@@ -1,0 +1,32 @@
+{
+	"name": "CampaignEvents",
+	"author": [
+		"[https://meta.wikimedia.org/wiki/Campaigns/Foundation_Product_Team WMF Campaigns Team]"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:CampaignEvents",
+	"descriptionmsg": "campaignevents-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "specialpage",
+	"requires": {
+		"MediaWiki": ">= 1.38.0"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\CampaignEvents\\": "src/"
+	},
+	"config": {
+	},
+	"HookHandlers": {
+	},
+	"Hooks": {
+	},
+	"MessagesDirs": {
+		"CampaignEvents": [
+			"i18n"
+		]
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "CampaignEvents/resources"
+	},
+	"manifest_version": 2
+}
