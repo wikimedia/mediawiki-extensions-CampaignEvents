@@ -32,7 +32,8 @@
 		}
 	},
 	"ExtensionMessagesFiles": {
-		"CampaignEventsAliases": "CampaignEvents.alias.php"
+		"CampaignEventsAliases": "CampaignEvents.alias.php",
+		"CampaignEventsNamespaces": "CampaignEvents.namespaces.php"
 	},
 	"HookHandlers": {
 		"SchemaChanges": {
@@ -47,6 +48,18 @@
 			"i18n"
 		]
 	},
+	"namespaces": [
+		{
+			"id": 1728,
+			"constant": "NS_EVENT",
+			"name": "Event"
+		},
+		{
+			"id": 1729,
+			"constant": "NS_EVENT_TALK",
+			"name": "Event_talk"
+		}
+	],
 	"ResourceFileModulePaths": {
 		"localBasePath": "resources",
 		"remoteExtPath": "CampaignEvents/resources"
