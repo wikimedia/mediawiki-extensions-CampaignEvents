@@ -16,8 +16,12 @@
 	"config": {
 	},
 	"HookHandlers": {
+		"SchemaChanges": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\SchemaChangesHandler"
+		}
 	},
 	"Hooks": {
+		"LoadExtensionSchemaUpdates": "SchemaChanges"
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [

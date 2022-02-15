@@ -1,0 +1,268 @@
+[
+	{
+		"name": "campaign_events",
+		"comment": "Stores all the event information",
+		"columns": [
+			{
+				"name": "event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "event_name",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_page_namespace",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "event_page_title",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_page_wiki",
+				"comment": "The Wiki ID the page is stored.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "event_chat_url",
+				"comment": "The link of the chat tool the organizers use to communicate.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_tracking_tool",
+				"comment": "The name of the tracking tool the organizers use. Example: EventMetrics, P&E Dashboard.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_tracking_url",
+				"comment": "The link of the tracking tool used by organizers.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_status",
+				"comment": "Status of the event. 1: Open. 2: Closed. 3: Draft. 4: Canceled.",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_start",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_end",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_type",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_meeting_type",
+				"comment": "The type of the meeting. 1: In person. 2: Online. 3: Both",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_meeting_url",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_meeting_location",
+				"comment": "The country of the event.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_meeting_address",
+				"comment": "The complete address of the event.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_created_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_last_edit",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_deleted_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [ "event_id" ]
+	},
+	{
+		"name": "ce_participants",
+		"comment": "Stores the participants of an event.",
+		"columns": [
+			{
+				"name": "cep_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_event_id",
+				"comment": "Gets the event id from campaign_events table.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_user_id",
+				"comment": "The Central ID.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [ "cep_id" ]
+	},
+	{
+		"name": "ce_organizers",
+		"comment": "Stores the organizers of an event.",
+		"columns": [
+			{
+				"name": "ceo_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceo_event_id",
+				"comment": "Gets the event id from campaign_events table.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceo_user_id",
+				"comment": "The Central ID.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceo_role_id",
+				"comment": "Gets the roles from ceo_roles table.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [ "ceo_id" ]
+	},
+	{
+		"name": "ceo_roles",
+		"comment": "Stores the user roles for permissions management.",
+		"columns": [
+			{
+				"name": "ceor_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceor_name",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [ "ceor_id" ]
+	}
+]
