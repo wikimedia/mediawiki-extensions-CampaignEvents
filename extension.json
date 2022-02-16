@@ -14,6 +14,14 @@
 		"MediaWiki\\Extension\\CampaignEvents\\": "src/"
 	},
 	"config": {
+		"CampaignEventsDatabaseCluster": {
+			"description": "The database cluster to use. False means the cluster of the current wiki will be used.",
+			"value": false
+		},
+		"CampaignEventsDatabaseName": {
+			"description": "The database to use. False means the database of the current wiki will be used.",
+			"value": false
+		}
 	},
 	"HookHandlers": {
 		"SchemaChanges": {
@@ -32,5 +40,8 @@
 		"localBasePath": "resources",
 		"remoteExtPath": "CampaignEvents/resources"
 	},
+	"ServiceWiringFiles": [
+		"src/ServiceWiring.php"
+	],
 	"manifest_version": 2
 }
