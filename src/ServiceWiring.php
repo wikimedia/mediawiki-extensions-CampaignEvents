@@ -3,6 +3,8 @@
 declare( strict_types=1 );
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsUserFactory;
 use MediaWiki\MediaWikiServices;
 
 // This file is actually covered by CampaignEventsServicesTest, but it's not possible to specify a path
@@ -15,6 +17,17 @@ return [
 			$services->getDBLoadBalancerFactory(),
 			$services->getMainConfig()->get( 'CampaignEventsDatabaseCluster' ),
 			$services->getMainConfig()->get( 'CampaignEventsDatabaseName' )
+		);
+	},
+	CampaignsPageFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFactory {
+		return new CampaignsPageFactory(
+			$services->getPageStoreFactory()
+		);
+	},
+	CampaignsUserFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsUserFactory {
+		return new CampaignsUserFactory(
+			$services->getCentralIdLookup(),
+			$services->getUserFactory()
 		);
 	},
 ];

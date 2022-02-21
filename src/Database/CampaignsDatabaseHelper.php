@@ -4,7 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Database;
 
-use Wikimedia\Rdbms\IDatabase;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
 use Wikimedia\Rdbms\LBFactory;
 
 class CampaignsDatabaseHelper {
@@ -30,12 +31,12 @@ class CampaignsDatabaseHelper {
 
 	/**
 	 * @param int $type DB_PRIMARY or DB_REPLICA
-	 * @return IDatabase
+	 * @return ICampaignsDatabase
 	 */
-	public function getDBConnection( int $type ): IDatabase {
+	public function getDBConnection( int $type ): ICampaignsDatabase {
 		$lb = $this->dbCluster === false
 			? $this->lbFactory->getMainLB( $this->dbName )
 			: $this->lbFactory->getExternalLB( $this->dbCluster );
-		return $lb->getConnectionRef( $type, [], $this->dbName );
+		return new MWDatabaseProxy( $lb->getConnectionRef( $type, [], $this->dbName ) );
 	}
 }
