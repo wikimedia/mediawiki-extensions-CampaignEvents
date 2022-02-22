@@ -5,6 +5,7 @@ declare( strict_types=1 );
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsUserFactory;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
@@ -41,5 +42,8 @@ return [
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {
 		return $services->get( IEventStore::STORE_SERVICE_NAME );
+	},
+	PermissionChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): PermissionChecker {
+		return new PermissionChecker();
 	},
 ];

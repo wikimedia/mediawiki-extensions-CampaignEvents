@@ -4,5 +4,7 @@
 			"Daimona Eaytoy"
 		]
 	},
-	"campaignevents-desc": "Provides features for campaign organizers and participants"
+	"campaignevents-desc": "Provides features for campaign organizers and participants",
+	"action-campaignevents-create-registration": "create event registrations",
+	"right-campaignevents-create-registration": "Create event registrations"
 }

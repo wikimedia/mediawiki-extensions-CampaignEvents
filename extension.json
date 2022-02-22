@@ -13,6 +13,9 @@
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CampaignEvents\\": "src/"
 	},
+	"AvailableRights": [
+		"campaignevents-create-registration"
+	],
 	"config": {
 		"CampaignEventsDatabaseCluster": {
 			"description": "The database cluster to use. False means the cluster of the current wiki will be used.",
@@ -21,6 +24,11 @@
 		"CampaignEventsDatabaseName": {
 			"description": "The database to use. False means the database of the current wiki will be used.",
 			"value": false
+		}
+	},
+	"GroupPermissions": {
+		"user": {
+			"campaignevents-create-registration": true
 		}
 	},
 	"HookHandlers": {

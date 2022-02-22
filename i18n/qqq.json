@@ -4,5 +4,7 @@
 			"Daimona Eaytoy"
 		]
 	},
-	"campaignevents-desc": "{{desc|name=CampaignEvents|url=https://www.mediawiki.org/wiki/Extension:CampaignEvents}}"
+	"campaignevents-desc": "{{desc|name=CampaignEvents|url=https://www.mediawiki.org/wiki/Extension:CampaignEvents}}",
+	"action-campaignevents-create-registration": "{{doc-action|campaignevents-create-registration}}",
+	"right-campaignevents-create-registration": "{{doc-right|campaignevents-create-registration}}"
 }

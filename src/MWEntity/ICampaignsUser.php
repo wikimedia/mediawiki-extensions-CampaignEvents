@@ -9,4 +9,10 @@ interface ICampaignsUser {
 	 * @return int
 	 */
 	public function getId(): int;
+
+	/**
+	 * @param string $right
+	 * @return bool
+	 */
+	public function hasRight( string $right ): bool;
 }
