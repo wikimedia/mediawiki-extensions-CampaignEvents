@@ -7,6 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsUserFactory;
+use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -32,5 +34,19 @@ class CampaignEventsServices {
 	 */
 	public static function getCampaignsUserFactory(): CampaignsUserFactory {
 		return MediaWikiServices::getInstance()->getService( CampaignsUserFactory::SERVICE_NAME );
+	}
+
+	/**
+	 * @return IEventStore
+	 */
+	public static function getEventStore(): IEventStore {
+		return MediaWikiServices::getInstance()->getService( IEventStore::STORE_SERVICE_NAME );
+	}
+
+	/**
+	 * @return IEventLookup
+	 */
+	public static function getEventLookup(): IEventLookup {
+		return MediaWikiServices::getInstance()->getService( IEventLookup::LOOKUP_SERVICE_NAME );
 	}
 }

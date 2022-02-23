@@ -4,7 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Page\PageStoreFactory;
+use WikiMap;
 
 class CampaignsPageFactory {
 	public const SERVICE_NAME = 'CampaignEventsPageFactory';
@@ -28,7 +30,8 @@ class CampaignsPageFactory {
 	 * @return ICampaignsPage
 	 */
 	public function newExistingPage( int $namespace, string $dbKey, string $wikiID ): ICampaignsPage {
-		$pageStore = $this->pageStoreFactory->getPageStore( $wikiID );
+		$adjustedWikiID = WikiMap::isCurrentWikiId( $wikiID ) ? WikiAwareEntity::LOCAL : $wikiID;
+		$pageStore = $this->pageStoreFactory->getPageStore( $adjustedWikiID );
 		$page = $pageStore->getPageByName( $namespace, $dbKey );
 		if ( !$page ) {
 			throw new PageNotFoundException( $namespace, $dbKey, $wikiID );

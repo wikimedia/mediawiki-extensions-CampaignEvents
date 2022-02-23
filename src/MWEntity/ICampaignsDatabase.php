@@ -57,6 +57,13 @@ interface ICampaignsDatabase {
 	public function update( string $table, array $set, $conds, $options = [] ): bool;
 
 	/**
+	 * @param string $table
+	 * @param string $uniqueKey
+	 * @param array $row
+	 */
+	public function replace( string $table, string $uniqueKey, array $row ): void;
+
+	/**
 	 * @return int
 	 */
 	public function insertId(): int;
