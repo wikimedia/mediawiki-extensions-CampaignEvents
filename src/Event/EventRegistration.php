@@ -14,8 +14,8 @@ class EventRegistration {
 	public const STATUS_CLOSED = 'closed';
 	public const VALID_STATUSES = [ self::STATUS_OPEN, self::STATUS_CLOSED ];
 
-	public const TYPE_EDITATHON = 'editathon';
-	public const VALID_TYPES = [ self::TYPE_EDITATHON ];
+	public const TYPE_GENERIC = 'generic';
+	public const VALID_TYPES = [ self::TYPE_GENERIC ];
 
 	public const MEETING_TYPE_ONLINE = 1 << 0;
 	public const MEETING_TYPE_PHYSICAL = 1 << 1;

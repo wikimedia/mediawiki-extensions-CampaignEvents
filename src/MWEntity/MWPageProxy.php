@@ -37,4 +37,11 @@ class MWPageProxy implements ICampaignsPage {
 	public function getNamespace(): int {
 		return $this->page->getNamespace();
 	}
+
+	/**
+	 * @return ProperPageIdentity
+	 */
+	public function getPageIdentity(): ProperPageIdentity {
+		return $this->page;
+	}
 }

@@ -19,7 +19,7 @@ class EventStore implements IEventStore, IEventLookup {
 	];
 
 	private const EVENT_TYPE_MAP = [
-		EventRegistration::TYPE_EDITATHON => 'editathon',
+		EventRegistration::TYPE_GENERIC => 'generic',
 	];
 
 	private const EVENT_MEETING_TYPE_MAP = [

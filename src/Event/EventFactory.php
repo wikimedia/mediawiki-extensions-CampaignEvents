@@ -256,6 +256,8 @@ class EventFactory {
 	private function validateDates( string $start, string $end ): StatusValue {
 		$res = StatusValue::newGood();
 
+		// TODO: Checking that the dates are not in the past should probably be skipped when a registration is updated
+		// (as opposed to being created)
 		$startTSUnix = null;
 		$endTSUnix = null;
 		$startAndEndValid = true;

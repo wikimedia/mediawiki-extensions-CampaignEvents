@@ -31,6 +31,9 @@
 			"campaignevents-create-registration": true
 		}
 	},
+	"ExtensionMessagesFiles": {
+		"CampaignEventsAliases": "CampaignEvents.alias.php"
+	},
 	"HookHandlers": {
 		"SchemaChanges": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\SchemaChangesHandler"
@@ -63,5 +66,17 @@
 	"ServiceWiringFiles": [
 		"src/ServiceWiring.php"
 	],
+	"SpecialPages": {
+		"EditEventRegistration": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEditEventRegistration",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsEventFactory",
+				"CampaignEventsEventStore",
+				"CampaignEventsCampaignsPageFormatter",
+				"CampaignEventsPermissionChecker"
+			]
+		}
+	},
 	"manifest_version": 2
 }

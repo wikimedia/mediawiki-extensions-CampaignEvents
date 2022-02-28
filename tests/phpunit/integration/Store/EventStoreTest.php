@@ -83,7 +83,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			EventRegistration::STATUS_OPEN,
 			'1646700000',
 			'1646800000',
-			EventRegistration::TYPE_EDITATHON,
+			EventRegistration::TYPE_GENERIC,
 			EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
 			'Meeting URL',
 			'Country',

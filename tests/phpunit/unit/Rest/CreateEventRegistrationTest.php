@@ -34,7 +34,7 @@ class CreateEventRegistrationTest extends MediaWikiUnitTestCase {
 		'tracking_tool_url' => 'https://trackingtool.example.org',
 		'start_time' => '20220308120000',
 		'end_time' => '20220308150000',
-		'type' => EventRegistration::TYPE_EDITATHON,
+		'type' => EventRegistration::TYPE_GENERIC,
 		'online_meeting' => true,
 		'physical_meeting' => true,
 		'meeting_url' => 'https://meetingurl.example.org',
@@ -59,7 +59,7 @@ class CreateEventRegistrationTest extends MediaWikiUnitTestCase {
 		if ( !$eventFactory ) {
 			$event = $this->createMock( EventRegistration::class );
 			$event->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
-			$event->method( 'getType' )->willReturn( EventRegistration::TYPE_EDITATHON );
+			$event->method( 'getType' )->willReturn( EventRegistration::TYPE_GENERIC );
 			$eventFactory = $this->createMock( EventFactory::class );
 			$eventFactory->method( 'newEvent' )->willReturn( $event );
 		}

@@ -38,7 +38,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'status' => EventRegistration::STATUS_OPEN,
 		'start' => '20220308120000',
 		'end' => '20220308150000',
-		'type' => EventRegistration::TYPE_EDITATHON,
+		'type' => EventRegistration::TYPE_GENERIC,
 		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',
