@@ -3,6 +3,7 @@
 declare( strict_types=1 );
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsUserFactory;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -45,5 +46,12 @@ return [
 	},
 	PermissionChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): PermissionChecker {
 		return new PermissionChecker();
+	},
+	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
+		return new EventFactory(
+			$services->getTitleParser(),
+			$services->getInterwikiLookup(),
+			$services->get( CampaignsPageFactory::SERVICE_NAME )
+		);
 	},
 ];

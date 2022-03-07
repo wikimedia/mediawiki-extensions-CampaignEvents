@@ -28,6 +28,7 @@ class CampaignsPageFactory {
 	 * @param string $dbKey
 	 * @param string $wikiID
 	 * @return ICampaignsPage
+	 * @throws PageNotFoundException
 	 */
 	public function newExistingPage( int $namespace, string $dbKey, string $wikiID ): ICampaignsPage {
 		$adjustedWikiID = WikiMap::isCurrentWikiId( $wikiID ) ? WikiAwareEntity::LOCAL : $wikiID;
