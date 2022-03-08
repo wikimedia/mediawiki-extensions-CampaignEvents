@@ -87,6 +87,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	 * @param InterwikiLookup|null $interwikiLookup
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
 	 * @covers ::newEvent
+	 * @covers ::validatePage
+	 * @covers ::validateDates
 	 * @covers ::isValidURL
 	 * @covers ::validateTrackingTool
 	 * @covers ::validateLocation
@@ -140,12 +142,15 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			$invalidTitleParser
 		];
 
+		$titleWithInterwiki = new TitleValue( NS_MAIN, 'Interwiki page', '', 'nonexistinginterwiki' );
+		$interwikiTitleParser = $this->createMock( TitleParser::class );
+		$interwikiTitleParser->method( 'parseTitle' )->willReturn( $titleWithInterwiki );
 		$invalidInterwikiLookup = $this->createMock( InterwikiLookup::class );
 		$invalidInterwikiLookup->method( 'fetch' )->willReturn( null );
 		yield 'Invalid title interwiki' => [
 			'campaignevents-error-invalid-title-interwiki',
-			$this->getTestDataWithDefault( [ 'page' => 'nonexistinginterwiki:Foo' ] ),
-			null,
+			$this->getTestDataWithDefault( [ 'page' => $titleWithInterwiki->__toString() ] ),
+			$interwikiTitleParser,
 			$invalidInterwikiLookup
 		];
 
@@ -180,6 +185,10 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-invalid-status',
 			$this->getTestDataWithDefault( [ 'status' => 'Some invalid status' ] )
 		];
+		yield 'Empty start timestamp' => [
+			'campaignevents-error-empty-start',
+			$this->getTestDataWithDefault( [ 'start' => '' ] )
+		];
 		yield 'Invalid start timestamp' => [
 			'campaignevents-error-invalid-start',
 			$this->getTestDataWithDefault( [ 'start' => 'Not a timestamp' ] )
@@ -187,6 +196,10 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'Start timestamp in the past' => [
 			'campaignevents-error-start-past',
 			$this->getTestDataWithDefault( [ 'start' => '19700101120000' ] )
+		];
+		yield 'Empty end timestamp' => [
+			'campaignevents-error-empty-end',
+			$this->getTestDataWithDefault( [ 'end' => '' ] )
 		];
 		yield 'Invalid end timestamp' => [
 			'campaignevents-error-invalid-end',

@@ -19,8 +19,10 @@
 	"campaignevents-error-tracking-tool-url-without-name": "A tracking tool name is required when a tracking tool URL is specified",
 	"campaignevents-error-invalid-trackingtool-url": "The tracking tool URL is invalid",
 	"campaignevents-error-invalid-status": "The event status is invalid",
+	"campaignevents-error-empty-start": "The event start time cannot be empty",
 	"campaignevents-error-invalid-start": "The event start time is invalid",
 	"campaignevents-error-start-past": "The event start time cannot be in the past",
+	"campaignevents-error-empty-end": "The event end time cannot be empty",
 	"campaignevents-error-invalid-end": "The event end time is invalid",
 	"campaignevents-error-start-after-end": "The start date cannot be after the end date",
 	"campaignevents-error-invalid-type": "The event type is invalid",
@@ -30,5 +32,7 @@
 	"campaignevents-error-physical-no-country": "Physical events must have a country",
 	"campaignevents-error-physical-no-address": "Physical events must have an address",
 	"campaignevents-error-invalid-country": "The event country is invalid",
-	"campaignevents-error-invalid-address": "The event address is invalid"
+	"campaignevents-error-invalid-address": "The event address is invalid",
+	"campaignevents-rest-createevent-permission-denied": "You are not allowed to create event registrations",
+	"campaignevents-rest-createevent-permission-denied-page": "You are not allowed to create an event registration for the given event page"
 }

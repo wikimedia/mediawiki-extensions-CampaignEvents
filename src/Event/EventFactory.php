@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use InvalidArgumentException;
 use MalformedTitleException;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
@@ -97,39 +98,9 @@ class EventFactory {
 			$res->error( 'campaignevents-error-name-too-long', Message::numParam( self::MAX_NAME_LENGTH ) );
 		}
 
-		$pageTitleStr = trim( $pageTitleStr );
-		if ( $pageTitleStr !== '' ) {
-			try {
-				$pageTitle = $this->titleParser->parseTitle( $pageTitleStr );
-			} catch ( MalformedTitleException $e ) {
-				$res->error( 'campaignevents-error-invalid-title', $e->getMessageObject() );
-				$pageTitle = null;
-			}
-		} else {
-			$res->error( 'campaignevents-error-empty-title' );
-			$pageTitle = null;
-		}
-
-		if ( $pageTitle ) {
-			$interwiki = $this->interwikiLookup->fetch( $pageTitle->getInterwiki() );
-			if ( $interwiki ) {
-				try {
-					$campaignsPage = $this->campaignsPageFactory->newExistingPage(
-						$pageTitle->getNamespace(),
-						$pageTitle->getDBkey(),
-						$interwiki->getWikiID()
-					);
-				} catch ( PageNotFoundException $_ ) {
-					$res->error( 'campaignevents-error-page-not-found' );
-					$campaignsPage = null;
-				}
-			} else {
-				$res->error( 'campaignevents-error-invalid-title-interwiki' );
-				$campaignsPage = null;
-			}
-		} else {
-			$campaignsPage = null;
-		}
+		$pageStatus = $this->validatePage( $pageTitleStr );
+		$res->merge( $pageStatus );
+		$campaignsPage = $pageStatus->getValue();
 
 		if ( $chatURL !== null ) {
 			$chatURL = trim( $chatURL );
@@ -152,22 +123,9 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-status' );
 		}
 
-		$startAndEndValid = true;
-		$startTSUnix = wfTimestamp( TS_UNIX, $startTimestamp );
-		if ( $startTSUnix === false ) {
-			$startAndEndValid = false;
-			$res->error( 'campaignevents-error-invalid-start' );
-		} elseif ( (int)$startTSUnix < MWTimestamp::time() ) {
-			$res->error( 'campaignevents-error-start-past' );
-		}
-		$endTSUnix = wfTimestamp( TS_UNIX, $endTimestamp );
-		if ( $endTSUnix === false ) {
-			$startAndEndValid = false;
-			$res->error( 'campaignevents-error-invalid-end' );
-		}
-		if ( $startAndEndValid && $startTSUnix > $endTSUnix ) {
-			$res->error( 'campaignevents-error-start-after-end' );
-		}
+		$datesStatus = $this->validateDates( $startTimestamp, $endTimestamp );
+		$res->merge( $datesStatus );
+		[ $startTSUnix, $endTSUnix ] = $datesStatus->getValue();
 
 		if ( !in_array( $type, EventRegistration::VALID_TYPES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-type' );
@@ -204,9 +162,9 @@ class EventFactory {
 			}
 		}
 
-		$creationTSUnix = wfTimestamp( TS_UNIX, $creationTimestamp );
-		$lastEditTSUnix = wfTimestamp( TS_UNIX, $lastEditTimestamp );
-		$deletionTSUnix = wfTimestamp( TS_UNIX, $deletionTimestamp );
+		$creationTSUnix = wfTimestampOrNull( TS_UNIX, $creationTimestamp );
+		$lastEditTSUnix = wfTimestampOrNull( TS_UNIX, $lastEditTimestamp );
+		$deletionTSUnix = wfTimestampOrNull( TS_UNIX, $deletionTimestamp );
 		// Creation, last edit, and deletion timestamp don't need user-facing validation since it's not the
 		// user setting them.
 		$invalidTimestamps = array_filter(
@@ -247,6 +205,89 @@ class EventFactory {
 			$lastEditTSUnix,
 			$deletionTSUnix
 		);
+	}
+
+	/**
+	 * Validates the page title provided as a string.
+	 *
+	 * @param string $pageTitleStr
+	 * @return StatusValue Fatal if invalid, good otherwise and with an ICampaignsPage as value.
+	 */
+	private function validatePage( string $pageTitleStr ): StatusValue {
+		$pageTitleStr = trim( $pageTitleStr );
+		if ( $pageTitleStr === '' ) {
+			return StatusValue::newFatal( 'campaignevents-error-empty-title' );
+		}
+
+		try {
+			$pageTitle = $this->titleParser->parseTitle( $pageTitleStr );
+		} catch ( MalformedTitleException $e ) {
+			return StatusValue::newFatal( 'campaignevents-error-invalid-title', $e->getMessageObject() );
+		}
+
+		if ( $pageTitle->getInterwiki() !== '' ) {
+			$interwiki = $this->interwikiLookup->fetch( $pageTitle->getInterwiki() );
+			if ( !$interwiki ) {
+				return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );
+			}
+			$wikiID = $interwiki->getWikiID();
+		} else {
+			$wikiID = WikiAwareEntity::LOCAL;
+		}
+
+		try {
+			$campaignsPage = $this->campaignsPageFactory->newExistingPage(
+				$pageTitle->getNamespace(),
+				$pageTitle->getDBkey(),
+				$wikiID
+			);
+		} catch ( PageNotFoundException $_ ) {
+			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );
+		}
+
+		return StatusValue::newGood( $campaignsPage );
+	}
+
+	/**
+	 * @param string $start
+	 * @param string $end
+	 * @return StatusValue Whose result is [ start_unix, end_unix ]
+	 */
+	private function validateDates( string $start, string $end ): StatusValue {
+		$res = StatusValue::newGood();
+
+		$startTSUnix = null;
+		$endTSUnix = null;
+		$startAndEndValid = true;
+		if ( $start === '' ) {
+			$startAndEndValid = false;
+			$res->error( 'campaignevents-error-empty-start' );
+		} else {
+			$startTSUnix = wfTimestamp( TS_UNIX, $start );
+			if ( $startTSUnix === false ) {
+				$startAndEndValid = false;
+				$res->error( 'campaignevents-error-invalid-start' );
+			} elseif ( (int)$startTSUnix < MWTimestamp::time() ) {
+				$res->error( 'campaignevents-error-start-past' );
+			}
+		}
+
+		if ( $end === '' ) {
+			$startAndEndValid = false;
+			$res->error( 'campaignevents-error-empty-end' );
+		} else {
+			$endTSUnix = wfTimestamp( TS_UNIX, $end );
+			if ( $endTSUnix === false ) {
+				$startAndEndValid = false;
+				$res->error( 'campaignevents-error-invalid-end' );
+			}
+		}
+
+		if ( $startAndEndValid && $startTSUnix > $endTSUnix ) {
+			$res->error( 'campaignevents-error-start-after-end' );
+		}
+		$res->setResult( true, [ $startTSUnix, $endTSUnix ] );
+		return $res;
 	}
 
 	/**

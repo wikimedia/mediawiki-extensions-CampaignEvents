@@ -5,8 +5,10 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsUserFactory;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
 use MediaWiki\MediaWikiServices;
@@ -48,5 +50,19 @@ class CampaignEventsServices {
 	 */
 	public static function getEventLookup(): IEventLookup {
 		return MediaWikiServices::getInstance()->getService( IEventLookup::LOOKUP_SERVICE_NAME );
+	}
+
+	/**
+	 * @return EventFactory
+	 */
+	public static function getEventFactory(): EventFactory {
+		return MediaWikiServices::getInstance()->getService( EventFactory::SERVICE_NAME );
+	}
+
+	/**
+	 * @return PermissionChecker
+	 */
+	public static function getPermissionChecker(): PermissionChecker {
+		return MediaWikiServices::getInstance()->getService( PermissionChecker::SERVICE_NAME );
 	}
 }

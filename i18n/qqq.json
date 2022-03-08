@@ -19,8 +19,10 @@
 	"campaignevents-error-tracking-tool-url-without-name": "Error message used when a tracking tool URL is given, but not a tracking tool name.",
 	"campaignevents-error-invalid-trackingtool-url": "Error message used when the given tracking tool URL is invalid.",
 	"campaignevents-error-invalid-status": "Error message used when the given event status is invalid.",
+	"campaignevents-error-empty-start": "Error message used when the given event start date is empty.",
 	"campaignevents-error-invalid-start": "Error message used when the given event start date is invalid.",
 	"campaignevents-error-start-past": "Error message used when the given start date is in the past.",
+	"campaignevents-error-empty-end": "Error message used when the given event end date is empty.",
 	"campaignevents-error-invalid-end": "Error message used when the given event end date is invalid.",
 	"campaignevents-error-start-after-end": "Error message used when the start date of an event is after the end date.",
 	"campaignevents-error-invalid-type": "Error message used when the given event type is invalid.",
@@ -30,5 +32,7 @@
 	"campaignevents-error-physical-no-country": "Error message used when the \"physical\" event type is selected but no country was provided.",
 	"campaignevents-error-physical-no-address": "Error message used when the \"physical\" event type is selected but no address was provided.",
 	"campaignevents-error-invalid-country": "Error message used when the given event country is invalid.",
-	"campaignevents-error-invalid-address": "Error message used when the given event address URL is invalid."
+	"campaignevents-error-invalid-address": "Error message used when the given event address URL is invalid.",
+	"campaignevents-rest-createevent-permission-denied": "Error message used when an unauthorized user attempts to create an event registration.",
+	"campaignevents-rest-createevent-permission-denied-page": "Error message used when an unauthorized user attempts to create an event registration for a specific page."
 }

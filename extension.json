@@ -48,6 +48,18 @@
 		"localBasePath": "resources",
 		"remoteExtPath": "CampaignEvents/resources"
 	},
+	"RestRoutes": [
+		{
+			"path": "/campaignevents/v0/event_registration",
+			"method": "POST",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\CreateEventRegistrationHandler",
+			"services": [
+				"CampaignEventsEventFactory",
+				"CampaignEventsEventStore",
+				"CampaignEventsPermissionChecker"
+			]
+		}
+	],
 	"ServiceWiringFiles": [
 		"src/ServiceWiring.php"
 	],
