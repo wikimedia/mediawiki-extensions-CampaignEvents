@@ -119,7 +119,7 @@
 				}
 			},
 			{
-				"name": "event_meeting_location",
+				"name": "event_meeting_country",
 				"comment": "The country of the event.",
 				"type": "binary",
 				"options": {
