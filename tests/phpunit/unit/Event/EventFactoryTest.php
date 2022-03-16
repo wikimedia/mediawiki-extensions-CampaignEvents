@@ -221,8 +221,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-no-meeting-type',
 			$this->getTestDataWithDefault( [ 'meetingtype' => 123 ] )
 		];
-		yield 'Online meeting without URL' => [
-			'campaignevents-error-online-no-meeting-url',
+		yield 'Online meeting without URL, successful' => [
+			null,
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
 				'meetingurl' => null

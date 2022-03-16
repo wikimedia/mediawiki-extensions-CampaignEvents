@@ -135,14 +135,10 @@ class EventFactory {
 			$res->error( 'campaignevents-error-no-meeting-type' );
 		}
 
-		if ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) {
-			if ( $meetingURL === null ) {
-				$res->error( 'campaignevents-error-online-no-meeting-url' );
-			} else {
-				$meetingURL = trim( $meetingURL );
-				if ( !$this->isValidURL( $meetingURL ) ) {
-					$res->error( 'campaignevents-error-invalid-meeting-url' );
-				}
+		if ( ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) && $meetingURL !== null ) {
+			$meetingURL = trim( $meetingURL );
+			if ( !$this->isValidURL( $meetingURL ) ) {
+				$res->error( 'campaignevents-error-invalid-meeting-url' );
 			}
 		}
 

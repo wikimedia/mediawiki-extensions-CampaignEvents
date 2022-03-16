@@ -153,7 +153,6 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 				'label-message' => 'campaignevents-edit-field-meeting-url',
 				'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_PHYSICAL ],
 				'default' => $this->event ? $this->event->getMeetingURL() : '',
-				'required' => true,
 			],
 			'EventMeetingCountry' => [
 				'type' => 'text',
