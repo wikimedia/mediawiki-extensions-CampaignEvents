@@ -63,9 +63,11 @@ class CreateEventRegistrationTest extends MediaWikiUnitTestCase {
 			$eventFactory = $this->createMock( EventFactory::class );
 			$eventFactory->method( 'newEvent' )->willReturn( $event );
 		}
+		$eventStore = $this->createMock( EventStore::class );
+		$eventStore->method( 'saveRegistration' )->willReturn( StatusValue::newGood( 42 ) );
 		return new CreateEventRegistrationHandler(
 			$eventFactory,
-			$this->createMock( EventStore::class ),
+			$eventStore,
 			$permchecker ?? new PermissionChecker()
 		);
 	}

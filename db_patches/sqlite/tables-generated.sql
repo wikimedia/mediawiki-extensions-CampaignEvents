@@ -17,6 +17,11 @@ CREATE TABLE /*_*/campaign_events (
   event_deleted_at BLOB DEFAULT NULL
 );
 
+CREATE UNIQUE INDEX event_page ON /*_*/campaign_events (
+  event_page_wiki, event_page_namespace,
+  event_page_title
+);
+
 
 CREATE TABLE /*_*/ce_participants (
   cep_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

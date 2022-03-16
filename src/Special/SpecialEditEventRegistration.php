@@ -82,7 +82,7 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 				return;
 			}
 			try {
-				$this->event = $this->eventLookup->getEvent( $eventID );
+				$this->event = $this->eventLookup->getEventByID( $eventID );
 			} catch ( EventNotFoundException $_ ) {
 				$this->setHeaders();
 				$this->getOutput()->addHTML( Html::errorBox(
@@ -223,8 +223,7 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 			return Status::newFatal( 'campaignevents-edit-not-allowed-page' );
 		}
 
-		$this->eventStore->saveRegistration( $event );
-		return true;
+		return $this->eventStore->saveRegistration( $event );
 	}
 
 	/**

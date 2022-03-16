@@ -8,9 +8,11 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Utils;
+use StatusValue;
 use stdClass;
-use WikiMap;
 
 class EventStore implements IEventStore, IEventLookup {
 	private const EVENT_STATUS_MAP = [
@@ -47,14 +49,36 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEvent( int $eventID ): ExistingEventRegistration {
+	public function getEventByID( int $eventID ): ExistingEventRegistration {
 		$eventRow = $this->dbHelper->getDBConnection( DB_REPLICA )->selectRow(
 			'campaign_events',
 			'*',
 			[ 'event_id' => $eventID ]
 		);
 		if ( !$eventRow ) {
-			throw new EventNotFoundException( $eventID );
+			throw new EventNotFoundException( "Event $eventID not found" );
+		}
+		return $this->newEventFromDBRow( $eventRow );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getEventByPage( ICampaignsPage $page ): ExistingEventRegistration {
+		$eventRow = $this->dbHelper->getDBConnection( DB_REPLICA )->selectRow(
+			'campaign_events',
+			'*',
+			[
+				'event_page_namespace' => $page->getNamespace(),
+				'event_page_title' => $page->getDBkey(),
+				'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
+			]
+		);
+		if ( !$eventRow ) {
+			throw new EventNotFoundException(
+				"No event found for the given page (ns={$page->getNamespace()}, " .
+					"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()}"
+			);
 		}
 		return $this->newEventFromDBRow( $eventRow );
 	}
@@ -105,8 +129,20 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function saveRegistration( EventRegistration $event ): int {
+	public function saveRegistration( EventRegistration $event ): StatusValue {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+
+		try {
+			$existingRegistrationIDForPage = $this->getEventByPage( $event->getPage() )->getID();
+		} catch ( EventNotFoundException $_ ) {
+			// We're creating one now.
+			$existingRegistrationIDForPage = null;
+		}
+
+		if ( $existingRegistrationIDForPage !== null && $existingRegistrationIDForPage !== $event->getID() ) {
+			return StatusValue::newFatal( 'campaignevents-error-page-already-registered' );
+		}
+
 		$curDBTimestamp = $dbw->timestamp();
 		$meetingType = 0;
 		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
@@ -124,7 +160,7 @@ class EventStore implements IEventStore, IEventLookup {
 				'event_name' => $event->getName(),
 				'event_page_namespace' => $event->getPage()->getNamespace(),
 				'event_page_title' => $event->getPage()->getDBkey(),
-				'event_page_wiki' => $event->getPage()->getWikiId() ?: WikiMap::getCurrentWikiId(),
+				'event_page_wiki' => Utils::getWikiIDString( $event->getPage()->getWikiId() ),
 				'event_chat_url' => $event->getChatURL() ?? '',
 				'event_tracking_tool' => $event->getTrackingToolName() ?? '',
 				'event_tracking_url' => $event->getTrackingToolURL() ?? '',
@@ -141,6 +177,6 @@ class EventStore implements IEventStore, IEventLookup {
 				'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
 			]
 		);
-		return $event->getID() ?? $dbw->insertId();
+		return StatusValue::newGood( $event->getID() ?? $dbw->insertId() );
 	}
 }

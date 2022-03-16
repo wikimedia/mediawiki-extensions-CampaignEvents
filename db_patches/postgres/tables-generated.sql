@@ -25,6 +25,11 @@ CREATE TABLE campaign_events (
   PRIMARY KEY(event_id)
 );
 
+CREATE UNIQUE INDEX event_page ON campaign_events (
+  event_page_wiki, event_page_namespace,
+  event_page_title
+);
+
 
 CREATE TABLE ce_participants (
   cep_id BIGSERIAL NOT NULL,
