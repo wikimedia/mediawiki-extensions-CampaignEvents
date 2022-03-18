@@ -1,0 +1,45 @@
+<?php
+
+declare( strict_types=1 );
+
+namespace MediaWiki\Extension\CampaignEvents\Participants;
+
+use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+
+class ParticipantsStore {
+	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
+
+	/** @var CampaignsDatabaseHelper */
+	private $dbHelper;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
+
+	/**
+	 * @param CampaignsDatabaseHelper $dbHelper
+	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 */
+	public function __construct( CampaignsDatabaseHelper $dbHelper, CampaignsCentralUserLookup $centralUserLookup ) {
+		$this->dbHelper = $dbHelper;
+		$this->centralUserLookup = $centralUserLookup;
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param ICampaignsUser $participant
+	 * @return bool True if the participant was just added, false if they were already listed.
+	 */
+	public function addParticipantToEvent( int $eventID, ICampaignsUser $participant ): bool {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw->insert(
+			'ce_participants',
+			[
+				'cep_event_id' => $eventID,
+				'cep_user_id' => $this->centralUserLookup->getCentralID( $participant )
+			],
+			[ 'IGNORE' ]
+		);
+		return $dbw->affectedRows() > 0;
+	}
+}

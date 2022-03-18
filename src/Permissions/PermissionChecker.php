@@ -17,6 +17,7 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanCreateRegistrations( ICampaignsUser $user ): bool {
+		// TODO Should this also check whether the user is blocked?
 		return $user->hasRight( self::CREATE_REGISTRATIONS_RIGHT );
 	}
 

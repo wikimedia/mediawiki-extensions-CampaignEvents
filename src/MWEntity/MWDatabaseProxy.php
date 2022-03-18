@@ -63,6 +63,13 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	/**
 	 * @inheritDoc
 	 */
+	public function affectedRows(): int {
+		return $this->db->affectedRows();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function timestamp( $ts = 0 ): string {
 		return $this->db->timestamp( $ts );
 	}

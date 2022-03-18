@@ -38,6 +38,8 @@ CREATE TABLE ce_participants (
   PRIMARY KEY(cep_id)
 );
 
+CREATE UNIQUE INDEX cep_event_participant ON ce_participants (cep_event_id, cep_user_id);
+
 
 CREATE TABLE ce_organizers (
   ceo_id BIGSERIAL NOT NULL,

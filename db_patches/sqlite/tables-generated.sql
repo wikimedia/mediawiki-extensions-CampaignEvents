@@ -29,6 +29,8 @@ CREATE TABLE /*_*/ce_participants (
   cep_user_id INTEGER UNSIGNED NOT NULL
 );
 
+CREATE UNIQUE INDEX cep_event_participant ON /*_*/ce_participants (cep_event_id, cep_user_id);
+
 
 CREATE TABLE /*_*/ce_organizers (
   ceo_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

@@ -25,7 +25,7 @@ class MWUserProxy implements ICampaignsUser {
 	/**
 	 * @inheritDoc
 	 */
-	public function getId(): int {
+	public function getLocalID(): int {
 		return $this->userIdentity->getId();
 	}
 

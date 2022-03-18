@@ -4,9 +4,10 @@ declare( strict_types=1 );
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsUserFactory;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
@@ -30,12 +31,13 @@ return [
 			$services->getPageStoreFactory()
 		);
 	},
-	CampaignsUserFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsUserFactory {
-		return new CampaignsUserFactory(
-			$services->getCentralIdLookup(),
-			$services->getUserFactory()
-		);
-	},
+	CampaignsCentralUserLookup::SERVICE_NAME =>
+		static function ( MediaWikiServices $services ): CampaignsCentralUserLookup {
+			return new CampaignsCentralUserLookup(
+				$services->getCentralIdLookup(),
+				$services->getUserFactory()
+			);
+		},
 	IEventStore::STORE_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventStore {
 		return new EventStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
@@ -58,6 +60,12 @@ return [
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {
 		return new CampaignsPageFormatter(
 			$services->getTitleFormatter()
+		);
+	},
+	ParticipantsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): ParticipantsStore {
+		return new ParticipantsStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 ];

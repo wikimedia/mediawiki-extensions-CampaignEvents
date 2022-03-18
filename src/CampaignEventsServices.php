@@ -6,8 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsUserFactory;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
@@ -32,10 +33,10 @@ class CampaignEventsServices {
 	}
 
 	/**
-	 * @return CampaignsUserFactory
+	 * @return CampaignsCentralUserLookup
 	 */
-	public static function getCampaignsUserFactory(): CampaignsUserFactory {
-		return MediaWikiServices::getInstance()->getService( CampaignsUserFactory::SERVICE_NAME );
+	public static function getCampaignsCentralUserLookup(): CampaignsCentralUserLookup {
+		return MediaWikiServices::getInstance()->getService( CampaignsCentralUserLookup::SERVICE_NAME );
 	}
 
 	/**
@@ -64,5 +65,12 @@ class CampaignEventsServices {
 	 */
 	public static function getPermissionChecker(): PermissionChecker {
 		return MediaWikiServices::getInstance()->getService( PermissionChecker::SERVICE_NAME );
+	}
+
+	/**
+	 * @return ParticipantsStore
+	 */
+	public static function getParticipantsStore(): ParticipantsStore {
+		return MediaWikiServices::getInstance()->getService( ParticipantsStore::SERVICE_NAME );
 	}
 }

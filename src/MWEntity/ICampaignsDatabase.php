@@ -69,6 +69,11 @@ interface ICampaignsDatabase {
 	public function insertId(): int;
 
 	/**
+	 * @return int
+	 */
+	public function affectedRows(): int;
+
+	/**
 	 * @param string|int $ts
 	 * @return string
 	 */

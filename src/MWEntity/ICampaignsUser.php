@@ -8,7 +8,7 @@ interface ICampaignsUser {
 	/**
 	 * @return int
 	 */
-	public function getId(): int;
+	public function getLocalID(): int;
 
 	/**
 	 * @param string $right

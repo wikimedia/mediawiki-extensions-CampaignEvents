@@ -200,7 +200,13 @@
 				}
 			}
 		],
-		"indexes": [],
+		"indexes": [
+			{
+				"name": "cep_event_participant",
+				"columns": [ "cep_event_id", "cep_user_id" ],
+				"unique": true
+			}
+		],
 		"pk": [ "cep_id" ]
 	},
 	{
