@@ -100,6 +100,7 @@ class CreateEventRegistrationHandler extends Handler {
 		if ( !$saveStatus->isGood() ) {
 			$this->exitWithStatus( $saveStatus );
 		}
+		// TODO Set status code 201 when we'll be able to provide a Location
 		return $this->getResponseFactory()->createJson( [
 			'id' => $saveStatus->getValue()
 		] );

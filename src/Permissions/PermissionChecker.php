@@ -42,4 +42,13 @@ class PermissionChecker {
 		$userCreatedEventPage = true;
 		return $userCreatedEventPage;
 	}
+
+	/**
+	 * @param ICampaignsUser $user
+	 * @return bool
+	 */
+	public function userCanRegisterForEvents( ICampaignsUser $user ): bool {
+		// TODO Do we need another user right for this? And should this also check whether the user is blocked?
+		return $user->isRegistered();
+	}
 }

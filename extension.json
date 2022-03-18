@@ -61,6 +61,16 @@
 				"CampaignEventsEventStore",
 				"CampaignEventsPermissionChecker"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/participants/self",
+			"method": "PUT",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RegisterForEventHandler",
+			"services": [
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsEventLookup",
+				"CampaignEventsParticipantsStore"
+			]
 		}
 	],
 	"ServiceWiringFiles": [

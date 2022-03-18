@@ -23,7 +23,7 @@ use StatusValue;
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler
  * @todo We can't test param validation due to T303619
  */
-class CreateEventRegistrationTest extends MediaWikiUnitTestCase {
+class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
 
 	private const DEFAULT_POST_PARAMS = [

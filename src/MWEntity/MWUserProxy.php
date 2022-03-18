@@ -35,4 +35,11 @@ class MWUserProxy implements ICampaignsUser {
 	public function hasRight( string $right ): bool {
 		return $this->authority->isAllowed( $right );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function isRegistered(): bool {
+		return $this->userIdentity->isRegistered();
+	}
 }

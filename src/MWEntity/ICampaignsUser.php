@@ -15,4 +15,9 @@ interface ICampaignsUser {
 	 * @return bool
 	 */
 	public function hasRight( string $right ): bool;
+
+	/**
+	 * @return bool
+	 */
+	public function isRegistered(): bool;
 }
