@@ -25,22 +25,6 @@ interface ICampaignsDatabase {
 
 	/**
 	 * @param string|array $table
-	 * @param string $field
-	 * @param array $conds
-	 * @param string|array $options
-	 * @param string|array $join_conds
-	 * @return array
-	 */
-	public function selectFieldValues(
-		$table,
-		string $field,
-		array $conds = [],
-		$options = [],
-		$join_conds = []
-	): array;
-
-	/**
-	 * @param string|array $table
 	 * @param string|array $vars
 	 * @param string|array $conds
 	 * @param string|array $options
@@ -54,6 +38,38 @@ interface ICampaignsDatabase {
 		$options = [],
 		$join_conds = []
 	): iterable;
+
+	/**
+	 * @param string $table
+	 * @param string $field
+	 * @param array $conds
+	 * @param string|array $options
+	 * @param string|array $join_conds
+	 * @return mixed|false The value from the field, or false if nothing was found
+	 */
+	public function selectField(
+		string $table,
+		string $field,
+		array $conds = [],
+		$options = [],
+		$join_conds = []
+	);
+
+	/**
+	 * @param string|array $table
+	 * @param string $field
+	 * @param array $conds
+	 * @param string|array $options
+	 * @param string|array $join_conds
+	 * @return array
+	 */
+	public function selectFieldValues(
+		$table,
+		string $field,
+		array $conds = [],
+		$options = [],
+		$join_conds = []
+	): array;
 
 	/**
 	 * @param string $table

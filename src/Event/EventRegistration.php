@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 
 /**
@@ -80,8 +81,8 @@ class EventRegistration {
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
-	 * @param string|null $meetingCountry
-	 * @param string|null $meetingAddress
+	 * @param string|null $meetingCountry Must be a string if $meetingType includes self::MEETING_TYPE_PHYSICAL
+	 * @param string|null $meetingAddress Must be a string if $meetingType includes self::MEETING_TYPE_PHYSICAL
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
@@ -117,6 +118,12 @@ class EventRegistration {
 		$this->type = $type;
 		$this->meetingType = $meetingType;
 		$this->meetingURL = $meetingURL;
+		if (
+			( $meetingType & self::MEETING_TYPE_PHYSICAL ) &&
+			( $meetingCountry === null || $meetingAddress === null )
+		) {
+			throw new InvalidArgumentException( 'Meeting country and address must not be null for in-person events' );
+		}
 		$this->meetingCountry = $meetingCountry;
 		$this->meetingAddress = $meetingAddress;
 		$this->creationTimestamp = $creationTimestamp;
@@ -209,14 +216,14 @@ class EventRegistration {
 	}
 
 	/**
-	 * @return string|null
+	 * @return string|null Guaranteed to be a string if the meeting type includes self::MEETING_TYPE_PHYSICAL
 	 */
 	public function getMeetingCountry(): ?string {
 		return $this->meetingCountry;
 	}
 
 	/**
-	 * @return string|null
+	 * @return string|null Guaranteed to be a string if the meeting type includes self::MEETING_TYPE_PHYSICAL
 	 */
 	public function getMeetingAddress(): ?string {
 		return $this->meetingAddress;

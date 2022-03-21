@@ -42,10 +42,17 @@
 	"HookHandlers": {
 		"SchemaChanges": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\SchemaChangesHandler"
+		},
+		"ArticleViewHeader": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\ArticleViewHeaderHandler",
+			"services": [
+				"CampaignEventsEventPageDecorator"
+			]
 		}
 	},
 	"Hooks": {
-		"LoadExtensionSchemaUpdates": "SchemaChanges"
+		"LoadExtensionSchemaUpdates": "SchemaChanges",
+		"ArticleViewHeader": "ArticleViewHeader"
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [
@@ -92,6 +99,38 @@
 			"dependencies": [
 				"oojs-ui-widgets",
 				"oojs-ui.styles.icons-interactions"
+			]
+		},
+		"ext.campaignEvents.eventpage.styles": {
+			"styles": "ext.campaignEvents.eventpage.styles.less"
+		},
+		"ext.campaignEvents.eventpage": {
+			"localBasePath": "resources/ext.campaignEvents.eventpage",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.eventpage",
+			"packageFiles": [
+				"index.js",
+				"ConfirmUnregistrationDialog.js",
+				"EventDetailsDialog.js"
+			],
+			"styles": [
+				"EventDetailsDialog.less"
+			],
+			"messages": [
+				"campaignevents-eventpage-dialog-title",
+				"campaignevents-eventpage-dialog-action-close",
+				"campaignevents-eventpage-register-notification",
+				"campaignevents-eventpage-unregister-confirmation-title",
+				"campaignevents-eventpage-unregister-confirmation-body",
+				"campaignevents-eventpage-unregister-confirmation-confirm",
+				"campaignevents-eventpage-unregister-confirmation-dismiss"
+			],
+			"dependencies": [
+				"mediawiki.api",
+				"mediawiki.user",
+				"mediawiki.util",
+				"mediawiki.Uri",
+				"oojs-ui-core",
+				"oojs-ui-windows"
 			]
 		}
 	},

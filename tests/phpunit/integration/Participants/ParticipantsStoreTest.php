@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Participants;
+namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Participants;
 
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
@@ -196,5 +196,26 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertFalse( $store->userParticipatesToEvent( $eventID, $participant ), 'precondition' );
 		$store->addParticipantToEvent( $eventID, $participant );
 		$this->assertTrue( $store->userParticipatesToEvent( $eventID, $participant ) );
+	}
+
+	/**
+	 * @param int $event
+	 * @param int $expected
+	 * @dataProvider provideParticipantCount
+	 * @covers ::getParticipantCountForEvent
+	 */
+	public function testGetParticipantCountForEvent( int $event, int $expected ) {
+		$store = new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$this->createMock( CampaignsCentralUserLookup::class )
+		);
+		$this->assertSame( $expected, $store->getParticipantCountForEvent( $event ) );
+	}
+
+	public function provideParticipantCount(): array {
+		return [
+			'One participant (and a deleted one)' => [ 1, 1 ],
+			'No participants' => [ 1000, 0 ],
+		];
 	}
 }

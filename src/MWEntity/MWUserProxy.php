@@ -42,4 +42,11 @@ class MWUserProxy implements ICampaignsUser {
 	public function isRegistered(): bool {
 		return $this->userIdentity->isRegistered();
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getName(): string {
+		return $this->userIdentity->getName();
+	}
 }

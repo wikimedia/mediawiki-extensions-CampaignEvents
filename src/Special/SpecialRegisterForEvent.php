@@ -12,6 +12,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use Status;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
+	public const PAGE_NAME = 'RegisterForEvent';
+
 	/** @var RegisterParticipantCommand */
 	private $registerParticipantCommand;
 	/** @var ParticipantsStore */
@@ -27,7 +29,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		RegisterParticipantCommand $registerParticipantCommand,
 		ParticipantsStore $participantsStore
 	) {
-		parent::__construct( 'RegisterForEvent', $eventLookup );
+		parent::__construct( self::PAGE_NAME, $eventLookup );
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->participantsStore = $participantsStore;
 	}

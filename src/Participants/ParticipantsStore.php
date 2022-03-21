@@ -104,6 +104,25 @@ class ParticipantsStore {
 	}
 
 	/**
+	 * Returns the count of participants to an event. This does NOT include participants who unregistered.
+	 * @param int $eventID
+	 * @return int
+	 */
+	public function getParticipantCountForEvent( int $eventID ): int {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$ret = $dbr->selectField(
+			'ce_participants',
+			'COUNT(*)',
+			[
+				'cep_event_id' => $eventID,
+				'cep_unregistered_at' => null,
+			]
+		);
+		// Intentionally casting false to int if no rows were found.
+		return (int)$ret;
+	}
+
+	/**
 	 * Returns whether the given user participates to the event. Note that this returns false if the user was
 	 * participating but then unregistered.
 	 * @param int $eventID

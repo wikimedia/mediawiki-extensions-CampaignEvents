@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
@@ -128,6 +129,17 @@ return [
 		return new EventsPagerFactory(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+		);
+	},
+	EventPageDecorator::SERVICE_NAME => static function ( MediaWikiServices $services ): EventPageDecorator {
+		return new EventPageDecorator(
+			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
+			$services->get( ParticipantsStore::SERVICE_NAME ),
+			$services->get( OrganizersStore::SERVICE_NAME ),
+			$services->get( UserBlockChecker::SERVICE_NAME ),
+			$services->getMessageFormatterFactory(),
+			$services->getLinkRenderer(),
+			$services->getTitleFormatter()
 		);
 	},
 ];
