@@ -18,7 +18,6 @@ use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
 use MWTimestamp;
 use Status;
-use User;
 
 class SpecialEditEventRegistration extends FormSpecialPage {
 	/** @var IEventLookup */
@@ -51,19 +50,12 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 		CampaignsPageFormatter $campaignsPageFormatter,
 		PermissionChecker $permissionChecker
 	) {
-		parent::__construct( 'EditEventRegistration' );
+		parent::__construct( 'EditEventRegistration', $permissionChecker->getCreateRegistrationsRight() );
 		$this->eventLookup = $eventLookup;
 		$this->eventFactory = $eventFactory;
 		$this->eventStore = $eventStore;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
 		$this->permissionChecker = $permissionChecker;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function userCanExecute( User $user ): bool {
-		return $this->permissionChecker->userCanCreateRegistrations( new MWUserProxy( $user, $user ) );
 	}
 
 	/**

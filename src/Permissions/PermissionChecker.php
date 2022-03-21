@@ -10,12 +10,21 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 class PermissionChecker {
 	public const SERVICE_NAME = 'CampaignEventsPermissionChecker';
 
+	private const CREATE_REGISTRATIONS_RIGHT = 'campaignevents-create-registration';
+
 	/**
 	 * @param ICampaignsUser $user
 	 * @return bool
 	 */
 	public function userCanCreateRegistrations( ICampaignsUser $user ): bool {
-		return $user->hasRight( 'campaignevents-create-registration' );
+		return $user->hasRight( self::CREATE_REGISTRATIONS_RIGHT );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCreateRegistrationsRight(): string {
+		return self::CREATE_REGISTRATIONS_RIGHT;
 	}
 
 	/**
