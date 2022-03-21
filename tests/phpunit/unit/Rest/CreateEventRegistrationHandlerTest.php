@@ -14,6 +14,8 @@ use MediaWiki\Extension\CampaignEvents\Store\EventStore;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
+use MediaWiki\Session\Session;
+use MediaWiki\Session\SessionProviderInterface;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWikiUnitTestCase;
 use StatusValue;
@@ -63,13 +65,20 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventFactory = $this->createMock( EventFactory::class );
 			$eventFactory->method( 'newEvent' )->willReturn( $event );
 		}
+
 		$eventStore = $this->createMock( EventStore::class );
 		$eventStore->method( 'saveRegistration' )->willReturn( StatusValue::newGood( 42 ) );
-		return new CreateEventRegistrationHandler(
+		$handler = new CreateEventRegistrationHandler(
 			$eventFactory,
 			$eventStore,
 			$permchecker ?? new PermissionChecker()
 		);
+		$sessionProvider = $this->createMock( SessionProviderInterface::class );
+		$sessionProvider->method( 'safeAgainstCsrf' )->willReturn( true );
+		$session = $this->createMock( Session::class );
+		$session->method( 'getProvider' )->willReturn( $sessionProvider );
+		$handler->setSession( $session );
+		return $handler;
 	}
 
 	public function testExecute__successful() {

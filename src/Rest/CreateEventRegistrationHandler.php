@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use ApiMessage;
+use BadMethodCallException;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -13,7 +14,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\EventStore;
 use MediaWiki\Rest\Handler;
+use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
+use MediaWiki\Session\Session;
+use RequestContext;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -26,6 +30,9 @@ class CreateEventRegistrationHandler extends Handler {
 	private $eventStore;
 	/** @var PermissionChecker */
 	private $permissionChecker;
+
+	/** @var Session used in tests */
+	private $session;
 
 	/**
 	 * @param EventFactory $eventFactory
@@ -46,6 +53,8 @@ class CreateEventRegistrationHandler extends Handler {
 	 * @inheritDoc
 	 */
 	public function execute() {
+		$this->assertCSRFSafety();
+
 		$body = $this->getValidatedParams();
 
 		$performerAuthority = $this->getAuthority();
@@ -121,6 +130,32 @@ class CreateEventRegistrationHandler extends Handler {
 	}
 
 	/**
+	 * @throws HttpException
+	 */
+	private function assertCSRFSafety(): void {
+		$session = $this->session ?? RequestContext::getMain()->getRequest()->getSession();
+		if ( !$session->getProvider()->safeAgainstCsrf() ) {
+			// NOTE: We don't use a localized exception here in the hope that core will check this for us in the
+			// future, and that it'll use a single & standardized translatable error message.
+			throw new HttpException(
+				'This endpoint must be used with OAuth',
+				400
+			);
+		}
+	}
+
+	/**
+	 * Test helper.
+	 * @param Session $session
+	 */
+	public function setSession( Session $session ): void {
+		if ( !defined( 'MW_PHPUNIT_TEST' ) ) {
+			throw new BadMethodCallException( 'Should only be used in tests' );
+		}
+		$this->session = $session;
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
@@ -184,7 +219,6 @@ class CreateEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'post',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-			// TODO Do we need a CSRF token?
 		];
 	}
 }
