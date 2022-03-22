@@ -58,4 +58,24 @@ class ParticipantsStore {
 		$dbw->endAtomic();
 		return $previousRow === null;
 	}
+
+	/**
+	 * @param int $eventID
+	 * @param ICampaignsUser $participant
+	 * @return bool True if the participant was removed, false if they never registered or
+	 * they registered but then unregistered.
+	 */
+	public function removeParticipantFromEvent( int $eventID, ICampaignsUser $participant ): bool {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw->update(
+			'ce_participants',
+			[ 'cep_unregistered_at' => $dbw->timestamp() ],
+			[
+				'cep_event_id' => $eventID,
+				'cep_user_id' => $this->centralUserLookup->getCentralID( $participant ),
+				'cep_unregistered_at' => null
+			]
+		);
+		return $dbw->affectedRows() > 0;
+	}
 }

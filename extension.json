@@ -84,6 +84,15 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/participants/self",
+			"method": "DELETE",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UnregisterForEventHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsParticipantsStore"
+			]
 		}
 	],
 	"ServiceWiringFiles": [
