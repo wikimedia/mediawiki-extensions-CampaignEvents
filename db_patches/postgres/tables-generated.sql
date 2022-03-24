@@ -35,6 +35,7 @@ CREATE TABLE ce_participants (
   cep_id BIGSERIAL NOT NULL,
   cep_event_id BIGINT NOT NULL,
   cep_user_id INT NOT NULL,
+  cep_unregistered_at TIMESTAMPTZ DEFAULT NULL,
   PRIMARY KEY(cep_id)
 );
 

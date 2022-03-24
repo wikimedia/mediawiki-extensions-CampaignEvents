@@ -32,14 +32,30 @@ class ParticipantsStore {
 	 */
 	public function addParticipantToEvent( int $eventID, ICampaignsUser $participant ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$dbw->insert(
+		$centralID = $this->centralUserLookup->getCentralID( $participant );
+		// TODO: Would be great if we could do this without opening an atomic section (T304680)
+		$dbw->startAtomic();
+		$previousRow = $dbw->selectRow(
+			'ce_participants',
+			'*',
+			[
+				'cep_event_id' => $eventID,
+				'cep_user_id' => $centralID,
+				'cep_unregistered_at' => null
+			],
+			[ 'FOR UPDATE' ]
+		);
+		$dbw->upsert(
 			'ce_participants',
 			[
 				'cep_event_id' => $eventID,
-				'cep_user_id' => $this->centralUserLookup->getCentralID( $participant )
+				'cep_user_id' => $centralID,
+				'cep_unregistered_at' => null
 			],
-			[ 'IGNORE' ]
+			[ [ 'cep_event_id', 'cep_user_id' ] ],
+			[ 'cep_unregistered_at' => null ]
 		);
-		return $dbw->affectedRows() > 0;
+		$dbw->endAtomic();
+		return $previousRow === null;
 	}
 }

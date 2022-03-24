@@ -198,6 +198,13 @@
 					"notnull": true,
 					"unsigned": true
 				}
+			},
+			{
+				"name": "cep_unregistered_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
 			}
 		],
 		"indexes": [

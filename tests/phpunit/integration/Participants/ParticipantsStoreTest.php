@@ -25,7 +25,11 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @inheritDoc
 	 */
 	public function addDBData(): void {
-		$this->db->insert( 'ce_participants', [ 'cep_event_id' => 1, 'cep_user_id' => 101 ] );
+		$rows = [
+			[ 'cep_event_id' => 1, 'cep_user_id' => 101, 'cep_unregistered_at' => null ],
+			[ 'cep_event_id' => 1, 'cep_user_id' => 102, 'cep_unregistered_at' => '20220324120000' ],
+		];
+		$this->db->insert( 'ce_participants', $rows );
 	}
 
 	/**
@@ -50,7 +54,8 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function provideParticipantsToStore(): Generator {
 		yield 'First participant' => [ 2, 102, true ];
-		yield 'Add participant to existing event' => [ 1, 102, true ];
-		yield 'Already a participant' => [ 1, 101, false ];
+		yield 'Add participant to existing event' => [ 1, 103, true ];
+		yield 'Already an active participant' => [ 1, 101, false ];
+		yield 'Had unregistered' => [ 1, 102, true ];
 	}
 }

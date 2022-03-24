@@ -69,6 +69,13 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	/**
 	 * @inheritDoc
 	 */
+	public function upsert( string $table, array $rows, $uniqueKeys, array $set ): void {
+		$this->db->upsert( $table, $rows, $uniqueKeys, $set, wfGetCaller() );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function insertId(): int {
 		return $this->db->insertId();
 	}
@@ -85,5 +92,19 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	 */
 	public function timestamp( $ts = 0 ): string {
 		return $this->db->timestamp( $ts );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function startAtomic(): void {
+		$this->db->startAtomic( wfGetCaller() );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function endAtomic(): void {
+		$this->db->endAtomic( wfGetCaller() );
 	}
 }

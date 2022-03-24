@@ -34,6 +34,7 @@ CREATE TABLE /*_*/ce_participants (
   cep_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
   cep_event_id BIGINT UNSIGNED NOT NULL,
   cep_user_id INT UNSIGNED NOT NULL,
+  cep_unregistered_at BINARY(14) DEFAULT NULL,
   UNIQUE INDEX cep_event_participant (cep_event_id, cep_user_id),
   PRIMARY KEY(cep_id)
 ) /*$wgDBTableOptions*/;

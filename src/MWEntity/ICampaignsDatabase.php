@@ -80,6 +80,15 @@ interface ICampaignsDatabase {
 	public function replace( string $table, string $uniqueKey, array $row ): void;
 
 	/**
+	 * @param string $table
+	 * @param array|array[] $rows
+	 * @param string|string[][] $uniqueKeys
+	 * @param array $set
+	 * @since 1.22
+	 */
+	public function upsert( string $table, array $rows, $uniqueKeys, array $set ): void;
+
+	/**
 	 * @return int
 	 */
 	public function insertId(): int;
@@ -94,4 +103,14 @@ interface ICampaignsDatabase {
 	 * @return string
 	 */
 	public function timestamp( $ts = 0 ): string;
+
+	/**
+	 * Begins an atomic section
+	 */
+	public function startAtomic(): void;
+
+	/**
+	 * End an atomic section
+	 */
+	public function endAtomic(): void;
 }
