@@ -27,7 +27,6 @@
 	"campaignevents-error-start-after-end": "The start date cannot be after the end date",
 	"campaignevents-error-invalid-type": "The event type is invalid",
 	"campaignevents-error-no-meeting-type": "At least one event meeting type is required",
-	"campaignevents-error-online-no-meeting-url": "Online events must have a meeting URL",
 	"campaignevents-error-invalid-meeting-url": "The event meeting URL is invalid",
 	"campaignevents-error-physical-no-country": "Physical events must have a country",
 	"campaignevents-error-physical-no-address": "Physical events must have an address",
