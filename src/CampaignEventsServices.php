@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
@@ -72,5 +73,12 @@ class CampaignEventsServices {
 	 */
 	public static function getParticipantsStore(): ParticipantsStore {
 		return MediaWikiServices::getInstance()->getService( ParticipantsStore::SERVICE_NAME );
+	}
+
+	/**
+	 * @return OrganizersStore
+	 */
+	public static function getOrganizersStore(): OrganizersStore {
+		return MediaWikiServices::getInstance()->getService( OrganizersStore::SERVICE_NAME );
 	}
 }

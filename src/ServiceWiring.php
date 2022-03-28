@@ -7,6 +7,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\EventStore;
@@ -64,6 +65,12 @@ return [
 	},
 	ParticipantsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): ParticipantsStore {
 		return new ParticipantsStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+		);
+	},
+	OrganizersStore::SERVICE_NAME => static function ( MediaWikiServices $services ): OrganizersStore {
+		return new OrganizersStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
