@@ -55,5 +55,6 @@
 	"campaignevents-edit-not-allowed-page": "Error message shown on [[Special:EditEventRegistration]] when the user is not allowed to create a registration for the given page",
 	"campaignevents-edit-success-msg": "Success message shown on [[Special:EditEventRegistration]] when the registration was created successfully",
 	"campaignevents-edit-invalid-id": "Error message shown on [[Special:EditEventRegistration]]",
-	"campaignevents-edit-event-notfound": "Error message shown on [[Special:EditEventRegistration]]"
+	"campaignevents-edit-event-notfound": "Error message shown on [[Special:EditEventRegistration]]",
+	"campaignevents-error-page-already-registered": "Error message used when the user tries to add a registration to an event page which already has a different one."
 }

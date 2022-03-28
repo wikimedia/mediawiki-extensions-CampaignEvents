@@ -23,14 +23,36 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/** @inheritDoc */
 	protected $tablesUsed = [ 'campaign_events' ];
 
-	/**
-	 * @param EventRegistration $event
-	 * @covers ::getEvent
-	 * @covers ::newEventFromDBRow
-	 * @covers ::saveRegistration
-	 * @dataProvider provideEvents
-	 */
-	public function testRoundtrip( EventRegistration $event ) {
+	private function assertEventsEqual( EventRegistration $expected, EventRegistration $actual ): void {
+		$this->assertSame( $expected->getName(), $actual->getName(), 'name' );
+		$this->assertSame( $expected->getPage()->getNamespace(), $actual->getPage()->getNamespace(), 'Page ns' );
+		$this->assertSame( $expected->getPage()->getDBkey(), $actual->getPage()->getDBkey(), 'Page dbkey' );
+		$this->assertSame( $expected->getPage()->getWikiId(), $actual->getPage()->getWikiId(), 'Page wiki ID' );
+		$this->assertSame( $expected->getTrackingToolName(), $actual->getTrackingToolName(), 'tracking tool name' );
+		$this->assertSame( $expected->getTrackingToolURL(), $actual->getTrackingToolURL(), 'tracking tool URL' );
+		$this->assertSame( $expected->getStatus(), $actual->getStatus(), 'status' );
+		$this->assertSame( $expected->getStartTimestamp(), $actual->getStartTimestamp(), 'start' );
+		$this->assertSame( $expected->getEndTimestamp(), $actual->getEndTimestamp(), 'end' );
+		$this->assertSame( $expected->getType(), $actual->getType(), 'type' );
+		$this->assertSame( $expected->getMeetingType(), $actual->getMeetingType(), 'meeting type' );
+		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
+		$this->assertSame( $expected->getMeetingCountry(), $actual->getMeetingCountry(), 'country' );
+		$this->assertSame( $expected->getMeetingAddress(), $actual->getMeetingAddress(), 'address' );
+	}
+
+	private function assertStoredEvent( int $insertID, EventRegistration $storedEvent ) {
+		$this->assertSame( $insertID, $storedEvent->getID(), 'ID' );
+		$this->assertNotNull( $storedEvent->getCreationTimestamp(), 'Creation ts' );
+		$this->assertNotNull( $storedEvent->getLastEditTimestamp(), 'Last edit ts' );
+		$this->assertSame(
+			$storedEvent->getCreationTimestamp(),
+			$storedEvent->getLastEditTimestamp(),
+			'Creation = last edit'
+		);
+		$this->assertNull( $storedEvent->getDeletionTimestamp() );
+	}
+
+	private function storeEvent( EventRegistration $event ): int {
 		$eventPage = $event->getPage();
 		$this->assertSame(
 			WikiAwareEntity::LOCAL,
@@ -41,35 +63,42 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->editPage( $eventPageTitle, 'Making sure that the event page exist' );
 
 		$store = CampaignEventsServices::getEventStore();
-		$id = $store->saveRegistration( $event );
+		$status = $store->saveRegistration( $event );
+		$this->assertTrue( $status->isGood(), 'Should be successful' );
+		$savedID = $status->getValue();
+		$this->assertIsInt( $savedID, 'Status value should be the insertion ID' );
 		if ( $event->getID() !== null ) {
-			$this->assertSame( $event->getID(), $id, 'ID should remain the same when updating' );
+			$this->assertSame( $event->getID(), $savedID, 'ID should remain the same when updating' );
 		}
+		return $savedID;
+	}
 
-		$storedEvent = CampaignEventsServices::getEventLookup()->getEvent( $id );
-		$this->assertSame( $id, $storedEvent->getID(), 'ID' );
-		$this->assertSame( $event->getName(), $storedEvent->getName(), 'name' );
-		$this->assertSame( $event->getPage()->getNamespace(), $storedEvent->getPage()->getNamespace(), 'Page ns' );
-		$this->assertSame( $event->getPage()->getDBkey(), $storedEvent->getPage()->getDBkey(), 'Page dbkey' );
-		$this->assertSame( $event->getPage()->getWikiId(), $storedEvent->getPage()->getWikiId(), 'Page wiki ID' );
-		$this->assertSame( $event->getTrackingToolName(), $storedEvent->getTrackingToolName(), 'tracking tool name' );
-		$this->assertSame( $event->getTrackingToolURL(), $storedEvent->getTrackingToolURL(), 'tracking tool URL' );
-		$this->assertSame( $event->getStatus(), $storedEvent->getStatus(), 'status' );
-		$this->assertSame( $event->getStartTimestamp(), $storedEvent->getStartTimestamp(), 'start' );
-		$this->assertSame( $event->getEndTimestamp(), $storedEvent->getEndTimestamp(), 'end' );
-		$this->assertSame( $event->getType(), $storedEvent->getType(), 'type' );
-		$this->assertSame( $event->getMeetingType(), $storedEvent->getMeetingType(), 'meeting type' );
-		$this->assertSame( $event->getMeetingURL(), $storedEvent->getMeetingURL(), 'meeting URL' );
-		$this->assertSame( $event->getMeetingCountry(), $storedEvent->getMeetingCountry(), 'country' );
-		$this->assertSame( $event->getMeetingAddress(), $storedEvent->getMeetingAddress(), 'address' );
-		$this->assertNotNull( $storedEvent->getCreationTimestamp(), 'Creation ts' );
-		$this->assertNotNull( $storedEvent->getLastEditTimestamp(), 'Last edit ts' );
-		$this->assertSame(
-			$storedEvent->getCreationTimestamp(),
-			$storedEvent->getLastEditTimestamp(),
-			'Creation = last edit'
-		);
-		$this->assertNull( $storedEvent->getDeletionTimestamp() );
+	/**
+	 * @param EventRegistration $event
+	 * @covers ::getEventByID
+	 * @covers ::newEventFromDBRow
+	 * @covers ::saveRegistration
+	 * @dataProvider provideEvents
+	 */
+	public function testRoundtripByID( EventRegistration $event ) {
+		$savedID = $this->storeEvent( $event );
+		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByID( $savedID );
+		$this->assertEventsEqual( $event, $storedEvent );
+		$this->assertStoredEvent( $savedID, $storedEvent );
+	}
+
+	/**
+	 * @param EventRegistration $event
+	 * @covers ::getEventByPage
+	 * @covers ::newEventFromDBRow
+	 * @covers ::saveRegistration
+	 * @dataProvider provideEvents
+	 */
+	public function testRoundtripByPage( EventRegistration $event ) {
+		$savedID = $this->storeEvent( $event );
+		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $event->getPage() );
+		$this->assertEventsEqual( $event, $storedEvent );
+		$this->assertStoredEvent( $savedID, $storedEvent );
 	}
 
 	public function provideEvents(): Generator {

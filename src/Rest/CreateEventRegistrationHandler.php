@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use ApiMessage;
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
@@ -13,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\EventStore;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\LocalizedHttpException;
+use StatusValue;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
@@ -84,10 +86,7 @@ class CreateEventRegistrationHandler extends Handler {
 				null
 			);
 		} catch ( InvalidEventDataException $e ) {
-			// TODO Report all errors, not just the first one.
-			$err = $e->getStatus()->getErrors()[0];
-			$apiMsg = ApiMessage::create( $err );
-			throw new LocalizedHttpException( new MessageValue( $apiMsg->getKey(), $apiMsg->getParams() ), 400 );
+			$this->exitWithStatus( $e->getStatus() );
 		}
 
 		if ( !$this->permissionChecker->userCanCreateRegistration( $user, $event->getPage() ) ) {
@@ -97,10 +96,27 @@ class CreateEventRegistrationHandler extends Handler {
 			);
 		}
 
-		$id = $this->eventStore->saveRegistration( $event );
+		$saveStatus = $this->eventStore->saveRegistration( $event );
+		if ( !$saveStatus->isGood() ) {
+			$this->exitWithStatus( $saveStatus );
+		}
 		return $this->getResponseFactory()->createJson( [
-			'id' => $id
+			'id' => $saveStatus->getValue()
 		] );
+	}
+
+	/**
+	 * @param StatusValue $status
+	 * @return never
+	 */
+	private function exitWithStatus( StatusValue $status ): void {
+		$errors = $status->getErrors();
+		if ( !$errors ) {
+			throw new InvalidArgumentException( "Got status without errors" );
+		}
+		// TODO Report all errors, not just the first one.
+		$apiMsg = ApiMessage::create( $errors[0] );
+		throw new LocalizedHttpException( new MessageValue( $apiMsg->getKey(), $apiMsg->getParams() ), 400 );
 	}
 
 	/**

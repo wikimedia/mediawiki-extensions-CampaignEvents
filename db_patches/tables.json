@@ -158,7 +158,14 @@
 				}
 			}
 		],
-		"indexes": [],
+		"indexes": [
+			{
+				"name": "event_page",
+				"columns": [ "event_page_wiki", "event_page_namespace", "event_page_title" ],
+				"unique": true,
+				"comment": "Used when querying events by pages. The index is currently unique, but this may change in the future."
+			}
+		],
 		"pk": [ "event_id" ]
 	},
 	{
