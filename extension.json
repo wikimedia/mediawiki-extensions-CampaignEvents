@@ -101,5 +101,9 @@
 			]
 		}
 	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\CampaignEvents\\Tests\\Unit\\": "tests/phpunit/unit/",
+		"MediaWiki\\Extension\\CampaignEvents\\Tests\\Integration\\": "tests/phpunit/integration/"
+	},
 	"manifest_version": 2
 }

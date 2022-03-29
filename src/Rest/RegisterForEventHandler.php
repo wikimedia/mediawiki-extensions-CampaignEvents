@@ -18,6 +18,8 @@ use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class RegisterForEventHandler extends SimpleHandler {
+	use CSRFCheckTrait;
+
 	/** @var PermissionChecker */
 	private $permissionChecker;
 	/** @var IEventLookup */
@@ -45,6 +47,8 @@ class RegisterForEventHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
+		$this->assertCSRFSafety();
+
 		$performerAuthority = $this->getAuthority();
 		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
 

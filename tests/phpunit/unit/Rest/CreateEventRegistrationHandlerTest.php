@@ -14,8 +14,6 @@ use MediaWiki\Extension\CampaignEvents\Store\EventStore;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
-use MediaWiki\Session\Session;
-use MediaWiki\Session\SessionProviderInterface;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWikiUnitTestCase;
 use StatusValue;
@@ -27,6 +25,7 @@ use StatusValue;
  */
 class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
+	use CSRFTestHelperTrait;
 
 	private const DEFAULT_POST_PARAMS = [
 		'name' => 'Some event name',
@@ -73,11 +72,7 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventStore,
 			$permchecker ?? new PermissionChecker()
 		);
-		$sessionProvider = $this->createMock( SessionProviderInterface::class );
-		$sessionProvider->method( 'safeAgainstCsrf' )->willReturn( true );
-		$session = $this->createMock( Session::class );
-		$session->method( 'getProvider' )->willReturn( $sessionProvider );
-		$handler->setSession( $session );
+		$this->setHandlerCSRFSafe( $handler );
 		return $handler;
 	}
 

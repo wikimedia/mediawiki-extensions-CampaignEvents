@@ -25,6 +25,7 @@ use MWTimestamp;
  */
 class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
+	use CSRFTestHelperTrait;
 
 	private const DEFAULT_REQ_DATA = [
 		'method' => 'PUT',
@@ -53,11 +54,13 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 			$event->method( 'getEndTimestamp' )->willReturn( (string)( self::FAKE_TIME + 1 ) );
 			$eventLookup->method( 'getEventByID' )->willReturn( $event );
 		}
-		return new RegisterForEventHandler(
+		$handler = new RegisterForEventHandler(
 			new PermissionChecker(),
 			$eventLookup,
 			$participantsStore ?? $this->createMock( ParticipantsStore::class )
 		);
+		$this->setHandlerCSRFSafe( $handler );
+		return $handler;
 	}
 
 	/**
