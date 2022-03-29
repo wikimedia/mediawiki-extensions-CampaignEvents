@@ -93,19 +93,37 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}",
+			"method": "POST",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EditEventRegistrationHandler",
+			"services": [
+				"CampaignEventsEventFactory",
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsEditEventCommand"
+			]
 		}
 	],
 	"ServiceWiringFiles": [
 		"src/ServiceWiring.php"
 	],
 	"SpecialPages": {
+		"CreateEventRegistration": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialCreateEventRegistration",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsEventFactory",
+				"CampaignEventsCampaignsPageFormatter",
+				"CampaignEventsEditEventCommand"
+			]
+		},
 		"EditEventRegistration": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEditEventRegistration",
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
 				"CampaignEventsCampaignsPageFormatter",
-				"CampaignEventsPermissionChecker",
 				"CampaignEventsEditEventCommand"
 			]
 		},

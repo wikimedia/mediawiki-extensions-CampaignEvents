@@ -5,9 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
-use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
+use MediaWiki\Extension\CampaignEvents\Rest\EditEventRegistrationHandler;
+use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
@@ -15,23 +17,25 @@ use StatusValue;
 
 /**
  * @group Test
- * @covers \MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\EditEventRegistrationHandler
  * @todo We can't test param validation due to T303619
  */
-class CreateEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerTestBase {
+class EditEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerTestBase {
 
 	use HandlerTestTrait;
 
+	protected const DEFAULT_POST_PARAMS = [ 'id' => 1 ] + parent::DEFAULT_POST_PARAMS;
+
 	protected const DEFAULT_REQ_DATA = [
 		'method' => 'POST',
-		'postParams' => parent::DEFAULT_POST_PARAMS
+		'postParams' => self::DEFAULT_POST_PARAMS
 	];
 
 	/**
 	 * @return string
 	 */
 	protected function getHandlerClass(): string {
-		return CreateEventRegistrationHandler::class;
+		return EditEventRegistrationHandler::class;
 	}
 
 	/**
@@ -40,7 +44,7 @@ class CreateEventRegistrationHandlerTest extends AbstractEventRegistrationHandle
 	public function testExecute__successful(): void {
 		$handler = $this->newHandler();
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
-		$respData = $this->executeHandlerAndGetBodyData(
+		$respData = $this->executeHandler(
 			$handler,
 			$request,
 			[],
@@ -49,21 +53,28 @@ class CreateEventRegistrationHandlerTest extends AbstractEventRegistrationHandle
 			[],
 			$this->mockRegisteredUltimateAuthority()
 		);
-		$this->assertArrayHasKey( 'id', $respData );
-		$this->assertIsInt( $respData['id'] );
+
+		$this->assertSame( 204, $respData->getStatusCode() );
 	}
 
-	public function testExecute__unauthorized() {
-		$performer = $this->mockAnonNullAuthority();
-		$handler = $this->newHandler();
+	/**
+	 * @return void
+	 */
+	public function testExecute__editRegistrationPermissions() {
+		$authority = $this->mockRegisteredUltimateAuthority();
+		$editEventCmd = $this->createMock( EditEventCommand::class );
+		$editEventCmd->method( 'doEditIfAllowed' )->willReturn(
+			PermissionStatus::newFatal( 'campaignevents-edit-not-allowed-page' )
+		);
+		$handler = $this->newHandler( null, $editEventCmd );
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
 
 		try {
-			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS, [], $performer );
+			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS, [], $authority );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 403, $e->getCode() );
-			$this->assertSame( 'campaignevents-rest-createevent-permission-denied', $e->getMessageValue()->getKey() );
+			$this->assertSame( 'campaignevents-edit-not-allowed-page', $e->getMessageValue()->getKey() );
 		}
 	}
 

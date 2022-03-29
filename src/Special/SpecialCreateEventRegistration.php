@@ -7,10 +7,10 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
-use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 
-class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
+class SpecialCreateEventRegistration extends AbstractEventRegistrationSpecialPage {
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -25,8 +25,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		EditEventCommand $editEventCommand
 	) {
 		parent::__construct(
-			'EditEventRegistration',
-			'',
+			'CreateEventRegistration',
+			PermissionChecker::CREATE_REGISTRATIONS_RIGHT,
 			$eventLookup,
 			$eventFactory,
 			$campaignsPageFormatter,
@@ -39,31 +39,9 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 */
 	protected function getFormMessages(): array {
 		return [
-			'success' => 'campaignevents-edit-success-msg',
+			'success' => 'campaignevents-create-success-msg',
 			'form-legend' => 'campaignevents-edit-form-legend',
-			'submit' => 'campaignevents-edit-form-submit',
+			'submit' => 'campaignevents-create-form-submit',
 		];
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function execute( $par ): void {
-		if ( $par === null ) {
-			$this->outputErrorBox( 'campaignevents-edit-no-event-id-provided' );
-			return;
-		}
-		$this->eventID = (int)$par;
-		if ( (string)$this->eventID !== $par ) {
-			$this->outputErrorBox( 'campaignevents-edit-invalid-id' );
-			return;
-		}
-		try {
-			$this->event = $this->eventLookup->getEventByID( $this->eventID );
-		} catch ( EventNotFoundException $_ ) {
-			$this->outputErrorBox( 'campaignevents-edit-event-notfound' );
-			return;
-		}
-		parent::execute( $par );
 	}
 }
