@@ -47,10 +47,3 @@ CREATE TABLE /*_*/ce_organizers (
   ceo_role_id BIGINT UNSIGNED NOT NULL,
   PRIMARY KEY(ceo_id)
 ) /*$wgDBTableOptions*/;
-
-
-CREATE TABLE /*_*/ceo_roles (
-  ceor_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
-  ceor_name VARBINARY(255) NOT NULL,
-  PRIMARY KEY(ceor_id)
-) /*$wgDBTableOptions*/;

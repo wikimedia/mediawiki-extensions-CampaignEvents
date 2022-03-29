@@ -26,10 +26,10 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 		}
 
 		$dbType = $updater->getDB()->getType();
-		$dir = dirname( dirname( dirname( __DIR__ ) ) ) . "/db_patches";
+		$dir = __DIR__ . "/../../../db_patches";
 
 		$updater->addExtensionTable(
-			'ceo_roles',
+			'ce_organizers',
 			"$dir/$dbType/tables-generated.sql"
 		);
 	}
