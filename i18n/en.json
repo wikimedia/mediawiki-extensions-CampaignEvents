@@ -33,7 +33,6 @@
 	"campaignevents-error-invalid-country": "The event country is invalid",
 	"campaignevents-error-invalid-address": "The event address is invalid",
 	"campaignevents-rest-createevent-permission-denied": "You are not allowed to create event registrations",
-	"campaignevents-rest-createevent-permission-denied-page": "You are not allowed to create an event registration for the given event page",
 	"campaignevents-rest-register-permission-denied": "You are not allowed to register for events",
 	"campaignevents-rest-register-event-not-found": "No event exists with the given ID",
 	"campaignevents-rest-register-event-not-open": "The specified event registration is closed",
@@ -55,9 +54,10 @@
 	"campaignevents-edit-field-chat-url": "Group chat invite",
 	"campaignevents-edit-field-chat-url-help": "If you have an online chat group for the participants of this event, you can add the invite link here. Participants will be sent the invite link after registering.",
 	"campaignevents-edit-form-submit": "Enable registration",
-	"campaignevents-edit-not-allowed-page": "You are not allowed to edit event registrations for the given page",
 	"campaignevents-edit-success-msg": "The registration was enabled. Participants can now register on the event page.",
 	"campaignevents-edit-invalid-id": "The event ID you provided is invalid",
 	"campaignevents-edit-event-notfound": "No event with the given ID exists",
-	"campaignevents-error-page-already-registered": "The given event page already has another registration associated."
+	"campaignevents-error-page-already-registered": "The given event page already has another registration associated.",
+	"campaignevents-edit-not-allowed-page": "You are not allowed to edit the event registration for the given event page",
+	"campaignevents-create-not-allowed-page": "You are not allowed to create an event registration for the given event page"
 }

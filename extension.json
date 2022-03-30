@@ -71,8 +71,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\CreateEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventFactory",
-				"CampaignEventsEventStore",
-				"CampaignEventsPermissionChecker"
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsEditEventCommand"
 			]
 		},
 		{
@@ -95,9 +95,9 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
-				"CampaignEventsEventStore",
 				"CampaignEventsCampaignsPageFormatter",
-				"CampaignEventsPermissionChecker"
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsEditEventCommand"
 			]
 		}
 	},

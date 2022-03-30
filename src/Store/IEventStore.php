@@ -12,7 +12,7 @@ interface IEventStore {
 
 	/**
 	 * @param EventRegistration $event
-	 * @return StatusValue If good, the value should be the ID of the event.
+	 * @return StatusValue If good, the value shall be the ID of the event.
 	 */
 	public function saveRegistration( EventRegistration $event ): StatusValue;
 }

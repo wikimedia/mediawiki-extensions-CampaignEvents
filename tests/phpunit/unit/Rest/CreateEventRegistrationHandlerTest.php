@@ -5,13 +5,12 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
-use MediaWiki\Extension\CampaignEvents\Store\EventStore;
-use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
@@ -49,12 +48,10 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	];
 
 	/**
-	 * @param PermissionChecker|null $permchecker
 	 * @param EventFactory|null $eventFactory
 	 * @return CreateEventRegistrationHandler
 	 */
 	private function newHandler(
-		PermissionChecker $permchecker = null,
 		EventFactory $eventFactory = null
 	): CreateEventRegistrationHandler {
 		if ( !$eventFactory ) {
@@ -65,12 +62,13 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventFactory->method( 'newEvent' )->willReturn( $event );
 		}
 
-		$eventStore = $this->createMock( EventStore::class );
-		$eventStore->method( 'saveRegistration' )->willReturn( StatusValue::newGood( 42 ) );
+		$editEventCmd = $this->createMock( EditEventCommand::class );
+		$editEventCmd->method( 'doEditIfAllowed' )->willReturn( StatusValue::newGood( 42 ) );
+
 		$handler = new CreateEventRegistrationHandler(
 			$eventFactory,
-			$eventStore,
-			$permchecker ?? new PermissionChecker()
+			new PermissionChecker(),
+			$editEventCmd
 		);
 		$this->setHandlerCSRFSafe( $handler );
 		return $handler;
@@ -84,46 +82,18 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$this->assertIsInt( $respData['id'] );
 	}
 
-	/**
-	 * @param Authority $authority
-	 * @param PermissionChecker|null $permChecker
-	 * @param string $expectedMsgKey
-	 * @dataProvider provideExecuteDataForPermissionTest
-	 */
-	public function testExecute__permissions(
-		Authority $authority,
-		?PermissionChecker $permChecker,
-		string $expectedMsgKey
-	) {
-		$handler = $this->newHandler( $permChecker );
+	public function testExecute__unauthorized() {
+		$performer = $this->mockAnonNullAuthority();
+		$handler = $this->newHandler();
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
 
 		try {
-			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS, [], $authority );
+			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS, [], $performer );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 403, $e->getCode() );
-			$this->assertSame( $expectedMsgKey, $e->getMessageValue()->getKey() );
+			$this->assertSame( 'campaignevents-rest-createevent-permission-denied', $e->getMessageValue()->getKey() );
 		}
-	}
-
-	public function provideExecuteDataForPermissionTest(): Generator {
-		$nullAuthority = $this->mockAnonNullAuthority();
-		yield 'Cannot create registrations' => [
-			$nullAuthority,
-			null,
-			'campaignevents-rest-createevent-permission-denied'
-		];
-
-		// TODO MVP: Improve this when userCanCreateRegistration will actually check something more.
-		$permChecker = $this->createMock( PermissionChecker::class );
-		$permChecker->method( 'userCanCreateRegistrations' )->willReturn( true );
-		$permChecker->method( 'userCanCreateRegistration' )->willReturn( false );
-		yield 'Cannot create registration for the given page' => [
-			$this->mockRegisteredUltimateAuthority(),
-			$permChecker,
-			'campaignevents-rest-createevent-permission-denied-page'
-		];
 	}
 
 	/**
@@ -132,7 +102,7 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideExecuteDataForValidationTest
 	 */
 	public function testExecute__validation( EventFactory $eventFactory, string $expectedMsgKey ) {
-		$handler = $this->newHandler( null, $eventFactory );
+		$handler = $this->newHandler( $eventFactory );
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
 
 		try {

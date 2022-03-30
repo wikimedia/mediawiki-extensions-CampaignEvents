@@ -33,7 +33,6 @@
 	"campaignevents-error-invalid-country": "Error message used when the given event country is invalid.",
 	"campaignevents-error-invalid-address": "Error message used when the given event address URL is invalid.",
 	"campaignevents-rest-createevent-permission-denied": "Error message used when an unauthorized user attempts to create an event registration.",
-	"campaignevents-rest-createevent-permission-denied-page": "Error message used when an unauthorized user attempts to create an event registration for a specific page.",
 	"campaignevents-rest-register-permission-denied": "Error message used when an unauthorized user attempts to register for an event.",
 	"campaignevents-rest-register-event-not-found": "Error message used when the event that the user wants to register for does not exist.",
 	"campaignevents-rest-register-event-not-open": "Error message used when the event that the user wants to register for is closed.",
@@ -55,9 +54,10 @@
 	"campaignevents-edit-field-chat-url": "Label of the event chat invite link field on [[Special:EditEventRegistration]]",
 	"campaignevents-edit-field-chat-url-help": "Content of the help tooltip for the event chat invite link field on [[Special:EditEventRegistration]]",
 	"campaignevents-edit-form-submit": "Label of the form submission button on [[Special:EditEventRegistration]]",
-	"campaignevents-edit-not-allowed-page": "Error message shown on [[Special:EditEventRegistration]] when the user is not allowed to create a registration for the given page",
 	"campaignevents-edit-success-msg": "Success message shown on [[Special:EditEventRegistration]] when the registration was created successfully",
 	"campaignevents-edit-invalid-id": "Error message shown on [[Special:EditEventRegistration]]",
 	"campaignevents-edit-event-notfound": "Error message shown on [[Special:EditEventRegistration]]",
-	"campaignevents-error-page-already-registered": "Error message used when the user tries to add a registration to an event page which already has a different one."
+	"campaignevents-error-page-already-registered": "Error message used when the user tries to add a registration to an event page which already has a different one.",
+	"campaignevents-edit-not-allowed-page": "Error message used when the user is not allowed to edit a registration for the given page",
+	"campaignevents-create-not-allowed-page": "Error message used when the user is not allowed to create a registration for the given page"
 }

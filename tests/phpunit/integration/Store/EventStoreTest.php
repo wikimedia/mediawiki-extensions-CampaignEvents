@@ -64,7 +64,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 		$store = CampaignEventsServices::getEventStore();
 		$status = $store->saveRegistration( $event );
-		$this->assertTrue( $status->isGood(), 'Should be successful' );
+		$this->assertStatusGood( $status, 'Should be successful' );
 		$savedID = $status->getValue();
 		$this->assertIsInt( $savedID, 'Status value should be the insertion ID' );
 		if ( $event->getID() !== null ) {

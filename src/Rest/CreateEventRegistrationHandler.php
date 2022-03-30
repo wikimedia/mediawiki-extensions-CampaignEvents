@@ -6,12 +6,13 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use ApiMessage;
 use InvalidArgumentException;
+use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\Store\EventStore;
+use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\LocalizedHttpException;
 use StatusValue;
@@ -24,24 +25,24 @@ class CreateEventRegistrationHandler extends Handler {
 
 	/** @var EventFactory */
 	private $eventFactory;
-	/** @var EventStore */
-	private $eventStore;
 	/** @var PermissionChecker */
 	private $permissionChecker;
+	/** @var EditEventCommand */
+	private $editEventCommand;
 
 	/**
 	 * @param EventFactory $eventFactory
-	 * @param EventStore $eventStore
 	 * @param PermissionChecker $permissionChecker
+	 * @param EditEventCommand $editEventCommand
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
-		EventStore $eventStore,
-		PermissionChecker $permissionChecker
+		PermissionChecker $permissionChecker,
+		EditEventCommand $editEventCommand
 	) {
 		$this->eventFactory = $eventFactory;
-		$this->eventStore = $eventStore;
 		$this->permissionChecker = $permissionChecker;
+		$this->editEventCommand = $editEventCommand;
 	}
 
 	/**
@@ -93,16 +94,10 @@ class CreateEventRegistrationHandler extends Handler {
 			$this->exitWithStatus( $e->getStatus() );
 		}
 
-		if ( !$this->permissionChecker->userCanCreateRegistration( $user, $event->getPage() ) ) {
-			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-createevent-permission-denied-page' ),
-				403
-			);
-		}
-
-		$saveStatus = $this->eventStore->saveRegistration( $event );
+		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $user );
 		if ( !$saveStatus->isGood() ) {
-			$this->exitWithStatus( $saveStatus );
+			$httptStatus = $saveStatus instanceof PermissionStatus ? 403 : 400;
+			$this->exitWithStatus( $saveStatus, $httptStatus );
 		}
 		// TODO Set status code 201 when we'll be able to provide a Location
 		return $this->getResponseFactory()->createJson( [
@@ -112,16 +107,17 @@ class CreateEventRegistrationHandler extends Handler {
 
 	/**
 	 * @param StatusValue $status
+	 * @param int $statusCode
 	 * @return never
 	 */
-	private function exitWithStatus( StatusValue $status ): void {
+	private function exitWithStatus( StatusValue $status, int $statusCode = 400 ): void {
 		$errors = $status->getErrors();
 		if ( !$errors ) {
 			throw new InvalidArgumentException( "Got status without errors" );
 		}
 		// TODO Report all errors, not just the first one.
 		$apiMsg = ApiMessage::create( $errors[0] );
-		throw new LocalizedHttpException( new MessageValue( $apiMsg->getKey(), $apiMsg->getParams() ), 400 );
+		throw new LocalizedHttpException( new MessageValue( $apiMsg->getKey(), $apiMsg->getParams() ), $statusCode );
 	}
 
 	/**
