@@ -49,3 +49,7 @@ CREATE TABLE ce_organizers (
   ceo_role_id BIGINT NOT NULL,
   PRIMARY KEY(ceo_id)
 );
+
+CREATE UNIQUE INDEX ceo_event_user_role ON ce_organizers (
+  ceo_event_id, ceo_user_id, ceo_role_id
+);

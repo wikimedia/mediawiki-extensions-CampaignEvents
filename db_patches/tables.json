@@ -257,7 +257,13 @@
 				}
 			}
 		],
-		"indexes": [],
+		"indexes": [
+			{
+				"name": "ceo_event_user_role",
+				"columns": [ "ceo_event_id", "ceo_user_id", "ceo_role_id" ],
+				"unique": true
+			}
+		],
 		"pk": [ "ceo_id" ]
 	}
 ]
