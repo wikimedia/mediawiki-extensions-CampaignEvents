@@ -6,26 +6,33 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 
 class PermissionChecker {
 	public const SERVICE_NAME = 'CampaignEventsPermissionChecker';
 
-	private const CREATE_REGISTRATIONS_RIGHT = 'campaignevents-create-registration';
+	public const CREATE_REGISTRATIONS_RIGHT = 'campaignevents-create-registration';
+
+	/** @var UserBlockChecker */
+	private $userBlockChecker;
 
 	/**
+	 * @param UserBlockChecker $userBlockChecker
+	 */
+	public function __construct( UserBlockChecker $userBlockChecker ) {
+		$this->userBlockChecker = $userBlockChecker;
+	}
+
+	/**
+	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring login, unblock,
+	 * and rights.
 	 * @param ICampaignsUser $user
 	 * @return bool
 	 */
 	public function userCanCreateRegistrations( ICampaignsUser $user ): bool {
-		// TODO Should this also check whether the user is blocked?
-		return $user->hasRight( self::CREATE_REGISTRATIONS_RIGHT );
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCreateRegistrationsRight(): string {
-		return self::CREATE_REGISTRATIONS_RIGHT;
+		return $user->isRegistered()
+			&& $user->hasRight( self::CREATE_REGISTRATIONS_RIGHT )
+			&& !$this->userBlockChecker->isSitewideBlocked( $user );
 	}
 
 	/**

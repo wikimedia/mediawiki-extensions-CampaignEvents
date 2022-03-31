@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -67,7 +68,7 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 
 		$handler = new CreateEventRegistrationHandler(
 			$eventFactory,
-			new PermissionChecker(),
+			$permchecker ?? new PermissionChecker( $this->createMock( UserBlockChecker::class ) ),
 			$editEventCmd
 		);
 		$this->setHandlerCSRFSafe( $handler );
@@ -77,7 +78,15 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	public function testExecute__successful() {
 		$handler = $this->newHandler();
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
-		$respData = $this->executeHandlerAndGetBodyData( $handler, $request, [], [], self::DEFAULT_POST_PARAMS );
+		$respData = $this->executeHandlerAndGetBodyData(
+			$handler,
+			$request,
+			[],
+			[],
+			self::DEFAULT_POST_PARAMS,
+			[],
+			$this->mockRegisteredUltimateAuthority()
+		);
 		$this->assertArrayHasKey( 'id', $respData );
 		$this->assertIsInt( $respData['id'] );
 	}
@@ -106,7 +115,15 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
 
 		try {
-			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS );
+			$this->executeHandler(
+				$handler,
+				$request,
+				[],
+				[],
+				self::DEFAULT_POST_PARAMS,
+				[],
+				$this->mockRegisteredUltimateAuthority()
+			);
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 400, $e->getCode() );

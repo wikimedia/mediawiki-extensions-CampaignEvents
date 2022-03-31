@@ -48,7 +48,7 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 		PermissionChecker $permissionChecker,
 		EditEventCommand $editEventCommand
 	) {
-		parent::__construct( 'EditEventRegistration', $permissionChecker->getCreateRegistrationsRight() );
+		parent::__construct( 'EditEventRegistration', PermissionChecker::CREATE_REGISTRATIONS_RIGHT );
 		$this->eventLookup = $eventLookup;
 		$this->eventFactory = $eventFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
@@ -59,6 +59,7 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function execute( $par ): void {
+		$this->requireLogin();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 		if ( $par !== null ) {
 			// Editing an existing registration

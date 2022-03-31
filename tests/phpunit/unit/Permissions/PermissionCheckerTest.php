@@ -8,8 +8,10 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\SimpleAuthority;
+use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
 
@@ -17,18 +19,32 @@ use MediaWikiUnitTestCase;
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker
  */
 class PermissionCheckerTest extends MediaWikiUnitTestCase {
-	private function getPermissionChecker(): PermissionChecker {
-		return new PermissionChecker();
+	use MockAuthorityTrait;
+
+	/**
+	 * @param UserBlockChecker|null $blockChecker
+	 * @return PermissionChecker
+	 */
+	private function getPermissionChecker( UserBlockChecker $blockChecker = null ): PermissionChecker {
+		return new PermissionChecker( $blockChecker ?? $this->createMock( UserBlockChecker::class ) );
 	}
 
 	/**
 	 * @param bool $expected
 	 * @param ICampaignsUser $user
+	 * @param UserBlockChecker|null $blockChecker
 	 * @covers ::userCanCreateRegistrations
 	 * @dataProvider provideUsers
 	 */
-	public function testUserCanCreateRegistrations( bool $expected, ICampaignsUser $user ) {
-		$this->assertSame( $expected, $this->getPermissionChecker()->userCanCreateRegistrations( $user ) );
+	public function testUserCanCreateRegistrations(
+		bool $expected,
+		ICampaignsUser $user,
+		UserBlockChecker $blockChecker = null
+	) {
+		$this->assertSame(
+			$expected,
+			$this->getPermissionChecker( $blockChecker )->userCanCreateRegistrations( $user )
+		);
 	}
 
 	public function provideUsers(): Generator {
@@ -37,7 +53,18 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			true,
 			new MWUserProxy( $identity, new SimpleAuthority( $identity, [ 'campaignevents-create-registration' ] ) )
 		];
-		yield 'Not authorized' => [ false, new MWUserProxy( $identity, new SimpleAuthority( $identity, [] ) ) ];
+		yield 'Lacking right' => [ false, new MWUserProxy( $identity, new SimpleAuthority( $identity, [] ) ) ];
+		yield 'Logged out' => [
+			false,
+			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
+		];
+		$blockedUser = new MWUserProxy( $identity, $this->mockRegisteredUltimateAuthority() );
+		$blockChecker = $this->createMock( UserBlockChecker::class );
+		$blockChecker->expects( $this->atLeastOnce() )
+			->method( 'isSitewideBlocked' )
+			->with( $blockedUser )
+			->willReturn( true );
+		yield 'Blocked' => [ false, $blockedUser, $blockChecker ];
 	}
 
 	/**

@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
@@ -33,7 +34,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		return new EditEventCommand(
 			$eventStore ?? $this->createMock( IEventStore::class ),
 			$this->createMock( OrganizersStore::class ),
-			$permChecker ?? new PermissionChecker()
+			$permChecker ?? new PermissionChecker( $this->createMock( UserBlockChecker::class ) )
 		);
 	}
 

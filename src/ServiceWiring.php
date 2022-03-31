@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -50,7 +51,9 @@ return [
 		return $services->get( IEventStore::STORE_SERVICE_NAME );
 	},
 	PermissionChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): PermissionChecker {
-		return new PermissionChecker();
+		return new PermissionChecker(
+			$services->get( UserBlockChecker::SERVICE_NAME )
+		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
 		return new EventFactory(
@@ -81,6 +84,11 @@ return [
 			$services->get( IEventStore::STORE_SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME )
+		);
+	},
+	UserBlockChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): UserBlockChecker {
+		return new UserBlockChecker(
+			$services->getUserFactory()
 		);
 	},
 ];
