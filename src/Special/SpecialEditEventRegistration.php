@@ -101,7 +101,7 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 				'label-message' => 'campaignevents-edit-field-page',
 				'interwiki' => true,
 				'exists' => true,
-				// TODO XXX namespace
+				'namespace' => NS_EVENT,
 				'default' => $eventPageDefault,
 				'help-message' => 'campaignevents-edit-field-page-help',
 				'help-inline' => false,
@@ -214,7 +214,7 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 			return Status::newFatal( 'campaignevents-edit-not-allowed-page' );
 		}
 
-		return $this->eventStore->saveRegistration( $event );
+		return Status::wrap( $this->eventStore->saveRegistration( $event ) );
 	}
 
 	/**
