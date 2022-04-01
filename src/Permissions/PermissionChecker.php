@@ -66,6 +66,15 @@ class PermissionChecker {
 	}
 
 	/**
+	 * @param ICampaignsUser $user
+	 * @param int $registrationID
+	 * @return bool
+	 */
+	public function userCanDeleteRegistration( ICampaignsUser $user, int $registrationID ): bool {
+		return $this->userCanEditRegistration( $user, $registrationID );
+	}
+
+	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring login and unblock.
 	 * @param ICampaignsUser $user
 	 * @return bool

@@ -28,7 +28,7 @@ class UnregisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	use CSRFTestHelperTrait;
 
 	private const DEFAULT_REQ_DATA = [
-		'method' => 'PUT',
+		'method' => 'DELETE',
 		'pathParams' => [ 'id' => 42 ],
 		'headers' => [ 'Content-Type' => 'application/json' ],
 	];

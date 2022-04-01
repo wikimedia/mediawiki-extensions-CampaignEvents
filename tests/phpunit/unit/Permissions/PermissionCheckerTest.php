@@ -176,6 +176,28 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param bool $expected
 	 * @param ICampaignsUser $user
 	 * @param UserBlockChecker|null $blockChecker
+	 * @param OrganizersStore|null $organizersStore
+	 * @covers ::userCanDeleteRegistration
+	 * Reuses the data provider for convenience.
+	 * @dataProvider provideCanEditRegistration
+	 */
+	public function testUserCanDeleteRegistration(
+		bool $expected,
+		ICampaignsUser $user,
+		UserBlockChecker $blockChecker = null,
+		OrganizersStore $organizersStore = null
+	) {
+		$checker = $this->getPermissionChecker( $blockChecker, $organizersStore );
+		$this->assertSame(
+			$expected,
+			$checker->userCanDeleteRegistration( $user, 42 )
+		);
+	}
+
+	/**
+	 * @param bool $expected
+	 * @param ICampaignsUser $user
+	 * @param UserBlockChecker|null $blockChecker
 	 * @covers ::userCanRegisterForEvents
 	 * @dataProvider provideCanRegisterForEvents
 	 */

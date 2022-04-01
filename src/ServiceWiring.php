@@ -3,6 +3,7 @@
 declare( strict_types=1 );
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -90,6 +91,12 @@ return [
 	UserBlockChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): UserBlockChecker {
 		return new UserBlockChecker(
 			$services->getUserFactory()
+		);
+	},
+	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {
+		return new DeleteEventCommand(
+			$services->get( IEventStore::STORE_SERVICE_NAME ),
+			$services->get( PermissionChecker::SERVICE_NAME )
 		);
 	},
 ];

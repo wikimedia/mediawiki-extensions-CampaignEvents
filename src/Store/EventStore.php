@@ -179,4 +179,20 @@ class EventStore implements IEventStore, IEventLookup {
 		);
 		return StatusValue::newGood( $event->getID() ?? $dbw->insertId() );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function deleteRegistration( ExistingEventRegistration $registration ): bool {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw->update(
+			'campaign_events',
+			[ 'event_deleted_at' => $dbw->timestamp() ],
+			[
+				'event_id' => $registration->getID(),
+				'event_deleted_at' => null
+			]
+		);
+		return $dbw->affectedRows() > 0;
+	}
 }
