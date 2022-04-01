@@ -52,7 +52,8 @@ return [
 	},
 	PermissionChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): PermissionChecker {
 		return new PermissionChecker(
-			$services->get( UserBlockChecker::SERVICE_NAME )
+			$services->get( UserBlockChecker::SERVICE_NAME ),
+			$services->get( OrganizersStore::SERVICE_NAME )
 		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {

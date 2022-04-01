@@ -60,11 +60,13 @@ class EditEventCommand {
 	 * @return PermissionStatus
 	 */
 	private function authorizeEdit( EventRegistration $registration, ICampaignsUser $creator ): PermissionStatus {
-		$isCreation = $registration->getID() === null;
+		$registrationID = $registration->getID();
+		$isCreation = $registrationID === null;
 		$eventPage = $registration->getPage();
 		if ( $isCreation && !$this->permissionChecker->userCanCreateRegistration( $creator, $eventPage ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-create-not-allowed-page' );
-		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration( $creator, $eventPage ) ) {
+		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration( $creator, $registrationID ) ) {
+			// @phan-suppress-previous-line PhanTypeMismatchArgumentNullable
 			return PermissionStatus::newFatal( 'campaignevents-edit-not-allowed-page' );
 		}
 		return PermissionStatus::newGood();

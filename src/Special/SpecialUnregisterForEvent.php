@@ -52,4 +52,12 @@ class SpecialUnregisterForEvent extends ChangeRegistrationSpecialPageBase {
 			$this->msg( 'campaignevents-unregister-success' )->escaped()
 		) );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function requiresUnblock(): bool {
+		// TODO MVP: Are we comfortable with this?
+		return false;
+	}
 }

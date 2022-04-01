@@ -34,4 +34,10 @@ abstract class AbstractEventRegistrationHandlerTestBase extends MediaWikiUnitTes
 		return $editEventCmd;
 	}
 
+	protected function getMockPermissionChecker(): EditEventCommand {
+		return new PermissionChecker(
+			$this->createMock( UserBlockChecker::class ),
+			$this->createMock( OrganizersStore::class )
+		);
+	}
 }

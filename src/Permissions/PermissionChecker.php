@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 
 class PermissionChecker {
 	public const SERVICE_NAME = 'CampaignEventsPermissionChecker';
@@ -15,12 +16,16 @@ class PermissionChecker {
 
 	/** @var UserBlockChecker */
 	private $userBlockChecker;
+	/** @var OrganizersStore */
+	private $organizersStore;
 
 	/**
 	 * @param UserBlockChecker $userBlockChecker
+	 * @param OrganizersStore $organizersStore
 	 */
-	public function __construct( UserBlockChecker $userBlockChecker ) {
+	public function __construct( UserBlockChecker $userBlockChecker, OrganizersStore $organizersStore ) {
 		$this->userBlockChecker = $userBlockChecker;
+		$this->organizersStore = $organizersStore;
 	}
 
 	/**
@@ -52,19 +57,21 @@ class PermissionChecker {
 
 	/**
 	 * @param ICampaignsUser $user
-	 * @param ICampaignsPage $eventPage
+	 * @param int $registrationID
 	 * @return bool
 	 */
-	public function userCanEditRegistration( ICampaignsUser $user, ICampaignsPage $eventPage ): bool {
-		return $this->userCanCreateRegistration( $user, $eventPage );
+	public function userCanEditRegistration( ICampaignsUser $user, int $registrationID ): bool {
+		return $this->userCanCreateRegistrations( $user )
+			&& $this->organizersStore->isEventOrganizer( $registrationID, $user );
 	}
 
 	/**
+	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring login and unblock.
 	 * @param ICampaignsUser $user
 	 * @return bool
 	 */
 	public function userCanRegisterForEvents( ICampaignsUser $user ): bool {
-		// TODO Do we need another user right for this? And should this also check whether the user is blocked?
-		return $user->isRegistered();
+		// TODO Do we need another user right for this?
+		return $user->isRegistered() && !$this->userBlockChecker->isSitewideBlocked( $user );
 	}
 }
