@@ -8,22 +8,16 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
-use MediaWiki\Rest\SimpleHandler;
-use MWTimestamp;
 use Wikimedia\Message\MessageValue;
-use Wikimedia\ParamValidator\ParamValidator;
 
-class RegisterForEventHandler extends SimpleHandler {
+class RegisterForEventHandler extends ParticipantRegistrationHandlerBase {
 	use CSRFCheckTrait;
 
 	/** @var PermissionChecker */
 	private $permissionChecker;
-	/** @var IEventLookup */
-	private $eventLookup;
 	/** @var ParticipantsStore */
 	private $participantsStore;
 
@@ -37,8 +31,8 @@ class RegisterForEventHandler extends SimpleHandler {
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore
 	) {
+		parent::__construct( $eventLookup );
 		$this->permissionChecker = $permissionChecker;
-		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 	}
 
@@ -59,29 +53,7 @@ class RegisterForEventHandler extends SimpleHandler {
 			);
 		}
 
-		try {
-			$eventRegistration = $this->eventLookup->getEventByID( $eventID );
-		} catch ( EventNotFoundException $_ ) {
-			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-register-event-not-found' ),
-				404
-			);
-		}
-
-		if ( $eventRegistration->getStatus() !== EventRegistration::STATUS_OPEN ) {
-			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-register-event-not-open' ),
-				400
-			);
-		}
-
-		$endTS = $eventRegistration->getEndTimestamp();
-		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
-			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-register-event-past' ),
-				400
-			);
-		}
+		$this->validateEventWithID( $eventID );
 
 		$modified = $this->participantsStore->addParticipantToEvent( $eventID, $user );
 		return $this->getResponseFactory()->createJson( [
@@ -92,13 +64,12 @@ class RegisterForEventHandler extends SimpleHandler {
 	/**
 	 * @inheritDoc
 	 */
-	public function getParamSettings(): array {
-		return [
-			'id' => [
-				self::PARAM_SOURCE => 'path',
-				ParamValidator::PARAM_TYPE => 'integer',
-				ParamValidator::PARAM_REQUIRED => true,
-			],
-		];
+	protected function doAdditionalEventValidation( EventRegistration $eventRegistration ): void {
+		if ( $eventRegistration->getStatus() !== EventRegistration::STATUS_OPEN ) {
+			throw new LocalizedHttpException(
+				new MessageValue( 'campaignevents-rest-register-event-not-open' ),
+				400
+			);
+		}
 	}
 }

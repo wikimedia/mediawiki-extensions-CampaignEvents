@@ -58,4 +58,30 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Already an active participant' => [ 1, 101, false ];
 		yield 'Had unregistered' => [ 1, 102, true ];
 	}
+
+	/**
+	 * @param int $eventID
+	 * @param int $userID
+	 * @param bool $expected
+	 * @covers ::removeParticipantFromEvent
+	 * @dataProvider provideParticipantsToRemove
+	 */
+	public function testRemoveParticipantFromEvent( int $eventID, int $userID, bool $expected ) {
+		$user = $this->createMock( ICampaignsUser::class );
+		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$userLookup->method( 'getCentralID' )
+			->with( $user )
+			->willReturn( $userID );
+		$store = new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$userLookup
+		);
+		$this->assertSame( $expected, $store->removeParticipantFromEvent( $eventID, $user ) );
+	}
+
+	public function provideParticipantsToRemove(): Generator {
+		yield 'Actively registered' => [ 1, 101, true ];
+		yield 'Never registered' => [ 2, 101, false ];
+		yield 'Already deleted' => [ 1, 102, false ];
+	}
 }
