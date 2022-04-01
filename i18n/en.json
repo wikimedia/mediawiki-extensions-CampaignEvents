@@ -59,5 +59,15 @@
 	"campaignevents-edit-event-notfound": "No event with the given ID exists",
 	"campaignevents-error-page-already-registered": "The given event page already has another registration associated.",
 	"campaignevents-edit-not-allowed-page": "You are not allowed to edit the event registration for the given event page",
-	"campaignevents-create-not-allowed-page": "You are not allowed to create an event registration for the given event page"
+	"campaignevents-create-not-allowed-page": "You are not allowed to create an event registration for the given event page",
+	"registerforevent": "Register for an event",
+	"campaignevents-register-error-no-event": "No event specified",
+	"campaignevents-register-error-event-not-found": "The ID provided does not refer to an existing event",
+	"campaignevents-register-success": "You are now registered for this event",
+	"campaignevents-register-confirmation-top": "Confirm registration",
+	"campaignevents-register-confirmation-text": "Confirm that you want to register for this event by clicking the button below.",
+	"unregisterforevent": "Unregister for an event",
+	"campaignevents-unregister-success": "You have uregistered for this event",
+	"campaignevents-unregister-confirmation-top": "Confirm unregistration",
+	"campaignevents-unregister-confirmation-text": "Confirm that you want to unregister for this event by clicking the button below."
 }

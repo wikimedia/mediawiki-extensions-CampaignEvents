@@ -108,6 +108,20 @@
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsEditEventCommand"
 			]
+		},
+		"RegisterForEvent": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialRegisterForEvent",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsParticipantsStore"
+			]
+		},
+		"UnregisterForEvent": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialUnregisterForEvent",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsParticipantsStore"
+			]
 		}
 	},
 	"TestAutoloadNamespaces": {

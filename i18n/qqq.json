@@ -59,5 +59,15 @@
 	"campaignevents-edit-event-notfound": "Error message shown on [[Special:EditEventRegistration]]",
 	"campaignevents-error-page-already-registered": "Error message used when the user tries to add a registration to an event page which already has a different one.",
 	"campaignevents-edit-not-allowed-page": "Error message used when the user is not allowed to edit a registration for the given page",
-	"campaignevents-create-not-allowed-page": "Error message used when the user is not allowed to create a registration for the given page"
+	"campaignevents-create-not-allowed-page": "Error message used when the user is not allowed to create a registration for the given page",
+	"registerforevent": "Description of [[Special:RegisterForEvent]]",
+	"campaignevents-register-error-no-event": "Error message shown on [[Special:RegisterForEvent]] and [[Special:UnregisterForEvent]] when no event ID was provided.",
+	"campaignevents-register-error-event-not-found": "Error message shown on [[Special:RegisterForEvent]] and [[Special:UnregisterForEvent]] when the event ID provided does not correspond to an existing event.",
+	"campaignevents-register-success": "Message shown on [[Special:RegisterForEvent]] when the registration went through successfully",
+	"campaignevents-register-confirmation-top": "Form label used on [[Special:RegisterForEvent]]",
+	"campaignevents-register-confirmation-text": "Confirmation message used on [[Special:RegisterForEvent]]",
+	"unregisterforevent": "Description of [[Special:UnregisterForEvent]]",
+	"campaignevents-unregister-success": "Message shown on [[Special:UnregisterForEvent]] when the unregistration went through successfully",
+	"campaignevents-unregister-confirmation-top": "Form label used on [[Special:RegisterForEvent]]",
+	"campaignevents-unregister-confirmation-text": "Confirmation message used on [[Special:RegisterForEvent]]"
 }
