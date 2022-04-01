@@ -39,9 +39,3 @@ CREATE TABLE /*_*/ce_organizers (
   ceo_user_id INTEGER UNSIGNED NOT NULL,
   ceo_role_id BIGINT UNSIGNED NOT NULL
 );
-
-
-CREATE TABLE /*_*/ceo_roles (
-  ceor_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  ceor_name BLOB NOT NULL
-);

@@ -249,7 +249,7 @@
 			},
 			{
 				"name": "ceo_role_id",
-				"comment": "Gets the roles from ceo_roles table.",
+				"comment": "ID of the role, as determined by the application.",
 				"type": "bigint",
 				"options": {
 					"notnull": true,
@@ -259,30 +259,5 @@
 		],
 		"indexes": [],
 		"pk": [ "ceo_id" ]
-	},
-	{
-		"name": "ceo_roles",
-		"comment": "Stores the user roles for permissions management.",
-		"columns": [
-			{
-				"name": "ceor_id",
-				"type": "bigint",
-				"options": {
-					"notnull": true,
-					"autoincrement": true,
-					"unsigned": true
-				}
-			},
-			{
-				"name": "ceor_name",
-				"type": "binary",
-				"options": {
-					"notnull": true,
-					"length": 255
-				}
-			}
-		],
-		"indexes": [],
-		"pk": [ "ceor_id" ]
 	}
 ]

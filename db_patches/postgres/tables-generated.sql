@@ -49,10 +49,3 @@ CREATE TABLE ce_organizers (
   ceo_role_id BIGINT NOT NULL,
   PRIMARY KEY(ceo_id)
 );
-
-
-CREATE TABLE ceo_roles (
-  ceor_id BIGSERIAL NOT NULL,
-  ceor_name TEXT NOT NULL,
-  PRIMARY KEY(ceor_id)
-);
