@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use FormSpecialPage;
 use Html;
 use HTMLForm;
+use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
@@ -15,7 +16,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
 use MWTimestamp;
 use Status;
 
@@ -24,12 +24,10 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 	private $eventLookup;
 	/** @var EventFactory */
 	private $eventFactory;
-	/** @var IEventStore */
-	private $eventStore;
 	/** @var CampaignsPageFormatter */
 	private $campaignsPageFormatter;
-	/** @var PermissionChecker */
-	private $permissionChecker;
+	/** @var EditEventCommand */
+	private $editEventCommand;
 
 	/** @var int|null */
 	private $eventID;
@@ -39,23 +37,22 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param EventFactory $eventFactory
-	 * @param IEventStore $eventStore
 	 * @param CampaignsPageFormatter $campaignsPageFormatter
 	 * @param PermissionChecker $permissionChecker
+	 * @param EditEventCommand $editEventCommand
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
-		IEventStore $eventStore,
 		CampaignsPageFormatter $campaignsPageFormatter,
-		PermissionChecker $permissionChecker
+		PermissionChecker $permissionChecker,
+		EditEventCommand $editEventCommand
 	) {
 		parent::__construct( 'EditEventRegistration', $permissionChecker->getCreateRegistrationsRight() );
 		$this->eventLookup = $eventLookup;
 		$this->eventFactory = $eventFactory;
-		$this->eventStore = $eventStore;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
-		$this->permissionChecker = $permissionChecker;
+		$this->editEventCommand = $editEventCommand;
 	}
 
 	/**
@@ -210,11 +207,7 @@ class SpecialEditEventRegistration extends FormSpecialPage {
 		}
 
 		$userProxy = new MWUserProxy( $this->getUser(), $this->getAuthority() );
-		if ( !$this->permissionChecker->userCanCreateRegistration( $userProxy, $event->getPage() ) ) {
-			return Status::newFatal( 'campaignevents-edit-not-allowed-page' );
-		}
-
-		return Status::wrap( $this->eventStore->saveRegistration( $event ) );
+		return Status::wrap( $this->editEventCommand->doEditIfAllowed( $event, $userProxy ) );
 	}
 
 	/**

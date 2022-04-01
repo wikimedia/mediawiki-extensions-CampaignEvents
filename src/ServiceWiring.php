@@ -3,6 +3,7 @@
 declare( strict_types=1 );
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -73,6 +74,13 @@ return [
 		return new OrganizersStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+		);
+	},
+	EditEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): EditEventCommand {
+		return new EditEventCommand(
+			$services->get( IEventStore::STORE_SERVICE_NAME ),
+			$services->get( OrganizersStore::SERVICE_NAME ),
+			$services->get( PermissionChecker::SERVICE_NAME )
 		);
 	},
 ];

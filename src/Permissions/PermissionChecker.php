@@ -45,6 +45,15 @@ class PermissionChecker {
 
 	/**
 	 * @param ICampaignsUser $user
+	 * @param ICampaignsPage $eventPage
+	 * @return bool
+	 */
+	public function userCanEditRegistration( ICampaignsUser $user, ICampaignsPage $eventPage ): bool {
+		return $this->userCanCreateRegistration( $user, $eventPage );
+	}
+
+	/**
+	 * @param ICampaignsUser $user
 	 * @return bool
 	 */
 	public function userCanRegisterForEvents( ICampaignsUser $user ): bool {
