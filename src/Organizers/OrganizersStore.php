@@ -4,12 +4,18 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Organizers;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 
 class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
+
+	private const ROLES_MAP = [
+		Organizer::ROLE_CREATOR => 1,
+		Organizer::ROLE_ORGANIZER => 2
+	];
 
 	/** @var CampaignsDatabaseHelper */
 	private $dbHelper;
@@ -27,16 +33,27 @@ class OrganizersStore {
 
 	/**
 	 * @param int $eventID
-	 * @return ICampaignsUser[]
+	 * @return Organizer[]
 	 */
 	public function getEventOrganizers( int $eventID ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$ids = $dbr->selectFieldValues(
+		$res = $dbr->select(
 			'ce_organizers',
-			'ceo_user_id',
+			[ 'ceo_user_id', 'ceo_role_id' ],
 			[ 'ceo_event_id' => $eventID ]
 		);
-		return array_map( [ $this->centralUserLookup, 'getLocalUser' ], $ids );
+		$rolesByOrganizer = [];
+		foreach ( $res as $row ) {
+			$userID = $row->ceo_user_id;
+			$rolesByOrganizer[$userID] = $rolesByOrganizer[$userID] ?? [];
+			$rolesByOrganizer[$userID][] = array_search( (int)$row->ceo_role_id, self::ROLES_MAP, true );
+		}
+
+		$organizers = [];
+		foreach ( $rolesByOrganizer as $organizerID => $roles ) {
+			$organizers[] = new Organizer( $this->centralUserLookup->getLocalUser( $organizerID ), $roles );
+		}
+		return $organizers;
 	}
 
 	/**
@@ -55,5 +72,30 @@ class OrganizersStore {
 			]
 		);
 		return $row !== null;
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param ICampaignsUser $user
+	 * @param string[] $roles Organizer::ROLE_* constants
+	 */
+	public function addOrganizerToEvent( int $eventID, ICampaignsUser $user, array $roles ): void {
+		$organizerCentralID = $this->centralUserLookup->getCentralID( $user );
+		$rows = [];
+		foreach ( $roles as $role ) {
+			if ( !isset( self::ROLES_MAP[$role] ) ) {
+				throw new InvalidArgumentException( "Invalid role `$role`" );
+			}
+			$rows[] = [
+				'ceo_event_id' => $eventID,
+				'ceo_user_id' => $organizerCentralID,
+				'ceo_role_id' => self::ROLES_MAP[$role]
+			];
+		}
+		$this->dbHelper->getDBConnection( DB_PRIMARY )->insert(
+			'ce_organizers',
+			$rows,
+			[ 'IGNORE' ]
+		);
 	}
 }

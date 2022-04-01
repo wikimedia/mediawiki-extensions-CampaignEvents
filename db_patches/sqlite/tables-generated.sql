@@ -39,3 +39,7 @@ CREATE TABLE /*_*/ce_organizers (
   ceo_user_id INTEGER UNSIGNED NOT NULL,
   ceo_role_id BIGINT UNSIGNED NOT NULL
 );
+
+CREATE UNIQUE INDEX ceo_event_user_role ON /*_*/ce_organizers (
+  ceo_event_id, ceo_user_id, ceo_role_id
+);

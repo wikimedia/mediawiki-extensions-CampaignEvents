@@ -45,5 +45,8 @@ CREATE TABLE /*_*/ce_organizers (
   ceo_event_id BIGINT UNSIGNED NOT NULL,
   ceo_user_id INT UNSIGNED NOT NULL,
   ceo_role_id BIGINT UNSIGNED NOT NULL,
+  UNIQUE INDEX ceo_event_user_role (
+    ceo_event_id, ceo_user_id, ceo_role_id
+  ),
   PRIMARY KEY(ceo_id)
 ) /*$wgDBTableOptions*/;
