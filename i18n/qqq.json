@@ -80,5 +80,6 @@
 	"campaignevents-delete-not-allowed-registration": "Error message shown when the user is not allowed to delete the given event registration",
 	"campaignevents-rest-delete-already-deleted": "Error message used when the event that the user wanted to delete is already deleted.",
 	"campaignevents-role-creator": "Name of the role of the user who created an event",
-	"campaignevents-role-organizer": "Name of the role of a user who organizes an event"
+	"campaignevents-role-organizer": "Name of the role of a user who organizes an event",
+	"campaignevents-rest-user-not-found": "Error message used when the user does not exist. Parameters:\n* $1 The username."
 }

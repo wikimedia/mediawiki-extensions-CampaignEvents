@@ -23,4 +23,18 @@ interface IEventLookup {
 	 * @throws EventNotFoundException
 	 */
 	public function getEventByPage( ICampaignsPage $page ): ExistingEventRegistration;
+
+	/**
+	 * @param int $organizerID
+	 * @param int $limit
+	 * @return ExistingEventRegistration[]
+	 */
+	public function getEventsByOrganizer( int $organizerID, int $limit ): array;
+
+	/**
+	 * @param int $participantID
+	 * @param int $limit
+	 * @return ExistingEventRegistration[]
+	 */
+	public function getEventsByParticipant( int $participantID, int $limit ): array;
 }

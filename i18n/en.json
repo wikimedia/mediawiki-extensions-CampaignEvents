@@ -80,5 +80,6 @@
 	"campaignevents-delete-not-allowed-registration": "You are not allowed to delete this event registration",
 	"campaignevents-rest-delete-already-deleted": "The event registration specified is already deleted",
 	"campaignevents-role-creator": "creator",
-	"campaignevents-role-organizer": "organizer"
+	"campaignevents-role-organizer": "organizer",
+	"campaignevents-rest-user-not-found": "The user $1 does not exist."
 }
