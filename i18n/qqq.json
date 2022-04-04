@@ -83,5 +83,17 @@
 	"campaignevents-register-already-participant": "Error message used when a user tries to register for an event that they are already registered for.",
 	"campaignevents-unregister-not-allowed": "Error message used when an unauthorized user attempts to unregister for an event.",
 	"campaignevents-unregister-event-past": "Error message used when the event that the user wants to unregister for has already finished.",
-	"campaignevents-unregister-not-participant": "Error message used when a user tries to unregister for an event that they are not registered for."
+	"campaignevents-unregister-not-participant": "Error message used when a user tries to unregister for an event that they are not registered for.",
+	"myevents": "Description of [[Special:MyEvents]]",
+	"campaignevents-eventslist-filter-legend": "Legend for the search/filter form on [[Special:MyEvents]].",
+	"campaignevents-eventslist-label-search": "Label for the search field on [[Special:MyEvents]].",
+	"campaignevents-eventslist-label-events-per-page": "Label for a field on [[Special:MyEvents]] that lets the user select how many events they want to see on each page.",
+	"campaignevents-eventslist-column-date": "Column header used on [[Special:MyEvents]]. The column contains the start date of each event.",
+	"campaignevents-eventslist-column-name": "Column header used on [[Special:MyEvents]]. The column contains the name of each event.",
+	"campaignevents-eventslist-column-location": "Column header used on [[Special:MyEvents]]. The column contains one of the following messages:\n*{{msg-mw|campaignevents-eventslist-location-online}}\n*{{msg-mw|campaignevents-eventslist-location-physical}}\n*{{msg-mw|campaignevents-eventslist-location-online-and-physical}}",
+	"campaignevents-eventslist-column-participants-number": "Column header used on [[Special:MyEvents]]. The column contains the number of participants of each event.",
+	"campaignevents-eventslist-location-online": "Label used on [[Special:MyEvents]] for events that happen online.",
+	"campaignevents-eventslist-location-physical": "Label used on [[Special:MyEvents]] for events that happen in person.",
+	"campaignevents-eventslist-location-online-and-physical": "Label used on [[Special:MyEvents]] for events that happen both online and in person.",
+	"campaignevents-eventslist-manage-btn-info": "Label used on [[Special:MyEvents]] for a button with some options that let a organizer manage an event."
 }

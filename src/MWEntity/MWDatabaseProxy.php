@@ -100,4 +100,11 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	public function endAtomic(): void {
 		$this->db->endAtomic( wfGetCaller() );
 	}
+
+	/**
+	 * @return IDatabase
+	 */
+	public function getMWDatabase(): IDatabase {
+		return $this->db;
+	}
 }
