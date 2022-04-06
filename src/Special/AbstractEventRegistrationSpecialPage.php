@@ -157,7 +157,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		];
 
 		$formFields['EventMeetingURL'] = [
-			'type' => 'text',
+			'type' => 'url',
 			'label-message' => 'campaignevents-edit-field-meeting-url',
 			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_PHYSICAL ],
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
@@ -178,7 +178,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'required' => true,
 		];
 		$formFields['EventChatURL'] = [
-			'type' => 'text',
+			'type' => 'url',
 			'label-message' => 'campaignevents-edit-field-chat-url',
 			'default' => $this->event ? $this->event->getChatURL() : '',
 			'help-message' => 'campaignevents-edit-field-chat-url-help',
