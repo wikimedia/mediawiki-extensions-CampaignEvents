@@ -78,5 +78,7 @@
 	"campaignevents-unregister-confirmation-top": "Confirm unregistration",
 	"campaignevents-unregister-confirmation-text": "Confirm that you want to unregister for this event by clicking the button below.",
 	"campaignevents-delete-not-allowed-registration": "You are not allowed to delete this event registration",
-	"campaignevents-rest-delete-already-deleted": "The event registration specified is already deleted"
+	"campaignevents-rest-delete-already-deleted": "The event registration specified is already deleted",
+	"campaignevents-role-creator": "creator",
+	"campaignevents-role-organizer": "organizer"
 }

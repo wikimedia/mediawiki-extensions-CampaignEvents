@@ -5,8 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
 use MediaWiki\Permissions\PermissionStatus;
@@ -84,7 +84,7 @@ class EditEventCommand {
 		}
 		$eventID = $saveStatus->getValue();
 		if ( $registration->getID() === null ) {
-			$this->organizerStore->addOrganizerToEvent( $eventID, $performer, [ Organizer::ROLE_CREATOR ] );
+			$this->organizerStore->addOrganizerToEvent( $eventID, $performer, [ Roles::ROLE_CREATOR ] );
 		}
 		return StatusValue::newGood( $eventID );
 	}

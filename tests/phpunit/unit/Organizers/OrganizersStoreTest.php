@@ -8,8 +8,8 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiUnitTestCase;
 use ReflectionClass;
 use Wikimedia\TestingAccessWrapper;
@@ -39,8 +39,8 @@ class OrganizersStoreTest extends MediaWikiUnitTestCase {
 	 */
 	public function testMapping() {
 		$expected = [];
-		$organizerRefl = new ReflectionClass( Organizer::class );
-		foreach ( $organizerRefl->getConstants() as $name => $val ) {
+		$rolesRefl = new ReflectionClass( Roles::class );
+		foreach ( $rolesRefl->getConstants() as $name => $val ) {
 			if ( str_starts_with( $name, 'ROLE_' ) ) {
 				$expected[] = $val;
 			}

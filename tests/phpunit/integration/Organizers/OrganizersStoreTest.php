@@ -8,8 +8,8 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiIntegrationTestCase;
 use stdClass;
 use Wikimedia\TestingAccessWrapper;
@@ -136,38 +136,48 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Adding a new role' => [
 			2,
 			101,
-			[ Organizer::ROLE_CREATOR ],
+			[ Roles::ROLE_CREATOR ],
 			$strVal( array_merge(
 				self::DEFAULT_ROWS,
-				[ [ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Organizer::ROLE_CREATOR] ] ]
+				[ [ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR] ] ]
 			) )
 		];
 		yield 'Adding two new roles' => [
 			2,
 			101,
-			[ Organizer::ROLE_CREATOR, Organizer::ROLE_ORGANIZER ],
+			[ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
 			$strVal( array_merge(
 				self::DEFAULT_ROWS,
 				[
-					[ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Organizer::ROLE_CREATOR] ],
-					[ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Organizer::ROLE_ORGANIZER] ]
+					[ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR] ],
+					[ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER] ]
 				]
 			) )
 		];
 		yield 'Single role, already there' => [
 			1,
 			101,
-			[ Organizer::ROLE_CREATOR ],
+			[ Roles::ROLE_CREATOR ],
 			$strVal( self::DEFAULT_ROWS )
 		];
 		yield 'One role already there, one new' => [
 			1,
 			101,
-			[ Organizer::ROLE_CREATOR, Organizer::ROLE_ORGANIZER ],
+			[ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
 			$strVal( array_merge(
 				self::DEFAULT_ROWS,
-				[ [ 'ceo_event_id' => 1, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Organizer::ROLE_ORGANIZER] ] ]
+				[ [ 'ceo_event_id' => 1, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER] ] ]
 			) )
 		];
+	}
+
+	public function testGetEventOrganizers__limit() {
+		$store = new OrganizersStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$this->createMock( CampaignsCentralUserLookup::class )
+		);
+		$this->assertCount( 2, $store->getEventOrganizers( 1 ), 'precondition' );
+		$limit = 1;
+		$this->assertCount( $limit, $store->getEventOrganizers( 1, $limit ) );
 	}
 }
