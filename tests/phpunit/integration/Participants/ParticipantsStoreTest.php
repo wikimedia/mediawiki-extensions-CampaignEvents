@@ -84,4 +84,44 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Never registered' => [ 2, 101, false ];
 		yield 'Already deleted' => [ 1, 102, false ];
 	}
+
+	/**
+	 * @covers ::getEventParticipants
+	 * @dataProvider provideGetEventParticipants
+	 */
+	public function testGetEventParticipants( int $eventID, array $expectedIDs ) {
+		$expectedUsers = [];
+		foreach ( $expectedIDs as $id ) {
+			$expectedUsers[$id] = $this->createMock( ICampaignsUser::class );
+		}
+
+		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$userLookup->method( 'getLocalUser' )->willReturnCallback( function ( int $centralID ) use ( $expectedUsers ) {
+			return $expectedUsers[$centralID] ?? $this->createMock( ICampaignsUser::class );
+		} );
+		$store = new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$userLookup
+		);
+		$actualUsers = $store->getEventParticipants( $eventID );
+		$this->assertSame( array_values( $expectedUsers ), $actualUsers );
+	}
+
+	public function provideGetEventParticipants(): Generator {
+		yield 'No participants' => [ 5, [] ];
+		yield 'Only inludes non-deleted participants' => [ 1, [ 101 ] ];
+	}
+
+	/**
+	 * @covers ::getEventParticipants
+	 */
+	public function testGetEventParticipants__limit() {
+		$store = new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$this->createMock( CampaignsCentralUserLookup::class )
+		);
+		$this->assertCount( 1, $store->getEventParticipants( 1 ), 'precondition' );
+		$limit = 0;
+		$this->assertCount( $limit, $store->getEventParticipants( 1, $limit ) );
+	}
 }

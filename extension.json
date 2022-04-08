@@ -123,6 +123,15 @@
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsRoleFormatter"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/participants",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListParticipantsHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsParticipantsStore"
+			]
 		}
 	],
 	"ServiceWiringFiles": [

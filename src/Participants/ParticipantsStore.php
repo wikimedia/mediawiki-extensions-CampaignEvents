@@ -78,4 +78,20 @@ class ParticipantsStore {
 		);
 		return $dbw->affectedRows() > 0;
 	}
+
+	/**
+	 * @param int $eventID
+	 * @param int|null $limit
+	 * @return ICampaignsUser[]
+	 */
+	public function getEventParticipants( int $eventID, int $limit = null ): array {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$centralIDs = $dbr->selectFieldValues(
+			'ce_participants',
+			'cep_user_id',
+			[ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ],
+			$limit !== null ? [ 'LIMIT' => $limit ] : []
+		);
+		return array_map( [ $this->centralUserLookup, 'getLocalUser' ], $centralIDs );
+	}
 }
