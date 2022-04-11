@@ -5,15 +5,15 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\SimpleHandler;
 use MWTimestamp;
 use Wikimedia\Message\MessageValue;
-use Wikimedia\ParamValidator\ParamValidator;
 
 abstract class ParticipantRegistrationHandlerBase extends SimpleHandler {
+	use EventIDParamTrait;
+
 	/** @var IEventLookup */
 	private $eventLookup;
 
@@ -29,15 +29,7 @@ abstract class ParticipantRegistrationHandlerBase extends SimpleHandler {
 	 * @throws LocalizedHttpException
 	 */
 	protected function validateEventWithID( int $id ): void {
-		try {
-			$eventRegistration = $this->eventLookup->getEventByID( $id );
-		} catch ( EventNotFoundException $_ ) {
-			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-register-event-not-found' ),
-				404
-			);
-		}
-
+		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $id );
 		$endTS = $eventRegistration->getEndTimestamp();
 		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
 			throw new LocalizedHttpException(
@@ -59,12 +51,6 @@ abstract class ParticipantRegistrationHandlerBase extends SimpleHandler {
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
-		return [
-			'id' => [
-				self::PARAM_SOURCE => 'path',
-				ParamValidator::PARAM_TYPE => 'integer',
-				ParamValidator::PARAM_REQUIRED => true,
-			],
-		];
+		return $this->getIDParamSetting();
 	}
 }

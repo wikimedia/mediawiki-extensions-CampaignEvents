@@ -13,7 +13,7 @@ trait CSRFTestHelperTrait {
 	/**
 	 * @param Handler $handler
 	 */
-	private function setHandlerCSRFSafe( Handler $handler ): void {
+	protected function setHandlerCSRFSafe( Handler $handler ): void {
 		if ( !method_exists( $handler, 'setSession' ) ) {
 			throw new InvalidArgumentException( "The given handler does not support setting a session" );
 		}

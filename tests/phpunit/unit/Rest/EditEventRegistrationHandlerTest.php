@@ -8,7 +8,11 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\EditEventRegistrationHandler;
+use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
@@ -18,10 +22,11 @@ use StatusValue;
 /**
  * @group Test
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\EditEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\EventIDParamTrait
  * @todo We can't test param validation due to T303619
  */
 class EditEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerTestBase {
-
 	use HandlerTestTrait;
 
 	protected const DEFAULT_POST_PARAMS = [ 'id' => 1 ] + parent::DEFAULT_POST_PARAMS;
@@ -32,15 +37,26 @@ class EditEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerT
 	];
 
 	/**
-	 * @return string
+	 * @param EventFactory|null $eventFactory
+	 * @param EditEventCommand|null $editEventCmd
+	 * @param IEventLookup|null $eventLookup
+	 * @return EditEventRegistrationHandler
 	 */
-	protected function getHandlerClass(): string {
-		return EditEventRegistrationHandler::class;
+	protected function newHandler(
+		EventFactory $eventFactory = null,
+		EditEventCommand $editEventCmd = null,
+		IEventLookup $eventLookup = null
+	): EditEventRegistrationHandler {
+		$handler = new EditEventRegistrationHandler(
+			$eventFactory ?? $this->createMock( EventFactory::class ),
+			new PermissionChecker( $this->createMock( UserBlockChecker::class ) ),
+			$editEventCmd ?? $this->getMockEditEventCommand(),
+			$eventLookup ?? $this->createMock( IEventLookup::class )
+		);
+		$this->setHandlerCSRFSafe( $handler );
+		return $handler;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function testExecute__successful(): void {
 		$handler = $this->newHandler();
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
@@ -57,9 +73,21 @@ class EditEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerT
 		$this->assertSame( 204, $respData->getStatusCode() );
 	}
 
-	/**
-	 * @return void
-	 */
+	public function testExecute__nonexistingEvent(): void {
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->method( 'getEventByID' )
+			->willThrowException( $this->createMock( EventNotFoundException::class ) );
+		$handler = $this->newHandler( null, null, $eventLookup );
+		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		try {
+			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 404, $e->getCode() );
+			$this->assertSame( 'campaignevents-rest-event-not-found', $e->getMessageValue()->getKey() );
+		}
+	}
+
 	public function testExecute__editRegistrationPermissions() {
 		$authority = $this->mockRegisteredUltimateAuthority();
 		$editEventCmd = $this->createMock( EditEventCommand::class );

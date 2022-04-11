@@ -5,8 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
@@ -16,10 +19,10 @@ use StatusValue;
 /**
  * @group Test
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEventRegistrationHandler
  * @todo We can't test param validation due to T303619
  */
 class CreateEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerTestBase {
-
 	use HandlerTestTrait;
 
 	protected const DEFAULT_REQ_DATA = [
@@ -28,15 +31,23 @@ class CreateEventRegistrationHandlerTest extends AbstractEventRegistrationHandle
 	];
 
 	/**
-	 * @return string
+	 * @param EventFactory|null $eventFactory
+	 * @param EditEventCommand|null $editEventCmd
+	 * @return CreateEventRegistrationHandler
 	 */
-	protected function getHandlerClass(): string {
-		return CreateEventRegistrationHandler::class;
+	protected function newHandler(
+		EventFactory $eventFactory = null,
+		EditEventCommand $editEventCmd = null
+	): CreateEventRegistrationHandler {
+		$handler = new CreateEventRegistrationHandler(
+			$eventFactory ?? $this->createMock( EventFactory::class ),
+			new PermissionChecker( $this->createMock( UserBlockChecker::class ) ),
+			$editEventCmd ?? $this->getMockEditEventCommand()
+		);
+		$this->setHandlerCSRFSafe( $handler );
+		return $handler;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function testExecute__successful(): void {
 		$handler = $this->newHandler();
 		$request = new RequestData( self::DEFAULT_REQ_DATA );

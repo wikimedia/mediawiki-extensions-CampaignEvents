@@ -101,7 +101,8 @@
 			"services": [
 				"CampaignEventsEventFactory",
 				"CampaignEventsPermissionChecker",
-				"CampaignEventsEditEventCommand"
+				"CampaignEventsEditEventCommand",
+				"CampaignEventsEventLookup"
 			]
 		}
 	],

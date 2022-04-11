@@ -21,6 +21,7 @@ use MWTimestamp;
  * @group Test
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\UnregisterForEventHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\ParticipantRegistrationHandlerBase
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\EventIDParamTrait
  */
 class UnregisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
@@ -89,7 +90,7 @@ class UnregisterForEventHandlerTest extends MediaWikiUnitTestCase {
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
 		yield 'Event does not exist' => [
 			404,
-			'campaignevents-rest-register-event-not-found',
+			'campaignevents-rest-event-not-found',
 			$eventDoesNotExistLookup
 		];
 

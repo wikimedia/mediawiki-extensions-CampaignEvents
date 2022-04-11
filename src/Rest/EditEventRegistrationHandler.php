@@ -4,13 +4,35 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
+use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Rest\Handler;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Rest\Response;
 use StatusValue;
-use Wikimedia\ParamValidator\ParamValidator;
 
 class EditEventRegistrationHandler extends AbstractEventRegistrationHandler {
+	use EventIDParamTrait;
+
+	/** @var IEventLookup */
+	private $eventLookup;
+
+	/**
+	 * @param EventFactory $eventFactory
+	 * @param PermissionChecker $permissionChecker
+	 * @param EditEventCommand $editEventCommand
+	 * @param IEventLookup $eventLookup
+	 */
+	public function __construct(
+		EventFactory $eventFactory,
+		PermissionChecker $permissionChecker,
+		EditEventCommand $editEventCommand,
+		IEventLookup $eventLookup
+	) {
+		parent::__construct( $eventFactory, $permissionChecker, $editEventCommand );
+		$this->eventLookup = $eventLookup;
+	}
 
 	/**
 	 * @inheritDoc
@@ -18,13 +40,7 @@ class EditEventRegistrationHandler extends AbstractEventRegistrationHandler {
 	public function getParamSettings(): array {
 		return array_merge(
 			parent::getParamSettings(),
-			[
-				'id' => [
-					Handler::PARAM_SOURCE => 'path',
-					ParamValidator::PARAM_TYPE => 'integer',
-					ParamValidator::PARAM_REQUIRED => true,
-				],
-			]
+			$this->getIDParamSetting()
 		);
 	}
 
@@ -39,6 +55,7 @@ class EditEventRegistrationHandler extends AbstractEventRegistrationHandler {
 	 * @inheritDoc
 	 */
 	protected function getEventID( array $body ): ?int {
+		$this->getRegistrationOrThrow( $this->eventLookup, $body['id'] );
 		return $body['id'];
 	}
 
