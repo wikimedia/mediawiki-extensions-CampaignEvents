@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -50,5 +51,12 @@ class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 */
 	protected function getEventStatus(): string {
 		return EventRegistration::STATUS_OPEN;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getValidationFlags(): int {
+		return EventFactory::VALIDATE_ALL;
 	}
 }

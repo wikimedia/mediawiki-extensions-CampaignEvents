@@ -103,4 +103,11 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	protected function getEventStatus(): string {
 		return $this->getValidatedBody()['status'];
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getValidationFlags(): int {
+		return EventFactory::VALIDATE_SKIP_DATES_PAST;
+	}
 }

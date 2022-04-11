@@ -16,6 +16,8 @@ use StatusValue;
 
 class EventFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventFactory';
+	public const VALIDATE_ALL = 0;
+	public const VALIDATE_SKIP_DATES_PAST = 1 << 0;
 
 	/** @var CampaignsPageFactory */
 	private $campaignsPageFactory;
@@ -53,6 +55,7 @@ class EventFactory {
 	 * @param string|null $creationTimestamp In the TS_MW format
 	 * @param string|null $lastEditTimestamp In the TS_MW format
 	 * @param string|null $deletionTimestamp In the TS_MW format
+	 * @param int $validationFlags
 	 * @return EventRegistration
 	 * @throws InvalidEventDataException
 	 */
@@ -72,7 +75,8 @@ class EventFactory {
 		?string $meetingAddress,
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
-		?string $deletionTimestamp
+		?string $deletionTimestamp,
+		int $validationFlags = self::VALIDATE_ALL
 	): EventRegistration {
 		$res = StatusValue::newGood();
 
@@ -105,7 +109,7 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-status' );
 		}
 
-		$datesStatus = $this->validateDates( $startTimestamp, $endTimestamp );
+		$datesStatus = $this->validateDates( $validationFlags, $startTimestamp, $endTimestamp );
 		$res->merge( $datesStatus );
 		[ $startTSUnix, $endTSUnix ] = $datesStatus->getValue();
 
@@ -215,15 +219,14 @@ class EventFactory {
 	}
 
 	/**
+	 * @param int $validationFlags
 	 * @param string $start
 	 * @param string $end
 	 * @return StatusValue Whose result is [ start_unix, end_unix ]
 	 */
-	private function validateDates( string $start, string $end ): StatusValue {
+	private function validateDates( int $validationFlags, string $start, string $end ): StatusValue {
 		$res = StatusValue::newGood();
 
-		// TODO: Checking that the dates are not in the past should probably be skipped when a registration is updated
-		// (as opposed to being created)
 		$startTSUnix = null;
 		$endTSUnix = null;
 		$startAndEndValid = true;
@@ -235,7 +238,9 @@ class EventFactory {
 			if ( $startTSUnix === false ) {
 				$startAndEndValid = false;
 				$res->error( 'campaignevents-error-invalid-start' );
-			} elseif ( (int)$startTSUnix < MWTimestamp::time() ) {
+			} elseif (
+				!( $validationFlags & self::VALIDATE_SKIP_DATES_PAST ) && (int)$startTSUnix < MWTimestamp::time()
+			) {
 				$res->error( 'campaignevents-error-start-past' );
 			}
 		}

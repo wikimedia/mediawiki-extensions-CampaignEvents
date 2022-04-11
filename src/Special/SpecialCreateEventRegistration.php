@@ -40,4 +40,11 @@ class SpecialCreateEventRegistration extends AbstractEventRegistrationSpecialPag
 			'submit' => 'campaignevents-create-form-submit',
 		];
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getValidationFlags(): int {
+		return EventFactory::VALIDATE_ALL;
+	}
 }

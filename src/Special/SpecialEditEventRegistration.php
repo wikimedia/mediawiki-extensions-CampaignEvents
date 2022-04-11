@@ -88,4 +88,11 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		}
 		parent::execute( $par );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getValidationFlags(): int {
+		return EventFactory::VALIDATE_SKIP_DATES_PAST;
+	}
 }

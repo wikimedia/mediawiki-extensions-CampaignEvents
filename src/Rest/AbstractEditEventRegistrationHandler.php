@@ -111,7 +111,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				$body['meeting_address'],
 				null,
 				null,
-				null
+				null,
+				$this->getValidationFlags()
 			);
 		} catch ( InvalidEventDataException $e ) {
 			$this->exitWithStatus( $e->getStatus() );
@@ -214,4 +215,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @return string
 	 */
 	abstract protected function getEventStatus(): string;
+
+	/**
+	 * @return int
+	 */
+	abstract protected function getValidationFlags(): int;
 }

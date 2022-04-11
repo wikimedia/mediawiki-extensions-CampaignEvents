@@ -41,7 +41,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'address' => 'Address',
 		'creation' => '20220308100000',
 		'lastedit' => '20220308100000',
-		'deletion' => null
+		'deletion' => null,
+		'validationFlags' => EventFactory::VALIDATE_ALL
 	];
 
 	/**
@@ -81,13 +82,14 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$factory = $this->getEventFactory( $campaignsPageFactory );
 		$event = null;
 		$ex = null;
+
 		try {
 			$event = $factory->newEvent( ...$factoryArgs );
 		} catch ( InvalidEventDataException $ex ) {
 		}
 
 		if ( !$expectedErrorKey ) {
-			$this->assertInstanceOf( EventRegistration::class, $event, 'Should create an event' );
+			$this->assertInstanceOf( EventRegistration::class, $event, 'Should create or update an event' );
 		} else {
 			$this->assertNotNull( $ex, 'Should throw an exception' );
 			$statusErrorKeys = array_column( $ex->getStatus()->getErrors(), 'message' );
@@ -167,9 +169,19 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-invalid-start',
 			$this->getTestDataWithDefault( [ 'start' => 'Not a timestamp' ] )
 		];
-		yield 'Start timestamp in the past' => [
+		yield 'Start timestamp in the past, validated' => [
 			'campaignevents-error-start-past',
-			$this->getTestDataWithDefault( [ 'start' => '19700101120000' ] )
+			$this->getTestDataWithDefault( [
+				'id' => null,
+				'start' => '19700101120000',
+			] )
+		];
+		yield 'Start timestamp in the past, not validated' => [
+			null,
+			$this->getTestDataWithDefault( [
+				'start' => '19700101120000',
+				'validationFlags' => EventFactory::VALIDATE_SKIP_DATES_PAST
+			] )
 		];
 		yield 'Empty end timestamp' => [
 			'campaignevents-error-empty-end',

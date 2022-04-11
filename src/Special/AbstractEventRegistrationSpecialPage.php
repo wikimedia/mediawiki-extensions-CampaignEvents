@@ -120,14 +120,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventStart'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-start',
-			'min' => MWTimestamp::now(),
+			'min' => $this->event ? '' : MWTimestamp::now(),
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartTimestamp() ) : '',
 			'required' => true,
 		];
 		$formFields['EventEnd'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-end',
-			'min' => MWTimestamp::now(),
+			'min' => $this->event ? '' : MWTimestamp::now(),
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndTimestamp() ) : '',
 			'required' => true,
 		];
@@ -207,7 +207,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventMeetingAddress'],
 				$this->event ? $this->event->getCreationTimestamp() : null,
 				$this->event ? $this->event->getLastEditTimestamp() : null,
-				$this->event ? $this->event->getDeletionTimestamp() : null
+				$this->event ? $this->event->getDeletionTimestamp() : null,
+				$this->getValidationFlags()
 			);
 		} catch ( InvalidEventDataException $e ) {
 			return Status::wrap( $e->getStatus() );
@@ -232,4 +233,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected function getDisplayFormat(): string {
 		return 'ooui';
 	}
+
+	/**
+	 * @return int
+	 */
+	abstract protected function getValidationFlags(): int;
 }
