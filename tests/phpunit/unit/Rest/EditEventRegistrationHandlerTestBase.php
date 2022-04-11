@@ -9,7 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
-abstract class AbstractEventRegistrationHandlerTestBase extends MediaWikiUnitTestCase {
+abstract class EditEventRegistrationHandlerTestBase extends MediaWikiUnitTestCase {
 	use CSRFTestHelperTrait;
 
 	protected const DEFAULT_POST_PARAMS = [

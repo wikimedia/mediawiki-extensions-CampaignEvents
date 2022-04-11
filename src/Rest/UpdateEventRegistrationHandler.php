@@ -12,7 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Rest\Response;
 use StatusValue;
 
-class EditEventRegistrationHandler extends AbstractEventRegistrationHandler {
+class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
 	use EventIDParamTrait;
 
 	/** @var IEventLookup */

@@ -10,7 +10,7 @@ use MediaWiki\Rest\Response;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
 
-class CreateEventRegistrationHandler extends AbstractEventRegistrationHandler {
+class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
 
 	/**
 	 * @inheritDoc

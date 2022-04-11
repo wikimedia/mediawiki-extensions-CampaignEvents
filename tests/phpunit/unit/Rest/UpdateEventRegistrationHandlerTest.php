@@ -11,7 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\Rest\EditEventRegistrationHandler;
+use MediaWiki\Extension\CampaignEvents\Rest\UpdateEventRegistrationHandler;
 use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Permissions\PermissionStatus;
@@ -22,12 +22,12 @@ use StatusValue;
 
 /**
  * @group Test
- * @covers \MediaWiki\Extension\CampaignEvents\Rest\EditEventRegistrationHandler
- * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\UpdateEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEditEventRegistrationHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\EventIDParamTrait
  * @todo We can't test param validation due to T303619
  */
-class EditEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerTestBase {
+class UpdateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTestBase {
 	use HandlerTestTrait;
 
 	protected const DEFAULT_POST_PARAMS = [ 'id' => 1 ] + parent::DEFAULT_POST_PARAMS;
@@ -41,14 +41,14 @@ class EditEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerT
 	 * @param EventFactory|null $eventFactory
 	 * @param EditEventCommand|null $editEventCmd
 	 * @param IEventLookup|null $eventLookup
-	 * @return EditEventRegistrationHandler
+	 * @return UpdateEventRegistrationHandler
 	 */
 	protected function newHandler(
 		EventFactory $eventFactory = null,
 		EditEventCommand $editEventCmd = null,
 		IEventLookup $eventLookup = null
-	): EditEventRegistrationHandler {
-		$handler = new EditEventRegistrationHandler(
+	): UpdateEventRegistrationHandler {
+		$handler = new UpdateEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),
 			new PermissionChecker(
 				$this->createMock( UserBlockChecker::class ),

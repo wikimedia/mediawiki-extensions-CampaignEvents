@@ -20,10 +20,10 @@ use StatusValue;
 /**
  * @group Test
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler
- * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEditEventRegistrationHandler
  * @todo We can't test param validation due to T303619
  */
-class CreateEventRegistrationHandlerTest extends AbstractEventRegistrationHandlerTestBase {
+class CreateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTestBase {
 	use HandlerTestTrait;
 
 	protected const DEFAULT_REQ_DATA = [

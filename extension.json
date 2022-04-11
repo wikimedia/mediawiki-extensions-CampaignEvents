@@ -106,7 +106,7 @@
 		{
 			"path": "/campaignevents/v0/event_registration/{id}",
 			"method": "POST",
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EditEventRegistrationHandler",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UpdateEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventFactory",
 				"CampaignEventsPermissionChecker",

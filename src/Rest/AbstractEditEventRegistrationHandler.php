@@ -18,7 +18,7 @@ use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
 
-abstract class AbstractEventRegistrationHandler extends Handler {
+abstract class AbstractEditEventRegistrationHandler extends Handler {
 	use CSRFCheckTrait;
 	use FailStatusUtilTrait;
 
