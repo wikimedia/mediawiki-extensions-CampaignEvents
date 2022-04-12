@@ -13,7 +13,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
+use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
+use MediaWiki\Rest\Validator\BodyValidator;
+use MediaWiki\Rest\Validator\JsonBodyValidator;
 use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
@@ -45,10 +48,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	}
 
 	/**
-	 * @param array $body
 	 * @return int|null
 	 */
-	abstract protected function getEventID( array $body ): ?int;
+	abstract protected function getEventID(): ?int;
 
 	/**
 	 * @param ICampaignsUser $user
@@ -61,9 +63,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	public function execute() {
 		$this->assertCSRFSafety();
 
-		$body = $this->getValidatedParams();
+		$body = $this->getValidatedBody();
 
-		$eventID = $this->getEventID( $body );
+		$eventID = $this->getEventID();
 
 		$performerAuthority = $this->getAuthority();
 		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
@@ -121,67 +123,75 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	/**
 	 * @inheritDoc
 	 */
-	public function getParamSettings(): array {
-		return [
+	public function getBodyValidator( $contentType ): BodyValidator {
+		if ( $contentType !== 'application/json' ) {
+			throw new HttpException( "Unsupported Content-Type",
+				415,
+				[ 'content_type' => $contentType ]
+			);
+		}
+
+		// NOTE: The param types are not validated yet, see T305973
+		return new JsonBodyValidator( [
 			'name' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'event_page' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'title',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'chat_url' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 			'tracking_tool_name' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 			'tracking_tool_url' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 			'start_time' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',
 				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS_MW,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'end_time' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',
 				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS_MW,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'type' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => EventRegistration::VALID_TYPES,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'online_meeting' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 			],
 			'physical_meeting' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 			],
 			'meeting_url' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 			'meeting_country' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 			'meeting_address' => [
-				static::PARAM_SOURCE => 'post',
+				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-		];
+		] );
 	}
 }

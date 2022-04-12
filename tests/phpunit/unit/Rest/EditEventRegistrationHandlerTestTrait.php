@@ -6,13 +6,17 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWikiUnitTestCase;
+use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use StatusValue;
 
-abstract class EditEventRegistrationHandlerTestBase extends MediaWikiUnitTestCase {
+trait EditEventRegistrationHandlerTestTrait {
 	use CSRFTestHelperTrait;
+	use HandlerTestTrait;
 
-	protected const DEFAULT_POST_PARAMS = [
+	/**
+	 * @var array
+	 */
+	private static $defaultEventParams = [
 		'name' => 'Some event name',
 		'event_page' => 'Some event page title',
 		'chat_url' => 'https://chaturl.example.org',
@@ -28,16 +32,12 @@ abstract class EditEventRegistrationHandlerTestBase extends MediaWikiUnitTestCas
 		'meeting_address' => 'Address',
 	];
 
+	/**
+	 * @return EditEventCommand
+	 */
 	protected function getMockEditEventCommand(): EditEventCommand {
 		$editEventCmd = $this->createMock( EditEventCommand::class );
 		$editEventCmd->method( 'doEditIfAllowed' )->willReturn( StatusValue::newGood( 42 ) );
 		return $editEventCmd;
-	}
-
-	protected function getMockPermissionChecker(): EditEventCommand {
-		return new PermissionChecker(
-			$this->createMock( UserBlockChecker::class ),
-			$this->createMock( OrganizersStore::class )
-		);
 	}
 }

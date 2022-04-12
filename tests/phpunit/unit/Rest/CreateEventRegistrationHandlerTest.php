@@ -14,22 +14,26 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
-use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWikiUnitTestCase;
 use StatusValue;
 
 /**
  * @group Test
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEditEventRegistrationHandler
- * @todo We can't test param validation due to T303619
  */
-class CreateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTestBase {
-	use HandlerTestTrait;
+class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
+	use EditEventRegistrationHandlerTestTrait;
 
-	protected const DEFAULT_REQ_DATA = [
-		'method' => 'POST',
-		'postParams' => parent::DEFAULT_POST_PARAMS
-	];
+	private function getRequestData(): array {
+		return [
+			'method' => 'POST',
+			'bodyContents' => json_encode( self::$defaultEventParams ),
+			'headers' => [
+				'Content-Type' => 'application/json',
+			]
+		];
+	}
 
 	/**
 	 * @param EventFactory|null $eventFactory
@@ -54,13 +58,13 @@ class CreateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 
 	public function testExecute__successful(): void {
 		$handler = $this->newHandler();
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		$request = new RequestData( $this->getRequestData() );
 		$respData = $this->executeHandlerAndGetBodyData(
 			$handler,
 			$request,
 			[],
 			[],
-			self::DEFAULT_POST_PARAMS,
+			[],
 			[],
 			$this->mockRegisteredUltimateAuthority()
 		);
@@ -71,10 +75,10 @@ class CreateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 	public function testExecute__unauthorized() {
 		$performer = $this->mockAnonNullAuthority();
 		$handler = $this->newHandler();
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		$request = new RequestData( $this->getRequestData() );
 
 		try {
-			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS, [], $performer );
+			$this->executeHandler( $handler, $request, [], [], [], [], $performer );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 403, $e->getCode() );
@@ -90,18 +94,10 @@ class CreateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 	public function testExecute__validation( EventFactory $eventFactory, string $expectedMsgKey ) {
 		$handler = $this->newHandler( $eventFactory );
 
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		$request = new RequestData( $this->getRequestData() );
 
 		try {
-			$this->executeHandler(
-				$handler,
-				$request,
-				[],
-				[],
-				self::DEFAULT_POST_PARAMS,
-				[],
-				$this->mockRegisteredUltimateAuthority()
-			);
+			$this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 400, $e->getCode() );

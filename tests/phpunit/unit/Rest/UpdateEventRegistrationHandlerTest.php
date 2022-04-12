@@ -17,7 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
-use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWikiUnitTestCase;
 use StatusValue;
 
 /**
@@ -25,17 +25,20 @@ use StatusValue;
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\UpdateEventRegistrationHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEditEventRegistrationHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\EventIDParamTrait
- * @todo We can't test param validation due to T303619
  */
-class UpdateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTestBase {
-	use HandlerTestTrait;
+class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
+	use EditEventRegistrationHandlerTestTrait;
 
-	protected const DEFAULT_POST_PARAMS = [ 'id' => 1 ] + parent::DEFAULT_POST_PARAMS;
-
-	protected const DEFAULT_REQ_DATA = [
-		'method' => 'POST',
-		'postParams' => self::DEFAULT_POST_PARAMS
-	];
+	private function getRequestData(): array {
+		return [
+			'method' => 'PUT',
+			'pathParams' => [ 'id' => 1 ],
+			'bodyContents' => json_encode( self::$defaultEventParams ),
+			'headers' => [
+				'Content-Type' => 'application/json',
+			]
+		];
+	}
 
 	/**
 	 * @param EventFactory|null $eventFactory
@@ -63,13 +66,13 @@ class UpdateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 
 	public function testExecute__successful(): void {
 		$handler = $this->newHandler();
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		$request = new RequestData( $this->getRequestData() );
 		$respData = $this->executeHandler(
 			$handler,
 			$request,
 			[],
 			[],
-			self::DEFAULT_POST_PARAMS,
+			[],
 			[],
 			$this->mockRegisteredUltimateAuthority()
 		);
@@ -82,9 +85,9 @@ class UpdateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 		$eventLookup->method( 'getEventByID' )
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
 		$handler = $this->newHandler( null, null, $eventLookup );
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		$request = new RequestData( $this->getRequestData() );
 		try {
-			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS );
+			$this->executeHandler( $handler, $request );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 404, $e->getCode() );
@@ -99,10 +102,10 @@ class UpdateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 			PermissionStatus::newFatal( 'campaignevents-edit-not-allowed-page' )
 		);
 		$handler = $this->newHandler( null, $editEventCmd );
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		$request = new RequestData( $this->getRequestData() );
 
 		try {
-			$this->executeHandler( $handler, $request, [], [], self::DEFAULT_POST_PARAMS, [], $authority );
+			$this->executeHandler( $handler, $request, [], [], [], [], $authority );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 403, $e->getCode() );
@@ -118,7 +121,7 @@ class UpdateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 	public function testExecute__validation( EventFactory $eventFactory, string $expectedMsgKey ) {
 		$handler = $this->newHandler( $eventFactory );
 
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
+		$request = new RequestData( $this->getRequestData() );
 
 		try {
 			$this->executeHandler(
@@ -126,7 +129,7 @@ class UpdateEventRegistrationHandlerTest extends EditEventRegistrationHandlerTes
 				$request,
 				[],
 				[],
-				self::DEFAULT_POST_PARAMS,
+				[],
 				[],
 				$this->mockRegisteredUltimateAuthority()
 			);

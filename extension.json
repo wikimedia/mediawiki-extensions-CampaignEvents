@@ -105,7 +105,7 @@
 		},
 		{
 			"path": "/campaignevents/v0/event_registration/{id}",
-			"method": "POST",
+			"method": "PUT",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UpdateEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventFactory",
