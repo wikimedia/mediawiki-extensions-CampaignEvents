@@ -214,7 +214,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventEnd'],
 				EventRegistration::TYPE_GENERIC,
 				(int)$data['EventMeetingType'],
-				$data['EventMeetingURL'],
+				$data['EventMeetingURL'] ?: null,
 				$data['EventMeetingCountry'],
 				$data['EventMeetingAddress'],
 				$this->event ? $this->event->getCreationTimestamp() : null,
