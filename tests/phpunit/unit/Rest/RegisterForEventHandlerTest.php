@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\RegisterForEventHandler;
@@ -58,7 +59,10 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 			$eventLookup->method( 'getEventByID' )->willReturn( $event );
 		}
 		$handler = new RegisterForEventHandler(
-			new PermissionChecker( $this->createMock( UserBlockChecker::class ) ),
+			new PermissionChecker(
+				$this->createMock( UserBlockChecker::class ),
+				$this->createMock( OrganizersStore::class )
+			),
 			$eventLookup,
 			$participantsStore ?? $this->createMock( ParticipantsStore::class )
 		);

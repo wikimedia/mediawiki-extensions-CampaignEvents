@@ -34,7 +34,10 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		return new EditEventCommand(
 			$eventStore ?? $this->createMock( IEventStore::class ),
 			$this->createMock( OrganizersStore::class ),
-			$permChecker ?? new PermissionChecker( $this->createMock( UserBlockChecker::class ) )
+			$permChecker ?? new PermissionChecker(
+				$this->createMock( UserBlockChecker::class ),
+				$this->createMock( OrganizersStore::class )
+			)
 		);
 	}
 

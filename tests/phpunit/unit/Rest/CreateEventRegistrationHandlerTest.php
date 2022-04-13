@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -41,7 +42,10 @@ class CreateEventRegistrationHandlerTest extends AbstractEventRegistrationHandle
 	): CreateEventRegistrationHandler {
 		$handler = new CreateEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),
-			new PermissionChecker( $this->createMock( UserBlockChecker::class ) ),
+			new PermissionChecker(
+				$this->createMock( UserBlockChecker::class ),
+				$this->createMock( OrganizersStore::class )
+			),
 			$editEventCmd ?? $this->getMockEditEventCommand()
 		);
 		$this->setHandlerCSRFSafe( $handler );
