@@ -7,10 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Organizers;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 
 class Organizer {
-	public const ROLE_CREATOR = 'creator';
-	// This is for a generic organizer
-	public const ROLE_ORGANIZER = 'organizer';
-
 	/** @var ICampaignsUser */
 	private $user;
 
@@ -19,7 +15,7 @@ class Organizer {
 
 	/**
 	 * @param ICampaignsUser $user
-	 * @param string[] $roles List of self::ROLE_* constants
+	 * @param string[] $roles List of Roles::ROLE_* constants
 	 */
 	public function __construct( ICampaignsUser $user, array $roles ) {
 		$this->user = $user;

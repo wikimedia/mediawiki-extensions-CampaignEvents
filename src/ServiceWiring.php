@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Store\EventStore;
@@ -97,6 +98,11 @@ return [
 		return new DeleteEventCommand(
 			$services->get( IEventStore::STORE_SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME )
+		);
+	},
+	RoleFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): RoleFormatter {
+		return new RoleFormatter(
+			$services->getMessageFormatterFactory()
 		);
 	},
 ];

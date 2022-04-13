@@ -113,6 +113,16 @@
 				"CampaignEventsEditEventCommand",
 				"CampaignEventsEventLookup"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/organizers",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListOrganizersHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsOrganizersStore",
+				"CampaignEventsRoleFormatter"
+			]
 		}
 	],
 	"ServiceWiringFiles": [
