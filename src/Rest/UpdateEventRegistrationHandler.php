@@ -38,10 +38,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
-		return array_merge(
-			parent::getParamSettings(),
-			$this->getIDParamSetting()
-		);
+		return $this->getIDParamSetting();
 	}
 
 	/**
@@ -54,9 +51,10 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	/**
 	 * @inheritDoc
 	 */
-	protected function getEventID( array $body ): ?int {
-		$this->getRegistrationOrThrow( $this->eventLookup, $body['id'] );
-		return $body['id'];
+	protected function getEventID(): int {
+		$id = $this->getValidatedParams()['id'];
+		$this->getRegistrationOrThrow( $this->eventLookup, $id );
+		return $id;
 	}
 
 	/**

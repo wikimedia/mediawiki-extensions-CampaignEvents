@@ -15,7 +15,7 @@ class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	/**
 	 * @inheritDoc
 	 */
-	protected function getEventID( array $body ): ?int {
+	protected function getEventID(): ?int {
 		return null;
 	}
 
