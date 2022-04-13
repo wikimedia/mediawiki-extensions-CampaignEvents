@@ -83,7 +83,9 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
-		$expectedMsg = $isCreation ? 'campaignevents-create-not-allowed-page' : 'campaignevents-edit-not-allowed-page';
+		$expectedMsg = $isCreation
+			? 'campaignevents-create-not-allowed-page'
+			: 'campaignevents-edit-not-allowed-registration';
 		$this->assertStatusMessage( $expectedMsg, $status );
 	}
 

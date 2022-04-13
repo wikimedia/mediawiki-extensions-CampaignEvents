@@ -4,8 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use ApiMessage;
-use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -15,15 +13,14 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
-use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use StatusValue;
-use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
 
 abstract class AbstractEventRegistrationHandler extends Handler {
 	use CSRFCheckTrait;
+	use FailStatusUtilTrait;
 
 	/** @var EventFactory */
 	protected $eventFactory;
@@ -120,22 +117,6 @@ abstract class AbstractEventRegistrationHandler extends Handler {
 	 * @return Response
 	 */
 	abstract protected function getSuccessResponse( StatusValue $saveStatus ): Response;
-
-	/**
-	 * @param StatusValue $status
-	 * @param int $statusCode
-	 * @return never
-	 */
-	private function exitWithStatus( StatusValue $status, int $statusCode = 400 ): void {
-		$errors = $status->getErrors();
-
-		if ( !$errors ) {
-			throw new InvalidArgumentException( "Got status without errors" );
-		}
-		// TODO Report all errors, not just the first one.
-		$apiMsg = ApiMessage::create( $errors[0] );
-		throw new LocalizedHttpException( new MessageValue( $apiMsg->getKey(), $apiMsg->getParams() ), $statusCode );
-	}
 
 	/**
 	 * @inheritDoc

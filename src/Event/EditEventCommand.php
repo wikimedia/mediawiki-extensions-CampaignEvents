@@ -42,49 +42,49 @@ class EditEventCommand {
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsUser $creator
+	 * @param ICampaignsUser $performer
 	 * @return StatusValue If good, the value shall be the ID of the event. Will be a PermissionStatus for
 	 *   permissions-related errors.
 	 */
-	public function doEditIfAllowed( EventRegistration $registration, ICampaignsUser $creator ): StatusValue {
-		$permStatus = $this->authorizeEdit( $registration, $creator );
+	public function doEditIfAllowed( EventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+		$permStatus = $this->authorizeEdit( $registration, $performer );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
 		}
-		return $this->doEditUnsafe( $registration, $creator );
+		return $this->doEditUnsafe( $registration, $performer );
 	}
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsUser $creator
+	 * @param ICampaignsUser $performer
 	 * @return PermissionStatus
 	 */
-	private function authorizeEdit( EventRegistration $registration, ICampaignsUser $creator ): PermissionStatus {
+	private function authorizeEdit( EventRegistration $registration, ICampaignsUser $performer ): PermissionStatus {
 		$registrationID = $registration->getID();
 		$isCreation = $registrationID === null;
 		$eventPage = $registration->getPage();
-		if ( $isCreation && !$this->permissionChecker->userCanCreateRegistration( $creator, $eventPage ) ) {
+		if ( $isCreation && !$this->permissionChecker->userCanCreateRegistration( $performer, $eventPage ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-create-not-allowed-page' );
-		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration( $creator, $registrationID ) ) {
+		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration( $performer, $registrationID ) ) {
 			// @phan-suppress-previous-line PhanTypeMismatchArgumentNullable
-			return PermissionStatus::newFatal( 'campaignevents-edit-not-allowed-page' );
+			return PermissionStatus::newFatal( 'campaignevents-edit-not-allowed-registration' );
 		}
 		return PermissionStatus::newGood();
 	}
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsUser $creator
+	 * @param ICampaignsUser $performer
 	 * @return StatusValue If good, the value shall be the ID of the event.
 	 */
-	public function doEditUnsafe( EventRegistration $registration, ICampaignsUser $creator ): StatusValue {
+	public function doEditUnsafe( EventRegistration $registration, ICampaignsUser $performer ): StatusValue {
 		$saveStatus = $this->eventStore->saveRegistration( $registration );
 		if ( !$saveStatus->isGood() ) {
 			return $saveStatus;
 		}
 		$eventID = $saveStatus->getValue();
 		if ( $registration->getID() === null ) {
-			$this->organizerStore->addOrganizerToEvent( $eventID, $creator, [ Organizer::ROLE_CREATOR ] );
+			$this->organizerStore->addOrganizerToEvent( $eventID, $performer, [ Organizer::ROLE_CREATOR ] );
 		}
 		return StatusValue::newGood( $eventID );
 	}

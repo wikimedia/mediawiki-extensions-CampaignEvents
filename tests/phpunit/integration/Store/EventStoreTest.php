@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWikiIntegrationTestCase;
@@ -124,5 +125,51 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 		yield 'New event' => [ new EventRegistration( ...$baseCtrArgs ) ];
 		yield 'Existing event' => [ new EventRegistration( ...array_replace( $baseCtrArgs, [ 0 => 42 ] ) ) ];
+	}
+
+	/**
+	 * @covers ::getEventByID
+	 * @covers ::newEventFromDBRow
+	 * @covers ::deleteRegistration
+	 * @dataProvider provideEventsToDelete
+	 */
+	public function testDeletion( ExistingEventRegistration $registration, bool $expected ) {
+		$this->storeEvent( $registration );
+		$store = CampaignEventsServices::getEventStore();
+		$this->assertSame( $expected, $store->deleteRegistration( $registration ), 'Deletion result' );
+		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByID( $registration->getID() );
+		$this->assertNotNull( $storedEvent->getDeletionTimestamp() );
+	}
+
+	public function provideEventsToDelete(): Generator {
+		$baseCtrArgs = [
+			1,
+			'Some name',
+			new MWPageProxy( new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ) ),
+			'Chat URL',
+			'Tracking tool name',
+			'Tracking tool URL',
+			EventRegistration::STATUS_OPEN,
+			'1646700000',
+			'1646800000',
+			EventRegistration::TYPE_GENERIC,
+			EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
+			'Meeting URL',
+			'Country',
+			'Address',
+			'1646500000',
+			'1646500000',
+			'del' => null
+		];
+
+		yield 'Not deleted' => [
+			new ExistingEventRegistration( ...array_values( $baseCtrArgs ) ),
+			true
+		];
+		$deletedEventCtrArgs = array_replace( $baseCtrArgs, [ 'del' => '1234500000' ] );
+		yield 'Already deleted' => [
+			new ExistingEventRegistration( ...array_values( $deletedEventCtrArgs ) ),
+			false
+		];
 	}
 }
