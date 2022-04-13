@@ -7,11 +7,11 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\Store\IEventStore;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
 

@@ -11,9 +11,9 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
-use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MWTimestamp;
 use Status;
 

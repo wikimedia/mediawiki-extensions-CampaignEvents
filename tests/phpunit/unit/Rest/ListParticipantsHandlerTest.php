@@ -5,12 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
-
 use MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler;
-use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
-use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;

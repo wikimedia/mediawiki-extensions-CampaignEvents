@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 
 class SpecialCreateEventRegistration extends AbstractEventRegistrationSpecialPage {
 

@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use FormSpecialPage;
 use Html;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
-use MediaWiki\Extension\CampaignEvents\Store\EventNotFoundException;
-use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	/** @var IEventLookup */

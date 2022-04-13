@@ -4,8 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
-use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 

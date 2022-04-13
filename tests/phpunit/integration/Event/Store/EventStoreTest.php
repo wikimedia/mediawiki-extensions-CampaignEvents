@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Store;
+namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Event\Store;
 
 use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
@@ -17,7 +17,7 @@ use Title;
 /**
  * @group Test
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Store\EventStore
+ * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\Store\EventStore
  * @covers ::__construct()
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {

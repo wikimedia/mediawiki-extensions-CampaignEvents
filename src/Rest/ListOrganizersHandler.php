@@ -4,9 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
-use MediaWiki\Extension\CampaignEvents\Store\IEventLookup;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 
