@@ -6,11 +6,13 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\Response;
 use StatusValue;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
 	use EventIDParamTrait;
@@ -62,5 +64,27 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 */
 	protected function checkPermissions( ICampaignsUser $user ): void {
 		// TODO Determine if we need to do something here
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getBodyParams(): array {
+		return array_merge(
+			parent::getBodyParams(),
+			[
+				'status' => [
+					static::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_TYPE => EventRegistration::VALID_STATUSES,
+				]
+			]
+		);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getEventStatus(): string {
+		return $this->getValidatedBody()['status'];
 	}
 }

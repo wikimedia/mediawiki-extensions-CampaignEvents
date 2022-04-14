@@ -1,0 +1,9 @@
+{
+	"extends": [
+		"wikimedia/server",
+		"wikimedia/mocha"
+	],
+	"rules": {
+		"camelcase": "off"
+	}
+}

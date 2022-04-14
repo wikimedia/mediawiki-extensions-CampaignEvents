@@ -4,3 +4,4 @@
 .eslintcache
 .DS_Store
 .idea/
+/.api-testing.config.json

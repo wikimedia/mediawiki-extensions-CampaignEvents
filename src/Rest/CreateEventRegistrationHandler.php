@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -39,5 +40,12 @@ class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 				403
 			);
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getEventStatus(): string {
+		return EventRegistration::STATUS_OPEN;
 	}
 }
