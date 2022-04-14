@@ -77,6 +77,15 @@
 		},
 		{
 			"path": "/campaignevents/v0/event_registration/{id}",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsCampaignsPageFormatter"
+			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}",
 			"method": "DELETE",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\DeleteEventRegistrationHandler",
 			"services": [
