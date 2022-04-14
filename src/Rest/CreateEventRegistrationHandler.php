@@ -23,10 +23,13 @@ class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @inheritDoc
 	 */
 	protected function getSuccessResponse( StatusValue $saveStatus ): Response {
-		// TODO Set status code 201 when we'll be able to provide a Location
-		return $this->getResponseFactory()->createJson( [
-			'id' => $saveStatus->getValue()
+		$id = $saveStatus->getValue();
+		$resp = $this->getResponseFactory()->createJson( [
+			'id' => $id
 		] );
+		$resp->setStatus( 201 );
+		$resp->setHeader( 'Location', $this->getRouter()->getRouteUrl( "/campaignevents/v0/event_registration/$id" ) );
+		return $resp;
 	}
 
 	/**
