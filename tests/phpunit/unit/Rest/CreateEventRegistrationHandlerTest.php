@@ -59,7 +59,7 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	public function testExecute__successful(): void {
 		$handler = $this->newHandler();
 		$request = new RequestData( $this->getRequestData() );
-		$respData = $this->executeHandlerAndGetBodyData(
+		$resp = $this->executeHandler(
 			$handler,
 			$request,
 			[],
@@ -68,6 +68,12 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			[],
 			$this->mockRegisteredUltimateAuthority()
 		);
+		$this->assertSame( 201, $resp->getStatusCode() );
+		$this->assertStringContainsString(
+			'/campaignevents/v0/event_registration/',
+			$resp->getHeaderLine( 'Location' )
+		);
+		$respData = json_decode( $resp->getBody()->__toString(), true );
 		$this->assertArrayHasKey( 'id', $respData );
 		$this->assertIsInt( $respData['id'] );
 	}
