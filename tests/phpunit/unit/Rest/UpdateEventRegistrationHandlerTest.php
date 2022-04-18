@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -30,10 +31,11 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	use EditEventRegistrationHandlerTestTrait;
 
 	private function getRequestData(): array {
+		$bodyParams = self::$defaultEventParams + [ 'status' => EventRegistration::STATUS_OPEN ];
 		return [
 			'method' => 'PUT',
 			'pathParams' => [ 'id' => 1 ],
-			'bodyContents' => json_encode( self::$defaultEventParams ),
+			'bodyContents' => json_encode( $bodyParams ),
 			'headers' => [
 				'Content-Type' => 'application/json',
 			]

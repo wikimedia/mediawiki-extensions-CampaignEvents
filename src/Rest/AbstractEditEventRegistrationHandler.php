@@ -88,7 +88,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				$body['chat_url'],
 				$body['tracking_tool_name'],
 				$body['tracking_tool_url'],
-				EventRegistration::STATUS_OPEN,
+				$this->getEventStatus(),
 				$body['start_time'],
 				$body['end_time'],
 				$body['type'],
@@ -132,7 +132,14 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		}
 
 		// NOTE: The param types are not validated yet, see T305973
-		return new JsonBodyValidator( [
+		return new JsonBodyValidator( $this->getBodyParams() );
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getBodyParams(): array {
+		return [
 			'name' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
@@ -192,6 +199,11 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-		] );
+		];
 	}
+
+	/**
+	 * @return string
+	 */
+	abstract protected function getEventStatus(): string;
 }
