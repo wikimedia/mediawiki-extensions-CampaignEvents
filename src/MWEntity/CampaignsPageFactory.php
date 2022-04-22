@@ -4,8 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
+use MalformedTitleException;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Interwiki\InterwikiLookup;
 use MediaWiki\Page\PageStoreFactory;
+use TitleParser;
 use WikiMap;
 
 class CampaignsPageFactory {
@@ -13,14 +16,24 @@ class CampaignsPageFactory {
 
 	/** @var PageStoreFactory */
 	private $pageStoreFactory;
+	/** @var TitleParser */
+	private $titleParser;
+	/** @var InterwikiLookup */
+	private $interwikiLookup;
 
 	/**
 	 * @param PageStoreFactory $pageStoreFactory
+	 * @param TitleParser $titleParser
+	 * @param InterwikiLookup $interwikiLookup
 	 */
 	public function __construct(
-		PageStoreFactory $pageStoreFactory
+		PageStoreFactory $pageStoreFactory,
+		TitleParser $titleParser,
+		InterwikiLookup $interwikiLookup
 	) {
 		$this->pageStoreFactory = $pageStoreFactory;
+		$this->titleParser = $titleParser;
+		$this->interwikiLookup = $interwikiLookup;
 	}
 
 	/**
@@ -44,5 +57,31 @@ class CampaignsPageFactory {
 			throw new PageNotFoundException( $namespace, $dbKey, $wikiID );
 		}
 		return new MWPageProxy( $page );
+	}
+
+	/**
+	 * @param string $titleStr
+	 * @return ICampaignsPage
+	 * @throws InvalidTitleStringException
+	 * @throws PageNotFoundException
+	 */
+	public function newExistingPageFromString( string $titleStr ): ICampaignsPage {
+		try {
+			$pageTitle = $this->titleParser->parseTitle( $titleStr );
+		} catch ( MalformedTitleException $e ) {
+			throw new InvalidTitleStringException( $titleStr, $e->getErrorMessage(), $e->getErrorMessageParameters() );
+		}
+
+		if ( $pageTitle->getInterwiki() !== '' ) {
+			$interwiki = $this->interwikiLookup->fetch( $pageTitle->getInterwiki() );
+			if ( !$interwiki ) {
+				throw new InvalidInterwikiException( $pageTitle->getInterwiki() );
+			}
+			$wikiID = $interwiki->getWikiID();
+		} else {
+			$wikiID = WikiAwareEntity::LOCAL;
+		}
+
+		return $this->newExistingPage( $pageTitle->getNamespace(), $pageTitle->getDBkey(), $wikiID );
 	}
 }
