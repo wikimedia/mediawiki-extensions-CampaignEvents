@@ -6,36 +6,38 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
-use Message;
 use MWTimestamp;
 use StatusValue;
 
 class EventFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventFactory';
 
-	private const MAX_NAME_LENGTH = 255;
-
 	/** @var CampaignsPageFactory */
 	private $campaignsPageFactory;
+	/** @var CampaignsPageFormatter */
+	private $campaignsPageFormatter;
 
 	/**
 	 * @param CampaignsPageFactory $campaignsPageFactory
+	 * @param CampaignsPageFormatter $campaignsPageFormatter
 	 */
 	public function __construct(
-		CampaignsPageFactory $campaignsPageFactory
+		CampaignsPageFactory $campaignsPageFactory,
+		CampaignsPageFormatter $campaignsPageFormatter
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
+		$this->campaignsPageFormatter = $campaignsPageFormatter;
 	}
 
 	/**
 	 * Creates a new event registration entity, making sure that the given data is valid and formatted as expected.
 	 *
 	 * @param int|null $id
-	 * @param string $name
 	 * @param string $pageTitleStr
 	 * @param string|null $chatURL
 	 * @param string|null $trackingToolName
@@ -56,7 +58,6 @@ class EventFactory {
 	 */
 	public function newEvent(
 		?int $id,
-		string $name,
 		string $pageTitleStr,
 		?string $chatURL,
 		?string $trackingToolName,
@@ -77,13 +78,6 @@ class EventFactory {
 
 		if ( $id !== null && $id <= 0 ) {
 			$res->error( 'campaignevents-error-invalid-id' );
-		}
-
-		$name = trim( $name );
-		if ( $name === '' ) {
-			$res->error( 'campaignevents-error-empty-name' );
-		} elseif ( strlen( $name ) > self::MAX_NAME_LENGTH ) {
-			$res->error( 'campaignevents-error-name-too-long', Message::numParam( self::MAX_NAME_LENGTH ) );
 		}
 
 		$pageStatus = $this->validatePage( $pageTitleStr );
@@ -172,7 +166,7 @@ class EventFactory {
 
 		return new EventRegistration(
 			$id,
-			$name,
+			$this->campaignsPageFormatter->getText( $campaignsPage ),
 			$campaignsPage,
 			$chatURL,
 			$trackingToolName,

@@ -62,7 +62,8 @@ return [
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
 		return new EventFactory(
-			$services->get( CampaignsPageFactory::SERVICE_NAME )
+			$services->get( CampaignsPageFactory::SERVICE_NAME ),
+			$services->get( CampaignsPageFormatter::SERVICE_NAME )
 		);
 	},
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {

@@ -10,12 +10,12 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWikiUnitTestCase;
 use MWTimestamp;
-use Wikimedia\TestingAccessWrapper;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventFactory
@@ -27,7 +27,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	private const TEST_TIME = 1646000000;
 	private const VALID_DEFAULT_DATA = [
 		'id' => 42,
-		'name' => 'Some event name',
 		'page' => 'Some event page title',
 		'chat' => 'https://chaturl.example.org',
 		'trackingname' => 'Tracking tool',
@@ -57,7 +56,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		CampaignsPageFactory $campaignsPageFactory = null
 	): EventFactory {
 		return new EventFactory(
-			$campaignsPageFactory ?? $this->createMock( CampaignsPageFactory::class )
+			$campaignsPageFactory ?? $this->createMock( CampaignsPageFactory::class ),
+			$this->createMock( CampaignsPageFormatter::class )
 		);
 	}
 
@@ -99,13 +99,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	public function provideEventData(): Generator {
 		yield 'Successful' => [ null, $this->getTestDataWithDefault() ];
 		yield 'Negative ID' => [ 'campaignevents-error-invalid-id', $this->getTestDataWithDefault( [ 'id' => -2 ] ) ];
-		yield 'Empty name' => [ 'campaignevents-error-empty-name', $this->getTestDataWithDefault( [ 'name' => '' ] ) ];
-		yield 'Space-only name' =>
-			[ 'campaignevents-error-empty-name', $this->getTestDataWithDefault( [ 'name' => '    ' ] ) ];
-
-		$longName = str_repeat( 'x', TestingAccessWrapper::constant( EventFactory::class, 'MAX_NAME_LENGTH' ) + 1 );
-		yield 'Name too long' =>
-			[ 'campaignevents-error-name-too-long', $this->getTestDataWithDefault( [ 'name' => $longName ] ) ];
 
 		yield 'Empty title string' =>
 			[ 'campaignevents-error-empty-title', $this->getTestDataWithDefault( [ 'page' => '' ] ) ];

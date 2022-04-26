@@ -17,7 +17,6 @@ trait EditEventRegistrationHandlerTestTrait {
 	 * @var array
 	 */
 	private static $defaultEventParams = [
-		'name' => 'Some event name',
 		'event_page' => 'Some event page title',
 		'chat_url' => 'https://chaturl.example.org',
 		'tracking_tool_name' => 'Tracking tool',

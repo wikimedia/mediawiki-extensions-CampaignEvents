@@ -83,7 +83,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		try {
 			$event = $this->eventFactory->newEvent(
 				$eventID,
-				$body['name'],
 				$body['event_page'],
 				$body['chat_url'],
 				$body['tracking_tool_name'],
@@ -140,11 +139,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 */
 	protected function getBodyParams(): array {
 		return [
-			'name' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-				ParamValidator::PARAM_REQUIRED => true,
-			],
 			'event_page' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'title',

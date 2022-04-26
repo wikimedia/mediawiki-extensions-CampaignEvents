@@ -30,4 +30,15 @@ class CampaignsPageFormatter {
 		}
 		throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
 	}
+
+	/**
+	 * @param ICampaignsPage $page
+	 * @return string
+	 */
+	public function getText( ICampaignsPage $page ): string {
+		if ( $page instanceof MWPageProxy ) {
+			return $this->titleFormatter->getText( $page->getPageIdentity() );
+		}
+		throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
+	}
 }
