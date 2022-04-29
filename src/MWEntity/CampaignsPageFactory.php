@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MalformedTitleException;
 use MediaWiki\DAO\WikiAwareEntity;
-use MediaWiki\Interwiki\InterwikiLookup;
 use MediaWiki\Page\PageStoreFactory;
 use TitleParser;
 use WikiMap;
@@ -18,22 +17,17 @@ class CampaignsPageFactory {
 	private $pageStoreFactory;
 	/** @var TitleParser */
 	private $titleParser;
-	/** @var InterwikiLookup */
-	private $interwikiLookup;
 
 	/**
 	 * @param PageStoreFactory $pageStoreFactory
 	 * @param TitleParser $titleParser
-	 * @param InterwikiLookup $interwikiLookup
 	 */
 	public function __construct(
 		PageStoreFactory $pageStoreFactory,
-		TitleParser $titleParser,
-		InterwikiLookup $interwikiLookup
+		TitleParser $titleParser
 	) {
 		$this->pageStoreFactory = $pageStoreFactory;
 		$this->titleParser = $titleParser;
-		$this->interwikiLookup = $interwikiLookup;
 	}
 
 	/**
@@ -61,11 +55,13 @@ class CampaignsPageFactory {
 
 	/**
 	 * @param string $titleStr
+	 * @param string|bool $wikiID
 	 * @return ICampaignsPage
 	 * @throws InvalidTitleStringException
+	 * @throws UnexpectedInterwikiException If the page title has an interwiki prefix
 	 * @throws PageNotFoundException
 	 */
-	public function newExistingPageFromString( string $titleStr ): ICampaignsPage {
+	public function newExistingPageFromString( string $titleStr, $wikiID = WikiAwareEntity::LOCAL ): ICampaignsPage {
 		try {
 			$pageTitle = $this->titleParser->parseTitle( $titleStr );
 		} catch ( MalformedTitleException $e ) {
@@ -73,13 +69,7 @@ class CampaignsPageFactory {
 		}
 
 		if ( $pageTitle->getInterwiki() !== '' ) {
-			$interwiki = $this->interwikiLookup->fetch( $pageTitle->getInterwiki() );
-			if ( !$interwiki ) {
-				throw new InvalidInterwikiException( $pageTitle->getInterwiki() );
-			}
-			$wikiID = $interwiki->getWikiID();
-		} else {
-			$wikiID = WikiAwareEntity::LOCAL;
+			throw new UnexpectedInterwikiException( $pageTitle->getInterwiki() );
 		}
 
 		return $this->newExistingPage( $pageTitle->getNamespace(), $pageTitle->getDBkey(), $wikiID );
