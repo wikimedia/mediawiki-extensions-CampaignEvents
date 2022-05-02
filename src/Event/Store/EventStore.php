@@ -152,31 +152,32 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 		$curCreationTS = $event->getCreationTimestamp();
 		$curDeletionTS = $event->getDeletionTimestamp();
-		$dbw->replace(
-			'campaign_events',
-			'event_id',
-			[
-				'event_id' => $event->getID(),
-				'event_name' => $event->getName(),
-				'event_page_namespace' => $event->getPage()->getNamespace(),
-				'event_page_title' => $event->getPage()->getDBkey(),
-				'event_page_wiki' => Utils::getWikiIDString( $event->getPage()->getWikiId() ),
-				'event_chat_url' => $event->getChatURL() ?? '',
-				'event_tracking_tool' => $event->getTrackingToolName() ?? '',
-				'event_tracking_url' => $event->getTrackingToolURL() ?? '',
-				'event_status' => self::EVENT_STATUS_MAP[$event->getStatus()],
-				'event_start' => $dbw->timestamp( $event->getStartTimestamp() ),
-				'event_end' => $dbw->timestamp( $event->getEndTimestamp() ),
-				'event_type' => self::EVENT_TYPE_MAP[$event->getType()],
-				'event_meeting_type' => $meetingType,
-				'event_meeting_url' => $event->getMeetingURL() ?: '',
-				'event_meeting_country' => $event->getMeetingCountry() ?: '',
-				'event_meeting_address' => $event->getMeetingAddress() ?: '',
-				'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
-				'event_last_edit' => $curDBTimestamp,
-				'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
-			]
-		);
+		$newRow = [
+			'event_name' => $event->getName(),
+			'event_page_namespace' => $event->getPage()->getNamespace(),
+			'event_page_title' => $event->getPage()->getDBkey(),
+			'event_page_wiki' => Utils::getWikiIDString( $event->getPage()->getWikiId() ),
+			'event_chat_url' => $event->getChatURL() ?? '',
+			'event_tracking_tool' => $event->getTrackingToolName() ?? '',
+			'event_tracking_url' => $event->getTrackingToolURL() ?? '',
+			'event_status' => self::EVENT_STATUS_MAP[$event->getStatus()],
+			'event_start' => $dbw->timestamp( $event->getStartTimestamp() ),
+			'event_end' => $dbw->timestamp( $event->getEndTimestamp() ),
+			'event_type' => self::EVENT_TYPE_MAP[$event->getType()],
+			'event_meeting_type' => $meetingType,
+			'event_meeting_url' => $event->getMeetingURL() ?: '',
+			'event_meeting_country' => $event->getMeetingCountry() ?: '',
+			'event_meeting_address' => $event->getMeetingAddress() ?: '',
+			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
+			'event_last_edit' => $curDBTimestamp,
+			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
+		];
+		$eventID = $event->getID();
+		if ( $eventID === null ) {
+			$dbw->insert( 'campaign_events', $newRow );
+		} else {
+			$dbw->update( 'campaign_events', $newRow, [ 'event_id' => $eventID ] );
+		}
 		return StatusValue::newGood( $event->getID() ?? $dbw->insertId() );
 	}
 
