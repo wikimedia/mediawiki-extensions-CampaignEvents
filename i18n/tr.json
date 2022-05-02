@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Khalvar"
+		]
+	},
+	"campaignevents-error-empty-start": "Etkinlik başlatma vakti boş olamaz",
+	"campaignevents-error-start-past": "Etkinlik başlatma vakti geçmişte olamaz",
+	"campaignevents-rest-register-permission-denied": "Etkinliklere kayıt olmanıza izin yok",
+	"campaignevents-rest-register-event-past": "Belirtilen etkinliğin kayıt olma süresi çoktan geçti",
+	"editeventregistration": "Etkinlik kaydını düzenle",
+	"campaignevents-edit-form-legend": "Düzenlediğiniz etkinlik hakkında genel bilgi verin",
+	"campaignevents-edit-field-name": "Etkinliğin adı.",
+	"campaignevents-edit-field-event-status": "Etkinlik Durumu",
+	"campaignevents-edit-field-status-open": "Açık",
+	"campaignevents-edit-field-status-closed": "Kapalı",
+	"campaignevents-edit-field-start": "Başlangıç zamanı",
+	"campaignevents-edit-field-end": "Bitiş vakti",
+	"campaignevents-edit-field-type-online": "Çevrimiçi etkinlik",
+	"campaignevents-edit-field-type-physical": "Fiziksel etkinlik",
+	"campaignevents-edit-field-address": "Adres",
+	"campaignevents-edit-field-chat-url-help": "Bu etkinliğin katılımcıları için bir çevrim içi sohbet grubunuz varsa, davet linkini buraya ekleyebilirsiniz. Katılımcılar, kayıt olduktan sonra davet linki gönderilecektir.",
+	"campaignevents-edit-form-submit": "Kaydı düzenle",
+	"registerforevent": "Bir etkinlik için kayıt olun",
+	"campaignevents-register-error-no-event": "Etkinlik belirtilmedi",
+	"campaignevents-unregister-success": "Bu etkinlik için kayıt olmadınız",
+	"campaignevents-rest-delete-already-deleted": "Belirtilmiş etkinlik kaydı çoktan silindi",
+	"campaignevents-role-creator": "oluşturan",
+	"campaignevents-role-organizer": "Düzenleyici"
+}

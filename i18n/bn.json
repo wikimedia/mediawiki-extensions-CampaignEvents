@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"মোঃ মারুফ হাসান24"
+		]
+	},
+	"campaignevents-edit-field-name": "ইভেন্টের নাম",
+	"campaignevents-edit-field-status-closed": "বন্ধ হয়ে গেছে",
+	"campaignevents-edit-field-end": "শেষ সময়",
+	"campaignevents-edit-field-address": "ঠিকানা",
+	"registerforevent": "একটি ইভেন্টের জন্য নিবন্ধন করুন",
+	"campaignevents-role-creator": "নির্মাতা",
+	"campaignevents-role-organizer": "সংগঠক"
+}

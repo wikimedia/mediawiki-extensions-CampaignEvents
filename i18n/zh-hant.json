@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Winston Sung"
+		]
+	},
+	"campaignevents-error-invalid-title": "活動頁面標題無效：$1",
+	"campaignevents-error-invalid-chat-url": "聊天連結無效",
+	"campaignevents-error-invalid-status": "活動狀態無效",
+	"campaignevents-edit-field-page": "活動頁面",
+	"campaignevents-edit-field-event-status": "活動狀態",
+	"campaignevents-edit-field-status-open": "開放中",
+	"campaignevents-edit-field-status-closed": "已關閉",
+	"campaignevents-edit-field-start": "開始時間",
+	"campaignevents-edit-field-end": "結束時間",
+	"campaignevents-edit-field-meeting-type": "活動會議類型",
+	"campaignevents-edit-field-type-online": "線上活動",
+	"campaignevents-edit-field-type-physical": "實體活動",
+	"campaignevents-edit-field-type-online-and-physical": "線上及實體活動",
+	"campaignevents-edit-field-meeting-url": "會議連結",
+	"campaignevents-edit-field-country": "國家/地區",
+	"campaignevents-edit-field-address": "地點",
+	"campaignevents-role-creator": "建立者",
+	"campaignevents-role-organizer": "組織者"
+}

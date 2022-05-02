@@ -1,0 +1,39 @@
+{
+	"@metadata": {
+		"authors": [
+			"MathXplore"
+		]
+	},
+	"campaignevents-error-empty-name": "イベント名は空欄にしてはいけません",
+	"campaignevents-error-empty-title": "イベントページのタイトルは空欄にしてはいけません",
+	"campaignevents-error-invalid-chat-url": "チャットのURLが無効です",
+	"campaignevents-error-empty-start": "イベントの開始時間は空欄にしてはいけません",
+	"campaignevents-error-invalid-start": "イベントの開始時間が無効です",
+	"campaignevents-error-start-past": "イベントの開始時間は過去であってはいけません",
+	"campaignevents-error-empty-end": "イベントの終了時間は空欄にしてはいけません",
+	"campaignevents-error-invalid-end": "イベントの終了時間が無効です",
+	"campaignevents-rest-event-not-found": "与えられたIDを持つイベントは存在しません",
+	"campaignevents-rest-register-permission-denied": "あなたはイベントの登録を許可されていません",
+	"campaignevents-edit-field-page": "イベントページ",
+	"campaignevents-edit-field-name": "イベント名",
+	"campaignevents-edit-field-status-open": "開く",
+	"campaignevents-edit-field-status-closed": "閉鎖",
+	"campaignevents-edit-field-start": "開始時間",
+	"campaignevents-edit-field-end": "終了時間",
+	"campaignevents-edit-field-type-online": "オンラインイベント",
+	"campaignevents-edit-field-country": "国",
+	"campaignevents-edit-field-address": "アドレス",
+	"campaignevents-create-form-submit": "登録を可能にする",
+	"campaignevents-edit-form-submit": "登録内容を編集する",
+	"campaignevents-edit-success-msg": "登録内容が編集されました。",
+	"campaignevents-create-success-msg": "登録が可能になりました。参加者たちはイベントページで登録できるようになります。",
+	"campaignevents-edit-not-allowed-registration": "あなたはこのイベント登録の編集を許可されていません",
+	"registerforevent": "イベントに登録する",
+	"campaignevents-register-success": "あなたは現在このイベントに登録されています",
+	"campaignevents-register-confirmation-top": "登録を確認する",
+	"unregisterforevent": "イベント登録を取り消す",
+	"campaignevents-unregister-success": "このイベントへの登録を取り消しました",
+	"campaignevents-delete-not-allowed-registration": "あなたはこのイベント登録の削除を許可されていません",
+	"campaignevents-role-creator": "作成者",
+	"campaignevents-role-organizer": "主催者"
+}
