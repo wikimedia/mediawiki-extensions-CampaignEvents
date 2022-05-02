@@ -5,12 +5,15 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -53,6 +56,16 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		EditEventCommand $editEventCmd = null,
 		IEventLookup $eventLookup = null
 	): UpdateEventRegistrationHandler {
+		if ( !$eventLookup ) {
+			// Ensure that the wiki ID of the event page is not null, otherwise it will be passed to
+			// MessageValue::param and will fail the type assertion in ScalarParam.
+			$eventPage = $this->createMock( ICampaignsPage::class );
+			$eventPage->method( 'getWikiId' )->willReturn( WikiAwareEntity::LOCAL );
+			$event = $this->createMock( ExistingEventRegistration::class );
+			$event->method( 'getPage' )->willReturn( $eventPage );
+			$eventLookup = $this->createMock( IEventLookup::class );
+			$eventLookup->method( 'getEventByID' )->willReturn( $event );
+		}
 		$handler = new UpdateEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),
 			new PermissionChecker(
@@ -60,7 +73,7 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 				$this->createMock( OrganizersStore::class )
 			),
 			$editEventCmd ?? $this->getMockEditEventCommand(),
-			$eventLookup ?? $this->createMock( IEventLookup::class )
+			$eventLookup
 		);
 		$this->setHandlerCSRFSafe( $handler );
 		return $handler;
@@ -159,5 +172,23 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$twoErrorsEventFactory->method( 'newEvent' )
 			->willThrowException( new InvalidEventDataException( $twoErrorsStatus ) );
 		yield 'Two errors' => [ $twoErrorsEventFactory, reset( $twoErrorKeys ) ];
+	}
+
+	public function testExecute__foreignPage(): void {
+		$eventPage = $this->createMock( ICampaignsPage::class );
+		$eventPage->method( 'getWikiId' )->willReturn( 'some_other_wiki' );
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getPage' )->willReturn( $eventPage );
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->method( 'getEventByID' )->willReturn( $event );
+		$handler = $this->newHandler( null, null, $eventLookup );
+		$request = new RequestData( $this->getRequestData() );
+		try {
+			$this->executeHandler( $handler, $request );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 'campaignevents-edit-page-nonlocal', $e->getMessageValue()->getKey() );
+			$this->assertSame( 400, $e->getCode() );
+		}
 	}
 }

@@ -4,11 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 
@@ -20,14 +20,12 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param EventFactory $eventFactory
-	 * @param CampaignsPageFormatter $campaignsPageFormatter
 	 * @param EditEventCommand $editEventCommand
 	 * @param PermissionChecker $permissionChecker
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
-		CampaignsPageFormatter $campaignsPageFormatter,
 		EditEventCommand $editEventCommand,
 		PermissionChecker $permissionChecker
 	) {
@@ -36,7 +34,6 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			'',
 			$eventLookup,
 			$eventFactory,
-			$campaignsPageFormatter,
 			$editEventCommand
 		);
 		$this->permissionChecker = $permissionChecker;
@@ -79,6 +76,11 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			return;
 		}
 
+		$eventPage = $this->event->getPage();
+		if ( $eventPage->getWikiId() !== WikiAwareEntity::LOCAL ) {
+			$this->outputErrorBox( 'campaignevents-edit-page-nonlocal', $eventPage->getWikiId() );
+			return;
+		}
 		parent::execute( $par );
 	}
 }

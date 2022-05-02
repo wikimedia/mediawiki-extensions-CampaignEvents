@@ -4,11 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Rest\GetEventRegistrationHandler;
 use MediaWiki\Page\PageIdentityValue;
@@ -30,23 +30,25 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	];
 
 	private function newHandler(
-		IEventLookup $eventLookup = null,
-		CampaignsPageFormatter $pageFormatter = null
+		IEventLookup $eventLookup = null
 	): GetEventRegistrationHandler {
 		return new GetEventRegistrationHandler(
-			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$pageFormatter ?? $this->createMock( CampaignsPageFormatter::class )
+			$eventLookup ?? $this->createMock( IEventLookup::class )
 		);
 	}
 
 	public function testRun() {
+		$eventPageStr = 'Event:Foo bar';
 		// NOTE: We can't use the NS_EVENT constant in unit tests
-		$eventPage = new MWPageProxy( new PageIdentityValue( 1, 1728, 'Foo_bar', 'somewiki' ) );
-		$eventPageStr = 'somewiki:Event:Foo bar';
+		$eventPage = new MWPageProxy(
+			new PageIdentityValue( 1, 1728, 'Foo_bar', WikiAwareEntity::LOCAL ),
+			$eventPageStr
+		);
 		$eventData = [
 			'id' => 1,
 			'name' => 'Some name',
 			'event_page' => $eventPageStr,
+			'event_page_wiki' => '',
 			'chat_url' => 'https://some-chat.example.org',
 			'tracking_tool_name' => 'Tracking tool',
 			'tracking_tool_url' => 'https://tracking-tool.example.org',
@@ -85,13 +87,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$eventLookup->expects( $this->once() )
 			->method( 'getEventByID' )
 			->willReturn( $registration );
-		$pageFormatter = $this->createMock( CampaignsPageFormatter::class );
-		$pageFormatter->expects( $this->atLeastOnce() )
-			->method( 'getPrefixedText' )
-			->with( $eventPage )
-			->willReturn( $eventPageStr );
 
-		$handler = $this->newHandler( $eventLookup, $pageFormatter );
+		$handler = $this->newHandler( $eventLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 		$this->assertSame( $eventData, $respData );
 	}

@@ -6,6 +6,7 @@ CREATE TABLE /*_*/campaign_events (
   event_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   event_name BLOB NOT NULL, event_page_namespace INTEGER UNSIGNED NOT NULL,
   event_page_title BLOB NOT NULL, event_page_wiki BLOB NOT NULL,
+  event_page_prefixedtext BLOB NOT NULL,
   event_chat_url BLOB NOT NULL, event_tracking_tool BLOB NOT NULL,
   event_tracking_url BLOB NOT NULL,
   event_status INTEGER NOT NULL, event_start BLOB NOT NULL,

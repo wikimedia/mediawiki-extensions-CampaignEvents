@@ -8,6 +8,7 @@ CREATE TABLE /*_*/campaign_events (
   event_page_namespace INT UNSIGNED NOT NULL,
   event_page_title VARBINARY(255) NOT NULL,
   event_page_wiki VARBINARY(64) NOT NULL,
+  event_page_prefixedtext VARBINARY(512) NOT NULL,
   event_chat_url BLOB NOT NULL,
   event_tracking_tool VARBINARY(255) NOT NULL,
   event_tracking_url BLOB NOT NULL,

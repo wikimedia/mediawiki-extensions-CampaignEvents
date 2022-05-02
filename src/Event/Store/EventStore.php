@@ -77,7 +77,7 @@ class EventStore implements IEventStore, IEventLookup {
 		if ( !$eventRow ) {
 			throw new EventNotFoundException(
 				"No event found for the given page (ns={$page->getNamespace()}, " .
-					"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()}"
+					"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()})"
 			);
 		}
 		return $this->newEventFromDBRow( $eventRow );
@@ -141,6 +141,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$eventPage = $this->campaignsPageFactory->newExistingPage(
 				(int)$row->event_page_namespace,
 				$row->event_page_title,
+				$row->event_page_prefixedtext,
 				$row->event_page_wiki
 			);
 		} catch ( PageNotFoundException $e ) {
@@ -193,6 +194,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_name' => $event->getName(),
 			'event_page_namespace' => $event->getPage()->getNamespace(),
 			'event_page_title' => $event->getPage()->getDBkey(),
+			'event_page_prefixedtext' => $event->getPage()->getPrefixedText(),
 			'event_page_wiki' => Utils::getWikiIDString( $event->getPage()->getWikiId() ),
 			'event_chat_url' => $event->getChatURL() ?? '',
 			'event_tracking_tool' => $event->getTrackingToolName() ?? '',

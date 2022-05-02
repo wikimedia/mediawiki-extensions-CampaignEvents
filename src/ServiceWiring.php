@@ -34,7 +34,8 @@ return [
 	CampaignsPageFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFactory {
 		return new CampaignsPageFactory(
 			$services->getPageStoreFactory(),
-			$services->getTitleParser()
+			$services->getTitleParser(),
+			$services->getTitleFormatter()
 		);
 	},
 	CampaignsCentralUserLookup::SERVICE_NAME =>

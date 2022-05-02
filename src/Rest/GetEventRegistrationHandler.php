@@ -6,7 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 
@@ -15,19 +15,14 @@ class GetEventRegistrationHandler extends SimpleHandler {
 
 	/** @var IEventLookup */
 	private $eventLookup;
-	/** @var CampaignsPageFormatter */
-	private $pageFormatter;
 
 	/**
 	 * @param IEventLookup $eventLookup
-	 * @param CampaignsPageFormatter $pageFormatter
 	 */
 	public function __construct(
-		IEventLookup $eventLookup,
-		CampaignsPageFormatter $pageFormatter
+		IEventLookup $eventLookup
 	) {
 		$this->eventLookup = $eventLookup;
-		$this->pageFormatter = $pageFormatter;
 	}
 
 	/**
@@ -36,11 +31,13 @@ class GetEventRegistrationHandler extends SimpleHandler {
 	 */
 	protected function run( int $eventID ): Response {
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		$page = $registration->getPage();
 
 		$respVal = [
 			'id' => $registration->getID(),
 			'name' => $registration->getName(),
-			'event_page' => $this->pageFormatter->getPrefixedText( $registration->getPage() ),
+			'event_page' => $page->getPrefixedText(),
+			'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
 			'chat_url' => $registration->getChatURL(),
 			'tracking_tool_name' => $registration->getTrackingToolName(),
 			'tracking_tool_url' => $registration->getTrackingToolURL(),

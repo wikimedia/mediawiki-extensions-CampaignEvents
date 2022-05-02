@@ -198,7 +198,7 @@ class EventFactory {
 		}
 
 		try {
-			$campaignsPage = $this->campaignsPageFactory->newExistingPageFromString( $pageTitleStr );
+			$campaignsPage = $this->campaignsPageFactory->newLocalExistingPageFromString( $pageTitleStr );
 		} catch ( InvalidTitleStringException $e ) {
 			// TODO: Ideally we wouldn't need wfMessage here.
 			return StatusValue::newFatal(

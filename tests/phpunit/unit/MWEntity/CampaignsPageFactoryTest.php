@@ -14,6 +14,7 @@ use MediaWiki\Page\ExistingPageRecord;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\PageStoreFactory;
 use MediaWikiUnitTestCase;
+use TitleFormatter;
 use TitleParser;
 use TitleValue;
 
@@ -26,9 +27,13 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 		TitleParser $titleParser = null,
 		PageStoreFactory $pageStoreFactory = null
 	): CampaignsPageFactory {
+		$titleFormatter = $this->createMock( TitleFormatter::class );
+		// TODO Remove the followig line once the return value of getPrefixedText is typehinted
+		$titleFormatter->method( 'getPrefixedText' )->willReturn( 'Something' );
 		return new CampaignsPageFactory(
 			$pageStoreFactory ?? $this->createMock( PageStoreFactory::class ),
-			$titleParser ?? $this->createMock( TitleParser::class )
+			$titleParser ?? $this->createMock( TitleParser::class ),
+			$titleFormatter
 		);
 	}
 
@@ -39,7 +44,7 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 	 * @param PageStoreFactory|null $pageStoreFactory
 	 * @dataProvider provideTitleStrings
 	 */
-	public function testNewExistingPageFromString(
+	public function testNewLocalExistingPageFromString(
 		string $titleString,
 		?string $expectedExcepClass,
 		TitleParser $titleParser = null,
@@ -49,7 +54,7 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 		if ( $expectedExcepClass !== null ) {
 			$this->expectException( $expectedExcepClass );
 		}
-		$factory->newExistingPageFromString( $titleString );
+		$factory->newLocalExistingPageFromString( $titleString );
 		if ( $expectedExcepClass === null ) {
 			$this->addToAssertionCount( 1 );
 		}

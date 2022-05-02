@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MWTimestamp;
 use Status;
@@ -25,8 +24,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected $eventLookup;
 	/** @var EventFactory */
 	private $eventFactory;
-	/** @var CampaignsPageFormatter */
-	private $campaignsPageFormatter;
 	/** @var EditEventCommand */
 	protected $editEventCommand;
 	/** @var int|null */
@@ -41,7 +38,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @param string $restriction
 	 * @param IEventLookup $eventLookup
 	 * @param EventFactory $eventFactory
-	 * @param CampaignsPageFormatter $campaignsPageFormatter
 	 * @param EditEventCommand $editEventCommand
 	 */
 	public function __construct(
@@ -49,13 +45,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		string $restriction,
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
-		CampaignsPageFormatter $campaignsPageFormatter,
 		EditEventCommand $editEventCommand
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
 		$this->eventFactory = $eventFactory;
-		$this->campaignsPageFormatter = $campaignsPageFormatter;
 		$this->editEventCommand = $editEventCommand;
 		$this->formMessages = $this->getFormMessages();
 	}
@@ -72,12 +66,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 	/**
 	 * @param string $errorMsg
+	 * @param mixed ...$msgParams
 	 * @return void
 	 */
-	protected function outputErrorBox( string $errorMsg ): void {
+	protected function outputErrorBox( string $errorMsg, ...$msgParams ): void {
 		$this->setHeaders();
 		$this->getOutput()->addHTML( Html::errorBox(
-			$this->msg( $errorMsg )->parseAsBlock()
+			$this->msg( $errorMsg )->params( ...$msgParams )->parseAsBlock()
 		) );
 	}
 
@@ -93,7 +88,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected function getFormFields(): array {
 		$eventPageDefault = null;
 		if ( $this->event ) {
-			$eventPageDefault = $this->campaignsPageFormatter->getPrefixedText( $this->event->getPage() );
+			$eventPageDefault = $this->event->getPage()->getPrefixedText();
 		}
 
 		$formFields = [];
