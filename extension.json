@@ -141,6 +141,28 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/organizer/{user}/event_registrations",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByOrganizerHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsCentralUserLookup",
+				"UserFactory",
+				"UserNameUtils"
+			]
+		},
+		{
+			"path": "/campaignevents/v0/participant/{user}/event_registrations",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByParticipantHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsCentralUserLookup",
+				"UserFactory",
+				"UserNameUtils"
+			]
 		}
 	],
 	"ServiceWiringFiles": [

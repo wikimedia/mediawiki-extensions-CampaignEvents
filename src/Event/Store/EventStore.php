@@ -84,6 +84,52 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function getEventsByOrganizer( int $organizerID, int $limit = null ): array {
+		$events = [];
+
+		$eventsRow = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
+			[ 'campaign_events', 'ce_organizers' ],
+			'*',
+			[ 'ceo_user_id' => $organizerID ],
+			$limit !== null ? [ 'LIMIT' => $limit ] : [],
+			[
+				'ce_organizers' => [ 'INNER JOIN', [ 'event_id=ceo_event_id' ] ]
+			]
+		);
+
+		foreach ( $eventsRow as $row ) {
+			$events[] = $this->newEventFromDBRow( $row );
+		}
+
+		return $events;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getEventsByParticipant( int $participantID, int $limit = null ): array {
+		$events = [];
+
+		$eventsRow = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
+			[ 'campaign_events', 'ce_participants' ],
+			'*',
+			[ 'cep_user_id' => $participantID ],
+			$limit !== null ? [ 'LIMIT' => $limit ] : [],
+			[
+				'ce_participants' => [ 'INNER JOIN', [ 'event_id=cep_event_id' ] ]
+			]
+		);
+
+		foreach ( $eventsRow as $row ) {
+			$events[] = $this->newEventFromDBRow( $row );
+		}
+
+		return $events;
+	}
+
+	/**
 	 * @param stdClass $row
 	 * @return ExistingEventRegistration
 	 */
