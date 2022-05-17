@@ -184,7 +184,8 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
 				"CampaignEventsCampaignsPageFormatter",
-				"CampaignEventsEditEventCommand"
+				"CampaignEventsEditEventCommand",
+				"CampaignEventsPermissionChecker"
 			]
 		},
 		"RegisterForEvent": {
