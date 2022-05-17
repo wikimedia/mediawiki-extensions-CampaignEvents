@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -20,6 +22,8 @@ class EditEventCommand {
 
 	/** @var IEventStore */
 	private $eventStore;
+	/** @var IEventLookup */
+	private $eventLookup;
 	/** @var OrganizersStore */
 	private $organizerStore;
 	/** @var PermissionChecker */
@@ -27,15 +31,18 @@ class EditEventCommand {
 
 	/**
 	 * @param IEventStore $eventStore
+	 * @param IEventLookup $eventLookup
 	 * @param OrganizersStore $organizersStore
 	 * @param PermissionChecker $permissionChecker
 	 */
 	public function __construct(
 		IEventStore $eventStore,
+		IEventLookup $eventLookup,
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker
 	) {
 		$this->eventStore = $eventStore;
+		$this->eventLookup = $eventLookup;
 		$this->organizerStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
 	}
@@ -78,6 +85,15 @@ class EditEventCommand {
 	 * @return StatusValue If good, the value shall be the ID of the event.
 	 */
 	public function doEditUnsafe( EventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+		try {
+			$existingRegistrationIDForPage = $this->eventLookup->getEventByPage( $registration->getPage() )->getID();
+			if ( $existingRegistrationIDForPage !== $registration->getID() ) {
+				return StatusValue::newFatal( 'campaignevents-error-page-already-registered' );
+			}
+		} catch ( EventNotFoundException $_ ) {
+			// The page has no associated registration, and we're creating one now. No problem.
+		}
+
 		$saveStatus = $this->eventStore->saveRegistration( $registration );
 		if ( !$saveStatus->isGood() ) {
 			return $saveStatus;

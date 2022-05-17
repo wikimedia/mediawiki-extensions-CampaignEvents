@@ -85,6 +85,7 @@ return [
 	EditEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): EditEventCommand {
 		return new EditEventCommand(
 			$services->get( IEventStore::STORE_SERVICE_NAME ),
+			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME )
 		);
