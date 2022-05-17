@@ -83,4 +83,13 @@ class PermissionChecker {
 		// TODO Do we need another user right for this?
 		return $user->isRegistered() && !$this->userBlockChecker->isSitewideBlocked( $user );
 	}
+
+	/**
+	 * NOTE: This should be kept in sync with the special page, which has its own way of requiring login.
+	 * @param ICampaignsUser $user
+	 * @return bool
+	 */
+	public function userCanUnregisterForEvents( ICampaignsUser $user ): bool {
+		return $user->isRegistered();
+	}
 }

@@ -6,14 +6,38 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use Html;
 use HTMLForm;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
+use Status;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
+	/** @var RegisterParticipantCommand */
+	private $registerParticipantCommand;
+	/** @var ParticipantsStore */
+	private $participantsStore;
+
+	/**
+	 * @param IEventLookup $eventLookup
+	 * @param RegisterParticipantCommand $registerParticipantCommand
+	 * @param ParticipantsStore $participantsStore
+	 */
+	public function __construct(
+		IEventLookup $eventLookup,
+		RegisterParticipantCommand $registerParticipantCommand,
+		ParticipantsStore $participantsStore
+	) {
+		parent::__construct( 'RegisterForEvent', $eventLookup );
+		$this->registerParticipantCommand = $registerParticipantCommand;
+		$this->participantsStore = $participantsStore;
+	}
+
 	/**
 	 * @inheritDoc
 	 */
-	protected function getNameInternal(): string {
-		return 'RegisterForEvent';
+	protected function checkRegistrationPrecondition() {
+		$isParticipating = $this->participantsStore->userParticipatesToEvent( $this->event->getID(), $this->mwUser );
+		return $isParticipating ? 'campaignevents-register-already-participant' : true;
 	}
 
 	/**
@@ -39,9 +63,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
-		$user = new MWUserProxy( $this->getUser(), $this->getAuthority() );
-		$this->participantsStore->addParticipantToEvent( $this->eventID, $user );
-		return true;
+		return Status::wrap( $this->registerParticipantCommand->registerIfAllowed( $this->event, $this->mwUser ) );
 	}
 
 	/**

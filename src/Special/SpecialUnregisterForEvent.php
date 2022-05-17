@@ -6,14 +6,38 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use Html;
 use HTMLForm;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
+use Status;
 
 class SpecialUnregisterForEvent extends ChangeRegistrationSpecialPageBase {
+	/** @var UnregisterParticipantCommand */
+	private $unregisterParticipantCommand;
+	/** @var ParticipantsStore */
+	private $participantsStore;
+
+	/**
+	 * @param IEventLookup $eventLookup
+	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
+	 * @param ParticipantsStore $participantsStore
+	 */
+	public function __construct(
+		IEventLookup $eventLookup,
+		UnregisterParticipantCommand $unregisterParticipantCommand,
+		ParticipantsStore $participantsStore
+	) {
+		parent::__construct( 'UnregisterForEvent', $eventLookup );
+		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
+		$this->participantsStore = $participantsStore;
+	}
+
 	/**
 	 * @inheritDoc
 	 */
-	protected function getNameInternal(): string {
-		return 'UnregisterForEvent';
+	protected function checkRegistrationPrecondition() {
+		$isParticipating = $this->participantsStore->userParticipatesToEvent( $this->event->getID(), $this->mwUser );
+		return $isParticipating ? true : 'campaignevents-unregister-not-participant';
 	}
 
 	/**
@@ -39,9 +63,7 @@ class SpecialUnregisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
-		$user = new MWUserProxy( $this->getUser(), $this->getAuthority() );
-		$this->participantsStore->removeParticipantFromEvent( $this->eventID, $user );
-		return true;
+		return Status::wrap( $this->unregisterParticipantCommand->unregisterIfAllowed( $this->event, $this->mwUser ) );
 	}
 
 	/**

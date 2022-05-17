@@ -6,25 +6,31 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
-use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
+use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Response;
+use MediaWiki\Rest\SimpleHandler;
 
-class UnregisterForEventHandler extends ParticipantRegistrationHandlerBase {
+class UnregisterForEventHandler extends SimpleHandler {
+	use EventIDParamTrait;
 	use CSRFCheckTrait;
+	use FailStatusUtilTrait;
 
-	/** @var ParticipantsStore */
-	private $participantsStore;
+	/** @var IEventLookup */
+	private $eventLookup;
+	/** @var UnregisterParticipantCommand */
+	private $unregisterParticipantCommand;
 
 	/**
 	 * @param IEventLookup $eventLookup
-	 * @param ParticipantsStore $participantsStore
+	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		ParticipantsStore $participantsStore
+		UnregisterParticipantCommand $unregisterParticipantCommand
 	) {
-		parent::__construct( $eventLookup );
-		$this->participantsStore = $participantsStore;
+		$this->eventLookup = $eventLookup;
+		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
 	}
 
 	/**
@@ -34,13 +40,23 @@ class UnregisterForEventHandler extends ParticipantRegistrationHandlerBase {
 	protected function run( int $eventID ): Response {
 		$this->assertCSRFSafety();
 
-		$this->validateEventWithID( $eventID );
-
+		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performerAuthority = $this->getAuthority();
 		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
-		$modified = $this->participantsStore->removeParticipantFromEvent( $eventID, $user );
+		$status = $this->unregisterParticipantCommand->unregisterIfAllowed( $eventRegistration, $user );
+		if ( !$status->isGood() ) {
+			$httptStatus = $status instanceof PermissionStatus ? 403 : 400;
+			$this->exitWithStatus( $status, $httptStatus );
+		}
 		return $this->getResponseFactory()->createJson( [
-			'modified' => $modified
+			'modified' => $status->getValue()
 		] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getParamSettings(): array {
+		return $this->getIDParamSetting();
 	}
 }

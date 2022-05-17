@@ -102,4 +102,26 @@ class ParticipantsStore {
 		);
 		return array_map( [ $this->centralUserLookup, 'getLocalUser' ], $centralIDs );
 	}
+
+	/**
+	 * Returns whether the given user participates to the event. Note that this returns false if the user was
+	 * participating but then unregistered.
+	 * @param int $eventID
+	 * @param ICampaignsUser $user
+	 * @return bool
+	 */
+	public function userParticipatesToEvent( int $eventID, ICampaignsUser $user ): bool {
+		$userCentralID = $this->centralUserLookup->getCentralID( $user );
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$row = $dbr->selectRow(
+			'ce_participants',
+			'*',
+			[
+				'cep_event_id' => $eventID,
+				'cep_user_id' => $userCentralID,
+				'cep_unregistered_at' => null,
+			]
+		);
+		return $row !== null;
+	}
 }

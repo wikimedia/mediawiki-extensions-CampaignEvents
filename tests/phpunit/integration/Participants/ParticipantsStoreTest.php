@@ -180,4 +180,21 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$limit = 0;
 		$this->assertCount( $limit, $store->getEventParticipants( 1, $limit ) );
 	}
+
+	/**
+	 * @covers ::userParticipatesToEvent
+	 */
+	public function testUserParticipatesToEvent() {
+		$participant = $this->createMock( ICampaignsUser::class );
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->method( 'getCentralID' )->with( $participant )->willReturn( 1234 );
+		$store = new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$centralUserLookup
+		);
+		$eventID = 42;
+		$this->assertFalse( $store->userParticipatesToEvent( $eventID, $participant ), 'precondition' );
+		$store->addParticipantToEvent( $eventID, $participant );
+		$this->assertTrue( $store->userParticipatesToEvent( $eventID, $participant ) );
+	}
 }

@@ -16,6 +16,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
+use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\MediaWikiServices;
 
@@ -107,4 +109,18 @@ return [
 			$services->getMessageFormatterFactory()
 		);
 	},
+	RegisterParticipantCommand::SERVICE_NAME =>
+		static function ( MediaWikiServices $services ): RegisterParticipantCommand {
+			return new RegisterParticipantCommand(
+				$services->get( ParticipantsStore::SERVICE_NAME ),
+				$services->get( PermissionChecker::SERVICE_NAME )
+			);
+		},
+	UnregisterParticipantCommand::SERVICE_NAME =>
+		static function ( MediaWikiServices $services ): UnregisterParticipantCommand {
+			return new UnregisterParticipantCommand(
+				$services->get( ParticipantsStore::SERVICE_NAME ),
+				$services->get( PermissionChecker::SERVICE_NAME )
+			);
+		},
 ];

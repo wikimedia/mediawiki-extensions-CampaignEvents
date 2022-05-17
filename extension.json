@@ -98,9 +98,8 @@
 			"method": "PUT",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RegisterForEventHandler",
 			"services": [
-				"CampaignEventsPermissionChecker",
 				"CampaignEventsEventLookup",
-				"CampaignEventsParticipantsStore"
+				"CampaignEventsRegisterParticipantCommand"
 			]
 		},
 		{
@@ -109,7 +108,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UnregisterForEventHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsParticipantsStore"
+				"CampaignEventsUnregisterParticipantCommand"
 			]
 		},
 		{
@@ -192,6 +191,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialRegisterForEvent",
 			"services": [
 				"CampaignEventsEventLookup",
+				"CampaignEventsRegisterParticipantCommand",
 				"CampaignEventsParticipantsStore"
 			]
 		},
@@ -199,6 +199,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialUnregisterForEvent",
 			"services": [
 				"CampaignEventsEventLookup",
+				"CampaignEventsUnregisterParticipantCommand",
 				"CampaignEventsParticipantsStore"
 			]
 		}

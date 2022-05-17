@@ -38,7 +38,7 @@ trait EventIDParamTrait {
 	 * @return ExistingEventRegistration
 	 * @throws HttpException
 	 */
-	private function getRegistrationOrThrow( IEventLookup $eventLookup, int $id ): ExistingEventRegistration {
+	protected function getRegistrationOrThrow( IEventLookup $eventLookup, int $id ): ExistingEventRegistration {
 		try {
 			return $eventLookup->getEventByID( $id );
 		} catch ( EventNotFoundException $_ ) {

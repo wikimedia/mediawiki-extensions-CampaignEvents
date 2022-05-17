@@ -4,36 +4,33 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
-use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
-use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Rest\LocalizedHttpException;
+use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
+use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Response;
-use Wikimedia\Message\MessageValue;
+use MediaWiki\Rest\SimpleHandler;
 
-class RegisterForEventHandler extends ParticipantRegistrationHandlerBase {
+class RegisterForEventHandler extends SimpleHandler {
+	use EventIDParamTrait;
 	use CSRFCheckTrait;
+	use FailStatusUtilTrait;
 
-	/** @var PermissionChecker */
-	private $permissionChecker;
-	/** @var ParticipantsStore */
-	private $participantsStore;
+	/** @var IEventLookup */
+	private $eventLookup;
+	/** @var RegisterParticipantCommand */
+	private $registerParticipantCommand;
 
 	/**
-	 * @param PermissionChecker $permissionChecker
 	 * @param IEventLookup $eventLookup
-	 * @param ParticipantsStore $participantsStore
+	 * @param RegisterParticipantCommand $registerParticipantCommand
 	 */
 	public function __construct(
-		PermissionChecker $permissionChecker,
 		IEventLookup $eventLookup,
-		ParticipantsStore $participantsStore
+		RegisterParticipantCommand $registerParticipantCommand
 	) {
-		parent::__construct( $eventLookup );
-		$this->permissionChecker = $permissionChecker;
-		$this->participantsStore = $participantsStore;
+		$this->eventLookup = $eventLookup;
+		$this->registerParticipantCommand = $registerParticipantCommand;
 	}
 
 	/**
@@ -43,33 +40,23 @@ class RegisterForEventHandler extends ParticipantRegistrationHandlerBase {
 	protected function run( int $eventID ): Response {
 		$this->assertCSRFSafety();
 
+		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performerAuthority = $this->getAuthority();
 		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
-
-		if ( !$this->permissionChecker->userCanRegisterForEvents( $user ) ) {
-			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-register-permission-denied' ),
-				403
-			);
+		$status = $this->registerParticipantCommand->registerIfAllowed( $eventRegistration, $user );
+		if ( !$status->isGood() ) {
+			$httptStatus = $status instanceof PermissionStatus ? 403 : 400;
+			$this->exitWithStatus( $status, $httptStatus );
 		}
-
-		$this->validateEventWithID( $eventID );
-
-		$modified = $this->participantsStore->addParticipantToEvent( $eventID, $user );
 		return $this->getResponseFactory()->createJson( [
-			'modified' => $modified
+			'modified' => $status->getValue()
 		] );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	protected function doAdditionalEventValidation( EventRegistration $eventRegistration ): void {
-		if ( $eventRegistration->getStatus() !== EventRegistration::STATUS_OPEN ) {
-			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-register-event-not-open' ),
-				400
-			);
-		}
+	public function getParamSettings(): array {
+		return $this->getIDParamSetting();
 	}
 }

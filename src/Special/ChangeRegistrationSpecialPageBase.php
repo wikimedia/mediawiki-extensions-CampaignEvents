@@ -6,37 +6,32 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use FormSpecialPage;
 use Html;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	/** @var IEventLookup */
 	private $eventLookup;
-	/** @var ParticipantsStore */
-	protected $participantsStore;
 
-	/** @var int|null */
-	protected $eventID;
+	/** @var MWUserProxy */
+	protected $mwUser;
+	/** @var ExistingEventRegistration|null */
+	protected $event;
 
 	/**
+	 * @param string $name
 	 * @param IEventLookup $eventLookup
-	 * @param ParticipantsStore $participantsStore
 	 */
 	public function __construct(
-		IEventLookup $eventLookup,
-		ParticipantsStore $participantsStore
+		string $name,
+		IEventLookup $eventLookup
 	) {
-		parent::__construct( $this->getNameInternal() );
+		parent::__construct( $name );
 		$this->eventLookup = $eventLookup;
-		$this->participantsStore = $participantsStore;
+		$this->mwUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
 	}
-
-	/**
-	 * Used in the constructor so that subclasses only need to override this.
-	 * @return string
-	 */
-	abstract protected function getNameInternal(): string;
 
 	/**
 	 * @inheritDoc
@@ -53,7 +48,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 		}
 		$eventID = (int)$par;
 		try {
-			$this->eventLookup->getEventByID( $eventID );
+			$this->event = $this->eventLookup->getEventByID( $eventID );
 		} catch ( EventNotFoundException $_ ) {
 			$this->setHeaders();
 			$this->getOutput()->addHTML( Html::errorBox(
@@ -61,9 +56,24 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 			) );
 			return;
 		}
-		$this->eventID = $eventID;
+		$preconditionResult = $this->checkRegistrationPrecondition();
+		if ( is_string( $preconditionResult ) ) {
+			$this->setHeaders();
+			$this->getOutput()->addHTML( Html::errorBox(
+				$this->msg( $preconditionResult )->escaped()
+			) );
+			return;
+		}
 		parent::execute( $par );
 	}
+
+	/**
+	 * Checks whether the user can perform this action, i.e.
+	 *  - Whether they are not registered, if they want to register
+	 *  - Whether they are registered, if they want to unregister
+	 * @return string|true Error message key, or true if OK.
+	 */
+	abstract protected function checkRegistrationPrecondition();
 
 	/**
 	 * @inheritDoc

@@ -32,9 +32,6 @@
 	"campaignevents-error-invalid-address": "Error message used when the given event address URL is invalid.",
 	"campaignevents-rest-event-not-found": "Error message used when the event ID provided by the user does not correspond to an existing event.",
 	"campaignevents-rest-createevent-permission-denied": "Error message used when an unauthorized user attempts to create an event registration.",
-	"campaignevents-rest-register-permission-denied": "Error message used when an unauthorized user attempts to register for an event.",
-	"campaignevents-rest-register-event-not-open": "Error message used when the event that the user wants to (un)register for is closed.",
-	"campaignevents-rest-register-event-past": "Error message used when the event that the user wants to (un)register for has already finished.",
 	"createeventregistration": "Description of [[Special:CreateEventRegistration]]",
 	"editeventregistration": "Description of [[Special:EditEventRegistration]]",
 	"campaignevents-edit-form-legend": "Legend of the form on [[Special:CreateEventRegistration]]",
@@ -78,5 +75,12 @@
 	"campaignevents-rest-delete-already-deleted": "Error message used when the event that the user wanted to delete is already deleted.",
 	"campaignevents-role-creator": "Name of the role of the user who created an event",
 	"campaignevents-role-organizer": "Name of the role of a user who organizes an event",
-	"campaignevents-rest-user-not-found": "Error message used when the user does not exist. Parameters:\n* $1 The username."
+	"campaignevents-rest-user-not-found": "Error message used when the user does not exist. Parameters:\n* $1 The username.",
+	"campaignevents-register-not-allowed": "Error message used when an unauthorized user attempts to register for an event.",
+	"campaignevents-register-event-past": "Error message used when the event that the user wants to register for has already finished.",
+	"campaignevents-register-event-not-open": "Error message used when the event that the user wants to register for is closed.",
+	"campaignevents-register-already-participant": "Error message used when a user tries to register for an event that they are already registered for.",
+	"campaignevents-unregister-not-allowed": "Error message used when an unauthorized user attempts to unregister for an event.",
+	"campaignevents-unregister-event-past": "Error message used when the event that the user wants to unregister for has already finished.",
+	"campaignevents-unregister-not-participant": "Error message used when a user tries to unregister for an event that they are not registered for."
 }
