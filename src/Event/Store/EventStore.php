@@ -115,7 +115,10 @@ class EventStore implements IEventStore, IEventLookup {
 		$eventsRow = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
 			[ 'campaign_events', 'ce_participants' ],
 			'*',
-			[ 'cep_user_id' => $participantID ],
+			[
+				'cep_user_id' => $participantID,
+				'cep_unregistered_at' => null
+			],
 			$limit !== null ? [ 'LIMIT' => $limit ] : [],
 			[
 				'ce_participants' => [ 'INNER JOIN', [ 'event_id=cep_event_id' ] ]

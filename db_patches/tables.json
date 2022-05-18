@@ -200,6 +200,13 @@
 				}
 			},
 			{
+				"name": "cep_registered_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
 				"name": "cep_unregistered_at",
 				"type": "mwtimestamp",
 				"options": {

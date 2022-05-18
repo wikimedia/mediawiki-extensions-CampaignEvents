@@ -45,16 +45,24 @@ class ParticipantsStore {
 			],
 			[ 'FOR UPDATE' ]
 		);
-		$dbw->upsert(
-			'ce_participants',
-			[
-				'cep_event_id' => $eventID,
-				'cep_user_id' => $centralID,
-				'cep_unregistered_at' => null
-			],
-			[ [ 'cep_event_id', 'cep_user_id' ] ],
-			[ 'cep_unregistered_at' => null ]
-		);
+		if ( $previousRow === null ) {
+			// Do this only if the user is not already an active participants, to avoid resetting
+			// the registration timestamp.
+			$dbw->upsert(
+				'ce_participants',
+				[
+					'cep_event_id' => $eventID,
+					'cep_user_id' => $centralID,
+					'cep_registered_at' => $dbw->timestamp(),
+					'cep_unregistered_at' => null
+				],
+				[ [ 'cep_event_id', 'cep_user_id' ] ],
+				[
+					'cep_unregistered_at' => null,
+					'cep_registered_at' => $dbw->timestamp()
+				]
+			);
+		}
 		$dbw->endAtomic();
 		return $previousRow === null;
 	}

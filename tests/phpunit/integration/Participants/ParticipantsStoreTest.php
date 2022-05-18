@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWikiIntegrationTestCase;
+use MWTimestamp;
 
 /**
  * @group Test
@@ -26,8 +27,18 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function addDBData(): void {
 		$rows = [
-			[ 'cep_event_id' => 1, 'cep_user_id' => 101, 'cep_unregistered_at' => null ],
-			[ 'cep_event_id' => 1, 'cep_user_id' => 102, 'cep_unregistered_at' => '20220324120000' ],
+			[
+				'cep_event_id' => 1,
+				'cep_user_id' => 101,
+				'cep_registered_at' => '20220315120000',
+				'cep_unregistered_at' => null
+			],
+			[
+				'cep_event_id' => 1,
+				'cep_user_id' => 102,
+				'cep_registered_at' => '20220315120000',
+				'cep_unregistered_at' => '20220324120000'
+			],
 		];
 		$this->db->insert( 'ce_participants', $rows );
 	}
@@ -83,6 +94,51 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Actively registered' => [ 1, 101, true ];
 		yield 'Never registered' => [ 2, 101, false ];
 		yield 'Already deleted' => [ 1, 102, false ];
+	}
+
+	/**
+	 * @covers ::addParticipantToEvent
+	 * @covers ::removeParticipantFromEvent
+	 */
+	public function testRegistrationTimestamp() {
+		$eventID = 42;
+		$userID = 100;
+		$user = $this->createMock( ICampaignsUser::class );
+		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$userLookup->method( 'getCentralID' )
+			->with( $user )
+			->willReturn( $userID );
+		$store = new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$userLookup
+		);
+		$getActualTS = function () use ( $eventID, $userID ): string {
+			return $this->db->selectField(
+				'ce_participants',
+				'cep_registered_at',
+				[ 'cep_event_id' => $eventID, 'cep_user_id' => $userID ]
+			);
+		};
+
+		$ts1 = '20220227120001';
+		MWTimestamp::setFakeTime( $ts1 );
+		$store->addParticipantToEvent( $eventID, $user );
+		$this->assertSame( $ts1, $getActualTS(), 'Registering for the first time' );
+
+		$ts2 = '20220227120002';
+		MWTimestamp::setFakeTime( $ts2 );
+		$store->removeParticipantFromEvent( $eventID, $user );
+		$this->assertSame( $ts1, $getActualTS(), 'Unregistering does not change the timestamp' );
+
+		$ts3 = '20220227120003';
+		MWTimestamp::setFakeTime( $ts3 );
+		$store->addParticipantToEvent( $eventID, $user );
+		$this->assertSame( $ts3, $getActualTS(), 'Registering after having unregistered resets the timestamp' );
+
+		$ts4 = '20220227120004';
+		MWTimestamp::setFakeTime( $ts4 );
+		$store->addParticipantToEvent( $eventID, $user );
+		$this->assertSame( $ts3, $getActualTS(), 'Registering when already registered does not change the timestamp' );
 	}
 
 	/**

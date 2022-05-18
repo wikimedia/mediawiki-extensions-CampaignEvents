@@ -27,7 +27,7 @@ CREATE TABLE /*_*/ce_participants (
   cep_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   cep_event_id BIGINT UNSIGNED NOT NULL,
   cep_user_id INTEGER UNSIGNED NOT NULL,
-  cep_unregistered_at BLOB DEFAULT NULL
+  cep_registered_at BLOB NOT NULL, cep_unregistered_at BLOB DEFAULT NULL
 );
 
 CREATE UNIQUE INDEX cep_event_participant ON /*_*/ce_participants (cep_event_id, cep_user_id);
