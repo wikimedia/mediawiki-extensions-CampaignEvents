@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
+use Html;
 use IContextSource;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
@@ -127,7 +128,7 @@ class EventsPager extends TablePager {
 			case 'event_start':
 				return htmlspecialchars( $this->getLanguage()->userDate( $value, $this->getUser() ) );
 			case 'event_name':
-				return htmlspecialchars( $value );
+				return Html::element( 'strong', [], $value );
 			case 'event_location':
 				$meetingType = EventStore::getMeetingTypeFromDBVal( $this->mCurrentRow->event_meeting_type );
 				if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE ) {
@@ -200,10 +201,35 @@ class EventsPager extends TablePager {
 	/**
 	 * @inheritDoc
 	 */
-	public function getModuleStyles(): array {
+	protected function getTableClass() {
+		return parent::getTableClass() . ' ext-campaignevents-eventspager-table';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getCellAttrs( $field, $value ) {
+		$ret = parent::getCellAttrs( $field, $value );
+		$addClass = null;
+		if ( $field === 'manage_event' ) {
+			$addClass = 'ext-campaignevents-eventspager-cell-manage';
+		}
+		if ( $addClass ) {
+			$ret['class'] = isset( $ret['class'] ) ? $ret['class'] . " $addClass" : $addClass;
+		}
+		return $ret;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getModuleStyles() {
 		return array_merge(
 			parent::getModuleStyles(),
-			[ 'oojs-ui.styles.icons-interactions' ]
+			[
+				'ext.campaignEvents.eventspager.styles',
+				'oojs-ui.styles.icons-interactions'
+			]
 		);
 	}
 }

@@ -64,6 +64,13 @@
 		"localBasePath": "resources",
 		"remoteExtPath": "CampaignEvents/resources"
 	},
+	"ResourceModules": {
+		"ext.campaignEvents.eventspager.styles": {
+			"styles": [
+				"EventsPager.less"
+			]
+		}
+	},
 	"RestRoutes": [
 		{
 			"path": "/campaignevents/v0/event_registration",

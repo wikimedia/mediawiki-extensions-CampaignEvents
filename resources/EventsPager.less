@@ -1,0 +1,31 @@
+@import 'mediawiki.ui/variables.less';
+
+.mw-datatable.ext-campaignevents-eventspager-table {
+	th {
+		background-color: @colorGray15;
+		text-align: left;
+		padding: 0.4em 0.8em 0.4em 0.2em;
+
+		&.mw-datatable-is-sorted a {
+			background-size: 1em;
+			padding-left: 18px;
+		}
+	}
+
+	&,
+	th,
+	td {
+		border-color: @colorGray14;
+		border-width: 2px;
+	}
+
+	th,
+	td {
+		border-left-width: 0;
+		border-right-width: 0;
+	}
+
+	.ext-campaignevents-eventspager-cell-manage {
+		text-align: center;
+	}
+}
