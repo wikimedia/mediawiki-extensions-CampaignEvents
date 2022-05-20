@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use HTMLForm;
+use MediaWiki\Extension\CampaignEvents\Pager\EventsPager;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use SpecialPage;
 
@@ -33,11 +34,13 @@ class SpecialMyEvents extends SpecialPage {
 	private function showFormAndEvents(): void {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
+		$status = $request->getVal( 'wpStatus', EventsPager::STATUS_ANY );
 
 		$pager = $this->eventsPagerFactory->newPager(
 			$this->getContext(),
 			$this->getLinkRenderer(),
-			$searchedVal
+			$searchedVal,
+			$status
 		);
 
 		$formDescriptor = [
@@ -45,6 +48,16 @@ class SpecialMyEvents extends SpecialPage {
 				'type' => 'text',
 				'label-message' => 'campaignevents-eventslist-label-search',
 				'default' => $searchedVal,
+			],
+			'Status' => [
+				'type' => 'select',
+				'label-message' => 'campaignevents-eventslist-label-status',
+				'options-messages' => [
+					'campaignevents-eventslist-field-status-any' => EventsPager::STATUS_ANY,
+					'campaignevents-eventslist-field-status-open' => EventsPager::STATUS_OPEN,
+					'campaignevents-eventslist-field-status-closed' => EventsPager::STATUS_CLOSED
+				],
+				'default' => $status,
 			],
 			'Limit' => [
 				// NOTE: This has to be called 'limit' because the pager expects that name.

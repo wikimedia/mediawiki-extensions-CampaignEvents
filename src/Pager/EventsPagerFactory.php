@@ -33,19 +33,22 @@ class EventsPagerFactory {
 	 * @param IContextSource $context
 	 * @param LinkRenderer $linkRenderer
 	 * @param string $search
+	 * @param string $status One of the EventsPager::STATUS_* constants
 	 * @return EventsPager
 	 */
 	public function newPager(
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
-		string $search
+		string $search,
+		string $status
 	): EventsPager {
 		return new EventsPager(
 			$context,
 			$linkRenderer,
 			$this->databaseHelper,
 			$this->centralUserLookup,
-			$search
+			$search,
+			$status
 		);
 	}
 }
