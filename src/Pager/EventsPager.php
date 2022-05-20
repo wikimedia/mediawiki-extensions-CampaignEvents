@@ -73,6 +73,8 @@ class EventsPager extends TablePager {
 		$conds = [];
 
 		if ( $this->search !== '' ) {
+			// TODO Make this case-insensitive. Not easy right now because the name is a binary string and the DBAL does
+			// not provide a method for converting it to a non-binary value on which LOWER can be applied.
 			$conds[] = 'event_name' . $this->mDb->buildLike(
 				$this->mDb->anyString(), $this->search, $this->mDb->anyString() );
 		}

@@ -1,0 +1,19 @@
+@import 'mediawiki.mixins.less';
+
+html.client-js {
+	.ext-campaignevents-myevents-filter-field {
+		display: none;
+	}
+
+	.ext-campaignevents-myevents-filter-widget .ext-campaignevents-myevents-filter-field {
+		display: unset;
+	}
+}
+
+#ext-campaignevents-myevents-form { // stylelint-disable-line selector-max-id
+	.flex-display();
+
+	fieldset { // stylelint-disable-line selector-max-id
+		.flex( 1, 1, auto, 0 );
+	}
+}
