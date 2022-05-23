@@ -8,7 +8,6 @@ use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWikiIntegrationTestCase;
@@ -23,6 +22,28 @@ use Title;
 class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/** @inheritDoc */
 	protected $tablesUsed = [ 'campaign_events' ];
+
+	private function getTestEvent(): EventRegistration {
+		return new EventRegistration(
+			null,
+			'Some name',
+			new MWPageProxy( new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ) ),
+			'Chat URL',
+			'Tracking tool name',
+			'Tracking tool URL',
+			EventRegistration::STATUS_OPEN,
+			'1646700000',
+			'1646800000',
+			EventRegistration::TYPE_GENERIC,
+			EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
+			'Meeting URL',
+			'Country',
+			'Address',
+			null,
+			null,
+			null
+		);
+	}
 
 	private function assertEventsEqual( EventRegistration $expected, EventRegistration $actual ): void {
 		$this->assertSame( $expected->getName(), $actual->getName(), 'name' );
@@ -75,13 +96,12 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @param EventRegistration $event
 	 * @covers ::getEventByID
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
-	 * @dataProvider provideEvents
 	 */
-	public function testRoundtripByID( EventRegistration $event ) {
+	public function testRoundtripByID() {
+		$event = $this->getTestEvent();
 		$savedID = $this->storeEvent( $event );
 		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByID( $savedID );
 		$this->assertEventsEqual( $event, $storedEvent );
@@ -89,42 +109,16 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @param EventRegistration $event
 	 * @covers ::getEventByPage
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
-	 * @dataProvider provideEvents
 	 */
-	public function testRoundtripByPage( EventRegistration $event ) {
+	public function testRoundtripByPage() {
+		$event = $this->getTestEvent();
 		$savedID = $this->storeEvent( $event );
 		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $event->getPage() );
 		$this->assertEventsEqual( $event, $storedEvent );
 		$this->assertStoredEvent( $savedID, $storedEvent );
-	}
-
-	public function provideEvents(): Generator {
-		$baseCtrArgs = [
-			null,
-			'Some name',
-			new MWPageProxy( new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ) ),
-			'Chat URL',
-			'Tracking tool name',
-			'Tracking tool URL',
-			EventRegistration::STATUS_OPEN,
-			'1646700000',
-			'1646800000',
-			EventRegistration::TYPE_GENERIC,
-			EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
-			'Meeting URL',
-			'Country',
-			'Address',
-			null,
-			null,
-			null
-		];
-
-		yield 'New event' => [ new EventRegistration( ...$baseCtrArgs ) ];
-		yield 'Existing event' => [ new EventRegistration( ...array_replace( $baseCtrArgs, [ 0 => 42 ] ) ) ];
 	}
 
 	/**
@@ -133,17 +127,19 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::deleteRegistration
 	 * @dataProvider provideEventsToDelete
 	 */
-	public function testDeletion( ExistingEventRegistration $registration, bool $expected ) {
-		$this->storeEvent( $registration );
+	public function testDeletion( EventRegistration $registration, bool $expected ) {
+		$id = $this->storeEvent( $registration );
+		$eventLookup = CampaignEventsServices::getEventLookup();
+		$storedEventBeforeDeletion = $eventLookup->getEventByID( $id );
 		$store = CampaignEventsServices::getEventStore();
-		$this->assertSame( $expected, $store->deleteRegistration( $registration ), 'Deletion result' );
-		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByID( $registration->getID() );
-		$this->assertNotNull( $storedEvent->getDeletionTimestamp() );
+		$this->assertSame( $expected, $store->deleteRegistration( $storedEventBeforeDeletion ), 'Deletion result' );
+		$storedEventAfterDeletion = CampaignEventsServices::getEventLookup()->getEventByID( $id );
+		$this->assertNotNull( $storedEventAfterDeletion->getDeletionTimestamp() );
 	}
 
 	public function provideEventsToDelete(): Generator {
 		$baseCtrArgs = [
-			1,
+			null,
 			'Some name',
 			new MWPageProxy( new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ) ),
 			'Chat URL',
@@ -163,12 +159,12 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		];
 
 		yield 'Not deleted' => [
-			new ExistingEventRegistration( ...array_values( $baseCtrArgs ) ),
+			new EventRegistration( ...array_values( $baseCtrArgs ) ),
 			true
 		];
 		$deletedEventCtrArgs = array_replace( $baseCtrArgs, [ 'del' => '1234500000' ] );
 		yield 'Already deleted' => [
-			new ExistingEventRegistration( ...array_values( $deletedEventCtrArgs ) ),
+			new EventRegistration( ...array_values( $deletedEventCtrArgs ) ),
 			false
 		];
 	}

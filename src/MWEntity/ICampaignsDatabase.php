@@ -74,13 +74,6 @@ interface ICampaignsDatabase {
 
 	/**
 	 * @param string $table
-	 * @param string $uniqueKey
-	 * @param array $row
-	 */
-	public function replace( string $table, string $uniqueKey, array $row ): void;
-
-	/**
-	 * @param string $table
 	 * @param array|array[] $rows
 	 * @param string|string[][] $uniqueKeys
 	 * @param array $set

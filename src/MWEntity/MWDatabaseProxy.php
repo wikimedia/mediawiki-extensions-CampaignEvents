@@ -62,13 +62,6 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	/**
 	 * @inheritDoc
 	 */
-	public function replace( string $table, string $uniqueKey, array $row ): void {
-		$this->db->replace( $table, $uniqueKey, $row, wfGetCaller() );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function upsert( string $table, array $rows, $uniqueKeys, array $set ): void {
 		$this->db->upsert( $table, $rows, $uniqueKeys, $set, wfGetCaller() );
 	}
