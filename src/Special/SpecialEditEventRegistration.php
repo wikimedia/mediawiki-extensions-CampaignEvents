@@ -9,20 +9,27 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
+
+	/** @var PermissionChecker */
+	private $permissionChecker;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param EventFactory $eventFactory
 	 * @param CampaignsPageFormatter $campaignsPageFormatter
 	 * @param EditEventCommand $editEventCommand
+	 * @param PermissionChecker $permissionChecker
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
 		CampaignsPageFormatter $campaignsPageFormatter,
-		EditEventCommand $editEventCommand
+		EditEventCommand $editEventCommand,
+		PermissionChecker $permissionChecker
 	) {
 		parent::__construct(
 			'EditEventRegistration',
@@ -32,6 +39,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$campaignsPageFormatter,
 			$editEventCommand
 		);
+		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**
@@ -64,6 +72,13 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$this->outputErrorBox( 'campaignevents-edit-event-notfound' );
 			return;
 		}
+
+		$mwUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
+		if ( !$this->permissionChecker->userCanEditRegistration( $mwUser, $this->eventID ) ) {
+			$this->outputErrorBox( 'campaignevents-edit-not-allowed-registration' );
+			return;
+		}
+
 		parent::execute( $par );
 	}
 }
