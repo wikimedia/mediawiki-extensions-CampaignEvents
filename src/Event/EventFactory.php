@@ -5,41 +5,29 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use InvalidArgumentException;
-use MalformedTitleException;
-use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidInterwikiException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
-use MediaWiki\Interwiki\InterwikiLookup;
 use Message;
 use MWTimestamp;
 use StatusValue;
-use TitleParser;
 
 class EventFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventFactory';
 
 	private const MAX_NAME_LENGTH = 255;
 
-	/** @var TitleParser */
-	private $titleParser;
-	/** @var InterwikiLookup */
-	private $interwikiLookup;
 	/** @var CampaignsPageFactory */
 	private $campaignsPageFactory;
 
 	/**
-	 * @param TitleParser $titleParser
-	 * @param InterwikiLookup $interwikiLookup
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 */
 	public function __construct(
-		TitleParser $titleParser,
-		InterwikiLookup $interwikiLookup,
 		CampaignsPageFactory $campaignsPageFactory
 	) {
-		$this->titleParser = $titleParser;
-		$this->interwikiLookup = $interwikiLookup;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 	}
 
@@ -216,27 +204,15 @@ class EventFactory {
 		}
 
 		try {
-			$pageTitle = $this->titleParser->parseTitle( $pageTitleStr );
-		} catch ( MalformedTitleException $e ) {
-			return StatusValue::newFatal( 'campaignevents-error-invalid-title', $e->getMessageObject() );
-		}
-
-		if ( $pageTitle->getInterwiki() !== '' ) {
-			$interwiki = $this->interwikiLookup->fetch( $pageTitle->getInterwiki() );
-			if ( !$interwiki ) {
-				return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );
-			}
-			$wikiID = $interwiki->getWikiID();
-		} else {
-			$wikiID = WikiAwareEntity::LOCAL;
-		}
-
-		try {
-			$campaignsPage = $this->campaignsPageFactory->newExistingPage(
-				$pageTitle->getNamespace(),
-				$pageTitle->getDBkey(),
-				$wikiID
+			$campaignsPage = $this->campaignsPageFactory->newExistingPageFromString( $pageTitleStr );
+		} catch ( InvalidTitleStringException $e ) {
+			// TODO: Ideally we wouldn't need wfMessage here.
+			return StatusValue::newFatal(
+				'campaignevents-error-invalid-title',
+				wfMessage( $e->getErrorMsgKey(), $e->getErrorMsgParams() )
 			);
+		} catch ( InvalidInterwikiException $_ ) {
+			return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );
 		} catch ( PageNotFoundException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );
 		}

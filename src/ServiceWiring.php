@@ -33,7 +33,9 @@ return [
 	},
 	CampaignsPageFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFactory {
 		return new CampaignsPageFactory(
-			$services->getPageStoreFactory()
+			$services->getPageStoreFactory(),
+			$services->getTitleParser(),
+			$services->getInterwikiLookup()
 		);
 	},
 	CampaignsCentralUserLookup::SERVICE_NAME =>
@@ -60,8 +62,6 @@ return [
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
 		return new EventFactory(
-			$services->getTitleParser(),
-			$services->getInterwikiLookup(),
 			$services->get( CampaignsPageFactory::SERVICE_NAME )
 		);
 	},

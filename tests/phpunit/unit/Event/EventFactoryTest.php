@@ -5,19 +5,16 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
 use Generator;
-use Interwiki;
 use InvalidArgumentException;
-use MalformedTitleException;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidInterwikiException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
-use MediaWiki\Interwiki\InterwikiLookup;
 use MediaWikiUnitTestCase;
 use MWTimestamp;
-use TitleParser;
-use TitleValue;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -57,25 +54,9 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	}
 
 	private function getEventFactory(
-		TitleParser $titleParser = null,
-		InterwikiLookup $interwikiLookup = null,
 		CampaignsPageFactory $campaignsPageFactory = null
 	): EventFactory {
-		if ( !$titleParser ) {
-			$titleParser = $this->createMock( TitleParser::class );
-			// Needed because the method is not return-typehinted
-			$titleParser->method( 'parseTitle' )->willReturn( $this->createMock( TitleValue::class ) );
-		}
-		if ( !$interwikiLookup ) {
-			$interwiki = $this->createMock( Interwiki::class );
-			// Needed because the method is not return-typehinted
-			$interwiki->method( 'getWikiID' )->willReturn( 'foo' );
-			$interwikiLookup = $this->createMock( InterwikiLookup::class );
-			$interwikiLookup->method( 'fetch' )->willReturn( $interwiki );
-		}
 		return new EventFactory(
-			$titleParser,
-			$interwikiLookup,
 			$campaignsPageFactory ?? $this->createMock( CampaignsPageFactory::class )
 		);
 	}
@@ -83,8 +64,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param string|null $expectedErrorKey
 	 * @param array $factoryArgs
-	 * @param TitleParser|null $titleParser
-	 * @param InterwikiLookup|null $interwikiLookup
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
 	 * @covers ::newEvent
 	 * @covers ::validatePage
@@ -97,11 +76,9 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	public function testNewEvent(
 		?string $expectedErrorKey,
 		array $factoryArgs,
-		TitleParser $titleParser = null,
-		InterwikiLookup $interwikiLookup = null,
 		CampaignsPageFactory $campaignsPageFactory = null
 	) {
-		$factory = $this->getEventFactory( $titleParser, $interwikiLookup, $campaignsPageFactory );
+		$factory = $this->getEventFactory( $campaignsPageFactory );
 		$event = null;
 		$ex = null;
 		try {
@@ -133,35 +110,39 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'Empty title string' =>
 			[ 'campaignevents-error-empty-title', $this->getTestDataWithDefault( [ 'page' => '' ] ) ];
 
-		$invalidTitleParser = $this->createMock( TitleParser::class );
-		$invalidTitleParser->method( 'parseTitle' )
-			->willThrowException( $this->createMock( MalformedTitleException::class ) );
+		$invalidTitleStr = 'a|b';
+		$invalidTitlePageFactory = $this->createMock( CampaignsPageFactory::class );
+		$invalidTitlePageFactory->expects( $this->atLeastOnce() )
+			->method( 'newExistingPageFromString' )
+			->with( $invalidTitleStr )
+			->willThrowException( $this->createMock( InvalidTitleStringException::class ) );
 		yield 'Invalid title string' => [
 			'campaignevents-error-invalid-title',
-			$this->getTestDataWithDefault( [ 'page' => 'a|b' ] ),
-			$invalidTitleParser
+			$this->getTestDataWithDefault( [ 'page' => $invalidTitleStr ] ),
+			$invalidTitlePageFactory
 		];
 
-		$titleWithInterwiki = new TitleValue( NS_MAIN, 'Interwiki page', '', 'nonexistinginterwiki' );
-		$interwikiTitleParser = $this->createMock( TitleParser::class );
-		$interwikiTitleParser->method( 'parseTitle' )->willReturn( $titleWithInterwiki );
-		$invalidInterwikiLookup = $this->createMock( InterwikiLookup::class );
-		$invalidInterwikiLookup->method( 'fetch' )->willReturn( null );
+		$nonExistingInterwikiStr = 'nonexistinginterwiki:Interwiki page';
+		$invalidInterwikiPageFactory = $this->createMock( CampaignsPageFactory::class );
+		$invalidInterwikiPageFactory->expects( $this->atLeastOnce() )
+			->method( 'newExistingPageFromString' )
+			->with( $nonExistingInterwikiStr )
+			->willThrowException( $this->createMock( InvalidInterwikiException::class ) );
 		yield 'Invalid title interwiki' => [
 			'campaignevents-error-invalid-title-interwiki',
-			$this->getTestDataWithDefault( [ 'page' => $titleWithInterwiki->__toString() ] ),
-			$interwikiTitleParser,
-			$invalidInterwikiLookup
+			$this->getTestDataWithDefault( [ 'page' => $nonExistingInterwikiStr ] ),
+			$invalidInterwikiPageFactory
 		];
 
+		$nonExistingPageStr = 'This page does not exist';
 		$nonExistingCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
-		$nonExistingCampaignsPageFactory->method( 'newExistingPage' )
+		$nonExistingCampaignsPageFactory->expects( $this->atLeastOnce() )
+			->method( 'newExistingPageFromString' )
+			->with( $nonExistingPageStr )
 			->willThrowException( $this->createMock( PageNotFoundException::class ) );
 		yield 'Non-existing page' => [
 			'campaignevents-error-page-not-found',
-			$this->getTestDataWithDefault( [ 'page' => 'This page does not exist' ] ),
-			null,
-			null,
+			$this->getTestDataWithDefault( [ 'page' => $nonExistingPageStr ] ),
 			$nonExistingCampaignsPageFactory
 		];
 
