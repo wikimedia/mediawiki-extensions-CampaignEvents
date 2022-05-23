@@ -7,9 +7,11 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
@@ -25,19 +27,29 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param IEventStore|null $eventStore
 	 * @param PermissionChecker|null $permChecker
+	 * @param IEventLookup|null $eventLookup
 	 * @return EditEventCommand
 	 */
 	private function getCommand(
 		IEventStore $eventStore = null,
-		PermissionChecker $permChecker = null
+		PermissionChecker $permChecker = null,
+		IEventLookup $eventLookup = null
 	): EditEventCommand {
+		if ( !$eventLookup ) {
+			$eventLookup = $this->createMock( IEventLookup::class );
+			$eventLookup->method( 'getEventByPage' )
+				->willThrowException( $this->createMock( EventNotFoundException::class ) );
+		}
+		if ( !$permChecker ) {
+			$permChecker = $this->createMock( PermissionChecker::class );
+			$permChecker->method( 'userCanCreateRegistration' )->willReturn( true );
+			$permChecker->method( 'userCanEditRegistration' )->willReturn( true );
+		}
 		return new EditEventCommand(
 			$eventStore ?? $this->createMock( IEventStore::class ),
+			$eventLookup,
 			$this->createMock( OrganizersStore::class ),
-			$permChecker ?? new PermissionChecker(
-				$this->createMock( UserBlockChecker::class ),
-				$this->createMock( OrganizersStore::class )
-			)
+			$permChecker
 		);
 	}
 
@@ -49,15 +61,11 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testDoEditIfAllowed__error( EventRegistration $registration ) {
 		$expectedMsg = 'foo-bar';
-		$isCreation = $registration->getID() === null;
-		$permChecker = $this->createMock( PermissionChecker::class );
-		$permMethod = $isCreation ? 'userCanCreateRegistration' : 'userCanEditRegistration';
-		$permChecker->method( $permMethod )->willReturn( true );
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )
 			->method( 'saveRegistration' )
 			->willReturn( StatusValue::newFatal( $expectedMsg ) );
-		$status = $this->getCommand( $eventStore, $permChecker )->doEditIfAllowed(
+		$status = $this->getCommand( $eventStore )->doEditIfAllowed(
 			$registration,
 			$this->createMock( ICampaignsUser::class )
 		);
@@ -90,6 +98,26 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::doEditIfAllowed
+	 */
+	public function testDoEditIfAllowed__pageAlreadyHasRegistration() {
+		$existingRegistration = $this->createMock( ExistingEventRegistration::class );
+		$existingRegistration->method( 'getID' )->willReturn( 1 );
+		$newRegistration = $this->createMock( EventRegistration::class );
+		$newRegistration->method( 'getID' )->willReturn( 2 );
+
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->expects( $this->once() )->method( 'getEventByPage' )->willReturn( $existingRegistration );
+		$status = $this->getCommand( null, null, $eventLookup )->doEditIfAllowed(
+			$newRegistration,
+			$this->createMock( ICampaignsUser::class )
+		);
+		$this->assertNotInstanceOf( PermissionStatus::class, $status );
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( 'campaignevents-error-page-already-registered', $status );
+	}
+
+	/**
 	 * @param EventRegistration $registration
 	 * @covers ::doEditIfAllowed
 	 * @covers ::authorizeEdit
@@ -99,10 +127,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$id = 42;
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( StatusValue::newGood( $id ) );
-		$permChecker = $this->createMock( PermissionChecker::class );
-		$permMethod = $registration->getID() === null ? 'userCanCreateRegistration' : 'userCanEditRegistration';
-		$permChecker->expects( $this->once() )->method( $permMethod )->willReturn( true );
-		$status = $this->getCommand( $eventStore, $permChecker )->doEditIfAllowed(
+		$status = $this->getCommand( $eventStore )->doEditIfAllowed(
 			$registration,
 			$this->createMock( ICampaignsUser::class )
 		);

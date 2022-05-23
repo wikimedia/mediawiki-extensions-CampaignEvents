@@ -180,18 +180,6 @@ class EventStore implements IEventStore, IEventLookup {
 	 */
 	public function saveRegistration( EventRegistration $event ): StatusValue {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-
-		try {
-			$existingRegistrationIDForPage = $this->getEventByPage( $event->getPage() )->getID();
-		} catch ( EventNotFoundException $_ ) {
-			// We're creating one now.
-			$existingRegistrationIDForPage = null;
-		}
-
-		if ( $existingRegistrationIDForPage !== null && $existingRegistrationIDForPage !== $event->getID() ) {
-			return StatusValue::newFatal( 'campaignevents-error-page-already-registered' );
-		}
-
 		$curDBTimestamp = $dbw->timestamp();
 		$meetingType = 0;
 		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
