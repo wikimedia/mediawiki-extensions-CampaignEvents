@@ -28,7 +28,10 @@ class EventRegistration {
 
 	/** @var int|null */
 	private $id;
-	/** @var string */
+	/**
+	 * @var string
+	 * @todo Is this necessary?
+	 */
 	private $name;
 	/** @var ICampaignsPage */
 	private $page;

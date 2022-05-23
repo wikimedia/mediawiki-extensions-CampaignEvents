@@ -108,12 +108,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'help-inline' => false,
 			'required' => true,
 		];
-		$formFields['EventName'] = [
-			'type' => 'text',
-			'label-message' => 'campaignevents-edit-field-name',
-			'default' => $this->event ? $this->event->getName() : '',
-			'required' => true,
-		];
 
 		if ( $this->event ) {
 			$formFields['EventStatus'] = [
@@ -203,7 +197,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
-				$data['EventName'],
 				$data['EventPage'],
 				$data['EventChatURL'] ?: null,
 				// TODO MVP: Tracking tool
