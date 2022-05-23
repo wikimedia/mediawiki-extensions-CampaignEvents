@@ -202,6 +202,9 @@
 				"CampaignEventsUnregisterParticipantCommand",
 				"CampaignEventsParticipantsStore"
 			]
+		},
+		"EventRegistration": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEventRegistration"
 		}
 	},
 	"TestAutoloadNamespaces": {
