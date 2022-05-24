@@ -19,4 +19,10 @@ interface ICampaignsPage {
 	 * @return int
 	 */
 	public function getNamespace(): int;
+
+	/**
+	 * This is here because the page could belong to another wiki, and the prefixedtext is injected. See T307358
+	 * @return string
+	 */
+	public function getPrefixedText(): string;
 }

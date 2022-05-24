@@ -58,6 +58,7 @@
 	"campaignevents-edit-invalid-id": "Error message shown on [[Special:EditEventRegistration]]",
 	"campaignevents-edit-no-event-id-provided": "Error message shown on [[Special:EditEventRegistration]] when the event id is not provided",
 	"campaignevents-edit-event-notfound": "Error message shown on [[Special:EditEventRegistration]]",
+	"campaignevents-edit-page-nonlocal": "Error message shown on [[Special:EditEventRegistration]] for events created on other wikis.\nParameters:\n*$1 - The ID of the wiki where the event was created",
 	"campaignevents-error-page-already-registered": "Error message used when the given event page already has another registration associated.",
 	"campaignevents-edit-not-allowed-registration": "Error message used when the user is not allowed to edit the given registration",
 	"campaignevents-create-not-allowed-page": "Error message used when the user is not allowed to create a registration for the given page",

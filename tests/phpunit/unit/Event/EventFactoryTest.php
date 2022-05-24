@@ -106,7 +106,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$invalidTitleStr = 'a|b';
 		$invalidTitlePageFactory = $this->createMock( CampaignsPageFactory::class );
 		$invalidTitlePageFactory->expects( $this->atLeastOnce() )
-			->method( 'newExistingPageFromString' )
+			->method( 'newLocalExistingPageFromString' )
 			->with( $invalidTitleStr )
 			->willThrowException( $this->createMock( InvalidTitleStringException::class ) );
 		yield 'Invalid title string' => [
@@ -118,7 +118,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$interwikiStr = 'nonexistinginterwiki:Interwiki page';
 		$interwikiPageFactory = $this->createMock( CampaignsPageFactory::class );
 		$interwikiPageFactory->expects( $this->atLeastOnce() )
-			->method( 'newExistingPageFromString' )
+			->method( 'newLocalExistingPageFromString' )
 			->with( $interwikiStr )
 			->willThrowException( $this->createMock( UnexpectedInterwikiException::class ) );
 		yield 'Invalid title interwiki' => [
@@ -130,7 +130,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$nonExistingPageStr = 'This page does not exist';
 		$nonExistingCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
 		$nonExistingCampaignsPageFactory->expects( $this->atLeastOnce() )
-			->method( 'newExistingPageFromString' )
+			->method( 'newLocalExistingPageFromString' )
 			->with( $nonExistingPageStr )
 			->willThrowException( $this->createMock( PageNotFoundException::class ) );
 		yield 'Non-existing page' => [

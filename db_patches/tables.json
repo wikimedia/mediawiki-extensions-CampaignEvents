@@ -46,6 +46,15 @@
 				}
 			},
 			{
+				"name": "event_page_prefixedtext",
+				"comment": "The full prefixedtext of the event page. This is needed for the crosswikiness, see T307358.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
 				"name": "event_chat_url",
 				"comment": "The link of the chat tool the organizers use to communicate.",
 				"type": "blob",

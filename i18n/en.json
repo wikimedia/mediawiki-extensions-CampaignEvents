@@ -58,6 +58,7 @@
 	"campaignevents-edit-invalid-id": "The event ID you provided is invalid",
 	"campaignevents-edit-no-event-id-provided": "No event ID provided",
 	"campaignevents-edit-event-notfound": "No event with the given ID exists",
+	"campaignevents-edit-page-nonlocal": "This event registration was created on the following wiki and should be edited there: $1",
 	"campaignevents-error-page-already-registered": "The given event page already has another registration associated.",
 	"campaignevents-edit-not-allowed-registration": "You are not allowed to edit this event registration",
 	"campaignevents-create-not-allowed-page": "You are not allowed to create an event registration for the given event page",

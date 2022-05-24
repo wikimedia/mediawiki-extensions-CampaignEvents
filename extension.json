@@ -80,8 +80,7 @@
 			"method": "GET",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
-				"CampaignEventsEventLookup",
-				"CampaignEventsCampaignsPageFormatter"
+				"CampaignEventsEventLookup"
 			]
 		},
 		{
@@ -173,7 +172,6 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
-				"CampaignEventsCampaignsPageFormatter",
 				"CampaignEventsEditEventCommand"
 			]
 		},
@@ -182,7 +180,6 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
-				"CampaignEventsCampaignsPageFormatter",
 				"CampaignEventsEditEventCommand",
 				"CampaignEventsPermissionChecker"
 			]

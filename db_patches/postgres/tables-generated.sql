@@ -8,6 +8,7 @@ CREATE TABLE campaign_events (
   event_page_namespace INT NOT NULL,
   event_page_title TEXT NOT NULL,
   event_page_wiki TEXT NOT NULL,
+  event_page_prefixedtext TEXT NOT NULL,
   event_chat_url TEXT NOT NULL,
   event_tracking_tool TEXT NOT NULL,
   event_tracking_url TEXT NOT NULL,

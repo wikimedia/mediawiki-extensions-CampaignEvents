@@ -27,7 +27,10 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		return new EventRegistration(
 			null,
 			'Some name',
-			new MWPageProxy( new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ) ),
+			new MWPageProxy(
+				new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
+				'Event page'
+			),
 			'Chat URL',
 			'Tracking tool name',
 			'Tracking tool URL',
@@ -141,7 +144,10 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$baseCtrArgs = [
 			null,
 			'Some name',
-			new MWPageProxy( new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ) ),
+			new MWPageProxy(
+				new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
+				'Event page'
+			),
 			'Chat URL',
 			'Tracking tool name',
 			'Tracking tool URL',

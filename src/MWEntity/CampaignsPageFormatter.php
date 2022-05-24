@@ -7,6 +7,10 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 use TitleFormatter;
 use UnexpectedValueException;
 
+/**
+ * This class formats a page, providing some string representation of it.
+ * @note This must work for cross-wiki pages, so getPrefixedText() cannot be here.
+ */
 class CampaignsPageFormatter {
 	public const SERVICE_NAME = 'CampaignEventsCampaignsPageFormatter';
 
@@ -18,17 +22,6 @@ class CampaignsPageFormatter {
 	 */
 	public function __construct( TitleFormatter $titleFormatter ) {
 		$this->titleFormatter = $titleFormatter;
-	}
-
-	/**
-	 * @param ICampaignsPage $page
-	 * @return string
-	 */
-	public function getPrefixedText( ICampaignsPage $page ): string {
-		if ( $page instanceof MWPageProxy ) {
-			return $this->titleFormatter->getPrefixedText( $page->getPageIdentity() );
-		}
-		throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
 	}
 
 	/**
