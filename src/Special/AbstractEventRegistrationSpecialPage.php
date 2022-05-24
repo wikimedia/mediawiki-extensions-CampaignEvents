@@ -100,7 +100,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventPage'] = [
 			'type' => 'title',
 			'label-message' => 'campaignevents-edit-field-page',
-			'interwiki' => true,
+			// TODO Interwiki support (T307108)
 			'exists' => true,
 			'namespace' => NS_EVENT,
 			'default' => $eventPageDefault,

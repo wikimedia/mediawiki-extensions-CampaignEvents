@@ -8,9 +8,9 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
-use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MWTimestamp;
 use StatusValue;
 
@@ -205,7 +205,7 @@ class EventFactory {
 				'campaignevents-error-invalid-title',
 				wfMessage( $e->getErrorMsgKey(), $e->getErrorMsgParams() )
 			);
-		} catch ( InvalidInterwikiException $_ ) {
+		} catch ( UnexpectedInterwikiException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );
 		} catch ( PageNotFoundException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );

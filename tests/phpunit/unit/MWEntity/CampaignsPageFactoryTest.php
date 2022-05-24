@@ -7,10 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MWEntity;
 use Generator;
 use MalformedTitleException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
-use MediaWiki\Interwiki\InterwikiLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Page\ExistingPageRecord;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\PageStoreFactory;
@@ -25,13 +24,11 @@ use TitleValue;
 class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 	private function getFactory(
 		TitleParser $titleParser = null,
-		InterwikiLookup $interwikiLookup = null,
 		PageStoreFactory $pageStoreFactory = null
 	): CampaignsPageFactory {
 		return new CampaignsPageFactory(
 			$pageStoreFactory ?? $this->createMock( PageStoreFactory::class ),
-			$titleParser ?? $this->createMock( TitleParser::class ),
-			$interwikiLookup ?? $this->createMock( InterwikiLookup::class )
+			$titleParser ?? $this->createMock( TitleParser::class )
 		);
 	}
 
@@ -39,7 +36,6 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 	 * @param string $titleString
 	 * @param string|null $expectedExcepClass
 	 * @param TitleParser|null $titleParser
-	 * @param InterwikiLookup|null $interwikiLookup
 	 * @param PageStoreFactory|null $pageStoreFactory
 	 * @dataProvider provideTitleStrings
 	 */
@@ -47,10 +43,9 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 		string $titleString,
 		?string $expectedExcepClass,
 		TitleParser $titleParser = null,
-		InterwikiLookup $interwikiLookup = null,
 		PageStoreFactory $pageStoreFactory = null
 	) {
-		$factory = $this->getFactory( $titleParser, $interwikiLookup, $pageStoreFactory );
+		$factory = $this->getFactory( $titleParser, $pageStoreFactory );
 		if ( $expectedExcepClass !== null ) {
 			$this->expectException( $expectedExcepClass );
 		}
@@ -68,7 +63,7 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 		$existingPageStore->method( 'getPageByName' )->willReturn( $this->createMock( ExistingPageRecord::class ) );
 		$existingPageStoreFactory = $this->createMock( PageStoreFactory::class );
 		$existingPageStoreFactory->method( 'getPageStore' )->willReturn( $existingPageStore );
-		yield 'Valid' => [ 'Foobar', null, $validTitleParser, null, $existingPageStoreFactory ];
+		yield 'Valid' => [ 'Foobar', null, $validTitleParser, $existingPageStoreFactory ];
 
 		$malformedStr = 'Foo|bar';
 		// TODO: Remove mocking of the exception methods once they'll be return-typehinted.
@@ -83,23 +78,17 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 			->willThrowException( $malformedTitleExcep );
 		yield 'Malformed' => [ $malformedStr, InvalidTitleStringException::class, $malformedTitleParser ];
 
-		$badInterwiki = 'foooooo';
-		$badInterwikiStr = "$badInterwiki:Something";
+		$interwikiPrefix = 'en';
+		$interwikiStr = "$interwikiPrefix:Something";
 		$interwikiTitleParser = $this->createMock( TitleParser::class );
 		$interwikiTitleParser->expects( $this->atLeastOnce() )
 			->method( 'parseTitle' )
-			->with( $badInterwikiStr )
-			->willReturn( new TitleValue( NS_MAIN, 'Something', '', $badInterwiki ) );
-		$badInterwikiLookup = $this->createMock( InterwikiLookup::class );
-		$badInterwikiLookup->expects( $this->atLeastOnce() )
-			->method( 'fetch' )
-			->with( $badInterwiki )
-			->willReturn( null );
-		yield 'Bad interwiki' => [
-			$badInterwikiStr,
-			InvalidInterwikiException::class,
-			$interwikiTitleParser,
-			$badInterwikiLookup
+			->with( $interwikiStr )
+			->willReturn( new TitleValue( NS_MAIN, 'Something', '', $interwikiPrefix ) );
+		yield 'Unexpected interwiki' => [
+			$interwikiStr,
+			UnexpectedInterwikiException::class,
+			$interwikiTitleParser
 		];
 
 		yield 'Not found' => [ 'Foobar', PageNotFoundException::class, $validTitleParser ];

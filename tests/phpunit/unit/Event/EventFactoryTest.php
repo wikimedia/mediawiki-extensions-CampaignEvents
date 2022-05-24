@@ -11,9 +11,9 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
-use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWikiUnitTestCase;
 use MWTimestamp;
 
@@ -115,16 +115,16 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			$invalidTitlePageFactory
 		];
 
-		$nonExistingInterwikiStr = 'nonexistinginterwiki:Interwiki page';
-		$invalidInterwikiPageFactory = $this->createMock( CampaignsPageFactory::class );
-		$invalidInterwikiPageFactory->expects( $this->atLeastOnce() )
+		$interwikiStr = 'nonexistinginterwiki:Interwiki page';
+		$interwikiPageFactory = $this->createMock( CampaignsPageFactory::class );
+		$interwikiPageFactory->expects( $this->atLeastOnce() )
 			->method( 'newExistingPageFromString' )
-			->with( $nonExistingInterwikiStr )
-			->willThrowException( $this->createMock( InvalidInterwikiException::class ) );
+			->with( $interwikiStr )
+			->willThrowException( $this->createMock( UnexpectedInterwikiException::class ) );
 		yield 'Invalid title interwiki' => [
 			'campaignevents-error-invalid-title-interwiki',
-			$this->getTestDataWithDefault( [ 'page' => $nonExistingInterwikiStr ] ),
-			$invalidInterwikiPageFactory
+			$this->getTestDataWithDefault( [ 'page' => $interwikiStr ] ),
+			$interwikiPageFactory
 		];
 
 		$nonExistingPageStr = 'This page does not exist';

@@ -10,7 +10,7 @@
 	"campaignevents-error-invalid-id": "The event ID must be a positive integer",
 	"campaignevents-error-empty-title": "The event page title cannot be empty",
 	"campaignevents-error-invalid-title": "The event page title is invalid: $1",
-	"campaignevents-error-invalid-title-interwiki": "The event page title has an invalid interwiki prefix",
+	"campaignevents-error-invalid-title-interwiki": "The event page cannot have an interwiki prefix",
 	"campaignevents-error-page-not-found": "The event page specified does not exist",
 	"campaignevents-error-invalid-chat-url": "The chat URL is invalid",
 	"campaignevents-error-tracking-tool-name-without-url": "A tracking tool URL is required when a tracking tool name is specified",
