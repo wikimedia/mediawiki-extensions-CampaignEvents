@@ -13,6 +13,7 @@ use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -33,18 +34,30 @@ class UnregisterForEventHandlerTest extends MediaWikiUnitTestCase {
 
 	private function newHandler(
 		UnregisterParticipantCommand $unregisterCommand = null,
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		UserFactory $userFactory = null
 	): UnregisterForEventHandler {
 		if ( !$unregisterCommand ) {
 			$unregisterCommand = $this->createMock( UnregisterParticipantCommand::class );
 			$unregisterCommand->method( 'unregisterIfAllowed' )->willReturn( StatusValue::newGood( true ) );
 		}
-		$handler = new UnregisterForEventHandler(
+		return new UnregisterForEventHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$unregisterCommand
+			$unregisterCommand,
+			$userFactory ?? $this->getUserFactory( true )
 		);
-		$this->setHandlerCSRFSafe( $handler );
-		return $handler;
+	}
+
+	public function testRun__badToken() {
+		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
+
+		try {
+			$this->executeHandler( $handler, new RequestData( self::DEFAULT_REQ_DATA ) );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 400, $e->getCode() );
+			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
+		}
 	}
 
 	/**

@@ -8,29 +8,39 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Rest\HttpException;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use MediaWiki\Rest\TokenAwareHandlerTrait;
+use MediaWiki\Rest\Validator\JsonBodyValidator;
+use MediaWiki\User\UserFactory;
 
 class RegisterForEventHandler extends SimpleHandler {
 	use EventIDParamTrait;
-	use CSRFCheckTrait;
+	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
 	/** @var IEventLookup */
 	private $eventLookup;
 	/** @var RegisterParticipantCommand */
 	private $registerParticipantCommand;
+	/** @var UserFactory */
+	private $userFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
+	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		RegisterParticipantCommand $registerParticipantCommand
+		RegisterParticipantCommand $registerParticipantCommand,
+		UserFactory $userFactory
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->registerParticipantCommand = $registerParticipantCommand;
+		$this->userFactory = $userFactory;
 	}
 
 	/**
@@ -38,7 +48,13 @@ class RegisterForEventHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		$this->assertCSRFSafety();
+		$token = $this->getToken();
+		if (
+			$token !== null &&
+			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
+		) {
+			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
+		}
 
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performerAuthority = $this->getAuthority();
@@ -58,5 +74,19 @@ class RegisterForEventHandler extends SimpleHandler {
 	 */
 	public function getParamSettings(): array {
 		return $this->getIDParamSetting();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getBodyValidator( $contentType ) {
+		if ( $contentType !== 'application/json' ) {
+			throw new HttpException( "Unsupported Content-Type",
+				415,
+				[ 'content_type' => $contentType ]
+			);
+		}
+
+		return new JsonBodyValidator( $this->getTokenParamDefinition() );
 	}
 }

@@ -4,23 +4,19 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
-use InvalidArgumentException;
-use MediaWiki\Rest\Handler;
-use MediaWiki\Session\Session;
-use MediaWiki\Session\SessionProviderInterface;
+use MediaWiki\User\UserFactory;
+use User;
 
 trait CSRFTestHelperTrait {
 	/**
-	 * @param Handler $handler
+	 * @param bool $tokenMatches
+	 * @return UserFactory
 	 */
-	protected function setHandlerCSRFSafe( Handler $handler ): void {
-		if ( !method_exists( $handler, 'setSession' ) ) {
-			throw new InvalidArgumentException( "The given handler does not support setting a session" );
-		}
-		$sessionProvider = $this->createMock( SessionProviderInterface::class );
-		$sessionProvider->method( 'safeAgainstCsrf' )->willReturn( true );
-		$session = $this->createMock( Session::class );
-		$session->method( 'getProvider' )->willReturn( $sessionProvider );
-		$handler->setSession( $session );
+	protected function getUserFactory( bool $tokenMatches ): UserFactory {
+		$user = $this->createMock( User::class );
+		$user->method( 'matchEditToken' )->willReturn( $tokenMatches );
+		$userFactory = $this->createMock( UserFactory::class );
+		$userFactory->method( 'newFromAuthority' )->willReturn( $user );
+		return $userFactory;
 	}
 }

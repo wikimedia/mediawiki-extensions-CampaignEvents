@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
+use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -38,22 +39,23 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param EventFactory|null $eventFactory
 	 * @param EditEventCommand|null $editEventCmd
+	 * @param UserFactory|null $userFactory
 	 * @return CreateEventRegistrationHandler
 	 */
 	protected function newHandler(
 		EventFactory $eventFactory = null,
-		EditEventCommand $editEventCmd = null
+		EditEventCommand $editEventCmd = null,
+		UserFactory $userFactory = null
 	): CreateEventRegistrationHandler {
-		$handler = new CreateEventRegistrationHandler(
+		return new CreateEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),
 			new PermissionChecker(
 				$this->createMock( UserBlockChecker::class ),
 				$this->createMock( OrganizersStore::class )
 			),
-			$editEventCmd ?? $this->getMockEditEventCommand()
+			$editEventCmd ?? $this->getMockEditEventCommand(),
+			$userFactory ?? $this->getUserFactory( true )
 		);
-		$this->setHandlerCSRFSafe( $handler );
-		return $handler;
 	}
 
 	public function testExecute__successful(): void {
@@ -89,6 +91,19 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 403, $e->getCode() );
 			$this->assertSame( 'campaignevents-rest-createevent-permission-denied', $e->getMessageValue()->getKey() );
+		}
+	}
+
+	public function testExecute__badToken() {
+		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
+		$request = new RequestData( $this->getRequestData() );
+
+		try {
+			$this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 400, $e->getCode() );
+			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
 		}
 	}
 
