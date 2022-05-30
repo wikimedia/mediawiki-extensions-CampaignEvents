@@ -76,6 +76,11 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			return;
 		}
 
+		if ( $this->event->getDeletionTimestamp() !== null ) {
+			$this->outputErrorBox( 'campaignevents-edit-error-deleted' );
+			return;
+		}
+
 		$eventPage = $this->event->getPage();
 		if ( $eventPage->getWikiId() !== WikiAwareEntity::LOCAL ) {
 			$this->outputErrorBox( 'campaignevents-edit-page-nonlocal', $eventPage->getWikiId() );

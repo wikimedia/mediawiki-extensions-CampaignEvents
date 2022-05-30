@@ -71,7 +71,17 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanDeleteRegistration( ICampaignsUser $user, int $registrationID ): bool {
-		return $this->userCanEditRegistration( $user, $registrationID );
+		return $this->userCanDeleteRegistrations( $user ) ||
+			$this->userCanEditRegistration( $user, $registrationID );
+	}
+
+	/**
+	 * @param ICampaignsUser $user
+	 * @return bool
+	 */
+	public function userCanDeleteRegistrations( ICampaignsUser $user ): bool {
+		return $user->hasRight( 'campaignevents-delete-registration' ) &&
+			!$this->userBlockChecker->isSitewideBlocked( $user );
 	}
 
 	/**

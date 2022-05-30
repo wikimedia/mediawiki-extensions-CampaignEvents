@@ -7,6 +7,8 @@
 	"campaignevents-desc": "{{desc|name=CampaignEvents|url=https://www.mediawiki.org/wiki/Extension:CampaignEvents}}",
 	"action-campaignevents-create-registration": "{{doc-action|campaignevents-create-registration}}",
 	"right-campaignevents-create-registration": "{{doc-right|campaignevents-create-registration}}",
+	"action-campaignevents-delete-registration": "{{doc-action|campaignevents-delete-registration}}",
+	"right-campaignevents-delete-registration": "{{doc-right|campaignevents-delete-registration}}",
 	"campaignevents-error-invalid-id": "Error message used when the given event ID is not valid.",
 	"campaignevents-error-empty-title": "Error message used when the given event page title is an empty string.",
 	"campaignevents-error-invalid-title": "Error message used when the given event page title is invalid.\nParameters:\n* $1 - The reason why the title is not valid",
@@ -59,6 +61,7 @@
 	"campaignevents-edit-no-event-id-provided": "Error message shown on [[Special:EditEventRegistration]] when the event id is not provided",
 	"campaignevents-edit-event-notfound": "Error message shown on [[Special:EditEventRegistration]]",
 	"campaignevents-edit-page-nonlocal": "Error message shown on [[Special:EditEventRegistration]] for events created on other wikis.\nParameters:\n*$1 - The ID of the wiki where the event was created",
+	"campaignevents-edit-error-deleted": "Error message shown on [[Special:EditEventRegistration]] when the given registration was deleted, and thus cannot be edited.",
 	"campaignevents-error-page-already-registered": "Error message used when the given event page already has another registration associated.",
 	"campaignevents-edit-not-allowed-registration": "Error message used when the user is not allowed to edit the given registration",
 	"campaignevents-create-not-allowed-page": "Error message used when the user is not allowed to create a registration for the given page",
@@ -95,5 +98,12 @@
 	"campaignevents-eventslist-location-online": "Label used on [[Special:MyEvents]] for events that happen online.",
 	"campaignevents-eventslist-location-physical": "Label used on [[Special:MyEvents]] for events that happen in person.",
 	"campaignevents-eventslist-location-online-and-physical": "Label used on [[Special:MyEvents]] for events that happen both online and in person.",
-	"campaignevents-eventslist-manage-btn-info": "Label used on [[Special:MyEvents]] for a button with some options that let a organizer manage an event."
+	"campaignevents-eventslist-manage-btn-info": "Label used on [[Special:MyEvents]] for a button with some options that let a organizer manage an event.",
+	"deleteeventregistration": "Description of [[Special:DeleteEventRegistration]]",
+	"campaignevents-delete-error-no-event": "Error message shown on [[Special:DeleteEventRegistration]] when no event ID was provided.",
+	"campaignevents-delete-error-event-not-found": "Error message shown on [[Special:DeleteEventRegistration]] when the event ID provided does not correspond to an existing event.",
+	"campaignevents-delete-error-already-deleted": "Error message shown on [[Special:DeleteEventRegistration]] when trying to delete an event registration that was already deleted.",
+	"campaignevents-delete-confirmation-text": "Confirmation message used on [[Special:DeleteEventRegistration]].",
+	"campaignevents-delete-submit-btn": "Label of the submit button on [[Special:DeleteEventRegistration]].",
+	"campaignevents-delete-success": "Message shown on [[Special:DeleteEventRegistration]] when the registration was deleted successfully."
 }

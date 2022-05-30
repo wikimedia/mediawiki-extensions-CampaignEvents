@@ -7,6 +7,8 @@
 	"campaignevents-desc": "Provides features for campaign organizers and participants",
 	"action-campaignevents-create-registration": "create event registrations",
 	"right-campaignevents-create-registration": "Create event registrations",
+	"action-campaignevents-delete-registration": "delete event registrations",
+	"right-campaignevents-delete-registration": "Delete event registrations",
 	"campaignevents-error-invalid-id": "The event ID must be a positive integer",
 	"campaignevents-error-empty-title": "The event page title cannot be empty",
 	"campaignevents-error-invalid-title": "The event page title is invalid: $1",
@@ -59,6 +61,7 @@
 	"campaignevents-edit-no-event-id-provided": "No event ID provided",
 	"campaignevents-edit-event-notfound": "No event with the given ID exists",
 	"campaignevents-edit-page-nonlocal": "This event registration was created on the following wiki and should be edited there: $1",
+	"campaignevents-edit-error-deleted": "This event registration was deleted.",
 	"campaignevents-error-page-already-registered": "The given event page already has another registration associated.",
 	"campaignevents-edit-not-allowed-registration": "You are not allowed to edit this event registration",
 	"campaignevents-create-not-allowed-page": "You are not allowed to create an event registration for the given event page",
@@ -95,5 +98,12 @@
 	"campaignevents-eventslist-location-online": "Online event",
 	"campaignevents-eventslist-location-physical": "Physical event",
 	"campaignevents-eventslist-location-online-and-physical": "Online and physical event",
-	"campaignevents-eventslist-manage-btn-info": "Manage event"
+	"campaignevents-eventslist-manage-btn-info": "Manage event",
+	"deleteeventregistration": "Delete event registration",
+	"campaignevents-delete-error-no-event": "No event specified",
+	"campaignevents-delete-error-event-not-found": "The ID provided does not refer to an existing event",
+	"campaignevents-delete-error-already-deleted": "This event registration was already deleted.",
+	"campaignevents-delete-confirmation-text": "Confirm that you want to delete this event registration by clicking the button below. This action cannot be reverted.",
+	"campaignevents-delete-submit-btn": "Delete",
+	"campaignevents-delete-success": "The event registration was deleted."
 }
