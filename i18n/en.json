@@ -37,7 +37,7 @@
 	"campaignevents-edit-form-legend": "Provide general information about the event you are organizing",
 	"campaignevents-edit-field-page": "Event page",
 	"campaignevents-edit-field-page-help": "An event page contains information about your event. From there, participants will be able to register to the event.",
-	"campaignevents-edit-field-event-status": "Event Status",
+	"campaignevents-edit-field-event-status": "Event status",
 	"campaignevents-edit-field-status-open": "Open",
 	"campaignevents-edit-field-status-closed": "Closed",
 	"campaignevents-edit-field-start": "Start time",
