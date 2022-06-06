@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use SpecialPage;
 
 class SpecialMyEvents extends SpecialPage {
+	public const PAGE_NAME = 'MyEvents';
 	/** @var EventsPagerFactory */
 	private $eventsPagerFactory;
 
@@ -17,7 +18,7 @@ class SpecialMyEvents extends SpecialPage {
 	 * @param EventsPagerFactory $eventsPagerFactory
 	 */
 	public function __construct( EventsPagerFactory $eventsPagerFactory ) {
-		parent::__construct( 'MyEvents' );
+		parent::__construct( self::PAGE_NAME );
 		$this->eventsPagerFactory = $eventsPagerFactory;
 	}
 

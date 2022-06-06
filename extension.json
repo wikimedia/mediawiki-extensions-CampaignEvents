@@ -167,6 +167,37 @@
 				"oojs-ui-core",
 				"oojs-ui-windows"
 			]
+		},
+		"ext.campaignEvents.specialeventdetails": {
+			"localBasePath": "resources/ext.campaignEvents.specialeventdetails",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialeventdetails",
+			"packageFiles": [
+				"index.js",
+				"ParticipantsManager.js",
+				"RemoveParticipantDialog.js"
+			],
+			"messages": [
+				"campaignevents-event-details-select-all",
+				"campaignevents-event-details-all-selected",
+				"campaignevents-event-details-participants-checkboxes-selected",
+				"campaignevents-event-details-remove-participant-confirmation-title",
+				"campaignevents-event-details-remove-participant-confirmation-msg",
+				"campaignevents-event-details-remove-participant-remove-btn",
+				"campaignevents-event-details-remove-participant-cancel-btn"
+			],
+			"dependencies": [
+				"mediawiki.language",
+				"oojs-ui-core",
+				"oojs-ui-windows"
+			],
+			"targets": [ "desktop", "mobile" ]
+		},
+		"ext.campaignEvents.specialeventdetails.styles": {
+			"styles": [
+				"ext.campaignEvents.specialeventdetails.styles.less",
+				"ext.campaignEvents.TextWithIconWidget.less"
+			],
+			"targets": [ "desktop", "mobile" ]
 		}
 	},
 	"RestRoutes": [
@@ -319,13 +350,20 @@
 				"CampaignEventsParticipantsStore"
 			]
 		},
-		"EventDetails": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEventDetails"
-		},
 		"MyEvents": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialMyEvents",
 			"services": [
 				"CampaignEventsEventsPagerFactory"
+			]
+		},
+		"EventDetails": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEventDetails",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsParticipantsStore",
+				"CampaignEventsOrganizersStore",
+				"CampaignEventsPageURLResolver",
+				"MessageFormatterFactory"
 			]
 		}
 	},

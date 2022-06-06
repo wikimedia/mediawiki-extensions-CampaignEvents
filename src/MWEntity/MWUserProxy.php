@@ -49,4 +49,11 @@ class MWUserProxy implements ICampaignsUser {
 	public function getName(): string {
 		return $this->userIdentity->getName();
 	}
+
+	/**
+	 * @return UserIdentity
+	 */
+	public function getUserIdentity(): UserIdentity {
+		return $this->userIdentity;
+	}
 }

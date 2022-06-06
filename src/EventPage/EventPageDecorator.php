@@ -528,7 +528,7 @@ class EventPageDecorator {
 				$participantsList .= Html::rawElement(
 					'li',
 					[],
-					Linker::userLink( $participant->getLocalID(), $participant->getName() )
+					Linker::userLink( $participant->getUser()->getLocalID(), $participant->getUser()->getName() )
 				);
 			}
 			$participantsList .= Html::closeElement( 'ul' );

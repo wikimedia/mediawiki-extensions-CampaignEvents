@@ -94,25 +94,29 @@ class ParticipantsStore {
 	/**
 	 * @param int $eventID
 	 * @param int|null $limit
-	 * @return ICampaignsUser[]
+	 * @return Participant[]
 	 */
 	public function getEventParticipants( int $eventID, int $limit = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$centralIDs = $dbr->selectFieldValues(
+		$rows = $dbr->select(
 			'ce_participants',
-			'cep_user_id',
+			'cep_user_id, cep_registered_at',
 			[ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ],
 			$limit !== null ? [ 'LIMIT' => $limit ] : []
 		);
-		$ret = [];
-		foreach ( $centralIDs as $id ) {
+
+		$participants = [];
+		foreach ( $rows as $participant ) {
 			try {
-				$ret[] = $this->centralUserLookup->getLocalUser( (int)$id );
+				$participants[] = new Participant(
+					$this->centralUserLookup->getLocalUser( (int)$participant->cep_user_id ),
+					wfTimestamp( TS_UNIX, $participant->cep_registered_at )
+				);
 			} catch ( LocalUserNotFoundException $_ ) {
 				// Most probably a deleted user, skip it.
 			}
 		}
-		return $ret;
+		return $participants;
 	}
 
 	/**

@@ -23,6 +23,9 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/** @inheritDoc */
 	protected $tablesUsed = [ 'campaign_events' ];
 
+	/**
+	 * @return EventRegistration
+	 */
 	private function getTestEvent(): EventRegistration {
 		return new EventRegistration(
 			null,
@@ -163,7 +166,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'1646500000',
 			'del' => null
 		];
-
 		yield 'Not deleted' => [
 			new EventRegistration( ...array_values( $baseCtrArgs ) ),
 			true
