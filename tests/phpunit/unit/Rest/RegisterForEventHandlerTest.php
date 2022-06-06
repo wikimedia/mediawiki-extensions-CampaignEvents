@@ -13,6 +13,7 @@ use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -28,23 +29,36 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	private const DEFAULT_REQ_DATA = [
 		'method' => 'PUT',
 		'pathParams' => [ 'id' => 42 ],
+		'bodyContents' => '{}',
 		'headers' => [ 'Content-Type' => 'application/json' ],
 	];
 
 	private function newHandler(
 		RegisterParticipantCommand $registerCommand = null,
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		UserFactory $userFactory = null
 	): RegisterForEventHandler {
 		if ( !$registerCommand ) {
 			$registerCommand = $this->createMock( RegisterParticipantCommand::class );
 			$registerCommand->method( 'registerIfAllowed' )->willReturn( StatusValue::newGood( true ) );
 		}
-		$handler = new RegisterForEventHandler(
+		return new RegisterForEventHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$registerCommand
+			$registerCommand,
+			$userFactory ?? $this->getUserFactory( true )
 		);
-		$this->setHandlerCSRFSafe( $handler );
-		return $handler;
+	}
+
+	public function testRun__badToken() {
+		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
+
+		try {
+			$this->executeHandler( $handler, new RequestData( self::DEFAULT_REQ_DATA ) );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 400, $e->getCode() );
+			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
+		}
 	}
 
 	/**

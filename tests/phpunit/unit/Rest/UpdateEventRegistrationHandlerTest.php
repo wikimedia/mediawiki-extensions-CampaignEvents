@@ -21,6 +21,7 @@ use MediaWiki\Extension\CampaignEvents\Rest\UpdateEventRegistrationHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
+use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -49,12 +50,14 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 * @param EventFactory|null $eventFactory
 	 * @param EditEventCommand|null $editEventCmd
 	 * @param IEventLookup|null $eventLookup
+	 * @param UserFactory|null $userFactory
 	 * @return UpdateEventRegistrationHandler
 	 */
 	protected function newHandler(
 		EventFactory $eventFactory = null,
 		EditEventCommand $editEventCmd = null,
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		UserFactory $userFactory = null
 	): UpdateEventRegistrationHandler {
 		if ( !$eventLookup ) {
 			// Ensure that the wiki ID of the event page is not null, otherwise it will be passed to
@@ -66,17 +69,16 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventLookup = $this->createMock( IEventLookup::class );
 			$eventLookup->method( 'getEventByID' )->willReturn( $event );
 		}
-		$handler = new UpdateEventRegistrationHandler(
+		return new UpdateEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),
 			new PermissionChecker(
 				$this->createMock( UserBlockChecker::class ),
 				$this->createMock( OrganizersStore::class )
 			),
 			$editEventCmd ?? $this->getMockEditEventCommand(),
+			$userFactory ?? $this->getUserFactory( true ),
 			$eventLookup
 		);
-		$this->setHandlerCSRFSafe( $handler );
-		return $handler;
 	}
 
 	public function testExecute__successful(): void {
@@ -93,6 +95,19 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		);
 
 		$this->assertSame( 204, $respData->getStatusCode() );
+	}
+
+	public function testExecute__badToken() {
+		$handler = $this->newHandler( null, null, null, $this->getUserFactory( false ) );
+		$request = new RequestData( $this->getRequestData() );
+
+		try {
+			$this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 400, $e->getCode() );
+			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
+		}
 	}
 
 	public function testExecute__nonexistingEvent(): void {

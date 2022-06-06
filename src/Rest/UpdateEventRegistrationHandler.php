@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
+use MediaWiki\User\UserFactory;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -27,15 +28,17 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @param EventFactory $eventFactory
 	 * @param PermissionChecker $permissionChecker
 	 * @param EditEventCommand $editEventCommand
+	 * @param UserFactory $userFactory
 	 * @param IEventLookup $eventLookup
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
 		EditEventCommand $editEventCommand,
+		UserFactory $userFactory,
 		IEventLookup $eventLookup
 	) {
-		parent::__construct( $eventFactory, $permissionChecker, $editEventCommand );
+		parent::__construct( $eventFactory, $permissionChecker, $editEventCommand, $userFactory );
 		$this->eventLookup = $eventLookup;
 	}
 

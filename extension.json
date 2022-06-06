@@ -72,7 +72,8 @@
 			"services": [
 				"CampaignEventsEventFactory",
 				"CampaignEventsPermissionChecker",
-				"CampaignEventsEditEventCommand"
+				"CampaignEventsEditEventCommand",
+				"UserFactory"
 			]
 		},
 		{
@@ -89,7 +90,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\DeleteEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsDeleteEventCommand"
+				"CampaignEventsDeleteEventCommand",
+				"UserFactory"
 			]
 		},
 		{
@@ -98,7 +100,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RegisterForEventHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsRegisterParticipantCommand"
+				"CampaignEventsRegisterParticipantCommand",
+				"UserFactory"
 			]
 		},
 		{
@@ -107,7 +110,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UnregisterForEventHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsUnregisterParticipantCommand"
+				"CampaignEventsUnregisterParticipantCommand",
+				"UserFactory"
 			]
 		},
 		{
@@ -118,6 +122,7 @@
 				"CampaignEventsEventFactory",
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsEditEventCommand",
+				"UserFactory",
 				"CampaignEventsEventLookup"
 			]
 		},

@@ -14,15 +14,18 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
+use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\BodyValidator;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
+use MediaWiki\User\UserFactory;
 use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
 
 abstract class AbstractEditEventRegistrationHandler extends Handler {
-	use CSRFCheckTrait;
+	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
 	/** @var EventFactory */
@@ -31,20 +34,25 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected $permissionChecker;
 	/** @var EditEventCommand */
 	protected $editEventCommand;
+	/** @var UserFactory */
+	protected $userFactory;
 
 	/**
 	 * @param EventFactory $eventFactory
 	 * @param PermissionChecker $permissionChecker
 	 * @param EditEventCommand $editEventCommand
+	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
-		EditEventCommand $editEventCommand
+		EditEventCommand $editEventCommand,
+		UserFactory $userFactory
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
 		$this->editEventCommand = $editEventCommand;
+		$this->userFactory = $userFactory;
 	}
 
 	/**
@@ -61,9 +69,15 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @inheritDoc
 	 */
 	public function execute() {
-		$this->assertCSRFSafety();
-
 		$body = $this->getValidatedBody();
+
+		$token = $this->getToken();
+		if (
+			$token !== null &&
+			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
+		) {
+			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
+		}
 
 		$eventID = $this->getEventID();
 
@@ -193,7 +207,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-		];
+		] + $this->getTokenParamDefinition();
 	}
 
 	/**

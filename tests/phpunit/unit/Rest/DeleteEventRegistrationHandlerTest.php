@@ -14,6 +14,7 @@ use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -35,22 +36,23 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param IEventLookup|null $eventLookup
 	 * @param DeleteEventCommand|null $deleteEventCommand
+	 * @param UserFactory|null $userFactory
 	 * @return DeleteEventRegistrationHandler
 	 */
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		DeleteEventCommand $deleteEventCommand = null
+		DeleteEventCommand $deleteEventCommand = null,
+		UserFactory $userFactory = null
 	): DeleteEventRegistrationHandler {
 		if ( !$deleteEventCommand ) {
 			$deleteEventCommand = $this->createMock( DeleteEventCommand::class );
 			$deleteEventCommand->method( 'deleteIfAllowed' )->willReturn( StatusValue::newGood() );
 		}
-		$handler = new DeleteEventRegistrationHandler(
+		return new DeleteEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$deleteEventCommand
+			$deleteEventCommand,
+			$userFactory ?? $this->getUserFactory( true )
 		);
-		$this->setHandlerCSRFSafe( $handler );
-		return $handler;
 	}
 
 	public function testExecute__successful() {
@@ -105,6 +107,19 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$lookupDeleted = $this->createMock( IEventLookup::class );
 		$lookupDeleted->expects( $this->once() )->method( 'getEventById' )->willReturn( $deletedRegistration );
 		yield 'Event already deleted' => [ 'campaignevents-rest-delete-already-deleted', 404, $lookupDeleted ];
+	}
+
+	public function testExecute__badToken() {
+		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
+		$request = new RequestData( self::DEFAULT_REQ_DATA );
+
+		try {
+			$this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 400, $e->getCode() );
+			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
+		}
 	}
 
 	public function testExecute__permissionError() {

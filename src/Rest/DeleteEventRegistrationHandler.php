@@ -8,13 +8,17 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use MediaWiki\Rest\TokenAwareHandlerTrait;
+use MediaWiki\Rest\Validator\JsonBodyValidator;
+use MediaWiki\User\UserFactory;
 use Wikimedia\Message\MessageValue;
 
 class DeleteEventRegistrationHandler extends SimpleHandler {
-	use CSRFCheckTrait;
+	use TokenAwareHandlerTrait;
 	use EventIDParamTrait;
 	use FailStatusUtilTrait;
 
@@ -22,17 +26,22 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	private $eventLookup;
 	/** @var DeleteEventCommand */
 	private $deleteEventCommand;
+	/** @var UserFactory */
+	protected $userFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param DeleteEventCommand $deleteEventCommand
+	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		DeleteEventCommand $deleteEventCommand
+		DeleteEventCommand $deleteEventCommand,
+		UserFactory $userFactory
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->deleteEventCommand = $deleteEventCommand;
+		$this->userFactory = $userFactory;
 	}
 
 	/**
@@ -40,7 +49,13 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	public function run( int $id ): Response {
-		$this->assertCSRFSafety();
+		$token = $this->getToken();
+		if (
+			$token !== null &&
+			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
+		) {
+			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
+		}
 
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $id );
 		if ( $registration->getDeletionTimestamp() !== null ) {
@@ -66,5 +81,19 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	 */
 	public function getParamSettings(): array {
 		return $this->getIDParamSetting();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getBodyValidator( $contentType ) {
+		if ( $contentType !== 'application/json' ) {
+			throw new HttpException( "Unsupported Content-Type",
+				415,
+				[ 'content_type' => $contentType ]
+			);
+		}
+
+		return new JsonBodyValidator( $this->getTokenParamDefinition() );
 	}
 }
