@@ -207,6 +207,12 @@
 		},
 		"EventRegistration": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEventRegistration"
+		},
+		"MyEvents": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialMyEvents",
+			"services": [
+				"CampaignEventsEventsPagerFactory"
+			]
 		}
 	},
 	"TestAutoloadNamespaces": {

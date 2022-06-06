@@ -235,4 +235,20 @@ class EventStore implements IEventStore, IEventLookup {
 		);
 		return $dbw->affectedRows() > 0;
 	}
+
+	/**
+	 * Converts a meeting type as stored in the DB into a combination of the EventRegistration::MEETING_TYPE_* constants
+	 * @param string $dbMeetingType
+	 * @return int
+	 */
+	public static function getMeetingTypeFromDBVal( string $dbMeetingType ): int {
+		$ret = 0;
+		$dbMeetingTypeNum = (int)$dbMeetingType;
+		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
+			if ( $dbMeetingTypeNum & $dbVal ) {
+				$ret |= $eventVal;
+			}
+		}
+		return $ret;
+	}
 }

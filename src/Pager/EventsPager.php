@@ -1,0 +1,209 @@
+<?php
+
+declare( strict_types=1 );
+
+namespace MediaWiki\Extension\CampaignEvents\Pager;
+
+use IContextSource;
+use LogicException;
+use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEventRegistration;
+use MediaWiki\Linker\LinkRenderer;
+use OOUI\ButtonWidget;
+use SpecialPage;
+use TablePager;
+
+class EventsPager extends TablePager {
+	private const SORT_INDEXES = [
+		'event_start' => [ 'event_start', 'event_name', 'event_id' ],
+		'event_name' => [ 'event_name', 'event_start', 'event_id' ],
+		'num_participants' => [ 'num_participants', 'event_start', 'event_id' ],
+	];
+
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
+
+	/** @var string */
+	private $search;
+
+	/**
+	 * @param IContextSource $context
+	 * @param LinkRenderer $linkRenderer
+	 * @param CampaignsDatabaseHelper $databaseHelper
+	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param string $search
+	 */
+	public function __construct(
+		IContextSource $context,
+		LinkRenderer $linkRenderer,
+		CampaignsDatabaseHelper $databaseHelper,
+		CampaignsCentralUserLookup $centralUserLookup,
+		string $search
+	) {
+		// Set the database before calling the parent constructor, otherwise it'll use the local one.
+		$dbWrapper = $databaseHelper->getDBConnection( DB_REPLICA );
+		if ( !$dbWrapper instanceof MWDatabaseProxy ) {
+			throw new LogicException( "Wrong DB class?!" );
+		}
+		$this->mDb = $dbWrapper->getMWDatabase();
+		parent::__construct( $context, $linkRenderer );
+		$this->centralUserLookup = $centralUserLookup;
+		$this->search = $search;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getQueryInfo(): array {
+		$conds = [];
+
+		if ( $this->search !== '' ) {
+			$conds[] = 'event_name' . $this->mDb->buildLike(
+				$this->mDb->anyString(), $this->search, $this->mDb->anyString() );
+		}
+
+		$campaignsUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
+
+		// Use a subquery and a temporary table to work around IndexPager not using HAVING for aggregates (T308694)
+		// and to support postgres (which doesn't allow aliases in HAVING).
+		$subquery = $this->mDb->buildSelectSubquery(
+			[ 'campaign_events', 'ce_participants', 'ce_organizers' ],
+			[
+				'event_id',
+				'event_name',
+				'event_start',
+				'event_meeting_type',
+				'num_participants' => 'COUNT(cep_id)'
+			],
+			array_merge(
+				$conds,
+				[
+					'event_deleted_at' => null,
+					'cep_unregistered_at' => null,
+					'ceo_user_id' => $this->centralUserLookup->getCentralID( $campaignsUser )
+				]
+			),
+			__METHOD__,
+			[
+				'GROUP BY' => [ 'cep_event_id', 'event_id', 'event_name', 'event_start', 'event_meeting_type' ]
+			],
+			[
+				'ce_participants' => [
+					'LEFT JOIN',
+					'event_id=cep_event_id'
+				],
+				'ce_organizers' => [
+					'LEFT JOIN',
+					'event_id=ceo_event_id'
+				]
+			]
+		);
+
+		return [
+			'tables' => [ 'tmp' => $subquery ],
+			'fields' => [
+				'event_id',
+				'event_name',
+				'event_start',
+				'event_meeting_type',
+				'num_participants'
+			],
+			'conds' => [],
+			'options' => [],
+			'join_conds' => []
+		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function formatValue( $name, $value ): string {
+		switch ( $name ) {
+			case 'event_start':
+				return htmlspecialchars( $this->getLanguage()->userDate( $value, $this->getUser() ) );
+			case 'event_name':
+				return htmlspecialchars( $value );
+			case 'event_location':
+				$meetingType = EventStore::getMeetingTypeFromDBVal( $this->mCurrentRow->event_meeting_type );
+				if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE ) {
+					$msgKey = 'campaignevents-eventslist-location-online';
+				} elseif ( $meetingType === EventRegistration::MEETING_TYPE_PHYSICAL ) {
+					$msgKey = 'campaignevents-eventslist-location-physical';
+				} elseif ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL ) {
+					$msgKey = 'campaignevents-eventslist-location-online-and-physical';
+				} else {
+					throw new LogicException( "Unexpected meeting type: $meetingType" );
+				}
+				return $this->msg( $msgKey )->escaped();
+			case 'num_participants':
+				return htmlspecialchars( $this->getLanguage()->formatNum( $value ) );
+			case 'manage_event':
+				$btn = new ButtonWidget( [
+					'framed' => false,
+					'label' => $this->msg( 'campaignevents-eventslist-manage-btn-info' )->text(),
+					'title' => $this->msg( 'campaignevents-eventslist-manage-btn-info' )->text(),
+					'invisibleLabel' => true,
+					'icon' => 'ellipsis',
+					'href' => SpecialPage::getTitleFor(
+						SpecialEventRegistration::PAGE_NAME,
+						$this->mCurrentRow->event_id
+					)->getLocalURL()
+				] );
+				return $btn->toString();
+			default:
+				throw new LogicException( "Unexpected name $name" );
+		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getFieldNames(): array {
+		return [
+			'event_start' => $this->msg( 'campaignevents-eventslist-column-date' )->text(),
+			'event_name' => $this->msg( 'campaignevents-eventslist-column-name' )->text(),
+			'event_location' => $this->msg( 'campaignevents-eventslist-column-location' )->text(),
+			'num_participants' => $this->msg( 'campaignevents-eventslist-column-participants-number' )->text(),
+			'manage_event' => ''
+		];
+	}
+
+	/**
+	 * Overridden to provide additional columns to order by, since most columns are not unique.
+	 * @inheritDoc
+	 */
+	public function getIndexField(): array {
+		// XXX Work around T308697: TablePager and IndexPager seem to be incompatible and the correct
+		// index is not chosen automatically.
+		return [ self::SORT_INDEXES[$this->mSort] ];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getDefaultSort(): string {
+		return 'event_start';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function isFieldSortable( $field ): bool {
+		return array_key_exists( $field, self::SORT_INDEXES );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getModuleStyles(): array {
+		return array_merge(
+			parent::getModuleStyles(),
+			[ 'oojs-ui.styles.icons-interactions' ]
+		);
+	}
+}
