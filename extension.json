@@ -14,7 +14,8 @@
 		"MediaWiki\\Extension\\CampaignEvents\\": "src/"
 	},
 	"AvailableRights": [
-		"campaignevents-create-registration"
+		"campaignevents-create-registration",
+		"campaignevents-delete-registration"
 	],
 	"config": {
 		"CampaignEventsDatabaseCluster": {
@@ -29,6 +30,9 @@
 	"GroupPermissions": {
 		"user": {
 			"campaignevents-create-registration": true
+		},
+		"sysop": {
+			"campaignevents-delete-registration": true
 		}
 	},
 	"ExtensionMessagesFiles": {
@@ -186,6 +190,14 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
 				"CampaignEventsEditEventCommand",
+				"CampaignEventsPermissionChecker"
+			]
+		},
+		"DeleteEventRegistration": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialDeleteEventRegistration",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsDeleteEventCommand",
 				"CampaignEventsPermissionChecker"
 			]
 		},

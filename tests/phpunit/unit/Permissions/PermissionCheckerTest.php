@@ -179,7 +179,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param OrganizersStore|null $organizersStore
 	 * @covers ::userCanDeleteRegistration
 	 * Reuses the data provider for convenience.
-	 * @dataProvider provideCanEditRegistration
+	 * @dataProvider provideCanDeleteRegistration
 	 */
 	public function testUserCanDeleteRegistration(
 		bool $expected,
@@ -192,6 +192,51 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$expected,
 			$checker->userCanDeleteRegistration( $user, 42 )
 		);
+	}
+
+	public function provideCanDeleteRegistration(): Generator {
+		$registeredUser = new UserIdentityValue( 42, 'Name' );
+		yield 'Logged out but allowed' => [
+			true,
+			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
+		];
+		yield 'Lacks right to create registrations' => [
+			false,
+			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
+		];
+		$blockedUser = new MWUserProxy( $registeredUser, $this->mockRegisteredUltimateAuthority() );
+		$blockChecker = $this->createMock( UserBlockChecker::class );
+		$blockChecker->expects( $this->atLeastOnce() )
+			->method( 'isSitewideBlocked' )
+			->with( $blockedUser )
+			->willReturn( true );
+		yield 'Blocked' => [
+			false,
+			$blockedUser,
+			$blockChecker,
+		];
+		yield 'Not an organizer' => [
+			false,
+			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
+		];
+		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
+		$authorizedOrgStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		yield 'Can edit the registration' => [
+			true,
+			new MWUserProxy(
+				$registeredUser,
+				new SimpleAuthority( $registeredUser, [ 'campaignevents-create-registration' ] )
+			),
+			null,
+			$authorizedOrgStore
+		];
+		yield 'Can delete all registrations' => [
+			true,
+			new MWUserProxy(
+				$registeredUser,
+				new SimpleAuthority( $registeredUser, [ 'campaignevents-delete-registration' ] )
+			)
+		];
 	}
 
 	/**
