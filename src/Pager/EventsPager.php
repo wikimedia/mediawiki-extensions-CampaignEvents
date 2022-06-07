@@ -20,6 +20,10 @@ use SpecialPage;
 use TablePager;
 
 class EventsPager extends TablePager {
+	public const STATUS_ANY = 'any';
+	public const STATUS_OPEN = 'open';
+	public const STATUS_CLOSED = 'closed';
+
 	private const SORT_INDEXES = [
 		'event_start' => [ 'event_start', 'event_name', 'event_id' ],
 		'event_name' => [ 'event_name', 'event_start', 'event_id' ],
@@ -31,6 +35,8 @@ class EventsPager extends TablePager {
 
 	/** @var string */
 	private $search;
+	/** @var string */
+	private $status;
 
 	/**
 	 * @param IContextSource $context
@@ -38,13 +44,15 @@ class EventsPager extends TablePager {
 	 * @param CampaignsDatabaseHelper $databaseHelper
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param string $search
+	 * @param string $status One of the self::STATUS_* constants
 	 */
 	public function __construct(
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsCentralUserLookup $centralUserLookup,
-		string $search
+		string $search,
+		string $status
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$dbWrapper = $databaseHelper->getDBConnection( DB_REPLICA );
@@ -55,6 +63,7 @@ class EventsPager extends TablePager {
 		parent::__construct( $context, $linkRenderer );
 		$this->centralUserLookup = $centralUserLookup;
 		$this->search = $search;
+		$this->status = $status;
 	}
 
 	/**
@@ -66,6 +75,19 @@ class EventsPager extends TablePager {
 		if ( $this->search !== '' ) {
 			$conds[] = 'event_name' . $this->mDb->buildLike(
 				$this->mDb->anyString(), $this->search, $this->mDb->anyString() );
+		}
+
+		switch ( $this->status ) {
+			case self::STATUS_ANY:
+				break;
+			case self::STATUS_OPEN:
+				$conds['event_status'] = EventStore::getEventStatusDBVal( EventRegistration::STATUS_OPEN );
+				break;
+			case self::STATUS_CLOSED:
+				$conds['event_status'] = EventStore::getEventStatusDBVal( EventRegistration::STATUS_CLOSED );
+				break;
+			default:
+				// Invalid statuses can only be entered by messing with the HTML or query params, ignore.
 		}
 
 		$campaignsUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
