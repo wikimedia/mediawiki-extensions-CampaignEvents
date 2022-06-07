@@ -29,7 +29,6 @@ class UnregisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	private const DEFAULT_REQ_DATA = [
 		'method' => 'DELETE',
 		'pathParams' => [ 'id' => 42 ],
-		'headers' => [ 'Content-Type' => 'application/json' ],
 	];
 
 	private function newHandler(
