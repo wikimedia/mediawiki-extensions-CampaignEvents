@@ -86,9 +86,12 @@ class EditEventCommand {
 	 */
 	public function doEditUnsafe( EventRegistration $registration, ICampaignsUser $performer ): StatusValue {
 		try {
-			$existingRegistrationIDForPage = $this->eventLookup->getEventByPage( $registration->getPage() )->getID();
-			if ( $existingRegistrationIDForPage !== $registration->getID() ) {
+			$existingRegistrationForPage = $this->eventLookup->getEventByPage( $registration->getPage() );
+			if ( $existingRegistrationForPage->getID() !== $registration->getID() ) {
 				return StatusValue::newFatal( 'campaignevents-error-page-already-registered' );
+			}
+			if ( $existingRegistrationForPage->getDeletionTimestamp() !== null ) {
+				return StatusValue::newFatal( 'campaignevents-edit-registration-deleted' );
 			}
 		} catch ( EventNotFoundException $_ ) {
 			// The page has no associated registration, and we're creating one now. No problem.

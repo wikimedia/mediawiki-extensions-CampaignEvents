@@ -7,8 +7,10 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use Wikimedia\Message\MessageValue;
 
 class GetEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
@@ -31,6 +33,12 @@ class GetEventRegistrationHandler extends SimpleHandler {
 	 */
 	protected function run( int $eventID ): Response {
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		if ( $registration->getDeletionTimestamp() !== null ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-get-registration-deleted' ),
+				404
+			);
+		}
 		$page = $registration->getPage();
 
 		$respVal = [

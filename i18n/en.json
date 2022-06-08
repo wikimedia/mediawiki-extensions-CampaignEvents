@@ -109,5 +109,9 @@
 	"campaignevents-delete-error-already-deleted": "This event registration was already deleted.",
 	"campaignevents-delete-confirmation-text": "Confirm that you want to delete this event registration by clicking the button below. This action cannot be reverted.",
 	"campaignevents-delete-submit-btn": "Delete",
-	"campaignevents-delete-success": "The event registration was deleted."
+	"campaignevents-delete-success": "The event registration was deleted.",
+	"campaignevents-rest-get-registration-deleted": "The specified event registration is deleted",
+	"campaignevents-edit-registration-deleted": "The specified event registration is deleted",
+	"campaignevents-register-registration-deleted": "You cannot register for this event because it is deleted",
+	"campaignevents-unregister-registration-deleted": "You cannot unregister for this event because it is deleted"
 }

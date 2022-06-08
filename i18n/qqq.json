@@ -109,5 +109,9 @@
 	"campaignevents-delete-error-already-deleted": "Error message shown on [[Special:DeleteEventRegistration]] when trying to delete an event registration that was already deleted.",
 	"campaignevents-delete-confirmation-text": "Confirmation message used on [[Special:DeleteEventRegistration]].",
 	"campaignevents-delete-submit-btn": "Label of the submit button on [[Special:DeleteEventRegistration]].",
-	"campaignevents-delete-success": "Message shown on [[Special:DeleteEventRegistration]] when the registration was deleted successfully."
+	"campaignevents-delete-success": "Message shown on [[Special:DeleteEventRegistration]] when the registration was deleted successfully.",
+	"campaignevents-rest-get-registration-deleted": "Error message used when trying to get details of a deleted registration.",
+	"campaignevents-edit-registration-deleted": "Error message used when trying to edit a deleted registration.",
+	"campaignevents-register-registration-deleted": "Error message used when trying to register for a deleted registration.",
+	"campaignevents-unregister-registration-deleted": "Error message used when trying to unregister for a deleted registration."
 }

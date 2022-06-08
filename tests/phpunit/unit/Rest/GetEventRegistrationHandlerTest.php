@@ -111,4 +111,22 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->assertSame( 404, $e->getCode() );
 		}
 	}
+
+	public function testRun__deletedEvent() {
+		$deletedEvent = $this->createMock( ExistingEventRegistration::class );
+		$deletedEvent->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->expects( $this->once() )->method( 'getEventByID' )->willReturn( $deletedEvent );
+		$handler = $this->newHandler( $eventLookup );
+		try {
+			$this->executeHandler( $handler, new RequestData( self::REQ_DATA ) );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame(
+				'campaignevents-rest-get-registration-deleted',
+				$e->getMessageValue()->getKey()
+			);
+			$this->assertSame( 404, $e->getCode() );
+		}
+	}
 }

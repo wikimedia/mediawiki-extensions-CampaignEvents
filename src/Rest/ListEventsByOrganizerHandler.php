@@ -11,16 +11,6 @@ class ListEventsByOrganizerHandler extends AbstractListEventsByUserHandler {
 	 * @return array
 	 */
 	protected function getEventsByUser( int $userID, int $resultLimit ): array {
-		$events = $this->eventLookup->getEventsByOrganizer( $userID, $resultLimit );
-		$filter = [];
-
-		foreach ( $events as $event ) {
-			$filter[] = [
-				'event_id' => $event->getID(),
-				'event_name' => $event->getName()
-			];
-		}
-
-		return $filter;
+		return $this->buildResultStructure( $this->eventLookup->getEventsByOrganizer( $userID, $resultLimit ) );
 	}
 }

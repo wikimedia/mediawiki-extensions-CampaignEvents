@@ -67,6 +67,9 @@ class RegisterParticipantCommand {
 	 * @return StatusValue
 	 */
 	public function registerUnsafe( ExistingEventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+		if ( $registration->getDeletionTimestamp() !== null ) {
+			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' );
+		}
 		$endTS = $registration->getEndTimestamp();
 		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
 			return StatusValue::newFatal( 'campaignevents-register-event-past' );

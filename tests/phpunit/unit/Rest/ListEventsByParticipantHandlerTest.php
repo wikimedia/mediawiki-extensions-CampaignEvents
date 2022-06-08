@@ -107,5 +107,22 @@ class ListEventsByParticipantHandlerTest extends MediaWikiUnitTestCase {
 			]
 		];
 		yield 'Return events' => [ $secondEventLookup, $expectedEvents ];
+
+		$deletedEvent = $this->createMock( ExistingEventRegistration::class );
+		$deletedEvent->method( "getID" )->willReturn( 123 );
+		$deletedEvent->method( "getName" )->willReturn( "Deleted event" );
+		$deletedEvent->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
+
+		$delEventLookup = $this->createMock( IEventLookup::class );
+		$delEventLookup->method( 'getEventsByParticipant' )->willReturn( [ $deletedEvent ] );
+
+		$expectedDeleted = [
+			[
+				"event_id" => $deletedEvent->getID(),
+				"event_name" => $deletedEvent->getName(),
+				'event_deleted' => true
+			]
+		];
+		yield 'Deleted event' => [ $delEventLookup, $expectedDeleted ];
 	}
 }

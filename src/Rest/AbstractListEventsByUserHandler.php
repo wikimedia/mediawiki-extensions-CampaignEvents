@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
@@ -65,6 +66,27 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 		$userID = $this->userLookup->getCentralID( $user );
 
 		return $this->getEventsByUser( $userID, self::RES_LIMIT );
+	}
+
+	/**
+	 * @param ExistingEventRegistration[] $events
+	 * @return array
+	 */
+	protected function buildResultStructure( array $events ): array {
+		$filter = [];
+
+		foreach ( $events as $event ) {
+			$data = [
+				'event_id' => $event->getID(),
+				'event_name' => $event->getName()
+			];
+			if ( $event->getDeletionTimestamp() !== null ) {
+				$data['event_deleted'] = true;
+			}
+			$filter[] = $data;
+		}
+
+		return $filter;
 	}
 
 	/**

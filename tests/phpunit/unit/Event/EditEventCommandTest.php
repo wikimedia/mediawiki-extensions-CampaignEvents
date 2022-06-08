@@ -118,6 +118,27 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::doEditUnsafe
+	 */
+	public function testDoEditUnsafe__deletedRegistration() {
+		$id = 1;
+		$existingRegistration = $this->createMock( ExistingEventRegistration::class );
+		$existingRegistration->method( 'getID' )->willReturn( $id );
+		$existingRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
+		$newRegistration = $this->createMock( EventRegistration::class );
+		$newRegistration->method( 'getID' )->willReturn( $id );
+
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->expects( $this->once() )->method( 'getEventByPage' )->willReturn( $existingRegistration );
+		$status = $this->getCommand( null, null, $eventLookup )->doEditUnsafe(
+			$newRegistration,
+			$this->createMock( ICampaignsUser::class )
+		);
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( 'campaignevents-edit-registration-deleted', $status );
+	}
+
+	/**
 	 * @param EventRegistration $registration
 	 * @covers ::doEditIfAllowed
 	 * @covers ::authorizeEdit

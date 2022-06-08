@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
 use MWTimestamp;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand
@@ -50,6 +51,9 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	/**
+	 * @return ExistingEventRegistration&MockObject
+	 */
 	private function getValidRegistration(): ExistingEventRegistration {
 		$registration = $this->createMock( ExistingEventRegistration::class );
 		$registration->method( 'getEndTimestamp' )->willReturn( (string)( self::TEST_TIME + 1 ) );
@@ -97,6 +101,10 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$finishedRegistration->method( 'getEndTimestamp' )->willReturn( (string)( self::TEST_TIME - 1 ) );
 		$finishedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
 		yield 'Already finished' => [ $finishedRegistration, 'campaignevents-unregister-event-past' ];
+
+		$deletedRegistration = $this->getValidRegistration();
+		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
+		yield 'Deleted' => [ $deletedRegistration, 'campaignevents-unregister-registration-deleted' ];
 	}
 
 	/**

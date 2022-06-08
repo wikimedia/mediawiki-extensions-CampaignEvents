@@ -66,6 +66,9 @@ class UnregisterParticipantCommand {
 		ExistingEventRegistration $registration,
 		ICampaignsUser $performer
 	): StatusValue {
+		if ( $registration->getDeletionTimestamp() !== null ) {
+			return StatusValue::newFatal( 'campaignevents-unregister-registration-deleted' );
+		}
 		$endTS = $registration->getEndTimestamp();
 		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
 			return StatusValue::newFatal( 'campaignevents-unregister-event-past' );
