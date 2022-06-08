@@ -16,6 +16,7 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWikiUnitTestCase;
+use WikiMap;
 
 /**
  * @group Test
@@ -48,7 +49,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'id' => 1,
 			'name' => 'Some name',
 			'event_page' => $eventPageStr,
-			'event_page_wiki' => '',
+			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'chat_url' => 'https://some-chat.example.org',
 			'tracking_tool_name' => 'Tracking tool',
 			'tracking_tool_url' => 'https://tracking-tool.example.org',
