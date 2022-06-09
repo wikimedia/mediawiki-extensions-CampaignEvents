@@ -73,6 +73,26 @@
 			"styles": [
 				"EventsPager.less"
 			]
+		},
+		"ext.campaignEvents.specialmyevents.styles": {
+			"styles": [
+				"SpecialMyEvents.less"
+			]
+		},
+		"ext.campaignEvents.specialmyevents": {
+			"localBasePath": "resources/ext.campaignEvents.specialmyevents",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialmyevents",
+			"packageFiles": [
+				"SpecialMyEvents.js",
+				"FilterEventsWidget.js"
+			],
+			"messages": [
+				"campaignevents-myevents-filter-btn-label"
+			],
+			"dependencies": [
+				"oojs-ui-widgets",
+				"oojs-ui.styles.icons-interactions"
+			]
 		}
 	},
 	"RestRoutes": [
