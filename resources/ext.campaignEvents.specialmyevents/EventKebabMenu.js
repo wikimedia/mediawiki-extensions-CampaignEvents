@@ -177,7 +177,7 @@
 							start_time: data.start_time,
 							end_time: data.end_time,
 							online_meeting: data.online_meeting,
-							physical_meeting: data.physical_meeting,
+							inperson_meeting: data.inperson_meeting,
 							meeting_url: data.meeting_url,
 							meeting_country: data.meeting_country,
 							meeting_address: data.meeting_address

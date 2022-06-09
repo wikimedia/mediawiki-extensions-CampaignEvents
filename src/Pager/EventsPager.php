@@ -199,10 +199,10 @@ class EventsPager extends TablePager {
 				$meetingType = EventStore::getMeetingTypeFromDBVal( $this->mCurrentRow->event_meeting_type );
 				if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE ) {
 					$msgKey = 'campaignevents-eventslist-location-online';
-				} elseif ( $meetingType === EventRegistration::MEETING_TYPE_PHYSICAL ) {
-					$msgKey = 'campaignevents-eventslist-location-physical';
-				} elseif ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL ) {
-					$msgKey = 'campaignevents-eventslist-location-online-and-physical';
+				} elseif ( $meetingType === EventRegistration::MEETING_TYPE_IN_PERSON ) {
+					$msgKey = 'campaignevents-eventslist-location-in-person';
+				} elseif ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON ) {
+					$msgKey = 'campaignevents-eventslist-location-online-and-in-person';
 				} else {
 					throw new LogicException( "Unexpected meeting type: $meetingType" );
 				}

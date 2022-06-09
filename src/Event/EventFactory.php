@@ -125,14 +125,14 @@ class EventFactory {
 			}
 		}
 
-		if ( $meetingType & EventRegistration::MEETING_TYPE_PHYSICAL ) {
+		if ( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) {
 			if ( $meetingCountry === null ) {
-				$res->error( 'campaignevents-error-physical-no-country' );
+				$res->error( 'campaignevents-error-in-person-no-country' );
 			} else {
 				$meetingCountry = trim( $meetingCountry );
 			}
 			if ( $meetingAddress === null ) {
-				$res->error( 'campaignevents-error-physical-no-address' );
+				$res->error( 'campaignevents-error-in-person-no-address' );
 			} else {
 				$meetingAddress = trim( $meetingAddress );
 			}

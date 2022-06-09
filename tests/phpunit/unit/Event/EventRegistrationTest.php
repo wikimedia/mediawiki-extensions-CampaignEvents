@@ -26,7 +26,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'start' => '1654000000',
 			'end' => '1654000001',
 			'type' => EventRegistration::TYPE_GENERIC,
-			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
+			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'country' => 'Some country',
 			'address' => 'Some address',
@@ -90,8 +90,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 
 	public function provideInvalidDataForInPersonMeetings(): Generator {
 		$types = [
-			'In-person only' => EventRegistration::MEETING_TYPE_PHYSICAL,
-			'Online and in-person' => EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
+			'In-person only' => EventRegistration::MEETING_TYPE_IN_PERSON,
+			'Online and in-person' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 		];
 		$getArgsWithData = function ( array $data ): array {
 			return array_values( array_replace( $this->getValidConstructorArgs(), $data ) );

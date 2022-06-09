@@ -147,9 +147,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'flatlist' => true,
 			'options-messages' => [
 				'campaignevents-edit-field-type-online' => EventRegistration::MEETING_TYPE_ONLINE,
-				'campaignevents-edit-field-type-physical' => EventRegistration::MEETING_TYPE_PHYSICAL,
-				'campaignevents-edit-field-type-online-and-physical' =>
-					EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL
+				'campaignevents-edit-field-type-in-person' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'campaignevents-edit-field-type-online-and-in-person' =>
+					EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON
 			],
 			'default' => $this->event ? $this->event->getMeetingType() : null,
 			'required' => true,
@@ -158,7 +158,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventMeetingURL'] = [
 			'type' => 'url',
 			'label-message' => 'campaignevents-edit-field-meeting-url',
-			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_PHYSICAL ],
+			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_IN_PERSON ],
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
 		];
 		$formFields['EventMeetingCountry'] = [

@@ -107,8 +107,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		if ( $body['online_meeting'] ) {
 			$meetingType |= EventRegistration::MEETING_TYPE_ONLINE;
 		}
-		if ( $body['physical_meeting'] ) {
-			$meetingType |= EventRegistration::MEETING_TYPE_PHYSICAL;
+		if ( $body['inperson_meeting'] ) {
+			$meetingType |= EventRegistration::MEETING_TYPE_IN_PERSON;
 		}
 
 		return $this->eventFactory->newEvent(

@@ -58,13 +58,13 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'end_time' => '20220220200222',
 			'type' => EventRegistration::TYPE_GENERIC,
 			'online_meeting' => true,
-			'physical_meeting' => true,
+			'inperson_meeting' => true,
 			'meeting_url' => 'https://meeting-url.example.org',
 			'meeting_country' => 'My country',
 			'meeting_address' => 'My address 123',
 		];
 		$meetingType = ( $eventData['online_meeting'] ? EventRegistration::MEETING_TYPE_ONLINE : 0 )
-			| ( $eventData['physical_meeting'] ? EventRegistration::MEETING_TYPE_PHYSICAL : 0 );
+			| ( $eventData['inperson_meeting'] ? EventRegistration::MEETING_TYPE_IN_PERSON : 0 );
 		$registration = new ExistingEventRegistration(
 			$eventData['id'],
 			$eventData['name'],

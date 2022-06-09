@@ -25,7 +25,7 @@ trait EditEventRegistrationHandlerTestTrait {
 		'end_time' => '20220308150000',
 		'type' => EventRegistration::TYPE_GENERIC,
 		'online_meeting' => true,
-		'physical_meeting' => true,
+		'inperson_meeting' => true,
 		'meeting_url' => 'https://meetingurl.example.org',
 		'meeting_country' => 'Country',
 		'meeting_address' => 'Address',

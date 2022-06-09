@@ -57,7 +57,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			// TODO MVP: Re-add this
 			// 'type' => $registration->getType(),
 			'online_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) !== 0,
-			'physical_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_PHYSICAL ) !== 0,
+			'inperson_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_IN_PERSON ) !== 0,
 			'meeting_url' => $registration->getMeetingURL(),
 			'meeting_country' => $registration->getMeetingCountry(),
 			'meeting_address' => $registration->getMeetingAddress(),

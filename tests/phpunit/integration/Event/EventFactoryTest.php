@@ -38,7 +38,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'start' => '20220308120000',
 		'end' => '20220308150000',
 		'type' => EventRegistration::TYPE_GENERIC,
-		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL,
+		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',
 		'address' => 'Address',
@@ -245,31 +245,31 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 				'meetingurl' => 'Not a URL'
 			] )
 		];
-		yield 'Physical meeting without country' => [
-			'campaignevents-error-physical-no-country',
+		yield 'In person meeting without country' => [
+			'campaignevents-error-in-person-no-country',
 			$this->getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_PHYSICAL,
+				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'country' => null
 			] )
 		];
-		yield 'Physical meeting without address' => [
-			'campaignevents-error-physical-no-address',
+		yield 'In person meeting without address' => [
+			'campaignevents-error-in-person-no-address',
 			$this->getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_PHYSICAL,
+				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'address' => null
 			] )
 		];
-		yield 'Physical meeting with invalid country' => [
+		yield 'In person meeting with invalid country' => [
 			'campaignevents-error-invalid-country',
 			$this->getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_PHYSICAL,
+				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'country' => ''
 			] )
 		];
-		yield 'Physical meeting with invalid address' => [
+		yield 'In person meeting with invalid address' => [
 			'campaignevents-error-invalid-address',
 			$this->getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_PHYSICAL,
+				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'address' => ''
 			] )
 		];

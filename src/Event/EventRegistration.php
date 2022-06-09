@@ -19,12 +19,12 @@ class EventRegistration {
 	public const VALID_TYPES = [ self::TYPE_GENERIC ];
 
 	public const MEETING_TYPE_ONLINE = 1 << 0;
-	public const MEETING_TYPE_PHYSICAL = 1 << 1;
-	public const MEETING_TYPE_ONLINE_AND_PHYSICAL = self::MEETING_TYPE_ONLINE | self::MEETING_TYPE_PHYSICAL;
+	public const MEETING_TYPE_IN_PERSON = 1 << 1;
+	public const MEETING_TYPE_ONLINE_AND_IN_PERSON = self::MEETING_TYPE_ONLINE | self::MEETING_TYPE_IN_PERSON;
 	public const VALID_MEETING_TYPES = [
 		self::MEETING_TYPE_ONLINE,
-		self::MEETING_TYPE_PHYSICAL,
-		self::MEETING_TYPE_ONLINE_AND_PHYSICAL
+		self::MEETING_TYPE_IN_PERSON,
+		self::MEETING_TYPE_ONLINE_AND_IN_PERSON
 	];
 
 	/** @var int|null */
@@ -81,8 +81,8 @@ class EventRegistration {
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
-	 * @param string|null $meetingCountry Must be a string if $meetingType includes self::MEETING_TYPE_PHYSICAL
-	 * @param string|null $meetingAddress Must be a string if $meetingType includes self::MEETING_TYPE_PHYSICAL
+	 * @param string|null $meetingCountry Must be a string if $meetingType includes self::MEETING_TYPE_IN_PERSON
+	 * @param string|null $meetingAddress Must be a string if $meetingType includes self::MEETING_TYPE_IN_PERSON
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
@@ -119,7 +119,7 @@ class EventRegistration {
 		$this->meetingType = $meetingType;
 		$this->meetingURL = $meetingURL;
 		if (
-			( $meetingType & self::MEETING_TYPE_PHYSICAL ) &&
+			( $meetingType & self::MEETING_TYPE_IN_PERSON ) &&
 			( $meetingCountry === null || $meetingAddress === null )
 		) {
 			throw new InvalidArgumentException( 'Meeting country and address must not be null for in-person events' );
@@ -216,14 +216,14 @@ class EventRegistration {
 	}
 
 	/**
-	 * @return string|null Guaranteed to be a string if the meeting type includes self::MEETING_TYPE_PHYSICAL
+	 * @return string|null Guaranteed to be a string if the meeting type includes self::MEETING_TYPE_IN_PERSON
 	 */
 	public function getMeetingCountry(): ?string {
 		return $this->meetingCountry;
 	}
 
 	/**
-	 * @return string|null Guaranteed to be a string if the meeting type includes self::MEETING_TYPE_PHYSICAL
+	 * @return string|null Guaranteed to be a string if the meeting type includes self::MEETING_TYPE_IN_PERSON
 	 */
 	public function getMeetingAddress(): ?string {
 		return $this->meetingAddress;

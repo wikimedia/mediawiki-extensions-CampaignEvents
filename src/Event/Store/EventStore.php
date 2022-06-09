@@ -27,7 +27,7 @@ class EventStore implements IEventStore, IEventLookup {
 	];
 
 	private const EVENT_MEETING_TYPE_MAP = [
-		EventRegistration::MEETING_TYPE_PHYSICAL => 1,
+		EventRegistration::MEETING_TYPE_IN_PERSON => 1,
 		EventRegistration::MEETING_TYPE_ONLINE => 2,
 	];
 

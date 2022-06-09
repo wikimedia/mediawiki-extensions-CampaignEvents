@@ -299,16 +299,16 @@ class EventPageDecorator {
 		$items = [];
 
 		$meetingType = $registration->getMeetingType();
-		if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE_AND_PHYSICAL ) {
+		if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON ) {
 			$locationContent = $msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-header-type-online-and-physical' )
+				MessageValue::new( 'campaignevents-eventpage-header-type-online-and-in-person' )
 			);
 		} elseif ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) {
 			$locationContent = $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-type-online' )
 			);
 		} else {
-			// Physical event
+			// In-person event
 			$address = $registration->getMeetingAddress();
 			'@phan-var string $address';
 			$locationContent = new Tag( 'div' );
@@ -480,7 +480,7 @@ class EventPageDecorator {
 			}
 			$onlineLocationElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
 		}
-		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_PHYSICAL ) {
+		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_IN_PERSON ) {
 			$address = $registration->getMeetingAddress() . "\n" . $registration->getMeetingCountry();
 			'@phan-var string $address';
 			$addressElement = new Tag( 'p' );
@@ -490,10 +490,10 @@ class EventPageDecorator {
 			] );
 			$addressElement->appendContent( $address );
 			if ( $onlineLocationElements ) {
-				$physicalLabel = ( new Tag( 'h5' ) )->appendContent( $msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-physical-label' )
+				$inPersonLabel = ( new Tag( 'h5' ) )->appendContent( $msgFormatter->format(
+					MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
 				) );
-				$locationElements[] = $physicalLabel;
+				$locationElements[] = $inPersonLabel;
 				$locationElements[] = $addressElement;
 				$locationElements = array_merge( $locationElements, $onlineLocationElements );
 			} else {
