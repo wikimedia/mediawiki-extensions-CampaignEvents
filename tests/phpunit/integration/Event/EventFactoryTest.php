@@ -11,23 +11,25 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
-use MediaWikiUnitTestCase;
+use MediaWikiIntegrationTestCase;
 use MWTimestamp;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventFactory
  * @covers ::__construct
+ * @todo Make this a unit test once it's possible to use namespace constants (T310375)
  */
-class EventFactoryTest extends MediaWikiUnitTestCase {
+class EventFactoryTest extends MediaWikiIntegrationTestCase {
 
 	// Feb 27, 2022
 	private const TEST_TIME = 1646000000;
 	private const VALID_DEFAULT_DATA = [
 		'id' => 42,
-		'page' => 'Some event page title',
+		'page' => 'Event:Some event page title',
 		'chat' => 'https://chaturl.example.org',
 		'trackingname' => 'Tracking tool',
 		'trackingurl' => 'https://trackingtool.example.org',
@@ -56,8 +58,14 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	private function getEventFactory(
 		CampaignsPageFactory $campaignsPageFactory = null
 	): EventFactory {
+		if ( !$campaignsPageFactory ) {
+			$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
+			$page = $this->createMock( ICampaignsPage::class );
+			$page->method( 'getNamespace' )->willReturn( NS_EVENT );
+			$campaignsPageFactory->method( 'newLocalExistingPageFromString' )->willReturn( $page );
+		}
 		return new EventFactory(
-			$campaignsPageFactory ?? $this->createMock( CampaignsPageFactory::class ),
+			$campaignsPageFactory,
 			$this->createMock( CampaignsPageFormatter::class )
 		);
 	}
@@ -80,16 +88,18 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		CampaignsPageFactory $campaignsPageFactory = null
 	) {
 		$factory = $this->getEventFactory( $campaignsPageFactory );
-		$event = null;
 		$ex = null;
 
 		try {
-			$event = $factory->newEvent( ...$factoryArgs );
+			$factory->newEvent( ...$factoryArgs );
 		} catch ( InvalidEventDataException $ex ) {
 		}
 
 		if ( !$expectedErrorKey ) {
-			$this->assertInstanceOf( EventRegistration::class, $event, 'Should create or update an event' );
+			$this->assertNull(
+				$ex,
+				'Should have succeeded, got exception with status: ' . ( $ex ? $ex->getStatus() : '' )
+			);
 		} else {
 			$this->assertNotNull( $ex, 'Should throw an exception' );
 			$statusErrorKeys = array_column( $ex->getStatus()->getErrors(), 'message' );
@@ -139,6 +149,20 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-page-not-found',
 			$this->getTestDataWithDefault( [ 'page' => $nonExistingPageStr ] ),
 			$nonExistingCampaignsPageFactory
+		];
+
+		$nonEventPageStr = 'This page is not in the event namespace';
+		$nonEventPageObj = $this->createMock( ICampaignsPage::class );
+		$nonEventPageObj->method( 'getNamespace' )->willReturn( NS_MAIN );
+		$nonEventCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
+		$nonEventCampaignsPageFactory->expects( $this->atLeastOnce() )
+			->method( 'newLocalExistingPageFromString' )
+			->with( $nonEventPageStr )
+			->willReturn( $nonEventPageObj );
+		yield 'Page not in the event namespace' => [
+			'campaignevents-error-page-not-event-namespace',
+			$this->getTestDataWithDefault( [ 'page' => $nonEventPageStr ] ),
+			$nonEventCampaignsPageFactory
 		];
 
 		yield 'Invalid chat URL' => [

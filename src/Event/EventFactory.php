@@ -215,6 +215,10 @@ class EventFactory {
 			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );
 		}
 
+		if ( $campaignsPage->getNamespace() !== NS_EVENT ) {
+			return StatusValue::newFatal( 'campaignevents-error-page-not-event-namespace' );
+		}
+
 		return StatusValue::newGood( $campaignsPage );
 	}
 

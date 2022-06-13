@@ -14,6 +14,7 @@
 	"campaignevents-error-invalid-title": "Error message used when the given event page title is invalid.\nParameters:\n* $1 - The reason why the title is not valid",
 	"campaignevents-error-invalid-title-interwiki": "Error message used when the given event page title has an interwiki prefix.",
 	"campaignevents-error-page-not-found": "Error message used when the given event page does not exist.",
+	"campaignevents-error-page-not-event-namespace": "Error message used when the given event page is not in the {{ns:event}} namespace.",
 	"campaignevents-error-invalid-chat-url": "Error message used when the given chat URL is invalid.",
 	"campaignevents-error-tracking-tool-name-without-url": "Error message used when a tracking tool name is given, but not a tracking tool URL.",
 	"campaignevents-error-tracking-tool-url-without-name": "Error message used when a tracking tool URL is given, but not a tracking tool name.",
