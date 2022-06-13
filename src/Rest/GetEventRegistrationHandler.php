@@ -47,12 +47,15 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'event_page' => $page->getPrefixedText(),
 			'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
 			'chat_url' => $registration->getChatURL(),
+			/* TODO MVP: Re-add these
 			'tracking_tool_name' => $registration->getTrackingToolName(),
 			'tracking_tool_url' => $registration->getTrackingToolURL(),
+			*/
 			'status' => $registration->getStatus(),
 			'start_time' => wfTimestamp( TS_MW, $registration->getStartTimestamp() ),
 			'end_time' => wfTimestamp( TS_MW, $registration->getEndTimestamp() ),
-			'type' => $registration->getType(),
+			// TODO MVP: Re-add this
+			// 'type' => $registration->getType(),
 			'online_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) !== 0,
 			'physical_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_PHYSICAL ) !== 0,
 			'meeting_url' => $registration->getMeetingURL(),

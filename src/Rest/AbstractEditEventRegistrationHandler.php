@@ -99,12 +99,14 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				$eventID,
 				$body['event_page'],
 				$body['chat_url'],
-				$body['tracking_tool_name'],
-				$body['tracking_tool_url'],
+				// TODO MVP Add these
+				null,
+				null,
 				$this->getEventStatus(),
 				$body['start_time'],
 				$body['end_time'],
-				$body['type'],
+				// TODO MVP Get this from the request body
+				EventRegistration::TYPE_GENERIC,
 				$meetingType,
 				$body['meeting_url'],
 				$body['meeting_country'],
@@ -162,6 +164,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
+			/* TODO MVP: Re-add these
 			'tracking_tool_name' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
@@ -170,6 +173,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
+			*/
 			'start_time' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',
@@ -182,11 +186,13 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS_MW,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
+			/* TODO MVP: Re-add this
 			'type' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => EventRegistration::VALID_TYPES,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
+			*/
 			'online_meeting' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
