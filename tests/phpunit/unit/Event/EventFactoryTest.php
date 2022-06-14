@@ -269,6 +269,54 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'Invalid deletion' => [ $this->getTestDataWithDefault( [ 'deletion' => 'foobar' ] ) ];
 	}
 
+	/**
+	 * @param string $url
+	 * @param bool $expectedValid
+	 * @covers ::newEvent
+	 * @covers ::isValidURL
+	 * @dataProvider provideURLs
+	 */
+	public function testURLValidation( string $url, bool $expectedValid ) {
+		$factory = $this->getEventFactory();
+		$args = $this->getTestDataWithDefault( [ 'chat' => $url ] );
+		$ex = null;
+
+		try {
+			$factory->newEvent( ...$args );
+		} catch ( InvalidEventDataException $ex ) {
+		}
+
+		if ( $expectedValid ) {
+			$this->assertNull(
+				$ex,
+				'Should have succeeded; got exception with status: ' . ( $ex ? $ex->getStatus() : '' )
+			);
+		} else {
+			$this->assertNotNull( $ex, 'Should throw an exception' );
+			$statusErrorKeys = array_column( $ex->getStatus()->getErrors(), 'message' );
+			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
+			$this->assertSame(
+				'campaignevents-error-invalid-chat-url',
+				$statusErrorKeys[0],
+				'Error message should match'
+			);
+		}
+	}
+
+	public function provideURLs(): array {
+		return [
+			'Random characters' => [ '24hà°(W!^§*', false ],
+			'Invalid protocol' => [ 'foo://abc.org', false ],
+			'Invalid protocol 2' => [ 'iaergboyuiberg://abc.org', false ],
+			'Invalid characters with HTTPS' => [ 'https://$%&/()=', false ],
+			'Invalid characters with invalid protocol' => [ "htp://f('_%$&...)", false ],
+			'Invalid characters with relative protocol' => [ "//f('_%$&...)", false ],
+			'Valid, HTTP' => [ "http://example.org", true ],
+			'Valid, HTTPS' => [ "https://example.org", true ],
+			'Valid, relative protocol' => [ "//example.org", true ],
+		];
+	}
+
 	private function getTestDataWithDefault( array $specificData = [] ): array {
 		return array_values( array_replace( self::VALID_DEFAULT_DATA, $specificData ) );
 	}
