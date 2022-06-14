@@ -35,6 +35,13 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	/**
 	 * @inheritDoc
 	 */
+	public function selectField( string $table, string $field, array $conds = [], $options = [], $join_conds = [] ) {
+		return $this->db->selectField( $table, $field, $conds, wfGetCaller(), $options, $join_conds );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function selectFieldValues(
 		$table,
 		string $field,

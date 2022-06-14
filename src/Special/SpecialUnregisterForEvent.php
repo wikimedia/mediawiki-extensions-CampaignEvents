@@ -12,6 +12,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand
 use Status;
 
 class SpecialUnregisterForEvent extends ChangeRegistrationSpecialPageBase {
+	public const PAGE_NAME = 'UnregisterForEvent';
+
 	/** @var UnregisterParticipantCommand */
 	private $unregisterParticipantCommand;
 	/** @var ParticipantsStore */
@@ -27,7 +29,7 @@ class SpecialUnregisterForEvent extends ChangeRegistrationSpecialPageBase {
 		UnregisterParticipantCommand $unregisterParticipantCommand,
 		ParticipantsStore $participantsStore
 	) {
-		parent::__construct( 'UnregisterForEvent', $eventLookup );
+		parent::__construct( self::PAGE_NAME, $eventLookup );
 		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
 		$this->participantsStore = $participantsStore;
 	}

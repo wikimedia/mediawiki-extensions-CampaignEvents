@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
+	public const PAGE_NAME = 'EditEventRegistration';
 
 	/** @var PermissionChecker */
 	private $permissionChecker;
@@ -30,7 +31,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		PermissionChecker $permissionChecker
 	) {
 		parent::__construct(
-			'EditEventRegistration',
+			self::PAGE_NAME,
 			'',
 			$eventLookup,
 			$eventFactory,

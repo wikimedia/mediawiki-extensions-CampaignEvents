@@ -1,0 +1,35 @@
+@import 'mediawiki.mixins.less';
+
+.ext-campaignevents-eventpage-header {
+	.flex-display();
+	align-items: center;
+
+	> *:not( :last-child ) {
+		// This is equivalent to using gap: 1em.
+		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
+		margin-right: 1em;
+	}
+}
+
+.ext-campaignevents-eventpage-info-widget-content {
+	margin-left: 2em;
+	display: block;
+}
+
+.ext-campaignevents-eventpage-action-element {
+	margin-left: auto;
+}
+
+.ext-campaignevents-eventpage-unregister-layout.oo-ui-horizontalLayout > .oo-ui-widget {
+	/* Remove margin set by HorizontalLayout */
+	margin-bottom: 0;
+}
+
+#ext-campaignEvents-detailsDialog-content { // stylelint-disable-line selector-max-id
+	display: none;
+}
+
+.ext-campaignevents-eventpage-unregister-layout.ext-campaignevents-eventpage-hidden-action,
+.ext-campaignevents-eventpage-register-btn.ext-campaignevents-eventpage-hidden-action {
+	display: none;
+}

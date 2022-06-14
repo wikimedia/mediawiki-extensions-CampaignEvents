@@ -77,6 +77,22 @@ class OrganizersStore {
 	}
 
 	/**
+	 * Returns the number of organizers of an event
+	 * @param int $eventID
+	 * @return int
+	 */
+	public function getOrganizerCountForEvent( int $eventID ): int {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$ret = $dbr->selectField(
+			'ce_organizers',
+			'COUNT(*)',
+			[ 'ceo_event_id' => $eventID ]
+		);
+		// Intentionally casting false to int if no rows were found.
+		return (int)$ret;
+	}
+
+	/**
 	 * @param int $eventID
 	 * @param ICampaignsUser $user
 	 * @param string[] $roles Roles::ROLE_* constants

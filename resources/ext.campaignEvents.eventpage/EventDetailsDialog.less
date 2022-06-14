@@ -1,0 +1,55 @@
+@import 'mediawiki.mixins.less';
+
+.ext-campaignevents-detailsdialog-body-container {
+	.flex-display();
+	justify-content: space-between;
+	margin-right: 1.5em;
+}
+
+.ext-campaignevents-detailsdialog-organizeranddetails-container {
+	.flex-display();
+	flex-direction: column;
+
+	> *:not( :last-child ) {
+		// This is equivalent to using gap: 2em.
+		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
+		margin-bottom: 2em;
+	}
+}
+
+.ext-campaignevents-eventpage-detailsdialog {
+	#ext-campaignEvents-detailsDialog-content { // stylelint-disable-line selector-max-id
+		display: unset;
+	}
+
+	.oo-ui-window-foot {
+		padding: 1em;
+
+		.ext-campaignevents-eventpage-action-element {
+			float: right;
+		}
+	}
+}
+
+.ext-campaignevents-eventpage-details-widget-header {
+	position: relative; /* The icon uses position:absolute, which makes positioning hard */
+	opacity: 0.67;
+
+	> .oo-ui-labelElement-label {
+		margin-left: 2.5em;
+		font-weight: bold;
+	}
+}
+
+.ext-campaignevents-eventpage-details-widget > .ext-campaignevents-eventpage-details-widget-content {
+	margin-top: 0.5em;
+	margin-left: 2.5em;
+}
+
+.ext-campaignevents-eventpage-details-widget-content ul {
+	margin-left: 1em;
+}
+
+.ext-campaignevents-eventpage-details-address {
+	white-space: pre-wrap;
+}

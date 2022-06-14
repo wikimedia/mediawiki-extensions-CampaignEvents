@@ -20,4 +20,9 @@ interface ICampaignsUser {
 	 * @return bool
 	 */
 	public function isRegistered(): bool;
+
+	/**
+	 * @return string
+	 */
+	public function getName(): string;
 }

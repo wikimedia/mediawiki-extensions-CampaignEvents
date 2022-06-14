@@ -180,4 +180,25 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		$limit = 1;
 		$this->assertCount( $limit, $store->getEventOrganizers( 1, $limit ) );
 	}
+
+	/**
+	 * @param int $event
+	 * @param int $expected
+	 * @dataProvider provideOrganizerCount
+	 * @covers ::getOrganizerCountForEvent
+	 */
+	public function testGetOrganizerCountForEvent( int $event, int $expected ) {
+		$store = new OrganizersStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$this->createMock( CampaignsCentralUserLookup::class )
+		);
+		$this->assertSame( $expected, $store->getOrganizerCountForEvent( $event ) );
+	}
+
+	public function provideOrganizerCount(): array {
+		return [
+			'Two organizers' => [ 1, 2 ],
+			'No organizers' => [ 1000, 0 ],
+		];
+	}
 }
