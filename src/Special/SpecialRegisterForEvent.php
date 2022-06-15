@@ -9,6 +9,7 @@ use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
+use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
 use Status;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
@@ -18,20 +19,25 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private $registerParticipantCommand;
 	/** @var ParticipantsStore */
 	private $participantsStore;
+	/** @var PolicyMessageLookup */
+	private $policyMessageLookup;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
 	 * @param ParticipantsStore $participantsStore
+	 * @param PolicyMessageLookup $policyMessageLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		RegisterParticipantCommand $registerParticipantCommand,
-		ParticipantsStore $participantsStore
+		ParticipantsStore $participantsStore,
+		PolicyMessageLookup $policyMessageLookup
 	) {
 		parent::__construct( self::PAGE_NAME, $eventLookup );
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->participantsStore = $participantsStore;
+		$this->policyMessageLookup = $policyMessageLookup;
 	}
 
 	/**
@@ -46,12 +52,21 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	protected function getFormFields(): array {
-		return [
-			'Info' => [
+		$fields = [
+			'Confirm' => [
 				'type' => 'info',
 				'default' => $this->msg( 'campaignevents-register-confirmation-text' )->text(),
 			],
 		];
+		$policyMsg = $this->policyMessageLookup->getPolicyMessage();
+		if ( $policyMsg !== null ) {
+			$fields['Policy'] = [
+				'type' => 'info',
+				'raw' => true,
+				'default' => $this->msg( $policyMsg )->parse(),
+			];
+		}
+		return $fields;
 	}
 
 	/**
