@@ -143,5 +143,7 @@
 	"campaignevents-eventpage-unregister-confirmation-title": "Title of a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-body": "Content of a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
-	"campaignevents-eventpage-unregister-confirmation-dismiss": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event."
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
+	"campaignevents-eventpage-register-confirmation-cancel": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event.",
+	"campaignevents-eventpage-register-confirmation-confirm": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event."
 }

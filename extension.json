@@ -110,7 +110,12 @@
 			"packageFiles": [
 				"index.js",
 				"ConfirmUnregistrationDialog.js",
-				"EventDetailsDialog.js"
+				"EventDetailsDialog.js",
+				"PolicyAcknowledgementDialog.js",
+				{
+					"name": "data.json",
+					"callback": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\ResourceLoaderCallbacks::getEventPageData"
+				}
 			],
 			"styles": [
 				"EventDetailsDialog.less"
@@ -122,7 +127,9 @@
 				"campaignevents-eventpage-unregister-confirmation-title",
 				"campaignevents-eventpage-unregister-confirmation-body",
 				"campaignevents-eventpage-unregister-confirmation-confirm",
-				"campaignevents-eventpage-unregister-confirmation-dismiss"
+				"campaignevents-eventpage-unregister-confirmation-dismiss",
+				"campaignevents-eventpage-register-confirmation-cancel",
+				"campaignevents-eventpage-register-confirmation-confirm"
 			],
 			"dependencies": [
 				"mediawiki.api",
