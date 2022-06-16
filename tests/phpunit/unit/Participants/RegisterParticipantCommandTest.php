@@ -81,6 +81,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @param ExistingEventRegistration $registration
 	 * @param string $errMsg
 	 * @covers ::registerIfAllowed
+	 * @covers ::checkIsRegistrationAllowed
 	 * @covers ::registerUnsafe
 	 * @dataProvider provideInvalidRegistrationsAndErrors
 	 */
@@ -118,6 +119,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @param bool $expectedModified
 	 * @covers ::registerIfAllowed
 	 * @covers ::authorizeRegistration
+	 * @covers ::checkIsRegistrationAllowed
 	 * @covers ::registerUnsafe
 	 * @dataProvider provideStoreAndModified
 	 */
