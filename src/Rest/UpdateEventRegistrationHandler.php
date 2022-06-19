@@ -78,7 +78,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @inheritDoc
 	 */
 	protected function checkPermissions( ICampaignsUser $user ): void {
-		// TODO Determine if we need to do something here
+		// Nothing to check now. Deeper check will happen in EditEventCommand.
 	}
 
 	/**
