@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsModule;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsParticipantsModule;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -33,16 +34,19 @@ class SpecialEventDetails extends SpecialPage {
 	private $participantsStore;
 	/** @var OrganizersStore */
 	private $organizersStore;
-	/** @var IMessageFormatterFactory */
-	private $messageFormatterFactory;
 	/** @var PageURLResolver */
 	private $pageURLResolver;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
+	/** @var IMessageFormatterFactory */
+	private $messageFormatterFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
 	 * @param PageURLResolver $pageURLResolver
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 */
 	public function __construct(
@@ -50,6 +54,7 @@ class SpecialEventDetails extends SpecialPage {
 		ParticipantsStore $participantsStore,
 		OrganizersStore $organizersStore,
 		PageURLResolver $pageURLResolver,
+		CampaignsCentralUserLookup $centralUserLookup,
 		IMessageFormatterFactory $messageFormatterFactory
 	) {
 		parent::__construct( self::PAGE_NAME );
@@ -57,6 +62,7 @@ class SpecialEventDetails extends SpecialPage {
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
 		$this->pageURLResolver = $pageURLResolver;
+		$this->centralUserLookup = $centralUserLookup;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 	}
 
@@ -114,6 +120,10 @@ class SpecialEventDetails extends SpecialPage {
 		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
+		$out->addJsConfigVars( [
+			'wgCampaignEventsEventID' => $eventID,
+			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
+		] );
 		$out->setPageTitle(
 			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-event' )
@@ -144,7 +154,8 @@ class SpecialEventDetails extends SpecialPage {
 				$participants,
 				$totalParticipants,
 				$msgFormatter,
-				$isOrganizer
+				$isOrganizer,
+				$this->centralUserLookup
 			)
 		);
 

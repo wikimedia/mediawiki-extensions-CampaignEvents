@@ -49,14 +49,5 @@
 		return RemoveParticipantDialog.super.prototype.getSetupProcess.call( this, data );
 	};
 
-	/** @inheritDoc **/
-	RemoveParticipantDialog.prototype.getActionProcess = function ( action ) {
-		if ( action === 'remove' ) {
-			// add here the code to remove the selected participant(s)
-			// this will be done in another patch
-			// see https://phabricator.wikimedia.org/T309981
-		}
-		return RemoveParticipantDialog.super.prototype.getActionProcess.call( this, action );
-	};
 	module.exports = RemoveParticipantDialog;
 }() );

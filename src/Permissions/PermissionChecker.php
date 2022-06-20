@@ -102,4 +102,14 @@ class PermissionChecker {
 	public function userCanUnregisterForEvents( ICampaignsUser $user ): bool {
 		return $user->isRegistered();
 	}
+
+	/**
+	 * @param ICampaignsUser $user
+	 * @param int $registrationID
+	 * @return bool
+	 */
+	public function userCanRemoveParticipants( ICampaignsUser $user, int $registrationID ): bool {
+		return $user->isRegistered() && $this->organizersStore->isEventOrganizer( $registrationID, $user ) &&
+			!$this->userBlockChecker->isSitewideBlocked( $user );
+	}
 }

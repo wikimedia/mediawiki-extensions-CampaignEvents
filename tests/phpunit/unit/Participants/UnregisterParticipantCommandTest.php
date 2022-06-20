@@ -44,6 +44,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
 			$permChecker->method( 'userCanUnregisterForEvents' )->willReturn( true );
+			$permChecker->method( 'userCanRemoveParticipants' )->willReturn( true );
 		}
 		return new UnregisterParticipantCommand(
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
@@ -166,5 +167,79 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$closedEvent->method( 'getEndTimestamp' )->willReturn( (string)( self::TEST_TIME + 1 ) );
 		$status = $this->getCommand()->unregisterUnsafe( $closedEvent, $this->createMock( ICampaignsUser::class ) );
 		$this->assertStatusGood( $status );
+	}
+
+	/**
+	 * @covers ::removeParticipantsIfAllowed
+	 * @covers ::authorizeRemoveParticipants
+	 */
+	public function testDoRemoveParticipantsIfAllowed__permissionError() {
+		$permChecker = $this->createMock( PermissionChecker::class );
+		$permChecker->expects( $this->once() )->method( 'userCanRemoveParticipants' )->willReturn( false );
+
+		$status = $this->getCommand( null, $permChecker )->removeParticipantsIfAllowed(
+			$this->getValidRegistration(),
+			[],
+			$this->createMock( ICampaignsUser::class )
+		);
+		$this->assertInstanceOf( PermissionStatus::class, $status );
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( 'campaignevents-unregister-participants-permission-denied', $status );
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param string $expectedStatusMessage
+	 * @covers ::removeParticipantsIfAllowed
+	 * @covers ::authorizeRemoveParticipants
+	 * @covers ::removeParticipantsUnsafe
+	 * @dataProvider provideDoRemoveParticipantsIfAllowedError
+	 */
+	public function testDoRemoveParticipantsIfAllowed__error(
+		ExistingEventRegistration $registration,
+		string $expectedStatusMessage
+	) {
+		$status = $this->getCommand()->removeParticipantsIfAllowed(
+			$registration,
+			[],
+			$this->createMock( ICampaignsUser::class )
+		);
+
+		$this->assertNotInstanceOf( PermissionStatus::class, $status );
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( $expectedStatusMessage, $status );
+	}
+
+	public function provideDoRemoveParticipantsIfAllowedError(): Generator {
+		$pastRegistration = $this->createMock( ExistingEventRegistration::class );
+		$pastRegistration->method( 'getEndTimestamp' )->willReturn( (string)( self::TEST_TIME - 1 ) );
+		yield 'Registration in the past' => [
+			$pastRegistration,
+			'campaignevents-unregister-participants-past-registration'
+		];
+
+		$deletedRegistration = $this->getValidRegistration();
+		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
+		yield 'Registration deleted' => [
+			$deletedRegistration,
+			'campaignevents-unregister-participants-registration-deleted'
+		];
+	}
+
+	/**
+	 * @covers ::removeParticipantsIfAllowed
+	 * @covers ::authorizeRemoveParticipants
+	 * @covers ::removeParticipantsUnsafe
+	 */
+	public function testDoRemoveParticipantsIfAllowed__success() {
+		$status = $this->getCommand()->removeParticipantsIfAllowed(
+			$this->getValidRegistration(),
+			[],
+			$this->createMock( ICampaignsUser::class )
+		);
+
+		$this->assertNotInstanceOf( PermissionStatus::class, $status );
+		$this->assertStatusGood( $status );
+		$this->assertStatusOK( $status );
 	}
 }

@@ -26,26 +26,32 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @inheritDoc
 	 */
 	public function addDBData(): void {
-		$rows = [
-			[
-				'cep_event_id' => 1,
-				'cep_user_id' => 101,
-				'cep_registered_at' => '20220315120000',
-				'cep_unregistered_at' => null
-			],
-			[
-				'cep_event_id' => 1,
-				'cep_user_id' => 102,
-				'cep_registered_at' => '20220315120000',
-				'cep_unregistered_at' => '20220324120000'
-			],
-			[
-				'cep_event_id' => 1,
-				'cep_user_id' => 104,
-				'cep_registered_at' => '20220316120000',
-				'cep_unregistered_at' => null
-			],
-		];
+		$rows = [];
+		for ( $eventID = 1; $eventID < 4; $eventID++ ) {
+			$rows = array_merge(
+				$rows,
+				[
+					[
+						'cep_event_id' => $eventID,
+						'cep_user_id' => 101,
+						'cep_registered_at' => '20220315120000',
+						'cep_unregistered_at' => null
+					],
+					[
+						'cep_event_id' => $eventID,
+						'cep_user_id' => 102,
+						'cep_registered_at' => '20220315120000',
+						'cep_unregistered_at' => '20220324120000'
+					],
+					[
+						'cep_event_id' => $eventID,
+						'cep_user_id' => 104,
+						'cep_registered_at' => '20220316120000',
+						'cep_unregistered_at' => null
+					],
+				]
+			);
+		}
 		$this->db->insert( 'ce_participants', $rows );
 	}
 
@@ -98,7 +104,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function provideParticipantsToRemove(): Generator {
 		yield 'Actively registered' => [ 1, 101, true ];
-		yield 'Never registered' => [ 2, 101, false ];
+		yield 'Never registered' => [ 4, 101, false ];
 		yield 'Already deleted' => [ 1, 102, false ];
 	}
 
@@ -245,5 +251,32 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			'Two participant (and a deleted one)' => [ 1, 2 ],
 			'No participants' => [ 1000, 0 ],
 		];
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param array|null $userIDs
+	 * @param int $expected
+	 * @covers ::removeParticipantsFromEvent
+	 * @dataProvider provideParticipantsToRemoveFromEvent
+	 */
+	public function testRemoveParticipantsFromEvent(
+		int $eventID,
+		?array $userIDs,
+		int $expected
+	) {
+		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$store = new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			$userLookup
+		);
+		$this->assertSame( $expected, $store->removeParticipantsFromEvent( $eventID, $userIDs ) );
+	}
+
+	public function provideParticipantsToRemoveFromEvent(): Generator {
+		yield 'Remove two participants' => [ 2, [ 101, 104 ], 2 ];
+		yield 'Remove all participants' => [ 3, null, 2 ];
+		yield 'Empty user ids' => [ 3, [], 0 ];
+		yield 'Remove one participant' => [ 1, [ 101 ], 1 ];
 	}
 }

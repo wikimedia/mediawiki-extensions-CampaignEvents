@@ -195,5 +195,12 @@
 	"campaignevents-event-details-event": "Description of [[Special:EventDetails]] used when viewing a specific event.\nParameters:\n* $1 - Name of the event",
 	"campaignevents-event-details-not-found": "Error message on [[Special:EventDetails]], used when the event ID provided by the user does not correspond to an existing event.",
 	"campaignevents-event-details-online-link-not-available": "Message used on [[Special:EventDetails]] when the event is online and there is no meeting link. Parameters:\n* $1 - The number of organizers, for PLURAL support.",
-	"campaignevents-event-details-dates-label": "Label used on [[Special:EventDetails]]. This label describes the start and end time of the event, and is also used for the \"title\" attribute of the field icon."
+	"campaignevents-event-details-dates-label": "Label used on [[Special:EventDetails]]. This label describes the start and end time of the event, and is also used for the \"title\" attribute of the field icon.",
+	"campaignevents-event-details-remove-participant-notification": "A notification shown on [[Special:EventDetails]] after removing participants. Parameters:\n* $1 - The number of removed participants, for PLURAL support.",
+	"campaignevents-event-details-remove-all-participant-notification": "A notification on [[Special:EventDetails]] when the organizer remove all participants",
+	"campaignevents-unregister-participants-permission-denied": "Message in case the user is not allowed to remove participants",
+	"campaignevents-unregister-participants-registration-deleted": "Message in case the specified event registration is deleted",
+	"campaignevents-unregister-participants-past-registration": "Message in case the user tries to remove participants from events in the past",
+	"campaignevents-event-details-remove-participant-notification-error": "Message shown on [[Special:EventDetails]] if there is an error when trying to remove participants",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "An error message shown if the parameter 'user_ids' is an empty list of user ids, when trying to remove participants"
 }
