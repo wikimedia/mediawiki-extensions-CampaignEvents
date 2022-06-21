@@ -18,6 +18,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
+use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
@@ -55,8 +57,10 @@ class EventPageDecorator {
 	// Constants for the different statuses of a user wrt a given event registration
 	private const USER_STATUS_BLOCKED = 1;
 	private const USER_STATUS_ORGANIZER = 2;
-	private const USER_STATUS_PARTICIPANT = 3;
-	private const USER_STATUS_CAN_REGISTER = 4;
+	private const USER_STATUS_PARTICIPANT_CAN_UNREGISTER = 3;
+	private const USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER = 4;
+	private const USER_STATUS_CAN_REGISTER = 5;
+	private const USER_STATUS_CANNOT_REGISTER = 6;
 
 	/** @var IEventLookup */
 	private $eventLookup;
@@ -147,7 +151,7 @@ class EventPageDecorator {
 		] );
 
 		$userProxy = new MWUserProxy( $viewingUser, $viewingAuthority );
-		$userStatus = $this->getUserStatus( $registration->getID(), $userProxy );
+		$userStatus = $this->getUserStatus( $registration, $userProxy );
 		$out->addHTML( $this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus ) );
 		$out->addHTML(
 			$this->getDetailsDialogContent( $registration, $msgFormatter, $language, $viewingUser, $userStatus )
@@ -335,13 +339,20 @@ class EventPageDecorator {
 					MessageValue::new( 'campaignevents-eventpage-dialog-link-not-available' )
 						->numParams( $organizersCount )
 				);
-			} elseif ( $userStatus === self::USER_STATUS_ORGANIZER || $userStatus === self::USER_STATUS_PARTICIPANT ) {
+			} elseif (
+				$userStatus === self::USER_STATUS_ORGANIZER ||
+				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
+				$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER
+			) {
 				$linkContent = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
 			} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
 				$linkContent = $msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-link-register' )
 				);
-			} elseif ( $userStatus === self::USER_STATUS_BLOCKED ) {
+			} elseif (
+				$userStatus === self::USER_STATUS_BLOCKED ||
+				$userStatus === self::USER_STATUS_CANNOT_REGISTER
+			) {
 				$linkContent = '';
 			} else {
 				throw new LogicException( "Unexpected user status $userStatus" );
@@ -444,7 +455,7 @@ class EventPageDecorator {
 	 * @return Element[]
 	 */
 	private function getActionElements( int $eventID, ITextFormatter $msgFormatter, int $userStatus ): array {
-		if ( $userStatus === self::USER_STATUS_BLOCKED ) {
+		if ( $userStatus === self::USER_STATUS_BLOCKED || $userStatus === self::USER_STATUS_CANNOT_REGISTER ) {
 			return [];
 		}
 
@@ -468,23 +479,26 @@ class EventPageDecorator {
 			SpecialUnregisterForEvent::PAGE_NAME,
 			(string)$eventID
 		)->getLocalURL();
+		$alreadyRegisteredItems = [
+			new MessageWidget( [
+				'type' => 'success',
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-eventpage-header-attending' )
+				),
+				'inline' => true,
+			] )
+		];
+		if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER ) {
+			$alreadyRegisteredItems[] = new ButtonWidget( [
+				'flags' => [ 'destructive' ],
+				'icon' => 'trash',
+				'framed' => false,
+				'href' => $unregisterURL,
+				'classes' => [ 'ext-campaignevents-event-unregister-btn' ],
+			] );
+		}
 		$alreadyRegisteredAction = new HorizontalLayout( [
-			'items' => [
-				new MessageWidget( [
-					'type' => 'success',
-					'label' => $msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-header-attending' )
-					),
-					'inline' => true,
-				] ),
-				new ButtonWidget( [
-					'flags' => [ 'destructive' ],
-					'icon' => 'trash',
-					'framed' => false,
-					'href' => $unregisterURL,
-					'classes' => [ 'ext-campaignevents-event-unregister-btn' ],
-				] )
-			],
+			'items' => $alreadyRegisteredItems,
 			'classes' => [
 				'ext-campaignevents-eventpage-action-element',
 				'ext-campaignevents-eventpage-unregister-layout'
@@ -497,7 +511,10 @@ class EventPageDecorator {
 			'href' => SpecialPage::getTitleFor( SpecialRegisterForEvent::PAGE_NAME, (string)$eventID )->getLocalURL(),
 		] );
 
-		if ( $userStatus === self::USER_STATUS_PARTICIPANT ) {
+		if (
+			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
+			$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER
+		) {
 			$registerBtn->addClasses( [ 'ext-campaignevents-eventpage-hidden-action' ] );
 		} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
 			$alreadyRegisteredAction->addClasses( [ 'ext-campaignevents-eventpage-hidden-action' ] );
@@ -509,28 +526,31 @@ class EventPageDecorator {
 	}
 
 	/**
-	 * @param int $eventID
+	 * @param ExistingEventRegistration $event
 	 * @param ICampaignsUser $user
 	 * @return int One of the SELF::USER_STATUS_* constants
 	 */
-	private function getUserStatus( int $eventID, ICampaignsUser $user ): int {
+	private function getUserStatus( ExistingEventRegistration $event, ICampaignsUser $user ): int {
 		if ( $this->userBlockChecker->isSitewideBlocked( $user ) ) {
 			return self::USER_STATUS_BLOCKED;
 		}
 
-		if ( !$user->isRegistered() ) {
-			// We'll know better after the login.
-			return self::USER_STATUS_CAN_REGISTER;
+		if ( $user->isRegistered() ) {
+			if ( $this->organizersStore->isEventOrganizer( $event->getID(), $user ) ) {
+				return self::USER_STATUS_ORGANIZER;
+			}
+
+			if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $user ) ) {
+				return UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $event )
+					? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
+					: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;
+			}
 		}
 
-		if ( $this->organizersStore->isEventOrganizer( $eventID, $user ) ) {
-			return self::USER_STATUS_ORGANIZER;
-		}
-
-		if ( $this->participantsStore->userParticipatesToEvent( $eventID, $user ) ) {
-			return self::USER_STATUS_PARTICIPANT;
-		}
-
-		return self::USER_STATUS_CAN_REGISTER;
+		// User is logged-in and not already participating, or logged-out, in which case we'll know better
+		// once they log in.
+		return RegisterParticipantCommand::isRegistrationAllowedForEvent( $event )
+			? self::USER_STATUS_CAN_REGISTER
+			: self::USER_STATUS_CANNOT_REGISTER;
 	}
 }

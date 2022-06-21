@@ -62,11 +62,19 @@ class RegisterParticipantCommand {
 	}
 
 	/**
+	 * Checks whether it's possible to register for the given event.
 	 * @param ExistingEventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @return bool
+	 */
+	public static function isRegistrationAllowedForEvent( ExistingEventRegistration $registration ): bool {
+		return self::checkIsRegistrationAllowed( $registration )->isGood();
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
 	 * @return StatusValue
 	 */
-	public function registerUnsafe( ExistingEventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+	private static function checkIsRegistrationAllowed( ExistingEventRegistration $registration ): StatusValue {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' );
 		}
@@ -76,6 +84,19 @@ class RegisterParticipantCommand {
 		}
 		if ( $registration->getStatus() !== EventRegistration::STATUS_OPEN ) {
 			return StatusValue::newFatal( 'campaignevents-register-event-not-open' );
+		}
+		return StatusValue::newGood();
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param ICampaignsUser $performer
+	 * @return StatusValue
+	 */
+	public function registerUnsafe( ExistingEventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+		$registrationAllowedStatus = self::checkIsRegistrationAllowed( $registration );
+		if ( !$registrationAllowedStatus->isGood() ) {
+			return $registrationAllowedStatus;
 		}
 
 		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $performer );

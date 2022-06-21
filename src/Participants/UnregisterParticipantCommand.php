@@ -58,6 +58,30 @@ class UnregisterParticipantCommand {
 	}
 
 	/**
+	 * Checks whether it's possible to cancel a registration for the given event.
+	 * @param ExistingEventRegistration $registration
+	 * @return bool
+	 */
+	public static function isUnregistrationAllowedForEvent( ExistingEventRegistration $registration ): bool {
+		return self::checkIsUnregistrationAllowed( $registration )->isGood();
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @return StatusValue
+	 */
+	private static function checkIsUnregistrationAllowed( ExistingEventRegistration $registration ): StatusValue {
+		if ( $registration->getDeletionTimestamp() !== null ) {
+			return StatusValue::newFatal( 'campaignevents-unregister-registration-deleted' );
+		}
+		$endTS = $registration->getEndTimestamp();
+		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
+			return StatusValue::newFatal( 'campaignevents-unregister-event-past' );
+		}
+		return StatusValue::newGood();
+	}
+
+	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param ICampaignsUser $performer
 	 * @return StatusValue
@@ -66,12 +90,9 @@ class UnregisterParticipantCommand {
 		ExistingEventRegistration $registration,
 		ICampaignsUser $performer
 	): StatusValue {
-		if ( $registration->getDeletionTimestamp() !== null ) {
-			return StatusValue::newFatal( 'campaignevents-unregister-registration-deleted' );
-		}
-		$endTS = $registration->getEndTimestamp();
-		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
-			return StatusValue::newFatal( 'campaignevents-unregister-event-past' );
+		$unregistrationAllowedStatus = self::checkIsUnregistrationAllowed( $registration );
+		if ( !$unregistrationAllowedStatus->isGood() ) {
+			return $unregistrationAllowedStatus;
 		}
 
 		$modified = $this->participantsStore->removeParticipantFromEvent( $registration->getID(), $performer );

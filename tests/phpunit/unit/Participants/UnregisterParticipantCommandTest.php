@@ -80,6 +80,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @param ExistingEventRegistration $registration
 	 * @param string $errMsg
 	 * @covers ::unregisterIfAllowed
+	 * @covers ::checkIsUnregistrationAllowed
 	 * @covers ::unregisterUnsafe
 	 * @dataProvider provideInvalidRegistrationsAndErrors
 	 */
@@ -111,6 +112,8 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @param ParticipantsStore $store
 	 * @param bool $expectedModified
 	 * @covers ::unregisterIfAllowed
+	 * @covers ::authorizeUnregistration
+	 * @covers ::checkIsUnregistrationAllowed
 	 * @covers ::unregisterUnsafe
 	 * @dataProvider provideStoreAndModified
 	 */
