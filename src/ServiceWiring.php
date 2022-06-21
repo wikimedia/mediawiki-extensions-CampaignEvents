@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
+use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
@@ -21,6 +22,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
 use MediaWiki\MediaWikiServices;
 
 // This file is actually covered by CampaignEventsServicesTest, but it's not possible to specify a path
@@ -140,6 +142,15 @@ return [
 			$services->getMessageFormatterFactory(),
 			$services->getLinkRenderer(),
 			$services->getTitleFormatter()
+		);
+	},
+	CampaignEventsHookRunner::SERVICE_NAME =>
+		static function ( MediaWikiServices $services ): CampaignEventsHookRunner {
+			return new CampaignEventsHookRunner( $services->getHookContainer() );
+		},
+	PolicyMessageLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PolicyMessageLookup {
+		return new PolicyMessageLookup(
+			$services->get( CampaignEventsHookRunner::SERVICE_NAME )
 		);
 	},
 ];
