@@ -143,5 +143,7 @@
 	"campaignevents-eventpage-unregister-confirmation-title": "Cancel registration",
 	"campaignevents-eventpage-unregister-confirmation-body": "Are you sure you want to cancel your registration?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Yes",
-	"campaignevents-eventpage-unregister-confirmation-dismiss": "No"
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "No",
+	"campaignevents-eventpage-register-confirmation-cancel": "Cancel registration",
+	"campaignevents-eventpage-register-confirmation-confirm": "Continue registration"
 }

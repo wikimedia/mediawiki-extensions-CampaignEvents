@@ -4,8 +4,11 @@
 
 	var EventDetailsDialog = require( './EventDetailsDialog.js' ),
 		ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
+		PolicyAcknowledgementDialog = require( './PolicyAcknowledgementDialog.js' ),
+		configData = require( './data.json' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( {} ),
+		policyAcknowledgementDialog,
 		confirmUnregistrationDialog;
 
 	windowManager.addWindows( [ detailsDialog ] );
@@ -35,6 +38,9 @@
 		mw.log.error( errorText );
 	}
 
+	/**
+	 * @return {jQuery.Promise}
+	 */
 	function registerUser() {
 		var registrationID = mw.config.get( 'wgCampaignEventsEventID' );
 		return new mw.Rest().put(
@@ -54,6 +60,9 @@
 			} );
 	}
 
+	/**
+	 * @return {jQuery.Promise}
+	 */
 	function unregisterUser() {
 		var registrationID = mw.config.get( 'wgCampaignEventsEventID' );
 		return new mw.Rest().delete(
@@ -67,6 +76,26 @@
 			.fail( function ( _err, errData ) {
 				logRequestError( errData );
 			} );
+	}
+
+	function getPolicyAcknowledgementDialog( msg ) {
+		if ( !policyAcknowledgementDialog ) {
+			policyAcknowledgementDialog = new PolicyAcknowledgementDialog( { policyMsg: msg } );
+			windowManager.addWindows( [ policyAcknowledgementDialog ] );
+		}
+		return policyAcknowledgementDialog;
+	}
+
+	/**
+	 * @return {jQuery.promise}
+	 */
+	function maybeRequirePolicyAcknowledgement() {
+		if ( !configData.policyMsg ) {
+			return $.Deferred().resolve( { action: 'confirm' } );
+		}
+		var policyDialog = getPolicyAcknowledgementDialog( configData.policyMsg );
+		windowManager.closeWindow( windowManager.getCurrentWindow() );
+		return windowManager.openWindow( policyDialog ).closed;
 	}
 
 	function getConfirmUnregistrationDialog() {
@@ -84,13 +113,17 @@
 			if ( mw.user.isAnon() ) {
 				redirectToLogin();
 			} else {
-				registerUser()
-					.fail( function () {
-						// Fall back to the special page
-						// TODO MVP Some errors (at least) could be surfaced here,
-						// e.g., if the event is over.
-						$btn.off( 'click' ).find( 'a' )[ 0 ].click();
-					} );
+				maybeRequirePolicyAcknowledgement().then( function ( data ) {
+					if ( data && data.action === 'confirm' ) {
+						registerUser()
+							.fail( function () {
+								// Fall back to the special page
+								// TODO MVP Some errors (at least) could be surfaced here,
+								// e.g., if the event is over.
+								$btn.off( 'click' ).find( 'a' )[ 0 ].click();
+							} );
+					}
+				} );
 			}
 		} );
 

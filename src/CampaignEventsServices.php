@@ -81,4 +81,11 @@ class CampaignEventsServices {
 	public static function getOrganizersStore(): OrganizersStore {
 		return MediaWikiServices::getInstance()->getService( OrganizersStore::SERVICE_NAME );
 	}
+
+	/**
+	 * @return PolicyMessageLookup
+	 */
+	public static function getPolicyMessageLookup(): PolicyMessageLookup {
+		return MediaWikiServices::getInstance()->getService( PolicyMessageLookup::SERVICE_NAME );
+	}
 }
