@@ -268,7 +268,15 @@ class EventFactory {
 	 * @return bool
 	 */
 	private function isValidURL( string $data ): bool {
-		return filter_var( $data, FILTER_VALIDATE_URL ) !== false;
+		// TODO There's a lot of space for improvement here, e.g., expand the list of allowed protocols, and
+		// possibly avoid having to do all the normalization and checks ourselves.
+		$allowedSchemes = [ 'http', 'https' ];
+		if ( !preg_match( '/^((' . implode( '|', $allowedSchemes ) . '):)?\/\//i', $data ) ) {
+			return false;
+		}
+		// Add the HTTPS protocol explicitly, since FILTER_VALIDATE_URL wants a scheme.
+		$urlToCheck = str_starts_with( $data, '//' ) ? "https:$data" : $data;
+		return filter_var( $urlToCheck, FILTER_VALIDATE_URL ) !== false;
 	}
 
 	/**
