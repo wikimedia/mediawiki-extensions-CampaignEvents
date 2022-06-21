@@ -272,7 +272,8 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsRegisterParticipantCommand",
-				"CampaignEventsParticipantsStore"
+				"CampaignEventsParticipantsStore",
+				"CampaignEventsPolicyMessageLookup"
 			]
 		},
 		"UnregisterForEvent": {
