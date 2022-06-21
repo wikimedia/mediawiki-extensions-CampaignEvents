@@ -88,7 +88,10 @@ class EditEventCommand {
 		try {
 			$existingRegistrationForPage = $this->eventLookup->getEventByPage( $registration->getPage() );
 			if ( $existingRegistrationForPage->getID() !== $registration->getID() ) {
-				return StatusValue::newFatal( 'campaignevents-error-page-already-registered' );
+				$msg = $existingRegistrationForPage->getDeletionTimestamp() !== null
+					? 'campaignevents-error-page-already-registered-deleted'
+					: 'campaignevents-error-page-already-registered';
+				return StatusValue::newFatal( $msg );
 			}
 			if ( $existingRegistrationForPage->getDeletionTimestamp() !== null ) {
 				return StatusValue::newFatal( 'campaignevents-edit-registration-deleted' );

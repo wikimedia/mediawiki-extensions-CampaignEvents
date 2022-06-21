@@ -64,6 +64,7 @@
 	"campaignevents-edit-page-nonlocal": "This event registration was created on the following wiki and should be edited there: $1",
 	"campaignevents-edit-error-deleted": "This event registration was deleted.",
 	"campaignevents-error-page-already-registered": "The given event page already has an associated registration.",
+	"campaignevents-error-page-already-registered-deleted": "You cannot complete the action because the event registration has been deleted from this event page.",
 	"campaignevents-edit-not-allowed-registration": "You are not allowed to edit this event registration.",
 	"campaignevents-create-not-allowed-page": "You are not allowed to create an event registration for the given event page.",
 	"registerforevent": "Register for an event",

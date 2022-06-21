@@ -98,23 +98,56 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @param IEventLookup $eventLookup
+	 * @param int $existingRegistrationID
+	 * @param string $expectedMsg
 	 * @covers ::doEditIfAllowed
+	 * @dataProvider providePageWithRegistrationAlreadyEnabled
 	 */
-	public function testDoEditIfAllowed__pageAlreadyHasRegistration() {
-		$existingRegistration = $this->createMock( ExistingEventRegistration::class );
-		$existingRegistration->method( 'getID' )->willReturn( 1 );
+	public function testDoEditIfAllowed__pageAlreadyHasRegistration(
+		IEventLookup $eventLookup,
+		int $existingRegistrationID,
+		string $expectedMsg
+	) {
 		$newRegistration = $this->createMock( EventRegistration::class );
-		$newRegistration->method( 'getID' )->willReturn( 2 );
+		$newRegistration->method( 'getID' )->willReturn( $existingRegistrationID + 1 );
 
-		$eventLookup = $this->createMock( IEventLookup::class );
-		$eventLookup->expects( $this->once() )->method( 'getEventByPage' )->willReturn( $existingRegistration );
 		$status = $this->getCommand( null, null, $eventLookup )->doEditIfAllowed(
 			$newRegistration,
 			$this->createMock( ICampaignsUser::class )
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
-		$this->assertStatusMessage( 'campaignevents-error-page-already-registered', $status );
+		$this->assertStatusMessage( $expectedMsg, $status );
+	}
+
+	public function providePageWithRegistrationAlreadyEnabled(): Generator {
+		$existingRegistrationsID = 1;
+
+		$nonDeletedRegistration = $this->createMock( ExistingEventRegistration::class );
+		$nonDeletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
+		$nonDeletedEventLookup = $this->createMock( IEventLookup::class );
+		$nonDeletedEventLookup->expects( $this->once() )
+			->method( 'getEventByPage' )
+			->willReturn( $nonDeletedRegistration );
+		yield 'Already has non-deleted registration' => [
+			$nonDeletedEventLookup,
+			$existingRegistrationsID,
+			'campaignevents-error-page-already-registered'
+		];
+
+		$deletedRegistration = $this->createMock( ExistingEventRegistration::class );
+		$deletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
+		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1646000000' );
+		$deletedEventLookup = $this->createMock( IEventLookup::class );
+		$deletedEventLookup->expects( $this->once() )
+			->method( 'getEventByPage' )
+			->willReturn( $deletedRegistration );
+		yield 'Already has a deleted registration' => [
+			$deletedEventLookup,
+			$existingRegistrationsID,
+			'campaignevents-error-page-already-registered-deleted'
+		];
 	}
 
 	/**
