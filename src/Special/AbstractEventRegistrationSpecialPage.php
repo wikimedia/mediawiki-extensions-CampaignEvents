@@ -34,6 +34,12 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected $user;
 
 	/**
+	 * @var string|null Prefixedtext of the event page, set upon form submission and guaranteed to be
+	 * a string on success.
+	 */
+	private $eventPagePrefixedText;
+
+	/**
 	 * @param string $name
 	 * @param string $restriction
 	 * @param IEventLookup $eventLookup
@@ -77,6 +83,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	}
 
 	/**
+	 * Returns messages to be used on the page. 'form-legend' and 'submit' must not use markup or take any parameter.
+	 * 'success' can contain markup, and will be passed the prefixedtext of the event page as the $1 parameter.
 	 * @phan-return array{success:string,form-legend:string,submit:string}
 	 * @return array
 	 */
@@ -214,6 +222,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			return Status::wrap( $e->getStatus() );
 		}
 
+		$this->eventPagePrefixedText = $event->getPage()->getPrefixedText();
 		$userProxy = new MWUserProxy( $this->getUser(), $this->getAuthority() );
 		return Status::wrap( $this->editEventCommand->doEditIfAllowed( $event, $userProxy ) );
 	}
@@ -223,7 +232,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	public function onSuccess(): void {
 		$this->getOutput()->addHTML( Html::successBox(
-			$this->msg( $this->formMessages['success'] )->escaped()
+			$this->msg( $this->formMessages['success'] )->params( $this->eventPagePrefixedText )->parse()
 		) );
 	}
 
