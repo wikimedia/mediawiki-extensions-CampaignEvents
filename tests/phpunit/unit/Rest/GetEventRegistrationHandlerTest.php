@@ -91,7 +91,11 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 
 		$handler = $this->newHandler( $eventLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
-		$this->assertSame( $eventData, $respData );
+		$this->assertSame(
+			// TODO MVP Check these too
+			array_diff_key( $eventData, [ 'tracking_tool_name' => 1, 'tracking_tool_url' => 1, 'type' => 1 ] ),
+			$respData
+		);
 	}
 
 	public function testRun__invalidEvent() {
