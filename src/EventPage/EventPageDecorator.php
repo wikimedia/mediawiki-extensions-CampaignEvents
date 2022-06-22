@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
@@ -20,6 +21,8 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialCreateEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
@@ -29,10 +32,12 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\User\UserIdentity;
+use MessageLocalizer;
 use OOUI\ButtonWidget;
 use OOUI\Element;
 use OOUI\HorizontalLayout;
 use OOUI\HtmlSnippet;
+use OOUI\IconWidget;
 use OOUI\MessageWidget;
 use OOUI\PanelLayout;
 use OOUI\Tag;
@@ -70,6 +75,8 @@ class EventPageDecorator {
 	private $organizersStore;
 	/** @var UserBlockChecker */
 	private $userBlockChecker;
+	/** @var PermissionChecker */
+	private $permissionChecker;
 	/** @var IMessageFormatterFactory */
 	private $messageFormatterFactory;
 	/** @var LinkRenderer */
@@ -82,6 +89,7 @@ class EventPageDecorator {
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
 	 * @param UserBlockChecker $userBlockChecker
+	 * @param PermissionChecker $permissionChecker
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param LinkRenderer $linkRenderer
 	 * @param TitleFormatter $titleFormatter
@@ -91,6 +99,7 @@ class EventPageDecorator {
 		ParticipantsStore $participantsStore,
 		OrganizersStore $organizersStore,
 		UserBlockChecker $userBlockChecker,
+		PermissionChecker $permissionChecker,
 		IMessageFormatterFactory $messageFormatterFactory,
 		LinkRenderer $linkRenderer,
 		TitleFormatter $titleFormatter
@@ -99,6 +108,7 @@ class EventPageDecorator {
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
 		$this->userBlockChecker = $userBlockChecker;
+		$this->permissionChecker = $permissionChecker;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->linkRenderer = $linkRenderer;
 		$this->titleFormatter = $titleFormatter;
@@ -125,15 +135,121 @@ class EventPageDecorator {
 		try {
 			$registration = $this->eventLookup->getEventByPage( $campaignsPage );
 		} catch ( EventNotFoundException $_ ) {
-			return;
+			$registration = null;
 		}
 
-		if ( $registration->getDeletionTimestamp() !== null ) {
+		if ( $registration && $registration->getDeletionTimestamp() !== null ) {
 			return;
 		}
 
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
+		$userProxy = new MWUserProxy( $viewingUser, $viewingAuthority );
+		if ( $registration ) {
+			$this->addRegistrationHeader(
+				$registration, $out, $viewingUser, $userProxy, $msgFormatter, $language );
+		} else {
+			$this->maybeAddEnableRegistrationHeader( $out, $msgFormatter, $language, $userProxy, $campaignsPage );
+		}
+	}
 
+	/**
+	 * @param OutputPage $out
+	 * @param ITextFormatter $msgFormatter
+	 * @param Language $language
+	 * @param ICampaignsUser $user
+	 * @param ICampaignsPage $eventPage
+	 */
+	private function maybeAddEnableRegistrationHeader(
+		OutputPage $out,
+		ITextFormatter $msgFormatter,
+		Language $language,
+		ICampaignsUser $user,
+		ICampaignsPage $eventPage
+	): void {
+		if ( !$this->permissionChecker->userCanCreateRegistration( $user, $eventPage ) ) {
+			return;
+		}
+
+		$out->enableOOUI();
+		$out->addModuleStyles( [
+			'ext.campaignEvents.eventpage.styles',
+			'oojs-ui.styles.icons-editing-advanced',
+		] );
+		$out->addHTML( $this->getEnableRegistrationHeader( $out, $msgFormatter, $language, $eventPage ) );
+	}
+
+	/**
+	 * @param MessageLocalizer $messageLocalizer
+	 * @param ITextFormatter $msgFormatter
+	 * @param Language $language
+	 * @param ICampaignsPage $eventPage
+	 * @return Tag
+	 */
+	private function getEnableRegistrationHeader(
+		MessageLocalizer $messageLocalizer,
+		ITextFormatter $msgFormatter,
+		Language $language,
+		ICampaignsPage $eventPage
+	): Tag {
+		$organizerText = ( new Tag( 'div' ) )->appendContent(
+			$msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-enableheader-organizer' ) )
+		)->setAttributes( [ 'class' => 'ext-campaignevents-eventpage-organizer-label' ] );
+
+		// Wrap it in a span for use inside a flex container, since the message contains HTML.
+		// XXX Can't use $msgFormatter here because the message contains HTML, see T260689
+		$infoMsg = ( new Tag( 'span' ) )->appendContent(
+			new HtmlSnippet( $messageLocalizer->msg( 'campaignevents-eventpage-enableheader-eventpage-desc' )->parse() )
+		);
+		$infoText = ( new Tag( 'div' ) )->appendContent(
+			new IconWidget( [ 'icon' => 'calendar', 'classes' => [ 'ext-campaignevents-eventpage-icon' ] ] ),
+			$infoMsg
+		)->setAttributes( [ 'class' => 'ext-campaignevents-eventpage-info-label' ] );
+		$infoElement = ( new Tag( 'div' ) )->appendContent( $organizerText, $infoText );
+
+		$enableRegistrationBtn = new ButtonWidget( [
+			'flags' => [ 'primary', 'progressive' ],
+			'label' => $msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-enableheader-button-label' )
+			),
+			'classes' => [ 'ext-campaignevents-eventpage-action-element' ],
+			'href' => SpecialPage::getTitleFor( SpecialCreateEventRegistration::PAGE_NAME )->getLocalURL( [
+				SpecialCreateEventRegistration::PAGE_FIELD_NAME => $eventPage->getPrefixedText()
+			] ),
+		] );
+
+		$layout = new PanelLayout( [
+			'content' => [ $infoElement, $enableRegistrationBtn ],
+			'padded' => true,
+			'framed' => true,
+			'expanded' => false,
+			'classes' => [ 'ext-campaignevents-eventpage-header' ],
+		] );
+
+		$layout->setAttributes( [
+			// Set the lang/dir explicitly, otherwise it will use that of the site/page language,
+			// not that of the interface.
+			'dir' => $language->getDir(),
+			'lang' => $language->getHtmlCode()
+		] );
+		return $layout;
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param OutputPage $out
+	 * @param UserIdentity $viewingUser
+	 * @param ICampaignsUser $userProxy
+	 * @param ITextFormatter $msgFormatter
+	 * @param Language $language
+	 */
+	private function addRegistrationHeader(
+		ExistingEventRegistration $registration,
+		OutputPage $out,
+		UserIdentity $viewingUser,
+		ICampaignsUser $userProxy,
+		ITextFormatter $msgFormatter,
+		Language $language
+	): void {
 		$out->setPreventClickjacking( true );
 		$out->enableOOUI();
 		$out->addModuleStyles( [
@@ -150,7 +266,6 @@ class EventPageDecorator {
 			'wgCampaignEventsEventID' => $registration->getID()
 		] );
 
-		$userProxy = new MWUserProxy( $viewingUser, $viewingAuthority );
 		$userStatus = $this->getUserStatus( $registration, $userProxy );
 		$out->addHTML( $this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus ) );
 		$out->addHTML(

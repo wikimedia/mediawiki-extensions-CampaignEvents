@@ -147,5 +147,8 @@
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-register-confirmation-cancel": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event.",
-	"campaignevents-eventpage-register-confirmation-confirm": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event."
+	"campaignevents-eventpage-register-confirmation-confirm": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event.",
+	"campaignevents-eventpage-enableheader-organizer": "Message shown on event pages when the user is an organizer and they can thus enable registration for that page.",
+	"campaignevents-eventpage-enableheader-eventpage-desc": "Message shown on event pages to explain how the registration system works.",
+	"campaignevents-eventpage-enableheader-button-label": "Label of a button shown on event pages that lets the user enable registration for that event."
 }

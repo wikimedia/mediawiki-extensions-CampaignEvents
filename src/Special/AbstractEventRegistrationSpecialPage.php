@@ -17,6 +17,8 @@ use MWTimestamp;
 use Status;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
+	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
+	public const PAGE_FIELD_NAME = 'wp' . self::PAGE_FIELD_NAME_HTMLFORM;
 
 	/** @var array */
 	private $formMessages;
@@ -100,7 +102,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		$formFields = [];
-		$formFields['EventPage'] = [
+		$formFields[self::PAGE_FIELD_NAME_HTMLFORM] = [
 			'type' => 'title',
 			'label-message' => 'campaignevents-edit-field-page',
 			// TODO Interwiki support (T307108)
@@ -200,7 +202,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
-				$data['EventPage'],
+				$data[self::PAGE_FIELD_NAME_HTMLFORM],
 				$data['EventChatURL'] ?: null,
 				// TODO MVP: Tracking tool
 				null,

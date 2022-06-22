@@ -1,4 +1,5 @@
 @import 'mediawiki.mixins.less';
+@import 'mediawiki.ui/variables.less';
 
 .ext-campaignevents-eventpage-header {
 	.flex-display();
@@ -55,4 +56,18 @@
 
 .ext-campaignevents-eventpage-header-address {
 	.hyphens(); /* Break long words if necessary */
+}
+
+.ext-campaignevents-eventpage-organizer-label {
+	color: @colorGray5;
+	font-size: 0.9em;
+}
+
+.ext-campaignevents-eventpage-info-label {
+	.flex-display();
+	align-items: center;
+}
+
+.ext-campaignevents-eventpage-info-label .oo-ui-iconWidget {
+	margin-right: 0.5em;
 }

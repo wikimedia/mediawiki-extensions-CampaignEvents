@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 
 class SpecialCreateEventRegistration extends AbstractEventRegistrationSpecialPage {
+	public const PAGE_NAME = 'CreateEventRegistration';
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -22,7 +23,7 @@ class SpecialCreateEventRegistration extends AbstractEventRegistrationSpecialPag
 		EditEventCommand $editEventCommand
 	) {
 		parent::__construct(
-			'CreateEventRegistration',
+			self::PAGE_NAME,
 			PermissionChecker::CREATE_REGISTRATIONS_RIGHT,
 			$eventLookup,
 			$eventFactory,
