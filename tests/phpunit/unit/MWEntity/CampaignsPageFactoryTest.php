@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
 use MediaWiki\Page\ExistingPageRecord;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\PageStoreFactory;
@@ -43,6 +44,8 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 	 * @param TitleParser|null $titleParser
 	 * @param PageStoreFactory|null $pageStoreFactory
 	 * @dataProvider provideTitleStrings
+	 * @covers ::newLocalExistingPageFromString
+	 * @covers ::newExistingPage
 	 */
 	public function testNewLocalExistingPageFromString(
 		string $titleString,
@@ -94,6 +97,17 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 			$interwikiStr,
 			UnexpectedInterwikiException::class,
 			$interwikiTitleParser
+		];
+
+		$specialStr = 'Special:Foobar';
+		$specialTitle = $this->createMock( TitleValue::class );
+		$specialTitle->method( 'getNamespace' )->willReturn( NS_SPECIAL );
+		$specialTitleParser = $this->createMock( TitleParser::class );
+		$specialTitleParser->method( 'parseTitle' )->willReturn( $specialTitle );
+		yield 'In the Special: namespace' => [
+			$specialStr,
+			UnexpectedVirtualNamespaceException::class,
+			$specialTitleParser
 		];
 
 		yield 'Not found' => [ 'Foobar', PageNotFoundException::class, $validTitleParser ];

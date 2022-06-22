@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
 use MediaWikiIntegrationTestCase;
 use MWTimestamp;
 
@@ -163,6 +164,18 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'campaignevents-error-page-not-event-namespace',
 			$this->getTestDataWithDefault( [ 'page' => $nonEventPageStr ] ),
 			$nonEventCampaignsPageFactory
+		];
+
+		$specialPageStr = 'Special:SomeSpecialPage';
+		$specialCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
+		$specialCampaignsPageFactory->expects( $this->atLeastOnce() )
+			->method( 'newLocalExistingPageFromString' )
+			->with( $specialPageStr )
+			->willThrowException( $this->createMock( UnexpectedVirtualNamespaceException::class ) );
+		yield 'Page in a virtual namespace' => [
+			'campaignevents-error-page-not-event-namespace',
+			$this->getTestDataWithDefault( [ 'page' => $specialPageStr ] ),
+			$specialCampaignsPageFactory
 		];
 
 		yield 'Invalid chat URL' => [

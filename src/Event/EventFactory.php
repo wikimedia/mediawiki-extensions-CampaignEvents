@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
 use MWTimestamp;
 use StatusValue;
 
@@ -211,6 +212,8 @@ class EventFactory {
 			);
 		} catch ( UnexpectedInterwikiException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );
+		} catch ( UnexpectedVirtualNamespaceException $_ ) {
+			return StatusValue::newFatal( 'campaignevents-error-page-not-event-namespace' );
 		} catch ( PageNotFoundException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );
 		}

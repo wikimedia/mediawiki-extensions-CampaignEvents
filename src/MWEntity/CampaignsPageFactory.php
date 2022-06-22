@@ -42,9 +42,13 @@ class CampaignsPageFactory {
 	 * @param string $prefixedText
 	 * @param string|false $wikiID
 	 * @return ICampaignsPage
+	 * @throws UnexpectedVirtualNamespaceException
 	 * @throws PageNotFoundException
 	 */
 	public function newExistingPage( int $namespace, string $dbKey, string $prefixedText, $wikiID ): ICampaignsPage {
+		if ( $namespace < 0 ) {
+			throw new UnexpectedVirtualNamespaceException( $namespace );
+		}
 		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
 			// Event pages stored in the database always have a string wiki ID, so we need to check if they're
 			// actually local.
@@ -65,6 +69,7 @@ class CampaignsPageFactory {
 	 * @return ICampaignsPage
 	 * @throws InvalidTitleStringException
 	 * @throws UnexpectedInterwikiException If the page title has an interwiki prefix
+	 * @throws UnexpectedVirtualNamespaceException
 	 * @throws PageNotFoundException
 	 */
 	public function newLocalExistingPageFromString( string $titleStr ): ICampaignsPage {
