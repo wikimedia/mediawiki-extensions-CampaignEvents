@@ -4,6 +4,12 @@
 	.flex-display();
 	justify-content: space-between;
 	margin-right: 1.5em;
+
+	> * {
+		flex-basis: 0;
+		flex-grow: 1;
+		min-width: 0;
+	}
 }
 
 .ext-campaignevents-detailsdialog-organizeranddetails-container {
@@ -52,4 +58,5 @@
 
 .ext-campaignevents-eventpage-details-address {
 	white-space: pre-wrap;
+	.hyphens(); /* Break long words if necessary */
 }

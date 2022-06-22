@@ -2,13 +2,32 @@
 
 .ext-campaignevents-eventpage-header {
 	.flex-display();
+	.flex-wrap();
 	align-items: center;
+
+	&.oo-ui-panelLayout-padded {
+		// OOUI sets a padding-top of 12px and the other ones of 16px, but we want the same
+		// padding for every side.
+		padding: 14px;
+	}
+
+	> * {
+		min-width: 0;
+	}
 
 	> *:not( :last-child ) {
 		// This is equivalent to using gap: 1em.
 		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
 		margin-right: 1em;
 	}
+}
+
+.ext-campaignevents-eventpage-icon {
+	opacity: 0.55;
+}
+
+.ext-campaignevents-eventpage-info-widget {
+	position: relative; /* This helps with the positioning of icons, which use absolute positioning */
 }
 
 .ext-campaignevents-eventpage-info-widget-content {
@@ -32,4 +51,8 @@
 .ext-campaignevents-eventpage-unregister-layout.ext-campaignevents-eventpage-hidden-action,
 .ext-campaignevents-eventpage-register-btn.ext-campaignevents-eventpage-hidden-action {
 	display: none;
+}
+
+.ext-campaignevents-eventpage-header-address {
+	.hyphens(); /* Break long words if necessary */
 }

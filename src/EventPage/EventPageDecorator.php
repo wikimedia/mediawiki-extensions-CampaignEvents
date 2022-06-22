@@ -195,6 +195,7 @@ class EventPageDecorator {
 			$locationContent->setAttributes( [
 				'dir' => Utils::guessStringDirection( $address )
 			] );
+			$locationContent->addClasses( [ 'ext-campaignevents-eventpage-header-address' ] );
 			$locationContent->appendContent( $language->truncateForVisual( $address, self::ADDRESS_MAX_LENGTH ) );
 		}
 		$items[] = new EventInfoWidget( [
@@ -360,7 +361,7 @@ class EventPageDecorator {
 			$onlineLocationElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
 		}
 		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_PHYSICAL ) {
-			$address = $registration->getMeetingAddress();
+			$address = $registration->getMeetingAddress() . "\n" . $registration->getMeetingCountry();
 			'@phan-var string $address';
 			$addressElement = new Tag( 'p' );
 			$addressElement->addClasses( [ 'ext-campaignevents-eventpage-details-address' ] );
