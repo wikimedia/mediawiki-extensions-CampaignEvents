@@ -76,13 +76,11 @@
 		"remoteExtPath": "CampaignEvents/resources"
 	},
 	"ResourceModules": {
-		"ext.campaignEvents.eventspager.styles": {
-			"styles": [
-				"EventsPager.less"
-			]
-		},
 		"ext.campaignEvents.specialmyevents.styles": {
+			"localBasePath": "resources/ext.campaignEvents.specialmyevents.styles",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialmyevents.styles",
 			"styles": [
+				"EventsPager.less",
 				"SpecialMyEvents.less"
 			]
 		},
@@ -90,13 +88,16 @@
 			"localBasePath": "resources/ext.campaignEvents.specialmyevents",
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialmyevents",
 			"packageFiles": [
-				"SpecialMyEvents.js",
-				"FilterEventsWidget.js"
+				"index.js",
+				"FilterEventsWidget.js",
+				"EventKebabMenu.js"
 			],
 			"messages": [
-				"campaignevents-myevents-filter-btn-label"
+				"campaignevents-myevents-filter-btn-label",
+				"campaignevents-eventslist-menu-edit"
 			],
 			"dependencies": [
+				"mediawiki.util",
 				"oojs-ui-widgets",
 				"oojs-ui.styles.icons-interactions"
 			]

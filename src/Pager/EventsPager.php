@@ -168,6 +168,8 @@ class EventsPager extends TablePager {
 			case 'num_participants':
 				return htmlspecialchars( $this->getLanguage()->formatNum( $value ) );
 			case 'manage_event':
+				$eventID = $this->mCurrentRow->event_id;
+				// This will be replaced with a ButtonMenuSelectWidget in JS.
 				$btn = new ButtonWidget( [
 					'framed' => false,
 					'label' => $this->msg( 'campaignevents-eventslist-manage-btn-info' )->text(),
@@ -176,8 +178,12 @@ class EventsPager extends TablePager {
 					'icon' => 'ellipsis',
 					'href' => SpecialPage::getTitleFor(
 						SpecialEventRegistration::PAGE_NAME,
-						$this->mCurrentRow->event_id
-					)->getLocalURL()
+						$eventID
+					)->getLocalURL(),
+					'classes' => [ 'ext-campaignevents-eventspager-manage-btn' ]
+				] );
+				$btn->setAttributes( [
+					'data-event-id' => $eventID
 				] );
 				return $btn->toString();
 			default:
@@ -251,9 +257,18 @@ class EventsPager extends TablePager {
 		return array_merge(
 			parent::getModuleStyles(),
 			[
-				'ext.campaignEvents.eventspager.styles',
+				// Avoid creating a new module for the pager only.
+				'ext.campaignEvents.specialmyevents.styles',
 				'oojs-ui.styles.icons-interactions'
 			]
 		);
+	}
+
+	/**
+	 * @return string[] An array of (non-style) RL modules.
+	 */
+	public function getModules(): array {
+		// Avoid creating a new module for the pager only.
+		return [ 'ext.campaignEvents.specialmyevents' ];
 	}
 }

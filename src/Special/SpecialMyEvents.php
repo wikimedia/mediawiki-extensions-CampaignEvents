@@ -79,5 +79,6 @@ class SpecialMyEvents extends SpecialPage {
 			->prepareForm()
 			->displayForm( false );
 		$this->getOutput()->addParserOutputContent( $pager->getFullOutput() );
+		$this->getOutput()->addModules( $pager->getModules() );
 	}
 }
