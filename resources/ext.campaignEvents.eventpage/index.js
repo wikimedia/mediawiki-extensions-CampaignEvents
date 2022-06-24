@@ -5,6 +5,7 @@
 	var EventDetailsDialog = require( './EventDetailsDialog.js' ),
 		ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
 		PolicyAcknowledgementDialog = require( './PolicyAcknowledgementDialog.js' ),
+		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
 		configData = require( './data.json' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( {} ),
@@ -146,6 +147,25 @@
 		} );
 	}
 
+	function showEnableRegistrationDialogOnPageCreation() {
+		var enableRegistrationURL = mw.config.get( 'wgCampaignEventsEnableRegistrationURL' );
+		if ( !enableRegistrationURL ) {
+			return;
+		}
+		mw.hook( 'postEdit' ).add( function () {
+			var action = mw.config.get( 'wgPostEdit' );
+			if ( action === 'created' ) {
+				var enableRegistrationDialog = new EnableRegistrationDialog( {} );
+				windowManager.addWindows( [ enableRegistrationDialog ] );
+				windowManager.openWindow( enableRegistrationDialog ).closed.then( function ( data ) {
+					if ( data && data.action === 'confirm' ) {
+						window.location.assign( enableRegistrationURL );
+					}
+				} );
+			}
+		} );
+	}
+
 	$( function () {
 		$( document.body ).append( windowManager.$element );
 
@@ -155,5 +175,7 @@
 			e.preventDefault();
 			windowManager.openWindow( detailsDialog );
 		} );
+
+		showEnableRegistrationDialogOnPageCreation();
 	} );
 }() );
