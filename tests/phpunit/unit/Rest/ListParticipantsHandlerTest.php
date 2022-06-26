@@ -51,30 +51,35 @@ class ListParticipantsHandlerTest extends MediaWikiUnitTestCase {
 	) {
 		$handler = $this->newHandler( null, $participantsStore, $centralUserLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
+
 		$this->assertSame( $expectedResp, $respData );
 	}
 
 	public function provideRunData(): Generator {
 		yield 'No participants' => [ [], $this->createMock( ParticipantsStore::class ) ];
 
-		$users = [];
+		$participants = [];
+		$expected = [];
 		for ( $i = 1; $i < 4; $i++ ) {
 			$curUser = $this->createMock( ICampaignsUser::class );
-			$curUser->method( 'getLocalID' )->willReturn( $i );
-			$participant = new Participant(
-				$curUser,
-				'20220315120000'
-			);
-			$users[] = $participant;
+			$participants[] = new Participant( $curUser, '20220315120000', $i );
+
+			$expected[] = [
+				'participant_id' => $i,
+				'user_id' => $i,
+				'user_name' => '',
+				'user_registered_at' => wfTimestamp( TS_DB, '20220315120000' ),
+			];
 		}
 
 		$partStore = $this->createMock( ParticipantsStore::class );
-		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $users );
+		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $participants );
 		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$centralUserLookup->expects( $this->exactly( 3 ) )->method( 'getCentralID' )
 			->willReturnOnConsecutiveCalls( 1, 2, 3 );
+
 		yield 'Has participants' => [
-			[ [ 'user_id' => 1 ], [ 'user_id' => 2 ], [ 'user_id' => 3 ] ],
+			$expected,
 			$partStore,
 			$centralUserLookup
 		];

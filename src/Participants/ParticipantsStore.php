@@ -114,15 +114,26 @@ class ParticipantsStore {
 	/**
 	 * @param int $eventID
 	 * @param int|null $limit
+	 * @param int|null $lastParticipantID
 	 * @return Participant[]
 	 */
-	public function getEventParticipants( int $eventID, int $limit = null ): array {
+	public function getEventParticipants( int $eventID, int $limit = null, ?int $lastParticipantID = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+
+		$where = [ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ];
+		if ( $lastParticipantID !== null ) {
+			$where[] = 'cep_id > ' . $dbr->addQuotes( $lastParticipantID );
+		}
+		$opts = [ 'ORDER BY' => 'cep_id' ];
+		if ( $limit !== null ) {
+			$opts[ 'LIMIT' ] = $limit;
+		}
+
 		$rows = $dbr->select(
 			'ce_participants',
-			[ 'cep_user_id', 'cep_registered_at' ],
-			[ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ],
-			$limit !== null ? [ 'LIMIT' => $limit ] : []
+			[ 'cep_id', 'cep_user_id', 'cep_registered_at' ],
+			$where,
+			$opts
 		);
 
 		$participants = [];
@@ -130,12 +141,14 @@ class ParticipantsStore {
 			try {
 				$participants[] = new Participant(
 					$this->centralUserLookup->getLocalUser( (int)$participant->cep_user_id ),
-					wfTimestamp( TS_UNIX, $participant->cep_registered_at )
+					wfTimestamp( TS_UNIX, $participant->cep_registered_at ),
+					(int)$participant->cep_id
 				);
 			} catch ( LocalUserNotFoundException $_ ) {
 				// Most probably a deleted user, skip it.
 			}
 		}
+
 		return $participants;
 	}
 

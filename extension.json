@@ -185,7 +185,8 @@
 			"packageFiles": [
 				"index.js",
 				"ParticipantsManager.js",
-				"RemoveParticipantDialog.js"
+				"RemoveParticipantDialog.js",
+				"ScrollDownObserver.js"
 			],
 			"messages": [
 				"campaignevents-event-details-select-all",
