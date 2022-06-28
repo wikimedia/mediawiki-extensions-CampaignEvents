@@ -9,11 +9,33 @@
 	 * @constructor
 	 * @param {Object} [config] Configuration options
 	 * @param {number} [config.eventID] ID of the event that the menu is used for.
+	 * @param {string} [config.eventName] Name of the event that the menu is used for.
+	 * @param {boolean} [config.isEventClosed] Whether the event is closed.
 	 */
 	function EventKebabMenu( config ) {
 		this.eventID = config.eventID;
+		this.eventName = config.eventName;
+		this.isClosed = config.isEventClosed;
 
 		var editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID );
+
+		this.openAndCloseOptionIndex = 1;
+		this.closeRegistrationOption = new OO.ui.MenuOptionWidget( {
+			$element: $( '<a>' ).attr( 'href', editHref ),
+			data: {
+				name: 'close',
+				href: editHref
+			},
+			label: mw.msg( 'campaignevents-eventslist-menu-close' )
+		} );
+		this.openRegistrationOption = new OO.ui.MenuOptionWidget( {
+			$element: $( '<a>' ).attr( 'href', editHref ),
+			data: {
+				name: 'open',
+				href: editHref
+			},
+			label: mw.msg( 'campaignevents-eventslist-menu-open' )
+		} );
 
 		config = $.extend(
 			{
@@ -31,7 +53,8 @@
 								href: editHref
 							},
 							label: mw.msg( 'campaignevents-eventslist-menu-edit' )
-						} )
+						} ),
+						this.isClosed ? this.openRegistrationOption : this.closeRegistrationOption
 					]
 				}
 			},
@@ -45,12 +68,95 @@
 	OO.inheritClass( EventKebabMenu, OO.ui.ButtonMenuSelectWidget );
 
 	EventKebabMenu.prototype.onChooseOption = function ( item ) {
-		var data = item.getData();
+		var data = item.getData(),
+			that = this;
 		switch ( data.name ) {
 			case 'edit':
 				window.location.assign( data.href );
 				break;
+			case 'close':
+				this.changeRegistrationStatus( 'closed' )
+					.done( function () {
+						mw.notify(
+							mw.message( 'campaignevents-eventslist-menu-close-success', that.eventName ),
+							{ type: 'success' }
+						);
+						that.getMenu()
+							.removeItems( [ that.closeRegistrationOption ] )
+							.addItems(
+								[ that.openRegistrationOption ],
+								that.openAndCloseOptionIndex
+							);
+					} )
+					.fail( function () {
+						// Fall back to the special page.
+						window.location.assign( data.href );
+					} );
+				break;
+			case 'open':
+				this.changeRegistrationStatus( 'open' )
+					.done( function () {
+						mw.notify(
+							mw.message( 'campaignevents-eventslist-menu-open-success', that.eventName ),
+							{ type: 'success' }
+						);
+						that.getMenu()
+							.removeItems( [ that.openRegistrationOption ] )
+							.addItems(
+								[ that.closeRegistrationOption ],
+								that.openAndCloseOptionIndex
+							);
+					} )
+					.fail( function () {
+						// Fall back to the special page.
+						window.location.assign( data.href );
+					} );
+				break;
 		}
+	};
+
+	/**
+	 * @param {string} status 'open' or 'closed'
+	 * @return {jQuery.Promise}
+	 */
+	EventKebabMenu.prototype.changeRegistrationStatus = function ( status ) {
+		var eventID = this.eventID;
+		return new mw.Rest().get( '/campaignevents/v0/event_registration/' + eventID )
+			.then(
+				function ( data ) {
+					var eventPageWiki = data.event_page_wiki;
+					if ( eventPageWiki !== mw.config.get( 'wgWikiID' ) ) {
+						// Can't edit registrations whose event page is on another wiki, see T311582
+						// TODO Remove this limitation
+						return $.Deferred().reject();
+					}
+
+					return new mw.Rest().put(
+						'/campaignevents/v0/event_registration/' + eventID,
+						{
+							/* eslint-disable camelcase */
+							token: mw.user.tokens.get( 'csrfToken' ),
+							event_page: data.event_page,
+							status: status,
+							chat_url: data.chat_url,
+							start_time: data.start_time,
+							end_time: data.end_time,
+							online_meeting: data.online_meeting,
+							physical_meeting: data.physical_meeting,
+							meeting_url: data.meeting_url,
+							meeting_country: data.meeting_country,
+							meeting_address: data.meeting_address
+							/* eslint-enable camelcase */
+						}
+					)
+						.fail( function ( _errCode, errData ) {
+							mw.log.error( errData.xhr.responseText );
+						} );
+				},
+				function ( _errCode, errData ) {
+					mw.log.error( errData.xhr.responseText );
+				}
+			);
 	};
 
 	module.exports = EventKebabMenu;

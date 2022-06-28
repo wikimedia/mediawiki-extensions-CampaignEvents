@@ -101,6 +101,7 @@ class EventsPager extends TablePager {
 			[
 				'event_id',
 				'event_name',
+				'event_status',
 				'event_start',
 				'event_meeting_type',
 				'num_participants' => 'COUNT(cep_id)'
@@ -115,7 +116,14 @@ class EventsPager extends TablePager {
 			),
 			__METHOD__,
 			[
-				'GROUP BY' => [ 'cep_event_id', 'event_id', 'event_name', 'event_start', 'event_meeting_type' ]
+				'GROUP BY' => [
+					'cep_event_id',
+					'event_id',
+					'event_name',
+					'event_status',
+					'event_start',
+					'event_meeting_type'
+				]
 			],
 			[
 				'ce_participants' => [
@@ -134,6 +142,7 @@ class EventsPager extends TablePager {
 			'fields' => [
 				'event_id',
 				'event_name',
+				'event_status',
 				'event_start',
 				'event_meeting_type',
 				'num_participants'
@@ -182,8 +191,11 @@ class EventsPager extends TablePager {
 					)->getLocalURL(),
 					'classes' => [ 'ext-campaignevents-eventspager-manage-btn' ]
 				] );
+				$eventStatus = EventStore::getEventStatusFromDBVal( $this->mCurrentRow->event_status );
 				$btn->setAttributes( [
-					'data-event-id' => $eventID
+					'data-event-id' => $eventID,
+					'data-event-name' => $this->mCurrentRow->event_name,
+					'data-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
 				] );
 				return $btn->toString();
 			default:

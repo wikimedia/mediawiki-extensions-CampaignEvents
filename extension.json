@@ -94,9 +94,14 @@
 			],
 			"messages": [
 				"campaignevents-myevents-filter-btn-label",
-				"campaignevents-eventslist-menu-edit"
+				"campaignevents-eventslist-menu-edit",
+				"campaignevents-eventslist-menu-close",
+				"campaignevents-eventslist-menu-close-success",
+				"campaignevents-eventslist-menu-open",
+				"campaignevents-eventslist-menu-open-success"
 			],
 			"dependencies": [
+				"mediawiki.api",
 				"mediawiki.util",
 				"oojs-ui-widgets",
 				"oojs-ui.styles.icons-interactions"
