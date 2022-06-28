@@ -56,11 +56,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	}
 
 	/**
-	 * @return int|null
-	 */
-	abstract protected function getEventID(): ?int;
-
-	/**
 	 * @param ICampaignsUser $user
 	 */
 	abstract protected function checkPermissions( ICampaignsUser $user ): void;
@@ -79,43 +74,13 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
 		}
 
-		$eventID = $this->getEventID();
-
 		$performerAuthority = $this->getAuthority();
 		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
 
 		$this->checkPermissions( $user );
 
-		$meetingType = 0;
-		if ( $body['online_meeting'] ) {
-			$meetingType |= EventRegistration::MEETING_TYPE_ONLINE;
-		}
-		if ( $body['physical_meeting'] ) {
-			$meetingType |= EventRegistration::MEETING_TYPE_PHYSICAL;
-		}
-
 		try {
-			$event = $this->eventFactory->newEvent(
-				$eventID,
-				$body['event_page'],
-				$body['chat_url'],
-				// TODO MVP Add these
-				null,
-				null,
-				$this->getEventStatus(),
-				$body['start_time'],
-				$body['end_time'],
-				// TODO MVP Get this from the request body
-				EventRegistration::TYPE_GENERIC,
-				$meetingType,
-				$body['meeting_url'],
-				$body['meeting_country'],
-				$body['meeting_address'],
-				null,
-				null,
-				null,
-				$this->getValidationFlags()
-			);
+			$event = $this->createEventObject( $body );
 		} catch ( InvalidEventDataException $e ) {
 			$this->exitWithStatus( $e->getStatus() );
 		}
@@ -218,12 +183,12 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	}
 
 	/**
-	 * @return string
+	 * Creates an EventRegistration object with the data from the request body, with
+	 * appropriate validation.
+	 *
+	 * @param array $body Request body data
+	 * @return EventRegistration
+	 * @throws InvalidEventDataException
 	 */
-	abstract protected function getEventStatus(): string;
-
-	/**
-	 * @return int
-	 */
-	abstract protected function getValidationFlags(): int;
+	abstract protected function createEventObject( array $body ): EventRegistration;
 }

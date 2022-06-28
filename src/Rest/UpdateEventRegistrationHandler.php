@@ -8,6 +8,7 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -57,9 +58,9 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	}
 
 	/**
-	 * @inheritDoc
+	 * @return ExistingEventRegistration
 	 */
-	protected function getEventID(): int {
+	protected function getExistingEvent(): ExistingEventRegistration {
 		$id = $this->getValidatedParams()['id'];
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $id );
 		$eventPageWikiID = $registration->getPage()->getWikiId();
@@ -71,7 +72,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 				400
 			);
 		}
-		return $id;
+		return $registration;
 	}
 
 	/**
@@ -98,16 +99,38 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	}
 
 	/**
-	 * @return string
-	 */
-	protected function getEventStatus(): string {
-		return $this->getValidatedBody()['status'];
-	}
-
-	/**
 	 * @inheritDoc
 	 */
-	protected function getValidationFlags(): int {
-		return EventFactory::VALIDATE_SKIP_DATES_PAST;
+	protected function createEventObject( array $body ): EventRegistration {
+		$existingEvent = $this->getExistingEvent();
+		$meetingType = 0;
+		if ( $body['online_meeting'] ) {
+			$meetingType |= EventRegistration::MEETING_TYPE_ONLINE;
+		}
+		if ( $body['physical_meeting'] ) {
+			$meetingType |= EventRegistration::MEETING_TYPE_PHYSICAL;
+		}
+
+		return $this->eventFactory->newEvent(
+			$existingEvent->getID(),
+			$body['event_page'],
+			$body['chat_url'],
+			// TODO MVP Add these
+			null,
+			null,
+			$body['status'],
+			$body['start_time'],
+			$body['end_time'],
+			// TODO MVP Get this from the request body
+			EventRegistration::TYPE_GENERIC,
+			$meetingType,
+			$body['meeting_url'],
+			$body['meeting_country'],
+			$body['meeting_address'],
+			$existingEvent->getCreationTimestamp(),
+			$existingEvent->getLastEditTimestamp(),
+			$existingEvent->getDeletionTimestamp(),
+			EventFactory::VALIDATE_SKIP_DATES_PAST
+		);
 	}
 }

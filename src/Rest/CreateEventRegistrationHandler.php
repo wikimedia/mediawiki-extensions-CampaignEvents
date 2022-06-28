@@ -13,14 +13,6 @@ use StatusValue;
 use Wikimedia\Message\MessageValue;
 
 class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function getEventID(): ?int {
-		return null;
-	}
-
 	/**
 	 * @inheritDoc
 	 */
@@ -47,16 +39,37 @@ class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	}
 
 	/**
-	 * @return string
-	 */
-	protected function getEventStatus(): string {
-		return EventRegistration::STATUS_OPEN;
-	}
-
-	/**
 	 * @inheritDoc
 	 */
-	protected function getValidationFlags(): int {
-		return EventFactory::VALIDATE_ALL;
+	protected function createEventObject( array $body ): EventRegistration {
+		$meetingType = 0;
+		if ( $body['online_meeting'] ) {
+			$meetingType |= EventRegistration::MEETING_TYPE_ONLINE;
+		}
+		if ( $body['physical_meeting'] ) {
+			$meetingType |= EventRegistration::MEETING_TYPE_PHYSICAL;
+		}
+
+		return $this->eventFactory->newEvent(
+			null,
+			$body['event_page'],
+			$body['chat_url'],
+			// TODO MVP Add these
+			null,
+			null,
+			EventRegistration::STATUS_OPEN,
+			$body['start_time'],
+			$body['end_time'],
+			// TODO MVP Get this from the request body
+			EventRegistration::TYPE_GENERIC,
+			$meetingType,
+			$body['meeting_url'],
+			$body['meeting_country'],
+			$body['meeting_address'],
+			null,
+			null,
+			null,
+			EventFactory::VALIDATE_ALL
+		);
 	}
 }
