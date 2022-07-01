@@ -116,6 +116,7 @@
 			"packageFiles": [
 				"index.js",
 				"ConfirmUnregistrationDialog.js",
+				"EnableRegistrationDialog.js",
 				"EventDetailsDialog.js",
 				"PolicyAcknowledgementDialog.js",
 				{
@@ -135,7 +136,11 @@
 				"campaignevents-eventpage-unregister-confirmation-confirm",
 				"campaignevents-eventpage-unregister-confirmation-dismiss",
 				"campaignevents-eventpage-register-confirmation-cancel",
-				"campaignevents-eventpage-register-confirmation-confirm"
+				"campaignevents-eventpage-register-confirmation-confirm",
+				"campaignevents-eventpage-enable-registration-dialog-title",
+				"campaignevents-eventpage-enable-registration-dialog-body",
+				"campaignevents-eventpage-enable-registration-dialog-dismiss",
+				"campaignevents-eventpage-enable-registration-dialog-confirm"
 			],
 			"dependencies": [
 				"mediawiki.api",

@@ -175,21 +175,28 @@ class EventPageDecorator {
 			'ext.campaignEvents.eventpage.styles',
 			'oojs-ui.styles.icons-editing-advanced',
 		] );
-		$out->addHTML( $this->getEnableRegistrationHeader( $out, $msgFormatter, $language, $eventPage ) );
+		$out->addModules( [ 'ext.campaignEvents.eventpage' ] );
+		// We pass this to the client to avoid hardcoding the name of the page field in JS. Apparently we can't use
+		// a RL callback for this because it doesn't provide the current page.
+		$enableRegistrationURL = SpecialPage::getTitleFor( SpecialCreateEventRegistration::PAGE_NAME )->getLocalURL( [
+			SpecialCreateEventRegistration::PAGE_FIELD_NAME => $eventPage->getPrefixedText()
+		] );
+		$out->addJsConfigVars( [ 'wgCampaignEventsEnableRegistrationURL' => $enableRegistrationURL ] );
+		$out->addHTML( $this->getEnableRegistrationHeader( $out, $msgFormatter, $language, $enableRegistrationURL ) );
 	}
 
 	/**
 	 * @param MessageLocalizer $messageLocalizer
 	 * @param ITextFormatter $msgFormatter
 	 * @param Language $language
-	 * @param ICampaignsPage $eventPage
+	 * @param string $enableRegistrationURL
 	 * @return Tag
 	 */
 	private function getEnableRegistrationHeader(
 		MessageLocalizer $messageLocalizer,
 		ITextFormatter $msgFormatter,
 		Language $language,
-		ICampaignsPage $eventPage
+		string $enableRegistrationURL
 	): Tag {
 		$organizerText = ( new Tag( 'div' ) )->appendContent(
 			$msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-enableheader-organizer' ) )
@@ -212,9 +219,7 @@ class EventPageDecorator {
 				MessageValue::new( 'campaignevents-eventpage-enableheader-button-label' )
 			),
 			'classes' => [ 'ext-campaignevents-eventpage-action-element' ],
-			'href' => SpecialPage::getTitleFor( SpecialCreateEventRegistration::PAGE_NAME )->getLocalURL( [
-				SpecialCreateEventRegistration::PAGE_FIELD_NAME => $eventPage->getPrefixedText()
-			] ),
+			'href' => $enableRegistrationURL,
 		] );
 
 		$layout = new PanelLayout( [

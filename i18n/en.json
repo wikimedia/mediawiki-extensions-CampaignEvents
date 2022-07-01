@@ -155,5 +155,9 @@
 	"campaignevents-eventpage-register-confirmation-confirm": "Continue registration",
 	"campaignevents-eventpage-enableheader-organizer": "You are an organizer",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Event page</strong>: enable registration so participants can register for your event directly on the page.",
-	"campaignevents-eventpage-enableheader-button-label": "Enable registration"
+	"campaignevents-eventpage-enableheader-button-label": "Enable registration",
+	"campaignevents-eventpage-enable-registration-dialog-title": "Enable event registration",
+	"campaignevents-eventpage-enable-registration-dialog-body": "This lets participants register to attend your event directly on this page.",
+	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Dismiss",
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "Enable registration"
 }

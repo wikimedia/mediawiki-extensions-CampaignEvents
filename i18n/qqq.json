@@ -155,5 +155,9 @@
 	"campaignevents-eventpage-register-confirmation-confirm": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event.",
 	"campaignevents-eventpage-enableheader-organizer": "Message shown on event pages when the user is an organizer and they can thus enable registration for that page.",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "Message shown on event pages to explain how the registration system works.",
-	"campaignevents-eventpage-enableheader-button-label": "Label of a button shown on event pages that lets the user enable registration for that event."
+	"campaignevents-eventpage-enableheader-button-label": "Label of a button shown on event pages that lets the user enable registration for that event.",
+	"campaignevents-eventpage-enable-registration-dialog-title": "Title of a dialog asking the user whether they want to enable registration for the event they just created.",
+	"campaignevents-eventpage-enable-registration-dialog-body": "Content of a dialog asking the user whether they want to enable registration for the event they just created.",
+	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Label of a button used in a dialog asking the user whether they want to enable registration for the event they just created.",
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "Label of a button used in a dialog asking the user whether they want to enable registration for the event they just created."
 }
