@@ -106,6 +106,7 @@
 	"campaignevents-eventslist-location-physical": "Label used on [[Special:MyEvents]] for events that happen in person.",
 	"campaignevents-eventslist-location-online-and-physical": "Label used on [[Special:MyEvents]] for events that happen both online and in person.",
 	"campaignevents-eventslist-manage-btn-info": "Label used on [[Special:MyEvents]] for a button with some options that let a organizer manage an event.",
+	"campaignevents-eventslist-menu-edit": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user will be sent to a page where they can edit the event.",
 	"deleteeventregistration": "Description of [[Special:DeleteEventRegistration]]",
 	"campaignevents-delete-error-no-event": "Error message shown on [[Special:DeleteEventRegistration]] when no event ID was provided.",
 	"campaignevents-delete-error-event-not-found": "Error message shown on [[Special:DeleteEventRegistration]] when the event ID provided does not correspond to an existing event.",
