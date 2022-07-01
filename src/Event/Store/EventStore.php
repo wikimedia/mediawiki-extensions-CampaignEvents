@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
+use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -263,5 +264,18 @@ class EventStore implements IEventStore, IEventLookup {
 			return self::EVENT_STATUS_MAP[$eventStatus];
 		}
 		throw new LogicException( "Unknown status $eventStatus" );
+	}
+
+	/**
+	 * Converts an event status as stored in the database to an EventRegistration::STATUS_* constant
+	 * @param string $eventStatus
+	 * @return string
+	 */
+	public static function getEventStatusFromDBVal( string $eventStatus ): string {
+		$val = array_search( (int)$eventStatus, self::EVENT_STATUS_MAP, true );
+		if ( $val === false ) {
+			throw new InvalidArgumentException( "Unknown event status: $eventStatus" );
+		}
+		return $val;
 	}
 }

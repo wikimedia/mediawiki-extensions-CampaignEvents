@@ -19,7 +19,9 @@
 		$( '.ext-campaignevents-eventspager-manage-btn' ).each( function () {
 			var $btn = $( this ),
 				menu = new EventKebabMenu( {
-					eventID: $btn.data( 'event-id' )
+					eventID: $btn.data( 'event-id' ),
+					eventName: $btn.data( 'event-name' ),
+					isEventClosed: $btn.data( 'is-closed' )
 				} );
 			$btn.replaceWith( menu.$element );
 		} );
