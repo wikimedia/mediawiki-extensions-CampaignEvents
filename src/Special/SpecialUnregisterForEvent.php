@@ -59,6 +59,7 @@ class SpecialUnregisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 */
 	protected function alterForm( HTMLForm $form ): void {
 		$form->setWrapperLegendMsg( 'campaignevents-unregister-confirmation-top' );
+		$form->setSubmitTextMsg( 'campaignevents-unregister-confirmation-btn' );
 	}
 
 	/**

@@ -32,8 +32,8 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'id' => 42,
 		'page' => 'Event:Some event page title',
 		'chat' => 'https://chaturl.example.org',
-		'trackingname' => 'Tracking tool',
-		'trackingurl' => 'https://trackingtool.example.org',
+		'trackingname' => null,
+		'trackingurl' => null,
 		'status' => EventRegistration::STATUS_OPEN,
 		'start' => '20220308120000',
 		'end' => '20220308150000',
@@ -79,7 +79,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::validatePage
 	 * @covers ::validateDates
 	 * @covers ::isValidURL
-	 * @covers ::validateTrackingTool
 	 * @covers ::validateLocation
 	 * @dataProvider provideEventData
 	 */
@@ -181,18 +180,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		yield 'Invalid chat URL' => [
 			'campaignevents-error-invalid-chat-url',
 			$this->getTestDataWithDefault( [ 'chat' => 'not-an-url' ] )
-		];
-		yield 'Tracking tool URL without name' => [
-			'campaignevents-error-tracking-tool-url-without-name',
-			$this->getTestDataWithDefault( [ 'trackingname' => null ] )
-		];
-		yield 'Tracking tool name without URL' => [
-			'campaignevents-error-tracking-tool-name-without-url',
-			$this->getTestDataWithDefault( [ 'trackingurl' => null ] )
-		];
-		yield 'Invalid tracking tool URL' => [
-			'campaignevents-error-invalid-trackingtool-url',
-			$this->getTestDataWithDefault( [ 'trackingurl' => 'not-an-url' ] )
 		];
 		yield 'Invalid status' => [
 			'campaignevents-error-invalid-status',

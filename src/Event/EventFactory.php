@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use InvalidArgumentException;
+use LogicException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
@@ -96,14 +97,9 @@ class EventFactory {
 			}
 		}
 
-		if ( $trackingToolName !== null && $trackingToolURL === null ) {
-			$res->error( 'campaignevents-error-tracking-tool-name-without-url' );
-		} elseif ( $trackingToolName === null && $trackingToolURL !== null ) {
-			$res->error( 'campaignevents-error-tracking-tool-url-without-name' );
-		} elseif ( $trackingToolName !== null && $trackingToolURL !== null ) {
-			$trackingToolName = trim( $trackingToolName );
-			$trackingToolURL = trim( $trackingToolURL );
-			$res->merge( $this->validateTrackingTool( $trackingToolName, $trackingToolURL ) );
+		if ( $trackingToolName !== null || $trackingToolURL !== null ) {
+			// TODO MVP Re-implement this.
+			throw new LogicException( "Should be dead code for V0" );
 		}
 
 		if ( !in_array( $status, EventRegistration::VALID_STATUSES, true ) ) {
@@ -284,19 +280,6 @@ class EventFactory {
 		// Add the HTTPS protocol explicitly, since FILTER_VALIDATE_URL wants a scheme.
 		$urlToCheck = str_starts_with( $data, '//' ) ? "https:$data" : $data;
 		return filter_var( $urlToCheck, FILTER_VALIDATE_URL ) !== false;
-	}
-
-	/**
-	 * @param string $name
-	 * @param string $url
-	 * @return StatusValue
-	 */
-	private function validateTrackingTool( string $name, string $url ): StatusValue {
-		$res = StatusValue::newGood();
-		if ( !$this->isValidURL( $url ) ) {
-			$res->error( 'campaignevents-error-invalid-trackingtool-url' );
-		}
-		return $res;
 	}
 
 	/**

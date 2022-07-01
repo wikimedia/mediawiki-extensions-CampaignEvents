@@ -74,6 +74,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 */
 	protected function alterForm( HTMLForm $form ): void {
 		$form->setWrapperLegendMsg( 'campaignevents-register-confirmation-top' );
+		$form->setSubmitTextMsg( 'campaignevents-register-confirmation-btn' );
 	}
 
 	/**
