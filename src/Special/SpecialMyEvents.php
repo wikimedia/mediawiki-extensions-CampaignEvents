@@ -72,11 +72,15 @@ class SpecialMyEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-myevents-filter-field'
 			],
 		];
-		HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
+		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
 			->setWrapperLegendMsg( 'campaignevents-myevents-filter-legend' )
 			->setMethod( 'get' )
-			->setId( 'ext-campaignevents-myevents-form' )
-			->prepareForm()
+			->setId( 'ext-campaignevents-myevents-form' );
+		$curSort = $this->getRequest()->getVal( 'sort' );
+		if ( $curSort ) {
+			$form->addHiddenField( 'sort', $curSort );
+		}
+		$form->prepareForm()
 			->displayForm( false );
 		$this->getOutput()->addParserOutputContent( $pager->getFullOutput() );
 		$this->getOutput()->addModules( $pager->getModules() );
