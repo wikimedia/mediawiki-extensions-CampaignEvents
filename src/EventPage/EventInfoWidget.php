@@ -39,7 +39,7 @@ class EventInfoWidget extends Widget {
 
 		$this->getIconElement()->setAttributes( [
 			'title' => $config['label'],
-		] );
+		] )->addClasses( [ 'ext-campaignevents-eventpage-icon' ] );
 
 		$this->addClasses( [ 'ext-campaignevents-eventpage-info-widget' ] );
 		// Prepending because the parent constructor has already appended the content
