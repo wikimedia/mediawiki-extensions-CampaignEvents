@@ -44,12 +44,13 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideArticle(): Generator {
-		$mockArticleInNamespace = function ( int $ns ): Article {
+		$mockArticleInNamespace = function ( int $ns, bool $exists = true ): Article {
 			$wikiPage = $this->createMock( WikiPage::class );
 			$wikiPage->method( 'getNamespace' )->willReturn( $ns );
+			$wikiPage->method( 'exists' )->willReturn( $exists );
 			$article = $this->createMock( Article::class );
 			$article->method( 'getPage' )->willReturn( $wikiPage );
-			// XXX Need to mock all this stuff because the method is not typehinted
+			// XXX Need to mock all this stuff because the methods are not typehinted
 			$ctx = $this->createMock( IContextSource::class );
 			$ctx->method( 'getOutput' )->willReturn( $this->createMock( OutputPage::class ) );
 			$ctx->method( 'getLanguage' )->willReturn( $this->createMock( Language::class ) );
@@ -60,6 +61,7 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 
 		yield 'Mainspace article' => [ $mockArticleInNamespace( NS_MAIN ), false ];
 		yield 'Project page' => [ $mockArticleInNamespace( NS_PROJECT ), false ];
-		yield 'Event page' => [ $mockArticleInNamespace( NS_EVENT ), true ];
+		yield 'Event page, does not exist' => [ $mockArticleInNamespace( NS_EVENT, false ), false ];
+		yield 'Event page, exists' => [ $mockArticleInNamespace( NS_EVENT ), true ];
 	}
 }

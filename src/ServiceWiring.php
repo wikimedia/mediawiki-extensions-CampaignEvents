@@ -139,6 +139,7 @@ return [
 			$services->get( ParticipantsStore::SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( UserBlockChecker::SERVICE_NAME ),
+			$services->get( PermissionChecker::SERVICE_NAME ),
 			$services->getMessageFormatterFactory(),
 			$services->getLinkRenderer(),
 			$services->getTitleFormatter()

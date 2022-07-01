@@ -152,5 +152,8 @@
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Yes",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "No",
 	"campaignevents-eventpage-register-confirmation-cancel": "Cancel registration",
-	"campaignevents-eventpage-register-confirmation-confirm": "Continue registration"
+	"campaignevents-eventpage-register-confirmation-confirm": "Continue registration",
+	"campaignevents-eventpage-enableheader-organizer": "You are an organizer",
+	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Event page</strong>: enable registration so participants can register for your event directly on the page.",
+	"campaignevents-eventpage-enableheader-button-label": "Enable registration"
 }
