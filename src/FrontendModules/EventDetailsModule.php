@@ -116,7 +116,6 @@ class EventDetailsModule {
 			)->addClasses( [ 'ext-campaignevents-event-details-social-media' ] );
 
 			if ( $isOrganizer || $isParticipant ) {
-
 				$iconLink = ( new IconWidget( [
 					'icon' => 'link',
 				] ) )->addClasses( [ 'ext-campaignevents-event-details-icons-style' ] );

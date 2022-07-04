@@ -4,7 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
 class ParticipantsStore {
@@ -12,12 +14,16 @@ class ParticipantsStore {
 
 	/** @var CampaignsDatabaseHelper */
 	private $dbHelper;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
 
 	/**
 	 * @param CampaignsDatabaseHelper $dbHelper
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
-	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
+	public function __construct( CampaignsDatabaseHelper $dbHelper, CampaignsCentralUserLookup $centralUserLookup ) {
 		$this->dbHelper = $dbHelper;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -106,9 +112,19 @@ class ParticipantsStore {
 	 * @param int $eventID
 	 * @param int|null $limit
 	 * @param int|null $lastParticipantID
+	 * @param string|null $usernameFilter If not null, only include participants whose username contains the
+	 * given string (case-insensitive). Cannot be the empty string.
 	 * @return Participant[]
 	 */
-	public function getEventParticipants( int $eventID, int $limit = null, ?int $lastParticipantID = null ): array {
+	public function getEventParticipants(
+		int $eventID,
+		int $limit = null,
+		?int $lastParticipantID = null,
+		string $usernameFilter = null
+	): array {
+		if ( $usernameFilter === '' ) {
+			throw new InvalidArgumentException( "The username filter cannot be the empty string" );
+		}
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
 		$where = [ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ];
@@ -116,7 +132,11 @@ class ParticipantsStore {
 			$where[] = 'cep_id > ' . $dbr->addQuotes( $lastParticipantID );
 		}
 		$opts = [ 'ORDER BY' => 'cep_id' ];
-		if ( $limit !== null ) {
+		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter
+		// and limit the results later. This is a bit hacky but there seems to be no super-clean alternative, since
+		// we can't join whatever table is used for central users and storing the username is non-trivial due to
+		// users being renamed. See T308574 and T312645.
+		if ( $limit !== null && $usernameFilter === null ) {
 			$opts[ 'LIMIT' ] = $limit;
 		}
 
@@ -127,13 +147,31 @@ class ParticipantsStore {
 			$opts
 		);
 
+		$centralIDsMap = [];
+		foreach ( $rows as $row ) {
+			$centralIDsMap[(int)$row->cep_user_id] = null;
+		}
+		$globalNames = $this->centralUserLookup->getNames( $centralIDsMap );
+
 		$participants = [];
-		foreach ( $rows as $participant ) {
+		$num = 0;
+		foreach ( $rows as $row ) {
+			if ( $limit !== null && $num >= $limit ) {
+				break;
+			}
+			$centralID = (int)$row->cep_user_id;
+			if (
+				$usernameFilter !== null &&
+				( !isset( $globalNames[$centralID] ) || stripos( $globalNames[$centralID], $usernameFilter ) === false )
+			) {
+				continue;
+			}
 			$participants[] = new Participant(
-				new CentralUser( (int)$participant->cep_user_id ),
-				wfTimestamp( TS_UNIX, $participant->cep_registered_at ),
-				(int)$participant->cep_id
+				new CentralUser( $centralID ),
+				wfTimestamp( TS_UNIX, $row->cep_registered_at ),
+				(int)$row->cep_id
 			);
+			$num++;
 		}
 
 		return $participants;

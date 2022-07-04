@@ -111,7 +111,7 @@
 	display: none;
 }
 
-.ext-campaignevents-details-participants-search > input.oo-ui-inputWidget-input {
+div.ext-campaignevents-details-participants-search {
 	width: 25em;
 }
 
@@ -145,7 +145,7 @@
 	text-align: center;
 }
 
-.ext-campaignevents-event-details-no-participants-icon .oo-ui-iconElement {
+.ext-campaignevents-event-details-no-participants-icon.oo-ui-iconElement {
 	position: relative;
 	text-align: center;
 	left: 50%;
@@ -157,6 +157,7 @@
 }
 
 .ext-campaignevents-details-users-container {
-	max-height: 30em;
+	/* Set a fixed height so that it does not change while we rebuild the list */
+	height: 30em;
 	overflow: auto;
 }

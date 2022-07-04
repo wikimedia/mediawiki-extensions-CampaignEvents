@@ -82,7 +82,8 @@ return [
 	},
 	ParticipantsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): ParticipantsStore {
 		return new ParticipantsStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 	OrganizersStore::SERVICE_NAME => static function ( MediaWikiServices $services ): OrganizersStore {

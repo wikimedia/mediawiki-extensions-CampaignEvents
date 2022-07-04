@@ -30,6 +30,8 @@
 		} );
 		this.windowManager = new OO.ui.WindowManager();
 		this.$usersContainer = $( '.ext-campaignevents-details-users-container' );
+		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
+		this.usernameFilter = null;
 
 		this.installEventListeners();
 		/* eslint-enable no-jquery/no-global-selector */
@@ -91,6 +93,34 @@
 				thisClass.loadMoreParticipants();
 			}
 		} );
+
+		if ( this.$searchParticipantsElement.length ) {
+			var searchParticipantsWidget = OO.ui.SearchInputWidget.static.infuse(
+				this.$searchParticipantsElement
+			);
+			searchParticipantsWidget.on(
+				'change',
+				mw.util.debounce( function () {
+					// eslint-disable-next-line no-jquery/no-global-selector
+					$( '.ext-campaignevents-details-user-div' ).remove();
+
+					thisClass.participantCheckboxes = [];
+
+					thisClass.scrollDownObserver.lastTop = 0;
+					if ( thisClass.selectAllParticipantsCheckbox ) {
+						thisClass.selectAllParticipantsCheckbox.setSelected( false );
+					}
+					var inputVal = searchParticipantsWidget.getValue();
+					thisClass.usernameFilter = inputVal === '' ? null : inputVal;
+					// Reset last participant so we can list them from the start if the
+					// filter changes
+					thisClass.lastParticipantID = null;
+					// Update the selection label
+					thisClass.onDeselectAll();
+					thisClass.loadMoreParticipants();
+				}, 500 )
+			);
+		}
 	};
 
 	ParticipantsManager.prototype.onSelectAll = function () {
@@ -169,7 +199,9 @@
 	ParticipantsManager.prototype.onConfirmRemoval = function () {
 		var thisClass = this,
 			removeAll = this.selectAllParticipantsCheckbox.isSelected(),
-			numSelected = removeAll ? this.participantsTotal : thisClass.selectedParticipantIDs.length;
+			numSelected = removeAll ?
+				this.participantsTotal :
+				thisClass.selectedParticipantIDs.length;
 
 		new mw.Rest().delete(
 			'/campaignevents/v0/event_registration/' + this.registrationID + '/participants',
@@ -180,14 +212,15 @@
 			}
 		)
 			.done( function () {
-				thisClass.participantCheckboxes = thisClass.participantCheckboxes.filter( function ( el ) {
-					if ( el.isSelected() ) {
-						$( el.$element ).closest( '.ext-campaignevents-details-user-div' ).remove();
-						return false;
-					} else {
-						return el;
-					}
-				} );
+				thisClass.participantCheckboxes =
+					thisClass.participantCheckboxes.filter( function ( el ) {
+						if ( el.isSelected() ) {
+							$( el.$element ).closest( '.ext-campaignevents-details-user-div' ).remove();
+							return false;
+						} else {
+							return el;
+						}
+					} );
 
 				thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
 				thisClass.onDeselectAll();
@@ -240,12 +273,19 @@
 	ParticipantsManager.prototype.loadMoreParticipants = function () {
 		var thisClass = this;
 
+		var params = {};
+		if ( thisClass.lastParticipantID !== null ) {
+			// eslint-disable-next-line camelcase
+			params.last_participant_id = thisClass.lastParticipantID;
+		}
+		if ( thisClass.usernameFilter !== null ) {
+			// eslint-disable-next-line camelcase
+			params.username_filter = thisClass.usernameFilter;
+		}
+
 		new mw.Rest().get(
 			'/campaignevents/v0/event_registration/' + thisClass.registrationID + '/participants',
-			{
-				// eslint-disable-next-line camelcase
-				last_participant_id: thisClass.lastParticipantID
-			}
+			params
 		)
 			.done( function ( data ) {
 				if ( !data.length ) {

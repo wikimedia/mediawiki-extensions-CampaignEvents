@@ -58,31 +58,31 @@ class EventDetailsParticipantsModule {
 
 		$noParticipantsIcon = new IconWidget( [
 			'icon' => 'userGroup',
+			'classes' => [ 'ext-campaignevents-event-details-no-participants-icon' ]
 		] );
 
-		$hideClass = [];
+		$noParticipantsClasses = [ 'ext-campaignevents-details-no-participants-state' ];
 		if ( $totalParticipants > 0 ) {
-			$hideClass = [ 'ext-campaignevents-details-hide-element' ];
+			$noParticipantsClasses[] = 'ext-campaignevents-details-hide-element';
 		}
 		$items[] = ( new Tag() )->appendContent(
-			( new Tag() )->appendContent( $noParticipantsIcon )
-				->addClasses( [ 'ext-campaignevents-event-details-no-participants-icon' ] ),
+			$noParticipantsIcon,
 			( new Tag() )->appendContent(
 				$msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-no-participants-state' )
 				)
 			)->addClasses( [ 'ext-campaignevents-details-no-participants-description' ] )
-		)->addClasses(
-			array_merge( [ 'ext-campaignevents-details-no-participants-state' ], $hideClass )
-		);
+		)->addClasses( $noParticipantsClasses );
 
 		if ( $participants ) {
 			$items[] = ( new Tag() )->appendContent(
-				( new SearchInputWidget( [
+				new SearchInputWidget( [
 					'placeholder' => $msgFormatter->format(
 						MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
-					)
-				] ) )->addClasses( [ 'ext-campaignevents-details-participants-search' ] )
+					),
+					'infusable' => true,
+					'classes' => [ 'ext-campaignevents-details-participants-search' ]
+				] )
 			)->addClasses( [ 'ext-campaignevents-details-participants-search-div' ] );
 		}
 
@@ -125,6 +125,9 @@ class EventDetailsParticipantsModule {
 
 		$usersDivContent = ( new Tag( 'div' ) )
 				->addClasses( [ 'ext-campaignevents-details-users-container' ] );
+		if ( !$participants ) {
+			$usersDivContent->addClasses( [ 'ext-campaignevents-details-hide-element' ] );
+		}
 
 		$usersDivRows = ( new Tag( 'div' ) )
 				->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );

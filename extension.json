@@ -215,7 +215,8 @@
 				"oojs-ui-core",
 				"oojs-ui-windows",
 				"mediawiki.api",
-				"mediawiki.user"
+				"mediawiki.user",
+				"mediawiki.util"
 			],
 			"targets": [ "desktop", "mobile" ]
 		},

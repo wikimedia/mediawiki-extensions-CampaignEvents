@@ -109,4 +109,20 @@ class CampaignsCentralUserLookup {
 		// of this method is to tell us if a local user exists at all.
 		return $this->centralIDLookup->localUserFromCentralId( $user->getCentralID() ) !== null;
 	}
+
+	/**
+	 * @param array<int,null> $centralIDsMap The central IDs are used as keys, the values must be null
+	 * @return array<int,string> Same keys as given to the method, but the values are the names. Suppressed and
+	 * non-existing users are excluded from the return value.
+	 */
+	public function getNames( array $centralIDsMap ): array {
+		$names = $this->centralIDLookup->lookupCentralIds( $centralIDsMap );
+		$ret = [];
+		foreach ( $names as $id => $name ) {
+			if ( $name !== null && $name !== '' ) {
+				$ret[$id] = $name;
+			}
+		}
+		return $ret;
+	}
 }

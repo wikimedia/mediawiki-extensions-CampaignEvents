@@ -7,8 +7,10 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ListParticipantsHandler extends SimpleHandler {
@@ -46,8 +48,20 @@ class ListParticipantsHandler extends SimpleHandler {
 	protected function run( int $eventID ): Response {
 		$this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
-		$lastParticipantID = $this->getValidatedParams()['last_participant_id'];
-		$participants = $this->participantsStore->getEventParticipants( $eventID, self::RES_LIMIT, $lastParticipantID );
+		$params = $this->getValidatedParams();
+		$usernameFilter = $params['username_filter'];
+		if ( $usernameFilter === '' ) {
+			throw new LocalizedHttpException(
+				new MessageValue( 'campaignevents-rest-list-participants-empty-filter' ),
+				400
+			);
+		}
+		$participants = $this->participantsStore->getEventParticipants(
+			$eventID,
+			self::RES_LIMIT,
+			$params['last_participant_id'],
+			$usernameFilter
+		);
 
 		$respVal = [];
 		foreach ( $participants as $participant ) {
@@ -74,6 +88,10 @@ class ListParticipantsHandler extends SimpleHandler {
 				'last_participant_id' => [
 					static::PARAM_SOURCE => 'query',
 					ParamValidator::PARAM_TYPE => 'integer'
+				],
+				'username_filter' => [
+					static::PARAM_SOURCE => 'query',
+					ParamValidator::PARAM_TYPE => 'string'
 				]
 			]
 		);

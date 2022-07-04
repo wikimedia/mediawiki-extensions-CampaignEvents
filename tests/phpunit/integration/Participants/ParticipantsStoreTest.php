@@ -54,6 +54,13 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->db->insert( 'ce_participants', $rows );
 	}
 
+	private function getStore(): ParticipantsStore {
+		return new ParticipantsStore(
+			CampaignEventsServices::getDatabaseHelper(),
+			CampaignEventsServices::getCampaignsCentralUserLookup()
+		);
+	}
+
 	/**
 	 * @param int $eventID
 	 * @param int $userID
@@ -63,10 +70,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testAddParticipantToEvent( int $eventID, int $userID, bool $expected ) {
 		$user = new CentralUser( $userID );
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
-		$this->assertSame( $expected, $store->addParticipantToEvent( $eventID, $user ) );
+		$this->assertSame( $expected, $this->getStore()->addParticipantToEvent( $eventID, $user ) );
 	}
 
 	public function provideParticipantsToStore(): Generator {
@@ -85,10 +89,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testRemoveParticipantFromEvent( int $eventID, int $userID, bool $expected ) {
 		$user = new CentralUser( $userID );
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
-		$this->assertSame( $expected, $store->removeParticipantFromEvent( $eventID, $user ) );
+		$this->assertSame( $expected, $this->getStore()->removeParticipantFromEvent( $eventID, $user ) );
 	}
 
 	public function provideParticipantsToRemove(): Generator {
@@ -105,9 +106,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$eventID = 42;
 		$userID = 100;
 		$user = new CentralUser( $userID );
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
+		$store = $this->getStore();
 		$getActualTS = function () use ( $eventID, $userID ): ?string {
 			$ts = $this->db->selectField(
 				'ce_participants',
@@ -151,11 +150,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		int $limit = null,
 		int $offset = null
 	) {
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
-
-		$actualUsers = $store->getEventParticipants( $eventID, $limit, $offset );
+		$actualUsers = $this->getStore()->getEventParticipants( $eventID, $limit, $offset );
 
 		$this->assertCount( count( $actualUsers ), $expectedParticipants );
 		foreach ( $actualUsers as $participant ) {
@@ -199,9 +194,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getEventParticipants
 	 */
 	public function testGetEventParticipants__limit() {
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
+		$store = $this->getStore();
 		$this->assertCount( 2, $store->getEventParticipants( 1 ), 'precondition' );
 		$limit = 0;
 		$this->assertCount( $limit, $store->getEventParticipants( 1, $limit ) );
@@ -212,9 +205,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testUserParticipatesToEvent() {
 		$participant = new CentralUser( 1234 );
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
+		$store = $this->getStore();
 		$eventID = 42;
 		$this->assertFalse( $store->userParticipatesToEvent( $eventID, $participant ), 'precondition' );
 		$store->addParticipantToEvent( $eventID, $participant );
@@ -228,10 +219,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getParticipantCountForEvent
 	 */
 	public function testGetParticipantCountForEvent( int $event, int $expected ) {
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
-		$this->assertSame( $expected, $store->getParticipantCountForEvent( $event ) );
+		$this->assertSame( $expected, $this->getStore()->getParticipantCountForEvent( $event ) );
 	}
 
 	public function provideParticipantCount(): array {
@@ -253,10 +241,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		?array $userIDs,
 		int $expected
 	) {
-		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper()
-		);
-		$this->assertSame( $expected, $store->removeParticipantsFromEvent( $eventID, $userIDs ) );
+		$this->assertSame( $expected, $this->getStore()->removeParticipantsFromEvent( $eventID, $userIDs ) );
 	}
 
 	public function provideParticipantsToRemoveFromEvent(): Generator {
