@@ -106,6 +106,7 @@
 	"campaignevents-eventslist-location-online-and-physical": "Online and physical event",
 	"campaignevents-eventslist-manage-btn-info": "Manage event",
 	"campaignevents-eventslist-menu-edit": "Edit event",
+	"campaignevents-eventslist-menu-view-eventpage": "View event page",
 	"campaignevents-eventslist-menu-close": "Close registration",
 	"campaignevents-eventslist-menu-close-success": "<bdi>$1</bdi> registration closed.",
 	"campaignevents-eventslist-menu-open": "Open registration",

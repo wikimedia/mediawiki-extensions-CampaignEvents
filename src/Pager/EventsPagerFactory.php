@@ -7,6 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Linker\LinkRenderer;
 
 class EventsPagerFactory {
@@ -16,17 +18,27 @@ class EventsPagerFactory {
 	private $databaseHelper;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var CampaignsPageFactory */
+	private $campaignsPageFactory;
+	/** @var PageURLResolver */
+	private $pageURLResolver;
 
 	/**
 	 * @param CampaignsDatabaseHelper $databaseHelper
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param CampaignsPageFactory $campaignsPageFactory
+	 * @param PageURLResolver $pageURLResolver
 	 */
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		CampaignsPageFactory $campaignsPageFactory,
+		PageURLResolver $pageURLResolver
 	) {
 		$this->databaseHelper = $databaseHelper;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->campaignsPageFactory = $campaignsPageFactory;
+		$this->pageURLResolver = $pageURLResolver;
 	}
 
 	/**
@@ -47,6 +59,8 @@ class EventsPagerFactory {
 			$linkRenderer,
 			$this->databaseHelper,
 			$this->centralUserLookup,
+			$this->campaignsPageFactory,
+			$this->pageURLResolver,
 			$search,
 			$status
 		);

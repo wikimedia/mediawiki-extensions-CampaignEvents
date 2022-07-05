@@ -4,19 +4,23 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
-use Html;
 use IContextSource;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventRegistration;
 use MediaWiki\Linker\LinkRenderer;
 use OOUI\ButtonWidget;
 use SpecialPage;
+use stdClass;
 use TablePager;
 
 class EventsPager extends TablePager {
@@ -32,17 +36,26 @@ class EventsPager extends TablePager {
 
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var CampaignsPageFactory */
+	private $campaignsPageFactory;
+	/** @var PageURLResolver */
+	private $pageURLResolver;
 
 	/** @var string */
 	private $search;
 	/** @var string */
 	private $status;
 
+	/** @var array<int,ICampaignsPage> Cache of event page objects, keyed by event ID */
+	private $eventPageCache = [];
+
 	/**
 	 * @param IContextSource $context
 	 * @param LinkRenderer $linkRenderer
 	 * @param CampaignsDatabaseHelper $databaseHelper
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param CampaignsPageFactory $campaignsPageFactory
+	 * @param PageURLResolver $pageURLResolver
 	 * @param string $search
 	 * @param string $status One of the self::STATUS_* constants
 	 */
@@ -51,6 +64,8 @@ class EventsPager extends TablePager {
 		LinkRenderer $linkRenderer,
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsCentralUserLookup $centralUserLookup,
+		CampaignsPageFactory $campaignsPageFactory,
+		PageURLResolver $pageURLResolver,
 		string $search,
 		string $status
 	) {
@@ -62,6 +77,8 @@ class EventsPager extends TablePager {
 		$this->mDb = $dbWrapper->getMWDatabase();
 		parent::__construct( $context, $linkRenderer );
 		$this->centralUserLookup = $centralUserLookup;
+		$this->campaignsPageFactory = $campaignsPageFactory;
+		$this->pageURLResolver = $pageURLResolver;
 		$this->search = $search;
 		$this->status = $status;
 	}
@@ -101,6 +118,10 @@ class EventsPager extends TablePager {
 			[
 				'event_id',
 				'event_name',
+				'event_page_namespace',
+				'event_page_title',
+				'event_page_prefixedtext',
+				'event_page_wiki',
 				'event_status',
 				'event_start',
 				'event_meeting_type',
@@ -120,6 +141,10 @@ class EventsPager extends TablePager {
 					'cep_event_id',
 					'event_id',
 					'event_name',
+					'event_page_namespace',
+					'event_page_title',
+					'event_page_prefixedtext',
+					'event_page_wiki',
 					'event_status',
 					'event_start',
 					'event_meeting_type'
@@ -142,6 +167,10 @@ class EventsPager extends TablePager {
 			'fields' => [
 				'event_id',
 				'event_name',
+				'event_page_namespace',
+				'event_page_title',
+				'event_page_prefixedtext',
+				'event_page_wiki',
 				'event_status',
 				'event_start',
 				'event_meeting_type',
@@ -161,7 +190,11 @@ class EventsPager extends TablePager {
 			case 'event_start':
 				return htmlspecialchars( $this->getLanguage()->userDate( $value, $this->getUser() ) );
 			case 'event_name':
-				return Html::element( 'strong', [], $value );
+				return $this->getLinkRenderer()->makeKnownLink(
+					SpecialPage::getTitleFor( SpecialEventRegistration::PAGE_NAME, $this->mCurrentRow->event_id ),
+					$value,
+					[ 'class' => 'ext-campaignevents-eventspager-eventpage-link' ]
+				);
 			case 'event_location':
 				$meetingType = EventStore::getMeetingTypeFromDBVal( $this->mCurrentRow->event_meeting_type );
 				if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE ) {
@@ -186,21 +219,40 @@ class EventsPager extends TablePager {
 					'invisibleLabel' => true,
 					'icon' => 'ellipsis',
 					'href' => SpecialPage::getTitleFor(
-						SpecialEventRegistration::PAGE_NAME,
+						SpecialEditEventRegistration::PAGE_NAME,
 						$eventID
 					)->getLocalURL(),
 					'classes' => [ 'ext-campaignevents-eventspager-manage-btn' ]
 				] );
 				$eventStatus = EventStore::getEventStatusFromDBVal( $this->mCurrentRow->event_status );
+				$eventPage = $this->getEventPageFromRow( $this->mCurrentRow );
 				$btn->setAttributes( [
 					'data-event-id' => $eventID,
 					'data-event-name' => $this->mCurrentRow->event_name,
 					'data-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
+					'data-event-page-url' => $this->pageURLResolver->getFullUrl( $eventPage )
 				] );
 				return $btn->toString();
 			default:
 				throw new LogicException( "Unexpected name $name" );
 		}
+	}
+
+	/**
+	 * @param stdClass $eventRow
+	 * @return ICampaignsPage
+	 */
+	private function getEventPageFromRow( stdClass $eventRow ): ICampaignsPage {
+		$eventID = $eventRow->event_id;
+		if ( !isset( $this->eventPageCache[$eventID] ) ) {
+			$this->eventPageCache[$eventID] = $this->campaignsPageFactory->newExistingPage(
+				(int)$eventRow->event_page_namespace,
+				$eventRow->event_page_title,
+				$eventRow->event_page_prefixedtext,
+				$eventRow->event_page_wiki
+			);
+		}
+		return $this->eventPageCache[$eventID];
 	}
 
 	/**

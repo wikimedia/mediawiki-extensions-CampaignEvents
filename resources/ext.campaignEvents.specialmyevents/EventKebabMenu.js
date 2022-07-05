@@ -11,6 +11,7 @@
 	 * @param {number} [config.eventID] ID of the event that the menu is used for.
 	 * @param {string} [config.eventName] Name of the event that the menu is used for.
 	 * @param {boolean} [config.isEventClosed] Whether the event is closed.
+	 * @param {string} [config.eventPageURL] URL of the event page (could be on another wiki).
 	 */
 	function EventKebabMenu( config ) {
 		this.eventID = config.eventID;
@@ -19,7 +20,7 @@
 
 		var editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID );
 
-		this.openAndCloseOptionIndex = 1;
+		this.openAndCloseOptionIndex = 2;
 		this.closeRegistrationOption = new OO.ui.MenuOptionWidget( {
 			$element: $( '<a>' ).attr( 'href', editHref ),
 			data: {
@@ -54,6 +55,14 @@
 							},
 							label: mw.msg( 'campaignevents-eventslist-menu-edit' )
 						} ),
+						new OO.ui.MenuOptionWidget( {
+							$element: $( '<a>' ).attr( 'href', config.eventPageURL ),
+							data: {
+								name: 'eventpage',
+								href: config.eventPageURL
+							},
+							label: mw.msg( 'campaignevents-eventslist-menu-view-eventpage' )
+						} ),
 						this.isClosed ? this.openRegistrationOption : this.closeRegistrationOption
 					]
 				}
@@ -72,6 +81,7 @@
 			that = this;
 		switch ( data.name ) {
 			case 'edit':
+			case 'eventpage':
 				window.location.assign( data.href );
 				break;
 			case 'close':

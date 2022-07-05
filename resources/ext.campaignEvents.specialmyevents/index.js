@@ -21,7 +21,8 @@
 				menu = new EventKebabMenu( {
 					eventID: $btn.data( 'event-id' ),
 					eventName: $btn.data( 'event-name' ),
-					isEventClosed: $btn.data( 'is-closed' )
+					isEventClosed: $btn.data( 'is-closed' ),
+					eventPageURL: $btn.data( 'event-page-url' )
 				} );
 			$btn.replaceWith( menu.$element );
 		} );

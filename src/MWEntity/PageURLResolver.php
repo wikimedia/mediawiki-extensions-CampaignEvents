@@ -15,6 +15,9 @@ class PageURLResolver {
 	/** @var TitleFactory */
 	private $titleFactory;
 
+	/** @var string[] Cached URLs */
+	private $cache = [];
+
 	/**
 	 * @param TitleFactory $titleFactory
 	 */
@@ -30,9 +33,23 @@ class PageURLResolver {
 		if ( !$page instanceof MWPageProxy ) {
 			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
 		}
-		$wikiID = $page->getWikiId();
-		return $wikiID === WikiAwareEntity::LOCAL
-			? $this->titleFactory->castFromPageIdentity( $page->getPageIdentity() )->getFullURL()
-			: WikiMap::getForeignURL( $wikiID, $page->getPrefixedText() );
+		$cacheKey = $this->getCacheKey( $page );
+		if ( !isset( $this->cache[$cacheKey] ) ) {
+			$wikiID = $page->getWikiId();
+			$this->cache[$cacheKey] = $wikiID === WikiAwareEntity::LOCAL
+				? $this->titleFactory->castFromPageIdentity( $page->getPageIdentity() )->getFullURL()
+				: WikiMap::getForeignURL( $wikiID, $page->getPrefixedText() );
+		}
+		return $this->cache[$cacheKey];
+	}
+
+	/**
+	 * @param ICampaignsPage $page
+	 * @return string
+	 */
+	private function getCacheKey( ICampaignsPage $page ): string {
+		// No need to actually convert it to the wiki ID if it's local.
+		$wikiIDStr = $page->getWikiId() === WikiAwareEntity::LOCAL ? '' : $page->getWikiId();
+		return $wikiIDStr . '|' . $page->getPrefixedText();
 	}
 }

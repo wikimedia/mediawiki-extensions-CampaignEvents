@@ -131,7 +131,9 @@ return [
 	EventsPagerFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventsPagerFactory {
 		return new EventsPagerFactory(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( CampaignsPageFactory::SERVICE_NAME ),
+			$services->get( PageURLResolver::SERVICE_NAME )
 		);
 	},
 	EventPageDecorator::SERVICE_NAME => static function ( MediaWikiServices $services ): EventPageDecorator {
