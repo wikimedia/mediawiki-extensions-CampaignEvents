@@ -1,6 +1,8 @@
 ( function () {
 	'use strict';
 
+	var ConfirmEventDeletionDialog = require( './ConfirmEventDeletionDialog.js' );
+
 	/**
 	 * Widgets for the kebab menu used in EventsPager.
 	 *
@@ -12,13 +14,16 @@
 	 * @param {string} [config.eventName] Name of the event that the menu is used for.
 	 * @param {boolean} [config.isEventClosed] Whether the event is closed.
 	 * @param {string} [config.eventPageURL] URL of the event page (could be on another wiki).
+	 * @param {Object} [config.windowManager] WindowManager object shared by all menus.
 	 */
 	function EventKebabMenu( config ) {
 		this.eventID = config.eventID;
 		this.eventName = config.eventName;
 		this.isClosed = config.isEventClosed;
+		this.windowManager = config.windowManager;
 
-		var editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID );
+		var editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID ),
+			deleteHref = mw.util.getUrl( 'Special:DeleteEventRegistration/' + this.eventID );
 
 		this.openAndCloseOptionIndex = 2;
 		this.closeRegistrationOption = new OO.ui.MenuOptionWidget( {
@@ -63,7 +68,15 @@
 							},
 							label: mw.msg( 'campaignevents-eventslist-menu-view-eventpage' )
 						} ),
-						this.isClosed ? this.openRegistrationOption : this.closeRegistrationOption
+						this.isClosed ? this.openRegistrationOption : this.closeRegistrationOption,
+						new OO.ui.MenuOptionWidget( {
+							$element: $( '<a>' ).attr( 'href', deleteHref ),
+							data: {
+								name: 'delete',
+								href: deleteHref
+							},
+							label: mw.msg( 'campaignevents-eventslist-menu-delete' )
+						} )
 					]
 				}
 			},
@@ -122,6 +135,18 @@
 						window.location.assign( data.href );
 					} );
 				break;
+			case 'delete':
+				this.maybeDeleteRegistration()
+					.done( function ( deleteData ) {
+						if ( deleteData && deleteData.deleted ) {
+							that.emit( 'deleted', that.eventName );
+						}
+					} )
+					.fail( function () {
+						// Fall back to the special page.
+						window.location.assign( data.href );
+					} );
+				break;
 		}
 	};
 
@@ -167,6 +192,33 @@
 					mw.log.error( errData.xhr.responseText );
 				}
 			);
+	};
+
+	/**
+	 * @return {jQuery.Promise} Resolved with { deleted: true } as value if the event was deleted.
+	 */
+	EventKebabMenu.prototype.maybeDeleteRegistration = function () {
+		var confirmDelDialog = new ConfirmEventDeletionDialog( { eventName: this.eventName } ),
+			eventID = this.eventID;
+
+		this.windowManager.addWindows( [ confirmDelDialog ] );
+
+		return this.windowManager.openWindow( confirmDelDialog ).closed.then( function ( data ) {
+			if ( data && data.action === 'confirm' ) {
+				return new mw.Rest().delete(
+					'/campaignevents/v0/event_registration/' + eventID,
+					{ token: mw.user.tokens.get( 'csrfToken' ) }
+				)
+					.then(
+						function () {
+							return $.Deferred().resolve( { deleted: true } );
+						},
+						function ( _errCode, errData ) {
+							mw.log.error( errData.xhr.responseText );
+						}
+					);
+			}
+		} );
 	};
 
 	module.exports = EventKebabMenu;

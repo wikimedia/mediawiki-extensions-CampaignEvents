@@ -2,7 +2,8 @@
 	'use strict';
 
 	/**
-	 * Dialog shown after an event page is created that prompts the organizer to enable registration.
+	 * Dialog shown after an event page is created that prompts the organizer to enable
+	 * registration.
 	 *
 	 * @param {Object} config Configuration options
 	 * @extends OO.ui.MessageDialog

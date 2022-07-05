@@ -89,6 +89,7 @@
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialmyevents",
 			"packageFiles": [
 				"index.js",
+				"ConfirmEventDeletionDialog.js",
 				"FilterEventsWidget.js",
 				"EventKebabMenu.js"
 			],
@@ -99,12 +100,20 @@
 				"campaignevents-eventslist-menu-close",
 				"campaignevents-eventslist-menu-close-success",
 				"campaignevents-eventslist-menu-open",
-				"campaignevents-eventslist-menu-open-success"
+				"campaignevents-eventslist-menu-open-success",
+				"campaignevents-eventslist-menu-delete",
+				"campaignevents-eventslist-delete-dialog-title",
+				"campaignevents-eventslist-delete-dialog-body",
+				"campaignevents-eventslist-delete-dialog-cancel",
+				"campaignevents-eventslist-delete-dialog-delete",
+				"campaignevents-eventslist-delete-success"
 			],
 			"dependencies": [
 				"mediawiki.api",
+				"mediawiki.jqueryMsg",
 				"mediawiki.util",
 				"oojs-ui-widgets",
+				"oojs-ui-windows",
 				"oojs-ui.styles.icons-interactions"
 			]
 		},

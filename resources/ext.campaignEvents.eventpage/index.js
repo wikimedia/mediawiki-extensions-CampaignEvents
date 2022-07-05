@@ -157,11 +157,13 @@
 			if ( action === 'created' ) {
 				var enableRegistrationDialog = new EnableRegistrationDialog( {} );
 				windowManager.addWindows( [ enableRegistrationDialog ] );
-				windowManager.openWindow( enableRegistrationDialog ).closed.then( function ( data ) {
-					if ( data && data.action === 'confirm' ) {
-						window.location.assign( enableRegistrationURL );
+				windowManager.openWindow( enableRegistrationDialog ).closed.then(
+					function ( data ) {
+						if ( data && data.action === 'confirm' ) {
+							window.location.assign( enableRegistrationURL );
+						}
 					}
-				} );
+				);
 			}
 		} );
 	}
