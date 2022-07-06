@@ -71,7 +71,7 @@
 	"campaignevents-register-confirmation-top": "Confirm registration",
 	"campaignevents-register-confirmation-text": "Confirm that you want to register for this event by using the \"{{int:campaignevents-register-confirmation-btn}}\" button.",
 	"campaignevents-register-confirmation-btn": "Register",
-	"unregisterforevent": "Cancel your registration for an event",
+	"canceleventregistration": "Cancel your registration for an event",
 	"campaignevents-unregister-success": "You have canceled your event registration.",
 	"campaignevents-unregister-confirmation-top": "Confirm unregistration",
 	"campaignevents-unregister-confirmation-text": "Confirm that you want to cancel your registration for this event by using the \"{{int:campaignevents-unregister-confirmation-btn}}\" button.",

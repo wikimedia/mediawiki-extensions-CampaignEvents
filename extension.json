@@ -196,7 +196,7 @@
 		{
 			"path": "/campaignevents/v0/event_registration/{id}/participants/self",
 			"method": "DELETE",
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UnregisterForEventHandler",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\CancelEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsUnregisterParticipantCommand",
@@ -295,16 +295,16 @@
 				"CampaignEventsPolicyMessageLookup"
 			]
 		},
-		"UnregisterForEvent": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialUnregisterForEvent",
+		"CancelEventRegistration": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialCancelEventRegistration",
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsUnregisterParticipantCommand",
 				"CampaignEventsParticipantsStore"
 			]
 		},
-		"EventRegistration": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEventRegistration"
+		"EventDetails": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEventDetails"
 		},
 		"MyEvents": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialMyEvents",

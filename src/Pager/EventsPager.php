@@ -16,7 +16,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Special\SpecialEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Linker\LinkRenderer;
 use OOUI\ButtonWidget;
 use SpecialPage;
@@ -191,7 +191,7 @@ class EventsPager extends TablePager {
 				return htmlspecialchars( $this->getLanguage()->userDate( $value, $this->getUser() ) );
 			case 'event_name':
 				return $this->getLinkRenderer()->makeKnownLink(
-					SpecialPage::getTitleFor( SpecialEventRegistration::PAGE_NAME, $this->mCurrentRow->event_id ),
+					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, $this->mCurrentRow->event_id ),
 					$value,
 					[ 'class' => 'ext-campaignevents-eventspager-eventpage-link' ]
 				);

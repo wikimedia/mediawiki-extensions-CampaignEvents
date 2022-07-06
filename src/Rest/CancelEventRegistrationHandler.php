@@ -16,7 +16,7 @@ use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
 use MediaWiki\User\UserFactory;
 
-class UnregisterForEventHandler extends SimpleHandler {
+class CancelEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;

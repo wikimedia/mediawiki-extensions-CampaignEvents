@@ -11,8 +11,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use Status;
 
-class SpecialUnregisterForEvent extends ChangeRegistrationSpecialPageBase {
-	public const PAGE_NAME = 'UnregisterForEvent';
+class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
+	public const PAGE_NAME = 'CancelEventRegistration';
 
 	/** @var UnregisterParticipantCommand */
 	private $unregisterParticipantCommand;

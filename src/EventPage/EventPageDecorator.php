@@ -22,11 +22,11 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialCancelEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Special\SpecialEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
-use MediaWiki\Extension\CampaignEvents\Special\SpecialUnregisterForEvent;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\ProperPageIdentity;
@@ -355,7 +355,7 @@ class EventPageDecorator {
 			'flags' => [ 'progressive' ],
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-details' ) ),
 			'classes' => [ 'ext-campaignevents-event-details-btn' ],
-			'href' => SpecialPage::getTitleFor( SpecialEventRegistration::PAGE_NAME, (string)$eventID )->getLocalURL(),
+			'href' => SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID )->getLocalURL(),
 		] );
 
 		$actionElements = $this->getActionElements( $eventID, $msgFormatter, $userStatus );
@@ -420,7 +420,7 @@ class EventPageDecorator {
 				// TODO MVP: This page doesn't actually list the organizers. However, in V0 there can only be
 				// a single organizer.
 				$this->linkRenderer->makeKnownLink(
-					SpecialPage::getTitleFor( SpecialEventRegistration::PAGE_NAME, (string)$eventID ),
+					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
 					$msgFormatter->format(
 						MessageValue::new( 'campaignevents-eventpage-dialog-organizers-view-all' )
 					)
@@ -534,7 +534,7 @@ class EventPageDecorator {
 					'p',
 					[],
 					$this->linkRenderer->makeKnownLink(
-						SpecialPage::getTitleFor( SpecialEventRegistration::PAGE_NAME, (string)$eventID ),
+						SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
 						$msgFormatter->format(
 							MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
 						)
@@ -597,7 +597,7 @@ class EventPageDecorator {
 		}
 
 		$unregisterURL = SpecialPage::getTitleFor(
-			SpecialUnregisterForEvent::PAGE_NAME,
+			SpecialCancelEventRegistration::PAGE_NAME,
 			(string)$eventID
 		)->getLocalURL();
 		$alreadyRegisteredItems = [
