@@ -12,7 +12,7 @@ use MediaWiki\Rest\Response;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
 
-class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
+class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
 	/**
 	 * @inheritDoc
 	 */
@@ -30,7 +30,7 @@ class CreateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @inheritDoc
 	 */
 	protected function checkPermissions( ICampaignsUser $user ): void {
-		if ( !$this->permissionChecker->userCanCreateRegistrations( $user ) ) {
+		if ( !$this->permissionChecker->userCanEnableRegistrations( $user ) ) {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-rest-createevent-permission-denied' ),
 				403

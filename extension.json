@@ -14,7 +14,7 @@
 		"MediaWiki\\Extension\\CampaignEvents\\": "src/"
 	},
 	"AvailableRights": [
-		"campaignevents-create-registration",
+		"campaignevents-enable-registration",
 		"campaignevents-delete-registration"
 	],
 	"config": {
@@ -29,7 +29,7 @@
 	},
 	"GroupPermissions": {
 		"user": {
-			"campaignevents-create-registration": true
+			"campaignevents-enable-registration": true
 		},
 		"sysop": {
 			"campaignevents-delete-registration": true
@@ -157,7 +157,7 @@
 		{
 			"path": "/campaignevents/v0/event_registration",
 			"method": "POST",
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\CreateEventRegistrationHandler",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EnableEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventFactory",
 				"CampaignEventsPermissionChecker",
@@ -261,8 +261,8 @@
 		"src/ServiceWiring.php"
 	],
 	"SpecialPages": {
-		"CreateEventRegistration": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialCreateEventRegistration",
+		"EnableEventRegistration": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialEnableEventRegistration",
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",

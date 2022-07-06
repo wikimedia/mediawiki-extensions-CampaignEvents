@@ -42,27 +42,27 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param bool $expected
 	 * @param ICampaignsUser $user
 	 * @param UserBlockChecker|null $blockChecker
-	 * @covers ::userCanCreateRegistrations
-	 * @dataProvider provideCanCreateRegistrations
+	 * @covers ::userCanEnableRegistrations
+	 * @dataProvider provideCanEnableRegistrations
 	 */
-	public function testUserCanCreateRegistrations(
+	public function testUserCanEnableRegistrations(
 		bool $expected,
 		ICampaignsUser $user,
 		UserBlockChecker $blockChecker = null
 	) {
 		$this->assertSame(
 			$expected,
-			$this->getPermissionChecker( $blockChecker )->userCanCreateRegistrations( $user )
+			$this->getPermissionChecker( $blockChecker )->userCanEnableRegistrations( $user )
 		);
 	}
 
-	public function provideCanCreateRegistrations(): Generator {
+	public function provideCanEnableRegistrations(): Generator {
 		$registeredUser = new UserIdentityValue( 42, 'Name' );
 		yield 'Authorized' => [
 			true,
 			new MWUserProxy(
 				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-create-registration' ] )
+				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
 			)
 		];
 		yield 'Lacking right' => [
@@ -86,23 +86,23 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param bool $expected
 	 * @param ICampaignsUser $user
 	 * @param ICampaignsPage $page
-	 * @covers ::userCanCreateRegistration
-	 * @dataProvider provideCanCreateRegistration
+	 * @covers ::userCanEnableRegistration
+	 * @dataProvider provideCanEnableRegistration
 	 */
-	public function testUserCanCreateRegistration( bool $expected, ICampaignsUser $user, ICampaignsPage $page ) {
+	public function testUserCanEnableRegistration( bool $expected, ICampaignsUser $user, ICampaignsPage $page ) {
 		$this->assertSame(
 			$expected,
-			$this->getPermissionChecker()->userCanCreateRegistration( $user, $page )
+			$this->getPermissionChecker()->userCanEnableRegistration( $user, $page )
 		);
 	}
 
-	public function provideCanCreateRegistration(): Generator {
+	public function provideCanEnableRegistration(): Generator {
 		$registeredUser = new UserIdentityValue( 42, 'Name' );
 		yield 'Authorized' => [
 			true,
 			new MWUserProxy(
 				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-create-registration' ] )
+				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
 			),
 			$this->createMock( ICampaignsPage::class )
 		];
@@ -140,7 +140,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			false,
 			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
 		];
-		yield 'Lacks right to create registrations' => [
+		yield 'Lacks right to enable registrations' => [
 			false,
 			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
 		];
@@ -165,7 +165,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			true,
 			new MWUserProxy(
 				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-create-registration' ] )
+				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
 			),
 			null,
 			$authorizedOrgStore
@@ -200,7 +200,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			true,
 			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
 		];
-		yield 'Lacks right to create registrations' => [
+		yield 'Lacks right to enable registrations' => [
 			false,
 			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
 		];
@@ -225,7 +225,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			true,
 			new MWUserProxy(
 				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-create-registration' ] )
+				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
 			),
 			null,
 			$authorizedOrgStore

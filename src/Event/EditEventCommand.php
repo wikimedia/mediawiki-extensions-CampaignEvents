@@ -70,7 +70,7 @@ class EditEventCommand {
 		$registrationID = $registration->getID();
 		$isCreation = $registrationID === null;
 		$eventPage = $registration->getPage();
-		if ( $isCreation && !$this->permissionChecker->userCanCreateRegistration( $performer, $eventPage ) ) {
+		if ( $isCreation && !$this->permissionChecker->userCanEnableRegistration( $performer, $eventPage ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-create-not-allowed-page' );
 		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration( $performer, $registrationID ) ) {
 			// @phan-suppress-previous-line PhanTypeMismatchArgumentNullable

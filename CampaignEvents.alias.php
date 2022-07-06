@@ -11,7 +11,7 @@ declare( strict_types=1 );
 $specialPageAliases = [];
 
 $specialPageAliases['en'] = [
-	'CreateEventRegistration' => [ 'CreateEventRegistration' ],
+	'EnableEventRegistration' => [ 'EnableEventRegistration' ],
 	'DeleteEventRegistration' => [ 'DeleteEventRegistration' ],
 	'EditEventRegistration' => [ 'EditEventRegistration' ],
 	'EventRegistration' => [ 'EventRegistration' ],
