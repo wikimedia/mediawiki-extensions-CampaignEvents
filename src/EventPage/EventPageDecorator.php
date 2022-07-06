@@ -22,8 +22,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\Special\SpecialCreateEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialUnregisterForEvent;
@@ -166,7 +166,7 @@ class EventPageDecorator {
 		ICampaignsUser $user,
 		ICampaignsPage $eventPage
 	): void {
-		if ( !$this->permissionChecker->userCanCreateRegistration( $user, $eventPage ) ) {
+		if ( !$this->permissionChecker->userCanEnableRegistration( $user, $eventPage ) ) {
 			return;
 		}
 
@@ -178,8 +178,8 @@ class EventPageDecorator {
 		$out->addModules( [ 'ext.campaignEvents.eventpage' ] );
 		// We pass this to the client to avoid hardcoding the name of the page field in JS. Apparently we can't use
 		// a RL callback for this because it doesn't provide the current page.
-		$enableRegistrationURL = SpecialPage::getTitleFor( SpecialCreateEventRegistration::PAGE_NAME )->getLocalURL( [
-			SpecialCreateEventRegistration::PAGE_FIELD_NAME => $eventPage->getPrefixedText()
+		$enableRegistrationURL = SpecialPage::getTitleFor( SpecialEnableEventRegistration::PAGE_NAME )->getLocalURL( [
+			SpecialEnableEventRegistration::PAGE_FIELD_NAME => $eventPage->getPrefixedText()
 		] );
 		$out->addJsConfigVars( [ 'wgCampaignEventsEnableRegistrationURL' => $enableRegistrationURL ] );
 		$out->addHTML( $this->getEnableRegistrationHeader( $out, $msgFormatter, $language, $enableRegistrationURL ) );

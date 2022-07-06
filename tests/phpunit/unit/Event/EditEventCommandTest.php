@@ -42,7 +42,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		}
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
-			$permChecker->method( 'userCanCreateRegistration' )->willReturn( true );
+			$permChecker->method( 'userCanEnableRegistration' )->willReturn( true );
 			$permChecker->method( 'userCanEditRegistration' )->willReturn( true );
 		}
 		return new EditEventCommand(
@@ -83,7 +83,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	public function testDoEditIfAllowed__permissionError( EventRegistration $registration ) {
 		$isCreation = $registration->getID() === null;
 		$permChecker = $this->createMock( PermissionChecker::class );
-		$permMethod = $isCreation ? 'userCanCreateRegistration' : 'userCanEditRegistration';
+		$permMethod = $isCreation ? 'userCanEnableRegistration' : 'userCanEditRegistration';
 		$permChecker->expects( $this->once() )->method( $permMethod )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->doEditIfAllowed(
 			$registration,

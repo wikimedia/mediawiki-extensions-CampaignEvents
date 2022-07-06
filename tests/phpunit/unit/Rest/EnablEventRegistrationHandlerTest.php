@@ -11,7 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler;
+use MediaWiki\Extension\CampaignEvents\Rest\EnableEventRegistrationHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\User\UserFactory;
@@ -20,10 +20,10 @@ use StatusValue;
 
 /**
  * @group Test
- * @covers \MediaWiki\Extension\CampaignEvents\Rest\CreateEventRegistrationHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\EnableEventRegistrationHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEditEventRegistrationHandler
  */
-class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
+class EnablEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	use EditEventRegistrationHandlerTestTrait;
 
 	private function getRequestData(): array {
@@ -40,14 +40,14 @@ class CreateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 * @param EventFactory|null $eventFactory
 	 * @param EditEventCommand|null $editEventCmd
 	 * @param UserFactory|null $userFactory
-	 * @return CreateEventRegistrationHandler
+	 * @return EnableEventRegistrationHandler
 	 */
 	protected function newHandler(
 		EventFactory $eventFactory = null,
 		EditEventCommand $editEventCmd = null,
 		UserFactory $userFactory = null
-	): CreateEventRegistrationHandler {
-		return new CreateEventRegistrationHandler(
+	): EnableEventRegistrationHandler {
+		return new EnableEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),
 			new PermissionChecker(
 				$this->createMock( UserBlockChecker::class ),

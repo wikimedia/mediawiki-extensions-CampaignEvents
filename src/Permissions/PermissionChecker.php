@@ -12,7 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 class PermissionChecker {
 	public const SERVICE_NAME = 'CampaignEventsPermissionChecker';
 
-	public const CREATE_REGISTRATIONS_RIGHT = 'campaignevents-create-registration';
+	public const ENABLE_REGISTRATIONS_RIGHT = 'campaignevents-enable-registration';
 
 	/** @var UserBlockChecker */
 	private $userBlockChecker;
@@ -34,9 +34,9 @@ class PermissionChecker {
 	 * @param ICampaignsUser $user
 	 * @return bool
 	 */
-	public function userCanCreateRegistrations( ICampaignsUser $user ): bool {
+	public function userCanEnableRegistrations( ICampaignsUser $user ): bool {
 		return $user->isRegistered()
-			&& $user->hasRight( self::CREATE_REGISTRATIONS_RIGHT )
+			&& $user->hasRight( self::ENABLE_REGISTRATIONS_RIGHT )
 			&& !$this->userBlockChecker->isSitewideBlocked( $user );
 	}
 
@@ -45,8 +45,8 @@ class PermissionChecker {
 	 * @param ICampaignsPage $eventPage
 	 * @return bool
 	 */
-	public function userCanCreateRegistration( ICampaignsUser $user, ICampaignsPage $eventPage ): bool {
-		if ( !$this->userCanCreateRegistrations( $user ) ) {
+	public function userCanEnableRegistration( ICampaignsUser $user, ICampaignsPage $eventPage ): bool {
+		if ( !$this->userCanEnableRegistrations( $user ) ) {
 			return false;
 		}
 
@@ -61,7 +61,7 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanEditRegistration( ICampaignsUser $user, int $registrationID ): bool {
-		return $this->userCanCreateRegistrations( $user )
+		return $this->userCanEnableRegistrations( $user )
 			&& $this->organizersStore->isEventOrganizer( $registrationID, $user );
 	}
 
