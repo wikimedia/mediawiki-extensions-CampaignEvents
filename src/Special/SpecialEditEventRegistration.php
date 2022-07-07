@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use WikiMap;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EditEventRegistration';
@@ -83,8 +84,10 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		}
 
 		$eventPage = $this->event->getPage();
-		if ( $eventPage->getWikiId() !== WikiAwareEntity::LOCAL ) {
-			$this->outputErrorBox( 'campaignevents-edit-page-nonlocal', $eventPage->getWikiId() );
+		$wikiID = $eventPage->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			$foreignEditURL = WikiMap::getForeignURL( $wikiID, 'Special:' . self::PAGE_NAME . "/{$this->eventID}" );
+			$this->outputErrorBox( 'campaignevents-edit-page-nonlocal', $foreignEditURL, $wikiID );
 			return;
 		}
 		parent::execute( $par );

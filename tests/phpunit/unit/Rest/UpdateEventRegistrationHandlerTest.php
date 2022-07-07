@@ -202,7 +202,7 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->executeHandler( $handler, $request );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
-			$this->assertSame( 'campaignevents-edit-page-nonlocal', $e->getMessageValue()->getKey() );
+			$this->assertSame( 'campaignevents-rest-edit-page-nonlocal', $e->getMessageValue()->getKey() );
 			$this->assertSame( 400, $e->getCode() );
 		}
 	}
