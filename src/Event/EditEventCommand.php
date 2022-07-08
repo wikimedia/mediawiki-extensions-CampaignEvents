@@ -71,7 +71,7 @@ class EditEventCommand {
 		$isCreation = $registrationID === null;
 		$eventPage = $registration->getPage();
 		if ( $isCreation && !$this->permissionChecker->userCanEnableRegistration( $performer, $eventPage ) ) {
-			return PermissionStatus::newFatal( 'campaignevents-create-not-allowed-page' );
+			return PermissionStatus::newFatal( 'campaignevents-enable-registration-not-allowed-page' );
 		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration( $performer, $registrationID ) ) {
 			// @phan-suppress-previous-line PhanTypeMismatchArgumentNullable
 			return PermissionStatus::newFatal( 'campaignevents-edit-not-allowed-registration' );

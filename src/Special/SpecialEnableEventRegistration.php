@@ -36,9 +36,9 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 	 */
 	protected function getFormMessages(): array {
 		return [
-			'success' => 'campaignevents-create-success-msg',
+			'success' => 'campaignevents-enable-registration-success-msg',
 			'form-legend' => 'campaignevents-edit-form-legend',
-			'submit' => 'campaignevents-create-form-submit',
+			'submit' => 'campaignevents-enable-registration-form-submit',
 		];
 	}
 

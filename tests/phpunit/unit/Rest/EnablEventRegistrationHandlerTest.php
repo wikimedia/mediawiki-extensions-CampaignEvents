@@ -90,7 +90,10 @@ class EnablEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 403, $e->getCode() );
-			$this->assertSame( 'campaignevents-rest-createevent-permission-denied', $e->getMessageValue()->getKey() );
+			$this->assertSame(
+				'campaignevents-rest-enable-registration-permission-denied',
+				$e->getMessageValue()->getKey()
+			);
 		}
 	}
 

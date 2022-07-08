@@ -32,7 +32,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	protected function checkPermissions( ICampaignsUser $user ): void {
 		if ( !$this->permissionChecker->userCanEnableRegistrations( $user ) ) {
 			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-createevent-permission-denied' ),
+				new MessageValue( 'campaignevents-rest-enable-registration-permission-denied' ),
 				403
 			);
 		}
