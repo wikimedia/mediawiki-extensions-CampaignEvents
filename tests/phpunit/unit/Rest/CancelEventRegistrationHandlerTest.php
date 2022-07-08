@@ -8,7 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
-use MediaWiki\Extension\CampaignEvents\Rest\UnregisterForEventHandler;
+use MediaWiki\Extension\CampaignEvents\Rest\CancelEventRegistrationHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
@@ -19,10 +19,10 @@ use StatusValue;
 
 /**
  * @group Test
- * @covers \MediaWiki\Extension\CampaignEvents\Rest\UnregisterForEventHandler
+ * @covers \MediaWiki\Extension\CampaignEvents\Rest\CancelEventRegistrationHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\EventIDParamTrait
  */
-class UnregisterForEventHandlerTest extends MediaWikiUnitTestCase {
+class CancelEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
 	use CSRFTestHelperTrait;
 
@@ -35,12 +35,12 @@ class UnregisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		UnregisterParticipantCommand $unregisterCommand = null,
 		IEventLookup $eventLookup = null,
 		UserFactory $userFactory = null
-	): UnregisterForEventHandler {
+	): CancelEventRegistrationHandler {
 		if ( !$unregisterCommand ) {
 			$unregisterCommand = $this->createMock( UnregisterParticipantCommand::class );
 			$unregisterCommand->method( 'unregisterIfAllowed' )->willReturn( StatusValue::newGood( true ) );
 		}
-		return new UnregisterForEventHandler(
+		return new CancelEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$unregisterCommand,
 			$userFactory ?? $this->getUserFactory( true )
