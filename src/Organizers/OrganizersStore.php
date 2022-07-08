@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotCentralException;
 
 class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
@@ -61,9 +62,12 @@ class OrganizersStore {
 	/**
 	 * @param int $eventID
 	 * @param ICampaignsUser $user
-	 * @return bool
+	 * @return bool Returns false if the user is logged-out.
 	 */
 	public function isEventOrganizer( int $eventID, ICampaignsUser $user ): bool {
+		if ( !$user->isRegistered() ) {
+			return false;
+		}
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$row = $dbr->selectRow(
 			'ce_organizers',
@@ -96,6 +100,7 @@ class OrganizersStore {
 	 * @param int $eventID
 	 * @param ICampaignsUser $user
 	 * @param string[] $roles Roles::ROLE_* constants
+	 * @throws UserNotCentralException If passed a logged-out user.
 	 */
 	public function addOrganizerToEvent( int $eventID, ICampaignsUser $user, array $roles ): void {
 		$organizerCentralID = $this->centralUserLookup->getCentralID( $user );

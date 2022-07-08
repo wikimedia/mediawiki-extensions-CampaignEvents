@@ -78,6 +78,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testIsEventOrganizer( int $eventID, int $userID, bool $expected ) {
 		$user = $this->createMock( ICampaignsUser::class );
+		$user->method( 'isRegistered' )->willReturn( true );
 		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$userLookup->method( 'getCentralID' )
 			->with( $user )

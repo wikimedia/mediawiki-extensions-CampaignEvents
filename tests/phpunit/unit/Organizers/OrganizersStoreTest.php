@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotCentralException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiUnitTestCase;
@@ -20,14 +21,18 @@ use Wikimedia\TestingAccessWrapper;
  * @covers ::__construct()
  */
 class OrganizersStoreTest extends MediaWikiUnitTestCase {
+	private function getOrganizersStore( CampaignsCentralUserLookup $centralUserLookup = null ): OrganizersStore {
+		return new OrganizersStore(
+			$this->createMock( CampaignsDatabaseHelper::class ),
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class )
+		);
+	}
+
 	/**
 	 * @covers ::addOrganizerToEvent
 	 */
 	public function testAddOrganizerToEvent__invalidRole() {
-		$store = new OrganizersStore(
-			$this->createMock( CampaignsDatabaseHelper::class ),
-			$this->createMock( CampaignsCentralUserLookup::class )
-		);
+		$store = $this->getOrganizersStore();
 
 		$this->expectException( InvalidArgumentException::class );
 		$store->addOrganizerToEvent( 1, $this->createMock( ICampaignsUser::class ), [ 'SOME-INVALID-ROLE' ] );
@@ -48,5 +53,31 @@ class OrganizersStoreTest extends MediaWikiUnitTestCase {
 		$actualMap = TestingAccessWrapper::constant( OrganizersStore::class, 'ROLES_MAP' );
 
 		$this->assertArrayEquals( $expected, array_keys( $actualMap ) );
+	}
+
+	/**
+	 * @covers ::isEventOrganizer
+	 */
+	public function testIsEventOrganizer__loggedOut() {
+		$store = $this->getOrganizersStore();
+		$loggedOutUser = $this->createMock( ICampaignsUser::class );
+		$loggedOutUser->expects( $this->atLeastOnce() )->method( 'isRegistered' )->willReturn( false );
+		$this->assertFalse( $store->isEventOrganizer( 1, $loggedOutUser ) );
+	}
+
+	/**
+	 * @covers ::addOrganizerToEvent
+	 */
+	public function testAddOrganizerToEvent__loggedOut() {
+		$loggedOutUser = $this->createMock( ICampaignsUser::class );
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->expects( $this->atLeastOnce() )
+			->method( 'getCentralID' )
+			->with( $loggedOutUser )
+			->willThrowException( $this->createMock( UserNotCentralException::class ) );
+		$store = $this->getOrganizersStore( $centralUserLookup );
+
+		$this->expectException( UserNotCentralException::class );
+		$store->addOrganizerToEvent( 1, $loggedOutUser, [] );
 	}
 }
