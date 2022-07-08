@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Participants;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotCentralException;
 
 class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
@@ -29,6 +30,7 @@ class ParticipantsStore {
 	 * @param int $eventID
 	 * @param ICampaignsUser $participant
 	 * @return bool True if the participant was just added, false if they were already listed.
+	 * @throws UserNotCentralException If passed a logged-out user.
 	 */
 	public function addParticipantToEvent( int $eventID, ICampaignsUser $participant ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
@@ -72,6 +74,7 @@ class ParticipantsStore {
 	 * @param ICampaignsUser $participant
 	 * @return bool True if the participant was removed, false if they never registered or
 	 * they registered but then unregistered.
+	 * @throws UserNotCentralException If passed a logged-out user.
 	 */
 	public function removeParticipantFromEvent( int $eventID, ICampaignsUser $participant ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
@@ -124,12 +127,16 @@ class ParticipantsStore {
 
 	/**
 	 * Returns whether the given user participates to the event. Note that this returns false if the user was
-	 * participating but then unregistered.
+	 * participating but then unregistered. Returns false if the user is not registered.
 	 * @param int $eventID
 	 * @param ICampaignsUser $user
 	 * @return bool
 	 */
 	public function userParticipatesToEvent( int $eventID, ICampaignsUser $user ): bool {
+		if ( !$user->isRegistered() ) {
+			return false;
+		}
+
 		$userCentralID = $this->centralUserLookup->getCentralID( $user );
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$row = $dbr->selectRow(

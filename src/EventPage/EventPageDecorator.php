@@ -656,16 +656,14 @@ class EventPageDecorator {
 			return self::USER_STATUS_BLOCKED;
 		}
 
-		if ( $user->isRegistered() ) {
-			if ( $this->organizersStore->isEventOrganizer( $event->getID(), $user ) ) {
-				return self::USER_STATUS_ORGANIZER;
-			}
+		if ( $this->organizersStore->isEventOrganizer( $event->getID(), $user ) ) {
+			return self::USER_STATUS_ORGANIZER;
+		}
 
-			if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $user ) ) {
-				return UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $event )
-					? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
-					: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;
-			}
+		if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $user ) ) {
+			return UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $event )
+				? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
+				: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;
 		}
 
 		// User is logged-in and not already participating, or logged-out, in which case we'll know better

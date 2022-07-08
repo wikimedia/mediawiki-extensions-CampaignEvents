@@ -186,6 +186,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testUserParticipatesToEvent() {
 		$participant = $this->createMock( ICampaignsUser::class );
+		$participant->method( 'isRegistered' )->willReturn( true );
 		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$centralUserLookup->method( 'getCentralID' )->with( $participant )->willReturn( 1234 );
 		$store = new ParticipantsStore(
