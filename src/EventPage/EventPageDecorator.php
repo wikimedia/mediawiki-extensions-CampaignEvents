@@ -28,6 +28,7 @@ use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
 use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
@@ -318,13 +319,14 @@ class EventPageDecorator {
 			$locationContent->addClasses( [ 'ext-campaignevents-eventpage-header-address' ] );
 			$locationContent->appendContent( $language->truncateForVisual( $address, self::ADDRESS_MAX_LENGTH ) );
 		}
-		$items[] = new EventInfoWidget( [
+		$items[] = new TextWithIconWidget( [
 			'icon' => 'mapPin',
 			'content' => $locationContent,
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-location-label' ) ),
+			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
 		] );
 
-		$items[] = new EventInfoWidget( [
+		$items[] = new TextWithIconWidget( [
 			'icon' => 'clock',
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-dates' )->params(
@@ -337,9 +339,10 @@ class EventPageDecorator {
 				)
 			),
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-dates-label' ) ),
+			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
 		] );
 
-		$items[] = new EventInfoWidget( [
+		$items[] = new TextWithIconWidget( [
 			'icon' => 'userGroup',
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-participants' )
@@ -348,6 +351,7 @@ class EventPageDecorator {
 			'label' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-participants-label' )
 			),
+			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
 		] );
 
 		$items[] = new ButtonWidget( [
