@@ -23,7 +23,6 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialCancelEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
@@ -589,7 +588,7 @@ class EventPageDecorator {
 					'ext-campaignevents-eventpage-manage-btn'
 				],
 				'href' => SpecialPage::getTitleFor(
-					SpecialEditEventRegistration::PAGE_NAME,
+					SpecialEventDetails::PAGE_NAME,
 					(string)$eventID
 				)->getLocalURL(),
 			] );
