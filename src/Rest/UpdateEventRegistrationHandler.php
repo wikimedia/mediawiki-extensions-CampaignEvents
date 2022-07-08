@@ -66,9 +66,9 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		$eventPageWikiID = $registration->getPage()->getWikiId();
 		if ( $eventPageWikiID !== WikiAwareEntity::LOCAL ) {
 			// TODO: This could redirect with a 3xx status code, but it's unclear how we may be able to obtain
-			// the REST endpoint URL for external wikis.
+			// the REST endpoint URL for external wikis (T312568).
 			throw new LocalizedHttpException(
-				MessageValue::new( 'campaignevents-edit-page-nonlocal' )->params( $eventPageWikiID ),
+				MessageValue::new( 'campaignevents-rest-edit-page-nonlocal' )->params( $eventPageWikiID ),
 				400
 			);
 		}
