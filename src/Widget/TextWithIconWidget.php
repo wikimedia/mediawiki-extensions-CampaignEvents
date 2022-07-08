@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\EventPage;
+namespace MediaWiki\Extension\CampaignEvents\Widget;
 
 use InvalidArgumentException;
 use OOUI\IconElement;
@@ -11,15 +11,17 @@ use OOUI\Tag;
 use OOUI\Widget;
 
 /**
- * A widget combining an icon and a label that is used for presenting information about an event.
- * Somewhat similar to MessageWidget, but with different semantics.
+ * A widget combining an icon and some unlabelled information. The label is invisible and used as `title`
+ * of the icon. Somewhat similar to MessageWidget, but with different semantics.
+ * @note When using this widget, you should load the `ext.campaignEvents.TextWithIconWidget.less` stylesheet.
  */
-class EventInfoWidget extends Widget {
+class TextWithIconWidget extends Widget {
 	use IconElement;
 	use LabelElement;
 
 	/**
 	 * @inheritDoc
+	 * CSS classes can be added to the icon via $config['icon_classes'].
 	 */
 	public function __construct( array $config = [] ) {
 		if ( !isset( $config['content'] ) || !isset( $config['label'] ) ) {
@@ -27,7 +29,7 @@ class EventInfoWidget extends Widget {
 		}
 		$content = new Tag( 'span' );
 		$content->appendContent( $config['content'] );
-		$content->addClasses( [ 'ext-campaignevents-eventpage-info-widget-content' ] );
+		$content->addClasses( [ 'ext-campaignevents-textwithicon-widget-content' ] );
 		$config['content'] = $content;
 
 		$config['invisibleLabel'] = true;
@@ -39,9 +41,9 @@ class EventInfoWidget extends Widget {
 
 		$this->getIconElement()->setAttributes( [
 			'title' => $config['label'],
-		] )->addClasses( [ 'ext-campaignevents-eventpage-icon' ] );
+		] )->addClasses( $config['icon_classes'] ?? [] );
 
-		$this->addClasses( [ 'ext-campaignevents-eventpage-info-widget' ] );
+		$this->addClasses( [ 'ext-campaignevents-textwithicon-widget' ] );
 		// Prepending because the parent constructor has already appended the content
 		$this->prependContent( [ $this->icon, $this->label ] );
 	}

@@ -118,7 +118,10 @@
 			]
 		},
 		"ext.campaignEvents.eventpage.styles": {
-			"styles": "ext.campaignEvents.eventpage.styles.less"
+			"styles": [
+				"ext.campaignEvents.eventpage.styles.less",
+				"ext.campaignEvents.TextWithIconWidget.less"
+			]
 		},
 		"ext.campaignEvents.eventpage": {
 			"localBasePath": "resources/ext.campaignEvents.eventpage",
