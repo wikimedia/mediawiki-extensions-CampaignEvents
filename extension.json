@@ -111,6 +111,7 @@
 			"dependencies": [
 				"mediawiki.api",
 				"mediawiki.jqueryMsg",
+				"mediawiki.Uri",
 				"mediawiki.util",
 				"oojs-ui-widgets",
 				"oojs-ui-windows",
