@@ -7,8 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Organizers;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotCentralException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\LocalUserNotFoundException;
 
 class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
@@ -54,7 +55,11 @@ class OrganizersStore {
 
 		$organizers = [];
 		foreach ( $rolesByOrganizer as $organizerID => $roles ) {
-			$organizers[] = new Organizer( $this->centralUserLookup->getLocalUser( $organizerID ), $roles );
+			try {
+				$organizers[] = new Organizer( $this->centralUserLookup->getLocalUser( $organizerID ), $roles );
+			} catch ( LocalUserNotFoundException $_ ) {
+				// Most probably a deleted user, skip it.
+			}
 		}
 		return $organizers;
 	}
@@ -100,7 +105,7 @@ class OrganizersStore {
 	 * @param int $eventID
 	 * @param ICampaignsUser $user
 	 * @param string[] $roles Roles::ROLE_* constants
-	 * @throws UserNotCentralException If passed a logged-out user.
+	 * @throws CentralUserNotFoundException If passed a logged-out user.
 	 */
 	public function addOrganizerToEvent( int $eventID, ICampaignsUser $user, array $roles ): void {
 		$organizerCentralID = $this->centralUserLookup->getCentralID( $user );

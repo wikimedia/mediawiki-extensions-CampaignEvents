@@ -6,8 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Participants;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotCentralException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\LocalUserNotFoundException;
 
 class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
@@ -30,7 +31,7 @@ class ParticipantsStore {
 	 * @param int $eventID
 	 * @param ICampaignsUser $participant
 	 * @return bool True if the participant was just added, false if they were already listed.
-	 * @throws UserNotCentralException If passed a logged-out user.
+	 * @throws CentralUserNotFoundException If passed a logged-out user.
 	 */
 	public function addParticipantToEvent( int $eventID, ICampaignsUser $participant ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
@@ -74,7 +75,7 @@ class ParticipantsStore {
 	 * @param ICampaignsUser $participant
 	 * @return bool True if the participant was removed, false if they never registered or
 	 * they registered but then unregistered.
-	 * @throws UserNotCentralException If passed a logged-out user.
+	 * @throws CentralUserNotFoundException If passed a logged-out user.
 	 */
 	public function removeParticipantFromEvent( int $eventID, ICampaignsUser $participant ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
@@ -103,7 +104,15 @@ class ParticipantsStore {
 			[ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ],
 			$limit !== null ? [ 'LIMIT' => $limit ] : []
 		);
-		return array_map( [ $this->centralUserLookup, 'getLocalUser' ], $centralIDs );
+		$ret = [];
+		foreach ( $centralIDs as $id ) {
+			try {
+				$ret[] = $this->centralUserLookup->getLocalUser( (int)$id );
+			} catch ( LocalUserNotFoundException $_ ) {
+				// Most probably a deleted user, skip it.
+			}
+		}
+		return $ret;
 	}
 
 	/**

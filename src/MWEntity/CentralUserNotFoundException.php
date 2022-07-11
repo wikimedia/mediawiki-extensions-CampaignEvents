@@ -6,7 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use RuntimeException;
 
-class UserNotCentralException extends RuntimeException {
+/**
+ * This exception is thrown when there's no global user corresponding to the given username.
+ */
+class CentralUserNotFoundException extends RuntimeException {
 	/**
 	 * @param string $userName
 	 */

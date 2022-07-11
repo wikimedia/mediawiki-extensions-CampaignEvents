@@ -7,8 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Organizers;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotCentralException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiUnitTestCase;
@@ -74,10 +74,10 @@ class OrganizersStoreTest extends MediaWikiUnitTestCase {
 		$centralUserLookup->expects( $this->atLeastOnce() )
 			->method( 'getCentralID' )
 			->with( $loggedOutUser )
-			->willThrowException( $this->createMock( UserNotCentralException::class ) );
+			->willThrowException( $this->createMock( CentralUserNotFoundException::class ) );
 		$store = $this->getOrganizersStore( $centralUserLookup );
 
-		$this->expectException( UserNotCentralException::class );
+		$this->expectException( CentralUserNotFoundException::class );
 		$store->addOrganizerToEvent( 1, $loggedOutUser, [] );
 	}
 }
