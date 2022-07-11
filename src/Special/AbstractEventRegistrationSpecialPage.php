@@ -199,6 +199,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
+		$meetingType = (int)$data['EventMeetingType'];
+		// Use null if it wasn't provided, or EventFactory will flag the empty string as an invalid URL.
+		$rawMeetingURL = $data['EventMeetingURL'] !== '' ? $data['EventMeetingURL'] : null;
+
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
@@ -211,10 +215,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventStart'],
 				$data['EventEnd'],
 				EventRegistration::TYPE_GENERIC,
-				(int)$data['EventMeetingType'],
-				$data['EventMeetingURL'] ?: null,
-				$data['EventMeetingCountry'],
-				$data['EventMeetingAddress'],
+				$meetingType,
+				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $rawMeetingURL : null,
+				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,
+				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingAddress'] : null,
 				$this->event ? $this->event->getCreationTimestamp() : null,
 				$this->event ? $this->event->getLastEditTimestamp() : null,
 				$this->event ? $this->event->getDeletionTimestamp() : null,

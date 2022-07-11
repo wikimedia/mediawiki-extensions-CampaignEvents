@@ -114,32 +114,7 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-type' );
 		}
 
-		if ( !in_array( $meetingType, EventRegistration::VALID_MEETING_TYPES, true ) ) {
-			$res->error( 'campaignevents-error-no-meeting-type' );
-		}
-
-		if ( ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) && $meetingURL !== null ) {
-			$meetingURL = trim( $meetingURL );
-			if ( !$this->isValidURL( $meetingURL ) ) {
-				$res->error( 'campaignevents-error-invalid-meeting-url' );
-			}
-		}
-
-		if ( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) {
-			if ( $meetingCountry === null ) {
-				$res->error( 'campaignevents-error-in-person-no-country' );
-			} else {
-				$meetingCountry = trim( $meetingCountry );
-			}
-			if ( $meetingAddress === null ) {
-				$res->error( 'campaignevents-error-in-person-no-address' );
-			} else {
-				$meetingAddress = trim( $meetingAddress );
-			}
-			if ( $meetingCountry !== null && $meetingAddress !== null ) {
-				$res->merge( $this->validateLocation( $meetingCountry, $meetingAddress ) );
-			}
-		}
+		$res->merge( $this->validateMeetingInfo( $meetingType, $meetingURL, $meetingCountry, $meetingAddress ) );
 
 		$creationTSUnix = wfTimestampOrNull( TS_UNIX, $creationTimestamp );
 		$lastEditTSUnix = wfTimestampOrNull( TS_UNIX, $lastEditTimestamp );
@@ -263,6 +238,58 @@ class EventFactory {
 			$res->error( 'campaignevents-error-start-after-end' );
 		}
 		$res->setResult( true, [ $startTSUnix, $endTSUnix ] );
+		return $res;
+	}
+
+	/**
+	 * @param int $meetingType
+	 * @param string|null &$meetingURL
+	 * @param string|null &$meetingCountry
+	 * @param string|null &$meetingAddress
+	 * @return StatusValue
+	 */
+	private function validateMeetingInfo(
+		int $meetingType,
+		?string &$meetingURL,
+		?string &$meetingCountry,
+		?string &$meetingAddress
+	): StatusValue {
+		$res = StatusValue::newGood();
+
+		if ( !in_array( $meetingType, EventRegistration::VALID_MEETING_TYPES, true ) ) {
+			$res->error( 'campaignevents-error-no-meeting-type' );
+			// Don't bother checking the rest.
+			return $res;
+		}
+
+		if ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) {
+			if ( $meetingURL !== null ) {
+				$meetingURL = trim( $meetingURL );
+				if ( !$this->isValidURL( $meetingURL ) ) {
+					$res->error( 'campaignevents-error-invalid-meeting-url' );
+				}
+			}
+		} elseif ( $meetingURL !== null ) {
+			$res->error( 'campaignevents-error-meeting-url-not-online' );
+		}
+
+		if ( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) {
+			if ( $meetingCountry === null ) {
+				$res->error( 'campaignevents-error-in-person-no-country' );
+			} else {
+				$meetingCountry = trim( $meetingCountry );
+			}
+			if ( $meetingAddress === null ) {
+				$res->error( 'campaignevents-error-in-person-no-address' );
+			} else {
+				$meetingAddress = trim( $meetingAddress );
+			}
+			if ( $meetingCountry !== null && $meetingAddress !== null ) {
+				$res->merge( $this->validateLocation( $meetingCountry, $meetingAddress ) );
+			}
+		} elseif ( $meetingCountry !== null || $meetingAddress !== null ) {
+			$res->error( 'campaignevents-error-countryoraddress-not-in-person' );
+		}
 		return $res;
 	}
 
