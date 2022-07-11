@@ -6,7 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use RuntimeException;
 
-class UserNotFoundException extends RuntimeException {
+/**
+ * This exception is thrown when there's no local user corresponding to the given central user ID.
+ */
+class LocalUserNotFoundException extends RuntimeException {
 	/**
 	 * @param int $centralID
 	 */

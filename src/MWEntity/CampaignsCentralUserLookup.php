@@ -7,6 +7,10 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 use CentralIdLookup;
 use MediaWiki\User\UserFactory;
 
+/**
+ * @todo Audience checks can be improved, but having them in a storage layer (like CentralIdLookup is) makes things
+ * harder in the first place.
+ */
 class CampaignsCentralUserLookup {
 	public const SERVICE_NAME = 'CampaignEventsCentralUserLookup';
 
@@ -30,14 +34,15 @@ class CampaignsCentralUserLookup {
 	/**
 	 * @param ICampaignsUser $user
 	 * @return int
-	 * @throws UserNotCentralException
-	 * @note This ignores permissions!
+	 * @throws CentralUserNotFoundException
+	 * @note This does not check if the user is deleted. This seems easier, and
+	 * the CentralAuth provider ignored $audience anyway.
 	 */
 	public function getCentralID( ICampaignsUser $user ): int {
 		$mwUser = $this->userFactory->newFromId( $user->getLocalID() );
 		$centralID = $this->centralIDLookup->centralIdFromLocalUser( $mwUser, CentralIdLookup::AUDIENCE_RAW );
 		if ( $centralID === 0 ) {
-			throw new UserNotCentralException( $mwUser->getName() );
+			throw new CentralUserNotFoundException( $mwUser->getName() );
 		}
 		return $centralID;
 	}
@@ -45,13 +50,13 @@ class CampaignsCentralUserLookup {
 	/**
 	 * @param int $centralID
 	 * @return ICampaignsUser
-	 * @throws UserNotFoundException
-	 * @note This ignores permissions!
+	 * @throws LocalUserNotFoundException
+	 * @note This considers deleted users as non-existent.
 	 */
 	public function getLocalUser( int $centralID ): ICampaignsUser {
-		$mwUser = $this->centralIDLookup->localUserFromCentralId( $centralID, CentralIdLookup::AUDIENCE_RAW );
+		$mwUser = $this->centralIDLookup->localUserFromCentralId( $centralID );
 		if ( !$mwUser ) {
-			throw new UserNotFoundException( $centralID );
+			throw new LocalUserNotFoundException( $centralID );
 		}
 
 		return new MWUserProxy(
