@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Gilbert Ndihokubwayo"
+		]
+	},
+	"campaignevents-desc": "Provizas funkciojn por kampanjo-organizantoj kaj partoprenantoj.",
+	"action-campaignevents-enable-registration": "Ebligi eventajn registriĝojn",
+	"right-campaignevents-enable-registration": "Ebligi eventajn registriĝojn",
+	"action-campaignevents-delete-registration": "Forigi eventajn registriĝojn",
+	"right-campaignevents-delete-registration": "Forigi eventajn registriĝojn",
+	"campaignevents-error-invalid-id": "La eventa ID devas esti pozitiva entjero.",
+	"campaignevents-error-empty-title": "Enigu la titolon de la evento-paĝo."
+}

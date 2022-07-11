@@ -1,0 +1,28 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kareyac"
+		]
+	},
+	"campaignevents-error-in-person-no-country": "Մուտքագրեք երկրի անունը։",
+	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",
+	"campaignevents-myevents-label-search": "Որոնում",
+	"campaignevents-myevents-label-status": "Կարգավիճակ",
+	"campaignevents-myevents-field-status-closed": "Փակ միջոցառումներ",
+	"campaignevents-eventslist-column-location": "Տեղադրություն",
+	"campaignevents-eventslist-column-participants-number": "Մասնակիցների թիվը",
+	"campaignevents-eventslist-location-online": "Առցանց միջոցառում",
+	"campaignevents-eventslist-manage-btn-info": "Կառավարել միջոցառումը",
+	"campaignevents-eventslist-menu-edit": "Խմբագրել միջոցառումը",
+	"campaignevents-eventslist-delete-dialog-body": "Դուք կկորցնեք գրանցման բոլոր տվյալները, բայց միջոցառման էջը չի ջնջվի։",
+	"campaignevents-eventslist-delete-dialog-cancel": "Չեղարկել",
+	"campaignevents-eventslist-delete-dialog-delete": "Ջնջել",
+	"campaignevents-eventpage-header-location-label": "Տեղադրություն",
+	"campaignevents-eventpage-header-dates-label": "Սկսելու և ավարտելու ժամանակը",
+	"campaignevents-eventpage-dialog-organizers": "Կազմակերպվում է $1",
+	"campaignevents-eventpage-dialog-organizers-view-all": "Դիտեք բոլոր կազմակերպիչներին",
+	"campaignevents-eventpage-dialog-action-close": "Փակել",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Այո",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ոչ",
+	"campaignevents-eventpage-register-confirmation-cancel": "Չեղարկել գրանցումը"
+}

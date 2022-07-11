@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Daimona Eaytoy"
 		]
 	},
@@ -70,12 +71,12 @@
 	"campaignevents-register-error-event-not-found": "Error message shown on [[Special:RegisterForEvent]] and [[Special:CancelEventRegistration]] when the event ID provided does not correspond to an existing event.",
 	"campaignevents-register-success": "Message shown on [[Special:RegisterForEvent]] when the registration went through successfully",
 	"campaignevents-register-confirmation-top": "Form label used on [[Special:RegisterForEvent]]",
-	"campaignevents-register-confirmation-text": "Confirmation message used on [[Special:RegisterForEvent]]",
+	"campaignevents-register-confirmation-text": "Confirmation message used on [[Special:RegisterForEvent]].\n\nThe button label is {{msg-mw|campaignevents-register-confirmation-btn}}.",
 	"campaignevents-register-confirmation-btn": "Label of the submit button on [[Special:RegisterForEvent]]. By clicking, the user will register for the event.",
 	"canceleventregistration": "Description of [[Special:CancelEventRegistration]]",
 	"campaignevents-unregister-success": "Message shown on [[Special:CancelEventRegistration]] when the unregistration went through successfully",
 	"campaignevents-unregister-confirmation-top": "Form label used on [[Special:CancelEventRegistration]]",
-	"campaignevents-unregister-confirmation-text": "Confirmation message used on [[Special:CancelEventRegistration]]",
+	"campaignevents-unregister-confirmation-text": "Confirmation message used on [[Special:CancelEventRegistration]].\n\nThe button is {{msg-mw|campaignevents-unregister-confirmation-btn}}.",
 	"campaignevents-unregister-confirmation-btn": "Label of the submit button on [[Special:CancelEventRegistration]]. By clicking, the user will cancel their registration for the event.",
 	"campaignevents-delete-not-allowed-registration": "Error message shown when the user is not allowed to delete the given event registration",
 	"campaignevents-rest-delete-already-deleted": "Error message used when the event that the user wanted to delete is already deleted.",
@@ -110,7 +111,7 @@
 	"campaignevents-eventslist-menu-view-eventpage": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user will be sent to the event page of the event they're looking at.",
 	"campaignevents-eventslist-menu-close": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user can close the registration for the event.",
 	"campaignevents-eventslist-menu-close-success": "Success message shown on [[Special:MyEvents]] when the user closes registration for an event. Parameters:\n* $1 - Name of the event whose registration was closed.",
-	"campaignevents-eventslist-menu-open": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user can open the registration for the event.",
+	"campaignevents-eventslist-menu-open": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user can open the registration for the event. \"Open\" is a verb.",
 	"campaignevents-eventslist-menu-open-success": "Success message shown on [[Special:MyEvents]] when the user opens registration for an event. Parameters:\n* $1 - Name of the event whose registration was opened.",
 	"campaignevents-eventslist-menu-delete": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user can delete the event.",
 	"campaignevents-eventslist-delete-dialog-title": "Title of a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration.",
@@ -122,7 +123,7 @@
 	"campaignevents-delete-error-no-event": "Error message shown on [[Special:DeleteEventRegistration]] when no event ID was provided.",
 	"campaignevents-delete-error-event-not-found": "Error message shown on [[Special:DeleteEventRegistration]] when the event ID provided does not correspond to an existing event.",
 	"campaignevents-delete-error-already-deleted": "Error message shown on [[Special:DeleteEventRegistration]] when trying to delete an event registration that was already deleted.",
-	"campaignevents-delete-confirmation-text": "Confirmation message used on [[Special:DeleteEventRegistration]].",
+	"campaignevents-delete-confirmation-text": "Confirmation message used on [[Special:DeleteEventRegistration]].\n\nThe button is {{msg-mw|campaignevents-delete-submit-btn}}",
 	"campaignevents-delete-submit-btn": "Label of the submit button on [[Special:DeleteEventRegistration]].",
 	"campaignevents-delete-success": "Message shown on [[Special:DeleteEventRegistration]] when the registration was deleted successfully.",
 	"campaignevents-rest-get-registration-deleted": "Error message used when trying to get details of a deleted registration.",
