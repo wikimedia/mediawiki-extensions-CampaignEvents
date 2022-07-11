@@ -75,5 +75,4 @@ class ExistingEventRegistration extends EventRegistration {
 		// @phan-suppress-next-line PhanTypeMismatchReturnNullable
 		return parent::getLastEditTimestamp();
 	}
-
 }

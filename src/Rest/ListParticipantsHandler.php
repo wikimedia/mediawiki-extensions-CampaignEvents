@@ -42,7 +42,7 @@ class ListParticipantsHandler extends SimpleHandler {
 		$participants = $this->participantsStore->getEventParticipants( $eventID, self::RES_LIMIT );
 		$respVal = [];
 		foreach ( $participants as $participant ) {
-			$respVal[] = [ 'user_id' => $participant->getLocalID() ];
+			$respVal[] = [ 'user_id' => $participant->getUser()->getLocalID() ];
 		}
 		return $this->getResponseFactory()->createJson( $respVal );
 	}

@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -53,7 +54,8 @@ class ListParticipantsHandlerTest extends MediaWikiUnitTestCase {
 		for ( $i = 1; $i < 4; $i++ ) {
 			$curUser = $this->createMock( ICampaignsUser::class );
 			$curUser->method( 'getLocalID' )->willReturn( $i );
-			$users[] = $curUser;
+			$participant = new Participant( $curUser, '20220315120000' );
+			$users[] = $participant;
 		}
 		$partStore = $this->createMock( ParticipantsStore::class );
 		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $users );

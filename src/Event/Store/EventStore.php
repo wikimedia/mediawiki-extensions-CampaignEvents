@@ -119,7 +119,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'*',
 			[
 				'cep_user_id' => $participantID,
-				'cep_unregistered_at' => null
+				'cep_unregistered_at' => null,
 			],
 			$limit !== null ? [ 'LIMIT' => $limit ] : [],
 			[

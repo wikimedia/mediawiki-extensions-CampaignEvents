@@ -39,6 +39,12 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 				'cep_registered_at' => '20220315120000',
 				'cep_unregistered_at' => '20220324120000'
 			],
+			[
+				'cep_event_id' => 1,
+				'cep_user_id' => 104,
+				'cep_registered_at' => '20220316120000',
+				'cep_unregistered_at' => null
+			],
 		];
 		$this->db->insert( 'ce_participants', $rows );
 	}
@@ -145,27 +151,48 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getEventParticipants
 	 * @dataProvider provideGetEventParticipants
 	 */
-	public function testGetEventParticipants( int $eventID, array $expectedIDs ) {
-		$expectedUsers = [];
-		foreach ( $expectedIDs as $id ) {
-			$expectedUsers[$id] = $this->createMock( ICampaignsUser::class );
-		}
-
+	public function testGetEventParticipants( int $eventID, array $expectedParticipants ) {
 		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getLocalUser' )->willReturnCallback( function ( int $centralID ) use ( $expectedUsers ) {
-			return $expectedUsers[$centralID] ?? $this->createMock( ICampaignsUser::class );
+		$userLookup->method( 'getLocalUser' )
+		->willReturnCallback( function ( int $centralID ) {
+			$user = $this->createMock( ICampaignsUser::class );
+			$user->method( 'getLocalID' )->willReturn( $centralID );
+			return $user;
 		} );
+
 		$store = new ParticipantsStore(
 			CampaignEventsServices::getDatabaseHelper(),
 			$userLookup
 		);
+
 		$actualUsers = $store->getEventParticipants( $eventID );
-		$this->assertSame( array_values( $expectedUsers ), $actualUsers );
+
+		$this->assertSame( count( $actualUsers ), count( $expectedParticipants ) );
+		foreach ( $actualUsers as $participant ) {
+			$participantID = $participant->getUser()->getLocalID();
+			$this->assertSame(
+				wfTimestamp( TS_UNIX, $expectedParticipants[ $participantID ][ 'registeredAt' ] ),
+				$participant->getRegisteredAt()
+			);
+		}
 	}
 
 	public function provideGetEventParticipants(): Generator {
-		yield 'No participants' => [ 5, [] ];
-		yield 'Only inludes non-deleted participants' => [ 1, [ 101 ] ];
+		yield 'Only inludes non-deleted participants' => [
+			1,
+			[
+				'101' => [
+					'registeredAt' => '20220315120000'
+				],
+				'104' => [
+					'registeredAt' => '20220316120000'
+				],
+			]
+		];
+		yield 'No participants' => [
+			5,
+			[]
+		];
 	}
 
 	/**
@@ -176,7 +203,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			CampaignEventsServices::getDatabaseHelper(),
 			$this->createMock( CampaignsCentralUserLookup::class )
 		);
-		$this->assertCount( 1, $store->getEventParticipants( 1 ), 'precondition' );
+		$this->assertCount( 2, $store->getEventParticipants( 1 ), 'precondition' );
 		$limit = 0;
 		$this->assertCount( $limit, $store->getEventParticipants( 1, $limit ) );
 	}
@@ -215,7 +242,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function provideParticipantCount(): array {
 		return [
-			'One participant (and a deleted one)' => [ 1, 1 ],
+			'Two participant (and a deleted one)' => [ 1, 2 ],
 			'No participants' => [ 1000, 0 ],
 		];
 	}
