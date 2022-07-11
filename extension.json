@@ -82,7 +82,8 @@
 			"styles": [
 				"EventsPager.less",
 				"SpecialMyEvents.less"
-			]
+			],
+			"targets": [ "desktop", "mobile" ]
 		},
 		"ext.campaignEvents.specialmyevents": {
 			"localBasePath": "resources/ext.campaignEvents.specialmyevents",
@@ -116,13 +117,15 @@
 				"oojs-ui-widgets",
 				"oojs-ui-windows",
 				"oojs-ui.styles.icons-interactions"
-			]
+			],
+			"targets": [ "desktop", "mobile" ]
 		},
 		"ext.campaignEvents.eventpage.styles": {
 			"styles": [
 				"ext.campaignEvents.eventpage.styles.less",
 				"ext.campaignEvents.TextWithIconWidget.less"
-			]
+			],
+			"targets": [ "desktop", "mobile" ]
 		},
 		"ext.campaignEvents.eventpage": {
 			"localBasePath": "resources/ext.campaignEvents.eventpage",
