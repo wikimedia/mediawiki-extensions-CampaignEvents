@@ -235,42 +235,73 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			null,
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
-				'meetingurl' => null
+				'meetingurl' => null,
+				'country' => null,
+				'address' => null,
 			] )
 		];
 		yield 'Online meeting with invalid URL' => [
 			'campaignevents-error-invalid-meeting-url',
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
-				'meetingurl' => 'Not a URL'
+				'meetingurl' => 'Not a URL',
+				'country' => null,
+				'address' => null,
 			] )
 		];
 		yield 'In person meeting without country' => [
 			'campaignevents-error-in-person-no-country',
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
-				'country' => null
+				'country' => null,
+				'meetingurl' => null,
 			] )
 		];
 		yield 'In person meeting without address' => [
 			'campaignevents-error-in-person-no-address',
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
-				'address' => null
+				'address' => null,
+				'meetingurl' => null,
 			] )
 		];
 		yield 'In person meeting with invalid country' => [
 			'campaignevents-error-invalid-country',
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
-				'country' => ''
+				'country' => '',
+				'meetingurl' => null,
 			] )
 		];
 		yield 'In person meeting with invalid address' => [
 			'campaignevents-error-invalid-address',
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
-				'address' => ''
+				'address' => '',
+				'meetingurl' => null,
+			] )
+		];
+		yield 'Online meeting with country' => [
+			'campaignevents-error-countryoraddress-not-in-person',
+			$this->getTestDataWithDefault( [
+				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
+				'address' => 'Explicitly set',
+				'country' => null,
+			] )
+		];
+		yield 'Online meeting with address' => [
+			'campaignevents-error-countryoraddress-not-in-person',
+			$this->getTestDataWithDefault( [
+				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
+				'address' => null,
+				'country' => 'Explicitly set',
+			] )
+		];
+		yield 'In-person meeting with meeting URL' => [
+			'campaignevents-error-meeting-url-not-online',
+			$this->getTestDataWithDefault( [
+				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'meetingurl' => 'https://explicitly-set.example.org',
 			] )
 		];
 	}
