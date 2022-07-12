@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedSectionAnchorException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
 use MediaWiki\Page\ExistingPageRecord;
 use MediaWiki\Page\PageStore;
@@ -45,7 +46,6 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 	 * @param PageStoreFactory|null $pageStoreFactory
 	 * @dataProvider provideTitleStrings
 	 * @covers ::newLocalExistingPageFromString
-	 * @covers ::newExistingPage
 	 */
 	public function testNewLocalExistingPageFromString(
 		string $titleString,
@@ -97,6 +97,19 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 			$interwikiStr,
 			UnexpectedInterwikiException::class,
 			$interwikiTitleParser
+		];
+
+		$section = 'SomeSection';
+		$sectionStr = "Something#$section";
+		$sectionTitleParser = $this->createMock( TitleParser::class );
+		$sectionTitleParser->expects( $this->atLeastOnce() )
+			->method( 'parseTitle' )
+			->with( $sectionStr )
+			->willReturn( new TitleValue( NS_MAIN, 'Something', $section ) );
+		yield 'Unexpected section anchor' => [
+			$sectionStr,
+			UnexpectedSectionAnchorException::class,
+			$sectionTitleParser
 		];
 
 		$specialStr = 'Special:Foobar';

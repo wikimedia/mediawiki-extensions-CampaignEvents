@@ -11,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
-use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use StatusValue;
 use stdClass;
@@ -139,17 +138,12 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @return ExistingEventRegistration
 	 */
 	private function newEventFromDBRow( stdClass $row ): ExistingEventRegistration {
-		try {
-			$eventPage = $this->campaignsPageFactory->newExistingPage(
-				(int)$row->event_page_namespace,
-				$row->event_page_title,
-				$row->event_page_prefixedtext,
-				$row->event_page_wiki
-			);
-		} catch ( PageNotFoundException $e ) {
-			// XXX What should we do here?
-			throw $e;
-		}
+		$eventPage = $this->campaignsPageFactory->newPageFromDB(
+			(int)$row->event_page_namespace,
+			$row->event_page_title,
+			$row->event_page_prefixedtext,
+			$row->event_page_wiki
+		);
 		$dbMeetingType = (int)$row->event_meeting_type;
 		$meetingType = 0;
 		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {

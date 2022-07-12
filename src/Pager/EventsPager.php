@@ -245,7 +245,7 @@ class EventsPager extends TablePager {
 	private function getEventPageFromRow( stdClass $eventRow ): ICampaignsPage {
 		$eventID = $eventRow->event_id;
 		if ( !isset( $this->eventPageCache[$eventID] ) ) {
-			$this->eventPageCache[$eventID] = $this->campaignsPageFactory->newExistingPage(
+			$this->eventPageCache[$eventID] = $this->campaignsPageFactory->newPageFromDB(
 				(int)$eventRow->event_page_namespace,
 				$eventRow->event_page_title,
 				$eventRow->event_page_prefixedtext,

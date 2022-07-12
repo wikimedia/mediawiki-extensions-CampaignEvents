@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -161,5 +162,12 @@ return [
 		return new PageURLResolver(
 			$services->getTitleFactory()
 		);
-	}
+	},
+	MWEventLookupFromPage::SERVICE_NAME => static function ( MediaWikiServices $services ): MWEventLookupFromPage {
+		return new MWEventLookupFromPage(
+			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
+			$services->getPageStore(),
+			$services->getTitleFormatter()
+		);
+	},
 ];

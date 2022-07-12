@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MalformedTitleException;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\PageStoreFactory;
 use TitleFormatter;
 use TitleParser;
@@ -37,29 +38,23 @@ class CampaignsPageFactory {
 	}
 
 	/**
+	 * Creates a page object from a DB record. This does NOT require that the page exists.
+	 *
 	 * @param int $namespace
 	 * @param string $dbKey
 	 * @param string $prefixedText
 	 * @param string|false $wikiID
 	 * @return ICampaignsPage
-	 * @throws UnexpectedVirtualNamespaceException
-	 * @throws PageNotFoundException
 	 */
-	public function newExistingPage( int $namespace, string $dbKey, string $prefixedText, $wikiID ): ICampaignsPage {
-		if ( $namespace < 0 ) {
-			throw new UnexpectedVirtualNamespaceException( $namespace );
-		}
-		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
-			// Event pages stored in the database always have a string wiki ID, so we need to check if they're
-			// actually local.
-			$adjustedWikiID = WikiMap::isCurrentWikiId( $wikiID ) ? WikiAwareEntity::LOCAL : $wikiID;
-		} else {
-			$adjustedWikiID = $wikiID;
-		}
+	public function newPageFromDB( int $namespace, string $dbKey, string $prefixedText, $wikiID ): ICampaignsPage {
+		// Event pages stored in the database always have a string wiki ID, so we need to check if they're
+		// actually local.
+		$adjustedWikiID = WikiMap::isCurrentWikiId( $wikiID ) ? WikiAwareEntity::LOCAL : $wikiID;
 		$pageStore = $this->pageStoreFactory->getPageStore( $adjustedWikiID );
 		$page = $pageStore->getPageByName( $namespace, $dbKey );
 		if ( !$page ) {
-			throw new PageNotFoundException( $namespace, $dbKey, $wikiID );
+			// The page does not exist; this can happen e.g. if the event page was deleted.
+			$page = new PageIdentityValue( 0, $namespace, $dbKey, $wikiID );
 		}
 		return new MWPageProxy( $page, $prefixedText );
 	}
@@ -70,24 +65,36 @@ class CampaignsPageFactory {
 	 * @throws InvalidTitleStringException
 	 * @throws UnexpectedInterwikiException If the page title has an interwiki prefix
 	 * @throws UnexpectedVirtualNamespaceException
-	 * @throws PageNotFoundException
+	 * @throws UnexpectedSectionAnchorException
+	 * @throws PageNotFoundException If the page does not exist
 	 */
 	public function newLocalExistingPageFromString( string $titleStr ): ICampaignsPage {
+		// This is similar to PageStore::getPageByText, but with better error handling
+		// and it also requires that the page exists.
 		try {
 			$pageTitle = $this->titleParser->parseTitle( $titleStr );
 		} catch ( MalformedTitleException $e ) {
 			throw new InvalidTitleStringException( $titleStr, $e->getErrorMessage(), $e->getErrorMessageParameters() );
 		}
 
-		if ( $pageTitle->getInterwiki() !== '' ) {
+		if ( $pageTitle->isExternal() ) {
 			throw new UnexpectedInterwikiException( $pageTitle->getInterwiki() );
 		}
 
-		return $this->newExistingPage(
-			$pageTitle->getNamespace(),
-			$pageTitle->getDBkey(),
-			$this->titleFormatter->getPrefixedText( $pageTitle ),
-			WikiAwareEntity::LOCAL
-		);
+		$namespace = $pageTitle->getNamespace();
+		if ( $namespace < 0 ) {
+			throw new UnexpectedVirtualNamespaceException( $namespace );
+		}
+
+		if ( $pageTitle->hasFragment() ) {
+			throw new UnexpectedSectionAnchorException( $pageTitle->getFragment() );
+		}
+
+		$dbKey = $pageTitle->getDBkey();
+		$page = $this->pageStoreFactory->getPageStore()->getPageByName( $namespace, $dbKey );
+		if ( !$page ) {
+			throw new PageNotFoundException( $namespace, $dbKey, WikiAwareEntity::LOCAL );
+		}
+		return new MWPageProxy( $page, $this->titleFormatter->getPrefixedText( $pageTitle ) );
 	}
 }

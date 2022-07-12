@@ -48,11 +48,22 @@
 			"services": [
 				"CampaignEventsEventPageDecorator"
 			]
+		},
+		"PageMoveAndDeleteHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\PageMoveAndDeleteHandler",
+			"services": [
+				"CampaignEventsMWEventLookupFromPage",
+				"CampaignEventsEventStore",
+				"PageStore",
+				"TitleFormatter"
+			]
 		}
 	},
 	"Hooks": {
 		"LoadExtensionSchemaUpdates": "SchemaChanges",
-		"ArticleViewHeader": "ArticleViewHeader"
+		"ArticleViewHeader": "ArticleViewHeader",
+		"PageMoveComplete": "PageMoveAndDeleteHandler",
+		"PageDeleteComplete": "PageMoveAndDeleteHandler"
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [
