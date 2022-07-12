@@ -96,5 +96,14 @@
 	"campaignevents-eventpage-register-confirmation-cancel": "登録をキャンセルする",
 	"campaignevents-eventpage-register-confirmation-confirm": "登録を続ける",
 	"campaignevents-eventpage-enableheader-organizer": "あなたは主催者です",
-	"campaignevents-eventpage-enable-registration-dialog-confirm": "登録を有効にする"
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "登録を有効にする",
+	"eventdetails": "イベントの詳細",
+	"campaignevents-event-details-label": "イベントの詳細",
+	"campaignevents-event-details-edit-button": "編集",
+	"campaignevents-event-details-online-label": "オンラインイベント",
+	"campaignevents-event-details-view-event-page": "イベントページを見る",
+	"campaignevents-event-details-select-all": "すべて選択",
+	"campaignevents-event-details-remove-participant-remove-btn": "除去",
+	"campaignevents-event-details-remove-participant-cancel-btn": "キャンセル",
+	"campaignevents-event-details-dates-label": "開始時間と終了時間"
 }
