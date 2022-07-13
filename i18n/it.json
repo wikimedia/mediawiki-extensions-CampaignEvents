@@ -6,6 +6,7 @@
 		]
 	},
 	"campaignevents-error-invalid-id": "L'ID dell'evento deve essere un intero positivo.",
+	"campaignevents-error-meeting-url-not-online": "L'URL della riunione non deve essere indicato se l'evento non è online.",
 	"campaignevents-edit-field-status-open": "Aperto",
 	"campaignevents-edit-field-status-closed": "Chiuso",
 	"campaignevents-edit-field-address": "Indirizzo",
@@ -28,5 +29,21 @@
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
 	"campaignevents-eventpage-dialog-action-close": "Chiudi",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Sì",
-	"campaignevents-eventpage-unregister-confirmation-dismiss": "No"
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "No",
+	"eventdetails": "Dettagli evento",
+	"campaignevents-event-details-label": "Dettagli evento",
+	"campaignevents-back-to-your-events": "Torna ai tuoi eventi",
+	"campaignevents-event-details-edit-button": "Modifica",
+	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
+	"campaignevents-event-details-dates": "$1 a $4",
+	"campaignevents-event-details-register-prompt": "Devi registrarti per vedere queste informazioni",
+	"campaignevents-event-details-select-all": "Seleziona tutto",
+	"campaignevents-event-details-all-selected": "Tutti selezionati",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|selezionato|selezionati}}",
+	"campaignevents-event-details-remove-participant-confirmation-title": "Rimuovi {{PLURAL:$1|partecipante|partecipanti}}",
+	"campaignevents-event-details-remove-participant-remove-btn": "Rimuovi",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Annulla",
+	"campaignevents-event-details-event": "Dettagli evento: $1",
+	"campaignevents-event-details-not-found": "Non ci sono eventi con questo ID.",
+	"campaignevents-event-details-dates-label": "Ora di inizio e fine"
 }

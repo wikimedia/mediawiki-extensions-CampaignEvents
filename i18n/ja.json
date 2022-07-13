@@ -100,10 +100,16 @@
 	"eventdetails": "イベントの詳細",
 	"campaignevents-event-details-label": "イベントの詳細",
 	"campaignevents-event-details-edit-button": "編集",
+	"campaignevents-event-details-in-person-event-label": "対面イベント",
 	"campaignevents-event-details-online-label": "オンラインイベント",
+	"campaignevents-event-details-register-prompt": "この情報を表示するには、登録する必要があります",
 	"campaignevents-event-details-view-event-page": "イベントページを見る",
 	"campaignevents-event-details-select-all": "すべて選択",
+	"campaignevents-event-details-all-selected": "すべて選択されました",
 	"campaignevents-event-details-remove-participant-remove-btn": "除去",
 	"campaignevents-event-details-remove-participant-cancel-btn": "キャンセル",
+	"campaignevents-event-details-no-event-id-provided": "イベントIDを入力してください。",
+	"campaignevents-event-details-invalid-id": "有効なイベントIDを入力してください。",
+	"campaignevents-event-details-not-found": "このIDを持つイベントは存在しません",
 	"campaignevents-event-details-dates-label": "開始時間と終了時間"
 }

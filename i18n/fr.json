@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Gomoko",
 			"Verdy p",
 			"Wladek92"
 		]
@@ -27,8 +28,10 @@
 	"campaignevents-error-invalid-type": "Saisissez un type d’événement valide.",
 	"campaignevents-error-no-meeting-type": "Choisissez au moins un type de réunion événementielle.",
 	"campaignevents-error-invalid-meeting-url": "Saisissez une URL de réunion événementielle valide.",
+	"campaignevents-error-meeting-url-not-online": "L’URL de la réunion ne doit pas être spécifiée si l’événement n’est pas en ligne.",
 	"campaignevents-error-in-person-no-country": "Saisissez un nom de pays.",
 	"campaignevents-error-in-person-no-address": "Saisissez une adresse.",
+	"campaignevents-error-countryoraddress-not-in-person": "Le pays ou l’adresse de la réunion ne doivent pas être spécifiés si l’événement n’est pas en présentiel.",
 	"campaignevents-error-invalid-country": "Saisissez un nom de pays valide.",
 	"campaignevents-error-invalid-address": "Saisissez une adresse valide.",
 	"campaignevents-rest-event-not-found": "Il n’y a aucun événement avec cet identifiant.",
@@ -167,5 +170,31 @@
 	"campaignevents-eventpage-enable-registration-dialog-title": "Activer les inscriptions à l’événement",
 	"campaignevents-eventpage-enable-registration-dialog-body": "Cela permet aux participants de s’inscrire pour assister à votre événement directement sur cette page.",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Ignorer",
-	"campaignevents-eventpage-enable-registration-dialog-confirm": "Activer les inscriptions"
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "Activer les inscriptions",
+	"eventdetails": "Détails de l’événement",
+	"campaignevents-event-details-label": "Détails de l’événement",
+	"campaignevents-back-to-your-events": "Retour à vos événements",
+	"campaignevents-event-details-edit-button": "Modifier",
+	"campaignevents-event-details-header-participants": "$1 participant{{PLURAL:$1||s}}",
+	"campaignevents-event-details-dates": "$1 à $4",
+	"campaignevents-event-details-in-person-event-label": "Événement en présentiel",
+	"campaignevents-event-details-online-label": "Événement en ligne",
+	"campaignevents-event-details-chat-link": "Lien d’invitation au groupe de discussion en ligne du média social",
+	"campaignevents-event-details-register-prompt": "Vous devez vous inscrire pour voir ces informations",
+	"campaignevents-event-details-view-event-page": "Afficher la page de l’événement",
+	"campaignevents-event-details-select-all": "Sélectionner tout",
+	"campaignevents-event-details-all-selected": "Tout sélectionné",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 sélectionné{{PLURAL:$1||s}}",
+	"campaignevents-event-details-remove-participant-confirmation-title": "Enlever {{PLURAL:$1|un participant|des participants}}",
+	"campaignevents-event-details-remove-participant-confirmation-msg": "Êtes-vous sûr{{GENDER:||e}} de vouloir enlever {{PLURAL:$1|le participant sélectionné|les participants sélectionnés}} ?",
+	"campaignevents-event-details-remove-participant-remove-btn": "Enlever",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Annuler",
+	"campaignevents-event-details-no-event-id-provided": "Fournissez un identifiant d’événement.",
+	"campaignevents-event-details-no-participants-state": "Les noms d’utilisateur des participants apparaîtront ici quand ils s’inscriront.",
+	"campaignevents-event-details-event-deleted": "Les inscriptions à cet événement ont été supprimées.",
+	"campaignevents-event-details-invalid-id": "Fournissez un identifiant d’événement valide.",
+	"campaignevents-event-details-event": "Détails de l’événement : $1",
+	"campaignevents-event-details-not-found": "Il n’y a aucun événement avec cet identifiant.",
+	"campaignevents-event-details-online-link-not-available": "Le lien sera rendu disponible par {{PLURAL:$1|l’organisateur|les organisateurs}}.",
+	"campaignevents-event-details-dates-label": "Heure de début et de fin"
 }

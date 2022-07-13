@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"আফতাবুজ্জামান",
 			"মোঃ মারুফ হাসান24"
 		]
 	},
@@ -9,5 +10,11 @@
 	"campaignevents-edit-field-address": "ঠিকানা",
 	"registerforevent": "একটি ইভেন্টের জন্য নিবন্ধন করুন",
 	"campaignevents-role-creator": "নির্মাতা",
-	"campaignevents-role-organizer": "সংগঠক"
+	"campaignevents-role-organizer": "সংগঠক",
+	"campaignevents-myevents-label-search": "অনুসন্ধান",
+	"campaignevents-myevents-field-status-any": "যেকোন",
+	"campaignevents-event-details-edit-button": "সম্পাদনা",
+	"campaignevents-event-details-header-participants": "$1 জন {{PLURAL:$1|অংশগ্রহণকারী}}",
+	"campaignevents-event-details-dates": "$1 থেকে $4 পর্যন্ত",
+	"campaignevents-event-details-remove-participant-cancel-btn": "বাতিল"
 }
