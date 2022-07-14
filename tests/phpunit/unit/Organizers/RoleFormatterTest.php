@@ -63,8 +63,8 @@ class RoleFormatterTest extends MediaWikiUnitTestCase {
 		$formatter = new RoleFormatter( $msgFormatterFactory );
 
 		// Implicitly asserts that the messages are different, too.
-		$this->assertSame( $enMsg, $formatter->getLocalizedName( Roles::ROLE_CREATOR, 'en' ) );
-		$this->assertSame( $frMsg, $formatter->getLocalizedName( Roles::ROLE_CREATOR, 'fr' ) );
+		$this->assertSame( $enMsg, $formatter->getLocalizedName( Roles::ROLE_CREATOR, 'Admin', 'en' ) );
+		$this->assertSame( $frMsg, $formatter->getLocalizedName( Roles::ROLE_CREATOR, 'Admin', 'fr' ) );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class RoleFormatterTest extends MediaWikiUnitTestCase {
 	public function testGetLocalizedName__invalid() {
 		$formatter = new RoleFormatter( $this->createMock( IMessageFormatterFactory::class ) );
 		$this->expectException( InvalidArgumentException::class );
-		$formatter->getLocalizedName( 'This role definitely does not exist', 'en' );
+		$formatter->getLocalizedName( 'This role definitely does not exist', 'Admin', 'en' );
 	}
 
 	/**

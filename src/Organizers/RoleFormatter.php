@@ -36,15 +36,16 @@ class RoleFormatter {
 
 	/**
 	 * @param string $role A valid Roles::ROLE_* constant
+	 * @param string $userName Of the user that the role refers to.
 	 * @param string $languageCode
 	 * @return string
 	 */
-	public function getLocalizedName( string $role, string $languageCode ): string {
+	public function getLocalizedName( string $role, string $userName, string $languageCode ): string {
 		if ( !isset( self::ROLES_MSG_MAP[$role] ) ) {
 			throw new InvalidArgumentException( "Invalid role $role" );
 		}
 		$formatter = $this->messageFormatterFactory->getTextFormatter( $languageCode );
-		return $formatter->format( MessageValue::new( self::ROLES_MSG_MAP[$role] ) );
+		return $formatter->format( MessageValue::new( self::ROLES_MSG_MAP[$role] )->params( $userName ) );
 	}
 
 	/**
