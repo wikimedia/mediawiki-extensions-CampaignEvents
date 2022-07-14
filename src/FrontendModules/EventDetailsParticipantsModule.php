@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
@@ -33,6 +34,7 @@ class EventDetailsParticipantsModule {
 	 * @param int $totalParticipants
 	 * @param ITextFormatter $msgFormatter
 	 * @param bool $isOrganizer
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @return PanelLayout
 	 */
 	public function createContent(
@@ -42,7 +44,8 @@ class EventDetailsParticipantsModule {
 		array $participants,
 		int $totalParticipants,
 		ITextFormatter $msgFormatter,
-		bool $isOrganizer
+		bool $isOrganizer,
+		CampaignsCentralUserLookup $centralUserLookup
 	): PanelLayout {
 		$items = [];
 		$items[] = ( new Tag() )->appendContent(
@@ -123,8 +126,8 @@ class EventDetailsParticipantsModule {
 			if ( $isOrganizer && $canRemoveParticipants ) {
 				$elements[] = ( new CheckboxInputWidget( [
 					'name' => 'event-details-participants-checkboxes',
-					'value' => $participant->getUser()->getLocalID(),
 					'infusable' => true,
+					'value' => $centralUserLookup->getCentralID( $participant->getUser() ),
 					'classes' => [ 'ext-campaignevents-event-details-participants-checkboxes' ],
 				] ) );
 			}

@@ -183,12 +183,18 @@
 				"campaignevents-event-details-remove-participant-confirmation-title",
 				"campaignevents-event-details-remove-participant-confirmation-msg",
 				"campaignevents-event-details-remove-participant-remove-btn",
-				"campaignevents-event-details-remove-participant-cancel-btn"
+				"campaignevents-event-details-remove-participant-cancel-btn",
+				"campaignevents-event-details-remove-participant-notification",
+				"campaignevents-event-details-remove-all-participant-notification",
+				"campaignevents-event-details-remove-participant-notification-error",
+				"campaignevents-event-details-header-participants"
 			],
 			"dependencies": [
 				"mediawiki.language",
 				"oojs-ui-core",
-				"oojs-ui-windows"
+				"oojs-ui-windows",
+				"mediawiki.api",
+				"mediawiki.user"
 			],
 			"targets": [ "desktop", "mobile" ]
 		},
@@ -302,6 +308,16 @@
 				"UserFactory",
 				"UserNameUtils"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/participants",
+			"method": "DELETE",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RemoveParticipantsFromEventHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsUnregisterParticipantCommand",
+				"UserFactory"
+			]
 		}
 	],
 	"ServiceWiringFiles": [
@@ -363,6 +379,7 @@
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsPageURLResolver",
+				"CampaignEventsCentralUserLookup",
 				"MessageFormatterFactory"
 			]
 		}

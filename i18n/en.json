@@ -194,5 +194,12 @@
 	"campaignevents-event-details-event": "Event details: $1",
 	"campaignevents-event-details-not-found": "There is no event with this ID.",
 	"campaignevents-event-details-online-link-not-available": "The link will be made available by the {{PLURAL:$1|organizer|organizers}}.",
-	"campaignevents-event-details-dates-label": "Start and end time"
+	"campaignevents-event-details-dates-label": "Start and end time",
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Participant|Participants}} removed",
+	"campaignevents-event-details-remove-all-participant-notification": "All participants removed",
+	"campaignevents-unregister-participants-permission-denied": "You are not allowed to remove participants",
+	"campaignevents-unregister-participants-registration-deleted": "You cannot remove participants from this event because it was deleted.",
+	"campaignevents-unregister-participants-past-registration": "You cannot remove participants from this event because the event has ended.",
+	"campaignevents-event-details-remove-participant-notification-error": "There was an error when trying to remove the {{PLURAL:$1|participant|participants}}",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' must be an array of user ids, or null (to remove all users)"
 }

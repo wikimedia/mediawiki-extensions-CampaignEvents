@@ -78,17 +78,37 @@ class ParticipantsStore {
 	 * @throws CentralUserNotFoundException If passed a logged-out user.
 	 */
 	public function removeParticipantFromEvent( int $eventID, ICampaignsUser $participant ): bool {
+		$userID = [ $this->centralUserLookup->getCentralID( $participant ) ];
+		$affectedRows = $this->removeParticipantsFromEvent( $eventID, $userID );
+		return $affectedRows > 0;
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param array|null $userIDs array of int userIDs, if null remove all participants,
+	 * if is an empty array do nothing and return 0
+	 * @return int number of participant(s) removed
+	 */
+	public function removeParticipantsFromEvent( int $eventID, array $userIDs = null ): int {
+		if ( is_array( $userIDs ) && !$userIDs ) {
+			return 0;
+		}
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+
+		$where = [
+			'cep_event_id' => $eventID,
+			'cep_unregistered_at' => null
+		];
+		if ( $userIDs ) {
+			$where[ 'cep_user_id' ] = $userIDs;
+		}
+
 		$dbw->update(
 			'ce_participants',
 			[ 'cep_unregistered_at' => $dbw->timestamp() ],
-			[
-				'cep_event_id' => $eventID,
-				'cep_user_id' => $this->centralUserLookup->getCentralID( $participant ),
-				'cep_unregistered_at' => null
-			]
+			$where
 		);
-		return $dbw->affectedRows() > 0;
+		return $dbw->affectedRows();
 	}
 
 	/**
