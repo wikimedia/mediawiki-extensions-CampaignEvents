@@ -182,7 +182,7 @@
 	"campaignevents-event-details-view-event-page": "View event page",
 	"campaignevents-event-details-select-all": "Select all",
 	"campaignevents-event-details-all-selected": "All selected",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|selected|selected}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|selected}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Remove {{PLURAL:$1|participant|participants}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Are you sure you want to remove the selected {{PLURAL:$1|participant|participants}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Remove",
