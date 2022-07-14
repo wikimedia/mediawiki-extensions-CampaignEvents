@@ -100,7 +100,7 @@ class ParticipantsStore {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$rows = $dbr->select(
 			'ce_participants',
-			'cep_user_id, cep_registered_at',
+			[ 'cep_user_id', 'cep_registered_at' ],
 			[ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ],
 			$limit !== null ? [ 'LIMIT' => $limit ] : []
 		);
