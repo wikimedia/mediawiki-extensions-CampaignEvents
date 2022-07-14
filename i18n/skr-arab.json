@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saraiki"
+		]
+	},
+	"campaignevents-myevents-label-search": "ڳولو",
+	"campaignevents-eventslist-column-date": "تریخ",
+	"campaignevents-eventslist-column-location": "محل وقوع",
+	"campaignevents-eventslist-delete-dialog-cancel": "منسوخ",
+	"campaignevents-eventslist-delete-dialog-delete": "مٹاؤ",
+	"campaignevents-delete-submit-btn": "مٹاؤ",
+	"campaignevents-eventpage-header-location-label": "محل وقوع",
+	"campaignevents-eventpage-dialog-location-label": "محل وقوع",
+	"campaignevents-eventpage-dialog-action-close": "بند کرو",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "جیا",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "کو",
+	"campaignevents-event-details-edit-button": "لکھو",
+	"campaignevents-event-details-select-all": "سبھ چݨو",
+	"campaignevents-event-details-remove-participant-remove-btn": "ہٹاؤ",
+	"campaignevents-event-details-remove-participant-cancel-btn": "منسوخ"
+}

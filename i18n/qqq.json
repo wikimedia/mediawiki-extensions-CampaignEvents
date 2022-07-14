@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Amire80",
 			"Daimona Eaytoy"
 		]
@@ -118,7 +119,7 @@
 	"campaignevents-eventslist-menu-delete": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user can delete the event.",
 	"campaignevents-eventslist-delete-dialog-title": "Title of a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration.",
 	"campaignevents-eventslist-delete-dialog-body": "Body of a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration.",
-	"campaignevents-eventslist-delete-dialog-cancel": "Label of a button used in a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration. By clicking, the registration will not be deleted.",
+	"campaignevents-eventslist-delete-dialog-cancel": "Label of a button used in a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration. By clicking, the registration will not be deleted.\n\n{{Identical|Cancel}}",
 	"campaignevents-eventslist-delete-dialog-delete": "Label of a button used in a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration. By clicking, the registration will be deleted.",
 	"campaignevents-eventslist-delete-success": "Success message shown on [[Special:MyEvents]] when an event is deleted. Parameters:\n* $1 - Name of the event that was deleted.",
 	"deleteeventregistration": "Description of [[Special:DeleteEventRegistration]]",
@@ -187,7 +188,7 @@
 	"campaignevents-event-details-remove-participant-confirmation-title": "Title of a confirmation dialog shown on [[Special:EventDetails]] when the user presses the button to remove participants from the event.\nParameters:\n* $1 - Number of selected participants, for PLURAL support",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Body of a confirmation dialog shown on [[Special:EventDetails]] when the user presses the button to remove participants from the event. Parameters:\n* $1 - The number of participants, for PLURAL support.",
 	"campaignevents-event-details-remove-participant-remove-btn": "Label of a button in a confirmation dialog shown on Special:EventDetails when the user presses the button to remove participants from the event. By clicking, the selected participant(s) will be removed.",
-	"campaignevents-event-details-remove-participant-cancel-btn": "Label of a button in a confirmation dialog shown on Special:EventDetails when the user presses the button to remove participants from the event. By clicking, the dialog will close without any action being taken.",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Label of a button in a confirmation dialog shown on Special:EventDetails when the user presses the button to remove participants from the event. By clicking, the dialog will close without any action being taken.\n\n{{Identical|Cancel}}",
 	"campaignevents-event-details-no-event-id-provided": "Error message shown on [[Special:EventDetails]] when the event ID was not provided.",
 	"campaignevents-event-details-no-participants-state": "Label used on [[Special:EventDetails]] when there are no participants.",
 	"campaignevents-event-details-event-deleted": "Error message shown on [[Special:EventDetails]] for deleted registrations",

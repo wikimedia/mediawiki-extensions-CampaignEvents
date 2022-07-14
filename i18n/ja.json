@@ -109,6 +109,7 @@
 	"campaignevents-event-details-remove-participant-remove-btn": "除去",
 	"campaignevents-event-details-remove-participant-cancel-btn": "キャンセル",
 	"campaignevents-event-details-no-event-id-provided": "イベントIDを入力してください。",
+	"campaignevents-event-details-event-deleted": "このイベント登録は削除されました。",
 	"campaignevents-event-details-invalid-id": "有効なイベントIDを入力してください。",
 	"campaignevents-event-details-not-found": "このIDを持つイベントは存在しません",
 	"campaignevents-event-details-dates-label": "開始時間と終了時間"

@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Brettchenweber"
+		]
 	},
 	"campaignevents-desc": "Stellt Funktionen für Organisatoren und Teilnehmer von Veranstaltungen bereit",
 	"action-campaignevents-enable-registration": "Veranstaltungsanmeldungen ermöglichen",
@@ -27,7 +29,7 @@
 	"campaignevents-error-meeting-url-not-online": "Die URL der Besprechung muss nicht angegeben werden, wenn die Veranstaltung nicht online ist.",
 	"campaignevents-error-in-person-no-country": "Gib einen Ländernamen ein.",
 	"campaignevents-error-in-person-no-address": "Gib eine Adresse ein.",
-	"campaignevents-error-countryoraddress-not-in-person": "Das Land und die Adresse des Treffens müssen nicht angegeben werden, wenn es sich nicht um ein Treffen in Präsens handelt.",
+	"campaignevents-error-countryoraddress-not-in-person": "Das Land und die Adresse des Treffens dürfen nicht angegeben werden, wenn es sich nicht um eine Präsenzveranstaltung handelt.",
 	"campaignevents-error-invalid-country": "Gib einen gültigen Ländernamen ein.",
 	"campaignevents-error-invalid-address": "Gib eine gültige Adresse ein.",
 	"campaignevents-rest-event-not-found": "Es gibt keine Veranstaltung mit dieser ID.",
