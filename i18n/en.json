@@ -163,7 +163,7 @@
 	"campaignevents-eventpage-register-confirmation-cancel": "Cancel registration",
 	"campaignevents-eventpage-register-confirmation-confirm": "Continue registration",
 	"campaignevents-eventpage-enableheader-organizer": "You are an organizer",
-	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Event page</strong>: enable registration so participants can register for your event directly on the page.",
+	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Event page</strong>: Enable registration so participants can register for your event directly on the page.",
 	"campaignevents-eventpage-enableheader-button-label": "Enable registration",
 	"campaignevents-eventpage-enable-registration-dialog-title": "Enable event registration",
 	"campaignevents-eventpage-enable-registration-dialog-body": "This lets participants register to attend your event directly on this page.",
