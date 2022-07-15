@@ -23,7 +23,7 @@ class ArticleViewHeaderHandler implements ArticleViewHeaderHook {
 	 */
 	public function onArticleViewHeader( $article, &$outputDone, &$pcache ): void {
 		$wikiPage = $article->getPage();
-		if ( $wikiPage->getNamespace() !== NS_EVENT || !$wikiPage->exists() ) {
+		if ( $wikiPage->getNamespace() !== NS_EVENT || !$wikiPage->exists() || $wikiPage->isRedirect() ) {
 			return;
 		}
 
