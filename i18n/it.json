@@ -43,6 +43,7 @@
 	"campaignevents-event-details-remove-participant-confirmation-title": "Rimuovi {{PLURAL:$1|partecipante|partecipanti}}",
 	"campaignevents-event-details-remove-participant-remove-btn": "Rimuovi",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Annulla",
+	"campaignevents-event-details-no-event-id-provided": "Fornisci un ID evento",
 	"campaignevents-event-details-event": "Dettagli evento: $1",
 	"campaignevents-event-details-not-found": "Non ci sono eventi con questo ID.",
 	"campaignevents-event-details-dates-label": "Ora di inizio e fine"
