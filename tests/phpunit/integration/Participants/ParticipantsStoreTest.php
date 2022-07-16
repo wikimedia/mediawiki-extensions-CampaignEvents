@@ -34,19 +34,19 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 					[
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 101,
-						'cep_registered_at' => '20220315120000',
+						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
 						'cep_unregistered_at' => null
 					],
 					[
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 102,
-						'cep_registered_at' => '20220315120000',
-						'cep_unregistered_at' => '20220324120000'
+						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
+						'cep_unregistered_at' => $this->db->timestamp( '20220324120000' ),
 					],
 					[
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 104,
-						'cep_registered_at' => '20220316120000',
+						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
 						'cep_unregistered_at' => null
 					],
 				]
@@ -125,11 +125,12 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			$userLookup
 		);
 		$getActualTS = function () use ( $eventID, $userID ): string {
-			return $this->db->selectField(
+			$ts = $this->db->selectField(
 				'ce_participants',
 				'cep_registered_at',
 				[ 'cep_event_id' => $eventID, 'cep_user_id' => $userID ]
 			);
+			return $ts === false ? $ts : wfTimestamp( TS_MW, $ts );
 		};
 
 		$ts1 = '20220227120001';
