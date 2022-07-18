@@ -80,7 +80,11 @@ class EventDetailsParticipantsModule {
 		$canRemoveParticipants = UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $registration );
 		if ( $participants ) {
 			$items[] = ( new Tag() )->appendContent(
-				( new SearchInputWidget() )->addClasses( [ 'ext-campaignevents-details-participants-search' ] )
+				( new SearchInputWidget( [
+					'placeholder' => $msgFormatter->format(
+						MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
+					)
+				] ) )->addClasses( [ 'ext-campaignevents-details-participants-search' ] )
 			)->addClasses( [ 'ext-campaignevents-details-participants-search-div' ] );
 		}
 

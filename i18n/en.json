@@ -202,5 +202,6 @@
 	"campaignevents-unregister-participants-registration-deleted": "You cannot remove participants from this event because it was deleted.",
 	"campaignevents-unregister-participants-past-registration": "You cannot remove participants from this event because the event has ended.",
 	"campaignevents-event-details-remove-participant-notification-error": "There was an error when trying to remove the {{PLURAL:$1|participant|participants}}",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' must be an array of user ids, or null (to remove all users)"
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' must be an array of user ids, or null (to remove all users)",
+	"campaignevents-event-details-search-participants-placeholder": "Search for participants"
 }

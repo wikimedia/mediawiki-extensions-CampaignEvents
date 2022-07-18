@@ -204,5 +204,6 @@
 	"campaignevents-unregister-participants-registration-deleted": "Message in case the specified event registration is deleted",
 	"campaignevents-unregister-participants-past-registration": "Message in case the user tries to remove participants from events in the past",
 	"campaignevents-event-details-remove-participant-notification-error": "Message shown on [[Special:EventDetails]] if there is an error when trying to remove participants",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "An error message shown if the parameter 'user_ids' is an empty list of user ids, when trying to remove participants"
+	"campaignevents-rest-remove-participants-invalid-users-ids": "An error message shown if the parameter 'user_ids' is an empty list of user ids, when trying to remove participants",
+	"campaignevents-event-details-search-participants-placeholder": "A placeholder message for the search participants input on [[Special:EventDetails]]"
 }
