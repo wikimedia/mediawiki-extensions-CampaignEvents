@@ -5,6 +5,7 @@
 		]
 	},
 	"campaignevents-error-in-person-no-country": "Մուտքագրեք երկրի անունը։",
+	"myevents": "Ձեր իրադարձությունները",
 	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",
 	"campaignevents-myevents-label-search": "Որոնում",
 	"campaignevents-myevents-label-status": "Կարգավիճակ",
@@ -21,8 +22,13 @@
 	"campaignevents-eventpage-header-dates-label": "Սկսելու և ավարտելու ժամանակը",
 	"campaignevents-eventpage-dialog-organizers": "Կազմակերպվում է $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Դիտեք բոլոր կազմակերպիչներին",
+	"campaignevents-eventpage-dialog-location-label": "Տեղադրություն",
 	"campaignevents-eventpage-dialog-action-close": "Փակել",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Այո",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ոչ",
-	"campaignevents-eventpage-register-confirmation-cancel": "Չեղարկել գրանցումը"
+	"campaignevents-eventpage-register-confirmation-cancel": "Չեղարկել գրանցումը",
+	"eventdetails": "Միջոցառման մանրամասները",
+	"campaignevents-event-details-edit-button": "Խմբագրել",
+	"campaignevents-event-details-remove-participant-remove-btn": "Հեռացնել",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Չեղարկել"
 }

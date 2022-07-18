@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"এম আবু সাঈদ"
+		]
+	},
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Participant|Participants}} ꠛꠣꠖ ꠚꠞꠤꠉꠦꠍꠂꠘ",
+	"campaignevents-event-details-remove-all-participant-notification": "ꠅꠈꠟ ꠡꠞꠤꠇꠣꠘ ꠛꠣꠖ ꠚꠞꠤꠉꠦꠍꠂꠘ",
+	"campaignevents-unregister-participants-permission-denied": "ꠡꠞꠤꠇꠣꠘ ꠅꠈꠟꠞꠦ ꠀꠚꠘꠦ ꠛꠣꠖ ꠖꠤꠔꠣ ꠚꠣꠞꠔꠣ ꠘꠣꠄ"
+}

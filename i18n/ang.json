@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hogweard"
+		]
+	},
+	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Belimp tramet</strong>: Gelef þe man mot bocian þe dælnimendas motan hie bocian for þinum belimpe rihte on þæm tramte.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' se rimtacn sceal beon ord of brucenda namum, oþþe emetig (þe eall brucendas sind animen)"
+}

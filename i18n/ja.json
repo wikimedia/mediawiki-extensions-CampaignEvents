@@ -2,14 +2,15 @@
 	"@metadata": {
 		"authors": [
 			"MathXplore",
-			"Omotecho"
+			"Omotecho",
+			"Shirayuki"
 		]
 	},
 	"campaignevents-desc": "キャンペーンの主催者用と参加者用の機能を提供。",
 	"action-campaignevents-enable-registration": "イベント登録を有効にする",
 	"right-campaignevents-enable-registration": "イベント登録を有効にする",
-	"action-campaignevents-delete-registration": "イベント登録を削除する",
-	"right-campaignevents-delete-registration": "イベント登録を削除する",
+	"action-campaignevents-delete-registration": "イベント登録の削除",
+	"right-campaignevents-delete-registration": "イベント登録を削除",
 	"campaignevents-error-invalid-id": "イベントIDは正の整数である必要があります。",
 	"campaignevents-error-empty-title": "イベントページのタイトルを入力して下さい。",
 	"campaignevents-error-invalid-chat-url": "有効なチャットURLを入力してください。",

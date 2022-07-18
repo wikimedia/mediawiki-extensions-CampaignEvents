@@ -18,6 +18,7 @@
 	"campaignevents-error-invalid-title-interwiki": "Spécifiez une page d’événement sur le wiki local.",
 	"campaignevents-error-page-not-found": "Il n’y a aucune page d’événement avec ce nom.",
 	"campaignevents-error-page-not-event-namespace": "La page d’événement doit se trouver dans l’espace de noms {{ns:event}}.",
+	"campaignevents-error-page-with-section": "La page de l’événement ne doit contenir aucun nom de section.",
 	"campaignevents-error-invalid-chat-url": "Saisissez une URL de discussion en direct valide.",
 	"campaignevents-error-invalid-status": "Indiquez si l’événement est ouvert ou fermé.",
 	"campaignevents-error-empty-start": "Choisissez une heure de début.",
@@ -197,5 +198,12 @@
 	"campaignevents-event-details-event": "Détails de l’événement : $1",
 	"campaignevents-event-details-not-found": "Il n’y a aucun événement avec cet identifiant.",
 	"campaignevents-event-details-online-link-not-available": "Le lien sera rendu disponible par {{PLURAL:$1|l’organisateur|les organisateurs}}.",
-	"campaignevents-event-details-dates-label": "Heure de début et de fin"
+	"campaignevents-event-details-dates-label": "Heure de début et de fin",
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Participant enlevé|Participants enlevés}}",
+	"campaignevents-event-details-remove-all-participant-notification": "Tous les participants ont été enlevés",
+	"campaignevents-unregister-participants-permission-denied": "Vous n’êtes pas autorisé à enlever des participants",
+	"campaignevents-unregister-participants-registration-deleted": "Vous ne pouvez pas enlever des participants de cet événement, car il a été supprimé.",
+	"campaignevents-unregister-participants-past-registration": "Vous ne pouvez pas enlever des participants de cet événement car il est terminé.",
+	"campaignevents-event-details-remove-participant-notification-error": "Une erreur s’est produite en essayant d’enlever {{PLURAL:$1|le participant|les participants}}",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour enlever tous les utilisateurs)"
 }

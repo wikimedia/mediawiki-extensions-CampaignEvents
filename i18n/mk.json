@@ -15,6 +15,7 @@
 	"campaignevents-error-invalid-title-interwiki": "Укажете на страницата за настанот на месното вики.",
 	"campaignevents-error-page-not-found": "Нема страница за настан со тоа име.",
 	"campaignevents-error-page-not-event-namespace": "Страницата за настанот мора да биде во именскиот простор {{ns:event}}.",
+	"campaignevents-error-page-with-section": "Страницата за настанот не треба да содржи има на оддел.",
 	"campaignevents-error-invalid-chat-url": "Внесете важечка URL-адреса за разговорот.",
 	"campaignevents-error-invalid-status": "Укажете дали настанот е отворен или затворен.",
 	"campaignevents-error-empty-start": "Одберете почетно време.",
@@ -193,5 +194,12 @@
 	"campaignevents-event-details-event": "Поединости за настанот: $1",
 	"campaignevents-event-details-not-found": "Нема настан со таа назнака.",
 	"campaignevents-event-details-online-link-not-available": "Врската ќе ја {{PLURAL:$1|добави приредувачот|добават приредувачите}}.",
-	"campaignevents-event-details-dates-label": "Почетно и завршно време"
+	"campaignevents-event-details-dates-label": "Почетно и завршно време",
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Отстранет учесник|Отстранети учесници}}",
+	"campaignevents-event-details-remove-all-participant-notification": "Сите учесници се отстранети",
+	"campaignevents-unregister-participants-permission-denied": "Не ви е дозволено да остранувате учесници",
+	"campaignevents-unregister-participants-registration-deleted": "Не можете да отстранувате учесници од овој настан бидејќи е избришан.",
+	"campaignevents-unregister-participants-past-registration": "Не можете да отстранувате учесници од овој настан бидејќи настанот завршил.",
+	"campaignevents-event-details-remove-participant-notification-error": "Се појави грешка при обиодот да {{PLURAL:$1|го отстранат учесникот|ги отстранам учесниците}}",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Параметарот „user_ids“ мора да биде строј од кориснички назнали, или пак да е празен (за да се отстранат сите корисници)"
 }

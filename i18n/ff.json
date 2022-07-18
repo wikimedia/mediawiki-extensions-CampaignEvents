@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"RafieuBah"
+		]
+	},
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|taawsnooɗo on|tawanooɓe ɓen}} ittaama",
+	"campaignevents-event-details-remove-all-participant-notification": "Taawaaɓe ɓen dow ittaama",
+	"campaignevents-unregister-participants-registration-deleted": "A waawataa ittude tawanooɓe ɓen e ngoo waɗo ɓay ɗum momtaama.",
+	"campaignevents-event-details-remove-participant-notification-error": "Lela waɗi fewndo ittayno-ɗa \n{{PLURAL:$1|tawaanoɗo on|tawanooɓe ɓen}}"
+}

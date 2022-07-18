@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Bachounda",
 			"Hhaboh162002",
 			"Mohanad Kh",
@@ -185,7 +186,7 @@
 	"campaignevents-event-details-view-event-page": "عرض صفحة الفعالية",
 	"campaignevents-event-details-select-all": "اختر الكل",
 	"campaignevents-event-details-all-selected": "محددة كليا",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1| محدد | محددة}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|محدد|محددة}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "حذف {{PLURAL:$1|المشارك|المشاركين}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "هل أنت متأكد من أنك ترغب في حذف {{PLURAL:$1|المشارك|المشاركين}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "إزالة",

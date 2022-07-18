@@ -26,6 +26,7 @@
 	"campaignevents-error-invalid-type": "Ange en giltig evenemangstyp.",
 	"campaignevents-error-no-meeting-type": "Välj minst ett typ av evenemangsmöte.",
 	"campaignevents-error-invalid-meeting-url": "Ange ett giltigt evenemangsmötes-URL.",
+	"campaignevents-error-meeting-url-not-online": "Mötes-URL:en för inte anges om evenemanget inte är online.",
 	"campaignevents-error-in-person-no-country": "Ange ett landsnamn.",
 	"campaignevents-error-in-person-no-address": "Ange en adress.",
 	"campaignevents-error-invalid-country": "Ange ett giltigt landsnamn.",

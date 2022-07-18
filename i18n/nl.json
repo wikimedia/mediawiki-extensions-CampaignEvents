@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Siebrand"
 		]
 	},
@@ -181,7 +182,7 @@
 	"campaignevents-event-details-view-event-page": "Evenementpagina bekijken",
 	"campaignevents-event-details-select-all": "Alles selecteren",
 	"campaignevents-event-details-all-selected": "Alles geselecteerd",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1| geselecteerd|geselecteerd}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|geselecteerd}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|Deelnemer|Deelnemers}} verwijderen",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Weet u zeker dat u de geselecteerde {{PLURAL:$1|deelnemer|deelnemers}} wilt verwijderen?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Verwijderen",
