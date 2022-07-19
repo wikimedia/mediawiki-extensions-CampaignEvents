@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
+			"McDutchie",
 			"Siebrand"
 		]
 	},
@@ -82,8 +83,8 @@
 	"campaignevents-unregister-confirmation-btn": "Afmelden",
 	"campaignevents-delete-not-allowed-registration": "U mag deze evenementregistratie niet verwijderen.",
 	"campaignevents-rest-delete-already-deleted": "Deze evenementregistratie is al verwijderd.",
-	"campaignevents-role-creator": "maker",
-	"campaignevents-role-organizer": "organisator",
+	"campaignevents-role-creator": "{{GENDER:$1|maker}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|organisator}}",
 	"campaignevents-rest-user-not-found": "De gebruiker \"$1\" bestaat niet.",
 	"campaignevents-register-not-allowed": "Aanmelden voor evenementen is niet toegestaan.",
 	"campaignevents-register-event-past": "Deze evenementregistratieperiode is al afgelopen.",
@@ -177,7 +178,7 @@
 	"campaignevents-event-details-dates": "$1 tot $4",
 	"campaignevents-event-details-in-person-event-label": "Evenement op locatie",
 	"campaignevents-event-details-online-label": "Online evenement",
-	"campaignevents-event-details-chat-link": "Uitnodigingslink voor chatgroep op sociale media",
+	"campaignevents-event-details-chat-link": "Uitnodigingslink voor chatgroep",
 	"campaignevents-event-details-register-prompt": "U moet zich registreren om deze informatie te bekijken",
 	"campaignevents-event-details-view-event-page": "Evenementpagina bekijken",
 	"campaignevents-event-details-select-all": "Alles selecteren",

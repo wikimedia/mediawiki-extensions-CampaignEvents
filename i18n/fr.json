@@ -85,8 +85,8 @@
 	"campaignevents-unregister-confirmation-btn": "Annuler l’inscription",
 	"campaignevents-delete-not-allowed-registration": "Vous n’avez pas le droit de supprimer cette inscription à un événement.",
 	"campaignevents-rest-delete-already-deleted": "Cette inscription à l’événement est déjà supprimée.",
-	"campaignevents-role-creator": "créateur",
-	"campaignevents-role-organizer": "organisateur",
+	"campaignevents-role-creator": "créat{{GENDER:$1|eur|rice}}",
+	"campaignevents-role-organizer": "organisat{{GENDER:$1|eur|rice}}",
 	"campaignevents-rest-user-not-found": "L’utilisateur $1 n’existe pas.",
 	"campaignevents-register-not-allowed": "Vous n'êtes pas autorisé{{GENDER:||e}} à vous inscrire aux événements.",
 	"campaignevents-register-event-past": "La période d’inscription à cet événement est déjà terminée.",
@@ -181,7 +181,7 @@
 	"campaignevents-event-details-dates": "du $1 au $4",
 	"campaignevents-event-details-in-person-event-label": "Événement en présentiel",
 	"campaignevents-event-details-online-label": "Événement en ligne",
-	"campaignevents-event-details-chat-link": "Lien d’invitation au groupe de discussion d’un réseau social",
+	"campaignevents-event-details-chat-link": "Lien d’invitation à un groupe de discussion en direct",
 	"campaignevents-event-details-register-prompt": "Vous devez vous inscrire pour voir ces informations",
 	"campaignevents-event-details-view-event-page": "Afficher la page de l’événement",
 	"campaignevents-event-details-select-all": "Sélectionner tout",
@@ -205,5 +205,6 @@
 	"campaignevents-unregister-participants-registration-deleted": "Vous ne pouvez pas enlever des participants de cet événement, car il a été supprimé.",
 	"campaignevents-unregister-participants-past-registration": "Vous ne pouvez pas enlever des participants de cet événement car il est terminé.",
 	"campaignevents-event-details-remove-participant-notification-error": "Une erreur s’est produite en essayant d’enlever {{PLURAL:$1|le participant|les participants}}",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour enlever tous les utilisateurs)"
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour enlever tous les utilisateurs)",
+	"campaignevents-event-details-search-participants-placeholder": "Rechercher des participants"
 }

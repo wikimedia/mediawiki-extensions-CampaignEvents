@@ -19,6 +19,7 @@
 	"campaignevents-error-invalid-title-interwiki": "حدد صفحة فعالية على موقع ويكي محلي.",
 	"campaignevents-error-page-not-found": "لا توجد صفحة فعالية بهذا الاسم.",
 	"campaignevents-error-page-not-event-namespace": "يتعين أن تكون صفحة الفعالية في النطاق {{ns:event}}.",
+	"campaignevents-error-page-with-section": "يجب ألا تحتوي صفحة الفعالية على اسم قسم.",
 	"campaignevents-error-invalid-chat-url": "أدخل عنوانًا فعّالًا لصفحة موقع الدردشة.",
 	"campaignevents-error-invalid-status": "حدد ما إذا كانت الفعالية مفتوحة أم مغلقة.",
 	"campaignevents-error-empty-start": "اختر وقت البدء.",
@@ -198,5 +199,12 @@
 	"campaignevents-event-details-event": "تفاصيل الفعالية : $1",
 	"campaignevents-event-details-not-found": "لا توجد فعالية مقترنة بهذا المعرّف.",
 	"campaignevents-event-details-online-link-not-available": "سيتولى {{PLURAL:$1|المنظم|المنظمون}} بتوفير الرابط.",
-	"campaignevents-event-details-dates-label": "وقت البدء والانتهاء"
+	"campaignevents-event-details-dates-label": "وقت البدء والانتهاء",
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|المشارك|المشاركون}} تمت إزالة",
+	"campaignevents-event-details-remove-all-participant-notification": "تمت إزالة جميع المشاركين",
+	"campaignevents-unregister-participants-permission-denied": "غير مسموح بإزالة المشاركين",
+	"campaignevents-unregister-participants-registration-deleted": "لا يمكنك إزالة المشاركين من الفعالية لأنه تم حذفها.",
+	"campaignevents-unregister-participants-past-registration": "لا يمكنك إزالة المشاركين من الفعالية لأنها أغلقت.",
+	"campaignevents-event-details-remove-participant-notification-error": "حدث خطأ ما خلال محاولة إزالة  {{PLURAL:$1|المشارك|المشاركين}}",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "يجب أن تكون خاصية 'user_ids' عبارة عن مصفوفة من معرفات المستخدم, or null (لإزالة جميع المستخدمين)"
 }

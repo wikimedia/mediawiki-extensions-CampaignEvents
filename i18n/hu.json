@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hanna Tardos"
+		]
+	},
+	"campaignevents-role-organizer": "{{GENDER:$1|szervező}}",
+	"campaignevents-event-details-search-participants-placeholder": "Részvevők keresése"
+}

@@ -15,6 +15,7 @@
 	"campaignevents-error-invalid-title-interwiki": "נא להזין דף אירוע בוויקי המקומי.",
 	"campaignevents-error-page-not-found": "אין דף אירוע בשם הזה.",
 	"campaignevents-error-page-not-event-namespace": "דף האירוע חייב להיות במרחב השמות {{ns:event}}.",
+	"campaignevents-error-page-with-section": "דף האירוע לא יכול להכיל שם פרק.",
 	"campaignevents-error-invalid-chat-url": "נא להזין URL תקין לצ'אט.",
 	"campaignevents-error-invalid-status": "נא לציין אם האירוע פתוח או סגור.",
 	"campaignevents-error-empty-start": "נא לבחור זמן התחלה.",
@@ -81,8 +82,8 @@
 	"campaignevents-unregister-confirmation-btn": "ביטול הרשמה",
 	"campaignevents-delete-not-allowed-registration": "אין לך הרשאה למחוק את ההרשמה לאירוע הזה.",
 	"campaignevents-rest-delete-already-deleted": "ההרשמה לאירוע שצוין כבר נמחקה.",
-	"campaignevents-role-creator": "יוצר",
-	"campaignevents-role-organizer": "מארגן",
+	"campaignevents-role-creator": "{{GENDER:$1|יוצר|יוצרת}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|מארגן|מארגנת}}",
 	"campaignevents-rest-user-not-found": "המשתמש \"$1\" אינו קיים.",
 	"campaignevents-register-not-allowed": "אין לך הרשאה להירשם לאירועים.",
 	"campaignevents-register-event-past": "תקופת ההרשמה לאירוע הזה כבר הסתיימה.",
@@ -176,7 +177,7 @@
 	"campaignevents-event-details-dates": "$1 עד $4",
 	"campaignevents-event-details-in-person-event-label": "אירוע בחיים האמיתיים",
 	"campaignevents-event-details-online-label": "אירוע מקוון",
-	"campaignevents-event-details-chat-link": "קישור הזמנה לקבוצת צ'אט במדיה חברתית",
+	"campaignevents-event-details-chat-link": "קישור הזמנה לקבוצת צ'אט",
 	"campaignevents-event-details-register-prompt": "יש להירשם כדי לראות את המידע הזה",
 	"campaignevents-event-details-view-event-page": "צפייה בדף האירוע",
 	"campaignevents-event-details-select-all": "לבחור הכול",
@@ -200,5 +201,6 @@
 	"campaignevents-unregister-participants-registration-deleted": "אין לך הרשאה להסיר משתתפים מהאירוע הזה כי הוא נמחק.",
 	"campaignevents-unregister-participants-past-registration": "אין לך הרשאה להסיר משתתפים מהאירוע הזה כי האירוע הסתיים.",
 	"campaignevents-event-details-remove-participant-notification-error": "אירעה שגיאה בעת ניסיון להסיר את {{PLURAL:$1|המשתתף|המשתתפים}}",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "הפרמטר \"user_ids\" חייב להיות מערך של מזהי משתמשים או null (כדי להסיר את כל המשתמשים)"
+	"campaignevents-rest-remove-participants-invalid-users-ids": "הפרמטר \"user_ids\" חייב להיות מערך של מזהי משתמשים או null (כדי להסיר את כל המשתמשים)",
+	"campaignevents-event-details-search-participants-placeholder": "חיפוש משתתפים"
 }

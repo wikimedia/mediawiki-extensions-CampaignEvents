@@ -180,7 +180,7 @@
 	"campaignevents-event-details-dates": "Message shown in the Event Details section on [[Special:EventDetails]] with the start and end time of the event.\nParameters:\n* $1 - Start date and time, in a format like \"13:00, 8 April 2022\" depending on the language.\n* $2 - The start date alone (optional).\n* $3 - The start time alone (optional)\n* $4 - End date and time, formatted the same as parameter $1.\n* $5 - The end date alone (optional).\n* $6 - The end time alone (optional).",
 	"campaignevents-event-details-in-person-event-label": "Heading used on [[Special:EventDetails]] for in-person events.",
 	"campaignevents-event-details-online-label": "Heading used on [[Special:EventDetails]] for online events.",
-	"campaignevents-event-details-chat-link": "Heading used on [[Special:EventDetails]] for a section that contains an invite link to a social media chat group.",
+	"campaignevents-event-details-chat-link": "Heading used on [[Special:EventDetails]] for a section that contains an invite link to a chat group.",
 	"campaignevents-event-details-register-prompt": "Message used on [[Special:EventDetails]] to inform the user that they need to register in order to see a piece of information.",
 	"campaignevents-event-details-view-event-page": "Label of a button used on [[Special:EventDetails]]. By clicking, the event page will open.",
 	"campaignevents-event-details-select-all": "Label of a checkbox on [[Special:EventDetails]] that allows you to select all the participants of an event.",
