@@ -295,7 +295,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListParticipantsHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsParticipantsStore"
+				"CampaignEventsParticipantsStore",
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		{
