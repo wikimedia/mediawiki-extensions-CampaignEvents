@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 
@@ -18,14 +19,22 @@ class PermissionChecker {
 	private $userBlockChecker;
 	/** @var OrganizersStore */
 	private $organizersStore;
+	/** @var PageAuthorLookup */
+	private $pageAuthorLookup;
 
 	/**
 	 * @param UserBlockChecker $userBlockChecker
 	 * @param OrganizersStore $organizersStore
+	 * @param PageAuthorLookup $pageAuthorLookup
 	 */
-	public function __construct( UserBlockChecker $userBlockChecker, OrganizersStore $organizersStore ) {
+	public function __construct(
+		UserBlockChecker $userBlockChecker,
+		OrganizersStore $organizersStore,
+		PageAuthorLookup $pageAuthorLookup
+	) {
 		$this->userBlockChecker = $userBlockChecker;
 		$this->organizersStore = $organizersStore;
+		$this->pageAuthorLookup = $pageAuthorLookup;
 	}
 
 	/**
@@ -50,9 +59,8 @@ class PermissionChecker {
 			return false;
 		}
 
-		// TODO MVP: Check this for real
-		$userCreatedEventPage = true;
-		return $userCreatedEventPage;
+		$pageAuthor = $this->pageAuthorLookup->getAuthor( $eventPage );
+		return $pageAuthor && $pageAuthor->equals( $user );
 	}
 
 	/**

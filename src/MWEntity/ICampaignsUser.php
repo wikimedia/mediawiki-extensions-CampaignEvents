@@ -25,4 +25,10 @@ interface ICampaignsUser {
 	 * @return string
 	 */
 	public function getName(): string;
+
+	/**
+	 * @param ICampaignsUser $other
+	 * @return bool
+	 */
+	public function equals( self $other ): bool;
 }

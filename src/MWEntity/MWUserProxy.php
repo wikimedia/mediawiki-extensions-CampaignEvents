@@ -51,6 +51,14 @@ class MWUserProxy implements ICampaignsUser {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function equals( ICampaignsUser $other ): bool {
+		// XXX This is not entirely correct given that our users are central. Fix together with T313133.
+		return $this->getName() === $other->getName();
+	}
+
+	/**
 	 * @return UserIdentity
 	 */
 	public function getUserIdentity(): UserIdentity {

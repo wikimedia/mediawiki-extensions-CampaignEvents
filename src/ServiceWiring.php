@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -64,7 +65,8 @@ return [
 	PermissionChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): PermissionChecker {
 		return new PermissionChecker(
 			$services->get( UserBlockChecker::SERVICE_NAME ),
-			$services->get( OrganizersStore::SERVICE_NAME )
+			$services->get( OrganizersStore::SERVICE_NAME ),
+			$services->get( PageAuthorLookup::SERVICE_NAME )
 		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
@@ -167,6 +169,12 @@ return [
 			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
 			$services->getPageStore(),
 			$services->getTitleFormatter()
+		);
+	},
+	PageAuthorLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PageAuthorLookup {
+		return new PageAuthorLookup(
+			$services->getRevisionStoreFactory(),
+			$services->getUserFactory()
 		);
 	},
 ];

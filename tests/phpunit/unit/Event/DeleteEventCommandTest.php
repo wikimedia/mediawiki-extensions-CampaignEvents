@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -34,7 +35,8 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 			$eventStore ?? $this->createMock( IEventStore::class ),
 			$permChecker ?? new PermissionChecker(
 				$this->createMock( UserBlockChecker::class ),
-				$this->createMock( OrganizersStore::class )
+				$this->createMock( OrganizersStore::class ),
+				$this->createMock( PageAuthorLookup::class )
 			)
 		);
 	}

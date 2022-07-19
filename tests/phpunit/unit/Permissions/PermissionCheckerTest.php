@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -26,15 +27,18 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param UserBlockChecker|null $blockChecker
 	 * @param OrganizersStore|null $organizersStore
+	 * @param PageAuthorLookup|null $pageAuthorLookup
 	 * @return PermissionChecker
 	 */
 	private function getPermissionChecker(
 		UserBlockChecker $blockChecker = null,
-		OrganizersStore $organizersStore = null
+		OrganizersStore $organizersStore = null,
+		PageAuthorLookup $pageAuthorLookup = null
 	): PermissionChecker {
 		return new PermissionChecker(
 			$blockChecker ?? $this->createMock( UserBlockChecker::class ),
-			$organizersStore ?? $this->createMock( OrganizersStore::class )
+			$organizersStore ?? $this->createMock( OrganizersStore::class ),
+			$pageAuthorLookup ?? $this->createMock( PageAuthorLookup::class )
 		);
 	}
 
@@ -86,30 +90,63 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param bool $expected
 	 * @param ICampaignsUser $user
 	 * @param ICampaignsPage $page
+	 * @param PageAuthorLookup|null $pageAuthorLookup
 	 * @covers ::userCanEnableRegistration
 	 * @dataProvider provideCanEnableRegistration
 	 */
-	public function testUserCanEnableRegistration( bool $expected, ICampaignsUser $user, ICampaignsPage $page ) {
+	public function testUserCanEnableRegistration(
+		bool $expected,
+		ICampaignsUser $user,
+		ICampaignsPage $page,
+		PageAuthorLookup $pageAuthorLookup = null
+	) {
 		$this->assertSame(
 			$expected,
-			$this->getPermissionChecker()->userCanEnableRegistration( $user, $page )
+			$this->getPermissionChecker( null, null, $pageAuthorLookup )->userCanEnableRegistration( $user, $page )
 		);
 	}
 
 	public function provideCanEnableRegistration(): Generator {
-		$registeredUser = new UserIdentityValue( 42, 'Name' );
-		yield 'Authorized' => [
-			true,
-			new MWUserProxy(
-				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
-			),
+		$registeredUserIdentity = new UserIdentityValue( 42, 'Name' );
+		$authorizedUser = new MWUserProxy(
+			$registeredUserIdentity,
+			new SimpleAuthority( $registeredUserIdentity, [ 'campaignevents-enable-registration' ] )
+		);
+		$unauthorizedUser = new MWUserProxy(
+			$registeredUserIdentity,
+			new SimpleAuthority( $registeredUserIdentity, [] )
+		);
+
+		yield 'Cannot create registrations' => [
+			false,
+			$unauthorizedUser,
 			$this->createMock( ICampaignsPage::class )
 		];
-		yield 'Not authorized' => [
+
+		$testPage = $this->createMock( ICampaignsPage::class );
+
+		$notCreatedAuthorLookup = $this->createMock( PageAuthorLookup::class );
+		$notCreatedAuthorLookup->expects( $this->atLeastOnce() )
+			->method( 'getAuthor' )
+			->with( $testPage )
+			->willReturn( $this->createMock( ICampaignsUser::class ) );
+		yield 'Did not create the page' => [
 			false,
-			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) ),
-			$this->createMock( ICampaignsPage::class )
+			$authorizedUser,
+			$testPage,
+			$notCreatedAuthorLookup
+		];
+
+		$createdAuthorLookup = $this->createMock( PageAuthorLookup::class );
+		$createdAuthorLookup->expects( $this->atLeastOnce() )
+			->method( 'getAuthor' )
+			->with( $testPage )
+			->willReturn( $authorizedUser );
+		yield 'Authorized' => [
+			true,
+			$authorizedUser,
+			$testPage,
+			$createdAuthorLookup
 		];
 	}
 
