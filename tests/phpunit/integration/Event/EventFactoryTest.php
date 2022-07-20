@@ -249,16 +249,16 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 				'address' => null,
 			] )
 		];
-		yield 'In person meeting without country' => [
-			'campaignevents-error-in-person-no-country',
+		yield 'In person meeting without country, successful' => [
+			null,
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'country' => null,
 				'meetingurl' => null,
 			] )
 		];
-		yield 'In person meeting without address' => [
-			'campaignevents-error-in-person-no-address',
+		yield 'In person meeting without address, successful' => [
+			null,
 			$this->getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'address' => null,

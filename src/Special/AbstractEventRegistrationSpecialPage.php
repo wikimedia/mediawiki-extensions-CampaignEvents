@@ -166,7 +166,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-country',
 			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingCountry() : '',
-			'required' => true,
 		];
 		$formFields['EventMeetingAddress'] = [
 			'type' => 'textarea',
@@ -174,7 +173,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-address',
 			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingAddress() : '',
-			'required' => true,
 		];
 		$formFields['EventChatURL'] = [
 			'type' => 'url',
@@ -200,14 +198,20 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	public function onSubmit( array $data ) {
 		$meetingType = (int)$data['EventMeetingType'];
-		// Use null if it wasn't provided, or EventFactory will flag the empty string as an invalid URL.
-		$rawMeetingURL = $data['EventMeetingURL'] !== '' ? $data['EventMeetingURL'] : null;
+		// The value for these fields is the empty string if the field was not filled, but EventFactory distinguishes
+		// empty string (= the value was explicitly specified as an empty string) vs null (=value not specified).
+		// That's mostly intended for API consumers, and here for the UI we can just assume that
+		// empty string === not specified.
+		$nullableFields = [ 'EventMeetingURL', 'EventMeetingCountry', 'EventMeetingAddress', 'EventChatURL' ];
+		foreach ( $nullableFields as $fieldName ) {
+			$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
+		}
 
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
-				$data['EventChatURL'] ?: null,
+				$data['EventChatURL'],
 				// TODO MVP: Tracking tool
 				null,
 				null,
@@ -216,7 +220,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventEnd'],
 				EventRegistration::TYPE_GENERIC,
 				$meetingType,
-				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $rawMeetingURL : null,
+				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingAddress'] : null,
 				$this->event ? $this->event->getCreationTimestamp() : null,
