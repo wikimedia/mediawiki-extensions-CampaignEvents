@@ -82,8 +82,8 @@
 	"campaignevents-unregister-confirmation-btn": "Откажи пријава",
 	"campaignevents-delete-not-allowed-registration": "Не ви е дозволено да ја избришете оваа пријава за настан.",
 	"campaignevents-rest-delete-already-deleted": "Оваа пријава за настан е веќе избришана.",
-	"campaignevents-role-creator": "создавач",
-	"campaignevents-role-organizer": "приредувач",
+	"campaignevents-role-creator": "{{GENDER:$1|создавач}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|приредувач}}",
 	"campaignevents-rest-user-not-found": "Корисникот $1 не постои.",
 	"campaignevents-register-not-allowed": "Не ви е дозволено да се пријавувате за настани.",
 	"campaignevents-register-event-past": "Ова пријавување за настан веќе заврши.",
@@ -177,7 +177,7 @@
 	"campaignevents-event-details-dates": "$1 до $4",
 	"campaignevents-event-details-in-person-event-label": "Физички настан",
 	"campaignevents-event-details-online-label": "Семрежен настан",
-	"campaignevents-event-details-chat-link": "Врска со покана за разговор на друштвени медиуми",
+	"campaignevents-event-details-chat-link": "Врска со покана за групен разговор",
 	"campaignevents-event-details-register-prompt": "Ќе треб ада се пријавите за да ги гледате овие информации",
 	"campaignevents-event-details-view-event-page": "Погл. страница за настанот",
 	"campaignevents-event-details-select-all": "Избери сè",
@@ -201,5 +201,6 @@
 	"campaignevents-unregister-participants-registration-deleted": "Не можете да отстранувате учесници од овој настан бидејќи е избришан.",
 	"campaignevents-unregister-participants-past-registration": "Не можете да отстранувате учесници од овој настан бидејќи настанот завршил.",
 	"campaignevents-event-details-remove-participant-notification-error": "Се појави грешка при обиодот да {{PLURAL:$1|го отстранат учесникот|ги отстранам учесниците}}",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Параметарот „user_ids“ мора да биде строј од кориснички назнали, или пак да е празен (за да се отстранат сите корисници)"
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Параметарот „user_ids“ мора да биде строј од кориснички назнали, или пак да е празен (за да се отстранат сите корисници)",
+	"campaignevents-event-details-search-participants-placeholder": "Пребарај учесници"
 }

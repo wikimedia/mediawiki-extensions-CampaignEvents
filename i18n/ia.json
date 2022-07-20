@@ -201,5 +201,6 @@
 	"campaignevents-unregister-participants-registration-deleted": "Tu non pote remover participantes de iste evento perque illo ha essite delite.",
 	"campaignevents-unregister-participants-past-registration": "Tu non pote remover participantes de iste evento perque le evento ha terminate.",
 	"campaignevents-event-details-remove-participant-notification-error": "Un error ha occurrite durante le tentativa de remover le participante{{PLURAL:$1||s}}",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Le parametro 'user_ids' debe esser un array de IDs de usator, o nulle (pro remover tote le usatores)"
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Le parametro 'user_ids' debe esser un array de IDs de usator, o nulle (pro remover tote le usatores)",
+	"campaignevents-event-details-search-participants-placeholder": "Cercar participantes"
 }

@@ -73,7 +73,7 @@
 	"campaignevents-delete-not-allowed-registration": "Du får inte radera denna evenemangsregistrering",
 	"campaignevents-rest-delete-already-deleted": "Den angivna evenemangsregistreringen har redan raderats",
 	"campaignevents-role-creator": "skapare",
-	"campaignevents-role-organizer": "organisatör",
+	"campaignevents-role-organizer": "{{GENDER:$1|organisatör}}",
 	"myevents": "Dina händelser",
 	"campaignevents-myevents-filter-legend": "Filtrera evenemang",
 	"campaignevents-myevents-label-search": "Sök",
@@ -98,5 +98,18 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Avbryt",
 	"campaignevents-eventpage-header-location-label": "Plats",
 	"campaignevents-eventpage-dialog-location-label": "Plats",
-	"campaignevents-eventpage-register-notification": "Du har nu registrerats för $1."
+	"campaignevents-eventpage-register-notification": "Du har nu registrerats för $1.",
+	"eventdetails": "Evenemangsdetaljer",
+	"campaignevents-event-details-label": "Evenemangsdetaljer",
+	"campaignevents-event-details-edit-button": "Redigera",
+	"campaignevents-event-details-dates": "$1 till $4",
+	"campaignevents-event-details-view-event-page": "Visa evenemangssida",
+	"campaignevents-event-details-select-all": "Välj alla",
+	"campaignevents-event-details-all-selected": "Alla valda",
+	"campaignevents-event-details-remove-participant-confirmation-title": "Ta bort {{PLURAL:$1|deltagare}}",
+	"campaignevents-event-details-remove-participant-remove-btn": "Ta bort",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Avbryt",
+	"campaignevents-event-details-event": "Evenemangsdetaljer: $1",
+	"campaignevents-event-details-not-found": "Det finns inget evenemang med detta ID.",
+	"campaignevents-event-details-search-participants-placeholder": "Sök efter deltagare"
 }
