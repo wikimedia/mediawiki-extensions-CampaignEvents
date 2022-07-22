@@ -277,14 +277,10 @@ class EventFactory {
 		}
 
 		if ( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) {
-			if ( $meetingCountry === null ) {
-				$res->error( 'campaignevents-error-in-person-no-country' );
-			} else {
+			if ( $meetingCountry !== null ) {
 				$meetingCountry = trim( $meetingCountry );
 			}
-			if ( $meetingAddress === null ) {
-				$res->error( 'campaignevents-error-in-person-no-address' );
-			} else {
+			if ( $meetingAddress !== null ) {
 				$meetingAddress = trim( $meetingAddress );
 			}
 			if ( $meetingCountry !== null && $meetingAddress !== null ) {

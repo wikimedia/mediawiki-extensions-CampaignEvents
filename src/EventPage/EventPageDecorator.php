@@ -310,13 +310,18 @@ class EventPageDecorator {
 		} else {
 			// In-person event
 			$address = $registration->getMeetingAddress();
-			'@phan-var string $address';
-			$locationContent = new Tag( 'div' );
-			$locationContent->setAttributes( [
-				'dir' => Utils::guessStringDirection( $address )
-			] );
-			$locationContent->addClasses( [ 'ext-campaignevents-eventpage-header-address' ] );
-			$locationContent->appendContent( $language->truncateForVisual( $address, self::ADDRESS_MAX_LENGTH ) );
+			if ( $address !== null ) {
+				$locationContent = new Tag( 'div' );
+				$locationContent->setAttributes( [
+					'dir' => Utils::guessStringDirection( $address )
+				] );
+				$locationContent->addClasses( [ 'ext-campaignevents-eventpage-header-address' ] );
+				$locationContent->appendContent( $language->truncateForVisual( $address, self::ADDRESS_MAX_LENGTH ) );
+			} else {
+				$locationContent = $msgFormatter->format(
+					MessageValue::new( 'campaignevents-eventpage-header-type-in-person' )
+				);
+			}
 		}
 		$items[] = new TextWithIconWidget( [
 			'icon' => 'mapPin',
@@ -484,14 +489,22 @@ class EventPageDecorator {
 			$onlineLocationElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
 		}
 		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_IN_PERSON ) {
-			$address = $registration->getMeetingAddress() . "\n" . $registration->getMeetingCountry();
-			'@phan-var string $address';
+			$rawAddress = $registration->getMeetingAddress();
+			$rawCountry = $registration->getMeetingCountry();
 			$addressElement = new Tag( 'p' );
 			$addressElement->addClasses( [ 'ext-campaignevents-eventpage-details-address' ] );
-			$addressElement->setAttributes( [
-				'dir' => Utils::guessStringDirection( $address )
-			] );
-			$addressElement->appendContent( $address );
+			if ( $rawAddress || $rawCountry ) {
+				$address = $rawAddress . "\n" . $rawCountry;
+				$addressElement->setAttributes( [
+					'dir' => Utils::guessStringDirection( $address )
+				] );
+				$addressElement->appendContent( $address );
+			} else {
+				$addressElement->appendContent( $msgFormatter->format(
+					MessageValue::new( 'campaignevents-eventpage-dialog-venue-not-available' )
+						->numParams( $organizersCount )
+				) );
+			}
 			if ( $onlineLocationElements ) {
 				$inPersonLabel = ( new Tag( 'h5' ) )->appendContent( $msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )

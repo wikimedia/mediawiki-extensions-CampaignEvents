@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
 use Generator;
-use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWikiUnitTestCase;
@@ -76,16 +75,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['creation'], $registration->getCreationTimestamp(), 'creation' );
 		$this->assertSame( $data['last_edit'], $registration->getLastEditTimestamp(), 'last_edit' );
 		$this->assertSame( $data['deletion'], $registration->getDeletionTimestamp(), 'deletion' );
-	}
-
-	/**
-	 * @dataProvider provideInvalidDataForInPersonMeetings
-	 * @covers ::__construct
-	 */
-	public function testConstruct__noAddressOrCountryForInPersonMeeting( array $constructorArgs ) {
-		$this->expectException( InvalidArgumentException::class );
-		$this->expectExceptionMessage( 'address' );
-		new EventRegistration( ...$constructorArgs );
 	}
 
 	public function provideInvalidDataForInPersonMeetings(): Generator {

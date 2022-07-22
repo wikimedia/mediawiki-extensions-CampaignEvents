@@ -170,29 +170,36 @@ class EventDetailsModule {
 	): array {
 		$meetingType = $registration->getMeetingType();
 		$items = [];
-		if (
-			$meetingType & ExistingEventRegistration::MEETING_TYPE_IN_PERSON
-		) {
-			$address = $registration->getMeetingAddress() . "\n" . $registration->getMeetingCountry();
-			$items[] = new IconLabelContentWidget( [
+		if ( $meetingType & ExistingEventRegistration::MEETING_TYPE_IN_PERSON ) {
+			$rawAddress = $registration->getMeetingAddress();
+			$rawCountry = $registration->getMeetingCountry();
+			if ( $rawAddress || $rawCountry ) {
+				// NOTE: This is not pretty if exactly one of address and country is specified, but
+				// that's going to be fixed when we switch to using an actual geocoding service (T309325)
+				$address = $rawAddress . "\n" . $rawCountry;
+				$widgetAttribs = [
+					'content' => $address,
+					'content_direction' => Utils::guessStringDirection( $address ),
+				];
+			} else {
+				$widgetAttribs = [
+					'content' => $msgFormatter->format(
+						MessageValue::new( 'campaignevents-event-details-venue-not-available' )
+							->numParams( $organizersCount )
+					),
+				];
+			}
+			$items[] = new IconLabelContentWidget( $widgetAttribs + [
 				'icon' => 'mapPin',
-				'content' => $address,
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-in-person-event-label' )
 				),
 				'icon_classes' => [ 'ext-campaignevents-event-details-icons-style' ],
-				'content_direction' => Utils::guessStringDirection( $address )
 			] );
 		}
 
-		if (
-			$meetingType & ExistingEventRegistration::MEETING_TYPE_ONLINE
-		) {
+		if ( $meetingType & ExistingEventRegistration::MEETING_TYPE_ONLINE ) {
 			$meetingURL = $registration->getMeetingURL();
-			$content = $msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-online-link-not-available' )
-					->numParams( $organizersCount )
-			);
 			if ( $meetingURL ) {
 				if ( $isOrganizer || $isParticipant ) {
 					$iconLink = ( new IconWidget( [
@@ -213,6 +220,11 @@ class EventDetailsModule {
 				} else {
 					$content = $needToRegisterMsg;
 				}
+			} else {
+				$content = $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-online-link-not-available' )
+						->numParams( $organizersCount )
+				);
 			}
 
 			$items[] = new IconLabelContentWidget( [
