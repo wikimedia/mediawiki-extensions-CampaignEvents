@@ -314,7 +314,6 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsCentralUserLookup",
-				"UserFactory",
 				"UserNameUtils"
 			]
 		},
@@ -325,7 +324,6 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsCentralUserLookup",
-				"UserFactory",
 				"UserNameUtils"
 			]
 		},

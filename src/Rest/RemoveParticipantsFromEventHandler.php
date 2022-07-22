@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\HttpException;
@@ -69,12 +69,10 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
-		$performerAuthority = $this->getAuthority();
-		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
 		$status = $this->unregisterParticipantCommand->removeParticipantsIfAllowed(
 			$eventRegistration,
 			$body[ 'user_ids' ],
-			$user
+			new MWAuthorityProxy( $this->getAuthority() )
 		);
 
 		if ( !$status->isGood() ) {

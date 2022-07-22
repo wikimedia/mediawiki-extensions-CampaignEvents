@@ -30,7 +30,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	) {
 		parent::__construct( $name );
 		$this->eventLookup = $eventLookup;
-		$this->mwUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
+		$this->mwUser = new MWUserProxy( $this->getUser() );
 	}
 
 	/**

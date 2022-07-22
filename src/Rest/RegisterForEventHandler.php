@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\HttpException;
@@ -57,9 +57,8 @@ class RegisterForEventHandler extends SimpleHandler {
 		}
 
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
-		$performerAuthority = $this->getAuthority();
-		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
-		$status = $this->registerParticipantCommand->registerIfAllowed( $eventRegistration, $user );
+		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		$status = $this->registerParticipantCommand->registerIfAllowed( $eventRegistration, $performer );
 		if ( !$status->isGood() ) {
 			$httptStatus = $status instanceof PermissionStatus ? 403 : 400;
 			$this->exitWithStatus( $status, $httptStatus );

@@ -8,8 +8,8 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
@@ -56,9 +56,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	}
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 */
-	abstract protected function checkPermissions( ICampaignsUser $user ): void;
+	abstract protected function checkPermissions( ICampaignsAuthority $performer ): void;
 
 	/**
 	 * @inheritDoc
@@ -74,10 +74,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
 		}
 
-		$performerAuthority = $this->getAuthority();
-		$user = new MWUserProxy( $performerAuthority->getUser(), $performerAuthority );
-
-		$this->checkPermissions( $user );
+		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		$this->checkPermissions( $performer );
 
 		try {
 			$event = $this->createEventObject( $body );
@@ -85,7 +83,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			$this->exitWithStatus( $e->getStatus() );
 		}
 
-		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $user );
+		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer );
 
 		if ( !$saveStatus->isGood() ) {
 			$httptStatus = $saveStatus instanceof PermissionStatus ? 403 : 400;

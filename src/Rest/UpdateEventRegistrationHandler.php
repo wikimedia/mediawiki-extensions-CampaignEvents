@@ -10,7 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -78,7 +78,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	/**
 	 * @inheritDoc
 	 */
-	protected function checkPermissions( ICampaignsUser $user ): void {
+	protected function checkPermissions( ICampaignsAuthority $performer ): void {
 		// Nothing to check now. Deeper check will happen in EditEventCommand.
 	}
 

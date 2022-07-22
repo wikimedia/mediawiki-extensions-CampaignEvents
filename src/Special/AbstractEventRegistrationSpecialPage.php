@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MWTimestamp;
 use Status;
@@ -233,8 +234,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		$this->eventPagePrefixedText = $event->getPage()->getPrefixedText();
-		$userProxy = new MWUserProxy( $this->getUser(), $this->getAuthority() );
-		return Status::wrap( $this->editEventCommand->doEditIfAllowed( $event, $userProxy ) );
+		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		return Status::wrap( $this->editEventCommand->doEditIfAllowed( $event, $performer ) );
 	}
 
 	/**

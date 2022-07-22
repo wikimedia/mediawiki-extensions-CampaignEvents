@@ -4,10 +4,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 
 class PermissionChecker {
@@ -15,109 +15,116 @@ class PermissionChecker {
 
 	public const ENABLE_REGISTRATIONS_RIGHT = 'campaignevents-enable-registration';
 
-	/** @var UserBlockChecker */
-	private $userBlockChecker;
 	/** @var OrganizersStore */
 	private $organizersStore;
 	/** @var PageAuthorLookup */
 	private $pageAuthorLookup;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
 
 	/**
-	 * @param UserBlockChecker $userBlockChecker
 	 * @param OrganizersStore $organizersStore
 	 * @param PageAuthorLookup $pageAuthorLookup
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
-		UserBlockChecker $userBlockChecker,
 		OrganizersStore $organizersStore,
-		PageAuthorLookup $pageAuthorLookup
+		PageAuthorLookup $pageAuthorLookup,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
-		$this->userBlockChecker = $userBlockChecker;
 		$this->organizersStore = $organizersStore;
 		$this->pageAuthorLookup = $pageAuthorLookup;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring login, unblock,
 	 * and rights.
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
-	public function userCanEnableRegistrations( ICampaignsUser $user ): bool {
-		return $user->isRegistered()
-			&& $user->hasRight( self::ENABLE_REGISTRATIONS_RIGHT )
-			&& !$this->userBlockChecker->isSitewideBlocked( $user );
+	public function userCanEnableRegistrations( ICampaignsAuthority $performer ): bool {
+		return $performer->isRegistered()
+			&& $performer->hasRight( self::ENABLE_REGISTRATIONS_RIGHT )
+			&& !$performer->isSitewideBlocked();
 	}
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @param ICampaignsPage $eventPage
 	 * @return bool
 	 */
-	public function userCanEnableRegistration( ICampaignsUser $user, ICampaignsPage $eventPage ): bool {
-		if ( !$this->userCanEnableRegistrations( $user ) ) {
+	public function userCanEnableRegistration( ICampaignsAuthority $performer, ICampaignsPage $eventPage ): bool {
+		if ( !$this->userCanEnableRegistrations( $performer ) ) {
 			return false;
 		}
 
 		$pageAuthor = $this->pageAuthorLookup->getAuthor( $eventPage );
-		return $pageAuthor && $pageAuthor->equals( $user );
+		return $pageAuthor && $pageAuthor->equals( $this->centralUserLookup->newFromAuthority( $performer ) );
 	}
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @param int $registrationID
 	 * @return bool
 	 */
-	public function userCanEditRegistration( ICampaignsUser $user, int $registrationID ): bool {
-		return $this->userCanEnableRegistrations( $user )
-			&& $this->organizersStore->isEventOrganizer( $registrationID, $user );
+	public function userCanEditRegistration( ICampaignsAuthority $performer, int $registrationID ): bool {
+		return $this->userCanEnableRegistrations( $performer )
+			&& $this->organizersStore->isEventOrganizer(
+				$registrationID,
+				$this->centralUserLookup->newFromAuthority( $performer )
+			);
 	}
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @param int $registrationID
 	 * @return bool
 	 */
-	public function userCanDeleteRegistration( ICampaignsUser $user, int $registrationID ): bool {
-		return $this->userCanDeleteRegistrations( $user ) ||
-			$this->userCanEditRegistration( $user, $registrationID );
+	public function userCanDeleteRegistration( ICampaignsAuthority $performer, int $registrationID ): bool {
+		return $this->userCanDeleteRegistrations( $performer ) ||
+			$this->userCanEditRegistration( $performer, $registrationID );
 	}
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
-	public function userCanDeleteRegistrations( ICampaignsUser $user ): bool {
-		return $user->hasRight( 'campaignevents-delete-registration' ) &&
-			!$this->userBlockChecker->isSitewideBlocked( $user );
+	public function userCanDeleteRegistrations( ICampaignsAuthority $performer ): bool {
+		return $performer->hasRight( 'campaignevents-delete-registration' ) &&
+			!$performer->isSitewideBlocked();
 	}
 
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring login and unblock.
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
-	public function userCanRegisterForEvents( ICampaignsUser $user ): bool {
+	public function userCanRegisterForEvents( ICampaignsAuthority $performer ): bool {
 		// TODO Do we need another user right for this?
-		return $user->isRegistered() && !$this->userBlockChecker->isSitewideBlocked( $user );
+		return $performer->isRegistered() && !$performer->isSitewideBlocked();
 	}
 
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own way of requiring login.
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
-	public function userCanUnregisterForEvents( ICampaignsUser $user ): bool {
-		return $user->isRegistered();
+	public function userCanUnregisterForEvents( ICampaignsAuthority $performer ): bool {
+		return $performer->isRegistered();
 	}
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @param int $registrationID
 	 * @return bool
 	 */
-	public function userCanRemoveParticipants( ICampaignsUser $user, int $registrationID ): bool {
-		return $user->isRegistered() && $this->organizersStore->isEventOrganizer( $registrationID, $user ) &&
-			!$this->userBlockChecker->isSitewideBlocked( $user );
+	public function userCanRemoveParticipants( ICampaignsAuthority $performer, int $registrationID ): bool {
+		if ( !$performer->isRegistered() ) {
+			return false;
+		}
+		$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		return $this->organizersStore->isEventOrganizer( $registrationID, $centralUser ) &&
+			!$performer->isSitewideBlocked();
 	}
 }

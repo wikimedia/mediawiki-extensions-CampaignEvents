@@ -6,7 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use StatusValue;
@@ -29,8 +29,8 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	/**
 	 * @inheritDoc
 	 */
-	protected function checkPermissions( ICampaignsUser $user ): void {
-		if ( !$this->permissionChecker->userCanEnableRegistrations( $user ) ) {
+	protected function checkPermissions( ICampaignsAuthority $performer ): void {
+		if ( !$this->permissionChecker->userCanEnableRegistrations( $performer ) ) {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-rest-enable-registration-permission-denied' ),
 				403

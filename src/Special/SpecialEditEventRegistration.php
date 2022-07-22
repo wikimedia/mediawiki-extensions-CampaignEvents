@@ -9,7 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use WikiMap;
 
@@ -72,8 +72,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			return;
 		}
 
-		$mwUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
-		if ( !$this->permissionChecker->userCanEditRegistration( $mwUser, $this->eventID ) ) {
+		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
+		if ( !$this->permissionChecker->userCanEditRegistration( $mwAuthority, $this->eventID ) ) {
 			$this->outputErrorBox( 'campaignevents-edit-not-allowed-registration' );
 			return;
 		}

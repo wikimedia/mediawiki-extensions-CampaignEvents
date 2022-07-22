@@ -5,7 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
@@ -18,26 +19,34 @@ class UnregisterParticipantCommand {
 	private $participantsStore;
 	/** @var PermissionChecker */
 	private $permissionChecker;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
 
 	/**
 	 * @param ParticipantsStore $participantsStore
 	 * @param PermissionChecker $permissionChecker
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
-	public function __construct( ParticipantsStore $participantsStore, PermissionChecker $permissionChecker ) {
+	public function __construct(
+		ParticipantsStore $participantsStore,
+		PermissionChecker $permissionChecker,
+		CampaignsCentralUserLookup $centralUserLookup
+	) {
 		$this->participantsStore = $participantsStore;
 		$this->permissionChecker = $permissionChecker;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return StatusValue Good if everything went fine, fatal with errors otherwise. If good, the value shall be
 	 *   true if the user was actively registered, and false if they unregistered or had never registered.
 	 *   Will be a PermissionStatus for permissions-related errors.
 	 */
 	public function unregisterIfAllowed(
 		ExistingEventRegistration $registration,
-		ICampaignsUser $performer
+		ICampaignsAuthority $performer
 	): StatusValue {
 		$permStatus = $this->authorizeUnregistration( $performer );
 		if ( !$permStatus->isGood() ) {
@@ -47,10 +56,10 @@ class UnregisterParticipantCommand {
 	}
 
 	/**
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return PermissionStatus
 	 */
-	private function authorizeUnregistration( ICampaignsUser $performer ): PermissionStatus {
+	private function authorizeUnregistration( ICampaignsAuthority $performer ): PermissionStatus {
 		if ( !$this->permissionChecker->userCanUnregisterForEvents( $performer ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-unregister-not-allowed' );
 		}
@@ -93,12 +102,12 @@ class UnregisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return StatusValue
 	 */
 	public function unregisterUnsafe(
 		ExistingEventRegistration $registration,
-		ICampaignsUser $performer
+		ICampaignsAuthority $performer
 	): StatusValue {
 		$unregistrationAllowedStatus = self::checkIsUnregistrationAllowed(
 			$registration,
@@ -109,20 +118,21 @@ class UnregisterParticipantCommand {
 			return $unregistrationAllowedStatus;
 		}
 
-		$modified = $this->participantsStore->removeParticipantFromEvent( $registration->getID(), $performer );
+		$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		$modified = $this->participantsStore->removeParticipantFromEvent( $registration->getID(), $centralUser );
 		return StatusValue::newGood( $modified );
 	}
 
 	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param int[]|null $userIDs and array of user IDs, if null remove all
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return StatusValue The StatusValue's "value" property has the number of participants removed
 	 */
 	public function removeParticipantsIfAllowed(
 		ExistingEventRegistration $registration,
 		?array $userIDs,
-		ICampaignsUser $performer
+		ICampaignsAuthority $performer
 	): StatusValue {
 		$permStatus = $this->authorizeRemoveParticipants( $registration, $performer );
 		if ( !$permStatus->isGood() ) {
@@ -134,12 +144,12 @@ class UnregisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return PermissionStatus
 	 */
 	private function authorizeRemoveParticipants(
 		ExistingEventRegistration $registration,
-		ICampaignsUser $performer
+		ICampaignsAuthority $performer
 	): PermissionStatus {
 		$registrationID = $registration->getID();
 		if ( !$this->permissionChecker->userCanRemoveParticipants( $performer, $registrationID ) ) {

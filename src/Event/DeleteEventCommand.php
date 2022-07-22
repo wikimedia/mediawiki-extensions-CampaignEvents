@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use StatusValue;
@@ -35,11 +35,14 @@ class DeleteEventCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return StatusValue If good, the value is true if the registration was deleted, false if it was already deleted.
 	 *   Will be a PermissionStatus for permissions-related errors.
 	 */
-	public function deleteIfAllowed( ExistingEventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+	public function deleteIfAllowed(
+		ExistingEventRegistration $registration,
+		ICampaignsAuthority $performer
+	): StatusValue {
 		$permStatus = $this->authorizeDeletion( $registration, $performer );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
@@ -49,12 +52,12 @@ class DeleteEventCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return PermissionStatus
 	 */
 	private function authorizeDeletion(
 		ExistingEventRegistration $registration,
-		ICampaignsUser $performer
+		ICampaignsAuthority $performer
 	): PermissionStatus {
 		if ( !$this->permissionChecker->userCanDeleteRegistration( $performer, $registration->getID() ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-delete-not-allowed-registration' );

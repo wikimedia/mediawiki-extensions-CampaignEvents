@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use Html;
 use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use Status;
@@ -66,7 +67,10 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
-		return Status::wrap( $this->unregisterParticipantCommand->unregisterIfAllowed( $this->event, $this->mwUser ) );
+		return Status::wrap( $this->unregisterParticipantCommand->unregisterIfAllowed(
+			$this->event,
+			new MWAuthorityProxy( $this->getAuthority() )
+		) );
 	}
 
 	/**

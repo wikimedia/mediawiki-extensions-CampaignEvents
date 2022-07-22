@@ -7,7 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Participants;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -47,7 +48,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		}
 		return new RegisterParticipantCommand(
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
-			$permChecker
+			$permChecker,
+			$this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 
@@ -70,7 +72,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanRegisterForEvents' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->registerIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -91,7 +93,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	) {
 		$status = $this->getCommand()->registerIfAllowed(
 			$registration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -129,7 +131,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	) {
 		$status = $this->getCommand( $store )->registerIfAllowed(
 			$this->getValidRegistration(),
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );
@@ -147,7 +149,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	) {
 		$status = $this->getCommand( $store )->registerUnsafe(
 			$this->getValidRegistration(),
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );

@@ -124,13 +124,16 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			CampaignEventsServices::getDatabaseHelper(),
 			$userLookup
 		);
-		$getActualTS = function () use ( $eventID, $userID ): string {
+		$getActualTS = function () use ( $eventID, $userID ): ?string {
 			$ts = $this->db->selectField(
 				'ce_participants',
 				'cep_registered_at',
 				[ 'cep_event_id' => $eventID, 'cep_user_id' => $userID ]
 			);
-			return $ts === false ? $ts : wfTimestamp( TS_MW, $ts );
+			if ( $ts === false ) {
+				$this->fail( 'No actual timestamp' );
+			}
+			return wfTimestamp( TS_MW, $ts );
 		};
 
 		$ts1 = '20220227120001';

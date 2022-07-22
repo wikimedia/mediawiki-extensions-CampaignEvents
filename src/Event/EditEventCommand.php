@@ -7,7 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -28,32 +29,37 @@ class EditEventCommand {
 	private $organizerStore;
 	/** @var PermissionChecker */
 	private $permissionChecker;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
 
 	/**
 	 * @param IEventStore $eventStore
 	 * @param IEventLookup $eventLookup
 	 * @param OrganizersStore $organizersStore
 	 * @param PermissionChecker $permissionChecker
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IEventStore $eventStore,
 		IEventLookup $eventLookup,
 		OrganizersStore $organizersStore,
-		PermissionChecker $permissionChecker
+		PermissionChecker $permissionChecker,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->eventStore = $eventStore;
 		$this->eventLookup = $eventLookup;
 		$this->organizerStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return StatusValue If good, the value shall be the ID of the event. Will be a PermissionStatus for
 	 *   permissions-related errors.
 	 */
-	public function doEditIfAllowed( EventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+	public function doEditIfAllowed( EventRegistration $registration, ICampaignsAuthority $performer ): StatusValue {
 		$permStatus = $this->authorizeEdit( $registration, $performer );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
@@ -63,10 +69,13 @@ class EditEventCommand {
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return PermissionStatus
 	 */
-	private function authorizeEdit( EventRegistration $registration, ICampaignsUser $performer ): PermissionStatus {
+	private function authorizeEdit(
+		EventRegistration $registration,
+		ICampaignsAuthority $performer
+	): PermissionStatus {
 		$registrationID = $registration->getID();
 		$isCreation = $registrationID === null;
 		$eventPage = $registration->getPage();
@@ -81,10 +90,10 @@ class EditEventCommand {
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsUser $performer
+	 * @param ICampaignsAuthority $performer
 	 * @return StatusValue If good, the value shall be the ID of the event.
 	 */
-	public function doEditUnsafe( EventRegistration $registration, ICampaignsUser $performer ): StatusValue {
+	public function doEditUnsafe( EventRegistration $registration, ICampaignsAuthority $performer ): StatusValue {
 		try {
 			$existingRegistrationForPage = $this->eventLookup->getEventByPage( $registration->getPage() );
 			if ( $existingRegistrationForPage->getID() !== $registration->getID() ) {
@@ -106,7 +115,8 @@ class EditEventCommand {
 		}
 		$eventID = $saveStatus->getValue();
 		if ( $registration->getID() === null ) {
-			$this->organizerStore->addOrganizerToEvent( $eventID, $performer, [ Roles::ROLE_CREATOR ] );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+			$this->organizerStore->addOrganizerToEvent( $eventID, $centralUser, [ Roles::ROLE_CREATOR ] );
 		}
 		return StatusValue::newGood( $eventID );
 	}

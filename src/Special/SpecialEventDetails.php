@@ -113,7 +113,7 @@ class SpecialEventDetails extends SpecialPage {
 		$eventID = $this->event->getID();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 
-		$userProxy = new MWUserProxy( $viewingUser, $this->getAuthority() );
+		$userProxy = new MWUserProxy( $viewingUser );
 		$isOrganizer = $this->organizersStore->isEventOrganizer( $eventID, $userProxy );
 		$isParticipant = $this->participantsStore->userParticipatesToEvent( $eventID, $userProxy );
 

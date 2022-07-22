@@ -11,7 +11,8 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
@@ -49,7 +50,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$eventStore ?? $this->createMock( IEventStore::class ),
 			$eventLookup,
 			$this->createMock( OrganizersStore::class ),
-			$permChecker
+			$permChecker,
+			$this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 
@@ -67,7 +69,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			->willReturn( StatusValue::newFatal( $expectedMsg ) );
 		$status = $this->getCommand( $eventStore )->doEditIfAllowed(
 			$registration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -87,7 +89,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( $permMethod )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->doEditIfAllowed(
 			$registration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -114,7 +116,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 		$status = $this->getCommand( null, null, $eventLookup )->doEditIfAllowed(
 			$newRegistration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -165,7 +167,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$eventLookup->expects( $this->once() )->method( 'getEventByPage' )->willReturn( $existingRegistration );
 		$status = $this->getCommand( null, null, $eventLookup )->doEditUnsafe(
 			$newRegistration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( 'campaignevents-edit-registration-deleted', $status );
@@ -183,7 +185,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( StatusValue::newGood( $id ) );
 		$status = $this->getCommand( $eventStore )->doEditIfAllowed(
 			$registration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $id, $status );
@@ -202,7 +204,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			->willReturn( StatusValue::newFatal( $errMsg ) );
 		$status = $this->getCommand( $eventStore )->doEditUnsafe(
 			$registration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( $errMsg, $status );
@@ -219,7 +221,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( StatusValue::newGood( $id ) );
 		$status = $this->getCommand( $eventStore )->doEditUnsafe(
 			$registration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $id, $status );

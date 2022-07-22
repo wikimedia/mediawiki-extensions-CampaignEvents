@@ -109,7 +109,7 @@ class EventsPager extends TablePager {
 				// Invalid statuses can only be entered by messing with the HTML or query params, ignore.
 		}
 
-		$campaignsUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
+		$campaignsUser = new MWUserProxy( $this->getUser() );
 
 		// Use a subquery and a temporary table to work around IndexPager not using HAVING for aggregates (T308694)
 		// and to support postgres (which doesn't allow aliases in HAVING).
