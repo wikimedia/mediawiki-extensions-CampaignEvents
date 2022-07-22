@@ -122,4 +122,12 @@ interface ICampaignsDatabase {
 	 * End an atomic section
 	 */
 	public function endAtomic(): void;
+
+	/**
+	 * Escape and quote a raw value string for use in a SQL query
+	 *
+	 * @param string|int|float|null|bool $s
+	 * @return string
+	 */
+	public function addQuotes( $s ): string;
 }

@@ -9,12 +9,13 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class ListParticipantsHandler extends SimpleHandler {
 	use EventIDParamTrait;
 
 	// TODO: Implement proper pagination (T305389)
-	private const RES_LIMIT = 50;
+	private const RES_LIMIT = 20;
 
 	/** @var IEventLookup */
 	private $eventLookup;
@@ -45,10 +46,19 @@ class ListParticipantsHandler extends SimpleHandler {
 	protected function run( int $eventID ): Response {
 		$this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
-		$participants = $this->participantsStore->getEventParticipants( $eventID, self::RES_LIMIT );
+		$lastParticipantID = $this->getValidatedParams()['last_participant_id'];
+		$participants = $this->participantsStore->getEventParticipants( $eventID, self::RES_LIMIT, $lastParticipantID );
+
 		$respVal = [];
 		foreach ( $participants as $participant ) {
-			$respVal[] = [ 'user_id' => $this->centralUserLookup->getCentralID( $participant->getUser() ) ];
+			$respVal[] = [
+				'participant_id' => $participant->getParticipantID(),
+				'user_id' => $this->centralUserLookup->getCentralID( $participant->getUser() ),
+				'user_name' => $participant->getUser()->getName(),
+				// To DO For now we decided on TS_DB to be the default returned by the api.
+				// see T312910
+				'user_registered_at' => wfTimestamp( TS_DB, $participant->getRegisteredAt() ),
+			];
 		}
 		return $this->getResponseFactory()->createJson( $respVal );
 	}
@@ -57,6 +67,14 @@ class ListParticipantsHandler extends SimpleHandler {
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
-		return $this->getIDParamSetting();
+		return array_merge(
+			$this->getIDParamSetting(),
+			[
+				'last_participant_id' => [
+					static::PARAM_SOURCE => 'query',
+					ParamValidator::PARAM_TYPE => 'integer'
+				]
+			]
+		);
 	}
 }

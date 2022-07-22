@@ -11,14 +11,18 @@ class Participant {
 	private $user;
 	/** @var string */
 	private $registeredAt;
+	/** @var int */
+	private $participantID;
 
 	/**
 	 * @param ICampaignsUser $user
 	 * @param string $registeredAt Timestamp in the TS_UNIX format
+	 * @param int $participantID participant_id, ID generated when a participant register for an event
 	 */
-	public function __construct( ICampaignsUser $user, string $registeredAt ) {
+	public function __construct( ICampaignsUser $user, string $registeredAt, int $participantID ) {
 		$this->user = $user;
 		$this->registeredAt = $registeredAt;
+		$this->participantID = $participantID;
 	}
 
 	/**
@@ -33,5 +37,12 @@ class Participant {
 	 */
 	public function getRegisteredAt(): string {
 		return $this->registeredAt;
+	}
+
+	/**
+	 * @return int participant_id, ID generated when a participant register for an event
+	 */
+	public function getParticipantID(): int {
+		return $this->participantID;
 	}
 }

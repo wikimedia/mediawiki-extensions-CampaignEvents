@@ -5,11 +5,9 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
-use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
@@ -28,23 +26,21 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param Language $language
-	 * @param ExistingEventRegistration $registration
 	 * @param MWUserProxy $userProxy
 	 * @param Participant[] $participants
 	 * @param int $totalParticipants
 	 * @param ITextFormatter $msgFormatter
-	 * @param bool $isOrganizer
+	 * @param bool $canRemoveParticipants
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @return PanelLayout
 	 */
 	public function createContent(
 		Language $language,
-		ExistingEventRegistration $registration,
 		MWUserProxy $userProxy,
 		array $participants,
 		int $totalParticipants,
 		ITextFormatter $msgFormatter,
-		bool $isOrganizer,
+		bool $canRemoveParticipants,
 		CampaignsCentralUserLookup $centralUserLookup
 	): PanelLayout {
 		$items = [];
@@ -75,9 +71,6 @@ class EventDetailsParticipantsModule {
 			array_merge( [ 'ext-campaignevents-details-no-participants-state' ], $hideClass )
 		);
 
-		// This need to be changed when we add the feature to send messages
-		// so it just not add remove the "Remove" button
-		$canRemoveParticipants = UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $registration );
 		if ( $participants ) {
 			$items[] = ( new Tag() )->appendContent(
 				( new SearchInputWidget( [
@@ -88,7 +81,7 @@ class EventDetailsParticipantsModule {
 			)->addClasses( [ 'ext-campaignevents-details-participants-search-div' ] );
 		}
 
-		if ( $isOrganizer && $canRemoveParticipants && $participants ) {
+		if ( $canRemoveParticipants && $participants ) {
 			$selectAllCheckBox = ( new CheckboxInputWidget( [
 					'name' => 'event-details-select-all-participants',
 					'infusable' => true,
@@ -125,9 +118,14 @@ class EventDetailsParticipantsModule {
 			)->addClasses( [ 'ext-campaignevents-details-select-all-users-div' ] );
 		}
 
+		$usersDivContent = ( new Tag( 'div' ) )
+				->addClasses( [ 'ext-campaignevents-details-users-container' ] );
+
+		$usersDivRows = ( new Tag( 'div' ) )
+				->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
 		foreach ( $participants as $participant ) {
 			$elements = [];
-			if ( $isOrganizer && $canRemoveParticipants ) {
+			if ( $canRemoveParticipants ) {
 				$elements[] = ( new CheckboxInputWidget( [
 					'name' => 'event-details-participants-checkboxes',
 					'infusable' => true,
@@ -146,10 +144,16 @@ class EventDetailsParticipantsModule {
 				)
 			)->addClasses( [ 'ext-campaignevents-details-participant-registered-at' ] );
 
-			$items[] = ( new Tag() )
+			$userRow = ( new Tag() )
 				->appendContent( ...$elements )
 				->addClasses( [ 'ext-campaignevents-details-user-div' ] );
+
+			$usersDivRows->appendContent( $userRow );
 		}
+
+		$usersDivContent->appendContent( $usersDivRows );
+
+		$items[] = $usersDivContent;
 
 		return new PanelLayout( [
 			'content' => $items,

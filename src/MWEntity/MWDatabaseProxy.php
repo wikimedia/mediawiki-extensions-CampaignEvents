@@ -109,6 +109,13 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function addQuotes( $s ): string {
+		return $this->db->addQuotes( $s );
+	}
+
+	/**
 	 * @return IDatabase
 	 */
 	public function getMWDatabase(): IDatabase {

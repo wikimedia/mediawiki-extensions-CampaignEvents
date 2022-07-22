@@ -1,9 +1,12 @@
 ( function () {
 	'use strict';
 
-	var RemoveParticipantDialog = require( './RemoveParticipantDialog.js' );
+	var RemoveParticipantDialog = require( './RemoveParticipantDialog.js' ),
+		ScrollDownObserver = require( './ScrollDownObserver.js' );
 	function ParticipantsManager() {
 		this.registrationID = mw.config.get( 'wgCampaignEventsEventID' );
+		this.showParticipantCheckboxes = mw.config.get( 'wgCampaignEventsShowParticipantCheckboxes' );
+		this.lastParticipantID = mw.config.get( 'wgCampaignEventsLastParticipantID' );
 		/* eslint-disable no-jquery/no-global-selector */
 		this.$selectAllParticipantsLabel = $(
 			'.ext-campaignevents-details-select-all-users-div label.oo-ui-labelElement-label'
@@ -20,12 +23,14 @@
 		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
 		this.$searchParticipantElement = $( '.ext-campaignevents-details-participants-search-div' );
 		this.$selectAllParticipantElement = $( '.ext-campaignevents-details-select-all-users-div' );
-
+		this.$userRowsContainer = $( '.ext-campaignevents-details-users-rows-container' );
 		this.$removeParticipantsButton = $( '#ext-campaignevents-event-details-remove-participant-button' );
 		this.removeParticipantDialog = new RemoveParticipantDialog( {
 			classes: [ 'ext-campaignevents-details-remove-participant-dialog' ]
 		} );
 		this.windowManager = new OO.ui.WindowManager();
+		this.$usersContainer = $( '.ext-campaignevents-details-users-container' );
+
 		this.installEventListeners();
 		/* eslint-enable no-jquery/no-global-selector */
 	}
@@ -54,11 +59,7 @@
 			$participantCheckboxes.each( function () {
 				var infusedCheckbox = OO.ui.CheckboxInputWidget.static.infuse( $( this ) );
 				infusedCheckbox.on( 'change', function ( selected ) {
-					if ( selected ) {
-						thisClass.onSelectParticipant( this );
-						return;
-					}
-					thisClass.onDeselectParticipant( this );
+					thisClass.onParticipantCheckboxChange( selected, this );
 				}, [], infusedCheckbox );
 				thisClass.participantCheckboxes.push( infusedCheckbox );
 			} );
@@ -81,6 +82,15 @@
 			$( document.body ).append( this.windowManager.$element );
 			this.windowManager.addWindows( [ this.removeParticipantDialog ] );
 		}
+
+		this.scrollDownObserver = new ScrollDownObserver(
+			this.$usersContainer[ 0 ]
+		);
+		this.$usersContainer.on( 'scroll', function () {
+			if ( thisClass.scrollDownObserver.scrolledToBottom() ) {
+				thisClass.loadMoreParticipants();
+			}
+		} );
 	};
 
 	ParticipantsManager.prototype.onSelectAll = function () {
@@ -99,6 +109,14 @@
 			mw.message( 'campaignevents-event-details-select-all' ).text()
 		);
 		this.removeParticipantsButton.$element.hide();
+	};
+
+	ParticipantsManager.prototype.onParticipantCheckboxChange = function ( selected, el ) {
+		if ( selected ) {
+			this.onSelectParticipant( el );
+			return;
+		}
+		this.onDeselectParticipant( el );
 	};
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {
@@ -149,8 +167,6 @@
 	};
 
 	ParticipantsManager.prototype.onConfirmRemoval = function () {
-		// TODO: This is bugged: if you have 30 participants, we only show 20; if the user select the 20 one by one
-		// and remove them, the other 10 will not be loaded.
 		var thisClass = this,
 			removeAll = this.selectAllParticipantsCheckbox.isSelected(),
 			numSelected = removeAll ? this.participantsTotal : thisClass.selectedParticipantIDs.length;
@@ -187,6 +203,7 @@
 						'campaignevents-event-details-remove-participant-notification',
 						mw.language.convertNumber( numSelected )
 					).text();
+					thisClass.loadMoreParticipants();
 				}
 
 				thisClass.$participantsTitle.text(
@@ -200,6 +217,7 @@
 					thisClass.$searchParticipantElement.hide();
 					thisClass.$selectAllParticipantElement.hide();
 				}
+				thisClass.scrollDownObserver.reset();
 				thisClass.selectedParticipantIDs = [];
 				thisClass.showNotification( 'success', succesMsg );
 			} )
@@ -216,6 +234,79 @@
 					errorMsg = errData.xhr.responseJSON.messageTranslations.en;
 				}
 				thisClass.showNotification( 'error', errorMsg );
+			} );
+	};
+
+	ParticipantsManager.prototype.loadMoreParticipants = function () {
+		var thisClass = this;
+
+		new mw.Rest().get(
+			'/campaignevents/v0/event_registration/' + thisClass.registrationID + '/participants',
+			{
+				// eslint-disable-next-line camelcase
+				last_participant_id: thisClass.lastParticipantID
+			}
+		)
+			.done( function ( data ) {
+				if ( !data.length ) {
+					return;
+				}
+				thisClass.lastParticipantID = data[ data.length - 1 ].participant_id;
+				var allSelected = thisClass.selectAllParticipantsCheckbox ?
+					thisClass.selectAllParticipantsCheckbox.isSelected() :
+					false;
+				for ( var i = 0; i < data.length; i++ ) {
+					var items = [];
+					if ( thisClass.showParticipantCheckboxes ) {
+						var newParticipantCheckbox =
+							new OO.ui.CheckboxInputWidget( {
+								selected: allSelected,
+								name: 'event-details-participants-checkboxes',
+								value: data[ i ].user_id,
+								classes: [
+									'ext-campaignevents-event-details-participants-checkboxes'
+								]
+							} );
+
+						newParticipantCheckbox.on( 'change', function ( selected ) {
+							thisClass.onParticipantCheckboxChange( selected, this );
+						}, [], newParticipantCheckbox );
+
+						thisClass.participantCheckboxes.push( newParticipantCheckbox );
+						if ( allSelected ) {
+							thisClass.selectedParticipantIDs.push( String( data[ i ].user_id ) );
+						}
+						items.push( newParticipantCheckbox );
+					}
+
+					items.push(
+						new OO.ui.Element( {
+							$element: $( '<span>' ),
+							text: data[ i ].user_name,
+							classes: [ 'ext-campaignevents-details-participant-username' ]
+						} )
+					);
+					items.push(
+						// TO DO T312910
+						new OO.ui.Element( {
+							$element: $( '<span>' ),
+							text: data[ i ].user_registered_at,
+							classes: [ 'ext-campaignevents-details-participant-registered-at' ]
+						} )
+					);
+
+					var layout = new OO.ui.Element( {
+						classes: [ 'ext-campaignevents-details-user-div' ],
+						content: items
+					} );
+
+					thisClass.$userRowsContainer.append( layout.$element );
+				}
+
+				thisClass.scrollDownObserver.reset();
+			} )
+			.fail( function ( _err, errData ) {
+				mw.log.error( errData.xhr.responseText || 'Unknown error' );
 			} );
 	};
 

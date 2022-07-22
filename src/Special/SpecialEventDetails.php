@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use OOUI\ButtonWidget;
 use OOUI\Tag;
 use SpecialPage;
@@ -120,9 +121,15 @@ class SpecialEventDetails extends SpecialPage {
 		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
+		$canRemoveParticipants = $isOrganizer &&
+			UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $this->event );
+
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
+			// TO DO This may change when we add the feature to send messages
+			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
+			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
 		] );
 		$out->setPageTitle(
 			$msgFormatter->format(
@@ -149,12 +156,11 @@ class SpecialEventDetails extends SpecialPage {
 		$main->appendContent(
 			( new EventDetailsParticipantsModule() )->createContent(
 				$language,
-				$this->event,
 				$userProxy,
 				$participants,
 				$totalParticipants,
 				$msgFormatter,
-				$isOrganizer,
+				$canRemoveParticipants,
 				$this->centralUserLookup
 			)
 		);

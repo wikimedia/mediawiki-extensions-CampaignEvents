@@ -158,7 +158,12 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getEventParticipants
 	 * @dataProvider provideGetEventParticipants
 	 */
-	public function testGetEventParticipants( int $eventID, array $expectedParticipants ) {
+	public function testGetEventParticipants(
+		int $eventID,
+		array $expectedParticipants,
+		$limit = null,
+		$offset = null
+	) {
 		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$userLookup->method( 'getLocalUser' )
 		->willReturnCallback( function ( int $centralID ) {
@@ -172,7 +177,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			$userLookup
 		);
 
-		$actualUsers = $store->getEventParticipants( $eventID );
+		$actualUsers = $store->getEventParticipants( $eventID, $limit, $offset );
 
 		$this->assertSame( count( $actualUsers ), count( $expectedParticipants ) );
 		foreach ( $actualUsers as $participant ) {
@@ -195,6 +200,16 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 					'registeredAt' => '20220316120000'
 				],
 			]
+		];
+		yield 'Test limit and offset' => [
+			1,
+			[
+				'104' => [
+					'registeredAt' => '20220316120000'
+				],
+			],
+			2,
+			1
 		];
 		yield 'No participants' => [
 			5,
