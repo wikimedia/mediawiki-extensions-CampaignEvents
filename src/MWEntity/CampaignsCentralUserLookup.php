@@ -6,11 +6,11 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use CentralIdLookup;
 use MediaWiki\User\UserFactory;
+use MediaWiki\User\UserIdentity;
 use UnexpectedValueException;
 
 /**
- * @todo Audience checks can be improved, but having them in a storage layer (like CentralIdLookup is) makes things
- * harder in the first place.
+ * This class is used to retrieve data about global user accounts, like MW's CentralIdLookup.
  */
 class CampaignsCentralUserLookup {
 	public const SERVICE_NAME = 'CampaignEventsCentralUserLookup';
@@ -33,46 +33,80 @@ class CampaignsCentralUserLookup {
 	}
 
 	/**
-	 * @param ICampaignsUser $user
-	 * @return int
-	 * @throws CentralUserNotFoundException
-	 * @note This does not check if the user is deleted. This seems easier, and
-	 * the CentralAuth provider ignored $audience anyway.
+	 * Returns the central user corresponding to the given local user, if it exists. This method should be
+	 * avoided if possible, because we should only work with (the current) Authority and CentralUser.
+	 * @param UserIdentity $userIdentity
+	 * @return CentralUser
+	 * @throws UserNotGlobalException
 	 */
-	public function getCentralID( ICampaignsUser $user ): int {
-		$mwUser = $this->userFactory->newFromId( $user->getLocalID() );
-		$centralID = $this->centralIDLookup->centralIdFromLocalUser( $mwUser, CentralIdLookup::AUDIENCE_RAW );
+	public function newFromUserIdentity( UserIdentity $userIdentity ): CentralUser {
+		// @note This does not check if the user is deleted. This seems easier, and
+		// the CentralAuth provider ignored $audience anyway.
+		// TODO This should be improved somehow (T312821)
+		$centralID = $this->centralIDLookup->centralIdFromLocalUser( $userIdentity, CentralIdLookup::AUDIENCE_RAW );
 		if ( $centralID === 0 ) {
-			throw new CentralUserNotFoundException( $mwUser->getName() );
+			throw new UserNotGlobalException( $userIdentity->getId() );
 		}
-		return $centralID;
+		return new CentralUser( $centralID );
 	}
 
 	/**
-	 * @param int $centralID
-	 * @return ICampaignsUser
-	 * @throws LocalUserNotFoundException
-	 * @note This considers deleted users as non-existent.
-	 */
-	public function getLocalUser( int $centralID ): ICampaignsUser {
-		$mwUser = $this->centralIDLookup->localUserFromCentralId( $centralID );
-		if ( !$mwUser ) {
-			throw new LocalUserNotFoundException( $centralID );
-		}
-
-		return new MWUserProxy( $mwUser );
-	}
-
-	/**
+	 * Returns the central user corresponding to the given authority, if it exists. NOTE: Make sure to handle
+	 * the exception, if the user is not guaranteed to have a global account.
 	 * @param ICampaignsAuthority $authority
-	 * @return ICampaignsUser
+	 * @return CentralUser
+	 * @throws UserNotGlobalException
 	 */
-	public function newFromAuthority( ICampaignsAuthority $authority ): ICampaignsUser {
+	public function newFromAuthority( ICampaignsAuthority $authority ): CentralUser {
 		if ( !$authority instanceof MWAuthorityProxy ) {
 			throw new UnexpectedValueException(
 				'Unknown campaigns authority implementation: ' . get_class( $authority )
 			);
 		}
-		return new MWUserProxy( $authority->getUserIdentity() );
+		$mwUser = $this->userFactory->newFromId( $authority->getUserIdentity()->getId() );
+		return $this->newFromUserIdentity( $mwUser );
+	}
+
+	/**
+	 * @param CentralUser $user
+	 * @return string
+	 * @throws CentralUserNotFoundException
+	 * @throws HiddenCentralUserException
+	 */
+	public function getUserName( CentralUser $user ): string {
+		$centralID = $user->getCentralID();
+		$val = $this->centralIDLookup->nameFromCentralId( $centralID );
+		if ( $val === null ) {
+			throw new CentralUserNotFoundException( $centralID );
+		} elseif ( $val === '' ) {
+			throw new HiddenCentralUserException( $centralID );
+		}
+
+		return $val;
+	}
+
+	/**
+	 * Checks whether the given CentralUser actually exists and is visible.
+	 * @param CentralUser $user
+	 * @return bool
+	 */
+	public function existsAndIsVisible( CentralUser $user ): bool {
+		try {
+			$this->getUserName( $user );
+			return true;
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Checks whether the given central user is attached, i.e. it exists on the current wiki.
+	 * @param CentralUser $user
+	 * @return bool
+	 */
+	public function existsLocally( CentralUser $user ): bool {
+		// NOTE: we can't really use isAttached here, because that takes a (local) UserIdentity, and the purpose
+		// of this method is to tell us if a local user exists at all.
+		return $this->centralIDLookup->localUserFromCentralId( $user->getCentralID() ) !== null;
 	}
 }

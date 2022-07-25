@@ -6,10 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Organizers;
 
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\LocalUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
 class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
@@ -21,16 +18,12 @@ class OrganizersStore {
 
 	/** @var CampaignsDatabaseHelper */
 	private $dbHelper;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
 
 	/**
 	 * @param CampaignsDatabaseHelper $dbHelper
-	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
-	public function __construct( CampaignsDatabaseHelper $dbHelper, CampaignsCentralUserLookup $centralUserLookup ) {
+	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
 		$this->dbHelper = $dbHelper;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -55,31 +48,24 @@ class OrganizersStore {
 
 		$organizers = [];
 		foreach ( $rolesByOrganizer as $organizerID => $roles ) {
-			try {
-				$organizers[] = new Organizer( $this->centralUserLookup->getLocalUser( $organizerID ), $roles );
-			} catch ( LocalUserNotFoundException $_ ) {
-				// Most probably a deleted user, skip it.
-			}
+			$organizers[] = new Organizer( new CentralUser( $organizerID ), $roles );
 		}
 		return $organizers;
 	}
 
 	/**
 	 * @param int $eventID
-	 * @param ICampaignsUser $user
-	 * @return bool Returns false if the user is logged-out.
+	 * @param CentralUser $user
+	 * @return bool
 	 */
-	public function isEventOrganizer( int $eventID, ICampaignsUser $user ): bool {
-		if ( !$user->isRegistered() ) {
-			return false;
-		}
+	public function isEventOrganizer( int $eventID, CentralUser $user ): bool {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$row = $dbr->selectRow(
 			'ce_organizers',
 			'*',
 			[
 				'ceo_event_id' => $eventID,
-				'ceo_user_id' => $this->centralUserLookup->getCentralID( $user )
+				'ceo_user_id' => $user->getCentralID()
 			]
 		);
 		return $row !== null;
@@ -103,12 +89,10 @@ class OrganizersStore {
 
 	/**
 	 * @param int $eventID
-	 * @param ICampaignsUser $user
+	 * @param CentralUser $user
 	 * @param string[] $roles Roles::ROLE_* constants
-	 * @throws CentralUserNotFoundException If passed a logged-out user.
 	 */
-	public function addOrganizerToEvent( int $eventID, ICampaignsUser $user, array $roles ): void {
-		$organizerCentralID = $this->centralUserLookup->getCentralID( $user );
+	public function addOrganizerToEvent( int $eventID, CentralUser $user, array $roles ): void {
 		$rows = [];
 		foreach ( $roles as $role ) {
 			if ( !isset( self::ROLES_MAP[$role] ) ) {
@@ -116,7 +100,7 @@ class OrganizersStore {
 			}
 			$rows[] = [
 				'ceo_event_id' => $eventID,
-				'ceo_user_id' => $organizerCentralID,
+				'ceo_user_id' => $user->getCentralID(),
 				'ceo_role_id' => self::ROLES_MAP[$role]
 			];
 		}

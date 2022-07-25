@@ -6,8 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Organizers;
 
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiIntegrationTestCase;
@@ -43,25 +42,15 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideOrganizers
 	 */
 	public function testGetEventOrganizers( int $eventID, array $expectedIDs ) {
-		$expectedUsers = [];
-		foreach ( $expectedIDs as $id ) {
-			$expectedUsers[$id] = $this->createMock( ICampaignsUser::class );
-		}
-
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getLocalUser' )->willReturnCallback( function ( int $centralID ) use ( $expectedUsers ) {
-			return $expectedUsers[$centralID] ?? $this->createMock( ICampaignsUser::class );
-		} );
 		$store = new OrganizersStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$actualOrganizers = $store->getEventOrganizers( $eventID );
-		$actualUsers = [];
+		$actualUserIDs = [];
 		foreach ( $actualOrganizers as $organizer ) {
-			$actualUsers[] = $organizer->getUser();
+			$actualUserIDs[] = $organizer->getUser()->getCentralID();
 		}
-		$this->assertSame( array_values( $expectedUsers ), $actualUsers );
+		$this->assertSame( $expectedIDs, $actualUserIDs );
 	}
 
 	public function provideOrganizers(): Generator {
@@ -77,15 +66,9 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideIsOrganizer
 	 */
 	public function testIsEventOrganizer( int $eventID, int $userID, bool $expected ) {
-		$user = $this->createMock( ICampaignsUser::class );
-		$user->method( 'isRegistered' )->willReturn( true );
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getCentralID' )
-			->with( $user )
-			->willReturn( $userID );
+		$user = new CentralUser( $userID );
 		$store = new OrganizersStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertSame( $expected, $store->isEventOrganizer( $eventID, $user ) );
 	}
@@ -105,14 +88,9 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideOrganizersToAdd
 	 */
 	public function testAddOrganizerToEvent( int $eventID, int $userID, array $roles, array $expectedRows ) {
-		$user = $this->createMock( ICampaignsUser::class );
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getCentralID' )
-			->with( $user )
-			->willReturn( $userID );
+		$user = new CentralUser( $userID );
 		$store = new OrganizersStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 
 		$store->addOrganizerToEvent( $eventID, $user, $roles );
@@ -174,8 +152,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetEventOrganizers__limit() {
 		$store = new OrganizersStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$this->createMock( CampaignsCentralUserLookup::class )
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertCount( 2, $store->getEventOrganizers( 1 ), 'precondition' );
 		$limit = 1;
@@ -190,8 +167,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testGetOrganizerCountForEvent( int $event, int $expected ) {
 		$store = new OrganizersStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$this->createMock( CampaignsCentralUserLookup::class )
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertSame( $expected, $store->getOrganizerCountForEvent( $event ) );
 	}

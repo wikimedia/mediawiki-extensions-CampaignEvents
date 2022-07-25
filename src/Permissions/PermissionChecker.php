@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 
 class PermissionChecker {
@@ -60,7 +61,16 @@ class PermissionChecker {
 		}
 
 		$pageAuthor = $this->pageAuthorLookup->getAuthor( $eventPage );
-		return $pageAuthor && $pageAuthor->equals( $this->centralUserLookup->newFromAuthority( $performer ) );
+		if ( !$pageAuthor ) {
+			return false;
+		}
+
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			return false;
+		}
+		return $pageAuthor->equals( $centralUser );
 	}
 
 	/**
@@ -69,11 +79,15 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanEditRegistration( ICampaignsAuthority $performer, int $registrationID ): bool {
-		return $this->userCanEnableRegistrations( $performer )
-			&& $this->organizersStore->isEventOrganizer(
-				$registrationID,
-				$this->centralUserLookup->newFromAuthority( $performer )
-			);
+		if ( !$this->userCanEnableRegistrations( $performer ) ) {
+			return false;
+		}
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			return false;
+		}
+		return $this->organizersStore->isEventOrganizer( $registrationID, $centralUser );
 	}
 
 	/**
@@ -123,7 +137,11 @@ class PermissionChecker {
 		if ( !$performer->isRegistered() ) {
 			return false;
 		}
-		$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			return false;
+		}
 		return $this->organizersStore->isEventOrganizer( $registrationID, $centralUser ) &&
 			!$performer->isSitewideBlocked();
 	}

@@ -10,10 +10,9 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Rest\ListEventsByOrganizerHandler;
 use MediaWiki\Rest\Handler;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
-use MediaWiki\User\UserIdentityValue;
-use MediaWiki\User\UserNameUtils;
 use MediaWikiUnitTestCase;
 
 /**
@@ -27,24 +26,26 @@ class ListEventsByOrganizerHandlerTest extends MediaWikiUnitTestCase {
 	protected const DEFAULT_REQ_DATA = [
 		'method' => 'GET',
 		'pathParams' => [
-			'user' => 'Admin',
+			'userid' => 1,
 		]
 	];
 
 	/**
 	 * @param IEventLookup|null $eventLookup
+	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @return Handler
 	 */
 	protected function newHandler(
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		CampaignsCentralUserLookup $centralUserLookup = null
 	): Handler {
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( "getCentralID" )->willReturn( 1 );
-
+		if ( !$centralUserLookup ) {
+			$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+			$centralUserLookup->method( 'existsAndIsVisible' )->willReturn( true );
+		}
 		return new ListEventsByOrganizerHandler(
-			$eventLookup,
-			$userLookup,
-			$this->createMock( UserNameUtils::class )
+			$eventLookup ?? $this->createMock( IEventLookup::class ),
+			$centralUserLookup
 		);
 	}
 
@@ -57,15 +58,7 @@ class ListEventsByOrganizerHandlerTest extends MediaWikiUnitTestCase {
 		$handler = $this->newHandler( $eventLookup );
 
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
-
-		$respData = $this->executeHandlerAndGetBodyData(
-			$handler,
-			$request,
-			[],
-			[],
-			[ "user" => new UserIdentityValue( 1, "Admin" ) ]
-		);
-
+		$respData = $this->executeHandlerAndGetBodyData( $handler, $request );
 		$this->assertSame( $expected, $respData );
 	}
 
@@ -117,5 +110,20 @@ class ListEventsByOrganizerHandlerTest extends MediaWikiUnitTestCase {
 			]
 		];
 		yield 'Deleted event' => [ $delEventLookup, $expectedDeleted ];
+	}
+
+	public function testExecute__userNotFound() {
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->expects( $this->atLeastOnce() )->method( 'existsAndIsVisible' )->willReturn( false );
+		$handler = $this->newHandler( null, $centralUserLookup );
+		$request = new RequestData( self::DEFAULT_REQ_DATA );
+
+		try {
+			$this->executeHandler( $handler, $request );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 'campaignevents-rest-user-not-found', $e->getMessageValue()->getKey() );
+			$this->assertSame( 404, $e->getCode() );
+		}
 	}
 }

@@ -8,7 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler;
@@ -31,13 +31,12 @@ class ListParticipantsHandlerTest extends MediaWikiUnitTestCase {
 
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		ParticipantsStore $participantsStore = null,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		ParticipantsStore $participantsStore = null
 	): ListParticipantsHandler {
 		return new ListParticipantsHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
-			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class )
+			$this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 
@@ -46,10 +45,9 @@ class ListParticipantsHandlerTest extends MediaWikiUnitTestCase {
 	 */
 	public function testRun(
 		array $expectedResp,
-		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		ParticipantsStore $participantsStore
 	) {
-		$handler = $this->newHandler( null, $participantsStore, $centralUserLookup );
+		$handler = $this->newHandler( null, $participantsStore );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 
 		$this->assertSame( $expectedResp, $respData );
@@ -61,8 +59,7 @@ class ListParticipantsHandlerTest extends MediaWikiUnitTestCase {
 		$participants = [];
 		$expected = [];
 		for ( $i = 1; $i < 4; $i++ ) {
-			$curUser = $this->createMock( ICampaignsUser::class );
-			$participants[] = new Participant( $curUser, '20220315120000', $i );
+			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i );
 
 			$expected[] = [
 				'participant_id' => $i,
@@ -74,14 +71,10 @@ class ListParticipantsHandlerTest extends MediaWikiUnitTestCase {
 
 		$partStore = $this->createMock( ParticipantsStore::class );
 		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $participants );
-		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$centralUserLookup->expects( $this->exactly( 3 ) )->method( 'getCentralID' )
-			->willReturnOnConsecutiveCalls( 1, 2, 3 );
 
 		yield 'Has participants' => [
 			$expected,
-			$partStore,
-			$centralUserLookup
+			$partStore
 		];
 	}
 

@@ -7,12 +7,12 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use Language;
 use Linker;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Extension\CampaignEvents\Widgets\IconLabelContentWidget;
+use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\HtmlSnippet;
 use OOUI\IconWidget;
@@ -33,18 +33,21 @@ class EventDetailsModule {
 	/**
 	 * @param Language $language
 	 * @param ExistingEventRegistration $registration
-	 * @param MWUserProxy $userProxy
+	 * @param UserIdentity $viewingUser
 	 * @param ITextFormatter $msgFormatter
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param int $organizersCount
 	 * @param PageURLResolver $pageURLResolver
 	 * @return PanelLayout
+	 *
+	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and
+	 * probably not worth doing.
 	 */
 	public function createContent(
 		Language $language,
 		ExistingEventRegistration $registration,
-		MWUserProxy $userProxy,
+		UserIdentity $viewingUser,
 		ITextFormatter $msgFormatter,
 		bool $isOrganizer,
 		bool $isParticipant,
@@ -74,12 +77,12 @@ class EventDetailsModule {
 			'icon' => 'clock',
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-dates' )->params(
-					$language->userTimeAndDate( $registration->getStartTimestamp(), $userProxy->getUserIdentity() ),
-					$language->userDate( $registration->getStartTimestamp(), $userProxy->getUserIdentity() ),
-					$language->userTime( $registration->getStartTimestamp(), $userProxy->getUserIdentity() ),
-					$language->userTimeAndDate( $registration->getEndTimestamp(), $userProxy->getUserIdentity() ),
-					$language->userDate( $registration->getEndTimestamp(), $userProxy->getUserIdentity() ),
-					$language->userTime( $registration->getEndTimestamp(), $userProxy->getUserIdentity() )
+					$language->userTimeAndDate( $registration->getStartTimestamp(), $viewingUser ),
+					$language->userDate( $registration->getStartTimestamp(), $viewingUser ),
+					$language->userTime( $registration->getStartTimestamp(), $viewingUser ),
+					$language->userTimeAndDate( $registration->getEndTimestamp(), $viewingUser ),
+					$language->userDate( $registration->getEndTimestamp(), $viewingUser ),
+					$language->userTime( $registration->getEndTimestamp(), $viewingUser )
 				)
 			),
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) ),

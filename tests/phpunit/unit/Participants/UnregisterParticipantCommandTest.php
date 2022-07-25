@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -36,11 +37,13 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param ParticipantsStore|null $participantsStore
 	 * @param PermissionChecker|null $permChecker
+	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @return UnregisterParticipantCommand
 	 */
 	private function getCommand(
 		ParticipantsStore $participantsStore = null,
-		PermissionChecker $permChecker = null
+		PermissionChecker $permChecker = null,
+		CampaignsCentralUserLookup $centralUserLookup = null
 	): UnregisterParticipantCommand {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
@@ -50,7 +53,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		return new UnregisterParticipantCommand(
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$permChecker,
-			$this->createMock( CampaignsCentralUserLookup::class )
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 
@@ -158,6 +161,34 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$notModifiedStore = $this->createMock( ParticipantsStore::class );
 		$notModifiedStore->method( 'removeParticipantFromEvent' )->willReturn( false );
 		yield 'Not modified' => [ $notModifiedStore, false ];
+	}
+
+	/**
+	 * @param string $expectedMsg
+	 * @param CampaignsCentralUserLookup|null $centralUserLookup
+	 * @covers ::unregisterUnsafe
+	 * @dataProvider provideUnregisterUnsafeErrors
+	 */
+	public function testUnregisterUnsafe__error(
+		string $expectedMsg,
+		CampaignsCentralUserLookup $centralUserLookup = null
+	) {
+		$status = $this->getCommand( null, null, $centralUserLookup )->unregisterUnsafe(
+			$this->getValidRegistration(),
+			$this->createMock( ICampaignsAuthority::class )
+		);
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( $expectedMsg, $status );
+	}
+
+	public function provideUnregisterUnsafeErrors(): Generator {
+		$notGlobalLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$notGlobalLookup->method( 'newFromAuthority' )
+			->willThrowException( $this->createMock( UserNotGlobalException::class ) );
+		yield 'User not global' => [
+			'campaignevents-unregister-need-central-account',
+			$notGlobalLookup
+		];
 	}
 
 	/**

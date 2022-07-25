@@ -7,7 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use Html;
 use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use Status;
@@ -22,15 +24,17 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 
 	/**
 	 * @param IEventLookup $eventLookup
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
 	 * @param ParticipantsStore $participantsStore
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
+		CampaignsCentralUserLookup $centralUserLookup,
 		UnregisterParticipantCommand $unregisterParticipantCommand,
 		ParticipantsStore $participantsStore
 	) {
-		parent::__construct( self::PAGE_NAME, $eventLookup );
+		parent::__construct( self::PAGE_NAME, $eventLookup, $centralUserLookup );
 		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
 		$this->participantsStore = $participantsStore;
 	}
@@ -39,7 +43,16 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	protected function checkRegistrationPrecondition() {
-		$isParticipating = $this->participantsStore->userParticipatesToEvent( $this->event->getID(), $this->mwUser );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+			$isParticipating = $this->participantsStore->userParticipatesToEvent(
+				$this->event->getID(),
+				$centralUser
+			);
+		} catch ( UserNotGlobalException $_ ) {
+			$isParticipating = false;
+		}
+
 		return $isParticipating ? true : 'campaignevents-unregister-not-participant';
 	}
 

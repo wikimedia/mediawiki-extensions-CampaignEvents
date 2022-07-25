@@ -6,7 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Participants;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
@@ -118,20 +120,24 @@ class UnregisterParticipantCommand {
 			return $unregistrationAllowedStatus;
 		}
 
-		$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			return StatusValue::newFatal( 'campaignevents-unregister-need-central-account' );
+		}
 		$modified = $this->participantsStore->removeParticipantFromEvent( $registration->getID(), $centralUser );
 		return StatusValue::newGood( $modified );
 	}
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param int[]|null $userIDs and array of user IDs, if null remove all
+	 * @param CentralUser[]|null $users Array of users, if null remove all
 	 * @param ICampaignsAuthority $performer
 	 * @return StatusValue The StatusValue's "value" property has the number of participants removed
 	 */
 	public function removeParticipantsIfAllowed(
 		ExistingEventRegistration $registration,
-		?array $userIDs,
+		?array $users,
 		ICampaignsAuthority $performer
 	): StatusValue {
 		$permStatus = $this->authorizeRemoveParticipants( $registration, $performer );
@@ -139,7 +145,7 @@ class UnregisterParticipantCommand {
 			return $permStatus;
 		}
 
-		return $this->removeParticipantsUnsafe( $registration, $userIDs );
+		return $this->removeParticipantsUnsafe( $registration, $users );
 	}
 
 	/**
@@ -160,12 +166,12 @@ class UnregisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param int[]|null $userIDs and array of user IDs, if null remove all
+	 * @param CentralUser[]|null $users Array of users, if null remove all
 	 * @return StatusValue The StatusValue's "value" property has the number of participants removed
 	 */
 	public function removeParticipantsUnsafe(
 		ExistingEventRegistration $registration,
-		?array $userIDs
+		?array $users
 	): StatusValue {
 		$unregistrationAllowedStatus = self::checkIsUnregistrationAllowed(
 			$registration,
@@ -177,7 +183,7 @@ class UnregisterParticipantCommand {
 		}
 
 		$eventID = $registration->getID();
-		$removedParticipants = $this->participantsStore->removeParticipantsFromEvent( $eventID, $userIDs );
+		$removedParticipants = $this->participantsStore->removeParticipantsFromEvent( $eventID, $users );
 
 		return StatusValue::newGood( $removedParticipants );
 	}

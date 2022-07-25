@@ -6,8 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Linker\LinkRenderer;
 
@@ -16,8 +16,6 @@ class EventsPagerFactory {
 
 	/** @var CampaignsDatabaseHelper */
 	private $databaseHelper;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
 	/** @var CampaignsPageFactory */
 	private $campaignsPageFactory;
 	/** @var PageURLResolver */
@@ -25,18 +23,15 @@ class EventsPagerFactory {
 
 	/**
 	 * @param CampaignsDatabaseHelper $databaseHelper
-	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param PageURLResolver $pageURLResolver
 	 */
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
-		CampaignsCentralUserLookup $centralUserLookup,
 		CampaignsPageFactory $campaignsPageFactory,
 		PageURLResolver $pageURLResolver
 	) {
 		$this->databaseHelper = $databaseHelper;
-		$this->centralUserLookup = $centralUserLookup;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->pageURLResolver = $pageURLResolver;
 	}
@@ -44,6 +39,7 @@ class EventsPagerFactory {
 	/**
 	 * @param IContextSource $context
 	 * @param LinkRenderer $linkRenderer
+	 * @param CentralUser $user
 	 * @param string $search
 	 * @param string $status One of the EventsPager::STATUS_* constants
 	 * @return EventsPager
@@ -51,6 +47,7 @@ class EventsPagerFactory {
 	public function newPager(
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
+		CentralUser $user,
 		string $search,
 		string $status
 	): EventsPager {
@@ -58,9 +55,9 @@ class EventsPagerFactory {
 			$context,
 			$linkRenderer,
 			$this->databaseHelper,
-			$this->centralUserLookup,
 			$this->campaignsPageFactory,
 			$this->pageURLResolver,
+			$user,
 			$search,
 			$status
 		);

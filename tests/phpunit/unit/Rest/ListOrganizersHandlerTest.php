@@ -7,7 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
@@ -56,8 +56,7 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	public function provideRunData(): Generator {
 		yield 'No organizers' => [ [], $this->createMock( OrganizersStore::class ) ];
 
-		$user1 = $this->createMock( ICampaignsUser::class );
-		$user1->method( 'getLocalID' )->willReturn( 1 );
+		$user1 = new CentralUser( 1 );
 
 		$singleCreatorStore = $this->createMock( OrganizersStore::class );
 		$singleCreatorStore->expects( $this->atLeastOnce() )
@@ -68,8 +67,7 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			$singleCreatorStore
 		];
 
-		$user2 = $this->createMock( ICampaignsUser::class );
-		$user2->method( 'getLocalID' )->willReturn( 2 );
+		$user2 = new CentralUser( 2 );
 		$multiCreatorStore = $this->createMock( OrganizersStore::class );
 		$multiCreatorStore->expects( $this->atLeastOnce() )
 			->method( 'getEventOrganizers' )

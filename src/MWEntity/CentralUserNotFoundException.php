@@ -7,13 +7,13 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 use RuntimeException;
 
 /**
- * This exception is thrown when there's no global user corresponding to the given username.
+ * This exception is thrown when there's no global user corresponding to the given user ID.
  */
 class CentralUserNotFoundException extends RuntimeException {
 	/**
-	 * @param string $userName
+	 * @param int $centralID
 	 */
-	public function __construct( string $userName ) {
-		parent::__construct( "User $userName does not have a central ID" );
+	public function __construct( int $centralID ) {
+		parent::__construct( "Central ID $centralID does not belong to any user" );
 	}
 }

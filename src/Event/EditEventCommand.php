@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -109,13 +110,18 @@ class EditEventCommand {
 			// The page has no associated registration, and we're creating one now. No problem.
 		}
 
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			return StatusValue::newFatal( 'campaignevents-edit-need-central-account' );
+		}
+
 		$saveStatus = $this->eventStore->saveRegistration( $registration );
 		if ( !$saveStatus->isGood() ) {
 			return $saveStatus;
 		}
 		$eventID = $saveStatus->getValue();
 		if ( $registration->getID() === null ) {
-			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
 			$this->organizerStore->addOrganizerToEvent( $eventID, $centralUser, [ Roles::ROLE_CREATOR ] );
 		}
 		return StatusValue::newGood( $eventID );

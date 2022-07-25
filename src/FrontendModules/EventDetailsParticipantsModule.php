@@ -6,8 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
+use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
@@ -26,17 +28,20 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param Language $language
-	 * @param MWUserProxy $userProxy
+	 * @param UserIdentity $viewingUser
 	 * @param Participant[] $participants
 	 * @param int $totalParticipants
 	 * @param ITextFormatter $msgFormatter
 	 * @param bool $canRemoveParticipants
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @return PanelLayout
+	 *
+	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and
+	 * probably not worth doing.
 	 */
 	public function createContent(
 		Language $language,
-		MWUserProxy $userProxy,
+		UserIdentity $viewingUser,
 		array $participants,
 		int $totalParticipants,
 		ITextFormatter $msgFormatter,
@@ -124,23 +129,28 @@ class EventDetailsParticipantsModule {
 		$usersDivRows = ( new Tag( 'div' ) )
 				->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
 		foreach ( $participants as $participant ) {
+			try {
+				$userName = $centralUserLookup->getUserName( $participant->getUser() );
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+				continue;
+			}
 			$elements = [];
 			if ( $canRemoveParticipants ) {
 				$elements[] = ( new CheckboxInputWidget( [
 					'name' => 'event-details-participants-checkboxes',
 					'infusable' => true,
-					'value' => $centralUserLookup->getCentralID( $participant->getUser() ),
+					'value' => $participant->getUser()->getCentralID(),
 					'classes' => [ 'ext-campaignevents-event-details-participants-checkboxes' ],
 				] ) );
 			}
 			$elements[] = ( new Tag( 'span' ) )
-				->appendContent( $participant->getUser()->getName() )
+				->appendContent( $userName )
 				->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
 
 			$elements[] = ( new Tag( 'span' ) )->appendContent(
 				$language->userTimeAndDate(
 					$participant->getRegisteredAt(),
-					$userProxy->getUserIdentity()
+					$viewingUser
 				)
 			)->addClasses( [ 'ext-campaignevents-details-participant-registered-at' ] );
 

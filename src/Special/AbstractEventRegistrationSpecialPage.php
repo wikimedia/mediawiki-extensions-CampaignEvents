@@ -13,7 +13,6 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MWTimestamp;
 use Status;
 
@@ -33,8 +32,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected $eventID;
 	/** @var EventRegistration|null */
 	protected $event;
-	/** @var MWUserProxy */
-	protected $user;
 
 	/**
 	 * @var string|null Prefixedtext of the event page, set upon form submission and guaranteed to be

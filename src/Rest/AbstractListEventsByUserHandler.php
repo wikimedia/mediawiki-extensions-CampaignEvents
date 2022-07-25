@@ -7,11 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
-use MediaWiki\ParamValidator\TypeDef\UserDef;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\LocalizedHttpException;
-use MediaWiki\User\UserNameUtils;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
@@ -20,8 +18,6 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	protected $eventLookup;
 	/** @var CampaignsCentralUserLookup */
 	private $userLookup;
-	/** @var UserNameUtils */
-	private $userNameUtils;
 
 	// TODO: Implement proper pagination (T305389)
 	protected const RES_LIMIT = 50;
@@ -29,17 +25,13 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param CampaignsCentralUserLookup $userLookup
-	 * @param UserNameUtils $userNameUtils
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		CampaignsCentralUserLookup $userLookup,
-		UserNameUtils $userNameUtils
-
+		CampaignsCentralUserLookup $userLookup
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->userLookup = $userLookup;
-		$this->userNameUtils = $userNameUtils;
 	}
 
 	/**
@@ -48,16 +40,17 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	public function execute() {
 		$params = $this->getValidatedParams();
 
-		if ( !$this->userNameUtils->isIp( $params['user']->getName() ) && !$params['user']->isRegistered() ) {
+		$user = new CentralUser( $params['userid'] );
+		if ( !$this->userLookup->existsAndIsVisible( $user ) ) {
+			// We don't really need an existing and visible account, but letting the user
+			// know seems a good idea.
 			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-rest-user-not-found', [ $params['user']->getName() ] ), 404
+				new MessageValue( 'campaignevents-rest-user-not-found' ),
+				404
 			);
 		}
 
-		$user = new MWUserProxy( $params['user'] );
-		$userID = $this->userLookup->getCentralID( $user );
-
-		return $this->getEventsByUser( $userID, self::RES_LIMIT );
+		return $this->getEventsByUser( $user, self::RES_LIMIT );
 	}
 
 	/**
@@ -82,23 +75,21 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	}
 
 	/**
-	 * @param int $userID
+	 * @param CentralUser $user
 	 * @param int $resultLimit
 	 * @return array
 	 */
-	abstract protected function getEventsByUser( int $userID, int $resultLimit ): array;
+	abstract protected function getEventsByUser( CentralUser $user, int $resultLimit ): array;
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
 		return [
-			'user' => [
+			'userid' => [
 				static::PARAM_SOURCE => 'path',
-				ParamValidator::PARAM_TYPE => 'user',
+				ParamValidator::PARAM_TYPE => 'integer',
 				ParamValidator::PARAM_REQUIRED => true,
-				UserDef::PARAM_ALLOWED_USER_TYPES => [ 'name' ],
-				UserDef::PARAM_RETURN_OBJECT => true
 			],
 		];
 	}
