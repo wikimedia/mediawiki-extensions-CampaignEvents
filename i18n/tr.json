@@ -29,8 +29,6 @@
 	"campaignevents-error-no-meeting-type": "En az bir etkinlik toplantı türü seçin.",
 	"campaignevents-error-invalid-meeting-url": "Geçerli bir etkinlik toplantısı URL'si girin.",
 	"campaignevents-error-meeting-url-not-online": "Etkinlik çevrimiçi değilse toplantı URL'si belirtilmemelidir.",
-	"campaignevents-error-in-person-no-country": "Bir ülke adı girin.",
-	"campaignevents-error-in-person-no-address": "Bir adres girin.",
 	"campaignevents-error-countryoraddress-not-in-person": "Etkinlik yüz yüze değilse toplantı ülkesi ve adresi belirtilmemelidir.",
 	"campaignevents-error-invalid-country": "Geçerli bir ülke adı girin.",
 	"campaignevents-error-invalid-address": "Geçerli bir adres girin.",

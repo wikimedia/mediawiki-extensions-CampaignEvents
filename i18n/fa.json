@@ -8,8 +8,6 @@
 	"campaignevents-error-empty-start": "یک زمان آغاز را انتخاب کنید.",
 	"campaignevents-error-invalid-start": "زمان آغاز رویداد نامعتبر است.",
 	"campaignevents-error-empty-end": "یک زمان پایان را وارد کنید.",
-	"campaignevents-error-in-person-no-country": "نام یک کشور را وارد کنید.",
-	"campaignevents-error-in-person-no-address": "یک نشانی وارد کنید.",
 	"campaignevents-error-invalid-country": "یک نام کشور معتبر وارد کنید.",
 	"campaignevents-error-invalid-address": "یک نشانی معتبر وارد کنید.",
 	"campaignevents-edit-field-event-status": "وضعیت رویداد",

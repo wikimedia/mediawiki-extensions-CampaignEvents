@@ -27,8 +27,6 @@
 	"campaignevents-error-no-meeting-type": "Wybierz co najmniej jeden typ spotkania.",
 	"campaignevents-error-invalid-meeting-url": "Wpisz prawidłowy adres URL miejsca spotkania.",
 	"campaignevents-error-meeting-url-not-online": "Nie należy podawać adresu URL spotkania, jeśli nie odbywa się ono online.",
-	"campaignevents-error-in-person-no-country": "Wpisz nazwę kraju.",
-	"campaignevents-error-in-person-no-address": "Podaj adres.",
 	"campaignevents-error-countryoraddress-not-in-person": "Nie należy podawać kraju i adresu spotkania, jeśli wydarzenie nie odbywa się osobiście.",
 	"campaignevents-error-invalid-country": "Wpisz prawidłową nazwę kraju.",
 	"campaignevents-error-invalid-address": "Wpisz poprawny adres.",

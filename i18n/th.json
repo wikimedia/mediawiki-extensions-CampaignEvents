@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Patsagorn Y."
+			"Patsagorn Y.",
+			"Trisorn Triboon"
 		]
 	},
 	"campaignevents-desc": "ให้ฟีเจอร์สำหรับผู้จัดแคมเปญและผู้มีส่วนร่วม",
@@ -26,8 +27,6 @@
 	"campaignevents-error-invalid-type": "โปรดระบุประเภทกิจกรรมที่ถูกต้อง",
 	"campaignevents-error-no-meeting-type": "โปรดเลือกชนิดการประชุมอย่างน้อยหนึ่งชนิด",
 	"campaignevents-error-invalid-meeting-url": "โปรดป้อนยูอาร์แอลการประชุมกิจกรรมที่ถูกต้อง",
-	"campaignevents-error-in-person-no-country": "โปรดป้อนประเทศ",
-	"campaignevents-error-in-person-no-address": "โปรดป้อนที่อยู่",
 	"campaignevents-error-invalid-country": "โปรดระบุชื่อประเทศที่ถูกต้อง",
 	"campaignevents-error-invalid-address": "โปรดป้อนที่อยู่ที่ถูกต้อง",
 	"campaignevents-rest-event-not-found": "ไม่มีกิจกรรมที่มี ID นี้",
@@ -79,8 +78,8 @@
 	"campaignevents-unregister-confirmation-btn": "ยกเลิกการลงทะเบียน",
 	"campaignevents-delete-not-allowed-registration": "คุณไม่ได้รับอนุญาตให้ลบการลงทะเบียนกิจกรรมนี้",
 	"campaignevents-rest-delete-already-deleted": "การลงทะเบียนกิจกรรมนี้ถูกลบไปแล้ว",
-	"campaignevents-role-creator": "ผู้สร้าง",
-	"campaignevents-role-organizer": "ผู้จัด",
+	"campaignevents-role-creator": "{{GENDER:$1|ผู้สร้าง}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|ผู้จัด}}",
 	"campaignevents-rest-user-not-found": "ไม่มีผู้ใช้ \"$1\"",
 	"campaignevents-register-not-allowed": "คุณไม่ได้รับอนุญาตให้ลงทะเบียนสำหรับกิจกรรม",
 	"campaignevents-register-event-past": "ระยะเวลาการลงทะเบียนกิจกรรมนี้เสร็จสิ้นแล้ว",

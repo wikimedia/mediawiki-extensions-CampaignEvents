@@ -27,8 +27,6 @@
 	"campaignevents-error-no-meeting-type": "Cagura n'imiburiburi ubwoko bumwe bw'ihuriro ry'igikorwa.",
 	"campaignevents-error-invalid-meeting-url": "Andika URL nyayo y'ihuriro ry'igikorwa.",
 	"campaignevents-error-meeting-url-not-online": "URL y'ihwaniro ntitegerezwa kwerekanwa mugihe igikorwa kitari ku murongo.",
-	"campaignevents-error-in-person-no-country": "Andika izina ry'igihugu.",
-	"campaignevents-error-in-person-no-address": "Andika aho uba.",
 	"campaignevents-error-countryoraddress-not-in-person": "Igihugu n'ikibanza vy'ihwaniro ntibitegerezwa kwerekanwa mugihe igikorwa kitari icahibonekeza.",
 	"campaignevents-error-invalid-country": "Andika izina nyaryo ry'igihugu.",
 	"campaignevents-error-invalid-address": "Andika aho uba nyaho.",

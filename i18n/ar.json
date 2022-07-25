@@ -32,8 +32,6 @@
 	"campaignevents-error-no-meeting-type": "اختر نوع لقاء فعالية واحد على الأقل.",
 	"campaignevents-error-invalid-meeting-url": "أدخل محدد موقع الموارد المُوحّد (URL) صالح للقاء الفعالية.",
 	"campaignevents-error-meeting-url-not-online": "لا داعي لتحديد موقع الموارد المُوحّد (URL) للاجتماع إذا لم تكن الفعالية عن بعد.",
-	"campaignevents-error-in-person-no-country": "أدخل اسم الدولة.",
-	"campaignevents-error-in-person-no-address": "أدخل عنوانا.",
 	"campaignevents-error-countryoraddress-not-in-person": "لا داعي لتحديد بلد الاجتماع وعنوانه إذا لم تكن الفعالية حضورية.",
 	"campaignevents-error-invalid-country": "أدخل اسم دولة صالح.",
 	"campaignevents-error-invalid-address": "أدخل عنوانًا صالحًا.",

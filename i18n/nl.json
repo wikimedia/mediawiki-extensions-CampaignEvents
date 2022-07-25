@@ -29,8 +29,6 @@
 	"campaignevents-error-no-meeting-type": "Kies ten minste één type bijeenkomst voor het evenement.",
 	"campaignevents-error-invalid-meeting-url": "Voer een geldige URL in voor de bijeenkomst van het evenement.",
 	"campaignevents-error-meeting-url-not-online": "De URL voor de bijeenkomst mag niet worden opgegeven als het evenement niet online is.",
-	"campaignevents-error-in-person-no-country": "Voer een landnaam in.",
-	"campaignevents-error-in-person-no-address": "Geef een adres in.",
 	"campaignevents-error-countryoraddress-not-in-person": "Het land en het adres van de bijeenkomst mogen niet worden opgegeven als het evenement niet op locatie is.",
 	"campaignevents-error-invalid-country": "Voer een geldige landnaam in.",
 	"campaignevents-error-invalid-address": "Voer een geldig adres in.",

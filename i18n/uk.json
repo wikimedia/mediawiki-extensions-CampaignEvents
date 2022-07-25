@@ -26,8 +26,6 @@
 	"campaignevents-error-invalid-type": "Введіть дійсний тип події.",
 	"campaignevents-error-no-meeting-type": "Виберіть принаймні один тип зустрічі.",
 	"campaignevents-error-invalid-meeting-url": "Введіть дійсну URL-адресу зустрічі.",
-	"campaignevents-error-in-person-no-country": "Введіть назву країни.",
-	"campaignevents-error-in-person-no-address": "Введіть адресу.",
 	"campaignevents-error-invalid-country": "Введіть дійсну назву країни.",
 	"campaignevents-error-invalid-address": "Введіть дійсну адресу.",
 	"campaignevents-rest-event-not-found": "Не існує події з таким ідентифікатором.",
