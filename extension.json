@@ -10,6 +10,13 @@
 	"requires": {
 		"MediaWiki": ">= 1.38.0"
 	},
+	"attributes": {
+		"VisualEditor": {
+			"AvailableNamespaces": {
+				"Event": true
+			}
+		}
+	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CampaignEvents\\": "src/"
 	},
