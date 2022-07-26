@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
@@ -282,9 +283,15 @@ class EventPageDecorator {
 		] );
 
 		$userStatus = $this->getUserStatus( $registration, $authority );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
+		} catch ( UserNotGlobalException $_ ) {
+			$centralUser = null;
+		}
 		$out->addHTML( $this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus ) );
 		$out->addHTML(
-			$this->getDetailsDialogContent( $registration, $msgFormatter, $language, $viewingUser, $userStatus )
+			$this->getDetailsDialogContent(
+				$registration, $msgFormatter, $language, $viewingUser, $userStatus, $centralUser )
 		);
 	}
 
@@ -376,8 +383,7 @@ class EventPageDecorator {
 			'href' => SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID )->getLocalURL(),
 		] );
 
-		$actionElements = $this->getActionElements( $eventID, $msgFormatter, $userStatus );
-		$items = array_merge( $items, $actionElements );
+		$items[] = $this->getActionElement( $eventID, $msgFormatter, $userStatus );
 
 		$layout = new PanelLayout( [
 			'content' => $items,
@@ -410,6 +416,7 @@ class EventPageDecorator {
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
+	 * @param CentralUser|null $centralUser
 	 * @return string
 	 */
 	private function getDetailsDialogContent(
@@ -417,7 +424,8 @@ class EventPageDecorator {
 		ITextFormatter $msgFormatter,
 		Language $language,
 		UserIdentity $viewingUser,
-		int $userStatus
+		int $userStatus,
+		?CentralUser $centralUser
 	): string {
 		$eventID = $registration->getID();
 
@@ -546,33 +554,14 @@ class EventPageDecorator {
 			$organizersAndDetails
 		);
 
-		$participantsList = '';
 		$participantsCount = $this->participantsStore->getParticipantCountForEvent( $eventID );
-		$partialParticipants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
-		if ( $partialParticipants ) {
-			$participantsList .= Html::openElement( 'ul' );
-			foreach ( $partialParticipants as $participant ) {
-				try {
-					$userLink = $this->userLinker->generateUserLink( $participant->getUser() );
-				} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
-					continue;
-				}
-				$participantsList .= Html::rawElement( 'li', [], $userLink );
-			}
-			$participantsList .= Html::closeElement( 'ul' );
-			if ( count( $partialParticipants ) < $participantsCount ) {
-				$participantsList .= Html::rawElement(
-					'p',
-					[],
-					$this->linkRenderer->makeKnownLink(
-						SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
-						$msgFormatter->format(
-							MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
-						)
-					)
-				);
-			}
-		}
+		$participantsList = $this->buildParticipantsList(
+			$eventID,
+			$msgFormatter,
+			$viewingUser,
+			$centralUser,
+			$participantsCount
+		);
 		$participantsWidget = new EventDetailsWidget( [
 			'icon' => 'userGroup',
 			'label' => $msgFormatter->format(
@@ -594,25 +583,93 @@ class EventPageDecorator {
 	}
 
 	/**
-	 * Returns the "action" elements for the header (that are also cloned into the popup). This can be a button for
+	 * @param int $eventID
+	 * @param ITextFormatter $msgFormatter
+	 * @param UserIdentity $viewingUser
+	 * @param CentralUser|null $centralUser
+	 * @param int $participantsCount
+	 * @return string
+	 */
+	private function buildParticipantsList(
+		int $eventID,
+		ITextFormatter $msgFormatter,
+		UserIdentity $viewingUser,
+		?CentralUser $centralUser,
+		int $participantsCount
+	): string {
+		$participantsList = '';
+		$partialParticipants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
+		if ( !$partialParticipants ) {
+			return '';
+		}
+
+		$participantsList .= Html::openElement( 'ul' );
+		$listElements = [];
+
+		$curUserParticipates = $centralUser &&
+			$this->participantsStore->userParticipatesToEvent( $eventID, $centralUser );
+		if ( $curUserParticipates ) {
+			// Make the current user always be at the top, and make sure that it is shown.
+			$listElements[] = Html::rawElement(
+				'li',
+				[],
+				Linker::userLink( $viewingUser->getId(), $viewingUser->getName() )
+			);
+		}
+		$skippedCurUser = false;
+		foreach ( $partialParticipants as $participant ) {
+			if ( $curUserParticipates && $participant->getUser()->getCentralID() === $centralUser->getCentralID() ) {
+				$skippedCurUser = true;
+				continue;
+			}
+			try {
+				$userLink = $this->userLinker->generateUserLink( $participant->getUser() );
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+				continue;
+			}
+			$listElements[] = Html::rawElement( 'li', [], $userLink );
+		}
+		if ( $curUserParticipates && !$skippedCurUser ) {
+			// If the current user is a participant and it was not in the partial list, this means that we have
+			// self::PARTICIPANTS_LIMIT + 1 users in the final list, so remove the last one to respect the limit.
+			array_pop( $listElements );
+		}
+
+		$participantsList .= implode( '', $listElements );
+
+		$participantsList .= Html::closeElement( 'ul' );
+		if ( count( $partialParticipants ) < $participantsCount ) {
+			$participantsList .= Html::rawElement(
+				'p',
+				[],
+				$this->linkRenderer->makeKnownLink(
+					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
+					$msgFormatter->format(
+						MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
+					)
+				)
+			);
+		}
+		return $participantsList;
+	}
+
+	/**
+	 * Returns the "action" element for the header (that are also cloned into the popup). This can be a button for
 	 * managing the event, or one to register for it. Or it can be a widget informing the user that they are already
-	 * registered, with a button to unregister. There can also be no elements if the user is not allowed to register.
-	 * Note that when the user can (un)register we always return both the register button and the unregister layout, but
-	 * one of them will be hidden. This way we can easily switch which one is shown when the button is clicked.
-	 * Reloading the page may not work because we should only pull the data from the replicas on view requests.
+	 * registered, with a button to unregister. There can also be no element if the user is not allowed to register.
 	 *
 	 * @param int $eventID
 	 * @param ITextFormatter $msgFormatter
 	 * @param int $userStatus
-	 * @return Element[]
+	 * @return Element|null
 	 */
-	private function getActionElements( int $eventID, ITextFormatter $msgFormatter, int $userStatus ): array {
+	private function getActionElement( int $eventID, ITextFormatter $msgFormatter, int $userStatus ): ?Element {
 		if ( $userStatus === self::USER_STATUS_BLOCKED || $userStatus === self::USER_STATUS_CANNOT_REGISTER ) {
-			return [];
+			return null;
 		}
 
 		if ( $userStatus === self::USER_STATUS_ORGANIZER ) {
-			$manageBtn = new ButtonWidget( [
+			return new ButtonWidget( [
 				'flags' => [ 'progressive' ],
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-manage' ) ),
 				'classes' => [
@@ -624,57 +681,56 @@ class EventPageDecorator {
 					(string)$eventID
 				)->getLocalURL(),
 			] );
-			return [ $manageBtn ];
 		}
-
-		$unregisterURL = SpecialPage::getTitleFor(
-			SpecialCancelEventRegistration::PAGE_NAME,
-			(string)$eventID
-		)->getLocalURL();
-		$alreadyRegisteredItems = [
-			new MessageWidget( [
-				'type' => 'success',
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-header-attending' )
-				),
-				'inline' => true,
-			] )
-		];
-		if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER ) {
-			$alreadyRegisteredItems[] = new ButtonWidget( [
-				'flags' => [ 'destructive' ],
-				'icon' => 'trash',
-				'framed' => false,
-				'href' => $unregisterURL,
-				'classes' => [ 'ext-campaignevents-event-unregister-btn' ],
-			] );
-		}
-		$alreadyRegisteredAction = new HorizontalLayout( [
-			'items' => $alreadyRegisteredItems,
-			'classes' => [
-				'ext-campaignevents-eventpage-action-element',
-				'ext-campaignevents-eventpage-unregister-layout'
-			]
-		] );
-		$registerBtn = new ButtonWidget( [
-			'flags' => [ 'primary', 'progressive' ],
-			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-register' ) ),
-			'classes' => [ 'ext-campaignevents-eventpage-action-element', 'ext-campaignevents-eventpage-register-btn' ],
-			'href' => SpecialPage::getTitleFor( SpecialRegisterForEvent::PAGE_NAME, (string)$eventID )->getLocalURL(),
-		] );
 
 		if (
 			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
 			$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER
 		) {
-			$registerBtn->addClasses( [ 'ext-campaignevents-eventpage-hidden-action' ] );
-		} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
-			$alreadyRegisteredAction->addClasses( [ 'ext-campaignevents-eventpage-hidden-action' ] );
-		} else {
-			throw new LogicException( "Unexpected user status $userStatus" );
+			$unregisterURL = SpecialPage::getTitleFor(
+				SpecialCancelEventRegistration::PAGE_NAME,
+				(string)$eventID
+			)->getLocalURL();
+			$alreadyRegisteredItems = [
+				new MessageWidget( [
+					'type' => 'success',
+					'label' => $msgFormatter->format(
+						MessageValue::new( 'campaignevents-eventpage-header-attending' )
+					),
+					'inline' => true,
+				] )
+			];
+			if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER ) {
+				$alreadyRegisteredItems[] = new ButtonWidget( [
+					'flags' => [ 'destructive' ],
+					'icon' => 'trash',
+					'framed' => false,
+					'href' => $unregisterURL,
+					'classes' => [ 'ext-campaignevents-event-unregister-btn' ],
+				] );
+			}
+			return new HorizontalLayout( [
+				'items' => $alreadyRegisteredItems,
+				'classes' => [
+					'ext-campaignevents-eventpage-action-element',
+					'ext-campaignevents-eventpage-unregister-layout'
+				]
+			] );
 		}
 
-		return [ $registerBtn, $alreadyRegisteredAction ];
+		if ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
+			return new ButtonWidget( [
+				'flags' => [ 'primary', 'progressive' ],
+				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-register' ) ),
+				'classes' => [
+					'ext-campaignevents-eventpage-action-element',
+					'ext-campaignevents-eventpage-register-btn'
+				],
+				'href' => SpecialPage::getTitleFor( SpecialRegisterForEvent::PAGE_NAME, (string)$eventID )
+					->getLocalURL(),
+			] );
+		}
+		throw new LogicException( "Unexpected user status $userStatus" );
 	}
 
 	/**
