@@ -104,6 +104,7 @@
 	"campaignevents-unregister-registration-deleted": "이벤트 등록이 삭제되었으므로 취소할 수 없습니다.",
 	"campaignevents-eventpage-header-location-label": "위치",
 	"campaignevents-eventpage-header-type-online": "온라인 이벤트",
+	"campaignevents-eventpage-header-type-in-person": "대면 이벤트",
 	"campaignevents-eventpage-header-type-online-and-in-person": "온라인 및 대면 이벤트",
 	"campaignevents-eventpage-header-dates-label": "시작 및 종료 시간",
 	"campaignevents-eventpage-header-participants": "{{PLURAL:$1|참가자}} $1명",

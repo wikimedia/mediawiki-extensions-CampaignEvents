@@ -1,10 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
+			"Fraxinus.cs",
 			"Kendo13",
 			"Matěj Suchánek"
 		]
 	},
+	"campaignevents-eventpage-header-type-in-person": "Osobní akce",
+	"campaignevents-eventpage-dialog-venue-not-available": "Adresu místa konání zpřístupní {{PLURAL:$1| organizátor|organizátoři}}.",
+	"campaignevents-event-details-edit-button": "Upravit",
+	"campaignevents-event-details-select-all": "Vybrat vše",
+	"campaignevents-event-details-all-selected": "Vybráno vše",
+	"campaignevents-event-details-remove-participant-remove-btn": "Odebrat",
+	"campaignevents-event-details-venue-not-available": "Adresu místa konání zpřístupní {{PLURAL:$1| organizátor|organizátoři}}.",
+	"campaignevents-event-details-dates-label": "Čas začátku a konce",
 	"campaignevents-event-details-remove-all-participant-notification": "Všichni účastníci odstraněni",
 	"campaignevents-unregister-participants-permission-denied": "Odstranění účastníků není povoleno",
 	"campaignevents-event-details-remove-participant-notification-error": "Při pokusu o odstranění {{PLURAL:$1|účastníka|účastníků}} došlo k chybě.",
