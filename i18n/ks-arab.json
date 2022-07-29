@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tajamul9"
+		]
+	},
+	"campaignevents-register-confirmation-btn": "ریٚجسٹر",
+	"campaignevents-myevents-label-search": "ژھانٛڈُن",
+	"campaignevents-myevents-label-status": "اوقات",
+	"campaignevents-eventslist-column-date": "تٲریٖخ",
+	"campaignevents-eventslist-delete-dialog-delete": "مِٹٲیو",
+	"campaignevents-delete-submit-btn": "مِٹٲیو",
+	"campaignevents-eventpage-header-dates-label": "شروع تہٕ ٲخری وقت",
+	"campaignevents-eventpage-dialog-organizers": "آرگنیزٕڈ بَی: $۱",
+	"campaignevents-eventpage-dialog-dates": "$۱ تا $۴",
+	"campaignevents-eventpage-dialog-action-close": "بَنٛد",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "آ",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "نہَ"
+}
