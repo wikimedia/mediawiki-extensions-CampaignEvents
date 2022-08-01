@@ -15,6 +15,7 @@
 	"campaignevents-error-invalid-title-interwiki": "Ange en evenemangssida på den lokala wikin.",
 	"campaignevents-error-page-not-found": "Det finns ingen evenemangssida med det här namnet.",
 	"campaignevents-error-page-not-event-namespace": "Evenemangssidan måste finnas i namnrymden {{ns:event}}.",
+	"campaignevents-error-page-with-section": "Evenemangssidan får inte innehålla ett avsnittsnamn.",
 	"campaignevents-error-invalid-chat-url": "Ange en giltig chatt-URL.",
 	"campaignevents-error-invalid-status": "Indikera om evenemanget är öppet eller stängt.",
 	"campaignevents-error-empty-start": "Välj en starttid.",

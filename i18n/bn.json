@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"আজিজ",
 			"আফতাবুজ্জামান",
 			"মোঃ মারুফ হাসান24"
 		]
@@ -9,12 +10,26 @@
 	"campaignevents-edit-field-end": "শেষ সময়",
 	"campaignevents-edit-field-address": "ঠিকানা",
 	"registerforevent": "একটি ইভেন্টের জন্য নিবন্ধন করুন",
-	"campaignevents-role-creator": "নির্মাতা",
-	"campaignevents-role-organizer": "সংগঠক",
+	"campaignevents-role-creator": "{{GENDER:$1|স্রষ্টা}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|সংগঠক}}",
 	"campaignevents-myevents-label-search": "অনুসন্ধান",
 	"campaignevents-myevents-field-status-any": "যেকোন",
+	"campaignevents-eventpage-header-type-in-person": "ব্যক্তিগত অনুষ্ঠান",
+	"eventdetails": "অনুষ্ঠানের বিবরণ",
+	"campaignevents-event-details-label": "অনুষ্ঠানের বিবরণ",
 	"campaignevents-event-details-edit-button": "সম্পাদনা",
 	"campaignevents-event-details-header-participants": "$1 জন {{PLURAL:$1|অংশগ্রহণকারী}}",
 	"campaignevents-event-details-dates": "$1 থেকে $4 পর্যন্ত",
-	"campaignevents-event-details-remove-participant-cancel-btn": "বাতিল"
+	"campaignevents-event-details-online-label": "অনলাইন অনুষ্ঠান",
+	"campaignevents-event-details-register-prompt": "এই তথ্য দেখতে আপনাকে নিবন্ধন করতে হবে",
+	"campaignevents-event-details-select-all": "সব নির্বাচন করুন",
+	"campaignevents-event-details-all-selected": "সব নির্বাচিত",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|নির্বাচিত}}",
+	"campaignevents-event-details-remove-participant-remove-btn": "অপসারণ",
+	"campaignevents-event-details-remove-participant-cancel-btn": "বাতিল",
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|অংশগ্রহণকারী|অংশগ্রহণকারীদের}} অপসারণ করা হয়েছে",
+	"campaignevents-event-details-remove-all-participant-notification": "সব অংশগ্রহণকারী অপসারিত",
+	"campaignevents-unregister-participants-permission-denied": "আপনি অংশগ্রহণকারীদের অপসারণ করার জন্য অনুমতি  প্রাপ্ত নন",
+	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|অংশগ্রহণকারী|অংশগ্রহণকারীদের}} অপসারণ করার সময় একটি ত্রুটি দেখা দিয়েছে",
+	"campaignevents-event-details-search-participants-placeholder": "অংশগ্রহণকারীদের জন্য অনুসন্ধান করুন"
 }

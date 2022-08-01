@@ -11,7 +11,7 @@
 	"campaignevents-error-invalid-chat-url": "Введите действительный URL-адрес чата.",
 	"campaignevents-error-empty-start": "Выберите время начала.",
 	"campaignevents-error-start-past": "Время начала мероприятия не может быть в прошлом",
-	"campaignevents-error-empty-end": "Время начала и окончания не могут быть не заполнены",
+	"campaignevents-error-empty-end": "Введите время окончания.",
 	"editeventregistration": "Изменить форму регистрации на мероприятие",
 	"campaignevents-edit-form-legend": "Предоставьте основную информацию о мероприятии, которое вы организуете",
 	"campaignevents-edit-field-page": "Страница мероприятия",
@@ -36,6 +36,6 @@
 	"campaignevents-unregister-confirmation-top": "Подтвердите отмену регистрации",
 	"campaignevents-delete-not-allowed-registration": "У вас нет разрешения удалить регистрацию на это мероприятие",
 	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена.",
-	"campaignevents-role-creator": "создатель(-ница)",
-	"campaignevents-role-organizer": "организатор"
+	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}"
 }

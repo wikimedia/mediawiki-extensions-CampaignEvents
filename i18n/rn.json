@@ -79,7 +79,7 @@
 	"campaignevents-unregister-confirmation-btn": "Futa ukwiyandikisha",
 	"campaignevents-delete-not-allowed-registration": "Ntiwemerewe gufuta ukwiyandikisha kuri kino gikorwa.",
 	"campaignevents-rest-delete-already-deleted": "Ukwiyandikisha kuri kino gikorwa vyamaze gukurwaho.",
-	"campaignevents-role-creator": "Uwatanguje igikorwa",
+	"campaignevents-role-creator": "{{GENDER:$1|uwatanguje}}",
 	"campaignevents-role-organizer": "Umutunganyabikorwa",
 	"campaignevents-rest-user-not-found": "Umukoresha $1 ntabaho.",
 	"campaignevents-register-not-allowed": "Ntiwemerewe kwiyandikisha kugikorwa.",

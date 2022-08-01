@@ -3,7 +3,8 @@
 		"authors": [
 			"Ajeje Brazorf",
 			"Amire80",
-			"Daimona Eaytoy"
+			"Daimona Eaytoy",
+			"Verdy p"
 		]
 	},
 	"campaignevents-desc": "{{desc|name=CampaignEvents|url=https://www.mediawiki.org/wiki/Extension:CampaignEvents}}",
@@ -16,7 +17,7 @@
 	"campaignevents-error-invalid-title": "Error message used when the given event page title is invalid.\nParameters:\n* $1 - The reason why the title is not valid",
 	"campaignevents-error-invalid-title-interwiki": "Error message used when the given event page title has an interwiki prefix.",
 	"campaignevents-error-page-not-found": "Error message used when the given event page does not exist.",
-	"campaignevents-error-page-not-event-namespace": "Error message used when the given event page is not in the {{ns:event}} namespace.",
+	"campaignevents-error-page-not-event-namespace": "Error message used when the given event page name does not exist in the “{{ns:event}}” namespace.",
 	"campaignevents-error-page-with-section": "Error message used when the given event page contains a section name, like \"Event:Test#Section\".",
 	"campaignevents-error-invalid-chat-url": "Error message used when the given chat URL is invalid.",
 	"campaignevents-error-invalid-status": "Error message used when the given event status is invalid.",
