@@ -4,6 +4,7 @@
 			"Kareyac"
 		]
 	},
+	"campaignevents-role-organizer": "{{GENDER:$1| կազմակերպիչ}}",
 	"myevents": "Ձեր իրադարձությունները",
 	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",
 	"campaignevents-myevents-label-search": "Որոնում",
