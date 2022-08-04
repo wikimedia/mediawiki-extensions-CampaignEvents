@@ -184,7 +184,8 @@
 				"mediawiki.Uri",
 				"oojs-ui-core",
 				"oojs-ui-windows"
-			]
+			],
+			"targets": [ "desktop", "mobile" ]
 		},
 		"ext.campaignEvents.specialeventdetails": {
 			"localBasePath": "resources/ext.campaignEvents.specialeventdetails",
