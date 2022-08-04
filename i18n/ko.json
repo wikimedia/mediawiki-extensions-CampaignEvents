@@ -162,8 +162,10 @@
 	"campaignevents-event-details-not-found": "이 ID에 해당하는 이벤트가 없습니다.",
 	"campaignevents-event-details-online-link-not-available": "이 링크는 {{PLURAL:$1|주최자}}가 사용할 수 있게 됩니다.",
 	"campaignevents-event-details-dates-label": "시작 및 종료 시간",
+	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|참여자}} 제거됨",
 	"campaignevents-event-details-remove-all-participant-notification": "모든 참가자가 제거됨",
 	"campaignevents-unregister-participants-permission-denied": "참가자를 제거할 권한이 없습니다.",
+	"campaignevents-unregister-participants-registration-deleted": "이 이벤트는 삭제되었기 때문에 해당 이벤트로부터 참여자를 제거할 수 없습니다.",
 	"campaignevents-unregister-participants-past-registration": "이벤트가 종료되었으므로 이 이벤트에서 참가자를 제거할 수 없습니다.",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|참가자}}를 제거하는 중 오류가 발생했습니다.",
 	"campaignevents-event-details-search-participants-placeholder": "참가자 검색"
