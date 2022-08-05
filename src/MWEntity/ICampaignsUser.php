@@ -11,12 +11,6 @@ interface ICampaignsUser {
 	public function getLocalID(): int;
 
 	/**
-	 * @param string $right
-	 * @return bool
-	 */
-	public function hasRight( string $right ): bool;
-
-	/**
 	 * @return bool
 	 */
 	public function isRegistered(): bool;

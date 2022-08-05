@@ -11,7 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use Status;
 use User;
@@ -81,8 +81,8 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function userCanExecute( User $user ): bool {
-		$mwUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
-		return $this->permissionChecker->userCanDeleteRegistration( $mwUser, $this->event->getID() );
+		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
+		return $this->permissionChecker->userCanDeleteRegistration( $mwAuthority, $this->event->getID() );
 	}
 
 	/**
@@ -109,8 +109,8 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ): Status {
-		$mwUser = new MWUserProxy( $this->getUser(), $this->getAuthority() );
-		return Status::wrap( $this->deleteEventCommand->deleteIfAllowed( $this->event, $mwUser ) );
+		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		return Status::wrap( $this->deleteEventCommand->deleteIfAllowed( $this->event, $performer ) );
 	}
 
 	/**

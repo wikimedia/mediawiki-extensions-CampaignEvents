@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use CentralIdLookup;
 use MediaWiki\User\UserFactory;
+use UnexpectedValueException;
 
 /**
  * @todo Audience checks can be improved, but having them in a storage layer (like CentralIdLookup is) makes things
@@ -59,9 +60,19 @@ class CampaignsCentralUserLookup {
 			throw new LocalUserNotFoundException( $centralID );
 		}
 
-		return new MWUserProxy(
-			$mwUser,
-			$this->userFactory->newFromUserIdentity( $mwUser )
-		);
+		return new MWUserProxy( $mwUser );
+	}
+
+	/**
+	 * @param ICampaignsAuthority $authority
+	 * @return ICampaignsUser
+	 */
+	public function newFromAuthority( ICampaignsAuthority $authority ): ICampaignsUser {
+		if ( !$authority instanceof MWAuthorityProxy ) {
+			throw new UnexpectedValueException(
+				'Unknown campaigns authority implementation: ' . get_class( $authority )
+			);
+		}
+		return new MWUserProxy( $authority->getUserIdentity() );
 	}
 }

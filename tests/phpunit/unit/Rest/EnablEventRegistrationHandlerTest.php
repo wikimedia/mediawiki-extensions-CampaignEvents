@@ -8,8 +8,8 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\EnableEventRegistrationHandler;
@@ -51,9 +51,9 @@ class EnablEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		return new EnableEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),
 			new PermissionChecker(
-				$this->createMock( UserBlockChecker::class ),
 				$this->createMock( OrganizersStore::class ),
-				$this->createMock( PageAuthorLookup::class )
+				$this->createMock( PageAuthorLookup::class ),
+				$this->createMock( CampaignsCentralUserLookup::class )
 			),
 			$editEventCmd ?? $this->getMockEditEventCommand(),
 			$userFactory ?? $this->getUserFactory( true )

@@ -12,11 +12,11 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -73,8 +73,6 @@ class EventPageDecorator {
 	private $participantsStore;
 	/** @var OrganizersStore */
 	private $organizersStore;
-	/** @var UserBlockChecker */
-	private $userBlockChecker;
 	/** @var PermissionChecker */
 	private $permissionChecker;
 	/** @var IMessageFormatterFactory */
@@ -83,35 +81,37 @@ class EventPageDecorator {
 	private $linkRenderer;
 	/** @var TitleFormatter */
 	private $titleFormatter;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
-	 * @param UserBlockChecker $userBlockChecker
 	 * @param PermissionChecker $permissionChecker
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param LinkRenderer $linkRenderer
 	 * @param TitleFormatter $titleFormatter
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
 		OrganizersStore $organizersStore,
-		UserBlockChecker $userBlockChecker,
 		PermissionChecker $permissionChecker,
 		IMessageFormatterFactory $messageFormatterFactory,
 		LinkRenderer $linkRenderer,
-		TitleFormatter $titleFormatter
+		TitleFormatter $titleFormatter,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
-		$this->userBlockChecker = $userBlockChecker;
 		$this->permissionChecker = $permissionChecker;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->linkRenderer = $linkRenderer;
 		$this->titleFormatter = $titleFormatter;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -143,12 +143,12 @@ class EventPageDecorator {
 		}
 
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
-		$userProxy = new MWUserProxy( $viewingUser, $viewingAuthority );
+		$authority = new MWAuthorityProxy( $viewingAuthority );
 		if ( $registration ) {
 			$this->addRegistrationHeader(
-				$registration, $out, $viewingUser, $userProxy, $msgFormatter, $language );
+				$registration, $out, $viewingUser, $authority, $msgFormatter, $language );
 		} else {
-			$this->maybeAddEnableRegistrationHeader( $out, $msgFormatter, $language, $userProxy, $campaignsPage );
+			$this->maybeAddEnableRegistrationHeader( $out, $msgFormatter, $language, $authority, $campaignsPage );
 		}
 	}
 
@@ -156,17 +156,17 @@ class EventPageDecorator {
 	 * @param OutputPage $out
 	 * @param ITextFormatter $msgFormatter
 	 * @param Language $language
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $authority
 	 * @param ICampaignsPage $eventPage
 	 */
 	private function maybeAddEnableRegistrationHeader(
 		OutputPage $out,
 		ITextFormatter $msgFormatter,
 		Language $language,
-		ICampaignsUser $user,
+		ICampaignsAuthority $authority,
 		ICampaignsPage $eventPage
 	): void {
-		if ( !$this->permissionChecker->userCanEnableRegistration( $user, $eventPage ) ) {
+		if ( !$this->permissionChecker->userCanEnableRegistration( $authority, $eventPage ) ) {
 			return;
 		}
 
@@ -243,7 +243,7 @@ class EventPageDecorator {
 	 * @param ExistingEventRegistration $registration
 	 * @param OutputPage $out
 	 * @param UserIdentity $viewingUser
-	 * @param ICampaignsUser $userProxy
+	 * @param ICampaignsAuthority $authority
 	 * @param ITextFormatter $msgFormatter
 	 * @param Language $language
 	 */
@@ -251,7 +251,7 @@ class EventPageDecorator {
 		ExistingEventRegistration $registration,
 		OutputPage $out,
 		UserIdentity $viewingUser,
-		ICampaignsUser $userProxy,
+		ICampaignsAuthority $authority,
 		ITextFormatter $msgFormatter,
 		Language $language
 	): void {
@@ -271,7 +271,7 @@ class EventPageDecorator {
 			'wgCampaignEventsEventID' => $registration->getID()
 		] );
 
-		$userStatus = $this->getUserStatus( $registration, $userProxy );
+		$userStatus = $this->getUserStatus( $registration, $authority );
 		$out->addHTML( $this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus ) );
 		$out->addHTML(
 			$this->getDetailsDialogContent( $registration, $msgFormatter, $language, $viewingUser, $userStatus )
@@ -664,19 +664,20 @@ class EventPageDecorator {
 
 	/**
 	 * @param ExistingEventRegistration $event
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @return int One of the SELF::USER_STATUS_* constants
 	 */
-	private function getUserStatus( ExistingEventRegistration $event, ICampaignsUser $user ): int {
-		if ( $this->userBlockChecker->isSitewideBlocked( $user ) ) {
+	private function getUserStatus( ExistingEventRegistration $event, ICampaignsAuthority $performer ): int {
+		if ( $performer->isSitewideBlocked() ) {
 			return self::USER_STATUS_BLOCKED;
 		}
 
-		if ( $this->organizersStore->isEventOrganizer( $event->getID(), $user ) ) {
+		$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		if ( $this->organizersStore->isEventOrganizer( $event->getID(), $centralUser ) ) {
 			return self::USER_STATUS_ORGANIZER;
 		}
 
-		if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $user ) ) {
+		if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $centralUser ) ) {
 			return UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $event )
 				? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
 				: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;

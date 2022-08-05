@@ -11,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\LocalizedHttpException;
-use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserNameUtils;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -20,11 +19,9 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	/** @var IEventLookup */
 	protected $eventLookup;
 	/** @var CampaignsCentralUserLookup */
-	protected $userLookup;
-	/** @var UserFactory */
-	protected $userFactory;
+	private $userLookup;
 	/** @var UserNameUtils */
-	protected $userNameUtils;
+	private $userNameUtils;
 
 	// TODO: Implement proper pagination (T305389)
 	protected const RES_LIMIT = 50;
@@ -32,19 +29,16 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param CampaignsCentralUserLookup $userLookup
-	 * @param UserFactory $userFactory
 	 * @param UserNameUtils $userNameUtils
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $userLookup,
-		UserFactory $userFactory,
 		UserNameUtils $userNameUtils
 
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->userLookup = $userLookup;
-		$this->userFactory = $userFactory;
 		$this->userNameUtils = $userNameUtils;
 	}
 
@@ -60,9 +54,7 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 			);
 		}
 
-		$targetAuthority = $this->userFactory->newFromUserIdentity( $params['user'] );
-
-		$user = new MWUserProxy( $params['user'], $targetAuthority );
+		$user = new MWUserProxy( $params['user'] );
 		$userID = $this->userLookup->getCentralID( $user );
 
 		return $this->getEventsByUser( $userID, self::RES_LIMIT );

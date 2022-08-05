@@ -5,14 +5,15 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Permissions;
 
 use Generator;
+use MediaWiki\Block\Block;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Permissions\SimpleAuthority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
@@ -25,70 +26,58 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	use MockAuthorityTrait;
 
 	/**
-	 * @param UserBlockChecker|null $blockChecker
 	 * @param OrganizersStore|null $organizersStore
 	 * @param PageAuthorLookup|null $pageAuthorLookup
 	 * @return PermissionChecker
 	 */
 	private function getPermissionChecker(
-		UserBlockChecker $blockChecker = null,
 		OrganizersStore $organizersStore = null,
 		PageAuthorLookup $pageAuthorLookup = null
 	): PermissionChecker {
 		return new PermissionChecker(
-			$blockChecker ?? $this->createMock( UserBlockChecker::class ),
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
-			$pageAuthorLookup ?? $this->createMock( PageAuthorLookup::class )
+			$pageAuthorLookup ?? $this->createMock( PageAuthorLookup::class ),
+			$this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 
 	/**
 	 * @param bool $expected
-	 * @param ICampaignsUser $user
-	 * @param UserBlockChecker|null $blockChecker
+	 * @param ICampaignsAuthority $performer
 	 * @covers ::userCanEnableRegistrations
 	 * @dataProvider provideCanEnableRegistrations
 	 */
 	public function testUserCanEnableRegistrations(
 		bool $expected,
-		ICampaignsUser $user,
-		UserBlockChecker $blockChecker = null
+		ICampaignsAuthority $performer
 	) {
 		$this->assertSame(
 			$expected,
-			$this->getPermissionChecker( $blockChecker )->userCanEnableRegistrations( $user )
+			$this->getPermissionChecker()->userCanEnableRegistrations( $performer )
 		);
 	}
 
 	public function provideCanEnableRegistrations(): Generator {
-		$registeredUser = new UserIdentityValue( 42, 'Name' );
 		yield 'Authorized' => [
 			true,
-			new MWUserProxy(
-				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
+			new MWAuthorityProxy(
+				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] )
 			)
 		];
 		yield 'Lacking right' => [
 			false,
-			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
 		];
 		yield 'Logged out' => [
 			false,
-			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
 		];
-		$blockedUser = new MWUserProxy( $registeredUser, $this->mockRegisteredUltimateAuthority() );
-		$blockChecker = $this->createMock( UserBlockChecker::class );
-		$blockChecker->expects( $this->atLeastOnce() )
-			->method( 'isSitewideBlocked' )
-			->with( $blockedUser )
-			->willReturn( true );
-		yield 'Blocked' => [ false, $blockedUser, $blockChecker ];
+		yield 'Blocked' => [ false, $this->mockSitewideBlockedRegisteredUltimateAuthority() ];
 	}
 
 	/**
 	 * @param bool $expected
-	 * @param ICampaignsUser $user
+	 * @param ICampaignsAuthority $performer
 	 * @param ICampaignsPage $page
 	 * @param PageAuthorLookup|null $pageAuthorLookup
 	 * @covers ::userCanEnableRegistration
@@ -96,25 +85,22 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 */
 	public function testUserCanEnableRegistration(
 		bool $expected,
-		ICampaignsUser $user,
+		ICampaignsAuthority $performer,
 		ICampaignsPage $page,
 		PageAuthorLookup $pageAuthorLookup = null
 	) {
 		$this->assertSame(
 			$expected,
-			$this->getPermissionChecker( null, null, $pageAuthorLookup )->userCanEnableRegistration( $user, $page )
+			$this->getPermissionChecker( null, $pageAuthorLookup )->userCanEnableRegistration( $performer, $page )
 		);
 	}
 
 	public function provideCanEnableRegistration(): Generator {
-		$registeredUserIdentity = new UserIdentityValue( 42, 'Name' );
-		$authorizedUser = new MWUserProxy(
-			$registeredUserIdentity,
-			new SimpleAuthority( $registeredUserIdentity, [ 'campaignevents-enable-registration' ] )
+		$authorizedUser = new MWAuthorityProxy(
+			$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] )
 		);
-		$unauthorizedUser = new MWUserProxy(
-			$registeredUserIdentity,
-			new SimpleAuthority( $registeredUserIdentity, [] )
+		$unauthorizedUser = new MWAuthorityProxy(
+			$this->mockRegisteredNullAuthority()
 		);
 
 		yield 'Cannot create registrations' => [
@@ -137,11 +123,13 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$notCreatedAuthorLookup
 		];
 
+		$pageAuthor = $this->createMock( ICampaignsUser::class );
+		$pageAuthor->expects( $this->atLeastOnce() )->method( 'equals' )->willReturn( true );
 		$createdAuthorLookup = $this->createMock( PageAuthorLookup::class );
 		$createdAuthorLookup->expects( $this->atLeastOnce() )
 			->method( 'getAuthor' )
 			->with( $testPage )
-			->willReturn( $authorizedUser );
+			->willReturn( $pageAuthor );
 		yield 'Authorized' => [
 			true,
 			$authorizedUser,
@@ -152,67 +140,54 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param bool $expected
-	 * @param ICampaignsUser $user
-	 * @param UserBlockChecker|null $blockChecker
+	 * @param ICampaignsAuthority $performer
 	 * @param OrganizersStore|null $organizersStore
 	 * @covers ::userCanEditRegistration
 	 * @dataProvider provideCanEditRegistration
 	 */
 	public function testUserCanEditRegistration(
 		bool $expected,
-		ICampaignsUser $user,
-		UserBlockChecker $blockChecker = null,
+		ICampaignsAuthority $performer,
 		OrganizersStore $organizersStore = null
 	) {
-		$checker = $this->getPermissionChecker( $blockChecker, $organizersStore );
+		$checker = $this->getPermissionChecker( $organizersStore );
 		$this->assertSame(
 			$expected,
-			$checker->userCanEditRegistration( $user, 42 )
+			$checker->userCanEditRegistration( $performer, 42 )
 		);
 	}
 
 	public function provideCanEditRegistration(): Generator {
-		$registeredUser = new UserIdentityValue( 42, 'Name' );
 		yield 'Logged out' => [
 			false,
-			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
 		];
 		yield 'Lacks right to enable registrations' => [
 			false,
-			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
 		];
-		$blockedUser = new MWUserProxy( $registeredUser, $this->mockRegisteredUltimateAuthority() );
-		$blockChecker = $this->createMock( UserBlockChecker::class );
-		$blockChecker->expects( $this->atLeastOnce() )
-			->method( 'isSitewideBlocked' )
-			->with( $blockedUser )
-			->willReturn( true );
 		yield 'Blocked' => [
 			false,
-			$blockedUser,
-			$blockChecker,
+			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
 		];
 		yield 'Not an organizer' => [
 			false,
-			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
 		];
 		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
 		$authorizedOrgStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
 		yield 'Authorized' => [
 			true,
-			new MWUserProxy(
-				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
+			new MWAuthorityProxy(
+				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] )
 			),
-			null,
 			$authorizedOrgStore
 		];
 	}
 
 	/**
 	 * @param bool $expected
-	 * @param ICampaignsUser $user
-	 * @param UserBlockChecker|null $blockChecker
+	 * @param ICampaignsAuthority $performer
 	 * @param OrganizersStore|null $organizersStore
 	 * @covers ::userCanDeleteRegistration
 	 * Reuses the data provider for convenience.
@@ -220,96 +195,88 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 */
 	public function testUserCanDeleteRegistration(
 		bool $expected,
-		ICampaignsUser $user,
-		UserBlockChecker $blockChecker = null,
+		ICampaignsAuthority $performer,
 		OrganizersStore $organizersStore = null
 	) {
-		$checker = $this->getPermissionChecker( $blockChecker, $organizersStore );
+		$checker = $this->getPermissionChecker( $organizersStore );
 		$this->assertSame(
 			$expected,
-			$checker->userCanDeleteRegistration( $user, 42 )
+			$checker->userCanDeleteRegistration( $performer, 42 )
 		);
 	}
 
 	public function provideCanDeleteRegistration(): Generator {
-		$registeredUser = new UserIdentityValue( 42, 'Name' );
 		yield 'Logged out but allowed' => [
 			true,
-			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
 		];
 		yield 'Lacks right to enable registrations' => [
 			false,
-			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
 		];
-		$blockedUser = new MWUserProxy( $registeredUser, $this->mockRegisteredUltimateAuthority() );
-		$blockChecker = $this->createMock( UserBlockChecker::class );
-		$blockChecker->expects( $this->atLeastOnce() )
-			->method( 'isSitewideBlocked' )
-			->with( $blockedUser )
-			->willReturn( true );
 		yield 'Blocked' => [
 			false,
-			$blockedUser,
-			$blockChecker,
+			$this->mockSitewideBlockedRegisteredUltimateAuthority()
 		];
 		yield 'Not an organizer' => [
 			false,
-			new MWUserProxy( $registeredUser, new SimpleAuthority( $registeredUser, [] ) )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
 		];
 		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
 		$authorizedOrgStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
 		yield 'Can edit the registration' => [
 			true,
-			new MWUserProxy(
-				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-enable-registration' ] )
+			new MWAuthorityProxy(
+				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] )
 			),
-			null,
 			$authorizedOrgStore
 		];
 		yield 'Can delete all registrations' => [
 			true,
-			new MWUserProxy(
-				$registeredUser,
-				new SimpleAuthority( $registeredUser, [ 'campaignevents-delete-registration' ] )
+			new MWAuthorityProxy(
+				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-delete-registration' ] )
 			)
 		];
 	}
 
 	/**
 	 * @param bool $expected
-	 * @param ICampaignsUser $user
-	 * @param UserBlockChecker|null $blockChecker
+	 * @param ICampaignsAuthority $performer
 	 * @covers ::userCanRegisterForEvents
 	 * @dataProvider provideCanRegisterForEvents
 	 */
 	public function testUserCanRegisterForEvents(
 		bool $expected,
-		ICampaignsUser $user,
-		UserBlockChecker $blockChecker = null
+		ICampaignsAuthority $performer
 	) {
 		$this->assertSame(
 			$expected,
-			$this->getPermissionChecker( $blockChecker )->userCanRegisterForEvents( $user )
+			$this->getPermissionChecker()->userCanRegisterForEvents( $performer )
 		);
 	}
 
 	public function provideCanRegisterForEvents(): Generator {
-		$registeredUser = new UserIdentityValue( 42, 'Name' );
 		yield 'Authorized' => [
 			true,
-			new MWUserProxy( $registeredUser, $this->mockRegisteredUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() )
 		];
 		yield 'Logged out' => [
 			false,
-			new MWUserProxy( new UserIdentityValue( 0, '1.1.1.1' ), $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
 		];
-		$blockedUser = new MWUserProxy( $registeredUser, $this->mockRegisteredUltimateAuthority() );
-		$blockChecker = $this->createMock( UserBlockChecker::class );
-		$blockChecker->expects( $this->atLeastOnce() )
-			->method( 'isSitewideBlocked' )
-			->with( $blockedUser )
-			->willReturn( true );
-		yield 'Blocked' => [ false, $blockedUser, $blockChecker ];
+		yield 'Blocked' => [ false, $this->mockSitewideBlockedRegisteredUltimateAuthority() ];
+	}
+
+	private function mockSitewideBlockedRegisteredUltimateAuthority(): ICampaignsAuthority {
+		$block = $this->createMock( Block::class );
+		$block->expects( $this->atLeastOnce() )->method( 'isSitewide' )->willReturn( true );
+		$authority = $this->mockAuthority(
+			new UserIdentityValue( 42, 'Test' ),
+			static function () {
+				return true;
+			},
+			$block
+		);
+		return new MWAuthorityProxy( $authority );
 	}
 }

@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStoreFactory;
-use MediaWiki\User\UserFactory;
 use UnexpectedValueException;
 
 /**
@@ -17,16 +16,12 @@ class PageAuthorLookup {
 
 	/** @var RevisionStoreFactory */
 	private $revisionStoreFactory;
-	/** @var UserFactory */
-	private $userFactory;
 
 	/**
 	 * @param RevisionStoreFactory $revisionStoreFactory
-	 * @param UserFactory $userFactory
 	 */
-	public function __construct( RevisionStoreFactory $revisionStoreFactory, UserFactory $userFactory ) {
+	public function __construct( RevisionStoreFactory $revisionStoreFactory ) {
 		$this->revisionStoreFactory = $revisionStoreFactory;
-		$this->userFactory = $userFactory;
 	}
 
 	/**
@@ -47,6 +42,6 @@ class PageAuthorLookup {
 		if ( !$userIdentity ) {
 			return null;
 		}
-		return new MWUserProxy( $userIdentity, $this->userFactory->newFromUserIdentity( $userIdentity ) );
+		return new MWUserProxy( $userIdentity );
 	}
 }

@@ -17,7 +17,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
@@ -64,9 +63,9 @@ return [
 	},
 	PermissionChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): PermissionChecker {
 		return new PermissionChecker(
-			$services->get( UserBlockChecker::SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
-			$services->get( PageAuthorLookup::SERVICE_NAME )
+			$services->get( PageAuthorLookup::SERVICE_NAME ),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
@@ -97,12 +96,8 @@ return [
 			$services->get( IEventStore::STORE_SERVICE_NAME ),
 			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
-			$services->get( PermissionChecker::SERVICE_NAME )
-		);
-	},
-	UserBlockChecker::SERVICE_NAME => static function ( MediaWikiServices $services ): UserBlockChecker {
-		return new UserBlockChecker(
-			$services->getUserFactory()
+			$services->get( PermissionChecker::SERVICE_NAME ),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {
@@ -120,14 +115,16 @@ return [
 		static function ( MediaWikiServices $services ): RegisterParticipantCommand {
 			return new RegisterParticipantCommand(
 				$services->get( ParticipantsStore::SERVICE_NAME ),
-				$services->get( PermissionChecker::SERVICE_NAME )
+				$services->get( PermissionChecker::SERVICE_NAME ),
+				$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 			);
 		},
 	UnregisterParticipantCommand::SERVICE_NAME =>
 		static function ( MediaWikiServices $services ): UnregisterParticipantCommand {
 			return new UnregisterParticipantCommand(
 				$services->get( ParticipantsStore::SERVICE_NAME ),
-				$services->get( PermissionChecker::SERVICE_NAME )
+				$services->get( PermissionChecker::SERVICE_NAME ),
+				$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 			);
 		},
 	EventsPagerFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventsPagerFactory {
@@ -143,11 +140,11 @@ return [
 			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
 			$services->get( ParticipantsStore::SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
-			$services->get( UserBlockChecker::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
 			$services->getMessageFormatterFactory(),
 			$services->getLinkRenderer(),
-			$services->getTitleFormatter()
+			$services->getTitleFormatter(),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 	CampaignEventsHookRunner::SERVICE_NAME =>
@@ -173,8 +170,7 @@ return [
 	},
 	PageAuthorLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PageAuthorLookup {
 		return new PageAuthorLookup(
-			$services->getRevisionStoreFactory(),
-			$services->getUserFactory()
+			$services->getRevisionStoreFactory()
 		);
 	},
 ];

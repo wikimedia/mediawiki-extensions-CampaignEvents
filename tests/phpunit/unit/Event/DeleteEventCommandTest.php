@@ -8,9 +8,9 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserBlockChecker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
@@ -34,9 +34,9 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 		return new DeleteEventCommand(
 			$eventStore ?? $this->createMock( IEventStore::class ),
 			$permChecker ?? new PermissionChecker(
-				$this->createMock( UserBlockChecker::class ),
 				$this->createMock( OrganizersStore::class ),
-				$this->createMock( PageAuthorLookup::class )
+				$this->createMock( PageAuthorLookup::class ),
+				$this->createMock( CampaignsCentralUserLookup::class )
 			)
 		);
 	}
@@ -50,7 +50,7 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanDeleteRegistration' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->deleteIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -74,7 +74,7 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanDeleteRegistration' )->willReturn( true );
 		$status = $this->getCommand( $store, $permChecker )->deleteIfAllowed(
 			$registration,
-			$this->createMock( ICampaignsUser::class )
+			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedVal, $status );

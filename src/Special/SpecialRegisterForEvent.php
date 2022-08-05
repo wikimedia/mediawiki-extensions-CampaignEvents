@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use Html;
 use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
@@ -81,7 +82,10 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
-		return Status::wrap( $this->registerParticipantCommand->registerIfAllowed( $this->event, $this->mwUser ) );
+		return Status::wrap( $this->registerParticipantCommand->registerIfAllowed(
+			$this->event,
+			new MWAuthorityProxy( $this->getAuthority() )
+		) );
 	}
 
 	/**

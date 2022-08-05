@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\Rest\ListEventsByParticipantHandler;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
-use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentityValue;
 use MediaWiki\User\UserNameUtils;
 use MediaWikiUnitTestCase;
@@ -42,17 +41,11 @@ class ListEventsByParticipantHandlerTest extends MediaWikiUnitTestCase {
 		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$userLookup->method( "getCentralID" )->willReturn( 1 );
 
-		$userFactory = $this->createMock( UserFactory::class );
-		$userNameUtils = $this->createMock( UserNameUtils::class );
-
-		$handler = new ListEventsByParticipantHandler(
+		return new ListEventsByParticipantHandler(
 			$eventLookup,
 			$userLookup,
-			$userFactory,
-			$userNameUtils
+			$this->createMock( UserNameUtils::class )
 		);
-
-		return $handler;
 	}
 
 	/**
