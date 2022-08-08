@@ -49,7 +49,7 @@ class ListOrganizersHandler extends SimpleHandler {
 		$respVal = [];
 		foreach ( $organizers as $organizer ) {
 			$respVal[] = [
-				'user_id' => $organizer->getUser()->getLocalID(),
+				'user_id' => $organizer->getUser()->getCentralID(),
 				// TODO Should these be localized? It doesn't seem possible right now anyway (T269492)
 				'roles' => array_map( [ $this->roleFormatter, 'getDebugName' ], $organizer->getRoles() )
 			];

@@ -4,22 +4,34 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use Html;
 use HTMLForm;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPager;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use SpecialPage;
 
 class SpecialMyEvents extends SpecialPage {
 	public const PAGE_NAME = 'MyEvents';
+
 	/** @var EventsPagerFactory */
 	private $eventsPagerFactory;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
 
 	/**
 	 * @param EventsPagerFactory $eventsPagerFactory
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
-	public function __construct( EventsPagerFactory $eventsPagerFactory ) {
+	public function __construct(
+		EventsPagerFactory $eventsPagerFactory,
+		CampaignsCentralUserLookup $centralUserLookup
+	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventsPagerFactory = $eventsPagerFactory;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -39,9 +51,18 @@ class SpecialMyEvents extends SpecialPage {
 		$searchedVal = $request->getVal( 'wpSearch', '' );
 		$status = $request->getVal( 'wpStatus', EventsPager::STATUS_ANY );
 
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+		} catch ( UserNotGlobalException $_ ) {
+			$this->getOutput()->addHTML( Html::errorBox(
+				$this->msg( 'campaignevents-myevents-need-central-account' )->escaped()
+			) );
+			return;
+		}
 		$pager = $this->eventsPagerFactory->newPager(
 			$this->getContext(),
 			$this->getLinkRenderer(),
+			$centralUser,
 			$searchedVal,
 			$status
 		);

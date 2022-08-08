@@ -7,7 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use Html;
 use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
@@ -25,17 +27,19 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 	/**
 	 * @param IEventLookup $eventLookup
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
 	 * @param ParticipantsStore $participantsStore
 	 * @param PolicyMessageLookup $policyMessageLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
+		CampaignsCentralUserLookup $centralUserLookup,
 		RegisterParticipantCommand $registerParticipantCommand,
 		ParticipantsStore $participantsStore,
 		PolicyMessageLookup $policyMessageLookup
 	) {
-		parent::__construct( self::PAGE_NAME, $eventLookup );
+		parent::__construct( self::PAGE_NAME, $eventLookup, $centralUserLookup );
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->participantsStore = $participantsStore;
 		$this->policyMessageLookup = $policyMessageLookup;
@@ -45,7 +49,16 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	protected function checkRegistrationPrecondition() {
-		$isParticipating = $this->participantsStore->userParticipatesToEvent( $this->event->getID(), $this->mwUser );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+			$isParticipating = $this->participantsStore->userParticipatesToEvent(
+				$this->event->getID(),
+				$centralUser
+			);
+		} catch ( UserNotGlobalException $_ ) {
+			$isParticipating = false;
+		}
+
 		return $isParticipating ? 'campaignevents-register-already-participant' : true;
 	}
 

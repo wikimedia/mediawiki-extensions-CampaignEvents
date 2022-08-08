@@ -11,8 +11,9 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsModule;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsParticipantsModule;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
@@ -37,34 +38,34 @@ class SpecialEventDetails extends SpecialPage {
 	private $organizersStore;
 	/** @var PageURLResolver */
 	private $pageURLResolver;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
 	/** @var IMessageFormatterFactory */
 	private $messageFormatterFactory;
+	/** @var CampaignsCentralUserLookup */
+	private $centralUserLookup;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
 	 * @param PageURLResolver $pageURLResolver
-	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param IMessageFormatterFactory $messageFormatterFactory
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
 		OrganizersStore $organizersStore,
 		PageURLResolver $pageURLResolver,
-		CampaignsCentralUserLookup $centralUserLookup,
-		IMessageFormatterFactory $messageFormatterFactory
+		IMessageFormatterFactory $messageFormatterFactory,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
 		$this->pageURLResolver = $pageURLResolver;
-		$this->centralUserLookup = $centralUserLookup;
 		$this->messageFormatterFactory = $messageFormatterFactory;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -95,7 +96,6 @@ class SpecialEventDetails extends SpecialPage {
 
 		$out = $this->getOutput();
 		$language = $this->getLanguage();
-		$viewingUser = $this->getUser();
 
 		$out->enableOOUI();
 		$out->addModuleStyles(
@@ -113,9 +113,13 @@ class SpecialEventDetails extends SpecialPage {
 		$eventID = $this->event->getID();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 
-		$userProxy = new MWUserProxy( $viewingUser );
-		$isOrganizer = $this->organizersStore->isEventOrganizer( $eventID, $userProxy );
-		$isParticipant = $this->participantsStore->userParticipatesToEvent( $eventID, $userProxy );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+			$isOrganizer = $this->organizersStore->isEventOrganizer( $eventID, $centralUser );
+			$isParticipant = $this->participantsStore->userParticipatesToEvent( $eventID, $centralUser );
+		} catch ( UserNotGlobalException $_ ) {
+			$isOrganizer = $isParticipant = false;
+		}
 
 		$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
 		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
@@ -156,7 +160,7 @@ class SpecialEventDetails extends SpecialPage {
 		$main->appendContent(
 			( new EventDetailsParticipantsModule() )->createContent(
 				$language,
-				$userProxy,
+				$this->getUser(),
 				$participants,
 				$totalParticipants,
 				$msgFormatter,
@@ -169,7 +173,7 @@ class SpecialEventDetails extends SpecialPage {
 			( new EventDetailsModule() )->createContent(
 				$language,
 				$this->event,
-				$userProxy,
+				$this->getUser(),
 				$msgFormatter,
 				$isOrganizer,
 				$isParticipant,

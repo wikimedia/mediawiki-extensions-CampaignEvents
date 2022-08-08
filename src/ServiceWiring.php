@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
@@ -81,14 +82,12 @@ return [
 	},
 	ParticipantsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): ParticipantsStore {
 		return new ParticipantsStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
 	OrganizersStore::SERVICE_NAME => static function ( MediaWikiServices $services ): OrganizersStore {
 		return new OrganizersStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
 	EditEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): EditEventCommand {
@@ -130,7 +129,6 @@ return [
 	EventsPagerFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventsPagerFactory {
 		return new EventsPagerFactory(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( CampaignsPageFactory::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME )
 		);
@@ -144,7 +142,8 @@ return [
 			$services->getMessageFormatterFactory(),
 			$services->getLinkRenderer(),
 			$services->getTitleFormatter(),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( UserLinker::SERVICE_NAME )
 		);
 	},
 	CampaignEventsHookRunner::SERVICE_NAME =>
@@ -170,7 +169,13 @@ return [
 	},
 	PageAuthorLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PageAuthorLookup {
 		return new PageAuthorLookup(
-			$services->getRevisionStoreFactory()
+			$services->getRevisionStoreFactory(),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+		);
+	},
+	UserLinker::SERVICE_NAME => static function ( MediaWikiServices $services ): UserLinker {
+		return new UserLinker(
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 ];

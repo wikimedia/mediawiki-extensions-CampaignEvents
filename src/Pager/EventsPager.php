@@ -9,11 +9,10 @@ use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
@@ -34,12 +33,13 @@ class EventsPager extends TablePager {
 		'num_participants' => [ 'num_participants', 'event_start', 'event_id' ],
 	];
 
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
 	/** @var CampaignsPageFactory */
 	private $campaignsPageFactory;
 	/** @var PageURLResolver */
 	private $pageURLResolver;
+
+	/** @var CentralUser */
+	private $centralUser;
 
 	/** @var string */
 	private $search;
@@ -53,9 +53,9 @@ class EventsPager extends TablePager {
 	 * @param IContextSource $context
 	 * @param LinkRenderer $linkRenderer
 	 * @param CampaignsDatabaseHelper $databaseHelper
-	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param PageURLResolver $pageURLResolver
+	 * @param CentralUser $user
 	 * @param string $search
 	 * @param string $status One of the self::STATUS_* constants
 	 */
@@ -63,9 +63,9 @@ class EventsPager extends TablePager {
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
 		CampaignsDatabaseHelper $databaseHelper,
-		CampaignsCentralUserLookup $centralUserLookup,
 		CampaignsPageFactory $campaignsPageFactory,
 		PageURLResolver $pageURLResolver,
+		CentralUser $user,
 		string $search,
 		string $status
 	) {
@@ -76,9 +76,9 @@ class EventsPager extends TablePager {
 		}
 		$this->mDb = $dbWrapper->getMWDatabase();
 		parent::__construct( $context, $linkRenderer );
-		$this->centralUserLookup = $centralUserLookup;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->pageURLResolver = $pageURLResolver;
+		$this->centralUser = $user;
 		$this->search = $search;
 		$this->status = $status;
 	}
@@ -109,8 +109,6 @@ class EventsPager extends TablePager {
 				// Invalid statuses can only be entered by messing with the HTML or query params, ignore.
 		}
 
-		$campaignsUser = new MWUserProxy( $this->getUser() );
-
 		// Use a subquery and a temporary table to work around IndexPager not using HAVING for aggregates (T308694)
 		// and to support postgres (which doesn't allow aliases in HAVING).
 		$subquery = $this->mDb->buildSelectSubquery(
@@ -132,7 +130,7 @@ class EventsPager extends TablePager {
 				[
 					'event_deleted_at' => null,
 					'cep_unregistered_at' => null,
-					'ceo_user_id' => $this->centralUserLookup->getCentralID( $campaignsUser )
+					'ceo_user_id' => $this->centralUser->getCentralID()
 				]
 			),
 			__METHOD__,

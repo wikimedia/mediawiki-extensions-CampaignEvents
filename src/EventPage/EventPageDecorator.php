@@ -13,10 +13,14 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -83,6 +87,8 @@ class EventPageDecorator {
 	private $titleFormatter;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var UserLinker */
+	private $userLinker;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -93,6 +99,7 @@ class EventPageDecorator {
 	 * @param LinkRenderer $linkRenderer
 	 * @param TitleFormatter $titleFormatter
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param UserLinker $userLinker
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -102,7 +109,8 @@ class EventPageDecorator {
 		IMessageFormatterFactory $messageFormatterFactory,
 		LinkRenderer $linkRenderer,
 		TitleFormatter $titleFormatter,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		UserLinker $userLinker
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
@@ -112,6 +120,7 @@ class EventPageDecorator {
 		$this->linkRenderer = $linkRenderer;
 		$this->titleFormatter = $titleFormatter;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->userLinker = $userLinker;
 	}
 
 	/**
@@ -257,15 +266,16 @@ class EventPageDecorator {
 	): void {
 		$out->setPreventClickjacking( true );
 		$out->enableOOUI();
-		$out->addModuleStyles( [
-			'ext.campaignEvents.eventpage.styles',
-			// Needed by Linker::userLink
-			'mediawiki.interface.helpers.styles',
-			'oojs-ui.styles.icons-location',
-			'oojs-ui.styles.icons-interactions',
-			'oojs-ui.styles.icons-moderation',
-			'oojs-ui.styles.icons-user'
-		] );
+		$out->addModuleStyles( array_merge(
+			[
+				'ext.campaignEvents.eventpage.styles',
+				'oojs-ui.styles.icons-location',
+				'oojs-ui.styles.icons-interactions',
+				'oojs-ui.styles.icons-moderation',
+				'oojs-ui.styles.icons-user'
+			],
+			UserLinker::MODULE_STYLES
+		) );
 		$out->addModules( [ 'ext.campaignEvents.eventpage' ] );
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $registration->getID()
@@ -392,7 +402,7 @@ class EventPageDecorator {
 	 * client side, for the following reasons:
 	 * - There's no way to format dates according to the user preferences (T21992)
 	 * - There's no easy way to get the directionality of a language (T181684)
-	 * - Other utilities are missing (e.g., Linker::userLink)
+	 * - Other utilities are missing (e.g., generating user links)
 	 * - Secondarily, no need to make 3 API requests and worry about them failing.
 	 *
 	 * @param ExistingEventRegistration $registration
@@ -416,7 +426,11 @@ class EventPageDecorator {
 		$organizerLinks = [];
 		foreach ( $partialOrganizers as $organizer ) {
 			$organizerUser = $organizer->getUser();
-			$organizerLinks[] = Linker::userLink( $organizerUser->getLocalID(), $organizerUser->getName() );
+			try {
+				$organizerLinks[] = $this->userLinker->generateUserLink( $organizerUser );
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+				// Skip it.
+			}
 		}
 		$organizersStr = $msgFormatter->format(
 			MessageValue::new( 'campaignevents-eventpage-dialog-organizers' )->commaListParams( $organizerLinks )
@@ -538,11 +552,12 @@ class EventPageDecorator {
 		if ( $partialParticipants ) {
 			$participantsList .= Html::openElement( 'ul' );
 			foreach ( $partialParticipants as $participant ) {
-				$participantsList .= Html::rawElement(
-					'li',
-					[],
-					Linker::userLink( $participant->getUser()->getLocalID(), $participant->getUser()->getName() )
-				);
+				try {
+					$userLink = $this->userLinker->generateUserLink( $participant->getUser() );
+				} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+					continue;
+				}
+				$participantsList .= Html::rawElement( 'li', [], $userLink );
 			}
 			$participantsList .= Html::closeElement( 'ul' );
 			if ( count( $partialParticipants ) < $participantsCount ) {
@@ -672,15 +687,18 @@ class EventPageDecorator {
 			return self::USER_STATUS_BLOCKED;
 		}
 
-		$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		if ( $this->organizersStore->isEventOrganizer( $event->getID(), $centralUser ) ) {
-			return self::USER_STATUS_ORGANIZER;
-		}
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+			if ( $this->organizersStore->isEventOrganizer( $event->getID(), $centralUser ) ) {
+				return self::USER_STATUS_ORGANIZER;
+			}
 
-		if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $centralUser ) ) {
-			return UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $event )
-				? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
-				: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;
+			if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $centralUser ) ) {
+				return UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $event )
+					? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
+					: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;
+			}
+		} catch ( UserNotGlobalException $_ ) {
 		}
 
 		// User is logged-in and not already participating, or logged-out, in which case we'll know better

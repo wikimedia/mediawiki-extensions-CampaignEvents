@@ -5,37 +5,28 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\LocalUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
 class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
 
 	/** @var CampaignsDatabaseHelper */
 	private $dbHelper;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
 
 	/**
 	 * @param CampaignsDatabaseHelper $dbHelper
-	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
-	public function __construct( CampaignsDatabaseHelper $dbHelper, CampaignsCentralUserLookup $centralUserLookup ) {
+	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
 		$this->dbHelper = $dbHelper;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
 	 * @param int $eventID
-	 * @param ICampaignsUser $participant
+	 * @param CentralUser $participant
 	 * @return bool True if the participant was just added, false if they were already listed.
-	 * @throws CentralUserNotFoundException If passed a logged-out user.
 	 */
-	public function addParticipantToEvent( int $eventID, ICampaignsUser $participant ): bool {
+	public function addParticipantToEvent( int $eventID, CentralUser $participant ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$centralID = $this->centralUserLookup->getCentralID( $participant );
 		// TODO: Would be great if we could do this without opening an atomic section (T304680)
 		$dbw->startAtomic();
 		$previousRow = $dbw->selectRow(
@@ -43,7 +34,7 @@ class ParticipantsStore {
 			'*',
 			[
 				'cep_event_id' => $eventID,
-				'cep_user_id' => $centralID,
+				'cep_user_id' => $participant->getCentralID(),
 				'cep_unregistered_at' => null
 			],
 			[ 'FOR UPDATE' ]
@@ -55,7 +46,7 @@ class ParticipantsStore {
 				'ce_participants',
 				[
 					'cep_event_id' => $eventID,
-					'cep_user_id' => $centralID,
+					'cep_user_id' => $participant->getCentralID(),
 					'cep_registered_at' => $dbw->timestamp(),
 					'cep_unregistered_at' => null
 				],
@@ -72,25 +63,23 @@ class ParticipantsStore {
 
 	/**
 	 * @param int $eventID
-	 * @param ICampaignsUser $participant
+	 * @param CentralUser $participant
 	 * @return bool True if the participant was removed, false if they never registered or
 	 * they registered but then unregistered.
-	 * @throws CentralUserNotFoundException If passed a logged-out user.
 	 */
-	public function removeParticipantFromEvent( int $eventID, ICampaignsUser $participant ): bool {
-		$userID = [ $this->centralUserLookup->getCentralID( $participant ) ];
-		$affectedRows = $this->removeParticipantsFromEvent( $eventID, $userID );
+	public function removeParticipantFromEvent( int $eventID, CentralUser $participant ): bool {
+		$affectedRows = $this->removeParticipantsFromEvent( $eventID, [ $participant ] );
 		return $affectedRows > 0;
 	}
 
 	/**
 	 * @param int $eventID
-	 * @param array|null $userIDs array of int userIDs, if null remove all participants,
-	 * if is an empty array do nothing and return 0
+	 * @param CentralUser[]|null $users Array of users, if null remove all participants,
+	 * if is an empty array do nothing and return 0.
 	 * @return int number of participant(s) removed
 	 */
-	public function removeParticipantsFromEvent( int $eventID, array $userIDs = null ): int {
-		if ( is_array( $userIDs ) && !$userIDs ) {
+	public function removeParticipantsFromEvent( int $eventID, array $users = null ): int {
+		if ( is_array( $users ) && !$users ) {
 			return 0;
 		}
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
@@ -99,8 +88,10 @@ class ParticipantsStore {
 			'cep_event_id' => $eventID,
 			'cep_unregistered_at' => null
 		];
-		if ( $userIDs ) {
-			$where[ 'cep_user_id' ] = $userIDs;
+		if ( $users ) {
+			$where['cep_user_id'] = array_map( static function ( CentralUser $user ): int {
+				return $user->getCentralID();
+			}, $users );
 		}
 
 		$dbw->update(
@@ -138,15 +129,11 @@ class ParticipantsStore {
 
 		$participants = [];
 		foreach ( $rows as $participant ) {
-			try {
-				$participants[] = new Participant(
-					$this->centralUserLookup->getLocalUser( (int)$participant->cep_user_id ),
-					wfTimestamp( TS_UNIX, $participant->cep_registered_at ),
-					(int)$participant->cep_id
-				);
-			} catch ( LocalUserNotFoundException $_ ) {
-				// Most probably a deleted user, skip it.
-			}
+			$participants[] = new Participant(
+				new CentralUser( (int)$participant->cep_user_id ),
+				wfTimestamp( TS_UNIX, $participant->cep_registered_at ),
+				(int)$participant->cep_id
+			);
 		}
 
 		return $participants;
@@ -173,24 +160,19 @@ class ParticipantsStore {
 
 	/**
 	 * Returns whether the given user participates to the event. Note that this returns false if the user was
-	 * participating but then unregistered. Returns false if the user is not registered.
+	 * participating but then unregistered.
 	 * @param int $eventID
-	 * @param ICampaignsUser $user
+	 * @param CentralUser $user
 	 * @return bool
 	 */
-	public function userParticipatesToEvent( int $eventID, ICampaignsUser $user ): bool {
-		if ( !$user->isRegistered() ) {
-			return false;
-		}
-
-		$userCentralID = $this->centralUserLookup->getCentralID( $user );
+	public function userParticipatesToEvent( int $eventID, CentralUser $user ): bool {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$row = $dbr->selectRow(
 			'ce_participants',
 			'*',
 			[
 				'cep_event_id' => $eventID,
-				'cep_user_id' => $userCentralID,
+				'cep_user_id' => $user->getCentralID(),
 				'cep_unregistered_at' => null,
 			]
 		);

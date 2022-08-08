@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
@@ -29,13 +30,19 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param IEventStore|null $eventStore
 	 * @param PermissionChecker|null $permChecker
 	 * @param IEventLookup|null $eventLookup
+	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @return EditEventCommand
 	 */
 	private function getCommand(
 		IEventStore $eventStore = null,
 		PermissionChecker $permChecker = null,
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		CampaignsCentralUserLookup $centralUserLookup = null
 	): EditEventCommand {
+		if ( !$eventStore ) {
+			$eventStore = $this->createMock( IEventStore::class );
+			$eventStore->method( 'saveRegistration' )->willReturn( StatusValue::newGood() );
+		}
 		if ( !$eventLookup ) {
 			$eventLookup = $this->createMock( IEventLookup::class );
 			$eventLookup->method( 'getEventByPage' )
@@ -47,11 +54,11 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$permChecker->method( 'userCanEditRegistration' )->willReturn( true );
 		}
 		return new EditEventCommand(
-			$eventStore ?? $this->createMock( IEventStore::class ),
+			$eventStore,
 			$eventLookup,
 			$this->createMock( OrganizersStore::class ),
 			$permChecker,
-			$this->createMock( CampaignsCentralUserLookup::class )
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 
@@ -193,21 +200,46 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param EventRegistration $registration
+	 * @param string $expectedMsg
+	 * @param IEventStore|null $eventStore
+	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @covers ::doEditUnsafe
-	 * @dataProvider provideEventRegistrations
+	 * @dataProvider provideEditUnsafeErrors
 	 */
-	public function testDoEditUnsafe__error( EventRegistration $registration ) {
-		$errMsg = 'foo-bar';
-		$eventStore = $this->createMock( IEventStore::class );
-		$eventStore->expects( $this->once() )
-			->method( 'saveRegistration' )
-			->willReturn( StatusValue::newFatal( $errMsg ) );
-		$status = $this->getCommand( $eventStore )->doEditUnsafe(
+	public function testDoEditUnsafe__error(
+		EventRegistration $registration,
+		string $expectedMsg,
+		IEventStore $eventStore = null,
+		CampaignsCentralUserLookup $centralUserLookup = null
+	) {
+		$status = $this->getCommand( $eventStore, null, null, $centralUserLookup )->doEditUnsafe(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusNotGood( $status );
-		$this->assertStatusMessage( $errMsg, $status );
+		$this->assertStatusMessage( $expectedMsg, $status );
+	}
+
+	public function provideEditUnsafeErrors(): Generator {
+		$registrations = $this->provideEventRegistrations();
+		foreach ( $registrations as $testName => [ $registration ] ) {
+			$storeError = 'some-store-error';
+			$eventStore = $this->createMock( IEventStore::class );
+			$eventStore->expects( $this->once() )
+				->method( 'saveRegistration' )
+				->willReturn( StatusValue::newFatal( $storeError ) );
+			yield "$testName, store error" => [ $registration, $storeError, $eventStore ];
+
+			$notGlobalLookup = $this->createMock( CampaignsCentralUserLookup::class );
+			$notGlobalLookup->method( 'newFromAuthority' )
+				->willThrowException( $this->createMock( UserNotGlobalException::class ) );
+			yield "$testName, user not global" => [
+				$registration,
+				'campaignevents-edit-need-central-account',
+				null,
+				$notGlobalLookup
+			];
+		}
 	}
 
 	/**

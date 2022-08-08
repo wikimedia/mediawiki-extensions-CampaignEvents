@@ -4,10 +4,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
 class Participant {
-	/** @var ICampaignsUser */
+	/** @var CentralUser */
 	private $user;
 	/** @var string */
 	private $registeredAt;
@@ -15,20 +15,20 @@ class Participant {
 	private $participantID;
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param CentralUser $user
 	 * @param string $registeredAt Timestamp in the TS_UNIX format
 	 * @param int $participantID participant_id, ID generated when a participant register for an event
 	 */
-	public function __construct( ICampaignsUser $user, string $registeredAt, int $participantID ) {
+	public function __construct( CentralUser $user, string $registeredAt, int $participantID ) {
 		$this->user = $user;
 		$this->registeredAt = $registeredAt;
 		$this->participantID = $participantID;
 	}
 
 	/**
-	 * @return ICampaignsUser
+	 * @return CentralUser
 	 */
-	public function getUser(): ICampaignsUser {
+	public function getUser(): CentralUser {
 		return $this->user;
 	}
 

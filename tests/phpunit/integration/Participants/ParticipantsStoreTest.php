@@ -6,8 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Participants;
 
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWikiIntegrationTestCase;
 use MWTimestamp;
@@ -63,14 +62,9 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideParticipantsToStore
 	 */
 	public function testAddParticipantToEvent( int $eventID, int $userID, bool $expected ) {
-		$user = $this->createMock( ICampaignsUser::class );
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getCentralID' )
-			->with( $user )
-			->willReturn( $userID );
+		$user = new CentralUser( $userID );
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertSame( $expected, $store->addParticipantToEvent( $eventID, $user ) );
 	}
@@ -90,14 +84,9 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideParticipantsToRemove
 	 */
 	public function testRemoveParticipantFromEvent( int $eventID, int $userID, bool $expected ) {
-		$user = $this->createMock( ICampaignsUser::class );
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getCentralID' )
-			->with( $user )
-			->willReturn( $userID );
+		$user = new CentralUser( $userID );
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertSame( $expected, $store->removeParticipantFromEvent( $eventID, $user ) );
 	}
@@ -115,14 +104,9 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	public function testRegistrationTimestamp() {
 		$eventID = 42;
 		$userID = 100;
-		$user = $this->createMock( ICampaignsUser::class );
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getCentralID' )
-			->with( $user )
-			->willReturn( $userID );
+		$user = new CentralUser( $userID );
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$getActualTS = function () use ( $eventID, $userID ): ?string {
 			$ts = $this->db->selectField(
@@ -164,27 +148,18 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	public function testGetEventParticipants(
 		int $eventID,
 		array $expectedParticipants,
-		$limit = null,
-		$offset = null
+		int $limit = null,
+		int $offset = null
 	) {
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getLocalUser' )
-		->willReturnCallback( function ( int $centralID ) {
-			$user = $this->createMock( ICampaignsUser::class );
-			$user->method( 'getLocalID' )->willReturn( $centralID );
-			return $user;
-		} );
-
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 
 		$actualUsers = $store->getEventParticipants( $eventID, $limit, $offset );
 
-		$this->assertSame( count( $actualUsers ), count( $expectedParticipants ) );
+		$this->assertCount( count( $actualUsers ), $expectedParticipants );
 		foreach ( $actualUsers as $participant ) {
-			$participantID = $participant->getUser()->getLocalID();
+			$participantID = $participant->getUser()->getCentralID();
 			$this->assertSame(
 				wfTimestamp( TS_UNIX, $expectedParticipants[ $participantID ][ 'registeredAt' ] ),
 				$participant->getRegisteredAt()
@@ -225,8 +200,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testGetEventParticipants__limit() {
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$this->createMock( CampaignsCentralUserLookup::class )
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertCount( 2, $store->getEventParticipants( 1 ), 'precondition' );
 		$limit = 0;
@@ -237,13 +211,9 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::userParticipatesToEvent
 	 */
 	public function testUserParticipatesToEvent() {
-		$participant = $this->createMock( ICampaignsUser::class );
-		$participant->method( 'isRegistered' )->willReturn( true );
-		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$centralUserLookup->method( 'getCentralID' )->with( $participant )->willReturn( 1234 );
+		$participant = new CentralUser( 1234 );
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$centralUserLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$eventID = 42;
 		$this->assertFalse( $store->userParticipatesToEvent( $eventID, $participant ), 'precondition' );
@@ -259,8 +229,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testGetParticipantCountForEvent( int $event, int $expected ) {
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$this->createMock( CampaignsCentralUserLookup::class )
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertSame( $expected, $store->getParticipantCountForEvent( $event ) );
 	}
@@ -284,18 +253,16 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		?array $userIDs,
 		int $expected
 	) {
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$store = new ParticipantsStore(
-			CampaignEventsServices::getDatabaseHelper(),
-			$userLookup
+			CampaignEventsServices::getDatabaseHelper()
 		);
 		$this->assertSame( $expected, $store->removeParticipantsFromEvent( $eventID, $userIDs ) );
 	}
 
 	public function provideParticipantsToRemoveFromEvent(): Generator {
-		yield 'Remove two participants' => [ 2, [ 101, 104 ], 2 ];
+		yield 'Remove two participants' => [ 2, [ new CentralUser( 101 ), new CentralUser( 104 ) ], 2 ];
 		yield 'Remove all participants' => [ 3, null, 2 ];
 		yield 'Empty user ids' => [ 3, [], 0 ];
-		yield 'Remove one participant' => [ 1, [ 101 ], 1 ];
+		yield 'Remove one participant' => [ 1, [ new CentralUser( 101 ) ], 1 ];
 	}
 }

@@ -309,23 +309,21 @@
 			]
 		},
 		{
-			"path": "/campaignevents/v0/organizer/{user}/event_registrations",
+			"path": "/campaignevents/v0/organizer/{userid}/event_registrations",
 			"method": "GET",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByOrganizerHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsCentralUserLookup",
-				"UserNameUtils"
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		{
-			"path": "/campaignevents/v0/participant/{user}/event_registrations",
+			"path": "/campaignevents/v0/participant/{userid}/event_registrations",
 			"method": "GET",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByParticipantHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsCentralUserLookup",
-				"UserNameUtils"
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		{
@@ -372,6 +370,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialRegisterForEvent",
 			"services": [
 				"CampaignEventsEventLookup",
+				"CampaignEventsCentralUserLookup",
 				"CampaignEventsRegisterParticipantCommand",
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsPolicyMessageLookup"
@@ -381,6 +380,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialCancelEventRegistration",
 			"services": [
 				"CampaignEventsEventLookup",
+				"CampaignEventsCentralUserLookup",
 				"CampaignEventsUnregisterParticipantCommand",
 				"CampaignEventsParticipantsStore"
 			]
@@ -388,7 +388,8 @@
 		"MyEvents": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialMyEvents",
 			"services": [
-				"CampaignEventsEventsPagerFactory"
+				"CampaignEventsEventsPagerFactory",
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		"EventDetails": {
@@ -398,8 +399,8 @@
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsPageURLResolver",
-				"CampaignEventsCentralUserLookup",
-				"MessageFormatterFactory"
+				"MessageFormatterFactory",
+				"CampaignEventsCentralUserLookup"
 			]
 		}
 	},

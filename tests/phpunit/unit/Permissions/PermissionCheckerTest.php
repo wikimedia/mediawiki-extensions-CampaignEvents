@@ -7,9 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Permissions;
 use Generator;
 use MediaWiki\Block\Block;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -115,7 +115,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$notCreatedAuthorLookup->expects( $this->atLeastOnce() )
 			->method( 'getAuthor' )
 			->with( $testPage )
-			->willReturn( $this->createMock( ICampaignsUser::class ) );
+			->willReturn( $this->createMock( CentralUser::class ) );
 		yield 'Did not create the page' => [
 			false,
 			$authorizedUser,
@@ -123,7 +123,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$notCreatedAuthorLookup
 		];
 
-		$pageAuthor = $this->createMock( ICampaignsUser::class );
+		$pageAuthor = $this->createMock( CentralUser::class );
 		$pageAuthor->expects( $this->atLeastOnce() )->method( 'equals' )->willReturn( true );
 		$createdAuthorLookup = $this->createMock( PageAuthorLookup::class );
 		$createdAuthorLookup->expects( $this->atLeastOnce() )

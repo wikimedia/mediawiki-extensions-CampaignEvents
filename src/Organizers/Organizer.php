@@ -4,28 +4,28 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Organizers;
 
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
 class Organizer {
-	/** @var ICampaignsUser */
+	/** @var CentralUser */
 	private $user;
 
 	/** @var string[] */
 	private $roles;
 
 	/**
-	 * @param ICampaignsUser $user
+	 * @param CentralUser $user
 	 * @param string[] $roles List of Roles::ROLE_* constants
 	 */
-	public function __construct( ICampaignsUser $user, array $roles ) {
+	public function __construct( CentralUser $user, array $roles ) {
 		$this->user = $user;
 		$this->roles = $roles;
 	}
 
 	/**
-	 * @return ICampaignsUser
+	 * @return CentralUser
 	 */
-	public function getUser(): ICampaignsUser {
+	public function getUser(): CentralUser {
 		return $this->user;
 	}
 

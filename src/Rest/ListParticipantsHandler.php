@@ -51,10 +51,11 @@ class ListParticipantsHandler extends SimpleHandler {
 
 		$respVal = [];
 		foreach ( $participants as $participant ) {
+			$centralUser = $participant->getUser();
 			$respVal[] = [
 				'participant_id' => $participant->getParticipantID(),
-				'user_id' => $this->centralUserLookup->getCentralID( $participant->getUser() ),
-				'user_name' => $participant->getUser()->getName(),
+				'user_id' => $centralUser->getCentralID(),
+				'user_name' => $this->centralUserLookup->getUserName( $centralUser ),
 				// To DO For now we decided on TS_DB to be the default returned by the api.
 				// see T312910
 				'user_registered_at' => wfTimestamp( TS_DB, $participant->getRegisteredAt() ),

@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
@@ -108,7 +109,11 @@ class RegisterParticipantCommand {
 			return $registrationAllowedStatus;
 		}
 
-		$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
+		}
 		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser );
 		return StatusValue::newGood( $modified );
 	}

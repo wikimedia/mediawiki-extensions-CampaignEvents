@@ -9,28 +9,30 @@ use Html;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWUserProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	/** @var IEventLookup */
 	private $eventLookup;
 
-	/** @var MWUserProxy */
-	protected $mwUser;
+	/** @var CampaignsCentralUserLookup */
+	protected $centralUserLookup;
 	/** @var ExistingEventRegistration|null */
 	protected $event;
 
 	/**
 	 * @param string $name
 	 * @param IEventLookup $eventLookup
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		string $name,
-		IEventLookup $eventLookup
+		IEventLookup $eventLookup,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		parent::__construct( $name );
 		$this->eventLookup = $eventLookup;
-		$this->mwUser = new MWUserProxy( $this->getUser() );
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
