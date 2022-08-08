@@ -4,7 +4,8 @@
 			"Funa-enpitu",
 			"MathXplore",
 			"Omotecho",
-			"Shirayuki"
+			"Shirayuki",
+			"Sou0012"
 		]
 	},
 	"campaignevents-desc": "キャンペーンの主催者用と参加者用の機能を提供。",
@@ -49,8 +50,8 @@
 	"campaignevents-unregister-confirmation-btn": "登録をキャンセルする",
 	"campaignevents-delete-not-allowed-registration": "あなたはこのイベント登録の削除を許可されていません",
 	"campaignevents-rest-delete-already-deleted": "このイベント登録はすでに削除されています。",
-	"campaignevents-role-creator": "作成者",
-	"campaignevents-role-organizer": "主催者",
+	"campaignevents-role-creator": "{{GENDER:$1|作成者}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|主催者}}",
 	"campaignevents-register-event-past": "このイベントへの登録期間は終了しました。",
 	"campaignevents-register-event-not-open": "このイベントへの登録は締め切らせていただきました。",
 	"campaignevents-unregister-event-past": "このイベントへの登録期間は終了しました。",
