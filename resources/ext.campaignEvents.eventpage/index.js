@@ -39,6 +39,22 @@
 		mw.log.error( errorText );
 	}
 
+	var SUCCESS_NOTIFICATION_COOKIE = 'showsuccessnotif';
+	/**
+	 * Checks whether the user just registered for this event, and thus a succes
+	 * notification should be shown. The cookie has a very short expiry and is
+	 * removed immediately on page refresh.
+	 */
+	function maybeShowRegistrationSuccessNotification() {
+		if ( mw.cookie.get( SUCCESS_NOTIFICATION_COOKIE ) ) {
+			mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 1, { expires: 1 } );
+			mw.notify(
+				mw.message( 'campaignevents-eventpage-register-notification', mw.config.get( 'wgTitle' ) ),
+				{ type: 'success' }
+			);
+		}
+	}
+
 	/**
 	 * @return {jQuery.Promise}
 	 */
@@ -49,12 +65,10 @@
 			{ token: mw.user.tokens.get( 'csrfToken' ) }
 		)
 			.done( function () {
-				mw.notify(
-					mw.message( 'campaignevents-eventpage-register-notification', mw.config.get( 'wgTitle' ) ),
-					{ type: 'success' }
-				);
-				$( '.ext-campaignevents-eventpage-register-btn' ).addClass( 'ext-campaignevents-eventpage-hidden-action' );
-				$( '.ext-campaignevents-eventpage-unregister-layout' ).removeClass( 'ext-campaignevents-eventpage-hidden-action' );
+				mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 1, { expires: 30 } );
+				// Reload the page so that the number and list of participants are updated.
+				// TODO This should be improved at some point, see T312646#8105313
+				window.location.reload();
 			} )
 			.fail( function ( _err, errData ) {
 				logRequestError( errData );
@@ -71,8 +85,7 @@
 			{ token: mw.user.tokens.get( 'csrfToken' ) }
 		)
 			.done( function () {
-				$( '.ext-campaignevents-eventpage-unregister-layout' ).addClass( 'ext-campaignevents-eventpage-hidden-action' );
-				$( '.ext-campaignevents-eventpage-register-btn' ).removeClass( 'ext-campaignevents-eventpage-hidden-action' );
+				window.location.reload();
 			} )
 			.fail( function ( _err, errData ) {
 				logRequestError( errData );
@@ -171,6 +184,7 @@
 	$( function () {
 		$( document.body ).append( windowManager.$element );
 
+		maybeShowRegistrationSuccessNotification();
 		installRegisterAndUnregisterHandlers();
 
 		$( '.ext-campaignevents-event-details-btn' ).on( 'click', function ( e ) {
