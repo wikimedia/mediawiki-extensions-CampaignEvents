@@ -70,13 +70,17 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
-		$centralUsers = [];
-		foreach ( $body['user_ids'] as $id ) {
-			$centralUsers[] = new CentralUser( $id );
+		if ( $body['user_ids'] ) {
+			$usersToRemove = [];
+			foreach ( $body['user_ids'] as $id ) {
+				$usersToRemove[] = new CentralUser( (int)$id );
+			}
+		} else {
+			$usersToRemove = null;
 		}
 		$status = $this->unregisterParticipantCommand->removeParticipantsIfAllowed(
 			$eventRegistration,
-			$centralUsers,
+			$usersToRemove,
 			new MWAuthorityProxy( $this->getAuthority() )
 		);
 
@@ -109,6 +113,8 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		}
 
 		return new JsonBodyValidator(
+			// TODO Here we should specify that each ID must be an integer. Right now this wouldn't
+			// work anyway due to T305973.
 			[ 'user_ids' => [ static::PARAM_SOURCE => 'body', ParamValidator::PARAM_DEFAULT => null ] ]
 		);
 	}
