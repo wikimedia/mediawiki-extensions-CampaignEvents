@@ -142,19 +142,18 @@ class SpecialEventDetails extends SpecialPage {
 			)
 		);
 
-		$backLink = ( new ButtonWidget( [
-			'framed' => false,
-			'flags' => [ 'progressive' ],
-			'label' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-back-to-your-events' )
-			),
-			'href' => SpecialPage::getTitleFor(
-					SpecialMyEvents::PAGE_NAME
-				)->getLocalURL(),
-			'icon' => 'arrowPrevious'
-		] ) );
+		if ( $isOrganizer ) {
+			// Special:MyEvents is not meaningful for participants, see T314879
+			$backLink = new ButtonWidget( [
+				'framed' => false,
+				'flags' => [ 'progressive' ],
+				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-back-to-your-events' ) ),
+				'href' => SpecialPage::getTitleFor( SpecialMyEvents::PAGE_NAME )->getLocalURL(),
+				'icon' => 'arrowPrevious'
+			] );
 
-		$out->addHTML( $backLink );
+			$out->addHTML( $backLink );
+		}
 
 		$main = new Tag( 'div' );
 		$main->appendContent(
