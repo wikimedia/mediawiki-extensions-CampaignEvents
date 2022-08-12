@@ -13,13 +13,38 @@
 	}
 
 	> * {
+		// Set this to ensure that text is wrapped correctly.
 		min-width: 0;
 	}
+}
 
-	> *:not( :last-child ) {
+@media ( min-width: ( @width-breakpoint-desktop + 1 ) ) {
+	.ext-campaignevents-eventpage-header > *:not( :last-child ) {
 		// This is equivalent to using gap: 1em.
 		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
 		margin-right: 1em;
+	}
+}
+
+@media ( max-width: @width-breakpoint-desktop ) {
+	// Change flex direction on small screens so that there's one item per line.
+	// @media queries seem to be the only way to achieve that aside from
+	// display:grid (which is still not supported well enough).
+	.ext-campaignevents-eventpage-header {
+		flex-direction: column;
+		align-items: flex-start;
+
+		> *:not( :last-child ) {
+			// This is equivalent to using gap: 1em.
+			// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
+			margin-bottom: 1em;
+		}
+
+		.ext-campaignevents-eventpage-header-buttons {
+			// Make sure the item is full-width; flex-grow: 1 only affects the width when the
+			// flex direction is row.
+			width: 100%;
+		}
 	}
 }
 
@@ -27,8 +52,17 @@
 	opacity: 0.55;
 }
 
-.ext-campaignevents-eventpage-action-element {
-	margin-left: auto;
+.ext-campaignevents-eventpage-header-buttons {
+	.flex-display();
+	.flex-wrap();
+	justify-content: space-between;
+	align-items: center;
+	flex-grow: 1; // Make sure that they take up all the available width and only leave space between them
+}
+
+.ext-campaignevents-event-details-btn.oo-ui-buttonElement-frameless.oo-ui-labelElement:first-child {
+	// Remove negative margin set by OOUI
+	margin-left: 0;
 }
 
 .ext-campaignevents-eventpage-unregister-layout.oo-ui-horizontalLayout > .oo-ui-widget {
@@ -56,4 +90,33 @@
 
 .ext-campaignevents-eventpage-info-label .oo-ui-iconWidget {
 	margin-right: 0.5em;
+}
+
+.ext-campaignevents-eventpage-enableheader {
+	.flex-display();
+	.flex-wrap();
+	align-items: center;
+	justify-content: space-between;
+
+	&.oo-ui-panelLayout-padded {
+		// OOUI sets a padding-top of 12px and the other ones of 16px, but we want the same
+		// padding for every side.
+		padding: 14px;
+	}
+}
+
+@media ( max-width: @width-breakpoint-desktop ) {
+	// Change flex direction on small screens so that there's one item per line.
+	// @media queries seem to be the only way to achieve that aside from
+	// display:grid (which is still not supported well enough).
+	.ext-campaignevents-eventpage-enableheader {
+		flex-direction: column;
+		align-items: flex-start;
+
+		.ext-campaignevents-eventpage-enable-registration-btn {
+			// This is equivalent to using gap: 1em.
+			// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
+			margin-top: 1em;
+		}
+	}
 }
