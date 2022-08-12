@@ -308,7 +308,8 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore",
-				"CampaignEventsCentralUserLookup"
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsUserLinker"
 			]
 		},
 		{
@@ -403,7 +404,8 @@
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsPageURLResolver",
 				"MessageFormatterFactory",
-				"CampaignEventsCentralUserLookup"
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsUserLinker"
 			]
 		}
 	},

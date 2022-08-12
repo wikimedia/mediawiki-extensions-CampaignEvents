@@ -5,14 +5,15 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
+use OOUI\HtmlSnippet;
 use OOUI\IconWidget;
 use OOUI\PanelLayout;
 use OOUI\SearchInputWidget;
@@ -29,11 +30,11 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
+	 * @param UserLinker $userLinker
 	 * @param Participant[] $participants
 	 * @param int $totalParticipants
 	 * @param ITextFormatter $msgFormatter
 	 * @param bool $canRemoveParticipants
-	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @return PanelLayout
 	 *
 	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and
@@ -42,11 +43,11 @@ class EventDetailsParticipantsModule {
 	public function createContent(
 		Language $language,
 		UserIdentity $viewingUser,
+		UserLinker $userLinker,
 		array $participants,
 		int $totalParticipants,
 		ITextFormatter $msgFormatter,
-		bool $canRemoveParticipants,
-		CampaignsCentralUserLookup $centralUserLookup
+		bool $canRemoveParticipants
 	): PanelLayout {
 		$items = [];
 		$items[] = ( new Tag() )->appendContent(
@@ -133,7 +134,7 @@ class EventDetailsParticipantsModule {
 				->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
 		foreach ( $participants as $participant ) {
 			try {
-				$userName = $centralUserLookup->getUserName( $participant->getUser() );
+				$userLink = new HtmlSnippet( $userLinker->generateUserLink( $participant->getUser() ) );
 			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				continue;
 			}
@@ -147,7 +148,7 @@ class EventDetailsParticipantsModule {
 				] ) );
 			}
 			$elements[] = ( new Tag( 'span' ) )
-				->appendContent( $userName )
+				->appendContent( $userLink )
 				->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
 
 			$elements[] = ( new Tag( 'span' ) )->appendContent(

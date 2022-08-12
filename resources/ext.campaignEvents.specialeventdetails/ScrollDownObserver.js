@@ -3,7 +3,8 @@
 
 	/**
 	 *
-	 * @param {Element} observedElement a plain DOM node that should be observed when scrolling on it
+	 * @param {Element} observedElement
+	 * a plain DOM node that should be observed when scrolling on it
 	 * @constructor
 	 */
 	function ScrollDownObserver( observedElement ) {

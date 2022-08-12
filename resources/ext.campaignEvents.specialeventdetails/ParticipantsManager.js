@@ -202,8 +202,7 @@
 	ParticipantsManager.prototype.onConfirmRemoval = function () {
 		var thisClass = this,
 			removeAll = this.selectAllParticipantsCheckbox.isSelected(),
-			numSelected = removeAll ?
-				this.participantsTotal :
+			numSelected = removeAll ? this.participantsTotal :
 				thisClass.selectedParticipantIDs.length;
 
 		new mw.Rest().delete(
@@ -218,7 +217,9 @@
 				thisClass.participantCheckboxes =
 					thisClass.participantCheckboxes.filter( function ( el ) {
 						if ( el.isSelected() ) {
-							$( el.$element ).closest( '.ext-campaignevents-details-user-row' ).remove();
+							$( el.$element )
+								.closest( '.ext-campaignevents-details-user-row' )
+								.remove();
 							return false;
 						} else {
 							return el;
@@ -322,11 +323,18 @@
 						items.push( newParticipantCheckbox );
 					}
 
+					var $link = $( '<a>' )
+						.attr( 'href', data[ i ].user_page.path )
+						.attr( 'title', data[ i ].user_page.title )
+						.text( data[ i ].user_name )
+						// The following classes are used here:
+						// * mw-userLink
+						// * new
+						.attr( 'class', 'ext-campaignevents-details-participant-username ' + data[ i ].user_page.classes );
+
 					items.push(
 						new OO.ui.Element( {
-							$element: $( '<span>' ),
-							text: data[ i ].user_name,
-							classes: [ 'ext-campaignevents-details-participant-username' ]
+							$element: $link
 						} )
 					);
 					items.push(
