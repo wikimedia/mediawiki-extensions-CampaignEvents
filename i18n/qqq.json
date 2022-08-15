@@ -8,6 +8,8 @@
 		]
 	},
 	"campaignevents-desc": "{{desc|name=CampaignEvents|url=https://www.mediawiki.org/wiki/Extension:CampaignEvents}}",
+	"nstab-event": "Tab label for pages in the \"Event\" namespace.",
+	"nstab-event_talk": "Tab label for pages in the \"Event talk\" namespace.",
 	"action-campaignevents-enable-registration": "{{doc-action|campaignevents-enable-registration}}",
 	"right-campaignevents-enable-registration": "{{doc-right|campaignevents-enable-registration}}",
 	"action-campaignevents-delete-registration": "{{doc-action|campaignevents-delete-registration}}",
