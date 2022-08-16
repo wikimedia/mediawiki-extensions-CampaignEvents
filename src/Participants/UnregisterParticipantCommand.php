@@ -13,9 +13,14 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
 use StatusValue;
+use UnexpectedValueException;
 
 class UnregisterParticipantCommand {
 	public const SERVICE_NAME = 'CampaignEventsUnregisterParticipantCommand';
+
+	public const CAN_UNREGISTER = 0;
+	public const CANNOT_UNREGISTER_DELETED = 1;
+	public const CANNOT_UNREGISTER_ENDED = 2;
 
 	/** @var ParticipantsStore */
 	private $participantsStore;
@@ -69,37 +74,18 @@ class UnregisterParticipantCommand {
 	}
 
 	/**
-	 * Checks whether it's possible to cancel a registration for the given event.
 	 * @param ExistingEventRegistration $registration
-	 * @return bool
+	 * @return int self::CAN_UNREGISTER or one of the self::CANNOT_UNREGISTER_* contants.
 	 */
-	public static function isUnregistrationAllowedForEvent( ExistingEventRegistration $registration ): bool {
-		return self::checkIsUnregistrationAllowed(
-			$registration,
-			'campaignevents-unregister-registration-deleted',
-			'campaignevents-unregister-event-past'
-		)->isGood();
-	}
-
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param string $deletedRegistrationMessage
-	 * @param string $pastRegistrationMessage
-	 * @return StatusValue
-	 */
-	private static function checkIsUnregistrationAllowed(
-		ExistingEventRegistration $registration,
-		string $deletedRegistrationMessage,
-		string $pastRegistrationMessage
-	): StatusValue {
+	public static function checkIsUnregistrationAllowed( ExistingEventRegistration $registration ): int {
 		if ( $registration->getDeletionTimestamp() !== null ) {
-			return StatusValue::newFatal( $deletedRegistrationMessage );
+			return self::CANNOT_UNREGISTER_DELETED;
 		}
 		$endTS = $registration->getEndTimestamp();
 		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
-			return StatusValue::newFatal( $pastRegistrationMessage );
+			return self::CANNOT_UNREGISTER_ENDED;
 		}
-		return StatusValue::newGood();
+		return self::CAN_UNREGISTER;
 	}
 
 	/**
@@ -111,13 +97,19 @@ class UnregisterParticipantCommand {
 		ExistingEventRegistration $registration,
 		ICampaignsAuthority $performer
 	): StatusValue {
-		$unregistrationAllowedStatus = self::checkIsUnregistrationAllowed(
-			$registration,
-			'campaignevents-unregister-registration-deleted',
-			'campaignevents-unregister-event-past'
-		);
-		if ( !$unregistrationAllowedStatus->isGood() ) {
-			return $unregistrationAllowedStatus;
+		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
+		if ( $unregistrationAllowedVal !== self::CAN_UNREGISTER ) {
+			switch ( $unregistrationAllowedVal ) {
+				case self::CANNOT_UNREGISTER_DELETED:
+					$msg = 'campaignevents-unregister-registration-deleted';
+					break;
+				case self::CANNOT_UNREGISTER_ENDED:
+					$msg = 'campaignevents-unregister-event-past';
+					break;
+				default:
+					throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
+			}
+			return StatusValue::newFatal( $msg );
 		}
 
 		try {
@@ -173,13 +165,19 @@ class UnregisterParticipantCommand {
 		ExistingEventRegistration $registration,
 		?array $users
 	): StatusValue {
-		$unregistrationAllowedStatus = self::checkIsUnregistrationAllowed(
-			$registration,
-			'campaignevents-unregister-participants-registration-deleted',
-			'campaignevents-unregister-participants-past-registration'
-		);
-		if ( !$unregistrationAllowedStatus->isGood() ) {
-			return $unregistrationAllowedStatus;
+		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
+		if ( $unregistrationAllowedVal !== self::CAN_UNREGISTER ) {
+			switch ( $unregistrationAllowedVal ) {
+				case self::CANNOT_UNREGISTER_DELETED:
+					$msg = 'campaignevents-unregister-participants-registration-deleted';
+					break;
+				case self::CANNOT_UNREGISTER_ENDED:
+					$msg = 'campaignevents-unregister-participants-past-registration';
+					break;
+				default:
+					throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
+			}
+			return StatusValue::newFatal( $msg );
 		}
 
 		$eventID = $registration->getID();

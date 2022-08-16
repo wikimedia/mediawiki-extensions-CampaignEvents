@@ -125,8 +125,12 @@ class SpecialEventDetails extends SpecialPage {
 		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
-		$canRemoveParticipants = $isOrganizer &&
-			UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $this->event );
+		if ( $isOrganizer ) {
+			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $this->event ) ===
+				UnregisterParticipantCommand::CAN_UNREGISTER;
+		} else {
+			$canRemoveParticipants = false;
+		}
 
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
