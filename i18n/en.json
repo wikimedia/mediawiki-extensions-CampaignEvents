@@ -6,7 +6,6 @@
 	},
 	"campaignevents-desc": "Provides features for campaign organizers and participants.",
 	"nstab-event": "Event",
-	"nstab-event_talk": "Event talk",
 	"action-campaignevents-enable-registration": "enable event registrations",
 	"right-campaignevents-enable-registration": "Enable event registrations",
 	"action-campaignevents-delete-registration": "delete event registrations",
