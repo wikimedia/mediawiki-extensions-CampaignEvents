@@ -150,6 +150,8 @@
 	"campaignevents-eventpage-header-attending": "Message shown in the registration header on event pages when you have already registered for an event.",
 	"campaignevents-eventpage-btn-manage": "Label of a button in the registration header and popup on event pages. Organizers can use the button to change the details of the event, like the start and end date or the location.",
 	"campaignevents-eventpage-btn-register": "Label of a button in the registration header and popup on event pages. Participants can use the button to register for the event.",
+	"campaignevents-eventpage-btn-registration-closed": "Label of a disabled (greyed out) button in the registration header and popup on event pages. This message informs the user that they cannot register for the event because the registration is closed.",
+	"campaignevents-eventpage-btn-event-ended": "Label of a disabled (greyed out) button in the registration header and popup on event pages. This message informs the user that they cannot register for the event because it has ended.",
 	"campaignevents-eventpage-dialog-title": "Title of the registration popup on event pages with details about the event.",
 	"campaignevents-eventpage-dialog-organizers": "Message shown in the registration popup on event pages to introduce the list of organizers. Parameters:\n* $1 A comma-separated list of usernames of the people who organized the event.",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Link shown in the registration popup on event pages when there are more organizers than what we can show there. By clicking it, the user will be sent to a page with the full list of organizers.",

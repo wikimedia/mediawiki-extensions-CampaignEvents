@@ -147,6 +147,8 @@
 	"campaignevents-eventpage-header-attending": "You are attending!",
 	"campaignevents-eventpage-btn-manage": "Manage event",
 	"campaignevents-eventpage-btn-register": "Register for event",
+	"campaignevents-eventpage-btn-registration-closed": "Registration closed",
+	"campaignevents-eventpage-btn-event-ended": "Event ended",
 	"campaignevents-eventpage-dialog-title": "Event details",
 	"campaignevents-eventpage-dialog-organizers": "Organized by: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "View all organizers",
