@@ -296,7 +296,8 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsOrganizersStore",
-				"CampaignEventsRoleFormatter"
+				"CampaignEventsRoleFormatter",
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		{
