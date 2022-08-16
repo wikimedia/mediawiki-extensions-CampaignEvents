@@ -166,7 +166,7 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "לא",
 	"campaignevents-eventpage-register-confirmation-cancel": "ביטול הרשמה",
 	"campaignevents-eventpage-register-confirmation-confirm": "המשך הרשמה",
-	"campaignevents-eventpage-enableheader-organizer": "{{GENDER:|אתה מארגן|את מארגנת}}",
+	"campaignevents-eventpage-enableheader-organizer": "{{GENDER:|אתה המארגן|את המארגנת}}",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>דף אירוע</strong>: יש להפעיל הרשמה כדי שמשתתפים יוכלו להירשם לאירוע שלך ישירות בדף.",
 	"campaignevents-eventpage-enableheader-button-label": "הפעלת הרשמה",
 	"campaignevents-eventpage-enable-registration-dialog-title": "הפעלת הרשמה לאירוע",

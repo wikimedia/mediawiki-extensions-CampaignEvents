@@ -5,6 +5,8 @@
 		]
 	},
 	"campaignevents-desc": "Stellt Funktionen für Organisatoren und Teilnehmer von Veranstaltungen bereit.",
+	"nstab-event": "Veranstaltung",
+	"nstab-event_talk": "Veranstaltung Diskussion",
 	"action-campaignevents-enable-registration": "Veranstaltungsanmeldungen ermöglichen",
 	"right-campaignevents-enable-registration": "Veranstaltungsanmeldungen ermöglichen",
 	"action-campaignevents-delete-registration": "Veranstaltungsanmeldungen löschen",
