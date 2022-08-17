@@ -137,7 +137,6 @@
 	"campaignevents-eventpage-header-location-label": "الموقع",
 	"campaignevents-eventpage-header-type-online": "فعاليات عبر الإنترنت",
 	"campaignevents-eventpage-header-type-online-and-in-person": "فعالية حضورية وعن بعد",
-	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-dates-label": "وقت البدء والانتهاء",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|مشارك|مشاركون}}",
 	"campaignevents-eventpage-header-participants-label": "عدد المشاركين",

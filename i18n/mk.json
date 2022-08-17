@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Bjankuloski06"
+			"Bjankuloski06",
+			"Vlad5250"
 		]
 	},
 	"campaignevents-desc": "Дава функции за приредувачите на походи и учесниците во истите.",
+	"nstab-event": "Настан",
 	"action-campaignevents-enable-registration": "овозможување на пријавување за настани",
 	"right-campaignevents-enable-registration": "Овозможување на пријавување за настани",
 	"action-campaignevents-delete-registration": "бришење на пријави за настани",

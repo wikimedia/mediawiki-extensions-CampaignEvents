@@ -32,7 +32,7 @@
 	"campaignevents-register-error-no-event": "Нет указанного мероприятия.",
 	"campaignevents-register-error-event-not-found": "Предоставленный идентификатор не ссылается на существующее мероприятие",
 	"campaignevents-register-confirmation-top": "Подтвердить регистрацию",
-	"campaignevents-unregister-success": "Вы отменили регистрацию на это мероприятие",
+	"campaignevents-unregister-success": "Вы отменили регистрацию на ваше мероприятие.",
 	"campaignevents-unregister-confirmation-top": "Подтвердите отмену регистрации",
 	"campaignevents-delete-not-allowed-registration": "У вас нет разрешения удалить регистрацию на это мероприятие",
 	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена.",

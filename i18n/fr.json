@@ -8,6 +8,7 @@
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
+	"nstab-event": "Événement",
 	"action-campaignevents-enable-registration": "activer les inscriptions aux événements",
 	"right-campaignevents-enable-registration": "Activer les inscriptions aux événements",
 	"action-campaignevents-delete-registration": "supprimer les inscriptions aux événements",

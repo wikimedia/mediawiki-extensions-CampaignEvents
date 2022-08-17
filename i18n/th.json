@@ -131,7 +131,6 @@
 	"campaignevents-eventpage-header-location-label": "สถานที่",
 	"campaignevents-eventpage-header-type-online": "กิจกรรมออนไลน์",
 	"campaignevents-eventpage-header-type-online-and-in-person": "งานออนไลน์และแบบตัวต่อตัว",
-	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-dates-label": "เวลาเริ่มต้นและสิ้นสุด",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|คน}}",
 	"campaignevents-eventpage-header-participants-label": "จำนวนผู้เข้าร่วม",

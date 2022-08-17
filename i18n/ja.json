@@ -9,6 +9,7 @@
 		]
 	},
 	"campaignevents-desc": "キャンペーンの主催者用と参加者用の機能を提供。",
+	"nstab-event": "イベント",
 	"action-campaignevents-enable-registration": "イベント登録を有効にする",
 	"right-campaignevents-enable-registration": "イベント登録を有効にする",
 	"action-campaignevents-delete-registration": "イベント登録の削除",
