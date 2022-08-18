@@ -3,12 +3,16 @@
 .ext-campaignevents-detailsdialog-body-container {
 	.flex-display();
 	justify-content: space-between;
-	margin-right: 1.5em;
+	flex-wrap: wrap;
 
 	> * {
+		// Make both columns have the same width, but wrap them if they would shrink too much.
 		flex-basis: 0;
 		flex-grow: 1;
-		min-width: 0;
+		// TODO 20em may exceed the container width on very small screens. Unfortunately, there
+		// seems to be no way to limit that too 100% without using clamp() or min() (both of which
+		// are not supported by all grade C browsers).
+		min-width: 20em;
 	}
 }
 
@@ -21,6 +25,14 @@
 		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
 		margin-bottom: 2em;
 	}
+}
+
+.ext-campaignevents-detailsdialog-participants {
+	// Set a top margin so that if the flex elements wrap, there's some space between
+	// event details and participants. Ideally we'd use gap, but that is not supported
+	// by all grade C browsers. In this case it's not a big deal because the margin
+	// doesn't look visually wrong when the element is still on the first row.
+	margin-top: 1em;
 }
 
 .ext-campaignevents-eventpage-detailsdialog {
@@ -59,4 +71,8 @@
 .ext-campaignevents-eventpage-details-address {
 	white-space: pre-wrap;
 	.hyphens(); /* Break long words if necessary */
+}
+
+.ext-campaignevents-eventpage-detailsdialog-location-header {
+	font-weight: bold;
 }
