@@ -1,9 +1,42 @@
 @import 'mediawiki.mixins.less';
 @import 'mediawiki.ui/variables.less';
 
-.ext-campaignevents-event-details-participants-panel.oo-ui-panelLayout-padded {
-	padding: 0;
-	float: left;
+.ext-campaignevents-eventdetails-back-btn {
+	margin-bottom: 1em;
+}
+
+.ext-campaignevents-eventdetails-panels {
+	display: flex;
+	flex-wrap: wrap-reverse;
+	// Items should be top-aligned, but since the wrapping is reversed, it must
+	// be specified as flex-end. align-items:start would also work, but it's
+	// still insufficiently supported.
+	align-items: flex-end;
+	// Note that column-gap is not supported by all grade C+ browsers as of August 2022,
+	// but it's not easy to polyfill. We try to compensate with the margin set below.
+	column-gap: 5em;
+}
+
+@media ( min-width: @width-breakpoint-desktop ) {
+	.ext-campaignevents-event-details-participants-panel {
+		// Make sure there's at least a bit of space between the panels
+		// in older browser on desktop.
+		margin-right: 1.5em;
+	}
+}
+
+.ext-campaignevents-event-details-participants-panel {
+	width: 34.5em;
+	max-width: 100%;
+}
+
+.ext-campaignevents-eventdetails-panel {
+	width: 32em;
+	max-width: 100%;
+
+	&.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
+		margin-top: 0; // Remove margin set by OOUI
+	}
 }
 
 .ext-campaignevents-event-details-social-media {
@@ -23,19 +56,8 @@
 	margin-bottom: 1em;
 }
 
-.ext-campaignevents-event-details-participants-panel {
-	margin-right: 1.5em;
-	width: 34.5em;
-}
-
-.ext-campaignevents-eventdetails-panel {
-	left: 5em;
-	width: 32em;
-	float: left;
-}
-
 .ext-campaignevents-details-participant-registered-at {
-	float: right;
+	margin-left: auto;
 }
 
 .ext-campaignevents-details-edit-button {
@@ -45,10 +67,17 @@
 
 .ext-campaignevents-details-participant-username {
 	.hyphens();
+	min-width: 0; // Ensure correct wrapping inside the flex container
 }
 
 .ext-campaignevents-event-details-icon-link {
 	margin-left: 0.5em;
+}
+
+.ext-campaignevents-details-users-container {
+	/* Set a fixed height so that it does not change while we rebuild the list */
+	height: 30em;
+	overflow: auto;
 }
 
 .ext-campaignevents-event-details-select-all-participant-checkbox.oo-ui-layout {
@@ -112,14 +141,16 @@
 }
 
 div.ext-campaignevents-details-participants-search {
-	width: 25em;
+	width: 75%;
 }
 
 .ext-campaignevents-details-select-all-users-div {
 	padding: 1.5em 1em 1.5em 1em;
 }
 
-.ext-campaignevents-details-user-div {
+.ext-campaignevents-details-user-row {
+	display: flex;
+	align-items: center;
 	padding: 1.5em 1em 1.5em 1em;
 	background: @colorGray15;
 	border-bottom: 2px solid @color-base--inverted;
@@ -130,34 +161,25 @@ div.ext-campaignevents-details-participants-search {
 }
 
 .ext-campaignevents-details-no-participants-state {
-	min-height: 34em;
-
-	> .ext-campaignevents-details-icon-label-content-widget {
-		left: 31%;
-		position: relative;
-	}
-}
-
-.ext-campaignevents-details-no-participants-description {
-	position: relative;
-	font-size: 1.1em;
-	padding: 4em;
-	text-align: center;
+	// TODO: Ideally here we wouldn't need flex at all. We could just set the icon
+	// to have a width of 40% and aspect ratio of 1, without having to specify
+	// any height. Unfortunately, aspect-ratio is not supported by all grade C+
+	// browsers.
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 34em;
 }
 
 .ext-campaignevents-event-details-no-participants-icon.oo-ui-iconElement {
-	position: relative;
-	text-align: center;
-	left: 50%;
-	top: 2.5em;
-	margin-left: -7.5em;
-	width: 13em;
-	height: 13em;
+	width: 40%;
+	flex-grow: 4;
 	opacity: 0.25;
 }
 
-.ext-campaignevents-details-users-container {
-	/* Set a fixed height so that it does not change while we rebuild the list */
-	height: 30em;
-	overflow: auto;
+.ext-campaignevents-details-no-participants-description {
+	flex-grow: 3;
+	font-size: 1.1em;
+	padding: 0 1em;
+	text-align: center;
 }

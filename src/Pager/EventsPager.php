@@ -228,7 +228,7 @@ class EventsPager extends TablePager {
 					'data-event-id' => $eventID,
 					'data-event-name' => $this->mCurrentRow->event_name,
 					'data-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
-					'data-event-page-url' => $this->pageURLResolver->getFullUrl( $eventPage )
+					'data-event-page-url' => $this->pageURLResolver->getUrl( $eventPage )
 				] );
 				return $btn->toString();
 			default:

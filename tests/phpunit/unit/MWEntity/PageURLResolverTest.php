@@ -19,21 +19,21 @@ use TitleFactory;
  */
 class PageURLResolverTest extends MediaWikiUnitTestCase {
 	/**
-	 * @dataProvider providePageAndFullURL
-	 * @covers ::getFullUrl
+	 * @dataProvider providePageAndURL
+	 * @covers ::getUrl
 	 */
-	public function testGetFullUrl( ICampaignsPage $page, TitleFactory $titleFactory, string $expected ) {
+	public function testGetUrl( ICampaignsPage $page, TitleFactory $titleFactory, string $expected ) {
 		$resolver = new PageURLResolver( $titleFactory );
-		$this->assertSame( $expected, $resolver->getFullUrl( $page ) );
+		$this->assertSame( $expected, $resolver->getUrl( $page ) );
 	}
 
-	public function providePageAndFullURL(): Generator {
+	public function providePageAndURL(): Generator {
 		$localUrl = 'test-local-url';
 		$localPageIdentity = $this->createMock( ProperPageIdentity::class );
 		$localPageIdentity->method( 'getWikiId' )->willReturn( ProperPageIdentity::LOCAL );
 		$localPage = new MWPageProxy( $localPageIdentity, 'Unused' );
 		$localTitle = $this->createMock( Title::class );
-		$localTitle->method( 'getFullURL' )->willReturn( $localUrl );
+		$localTitle->method( 'getLocalURL' )->willReturn( $localUrl );
 		$localTitleFactory = $this->createMock( TitleFactory::class );
 		$localTitleFactory->expects( $this->once() )
 			->method( 'castFromPageIdentity' )
