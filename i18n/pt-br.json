@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Duke of Wikipädia"
+			"Duke of Wikipädia",
+			"Eduardoaddad"
 		]
 	},
 	"campaignevents-desc": "Fornece recursos para organizadores e participantes da campanha.",
+	"nstab-event": "Evento",
 	"action-campaignevents-enable-registration": "habilitar inscrições para o evento",
 	"right-campaignevents-enable-registration": "Ativar inscrições para o evento",
 	"action-campaignevents-delete-registration": "excluir inscrições do evento",
@@ -62,5 +64,6 @@
 	"campaignevents-rest-edit-page-nonlocal": "Esta inscrição de evento foi habilitada na seguinte wiki e deve ser editada lá: $1.",
 	"campaignevents-edit-page-nonlocal": "Por favor [$1 edite esta inscrição] na wiki em que foi habilitada: $2.",
 	"campaignevents-edit-error-deleted": "Esta inscrição de evento foi excluída.",
-	"campaignevents-error-page-already-registered": "A página do evento em questão já possui uma inscrição associada."
+	"campaignevents-error-page-already-registered": "A página do evento em questão já possui uma inscrição associada.",
+	"campaignevents-register-confirmation-btn": "Registrar"
 }
