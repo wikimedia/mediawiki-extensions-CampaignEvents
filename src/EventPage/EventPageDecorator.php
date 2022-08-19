@@ -220,7 +220,7 @@ class EventPageDecorator {
 		$infoText = ( new Tag( 'div' ) )->appendContent(
 			new IconWidget( [ 'icon' => 'calendar', 'classes' => [ 'ext-campaignevents-eventpage-icon' ] ] ),
 			$infoMsg
-		)->setAttributes( [ 'class' => 'ext-campaignevents-eventpage-info-label' ] );
+		)->setAttributes( [ 'class' => 'ext-campaignevents-eventpage-enableheader-message' ] );
 		$infoElement = ( new Tag( 'div' ) )->appendContent( $organizerText, $infoText );
 
 		$enableRegistrationBtn = new ButtonWidget( [
