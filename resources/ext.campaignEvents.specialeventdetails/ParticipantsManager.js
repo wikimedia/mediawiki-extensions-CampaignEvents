@@ -87,7 +87,10 @@
 			this.$usersContainer[ 0 ]
 		);
 		this.$usersContainer.on( 'scroll', function () {
-			if ( thisClass.scrollDownObserver.scrolledToBottom() ) {
+			if (
+				thisClass.scrollDownObserver.scrolledToBottom() &&
+				thisClass.participantsTotal > thisClass.$userRowsContainer.children().length
+			) {
 				thisClass.loadMoreParticipants();
 			}
 		} );
