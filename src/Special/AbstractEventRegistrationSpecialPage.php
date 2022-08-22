@@ -73,6 +73,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	public function execute( $par ): void {
 		$this->requireLogin();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
+		$this->getOutput()->addModules( [
+			'ext.campaignEvents.editeventregistration'
+		] );
 
 		parent::execute( $par );
 	}
@@ -143,13 +146,17 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-timezone',
 			'default' => $defaultTimezone,
 			'required' => true,
+			'cssclass' => 'ext-campaignevents-timezone-input'
 		];
+		// Disable auto-infusion because we want to change the configuration.
+		$timeFieldClasses = 'ext-campaignevents-time-input mw-htmlform-autoinfuse-lazy';
 		$formFields['EventStart'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-start',
 			'min' => $this->event ? '' : MWTimestamp::now(),
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartLocalTimestamp() ) : '',
 			'required' => true,
+			'cssclass' => $timeFieldClasses,
 		];
 		$formFields['EventEnd'] = [
 			'type' => 'datetime',
@@ -157,6 +164,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'min' => $this->event ? '' : MWTimestamp::now(),
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
 			'required' => true,
+			'cssclass' => $timeFieldClasses,
 		];
 
 		$formFields['EventMeetingType'] = [

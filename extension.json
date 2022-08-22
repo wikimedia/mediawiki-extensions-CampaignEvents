@@ -229,6 +229,17 @@
 				"ext.campaignEvents.userlinks.styles.less"
 			],
 			"targets": [ "desktop", "mobile" ]
+		},
+		"ext.campaignEvents.editeventregistration": {
+			"localBasePath": "resources/ext.campaignEvents.editeventregistration",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.editeventregistration",
+			"packageFiles": [
+				"index.js"
+			],
+			"dependencies": [
+				"mediawiki.widgets.datetime"
+			],
+			"targets": [ "desktop", "mobile" ]
 		}
 	},
 	"RestRoutes": [
