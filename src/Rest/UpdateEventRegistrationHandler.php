@@ -119,7 +119,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			null,
 			null,
 			$body['status'],
-			'UTC',
+			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
 			// TODO MVP Get this from the request body
