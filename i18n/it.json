@@ -12,7 +12,7 @@
 	"campaignevents-edit-field-address": "Indirizzo",
 	"campaignevents-role-creator": "{{GENDER:$1|creatore|creatrice|creatore/trice}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organizzatore|organizzatrice|organizzatore/trice}}",
-	"campaignevents-rest-user-not-found": "L'utente $1 non esiste.",
+	"campaignevents-rest-user-not-found": "Non esiste alcun utente con questo ID centrale.",
 	"myevents": "I tuoi eventi",
 	"campaignevents-myevents-label-search": "Cerca",
 	"campaignevents-myevents-field-status-any": "Qualsiasi",

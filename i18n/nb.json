@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jon Harald Søby"
+		]
+	},
+	"campaignevents-desc": "Tilbyr funksjoner for kampanjearrangører og -deltakere.",
+	"nstab-event": "Arrangement",
+	"action-campaignevents-enable-registration": "aktivere arrangementsregistreringer"
+}
