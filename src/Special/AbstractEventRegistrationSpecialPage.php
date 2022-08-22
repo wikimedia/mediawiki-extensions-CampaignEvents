@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use DateTimeZone;
 use FormSpecialPage;
 use Html;
 use HTMLForm;
@@ -13,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\User\UserTimeCorrection;
 use MWTimestamp;
 use Status;
 
@@ -125,6 +127,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			];
 		}
 
+		$defaultTimezone = '+00:00';
+		$formFields['TimeZone'] = [
+			'type' => 'timezone',
+			'label-message' => 'campaignevents-edit-field-timezone',
+			'default' => $defaultTimezone,
+			'required' => true,
+		];
 		$formFields['EventStart'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-start',
@@ -139,6 +148,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndTimestamp() ) : '',
 			'required' => true,
 		];
+
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
 			'label-message' => 'campaignevents-edit-field-meeting-type',
@@ -204,6 +214,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
 		}
 
+		$timeCorrection = new UserTimeCorrection( $data['TimeZone'] );
+		$timezone = $timeCorrection->getTimeZone();
+		if ( !$timezone ) {
+			$offset = $timeCorrection->getTimeOffset();
+			$timezone = new DateTimeZone( sprintf( '%+03d:%02d', floor( $offset / 60 ), abs( $offset ) % 60 ) );
+		}
+
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
@@ -213,8 +230,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				null,
 				null,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
-				$data['EventStart'],
-				$data['EventEnd'],
+				$timezone,
+				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
+				wfTimestamp( TS_MW, $data['EventStart'] ),
+				wfTimestamp( TS_MW, $data['EventEnd'] ),
 				EventRegistration::TYPE_GENERIC,
 				$meetingType,
 				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,

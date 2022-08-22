@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
+use DateTimeZone;
 use Generator;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -28,25 +29,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 
 	// Feb 27, 2022
 	private const TEST_TIME = 1646000000;
-	private const VALID_DEFAULT_DATA = [
-		'id' => 42,
-		'page' => 'Event:Some event page title',
-		'chat' => 'https://chaturl.example.org',
-		'trackingname' => null,
-		'trackingurl' => null,
-		'status' => EventRegistration::STATUS_OPEN,
-		'start' => '20220308120000',
-		'end' => '20220308150000',
-		'type' => EventRegistration::TYPE_GENERIC,
-		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
-		'meetingurl' => 'https://meetingurl.example.org',
-		'country' => 'Country',
-		'address' => 'Address',
-		'creation' => '20220308100000',
-		'lastedit' => '20220308100000',
-		'deletion' => null,
-		'validationFlags' => EventFactory::VALIDATE_ALL
-	];
 
 	/**
 	 * @inheritDoc
@@ -54,6 +36,29 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		MWTimestamp::setFakeTime( self::TEST_TIME );
+	}
+
+	private function getValidDefaultData(): array {
+		return [
+			'id' => 42,
+			'page' => 'Event:Some event page title',
+			'chat' => 'https://chaturl.example.org',
+			'trackingname' => null,
+			'trackingurl' => null,
+			'status' => EventRegistration::STATUS_OPEN,
+			'timezone' => new DateTimeZone( 'UTC' ),
+			'start' => '20220308120000',
+			'end' => '20220308150000',
+			'type' => EventRegistration::TYPE_GENERIC,
+			'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			'meetingurl' => 'https://meetingurl.example.org',
+			'country' => 'Country',
+			'address' => 'Address',
+			'creation' => '20220308100000',
+			'lastedit' => '20220308100000',
+			'deletion' => null,
+			'validationFlags' => EventFactory::VALIDATE_ALL
+		];
 	}
 
 	private function getEventFactory(
@@ -193,6 +198,10 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'campaignevents-error-invalid-start',
 			$this->getTestDataWithDefault( [ 'start' => 'Not a timestamp' ] )
 		];
+		yield 'Start timestamp not in TS_MW format' => [
+			'campaignevents-error-invalid-start',
+			$this->getTestDataWithDefault( [ 'start' => '1661199533' ] )
+		];
 		yield 'Start timestamp in the past, validated' => [
 			'campaignevents-error-start-past',
 			$this->getTestDataWithDefault( [
@@ -214,6 +223,10 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		yield 'Invalid end timestamp' => [
 			'campaignevents-error-invalid-end',
 			$this->getTestDataWithDefault( [ 'end' => 'Not a timestamp' ] )
+		];
+		yield 'End timestamp not in TS_MW format' => [
+			'campaignevents-error-invalid-end',
+			$this->getTestDataWithDefault( [ 'end' => '1661199533' ] )
 		];
 		yield 'Start after end' => [
 			'campaignevents-error-start-after-end',
@@ -372,7 +385,83 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
+	/**
+	 * @covers ::validateDates
+	 * @dataProvider provideDates
+	 */
+	public function testDates( array $factoryArgs, string $expectedStartMw, string $expectedEndMw ) {
+		$factory = $this->getEventFactory();
+		$event = $factory->newEvent( ...$factoryArgs );
+		$this->assertSame( MWTimestamp::convert( TS_UNIX, $expectedStartMw ), $event->getStartTimestamp(), 'start ts' );
+		$this->assertSame( MWTimestamp::convert( TS_UNIX, $expectedEndMw ), $event->getEndTimestamp(), 'end ts' );
+	}
+
+	public function provideDates(): Generator {
+		// Use MW timestamps for testing data so we don't have to convert to unix already
+		$summerStart = '20220815143000';
+		$summerStartMinus2Hours = '20220815123000';
+		$summerEnd = '20220815153000';
+		$summerEndMinus2Hours = '20220815133000';
+
+		$winterStart = '20221215143000';
+		$winterStartMinus1Hour = '20221215133000';
+		$winterStartMinus2Hours = '20221215123000';
+		$winterEnd = '20221215153000';
+		$winterEndMinus1Hour = '20221215143000';
+		$winterEndMinus2Hours = '20221215133000';
+
+		yield 'UTC' => [
+			$this->getTestDataWithDefault( [
+				'timezone' => new DateTimeZone( 'UTC' ),
+				'start' => $summerStart,
+				'end' => $summerEnd
+			] ),
+			$summerStart,
+			$summerEnd
+		];
+
+		yield 'Europe/Rome with DST' => [
+			$this->getTestDataWithDefault( [
+				'timezone' => new DateTimeZone( 'Europe/Rome' ),
+				'start' => $summerStart,
+				'end' => $summerEnd
+			] ),
+			$summerStartMinus2Hours,
+			$summerEndMinus2Hours
+		];
+
+		yield 'Europe/Rome without DST' => [
+			$this->getTestDataWithDefault( [
+				'timezone' => new DateTimeZone( 'Europe/Rome' ),
+				'start' => $winterStart,
+				'end' => $winterEnd
+			] ),
+			$winterStartMinus1Hour,
+			$winterEndMinus1Hour
+		];
+
+		yield 'Offset in summer' => [
+			$this->getTestDataWithDefault( [
+				'timezone' => new DateTimeZone( '+02:00' ),
+				'start' => $summerStart,
+				'end' => $summerEnd
+			] ),
+			$summerStartMinus2Hours,
+			$summerEndMinus2Hours
+		];
+
+		yield 'Offset in winter' => [
+			$this->getTestDataWithDefault( [
+				'timezone' => new DateTimeZone( '+02:00' ),
+				'start' => $winterStart,
+				'end' => $winterEnd
+			] ),
+			$winterStartMinus2Hours,
+			$winterEndMinus2Hours
+		];
+	}
+
 	private function getTestDataWithDefault( array $specificData = [] ): array {
-		return array_values( array_replace( self::VALID_DEFAULT_DATA, $specificData ) );
+		return array_values( array_replace( $this->getValidDefaultData(), $specificData ) );
 	}
 }

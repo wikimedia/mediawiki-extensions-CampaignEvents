@@ -45,6 +45,7 @@
 	"campaignevents-edit-field-event-status": "Event status text on [[Special:EditEventRegistration]]",
 	"campaignevents-edit-field-status-open": "Message used on [[Special:EditEventRegistration]] to describe the \"open\" status of a registration. \"Open\" is an adjective here.",
 	"campaignevents-edit-field-status-closed": "Message used on [[Special:EditEventRegistration]] to describe the \"closed\" status of a registration.",
+	"campaignevents-edit-field-timezone": "Label of the event time zone field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-start": "Label of the event start time field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-end": "Label of the event end time field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-meeting-type": "Label of the event meeting type field on [[Special:EnableEventRegistration]]",
