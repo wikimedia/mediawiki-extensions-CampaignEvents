@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Kareyac",
 			"Okras",
 			"Pacha Tchernof"
 		]
 	},
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
+	"nstab-event": "Событие",
 	"campaignevents-error-invalid-id": "Идентификатор мероприятия должен быть положительным целым числом.",
 	"campaignevents-error-invalid-title-interwiki": "Заголовок страницы мероприятия содержит недействительный интервики-префикс",
 	"campaignevents-error-invalid-chat-url": "Введите действительный URL-адрес чата.",
