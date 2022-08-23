@@ -228,7 +228,7 @@ class EventPageDecorator {
 			'label' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-enableheader-button-label' )
 			),
-			'classes' => [ 'ext-campaignevents-eventpage-action-element' ],
+			'classes' => [ 'ext-campaignevents-eventpage-enable-registration-btn' ],
 			'href' => $enableRegistrationURL,
 		] );
 
@@ -237,7 +237,7 @@ class EventPageDecorator {
 			'padded' => true,
 			'framed' => true,
 			'expanded' => false,
-			'classes' => [ 'ext-campaignevents-eventpage-header' ],
+			'classes' => [ 'ext-campaignevents-eventpage-enableheader' ],
 		] );
 
 		$layout->setAttributes( [
@@ -375,15 +375,22 @@ class EventPageDecorator {
 			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
 		] );
 
-		$items[] = new ButtonWidget( [
+		$btnContainer = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-eventpage-header-buttons' ] );
+		$btnContainer->appendContent( new ButtonWidget( [
 			'framed' => false,
 			'flags' => [ 'progressive' ],
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-details' ) ),
 			'classes' => [ 'ext-campaignevents-event-details-btn' ],
 			'href' => SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID )->getLocalURL(),
-		] );
+		] ) );
 
-		$items[] = $this->getActionElement( $eventID, $msgFormatter, $userStatus );
+		$actionElement = $this->getActionElement( $eventID, $msgFormatter, $userStatus );
+		if ( $actionElement ) {
+			$btnContainer->appendContent( $actionElement );
+		}
+
+		$items[] = $btnContainer;
 
 		$layout = new PanelLayout( [
 			'content' => $items,
@@ -673,7 +680,6 @@ class EventPageDecorator {
 				'flags' => [ 'progressive' ],
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-manage' ) ),
 				'classes' => [
-					'ext-campaignevents-eventpage-action-element',
 					'ext-campaignevents-eventpage-manage-btn'
 				],
 				'href' => SpecialPage::getTitleFor(
@@ -712,7 +718,6 @@ class EventPageDecorator {
 			return new HorizontalLayout( [
 				'items' => $alreadyRegisteredItems,
 				'classes' => [
-					'ext-campaignevents-eventpage-action-element',
 					'ext-campaignevents-eventpage-unregister-layout'
 				]
 			] );
@@ -723,7 +728,6 @@ class EventPageDecorator {
 				'flags' => [ 'primary', 'progressive' ],
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-register' ) ),
 				'classes' => [
-					'ext-campaignevents-eventpage-action-element',
 					'ext-campaignevents-eventpage-register-btn'
 				],
 				'href' => SpecialPage::getTitleFor( SpecialRegisterForEvent::PAGE_NAME, (string)$eventID )
