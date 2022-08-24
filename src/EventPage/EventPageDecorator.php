@@ -506,7 +506,7 @@ class EventPageDecorator {
 			) {
 				$linkIcon = new IconWidget( [ 'icon' => 'link' ] );
 				$linkContent = new HtmlSnippet(
-					$linkIcon . '&nbsp' . Linker::makeExternalLink( $meetingURL, $meetingURL )
+					$linkIcon . '&nbsp;' . Linker::makeExternalLink( $meetingURL, $meetingURL )
 				);
 			} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
 				$linkContent = $msgFormatter->format(
