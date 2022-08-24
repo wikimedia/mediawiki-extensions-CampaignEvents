@@ -105,7 +105,7 @@
 				'change',
 				mw.util.debounce( function () {
 					// eslint-disable-next-line no-jquery/no-global-selector
-					$( '.ext-campaignevents-details-user-div' ).remove();
+					$( '.ext-campaignevents-details-user-row' ).remove();
 
 					thisClass.participantCheckboxes = [];
 
@@ -218,7 +218,7 @@
 				thisClass.participantCheckboxes =
 					thisClass.participantCheckboxes.filter( function ( el ) {
 						if ( el.isSelected() ) {
-							$( el.$element ).closest( '.ext-campaignevents-details-user-div' ).remove();
+							$( el.$element ).closest( '.ext-campaignevents-details-user-row' ).remove();
 							return false;
 						} else {
 							return el;
@@ -339,7 +339,7 @@
 					);
 
 					var layout = new OO.ui.Element( {
-						classes: [ 'ext-campaignevents-details-user-div' ],
+						classes: [ 'ext-campaignevents-details-user-row' ],
 						content: items
 					} );
 

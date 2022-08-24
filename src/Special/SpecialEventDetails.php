@@ -153,13 +153,15 @@ class SpecialEventDetails extends SpecialPage {
 				'flags' => [ 'progressive' ],
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-back-to-your-events' ) ),
 				'href' => SpecialPage::getTitleFor( SpecialMyEvents::PAGE_NAME )->getLocalURL(),
-				'icon' => 'arrowPrevious'
+				'icon' => 'arrowPrevious',
+				'classes' => [ 'ext-campaignevents-eventdetails-back-btn' ]
 			] );
 
 			$out->addHTML( $backLink );
 		}
 
-		$main = new Tag( 'div' );
+		$main = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-eventdetails-panels' ] );
 		$main->appendContent(
 			( new EventDetailsParticipantsModule() )->createContent(
 				$language,

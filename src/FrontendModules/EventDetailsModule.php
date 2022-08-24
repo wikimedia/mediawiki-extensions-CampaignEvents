@@ -138,10 +138,9 @@ class EventDetailsModule {
 
 		$items[] = new ButtonWidget( [
 			'flags' => [ 'progressive' ],
-			'target' => '_blank',
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-view-event-page' ) ),
 			'classes' => [ 'ext-campaignevents-event-details-view-event-page-button' ],
-			'href' => $pageURLResolver->getFullUrl( $registration->getPage() )
+			'href' => $pageURLResolver->getUrl( $registration->getPage() )
 		] );
 
 		return new PanelLayout( [

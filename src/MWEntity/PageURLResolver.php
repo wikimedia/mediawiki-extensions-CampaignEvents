@@ -26,10 +26,12 @@ class PageURLResolver {
 	}
 
 	/**
+	 * Returns the URL of a page. This could be a local URL (for local pages) or a full URL (for
+	 * foreign wiki pages).
 	 * @param ICampaignsPage $page
 	 * @return string
 	 */
-	public function getFullUrl( ICampaignsPage $page ): string {
+	public function getUrl( ICampaignsPage $page ): string {
 		if ( !$page instanceof MWPageProxy ) {
 			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
 		}
@@ -37,7 +39,7 @@ class PageURLResolver {
 		if ( !isset( $this->cache[$cacheKey] ) ) {
 			$wikiID = $page->getWikiId();
 			$this->cache[$cacheKey] = $wikiID === WikiAwareEntity::LOCAL
-				? $this->titleFactory->castFromPageIdentity( $page->getPageIdentity() )->getFullURL()
+				? $this->titleFactory->castFromPageIdentity( $page->getPageIdentity() )->getLocalURL()
 				: WikiMap::getForeignURL( $wikiID, $page->getPrefixedText() );
 		}
 		return $this->cache[$cacheKey];

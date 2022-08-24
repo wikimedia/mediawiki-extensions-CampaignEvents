@@ -159,7 +159,7 @@ class EventDetailsParticipantsModule {
 
 			$userRow = ( new Tag() )
 				->appendContent( ...$elements )
-				->addClasses( [ 'ext-campaignevents-details-user-div' ] );
+				->addClasses( [ 'ext-campaignevents-details-user-row' ] );
 
 			$usersDivRows->appendContent( $userRow );
 		}
@@ -170,7 +170,7 @@ class EventDetailsParticipantsModule {
 
 		return new PanelLayout( [
 			'content' => $items,
-			'padded' => true,
+			'padded' => false,
 			'framed' => true,
 			'expanded' => false,
 			'classes' => [ 'ext-campaignevents-event-details-participants-panel' ],
