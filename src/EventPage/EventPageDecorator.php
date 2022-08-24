@@ -273,7 +273,8 @@ class EventPageDecorator {
 				'oojs-ui.styles.icons-location',
 				'oojs-ui.styles.icons-interactions',
 				'oojs-ui.styles.icons-moderation',
-				'oojs-ui.styles.icons-user'
+				'oojs-ui.styles.icons-user',
+				'oojs-ui.styles.icons-editing-core',
 			],
 			UserLinker::MODULE_STYLES
 		) );
@@ -486,11 +487,12 @@ class EventPageDecorator {
 		$locationElements = [];
 		$onlineLocationElements = [];
 		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) {
-			$onlineLocationElements[] = ( new Tag( 'h5' ) )->appendContent(
-				$msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-online-label' )
-				)
-			);
+			$onlineLocationElements[] = ( new Tag( 'span' ) )
+				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-location-header' ] )
+				->appendContent(
+					$msgFormatter->format(
+						MessageValue::new( 'campaignevents-eventpage-dialog-online-label' )
+					) );
 			$meetingURL = $registration->getMeetingURL();
 			if ( $meetingURL === null ) {
 				$linkContent = $msgFormatter->format(
@@ -502,7 +504,10 @@ class EventPageDecorator {
 				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
 				$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER
 			) {
-				$linkContent = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
+				$linkIcon = new IconWidget( [ 'icon' => 'link' ] );
+				$linkContent = new HtmlSnippet(
+					$linkIcon . '&nbsp' . Linker::makeExternalLink( $meetingURL, $meetingURL )
+				);
 			} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
 				$linkContent = $msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-link-register' )
@@ -535,9 +540,11 @@ class EventPageDecorator {
 				) );
 			}
 			if ( $onlineLocationElements ) {
-				$inPersonLabel = ( new Tag( 'h5' ) )->appendContent( $msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
-				) );
+				$inPersonLabel = ( new Tag( 'span' ) )
+					->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-location-header' ] )
+					->appendContent( $msgFormatter->format(
+						MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
+					) );
 				$locationElements[] = $inPersonLabel;
 				$locationElements[] = $addressElement;
 				$locationElements = array_merge( $locationElements, $onlineLocationElements );
@@ -575,15 +582,15 @@ class EventPageDecorator {
 				MessageValue::new( 'campaignevents-eventpage-dialog-participants' )
 					->numParams( $participantsCount )
 			),
-			'content' => new HtmlSnippet( $participantsList )
+			'content' => new HtmlSnippet( $participantsList ),
+			'classes' => [ 'ext-campaignevents-detailsdialog-participants' ]
 		] );
-		$participantsContainer = Html::rawElement( 'div', [], $participantsWidget );
 
 		$dialogContent = Html::element( 'h2', [], $registration->getName() );
 		$dialogContent .= Html::rawElement(
 			'div',
 			[ 'class' => 'ext-campaignevents-detailsdialog-body-container' ],
-			$organizersAndDetailsContainer . $participantsContainer
+			$organizersAndDetailsContainer . $participantsWidget
 		);
 
 		return Html::rawElement( 'div', [ 'id' => 'ext-campaignEvents-detailsDialog-content' ], $dialogContent );

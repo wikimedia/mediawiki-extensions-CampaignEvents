@@ -11,7 +11,7 @@ use OOUI\Tag;
 use OOUI\Widget;
 
 /**
- * A widget combining an icon and some unlabelled information. The label is invisible and used as `title`
+ * A widget combining an icon and some labelled information. The label is invisible and used as `title`
  * of the icon. Somewhat similar to MessageWidget, but with different semantics.
  * @note When using this widget, you should load the `ext.campaignEvents.TextWithIconWidget.less` stylesheet.
  */

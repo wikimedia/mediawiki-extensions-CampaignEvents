@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\Widgets;
+namespace MediaWiki\Extension\CampaignEvents\Widget;
 
 use InvalidArgumentException;
 use OOUI\IconElement;
@@ -12,6 +12,7 @@ use OOUI\Widget;
 
 /**
  * A generic widget combining an icon, a label and content.
+ * TODO This widget requires styles that are only loaded on Special:MyEvents and is not really reusable outside of it
  */
 class IconLabelContentWidget extends Widget {
 	use IconElement;
