@@ -4,6 +4,7 @@
 			"Winston Sung"
 		]
 	},
+	"nstab-event": "活動",
 	"campaignevents-error-invalid-title": "活動頁面標題無效：$1",
 	"campaignevents-error-invalid-chat-url": "聊天連結無效",
 	"campaignevents-error-invalid-status": "活動狀態無效",

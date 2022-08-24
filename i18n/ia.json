@@ -5,6 +5,7 @@
 		]
 	},
 	"campaignevents-desc": "Forni functionalitate pro organisatores e participantes de campanias.",
+	"nstab-event": "Evento",
 	"action-campaignevents-enable-registration": "activar inscriptiones pro eventos",
 	"right-campaignevents-enable-registration": "Activar inscriptiones pro eventos",
 	"action-campaignevents-delete-registration": "deler inscriptiones de eventos",
