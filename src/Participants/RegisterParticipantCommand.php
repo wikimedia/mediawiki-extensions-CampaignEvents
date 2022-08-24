@@ -13,9 +13,15 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
 use StatusValue;
+use UnexpectedValueException;
 
 class RegisterParticipantCommand {
 	public const SERVICE_NAME = 'CampaignEventsRegisterParticipantCommand';
+
+	public const CAN_REGISTER = 0;
+	public const CANNOT_REGISTER_DELETED = 1;
+	public const CANNOT_REGISTER_ENDED = 2;
+	public const CANNOT_REGISTER_CLOSED = 3;
 
 	/** @var ParticipantsStore */
 	private $participantsStore;
@@ -69,30 +75,21 @@ class RegisterParticipantCommand {
 	}
 
 	/**
-	 * Checks whether it's possible to register for the given event.
 	 * @param ExistingEventRegistration $registration
-	 * @return bool
+	 * @return int self::CAN_REGISTER or one of the self::CANNOT_REGISTER_* constants
 	 */
-	public static function isRegistrationAllowedForEvent( ExistingEventRegistration $registration ): bool {
-		return self::checkIsRegistrationAllowed( $registration )->isGood();
-	}
-
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @return StatusValue
-	 */
-	private static function checkIsRegistrationAllowed( ExistingEventRegistration $registration ): StatusValue {
+	public static function checkIsRegistrationAllowed( ExistingEventRegistration $registration ): int {
 		if ( $registration->getDeletionTimestamp() !== null ) {
-			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' );
+			return self::CANNOT_REGISTER_DELETED;
 		}
 		$endTS = $registration->getEndTimestamp();
 		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
-			return StatusValue::newFatal( 'campaignevents-register-event-past' );
+			return self::CANNOT_REGISTER_ENDED;
 		}
 		if ( $registration->getStatus() !== EventRegistration::STATUS_OPEN ) {
-			return StatusValue::newFatal( 'campaignevents-register-event-not-open' );
+			return self::CANNOT_REGISTER_CLOSED;
 		}
-		return StatusValue::newGood();
+		return self::CAN_REGISTER;
 	}
 
 	/**
@@ -104,9 +101,22 @@ class RegisterParticipantCommand {
 		ExistingEventRegistration $registration,
 		ICampaignsAuthority $performer
 	): StatusValue {
-		$registrationAllowedStatus = self::checkIsRegistrationAllowed( $registration );
-		if ( !$registrationAllowedStatus->isGood() ) {
-			return $registrationAllowedStatus;
+		$registrationAllowedVal = self::checkIsRegistrationAllowed( $registration );
+		if ( $registrationAllowedVal !== self::CAN_REGISTER ) {
+			switch ( $registrationAllowedVal ) {
+				case self::CANNOT_REGISTER_DELETED:
+					$msg = 'campaignevents-register-registration-deleted';
+					break;
+				case self::CANNOT_REGISTER_ENDED:
+					$msg = 'campaignevents-register-event-past';
+					break;
+				case self::CANNOT_REGISTER_CLOSED:
+					$msg = 'campaignevents-register-event-not-open';
+					break;
+				default:
+					throw new UnexpectedValueException( "Unexpected val $registrationAllowedVal" );
+			}
+			return StatusValue::newFatal( $msg );
 		}
 
 		try {

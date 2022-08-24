@@ -761,7 +761,8 @@ class EventPageDecorator {
 			}
 
 			if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $centralUser ) ) {
-				return UnregisterParticipantCommand::isUnregistrationAllowedForEvent( $event )
+				$checkUnregistrationAllowedVal = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event );
+				return $checkUnregistrationAllowedVal === UnregisterParticipantCommand::CAN_UNREGISTER
 					? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
 					: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;
 			}
@@ -770,7 +771,8 @@ class EventPageDecorator {
 
 		// User is logged-in and not already participating, or logged-out, in which case we'll know better
 		// once they log in.
-		return RegisterParticipantCommand::isRegistrationAllowedForEvent( $event )
+		$checkRegistrationAllowedVal = RegisterParticipantCommand::checkIsRegistrationAllowed( $event );
+		return $checkRegistrationAllowedVal === RegisterParticipantCommand::CAN_REGISTER
 			? self::USER_STATUS_CAN_REGISTER
 			: self::USER_STATUS_CANNOT_REGISTER;
 	}
