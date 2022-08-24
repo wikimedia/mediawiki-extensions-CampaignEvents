@@ -49,6 +49,7 @@ use OOUI\Tag;
 use OutputPage;
 use SpecialPage;
 use TitleFormatter;
+use UnexpectedValueException;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
@@ -68,9 +69,10 @@ class EventPageDecorator {
 	private const USER_STATUS_BLOCKED = 1;
 	private const USER_STATUS_ORGANIZER = 2;
 	private const USER_STATUS_PARTICIPANT_CAN_UNREGISTER = 3;
-	private const USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER = 4;
+	private const USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED = 4;
 	private const USER_STATUS_CAN_REGISTER = 5;
-	private const USER_STATUS_CANNOT_REGISTER = 6;
+	private const USER_STATUS_CANNOT_REGISTER_ENDED = 6;
+	private const USER_STATUS_CANNOT_REGISTER_CLOSED = 7;
 
 	/** @var IEventLookup */
 	private $eventLookup;
@@ -502,7 +504,7 @@ class EventPageDecorator {
 			} elseif (
 				$userStatus === self::USER_STATUS_ORGANIZER ||
 				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
-				$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER
+				$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED
 			) {
 				$linkIcon = new IconWidget( [ 'icon' => 'link' ] );
 				$linkContent = new HtmlSnippet(
@@ -514,7 +516,8 @@ class EventPageDecorator {
 				);
 			} elseif (
 				$userStatus === self::USER_STATUS_BLOCKED ||
-				$userStatus === self::USER_STATUS_CANNOT_REGISTER
+				$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
+				$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
 			) {
 				$linkContent = '';
 			} else {
@@ -678,8 +681,24 @@ class EventPageDecorator {
 	 * @return Element|null
 	 */
 	private function getActionElement( int $eventID, ITextFormatter $msgFormatter, int $userStatus ): ?Element {
-		if ( $userStatus === self::USER_STATUS_BLOCKED || $userStatus === self::USER_STATUS_CANNOT_REGISTER ) {
+		if ( $userStatus === self::USER_STATUS_BLOCKED ) {
 			return null;
+		}
+
+		if (
+			$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
+			$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
+		) {
+			$msgKey = $userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED
+				? 'campaignevents-eventpage-btn-registration-closed'
+				: 'campaignevents-eventpage-btn-event-ended';
+			return new ButtonWidget( [
+				'disabled' => true,
+				'label' => $msgFormatter->format( MessageValue::new( $msgKey ) ),
+				'classes' => [
+					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
+				],
+			] );
 		}
 
 		if ( $userStatus === self::USER_STATUS_ORGANIZER ) {
@@ -687,7 +706,8 @@ class EventPageDecorator {
 				'flags' => [ 'progressive' ],
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-manage' ) ),
 				'classes' => [
-					'ext-campaignevents-eventpage-manage-btn'
+					'ext-campaignevents-eventpage-manage-btn',
+					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
 				],
 				'href' => SpecialPage::getTitleFor(
 					SpecialEventDetails::PAGE_NAME,
@@ -698,7 +718,7 @@ class EventPageDecorator {
 
 		if (
 			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
-			$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER
+			$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED
 		) {
 			$unregisterURL = SpecialPage::getTitleFor(
 				SpecialCancelEventRegistration::PAGE_NAME,
@@ -713,7 +733,7 @@ class EventPageDecorator {
 					'inline' => true,
 				] )
 			];
-			if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER ) {
+			if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED ) {
 				$alreadyRegisteredItems[] = new ButtonWidget( [
 					'flags' => [ 'destructive' ],
 					'icon' => 'trash',
@@ -725,7 +745,8 @@ class EventPageDecorator {
 			return new HorizontalLayout( [
 				'items' => $alreadyRegisteredItems,
 				'classes' => [
-					'ext-campaignevents-eventpage-unregister-layout'
+					'ext-campaignevents-eventpage-unregister-layout',
+					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
 				]
 			] );
 		}
@@ -735,7 +756,8 @@ class EventPageDecorator {
 				'flags' => [ 'primary', 'progressive' ],
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-register' ) ),
 				'classes' => [
-					'ext-campaignevents-eventpage-register-btn'
+					'ext-campaignevents-eventpage-register-btn',
+					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
 				],
 				'href' => SpecialPage::getTitleFor( SpecialRegisterForEvent::PAGE_NAME, (string)$eventID )
 					->getLocalURL(),
@@ -762,9 +784,16 @@ class EventPageDecorator {
 
 			if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $centralUser ) ) {
 				$checkUnregistrationAllowedVal = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event );
-				return $checkUnregistrationAllowedVal === UnregisterParticipantCommand::CAN_UNREGISTER
-					? self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
-					: self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER;
+				switch ( $checkUnregistrationAllowedVal ) {
+					case UnregisterParticipantCommand::CANNOT_UNREGISTER_DELETED:
+						throw new UnexpectedValueException( "Registration should not be deleted at this point." );
+					case UnregisterParticipantCommand::CANNOT_UNREGISTER_ENDED:
+						return self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED;
+					case UnregisterParticipantCommand::CAN_UNREGISTER:
+						return self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER;
+					default:
+						throw new UnexpectedValueException( "Unexpected value $checkUnregistrationAllowedVal" );
+				}
 			}
 		} catch ( UserNotGlobalException $_ ) {
 		}
@@ -772,8 +801,17 @@ class EventPageDecorator {
 		// User is logged-in and not already participating, or logged-out, in which case we'll know better
 		// once they log in.
 		$checkRegistrationAllowedVal = RegisterParticipantCommand::checkIsRegistrationAllowed( $event );
-		return $checkRegistrationAllowedVal === RegisterParticipantCommand::CAN_REGISTER
-			? self::USER_STATUS_CAN_REGISTER
-			: self::USER_STATUS_CANNOT_REGISTER;
+		switch ( $checkRegistrationAllowedVal ) {
+			case RegisterParticipantCommand::CANNOT_REGISTER_DELETED:
+				throw new UnexpectedValueException( "Registration should not be deleted at this point." );
+			case RegisterParticipantCommand::CANNOT_REGISTER_ENDED:
+				return self::USER_STATUS_CANNOT_REGISTER_ENDED;
+			case RegisterParticipantCommand::CANNOT_REGISTER_CLOSED:
+				return self::USER_STATUS_CANNOT_REGISTER_CLOSED;
+			case RegisterParticipantCommand::CAN_REGISTER:
+				return self::USER_STATUS_CAN_REGISTER;
+			default:
+				throw new UnexpectedValueException( "Unexpected value $checkRegistrationAllowedVal" );
+		}
 	}
 }

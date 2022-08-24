@@ -132,8 +132,8 @@
 						registerUser()
 							.fail( function () {
 								// Fall back to the special page
-								// TODO MVP Some errors (at least) could be surfaced here,
-								// e.g., if the event is over.
+								// TODO We could also show an error here once T269492 and T311423
+								//  are resolved
 								$btn.off( 'click' ).find( 'a' )[ 0 ].click();
 							} );
 					}
@@ -151,8 +151,8 @@
 					unregisterUser()
 						.fail( function () {
 							// Fall back to the special page
-							// TODO MVP Some errors (at least) could be surfaced here,
-							//  e.g., if the event is over.
+							// TODO We could also show an error here once T269492 and T311423
+							//  are resolved
 							$btn.off( 'click' ).find( 'a' )[ 0 ].click();
 						} );
 				}

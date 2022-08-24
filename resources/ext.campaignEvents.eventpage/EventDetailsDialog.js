@@ -36,9 +36,7 @@
 		/* eslint-disable no-jquery/no-global-selector */
 		this.content.$element.append( $( '#ext-campaignEvents-detailsDialog-content' ) );
 		this.$body.append( this.content.$element );
-		this.$foot.append(
-			$( '.ext-campaignevents-eventpage-manage-btn,.ext-campaignevents-eventpage-register-btn,.ext-campaignevents-eventpage-unregister-layout' ).clone( true )
-		);
+		this.$foot.append( $( '.ext-campaignevents-eventpage-cloneable-element-for-dialog' ).clone( true ) );
 		/* eslint-enable no-jquery/no-global-selector */
 	};
 
