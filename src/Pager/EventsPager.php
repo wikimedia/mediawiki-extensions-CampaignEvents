@@ -129,8 +129,6 @@ class EventsPager extends TablePager {
 				$conds,
 				[
 					'event_deleted_at' => null,
-					'cep_unregistered_at' => null,
-					'ceo_user_id' => $this->centralUser->getCentralID()
 				]
 			),
 			__METHOD__,
@@ -151,11 +149,17 @@ class EventsPager extends TablePager {
 			[
 				'ce_participants' => [
 					'LEFT JOIN',
-					'event_id=cep_event_id'
+					[
+						'event_id=cep_event_id',
+						'cep_unregistered_at' => null,
+					]
 				],
 				'ce_organizers' => [
-					'LEFT JOIN',
-					'event_id=ceo_event_id'
+					'JOIN',
+					[
+						'event_id=ceo_event_id',
+						'ceo_user_id' => $this->centralUser->getCentralID(),
+					]
 				]
 			]
 		);
