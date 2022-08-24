@@ -83,13 +83,14 @@
 	font-size: 0.9em;
 }
 
-.ext-campaignevents-eventpage-info-label {
+.ext-campaignevents-eventpage-enableheader-message {
 	.flex-display();
 	align-items: center;
-}
 
-.ext-campaignevents-eventpage-info-label .oo-ui-iconWidget {
-	margin-right: 0.5em;
+	& .oo-ui-iconWidget {
+		margin-right: 0.5em;
+		align-self: flex-start;
+	}
 }
 
 .ext-campaignevents-eventpage-enableheader {
@@ -117,6 +118,16 @@
 			// This is equivalent to using gap: 1em.
 			// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
 			margin-top: 1em;
+		}
+	}
+}
+
+@media ( max-width: @width-breakpoint-tablet ) {
+	.ext-campaignevents-eventpage-enableheader .ext-campaignevents-eventpage-enable-registration-btn {
+		&,
+		& .oo-ui-buttonElement-button {
+			// Make the button full-width on mobile.
+			width: 100%;
 		}
 	}
 }
