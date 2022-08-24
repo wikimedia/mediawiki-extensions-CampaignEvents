@@ -48,6 +48,7 @@
 				icon: 'ellipsis',
 				framed: false,
 				menu: {
+					horizontalPosition: 'end',
 					items: [
 						// Below we use <a> elements for accessibility, so it's possible to
 						// right-click, middle-click, see preview etc. We still need an event
