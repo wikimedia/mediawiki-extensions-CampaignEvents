@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -66,10 +68,15 @@ class ListParticipantsHandler extends SimpleHandler {
 		$respVal = [];
 		foreach ( $participants as $participant ) {
 			$centralUser = $participant->getUser();
+			try {
+				$userName = $this->centralUserLookup->getUserName( $centralUser );
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+				continue;
+			}
 			$respVal[] = [
 				'participant_id' => $participant->getParticipantID(),
 				'user_id' => $centralUser->getCentralID(),
-				'user_name' => $this->centralUserLookup->getUserName( $centralUser ),
+				'user_name' => $userName,
 				// To DO For now we decided on TS_DB to be the default returned by the api.
 				// see T312910
 				'user_registered_at' => wfTimestamp( TS_DB, $participant->getRegisteredAt() ),

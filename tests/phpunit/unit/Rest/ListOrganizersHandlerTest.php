@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -37,10 +38,13 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$roleFormatter = $this->createMock( RoleFormatter::class );
 		// Return the constant value for simplicity
 		$roleFormatter->method( 'getDebugName' )->willReturnArgument( 0 );
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->method( 'existsAndIsVisible' )->willReturn( true );
 		return new ListOrganizersHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
-			$roleFormatter
+			$roleFormatter,
+			$centralUserLookup
 		);
 	}
 
