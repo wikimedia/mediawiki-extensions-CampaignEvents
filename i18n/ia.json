@@ -146,6 +146,8 @@
 	"campaignevents-eventpage-header-attending": "Tu assistera!",
 	"campaignevents-eventpage-btn-manage": "Gerer evento",
 	"campaignevents-eventpage-btn-register": "Inscriber se al evento",
+	"campaignevents-eventpage-btn-registration-closed": "Inscription claudite",
+	"campaignevents-eventpage-btn-event-ended": "Evento finite",
 	"campaignevents-eventpage-dialog-title": "Detalios del evento",
 	"campaignevents-eventpage-dialog-organizers": "Organisate per: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Vider tote le organisatores",
@@ -208,5 +210,6 @@
 	"campaignevents-unregister-participants-past-registration": "Tu non pote remover participantes de iste evento perque le evento ha terminate.",
 	"campaignevents-event-details-remove-participant-notification-error": "Un error ha occurrite durante le tentativa de remover le participante{{PLURAL:$1||s}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Le parametro 'user_ids' debe esser un array de IDs de usator, o nulle (pro remover tote le usatores)",
-	"campaignevents-event-details-search-participants-placeholder": "Cercar participantes"
+	"campaignevents-event-details-search-participants-placeholder": "Cercar participantes",
+	"campaignevents-rest-list-participants-empty-filter": "Le filtro del nomine de usator, si specificate, debe esser un texto non vacue."
 }

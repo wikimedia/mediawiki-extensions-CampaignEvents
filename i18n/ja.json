@@ -86,6 +86,8 @@
 	"campaignevents-eventpage-header-details": "詳細",
 	"campaignevents-eventpage-btn-manage": "イベントを管理する",
 	"campaignevents-eventpage-btn-register": "イベントに登録する",
+	"campaignevents-eventpage-btn-registration-closed": "登録は終了しました",
+	"campaignevents-eventpage-btn-event-ended": "イベント終了",
 	"campaignevents-eventpage-dialog-title": "イベントの詳細",
 	"campaignevents-eventpage-dialog-organizers-view-all": "すべての主催者を表示",
 	"campaignevents-eventpage-dialog-dates-label": "開始時間と終了時間",

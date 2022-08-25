@@ -4,7 +4,8 @@
 			"Gomoko",
 			"Pols12",
 			"Verdy p",
-			"Wladek92"
+			"Wladek92",
+			"ߒߓߋ߫ ߝߏߝߣߊ߫"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -150,6 +151,8 @@
 	"campaignevents-eventpage-header-attending": "Vous participez !",
 	"campaignevents-eventpage-btn-manage": "Gérer l’événement",
 	"campaignevents-eventpage-btn-register": "S’inscrire à l’événement",
+	"campaignevents-eventpage-btn-registration-closed": "ߕߐ߯ߛߓߍߟߌ ߓߘߊ߫ ߘߊߕߎ߲߯",
+	"campaignevents-eventpage-btn-event-ended": "ߖߊ߲߬ߖߏ߲ ߓߊ߲ߠߌ߲",
 	"campaignevents-eventpage-dialog-title": "Détails de l’évènement",
 	"campaignevents-eventpage-dialog-organizers": "Organisé par : $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Voir tous les organisateurs",
@@ -212,5 +215,6 @@
 	"campaignevents-unregister-participants-past-registration": "Vous ne pouvez pas enlever des participants de cet événement car il est terminé.",
 	"campaignevents-event-details-remove-participant-notification-error": "Une erreur s’est produite en essayant d’enlever {{PLURAL:$1|le participant|les participants}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour enlever tous les utilisateurs)",
-	"campaignevents-event-details-search-participants-placeholder": "Rechercher des participants"
+	"campaignevents-event-details-search-participants-placeholder": "Rechercher des participants",
+	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide."
 }
