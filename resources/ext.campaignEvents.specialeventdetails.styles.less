@@ -136,10 +136,6 @@
 	background: @colorGray15;
 }
 
-.ext-campaignevents-details-hide-element {
-	display: none;
-}
-
 div.ext-campaignevents-details-participants-search {
 	width: 75%;
 }
@@ -182,4 +178,9 @@ div.ext-campaignevents-details-participants-search {
 	font-size: 1.1em;
 	padding: 0 1em;
 	text-align: center;
+}
+
+// This rule should come last so that it overrides other styles set in this file.
+.ext-campaignevents-details-hide-element {
+	display: none;
 }
