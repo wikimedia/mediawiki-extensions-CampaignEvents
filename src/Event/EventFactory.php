@@ -4,8 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
-use DateTime;
-use DateTimeZone;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -50,9 +48,8 @@ class EventFactory {
 	 * @param string|null $trackingToolName
 	 * @param string|null $trackingToolURL
 	 * @param string $status
-	 * @param DateTimeZone $timezone
-	 * @param string $startTimestamp In the TS_MW format, already in the local timezone
-	 * @param string $endTimestamp In the TS_MW format, already in the local timezone
+	 * @param string $startTimestamp In the TS_MW format
+	 * @param string $endTimestamp In the TS_MW format
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
@@ -72,7 +69,6 @@ class EventFactory {
 		?string $trackingToolName,
 		?string $trackingToolURL,
 		string $status,
-		DateTimeZone $timezone,
 		string $startTimestamp,
 		string $endTimestamp,
 		string $type,
@@ -111,7 +107,7 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-status' );
 		}
 
-		$datesStatus = $this->validateDates( $validationFlags, $timezone, $startTimestamp, $endTimestamp );
+		$datesStatus = $this->validateDates( $validationFlags, $startTimestamp, $endTimestamp );
 		$res->merge( $datesStatus );
 		[ $startTSUnix, $endTSUnix ] = $datesStatus->getValue();
 
@@ -205,17 +201,11 @@ class EventFactory {
 
 	/**
 	 * @param int $validationFlags
-	 * @param DateTimeZone $timezone
 	 * @param string $start
 	 * @param string $end
 	 * @return StatusValue Whose result is [ start_unix, end_unix ]
 	 */
-	private function validateDates(
-		int $validationFlags,
-		DateTimeZone $timezone,
-		string $start,
-		string $end
-	): StatusValue {
+	private function validateDates( int $validationFlags, string $start, string $end ): StatusValue {
 		$res = StatusValue::newGood();
 
 		$startTSUnix = null;
@@ -224,15 +214,12 @@ class EventFactory {
 		if ( $start === '' ) {
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-empty-start' );
-		} elseif ( MWTimestamp::convert( TS_MW, $start ) !== $start ) {
-			// This accounts for both the timestamp being invalid and it not being TS_MW.
-			$startAndEndValid = false;
-			$res->error( 'campaignevents-error-invalid-start' );
 		} else {
-			$startTime = new DateTime( $start, $timezone );
-			$utcStartTime = $startTime->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp();
-			$startTSUnix = wfTimestamp( TS_UNIX, $utcStartTime );
-			if (
+			$startTSUnix = wfTimestamp( TS_UNIX, $start );
+			if ( $startTSUnix === false ) {
+				$startAndEndValid = false;
+				$res->error( 'campaignevents-error-invalid-start' );
+			} elseif (
 				!( $validationFlags & self::VALIDATE_SKIP_DATES_PAST ) && (int)$startTSUnix < MWTimestamp::time()
 			) {
 				$res->error( 'campaignevents-error-start-past' );
@@ -242,14 +229,12 @@ class EventFactory {
 		if ( $end === '' ) {
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-empty-end' );
-		} elseif ( MWTimestamp::convert( TS_MW, $end ) !== $end ) {
-			// This accounts for both the timestamp being invalid and it not being TS_MW.
-			$startAndEndValid = false;
-			$res->error( 'campaignevents-error-invalid-end' );
 		} else {
-			$endTime = new DateTime( $end, $timezone );
-			$utcEndTime = $endTime->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp();
-			$endTSUnix = wfTimestamp( TS_UNIX, $utcEndTime );
+			$endTSUnix = wfTimestamp( TS_UNIX, $end );
+			if ( $endTSUnix === false ) {
+				$startAndEndValid = false;
+				$res->error( 'campaignevents-error-invalid-end' );
+			}
 		}
 
 		if ( $startAndEndValid && $startTSUnix > $endTSUnix ) {
