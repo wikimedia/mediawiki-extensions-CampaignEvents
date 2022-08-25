@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -119,6 +120,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			null,
 			null,
 			$body['status'],
+			new DateTimeZone( 'UTC' ),
 			$body['start_time'],
 			$body['end_time'],
 			// TODO MVP Get this from the request body

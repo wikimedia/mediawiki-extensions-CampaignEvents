@@ -42,6 +42,7 @@
 	"campaignevents-edit-field-event-status": "Event status",
 	"campaignevents-edit-field-status-open": "Open",
 	"campaignevents-edit-field-status-closed": "Closed",
+	"campaignevents-edit-field-timezone": "Time zone",
 	"campaignevents-edit-field-start": "Start time",
 	"campaignevents-edit-field-end": "End time",
 	"campaignevents-edit-field-meeting-type": "Event meeting type",
