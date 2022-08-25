@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use DateTimeZone;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
@@ -59,7 +58,6 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			null,
 			null,
 			EventRegistration::STATUS_OPEN,
-			new DateTimeZone( 'UTC' ),
 			$body['start_time'],
 			$body['end_time'],
 			// TODO MVP Get this from the request body
