@@ -146,6 +146,8 @@
 	"campaignevents-eventpage-header-attending": "{{GENDER:|אתה משתתף|את משתתפת}}!",
 	"campaignevents-eventpage-btn-manage": "ניהול אירוע",
 	"campaignevents-eventpage-btn-register": "הרשמה לאירוע",
+	"campaignevents-eventpage-btn-registration-closed": "ההרשמה נסגרה",
+	"campaignevents-eventpage-btn-event-ended": "האירוע הסתיים",
 	"campaignevents-eventpage-dialog-title": "פרטי האירוע",
 	"campaignevents-eventpage-dialog-organizers": "מאורגן על־ידי: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "הצגת כל המארגנים",
@@ -208,5 +210,6 @@
 	"campaignevents-unregister-participants-past-registration": "אין לך הרשאה להסיר משתתפים מהאירוע הזה כי האירוע הסתיים.",
 	"campaignevents-event-details-remove-participant-notification-error": "אירעה שגיאה בעת ניסיון להסיר את {{PLURAL:$1|המשתתף|המשתתפים}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "הפרמטר \"user_ids\" חייב להיות מערך של מזהי משתמשים או null (כדי להסיר את כל המשתמשים)",
-	"campaignevents-event-details-search-participants-placeholder": "חיפוש משתתפים"
+	"campaignevents-event-details-search-participants-placeholder": "חיפוש משתתפים",
+	"campaignevents-rest-list-participants-empty-filter": "מסנן שמות המשתמש, אם צוין, חייב להיות מחרוזת לא ריקה."
 }
