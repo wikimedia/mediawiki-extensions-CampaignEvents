@@ -277,6 +277,7 @@ class EventPageDecorator {
 				'oojs-ui.styles.icons-moderation',
 				'oojs-ui.styles.icons-user',
 				'oojs-ui.styles.icons-editing-core',
+				'oojs-ui.styles.icons-alerts',
 			],
 			UserLinker::MODULE_STYLES
 		) );
@@ -565,6 +566,40 @@ class EventPageDecorator {
 			'content' => $locationElements
 		] );
 		$organizersAndDetails .= Html::rawElement( 'div', [], $locationWidget );
+
+		$chatURL = $registration->getChatURL();
+		if ( $chatURL === null ) {
+			$chatURLContent = $msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-chat-not-available' )
+			);
+		} elseif (
+			$userStatus === self::USER_STATUS_ORGANIZER ||
+			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
+			$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED
+		) {
+			$chatURLContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
+		} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
+			$chatURLContent = $msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-chat-register' )
+			);
+		} elseif (
+			$userStatus === self::USER_STATUS_BLOCKED ||
+			$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
+			$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
+		) {
+			$chatURLContent = '';
+		} else {
+			throw new LogicException( "Unexpected user status $userStatus" );
+		}
+		$chatURLWidget = new EventDetailsWidget( [
+			'icon' => 'speechBubbles',
+			'label' => $msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-chat-label' )
+			),
+			'content' => $chatURLContent
+		] );
+		$organizersAndDetails .= Html::rawElement( 'div', [], $chatURLWidget );
+
 		$organizersAndDetailsContainer = Html::rawElement(
 			'div',
 			[ 'class' => 'ext-campaignevents-detailsdialog-organizeranddetails-container' ],
