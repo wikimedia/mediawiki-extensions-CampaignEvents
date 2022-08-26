@@ -173,6 +173,11 @@
 				"columns": [ "event_page_wiki", "event_page_namespace", "event_page_title" ],
 				"unique": true,
 				"comment": "Used when querying events by pages. The index is currently unique, but this may change in the future."
+			},
+			{
+				"name": "event_id_deleted",
+				"unique": false,
+				"columns": [ "event_id", "event_deleted_at" ]
 			}
 		],
 		"pk": [ "event_id" ]
@@ -227,7 +232,20 @@
 			{
 				"name": "cep_event_participant",
 				"columns": [ "cep_event_id", "cep_user_id" ],
-				"unique": true
+				"unique": true,
+				"comment": "Uniqueness constraint, used in queries where we need the event first."
+			},
+			{
+				"name": "cep_event_unregistered",
+				"columns": [ "cep_event_id", "cep_unregistered_at" ],
+				"unique": false,
+				"comment": "For COUNT measurements."
+			},
+			{
+				"name": "cep_user_unregistered_event",
+				"columns": [ "cep_user_id", "cep_unregistered_at", "cep_event_id" ],
+				"unique": false,
+				"comment": "For JOINs."
 			}
 		],
 		"pk": [ "cep_id" ]
@@ -277,7 +295,14 @@
 			{
 				"name": "ceo_event_user_role",
 				"columns": [ "ceo_event_id", "ceo_user_id", "ceo_role_id" ],
-				"unique": true
+				"unique": true,
+				"comment": "Uniqueness constraint, used when retrieving the organizers of an event."
+			},
+			{
+				"name": "ceo_user_event",
+				"columns": [ "ceo_user_id", "ceo_event_id" ],
+				"unique": false,
+				"comment": "Used for JOINs."
 			}
 		],
 		"pk": [ "ceo_id" ]
