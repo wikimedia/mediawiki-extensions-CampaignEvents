@@ -4,6 +4,9 @@
 			"Hanna Tardos"
 		]
 	},
+	"nstab-event": "Esemény",
 	"campaignevents-role-organizer": "{{GENDER:$1|szervező}}",
+	"campaignevents-eventpage-btn-registration-closed": "Regisztráció lezárva",
+	"campaignevents-eventpage-btn-event-ended": "Az esemény véget ért",
 	"campaignevents-event-details-search-participants-placeholder": "Részvevők keresése"
 }

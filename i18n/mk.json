@@ -147,6 +147,8 @@
 	"campaignevents-eventpage-header-attending": "Ќе учествувате!",
 	"campaignevents-eventpage-btn-manage": "Управувај со настан",
 	"campaignevents-eventpage-btn-register": "Пријавете се за настанот",
+	"campaignevents-eventpage-btn-registration-closed": "Пријавувањето е завршено",
+	"campaignevents-eventpage-btn-event-ended": "Настанот заврши",
 	"campaignevents-eventpage-dialog-title": "Поединости за настанот",
 	"campaignevents-eventpage-dialog-organizers": "Приредувач: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Погл. сите приредувачи",
@@ -209,5 +211,6 @@
 	"campaignevents-unregister-participants-past-registration": "Не можете да отстранувате учесници од овој настан бидејќи настанот завршил.",
 	"campaignevents-event-details-remove-participant-notification-error": "Се појави грешка при обиодот да {{PLURAL:$1|го отстранат учесникот|ги отстранам учесниците}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Параметарот „user_ids“ мора да биде строј од кориснички назнали, или пак да е празен (за да се отстранат сите корисници)",
-	"campaignevents-event-details-search-participants-placeholder": "Пребарај учесници"
+	"campaignevents-event-details-search-participants-placeholder": "Пребарај учесници",
+	"campaignevents-rest-list-participants-empty-filter": "Филтерот за корисничко име, ако е укажан, не може да стои празен."
 }
