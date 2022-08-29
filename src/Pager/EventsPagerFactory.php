@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use IContextSource;
+use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -20,20 +21,25 @@ class EventsPagerFactory {
 	private $campaignsPageFactory;
 	/** @var PageURLResolver */
 	private $pageURLResolver;
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
 
 	/**
 	 * @param CampaignsDatabaseHelper $databaseHelper
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param PageURLResolver $pageURLResolver
+	 * @param LinkBatchFactory $linkBatchFactory
 	 */
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsPageFactory $campaignsPageFactory,
-		PageURLResolver $pageURLResolver
+		PageURLResolver $pageURLResolver,
+		LinkBatchFactory $linkBatchFactory
 	) {
 		$this->databaseHelper = $databaseHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->pageURLResolver = $pageURLResolver;
+		$this->linkBatchFactory = $linkBatchFactory;
 	}
 
 	/**
@@ -57,6 +63,7 @@ class EventsPagerFactory {
 			$this->databaseHelper,
 			$this->campaignsPageFactory,
 			$this->pageURLResolver,
+			$this->linkBatchFactory,
 			$user,
 			$search,
 			$status
