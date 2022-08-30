@@ -5,7 +5,12 @@
 		]
 	},
 	"nstab-event": "Esemény",
+	"campaignevents-edit-need-central-account": "Eseményregisztráció engedélyezéséhez vagy szerkesztéséhez központi felhasználói fiókra lesz szükséged.",
 	"campaignevents-role-organizer": "{{GENDER:$1|szervező}}",
+	"campaignevents-rest-user-not-found": "Nem találtunk központi felhasználót ezzel az azonosítóval.",
+	"campaignevents-register-need-central-account": "Eseményre való regisztrációhoz központi felhasználói fiókra lesz szükséged.",
+	"campaignevents-unregister-need-central-account": "Eseményregisztráció törléséhez központi felhasználói fiókra lesz szükséged.",
+	"campaignevents-myevents-need-central-account": "Az események listájának megtekintéséhez központi felhasználói fiókra lesz szükséged.",
 	"campaignevents-eventpage-btn-registration-closed": "Regisztráció lezárva",
 	"campaignevents-eventpage-btn-event-ended": "Az esemény véget ért",
 	"campaignevents-event-details-search-participants-placeholder": "Részvevők keresése"

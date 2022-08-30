@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Duke of Wikipädia",
-			"Eduardoaddad"
+			"Eduardoaddad",
+			"Tiagoquix"
 		]
 	},
 	"campaignevents-desc": "Fornece recursos para organizadores e participantes da campanha.",
@@ -64,6 +65,30 @@
 	"campaignevents-rest-edit-page-nonlocal": "Esta inscrição de evento foi habilitada na seguinte wiki e deve ser editada lá: $1.",
 	"campaignevents-edit-page-nonlocal": "Por favor [$1 edite esta inscrição] na wiki em que foi habilitada: $2.",
 	"campaignevents-edit-error-deleted": "Esta inscrição de evento foi excluída.",
+	"campaignevents-edit-need-central-account": "É necessário uma conta de usuário central para ativar ou editar registros de evento.",
 	"campaignevents-error-page-already-registered": "A página do evento em questão já possui uma inscrição associada.",
-	"campaignevents-register-confirmation-btn": "Registrar"
+	"campaignevents-error-page-already-registered-deleted": "Não é possível completar a ação pois o registro de evento foi excluído desta página de evento.",
+	"campaignevents-edit-not-allowed-registration": "Você não tem permissão para editar este registro de evento.",
+	"campaignevents-enable-registration-not-allowed-page": "Você não tem permissão para editar registros de evento na página em questão.",
+	"registerforevent": "Registrar-se em um evento",
+	"campaignevents-register-error-no-event": "Nenhum evento especificado.",
+	"campaignevents-register-error-event-not-found": "Não há nenhum evento com este ID.",
+	"campaignevents-register-success": "Você foi registrado com sucesso neste evento.",
+	"campaignevents-register-confirmation-top": "Confirmar registro",
+	"campaignevents-register-confirmation-text": "Confirme que deseja registrar-se neste evento usando o botão \"{{int:campaignevents-register-confirmation-btn}}\".",
+	"campaignevents-register-confirmation-btn": "Registrar",
+	"canceleventregistration": "Cancelar registro de um evento",
+	"campaignevents-unregister-success": "Registro de evento cancelado com sucesso.",
+	"campaignevents-unregister-confirmation-top": "Confirmar cancelamento de registro",
+	"campaignevents-unregister-confirmation-text": "Confirme que deseja cancelar o registro neste evento usando o botão \"{{int:campaignevents-register-confirmation-btn}}\".",
+	"campaignevents-unregister-confirmation-btn": "Cancelar registro",
+	"campaignevents-delete-not-allowed-registration": "Você não tem permissão para excluir este registro de evento.",
+	"campaignevents-rest-delete-already-deleted": "Este registro de evento já foi excluído.",
+	"campaignevents-role-creator": "{{GENDER:$1|criador|criadora}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|organizador|organizadora}}",
+	"campaignevents-rest-user-not-found": "Não há nenhum usuário com este ID central.",
+	"campaignevents-register-not-allowed": "Você não tem permissão para registrar-se em eventos.",
+	"campaignevents-register-event-past": "O período de registro deste evento já terminou.",
+	"campaignevents-register-event-not-open": "Não é mais possível registrar-se neste evento.",
+	"campaignevents-register-already-participant": "Você já está registrado neste evento."
 }
