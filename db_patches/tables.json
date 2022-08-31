@@ -289,22 +289,6 @@
 					"notnull": true,
 					"unsigned": true
 				}
-			},
-			{
-				"name": "ceo_created_at",
-				"comment": "Timestamp of when the user first became an organizer in this role.",
-				"type": "mwtimestamp",
-				"options": {
-					"notnull": true
-				}
-			},
-			{
-				"name": "ceo_deleted_at",
-				"comment": "Timestamp of when the user stopped being an organizer in this role.",
-				"type": "mwtimestamp",
-				"options": {
-					"notnull": false
-				}
 			}
 		],
 		"indexes": [

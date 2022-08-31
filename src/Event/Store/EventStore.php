@@ -96,13 +96,7 @@ class EventStore implements IEventStore, IEventLookup {
 			[ 'ceo_user_id' => $organizerID ],
 			$limit !== null ? [ 'LIMIT' => $limit ] : [],
 			[
-				'ce_organizers' => [
-					'INNER JOIN',
-					[
-						'event_id=ceo_event_id',
-						'ceo_deleted_at' => null
-					]
-				]
+				'ce_organizers' => [ 'INNER JOIN', [ 'event_id=ceo_event_id' ] ]
 			]
 		);
 

@@ -23,46 +23,16 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	/** @inheritDoc */
 	protected $tablesUsed = [ 'ce_organizers' ];
 
-	/**
-	 * @param bool $includeTimestamps If true, ceo_created_at and ceo_deleted_at won't be included. This is
-	 * useful when the method is called from a data provider, when the database cannot be accessed.
-	 * @return array
-	 */
-	private function getDefaultRows( bool $includeTimestamps = true ): array {
-		$rows = [
-			[
-				'ceo_event_id' => 1,
-				'ceo_user_id' => 101,
-				'ceo_role_id' => 1,
-			],
-			[
-				'ceo_event_id' => 1,
-				'ceo_user_id' => 102,
-				'ceo_role_id' => 2,
-			],
-			[
-				'ceo_event_id' => 1,
-				'ceo_user_id' => 103,
-				'ceo_role_id' => 2,
-			],
-		];
-		if ( $includeTimestamps ) {
-			$ts = $this->db->timestamp();
-			$rows[0]['ceo_created_at'] = $ts;
-			$rows[0]['ceo_deleted_at'] = null;
-			$rows[1]['ceo_created_at'] = $ts;
-			$rows[1]['ceo_deleted_at'] = null;
-			$rows[2]['ceo_created_at'] = $ts;
-			$rows[2]['ceo_deleted_at'] = $ts;
-		}
-		return $rows;
-	}
+	private const DEFAULT_ROWS = [
+		[ 'ceo_event_id' => 1, 'ceo_user_id' => 101, 'ceo_role_id' => 1 ],
+		[ 'ceo_event_id' => 1, 'ceo_user_id' => 102, 'ceo_role_id' => 2 ],
+	];
 
 	/**
 	 * @inheritDoc
 	 */
 	public function addDBData(): void {
-		$this->db->insert( 'ce_organizers', $this->getDefaultRows() );
+		$this->db->insert( 'ce_organizers', self::DEFAULT_ROWS );
 	}
 
 	/**
@@ -84,7 +54,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideOrganizers(): Generator {
-		yield 'Has organizers, including a deleted one' => [ 1, [ 101, 102 ] ];
+		yield 'Has organizers' => [ 1, [ 101, 102 ] ];
 		yield 'Does not have organizers' => [ 2, [] ];
 	}
 
@@ -106,7 +76,6 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	public function provideIsOrganizer(): Generator {
 		yield 'Yes, first' => [ 1, 101, true ];
 		yield 'Yes, second' => [ 1, 102, true ];
-		yield 'No, deleted' => [ 1, 103, false ];
 		yield 'Nope' => [ 2, 101, false ];
 	}
 
@@ -114,8 +83,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @param int $eventID
 	 * @param int $userID
 	 * @param string[] $roles
-	 * @param stdClass[] $expectedRows NOTE: These rows do not include ceo_created_at and ceo_deleted_at, because we
-	 *   can't use $this->db->timestamp() in the data provider, and we also don't need to check the values for equality.
+	 * @param stdClass[] $expectedRows
 	 * @covers ::addOrganizerToEvent
 	 * @dataProvider provideOrganizersToAdd
 	 */
@@ -149,12 +117,8 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 			101,
 			[ Roles::ROLE_CREATOR ],
 			$strVal( array_merge(
-				$this->getDefaultRows( false ),
-				[ [
-					'ceo_event_id' => 2,
-					'ceo_user_id' => 101,
-					'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR],
-				] ]
+				self::DEFAULT_ROWS,
+				[ [ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR] ] ]
 			) )
 		];
 		yield 'Adding two new roles' => [
@@ -162,18 +126,10 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 			101,
 			[ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
 			$strVal( array_merge(
-				$this->getDefaultRows( false ),
+				self::DEFAULT_ROWS,
 				[
-					[
-						'ceo_event_id' => 2,
-						'ceo_user_id' => 101,
-						'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR],
-					],
-					[
-						'ceo_event_id' => 2,
-						'ceo_user_id' => 101,
-						'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER],
-					]
+					[ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR] ],
+					[ 'ceo_event_id' => 2, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER] ]
 				]
 			) )
 		];
@@ -181,19 +137,15 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 			1,
 			101,
 			[ Roles::ROLE_CREATOR ],
-			$strVal( $this->getDefaultRows( false ) )
+			$strVal( self::DEFAULT_ROWS )
 		];
 		yield 'One role already there, one new' => [
 			1,
 			101,
 			[ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
 			$strVal( array_merge(
-				$this->getDefaultRows( false ),
-				[ [
-					'ceo_event_id' => 1,
-					'ceo_user_id' => 101,
-					'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER],
-				] ]
+				self::DEFAULT_ROWS,
+				[ [ 'ceo_event_id' => 1, 'ceo_user_id' => 101, 'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER] ] ]
 			) )
 		];
 	}
@@ -222,7 +174,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function provideOrganizerCount(): array {
 		return [
-			'Two organizers (third one deleted)' => [ 1, 2 ],
+			'Two organizers' => [ 1, 2 ],
 			'No organizers' => [ 1000, 0 ],
 		];
 	}
