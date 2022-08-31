@@ -89,14 +89,45 @@
 				}
 			},
 			{
-				"name": "event_start",
+				"name": "event_timezone",
+				"comment": "Timezone of the event, used with event_start_local and event_end_local.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "event_start_local",
+				"comment": "Start time of the event, in the local timezone (stored in event_timezone), in the TS_MW format. This does not use mwtimestamp because that is only intended for UTC time.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 14,
+					"fixed": true
+				}
+			},
+			{
+				"name": "event_start_utc",
+				"comment": "Start time of the event, in UTC. This value is derived from event_start_local, and is used for sorting.",
 				"type": "mwtimestamp",
 				"options": {
 					"notnull": true
 				}
 			},
 			{
-				"name": "event_end",
+				"name": "event_end_local",
+				"comment": "End time of the event, in the local timezone (stored in event_timezone), in the TS_MW format. This does not use mwtimestamp because that is only intended for UTC time.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 14,
+					"fixed": true
+				}
+			},
+			{
+				"name": "event_end_utc",
+				"comment": "End time of the event, in UTC. This value is derived from event_end_local, and is used for sorting.",
 				"type": "mwtimestamp",
 				"options": {
 					"notnull": true
@@ -177,6 +208,12 @@
 				"name": "event_id_deleted",
 				"unique": false,
 				"columns": [ "event_id", "event_deleted_at" ]
+			},
+			{
+				"name": "event_timezone_id",
+				"unique": false,
+				"columns": [ "event_timezone", "event_id" ],
+				"comment": "Used when updating UTC timestamps, filtering by timezone and batching by primary key."
 			}
 		],
 		"pk": [ "event_id" ]

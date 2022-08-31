@@ -13,8 +13,11 @@ CREATE TABLE campaign_events (
   event_tracking_tool_id INT DEFAULT NULL,
   event_tracking_tool_event_id TEXT DEFAULT NULL,
   event_status INT NOT NULL,
-  event_start TIMESTAMPTZ NOT NULL,
-  event_end TIMESTAMPTZ NOT NULL,
+  event_timezone TEXT NOT NULL,
+  event_start_local TEXT NOT NULL,
+  event_start_utc TIMESTAMPTZ NOT NULL,
+  event_end_local TEXT NOT NULL,
+  event_end_utc TIMESTAMPTZ NOT NULL,
   event_type TEXT NOT NULL,
   event_meeting_type INT NOT NULL,
   event_meeting_url TEXT NOT NULL,
@@ -32,6 +35,8 @@ CREATE UNIQUE INDEX event_page ON campaign_events (
 );
 
 CREATE INDEX event_id_deleted ON campaign_events (event_id, event_deleted_at);
+
+CREATE INDEX event_timezone_id ON campaign_events (event_timezone, event_id);
 
 
 CREATE TABLE ce_participants (

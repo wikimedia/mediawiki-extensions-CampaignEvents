@@ -13,8 +13,11 @@ CREATE TABLE /*_*/campaign_events (
   event_tracking_tool_id INT DEFAULT NULL,
   event_tracking_tool_event_id BLOB DEFAULT NULL,
   event_status INT NOT NULL,
-  event_start BINARY(14) NOT NULL,
-  event_end BINARY(14) NOT NULL,
+  event_timezone VARBINARY(64) NOT NULL,
+  event_start_local BINARY(14) NOT NULL,
+  event_start_utc BINARY(14) NOT NULL,
+  event_end_local BINARY(14) NOT NULL,
+  event_end_utc BINARY(14) NOT NULL,
   event_type VARBINARY(255) NOT NULL,
   event_meeting_type INT NOT NULL,
   event_meeting_url BLOB NOT NULL,
@@ -28,6 +31,7 @@ CREATE TABLE /*_*/campaign_events (
     event_page_title
   ),
   INDEX event_id_deleted (event_id, event_deleted_at),
+  INDEX event_timezone_id (event_timezone, event_id),
   PRIMARY KEY(event_id)
 ) /*$wgDBTableOptions*/;
 

@@ -31,9 +31,9 @@ class EventsPager extends TablePager {
 	public const STATUS_CLOSED = 'closed';
 
 	private const SORT_INDEXES = [
-		'event_start' => [ 'event_start', 'event_name', 'event_id' ],
-		'event_name' => [ 'event_name', 'event_start', 'event_id' ],
-		'num_participants' => [ 'num_participants', 'event_start', 'event_id' ],
+		'event_start_utc' => [ 'event_start_utc', 'event_name', 'event_id' ],
+		'event_name' => [ 'event_name', 'event_start_utc', 'event_id' ],
+		'num_participants' => [ 'num_participants', 'event_start_utc', 'event_id' ],
 	];
 
 	/** @var CampaignsPageFactory */
@@ -129,7 +129,7 @@ class EventsPager extends TablePager {
 				'event_page_prefixedtext',
 				'event_page_wiki',
 				'event_status',
-				'event_start',
+				'event_start_utc',
 				'event_meeting_type',
 				'num_participants' => 'COUNT(cep_id)'
 			],
@@ -150,7 +150,7 @@ class EventsPager extends TablePager {
 					'event_page_prefixedtext',
 					'event_page_wiki',
 					'event_status',
-					'event_start',
+					'event_start_utc',
 					'event_meeting_type'
 				]
 			],
@@ -183,7 +183,7 @@ class EventsPager extends TablePager {
 				'event_page_prefixedtext',
 				'event_page_wiki',
 				'event_status',
-				'event_start',
+				'event_start_utc',
 				'event_meeting_type',
 				'num_participants'
 			],
@@ -220,7 +220,7 @@ class EventsPager extends TablePager {
 	 */
 	public function formatValue( $name, $value ): string {
 		switch ( $name ) {
-			case 'event_start':
+			case 'event_start_utc':
 				return htmlspecialchars( $this->getLanguage()->userDate( $value, $this->getUser() ) );
 			case 'event_name':
 				return $this->getLinkRenderer()->makeKnownLink(
@@ -293,7 +293,7 @@ class EventsPager extends TablePager {
 	 */
 	protected function getFieldNames(): array {
 		return [
-			'event_start' => $this->msg( 'campaignevents-eventslist-column-date' )->text(),
+			'event_start_utc' => $this->msg( 'campaignevents-eventslist-column-date' )->text(),
 			'event_name' => $this->msg( 'campaignevents-eventslist-column-name' )->text(),
 			'event_location' => $this->msg( 'campaignevents-eventslist-column-location' )->text(),
 			'num_participants' => $this->msg( 'campaignevents-eventslist-column-participants-number' )->text(),
@@ -315,7 +315,7 @@ class EventsPager extends TablePager {
 	 * @inheritDoc
 	 */
 	public function getDefaultSort(): string {
-		return 'event_start';
+		return 'event_start_utc';
 	}
 
 	/**

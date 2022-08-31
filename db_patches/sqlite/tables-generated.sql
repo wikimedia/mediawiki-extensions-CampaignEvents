@@ -9,9 +9,10 @@ CREATE TABLE /*_*/campaign_events (
   event_page_prefixedtext BLOB NOT NULL,
   event_chat_url BLOB NOT NULL, event_tracking_tool_id INTEGER DEFAULT NULL,
   event_tracking_tool_event_id BLOB DEFAULT NULL,
-  event_status INTEGER NOT NULL, event_start BLOB NOT NULL,
-  event_end BLOB NOT NULL, event_type BLOB NOT NULL,
-  event_meeting_type INTEGER NOT NULL,
+  event_status INTEGER NOT NULL, event_timezone BLOB NOT NULL,
+  event_start_local BLOB NOT NULL, event_start_utc BLOB NOT NULL,
+  event_end_local BLOB NOT NULL, event_end_utc BLOB NOT NULL,
+  event_type BLOB NOT NULL, event_meeting_type INTEGER NOT NULL,
   event_meeting_url BLOB NOT NULL, event_meeting_country BLOB NOT NULL,
   event_meeting_address BLOB NOT NULL,
   event_created_at BLOB NOT NULL, event_last_edit BLOB NOT NULL,
@@ -24,6 +25,8 @@ CREATE UNIQUE INDEX event_page ON /*_*/campaign_events (
 );
 
 CREATE INDEX event_id_deleted ON /*_*/campaign_events (event_id, event_deleted_at);
+
+CREATE INDEX event_timezone_id ON /*_*/campaign_events (event_timezone, event_id);
 
 
 CREATE TABLE /*_*/ce_participants (
