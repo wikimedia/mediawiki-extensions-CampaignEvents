@@ -36,7 +36,10 @@ class OrganizersStore {
 		$res = $dbr->select(
 			'ce_organizers',
 			[ 'ceo_user_id', 'ceo_role_id' ],
-			[ 'ceo_event_id' => $eventID ],
+			[
+				'ceo_event_id' => $eventID,
+				'ceo_deleted_at' => null,
+			],
 			$limit !== null ? [ 'LIMIT' => $limit ] : []
 		);
 		$rolesByOrganizer = [];
@@ -65,7 +68,8 @@ class OrganizersStore {
 			'*',
 			[
 				'ceo_event_id' => $eventID,
-				'ceo_user_id' => $user->getCentralID()
+				'ceo_user_id' => $user->getCentralID(),
+				'ceo_deleted_at' => null,
 			]
 		);
 		return $row !== null;
@@ -81,7 +85,10 @@ class OrganizersStore {
 		$ret = $dbr->selectField(
 			'ce_organizers',
 			'COUNT(*)',
-			[ 'ceo_event_id' => $eventID ]
+			[
+				'ceo_event_id' => $eventID,
+				'ceo_deleted_at' => null,
+			]
 		);
 		// Intentionally casting false to int if no rows were found.
 		return (int)$ret;
@@ -93,6 +100,7 @@ class OrganizersStore {
 	 * @param string[] $roles Roles::ROLE_* constants
 	 */
 	public function addOrganizerToEvent( int $eventID, CentralUser $user, array $roles ): void {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$rows = [];
 		foreach ( $roles as $role ) {
 			if ( !isset( self::ROLES_MAP[$role] ) ) {
@@ -101,13 +109,18 @@ class OrganizersStore {
 			$rows[] = [
 				'ceo_event_id' => $eventID,
 				'ceo_user_id' => $user->getCentralID(),
-				'ceo_role_id' => self::ROLES_MAP[$role]
+				'ceo_role_id' => self::ROLES_MAP[$role],
+				'ceo_created_at' => $dbw->timestamp(),
+				'ceo_deleted_at' => null
 			];
 		}
-		$this->dbHelper->getDBConnection( DB_PRIMARY )->insert(
+		$dbw->upsert(
 			'ce_organizers',
 			$rows,
-			[ 'IGNORE' ]
+			[ [ 'ceo_event_id', 'ceo_user_id', 'ceo_role_id' ] ],
+			[
+				'ceo_deleted_at' => null,
+			]
 		);
 	}
 }
