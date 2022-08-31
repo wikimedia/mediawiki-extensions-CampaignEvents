@@ -31,6 +31,8 @@ CREATE UNIQUE INDEX event_page ON campaign_events (
   event_page_title
 );
 
+CREATE INDEX event_id_deleted ON campaign_events (event_id, event_deleted_at);
+
 
 CREATE TABLE ce_participants (
   cep_id BIGSERIAL NOT NULL,
@@ -42,6 +44,15 @@ CREATE TABLE ce_participants (
 );
 
 CREATE UNIQUE INDEX cep_event_participant ON ce_participants (cep_event_id, cep_user_id);
+
+CREATE INDEX cep_event_unregistered ON ce_participants (
+  cep_event_id, cep_unregistered_at
+);
+
+CREATE INDEX cep_user_unregistered_event ON ce_participants (
+  cep_user_id, cep_unregistered_at,
+  cep_event_id
+);
 
 
 CREATE TABLE ce_organizers (
@@ -57,3 +68,5 @@ CREATE TABLE ce_organizers (
 CREATE UNIQUE INDEX ceo_event_user_role ON ce_organizers (
   ceo_event_id, ceo_user_id, ceo_role_id
 );
+
+CREATE INDEX ceo_user_event ON ce_organizers (ceo_user_id, ceo_event_id);

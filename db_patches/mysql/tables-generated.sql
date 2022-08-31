@@ -27,6 +27,7 @@ CREATE TABLE /*_*/campaign_events (
     event_page_wiki, event_page_namespace,
     event_page_title
   ),
+  INDEX event_id_deleted (event_id, event_deleted_at),
   PRIMARY KEY(event_id)
 ) /*$wgDBTableOptions*/;
 
@@ -38,6 +39,13 @@ CREATE TABLE /*_*/ce_participants (
   cep_registered_at BINARY(14) NOT NULL,
   cep_unregistered_at BINARY(14) DEFAULT NULL,
   UNIQUE INDEX cep_event_participant (cep_event_id, cep_user_id),
+  INDEX cep_event_unregistered (
+    cep_event_id, cep_unregistered_at
+  ),
+  INDEX cep_user_unregistered_event (
+    cep_user_id, cep_unregistered_at,
+    cep_event_id
+  ),
   PRIMARY KEY(cep_id)
 ) /*$wgDBTableOptions*/;
 
@@ -52,5 +60,6 @@ CREATE TABLE /*_*/ce_organizers (
   UNIQUE INDEX ceo_event_user_role (
     ceo_event_id, ceo_user_id, ceo_role_id
   ),
+  INDEX ceo_user_event (ceo_user_id, ceo_event_id),
   PRIMARY KEY(ceo_id)
 ) /*$wgDBTableOptions*/;
