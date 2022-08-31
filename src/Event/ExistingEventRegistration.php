@@ -19,8 +19,8 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string|null $trackingToolName
 	 * @param string|null $trackingToolURL
 	 * @param string $status
-	 * @param string $startTimestamp UNIX timestamp
-	 * @param string $endTimestamp UNIX timestamp
+	 * @param string $startTimestamp TS_MW timestamp
+	 * @param string $endTimestamp TS_MW timestamp
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL

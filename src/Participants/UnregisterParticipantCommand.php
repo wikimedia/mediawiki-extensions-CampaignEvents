@@ -81,8 +81,8 @@ class UnregisterParticipantCommand {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			return self::CANNOT_UNREGISTER_DELETED;
 		}
-		$endTS = $registration->getEndTimestamp();
-		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
+		$endTSUnix = wfTimestamp( TS_UNIX, $registration->getEndTimestamp() );
+		if ( (int)$endTSUnix < (int)MWTimestamp::now( TS_UNIX ) ) {
 			return self::CANNOT_UNREGISTER_ENDED;
 		}
 		return self::CAN_UNREGISTER;

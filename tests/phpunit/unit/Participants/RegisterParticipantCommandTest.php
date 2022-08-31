@@ -24,7 +24,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
-	private const TEST_TIME = 1646000000;
+	private const TEST_TIME = '20220227120000';
+	private const PAST_TIME = '20220227100000';
+	private const FUTURE_TIME = '20220227150000';
 
 	/**
 	 * @inheritDoc
@@ -61,7 +63,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	private function getValidRegistration(): ExistingEventRegistration {
 		$registration = $this->createMock( ExistingEventRegistration::class );
-		$registration->method( 'getEndTimestamp' )->willReturn( (string)( self::TEST_TIME + 1 ) );
+		$registration->method( 'getEndTimestamp' )->willReturn( self::FUTURE_TIME );
 		$registration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
 		return $registration;
 	}
@@ -105,12 +107,12 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
 	public function provideInvalidRegistrationsAndErrors(): Generator {
 		$finishedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$finishedRegistration->method( 'getEndTimestamp' )->willReturn( (string)( self::TEST_TIME - 1 ) );
+		$finishedRegistration->method( 'getEndTimestamp' )->willReturn( self::PAST_TIME );
 		$finishedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
 		yield 'Already finished' => [ $finishedRegistration, 'campaignevents-register-event-past' ];
 
 		$closedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$closedRegistration->method( 'getEndTimestamp' )->willReturn( (string)( self::TEST_TIME + 1 ) );
+		$closedRegistration->method( 'getEndTimestamp' )->willReturn( self::FUTURE_TIME );
 		$closedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_CLOSED );
 		yield 'Not open' => [ $closedRegistration, 'campaignevents-register-event-not-open' ];
 

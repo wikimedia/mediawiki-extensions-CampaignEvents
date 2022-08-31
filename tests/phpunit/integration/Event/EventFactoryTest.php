@@ -193,6 +193,10 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'campaignevents-error-invalid-start',
 			$this->getTestDataWithDefault( [ 'start' => 'Not a timestamp' ] )
 		];
+		yield 'Start timestamp not in TS_MW format' => [
+			'campaignevents-error-invalid-start',
+			$this->getTestDataWithDefault( [ 'start' => '1661199533' ] )
+		];
 		yield 'Start timestamp in the past, validated' => [
 			'campaignevents-error-start-past',
 			$this->getTestDataWithDefault( [
@@ -214,6 +218,10 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		yield 'Invalid end timestamp' => [
 			'campaignevents-error-invalid-end',
 			$this->getTestDataWithDefault( [ 'end' => 'Not a timestamp' ] )
+		];
+		yield 'End timestamp not in TS_MW format' => [
+			'campaignevents-error-invalid-end',
+			$this->getTestDataWithDefault( [ 'end' => '1661199533' ] )
 		];
 		yield 'Start after end' => [
 			'campaignevents-error-start-after-end',

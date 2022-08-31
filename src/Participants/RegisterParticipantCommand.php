@@ -82,8 +82,8 @@ class RegisterParticipantCommand {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			return self::CANNOT_REGISTER_DELETED;
 		}
-		$endTS = $registration->getEndTimestamp();
-		if ( (int)$endTS < (int)MWTimestamp::now( TS_UNIX ) ) {
+		$endTSUnix = wfTimestamp( TS_UNIX, $registration->getEndTimestamp() );
+		if ( (int)$endTSUnix < (int)MWTimestamp::now( TS_UNIX ) ) {
 			return self::CANNOT_REGISTER_ENDED;
 		}
 		if ( $registration->getStatus() !== EventRegistration::STATUS_OPEN ) {
