@@ -159,6 +159,7 @@ class EventsPager extends TablePager {
 					[
 						'event_id=ceo_event_id',
 						'ceo_user_id' => $this->centralUser->getCentralID(),
+						'ceo_deleted_at' => null,
 					]
 				]
 			]
