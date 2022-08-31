@@ -49,8 +49,6 @@ CREATE TABLE ce_organizers (
   ceo_event_id BIGINT NOT NULL,
   ceo_user_id INT NOT NULL,
   ceo_role_id BIGINT NOT NULL,
-  ceo_created_at TIMESTAMPTZ NOT NULL,
-  ceo_deleted_at TIMESTAMPTZ DEFAULT NULL,
   PRIMARY KEY(ceo_id)
 );
 
