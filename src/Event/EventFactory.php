@@ -45,8 +45,8 @@ class EventFactory {
 	 * @param int|null $id
 	 * @param string $pageTitleStr
 	 * @param string|null $chatURL
-	 * @param string|null $trackingToolName
-	 * @param string|null $trackingToolURL
+	 * @param int|null $trackingToolID
+	 * @param string|null $trackingToolEventID
 	 * @param string $status
 	 * @param string $startTimestamp In the TS_MW format
 	 * @param string $endTimestamp In the TS_MW format
@@ -66,8 +66,8 @@ class EventFactory {
 		?int $id,
 		string $pageTitleStr,
 		?string $chatURL,
-		?string $trackingToolName,
-		?string $trackingToolURL,
+		?int $trackingToolID,
+		?string $trackingToolEventID,
 		string $status,
 		string $startTimestamp,
 		string $endTimestamp,
@@ -98,7 +98,7 @@ class EventFactory {
 			}
 		}
 
-		if ( $trackingToolName !== null || $trackingToolURL !== null ) {
+		if ( $trackingToolID !== null || $trackingToolEventID !== null ) {
 			// TODO MVP Re-implement this.
 			throw new LogicException( "Should be dead code for V0" );
 		}
@@ -146,8 +146,8 @@ class EventFactory {
 			$this->campaignsPageFormatter->getText( $campaignsPage ),
 			$campaignsPage,
 			$chatURL,
-			$trackingToolName,
-			$trackingToolURL,
+			$trackingToolID,
+			$trackingToolEventID,
 			$status,
 			$startTSUnix,
 			$endTSUnix,

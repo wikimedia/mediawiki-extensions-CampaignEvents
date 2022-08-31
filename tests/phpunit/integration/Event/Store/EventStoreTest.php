@@ -35,8 +35,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'Event page'
 			),
 			'Chat URL',
-			'Tracking tool name',
-			'Tracking tool URL',
+			42,
+			'tracking-tool-event-id',
 			EventRegistration::STATUS_OPEN,
 			'1646700000',
 			'1646800000',
@@ -56,8 +56,12 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getPage()->getNamespace(), $actual->getPage()->getNamespace(), 'Page ns' );
 		$this->assertSame( $expected->getPage()->getDBkey(), $actual->getPage()->getDBkey(), 'Page dbkey' );
 		$this->assertSame( $expected->getPage()->getWikiId(), $actual->getPage()->getWikiId(), 'Page wiki ID' );
-		$this->assertSame( $expected->getTrackingToolName(), $actual->getTrackingToolName(), 'tracking tool name' );
-		$this->assertSame( $expected->getTrackingToolURL(), $actual->getTrackingToolURL(), 'tracking tool URL' );
+		$this->assertSame( $expected->getTrackingToolID(), $actual->getTrackingToolID(), 'tracking tool ID' );
+		$this->assertSame(
+			$expected->getTrackingToolEventID(),
+			$actual->getTrackingToolEventID(),
+			'tracking tool event ID'
+		);
 		$this->assertSame( $expected->getStatus(), $actual->getStatus(), 'status' );
 		$this->assertSame( $expected->getStartTimestamp(), $actual->getStartTimestamp(), 'start' );
 		$this->assertSame( $expected->getEndTimestamp(), $actual->getEndTimestamp(), 'end' );
@@ -152,8 +156,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'Event page'
 			),
 			'Chat URL',
-			'Tracking tool name',
-			'Tracking tool URL',
+			42,
+			'some-event-id',
 			EventRegistration::STATUS_OPEN,
 			'1646700000',
 			'1646800000',

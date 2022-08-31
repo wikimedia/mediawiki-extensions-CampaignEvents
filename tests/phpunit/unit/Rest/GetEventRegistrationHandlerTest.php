@@ -45,14 +45,13 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			new PageIdentityValue( 1, 1728, 'Foo_bar', WikiAwareEntity::LOCAL ),
 			$eventPageStr
 		);
+		// TODO MVP Add tracking tool
 		$eventData = [
 			'id' => 1,
 			'name' => 'Some name',
 			'event_page' => $eventPageStr,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'chat_url' => 'https://some-chat.example.org',
-			'tracking_tool_name' => 'Tracking tool',
-			'tracking_tool_url' => 'https://tracking-tool.example.org',
 			'status' => EventRegistration::STATUS_OPEN,
 			'start_time' => '20220220200220',
 			'end_time' => '20220220200222',
@@ -70,8 +69,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['name'],
 			$eventPage,
 			$eventData['chat_url'],
-			$eventData['tracking_tool_name'],
-			$eventData['tracking_tool_url'],
+			null,
+			null,
 			$eventData['status'],
 			wfTimestamp( TS_UNIX, $eventData['start_time'] ),
 			wfTimestamp( TS_UNIX, $eventData['end_time'] ),
@@ -92,8 +91,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$handler = $this->newHandler( $eventLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 		$this->assertSame(
-			// TODO MVP Check these too
-			array_diff_key( $eventData, [ 'tracking_tool_name' => 1, 'tracking_tool_url' => 1, 'type' => 1 ] ),
+			// TODO MVP Check this too
+			array_diff_key( $eventData, [ 'type' => 1 ] ),
 			$respData
 		);
 	}

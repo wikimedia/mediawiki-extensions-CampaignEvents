@@ -11,8 +11,6 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 			name: 'Some registration',
 			event_page: 'Some page',
 			chat_url: 'https://example.org',
-			tracking_tool_name: 'Some tracking tool',
-			tracking_tool_url: 'htps://example.org',
 			start_time: '20200220200220',
 			end_time: '20200220200222',
 			type: 'generic',

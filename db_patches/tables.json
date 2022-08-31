@@ -64,20 +64,19 @@
 				}
 			},
 			{
-				"name": "event_tracking_tool",
-				"comment": "The name of the tracking tool the organizers use. Example: EventMetrics, P&E Dashboard.",
-				"type": "binary",
+				"name": "event_tracking_tool_id",
+				"comment": "The unique ID of the tracking tool the organizers use, as defined by the application.",
+				"type": "integer",
 				"options": {
-					"notnull": true,
-					"length": 255
+					"notnull": false
 				}
 			},
 			{
-				"name": "event_tracking_url",
-				"comment": "The link of the tracking tool used by organizers.",
+				"name": "event_tracking_tool_event_id",
+				"comment": "The unique identifier of the event within the tracking tool.",
 				"type": "blob",
 				"options": {
-					"notnull": true,
+					"notnull": false,
 					"length": 65530
 				}
 			},
