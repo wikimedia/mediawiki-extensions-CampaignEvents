@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use IContextSource;
 use LogicException;
+use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
@@ -21,6 +22,8 @@ use OOUI\ButtonWidget;
 use SpecialPage;
 use stdClass;
 use TablePager;
+use WikiMap;
+use Wikimedia\Rdbms\IResultWrapper;
 
 class EventsPager extends TablePager {
 	public const STATUS_ANY = 'any';
@@ -37,6 +40,8 @@ class EventsPager extends TablePager {
 	private $campaignsPageFactory;
 	/** @var PageURLResolver */
 	private $pageURLResolver;
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
 
 	/** @var CentralUser */
 	private $centralUser;
@@ -55,6 +60,7 @@ class EventsPager extends TablePager {
 	 * @param CampaignsDatabaseHelper $databaseHelper
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param PageURLResolver $pageURLResolver
+	 * @param LinkBatchFactory $linkBatchFactory
 	 * @param CentralUser $user
 	 * @param string $search
 	 * @param string $status One of the self::STATUS_* constants
@@ -65,6 +71,7 @@ class EventsPager extends TablePager {
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsPageFactory $campaignsPageFactory,
 		PageURLResolver $pageURLResolver,
+		LinkBatchFactory $linkBatchFactory,
 		CentralUser $user,
 		string $search,
 		string $status
@@ -78,6 +85,7 @@ class EventsPager extends TablePager {
 		parent::__construct( $context, $linkRenderer );
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->pageURLResolver = $pageURLResolver;
+		$this->linkBatchFactory = $linkBatchFactory;
 		$this->centralUser = $user;
 		$this->search = $search;
 		$this->status = $status;
@@ -183,6 +191,28 @@ class EventsPager extends TablePager {
 			'options' => [],
 			'join_conds' => []
 		];
+	}
+
+	/**
+	 * Add event pages to a LinkBatch to improve performance and not make one query per page.
+	 * This code was stolen from AbuseFilter's pager et al.
+	 * @param IResultWrapper $result
+	 */
+	protected function preprocessResults( $result ): void {
+		if ( $this->getNumRows() === 0 ) {
+			return;
+		}
+		$lb = $this->linkBatchFactory->newLinkBatch();
+		$lb->setCaller( __METHOD__ );
+		$curWikiID = WikiMap::getCurrentWikiId();
+		foreach ( $result as $row ) {
+			// XXX LinkCache only supports local pages, and it's not used in foreign instances of PageStore.
+			if ( $row->event_page_wiki === $curWikiID ) {
+				$lb->add( (int)$row->event_page_namespace, $row->event_page_title );
+			}
+		}
+		$lb->execute();
+		$result->seek( 0 );
 	}
 
 	/**
