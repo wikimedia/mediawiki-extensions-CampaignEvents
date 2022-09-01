@@ -82,7 +82,7 @@ class RegisterParticipantCommand {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			return self::CANNOT_REGISTER_DELETED;
 		}
-		$endTSUnix = wfTimestamp( TS_UNIX, $registration->getEndTimestamp() );
+		$endTSUnix = wfTimestamp( TS_UNIX, $registration->getEndUTCTimestamp() );
 		if ( (int)$endTSUnix < (int)MWTimestamp::now( TS_UNIX ) ) {
 			return self::CANNOT_REGISTER_ENDED;
 		}

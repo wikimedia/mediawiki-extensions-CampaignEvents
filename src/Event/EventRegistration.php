@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
+use DateTime;
+use DateTimeZone;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MWTimestamp;
 use Wikimedia\Assert\Assert;
@@ -45,10 +47,12 @@ class EventRegistration {
 	private $trackingToolEventID;
 	/** @var string One of the STATUS_* constants */
 	private $status;
+	/** @var DateTimeZone */
+	private $timezone;
 	/** @var string */
-	private $startTimestamp;
+	private $startLocalTimestamp;
 	/** @var string */
-	private $endTimestamp;
+	private $endLocalTimestamp;
 	/** @var string One of the TYPE_* constants */
 	private $type;
 	/** @var int One of the MEETING_TYPE_* constants */
@@ -74,8 +78,9 @@ class EventRegistration {
 	 * @param int|null $trackingToolID
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
-	 * @param string $startTimestamp TS_MW timestamp
-	 * @param string $endTimestamp TS_MW timestamp
+	 * @param DateTimeZone $timezone
+	 * @param string $startLocalTimestamp TS_MW timestamp
+	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
@@ -93,8 +98,9 @@ class EventRegistration {
 		?int $trackingToolID,
 		?string $trackingToolEventID,
 		string $status,
-		string $startTimestamp,
-		string $endTimestamp,
+		DateTimeZone $timezone,
+		string $startLocalTimestamp,
+		string $endLocalTimestamp,
 		string $type,
 		int $meetingType,
 		?string $meetingURL,
@@ -105,13 +111,13 @@ class EventRegistration {
 		?string $deletionTimestamp
 	) {
 		Assert::parameter(
-			MWTimestamp::convert( TS_MW, $startTimestamp ) === $startTimestamp,
-			'$startTimestamp',
+			MWTimestamp::convert( TS_MW, $startLocalTimestamp ) === $startLocalTimestamp,
+			'$startLocalTimestamp',
 			'Should be in TS_MW format.'
 		);
 		Assert::parameter(
-			MWTimestamp::convert( TS_MW, $endTimestamp ) === $endTimestamp,
-			'$endTimestamp',
+			MWTimestamp::convert( TS_MW, $endLocalTimestamp ) === $endLocalTimestamp,
+			'$endLocalTimestamp',
 			'Should be in TS_MW format.'
 		);
 		$this->id = $id;
@@ -121,8 +127,9 @@ class EventRegistration {
 		$this->trackingToolID = $trackingToolID;
 		$this->trackingToolEventID = $trackingToolEventID;
 		$this->status = $status;
-		$this->startTimestamp = $startTimestamp;
-		$this->endTimestamp = $endTimestamp;
+		$this->timezone = $timezone;
+		$this->startLocalTimestamp = $startLocalTimestamp;
+		$this->endLocalTimestamp = $endLocalTimestamp;
 		$this->type = $type;
 		$this->meetingType = $meetingType;
 		$this->meetingURL = $meetingURL;
@@ -183,17 +190,42 @@ class EventRegistration {
 	}
 
 	/**
+	 * @return DateTimeZone
+	 */
+	public function getTimezone(): DateTimeZone {
+		return $this->timezone;
+	}
+
+	/**
 	 * @return string Timestamp in the TS_MW format
 	 */
-	public function getStartTimestamp(): string {
-		return $this->startTimestamp;
+	public function getStartLocalTimestamp(): string {
+		return $this->startLocalTimestamp;
+	}
+
+	/**
+	 * @return string Timestamp in the TS_MW format
+	 */
+	public function getStartUTCTimestamp(): string {
+		$localDateTime = new DateTime( $this->startLocalTimestamp, $this->timezone );
+		$utcStartTime = $localDateTime->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp();
+		return wfTimestamp( TS_MW, $utcStartTime );
 	}
 
 	/**
 	 * @return string Timestamp in TS_MW format
 	 */
-	public function getEndTimestamp(): string {
-		return $this->endTimestamp;
+	public function getEndLocalTimestamp(): string {
+		return $this->endLocalTimestamp;
+	}
+
+	/**
+	 * @return string Timestamp in the TS_MW format
+	 */
+	public function getEndUTCTimestamp(): string {
+		$localDateTime = new DateTime( $this->endLocalTimestamp, $this->timezone );
+		$utcEndTime = $localDateTime->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp();
+		return wfTimestamp( TS_MW, $utcEndTime );
 	}
 
 	/**

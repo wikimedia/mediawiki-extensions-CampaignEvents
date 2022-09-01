@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
+use DateTimeZone;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 
 /**
@@ -12,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 class ExistingEventRegistration extends EventRegistration {
 	/**
 	 * Same as the parent, but ID, creation timestamp and last edit timestamp are not nullable.
+	 *
 	 * @param int $id
 	 * @param string $name
 	 * @param ICampaignsPage $page
@@ -19,8 +21,9 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param int|null $trackingToolID
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
-	 * @param string $startTimestamp TS_MW timestamp
-	 * @param string $endTimestamp TS_MW timestamp
+	 * @param DateTimeZone $timezone
+	 * @param string $startLocalTimestamp TS_MW timestamp
+	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
@@ -38,8 +41,9 @@ class ExistingEventRegistration extends EventRegistration {
 		?int $trackingToolID,
 		?string $trackingToolEventID,
 		string $status,
-		string $startTimestamp,
-		string $endTimestamp,
+		DateTimeZone $timezone,
+		string $startLocalTimestamp,
+		string $endLocalTimestamp,
 		string $type,
 		int $meetingType,
 		?string $meetingURL,

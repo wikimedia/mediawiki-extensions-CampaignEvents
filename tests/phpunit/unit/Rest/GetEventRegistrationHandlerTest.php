@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
+use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -46,6 +47,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventPageStr
 		);
 		// TODO MVP Add tracking tool
+		$timezoneName = 'UTC';
 		$eventData = [
 			'id' => 1,
 			'name' => 'Some name',
@@ -53,6 +55,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'chat_url' => 'https://some-chat.example.org',
 			'status' => EventRegistration::STATUS_OPEN,
+			'timezone' => new DateTimeZone( $timezoneName ),
 			'start_time' => '20220220200220',
 			'end_time' => '20220220200222',
 			'type' => EventRegistration::TYPE_GENERIC,
@@ -72,6 +75,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			null,
 			null,
 			$eventData['status'],
+			$eventData['timezone'],
 			wfTimestamp( TS_MW, $eventData['start_time'] ),
 			wfTimestamp( TS_MW, $eventData['end_time'] ),
 			$eventData['type'],
@@ -90,9 +94,11 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 
 		$handler = $this->newHandler( $eventLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
+		$this->assertSame( $timezoneName, $respData['timezone'], 'timezone' );
+		unset( $respData['timezone'] );
 		$this->assertSame(
-			// TODO MVP Check this too
-			array_diff_key( $eventData, [ 'type' => 1 ] ),
+			// TODO MVP Check tracking tools and type, too
+			array_diff_key( $eventData, [ 'type' => 1, 'timezone' => 1 ] ),
 			$respData
 		);
 	}

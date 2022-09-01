@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Event\Store;
 
+use DateTimeZone;
 use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
@@ -38,6 +39,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			42,
 			'tracking-tool-event-id',
 			EventRegistration::STATUS_OPEN,
+			new DateTimeZone( 'UTC' ),
 			'20220810000000',
 			'20220810000001',
 			EventRegistration::TYPE_GENERIC,
@@ -63,8 +65,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'tracking tool event ID'
 		);
 		$this->assertSame( $expected->getStatus(), $actual->getStatus(), 'status' );
-		$this->assertSame( $expected->getStartTimestamp(), $actual->getStartTimestamp(), 'start' );
-		$this->assertSame( $expected->getEndTimestamp(), $actual->getEndTimestamp(), 'end' );
+		$this->assertSame( $expected->getTimezone()->getName(), $actual->getTimezone()->getName(), 'timezone' );
+		$this->assertSame( $expected->getStartLocalTimestamp(), $actual->getStartLocalTimestamp(), 'local start' );
+		$this->assertSame( $expected->getStartUTCTimestamp(), $actual->getStartUTCTimestamp(), 'UTC start' );
+		$this->assertSame( $expected->getEndLocalTimestamp(), $actual->getEndLocalTimestamp(), 'local end' );
+		$this->assertSame( $expected->getEndUTCTimestamp(), $actual->getEndUTCTimestamp(), 'UTC end' );
 		$this->assertSame( $expected->getType(), $actual->getType(), 'type' );
 		$this->assertSame( $expected->getMeetingType(), $actual->getMeetingType(), 'meeting type' );
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
@@ -159,6 +164,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			42,
 			'some-event-id',
 			EventRegistration::STATUS_OPEN,
+			new DateTimeZone( 'UTC' ),
 			'20220731080000',
 			'20220731160000',
 			EventRegistration::TYPE_GENERIC,

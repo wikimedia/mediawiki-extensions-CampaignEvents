@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
+use DateTimeZone;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -48,8 +49,8 @@ class EventFactory {
 	 * @param int|null $trackingToolID
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
-	 * @param string $startTimestamp In the TS_MW format
-	 * @param string $endTimestamp In the TS_MW format
+	 * @param string $startLocalTimestamp In the TS_MW format
+	 * @param string $endLocalTimestamp In the TS_MW format
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
@@ -69,8 +70,8 @@ class EventFactory {
 		?int $trackingToolID,
 		?string $trackingToolEventID,
 		string $status,
-		string $startTimestamp,
-		string $endTimestamp,
+		string $startLocalTimestamp,
+		string $endLocalTimestamp,
 		string $type,
 		int $meetingType,
 		?string $meetingURL,
@@ -107,9 +108,11 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-status' );
 		}
 
-		$datesStatus = $this->validateDates( $validationFlags, $startTimestamp, $endTimestamp );
+		// TODO Make the timezone customizable (T315691)
+		$timezone = new DateTimeZone( 'UTC' );
+		$datesStatus = $this->validateDates( $validationFlags, $startLocalTimestamp, $endLocalTimestamp );
 		$res->merge( $datesStatus );
-		[ $validatedStart, $validatedEnd ] = $datesStatus->getValue();
+		[ $validatedLocalStart, $validatedLocalEnd ] = $datesStatus->getValue();
 
 		if ( !in_array( $type, EventRegistration::VALID_TYPES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-type' );
@@ -149,8 +152,9 @@ class EventFactory {
 			$trackingToolID,
 			$trackingToolEventID,
 			$status,
-			$validatedStart,
-			$validatedEnd,
+			$timezone,
+			$validatedLocalStart,
+			$validatedLocalEnd,
 			$type,
 			$meetingType,
 			$meetingURL,

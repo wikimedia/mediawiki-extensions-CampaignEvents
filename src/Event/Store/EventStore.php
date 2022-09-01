@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
+use DateTimeZone;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
@@ -165,8 +166,9 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_tracking_tool_id !== null ? (int)$row->event_tracking_tool_id : null,
 			$row->event_tracking_tool_event_id,
 			array_search( (int)$row->event_status, self::EVENT_STATUS_MAP, true ),
-			wfTimestamp( TS_MW, $row->event_start_utc ),
-			wfTimestamp( TS_MW, $row->event_end_utc ),
+			new DateTimeZone( $row->event_timezone ),
+			wfTimestamp( TS_MW, $row->event_start_local ),
+			wfTimestamp( TS_MW, $row->event_end_local ),
 			array_search( $row->event_type, self::EVENT_TYPE_MAP, true ),
 			$meetingType,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
@@ -192,6 +194,11 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 		$curCreationTS = $event->getCreationTimestamp();
 		$curDeletionTS = $event->getDeletionTimestamp();
+		$timezone = $event->getTimezone();
+		// The local timestamps are already guaranteed to be in TS_MW format and the EventRegistration constructor
+		// enforces that, but convert them again as an extra safeguard to avoid any chance of storing garbage.
+		$localStartDB = wfTimestamp( TS_MW, $event->getStartLocalTimestamp() );
+		$localEndDB = wfTimestamp( TS_MW, $event->getEndLocalTimestamp() );
 		$newRow = [
 			'event_name' => $event->getName(),
 			'event_page_namespace' => $event->getPage()->getNamespace(),
@@ -202,12 +209,11 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_tracking_tool_id' => $event->getTrackingToolID(),
 			'event_tracking_tool_event_id' => $event->getTrackingToolEventID(),
 			'event_status' => self::EVENT_STATUS_MAP[$event->getStatus()],
-			// TODO Make the timezone customizable (T315691)
-			'event_timezone' => 'UTC',
-			'event_start_local' => $event->getStartTimestamp(),
-			'event_start_utc' => $dbw->timestamp( $event->getStartTimestamp() ),
-			'event_end_local' => $event->getEndTimestamp(),
-			'event_end_utc' => $dbw->timestamp( $event->getEndTimestamp() ),
+			'event_timezone' => $timezone->getName(),
+			'event_start_local' => $localStartDB,
+			'event_start_utc' => $dbw->timestamp( $event->getStartUTCTimestamp() ),
+			'event_end_local' => $localEndDB,
+			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
 			'event_type' => self::EVENT_TYPE_MAP[$event->getType()],
 			'event_meeting_type' => $meetingType,
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
@@ -223,7 +229,7 @@ class EventStore implements IEventStore, IEventLookup {
 		} else {
 			$dbw->update( 'campaign_events', $newRow, [ 'event_id' => $eventID ] );
 		}
-		return StatusValue::newGood( $event->getID() ?? $dbw->insertId() );
+		return StatusValue::newGood( $eventID ?? $dbw->insertId() );
 	}
 
 	/**

@@ -132,14 +132,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-start',
 			'min' => $this->event ? '' : MWTimestamp::now(),
-			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartTimestamp() ) : '',
+			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartLocalTimestamp() ) : '',
 			'required' => true,
 		];
 		$formFields['EventEnd'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-end',
 			'min' => $this->event ? '' : MWTimestamp::now(),
-			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndTimestamp() ) : '',
+			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
 			'required' => true,
 		];
 		$formFields['EventMeetingType'] = [

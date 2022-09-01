@@ -49,8 +49,9 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'chat_url' => $registration->getChatURL(),
 			// TODO MVP: Add tracking tool
 			'status' => $registration->getStatus(),
-			'start_time' => wfTimestamp( TS_MW, $registration->getStartTimestamp() ),
-			'end_time' => wfTimestamp( TS_MW, $registration->getEndTimestamp() ),
+			'timezone' => $registration->getTimezone()->getName(),
+			'start_time' => wfTimestamp( TS_MW, $registration->getStartLocalTimestamp() ),
+			'end_time' => wfTimestamp( TS_MW, $registration->getEndLocalTimestamp() ),
 			// TODO MVP: Re-add this
 			// 'type' => $registration->getType(),
 			'online_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) !== 0,

@@ -355,12 +355,12 @@ class EventPageDecorator {
 			'icon' => 'clock',
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-dates' )->params(
-					$language->userTimeAndDate( $registration->getStartTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getStartTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getStartTimestamp(), $viewingUser ),
-					$language->userTimeAndDate( $registration->getEndTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getEndTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getEndTimestamp(), $viewingUser )
+					$language->userTimeAndDate( $registration->getStartUTCTimestamp(), $viewingUser ),
+					$language->userDate( $registration->getStartUTCTimestamp(), $viewingUser ),
+					$language->userTime( $registration->getStartUTCTimestamp(), $viewingUser ),
+					$language->userTimeAndDate( $registration->getEndUTCTimestamp(), $viewingUser ),
+					$language->userDate( $registration->getEndUTCTimestamp(), $viewingUser ),
+					$language->userTime( $registration->getEndUTCTimestamp(), $viewingUser )
 				)
 			),
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-dates-label' ) ),
@@ -476,12 +476,12 @@ class EventPageDecorator {
 			),
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-dates' )->params(
-					$language->userTimeAndDate( $registration->getStartTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getStartTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getStartTimestamp(), $viewingUser ),
-					$language->userTimeAndDate( $registration->getEndTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getEndTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getEndTimestamp(), $viewingUser )
+					$language->userTimeAndDate( $registration->getStartUTCTimestamp(), $viewingUser ),
+					$language->userDate( $registration->getStartUTCTimestamp(), $viewingUser ),
+					$language->userTime( $registration->getStartUTCTimestamp(), $viewingUser ),
+					$language->userTimeAndDate( $registration->getEndUTCTimestamp(), $viewingUser ),
+					$language->userDate( $registration->getEndUTCTimestamp(), $viewingUser ),
+					$language->userTime( $registration->getEndUTCTimestamp(), $viewingUser )
 				)
 			)
 		] );

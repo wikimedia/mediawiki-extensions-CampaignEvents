@@ -64,7 +64,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	private function getValidRegistration(): ExistingEventRegistration {
 		$registration = $this->createMock( ExistingEventRegistration::class );
-		$registration->method( 'getEndTimestamp' )->willReturn( self::FUTURE_TIME );
+		$registration->method( 'getEndUTCTimestamp' )->willReturn( self::FUTURE_TIME );
 		return $registration;
 	}
 
@@ -107,7 +107,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
 	public function provideInvalidRegistrationsAndErrors(): Generator {
 		$finishedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$finishedRegistration->method( 'getEndTimestamp' )->willReturn( self::PAST_TIME );
+		$finishedRegistration->method( 'getEndUTCTimestamp' )->willReturn( self::PAST_TIME );
 		$finishedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
 		yield 'Already finished' => [ $finishedRegistration, 'campaignevents-unregister-event-past' ];
 
@@ -199,7 +199,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	public function testCanUnregisterFromClosedEvent() {
 		$closedEvent = $this->createMock( ExistingEventRegistration::class );
 		$closedEvent->method( 'getStatus' )->willReturn( EventRegistration::STATUS_CLOSED );
-		$closedEvent->method( 'getEndTimestamp' )->willReturn( self::FUTURE_TIME );
+		$closedEvent->method( 'getEndUTCTimestamp' )->willReturn( self::FUTURE_TIME );
 		$status = $this->getCommand()->unregisterUnsafe(
 			$closedEvent,
 			$this->createMock( ICampaignsAuthority::class )
@@ -250,7 +250,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
 	public function provideDoRemoveParticipantsIfAllowedError(): Generator {
 		$pastRegistration = $this->createMock( ExistingEventRegistration::class );
-		$pastRegistration->method( 'getEndTimestamp' )->willReturn( self::PAST_TIME );
+		$pastRegistration->method( 'getEndUTCTimestamp' )->willReturn( self::PAST_TIME );
 		yield 'Registration in the past' => [
 			$pastRegistration,
 			'campaignevents-unregister-participants-past-registration'

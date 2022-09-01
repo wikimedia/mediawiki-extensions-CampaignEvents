@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
+use DateTimeZone;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
@@ -23,6 +24,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'tracking_id' => 1,
 			'tracking_event_id' => 'some-event-identifier',
 			'status' => EventRegistration::STATUS_OPEN,
+			'timezone' => new DateTimeZone( 'UTC' ),
 			'start' => '20220815120000',
 			'end' => '20220815120001',
 			'type' => EventRegistration::TYPE_GENERIC,
@@ -45,8 +47,9 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @covers ::getTrackingToolID
 	 * @covers ::getTrackingToolEventID
 	 * @covers ::getStatus
-	 * @covers ::getStartTimestamp
-	 * @covers ::getEndTimestamp
+	 * @covers ::getTimezone
+	 * @covers ::getStartLocalTimestamp
+	 * @covers ::getEndLocalTimestamp
 	 * @covers ::getType
 	 * @covers ::getMeetingType
 	 * @covers ::getMeetingURL
@@ -66,8 +69,9 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['tracking_id'], $registration->getTrackingToolID(), 'tracking_id' );
 		$this->assertSame( $data['tracking_event_id'], $registration->getTrackingToolEventID(), 'tracking_event_id' );
 		$this->assertSame( $data['status'], $registration->getStatus(), 'status' );
-		$this->assertSame( $data['start'], $registration->getStartTimestamp(), 'start' );
-		$this->assertSame( $data['end'], $registration->getEndTimestamp(), 'end' );
+		$this->assertSame( $data['timezone']->getName(), $registration->getTimezone()->getName(), 'timezone' );
+		$this->assertSame( $data['start'], $registration->getStartLocalTimestamp(), 'start' );
+		$this->assertSame( $data['end'], $registration->getEndLocalTimestamp(), 'end' );
 		$this->assertSame( $data['type'], $registration->getType(), 'type' );
 		$this->assertSame( $data['meeting_type'], $registration->getMeetingType(), 'meeting_type' );
 		$this->assertSame( $data['meeting_url'], $registration->getMeetingURL(), 'meeting_url' );
@@ -93,11 +97,92 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	public function provideInvalidTimestampFormat(): Generator {
 		yield 'Start timestamp' => [
 			array_values( array_replace( $this->getValidConstructorArgs(), [ 'start' => '1654000000' ] ) ),
-			'$startTimestamp'
+			'$startLocalTimestamp'
 		];
 		yield 'End timestamp' => [
 			array_values( array_replace( $this->getValidConstructorArgs(), [ 'end' => '1654000000' ] ) ),
-			'$endTimestamp'
+			'$endLocalTimestamp'
+		];
+	}
+
+	/**
+	 * @covers ::getStartUTCTimestamp
+	 * @covers ::getEndUTCTimestamp
+	 * @dataProvider provideEventsForUTCConversion
+	 */
+	public function testUTCConversion( EventRegistration $event, string $expectedStartUTC, string $expectedEndUTC ) {
+		$this->assertSame( $expectedStartUTC, $event->getStartUTCTimestamp(), 'start' );
+		$this->assertSame( $expectedEndUTC, $event->getEndUTCTimestamp(), 'end' );
+	}
+
+	public function provideEventsForUTCConversion(): Generator {
+		$baseCtrArgs = $this->getValidConstructorArgs();
+		$replaceArgs = static function ( array $replacements ) use ( $baseCtrArgs ): array {
+			return array_values( array_replace( $baseCtrArgs, $replacements ) );
+		};
+
+		// NOTE: This test uses dates in the past, so that the timezone conversion rules are known for sure.
+		// The premise here is that Europe/Rome is UTC+1 in summer (DST) and UTC+2 in winter (no DST).
+		$summerStart = '20220815143000';
+		$summerStartMinus2Hours = '20220815123000';
+		$summerEnd = '20220815153000';
+		$summerEndMinus2Hours = '20220815133000';
+
+		$winterStart = '20211215143000';
+		$winterStartMinus1Hour = '20211215133000';
+		$winterStartMinus2Hours = '20211215123000';
+		$winterEnd = '20211215153000';
+		$winterEndMinus1Hour = '20211215143000';
+		$winterEndMinus2Hours = '20211215133000';
+
+		yield 'Local in UTC' => [
+			new EventRegistration( ...$replaceArgs( [
+				'timezone' => new DateTimeZone( 'UTC' ),
+				'start' => $summerStart,
+				'end' => $summerEnd
+			] ) ),
+			$summerStart,
+			$summerEnd
+		];
+
+		yield 'Europe/Rome with DST' => [
+			new EventRegistration( ...$replaceArgs( [
+				'timezone' => new DateTimeZone( 'Europe/Rome' ),
+				'start' => $summerStart,
+				'end' => $summerEnd
+			] ) ),
+			$summerStartMinus2Hours,
+			$summerEndMinus2Hours
+		];
+
+		yield 'Europe/Rome without DST' => [
+			new EventRegistration( ...$replaceArgs( [
+				'timezone' => new DateTimeZone( 'Europe/Rome' ),
+				'start' => $winterStart,
+				'end' => $winterEnd
+			] ) ),
+			$winterStartMinus1Hour,
+			$winterEndMinus1Hour
+		];
+
+		yield 'Fixed offset in summer' => [
+			new EventRegistration( ...$replaceArgs( [
+				'timezone' => new DateTimeZone( '+02:00' ),
+				'start' => $summerStart,
+				'end' => $summerEnd
+			] ) ),
+			$summerStartMinus2Hours,
+			$summerEndMinus2Hours
+		];
+
+		yield 'Fixed offset in winter' => [
+			new EventRegistration( ...$replaceArgs( [
+				'timezone' => new DateTimeZone( '+02:00' ),
+				'start' => $winterStart,
+				'end' => $winterEnd
+			] ) ),
+			$winterStartMinus2Hours,
+			$winterEndMinus2Hours
 		];
 	}
 }
