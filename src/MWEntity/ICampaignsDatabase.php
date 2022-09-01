@@ -4,9 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
+use Countable;
 use stdClass;
 
 interface ICampaignsDatabase {
+
 	/**
 	 * @param string|array $table Table name
 	 * @param string|array $vars Field names
@@ -29,7 +31,7 @@ interface ICampaignsDatabase {
 	 * @param string|array $conds
 	 * @param string|array $options
 	 * @param string|array $join_conds
-	 * @return iterable<stdClass>
+	 * @return iterable<stdClass>&Countable
 	 */
 	public function select(
 		$table,
@@ -130,4 +132,34 @@ interface ICampaignsDatabase {
 	 * @return string
 	 */
 	public function addQuotes( $s ): string;
+
+	/**
+	 * @param string $table
+	 * @param array $conds
+	 * @return bool Return true if no exception was thrown
+	 */
+	public function delete( string $table, array $conds ): bool;
+
+	/**
+	 * @param string $delTable The table to delete from.
+	 * @param string $joinTable The other table.
+	 * @param string $delVar The variable to join on, in the first table.
+	 * @param string $joinVar The variable to join on, in the second table.
+	 * @param array|string $conds Condition array of field names mapped to variables,
+	 *   ANDed together in the WHERE clause
+	 */
+	public function deleteJoin(
+	   $delTable,
+	   $joinTable,
+	   $delVar,
+	   $joinVar,
+	   $conds
+	);
+
+	/**
+	 * Makes an encoded list of strings from an array
+	 * @param array $a Containing the data
+	 * @return string
+	 */
+	public function makeCommaList( array $a );
 }

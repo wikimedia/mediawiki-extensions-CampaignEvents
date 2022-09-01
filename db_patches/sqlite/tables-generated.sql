@@ -13,10 +13,8 @@ CREATE TABLE /*_*/campaign_events (
   event_start_local BLOB NOT NULL, event_start_utc BLOB NOT NULL,
   event_end_local BLOB NOT NULL, event_end_utc BLOB NOT NULL,
   event_type BLOB NOT NULL, event_meeting_type INTEGER NOT NULL,
-  event_meeting_url BLOB NOT NULL, event_meeting_country BLOB NOT NULL,
-  event_meeting_address BLOB NOT NULL,
-  event_created_at BLOB NOT NULL, event_last_edit BLOB NOT NULL,
-  event_deleted_at BLOB DEFAULT NULL
+  event_meeting_url BLOB NOT NULL, event_created_at BLOB NOT NULL,
+  event_last_edit BLOB NOT NULL, event_deleted_at BLOB DEFAULT NULL
 );
 
 CREATE UNIQUE INDEX event_page ON /*_*/campaign_events (
@@ -61,3 +59,18 @@ CREATE UNIQUE INDEX ceo_event_user_role ON /*_*/ce_organizers (
 );
 
 CREATE INDEX ceo_user_event ON /*_*/ce_organizers (ceo_user_id, ceo_event_id);
+
+
+CREATE TABLE /*_*/ce_address (
+  cea_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  cea_full_address BLOB NOT NULL, cea_country BLOB DEFAULT NULL
+);
+
+
+CREATE TABLE /*_*/ce_event_address (
+  ceea_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceea_event BIGINT UNSIGNED NOT NULL,
+  ceea_address BIGINT UNSIGNED NOT NULL
+);
+
+CREATE UNIQUE INDEX ceea_event_address ON /*_*/ce_event_address (ceea_event, ceea_address);

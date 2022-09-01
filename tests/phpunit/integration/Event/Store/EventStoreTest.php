@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWikiIntegrationTestCase;
+use RuntimeException;
 use Title;
 
 /**
@@ -22,7 +23,7 @@ use Title;
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/** @inheritDoc */
-	protected $tablesUsed = [ 'campaign_events' ];
+	protected $tablesUsed = [ 'campaign_events', 'ce_address', 'ce_event_address' ];
 
 	/**
 	 * @return EventRegistration
@@ -114,13 +115,26 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getEventByID
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
+	 * @covers ::storeEventAddress
+	 * @covers ::updateStoredAddresses
+	 * @dataProvider provideRoundtripByID
 	 */
-	public function testRoundtripByID() {
-		$event = $this->getTestEvent();
+	public function testRoundtripByID( $event ) {
 		$savedID = $this->storeEvent( $event );
 		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByID( $savedID );
 		$this->assertEventsEqual( $event, $storedEvent );
 		$this->assertStoredEvent( $savedID, $storedEvent );
+	}
+
+	public function provideRoundtripByID(): Generator {
+		$baseCtrArgs = $this->getBaseCtrArgs();
+		yield 'Event with address and country' => [
+			new EventRegistration( ...array_values( $baseCtrArgs ) )
+		];
+		$eventWithOnlyAddress = array_replace( $baseCtrArgs, [ 'Country' => null ] );
+		yield 'Event with only address' => [
+			new EventRegistration( ...array_values( $eventWithOnlyAddress ) ),
+		];
 	}
 
 	/**
@@ -153,7 +167,76 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideEventsToDelete(): Generator {
-		$baseCtrArgs = [
+		$baseCtrArgs = $this->getBaseCtrArgs();
+		yield 'Not deleted' => [
+			new EventRegistration( ...array_values( $baseCtrArgs ) ),
+			true
+		];
+		$deletedEventCtrArgs = array_replace( $baseCtrArgs, [ 'del' => '1234500000' ] );
+		yield 'Already deleted' => [
+			new EventRegistration( ...array_values( $deletedEventCtrArgs ) ),
+			false
+		];
+	}
+
+	/**
+	 * @covers ::getEventByID
+	 */
+	public function testEventWithMoreThanOneAddress() {
+		$eventData = [
+			'event_name' => 'test multiple address',
+			'event_page_namespace' => 1728,
+			'event_page_title' => 'test',
+			'event_page_prefixedtext' => 'test',
+			'event_page_wiki' => 'local_wiki',
+			'event_chat_url' => '',
+			'event_tracking_tool_id' => null,
+			'event_tracking_tool_event_id' => null,
+			'event_status' => 1,
+			'event_timezone' => 'UTC',
+			'event_start_local' => '20220811142657',
+			'event_start_utc' => '20220811142657',
+			'event_end_local' => '20220811142657',
+			'event_end_utc' => '20220811142657',
+			'event_type' => 'generic',
+			'event_meeting_type' => 3,
+			'event_meeting_url' => '',
+			'event_created_at' => '20220811142657',
+			'event_last_edit' => '20220811142657',
+			'event_deleted_at' => null,
+		];
+		$this->db->insert( 'campaign_events', [ $eventData ] );
+
+		$addresses = [
+			[
+				'cea_full_address' => 'Full address 1',
+				'cea_country' => 'Country 1',
+			],
+			[
+				'cea_full_address' => 'Full address 2',
+				'cea_country' => 'Country 2',
+			]
+		];
+		$this->db->insert( 'ce_address', $addresses );
+
+		$eventAddresses = [
+			[
+				'ceea_event' => 1,
+				'ceea_address' => 1,
+			],
+			[
+				'ceea_event' => 1,
+				'ceea_address' => 2,
+			]
+		];
+		$this->db->insert( 'ce_event_address', $eventAddresses );
+		$this->expectException( RuntimeException::class );
+		$this->expectExceptionMessage( 'Events should have only one address' );
+		CampaignEventsServices::getEventLookup()->getEventByID( 1 );
+	}
+
+	private function getBaseCtrArgs(): array {
+		return [
 			null,
 			'Some name',
 			new MWPageProxy(
@@ -170,20 +253,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			EventRegistration::TYPE_GENERIC,
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			'Country',
-			'Address',
-			'1646500000',
-			'1646500000',
-			'del' => null
-		];
-		yield 'Not deleted' => [
-			new EventRegistration( ...array_values( $baseCtrArgs ) ),
-			true
-		];
-		$deletedEventCtrArgs = array_replace( $baseCtrArgs, [ 'del' => '1234500000' ] );
-		yield 'Already deleted' => [
-			new EventRegistration( ...array_values( $deletedEventCtrArgs ) ),
-			false
+			'Country' => 'Country',
+			'Address' => 'Address',
+			null,
+			null,
+			'del' => null,
 		];
 	}
 }

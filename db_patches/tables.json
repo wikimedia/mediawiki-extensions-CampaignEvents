@@ -158,24 +158,6 @@
 				}
 			},
 			{
-				"name": "event_meeting_country",
-				"comment": "The country of the event.",
-				"type": "binary",
-				"options": {
-					"notnull": true,
-					"length": 255
-				}
-			},
-			{
-				"name": "event_meeting_address",
-				"comment": "The complete address of the event.",
-				"type": "blob",
-				"options": {
-					"notnull": true,
-					"length": 65530
-				}
-			},
-			{
 				"name": "event_created_at",
 				"type": "mwtimestamp",
 				"options": {
@@ -358,5 +340,83 @@
 			}
 		],
 		"pk": [ "ceo_id" ]
+	},
+	{
+		"name": "ce_address",
+		"comment": "Stores known event addresses.",
+		"columns": [
+			{
+				"name": "cea_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cea_full_address",
+				"comment": "Full address of the event.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "cea_country",
+				"comment": "Event country.",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"length": 255
+				}
+			}
+		],
+		"indexes": [
+		],
+		"pk": [ "cea_id" ]
+	},
+	{
+		"name": "ce_event_address",
+		"comment": "Stores the id of the event and the id of an address.",
+		"columns": [
+			{
+				"name": "ceea_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceea_event",
+				"comment": "The id of the event on campaign_events.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceea_address",
+				"comment": "The id of the address on ce_address.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ceea_event_address",
+				"columns": [ "ceea_event", "ceea_address" ],
+				"unique": true,
+				"comment": "Used when querying event address."
+			}
+		],
+		"pk": [ "ceea_id" ]
 	}
 ]
