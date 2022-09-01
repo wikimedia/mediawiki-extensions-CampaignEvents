@@ -65,6 +65,9 @@ class ListParticipantsHandler extends SimpleHandler {
 			$usernameFilter
 		);
 
+		// TODO: remove global when T269492 is resolved
+
+		$language = \RequestContext::getMain()->getLanguage();
 		$respVal = [];
 		foreach ( $participants as $participant ) {
 			$centralUser = $participant->getUser();
@@ -77,9 +80,11 @@ class ListParticipantsHandler extends SimpleHandler {
 				'participant_id' => $participant->getParticipantID(),
 				'user_id' => $centralUser->getCentralID(),
 				'user_name' => $userName,
-				// To DO For now we decided on TS_DB to be the default returned by the api.
-				// see T312910
-				'user_registered_at' => wfTimestamp( TS_DB, $participant->getRegisteredAt() ),
+				'user_registered_at' => wfTimestamp( TS_MW, $participant->getRegisteredAt() ),
+				'user_registered_at_formatted' => $language->userTimeAndDate(
+					$participant->getRegisteredAt(),
+					$this->getAuthority()->getUser()
+				)
 			];
 		}
 		return $this->getResponseFactory()->createJson( $respVal );

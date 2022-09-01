@@ -227,15 +227,15 @@
 
 				thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
 				thisClass.onDeselectAll();
-				var succesMsg;
+				var successMsg;
 				if ( removeAll ) {
 					thisClass.participantsTotal = 0;
-					succesMsg = mw.message(
+					successMsg = mw.message(
 						'campaignevents-event-details-remove-all-participant-notification'
 					).text();
 				} else {
 					thisClass.participantsTotal -= numSelected;
-					succesMsg = mw.message(
+					successMsg = mw.message(
 						'campaignevents-event-details-remove-participant-notification',
 						mw.language.convertNumber( numSelected )
 					).text();
@@ -255,7 +255,7 @@
 				}
 				thisClass.scrollDownObserver.reset();
 				thisClass.selectedParticipantIDs = [];
-				thisClass.showNotification( 'success', succesMsg );
+				thisClass.showNotification( 'success', successMsg );
 			} )
 			.fail( function ( _err, errData ) {
 				var errorMsg = mw.message(
@@ -330,10 +330,9 @@
 						} )
 					);
 					items.push(
-						// TO DO T312910
 						new OO.ui.Element( {
 							$element: $( '<span>' ),
-							text: data[ i ].user_registered_at,
+							text: data[ i ].user_registered_at_formatted,
 							classes: [ 'ext-campaignevents-details-participant-registered-at' ]
 						} )
 					);
