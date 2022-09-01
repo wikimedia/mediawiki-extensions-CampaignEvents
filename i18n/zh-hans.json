@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"GuoPC",
 			"Wzl19371"
 		]
 	},
@@ -34,6 +35,9 @@
 	"campaignevents-eventpage-dialog-location-label": "位置",
 	"campaignevents-eventpage-dialog-online-label": "线上活动",
 	"campaignevents-eventpage-dialog-in-person-label": "现场活动",
+	"campaignevents-eventpage-dialog-chat-label": "加入活动聊天群组",
+	"campaignevents-eventpage-dialog-chat-not-available": "此活动没有可用的聊天群组。",
+	"campaignevents-eventpage-dialog-chat-register": "注册以查看聊天群组链接。",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "是",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "否",
 	"campaignevents-event-details-edit-button": "编辑",

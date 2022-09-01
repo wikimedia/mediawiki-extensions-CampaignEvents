@@ -94,6 +94,8 @@
 	"campaignevents-eventpage-dialog-location-label": "位置",
 	"campaignevents-eventpage-dialog-online-label": "オンラインイベント",
 	"campaignevents-eventpage-dialog-in-person-label": "対面イベント",
+	"campaignevents-eventpage-dialog-chat-label": "イベントのチャットグループに参加",
+	"campaignevents-eventpage-dialog-chat-not-available": "このイベントに利用できるチャットグループはありません。",
 	"campaignevents-eventpage-dialog-action-close": "閉じる",
 	"campaignevents-eventpage-unregister-confirmation-title": "登録をキャンセルする",
 	"campaignevents-eventpage-unregister-confirmation-body": "登録をキャンセルしてもよろしいですか？",

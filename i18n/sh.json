@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Vlad5250"
+		]
+	},
+	"nstab-event": "Događaj",
+	"campaignevents-eventpage-dialog-chat-label": "Pridružite se chat grupi događaja",
+	"campaignevents-eventpage-dialog-chat-not-available": "Nije dostupna chat grupa za ovaj događaj.",
+	"campaignevents-eventpage-dialog-chat-register": "Registrirajte se za pregled poveznice grupe za chat."
+}

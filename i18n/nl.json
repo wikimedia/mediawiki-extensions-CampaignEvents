@@ -83,7 +83,7 @@
 	"campaignevents-rest-delete-already-deleted": "Deze evenementregistratie is al verwijderd.",
 	"campaignevents-role-creator": "{{GENDER:$1|maker}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organisator}}",
-	"campaignevents-rest-user-not-found": "De gebruiker \"$1\" bestaat niet.",
+	"campaignevents-rest-user-not-found": "Er is geen gebruiker met deze centrale ID.",
 	"campaignevents-register-not-allowed": "Aanmelden voor evenementen is niet toegestaan.",
 	"campaignevents-register-event-past": "Deze evenementregistratieperiode is al afgelopen.",
 	"campaignevents-register-event-not-open": "Deze evenementregistratie is gesloten.",
