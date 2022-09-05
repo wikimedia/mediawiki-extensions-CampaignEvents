@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"DarkGames26",
 			"MarcoAurelio"
 		]
 	},
 	"campaignevents-desc": "Proporciona características para los organizadores de campañas y sus participantes.",
+	"nstab-event": "Evento",
 	"action-campaignevents-enable-registration": "permitir inscripciones para los eventos",
 	"right-campaignevents-enable-registration": "Permitir inscripciones para los eventos",
 	"action-campaignevents-delete-registration": "eliminar inscripciones de los eventos",
@@ -141,6 +143,7 @@
 	"campaignevents-eventpage-header-attending": "¡Asistes!",
 	"campaignevents-eventpage-btn-manage": "Gestionar evento",
 	"campaignevents-eventpage-btn-register": "Registrarse para el evento",
+	"campaignevents-eventpage-btn-event-ended": "Evento finalizado",
 	"campaignevents-eventpage-dialog-title": "Detalles del evento",
 	"campaignevents-eventpage-dialog-organizers": "Organizado por: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Ver todos los organizadores",
@@ -154,6 +157,8 @@
 	"campaignevents-eventpage-dialog-link-not-available": "El enlace será proporcionado por {{PLURAL:$1|el organizador|los organizadores}}.",
 	"campaignevents-eventpage-dialog-link-register": "Regístrate para ver el enlace del evento.",
 	"campaignevents-eventpage-dialog-venue-not-available": "La dirección será proporcionada por {{PLURAL:$1|el organizador|los organizadores}}.",
+	"campaignevents-eventpage-dialog-chat-not-available": "No hay grupo de chat disponible para este evento.",
+	"campaignevents-eventpage-dialog-chat-register": "Regístrese para ver el enlace del grupo de chat.",
 	"campaignevents-eventpage-dialog-action-close": "Cerrar",
 	"campaignevents-eventpage-register-notification": "Te has inscrito para $1.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Cancelar inscripción",

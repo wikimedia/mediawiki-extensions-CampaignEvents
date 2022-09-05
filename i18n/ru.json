@@ -9,10 +9,10 @@
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
 	"nstab-event": "Событие",
 	"campaignevents-error-invalid-id": "Идентификатор мероприятия должен быть положительным целым числом.",
-	"campaignevents-error-invalid-title-interwiki": "Заголовок страницы мероприятия содержит недействительный интервики-префикс",
+	"campaignevents-error-invalid-title-interwiki": "Укажите страницу мероприятия в локальной вики.",
 	"campaignevents-error-invalid-chat-url": "Введите действительный URL-адрес чата.",
 	"campaignevents-error-empty-start": "Выберите время начала.",
-	"campaignevents-error-start-past": "Время начала мероприятия не может быть в прошлом",
+	"campaignevents-error-start-past": "Укажите время начала мероприятия в будущем.",
 	"campaignevents-error-empty-end": "Введите время окончания.",
 	"editeventregistration": "Изменить форму регистрации на мероприятие",
 	"campaignevents-edit-form-legend": "Предоставьте основную информацию о мероприятии, которое вы организуете",
@@ -40,5 +40,7 @@
 	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена.",
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
-	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено"
+	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
+	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
+	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы."
 }

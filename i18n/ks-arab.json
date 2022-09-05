@@ -13,6 +13,9 @@
 	"campaignevents-eventpage-header-dates-label": "شروع تہٕ ٲخری وقت",
 	"campaignevents-eventpage-dialog-organizers": "آرگنیزٕڈ بَی: $1",
 	"campaignevents-eventpage-dialog-dates": "$1 تا $4",
+	"campaignevents-eventpage-dialog-chat-label": "بَحَث گُرپ اِوینٛٹس منٛز گژھیوٚ شٲمل",
+	"campaignevents-eventpage-dialog-chat-not-available": "یتھ اِوینٛٹس کھٲترٕ چھنہٕ کانٛہہ تہِ بَحَث گُرپ موجود.",
+	"campaignevents-eventpage-dialog-chat-register": "درٕج گژِھیوٚ بَحَث گُرپ کُنٛڈٕ وُچھنہٕ کھٲترٕ.",
 	"campaignevents-eventpage-dialog-action-close": "بَنٛد",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "آ",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "نہَ"

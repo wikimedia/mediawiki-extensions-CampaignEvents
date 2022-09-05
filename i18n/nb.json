@@ -1,10 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Gabriel Kielland",
 			"Jon Harald Søby"
 		]
 	},
 	"campaignevents-desc": "Tilbyr funksjoner for kampanjearrangører og -deltakere.",
 	"nstab-event": "Arrangement",
-	"action-campaignevents-enable-registration": "aktivere arrangementsregistreringer"
+	"action-campaignevents-enable-registration": "aktivere arrangementsregistreringer",
+	"campaignevents-eventpage-dialog-chat-not-available": "Ingen chattegruppe er tilgjengelig for dette arrangementet.",
+	"campaignevents-eventpage-dialog-chat-register": "Registrer deg for å kunne se chattegruppens lenke"
 }
