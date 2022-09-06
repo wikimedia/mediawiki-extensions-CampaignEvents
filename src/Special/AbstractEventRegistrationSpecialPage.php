@@ -14,6 +14,9 @@ use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MWTimestamp;
+use OOUI\FieldLayout;
+use OOUI\HtmlSnippet;
+use OOUI\MessageWidget;
 use Status;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
@@ -188,6 +191,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected function alterForm( HTMLForm $form ): void {
 		$form->setWrapperLegendMsg( $this->formMessages['form-legend'] );
 		$form->setSubmitTextMsg( $this->formMessages['submit'] );
+		$form->addFooterHtml( new FieldLayout( new MessageWidget( [
+			'type' => 'notice',
+			'inline' => true,
+			'label' => new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() )
+		] ) ) );
 	}
 
 	/**
