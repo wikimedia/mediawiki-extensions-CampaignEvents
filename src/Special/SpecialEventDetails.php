@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsParticipantsM
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -38,6 +39,8 @@ class SpecialEventDetails extends SpecialPage {
 	private $organizersStore;
 	/** @var PageURLResolver */
 	private $pageURLResolver;
+	/** @var UserLinker */
+	private $userLinker;
 	/** @var IMessageFormatterFactory */
 	private $messageFormatterFactory;
 	/** @var CampaignsCentralUserLookup */
@@ -50,6 +53,7 @@ class SpecialEventDetails extends SpecialPage {
 	 * @param PageURLResolver $pageURLResolver
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param UserLinker $userLinker
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -57,13 +61,15 @@ class SpecialEventDetails extends SpecialPage {
 		OrganizersStore $organizersStore,
 		PageURLResolver $pageURLResolver,
 		IMessageFormatterFactory $messageFormatterFactory,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		UserLinker $userLinker
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
 		$this->pageURLResolver = $pageURLResolver;
+		$this->userLinker = $userLinker;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->centralUserLookup = $centralUserLookup;
 	}
@@ -166,11 +172,11 @@ class SpecialEventDetails extends SpecialPage {
 			( new EventDetailsParticipantsModule() )->createContent(
 				$language,
 				$this->getUser(),
+				$this->userLinker,
 				$participants,
 				$totalParticipants,
 				$msgFormatter,
-				$canRemoveParticipants,
-				$this->centralUserLookup
+				$canRemoveParticipants
 			)
 		);
 

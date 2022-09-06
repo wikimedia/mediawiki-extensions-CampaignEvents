@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler;
@@ -37,12 +38,14 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		ParticipantsStore $participantsStore = null
+		ParticipantsStore $participantsStore = null,
+		CampaignsCentralUserLookup $centralUserLookup = null
 	): ListParticipantsHandler {
 		return new ListParticipantsHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
-			$this->createMock( CampaignsCentralUserLookup::class )
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
+			$this->createMock( UserLinker::class )
 		);
 	}
 
@@ -53,14 +56,18 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		array $expectedResp,
 		ParticipantsStore $participantsStore
 	) {
-		$handler = $this->newHandler( null, $participantsStore );
+		$handler = $this->newHandler( null, $participantsStore, null );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 
 		$this->assertSame( $expectedResp, $respData );
 	}
 
 	public function provideRunData(): Generator {
-		yield 'No participants' => [ [], $this->createMock( ParticipantsStore::class ) ];
+		yield 'No participants' => [
+			[],
+			$this->createMock( ParticipantsStore::class ),
+			$this->createMock( CampaignsCentralUserLookup::class )
+		];
 
 		$participants = [];
 		$expected = [];
@@ -71,6 +78,11 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 				'participant_id' => $i,
 				'user_id' => $i,
 				'user_name' => '',
+				'user_page' => [
+					'path' => '',
+					'title' => '',
+					'classes' => ''
+				],
 				'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
 				'user_registered_at_formatted' => '12:00, 15 March 2022'
 			];
@@ -78,7 +90,6 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$partStore = $this->createMock( ParticipantsStore::class );
 		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $participants );
-
 		yield 'Has participants' => [
 			$expected,
 			$partStore
@@ -90,7 +101,9 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$eventLookup->expects( $this->once() )
 			->method( 'getEventByID' )
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
+
 		$handler = $this->newHandler( $eventLookup );
+
 		try {
 			$this->executeHandler( $handler, new RequestData( self::REQ_DATA ) );
 			$this->fail( 'No exception thrown' );

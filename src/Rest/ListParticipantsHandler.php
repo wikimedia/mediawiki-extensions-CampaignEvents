@@ -6,12 +6,15 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use Sanitizer;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
@@ -27,20 +30,25 @@ class ListParticipantsHandler extends SimpleHandler {
 	private $participantsStore;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var UserLinker */
+	private $userLinker;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param UserLinker $userLinker
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		UserLinker $userLinker
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->userLinker = $userLinker;
 	}
 
 	/**
@@ -80,6 +88,7 @@ class ListParticipantsHandler extends SimpleHandler {
 				'participant_id' => $participant->getParticipantID(),
 				'user_id' => $centralUser->getCentralID(),
 				'user_name' => $userName,
+				'user_page' => $this->getUserPagePath( $centralUser ),
 				'user_registered_at' => wfTimestamp( TS_MW, $participant->getRegisteredAt() ),
 				'user_registered_at_formatted' => $language->userTimeAndDate(
 					$participant->getRegisteredAt(),
@@ -107,5 +116,21 @@ class ListParticipantsHandler extends SimpleHandler {
 				]
 			]
 		);
+	}
+
+	/**
+	 * @param CentralUser $centralUser
+	 * @return string[]
+	 * NOTE: Make sure that the user is not hidden before calling this method, or it will throw an exception.
+	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::GetUserLink
+	 */
+	private function getUserPagePath( CentralUser $centralUser ): array {
+		$html = $this->userLinker->generateUserLink( $centralUser );
+		$attribs = Sanitizer::decodeTagAttributes( $html );
+		return [
+			'path' => array_key_exists( 'href', $attribs ) ? $attribs['href'] : '',
+			'title' => array_key_exists( 'title', $attribs ) ? $attribs['title'] : '',
+			'classes' => array_key_exists( 'class', $attribs ) ? $attribs['class'] : ''
+		];
 	}
 }
