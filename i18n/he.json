@@ -55,6 +55,7 @@
 	"campaignevents-edit-field-chat-url-help": "אם יש לך קבוצת צ'אט מקוונת למשתתפי האירוע הזה, אפשר להוסיף את קישור ההזמנה כאן. משתתפים יוכלו לצפות בקישור ההזמנה אחרי ההרשמה.",
 	"campaignevents-enable-registration-form-submit": "הפעלת הרשמה",
 	"campaignevents-edit-form-submit": "עריכת הרשמה",
+	"campaignevents-edit-form-notice": "רק שמות משתמש ייאספו ממשתתפים במהלך ההרשמה. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration מידע נוסף]",
 	"campaignevents-edit-success-msg": "ההרשמה נערכה. ר' את [[$1|דף האירוע]].",
 	"campaignevents-enable-registration-success-msg": "ההרשמה מופעלת. עכשיו משתתפים יכולים להירשם ב[[$1|דף האירוע]].",
 	"campaignevents-edit-invalid-id": "יש לספק מזהה אירוע תקין.",

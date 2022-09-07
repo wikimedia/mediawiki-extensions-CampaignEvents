@@ -55,6 +55,7 @@
 	"campaignevents-edit-field-chat-url-help": "Wenn du eine Online-Chat-Gruppe für die Teilnehmer dieser Veranstaltung hast, kannst du den Einladungslink hier hinzufügen. Die Teilnehmer können den Einladungslink nach der Registrierung sehen.",
 	"campaignevents-enable-registration-form-submit": "Anmeldung freigeben",
 	"campaignevents-edit-form-submit": "Anmeldung bearbeiten",
+	"campaignevents-edit-form-notice": "Bei der Anmeldung werden von den Teilnehmern nur Benutzernamen erhoben. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Weitere Informationen].",
 	"campaignevents-edit-success-msg": "Die Anmeldung wurde bearbeitet. Siehe [[$1|Veranstaltungsseite]].",
 	"campaignevents-enable-registration-success-msg": "Die Registrierung ist aktiviert. Teilnehmer können sich jetzt auf der [[$1|Veranstaltungsseite]] anmelden.",
 	"campaignevents-edit-invalid-id": "Gib eine gültige Veranstaltungs-ID an.",

@@ -59,6 +59,7 @@
 	"campaignevents-edit-field-chat-url-help": "Si vous avez un groupe de discussion instantanée pour les participants à cet événement, vous pouvez ajouter le lien d’invitation ici. Les participants pourront voir le lien d’invitation au groupe après leur inscription.",
 	"campaignevents-enable-registration-form-submit": "Activer les inscriptions",
 	"campaignevents-edit-form-submit": "Modifier le formulaire d’inscription",
+	"campaignevents-edit-form-notice": "Seuls les noms d’utilisateur seront collectés auprès des participants lors de l’inscription. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration En savoir plus].",
 	"campaignevents-edit-success-msg": "Le formulaire d’inscription a été modifié. Voir la [[$1|page de l’événement]].",
 	"campaignevents-enable-registration-success-msg": "Les inscriptions sont activées. Les participants peuvent désormais s'inscrire sur la [[$1|page de l’événement]].",
 	"campaignevents-edit-invalid-id": "Indiquez un identifiant d’événement valide.",
