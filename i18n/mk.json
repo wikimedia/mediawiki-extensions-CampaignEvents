@@ -56,6 +56,7 @@
 	"campaignevents-edit-field-chat-url-help": "Ако имате група за семрежни разговори наманета за учесниците на овој настан, тука ставете ја врската за покана. Учесниците ќе можат да ја видат врската со покана откако ќе се пријават за настанот.",
 	"campaignevents-enable-registration-form-submit": "Овозможи пријавување",
 	"campaignevents-edit-form-submit": "Измени пријавување",
+	"campaignevents-edit-form-notice": "При пријавата ќе се собираат само корисничките имиња на учесниците. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Дознајте повеќе].",
 	"campaignevents-edit-success-msg": "Пријавувањето е затворено. Погледајте ја [[$1|страницата за настанот]].",
 	"campaignevents-enable-registration-success-msg": "Пријавувањето е овозможено. Сега учесниците можат да се пријават на [[$1|страницата за настанот]].",
 	"campaignevents-edit-invalid-id": "Укажете важечка назнака за настан.",
