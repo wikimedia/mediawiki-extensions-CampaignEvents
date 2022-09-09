@@ -77,7 +77,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
 	 * @covers ::newEvent
 	 * @covers ::validatePage
-	 * @covers ::validateDates
+	 * @covers ::validateLocalDates
 	 * @covers ::isValidURL
 	 * @covers ::validateLocation
 	 * @dataProvider provideEventData
