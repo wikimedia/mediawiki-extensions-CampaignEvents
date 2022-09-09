@@ -20,8 +20,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'name' => 'Name',
 			'page' => $this->createMock( ICampaignsPage::class ),
 			'chat' => 'https://chat.example.org',
-			'tracking_name' => 'Some name',
-			'tracking_url' => 'https://tracking.example.org',
+			'tracking_id' => 1,
+			'tracking_event_id' => 'some-event-identifier',
 			'status' => EventRegistration::STATUS_OPEN,
 			'start' => '20220815120000',
 			'end' => '20220815120001',
@@ -42,8 +42,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @covers ::getName
 	 * @covers ::getPage
 	 * @covers ::getChatURL
-	 * @covers ::getTrackingToolName
-	 * @covers ::getTrackingToolURL
+	 * @covers ::getTrackingToolID
+	 * @covers ::getTrackingToolEventID
 	 * @covers ::getStatus
 	 * @covers ::getStartTimestamp
 	 * @covers ::getEndTimestamp
@@ -63,8 +63,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['name'], $registration->getName(), 'name' );
 		$this->assertSame( $data['page'], $registration->getPage(), 'page' );
 		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
-		$this->assertSame( $data['tracking_name'], $registration->getTrackingToolName(), 'tracking_name' );
-		$this->assertSame( $data['tracking_url'], $registration->getTrackingToolURL(), 'tracking_url' );
+		$this->assertSame( $data['tracking_id'], $registration->getTrackingToolID(), 'tracking_id' );
+		$this->assertSame( $data['tracking_event_id'], $registration->getTrackingToolEventID(), 'tracking_event_id' );
 		$this->assertSame( $data['status'], $registration->getStatus(), 'status' );
 		$this->assertSame( $data['start'], $registration->getStartTimestamp(), 'start' );
 		$this->assertSame( $data['end'], $registration->getEndTimestamp(), 'end' );

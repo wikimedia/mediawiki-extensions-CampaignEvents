@@ -128,16 +128,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-			/* TODO MVP: Re-add these
-			'tracking_tool_name' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-			],
-			'tracking_tool_url' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-			],
-			*/
+			// TODO MVP: Add tracking tool
 			'start_time' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',

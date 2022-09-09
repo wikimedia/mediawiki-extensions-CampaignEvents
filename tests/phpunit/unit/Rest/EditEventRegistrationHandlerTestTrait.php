@@ -19,8 +19,6 @@ trait EditEventRegistrationHandlerTestTrait {
 	private static $defaultEventParams = [
 		'event_page' => 'Some event page title',
 		'chat_url' => 'https://chaturl.example.org',
-		'tracking_tool_name' => 'Tracking tool',
-		'tracking_tool_url' => 'https://trackingtool.example.org',
 		'start_time' => '20220308120000',
 		'end_time' => '20220308150000',
 		'type' => EventRegistration::TYPE_GENERIC,

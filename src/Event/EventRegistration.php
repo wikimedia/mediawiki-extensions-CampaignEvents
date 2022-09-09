@@ -39,13 +39,10 @@ class EventRegistration {
 	private $page;
 	/** @var string|null */
 	private $chatURL;
-	/**
-	 * @var string|null
-	 * @todo Should this and the URL be moved to a separate interface?
-	 */
-	private $trackingToolName;
+	/** @var int|null */
+	private $trackingToolID;
 	/** @var string|null */
-	private $trackingToolURL;
+	private $trackingToolEventID;
 	/** @var string One of the STATUS_* constants */
 	private $status;
 	/** @var string */
@@ -74,8 +71,8 @@ class EventRegistration {
 	 * @param string $name
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
-	 * @param string|null $trackingToolName
-	 * @param string|null $trackingToolURL
+	 * @param int|null $trackingToolID
+	 * @param string|null $trackingToolEventID
 	 * @param string $status
 	 * @param string $startTimestamp TS_MW timestamp
 	 * @param string $endTimestamp TS_MW timestamp
@@ -93,8 +90,8 @@ class EventRegistration {
 		string $name,
 		ICampaignsPage $page,
 		?string $chatURL,
-		?string $trackingToolName,
-		?string $trackingToolURL,
+		?int $trackingToolID,
+		?string $trackingToolEventID,
 		string $status,
 		string $startTimestamp,
 		string $endTimestamp,
@@ -121,8 +118,8 @@ class EventRegistration {
 		$this->name = $name;
 		$this->page = $page;
 		$this->chatURL = $chatURL;
-		$this->trackingToolName = $trackingToolName;
-		$this->trackingToolURL = $trackingToolURL;
+		$this->trackingToolID = $trackingToolID;
+		$this->trackingToolEventID = $trackingToolEventID;
 		$this->status = $status;
 		$this->startTimestamp = $startTimestamp;
 		$this->endTimestamp = $endTimestamp;
@@ -165,17 +162,17 @@ class EventRegistration {
 	}
 
 	/**
-	 * @return string|null
+	 * @return int|null
 	 */
-	public function getTrackingToolName(): ?string {
-		return $this->trackingToolName;
+	public function getTrackingToolID(): ?int {
+		return $this->trackingToolID;
 	}
 
 	/**
 	 * @return string|null
 	 */
-	public function getTrackingToolURL(): ?string {
-		return $this->trackingToolURL;
+	public function getTrackingToolEventID(): ?string {
+		return $this->trackingToolEventID;
 	}
 
 	/**
