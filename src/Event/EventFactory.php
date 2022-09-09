@@ -109,7 +109,7 @@ class EventFactory {
 
 		$datesStatus = $this->validateDates( $validationFlags, $startTimestamp, $endTimestamp );
 		$res->merge( $datesStatus );
-		[ $startTSUnix, $endTSUnix ] = $datesStatus->getValue();
+		[ $validatedStart, $validatedEnd ] = $datesStatus->getValue();
 
 		if ( !in_array( $type, EventRegistration::VALID_TYPES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-type' );
@@ -149,8 +149,8 @@ class EventFactory {
 			$trackingToolName,
 			$trackingToolURL,
 			$status,
-			$startTSUnix,
-			$endTSUnix,
+			$validatedStart,
+			$validatedEnd,
 			$type,
 			$meetingType,
 			$meetingURL,
@@ -203,7 +203,8 @@ class EventFactory {
 	 * @param int $validationFlags
 	 * @param string $start
 	 * @param string $end
-	 * @return StatusValue Whose result is [ start_unix, end_unix ]
+	 * @return StatusValue Whose result is [ start, end ] with the actual values to use for creating
+	 * the EventRegistration object. Currently they are the same as $start and $end but this may change.
 	 */
 	private function validateDates( int $validationFlags, string $start, string $end ): StatusValue {
 		$res = StatusValue::newGood();
@@ -214,12 +215,13 @@ class EventFactory {
 		if ( $start === '' ) {
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-empty-start' );
+		} elseif ( MWTimestamp::convert( TS_MW, $start ) !== $start ) {
+			// This accounts for both the timestamp being invalid and it not being TS_MW.
+			$startAndEndValid = false;
+			$res->error( 'campaignevents-error-invalid-start' );
 		} else {
 			$startTSUnix = wfTimestamp( TS_UNIX, $start );
-			if ( $startTSUnix === false ) {
-				$startAndEndValid = false;
-				$res->error( 'campaignevents-error-invalid-start' );
-			} elseif (
+			if (
 				!( $validationFlags & self::VALIDATE_SKIP_DATES_PAST ) && (int)$startTSUnix < MWTimestamp::time()
 			) {
 				$res->error( 'campaignevents-error-start-past' );
@@ -229,18 +231,18 @@ class EventFactory {
 		if ( $end === '' ) {
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-empty-end' );
+		} elseif ( MWTimestamp::convert( TS_MW, $end ) !== $end ) {
+			// This accounts for both the timestamp being invalid and it not being TS_MW.
+			$startAndEndValid = false;
+			$res->error( 'campaignevents-error-invalid-end' );
 		} else {
 			$endTSUnix = wfTimestamp( TS_UNIX, $end );
-			if ( $endTSUnix === false ) {
-				$startAndEndValid = false;
-				$res->error( 'campaignevents-error-invalid-end' );
-			}
 		}
 
 		if ( $startAndEndValid && $startTSUnix > $endTSUnix ) {
 			$res->error( 'campaignevents-error-start-after-end' );
 		}
-		$res->setResult( true, [ $startTSUnix, $endTSUnix ] );
+		$res->setResult( true, [ $start, $end ] );
 		return $res;
 	}
 

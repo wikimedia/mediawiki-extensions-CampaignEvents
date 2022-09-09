@@ -5,6 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MWTimestamp;
+use Wikimedia\Assert\Assert;
 
 /**
  * Immutable value object that represents an abstract registration, i.e. one that may not exist in the database.
@@ -75,8 +77,8 @@ class EventRegistration {
 	 * @param string|null $trackingToolName
 	 * @param string|null $trackingToolURL
 	 * @param string $status
-	 * @param string $startTimestamp UNIX timestamp
-	 * @param string $endTimestamp UNIX timestamp
+	 * @param string $startTimestamp TS_MW timestamp
+	 * @param string $endTimestamp TS_MW timestamp
 	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
@@ -105,6 +107,16 @@ class EventRegistration {
 		?string $lastEditTimestamp,
 		?string $deletionTimestamp
 	) {
+		Assert::parameter(
+			MWTimestamp::convert( TS_MW, $startTimestamp ) === $startTimestamp,
+			'$startTimestamp',
+			'Should be in TS_MW format.'
+		);
+		Assert::parameter(
+			MWTimestamp::convert( TS_MW, $endTimestamp ) === $endTimestamp,
+			'$endTimestamp',
+			'Should be in TS_MW format.'
+		);
 		$this->id = $id;
 		$this->name = $name;
 		$this->page = $page;
@@ -174,14 +186,14 @@ class EventRegistration {
 	}
 
 	/**
-	 * @return string
+	 * @return string Timestamp in the TS_MW format
 	 */
 	public function getStartTimestamp(): string {
 		return $this->startTimestamp;
 	}
 
 	/**
-	 * @return string
+	 * @return string Timestamp in TS_MW format
 	 */
 	public function getEndTimestamp(): string {
 		return $this->endTimestamp;

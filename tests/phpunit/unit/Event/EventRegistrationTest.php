@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWikiUnitTestCase;
+use Wikimedia\Assert\ParameterAssertionException;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventRegistration
@@ -22,8 +23,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'tracking_name' => 'Some name',
 			'tracking_url' => 'https://tracking.example.org',
 			'status' => EventRegistration::STATUS_OPEN,
-			'start' => '1654000000',
-			'end' => '1654000001',
+			'start' => '20220815120000',
+			'end' => '20220815120001',
 			'type' => EventRegistration::TYPE_GENERIC,
 			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
@@ -77,25 +78,26 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['deletion'], $registration->getDeletionTimestamp(), 'deletion' );
 	}
 
-	public function provideInvalidDataForInPersonMeetings(): Generator {
-		$types = [
-			'In-person only' => EventRegistration::MEETING_TYPE_IN_PERSON,
-			'Online and in-person' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
-		];
-		$getArgsWithData = function ( array $data ): array {
-			return array_values( array_replace( $this->getValidConstructorArgs(), $data ) );
-		};
+	/**
+	 * @param array $constructorArgs
+	 * @param string $expectedWrongParam
+	 * @dataProvider provideInvalidTimestampFormat
+	 * @covers ::__construct
+	 */
+	public function testInvalidTimestampFormat( array $constructorArgs, string $expectedWrongParam ) {
+		$this->expectException( ParameterAssertionException::class );
+		$this->expectExceptionMessage( $expectedWrongParam );
+		new EventRegistration( ...$constructorArgs );
+	}
 
-		foreach ( $types as $typeDesc => $type ) {
-			yield $typeDesc . ', without country and address' => [
-				$getArgsWithData( [ 'meeting_type' => $type, 'country' => null, 'address' => null ] )
-			];
-			yield $typeDesc . ', without country, with address' => [
-				$getArgsWithData( [ 'meeting_type' => $type, 'country' => null, 'address' => 'Foo bar' ] )
-			];
-			yield $typeDesc . ', with country, without address' => [
-				$getArgsWithData( [ 'meeting_type' => $type, 'country' => 'Foo', 'address' => null ] )
-			];
-		}
+	public function provideInvalidTimestampFormat(): Generator {
+		yield 'Start timestamp' => [
+			array_values( array_replace( $this->getValidConstructorArgs(), [ 'start' => '1654000000' ] ) ),
+			'$startTimestamp'
+		];
+		yield 'End timestamp' => [
+			array_values( array_replace( $this->getValidConstructorArgs(), [ 'end' => '1654000000' ] ) ),
+			'$endTimestamp'
+		];
 	}
 }
