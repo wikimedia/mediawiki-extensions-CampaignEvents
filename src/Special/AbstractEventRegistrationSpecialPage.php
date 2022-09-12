@@ -17,6 +17,7 @@ use MWTimestamp;
 use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
+use OOUI\Tag;
 use Status;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
@@ -191,10 +192,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected function alterForm( HTMLForm $form ): void {
 		$form->setWrapperLegendMsg( $this->formMessages['form-legend'] );
 		$form->setSubmitTextMsg( $this->formMessages['submit'] );
+		// XXX HACK: Override the font weight with inline style to avoid creating a new RL module just for this. T316820
+		$footerNotice = ( new Tag( 'span' ) )
+			->appendContent( new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() ) )
+			->setAttributes( [ 'style' => 'font-weight: normal' ] );
 		$form->addFooterHtml( new FieldLayout( new MessageWidget( [
 			'type' => 'notice',
 			'inline' => true,
-			'label' => new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() )
+			'label' => $footerNotice
 		] ) ) );
 	}
 
