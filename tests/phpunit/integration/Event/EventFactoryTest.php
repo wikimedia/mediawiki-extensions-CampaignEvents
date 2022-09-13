@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
+namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Event;
 
 use Generator;
 use InvalidArgumentException;

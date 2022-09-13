@@ -149,10 +149,10 @@ interface ICampaignsDatabase {
 	 *   ANDed together in the WHERE clause
 	 */
 	public function deleteJoin(
-	   $delTable,
-	   $joinTable,
-	   $delVar,
-	   $joinVar,
+	   string $delTable,
+	   string $joinTable,
+	   string $delVar,
+	   string $joinVar,
 	   $conds
 	);
 
@@ -161,5 +161,20 @@ interface ICampaignsDatabase {
 	 * @param array $a Containing the data
 	 * @return string
 	 */
-	public function makeCommaList( array $a );
+	public function makeCommaList( array $a ): string;
+
+	/**
+	 * @param string|array $cond
+	 * @param string $caseTrueExpression
+	 * @param string $caseFalseExpression
+	 * @return string
+	 */
+	public function conditional( $cond, string $caseTrueExpression, string $caseFalseExpression ): string;
+
+	/**
+	 * Build a reference to a column value from the conflicting proposed upsert() row.
+	 * @param string $column Column name
+	 * @return string SQL expression returning a scalar
+	 */
+	public function buildExcludedValue( string $column ): string;
 }

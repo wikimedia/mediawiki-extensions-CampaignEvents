@@ -39,4 +39,11 @@ class CampaignsDatabaseHelper {
 			: $this->lbFactory->getExternalLB( $this->dbCluster );
 		return new MWDatabaseProxy( $lb->getConnectionRef( $type, [], $this->dbName ) );
 	}
+
+	/**
+	 * Waits for the replica DBs to catch up to the current primary position
+	 */
+	public function waitForReplication(): void {
+		$this->lbFactory->waitForReplication();
+	}
 }
