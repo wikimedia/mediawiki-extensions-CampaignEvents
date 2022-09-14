@@ -27,6 +27,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\MediaWikiServices;
 
 // This file is actually covered by CampaignEventsServicesTest, but it's not possible to specify a path
@@ -186,5 +187,8 @@ return [
 		return new AddressStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
+	},
+	TrackingToolRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): TrackingToolRegistry {
+		return new TrackingToolRegistry();
 	},
 ];

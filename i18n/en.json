@@ -217,5 +217,6 @@
 	"campaignevents-event-details-remove-participant-notification-error": "There was an error when trying to remove the {{PLURAL:$1|participant|participants}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' must be an array of user ids, or null (to remove all users)",
 	"campaignevents-event-details-search-participants-placeholder": "Search for participants",
-	"campaignevents-rest-list-participants-empty-filter": "The username filter, if specified, must be a non-empty string."
+	"campaignevents-rest-list-participants-empty-filter": "The username filter, if specified, must be a non-empty string.",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Programs & Events Dashboard"
 }
