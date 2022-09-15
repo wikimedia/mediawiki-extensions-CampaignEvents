@@ -9,7 +9,9 @@ use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWikiIntegrationTestCase;
 use Title;
@@ -185,5 +187,33 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			new EventRegistration( ...array_values( $deletedEventCtrArgs ) ),
 			false
 		];
+	}
+
+	/**
+	 * @covers ::getEventsByOrganizer
+	 */
+	public function testGetEventsByOrganizer() {
+		$event = $this->getTestEvent();
+		$savedID = $this->storeEvent( $event );
+		$orgStore = CampaignEventsServices::getOrganizersStore();
+		$organizerID = 42;
+		$orgStore->addOrganizerToEvent( $savedID, new CentralUser( $organizerID ), [ Roles::ROLE_CREATOR ] );
+		$eventsByOrganizer = CampaignEventsServices::getEventLookup()->getEventsByOrganizer( $organizerID, 5 );
+		$this->assertCount( 1, $eventsByOrganizer, 'Should be only one event' );
+		$this->assertEventsEqual( $event, $eventsByOrganizer[0] );
+	}
+
+	/**
+	 * @covers ::getEventsByParticipant
+	 */
+	public function testGetEventsByParticipant() {
+		$event = $this->getTestEvent();
+		$savedID = $this->storeEvent( $event );
+		$partStore = CampaignEventsServices::getParticipantsStore();
+		$participantID = 42;
+		$partStore->addParticipantToEvent( $savedID, new CentralUser( $participantID ) );
+		$eventsByParticipant = CampaignEventsServices::getEventLookup()->getEventsByParticipant( $participantID, 5 );
+		$this->assertCount( 1, $eventsByParticipant, 'Should be only one event' );
+		$this->assertEventsEqual( $event, $eventsByParticipant[0] );
 	}
 }
