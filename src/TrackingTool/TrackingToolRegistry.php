@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\TrackingTool;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use RuntimeException;
@@ -15,8 +16,24 @@ use RuntimeException;
 class TrackingToolRegistry {
 	public const SERVICE_NAME = 'CampaignEventsTrackingToolRegistry';
 
+	public const CONSTRUCTOR_OPTIONS = [
+		'CampaignEventsProgramsAndEventsDashboardInstance',
+		'CampaignEventsProgramsAndEventsDashboardAPISecret',
+	];
+
+	/** @var ServiceOptions */
+	private $options;
+
 	/** @var array|null Mock registry that can be set in tests. */
 	private $registryForTests;
+
+	/**
+	 * @param ServiceOptions $options
+	 */
+	public function __construct( ServiceOptions $options ) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+		$this->options = $options;
+	}
 
 	/**
 	 * This method returns the internal registry of known tracking tools. This list can potentially be affected by
@@ -40,16 +57,46 @@ class TrackingToolRegistry {
 			return $this->registryForTests;
 		}
 
+		$registry = [];
+
+		$peDashboardData = $this->getConfiguredPEDashboardData();
+		if ( $peDashboardData !== null ) {
+			$registry['P&E Dashboard'] = $peDashboardData;
+		}
+
+		return $registry;
+	}
+
+	/**
+	 * Returns the registry definition of the P&E Dashboard, if configured, and null otherwise.
+	 *
+	 * @return array{display-name-msg:string,base-url:string,class:class-string,db-id:int,user-id:string,extra:array}|null
+	 */
+	private function getConfiguredPEDashboardData(): ?array {
+		$peDashboardInstance = $this->options->get( 'CampaignEventsProgramsAndEventsDashboardInstance' );
+		if ( $peDashboardInstance === null ) {
+			return null;
+		}
+
+		$dashboardUrl = $peDashboardInstance === 'production'
+			? 'https://outreachdashboard.wmflabs.org/'
+				: 'https://dashboard-testing.wikiedu.org/';
+		$apiSecret = $this->options->get( 'CampaignEventsProgramsAndEventsDashboardAPISecret' );
+		if ( !is_string( $apiSecret ) ) {
+			throw new RuntimeException(
+				'"CampaignEventsProgramsAndEventsDashboardAPISecret" must be configured in order to ' .
+					' use the P&E Dashboard.'
+			);
+		}
 		return [
-			'P&E Dashboard' => [
-				'display-name-msg' => 'campaignevents-tracking-tool-p&e-dashboard-name',
-				// XXX Just testing data for now.
-				'base-url' => 'https://example.org',
-				'class' => WikiEduDashboard::class,
-				'db-id' => 1,
-				'user-id' => 'wikimedia-pe-dashboard',
-				'extra' => [],
-			]
+			'display-name-msg' => 'campaignevents-tracking-tool-p&e-dashboard-name',
+			'base-url' => $dashboardUrl,
+			'class' => WikiEduDashboard::class,
+			'db-id' => 1,
+			'user-id' => 'wikimedia-pe-dashboard',
+			'extra' => [
+				'secret' => $apiSecret
+			],
 		];
 	}
 

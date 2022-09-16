@@ -32,6 +32,14 @@
 		"CampaignEventsDatabaseName": {
 			"description": "The database to use. False means the database of the current wiki will be used.",
 			"value": false
+		},
+		"CampaignEventsProgramsAndEventsDashboardInstance": {
+			"description": "Determines which instance of the P&E Dashboard should be used, if any. Supported values are 'production', 'staging', or null to not use the dashboard.",
+			"value": null
+		},
+		"CampaignEventsProgramsAndEventsDashboardAPISecret": {
+			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
+			"value": null
 		}
 	},
 	"GroupPermissions": {

@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\TrackingTool;
 
+use HashConfig;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -32,7 +34,14 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	 * @return TrackingToolRegistry
 	 */
 	private function getRegistry( bool $mockRegistry = true ): TrackingToolRegistry {
-		$instance = new TrackingToolRegistry();
+		$options = new ServiceOptions(
+			TrackingToolRegistry::CONSTRUCTOR_OPTIONS,
+			new HashConfig( [
+				'CampaignEventsProgramsAndEventsDashboardInstance' => 'staging',
+				'CampaignEventsProgramsAndEventsDashboardAPISecret' => 'foo',
+			] )
+		);
+		$instance = new TrackingToolRegistry( $options );
 		if ( $mockRegistry ) {
 			$instance->setRegistryForTesting( self::TEST_REGISTRY );
 		}
