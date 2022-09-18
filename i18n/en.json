@@ -152,6 +152,7 @@
 	"campaignevents-eventpage-btn-event-ended": "Event ended",
 	"campaignevents-eventpage-dialog-title": "Event details",
 	"campaignevents-eventpage-dialog-organizers": "Organized by: $1",
+	"campaignevents-eventpage-dialog-organizer-hidden": "username removed",
 	"campaignevents-eventpage-dialog-organizers-view-all": "View all organizers",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|participant|participants}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "View full list",
