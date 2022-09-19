@@ -89,6 +89,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "登録は終了しました",
 	"campaignevents-eventpage-btn-event-ended": "イベント終了",
 	"campaignevents-eventpage-dialog-title": "イベントの詳細",
+	"campaignevents-eventpage-dialog-organizer-hidden": "(利用者名は除去されています)",
 	"campaignevents-eventpage-dialog-organizers-view-all": "すべての主催者を表示",
 	"campaignevents-eventpage-dialog-dates-label": "開始時間と終了時間",
 	"campaignevents-eventpage-dialog-location-label": "位置",

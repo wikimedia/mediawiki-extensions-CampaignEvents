@@ -151,6 +151,7 @@
 	"campaignevents-eventpage-btn-event-ended": "האירוע הסתיים",
 	"campaignevents-eventpage-dialog-title": "פרטי האירוע",
 	"campaignevents-eventpage-dialog-organizers": "מאורגן על־ידי: $1",
+	"campaignevents-eventpage-dialog-organizer-hidden": "שם המשתמש הוסר",
 	"campaignevents-eventpage-dialog-organizers-view-all": "הצגת כל המארגנים",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "הצגת רשימה מלאה",
