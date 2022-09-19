@@ -2,6 +2,7 @@
 
 declare( strict_types=1 );
 
+use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
@@ -56,7 +57,8 @@ return [
 	IEventStore::STORE_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventStore {
 		return new EventStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->get( CampaignsPageFactory::SERVICE_NAME )
+			$services->get( CampaignsPageFactory::SERVICE_NAME ),
+			$services->get( AddressStore::SERVICE_NAME )
 		);
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {
@@ -178,6 +180,11 @@ return [
 	UserLinker::SERVICE_NAME => static function ( MediaWikiServices $services ): UserLinker {
 		return new UserLinker(
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+		);
+	},
+	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
+		return new AddressStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
 ];

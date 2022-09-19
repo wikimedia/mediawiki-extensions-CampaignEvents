@@ -29,7 +29,7 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 		$dir = __DIR__ . "/../../../db_patches";
 
 		$updater->addExtensionTable(
-			'ce_organizers',
+			'ce_event_address',
 			"$dir/$dbType/tables-generated.sql"
 		);
 	}

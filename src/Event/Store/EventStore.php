@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 use DateTimeZone;
 use InvalidArgumentException;
 use LogicException;
+use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -37,17 +38,22 @@ class EventStore implements IEventStore, IEventLookup {
 	private $dbHelper;
 	/** @var CampaignsPageFactory */
 	private $campaignsPageFactory;
+	/** @var AddressStore */
+	private $addressStore;
 
 	/**
 	 * @param CampaignsDatabaseHelper $dbHelper
 	 * @param CampaignsPageFactory $campaignsPageFactory
+	 * @param AddressStore $addressStore
 	 */
 	public function __construct(
 		CampaignsDatabaseHelper $dbHelper,
-		CampaignsPageFactory $campaignsPageFactory
+		CampaignsPageFactory $campaignsPageFactory,
+		AddressStore $addressStore
 	) {
 		$this->dbHelper = $dbHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
+		$this->addressStore = $addressStore;
 	}
 
 	/**
@@ -325,44 +331,16 @@ class EventStore implements IEventStore, IEventLookup {
 		);
 
 		if ( $meetingAddress ) {
-			$this->storeEventAddress( $dbw, $meetingAddress, $meetingCountry, $eventID );
-		}
-	}
-
-	/**
-	 * Store the event address information.
-	 * @param ICampaignsDatabase $dbw
-	 * @param string $meetingAddress
-	 * @param string|null $meetingCountry
-	 * @param int $eventID
-	 * @return void
-	 */
-	private function storeEventAddress(
-		ICampaignsDatabase $dbw,
-		string $meetingAddress,
-		?string $meetingCountry,
-		int $eventID
-	): void {
-		// TDB T317581
-		$addressID = $dbw->selectField( 'ce_address', 'cea_id', [ 'cea_full_address' => $meetingAddress ] );
-		if ( !$addressID ) {
+			$addressID = $this->addressStore->acquireAddressID( $meetingAddress, $meetingCountry );
 			$dbw->insert(
-				'ce_address',
+				'ce_event_address',
 				[
-					'cea_full_address' => $meetingAddress,
-					'cea_country' => $meetingCountry
-				]
+					'ceea_event' => $eventID,
+					'ceea_address' => $addressID
+				],
+				[ 'IGNORE' ]
 			);
-			$addressID = $dbw->insertId();
 		}
-		$dbw->insert(
-			'ce_event_address',
-			[
-				'ceea_event' => $eventID,
-				'ceea_address' => $addressID
-			],
-			[ 'IGNORE' ]
-		);
 	}
 
 	/**
