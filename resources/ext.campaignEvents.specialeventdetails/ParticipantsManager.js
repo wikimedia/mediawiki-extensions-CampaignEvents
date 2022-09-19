@@ -133,7 +133,9 @@
 		this.$selectAllParticipantsLabel.text(
 			mw.message( 'campaignevents-event-details-all-selected' ).text()
 		);
-		this.removeParticipantsButton.$element.show();
+		if ( this.removeParticipantsButton ) {
+			this.removeParticipantsButton.$element.show();
+		}
 	};
 
 	ParticipantsManager.prototype.onDeselectAll = function () {
@@ -141,7 +143,9 @@
 		this.$selectAllParticipantsLabel.text(
 			mw.message( 'campaignevents-event-details-select-all' ).text()
 		);
-		this.removeParticipantsButton.$element.hide();
+		if ( this.removeParticipantsButton ) {
+			this.removeParticipantsButton.$element.hide();
+		}
 	};
 
 	ParticipantsManager.prototype.onParticipantCheckboxChange = function ( selected, el ) {
