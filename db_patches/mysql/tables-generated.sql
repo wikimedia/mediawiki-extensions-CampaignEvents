@@ -21,8 +21,6 @@ CREATE TABLE /*_*/campaign_events (
   event_type VARBINARY(255) NOT NULL,
   event_meeting_type INT NOT NULL,
   event_meeting_url BLOB NOT NULL,
-  event_meeting_country VARBINARY(255) NOT NULL,
-  event_meeting_address BLOB NOT NULL,
   event_created_at BINARY(14) NOT NULL,
   event_last_edit BINARY(14) NOT NULL,
   event_deleted_at BINARY(14) DEFAULT NULL,
@@ -66,4 +64,21 @@ CREATE TABLE /*_*/ce_organizers (
   ),
   INDEX ceo_user_event (ceo_user_id, ceo_event_id),
   PRIMARY KEY(ceo_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_address (
+  cea_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  cea_full_address BLOB NOT NULL,
+  cea_country VARBINARY(255) DEFAULT NULL,
+  PRIMARY KEY(cea_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_event_address (
+  ceea_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceea_event BIGINT UNSIGNED NOT NULL,
+  ceea_address BIGINT UNSIGNED NOT NULL,
+  UNIQUE INDEX ceea_event_address (ceea_event, ceea_address),
+  PRIMARY KEY(ceea_id)
 ) /*$wgDBTableOptions*/;

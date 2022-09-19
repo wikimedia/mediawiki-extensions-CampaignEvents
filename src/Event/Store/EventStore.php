@@ -11,8 +11,10 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\Utils;
+use RuntimeException;
 use StatusValue;
 use stdClass;
 
@@ -52,37 +54,75 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function getEventByID( int $eventID ): ExistingEventRegistration {
-		$eventRow = $this->dbHelper->getDBConnection( DB_REPLICA )->selectRow(
-			'campaign_events',
+		$eventRows = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
+			[ 'campaign_events', 'ce_event_address', 'ce_address' ],
 			'*',
-			[ 'event_id' => $eventID ]
+			[ 'event_id' => $eventID ],
+			[],
+			[
+				'ce_event_address' => [ 'LEFT JOIN', [ 'event_id=ceea_event' ] ],
+				'ce_address' => [ 'LEFT JOIN', [ 'ceea_address=cea_id' ] ]
+			]
 		);
-		if ( !$eventRow ) {
+
+		$rowsAmount = count( $eventRows );
+		if ( !$rowsAmount ) {
 			throw new EventNotFoundException( "Event $eventID not found" );
 		}
-		return $this->newEventFromDBRow( $eventRow );
+
+		// TBD this may change when we add the support to have more than
+		// one address per event
+		if ( $rowsAmount > 1 ) {
+			throw new RuntimeException( 'Events should have only one address.' );
+		}
+
+		$rows = [];
+		foreach ( $eventRows as $row ) {
+			$rows[] = $row;
+		}
+
+		return $this->newEventFromDBRow( $rows[ 0 ], $rows[ 0 ] );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getEventByPage( ICampaignsPage $page ): ExistingEventRegistration {
-		$eventRow = $this->dbHelper->getDBConnection( DB_REPLICA )->selectRow(
-			'campaign_events',
+		$eventRows = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
+			[ 'campaign_events', 'ce_event_address', 'ce_address' ],
 			'*',
 			[
 				'event_page_namespace' => $page->getNamespace(),
 				'event_page_title' => $page->getDBkey(),
 				'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
+			],
+			[],
+			[
+				'ce_event_address' => [ 'LEFT JOIN', [ 'event_id=ceea_event' ] ],
+				'ce_address' => [ 'LEFT JOIN', [ 'ceea_address=cea_id' ] ]
 			]
 		);
-		if ( !$eventRow ) {
+
+		$rowsAmount = count( $eventRows );
+
+		if ( !$rowsAmount ) {
 			throw new EventNotFoundException(
 				"No event found for the given page (ns={$page->getNamespace()}, " .
 					"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()})"
 			);
 		}
-		return $this->newEventFromDBRow( $eventRow );
+
+		// TBD this may change when we add the support to have more than
+		// one address per event
+		if ( $rowsAmount > 1 ) {
+			throw new RuntimeException( 'Events should have only one address.' );
+		}
+
+		$rows = [];
+		foreach ( $eventRows as $row ) {
+			$rows[] = $row;
+		}
+		return $this->newEventFromDBRow( $rows[ 0 ], $rows[ 0 ] );
 	}
 
 	/**
@@ -92,7 +132,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$events = [];
 
 		$eventsRow = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
-			[ 'campaign_events', 'ce_organizers' ],
+			[ 'campaign_events', 'ce_organizers',  'ce_event_address', 'ce_address' ],
 			'*',
 			[ 'ceo_user_id' => $organizerID ],
 			$limit !== null ? [ 'LIMIT' => $limit ] : [],
@@ -103,12 +143,16 @@ class EventStore implements IEventStore, IEventLookup {
 						'event_id=ceo_event_id',
 						'ceo_deleted_at' => null
 					]
-				]
+				],
+				'ce_event_address' => [ 'LEFT JOIN', [ 'event_id=ceea_event' ] ],
+				'ce_address' => [ 'LEFT JOIN', [ 'ceea_address=cea_id' ] ]
 			]
 		);
 
+		// TBD this may change when we add the support to have more than
+		// one address per event
 		foreach ( $eventsRow as $row ) {
-			$events[] = $this->newEventFromDBRow( $row );
+			$events[] = $this->newEventFromDBRow( $row, $row );
 		}
 
 		return $events;
@@ -121,7 +165,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$events = [];
 
 		$eventsRow = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
-			[ 'campaign_events', 'ce_participants' ],
+			[ 'campaign_events', 'ce_participants', 'ce_event_address', 'ce_address' ],
 			'*',
 			[
 				'cep_user_id' => $participantID,
@@ -129,12 +173,16 @@ class EventStore implements IEventStore, IEventLookup {
 			],
 			$limit !== null ? [ 'LIMIT' => $limit ] : [],
 			[
-				'ce_participants' => [ 'INNER JOIN', [ 'event_id=cep_event_id' ] ]
+				'ce_participants' => [ 'INNER JOIN', [ 'event_id=cep_event_id' ] ],
+				'ce_event_address' => [ 'LEFT JOIN', [ 'event_id=ceea_event' ] ],
+				'ce_address' => [ 'LEFT JOIN', [ 'ceea_address=cea_id' ] ]
 			]
 		);
 
+		// TBD this may change when we add the support to have more than
+		// one address per event
 		foreach ( $eventsRow as $row ) {
-			$events[] = $this->newEventFromDBRow( $row );
+			$events[] = $this->newEventFromDBRow( $row, $row );
 		}
 
 		return $events;
@@ -142,9 +190,10 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * @param stdClass $row
+	 * @param stdClass $addressRow
 	 * @return ExistingEventRegistration
 	 */
-	private function newEventFromDBRow( stdClass $row ): ExistingEventRegistration {
+	private function newEventFromDBRow( stdClass $row, stdClass $addressRow ): ExistingEventRegistration {
 		$eventPage = $this->campaignsPageFactory->newPageFromDB(
 			(int)$row->event_page_namespace,
 			$row->event_page_title,
@@ -158,6 +207,15 @@ class EventStore implements IEventStore, IEventLookup {
 				$meetingType |= $eventVal;
 			}
 		}
+
+		// TDB this is ugly and should be removed as soon as we remove the country on the front end
+		$address = null;
+		if ( $addressRow->cea_full_address ) {
+			$address = explode( " \n ", $addressRow->cea_full_address );
+			array_pop( $address );
+			$address = implode( " \n ", $address );
+		}
+
 		return new ExistingEventRegistration(
 			(int)$row->event_id,
 			$row->event_name,
@@ -172,8 +230,8 @@ class EventStore implements IEventStore, IEventLookup {
 			array_search( $row->event_type, self::EVENT_TYPE_MAP, true ),
 			$meetingType,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
-			$row->event_meeting_country !== '' ? $row->event_meeting_country : null,
-			$row->event_meeting_address !== '' ? $row->event_meeting_address : null,
+			$addressRow->cea_country,
+			$address,
 			wfTimestamp( TS_UNIX, $row->event_created_at ),
 			wfTimestamp( TS_UNIX, $row->event_last_edit ),
 			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at )
@@ -186,6 +244,7 @@ class EventStore implements IEventStore, IEventLookup {
 	public function saveRegistration( EventRegistration $event ): StatusValue {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$curDBTimestamp = $dbw->timestamp();
+
 		$meetingType = 0;
 		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
 			if ( $event->getMeetingType() & $eventVal ) {
@@ -217,19 +276,93 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_type' => self::EVENT_TYPE_MAP[$event->getType()],
 			'event_meeting_type' => $meetingType,
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
-			'event_meeting_country' => $event->getMeetingCountry() ?? '',
-			'event_meeting_address' => $event->getMeetingAddress() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
 			'event_last_edit' => $curDBTimestamp,
 			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
 		];
+
 		$eventID = $event->getID();
+		$dbw->startAtomic();
 		if ( $eventID === null ) {
 			$dbw->insert( 'campaign_events', $newRow );
+			$eventID = $dbw->insertId();
 		} else {
 			$dbw->update( 'campaign_events', $newRow, [ 'event_id' => $eventID ] );
 		}
-		return StatusValue::newGood( $eventID ?? $dbw->insertId() );
+
+		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
+
+		$dbw->endAtomic();
+
+		return StatusValue::newGood( $eventID );
+	}
+
+	/**
+	 * @param ICampaignsDatabase $dbw
+	 * @param string|null $meetingAddress
+	 * @param string|null $meetingCountry
+	 * @param int $eventID
+	 * @return void
+	 */
+	private function updateStoredAddresses(
+		ICampaignsDatabase $dbw,
+		?string $meetingAddress,
+		?string $meetingCountry,
+		int $eventID
+	): void {
+		$where = [ 'ceea_event' => $eventID ];
+		if ( $meetingAddress || $meetingCountry ) {
+			$meetingAddress .= " \n " . $meetingCountry;
+			$where[] = 'cea_full_address NOT IN (' . $dbw->makeCommaList( [ $meetingAddress ] ) . ' ) ';
+		}
+
+		$dbw->deleteJoin(
+			'ce_event_address',
+			'ce_address',
+			'ceea_address',
+			'cea_id',
+			$where
+		);
+
+		if ( $meetingAddress ) {
+			$this->storeEventAddress( $dbw, $meetingAddress, $meetingCountry, $eventID );
+		}
+	}
+
+	/**
+	 * Store the event address information.
+	 * @param ICampaignsDatabase $dbw
+	 * @param string $meetingAddress
+	 * @param string|null $meetingCountry
+	 * @param int $eventID
+	 * @return void
+	 */
+	private function storeEventAddress(
+		ICampaignsDatabase $dbw,
+		string $meetingAddress,
+		?string $meetingCountry,
+		int $eventID
+	): void {
+		// TDB T317581
+		$addressID = $dbw->selectField( 'ce_address', 'cea_id', [ 'cea_full_address' => $meetingAddress ] );
+		if ( !$addressID ) {
+			$dbw->insert(
+				'ce_address',
+				[
+					'cea_full_address' => $meetingAddress,
+					'cea_country' => $meetingCountry
+				]
+			);
+			$addressID = $dbw->insertId();
+		}
+		$dbw->insert(
+			'ce_event_address',
+			[
+				'ceea_event' => $eventID,
+				'ceea_address' => $addressID
+			],
+			[ 'IGNORE' ]
+		);
 	}
 
 	/**

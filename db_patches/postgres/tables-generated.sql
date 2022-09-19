@@ -21,8 +21,6 @@ CREATE TABLE campaign_events (
   event_type TEXT NOT NULL,
   event_meeting_type INT NOT NULL,
   event_meeting_url TEXT NOT NULL,
-  event_meeting_country TEXT NOT NULL,
-  event_meeting_address TEXT NOT NULL,
   event_created_at TIMESTAMPTZ NOT NULL,
   event_last_edit TIMESTAMPTZ NOT NULL,
   event_deleted_at TIMESTAMPTZ DEFAULT NULL,
@@ -75,3 +73,21 @@ CREATE UNIQUE INDEX ceo_event_user_role ON ce_organizers (
 );
 
 CREATE INDEX ceo_user_event ON ce_organizers (ceo_user_id, ceo_event_id);
+
+
+CREATE TABLE ce_address (
+  cea_id BIGSERIAL NOT NULL,
+  cea_full_address TEXT NOT NULL,
+  cea_country TEXT DEFAULT NULL,
+  PRIMARY KEY(cea_id)
+);
+
+
+CREATE TABLE ce_event_address (
+  ceea_id BIGSERIAL NOT NULL,
+  ceea_event BIGINT NOT NULL,
+  ceea_address BIGINT NOT NULL,
+  PRIMARY KEY(ceea_id)
+);
+
+CREATE UNIQUE INDEX ceea_event_address ON ce_event_address (ceea_event, ceea_address);

@@ -8,6 +8,7 @@ use stdClass;
 use Wikimedia\Rdbms\IDatabase;
 
 class MWDatabaseProxy implements ICampaignsDatabase {
+
 	/** @var IDatabase */
 	private $db;
 
@@ -120,5 +121,32 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	 */
 	public function getMWDatabase(): IDatabase {
 		return $this->db;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function delete( $table, $conds ): bool {
+		return $this->db->delete( $table, $conds, wfGetCaller() );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function deleteJoin(
+		$delTable,
+		$joinTable,
+		$delVar,
+		$joinVar,
+		$conds
+	) {
+		return $this->db->deleteJoin( $delTable, $joinTable, $delVar, $joinVar, $conds, wfGetCaller() );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function makeCommaList( array $a ) {
+		return $this->db->makeList( $a, IDatabase::LIST_COMMA );
 	}
 }
