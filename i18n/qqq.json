@@ -156,7 +156,6 @@
 	"campaignevents-eventpage-btn-event-ended": "Label of a disabled (greyed out) button in the registration header and popup on event pages. This message informs the user that they cannot register for the event because it has ended.",
 	"campaignevents-eventpage-dialog-title": "Title of the registration popup on event pages with details about the event.",
 	"campaignevents-eventpage-dialog-organizers": "Message shown in the registration popup on event pages to introduce the list of organizers. Parameters:\n* $1 A comma-separated list of usernames of the people who organized the event.",
-	"campaignevents-eventpage-dialog-organizer-hidden": "Message shown in the registration popup on event pages. This is used as a placeholder, when the username of an organizer cannot be shown because their account was blocked and hidden. The intention is similar to {{msg-mw|Rev-deleted-user}}.",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Link shown in the registration popup on event pages when there are more organizers than what we can show there. By clicking it, the user will be sent to a page with the full list of organizers.",
 	"campaignevents-eventpage-dialog-participants": "Message shown in the registration popup on event pages to introduce the list of participants. The bullet list itself will come after this message. Parameters:\n* $1 The number of participants.",
 	"campaignevents-eventpage-dialog-participants-view-list": "Link shown in the registration popup on event pages when there are more participants than what we can show there. By clicking it, the user will be sent to a page with the full list of participants.",
@@ -222,5 +221,7 @@
 	"campaignevents-rest-remove-participants-invalid-users-ids": "An error message shown if the parameter 'user_ids' is an empty list of user ids, when trying to remove participants",
 	"campaignevents-event-details-search-participants-placeholder": "A placeholder message for the search participants input on [[Special:EventDetails]]",
 	"campaignevents-rest-list-participants-empty-filter": "Error message used by the API endpoint for listing participants when a username filter was provided but it's the empty string.",
-	"campaignevents-tracking-tool-p&e-dashboard-name": "Display name of the [[:m:Programs & Events Dashboard]]"
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Display name of the [[:m:Programs & Events Dashboard]]",
+	"campaignevents-userlink-suppressed-user": "Message used as a placeholder when a username cannot be shown because the user account was blocked and suppressed. The intention is similar to {{msg-mw|Rev-deleted-user}}.",
+	"campaignevents-userlink-deleted-user": "Message used as a placeholder when a username cannot be shown because the user account was deleted (for instance, via CentralAuth)."
 }

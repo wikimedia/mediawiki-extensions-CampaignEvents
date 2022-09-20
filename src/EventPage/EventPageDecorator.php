@@ -442,22 +442,10 @@ class EventPageDecorator {
 
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 		$partialOrganizers = $this->organizersStore->getEventOrganizers( $eventID, self::ORGANIZERS_LIMIT );
+		$langCode = $msgFormatter->getLangCode();
 		$organizerElements = [];
 		foreach ( $partialOrganizers as $organizer ) {
-			$organizerUser = $organizer->getUser();
-			try {
-				$organizerElements[] = $this->userLinker->generateUserLink( $organizerUser );
-			} catch ( CentralUserNotFoundException $_ ) {
-				// Should not happen, but skip it.
-			} catch ( HiddenCentralUserException $_ ) {
-				$organizerElements[] = Html::element(
-					'span',
-					[ 'class' => 'ext-campaignevents-eventpage-detailsdialog-hidden-user' ],
-					$msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-dialog-organizer-hidden' )
-					)
-				);
-			}
+			$organizerElements[] = $this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode );
 		}
 		$organizersStr = $msgFormatter->format(
 			MessageValue::new( 'campaignevents-eventpage-dialog-organizers' )->commaListParams( $organizerElements )

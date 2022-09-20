@@ -180,7 +180,8 @@ return [
 	},
 	UserLinker::SERVICE_NAME => static function ( MediaWikiServices $services ): UserLinker {
 		return new UserLinker(
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->getMessageFormatterFactory()
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

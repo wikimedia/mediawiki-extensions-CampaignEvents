@@ -141,7 +141,8 @@
 		"ext.campaignEvents.eventpage.styles": {
 			"styles": [
 				"ext.campaignEvents.eventpage.styles.less",
-				"ext.campaignEvents.TextWithIconWidget.less"
+				"ext.campaignEvents.TextWithIconWidget.less",
+				"ext.campaignEvents.userlinks.styles.less"
 			],
 			"targets": [ "desktop", "mobile" ]
 		},

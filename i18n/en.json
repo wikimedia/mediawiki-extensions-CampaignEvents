@@ -153,7 +153,6 @@
 	"campaignevents-eventpage-btn-event-ended": "Event ended",
 	"campaignevents-eventpage-dialog-title": "Event details",
 	"campaignevents-eventpage-dialog-organizers": "Organized by: $1",
-	"campaignevents-eventpage-dialog-organizer-hidden": "username removed",
 	"campaignevents-eventpage-dialog-organizers-view-all": "View all organizers",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|participant|participants}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "View full list",
@@ -219,5 +218,7 @@
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' must be an array of user ids, or null (to remove all users)",
 	"campaignevents-event-details-search-participants-placeholder": "Search for participants",
 	"campaignevents-rest-list-participants-empty-filter": "The username filter, if specified, must be a non-empty string.",
-	"campaignevents-tracking-tool-p&e-dashboard-name": "Programs & Events Dashboard"
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Programs & Events Dashboard",
+	"campaignevents-userlink-suppressed-user": "username suppressed",
+	"campaignevents-userlink-deleted-user": "deleted user"
 }
