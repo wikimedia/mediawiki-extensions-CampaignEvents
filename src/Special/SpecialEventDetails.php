@@ -108,7 +108,8 @@ class SpecialEventDetails extends SpecialPage {
 			array_merge(
 				self::MODULE_STYLES,
 				EventDetailsModule::MODULE_STYLES,
-				EventDetailsParticipantsModule::MODULE_STYLES
+				EventDetailsParticipantsModule::MODULE_STYLES,
+				UserLinker::MODULE_STYLES
 			)
 		);
 
@@ -129,7 +130,6 @@ class SpecialEventDetails extends SpecialPage {
 
 		$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
 		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
-		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
 		if ( $isOrganizer ) {
 			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $this->event ) ===
@@ -188,8 +188,10 @@ class SpecialEventDetails extends SpecialPage {
 				$msgFormatter,
 				$isOrganizer,
 				$isParticipant,
-				$organizersCount,
-				$this->pageURLResolver
+				$this->organizersStore,
+				$this->pageURLResolver,
+				$this->userLinker,
+				$out
 			)
 		);
 		$out->addHTML( $main );

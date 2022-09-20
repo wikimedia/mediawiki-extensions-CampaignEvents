@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
@@ -18,7 +20,7 @@ class ListOrganizersHandler extends SimpleHandler {
 	use UserLinkTrait;
 
 	// TODO: Implement proper pagination (T305389)
-	private const RES_LIMIT = 10;
+	private const RES_LIMIT = 11;
 
 	/** @var IEventLookup */
 	private $eventLookup;
@@ -68,12 +70,15 @@ class ListOrganizersHandler extends SimpleHandler {
 		$respVal = [];
 		foreach ( $organizers as $organizer ) {
 			$user = $organizer->getUser();
-			if ( !$this->centralUserLookup->existsAndIsVisible( $user ) ) {
+			try {
+				$userName = $this->centralUserLookup->getUserName( $user );
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				continue;
 			}
 			$respVal[] = [
 				'organizer_id' => $organizer->getOrganizerID(),
 				'user_id' => $user->getCentralID(),
+				'user_name' => $userName,
 				// TODO Should these be localized? It doesn't seem possible right now anyway (T269492)
 				'roles' => array_map( [ $this->roleFormatter, 'getDebugName' ], $organizer->getRoles() ),
 				'user_page' => $this->getUserPagePath( $this->userLinker,  $user ),

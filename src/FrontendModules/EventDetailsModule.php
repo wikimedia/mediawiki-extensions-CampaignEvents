@@ -4,10 +4,13 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use Html;
 use Language;
 use Linker;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\IconLabelContentWidget;
@@ -18,11 +21,13 @@ use OOUI\HtmlSnippet;
 use OOUI\IconWidget;
 use OOUI\PanelLayout;
 use OOUI\Tag;
+use OutputPage;
 use SpecialPage;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 
 class EventDetailsModule {
+	private const ORGANIZERS_LIMIT = 10;
 
 	public const MODULE_STYLES = [
 		'oojs-ui.styles.icons-location',
@@ -37,8 +42,10 @@ class EventDetailsModule {
 	 * @param ITextFormatter $msgFormatter
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
-	 * @param int $organizersCount
+	 * @param OrganizersStore $organizersStore
 	 * @param PageURLResolver $pageURLResolver
+	 * @param UserLinker $userLinker
+	 * @param OutputPage $out
 	 * @return PanelLayout
 	 *
 	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and
@@ -51,9 +58,13 @@ class EventDetailsModule {
 		ITextFormatter $msgFormatter,
 		bool $isOrganizer,
 		bool $isParticipant,
-		int $organizersCount,
-		PageURLResolver $pageURLResolver
+		OrganizersStore $organizersStore,
+		PageURLResolver $pageURLResolver,
+		UserLinker $userLinker,
+		OutputPage $out
 	): PanelLayout {
+		$eventID = $registration->getID();
+
 		$items = [];
 		$items[] = ( new Tag( 'span' ) )->appendContent(
 			$msgFormatter->format(
@@ -95,6 +106,8 @@ class EventDetailsModule {
 			)
 		);
 
+		$organizersCount = $organizersStore->getOrganizerCountForEvent( $eventID );
+
 		$items = array_merge(
 			$items,
 			$this->getLocationContent(
@@ -113,7 +126,7 @@ class EventDetailsModule {
 				$msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-chat-link' )
 				)
-			)->addClasses( [ 'ext-campaignevents-event-details-social-media' ] );
+			)->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
 
 			if ( $isOrganizer || $isParticipant ) {
 				$iconLink = ( new IconWidget( [
@@ -136,6 +149,16 @@ class EventDetailsModule {
 			}
 		}
 
+		$organizerSectionElements = $this->getOrganizersSectionElements(
+			$msgFormatter,
+			$organizersStore,
+			$userLinker,
+			$out,
+			$eventID,
+			$organizersCount
+		);
+		$items = array_merge( $items, $organizerSectionElements );
+
 		$items[] = new ButtonWidget( [
 			'flags' => [ 'progressive' ],
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-view-event-page' ) ),
@@ -150,6 +173,71 @@ class EventDetailsModule {
 			'expanded' => false,
 			'classes' => [ 'ext-campaignevents-eventdetails-panel' ],
 		] );
+	}
+
+	/**
+	 * @param ITextFormatter $msgFormatter
+	 * @param OrganizersStore $organizersStore
+	 * @param UserLinker $userLinker
+	 * @param OutputPage $out
+	 * @param int $eventID
+	 * @param int $organizersCount
+	 * @return array
+	 */
+	private function getOrganizersSectionElements(
+		ITextFormatter $msgFormatter,
+		OrganizersStore $organizersStore,
+		UserLinker $userLinker,
+		OutputPage $out,
+		int $eventID,
+		int $organizersCount
+	): array {
+		$ret = [];
+		$ret[] = ( new Tag() )->appendContent(
+			$msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-organizers-header' )
+			)
+		)->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
+
+		$partialOrganizers = $organizersStore->getEventOrganizers( $eventID, self::ORGANIZERS_LIMIT );
+		$langCode = $msgFormatter->getLangCode();
+		$organizerListItems = '';
+		$lastOrganizerID = null;
+		foreach ( $partialOrganizers as $organizer ) {
+			$organizerListItems .= Html::rawElement(
+				'li',
+				[],
+				$userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode )
+			);
+			$lastOrganizerID = $organizer->getOrganizerID();
+		}
+		$out->addJsConfigVars( [
+			'wgCampaignEventsLastOrganizerID' => $lastOrganizerID,
+		] );
+		$organizersList = Html::rawElement(
+			'ul',
+			[ 'class' => 'ext-campaignevents-event-details-organizers-list' ],
+			$organizerListItems
+		);
+		$ret[] = new HtmlSnippet( $organizersList );
+
+		if ( count( $partialOrganizers ) < $organizersCount ) {
+			$viewMoreBtn = new ButtonWidget( [
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-organizers-view-more' )
+				),
+				'classes' => [ 'ext-campaignevents-event-details-load-organizers-link' ],
+				'framed' => false,
+				'flags' => [ 'progressive' ]
+			] );
+			$viewMoreNoscript = ( new Tag( 'noscript' ) )
+				->appendContent(
+					$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-organizers-noscript' ) )
+				);
+			$ret[] = ( new Tag( 'p' ) )->appendContent( $viewMoreBtn, $viewMoreNoscript );
+		}
+
+		return $ret;
 	}
 
 	/**

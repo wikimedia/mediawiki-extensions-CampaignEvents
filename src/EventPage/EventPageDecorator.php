@@ -454,8 +454,6 @@ class EventPageDecorator {
 			$organizersStr .= Html::rawElement(
 				'p',
 				[],
-				// TODO MVP: This page doesn't actually list the organizers. However, in V0 there can only be
-				// a single organizer.
 				$this->linkRenderer->makeKnownLink(
 					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
 					$msgFormatter->format(

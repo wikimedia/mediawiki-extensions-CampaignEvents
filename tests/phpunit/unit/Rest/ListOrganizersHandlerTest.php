@@ -73,6 +73,7 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 				[
 					'organizer_id' => 1,
 					'user_id' => 1,
+					'user_name' => '',
 					'roles' => [ Roles::ROLE_CREATOR ],
 					'user_page' => [
 						'path' => '',
@@ -97,6 +98,7 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 				[
 					'organizer_id' => 2,
 					'user_id' => 1,
+					'user_name' => '',
 					'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
 					'user_page' => [
 						'path' => '',
@@ -107,6 +109,7 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 				[
 					'organizer_id' => 3,
 					'user_id' => 2,
+					'user_name' => '',
 					'roles' => [ Roles::ROLE_ORGANIZER ],
 					'user_page' => [
 						'path' => '',
