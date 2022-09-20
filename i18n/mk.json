@@ -152,6 +152,7 @@
 	"campaignevents-eventpage-btn-event-ended": "Настанот заврши",
 	"campaignevents-eventpage-dialog-title": "Поединости за настанот",
 	"campaignevents-eventpage-dialog-organizers": "Приредувач: $1",
+	"campaignevents-eventpage-dialog-organizer-hidden": "отстрането корисничко име",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Погл. сите приредувачи",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|учесник|учесници}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Погл. целосен список",

@@ -27,6 +27,7 @@
 	"campaignevents-eventpage-btn-event-ended": "Evento terminato",
 	"campaignevents-eventpage-dialog-title": "Dettagli evento",
 	"campaignevents-eventpage-dialog-organizers": "Organizzato da: $1",
+	"campaignevents-eventpage-dialog-organizer-hidden": "nome utente rimosso",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
 	"campaignevents-eventpage-dialog-chat-label": "Unisciti alla chat di gruppo dell'evento",
 	"campaignevents-eventpage-dialog-chat-not-available": "Nessuna chat di gruppo è disponibile per questo evento.",
