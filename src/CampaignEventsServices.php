@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents;
 
+use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -87,5 +88,12 @@ class CampaignEventsServices {
 	 */
 	public static function getPolicyMessageLookup(): PolicyMessageLookup {
 		return MediaWikiServices::getInstance()->getService( PolicyMessageLookup::SERVICE_NAME );
+	}
+
+	/**
+	 * @return AddressStore
+	 */
+	public static function getAddressStore(): AddressStore {
+		return MediaWikiServices::getInstance()->getService( AddressStore::SERVICE_NAME );
 	}
 }

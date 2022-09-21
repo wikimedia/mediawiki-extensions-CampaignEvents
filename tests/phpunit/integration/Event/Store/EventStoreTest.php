@@ -117,7 +117,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getEventByID
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
-	 * @covers ::storeEventAddress
 	 * @covers ::updateStoredAddresses
 	 * @dataProvider provideRoundtripByID
 	 */
