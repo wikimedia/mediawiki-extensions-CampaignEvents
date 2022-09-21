@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Deltaspace",
 			"Kareyac",
 			"Okras",
 			"Pacha Tchernof"
@@ -41,6 +42,7 @@
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
 	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
+	"campaignevents-eventpage-dialog-organizer-hidden": "имя пользователя удалено",
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
 	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы."
 }

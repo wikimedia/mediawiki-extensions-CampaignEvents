@@ -90,5 +90,6 @@
 	"campaignevents-register-not-allowed": "Você não tem permissão para registrar-se em eventos.",
 	"campaignevents-register-event-past": "O período de registro deste evento já terminou.",
 	"campaignevents-register-event-not-open": "Não é mais possível registrar-se neste evento.",
-	"campaignevents-register-already-participant": "Você já está registrado neste evento."
+	"campaignevents-register-already-participant": "Você já está registrado neste evento.",
+	"campaignevents-eventpage-dialog-organizer-hidden": "Nome de usuário removido"
 }
