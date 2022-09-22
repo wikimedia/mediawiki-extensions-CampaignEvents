@@ -75,7 +75,7 @@
 	"campaignevents-register-success": "עכשיו {{GENDER:|אתה רשום|את רשומה}} לאירוע הזה.",
 	"campaignevents-register-confirmation-top": "אישור הרשמה",
 	"campaignevents-register-confirmation-text": "נא לאשר {{GENDER:|שאתה|שאת}} באמת רוצה להירשם לאירוע הזה באמצעות שימוש בכתפור \"{{int:campaignevents-register-confirmation-btn}}\".",
-	"campaignevents-register-confirmation-btn": "הרשמה",
+	"campaignevents-register-confirmation-btn": "להירשם",
 	"canceleventregistration": "ביטול ההרשמה שלך לאירוע",
 	"campaignevents-unregister-success": "ביטלת את ההרשמה שלך לאירוע.",
 	"campaignevents-unregister-confirmation-top": "אישור ביטול הרשמה",
