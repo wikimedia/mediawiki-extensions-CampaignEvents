@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ата"
+			"Ата",
+			"Пан Хаунд"
 		]
 	},
 	"campaignevents-desc": "Надає функціонал для організаторів та учасників кампаній.",
@@ -77,8 +78,8 @@
 	"campaignevents-unregister-confirmation-btn": "Скасувати реєстрацію",
 	"campaignevents-delete-not-allowed-registration": "У вас немає дозволу вилучати цю реєстрацію на подію.",
 	"campaignevents-rest-delete-already-deleted": "Реєстрацію на цю подію уже вилучено.",
-	"campaignevents-role-creator": "створювач",
-	"campaignevents-role-organizer": "організатор",
+	"campaignevents-role-creator": "{{GENDER:$1|творець}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|організатор}}",
 	"campaignevents-rest-user-not-found": "Користувача «$1» не існує.",
 	"campaignevents-register-not-allowed": "У вас немає дозволу реєструватися на події.",
 	"campaignevents-register-event-past": "Період реєстрації на цю подію вже закінчився.",
@@ -163,5 +164,10 @@
 	"campaignevents-eventpage-enable-registration-dialog-title": "Увімкнення реєстрації на подію",
 	"campaignevents-eventpage-enable-registration-dialog-body": "Це дозволяє учасникам зареєструватися для відвідування вашої події безпосередньо на цій сторінці.",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Відхилити",
-	"campaignevents-eventpage-enable-registration-dialog-confirm": "Увімкнути реєстрацію"
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "Увімкнути реєстрацію",
+	"campaignevents-back-to-your-events": "Повернутися до ваших подій",
+	"campaignevents-event-details-edit-button": "Редагувати",
+	"campaignevents-event-details-dates": "$1 до $4",
+	"campaignevents-event-details-online-label": "Онлайн-подія",
+	"campaignevents-event-details-event": "Деталі події: $1"
 }

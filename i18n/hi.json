@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Abijeet Patro"
+			"Abijeet Patro",
+			"Saurmandal"
 		]
 	},
-	"nstab-event": "आयोजन"
+	"nstab-event": "आयोजन",
+	"campaignevents-eventpage-dialog-chat-register": "चैट समूह कड़ी देखने के लिए पंजीकृत करें।"
 }
