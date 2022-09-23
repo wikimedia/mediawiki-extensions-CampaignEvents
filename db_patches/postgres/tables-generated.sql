@@ -62,15 +62,13 @@ CREATE TABLE ce_organizers (
   ceo_id BIGSERIAL NOT NULL,
   ceo_event_id BIGINT NOT NULL,
   ceo_user_id INT NOT NULL,
-  ceo_role_id BIGINT NOT NULL,
+  ceo_roles BIGINT NOT NULL,
   ceo_created_at TIMESTAMPTZ NOT NULL,
   ceo_deleted_at TIMESTAMPTZ DEFAULT NULL,
   PRIMARY KEY(ceo_id)
 );
 
-CREATE UNIQUE INDEX ceo_event_user_role ON ce_organizers (
-  ceo_event_id, ceo_user_id, ceo_role_id
-);
+CREATE UNIQUE INDEX ceo_event_user ON ce_organizers (ceo_event_id, ceo_user_id);
 
 CREATE INDEX ceo_user_event ON ce_organizers (ceo_user_id, ceo_event_id);
 

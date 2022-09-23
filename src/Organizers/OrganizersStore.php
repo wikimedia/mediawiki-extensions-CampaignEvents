@@ -12,8 +12,8 @@ class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
 
 	private const ROLES_MAP = [
-		Roles::ROLE_CREATOR => 1,
-		Roles::ROLE_ORGANIZER => 2
+		Roles::ROLE_CREATOR => 1 << 0,
+		Roles::ROLE_ORGANIZER => 1 << 1,
 	];
 
 	/** @var CampaignsDatabaseHelper */
@@ -35,23 +35,24 @@ class OrganizersStore {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$res = $dbr->select(
 			'ce_organizers',
-			[ 'ceo_user_id', 'ceo_role_id' ],
+			[ 'ceo_user_id', 'ceo_roles' ],
 			[
 				'ceo_event_id' => $eventID,
 				'ceo_deleted_at' => null,
 			],
 			$limit !== null ? [ 'LIMIT' => $limit ] : []
 		);
-		$rolesByOrganizer = [];
-		foreach ( $res as $row ) {
-			$userID = $row->ceo_user_id;
-			$rolesByOrganizer[$userID] = $rolesByOrganizer[$userID] ?? [];
-			$rolesByOrganizer[$userID][] = array_search( (int)$row->ceo_role_id, self::ROLES_MAP, true );
-		}
 
 		$organizers = [];
-		foreach ( $rolesByOrganizer as $organizerID => $roles ) {
-			$organizers[] = new Organizer( new CentralUser( $organizerID ), $roles );
+		foreach ( $res as $row ) {
+			$dbRoles = (int)$row->ceo_roles;
+			$roles = [];
+			foreach ( self::ROLES_MAP as $role => $dbVal ) {
+				if ( $dbRoles & $dbVal ) {
+					$roles[] = $role;
+				}
+			}
+			$organizers[] = new Organizer( new CentralUser( (int)$row->ceo_user_id ), $roles );
 		}
 		return $organizers;
 	}
@@ -100,25 +101,26 @@ class OrganizersStore {
 	 * @param string[] $roles Roles::ROLE_* constants
 	 */
 	public function addOrganizerToEvent( int $eventID, CentralUser $user, array $roles ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$rows = [];
+		$dbRoles = 0;
 		foreach ( $roles as $role ) {
 			if ( !isset( self::ROLES_MAP[$role] ) ) {
 				throw new InvalidArgumentException( "Invalid role `$role`" );
 			}
-			$rows[] = [
-				'ceo_event_id' => $eventID,
-				'ceo_user_id' => $user->getCentralID(),
-				'ceo_role_id' => self::ROLES_MAP[$role],
-				'ceo_created_at' => $dbw->timestamp(),
-				'ceo_deleted_at' => null
-			];
+			$dbRoles |= self::ROLES_MAP[$role];
 		}
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$dbw->upsert(
 			'ce_organizers',
-			$rows,
-			[ [ 'ceo_event_id', 'ceo_user_id', 'ceo_role_id' ] ],
 			[
+				'ceo_event_id' => $eventID,
+				'ceo_user_id' => $user->getCentralID(),
+				'ceo_roles' => $dbRoles,
+				'ceo_created_at' => $dbw->timestamp(),
+				'ceo_deleted_at' => null
+			],
+			[ [ 'ceo_event_id', 'ceo_user_id' ] ],
+			[
+				'ceo_roles' => $dbRoles,
 				'ceo_deleted_at' => null,
 			]
 		);
