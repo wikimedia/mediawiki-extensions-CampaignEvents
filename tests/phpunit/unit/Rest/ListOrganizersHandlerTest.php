@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
@@ -44,7 +45,8 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
 			$roleFormatter,
-			$centralUserLookup
+			$centralUserLookup,
+			$this->createMock( UserLinker::class )
 		);
 	}
 
@@ -67,7 +69,18 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			->method( 'getEventOrganizers' )
 			->willReturn( [ new Organizer( $user1, [ Roles::ROLE_CREATOR ], 1 ) ] );
 		yield 'Single organizer, creator only' => [
-			[ [ 'organizer_id' => 1, 'user_id' => 1, 'roles' => [ Roles::ROLE_CREATOR ] ] ],
+			[
+				[
+					'organizer_id' => 1,
+					'user_id' => 1,
+					'roles' => [ Roles::ROLE_CREATOR ],
+					'user_page' => [
+						'path' => '',
+						'title' => '',
+						'classes' => '',
+					],
+				],
+			],
 			$singleCreatorStore
 		];
 
@@ -81,8 +94,26 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			] );
 		yield 'Multiple organizers, multiple roles' => [
 			[
-				[ 'organizer_id' => 2, 'user_id' => 1, 'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ] ],
-				[ 'organizer_id' => 3, 'user_id' => 2, 'roles' => [ Roles::ROLE_ORGANIZER ] ]
+				[
+					'organizer_id' => 2,
+					'user_id' => 1,
+					'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
+					'user_page' => [
+						'path' => '',
+						'title' => '',
+						'classes' => '',
+					],
+				],
+				[
+					'organizer_id' => 3,
+					'user_id' => 2,
+					'roles' => [ Roles::ROLE_ORGANIZER ],
+					'user_page' => [
+						'path' => '',
+						'title' => '',
+						'classes' => '',
+					],
+				],
 			],
 			$multiCreatorStore
 		];
