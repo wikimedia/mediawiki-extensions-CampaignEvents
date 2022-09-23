@@ -65,9 +65,9 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$singleCreatorStore = $this->createMock( OrganizersStore::class );
 		$singleCreatorStore->expects( $this->atLeastOnce() )
 			->method( 'getEventOrganizers' )
-			->willReturn( [ new Organizer( $user1, [ Roles::ROLE_CREATOR ] ) ] );
+			->willReturn( [ new Organizer( $user1, [ Roles::ROLE_CREATOR ], 1 ) ] );
 		yield 'Single organizer, creator only' => [
-			[ [ 'user_id' => 1, 'roles' => [ Roles::ROLE_CREATOR ] ] ],
+			[ [ 'organizer_id' => 1, 'user_id' => 1, 'roles' => [ Roles::ROLE_CREATOR ] ] ],
 			$singleCreatorStore
 		];
 
@@ -76,13 +76,13 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$multiCreatorStore->expects( $this->atLeastOnce() )
 			->method( 'getEventOrganizers' )
 			->willReturn( [
-				new Organizer( $user1, [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ] ),
-				new Organizer( $user2, [ Roles::ROLE_ORGANIZER ] ),
+				new Organizer( $user1, [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ], 2 ),
+				new Organizer( $user2, [ Roles::ROLE_ORGANIZER ], 3 ),
 			] );
 		yield 'Multiple organizers, multiple roles' => [
 			[
-				[ 'user_id' => 1, 'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ] ],
-				[ 'user_id' => 2, 'roles' => [ Roles::ROLE_ORGANIZER ] ]
+				[ 'organizer_id' => 2, 'user_id' => 1, 'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ] ],
+				[ 'organizer_id' => 3, 'user_id' => 2, 'roles' => [ Roles::ROLE_ORGANIZER ] ]
 			],
 			$multiCreatorStore
 		];

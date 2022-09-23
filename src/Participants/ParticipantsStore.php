@@ -119,7 +119,7 @@ class ParticipantsStore {
 	public function getEventParticipants(
 		int $eventID,
 		int $limit = null,
-		?int $lastParticipantID = null,
+		int $lastParticipantID = null,
 		string $usernameFilter = null
 	): array {
 		if ( $usernameFilter === '' ) {

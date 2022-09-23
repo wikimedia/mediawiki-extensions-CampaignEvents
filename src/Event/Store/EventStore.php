@@ -137,11 +137,15 @@ class EventStore implements IEventStore, IEventLookup {
 	public function getEventsByOrganizer( int $organizerID, int $limit = null ): array {
 		$events = [];
 
+		$opts = [ 'ORDER BY' => 'event_id' ];
+		if ( $limit !== null ) {
+			$opts['LIMIT'] = $limit;
+		}
 		$eventsRow = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
 			[ 'campaign_events', 'ce_organizers',  'ce_event_address', 'ce_address' ],
 			'*',
 			[ 'ceo_user_id' => $organizerID ],
-			$limit !== null ? [ 'LIMIT' => $limit ] : [],
+			$opts,
 			[
 				'ce_organizers' => [
 					'INNER JOIN',
@@ -170,6 +174,10 @@ class EventStore implements IEventStore, IEventLookup {
 	public function getEventsByParticipant( int $participantID, int $limit = null ): array {
 		$events = [];
 
+		$opts = [ 'ORDER BY' => 'event_id' ];
+		if ( $limit !== null ) {
+			$opts['LIMIT'] = $limit;
+		}
 		$eventsRow = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
 			[ 'campaign_events', 'ce_participants', 'ce_event_address', 'ce_address' ],
 			'*',
@@ -177,7 +185,7 @@ class EventStore implements IEventStore, IEventLookup {
 				'cep_user_id' => $participantID,
 				'cep_unregistered_at' => null,
 			],
-			$limit !== null ? [ 'LIMIT' => $limit ] : [],
+			$opts,
 			[
 				'ce_participants' => [ 'INNER JOIN', [ 'event_id=cep_event_id' ] ],
 				'ce_event_address' => [ 'LEFT JOIN', [ 'event_id=ceea_event' ] ],

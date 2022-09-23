@@ -62,14 +62,15 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @param int $eventID
 	 * @param array $expectedIDs
+	 * @param int|null $lastOrganizerID
 	 * @covers ::getEventOrganizers
 	 * @dataProvider provideOrganizers
 	 */
-	public function testGetEventOrganizers( int $eventID, array $expectedIDs ) {
+	public function testGetEventOrganizers( int $eventID, array $expectedIDs, int $lastOrganizerID = null ) {
 		$store = new OrganizersStore(
 			CampaignEventsServices::getDatabaseHelper()
 		);
-		$actualOrganizers = $store->getEventOrganizers( $eventID );
+		$actualOrganizers = $store->getEventOrganizers( $eventID, null, $lastOrganizerID );
 		$actualUserIDs = [];
 		foreach ( $actualOrganizers as $organizer ) {
 			$actualUserIDs[] = $organizer->getUser()->getCentralID();
@@ -80,6 +81,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	public function provideOrganizers(): Generator {
 		yield 'Has organizers, including a deleted one' => [ 1, [ 101, 102 ] ];
 		yield 'Does not have organizers' => [ 2, [] ];
+		yield 'Providing ID of the last organizer' => [ 1, [ 102 ], 1 ];
 	}
 
 	/**
