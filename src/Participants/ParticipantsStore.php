@@ -32,6 +32,8 @@ class ParticipantsStore {
 	 * @return bool True if the participant was just added, false if they were already listed.
 	 */
 	public function addParticipantToEvent( int $eventID, CentralUser $participant ): bool {
+		// TODO Pass this in
+		$private = false;
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		// TODO: Would be great if we could do this without opening an atomic section (T304680)
 		$dbw->startAtomic();
@@ -41,6 +43,7 @@ class ParticipantsStore {
 			[
 				'cep_event_id' => $eventID,
 				'cep_user_id' => $participant->getCentralID(),
+				'cep_private' => $private,
 				'cep_unregistered_at' => null
 			],
 			[ 'FOR UPDATE' ]
@@ -53,11 +56,13 @@ class ParticipantsStore {
 				[
 					'cep_event_id' => $eventID,
 					'cep_user_id' => $participant->getCentralID(),
+					'cep_private' => $private,
 					'cep_registered_at' => $dbw->timestamp(),
 					'cep_unregistered_at' => null
 				],
 				[ [ 'cep_event_id', 'cep_user_id' ] ],
 				[
+					'cep_private' => $private,
 					'cep_unregistered_at' => null,
 					'cep_registered_at' => $dbw->timestamp()
 				]
@@ -82,7 +87,7 @@ class ParticipantsStore {
 	 * @param int $eventID
 	 * @param CentralUser[]|null $users Array of users, if null remove all participants,
 	 * if is an empty array do nothing and return 0.
-	 * @return int number of participant(s) removed
+	 * @return int number of participants removed
 	 */
 	public function removeParticipantsFromEvent( int $eventID, array $users = null ): int {
 		if ( is_array( $users ) && !$users ) {
@@ -131,6 +136,8 @@ class ParticipantsStore {
 		if ( $lastParticipantID !== null ) {
 			$where[] = 'cep_id > ' . $dbr->addQuotes( $lastParticipantID );
 		}
+		// TODO actually determine whether to include privately registered participants!
+		$where['cep_private'] = false;
 		$opts = [ 'ORDER BY' => 'cep_id' ];
 		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter
 		// and limit the results later. This is a bit hacky but there seems to be no super-clean alternative, since
@@ -212,6 +219,8 @@ class ParticipantsStore {
 				'cep_event_id' => $eventID,
 				'cep_user_id' => $user->getCentralID(),
 				'cep_unregistered_at' => null,
+				// TODO actually determine whether to check for private registration!
+				'cep_private' => false,
 			]
 		);
 		return $row !== null;
