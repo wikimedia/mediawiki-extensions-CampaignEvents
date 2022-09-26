@@ -187,7 +187,14 @@ class EventStore implements IEventStore, IEventLookup {
 			],
 			$opts,
 			[
-				'ce_participants' => [ 'INNER JOIN', [ 'event_id=cep_event_id' ] ],
+				'ce_participants' => [
+					'INNER JOIN',
+					[
+						'event_id=cep_event_id',
+						// TODO Perhaps consider more granular permission check here.
+						'cep_private' => false,
+					]
+				],
 				'ce_event_address' => [ 'LEFT JOIN', [ 'event_id=ceea_event' ] ],
 				'ce_address' => [ 'LEFT JOIN', [ 'ceea_address=cea_id' ] ]
 			]

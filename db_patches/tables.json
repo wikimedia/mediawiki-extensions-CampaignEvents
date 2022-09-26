@@ -232,6 +232,14 @@
 				}
 			},
 			{
+				"name": "cep_private",
+				"comment": "Whether the user registered privately for the event.",
+				"type": "boolean",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
 				"name": "cep_registered_at",
 				"type": "mwtimestamp",
 				"options": {
