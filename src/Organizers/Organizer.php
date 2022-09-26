@@ -13,13 +13,18 @@ class Organizer {
 	/** @var string[] */
 	private $roles;
 
+	/** @var int */
+	private $organizerID;
+
 	/**
 	 * @param CentralUser $user
 	 * @param string[] $roles List of Roles::ROLE_* constants
+	 * @param int $organizerID Unique ID which identifies this specific organizer, for a specific event, in the DB.
 	 */
-	public function __construct( CentralUser $user, array $roles ) {
+	public function __construct( CentralUser $user, array $roles, int $organizerID ) {
 		$this->user = $user;
 		$this->roles = $roles;
+		$this->organizerID = $organizerID;
 	}
 
 	/**
@@ -34,5 +39,12 @@ class Organizer {
 	 */
 	public function getRoles(): array {
 		return $this->roles;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getOrganizerID(): int {
+		return $this->organizerID;
 	}
 }

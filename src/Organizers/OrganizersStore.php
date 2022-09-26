@@ -29,18 +29,27 @@ class OrganizersStore {
 	/**
 	 * @param int $eventID
 	 * @param int|null $limit
+	 * @param int|null $lastOrganizerId
 	 * @return Organizer[]
 	 */
-	public function getEventOrganizers( int $eventID, int $limit = null ): array {
+	public function getEventOrganizers( int $eventID, int $limit = null, int $lastOrganizerId = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$where = [
+			'ceo_event_id' => $eventID,
+			'ceo_deleted_at' => null,
+		];
+		if ( $lastOrganizerId !== null ) {
+			$where[] = 'ceo_id > ' . $dbr->addQuotes( $lastOrganizerId );
+		}
+		$opts = [ 'ORDER BY' => 'ceo_id' ];
+		if ( $limit !== null ) {
+			$opts['LIMIT'] = $limit;
+		}
 		$res = $dbr->select(
 			'ce_organizers',
-			[ 'ceo_user_id', 'ceo_roles' ],
-			[
-				'ceo_event_id' => $eventID,
-				'ceo_deleted_at' => null,
-			],
-			$limit !== null ? [ 'LIMIT' => $limit ] : []
+			'*',
+			$where,
+			$opts
 		);
 
 		$organizers = [];
@@ -52,7 +61,7 @@ class OrganizersStore {
 					$roles[] = $role;
 				}
 			}
-			$organizers[] = new Organizer( new CentralUser( (int)$row->ceo_user_id ), $roles );
+			$organizers[] = new Organizer( new CentralUser( (int)$row->ceo_user_id ), $roles, (int)$row->ceo_id );
 		}
 		return $organizers;
 	}

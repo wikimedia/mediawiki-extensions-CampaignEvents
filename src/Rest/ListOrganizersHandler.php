@@ -10,12 +10,13 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class ListOrganizersHandler extends SimpleHandler {
 	use EventIDParamTrait;
 
 	// TODO: Implement proper pagination (T305389)
-	private const RES_LIMIT = 50;
+	private const RES_LIMIT = 10;
 
 	/** @var IEventLookup */
 	private $eventLookup;
@@ -51,7 +52,12 @@ class ListOrganizersHandler extends SimpleHandler {
 	protected function run( int $eventID ): Response {
 		$this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
-		$organizers = $this->organizersStore->getEventOrganizers( $eventID, self::RES_LIMIT );
+		$params = $this->getValidatedParams();
+		$organizers = $this->organizersStore->getEventOrganizers(
+			$eventID,
+			self::RES_LIMIT,
+			$params['last_organizer_id']
+		);
 		$respVal = [];
 		foreach ( $organizers as $organizer ) {
 			$user = $organizer->getUser();
@@ -59,6 +65,7 @@ class ListOrganizersHandler extends SimpleHandler {
 				continue;
 			}
 			$respVal[] = [
+				'organizer_id' => $organizer->getOrganizerID(),
 				'user_id' => $user->getCentralID(),
 				// TODO Should these be localized? It doesn't seem possible right now anyway (T269492)
 				'roles' => array_map( [ $this->roleFormatter, 'getDebugName' ], $organizer->getRoles() )
@@ -71,6 +78,14 @@ class ListOrganizersHandler extends SimpleHandler {
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
-		return $this->getIDParamSetting();
+		return array_merge(
+			$this->getIDParamSetting(),
+			[
+				'last_organizer_id' => [
+					static::PARAM_SOURCE => 'query',
+					ParamValidator::PARAM_TYPE => 'integer'
+				],
+			]
+		);
 	}
 }
