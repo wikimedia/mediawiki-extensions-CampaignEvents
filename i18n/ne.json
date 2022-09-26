@@ -9,6 +9,7 @@
 	"campaignevents-role-creator": "{{GENDER:$1|निर्माता}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|आयोजक}}",
 	"campaignevents-eventpage-btn-event-ended": "कार्यक्रम समाप्त भयो",
+	"campaignevents-eventpage-dialog-organizer-hidden": "प्रयोगकर्ता नाम हटाइयो",
 	"campaignevents-event-details-edit-button": "सम्पादन गर्नुहोस्",
 	"campaignevents-event-details-dates": "$1 देखि $4",
 	"campaignevents-event-details-select-all": "सबै चयन गर्नुहोस्",
