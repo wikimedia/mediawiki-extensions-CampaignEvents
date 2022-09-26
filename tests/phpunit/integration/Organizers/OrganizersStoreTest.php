@@ -10,7 +10,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiIntegrationTestCase;
-use stdClass;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -23,46 +22,41 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	/** @inheritDoc */
 	protected $tablesUsed = [ 'ce_organizers' ];
 
-	/**
-	 * @param bool $includeTimestamps If true, ceo_created_at and ceo_deleted_at won't be included. This is
-	 * useful when the method is called from a data provider, when the database cannot be accessed.
-	 * @return array
-	 */
-	private function getDefaultRows( bool $includeTimestamps = true ): array {
-		$rows = [
-			[
-				'ceo_event_id' => 1,
-				'ceo_user_id' => 101,
-				'ceo_role_id' => 1,
-			],
-			[
-				'ceo_event_id' => 1,
-				'ceo_user_id' => 102,
-				'ceo_role_id' => 2,
-			],
-			[
-				'ceo_event_id' => 1,
-				'ceo_user_id' => 103,
-				'ceo_role_id' => 2,
-			],
-		];
-		if ( $includeTimestamps ) {
-			$ts = $this->db->timestamp();
-			$rows[0]['ceo_created_at'] = $ts;
-			$rows[0]['ceo_deleted_at'] = null;
-			$rows[1]['ceo_created_at'] = $ts;
-			$rows[1]['ceo_deleted_at'] = null;
-			$rows[2]['ceo_created_at'] = $ts;
-			$rows[2]['ceo_deleted_at'] = $ts;
-		}
-		return $rows;
-	}
+	private const ORGANIZERS_BY_EVENT = [
+		1 => [
+			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ], 'deleted' => false ],
+			[ 'user' => 102, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false ],
+			[ 'user' => 103, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => true ],
+		],
+		3 => [
+			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => false ],
+		]
+	];
 
 	/**
 	 * @inheritDoc
 	 */
 	public function addDBData(): void {
-		$this->db->insert( 'ce_organizers', $this->getDefaultRows() );
+		$rolesMap = TestingAccessWrapper::constant( OrganizersStore::class, 'ROLES_MAP' );
+		$ts = $this->db->timestamp();
+		$rows = [];
+		foreach ( self::ORGANIZERS_BY_EVENT as $event => $organizers ) {
+			foreach ( $organizers as $data ) {
+				$dbRoles = 0;
+				foreach ( $data['roles'] as $role ) {
+					$dbRoles |= $rolesMap[$role];
+				}
+				$rows[] = [
+					'ceo_event_id' => $event,
+					'ceo_user_id' => $data['user'],
+					'ceo_roles' => $dbRoles,
+					'ceo_created_at' => $ts,
+					'ceo_deleted_at' => $data['deleted'] ? $ts : null
+				];
+			}
+		}
+
+		$this->db->insert( 'ce_organizers', $rows );
 	}
 
 	/**
@@ -104,8 +98,8 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideIsOrganizer(): Generator {
-		yield 'Yes, first' => [ 1, 101, true ];
-		yield 'Yes, second' => [ 1, 102, true ];
+		yield 'Yes, creator' => [ 1, 101, true ];
+		yield 'Yes, secondary role' => [ 1, 102, true ];
 		yield 'No, deleted' => [ 1, 103, false ];
 		yield 'Nope' => [ 2, 101, false ];
 	}
@@ -114,12 +108,11 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @param int $eventID
 	 * @param int $userID
 	 * @param string[] $roles
-	 * @param stdClass[] $expectedRows NOTE: These rows do not include ceo_created_at and ceo_deleted_at, because we
-	 *   can't use $this->db->timestamp() in the data provider, and we also don't need to check the values for equality.
+	 * @param array<int,string[]> $expectedOrganizers Shape: [ user_id => [ role1, role2, ... ], ... ]
 	 * @covers ::addOrganizerToEvent
 	 * @dataProvider provideOrganizersToAdd
 	 */
-	public function testAddOrganizerToEvent( int $eventID, int $userID, array $roles, array $expectedRows ) {
+	public function testAddOrganizerToEvent( int $eventID, int $userID, array $roles, array $expectedOrganizers ) {
 		$user = new CentralUser( $userID );
 		$store = new OrganizersStore(
 			CampaignEventsServices::getDatabaseHelper()
@@ -127,74 +120,47 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 
 		$store->addOrganizerToEvent( $eventID, $user, $roles );
 
-		// $this->assertSelect() strips string keys, which complicates things unnecessarily.
-		$dbData = $this->db->select( 'ce_organizers', [ 'ceo_event_id', 'ceo_user_id', 'ceo_role_id' ], [] );
-		$this->assertArrayEquals( $expectedRows, array_map( 'get_object_vars', iterator_to_array( $dbData ) ) );
+		$actualOrganizers = $store->getEventOrganizers( $eventID );
+		$this->assertCount( count( $expectedOrganizers ), $actualOrganizers );
+		foreach ( $actualOrganizers as $actualOrg ) {
+			$userID = $actualOrg->getUser()->getCentralID();
+			$this->assertArrayHasKey( $userID, $expectedOrganizers );
+			$this->assertSame( $expectedOrganizers[$userID], $actualOrg->getRoles(), "Roles for user $userID" );
+		}
 	}
 
 	public function provideOrganizersToAdd(): Generator {
-		$rolesMap = TestingAccessWrapper::constant( OrganizersStore::class, 'ROLES_MAP' );
-		/**
-		 * Changes all values to strings, since that's what SELECT will return.
-		 */
-		$strVal = static function ( array $rows ): array {
-			$ret = [];
-			foreach ( $rows as $row ) {
-				$ret[] = array_map( 'strval', $row );
-			}
-			return $ret;
-		};
 		yield 'Adding a new role' => [
 			2,
 			101,
 			[ Roles::ROLE_CREATOR ],
-			$strVal( array_merge(
-				$this->getDefaultRows( false ),
-				[ [
-					'ceo_event_id' => 2,
-					'ceo_user_id' => 101,
-					'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR],
-				] ]
-			) )
+			[
+				101 => [ Roles::ROLE_CREATOR ]
+			]
 		];
 		yield 'Adding two new roles' => [
 			2,
 			101,
 			[ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
-			$strVal( array_merge(
-				$this->getDefaultRows( false ),
-				[
-					[
-						'ceo_event_id' => 2,
-						'ceo_user_id' => 101,
-						'ceo_role_id' => $rolesMap[Roles::ROLE_CREATOR],
-					],
-					[
-						'ceo_event_id' => 2,
-						'ceo_user_id' => 101,
-						'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER],
-					]
-				]
-			) )
+			[
+				101 => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ]
+			]
 		];
 		yield 'Single role, already there' => [
-			1,
+			3,
 			101,
 			[ Roles::ROLE_CREATOR ],
-			$strVal( $this->getDefaultRows( false ) )
+			[
+				101 => [ Roles::ROLE_CREATOR ]
+			]
 		];
 		yield 'One role already there, one new' => [
-			1,
+			3,
 			101,
 			[ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
-			$strVal( array_merge(
-				$this->getDefaultRows( false ),
-				[ [
-					'ceo_event_id' => 1,
-					'ceo_user_id' => 101,
-					'ceo_role_id' => $rolesMap[Roles::ROLE_ORGANIZER],
-				] ]
-			) )
+			[
+				101 => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ]
+			]
 		];
 	}
 
@@ -202,9 +168,17 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		$store = new OrganizersStore(
 			CampaignEventsServices::getDatabaseHelper()
 		);
-		$this->assertCount( 2, $store->getEventOrganizers( 1 ), 'precondition' );
+		$allOrganizers = $store->getEventOrganizers( 1 );
+		$this->assertCount( 2, $allOrganizers, 'precondition: total count' );
+		$this->assertSame( 101, $allOrganizers[0]->getUser()->getCentralID(), 'precondition: first user ID' );
+		$this->assertCount( 2, $allOrganizers[0]->getRoles(), 'precondition: first user roles' );
+		$this->assertSame( 102, $allOrganizers[1]->getUser()->getCentralID(), 'precondition: second user ID' );
+		$this->assertCount( 1, $allOrganizers[1]->getRoles(), 'precondition: second user roles' );
 		$limit = 1;
-		$this->assertCount( $limit, $store->getEventOrganizers( 1, $limit ) );
+		$partialOrganizers = $store->getEventOrganizers( 1, $limit );
+		$this->assertCount( $limit, $partialOrganizers );
+		$this->assertSame( 101, $partialOrganizers[0]->getUser()->getCentralID(), 'user ID' );
+		$this->assertCount( 2, $partialOrganizers[0]->getRoles(), 'roles' );
 	}
 
 	/**
@@ -222,6 +196,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function provideOrganizerCount(): array {
 		return [
+			'One organizer' => [ 3, 1 ],
 			'Two organizers (third one deleted)' => [ 1, 2 ],
 			'No organizers' => [ 1000, 0 ],
 		];

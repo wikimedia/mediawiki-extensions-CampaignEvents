@@ -50,13 +50,11 @@ CREATE TABLE /*_*/ce_organizers (
   ceo_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   ceo_event_id BIGINT UNSIGNED NOT NULL,
   ceo_user_id INTEGER UNSIGNED NOT NULL,
-  ceo_role_id BIGINT UNSIGNED NOT NULL,
+  ceo_roles BIGINT UNSIGNED NOT NULL,
   ceo_created_at BLOB NOT NULL, ceo_deleted_at BLOB DEFAULT NULL
 );
 
-CREATE UNIQUE INDEX ceo_event_user_role ON /*_*/ce_organizers (
-  ceo_event_id, ceo_user_id, ceo_role_id
-);
+CREATE UNIQUE INDEX ceo_event_user ON /*_*/ce_organizers (ceo_event_id, ceo_user_id);
 
 CREATE INDEX ceo_user_event ON /*_*/ce_organizers (ceo_user_id, ceo_event_id);
 

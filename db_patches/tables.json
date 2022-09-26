@@ -300,8 +300,8 @@
 				}
 			},
 			{
-				"name": "ceo_role_id",
-				"comment": "ID of the role, as determined by the application.",
+				"name": "ceo_roles",
+				"comment": "Bit set of the roles that the organizer has for a specific event.",
 				"type": "bigint",
 				"options": {
 					"notnull": true,
@@ -310,7 +310,7 @@
 			},
 			{
 				"name": "ceo_created_at",
-				"comment": "Timestamp of when the user first became an organizer in this role.",
+				"comment": "Timestamp of when the user first became an organizer.",
 				"type": "mwtimestamp",
 				"options": {
 					"notnull": true
@@ -318,7 +318,7 @@
 			},
 			{
 				"name": "ceo_deleted_at",
-				"comment": "Timestamp of when the user stopped being an organizer in this role.",
+				"comment": "Timestamp of when the user stopped being an organizer.",
 				"type": "mwtimestamp",
 				"options": {
 					"notnull": false
@@ -327,8 +327,8 @@
 		],
 		"indexes": [
 			{
-				"name": "ceo_event_user_role",
-				"columns": [ "ceo_event_id", "ceo_user_id", "ceo_role_id" ],
+				"name": "ceo_event_user",
+				"columns": [ "ceo_event_id", "ceo_user_id" ],
 				"unique": true,
 				"comment": "Uniqueness constraint, used when retrieving the organizers of an event."
 			},
