@@ -10,14 +10,13 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsModule;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsParticipantsModule;
+use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
-use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use OOUI\ButtonWidget;
 use OOUI\Tag;
 use SpecialPage;
@@ -26,7 +25,6 @@ use Wikimedia\Message\MessageValue;
 
 class SpecialEventDetails extends SpecialPage {
 	public const PAGE_NAME = 'EventDetails';
-	private const PARTICIPANTS_LIMIT = 20;
 	private const MODULE_STYLES = [ 'oojs-ui.styles.icons-movement', 'ext.campaignEvents.specialeventdetails.styles' ];
 
 	/** @var IEventLookup */
@@ -37,41 +35,36 @@ class SpecialEventDetails extends SpecialPage {
 	private $participantsStore;
 	/** @var OrganizersStore */
 	private $organizersStore;
-	/** @var PageURLResolver */
-	private $pageURLResolver;
-	/** @var UserLinker */
-	private $userLinker;
 	/** @var IMessageFormatterFactory */
 	private $messageFormatterFactory;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var FrontendModulesFactory */
+	private $frontendModulesFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
-	 * @param PageURLResolver $pageURLResolver
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UserLinker $userLinker
+	 * @param FrontendModulesFactory $frontendModulesFactory
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
 		OrganizersStore $organizersStore,
-		PageURLResolver $pageURLResolver,
 		IMessageFormatterFactory $messageFormatterFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker
+		FrontendModulesFactory $frontendModulesFactory
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
-		$this->pageURLResolver = $pageURLResolver;
-		$this->userLinker = $userLinker;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->frontendModulesFactory = $frontendModulesFactory;
 	}
 
 	/**
@@ -128,22 +121,8 @@ class SpecialEventDetails extends SpecialPage {
 			$isOrganizer = $isParticipant = false;
 		}
 
-		$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
-		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
-
-		if ( $isOrganizer ) {
-			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $this->event ) ===
-				UnregisterParticipantCommand::CAN_UNREGISTER;
-		} else {
-			$canRemoveParticipants = false;
-		}
-
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
-			// TO DO This may change when we add the feature to send messages
-			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
-			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
-			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
 		] );
 		$out->setPageTitle(
 			$msgFormatter->format(
@@ -168,29 +147,25 @@ class SpecialEventDetails extends SpecialPage {
 
 		$main = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-eventdetails-panels' ] );
+		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule();
 		$main->appendContent(
-			( new EventDetailsParticipantsModule() )->createContent(
-				$language,
-				$this->getUser(),
-				$this->userLinker,
-				$participants,
-				$totalParticipants,
-				$msgFormatter,
-				$canRemoveParticipants
-			)
-		);
-
-		$main->appendContent(
-			( new EventDetailsModule() )->createContent(
+			$eventParticipantsModule->createContent(
 				$language,
 				$this->event,
 				$this->getUser(),
-				$msgFormatter,
+				$isOrganizer,
+				$out
+			)
+		);
+
+		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule();
+		$main->appendContent(
+			$eventDetailsModule->createContent(
+				$language,
+				$this->event,
+				$this->getUser(),
 				$isOrganizer,
 				$isParticipant,
-				$this->organizersStore,
-				$this->pageURLResolver,
-				$this->userLinker,
 				$out
 			)
 		);

@@ -406,10 +406,9 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsOrganizersStore",
-				"CampaignEventsPageURLResolver",
 				"MessageFormatterFactory",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsUserLinker"
+				"CampaignEventsFrontendModulesFactory"
 			]
 		}
 	},

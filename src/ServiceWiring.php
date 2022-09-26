@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
+use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -182,6 +183,15 @@ return [
 		return new UserLinker(
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->getMessageFormatterFactory()
+		);
+	},
+	FrontendModulesFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): FrontendModulesFactory {
+		return new FrontendModulesFactory(
+			$services->getMessageFormatterFactory(),
+			$services->get( OrganizersStore::SERVICE_NAME ),
+			$services->get( ParticipantsStore::SERVICE_NAME ),
+			$services->get( PageURLResolver::SERVICE_NAME ),
+			$services->get( UserLinker::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
