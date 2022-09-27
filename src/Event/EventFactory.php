@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use DateTime;
 use DateTimeZone;
+use Exception;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -18,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedSectionAnchorException
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
 use MWTimestamp;
 use StatusValue;
+use Wikimedia\RequestTimeout\TimeoutException;
 
 class EventFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventFactory';
@@ -50,6 +52,7 @@ class EventFactory {
 	 * @param int|null $trackingToolID
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
+	 * @param string $timezone Can be in any format accepted by DateTimeZone
 	 * @param string $startLocalTimestamp In the TS_MW format
 	 * @param string $endLocalTimestamp In the TS_MW format
 	 * @param string $type
@@ -71,6 +74,7 @@ class EventFactory {
 		?int $trackingToolID,
 		?string $trackingToolEventID,
 		string $status,
+		string $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		string $type,
@@ -109,15 +113,26 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-status' );
 		}
 
-		// TODO Make the timezone customizable (T315691)
-		$timezone = new DateTimeZone( 'UTC' );
-		$datesStatus = $this->validateLocalDates(
-			$validationFlags,
-			$timezone,
-			$startLocalTimestamp,
-			$endLocalTimestamp
-		);
-		$res->merge( $datesStatus );
+		$timezoneValid = true;
+		try {
+			$timezoneObj = new DateTimeZone( $timezone );
+		} catch ( TimeoutException $e ) {
+			throw $e;
+		} catch ( Exception $e ) {
+			// Invalid timezone. Thanks PHP for making error handling so convoluted here.
+			$timezoneValid = false;
+			$res->error( 'campaignevents-error-invalid-timezone' );
+		}
+
+		if ( $timezoneValid ) {
+			$datesStatus = $this->validateLocalDates(
+				$validationFlags,
+				$timezoneObj,
+				$startLocalTimestamp,
+				$endLocalTimestamp
+			);
+			$res->merge( $datesStatus );
+		}
 
 		if ( !in_array( $type, EventRegistration::VALID_TYPES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-type' );
@@ -157,7 +172,7 @@ class EventFactory {
 			$trackingToolID,
 			$trackingToolEventID,
 			$status,
-			$timezone,
+			$timezoneObj,
 			$startLocalTimestamp,
 			$endLocalTimestamp,
 			$type,

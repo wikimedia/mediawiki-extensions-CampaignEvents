@@ -226,6 +226,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				null,
 				null,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
+				'UTC',
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
 				EventRegistration::TYPE_GENERIC,

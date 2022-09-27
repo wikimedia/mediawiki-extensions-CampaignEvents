@@ -22,6 +22,7 @@
 	"campaignevents-error-page-with-section": "Error message used when the given event page contains a section name, like \"Event:Test#Section\".",
 	"campaignevents-error-invalid-chat-url": "Error message used when the given chat URL is invalid.",
 	"campaignevents-error-invalid-status": "Error message used when the given event status is invalid.",
+	"campaignevents-error-invalid-timezone": "Error message used when the timezone is invalid.",
 	"campaignevents-error-empty-start": "Error message used when the given event start date is empty.",
 	"campaignevents-error-invalid-start": "Error message used when the given event start date is invalid.",
 	"campaignevents-error-start-past": "Error message used when the given start date is in the past.",

@@ -58,6 +58,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			null,
 			null,
 			EventRegistration::STATUS_OPEN,
+			'UTC',
 			$body['start_time'],
 			$body['end_time'],
 			// TODO MVP Get this from the request body

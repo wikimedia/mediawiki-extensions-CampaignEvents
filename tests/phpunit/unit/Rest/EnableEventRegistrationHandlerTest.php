@@ -24,7 +24,7 @@ use StatusValue;
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\EnableEventRegistrationHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\AbstractEditEventRegistrationHandler
  */
-class EnablEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
+class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	use EditEventRegistrationHandlerTestTrait;
 
 	private function getRequestData(): array {

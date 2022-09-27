@@ -35,6 +35,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'trackingid' => null,
 		'trackingeventid' => null,
 		'status' => EventRegistration::STATUS_OPEN,
+		'timezone' => 'UTC',
 		'start' => '20220308120000',
 		'end' => '20220308150000',
 		'type' => EventRegistration::TYPE_GENERIC,
@@ -184,6 +185,10 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		yield 'Invalid status' => [
 			'campaignevents-error-invalid-status',
 			$this->getTestDataWithDefault( [ 'status' => 'Some invalid status' ] )
+		];
+		yield 'Invalid timezone' => [
+			'campaignevents-error-invalid-timezone',
+			$this->getTestDataWithDefault( [ 'timezone' => 'Some invalid timezone' ] )
 		];
 		yield 'Empty start timestamp' => [
 			'campaignevents-error-empty-start',
