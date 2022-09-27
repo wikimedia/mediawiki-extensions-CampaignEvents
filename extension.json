@@ -298,7 +298,8 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsRoleFormatter",
-				"CampaignEventsCentralUserLookup"
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsUserLinker"
 			]
 		},
 		{
