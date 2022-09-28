@@ -185,4 +185,55 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			$winterEndMinus2Hours
 		];
 	}
+
+	/**
+	 * Test what happens when the user provides a local time that happens to coincide with a DST change, meaning the
+	 * provided time was skipped or happened twice.
+	 *
+	 * @covers ::getStartUTCTimestamp
+	 * @covers ::getEndUTCTimestamp
+	 * @dataProvider provideAmbiguousLocalTimes
+	 */
+	public function testAmbiguousLocalTimes( EventRegistration $event, string $expectedLocal, string $expectedUTC ) {
+		$this->assertSame( $expectedLocal, $event->getStartLocalTimestamp(), 'local start' );
+		$this->assertSame( $expectedUTC, $event->getStartUTCTimestamp(), 'UTC start' );
+		$this->assertSame( $expectedLocal, $event->getEndLocalTimestamp(), 'local end' );
+		$this->assertSame( $expectedUTC, $event->getEndUTCTimestamp(), 'UTC end' );
+	}
+
+	public function provideAmbiguousLocalTimes(): Generator {
+		$baseCtrArgs = $this->getValidConstructorArgs();
+		$replaceArgs = static function ( array $replacements ) use ( $baseCtrArgs ): array {
+			return array_values( array_replace( $baseCtrArgs, $replacements ) );
+		};
+
+		// Assumption: Europe/Rome switched from UTC+1 to UTC+2 on 2022-03-27 02:00 and back to UTC+1
+		// on 2022-10-30 03:00. Thus, on March 27 the time went from 01:59:59 to 03:00:00; on October 30,
+		// it went from 02:59:50 to 02:00:00.
+
+		yield 'Skipped time' => [
+			new EventRegistration( ...$replaceArgs( [
+				'timezone' => new DateTimeZone( 'Europe/Rome' ),
+				'start' => '20220327023000',
+				'end' => '20220327023000'
+			] ) ),
+			// PHP would automatically add 1 hour to the skipped time (so 03:30) but we preserve the value
+			// entered by the organizer.
+			'20220327023000',
+			// Input time is considered to be after the switch, so UTC+2
+			'20220327013000'
+		];
+
+		yield 'Repeated time' => [
+			new EventRegistration( ...$replaceArgs( [
+				'timezone' => new DateTimeZone( 'Europe/Rome' ),
+				'start' => '20221030023000',
+				'end' => '20221030023000'
+			] ) ),
+			// Local time is unchanged because it did happen
+			'20221030023000',
+			// PHP assumes the last occurrence of that time, so UTC+1
+			'20221030013000'
+		];
+	}
 }
