@@ -3,7 +3,9 @@
 		"authors": [
 			"Kareyac",
 			"Okras",
-			"Pacha Tchernof"
+			"Pacha Tchernof",
+			"Deltaspace",
+			"UniCollab"
 		]
 	},
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
@@ -17,7 +19,7 @@
 	"editeventregistration": "Изменить форму регистрации на мероприятие",
 	"campaignevents-edit-form-legend": "Предоставьте основную информацию о мероприятии, которое вы организуете",
 	"campaignevents-edit-field-page": "Страница мероприятия",
-	"campaignevents-edit-field-page-help": "Страница мероприятия содержит информацию о вашем мероприятии. Именно отсюда участники смогут зарегистрироваться на мероприятие.",
+	"campaignevents-edit-field-page-help": "Страница мероприятия содержит информацию о вашем мероприятии. Люди могут зарегистрироваться в качестве участников на странице мероприятия.",
 	"campaignevents-edit-field-event-status": "Статус мероприятия",
 	"campaignevents-edit-field-status-open": "Открыто",
 	"campaignevents-edit-field-status-closed": "Закрыто",
@@ -32,11 +34,11 @@
 	"campaignevents-edit-form-submit": "Изменить форму регистрации",
 	"registerforevent": "Зарегистрироваться на мероприятие",
 	"campaignevents-register-error-no-event": "Нет указанного мероприятия.",
-	"campaignevents-register-error-event-not-found": "Предоставленный идентификатор не ссылается на существующее мероприятие",
+	"campaignevents-register-error-event-not-found": "Не найдено мероприятий с этим ID.",
 	"campaignevents-register-confirmation-top": "Подтвердить регистрацию",
 	"campaignevents-unregister-success": "Вы отменили регистрацию на ваше мероприятие.",
 	"campaignevents-unregister-confirmation-top": "Подтвердите отмену регистрации",
-	"campaignevents-delete-not-allowed-registration": "У вас нет разрешения удалить регистрацию на это мероприятие",
+	"campaignevents-delete-not-allowed-registration": "У вас нет разрешения удалить регистрацию на это мероприятие.",
 	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена.",
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
