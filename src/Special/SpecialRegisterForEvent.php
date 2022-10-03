@@ -51,9 +51,10 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	protected function checkRegistrationPrecondition() {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
-			$isParticipating = $this->participantsStore->userParticipatesToEvent(
+			$isParticipating = $this->participantsStore->userParticipatesInEvent(
 				$this->event->getID(),
-				$centralUser
+				$centralUser,
+				true
 			);
 		} catch ( UserNotGlobalException $_ ) {
 			$isParticipating = false;
@@ -97,7 +98,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	public function onSubmit( array $data ) {
 		return Status::wrap( $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
-			new MWAuthorityProxy( $this->getAuthority() )
+			new MWAuthorityProxy( $this->getAuthority() ),
+			RegisterParticipantCommand::REGISTRATION_PUBLIC
 		) );
 	}
 

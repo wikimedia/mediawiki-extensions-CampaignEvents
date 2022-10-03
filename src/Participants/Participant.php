@@ -13,16 +13,24 @@ class Participant {
 	private $registeredAt;
 	/** @var int */
 	private $participantID;
+	/** @var bool */
+	private $privateRegistration;
 
 	/**
 	 * @param CentralUser $user
 	 * @param string $registeredAt Timestamp in the TS_UNIX format
 	 * @param int $participantID participant_id, ID generated when a participant register for an event
+	 * @param bool $privateRegistration
 	 */
-	public function __construct( CentralUser $user, string $registeredAt, int $participantID ) {
+	public function __construct(
+		CentralUser $user,
+		string $registeredAt,
+		int $participantID,
+		bool $privateRegistration ) {
 		$this->user = $user;
 		$this->registeredAt = $registeredAt;
 		$this->participantID = $participantID;
+		$this->privateRegistration = $privateRegistration;
 	}
 
 	/**
@@ -44,5 +52,12 @@ class Participant {
 	 */
 	public function getParticipantID(): int {
 		return $this->participantID;
+	}
+
+	/**
+	 * @return bool privateRegistration, true if registration is private.
+	 */
+	public function isPrivateRegistration(): bool {
+		return $this->privateRegistration;
 	}
 }

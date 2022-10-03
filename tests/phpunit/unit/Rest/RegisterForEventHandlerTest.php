@@ -26,12 +26,14 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
 	use CSRFTestHelperTrait;
 
-	private const DEFAULT_REQ_DATA = [
-		'method' => 'PUT',
-		'pathParams' => [ 'id' => 42 ],
-		'bodyContents' => '{}',
-		'headers' => [ 'Content-Type' => 'application/json' ],
-	];
+	private function getRequestData( bool $private = false ): array {
+		return [
+			'method' => 'PUT',
+			'pathParams' => [ 'id' => 42 ],
+			'bodyContents' => json_encode( [ 'is_private' => $private ] ),
+			'headers' => [ 'Content-Type' => 'application/json' ],
+		];
+	}
 
 	private function newHandler(
 		RegisterParticipantCommand $registerCommand = null,
@@ -53,7 +55,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
 
 		try {
-			$this->executeHandler( $handler, new RequestData( self::DEFAULT_REQ_DATA ) );
+			$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 400, $e->getCode() );
@@ -77,7 +79,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		$handler = $this->newHandler( $registerParticipantCommand, $eventLookup );
 
 		try {
-			$this->executeHandler( $handler, new RequestData( self::DEFAULT_REQ_DATA ) );
+			$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( $expectedStatusCode, $e->getCode() );
@@ -132,7 +134,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		bool $expectedModified
 	) {
 		$handler = $this->newHandler( $registerParticipantCommand );
-		$reqData = new RequestData( self::DEFAULT_REQ_DATA );
+		$reqData = new RequestData( $this->getRequestData() );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, $reqData );
 		$this->assertArrayHasKey( 'modified', $respData );
 		$this->assertSame( $expectedModified, $respData['modified'] );
@@ -146,5 +148,30 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		$notModifiedCommand = $this->createMock( RegisterParticipantCommand::class );
 		$notModifiedCommand->method( 'registerIfAllowed' )->willReturn( StatusValue::newGood( false ) );
 		yield 'Not modified' => [ $notModifiedCommand, false ];
+	}
+
+	/**
+	 * @dataProvider provideRunPrivate
+	 */
+	public function testRun__private( bool $private ) {
+		$registerParticipantCommand = $this->createMock( RegisterParticipantCommand::class );
+		$expectedCommandArg = $private ?
+			RegisterParticipantCommand::REGISTRATION_PRIVATE :
+			RegisterParticipantCommand::REGISTRATION_PUBLIC;
+
+		$registerParticipantCommand->expects( $this->once() )->method( 'registerIfAllowed' )
+			->with( $this->anything(), $this->anything(), $expectedCommandArg )
+			->willReturn( StatusValue::newGood( true ) );
+
+		$handler = $this->newHandler( $registerParticipantCommand );
+		$reqData = new RequestData( $this->getRequestData( $private ) );
+		$this->executeHandlerAndGetBodyData( $handler, $reqData );
+	}
+
+	public function provideRunPrivate(): array {
+		return [
+			'private' => [ true ],
+			'public' => [ false ],
+		];
 	}
 }

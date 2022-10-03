@@ -45,9 +45,10 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	protected function checkRegistrationPrecondition() {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
-			$isParticipating = $this->participantsStore->userParticipatesToEvent(
+			$isParticipating = $this->participantsStore->userParticipatesInEvent(
 				$this->event->getID(),
-				$centralUser
+				$centralUser,
+				true
 			);
 		} catch ( UserNotGlobalException $_ ) {
 			$isParticipating = false;

@@ -51,6 +51,13 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
 						'cep_unregistered_at' => null
 					],
+					[
+						'cep_event_id' => $eventID,
+						'cep_user_id' => 106,
+						'cep_private' => true,
+						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
+						'cep_unregistered_at' => null
+					],
 				]
 			);
 		}
@@ -67,20 +74,25 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @param int $eventID
 	 * @param int $userID
+	 * @param bool $private
 	 * @param bool $expected
 	 * @covers ::addParticipantToEvent
 	 * @dataProvider provideParticipantsToStore
 	 */
-	public function testAddParticipantToEvent( int $eventID, int $userID, bool $expected ) {
+	public function testAddParticipantToEvent( int $eventID, int $userID, bool $private, bool $expected ) {
 		$user = new CentralUser( $userID );
-		$this->assertSame( $expected, $this->getStore()->addParticipantToEvent( $eventID, $user ) );
+		$this->assertSame( $expected, $this->getStore()->addParticipantToEvent( $eventID, $user, $private ) );
 	}
 
 	public function provideParticipantsToStore(): Generator {
-		yield 'First participant' => [ 2, 102, true ];
-		yield 'Add participant to existing event' => [ 1, 103, true ];
-		yield 'Already an active participant' => [ 1, 101, false ];
-		yield 'Had unregistered' => [ 1, 102, true ];
+		yield 'First participant' => [ 10, 102, false , true ];
+		yield 'Add participant to existing event' => [ 1, 103, false , true ];
+		yield 'Add private participant to existing event' => [ 3, 107, true , true ];
+		yield 'Changing a participant from private to public' => [ 1, 106, false, true ];
+		yield 'Changing a participant from public to private' => [ 1, 101, true, true ];
+		yield 'Setting to private a participant that is already private' => [ 1, 106, true, false ];
+		yield 'Already an active participant' => [ 1, 101, false , false ];
+		yield 'Had unregistered' => [ 1, 102, false, true ];
 	}
 
 	/**
@@ -124,7 +136,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 		$ts1 = '20220227120001';
 		MWTimestamp::setFakeTime( $ts1 );
-		$store->addParticipantToEvent( $eventID, $user );
+		$store->addParticipantToEvent( $eventID, $user, false );
 		$this->assertSame( $ts1, $getActualTS(), 'Registering for the first time' );
 
 		$ts2 = '20220227120002';
@@ -134,20 +146,20 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 		$ts3 = '20220227120003';
 		MWTimestamp::setFakeTime( $ts3 );
-		$store->addParticipantToEvent( $eventID, $user );
+		$store->addParticipantToEvent( $eventID, $user, false );
 		$this->assertSame( $ts3, $getActualTS(), 'Registering after having unregistered resets the timestamp' );
 
 		$ts4 = '20220227120004';
 		MWTimestamp::setFakeTime( $ts4 );
-		$store->addParticipantToEvent( $eventID, $user );
+		$store->addParticipantToEvent( $eventID, $user, false );
 		$this->assertSame( $ts3, $getActualTS(), 'Registering when already registered does not change the timestamp' );
 	}
 
 	/**
 	 * @covers ::getEventParticipants
-	 * @dataProvider provideGetEventParticipants
+	 * @dataProvider provideGetEventParticipants_Public
 	 */
-	public function testGetEventParticipants(
+	public function testGetEventParticipants_Public(
 		int $eventID,
 		array $expectedParticipants,
 		int $limit = null,
@@ -155,18 +167,42 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	) {
 		$actualUsers = $this->getStore()->getEventParticipants( $eventID, $limit, $offset );
 
+		$this->checkParticipants( $actualUsers, $expectedParticipants );
+	}
+
+	/**
+	 * @covers ::getEventParticipants
+	 * @dataProvider provideGetEventParticipants_Private
+	 */
+	public function testGetEventParticipants_Private(
+		int $eventID,
+		array $expectedParticipants,
+		int $limit = null,
+		int $offset = null
+	) {
+		$actualUsers = $this->getStore()->getEventParticipants( $eventID, $limit, $offset, null, true );
+
+		$this->checkParticipants( $actualUsers, $expectedParticipants );
+	}
+
+	/**
+	 * @param array $actualUsers
+	 * @param array $expectedParticipants
+	 * @return void
+	 */
+	public function checkParticipants( array $actualUsers, array $expectedParticipants ): void {
 		$this->assertCount( count( $actualUsers ), $expectedParticipants );
 		foreach ( $actualUsers as $participant ) {
 			$participantID = $participant->getUser()->getCentralID();
 			$this->assertSame(
-				wfTimestamp( TS_UNIX, $expectedParticipants[ $participantID ][ 'registeredAt' ] ),
+				wfTimestamp( TS_UNIX, $expectedParticipants[$participantID]['registeredAt'] ),
 				$participant->getRegisteredAt()
 			);
 		}
 	}
 
-	public function provideGetEventParticipants(): Generator {
-		yield 'Only inludes non-deleted participants' => [
+	public function provideGetEventParticipants_Public(): Generator {
+		yield 'Only inludes non-deleted public participants' => [
 			1,
 			[
 				'101' => [
@@ -193,6 +229,40 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
+	public function provideGetEventParticipants_Private(): Generator {
+		yield 'Only inludes non-deleted participants' => [
+			1,
+			[
+				'101' => [
+					'registeredAt' => '20220315120000'
+				],
+				'104' => [
+					'registeredAt' => '20220316120000'
+				],
+				'106' => [
+					'registeredAt' => '20220316120000'
+				],
+			]
+		];
+		yield 'Test limit and offset' => [
+			1,
+			[
+				'104' => [
+					'registeredAt' => '20220316120000'
+				],
+				'106' => [
+					'registeredAt' => '20220316120000'
+				],
+			],
+			2,
+			2
+		];
+		yield 'No participants' => [
+			5,
+			[]
+		];
+	}
+
 	/**
 	 * @covers ::getEventParticipants
 	 */
@@ -204,30 +274,49 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers ::userParticipatesToEvent
+	 * @covers ::userParticipatesInEvent
 	 */
 	public function testUserParticipatesToEvent() {
 		$participant = new CentralUser( 1234 );
 		$store = $this->getStore();
 		$eventID = 42;
-		$this->assertFalse( $store->userParticipatesToEvent( $eventID, $participant ), 'precondition' );
-		$store->addParticipantToEvent( $eventID, $participant );
-		$this->assertTrue( $store->userParticipatesToEvent( $eventID, $participant ) );
+		$this->assertFalse( $store->userParticipatesInEvent( $eventID, $participant, true ), 'precondition' );
+		$store->addParticipantToEvent( $eventID, $participant, false );
+		$this->assertTrue( $store->userParticipatesInEvent( $eventID, $participant, true ) );
 	}
 
 	/**
 	 * @param int $event
 	 * @param int $expected
 	 * @dataProvider provideParticipantCount
+	 * @covers ::getFullParticipantCountForEvent
 	 * @covers ::getParticipantCountForEvent
 	 */
-	public function testGetParticipantCountForEvent( int $event, int $expected ) {
-		$this->assertSame( $expected, $this->getStore()->getParticipantCountForEvent( $event ) );
+	public function testGetFullParticipantCountForEvent( int $event, int $expected ) {
+		$this->assertSame( $expected, $this->getStore()->getFullParticipantCountForEvent( $event ) );
 	}
 
 	public function provideParticipantCount(): array {
 		return [
-			'Two participant (and a deleted one)' => [ 1, 2 ],
+			'Three participants (and a deleted one)' => [ 1, 3 ],
+			'No participants' => [ 1000, 0 ],
+		];
+	}
+
+	/**
+	 * @param int $event
+	 * @param int $expected
+	 * @dataProvider providePrivateParticipantCount
+	 * @covers ::getPrivateParticipantCountForEvent
+	 * @covers ::getParticipantCountForEvent
+	 */
+	public function testGetPrivateParticipantCountForEvent( int $event, int $expected ) {
+		$this->assertSame( $expected, $this->getStore()->getPrivateParticipantCountForEvent( $event ) );
+	}
+
+	public function providePrivateParticipantCount(): array {
+		return [
+			'One private participant (and a deleted one)' => [ 1, 1 ],
 			'No participants' => [ 1000, 0 ],
 		];
 	}
@@ -249,7 +338,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function provideParticipantsToRemoveFromEvent(): Generator {
 		yield 'Remove two participants' => [ 2, [ new CentralUser( 101 ), new CentralUser( 104 ) ], 2 ];
-		yield 'Remove all participants' => [ 3, null, 2 ];
+		yield 'Remove all participants' => [ 3, null, 3 ];
 		yield 'Empty user ids' => [ 3, [], 0 ];
 		yield 'Remove one participant' => [ 1, [ new CentralUser( 101 ) ], 1 ];
 	}
