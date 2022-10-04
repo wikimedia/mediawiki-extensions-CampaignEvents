@@ -27,9 +27,9 @@ class IconLabelContentWidget extends Widget {
 		}
 		$content = new Tag();
 		$content->appendContent( $config['content'] );
-		$content->addClasses( [ 'ext-campaignevents-details-icon-label-content-widget' ] );
+		$content->addClasses( [ 'ext-campaignevents-icon-label-content-widget-content' ] );
 
-		if ( !empty( $config[ 'content_direction' ] ) ) {
+		if ( !empty( $config['content_direction'] ) ) {
 			$content->setAttributes( [ 'dir' => $config[ 'content_direction' ] ] );
 		}
 		$config['content'] = $content;
@@ -46,10 +46,9 @@ class IconLabelContentWidget extends Widget {
 			$this->icon->addClasses( $config['icon_classes'] );
 		}
 
-		$this->addClasses( [ 'ext-campaignevents-details-icon-label-content-widget' ] );
 		$header = new Tag();
 		$header->appendContent( $this->icon, $this->label );
-		$header->addClasses( [ 'ext-campaignevents-details-icon-label-content-widget-header' ] );
+		$header->addClasses( [ 'ext-campaignevents-icon-label-content-widget-header' ] );
 		$this->prependContent( $header );
 	}
 }

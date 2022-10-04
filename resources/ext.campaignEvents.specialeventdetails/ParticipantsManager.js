@@ -8,12 +8,16 @@
 		this.showParticipantCheckboxes = mw.config.get( 'wgCampaignEventsShowParticipantCheckboxes' );
 		this.lastParticipantID = mw.config.get( 'wgCampaignEventsLastParticipantID' );
 		/* eslint-disable no-jquery/no-global-selector */
-		this.$selectAllParticipantsLabel = $(
-			'.ext-campaignevents-details-select-all-users-div label.oo-ui-labelElement-label'
+		var $selectAllParticipantsField = $(
+			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
 		);
-		this.$selectAllParticipantsCheckbox = $(
-			'#event-details-select-all-participant-checkbox'
-		);
+		if ( $selectAllParticipantsField.length ) {
+			this.selectAllParticipantsField = OO.ui.FieldLayout.static.infuse(
+				$selectAllParticipantsField
+			);
+			this.selectAllParticipantsCheckbox = this.selectAllParticipantsField.getField();
+		}
+
 		this.$participantsTitle = $( '.ext-campaignevents-details-participants-header' );
 
 		this.participantCheckboxes = [];
@@ -21,8 +25,7 @@
 		this.participantsTotal = mw.config.get( 'wgCampaignEventsEventDetailsParticipantsTotal' );
 
 		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
-		this.$searchParticipantElement = $( '.ext-campaignevents-details-participants-search-div' );
-		this.$selectAllParticipantElement = $( '.ext-campaignevents-details-select-all-users-div' );
+		this.$userActionsContainer = $( '.ext-campaignevents-details-user-actions-container' );
 		this.$userRowsContainer = $( '.ext-campaignevents-details-users-rows-container' );
 		this.$removeParticipantsButton = $( '#ext-campaignevents-event-details-remove-participant-button' );
 		this.removeParticipantDialog = new RemoveParticipantDialog( {
@@ -30,6 +33,7 @@
 		} );
 		this.windowManager = new OO.ui.WindowManager();
 		this.$usersContainer = $( '.ext-campaignevents-details-users-container' );
+		this.$searchParticipantsContainer = $( '.ext-campaignevents-details-participants-search-container' );
 		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
 		this.usernameFilter = null;
 
@@ -39,10 +43,7 @@
 
 	ParticipantsManager.prototype.installEventListeners = function () {
 		var thisClass = this;
-		if ( this.$selectAllParticipantsCheckbox.length ) {
-			this.selectAllParticipantsCheckbox = OO.ui.CheckboxInputWidget.static.infuse(
-				this.$selectAllParticipantsCheckbox
-			);
+		if ( this.selectAllParticipantsCheckbox ) {
 			this.selectAllParticipantsCheckbox.on( 'change', function ( selected ) {
 				for ( var i = 0; i < thisClass.participantCheckboxes.length; i++ ) {
 					thisClass.participantCheckboxes[ i ].setSelected( selected, true );
@@ -130,7 +131,7 @@
 		this.selectedParticipantIDs = this.participantCheckboxes.map( function ( el ) {
 			return el.getValue();
 		} );
-		this.$selectAllParticipantsLabel.text(
+		this.selectAllParticipantsField.setLabel(
 			mw.message( 'campaignevents-event-details-all-selected' ).text()
 		);
 		if ( this.removeParticipantsButton ) {
@@ -140,7 +141,7 @@
 
 	ParticipantsManager.prototype.onDeselectAll = function () {
 		this.selectedParticipantIDs = [];
-		this.$selectAllParticipantsLabel.text(
+		this.selectAllParticipantsField.setLabel(
 			mw.message( 'campaignevents-event-details-select-all' ).text()
 		);
 		if ( this.removeParticipantsButton ) {
@@ -158,7 +159,7 @@
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {
 		this.selectedParticipantIDs.push( checkbox.getValue() );
-		this.$selectAllParticipantsLabel.text(
+		this.selectAllParticipantsField.setLabel(
 			mw.message(
 				'campaignevents-event-details-participants-checkboxes-selected',
 				mw.language.convertNumber( this.selectedParticipantIDs.length )
@@ -175,11 +176,11 @@
 
 		if ( this.selectedParticipantIDs.length === 0 ) {
 			this.removeParticipantsButton.$element.hide();
-			this.$selectAllParticipantsLabel.text(
+			this.selectAllParticipantsField.setLabel(
 				mw.message( 'campaignevents-event-details-select-all' ).text()
 			);
 		} else {
-			this.$selectAllParticipantsLabel.text(
+			this.selectAllParticipantsField.setLabel(
 				mw.message(
 					'campaignevents-event-details-participants-checkboxes-selected',
 					mw.language.convertNumber( this.selectedParticipantIDs.length )
@@ -255,8 +256,8 @@
 				);
 				if ( thisClass.participantsTotal === 0 ) {
 					thisClass.$noParticipantsStateElement.show();
-					thisClass.$searchParticipantElement.hide();
-					thisClass.$selectAllParticipantElement.hide();
+					thisClass.$searchParticipantsContainer.hide();
+					thisClass.$userActionsContainer.hide();
 				}
 				thisClass.scrollDownObserver.reset();
 				thisClass.selectedParticipantIDs = [];

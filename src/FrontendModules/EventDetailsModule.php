@@ -55,16 +55,17 @@ class EventDetailsModule {
 		PageURLResolver $pageURLResolver
 	): PanelLayout {
 		$items = [];
-		$items[] = ( new Tag( 'span' ) )->appendContent(
+
+		$headerItems = [];
+		$headerItems[] = ( new Tag( 'span' ) )->appendContent(
 			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-label' )
 			)
 		)->addClasses( [ 'ext-campaignevents-event-details-info-header' ] );
 
 		if ( $isOrganizer ) {
-			$items[] = new ButtonWidget( [
+			$headerItems[] = new ButtonWidget( [
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-edit-button' ) ),
-				'classes' => [ 'ext-campaignevents-details-edit-button' ],
 				'href' => SpecialPage::getTitleFor(
 					SpecialEditEventRegistration::PAGE_NAME,
 					(string)$registration->getID()
@@ -72,6 +73,10 @@ class EventDetailsModule {
 				'icon' => 'edit'
 			] );
 		}
+
+		$items[] = ( new Tag( 'div' ) )
+			->appendContent( $headerItems )
+			->addClasses( [ 'ext-campaignevents-event-details-info-topbar' ] );
 
 		$items[] = new TextWithIconWidget( [
 			'icon' => 'clock',
@@ -119,16 +124,14 @@ class EventDetailsModule {
 				$iconLink = ( new IconWidget( [
 					'icon' => 'link',
 				] ) )->addClasses( [ 'ext-campaignevents-event-details-icons-style' ] );
-				$items[] = ( new Tag() )->appendContent(
-					$iconLink,
-					new HtmlSnippet(
-						Linker::makeExternalLink(
-							$chatURL,
-							$chatURL,
-							true,
-							'',
-							[ 'class' => 'ext-campaignevents-event-details-icon-link' ]
-						)
+				$items[] = $iconLink;
+				$items[] = new HtmlSnippet(
+					Linker::makeExternalLink(
+						$chatURL,
+						$chatURL,
+						true,
+						'',
+						[ 'class' => 'ext-campaignevents-event-details-icon-link' ]
 					)
 				);
 			} else {
@@ -206,7 +209,7 @@ class EventDetailsModule {
 					$iconLink = ( new IconWidget( [
 						'icon' => 'link',
 					] ) )->addClasses( [ 'ext-campaignevents-event-details-icons-style' ] );
-					$content = ( new Tag() )->appendContent(
+					$content = [
 						$iconLink,
 						new HtmlSnippet(
 							Linker::makeExternalLink(
@@ -217,7 +220,7 @@ class EventDetailsModule {
 								[ 'class' => 'ext-campaignevents-event-details-icon-link' ]
 							)
 						)
-					);
+					];
 				} else {
 					$content = $needToRegisterMsg;
 				}
