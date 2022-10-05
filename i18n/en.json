@@ -19,6 +19,7 @@
 	"campaignevents-error-page-with-section": "The event page must not contain a section name.",
 	"campaignevents-error-invalid-chat-url": "Enter a valid chat URL.",
 	"campaignevents-error-invalid-status": "Indicate whether the event is open or closed.",
+	"campaignevents-error-invalid-timezone": "Enter a valid timezone.",
 	"campaignevents-error-empty-start": "Choose a start time.",
 	"campaignevents-error-invalid-start": "The event start time is invalid.",
 	"campaignevents-error-start-past": "Enter a start time in the future.",
