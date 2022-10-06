@@ -20,6 +20,7 @@
 	"campaignevents-error-page-with-section": "Страницата за настанот не треба да содржи има на оддел.",
 	"campaignevents-error-invalid-chat-url": "Внесете важечка URL-адреса за разговорот.",
 	"campaignevents-error-invalid-status": "Укажете дали настанот е отворен или затворен.",
+	"campaignevents-error-invalid-timezone": "Внесете важечки часовен појас.",
 	"campaignevents-error-empty-start": "Одберете почетно време.",
 	"campaignevents-error-invalid-start": "Почетното време на настанот е неважечко.",
 	"campaignevents-error-start-past": "Внесете почетно време во иднината.",

@@ -19,6 +19,7 @@
 	"campaignevents-error-page-with-section": "דף האירוע לא יכול להכיל שם פרק.",
 	"campaignevents-error-invalid-chat-url": "נא להזין URL תקין לצ'אט.",
 	"campaignevents-error-invalid-status": "נא לציין אם האירוע פתוח או סגור.",
+	"campaignevents-error-invalid-timezone": "נא להזין אזור זמן תקין.",
 	"campaignevents-error-empty-start": "נא לבחור זמן התחלה.",
 	"campaignevents-error-invalid-start": "זמן התחלת האירוע אינו תקין.",
 	"campaignevents-error-start-past": "יש להזין זמן התחלה בעתיד.",

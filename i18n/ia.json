@@ -19,6 +19,7 @@
 	"campaignevents-error-page-with-section": "Le pagina del evento non debe continer un nomine de section.",
 	"campaignevents-error-invalid-chat-url": "Insere un URL de chat valide.",
 	"campaignevents-error-invalid-status": "Indica si le evento es aperte o clause.",
+	"campaignevents-error-invalid-timezone": "Insere un fuso horari valide.",
 	"campaignevents-error-empty-start": "Elige un hora de initio.",
 	"campaignevents-error-invalid-start": "Le hora de initio del evento non es valide.",
 	"campaignevents-error-start-past": "Insere un hora de initio futur.",

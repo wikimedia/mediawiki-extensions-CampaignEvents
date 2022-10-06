@@ -19,6 +19,7 @@
 	"campaignevents-error-page-with-section": "A página do evento não pode conter um nome de secção.",
 	"campaignevents-error-invalid-chat-url": "Introduza um URL de conversação válido.",
 	"campaignevents-error-invalid-status": "Indique se o evento é aberto ou fechado.",
+	"campaignevents-error-invalid-timezone": "Introduza um fuso horário válido.",
 	"campaignevents-error-empty-start": "Escolha uma hora de início.",
 	"campaignevents-error-invalid-start": "A hora de início do evento é inválida.",
 	"campaignevents-error-start-past": "Introduza uma hora de início no futuro.",

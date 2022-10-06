@@ -19,6 +19,7 @@
 	"campaignevents-error-page-with-section": "Die Veranstaltungsseite darf keinen Abschnittsnamen enthalten.",
 	"campaignevents-error-invalid-chat-url": "Gib eine gültige Chat-URL ein.",
 	"campaignevents-error-invalid-status": "Gib an, ob die Veranstaltung offen oder geschlossen ist.",
+	"campaignevents-error-invalid-timezone": "Gib eine gültige Zeitzone ein.",
 	"campaignevents-error-empty-start": "Wähle eine Startzeit.",
 	"campaignevents-error-invalid-start": "Die Startzeit des Ereignisses ist ungültig.",
 	"campaignevents-error-start-past": "Gib eine Startzeit in der Zukunft ein.",

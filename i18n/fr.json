@@ -23,6 +23,7 @@
 	"campaignevents-error-page-with-section": "La page de l’événement ne doit contenir aucun nom de section.",
 	"campaignevents-error-invalid-chat-url": "Saisissez une URL de discussion en direct valide.",
 	"campaignevents-error-invalid-status": "Indiquez si l’événement est ouvert ou fermé.",
+	"campaignevents-error-invalid-timezone": "Saisissez un fuseau horaire valide.",
 	"campaignevents-error-empty-start": "Choisissez une heure de début.",
 	"campaignevents-error-invalid-start": "L’heure de début de l’événement n’est pas valide.",
 	"campaignevents-error-start-past": "Saisissez une heure de début dans le futur.",

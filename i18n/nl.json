@@ -21,6 +21,7 @@
 	"campaignevents-error-page-with-section": "De evenementpagina mag geen sectienaam bevatten.",
 	"campaignevents-error-invalid-chat-url": "Voer een geldige chat-URL in.",
 	"campaignevents-error-invalid-status": "Geef aan of het evenement open of besloten is.",
+	"campaignevents-error-invalid-timezone": "Voer een geldige tijdzone in.",
 	"campaignevents-error-empty-start": "Kies een begintijd.",
 	"campaignevents-error-invalid-start": "De begintijd van het evenement is ongeldig.",
 	"campaignevents-error-start-past": "Voer een begintijd in de toekomst in.",
