@@ -43,8 +43,8 @@
 		// The proper solution would be for the widget to natively support customizing the
 		// timezone (T315874).
 		$root.find( '.ext-campaignevents-time-input' ).each( function () {
-			// Same as '@default' but without the timezone
-			var dateFormat = '$!{dow|short} ${day|#} ${month|short} ${year|#} ${hour|0}:${minute|0}:${second|0}';
+			// Same as '@default' but without the timezone and seconds (T317542)
+			var dateFormat = '$!{dow|short} ${day|#} ${month|short} ${year|#} ${hour|0}:${minute|0}';
 
 			var widget = OO.ui.infuse(
 				$( this ),
