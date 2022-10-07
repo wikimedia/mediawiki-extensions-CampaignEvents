@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use DateTime;
+use DateTimeZone;
 use FormSpecialPage;
 use Html;
 use HTMLForm;
@@ -13,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\User\UserTimeCorrection;
 use MWTimestamp;
 use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
@@ -129,6 +132,18 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			];
 		}
 
+		if ( $this->event ) {
+			$defaultTimezone = $this->convertTimezoneForForm( $this->event->getTimezone() );
+		} else {
+			$defaultTimezone = '+00:00';
+		}
+
+		$formFields['TimeZone'] = [
+			'type' => 'timezone',
+			'label-message' => 'campaignevents-edit-field-timezone',
+			'default' => $defaultTimezone,
+			'required' => true,
+		];
 		$formFields['EventStart'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-start',
@@ -143,6 +158,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
 			'required' => true,
 		];
+
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
 			'label-message' => 'campaignevents-edit-field-meeting-type',
@@ -187,6 +203,35 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	}
 
 	/**
+	 * Converts a DateTimeZone object to a string that can be used as (default) value of the timezone input.
+	 * This logic could perhaps be moved to UserTimeCorrection in the future.
+	 *
+	 * @param DateTimeZone $tz
+	 * @return string
+	 */
+	private function convertTimezoneForForm( DateTimeZone $tz ): string {
+		// Timezones in PHP can be either a geographical zone ("Europe/Rome"), an offset ("+01:00"), or
+		// an abbreviation ("GMT"). PHP provides no way to tell which format a timezone object uses.
+		// DateTimeZone seems to have an internal timezone_type property but it's set magically and inaccessible.
+		// Also, 'UTC' is surprisingly categorized as a geographical zone, and getLocation() does not return false
+		// for it, but rather an array with incomplete data. PHP, WTF?!
+		$timezoneName = $tz->getName();
+		if ( strpos( $timezoneName, '/' ) !== false ) {
+			// Geographical format, convert to the format used by UserTimeCorrection and the timezone field.
+			$minDiff = floor( $tz->getOffset( new DateTime() ) / 60 );
+			return "ZoneInfo|$minDiff|$timezoneName";
+		}
+		if ( preg_match( '/[+-]\d{2}:\d{2}/', $timezoneName ) ) {
+			// Offset, which the timezone field accepts directly as the value for the "other" option.
+			return $timezoneName;
+		}
+		// Non-geographical named zone, convert to offset because the timezone field only accepts
+		// the other two types. In theory, this conversion shouldn't change the absolute time and it should
+		// not depend on DST, because abbreviations already contain information about DST (e.g., "PST" vs "PDT").
+		return UserTimeCorrection::formatTimezoneOffset( $tz->getOffset( new DateTime() ) );
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	protected function alterForm( HTMLForm $form ): void {
@@ -217,6 +262,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
 		}
 
+		$timeCorrection = new UserTimeCorrection( $data['TimeZone'] );
+		$timezoneObj = $timeCorrection->getTimeZone();
+		if ( $timezoneObj ) {
+			$timezone = $timezoneObj->getName();
+		} else {
+			$timezone = UserTimeCorrection::formatTimezoneOffset( $timeCorrection->getTimeOffset() );
+		}
+
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
@@ -226,7 +279,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				null,
 				null,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
-				'UTC',
+				$timezone,
+				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
 				EventRegistration::TYPE_GENERIC,
