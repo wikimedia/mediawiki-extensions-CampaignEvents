@@ -5,10 +5,12 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
-use MediaWiki\Extension\CampaignEvents\Participants\Participant;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
@@ -18,23 +20,46 @@ use OOUI\IconWidget;
 use OOUI\PanelLayout;
 use OOUI\SearchInputWidget;
 use OOUI\Tag;
-use Wikimedia\Message\ITextFormatter;
+use OutputPage;
+use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
 class EventDetailsParticipantsModule {
+	private const PARTICIPANTS_LIMIT = 20;
+
 	public const MODULE_STYLES = [
 		'oojs-ui.styles.icons-moderation',
 		'oojs-ui.styles.icons-user'
 	];
 
+	/** @var IMessageFormatterFactory */
+	private $messageFormatterFactory;
+	/** @var UserLinker */
+	private $userLinker;
+	/** @var ParticipantsStore */
+	private $participantsStore;
+
+	/**
+	 * @param IMessageFormatterFactory $messageFormatterFactory
+	 * @param UserLinker $userLinker
+	 * @param ParticipantsStore $participantsStore
+	 */
+	public function __construct(
+		IMessageFormatterFactory $messageFormatterFactory,
+		UserLinker $userLinker,
+		ParticipantsStore $participantsStore
+	) {
+		$this->messageFormatterFactory = $messageFormatterFactory;
+		$this->userLinker = $userLinker;
+		$this->participantsStore = $participantsStore;
+	}
+
 	/**
 	 * @param Language $language
+	 * @param ExistingEventRegistration $event
 	 * @param UserIdentity $viewingUser
-	 * @param UserLinker $userLinker
-	 * @param Participant[] $participants
-	 * @param int $totalParticipants
-	 * @param ITextFormatter $msgFormatter
-	 * @param bool $canRemoveParticipants
+	 * @param bool $isOrganizer
+	 * @param OutputPage $out
 	 * @return PanelLayout
 	 *
 	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and
@@ -42,13 +67,16 @@ class EventDetailsParticipantsModule {
 	 */
 	public function createContent(
 		Language $language,
+		ExistingEventRegistration $event,
 		UserIdentity $viewingUser,
-		UserLinker $userLinker,
-		array $participants,
-		int $totalParticipants,
-		ITextFormatter $msgFormatter,
-		bool $canRemoveParticipants
+		bool $isOrganizer,
+		OutputPage $out
 	): PanelLayout {
+		$eventID = $event->getID();
+		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
+
+		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
+
 		$items = [];
 		$items[] = ( new Tag() )->appendContent(
 			$msgFormatter->format(
@@ -75,6 +103,7 @@ class EventDetailsParticipantsModule {
 			)->addClasses( [ 'ext-campaignevents-details-no-participants-description' ] )
 		)->addClasses( $noParticipantsClasses );
 
+		$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
 		if ( $participants ) {
 			$items[] = ( new Tag() )->appendContent(
 				new SearchInputWidget( [
@@ -85,6 +114,13 @@ class EventDetailsParticipantsModule {
 					'classes' => [ 'ext-campaignevents-details-participants-search' ]
 				] )
 			)->addClasses( [ 'ext-campaignevents-details-participants-search-div' ] );
+		}
+
+		if ( $isOrganizer ) {
+			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
+				UnregisterParticipantCommand::CAN_UNREGISTER;
+		} else {
+			$canRemoveParticipants = false;
 		}
 
 		if ( $canRemoveParticipants && $participants ) {
@@ -134,7 +170,7 @@ class EventDetailsParticipantsModule {
 				->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
 		foreach ( $participants as $participant ) {
 			try {
-				$userLink = new HtmlSnippet( $userLinker->generateUserLink( $participant->getUser() ) );
+				$userLink = new HtmlSnippet( $this->userLinker->generateUserLink( $participant->getUser() ) );
 			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				continue;
 			}
@@ -168,6 +204,13 @@ class EventDetailsParticipantsModule {
 		$usersDivContent->appendContent( $usersDivRows );
 
 		$items[] = $usersDivContent;
+
+		$out->addJsConfigVars( [
+			// TODO This may change when we add the feature to send messages
+			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
+			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
+			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
+		] );
 
 		return new PanelLayout( [
 			'content' => $items,

@@ -23,6 +23,7 @@ use OOUI\PanelLayout;
 use OOUI\Tag;
 use OutputPage;
 use SpecialPage;
+use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 
@@ -35,16 +36,39 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-editing-core',
 	];
 
+	/** @var IMessageFormatterFactory */
+	private $messageFormatterFactory;
+	/** @var OrganizersStore */
+	private $organizersStore;
+	/** @var PageURLResolver */
+	private $pageURLResolver;
+	/** @var UserLinker */
+	private $userLinker;
+
+	/**
+	 * @param IMessageFormatterFactory $messageFormatterFactory
+	 * @param OrganizersStore $organizersStore
+	 * @param PageURLResolver $pageURLResolver
+	 * @param UserLinker $userLinker
+	 */
+	public function __construct(
+		IMessageFormatterFactory $messageFormatterFactory,
+		OrganizersStore $organizersStore,
+		PageURLResolver $pageURLResolver,
+		UserLinker $userLinker
+	) {
+		$this->messageFormatterFactory = $messageFormatterFactory;
+		$this->organizersStore = $organizersStore;
+		$this->pageURLResolver = $pageURLResolver;
+		$this->userLinker = $userLinker;
+	}
+
 	/**
 	 * @param Language $language
 	 * @param ExistingEventRegistration $registration
 	 * @param UserIdentity $viewingUser
-	 * @param ITextFormatter $msgFormatter
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
-	 * @param OrganizersStore $organizersStore
-	 * @param PageURLResolver $pageURLResolver
-	 * @param UserLinker $userLinker
 	 * @param OutputPage $out
 	 * @return PanelLayout
 	 *
@@ -55,14 +79,11 @@ class EventDetailsModule {
 		Language $language,
 		ExistingEventRegistration $registration,
 		UserIdentity $viewingUser,
-		ITextFormatter $msgFormatter,
 		bool $isOrganizer,
 		bool $isParticipant,
-		OrganizersStore $organizersStore,
-		PageURLResolver $pageURLResolver,
-		UserLinker $userLinker,
 		OutputPage $out
 	): PanelLayout {
+		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$eventID = $registration->getID();
 
 		$items = [];
@@ -106,7 +127,7 @@ class EventDetailsModule {
 			)
 		);
 
-		$organizersCount = $organizersStore->getOrganizerCountForEvent( $eventID );
+		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
 		$items = array_merge(
 			$items,
@@ -151,8 +172,6 @@ class EventDetailsModule {
 
 		$organizerSectionElements = $this->getOrganizersSectionElements(
 			$msgFormatter,
-			$organizersStore,
-			$userLinker,
 			$out,
 			$eventID,
 			$organizersCount
@@ -163,7 +182,7 @@ class EventDetailsModule {
 			'flags' => [ 'progressive' ],
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-view-event-page' ) ),
 			'classes' => [ 'ext-campaignevents-event-details-view-event-page-button' ],
-			'href' => $pageURLResolver->getUrl( $registration->getPage() )
+			'href' => $this->pageURLResolver->getUrl( $registration->getPage() )
 		] );
 
 		return new PanelLayout( [
@@ -177,8 +196,6 @@ class EventDetailsModule {
 
 	/**
 	 * @param ITextFormatter $msgFormatter
-	 * @param OrganizersStore $organizersStore
-	 * @param UserLinker $userLinker
 	 * @param OutputPage $out
 	 * @param int $eventID
 	 * @param int $organizersCount
@@ -186,8 +203,6 @@ class EventDetailsModule {
 	 */
 	private function getOrganizersSectionElements(
 		ITextFormatter $msgFormatter,
-		OrganizersStore $organizersStore,
-		UserLinker $userLinker,
 		OutputPage $out,
 		int $eventID,
 		int $organizersCount
@@ -199,7 +214,7 @@ class EventDetailsModule {
 			)
 		)->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
 
-		$partialOrganizers = $organizersStore->getEventOrganizers( $eventID, self::ORGANIZERS_LIMIT );
+		$partialOrganizers = $this->organizersStore->getEventOrganizers( $eventID, self::ORGANIZERS_LIMIT );
 		$langCode = $msgFormatter->getLangCode();
 		$organizerListItems = '';
 		$lastOrganizerID = null;
@@ -207,7 +222,7 @@ class EventDetailsModule {
 			$organizerListItems .= Html::rawElement(
 				'li',
 				[],
-				$userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode )
+				$this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode )
 			);
 			$lastOrganizerID = $organizer->getOrganizerID();
 		}
