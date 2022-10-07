@@ -194,6 +194,7 @@
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialeventdetails",
 			"packageFiles": [
 				"index.js",
+				"OrganizersLoader.js",
 				"ParticipantsManager.js",
 				"RemoveParticipantDialog.js",
 				"ScrollDownObserver.js"
@@ -224,7 +225,8 @@
 		"ext.campaignEvents.specialeventdetails.styles": {
 			"styles": [
 				"ext.campaignEvents.specialeventdetails.styles.less",
-				"ext.campaignEvents.TextWithIconWidget.less"
+				"ext.campaignEvents.TextWithIconWidget.less",
+				"ext.campaignEvents.userlinks.styles.less"
 			],
 			"targets": [ "desktop", "mobile" ]
 		}
