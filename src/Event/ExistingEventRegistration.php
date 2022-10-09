@@ -53,6 +53,7 @@ class ExistingEventRegistration extends EventRegistration {
 		string $lastEditTimestamp,
 		?string $deletionTimestamp
 	) {
+		// @phan-suppress-next-line PhanParamTooFewUnpack
 		parent::__construct( ...func_get_args() );
 	}
 
