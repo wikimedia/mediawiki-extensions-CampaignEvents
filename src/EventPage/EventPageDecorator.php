@@ -447,9 +447,9 @@ class EventPageDecorator {
 		foreach ( $partialOrganizers as $organizer ) {
 			$organizerElements[] = $this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode );
 		}
-		$organizersStr = $msgFormatter->format(
+		$organizersStr = htmlspecialchars( $msgFormatter->format(
 			MessageValue::new( 'campaignevents-eventpage-dialog-organizers' )->commaListParams( $organizerElements )
-		);
+		) );
 		if ( count( $partialOrganizers ) < $organizersCount ) {
 			$organizersStr .= Html::rawElement(
 				'p',
