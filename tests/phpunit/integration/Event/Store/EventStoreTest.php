@@ -26,7 +26,7 @@ use Title;
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/** @inheritDoc */
-	protected $tablesUsed = [ 'campaign_events', 'ce_address', 'ce_event_address' ];
+	protected $tablesUsed = [ 'campaign_events', 'ce_address', 'ce_event_address', 'ce_tracking_tools' ];
 
 	/**
 	 * @inheritDoc
@@ -50,7 +50,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'Chat URL',
 			[
 				new TrackingToolAssociation(
-					42,
+					1,
 					'tracking-tool-event-id',
 					TrackingToolAssociation::SYNC_STATUS_UNKNOWN,
 					null
@@ -127,7 +127,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
 	 * @covers ::updateStoredAddresses
-	 * @covers ::updateStoredTrackingTools
 	 * @dataProvider provideRoundtripByID
 	 */
 	public function testRoundtripByID( $event ) {

@@ -38,6 +38,13 @@ class WikiEduDashboard extends TrackingTool {
 	/**
 	 * @inheritDoc
 	 */
+	public function addToEvent( EventRegistration $event, array $organizers, string $toolEventID ): StatusValue {
+		return StatusValue::newGood();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function validateToolRemoval( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
 		return StatusValue::newGood();
 	}
@@ -45,7 +52,21 @@ class WikiEduDashboard extends TrackingTool {
 	/**
 	 * @inheritDoc
 	 */
+	public function removeFromEvent( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
+		return StatusValue::newGood();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function validateEventDeletion( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
+		return StatusValue::newGood();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onEventDeleted( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
 		return StatusValue::newGood();
 	}
 
@@ -64,7 +85,31 @@ class WikiEduDashboard extends TrackingTool {
 	/**
 	 * @inheritDoc
 	 */
+	public function addParticipant(
+		ExistingEventRegistration $event,
+		string $toolEventID,
+		CentralUser $participant,
+		bool $private
+	): StatusValue {
+		return StatusValue::newGood();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function validateParticipantsRemoved(
+		ExistingEventRegistration $event,
+		string $toolEventID,
+		?array $participants,
+		bool $invertSelection
+	): StatusValue {
+		return StatusValue::newGood();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function removeParticipants(
 		ExistingEventRegistration $event,
 		string $toolEventID,
 		?array $participants,

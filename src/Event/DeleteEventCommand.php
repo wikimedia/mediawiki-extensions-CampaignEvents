@@ -81,6 +81,10 @@ class DeleteEventCommand {
 			return $trackingToolValidationStatus;
 		}
 		$effectivelyDeleted = $this->eventStore->deleteRegistration( $registration );
+
+		if ( $effectivelyDeleted ) {
+			$this->trackingToolEventWatcher->onEventDeleted( $registration );
+		}
 		return StatusValue::newGood( $effectivelyDeleted );
 	}
 }

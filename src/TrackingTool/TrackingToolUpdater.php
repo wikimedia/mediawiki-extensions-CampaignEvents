@@ -5,18 +5,31 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 
 use InvalidArgumentException;
+use LogicException;
+use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 
 /**
  * This class updates the information about tracking tools stored in our database.
- * For now it is just a stub, but it will be expanded soon, and some logic from EventStore might potentially
- * be moved here.
  */
 class TrackingToolUpdater {
+	public const SERVICE_NAME = 'CampaignEventsTrackingToolUpdater';
+
 	private const SYNC_STATUS_TO_DB_MAP = [
 		TrackingToolAssociation::SYNC_STATUS_UNKNOWN => 1,
 		TrackingToolAssociation::SYNC_STATUS_SYNCED => 2,
 		TrackingToolAssociation::SYNC_STATUS_FAILED => 3,
 	];
+
+	/** @var CampaignsDatabaseHelper */
+	private CampaignsDatabaseHelper $dbHelper;
+
+	/**
+	 * @param CampaignsDatabaseHelper $dbHelper
+	 */
+	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
+		$this->dbHelper = $dbHelper;
+	}
 
 	/**
 	 * Converts a TrackingToolAssociation::SYNC_STATUS_* constant to the respective DB value
@@ -42,5 +55,117 @@ class TrackingToolUpdater {
 			throw new InvalidArgumentException( "Unknown DB value for sync status: $dbVal" );
 		}
 		return $const;
+	}
+
+	/**
+	 * Replaces the tools associated to an event with the given array of tool associations.
+	 *
+	 * @param int $eventID
+	 * @param TrackingToolAssociation[] $tools
+	 * @param ICampaignsDatabase|null $dbw Optional, in case the caller opened an atomic section and wants to make sure
+	 * that writes are done on the same DB handle.
+	 * @return void
+	 */
+	public function replaceEventTools( int $eventID, array $tools, ICampaignsDatabase $dbw = null ): void {
+		global $wgCampaignEventsUseNewTrackingToolsSchema;
+		if ( $wgCampaignEventsUseNewTrackingToolsSchema === false ) {
+			throw new LogicException( 'This code should be unreachable.' );
+		}
+
+		$dbw ??= $this->dbHelper->getDBConnection( DB_PRIMARY );
+
+		// Make a map of tools with faster lookup to compare existing values
+		$toolsMap = [];
+		foreach ( $tools as $toolAssociation ) {
+			$key = $toolAssociation->getToolID() . '|' . $toolAssociation->getToolEventID();
+			$toolsMap[$key] = $toolAssociation;
+		}
+
+		// Make changes by primary key to avoid lock contention
+		$currentToolRows = $dbw->select(
+			'ce_tracking_tools',
+			'*',
+			[ 'cett_event' => $eventID ],
+			[ 'FOR UPDATE' ]
+		);
+
+		// TODO Add support for multiple tracking tools per event
+		if ( count( $currentToolRows ) > 1 && !defined( 'MW_PHPUNIT_TEST' ) ) {
+			throw new LogicException( "Events should have only one tracking tool." );
+		}
+
+		// Delete rows for tools that are no longer connected or with outdated sync info
+		$deleteIDs = [];
+		foreach ( $currentToolRows as $curRow ) {
+			$lookupKey = $curRow->cett_tool_id . '|' . $curRow->cett_tool_event_id;
+			$syncStatus = self::dbSyncStatusToConst( (int)$curRow->cett_sync_status );
+			if (
+				!isset( $toolsMap[$lookupKey] ) ||
+				$syncStatus !== $toolsMap[$lookupKey]->getSyncStatus() ||
+				wfTimestampOrNull( TS_UNIX, $curRow->cett_last_sync ) !== $toolsMap[$lookupKey]->getLastSyncTimestamp()
+			) {
+				$deleteIDs[] = $curRow->cett_id;
+			}
+		}
+
+		if ( $deleteIDs ) {
+			$dbw->delete( 'ce_tracking_tools', [ 'cett_id' => $deleteIDs ] );
+		}
+
+		$newRows = [];
+		foreach ( $tools as $toolAssoc ) {
+			$syncTS = $toolAssoc->getLastSyncTimestamp();
+			$newRows[] = [
+				'cett_event' => $eventID,
+				'cett_tool_id' => $toolAssoc->getToolID(),
+				'cett_tool_event_id' => $toolAssoc->getToolEventID(),
+				'cett_sync_status' => self::syncStatusToDB( $toolAssoc->getSyncStatus() ),
+				'cett_last_sync' => $syncTS !== null ? $dbw->timestamp( $syncTS ) : $syncTS,
+			];
+		}
+
+		if ( $newRows ) {
+			// Insert the remaining rows. We can ignore conflicting rows in the database, as the checks above guarantee
+			// that they're identical to the new rows.
+			$dbw->insert(
+				'ce_tracking_tools',
+				$newRows,
+				[ 'IGNORE' ]
+			);
+		}
+	}
+
+	/**
+	 * Updates the sync status of a tool in the database, updating the last sync timestamp if $status is
+	 * SYNC_STATUS_SYNCED.
+	 *
+	 * @param int $eventID
+	 * @param int $toolID
+	 * @param string $toolEventID
+	 * @param int $status One of the TrackingToolAssociation::SYNC_STATUS_* constants
+	 */
+	public function updateToolSyncStatus( int $eventID, int $toolID, string $toolEventID, int $status ): void {
+		global $wgCampaignEventsUseNewTrackingToolsSchema;
+		if ( $wgCampaignEventsUseNewTrackingToolsSchema === false ) {
+			throw new LogicException( 'This code should be unreachable.' );
+		}
+
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$setConds = [
+			'cett_sync_status' => self::syncStatusToDB( $status ),
+		];
+		if ( $status === TrackingToolAssociation::SYNC_STATUS_SYNCED ) {
+			$setConds['cett_last_sync'] = $dbw->timestamp();
+		}
+
+		$dbw->update(
+			'ce_tracking_tools',
+			$setConds,
+			[
+				'cett_event' => $eventID,
+				'cett_tool_id' => $toolID,
+				'cett_tool_event_id' => $toolEventID
+			]
+		);
 	}
 }

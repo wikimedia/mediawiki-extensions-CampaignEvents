@@ -20,9 +20,12 @@ use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
+use Psr\Log\NullLogger;
 use StatusValue;
 
 /**
@@ -40,6 +43,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @param OrganizersStore|null $organizersStore
 	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
+	 * @param TrackingToolUpdater|null $trackingToolUpdater
 	 * @return EditEventCommand
 	 */
 	private function getCommand(
@@ -48,7 +52,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		IEventLookup $eventLookup = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		OrganizersStore $organizersStore = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		TrackingToolEventWatcher $trackingToolEventWatcher = null,
+		TrackingToolUpdater $trackingToolUpdater = null
 	): EditEventCommand {
 		$eventStore ??= $this->createMock( IEventStore::class );
 		if ( !$eventLookup ) {
@@ -78,6 +83,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );
 			$trackingToolEventWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
 			$trackingToolEventWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
+			$trackingToolEventWatcher->method( 'onEventCreated' )->willReturn( StatusValue::newGood( [] ) );
+			$trackingToolEventWatcher->method( 'onEventUpdated' )->willReturn( StatusValue::newGood( [] ) );
 		}
 
 		return new EditEventCommand(
@@ -87,7 +94,9 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$permChecker,
 			$centralUserLookup,
 			$this->createMock( EventPageCacheUpdater::class ),
-			$trackingToolEventWatcher
+			$trackingToolEventWatcher,
+			$trackingToolUpdater ?? $this->createMock( TrackingToolUpdater::class ),
+			new NullLogger()
 		);
 	}
 
@@ -447,5 +456,51 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$existing = $this->createMock( EventRegistration::class );
 		$existing->method( 'getID' )->willReturn( 1 );
 		yield 'Existing (update)' => [ $existing ];
+	}
+
+	/**
+	 * @param EventRegistration $registration
+	 * @param TrackingToolEventWatcher $watcher
+	 * @param TrackingToolUpdater $updater
+	 * @covers ::updateTrackingTools
+	 * @dataProvider provideUpdateTrackingTools
+	 */
+	public function testUpdateTrackingTools(
+		EventRegistration $registration,
+		TrackingToolEventWatcher $watcher,
+		TrackingToolUpdater $updater
+	) {
+		$cmd = $this->getCommand( null, null, null, null, null, $watcher, $updater );
+		$status = $cmd->doEditUnsafe(
+			$registration,
+			$this->createMock( ICampaignsAuthority::class ),
+			self::ORGANIZER_USERNAMES
+		);
+		$this->assertStatusGood( $status );
+	}
+
+	public function provideUpdateTrackingTools(): Generator {
+		$newTools = [ $this->createMock( TrackingToolAssociation::class ) ];
+
+		$existingEvent = $this->createMock( ExistingEventRegistration::class );
+		$existingEvent->method( 'getID' )->willReturn( 1 );
+		$updateWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$updateWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
+		$updateWatcher->method( 'onEventUpdated' )->willReturn( StatusValue::newGood( $newTools ) );
+		$updateUpdater = $this->createMock( TrackingToolUpdater::class );
+		$updateUpdater->expects( $this->once() )
+			->method( 'replaceEventTools' )
+			->with( $this->anything(), $newTools );
+		yield 'Existing event' => [ $existingEvent, $updateWatcher, $updateUpdater ];
+
+		$newEvent = $this->createMock( EventRegistration::class );
+		$creationWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$creationWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
+		$creationWatcher->method( 'onEventCreated' )->willReturn( StatusValue::newGood( $newTools ) );
+		$creationUpdater = $this->createMock( TrackingToolUpdater::class );
+		$creationUpdater->expects( $this->once() )
+			->method( 'replaceEventTools' )
+			->with( $this->anything(), $newTools );
+		yield 'New event' => [ $newEvent, $creationWatcher, $creationUpdater ];
 	}
 }

@@ -162,6 +162,12 @@ class RegisterParticipantCommand {
 
 		if ( $modified ) {
 			$this->userNotifier->notifyRegistration( $performer, $registration );
+			$this->trackingToolEventWatcher->onParticipantAdded(
+				$registration,
+				$centralUser,
+				$isPrivate
+			);
+
 			if ( $isPrivate ) {
 				// Only purge the cache if the participant registered privately, assuming that they were previously
 				// registered publicly, so as to make sure that their username will not remain visible for too long.

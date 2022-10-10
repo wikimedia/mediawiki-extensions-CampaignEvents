@@ -10,7 +10,8 @@ namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 class TrackingToolAssociation {
 	/**
 	 * Constants that represent the status of this association:
-	 *  - UNKNOWN: unknown status, possibly because no attempts were already made to sync the tool
+	 *  - UNKNOWN: unknown status, possibly because no attempts were already made to sync the tool, or the event was
+	 *      deleted
 	 *  - SYNCED: the last synchronization completed successfully
 	 *  - FAILED: the last synchronization failed
 	 */
@@ -62,9 +63,25 @@ class TrackingToolAssociation {
 	}
 
 	/**
-	 * @return string|null
+	 * @return string|null UNIX timestamp or null
 	 */
 	public function getLastSyncTimestamp(): ?string {
 		return $this->lastSyncTimestamp;
+	}
+
+	/**
+	 * Returns a copy of $this updated with the given sync status and TS.
+	 *
+	 * @param int $newStatus
+	 * @param string|null $newTS
+	 * @return self
+	 */
+	public function asUpdatedWith( int $newStatus, ?string $newTS ): self {
+		return new self(
+			$this->toolID,
+			$this->toolEventID,
+			$newStatus,
+			$newTS
+		);
 	}
 }

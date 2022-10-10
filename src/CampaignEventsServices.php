@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\MediaWikiServices;
 use Psr\Container\ContainerInterface;
 
@@ -107,5 +108,13 @@ class CampaignEventsServices {
 	 */
 	public static function getUserLinker( ContainerInterface $services = null ): UserLinker {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( UserLinker::SERVICE_NAME );
+	}
+
+	/**
+	 * @param ContainerInterface|null $services
+	 * @return TrackingToolUpdater
+	 */
+	public static function getTrackingToolUpdater( ContainerInterface $services = null ): TrackingToolUpdater {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( TrackingToolUpdater::SERVICE_NAME );
 	}
 }

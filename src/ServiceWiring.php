@@ -35,6 +35,8 @@ use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 
 // This file is actually covered by CampaignEventsServicesTest, but it's not possible to specify a path
@@ -67,7 +69,8 @@ return [
 		return new EventStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->get( CampaignsPageFactory::SERVICE_NAME ),
-			$services->get( AddressStore::SERVICE_NAME )
+			$services->get( AddressStore::SERVICE_NAME ),
+			$services->get( TrackingToolUpdater::SERVICE_NAME )
 		);
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {
@@ -112,7 +115,9 @@ return [
 			$services->get( PermissionChecker::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( EventPageCacheUpdater::SERVICE_NAME ),
-			$services->get( TrackingToolEventWatcher::SERVICE_NAME )
+			$services->get( TrackingToolEventWatcher::SERVICE_NAME ),
+			$services->get( TrackingToolUpdater::SERVICE_NAME ),
+			LoggerFactory::getInstance( 'CampaignEvents' )
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {
@@ -253,7 +258,15 @@ return [
 	TrackingToolEventWatcher::SERVICE_NAME =>
 		static function ( MediaWikiServices $services ): TrackingToolEventWatcher {
 			return new TrackingToolEventWatcher(
-				$services->get( TrackingToolRegistry::SERVICE_NAME )
+				$services->get( TrackingToolRegistry::SERVICE_NAME ),
+				$services->get( TrackingToolUpdater::SERVICE_NAME ),
+				LoggerFactory::getInstance( 'CampaignEvents' ),
+				[ DeferredUpdates::class, 'addCallableUpdate' ]
 			);
 		},
+	TrackingToolUpdater::SERVICE_NAME => static function ( MediaWikiServices $services ): TrackingToolUpdater {
+		return new TrackingToolUpdater(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+		);
+	},
 ];
