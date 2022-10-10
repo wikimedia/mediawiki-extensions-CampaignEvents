@@ -17,7 +17,7 @@ class TrackingToolTest extends MediaWikiUnitTestCase {
 	 */
 	public function testGetDBID() {
 		$dbID = 12345;
-		$tool = new WikiEduDashboard( $dbID, 'url', [] );
+		$tool = new WikiEduDashboard( $dbID, 'url', [ 'secret' => 'foo' ] );
 		$this->assertSame( $dbID, $tool->getDBID() );
 	}
 }

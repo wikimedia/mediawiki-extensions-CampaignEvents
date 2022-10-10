@@ -2,6 +2,7 @@
 
 declare( strict_types=1 );
 
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
@@ -200,6 +201,11 @@ return [
 		);
 	},
 	TrackingToolRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): TrackingToolRegistry {
-		return new TrackingToolRegistry();
+		return new TrackingToolRegistry(
+			new ServiceOptions(
+				TrackingToolRegistry::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			)
+		);
 	},
 ];
