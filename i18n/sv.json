@@ -151,7 +151,6 @@
 	"campaignevents-eventpage-btn-event-ended": "Evenemanget avslutades",
 	"campaignevents-eventpage-dialog-title": "Evenemangsdetaljer",
 	"campaignevents-eventpage-dialog-organizers": "Organiserad av: $1",
-	"campaignevents-eventpage-dialog-organizer-hidden": "användarnamn borttaget",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Visa alla organisatörer",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|deltagare}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Visa fullständig lista",

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Gomoko",
+			"LD",
 			"Pols12",
 			"Verdy p",
 			"Wladek92",
@@ -47,6 +48,7 @@
 	"campaignevents-edit-field-event-status": "État de l’événement",
 	"campaignevents-edit-field-status-open": "Ouvert",
 	"campaignevents-edit-field-status-closed": "Fermé",
+	"campaignevents-edit-field-timezone": "Fuseau horaire",
 	"campaignevents-edit-field-start": "Horodatage de début",
 	"campaignevents-edit-field-end": "Horodatage de fin",
 	"campaignevents-edit-field-meeting-type": "Type de réunion événementielle",
@@ -157,7 +159,6 @@
 	"campaignevents-eventpage-btn-event-ended": "Événement terminé",
 	"campaignevents-eventpage-dialog-title": "Détails de l’évènement",
 	"campaignevents-eventpage-dialog-organizers": "Organisé par : $1",
-	"campaignevents-eventpage-dialog-organizer-hidden": "nom d’utilisateur supprimé",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Voir tous les organisateurs",
 	"campaignevents-eventpage-dialog-participants": "$1 participant{{PLURAL:$1||s}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Afficher la liste complète",
@@ -196,6 +197,7 @@
 	"campaignevents-event-details-in-person-event-label": "Événement en présentiel",
 	"campaignevents-event-details-online-label": "Événement en ligne",
 	"campaignevents-event-details-chat-link": "Lien d’invitation à un groupe de discussion en direct",
+	"campaignevents-event-details-organizers-header": "Organisateurs",
 	"campaignevents-event-details-register-prompt": "Vous devez vous inscrire pour voir ces informations",
 	"campaignevents-event-details-view-event-page": "Afficher la page de l’événement",
 	"campaignevents-event-details-select-all": "Sélectionner tout",
@@ -222,5 +224,10 @@
 	"campaignevents-event-details-remove-participant-notification-error": "Une erreur s’est produite en essayant d’enlever {{PLURAL:$1|le participant|les participants}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour enlever tous les utilisateurs)",
 	"campaignevents-event-details-search-participants-placeholder": "Rechercher des participants",
-	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide."
+	"campaignevents-event-details-organizers-view-more": "Voir plus",
+	"campaignevents-event-details-organizers-noscript": "Vous devez activer JavaScript pour voir la liste complète des organisateurs.",
+	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide.",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Tableau de bord des programmes et événements",
+	"campaignevents-userlink-suppressed-user": "nom d’utilisateur supprimé",
+	"campaignevents-userlink-deleted-user": "utilisateur supprimé"
 }

@@ -43,6 +43,7 @@
 	"campaignevents-edit-field-event-status": "Stato del evento",
 	"campaignevents-edit-field-status-open": "Aperte",
 	"campaignevents-edit-field-status-closed": "Clause",
+	"campaignevents-edit-field-timezone": "Fuso horari",
 	"campaignevents-edit-field-start": "Hora de initio",
 	"campaignevents-edit-field-end": "Hora de fin",
 	"campaignevents-edit-field-meeting-type": "Typo de reunion del evento",
@@ -152,7 +153,6 @@
 	"campaignevents-eventpage-btn-event-ended": "Evento finite",
 	"campaignevents-eventpage-dialog-title": "Detalios del evento",
 	"campaignevents-eventpage-dialog-organizers": "Organisate per: $1",
-	"campaignevents-eventpage-dialog-organizer-hidden": "nomine de usator removite",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Vider tote le organisatores",
 	"campaignevents-eventpage-dialog-participants": "$1 participante{{PLURAL:$1||s}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Vider lista complete",
@@ -191,6 +191,7 @@
 	"campaignevents-event-details-in-person-event-label": "Evento in persona",
 	"campaignevents-event-details-online-label": "Evento in linea",
 	"campaignevents-event-details-chat-link": "Ligamine de invitation al gruppo de conversation",
+	"campaignevents-event-details-organizers-header": "Organisatores",
 	"campaignevents-event-details-register-prompt": "Es necessari inscriber se pro vider iste information",
 	"campaignevents-event-details-view-event-page": "Vider pagina de evento",
 	"campaignevents-event-details-select-all": "Seliger totes",
@@ -217,5 +218,10 @@
 	"campaignevents-event-details-remove-participant-notification-error": "Un error ha occurrite durante le tentativa de remover le participante{{PLURAL:$1||s}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Le parametro 'user_ids' debe esser un array de IDs de usator, o nulle (pro remover tote le usatores)",
 	"campaignevents-event-details-search-participants-placeholder": "Cercar participantes",
-	"campaignevents-rest-list-participants-empty-filter": "Le filtro del nomine de usator, si specificate, debe esser un texto non vacue."
+	"campaignevents-event-details-organizers-view-more": "Vider plus",
+	"campaignevents-event-details-organizers-noscript": "Es necessari activar JavaScript pro poter vider le lista complete de organisatores.",
+	"campaignevents-rest-list-participants-empty-filter": "Le filtro del nomine de usator, si specificate, debe esser un texto non vacue.",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Tabuliero de programmas e eventos",
+	"campaignevents-userlink-suppressed-user": "nomine de usator supprimite",
+	"campaignevents-userlink-deleted-user": "usator delite"
 }

@@ -43,6 +43,7 @@
 	"campaignevents-edit-field-event-status": "Status der Veranstaltung",
 	"campaignevents-edit-field-status-open": "Offen",
 	"campaignevents-edit-field-status-closed": "Geschlossen",
+	"campaignevents-edit-field-timezone": "Zeitzone",
 	"campaignevents-edit-field-start": "Startzeit",
 	"campaignevents-edit-field-end": "Endzeit",
 	"campaignevents-edit-field-meeting-type": "Veranstaltungstyp",
@@ -152,7 +153,6 @@
 	"campaignevents-eventpage-btn-event-ended": "Veranstaltung beendet",
 	"campaignevents-eventpage-dialog-title": "Veranstaltungsdetails",
 	"campaignevents-eventpage-dialog-organizers": "Organisiert von: $1",
-	"campaignevents-eventpage-dialog-organizer-hidden": "Benutzername entfernt",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Alle Organisatoren anzeigen",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|Ein|$1}} Teilnehmer",
 	"campaignevents-eventpage-dialog-participants-view-list": "Vollständige Liste ansehen",
@@ -191,6 +191,7 @@
 	"campaignevents-event-details-in-person-event-label": "Präsenzveranstaltung",
 	"campaignevents-event-details-online-label": "Online-Veranstaltung",
 	"campaignevents-event-details-chat-link": "Einladungslink für die Chat-Gruppe",
+	"campaignevents-event-details-organizers-header": "Organisatoren",
 	"campaignevents-event-details-register-prompt": "Du musst dich anmelden, um diese Information sehen zu können.",
 	"campaignevents-event-details-view-event-page": "Veranstaltungsseite ansehen",
 	"campaignevents-event-details-select-all": "Alle auswählen",
@@ -217,5 +218,10 @@
 	"campaignevents-event-details-remove-participant-notification-error": "Beim Versuch, {{PLURAL:$1|$1 Teilnehmer}} zu entfernen, ist ein Fehler aufgetreten.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Der Parameter „user_ids“ muss ein Array von Benutzer-IDs oder null sein (um alle Benutzer zu entfernen).",
 	"campaignevents-event-details-search-participants-placeholder": "Teilnehmer suchen",
-	"campaignevents-rest-list-participants-empty-filter": "Der Benutzernamenfilter muss, sofern angegeben, eine nicht leere Zeichenfolge sein."
+	"campaignevents-event-details-organizers-view-more": "Mehr anzeigen",
+	"campaignevents-event-details-organizers-noscript": "Du musst JavaScript aktivieren, um die vollständige Liste der Organisatoren anzuzeigen.",
+	"campaignevents-rest-list-participants-empty-filter": "Der Benutzernamenfilter muss, sofern angegeben, eine nicht leere Zeichenfolge sein.",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Übersichtstabelle der Programme & Veranstaltungen",
+	"campaignevents-userlink-suppressed-user": "Benutzername unterdrückt",
+	"campaignevents-userlink-deleted-user": "gelöschter Benutzer"
 }

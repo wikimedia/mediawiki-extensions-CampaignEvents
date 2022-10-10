@@ -43,6 +43,7 @@
 	"campaignevents-edit-field-event-status": "מצב האירוע",
 	"campaignevents-edit-field-status-open": "פתוחה",
 	"campaignevents-edit-field-status-closed": "סגורה",
+	"campaignevents-edit-field-timezone": "אזור זמן",
 	"campaignevents-edit-field-start": "זמן התחלה",
 	"campaignevents-edit-field-end": "זמן סיום",
 	"campaignevents-edit-field-meeting-type": "סוג מפגש אירוע",
@@ -152,7 +153,6 @@
 	"campaignevents-eventpage-btn-event-ended": "האירוע הסתיים",
 	"campaignevents-eventpage-dialog-title": "פרטי האירוע",
 	"campaignevents-eventpage-dialog-organizers": "מאורגן על־ידי: $1",
-	"campaignevents-eventpage-dialog-organizer-hidden": "שם המשתמש הוסר",
 	"campaignevents-eventpage-dialog-organizers-view-all": "הצגת כל המארגנים",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "הצגת רשימה מלאה",
@@ -191,6 +191,7 @@
 	"campaignevents-event-details-in-person-event-label": "אירוע בחיים האמיתיים",
 	"campaignevents-event-details-online-label": "אירוע מקוון",
 	"campaignevents-event-details-chat-link": "קישור הזמנה לקבוצת צ'אט",
+	"campaignevents-event-details-organizers-header": "מארגנים",
 	"campaignevents-event-details-register-prompt": "יש להירשם כדי לראות את המידע הזה",
 	"campaignevents-event-details-view-event-page": "צפייה בדף האירוע",
 	"campaignevents-event-details-select-all": "לבחור הכול",
@@ -217,5 +218,10 @@
 	"campaignevents-event-details-remove-participant-notification-error": "אירעה שגיאה בעת ניסיון להסיר את {{PLURAL:$1|המשתתף|המשתתפים}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "הפרמטר \"user_ids\" חייב להיות מערך של מזהי משתמשים או null (כדי להסיר את כל המשתמשים)",
 	"campaignevents-event-details-search-participants-placeholder": "חיפוש משתתפים",
-	"campaignevents-rest-list-participants-empty-filter": "מסנן שמות המשתמש, אם צוין, חייב להיות מחרוזת לא ריקה."
+	"campaignevents-event-details-organizers-view-more": "להציג עוד",
+	"campaignevents-event-details-organizers-noscript": "יש להפעיל JavaScript כדי לראות את רשימת המארגנים המלאה.",
+	"campaignevents-rest-list-participants-empty-filter": "מסנן שמות המשתמש, אם צוין, חייב להיות מחרוזת לא ריקה.",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "לוח הבקרה של תוכניות ואירועים",
+	"campaignevents-userlink-suppressed-user": "שם המשתמש הועלם",
+	"campaignevents-userlink-deleted-user": "חשבון משתמש מחוק"
 }

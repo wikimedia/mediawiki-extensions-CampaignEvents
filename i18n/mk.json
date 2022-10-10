@@ -44,6 +44,7 @@
 	"campaignevents-edit-field-event-status": "Статус на настанот",
 	"campaignevents-edit-field-status-open": "Отворен",
 	"campaignevents-edit-field-status-closed": "Затворен",
+	"campaignevents-edit-field-timezone": "Часовен појас",
 	"campaignevents-edit-field-start": "Почетно време",
 	"campaignevents-edit-field-end": "Завршно време",
 	"campaignevents-edit-field-meeting-type": "Вид на средба за настанот",
@@ -153,7 +154,6 @@
 	"campaignevents-eventpage-btn-event-ended": "Настанот заврши",
 	"campaignevents-eventpage-dialog-title": "Поединости за настанот",
 	"campaignevents-eventpage-dialog-organizers": "Приредувач: $1",
-	"campaignevents-eventpage-dialog-organizer-hidden": "отстрането корисничко име",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Погл. сите приредувачи",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|учесник|учесници}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Погл. целосен список",
@@ -192,6 +192,7 @@
 	"campaignevents-event-details-in-person-event-label": "Присуствен настан",
 	"campaignevents-event-details-online-label": "Семрежен настан",
 	"campaignevents-event-details-chat-link": "Врска со покана за групен разговор",
+	"campaignevents-event-details-organizers-header": "Приредувачи",
 	"campaignevents-event-details-register-prompt": "Ќе треб ада се пријавите за да ги гледате овие информации",
 	"campaignevents-event-details-view-event-page": "Погл. страница за настанот",
 	"campaignevents-event-details-select-all": "Избери сè",
@@ -218,5 +219,10 @@
 	"campaignevents-event-details-remove-participant-notification-error": "Се појави грешка при обиодот да {{PLURAL:$1|го отстранат учесникот|ги отстранам учесниците}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Параметарот „user_ids“ мора да биде строј од кориснички назнали, или пак да е празен (за да се отстранат сите корисници)",
 	"campaignevents-event-details-search-participants-placeholder": "Пребарај учесници",
-	"campaignevents-rest-list-participants-empty-filter": "Филтерот за корисничко име, ако е укажан, не може да стои празен."
+	"campaignevents-event-details-organizers-view-more": "Погл. уште",
+	"campaignevents-event-details-organizers-noscript": "Ќе треба да овозможите JavaScript за да го видите целиот список на приредувачи.",
+	"campaignevents-rest-list-participants-empty-filter": "Филтерот за корисничко име, ако е укажан, не може да стои празен.",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Управувачница за програми и настани",
+	"campaignevents-userlink-suppressed-user": "корисничкото име е потиснато",
+	"campaignevents-userlink-deleted-user": "избиршан корисник"
 }

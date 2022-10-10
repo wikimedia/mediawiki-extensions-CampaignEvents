@@ -4,5 +4,8 @@
 			"Pavel1513"
 		]
 	},
-	"campaignevents-eventpage-dialog-organizer-hidden": "naudotojo vardas pašalintas"
+	"campaignevents-edit-field-timezone": "Laiko zona",
+	"campaignevents-event-details-organizers-header": "Orgainzatoriai",
+	"campaignevents-event-details-organizers-view-more": "Žiūrėk daugiau",
+	"campaignevents-event-details-organizers-noscript": "Norėdami matyti visą organizatorių sąrašą, turite įjungti \"JavaScript\"."
 }

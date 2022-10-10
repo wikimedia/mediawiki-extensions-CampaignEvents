@@ -21,6 +21,7 @@
 	"campaignevents-error-page-with-section": "A página do evento não deve conter um nome de seção.",
 	"campaignevents-error-invalid-chat-url": "Insira um URL de bate-papo válido.",
 	"campaignevents-error-invalid-status": "Indique se o evento está aberto ou fechado.",
+	"campaignevents-error-invalid-timezone": "Introduza um fuso horário válido.",
 	"campaignevents-error-empty-start": "Escolha um horário de início.",
 	"campaignevents-error-invalid-start": "A hora de início do evento é inválida.",
 	"campaignevents-error-start-past": "Insira uma hora de início no futuro.",
@@ -91,5 +92,7 @@
 	"campaignevents-register-event-past": "O período de registro deste evento já terminou.",
 	"campaignevents-register-event-not-open": "Não é mais possível registrar-se neste evento.",
 	"campaignevents-register-already-participant": "Você já está registrado neste evento.",
-	"campaignevents-eventpage-dialog-organizer-hidden": "Nome de usuário removido"
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Painel de controle de programas e eventos",
+	"campaignevents-userlink-suppressed-user": "nome de usuário suprimido",
+	"campaignevents-userlink-deleted-user": "usuário excluído"
 }

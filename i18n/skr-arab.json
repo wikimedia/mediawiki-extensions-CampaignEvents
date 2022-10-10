@@ -4,6 +4,7 @@
 			"Saraiki"
 		]
 	},
+	"campaignevents-edit-field-timezone": "ٹائم زون",
 	"campaignevents-myevents-label-search": "ڳولو",
 	"campaignevents-eventslist-column-date": "تریخ",
 	"campaignevents-eventslist-column-location": "محل وقوع",
@@ -18,5 +19,6 @@
 	"campaignevents-event-details-edit-button": "لکھو",
 	"campaignevents-event-details-select-all": "سبھ چݨو",
 	"campaignevents-event-details-remove-participant-remove-btn": "ہٹاؤ",
-	"campaignevents-event-details-remove-participant-cancel-btn": "منسوخ"
+	"campaignevents-event-details-remove-participant-cancel-btn": "منسوخ",
+	"campaignevents-event-details-organizers-view-more": "ٻئے ݙیکھو"
 }

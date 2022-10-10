@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"GuoPC",
+			"LittlePaw365",
 			"Wzl19371"
 		]
 	},
@@ -19,6 +20,7 @@
 	"campaignevents-rest-event-not-found": "没有具有此ID的活动。",
 	"campaignevents-edit-field-status-open": "开放中",
 	"campaignevents-edit-field-status-closed": "已关闭",
+	"campaignevents-edit-field-timezone": "时区",
 	"campaignevents-edit-field-start": "开始时间",
 	"campaignevents-edit-field-end": "结束时间",
 	"campaignevents-edit-field-country": "国家/地区",
@@ -41,8 +43,10 @@
 	"campaignevents-eventpage-unregister-confirmation-confirm": "是",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "否",
 	"campaignevents-event-details-edit-button": "编辑",
+	"campaignevents-event-details-organizers-header": "组织者",
 	"campaignevents-event-details-select-all": "全选",
 	"campaignevents-event-details-remove-participant-remove-btn": "移除",
 	"campaignevents-event-details-remove-participant-cancel-btn": "取消",
-	"campaignevents-event-details-dates-label": "开始和结束时间"
+	"campaignevents-event-details-dates-label": "开始和结束时间",
+	"campaignevents-event-details-organizers-view-more": "查看更多"
 }

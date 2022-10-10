@@ -26,6 +26,7 @@
 	"campaignevents-edit-field-page": "イベントページ",
 	"campaignevents-edit-field-status-open": "開く",
 	"campaignevents-edit-field-status-closed": "閉鎖",
+	"campaignevents-edit-field-timezone": "タイムゾーン",
 	"campaignevents-edit-field-start": "開始時間",
 	"campaignevents-edit-field-end": "終了時間",
 	"campaignevents-edit-field-type-online": "オンラインイベント",
@@ -89,7 +90,6 @@
 	"campaignevents-eventpage-btn-registration-closed": "登録は終了しました",
 	"campaignevents-eventpage-btn-event-ended": "イベント終了",
 	"campaignevents-eventpage-dialog-title": "イベントの詳細",
-	"campaignevents-eventpage-dialog-organizer-hidden": "(利用者名は除去されています)",
 	"campaignevents-eventpage-dialog-organizers-view-all": "すべての主催者を表示",
 	"campaignevents-eventpage-dialog-dates-label": "開始時間と終了時間",
 	"campaignevents-eventpage-dialog-location-label": "位置",
@@ -112,6 +112,7 @@
 	"campaignevents-event-details-in-person-event-label": "対面イベント",
 	"campaignevents-event-details-online-label": "オンラインイベント",
 	"campaignevents-event-details-chat-link": "チャットグループの招待リンク",
+	"campaignevents-event-details-organizers-header": "主催者",
 	"campaignevents-event-details-register-prompt": "この情報を表示するには、登録する必要があります",
 	"campaignevents-event-details-view-event-page": "イベントページを見る",
 	"campaignevents-event-details-select-all": "すべて選択",
@@ -124,5 +125,6 @@
 	"campaignevents-event-details-not-found": "このIDを持つイベントは存在しません",
 	"campaignevents-event-details-venue-not-available": "会場の住所は{{PLURAL:$1|organizer|主催者}}から提供されます。",
 	"campaignevents-event-details-dates-label": "開始時間と終了時間",
-	"campaignevents-event-details-search-participants-placeholder": "参加者を検索する"
+	"campaignevents-event-details-search-participants-placeholder": "参加者を検索する",
+	"campaignevents-event-details-organizers-view-more": "さらに表示"
 }

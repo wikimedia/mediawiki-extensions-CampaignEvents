@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajiniyaz",
 			"Deltaspace",
 			"Kareyac",
 			"Okras",
@@ -23,6 +24,7 @@
 	"campaignevents-edit-field-event-status": "Статус мероприятия",
 	"campaignevents-edit-field-status-open": "Открыто",
 	"campaignevents-edit-field-status-closed": "Закрыто",
+	"campaignevents-edit-field-timezone": "Часовой пояс",
 	"campaignevents-edit-field-start": "Время начала",
 	"campaignevents-edit-field-end": "Время окончания",
 	"campaignevents-edit-field-meeting-type": "Тип встречи мероприятия",
@@ -43,7 +45,10 @@
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
 	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
-	"campaignevents-eventpage-dialog-organizer-hidden": "имя пользователя удалено",
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
-	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы."
+	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы.",
+	"campaignevents-event-details-organizers-header": "Организаторы",
+	"campaignevents-event-details-organizers-view-more": "Показать больше",
+	"campaignevents-event-details-organizers-noscript": "Вам необходимо включить JavaScript, чтобы увидеть полный список организаторов.",
+	"campaignevents-userlink-suppressed-user": "Имя пользователя скрыто"
 }

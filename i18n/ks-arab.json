@@ -4,6 +4,8 @@
 			"Tajamul9"
 		]
 	},
+	"campaignevents-error-invalid-timezone": "اکھ کارگر وقجاے کٕریٚو درٕج.",
+	"campaignevents-edit-field-timezone": "ٹائم زون",
 	"campaignevents-register-confirmation-btn": "ریٚجسٹر",
 	"campaignevents-myevents-label-search": "ژھانٛڈُن",
 	"campaignevents-myevents-label-status": "اوقات",
@@ -18,5 +20,10 @@
 	"campaignevents-eventpage-dialog-chat-register": "درٕج گژِھیوٚ بَحَث گُرپ کُنٛڈٕ وُچھنہٕ کھٲترٕ.",
 	"campaignevents-eventpage-dialog-action-close": "بَنٛد",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "آ",
-	"campaignevents-eventpage-unregister-confirmation-dismiss": "نہَ"
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "نہَ",
+	"campaignevents-event-details-organizers-header": "اِنتِظٲمی",
+	"campaignevents-event-details-organizers-view-more": "بییہٚ وُچُھو",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "ڈیشبوڈ پروٗگرام تہٕ تقریٖبہٕ",
+	"campaignevents-userlink-suppressed-user": "رُکُن ناو دبوومُت",
+	"campaignevents-userlink-deleted-user": "صٲرف ییم ترٕک چھُ کوٚرمُت"
 }
