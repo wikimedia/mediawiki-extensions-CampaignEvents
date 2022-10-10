@@ -113,7 +113,7 @@ class EventDetailsParticipantsModule {
 					'infusable' => true,
 					'classes' => [ 'ext-campaignevents-details-participants-search' ]
 				] )
-			)->addClasses( [ 'ext-campaignevents-details-participants-search-div' ] );
+			)->addClasses( [ 'ext-campaignevents-details-participants-search-container' ] );
 		}
 
 		if ( $isOrganizer ) {
@@ -124,14 +124,21 @@ class EventDetailsParticipantsModule {
 		}
 
 		if ( $canRemoveParticipants && $participants ) {
-			$selectAllCheckBox = ( new CheckboxInputWidget( [
+			$selectAllCheckBoxField = new FieldLayout(
+				new CheckboxInputWidget( [
 					'name' => 'event-details-select-all-participants',
+				] ),
+				[
+					'label' => $msgFormatter->format(
+						MessageValue::new( 'campaignevents-event-details-select-all' )
+					),
+					'align' => 'inline',
+					'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox-field' ],
 					'infusable' => true,
-					'id' => 'event-details-select-all-participant-checkbox',
-				] )
+				]
 			);
 
-			$removeButton = ( new ButtonWidget( [
+			$removeButton = new ButtonWidget( [
 				'infusable' => true,
 				'framed' => false,
 				'flags' => [
@@ -143,21 +150,10 @@ class EventDetailsParticipantsModule {
 				),
 				'id' => 'ext-campaignevents-event-details-remove-participant-button',
 				'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
-			] ) );
+			] );
 
-			$items[] = ( new Tag() )->appendContent(
-				new FieldLayout(
-					$selectAllCheckBox,
-					[
-						'label' => $msgFormatter->format(
-								MessageValue::new( 'campaignevents-event-details-select-all' )
-						),
-						'align' => 'inline',
-						'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox' ],
-					]
-				),
-				$removeButton
-			)->addClasses( [ 'ext-campaignevents-details-select-all-users-div' ] );
+			$items[] = ( new Tag( 'div' ) )->appendContent( $selectAllCheckBoxField, $removeButton )
+				->addClasses( [ 'ext-campaignevents-details-user-actions-container' ] );
 		}
 
 		$usersDivContent = ( new Tag( 'div' ) )
