@@ -8,7 +8,6 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
-use LogicException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
@@ -17,6 +16,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedSectionAnchorException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MWTimestamp;
 use StatusValue;
 use Wikimedia\RequestTimeout\TimeoutException;
@@ -30,17 +31,22 @@ class EventFactory {
 	private $campaignsPageFactory;
 	/** @var CampaignsPageFormatter */
 	private $campaignsPageFormatter;
+	/** @var TrackingToolRegistry */
+	private $trackingToolRegistry;
 
 	/**
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param CampaignsPageFormatter $campaignsPageFormatter
+	 * @param TrackingToolRegistry $trackingToolRegistry
 	 */
 	public function __construct(
 		CampaignsPageFactory $campaignsPageFactory,
-		CampaignsPageFormatter $campaignsPageFormatter
+		CampaignsPageFormatter $campaignsPageFormatter,
+		TrackingToolRegistry $trackingToolRegistry
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
+		$this->trackingToolRegistry = $trackingToolRegistry;
 	}
 
 	/**
@@ -49,7 +55,7 @@ class EventFactory {
 	 * @param int|null $id
 	 * @param string $pageTitleStr
 	 * @param string|null $chatURL
-	 * @param int|null $trackingToolID
+	 * @param string|null $trackingToolUserID User identifier of a tracking tool
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
 	 * @param string $timezone Can be in any format accepted by DateTimeZone
@@ -71,7 +77,7 @@ class EventFactory {
 		?int $id,
 		string $pageTitleStr,
 		?string $chatURL,
-		?int $trackingToolID,
+		?string $trackingToolUserID,
 		?string $trackingToolEventID,
 		string $status,
 		string $timezone,
@@ -104,10 +110,9 @@ class EventFactory {
 			}
 		}
 
-		if ( $trackingToolID !== null || $trackingToolEventID !== null ) {
-			// TODO MVP Re-implement this.
-			throw new LogicException( "Should be dead code for V0" );
-		}
+		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
+		$res->merge( $trackingToolStatus );
+		$trackingToolDBID = $trackingToolStatus->getValue();
 
 		if ( !in_array( $status, EventRegistration::VALID_STATUSES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-status' );
@@ -161,7 +166,7 @@ class EventFactory {
 			$this->campaignsPageFormatter->getText( $campaignsPage ),
 			$campaignsPage,
 			$chatURL,
-			$trackingToolID,
+			$trackingToolDBID,
 			$trackingToolEventID,
 			$status,
 			$timezoneObj,
@@ -213,6 +218,31 @@ class EventFactory {
 		}
 
 		return StatusValue::newGood( $campaignsPage );
+	}
+
+	/**
+	 * @param string|null $trackingToolUserID
+	 * @param string|null $trackingToolEventID
+	 * @return StatusValue If good, has the tracking tool DB ID as value, or null if no tool was specified.
+	 */
+	private function validateTrackingTool( ?string $trackingToolUserID, ?string $trackingToolEventID ): StatusValue {
+		if ( $trackingToolUserID === null || $trackingToolEventID === null ) {
+			if ( $trackingToolUserID !== null && $trackingToolEventID === null ) {
+				return StatusValue::newFatal( 'campaignevents-error-trackingtool-without-eventid' );
+			}
+			if ( $trackingToolUserID === null && $trackingToolEventID !== null ) {
+				return StatusValue::newFatal( 'campaignevents-error-trackingtool-eventid-without-toolid' );
+			}
+			return StatusValue::newGood( null );
+		}
+
+		try {
+			return StatusValue::newGood(
+				$this->trackingToolRegistry->newFromUserIdentifier( $trackingToolUserID )->getDBID()
+			);
+		} catch ( ToolNotFoundException $_ ) {
+			return StatusValue::newFatal( 'campaignevents-error-invalid-trackingtool' );
+		}
 	}
 
 	/**

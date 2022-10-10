@@ -61,7 +61,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getPage()->getNamespace(), $actual->getPage()->getNamespace(), 'Page ns' );
 		$this->assertSame( $expected->getPage()->getDBkey(), $actual->getPage()->getDBkey(), 'Page dbkey' );
 		$this->assertSame( $expected->getPage()->getWikiId(), $actual->getPage()->getWikiId(), 'Page wiki ID' );
-		$this->assertSame( $expected->getTrackingToolID(), $actual->getTrackingToolID(), 'tracking tool ID' );
+		$this->assertSame( $expected->getTrackingToolDBID(), $actual->getTrackingToolDBID(), 'tracking tool ID' );
 		$this->assertSame(
 			$expected->getTrackingToolEventID(),
 			$actual->getTrackingToolEventID(),

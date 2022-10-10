@@ -44,7 +44,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @covers ::getName
 	 * @covers ::getPage
 	 * @covers ::getChatURL
-	 * @covers ::getTrackingToolID
+	 * @covers ::getTrackingToolDBID
 	 * @covers ::getTrackingToolEventID
 	 * @covers ::getStatus
 	 * @covers ::getTimezone
@@ -66,7 +66,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['name'], $registration->getName(), 'name' );
 		$this->assertSame( $data['page'], $registration->getPage(), 'page' );
 		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
-		$this->assertSame( $data['tracking_id'], $registration->getTrackingToolID(), 'tracking_id' );
+		$this->assertSame( $data['tracking_id'], $registration->getTrackingToolDBID(), 'tracking_id' );
 		$this->assertSame( $data['tracking_event_id'], $registration->getTrackingToolEventID(), 'tracking_event_id' );
 		$this->assertSame( $data['status'], $registration->getStatus(), 'status' );
 		$this->assertSame( $data['timezone']->getName(), $registration->getTimezone()->getName(), 'timezone' );

@@ -286,7 +286,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_page_prefixedtext' => $event->getPage()->getPrefixedText(),
 			'event_page_wiki' => Utils::getWikiIDString( $event->getPage()->getWikiId() ),
 			'event_chat_url' => $event->getChatURL() ?? '',
-			'event_tracking_tool_id' => $event->getTrackingToolID(),
+			'event_tracking_tool_id' => $event->getTrackingToolDBID(),
 			'event_tracking_tool_event_id' => $event->getTrackingToolEventID(),
 			'event_status' => self::EVENT_STATUS_MAP[$event->getStatus()],
 			'event_timezone' => $timezone->getName(),

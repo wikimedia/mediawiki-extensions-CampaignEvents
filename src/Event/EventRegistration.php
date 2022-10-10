@@ -42,7 +42,7 @@ class EventRegistration {
 	/** @var string|null */
 	private $chatURL;
 	/** @var int|null */
-	private $trackingToolID;
+	private $trackingToolDBID;
 	/** @var string|null */
 	private $trackingToolEventID;
 	/** @var string One of the STATUS_* constants */
@@ -75,7 +75,7 @@ class EventRegistration {
 	 * @param string $name
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
-	 * @param int|null $trackingToolID
+	 * @param int|null $trackingToolDBID Identifier of a tracking tool in the database
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
 	 * @param DateTimeZone $timezone
@@ -95,7 +95,7 @@ class EventRegistration {
 		string $name,
 		ICampaignsPage $page,
 		?string $chatURL,
-		?int $trackingToolID,
+		?int $trackingToolDBID,
 		?string $trackingToolEventID,
 		string $status,
 		DateTimeZone $timezone,
@@ -124,7 +124,7 @@ class EventRegistration {
 		$this->name = $name;
 		$this->page = $page;
 		$this->chatURL = $chatURL;
-		$this->trackingToolID = $trackingToolID;
+		$this->trackingToolDBID = $trackingToolDBID;
 		$this->trackingToolEventID = $trackingToolEventID;
 		$this->status = $status;
 		$this->timezone = $timezone;
@@ -171,8 +171,8 @@ class EventRegistration {
 	/**
 	 * @return int|null
 	 */
-	public function getTrackingToolID(): ?int {
-		return $this->trackingToolID;
+	public function getTrackingToolDBID(): ?int {
+		return $this->trackingToolDBID;
 	}
 
 	/**

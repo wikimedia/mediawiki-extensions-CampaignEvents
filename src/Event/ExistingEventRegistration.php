@@ -18,7 +18,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string $name
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
-	 * @param int|null $trackingToolID
+	 * @param int|null $trackingToolDBID
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
 	 * @param DateTimeZone $timezone
@@ -38,7 +38,7 @@ class ExistingEventRegistration extends EventRegistration {
 		string $name,
 		ICampaignsPage $page,
 		?string $chatURL,
-		?int $trackingToolID,
+		?int $trackingToolDBID,
 		?string $trackingToolEventID,
 		string $status,
 		DateTimeZone $timezone,

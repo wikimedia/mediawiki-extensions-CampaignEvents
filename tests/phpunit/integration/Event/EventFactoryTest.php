@@ -16,6 +16,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWikiIntegrationTestCase;
 use MWTimestamp;
 
@@ -28,6 +30,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 
 	// Feb 27, 2022
 	private const TEST_TIME = 1646000000;
+	private const VALID_TRACKING_TOOL = 'my-tracking-tool';
 	private const VALID_DEFAULT_DATA = [
 		'id' => 42,
 		'page' => 'Event:Some event page title',
@@ -66,9 +69,15 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			$page->method( 'getNamespace' )->willReturn( NS_EVENT );
 			$campaignsPageFactory->method( 'newLocalExistingPageFromString' )->willReturn( $page );
 		}
+		$trackingToolRegistry = $this->createMock( TrackingToolRegistry::class );
+		$trackingToolRegistry
+			->method( 'newFromUserIdentifier' )
+			->with( $this->logicalNot( $this->equalTo( self::VALID_TRACKING_TOOL ) ) )
+			->willThrowException( $this->createMock( ToolNotFoundException::class ) );
 		return new EventFactory(
 			$campaignsPageFactory,
-			$this->createMock( CampaignsPageFormatter::class )
+			$this->createMock( CampaignsPageFormatter::class ),
+			$trackingToolRegistry
 		);
 	}
 
@@ -78,6 +87,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
 	 * @covers ::newEvent
 	 * @covers ::validatePage
+	 * @covers ::validateTrackingTool
 	 * @covers ::validateTimezone
 	 * @covers ::validateLocalDates
 	 * @covers ::isValidURL
@@ -183,6 +193,20 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'campaignevents-error-invalid-chat-url',
 			$this->getTestDataWithDefault( [ 'chat' => 'not-an-url' ] )
 		];
+
+		yield 'Tracking tool without its event ID' => [
+			'campaignevents-error-trackingtool-without-eventid',
+			$this->getTestDataWithDefault( [ 'trackingid' => self::VALID_TRACKING_TOOL, 'trackingeventid' => null ] )
+		];
+		yield 'Tracking tool event ID without tracking tool' => [
+			'campaignevents-error-trackingtool-eventid-without-toolid',
+			$this->getTestDataWithDefault( [ 'trackingid' => null, 'trackingeventid' => 'foo' ] )
+		];
+		yield 'Invalid tracking tool ID' => [
+			'campaignevents-error-invalid-trackingtool',
+			$this->getTestDataWithDefault( [ 'trackingid' => 'invalid-tracking-tool', 'trackingeventid' => 'foo' ] )
+		];
+
 		yield 'Invalid status' => [
 			'campaignevents-error-invalid-status',
 			$this->getTestDataWithDefault( [ 'status' => 'Some invalid status' ] )
