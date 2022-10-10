@@ -51,6 +51,9 @@
 				{ formatter: { format: dateFormat } }
 			).fieldWidget;
 
+			// Dates selected through the widget should always have seconds set to 00
+			widget.formatter.defaultDate.setSeconds( 0 );
+
 			// The initial values are always UTC; make sure to clone them.
 			var utcDefaultDate = new Date( widget.formatter.defaultDate.getTime() ),
 				utcMin = new Date( widget.min.getTime() ),
