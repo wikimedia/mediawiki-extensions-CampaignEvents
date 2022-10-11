@@ -1,9 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ajiniyaz"
+			"Ajiniyaz",
+			"Ajiniyaz Nurniyazov"
 		]
 	},
 	"campaignevents-edit-field-timezone": "Waqıt zonası",
-	"campaignevents-event-details-organizers-view-more": "Kóbirek kóriw"
+	"campaignevents-event-details-organizers-header": "Shólkemlestiriwshiler",
+	"campaignevents-event-details-organizers-view-more": "Kóbirek kóriw",
+	"campaignevents-event-details-organizers-noscript": "Shólkemlestiriwshilerdiń tolıq dizimin kóriw ushın JavaScriptti qosıwıńız kerek.",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "Programmalardı hám waqıyalardı basqarıw paneli",
+	"campaignevents-userlink-suppressed-user": "Paydalanıwshı atı jasırılǵan",
+	"campaignevents-userlink-deleted-user": "Óshirilgen paydalanıwshı"
 }

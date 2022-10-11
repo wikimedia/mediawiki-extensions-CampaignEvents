@@ -9,6 +9,7 @@
 	"campaignevents-error-meeting-url-not-online": "L'URL della riunione non deve essere indicato se l'evento non è online.",
 	"campaignevents-edit-field-status-open": "Aperto",
 	"campaignevents-edit-field-status-closed": "Chiuso",
+	"campaignevents-edit-field-timezone": "Fuso orario",
 	"campaignevents-edit-field-address": "Indirizzo",
 	"campaignevents-role-creator": "{{GENDER:$1|creatore|creatrice|creatore/trice}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organizzatore|organizzatrice|organizzatore/trice}}",
@@ -39,6 +40,7 @@
 	"campaignevents-event-details-edit-button": "Modifica",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
 	"campaignevents-event-details-dates": "$1 a $4",
+	"campaignevents-event-details-organizers-header": "Organizzatori",
 	"campaignevents-event-details-register-prompt": "Devi registrarti per vedere queste informazioni",
 	"campaignevents-event-details-select-all": "Seleziona tutto",
 	"campaignevents-event-details-all-selected": "Tutti selezionati",
@@ -50,5 +52,7 @@
 	"campaignevents-event-details-event": "Dettagli evento: $1",
 	"campaignevents-event-details-not-found": "Non ci sono eventi con questo ID.",
 	"campaignevents-event-details-dates-label": "Ora di inizio e fine",
-	"campaignevents-userlink-suppressed-user": "nome utente soppresso"
+	"campaignevents-event-details-organizers-view-more": "Mostra altro",
+	"campaignevents-userlink-suppressed-user": "nome utente soppresso",
+	"campaignevents-userlink-deleted-user": "utente cancellato"
 }

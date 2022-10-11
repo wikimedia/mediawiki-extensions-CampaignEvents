@@ -3,7 +3,8 @@
 		"authors": [
 			"EdoAug",
 			"Gabriel Kielland",
-			"Jon Harald Søby"
+			"Jon Harald Søby",
+			"Telaneo"
 		]
 	},
 	"campaignevents-desc": "Tilbyr funksjoner for kampanjearrangører og -deltakere.",
@@ -12,6 +13,7 @@
 	"campaignevents-error-invalid-chat-url": "Skriv inn en gyldig chat-URL.",
 	"campaignevents-edit-field-status-open": "Åpen",
 	"campaignevents-edit-field-status-closed": "Lukket",
+	"campaignevents-edit-field-timezone": "Tidssone",
 	"campaignevents-edit-field-country": "Land",
 	"campaignevents-edit-field-address": "Adresse",
 	"campaignevents-role-creator": "{{GENDER:$1|skaper}}",
@@ -44,6 +46,7 @@
 	"campaignevents-event-details-edit-button": "Rediger",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|deltaker|deltakere}}",
 	"campaignevents-event-details-dates": "$1 til $4",
+	"campaignevents-event-details-organizers-header": "Arrangører",
 	"campaignevents-event-details-select-all": "Velg alle",
 	"campaignevents-event-details-all-selected": "Alle valgte",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|valgt|valgte}}",
@@ -54,5 +57,9 @@
 	"campaignevents-event-details-dates-label": "Start- og slutt-tid",
 	"campaignevents-event-details-remove-all-participant-notification": "Fjernet alle deltakere",
 	"campaignevents-unregister-participants-permission-denied": "Du har ikke tillatelse til å fjerne deltakere",
-	"campaignevents-event-details-search-participants-placeholder": "Søk etter deltakere"
+	"campaignevents-event-details-search-participants-placeholder": "Søk etter deltakere",
+	"campaignevents-event-details-organizers-view-more": "Vis mer",
+	"campaignevents-event-details-organizers-noscript": "Du må skru på JavaScript for å se den fullstendige listen over arrangører.",
+	"campaignevents-userlink-suppressed-user": "brukernavn dempet",
+	"campaignevents-userlink-deleted-user": "slettet bruker"
 }
