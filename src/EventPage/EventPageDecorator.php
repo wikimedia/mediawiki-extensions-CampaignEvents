@@ -295,7 +295,7 @@ class EventPageDecorator {
 		$out->addHTML( $this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus ) );
 		$out->addHTML(
 			$this->getDetailsDialogContent(
-				$registration, $msgFormatter, $language, $viewingUser, $userStatus, $centralUser )
+				$registration, $msgFormatter, $language, $viewingUser, $userStatus, $centralUser, $out )
 		);
 	}
 
@@ -428,6 +428,7 @@ class EventPageDecorator {
 	 * @param UserIdentity $viewingUser
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
 	 * @param CentralUser|null $centralUser
+	 * @param OutputPage $out
 	 * @return string
 	 */
 	private function getDetailsDialogContent(
@@ -436,7 +437,8 @@ class EventPageDecorator {
 		Language $language,
 		UserIdentity $viewingUser,
 		int $userStatus,
-		?CentralUser $centralUser
+		?CentralUser $centralUser,
+		OutputPage $out
 	): string {
 		$eventID = $registration->getID();
 
@@ -447,9 +449,11 @@ class EventPageDecorator {
 		foreach ( $partialOrganizers as $organizer ) {
 			$organizerElements[] = $this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode );
 		}
-		$organizersStr = htmlspecialchars( $msgFormatter->format(
-			MessageValue::new( 'campaignevents-eventpage-dialog-organizers' )->commaListParams( $organizerElements )
-		) );
+		// XXX We need to use OutputPage here because there's no supported way to change the format of
+		// MessageFormatterFactory...
+		$organizersStr = $out->msg( 'campaignevents-eventpage-dialog-organizers' )
+			->rawParams( $language->commaList( $organizerElements ) )
+			->escaped();
 		if ( count( $partialOrganizers ) < $organizersCount ) {
 			$organizersStr .= Html::rawElement(
 				'p',
