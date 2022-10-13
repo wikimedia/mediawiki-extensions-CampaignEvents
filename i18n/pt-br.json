@@ -45,6 +45,7 @@
 	"campaignevents-edit-field-event-status": "Status do evento",
 	"campaignevents-edit-field-status-open": "Aberto",
 	"campaignevents-edit-field-status-closed": "Fechado",
+	"campaignevents-edit-field-timezone": "Fuso horário",
 	"campaignevents-edit-field-start": "Hora de início",
 	"campaignevents-edit-field-end": "Hora de término",
 	"campaignevents-edit-field-meeting-type": "Tipo de reunião do evento",
@@ -92,6 +93,9 @@
 	"campaignevents-register-event-past": "O período de registro deste evento já terminou.",
 	"campaignevents-register-event-not-open": "Não é mais possível registrar-se neste evento.",
 	"campaignevents-register-already-participant": "Você já está registrado neste evento.",
+	"campaignevents-event-details-organizers-header": "Organizadores",
+	"campaignevents-event-details-organizers-view-more": "Ver mais",
+	"campaignevents-event-details-organizers-noscript": "Precisa de ativar o JavaScript para ver a lista completa de organizadores.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Painel de controle de programas e eventos",
 	"campaignevents-userlink-suppressed-user": "nome de usuário suprimido",
 	"campaignevents-userlink-deleted-user": "usuário excluído"

@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cakkaparla",
+			"ReyLon Mrat"
+		]
+	},
+	"campaignevents-edit-field-timezone": "အချိန်ဇုန်",
+	"campaignevents-event-details-organizers-header": "စီစဉ်ရေလူ",
+	"campaignevents-event-details-organizers-view-more": "ပိုလို့ကြေ့",
+	"campaignevents-event-details-organizers-noscript": "စုစီးထားရေအချက်လက်တိကိူပြည့်ပြည့်ဝဝကြေ့နိင်ဖို့ JavaScript ကို သင်ဖွင့်ပီးဖို့လိုအပ်ပါရေ။",
+	"campaignevents-userlink-suppressed-user": "သုံးရေလူနာမည်ကိုဖိနှိပ်ထားရေ",
+	"campaignevents-userlink-deleted-user": "အပယ်ခံထားရရေ အသုံးပြုသူ"
+}
