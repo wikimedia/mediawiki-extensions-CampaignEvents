@@ -2,13 +2,17 @@
 	"@metadata": {
 		"authors": [
 			"Cakkaparla",
-			"ReyLon Mrat"
+			"Nay Thu Rin",
+			"ReyLon Mrat",
+			"YaThaWinTha"
 		]
 	},
+	"campaignevents-error-invalid-timezone": "ရရှိနိင်နေ အချိန်ဇုန်ထဲကိုဝင်ပါ။",
 	"campaignevents-edit-field-timezone": "အချိန်ဇုန်",
-	"campaignevents-event-details-organizers-header": "စီစဉ်ရေလူ",
-	"campaignevents-event-details-organizers-view-more": "ပိုလို့ကြေ့",
-	"campaignevents-event-details-organizers-noscript": "စုစီးထားရေအချက်လက်တိကိူပြည့်ပြည့်ဝဝကြေ့နိင်ဖို့ JavaScript ကို သင်ဖွင့်ပီးဖို့လိုအပ်ပါရေ။",
-	"campaignevents-userlink-suppressed-user": "သုံးရေလူနာမည်ကိုဖိနှိပ်ထားရေ",
+	"campaignevents-event-details-organizers-header": "အစီအစဥ်လုပ်တေလူ",
+	"campaignevents-event-details-organizers-view-more": "ပိုလို့ကြေ့ရေ",
+	"campaignevents-event-details-organizers-noscript": "စုစီးထားရေအချက်အလက်တိကိူအပြည့်အစုံ​ကေ့နိုင်ဖို့ကတ်ဖို့JavaScript ကို မင်းဖွင့်ပီးဖို့လိုအပ်ပါရေ။",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "ပရိုဂရမ် & ဖြိုက်စဉ် ကြော်ငြာ",
+	"campaignevents-userlink-suppressed-user": "သုံးနီရေလူနာမည်ကိုဖိနှိပ်ထားရေ",
 	"campaignevents-userlink-deleted-user": "အပယ်ခံထားရရေ အသုံးပြုသူ"
 }

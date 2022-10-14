@@ -6,9 +6,9 @@
 		]
 	},
 	"campaignevents-edit-field-timezone": "အချိန်ဇုန်",
-	"campaignevents-event-details-organizers-header": "စီစဥ်လူ",
+	"campaignevents-event-details-organizers-header": "စေးရုံးရေလူ",
 	"campaignevents-event-details-organizers-view-more": "ပိုလို့ကြည့်",
 	"campaignevents-event-details-organizers-noscript": "စီစဉ်လူတိစာရင်း အပြည့်အစုံကို ကြည့်ဖို့အတွက် JavaScript ကို ဖွင့်ထားဖို့ လိုအပ်ပါရေ။",
-	"campaignevents-userlink-suppressed-user": "အသုံးပြုသူနာမည်ကို ဖိနှိပ်ထားပါ",
-	"campaignevents-userlink-deleted-user": "ဖျက်လိုက်ရေ အသုံးပြုသူ"
+	"campaignevents-userlink-suppressed-user": "သုံးရေလူနာမည်ကို နှိပ်လိုက်ပါ",
+	"campaignevents-userlink-deleted-user": "ဖျက်ပလိုက်စာကို အသုံးပြုရေလူ"
 }
