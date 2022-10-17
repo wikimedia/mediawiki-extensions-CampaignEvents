@@ -4,6 +4,7 @@
 			"Kareyac"
 		]
 	},
+	"campaignevents-edit-field-timezone": "Ժամային գոտի",
 	"campaignevents-role-organizer": "{{GENDER:$1| կազմակերպիչ}}",
 	"myevents": "Ձեր իրադարձությունները",
 	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",
