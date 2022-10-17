@@ -113,18 +113,10 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-status' );
 		}
 
-		$timezoneValid = true;
-		try {
-			$timezoneObj = new DateTimeZone( $timezone );
-		} catch ( TimeoutException $e ) {
-			throw $e;
-		} catch ( Exception $e ) {
-			// Invalid timezone. Thanks PHP for making error handling so convoluted here.
-			$timezoneValid = false;
-			$res->error( 'campaignevents-error-invalid-timezone' );
-		}
-
-		if ( $timezoneValid ) {
+		$timezoneStatus = $this->validateTimezone( $timezone );
+		$res->merge( $timezoneStatus );
+		$timezoneObj = $timezoneStatus->isGood() ? $timezoneStatus->getValue() : null;
+		if ( $timezoneObj ) {
 			$datesStatus = $this->validateLocalDates(
 				$validationFlags,
 				$timezoneObj,
@@ -221,6 +213,35 @@ class EventFactory {
 		}
 
 		return StatusValue::newGood( $campaignsPage );
+	}
+
+	/**
+	 * @param string $timezone
+	 * @return StatusValue If good, has the corresponding DateTimeZone object as value.
+	 */
+	private function validateTimezone( string $timezone ): StatusValue {
+		if ( preg_match( '/^[+-]/', $timezone ) ) {
+			$matches = [];
+			if ( !preg_match( '/^[+-](\d\d):(\d\d)$/', $timezone, $matches ) ) {
+				// Work around bug in PHP: strings starting with + and - do not throw an exception in PHP < 8,
+				// see https://3v4l.org/SE0oA
+				return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
+			}
+			// Work around another PHP bug: if the hours are < 100 but hours + 60 * miutes > 100*60, it will truncate
+			// the input and add a null byte that makes it unusable, see https://github.com/php/php-src/issues/9763
+			if ( $matches[1] === '99' && (int)$matches[2] > 60 ) {
+				return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
+			}
+		}
+		try {
+			return StatusValue::newGood( new DateTimeZone( $timezone ) );
+		} catch ( TimeoutException $e ) {
+			throw $e;
+		} catch ( Exception $e ) {
+			// PHP throws a generic Exception, but we don't want to catch excimer timeouts.
+			// Again, thanks PHP for making error handling so convoluted here.
+			return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
+		}
 	}
 
 	/**

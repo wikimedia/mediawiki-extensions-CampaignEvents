@@ -78,6 +78,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
 	 * @covers ::newEvent
 	 * @covers ::validatePage
+	 * @covers ::validateTimezone
 	 * @covers ::validateLocalDates
 	 * @covers ::isValidURL
 	 * @covers ::validateLocation
@@ -186,6 +187,8 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'campaignevents-error-invalid-status',
 			$this->getTestDataWithDefault( [ 'status' => 'Some invalid status' ] )
 		];
+
+		// Timezone tested more extensively in testNewEvent__invalidTimezone, too
 		yield 'Invalid timezone' => [
 			'campaignevents-error-invalid-timezone',
 			$this->getTestDataWithDefault( [ 'timezone' => 'Some invalid timezone' ] )
@@ -316,6 +319,39 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'meetingurl' => 'https://explicitly-set.example.org',
 			] )
+		];
+	}
+
+	/**
+	 * This test is specifically about validating the timezone, to make sure that there are no weird bugs like
+	 * T315692#8306011.
+	 * @param string $timezone
+	 * @covers ::newEvent
+	 * @covers ::validateTimezone
+	 * @dataProvider provideInvalidTimezones
+	 */
+	public function testNewEvent__invalidTimezone( string $timezone ) {
+		$factory = $this->getEventFactory();
+		$factoryArgs = $this->getTestDataWithDefault( [ 'timezone' => $timezone ] );
+
+		try {
+			$factory->newEvent( ...$factoryArgs );
+			$this->fail( 'Should throw an exception' );
+		} catch ( InvalidEventDataException $ex ) {
+			$statusErrorKeys = array_column( $ex->getStatus()->getErrors(), 'message' );
+			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
+			$this->assertSame( 'campaignevents-error-invalid-timezone', $statusErrorKeys[0] );
+		}
+	}
+
+	public function provideInvalidTimezones(): array {
+		return [
+			'Letters only' => [ 'SomethingInvalid' ],
+			'Letters, starting with a number' => [ '1SomethingInvalid' ],
+			'Alphanumeric with spaces' => [ 'Invalid timezone 1' ],
+			'Starting with +' => [ '+ThisIsNotValid' ],
+			'Starting with -' => [ '-ThisIsNotValid' ],
+			'Offset larger than 60*100 minutes' => [ '+99:99' ],
 		];
 	}
 
