@@ -183,20 +183,20 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventMeetingURL'] = [
 			'type' => 'url',
 			'label-message' => 'campaignevents-edit-field-meeting-url',
-			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_IN_PERSON ],
+			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_IN_PERSON ],
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
 		];
 		$formFields['EventMeetingCountry'] = [
 			'type' => 'text',
 			'label-message' => 'campaignevents-edit-field-country',
-			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
+			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingCountry() : '',
 		];
 		$formFields['EventMeetingAddress'] = [
 			'type' => 'textarea',
 			'rows' => 5,
 			'label-message' => 'campaignevents-edit-field-address',
-			'hide-if' => [ '===', 'wpEventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
+			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingAddress() : '',
 		];
 		$formFields['EventChatURL'] = [
