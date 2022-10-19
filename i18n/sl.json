@@ -4,6 +4,9 @@
 			"Eleassar"
 		]
 	},
+	"campaignevents-error-trackingtool-without-eventid": "Navedite identifikator dogodka v danem orodju za sledenje.",
+	"campaignevents-error-trackingtool-eventid-without-toolid": "Navedite identifikator orodja za sledenje",
+	"campaignevents-error-invalid-trackingtool": "Navedite veljaven identifikator orodja za sledenje",
 	"campaignevents-error-invalid-timezone": "Vnesite veljaven časovni pas.",
 	"campaignevents-edit-field-timezone": "Časovni pas",
 	"campaignevents-eventslist-delete-dialog-cancel": "Prekliči",
