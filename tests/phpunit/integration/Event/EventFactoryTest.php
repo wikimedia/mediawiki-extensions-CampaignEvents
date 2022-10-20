@@ -375,7 +375,16 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'Alphanumeric with spaces' => [ 'Invalid timezone 1' ],
 			'Starting with +' => [ '+ThisIsNotValid' ],
 			'Starting with -' => [ '-ThisIsNotValid' ],
-			'Offset larger than 60*100 minutes' => [ '+99:99' ],
+			'Positive offset with hours = 100' => [ '+100:00' ],
+			'Positive offset with hours > 100' => [ '+147:32' ],
+			'Positive offset with minutes > 100' => [ '+02:130' ],
+			'Positive offset larger than 60*100 minutes' => [ '+99:99' ],
+			'Positive offset equal to 60*100 minutes' => [ '+99:60' ],
+			'Negative offset with hours = 100' => [ '-100:00' ],
+			'Negative offset with hours > 100' => [ '-147:32' ],
+			'Negative offset with minutes > 100' => [ '-02:130' ],
+			'Negative offset larger than 60*100 minutes' => [ '-99:99' ],
+			'Negative offset equal to 60*100 minutes' => [ '-99:60' ],
 		];
 	}
 

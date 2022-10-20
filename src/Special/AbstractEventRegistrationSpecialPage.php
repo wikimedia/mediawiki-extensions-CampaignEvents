@@ -136,7 +136,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		if ( $this->event ) {
-			$defaultTimezone = $this->convertTimezoneForForm( $this->event->getTimezone() );
+			$defaultTimezone = self::convertTimezoneForForm( $this->event->getTimezone() );
 		} else {
 			$defaultTimezone = '+00:00';
 		}
@@ -211,13 +211,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	}
 
 	/**
+	 * @internal
 	 * Converts a DateTimeZone object to a string that can be used as (default) value of the timezone input.
 	 * This logic could perhaps be moved to UserTimeCorrection in the future.
 	 *
 	 * @param DateTimeZone $tz
 	 * @return string
 	 */
-	private function convertTimezoneForForm( DateTimeZone $tz ): string {
+	public static function convertTimezoneForForm( DateTimeZone $tz ): string {
 		// Timezones in PHP can be either a geographical zone ("Europe/Rome"), an offset ("+01:00"), or
 		// an abbreviation ("GMT"). PHP provides no way to tell which format a timezone object uses.
 		// DateTimeZone seems to have an internal timezone_type property but it's set magically and inaccessible.
@@ -236,7 +237,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		// Non-geographical named zone, convert to offset because the timezone field only accepts
 		// the other two types. In theory, this conversion shouldn't change the absolute time and it should
 		// not depend on DST, because abbreviations already contain information about DST (e.g., "PST" vs "PDT").
-		return UserTimeCorrection::formatTimezoneOffset( $tz->getOffset( new DateTime() ) );
+		// TODO Validate these assumptions
+
+		// Work around PHP bug: all versions of PHP up to 7.4.x, 8.0.20 and 8.1.7 do not parse DST correctly for
+		// time zone abbreviations, and PHP assumes that *all* abbreviations correspond to time zones without DST.
+		// So we can't use DateTimeZone::getOffset(), nor DateTime::format( 'P' ), and we need this awful hack.
+		// See https://bugs.php.net/bug.php?id=74671
+		$randomTime = '2022-10-20 18:00:00 ' . $timezoneName;
+		return ( new DateTime( $randomTime ) )->format( 'P' );
 	}
 
 	/**
