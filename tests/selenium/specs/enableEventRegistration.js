@@ -6,6 +6,7 @@ const assert = require( 'assert' ),
 	event = EnableEventRegistrationPage.getTestString( 'Event:e2e' );
 
 describe( 'Enable Event Registration', function () {
+
 	before( async function () {
 		await UserLoginPage.loginAdmin();
 	} );
@@ -20,5 +21,12 @@ describe( 'Enable Event Registration', function () {
 		await EnableEventRegistrationPage.enableEvent( event );
 
 		assert.deepEqual( await EnableEventRegistrationPage.generalError.getText(), 'There are problems with some of your input.' );
+	} );
+
+	it( 'can be enabled', async function () {
+		await EnableEventRegistrationPage.createEvent( event );
+		await EnableEventRegistrationPage.enableEvent( event );
+
+		assert.deepEqual( await EnableEventRegistrationPage.feedback.getText(), 'Registration is enabled. Participants can now register on the event page.' );
 	} );
 } );
