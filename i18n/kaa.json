@@ -5,6 +5,9 @@
 			"Ajiniyaz Nurniyazov"
 		]
 	},
+	"campaignevents-error-trackingtool-without-eventid": "Berilgen baqlaw quralında waqıya identifikatorın kórsetiń.",
+	"campaignevents-error-trackingtool-eventid-without-toolid": "Baqlaw quralı identifikatorın kórsetiń",
+	"campaignevents-error-invalid-trackingtool": "Jaramlı baqlaw quralı identifikatorın kiritiń",
 	"campaignevents-error-invalid-timezone": "Durıslı waqıt regionın kiritiń.",
 	"campaignevents-edit-field-timezone": "Waqıt zonası",
 	"campaignevents-event-details-organizers-header": "Shólkemlestiriwshiler",
@@ -12,5 +15,5 @@
 	"campaignevents-event-details-organizers-noscript": "Shólkemlestiriwshilerdiń tolıq dizimin kóriw ushın JavaScriptti qosıwıńız kerek.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Programmalardı hám waqıyalardı basqarıw paneli",
 	"campaignevents-userlink-suppressed-user": "Paydalanıwshı atı jasırılǵan",
-	"campaignevents-userlink-deleted-user": "Óshirilgen paydalanıwshı"
+	"campaignevents-userlink-deleted-user": "óshirilgen paydalanıwshı"
 }
