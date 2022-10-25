@@ -6,6 +6,7 @@
 	function ParticipantsManager() {
 		this.registrationID = mw.config.get( 'wgCampaignEventsEventID' );
 		this.showParticipantCheckboxes = mw.config.get( 'wgCampaignEventsShowParticipantCheckboxes' );
+		this.showPrivateParticipants = mw.config.get( 'wgCampaignEventsShowPrivateParticipants' );
 		this.lastParticipantID = mw.config.get( 'wgCampaignEventsLastParticipantID' );
 		this.curUserCentralID = mw.config.get( 'wgCampaignEventsCurUserCentralID' );
 		/* eslint-disable no-jquery/no-global-selector */
@@ -288,8 +289,7 @@
 
 		/* eslint-disable camelcase */
 		var params = {
-			// TODO Pass the actual value
-			include_private: false
+			include_private: this.showPrivateParticipants
 		};
 		if ( thisClass.curUserCentralID !== null ) {
 			params.exclude_user = thisClass.curUserCentralID;
@@ -352,6 +352,16 @@
 							$element: $link
 						} )
 					);
+
+					if ( data[ i ].private ) {
+						items.push(
+							new OO.ui.IconWidget( {
+								icon: 'lock',
+								classes: [ 'ext-campaignevents-event-details-participants-private-icon' ]
+							} )
+						);
+					}
+
 					items.push(
 						new OO.ui.Element( {
 							$element: $( '<span>' ),

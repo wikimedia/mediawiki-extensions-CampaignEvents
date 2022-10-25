@@ -12,8 +12,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
@@ -44,23 +46,28 @@ class EventDetailsParticipantsModule {
 	private $participantsStore;
 	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
+	/** @var PermissionChecker */
+	private PermissionChecker $permissionChecker;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param UserLinker $userLinker
 	 * @param ParticipantsStore $participantsStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param PermissionChecker $permissionChecker
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		UserLinker $userLinker,
 		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		PermissionChecker $permissionChecker
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->userLinker = $userLinker;
 		$this->participantsStore = $participantsStore;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**
@@ -70,7 +77,7 @@ class EventDetailsParticipantsModule {
 	 * @param ICampaignsAuthority $authority
 	 * @param bool $isOrganizer
 	 * @param OutputPage $out
-	 * @return PanelLayout
+	 * @return Tag
 	 *
 	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and
 	 * probably not worth doing.
@@ -82,7 +89,7 @@ class EventDetailsParticipantsModule {
 		ICampaignsAuthority $authority,
 		bool $isOrganizer,
 		OutputPage $out
-	): PanelLayout {
+	): Tag {
 		$eventID = $event->getID();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 
@@ -100,6 +107,7 @@ class EventDetailsParticipantsModule {
 			$curUserParticipant = null;
 		}
 
+		$showPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID );
 		if ( $curUserParticipant ) {
 			$participants = array_merge(
 				[ $curUserParticipant ],
@@ -108,13 +116,19 @@ class EventDetailsParticipantsModule {
 					self::PARTICIPANTS_LIMIT - 1,
 					null,
 					null,
-					false,
+					$showPrivateParticipants,
 					// The isset is redundant, but the IDE's unhappy without it.
 					isset( $centralUser ) ? $centralUser->getCentralID() : null
 				)
 			);
 		} else {
-			$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
+			$participants = $this->participantsStore->getEventParticipants(
+				$eventID,
+				self::PARTICIPANTS_LIMIT,
+				null,
+				null,
+				$showPrivateParticipants
+			);
 		}
 
 		if ( $participants ) {
@@ -136,18 +150,29 @@ class EventDetailsParticipantsModule {
 		$out->addJsConfigVars( [
 			// TODO This may change when we add the feature to send messages
 			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
+			'wgCampaignEventsShowPrivateParticipants' => $showPrivateParticipants,
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
 			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
 			'wgCampaignEventsCurUserCentralID' => isset( $centralUser ) ? $centralUser->getCentralID() : null,
 		] );
 
-		return new PanelLayout( [
+		$layout = new PanelLayout( [
 			'content' => $items,
 			'padded' => false,
 			'framed' => true,
 			'expanded' => false,
-			'classes' => [ 'ext-campaignevents-event-details-participants-panel' ],
 		] );
+
+		$content = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-event-details-participants-panel' ] )
+			->appendContent( $layout );
+
+		$footer = $this->getFooter( $eventID, $msgFormatter );
+		if ( $footer ) {
+			$content->appendContent( $footer );
+		}
+
+		return $content;
 	}
 
 	/**
@@ -243,7 +268,7 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param array $participants
+	 * @param Participant[] $participants
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
@@ -269,7 +294,7 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param array $participants
+	 * @param Participant[] $participants
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
@@ -302,6 +327,13 @@ class EventDetailsParticipantsModule {
 				->appendContent( $userLink )
 				->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
 
+			if ( $participant->isPrivateRegistration() ) {
+				$elements[] = new IconWidget( [
+					'icon' => 'lock',
+					'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
+				] );
+			}
+
 			$elements[] = ( new Tag( 'span' ) )->appendContent(
 				$language->userTimeAndDate(
 					$participant->getRegisteredAt(),
@@ -316,5 +348,30 @@ class EventDetailsParticipantsModule {
 			$participantRows->appendContent( $userRow );
 		}
 		return $participantRows;
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param ITextFormatter $msgFormatter
+	 * @return Tag|null
+	 */
+	private function getFooter( int $eventID, ITextFormatter $msgFormatter ): ?Tag {
+		$privateParticipantsCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );
+		if ( $privateParticipantsCount === 0 ) {
+			// Don't show anything, it would be redundant.
+			return null;
+		}
+
+		$icon = new IconWidget( [ 'icon' => 'lock' ] );
+		$text = $msgFormatter->format(
+			MessageValue::new( 'campaignevents-event-details-participants-private' )
+				->numParams( $privateParticipantsCount )
+		);
+		$textElement = ( new Tag( 'span' ) )
+			->appendContent( $text );
+		// TODO The number should be updated dynamically when (private) participants are removed, see T322275.
+		return ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-event-details-participants-footer' ] )
+			->appendContent( $icon, $textElement );
 	}
 }
