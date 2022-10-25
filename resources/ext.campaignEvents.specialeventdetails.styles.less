@@ -5,26 +5,6 @@
 	margin-bottom: 1em;
 }
 
-.ext-campaignevents-eventdetails-panels {
-	display: flex;
-	flex-wrap: wrap-reverse;
-	// Items should be top-aligned, but since the wrapping is reversed, it must
-	// be specified as flex-end. align-items:start would also work, but it's
-	// still insufficiently supported.
-	align-items: flex-end;
-	// Note that column-gap is not supported by all grade C+ browsers as of August 2022,
-	// but it's not easy to polyfill. We try to compensate with the margin set below.
-	column-gap: 5em;
-}
-
-@media ( min-width: @width-breakpoint-desktop ) {
-	.ext-campaignevents-event-details-participants-panel {
-		// Make sure there's at least a bit of space between the panels
-		// in older browser on desktop.
-		margin-right: 1.5em;
-	}
-}
-
 .ext-campaignevents-event-details-participants-panel {
 	width: 34.5em;
 	max-width: 100%;

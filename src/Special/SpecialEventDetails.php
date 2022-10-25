@@ -18,6 +18,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use OOUI\ButtonWidget;
+use OOUI\IndexLayout;
+use OOUI\TabPanelLayout;
 use OOUI\Tag;
 use SpecialPage;
 use Wikimedia\Message\IMessageFormatterFactory;
@@ -25,7 +27,10 @@ use Wikimedia\Message\MessageValue;
 
 class SpecialEventDetails extends SpecialPage {
 	public const PAGE_NAME = 'EventDetails';
-	private const MODULE_STYLES = [ 'oojs-ui.styles.icons-movement', 'ext.campaignEvents.specialeventdetails.styles' ];
+	private const MODULE_STYLES = [
+		'oojs-ui.styles.icons-movement',
+		'ext.campaignEvents.specialeventdetails.styles',
+		'oojs-ui-widgets.styles' ];
 
 	/** @var IEventLookup */
 	protected $eventLookup;
@@ -108,7 +113,7 @@ class SpecialEventDetails extends SpecialPage {
 
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 
-		$out->addModules( [ 'ext.campaignEvents.specialeventdetails' ] );
+		$out->addModules( [ 'ext.campaignEvents.specialeventdetails', 'oojs-ui-widgets' ] );
 
 		$eventID = $this->event->getID();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
@@ -145,22 +150,18 @@ class SpecialEventDetails extends SpecialPage {
 			$out->addHTML( $backLink );
 		}
 
-		$main = ( new Tag( 'div' ) )
-			->addClasses( [ 'ext-campaignevents-eventdetails-panels' ] );
-		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule();
-		$main->appendContent(
-			$eventParticipantsModule->createContent(
-				$language,
-				$this->event,
-				$this->getUser(),
-				new MWAuthorityProxy( $this->getAuthority() ),
-				$isOrganizer,
-				$out
-			)
-		);
-
+		$main = new IndexLayout( [
+			'infusable' => true,
+			'expanded' => false,
+			'framed' => false,
+			'id' => 'ext-campaignevents-eventdetails-tabs'
+		] );
 		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule();
-		$main->appendContent(
+		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule();
+		$tabs = [];
+		$tabs[] = $this->createTab(
+			'EventDetailsPanel',
+			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-event-details' ) ),
 			$eventDetailsModule->createContent(
 				$language,
 				$this->event,
@@ -170,6 +171,25 @@ class SpecialEventDetails extends SpecialPage {
 				$out
 			)
 		);
+		$tabs[] = $this->createTab(
+			'ParticipantsPanel',
+			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-participants' ) ),
+			$eventParticipantsModule->createContent(
+				$language,
+				$this->event,
+				$this->getUser(),
+				new MWAuthorityProxy( $this->getAuthority() ),
+				$isOrganizer,
+				$out )
+		);
+
+		$main->addTabPanels( $tabs );
+		$main->setTabPanel( 'EventDetailsPanel' );
+		$selectedTab = $this->getRequest()->getRawVal( 'tab' );
+		// FIXME Remove when T322267 is resolved
+		if ( in_array( $selectedTab, [ 'EventDetailsPanel','ParticipantsPanel' ], true ) ) {
+			$main->setTabPanel( $selectedTab );
+		}
 		$out->addHTML( $main );
 	}
 
@@ -182,5 +202,26 @@ class SpecialEventDetails extends SpecialPage {
 		$this->getOutput()->addHTML( Html::errorBox(
 			$this->msg( $errorMsg )->params( ...$msgParams )->parseAsBlock()
 		) );
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $label
+	 * @param Tag $content
+	 * @return TabPanelLayout
+	 */
+	private function createTab( string $name, string $label, Tag $content ): TabPanelLayout {
+		return new TabPanelLayout(
+			$name,
+			[
+				'id' => $name,
+				'label' => $label,
+				'expanded' => false,
+				'tabItemConfig' => [
+					'href' => $this->getFullTitle()->getLinkURL( [ 'tab' => $name ] )
+				],
+				'content' => $content
+			]
+		);
 	}
 }
