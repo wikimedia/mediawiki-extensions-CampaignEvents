@@ -8,8 +8,10 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
@@ -23,6 +25,8 @@ class ListParticipantsHandler extends SimpleHandler {
 	// TODO: Implement proper pagination (T305389)
 	private const RES_LIMIT = 20;
 
+	/** @var PermissionChecker */
+	private PermissionChecker $permissionChecker;
 	/** @var IEventLookup */
 	private $eventLookup;
 	/** @var ParticipantsStore */
@@ -33,17 +37,20 @@ class ListParticipantsHandler extends SimpleHandler {
 	private $userLinker;
 
 	/**
+	 * @param PermissionChecker $permissionChecker
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserLinker $userLinker
 	 */
 	public function __construct(
+		PermissionChecker $permissionChecker,
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserLinker $userLinker
 	) {
+		$this->permissionChecker = $permissionChecker;
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->centralUserLookup = $centralUserLookup;
@@ -65,11 +72,25 @@ class ListParticipantsHandler extends SimpleHandler {
 				400
 			);
 		}
+
+		$includePrivate = $params['include_private'];
+		$authority = $this->getAuthority();
+		if (
+			$includePrivate &&
+			!$this->permissionChecker->userCanViewPrivateParticipants( new MWAuthorityProxy( $authority ), $eventID )
+		) {
+			throw new LocalizedHttpException(
+				new MessageValue( 'campaignevents-rest-list-participants-cannot-see-private' ),
+				403
+			);
+		}
+
 		$participants = $this->participantsStore->getEventParticipants(
 			$eventID,
 			self::RES_LIMIT,
 			$params['last_participant_id'],
-			$usernameFilter
+			$usernameFilter,
+			$includePrivate
 		);
 
 		// TODO: remove global when T269492 is resolved
@@ -91,8 +112,9 @@ class ListParticipantsHandler extends SimpleHandler {
 				'user_registered_at' => wfTimestamp( TS_MW, $participant->getRegisteredAt() ),
 				'user_registered_at_formatted' => $language->userTimeAndDate(
 					$participant->getRegisteredAt(),
-					$this->getAuthority()->getUser()
-				)
+					$authority->getUser()
+				),
+				'private' => $participant->isPrivateRegistration(),
 			];
 		}
 		return $this->getResponseFactory()->createJson( $respVal );
@@ -105,6 +127,11 @@ class ListParticipantsHandler extends SimpleHandler {
 		return array_merge(
 			$this->getIDParamSetting(),
 			[
+				'include_private' => [
+					static::PARAM_SOURCE => 'query',
+					ParamValidator::PARAM_REQUIRED => true,
+					ParamValidator::PARAM_TYPE => 'boolean'
+				],
 				'last_participant_id' => [
 					static::PARAM_SOURCE => 'query',
 					ParamValidator::PARAM_TYPE => 'integer'
@@ -112,7 +139,7 @@ class ListParticipantsHandler extends SimpleHandler {
 				'username_filter' => [
 					static::PARAM_SOURCE => 'query',
 					ParamValidator::PARAM_TYPE => 'string'
-				]
+				],
 			]
 		);
 	}

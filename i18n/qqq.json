@@ -228,6 +228,7 @@
 	"campaignevents-event-details-organizers-view-more": "Label of a link on [[Special:EventDetails]] that, if clicked, will load more organizers to display.",
 	"campaignevents-event-details-organizers-noscript": "Message used on [[Special:EventDetails]] to let the user know that they have to enable JavaScript in order to be able to load and view more participants.",
 	"campaignevents-rest-list-participants-empty-filter": "Error message used by the API endpoint for listing participants when a username filter was provided but it's the empty string.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Error message used by the API endpoint for listing participants when the client passed the option to include privately registered participants, but the user is not allowed to see them.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Display name of the [[:m:Programs & Events Dashboard]]",
 	"campaignevents-userlink-suppressed-user": "Message used as a placeholder when a username cannot be shown because the user account was blocked and suppressed. The intention is similar to {{msg-mw|Rev-deleted-user}}.",
 	"campaignevents-userlink-deleted-user": "Message used as a placeholder when a username cannot be shown because the user account was deleted (for instance, via CentralAuth)."

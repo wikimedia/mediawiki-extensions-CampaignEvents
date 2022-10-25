@@ -225,6 +225,7 @@
 	"campaignevents-event-details-organizers-view-more": "View more",
 	"campaignevents-event-details-organizers-noscript": "You need to enable JavaScript in order to see the full list of organizers.",
 	"campaignevents-rest-list-participants-empty-filter": "The username filter, if specified, must be a non-empty string.",
+	"campaignevents-rest-list-participants-cannot-see-private": "You are not authorized to view participants who registered privately for this event.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Programs & Events Dashboard",
 	"campaignevents-userlink-suppressed-user": "username suppressed",
 	"campaignevents-userlink-deleted-user": "deleted user"
