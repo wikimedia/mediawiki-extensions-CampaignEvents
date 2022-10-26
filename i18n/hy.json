@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Armenoid",
 			"Kareyac"
 		]
 	},
-	"campaignevents-edit-field-timezone": "Ժամային գոտի",
+	"campaignevents-edit-field-timezone": "Ժամագոտի",
 	"campaignevents-role-organizer": "{{GENDER:$1| կազմակերպիչ}}",
 	"myevents": "Ձեր իրադարձությունները",
 	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",

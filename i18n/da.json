@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Saederup92"
+			"Saederup92",
+			"Sarrus"
 		]
 	},
 	"campaignevents-error-invalid-timezone": "Indtast en gyldig tidszone.",
-	"campaignevents-error-empty-start": "Vælg et starttidspunkt",
+	"campaignevents-error-empty-start": "Vælg et starttidspunkt.",
 	"campaignevents-error-empty-end": "Indtast et sluttidspunkt",
 	"campaignevents-edit-field-timezone": "Tidszone",
 	"campaignevents-edit-field-start": "Starttidspunkt",
