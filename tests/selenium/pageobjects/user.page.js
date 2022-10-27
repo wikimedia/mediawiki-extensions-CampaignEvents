@@ -8,6 +8,7 @@ class User extends Page {
 
 	get registerForEvent() { return $( '=Register for event' ); }
 	get confirmRegistration() { return $( '=Register' ); }
+	get togglePrivate() { return $( '.oo-ui-toggleSwitchWidget' ); }
 
 	async createAccount( userName ) {
 		const bot = await Api.bot();
@@ -22,8 +23,9 @@ class User extends Page {
 	 * @param {string} userName user that will register for the event
 	 * @param {string} event a namespaced string beginning with 'Event:'
 	 * example: 'Event:Test'
+	 * @param {boolean} isPrivate is user registering privately for the event
 	 */
-	async register( userName, event ) {
+	async register( userName, event, isPrivate = false ) {
 		await LoginPage.login( userName, password );
 		this.openTitle( event );
 
@@ -35,6 +37,9 @@ class User extends Page {
 			}
 		);
 		await this.registerForEvent.click();
+		if ( isPrivate ) {
+			await this.togglePrivate.click();
+		}
 		await this.confirmRegistration.click();
 	}
 }

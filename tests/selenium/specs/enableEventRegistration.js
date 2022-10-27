@@ -40,4 +40,11 @@ describe( 'Enable Event Registration', function () {
 		await expect( await EnableEventRegistrationPage.successfulRegistration ).toBeDisplayed();
 	} );
 
+	it( 'can have one user register privately', async function () {
+		await EnableEventRegistrationPage.createEvent( event );
+		await EnableEventRegistrationPage.enableEvent( event );
+		await UserPage.createAccount( 'Private' + userName );
+		await UserPage.register( 'Private' + userName, event, true );
+		await expect( await EnableEventRegistrationPage.successfulRegistration ).toBeDisplayed();
+	} );
 } );
