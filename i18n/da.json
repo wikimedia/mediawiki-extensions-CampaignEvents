@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saederup92",
+			"Sarrus"
+		]
+	},
+	"campaignevents-error-empty-start": "Vælg et starttidspunkt.",
+	"campaignevents-error-empty-end": "Indtast et sluttidspunkt",
+	"campaignevents-edit-field-start": "Starttidspunkt",
+	"campaignevents-edit-field-end": "Sluttidspunkt",
+	"campaignevents-edit-field-country": "Land",
+	"campaignevents-edit-field-address": "Adresse",
+	"campaignevents-myevents-label-search": "Søg",
+	"campaignevents-myevents-label-status": "Status",
+	"campaignevents-myevents-field-status-any": "Enhver",
+	"campaignevents-eventslist-column-date": "Dato",
+	"campaignevents-eventslist-delete-dialog-title": "Slet <bdi>$1</bdi>",
+	"campaignevents-eventslist-delete-dialog-delete": "Slet",
+	"campaignevents-delete-submit-btn": "Slet",
+	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|deltager|deltagere}}",
+	"campaignevents-eventpage-header-participants-label": "Antal deltagere",
+	"campaignevents-eventpage-header-attending": "Du deltager!",
+	"campaignevents-eventpage-dialog-dates": "$1 til $4",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Ja",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Nej",
+	"campaignevents-event-details-dates": "$1 til $4",
+	"campaignevents-event-details-select-all": "Vælg alle"
+}
