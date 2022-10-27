@@ -22,6 +22,7 @@ use OOUI\SearchInputWidget;
 use OOUI\Tag;
 use OutputPage;
 use Wikimedia\Message\IMessageFormatterFactory;
+use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 
 class EventDetailsParticipantsModule {
@@ -78,13 +79,63 @@ class EventDetailsParticipantsModule {
 		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 
 		$items = [];
-		$items[] = ( new Tag() )->appendContent(
+		$items[] = $this->getHeader( $msgFormatter, $totalParticipants );
+
+		$items[] = $this->getEmptyStateElement( $totalParticipants, $msgFormatter );
+
+		$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
+		if ( $participants ) {
+			$items[] = $this->getSearchBar( $msgFormatter );
+		}
+
+		$canRemoveParticipants = false;
+		if ( $isOrganizer ) {
+			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
+				UnregisterParticipantCommand::CAN_UNREGISTER;
+		}
+
+		if ( $canRemoveParticipants && $participants ) {
+			$items[] = $this->getListControls( $msgFormatter );
+		}
+
+		$items[] = $this->getParticipantsContainer( $participants, $canRemoveParticipants, $language, $viewingUser );
+
+		$out->addJsConfigVars( [
+			// TODO This may change when we add the feature to send messages
+			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
+			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
+			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
+		] );
+
+		return new PanelLayout( [
+			'content' => $items,
+			'padded' => false,
+			'framed' => true,
+			'expanded' => false,
+			'classes' => [ 'ext-campaignevents-event-details-participants-panel' ],
+		] );
+	}
+
+	/**
+	 * @param ITextFormatter $msgFormatter
+	 * @param int $totalParticipants
+	 * @return Tag
+	 */
+	private function getHeader( ITextFormatter $msgFormatter, int $totalParticipants ): Tag {
+		return ( new Tag() )->appendContent(
 			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-header-participants' )
 					->numParams( $totalParticipants )
 			)
 		)->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
+	}
 
+	/**
+	 * @param int $totalParticipants
+	 * @param ITextFormatter $msgFormatter
+	 * @return Tag
+	 */
+	private function getEmptyStateElement( int $totalParticipants, ITextFormatter $msgFormatter ): Tag {
 		$noParticipantsIcon = new IconWidget( [
 			'icon' => 'userGroup',
 			'classes' => [ 'ext-campaignevents-event-details-no-participants-icon' ]
@@ -94,7 +145,7 @@ class EventDetailsParticipantsModule {
 		if ( $totalParticipants > 0 ) {
 			$noParticipantsClasses[] = 'ext-campaignevents-details-hide-element';
 		}
-		$items[] = ( new Tag() )->appendContent(
+		return ( new Tag() )->appendContent(
 			$noParticipantsIcon,
 			( new Tag() )->appendContent(
 				$msgFormatter->format(
@@ -102,68 +153,102 @@ class EventDetailsParticipantsModule {
 				)
 			)->addClasses( [ 'ext-campaignevents-details-no-participants-description' ] )
 		)->addClasses( $noParticipantsClasses );
+	}
 
-		$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
-		if ( $participants ) {
-			$items[] = ( new Tag() )->appendContent(
-				new SearchInputWidget( [
-					'placeholder' => $msgFormatter->format(
-						MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
-					),
-					'infusable' => true,
-					'classes' => [ 'ext-campaignevents-details-participants-search' ]
-				] )
-			)->addClasses( [ 'ext-campaignevents-details-participants-search-container' ] );
-		}
-
-		if ( $isOrganizer ) {
-			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
-				UnregisterParticipantCommand::CAN_UNREGISTER;
-		} else {
-			$canRemoveParticipants = false;
-		}
-
-		if ( $canRemoveParticipants && $participants ) {
-			$selectAllCheckBoxField = new FieldLayout(
-				new CheckboxInputWidget( [
-					'name' => 'event-details-select-all-participants',
-				] ),
-				[
-					'label' => $msgFormatter->format(
-						MessageValue::new( 'campaignevents-event-details-select-all' )
-					),
-					'align' => 'inline',
-					'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox-field' ],
-					'infusable' => true,
-				]
-			);
-
-			$removeButton = new ButtonWidget( [
-				'infusable' => true,
-				'framed' => false,
-				'flags' => [
-					'destructive'
-				],
-				'icon' => 'trash',
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
+	/**
+	 * @param ITextFormatter $msgFormatter
+	 * @return Tag
+	 */
+	private function getSearchBar( ITextFormatter $msgFormatter ): Tag {
+		return ( new Tag( 'div' ) )->appendContent(
+			new SearchInputWidget( [
+				'placeholder' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
 				),
-				'id' => 'ext-campaignevents-event-details-remove-participant-button',
-				'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
-			] );
+				'infusable' => true,
+				'classes' => [ 'ext-campaignevents-details-participants-search' ]
+			] )
+		)->addClasses( [ 'ext-campaignevents-details-participants-search-container' ] );
+	}
 
-			$items[] = ( new Tag( 'div' ) )->appendContent( $selectAllCheckBoxField, $removeButton )
-				->addClasses( [ 'ext-campaignevents-details-user-actions-container' ] );
-		}
+	/**
+	 * @param ITextFormatter $msgFormatter
+	 * @return Tag
+	 */
+	private function getListControls( ITextFormatter $msgFormatter ): Tag {
+		$selectAllCheckBoxField = new FieldLayout(
+			new CheckboxInputWidget( [
+				'name' => 'event-details-select-all-participants',
+			] ),
+			[
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-select-all' )
+				),
+				'align' => 'inline',
+				'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox-field' ],
+				'infusable' => true,
+			]
+		);
 
-		$usersDivContent = ( new Tag( 'div' ) )
-				->addClasses( [ 'ext-campaignevents-details-users-container' ] );
+		$removeButton = new ButtonWidget( [
+			'infusable' => true,
+			'framed' => false,
+			'flags' => [
+				'destructive'
+			],
+			'icon' => 'trash',
+			'label' => $msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
+			),
+			'id' => 'ext-campaignevents-event-details-remove-participant-button',
+			'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
+		] );
+
+		return ( new Tag( 'div' ) )->appendContent( $selectAllCheckBoxField, $removeButton )
+			->addClasses( [ 'ext-campaignevents-details-user-actions-container' ] );
+	}
+
+	/**
+	 * @param array $participants
+	 * @param bool $canRemoveParticipants
+	 * @param Language $language
+	 * @param UserIdentity $viewingUser
+	 * @return Tag
+	 */
+	private function getParticipantsContainer(
+		array $participants,
+		bool $canRemoveParticipants,
+		Language $language,
+		UserIdentity $viewingUser
+	): Tag {
+		$participantsContainer = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-details-users-container' ] );
 		if ( !$participants ) {
-			$usersDivContent->addClasses( [ 'ext-campaignevents-details-hide-element' ] );
+			$participantsContainer->addClasses( [ 'ext-campaignevents-details-hide-element' ] );
 		}
 
-		$usersDivRows = ( new Tag( 'div' ) )
-				->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
+		$participantRows = $this->getParticipantRows( $participants, $canRemoveParticipants, $language, $viewingUser );
+
+		$participantsContainer->appendContent( $participantRows );
+
+		return $participantsContainer;
+	}
+
+	/**
+	 * @param array $participants
+	 * @param bool $canRemoveParticipants
+	 * @param Language $language
+	 * @param UserIdentity $viewingUser
+	 * @return Tag
+	 */
+	private function getParticipantRows(
+		array $participants,
+		bool $canRemoveParticipants,
+		Language $language,
+		UserIdentity $viewingUser
+	): Tag {
+		$participantRows = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
 		foreach ( $participants as $participant ) {
 			try {
 				$userLink = new HtmlSnippet( $this->userLinker->generateUserLink( $participant->getUser() ) );
@@ -194,26 +279,8 @@ class EventDetailsParticipantsModule {
 				->appendContent( ...$elements )
 				->addClasses( [ 'ext-campaignevents-details-user-row' ] );
 
-			$usersDivRows->appendContent( $userRow );
+			$participantRows->appendContent( $userRow );
 		}
-
-		$usersDivContent->appendContent( $usersDivRows );
-
-		$items[] = $usersDivContent;
-
-		$out->addJsConfigVars( [
-			// TODO This may change when we add the feature to send messages
-			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
-			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
-			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
-		] );
-
-		return new PanelLayout( [
-			'content' => $items,
-			'padded' => false,
-			'framed' => true,
-			'expanded' => false,
-			'classes' => [ 'ext-campaignevents-event-details-participants-panel' ],
-		] );
+		return $participantRows;
 	}
 }
