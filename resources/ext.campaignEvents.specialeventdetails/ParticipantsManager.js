@@ -255,9 +255,10 @@
 					)
 				);
 				if ( thisClass.participantsTotal === 0 ) {
-					thisClass.$noParticipantsStateElement.show();
+					thisClass.$noParticipantsStateElement.removeClass( 'ext-campaignevents-details-hide-element' );
 					thisClass.$searchParticipantsContainer.hide();
 					thisClass.$userActionsContainer.hide();
+					thisClass.$usersContainer.hide();
 				}
 				thisClass.scrollDownObserver.reset();
 				thisClass.selectedParticipantIDs = [];
