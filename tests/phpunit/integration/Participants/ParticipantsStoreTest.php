@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Participants;
 
 use Generator;
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
@@ -362,7 +363,37 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	public function provideParticipantsToRemoveFromEvent(): Generator {
 		yield 'Remove two participants' => [ 2, [ new CentralUser( 101 ), new CentralUser( 104 ) ], 2 ];
 		yield 'Remove all participants' => [ 3, null, 3 ];
-		yield 'Empty user ids' => [ 3, [], 0 ];
 		yield 'Remove one participant' => [ 1, [ new CentralUser( 101 ) ], 1 ];
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param array|null $userIDs
+	 * @param bool $invertUsers
+	 * @param string $errorMessage
+	 * @covers ::removeParticipantsFromEvent
+	 * @dataProvider provideParticipantsToRemoveFromEvent__error
+	 */
+	public function testRemoveParticipantsFromEvent__error(
+		int $eventID,
+		?array $userIDs,
+		bool $invertUsers,
+		string $errorMessage
+	) {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( $errorMessage );
+		$participantStore = $this->getStore();
+		$participantStore->removeParticipantsFromEvent( $eventID, $userIDs, $invertUsers );
+	}
+
+	public function provideParticipantsToRemoveFromEvent__error(): Generator {
+		yield 'Empty user ids' => [
+			3, [], false,
+			'The users must be an array of user ids, or null (to remove all users)'
+		];
+		yield 'User ids null and invert users true' => [
+			3, null, true,
+			'The users must be an array of user ids if invertUsers is true'
+		];
 	}
 }

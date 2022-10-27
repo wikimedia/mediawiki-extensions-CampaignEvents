@@ -160,15 +160,18 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
 	 * @param int $expectedModified
+	 * @param array $reqData
 	 * @dataProvider provideRequestDataSuccessful
 	 */
 	public function testRun__successful(
 		UnregisterParticipantCommand $unregisterParticipantCommand,
-		int $expectedModified
+		int $expectedModified,
+		array $reqData
 	) {
 		$handler = $this->newHandler( null, $unregisterParticipantCommand );
-		$reqData = new RequestData( $this->getRequestData() );
+		$reqData = new RequestData( $reqData );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, $reqData );
+
 		$this->assertArrayHasKey( 'modified', $respData );
 		$this->assertSame( $expectedModified, $respData['modified'] );
 	}
@@ -176,10 +179,30 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 	public function provideRequestDataSuccessful(): Generator {
 		$modifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
 		$modifiedCommand->method( 'removeParticipantsIfAllowed' )->willReturn( StatusValue::newGood( 1 ) );
-		yield 'Some Modified' => [ $modifiedCommand, 1 ];
+		yield 'Some Modified' => [ $modifiedCommand, 1, $this->getRequestData() ];
+
+		$invertReqData = $this->getRequestData();
+		$invertReqData[ 'bodyContents' ] = json_encode(
+			[
+				'user_ids' => [ 1 ],
+				'invert_users' => true,
+			]
+		);
+		yield 'Some Modified and invert_users true' => [ $modifiedCommand, 1, $invertReqData ];
 
 		$notModifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
 		$notModifiedCommand->method( 'removeParticipantsIfAllowed' )->willReturn( StatusValue::newGood( 0 ) );
-		yield 'None modified' => [ $notModifiedCommand, 0 ];
+		yield 'None modified' => [ $notModifiedCommand, 0, $this->getRequestData() ];
+
+		$allModifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
+		$allModifiedCommand->method( 'removeParticipantsIfAllowed' )->willReturn( StatusValue::newGood( 2 ) );
+		$invertReqData = $this->getRequestData();
+		$invertReqData[ 'bodyContents' ] = json_encode(
+			[
+				'user_ids' => null,
+				'invert_users' => false,
+			]
+		);
+		yield 'All mofified' => [ $allModifiedCommand, 2, $invertReqData ];
 	}
 }

@@ -216,7 +216,8 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand( null, $permChecker )->removeParticipantsIfAllowed(
 			$this->getValidRegistration(),
 			[],
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			UnregisterParticipantCommand::INVERT_USERS
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -234,7 +235,8 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand()->removeParticipantsIfAllowed(
 			$deletedRegistration,
 			[],
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			UnregisterParticipantCommand::INVERT_USERS
 		);
 
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
@@ -243,19 +245,34 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @param bool $invertUsers
 	 * @covers ::removeParticipantsIfAllowed
 	 * @covers ::authorizeRemoveParticipants
 	 * @covers ::removeParticipantsUnsafe
+	 * @dataProvider provideDoRemoveParticipantsIfAllowed
 	 */
-	public function testDoRemoveParticipantsIfAllowed__success() {
+	public function testDoRemoveParticipantsIfAllowed__success( bool $invertUsers ) {
 		$status = $this->getCommand()->removeParticipantsIfAllowed(
 			$this->getValidRegistration(),
 			[],
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			$invertUsers
 		);
 
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusGood( $status );
 		$this->assertStatusOK( $status );
+	}
+
+	/**
+	 * @return Generator
+	 */
+	public function provideDoRemoveParticipantsIfAllowed(): Generator {
+		yield 'Remove participants based on selected participants IDs' => [
+			UnregisterParticipantCommand::DO_NOT_INVERT_USERS
+		];
+		yield 'Remove participants based on unselected participants IDs' => [
+			UnregisterParticipantCommand::INVERT_USERS
+		];
 	}
 }
