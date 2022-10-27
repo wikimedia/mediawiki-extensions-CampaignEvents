@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -23,6 +24,8 @@ class FrontendModulesFactory {
 	private $pageURLResolver;
 	/** @var UserLinker */
 	private $userLinker;
+	/** @var CampaignsCentralUserLookup */
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -30,19 +33,22 @@ class FrontendModulesFactory {
 	 * @param ParticipantsStore $participantsStore
 	 * @param PageURLResolver $pageURLResolver
 	 * @param UserLinker $userLinker
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		OrganizersStore $organizersStore,
 		ParticipantsStore $participantsStore,
 		PageURLResolver $pageURLResolver,
-		UserLinker $userLinker
+		UserLinker $userLinker,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
 		$this->participantsStore = $participantsStore;
 		$this->pageURLResolver = $pageURLResolver;
 		$this->userLinker = $userLinker;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	public function newEventDetailsModule(): EventDetailsModule {
@@ -58,7 +64,8 @@ class FrontendModulesFactory {
 		return new EventDetailsParticipantsModule(
 			$this->messageFormatterFactory,
 			$this->userLinker,
-			$this->participantsStore
+			$this->participantsStore,
+			$this->centralUserLookup
 		);
 	}
 }

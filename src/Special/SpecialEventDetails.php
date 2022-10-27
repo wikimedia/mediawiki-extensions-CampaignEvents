@@ -153,6 +153,7 @@ class SpecialEventDetails extends SpecialPage {
 				$language,
 				$this->event,
 				$this->getUser(),
+				new MWAuthorityProxy( $this->getAuthority() ),
 				$isOrganizer,
 				$out
 			)

@@ -7,6 +7,7 @@
 		this.registrationID = mw.config.get( 'wgCampaignEventsEventID' );
 		this.showParticipantCheckboxes = mw.config.get( 'wgCampaignEventsShowParticipantCheckboxes' );
 		this.lastParticipantID = mw.config.get( 'wgCampaignEventsLastParticipantID' );
+		this.curUserCentralID = mw.config.get( 'wgCampaignEventsCurUserCentralID' );
 		/* eslint-disable no-jquery/no-global-selector */
 		var $selectAllParticipantsField = $(
 			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
@@ -285,19 +286,21 @@
 	ParticipantsManager.prototype.loadMoreParticipants = function () {
 		var thisClass = this;
 
+		/* eslint-disable camelcase */
 		var params = {
 			// TODO Pass the actual value
-			// eslint-disable-next-line camelcase
 			include_private: false
 		};
+		if ( thisClass.curUserCentralID !== null ) {
+			params.exclude_user = thisClass.curUserCentralID;
+		}
 		if ( thisClass.lastParticipantID !== null ) {
-			// eslint-disable-next-line camelcase
 			params.last_participant_id = thisClass.lastParticipantID;
 		}
 		if ( thisClass.usernameFilter !== null ) {
-			// eslint-disable-next-line camelcase
 			params.username_filter = thisClass.usernameFilter;
 		}
+		/* eslint-enable camelcase */
 
 		new mw.Rest().get(
 			'/campaignevents/v0/event_registration/' + thisClass.registrationID + '/participants',

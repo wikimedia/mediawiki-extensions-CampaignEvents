@@ -90,7 +90,8 @@ class ListParticipantsHandler extends SimpleHandler {
 			self::RES_LIMIT,
 			$params['last_participant_id'],
 			$usernameFilter,
-			$includePrivate
+			$includePrivate,
+			$params['exclude_user']
 		);
 
 		// TODO: remove global when T269492 is resolved
@@ -139,6 +140,10 @@ class ListParticipantsHandler extends SimpleHandler {
 				'username_filter' => [
 					static::PARAM_SOURCE => 'query',
 					ParamValidator::PARAM_TYPE => 'string'
+				],
+				'exclude_user' => [
+					static::PARAM_SOURCE => 'query',
+					ParamValidator::PARAM_TYPE => 'integer'
 				],
 			]
 		);
