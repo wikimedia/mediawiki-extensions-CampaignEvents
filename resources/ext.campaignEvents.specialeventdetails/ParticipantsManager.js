@@ -119,8 +119,10 @@
 					// Reset last participant so we can list them from the start if the
 					// filter changes
 					thisClass.lastParticipantID = null;
-					// Update the selection label
-					thisClass.onDeselectAll();
+					if ( thisClass.showParticipantCheckboxes ) {
+						// Update the selection label
+						thisClass.onDeselectAll();
+					}
 					thisClass.loadMoreParticipants();
 				}, 500 )
 			);
