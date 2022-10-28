@@ -5,5 +5,8 @@
 		]
 	},
 	"campaignevents-eventslist-delete-dialog-cancel": "Jooskâ",
+	"campaignevents-eventslist-delete-dialog-delete": "Siho",
+	"campaignevents-delete-submit-btn": "Siho",
+	"campaignevents-event-details-remove-participant-remove-btn": "Siho",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Jooskâ"
 }

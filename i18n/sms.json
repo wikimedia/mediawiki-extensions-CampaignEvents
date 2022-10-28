@@ -12,5 +12,6 @@
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
+	"campaignevents-event-details-remove-participant-remove-btn": "Jaukkâd",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Jõõsk"
 }
