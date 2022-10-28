@@ -25,9 +25,18 @@
 		var editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID ),
 			deleteHref = mw.util.getUrl( 'Special:DeleteEventRegistration/' + this.eventID );
 
+		// Note: all options are actually <a> elements, so that it's possible to middle- or
+		// right-click them and copy the link or open it in a new tab.
+		var getLinkWithLeftClickDisabled = function ( href ) {
+			return $( '<a>' ).attr( 'href', href ).on( 'click', function ( e ) {
+				if ( e.button === 0 ) {
+					return false;
+				}
+			} );
+		};
 		this.openAndCloseOptionIndex = 2;
 		this.closeRegistrationOption = new OO.ui.MenuOptionWidget( {
-			$element: $( '<a>' ).attr( 'href', editHref ),
+			$element: getLinkWithLeftClickDisabled( editHref ),
 			data: {
 				name: 'close',
 				href: editHref
@@ -35,7 +44,7 @@
 			label: mw.msg( 'campaignevents-eventslist-menu-close' )
 		} );
 		this.openRegistrationOption = new OO.ui.MenuOptionWidget( {
-			$element: $( '<a>' ).attr( 'href', editHref ),
+			$element: getLinkWithLeftClickDisabled( editHref ),
 			data: {
 				name: 'open',
 				href: editHref
@@ -54,7 +63,7 @@
 						// right-click, middle-click, see preview etc. We still need an event
 						// listener for left-clicks.
 						new OO.ui.MenuOptionWidget( {
-							$element: $( '<a>' ).attr( 'href', editHref ),
+							$element: getLinkWithLeftClickDisabled( editHref ),
 							data: {
 								name: 'edit',
 								href: editHref
@@ -62,7 +71,7 @@
 							label: mw.msg( 'campaignevents-eventslist-menu-edit' )
 						} ),
 						new OO.ui.MenuOptionWidget( {
-							$element: $( '<a>' ).attr( 'href', config.eventPageURL ),
+							$element: getLinkWithLeftClickDisabled( config.eventPageURL ),
 							data: {
 								name: 'eventpage',
 								href: config.eventPageURL
@@ -71,7 +80,7 @@
 						} ),
 						this.isClosed ? this.openRegistrationOption : this.closeRegistrationOption,
 						new OO.ui.MenuOptionWidget( {
-							$element: $( '<a>' ).attr( 'href', deleteHref ),
+							$element: getLinkWithLeftClickDisabled( deleteHref ),
 							data: {
 								name: 'delete',
 								href: deleteHref
