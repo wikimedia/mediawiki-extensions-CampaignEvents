@@ -77,7 +77,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanRegisterForEvents' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->registerIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			RegisterParticipantCommand::REGISTRATION_PUBLIC
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -98,7 +99,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	) {
 		$status = $this->getCommand()->registerIfAllowed(
 			$registration,
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			RegisterParticipantCommand::REGISTRATION_PUBLIC
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -123,6 +125,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param ParticipantsStore $store
+	 * @param bool $isPrivate
 	 * @param bool $expectedModified
 	 * @covers ::registerIfAllowed
 	 * @covers ::authorizeRegistration
@@ -132,11 +135,15 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testRegisterIfAllowed__successful(
 		ParticipantsStore $store,
+		bool $isPrivate,
 		bool $expectedModified
 	) {
 		$status = $this->getCommand( $store )->registerIfAllowed(
 			$this->getValidRegistration(),
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			$isPrivate ?
+				RegisterParticipantCommand::REGISTRATION_PRIVATE :
+				RegisterParticipantCommand::REGISTRATION_PUBLIC
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );
@@ -144,20 +151,48 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param ParticipantsStore $store
+	 * @param bool $isPrivate
 	 * @param bool $expectedModified
 	 * @covers ::registerUnsafe
 	 * @dataProvider provideStoreAndModified
 	 */
 	public function testRegisterUnsafe__successful(
 		ParticipantsStore $store,
+		bool $isPrivate,
 		bool $expectedModified
 	) {
 		$status = $this->getCommand( $store )->registerUnsafe(
 			$this->getValidRegistration(),
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			$isPrivate ?
+				RegisterParticipantCommand::REGISTRATION_PRIVATE :
+				RegisterParticipantCommand::REGISTRATION_PUBLIC
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );
+	}
+
+	public function provideStoreAndModified(): Generator {
+		foreach ( [ true, false ] as $isPrivate ) {
+			$testDescription = $isPrivate ?
+				RegisterParticipantCommand::REGISTRATION_PRIVATE :
+				RegisterParticipantCommand::REGISTRATION_PUBLIC;
+			$modifiedStore = $this->createMock( ParticipantsStore::class );
+			$modifiedStore->method( 'addParticipantToEvent' )->willReturn( true );
+			$modifiedStore->expects(
+				$this->exactly( 1 ) )->
+			method( 'addParticipantToEvent' )->
+			with( $this->anything(), $this->anything(), $isPrivate );
+			yield "Modified, $testDescription" => [ $modifiedStore, $isPrivate, true ];
+
+			$notModifiedStore = $this->createMock( ParticipantsStore::class );
+			$notModifiedStore->method( 'addParticipantToEvent' )->willReturn( false );
+			$notModifiedStore->expects(
+				$this->exactly( 1 ) )->
+			method( 'addParticipantToEvent' )->
+			with( $this->anything(), $this->anything(), $isPrivate );
+			yield "Not modified, $testDescription" => [ $notModifiedStore, $isPrivate, false ];
+		}
 	}
 
 	/**
@@ -172,7 +207,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	) {
 		$status = $this->getCommand( null, null, $centralUserLookup )->registerUnsafe(
 			$this->getValidRegistration(),
-			$this->createMock( ICampaignsAuthority::class )
+			$this->createMock( ICampaignsAuthority::class ),
+			RegisterParticipantCommand::REGISTRATION_PUBLIC
 		);
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( $expectedMsg, $status );
@@ -186,15 +222,5 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			'campaignevents-register-need-central-account',
 			$notGlobalLookup
 		];
-	}
-
-	public function provideStoreAndModified(): Generator {
-		$modifiedStore = $this->createMock( ParticipantsStore::class );
-		$modifiedStore->method( 'addParticipantToEvent' )->willReturn( true );
-		yield 'Modified' => [ $modifiedStore, true ];
-
-		$notModifiedStore = $this->createMock( ParticipantsStore::class );
-		$notModifiedStore->method( 'addParticipantToEvent' )->willReturn( false );
-		yield 'Not modified' => [ $notModifiedStore, false ];
 	}
 }

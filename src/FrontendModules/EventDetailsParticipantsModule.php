@@ -75,7 +75,7 @@ class EventDetailsParticipantsModule {
 		$eventID = $event->getID();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 
-		$totalParticipants = $this->participantsStore->getParticipantCountForEvent( $eventID );
+		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 
 		$items = [];
 		$items[] = ( new Tag() )->appendContent(

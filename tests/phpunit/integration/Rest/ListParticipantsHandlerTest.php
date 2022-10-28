@@ -72,7 +72,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$participants = [];
 		$expected = [];
 		for ( $i = 1; $i < 4; $i++ ) {
-			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i );
+			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i, false );
 
 			$expected[] = [
 				'participant_id' => $i,

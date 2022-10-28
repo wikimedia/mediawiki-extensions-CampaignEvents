@@ -116,7 +116,7 @@ class SpecialEventDetails extends SpecialPage {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
 			$isOrganizer = $this->organizersStore->isEventOrganizer( $eventID, $centralUser );
-			$isParticipant = $this->participantsStore->userParticipatesToEvent( $eventID, $centralUser );
+			$isParticipant = $this->participantsStore->userParticipatesInEvent( $eventID, $centralUser, true );
 		} catch ( UserNotGlobalException $_ ) {
 			$isOrganizer = $isParticipant = false;
 		}

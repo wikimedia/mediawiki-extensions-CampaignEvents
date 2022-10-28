@@ -62,7 +62,11 @@
 		var registrationID = mw.config.get( 'wgCampaignEventsEventID' );
 		return new mw.Rest().put(
 			'/campaignevents/v0/event_registration/' + registrationID + '/participants/self',
-			{ token: mw.user.tokens.get( 'csrfToken' ) }
+			{
+				token: mw.user.tokens.get( 'csrfToken' ),
+				// eslint-disable-next-line camelcase
+				is_private: false
+			}
 		)
 			.done( function () {
 				mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 1, { expires: 30 } );

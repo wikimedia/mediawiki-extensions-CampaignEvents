@@ -22,6 +22,8 @@ class RegisterParticipantCommand {
 	public const CANNOT_REGISTER_DELETED = 1;
 	public const CANNOT_REGISTER_ENDED = 2;
 	public const CANNOT_REGISTER_CLOSED = 3;
+	public const REGISTRATION_PRIVATE = true;
+	public const REGISTRATION_PUBLIC = false;
 
 	/** @var ParticipantsStore */
 	private $participantsStore;
@@ -48,19 +50,21 @@ class RegisterParticipantCommand {
 	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param ICampaignsAuthority $performer
+	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
 	 * @return StatusValue Good if everything went fine, fatal with errors otherwise. If good, the value shall be
 	 *   true if the user was not already registered (or they deleted their registration), and false if they were
 	 *   already actively registered. Will be a PermissionStatus for permissions-related errors.
 	 */
 	public function registerIfAllowed(
 		ExistingEventRegistration $registration,
-		ICampaignsAuthority $performer
+		ICampaignsAuthority $performer,
+		bool $isPrivate
 	): StatusValue {
 		$permStatus = $this->authorizeRegistration( $performer );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
 		}
-		return $this->registerUnsafe( $registration, $performer );
+		return $this->registerUnsafe( $registration, $performer, $isPrivate );
 	}
 
 	/**
@@ -95,11 +99,13 @@ class RegisterParticipantCommand {
 	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param ICampaignsAuthority $performer
+	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
 	 * @return StatusValue
 	 */
 	public function registerUnsafe(
 		ExistingEventRegistration $registration,
-		ICampaignsAuthority $performer
+		ICampaignsAuthority $performer,
+		bool $isPrivate
 	): StatusValue {
 		$registrationAllowedVal = self::checkIsRegistrationAllowed( $registration );
 		if ( $registrationAllowedVal !== self::CAN_REGISTER ) {
@@ -124,7 +130,7 @@ class RegisterParticipantCommand {
 		} catch ( UserNotGlobalException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
 		}
-		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser );
+		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser, $isPrivate );
 		return StatusValue::newGood( $modified );
 	}
 }

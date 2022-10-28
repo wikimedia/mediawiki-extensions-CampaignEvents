@@ -371,7 +371,7 @@ class EventPageDecorator {
 			'icon' => 'userGroup',
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-participants' )
-					->numParams( $this->participantsStore->getParticipantCountForEvent( $eventID ) )
+					->numParams( $this->participantsStore->getFullParticipantCountForEvent( $eventID ) )
 			),
 			'label' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-participants-label' )
@@ -604,7 +604,7 @@ class EventPageDecorator {
 			$organizersAndDetails
 		);
 
-		$participantsCount = $this->participantsStore->getParticipantCountForEvent( $eventID );
+		$participantsCount = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 		$participantsList = $this->buildParticipantsList(
 			$eventID,
 			$msgFormatter,
@@ -657,7 +657,7 @@ class EventPageDecorator {
 		$listElements = [];
 
 		$curUserParticipates = $centralUser &&
-			$this->participantsStore->userParticipatesToEvent( $eventID, $centralUser );
+			$this->participantsStore->userParticipatesInEvent( $eventID, $centralUser, true );
 		if ( $curUserParticipates ) {
 			// Make the current user always be at the top, and make sure that it is shown.
 			$listElements[] = Html::rawElement(
@@ -815,7 +815,7 @@ class EventPageDecorator {
 				return self::USER_STATUS_ORGANIZER;
 			}
 
-			if ( $this->participantsStore->userParticipatesToEvent( $event->getID(), $centralUser ) ) {
+			if ( $this->participantsStore->userParticipatesInEvent( $event->getID(), $centralUser, true ) ) {
 				$checkUnregistrationAllowedVal = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event );
 				switch ( $checkUnregistrationAllowedVal ) {
 					case UnregisterParticipantCommand::CANNOT_UNREGISTER_DELETED:

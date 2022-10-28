@@ -15,6 +15,7 @@ use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
 use MediaWiki\User\UserFactory;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class RegisterForEventHandler extends SimpleHandler {
 	use EventIDParamTrait;
@@ -49,6 +50,7 @@ class RegisterForEventHandler extends SimpleHandler {
 	 */
 	protected function run( int $eventID ): Response {
 		$token = $this->getToken();
+		$body = $this->getValidatedBody();
 		if (
 			$token !== null &&
 			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
@@ -58,10 +60,16 @@ class RegisterForEventHandler extends SimpleHandler {
 
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		$status = $this->registerParticipantCommand->registerIfAllowed( $eventRegistration, $performer );
+		$status = $this->registerParticipantCommand->registerIfAllowed(
+			$eventRegistration,
+			$performer,
+			$body['is_private'] ?
+				RegisterParticipantCommand::REGISTRATION_PRIVATE :
+				RegisterParticipantCommand::REGISTRATION_PUBLIC
+		);
 		if ( !$status->isGood() ) {
-			$httptStatus = $status instanceof PermissionStatus ? 403 : 400;
-			$this->exitWithStatus( $status, $httptStatus );
+			$httpStatus = $status instanceof PermissionStatus ? 403 : 400;
+			$this->exitWithStatus( $status, $httpStatus );
 		}
 		return $this->getResponseFactory()->createJson( [
 			'modified' => $status->getValue()
@@ -86,6 +94,25 @@ class RegisterForEventHandler extends SimpleHandler {
 			);
 		}
 
-		return new JsonBodyValidator( $this->getTokenParamDefinition() );
+		return new JsonBodyValidator(
+			array_merge(
+				$this->getTokenParamDefinition(),
+				$this->getBodyParams()
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getBodyParams(): array {
+		return [
+			'is_private' =>
+				[
+					static::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_TYPE => 'boolean',
+					ParamValidator::PARAM_REQUIRED => true,
+				]
+		];
 	}
 }

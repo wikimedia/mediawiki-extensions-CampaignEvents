@@ -29,11 +29,10 @@ class ParticipantsStore {
 	/**
 	 * @param int $eventID
 	 * @param CentralUser $participant
+	 * @param bool $private
 	 * @return bool True if the participant was just added, false if they were already listed.
 	 */
-	public function addParticipantToEvent( int $eventID, CentralUser $participant ): bool {
-		// TODO Pass this in
-		$private = false;
+	public function addParticipantToEvent( int $eventID, CentralUser $participant, bool $private ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		// TODO: Would be great if we could do this without opening an atomic section (T304680)
 		$dbw->startAtomic();
@@ -119,13 +118,15 @@ class ParticipantsStore {
 	 * @param int|null $lastParticipantID
 	 * @param string|null $usernameFilter If not null, only include participants whose username contains the
 	 * given string (case-insensitive). Cannot be the empty string.
+	 * @param bool $showPrivate
 	 * @return Participant[]
 	 */
 	public function getEventParticipants(
 		int $eventID,
 		int $limit = null,
 		int $lastParticipantID = null,
-		string $usernameFilter = null
+		string $usernameFilter = null,
+		bool $showPrivate = false
 	): array {
 		if ( $usernameFilter === '' ) {
 			throw new InvalidArgumentException( "The username filter cannot be the empty string" );
@@ -136,8 +137,9 @@ class ParticipantsStore {
 		if ( $lastParticipantID !== null ) {
 			$where[] = 'cep_id > ' . $dbr->addQuotes( $lastParticipantID );
 		}
-		// TODO actually determine whether to include privately registered participants!
-		$where['cep_private'] = false;
+		if ( !$showPrivate ) {
+			$where['cep_private'] = false;
+		}
 		$opts = [ 'ORDER BY' => 'cep_id' ];
 		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter
 		// and limit the results later. This is a bit hacky but there seems to be no super-clean alternative, since
@@ -149,7 +151,7 @@ class ParticipantsStore {
 
 		$rows = $dbr->select(
 			'ce_participants',
-			[ 'cep_id', 'cep_user_id', 'cep_registered_at' ],
+			[ 'cep_id', 'cep_user_id', 'cep_registered_at', 'cep_private' ],
 			$where,
 			$opts
 		);
@@ -176,7 +178,8 @@ class ParticipantsStore {
 			$participants[] = new Participant(
 				new CentralUser( $centralID ),
 				wfTimestamp( TS_UNIX, $row->cep_registered_at ),
-				(int)$row->cep_id
+				(int)$row->cep_id,
+				(bool)$row->cep_private
 			);
 			$num++;
 		}
@@ -185,43 +188,67 @@ class ParticipantsStore {
 	}
 
 	/**
-	 * Returns the count of participants to an event. This does NOT include participants who unregistered.
+	 * Returns the count of participants to an event.
 	 * @param int $eventID
+	 * @param bool $public
 	 * @return int
 	 */
-	public function getParticipantCountForEvent( int $eventID ): int {
+	private function getParticipantCountForEvent( int $eventID, bool $public ): int {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$where = [
+			'cep_event_id' => $eventID,
+			'cep_unregistered_at' => null,
+		];
+		if ( !$public ) {
+			$where['cep_private'] = true;
+		}
 		$ret = $dbr->selectField(
 			'ce_participants',
 			'COUNT(*)',
-			[
-				'cep_event_id' => $eventID,
-				'cep_unregistered_at' => null,
-			]
+			$where
 		);
 		// Intentionally casting false to int if no rows were found.
 		return (int)$ret;
 	}
 
 	/**
-	 * Returns whether the given user participates to the event. Note that this returns false if the user was
+	 * @param int $eventId
+	 * @return int
+	 */
+	public function getFullParticipantCountForEvent( int $eventId ): int {
+		return $this->getParticipantCountForEvent( $eventId, true );
+	}
+
+	/**
+	 * @param int $eventId
+	 * @return int
+	 */
+	public function getPrivateParticipantCountForEvent( int $eventId ): int {
+		return $this->getParticipantCountForEvent( $eventId, false );
+	}
+
+	/**
+	 * Returns whether the given user participates in the event. Note that this returns false if the user was
 	 * participating but then unregistered.
 	 * @param int $eventID
 	 * @param CentralUser $user
+	 * @param bool $showPrivate
 	 * @return bool
 	 */
-	public function userParticipatesToEvent( int $eventID, CentralUser $user ): bool {
+	public function userParticipatesInEvent( int $eventID, CentralUser $user, bool $showPrivate ): bool {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$conditions = [
+			'cep_event_id' => $eventID,
+			'cep_user_id' => $user->getCentralID(),
+			'cep_unregistered_at' => null,
+		];
+		if ( !$showPrivate ) {
+			$conditions['cep_private'] = false;
+		}
 		$row = $dbr->selectRow(
 			'ce_participants',
 			'*',
-			[
-				'cep_event_id' => $eventID,
-				'cep_user_id' => $user->getCentralID(),
-				'cep_unregistered_at' => null,
-				// TODO actually determine whether to check for private registration!
-				'cep_private' => false,
-			]
+			$conditions
 		);
 		return $row !== null;
 	}
