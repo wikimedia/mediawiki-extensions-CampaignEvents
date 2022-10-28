@@ -175,6 +175,7 @@
 							event_page: data.event_page,
 							status: status,
 							chat_url: data.chat_url,
+							timezone: data.timezone,
 							start_time: data.start_time,
 							end_time: data.end_time,
 							online_meeting: data.online_meeting,
