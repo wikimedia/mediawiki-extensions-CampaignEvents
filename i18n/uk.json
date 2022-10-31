@@ -80,7 +80,7 @@
 	"campaignevents-rest-delete-already-deleted": "Реєстрацію на цю подію уже вилучено.",
 	"campaignevents-role-creator": "{{GENDER:$1|творець}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|організатор}}",
-	"campaignevents-rest-user-not-found": "Користувача «$1» не існує.",
+	"campaignevents-rest-user-not-found": "Немає користувача з цим центральним ідентифікатором.",
 	"campaignevents-register-not-allowed": "У вас немає дозволу реєструватися на події.",
 	"campaignevents-register-event-past": "Період реєстрації на цю подію вже закінчився.",
 	"campaignevents-register-event-not-open": "Реєстрацію на цю подію закрито.",
