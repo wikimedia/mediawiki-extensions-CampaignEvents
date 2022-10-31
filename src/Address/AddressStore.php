@@ -8,6 +8,8 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 
 /**
  * This class abstracts access to the ce_address DB table.
+ * @note This class is not very useful right now, but it will be expanded when implementing geocoding support for
+ * events (T316126). The schema will also be updated to have a unique identifier for each address.
  */
 class AddressStore {
 	public const SERVICE_NAME = 'CampaignEventsAddressStore';

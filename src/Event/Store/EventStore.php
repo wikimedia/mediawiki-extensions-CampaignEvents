@@ -19,6 +19,10 @@ use RuntimeException;
 use StatusValue;
 use stdClass;
 
+/**
+ * @note Some pieces of code involving addresses may seem unnecessarily complex, but this is necessary because
+ * we will add support for multiple addresses (T321811).
+ */
 class EventStore implements IEventStore, IEventLookup {
 	private const EVENT_STATUS_MAP = [
 		EventRegistration::STATUS_OPEN => 1,
