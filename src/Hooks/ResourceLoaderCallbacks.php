@@ -17,7 +17,7 @@ class ResourceLoaderCallbacks {
 	public static function getEventPageData( ResourceLoaderContext $context, Config $config ): array {
 		$policyMessageLookup = CampaignEventsServices::getPolicyMessageLookup();
 		$msgKey = $policyMessageLookup->getPolicyMessage();
-		$msgHTML = $msgKey !== null ? $context->msg( $msgKey )->parse() : null;
+		$msgHTML = $msgKey !== null ? $context->msg( $msgKey )->parseAsBlock() : null;
 		return [ 'policyMsg' => $msgHTML ];
 	}
 }

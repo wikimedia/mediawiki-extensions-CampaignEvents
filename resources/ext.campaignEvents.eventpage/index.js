@@ -1,16 +1,17 @@
 /* eslint-disable no-jquery/no-global-selector */
+// # sourceURL=index.js
 ( function () {
 	'use strict';
 
 	var EventDetailsDialog = require( './EventDetailsDialog.js' ),
 		ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
-		PolicyAcknowledgementDialog = require( './PolicyAcknowledgementDialog.js' ),
+		RegistrationConfirmationDialog = require( './RegistrationConfirmationDialog.js' ),
 		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
+		confirmUnregistrationDialog,
+		registrationConfirmationDialog,
 		configData = require( './data.json' ),
 		windowManager = new OO.ui.WindowManager(),
-		detailsDialog = new EventDetailsDialog( {} ),
-		policyAcknowledgementDialog,
-		confirmUnregistrationDialog;
+		detailsDialog = new EventDetailsDialog( {} );
 
 	windowManager.addWindows( [ detailsDialog ] );
 
@@ -56,16 +57,18 @@
 	}
 
 	/**
+	 * @param {boolean} privateRegistration
 	 * @return {jQuery.Promise}
 	 */
-	function registerUser() {
+	function registerUser( privateRegistration ) {
 		var registrationID = mw.config.get( 'wgCampaignEventsEventID' );
+
 		return new mw.Rest().put(
 			'/campaignevents/v0/event_registration/' + registrationID + '/participants/self',
 			{
 				token: mw.user.tokens.get( 'csrfToken' ),
 				// eslint-disable-next-line camelcase
-				is_private: false
+				is_private: privateRegistration
 			}
 		)
 			.done( function () {
@@ -96,24 +99,24 @@
 			} );
 	}
 
-	function getPolicyAcknowledgementDialog( msg ) {
-		if ( !policyAcknowledgementDialog ) {
-			policyAcknowledgementDialog = new PolicyAcknowledgementDialog( { policyMsg: msg } );
-			windowManager.addWindows( [ policyAcknowledgementDialog ] );
+	function getRegistrationConfirmationDialog( msg ) {
+		if ( !registrationConfirmationDialog ) {
+			registrationConfirmationDialog = new RegistrationConfirmationDialog(
+				{
+					policyMsg: msg
+				} );
+			windowManager.addWindows( [ registrationConfirmationDialog ] );
 		}
-		return policyAcknowledgementDialog;
+		return registrationConfirmationDialog;
 	}
 
 	/**
 	 * @return {jQuery.promise}
 	 */
-	function maybeRequirePolicyAcknowledgement() {
-		if ( !configData.policyMsg ) {
-			return $.Deferred().resolve( { action: 'confirm' } );
-		}
-		var policyDialog = getPolicyAcknowledgementDialog( configData.policyMsg );
+	function requireRegistrationConfirmation() {
+		registrationConfirmationDialog = getRegistrationConfirmationDialog( configData.policyMsg );
 		windowManager.closeWindow( windowManager.getCurrentWindow() );
-		return windowManager.openWindow( policyDialog ).closed;
+		return windowManager.openWindow( registrationConfirmationDialog ).closed;
 	}
 
 	function getConfirmUnregistrationDialog() {
@@ -130,19 +133,19 @@
 			var $btn = $( this );
 			if ( mw.user.isAnon() ) {
 				redirectToLogin();
-			} else {
-				maybeRequirePolicyAcknowledgement().then( function ( data ) {
-					if ( data && data.action === 'confirm' ) {
-						registerUser()
-							.fail( function () {
-								// Fall back to the special page
-								// TODO We could also show an error here once T269492 and T311423
-								//  are resolved
-								$btn.off( 'click' ).find( 'a' )[ 0 ].click();
-							} );
-					}
-				} );
+				return;
 			}
+			requireRegistrationConfirmation().then( function ( data ) {
+				if ( data && data.action === 'confirm' ) {
+					registerUser( data.isPrivate )
+						.fail( function () {
+							// Fall back to the special page
+							// TODO We could also show an error here once T269492 and T311423
+							//  are resolved
+							$btn.off( 'click' ).find( 'a' )[ 0 ].click();
+						} );
+				}
+			} );
 		} );
 
 		$( '.ext-campaignevents-event-unregister-btn' ).on( 'click', function ( e ) {

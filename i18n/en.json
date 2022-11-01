@@ -177,8 +177,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Are you sure you want to cancel your registration?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Yes",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "No",
-	"campaignevents-eventpage-register-confirmation-cancel": "Cancel registration",
-	"campaignevents-eventpage-register-confirmation-confirm": "Continue registration",
+	"campaignevents-eventpage-register-confirmation-confirm": "Register",
+	"campaignevents-eventpage-register-confirmation-title": "Event privacy",
 	"campaignevents-eventpage-enableheader-organizer": "You are an organizer",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Event page</strong>: Enable registration so participants can register for your event directly on the page.",
 	"campaignevents-eventpage-enableheader-button-label": "Enable registration",
@@ -229,5 +229,9 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "You are not authorized to view participants who registered privately for this event.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Programs & Events Dashboard",
 	"campaignevents-userlink-suppressed-user": "username suppressed",
-	"campaignevents-userlink-deleted-user": "deleted user"
+	"campaignevents-userlink-deleted-user": "deleted user",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Private registration:</strong> Only the event organizers can see your username in the participant list.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Public registration:</strong> Show your username on a public participant list.",
+	"campaignevents-registration-confirmation-toggle-private": "Private registration",
+	"campaignevents-registration-confirmation-toggle-public": "Public registration"
 }
