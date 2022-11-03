@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Bada Kaji",
+			"पर्वत सुबेदी",
 			"बडा काजी"
 		]
 	},
@@ -9,6 +10,8 @@
 	"campaignevents-edit-field-timezone": "समयरेखा",
 	"campaignevents-role-creator": "{{GENDER:$1|निर्माता}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|आयोजक}}",
+	"campaignevents-eventslist-delete-dialog-delete": "मेट्ने",
+	"campaignevents-delete-submit-btn": "मेट्ने",
 	"campaignevents-eventpage-btn-event-ended": "कार्यक्रम समाप्त भयो",
 	"campaignevents-event-details-edit-button": "सम्पादन गर्नुहोस्",
 	"campaignevents-event-details-dates": "$1 देखि $4",
