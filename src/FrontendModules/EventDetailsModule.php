@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\IconLabelContentWidget;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
@@ -37,30 +38,35 @@ class EventDetailsModule {
 	];
 
 	/** @var IMessageFormatterFactory */
-	private $messageFormatterFactory;
+	private IMessageFormatterFactory $messageFormatterFactory;
 	/** @var OrganizersStore */
-	private $organizersStore;
+	private OrganizersStore $organizersStore;
 	/** @var PageURLResolver */
-	private $pageURLResolver;
+	private PageURLResolver $pageURLResolver;
 	/** @var UserLinker */
-	private $userLinker;
+	private UserLinker $userLinker;
+	/** @var EventTimeFormatter */
+	private EventTimeFormatter $eventTimeFormatter;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param OrganizersStore $organizersStore
 	 * @param PageURLResolver $pageURLResolver
 	 * @param UserLinker $userLinker
+	 * @param EventTimeFormatter $eventTimeFormatter
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		OrganizersStore $organizersStore,
 		PageURLResolver $pageURLResolver,
-		UserLinker $userLinker
+		UserLinker $userLinker,
+		EventTimeFormatter $eventTimeFormatter
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
 		$this->pageURLResolver = $pageURLResolver;
 		$this->userLinker = $userLinker;
+		$this->eventTimeFormatter = $eventTimeFormatter;
 	}
 
 	/**
@@ -110,16 +116,18 @@ class EventDetailsModule {
 			->appendContent( $headerItems )
 			->addClasses( [ 'ext-campaignevents-event-details-info-topbar' ] );
 
+		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
+		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
 		$items[] = new TextWithIconWidget( [
 			'icon' => 'clock',
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-dates' )->params(
-					$language->userTimeAndDate( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userTimeAndDate( $registration->getEndUTCTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getEndUTCTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getEndUTCTimestamp(), $viewingUser )
+					$formattedStart->getTimeAndDate(),
+					$formattedStart->getDate(),
+					$formattedStart->getTime(),
+					$formattedEnd->getTimeAndDate(),
+					$formattedEnd->getDate(),
+					$formattedEnd->getTime()
 				)
 			),
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) ),

@@ -31,6 +31,7 @@ use MediaWiki\Extension\CampaignEvents\Special\SpecialCancelEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
+use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Linker\LinkRenderer;
@@ -92,6 +93,8 @@ class EventPageDecorator {
 	private $centralUserLookup;
 	/** @var UserLinker */
 	private $userLinker;
+	/** @var EventTimeFormatter */
+	private EventTimeFormatter $eventTimeFormatter;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -103,6 +106,7 @@ class EventPageDecorator {
 	 * @param TitleFormatter $titleFormatter
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserLinker $userLinker
+	 * @param EventTimeFormatter $eventTimeFormatter
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -113,7 +117,8 @@ class EventPageDecorator {
 		LinkRenderer $linkRenderer,
 		TitleFormatter $titleFormatter,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker
+		UserLinker $userLinker,
+		EventTimeFormatter $eventTimeFormatter
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
@@ -124,6 +129,7 @@ class EventPageDecorator {
 		$this->titleFormatter = $titleFormatter;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userLinker = $userLinker;
+		$this->eventTimeFormatter = $eventTimeFormatter;
 	}
 
 	/**
@@ -351,16 +357,18 @@ class EventPageDecorator {
 			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
 		] );
 
+		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
+		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
 		$items[] = new TextWithIconWidget( [
 			'icon' => 'clock',
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-dates' )->params(
-					$language->userTimeAndDate( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userTimeAndDate( $registration->getEndUTCTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getEndUTCTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getEndUTCTimestamp(), $viewingUser )
+					$formattedStart->getTimeAndDate(),
+					$formattedStart->getDate(),
+					$formattedStart->getTime(),
+					$formattedEnd->getTimeAndDate(),
+					$formattedEnd->getDate(),
+					$formattedEnd->getTime()
 				)
 			),
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-dates-label' ) ),
@@ -467,6 +475,8 @@ class EventPageDecorator {
 			);
 		}
 		$organizersAndDetails = Html::rawElement( 'div', [], $organizersStr );
+		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
+		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
 		$datesWidget = new EventDetailsWidget( [
 			'icon' => 'clock',
 			'label' => $msgFormatter->format(
@@ -474,12 +484,12 @@ class EventPageDecorator {
 			),
 			'content' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-dates' )->params(
-					$language->userTimeAndDate( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getStartUTCTimestamp(), $viewingUser ),
-					$language->userTimeAndDate( $registration->getEndUTCTimestamp(), $viewingUser ),
-					$language->userDate( $registration->getEndUTCTimestamp(), $viewingUser ),
-					$language->userTime( $registration->getEndUTCTimestamp(), $viewingUser )
+					$formattedStart->getTimeAndDate(),
+					$formattedStart->getDate(),
+					$formattedStart->getTime(),
+					$formattedEnd->getTimeAndDate(),
+					$formattedEnd->getDate(),
+					$formattedEnd->getTime()
 				)
 			)
 		] );

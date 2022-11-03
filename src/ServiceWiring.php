@@ -29,6 +29,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
+use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\MediaWikiServices;
 
@@ -151,7 +152,8 @@ return [
 			$services->getLinkRenderer(),
 			$services->getTitleFormatter(),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-			$services->get( UserLinker::SERVICE_NAME )
+			$services->get( UserLinker::SERVICE_NAME ),
+			$services->get( EventTimeFormatter::SERVICE_NAME )
 		);
 	},
 	CampaignEventsHookRunner::SERVICE_NAME =>
@@ -195,7 +197,8 @@ return [
 			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->get( UserLinker::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-			$services->get( PermissionChecker::SERVICE_NAME )
+			$services->get( PermissionChecker::SERVICE_NAME ),
+			$services->get( EventTimeFormatter::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
@@ -209,6 +212,11 @@ return [
 				TrackingToolRegistry::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			)
+		);
+	},
+	EventTimeFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTimeFormatter {
+		return new EventTimeFormatter(
+			$services->getUserOptionsLookup()
 		);
 	},
 ];
