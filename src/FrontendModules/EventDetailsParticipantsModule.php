@@ -6,9 +6,12 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\User\UserIdentity;
@@ -39,26 +42,32 @@ class EventDetailsParticipantsModule {
 	private $userLinker;
 	/** @var ParticipantsStore */
 	private $participantsStore;
+	/** @var CampaignsCentralUserLookup */
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param UserLinker $userLinker
 	 * @param ParticipantsStore $participantsStore
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		UserLinker $userLinker,
-		ParticipantsStore $participantsStore
+		ParticipantsStore $participantsStore,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->userLinker = $userLinker;
 		$this->participantsStore = $participantsStore;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
 	 * @param Language $language
 	 * @param ExistingEventRegistration $event
 	 * @param UserIdentity $viewingUser
+	 * @param ICampaignsAuthority $authority
 	 * @param bool $isOrganizer
 	 * @param OutputPage $out
 	 * @return PanelLayout
@@ -70,6 +79,7 @@ class EventDetailsParticipantsModule {
 		Language $language,
 		ExistingEventRegistration $event,
 		UserIdentity $viewingUser,
+		ICampaignsAuthority $authority,
 		bool $isOrganizer,
 		OutputPage $out
 	): PanelLayout {
@@ -83,7 +93,30 @@ class EventDetailsParticipantsModule {
 
 		$items[] = $this->getEmptyStateElement( $totalParticipants, $msgFormatter );
 
-		$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
+			$curUserParticipant = $this->participantsStore->getEventParticipant( $eventID, $centralUser, true );
+		} catch ( UserNotGlobalException $_ ) {
+			$curUserParticipant = null;
+		}
+
+		if ( $curUserParticipant ) {
+			$participants = array_merge(
+				[ $curUserParticipant ],
+				$this->participantsStore->getEventParticipants(
+					$eventID,
+					self::PARTICIPANTS_LIMIT - 1,
+					null,
+					null,
+					false,
+					// The isset is redundant, but the IDE's unhappy without it.
+					isset( $centralUser ) ? $centralUser->getCentralID() : null
+				)
+			);
+		} else {
+			$participants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
+		}
+
 		if ( $participants ) {
 			$items[] = $this->getSearchBar( $msgFormatter );
 		}
@@ -105,6 +138,7 @@ class EventDetailsParticipantsModule {
 			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
 			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
+			'wgCampaignEventsCurUserCentralID' => isset( $centralUser ) ? $centralUser->getCentralID() : null,
 		] );
 
 		return new PanelLayout( [

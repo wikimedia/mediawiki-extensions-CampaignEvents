@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Participants;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWikiIntegrationTestCase;
 use MWTimestamp;
@@ -271,6 +272,28 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertCount( 2, $store->getEventParticipants( 1 ), 'precondition' );
 		$limit = 0;
 		$this->assertCount( $limit, $store->getEventParticipants( 1, $limit ) );
+	}
+
+	/**
+	 * @covers ::getEventParticipant
+	 * @dataProvider provideGetEventParticipant
+	 */
+	public function testGetEventParticipant( int $event, int $userID, bool $showPrivate, bool $expectedFound ) {
+		$store = $this->getStore();
+		$res = $store->getEventParticipant( $event, new CentralUser( $userID ), $showPrivate );
+		if ( $expectedFound ) {
+			$this->assertInstanceOf( Participant::class, $res );
+		} else {
+			$this->assertNull( $res );
+		}
+	}
+
+	public function provideGetEventParticipant(): Generator {
+		yield 'Not a participant' => [ 1, 12345678, true, false ];
+		yield 'Unregistered' => [ 1, 102, true, false ];
+		yield 'Private, but showPrivate is false' => [ 1, 106, false, false ];
+		yield 'Public' => [ 1, 101, true, true ];
+		yield 'Private and showPrivate is true' => [ 1, 106, true, true ];
 	}
 
 	/**

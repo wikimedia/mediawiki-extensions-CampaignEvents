@@ -193,7 +193,8 @@ return [
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( ParticipantsStore::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
-			$services->get( UserLinker::SERVICE_NAME )
+			$services->get( UserLinker::SERVICE_NAME ),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

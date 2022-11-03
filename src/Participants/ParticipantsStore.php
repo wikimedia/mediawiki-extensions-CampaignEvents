@@ -119,6 +119,8 @@ class ParticipantsStore {
 	 * @param string|null $usernameFilter If not null, only include participants whose username contains the
 	 * given string (case-insensitive). Cannot be the empty string.
 	 * @param bool $showPrivate
+	 * @param int|null $excludeUser ID of a user to exclude from the result (useful when the request user is handled
+	 * separately).
 	 * @return Participant[]
 	 */
 	public function getEventParticipants(
@@ -126,7 +128,8 @@ class ParticipantsStore {
 		int $limit = null,
 		int $lastParticipantID = null,
 		string $usernameFilter = null,
-		bool $showPrivate = false
+		bool $showPrivate = false,
+		int $excludeUser = null
 	): array {
 		if ( $usernameFilter === '' ) {
 			throw new InvalidArgumentException( "The username filter cannot be the empty string" );
@@ -139,6 +142,9 @@ class ParticipantsStore {
 		}
 		if ( !$showPrivate ) {
 			$where['cep_private'] = false;
+		}
+		if ( $excludeUser !== null ) {
+			$where[] = "cep_user_id != $excludeUser";
 		}
 		$opts = [ 'ORDER BY' => 'cep_id' ];
 		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter
@@ -185,6 +191,46 @@ class ParticipantsStore {
 		}
 
 		return $participants;
+	}
+
+	/**
+	 * Returns a Participant object for the given user and event, if the user is a participant (and has not
+	 * unregistered), or null otherwise.
+	 * @param int $eventID
+	 * @param CentralUser $user
+	 * @param bool $showPrivate
+	 * @return Participant|null
+	 */
+	public function getEventParticipant(
+		int $eventID,
+		CentralUser $user,
+		bool $showPrivate = false
+	): ?Participant {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$conditions = [
+			'cep_event_id' => $eventID,
+			'cep_user_id' => $user->getCentralID(),
+			'cep_unregistered_at' => null,
+		];
+		if ( !$showPrivate ) {
+			$conditions['cep_private'] = false;
+		}
+		$row = $dbr->selectRow(
+			'ce_participants',
+			'*',
+			$conditions
+		);
+
+		if ( $row === null ) {
+			return null;
+		}
+
+		return new Participant(
+			new CentralUser( (int)$row->cep_user_id ),
+			wfTimestamp( TS_UNIX, $row->cep_registered_at ),
+			(int)$row->cep_id,
+			(bool)$row->cep_private
+		);
 	}
 
 	/**
@@ -236,20 +282,6 @@ class ParticipantsStore {
 	 * @return bool
 	 */
 	public function userParticipatesInEvent( int $eventID, CentralUser $user, bool $showPrivate ): bool {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$conditions = [
-			'cep_event_id' => $eventID,
-			'cep_user_id' => $user->getCentralID(),
-			'cep_unregistered_at' => null,
-		];
-		if ( !$showPrivate ) {
-			$conditions['cep_private'] = false;
-		}
-		$row = $dbr->selectRow(
-			'ce_participants',
-			'*',
-			$conditions
-		);
-		return $row !== null;
+		return $this->getEventParticipant( $eventID, $user, $showPrivate ) !== null;
 	}
 }
