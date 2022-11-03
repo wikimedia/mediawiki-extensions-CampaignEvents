@@ -5,7 +5,8 @@
 			"Bachounda",
 			"Hhaboh162002",
 			"Mohanad Kh",
-			"محمد أحمد عبد الفتاح"
+			"محمد أحمد عبد الفتاح",
+			"Meno25"
 		]
 	},
 	"campaignevents-desc": "يوفر ميزات لمنظمي الحملة والمشاركين فيها.",
@@ -144,7 +145,7 @@
 	"campaignevents-eventpage-header-type-in-person": "فعالية حضورية",
 	"campaignevents-eventpage-header-type-online-and-in-person": "فعالية حضورية وعن بعد",
 	"campaignevents-eventpage-header-dates-label": "تاريخ وتوقيت البداية والنهاية",
-	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|مشارك|مشارك}}",
+	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|مشارك}}",
 	"campaignevents-eventpage-header-participants-label": "عدد المشاركين",
 	"campaignevents-eventpage-header-details": "مزيد من التفاصيل",
 	"campaignevents-eventpage-header-attending": "أنت تشارك!",
