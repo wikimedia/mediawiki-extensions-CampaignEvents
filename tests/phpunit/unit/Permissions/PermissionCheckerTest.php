@@ -279,4 +279,47 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		);
 		return new MWAuthorityProxy( $authority );
 	}
+
+	/**
+	 * @param bool $expected
+	 * @param ICampaignsAuthority $performer
+	 * @param OrganizersStore|null $organizersStore
+	 * @covers ::userCanViewPrivateParticipants
+	 * @dataProvider provideCanViewPrivateParticipants
+	 */
+	public function testUserCanViewPrivateParticipants(
+		bool $expected,
+		ICampaignsAuthority $performer,
+		OrganizersStore $organizersStore = null
+	) {
+		$checker = $this->getPermissionChecker( $organizersStore );
+		$this->assertSame(
+			$expected,
+			$checker->userCanViewPrivateParticipants( $performer, 42 )
+		);
+	}
+
+	public function provideCanViewPrivateParticipants(): Generator {
+		yield 'Logged out' => [
+			false,
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+		];
+		yield 'Blocked' => [
+			false,
+			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
+		];
+		yield 'Not an organizer' => [
+			false,
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+		];
+		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
+		$authorizedOrgStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		yield 'Authorized' => [
+			true,
+			new MWAuthorityProxy(
+				$this->mockRegisteredNullAuthority()
+			),
+			$authorizedOrgStore
+		];
+	}
 }

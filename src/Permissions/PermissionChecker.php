@@ -145,4 +145,21 @@ class PermissionChecker {
 		return $this->organizersStore->isEventOrganizer( $registrationID, $centralUser ) &&
 			!$performer->isSitewideBlocked();
 	}
+
+	/**
+	 * @param ICampaignsAuthority $performer
+	 * @param int $eventID
+	 * @return bool
+	 */
+	public function userCanViewPrivateParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
+		if ( !$performer->isRegistered() ) {
+			return false;
+		}
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			return false;
+		}
+		return $this->organizersStore->isEventOrganizer( $eventID, $centralUser ) && !$performer->isSitewideBlocked();
+	}
 }
