@@ -285,7 +285,11 @@
 	ParticipantsManager.prototype.loadMoreParticipants = function () {
 		var thisClass = this;
 
-		var params = {};
+		var params = {
+			// TODO Pass the actual value
+			// eslint-disable-next-line camelcase
+			include_private: false
+		};
 		if ( thisClass.lastParticipantID !== null ) {
 			// eslint-disable-next-line camelcase
 			params.last_participant_id = thisClass.lastParticipantID;

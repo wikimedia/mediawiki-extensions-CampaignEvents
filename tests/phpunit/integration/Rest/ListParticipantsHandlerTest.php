@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
@@ -28,7 +29,8 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	use HandlerTestTrait;
 
 	private const REQ_DATA = [
-		'pathParams' => [ 'id' => 42 ]
+		'pathParams' => [ 'id' => 42 ],
+		'queryParams' => [ 'include_private' => false ],
 	];
 
 	protected function setUp(): void {
@@ -37,11 +39,13 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function newHandler(
+		PermissionChecker $permissionChecker = null,
 		IEventLookup $eventLookup = null,
 		ParticipantsStore $participantsStore = null,
 		CampaignsCentralUserLookup $centralUserLookup = null
 	): ListParticipantsHandler {
 		return new ListParticipantsHandler(
+			$permissionChecker ?? $this->createMock( PermissionChecker::class ),
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
@@ -56,7 +60,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		array $expectedResp,
 		ParticipantsStore $participantsStore
 	) {
-		$handler = $this->newHandler( null, $participantsStore, null );
+		$handler = $this->newHandler( null, null, $participantsStore );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 
 		$this->assertSame( $expectedResp, $respData );
@@ -84,7 +88,8 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 					'classes' => ''
 				],
 				'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
-				'user_registered_at_formatted' => '12:00, 15 March 2022'
+				'user_registered_at_formatted' => '12:00, 15 March 2022',
+				'private' => false,
 			];
 		}
 
@@ -96,23 +101,60 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
-	public function testRun__invalidEvent() {
-		$eventLookup = $this->createMock( IEventLookup::class );
-		$eventLookup->expects( $this->once() )
-			->method( 'getEventByID' )
-			->willThrowException( $this->createMock( EventNotFoundException::class ) );
-
-		$handler = $this->newHandler( $eventLookup );
+	/**
+	 * @dataProvider provideRunErrors
+	 */
+	public function testRun__invalid(
+		string $expectedMsg,
+		int $expectedCode,
+		array $reqData,
+		PermissionChecker $permissionChecker = null,
+		IEventLookup $eventLookup = null
+	) {
+		$handler = $this->newHandler( $permissionChecker, $eventLookup );
 
 		try {
-			$this->executeHandler( $handler, new RequestData( self::REQ_DATA ) );
+			$this->executeHandler( $handler, new RequestData( $reqData ) );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
-			$this->assertSame(
-				'campaignevents-rest-event-not-found',
-				$e->getMessageValue()->getKey()
-			);
-			$this->assertSame( 404, $e->getCode() );
+			$this->assertSame( $expectedMsg, $e->getMessageValue()->getKey() );
+			$this->assertSame( $expectedCode, $e->getCode() );
 		}
+	}
+
+	public function provideRunErrors(): Generator {
+		$eventNotFoundLookup = $this->createMock( IEventLookup::class );
+		$eventNotFoundLookup->expects( $this->once() )
+			->method( 'getEventByID' )
+			->willThrowException( $this->createMock( EventNotFoundException::class ) );
+		yield 'Event not found' => [
+			'campaignevents-rest-event-not-found',
+			404,
+			self::REQ_DATA,
+			null,
+			$eventNotFoundLookup
+		];
+
+		$getDataWithParams = static function ( array $params ): array {
+			$ret = self::REQ_DATA;
+			$ret['queryParams'] = $params + $ret['queryParams'];
+			return $ret;
+		};
+		yield 'Empty username filter' => [
+			'campaignevents-rest-list-participants-empty-filter',
+			400,
+			$getDataWithParams( [ 'username_filter' => '' ] )
+		];
+
+		$unauthorizedPermChecker = $this->createMock( PermissionChecker::class );
+		$unauthorizedPermChecker->expects( $this->atLeastOnce() )
+			->method( 'userCanViewPrivateParticipants' )
+			->willReturn( false );
+		yield 'Cannot see private participants' => [
+			'campaignevents-rest-list-participants-cannot-see-private',
+			403,
+			$getDataWithParams( [ 'include_private' => true ] ),
+			$unauthorizedPermChecker
+		];
 	}
 }
