@@ -298,7 +298,9 @@ class EventPageDecorator {
 		} catch ( UserNotGlobalException $_ ) {
 			$centralUser = null;
 		}
-		$out->addHTML( $this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus ) );
+		$out->addHTML(
+			$this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus, $out )
+		);
 		$out->addHTML(
 			$this->getDetailsDialogContent(
 				$registration, $msgFormatter, $language, $viewingUser, $userStatus, $centralUser, $out )
@@ -313,6 +315,7 @@ class EventPageDecorator {
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
+	 * @param OutputPage $out
 	 * @return Tag
 	 */
 	private function getHeaderElement(
@@ -320,7 +323,8 @@ class EventPageDecorator {
 		ITextFormatter $msgFormatter,
 		Language $language,
 		UserIdentity $viewingUser,
-		int $userStatus
+		int $userStatus,
+		OutputPage $out
 	): Tag {
 		$eventID = $registration->getID();
 		$items = [];
@@ -359,18 +363,27 @@ class EventPageDecorator {
 
 		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
 		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
+		$datesMsg = $msgFormatter->format(
+			MessageValue::new( 'campaignevents-eventpage-header-dates' )->params(
+				$formattedStart->getTimeAndDate(),
+				$formattedStart->getDate(),
+				$formattedStart->getTime(),
+				$formattedEnd->getTimeAndDate(),
+				$formattedEnd->getDate(),
+				$formattedEnd->getTime()
+			)
+		);
+		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $registration, $viewingUser );
+		// XXX Can't use $msgFormatter due to parse()
+		$timezoneMsg = $out->msg( 'campaignevents-eventpage-header-timezone' )
+			->params( $formattedTimezone )
+			->parse();
 		$items[] = new TextWithIconWidget( [
 			'icon' => 'clock',
-			'content' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-header-dates' )->params(
-					$formattedStart->getTimeAndDate(),
-					$formattedStart->getDate(),
-					$formattedStart->getTime(),
-					$formattedEnd->getTimeAndDate(),
-					$formattedEnd->getDate(),
-					$formattedEnd->getTime()
-				)
-			),
+			'content' => [
+				$datesMsg,
+				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
+			],
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-dates-label' ) ),
 			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
 		] );

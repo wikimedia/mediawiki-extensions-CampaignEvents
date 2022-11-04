@@ -146,6 +146,7 @@
 	"campaignevents-eventpage-header-type-in-person": "In-person event",
 	"campaignevents-eventpage-header-type-online-and-in-person": "Online and in-person event",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
+	"campaignevents-eventpage-header-timezone": "<strong>Timezone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Start and end time",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|participant|participants}}",
 	"campaignevents-eventpage-header-participants-label": "Number of participants",

@@ -4,12 +4,16 @@
 .ext-campaignevents-eventpage-header {
 	.flex-display();
 	.flex-wrap();
-	align-items: center;
+	align-items: flex-start;
 
 	&.oo-ui-panelLayout-padded {
 		// OOUI sets a padding-top of 12px and the other ones of 16px, but we want the same
 		// padding for every side.
 		padding: 14px;
+	}
+
+	.ext-campaignevents-eventpage-header-buttons {
+		align-self: center;
 	}
 
 	> * {
