@@ -162,6 +162,7 @@
 	"campaignevents-eventpage-dialog-participants-view-list": "View full list",
 	"campaignevents-eventpage-dialog-dates-label": "Start and end time",
 	"campaignevents-eventpage-dialog-dates": "$1 to $4",
+	"campaignevents-eventpage-dialog-timezone": "<strong>Timezone:</strong> $1",
 	"campaignevents-eventpage-dialog-location-label": "Location",
 	"campaignevents-eventpage-dialog-online-label": "Online event",
 	"campaignevents-eventpage-dialog-in-person-label": "In-person event",

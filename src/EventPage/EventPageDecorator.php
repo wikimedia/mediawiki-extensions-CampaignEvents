@@ -477,21 +477,30 @@ class EventPageDecorator {
 		$organizersAndDetails = Html::rawElement( 'div', [], $organizersStr );
 		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
 		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
+		$datesMsg = $msgFormatter->format(
+			MessageValue::new( 'campaignevents-eventpage-dialog-dates' )->params(
+				$formattedStart->getTimeAndDate(),
+				$formattedStart->getDate(),
+				$formattedStart->getTime(),
+				$formattedEnd->getTimeAndDate(),
+				$formattedEnd->getDate(),
+				$formattedEnd->getTime()
+			)
+		);
+		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $registration, $viewingUser );
+		// XXX Can't use $msgFormatter due to parse()
+		$timezoneMsg = $out->msg( 'campaignevents-eventpage-dialog-timezone' )
+			->params( $formattedTimezone )
+			->parse();
 		$datesWidget = new EventDetailsWidget( [
 			'icon' => 'clock',
 			'label' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-dates-label' )
 			),
-			'content' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-dates' )->params(
-					$formattedStart->getTimeAndDate(),
-					$formattedStart->getDate(),
-					$formattedStart->getTime(),
-					$formattedEnd->getTimeAndDate(),
-					$formattedEnd->getDate(),
-					$formattedEnd->getTime()
-				)
-			)
+			'content' => [
+				$datesMsg,
+				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
+			],
 		] );
 		$organizersAndDetails .= Html::rawElement( 'div', [], $datesWidget );
 
