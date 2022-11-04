@@ -190,6 +190,7 @@
 	"campaignevents-back-to-your-events": "Retornar a tu eventos",
 	"campaignevents-event-details-edit-button": "Modificar",
 	"campaignevents-event-details-header-participants": "$1 participante{{PLURAL:$1||s}}",
+	"campaignevents-event-details-participants-private": "$1 participante{{PLURAL:$1||s}} inscribite in privato.",
 	"campaignevents-event-details-dates": "de $1 a $4",
 	"campaignevents-event-details-in-person-event-label": "Evento in persona",
 	"campaignevents-event-details-online-label": "Evento in linea",
@@ -224,6 +225,7 @@
 	"campaignevents-event-details-organizers-view-more": "Vider plus",
 	"campaignevents-event-details-organizers-noscript": "Es necessari activar JavaScript pro poter vider le lista complete de organisatores.",
 	"campaignevents-rest-list-participants-empty-filter": "Le filtro del nomine de usator, si specificate, debe esser un texto non vacue.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Tu non es autorisate a vider le participantes que se ha inscribite in privato pro iste evento.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Tabuliero de programmas e eventos",
 	"campaignevents-userlink-suppressed-user": "nomine de usator supprimite",
 	"campaignevents-userlink-deleted-user": "usator delite"

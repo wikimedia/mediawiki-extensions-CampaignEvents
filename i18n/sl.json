@@ -10,10 +10,12 @@
 	"campaignevents-error-invalid-timezone": "Vnesite veljaven časovni pas.",
 	"campaignevents-edit-field-timezone": "Časovni pas",
 	"campaignevents-eventslist-delete-dialog-cancel": "Prekliči",
+	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|udeleženec je registriran|udeleženca sta registrirana|udeleženci so registrirani|udeležencev je registriranih}} zasebno.",
 	"campaignevents-event-details-organizers-header": "Organizatorji",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Prekliči",
 	"campaignevents-event-details-organizers-view-more": "Prikaži več",
 	"campaignevents-event-details-organizers-noscript": "Za ogled celotnega seznama organizatorjev morate omogočiti JavaScript.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Nimate dovoljenja za ogled udeležencev, ki so se zasebno registrirali za ta dogodek.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Nadzorna plošča programov in dogodkov",
 	"campaignevents-userlink-suppressed-user": "uporabniško ime zatrto",
 	"campaignevents-userlink-deleted-user": "izbrisani uporabnik"

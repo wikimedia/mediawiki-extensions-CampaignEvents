@@ -191,6 +191,7 @@
 	"campaignevents-back-to-your-events": "Назад на вашите настани",
 	"campaignevents-event-details-edit-button": "Уреди",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|учесник|учесници}}",
+	"campaignevents-event-details-participants-private": "$1 приватно {{PLURAL:$1|пријавен учесник|пријавени учесници}}.",
 	"campaignevents-event-details-dates": "$1 до $4",
 	"campaignevents-event-details-in-person-event-label": "Присуствен настан",
 	"campaignevents-event-details-online-label": "Семрежен настан",
@@ -225,6 +226,7 @@
 	"campaignevents-event-details-organizers-view-more": "Погл. уште",
 	"campaignevents-event-details-organizers-noscript": "Ќе треба да овозможите JavaScript за да го видите целиот список на приредувачи.",
 	"campaignevents-rest-list-participants-empty-filter": "Филтерот за корисничко име, ако е укажан, не може да стои празен.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Не сте овластени да ги гледате учесниците кои се пријавиле приватно за овој настан.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Управувачница за програми и настани",
 	"campaignevents-userlink-suppressed-user": "корисничкото име е потиснато",
 	"campaignevents-userlink-deleted-user": "избиршан корисник"

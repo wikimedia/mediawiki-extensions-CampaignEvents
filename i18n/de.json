@@ -190,6 +190,7 @@
 	"campaignevents-back-to-your-events": "Zurück zu deinen Veranstaltungen",
 	"campaignevents-event-details-edit-button": "Bearbeiten",
 	"campaignevents-event-details-header-participants": "{{PLURAL:$1|Ein Teilnehmer|$1 Teilnehmer}}",
+	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|Teilnehmer ist|Teilnehmer sind}} privat registriert.",
 	"campaignevents-event-details-dates": "$1 bis $4",
 	"campaignevents-event-details-in-person-event-label": "Präsenzveranstaltung",
 	"campaignevents-event-details-online-label": "Online-Veranstaltung",
@@ -224,6 +225,7 @@
 	"campaignevents-event-details-organizers-view-more": "Mehr anzeigen",
 	"campaignevents-event-details-organizers-noscript": "Du musst JavaScript aktivieren, um die vollständige Liste der Organisatoren anzuzeigen.",
 	"campaignevents-rest-list-participants-empty-filter": "Der Benutzernamenfilter muss, sofern angegeben, eine nicht leere Zeichenfolge sein.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Du bist nicht berechtigt, Teilnehmer anzuzeigen, die sich privat für diese Veranstaltung angemeldet haben.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Übersichtstabelle der Programme & Veranstaltungen",
 	"campaignevents-userlink-suppressed-user": "Benutzername unterdrückt",
 	"campaignevents-userlink-deleted-user": "gelöschter Benutzer"

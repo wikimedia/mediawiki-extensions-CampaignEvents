@@ -224,6 +224,7 @@
 	"campaignevents-event-details-organizers-view-more": "להציג עוד",
 	"campaignevents-event-details-organizers-noscript": "יש להפעיל JavaScript כדי לראות את רשימת המארגנים המלאה.",
 	"campaignevents-rest-list-participants-empty-filter": "מסנן שמות המשתמש, אם צוין, חייב להיות מחרוזת לא ריקה.",
+	"campaignevents-rest-list-participants-cannot-see-private": "אין לך הרשאה לצפות במשתתפים שנרשמו באופן פרטי לאירוע הזה.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "לוח הבקרה של תוכניות ואירועים",
 	"campaignevents-userlink-suppressed-user": "שם המשתמש הועלם",
 	"campaignevents-userlink-deleted-user": "חשבון משתמש מחוק"

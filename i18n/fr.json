@@ -196,6 +196,7 @@
 	"campaignevents-back-to-your-events": "Retour à vos événements",
 	"campaignevents-event-details-edit-button": "Modifier",
 	"campaignevents-event-details-header-participants": "$1 participant{{PLURAL:$1||s}}",
+	"campaignevents-event-details-participants-private": "$1 participant{{PLURAL:$1||s}} inscrit{{PLURAL:$1||s}} en privé.",
 	"campaignevents-event-details-dates": "du $1 au $4",
 	"campaignevents-event-details-in-person-event-label": "Événement en présentiel",
 	"campaignevents-event-details-online-label": "Événement en ligne",
@@ -230,6 +231,7 @@
 	"campaignevents-event-details-organizers-view-more": "Voir plus",
 	"campaignevents-event-details-organizers-noscript": "Vous devez activer JavaScript pour voir la liste complète des organisateurs.",
 	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Vous n’avez pas le droit de voir les participants qui se sont inscrits en privé pour cet événement.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Tableau de bord des programmes et événements",
 	"campaignevents-userlink-suppressed-user": "nom d’utilisateur supprimé",
 	"campaignevents-userlink-deleted-user": "utilisateur supprimé"
