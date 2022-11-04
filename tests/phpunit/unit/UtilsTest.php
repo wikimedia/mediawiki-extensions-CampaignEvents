@@ -4,6 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit;
 
+use DateTime;
+use DateTimeZone;
+use Generator;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWikiUnitTestCase;
 
@@ -37,5 +40,28 @@ class UtilsTest extends MediaWikiUnitTestCase {
 			'Arabic + Hebrew' => [ 'اسمي עִמָּנוּאֵל', 'rtl' ],
 			'Chinese + Arabic' => [ "-告诉我一些事情\n-ٱلسَّلَامُ عَلَيْكُمْ", 'rtl' ],
 		];
+	}
+
+	/**
+	 * @param DateTimeZone $timezone
+	 * @param string $expected
+	 * @covers ::timezoneToUserTimeCorrection
+	 * @dataProvider provideValidTimezones
+	 */
+	public function testTimezoneToUserTimeCorrection( DateTimeZone $timezone, string $expected ) {
+		$this->assertSame( $expected, Utils::timezoneToUserTimeCorrection( $timezone )->toString() );
+	}
+
+	public function provideValidTimezones(): Generator {
+		$romeTimezone = new DateTimeZone( 'Europe/Rome' );
+		// UserTimeCorrection includes the offset, which changes over time.
+		$curRomeOffset = $romeTimezone->getOffset( new DateTime() ) / 60;
+		yield 'Geographical' => [ $romeTimezone, "ZoneInfo|$curRomeOffset|Europe/Rome" ];
+		yield 'Positive offset' => [ new DateTimeZone( '+02:00' ), 'Offset|120' ];
+		yield 'Large positive offset' => [ new DateTimeZone( '+99:00' ), 'Offset|840' ];
+		yield 'Negative offset' => [ new DateTimeZone( '-05:30' ), 'Offset|-330' ];
+		yield 'Large negative offset' => [ new DateTimeZone( '-99:00' ), 'Offset|-720' ];
+		yield 'Abbreviation' => [ new DateTimeZone( 'CEST' ), 'Offset|120' ];
+		yield 'Abbreviation 2' => [ new DateTimeZone( 'CET' ), 'Offset|60' ];
 	}
 }

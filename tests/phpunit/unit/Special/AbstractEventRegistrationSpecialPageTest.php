@@ -31,9 +31,9 @@ class AbstractEventRegistrationSpecialPageTest extends MediaWikiUnitTestCase {
 		$curRomeOffset = $romeTimezone->getOffset( new DateTime() ) / 60;
 		yield 'Geographical' => [ $romeTimezone, "ZoneInfo|$curRomeOffset|Europe/Rome" ];
 		yield 'Positive offset' => [ new DateTimeZone( '+02:00' ), '+02:00' ];
-		yield 'Large positive offset' => [ new DateTimeZone( '+99:00' ), '+99:00' ];
+		yield 'Large positive offset' => [ new DateTimeZone( '+99:00' ), '+14:00' ];
 		yield 'Negative offset' => [ new DateTimeZone( '-05:30' ), '-05:30' ];
-		yield 'Large negative offset' => [ new DateTimeZone( '-99:00' ), '-99:00' ];
+		yield 'Large negative offset' => [ new DateTimeZone( '-99:00' ), '-12:00' ];
 		yield 'Abbreviation' => [ new DateTimeZone( 'CEST' ), '+02:00' ];
 		yield 'Abbreviation 2' => [ new DateTimeZone( 'CET' ), '+01:00' ];
 	}

@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
-use DateTime;
 use DateTimeZone;
 use FormSpecialPage;
 use Html;
@@ -15,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserTimeCorrection;
 use MWTimestamp;
 use OOUI\FieldLayout;
@@ -213,38 +213,16 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	/**
 	 * @internal
 	 * Converts a DateTimeZone object to a string that can be used as (default) value of the timezone input.
-	 * This logic could perhaps be moved to UserTimeCorrection in the future.
 	 *
 	 * @param DateTimeZone $tz
 	 * @return string
 	 */
 	public static function convertTimezoneForForm( DateTimeZone $tz ): string {
-		// Timezones in PHP can be either a geographical zone ("Europe/Rome"), an offset ("+01:00"), or
-		// an abbreviation ("GMT"). PHP provides no way to tell which format a timezone object uses.
-		// DateTimeZone seems to have an internal timezone_type property but it's set magically and inaccessible.
-		// Also, 'UTC' is surprisingly categorized as a geographical zone, and getLocation() does not return false
-		// for it, but rather an array with incomplete data. PHP, WTF?!
-		$timezoneName = $tz->getName();
-		if ( strpos( $timezoneName, '/' ) !== false ) {
-			// Geographical format, convert to the format used by UserTimeCorrection and the timezone field.
-			$minDiff = floor( $tz->getOffset( new DateTime() ) / 60 );
-			return "ZoneInfo|$minDiff|$timezoneName";
+		$userTimeCorrectionObj = Utils::timezoneToUserTimeCorrection( $tz );
+		if ( $userTimeCorrectionObj->getCorrectionType() === UserTimeCorrection::OFFSET ) {
+			return UserTimeCorrection::formatTimezoneOffset( $userTimeCorrectionObj->getTimeOffset() );
 		}
-		if ( preg_match( '/[+-]\d{2}:\d{2}/', $timezoneName ) ) {
-			// Offset, which the timezone field accepts directly as the value for the "other" option.
-			return $timezoneName;
-		}
-		// Non-geographical named zone, convert to offset because the timezone field only accepts
-		// the other two types. In theory, this conversion shouldn't change the absolute time and it should
-		// not depend on DST, because abbreviations already contain information about DST (e.g., "PST" vs "PDT").
-		// TODO Validate these assumptions
-
-		// Work around PHP bug: all versions of PHP up to 7.4.x, 8.0.20 and 8.1.7 do not parse DST correctly for
-		// time zone abbreviations, and PHP assumes that *all* abbreviations correspond to time zones without DST.
-		// So we can't use DateTimeZone::getOffset(), nor DateTime::format( 'P' ), and we need this awful hack.
-		// See https://bugs.php.net/bug.php?id=74671
-		$randomTime = '2022-10-20 18:00:00 ' . $timezoneName;
-		return ( new DateTime( $randomTime ) )->format( 'P' );
+		return $userTimeCorrectionObj->toString();
 	}
 
 	/**
