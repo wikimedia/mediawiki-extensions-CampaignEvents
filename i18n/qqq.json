@@ -196,6 +196,7 @@
 	"campaignevents-event-details-header-participants": "Message shown in the list of participants on [[Special:EventDetails]] with the number of participants of the event.\nParameters:\n* $1 - Number of participants",
 	"campaignevents-event-details-participants-private": "Message shown after the list of participants on [[Special:EventDetails]] with the number of participants of the event who registered privately.\nParameters:\n* $1 - Number of participants who registered privately",
 	"campaignevents-event-details-dates": "Message shown in the Event Details section on [[Special:EventDetails]] with the start and end time of the event.\nParameters:\n* $1 - Start date and time, in a format like \"13:00, 8 April 2022\" depending on the language.\n* $2 - The start date alone (optional).\n* $3 - The start time alone (optional)\n* $4 - End date and time, formatted the same as parameter $1.\n* $5 - The end date alone (optional).\n* $6 - The end time alone (optional).",
+	"campaignevents-event-details-timezone": "Message shown in the Event Details section on [[Special:EventDetails]] with the time zone of the event.\nParameters:\n* $1 - Timezone, like \"Europe/Berlin\" or \"+02:00\".",
 	"campaignevents-event-details-in-person-event-label": "Heading used on [[Special:EventDetails]] for in-person events.",
 	"campaignevents-event-details-online-label": "Heading used on [[Special:EventDetails]] for online events.",
 	"campaignevents-event-details-chat-link": "Heading used on [[Special:EventDetails]] for a section that contains an invite link to a chat group.",
