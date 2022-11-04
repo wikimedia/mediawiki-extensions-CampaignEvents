@@ -70,10 +70,9 @@ class EventPageDecorator {
 	private const USER_STATUS_BLOCKED = 1;
 	private const USER_STATUS_ORGANIZER = 2;
 	private const USER_STATUS_PARTICIPANT_CAN_UNREGISTER = 3;
-	private const USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED = 4;
-	private const USER_STATUS_CAN_REGISTER = 5;
-	private const USER_STATUS_CANNOT_REGISTER_ENDED = 6;
-	private const USER_STATUS_CANNOT_REGISTER_CLOSED = 7;
+	private const USER_STATUS_CAN_REGISTER = 4;
+	private const USER_STATUS_CANNOT_REGISTER_ENDED = 5;
+	private const USER_STATUS_CANNOT_REGISTER_CLOSED = 6;
 
 	/** @var IEventLookup */
 	private $eventLookup;
@@ -534,8 +533,7 @@ class EventPageDecorator {
 				);
 			} elseif (
 				$userStatus === self::USER_STATUS_ORGANIZER ||
-				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
-				$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED
+				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
 			) {
 				$linkIcon = new IconWidget( [ 'icon' => 'link' ] );
 				$linkContent = new HtmlSnippet(
@@ -604,8 +602,7 @@ class EventPageDecorator {
 			);
 		} elseif (
 			$userStatus === self::USER_STATUS_ORGANIZER ||
-			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
-			$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED
+			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
 		) {
 			$chatURLContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
 		} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
@@ -781,34 +778,29 @@ class EventPageDecorator {
 			] );
 		}
 
-		if (
-			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ||
-			$userStatus === self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED
-		) {
+		if ( $userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ) {
 			$unregisterURL = SpecialPage::getTitleFor(
 				SpecialCancelEventRegistration::PAGE_NAME,
 				(string)$eventID
 			)->getLocalURL();
-			$alreadyRegisteredItems = [
-				new MessageWidget( [
-					'type' => 'success',
-					'label' => $msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-header-attending' )
-					),
-					'inline' => true,
-				] )
-			];
-			if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED ) {
-				$alreadyRegisteredItems[] = new ButtonWidget( [
-					'flags' => [ 'destructive' ],
-					'icon' => 'trash',
-					'framed' => false,
-					'href' => $unregisterURL,
-					'classes' => [ 'ext-campaignevents-event-unregister-btn' ],
-				] );
-			}
+
 			return new HorizontalLayout( [
-				'items' => $alreadyRegisteredItems,
+				'items' => [
+					new MessageWidget( [
+						'type' => 'success',
+						'label' => $msgFormatter->format(
+							MessageValue::new( 'campaignevents-eventpage-header-attending' )
+						),
+						'inline' => true,
+					] ),
+					new ButtonWidget( [
+						'flags' => [ 'destructive' ],
+						'icon' => 'trash',
+						'framed' => false,
+						'href' => $unregisterURL,
+						'classes' => [ 'ext-campaignevents-event-unregister-btn' ],
+					] )
+				],
 				'classes' => [
 					'ext-campaignevents-eventpage-unregister-layout',
 					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
@@ -852,8 +844,6 @@ class EventPageDecorator {
 				switch ( $checkUnregistrationAllowedVal ) {
 					case UnregisterParticipantCommand::CANNOT_UNREGISTER_DELETED:
 						throw new UnexpectedValueException( "Registration should not be deleted at this point." );
-					case UnregisterParticipantCommand::CANNOT_UNREGISTER_ENDED:
-						return self::USER_STATUS_PARTICIPANT_CANNOT_UNREGISTER_ENDED;
 					case UnregisterParticipantCommand::CAN_UNREGISTER:
 						return self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER;
 					default:

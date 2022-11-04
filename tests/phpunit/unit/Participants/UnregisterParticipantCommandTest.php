@@ -85,35 +85,20 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param string $errMsg
 	 * @covers ::unregisterIfAllowed
 	 * @covers ::checkIsUnregistrationAllowed
 	 * @covers ::unregisterUnsafe
-	 * @dataProvider provideInvalidRegistrationsAndErrors
 	 */
-	public function testUnregisterIfAllowed__error(
-		ExistingEventRegistration $registration,
-		string $errMsg
-	) {
+	public function testUnregisterIfAllowed__deleted() {
+		$deletedRegistration = $this->getValidRegistration();
+		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
 		$status = $this->getCommand()->unregisterIfAllowed(
-			$registration,
+			$deletedRegistration,
 			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
-		$this->assertStatusMessage( $errMsg, $status );
-	}
-
-	public function provideInvalidRegistrationsAndErrors(): Generator {
-		$finishedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$finishedRegistration->method( 'getEndUTCTimestamp' )->willReturn( self::PAST_TIME );
-		$finishedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
-		yield 'Already finished' => [ $finishedRegistration, 'campaignevents-unregister-event-past' ];
-
-		$deletedRegistration = $this->getValidRegistration();
-		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
-		yield 'Deleted' => [ $deletedRegistration, 'campaignevents-unregister-registration-deleted' ];
+		$this->assertStatusMessage( 'campaignevents-unregister-registration-deleted', $status );
 	}
 
 	/**
@@ -208,6 +193,19 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::unregisterUnsafe
+	 */
+	public function testCanUnregisterFromFinishedEvent() {
+		$finishedEvent = $this->createMock( ExistingEventRegistration::class );
+		$finishedEvent->method( 'getEndUTCTimestamp' )->willReturn( self::PAST_TIME );
+		$status = $this->getCommand()->unregisterUnsafe(
+			$finishedEvent,
+			$this->createMock( ICampaignsAuthority::class )
+		);
+		$this->assertStatusGood( $status );
+	}
+
+	/**
 	 * @covers ::removeParticipantsIfAllowed
 	 * @covers ::authorizeRemoveParticipants
 	 */
@@ -226,42 +224,22 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param string $expectedStatusMessage
 	 * @covers ::removeParticipantsIfAllowed
 	 * @covers ::authorizeRemoveParticipants
 	 * @covers ::removeParticipantsUnsafe
-	 * @dataProvider provideDoRemoveParticipantsIfAllowedError
 	 */
-	public function testDoRemoveParticipantsIfAllowed__error(
-		ExistingEventRegistration $registration,
-		string $expectedStatusMessage
-	) {
+	public function testDoRemoveParticipantsIfAllowed__deletedRegistration() {
+		$deletedRegistration = $this->getValidRegistration();
+		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
 		$status = $this->getCommand()->removeParticipantsIfAllowed(
-			$registration,
+			$deletedRegistration,
 			[],
 			$this->createMock( ICampaignsAuthority::class )
 		);
 
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
-		$this->assertStatusMessage( $expectedStatusMessage, $status );
-	}
-
-	public function provideDoRemoveParticipantsIfAllowedError(): Generator {
-		$pastRegistration = $this->createMock( ExistingEventRegistration::class );
-		$pastRegistration->method( 'getEndUTCTimestamp' )->willReturn( self::PAST_TIME );
-		yield 'Registration in the past' => [
-			$pastRegistration,
-			'campaignevents-unregister-participants-past-registration'
-		];
-
-		$deletedRegistration = $this->getValidRegistration();
-		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
-		yield 'Registration deleted' => [
-			$deletedRegistration,
-			'campaignevents-unregister-participants-registration-deleted'
-		];
+		$this->assertStatusMessage( 'campaignevents-unregister-participants-registration-deleted', $status );
 	}
 
 	/**
