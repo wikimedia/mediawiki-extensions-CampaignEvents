@@ -7,8 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -35,7 +33,8 @@ class EventDetailsParticipantsModule {
 
 	public const MODULE_STYLES = [
 		'oojs-ui.styles.icons-moderation',
-		'oojs-ui.styles.icons-user'
+		'oojs-ui.styles.icons-user',
+		...UserLinker::MODULE_STYLES
 	];
 
 	/** @var IMessageFormatterFactory */
@@ -315,22 +314,20 @@ class EventDetailsParticipantsModule {
 			->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
 
 		if ( $curUserParticipant ) {
-			$curUserRow = $this->getCurUserParticipantRow(
-				$curUserParticipant,
-				$canRemoveParticipants,
-				$language,
-				$viewingUser
+			$participantRows->appendContent(
+				$this->getCurUserParticipantRow(
+					$curUserParticipant,
+					$canRemoveParticipants,
+					$language,
+					$viewingUser
+				)
 			);
-			if ( $curUserRow ) {
-				$participantRows->appendContent( $curUserRow );
-			}
 		}
 
 		foreach ( $otherParticipants as $participant ) {
-			$userRow = $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser );
-			if ( $userRow ) {
-				$participantRows->appendContent( $userRow );
-			}
+			$participantRows->appendContent(
+				$this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser )
+			);
 		}
 		return $participantRows;
 	}
@@ -340,14 +337,14 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
-	 * @return Tag|null
+	 * @return Tag
 	 */
 	private function getCurUserParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
 		Language $language,
 		UserIdentity $viewingUser
-	): ?Tag {
+	): Tag {
 		return $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser );
 	}
 
@@ -356,19 +353,14 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
-	 * @return Tag|null
+	 * @return Tag
 	 */
 	private function getParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
 		Language $language,
 		UserIdentity $viewingUser
-	): ?Tag {
-		try {
-			$userLink = new HtmlSnippet( $this->userLinker->generateUserLink( $participant->getUser() ) );
-		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
-			return null;
-		}
+	): Tag {
 		$elements = [];
 		if ( $canRemoveParticipants ) {
 			$elements[] = ( new CheckboxInputWidget( [
@@ -378,8 +370,12 @@ class EventDetailsParticipantsModule {
 				'classes' => [ 'ext-campaignevents-event-details-participants-checkboxes' ],
 			] ) );
 		}
+
+		$usernameElement = new HtmlSnippet(
+			$this->userLinker->generateUserLinkWithFallback( $participant->getUser(), $language->getCode() )
+		);
 		$elements[] = ( new Tag( 'span' ) )
-			->appendContent( $userLink )
+			->appendContent( $usernameElement )
 			->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
 
 		if ( $participant->isPrivateRegistration() ) {

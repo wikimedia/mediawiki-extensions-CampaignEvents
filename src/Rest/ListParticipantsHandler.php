@@ -100,16 +100,9 @@ class ListParticipantsHandler extends SimpleHandler {
 		$respVal = [];
 		foreach ( $participants as $participant ) {
 			$centralUser = $participant->getUser();
-			try {
-				$userName = $this->centralUserLookup->getUserName( $centralUser );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
-				continue;
-			}
-			$respVal[] = [
+			$curData = [
 				'participant_id' => $participant->getParticipantID(),
 				'user_id' => $centralUser->getCentralID(),
-				'user_name' => $userName,
-				'user_page' => $this->getUserPagePath( $this->userLinker,  $centralUser ),
 				'user_registered_at' => wfTimestamp( TS_MW, $participant->getRegisteredAt() ),
 				'user_registered_at_formatted' => $language->userTimeAndDate(
 					$participant->getRegisteredAt(),
@@ -117,6 +110,19 @@ class ListParticipantsHandler extends SimpleHandler {
 				),
 				'private' => $participant->isPrivateRegistration(),
 			];
+
+			$userName = null;
+			try {
+				$userName = $this->centralUserLookup->getUserName( $centralUser );
+				$curData['user_name'] = $userName;
+				$curData['user_page'] = $this->getUserPagePath( $this->userLinker,  $centralUser );
+			} catch ( CentralUserNotFoundException $_ ) {
+				$curData['not_found'] = true;
+			} catch ( HiddenCentralUserException $_ ) {
+				$curData['hidden'] = true;
+			}
+
+			$respVal[] = $curData;
 		}
 		return $this->getResponseFactory()->createJson( $respVal );
 	}

@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -58,19 +59,19 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testRun(
 		array $expectedResp,
-		ParticipantsStore $participantsStore
+		ParticipantsStore $participantsStore,
+		CampaignsCentralUserLookup $centralUserLookup = null
 	) {
-		$handler = $this->newHandler( null, null, $participantsStore );
+		$handler = $this->newHandler( null, null, $participantsStore, $centralUserLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 
-		$this->assertSame( $expectedResp, $respData );
+		$this->assertArrayEquals( $expectedResp, $respData );
 	}
 
 	public function provideRunData(): Generator {
 		yield 'No participants' => [
 			[],
-			$this->createMock( ParticipantsStore::class ),
-			$this->createMock( CampaignsCentralUserLookup::class )
+			$this->createMock( ParticipantsStore::class )
 		];
 
 		$participants = [];
@@ -99,6 +100,26 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			$expected,
 			$partStore
 		];
+
+		$deletedParticipant = new Participant( new CentralUser( 1 ), '20220315120000', 1, false );
+		$deletedUserExpected = [
+			[
+				'participant_id' => 1,
+				'user_id' => 1,
+				'hidden' => true,
+				'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
+				'user_registered_at_formatted' => '12:00, 15 March 2022',
+				'private' => false,
+			]
+		];
+		$delPartStore = $this->createMock( ParticipantsStore::class );
+		$delPartStore->expects( $this->atLeastOnce() )
+			->method( 'getEventParticipants' )
+			->willReturn( [ $deletedParticipant ] );
+		$delUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$delUserLookup->method( 'getUserName' )
+			->willThrowException( $this->createMock( HiddenCentralUserException::class ) );
+		yield 'Deleted user' => [ $deletedUserExpected, $delPartStore, $delUserLookup ];
 	}
 
 	/**

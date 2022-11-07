@@ -70,6 +70,7 @@ class UserLinker {
 	 * ext.campaignEvents.userlinks.styles.less file as well.
 	 * @note This assumes that the given central user exists, or existed in the past. As such, if the account
 	 * cannot be found it will consider it as being deleted.
+	 * @fixme This must be kept in sync with ParticipantsManager.getDeletedOrNotFoundParticipantElement
 	 */
 	public function generateUserLinkWithFallback( CentralUser $user, string $langCode ): string {
 		try {
