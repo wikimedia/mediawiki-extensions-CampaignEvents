@@ -3,15 +3,23 @@
 
 	/**
 	 *
-	 * @param {Element} observedElement
-	 * a plain DOM node that should be observed when scrolling on it
+	 * @param {Element} observedElement A plain DOM node that should be observed when
+	 *   scrolling on it.
+	 * @param {Function} onScrolledToBottom Callback to execute when the bottom
+	 *   of the observed element is reached.
 	 * @constructor
 	 */
-	function ScrollDownObserver( observedElement ) {
+	function ScrollDownObserver( observedElement, onScrolledToBottom ) {
 		this.observedElement = observedElement;
 		this.preloadFromBottom = 50;
 		this.lastTop = 0;
 		this.scrollingEnd = false;
+		var that = this;
+		$( observedElement ).on( 'scroll', function () {
+			if ( that.scrolledToBottom() ) {
+				onScrolledToBottom();
+			}
+		} );
 	}
 
 	ScrollDownObserver.prototype.scrolledToBottom = function () {
