@@ -21,6 +21,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
@@ -123,7 +124,8 @@ return [
 			return new RegisterParticipantCommand(
 				$services->get( ParticipantsStore::SERVICE_NAME ),
 				$services->get( PermissionChecker::SERVICE_NAME ),
-				$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+				$services->get( UserNotifier::SERVICE_NAME )
 			);
 		},
 	UnregisterParticipantCommand::SERVICE_NAME =>
@@ -217,6 +219,11 @@ return [
 	EventTimeFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTimeFormatter {
 		return new EventTimeFormatter(
 			$services->getUserOptionsLookup()
+		);
+	},
+	UserNotifier::SERVICE_NAME => static function ( MediaWikiServices $services ): UserNotifier {
+		return new UserNotifier(
+			ExtensionRegistry::getInstance()->isLoaded( 'Echo' )
 		);
 	},
 ];

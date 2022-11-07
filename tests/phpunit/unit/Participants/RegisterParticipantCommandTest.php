@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -54,7 +55,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		return new RegisterParticipantCommand(
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$permChecker,
-			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class )
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
+			$this->createMock( UserNotifier::class )
 		);
 	}
 
@@ -179,18 +181,16 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 				RegisterParticipantCommand::REGISTRATION_PUBLIC;
 			$modifiedStore = $this->createMock( ParticipantsStore::class );
 			$modifiedStore->method( 'addParticipantToEvent' )->willReturn( true );
-			$modifiedStore->expects(
-				$this->exactly( 1 ) )->
-			method( 'addParticipantToEvent' )->
-			with( $this->anything(), $this->anything(), $isPrivate );
+			$modifiedStore->expects( $this->once() )
+				->method( 'addParticipantToEvent' )
+				->with( $this->anything(), $this->anything(), $isPrivate );
 			yield "Modified, $testDescription" => [ $modifiedStore, $isPrivate, true ];
 
 			$notModifiedStore = $this->createMock( ParticipantsStore::class );
 			$notModifiedStore->method( 'addParticipantToEvent' )->willReturn( false );
-			$notModifiedStore->expects(
-				$this->exactly( 1 ) )->
-			method( 'addParticipantToEvent' )->
-			with( $this->anything(), $this->anything(), $isPrivate );
+			$notModifiedStore->expects( $this->once() )
+				->method( 'addParticipantToEvent' )
+				->with( $this->anything(), $this->anything(), $isPrivate );
 			yield "Not modified, $testDescription" => [ $notModifiedStore, $isPrivate, false ];
 		}
 	}

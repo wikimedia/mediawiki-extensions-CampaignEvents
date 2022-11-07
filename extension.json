@@ -43,6 +43,10 @@
 			"value": null
 		}
 	},
+	"DefaultUserOptions": {
+		"echo-subscriptions-email-campaign-events-notification-registration": true,
+		"echo-subscriptions-web-campaign-events-notification-registration": false
+	},
 	"GroupPermissions": {
 		"user": {
 			"campaignevents-enable-registration": true
@@ -79,7 +83,8 @@
 		"LoadExtensionSchemaUpdates": "SchemaChanges",
 		"ArticleViewHeader": "ArticleViewHeader",
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
-		"PageDeleteComplete": "PageMoveAndDeleteHandler"
+		"PageDeleteComplete": "PageMoveAndDeleteHandler",
+		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler::onBeforeCreateEchoEvent"
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [
