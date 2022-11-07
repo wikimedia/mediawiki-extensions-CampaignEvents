@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Gilbert Ndihokubwayo"
 		]
 	},
@@ -80,7 +81,7 @@
 	"campaignevents-delete-not-allowed-registration": "Ntiwemerewe gufuta ukwiyandikisha kuri kino gikorwa.",
 	"campaignevents-rest-delete-already-deleted": "Ukwiyandikisha kuri kino gikorwa vyamaze gukurwaho.",
 	"campaignevents-role-creator": "{{GENDER:$1|uwatanguje}}",
-	"campaignevents-role-organizer": "Umutunganyabikorwa",
+	"campaignevents-role-organizer": "{{GENDER:$1|Umutunganyabikorwa}}",
 	"campaignevents-rest-user-not-found": "Umukoresha $1 ntabaho.",
 	"campaignevents-register-not-allowed": "Ntiwemerewe kwiyandikisha kugikorwa.",
 	"campaignevents-register-event-past": "Ikiringo co kwiyandikisha kuri kino gikorwa cararangiye.",

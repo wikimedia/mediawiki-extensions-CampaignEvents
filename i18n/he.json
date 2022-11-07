@@ -190,6 +190,7 @@
 	"campaignevents-back-to-your-events": "חזרה לאירועים שלך",
 	"campaignevents-event-details-edit-button": "עריכה",
 	"campaignevents-event-details-header-participants": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}}",
+	"campaignevents-event-details-participants-private": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}} נרשם באופן פרטי.",
 	"campaignevents-event-details-dates": "$1 עד $4",
 	"campaignevents-event-details-in-person-event-label": "אירוע בחיים האמיתיים",
 	"campaignevents-event-details-online-label": "אירוע מקוון",
