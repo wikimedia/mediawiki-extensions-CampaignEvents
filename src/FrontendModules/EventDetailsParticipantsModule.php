@@ -108,30 +108,19 @@ class EventDetailsParticipantsModule {
 		}
 
 		$showPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID );
-		if ( $curUserParticipant ) {
-			$participants = array_merge(
-				[ $curUserParticipant ],
-				$this->participantsStore->getEventParticipants(
-					$eventID,
-					self::PARTICIPANTS_LIMIT - 1,
-					null,
-					null,
-					$showPrivateParticipants,
-					// The isset is redundant, but the IDE's unhappy without it.
-					isset( $centralUser ) ? $centralUser->getCentralID() : null
-				)
-			);
-		} else {
-			$participants = $this->participantsStore->getEventParticipants(
-				$eventID,
-				self::PARTICIPANTS_LIMIT,
-				null,
-				null,
-				$showPrivateParticipants
-			);
-		}
+		$otherParticipantsNum = $curUserParticipant ? self::PARTICIPANTS_LIMIT - 1 : self::PARTICIPANTS_LIMIT;
+		$otherParticipants = $this->participantsStore->getEventParticipants(
+			$eventID,
+			$otherParticipantsNum,
+			null,
+			null,
+			$showPrivateParticipants,
+			isset( $centralUser ) ? $centralUser->getCentralID() : null
+		);
+		$lastParticipant = $otherParticipants ? end( $otherParticipants ) : $curUserParticipant;
+		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;
 
-		if ( $participants ) {
+		if ( $totalParticipants ) {
 			$items[] = $this->getSearchBar( $msgFormatter );
 		}
 
@@ -141,18 +130,24 @@ class EventDetailsParticipantsModule {
 				UnregisterParticipantCommand::CAN_UNREGISTER;
 		}
 
-		if ( $canRemoveParticipants && $participants ) {
+		if ( $canRemoveParticipants && $totalParticipants ) {
 			$items[] = $this->getListControls( $msgFormatter );
 		}
 
-		$items[] = $this->getParticipantsContainer( $participants, $canRemoveParticipants, $language, $viewingUser );
+		$items[] = $this->getParticipantsContainer(
+			$curUserParticipant,
+			$otherParticipants,
+			$canRemoveParticipants,
+			$language,
+			$viewingUser
+		);
 
 		$out->addJsConfigVars( [
 			// TODO This may change when we add the feature to send messages
 			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
 			'wgCampaignEventsShowPrivateParticipants' => $showPrivateParticipants,
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
-			'wgCampaignEventsLastParticipantID' => !$participants ? null : end( $participants )->getParticipantID(),
+			'wgCampaignEventsLastParticipantID' => $lastParticipantID,
 			'wgCampaignEventsCurUserCentralID' => isset( $centralUser ) ? $centralUser->getCentralID() : null,
 		] );
 
@@ -268,25 +263,33 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param Participant[] $participants
+	 * @param Participant|null $curUserParticipant
+	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
 	 * @return Tag
 	 */
 	private function getParticipantsContainer(
-		array $participants,
+		?Participant $curUserParticipant,
+		array $otherParticipants,
 		bool $canRemoveParticipants,
 		Language $language,
 		UserIdentity $viewingUser
 	): Tag {
 		$participantsContainer = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-users-container' ] );
-		if ( !$participants ) {
+		if ( !$curUserParticipant && !$otherParticipants ) {
 			$participantsContainer->addClasses( [ 'ext-campaignevents-details-hide-element' ] );
 		}
 
-		$participantRows = $this->getParticipantRows( $participants, $canRemoveParticipants, $language, $viewingUser );
+		$participantRows = $this->getParticipantRows(
+			$curUserParticipant,
+			$otherParticipants,
+			$canRemoveParticipants,
+			$language,
+			$viewingUser
+		);
 
 		$participantsContainer->appendContent( $participantRows );
 
@@ -294,60 +297,108 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param Participant[] $participants
+	 * @param Participant|null $curUserParticipant
+	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
 	 * @return Tag
 	 */
 	private function getParticipantRows(
-		array $participants,
+		?Participant $curUserParticipant,
+		array $otherParticipants,
 		bool $canRemoveParticipants,
 		Language $language,
 		UserIdentity $viewingUser
 	): Tag {
 		$participantRows = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
-		foreach ( $participants as $participant ) {
-			try {
-				$userLink = new HtmlSnippet( $this->userLinker->generateUserLink( $participant->getUser() ) );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
-				continue;
+
+		if ( $curUserParticipant ) {
+			$curUserRow = $this->getCurUserParticipantRow(
+				$curUserParticipant,
+				$canRemoveParticipants,
+				$language,
+				$viewingUser
+			);
+			if ( $curUserRow ) {
+				$participantRows->appendContent( $curUserRow );
 			}
-			$elements = [];
-			if ( $canRemoveParticipants ) {
-				$elements[] = ( new CheckboxInputWidget( [
-					'name' => 'event-details-participants-checkboxes',
-					'infusable' => true,
-					'value' => $participant->getUser()->getCentralID(),
-					'classes' => [ 'ext-campaignevents-event-details-participants-checkboxes' ],
-				] ) );
+		}
+
+		foreach ( $otherParticipants as $participant ) {
+			$userRow = $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser );
+			if ( $userRow ) {
+				$participantRows->appendContent( $userRow );
 			}
-			$elements[] = ( new Tag( 'span' ) )
-				->appendContent( $userLink )
-				->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
-
-			if ( $participant->isPrivateRegistration() ) {
-				$elements[] = new IconWidget( [
-					'icon' => 'lock',
-					'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
-				] );
-			}
-
-			$elements[] = ( new Tag( 'span' ) )->appendContent(
-				$language->userTimeAndDate(
-					$participant->getRegisteredAt(),
-					$viewingUser
-				)
-			)->addClasses( [ 'ext-campaignevents-details-participant-registered-at' ] );
-
-			$userRow = ( new Tag() )
-				->appendContent( ...$elements )
-				->addClasses( [ 'ext-campaignevents-details-user-row' ] );
-
-			$participantRows->appendContent( $userRow );
 		}
 		return $participantRows;
+	}
+
+	/**
+	 * @param Participant $participant
+	 * @param bool $canRemoveParticipants
+	 * @param Language $language
+	 * @param UserIdentity $viewingUser
+	 * @return Tag|null
+	 */
+	private function getCurUserParticipantRow(
+		Participant $participant,
+		bool $canRemoveParticipants,
+		Language $language,
+		UserIdentity $viewingUser
+	): ?Tag {
+		return $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser );
+	}
+
+	/**
+	 * @param Participant $participant
+	 * @param bool $canRemoveParticipants
+	 * @param Language $language
+	 * @param UserIdentity $viewingUser
+	 * @return Tag|null
+	 */
+	private function getParticipantRow(
+		Participant $participant,
+		bool $canRemoveParticipants,
+		Language $language,
+		UserIdentity $viewingUser
+	): ?Tag {
+		try {
+			$userLink = new HtmlSnippet( $this->userLinker->generateUserLink( $participant->getUser() ) );
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			return null;
+		}
+		$elements = [];
+		if ( $canRemoveParticipants ) {
+			$elements[] = ( new CheckboxInputWidget( [
+				'name' => 'event-details-participants-checkboxes',
+				'infusable' => true,
+				'value' => $participant->getUser()->getCentralID(),
+				'classes' => [ 'ext-campaignevents-event-details-participants-checkboxes' ],
+			] ) );
+		}
+		$elements[] = ( new Tag( 'span' ) )
+			->appendContent( $userLink )
+			->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
+
+		if ( $participant->isPrivateRegistration() ) {
+			$elements[] = new IconWidget( [
+				'icon' => 'lock',
+				'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
+			] );
+		}
+
+		$elements[] = ( new Tag( 'span' ) )->appendContent(
+			$language->userTimeAndDate(
+				$participant->getRegisteredAt(),
+				$viewingUser
+			)
+		)->addClasses( [ 'ext-campaignevents-details-participant-registered-at' ] );
+
+		return ( new Tag( 'div' ) )
+			->appendContent( ...$elements )
+			->addClasses( [ 'ext-campaignevents-details-user-row' ] );
 	}
 
 	/**
