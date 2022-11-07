@@ -100,7 +100,6 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function requiresUnblock(): bool {
-		// TODO MVP: Are we comfortable with this?
 		return false;
 	}
 }
