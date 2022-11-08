@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Time;
 
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\User\UserOptionsLookup;
 use MediaWiki\User\UserTimeCorrection;
@@ -96,13 +97,17 @@ class EventTimeFormatter {
 
 	/**
 	 * Returns the time correction that should be used when formatting time, date, and timezone.
+	 * This uses the event timezone for in-person events, and the user preference for online and hybrid events,
+	 * see T316688.
 	 *
 	 * @param EventRegistration $event
 	 * @param UserIdentity $user
 	 * @return UserTimeCorrection
 	 */
 	private function getTimeCorrection( EventRegistration $event, UserIdentity $user ): UserTimeCorrection {
-		// TODO This will depend on the event type (T316688)
+		if ( $event->getMeetingType() === EventRegistration::MEETING_TYPE_IN_PERSON ) {
+			return Utils::timezoneToUserTimeCorrection( $event->getTimezone() );
+		}
 		$timeCorrectionPref = $this->userOptionsLookup->getOption( $user, 'timecorrection' ) ?? '';
 		return new UserTimeCorrection( $timeCorrectionPref );
 	}

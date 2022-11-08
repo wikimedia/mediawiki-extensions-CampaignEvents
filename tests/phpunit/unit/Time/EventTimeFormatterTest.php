@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Time;
 
+use DateTimeZone;
 use Generator;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -77,38 +78,72 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 
 	public function provideDates(): Generator {
 		$utcTimestamp = '20221015120000';
-		$event = $this->createMock( EventRegistration::class );
-		$event->method( 'getStartUTCTimestamp' )->willReturn( $utcTimestamp );
-		$event->method( 'getEndUTCTimestamp' )->willReturn( $utcTimestamp );
-
-		$expected = new FormattedTime(
-			'12:00',
-			'2022-10-15',
-			'2022-10-15 12:00'
-		);
-
 		$userTimeCorrectionPref = 'Offset|0';
+		$eventTimezone = new DateTimeZone( '+02:00' );
+		$eventTimeCorrection = 'Offset|120';
+
+		$getEventMock = function ( int $meetingType ) use ( $utcTimestamp, $eventTimezone ): EventRegistration {
+			$event = $this->createMock( EventRegistration::class );
+			$event->method( 'getStartUTCTimestamp' )->willReturn( $utcTimestamp );
+			$event->method( 'getEndUTCTimestamp' )->willReturn( $utcTimestamp );
+			$event->method( 'getMeetingType' )->willReturn( $meetingType );
+			$event->method( 'getTimezone' )->willReturn( $eventTimezone );
+			return $event;
+		};
+
+		// Note that the expected value here doesn't really matter, as we force Language to return it.
+		// The important bit are the assertions on the Language methods and the arguments they receive.
+		$expected = new FormattedTime( '12:00', '2022-10-15', '2022-10-15 12:00' );
+
 		$userOptionsLookup = $this->createMock( UserOptionsLookup::class );
 		$userOptionsLookup->expects( $this->atLeastOnce() )
 			->method( 'getOption' )
 			->with( $this->anything(), 'timecorrection' )
 			->willReturn( $userTimeCorrectionPref );
 
-		$lang = $this->createMock( Language::class );
-		$lang->expects( $this->once() )
-			->method( 'userTime' )
-			->with( $utcTimestamp, $this->anything(), [ 'timecorrection' => $userTimeCorrectionPref ] )
-			->willReturn( $expected->getTime() );
-		$lang->expects( $this->once() )
-			->method( 'userDate' )
-			->with( $utcTimestamp, $this->anything(), [ 'timecorrection' => $userTimeCorrectionPref ] )
-			->willReturn( $expected->getDate() );
-		$lang->expects( $this->once() )
-			->method( 'userTimeAndDate' )
-			->with( $utcTimestamp, $this->anything(), [ 'timecorrection' => $userTimeCorrectionPref ] )
-			->willReturn( $expected->getTimeAndDate() );
+		$mockLangWithExpectedTimeCorrection = function ( string $timeCorrection ) use (
+			$utcTimestamp,
+			$expected
+		): Language {
+			$lang = $this->createMock( Language::class );
+			$lang->expects( $this->once() )
+				->method( 'userTime' )
+				->with( $utcTimestamp, $this->anything(), [ 'timecorrection' => $timeCorrection ] )
+				->willReturn( $expected->getTime() );
+			$lang->expects( $this->once() )
+				->method( 'userDate' )
+				->with( $utcTimestamp, $this->anything(), [ 'timecorrection' => $timeCorrection ] )
+				->willReturn( $expected->getDate() );
+			$lang->expects( $this->once() )
+				->method( 'userTimeAndDate' )
+				->with( $utcTimestamp, $this->anything(), [ 'timecorrection' => $timeCorrection ] )
+				->willReturn( $expected->getTimeAndDate() );
+			return $lang;
+		};
 
-		yield [ $event, $lang, $userOptionsLookup, $expected ];
+		$onlineEvent = $getEventMock( EventRegistration::MEETING_TYPE_ONLINE );
+		yield 'Online event' => [
+			$onlineEvent,
+			$mockLangWithExpectedTimeCorrection( $userTimeCorrectionPref ),
+			$userOptionsLookup,
+			$expected
+		];
+
+		$inPersonEvent = $getEventMock( EventRegistration::MEETING_TYPE_IN_PERSON );
+		yield 'In-person event' => [
+			$inPersonEvent,
+			$mockLangWithExpectedTimeCorrection( $eventTimeCorrection ),
+			$userOptionsLookup,
+			$expected
+		];
+
+		$hybridEvent = $getEventMock( EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON );
+		yield 'Hybrid event' => [
+			$hybridEvent,
+			$mockLangWithExpectedTimeCorrection( $userTimeCorrectionPref ),
+			$userOptionsLookup,
+			$expected
+		];
 	}
 
 	/**
@@ -129,26 +164,68 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 	}
 
 	public function provideTimezones(): Generator {
-		// The EventRegistration object is currently ignored by the method
-		$event = $this->createMock( EventRegistration::class );
+		$mockEvent = function ( int $meetingType, string $timeZone = null ): EventRegistration {
+			$event = $this->createMock( EventRegistration::class );
+			$event->method( 'getMeetingType' )->willReturn( $meetingType );
+			if ( $timeZone !== null ) {
+				$event->method( 'getTimezone' )->willReturn( new DateTimeZone( $timeZone ) );
+			} else {
+				$event->expects( $this->never() )->method( 'getTimezone' );
+			}
+			return $event;
+		};
+
+		$mockOptionsLookup = function ( ?string $expectedTimeCorrection ): UserOptionsLookup {
+			$lookup = $this->createMock( UserOptionsLookup::class );
+			if ( $expectedTimeCorrection !== null ) {
+				$lookup->expects( $this->once() )
+					->method( 'getOption' )
+					->with( $this->anything(), 'timecorrection' )
+					->willReturn( $expectedTimeCorrection );
+			} else {
+				$lookup->expects( $this->never() )
+					->method( 'getOption' )
+					->with( $this->anything(), 'timecorrection' );
+			}
+			return $lookup;
+		};
 
 		$geographicalZone = 'Europe/Berlin';
-		$geographicalPreference = "ZoneInfo|0|$geographicalZone";
-		$geographicalOptionLookup = $this->createMock( UserOptionsLookup::class );
-		$geographicalOptionLookup->expects( $this->once() )
-			->method( 'getOption' )
-			->with( $this->anything(), 'timecorrection' )
-			->willReturn( $geographicalPreference );
+		$geographicalTimeCorrection = "ZoneInfo|0|$geographicalZone";
 
-		yield 'Geographical' => [ $event, $geographicalOptionLookup, $geographicalZone ];
+		yield 'Online event, geographical' => [
+			$mockEvent( EventRegistration::MEETING_TYPE_ONLINE ),
+			$mockOptionsLookup( $geographicalTimeCorrection ),
+			$geographicalZone
+		];
+		yield 'In-person event, geographical' => [
+			$mockEvent( EventRegistration::MEETING_TYPE_IN_PERSON, $geographicalZone ),
+			$mockOptionsLookup( null ),
+			$geographicalZone
+		];
+		yield 'Hybrid event, geographical' => [
+			$mockEvent( EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON ),
+			$mockOptionsLookup( $geographicalTimeCorrection ),
+			$geographicalZone
+		];
 
 		$offset = '+02:00';
-		$offsetPreference = "Offset|120";
-		$offsetOptionLookup = $this->createMock( UserOptionsLookup::class );
-		$offsetOptionLookup->expects( $this->once() )
-			->method( 'getOption' )
-			->with( $this->anything(), 'timecorrection' )
-			->willReturn( $offsetPreference );
-		yield 'Offset' => [ $event, $offsetOptionLookup, $offset ];
+		$offsetTimeCorrection = "Offset|120";
+
+		yield 'Online event, offset' => [
+			$mockEvent( EventRegistration::MEETING_TYPE_ONLINE ),
+			$mockOptionsLookup( $offsetTimeCorrection ),
+			$offset
+		];
+		yield 'In-person event, offset' => [
+			$mockEvent( EventRegistration::MEETING_TYPE_IN_PERSON, $offset ),
+			$mockOptionsLookup( null ),
+			$offset
+		];
+		yield 'Hybrid event, offset' => [
+			$mockEvent( EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON ),
+			$mockOptionsLookup( $offsetTimeCorrection ),
+			$offset
+		];
 	}
 }
