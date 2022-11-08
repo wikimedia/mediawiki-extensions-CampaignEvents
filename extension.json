@@ -18,7 +18,8 @@
 		}
 	},
 	"AutoloadNamespaces": {
-		"MediaWiki\\Extension\\CampaignEvents\\": "src/"
+		"MediaWiki\\Extension\\CampaignEvents\\": "src/",
+		"MediaWiki\\Extension\\CampaignEvents\\Maintenance\\": "maintenance/"
 	},
 	"AvailableRights": [
 		"campaignevents-enable-registration",

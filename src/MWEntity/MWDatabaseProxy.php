@@ -117,13 +117,6 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	}
 
 	/**
-	 * @return IDatabase
-	 */
-	public function getMWDatabase(): IDatabase {
-		return $this->db;
-	}
-
-	/**
 	 * @inheritDoc
 	 */
 	public function delete( $table, $conds ): bool {
@@ -134,10 +127,10 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	 * @inheritDoc
 	 */
 	public function deleteJoin(
-		$delTable,
-		$joinTable,
-		$delVar,
-		$joinVar,
+		string $delTable,
+		string $joinTable,
+		string $delVar,
+		string $joinVar,
 		$conds
 	) {
 		return $this->db->deleteJoin( $delTable, $joinTable, $delVar, $joinVar, $conds, wfGetCaller() );
@@ -146,7 +139,28 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	/**
 	 * @inheritDoc
 	 */
-	public function makeCommaList( array $a ) {
+	public function makeCommaList( array $a ): string {
 		return $this->db->makeList( $a, IDatabase::LIST_COMMA );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function conditional( $cond, string $caseTrueExpression, string $caseFalseExpression ): string {
+		return $this->db->conditional( $cond, $caseTrueExpression, $caseFalseExpression );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function buildExcludedValue( string $column ): string {
+		return $this->db->buildExcludedValue( $column );
+	}
+
+	/**
+	 * @return IDatabase
+	 */
+	public function getMWDatabase(): IDatabase {
+		return $this->db;
 	}
 }
