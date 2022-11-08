@@ -89,16 +89,15 @@
 		}
 
 		this.scrollDownObserver = new ScrollDownObserver(
-			this.$usersContainer[ 0 ]
-		);
-		this.$usersContainer.on( 'scroll', function () {
-			if (
-				thisClass.scrollDownObserver.scrolledToBottom() &&
-				thisClass.participantsTotal > thisClass.$userRowsContainer.children().length
-			) {
-				thisClass.loadMoreParticipants();
+			this.$usersContainer[ 0 ],
+			function () {
+				if (
+					thisClass.participantsTotal > thisClass.$userRowsContainer.children().length
+				) {
+					thisClass.loadMoreParticipants();
+				}
 			}
-		} );
+		);
 
 		if ( this.$searchParticipantsElement.length ) {
 			var searchParticipantsWidget = OO.ui.SearchInputWidget.static.infuse(
@@ -107,24 +106,17 @@
 			searchParticipantsWidget.on(
 				'change',
 				mw.util.debounce( function () {
-					// eslint-disable-next-line no-jquery/no-global-selector
-					$( '.ext-campaignevents-details-user-row' ).remove();
+					thisClass.deleteParticipantsList();
 
-					thisClass.participantCheckboxes = [];
-
-					thisClass.scrollDownObserver.lastTop = 0;
 					if ( thisClass.selectAllParticipantsCheckbox ) {
-						thisClass.selectAllParticipantsCheckbox.setSelected( false );
+						thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
+						thisClass.onDeselectAll();
 					}
 					var inputVal = searchParticipantsWidget.getValue();
 					thisClass.usernameFilter = inputVal === '' ? null : inputVal;
 					// Reset last participant so we can list them from the start if the
 					// filter changes
 					thisClass.lastParticipantID = null;
-					if ( thisClass.showParticipantCheckboxes ) {
-						// Update the selection label
-						thisClass.onDeselectAll();
-					}
 					thisClass.loadMoreParticipants();
 				}, 500 )
 			);
@@ -226,7 +218,7 @@
 				thisClass.participantCheckboxes =
 					thisClass.participantCheckboxes.filter( function ( el ) {
 						if ( el.isSelected() ) {
-							$( el.$element )
+							el.$element
 								.closest( '.ext-campaignevents-details-user-row' )
 								.remove();
 							return false;
@@ -269,19 +261,25 @@
 				thisClass.showNotification( 'success', successMsg );
 			} )
 			.fail( function ( _err, errData ) {
-				var errorMsg = mw.message(
-					'campaignevents-event-details-remove-participant-notification-error',
-					mw.language.convertNumber( numSelected )
-				).text();
+				var errorMsg;
 
-				if (
-					errData.xhr &&
-					errData.xhr.responseJSON.messageTranslations
-				) {
+				if ( errData.xhr.responseJSON.messageTranslations ) {
 					errorMsg = errData.xhr.responseJSON.messageTranslations.en;
+				} else {
+					errorMsg = mw.message(
+						'campaignevents-event-details-remove-participant-notification-error',
+						mw.language.convertNumber( numSelected )
+					).text();
 				}
 				thisClass.showNotification( 'error', errorMsg );
 			} );
+	};
+
+	ParticipantsManager.prototype.deleteParticipantsList = function () {
+		// eslint-disable-next-line no-jquery/no-global-selector
+		$( '.ext-campaignevents-details-user-row' ).remove();
+		this.participantCheckboxes = [];
+		this.scrollDownObserver.reset();
 	};
 
 	ParticipantsManager.prototype.loadMoreParticipants = function () {
@@ -307,82 +305,108 @@
 			params
 		)
 			.done( function ( data ) {
-				if ( !data.length ) {
-					return;
+				if ( data.length ) {
+					thisClass.addParticipantsToList( data );
 				}
-				thisClass.lastParticipantID = data[ data.length - 1 ].participant_id;
-				var allSelected = thisClass.selectAllParticipantsCheckbox ?
-					thisClass.selectAllParticipantsCheckbox.isSelected() :
-					false;
-				for ( var i = 0; i < data.length; i++ ) {
-					var items = [];
-					if ( thisClass.showParticipantCheckboxes ) {
-						var newParticipantCheckbox =
-							new OO.ui.CheckboxInputWidget( {
-								selected: allSelected,
-								name: 'event-details-participants-checkboxes',
-								value: data[ i ].user_id,
-								classes: [
-									'ext-campaignevents-event-details-participants-checkboxes'
-								]
-							} );
-
-						newParticipantCheckbox.on( 'change', function ( selected ) {
-							thisClass.onParticipantCheckboxChange( selected, this );
-						}, [], newParticipantCheckbox );
-
-						thisClass.participantCheckboxes.push( newParticipantCheckbox );
-						if ( allSelected ) {
-							thisClass.selectedParticipantIDs.push( String( data[ i ].user_id ) );
-						}
-						items.push( newParticipantCheckbox );
-					}
-
-					var $link = $( '<a>' )
-						.attr( 'href', data[ i ].user_page.path )
-						.attr( 'title', data[ i ].user_page.title )
-						.text( data[ i ].user_name )
-						// The following classes are used here:
-						// * mw-userLink
-						// * new
-						.attr( 'class', 'ext-campaignevents-details-participant-username ' + data[ i ].user_page.classes );
-
-					items.push(
-						new OO.ui.Element( {
-							$element: $link
-						} )
-					);
-
-					if ( data[ i ].private ) {
-						items.push(
-							new OO.ui.IconWidget( {
-								icon: 'lock',
-								classes: [ 'ext-campaignevents-event-details-participants-private-icon' ]
-							} )
-						);
-					}
-
-					items.push(
-						new OO.ui.Element( {
-							$element: $( '<span>' ),
-							text: data[ i ].user_registered_at_formatted,
-							classes: [ 'ext-campaignevents-details-participant-registered-at' ]
-						} )
-					);
-
-					var layout = new OO.ui.Element( {
-						classes: [ 'ext-campaignevents-details-user-row' ],
-						content: items
-					} );
-
-					thisClass.$userRowsContainer.append( layout.$element );
-				}
-
-				thisClass.scrollDownObserver.reset();
 			} )
 			.fail( function ( _err, errData ) {
 				mw.log.error( errData.xhr.responseText || 'Unknown error' );
 			} );
+	};
+
+	/**
+	 * Adds the participants in the given response to the list of participants.
+	 *
+	 * @param {Object} apiResponse Response of the "list participants" API endpoint
+	 */
+	ParticipantsManager.prototype.addParticipantsToList = function ( apiResponse ) {
+		var thisClass = this;
+
+		var allSelected = this.selectAllParticipantsCheckbox ?
+			this.selectAllParticipantsCheckbox.isSelected() :
+			false;
+		this.lastParticipantID = apiResponse[ apiResponse.length - 1 ].participant_id;
+		for ( var i = 0; i < apiResponse.length; i++ ) {
+			var items = [];
+			if ( this.showParticipantCheckboxes ) {
+				var newParticipantCheckbox =
+					new OO.ui.CheckboxInputWidget( {
+						selected: allSelected,
+						name: 'event-details-participants-checkboxes',
+						value: apiResponse[ i ].user_id,
+						classes: [
+							'ext-campaignevents-event-details-participants-checkboxes'
+						]
+					} );
+
+				newParticipantCheckbox.on( 'change', function ( selected ) {
+					thisClass.onParticipantCheckboxChange( selected, this );
+				}, [], newParticipantCheckbox );
+
+				this.participantCheckboxes.push( newParticipantCheckbox );
+				if ( allSelected ) {
+					this.selectedParticipantIDs.push( String( apiResponse[ i ].user_id ) );
+				}
+				items.push( newParticipantCheckbox );
+			}
+
+			var $userLink = thisClass.makeUserLink(
+				apiResponse[ i ].user_name,
+				apiResponse[ i ].user_page
+			);
+			items.push(
+				new OO.ui.Element( {
+					$element: $( '<span>' ),
+					$content: $userLink,
+					classes: [ 'ext-campaignevents-details-participant-username' ]
+				} )
+			);
+
+			if ( apiResponse[ i ].private ) {
+				items.push(
+					new OO.ui.IconWidget( {
+						icon: 'lock',
+						classes: [ 'ext-campaignevents-event-details-participants-private-icon' ]
+					} )
+				);
+			}
+
+			items.push(
+				new OO.ui.Element( {
+					$element: $( '<span>' ),
+					text: apiResponse[ i ].user_registered_at_formatted,
+					classes: [ 'ext-campaignevents-details-participant-registered-at' ]
+				} )
+			);
+
+			var layout = new OO.ui.Element( {
+				classes: [ 'ext-campaignevents-details-user-row' ],
+				content: items
+			} );
+
+			this.$userRowsContainer.append( layout.$element );
+		}
+
+		this.scrollDownObserver.reset();
+	};
+
+	/**
+	 * Builds a link to a user page.
+	 * FIXME: This functionality should really be in MW core.
+	 *
+	 * @param {string} userName
+	 * @param {Object} userLinkData As returned by the "list participants" endpoint
+	 * @return {jQuery}
+	 */
+	ParticipantsManager.prototype.makeUserLink = function ( userName, userLinkData ) {
+		return $( '<a>' )
+			.attr( 'href', userLinkData.path )
+			.attr( 'title', userLinkData.title )
+			// The following classes are used here:
+			// * mw-userLink
+			// * new
+			.attr( 'class', userLinkData.classes )
+			.append( $( '<bdi>' ).text( userName ) );
 	};
 
 	module.exports = new ParticipantsManager();
