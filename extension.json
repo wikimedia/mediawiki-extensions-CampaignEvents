@@ -210,7 +210,6 @@
 			],
 			"messages": [
 				"campaignevents-event-details-select-all",
-				"campaignevents-event-details-all-selected",
 				"campaignevents-event-details-participants-checkboxes-selected",
 				"campaignevents-event-details-remove-participant-confirmation-title",
 				"campaignevents-event-details-remove-participant-confirmation-msg",

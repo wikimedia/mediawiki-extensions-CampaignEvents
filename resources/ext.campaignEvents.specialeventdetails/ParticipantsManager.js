@@ -127,9 +127,7 @@
 		this.selectedParticipantIDs = this.participantCheckboxes.map( function ( el ) {
 			return el.getValue();
 		} );
-		this.selectAllParticipantsField.setLabel(
-			mw.message( 'campaignevents-event-details-all-selected' ).text()
-		);
+		this.updateSelectedLabel();
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.show();
 		}
@@ -137,12 +135,25 @@
 
 	ParticipantsManager.prototype.onDeselectAll = function () {
 		this.selectedParticipantIDs = [];
-		this.selectAllParticipantsField.setLabel(
-			mw.message( 'campaignevents-event-details-select-all' ).text()
-		);
+		this.updateSelectedLabel();
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.hide();
 		}
+	};
+
+	ParticipantsManager.prototype.updateSelectedLabel = function () {
+		if ( this.selectedParticipantIDs.length > 0 ) {
+			this.selectAllParticipantsField.setLabel(
+				mw.message( 'campaignevents-event-details-participants-checkboxes-selected',
+					mw.language.convertNumber( this.selectedParticipantIDs.length ),
+					mw.language.convertNumber( this.participantsTotal )
+				).text()
+			);
+			return;
+		}
+		this.selectAllParticipantsField.setLabel(
+			mw.message( 'campaignevents-event-details-select-all' ).text()
+		);
 	};
 
 	ParticipantsManager.prototype.onParticipantCheckboxChange = function ( selected, el ) {
@@ -155,12 +166,7 @@
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {
 		this.selectedParticipantIDs.push( checkbox.getValue() );
-		this.selectAllParticipantsField.setLabel(
-			mw.message(
-				'campaignevents-event-details-participants-checkboxes-selected',
-				mw.language.convertNumber( this.selectedParticipantIDs.length )
-			).text()
-		);
+		this.updateSelectedLabel();
 		this.removeParticipantsButton.$element.show();
 	};
 
@@ -172,17 +178,8 @@
 
 		if ( this.selectedParticipantIDs.length === 0 ) {
 			this.removeParticipantsButton.$element.hide();
-			this.selectAllParticipantsField.setLabel(
-				mw.message( 'campaignevents-event-details-select-all' ).text()
-			);
-		} else {
-			this.selectAllParticipantsField.setLabel(
-				mw.message(
-					'campaignevents-event-details-participants-checkboxes-selected',
-					mw.language.convertNumber( this.selectedParticipantIDs.length )
-				).text()
-			);
 		}
+		this.updateSelectedLabel();
 	};
 
 	/**
