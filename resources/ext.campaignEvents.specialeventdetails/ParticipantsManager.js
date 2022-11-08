@@ -327,13 +327,14 @@
 			false;
 		this.lastParticipantID = apiResponse[ apiResponse.length - 1 ].participant_id;
 		for ( var i = 0; i < apiResponse.length; i++ ) {
+			var curParticipantData = apiResponse[ i ];
 			var items = [];
 			if ( this.showParticipantCheckboxes ) {
 				var newParticipantCheckbox =
 					new OO.ui.CheckboxInputWidget( {
 						selected: allSelected,
 						name: 'event-details-participants-checkboxes',
-						value: apiResponse[ i ].user_id,
+						value: curParticipantData.user_id,
 						classes: [
 							'ext-campaignevents-event-details-participants-checkboxes'
 						]
@@ -345,24 +346,31 @@
 
 				this.participantCheckboxes.push( newParticipantCheckbox );
 				if ( allSelected ) {
-					this.selectedParticipantIDs.push( String( apiResponse[ i ].user_id ) );
+					this.selectedParticipantIDs.push( String( curParticipantData.user_id ) );
 				}
 				items.push( newParticipantCheckbox );
 			}
 
-			var $userLink = thisClass.makeUserLink(
-				apiResponse[ i ].user_name,
-				apiResponse[ i ].user_page
-			);
+			var $usernameElement;
+			if ( curParticipantData.user_name ) {
+				$usernameElement = thisClass.makeUserLink(
+					curParticipantData.user_name,
+					curParticipantData.user_page
+				);
+			} else {
+				$usernameElement = thisClass.getDeletedOrNotFoundParticipantElement(
+					curParticipantData
+				);
+			}
 			items.push(
 				new OO.ui.Element( {
 					$element: $( '<span>' ),
-					$content: $userLink,
+					$content: $usernameElement,
 					classes: [ 'ext-campaignevents-details-participant-username' ]
 				} )
 			);
 
-			if ( apiResponse[ i ].private ) {
+			if ( curParticipantData.private ) {
 				items.push(
 					new OO.ui.IconWidget( {
 						icon: 'lock',
@@ -374,7 +382,7 @@
 			items.push(
 				new OO.ui.Element( {
 					$element: $( '<span>' ),
-					text: apiResponse[ i ].user_registered_at_formatted,
+					text: curParticipantData.user_registered_at_formatted,
 					classes: [ 'ext-campaignevents-details-participant-registered-at' ]
 				} )
 			);
@@ -407,6 +415,29 @@
 			// * new
 			.attr( 'class', userLinkData.classes )
 			.append( $( '<bdi>' ).text( userName ) );
+	};
+
+	/**
+	 * Returns a placeholder to be used in place of the username for who were not found,
+	 * or whose account was suppressed.
+	 * FIXME: Keep in sync with UserLinker::generateUserLinkWithFallback
+	 *
+	 * @param {Object} userData Data about this participant as returned by the
+	 *   "list participants" endpoint
+	 * @return {jQuery}
+	 */
+	ParticipantsManager.prototype.getDeletedOrNotFoundParticipantElement = function ( userData ) {
+		var $el = $( '<span>' );
+		if ( userData.hidden ) {
+			$el.addClass( 'ext-campaignevents-userlink-hidden' )
+				.text( mw.msg( 'campaignevents-userlink-suppressed-user' ) );
+		} else if ( userData.not_found ) {
+			$el.addClass( 'ext-campaignevents-userlink-deleted' )
+				.text( mw.msg( 'campaignevents-userlink-deleted-user' ) );
+		} else {
+			throw new Error( 'No username but user is not hidden and they were found?!' );
+		}
+		return $el;
 	};
 
 	module.exports = new ParticipantsManager();

@@ -219,7 +219,9 @@
 				"campaignevents-event-details-remove-participant-notification",
 				"campaignevents-event-details-remove-all-participant-notification",
 				"campaignevents-event-details-remove-participant-notification-error",
-				"campaignevents-event-details-header-participants"
+				"campaignevents-event-details-header-participants",
+				"campaignevents-userlink-suppressed-user",
+				"campaignevents-userlink-deleted-user"
 			],
 			"dependencies": [
 				"mediawiki.language",
