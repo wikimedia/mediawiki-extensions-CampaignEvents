@@ -118,18 +118,25 @@ class EventDetailsModule {
 
 		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
 		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
+		$datesMsg = $msgFormatter->format(
+			MessageValue::new( 'campaignevents-event-details-dates' )->params(
+				$formattedStart->getTimeAndDate(),
+				$formattedStart->getDate(),
+				$formattedStart->getTime(),
+				$formattedEnd->getTimeAndDate(),
+				$formattedEnd->getDate(),
+				$formattedEnd->getTime()
+			)
+		);
+		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $registration, $viewingUser );
+		// XXX Can't use $msgFormatter due to parse()
+		$timezoneMsg = $out->msg( 'campaignevents-event-details-timezone' )->params( $formattedTimezone )->parse();
 		$items[] = new TextWithIconWidget( [
 			'icon' => 'clock',
-			'content' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-dates' )->params(
-					$formattedStart->getTimeAndDate(),
-					$formattedStart->getDate(),
-					$formattedStart->getTime(),
-					$formattedEnd->getTimeAndDate(),
-					$formattedEnd->getDate(),
-					$formattedEnd->getTime()
-				)
-			),
+			'content' => [
+				$datesMsg,
+				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
+			],
 			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) ),
 			'icon_classes' => [ 'ext-campaignevents-event-details-icons-style' ],
 		] );

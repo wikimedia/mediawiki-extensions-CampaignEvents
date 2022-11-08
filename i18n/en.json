@@ -193,6 +193,7 @@
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|participant|participants}}",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|participant|participants}} registered privately.",
 	"campaignevents-event-details-dates": "$1 to $4",
+	"campaignevents-event-details-timezone": "<strong>Timezone:</strong> $1",
 	"campaignevents-event-details-in-person-event-label": "In-person event",
 	"campaignevents-event-details-online-label": "Online event",
 	"campaignevents-event-details-chat-link": "Chat group invite link",
