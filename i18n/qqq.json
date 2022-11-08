@@ -228,6 +228,8 @@
 	"campaignevents-unregister-participants-past-registration": "Message in case the user tries to remove participants from events in the past",
 	"campaignevents-event-details-remove-participant-notification-error": "Message shown on [[Special:EventDetails]] if there is an error when trying to remove participants",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "An error message shown if the parameter 'user_ids' is an empty list of user ids, when trying to remove participants",
+	"campaignevents-event-details-tab-participants": "Participants tab label used on [[Special:EventDetails]]",
+	"campaignevents-event-details-tab-event-details": "Event details tab label used on [[Special:EventDetails]]",
 	"campaignevents-event-details-search-participants-placeholder": "A placeholder message for the search participants input on [[Special:EventDetails]]",
 	"campaignevents-event-details-organizers-view-more": "Label of a link on [[Special:EventDetails]] that, if clicked, will load more organizers to display.",
 	"campaignevents-event-details-organizers-noscript": "Message used on [[Special:EventDetails]] to let the user know that they have to enable JavaScript in order to be able to load and view more participants.",
