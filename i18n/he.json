@@ -199,7 +199,6 @@
 	"campaignevents-event-details-register-prompt": "יש להירשם כדי לראות את המידע הזה",
 	"campaignevents-event-details-view-event-page": "צפייה בדף האירוע",
 	"campaignevents-event-details-select-all": "לבחור הכול",
-	"campaignevents-event-details-all-selected": "כל מה שנבחר",
 	"campaignevents-event-details-participants-checkboxes-selected": "{{PLURAL:$1|נבחר אחד|נבחרו $1}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "הסרת {{PLURAL:$1|משתתף|משתתפים}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "האם ברצונך באמת להסיר את {{PLURAL:$1|המשתתף שנבחר|המשתתפים שנבחרו}}?",

@@ -79,7 +79,6 @@
 	"campaignevents-event-details-register-prompt": "برای مشاهدهٔ این اطلاعات باید ثبت نام کنید",
 	"campaignevents-event-details-view-event-page": "مشاهدهٔ صفحهٔ رویداد",
 	"campaignevents-event-details-select-all": "انتخاب همه",
-	"campaignevents-event-details-all-selected": "همه انتخاب شدند",
 	"campaignevents-event-details-remove-participant-confirmation-title": "حذف {{PLURAL:$1|شرکت‌کننده|شرکت‌کنندگان}}",
 	"campaignevents-event-details-remove-participant-remove-btn": "حذف",
 	"campaignevents-event-details-remove-participant-cancel-btn": "لغو",

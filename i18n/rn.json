@@ -179,7 +179,6 @@
 	"campaignevents-event-details-register-prompt": "Utegerezwa kwiyandikisha kugirango ubone ino nkuru",
 	"campaignevents-event-details-view-event-page": "Raba urupapuro rw'igikorwa",
 	"campaignevents-event-details-select-all": "Cagura vyose",
-	"campaignevents-event-details-all-selected": "Bose bacaguwe",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|yacaguwe|bacaguwe}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Kuramwo {{PLURAL:$1|yitabiriye|bitabiriye}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Nivyo ushaka gukuramwo {{PLURAL:$1|uwo yitabiriye ya|abo bitabiriye ba}} caguwe?",

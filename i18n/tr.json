@@ -183,7 +183,6 @@
 	"campaignevents-event-details-register-prompt": "Bu bilgileri görmek için kaydolmanız gerekmektedir.",
 	"campaignevents-event-details-view-event-page": "Etkinlik sayfasını görüntüle",
 	"campaignevents-event-details-select-all": "Hepsini seç",
-	"campaignevents-event-details-all-selected": "Hepsi seçildi",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|seçildi}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|Katılımcıyı|Katılımcıları}} kaldır",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Seçilen {{PLURAL:$1|katılımcıyı|katılımcıları}} kaldırmak istediğinizden emin misiniz?",

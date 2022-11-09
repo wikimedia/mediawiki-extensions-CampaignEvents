@@ -92,7 +92,6 @@
 	"campaignevents-event-details-dates": "$1 til $4",
 	"campaignevents-event-details-organizers-header": "Arrangører",
 	"campaignevents-event-details-select-all": "Velg alle",
-	"campaignevents-event-details-all-selected": "Alle valgte",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|valgt|valgte}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Fjern {{PLURAL:$1|deltaker|deltakere}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Er du sikker på at du ønsker å fjerne {{PLURAL:$1|den valgte deltakeren|de valgte deltakerne}}?",

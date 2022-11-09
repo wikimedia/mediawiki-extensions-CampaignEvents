@@ -148,7 +148,6 @@
 	"campaignevents-event-details-register-prompt": "이 정보를 보려면 등록해야 합니다",
 	"campaignevents-event-details-view-event-page": "이벤트 문서 보기",
 	"campaignevents-event-details-select-all": "모두 선택",
-	"campaignevents-event-details-all-selected": "모두 선택됨",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1개 {{PLURAL:$1|선택됨}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|참가자}} 제거",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "선택된 {{PLURAL:$1|참여자}}를 정말로 제거하시겠습니까?",

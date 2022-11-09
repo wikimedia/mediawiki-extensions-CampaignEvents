@@ -192,7 +192,6 @@
 	"campaignevents-event-details-register-prompt": "Du måste registrera dig för att se den här information",
 	"campaignevents-event-details-view-event-page": "Visa evenemangssida",
 	"campaignevents-event-details-select-all": "Välj alla",
-	"campaignevents-event-details-all-selected": "Alla valda",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|vald|valda}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Ta bort {{PLURAL:$1|deltagare}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Är du säker på att du vill ta bort {{PLURAL:$1|den valda deltagaren|de valda deltagarna}}?",
