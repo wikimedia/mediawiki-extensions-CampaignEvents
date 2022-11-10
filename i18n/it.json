@@ -46,7 +46,7 @@
 	"campaignevents-event-details-organizers-header": "Organizzatori",
 	"campaignevents-event-details-register-prompt": "Devi registrarti per vedere queste informazioni",
 	"campaignevents-event-details-select-all": "Seleziona tutto",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|selezionato|selezionati}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 di $2 {{PLURAL:$1|selezionato|selezionati}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Rimuovi {{PLURAL:$1|partecipante|partecipanti}}",
 	"campaignevents-event-details-remove-participant-remove-btn": "Rimuovi",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Annulla",
@@ -54,6 +54,8 @@
 	"campaignevents-event-details-event": "Dettagli evento: $1",
 	"campaignevents-event-details-not-found": "Non ci sono eventi con questo ID.",
 	"campaignevents-event-details-dates-label": "Ora di inizio e fine",
+	"campaignevents-event-details-tab-participants": "Partecipanti",
+	"campaignevents-event-details-tab-event-details": "Dettagli evento",
 	"campaignevents-event-details-organizers-view-more": "Mostra altro",
 	"campaignevents-userlink-suppressed-user": "nome utente soppresso",
 	"campaignevents-userlink-deleted-user": "utente cancellato"

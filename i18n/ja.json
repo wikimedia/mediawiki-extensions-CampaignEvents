@@ -124,6 +124,8 @@
 	"campaignevents-event-details-not-found": "このIDを持つイベントは存在しません",
 	"campaignevents-event-details-venue-not-available": "会場の住所は{{PLURAL:$1|organizer|主催者}}から提供されます。",
 	"campaignevents-event-details-dates-label": "開始時間と終了時間",
+	"campaignevents-event-details-tab-participants": "参加者",
+	"campaignevents-event-details-tab-event-details": "イベントの詳細",
 	"campaignevents-event-details-search-participants-placeholder": "参加者を検索する",
 	"campaignevents-event-details-organizers-view-more": "さらに表示"
 }

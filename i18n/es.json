@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"DarkGames26",
-			"MarcoAurelio"
+			"MarcoAurelio",
+			"SpikeShroom"
 		]
 	},
 	"campaignevents-desc": "Proporciona características para los organizadores de campañas y sus participantes.",
@@ -136,6 +137,7 @@
 	"campaignevents-eventpage-header-type-online": "Evento en línea",
 	"campaignevents-eventpage-header-type-in-person": "Evento presencial",
 	"campaignevents-eventpage-header-type-online-and-in-person": "Evento mixto en línea y presencial",
+	"campaignevents-eventpage-header-timezone": "<strong>Zona horaria:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Fecha y hora de inicio y de finalización",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-eventpage-header-participants-label": "Número de participantes",
@@ -151,6 +153,7 @@
 	"campaignevents-eventpage-dialog-participants-view-list": "Ver la lista completa",
 	"campaignevents-eventpage-dialog-dates-label": "Hora de inicio y de finalización",
 	"campaignevents-eventpage-dialog-dates": "de $1 a $4",
+	"campaignevents-eventpage-dialog-timezone": "<strong>Zona horaria:</strong> $1",
 	"campaignevents-eventpage-dialog-location-label": "Ubicación",
 	"campaignevents-eventpage-dialog-online-label": "Evento en línea",
 	"campaignevents-eventpage-dialog-in-person-label": "Evento presencial",
@@ -180,13 +183,14 @@
 	"campaignevents-event-details-edit-button": "Editar",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-event-details-dates": "de $1 a $4",
+	"campaignevents-event-details-timezone": "<strong>Zona horaria:</strong> $1",
 	"campaignevents-event-details-in-person-event-label": "Evento presencial",
 	"campaignevents-event-details-online-label": "Evento en línea",
 	"campaignevents-event-details-chat-link": "Enlace de invitación al chat del grupo",
 	"campaignevents-event-details-register-prompt": "Necesitas inscribirte para ver esta información",
 	"campaignevents-event-details-view-event-page": "Ver la página del evento",
 	"campaignevents-event-details-select-all": "Seleccionar todo",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|seleccionado|seleccionados}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 de $2 {{PLURAL:$1|seleccionado}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Quitar {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "¿Estás seguro de que quieres eliminar {{PLURAL:$1|al participante seleccionado|a los participantes seleccionados}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Quitar",
@@ -207,5 +211,7 @@
 	"campaignevents-unregister-participants-past-registration": "No puede eliminar participantes de este evento porque este ha finalizado.",
 	"campaignevents-event-details-remove-participant-notification-error": "Ha habido un error al tratar de eliminar {{PLURAL:$1|al participante|a los participantes}}",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "El parámetro 'user_ids' debe ser un conjunto de códigos identificadores de usuario o null (para eliminar a todos los usuarios)",
+	"campaignevents-event-details-tab-participants": "Participantes",
+	"campaignevents-event-details-tab-event-details": "Detalles del evento",
 	"campaignevents-event-details-search-participants-placeholder": "Buscar participantes"
 }
