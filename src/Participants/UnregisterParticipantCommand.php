@@ -11,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
-use MWTimestamp;
 use StatusValue;
 use UnexpectedValueException;
 
@@ -20,7 +19,6 @@ class UnregisterParticipantCommand {
 
 	public const CAN_UNREGISTER = 0;
 	public const CANNOT_UNREGISTER_DELETED = 1;
-	public const CANNOT_UNREGISTER_ENDED = 2;
 
 	/** @var ParticipantsStore */
 	private $participantsStore;
@@ -81,10 +79,6 @@ class UnregisterParticipantCommand {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			return self::CANNOT_UNREGISTER_DELETED;
 		}
-		$endTSUnix = wfTimestamp( TS_UNIX, $registration->getEndUTCTimestamp() );
-		if ( (int)$endTSUnix < (int)MWTimestamp::now( TS_UNIX ) ) {
-			return self::CANNOT_UNREGISTER_ENDED;
-		}
 		return self::CAN_UNREGISTER;
 	}
 
@@ -99,17 +93,10 @@ class UnregisterParticipantCommand {
 	): StatusValue {
 		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
 		if ( $unregistrationAllowedVal !== self::CAN_UNREGISTER ) {
-			switch ( $unregistrationAllowedVal ) {
-				case self::CANNOT_UNREGISTER_DELETED:
-					$msg = 'campaignevents-unregister-registration-deleted';
-					break;
-				case self::CANNOT_UNREGISTER_ENDED:
-					$msg = 'campaignevents-unregister-event-past';
-					break;
-				default:
-					throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
+			if ( $unregistrationAllowedVal === self::CANNOT_UNREGISTER_DELETED ) {
+				return StatusValue::newFatal( 'campaignevents-unregister-registration-deleted' );
 			}
-			return StatusValue::newFatal( $msg );
+			throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
 		}
 
 		try {
@@ -166,18 +153,12 @@ class UnregisterParticipantCommand {
 		?array $users
 	): StatusValue {
 		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
+
+		if ( $unregistrationAllowedVal === self::CANNOT_UNREGISTER_DELETED ) {
+			return StatusValue::newFatal( 'campaignevents-unregister-participants-registration-deleted' );
+		}
 		if ( $unregistrationAllowedVal !== self::CAN_UNREGISTER ) {
-			switch ( $unregistrationAllowedVal ) {
-				case self::CANNOT_UNREGISTER_DELETED:
-					$msg = 'campaignevents-unregister-participants-registration-deleted';
-					break;
-				case self::CANNOT_UNREGISTER_ENDED:
-					$msg = 'campaignevents-unregister-participants-past-registration';
-					break;
-				default:
-					throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
-			}
-			return StatusValue::newFatal( $msg );
+			throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
 		}
 
 		$eventID = $registration->getID();
