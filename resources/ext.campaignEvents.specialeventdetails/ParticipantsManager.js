@@ -29,6 +29,9 @@
 		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
 		this.$userActionsContainer = $( '.ext-campaignevents-details-user-actions-container' );
 		this.$userRowsContainer = $( '.ext-campaignevents-details-users-rows-container' );
+		this.$curUserRow = $( '.ext-campaignevents-details-current-user-row' );
+		// Note: this can be null if the user is not logged in
+		this.curUserName = mw.user.getName();
 		this.$removeParticipantsButton = $( '#ext-campaignevents-event-details-remove-participant-button' );
 		this.removeParticipantDialog = new RemoveParticipantDialog( {
 			classes: [ 'ext-campaignevents-details-remove-participant-dialog' ]
@@ -37,7 +40,6 @@
 		this.$usersContainer = $( '.ext-campaignevents-details-users-container' );
 		this.$searchParticipantsContainer = $( '.ext-campaignevents-details-participants-search-container' );
 		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
-		this.usernameFilter = null;
 
 		this.installEventListeners();
 		/* eslint-enable no-jquery/no-global-selector */
@@ -105,19 +107,13 @@
 			);
 			searchParticipantsWidget.on(
 				'change',
-				mw.util.debounce( function () {
-					thisClass.deleteParticipantsList();
-
+				mw.util.debounce( function ( inputVal ) {
 					if ( thisClass.selectAllParticipantsCheckbox ) {
 						thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
 						thisClass.onDeselectAll();
 					}
-					var inputVal = searchParticipantsWidget.getValue();
-					thisClass.usernameFilter = inputVal === '' ? null : inputVal;
-					// Reset last participant so we can list them from the start if the
-					// filter changes
-					thisClass.lastParticipantID = null;
-					thisClass.loadMoreParticipants();
+					var usernameFilter = inputVal === '' ? null : inputVal;
+					thisClass.rebuildListWithFilter( usernameFilter );
 				}, 500 )
 			);
 		}
@@ -272,14 +268,27 @@
 			} );
 	};
 
-	ParticipantsManager.prototype.deleteParticipantsList = function () {
+	/**
+	 * @param {string|null} usernameFilter
+	 */
+	ParticipantsManager.prototype.rebuildListWithFilter = function ( usernameFilter ) {
 		// eslint-disable-next-line no-jquery/no-global-selector
-		$( '.ext-campaignevents-details-user-row' ).remove();
+		$( '.ext-campaignevents-details-user-row' )
+			.not( this.$curUserRow )
+			.remove();
+		this.$curUserRow.hide();
 		this.participantCheckboxes = [];
 		this.scrollDownObserver.reset();
+		// Reset last participant so we can list them from the start if the
+		// filter changes
+		this.lastParticipantID = null;
+		this.loadMoreParticipants( usernameFilter );
 	};
 
-	ParticipantsManager.prototype.loadMoreParticipants = function () {
+	/**
+	 * @param {string|undefined|null} usernameFilter
+	 */
+	ParticipantsManager.prototype.loadMoreParticipants = function ( usernameFilter ) {
 		var thisClass = this;
 
 		/* eslint-disable camelcase */
@@ -292,8 +301,8 @@
 		if ( thisClass.lastParticipantID !== null ) {
 			params.last_participant_id = thisClass.lastParticipantID;
 		}
-		if ( thisClass.usernameFilter !== null ) {
-			params.username_filter = thisClass.usernameFilter;
+		if ( typeof usernameFilter === 'string' ) {
+			params.username_filter = usernameFilter;
 		}
 		/* eslint-enable camelcase */
 
@@ -302,6 +311,7 @@
 			params
 		)
 			.done( function ( data ) {
+				thisClass.toggleCurUserRow( usernameFilter );
 				if ( data.length ) {
 					thisClass.addParticipantsToList( data );
 				}
@@ -309,6 +319,29 @@
 			.fail( function ( _err, errData ) {
 				mw.log.error( errData.xhr.responseText || 'Unknown error' );
 			} );
+	};
+
+	/**
+	 * Toggles the current user's row, depending on the username filter. This needs
+	 * to be special-cased, like in PHP, and the code should be kept in sync with
+	 * its PHP counterpart.
+	 * TODO This is subpar.
+	 *
+	 * @param {string|null|undefined} usernameFilter
+	 */
+	ParticipantsManager.prototype.toggleCurUserRow = function ( usernameFilter ) {
+		if ( this.curUserName === null ) {
+			return;
+		}
+
+		if (
+			typeof usernameFilter !== 'string' ||
+			this.curUserName.toLowerCase().indexOf( usernameFilter.toLowerCase() ) > -1
+		) {
+			this.$curUserRow.show();
+		} else {
+			this.$curUserRow.hide();
+		}
 	};
 
 	/**

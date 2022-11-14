@@ -345,7 +345,9 @@ class EventDetailsParticipantsModule {
 		Language $language,
 		UserIdentity $viewingUser
 	): Tag {
-		return $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser );
+		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser );
+		$row->addClasses( [ 'ext-campaignevents-details-current-user-row' ] );
+		return $row;
 	}
 
 	/**
