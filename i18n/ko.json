@@ -63,7 +63,6 @@
 	"campaignevents-register-event-not-open": "이 이벤트 등록은 마감되었습니다.",
 	"campaignevents-register-already-participant": "이 이벤트에 이미 등록되어 있습니다.",
 	"campaignevents-unregister-not-allowed": "등록 취소가 허가되지 않았습니다.",
-	"campaignevents-unregister-event-past": "이 이벤트의 등록 기간은 이미 끝났습니다.",
 	"campaignevents-unregister-not-participant": "당신은 이 이벤트에 등록되어 있지 않습니다.",
 	"myevents": "내 이벤트",
 	"campaignevents-myevents-filter-legend": "이벤트 필터링",
@@ -165,7 +164,6 @@
 	"campaignevents-event-details-remove-all-participant-notification": "모든 참가자가 제거됨",
 	"campaignevents-unregister-participants-permission-denied": "참가자를 제거할 권한이 없습니다.",
 	"campaignevents-unregister-participants-registration-deleted": "이 이벤트는 삭제되었기 때문에 해당 이벤트로부터 참여자를 제거할 수 없습니다.",
-	"campaignevents-unregister-participants-past-registration": "이벤트가 종료되었으므로 이 이벤트에서 참가자를 제거할 수 없습니다.",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|참가자}}를 제거하는 중 오류가 발생했습니다.",
 	"campaignevents-event-details-search-participants-placeholder": "참가자 검색"
 }

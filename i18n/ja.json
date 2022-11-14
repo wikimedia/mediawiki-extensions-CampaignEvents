@@ -56,7 +56,6 @@
 	"campaignevents-role-organizer": "{{GENDER:$1|主催者}}",
 	"campaignevents-register-event-past": "このイベントへの登録期間は終了しました。",
 	"campaignevents-register-event-not-open": "このイベントへの登録は締め切らせていただきました。",
-	"campaignevents-unregister-event-past": "このイベントへの登録期間は終了しました。",
 	"myevents": "あなたのイベント",
 	"campaignevents-myevents-label-search": "検索",
 	"campaignevents-myevents-label-status": "状態",

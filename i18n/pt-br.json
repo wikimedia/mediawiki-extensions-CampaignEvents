@@ -97,6 +97,8 @@
 	"campaignevents-register-event-not-open": "Não é mais possível registrar-se neste evento.",
 	"campaignevents-register-already-participant": "Você já está registrado neste evento.",
 	"campaignevents-event-details-organizers-header": "Organizadores",
+	"campaignevents-event-details-tab-participants": "Participantes",
+	"campaignevents-event-details-tab-event-details": "Detalhes do evento",
 	"campaignevents-event-details-organizers-view-more": "Ver mais",
 	"campaignevents-event-details-organizers-noscript": "Precisa de ativar o JavaScript para ver a lista completa de organizadores.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Painel de controle de programas e eventos",

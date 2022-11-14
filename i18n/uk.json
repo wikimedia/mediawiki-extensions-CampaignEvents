@@ -86,7 +86,6 @@
 	"campaignevents-register-event-not-open": "Реєстрацію на цю подію закрито.",
 	"campaignevents-register-already-participant": "Ви вже зареєстровані на цю подію.",
 	"campaignevents-unregister-not-allowed": "У вас немає дозволу скасувати свою реєстрацію на подію.",
-	"campaignevents-unregister-event-past": "Період реєстрації на цю подію вже закінчився.",
 	"campaignevents-unregister-not-participant": "Ви не зареєстровані на цю подію.",
 	"myevents": "Ваші події",
 	"campaignevents-myevents-filter-legend": "Фільтрувати події",

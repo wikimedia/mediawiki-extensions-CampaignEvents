@@ -4,6 +4,9 @@
 			"Robby"
 		]
 	},
+	"campaignevents-eventpage-header-timezone": "<strong>Zäitzone:</strong> $1",
+	"campaignevents-eventpage-dialog-timezone": "<strong>Zäitzone:</strong> $1",
+	"campaignevents-event-details-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-event-details-in-person-event-label": "Event am Presentiel",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Ofbriechen",
 	"campaignevents-userlink-deleted-user": "geläscht Benotzer"

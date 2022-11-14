@@ -86,7 +86,6 @@
 	"campaignevents-register-event-not-open": "ปิดรับการลงทะเบียนกิจกรรมนี้แล้ว",
 	"campaignevents-register-already-participant": "คุณได้ลงทะเบียนสำหรับกิจกรรมนี้แล้ว",
 	"campaignevents-unregister-not-allowed": "คุณไม่ได้รับอนุญาตให้ยกเลิกการลงทะเบียนของคุณ",
-	"campaignevents-unregister-event-past": "ระยะเวลาการลงทะเบียนกิจกรรมนี้เสร็จสิ้นแล้ว",
 	"campaignevents-unregister-not-participant": "คุณไม่ได้ลงทะเบียนสำหรับกิจกรรมนี้",
 	"myevents": "กิจกรรมของคุณ",
 	"campaignevents-myevents-filter-legend": "กรองเหตุการณ์",

@@ -89,7 +89,6 @@
 	"campaignevents-register-event-not-open": "Bu etkinlik kaydı kapatılmıştır.",
 	"campaignevents-register-already-participant": "Bu etkinlik için zaten kayıtlısınız.",
 	"campaignevents-unregister-not-allowed": "Kaydınızı iptal etmenize izin verilmiyor.",
-	"campaignevents-unregister-event-past": "Bu etkinlik kayıt dönemi sona ermiştir.",
 	"campaignevents-unregister-not-participant": "Bu etkinlik için kayıtlı değilsiniz.",
 	"myevents": "Etkinlikleriniz",
 	"campaignevents-myevents-filter-legend": "Etkinlikleri filtrele",
@@ -200,7 +199,6 @@
 	"campaignevents-event-details-remove-all-participant-notification": "Tüm katılımcılar kaldırıldı",
 	"campaignevents-unregister-participants-permission-denied": "Katılımcıları kaldırmanıza izin verilmiyor",
 	"campaignevents-unregister-participants-registration-deleted": "Bu etkinlik silindiği için katılımcıları bu etkinlikten çıkaramazsınız.",
-	"campaignevents-unregister-participants-past-registration": "Etkinlik sona erdiği için katılımcıları bu etkinlikten çıkaramazsınız.",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|Katılımcı|Katılımcılar}} kaldırılmaya çalışırılken bir hata oluştu.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' parametresi bir dizi kullanıcı kimliği veya boş (tüm kullanıcıları kaldırmak için) olmalıdır",
 	"campaignevents-event-details-search-participants-placeholder": "Katılımcı ara"
