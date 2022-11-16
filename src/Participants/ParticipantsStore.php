@@ -86,12 +86,24 @@ class ParticipantsStore {
 	 * @param int $eventID
 	 * @param CentralUser[]|null $users Array of users, if null remove all participants,
 	 * if is an empty array do nothing and return 0.
+	 * @param bool $invertUsers
 	 * @return int number of participants removed
 	 */
-	public function removeParticipantsFromEvent( int $eventID, array $users = null ): int {
-		if ( is_array( $users ) && !$users ) {
-			return 0;
+	public function removeParticipantsFromEvent(
+		int $eventID,
+		array $users = null,
+		bool $invertUsers = false
+	): int {
+		if ( $users === null && $invertUsers ) {
+			throw new InvalidArgumentException( "The users must be an array of user ids if invertUsers is true" );
 		}
+
+		if ( is_array( $users ) && !$users ) {
+			throw new InvalidArgumentException(
+				"The users must be an array of user ids, or null (to remove all users)"
+			);
+		}
+
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$where = [
@@ -99,9 +111,14 @@ class ParticipantsStore {
 			'cep_unregistered_at' => null
 		];
 		if ( $users ) {
-			$where['cep_user_id'] = array_map( static function ( CentralUser $user ): int {
+			$userIDs = array_map( static function ( CentralUser $user ): int {
 				return $user->getCentralID();
 			}, $users );
+			if ( !$invertUsers ) {
+				$where['cep_user_id'] = $userIDs;
+			} else {
+				$where[] = 'cep_user_id NOT IN (' . $dbw->makeCommaList( $userIDs ) . ')';
+			}
 		}
 
 		$dbw->update(
@@ -109,6 +126,7 @@ class ParticipantsStore {
 			[ 'cep_unregistered_at' => $dbw->timestamp() ],
 			$where
 		);
+
 		return $dbw->affectedRows();
 	}
 

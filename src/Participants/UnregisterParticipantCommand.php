@@ -19,6 +19,8 @@ class UnregisterParticipantCommand {
 
 	public const CAN_UNREGISTER = 0;
 	public const CANNOT_UNREGISTER_DELETED = 1;
+	public const DO_NOT_INVERT_USERS = false;
+	public const INVERT_USERS = true;
 
 	/** @var ParticipantsStore */
 	private $participantsStore;
@@ -112,19 +114,21 @@ class UnregisterParticipantCommand {
 	 * @param ExistingEventRegistration $registration
 	 * @param CentralUser[]|null $users Array of users, if null remove all
 	 * @param ICampaignsAuthority $performer
+	 * @param bool $invertUsers self::DO_NOT_INVERT_USERS or self::INVERT_USERS
 	 * @return StatusValue The StatusValue's "value" property has the number of participants removed
 	 */
 	public function removeParticipantsIfAllowed(
 		ExistingEventRegistration $registration,
 		?array $users,
-		ICampaignsAuthority $performer
+		ICampaignsAuthority $performer,
+		bool $invertUsers
 	): StatusValue {
 		$permStatus = $this->authorizeRemoveParticipants( $registration, $performer );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
 		}
 
-		return $this->removeParticipantsUnsafe( $registration, $users );
+		return $this->removeParticipantsUnsafe( $registration, $users, $invertUsers );
 	}
 
 	/**
@@ -146,11 +150,13 @@ class UnregisterParticipantCommand {
 	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param CentralUser[]|null $users Array of users, if null remove all
+	 * @param bool $invertUsers self::DO_NOT_INVERT_USERS or self::INVERT_USERS
 	 * @return StatusValue The StatusValue's "value" property has the number of participants removed
 	 */
 	public function removeParticipantsUnsafe(
 		ExistingEventRegistration $registration,
-		?array $users
+		?array $users,
+		bool $invertUsers
 	): StatusValue {
 		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
 
@@ -162,7 +168,11 @@ class UnregisterParticipantCommand {
 		}
 
 		$eventID = $registration->getID();
-		$removedParticipants = $this->participantsStore->removeParticipantsFromEvent( $eventID, $users );
+		$removedParticipants = $this->participantsStore->removeParticipantsFromEvent(
+			$eventID,
+			$users,
+			$invertUsers
+		);
 
 		return StatusValue::newGood( $removedParticipants );
 	}

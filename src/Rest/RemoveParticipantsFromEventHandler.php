@@ -78,10 +78,13 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		} else {
 			$usersToRemove = null;
 		}
+
 		$status = $this->unregisterParticipantCommand->removeParticipantsIfAllowed(
 			$eventRegistration,
 			$usersToRemove,
-			new MWAuthorityProxy( $this->getAuthority() )
+			new MWAuthorityProxy( $this->getAuthority() ),
+			$body['invert_users'] ? UnregisterParticipantCommand::INVERT_USERS :
+				UnregisterParticipantCommand::DO_NOT_INVERT_USERS
 		);
 
 		if ( !$status->isGood() ) {
@@ -113,9 +116,19 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		}
 
 		return new JsonBodyValidator(
-			// TODO Here we should specify that each ID must be an integer. Right now this wouldn't
-			// work anyway due to T305973.
-			[ 'user_ids' => [ static::PARAM_SOURCE => 'body', ParamValidator::PARAM_DEFAULT => null ] ]
+			[
+				// TODO Here we should specify that each ID must be an integer. Right now this wouldn't
+				// work anyway due to T305973.
+				'user_ids' => [
+					static::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_DEFAULT => null
+				],
+				'invert_users' => [
+					static::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_DEFAULT => false,
+					ParamValidator::PARAM_TYPE => 'boolean',
+				],
+			]
 		);
 	}
 }

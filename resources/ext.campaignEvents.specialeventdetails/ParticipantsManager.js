@@ -24,6 +24,7 @@
 
 		this.participantCheckboxes = [];
 		this.selectedParticipantIDs = [];
+		this.participantIDsExcludedFromSelection = [];
 		this.participantsTotal = mw.config.get( 'wgCampaignEventsEventDetailsParticipantsTotal' );
 
 		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
@@ -40,6 +41,7 @@
 		this.$usersContainer = $( '.ext-campaignevents-details-users-container' );
 		this.$searchParticipantsContainer = $( '.ext-campaignevents-details-participants-search-container' );
 		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
+		this.selectedParticipantsAmount = 0;
 
 		this.installEventListeners();
 		/* eslint-enable no-jquery/no-global-selector */
@@ -79,7 +81,7 @@
 			this.removeParticipantsButton.on( 'click', function () {
 				thisClass.windowManager.openWindow(
 					thisClass.removeParticipantDialog,
-					{ selectedParticipantsAmount: thisClass.selectedParticipantIDs.length }
+					{ selectedParticipantsAmount: thisClass.selectedParticipantsAmount }
 				).closed.then( function ( data ) {
 					if ( data && data.action === 'remove' ) {
 						thisClass.onConfirmRemoval();
@@ -108,10 +110,6 @@
 			searchParticipantsWidget.on(
 				'change',
 				mw.util.debounce( function ( inputVal ) {
-					if ( thisClass.selectAllParticipantsCheckbox ) {
-						thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
-						thisClass.onDeselectAll();
-					}
 					var usernameFilter = inputVal === '' ? null : inputVal;
 					thisClass.rebuildListWithFilter( usernameFilter );
 				}, 500 )
@@ -123,6 +121,9 @@
 		this.selectedParticipantIDs = this.participantCheckboxes.map( function ( el ) {
 			return el.getValue();
 		} );
+
+		this.selectedParticipantsAmount = this.participantsTotal;
+		this.participantIDsExcludedFromSelection = [];
 		this.updateSelectedLabel();
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.show();
@@ -130,7 +131,9 @@
 	};
 
 	ParticipantsManager.prototype.onDeselectAll = function () {
+		this.selectedParticipantsAmount = 0;
 		this.selectedParticipantIDs = [];
+		this.participantIDsExcludedFromSelection = [];
 		this.updateSelectedLabel();
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.hide();
@@ -138,10 +141,10 @@
 	};
 
 	ParticipantsManager.prototype.updateSelectedLabel = function () {
-		if ( this.selectedParticipantIDs.length > 0 ) {
+		if ( this.selectedParticipantsAmount > 0 ) {
 			this.selectAllParticipantsField.setLabel(
 				mw.message( 'campaignevents-event-details-participants-checkboxes-selected',
-					mw.language.convertNumber( this.selectedParticipantIDs.length ),
+					mw.language.convertNumber( this.selectedParticipantsAmount ),
 					mw.language.convertNumber( this.participantsTotal )
 				).text()
 			);
@@ -162,18 +165,34 @@
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {
 		this.selectedParticipantIDs.push( checkbox.getValue() );
+
+		this.participantIDsExcludedFromSelection.splice(
+			this.participantIDsExcludedFromSelection.indexOf( checkbox.getValue() ), 1
+		);
+
+		this.selectedParticipantsAmount++;
+		// if select all manually check select all checkbox
+		if ( this.selectedParticipantsAmount === this.participantsTotal ) {
+			this.selectAllParticipantsCheckbox.setSelected( true, true );
+			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
+		}
 		this.updateSelectedLabel();
 		this.removeParticipantsButton.$element.show();
 	};
 
 	ParticipantsManager.prototype.onDeselectParticipant = function ( checkbox ) {
+		this.participantIDsExcludedFromSelection.push( checkbox.getValue() );
 		this.selectedParticipantIDs.splice(
 			this.selectedParticipantIDs.indexOf( checkbox.getValue() ), 1
 		);
-		this.selectAllParticipantsCheckbox.setSelected( false, true );
 
-		if ( this.selectedParticipantIDs.length === 0 ) {
+		this.selectedParticipantsAmount--;
+		if ( this.selectedParticipantsAmount === 0 ) {
+			this.selectAllParticipantsCheckbox.setSelected( false, true );
+			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 			this.removeParticipantsButton.$element.hide();
+		} else if ( this.selectAllParticipantsCheckbox.isSelected() ) {
+			this.selectAllParticipantsCheckbox.setIndeterminate( true, true );
 		}
 		this.updateSelectedLabel();
 	};
@@ -193,21 +212,35 @@
 		);
 	};
 
+	/**
+	 * @param {boolean} invertUsers
+	 * @return {Array|null}
+	 */
+	ParticipantsManager.prototype.getUsersIDsToRemove = function ( invertUsers ) {
+		if ( invertUsers ) {
+			return this.participantIDsExcludedFromSelection;
+		} else if ( this.selectAllParticipantsCheckbox.isSelected() ) {
+			return null;
+		}
+
+		return this.selectedParticipantIDs;
+	};
+
 	ParticipantsManager.prototype.onConfirmRemoval = function () {
 		var thisClass = this,
-			removeAll = this.selectAllParticipantsCheckbox.isSelected(),
-			numSelected = removeAll ? this.participantsTotal :
-				thisClass.selectedParticipantIDs.length;
+			invertUsers = this.participantIDsExcludedFromSelection.length > 0;
 
 		new mw.Rest().delete(
 			'/campaignevents/v0/event_registration/' + this.registrationID + '/participants',
 			{
 				token: mw.user.tokens.get( 'csrfToken' ),
 				// eslint-disable-next-line camelcase
-				user_ids: removeAll ? null : this.selectedParticipantIDs
+				user_ids: this.getUsersIDsToRemove( invertUsers ),
+				// eslint-disable-next-line camelcase
+				invert_users: invertUsers
 			}
 		)
-			.done( function () {
+			.done( function ( response ) {
 				thisClass.participantCheckboxes =
 					thisClass.participantCheckboxes.filter( function ( el ) {
 						if ( el.isSelected() ) {
@@ -221,18 +254,18 @@
 					} );
 
 				thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
+				thisClass.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 				thisClass.onDeselectAll();
 				var successMsg;
-				if ( removeAll ) {
-					thisClass.participantsTotal = 0;
+				thisClass.participantsTotal = thisClass.participantsTotal - response.modified;
+				if ( thisClass.participantsTotal === 0 ) {
 					successMsg = mw.message(
 						'campaignevents-event-details-remove-all-participant-notification'
 					).text();
 				} else {
-					thisClass.participantsTotal -= numSelected;
 					successMsg = mw.message(
 						'campaignevents-event-details-remove-participant-notification',
-						mw.language.convertNumber( numSelected )
+						mw.language.convertNumber( response.modified )
 					).text();
 					thisClass.loadMoreParticipants();
 				}
@@ -250,7 +283,6 @@
 					thisClass.$usersContainer.hide();
 				}
 				thisClass.scrollDownObserver.reset();
-				thisClass.selectedParticipantIDs = [];
 				thisClass.showNotification( 'success', successMsg );
 			} )
 			.fail( function ( _err, errData ) {
@@ -261,7 +293,7 @@
 				} else {
 					errorMsg = mw.message(
 						'campaignevents-event-details-remove-participant-notification-error',
-						mw.language.convertNumber( numSelected )
+						mw.language.convertNumber( thisClass.selectedParticipantsAmount )
 					).text();
 				}
 				thisClass.showNotification( 'error', errorMsg );
@@ -351,32 +383,35 @@
 	 */
 	ParticipantsManager.prototype.addParticipantsToList = function ( apiResponse ) {
 		var thisClass = this;
-
-		var allSelected = this.selectAllParticipantsCheckbox ?
-			this.selectAllParticipantsCheckbox.isSelected() :
-			false;
 		this.lastParticipantID = apiResponse[ apiResponse.length - 1 ].participant_id;
 		for ( var i = 0; i < apiResponse.length; i++ ) {
-			var curParticipantData = apiResponse[ i ];
-			var items = [];
+			var curParticipantData = apiResponse[ i ],
+				items = [];
+
 			if ( this.showParticipantCheckboxes ) {
-				var newParticipantCheckbox =
-					new OO.ui.CheckboxInputWidget( {
-						selected: allSelected,
-						name: 'event-details-participants-checkboxes',
-						value: curParticipantData.user_id,
-						classes: [
-							'ext-campaignevents-event-details-participants-checkboxes'
-						]
-					} );
+				// eslint-disable-next-line camelcase
+				curParticipantData.user_id = String( curParticipantData.user_id );
+				var loadAsSelected = this.loadParticipantAsSelected( curParticipantData.user_id ),
+					newParticipantCheckbox =
+						new OO.ui.CheckboxInputWidget( {
+							selected: loadAsSelected,
+							name: 'event-details-participants-checkboxes',
+							value: curParticipantData.user_id,
+							classes: [
+								'ext-campaignevents-event-details-participants-checkboxes'
+							]
+						} );
 
 				newParticipantCheckbox.on( 'change', function ( selected ) {
 					thisClass.onParticipantCheckboxChange( selected, this );
 				}, [], newParticipantCheckbox );
 
 				this.participantCheckboxes.push( newParticipantCheckbox );
-				if ( allSelected ) {
-					this.selectedParticipantIDs.push( String( curParticipantData.user_id ) );
+				if (
+					loadAsSelected &&
+					thisClass.selectedParticipantIDs.indexOf( curParticipantData.user_id ) < 0
+				) {
+					this.selectedParticipantIDs.push( curParticipantData.user_id );
 				}
 				items.push( newParticipantCheckbox );
 			}
@@ -426,6 +461,26 @@
 		}
 
 		this.scrollDownObserver.reset();
+	};
+
+	/**
+	 *
+	 * @param {string} userID
+	 * @return {boolean}
+	 */
+	ParticipantsManager.prototype.loadParticipantAsSelected = function ( userID ) {
+		if ( !this.showParticipantCheckboxes ) {
+			return false;
+		}
+
+		if (
+			this.selectAllParticipantsCheckbox.isSelected() &&
+			this.participantIDsExcludedFromSelection.indexOf( userID ) < 0
+		) {
+			return true;
+		}
+
+		return this.selectedParticipantIDs.indexOf( userID ) > -1;
 	};
 
 	/**
