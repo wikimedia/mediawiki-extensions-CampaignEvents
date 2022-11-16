@@ -163,14 +163,15 @@
 				"ConfirmUnregistrationDialog.js",
 				"EnableRegistrationDialog.js",
 				"EventDetailsDialog.js",
-				"PolicyAcknowledgementDialog.js",
+				"RegistrationConfirmationDialog.js",
 				{
 					"name": "data.json",
 					"callback": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\ResourceLoaderCallbacks::getEventPageData"
 				}
 			],
 			"styles": [
-				"EventDetailsDialog.less"
+				"EventDetailsDialog.less",
+				"RegistrationConfirmationDialog.less"
 			],
 			"messages": [
 				"campaignevents-eventpage-dialog-title",
@@ -180,12 +181,16 @@
 				"campaignevents-eventpage-unregister-confirmation-body",
 				"campaignevents-eventpage-unregister-confirmation-confirm",
 				"campaignevents-eventpage-unregister-confirmation-dismiss",
-				"campaignevents-eventpage-register-confirmation-cancel",
 				"campaignevents-eventpage-register-confirmation-confirm",
 				"campaignevents-eventpage-enable-registration-dialog-title",
 				"campaignevents-eventpage-enable-registration-dialog-body",
 				"campaignevents-eventpage-enable-registration-dialog-dismiss",
-				"campaignevents-eventpage-enable-registration-dialog-confirm"
+				"campaignevents-eventpage-enable-registration-dialog-confirm",
+				"campaignevents-registration-confirmation-helptext-public",
+				"campaignevents-registration-confirmation-helptext-private",
+				"campaignevents-registration-confirmation-toggle-private",
+				"campaignevents-registration-confirmation-toggle-public",
+				"campaignevents-eventpage-register-confirmation-title"
 			],
 			"dependencies": [
 				"mediawiki.api",
@@ -194,7 +199,8 @@
 				"mediawiki.util",
 				"mediawiki.Uri",
 				"oojs-ui-core",
-				"oojs-ui-windows"
+				"oojs-ui-windows",
+				"oojs-ui-widgets"
 			],
 			"targets": [ "desktop", "mobile" ]
 		},

@@ -181,8 +181,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Content of a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
-	"campaignevents-eventpage-register-confirmation-cancel": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event.",
-	"campaignevents-eventpage-register-confirmation-confirm": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to registrater for an event.",
+	"campaignevents-eventpage-register-confirmation-title": "Title of a dialog asking the user whether they accept the terms of use and confirm that they want to register for an event.",
+	"campaignevents-eventpage-register-confirmation-confirm": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to register for an event.",
 	"campaignevents-eventpage-enableheader-organizer": "Message shown on event pages when the user is an organizer and they can thus enable registration for that page.",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "Message shown on event pages to explain how the registration system works.",
 	"campaignevents-eventpage-enableheader-button-label": "Label of a button shown on event pages that lets the user enable registration for that event.",
@@ -234,5 +234,10 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Error message used by the API endpoint for listing participants when the client passed the option to include privately registered participants, but the user is not allowed to see them.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Display name of the [[:m:Programs & Events Dashboard]]",
 	"campaignevents-userlink-suppressed-user": "Message used as a placeholder when a username cannot be shown because the user account was blocked and suppressed. The intention is similar to {{msg-mw|Rev-deleted-user}}.",
-	"campaignevents-userlink-deleted-user": "Message used as a placeholder when a username cannot be shown because the user account was deleted (for instance, via CentralAuth)."
+	"campaignevents-userlink-deleted-user": "Message used as a placeholder when a username cannot be shown because the user account was deleted (for instance, via CentralAuth).",
+	"campaignevents-registration-confirmation-helptext-private": "help text to explain the consequence of private registration, used in the registration popup on event pages.",
+	"campaignevents-registration-confirmation-helptext-public": "help text to explain the consequence of public registration, used in the registration popup on event pages.",
+	"campaignevents-registration-confirmation-toggle-private": "private registration toggle state label, used in the registration popup on event pages.",
+	"campaignevents-registration-confirmation-toggle-public": "public registration toggle state label, used in the registration popup on event pages."
+
 }
