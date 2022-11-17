@@ -31,6 +31,8 @@ class SpecialEventDetails extends SpecialPage {
 		'oojs-ui.styles.icons-movement',
 		'ext.campaignEvents.specialeventdetails.styles',
 		'oojs-ui-widgets.styles' ];
+	public const EVENT_DETAILS_PANEL = 'EventDetailsPanel';
+	public const PARTICIPANTS_PANEL = 'ParticipantsPanel';
 
 	/** @var IEventLookup */
 	protected $eventLookup;
@@ -160,7 +162,7 @@ class SpecialEventDetails extends SpecialPage {
 		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule();
 		$tabs = [];
 		$tabs[] = $this->createTab(
-			'EventDetailsPanel',
+			self::EVENT_DETAILS_PANEL,
 			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-event-details' ) ),
 			$eventDetailsModule->createContent(
 				$language,
@@ -172,7 +174,7 @@ class SpecialEventDetails extends SpecialPage {
 			)
 		);
 		$tabs[] = $this->createTab(
-			'ParticipantsPanel',
+			self::PARTICIPANTS_PANEL,
 			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-participants' ) ),
 			$eventParticipantsModule->createContent(
 				$language,
@@ -184,10 +186,10 @@ class SpecialEventDetails extends SpecialPage {
 		);
 
 		$main->addTabPanels( $tabs );
-		$main->setTabPanel( 'EventDetailsPanel' );
+		$main->setTabPanel( self::EVENT_DETAILS_PANEL );
 		$selectedTab = $this->getRequest()->getRawVal( 'tab' );
 		// FIXME Remove when T322267 is resolved
-		if ( in_array( $selectedTab, [ 'EventDetailsPanel','ParticipantsPanel' ], true ) ) {
+		if ( in_array( $selectedTab, [ self::EVENT_DETAILS_PANEL, self::PARTICIPANTS_PANEL ], true ) ) {
 			$main->setTabPanel( $selectedTab );
 		}
 		$out->addHTML( $main );

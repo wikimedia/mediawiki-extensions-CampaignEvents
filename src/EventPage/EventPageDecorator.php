@@ -15,7 +15,6 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -23,6 +22,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
@@ -302,7 +302,14 @@ class EventPageDecorator {
 		);
 		$out->addHTML(
 			$this->getDetailsDialogContent(
-				$registration, $msgFormatter, $language, $viewingUser, $userStatus, $centralUser, $out )
+				$registration,
+				$msgFormatter,
+				$language,
+				$viewingUser,
+				$userStatus,
+				$centralUser,
+				$authority,
+				$out )
 		);
 	}
 
@@ -448,6 +455,7 @@ class EventPageDecorator {
 	 * @param UserIdentity $viewingUser
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
 	 * @param CentralUser|null $centralUser
+	 * @param ICampaignsAuthority $authority
 	 * @param OutputPage $out
 	 * @return string
 	 */
@@ -458,6 +466,7 @@ class EventPageDecorator {
 		UserIdentity $viewingUser,
 		int $userStatus,
 		?CentralUser $centralUser,
+		ICampaignsAuthority $authority,
 		OutputPage $out
 	): string {
 		$eventID = $registration->getID();
@@ -633,29 +642,59 @@ class EventPageDecorator {
 			$organizersAndDetails
 		);
 
+		$showPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID );
 		$participantsCount = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
-		$participantsList = $this->buildParticipantsList(
+		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );
+		$participantsList = $this->getParticipantRows(
 			$eventID,
-			$msgFormatter,
-			$viewingUser,
+			$language,
 			$centralUser,
-			$participantsCount
+			$msgFormatter,
+			$showPrivateParticipants
 		);
+		$participantsFooter = '';
+		if ( self::PARTICIPANTS_LIMIT < $participantsCount ) {
+			$participantsFooter = $this->getParticipantFooter( $eventID, $msgFormatter );
+		}
 		$participantsWidget = new EventDetailsWidget( [
 			'icon' => 'userGroup',
 			'label' => $msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-participants' )
 					->numParams( $participantsCount )
 			),
-			'content' => new HtmlSnippet( $participantsList ),
+			'content' => [ $participantsList ?: '', $participantsFooter ],
 			'classes' => [ 'ext-campaignevents-detailsdialog-participants' ]
 		] );
+		$privateCountWidget = '';
 
+		if ( $privateCount > 0 ) {
+			$privateCountWidget = new Tag();
+			$privateCountWidget->addClasses( [
+				'ext-campaignevents-detailsdialog-private-participants'
+			] );
+			$privateCountIcon = new IconWidget( [
+				'icon' => 'lock'
+				] );
+			$privateCountText = new Tag( 'span' );
+			$privateCountText->appendContent(
+				$msgFormatter->format(
+					MessageValue::new( 'campaignevents-eventpage-dialog-participants-private' )
+					->numParams( $privateCount )
+				)
+			);
+
+			$privateCountWidget->appendContent( [ $privateCountIcon,$privateCountText ] );
+		}
+		$participantsContainer = Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-detailsdialog-participants-container' ],
+			$participantsWidget . $privateCountWidget
+		);
 		$dialogContent = Html::element( 'h2', [], $registration->getName() );
 		$dialogContent .= Html::rawElement(
 			'div',
 			[ 'class' => 'ext-campaignevents-detailsdialog-body-container' ],
-			$organizersAndDetailsContainer . $participantsWidget
+			$organizersAndDetailsContainer . $participantsContainer
 		);
 
 		return Html::rawElement( 'div', [ 'id' => 'ext-campaignEvents-detailsDialog-content' ], $dialogContent );
@@ -663,70 +702,51 @@ class EventPageDecorator {
 
 	/**
 	 * @param int $eventID
-	 * @param ITextFormatter $msgFormatter
-	 * @param UserIdentity $viewingUser
+	 * @param Language $language
 	 * @param CentralUser|null $centralUser
-	 * @param int $participantsCount
-	 * @return string
+	 * @param ITextFormatter $msgFormatter
+	 * @param bool $showPrivateParticipants
+	 *
+	 * @return Tag|null
 	 */
-	private function buildParticipantsList(
+	private function getParticipantRows(
 		int $eventID,
-		ITextFormatter $msgFormatter,
-		UserIdentity $viewingUser,
+		Language $language,
 		?CentralUser $centralUser,
-		int $participantsCount
-	): string {
-		$participantsList = '';
-		$partialParticipants = $this->participantsStore->getEventParticipants( $eventID, self::PARTICIPANTS_LIMIT );
-		if ( !$partialParticipants ) {
-			return '';
+		ITextFormatter $msgFormatter,
+		bool $showPrivateParticipants
+	): ?Tag {
+		$curUserParticipant = null;
+		$participantsList = new Tag( 'ul' );
+		if ( $centralUser ) {
+			$curUserParticipant = $this->participantsStore->getEventParticipant( $eventID, $centralUser, true );
+		}
+		$partialParticipants = $this->participantsStore->getEventParticipants(
+			$eventID,
+			$curUserParticipant ?
+				self::PARTICIPANTS_LIMIT - 1 :
+				self::PARTICIPANTS_LIMIT,
+			null,
+			null,
+			$showPrivateParticipants,
+			isset( $centralUser ) ? $centralUser->getCentralID() : null );
+
+		if ( !$curUserParticipant && !$partialParticipants ) {
+			return null;
 		}
 
-		$participantsList .= Html::openElement( 'ul' );
-		$listElements = [];
-
-		$curUserParticipates = $centralUser &&
-			$this->participantsStore->userParticipatesInEvent( $eventID, $centralUser, true );
-		if ( $curUserParticipates ) {
-			// Make the current user always be at the top, and make sure that it is shown.
-			$listElements[] = Html::rawElement(
-				'li',
-				[],
-				Linker::userLink( $viewingUser->getId(), $viewingUser->getName() )
+		if ( $curUserParticipant ) {
+			$participantsList->appendContent(
+				$this->getParticipantRow(
+					$curUserParticipant,
+					$language,
+					$msgFormatter
+				)
 			);
 		}
-		$skippedCurUser = false;
 		foreach ( $partialParticipants as $participant ) {
-			if ( $curUserParticipates && $participant->getUser()->getCentralID() === $centralUser->getCentralID() ) {
-				$skippedCurUser = true;
-				continue;
-			}
-			try {
-				$userLink = $this->userLinker->generateUserLink( $participant->getUser() );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
-				continue;
-			}
-			$listElements[] = Html::rawElement( 'li', [], $userLink );
-		}
-		if ( $curUserParticipates && !$skippedCurUser ) {
-			// If the current user is a participant and it was not in the partial list, this means that we have
-			// self::PARTICIPANTS_LIMIT + 1 users in the final list, so remove the last one to respect the limit.
-			array_pop( $listElements );
-		}
-
-		$participantsList .= implode( '', $listElements );
-
-		$participantsList .= Html::closeElement( 'ul' );
-		if ( count( $partialParticipants ) < $participantsCount ) {
-			$participantsList .= Html::rawElement(
-				'p',
-				[],
-				$this->linkRenderer->makeKnownLink(
-					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
-					$msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
-					)
-				)
+			$participantsList->appendContent(
+				$this->getParticipantRow( $participant, $language, $msgFormatter )
 			);
 		}
 		return $participantsList;
@@ -868,5 +888,68 @@ class EventPageDecorator {
 			default:
 				throw new UnexpectedValueException( "Unexpected value $checkRegistrationAllowedVal" );
 		}
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param ITextFormatter $msgFormatter
+	 *
+	 * @return Tag
+	 */
+	private function getParticipantFooter( int $eventID, ITextFormatter $msgFormatter ): Tag {
+		$tag = new Tag( 'div' );
+
+		$tag->appendContent(
+				new HtmlSnippet( $this->linkRenderer->makeKnownLink(
+					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
+					$msgFormatter->format(
+						MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
+					),
+					[],
+					[ 'tab' => SpecialEventDetails::PARTICIPANTS_PANEL ]
+				)
+			) );
+
+		return $tag;
+	}
+
+	/**
+	 * @param Participant $participant
+	 * @param Language $language
+	 * @param ITextFormatter $formatter
+	 * @return array
+	 */
+	private function getParticipantRow(
+		Participant $participant, Language $language, ITextFormatter $formatter ): array {
+		$usernameElement = new HtmlSnippet(
+			$this->userLinker->generateUserLinkWithFallback(
+				$participant->getUser(),
+				$language->getCode()
+			)
+		);
+		try {
+			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
+		} catch ( CentralUserNotFoundException | UserNotGlobalException $_ ) {
+			// Hack: use an invalid username to force unspecified gender
+			$userName = '@';
+		}
+		$elements = [];
+		$tag = ( new Tag( 'li' ) )
+			->appendContent( $usernameElement );
+		$labelText = $formatter->format(
+			MessageValue::new( 'campaignevents-eventpage-dialog-participant-private-registration-label' )
+			->params( $userName )
+		);
+		if ( $participant->isPrivateRegistration() ) {
+			$tag->appendContent( new IconWidget( [
+					'icon' => 'lock',
+					'title' => $labelText,
+					'label' => $labelText,
+					'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
+				] )
+			);
+		}
+		$elements[] = $tag;
+		return $elements;
 	}
 }
