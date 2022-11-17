@@ -81,6 +81,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Registrer deg for å kunne se chattegruppens lenke",
 	"campaignevents-eventpage-dialog-action-close": "Lukk",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ja",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Nei",
 	"campaignevents-eventpage-enableheader-organizer": "Du er en organisator",
 	"campaignevents-event-details-edit-button": "Rediger",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|deltaker|deltakere}}",
