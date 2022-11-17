@@ -181,8 +181,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Content of a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
-	"campaignevents-eventpage-register-confirmation-title": "Title of a dialog asking the user whether they accept the terms of use and confirm that they want to register for an event.",
 	"campaignevents-eventpage-register-confirmation-confirm": "Label of a button used in a dialog asking the user whether they accept the terms of use and confirm that they want to register for an event.",
+	"campaignevents-eventpage-register-confirmation-title": "Title of a dialog asking the user whether they accept the terms of use and confirm that they want to register for an event.",
 	"campaignevents-eventpage-enableheader-organizer": "Message shown on event pages when the user is an organizer and they can thus enable registration for that page.",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "Message shown on event pages to explain how the registration system works.",
 	"campaignevents-eventpage-enableheader-button-label": "Label of a button shown on event pages that lets the user enable registration for that event.",
@@ -239,5 +239,4 @@
 	"campaignevents-registration-confirmation-helptext-public": "help text to explain the consequence of public registration, used in the registration popup on event pages.",
 	"campaignevents-registration-confirmation-toggle-private": "private registration toggle state label, used in the registration popup on event pages.",
 	"campaignevents-registration-confirmation-toggle-public": "public registration toggle state label, used in the registration popup on event pages."
-
 }

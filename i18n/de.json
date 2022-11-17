@@ -177,8 +177,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Bist du sicher, dass du deine Registrierung abbrechen möchtest?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ja",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Nein",
-	"campaignevents-eventpage-register-confirmation-cancel": "Registrierung abbrechen",
-	"campaignevents-eventpage-register-confirmation-confirm": "Mit der Registrierung fortfahren",
+	"campaignevents-eventpage-register-confirmation-confirm": "Anmelden",
+	"campaignevents-eventpage-register-confirmation-title": "Datenschutz bei Veranstaltungen",
 	"campaignevents-eventpage-enableheader-organizer": "Du bist ein Organisator",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Veranstaltungsseite</strong>: Schalte die Registrierung frei, damit sich Teilnehmer direkt auf der Seite für deine Veranstaltung anmelden können.",
 	"campaignevents-eventpage-enableheader-button-label": "Anmeldung freigeben",
@@ -230,5 +230,9 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Du bist nicht berechtigt, Teilnehmer anzuzeigen, die sich privat für diese Veranstaltung angemeldet haben.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Übersichtstabelle der Programme & Veranstaltungen",
 	"campaignevents-userlink-suppressed-user": "Benutzername unterdrückt",
-	"campaignevents-userlink-deleted-user": "gelöschter Benutzer"
+	"campaignevents-userlink-deleted-user": "gelöschter Benutzer",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Private Registrierung:</strong> Nur die Veranstalter können deinen Benutzernamen in der Teilnehmerliste sehen.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Öffentliche Registrierung:</strong> Zeige deinen Benutzernamen auf einer öffentlichen Teilnehmerliste.",
+	"campaignevents-registration-confirmation-toggle-private": "Private Anmeldung",
+	"campaignevents-registration-confirmation-toggle-public": "Öffentliche Anmeldung"
 }

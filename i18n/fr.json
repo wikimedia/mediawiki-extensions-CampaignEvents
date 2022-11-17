@@ -183,8 +183,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Êtes-vous sûr{{GENDER:||e}} de vouloir annuler votre inscription ?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Oui",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Non",
-	"campaignevents-eventpage-register-confirmation-cancel": "Annuler l’inscription",
-	"campaignevents-eventpage-register-confirmation-confirm": "Continuer l’inscription",
+	"campaignevents-eventpage-register-confirmation-confirm": "S’inscrire",
+	"campaignevents-eventpage-register-confirmation-title": "Confidentialité de l’événement",
 	"campaignevents-eventpage-enableheader-organizer": "Vous êtes organisat{{GENDER:|eur|rice}}",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Page de l’événement</strong> : activez les inscriptions afin que les participants puissent s’inscrire à votre événement directement sur la page.",
 	"campaignevents-eventpage-enableheader-button-label": "Activer les inscriptions",
@@ -236,5 +236,9 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Vous n’avez pas le droit de voir les participants qui se sont inscrits en privé pour cet événement.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Tableau de bord des programmes et événements",
 	"campaignevents-userlink-suppressed-user": "nom d’utilisateur supprimé",
-	"campaignevents-userlink-deleted-user": "utilisateur supprimé"
+	"campaignevents-userlink-deleted-user": "utilisateur supprimé",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscription privée :</strong> seuls les organisateurs de l’événement peuvent voir votre nom d’utilisateur dans la liste des participants.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription publique :</strong> afficher votre nom d’utilisateur dans la liste publique des participants.",
+	"campaignevents-registration-confirmation-toggle-private": "Inscription privée",
+	"campaignevents-registration-confirmation-toggle-public": "Inscription publique"
 }

@@ -105,6 +105,7 @@
 	"campaignevents-eventpage-header-type-online": "온라인 이벤트",
 	"campaignevents-eventpage-header-type-in-person": "대면 이벤트",
 	"campaignevents-eventpage-header-type-online-and-in-person": "온라인 및 대면 이벤트",
+	"campaignevents-eventpage-header-timezone": "<strong>시간대:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "시작 및 종료 시간",
 	"campaignevents-eventpage-header-participants": "{{PLURAL:$1|참가자}} $1명",
 	"campaignevents-eventpage-header-participants-label": "참가자 수",
@@ -119,6 +120,7 @@
 	"campaignevents-eventpage-dialog-participants-view-list": "전체 목록 보기",
 	"campaignevents-eventpage-dialog-dates-label": "시작 및 종료 시간",
 	"campaignevents-eventpage-dialog-dates": "$1부터 $4까지",
+	"campaignevents-eventpage-dialog-timezone": "<strong>시간대:</strong> $1",
 	"campaignevents-eventpage-dialog-location-label": "위치",
 	"campaignevents-eventpage-dialog-online-label": "온라인 이벤트",
 	"campaignevents-eventpage-dialog-in-person-label": "대면 이벤트",
@@ -128,7 +130,6 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "등록을 취소하시겠습니까?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "예",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "아니오",
-	"campaignevents-eventpage-register-confirmation-cancel": "등록 취소",
 	"campaignevents-eventpage-register-confirmation-confirm": "등록 계속",
 	"campaignevents-eventpage-enableheader-organizer": "당신은 주최자입니다",
 	"campaignevents-eventpage-enableheader-button-label": "등록 활성화",
@@ -141,6 +142,7 @@
 	"campaignevents-event-details-edit-button": "편집",
 	"campaignevents-event-details-header-participants": "{{PLURAL:$1|참가자}} $1명",
 	"campaignevents-event-details-dates": "$1부터 $4까지",
+	"campaignevents-event-details-timezone": "<strong>시간대:</strong> $1",
 	"campaignevents-event-details-in-person-event-label": "대면 이벤트",
 	"campaignevents-event-details-online-label": "온라인 이벤트",
 	"campaignevents-event-details-chat-link": "채팅 그룹 초대 링크",
@@ -165,5 +167,6 @@
 	"campaignevents-unregister-participants-permission-denied": "참가자를 제거할 권한이 없습니다.",
 	"campaignevents-unregister-participants-registration-deleted": "이 이벤트는 삭제되었기 때문에 해당 이벤트로부터 참여자를 제거할 수 없습니다.",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|참가자}}를 제거하는 중 오류가 발생했습니다.",
+	"campaignevents-event-details-tab-participants": "참가자",
 	"campaignevents-event-details-search-participants-placeholder": "참가자 검색"
 }

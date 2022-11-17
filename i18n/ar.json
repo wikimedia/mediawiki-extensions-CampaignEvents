@@ -182,7 +182,6 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "هل أنت متأكد من إلغاء التسجيل في الفعالية؟",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "نعم",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "لا",
-	"campaignevents-eventpage-register-confirmation-cancel": "إلغاء التسجيل",
 	"campaignevents-eventpage-register-confirmation-confirm": "مواصلة التسجيل",
 	"campaignevents-eventpage-enableheader-organizer": "{{GENDER:|أنت منظم|أنتي منظمة}} الآن",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>صفحة الفعالية</strong> : قم بتفعيل التسجيل حتى يتمكن المشاركون من التسجيل في الفعالية الخاصة بك مباشرة على الصفحة.",

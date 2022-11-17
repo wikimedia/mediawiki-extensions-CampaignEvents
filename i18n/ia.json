@@ -177,8 +177,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Es tu secur de voler cancellar tu inscription?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Si",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "No",
-	"campaignevents-eventpage-register-confirmation-cancel": "Cancellar inscription",
-	"campaignevents-eventpage-register-confirmation-confirm": "Continuar inscription",
+	"campaignevents-eventpage-register-confirmation-confirm": "Inscriber",
+	"campaignevents-eventpage-register-confirmation-title": "Confidentialitate del evento",
 	"campaignevents-eventpage-enableheader-organizer": "Tu es un organisator",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Pagina del evento</strong>: activa le inscription de sorta que le participantes pote inscriber se a tu evento directemente sur le pagina.",
 	"campaignevents-eventpage-enableheader-button-label": "Activar inscription",
@@ -230,5 +230,9 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Tu non es autorisate a vider le participantes que se ha inscribite in privato pro iste evento.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Tabuliero de programmas e eventos",
 	"campaignevents-userlink-suppressed-user": "nomine de usator supprimite",
-	"campaignevents-userlink-deleted-user": "usator delite"
+	"campaignevents-userlink-deleted-user": "usator delite",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscription private:</strong> Solmente le organisatores del evento pote vider tu nomine de usator in le lista de participantes.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription public:</strong> Monstrar tu nomine de usator in un lista public de participantes.",
+	"campaignevents-registration-confirmation-toggle-private": "Inscription private",
+	"campaignevents-registration-confirmation-toggle-public": "Inscription public"
 }

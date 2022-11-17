@@ -177,7 +177,6 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "האם {{GENDER:|אתה בטוח שאתה|את בטוחה שאת}} רוצה לבטל את הרשמה שלך?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "כן",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "לא",
-	"campaignevents-eventpage-register-confirmation-cancel": "ביטול הרשמה",
 	"campaignevents-eventpage-register-confirmation-confirm": "המשך הרשמה",
 	"campaignevents-eventpage-enableheader-organizer": "{{GENDER:|אתה המארגן|את המארגנת}}",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>דף אירוע</strong>: יש להפעיל הרשמה כדי שמשתתפים יוכלו להירשם לאירוע שלך ישירות בדף.",
