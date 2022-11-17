@@ -23,8 +23,12 @@
 		this.$participantsTitle = $( '.ext-campaignevents-details-participants-header' );
 
 		this.participantCheckboxes = [];
+		this.curParticipantCheckbox = null;
+		this.isSelectionInverted = false;
+		// This can be an array of IDs or null. Null means all participants are selected. If array,
+		// then the listed user are respectively selected or excluded from selection, depending
+		// on the value of isSelectionInverted.
 		this.selectedParticipantIDs = [];
-		this.participantIDsExcludedFromSelection = [];
 		this.participantsTotal = mw.config.get( 'wgCampaignEventsEventDetailsParticipantsTotal' );
 
 		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
@@ -56,9 +60,10 @@
 				}
 				if ( selected ) {
 					thisClass.onSelectAll();
-					return;
+				} else {
+					thisClass.onDeselectAll();
 				}
-				thisClass.onDeselectAll();
+				thisClass.updateSelectedLabel();
 			} );
 		}
 
@@ -71,6 +76,9 @@
 					thisClass.onParticipantCheckboxChange( selected, this );
 				}, [], infusedCheckbox );
 				thisClass.participantCheckboxes.push( infusedCheckbox );
+				if ( infusedCheckbox.getValue() === String( thisClass.curUserCentralID ) ) {
+					thisClass.curParticipantCheckbox = infusedCheckbox;
+				}
 			} );
 		}
 
@@ -118,23 +126,20 @@
 	};
 
 	ParticipantsManager.prototype.onSelectAll = function () {
-		this.selectedParticipantIDs = this.participantCheckboxes.map( function ( el ) {
-			return el.getValue();
-		} );
-
+		this.selectedParticipantIDs = null;
+		this.isSelectionInverted = false;
 		this.selectedParticipantsAmount = this.participantsTotal;
-		this.participantIDsExcludedFromSelection = [];
-		this.updateSelectedLabel();
+
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.show();
 		}
 	};
 
 	ParticipantsManager.prototype.onDeselectAll = function () {
-		this.selectedParticipantsAmount = 0;
 		this.selectedParticipantIDs = [];
-		this.participantIDsExcludedFromSelection = [];
-		this.updateSelectedLabel();
+		this.isSelectionInverted = false;
+		this.selectedParticipantsAmount = 0;
+
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.hide();
 		}
@@ -158,43 +163,54 @@
 	ParticipantsManager.prototype.onParticipantCheckboxChange = function ( selected, el ) {
 		if ( selected ) {
 			this.onSelectParticipant( el );
-			return;
+		} else {
+			this.onDeselectParticipant( el );
 		}
-		this.onDeselectParticipant( el );
+		this.updateSelectedLabel();
 	};
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {
-		this.selectedParticipantIDs.push( checkbox.getValue() );
-
-		this.participantIDsExcludedFromSelection.splice(
-			this.participantIDsExcludedFromSelection.indexOf( checkbox.getValue() ), 1
-		);
-
 		this.selectedParticipantsAmount++;
-		// if select all manually check select all checkbox
 		if ( this.selectedParticipantsAmount === this.participantsTotal ) {
 			this.selectAllParticipantsCheckbox.setSelected( true, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
+			this.isSelectionInverted = false;
+			this.selectedParticipantIDs = null;
+		} else if ( this.isSelectionInverted ) {
+			this.selectedParticipantIDs.splice(
+				this.selectedParticipantIDs.indexOf( checkbox.getValue() ), 1
+			);
+		} else {
+			this.selectedParticipantIDs.push( checkbox.getValue() );
 		}
-		this.updateSelectedLabel();
+
 		this.removeParticipantsButton.$element.show();
 	};
 
 	ParticipantsManager.prototype.onDeselectParticipant = function ( checkbox ) {
-		this.participantIDsExcludedFromSelection.push( checkbox.getValue() );
-		this.selectedParticipantIDs.splice(
-			this.selectedParticipantIDs.indexOf( checkbox.getValue() ), 1
-		);
-
 		this.selectedParticipantsAmount--;
 		if ( this.selectedParticipantsAmount === 0 ) {
 			this.selectAllParticipantsCheckbox.setSelected( false, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
+			this.selectedParticipantIDs = [];
+			this.isSelectionInverted = false;
 			this.removeParticipantsButton.$element.hide();
-		} else if ( this.selectAllParticipantsCheckbox.isSelected() ) {
+			return;
+		}
+
+		if ( this.selectAllParticipantsCheckbox.isSelected() ) {
+			this.isSelectionInverted = true;
 			this.selectAllParticipantsCheckbox.setIndeterminate( true, true );
 		}
-		this.updateSelectedLabel();
+
+		this.selectedParticipantIDs = this.selectedParticipantIDs || [];
+		if ( this.isSelectionInverted ) {
+			this.selectedParticipantIDs.push( checkbox.getValue() );
+		} else {
+			this.selectedParticipantIDs.splice(
+				this.selectedParticipantIDs.indexOf( checkbox.getValue() ), 1
+			);
+		}
 	};
 
 	/**
@@ -212,32 +228,16 @@
 		);
 	};
 
-	/**
-	 * @param {boolean} invertUsers
-	 * @return {Array|null}
-	 */
-	ParticipantsManager.prototype.getUsersIDsToRemove = function ( invertUsers ) {
-		if ( invertUsers ) {
-			return this.participantIDsExcludedFromSelection;
-		} else if ( this.selectAllParticipantsCheckbox.isSelected() ) {
-			return null;
-		}
-
-		return this.selectedParticipantIDs;
-	};
-
 	ParticipantsManager.prototype.onConfirmRemoval = function () {
-		var thisClass = this,
-			invertUsers = this.participantIDsExcludedFromSelection.length > 0;
-
+		var thisClass = this;
 		new mw.Rest().delete(
 			'/campaignevents/v0/event_registration/' + this.registrationID + '/participants',
 			{
 				token: mw.user.tokens.get( 'csrfToken' ),
 				// eslint-disable-next-line camelcase
-				user_ids: this.getUsersIDsToRemove( invertUsers ),
+				user_ids: this.selectedParticipantIDs,
 				// eslint-disable-next-line camelcase
-				invert_users: invertUsers
+				invert_users: this.isSelectionInverted
 			}
 		)
 			.done( function ( response ) {
@@ -309,11 +309,16 @@
 			.not( this.$curUserRow )
 			.remove();
 		this.$curUserRow.hide();
-		this.participantCheckboxes = [];
+		// The checkbox for the current user can be left here so that we don't have to check
+		// whether it should be selected every time we toggle it.
+		this.participantCheckboxes = this.curParticipantCheckbox ?
+			[ this.curParticipantCheckbox ] :
+			[];
 		this.scrollDownObserver.reset();
 		// Reset last participant so we can list them from the start if the
 		// filter changes
 		this.lastParticipantID = null;
+		// Note that the selected participants should persist and are not reset here.
 		this.loadMoreParticipants( usernameFilter );
 	};
 
@@ -407,12 +412,6 @@
 				}, [], newParticipantCheckbox );
 
 				this.participantCheckboxes.push( newParticipantCheckbox );
-				if (
-					loadAsSelected &&
-					thisClass.selectedParticipantIDs.indexOf( curParticipantData.user_id ) < 0
-				) {
-					this.selectedParticipantIDs.push( curParticipantData.user_id );
-				}
 				items.push( newParticipantCheckbox );
 			}
 
@@ -469,18 +468,13 @@
 	 * @return {boolean}
 	 */
 	ParticipantsManager.prototype.loadParticipantAsSelected = function ( userID ) {
-		if ( !this.showParticipantCheckboxes ) {
-			return false;
-		}
-
-		if (
-			this.selectAllParticipantsCheckbox.isSelected() &&
-			this.participantIDsExcludedFromSelection.indexOf( userID ) < 0
-		) {
+		if ( this.selectedParticipantIDs === null && !this.isSelectionInverted ) {
 			return true;
 		}
 
-		return this.selectedParticipantIDs.indexOf( userID ) > -1;
+		return this.isSelectionInverted ?
+			this.selectedParticipantIDs.indexOf( userID ) === -1 :
+			this.selectedParticipantIDs.indexOf( userID ) > -1;
 	};
 
 	/**
