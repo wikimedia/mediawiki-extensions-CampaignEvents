@@ -177,7 +177,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "האם {{GENDER:|אתה בטוח שאתה|את בטוחה שאת}} רוצה לבטל את הרשמה שלך?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "כן",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "לא",
-	"campaignevents-eventpage-register-confirmation-confirm": "המשך הרשמה",
+	"campaignevents-eventpage-register-confirmation-confirm": "להירשם",
+	"campaignevents-eventpage-register-confirmation-title": "פרטיות האירוע",
 	"campaignevents-eventpage-enableheader-organizer": "{{GENDER:|אתה המארגן|את המארגנת}}",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>דף אירוע</strong>: יש להפעיל הרשמה כדי שמשתתפים יוכלו להירשם לאירוע שלך ישירות בדף.",
 	"campaignevents-eventpage-enableheader-button-label": "הפעלת הרשמה",
@@ -229,5 +230,9 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "אין לך הרשאה לצפות במשתתפים שנרשמו באופן פרטי לאירוע הזה.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "לוח הבקרה של תוכניות ואירועים",
 	"campaignevents-userlink-suppressed-user": "שם המשתמש הועלם",
-	"campaignevents-userlink-deleted-user": "חשבון משתמש מחוק"
+	"campaignevents-userlink-deleted-user": "חשבון משתמש מחוק",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>הרשמה פרטית:</strong> רק מארגני האירוע יכולים לראות את שם המשתמש שלך ברשימת המשתתפים.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>רישום פומבי:</strong> להציג את שם המשתמש שלך ברשימת משתתפים הפומבית.",
+	"campaignevents-registration-confirmation-toggle-private": "הרשמה פרטית",
+	"campaignevents-registration-confirmation-toggle-public": "הרשמה פומבית"
 }

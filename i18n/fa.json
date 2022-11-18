@@ -86,5 +86,6 @@
 	"campaignevents-event-details-event": "جزئیات رویداد: $1",
 	"campaignevents-event-details-not-found": "رویدادی با این شناسه وجود ندارد.",
 	"campaignevents-event-details-dates-label": "زمان آغاز و پایان",
-	"campaignevents-event-details-search-participants-placeholder": "جستجوی شرکت‌کنندگان"
+	"campaignevents-event-details-search-participants-placeholder": "جستجوی شرکت‌کنندگان",
+	"campaignevents-registration-confirmation-toggle-public": "ثبت نام عمومی"
 }

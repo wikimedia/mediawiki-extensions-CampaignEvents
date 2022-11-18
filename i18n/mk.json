@@ -178,7 +178,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Дали сигурно сакате да ја откажете пријавата?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Да",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Не",
-	"campaignevents-eventpage-register-confirmation-confirm": "Продолжи со пријавување",
+	"campaignevents-eventpage-register-confirmation-confirm": "Пријави се",
+	"campaignevents-eventpage-register-confirmation-title": "Приватност на настанот",
 	"campaignevents-eventpage-enableheader-organizer": "Вие сте приредувач",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Страница за настан</strong>: овозможете пријавување за учесниците да можат да се пријават за вашиот настан непосредно на страницата.",
 	"campaignevents-eventpage-enableheader-button-label": "Овозможи пријавување",
@@ -230,5 +231,9 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Не сте овластени да ги гледате учесниците кои се пријавиле приватно за овој настан.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Управувачница за програми и настани",
 	"campaignevents-userlink-suppressed-user": "корисничкото име е потиснато",
-	"campaignevents-userlink-deleted-user": "избиршан корисник"
+	"campaignevents-userlink-deleted-user": "избиршан корисник",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Приватно пријавување:</strong> Само приредувачите на настанот можат да го видат вашето кроисничко име во списокот на учесници.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Јавно пријавување:</strong> Вашето корисничко име ќе се прикажува на список на ученици.",
+	"campaignevents-registration-confirmation-toggle-private": "Приватно пријавување",
+	"campaignevents-registration-confirmation-toggle-public": "Јавно пријавување"
 }

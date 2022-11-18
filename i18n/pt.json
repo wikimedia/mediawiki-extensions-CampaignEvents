@@ -177,7 +177,8 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "Tem a certeza de que quer cancelar a sua inscrição?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Tenho",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Não",
-	"campaignevents-eventpage-register-confirmation-confirm": "Continuar inscrição",
+	"campaignevents-eventpage-register-confirmation-confirm": "Inscrever-se",
+	"campaignevents-eventpage-register-confirmation-title": "Privacidade do evento",
 	"campaignevents-eventpage-enableheader-organizer": "É um organizador",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Página do evento</strong>: permita as inscrições para que os participantes se possam inscrever no seu evento diretamente na página.",
 	"campaignevents-eventpage-enableheader-button-label": "Permitir inscrições",
@@ -229,5 +230,9 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Não está autorizado a ver os participantes que se inscreveram de forma privada neste evento.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Painel de controlo de programas e eventos",
 	"campaignevents-userlink-suppressed-user": "nome de utilizador suprimido",
-	"campaignevents-userlink-deleted-user": "utilizador eliminado"
+	"campaignevents-userlink-deleted-user": "utilizador eliminado",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscrição privada:</strong> só os organizadores do evento podem ver o seu nome de utilizador na lista de participantes.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscrição pública:</strong> mostrar o seu nome de utilizador numa lista de participantes pública.",
+	"campaignevents-registration-confirmation-toggle-private": "Inscrição privada",
+	"campaignevents-registration-confirmation-toggle-public": "Inscrição pública"
 }
