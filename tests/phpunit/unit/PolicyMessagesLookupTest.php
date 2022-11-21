@@ -29,7 +29,7 @@ class PolicyMessagesLookupTest extends MediaWikiUnitTestCase {
 			$this->createSimpleObjectFactory()
 		);
 		foreach ( $hookHandlers as $callback ) {
-			$hookContainer->register( 'CampaignEventsGetPolicyMessage', $callback );
+			$hookContainer->register( 'CampaignEventsGetPolicyMessageForRegistration', $callback );
 		}
 		$lookup = new PolicyMessagesLookup( new CampaignEventsHookRunner( $hookContainer ) );
 		$this->assertSame( $expected, $lookup->getPolicyMessageForRegistration() );

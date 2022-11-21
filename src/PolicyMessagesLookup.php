@@ -28,9 +28,6 @@ class PolicyMessagesLookup {
 	public function getPolicyMessageForRegistration(): ?string {
 		$msg = null;
 		$this->hookRunner->onCampaignEventsGetPolicyMessageForRegistration( $msg );
-		if ( $msg === null ) {
-			$this->hookRunner->onCampaignEventsGetPolicyMessage( $msg );
-		}
 		return $msg;
 	}
 }
