@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserTimeCorrection;
 use MWTimestamp;
@@ -34,7 +35,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	/** @var EventFactory */
 	private $eventFactory;
 	/** @var EditEventCommand */
-	protected $editEventCommand;
+	private $editEventCommand;
+	/** @var PolicyMessagesLookup */
+	private PolicyMessagesLookup $policyMessagesLookup;
+
 	/** @var int|null */
 	protected $eventID;
 	/** @var EventRegistration|null */
@@ -52,18 +56,21 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @param IEventLookup $eventLookup
 	 * @param EventFactory $eventFactory
 	 * @param EditEventCommand $editEventCommand
+	 * @param PolicyMessagesLookup $policyMessagesLookup
 	 */
 	public function __construct(
 		string $name,
 		string $restriction,
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
-		EditEventCommand $editEventCommand
+		EditEventCommand $editEventCommand,
+		PolicyMessagesLookup $policyMessagesLookup
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
 		$this->eventFactory = $eventFactory;
 		$this->editEventCommand = $editEventCommand;
+		$this->policyMessagesLookup = $policyMessagesLookup;
 		$this->formMessages = $this->getFormMessages();
 	}
 
@@ -235,6 +242,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$footerNotice = ( new Tag( 'span' ) )
 			->appendContent( new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() ) )
 			->setAttributes( [ 'style' => 'font-weight: normal' ] );
+
+		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistrationForm();
+		if ( $policyMsg !== null ) {
+			$footerNotice->appendContent(
+				new HtmlSnippet( $this->msg( $policyMsg )->parseAsBlock() )
+			);
+		}
 		$form->addFooterHtml( new FieldLayout( new MessageWidget( [
 			'type' => 'notice',
 			'inline' => true,

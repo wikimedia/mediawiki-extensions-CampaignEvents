@@ -382,7 +382,8 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
-				"CampaignEventsEditEventCommand"
+				"CampaignEventsEditEventCommand",
+				"CampaignEventsPolicyMessagesLookup"
 			]
 		},
 		"EditEventRegistration": {
@@ -391,7 +392,8 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
 				"CampaignEventsEditEventCommand",
-				"CampaignEventsPermissionChecker"
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsPolicyMessagesLookup"
 			]
 		},
 		"DeleteEventRegistration": {

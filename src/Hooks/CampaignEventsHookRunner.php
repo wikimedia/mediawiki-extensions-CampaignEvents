@@ -7,7 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Hooks;
 use MediaWiki\HookContainer\HookContainer;
 
 class CampaignEventsHookRunner implements
-	CampaignEventsGetPolicyMessageForRegistrationHook
+	CampaignEventsGetPolicyMessageForRegistrationHook,
+	CampaignEventsGetPolicyMessageForRegistrationFormHook
 {
 	public const SERVICE_NAME = 'CampaignEventsHookRunner';
 
@@ -27,6 +28,16 @@ class CampaignEventsHookRunner implements
 	public function onCampaignEventsGetPolicyMessageForRegistration( ?string &$message ) {
 		return $this->hookContainer->run(
 			'CampaignEventsGetPolicyMessageForRegistration',
+			[ &$message ]
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onCampaignEventsGetPolicyMessageForRegistrationForm( ?string &$message ) {
+		return $this->hookContainer->run(
+			'CampaignEventsGetPolicyMessageForRegistrationForm',
 			[ &$message ]
 		);
 	}

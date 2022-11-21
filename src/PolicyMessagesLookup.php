@@ -30,4 +30,16 @@ class PolicyMessagesLookup {
 		$this->hookRunner->onCampaignEventsGetPolicyMessageForRegistration( $msg );
 		return $msg;
 	}
+
+	/**
+	 * Looks for a policy message that should be shown in the enable/edit registration form.
+	 *
+	 * @return string|null Message key, or null if there's no message to display.
+	 *  The message may contain wikitext.
+	 */
+	public function getPolicyMessageForRegistrationForm(): ?string {
+		$msg = null;
+		$this->hookRunner->onCampaignEventsGetPolicyMessageForRegistrationForm( $msg );
+		return $msg;
+	}
 }

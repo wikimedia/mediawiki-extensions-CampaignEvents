@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use WikiMap;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
@@ -24,19 +25,22 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 * @param EventFactory $eventFactory
 	 * @param EditEventCommand $editEventCommand
 	 * @param PermissionChecker $permissionChecker
+	 * @param PolicyMessagesLookup $policyMessagesLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
 		EditEventCommand $editEventCommand,
-		PermissionChecker $permissionChecker
+		PermissionChecker $permissionChecker,
+		PolicyMessagesLookup $policyMessagesLookup
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
 			'',
 			$eventLookup,
 			$eventFactory,
-			$editEventCommand
+			$editEventCommand,
+			$policyMessagesLookup
 		);
 		$this->permissionChecker = $permissionChecker;
 	}
