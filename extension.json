@@ -409,7 +409,7 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsRegisterParticipantCommand",
 				"CampaignEventsParticipantsStore",
-				"CampaignEventsPolicyMessageLookup"
+				"CampaignEventsPolicyMessagesLookup"
 			]
 		},
 		"CancelEventRegistration": {

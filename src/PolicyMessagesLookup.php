@@ -6,8 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents;
 
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 
-class PolicyMessageLookup {
-	public const SERVICE_NAME = 'CampaignEventsPolicyMessageLookup';
+class PolicyMessagesLookup {
+	public const SERVICE_NAME = 'CampaignEventsPolicyMessagesLookup';
 
 	/** @var CampaignEventsHookRunner */
 	private $hookRunner;
@@ -20,12 +20,17 @@ class PolicyMessageLookup {
 	}
 
 	/**
+	 * Looks for a policy message that should be shown to participants when registering for an event.
+	 *
 	 * @return string|null Message key, or null if there's no policy acknowledgement to display.
 	 *  The message may contain wikitext.
 	 */
-	public function getPolicyMessage(): ?string {
+	public function getPolicyMessageForRegistration(): ?string {
 		$msg = null;
-		$this->hookRunner->onCampaignEventsGetPolicyMessage( $msg );
+		$this->hookRunner->onCampaignEventsGetPolicyMessageForRegistration( $msg );
+		if ( $msg === null ) {
+			$this->hookRunner->onCampaignEventsGetPolicyMessage( $msg );
+		}
 		return $msg;
 	}
 }

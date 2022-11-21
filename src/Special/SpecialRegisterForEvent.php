@@ -12,7 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
-use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
+use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use Status;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
@@ -22,27 +22,27 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private $registerParticipantCommand;
 	/** @var ParticipantsStore */
 	private $participantsStore;
-	/** @var PolicyMessageLookup */
-	private $policyMessageLookup;
+	/** @var PolicyMessagesLookup */
+	private $policyMessagesLookup;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
 	 * @param ParticipantsStore $participantsStore
-	 * @param PolicyMessageLookup $policyMessageLookup
+	 * @param PolicyMessagesLookup $policyMessagesLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
 		RegisterParticipantCommand $registerParticipantCommand,
 		ParticipantsStore $participantsStore,
-		PolicyMessageLookup $policyMessageLookup
+		PolicyMessagesLookup $policyMessagesLookup
 	) {
 		parent::__construct( self::PAGE_NAME, $eventLookup, $centralUserLookup );
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->participantsStore = $participantsStore;
-		$this->policyMessageLookup = $policyMessageLookup;
+		$this->policyMessagesLookup = $policyMessagesLookup;
 	}
 
 	/**
@@ -73,7 +73,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				'default' => $this->msg( 'campaignevents-register-confirmation-text' )->text(),
 			],
 		];
-		$policyMsg = $this->policyMessageLookup->getPolicyMessage();
+		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistration();
 		if ( $policyMsg !== null ) {
 			$fields['Policy'] = [
 				'type' => 'info',

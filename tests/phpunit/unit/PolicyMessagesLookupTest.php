@@ -6,21 +6,21 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit;
 
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
-use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
+use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\HookContainer\StaticHookRegistry;
 use MediaWikiUnitTestCase;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\PolicyMessageLookup
+ * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup
  * @covers ::__construct
  */
-class PolicyMessageLookupTest extends MediaWikiUnitTestCase {
+class PolicyMessagesLookupTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param callable[] $hookHandlers
 	 * @param string|null $expected
 	 * @dataProvider provideHookHandlers
-	 * @covers ::getPolicyMessage
+	 * @covers ::getPolicyMessageForRegistration
 	 */
 	public function testGetPolicyMessage( array $hookHandlers, ?string $expected ) {
 		// Note: we can't use $this->createHookContainer() because that only allows one handler per hook
@@ -31,8 +31,8 @@ class PolicyMessageLookupTest extends MediaWikiUnitTestCase {
 		foreach ( $hookHandlers as $callback ) {
 			$hookContainer->register( 'CampaignEventsGetPolicyMessage', $callback );
 		}
-		$lookup = new PolicyMessageLookup( new CampaignEventsHookRunner( $hookContainer ) );
-		$this->assertSame( $expected, $lookup->getPolicyMessage() );
+		$lookup = new PolicyMessagesLookup( new CampaignEventsHookRunner( $hookContainer ) );
+		$this->assertSame( $expected, $lookup->getPolicyMessageForRegistration() );
 	}
 
 	public function provideHookHandlers(): Generator {

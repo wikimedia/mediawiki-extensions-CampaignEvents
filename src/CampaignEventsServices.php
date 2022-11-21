@@ -84,10 +84,10 @@ class CampaignEventsServices {
 	}
 
 	/**
-	 * @return PolicyMessageLookup
+	 * @return PolicyMessagesLookup
 	 */
-	public static function getPolicyMessageLookup(): PolicyMessageLookup {
-		return MediaWikiServices::getInstance()->getService( PolicyMessageLookup::SERVICE_NAME );
+	public static function getPolicyMessagesLookup(): PolicyMessagesLookup {
+		return MediaWikiServices::getInstance()->getService( PolicyMessagesLookup::SERVICE_NAME );
 	}
 
 	/**

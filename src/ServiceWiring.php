@@ -28,7 +28,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Extension\CampaignEvents\PolicyMessageLookup;
+use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\MediaWikiServices;
@@ -160,8 +160,8 @@ return [
 		static function ( MediaWikiServices $services ): CampaignEventsHookRunner {
 			return new CampaignEventsHookRunner( $services->getHookContainer() );
 		},
-	PolicyMessageLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PolicyMessageLookup {
-		return new PolicyMessageLookup(
+	PolicyMessagesLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PolicyMessagesLookup {
+		return new PolicyMessagesLookup(
 			$services->get( CampaignEventsHookRunner::SERVICE_NAME )
 		);
 	},
