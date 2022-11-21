@@ -12,6 +12,8 @@
 	"campaignevents-edit-field-timezone": "Waqıt zonası",
 	"campaignevents-eventpage-header-timezone": "<strong>Waqıt zonası:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Waqıt zonası:</strong> $1",
+	"campaignevents-eventpage-register-confirmation-confirm": "Dizimnen ótiw",
+	"campaignevents-eventpage-register-confirmation-title": "Ilaj qupıyalıǵı",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|qatnasıwshı|qatnasıwshılar}} jeke dizimnen ótken.",
 	"campaignevents-event-details-timezone": "<strong>Waqıt zonası:</strong> $1",
 	"campaignevents-event-details-organizers-header": "Shólkemlestiriwshiler",
@@ -22,5 +24,8 @@
 	"campaignevents-event-details-organizers-noscript": "Shólkemlestiriwshilerdiń tolıq dizimin kóriw ushın JavaScriptti qosıwıńız kerek.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Programmalardı hám waqıyalardı basqarıw paneli",
 	"campaignevents-userlink-suppressed-user": "Paydalanıwshı atı jasırılǵan",
-	"campaignevents-userlink-deleted-user": "óshirilgen paydalanıwshı"
+	"campaignevents-userlink-deleted-user": "óshirilgen paydalanıwshı",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Qupıya dizimnen ótiw:</strong> Qatnasıwshılar dizimindegi paydalanıwshı atıńızdı tek ilaj shólkemlestiriwshileri kóre aladı.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Ǵalabalıq dizimnen ótiw:</strong> Ǵalabalıq qatnasıwshılar diziminde paydalanıwshı atıńızdı kórsetiń.",
+	"campaignevents-registration-confirmation-toggle-private": "Qupıya dizimnen ótiw"
 }

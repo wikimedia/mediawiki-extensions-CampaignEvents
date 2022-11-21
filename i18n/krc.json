@@ -4,9 +4,15 @@
 			"Къарачайлы"
 		]
 	},
+	"campaignevents-eventpage-header-timezone": "<strong>Заман беллик:</strong> $1",
+	"campaignevents-eventpage-dialog-timezone": "<strong>Заман беллик:</strong> $1",
 	"campaignevents-eventpage-register-confirmation-confirm": "Регистрация эт",
 	"campaignevents-eventpage-register-confirmation-title": "Болууну ташалыгъы",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|къошулуучу}} энчи халда регистрация этилгенди.",
+	"campaignevents-event-details-timezone": "<strong>Заман беллик:</strong> $1",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 -ден $2 {{PLURAL:$1|сайланнганды}}",
+	"campaignevents-event-details-tab-participants": "Кошулгъанла",
+	"campaignevents-event-details-tab-event-details": "Болууну толусу",
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Таша регистрация:</strong> Къошулгъанланы тизмесинде сизни атыгъызны къуру болууну къургъанла кёрюрге боллукъдула.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Туура регистрация:</strong> Кесигизни атыгъызны туура къошулуучу тизмеде кёргюзюгюз.",
 	"campaignevents-registration-confirmation-toggle-private": "Таша регистрация",
