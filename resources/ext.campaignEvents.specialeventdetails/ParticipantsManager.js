@@ -256,6 +256,7 @@
 				thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
 				thisClass.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 				thisClass.onDeselectAll();
+				thisClass.updateSelectedLabel();
 				var successMsg;
 				thisClass.participantsTotal = thisClass.participantsTotal - response.modified;
 				if ( thisClass.participantsTotal === 0 ) {
