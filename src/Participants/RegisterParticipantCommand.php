@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
@@ -31,20 +32,25 @@ class RegisterParticipantCommand {
 	private $permissionChecker;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var UserNotifier */
+	private UserNotifier $userNotifier;
 
 	/**
 	 * @param ParticipantsStore $participantsStore
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param UserNotifier $userNotifier
 	 */
 	public function __construct(
 		ParticipantsStore $participantsStore,
 		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		UserNotifier $userNotifier
 	) {
 		$this->participantsStore = $participantsStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->userNotifier = $userNotifier;
 	}
 
 	/**
@@ -131,6 +137,7 @@ class RegisterParticipantCommand {
 			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
 		}
 		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser, $isPrivate );
+		$this->userNotifier->notifyRegistration( $performer, $registration );
 		return StatusValue::newGood( $modified );
 	}
 }

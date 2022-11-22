@@ -15,8 +15,10 @@ class PageURLResolver {
 	/** @var TitleFactory */
 	private $titleFactory;
 
-	/** @var string[] Cached URLs */
-	private $cache = [];
+	/** @var string[] Cached results of getUrl() */
+	private array $urlCache = [];
+	/** @var string[] Cached results of getFullUrl() */
+	private array $fullUrlCache = [];
 
 	/**
 	 * @param TitleFactory $titleFactory
@@ -36,13 +38,32 @@ class PageURLResolver {
 			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
 		}
 		$cacheKey = $this->getCacheKey( $page );
-		if ( !isset( $this->cache[$cacheKey] ) ) {
+		if ( !isset( $this->urlCache[$cacheKey] ) ) {
 			$wikiID = $page->getWikiId();
-			$this->cache[$cacheKey] = $wikiID === WikiAwareEntity::LOCAL
+			$this->urlCache[$cacheKey] = $wikiID === WikiAwareEntity::LOCAL
 				? $this->titleFactory->castFromPageIdentity( $page->getPageIdentity() )->getLocalURL()
 				: WikiMap::getForeignURL( $wikiID, $page->getPrefixedText() );
 		}
-		return $this->cache[$cacheKey];
+		return $this->urlCache[$cacheKey];
+	}
+
+	/**
+	 * Returns the full URL of a page. Unlike getUrl, this is guaranteed to be the full URL even for local pages.
+	 * @param ICampaignsPage $page
+	 * @return string
+	 */
+	public function getFullUrl( ICampaignsPage $page ): string {
+		if ( !$page instanceof MWPageProxy ) {
+			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
+		}
+		$cacheKey = $this->getCacheKey( $page );
+		if ( !isset( $this->fullUrlCache[$cacheKey] ) ) {
+			$wikiID = $page->getWikiId();
+			$this->fullUrlCache[$cacheKey] = $wikiID === WikiAwareEntity::LOCAL
+				? $this->titleFactory->castFromPageIdentity( $page->getPageIdentity() )->getFullURL()
+				: WikiMap::getForeignURL( $wikiID, $page->getPrefixedText() );
+		}
+		return $this->fullUrlCache[$cacheKey];
 	}
 
 	/**

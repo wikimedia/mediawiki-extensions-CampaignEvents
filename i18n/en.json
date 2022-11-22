@@ -235,5 +235,23 @@
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Private registration:</strong> Only the event organizers can see your username in the participant list.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Public registration:</strong> Show your username on a public participant list.",
 	"campaignevents-registration-confirmation-toggle-private": "Private registration",
-	"campaignevents-registration-confirmation-toggle-public": "Public registration"
+	"campaignevents-registration-confirmation-toggle-public": "Public registration",
+	"echo-category-title-campaign-events-notification-registration": "Event registration",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Notify me when I register for an event that uses the Event Registration tool.",
+	"campaignevents-notification-registration-subject": "$1 registration confirmed",
+	"campaignevents-notification-registration-header-intro": "Thank you for registering for $1.",
+	"campaignevents-notification-registration-header-chat": "Join the $1 to connect with other participants and get additional updates from the organizers.",
+	"campaignevents-notification-registration-header-chat-label": "event group chat",
+	"campaignevents-notification-registration-details-header": "Event details",
+	"campaignevents-notification-registration-details-dates-header": "Date and time",
+	"campaignevents-notification-registration-details-dates": "$1 to $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Timezone:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Event type",
+	"campaignevents-notification-registration-details-type-online-header": "Online event",
+	"campaignevents-notification-registration-details-type-in-person-header": "In-person event",
+	"campaignevents-notification-registration-details-organizers-header": "Event organizers",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|more}}",
+	"campaignevents-notification-registration-event-page-link": "View event page",
+	"campaignevents-notification-registration-chat-link": "Join group chat"
+
 }

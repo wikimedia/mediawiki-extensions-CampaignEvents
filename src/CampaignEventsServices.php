@@ -11,9 +11,12 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -95,5 +98,26 @@ class CampaignEventsServices {
 	 */
 	public static function getAddressStore(): AddressStore {
 		return MediaWikiServices::getInstance()->getService( AddressStore::SERVICE_NAME );
+	}
+
+	/**
+	 * @return EventTimeFormatter
+	 */
+	public static function getEventTimeFormatter(): EventTimeFormatter {
+		return MediaWikiServices::getInstance()->getService( EventTimeFormatter::SERVICE_NAME );
+	}
+
+	/**
+	 * @return PageURLResolver
+	 */
+	public static function getPageUrlResolver(): PageURLResolver {
+		return MediaWikiServices::getInstance()->getService( PageURLResolver::SERVICE_NAME );
+	}
+
+	/**
+	 * @return UserLinker
+	 */
+	public static function getUserLinker(): UserLinker {
+		return MediaWikiServices::getInstance()->getService( UserLinker::SERVICE_NAME );
 	}
 }
