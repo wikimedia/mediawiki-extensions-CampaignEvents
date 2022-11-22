@@ -234,5 +234,22 @@
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Private Registrierung:</strong> Nur die Veranstalter können deinen Benutzernamen in der Teilnehmerliste sehen.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Öffentliche Registrierung:</strong> Zeige deinen Benutzernamen auf einer öffentlichen Teilnehmerliste.",
 	"campaignevents-registration-confirmation-toggle-private": "Private Anmeldung",
-	"campaignevents-registration-confirmation-toggle-public": "Öffentliche Anmeldung"
+	"campaignevents-registration-confirmation-toggle-public": "Öffentliche Anmeldung",
+	"echo-category-title-campaign-events-notification-registration": "Anmeldung zur Veranstaltung",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Benachrichtige mich, wenn ich mich für eine Veranstaltung registriere, die das Veranstaltungsanmeldewerkzeug verwendet.",
+	"campaignevents-notification-registration-subject": "Anmeldung zu $1 bestätigt",
+	"campaignevents-notification-registration-header-intro": "Vielen Dank für die Anmeldung für $1.",
+	"campaignevents-notification-registration-header-chat": "Trete $1 bei, um mit anderen Teilnehmern in Kontakt zu treten und zusätzliche Updates von den Veranstaltern zu erhalten.",
+	"campaignevents-notification-registration-header-chat-label": "Gruppen-Chat zur Veranstaltung",
+	"campaignevents-notification-registration-details-header": "Veranstaltungsdetails",
+	"campaignevents-notification-registration-details-dates-header": "Datum und Uhrzeit",
+	"campaignevents-notification-registration-details-dates": "$1 bis $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Zeitzone:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Art der Veranstaltung",
+	"campaignevents-notification-registration-details-type-online-header": "Online-Veranstaltung",
+	"campaignevents-notification-registration-details-type-in-person-header": "Präsenzveranstaltung",
+	"campaignevents-notification-registration-details-organizers-header": "Veranstalter",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|mehr}}",
+	"campaignevents-notification-registration-event-page-link": "Veranstaltungsseite ansehen",
+	"campaignevents-notification-registration-chat-link": "Dem Gruppenchat beitreten"
 }
