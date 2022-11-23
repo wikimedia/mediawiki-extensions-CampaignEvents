@@ -16,5 +16,18 @@
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Таша регистрация:</strong> Къошулгъанланы тизмесинде сизни атыгъызны къуру болууну къургъанла кёрюрге боллукъдула.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Туура регистрация:</strong> Кесигизни атыгъызны туура къошулуучу тизмеде кёргюзюгюз.",
 	"campaignevents-registration-confirmation-toggle-private": "Таша регистрация",
-	"campaignevents-registration-confirmation-toggle-public": "Туура регистрация"
+	"campaignevents-registration-confirmation-toggle-public": "Туура регистрация",
+	"echo-category-title-campaign-events-notification-registration": "Болууну регистрация",
+	"campaignevents-notification-registration-subject": "$1 регистрация бегитилгенди",
+	"campaignevents-notification-registration-header-chat-label": "болууну къауум чаты",
+	"campaignevents-notification-registration-details-header": "Болууну толусу",
+	"campaignevents-notification-registration-details-dates-header": "Дата эмда заман",
+	"campaignevents-notification-registration-details-dates": "$1 башлаб $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Заман беллик:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Болууну типи",
+	"campaignevents-notification-registration-details-type-online-header": "Онлайн болуу",
+	"campaignevents-notification-registration-details-type-in-person-header": "Энчи болуу",
+	"campaignevents-notification-registration-details-organizers-header": "Болууну къураучула",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|аслам}}",
+	"campaignevents-notification-registration-chat-link": "Къауум чатха къошул"
 }

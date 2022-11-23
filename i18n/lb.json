@@ -6,8 +6,12 @@
 	},
 	"campaignevents-eventpage-header-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Zäitzone:</strong> $1",
+	"campaignevents-eventpage-register-confirmation-confirm": "Aschreiwen",
 	"campaignevents-event-details-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-event-details-in-person-event-label": "Event am Presentiel",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Ofbriechen",
-	"campaignevents-userlink-deleted-user": "geläscht Benotzer"
+	"campaignevents-userlink-deleted-user": "geläscht Benotzer",
+	"campaignevents-notification-registration-details-dates-header": "Datum an Auerzäit",
+	"campaignevents-notification-registration-details-dates": "$1 bis $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Zäitzone:</strong> $1"
 }

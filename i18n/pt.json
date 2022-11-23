@@ -234,5 +234,22 @@
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscrição privada:</strong> só os organizadores do evento podem ver o seu nome de utilizador na lista de participantes.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscrição pública:</strong> mostrar o seu nome de utilizador numa lista de participantes pública.",
 	"campaignevents-registration-confirmation-toggle-private": "Inscrição privada",
-	"campaignevents-registration-confirmation-toggle-public": "Inscrição pública"
+	"campaignevents-registration-confirmation-toggle-public": "Inscrição pública",
+	"echo-category-title-campaign-events-notification-registration": "Inscrição num evento",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Notificar-me quando me inscrevo num evento que usa a ferramenta de Inscrição em Eventos.",
+	"campaignevents-notification-registration-subject": "Inscrição em $1 confirmada",
+	"campaignevents-notification-registration-header-intro": "Obrigado por se inscrever em $1.",
+	"campaignevents-notification-registration-header-chat": "Junte-se a $1 para contactar outros participantes e obter atualizações adicionais dos organizadores.",
+	"campaignevents-notification-registration-header-chat-label": "conversação em grupo do evento",
+	"campaignevents-notification-registration-details-header": "Detalhes do evento",
+	"campaignevents-notification-registration-details-dates-header": "Data e hora",
+	"campaignevents-notification-registration-details-dates": "Início: $1 Fim: $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Fuso horário:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Tipo de evento",
+	"campaignevents-notification-registration-details-type-online-header": "Evento ''online''",
+	"campaignevents-notification-registration-details-type-in-person-header": "Evento presencial",
+	"campaignevents-notification-registration-details-organizers-header": "Organizadores de eventos",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|outro|outros}}",
+	"campaignevents-notification-registration-event-page-link": "Ver página do evento",
+	"campaignevents-notification-registration-chat-link": "Entrar na conversação em grupo"
 }

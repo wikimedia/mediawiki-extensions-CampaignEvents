@@ -27,5 +27,21 @@
 	"campaignevents-userlink-deleted-user": "óshirilgen paydalanıwshı",
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Qupıya dizimnen ótiw:</strong> Qatnasıwshılar dizimindegi paydalanıwshı atıńızdı tek ilaj shólkemlestiriwshileri kóre aladı.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Ǵalabalıq dizimnen ótiw:</strong> Ǵalabalıq qatnasıwshılar diziminde paydalanıwshı atıńızdı kórsetiń.",
-	"campaignevents-registration-confirmation-toggle-private": "Qupıya dizimnen ótiw"
+	"campaignevents-registration-confirmation-toggle-private": "Qupıya dizimnen ótiw",
+	"echo-category-title-campaign-events-notification-registration": "Ilajdı dizimnen ótkeriw",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Waqıyanı dizimnen ótkeriw quralın paydalanatuǵın ilajdan dizimnen ótkenimde meni xabarlandırıń.",
+	"campaignevents-notification-registration-subject": "$1 dizimnen ótiw tastıyıqlandı",
+	"campaignevents-notification-registration-header-intro": "$1 ilajǵa dizimnen ótkenińiz ushın raxmet.",
+	"campaignevents-notification-registration-header-chat-label": "Ilajdıń toparlıq sáwbeti",
+	"campaignevents-notification-registration-details-header": "Ilaj haqqında tolıǵıraq maǵlıwmatlar",
+	"campaignevents-notification-registration-details-dates-header": "Sáne hám waqıt",
+	"campaignevents-notification-registration-details-dates": "$1 hám $4 aralıǵında",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Waqıt zonası:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Ilajdıń túri",
+	"campaignevents-notification-registration-details-type-online-header": "Onlayn ilaj",
+	"campaignevents-notification-registration-details-type-in-person-header": "Jeke ilaj",
+	"campaignevents-notification-registration-details-organizers-header": "Ilaj shólkemlestiriwshileri",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|jáne}}",
+	"campaignevents-notification-registration-event-page-link": "Ilaj betin kóriw",
+	"campaignevents-notification-registration-chat-link": "Toparlıq sáwbetke qosılıw"
 }

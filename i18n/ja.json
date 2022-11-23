@@ -125,5 +125,11 @@
 	"campaignevents-event-details-tab-participants": "参加者",
 	"campaignevents-event-details-tab-event-details": "イベントの詳細",
 	"campaignevents-event-details-search-participants-placeholder": "参加者を検索する",
-	"campaignevents-event-details-organizers-view-more": "さらに表示"
+	"campaignevents-event-details-organizers-view-more": "さらに表示",
+	"campaignevents-notification-registration-details-header": "イベントの詳細",
+	"campaignevents-notification-registration-details-dates-header": "日付と時刻",
+	"campaignevents-notification-registration-details-type-header": "イベントの種類",
+	"campaignevents-notification-registration-details-type-online-header": "オンラインイベント",
+	"campaignevents-notification-registration-event-page-link": "イベントページを見る",
+	"campaignevents-notification-registration-chat-link": "グループチャットに参加"
 }

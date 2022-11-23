@@ -20,5 +20,8 @@
 	"campaignevents-event-details-select-all": "سبھ چݨو",
 	"campaignevents-event-details-remove-participant-remove-btn": "ہٹاؤ",
 	"campaignevents-event-details-remove-participant-cancel-btn": "منسوخ",
-	"campaignevents-event-details-organizers-view-more": "ٻئے ݙیکھو"
+	"campaignevents-event-details-organizers-view-more": "ٻئے ݙیکھو",
+	"campaignevents-notification-registration-details-dates-header": "تریخ تے ویلا",
+	"campaignevents-notification-registration-details-dates": "$1 توں $4 تائیں",
+	"campaignevents-notification-registration-details-type-header": "ایونٹ قسم"
 }

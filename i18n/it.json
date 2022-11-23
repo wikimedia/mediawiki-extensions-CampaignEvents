@@ -58,5 +58,13 @@
 	"campaignevents-event-details-tab-event-details": "Dettagli evento",
 	"campaignevents-event-details-organizers-view-more": "Mostra altro",
 	"campaignevents-userlink-suppressed-user": "nome utente soppresso",
-	"campaignevents-userlink-deleted-user": "utente cancellato"
+	"campaignevents-userlink-deleted-user": "utente cancellato",
+	"campaignevents-notification-registration-details-header": "Dettagli evento",
+	"campaignevents-notification-registration-details-dates-header": "Data e ora",
+	"campaignevents-notification-registration-details-dates": "$1 a $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Fuso orario:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Tipo di evento",
+	"campaignevents-notification-registration-details-type-online-header": "Evento online",
+	"campaignevents-notification-registration-details-type-in-person-header": "Evento in presenza",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|altro|altri}}"
 }

@@ -30,5 +30,22 @@
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Zasebna registracija:</strong> Vaše uporabniško ime lahko na seznamu udeležencev vidijo samo organizatorji dogodka.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Javna registracija:</strong> Vaše ime bo prikazano na javnem seznamu udeležencev.",
 	"campaignevents-registration-confirmation-toggle-private": "Zasebna registracija",
-	"campaignevents-registration-confirmation-toggle-public": "Javna registracija"
+	"campaignevents-registration-confirmation-toggle-public": "Javna registracija",
+	"echo-category-title-campaign-events-notification-registration": "Prijava na dogodek",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Obvesti me, ko se prijavim na dogodek, ki uporablja orodje za registracijo dogodkov.",
+	"campaignevents-notification-registration-subject": "Prijava na $1 potrjena",
+	"campaignevents-notification-registration-header-intro": "Hvala za prijavo na $1.",
+	"campaignevents-notification-registration-header-chat": "Pridružite se $1, da se povežete z drugimi udeleženci in od organizatorjev prejmete nadaljnja obvestila.",
+	"campaignevents-notification-registration-header-chat-label": "skupinski klepet dogodka",
+	"campaignevents-notification-registration-details-header": "Podrobnosti dogodka",
+	"campaignevents-notification-registration-details-dates-header": "Datum in čas",
+	"campaignevents-notification-registration-details-dates": "od $1 do $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Časovni pas:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Vrsta dogodka",
+	"campaignevents-notification-registration-details-type-online-header": "Spletni dogodek",
+	"campaignevents-notification-registration-details-type-in-person-header": "Prisotnost pri dogodku",
+	"campaignevents-notification-registration-details-organizers-header": "Organizatorji dogodka",
+	"campaignevents-notification-registration-details-organizers-more": "še $1 {{PLURAL:$1|drugi|druga|drugi|drugih}}",
+	"campaignevents-notification-registration-event-page-link": "Ogled strani dogodka",
+	"campaignevents-notification-registration-chat-link": "Pridružite se skupinskemu klepetu"
 }
