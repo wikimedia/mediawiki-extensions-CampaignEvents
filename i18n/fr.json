@@ -5,7 +5,8 @@
 			"Pols12",
 			"Verdy p",
 			"Wladek92",
-			"ߒߓߋ߫ ߝߏߝߣߊ߫"
+			"ߒߓߋ߫ ߝߏߝߣߊ߫",
+			"LD"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -198,9 +199,9 @@
 	"campaignevents-event-details-select-all": "Sélectionner tout",
 	"campaignevents-event-details-all-selected": "Tous sélectionnés",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 sélectionné{{PLURAL:$1||s}}",
-	"campaignevents-event-details-remove-participant-confirmation-title": "Enlever {{PLURAL:$1|un participant|des participants}}",
-	"campaignevents-event-details-remove-participant-confirmation-msg": "Êtes-vous sûr{{GENDER:||e}} de vouloir enlever {{PLURAL:$1|le participant sélectionné|les participants sélectionnés}} ?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Enlever",
+	"campaignevents-event-details-remove-participant-confirmation-title": "Retirer {{PLURAL:$1|un|des}} participant{{PLURAL:$1||s}}",
+	"campaignevents-event-details-remove-participant-confirmation-msg": "Êtes-vous sûr{{GENDER:||e}} de vouloir retirer le{{PLURAL:$1||s}} participant{{PLURAL:$1||s}} sélectionné{{PLURAL:$1||s}} ?",
+	"campaignevents-event-details-remove-participant-remove-btn": "Retirer",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Annuler",
 	"campaignevents-event-details-no-event-id-provided": "Fournissez un identifiant d’événement.",
 	"campaignevents-event-details-no-participants-state": "Les noms d’utilisateur des participants apparaîtront ici quand ils s’inscriront.",
@@ -211,13 +212,13 @@
 	"campaignevents-event-details-online-link-not-available": "Le lien sera rendu disponible par {{PLURAL:$1|l’organisateur|les organisateurs}}.",
 	"campaignevents-event-details-venue-not-available": "L'adresse du lieu d’accueil sera mise à disposition par {{PLURAL:$1|l’organisateur|les organisateurs}}.",
 	"campaignevents-event-details-dates-label": "Heure de début et de fin",
-	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Participant enlevé|Participants enlevés}}",
-	"campaignevents-event-details-remove-all-participant-notification": "Tous les participants ont été enlevés",
-	"campaignevents-unregister-participants-permission-denied": "Vous n’êtes pas autorisé à enlever des participants",
-	"campaignevents-unregister-participants-registration-deleted": "Vous ne pouvez pas enlever des participants de cet événement, car il a été supprimé.",
+	"campaignevents-event-details-remove-participant-notification": "Participant{{PLURAL:$1||s}} retiré{{PLURAL:$1||s}}",
+	"campaignevents-event-details-remove-all-participant-notification": "Tous les participants ont été retirés",
+	"campaignevents-unregister-participants-permission-denied": "Vous n’êtes pas autorisé à retirer des participants",
+	"campaignevents-unregister-participants-registration-deleted": "Vous ne pouvez pas retirer des participants de cet événement, car il a été supprimé.",
 	"campaignevents-unregister-participants-past-registration": "Vous ne pouvez pas enlever des participants de cet événement car il est terminé.",
-	"campaignevents-event-details-remove-participant-notification-error": "Une erreur s’est produite en essayant d’enlever {{PLURAL:$1|le participant|les participants}}",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour enlever tous les utilisateurs)",
+	"campaignevents-event-details-remove-participant-notification-error": "Une erreur s’est produite en essayant de retirer le{{PLURAL:$1||s}} participant{{PLURAL:$1||s}}",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour retirer tous les utilisateurs)",
 	"campaignevents-event-details-search-participants-placeholder": "Rechercher des participants",
 	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide."
 }
