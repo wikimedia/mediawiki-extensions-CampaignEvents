@@ -235,5 +235,22 @@
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Приватно пријавување:</strong> Само приредувачите на настанот можат да го видат вашето кроисничко име во списокот на учесници.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Јавно пријавување:</strong> Вашето корисничко име ќе се прикажува на список на ученици.",
 	"campaignevents-registration-confirmation-toggle-private": "Приватно пријавување",
-	"campaignevents-registration-confirmation-toggle-public": "Јавно пријавување"
+	"campaignevents-registration-confirmation-toggle-public": "Јавно пријавување",
+	"echo-category-title-campaign-events-notification-registration": "Пријава за настан",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Извести ме кога ќе се пријавам за настан кој ја користи алатката Пријавување на настани.",
+	"campaignevents-notification-registration-subject": "Пријавата за $1 е потврдена",
+	"campaignevents-notification-registration-header-intro": "Ви благодариме што се пријавивте за $1.",
+	"campaignevents-notification-registration-header-chat": "Придружете се во $1 за да се поврзете со другите учесници и да добивате дополнителни новости од приредувачите.",
+	"campaignevents-notification-registration-header-chat-label": "групен разговор за настанот",
+	"campaignevents-notification-registration-details-header": "Поединости за настанот",
+	"campaignevents-notification-registration-details-dates-header": "Датум и време",
+	"campaignevents-notification-registration-details-dates": "$1 до $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Часовен појас:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Вид на настан",
+	"campaignevents-notification-registration-details-type-online-header": "Семрежен настан",
+	"campaignevents-notification-registration-details-type-in-person-header": "Присуствен настан",
+	"campaignevents-notification-registration-details-organizers-header": "Приредувачи на настанот",
+	"campaignevents-notification-registration-details-organizers-more": "и {{PLURAL:$1|уште}} $1",
+	"campaignevents-notification-registration-event-page-link": "Погл. страница за настанот",
+	"campaignevents-notification-registration-chat-link": "Приклучи се на групниот разговор"
 }

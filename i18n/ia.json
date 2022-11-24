@@ -234,5 +234,22 @@
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscription private:</strong> Solmente le organisatores del evento pote vider tu nomine de usator in le lista de participantes.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription public:</strong> Monstrar tu nomine de usator in un lista public de participantes.",
 	"campaignevents-registration-confirmation-toggle-private": "Inscription private",
-	"campaignevents-registration-confirmation-toggle-public": "Inscription public"
+	"campaignevents-registration-confirmation-toggle-public": "Inscription public",
+	"echo-category-title-campaign-events-notification-registration": "Inscription a un evento",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Notificar me quando io me inscribe a un evento que usa le utensile Inscription a Eventos.",
+	"campaignevents-notification-registration-subject": "Inscription a $1 confirmate",
+	"campaignevents-notification-registration-header-intro": "Gratias pro inscriber te a $1.",
+	"campaignevents-notification-registration-header-chat": "Entra in le $1 pro connecter te con altere participantes e obtener actualisationes additional del organisatores.",
+	"campaignevents-notification-registration-header-chat-label": "gruppo de conversation sur le evento",
+	"campaignevents-notification-registration-details-header": "Detalios del evento",
+	"campaignevents-notification-registration-details-dates-header": "Data e hora",
+	"campaignevents-notification-registration-details-dates": "de $1 a $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Fuso horari:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Typo de evento",
+	"campaignevents-notification-registration-details-type-online-header": "Evento in linea",
+	"campaignevents-notification-registration-details-type-in-person-header": "Evento in persona",
+	"campaignevents-notification-registration-details-organizers-header": "Organisatores de eventos",
+	"campaignevents-notification-registration-details-organizers-more": "$1 altere{{PLURAL:$1||s}}",
+	"campaignevents-notification-registration-event-page-link": "Visitar le pagina del evento",
+	"campaignevents-notification-registration-chat-link": "Entra in le gruppo de conversation"
 }

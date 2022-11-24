@@ -239,7 +239,7 @@
 	"echo-pref-tooltip-campaign-events-notification-registration": "Benachrichtige mich, wenn ich mich für eine Veranstaltung registriere, die das Veranstaltungsanmeldewerkzeug verwendet.",
 	"campaignevents-notification-registration-subject": "Anmeldung zu $1 bestätigt",
 	"campaignevents-notification-registration-header-intro": "Vielen Dank für die Anmeldung für $1.",
-	"campaignevents-notification-registration-header-chat": "Trete $1 bei, um mit anderen Teilnehmern in Kontakt zu treten und zusätzliche Updates von den Veranstaltern zu erhalten.",
+	"campaignevents-notification-registration-header-chat": "Tritt $1 bei, um mit anderen Teilnehmern in Kontakt zu treten und zusätzliche Updates von den Veranstaltern zu erhalten.",
 	"campaignevents-notification-registration-header-chat-label": "Gruppen-Chat zur Veranstaltung",
 	"campaignevents-notification-registration-details-header": "Veranstaltungsdetails",
 	"campaignevents-notification-registration-details-dates-header": "Datum und Uhrzeit",

@@ -18,7 +18,10 @@
 	"campaignevents-registration-confirmation-toggle-private": "Таша регистрация",
 	"campaignevents-registration-confirmation-toggle-public": "Туура регистрация",
 	"echo-category-title-campaign-events-notification-registration": "Болууну регистрация",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Болууланы регистрация адыры болгъан Болуугъа къошулур ючюн регистрация этген заманда, меннге билдириу ийилсин.",
 	"campaignevents-notification-registration-subject": "$1 регистрация бегитилгенди",
+	"campaignevents-notification-registration-header-intro": "$1 ючюн регистрациягъыз ючюн сау болугъуз.",
+	"campaignevents-notification-registration-header-chat": "Башха къошулуучула бла байланыр эмда къураучуладан къошакъ джангылыкъла алыр ючюн $1 къошулугъуз.",
 	"campaignevents-notification-registration-header-chat-label": "болууну къауум чаты",
 	"campaignevents-notification-registration-details-header": "Болууну толусу",
 	"campaignevents-notification-registration-details-dates-header": "Дата эмда заман",
@@ -29,5 +32,6 @@
 	"campaignevents-notification-registration-details-type-in-person-header": "Энчи болуу",
 	"campaignevents-notification-registration-details-organizers-header": "Болууну къураучула",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|аслам}}",
+	"campaignevents-notification-registration-event-page-link": "Болууну бетине къара",
 	"campaignevents-notification-registration-chat-link": "Къауум чатха къошул"
 }
