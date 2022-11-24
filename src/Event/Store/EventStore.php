@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use DateTimeZone;
+use DBAccessObjectUtils;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
@@ -97,8 +98,12 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEventByPage( ICampaignsPage $page ): ExistingEventRegistration {
-		$eventRows = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
+	public function getEventByPage(
+		ICampaignsPage $page,
+		int $readFlags = self::READ_NORMAL
+	): ExistingEventRegistration {
+		[ $dbIndex, $dbOptions ] = DBAccessObjectUtils::getDBOptions( $readFlags );
+		$eventRows = $this->dbHelper->getDBConnection( $dbIndex )->select(
 			[ 'campaign_events', 'ce_event_address', 'ce_address' ],
 			'*',
 			[
@@ -106,7 +111,7 @@ class EventStore implements IEventStore, IEventLookup {
 				'event_page_title' => $page->getDBkey(),
 				'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
 			],
-			[],
+			$dbOptions,
 			[
 				'ce_event_address' => [ 'LEFT JOIN', [ 'event_id=ceea_event' ] ],
 				'ce_address' => [ 'LEFT JOIN', [ 'ceea_address=cea_id' ] ]

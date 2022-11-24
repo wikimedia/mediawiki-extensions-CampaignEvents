@@ -21,6 +21,7 @@ use TitleFormatter;
  * This handler is used for page move and deletion. If the page is an event page, we update the registration:
  *  - Delete it in case of event page deletion
  *  - Make it point to the new page in case of page move
+ * Note that both handlers have to load data from DB master (T302858#8354617)
  */
 class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteCompleteHook {
 	/** @var MWEventLookupFromPage */
@@ -62,7 +63,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 		ManualLogEntry $logEntry,
 		int $archivedRevisionCount
 	) {
-		$registration = $this->eventLookupFromPage->getRegistrationForPage( $page );
+		$registration = $this->eventLookupFromPage->getRegistrationForPage( $page, MWEventLookupFromPage::READ_LATEST );
 		if ( !$registration ) {
 			return;
 		}
@@ -73,7 +74,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	 * @inheritDoc
 	 */
 	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ) {
-		$registration = $this->eventLookupFromPage->getRegistrationForPage( $old );
+		$registration = $this->eventLookupFromPage->getRegistrationForPage( $old, MWEventLookupFromPage::READ_LATEST );
 		if ( !$registration ) {
 			return;
 		}
