@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Milicevic01"
+		]
+	},
+	"campaignevents-notification-registration-details-dates-header": "Датум и време",
+	"campaignevents-notification-registration-details-dates": "$1 до $4"
+}
