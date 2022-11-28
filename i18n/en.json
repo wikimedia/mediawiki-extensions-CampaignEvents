@@ -236,6 +236,8 @@
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Public registration:</strong> Show your username on a public participant list.",
 	"campaignevents-registration-confirmation-toggle-private": "Private registration",
 	"campaignevents-registration-confirmation-toggle-public": "Public registration",
+	"campaignevents-register-confirmation-radio-private": "Private registration",
+	"campaignevents-register-confirmation-radio-public": "Public registration",
 	"echo-category-title-campaign-events-notification-registration": "Event registration",
 	"echo-pref-tooltip-campaign-events-notification-registration": "Notify me when I register for an event that uses the Event Registration tool.",
 	"campaignevents-notification-registration-subject": "$1 registration confirmed",

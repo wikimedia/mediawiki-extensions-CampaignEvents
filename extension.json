@@ -261,6 +261,14 @@
 				"mediawiki.widgets.datetime"
 			],
 			"targets": [ "desktop", "mobile" ]
+		},
+		"ext.campaignEvents.specialregisterforevent.styles": {
+			"localBasePath": "resources/ext.campaignEvents.specialregisterforevent.styles",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialregisterforevent.styles",
+			"styles": [
+				"RegisterForEvent.styles.less"
+			],
+			"targets": [ "desktop", "mobile" ]
 		}
 	},
 	"RestRoutes": [

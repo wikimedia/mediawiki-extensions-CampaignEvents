@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
+use OOUI\IconWidget;
 use Status;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
@@ -43,6 +44,13 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->participantsStore = $participantsStore;
 		$this->policyMessagesLookup = $policyMessagesLookup;
+		$this->getOutput()->enableOOUI();
+		$this->getOutput()->addModuleStyles( [
+			'ext.campaignEvents.specialregisterforevent.styles',
+			'oojs-ui.styles.icons-location',
+			'oojs-ui.styles.icons-moderation'
+
+		] );
 	}
 
 	/**
@@ -67,10 +75,29 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	protected function getFormFields(): array {
+		$publicIcon =
+			new IconWidget( [
+				'icon' => 'globe',
+				'classes' => [ 'ext-campaignevents-registerforevent-icon' ]
+			] );
+		$privateIcon =
+			new IconWidget( [
+				'icon' => 'lock',
+				'classes' => [ 'ext-campaignevents-registerforevent-icon' ]
+			] );
+
 		$fields = [
 			'Confirm' => [
 				'type' => 'info',
 				'default' => $this->msg( 'campaignevents-register-confirmation-text' )->text(),
+			],
+			'IsPrivate' => [
+				'type' => 'radio',
+				'options' => [
+					$this->msg( 'campaignevents-register-confirmation-radio-public' ) . $publicIcon => false,
+					$this->msg( 'campaignevents-register-confirmation-radio-private' ) . $privateIcon => true
+				],
+				'name' => 'IsPrivate'
 			],
 		];
 		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistration();
@@ -80,6 +107,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				'raw' => true,
 				'default' => $this->msg( $policyMsg )->parse(),
 			];
+
 		}
 		return $fields;
 	}
@@ -99,7 +127,9 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		return Status::wrap( $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
 			new MWAuthorityProxy( $this->getAuthority() ),
-			RegisterParticipantCommand::REGISTRATION_PUBLIC
+			$data['IsPrivate'] ?
+				RegisterParticipantCommand::REGISTRATION_PRIVATE :
+				RegisterParticipantCommand::REGISTRATION_PUBLIC
 		) );
 	}
 
