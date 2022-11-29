@@ -15,6 +15,7 @@
 		this.policyMsg = config.policyMsg;
 		this.publicRegistration = true;
 		this.$helpText = $( '<span>' );
+		this.$helpText.addClass( 'campaignevents-registration-confirmation-helptext' );
 		this.icon = new OO.ui.IconWidget( {
 			icon: this.publicRegistration ? 'globe' : 'lock'
 		} );
@@ -30,7 +31,6 @@
 
 	RegistrationConfirmationDialog.static.name = 'campaignEventsRegistrationConfirmationDialog';
 	RegistrationConfirmationDialog.static.title = mw.msg( 'campaignevents-eventpage-register-confirmation-title' );
-	RegistrationConfirmationDialog.static.size = 'large';
 	RegistrationConfirmationDialog.static.actions = [
 		{
 			flags: [ 'safe', 'close' ],
