@@ -4,10 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
+use IDBAccessObject;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 
-interface IEventLookup {
+interface IEventLookup extends IDBAccessObject {
 	public const LOOKUP_SERVICE_NAME = 'CampaignEventsEventLookup';
 
 	/**
@@ -19,10 +20,14 @@ interface IEventLookup {
 
 	/**
 	 * @param ICampaignsPage $page
+	 * @param int $readFlags One of the self::READ_* constants
 	 * @return ExistingEventRegistration
 	 * @throws EventNotFoundException
 	 */
-	public function getEventByPage( ICampaignsPage $page ): ExistingEventRegistration;
+	public function getEventByPage(
+		ICampaignsPage $page,
+		int $readFlags = self::READ_NORMAL
+	): ExistingEventRegistration;
 
 	/**
 	 * @param int $organizerID
