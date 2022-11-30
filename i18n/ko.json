@@ -168,5 +168,6 @@
 	"campaignevents-unregister-participants-registration-deleted": "이 이벤트는 삭제되었기 때문에 해당 이벤트로부터 참여자를 제거할 수 없습니다.",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|참가자}}를 제거하는 중 오류가 발생했습니다.",
 	"campaignevents-event-details-tab-participants": "참가자",
-	"campaignevents-event-details-search-participants-placeholder": "참가자 검색"
+	"campaignevents-event-details-search-participants-placeholder": "참가자 검색",
+	"campaignevents-notification-registration-details-dates-header": "날짜 및 시간"
 }
