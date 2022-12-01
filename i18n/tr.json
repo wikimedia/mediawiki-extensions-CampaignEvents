@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Hedda",
-			"Khalvar"
+			"Khalvar",
+			"ToprakM"
 		]
 	},
 	"campaignevents-desc": "Kampanya düzenleyicileri ve katılımcıları için özellikler sağlar.",
@@ -42,6 +43,7 @@
 	"campaignevents-edit-field-event-status": "Etkinlik durumu",
 	"campaignevents-edit-field-status-open": "Açık",
 	"campaignevents-edit-field-status-closed": "Kapalı",
+	"campaignevents-edit-field-timezone": "Saat dilimi",
 	"campaignevents-edit-field-start": "Başlangıç zamanı",
 	"campaignevents-edit-field-end": "Bitiş vakti",
 	"campaignevents-edit-field-meeting-type": "Etkinlik toplantı türü",
@@ -140,6 +142,8 @@
 	"campaignevents-eventpage-header-attending": "Katılıyorsun!",
 	"campaignevents-eventpage-btn-manage": "Etkinliği yönet",
 	"campaignevents-eventpage-btn-register": "Etkinlik için kaydolun",
+	"campaignevents-eventpage-btn-registration-closed": "Kayıt kapalı",
+	"campaignevents-eventpage-btn-event-ended": "Etkinlik sona erdi",
 	"campaignevents-eventpage-dialog-title": "Etkinlik detayları",
 	"campaignevents-eventpage-dialog-organizers": "Organize eden: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Tüm organizatörleri görüntüle",
@@ -200,5 +204,24 @@
 	"campaignevents-unregister-participants-registration-deleted": "Bu etkinlik silindiği için katılımcıları bu etkinlikten çıkaramazsınız.",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|Katılımcı|Katılımcılar}} kaldırılmaya çalışırılken bir hata oluştu.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' parametresi bir dizi kullanıcı kimliği veya boş (tüm kullanıcıları kaldırmak için) olmalıdır",
-	"campaignevents-event-details-search-participants-placeholder": "Katılımcı ara"
+	"campaignevents-event-details-tab-participants": "Katılımcılar",
+	"campaignevents-event-details-tab-event-details": "Etkinlik detayları",
+	"campaignevents-event-details-search-participants-placeholder": "Katılımcı ara",
+	"campaignevents-event-details-organizers-view-more": "Daha fazla göster",
+	"campaignevents-registration-confirmation-toggle-private": "Özel kayıt",
+	"campaignevents-registration-confirmation-toggle-public": "Genel kayıt",
+	"campaignevents-register-confirmation-radio-private": "Özel kayıt",
+	"campaignevents-register-confirmation-radio-public": "Genel kayıt",
+	"echo-category-title-campaign-events-notification-registration": "Etkinlik kaydı",
+	"campaignevents-notification-registration-details-header": "Etkinlik detayları",
+	"campaignevents-notification-registration-details-dates-header": "Tarih ve saat",
+	"campaignevents-notification-registration-details-dates": "$1 - $4 arası",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Saat dilimi:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Etkinlik türü",
+	"campaignevents-notification-registration-details-type-online-header": "Çevrimiçi etkinlik",
+	"campaignevents-notification-registration-details-type-in-person-header": "Yüz yüze etkinlik",
+	"campaignevents-notification-registration-details-organizers-header": "Etkinlik organizatörleri",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|diğer}}",
+	"campaignevents-notification-registration-event-page-link": "Etkinlik sayfasını görüntüle",
+	"campaignevents-notification-registration-chat-link": "Grup sohbetine katıl"
 }
