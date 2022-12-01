@@ -16,7 +16,7 @@ class EnableEventRegistrationPage extends Page {
 	}
 
 	async enableEvent( event ) {
-		await this.open();
+		this.open();
 		await this.eventPage.setValue( event );
 		await this.enableRegistration.click();
 	}

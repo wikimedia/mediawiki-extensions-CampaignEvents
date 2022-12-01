@@ -11,7 +11,7 @@ describe( 'Enable Event Registration', function () {
 	} );
 
 	it( 'is configured correctly', async function () {
-		await EnableEventRegistrationPage.open();
+		EnableEventRegistrationPage.open();
 
 		assert( await EnableEventRegistrationPage.enableRegistration.isExisting() );
 	} );
