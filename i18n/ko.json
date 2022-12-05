@@ -169,5 +169,7 @@
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|참가자}}를 제거하는 중 오류가 발생했습니다.",
 	"campaignevents-event-details-tab-participants": "참가자",
 	"campaignevents-event-details-search-participants-placeholder": "참가자 검색",
+	"campaignevents-register-confirmation-radio-private": "비공개 등록",
+	"campaignevents-register-confirmation-radio-public": "공개 등록",
 	"campaignevents-notification-registration-details-dates-header": "날짜 및 시간"
 }

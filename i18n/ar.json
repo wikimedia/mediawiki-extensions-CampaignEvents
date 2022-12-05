@@ -6,12 +6,13 @@
 			"Hhaboh162002",
 			"Meno25",
 			"Mohanad Kh",
+			"Sandra Hanbo",
 			"محمد أحمد عبد الفتاح"
 		]
 	},
 	"campaignevents-desc": "يوفّر ميزات لمنظمي الحملة والمشاركين فيها.",
 	"nstab-event": "فعالية",
-	"action-campaignevents-enable-registration": "تفعيل تسجيل الفعالية",
+	"action-campaignevents-enable-registration": "تفعيل تسجيل الفعاليات",
 	"right-campaignevents-enable-registration": "تفعيل تسجيل الفعاليات",
 	"action-campaignevents-delete-registration": "حذف تسجيلات في الفعالية",
 	"right-campaignevents-delete-registration": "حذف تسجيلات في الفعالية",
@@ -62,7 +63,7 @@
 	"campaignevents-edit-field-country": "البلد",
 	"campaignevents-edit-field-address": "العنوان",
 	"campaignevents-edit-field-chat-url": "رابط دعوة الإنضمام لمجموعة دردشة الفعالية",
-	"campaignevents-edit-field-chat-url-help": "إن كان لديك مجموعة دردشة عبر الإنترنت للمشاركين في هذه الفعالية، يمكن إضافة وصلة الدعوة هناوسيشاهدها المشاركون بعد التسجيل.",
+	"campaignevents-edit-field-chat-url-help": "إن كان لديك مجموعة دردشة عبر الإنترنت للمشاركين في هذه الفعالية، يمكن إضافة وصلة الدعوة هنا وسيشاهدها المشاركون بعد التسجيل.",
 	"campaignevents-enable-registration-form-submit": "تفعيل التسجيل",
 	"campaignevents-edit-form-submit": "تعديل التسجيل",
 	"campaignevents-edit-form-notice": "سيتم جمع أسماء المستخدمين فقط من المشاركين أثناء التسجيل. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration مزيد من المعلومات].",
