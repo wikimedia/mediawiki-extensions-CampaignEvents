@@ -75,10 +75,10 @@ class UpdateUTCTimestamps extends Maintenance {
 	/**
 	 * @param int $prevID
 	 * @param int $curID
-	 * @param string|null $updateTimezones
+	 * @param array|null $updateTimezones
 	 * @return int Number of rows found
 	 */
-	private function updateBatch( int $prevID, int $curID, ?string $updateTimezones ): int {
+	private function updateBatch( int $prevID, int $curID, ?array $updateTimezones ): int {
 		$where = [
 			"event_id > $prevID",
 			"event_id <= $curID",
