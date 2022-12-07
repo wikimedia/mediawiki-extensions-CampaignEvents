@@ -15,7 +15,7 @@ class EnableEventRegistrationPage extends Page {
 		return prefix + Date.now().toString() + '-Iñtërnâtiônàlizætiøn';
 	}
 
-	async createEvent( event ) {
+	async enableEvent( event ) {
 		await this.open();
 		await this.eventPage.setValue( event );
 		await this.enableRegistration.click();

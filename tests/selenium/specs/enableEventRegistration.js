@@ -17,7 +17,7 @@ describe( 'Enable Event Registration', function () {
 	} );
 
 	it( 'requires event data', async function () {
-		await EnableEventRegistrationPage.createEvent( event );
+		await EnableEventRegistrationPage.enableEvent( event );
 
 		assert.deepEqual( await EnableEventRegistrationPage.generalError.getText(), 'There are problems with some of your input.' );
 	} );
