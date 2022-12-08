@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Hedda",
-			"Khalvar"
+			"Khalvar",
+			"ToprakM"
 		]
 	},
 	"campaignevents-desc": "Kampanya düzenleyicileri ve katılımcıları için özellikler sağlar.",
@@ -141,6 +142,8 @@
 	"campaignevents-eventpage-header-attending": "Katılıyorsun!",
 	"campaignevents-eventpage-btn-manage": "Etkinliği yönet",
 	"campaignevents-eventpage-btn-register": "Etkinlik için kaydolun",
+	"campaignevents-eventpage-btn-registration-closed": "Kayıt kapalı",
+	"campaignevents-eventpage-btn-event-ended": "Etkinlik sona erdi",
 	"campaignevents-eventpage-dialog-title": "Etkinlik detayları",
 	"campaignevents-eventpage-dialog-organizers": "Organize eden: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Tüm organizatörleri görüntüle",

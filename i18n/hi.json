@@ -2,9 +2,40 @@
 	"@metadata": {
 		"authors": [
 			"Abijeet Patro",
-			"Saurmandal"
+			"Saurmandal",
+			"Suyash.dwivedi"
 		]
 	},
+	"campaignevents-desc": "अभियान आयोजकों और प्रतिभागियों के लिए सुविधाएँ प्रदान करता है।",
 	"nstab-event": "आयोजन",
+	"action-campaignevents-enable-registration": "कार्यक्रम पंजीकरण सक्षम करें",
+	"right-campaignevents-enable-registration": "कार्यक्रम पंजीकरण सक्षम करें",
+	"action-campaignevents-delete-registration": "कार्यक्रम पंजीकरण हटाएं",
+	"right-campaignevents-delete-registration": "कार्यक्रम पंजीकरण हटाएँ",
+	"campaignevents-error-invalid-id": "कार्यक्रम आईडी एक धनात्मक पूर्णांक होना चाहिए।",
+	"campaignevents-error-empty-title": "कार्यक्रम पृष्ठ का शीर्षक दर्ज करें।",
+	"campaignevents-error-invalid-title": "कार्यक्रम पृष्ठ का शीर्षक अमान्य है: $1 .",
+	"campaignevents-edit-field-event-status": "कार्यक्रम की स्थिति",
+	"campaignevents-edit-field-status-open": "खोलें",
+	"campaignevents-edit-field-status-closed": "बंद करें",
+	"campaignevents-edit-field-start": "समय शुरू",
+	"campaignevents-edit-field-end": "अंत समय",
+	"campaignevents-edit-field-meeting-type": "कार्यक्रम मीटिंग प्रकार",
+	"campaignevents-edit-field-type-online": "ऑनलाइन कार्यक्रम",
+	"campaignevents-edit-field-type-in-person": "इन-पर्सन कार्यक्रम",
+	"campaignevents-edit-field-type-online-and-in-person": "ऑनलाइन और इन-पर्सन कार्यक्रम",
+	"campaignevents-edit-field-meeting-url": "मीटिंग यूआरएल",
+	"campaignevents-edit-field-country": "देश",
+	"campaignevents-edit-field-address": "पता",
+	"campaignevents-edit-field-chat-url": "समूह चैट आमंत्रण",
+	"campaignevents-edit-field-chat-url-help": "यदि आपके पास इस कार्यक्रम के प्रतिभागियों के लिए एक ऑनलाइन चैट समूह है, तो आप यहाँ आमंत्रण लिंक जोड़ सकते हैं। प्रतिभागी पंजीकरण के बाद आमंत्रण लिंक देख सकेंगे।",
+	"campaignevents-enable-registration-form-submit": "पंजीकरण सक्षम करें",
+	"campaignevents-edit-form-submit": "पंजीकरण संपादित करें",
+	"campaignevents-edit-success-msg": "पंजीकरण संपादित किया गया था। देखें [[$1|कार्यक्रम पृष्ठ]]।",
+	"campaignevents-enable-registration-success-msg": "पंजीकरण सक्षम है। प्रतिभागी अब [[$1|कार्यक्रम पृष्ठ]] पर पंजीकरण कर सकते हैं।",
+	"campaignevents-edit-invalid-id": "एक मान्य कार्यक्रम आईडी प्रदान करें।",
+	"campaignevents-edit-no-event-id-provided": "कार्यक्रम आईडी प्रदान करें।",
+	"campaignevents-edit-event-notfound": "इस आईडी के साथ कोई कार्यक्रम नहीं है।",
+	"campaignevents-rest-edit-page-nonlocal": "यह घटना पंजीकरण निम्नलिखित विकी पर सक्षम किया गया था और इसे वहाँ संपादित किया जाना चाहिए: $1 ।",
 	"campaignevents-eventpage-dialog-chat-register": "चैट समूह कड़ी देखने के लिए पंजीकृत करें।"
 }
