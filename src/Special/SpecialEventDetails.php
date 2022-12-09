@@ -186,12 +186,8 @@ class SpecialEventDetails extends SpecialPage {
 		);
 
 		$main->addTabPanels( $tabs );
-		$main->setTabPanel( self::EVENT_DETAILS_PANEL );
-		$selectedTab = $this->getRequest()->getRawVal( 'tab' );
-		// FIXME Remove when T322267 is resolved
-		if ( in_array( $selectedTab, [ self::EVENT_DETAILS_PANEL, self::PARTICIPANTS_PANEL ], true ) ) {
-			$main->setTabPanel( $selectedTab );
-		}
+		$selectedTab = $this->getRequest()->getRawVal( 'tab', self::EVENT_DETAILS_PANEL );
+		$main->setTabPanel( $selectedTab );
 		$out->addHTML( $main );
 	}
 
