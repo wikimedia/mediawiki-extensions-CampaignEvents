@@ -3,6 +3,7 @@
 		"authors": [
 			"Duke of Wikipädia",
 			"Eduardoaddad",
+			"Fúlvio",
 			"Tiagoquix"
 		]
 	},
@@ -62,6 +63,7 @@
 	"campaignevents-edit-field-chat-url-help": "Se você tiver um grupo de bate-papo online para os participantes deste evento, poderá adicionar o link do convite aqui. Os participantes poderão visualizar o link do convite após o registro.",
 	"campaignevents-enable-registration-form-submit": "Ativar inscrições",
 	"campaignevents-edit-form-submit": "Editar inscrição",
+	"campaignevents-edit-form-notice": "Apenas os nomes de usuário serão coletados dos participantes durante a inscrição.\n[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Saiba mais].",
 	"campaignevents-edit-success-msg": "A inscrição foi editada. Veja [[$1|página do evento]].",
 	"campaignevents-enable-registration-success-msg": "A inscrição está ativada. Os participantes agora podem se registrar na [[$1|página do evento]].",
 	"campaignevents-edit-invalid-id": "Forneça um ID de evento válido.",
