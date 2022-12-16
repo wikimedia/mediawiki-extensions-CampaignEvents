@@ -4,8 +4,11 @@
 			"Milicevic01"
 		]
 	},
+	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
+	"campaignevents-eventslist-delete-dialog-delete": "Обриши",
 	"campaignevents-registration-confirmation-toggle-public": "Јавна регистрација",
 	"campaignevents-notification-registration-details-dates-header": "Датум и време",
 	"campaignevents-notification-registration-details-dates": "$1 до $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Временска зона:</strong> $1",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|више}}"
 }

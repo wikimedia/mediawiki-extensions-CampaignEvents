@@ -26,7 +26,7 @@
 	"campaignevents-event-details-organizers-noscript": "Za ogled celotnega seznama organizatorjev morate omogočiti JavaScript.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Nimate dovoljenja za ogled udeležencev, ki so se zasebno registrirali za ta dogodek.",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Nadzorna plošča programov in dogodkov",
-	"campaignevents-userlink-suppressed-user": "uporabniško ime zatrto",
+	"campaignevents-userlink-suppressed-user": "uporabniško ime ukinjeno",
 	"campaignevents-userlink-deleted-user": "izbrisani uporabnik",
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Zasebna registracija:</strong> Vaše uporabniško ime lahko na seznamu udeležencev vidijo samo organizatorji dogodka.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Javna registracija:</strong> Vaše ime bo prikazano na javnem seznamu udeležencev.",
