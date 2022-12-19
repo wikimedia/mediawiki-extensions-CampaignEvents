@@ -30,6 +30,7 @@
 		// on the value of isSelectionInverted.
 		this.selectedParticipantIDs = [];
 		this.participantsTotal = mw.config.get( 'wgCampaignEventsEventDetailsParticipantsTotal' );
+		this.usernameFilter = null;
 
 		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
 		this.$userActionsContainer = $( '.ext-campaignevents-details-user-actions-container' );
@@ -118,8 +119,8 @@
 			searchParticipantsWidget.on(
 				'change',
 				mw.util.debounce( function ( inputVal ) {
-					var usernameFilter = inputVal === '' ? null : inputVal;
-					thisClass.rebuildListWithFilter( usernameFilter );
+					thisClass.usernameFilter = inputVal === '' ? null : inputVal;
+					thisClass.rebuildList();
 				}, 500 )
 			);
 		}
@@ -302,9 +303,10 @@
 	};
 
 	/**
-	 * @param {string|null} usernameFilter
+	 * Rebuilds the list of participant. For instance, this is used when the
+	 * username filter changes.
 	 */
-	ParticipantsManager.prototype.rebuildListWithFilter = function ( usernameFilter ) {
+	ParticipantsManager.prototype.rebuildList = function () {
 		// eslint-disable-next-line no-jquery/no-global-selector
 		$( '.ext-campaignevents-details-user-row' )
 			.not( this.$curUserRow )
@@ -320,13 +322,10 @@
 		// filter changes
 		this.lastParticipantID = null;
 		// Note that the selected participants should persist and are not reset here.
-		this.loadMoreParticipants( usernameFilter );
+		this.loadMoreParticipants();
 	};
 
-	/**
-	 * @param {string|undefined|null} usernameFilter
-	 */
-	ParticipantsManager.prototype.loadMoreParticipants = function ( usernameFilter ) {
+	ParticipantsManager.prototype.loadMoreParticipants = function () {
 		var thisClass = this;
 
 		/* eslint-disable camelcase */
@@ -339,8 +338,8 @@
 		if ( thisClass.lastParticipantID !== null ) {
 			params.last_participant_id = thisClass.lastParticipantID;
 		}
-		if ( typeof usernameFilter === 'string' ) {
-			params.username_filter = usernameFilter;
+		if ( thisClass.usernameFilter !== null ) {
+			params.username_filter = thisClass.usernameFilter;
 		}
 		/* eslint-enable camelcase */
 
@@ -349,7 +348,7 @@
 			params
 		)
 			.done( function ( data ) {
-				thisClass.toggleCurUserRow( usernameFilter );
+				thisClass.toggleCurUserRow();
 				if ( data.length ) {
 					thisClass.addParticipantsToList( data );
 				}
@@ -364,17 +363,15 @@
 	 * to be special-cased, like in PHP, and the code should be kept in sync with
 	 * its PHP counterpart.
 	 * TODO This is subpar.
-	 *
-	 * @param {string|null|undefined} usernameFilter
 	 */
-	ParticipantsManager.prototype.toggleCurUserRow = function ( usernameFilter ) {
+	ParticipantsManager.prototype.toggleCurUserRow = function () {
 		if ( this.curUserName === null ) {
 			return;
 		}
 
 		if (
-			typeof usernameFilter !== 'string' ||
-			this.curUserName.toLowerCase().indexOf( usernameFilter.toLowerCase() ) > -1
+			this.usernameFilter === null ||
+			this.curUserName.toLowerCase().indexOf( this.usernameFilter.toLowerCase() ) > -1
 		) {
 			this.$curUserRow.show();
 		} else {
