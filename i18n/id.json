@@ -8,9 +8,5 @@
 	"nstab-event": "Acara",
 	"campaignevents-error-trackingtool-without-eventid": "Berikan penanda acara pada alat pelacakan tersebut.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Berikan penanda alat pelacak",
-	"campaignevents-error-invalid-trackingtool": "Berikan penanda alat pelacakan yang valid",
-	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|participant|participants}} registered privately",
-	"campaignevents-register-confirmation-radio-private": "Private registration",
-	"campaignevents-register-confirmation-radio-public": "Public registration",
-	"campaignevents-eventpage-dialog-private-registration-label": "{{GENDER:$1|Participant registered}} privately"
+	"campaignevents-error-invalid-trackingtool": "Berikan penanda alat pelacakan yang valid"
 }

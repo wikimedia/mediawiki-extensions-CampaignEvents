@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"campaignevents-eventslist-delete-dialog-cancel": "Otkaži",
+	"campaignevents-eventslist-delete-dialog-delete": "Obriši",
+	"campaignevents-registration-confirmation-toggle-public": "Javna registracija",
+	"campaignevents-notification-registration-details-dates-header": "Datum i vreme",
+	"campaignevents-notification-registration-details-dates": "$1 do $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Vremenska zona:</strong> $1",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|više}}"
+}
