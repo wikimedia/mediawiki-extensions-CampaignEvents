@@ -14,6 +14,7 @@ require_once "$IP/maintenance/Maintenance.php";
 
 use DateTime;
 use DateTimeZone;
+use Exception;
 use Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
@@ -58,27 +59,49 @@ class UpdateUTCTimestamps extends Maintenance {
 		$this->dbw = $dbHelper->getDBConnection( DB_PRIMARY );
 		$batchSize = $this->getBatchSize();
 		$updateTimezones = $this->getOption( 'timezone' );
+		$this->validateTimezones( $updateTimezones );
+
+		$maxRowID = (int)$this->dbr->selectField( 'campaign_events', 'MAX(event_id)' );
+		if ( $maxRowID === 0 ) {
+			$this->output( "Table is empty.\n" );
+			return;
+		}
 
 		$prevID = 0;
 		$curID = $batchSize;
 		$this->utcTimezone = new DateTimeZone( 'UTC' );
 		do {
-			$foundRows = $this->updateBatch( $prevID, $curID, $updateTimezones );
+			$this->updateBatch( $prevID, $curID, $updateTimezones );
 			$prevID = $curID;
 			$curID += $batchSize;
 			$dbHelper->waitForReplication();
-		} while ( $foundRows );
+		} while ( $prevID < $maxRowID );
 
 		$this->output( "Done.\n" );
 	}
 
 	/**
+	 * @param string[]|null $timezones
+	 */
+	private function validateTimezones( ?array $timezones ): void {
+		if ( $timezones !== null ) {
+			foreach ( $timezones as $tz ) {
+				try {
+					// @phan-suppress-next-line PhanNoopNew
+					new DateTimeZone( $tz );
+				} catch ( Exception $_ ) {
+					$this->fatalError( "'$tz' is not a valid time zone.\n" );
+				}
+			}
+		}
+	}
+
+	/**
 	 * @param int $prevID
 	 * @param int $curID
-	 * @param array|null $updateTimezones
-	 * @return int Number of rows found
+	 * @param string[]|null $updateTimezones
 	 */
-	private function updateBatch( int $prevID, int $curID, ?array $updateTimezones ): int {
+	private function updateBatch( int $prevID, int $curID, ?array $updateTimezones ): void {
 		$where = [
 			"event_id > $prevID",
 			"event_id <= $curID",
@@ -125,7 +148,6 @@ class UpdateUTCTimestamps extends Maintenance {
 		}
 
 		$this->output( "Batch $prevID-$curID: $affectedRows updated.\n" );
-		return count( $res );
 	}
 
 	/**
