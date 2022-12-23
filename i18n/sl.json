@@ -8,6 +8,7 @@
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Navedite identifikator orodja za sledenje",
 	"campaignevents-error-invalid-trackingtool": "Navedite veljaven identifikator orodja za sledenje",
 	"campaignevents-error-invalid-timezone": "Vnesite veljaven časovni pas.",
+	"campaignevents-edit-field-status-open": "Odpri",
 	"campaignevents-edit-field-timezone": "Časovni pas",
 	"campaignevents-eventslist-delete-dialog-cancel": "Prekliči",
 	"campaignevents-eventpage-header-timezone": "<strong>Časovni pas:</strong> $1",
