@@ -10,6 +10,7 @@
 	"campaignevents-error-invalid-timezone": "Vnesite veljaven časovni pas.",
 	"campaignevents-edit-field-status-open": "Odpri",
 	"campaignevents-edit-field-timezone": "Časovni pas",
+	"campaignevents-myevents-label-search": "Išči",
 	"campaignevents-eventslist-delete-dialog-cancel": "Prekliči",
 	"campaignevents-eventpage-header-timezone": "<strong>Časovni pas:</strong> $1",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|udeleženec se je registriral|udeleženca sta se registrirala|udeleženci so se registrirali|udeležencev se je registriralo}} zasebno.",
