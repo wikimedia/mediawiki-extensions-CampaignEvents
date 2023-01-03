@@ -128,4 +128,11 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	protected function getDisplayFormat(): string {
 		return 'ooui';
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getGroupName(): string {
+		return 'campaignevents';
+	}
 }

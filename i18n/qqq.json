@@ -13,6 +13,7 @@
 	"right-campaignevents-enable-registration": "{{doc-right|campaignevents-enable-registration}}",
 	"action-campaignevents-delete-registration": "{{doc-action|campaignevents-delete-registration}}",
 	"right-campaignevents-delete-registration": "{{doc-right|campaignevents-delete-registration}}",
+	"specialpages-group-campaignevents": "{{doc-special-group|that=are related to the CampaignEvents extension}}",
 	"campaignevents-error-invalid-id": "Error message used when the given event ID is not valid.",
 	"campaignevents-error-empty-title": "Error message used when the given event page title is an empty string.",
 	"campaignevents-error-invalid-title": "Error message used when the given event page title is invalid.\nParameters:\n* $1 - The reason why the title is not valid",
