@@ -17,6 +17,7 @@
 	"campaignevents-eventpage-dialog-timezone": "<strong>Časovni pas:</strong> $1",
 	"campaignevents-eventpage-register-confirmation-confirm": "Registrirajte se",
 	"campaignevents-eventpage-register-confirmation-title": "Zasebnost dogodka",
+	"campaignevents-event-details-edit-button": "Uredi",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|udeleženec je registriran|udeleženca sta registrirana|udeleženci so registrirani|udeležencev je registriranih}} zasebno.",
 	"campaignevents-event-details-timezone": "<strong>Časovni pas:</strong> $1",
 	"campaignevents-event-details-organizers-header": "Organizatorji",
