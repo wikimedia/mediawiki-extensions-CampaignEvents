@@ -4,8 +4,25 @@
 			"Eleassar"
 		]
 	},
+	"campaignevents-error-empty-title": "Vnesite naslov strani dogodka",
+	"campaignevents-error-invalid-title": "Naslov strani dogodka je neveljaven: $1.",
+	"campaignevents-error-empty-start": "Izberite začetni čas.",
+	"campaignevents-error-empty-end": "Vnesite končni čas.",
+	"campaignevents-edit-field-page": "Stran dogodka",
 	"campaignevents-edit-field-status-open": "Odpri",
+	"campaignevents-edit-field-start": "Začetni čas",
+	"campaignevents-edit-field-end": "Končni čas",
+	"campaignevents-unregister-confirmation-btn": "Prekliči registracijo",
 	"campaignevents-myevents-label-search": "Išči",
+	"campaignevents-myevents-label-events-per-page": "Dogodkov na stran",
+	"campaignevents-eventslist-menu-close": "Zapri registracijo",
 	"campaignevents-eventslist-delete-dialog-cancel": "Prekliči",
-	"campaignevents-event-details-remove-participant-cancel-btn": "Prekliči"
+	"campaignevents-eventpage-header-dates-label": "Začetni in končni čas",
+	"campaignevents-eventpage-dialog-dates-label": "Začetni in končni čas",
+	"campaignevents-eventpage-dialog-action-close": "Zapri",
+	"campaignevents-eventpage-unregister-confirmation-title": "Prekliči registracijo",
+	"campaignevents-event-details-edit-button": "Uredi",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Prekliči",
+	"campaignevents-event-details-dates-label": "Začetni in končni čas",
+	"campaignevents-event-details-search-participants-placeholder": "Poišči udeležence"
 }
