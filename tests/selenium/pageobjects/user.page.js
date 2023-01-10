@@ -9,6 +9,8 @@ class User extends Page {
 	get registerForEvent() { return $( '=Register for event' ); }
 	get confirmRegistration() { return $( '=Register' ); }
 	get togglePrivate() { return $( '.oo-ui-toggleSwitchWidget' ); }
+	get cancelRegistrationButton() { return $( '.oo-ui-icon-trash' ); }
+	get confirmCancellation() { return $( '=Yes' ); }
 
 	async createAccount( userName ) {
 		const bot = await Api.bot();
@@ -42,6 +44,18 @@ class User extends Page {
 		}
 		await this.confirmRegistration.click();
 	}
+
+	/**
+	 * Cancel registration for an event.
+	 *
+	 * Cancel a user's registration for an event and confirm that cancellation
+	 *
+	 */
+	async cancelRegistration() {
+		await this.cancelRegistrationButton.click();
+		await this.confirmCancellation.click();
+	}
+
 }
 
 module.exports = new User();

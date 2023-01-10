@@ -47,4 +47,13 @@ describe( 'Enable Event Registration', function () {
 		await UserPage.register( 'Private' + userName, event, true );
 		await expect( await EnableEventRegistrationPage.successfulRegistration ).toBeDisplayed();
 	} );
+
+	it( 'can have a user cancel registration', async function () {
+		await EnableEventRegistrationPage.createEvent( event );
+		await EnableEventRegistrationPage.enableEvent( event );
+		await UserPage.createAccount( 'TestCancel' + userName );
+		await UserPage.register( 'TestCancel' + userName, event );
+		await UserPage.cancelRegistration();
+		await expect( await UserPage.registerForEvent ).toBeDisplayed();
+	} );
 } );
