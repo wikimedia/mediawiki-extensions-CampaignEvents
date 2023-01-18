@@ -2,13 +2,15 @@
 
 const assert = require( 'assert' ),
 	EnableEventRegistrationPage = require( '../pageobjects/enableEventRegistration.page' ),
-	UserLoginPage = require( 'wdio-mediawiki/LoginPage' ),
-	event = EnableEventRegistrationPage.getTestString( 'Event:e2e' );
+	UserPage = require( '../pageobjects/user.page' ),
+	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
+	event = EnableEventRegistrationPage.getTestString( 'Event:e2e' ),
+	userName = EnableEventRegistrationPage.getTestString();
 
 describe( 'Enable Event Registration', function () {
 
 	before( async function () {
-		await UserLoginPage.loginAdmin();
+		await LoginPage.loginAdmin();
 	} );
 
 	it( 'is configured correctly', async function () {
@@ -29,4 +31,13 @@ describe( 'Enable Event Registration', function () {
 
 		assert.deepEqual( await EnableEventRegistrationPage.feedback.getText(), 'Registration is enabled. Participants can now register on the event page.' );
 	} );
+
+	it( 'can have one user register publicly', async function () {
+		await EnableEventRegistrationPage.createEvent( event );
+		await EnableEventRegistrationPage.enableEvent( event );
+		await UserPage.createAccount( userName );
+		await UserPage.register( userName, event );
+		await expect( await EnableEventRegistrationPage.successfulRegistration ).toBeDisplayed();
+	} );
+
 } );

@@ -26,6 +26,7 @@ class EnableEventRegistrationPage extends Page {
 	get endDateInput() { return $( '#mw-input-wpEventEnd' ).$( '[size="2"]' ); }
 	get endYearInput() { return $( '#mw-input-wpEventEnd' ).$( '[size="4"]' ); }
 	get feedback() { return $( '#mw-content-text' ); }
+	get successfulRegistration() { return $( '//span[normalize-space() = "You are attending!"]' ); }
 	get body() { return $( 'body' ); }
 
 	open() {
