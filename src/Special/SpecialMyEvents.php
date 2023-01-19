@@ -107,4 +107,11 @@ class SpecialMyEvents extends SpecialPage {
 		$this->getOutput()->addParserOutputContent( $pager->getFullOutput() );
 		$this->getOutput()->addModules( $pager->getModules() );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getGroupName(): string {
+		return 'campaignevents';
+	}
 }

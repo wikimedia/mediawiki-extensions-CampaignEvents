@@ -222,4 +222,11 @@ class SpecialEventDetails extends SpecialPage {
 			]
 		);
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getGroupName(): string {
+		return 'campaignevents';
+	}
 }

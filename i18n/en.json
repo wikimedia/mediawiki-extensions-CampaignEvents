@@ -10,6 +10,7 @@
 	"right-campaignevents-enable-registration": "Enable event registrations",
 	"action-campaignevents-delete-registration": "delete event registrations",
 	"right-campaignevents-delete-registration": "Delete event registrations",
+	"specialpages-group-campaignevents": "Events",
 	"campaignevents-error-invalid-id": "The event ID must be a positive integer.",
 	"campaignevents-error-empty-title": "Enter an event page title.",
 	"campaignevents-error-invalid-title": "The event page title is invalid: $1.",

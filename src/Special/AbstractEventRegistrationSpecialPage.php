@@ -327,6 +327,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	protected function getGroupName(): string {
+		return 'campaignevents';
+	}
+
+	/**
 	 * @return int
 	 */
 	abstract protected function getValidationFlags(): int;
