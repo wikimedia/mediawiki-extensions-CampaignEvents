@@ -351,8 +351,12 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$timezoneObj = $timeCorrection->getTimeZone();
 		if ( $timezoneObj ) {
 			$timezone = $timezoneObj->getName();
-		} else {
+		} elseif ( $timeCorrection->getCorrectionType() === UserTimeCorrection::SYSTEM ) {
 			$timezone = UserTimeCorrection::formatTimezoneOffset( $timeCorrection->getTimeOffset() );
+		} else {
+			// User entered an offset directly, pass the value through without letting UserTimeCorrection
+			// parse and accept raw offsets in minutes or things like "+0:555" that DateTimeZone doesn't support.
+			$timezone = $data['TimeZone'];
 		}
 
 		try {
