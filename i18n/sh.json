@@ -6,6 +6,7 @@
 	},
 	"campaignevents-desc": "Pruža značajke za organizatore i sudionike kampanje.",
 	"nstab-event": "Događaj",
+	"specialpages-group-campaignevents": "Događaji",
 	"campaignevents-edit-field-chat-url-help": "Ako imate online chat grupu za sudionike ovog događaja, ovdje stavite link za poziv. Sudionici će nakon registracije moći vidjeti link s pozivnicom.",
 	"campaignevents-edit-form-notice": "Prilikom registracije od sudionika će se prikupljati samo korisnička imena. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Saznajte više].",
 	"campaignevents-eventpage-dialog-chat-label": "Pridružite se chat grupi događaja",

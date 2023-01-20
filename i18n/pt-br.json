@@ -13,6 +13,7 @@
 	"right-campaignevents-enable-registration": "Ativar inscrições para o evento",
 	"action-campaignevents-delete-registration": "excluir inscrições do evento",
 	"right-campaignevents-delete-registration": "Excluir inscrições do evento",
+	"specialpages-group-campaignevents": "Eventos",
 	"campaignevents-error-invalid-id": "A ID do evento deve ser um número inteiro positivo.",
 	"campaignevents-error-empty-title": "Insira um título de página para o evento.",
 	"campaignevents-error-invalid-title": "O título da página do evento é inválido: $1",

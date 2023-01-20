@@ -14,6 +14,7 @@
 	"right-campaignevents-enable-registration": "イベント登録を有効にする",
 	"action-campaignevents-delete-registration": "イベント登録の削除",
 	"right-campaignevents-delete-registration": "イベント登録を削除",
+	"specialpages-group-campaignevents": "イベント",
 	"campaignevents-error-invalid-id": "イベントIDは正の整数である必要があります。",
 	"campaignevents-error-empty-title": "イベントページのタイトルを入力して下さい。",
 	"campaignevents-error-invalid-title": "指定したページ名が無効です。$1",

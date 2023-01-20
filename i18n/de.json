@@ -10,6 +10,7 @@
 	"right-campaignevents-enable-registration": "Veranstaltungsanmeldungen ermöglichen",
 	"action-campaignevents-delete-registration": "Veranstaltungsanmeldungen löschen",
 	"right-campaignevents-delete-registration": "Veranstaltungsanmeldungen löschen",
+	"specialpages-group-campaignevents": "Ereignisse",
 	"campaignevents-error-invalid-id": "Die Veranstaltungs-ID muss eine positive ganze Zahl sein.",
 	"campaignevents-error-empty-title": "Gib einen Titel für die Veranstaltungsseite ein.",
 	"campaignevents-error-invalid-title": "Der Titel der Veranstaltungsseite ist ungültig: $1.",

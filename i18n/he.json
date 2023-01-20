@@ -10,6 +10,7 @@
 	"right-campaignevents-enable-registration": "הפעלת הרשמות לאירועים",
 	"action-campaignevents-delete-registration": "למחוק הרשמות לאירועים",
 	"right-campaignevents-delete-registration": "מחיקת הרשמות לאירועים",
+	"specialpages-group-campaignevents": "אירועים",
 	"campaignevents-error-invalid-id": "מזהה האירוע חייב להיות מספר שלם חיובי.",
 	"campaignevents-error-empty-title": "נא להזין כותרת דף לאירוע.",
 	"campaignevents-error-invalid-title": "כותרת דף האירוע אינה תקינה: $1.",

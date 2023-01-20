@@ -10,6 +10,7 @@
 	"right-campaignevents-enable-registration": "Omogočanje prijav na dogodke",
 	"action-campaignevents-delete-registration": "brisanje prijqv na dogodke",
 	"right-campaignevents-delete-registration": "Brisanje prijav na dogodke",
+	"specialpages-group-campaignevents": "Dogodki",
 	"campaignevents-error-invalid-id": "ID dogodka mora biti pozitivno celo število.",
 	"campaignevents-error-empty-title": "Vnesite naslov strani dogodka",
 	"campaignevents-error-invalid-title": "Naslov strani dogodka je neveljaven: $1.",
