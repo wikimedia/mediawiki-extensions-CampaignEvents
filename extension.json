@@ -23,7 +23,8 @@
 	},
 	"AvailableRights": [
 		"campaignevents-enable-registration",
-		"campaignevents-delete-registration"
+		"campaignevents-delete-registration",
+		"campaignevents-organize-events"
 	],
 	"config": {
 		"CampaignEventsDatabaseCluster": {
@@ -41,6 +42,10 @@
 		"CampaignEventsProgramsAndEventsDashboardAPISecret": {
 			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
 			"value": null
+		},
+		"CampaignEventsEnableMultipleOrganizers": {
+			"description": "Temporary feature flag to enable support for multiple event organizers.",
+			"value": false
 		}
 	},
 	"DefaultUserOptions": {
@@ -49,7 +54,8 @@
 	},
 	"GroupPermissions": {
 		"user": {
-			"campaignevents-enable-registration": true
+			"campaignevents-enable-registration": true,
+			"campaignevents-organize-events": true
 		},
 		"sysop": {
 			"campaignevents-delete-registration": true

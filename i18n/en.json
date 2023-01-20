@@ -10,6 +10,8 @@
 	"right-campaignevents-enable-registration": "Enable event registrations",
 	"action-campaignevents-delete-registration": "delete event registrations",
 	"right-campaignevents-delete-registration": "Delete event registrations",
+	"action-campaignevents-organize-events": "organize events",
+	"right-campaignevents-organize-events": "Organize events",
 	"specialpages-group-campaignevents": "Events",
 	"campaignevents-error-invalid-id": "The event ID must be a positive integer.",
 	"campaignevents-error-empty-title": "Enter an event page title.",
@@ -71,6 +73,13 @@
 	"campaignevents-edit-page-nonlocal": "Please [$1 edit this registration] on the wiki it was enabled on: $2.",
 	"campaignevents-edit-error-deleted": "This event registration was deleted.",
 	"campaignevents-edit-need-central-account": "You need a central user account in order to enable or edit event registrations.",
+	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|doesn't|don't}} have the needed permissions to be {{PLURAL:$1|an organizer|organizers}}.",
+	"campaignevents-edit-no-organizers": "You need to choose at least one organizer.",
+	"campaignevents-edit-removed-creator": "You are not allowed to remove the event creator.",
+	"campaignevents-edit-no-creator": "You need to add yourself as an organizer when you first enable event registration.",
+	"campaignevents-edit-too-many-organizers": "You can't add more than $1 {{PLURAL:$1|organizer|organizers}}.",
+	"campaignevents-edit-organizer-need-central-account": "The following {{PLURAL:$1|user does|users do}} not have a central user account and cannot be added as {{PLURAL:$1|organizer|organizers}}: $2.",
+	"campaignevents-edit-invalid-username": "\"$1\" is not a valid username.",
 	"campaignevents-error-page-already-registered": "The given event page already has an associated registration.",
 	"campaignevents-error-page-already-registered-deleted": "You cannot complete the action because the event registration has been deleted from this event page.",
 	"campaignevents-edit-not-allowed-registration": "You are not allowed to edit this event registration.",
@@ -258,5 +267,4 @@
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|more}}",
 	"campaignevents-notification-registration-event-page-link": "View event page",
 	"campaignevents-notification-registration-chat-link": "Join group chat"
-
 }

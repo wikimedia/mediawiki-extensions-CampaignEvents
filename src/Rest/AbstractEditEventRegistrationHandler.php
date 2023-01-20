@@ -77,8 +77,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			$this->exitWithStatus( $e->getStatus() );
 		}
 
-		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer );
-
+		$organizers = [ $this->getAuthority()->getUser()->getName() ];
+		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizers );
 		if ( !$saveStatus->isGood() ) {
 			$httptStatus = $saveStatus instanceof PermissionStatus ? 403 : 400;
 			$this->exitWithStatus( $saveStatus, $httptStatus );

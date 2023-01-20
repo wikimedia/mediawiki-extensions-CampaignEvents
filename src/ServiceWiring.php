@@ -18,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
@@ -56,7 +57,8 @@ return [
 		static function ( MediaWikiServices $services ): CampaignsCentralUserLookup {
 			return new CampaignsCentralUserLookup(
 				$services->getCentralIdLookup(),
-				$services->getUserFactory()
+				$services->getUserFactory(),
+				$services->getUserNameUtils()
 			);
 		},
 	IEventStore::STORE_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventStore {
@@ -73,7 +75,8 @@ return [
 		return new PermissionChecker(
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( PageAuthorLookup::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( MWPermissionsLookup::SERVICE_NAME )
 		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
@@ -224,6 +227,11 @@ return [
 	UserNotifier::SERVICE_NAME => static function ( MediaWikiServices $services ): UserNotifier {
 		return new UserNotifier(
 			ExtensionRegistry::getInstance()->isLoaded( 'Echo' )
+		);
+	},
+	MWPermissionsLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): MWPermissionsLookup {
+		return new MWPermissionsLookup(
+			$services->getUserFactory()
 		);
 	},
 ];

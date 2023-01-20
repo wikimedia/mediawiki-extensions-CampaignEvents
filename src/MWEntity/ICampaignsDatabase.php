@@ -177,4 +177,11 @@ interface ICampaignsDatabase {
 	 * @return string SQL expression returning a scalar
 	 */
 	public function buildExcludedValue( string $column ): string;
+
+	/**
+	 * @param string|int $fieldLeft
+	 * @param string|int $fieldRight
+	 * @return string
+	 */
+	public function bitAnd( $fieldLeft, $fieldRight ): string;
 }

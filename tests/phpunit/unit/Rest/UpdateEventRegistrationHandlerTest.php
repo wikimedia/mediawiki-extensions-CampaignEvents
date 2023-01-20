@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -73,7 +74,8 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			new PermissionChecker(
 				$this->createMock( OrganizersStore::class ),
 				$this->createMock( PageAuthorLookup::class ),
-				$this->createMock( CampaignsCentralUserLookup::class )
+				$this->createMock( CampaignsCentralUserLookup::class ),
+				$this->createMock( IPermissionsLookup::class )
 			),
 			$editEventCmd ?? $this->getMockEditEventCommand(),
 			$eventLookup

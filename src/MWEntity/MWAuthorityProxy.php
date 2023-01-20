@@ -47,4 +47,11 @@ class MWAuthorityProxy implements ICampaignsAuthority {
 	public function getUserIdentity(): UserIdentity {
 		return $this->authority->getUser();
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getName(): string {
+		return $this->authority->getUser()->getName();
+	}
 }

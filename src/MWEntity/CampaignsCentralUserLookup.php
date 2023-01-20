@@ -5,9 +5,12 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use CentralIdLookup;
+use InvalidArgumentException;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
+use MediaWiki\User\UserNameUtils;
 use UnexpectedValueException;
+use User;
 
 /**
  * This class is used to retrieve data about global user accounts, like MW's CentralIdLookup.
@@ -19,17 +22,22 @@ class CampaignsCentralUserLookup {
 	private $centralIDLookup;
 	/** @var UserFactory */
 	private $userFactory;
+	/** @var UserNameUtils */
+	private $userNameUtils;
 
 	/**
 	 * @param CentralIdLookup $centralIdLookup
 	 * @param UserFactory $userFactory
+	 * @param UserNameUtils $userNameUtils
 	 */
 	public function __construct(
 		CentralIdLookup $centralIdLookup,
-		UserFactory $userFactory
+		UserFactory $userFactory,
+		UserNameUtils $userNameUtils
 	) {
 		$this->centralIDLookup = $centralIdLookup;
 		$this->userFactory = $userFactory;
+		$this->userNameUtils = $userNameUtils;
 	}
 
 	/**
@@ -64,6 +72,24 @@ class CampaignsCentralUserLookup {
 			);
 		}
 		$mwUser = $this->userFactory->newFromId( $authority->getUserIdentity()->getId() );
+		return $this->newFromUserIdentity( $mwUser );
+	}
+
+	/**
+	 * Returns the central user corresponding to the given username, if it exists. NOTE: Make sure to handle
+	 * the exception, if the user is not guaranteed to have a global account.
+	 * Callers must ensure that the username is valid
+	 * @param string $userName
+	 * @return CentralUser
+	 * @throws UserNotGlobalException
+	 */
+	public function newFromLocalUsername( string $userName ): CentralUser {
+		$mwUser = $this->userFactory->newFromName( $userName );
+		if ( !$mwUser instanceof User ) {
+			throw new InvalidArgumentException(
+				"Invalid username: $userName"
+			);
+		}
 		return $this->newFromUserIdentity( $mwUser );
 	}
 
@@ -124,5 +150,14 @@ class CampaignsCentralUserLookup {
 			}
 		}
 		return $ret;
+	}
+
+	/**
+	 * @param string $userName
+	 * @return bool
+	 * @todo This method should possibly be moved to a separate service in the future.
+	 */
+	public function isValidLocalUsername( string $userName ): bool {
+		return $this->userNameUtils->getCanonical( $userName ) !== false;
 	}
 }
