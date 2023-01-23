@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
 use ManualLogEntry;
+use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
@@ -28,6 +29,8 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	private $eventLookupFromPage;
 	/** @var IEventStore */
 	private $eventStore;
+	/** @var DeleteEventCommand */
+	private DeleteEventCommand $deleteEventCommand;
 	/** @var PageStore */
 	private $pageStore;
 	/** @var TitleFormatter */
@@ -36,17 +39,20 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	/**
 	 * @param MWEventLookupFromPage $eventLookupFromPage
 	 * @param IEventStore $eventStore
+	 * @param DeleteEventCommand $deleteEventCommand
 	 * @param PageStore $pageStore
 	 * @param TitleFormatter $titleFormatter
 	 */
 	public function __construct(
 		MWEventLookupFromPage $eventLookupFromPage,
 		IEventStore $eventStore,
+		DeleteEventCommand $deleteEventCommand,
 		PageStore $pageStore,
 		TitleFormatter $titleFormatter
 	) {
 		$this->eventLookupFromPage = $eventLookupFromPage;
 		$this->eventStore = $eventStore;
+		$this->deleteEventCommand = $deleteEventCommand;
 		$this->pageStore = $pageStore;
 		$this->titleFormatter = $titleFormatter;
 	}
@@ -67,7 +73,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 		if ( !$registration ) {
 			return;
 		}
-		$this->eventStore->deleteRegistration( $registration );
+		$this->deleteEventCommand->deleteUnsafe( $registration );
 	}
 
 	/**

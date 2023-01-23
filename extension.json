@@ -80,6 +80,7 @@
 			"services": [
 				"CampaignEventsMWEventLookupFromPage",
 				"CampaignEventsEventStore",
+				"CampaignEventsDeleteEventCommand",
 				"PageStore",
 				"TitleFormatter"
 			]
