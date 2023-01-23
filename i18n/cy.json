@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Afalau"
+		]
+	},
+	"campaignevents-desc": "Yn creu nodweddion ar gyfer trefnwyr a chyfranogwyr ymgyrchoedd.",
+	"nstab-event": "Digwyddiad",
+	"action-campaignevents-enable-registration": "galluogi cofrestriadau am ddigwyddiadau",
+	"right-campaignevents-enable-registration": "Galluogi cofrestriadau am ddigwyddiadau",
+	"action-campaignevents-delete-registration": "dileu cofrestriadau am ddigwyddiadau",
+	"right-campaignevents-delete-registration": "Dileu cofrestriadau am ddigwyddiadau",
+	"specialpages-group-campaignevents": "Digwyddiadau",
+	"campaignevents-error-invalid-title-interwiki": "Nodwch dudalen digwyddiad ar y wici lleol.",
+	"campaignevents-error-page-not-found": "Nid oes tudalen ddigwyddiad gyda'r enw hwn.",
+	"campaignevents-error-page-not-event-namespace": "Rhaid i'r dudalen ddigwyddiad fod yn y parth {{ns:event}}.",
+	"campaignevents-event-details-tab-participants": "Cyfranogwyr",
+	"campaignevents-event-details-tab-event-details": "Manylion y digwyddiad",
+	"campaignevents-event-details-organizers-view-more": "Gweld mwy",
+	"campaignevents-notification-registration-details-dates-header": "Dyddiad ac amser",
+	"campaignevents-notification-registration-details-dates": "$1 - $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Cylchfa amser:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Math o ddigwyddiad",
+	"campaignevents-notification-registration-details-type-online-header": "Digwyddiad ar-lein",
+	"campaignevents-notification-registration-details-type-in-person-header": "Digwyddiad wyneb-yn-wyneb"
+}

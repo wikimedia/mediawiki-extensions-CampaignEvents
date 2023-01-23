@@ -3,6 +3,7 @@
 		"authors": [
 			"DarkGames26",
 			"Fitoschido",
+			"JDíaz32",
 			"MarcoAurelio",
 			"SpikeShroom"
 		]
@@ -13,6 +14,7 @@
 	"right-campaignevents-enable-registration": "Permitir inscripciones para los eventos",
 	"action-campaignevents-delete-registration": "eliminar inscripciones de los eventos",
 	"right-campaignevents-delete-registration": "Eliminar inscripciones de los eventos",
+	"specialpages-group-campaignevents": "Eventos",
 	"campaignevents-error-invalid-id": "El código identificador del evento tiene que ser un número entero positivo.",
 	"campaignevents-error-empty-title": "Introduce un título para el evento.",
 	"campaignevents-error-invalid-title": "El título del evento no es válido: $1.",

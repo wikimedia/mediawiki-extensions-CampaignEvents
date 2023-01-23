@@ -11,6 +11,7 @@
 	},
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
 	"nstab-event": "Событие",
+	"specialpages-group-campaignevents": "События",
 	"campaignevents-error-invalid-id": "Идентификатор мероприятия должен быть положительным целым числом.",
 	"campaignevents-error-invalid-title-interwiki": "Укажите страницу мероприятия в локальной вики.",
 	"campaignevents-error-invalid-chat-url": "Введите действительный URL-адрес чата.",

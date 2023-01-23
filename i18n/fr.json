@@ -15,6 +15,7 @@
 	"right-campaignevents-enable-registration": "Activer les inscriptions aux événements",
 	"action-campaignevents-delete-registration": "supprimer les inscriptions aux événements",
 	"right-campaignevents-delete-registration": "Supprimer les inscriptions aux événements",
+	"specialpages-group-campaignevents": "Événements",
 	"campaignevents-error-invalid-id": "L’identifiant de l’événement doit être un entier positif.",
 	"campaignevents-error-empty-title": "Entrez un titre de page d’événement.",
 	"campaignevents-error-invalid-title": "Le titre de la page de l’événement n’est pas valide : $1.",

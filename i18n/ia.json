@@ -10,6 +10,7 @@
 	"right-campaignevents-enable-registration": "Activar inscriptiones pro eventos",
 	"action-campaignevents-delete-registration": "deler inscriptiones de eventos",
 	"right-campaignevents-delete-registration": "Deler inscriptiones de eventos",
+	"specialpages-group-campaignevents": "Eventos",
 	"campaignevents-error-invalid-id": "Le ID del evento debe esser un numero integre positive.",
 	"campaignevents-error-empty-title": "Insere un titulo pro le pagina del evento.",
 	"campaignevents-error-invalid-title": "Le titulo del pagina del evento non es valide: $1.",
