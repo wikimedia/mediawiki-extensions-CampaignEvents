@@ -5,6 +5,7 @@
 			"Daimona Eaytoy"
 		]
 	},
+	"specialpages-group-campaignevents": "Eventi",
 	"campaignevents-error-invalid-id": "L'ID dell'evento deve essere un intero positivo.",
 	"campaignevents-error-meeting-url-not-online": "L'URL della riunione non deve essere indicato se l'evento non è online.",
 	"campaignevents-edit-field-status-open": "Aperto",

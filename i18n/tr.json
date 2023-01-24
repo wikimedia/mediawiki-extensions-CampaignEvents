@@ -3,6 +3,7 @@
 		"authors": [
 			"Hedda",
 			"Khalvar",
+			"Rapsar",
 			"ToprakM"
 		]
 	},
@@ -36,7 +37,7 @@
 	"campaignevents-rest-event-not-found": "Bu kimliğe sahip bir etkinlik yok.",
 	"campaignevents-rest-enable-registration-permission-denied": "Etkinlik kayıtlarını etkinleştirmenize izin verilmiyor.",
 	"enableeventregistration": "Etkinlik kaydını etkinleştir",
-	"editeventregistration": "Etkinlik kaydını düzenle",
+	"editeventregistration": "Etkinlik kaydını değiştir",
 	"campaignevents-edit-form-legend": "Düzenlediğiniz etkinlik hakkında genel bilgi verin",
 	"campaignevents-edit-field-page": "Etkinlik sayfası",
 	"campaignevents-edit-field-page-help": "Bir etkinlik sayfası, etkinliğiniz hakkında bilgiler içerir. Kişiler etkinlik sayfasında katılımcı olarak kayıt olabilirler.",
