@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Afalau"
+		]
+	},
+	"campaignevents-desc": "Yn creu nodweddion ar gyfer trefnwyr a chyfranogwyr ymgyrchoedd.",
+	"nstab-event": "Digwyddiad",
+	"action-campaignevents-enable-registration": "galluogi cofrestriadau am ddigwyddiadau",
+	"right-campaignevents-enable-registration": "Galluogi cofrestriadau am ddigwyddiadau",
+	"action-campaignevents-delete-registration": "dileu cofrestriadau am ddigwyddiadau",
+	"right-campaignevents-delete-registration": "Dileu cofrestriadau am ddigwyddiadau",
+	"campaignevents-error-invalid-title-interwiki": "Nodwch dudalen digwyddiad ar y wici lleol.",
+	"campaignevents-error-page-not-found": "Nid oes tudalen ddigwyddiad gyda'r enw hwn.",
+	"campaignevents-error-page-not-event-namespace": "Rhaid i'r dudalen ddigwyddiad fod yn y parth {{ns:event}}."
+}
