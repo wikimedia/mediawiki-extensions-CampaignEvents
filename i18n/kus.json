@@ -2,11 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
+			"Bugirbiig",
 			"Engr Winnamzua"
 		]
 	},
 	"campaignevents-eventpage-register-confirmation-confirm": "Yʋda Gʋlʋsʋg",
 	"campaignevents-eventpage-register-confirmation-title": "La'asʋg su'adim",
 	"campaignevents-registration-confirmation-toggle-private": "Sʋʋgʋmɛŋ yuda gʋlʋsʋg",
-	"campaignevents-registration-confirmation-toggle-public": "Paalʋ yʋda gʋlʋsʋg/paalʋ yʋda sɔb"
+	"campaignevents-registration-confirmation-toggle-public": "Paalʋ sɔb"
 }

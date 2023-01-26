@@ -31,7 +31,7 @@
 	"campaignevents-eventpage-dialog-title": "Dettagli evento",
 	"campaignevents-eventpage-dialog-organizers": "Organizzato da: $1",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
-	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|partecipante|partecipanti}} registrati privatamente",
+	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|partecipante registrato|partecipanti registrati}} privatamente",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Fuso orario:</strong> $1",
 	"campaignevents-eventpage-dialog-chat-label": "Unisciti alla chat di gruppo dell'evento",
 	"campaignevents-eventpage-dialog-chat-not-available": "Nessuna chat di gruppo è disponibile per questo evento.",
