@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kareyac"
+			"Kareyac",
+			"StanProg"
 		]
 	},
+	"campaignevents-myevents-label-search": "Търсене",
 	"campaignevents-event-details-organizers-header": "Организатори"
 }
