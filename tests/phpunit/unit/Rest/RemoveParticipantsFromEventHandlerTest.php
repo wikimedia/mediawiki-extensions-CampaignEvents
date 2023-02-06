@@ -12,8 +12,8 @@ use MediaWiki\Extension\CampaignEvents\Rest\RemoveParticipantsFromEventHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
+use MediaWiki\Session\Session;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
-use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -47,13 +47,11 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param IEventLookup|null $eventLookup
 	 * @param UnregisterParticipantCommand|null $unregisterParticipantCommand
-	 * @param UserFactory|null $userFactory
 	 * @return RemoveParticipantsFromEventHandler
 	 */
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		UnregisterParticipantCommand $unregisterParticipantCommand = null,
-		UserFactory $userFactory = null
+		UnregisterParticipantCommand $unregisterParticipantCommand = null
 	): RemoveParticipantsFromEventHandler {
 		if ( !$unregisterParticipantCommand ) {
 			$unregisterParticipantCommand = $this->createMock( UnregisterParticipantCommand::class );
@@ -62,21 +60,21 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 		}
 		return new RemoveParticipantsFromEventHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$unregisterParticipantCommand,
-			$userFactory ?? $this->getUserFactory( true )
+			$unregisterParticipantCommand
 		);
 	}
 
-	public function testRun__badToken() {
-		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
-
-		try {
-			$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
-			$this->fail( 'No exception thrown' );
-		} catch ( LocalizedHttpException $e ) {
-			$this->assertSame( 400, $e->getCode() );
-			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
-		}
+	/**
+	 * @dataProvider provideBadTokenSessions
+	 */
+	public function testRun__badToken( Session $session, string $excepMsg, ?string $token ) {
+		$this->assertCorrectBadTokenBehaviour(
+			$this->newHandler(),
+			$this->getRequestData(),
+			$session,
+			$token,
+			$excepMsg
+		);
 	}
 
 	/**
@@ -90,8 +88,8 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 	public function testRun__error(
 		int $expectedStatusCode,
 		string $expectedErrorKey,
-		?UnregisterParticipantCommand $unregisterParticipantCommand = null,
-		?IEventLookup $eventLookup = null,
+		?UnregisterParticipantCommand $unregisterParticipantCommand,
+		?IEventLookup $eventLookup,
 		array $requestData
 	) {
 		$handler = $this->newHandler( $eventLookup, $unregisterParticipantCommand );

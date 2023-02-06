@@ -13,8 +13,8 @@ use MediaWiki\Extension\CampaignEvents\Rest\DeleteEventRegistrationHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
+use MediaWiki\Session\Session;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
-use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -35,13 +35,11 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param IEventLookup|null $eventLookup
 	 * @param DeleteEventCommand|null $deleteEventCommand
-	 * @param UserFactory|null $userFactory
 	 * @return DeleteEventRegistrationHandler
 	 */
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		DeleteEventCommand $deleteEventCommand = null,
-		UserFactory $userFactory = null
+		DeleteEventCommand $deleteEventCommand = null
 	): DeleteEventRegistrationHandler {
 		if ( !$deleteEventCommand ) {
 			$deleteEventCommand = $this->createMock( DeleteEventCommand::class );
@@ -49,8 +47,7 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		}
 		return new DeleteEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$deleteEventCommand,
-			$userFactory ?? $this->getUserFactory( true )
+			$deleteEventCommand
 		);
 	}
 
@@ -108,17 +105,17 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		yield 'Event already deleted' => [ 'campaignevents-rest-delete-already-deleted', 404, $lookupDeleted ];
 	}
 
-	public function testExecute__badToken() {
-		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
-
-		try {
-			$this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
-			$this->fail( 'No exception thrown' );
-		} catch ( LocalizedHttpException $e ) {
-			$this->assertSame( 400, $e->getCode() );
-			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
-		}
+	/**
+	 * @dataProvider provideBadTokenSessions
+	 */
+	public function testExecute__badToken( Session $session, string $excepMsg, ?string $token ) {
+		$this->assertCorrectBadTokenBehaviour(
+			$this->newHandler(),
+			self::DEFAULT_REQ_DATA,
+			$session,
+			$token,
+			$excepMsg
+		);
 	}
 
 	public function testExecute__permissionError() {

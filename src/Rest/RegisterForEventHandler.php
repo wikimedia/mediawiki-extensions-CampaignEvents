@@ -9,12 +9,11 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\HttpException;
-use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Rest\Validator\Validator;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class RegisterForEventHandler extends SimpleHandler {
@@ -26,22 +25,25 @@ class RegisterForEventHandler extends SimpleHandler {
 	private $eventLookup;
 	/** @var RegisterParticipantCommand */
 	private $registerParticipantCommand;
-	/** @var UserFactory */
-	private $userFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
-	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		RegisterParticipantCommand $registerParticipantCommand,
-		UserFactory $userFactory
+		RegisterParticipantCommand $registerParticipantCommand
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->registerParticipantCommand = $registerParticipantCommand;
-		$this->userFactory = $userFactory;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function validate( Validator $restValidator ): void {
+		parent::validate( $restValidator );
+		$this->validateToken();
 	}
 
 	/**
@@ -49,15 +51,7 @@ class RegisterForEventHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		$token = $this->getToken();
 		$body = $this->getValidatedBody();
-		if (
-			$token !== null &&
-			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
-		) {
-			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
-		}
-
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$status = $this->registerParticipantCommand->registerIfAllowed(

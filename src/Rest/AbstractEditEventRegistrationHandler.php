@@ -14,12 +14,11 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;
-use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\BodyValidator;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Rest\Validator\Validator;
 use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
@@ -34,25 +33,28 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected $permissionChecker;
 	/** @var EditEventCommand */
 	protected $editEventCommand;
-	/** @var UserFactory */
-	protected $userFactory;
 
 	/**
 	 * @param EventFactory $eventFactory
 	 * @param PermissionChecker $permissionChecker
 	 * @param EditEventCommand $editEventCommand
-	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
-		EditEventCommand $editEventCommand,
-		UserFactory $userFactory
+		EditEventCommand $editEventCommand
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
 		$this->editEventCommand = $editEventCommand;
-		$this->userFactory = $userFactory;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function validate( Validator $restValidator ): void {
+		parent::validate( $restValidator );
+		$this->validateToken();
 	}
 
 	/**
@@ -65,14 +67,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 */
 	public function execute() {
 		$body = $this->getValidatedBody();
-
-		$token = $this->getToken();
-		if (
-			$token !== null &&
-			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
-		) {
-			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
-		}
 
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->checkPermissions( $performer );

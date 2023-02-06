@@ -31,12 +31,13 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 	} );
 
 	describe( 'permission error', () => {
-		it( 'fails for anonymous users', async () => {
+		it( 'fails session check for anonymous users', async () => {
 			const { body: sourceBody } = await client.post( '', reqBody );
 			assert.strictEqual( sourceBody.httpCode, 403 );
+			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
 			assert.property( sourceBody, 'messageTranslations' );
 			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'not allowed' );
+			assert.include( sourceBody.messageTranslations.en, 'no session' );
 		} );
 	} );
 } );
