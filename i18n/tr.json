@@ -177,7 +177,7 @@
 	"eventdetails": "Etkinlik detayları",
 	"campaignevents-event-details-label": "Etkinlik detayları",
 	"campaignevents-back-to-your-events": "Etkinliklerinize geri dönün",
-	"campaignevents-event-details-edit-button": "Düzenle",
+	"campaignevents-event-details-edit-button": "Değiştir",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|katılımcı}}",
 	"campaignevents-event-details-dates": "$1 - $4 arası",
 	"campaignevents-event-details-in-person-event-label": "Yüz yüze etkinlik",
