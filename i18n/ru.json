@@ -45,10 +45,12 @@
 	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена.",
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
+	"campaignevents-eventslist-delete-dialog-cancel": "Отмена",
 	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
 	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы.",
 	"campaignevents-event-details-organizers-header": "Организаторы",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Отмена",
 	"campaignevents-event-details-organizers-view-more": "Показать больше",
 	"campaignevents-event-details-organizers-noscript": "Вам необходимо включить JavaScript, чтобы увидеть полный список организаторов.",
 	"campaignevents-userlink-suppressed-user": "имя пользователя скрыто"
