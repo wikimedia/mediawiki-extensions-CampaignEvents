@@ -7,7 +7,6 @@ use EchoEvent;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use Title;
 
@@ -29,9 +28,6 @@ class UserNotifier {
 	 * @param ExistingEventRegistration $event
 	 */
 	public function notifyRegistration( ICampaignsAuthority $performer, ExistingEventRegistration $event ): void {
-		if ( !$performer instanceof MWAuthorityProxy ) {
-			throw new InvalidArgumentException( "Unexpected Authority implementation" );
-		}
 		if ( $this->isEchoLoaded ) {
 			$eventPage = $event->getPage();
 			if ( !$eventPage instanceof MWPageProxy ) {
@@ -41,7 +37,7 @@ class UserNotifier {
 				'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
 				'title' => Title::castFromPageIdentity( $eventPage->getPageIdentity() ),
 				'extra' => [
-					'user' => $performer->getUserIdentity()->getId(),
+					'user' => $performer->getLocalUserID(),
 					'event-id' => $event->getID()
 				]
 			] );

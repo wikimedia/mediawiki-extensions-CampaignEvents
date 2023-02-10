@@ -122,11 +122,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				$eventCreatorUsername = null;
 			}
-			$performerUserName = $this->performer->getUserIdentity()->getName();
+			$performerUserName = $this->performer->getName();
 			$isEventCreator = $performerUserName === $eventCreatorUsername;
 		} else {
 			$isEventCreator = true;
-			$eventCreatorUsername = $this->performer->getUserIdentity()->getName();
+			$eventCreatorUsername = $this->performer->getName();
 		}
 		$this->getOutput()->addJsConfigVars( [
 			'wgCampaignEventsIsEventCreator' => $isEventCreator,
@@ -401,7 +401,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				? explode( "\n", $data[ 'EventOrganizerUsernames' ] )
 				: [];
 		} else {
-			$organizerUsernames = [ $performer->getUserIdentity()->getName() ];
+			$organizerUsernames = [ $performer->getName() ];
 		}
 
 		return Status::wrap( $this->editEventCommand->doEditIfAllowed(
@@ -417,7 +417,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	private function getOrganizerUsernames(): array {
 		if ( !$this->eventID ) {
-			return [ $this->performer->getUserIdentity()->getName() ];
+			return [ $this->performer->getName() ];
 		}
 		$organizerUserNames = [];
 		$organizers = $this->organizersStore->getEventOrganizers(

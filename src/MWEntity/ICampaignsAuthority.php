@@ -6,7 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 /**
  * This interface is similar to MediaWiki's Authority, in that represents the authority for a given operation
- * and is used for permission checks.
+ * and is used for permission checks. Note that the authority is associated to the current request context,
+ * and should not be used for users other than the one performing the action.
  */
 interface ICampaignsAuthority {
 	/**
@@ -29,4 +30,9 @@ interface ICampaignsAuthority {
 	 * @return string
 	 */
 	public function getName(): string;
+
+	/**
+	 * @return int
+	 */
+	public function getLocalUserID(): int;
 }
