@@ -19,4 +19,8 @@ describe( 'MyEvents', function () {
 		assert.deepEqual( await MyEventsPage.notification.getText(), `${await MyEventsPage.firstEvent.getText()} registration closed.` );
 	} );
 
+	it( 'can allow organizer to delete registration of first event in My Events', async function () {
+		await MyEventsPage.deleteRegistration();
+		assert.deepEqual( `${await MyEventsPage.firstEvent.getText()} deleted.`, await MyEventsPage.notification.getText() );
+	} );
 } );
