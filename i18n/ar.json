@@ -16,6 +16,7 @@
 	"right-campaignevents-enable-registration": "تفعيل تسجيل الفعاليات",
 	"action-campaignevents-delete-registration": "حذف تسجيلات في الفعالية",
 	"right-campaignevents-delete-registration": "حذف تسجيلات في الفعالية",
+	"specialpages-group-campaignevents": "الفعاليات",
 	"campaignevents-error-invalid-id": "معرِّف الفعالية يجب أن يكون عددًا صحيحًا موجبًا.",
 	"campaignevents-error-empty-title": "أدخل عنوان صفحة الفعالية.",
 	"campaignevents-error-invalid-title": "عنوان صفحة الفعالية خاطئ: $1.",
