@@ -1,11 +1,13 @@
 'use strict';
 
 const { action, assert, REST, clientFactory, utils } = require( 'api-testing' );
+const EventUtils = require( './EventUtils.js' );
 
-describe( 'POST /campaignevents/v0/event_registration', () => {
+describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
+	// Note that the event ID must be specified when using these clients
 	let anonClient, organizerClient, blockedUserClient,
 		anonToken, organizerToken, blockedUserToken,
-		eventPage;
+		eventPage, eventID;
 
 	before( async () => {
 		const organizerUser = await action.root();
@@ -14,20 +16,25 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 		const anonUser = action.getAnon();
 		anonToken = await anonUser.token();
 
-		const blockedUser = await action.user( 'Blocked' );
-		await organizerUser.action( 'block', {
-			user: blockedUser.username,
-			reason: 'Test block',
-			token: organizerToken
-		}, 'POST' );
+		const blockedUser = await EventUtils.getBlockedUser();
 		blockedUserToken = await blockedUser.token();
-
-		anonClient = new REST( 'rest.php/campaignevents/v0/event_registration' );
-		organizerClient = clientFactory.getRESTClient( 'rest.php/campaignevents/v0/event_registration', organizerUser );
-		blockedUserClient = clientFactory.getRESTClient( 'rest.php/campaignevents/v0/event_registration', blockedUser );
 
 		eventPage = utils.title( 'Event:Event page ' );
 		await organizerUser.edit( eventPage, {} );
+		const creationBody = getBody( organizerToken );
+		creationBody.meeting_url = 'https://example.org';
+		delete creationBody.status;
+		eventID = await EventUtils.enableRegistration( organizerUser, creationBody );
+
+		anonClient = new REST( 'rest.php/campaignevents/v0/event_registration/' );
+		organizerClient = clientFactory.getRESTClient(
+			'rest.php/campaignevents/v0/event_registration/',
+			organizerUser
+		);
+		blockedUserClient = clientFactory.getRESTClient(
+			'rest.php/campaignevents/v0/event_registration/',
+			blockedUser
+		);
 	} );
 
 	function getBody( token ) {
@@ -38,6 +45,7 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 			start_time: '30200220200220',
 			end_time: '30200220200222',
 			type: 'generic',
+			status: 'open',
 			online_meeting: true,
 			token: token
 		};
@@ -45,7 +53,7 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 
 	describe( 'permission error', () => {
 		it( 'fails session check for anonymous users', async () => {
-			const { body: sourceBody } = await anonClient.post( '', getBody( anonToken ) );
+			const { body: sourceBody } = await anonClient.put( eventID, getBody( anonToken ) );
 			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
 			assert.property( sourceBody, 'messageTranslations' );
@@ -53,7 +61,10 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
 		} );
 		it( 'fails for a blocked user', async () => {
-			const { body: sourceBody } = await blockedUserClient.post( '', getBody( blockedUserToken ) );
+			const { body: sourceBody } = await blockedUserClient.put(
+				eventID,
+				getBody( blockedUserToken )
+			);
 			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.property( sourceBody, 'messageTranslations' );
 			assert.property( sourceBody.messageTranslations, 'en' );
@@ -63,20 +74,32 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 
 	describe( 'param validation', () => {
 		it( 'fails if no parameters were given', async () => {
-			const { body: sourceBody } = await organizerClient.post( '' );
+			const { body: sourceBody } = await organizerClient.put( eventID );
 			assert.strictEqual( sourceBody.httpCode, 400 );
 			assert.property( sourceBody, 'messageTranslations' );
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'Mandatory field' );
 		} );
+		it( 'cannot be used to create a new event', async () => {
+			const nonExistentEventID = eventID + 1000;
+			const { body: sourceBody } = await organizerClient.put(
+				nonExistentEventID,
+				getBody( organizerToken )
+			);
+			assert.strictEqual( sourceBody.httpCode, 404 );
+			assert.property( sourceBody, 'messageTranslations' );
+			assert.property( sourceBody.messageTranslations, 'en' );
+			assert.include( sourceBody.messageTranslations.en, 'There is no event with this ID' );
+		} );
 	} );
 
 	describe( 'successful', () => {
 		it( 'succeeds for an authorized user if the request body is valid', async () => {
-			const { status: statusCode, body: sourceBody } = await organizerClient.post( '', getBody( organizerToken ) );
-			assert.strictEqual( statusCode, 201 );
-			assert.property( sourceBody, 'id' );
-			assert.isNumber( sourceBody.id );
+			const { status: statusCode } = await organizerClient.put(
+				eventID,
+				getBody( organizerToken )
+			);
+			assert.strictEqual( statusCode, 204 );
 		} );
 	} );
 } );
