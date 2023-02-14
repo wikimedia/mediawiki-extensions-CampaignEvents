@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use ApiMessage;
 use DateTimeZone;
 use FormSpecialPage;
 use Html;
@@ -13,7 +14,11 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserTimeCorrection;
@@ -22,6 +27,7 @@ use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
 use OOUI\Tag;
+use RuntimeException;
 use Status;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
@@ -38,11 +44,19 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private $editEventCommand;
 	/** @var PolicyMessagesLookup */
 	private PolicyMessagesLookup $policyMessagesLookup;
+	/** @var OrganizersStore */
+	private OrganizersStore $organizersStore;
+	/** @var PermissionChecker */
+	protected PermissionChecker $permissionChecker;
+	/** @var CampaignsCentralUserLookup */
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/** @var int|null */
 	protected $eventID;
 	/** @var EventRegistration|null */
 	protected $event;
+	/** @var MWAuthorityProxy */
+	protected $performer;
 
 	/**
 	 * @var string|null Prefixedtext of the event page, set upon form submission and guaranteed to be
@@ -57,6 +71,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @param EventFactory $eventFactory
 	 * @param EditEventCommand $editEventCommand
 	 * @param PolicyMessagesLookup $policyMessagesLookup
+	 * @param OrganizersStore $organizersStore
+	 * @param PermissionChecker $permissionChecker
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		string $name,
@@ -64,7 +81,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
 		EditEventCommand $editEventCommand,
-		PolicyMessagesLookup $policyMessagesLookup
+		PolicyMessagesLookup $policyMessagesLookup,
+		OrganizersStore $organizersStore,
+		PermissionChecker $permissionChecker,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -72,6 +92,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->editEventCommand = $editEventCommand;
 		$this->policyMessagesLookup = $policyMessagesLookup;
 		$this->formMessages = $this->getFormMessages();
+		$this->organizersStore = $organizersStore;
+		$this->permissionChecker = $permissionChecker;
+		$this->centralUserLookup = $centralUserLookup;
+		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 	}
 
 	/**
@@ -81,7 +105,32 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->requireLogin();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 		$this->getOutput()->addModules( [
-			'ext.campaignEvents.editeventregistration'
+			'ext.campaignEvents.editeventregistration',
+		] );
+
+		if ( $this->eventID ) {
+			$eventCreator = $this->organizersStore->getEventCreator(
+				$this->eventID,
+				OrganizersStore::GET_CREATOR_INCLUDE_DELETED
+			);
+			if ( !$eventCreator ) {
+				throw new RuntimeException( "Did not find event creator." );
+			}
+
+			$eventCreatorUsername = $this->centralUserLookup->getUserName( $eventCreator->getUser() );
+			$performerUserName = $this->performer->getUserIdentity()->getName();
+			$isEventCreator = $performerUserName === $eventCreatorUsername;
+		} else {
+			$isEventCreator = true;
+			$eventCreatorUsername = $this->performer->getUserIdentity()->getName();
+		}
+		$this->getOutput()->addJsConfigVars( [
+			'wgCampaignEventsIsEventCreator' => $isEventCreator,
+			'wgCampaignEventsEventCreatorUsername' => $eventCreatorUsername,
+			'wgCampaignEventsEventID' => $this->eventID,
+			'wgCampaignEventsEnableMultipleOrganizers' => $this->getConfig()->get(
+				'CampaignEventsEnableMultipleOrganizers'
+			)
 		] );
 
 		parent::execute( $par );
@@ -173,6 +222,34 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'required' => true,
 			'cssclass' => $timeFieldClasses,
 		];
+
+		if ( $this->getConfig()->get( 'CampaignEventsEnableMultipleOrganizers' ) ) {
+			$formFields['EventOrganizerUsernames'] = [
+				'type' => 'usersmultiselect',
+				'label-message' => 'campaignevents-edit-field-organizers',
+				'default' => implode( "\n", $this->getOrganizerUsernames() ),
+				'exists' => true,
+				'help-message' => 'campaignevents-edit-field-organizers-help',
+				'max' => EditEventCommand::MAX_ORGANIZERS_PER_EVENT,
+				'min' => 1,
+				'cssclass' => 'ext-campaignevents-organizers-multiselect-input',
+				'placeholder' => $this->msg( 'campaignevents-edit-field-organizers-placeholder' )->text(),
+				'validation-callback' => function ( $value, $alldata ) {
+					$organizers = $alldata['EventOrganizerUsernames'] !== ''
+						? explode( "\n", $alldata['EventOrganizerUsernames'] )
+						: [];
+					$validationStatus = $this->editEventCommand->validateOrganizers( $organizers );
+
+					if ( !$validationStatus->isGood() ) {
+						$error = $validationStatus->getErrors()[0];
+						$errorApiMsg = ApiMessage::create( $error );
+						return $this->msg( $errorApiMsg->getKey(), ...$errorApiMsg->getParams() )->text();
+					}
+
+					return true;
+				},
+			];
+		}
 
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
@@ -307,11 +384,45 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		$this->eventPagePrefixedText = $event->getPage()->getPrefixedText();
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		$organizerUsernames = [
-			$performer->getUserIdentity()->getName()
-		];
+		if ( $this->getConfig()->get( 'CampaignEventsEnableMultipleOrganizers' ) ) {
+			$organizerUsernames = $data[ 'EventOrganizerUsernames' ]
+				? explode( "\n", $data[ 'EventOrganizerUsernames' ] )
+				: [];
+		} else {
+			$organizerUsernames = [ $performer->getUserIdentity()->getName() ];
+		}
 
-		return Status::wrap( $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizerUsernames ) );
+		return Status::wrap( $this->editEventCommand->doEditIfAllowed(
+				$event,
+				$this->performer,
+				$organizerUsernames
+			)
+		);
+	}
+
+	/**
+	 * @return array of usernames
+	 */
+	private function getOrganizerUsernames(): array {
+		if ( !$this->eventID ) {
+			return [ $this->performer->getUserIdentity()->getName() ];
+		}
+		$organizerUserNames = [];
+		$organizers = $this->organizersStore->getEventOrganizers(
+			$this->eventID,
+			EditEventCommand::MAX_ORGANIZERS_PER_EVENT
+		);
+		foreach ( $organizers as $organizer ) {
+			$user = $organizer->getUser();
+			try {
+				$organizerUserNames[] = $this->centralUserLookup->getUserName( $user );
+			} catch ( UserNotGlobalException $_ ) {
+				// Should never happen.
+				throw new RuntimeException( "Organizer in the database has no central account." );
+			}
+		}
+
+		return $organizerUserNames;
 	}
 
 	/**

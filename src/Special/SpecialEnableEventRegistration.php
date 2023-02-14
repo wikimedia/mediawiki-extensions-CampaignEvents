@@ -7,6 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 
@@ -18,12 +20,18 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 	 * @param EventFactory $eventFactory
 	 * @param EditEventCommand $editEventCommand
 	 * @param PolicyMessagesLookup $policyMessagesLookup
+	 * @param OrganizersStore $organizersStore
+	 * @param PermissionChecker $permissionChecker
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
 		EditEventCommand $editEventCommand,
-		PolicyMessagesLookup $policyMessagesLookup
+		PolicyMessagesLookup $policyMessagesLookup,
+		OrganizersStore $organizersStore,
+		PermissionChecker $permissionChecker,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -31,7 +39,10 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 			$eventLookup,
 			$eventFactory,
 			$editEventCommand,
-			$policyMessagesLookup
+			$policyMessagesLookup,
+			$organizersStore,
+			$permissionChecker,
+			$centralUserLookup
 		);
 	}
 

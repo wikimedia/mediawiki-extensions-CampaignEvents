@@ -9,7 +9,9 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use WikiMap;
@@ -17,22 +19,23 @@ use WikiMap;
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EditEventRegistration';
 
-	/** @var PermissionChecker */
-	private $permissionChecker;
-
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param EventFactory $eventFactory
 	 * @param EditEventCommand $editEventCommand
 	 * @param PermissionChecker $permissionChecker
 	 * @param PolicyMessagesLookup $policyMessagesLookup
+	 * @param OrganizersStore $organizersStore
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
 		EditEventCommand $editEventCommand,
 		PermissionChecker $permissionChecker,
-		PolicyMessagesLookup $policyMessagesLookup
+		PolicyMessagesLookup $policyMessagesLookup,
+		OrganizersStore $organizersStore,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -40,9 +43,11 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$eventLookup,
 			$eventFactory,
 			$editEventCommand,
-			$policyMessagesLookup
+			$policyMessagesLookup,
+			$organizersStore,
+			$permissionChecker,
+			$centralUserLookup
 		);
-		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**
