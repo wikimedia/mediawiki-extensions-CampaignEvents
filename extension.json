@@ -285,7 +285,9 @@
 			"services": [
 				"CampaignEventsEventFactory",
 				"CampaignEventsPermissionChecker",
-				"CampaignEventsEditEventCommand"
+				"CampaignEventsEditEventCommand",
+				"CampaignEventsOrganizersStore",
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		{
@@ -331,6 +333,8 @@
 				"CampaignEventsEventFactory",
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsEditEventCommand",
+				"CampaignEventsOrganizersStore",
+				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventLookup"
 			]
 		},
@@ -344,6 +348,16 @@
 				"CampaignEventsRoleFormatter",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsUserLinker"
+			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/organizers",
+			"method": "PUT",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\SetOrganizersHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsEditEventCommand",
+				"MainConfig"
 			]
 		},
 		{

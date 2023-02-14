@@ -10,7 +10,9 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -28,15 +30,25 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @param EventFactory $eventFactory
 	 * @param PermissionChecker $permissionChecker
 	 * @param EditEventCommand $editEventCommand
+	 * @param OrganizersStore $organizersStore
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param IEventLookup $eventLookup
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
 		EditEventCommand $editEventCommand,
+		OrganizersStore $organizersStore,
+		CampaignsCentralUserLookup $centralUserLookup,
 		IEventLookup $eventLookup
 	) {
-		parent::__construct( $eventFactory, $permissionChecker, $editEventCommand );
+		parent::__construct(
+			$eventFactory,
+			$permissionChecker,
+			$editEventCommand,
+			$organizersStore,
+			$centralUserLookup
+		);
 		$this->eventLookup = $eventLookup;
 	}
 

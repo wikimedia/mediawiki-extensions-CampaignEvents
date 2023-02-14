@@ -269,5 +269,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Section header of the email notification sent to confirm that the user registered for an event.",
 	"campaignevents-notification-registration-details-organizers-more": "Message used in the email notification sent to confirm that the user registered for an event. This message is used as the last item of a comma-separated list of usernames, when there are more users than can be shown. The full sentence could be something like \"User1, User2, User3 and 3 more\".\nParameters:\n* $1 - Number of users not included in the list.",
 	"campaignevents-notification-registration-event-page-link": "Primary link of the email notification sent to confirm that the user registered for an event. By clicking the link, the user can visit the event page.",
-	"campaignevents-notification-registration-chat-link": "Secondary link of the email notification sent to confirm that the user registered for an event. By clicking the link, the user can join the group chat of event participants and organizers."
+	"campaignevents-notification-registration-chat-link": "Secondary link of the email notification sent to confirm that the user registered for an event. By clicking the link, the user can join the group chat of event participants and organizers.",
+	"campaignevents-rest-set-organizers-empty-list": "{{doc-important|Do not translate \"organizer_usernames\".}}\nError message returned by the API if the <code>organizer_usernames</code> field is empty."
 }
