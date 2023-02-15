@@ -24,6 +24,7 @@ use User;
 
 class RegistrationNotificationPresentationModel extends EchoEventPresentationModel {
 	public const NOTIFICATION_NAME = 'campaign-events-notification-registration-confirmation';
+	public const ICON_NAME = 'campaignevents-registration';
 
 	private const ORGANIZERS_LIMIT = 4;
 
@@ -78,8 +79,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 	 * @inheritDoc
 	 */
 	public function getIconType(): string {
-		// TODO Find an appropriate icon (T317231#8406175)
-		return 'placeholder';
+		return self::ICON_NAME;
 	}
 
 	/**

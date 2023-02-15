@@ -45,5 +45,8 @@ class EchoHooksHandler {
 				]
 			],
 		];
+
+		$icons[RegistrationNotificationPresentationModel::ICON_NAME]['path'] =
+			'CampaignEvents/resources/icons/calendar.svg';
 	}
 }
