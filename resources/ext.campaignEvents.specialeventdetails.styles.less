@@ -6,8 +6,7 @@
 }
 
 .ext-campaignevents-event-details-participants-panel {
-	width: 34.5em;
-	max-width: 100%;
+	max-width: 60em;
 }
 
 // Increase specificity to enforce the margin.
@@ -74,7 +73,7 @@ span.ext-campaignevents-event-details-participants-private-icon {
 
 .ext-campaignevents-details-users-container {
 	/* Set a fixed height so that it does not change while we rebuild the list */
-	height: 30em;
+	height: 36em;
 	overflow: auto;
 }
 
@@ -116,15 +115,17 @@ span.ext-campaignevents-event-details-participants-private-icon {
 }
 
 .ext-campaignevents-details-participants-header {
-	padding: 0.5em 1em 0.5em 1em;
-	font-size: 2em;
+	padding: 0.75em 1.5em 0.75em 1.5em;
+	background: @colorGray14;
+}
+
+.ext-campaignevents-details-participants-header-text {
+	font-size: 1.5em;
 	font-weight: bold;
-	background: @colorGray15;
 }
 
 .ext-campaignevents-details-participants-search-container {
-	padding: 0.5em 1em 1.5em 1em;
-	background: @colorGray15;
+	margin-top: 0.5em;
 }
 
 div.ext-campaignevents-details-participants-search {
@@ -142,7 +143,7 @@ div.ext-campaignevents-details-participants-search {
 .ext-campaignevents-details-user-row {
 	display: flex;
 	align-items: center;
-	padding: 1.5em 1em 1.5em 1em;
+	padding: 1em;
 	background: @colorGray15;
 	border-bottom: 2px solid @color-base--inverted;
 }
