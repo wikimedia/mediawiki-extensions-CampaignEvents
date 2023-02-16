@@ -9,12 +9,11 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\HttpException;
-use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Rest\Validator\Validator;
 
 class CancelEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
@@ -25,22 +24,25 @@ class CancelEventRegistrationHandler extends SimpleHandler {
 	private $eventLookup;
 	/** @var UnregisterParticipantCommand */
 	private $unregisterParticipantCommand;
-	/** @var UserFactory */
-	private $userFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
-	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		UnregisterParticipantCommand $unregisterParticipantCommand,
-		UserFactory $userFactory
+		UnregisterParticipantCommand $unregisterParticipantCommand
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
-		$this->userFactory = $userFactory;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function validate( Validator $restValidator ): void {
+		parent::validate( $restValidator );
+		$this->validateToken();
 	}
 
 	/**
@@ -48,14 +50,6 @@ class CancelEventRegistrationHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		$token = $this->getToken();
-		if (
-			$token !== null &&
-			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
-		) {
-			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
-		}
-
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$status = $this->unregisterParticipantCommand->unregisterIfAllowed( $eventRegistration, $performer );

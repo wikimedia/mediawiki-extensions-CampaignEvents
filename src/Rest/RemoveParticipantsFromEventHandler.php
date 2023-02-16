@@ -15,7 +15,7 @@ use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Rest\Validator\Validator;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
@@ -28,22 +28,25 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 	private $eventLookup;
 	/** @var UnregisterParticipantCommand */
 	private $unregisterParticipantCommand;
-	/** @var UserFactory */
-	private $userFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
-	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		UnregisterParticipantCommand $unregisterParticipantCommand,
-		UserFactory $userFactory
+		UnregisterParticipantCommand $unregisterParticipantCommand
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
-		$this->userFactory = $userFactory;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function validate( Validator $restValidator ): void {
+		parent::validate( $restValidator );
+		$this->validateToken();
 	}
 
 	/**
@@ -52,14 +55,6 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 	 */
 	protected function run( int $eventID ): Response {
 		$body = $this->getValidatedBody();
-
-		$token = $this->getToken();
-		if (
-			$token !== null &&
-			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
-		) {
-			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
-		}
 
 		if ( is_array( $body[ 'user_ids' ] ) && !$body[ 'user_ids' ] ) {
 			throw new LocalizedHttpException(
@@ -128,7 +123,7 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 					ParamValidator::PARAM_DEFAULT => false,
 					ParamValidator::PARAM_TYPE => 'boolean',
 				],
-			]
+			] + $this->getTokenParamDefinition()
 		);
 	}
 }

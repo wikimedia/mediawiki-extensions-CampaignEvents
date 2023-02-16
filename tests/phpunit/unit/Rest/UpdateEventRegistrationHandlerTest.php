@@ -22,7 +22,7 @@ use MediaWiki\Extension\CampaignEvents\Rest\UpdateEventRegistrationHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Session\Session;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -51,14 +51,12 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 * @param EventFactory|null $eventFactory
 	 * @param EditEventCommand|null $editEventCmd
 	 * @param IEventLookup|null $eventLookup
-	 * @param UserFactory|null $userFactory
 	 * @return UpdateEventRegistrationHandler
 	 */
 	protected function newHandler(
 		EventFactory $eventFactory = null,
 		EditEventCommand $editEventCmd = null,
-		IEventLookup $eventLookup = null,
-		UserFactory $userFactory = null
+		IEventLookup $eventLookup = null
 	): UpdateEventRegistrationHandler {
 		if ( !$eventLookup ) {
 			// Ensure that the wiki ID of the event page is not null, otherwise it will be passed to
@@ -78,7 +76,6 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 				$this->createMock( CampaignsCentralUserLookup::class )
 			),
 			$editEventCmd ?? $this->getMockEditEventCommand(),
-			$userFactory ?? $this->getUserFactory( true ),
 			$eventLookup
 		);
 	}
@@ -99,17 +96,17 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 204, $respData->getStatusCode() );
 	}
 
-	public function testExecute__badToken() {
-		$handler = $this->newHandler( null, null, null, $this->getUserFactory( false ) );
-		$request = new RequestData( $this->getRequestData() );
-
-		try {
-			$this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
-			$this->fail( 'No exception thrown' );
-		} catch ( LocalizedHttpException $e ) {
-			$this->assertSame( 400, $e->getCode() );
-			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
-		}
+	/**
+	 * @dataProvider provideBadTokenSessions
+	 */
+	public function testExecute__badToken( Session $session, string $excepMsg, ?string $token ) {
+		$this->assertCorrectBadTokenBehaviour(
+			$this->newHandler(),
+			$this->getRequestData(),
+			$session,
+			$token,
+			$excepMsg
+		);
 	}
 
 	public function testExecute__nonexistingEvent(): void {

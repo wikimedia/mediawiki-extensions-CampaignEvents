@@ -12,8 +12,8 @@ use MediaWiki\Extension\CampaignEvents\Rest\RegisterForEventHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
+use MediaWiki\Session\Session;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
-use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -37,8 +37,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 
 	private function newHandler(
 		RegisterParticipantCommand $registerCommand = null,
-		IEventLookup $eventLookup = null,
-		UserFactory $userFactory = null
+		IEventLookup $eventLookup = null
 	): RegisterForEventHandler {
 		if ( !$registerCommand ) {
 			$registerCommand = $this->createMock( RegisterParticipantCommand::class );
@@ -46,21 +45,21 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		}
 		return new RegisterForEventHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$registerCommand,
-			$userFactory ?? $this->getUserFactory( true )
+			$registerCommand
 		);
 	}
 
-	public function testRun__badToken() {
-		$handler = $this->newHandler( null, null, $this->getUserFactory( false ) );
-
-		try {
-			$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
-			$this->fail( 'No exception thrown' );
-		} catch ( LocalizedHttpException $e ) {
-			$this->assertSame( 400, $e->getCode() );
-			$this->assertStringContainsString( 'badtoken', $e->getMessageValue()->getKey() );
-		}
+	/**
+	 * @dataProvider provideBadTokenSessions
+	 */
+	public function testRun__badToken( Session $session, string $excepMsg, ?string $token ) {
+		$this->assertCorrectBadTokenBehaviour(
+			$this->newHandler(),
+			$this->getRequestData(),
+			$session,
+			$token,
+			$excepMsg
+		);
 	}
 
 	/**

@@ -14,7 +14,7 @@ use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Rest\Validator\Validator;
 use Wikimedia\Message\MessageValue;
 
 class DeleteEventRegistrationHandler extends SimpleHandler {
@@ -26,22 +26,25 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	private $eventLookup;
 	/** @var DeleteEventCommand */
 	private $deleteEventCommand;
-	/** @var UserFactory */
-	protected $userFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param DeleteEventCommand $deleteEventCommand
-	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		DeleteEventCommand $deleteEventCommand,
-		UserFactory $userFactory
+		DeleteEventCommand $deleteEventCommand
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->deleteEventCommand = $deleteEventCommand;
-		$this->userFactory = $userFactory;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function validate( Validator $restValidator ): void {
+		parent::validate( $restValidator );
+		$this->validateToken();
 	}
 
 	/**
@@ -49,14 +52,6 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	public function run( int $id ): Response {
-		$token = $this->getToken();
-		if (
-			$token !== null &&
-			!$this->userFactory->newFromAuthority( $this->getAuthority() )->matchEditToken( $token )
-		) {
-			throw new LocalizedHttpException( $this->getBadTokenMessage(), 400 );
-		}
-
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $id );
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			throw new LocalizedHttpException(
