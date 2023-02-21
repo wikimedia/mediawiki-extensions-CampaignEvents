@@ -206,7 +206,7 @@
 	"campaignevents-unregister-participants-permission-denied": "Nimate dovoljenja za odstranitev udeležencev",
 	"campaignevents-unregister-participants-registration-deleted": "Iz tega dogodka ne morete odstraniti udeležencev, ker je bil izbrisan.",
 	"campaignevents-event-details-remove-participant-notification-error": "Pri poskusu odstranitve {{PLURAL:$1|udeleženca|udeležencev}} je prišlo do napake",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter »user_ids« mora biti polje ID-jev uporabnikov ali prazno (za odstranitev vseh uporabnikov)",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter »user_ids« mora biti matrika identifikatorjev uporabnikov ali prazen (za odstranitev vseh uporabnikov)",
 	"campaignevents-event-details-search-participants-placeholder": "Poišči udeležence",
 	"campaignevents-rest-list-participants-empty-filter": "Filter uporabniških imen, če je določen, mora biti neprazen niz."
 }

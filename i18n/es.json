@@ -2,7 +2,10 @@
 	"@metadata": {
 		"authors": [
 			"DarkGames26",
-			"MarcoAurelio"
+			"MarcoAurelio",
+			"Fitoschido",
+			"JDíaz32",
+			"SpikeShroom"
 		]
 	},
 	"campaignevents-desc": "Proporciona características para los organizadores de campañas y sus participantes.",
@@ -84,14 +87,16 @@
 	"campaignevents-rest-delete-already-deleted": "Las inscripciones para este evento ya han sido borradas.",
 	"campaignevents-role-creator": "{{GENDER:$1|creador|creadora}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organizador|organizadora}}",
-	"campaignevents-rest-user-not-found": "El usuario «$1» no existe.",
+	"campaignevents-rest-user-not-found": "No existe ningún usuario con ese código.",
 	"campaignevents-register-not-allowed": "No se te permite inscribirte a eventos.",
 	"campaignevents-register-event-past": "El plazo para inscribirse a este evento ha finalizado.",
 	"campaignevents-register-event-not-open": "Las inscripciones para este evento están cerradas.",
 	"campaignevents-register-already-participant": "Ya estás inscrito para este evento.",
+	"campaignevents-register-need-central-account": "Necesitas una cuenta global para inscribirte en eventos.",
 	"campaignevents-unregister-not-allowed": "No puedes cancelar tu propia inscripción.",
 	"campaignevents-unregister-event-past": "El plazo para inscribirse a este evento ha finalizado.",
 	"campaignevents-unregister-not-participant": "No estás inscrito para este evento.",
+	"campaignevents-unregister-need-central-account": "Necesitas una cuenta global para cancelar tu inscripción en el evento.",
 	"myevents": "Mis eventos",
 	"campaignevents-myevents-filter-legend": "Filtrar eventos",
 	"campaignevents-myevents-label-search": "Buscar",
@@ -143,6 +148,7 @@
 	"campaignevents-eventpage-header-attending": "¡Asistes!",
 	"campaignevents-eventpage-btn-manage": "Gestionar evento",
 	"campaignevents-eventpage-btn-register": "Registrarse para el evento",
+	"campaignevents-eventpage-btn-registration-closed": "Inscripciones cerradas",
 	"campaignevents-eventpage-btn-event-ended": "Evento finalizado",
 	"campaignevents-eventpage-dialog-title": "Detalles del evento",
 	"campaignevents-eventpage-dialog-organizers": "Organizado por: $1",
