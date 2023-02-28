@@ -3,7 +3,7 @@
 const Page = require( 'wdio-mediawiki/Page' ),
 	Api = require( 'wdio-mediawiki/Api' );
 
-class EnableEventRegistrationPage extends Page {
+class EventRegistrationPage extends Page {
 
 	constructor() {
 		super();
@@ -18,6 +18,7 @@ class EnableEventRegistrationPage extends Page {
 		};
 	}
 
+	get editRegistration() { return $( '[value="Edit registration"]' ); }
 	get enableRegistration() { return $( '[value="Enable registration"]' ); }
 	get eventPage() { return $( '[name="wpEventPage"]' ); }
 	get generalError() { return $( '[role=alert]' ); }
@@ -68,6 +69,32 @@ class EnableEventRegistrationPage extends Page {
 		await this.loseFocus();
 		await this.enableRegistration.click();
 	}
+
+	/**
+	 * Edit an event.
+	 *
+	 * Pass in an an event, start date and end date, and an event will be created
+	 *
+	 * @param {number} id id of the event to be edited
+	 * example: 22
+	 * @param {string} event a namespaced string beginning with 'Event:'
+	 * example: 'Event:Test'
+	 * @param {Object} start the day and year to start the event
+	 * example: {day: 15, year: 2023}
+	 * @param {Object} end the day and year to end the event
+	 * example: {day: 15, year: 2024}
+	 */
+	async editEvent( { id, event, start = this.startDefault, end = this.endDefault } ) {
+		super.openTitle( `Special:EditEventRegistration/${id}` );
+		if ( event ) {
+			await this.eventPage.setValue( event );
+		}
+		await this.startYearInput.setValue( ( start.year ).toString() );
+		await this.startDateInput.setValue( ( start.day ).toString() );
+		await this.endDateInput.setValue( ( end.day ).toString() );
+		await this.endYearInput.setValue( ( end.year ).toString() );
+		await this.editRegistration.click();
+	}
 }
 
-module.exports = new EnableEventRegistrationPage();
+module.exports = new EventRegistrationPage();

@@ -1,17 +1,17 @@
 'use strict';
 
 const assert = require( 'assert' ),
-	EnableEventRegistrationPage = require( '../pageobjects/enableEventRegistration.page' ),
+	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	MyEventsPage = require( '../pageobjects/myEvents.page' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
 	Rest = require( '../pageobjects/rest.page' ),
-	event = EnableEventRegistrationPage.getTestString( 'Event:e2e' );
+	event = EventRegistrationPage.getTestString( 'Event:e2e' );
 
 describe( 'MyEvents', function () {
 
 	before( async function () {
 		await LoginPage.loginAdmin();
-		await EnableEventRegistrationPage.createEvent( event );
+		await EventRegistrationPage.createEvent( event );
 		await Rest.enableEvent( event );
 	} );
 
