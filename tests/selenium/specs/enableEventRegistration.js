@@ -4,6 +4,7 @@ const assert = require( 'assert' ),
 	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	UserPage = require( '../pageobjects/user.page' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
+	Rest = require( '../pageobjects/rest.page' ),
 	event = EventRegistrationPage.getTestString( 'Event:e2e' ),
 	userName = EventRegistrationPage.getTestString();
 
@@ -34,7 +35,7 @@ describe( 'Enable Event Registration', function () {
 
 	it( 'can have one user register publicly', async function () {
 		await EventRegistrationPage.createEvent( event );
-		await EventRegistrationPage.enableEvent( event );
+		await Rest.enableEvent( event );
 		await UserPage.createAccount( userName );
 		await UserPage.register( userName, event );
 		await expect( await EventRegistrationPage.successfulRegistration ).toBeDisplayed();
@@ -42,7 +43,7 @@ describe( 'Enable Event Registration', function () {
 
 	it( 'can have one user register privately', async function () {
 		await EventRegistrationPage.createEvent( event );
-		await EventRegistrationPage.enableEvent( event );
+		await Rest.enableEvent( event );
 		await UserPage.createAccount( 'Private' + userName );
 		await UserPage.register( 'Private' + userName, event, true );
 		await expect( await EventRegistrationPage.successfulRegistration ).toBeDisplayed();
@@ -50,7 +51,7 @@ describe( 'Enable Event Registration', function () {
 
 	it( 'can have a user cancel registration', async function () {
 		await EventRegistrationPage.createEvent( event );
-		await EventRegistrationPage.enableEvent( event );
+		await Rest.enableEvent( event );
 		await UserPage.createAccount( 'TestCancel' + userName );
 		await UserPage.register( 'TestCancel' + userName, event );
 		await UserPage.cancelRegistration();
