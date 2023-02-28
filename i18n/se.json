@@ -1,14 +1,17 @@
 {
 	"@metadata": {
 		"authors": [
-			"Yupik"
+			"Yupik",
+			"Kimberli Mäkäräinen (WMNO)"
 		]
 	},
 	"campaignevents-edit-field-address": "Čujuhus",
 	"campaignevents-myevents-label-search": "Oza",
 	"campaignevents-eventslist-menu-delete": "Sihko dáhpáhusa",
+	"campaignevents-eventslist-delete-dialog-cancel": "Šluhtte",
 	"campaignevents-eventslist-delete-dialog-delete": "Sihko",
 	"campaignevents-delete-submit-btn": "Sihko",
 	"campaignevents-event-details-edit-button": "Rievdat",
-	"campaignevents-event-details-remove-participant-remove-btn": "Sihko"
+	"campaignevents-event-details-remove-participant-remove-btn": "Sihko",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Šluhtte"
 }
