@@ -261,12 +261,20 @@
 			"localBasePath": "resources/ext.campaignEvents.editeventregistration",
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.editeventregistration",
 			"packageFiles": [
-				"index.js"
+				"index.js",
+				"OrganizerSelectionFieldEnhancer.js"
 			],
 			"dependencies": [
-				"mediawiki.widgets.datetime"
+				"mediawiki.widgets.datetime",
+				"mediawiki.widgets.UsersMultiselectWidget"
 			],
-			"targets": [ "desktop", "mobile" ]
+			"targets": [ "desktop", "mobile" ],
+			"messages": [
+				"campaignevents-edit-organizers-not-allowed",
+				"campaignevents-edit-no-organizers",
+				"campaignevents-edit-field-organizers-creator-title",
+				"campaignevents-edit-field-organizers-user-not-allowed"
+			]
 		},
 		"ext.campaignEvents.specialregisterforevent.styles": {
 			"localBasePath": "resources/ext.campaignEvents.specialregisterforevent.styles",
@@ -396,7 +404,10 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsEventFactory",
 				"CampaignEventsEditEventCommand",
-				"CampaignEventsPolicyMessagesLookup"
+				"CampaignEventsPolicyMessagesLookup",
+				"CampaignEventsOrganizersStore",
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		"EditEventRegistration": {
@@ -406,7 +417,9 @@
 				"CampaignEventsEventFactory",
 				"CampaignEventsEditEventCommand",
 				"CampaignEventsPermissionChecker",
-				"CampaignEventsPolicyMessagesLookup"
+				"CampaignEventsPolicyMessagesLookup",
+				"CampaignEventsOrganizersStore",
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		"DeleteEventRegistration": {
