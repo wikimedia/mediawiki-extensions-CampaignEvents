@@ -28,7 +28,7 @@ class RoleFormatterTest extends MediaWikiUnitTestCase {
 		$allRoles = [];
 		$rolesRefl = new ReflectionClass( Roles::class );
 		foreach ( $rolesRefl->getConstants() as $name => $val ) {
-			if ( str_starts_with( $name, 'ROLE_' ) ) {
+			if ( str_starts_with( $name, 'ROLE_' ) && $val !== Roles::ROLE_TEST ) {
 				$allRoles[] = $val;
 			}
 		}

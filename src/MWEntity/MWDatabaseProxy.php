@@ -163,4 +163,11 @@ class MWDatabaseProxy implements ICampaignsDatabase {
 	public function getMWDatabase(): IDatabase {
 		return $this->db;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function bitAnd( $fieldLeft, $fieldRight ): string {
+		return $this->db->bitAnd( $fieldLeft, $fieldRight );
+	}
 }

@@ -6,7 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Organizers;
 
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiUnitTestCase;
@@ -20,9 +20,11 @@ use Wikimedia\TestingAccessWrapper;
  */
 class OrganizersStoreTest extends MediaWikiUnitTestCase {
 	private function getOrganizersStore(): OrganizersStore {
-		return new OrganizersStore(
-			$this->createMock( CampaignsDatabaseHelper::class )
-		);
+		$db = $this->createMock( ICampaignsDatabase::class );
+		$db->method( 'selectRow' )->willReturn( (object)[ 'ceo_id' => 1, 'ceo_user_id' => 1, 'ceo_roles' => 1 ] );
+		$dbHelper = $this->createMock( CampaignsDatabaseHelper::class );
+		$dbHelper->method( 'getDBConnection' )->willReturn( $db );
+		return new OrganizersStore( $dbHelper );
 	}
 
 	/**
@@ -32,7 +34,17 @@ class OrganizersStoreTest extends MediaWikiUnitTestCase {
 		$store = $this->getOrganizersStore();
 
 		$this->expectException( InvalidArgumentException::class );
-		$store->addOrganizerToEvent( 1, new CentralUser( 1 ), [ 'SOME-INVALID-ROLE' ] );
+		$store->addOrganizerToEvent( 1, 1, [ 'SOME-INVALID-ROLE' ] );
+	}
+
+	/**
+	 * @covers ::addOrganizersToEvent
+	 */
+	public function testAddOrganizersToEvent__invalidRole() {
+		$store = $this->getOrganizersStore();
+
+		$this->expectException( InvalidArgumentException::class );
+		$store->addOrganizersToEvent( 1, [ 1 => [ 'SOME-INVALID-ROLE' ] ] );
 	}
 
 	/**

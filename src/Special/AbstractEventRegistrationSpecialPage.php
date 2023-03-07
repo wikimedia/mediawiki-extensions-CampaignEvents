@@ -307,7 +307,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		$this->eventPagePrefixedText = $event->getPage()->getPrefixedText();
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		return Status::wrap( $this->editEventCommand->doEditIfAllowed( $event, $performer ) );
+		$organizerUsernames = [
+			$performer->getUserIdentity()->getName()
+		];
+
+		return Status::wrap( $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizerUsernames ) );
 	}
 
 	/**

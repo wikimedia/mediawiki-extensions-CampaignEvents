@@ -7,13 +7,18 @@ namespace MediaWiki\Extension\CampaignEvents\Organizers;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use stdClass;
 
 class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
 
+	public const GET_CREATOR_INCLUDE_DELETED = 'include';
+	public const GET_CREATOR_EXCLUDE_DELETED = 'exclude';
+
 	private const ROLES_MAP = [
 		Roles::ROLE_CREATOR => 1 << 0,
 		Roles::ROLE_ORGANIZER => 1 << 1,
+		Roles::ROLE_TEST => 1 << 2,
 	];
 
 	/** @var CampaignsDatabaseHelper */
@@ -54,16 +59,55 @@ class OrganizersStore {
 
 		$organizers = [];
 		foreach ( $res as $row ) {
-			$dbRoles = (int)$row->ceo_roles;
-			$roles = [];
-			foreach ( self::ROLES_MAP as $role => $dbVal ) {
-				if ( $dbRoles & $dbVal ) {
-					$roles[] = $role;
-				}
-			}
-			$organizers[] = new Organizer( new CentralUser( (int)$row->ceo_user_id ), $roles, (int)$row->ceo_id );
+			$organizers[] = $this->rowToOrganizerObject( $row );
 		}
 		return $organizers;
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param string $includeDeleted One of the GET_CREATOR_* constants.
+	 * @return Organizer|null This may return null if deleted organizers are not included, and also if the event
+	 * has never had a creator (e.g., if the event doesn't exist at all).
+	 */
+	public function getEventCreator( int $eventID, string $includeDeleted ): ?Organizer {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$creatorRole = self::ROLES_MAP[Roles::ROLE_CREATOR];
+		$where = [
+			'ceo_event_id' => $eventID,
+			$dbr->bitAnd( 'ceo_roles', $creatorRole ) . " = " . $creatorRole
+		];
+
+		if ( $includeDeleted === self::GET_CREATOR_EXCLUDE_DELETED ) {
+			$where['ceo_deleted_at'] = null;
+		}
+
+		$row = $dbr->selectRow(
+			'ce_organizers',
+			'*',
+			$where,
+		);
+
+		if ( $row ) {
+			return $this->rowToOrganizerObject( $row );
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param stdClass $row
+	 * @return Organizer
+	 */
+	private function rowToOrganizerObject( stdClass $row ): Organizer {
+		$dbRoles = (int)$row->ceo_roles;
+		$roles = [];
+		foreach ( self::ROLES_MAP as $role => $dbVal ) {
+			if ( $dbRoles & $dbVal ) {
+				$roles[] = $role;
+			}
+		}
+		return new Organizer( new CentralUser( (int)$row->ceo_user_id ), $roles, (int)$row->ceo_id );
 	}
 
 	/**
@@ -106,32 +150,72 @@ class OrganizersStore {
 
 	/**
 	 * @param int $eventID
-	 * @param CentralUser $user
-	 * @param string[] $roles Roles::ROLE_* constants
+	 * @param array<int,string[]> $organizers Map of [ user ID => roles[] ]
 	 */
-	public function addOrganizerToEvent( int $eventID, CentralUser $user, array $roles ): void {
-		$dbRoles = 0;
-		foreach ( $roles as $role ) {
-			if ( !isset( self::ROLES_MAP[$role] ) ) {
-				throw new InvalidArgumentException( "Invalid role `$role`" );
-			}
-			$dbRoles |= self::ROLES_MAP[$role];
-		}
+	public function addOrganizersToEvent( int $eventID, array $organizers ): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$newRows = [];
+		$createdAt = $dbw->timestamp();
+		$eventCreator = $this->getEventCreator( $eventID, self::GET_CREATOR_INCLUDE_DELETED );
+		$eventCreatorID = $eventCreator ? $eventCreator->getUser()->getCentralID() : null;
+		foreach ( $organizers as $userID => $roles ) {
+			$dbRoles = 0;
+			foreach ( $roles as $role ) {
+				if ( !isset( self::ROLES_MAP[$role] ) ) {
+					throw new InvalidArgumentException( "Invalid role `$role`" );
+				}
+				if ( $role === Roles::ROLE_CREATOR && $eventCreatorID && $eventCreatorID !== $userID ) {
+					throw new InvalidArgumentException( "User $userID is not the event creator" );
+				}
+
+				$dbRoles |= self::ROLES_MAP[$role];
+			}
+
+			$newRows[] = [
+				'ceo_event_id' => $eventID,
+				'ceo_user_id' => $userID,
+				'ceo_roles' => $dbRoles,
+				'ceo_created_at' => $createdAt,
+			];
+		}
+
 		$dbw->upsert(
 			'ce_organizers',
-			[
-				'ceo_event_id' => $eventID,
-				'ceo_user_id' => $user->getCentralID(),
-				'ceo_roles' => $dbRoles,
-				'ceo_created_at' => $dbw->timestamp(),
-				'ceo_deleted_at' => null
-			],
+			$newRows,
 			[ [ 'ceo_event_id', 'ceo_user_id' ] ],
 			[
-				'ceo_roles' => $dbRoles,
 				'ceo_deleted_at' => null,
+				'ceo_roles = ' . $dbw->buildExcludedValue( 'ceo_roles' ),
 			]
+		);
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param int $userID
+	 * @param string[] $roles Roles::ROLE_* constants
+	 */
+	public function addOrganizerToEvent( int $eventID, int $userID, array $roles ): void {
+		$this->addOrganizersToEvent( $eventID, [ $userID => $roles ] );
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param int[] $userIDsToNotRemove
+	 */
+	public function removeOrganizersFromEventExcept( int $eventID, array $userIDsToNotRemove ): void {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+
+		$dbw->update(
+			'ce_organizers',
+			[
+				'ceo_deleted_at' => $dbw->timestamp()
+			],
+			[
+				'ceo_event_id' => $eventID,
+				'ceo_user_id NOT IN (' . $dbw->makeCommaList( $userIDsToNotRemove ) . ')',
+				'ceo_deleted_at' => null,
+			],
 		);
 	}
 }

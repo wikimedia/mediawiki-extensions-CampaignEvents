@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -15,6 +16,7 @@ class PermissionChecker {
 	public const SERVICE_NAME = 'CampaignEventsPermissionChecker';
 
 	public const ENABLE_REGISTRATIONS_RIGHT = 'campaignevents-enable-registration';
+	public const ORGANIZE_EVENTS_RIGHT = 'campaignevents-organize-events';
 
 	/** @var OrganizersStore */
 	private $organizersStore;
@@ -22,20 +24,25 @@ class PermissionChecker {
 	private $pageAuthorLookup;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var IPermissionsLookup */
+	private $permissionsLookup;
 
 	/**
 	 * @param OrganizersStore $organizersStore
 	 * @param PageAuthorLookup $pageAuthorLookup
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param IPermissionsLookup $permissionsLookup
 	 */
 	public function __construct(
 		OrganizersStore $organizersStore,
 		PageAuthorLookup $pageAuthorLookup,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		IPermissionsLookup $permissionsLookup
 	) {
 		$this->organizersStore = $organizersStore;
 		$this->pageAuthorLookup = $pageAuthorLookup;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->permissionsLookup = $permissionsLookup;
 	}
 
 	/**
@@ -74,12 +81,25 @@ class PermissionChecker {
 	}
 
 	/**
+	 * @param string $username
+	 * @return bool
+	 */
+	public function userCanOrganizeEvents( string $username ): bool {
+		return $this->permissionsLookup->userIsRegistered( $username ) &&
+			$this->permissionsLookup->userHasRight( $username, self::ORGANIZE_EVENTS_RIGHT ) &&
+			!$this->permissionsLookup->userIsSitewideBlocked( $username );
+	}
+
+	/**
 	 * @param ICampaignsAuthority $performer
 	 * @param int $registrationID
 	 * @return bool
 	 */
 	public function userCanEditRegistration( ICampaignsAuthority $performer, int $registrationID ): bool {
-		if ( !$this->userCanEnableRegistrations( $performer ) ) {
+		if (
+			!$this->userCanEnableRegistrations( $performer ) &&
+			!$this->userCanOrganizeEvents( $performer->getName() )
+		) {
 			return false;
 		}
 		try {
@@ -135,16 +155,7 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanRemoveParticipants( ICampaignsAuthority $performer, int $registrationID ): bool {
-		if ( !$performer->isRegistered() ) {
-			return false;
-		}
-		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
-			return false;
-		}
-		return $this->organizersStore->isEventOrganizer( $registrationID, $centralUser ) &&
-			!$performer->isSitewideBlocked();
+		return $this->userCanEditRegistration( $performer, $registrationID );
 	}
 
 	/**
@@ -153,14 +164,6 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanViewPrivateParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
-		if ( !$performer->isRegistered() ) {
-			return false;
-		}
-		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
-			return false;
-		}
-		return $this->organizersStore->isEventOrganizer( $eventID, $centralUser ) && !$performer->isSitewideBlocked();
+		return $this->userCanEditRegistration( $performer, $eventID );
 	}
 }
