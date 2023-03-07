@@ -231,7 +231,8 @@ return [
 	},
 	MWPermissionsLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): MWPermissionsLookup {
 		return new MWPermissionsLookup(
-			$services->getUserFactory()
+			$services->getUserFactory(),
+			$services->getUserNameUtils()
 		);
 	},
 ];
