@@ -6,7 +6,10 @@
 		]
 	},
 	"nstab-event": "Acara",
+	"action-campaignevents-organize-events": "mengatur acara",
+	"right-campaignevents-organize-events": "Mengatur acara",
 	"campaignevents-error-trackingtool-without-eventid": "Berikan penanda acara pada alat pelacakan tersebut.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Berikan penanda alat pelacak",
-	"campaignevents-error-invalid-trackingtool": "Berikan penanda alat pelacakan yang valid"
+	"campaignevents-error-invalid-trackingtool": "Berikan penanda alat pelacakan yang valid",
+	"campaignevents-edit-field-organizers": "Penyelenggara"
 }

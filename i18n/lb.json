@@ -1,10 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Robby"
+			"Robby",
+			"Volvox"
 		]
 	},
+	"action-campaignevents-organize-events": "Evenementer ze organiséieren",
+	"right-campaignevents-organize-events": "Evenementer organiséieren",
 	"specialpages-group-campaignevents": "Evenementer",
+	"campaignevents-edit-invalid-username": "\"$1\" ass kee valabele Benotzernumm.",
 	"campaignevents-eventpage-header-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-eventpage-register-confirmation-confirm": "Aschreiwen",
