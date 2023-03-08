@@ -849,12 +849,20 @@ class EventPageDecorator {
 	 * @return int One of the SELF::USER_STATUS_* constants
 	 */
 	private function getUserStatus( ExistingEventRegistration $event, ICampaignsAuthority $performer ): int {
-		if ( $performer->isSitewideBlocked() ) {
-			return self::USER_STATUS_BLOCKED;
-		}
-
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException $_ ) {
+			$centralUser = null;
+		}
+
+		// Do not check user blocks or other user-dependent conditions for logged-out users, so that we can serve the
+		// same (cached) version of the page to everyone. Also, even if the IP is blocked, the user might have an
+		// account that they can log into, so showing the button is fine.
+		if ( $centralUser ) {
+			if ( $performer->isSitewideBlocked() ) {
+				return self::USER_STATUS_BLOCKED;
+			}
+
 			if ( $this->organizersStore->isEventOrganizer( $event->getID(), $centralUser ) ) {
 				return self::USER_STATUS_ORGANIZER;
 			}
@@ -870,7 +878,6 @@ class EventPageDecorator {
 						throw new UnexpectedValueException( "Unexpected value $checkUnregistrationAllowedVal" );
 				}
 			}
-		} catch ( UserNotGlobalException $_ ) {
 		}
 
 		// User is logged-in and not already participating, or logged-out, in which case we'll know better
