@@ -20,7 +20,7 @@
 			this.selectAllParticipantsCheckbox = this.selectAllParticipantsField.getField();
 		}
 
-		this.$participantsTitle = $( '.ext-campaignevents-details-participants-header' );
+		this.$participantsTitle = $( '.ext-campaignevents-details-participants-header-text' );
 
 		this.participantCheckboxes = [];
 		this.curParticipantCheckbox = null;

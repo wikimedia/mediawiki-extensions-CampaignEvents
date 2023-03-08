@@ -119,10 +119,6 @@ class EventDetailsParticipantsModule {
 		$lastParticipant = $otherParticipants ? end( $otherParticipants ) : $curUserParticipant;
 		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;
 
-		if ( $totalParticipants ) {
-			$items[] = $this->getSearchBar( $msgFormatter );
-		}
-
 		$canRemoveParticipants = false;
 		if ( $isOrganizer ) {
 			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
@@ -175,12 +171,22 @@ class EventDetailsParticipantsModule {
 	 * @return Tag
 	 */
 	private function getHeader( ITextFormatter $msgFormatter, int $totalParticipants ): Tag {
-		return ( new Tag() )->appendContent(
+		$headerText = ( new Tag( 'div' ) )->appendContent(
 			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-header-participants' )
 					->numParams( $totalParticipants )
 			)
+		)->addClasses( [ 'ext-campaignevents-details-participants-header-text' ] );
+
+		$header = ( new Tag() )->appendContent(
+			$headerText
 		)->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
+
+		if ( $totalParticipants ) {
+			$header->appendContent( $this->getSearchBar( $msgFormatter ) );
+		}
+
+		return $header;
 	}
 
 	/**
