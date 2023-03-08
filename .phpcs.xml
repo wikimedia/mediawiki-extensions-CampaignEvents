@@ -3,4 +3,5 @@
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki" />
 	<rule ref="Generic.PHP.RequireStrictTypes" />
 	<file>.</file>
+	<exclude-pattern>tests/api-testing</exclude-pattern>
 </ruleset>
