@@ -271,5 +271,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Event organizers",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|more}}",
 	"campaignevents-notification-registration-event-page-link": "View event page",
-	"campaignevents-notification-registration-chat-link": "Join group chat"
+	"campaignevents-notification-registration-chat-link": "Join group chat",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> must be an array of usernames and cannot be empty"
 }

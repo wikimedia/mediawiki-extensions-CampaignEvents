@@ -8,8 +8,11 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
@@ -19,6 +22,7 @@ use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\BodyValidator;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
+use RuntimeException;
 use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
@@ -33,20 +37,30 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected $permissionChecker;
 	/** @var EditEventCommand */
 	protected $editEventCommand;
+	/** @var OrganizersStore */
+	private OrganizersStore $organizersStore;
+	/** @var CampaignsCentralUserLookup */
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/**
 	 * @param EventFactory $eventFactory
 	 * @param PermissionChecker $permissionChecker
 	 * @param EditEventCommand $editEventCommand
+	 * @param OrganizersStore $organizersStore
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
-		EditEventCommand $editEventCommand
+		EditEventCommand $editEventCommand,
+		OrganizersStore $organizersStore,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
 		$this->editEventCommand = $editEventCommand;
+		$this->organizersStore = $organizersStore;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -77,8 +91,24 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			$this->exitWithStatus( $e->getStatus() );
 		}
 
-		$organizers = [ $this->getAuthority()->getUser()->getName() ];
-		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizers );
+		$eventID = $event->getID();
+		if ( $eventID === null ) {
+			$organizerNames = [ $this->getAuthority()->getUser()->getName() ];
+		} else {
+			$organizers = $this->organizersStore->getEventOrganizers( $eventID );
+			$organizerNames = [];
+			foreach ( $organizers as $organizer ) {
+				$user = $organizer->getUser();
+				try {
+					$organizerNames[] = $this->centralUserLookup->getUserName( $user );
+				} catch ( UserNotGlobalException $_ ) {
+					// Should never happen.
+					throw new RuntimeException( "Organizer in the database has no central account." );
+				}
+			}
+		}
+
+		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizerNames );
 		if ( !$saveStatus->isGood() ) {
 			$httptStatus = $saveStatus instanceof PermissionStatus ? 403 : 400;
 			$this->exitWithStatus( $saveStatus, $httptStatus );

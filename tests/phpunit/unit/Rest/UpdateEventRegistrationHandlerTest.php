@@ -78,6 +78,8 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 				$this->createMock( IPermissionsLookup::class )
 			),
 			$editEventCmd ?? $this->getMockEditEventCommand(),
+			$this->createMock( OrganizersStore::class ),
+			$this->createMock( CampaignsCentralUserLookup::class ),
 			$eventLookup
 		);
 	}
@@ -204,6 +206,22 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
 			$this->assertSame( 'campaignevents-rest-edit-page-nonlocal', $e->getMessageValue()->getKey() );
+			$this->assertSame( 400, $e->getCode() );
+		}
+	}
+
+	public function testExecute__EditEventCmdErrors(): void {
+		$expectedError = 'some-command-error';
+		$editEventCmd = $this->createMock( EditEventCommand::class );
+		$editEventCmd->method( 'doEditIfAllowed' )->willReturn( StatusValue::newFatal( $expectedError ) );
+		$handler = $this->newHandler( null, $editEventCmd );
+		$request = new RequestData( $this->getRequestData() );
+
+		try {
+			$this->executeHandler( $handler, $request );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( $expectedError, $e->getMessageValue()->getKey() );
 			$this->assertSame( 400, $e->getCode() );
 		}
 	}

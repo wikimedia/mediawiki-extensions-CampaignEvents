@@ -55,7 +55,9 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 				$this->createMock( CampaignsCentralUserLookup::class ),
 				$this->createMock( IPermissionsLookup::class )
 			),
-			$editEventCmd ?? $this->getMockEditEventCommand()
+			$editEventCmd ?? $this->getMockEditEventCommand(),
+			$this->createMock( OrganizersStore::class ),
+			$this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 
@@ -147,5 +149,21 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$twoErrorsEventFactory->method( 'newEvent' )
 			->willThrowException( new InvalidEventDataException( $twoErrorsStatus ) );
 		yield 'Two errors' => [ $twoErrorsEventFactory, reset( $twoErrorKeys ) ];
+	}
+
+	public function testExecute__EditEventCmdErrors(): void {
+		$expectedError = 'some-command-error';
+		$editEventCmd = $this->createMock( EditEventCommand::class );
+		$editEventCmd->method( 'doEditIfAllowed' )->willReturn( StatusValue::newFatal( $expectedError ) );
+		$handler = $this->newHandler( null, $editEventCmd );
+		$request = new RequestData( $this->getRequestData() );
+
+		try {
+			$this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 400, $e->getCode() );
+			$this->assertSame( $expectedError, $e->getMessageValue()->getKey() );
+		}
 	}
 }

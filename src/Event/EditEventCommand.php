@@ -21,6 +21,7 @@ use StatusValue;
 
 /**
  * Command object used for creation and editing of event registrations.
+ * @todo The logic for adding organizers might perhaps be moved to a separate command.
  */
 class EditEventCommand {
 	public const SERVICE_NAME = 'CampaignEventsEditEventCommand';
