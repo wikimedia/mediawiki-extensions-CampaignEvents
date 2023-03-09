@@ -83,7 +83,7 @@
 	"campaignevents-edit-removed-creator": "Du bist nicht berechtigt, den Veranstaltungsersteller zu entfernen.",
 	"campaignevents-edit-no-creator": "Du musst dich selbst als Organisator hinzufügen, wenn du die Veranstaltungsregistrierung zum ersten Mal aktivierst.",
 	"campaignevents-edit-too-many-organizers": "Du kannst nicht mehr als $1 {{PLURAL:$1|Organisator|Organisatoren}} hinzufügen.",
-	"campaignevents-edit-organizer-need-central-account": "{{PLURAL:$1|Der folgende Benutzer hat|Die folgenden Benutzer haben}} kein zentrales Benutzerkonto und können nicht als {{PLURAL:$1|Veranstalter}} hinzugefügt werden: $2 .",
+	"campaignevents-edit-organizer-need-central-account": "{{PLURAL:$1|Der folgende Benutzer hat|Die folgenden Benutzer haben}} kein zentrales Benutzerkonto und können nicht als {{PLURAL:$1|Veranstalter}} hinzugefügt werden: $2.",
 	"campaignevents-edit-invalid-username": "„$1“ ist kein gültiger Benutzername.",
 	"campaignevents-error-page-already-registered": "Die angegebene Veranstaltungsseite hat bereits eine zugehörige Registrierung.",
 	"campaignevents-error-page-already-registered-deleted": "Du kannst die Aktion nicht abschließen, da die Veranstaltungsanmeldung von dieser Veranstaltungsseite gelöscht wurde.",
@@ -270,5 +270,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Veranstalter",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|mehr}}",
 	"campaignevents-notification-registration-event-page-link": "Veranstaltungsseite ansehen",
-	"campaignevents-notification-registration-chat-link": "Dem Gruppenchat beitreten"
+	"campaignevents-notification-registration-chat-link": "Dem Gruppenchat beitreten",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> muss ein Array von Benutzernamen sein und darf nicht leer sein"
 }

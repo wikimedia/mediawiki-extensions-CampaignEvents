@@ -276,5 +276,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Organisateurs d’événements",
 	"campaignevents-notification-registration-details-organizers-more": "$1 autre{{PLURAL:$1||s}}",
 	"campaignevents-notification-registration-event-page-link": "Voir la page de l’événement",
-	"campaignevents-notification-registration-chat-link": "Rejoindre la discussion en direct avec le groupe"
+	"campaignevents-notification-registration-chat-link": "Rejoindre la discussion en direct avec le groupe",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> doit être un tableau de noms d’utilisateur et ne peut pas être vide"
 }

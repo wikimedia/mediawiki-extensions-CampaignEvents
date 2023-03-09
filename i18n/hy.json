@@ -6,6 +6,7 @@
 		]
 	},
 	"campaignevents-edit-field-timezone": "Ժամագոտի",
+	"campaignevents-edit-field-organizers": "Կազմակերպիչներ",
 	"campaignevents-role-organizer": "{{GENDER:$1| կազմակերպիչ}}",
 	"myevents": "Ձեր իրադարձությունները",
 	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",
