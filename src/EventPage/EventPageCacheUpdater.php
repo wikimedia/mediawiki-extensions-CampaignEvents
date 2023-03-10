@@ -4,15 +4,29 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
+use HtmlCacheUpdater;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MWTimestamp;
 use OutputPage;
+use RuntimeException;
 
 /**
  * This class is responsible of managing the cache of event pages, to avoid issues like T326593.
  */
 class EventPageCacheUpdater {
 	public const SERVICE_NAME = 'CampaignEventsEventPageCacheUpdater';
+
+	/** @var HtmlCacheUpdater */
+	private HtmlCacheUpdater $htmlCacheUpdater;
+
+	/**
+	 * @param HtmlCacheUpdater $htmlCacheUpdater
+	 */
+	public function __construct( HtmlCacheUpdater $htmlCacheUpdater ) {
+		$this->htmlCacheUpdater = $htmlCacheUpdater;
+	}
 
 	/**
 	 * @param OutputPage $out
@@ -32,5 +46,20 @@ class EventPageCacheUpdater {
 		// Do not let the cached version persist after the end date.
 		$secondsToEventEnd = $endTSUnix - $now;
 		$out->lowerCdnMaxage( $secondsToEventEnd );
+	}
+
+	/**
+	 * @param EventRegistration $registration
+	 * @return void
+	 */
+	public function purgeEventPageCache( EventRegistration $registration ): void {
+		$eventPage = $registration->getPage();
+		if ( !$eventPage instanceof MWPageProxy ) {
+			throw new RuntimeException( 'Unexpected ICampaignsPage implementation.' );
+		}
+		$this->htmlCacheUpdater->purgeTitleUrls(
+			[ $eventPage->getPageIdentity() ],
+			HtmlCacheUpdater::PURGE_INTENT_TXROUND_REFLECTED
+		);
 	}
 }

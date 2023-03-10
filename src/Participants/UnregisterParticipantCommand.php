@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
@@ -27,21 +28,25 @@ class UnregisterParticipantCommand {
 	/** @var PermissionChecker */
 	private $permissionChecker;
 	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
+	private $centralUserLookup;	/** @var EventPageCacheUpdater */
+	private EventPageCacheUpdater $eventPageCacheUpdater;
 
 	/**
 	 * @param ParticipantsStore $participantsStore
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 */
 	public function __construct(
 		ParticipantsStore $participantsStore,
 		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		EventPageCacheUpdater $eventPageCacheUpdater
 	) {
 		$this->participantsStore = $participantsStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 	}
 
 	/**
@@ -107,6 +112,9 @@ class UnregisterParticipantCommand {
 			return StatusValue::newFatal( 'campaignevents-unregister-need-central-account' );
 		}
 		$modified = $this->participantsStore->removeParticipantFromEvent( $registration->getID(), $centralUser );
+		if ( $modified ) {
+			$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
+		}
 		return StatusValue::newGood( $modified );
 	}
 
@@ -173,6 +181,9 @@ class UnregisterParticipantCommand {
 			$users,
 			$invertUsers
 		);
+		if ( $removedParticipants > 0 ) {
+			$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
+		}
 
 		return StatusValue::newGood( $removedParticipants );
 	}
