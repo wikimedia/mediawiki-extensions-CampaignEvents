@@ -55,7 +55,7 @@ class Utils {
 			$minDiff = floor( $tz->getOffset( new DateTime() ) / 60 );
 			return new UserTimeCorrection( "ZoneInfo|$minDiff|$timezoneName" );
 		}
-		if ( preg_match( '/[+-]\d{2}:\d{2}/', $timezoneName ) ) {
+		if ( preg_match( '/^[+-]\d{2}:\d{2}$/', $timezoneName ) ) {
 			// Offset, which UserTimeCorrection accepts directly.
 			return new UserTimeCorrection( $timezoneName );
 		}

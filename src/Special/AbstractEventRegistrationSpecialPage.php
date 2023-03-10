@@ -356,7 +356,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		} else {
 			// User entered an offset directly, pass the value through without letting UserTimeCorrection
 			// parse and accept raw offsets in minutes or things like "+0:555" that DateTimeZone doesn't support.
+			// However, add a plus sign to valid positive offsets for consistency with the timezone selector core widget
 			$timezone = $data['TimeZone'];
+			if ( preg_match( '/^\d{2}:\d{2}$/', $timezone ) ) {
+				$timezone = "+$timezone";
+			}
 		}
 
 		try {
