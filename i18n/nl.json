@@ -272,5 +272,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Organisatoren van evenementen",
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|}}nog $1",
 	"campaignevents-notification-registration-event-page-link": "Evenementpagina bekijken",
-	"campaignevents-notification-registration-chat-link": "Aan groepschat meedoen"
+	"campaignevents-notification-registration-chat-link": "Aan groepschat meedoen",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> moet een array van gebruikersnamen zijn en mag niet leeg zijn"
 }

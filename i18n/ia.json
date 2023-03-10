@@ -236,7 +236,7 @@
 	"campaignevents-unregister-participants-permission-denied": "Tu non es autorisate a remover participantes",
 	"campaignevents-unregister-participants-registration-deleted": "Tu non pote remover participantes de iste evento perque illo ha essite delite.",
 	"campaignevents-event-details-remove-participant-notification-error": "Un error ha occurrite durante le tentativa de remover le participante{{PLURAL:$1||s}}",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Le parametro 'user_ids' debe esser un array de IDs de usator, o nulle (pro remover tote le usatores)",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Le parametro 'user_ids' debe esser un matrice de identificatores de usator, o nulle (pro remover tote le usatores)",
 	"campaignevents-event-details-tab-participants": "Participantes",
 	"campaignevents-event-details-tab-event-details": "Detalios del evento",
 	"campaignevents-event-details-search-participants-placeholder": "Cercar participantes",
@@ -270,5 +270,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Organisatores de eventos",
 	"campaignevents-notification-registration-details-organizers-more": "$1 altere{{PLURAL:$1||s}}",
 	"campaignevents-notification-registration-event-page-link": "Visitar le pagina del evento",
-	"campaignevents-notification-registration-chat-link": "Entra in le gruppo de conversation"
+	"campaignevents-notification-registration-chat-link": "Entra in le gruppo de conversation",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe esser un vector/matrice de nomines de usator e non pote esser vacue"
 }

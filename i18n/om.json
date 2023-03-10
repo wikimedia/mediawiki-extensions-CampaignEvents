@@ -1,0 +1,20 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ahrada2016"
+		]
+	},
+	"action-campaignevents-organize-events": "taateewwan hogganuu",
+	"right-campaignevents-organize-events": "Taateewwan hogganuu",
+	"campaignevents-edit-field-organizers-help": "Taatee kana akka bulchan hayyama kennuudhaaf maqaa fayyadamaa qindeessitoota biroo itti dabali.",
+	"campaignevents-edit-field-organizers-placeholder": "Qindeessitoota dabalataa itti dabalaa",
+	"campaignevents-edit-field-organizers-creator-title": "Kun uumaa sagantichaati, qindeessitoonni biroo fayyadamaa kana haquu hin danda'an.",
+	"campaignevents-edit-field-organizers-user-not-allowed": "Kun {{GENDER:$1| fayyadamaan}} taateewwan qindeessuun hin hayyamamu.",
+	"campaignevents-edit-no-organizers": "Yoo xiqqaate qindeessaa tokko filachuu qabda.",
+	"campaignevents-edit-removed-creator": "Uumaa taatee haquun siif hin hayyamamu.",
+	"campaignevents-edit-no-creator": "Yeroo jalqaba galmee taatee dandeessiftu akka qindeessituutti of dabaluu qabda.",
+	"campaignevents-edit-too-many-organizers": "$1 {{PLURAL:$1| caalaa dabaluu hin dandeessu qindeessituu|qindeessitoota}}.",
+	"campaignevents-edit-organizer-need-central-account": "Kanneen armaan gadii {{PLURAL:$1| fayyadamaan ni godha|fayyadamtoonni ni godhu}} herrega fayyadamaa giddugaleessaa hin qabu akkasumas akka {{PLURAL:$1| tti dabalamuu hin danda'u qindeessituu|qindeessitoota}}: $2.",
+	"campaignevents-edit-invalid-username": "\" $1 \" maqaa fayyadamaa sirrii miti.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>maqaa_fayyadamtootaa_qindeessaa</var> tarree maqaa fayyadamaa ta'uu qaba malee duwwaa ta'uu hin danda'u"
+}

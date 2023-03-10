@@ -150,5 +150,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Organizzatori dell'evento",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|altro|altri}}",
 	"campaignevents-notification-registration-event-page-link": "Vedi pagina dell'evento",
-	"campaignevents-notification-registration-chat-link": "Unisciti alla chat di gruppo"
+	"campaignevents-notification-registration-chat-link": "Unisciti alla chat di gruppo",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> deve essere un array di nomi utente e non può essere vuoto"
 }
