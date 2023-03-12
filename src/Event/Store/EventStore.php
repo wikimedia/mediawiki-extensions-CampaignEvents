@@ -47,6 +47,11 @@ class EventStore implements IEventStore, IEventLookup {
 	private $addressStore;
 
 	/**
+	 * @var array<int,ExistingEventRegistration> Cache of stored registrations, keyed by ID.
+	 */
+	private array $cache = [];
+
+	/**
 	 * @param CampaignsDatabaseHelper $dbHelper
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param AddressStore $addressStore
@@ -65,6 +70,10 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function getEventByID( int $eventID ): ExistingEventRegistration {
+		if ( isset( $this->cache[$eventID] ) ) {
+			return $this->cache[$eventID];
+		}
+
 		$eventRows = $this->dbHelper->getDBConnection( DB_REPLICA )->select(
 			[ 'campaign_events', 'ce_event_address', 'ce_address' ],
 			'*',
@@ -92,7 +101,8 @@ class EventStore implements IEventStore, IEventLookup {
 			$rows[] = $row;
 		}
 
-		return $this->newEventFromDBRow( $rows[ 0 ], $rows[ 0 ] );
+		$this->cache[$eventID] = $this->newEventFromDBRow( $rows[ 0 ], $rows[ 0 ] );
+		return $this->cache[$eventID];
 	}
 
 	/**
@@ -324,6 +334,8 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$dbw->endAtomic();
 
+		unset( $this->cache[$eventID] );
+
 		return StatusValue::newGood( $eventID );
 	}
 
@@ -380,6 +392,7 @@ class EventStore implements IEventStore, IEventLookup {
 				'event_deleted_at' => null
 			]
 		);
+		unset( $this->cache[$registration->getID()] );
 		return $dbw->affectedRows() > 0;
 	}
 
