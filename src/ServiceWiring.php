@@ -33,6 +33,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\MediaWikiServices;
 
@@ -110,13 +111,15 @@ return [
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-			$services->get( EventPageCacheUpdater::SERVICE_NAME )
+			$services->get( EventPageCacheUpdater::SERVICE_NAME ),
+			$services->get( TrackingToolEventWatcher::SERVICE_NAME )
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {
 		return new DeleteEventCommand(
 			$services->get( IEventStore::STORE_SERVICE_NAME ),
-			$services->get( PermissionChecker::SERVICE_NAME )
+			$services->get( PermissionChecker::SERVICE_NAME ),
+			$services->get( TrackingToolEventWatcher::SERVICE_NAME )
 		);
 	},
 	RoleFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): RoleFormatter {
@@ -131,7 +134,8 @@ return [
 				$services->get( PermissionChecker::SERVICE_NAME ),
 				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 				$services->get( UserNotifier::SERVICE_NAME ),
-				$services->get( EventPageCacheUpdater::SERVICE_NAME )
+				$services->get( EventPageCacheUpdater::SERVICE_NAME ),
+				$services->get( TrackingToolEventWatcher::SERVICE_NAME )
 			);
 		},
 	UnregisterParticipantCommand::SERVICE_NAME =>
@@ -140,7 +144,8 @@ return [
 				$services->get( ParticipantsStore::SERVICE_NAME ),
 				$services->get( PermissionChecker::SERVICE_NAME ),
 				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-				$services->get( EventPageCacheUpdater::SERVICE_NAME )
+				$services->get( EventPageCacheUpdater::SERVICE_NAME ),
+				$services->get( TrackingToolEventWatcher::SERVICE_NAME )
 			);
 		},
 	EventsPagerFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventsPagerFactory {
@@ -245,4 +250,10 @@ return [
 			$services->getHtmlCacheUpdater()
 		);
 	},
+	TrackingToolEventWatcher::SERVICE_NAME =>
+		static function ( MediaWikiServices $services ): TrackingToolEventWatcher {
+			return new TrackingToolEventWatcher(
+				$services->get( TrackingToolRegistry::SERVICE_NAME )
+			);
+		},
 ];

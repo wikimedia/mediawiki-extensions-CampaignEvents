@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use StatusValue;
 
@@ -20,17 +21,22 @@ class DeleteEventCommand {
 	private $eventStore;
 	/** @var PermissionChecker */
 	private $permissionChecker;
+	/** @var TrackingToolEventWatcher */
+	private $trackingToolEventWatcher;
 
 	/**
 	 * @param IEventStore $eventStore
 	 * @param PermissionChecker $permissionChecker
+	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
 	 */
 	public function __construct(
 		IEventStore $eventStore,
-		PermissionChecker $permissionChecker
+		PermissionChecker $permissionChecker,
+		TrackingToolEventWatcher $trackingToolEventWatcher
 	) {
 		$this->eventStore = $eventStore;
 		$this->permissionChecker = $permissionChecker;
+		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
 	}
 
 	/**
@@ -70,6 +76,11 @@ class DeleteEventCommand {
 	 * @return StatusValue If good, the value is true if the registration was deleted, false if it was already deleted.
 	 */
 	public function deleteUnsafe( ExistingEventRegistration $registration ): StatusValue {
-		return StatusValue::newGood( $this->eventStore->deleteRegistration( $registration ) );
+		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateEventDeletion( $registration );
+		if ( !$trackingToolValidationStatus->isGood() ) {
+			return $trackingToolValidationStatus;
+		}
+		$effectivelyDeleted = $this->eventStore->deleteRegistration( $registration );
+		return StatusValue::newGood( $effectivelyDeleted );
 	}
 }

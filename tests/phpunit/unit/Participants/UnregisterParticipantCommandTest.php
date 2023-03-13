@@ -14,10 +14,12 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
 use MWTimestamp;
 use PHPUnit\Framework\MockObject\MockObject;
+use StatusValue;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand
@@ -41,23 +43,30 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @param ParticipantsStore|null $participantsStore
 	 * @param PermissionChecker|null $permChecker
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @return UnregisterParticipantCommand
 	 */
 	private function getCommand(
 		ParticipantsStore $participantsStore = null,
 		PermissionChecker $permChecker = null,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		CampaignsCentralUserLookup $centralUserLookup = null,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): UnregisterParticipantCommand {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
 			$permChecker->method( 'userCanUnregisterForEvents' )->willReturn( true );
 			$permChecker->method( 'userCanRemoveParticipants' )->willReturn( true );
 		}
+		if ( !$trackingToolEventWatcher ) {
+			$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );
+			$trackingToolEventWatcher->method( 'validateParticipantsRemoved' )->willReturn( StatusValue::newGood() );
+		}
 		return new UnregisterParticipantCommand(
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$permChecker,
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
-			$this->createMock( EventPageCacheUpdater::class )
+			$this->createMock( EventPageCacheUpdater::class ),
+			$trackingToolEventWatcher
 		);
 	}
 
@@ -155,14 +164,16 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param string $expectedMsg
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @covers ::unregisterUnsafe
 	 * @dataProvider provideUnregisterUnsafeErrors
 	 */
 	public function testUnregisterUnsafe__error(
 		string $expectedMsg,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		CampaignsCentralUserLookup $centralUserLookup = null,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	) {
-		$status = $this->getCommand( null, null, $centralUserLookup )->unregisterUnsafe(
+		$status = $this->getCommand( null, null, $centralUserLookup, $trackingToolEventWatcher )->unregisterUnsafe(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class )
 		);
@@ -177,6 +188,17 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		yield 'User not global' => [
 			'campaignevents-unregister-need-central-account',
 			$notGlobalLookup
+		];
+
+		$trackingToolError = 'some-tracking-tool-error';
+		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$trackingToolWatcher->expects( $this->atLeastOnce() )
+			->method( 'validateParticipantsRemoved' )
+			->willReturn( StatusValue::newFatal( $trackingToolError ) );
+		yield 'Fails tracking tool validation' => [
+			$trackingToolError,
+			null,
+			$trackingToolWatcher
 		];
 	}
 
@@ -211,7 +233,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @covers ::removeParticipantsIfAllowed
 	 * @covers ::authorizeRemoveParticipants
 	 */
-	public function testDoRemoveParticipantsIfAllowed__permissionError() {
+	public function testRemoveParticipantsIfAllowed__permissionError() {
 		$permChecker = $this->createMock( PermissionChecker::class );
 		$permChecker->expects( $this->once() )->method( 'userCanRemoveParticipants' )->willReturn( false );
 
@@ -231,7 +253,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @covers ::authorizeRemoveParticipants
 	 * @covers ::removeParticipantsUnsafe
 	 */
-	public function testDoRemoveParticipantsIfAllowed__deletedRegistration() {
+	public function testRemoveParticipantsIfAllowed__deletedRegistration() {
 		$deletedRegistration = $this->getValidRegistration();
 		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
 		$status = $this->getCommand()->removeParticipantsIfAllowed(
@@ -253,7 +275,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @covers ::removeParticipantsUnsafe
 	 * @dataProvider provideDoRemoveParticipantsIfAllowed
 	 */
-	public function testDoRemoveParticipantsIfAllowed__success( bool $invertUsers ) {
+	public function testRemoveParticipantsIfAllowed__success( bool $invertUsers ) {
 		$status = $this->getCommand()->removeParticipantsIfAllowed(
 			$this->getValidRegistration(),
 			[],
@@ -275,6 +297,38 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		];
 		yield 'Remove participants based on unselected participants IDs' => [
 			UnregisterParticipantCommand::INVERT_USERS
+		];
+	}
+
+	/**
+	 * @param string $expectedMsg
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
+	 * @covers ::removeParticipantsUnsafe
+	 * @dataProvider provideRemoveParticipantsUnsafeErrors
+	 */
+	public function testRemoveParticipantsUnsafe__error(
+		string $expectedMsg,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
+	) {
+		$cmd = $this->getCommand( null, null, null, $trackingToolEventWatcher );
+		$status = $cmd->removeParticipantsUnsafe(
+			$this->getValidRegistration(),
+			[],
+			UnregisterParticipantCommand::DO_NOT_INVERT_USERS
+		);
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( $expectedMsg, $status );
+	}
+
+	public function provideRemoveParticipantsUnsafeErrors(): Generator {
+		$trackingToolError = 'some-tracking-tool-error';
+		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$trackingToolWatcher->expects( $this->atLeastOnce() )
+			->method( 'validateParticipantsRemoved' )
+			->willReturn( StatusValue::newFatal( $trackingToolError ) );
+		yield 'Fails tracking tool validation' => [
+			$trackingToolError,
+			$trackingToolWatcher
 		];
 	}
 }

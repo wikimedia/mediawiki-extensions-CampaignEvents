@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use StatusValue;
 use UnexpectedValueException;
@@ -28,25 +29,31 @@ class UnregisterParticipantCommand {
 	/** @var PermissionChecker */
 	private $permissionChecker;
 	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;	/** @var EventPageCacheUpdater */
+	private $centralUserLookup;
+	/** @var EventPageCacheUpdater */
 	private EventPageCacheUpdater $eventPageCacheUpdater;
+	/** @var TrackingToolEventWatcher */
+	private $trackingToolEventWatcher;
 
 	/**
 	 * @param ParticipantsStore $participantsStore
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
+	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
 	 */
 	public function __construct(
 		ParticipantsStore $participantsStore,
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
-		EventPageCacheUpdater $eventPageCacheUpdater
+		EventPageCacheUpdater $eventPageCacheUpdater,
+		TrackingToolEventWatcher $trackingToolEventWatcher
 	) {
 		$this->participantsStore = $participantsStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
+		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
 	}
 
 	/**
@@ -111,6 +118,16 @@ class UnregisterParticipantCommand {
 		} catch ( UserNotGlobalException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-unregister-need-central-account' );
 		}
+
+		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateParticipantsRemoved(
+			$registration,
+			[ $centralUser ],
+			false
+		);
+		if ( !$trackingToolValidationStatus->isGood() ) {
+			return $trackingToolValidationStatus;
+		}
+
 		$modified = $this->participantsStore->removeParticipantFromEvent( $registration->getID(), $centralUser );
 		if ( $modified ) {
 			$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
@@ -173,6 +190,15 @@ class UnregisterParticipantCommand {
 		}
 		if ( $unregistrationAllowedVal !== self::CAN_UNREGISTER ) {
 			throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
+		}
+
+		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateParticipantsRemoved(
+			$registration,
+			$users,
+			$invertUsers
+		);
+		if ( !$trackingToolValidationStatus->isGood() ) {
+			return $trackingToolValidationStatus;
 		}
 
 		$eventID = $registration->getID();

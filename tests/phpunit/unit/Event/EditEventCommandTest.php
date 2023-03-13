@@ -20,8 +20,10 @@ use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
+use StatusValue;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EditEventCommand
@@ -37,6 +39,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param IEventLookup|null $eventLookup
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @param OrganizersStore|null $organizersStore
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @return EditEventCommand
 	 */
 	private function getCommand(
@@ -44,7 +47,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		PermissionChecker $permChecker = null,
 		IEventLookup $eventLookup = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
-		OrganizersStore $organizersStore = null
+		OrganizersStore $organizersStore = null,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): EditEventCommand {
 		$eventStore ??= $this->createMock( IEventStore::class );
 		if ( !$eventLookup ) {
@@ -70,13 +74,20 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$centralUserLookup->method( 'existsAndIsVisible' )->willReturn( true );
 		}
 
+		if ( !$trackingToolEventWatcher ) {
+			$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );
+			$trackingToolEventWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
+			$trackingToolEventWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
+		}
+
 		return new EditEventCommand(
 			$eventStore,
 			$eventLookup,
 			$organizersStore,
 			$permChecker,
 			$centralUserLookup,
-			$this->createMock( EventPageCacheUpdater::class )
+			$this->createMock( EventPageCacheUpdater::class ),
+			$trackingToolEventWatcher
 		);
 	}
 
@@ -206,6 +217,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param PermissionChecker|null $permChecker
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @param OrganizersStore|null $organizersStore
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @covers ::doEditUnsafe
 	 * @covers ::validateOrganizers
 	 * @covers ::organizerNamesToCentralIDs
@@ -218,9 +230,17 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		array $organizers,
 		PermissionChecker $permChecker = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
-		OrganizersStore $organizersStore = null
+		OrganizersStore $organizersStore = null,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	) {
-		$command = $this->getCommand( null, $permChecker, null, $centralUserLookup, $organizersStore );
+		$command = $this->getCommand(
+			null,
+			$permChecker,
+			null,
+			$centralUserLookup,
+			$organizersStore,
+			$trackingToolEventWatcher
+		);
 		$status = $command->doEditUnsafe(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),
@@ -316,6 +336,22 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				[ 'invalid-username|<>' ],
 				null,
 				$invalidUsernameCentralUserLookup
+			];
+
+			$trackingToolError = 'some-tracking-tool-error';
+			$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
+			$methodName = $registration->getID() ? 'validateEventUpdate' : 'validateEventCreation';
+			$trackingToolWatcher->expects( $this->atLeastOnce() )
+				->method( $methodName )
+				->willReturn( StatusValue::newFatal( $trackingToolError ) );
+			yield "$testName, fails tracking tool validation" => [
+				$registration,
+				$trackingToolError,
+				self::ORGANIZER_USERNAMES,
+				null,
+				null,
+				null,
+				$trackingToolWatcher
 			];
 		}
 	}
