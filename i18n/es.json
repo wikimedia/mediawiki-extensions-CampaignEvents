@@ -258,7 +258,7 @@
 	"campaignevents-register-confirmation-radio-private": "Registro privado",
 	"campaignevents-register-confirmation-radio-public": "Registro público",
 	"echo-category-title-campaign-events-notification-registration": "Registro a un evento",
-	"campaignevents-eventpage-dialog-private-registration-label": "{{GENDER:$1|El|La}} participante se inscribió de manera privada",
+	"campaignevents-eventpage-dialog-private-registration-label": "{{GENDER:$1|El|La|Le}} participante se registró de manera privada",
 	"echo-pref-tooltip-campaign-events-notification-registration": "Notificarme cuando me inscriba en un evento que utilice la herramienta de inscripción.",
 	"campaignevents-notification-registration-subject": "Inscripción confirmada para $1",
 	"campaignevents-notification-registration-header-intro": "Gracias por inscribirte para $1.",
@@ -274,5 +274,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Organizadores del evento",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|más}}",
 	"campaignevents-notification-registration-event-page-link": "Ver la página del evento",
-	"campaignevents-notification-registration-chat-link": "Unirse al chat grupal"
+	"campaignevents-notification-registration-chat-link": "Unirse al chat grupal",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe ser una cadena de nombres de usuario, y no puede estar vacía"
 }

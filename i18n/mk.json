@@ -271,5 +271,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Приредувачи на настанот",
 	"campaignevents-notification-registration-details-organizers-more": "и {{PLURAL:$1|уште}} $1",
 	"campaignevents-notification-registration-event-page-link": "Погл. страница за настанот",
-	"campaignevents-notification-registration-chat-link": "Приклучи се на групниот разговор"
+	"campaignevents-notification-registration-chat-link": "Приклучи се на групниот разговор",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> мора да биде строј од кориснички имиња и не може да стои празно"
 }
