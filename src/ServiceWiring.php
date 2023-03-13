@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
@@ -158,7 +159,8 @@ return [
 			$services->getTitleFormatter(),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( UserLinker::SERVICE_NAME ),
-			$services->get( EventTimeFormatter::SERVICE_NAME )
+			$services->get( EventTimeFormatter::SERVICE_NAME ),
+			$services->get( EventPageCacheUpdater::SERVICE_NAME )
 		);
 	},
 	CampaignEventsHookRunner::SERVICE_NAME =>
@@ -234,5 +236,8 @@ return [
 			$services->getUserFactory(),
 			$services->getUserNameUtils()
 		);
+	},
+	EventPageCacheUpdater::SERVICE_NAME => static function ( MediaWikiServices $services ): EventPageCacheUpdater {
+		return new EventPageCacheUpdater();
 	},
 ];

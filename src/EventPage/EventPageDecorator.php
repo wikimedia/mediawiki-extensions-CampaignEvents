@@ -94,6 +94,8 @@ class EventPageDecorator {
 	private $userLinker;
 	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
+	/** @var EventPageCacheUpdater */
+	private EventPageCacheUpdater $eventPageCacheUpdater;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -106,6 +108,7 @@ class EventPageDecorator {
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserLinker $userLinker
 	 * @param EventTimeFormatter $eventTimeFormatter
+	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -117,7 +120,8 @@ class EventPageDecorator {
 		TitleFormatter $titleFormatter,
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserLinker $userLinker,
-		EventTimeFormatter $eventTimeFormatter
+		EventTimeFormatter $eventTimeFormatter,
+		EventPageCacheUpdater $eventPageCacheUpdater
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
@@ -129,6 +133,7 @@ class EventPageDecorator {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
+		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 	}
 
 	/**
@@ -164,6 +169,7 @@ class EventPageDecorator {
 		if ( $registration ) {
 			$this->addRegistrationHeader(
 				$registration, $out, $viewingUser, $authority, $msgFormatter, $language );
+			$this->eventPageCacheUpdater->adjustCacheForPageWithRegistration( $out, $registration );
 		} else {
 			$this->maybeAddEnableRegistrationHeader( $out, $msgFormatter, $language, $authority, $campaignsPage );
 		}
