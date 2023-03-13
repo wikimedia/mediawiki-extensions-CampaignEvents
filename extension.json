@@ -94,7 +94,8 @@
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [
-			"i18n"
+			"i18n",
+			"i18n/rest"
 		]
 	},
 	"namespaces": [
