@@ -3,5 +3,6 @@
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki" />
 	<rule ref="Generic.PHP.RequireStrictTypes" />
 	<file>.</file>
-	<exclude-pattern>tests/api-testing</exclude-pattern>
+	<arg name="extensions" value="php" />
+	<arg name="encoding" value="UTF-8" />
 </ruleset>

@@ -17,7 +17,7 @@ module.exports = {
 			return mw.user.tokens.values.csrfToken; // eslint-disable-line no-undef
 		} );
 		const cookies = await browser.getCookies();
-		const cookieString = cookies.map( ( cookie ) => `${cookie.name}=${cookie.value};` ).join( '' ); // phpcs:ignore
+		const cookieString = cookies.map( ( cookie ) => `${cookie.name}=${cookie.value};` ).join( '' );
 		const baseUrl = await browser.options.baseUrl;
 		const baseUrlString = await baseUrl.endsWith( '/' ) ? baseUrl.slice( 0, -1 ) : baseUrl;
 
@@ -36,10 +36,10 @@ module.exports = {
 		const config = {
 			method: 'post',
 			maxBodyLength: Infinity,
-			url: `${await baseUrlString}/rest.php/campaignevents/v0/event_registration`, // phpcs:ignore
+			url: `${await baseUrlString}/rest.php/campaignevents/v0/event_registration`,
 			headers: {
 				'Content-type': 'application/json',
-				Cookie: await cookieString // phpcs:ignore
+				Cookie: await cookieString
 			},
 			data: data
 		};
