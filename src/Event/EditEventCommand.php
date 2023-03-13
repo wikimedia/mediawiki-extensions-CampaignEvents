@@ -154,10 +154,26 @@ class EditEventCommand {
 			return $saveStatus;
 		}
 		$newEventID = $saveStatus->getValue();
+		$this->addOrganizers( $registrationID === null, $newEventID, $organizerCentralUserIDs, $performerCentralUser );
 
-		if ( $registrationID ) {
+		return StatusValue::newGood( $newEventID );
+	}
+
+	/**
+	 * @param bool $isCreation
+	 * @param int $eventID
+	 * @param array $organizerCentralIDs
+	 * @param CentralUser $performer
+	 */
+	private function addOrganizers(
+		bool $isCreation,
+		int $eventID,
+		array $organizerCentralIDs,
+		CentralUser $performer
+	): void {
+		if ( !$isCreation ) {
 			$eventCreator = $this->organizerStore->getEventCreator(
-				$registrationID,
+				$eventID,
 				OrganizersStore::GET_CREATOR_INCLUDE_DELETED
 			);
 			if ( !$eventCreator ) {
@@ -165,19 +181,18 @@ class EditEventCommand {
 			}
 			$eventCreatorID = $eventCreator->getUser()->getCentralID();
 		} else {
-			$eventCreatorID = $performerCentralUser->getCentralID();
+			$eventCreatorID = $performer->getCentralID();
 		}
 		$organizersAndRoles = [];
-		foreach ( $organizerCentralUserIDs as $organizerCentralUserID ) {
+		foreach ( $organizerCentralIDs as $organizerCentralUserID ) {
 			$organizersAndRoles[$organizerCentralUserID] = $organizerCentralUserID === $eventCreatorID
 				? [ Roles::ROLE_CREATOR ]
 				: [ Roles::ROLE_ORGANIZER ];
 		}
-		if ( $registrationID ) {
-			$this->organizerStore->removeOrganizersFromEventExcept( $registrationID, $organizerCentralUserIDs );
+		if ( !$isCreation ) {
+			$this->organizerStore->removeOrganizersFromEventExcept( $eventID, $organizerCentralIDs );
 		}
-		$this->organizerStore->addOrganizersToEvent( $newEventID, $organizersAndRoles );
-		return StatusValue::newGood( $newEventID );
+		$this->organizerStore->addOrganizersToEvent( $eventID, $organizersAndRoles );
 	}
 
 	/**
