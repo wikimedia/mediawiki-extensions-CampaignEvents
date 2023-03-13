@@ -30,27 +30,26 @@ class ParticipantsStore {
 	 * @param int $eventID
 	 * @param CentralUser $participant
 	 * @param bool $private
-	 * @return bool True if the participant was just added, false if they were already listed.
+	 * @return bool True if the participant was just added or their visibility was changed, false if they were
+	 * already listed with the same visibility.
 	 */
 	public function addParticipantToEvent( int $eventID, CentralUser $participant, bool $private ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		// TODO: Would be great if we could do this without opening an atomic section (T304680)
+
 		$dbw->startAtomic();
 		$previousRow = $dbw->selectRow(
 			'ce_participants',
 			'*',
 			[
 				'cep_event_id' => $eventID,
-				'cep_user_id' => $participant->getCentralID(),
-				'cep_private' => $private,
-				'cep_unregistered_at' => null
+				'cep_user_id' => $participant->getCentralID()
 			],
 			[ 'FOR UPDATE' ]
 		);
-		if ( $previousRow === null ) {
-			// Do this only if the user is not already an active participants, to avoid resetting
-			// the registration timestamp.
-			$dbw->upsert(
+
+		if ( !$previousRow ) {
+			// User never registered for this event, so we're just adding a new record.
+			$dbw->insert(
 				'ce_participants',
 				[
 					'cep_event_id' => $eventID,
@@ -58,17 +57,38 @@ class ParticipantsStore {
 					'cep_private' => $private,
 					'cep_registered_at' => $dbw->timestamp(),
 					'cep_unregistered_at' => null
-				],
-				[ [ 'cep_event_id', 'cep_user_id' ] ],
+				]
+			);
+			$modified = true;
+		} elseif ( $previousRow->cep_unregistered_at !== null ) {
+			// User was registered, but then cancelled their registration. Update the visibility, reinstate the
+			// registration, and reset the registration time.
+			$dbw->update(
+				'ce_participants',
 				[
 					'cep_private' => $private,
 					'cep_unregistered_at' => null,
 					'cep_registered_at' => $dbw->timestamp()
-				]
+				],
+				[ 'cep_id' => $previousRow->cep_id ]
 			);
+			$modified = true;
+		} elseif ( (bool)$previousRow->cep_private !== $private ) {
+			// User is already an active participant, but is changing their visibility. Update that, but not the
+			// registration time.
+			$dbw->update(
+				'ce_participants',
+				[ 'cep_private' => $private ],
+				[ 'cep_id' => $previousRow->cep_id ]
+			);
+			$modified = true;
+		} else {
+			// User is already an active participant with the desired visibility, nothing to do.
+			$modified = false;
 		}
+
 		$dbw->endAtomic();
-		return $previousRow === null;
+		return $modified;
 	}
 
 	/**

@@ -136,8 +136,13 @@ class RegisterParticipantCommand {
 		} catch ( UserNotGlobalException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
 		}
+
 		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser, $isPrivate );
-		$this->userNotifier->notifyRegistration( $performer, $registration );
+
+		if ( $modified ) {
+			$this->userNotifier->notifyRegistration( $performer, $registration );
+		}
+
 		return StatusValue::newGood( $modified );
 	}
 }
