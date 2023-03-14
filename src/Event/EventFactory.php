@@ -113,6 +113,7 @@ class EventFactory {
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
 		$res->merge( $trackingToolStatus );
 		$trackingToolDBID = $trackingToolStatus->getValue();
+		$trackingTools = $trackingToolDBID ? [ $trackingToolDBID => $trackingToolEventID ] : [];
 
 		if ( !in_array( $status, EventRegistration::VALID_STATUSES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-status' );
@@ -166,8 +167,7 @@ class EventFactory {
 			$this->campaignsPageFormatter->getText( $campaignsPage ),
 			$campaignsPage,
 			$chatURL,
-			$trackingToolDBID,
-			$trackingToolEventID,
+			$trackingTools,
 			$status,
 			$timezoneObj,
 			$startLocalTimestamp,

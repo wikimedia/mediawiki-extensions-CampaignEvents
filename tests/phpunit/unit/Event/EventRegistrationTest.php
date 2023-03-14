@@ -21,8 +21,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'name' => 'Name',
 			'page' => $this->createMock( ICampaignsPage::class ),
 			'chat' => 'https://chat.example.org',
-			'tracking_id' => 1,
-			'tracking_event_id' => 'some-event-identifier',
+			'tracking_tools' => [ 1 => 'some-event-identifier' ],
 			'status' => EventRegistration::STATUS_OPEN,
 			'timezone' => new DateTimeZone( 'UTC' ),
 			'start' => '20220815120000',
@@ -44,8 +43,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @covers ::getName
 	 * @covers ::getPage
 	 * @covers ::getChatURL
-	 * @covers ::getTrackingToolDBID
-	 * @covers ::getTrackingToolEventID
+	 * @covers ::getTrackingTools
 	 * @covers ::getStatus
 	 * @covers ::getTimezone
 	 * @covers ::getStartLocalTimestamp
@@ -66,8 +64,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['name'], $registration->getName(), 'name' );
 		$this->assertSame( $data['page'], $registration->getPage(), 'page' );
 		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
-		$this->assertSame( $data['tracking_id'], $registration->getTrackingToolDBID(), 'tracking_id' );
-		$this->assertSame( $data['tracking_event_id'], $registration->getTrackingToolEventID(), 'tracking_event_id' );
+		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
 		$this->assertSame( $data['status'], $registration->getStatus(), 'status' );
 		$this->assertSame( $data['timezone']->getName(), $registration->getTimezone()->getName(), 'timezone' );
 		$this->assertSame( $data['start'], $registration->getStartLocalTimestamp(), 'start' );

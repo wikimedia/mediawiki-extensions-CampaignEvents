@@ -41,10 +41,8 @@ class EventRegistration {
 	private $page;
 	/** @var string|null */
 	private $chatURL;
-	/** @var int|null */
-	private $trackingToolDBID;
-	/** @var string|null */
-	private $trackingToolEventID;
+	/** @var array<int,string> */
+	private $trackingTools;
 	/** @var string One of the STATUS_* constants */
 	private $status;
 	/** @var DateTimeZone */
@@ -75,8 +73,8 @@ class EventRegistration {
 	 * @param string $name
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
-	 * @param int|null $trackingToolDBID Identifier of a tracking tool in the database
-	 * @param string|null $trackingToolEventID
+	 * @param array<int,string> $trackingTools List of attached tracking tools, in the format
+	 *   [ tool_DB_ID => tool_event_ID ].
 	 * @param string $status
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
@@ -95,8 +93,7 @@ class EventRegistration {
 		string $name,
 		ICampaignsPage $page,
 		?string $chatURL,
-		?int $trackingToolDBID,
-		?string $trackingToolEventID,
+		array $trackingTools,
 		string $status,
 		DateTimeZone $timezone,
 		string $startLocalTimestamp,
@@ -120,12 +117,16 @@ class EventRegistration {
 			'$endLocalTimestamp',
 			'Should be in TS_MW format.'
 		);
+		Assert::parameter(
+			count( $trackingTools ) <= 1,
+			'$trackingTools',
+			'Should not have more than one tracking tool'
+		);
 		$this->id = $id;
 		$this->name = $name;
 		$this->page = $page;
 		$this->chatURL = $chatURL;
-		$this->trackingToolDBID = $trackingToolDBID;
-		$this->trackingToolEventID = $trackingToolEventID;
+		$this->trackingTools = $trackingTools;
 		$this->status = $status;
 		$this->timezone = $timezone;
 		$this->startLocalTimestamp = $startLocalTimestamp;
@@ -169,17 +170,11 @@ class EventRegistration {
 	}
 
 	/**
-	 * @return int|null
+	 * Returns a list of attached tracking tools, in the format [ tool_DB_ID => tool_event_ID ].
+	 * @return array<int,string>
 	 */
-	public function getTrackingToolDBID(): ?int {
-		return $this->trackingToolDBID;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getTrackingToolEventID(): ?string {
-		return $this->trackingToolEventID;
+	public function getTrackingTools(): array {
+		return $this->trackingTools;
 	}
 
 	/**

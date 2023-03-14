@@ -256,13 +256,15 @@ class EventStore implements IEventStore, IEventLookup {
 			$address = implode( " \n ", $address );
 		}
 
+		$trackingTools = $row->event_tracking_tool_id !== null
+			? [ $row->event_tracking_tool_id => $row->event_tracking_tool_event_id ]
+			: [];
 		return new ExistingEventRegistration(
 			(int)$row->event_id,
 			$row->event_name,
 			$eventPage,
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
-			$row->event_tracking_tool_id !== null ? (int)$row->event_tracking_tool_id : null,
-			$row->event_tracking_tool_event_id,
+			$trackingTools,
 			array_search( (int)$row->event_status, self::EVENT_STATUS_MAP, true ),
 			new DateTimeZone( $row->event_timezone ),
 			wfTimestamp( TS_MW, $row->event_start_local ),
@@ -291,9 +293,18 @@ class EventStore implements IEventStore, IEventLookup {
 				$meetingType |= $dbVal;
 			}
 		}
+		$trackingToolData = $event->getTrackingTools();
+		if ( count( $trackingToolData ) === 1 ) {
+			$trackingToolDBID = key( $trackingToolData );
+			$trackingToolEventID = $trackingToolData[$trackingToolDBID];
+		} elseif ( !$trackingToolData ) {
+			$trackingToolDBID = $trackingToolEventID = null;
+		} else {
+			// Not implemented.
+			throw new LogicException( "There should only be at most 1 tracking tool for now" );
+		}
 		$curCreationTS = $event->getCreationTimestamp();
 		$curDeletionTS = $event->getDeletionTimestamp();
-		$timezone = $event->getTimezone();
 		// The local timestamps are already guaranteed to be in TS_MW format and the EventRegistration constructor
 		// enforces that, but convert them again as an extra safeguard to avoid any chance of storing garbage.
 		$localStartDB = wfTimestamp( TS_MW, $event->getStartLocalTimestamp() );
@@ -305,10 +316,10 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_page_prefixedtext' => $event->getPage()->getPrefixedText(),
 			'event_page_wiki' => Utils::getWikiIDString( $event->getPage()->getWikiId() ),
 			'event_chat_url' => $event->getChatURL() ?? '',
-			'event_tracking_tool_id' => $event->getTrackingToolDBID(),
-			'event_tracking_tool_event_id' => $event->getTrackingToolEventID(),
+			'event_tracking_tool_id' => $trackingToolDBID,
+			'event_tracking_tool_event_id' => $trackingToolEventID,
 			'event_status' => self::EVENT_STATUS_MAP[$event->getStatus()],
-			'event_timezone' => $timezone->getName(),
+			'event_timezone' => $event->getTimezone()->getName(),
 			'event_start_local' => $localStartDB,
 			'event_start_utc' => $dbw->timestamp( $event->getStartUTCTimestamp() ),
 			'event_end_local' => $localEndDB,
