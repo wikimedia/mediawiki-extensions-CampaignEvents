@@ -8,7 +8,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "specialpage",
 	"requires": {
-		"MediaWiki": ">= 1.38.0"
+		"MediaWiki": ">= 1.39.0"
 	},
 	"attributes": {
 		"VisualEditor": {
@@ -101,7 +101,10 @@
 				"EventsPager.less",
 				"SpecialMyEvents.less"
 			],
-			"targets": [ "desktop", "mobile" ]
+			"targets": [
+				"desktop",
+				"mobile"
+			]
 		},
 		"ext.campaignEvents.specialmyevents": {
 			"localBasePath": "resources/ext.campaignEvents.specialmyevents",
@@ -136,14 +139,20 @@
 				"oojs-ui-windows",
 				"oojs-ui.styles.icons-interactions"
 			],
-			"targets": [ "desktop", "mobile" ]
+			"targets": [
+				"desktop",
+				"mobile"
+			]
 		},
 		"ext.campaignEvents.eventpage.styles": {
 			"styles": [
 				"ext.campaignEvents.eventpage.styles.less",
 				"ext.campaignEvents.TextWithIconWidget.less"
 			],
-			"targets": [ "desktop", "mobile" ]
+			"targets": [
+				"desktop",
+				"mobile"
+			]
 		},
 		"ext.campaignEvents.eventpage": {
 			"localBasePath": "resources/ext.campaignEvents.eventpage",
@@ -186,7 +195,10 @@
 				"oojs-ui-core",
 				"oojs-ui-windows"
 			],
-			"targets": [ "desktop", "mobile" ]
+			"targets": [
+				"desktop",
+				"mobile"
+			]
 		},
 		"ext.campaignEvents.specialeventdetails": {
 			"localBasePath": "resources/ext.campaignEvents.specialeventdetails",
@@ -218,14 +230,20 @@
 				"mediawiki.user",
 				"mediawiki.util"
 			],
-			"targets": [ "desktop", "mobile" ]
+			"targets": [
+				"desktop",
+				"mobile"
+			]
 		},
 		"ext.campaignEvents.specialeventdetails.styles": {
 			"styles": [
 				"ext.campaignEvents.specialeventdetails.styles.less",
 				"ext.campaignEvents.TextWithIconWidget.less"
 			],
-			"targets": [ "desktop", "mobile" ]
+			"targets": [
+				"desktop",
+				"mobile"
+			]
 		}
 	},
 	"RestRoutes": [
