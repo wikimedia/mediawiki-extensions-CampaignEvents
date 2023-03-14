@@ -391,10 +391,10 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::doEditUnsafe
+	 * @covers ::addOrganizers
 	 * @dataProvider provideEventRegistrations
 	 */
-	public function testSetsCorrectOrganizersRoles( EventRegistration $registration ) {
+	public function testAddOrganizers( EventRegistration $registration ) {
 		$creatorID = 1;
 		$organizerIDsMap = [
 			'Creator' => $creatorID,
