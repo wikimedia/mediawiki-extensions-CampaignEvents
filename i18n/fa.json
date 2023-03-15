@@ -25,7 +25,6 @@
 	"campaignevents-edit-field-address": "نشانی",
 	"campaignevents-register-confirmation-btn": "ثبت‌نام",
 	"campaignevents-role-creator": "{{GENDER:$1|ایجادگر}}",
-	"campaignevents-rest-user-not-found": "کاربر $1 موجود نیست.",
 	"myevents": "رویدادهای شما",
 	"campaignevents-myevents-filter-legend": "پالایش رویدادها",
 	"campaignevents-myevents-label-search": "جستجو",

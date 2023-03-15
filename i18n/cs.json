@@ -15,6 +15,5 @@
 	"campaignevents-event-details-dates-label": "Čas začátku a konce",
 	"campaignevents-event-details-remove-all-participant-notification": "Všichni účastníci odstraněni",
 	"campaignevents-unregister-participants-permission-denied": "Nemáte dovoleno odstranit účastníky",
-	"campaignevents-event-details-remove-participant-notification-error": "Při pokusu o odstranění {{PLURAL:$1|účastníka|účastníků}} došlo k chybě.",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Parametr 'user_ids' musí být pole ID uživatelů nebo null (pro odstranění všech uživatelů)."
+	"campaignevents-event-details-remove-participant-notification-error": "Při pokusu o odstranění {{PLURAL:$1|účastníka|účastníků}} došlo k chybě."
 }

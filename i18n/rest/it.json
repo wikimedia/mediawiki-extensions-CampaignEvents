@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beta16"
+		]
+	},
+	"campaignevents-rest-user-not-found": "Non esiste alcun utente con questo ID centrale.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> deve essere un array di nomi utente e non può essere vuoto"
+}

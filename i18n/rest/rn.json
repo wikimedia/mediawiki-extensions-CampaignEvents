@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Gilbert Ndihokubwayo"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Nta gikorwa kiriho kuri ino ndangakintu.",
+	"campaignevents-rest-enable-registration-permission-denied": "Ntiwemerewe gushoboza kwiyandikisha mu gikorwa.",
+	"campaignevents-rest-edit-page-nonlocal": "Kwiyandikisha kuri kino gikorwa birashoboka kuri ino Wiki kandi bishobora guhinyanyurwa hano: $1.",
+	"campaignevents-rest-delete-already-deleted": "Ukwiyandikisha kuri kino gikorwa vyamaze gukurwaho.",
+	"campaignevents-rest-user-not-found": "Umukoresha $1 ntabaho.",
+	"campaignevents-rest-get-registration-deleted": "Ukwiyandikisha kuri kino gikorwa vyakuweho."
+}

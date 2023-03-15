@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Volvox"
+		]
+	},
+	"campaignevents-rest-set-organizers-empty-list": "<var>organisator_usernames</var> muss en Array vu Benotzernimm sinn an däerf net eidel sinn"
+}

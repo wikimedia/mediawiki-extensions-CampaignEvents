@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Duke of Wikipädia",
+			"Fúlvio",
+			"Tiagoquix"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Não há nenhum evento com este ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Você não tem permissão para habilitar inscrições para o evento.",
+	"campaignevents-rest-edit-page-nonlocal": "Esta inscrição de evento foi habilitada na seguinte wiki e deve ser editada lá: $1.",
+	"campaignevents-rest-delete-already-deleted": "Este registro de evento já foi excluído.",
+	"campaignevents-rest-user-not-found": "Não há nenhum usuário com este ID central.",
+	"campaignevents-rest-get-registration-deleted": "Esta inscrição do evento foi eliminada.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "O parâmetro 'user_ids' deve ser uma matriz de IDs de usuário ou null (para remover todos os usuários)",
+	"campaignevents-rest-list-participants-empty-filter": "O filtro de nome de usuário, se especificado, deve ser uma string não vazia.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Você não está autorizado a ver os participantes que se inscreveram de forma privada para este evento."
+}

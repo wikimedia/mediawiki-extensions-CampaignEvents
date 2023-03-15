@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Woytecr"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
+	"campaignevents-rest-enable-registration-permission-denied": "Nie masz pozwolenia na włączenie rejestracji na wydarzenia.",
+	"campaignevents-rest-edit-page-nonlocal": "Ta rejestracja na wydarzenie została włączona na następującej wiki i powinna być tam edytowana: $1.",
+	"campaignevents-rest-user-not-found": "Użytkownik „$1” nie istnieje."
+}

@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Gomoko",
+			"Pols12",
+			"Verdy p"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Il n’y a aucun événement avec cet identifiant.",
+	"campaignevents-rest-enable-registration-permission-denied": "Vous n’êtes pas autorisé{{GENDER:||e}} à activer les inscriptions aux événements.",
+	"campaignevents-rest-edit-page-nonlocal": "Les inscriptions à cet événement ont été activées sur le wiki suivant et doivent être modifiées ici : $1.",
+	"campaignevents-rest-delete-already-deleted": "Cette inscription à l’événement est déjà supprimée.",
+	"campaignevents-rest-user-not-found": "Il n’y a aucun utilisateur avec cet identifiant central.",
+	"campaignevents-rest-get-registration-deleted": "Les inscriptions à cet événement ont été supprimées.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour retirer tous les utilisateurs)",
+	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Vous n’avez pas le droit de voir les participants qui se sont inscrits en privé pour cet événement.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> doit être un tableau de noms d’utilisateur et ne peut pas être vide"
+}

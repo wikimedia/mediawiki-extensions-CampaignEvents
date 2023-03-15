@@ -14,7 +14,6 @@
 	"registerforevent": "একটি ইভেন্টের জন্য নিবন্ধন করুন",
 	"campaignevents-role-creator": "{{GENDER:$1|স্রষ্টা}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|সংগঠক}}",
-	"campaignevents-rest-user-not-found": "এই কেন্দ্রীয় আইডির সহ কোনও ব্যবহারকারী নেই।",
 	"campaignevents-register-need-central-account": "ইভেন্টের জন্য নিবন্ধন করতে হলে আপনার একটি কেন্দ্রীয় ব্যবহারকারী অ্যাকাউন্টের থাকতে হবে৷",
 	"campaignevents-unregister-need-central-account": "ইভেন্ট নিবন্ধন বাতিল করতে হলে আপনার একটি কেন্দ্রীয় ব্যবহারকারী অ্যাকাউন্ট থাকতে হবে৷",
 	"campaignevents-myevents-need-central-account": "আপনার ইভেন্টের তালিকা দেখতে হলে আপনার একটি কেন্দ্রীয় ব্যবহারকারী অ্যাকাউন্টের থাকতে হবে।",

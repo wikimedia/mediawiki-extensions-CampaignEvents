@@ -39,8 +39,6 @@
 	"campaignevents-error-countryoraddress-not-in-person": "Møtets land og adresse må ikke angis om arrangementet ikke er fysisk.",
 	"campaignevents-error-invalid-country": "Angi et gyldig landnavn.",
 	"campaignevents-error-invalid-address": "Angi en gyldig adresse.",
-	"campaignevents-rest-event-not-found": "Det er ingen arrangementer med denne ID-en.",
-	"campaignevents-rest-enable-registration-permission-denied": "Du har ikke tillatelse til å aktivere arrangementsregistrering.",
 	"enableeventregistration": "Aktiver arrangementsregistrering",
 	"editeventregistration": "Rediger arrangementsregistrering",
 	"campaignevents-edit-form-legend": "Angi generell informasjon om arrangementet du organiserer",

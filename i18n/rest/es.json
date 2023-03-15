@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"MarcoAurelio"
+		]
+	},
+	"campaignevents-rest-event-not-found": "No existe ningún evento con ese código identificador.",
+	"campaignevents-rest-enable-registration-permission-denied": "No estás autorizado para activar las inscripciones para los eventos.",
+	"campaignevents-rest-edit-page-nonlocal": "Las inscripciones para este evento se abriero en la siguiente wiki y se deben editar desde allí: $1.",
+	"campaignevents-rest-delete-already-deleted": "Las inscripciones para este evento ya han sido borradas.",
+	"campaignevents-rest-user-not-found": "No existe ningún usuario con ese código.",
+	"campaignevents-rest-get-registration-deleted": "Las inscripciones para este evento han sido eliminadas.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "El parámetro 'user_ids' debe ser un conjunto de códigos identificadores de usuario o null (para eliminar a todos los usuarios)",
+	"campaignevents-rest-list-participants-empty-filter": "El filtro de nombres de usuario, si se especifica, debe ser una cadena que no esté vacía.",
+	"campaignevents-rest-list-participants-cannot-see-private": "No tienes permiso para ver la lista de participantes que se inscribieron para este evento de forma privada.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe ser una cadena de nombres de usuario, y no puede estar vacía"
+}

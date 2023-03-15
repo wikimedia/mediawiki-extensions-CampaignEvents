@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ата",
+			"Пан Хаунд"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Не існує події з таким ідентифікатором.",
+	"campaignevents-rest-enable-registration-permission-denied": "У вас немає дозволу вмикати реєстрацію на події.",
+	"campaignevents-rest-edit-page-nonlocal": "Цю реєстрацію на подію було ввімкнено на такій вікі, і її потрібно редагувати там: $1.",
+	"campaignevents-rest-delete-already-deleted": "Реєстрацію на цю подію уже вилучено.",
+	"campaignevents-rest-user-not-found": "Немає користувача з цим центральним ідентифікатором.",
+	"campaignevents-rest-get-registration-deleted": "Реєстрацію на цю подію вилучено."
+}

@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Gilbert Ndihokubwayo"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Estas neniu evento kun ĉi tiu ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Vi ne rajtas ebligi eventajn registriĝojn."
+}

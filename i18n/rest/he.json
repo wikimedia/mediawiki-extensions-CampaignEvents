@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Amire80"
+		]
+	},
+	"campaignevents-rest-event-not-found": "אין אירוע עם מזהה כזה.",
+	"campaignevents-rest-enable-registration-permission-denied": "אין לך הרשאה להפעיל הרשמות לאירועים.",
+	"campaignevents-rest-edit-page-nonlocal": "הרשמת האירוע הזאת הופעלה בוויקי הבא ויש לערוך אותה שם: $1.",
+	"campaignevents-rest-delete-already-deleted": "ההרשמה לאירוע שצוין כבר נמחקה.",
+	"campaignevents-rest-user-not-found": "משתמש עם מזהה מרכזי כזה אינו קיים.",
+	"campaignevents-rest-get-registration-deleted": "ההרשמה לאירוע הזה נמחקה.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "הפרמטר \"user_ids\" חייב להיות מערך של מזהי משתמשים או null (כדי להסיר את כל המשתמשים)",
+	"campaignevents-rest-list-participants-empty-filter": "מסנן שמות המשתמש, אם צוין, חייב להיות מחרוזת לא ריקה.",
+	"campaignevents-rest-list-participants-cannot-see-private": "אין לך הרשאה לצפות במשתתפים שנרשמו באופן פרטי לאירוע הזה.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> חייב להיות מערך של שמות משתמש ואינו יכול להיות ריק"
+}

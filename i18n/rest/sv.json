@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Sabelöga"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Det finns inget evenemang med det angivna ID:t.",
+	"campaignevents-rest-enable-registration-permission-denied": "Du får inte aktivera evenemangsregistreringar.",
+	"campaignevents-rest-edit-page-nonlocal": "Detta evenemangsregistrering har aktiverats på följande wiki och borde redigeras där: $1.",
+	"campaignevents-rest-delete-already-deleted": "Denna evenemangsregistreringen har redan raderats.",
+	"campaignevents-rest-user-not-found": "Det finns ingen användare med detta central-ID.",
+	"campaignevents-rest-get-registration-deleted": "Denna evenemangsregistreringen har raderats.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter \"user_ids\" måste vara en uppsättning användar-ID:n eller null (för att ta bort alla användare)",
+	"campaignevents-rest-list-participants-empty-filter": "Användarnamnsfiltret, om det angetts, får inte vara en tom sträng."
+}

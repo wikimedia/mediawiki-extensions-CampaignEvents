@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie",
+			"Siebrand"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Er is geen evenement met dit ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "U mag evenementregistraties niet inschakelen.",
+	"campaignevents-rest-edit-page-nonlocal": "Deze evenementregistratie is ingeschakeld op de volgende wiki en moet daar worden bewerkt: $1 .",
+	"campaignevents-rest-delete-already-deleted": "Deze evenementregistratie is al verwijderd.",
+	"campaignevents-rest-user-not-found": "Er is geen gebruiker met deze centrale ID.",
+	"campaignevents-rest-get-registration-deleted": "Deze evenementregistratie is verwijderd.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' moet een array van gebruikers-ID's zijn, of null (om alle gebruikers te verwijderen)",
+	"campaignevents-rest-list-participants-empty-filter": "Het gebruikersnaamfilter, indien opgegeven, moet een niet-lege tekenreeks zijn.",
+	"campaignevents-rest-list-participants-cannot-see-private": "U bent niet bevoegd om deelnemers te zien die zich privé hebben aangemeld voor dit evenement.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> moet een array van gebruikersnamen zijn en mag niet leeg zijn"
+}

@@ -43,7 +43,6 @@
 	"campaignevents-edit-invalid-username": "\"$1\" non è un nome utente valido.",
 	"campaignevents-role-creator": "{{GENDER:$1|creatore|creatrice|creatore/trice}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organizzatore|organizzatrice|organizzatore/trice}}",
-	"campaignevents-rest-user-not-found": "Non esiste alcun utente con questo ID centrale.",
 	"myevents": "I tuoi eventi",
 	"campaignevents-myevents-need-central-account": "Devi avere un account utente centralizzato per poter vedere la lista dei tuoi eventi.",
 	"campaignevents-myevents-filter-legend": "Filtra gli eventi",
@@ -150,6 +149,5 @@
 	"campaignevents-notification-registration-details-organizers-header": "Organizzatori dell'evento",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|altro|altri}}",
 	"campaignevents-notification-registration-event-page-link": "Vedi pagina dell'evento",
-	"campaignevents-notification-registration-chat-link": "Unisciti alla chat di gruppo",
-	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> deve essere un array di nomi utente e non può essere vuoto"
+	"campaignevents-notification-registration-chat-link": "Unisciti alla chat di gruppo"
 }

@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Okras"
+		]
+	},
+	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена."
+}

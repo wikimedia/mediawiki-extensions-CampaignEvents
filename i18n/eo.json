@@ -30,8 +30,6 @@
 	"campaignevents-error-countryoraddress-not-in-person": "La enrenkontiĝa lando kaj adreso ne devas esti specifita se la evento ne estas fizika.",
 	"campaignevents-error-invalid-country": "Enigu validan landonomon.",
 	"campaignevents-error-invalid-address": "Enigu validan adreson.",
-	"campaignevents-rest-event-not-found": "Estas neniu evento kun ĉi tiu ID.",
-	"campaignevents-rest-enable-registration-permission-denied": "Vi ne rajtas ebligi eventajn registriĝojn.",
 	"enableeventregistration": "Ebligi eventajn registriĝojn",
 	"editeventregistration": "Redakti eventan registriĝon",
 	"campaignevents-edit-form-legend": "Provizu ĝeneralan informon pri la evento, kiun vi organizantas",

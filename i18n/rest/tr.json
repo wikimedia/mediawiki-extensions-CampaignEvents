@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hedda"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Bu kimliğe sahip bir etkinlik yok.",
+	"campaignevents-rest-enable-registration-permission-denied": "Etkinlik kayıtlarını etkinleştirmenize izin verilmiyor.",
+	"campaignevents-rest-edit-page-nonlocal": "Bu etkinlik kaydı şu viki'de etkinleştirildi ve burada düzenlenmesi gerekiyor: $1 .",
+	"campaignevents-rest-delete-already-deleted": "Bu etkinlik kaydı zaten silinmiş.",
+	"campaignevents-rest-user-not-found": "$1 kullanıcısı mevcut değil.",
+	"campaignevents-rest-get-registration-deleted": "Bu etkinlik kaydı silindi.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' parametresi bir dizi kullanıcı kimliği veya boş (tüm kullanıcıları kaldırmak için) olmalıdır"
+}

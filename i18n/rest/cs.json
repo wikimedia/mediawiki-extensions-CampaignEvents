@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kendo13"
+		]
+	},
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parametr 'user_ids' musí být pole ID uživatelů nebo null (pro odstranění všech uživatelů)."
+}

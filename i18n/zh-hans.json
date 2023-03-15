@@ -17,7 +17,6 @@
 	"campaignevents-error-invalid-type": "请输入有效的活动类型。",
 	"campaignevents-error-invalid-country": "请输入有效的国家名称。",
 	"campaignevents-error-invalid-address": "请输入有效地址。",
-	"campaignevents-rest-event-not-found": "没有具有此ID的活动。",
 	"campaignevents-edit-field-status-open": "开放中",
 	"campaignevents-edit-field-status-closed": "已关闭",
 	"campaignevents-edit-field-timezone": "时区",

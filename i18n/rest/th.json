@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Patsagorn Y."
+		]
+	},
+	"campaignevents-rest-event-not-found": "ไม่มีกิจกรรมที่มี ID นี้",
+	"campaignevents-rest-enable-registration-permission-denied": "คุณไม่มีสิทธิ์ในการเปิดการรับลงทะเบียนกิจกรรม",
+	"campaignevents-rest-edit-page-nonlocal": "การลงทะเบียนเหตุการณ์นี้เปิดใช้งานบนวิกิต่อไปนี้ และควรแก้ไขที่นั่น: $1",
+	"campaignevents-rest-delete-already-deleted": "การลงทะเบียนกิจกรรมนี้ถูกลบไปแล้ว",
+	"campaignevents-rest-user-not-found": "ไม่มีผู้ใช้ \"$1\"",
+	"campaignevents-rest-get-registration-deleted": "การลงทะเบียนกิจกรรมนี้ถูกลบ"
+}
