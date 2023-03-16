@@ -3,12 +3,12 @@
 const { action, assert, REST, clientFactory, utils } = require( 'api-testing' );
 const EventUtils = require( './EventUtils.js' );
 
-describe( 'POST /campaignevents/v0/event_registration', () => {
+describe( 'POST /campaignevents/v0/event_registration', function () {
 	let anonClient, organizerClient, blockedUserClient,
 		anonToken, organizerToken, blockedUserToken,
 		eventPage;
 
-	before( async () => {
+	before( async function () {
 		const organizerUser = await action.root();
 		organizerToken = await organizerUser.token();
 
@@ -39,8 +39,8 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 		};
 	}
 
-	describe( 'permission error', () => {
-		it( 'fails session check for anonymous users', async () => {
+	describe( 'permission error', function () {
+		it( 'fails session check for anonymous users', async function () {
 			const { body: sourceBody } = await anonClient.post( '', getBody( anonToken ) );
 			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
@@ -48,7 +48,7 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
 		} );
-		it( 'fails for a blocked user', async () => {
+		it( 'fails for a blocked user', async function () {
 			const { body: sourceBody } = await blockedUserClient.post( '', getBody( blockedUserToken ) );
 			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.property( sourceBody, 'messageTranslations' );
@@ -57,8 +57,8 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 		} );
 	} );
 
-	describe( 'param validation', () => {
-		it( 'fails if no parameters were given', async () => {
+	describe( 'param validation', function () {
+		it( 'fails if no parameters were given', async function () {
 			const { body: sourceBody } = await organizerClient.post( '' );
 			assert.strictEqual( sourceBody.httpCode, 400 );
 			assert.property( sourceBody, 'messageTranslations' );
@@ -67,8 +67,8 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 		} );
 	} );
 
-	describe( 'successful', () => {
-		it( 'succeeds for an authorized user if the request body is valid', async () => {
+	describe( 'successful', function () {
+		it( 'succeeds for an authorized user if the request body is valid', async function () {
 			const { status: statusCode, body: sourceBody } = await organizerClient.post( '', getBody( organizerToken ) );
 			assert.strictEqual( statusCode, 201 );
 			assert.property( sourceBody, 'id' );
