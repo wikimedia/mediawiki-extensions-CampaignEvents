@@ -52,7 +52,7 @@
 	"campaignevents-edit-field-end": "End time",
 	"campaignevents-edit-field-organizers": "Organizers",
 	"campaignevents-edit-field-organizers-help": "Add the username of other organizers to give them permission to manage this event.",
-	"campaignevents-edit-field-organizers-placeholder": "Add more organizers",
+	"campaignevents-edit-field-organizers-placeholder": "Add username",
 	"campaignevents-edit-field-organizers-creator-title": "This is the creator of the event, other organizers can not remove this user.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "This {{GENDER:$1|user}} is not allowed to organize events.",
 	"campaignevents-edit-field-meeting-type": "Event meeting type",
