@@ -18,7 +18,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use RuntimeException;
-use StatusValue;
 use stdClass;
 
 /**
@@ -294,7 +293,7 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function saveRegistration( EventRegistration $event ): StatusValue {
+	public function saveRegistration( EventRegistration $event ): int {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$curDBTimestamp = $dbw->timestamp();
 
@@ -359,7 +358,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 		unset( $this->cache[$eventID] );
 
-		return StatusValue::newGood( $eventID );
+		return $eventID;
 	}
 
 	/**

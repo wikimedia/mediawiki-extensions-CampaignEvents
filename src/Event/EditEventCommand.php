@@ -161,12 +161,8 @@ class EditEventCommand {
 			return StatusValue::newFatal( 'campaignevents-edit-no-creator' );
 		}
 
-		$saveStatus = $this->eventStore->saveRegistration( $registration );
-		if ( !$saveStatus->isGood() ) {
-			return $saveStatus;
-		}
+		$newEventID = $this->eventStore->saveRegistration( $registration );
 		$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
-		$newEventID = $saveStatus->getValue();
 		$this->addOrganizers( $registrationID === null, $newEventID, $organizerCentralUserIDs, $performerCentralUser );
 
 		return StatusValue::newGood( $newEventID );

@@ -105,10 +105,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->editPage( $eventPageTitle, 'Making sure that the event page exist' );
 
 		$store = CampaignEventsServices::getEventStore();
-		$status = $store->saveRegistration( $event );
-		$this->assertStatusGood( $status, 'Should be successful' );
-		$savedID = $status->getValue();
-		$this->assertIsInt( $savedID, 'Status value should be the insertion ID' );
+		$savedID = $store->saveRegistration( $event );
 		if ( $event->getID() !== null ) {
 			$this->assertSame( $event->getID(), $savedID, 'ID should remain the same when updating' );
 		}

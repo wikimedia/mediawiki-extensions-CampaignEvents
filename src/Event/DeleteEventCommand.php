@@ -67,7 +67,7 @@ class DeleteEventCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @return StatusValue The value is true if the registration was deleted, false if it was already deleted
+	 * @return StatusValue If good, the value is true if the registration was deleted, false if it was already deleted.
 	 */
 	public function deleteUnsafe( ExistingEventRegistration $registration ): StatusValue {
 		return StatusValue::newGood( $this->eventStore->deleteRegistration( $registration ) );
