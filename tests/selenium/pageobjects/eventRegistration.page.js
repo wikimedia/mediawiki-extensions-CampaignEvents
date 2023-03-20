@@ -22,6 +22,7 @@ class EventRegistrationPage extends Page {
 	get enableRegistration() { return $( '[value="Enable registration"]' ); }
 	get eventPage() { return $( '[name="wpEventPage"]' ); }
 	get generalError() { return $( '[role=alert]' ); }
+	get meetingTypeSelector() { return $( '[role="radiogroup"]' ); }
 	get startDateInput() { return $( '#mw-input-wpEventStart' ).$( '[size="2"]' ); }
 	get startYearInput() { return $( '#mw-input-wpEventStart' ).$( '[size="4"]' ); }
 	get endDateInput() { return $( '#mw-input-wpEventEnd' ).$( '[size="2"]' ); }
@@ -45,6 +46,16 @@ class EventRegistrationPage extends Page {
 	async createEvent( event ) {
 		const bot = await Api.bot();
 		await bot.edit( event, '', '' );
+	}
+
+	async selectMeetingType( meetingType ) {
+		if ( meetingType === 'online' ) {
+			await this.meetingTypeSelector.$( 'label:nth-of-type(1)' ).click();
+		} else if ( meetingType === 'inperson' ) {
+			await this.meetingTypeSelector.$( 'label:nth-of-type(2)' ).click();
+		} else if ( meetingType === 'hybrid' ) {
+			await this.meetingTypeSelector.$( 'label:nth-of-type(3)' ).click();
+		}
 	}
 
 	/**
@@ -83,16 +94,33 @@ class EventRegistrationPage extends Page {
 	 * example: {day: 15, year: 2023}
 	 * @param {Object} end the day and year to end the event
 	 * example: {day: 15, year: 2024}
+	 * @param {string} meetingType choose from 'inperson', 'hybrid', or 'online'
+	 * example: 'inperson'
 	 */
-	async editEvent( { id, event, start = this.startDefault, end = this.endDefault } ) {
+	async editEvent( {
+		id,
+		event,
+		start,
+		end,
+		meetingType
+	} ) {
 		super.openTitle( `Special:EditEventRegistration/${id}` );
 		if ( event ) {
 			await this.eventPage.setValue( event );
 		}
-		await this.startYearInput.setValue( ( start.year ).toString() );
-		await this.startDateInput.setValue( ( start.day ).toString() );
-		await this.endDateInput.setValue( ( end.day ).toString() );
-		await this.endYearInput.setValue( ( end.year ).toString() );
+		if ( start ) {
+			await this.startYearInput.setValue( ( start.year ).toString() );
+			await this.startDateInput.setValue( ( start.day ).toString() );
+			await this.loseFocus();
+		}
+		if ( end ) {
+			await this.endDateInput.setValue( ( end.day ).toString() );
+			await this.endYearInput.setValue( ( end.year ).toString() );
+			await this.loseFocus();
+		}
+		if ( meetingType ) {
+			await this.selectMeetingType( meetingType );
+		}
 		await this.editRegistration.click();
 	}
 }
