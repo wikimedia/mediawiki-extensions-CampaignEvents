@@ -69,6 +69,7 @@
 	"campaignevents-edit-no-event-id-provided": "Angi en arrangements-ID.",
 	"campaignevents-edit-event-notfound": "Det er ingen arrangementer med denne ID-en.",
 	"campaignevents-edit-invalid-username": "«$1» er ikke et gyldig brukernavn.",
+	"campaignevents-register-confirmation-btn": "Registrer deg",
 	"campaignevents-role-creator": "{{GENDER:$1|skaper}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organisator}}",
 	"campaignevents-myevents-filter-legend": "Filtrer arrangementer",
@@ -130,9 +131,18 @@
 	"campaignevents-event-details-dates-label": "Start- og slutt-tid",
 	"campaignevents-event-details-remove-all-participant-notification": "Fjernet alle deltakere",
 	"campaignevents-unregister-participants-permission-denied": "Du har ikke tillatelse til å fjerne deltakere",
+	"campaignevents-event-details-tab-participants": "Deltakere",
 	"campaignevents-event-details-search-participants-placeholder": "Søk etter deltakere",
 	"campaignevents-event-details-organizers-view-more": "Vis mer",
 	"campaignevents-event-details-organizers-noscript": "Du må skru på JavaScript for å se den fullstendige listen over arrangører.",
 	"campaignevents-userlink-suppressed-user": "brukernavn dempet",
-	"campaignevents-userlink-deleted-user": "slettet bruker"
+	"campaignevents-userlink-deleted-user": "slettet bruker",
+	"campaignevents-notification-registration-details-dates": "$1 til $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Tidssone:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Arrangementstype",
+	"campaignevents-notification-registration-details-type-online-header": "Nettarrangement",
+	"campaignevents-notification-registration-details-type-in-person-header": "Fysisk arrangement",
+	"campaignevents-notification-registration-details-organizers-header": "Arrangementsorganisatorer",
+	"campaignevents-notification-registration-event-page-link": "Vis arrangementsside",
+	"campaignevents-notification-registration-chat-link": "Bli med i gruppesamtale"
 }
