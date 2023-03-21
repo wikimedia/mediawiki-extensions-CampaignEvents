@@ -3,7 +3,7 @@
 const { action, assert, REST, clientFactory, utils } = require( 'api-testing' );
 const EventUtils = require( './EventUtils.js' );
 
-describe( 'PUT /campaignevents/v0/event_registration/{id}', function () {
+describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 	// Note that the event ID must be specified when using these clients
 	let anonClient, organizerClient, blockedUserClient,
 		anonToken, organizerToken, blockedUserToken,
@@ -54,8 +54,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', function () {
 		};
 	}
 
-	describe( 'permission error', function () {
-		it( 'fails session check for anonymous users', async function () {
+	describe( 'permission error', () => {
+		it( 'fails session check for anonymous users', async () => {
 			const { body: sourceBody } = await anonClient.put( eventID, getBody( anonToken ) );
 			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
@@ -63,7 +63,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', function () {
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
 		} );
-		it( 'fails for a blocked user', async function () {
+		it( 'fails for a blocked user', async () => {
 			const { body: sourceBody } = await blockedUserClient.put(
 				eventID,
 				getBody( blockedUserToken )
@@ -75,15 +75,15 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', function () {
 		} );
 	} );
 
-	describe( 'param validation', function () {
-		it( 'fails if no parameters were given', async function () {
+	describe( 'param validation', () => {
+		it( 'fails if no parameters were given', async () => {
 			const { body: sourceBody } = await organizerClient.put( eventID );
 			assert.strictEqual( sourceBody.httpCode, 400 );
 			assert.property( sourceBody, 'messageTranslations' );
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'Mandatory field' );
 		} );
-		it( 'cannot be used to create a new event', async function () {
+		it( 'cannot be used to create a new event', async () => {
 			const nonExistentEventID = eventID + 1000;
 			const { body: sourceBody } = await organizerClient.put(
 				nonExistentEventID,
@@ -96,8 +96,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', function () {
 		} );
 	} );
 
-	describe( 'successful', function () {
-		it( 'succeeds for an authorized user if the request body is valid', async function () {
+	describe( 'successful', () => {
+		it( 'succeeds for an authorized user if the request body is valid', async () => {
 			const { status: statusCode } = await organizerClient.put(
 				eventID,
 				getBody( organizerToken )

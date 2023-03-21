@@ -3,7 +3,7 @@
 const { action, assert, REST, clientFactory, utils } = require( 'api-testing' );
 const EventUtils = require( './EventUtils.js' );
 
-describe( 'POST /campaignevents/v0/event_registration', function () {
+describe( 'POST /campaignevents/v0/event_registration', () => {
 	let anonClient, organizerClient, blockedUserClient,
 		anonToken, organizerToken, blockedUserToken,
 		eventPage;
@@ -42,8 +42,8 @@ describe( 'POST /campaignevents/v0/event_registration', function () {
 		};
 	}
 
-	describe( 'permission error', function () {
-		it( 'fails session check for anonymous users', async function () {
+	describe( 'permission error', () => {
+		it( 'fails session check for anonymous users', async () => {
 			const { body: sourceBody } = await anonClient.post( '', getBody( anonToken ) );
 			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
@@ -51,7 +51,7 @@ describe( 'POST /campaignevents/v0/event_registration', function () {
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
 		} );
-		it( 'fails for a blocked user', async function () {
+		it( 'fails for a blocked user', async () => {
 			const { body: sourceBody } = await blockedUserClient.post( '', getBody( blockedUserToken ) );
 			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.property( sourceBody, 'messageTranslations' );
@@ -60,8 +60,8 @@ describe( 'POST /campaignevents/v0/event_registration', function () {
 		} );
 	} );
 
-	describe( 'param validation', function () {
-		it( 'fails if no parameters were given', async function () {
+	describe( 'param validation', () => {
+		it( 'fails if no parameters were given', async () => {
 			const { body: sourceBody } = await organizerClient.post( '' );
 			assert.strictEqual( sourceBody.httpCode, 400 );
 			assert.property( sourceBody, 'messageTranslations' );
@@ -70,8 +70,8 @@ describe( 'POST /campaignevents/v0/event_registration', function () {
 		} );
 	} );
 
-	describe( 'successful', function () {
-		it( 'succeeds for an authorized user if the request body is valid', async function () {
+	describe( 'successful', () => {
+		it( 'succeeds for an authorized user if the request body is valid', async () => {
 			const { status: statusCode, body: sourceBody } = await organizerClient.post( '', getBody( organizerToken ) );
 			assert.strictEqual( statusCode, 201 );
 			assert.property( sourceBody, 'id' );

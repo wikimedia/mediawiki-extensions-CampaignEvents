@@ -3,7 +3,7 @@
 const { action, assert, REST, clientFactory } = require( 'api-testing' );
 const EventUtils = require( './EventUtils.js' );
 
-describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', function () {
+describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', () => {
 	// Note that you must specify the path suffix when using these clients
 	// (see getPathSuffixForEvent)
 	let anonClient, participantClient, blockedUserClient,
@@ -45,11 +45,11 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', fu
 
 	function getPathSuffix( pathEventID ) {
 		pathEventID = pathEventID || eventID;
-		return String( pathEventID ) + '/participants/self';
+		return `${pathEventID}/participants/self`;
 	}
 
-	describe( 'permission error', function () {
-		it( 'fails session check for anonymous users', async function () {
+	describe( 'permission error', () => {
+		it( 'fails session check for anonymous users', async () => {
 			const { body: sourceBody } = await anonClient.put(
 				getPathSuffix(),
 				getBody( anonToken )
@@ -60,7 +60,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', fu
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
 		} );
-		it( 'fails for a blocked user', async function () {
+		it( 'fails for a blocked user', async () => {
 			const { body: sourceBody } = await blockedUserClient.put(
 				getPathSuffix(),
 				getBody( blockedUserToken )
@@ -72,8 +72,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', fu
 		} );
 	} );
 
-	describe( 'param validation', function () {
-		it( 'fails if the event does not exist', async function () {
+	describe( 'param validation', () => {
+		it( 'fails if the event does not exist', async () => {
 			const nonExistentEventID = eventID + 1000;
 			const { body: sourceBody } = await participantClient.put(
 				getPathSuffix( nonExistentEventID ),
@@ -86,8 +86,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', fu
 		} );
 	} );
 
-	describe( 'successful', function () {
-		it( 'authorized user can register publicly', async function () {
+	describe( 'successful', () => {
+		it( 'authorized user can register publicly', async () => {
 			const { status: statusCode, body: sourceBody } = await participantClient.put(
 				getPathSuffix(),
 				getBody( participantToken, false )
@@ -96,7 +96,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', fu
 			assert.property( sourceBody, 'modified' );
 			assert.strictEqual( sourceBody.modified, true );
 		} );
-		it( 'authorized user can switch public registration to private', async function () {
+		it( 'authorized user can switch public registration to private', async () => {
 			const { status: statusCode, body: sourceBody } = await participantClient.put(
 				getPathSuffix(),
 				getBody( participantToken, true )
@@ -105,7 +105,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', fu
 			assert.property( sourceBody, 'modified' );
 			assert.strictEqual( sourceBody.modified, true );
 		} );
-		it( 'attempting to set the registration to private again does not change the resource', async function () {
+		it( 'attempting to set the registration to private again does not change the resource', async () => {
 			const { status: statusCode, body: sourceBody } = await participantClient.put(
 				getPathSuffix(),
 				getBody( participantToken, true )
