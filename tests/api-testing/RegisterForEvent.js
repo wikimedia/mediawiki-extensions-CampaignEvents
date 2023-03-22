@@ -11,6 +11,9 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', fu
 		eventID;
 
 	before( async function () {
+		// Increase the timeout, because we need to block a user and edit a page
+		this.timeout( 5000 );
+
 		const participantUser = await action.alice();
 		participantToken = await participantUser.token();
 
