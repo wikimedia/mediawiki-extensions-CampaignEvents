@@ -13,7 +13,7 @@
 		this.setInvalidOrganizers();
 
 		this.organizersField.on( 'change', this.setInvalidOrganizers.bind( this ) );
-		if ( !this.isEventCreator || !this.eventID ) {
+		if ( ( !this.isEventCreator || !this.eventID ) && this.eventCreatorUsername !== null ) {
 			var organizerItem = this.organizersField.findItemFromData( this.eventCreatorUsername );
 			if ( organizerItem ) {
 				// XXX The card can still be removed by using the menu (i.e., highlight the entry

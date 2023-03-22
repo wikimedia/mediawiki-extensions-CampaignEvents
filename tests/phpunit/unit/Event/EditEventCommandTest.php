@@ -70,6 +70,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		if ( !$centralUserLookup ) {
 			$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
 			$centralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
+			$centralUserLookup->method( 'existsAndIsVisible' )->willReturn( true );
 		}
 
 		return new EditEventCommand(
@@ -345,6 +346,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$returnNotCreatorCentralUserLookup->method( 'newFromLocalUsername' )
 				->with( $notCreatorUsername )->willReturn( $notCreatorUser );
 			$returnNotCreatorCentralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
+			$returnNotCreatorCentralUserLookup->method( 'existsAndIsVisible' )->willReturn( true );
 
 			$noCreatorMsg = $registration->getID()
 				? 'campaignevents-edit-removed-creator'
@@ -433,6 +435,27 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),
 			array_keys( $organizerIDsMap ),
+		);
+		$this->assertStatusGood( $status );
+	}
+
+	/**
+	 * @covers ::doEditUnsafe
+	 */
+	public function testDoEditUnsafe__successfulCreatorDeletedOrNotVisible() {
+		$registration = $this->createMock( EventRegistration::class );
+		$registration->method( 'getID' )->willReturn( 1 );
+
+		$performer = $this->createMock( ICampaignsAuthority::class );
+
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
+		$centralUserLookup->method( 'existsAndIsVisible' )->willReturn( false );
+
+		$status = $this->getCommand( null, null, null, $centralUserLookup )->doEditUnsafe(
+			$registration,
+			$performer,
+			self::ORGANIZER_USERNAMES
 		);
 		$this->assertStatusGood( $status );
 	}
