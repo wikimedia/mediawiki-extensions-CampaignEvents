@@ -57,7 +57,7 @@
 	"campaignevents-edit-field-start": "開始時間",
 	"campaignevents-edit-field-end": "終了時間",
 	"campaignevents-edit-field-organizers": "主催者",
-	"campaignevents-edit-field-organizers-placeholder": "主催者を追加",
+	"campaignevents-edit-field-organizers-placeholder": "ユーザー名を追加",
 	"campaignevents-edit-field-organizers-creator-title": "イベントの作成者です。他の主催者はこのユーザーを削除できません。",
 	"campaignevents-edit-field-organizers-user-not-allowed": "この利用者 \"$1\" はイベントを主催できません。",
 	"campaignevents-edit-field-meeting-type": "イベントのミーティングのタイプ",

@@ -57,7 +57,7 @@
 	"campaignevents-edit-field-end": "Horodatage de fin",
 	"campaignevents-edit-field-organizers": "Organisateurs",
 	"campaignevents-edit-field-organizers-help": "Ajoutez le nom d’utilisateur des autres organisateurs pour leur donner la permission de gérer cet événement.",
-	"campaignevents-edit-field-organizers-placeholder": "Ajouter d’autres organisateurs",
+	"campaignevents-edit-field-organizers-placeholder": "Ajouter un nom d’utilisateur",
 	"campaignevents-edit-field-organizers-creator-title": "Il s’agit du créateur de l’événement, les autres organisateurs ne peuvent pas supprimer cet utilisateur.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Cet{{GENDER:$1||te}} utilisat{{GENDER:$1|eur|rice}} n'est pas autorisé{{GENDER:$1||e}} à organiser des événements.",
 	"campaignevents-edit-field-meeting-type": "Type de réunion événementielle",

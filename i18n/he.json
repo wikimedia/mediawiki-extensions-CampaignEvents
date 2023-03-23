@@ -52,7 +52,7 @@
 	"campaignevents-edit-field-end": "זמן סיום",
 	"campaignevents-edit-field-organizers": "מארגנים",
 	"campaignevents-edit-field-organizers-help": "יש להוסיף את שם המשתמש של המארגנים האחרים כדי לתת להם הרשאה לנהל את האירוע הזה.",
-	"campaignevents-edit-field-organizers-placeholder": "להוסיף עוד מארגנים",
+	"campaignevents-edit-field-organizers-placeholder": "הוספת שם משתמש",
 	"campaignevents-edit-field-organizers-creator-title": "זה היוצר של האירוע, מארגנים אחרים לא יכולים להסיר את המשתמש הזה.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|המשתמש הזה אינו רשאי|המשתמשת הזאת אינה רשאית}} לארגן אירועים.",
 	"campaignevents-edit-field-meeting-type": "סוג מפגש אירוע",

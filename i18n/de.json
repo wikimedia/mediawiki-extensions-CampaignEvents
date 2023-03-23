@@ -52,7 +52,7 @@
 	"campaignevents-edit-field-end": "Endzeit",
 	"campaignevents-edit-field-organizers": "Organisatoren",
 	"campaignevents-edit-field-organizers-help": "Füge den Benutzernamen anderer Organisatoren hinzu, um ihnen die Erlaubnis zu geben, diese Veranstaltung zu verwalten.",
-	"campaignevents-edit-field-organizers-placeholder": "Weitere Organisatoren hinzufügen",
+	"campaignevents-edit-field-organizers-placeholder": "Benutzernamen hinzufügen",
 	"campaignevents-edit-field-organizers-creator-title": "Dies ist der Ersteller der Veranstaltung, andere Organisatoren können diesen Benutzer nicht entfernen.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Dieser Benutzer|Diese Benutzerin}} darf keine Veranstaltungen organisieren.",
 	"campaignevents-edit-field-meeting-type": "Veranstaltungstyp",

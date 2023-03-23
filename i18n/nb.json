@@ -55,7 +55,7 @@
 	"campaignevents-edit-field-end": "Sluttidspunkt",
 	"campaignevents-edit-field-organizers": "Arrangører",
 	"campaignevents-edit-field-organizers-help": "Legg til brukernavnet til andre arrangører for å gi dem tillatelse til å styre dette arrangementet.",
-	"campaignevents-edit-field-organizers-placeholder": "Legg til flere arrangører",
+	"campaignevents-edit-field-organizers-placeholder": "Legg til brukernavn",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Denne}} brukeren har ikke tillatelse til å organisere arrangementer.",
 	"campaignevents-edit-field-meeting-type": "Arrangementets møtetype",
 	"campaignevents-edit-field-type-online": "Online-arrangement",

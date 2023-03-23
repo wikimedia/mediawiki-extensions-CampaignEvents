@@ -52,7 +52,7 @@
 	"campaignevents-edit-field-end": "Hora de fin",
 	"campaignevents-edit-field-organizers": "Organisatores",
 	"campaignevents-edit-field-organizers-help": "Adde le nomine de usator de altere organisatores pro dar les le permission de gerer iste evento.",
-	"campaignevents-edit-field-organizers-placeholder": "Adder plus organisatores",
+	"campaignevents-edit-field-organizers-placeholder": "Adder nomine de usator",
 	"campaignevents-edit-field-organizers-creator-title": "Isto es le creator del evento. Altere organisatores non pote remover iste usator.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Iste usat{{GENDER:$1|or|rice}} non es autorisate a organisar eventos.",
 	"campaignevents-edit-field-meeting-type": "Typo de reunion del evento",
