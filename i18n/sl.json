@@ -52,7 +52,7 @@
 	"campaignevents-edit-field-end": "Končni čas",
 	"campaignevents-edit-field-organizers": "Organizatorji",
 	"campaignevents-edit-field-organizers-help": "Dodajte uporabniška imena drugih organizatorjev, da jim omogočite upravljanje tega dogodka.",
-	"campaignevents-edit-field-organizers-placeholder": "Dodajte več organizatorjev",
+	"campaignevents-edit-field-organizers-placeholder": "Dodajte uporabniško ime",
 	"campaignevents-edit-field-organizers-creator-title": "To je ustvarjalec dogodka; drugi organizatorji tega uporabnika ne morejo odstraniti.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Ta {{GENDER:$1|uporabnik|uporabnica|uporabnik_ca}} nima dovoljenja za organiziranje dogodkov.",
 	"campaignevents-edit-field-meeting-type": "Vrsta srečanja na dogodku",

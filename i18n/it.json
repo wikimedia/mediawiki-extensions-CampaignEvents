@@ -27,7 +27,7 @@
 	"campaignevents-edit-field-status-closed": "Chiuso",
 	"campaignevents-edit-field-timezone": "Fuso orario",
 	"campaignevents-edit-field-organizers": "Organizzatori",
-	"campaignevents-edit-field-organizers-placeholder": "Aggiungi altri organizzatori",
+	"campaignevents-edit-field-organizers-placeholder": "Aggiungi nome utente",
 	"campaignevents-edit-field-organizers-creator-title": "Questo è il creatore dell'evento, gli altri organizzatori non possono rimuovere questo utente.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Questo|Questa}} utente non è {{GENDER:$1|autorizzato|autorizzata}} a organizzare eventi.",
 	"campaignevents-edit-field-type-online": "Evento online",
