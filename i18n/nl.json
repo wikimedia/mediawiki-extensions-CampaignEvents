@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
+			"HanV",
 			"McDutchie",
 			"Siebrand"
 		]
@@ -54,7 +55,7 @@
 	"campaignevents-edit-field-end": "Eindtijd",
 	"campaignevents-edit-field-organizers": "Organisatoren",
 	"campaignevents-edit-field-organizers-help": "Voeg de gebruikersnaam van andere organisatoren toe om hen toestemming te geven om dit evenement te beheren.",
-	"campaignevents-edit-field-organizers-placeholder": "Meer organisatoren toevoegen",
+	"campaignevents-edit-field-organizers-placeholder": "Gebruikersnaam toevoegen",
 	"campaignevents-edit-field-organizers-creator-title": "Dit is de maker van het evenement. Andere organisatoren kunnen deze gebruiker niet verwijderen.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Deze gebruik{{GENDER:$1||st}}er mag geen evenementen organiseren.",
 	"campaignevents-edit-field-meeting-type": "Type bijeenkomst voor evenement",
