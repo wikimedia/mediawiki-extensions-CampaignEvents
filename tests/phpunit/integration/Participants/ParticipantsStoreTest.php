@@ -69,7 +69,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	private function getStore(): ParticipantsStore {
 		return new ParticipantsStore(
 			CampaignEventsServices::getDatabaseHelper(),
-			CampaignEventsServices::getCampaignsCentralUserLookup()
+			CampaignEventsServices::getCentralUserLookup()
 		);
 	}
 

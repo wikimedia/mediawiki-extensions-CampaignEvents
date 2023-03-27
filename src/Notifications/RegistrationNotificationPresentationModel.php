@@ -55,7 +55,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		$eventLookup = CampaignEventsServices::getEventLookup();
 		$eventID = $this->event->getExtraParam( 'event-id' );
 		$this->eventRegistration = $eventLookup->getEventByID( $eventID );
-		$this->pageUrlResolver = CampaignEventsServices::getPageUrlResolver();
+		$this->pageUrlResolver = CampaignEventsServices::getPageURLResolver();
 		$this->eventTimeFormatter = CampaignEventsServices::getEventTimeFormatter();
 		$this->organizersStore = CampaignEventsServices::getOrganizersStore();
 		$this->userLinker = CampaignEventsServices::getUserLinker();
