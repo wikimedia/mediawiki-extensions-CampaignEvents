@@ -15,8 +15,9 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
@@ -116,8 +117,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			if ( !$eventCreator ) {
 				throw new RuntimeException( "Did not find event creator." );
 			}
-
-			$eventCreatorUsername = $this->centralUserLookup->getUserName( $eventCreator->getUser() );
+			try {
+				$eventCreatorUsername = $this->centralUserLookup->getUserName( $eventCreator->getUser() );
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+				$eventCreatorUsername = null;
+			}
 			$performerUserName = $this->performer->getUserIdentity()->getName();
 			$isEventCreator = $performerUserName === $eventCreatorUsername;
 		} else {
@@ -424,9 +428,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$user = $organizer->getUser();
 			try {
 				$organizerUserNames[] = $this->centralUserLookup->getUserName( $user );
-			} catch ( UserNotGlobalException $_ ) {
-				// Should never happen.
-				throw new RuntimeException( "Organizer in the database has no central account." );
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+				// If this happens we just don't display the user name
 			}
 		}
 

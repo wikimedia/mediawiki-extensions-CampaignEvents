@@ -290,6 +290,11 @@ class EditEventCommand {
 			return false;
 		}
 
+		if ( !$this->centralUserLookup->existsAndIsVisible( $eventCreator->getUser() ) ) {
+			// Allow the removal of deleted/suppressed organizers, since they're not shown in the editing interface
+			return false;
+		}
+
 		$creatorGlobalUserID = $eventCreator->getUser()->getCentralID();
 
 		if (
