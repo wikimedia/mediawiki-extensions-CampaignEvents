@@ -9,6 +9,9 @@ describe( 'POST /campaignevents/v0/event_registration', function () {
 		eventPage;
 
 	before( async function () {
+		// Increase the timeout, because we need to block a user and edit a page
+		this.timeout( 5000 );
+
 		const organizerUser = await action.root();
 		organizerToken = await organizerUser.token();
 

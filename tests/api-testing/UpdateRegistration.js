@@ -10,6 +10,9 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', function () {
 		eventPage, eventID;
 
 	before( async function () {
+		// Increase the timeout, because we need to block a user and edit a page
+		this.timeout( 5000 );
+
 		const organizerUser = await action.root();
 		organizerToken = await organizerUser.token();
 
