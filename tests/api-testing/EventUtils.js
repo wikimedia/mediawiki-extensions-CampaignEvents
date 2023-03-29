@@ -4,7 +4,7 @@ const { assert, clientFactory, action, utils } = require( 'api-testing' );
 
 let blockedUser;
 module.exports = {
-	enableRegistration: async function ( user, reqBody ) {
+	async enableRegistration( user, reqBody ) {
 		const enableRegistrationClient = clientFactory.getRESTClient( 'rest.php/campaignevents/v0/event_registration', user );
 		const { status: statusCode, body: sourceBody } = await enableRegistrationClient.post( '', reqBody );
 		assert.strictEqual( statusCode, 201 );
@@ -13,7 +13,7 @@ module.exports = {
 		return sourceBody.id;
 	},
 
-	enableRandomRegistration: async function () {
+	async enableRandomRegistration() {
 		const eventPage = utils.title( 'Event:Event page ' ),
 			rootUser = await action.root();
 		await rootUser.edit( eventPage, {} );
@@ -29,7 +29,7 @@ module.exports = {
 		return this.enableRegistration( rootUser, reqBody );
 	},
 
-	getBlockedUser: async function () {
+	async getBlockedUser() {
 		if ( blockedUser ) {
 			return blockedUser;
 		}
