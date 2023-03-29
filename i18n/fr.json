@@ -81,7 +81,7 @@
 	"campaignevents-edit-error-deleted": "Les inscriptions pour cet événement sont fermées.",
 	"campaignevents-edit-need-central-account": "Vous avez besoin d’un compte d’utilisateur central pour activer ou modifier les inscriptions aux événements.",
 	"campaignevents-edit-organizers-not-allowed": "$2 n’{{PLURAL:$1|a|ont}} pas les droits nécessaires pour être {{PLURAL:$1|un|des}} organisateur{{PLURAL:$1||s}}.",
-	"campaignevents-edit-no-organizers": "Vous devez choisir au moins un organisateur.",
+	"campaignevents-edit-no-organizers": "Les événements doivent avoir au moins un organisateur. Veuillez ajouter un organisateur ou supprimer l’événement s’il n’est plus nécessaire.",
 	"campaignevents-edit-removed-creator": "Vous n’êtes pas autorisé{{GENDER:||e}} à supprimer le créateur de l’événement.",
 	"campaignevents-edit-no-creator": "Vous devez vous ajouter vous-même en tant qu’organisat{{GENDER:|eur|rice}} lorsque vous activez les inscriptions à un événement pour la première fois.",
 	"campaignevents-edit-too-many-organizers": "Vous ne pouvez pas ajouter plus de $1 organisateur{{PLURAL:$1||s}}.",
