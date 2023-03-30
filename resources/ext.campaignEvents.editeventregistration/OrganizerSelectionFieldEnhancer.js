@@ -5,6 +5,7 @@
 		this.isEventCreator = mw.config.get( 'wgCampaignEventsIsEventCreator' );
 		this.eventCreatorUsername = mw.config.get( 'wgCampaignEventsEventCreatorUsername' );
 		this.eventID = mw.config.get( 'wgCampaignEventsEventID' );
+		this.knownInvalidOrganizers = mw.config.get( 'wgCampaignEventsInvalidOrganizers' );
 	}
 
 	OrganizerSelectionFieldEnhancer.prototype.init = function ( $fieldElement ) {
@@ -56,11 +57,19 @@
 	};
 
 	OrganizerSelectionFieldEnhancer.prototype.setInvalidOrganizersFromResponse = function ( resp ) {
+		var that = this;
 		var invalidOrganizers = [];
 		resp.query.users.forEach( function ( user ) {
-			// Note: the backend will perform a more thorough check than this. A user might be
-			// considered valid here, but invalid in the backend (e.g., if they're blocked).
-			if ( user.rights.indexOf( 'campaignevents-organize-events' ) < 0 ) {
+			// Note: the backend will perform a more thorough check than just user rights. A user
+			// might be/ considered valid here, but invalid in the backend (e.g., if they're
+			// blocked). We try to mitigate this by having the server generate a list of known
+			// invalid organizers when validating the field, then using that list here as an
+			// extra source of information. This is also necessary to handle the case where
+			// server and frontend disagree (see T327470#8742742).
+			if (
+				user.rights.indexOf( 'campaignevents-organize-events' ) < 0 ||
+				that.knownInvalidOrganizers.indexOf( user.name ) > -1
+			) {
 				invalidOrganizers.push( user.name );
 			}
 		} );
