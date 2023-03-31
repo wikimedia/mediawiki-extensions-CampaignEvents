@@ -76,7 +76,7 @@
 	"campaignevents-edit-error-deleted": "Iste inscription de evento ha essite delite.",
 	"campaignevents-edit-need-central-account": "Un conto de usator central es necessari pro poter activar o modificar inscriptiones a eventos.",
 	"campaignevents-edit-organizers-not-allowed": "$2 non ha le permissiones necessari pro esser organisator{{PLURAL:$1||es}}.",
-	"campaignevents-edit-no-organizers": "Tu debe eliger al minus un organisator.",
+	"campaignevents-edit-no-organizers": "Eventos debe haber al minus un organisator. Per favor adde un organisator o dele le evento si non es plus necessari.",
 	"campaignevents-edit-removed-creator": "Tu non es autorisate a remover le creator del evento.",
 	"campaignevents-edit-no-creator": "Tu debe adder te como organisator le prime vice que tu activa le inscription al evento.",
 	"campaignevents-edit-too-many-organizers": "Tu non pote adder plus que $1 organisator{{PLURAL:$1||es}}.",
