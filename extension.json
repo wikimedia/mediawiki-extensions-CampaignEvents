@@ -28,11 +28,11 @@
 	],
 	"config": {
 		"CampaignEventsDatabaseCluster": {
-			"description": "The database cluster to use. False means the cluster of the current wiki will be used.",
+			"description": "The database cluster to use. False means the cluster of the current wiki will be used. In order to use a shared central database for a wiki farm, you need to setup single sign-on for that wiki farm. See https://www.mediawiki.org/wiki/Manual:Central_ID for more information.",
 			"value": false
 		},
 		"CampaignEventsDatabaseName": {
-			"description": "The database to use. False means the database of the current wiki will be used.",
+			"description": "The database to use. False means the database of the current wiki will be used. In order to use a shared central database for a wiki farm, you need to setup single sign-on for that wiki farm. See https://www.mediawiki.org/wiki/Manual:Central_ID for more information.",
 			"value": false
 		},
 		"CampaignEventsProgramsAndEventsDashboardInstance": {
