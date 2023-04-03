@@ -16,11 +16,11 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\BodyValidator;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
+use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
 use RuntimeException;
 use StatusValue;
@@ -128,10 +128,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 */
 	public function getBodyValidator( $contentType ): BodyValidator {
 		if ( $contentType !== 'application/json' ) {
-			throw new HttpException( "Unsupported Content-Type",
-				415,
-				[ 'content_type' => $contentType ]
-			);
+			return new UnsupportedContentTypeBodyValidator( $contentType );
 		}
 
 		// NOTE: The param types are not validated yet, see T305973
