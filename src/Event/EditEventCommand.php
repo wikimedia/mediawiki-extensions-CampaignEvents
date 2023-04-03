@@ -198,7 +198,7 @@ class EditEventCommand {
 	/**
 	 * @param string[] $organizerUsernames
 	 * @return StatusValue Fatal with an error, or a good Status whose value is a list of central IDs for the given
-	 * local usernames.
+	 * local usernames. If fatal, the status' value *may* be a list of invalid organizer usernames.
 	 */
 	public function validateOrganizers( array $organizerUsernames ): StatusValue {
 		if ( count( $organizerUsernames ) < 1 ) {
@@ -222,11 +222,13 @@ class EditEventCommand {
 		}
 
 		if ( $invalidOrganizers ) {
-			return StatusValue::newFatal(
+			$ret = StatusValue::newFatal(
 				'campaignevents-edit-organizers-not-allowed',
 				Message::numParam( count( $invalidOrganizers ) ),
 				Message::listParam( $invalidOrganizers )
 			);
+			$ret->value = $invalidOrganizers;
+			return $ret;
 		}
 
 		$centralIDsStatus = $this->organizerNamesToCentralIDs( $organizerUsernames );

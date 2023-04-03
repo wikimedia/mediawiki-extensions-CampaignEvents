@@ -64,6 +64,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * a string on success.
 	 */
 	private $eventPagePrefixedText;
+	/**
+	 * @var string[] Usernames of invalid organizers, used for live validation in JavaScript.
+	 */
+	private array $invalidOrganizerNames = [];
 
 	/**
 	 * @param string $name
@@ -128,6 +132,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$isEventCreator = true;
 			$eventCreatorUsername = $this->performer->getUserIdentity()->getName();
 		}
+
 		$this->getOutput()->addJsConfigVars( [
 			'wgCampaignEventsIsEventCreator' => $isEventCreator,
 			'wgCampaignEventsEventCreatorUsername' => $eventCreatorUsername,
@@ -138,6 +143,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		] );
 
 		parent::execute( $par );
+		// Note: this has to be added after parent::execute, which is where the validation runs.
+		$this->getOutput()->addJsConfigVars( [
+			'wgCampaignEventsInvalidOrganizers' => $this->invalidOrganizerNames
+		] );
 	}
 
 	/**
@@ -245,6 +254,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 					$validationStatus = $this->editEventCommand->validateOrganizers( $organizers );
 
 					if ( !$validationStatus->isGood() ) {
+						if ( $validationStatus->getValue() ) {
+							$this->invalidOrganizerNames = $validationStatus->getValue();
+						}
 						$error = $validationStatus->getErrors()[0];
 						$errorApiMsg = ApiMessage::create( $error );
 						return $this->msg( $errorApiMsg->getKey(), ...$errorApiMsg->getParams() )->text();
