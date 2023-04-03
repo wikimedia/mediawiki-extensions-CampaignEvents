@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
+			"Hakimi97",
 			"Tofeiku"
 		]
 	},
-	"specialpages-group-campaignevents": "Acara"
+	"specialpages-group-campaignevents": "Acara",
+	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi."
 }
