@@ -8,6 +8,7 @@ use Generator;
 use HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Rest\SetOrganizersHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\HttpException;
@@ -34,9 +35,12 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			$editEventCommand = $this->createMock( EditEventCommand::class );
 			$editEventCommand->method( 'doEditIfAllowed' )->willReturn( StatusValue::newGood( 42 ) );
 		}
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
 		return new SetOrganizersHandler(
 			$this->createMock( IEventLookup::class ),
 			$editEventCommand,
+			$centralUserLookup,
 			new HashConfig( [ 'CampaignEventsEnableMultipleOrganizers' => $featureEnabled ] )
 		);
 	}
