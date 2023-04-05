@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Rzuwig",
 			"Woytecr"
 		]
 	},
@@ -9,6 +10,7 @@
 	"right-campaignevents-enable-registration": "Włączanie rejestracji na wydarzenia",
 	"action-campaignevents-delete-registration": "usuwania rejestracji na wydarzenia",
 	"right-campaignevents-delete-registration": "Usuwanie rejestracji na wydarzenia",
+	"specialpages-group-campaignevents": "Wydarzenia",
 	"campaignevents-error-invalid-id": "Identyfikator wydarzenia musi być dodatnią liczbą całkowitą.",
 	"campaignevents-error-empty-title": "Wpisz tytuł strony wydarzenia.",
 	"campaignevents-error-invalid-title": "Tytuł strony wydarzenia jest nieprawidłowy: $1.",
@@ -57,6 +59,7 @@
 	"campaignevents-edit-no-event-id-provided": "Podaj identyfikator wydarzenia.",
 	"campaignevents-edit-event-notfound": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-edit-page-nonlocal": "[$1 Edytuj tę rejestrację] na wiki, na której została ona włączona: $2.",
+	"registerforevent": "Zarejestruj się na wydarzenie",
 	"campaignevents-register-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-register-success": "Zostałeś właśnie zarejestrowany na to wydarzenie.",
 	"campaignevents-register-confirmation-top": "Potwierdź rejestrację",
@@ -95,6 +98,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Anuluj",
 	"campaignevents-eventslist-delete-dialog-delete": "Usuń",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> usunięte.",
+	"deleteeventregistration": "Usuń rejestrację na wydarzenie",
 	"campaignevents-delete-error-no-event": "Nie określono wydarzenia.",
 	"campaignevents-delete-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-delete-submit-btn": "Usuń",
@@ -134,5 +138,6 @@
 	"campaignevents-event-details-chat-link": "Link do zaproszenia do czatu w mediach społecznościowych",
 	"campaignevents-event-details-register-prompt": "Aby zobaczyć te informacje, musisz się zarejestrować",
 	"campaignevents-event-details-view-event-page": "Zobacz stronę wydarzenia",
-	"campaignevents-event-details-dates-label": "Czas rozpoczęcia i zakończenia"
+	"campaignevents-event-details-dates-label": "Czas rozpoczęcia i zakończenia",
+	"campaignevents-event-details-tab-event-details": "Szczegóły wydarzenia"
 }
