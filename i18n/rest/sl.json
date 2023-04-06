@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Dogodek s tem identifikatorjem ne obstaja.",
+	"campaignevents-rest-enable-registration-permission-denied": "Nimate dovoljenja za omogočanje prijav na dogodke.",
+	"campaignevents-rest-edit-page-nonlocal": "Ta prijava na dogodek je bila omogočena v naslednjem vikiju in jo je treba urejati tam:\n$1.",
+	"campaignevents-rest-delete-already-deleted": "Ta dogodek je že izbrisan.",
+	"campaignevents-rest-user-not-found": "Uporabnik s tem centralnim ID-jem ne obstaja.",
+	"campaignevents-rest-get-registration-deleted": "Prijave na ta dogodek so izbrisane.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter »user_ids« mora biti matrika identifikatorjev uporabnikov ali prazen (za odstranitev vseh uporabnikov)",
+	"campaignevents-rest-list-participants-empty-filter": "Filter uporabniških imen, če je določen, mora biti neprazen niz.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Nimate dovoljenja za ogled udeležencev, ki so se zasebno registrirali za ta dogodek.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> mora biti polje uporabniških imen in ne sme biti prazno"
+}

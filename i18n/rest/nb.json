@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jon Harald Søby"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Det er ingen arrangementer med denne ID-en.",
+	"campaignevents-rest-enable-registration-permission-denied": "Du har ikke tillatelse til å aktivere arrangementsregistrering."
+}

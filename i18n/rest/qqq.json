@@ -9,12 +9,12 @@
 	},
 	"campaignevents-rest-event-not-found": "Error message used when the event ID provided by the user does not correspond to an existing event.",
 	"campaignevents-rest-enable-registration-permission-denied": "Error message used when an unauthorized user attempts to enable an event registration.",
-	"campaignevents-rest-edit-page-nonlocal": "Error message used when trying to edit an event registration via the API but it cannot be edited from the current wiki.\nParameters:\n*$1 - The ID/name of the wiki where the event registration was enabled",
+	"campaignevents-rest-edit-page-nonlocal": "Error message used when trying to edit an event registration via the API but it cannot be edited from the current wiki.\n\nParameters:\n* $1 - The ID/name of the wiki where the event registration was enabled",
 	"campaignevents-rest-delete-already-deleted": "Error message used when the event that the user wanted to delete is already deleted.",
 	"campaignevents-rest-user-not-found": "Error message used when passing a central user ID to the API and that ID does not belong to any user.",
 	"campaignevents-rest-get-registration-deleted": "Error message used when trying to get details of a deleted registration.",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "An error message shown if the parameter 'user_ids' is an empty list of user ids, when trying to remove participants",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "An error message shown if the parameter 'user_ids' is an empty list of user ids, when trying to remove participants.",
 	"campaignevents-rest-list-participants-empty-filter": "Error message used by the API endpoint for listing participants when a username filter was provided but it's the empty string.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Error message used by the API endpoint for listing participants when the client passed the option to include privately registered participants, but the user is not allowed to see them.",
-	"campaignevents-rest-set-organizers-empty-list": "{{doc-important|Do not translate \"organizer_usernames\".}}\nError message returned by the API if the <code>organizer_usernames</code> field is empty."
+	"campaignevents-rest-set-organizers-empty-list": "{{doc-important|Do not translate <code>organizer_usernames</code>.}}\nError message returned by the API if the <code>organizer_usernames</code> field is empty."
 }

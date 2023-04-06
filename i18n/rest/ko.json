@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ykhwong"
+		]
+	},
+	"campaignevents-rest-event-not-found": "이 ID에 해당하는 이벤트가 없습니다.",
+	"campaignevents-rest-enable-registration-permission-denied": "이벤트 등록을 활성화할 권한이 없습니다.",
+	"campaignevents-rest-edit-page-nonlocal": "이 이벤트 등록은 다음 위키에서 활성화되었으며 해당 장소에서 편집해야 합니다: $1.",
+	"campaignevents-rest-delete-already-deleted": "이 이벤트 등록은 이미 삭제되었습니다.",
+	"campaignevents-rest-user-not-found": "$1 사용자는 존재하지 않습니다.",
+	"campaignevents-rest-get-registration-deleted": "이 이벤트 등록이 삭제되었습니다."
+}

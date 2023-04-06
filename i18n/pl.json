@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Woytecr"
+			"Woytecr",
+			"Rzuwig"
 		]
 	},
 	"campaignevents-desc": "Dostarcza narzędzia dla organizatorów i uczestników kampanii.",
@@ -9,6 +10,7 @@
 	"right-campaignevents-enable-registration": "Włączanie rejestracji na wydarzenia",
 	"action-campaignevents-delete-registration": "usuwania rejestracji na wydarzenia",
 	"right-campaignevents-delete-registration": "Usuwanie rejestracji na wydarzenia",
+	"specialpages-group-campaignevents": "Wydarzenia",
 	"campaignevents-error-invalid-id": "Identyfikator wydarzenia musi być dodatnią liczbą całkowitą.",
 	"campaignevents-error-empty-title": "Wpisz tytuł strony wydarzenia.",
 	"campaignevents-error-invalid-title": "Tytuł strony wydarzenia jest nieprawidłowy: $1.",
@@ -30,8 +32,6 @@
 	"campaignevents-error-countryoraddress-not-in-person": "Nie należy podawać kraju i adresu spotkania, jeśli wydarzenie nie odbywa się osobiście.",
 	"campaignevents-error-invalid-country": "Wpisz prawidłową nazwę kraju.",
 	"campaignevents-error-invalid-address": "Wpisz poprawny adres.",
-	"campaignevents-rest-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
-	"campaignevents-rest-enable-registration-permission-denied": "Nie masz pozwolenia na włączenie rejestracji na wydarzenia.",
 	"enableeventregistration": "Włącz rejestrację na wydarzenie",
 	"editeventregistration": "Edytuj rejestrację na wydarzenie",
 	"campaignevents-edit-form-legend": "Podaj ogólne informacje o wydarzeniu, które organizujesz",
@@ -58,8 +58,8 @@
 	"campaignevents-edit-invalid-id": "Podaj prawidłowy identyfikator wydarzenia.",
 	"campaignevents-edit-no-event-id-provided": "Podaj identyfikator wydarzenia.",
 	"campaignevents-edit-event-notfound": "Nie ma wydarzenia o tym identyfikatorze.",
-	"campaignevents-rest-edit-page-nonlocal": "Ta rejestracja na wydarzenie została włączona na następującej wiki i powinna być tam edytowana: $1.",
 	"campaignevents-edit-page-nonlocal": "[$1 Edytuj tę rejestrację] na wiki, na której została ona włączona: $2.",
+	"registerforevent": "Zarejestruj się na wydarzenie",
 	"campaignevents-register-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-register-success": "Zostałeś właśnie zarejestrowany na to wydarzenie.",
 	"campaignevents-register-confirmation-top": "Potwierdź rejestrację",
@@ -70,7 +70,6 @@
 	"campaignevents-unregister-confirmation-top": "Potwierdź wyrejestrowanie",
 	"campaignevents-unregister-confirmation-text": "Potwierdź, że chcesz anulować rejestrację na to wydarzenie, używając przycisku „{{int:campaignevents-unregister-confirmation-btn}}”.",
 	"campaignevents-unregister-confirmation-btn": "Anuluj rejestrację",
-	"campaignevents-rest-user-not-found": "Użytkownik „$1” nie istnieje.",
 	"campaignevents-register-not-allowed": "Nie możesz rejestrować się na wydarzenia.",
 	"campaignevents-register-event-past": "Okres rejestracji na to wydarzenie już się zakończył.",
 	"campaignevents-register-event-not-open": "Rejestracja na to wydarzenie jest zamknięta.",
@@ -99,6 +98,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Anuluj",
 	"campaignevents-eventslist-delete-dialog-delete": "Usuń",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> usunięte.",
+	"deleteeventregistration": "Usuń rejestrację na wydarzenie",
 	"campaignevents-delete-error-no-event": "Nie określono wydarzenia.",
 	"campaignevents-delete-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-delete-submit-btn": "Usuń",
@@ -138,5 +138,6 @@
 	"campaignevents-event-details-chat-link": "Link do zaproszenia do czatu w mediach społecznościowych",
 	"campaignevents-event-details-register-prompt": "Aby zobaczyć te informacje, musisz się zarejestrować",
 	"campaignevents-event-details-view-event-page": "Zobacz stronę wydarzenia",
-	"campaignevents-event-details-dates-label": "Czas rozpoczęcia i zakończenia"
+	"campaignevents-event-details-dates-label": "Czas rozpoczęcia i zakończenia",
+	"campaignevents-event-details-tab-event-details": "Szczegóły wydarzenia"
 }

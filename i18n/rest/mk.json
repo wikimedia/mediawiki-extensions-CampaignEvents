@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Нема настан со таа назнака.",
+	"campaignevents-rest-enable-registration-permission-denied": "Не ви е дозволено да ја овозможите пријавување за настан.",
+	"campaignevents-rest-edit-page-nonlocal": "Ова пријавување за настан е овозможено на следново вики и треба да се уредува тука: $1.",
+	"campaignevents-rest-delete-already-deleted": "Оваа пријава за настан е веќе избришана.",
+	"campaignevents-rest-user-not-found": "Нема корисник со таква централна назнака.",
+	"campaignevents-rest-get-registration-deleted": "Оваа пријава за настан е избришана.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Параметарот „user_ids“ мора да биде строј од кориснички назнали, или пак да е празен (за да се отстранат сите корисници)",
+	"campaignevents-rest-list-participants-empty-filter": "Филтерот за корисничко име, ако е укажан, не може да стои празен.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Не сте овластени да ги гледате учесниците кои се пријавиле приватно за овој настан.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> мора да биде строј од кориснички имиња и не може да стои празно"
+}

@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"campaignevents-rest-event-not-found": "Es gibt keine Veranstaltung mit dieser ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Du bist nicht berechtigt, die Registrierung von Veranstaltungen zu aktivieren.",
+	"campaignevents-rest-edit-page-nonlocal": "Diese Veranstaltungsanmeldung wurde auf dem folgenden Wiki aktiviert und sollte dort bearbeitet werden: $1.",
+	"campaignevents-rest-delete-already-deleted": "Diese Veranstaltungsanmeldung wurde bereits gelöscht.",
+	"campaignevents-rest-user-not-found": "Es gibt keinen Benutzer mit dieser zentralen ID.",
+	"campaignevents-rest-get-registration-deleted": "Die Veranstaltungsanmeldung wurde gelöscht.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Der Parameter „user_ids“ muss ein Array von Benutzer-IDs oder null sein (um alle Benutzer zu entfernen).",
+	"campaignevents-rest-list-participants-empty-filter": "Der Benutzernamenfilter muss, sofern angegeben, eine nicht leere Zeichenfolge sein.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Du bist nicht berechtigt, Teilnehmer anzuzeigen, die sich privat für diese Veranstaltung angemeldet haben.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> muss ein Array von Benutzernamen sein und darf nicht leer sein"
+}

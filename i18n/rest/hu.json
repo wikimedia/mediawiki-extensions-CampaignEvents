@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hanna Tardos"
+		]
+	},
+	"campaignevents-rest-user-not-found": "Nem találtunk központi felhasználót ezzel az azonosítóval."
+}
