@@ -40,8 +40,6 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 			'event_page_namespace' => NS_EVENT,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'event_chat_url' => '',
-			'event_tracking_tool_id' => null,
-			'event_tracking_tool_event_id' => null,
 			'event_status' => 1,
 			'event_type' => 'generic',
 			'event_meeting_type' => 2,

@@ -73,3 +73,16 @@ CREATE TABLE /*_*/ce_event_address (
 );
 
 CREATE UNIQUE INDEX ceea_event_address ON /*_*/ce_event_address (ceea_event, ceea_address);
+
+
+CREATE TABLE /*_*/ce_tracking_tools (
+  cett_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  cett_event BIGINT UNSIGNED NOT NULL,
+  cett_tool_id INTEGER NOT NULL, cett_tool_event_id BLOB NOT NULL,
+  cett_sync_status INTEGER NOT NULL,
+  cett_last_sync BLOB DEFAULT NULL
+);
+
+CREATE UNIQUE INDEX cett_event_tool_teid ON /*_*/ce_tracking_tools (
+  cett_event, cett_tool_id, cett_tool_event_id
+);

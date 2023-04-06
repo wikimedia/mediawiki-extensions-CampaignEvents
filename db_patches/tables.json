@@ -426,5 +426,70 @@
 			}
 		],
 		"pk": [ "ceea_id" ]
+	},
+	{
+		"name": "ce_tracking_tools",
+		"comment": "Stores the tracking tools associated with an event.",
+		"columns": [
+			{
+				"name": "cett_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cett_event",
+				"comment": "The ID of the event, references campaign_events.event_id.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cett_tool_id",
+				"comment": "The unique ID of this tracking tool, as defined by the application.",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cett_tool_event_id",
+				"comment": "The unique identifier of the event within the tracking tool.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
+				"name": "cett_sync_status",
+				"comment": "Status of the synchronization with the tool. The meaning of each value is defined in the application",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cett_last_sync",
+				"comment": "Timestamp of the last successful synchronization with this tool, or null if it was never synced.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "cett_event_tool_teid",
+				"columns": [ "cett_event", "cett_tool_id", "cett_tool_event_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "cett_id" ]
 	}
 ]

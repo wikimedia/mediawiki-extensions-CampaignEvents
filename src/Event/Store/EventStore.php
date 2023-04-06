@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use RuntimeException;
 use stdClass;
@@ -84,7 +85,11 @@ class EventStore implements IEventStore, IEventLookup {
 			throw new EventNotFoundException( "Event $eventID not found" );
 		}
 
-		$this->cache[$eventID] = $this->newEventFromDBRow( $eventRow, $this->getEventAddressRow( $dbr, $eventID ) );
+		$this->cache[$eventID] = $this->newEventFromDBRow(
+			$eventRow,
+			$this->getEventAddressRow( $dbr, $eventID ),
+			$this->getEventTrackingToolRow( $dbr, $eventID, $eventRow )
+		);
 		return $this->cache[$eventID];
 	}
 
@@ -116,7 +121,11 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 
 		$eventID = (int)$eventRow->event_id;
-		return $this->newEventFromDBRow( $eventRow, $this->getEventAddressRow( $db, $eventID ) );
+		return $this->newEventFromDBRow(
+			$eventRow,
+			$this->getEventAddressRow( $db, $eventID ),
+			$this->getEventTrackingToolRow( $db, $eventID, $eventRow )
+		);
 	}
 
 	/**
@@ -146,6 +155,46 @@ class EventStore implements IEventStore, IEventLookup {
 			break;
 		}
 		return $addressRow;
+	}
+
+	/**
+	 * @param ICampaignsDatabase $db
+	 * @param int $eventID
+	 * @param stdClass $eventRow
+	 * @return stdClass|null
+	 */
+	private function getEventTrackingToolRow( ICampaignsDatabase $db, int $eventID, stdClass $eventRow ): ?stdClass {
+		global $wgCampaignEventsUseNewTrackingToolsSchema;
+		if ( !$wgCampaignEventsUseNewTrackingToolsSchema ) {
+			if ( !$eventRow->event_tracking_tool_id ) {
+				return null;
+			}
+			return (object)[
+				'cett_tool_id' => $eventRow->event_tracking_tool_id,
+				'cett_tool_event_id' => $eventRow->event_tracking_tool_event_id,
+				'cett_sync_status' =>
+					TrackingToolUpdater::syncStatusToDB( TrackingToolAssociation::SYNC_STATUS_UNKNOWN ),
+				'cett_last_sync' => null,
+			];
+		}
+
+		$trackingToolsRows = $db->select(
+			'ce_tracking_tools',
+			'*',
+			[ 'cett_event' => $eventID ]
+		);
+
+		// TODO Add support for multiple tracking tools per event
+		if ( count( $trackingToolsRows ) > 1 ) {
+			throw new RuntimeException( 'Events should have only one tracking tool.' );
+		}
+
+		$trackingToolRow = null;
+		foreach ( $trackingToolsRows as $row ) {
+			$trackingToolRow = $row;
+			break;
+		}
+		return $trackingToolRow;
 	}
 
 	/**
@@ -222,11 +271,16 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 
 		$addressRowsByEvent = $this->getAddressRowsForEvents( $db, $eventIDs );
+		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs, $eventRows );
 
 		$events = [];
 		foreach ( $eventRows as $row ) {
 			$curEventID = (int)$row->event_id;
-			$events[] = $this->newEventFromDBRow( $row, $addressRowsByEvent[$curEventID] ?? null );
+			$events[] = $this->newEventFromDBRow(
+				$row,
+				$addressRowsByEvent[$curEventID] ?? null,
+				$trackingToolRowsByEvent[$curEventID] ?? null
+			);
 		}
 		return $events;
 	}
@@ -260,11 +314,62 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
+	 * @param ICampaignsDatabase $db
+	 * @param int[] $eventIDs
+	 * @param iterable<stdClass> $eventRows
+	 * @return array<int,stdClass> Maps event IDs to the corresponding tracking tool row
+	 */
+	private function getTrackingToolsRowsForEvents(
+		ICampaignsDatabase $db,
+		array $eventIDs,
+		iterable $eventRows
+	): array {
+		global $wgCampaignEventsUseNewTrackingToolsSchema;
+		if ( !$wgCampaignEventsUseNewTrackingToolsSchema ) {
+			$ret = [];
+			foreach ( $eventRows as $eventRow ) {
+				if ( $eventRow->event_tracking_tool_id ) {
+					$ret[$eventRow->event_id] = (object)[
+						'cett_tool_id' => $eventRow->event_tracking_tool_id,
+						'cett_tool_event_id' => $eventRow->event_tracking_tool_event_id,
+						'cett_sync_status' =>
+							TrackingToolUpdater::syncStatusToDB( TrackingToolAssociation::SYNC_STATUS_UNKNOWN ),
+						'cett_last_sync' => null,
+					];
+				}
+			}
+			return $ret;
+		}
+
+		$trackingToolsRows = $db->select(
+			'ce_tracking_tools',
+			'*',
+			[ 'cett_event' => $eventIDs ]
+		);
+
+		$trackingToolsRowsByEvent = [];
+		foreach ( $trackingToolsRows as $trackingToolRow ) {
+			$curEventID = (int)$trackingToolRow->cett_event;
+			if ( isset( $trackingToolsRowsByEvent[$curEventID] ) ) {
+				// TODO Add support for multiple tracking tools per event
+				throw new RuntimeException( "Event $curEventID should have only one tracking tool." );
+			}
+			$trackingToolsRowsByEvent[$curEventID] = $trackingToolRow;
+		}
+		return $trackingToolsRowsByEvent;
+	}
+
+	/**
 	 * @param stdClass $row
 	 * @param stdClass|null $addressRow
+	 * @param stdClass|null $trackingToolRow
 	 * @return ExistingEventRegistration
 	 */
-	private function newEventFromDBRow( stdClass $row, ?stdClass $addressRow ): ExistingEventRegistration {
+	private function newEventFromDBRow(
+		stdClass $row,
+		?stdClass $addressRow,
+		?stdClass $trackingToolRow
+	): ExistingEventRegistration {
 		$eventPage = $this->campaignsPageFactory->newPageFromDB(
 			(int)$row->event_page_namespace,
 			$row->event_page_title,
@@ -289,13 +394,13 @@ class EventStore implements IEventStore, IEventLookup {
 			$country = $addressRow->cea_country;
 		}
 
-		if ( $row->event_tracking_tool_id !== null ) {
+		if ( $trackingToolRow ) {
 			$trackingTools = [
 				new TrackingToolAssociation(
-					(int)$row->event_tracking_tool_id,
-					$row->event_tracking_tool_event_id,
-					TrackingToolAssociation::SYNC_STATUS_UNKNOWN,
-					null
+					(int)$trackingToolRow->cett_tool_id,
+					$trackingToolRow->cett_tool_event_id,
+					TrackingToolUpdater::dbSyncStatusToConst( (int)$trackingToolRow->cett_sync_status ),
+					wfTimestampOrNull( TS_UNIX, $trackingToolRow->cett_last_sync )
 				)
 			];
 		} else {
@@ -327,6 +432,8 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function saveRegistration( EventRegistration $event ): int {
+		global $wgCampaignEventsUseNewTrackingToolsSchema;
+
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$curDBTimestamp = $dbw->timestamp();
 
@@ -336,17 +443,7 @@ class EventStore implements IEventStore, IEventLookup {
 				$meetingType |= $dbVal;
 			}
 		}
-		$trackingTools = $event->getTrackingTools();
-		if ( count( $trackingTools ) === 1 ) {
-			$toolAssociation = $trackingTools[0];
-			$trackingToolDBID = $toolAssociation->getToolID();
-			$trackingToolEventID = $toolAssociation->getToolEventID();
-		} elseif ( !$trackingTools ) {
-			$trackingToolDBID = $trackingToolEventID = null;
-		} else {
-			// Not implemented.
-			throw new LogicException( "There should only be at most 1 tracking tool for now" );
-		}
+
 		$curCreationTS = $event->getCreationTimestamp();
 		$curDeletionTS = $event->getDeletionTimestamp();
 		// The local timestamps are already guaranteed to be in TS_MW format and the EventRegistration constructor
@@ -360,8 +457,6 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_page_prefixedtext' => $event->getPage()->getPrefixedText(),
 			'event_page_wiki' => Utils::getWikiIDString( $event->getPage()->getWikiId() ),
 			'event_chat_url' => $event->getChatURL() ?? '',
-			'event_tracking_tool_id' => $trackingToolDBID,
-			'event_tracking_tool_event_id' => $trackingToolEventID,
 			'event_status' => self::EVENT_STATUS_MAP[$event->getStatus()],
 			'event_timezone' => $event->getTimezone()->getName(),
 			'event_start_local' => $localStartDB,
@@ -376,6 +471,23 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
 		];
 
+		if ( !$wgCampaignEventsUseNewTrackingToolsSchema ) {
+			$trackingTools = $event->getTrackingTools();
+			if ( count( $trackingTools ) === 1 ) {
+				$toolAssociation = $trackingTools[0];
+				$trackingToolDBID = $toolAssociation->getToolID();
+				$trackingToolEventID = $toolAssociation->getToolEventID();
+			} elseif ( !$trackingTools ) {
+				$trackingToolDBID = $trackingToolEventID = null;
+			} else {
+				// Not implemented.
+				throw new LogicException( "There should only be at most 1 tracking tool for now" );
+			}
+
+			$newRow['event_tracking_tool_id'] = $trackingToolDBID;
+			$newRow['event_tracking_tool_event_id'] = $trackingToolEventID;
+		}
+
 		$eventID = $event->getID();
 		$dbw->startAtomic();
 		if ( $eventID === null ) {
@@ -386,12 +498,81 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 
 		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
+		if ( $wgCampaignEventsUseNewTrackingToolsSchema ) {
+			$this->updateStoredTrackingTools( $dbw, $event->getTrackingTools(), $eventID );
+		}
 
 		$dbw->endAtomic();
 
 		unset( $this->cache[$eventID] );
 
 		return $eventID;
+	}
+
+	/**
+	 * @param ICampaignsDatabase $dbw
+	 * @param TrackingToolAssociation[] $trackingTools
+	 * @param int $eventID
+	 * @return void
+	 */
+	private function updateStoredTrackingTools(
+		ICampaignsDatabase $dbw,
+		array $trackingTools,
+		int $eventID
+	): void {
+		$toolsMap = [];
+		foreach ( $trackingTools as $toolAssociation ) {
+			$toolID = $toolAssociation->getToolID();
+			$toolsMap[$toolID] ??= [];
+			$toolsMap[$toolID][] = $toolAssociation->getToolEventID();
+		}
+
+		// Make changes by primary key to avoid lock contention
+		$currentToolRows = $dbw->select(
+			'ce_tracking_tools',
+			'*',
+			[ 'cett_event' => $eventID ],
+			[ 'FOR UPDATE' ]
+		);
+
+		// TODO Add support for multiple tracking tools per event
+		if ( count( $currentToolRows ) > 1 ) {
+			throw new LogicException( "Events should have only one tracking tool." );
+		}
+
+		$deleteIDs = [];
+		foreach ( $currentToolRows as $curRow ) {
+			$toolID = (int)$curRow->cett_tool_id;
+			if ( !isset( $toolsMap[$toolID] ) || !in_array( $curRow->cett_tool_event_id, $toolsMap[$toolID], true ) ) {
+				$deleteIDs[] = $curRow->cett_id;
+			}
+		}
+
+		if ( $deleteIDs ) {
+			$dbw->delete( 'ce_tracking_tools', [ 'cett_id' => $deleteIDs ] );
+		}
+
+		$newRows = [];
+		$dbSyncStatus = TrackingToolUpdater::syncStatusToDB( TrackingToolAssociation::SYNC_STATUS_UNKNOWN );
+		foreach ( $trackingTools as $tool ) {
+			$newRows[] = [
+				'cett_event' => $eventID,
+				'cett_tool_id' => $tool->getToolID(),
+				'cett_tool_event_id' => $tool->getToolEventID(),
+				'cett_sync_status' => $dbSyncStatus,
+				'cett_last_sync' => null,
+			];
+		}
+
+		if ( $newRows ) {
+			// For existing rows we don't need to update sync_status and last_sync now. The previous values should
+			// remain valid until the tool is synced again, which will happen later anyway.
+			$dbw->insert(
+				'ce_tracking_tools',
+				$newRows,
+				[ 'IGNORE' ]
+			);
+		}
 	}
 
 	/**

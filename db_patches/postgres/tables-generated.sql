@@ -90,3 +90,18 @@ CREATE TABLE ce_event_address (
 );
 
 CREATE UNIQUE INDEX ceea_event_address ON ce_event_address (ceea_event, ceea_address);
+
+
+CREATE TABLE ce_tracking_tools (
+  cett_id BIGSERIAL NOT NULL,
+  cett_event BIGINT NOT NULL,
+  cett_tool_id INT NOT NULL,
+  cett_tool_event_id TEXT NOT NULL,
+  cett_sync_status INT NOT NULL,
+  cett_last_sync TIMESTAMPTZ DEFAULT NULL,
+  PRIMARY KEY(cett_id)
+);
+
+CREATE UNIQUE INDEX cett_event_tool_teid ON ce_tracking_tools (
+  cett_event, cett_tool_id, cett_tool_event_id
+);

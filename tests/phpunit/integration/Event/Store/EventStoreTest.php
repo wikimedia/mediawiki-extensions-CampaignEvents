@@ -29,6 +29,14 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	protected $tablesUsed = [ 'campaign_events', 'ce_address', 'ce_event_address' ];
 
 	/**
+	 * @inheritDoc
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+		$this->setMwGlobals( [ 'wgCampaignEventsUseNewTrackingToolsSchema' => true ] );
+	}
+
+	/**
 	 * @return EventRegistration
 	 */
 	private function getTestEvent(): EventRegistration {
@@ -115,9 +123,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @covers ::getEventByID
 	 * @covers ::getEventAddressRow
+	 * @covers ::getEventTrackingToolRow
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
 	 * @covers ::updateStoredAddresses
+	 * @covers ::updateStoredTrackingTools
 	 * @dataProvider provideRoundtripByID
 	 */
 	public function testRoundtripByID( $event ) {
@@ -141,6 +151,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @covers ::getEventByPage
 	 * @covers ::getEventAddressRow
+	 * @covers ::getEventTrackingToolRow
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
 	 */
@@ -193,8 +204,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'event_page_prefixedtext' => 'test',
 			'event_page_wiki' => 'local_wiki',
 			'event_chat_url' => '',
-			'event_tracking_tool_id' => null,
-			'event_tracking_tool_event_id' => null,
 			'event_status' => 1,
 			'event_timezone' => 'UTC',
 			'event_start_local' => '20220811142657',
@@ -266,6 +275,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @covers ::getEventsByOrganizer
 	 * @covers ::getAddressRowsForEvents
+	 * @covers ::getTrackingToolsRowsForEvents
 	 * @covers ::newEventsFromDBRows
 	 */
 	public function testGetEventsByOrganizer() {
@@ -282,6 +292,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @covers ::getEventsByParticipant
 	 * @covers ::getAddressRowsForEvents
+	 * @covers ::getTrackingToolsRowsForEvents
 	 * @covers ::newEventsFromDBRows
 	 */
 	public function testGetEventsByParticipant() {
