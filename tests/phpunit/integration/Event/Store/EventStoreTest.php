@@ -114,6 +114,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getEventByID
+	 * @covers ::getEventAddressRow
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
 	 * @covers ::updateStoredAddresses
@@ -139,6 +140,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getEventByPage
+	 * @covers ::getEventAddressRow
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
 	 */
@@ -181,6 +183,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getEventByID
+	 * @covers ::getEventAddressRow
 	 */
 	public function testEventWithMoreThanOneAddress() {
 		$eventData = [
@@ -262,6 +265,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getEventsByOrganizer
+	 * @covers ::getAddressRowsForEvents
+	 * @covers ::newEventsFromDBRows
 	 */
 	public function testGetEventsByOrganizer() {
 		$event = $this->getTestEvent();
@@ -276,6 +281,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getEventsByParticipant
+	 * @covers ::getAddressRowsForEvents
+	 * @covers ::newEventsFromDBRows
 	 */
 	public function testGetEventsByParticipant() {
 		$event = $this->getTestEvent();
