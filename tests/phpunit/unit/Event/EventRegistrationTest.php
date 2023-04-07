@@ -8,6 +8,7 @@ use DateTimeZone;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWikiUnitTestCase;
 use Wikimedia\Assert\ParameterAssertionException;
 
@@ -21,7 +22,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'name' => 'Name',
 			'page' => $this->createMock( ICampaignsPage::class ),
 			'chat' => 'https://chat.example.org',
-			'tracking_tools' => [ 1 => 'some-event-identifier' ],
+			'tracking_tools' => [ new TrackingToolAssociation( 1, 'some-event-identifier' ) ],
 			'status' => EventRegistration::STATUS_OPEN,
 			'timezone' => new DateTimeZone( 'UTC' ),
 			'start' => '20220815120000',

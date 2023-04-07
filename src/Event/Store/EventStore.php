@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use RuntimeException;
 use StatusValue;
@@ -257,7 +258,7 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 
 		$trackingTools = $row->event_tracking_tool_id !== null
-			? [ $row->event_tracking_tool_id => $row->event_tracking_tool_event_id ]
+			? [ new TrackingToolAssociation( (int)$row->event_tracking_tool_id, $row->event_tracking_tool_event_id ) ]
 			: [];
 		return new ExistingEventRegistration(
 			(int)$row->event_id,
@@ -293,11 +294,12 @@ class EventStore implements IEventStore, IEventLookup {
 				$meetingType |= $dbVal;
 			}
 		}
-		$trackingToolData = $event->getTrackingTools();
-		if ( count( $trackingToolData ) === 1 ) {
-			$trackingToolDBID = key( $trackingToolData );
-			$trackingToolEventID = $trackingToolData[$trackingToolDBID];
-		} elseif ( !$trackingToolData ) {
+		$trackingTools = $event->getTrackingTools();
+		if ( count( $trackingTools ) === 1 ) {
+			$toolAssociation = $trackingTools[0];
+			$trackingToolDBID = $toolAssociation->getToolID();
+			$trackingToolEventID = $toolAssociation->getToolEventID();
+		} elseif ( !$trackingTools ) {
 			$trackingToolDBID = $trackingToolEventID = null;
 		} else {
 			// Not implemented.

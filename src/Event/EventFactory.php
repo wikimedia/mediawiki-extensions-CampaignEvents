@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedSectionAnchorException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MWTimestamp;
 use StatusValue;
@@ -113,7 +114,9 @@ class EventFactory {
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
 		$res->merge( $trackingToolStatus );
 		$trackingToolDBID = $trackingToolStatus->getValue();
-		$trackingTools = $trackingToolDBID ? [ $trackingToolDBID => $trackingToolEventID ] : [];
+		$trackingTools = $trackingToolDBID
+			? [ new TrackingToolAssociation( $trackingToolDBID, $trackingToolEventID ) ]
+			: [];
 
 		if ( !in_array( $status, EventRegistration::VALID_STATUSES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-status' );

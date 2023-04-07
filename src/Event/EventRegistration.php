@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 use DateTime;
 use DateTimeZone;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MWTimestamp;
 use Wikimedia\Assert\Assert;
 
@@ -41,7 +42,10 @@ class EventRegistration {
 	private $page;
 	/** @var string|null */
 	private $chatURL;
-	/** @var array<int,string> */
+	/**
+	 * @var TrackingToolAssociation[]
+	 * @phan-var list<TrackingToolAssociation>
+	 */
 	private $trackingTools;
 	/** @var string One of the STATUS_* constants */
 	private $status;
@@ -73,8 +77,8 @@ class EventRegistration {
 	 * @param string $name
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
-	 * @param array<int,string> $trackingTools List of attached tracking tools, in the format
-	 *   [ tool_DB_ID => tool_event_ID ].
+	 * @param TrackingToolAssociation[] $trackingTools
+	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string $status
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
@@ -170,8 +174,8 @@ class EventRegistration {
 	}
 
 	/**
-	 * Returns a list of attached tracking tools, in the format [ tool_DB_ID => tool_event_ID ].
-	 * @return array<int,string>
+	 * @return TrackingToolAssociation[]
+	 * @phan-return list<TrackingToolAssociation>
 	 */
 	public function getTrackingTools(): array {
 		return $this->trackingTools;
