@@ -7,7 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -30,21 +32,26 @@ class SetOrganizersHandler extends SimpleHandler {
 	private IEventLookup $eventLookup;
 	/** @var EditEventCommand */
 	private EditEventCommand $editEventCommand;
+	/** @var CampaignsCentralUserLookup */
+	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var bool */
 	private bool $endpointEnabled;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param EditEventCommand $editEventCommand
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param Config $config
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EditEventCommand $editEventCommand,
+		CampaignsCentralUserLookup $centralUserLookup,
 		Config $config
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->editEventCommand = $editEventCommand;
+		$this->centralUserLookup = $centralUserLookup;
 		$this->endpointEnabled = $config->get( 'CampaignEventsEnableMultipleOrganizers' );
 	}
 
@@ -54,6 +61,16 @@ class SetOrganizersHandler extends SimpleHandler {
 	public function validate( Validator $restValidator ): void {
 		parent::validate( $restValidator );
 		$this->validateToken();
+		// XXX JsonBodyValidator does not validate parameters, see T305973
+		$organizerNames = $this->getValidatedBody()['organizer_usernames'];
+		foreach ( $organizerNames as $name ) {
+			if ( !$this->centralUserLookup->isValidLocalUsername( $name ) ) {
+				throw new LocalizedHttpException(
+					MessageValue::new( 'paramvalidator-baduser' )->plaintextParams( 'organizer_usernames', $name ),
+					400
+				);
+			}
+		}
 	}
 
 	/**
@@ -106,9 +123,10 @@ class SetOrganizersHandler extends SimpleHandler {
 		}
 
 		return new JsonBodyValidator( [
-			// NOTE: The param types are not validated yet, see T305973
 			'organizer_usernames' => [
 				ParamValidator::PARAM_REQUIRED => true,
+				ParamValidator::PARAM_TYPE => 'user',
+				UserDef::PARAM_ALLOWED_USER_TYPES => [ 'name' ],
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_DEFAULT => [],

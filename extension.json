@@ -367,6 +367,7 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEditEventCommand",
+				"CampaignEventsCentralUserLookup",
 				"MainConfig"
 			]
 		},
