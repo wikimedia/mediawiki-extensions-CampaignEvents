@@ -16,6 +16,7 @@
 	"campaignevents-edit-field-status-closed": "بسته‌شده",
 	"campaignevents-edit-field-start": "تاریخ آغاز",
 	"campaignevents-edit-field-end": "تاریخ پایان",
+	"campaignevents-edit-field-organizers-placeholder": "افزودن نام کاربری",
 	"campaignevents-edit-field-meeting-type": "نوع رویداد جلسه",
 	"campaignevents-edit-field-type-online": "رویداد برخط",
 	"campaignevents-edit-field-type-in-person": "رویداد حضوری",

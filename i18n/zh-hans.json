@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"GuoPC",
+			"Kishinsagi",
 			"LittlePaw365",
 			"Wzl19371"
 		]
@@ -22,6 +23,7 @@
 	"campaignevents-edit-field-timezone": "时区",
 	"campaignevents-edit-field-start": "开始时间",
 	"campaignevents-edit-field-end": "结束时间",
+	"campaignevents-edit-field-organizers-placeholder": "添加用户名",
 	"campaignevents-edit-field-country": "国家/地区",
 	"campaignevents-edit-field-address": "地址",
 	"campaignevents-eventslist-delete-dialog-cancel": "取消",
