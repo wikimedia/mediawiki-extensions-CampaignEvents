@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Woytecr"
+			"Woytecr",
+			"Rzuwig"
 		]
 	},
 	"campaignevents-desc": "Dostarcza narzędzia dla organizatorów i uczestników kampanii.",
@@ -60,6 +61,7 @@
 	"campaignevents-edit-event-notfound": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-rest-edit-page-nonlocal": "Ta rejestracja na wydarzenie została włączona na następującej wiki i powinna być tam edytowana: $1.",
 	"campaignevents-edit-page-nonlocal": "[$1 Edytuj tę rejestrację] na wiki, na której została ona włączona: $2.",
+	"registerforevent": "Zarejestruj się na wydarzenie",
 	"campaignevents-register-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-register-success": "Zostałeś właśnie zarejestrowany na to wydarzenie.",
 	"campaignevents-register-confirmation-top": "Potwierdź rejestrację",
@@ -99,6 +101,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Anuluj",
 	"campaignevents-eventslist-delete-dialog-delete": "Usuń",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> usunięte.",
+	"deleteeventregistration": "Usuń rejestrację na wydarzenie",
 	"campaignevents-delete-error-no-event": "Nie określono wydarzenia.",
 	"campaignevents-delete-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-delete-submit-btn": "Usuń",
