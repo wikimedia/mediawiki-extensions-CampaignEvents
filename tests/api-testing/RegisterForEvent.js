@@ -20,7 +20,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 		const anonUser = action.getAnon();
 		anonToken = await anonUser.token();
 
-		const blockedUser = await EventUtils.getBlockedUser();
+		const blockedUser = await action.blockedUser();
 		blockedUserToken = await blockedUser.token();
 
 		eventID = await EventUtils.enableRandomRegistration( participantUser );

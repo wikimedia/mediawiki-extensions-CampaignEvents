@@ -19,7 +19,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 		const anonUser = action.getAnon();
 		anonToken = await anonUser.token();
 
-		const blockedUser = await EventUtils.getBlockedUser();
+		const blockedUser = await action.blockedUser();
 		blockedUserToken = await blockedUser.token();
 
 		eventPage = utils.title( 'Event:Event page ' );

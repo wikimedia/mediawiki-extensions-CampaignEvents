@@ -2,7 +2,6 @@
 
 const { assert, clientFactory, action, utils } = require( 'api-testing' );
 
-let blockedUser;
 module.exports = {
 	async enableRegistration( user, reqBody ) {
 		const enableRegistrationClient = clientFactory.getRESTClient( 'rest.php/campaignevents/v0/event_registration', user );
@@ -27,19 +26,5 @@ module.exports = {
 			token: await rootUser.token()
 		};
 		return this.enableRegistration( rootUser, reqBody );
-	},
-
-	async getBlockedUser() {
-		if ( blockedUser ) {
-			return blockedUser;
-		}
-		blockedUser = await action.user( 'Blocked' );
-		const rootUser = await action.root();
-		await rootUser.action( 'block', {
-			user: blockedUser.username,
-			reason: 'Test block',
-			token: await rootUser.token()
-		}, 'POST' );
-		return blockedUser;
 	}
 };
