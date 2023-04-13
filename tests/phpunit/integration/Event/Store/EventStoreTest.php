@@ -40,7 +40,14 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'Event page'
 			),
 			'Chat URL',
-			[ new TrackingToolAssociation( 42, 'tracking-tool-event-id' ) ],
+			[
+				new TrackingToolAssociation(
+					42,
+					'tracking-tool-event-id',
+					TrackingToolAssociation::SYNC_STATUS_UNKNOWN,
+					null
+				)
+			],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20220810000000',
@@ -240,7 +247,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'Event page'
 			),
 			'Chat URL',
-			[ new TrackingToolAssociation( 42, 'some-event-id' ) ],
+			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20220731080000',

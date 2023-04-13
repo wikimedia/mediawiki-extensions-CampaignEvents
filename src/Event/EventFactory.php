@@ -114,9 +114,18 @@ class EventFactory {
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
 		$res->merge( $trackingToolStatus );
 		$trackingToolDBID = $trackingToolStatus->getValue();
-		$trackingTools = $trackingToolDBID
-			? [ new TrackingToolAssociation( $trackingToolDBID, $trackingToolEventID ) ]
-			: [];
+		if ( $trackingToolDBID !== null ) {
+			$trackingTools = [
+				new TrackingToolAssociation(
+					$trackingToolDBID,
+					$trackingToolEventID,
+					TrackingToolAssociation::SYNC_STATUS_UNKNOWN,
+					null
+				)
+			];
+		} else {
+			$trackingTools = [];
+		}
 
 		if ( !in_array( $status, EventRegistration::VALID_STATUSES, true ) ) {
 			$res->error( 'campaignevents-error-invalid-status' );

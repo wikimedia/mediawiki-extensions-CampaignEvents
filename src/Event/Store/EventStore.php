@@ -257,9 +257,19 @@ class EventStore implements IEventStore, IEventLookup {
 			$address = implode( " \n ", $address );
 		}
 
-		$trackingTools = $row->event_tracking_tool_id !== null
-			? [ new TrackingToolAssociation( (int)$row->event_tracking_tool_id, $row->event_tracking_tool_event_id ) ]
-			: [];
+		if ( $row->event_tracking_tool_id !== null ) {
+			$trackingTools = [
+				new TrackingToolAssociation(
+					(int)$row->event_tracking_tool_id,
+					$row->event_tracking_tool_event_id,
+					TrackingToolAssociation::SYNC_STATUS_UNKNOWN,
+					null
+				)
+			];
+		} else {
+			$trackingTools = [];
+		}
+
 		return new ExistingEventRegistration(
 			(int)$row->event_id,
 			$row->event_name,
