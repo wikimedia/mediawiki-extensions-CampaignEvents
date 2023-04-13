@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Permissions\Authority;
-use MediaWiki\User\UserIdentity;
 
 class MWAuthorityProxy implements ICampaignsAuthority {
 	/** @var Authority */
@@ -41,17 +40,16 @@ class MWAuthorityProxy implements ICampaignsAuthority {
 	}
 
 	/**
-	 * Temporary transition method.
-	 * @return UserIdentity
-	 */
-	public function getUserIdentity(): UserIdentity {
-		return $this->authority->getUser();
-	}
-
-	/**
 	 * @inheritDoc
 	 */
 	public function getName(): string {
 		return $this->authority->getUser()->getName();
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLocalUserID(): int {
+		return $this->authority->getUser()->getId();
 	}
 }

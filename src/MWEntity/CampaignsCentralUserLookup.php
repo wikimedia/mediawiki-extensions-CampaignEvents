@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\User\UserNameUtils;
-use UnexpectedValueException;
 use User;
 
 /**
@@ -66,12 +65,7 @@ class CampaignsCentralUserLookup {
 	 * @throws UserNotGlobalException
 	 */
 	public function newFromAuthority( ICampaignsAuthority $authority ): CentralUser {
-		if ( !$authority instanceof MWAuthorityProxy ) {
-			throw new UnexpectedValueException(
-				'Unknown campaigns authority implementation: ' . get_class( $authority )
-			);
-		}
-		$mwUser = $this->userFactory->newFromId( $authority->getUserIdentity()->getId() );
+		$mwUser = $this->userFactory->newFromId( $authority->getLocalUserID() );
 		return $this->newFromUserIdentity( $mwUser );
 	}
 
