@@ -109,7 +109,8 @@ return [
 			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( EventPageCacheUpdater::SERVICE_NAME )
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {
@@ -129,7 +130,8 @@ return [
 				$services->get( ParticipantsStore::SERVICE_NAME ),
 				$services->get( PermissionChecker::SERVICE_NAME ),
 				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-				$services->get( UserNotifier::SERVICE_NAME )
+				$services->get( UserNotifier::SERVICE_NAME ),
+				$services->get( EventPageCacheUpdater::SERVICE_NAME )
 			);
 		},
 	UnregisterParticipantCommand::SERVICE_NAME =>
@@ -137,7 +139,8 @@ return [
 			return new UnregisterParticipantCommand(
 				$services->get( ParticipantsStore::SERVICE_NAME ),
 				$services->get( PermissionChecker::SERVICE_NAME ),
-				$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+				$services->get( EventPageCacheUpdater::SERVICE_NAME )
 			);
 		},
 	EventsPagerFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventsPagerFactory {
@@ -238,6 +241,8 @@ return [
 		);
 	},
 	EventPageCacheUpdater::SERVICE_NAME => static function ( MediaWikiServices $services ): EventPageCacheUpdater {
-		return new EventPageCacheUpdater();
+		return new EventPageCacheUpdater(
+			$services->getHtmlCacheUpdater()
+		);
 	},
 ];

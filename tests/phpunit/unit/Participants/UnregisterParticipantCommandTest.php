@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Participants;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -55,7 +56,8 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		return new UnregisterParticipantCommand(
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$permChecker,
-			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class )
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
+			$this->createMock( EventPageCacheUpdater::class )
 		);
 	}
 

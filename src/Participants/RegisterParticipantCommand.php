@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Participants;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -34,23 +35,28 @@ class RegisterParticipantCommand {
 	private $centralUserLookup;
 	/** @var UserNotifier */
 	private UserNotifier $userNotifier;
+	/** @var EventPageCacheUpdater */
+	private EventPageCacheUpdater $eventPageCacheUpdater;
 
 	/**
 	 * @param ParticipantsStore $participantsStore
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserNotifier $userNotifier
+	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 */
 	public function __construct(
 		ParticipantsStore $participantsStore,
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UserNotifier $userNotifier
+		UserNotifier $userNotifier,
+		EventPageCacheUpdater $eventPageCacheUpdater
 	) {
 		$this->participantsStore = $participantsStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userNotifier = $userNotifier;
+		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 	}
 
 	/**
@@ -141,6 +147,12 @@ class RegisterParticipantCommand {
 
 		if ( $modified ) {
 			$this->userNotifier->notifyRegistration( $performer, $registration );
+			if ( $isPrivate ) {
+				// Only purge the cache if the participant registered privately, assuming that they were previously
+				// registered publicly, so as to make sure that their username will not remain visible for too long.
+				// Purging the cache in other cases wouldn't hurt, but there wouldn't be a strong reason for doing it.
+				$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
+			}
 		}
 
 		return StatusValue::newGood( $modified );

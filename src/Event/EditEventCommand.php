@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
@@ -38,6 +39,8 @@ class EditEventCommand {
 	private $permissionChecker;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var EventPageCacheUpdater */
+	private EventPageCacheUpdater $eventPageCacheUpdater;
 
 	/**
 	 * @param IEventStore $eventStore
@@ -45,19 +48,22 @@ class EditEventCommand {
 	 * @param OrganizersStore $organizersStore
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 */
 	public function __construct(
 		IEventStore $eventStore,
 		IEventLookup $eventLookup,
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		EventPageCacheUpdater $eventPageCacheUpdater
 	) {
 		$this->eventStore = $eventStore;
 		$this->eventLookup = $eventLookup;
 		$this->organizerStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 	}
 
 	/**
@@ -153,6 +159,7 @@ class EditEventCommand {
 		if ( !$saveStatus->isGood() ) {
 			return $saveStatus;
 		}
+		$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 		$newEventID = $saveStatus->getValue();
 		$this->addOrganizers( $registrationID === null, $newEventID, $organizerCentralUserIDs, $performerCentralUser );
 

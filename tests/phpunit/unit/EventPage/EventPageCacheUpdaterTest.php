@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\EventPage;
 
 use Generator;
+use HtmlCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWikiUnitTestCase;
@@ -26,7 +27,9 @@ class EventPageCacheUpdaterTest extends MediaWikiUnitTestCase {
 	}
 
 	private function getCacheUpdater(): EventPageCacheUpdater {
-		return new EventPageCacheUpdater();
+		return new EventPageCacheUpdater(
+			$this->createMock( HtmlCacheUpdater::class )
+		);
 	}
 
 	/**

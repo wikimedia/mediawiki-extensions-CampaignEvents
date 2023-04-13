@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
@@ -78,7 +79,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$eventLookup,
 			$organizersStore,
 			$permChecker,
-			$centralUserLookup
+			$centralUserLookup,
+			$this->createMock( EventPageCacheUpdater::class )
 		);
 	}
 
