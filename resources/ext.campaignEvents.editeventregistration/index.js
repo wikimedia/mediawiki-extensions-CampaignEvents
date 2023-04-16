@@ -34,12 +34,11 @@
 	}
 
 	mw.hook( 'htmlform.enhance' ).add( function ( $root ) {
-		if ( mw.config.get( 'wgCampaignEventsEnableMultipleOrganizers' ) ) {
-			// NOTE: This module has a dependency on mediawiki.widgets.UsersMultiselectWidget
-			// because autoinfusion is also handled in a htmlform.enhance callback, so there's no
-			// guarantee on which handler runs first. In fact, it throws when using debug=1.
-			OrganizerSelectionFieldEnhancer.init( $root.find( '.ext-campaignevents-organizers-multiselect-input' ) );
-		}
+		// NOTE: This module has a dependency on mediawiki.widgets.UsersMultiselectWidget
+		// because autoinfusion is also handled in a htmlform.enhance callback, so there's no
+		// guarantee on which handler runs first. In fact, it throws when using debug=1.
+		OrganizerSelectionFieldEnhancer.init( $root.find( '.ext-campaignevents-organizers-multiselect-input' ) );
+
 		var tzInput = $root.find( '.ext-campaignevents-timezone-input' ).get( 0 );
 		if ( !tzInput ) {
 			return;

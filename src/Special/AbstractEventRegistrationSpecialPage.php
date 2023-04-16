@@ -137,9 +137,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'wgCampaignEventsIsEventCreator' => $isEventCreator,
 			'wgCampaignEventsEventCreatorUsername' => $eventCreatorUsername,
 			'wgCampaignEventsEventID' => $this->eventID,
-			'wgCampaignEventsEnableMultipleOrganizers' => $this->getConfig()->get(
-				'CampaignEventsEnableMultipleOrganizers'
-			)
 		] );
 
 		parent::execute( $par );
@@ -236,36 +233,34 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'cssclass' => $timeFieldClasses,
 		];
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableMultipleOrganizers' ) ) {
-			$formFields['EventOrganizerUsernames'] = [
-				'type' => 'usersmultiselect',
-				'label-message' => 'campaignevents-edit-field-organizers',
-				'default' => implode( "\n", $this->getOrganizerUsernames() ),
-				'exists' => true,
-				'help-message' => 'campaignevents-edit-field-organizers-help',
-				'max' => EditEventCommand::MAX_ORGANIZERS_PER_EVENT,
-				'min' => 1,
-				'cssclass' => 'ext-campaignevents-organizers-multiselect-input',
-				'placeholder' => $this->msg( 'campaignevents-edit-field-organizers-placeholder' )->text(),
-				'validation-callback' => function ( $value, $alldata ) {
-					$organizers = $alldata['EventOrganizerUsernames'] !== ''
-						? explode( "\n", $alldata['EventOrganizerUsernames'] )
-						: [];
-					$validationStatus = $this->editEventCommand->validateOrganizers( $organizers );
+		$formFields['EventOrganizerUsernames'] = [
+			'type' => 'usersmultiselect',
+			'label-message' => 'campaignevents-edit-field-organizers',
+			'default' => implode( "\n", $this->getOrganizerUsernames() ),
+			'exists' => true,
+			'help-message' => 'campaignevents-edit-field-organizers-help',
+			'max' => EditEventCommand::MAX_ORGANIZERS_PER_EVENT,
+			'min' => 1,
+			'cssclass' => 'ext-campaignevents-organizers-multiselect-input',
+			'placeholder' => $this->msg( 'campaignevents-edit-field-organizers-placeholder' )->text(),
+			'validation-callback' => function ( $value, $alldata ) {
+				$organizers = $alldata['EventOrganizerUsernames'] !== ''
+					? explode( "\n", $alldata['EventOrganizerUsernames'] )
+					: [];
+				$validationStatus = $this->editEventCommand->validateOrganizers( $organizers );
 
-					if ( !$validationStatus->isGood() ) {
-						if ( $validationStatus->getValue() ) {
-							$this->invalidOrganizerNames = $validationStatus->getValue();
-						}
-						$error = $validationStatus->getErrors()[0];
-						$errorApiMsg = ApiMessage::create( $error );
-						return $this->msg( $errorApiMsg->getKey(), ...$errorApiMsg->getParams() )->text();
+				if ( !$validationStatus->isGood() ) {
+					if ( $validationStatus->getValue() ) {
+						$this->invalidOrganizerNames = $validationStatus->getValue();
 					}
+					$error = $validationStatus->getErrors()[0];
+					$errorApiMsg = ApiMessage::create( $error );
+					return $this->msg( $errorApiMsg->getKey(), ...$errorApiMsg->getParams() )->text();
+				}
 
-					return true;
-				},
-			];
-		}
+				return true;
+			},
+		];
 
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
@@ -408,13 +403,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		$this->eventPagePrefixedText = $event->getPage()->getPrefixedText();
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		if ( $this->getConfig()->get( 'CampaignEventsEnableMultipleOrganizers' ) ) {
-			$organizerUsernames = $data[ 'EventOrganizerUsernames' ]
-				? explode( "\n", $data[ 'EventOrganizerUsernames' ] )
-				: [];
-		} else {
-			$organizerUsernames = [ $performer->getName() ];
-		}
+		$organizerUsernames = $data[ 'EventOrganizerUsernames' ]
+			? explode( "\n", $data[ 'EventOrganizerUsernames' ] )
+			: [];
 
 		return Status::wrap( $this->editEventCommand->doEditIfAllowed(
 				$event,
