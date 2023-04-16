@@ -238,7 +238,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @covers ::doEditUnsafe
 	 * @covers ::validateOrganizers
 	 * @covers ::organizerNamesToCentralIDs
-	 * @covers ::isOrganizerRemovingTheCreator
+	 * @covers ::checkOrganizerNotRemovingTheCreator
 	 * @dataProvider provideEditUnsafeErrors
 	 */
 	public function testDoEditUnsafe__error(

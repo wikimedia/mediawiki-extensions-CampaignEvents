@@ -10,6 +10,8 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -146,10 +148,14 @@ class EditEventCommand {
 
 		$registrationID = $registration->getID();
 		if ( $registrationID ) {
-			if (
-				$this->isOrganizerRemovingTheCreator( $organizerCentralUserIDs, $registrationID, $performerCentralUser )
-			) {
-				return StatusValue::newFatal( 'campaignevents-edit-removed-creator' );
+			$checkOrganizerNotRemovingCreatorStatus = $this->checkOrganizerNotRemovingTheCreator(
+				$organizerCentralUserIDs,
+				$registrationID,
+				$performerCentralUser
+			);
+
+			if ( !$checkOrganizerNotRemovingCreatorStatus->isGood() ) {
+				return $checkOrganizerNotRemovingCreatorStatus;
 			}
 		} elseif ( !in_array( $performerCentralUser->getCentralID(), $organizerCentralUserIDs, true ) ) {
 			return StatusValue::newFatal( 'campaignevents-edit-no-creator' );
@@ -283,35 +289,41 @@ class EditEventCommand {
 	 * @param int[] $organizerCentralUserIDs
 	 * @param int $eventID
 	 * @param CentralUser $performer
-	 * @return bool
+	 * @return StatusValue
 	 */
-	private function isOrganizerRemovingTheCreator(
+	private function checkOrganizerNotRemovingTheCreator(
 		array $organizerCentralUserIDs,
 		int $eventID,
 		CentralUser $performer
-	): bool {
+	): StatusValue {
 		$eventCreator = $this->organizerStore->getEventCreator(
 			$eventID,
 			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED
 		);
 
 		if ( !$eventCreator ) {
-			return false;
+			// If there is no event creator it means that the event creator removed themself
+			return StatusValue::newGood();
 		}
 
-		if ( !$this->centralUserLookup->existsAndIsVisible( $eventCreator->getUser() ) ) {
+		try {
+			$eventCreatorUsername = $this->centralUserLookup->getUserName( $eventCreator->getUser() );
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 			// Allow the removal of deleted/suppressed organizers, since they're not shown in the editing interface
-			return false;
+			return StatusValue::newGood();
 		}
 
 		$creatorGlobalUserID = $eventCreator->getUser()->getCentralID();
-
 		if (
 			$performer->getCentralID() !== $creatorGlobalUserID &&
 			!in_array( $creatorGlobalUserID, $organizerCentralUserIDs, true )
 		) {
-			return true;
+			return StatusValue::newFatal(
+				'campaignevents-edit-removed-creator',
+				Message::plaintextParam( $eventCreatorUsername )
+			);
 		}
-		return false;
+
+		return StatusValue::newGood();
 	}
 }

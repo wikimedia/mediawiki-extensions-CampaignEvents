@@ -80,7 +80,7 @@
 	"campaignevents-edit-need-central-account": "Error message used when the user tries to enable or edit a registration, but their user account is not global.",
 	"campaignevents-edit-organizers-not-allowed": "Error message used when some users that were specified as organizers are not allowed to organize events.\nParameters:\n* $1 - number of users, for PLURAL.\n* $2 - list of users",
 	"campaignevents-edit-no-organizers": "Error message used when no organizers were specified for an event.",
-	"campaignevents-edit-removed-creator": "Error message used when a user other than the event creator tries to remove the event creator from the list of organizers of an event.",
+	"campaignevents-edit-removed-creator": "Error message used when a user other than the event creator tries to remove the event creator from the list of organizers of an event.\nParameters:\n* $1 - username of the event creator",
 	"campaignevents-edit-no-creator": "Error message used when enabling event registration if the user did not add (that is, removed) themself from the list of organizers.",
 	"campaignevents-edit-too-many-organizers": "Error message used when the user tries to add more than the allowed number of organizers for an event.\nParameters:\n* $1 - maximum number of organizers allowed.",
 	"campaignevents-edit-organizer-need-central-account": "Error message used when the user tries to add organizers to the event, but some of them do not have a global user account.\nParameters:\n* $1 - number of users without a global account, for PLURAL.\n* $2 - list of users",
