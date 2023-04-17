@@ -4,7 +4,8 @@ const assert = require( 'assert' ),
 	EventPage = require( '../pageobjects/event.page' ),
 	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
-	Rest = require( '../pageobjects/rest.page' );
+	Rest = require( '../pageobjects/rest.page' ),
+	Util = require( 'wdio-mediawiki/Util' );
 
 let event,
 	id;
@@ -12,15 +13,15 @@ let event,
 describe( 'Edit Event Registration', function () {
 
 	beforeEach( async function () {
-		event = EventRegistrationPage.getTestString( 'Event:e2e' );
+		event = Util.getTestString( 'Event:Test EditEventRegistration' );
 		await LoginPage.loginAdmin();
-		await EventRegistrationPage.createEvent( event );
+		await EventRegistrationPage.createEventPage( event );
 		id = await Rest.enableEvent( event );
 	} );
 
 	it( 'can allow organizer to update event data', async function () {
-		const updatedEventPage = EventRegistrationPage.getTestString( 'Event:updatede2e' );
-		await EventRegistrationPage.createEvent( updatedEventPage );
+		const updatedEventPage = Util.getTestString( 'Event:New page for EditEventRegistration' );
+		await EventRegistrationPage.createEventPage( updatedEventPage );
 
 		await EventRegistrationPage.editEvent( {
 			event: updatedEventPage,

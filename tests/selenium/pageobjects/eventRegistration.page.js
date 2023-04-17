@@ -35,15 +35,11 @@ class EventRegistrationPage extends Page {
 		super.openTitle( 'Special:EnableEventRegistration' );
 	}
 
-	getTestString( prefix = '' ) {
-		return prefix + Date.now().toString() + '-Iñtërnâtiônàlizætiøn';
-	}
-
 	loseFocus() {
 		return this.body.click();
 	}
 
-	async createEvent( event ) {
+	async createEventPage( event ) {
 		const bot = await Api.bot();
 		await bot.edit( event, '', '' );
 	}
@@ -56,6 +52,26 @@ class EventRegistrationPage extends Page {
 		} else if ( meetingType === 'hybrid' ) {
 			await this.meetingTypeSelector.$( 'label:nth-of-type(3)' ).click();
 		}
+	}
+
+	/**
+	 * @param {Object} date With 'year' and 'day' as properties
+	 */
+	async setStartDate( date ) {
+		await this.startYearInput.setValue( ( date.year ).toString() );
+		await this.loseFocus();
+		await this.startDateInput.setValue( ( date.day ).toString() );
+		await this.loseFocus();
+	}
+
+	/**
+	 * @param {Object} date With 'year' and 'day' as properties
+	 */
+	async setEndDate( date ) {
+		await this.endYearInput.setValue( ( date.year ).toString() );
+		await this.loseFocus();
+		await this.endDateInput.setValue( ( date.day ).toString() );
+		await this.loseFocus();
 	}
 
 	/**
@@ -73,11 +89,8 @@ class EventRegistrationPage extends Page {
 	async enableEvent( event, start = this.startDefault, end = this.endDefault ) {
 		this.open();
 		await this.eventPage.setValue( event );
-		await this.startYearInput.setValue( ( start.year ).toString() );
-		await this.startDateInput.setValue( ( start.day ).toString() );
-		await this.endDateInput.setValue( ( end.day ).toString() );
-		await this.endYearInput.setValue( ( end.year ).toString() );
-		await this.loseFocus();
+		await this.setStartDate( start );
+		await this.setEndDate( end );
 		await this.enableRegistration.click();
 	}
 
@@ -109,14 +122,10 @@ class EventRegistrationPage extends Page {
 			await this.eventPage.setValue( event );
 		}
 		if ( start ) {
-			await this.startYearInput.setValue( ( start.year ).toString() );
-			await this.startDateInput.setValue( ( start.day ).toString() );
-			await this.loseFocus();
+			await this.setStartDate( start );
 		}
 		if ( end ) {
-			await this.endDateInput.setValue( ( end.day ).toString() );
-			await this.endYearInput.setValue( ( end.year ).toString() );
-			await this.loseFocus();
+			await this.setEndDate( end );
 		}
 		if ( meetingType ) {
 			await this.selectMeetingType( meetingType );

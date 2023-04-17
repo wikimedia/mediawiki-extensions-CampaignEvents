@@ -5,13 +5,14 @@ const assert = require( 'assert' ),
 	MyEventsPage = require( '../pageobjects/myEvents.page' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
 	Rest = require( '../pageobjects/rest.page' ),
-	event = EventRegistrationPage.getTestString( 'Event:e2e' );
+	Util = require( 'wdio-mediawiki/Util' ),
+	event = Util.getTestString( 'Event:Test MyEvents' );
 
 describe( 'MyEvents', function () {
 
 	before( async function () {
 		await LoginPage.loginAdmin();
-		await EventRegistrationPage.createEvent( event );
+		await EventRegistrationPage.createEventPage( event );
 		await Rest.enableEvent( event );
 	} );
 

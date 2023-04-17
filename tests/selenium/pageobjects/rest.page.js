@@ -1,16 +1,17 @@
 'use strict';
 
-const axios = require( 'axios' );
+const axios = require( 'axios' ),
+	assert = require( 'assert' );
 
 module.exports = {
-	/*
+	/**
 	 * Enable an event through the API, to bypass GUI interactions.
 	 *
 	 * Pass in an an event name, and an event will be created
 	 *
 	 * @param {string} event a namespaced string beginning with 'Event:'
 	 * example: 'Event:Test'
-	 *
+	 * @return {Promise<number>}
 	 */
 	async enableEvent( event ) {
 		const csrfToken = await browser.execute( () => {
@@ -19,19 +20,20 @@ module.exports = {
 		const cookies = await browser.getCookies();
 		const cookieString = cookies.map( ( cookie ) => `${cookie.name}=${cookie.value};` ).join( '' );
 		const baseUrl = await browser.options.baseUrl;
-		const baseUrlString = await baseUrl.endsWith( '/' ) ? baseUrl.slice( 0, -1 ) : baseUrl;
+		const baseUrlString = baseUrl.endsWith( '/' ) ? baseUrl.slice( 0, -1 ) : baseUrl;
 
-		// axios
+		/* eslint-disable camelcase */
 		const data = JSON.stringify( {
 			token: csrfToken,
 			name: event,
-			event_page: event, // eslint-disable-line camelcase
-			start_time: '20230414160000', // eslint-disable-line camelcase
-			end_time: '20230515170000', // eslint-disable-line camelcase
+			event_page: event,
+			start_time: '29990414160000',
+			end_time: '29990515170000',
 			type: 'generic',
-			online_meeting: true, // eslint-disable-line camelcase
+			online_meeting: true,
 			timezone: 'EST'
 		} );
+		/* eslint-enable camelcase */
 
 		const config = {
 			method: 'post',
@@ -48,7 +50,8 @@ module.exports = {
 			const response = await axios( config );
 			return response.data.id;
 		} catch ( error ) {
-			return error;
+			const errorDetails = JSON.stringify( error.response.data );
+			assert.fail( `Enable registration API request failed with status code ${error.response.status}:\n${errorDetails}` );
 		}
 
 	}
