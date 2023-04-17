@@ -1,7 +1,6 @@
 'use strict';
 
 const { action, assert, REST, clientFactory, utils } = require( 'api-testing' );
-const EventUtils = require( './EventUtils.js' );
 
 describe( 'POST /campaignevents/v0/event_registration', () => {
 	let anonClient, organizerClient, blockedUserClient,
@@ -18,7 +17,7 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 		const anonUser = action.getAnon();
 		anonToken = await anonUser.token();
 
-		const blockedUser = await EventUtils.getBlockedUser();
+		const blockedUser = await action.blockedUser();
 		blockedUserToken = await blockedUser.token();
 
 		anonClient = new REST( 'rest.php/campaignevents/v0/event_registration' );
