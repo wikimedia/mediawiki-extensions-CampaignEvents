@@ -9,9 +9,9 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Page\ProperPageIdentity;
+use MediaWiki\Title\TitleFactory;
 use MediaWikiUnitTestCase;
 use Title;
-use TitleFactory;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver

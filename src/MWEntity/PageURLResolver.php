@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\DAO\WikiAwareEntity;
-use TitleFactory;
+use MediaWiki\Title\TitleFactory;
 use UnexpectedValueException;
 use WikiMap;
 
