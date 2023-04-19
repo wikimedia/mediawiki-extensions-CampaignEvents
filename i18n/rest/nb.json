@@ -5,5 +5,13 @@
 		]
 	},
 	"campaignevents-rest-event-not-found": "Det er ingen arrangementer med denne ID-en.",
-	"campaignevents-rest-enable-registration-permission-denied": "Du har ikke tillatelse til å aktivere arrangementsregistrering."
+	"campaignevents-rest-enable-registration-permission-denied": "Du har ikke tillatelse til å aktivere arrangementsregistrering.",
+	"campaignevents-rest-edit-page-nonlocal": "Denne arrangementsregistreringen ble aktivert på følgende wiki, og bør redigeres der: $1.",
+	"campaignevents-rest-delete-already-deleted": "Arrangementsregistreringen er allerede slettet.",
+	"campaignevents-rest-user-not-found": "Det er ingen bruker med denne sentral-ID-en.",
+	"campaignevents-rest-get-registration-deleted": "Denne arrangementsregistreringen ble slettet.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameteren «user_ids» må være ei liste over bruker-ID-er eller null (for å fjerne alle brukere)",
+	"campaignevents-rest-list-participants-empty-filter": "Brukernavnfilteret, hvis det er angitt, må være en ikke-tom streng.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Du har ikke autorisasjon til å se deltakere som har registrert seg privat på dette arrangementet.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> må være ei liste over brukernavn, og kan ikke være tom."
 }
