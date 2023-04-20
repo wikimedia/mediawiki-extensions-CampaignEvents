@@ -1,8 +1,9 @@
-@import 'mediawiki.ui/variables.less';
+@import 'mediawiki.skin.variables.less';
 
 .ext-campaignevents-registration-confirmation-dialog {
 	.ext-campaignevents-policy-message-panel {
-		background-color: @colorGray15;
+		// TODO: Use a Codex token for this as soon as available.
+		background-color: #f8f9fa;
 		color: @color-base;
 		font-size: 85%;
 	}
@@ -22,7 +23,7 @@
 		flex-direction: row;
 
 		.campaignevents-registration-confirmation-helptext {
-			color: @colorGray5;
+			color: @color-subtle;
 			margin-top: 0.2em;
 		}
 

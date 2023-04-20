@@ -1,10 +1,11 @@
-@import 'mediawiki.ui/variables.less';
+@import 'mediawiki.skin.variables.less';
 
 .mw-datatable.ext-campaignevents-eventspager-table {
 	th {
-		background-color: @colorGray15;
-		text-align: left;
+		// TODO: Use a Codex token for this as soon as available.
+		background-color: #f8f9fa;
 		padding: 0.4em 0.8em 0.4em 0.2em;
+		text-align: left;
 
 		&.mw-datatable-is-sorted a {
 			background-size: 1em;
@@ -15,8 +16,9 @@
 	&,
 	th,
 	td {
-		border-color: @colorGray14;
-		border-width: 2px;
+		// TODO: Use a Codex token for this as soon as available.
+		border-color: #eaecf0;
+		border-width: @border-width-thick;
 	}
 
 	th,

@@ -1,5 +1,5 @@
+@import 'mediawiki.skin.variables.less';
 @import 'mediawiki.mixins.less';
-@import 'mediawiki.ui/variables.less';
 
 .ext-campaignevents-eventdetails-back-btn {
 	margin-bottom: 1em;
@@ -11,17 +11,17 @@
 
 // Increase specificity to enforce the margin.
 span.ext-campaignevents-event-details-participants-private-icon {
-	opacity: 0.67;
+	opacity: @opacity-icon-subtle;
 	margin-left: 1em;
 }
 
 .ext-campaignevents-event-details-participants-footer {
 	display: flex;
-	color: @colorGray5;
+	color: @color-subtle;
 	margin-top: 0.5em;
 
 	.oo-ui-iconElement-icon {
-		opacity: 0.67;
+		opacity: @opacity-icon-subtle;
 		margin-right: 0.5em;
 	}
 }
@@ -116,7 +116,7 @@ span.ext-campaignevents-event-details-participants-private-icon {
 
 .ext-campaignevents-details-participants-header {
 	padding: 0.75em 1.5em 0.75em 1.5em;
-	background: @colorGray14;
+	background-color: #f8f9fa;
 }
 
 .ext-campaignevents-details-participants-header-text {
@@ -144,8 +144,8 @@ div.ext-campaignevents-details-participants-search {
 	display: flex;
 	align-items: center;
 	padding: 1em;
-	background: @colorGray15;
-	border-bottom: 2px solid @color-base--inverted;
+	background: #f8f9fa;
+	border-bottom: 2px @border-style-base @color-inverted;
 }
 
 .ext-campaignevents-event-details-icons-style {
