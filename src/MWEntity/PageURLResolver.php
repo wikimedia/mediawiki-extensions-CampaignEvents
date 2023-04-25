@@ -6,8 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Title\TitleFactory;
+use MediaWiki\WikiMap\WikiMap;
 use UnexpectedValueException;
-use WikiMap;
 
 class PageURLResolver {
 	public const SERVICE_NAME = 'CampaignEventsPageURLResolver';

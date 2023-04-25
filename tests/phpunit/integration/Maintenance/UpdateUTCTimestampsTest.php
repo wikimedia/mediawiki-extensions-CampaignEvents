@@ -7,8 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Maintenance\UpdateUTCTimestamps;
 use MediaWiki\Tests\Maintenance\MaintenanceBaseTestCase;
+use MediaWiki\WikiMap\WikiMap;
 use stdClass;
-use WikiMap;
 
 /**
  * @group Test

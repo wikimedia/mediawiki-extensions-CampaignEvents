@@ -14,7 +14,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
-use WikiMap;
+use MediaWiki\WikiMap\WikiMap;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EditEventRegistration';

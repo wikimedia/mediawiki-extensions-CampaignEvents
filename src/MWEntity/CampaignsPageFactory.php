@@ -8,9 +8,9 @@ use MalformedTitleException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\PageStoreFactory;
+use MediaWiki\WikiMap\WikiMap;
 use TitleFormatter;
 use TitleParser;
-use WikiMap;
 
 class CampaignsPageFactory {
 	public const SERVICE_NAME = 'CampaignEventsPageFactory';

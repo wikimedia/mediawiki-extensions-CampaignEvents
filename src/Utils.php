@@ -8,7 +8,7 @@ use DateTime;
 use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\User\UserTimeCorrection;
-use WikiMap;
+use MediaWiki\WikiMap\WikiMap;
 
 /**
  * Simple utility methods.

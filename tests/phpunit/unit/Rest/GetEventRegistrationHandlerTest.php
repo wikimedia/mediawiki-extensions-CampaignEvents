@@ -16,8 +16,8 @@ use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWiki\WikiMap\WikiMap;
 use MediaWikiUnitTestCase;
-use WikiMap;
 
 /**
  * @group Test
