@@ -55,6 +55,8 @@
 	"campaignevents-edit-field-country": "Land",
 	"campaignevents-edit-field-address": "Adresse",
 	"campaignevents-edit-field-chat-url": "Invitasjon til gruppechat",
+	"campaignevents-enable-registration-form-submit": "Aktiver registrering",
+	"campaignevents-edit-form-submit": "Rediger registrering",
 	"campaignevents-edit-invalid-id": "Angi en gyldig arrangements-ID.",
 	"campaignevents-edit-no-event-id-provided": "Angi en arrangements-ID.",
 	"campaignevents-edit-event-notfound": "Det er ingen arrangementer med denne ID-en.",

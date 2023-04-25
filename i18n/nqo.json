@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"Lancine.kounfantoh.fofana"
+		]
+	},
+	"nstab-event": "ߖߊ߲߬ߖߏ߲",
+	"action-campaignevents-enable-registration": "ߖߊ߲߬ߖߏ߲ ߕߐ߯ߛߓߍߟߌ ߓߌ߬ߟߴߊ߬ ߟߊ߫",
+	"right-campaignevents-enable-registration": "ߖߊ߲߬ߖߏ߲ ߕߐ߯ߛߓߍߟߌ ߓߌ߬ߟߴߊ߬ ߟߊ߫",
+	"action-campaignevents-delete-registration": "ߖߊ߲߬ߖߏ߲ ߕߐ߯ߛߓߍߟߌ ߖߏ߰ߛߌ߬",
+	"right-campaignevents-delete-registration": "ߖߊ߲߬ߖߏ߲ ߕߐ߯ߛߓߍߟߌ ߖߏ߰ߛߌ߬",
+	"myevents": "ߌ ߟߊ߫ ߖߊ߲߬ߖߏ߲",
+	"campaignevents-myevents-need-central-account": "ߌ ߞߊߡߊ߲߫ ߦߋ߫ ߞߊ߬ ߕߊ߲ߓߊ߲ ߟߊ߬ߓߊ߰ߙߊ߬ߟߊ ߟߊ߫ ߖߊ߬ߕߋ߬ߘߊ ߛߐ߬ߘߐ߲߫ ߛߴߌ ߘߵߌ ߟߊ߫ ߖߊ߲߬ߖߏ߲ ߠߎ߬ ߛߙߍߘߍ ߦߋ߫.",
+	"campaignevents-myevents-filter-legend": "ߖߊ߲߬ߖߏ߲ ߠߎ߬ ߛߍ߲ߛߍ߲߫",
+	"campaignevents-myevents-label-search": "ߢߌߣߌ߲ߠߌ߲",
+	"campaignevents-myevents-label-status": "ߟߌ߬ߤߟߊ",
+	"campaignevents-myevents-field-status-any": "ߊ߬ ߓߍ߯",
+	"campaignevents-myevents-field-status-open": "ߖߊ߲߬ߖߏ߲߬ ߘߊߦߟߍ߬ߣߍ߲ ߠߎ߬",
+	"campaignevents-myevents-field-status-closed": "ߖߊ߲߬ߖߏ߲߬ ߘߎ߲߯ߣߍ߲ ߠߎ߬",
+	"campaignevents-myevents-label-events-per-page": "ߖߊ߲߬ߖߏ߲ ߞߐߜߍ ߟߎ߬ ߡߊ߬",
+	"campaignevents-myevents-filter-btn-label": "ߖߊ߲߬ߖߏ߲ ߠߎ߬ ߛߍ߲ߛߍ߲߫",
+	"campaignevents-eventslist-column-date": "ߕߎ߬ߡߊ߬ߘߊ",
+	"campaignevents-eventslist-column-name": "ߖߊ߲߬ߕߏ߲ ߕߐ߮",
+	"campaignevents-eventslist-column-location": "ߘߌ߲߬ߞߌߙߊ",
+	"campaignevents-eventslist-column-participants-number": "ߕߘߍ߬ߒ߬ߘߐ߬ߓߊ߮ ߟߎ߬ ߦߙߌߞߊ",
+	"campaignevents-eventslist-location-online": "ߖߊ߲߬ߖߏ߲߫ ߜߊ߲߬ߞߎ߲߬ߣߍ߲",
+	"campaignevents-eventslist-manage-btn-info": "ߖߊ߲߬ߖߏ߲߫ ߘߐߛߌ߰",
+	"campaignevents-eventslist-menu-edit": "ߖߊ߲߬ߖߏ߲ ߡߊߦߟߍ߬ߡߊ߲߫",
+	"campaignevents-eventslist-menu-view-eventpage": "ߖߊ߲߬ߖߏ߲ ߞߐߜߍ ߘߐߜߍ߫",
+	"campaignevents-eventslist-menu-close": "ߕߐ߯ߛߓߍߟߌ ߘߊߕߎ߲߯",
+	"campaignevents-eventslist-menu-close-success": "<bdi>ߕߐ߯ߛߓߍߟߌ ߓߘߊ߫ ߕߎ߲߯</bdi>",
+	"campaignevents-eventslist-menu-open": "ߕߐ߯ߛߓߍߟߌ ߘߊߦߟߍ߬",
+	"campaignevents-eventslist-menu-open-success": "<bdi>$1</bdi> ߕߐ߯ߛߓߍߟߌ ߓߘߊ߫ ߟߊߞߊ߬",
+	"campaignevents-eventslist-menu-delete": "ߖߊ߲߬ߖߏ߲ ߖߏ߰ߛߌ߬",
+	"campaignevents-eventslist-delete-dialog-title": "<bdi>$1</bdi> ߖߏ߰ߛߌ߬",
+	"campaignevents-eventslist-delete-dialog-body": "ߌ ߘߌߣߊ߬ ߓߣߐ߬ ߓߟߏߡߟߊ߫ ߟߊߡߙߊ߬ߣߍ߲ ߓߍ߯ ߛߐ߫߸ ߒ߬ߞߊ߬ ߖߊ߲߬ߖߏ߲ ߞߐߜߍ ߕߍߣߊ߬ ߖߏ߰ߛߌ߬ ߟߊ߫",
+	"campaignevents-eventslist-delete-dialog-cancel": "ߊ߬ ߘߐߛߊ߬",
+	"campaignevents-eventslist-delete-dialog-delete": "ߊ߬ ߖߏ߬ߛߌ߬",
+	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> ߓߘߊ߫ ߖߏ߰ߛߌ߬",
+	"deleteeventregistration": "ߖߊ߲߬ߖߏ߲ ߕߐ߯ߛߓߍߟߌ ߖߏ߰ߛߌ߬",
+	"campaignevents-delete-error-no-event": "ߖߊ߲߬ߖߏ߲߬ ߡߊ߫ ߞߙߍߞߙߍ߫",
+	"campaignevents-delete-error-event-not-found": "ߖߊ߲߬ߖߏ߲߬ ߛߌ߫ ߕߍ߫ ߡߊ߬ߟߐ߲߬ߠߌ߲ ߏ߬ ߟߊ߫."
+}
