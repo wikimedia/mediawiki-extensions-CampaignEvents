@@ -472,6 +472,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function doesWrites(): bool {
+		return true;
+	}
+
+	/**
 	 * @return int
 	 */
 	abstract protected function getValidationFlags(): int;

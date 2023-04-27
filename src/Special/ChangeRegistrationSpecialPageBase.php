@@ -90,4 +90,11 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	protected function getGroupName(): string {
 		return 'campaignevents';
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function doesWrites(): bool {
+		return true;
+	}
 }
