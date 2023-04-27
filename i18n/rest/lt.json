@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nokeoo"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Nėra įvykio su šiuo ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Negalite įjungti įvykių registracijos.",
+	"campaignevents-rest-edit-page-nonlocal": "Ši registracija į įvykį buvo įjungta pateiktoje viki ir turėtų būti redaguojama ten: $1.",
+	"campaignevents-rest-delete-already-deleted": "Ši įvykio registracija jau ištrinta.",
+	"campaignevents-rest-user-not-found": "Nėra naudotojo su šiuo centriniu ID.",
+	"campaignevents-rest-get-registration-deleted": "Šio įvykio registracija ištrinta.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Jūs neturite teisės matyti dalyvių, kurie užsiregistravo privačiai, šiam įvykiui."
+}
