@@ -77,7 +77,7 @@
 	"campaignevents-edit-need-central-account": "Da lahko omogočite ali urejate prijave na dogodek, potrebujete centralni uporabniški račun.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|nima|nimata|nimajo}} potrebnih dovoljenj za {{PLURAL:$1|organizatorja|organizatorja|organizatorje}}.",
 	"campaignevents-edit-no-organizers": "Dogodki morajo imeti vsaj enega organizatorja. Dodajte organizatorja ali izbrišite dogodek, če ni več potreben.",
-	"campaignevents-edit-removed-creator": "Nimate dovoljenja za odstranitev ($1), ker je ta uporabnik ustvaritelj dogodka.",
+	"campaignevents-edit-removed-creator": "Uporabnika $1 ne morete odstraniti, ker je ustvaritelj dogodka.",
 	"campaignevents-edit-no-creator": "Ko prvič omogočite registracijo dogodka, se morate dodati kot organizator.",
 	"campaignevents-edit-too-many-organizers": "Ne morete dodati več kot $1 {{PLURAL:$1|organizatorja|organizatorjev}}.",
 	"campaignevents-edit-organizer-need-central-account": "{{PLURAL:$1|Naslednji uporabnik nima|Naslednja uporabnika nimata|Naslednji uporabniki nimajo}} centralnega uporabniškega računa in {{PLURAL:$1|ga|ju|jih}} ni mogoče dodati kot {{PLURAL:$1|organizatorja|organizatorja|organizatorje}}: $2.",
