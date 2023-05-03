@@ -77,7 +77,7 @@
 	"campaignevents-edit-need-central-account": "חובה להחזיר בחשבון משתמש גלובלי כדי להפעיל או לערוך הרשמות לאירועים.",
 	"campaignevents-edit-organizers-not-allowed": "$2 לא {{PLURAL:$1|מחזיק|מחזיקים}} הההרשאות הדרושות כדי להיות {{PLURAL:$1|{{GENDER:$2|מארגן|מארגנת}}|מארגנים}}.",
 	"campaignevents-edit-no-organizers": "לאירועים צריך להיות מארגן אחד לפחות. נא להוסיף מארגן או למחוק את האירוע אם אין בו עוד צורך.",
-	"campaignevents-edit-removed-creator": "אין לך הרשאה להסיר את יוצר האירוע.",
+	"campaignevents-edit-removed-creator": "לא ניתן להסיר את $1 כי זה חשבון של של מארגן האירוע",
 	"campaignevents-edit-no-creator": "יש להוסיף את עצמך כמארגן כאשר בעת הפעלת ראשונה של רישום לאירוע.",
 	"campaignevents-edit-too-many-organizers": "לא ניתן להוסיף יותר {{PLURAL:$1|ממארגן אחד|מ־$1 מארגנים}}.",
 	"campaignevents-edit-organizer-need-central-account": "{{PLURAL:$1|למשתמש הבא|למשתמשים הבאים}} אין חשבון משתמש מרכזי ולא ניתן להוסיף {{PLURAL:$1|אותו בתור מארגן|אותם בתור מארגנים}}: $2.",
