@@ -77,7 +77,7 @@
 	"campaignevents-edit-need-central-account": "You need a central user account in order to enable or edit event registrations.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|doesn't|don't}} have the needed permissions to be {{PLURAL:$1|an organizer|organizers}}.",
 	"campaignevents-edit-no-organizers": "Events need to have at least one organizer. Please add an organizer or delete the event if it is no longer needed.",
-	"campaignevents-edit-removed-creator": "You cannot remove $1 because this user is the event creator",
+	"campaignevents-edit-removed-creator": "You cannot remove $1 because this {{GENDER:$1|user}} is the event creator",
 	"campaignevents-edit-no-creator": "You need to add yourself as an organizer when you first enable event registration.",
 	"campaignevents-edit-too-many-organizers": "You can't add more than $1 {{PLURAL:$1|organizer|organizers}}.",
 	"campaignevents-edit-organizer-need-central-account": "The following {{PLURAL:$1|user does|users do}} not have a central user account and cannot be added as {{PLURAL:$1|organizer|organizers}}: $2.",
