@@ -29,7 +29,7 @@
 	"campaignevents-event-details-chat-link": "আড্ডা গোষ্ঠীর আমন্ত্রণ লিঙ্ক",
 	"campaignevents-event-details-register-prompt": "এই তথ্য দেখতে আপনাকে নিবন্ধন করতে হবে",
 	"campaignevents-event-details-select-all": "সব নির্বাচন করুন",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|নির্বাচিত}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$2টির মধ্যে $1টি {{PLURAL:$1|নির্বাচন করা হয়েছে}}",
 	"campaignevents-event-details-remove-participant-remove-btn": "অপসারণ",
 	"campaignevents-event-details-remove-participant-cancel-btn": "বাতিল",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|অংশগ্রহণকারী|অংশগ্রহণকারীদের}} অপসারণ করা হয়েছে",

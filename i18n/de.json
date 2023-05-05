@@ -77,7 +77,7 @@
 	"campaignevents-edit-need-central-account": "Du benötigst ein zentrales Benutzerkonto, um Veranstaltungsanmeldungen zu ermöglichen oder zu bearbeiten.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|hat nicht|haben nicht}} die erforderlichen Berechtigungen, um {{PLURAL:$1|Organisator|Organisatoren}} zu sein.",
 	"campaignevents-edit-no-organizers": "Veranstaltungen müssen mindestens einen Organisator haben. Bitte füge einen Organisator hinzu oder lösche die Veranstaltung, wenn sie nicht mehr benötigt wird.",
-	"campaignevents-edit-removed-creator": "Du kannst $1 nicht entfernen, da dieser Benutzer der Ersteller der Veranstaltung ist",
+	"campaignevents-edit-removed-creator": "Du kannst $1 nicht entfernen, da {{GENDER:$1|dieser Benutzer der Ersteller|diese Benutzerin die Erstellerin}} der Veranstaltung ist",
 	"campaignevents-edit-no-creator": "Du musst dich selbst als Organisator hinzufügen, wenn du die Veranstaltungsregistrierung zum ersten Mal aktivierst.",
 	"campaignevents-edit-too-many-organizers": "Du kannst nicht mehr als $1 {{PLURAL:$1|Organisator|Organisatoren}} hinzufügen.",
 	"campaignevents-edit-organizer-need-central-account": "{{PLURAL:$1|Der folgende Benutzer hat|Die folgenden Benutzer haben}} kein zentrales Benutzerkonto und können nicht als {{PLURAL:$1|Veranstalter}} hinzugefügt werden: $2.",
