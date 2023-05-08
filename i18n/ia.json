@@ -77,7 +77,7 @@
 	"campaignevents-edit-need-central-account": "Un conto de usator central es necessari pro poter activar o modificar inscriptiones a eventos.",
 	"campaignevents-edit-organizers-not-allowed": "$2 non ha le permissiones necessari pro esser organisator{{PLURAL:$1||es}}.",
 	"campaignevents-edit-no-organizers": "Eventos debe haber al minus un organisator. Per favor adde un organisator o dele le evento si non es plus necessari.",
-	"campaignevents-edit-removed-creator": "Non es possibile remover $1 perque iste usator es le creator del evento.",
+	"campaignevents-edit-removed-creator": "Non es possibile remover $1 perque iste usat{{GENDER:$1|or|rice}} es le creat{{GENDER:$1|or|rice}} del evento.",
 	"campaignevents-edit-no-creator": "Tu debe adder te como organisator le prime vice que tu activa le inscription al evento.",
 	"campaignevents-edit-too-many-organizers": "Tu non pote adder plus que $1 organisator{{PLURAL:$1||es}}.",
 	"campaignevents-edit-organizer-need-central-account": "Le sequente usator{{PLURAL:$1||es}} non ha un conto de usator central e non pote esser addite como organisator{{PLURAL:$1||es}}: $2.",
