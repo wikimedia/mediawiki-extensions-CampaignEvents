@@ -84,7 +84,7 @@
 	"campaignevents-edit-need-central-account": "أنت بحاجة إلى حساب مستخدم مركزي لتفعيل التسجيل أو التحرير في الفعاليات.",
 	"campaignevents-edit-organizers-not-allowed": "ليس $2 {{PLURAL:$1| لديه| لديهم}} الصلاحيات المطلوبة ليكون {{PLURAL:$1| منظم |و منظمون}}.",
 	"campaignevents-edit-no-organizers": "يجب أن يكون للفعاليات منظم واحد على الأقل. الرجاء إضافة منظم أو حذف الفعالية إذا لم تعد هناك حاجة إليها.",
-	"campaignevents-edit-removed-creator": "لا يمكنك إزالة $1 لأن هذا {{GENDER:$1| user}} هو منشئ الحدث",
+	"campaignevents-edit-removed-creator": "لا يمكنك إزالة $1 لأن هذا {{GENDER:$1| user}} هو منشئ الفعالية",
 	"campaignevents-edit-no-creator": "تحتاج إلى إضافة نفسك كمنظم عند تفعيل تسجيل الفعالية لأول مرة.",
 	"campaignevents-edit-too-many-organizers": "لا يمكنك إضافة أكثر من $1 {{PLURAL:$1| منظم واحد| من المنظمين}}.",
 	"campaignevents-edit-organizer-need-central-account": "{{PLURAL:$1| المستخدم هذا لا يمتلك | هؤلاء المستخدمين لا يمتلكون}} حساب مستخدم مركزي ولا يمكن {{PLURAL:$1| إضافته كمنظم | إضافتهم كمنظمين}}: $2 .",
