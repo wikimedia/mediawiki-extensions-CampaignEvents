@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use DateTimeZone;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 
 /**
  * Immutable value object that represents a registration that exists in the database.
@@ -18,8 +19,8 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string $name
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
-	 * @param array<int,string> $trackingTools List of attached tracking tools, in the format
-	 *   [ tool_DB_ID => tool_event_ID ].
+	 * @param TrackingToolAssociation[] $trackingTools
+	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string $status
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
