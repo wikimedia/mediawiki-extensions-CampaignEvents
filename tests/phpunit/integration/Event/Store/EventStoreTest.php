@@ -39,8 +39,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'Event page'
 			),
 			'Chat URL',
-			42,
-			'tracking-tool-event-id',
+			[ 42 => 'tracking-tool-event-id' ],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20220810000000',
@@ -61,12 +60,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getPage()->getNamespace(), $actual->getPage()->getNamespace(), 'Page ns' );
 		$this->assertSame( $expected->getPage()->getDBkey(), $actual->getPage()->getDBkey(), 'Page dbkey' );
 		$this->assertSame( $expected->getPage()->getWikiId(), $actual->getPage()->getWikiId(), 'Page wiki ID' );
-		$this->assertSame( $expected->getTrackingToolDBID(), $actual->getTrackingToolDBID(), 'tracking tool ID' );
-		$this->assertSame(
-			$expected->getTrackingToolEventID(),
-			$actual->getTrackingToolEventID(),
-			'tracking tool event ID'
-		);
+		$this->assertSame( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
 		$this->assertSame( $expected->getStatus(), $actual->getStatus(), 'status' );
 		$this->assertSame( $expected->getTimezone()->getName(), $actual->getTimezone()->getName(), 'timezone' );
 		$this->assertSame( $expected->getStartLocalTimestamp(), $actual->getStartLocalTimestamp(), 'local start' );
@@ -245,8 +239,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'Event page'
 			),
 			'Chat URL',
-			42,
-			'some-event-id',
+			[ 42 => 'some-event-id' ],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20220731080000',
