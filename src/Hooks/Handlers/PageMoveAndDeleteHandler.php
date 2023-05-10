@@ -4,27 +4,25 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use ManualLogEntry;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Hook\PageMoveCompleteHook;
-use MediaWiki\Page\Hook\PageDeleteCompleteHook;
+use MediaWiki\Page\Hook\PageDeleteHook;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
-use MediaWiki\Revision\RevisionRecord;
+use StatusValue;
 use TitleFormatter;
 
 /**
  * This handler is used for page move and deletion. If the page is an event page, we update the registration:
  *  - Delete it in case of event page deletion
  *  - Make it point to the new page in case of page move
- * Note that both handlers have to load data from DB master (T302858#8354617)
  */
-class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteCompleteHook {
+class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteHook {
 	/** @var MWEventLookupFromPage */
 	private $eventLookupFromPage;
 	/** @var IEventStore */
@@ -60,26 +58,30 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	/**
 	 * @inheritDoc
 	 */
-	public function onPageDeleteComplete(
+	public function onPageDelete(
 		ProperPageIdentity $page,
 		Authority $deleter,
 		string $reason,
-		int $pageID,
-		RevisionRecord $deletedRev,
-		ManualLogEntry $logEntry,
-		int $archivedRevisionCount
+		StatusValue $status,
+		bool $suppress
 	) {
-		$registration = $this->eventLookupFromPage->getRegistrationForPage( $page, MWEventLookupFromPage::READ_LATEST );
+		$registration = $this->eventLookupFromPage->getRegistrationForPage( $page );
 		if ( !$registration ) {
-			return;
+			return true;
 		}
-		$this->deleteEventCommand->deleteUnsafe( $registration );
+		$res = $this->deleteEventCommand->deleteUnsafe( $registration );
+		if ( !$res->isGood() ) {
+			$status->merge( $res );
+			return false;
+		}
+		return true;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ) {
+		// This code runs in a DeferredUpdate, load the data from DB master (T302858#8354617)
 		$registration = $this->eventLookupFromPage->getRegistrationForPage( $old, MWEventLookupFromPage::READ_LATEST );
 		if ( !$registration ) {
 			return;

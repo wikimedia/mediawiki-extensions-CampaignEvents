@@ -90,7 +90,7 @@
 		"LoadExtensionSchemaUpdates": "SchemaChanges",
 		"ArticleViewHeader": "ArticleViewHeader",
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
-		"PageDeleteComplete": "PageMoveAndDeleteHandler",
+		"PageDelete": "PageMoveAndDeleteHandler",
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler::onBeforeCreateEchoEvent"
 	},
 	"MessagesDirs": {

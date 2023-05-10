@@ -22,7 +22,6 @@ use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
-use StatusValue;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EditEventCommand
@@ -47,10 +46,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		OrganizersStore $organizersStore = null
 	): EditEventCommand {
-		if ( !$eventStore ) {
-			$eventStore = $this->createMock( IEventStore::class );
-			$eventStore->method( 'saveRegistration' )->willReturn( StatusValue::newGood( 1 ) );
-		}
+		$eventStore ??= $this->createMock( IEventStore::class );
 		if ( !$eventLookup ) {
 			$eventLookup = $this->createMock( IEventLookup::class );
 			$eventLookup->method( 'getEventByPage' )
@@ -82,30 +78,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$centralUserLookup,
 			$this->createMock( EventPageCacheUpdater::class )
 		);
-	}
-
-	/**
-	 * @param EventRegistration $registration
-	 * @covers ::doEditIfAllowed
-	 * @covers ::authorizeEdit
-	 * @dataProvider provideEventRegistrations
-	 */
-	public function testDoEditIfAllowed__error( EventRegistration $registration ) {
-		$expectedMsg = 'foo-bar';
-		$eventStore = $this->createMock( IEventStore::class );
-		$eventStore->expects( $this->once() )
-			->method( 'saveRegistration' )
-			->willReturn( StatusValue::newFatal( $expectedMsg ) );
-
-		$status = $this->getCommand( $eventStore )->doEditIfAllowed(
-			$registration,
-			$this->createMock( ICampaignsAuthority::class ),
-			self::ORGANIZER_USERNAMES
-		);
-
-		$this->assertNotInstanceOf( PermissionStatus::class, $status );
-		$this->assertStatusNotGood( $status );
-		$this->assertStatusMessage( $expectedMsg, $status );
 	}
 
 	/**
@@ -217,7 +189,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	public function testDoEditIfAllowed__successful( EventRegistration $registration ) {
 		$id = 42;
 		$eventStore = $this->createMock( IEventStore::class );
-		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( StatusValue::newGood( $id ) );
+		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );
 		$status = $this->getCommand( $eventStore )->doEditIfAllowed(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),
@@ -232,7 +204,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param string|null $expectedMsg
 	 * @param array|null $organizers
 	 * @param PermissionChecker|null $permChecker
-	 * @param IEventStore|null $eventStore
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @param OrganizersStore|null $organizersStore
 	 * @covers ::doEditUnsafe
@@ -246,11 +217,10 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		string $expectedMsg,
 		array $organizers,
 		PermissionChecker $permChecker = null,
-		IEventStore $eventStore = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		OrganizersStore $organizersStore = null
 	) {
-		$command = $this->getCommand( $eventStore, $permChecker, null, $centralUserLookup, $organizersStore );
+		$command = $this->getCommand( null, $permChecker, null, $centralUserLookup, $organizersStore );
 		$status = $command->doEditUnsafe(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),
@@ -263,20 +233,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	public function provideEditUnsafeErrors(): Generator {
 		$registrations = $this->provideEventRegistrations();
 		foreach ( $registrations as $testName => [ $registration ] ) {
-			$storeError = 'some-store-error';
-			$eventStore = $this->createMock( IEventStore::class );
-			$eventStore->expects( $this->once() )
-				->method( 'saveRegistration' )
-				->willReturn( StatusValue::newFatal( $storeError ) );
-			yield "$testName, store error" => [
-				$registration,
-				$storeError,
-				self::ORGANIZER_USERNAMES,
-				null,
-				$eventStore,
-				null
-			];
-
 			$notGlobalLookup = $this->createMock( CampaignsCentralUserLookup::class );
 			$notGlobalLookup->method( 'newFromAuthority' )
 				->willThrowException( $this->createMock( UserNotGlobalException::class ) );
@@ -285,16 +241,12 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				'campaignevents-edit-need-central-account',
 				self::ORGANIZER_USERNAMES,
 				null,
-				null,
 				$notGlobalLookup
 			];
 			yield "$testName, empty list of organizers" => [
 				$registration,
 				'campaignevents-edit-no-organizers',
-				[],
-				null,
-				null,
-				null
+				[]
 			];
 			$organizers = [];
 			for ( $i = 0; $i < EditEventCommand::MAX_ORGANIZERS_PER_EVENT + 1; $i++ ) {
@@ -303,10 +255,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			yield "$testName, organizer limit per event error" => [
 				$registration,
 				'campaignevents-edit-too-many-organizers',
-				$organizers,
-				null,
-				null,
-				null
+				$organizers
 			];
 			$disallowedPermChecker = $this->createMock( PermissionChecker::class );
 			$disallowedPermChecker->method( 'userCanOrganizeEvents' )->willReturn( false );
@@ -314,9 +263,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				$registration,
 				'campaignevents-edit-organizers-not-allowed',
 				self::ORGANIZER_USERNAMES,
-				$disallowedPermChecker,
-				null,
-				null
+				$disallowedPermChecker
 			];
 
 			$usersNotGlobalCentralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
@@ -327,7 +274,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				$registration,
 				'campaignevents-edit-organizer-need-central-account',
 				self::ORGANIZER_USERNAMES,
-				null,
 				null,
 				$usersNotGlobalCentralUserLookup
 			];
@@ -358,7 +304,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				$noCreatorMsg,
 				[ $notCreatorUsername ],
 				null,
-				null,
 				$returnNotCreatorCentralUserLookup,
 				$organizersStore
 			];
@@ -369,7 +314,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				$registration,
 				'campaignevents-edit-invalid-username',
 				[ 'invalid-username|<>' ],
-				null,
 				null,
 				$invalidUsernameCentralUserLookup
 			];
@@ -384,7 +328,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	public function testDoEditUnsafe__successful( EventRegistration $registration ) {
 		$id = 42;
 		$eventStore = $this->createMock( IEventStore::class );
-		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( StatusValue::newGood( $id ) );
+		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );
 		$status = $this->getCommand( $eventStore )->doEditUnsafe(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),
