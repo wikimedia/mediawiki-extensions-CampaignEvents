@@ -22,7 +22,14 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'name' => 'Name',
 			'page' => $this->createMock( ICampaignsPage::class ),
 			'chat' => 'https://chat.example.org',
-			'tracking_tools' => [ new TrackingToolAssociation( 1, 'some-event-identifier' ) ],
+			'tracking_tools' => [
+				new TrackingToolAssociation(
+					1,
+					'some-event-identifier',
+					TrackingToolAssociation::SYNC_STATUS_UNKNOWN,
+					null
+				)
+			],
 			'status' => EventRegistration::STATUS_OPEN,
 			'timezone' => new DateTimeZone( 'UTC' ),
 			'start' => '20220815120000',
