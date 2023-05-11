@@ -80,7 +80,7 @@
 	"campaignevents-edit-need-central-account": "U hebt een centraal gebruikersaccount nodig om de inschrijving op evenementen in te schakelen of te bewerken.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|heeft|hebben}} niet de benodigde rechten om organisator{{PLURAL:$1||en}} te zijn.",
 	"campaignevents-edit-no-organizers": "Evenementen moeten ten minste één organisator hebben. Voeg een organisator toe of verwijder het evenement als het niet langer nodig is.",
-	"campaignevents-edit-removed-creator": "U bent niet gerechtigd de maker van het evenement te verwijderen.",
+	"campaignevents-edit-removed-creator": "U kunt $1 niet verwijderen omdat deze gebruik{{GENDER:$1||st}}er de maker van het evenement is",
 	"campaignevents-edit-no-creator": "U moet zichzelf toevoegen als organisator wanneer u evenementregistratie voor het eerst inschakelt.",
 	"campaignevents-edit-too-many-organizers": "U kunt niet meer dan $1 organisator{{PLURAL:$1||en}} toevoegen.",
 	"campaignevents-edit-organizer-need-central-account": "De volgende gebruiker{{PLURAL:$1| heeft|s hebben}} geen centraal gebruikersaccount en {{PLURAL:$1|kan|kunnen}} niet worden toegevoegd als organisator{{PLURAL:$1||en}}: $2.",
