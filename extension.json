@@ -47,6 +47,14 @@
 		"CampaignEventsEnableEmail": {
 			"description": "Temporary feature flag to enable support for emailing users.",
 			"value": false
+		},
+		"CampaignEventsEnableParticipantQuestions": {
+			"description": "Temporary feature flag to enable support for participant questions.",
+			"value": false
+		},
+		"CampaignEventsEnableWikimediaParticipantQuestions": {
+			"description": "Flag to enable Wikimedia-specific participant questions. This flag could be reconsidered in the future, in favour of other solutions (like a hook to add Wikimedia-specific questions).",
+			"value": true
 		}
 	},
 	"DefaultUserOptions": {
@@ -503,7 +511,8 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsRegisterParticipantCommand",
 				"CampaignEventsParticipantsStore",
-				"CampaignEventsPolicyMessagesLookup"
+				"CampaignEventsPolicyMessagesLookup",
+				"CampaignEventsEventQuestionsRegistry"
 			]
 		},
 		"CancelEventRegistration": {
