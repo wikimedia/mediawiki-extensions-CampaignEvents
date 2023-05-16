@@ -4,5 +4,6 @@
 			"MRidhaAJ"
 		]
 	},
-	"campaignevents-edit-invalid-username": "\"$1\" مو يوزر نيم صح"
+	"campaignevents-edit-invalid-username": "\"$1\" مو يوزر نيم صح",
+	"campaignevents-event-details-remove-participant-cancel-btn": "الغي"
 }
