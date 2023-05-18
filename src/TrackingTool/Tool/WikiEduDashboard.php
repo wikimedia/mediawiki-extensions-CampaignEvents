@@ -9,6 +9,8 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Http\HttpRequestFactory;
 use Message;
 use StatusValue;
@@ -21,6 +23,8 @@ class WikiEduDashboard extends TrackingTool {
 	private HttpRequestFactory $httpRequestFactory;
 	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
+	/** @var ParticipantsStore */
+	private ParticipantsStore $participantsStore;
 
 	/** @var string */
 	private $apiSecret;
@@ -33,6 +37,7 @@ class WikiEduDashboard extends TrackingTool {
 	public function __construct(
 		HttpRequestFactory $httpRequestFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
+		ParticipantsStore $participantsStore,
 		int $dbID,
 		string $baseURL,
 		array $extra
@@ -40,6 +45,7 @@ class WikiEduDashboard extends TrackingTool {
 		parent::__construct( $dbID, $baseURL, $extra );
 		$this->httpRequestFactory = $httpRequestFactory;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->participantsStore = $participantsStore;
 		$this->apiSecret = $extra['secret'];
 		$this->apiProxy = $extra['proxy'];
 	}
@@ -51,6 +57,29 @@ class WikiEduDashboard extends TrackingTool {
 		EventRegistration $event,
 		array $organizers,
 		string $toolEventID
+	): StatusValue {
+		return $this->makeNewEventRequest( $event, $organizers, $toolEventID, true );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function addToEvent( EventRegistration $event, array $organizers, string $toolEventID ): StatusValue {
+		return $this->makeNewEventRequest( $event, $organizers, $toolEventID, false );
+	}
+
+	/**
+	 * @param EventRegistration $event
+	 * @param CentralUser[] $organizers
+	 * @param string $toolEventID
+	 * @param bool $dryRun
+	 * @return StatusValue
+	 */
+	private function makeNewEventRequest(
+		EventRegistration $event,
+		array $organizers,
+		string $toolEventID,
+		bool $dryRun
 	): StatusValue {
 		$organizerIDsMap = array_fill_keys(
 			array_map( static fn( CentralUser $u ) => $u->getCentralID(), $organizers ),
@@ -65,7 +94,7 @@ class WikiEduDashboard extends TrackingTool {
 			'confirm_event_sync',
 			$eventID,
 			$toolEventID,
-			true,
+			$dryRun,
 			[
 				'organizer_usernames' => $organizerNames,
 			]
@@ -75,36 +104,39 @@ class WikiEduDashboard extends TrackingTool {
 	/**
 	 * @inheritDoc
 	 */
-	public function addToEvent( EventRegistration $event, array $organizers, string $toolEventID ): StatusValue {
-		return StatusValue::newGood();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function validateToolRemoval( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
-		return StatusValue::newGood();
+		return $this->makePostRequest(
+			'unsync_event',
+			$event->getID(),
+			$toolEventID,
+			true
+		);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function removeFromEvent( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
-		return StatusValue::newGood();
+		return $this->makePostRequest(
+			'unsync_event',
+			$event->getID(),
+			$toolEventID,
+			false
+		);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function validateEventDeletion( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
-		return StatusValue::newGood();
+		return $this->validateToolRemoval( $event, $toolEventID );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function onEventDeleted( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
-		return StatusValue::newGood();
+		return $this->removeFromEvent( $event, $toolEventID );
 	}
 
 	/**
@@ -116,7 +148,11 @@ class WikiEduDashboard extends TrackingTool {
 		CentralUser $participant,
 		bool $private
 	): StatusValue {
-		return StatusValue::newGood();
+		if ( $private ) {
+			// Private participants are not synced, so don't bother making a request.
+			return StatusValue::newGood();
+		}
+		return $this->syncParticipants( $event, $toolEventID, true );
 	}
 
 	/**
@@ -128,7 +164,11 @@ class WikiEduDashboard extends TrackingTool {
 		CentralUser $participant,
 		bool $private
 	): StatusValue {
-		return StatusValue::newGood();
+		if ( $private ) {
+			// Private participants are not synced, so don't bother making a request.
+			return StatusValue::newGood();
+		}
+		return $this->syncParticipants( $event, $toolEventID, false );
 	}
 
 	/**
@@ -140,7 +180,7 @@ class WikiEduDashboard extends TrackingTool {
 		?array $participants,
 		bool $invertSelection
 	): StatusValue {
-		return StatusValue::newGood();
+		return $this->syncParticipants( $event, $toolEventID, true );
 	}
 
 	/**
@@ -152,7 +192,44 @@ class WikiEduDashboard extends TrackingTool {
 		?array $participants,
 		bool $invertSelection
 	): StatusValue {
-		return StatusValue::newGood();
+		return $this->syncParticipants( $event, $toolEventID, false );
+	}
+
+	/**
+	 * @param ExistingEventRegistration $event
+	 * @param string $toolEventID
+	 * @param bool $dryRun
+	 * @return StatusValue
+	 */
+	private function syncParticipants(
+		ExistingEventRegistration $event,
+		string $toolEventID,
+		bool $dryRun
+	): StatusValue {
+		$eventID = $event->getID();
+		$latestParticipants = $this->participantsStore->getEventParticipants(
+			$eventID,
+			null,
+			null,
+			null,
+			false,
+			null,
+			ParticipantsStore::READ_LATEST
+		);
+		$participantIDsMap = array_fill_keys(
+			array_map( static fn( Participant $p ) => $p->getUser()->getCentralID(), $latestParticipants ),
+			null
+		);
+		$participantNames = array_values( $this->centralUserLookup->getNames( $participantIDsMap ) );
+		return $this->makePostRequest(
+			'update_event_participants',
+			$eventID,
+			$toolEventID,
+			$dryRun,
+			[
+				'participant_usernames' => $participantNames
+			]
+		);
 	}
 
 	/**

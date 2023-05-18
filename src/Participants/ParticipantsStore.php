@@ -4,12 +4,14 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
+use DBAccessObjectUtils;
+use IDBAccessObject;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
-class ParticipantsStore {
+class ParticipantsStore implements IDBAccessObject {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
 
 	/** @var CampaignsDatabaseHelper */
@@ -159,6 +161,7 @@ class ParticipantsStore {
 	 * @param bool $showPrivate
 	 * @param int|null $excludeUser ID of a user to exclude from the result (useful when the request user is handled
 	 * separately).
+	 * @param int $readFlags One of the self::READ_* constants
 	 * @return Participant[]
 	 */
 	public function getEventParticipants(
@@ -167,12 +170,14 @@ class ParticipantsStore {
 		int $lastParticipantID = null,
 		string $usernameFilter = null,
 		bool $showPrivate = false,
-		int $excludeUser = null
+		int $excludeUser = null,
+		int $readFlags = self::READ_NORMAL
 	): array {
 		if ( $usernameFilter === '' ) {
 			throw new InvalidArgumentException( "The username filter cannot be the empty string" );
 		}
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		[ $dbIndex, $dbOptions ] = DBAccessObjectUtils::getDBOptions( $readFlags );
+		$dbr = $this->dbHelper->getDBConnection( $dbIndex );
 
 		$where = [ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ];
 		if ( $lastParticipantID !== null ) {
@@ -184,7 +189,7 @@ class ParticipantsStore {
 		if ( $excludeUser !== null ) {
 			$where[] = "cep_user_id != $excludeUser";
 		}
-		$opts = [ 'ORDER BY' => 'cep_id' ];
+		$opts = [ 'ORDER BY' => 'cep_id' ] + $dbOptions;
 		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter
 		// and limit the results later. This is a bit hacky but there seems to be no super-clean alternative, since
 		// we can't join whatever table is used for central users and storing the username is non-trivial due to
