@@ -32,7 +32,7 @@ abstract class TrackingTool {
 	/** @var int */
 	private $dbID;
 	/** @var string */
-	private $baseURL;
+	protected $baseURL;
 
 	/**
 	 * @param int $dbID ID that identifies this specific tracking tool in the DB

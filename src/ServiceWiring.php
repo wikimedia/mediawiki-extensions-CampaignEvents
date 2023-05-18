@@ -228,6 +228,7 @@ return [
 	},
 	TrackingToolRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): TrackingToolRegistry {
 		return new TrackingToolRegistry(
+			$services->getObjectFactory(),
 			new ServiceOptions(
 				TrackingToolRegistry::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
