@@ -5,13 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Rest\SetOrganizersHandler;
 use MediaWiki\Permissions\PermissionStatus;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Session\Session;
@@ -28,7 +26,6 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
 
 	private function newHandler(
-		bool $featureEnabled = true,
 		EditEventCommand $editEventCommand = null
 	): SetOrganizersHandler {
 		if ( !$editEventCommand ) {
@@ -40,8 +37,7 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		return new SetOrganizersHandler(
 			$this->createMock( IEventLookup::class ),
 			$editEventCommand,
-			$centralUserLookup,
-			new HashConfig( [ 'CampaignEventsEnableMultipleOrganizers' => $featureEnabled ] )
+			$centralUserLookup
 		);
 	}
 
@@ -56,14 +52,6 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			'bodyContents' => json_encode( [ 'organizer_usernames' => $organizers ] ),
 			'headers' => [ 'Content-Type' => 'application/json' ],
 		];
-	}
-
-	public function testRun__featureDisabled() {
-		$handler = $this->newHandler( false );
-		$this->expectException( HttpException::class );
-		$this->expectExceptionMessage( 'This endpoint is not enabled on this wiki' );
-		$this->expectExceptionCode( 421 );
-		$this->executeHandler( $handler, new RequestData( $this->getRequestData( [] ) ) );
 	}
 
 	/**
@@ -103,7 +91,7 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		string $expectedErrorMsg,
 		int $expectedCode
 	) {
-		$handler = $this->newHandler( true, $editEventCommand );
+		$handler = $this->newHandler( $editEventCommand );
 		$performer = $this->mockRegisteredUltimateAuthority();
 		$request = new RequestData( $this->getRequestData( [ 'foo' ] ) );
 

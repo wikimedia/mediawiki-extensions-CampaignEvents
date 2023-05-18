@@ -42,10 +42,6 @@
 		"CampaignEventsProgramsAndEventsDashboardAPISecret": {
 			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
 			"value": null
-		},
-		"CampaignEventsEnableMultipleOrganizers": {
-			"description": "Temporary feature flag to enable support for multiple event organizers.",
-			"value": false
 		}
 	},
 	"DefaultUserOptions": {
@@ -391,8 +387,7 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsEditEventCommand",
-				"CampaignEventsCentralUserLookup",
-				"MainConfig"
+				"CampaignEventsCentralUserLookup"
 			]
 		},
 		{

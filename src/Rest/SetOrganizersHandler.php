@@ -4,14 +4,12 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Permissions\PermissionStatus;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
@@ -34,25 +32,20 @@ class SetOrganizersHandler extends SimpleHandler {
 	private EditEventCommand $editEventCommand;
 	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var bool */
-	private bool $endpointEnabled;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param EditEventCommand $editEventCommand
 	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param Config $config
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EditEventCommand $editEventCommand,
-		CampaignsCentralUserLookup $centralUserLookup,
-		Config $config
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->editEventCommand = $editEventCommand;
 		$this->centralUserLookup = $centralUserLookup;
-		$this->endpointEnabled = $config->get( 'CampaignEventsEnableMultipleOrganizers' );
 	}
 
 	/**
@@ -78,14 +71,6 @@ class SetOrganizersHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		if ( !$this->endpointEnabled ) {
-			throw new HttpException(
-				// No need to localize this, since the feature flag is temporary.
-				'This endpoint is not enabled on this wiki.',
-				421
-			);
-		}
-
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
 		$body = $this->getValidatedBody();
