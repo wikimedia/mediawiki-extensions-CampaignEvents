@@ -192,7 +192,8 @@ return [
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( UserLinker::SERVICE_NAME ),
 			$services->get( EventTimeFormatter::SERVICE_NAME ),
-			$services->get( EventPageCacheUpdater::SERVICE_NAME )
+			$services->get( EventPageCacheUpdater::SERVICE_NAME ),
+			$services->get( EventQuestionsRegistry::SERVICE_NAME )
 		);
 	},
 	CampaignEventsHookRunner::SERVICE_NAME =>

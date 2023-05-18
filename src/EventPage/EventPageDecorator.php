@@ -28,6 +28,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialCancelEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
@@ -36,6 +37,7 @@ use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\User\UserIdentity;
@@ -97,6 +99,8 @@ class EventPageDecorator {
 	private EventTimeFormatter $eventTimeFormatter;
 	/** @var EventPageCacheUpdater */
 	private EventPageCacheUpdater $eventPageCacheUpdater;
+	/** @var EventQuestionsRegistry */
+	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/**
 	 * @var bool|null Whether the user is registered publicly or privately. This value is lazy-loaded iff the user
@@ -116,6 +120,8 @@ class EventPageDecorator {
 	 * @param UserLinker $userLinker
 	 * @param EventTimeFormatter $eventTimeFormatter
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 *
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -128,7 +134,8 @@ class EventPageDecorator {
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
-		EventPageCacheUpdater $eventPageCacheUpdater
+		EventPageCacheUpdater $eventPageCacheUpdater,
+		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
@@ -141,6 +148,7 @@ class EventPageDecorator {
 		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
+		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 	}
 
 	/**
@@ -299,6 +307,7 @@ class EventPageDecorator {
 			],
 			UserLinker::MODULE_STYLES
 		) );
+
 		$out->addModules( [ 'ext.campaignEvents.eventpage' ] );
 
 		$userStatus = $this->getUserStatus( $registration, $authority );
@@ -321,10 +330,62 @@ class EventPageDecorator {
 				$authority,
 				$out )
 		);
+
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $registration->getID(),
 			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
+			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData(
+				$registration, $msgFormatter, $centralUser
+			),
+			// temporarily feature flag to prevent participants from seeing the event questions
+			'wgCampaignEventsEnableParticipantQuestions' =>
+				MediaWikiServices::getInstance()->getMainConfig()->get( 'CampaignEventsEnableParticipantQuestions' )
 		] );
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param ITextFormatter $msgFormatter
+	 * @param CentralUser|null $centralUser
+	 * @return array
+	 */
+	private function getEventQuestionsData(
+		ExistingEventRegistration $registration,
+		ITextFormatter $msgFormatter,
+		?CentralUser $centralUser
+	) {
+		$enabledQuestions = $registration->getParticipantQuestions();
+		$curParticipantData = $centralUser ? $this->participantsStore->getEventParticipant(
+			$registration->getID(),
+			$centralUser,
+			true
+		) : [];
+		$curAnswers = $curParticipantData ? $curParticipantData->getAnswers() : [];
+		$eventQuestionsData = $this->eventQuestionsRegistry->getQuestionsForHTMLForm( $enabledQuestions, $curAnswers );
+		foreach ( $eventQuestionsData as &$eventQuestion ) {
+			if ( isset( $eventQuestion[ 'label-message' ] ) ) {
+				$eventQuestion[ 'label-message' ] = $msgFormatter->format(
+					MessageValue::new( $eventQuestion[ 'label-message' ] )
+				);
+			}
+			if ( isset( $eventQuestion[ 'placeholder-message' ] ) ) {
+				$eventQuestion[ 'placeholder-message' ] = $msgFormatter->format(
+					MessageValue::new( $eventQuestion[ 'placeholder-message' ] )
+				);
+			}
+			if ( isset( $eventQuestion[ 'options-messages' ] ) ) {
+				foreach ( $eventQuestion[ 'options-messages' ] as $messageKey => $value ) {
+					$message = $msgFormatter->format( MessageValue::new( $messageKey ) );
+					$eventQuestion[ 'options-messages' ][ $messageKey ] = [
+						'value' => $value,
+						'message' => $message
+					];
+				}
+			}
+		}
+		unset( $eventQuestion );
+
+		return $eventQuestionsData;
 	}
 
 	/**

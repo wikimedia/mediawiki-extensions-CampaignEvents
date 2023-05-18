@@ -208,6 +208,7 @@
 				"EventDetailsDialog.js",
 				"ParticipantRegistrationDialog.js",
 				"ManageRegistrationWidget.js",
+				"EventQuestions.js",
 				{
 					"name": "data.json",
 					"callback": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\ResourceLoaderCallbacks::getEventPageData"
@@ -240,7 +241,9 @@
 				"campaignevents-eventpage-btn-cancel",
 				"campaignevents-eventpage-register-dialog-title-edit",
 				"campaignevents-eventpage-register-dialog-save",
-				"campaignevents-eventpage-register-dialog-visibility-title"
+				"campaignevents-eventpage-register-dialog-visibility-title",
+				"campaignevents-eventpage-register-dialog-questions-title",
+				"campaignevents-eventpage-register-dialog-questions-subtitle"
 			],
 			"dependencies": [
 				"mediawiki.api",

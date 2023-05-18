@@ -8,10 +8,12 @@
 		ParticipantRegistrationDialog = require( './ParticipantRegistrationDialog.js' ),
 		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
 		ManageRegistrationWidget = require( './ManageRegistrationWidget.js' ),
+		EventQuestions = require( './EventQuestions.js' ),
 		confirmUnregistrationDialog,
 		participantRegistrationDialog,
-		configData = require( './data.json' ),
 		eventID = mw.config.get( 'wgCampaignEventsEventID' ),
+		eventQuestionsData = mw.config.get( 'wgCampaignEventsEventQuestions' ),
+		configData = require( './data.json' ),
 		userIsParticipant = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ) !== null,
 		userIsRegisteredPublicly = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ),
 		windowManager = new OO.ui.WindowManager(),
@@ -103,7 +105,7 @@
 			} );
 	}
 
-	function getParticipantRegistrationDialog( msg ) {
+	function getParticipantRegistrationDialog( msg, eventQuestions ) {
 		if ( !participantRegistrationDialog ) {
 			var curParticipantData;
 			if ( userIsParticipant ) {
@@ -114,7 +116,8 @@
 			participantRegistrationDialog = new ParticipantRegistrationDialog(
 				{
 					policyMsg: msg,
-					curParticipantData: curParticipantData
+					curParticipantData: curParticipantData,
+					eventQuestions: eventQuestions
 				} );
 			windowManager.addWindows( [ participantRegistrationDialog ] );
 		}
@@ -125,7 +128,9 @@
 	 * @return {jQuery.promise}
 	 */
 	function showParticipantRegistrationDialog() {
-		participantRegistrationDialog = getParticipantRegistrationDialog( configData.policyMsg );
+		participantRegistrationDialog = getParticipantRegistrationDialog(
+			configData.policyMsg, new EventQuestions( eventQuestionsData )
+		);
 		windowManager.closeWindow( windowManager.getCurrentWindow() );
 		return windowManager.openWindow( participantRegistrationDialog ).closed;
 	}

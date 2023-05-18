@@ -9,6 +9,7 @@
 	 * @cfg {Object|undefined} [curParticipantData=true] Current registration data for this user, if
 	 *   available. Undefined otherwise. Must have the following keys:
 	 *    - public (boolean): Whether the user is registered publicly
+	 * @cfg {Object} [eventQuestions] event questions
 	 * @extends OO.ui.ProcessDialog
 	 * @constructor
 	 */
@@ -23,6 +24,7 @@
 			this.publicRegistration = true;
 			this.isEdit = false;
 		}
+		this.eventQuestions = config.eventQuestions;
 	}
 
 	OO.inheritClass( ParticipantRegistrationDialog, OO.ui.ProcessDialog );
@@ -67,8 +69,21 @@
 			items: visibilityFields,
 			label: mw.msg( 'campaignevents-eventpage-register-dialog-visibility-title' )
 		} );
+
+		var questionsObj = this.eventQuestions.questions;
+		var questionsArray = Object.keys( questionsObj ).map( function ( q ) {
+			return questionsObj[ q ];
+		} );
+
+		var questionsFieldset = questionsArray.length === 0 ? '' : new OO.ui.FieldsetLayout( {
+			items: questionsArray,
+			label: mw.msg( 'campaignevents-eventpage-register-dialog-questions-title' ),
+			help: mw.msg( 'campaignevents-eventpage-register-dialog-questions-subtitle' ),
+			helpInline: true
+		} );
+
 		var formPanel = new OO.ui.PanelLayout( {
-			content: [ visibilityFieldset ],
+			content: [ visibilityFieldset, questionsFieldset ],
 			padded: true,
 			scrollable: false,
 			expanded: false
