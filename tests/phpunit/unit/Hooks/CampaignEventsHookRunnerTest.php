@@ -15,7 +15,7 @@ class CampaignEventsHookRunnerTest extends HookRunnerTestBase {
 	/**
 	 * @inheritDoc
 	 */
-	public function provideHookRunners() {
+	public static function provideHookRunners() {
 		yield CampaignEventsHookRunner::class => [ CampaignEventsHookRunner::class ];
 	}
 }
