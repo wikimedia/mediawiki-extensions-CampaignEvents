@@ -92,7 +92,7 @@ class EditEventCommand {
 	 * @param ICampaignsAuthority $performer
 	 * @param string[] $organizerUsernames These must be local usernames
 	 * @return StatusValue If good, the value shall be the ID of the event. Will be a PermissionStatus for
-	 *   permissions-related errors.
+	 *   permissions-related errors. This can be a fatal status, or a non-fatal status with warnings.
 	 */
 	public function doEditIfAllowed(
 		EventRegistration $registration,
@@ -131,7 +131,8 @@ class EditEventCommand {
 	 * @param EventRegistration $registration
 	 * @param ICampaignsAuthority $performer
 	 * @param string[] $organizerUsernames These must be local usernames
-	 * @return StatusValue If good, the value shall be the ID of the event.
+	 * @return StatusValue If good, the value shall be the ID of the event. Else this can be a fatal status, or a
+	 *   non-fatal status with warnings.
 	 */
 	public function doEditUnsafe(
 		EventRegistration $registration,
@@ -203,11 +204,22 @@ class EditEventCommand {
 
 		$newEventID = $this->eventStore->saveRegistration( $registration );
 		$this->addOrganizers( $registrationID === null, $newEventID, $organizerCentralUserIDs, $performerCentralUser );
-		$this->updateTrackingTools( $newEventID, $previousVersion, $registration, $organizerCentralUsers );
+		$toolStatus = $this->updateTrackingTools(
+			$newEventID,
+			$previousVersion,
+			$registration,
+			$organizerCentralUsers
+		);
 
 		$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 
-		return StatusValue::newGood( $newEventID );
+		$ret = StatusValue::newGood( $newEventID );
+		if ( !$toolStatus->isGood() ) {
+			foreach ( $toolStatus->getErrors() as $error ) {
+				$ret->warning( $error['message'], ...$error['params'] );
+			}
+		}
+		return $ret;
 	}
 
 	/**
@@ -215,17 +227,18 @@ class EditEventCommand {
 	 * @param ExistingEventRegistration|null $previousVersion
 	 * @param EventRegistration $newVersion
 	 * @param CentralUser[] $organizers
+	 * @return StatusValue
 	 */
 	private function updateTrackingTools(
 		int $eventID,
 		?ExistingEventRegistration $previousVersion,
 		EventRegistration $newVersion,
 		array $organizers
-	): void {
+	): StatusValue {
 		global $wgCampaignEventsUseNewTrackingToolsSchema;
 		if ( $wgCampaignEventsUseNewTrackingToolsSchema === false ) {
 			// Tracking tools are not supported yet, skip this.
-			return;
+			return StatusValue::newGood();
 		}
 
 		// Use a RAII callback to log failures at this stage that could leave the database in an inconsistent state
@@ -266,7 +279,7 @@ class EditEventCommand {
 		$newTools = $trackingToolStatus->getValue();
 		$this->trackingToolUpdater->replaceEventTools( $eventID, $newTools );
 		ScopedCallback::cancel( $failureLogger );
-		// TODO Inform the user about the failure (T336900)
+		return $trackingToolStatus;
 	}
 
 	/**

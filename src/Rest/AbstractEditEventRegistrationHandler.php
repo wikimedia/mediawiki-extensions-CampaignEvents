@@ -109,7 +109,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		}
 
 		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizerNames );
-		if ( !$saveStatus->isGood() ) {
+		if ( !$saveStatus->isOK() ) {
 			$httptStatus = $saveStatus instanceof PermissionStatus ? 403 : 400;
 			$this->exitWithStatus( $saveStatus, $httptStatus );
 		}

@@ -23,6 +23,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserTimeCorrection;
+use Message;
 use MWTimestamp;
 use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
@@ -30,6 +31,7 @@ use OOUI\MessageWidget;
 use OOUI\Tag;
 use RuntimeException;
 use Status;
+use StatusValue;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
@@ -68,6 +70,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @var string[] Usernames of invalid organizers, used for live validation in JavaScript.
 	 */
 	private array $invalidOrganizerNames = [];
+	/** @var StatusValue|null */
+	private ?StatusValue $saveWarningsStatus;
 
 	/**
 	 * @param string $name
@@ -402,17 +406,17 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		$this->eventPagePrefixedText = $event->getPage()->getPrefixedText();
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$organizerUsernames = $data[ 'EventOrganizerUsernames' ]
 			? explode( "\n", $data[ 'EventOrganizerUsernames' ] )
 			: [];
 
-		return Status::wrap( $this->editEventCommand->doEditIfAllowed(
-				$event,
-				$this->performer,
-				$organizerUsernames
-			)
+		$res = $this->editEventCommand->doEditIfAllowed(
+			$event,
+			$this->performer,
+			$organizerUsernames
 		);
+		[ $errorsStatus, $this->saveWarningsStatus ] = $res->splitByErrorType();
+		return Status::wrap( $errorsStatus );
 	}
 
 	/**
@@ -446,6 +450,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->getOutput()->addHTML( Html::successBox(
 			$this->msg( $this->formMessages['success'] )->params( $this->eventPagePrefixedText )->parse()
 		) );
+		if ( $this->saveWarningsStatus ) {
+			foreach ( $this->saveWarningsStatus->getErrors() as $error ) {
+				// XXX: This is ugly, but it's the easiest way to convert a Status error to a Message.
+				$msg = Message::newFromSpecifier( ApiMessage::create( $error ) );
+				$this->getOutput()->addHTML( Html::warningBox( $this->msg( $msg )->escaped() ) );
+			}
+		}
 	}
 
 	/**

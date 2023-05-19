@@ -462,13 +462,16 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param EventRegistration $registration
 	 * @param TrackingToolEventWatcher $watcher
 	 * @param TrackingToolUpdater $updater
+	 * @param StatusValue $expectedStatus
 	 * @covers ::updateTrackingTools
 	 * @dataProvider provideUpdateTrackingTools
+	 * @note That tracking tool validation is tested in testDoEditUnsafe__error
 	 */
 	public function testUpdateTrackingTools(
 		EventRegistration $registration,
 		TrackingToolEventWatcher $watcher,
-		TrackingToolUpdater $updater
+		TrackingToolUpdater $updater,
+		StatusValue $expectedStatus
 	) {
 		$cmd = $this->getCommand( null, null, null, null, null, $watcher, $updater );
 		$status = $cmd->doEditUnsafe(
@@ -476,7 +479,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$this->createMock( ICampaignsAuthority::class ),
 			self::ORGANIZER_USERNAMES
 		);
-		$this->assertStatusGood( $status );
+		$this->assertEquals( $expectedStatus, $status );
 	}
 
 	public function provideUpdateTrackingTools(): Generator {
@@ -484,23 +487,74 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 		$existingEvent = $this->createMock( ExistingEventRegistration::class );
 		$existingEvent->method( 'getID' )->willReturn( 1 );
-		$updateWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$updateWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
-		$updateWatcher->method( 'onEventUpdated' )->willReturn( StatusValue::newGood( $newTools ) );
-		$updateUpdater = $this->createMock( TrackingToolUpdater::class );
-		$updateUpdater->expects( $this->once() )
-			->method( 'replaceEventTools' )
-			->with( $this->anything(), $newTools );
-		yield 'Existing event' => [ $existingEvent, $updateWatcher, $updateUpdater ];
-
 		$newEvent = $this->createMock( EventRegistration::class );
-		$creationWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$creationWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
-		$creationWatcher->method( 'onEventCreated' )->willReturn( StatusValue::newGood( $newTools ) );
-		$creationUpdater = $this->createMock( TrackingToolUpdater::class );
-		$creationUpdater->expects( $this->once() )
+
+		$changStatusErrorsToWarnings = static function ( StatusValue $status ): StatusValue {
+			$ret = StatusValue::newGood();
+			foreach ( $status->getErrors() as $err ) {
+				$ret->warning( $err['message'], ...$err['params'] );
+			}
+			return $ret;
+		};
+
+		$successUpdateWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$successUpdateWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
+		$successUpdateWatcher->method( 'onEventUpdated' )->willReturn( StatusValue::newGood( $newTools ) );
+		$successUpdateUpdater = $this->createMock( TrackingToolUpdater::class );
+		$successUpdateUpdater->expects( $this->once() )
 			->method( 'replaceEventTools' )
 			->with( $this->anything(), $newTools );
-		yield 'New event' => [ $newEvent, $creationWatcher, $creationUpdater ];
+		yield 'Existing event, success' => [
+			$existingEvent,
+			$successUpdateWatcher,
+			$successUpdateUpdater,
+			StatusValue::newGood()
+		];
+
+		$errorUpdateWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$errorUpdateWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
+		$updateError = StatusValue::newFatal( 'some-tool-update-error' );
+		$errorUpdateWatcher->method( 'onEventUpdated' )
+			->willReturn( StatusValue::newGood( $newTools )->merge( $updateError ) );
+		$errorUpdateUpdater = $this->createMock( TrackingToolUpdater::class );
+		$errorUpdateUpdater->expects( $this->once() )
+			->method( 'replaceEventTools' )
+			->with( $this->anything(), $newTools );
+		yield 'Existing event, error' => [
+			$existingEvent,
+			$errorUpdateWatcher,
+			$errorUpdateUpdater,
+			$changStatusErrorsToWarnings( $updateError )
+		];
+
+		$successCreationWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$successCreationWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
+		$successCreationWatcher->method( 'onEventCreated' )->willReturn( StatusValue::newGood( $newTools ) );
+		$successCreationUpdater = $this->createMock( TrackingToolUpdater::class );
+		$successCreationUpdater->expects( $this->once() )
+			->method( 'replaceEventTools' )
+			->with( $this->anything(), $newTools );
+		yield 'New event, success' => [
+			$newEvent,
+			$successCreationWatcher,
+			$successCreationUpdater,
+			StatusValue::newGood()
+		];
+
+		$errorCreationWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$errorCreationWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
+		$creationError = StatusValue::newFatal( 'some-tool-update-error' );
+		$errorCreationWatcher->method( 'onEventCreated' )
+			->willReturn( StatusValue::newGood( $newTools )->merge( $creationError ) );
+		$errorCreationUpdater = $this->createMock( TrackingToolUpdater::class );
+		$errorCreationUpdater->expects( $this->once() )
+			->method( 'replaceEventTools' )
+			->with( $this->anything(), $newTools );
+		yield 'New event, error' => [
+			$newEvent,
+			$errorCreationWatcher,
+			$errorCreationUpdater,
+			$changStatusErrorsToWarnings( $creationError )
+		];
 	}
 }
