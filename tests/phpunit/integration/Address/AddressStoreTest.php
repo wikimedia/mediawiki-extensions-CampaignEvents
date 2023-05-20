@@ -47,7 +47,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $store->acquireAddressID( $fullAddress, $country ) );
 	}
 
-	public function provideAcquireAddressID(): Generator {
+	public static function provideAcquireAddressID(): Generator {
 		yield 'Existing address' => [ "Address \n Country", 'Country', 1 ];
 		yield 'Existing address without country' => [ "Address without country \n ", null, 2 ];
 		yield 'New address' => [ "This is a new address! \n Country", 'Country', 3 ];

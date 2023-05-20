@@ -269,7 +269,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @return Generator
 	 */
-	public function provideDoRemoveParticipantsIfAllowed(): Generator {
+	public static function provideDoRemoveParticipantsIfAllowed(): Generator {
 		yield 'Remove participants based on selected participants IDs' => [
 			UnregisterParticipantCommand::DO_NOT_INVERT_USERS
 		];

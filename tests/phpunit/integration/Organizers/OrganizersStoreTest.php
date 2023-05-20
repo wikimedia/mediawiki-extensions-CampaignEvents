@@ -83,7 +83,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expectedIDs, $actualUserIDs );
 	}
 
-	public function provideOrganizers(): Generator {
+	public static function provideOrganizers(): Generator {
 		yield 'Has organizers, including a deleted one' => [ 1, [ 101, 102 ] ];
 		yield 'Does not have organizers' => [ 2, [] ];
 		yield 'Providing ID of the last organizer' => [ 1, [ 102 ], 1 ];
@@ -104,7 +104,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $store->isEventOrganizer( $eventID, $user ) );
 	}
 
-	public function provideIsOrganizer(): Generator {
+	public static function provideIsOrganizer(): Generator {
 		yield 'Yes, creator' => [ 1, 101, true ];
 		yield 'Yes, secondary role' => [ 1, 102, true ];
 		yield 'No, deleted' => [ 1, 103, false ];
@@ -135,7 +135,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideOrganizersToAdd(): Generator {
+	public static function provideOrganizersToAdd(): Generator {
 		yield 'Adding a new role' => [
 			3,
 			102,
@@ -204,7 +204,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideAddOrganizersToEvent(): Generator {
+	public static function provideAddOrganizersToEvent(): Generator {
 		yield 'Adding new organizers' => [
 			1,
 			[
@@ -292,7 +292,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideGetEventCreator(): Generator {
+	public static function provideGetEventCreator(): Generator {
 		yield 'Has a creator, include deleted' => [ 1, OrganizersStore::GET_CREATOR_INCLUDE_DELETED, 101 ];
 		yield 'Has a creator, exclude deleted' => [ 1, OrganizersStore::GET_CREATOR_EXCLUDE_DELETED, 101 ];
 		yield 'Creator was deleted, include deleted' => [ 10, OrganizersStore::GET_CREATOR_INCLUDE_DELETED, 101 ];
@@ -336,7 +336,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideOrganizersToRemove(): Generator {
+	public static function provideOrganizersToRemove(): Generator {
 		yield 'Removing all but the creator' => [
 			1,
 			[ 101 ],
@@ -396,7 +396,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $store->getOrganizerCountForEvent( $event ) );
 	}
 
-	public function provideOrganizerCount(): array {
+	public static function provideOrganizerCount(): array {
 		return [
 			'One organizer' => [ 3, 1 ],
 			'Two organizers (third one deleted)' => [ 1, 2 ],

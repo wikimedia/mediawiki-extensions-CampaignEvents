@@ -86,7 +86,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $this->getStore()->addParticipantToEvent( $eventID, $user, $private ) );
 	}
 
-	public function provideParticipantsToStore(): Generator {
+	public static function provideParticipantsToStore(): Generator {
 		yield 'First participant' => [ 10, 102, false , true ];
 		yield 'Add participant to existing event' => [ 1, 103, false , true ];
 		yield 'Add private participant to existing event' => [ 3, 107, true , true ];
@@ -109,7 +109,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $this->getStore()->removeParticipantFromEvent( $eventID, $user ) );
 	}
 
-	public function provideParticipantsToRemove(): Generator {
+	public static function provideParticipantsToRemove(): Generator {
 		yield 'Actively registered' => [ 1, 101, true ];
 		yield 'Never registered' => [ 4, 101, false ];
 		yield 'Already deleted' => [ 1, 102, false ];
@@ -203,7 +203,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideGetEventParticipants_Public(): Generator {
+	public static function provideGetEventParticipants_Public(): Generator {
 		yield 'Only inludes non-deleted public participants' => [
 			1,
 			[
@@ -231,7 +231,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
-	public function provideGetEventParticipants_Private(): Generator {
+	public static function provideGetEventParticipants_Private(): Generator {
 		yield 'Only inludes non-deleted participants' => [
 			1,
 			[
@@ -289,7 +289,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideGetEventParticipant(): Generator {
+	public static function provideGetEventParticipant(): Generator {
 		yield 'Not a participant' => [ 1, 12345678, true, false ];
 		yield 'Unregistered' => [ 1, 102, true, false ];
 		yield 'Private, but showPrivate is false' => [ 1, 106, false, false ];
@@ -320,7 +320,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $this->getStore()->getFullParticipantCountForEvent( $event ) );
 	}
 
-	public function provideParticipantCount(): array {
+	public static function provideParticipantCount(): array {
 		return [
 			'Three participants (and a deleted one)' => [ 1, 3 ],
 			'No participants' => [ 1000, 0 ],
@@ -338,7 +338,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $this->getStore()->getPrivateParticipantCountForEvent( $event ) );
 	}
 
-	public function providePrivateParticipantCount(): array {
+	public static function providePrivateParticipantCount(): array {
 		return [
 			'One private participant (and a deleted one)' => [ 1, 1 ],
 			'No participants' => [ 1000, 0 ],
@@ -360,7 +360,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $this->getStore()->removeParticipantsFromEvent( $eventID, $userIDs ) );
 	}
 
-	public function provideParticipantsToRemoveFromEvent(): Generator {
+	public static function provideParticipantsToRemoveFromEvent(): Generator {
 		yield 'Remove two participants' => [ 2, [ new CentralUser( 101 ), new CentralUser( 104 ) ], 2 ];
 		yield 'Remove all participants' => [ 3, null, 3 ];
 		yield 'Remove one participant' => [ 1, [ new CentralUser( 101 ) ], 1 ];
@@ -386,7 +386,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$participantStore->removeParticipantsFromEvent( $eventID, $userIDs, $invertUsers );
 	}
 
-	public function provideParticipantsToRemoveFromEvent__error(): Generator {
+	public static function provideParticipantsToRemoveFromEvent__error(): Generator {
 		yield 'Empty user ids' => [
 			3, [], false,
 			'The users must be an array of user ids, or null (to remove all users)'

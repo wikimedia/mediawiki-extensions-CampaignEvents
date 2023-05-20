@@ -121,11 +121,11 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideEventData(): Generator {
-		yield 'Successful' => [ null, $this->getTestDataWithDefault() ];
-		yield 'Negative ID' => [ 'campaignevents-error-invalid-id', $this->getTestDataWithDefault( [ 'id' => -2 ] ) ];
+		yield 'Successful' => [ null, self::getTestDataWithDefault() ];
+		yield 'Negative ID' => [ 'campaignevents-error-invalid-id', self::getTestDataWithDefault( [ 'id' => -2 ] ) ];
 
 		yield 'Empty title string' =>
-			[ 'campaignevents-error-empty-title', $this->getTestDataWithDefault( [ 'page' => '' ] ) ];
+			[ 'campaignevents-error-empty-title', self::getTestDataWithDefault( [ 'page' => '' ] ) ];
 
 		$invalidTitleStr = 'a|b';
 		$invalidTitlePageFactory = $this->createMock( CampaignsPageFactory::class );
@@ -135,7 +135,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->willThrowException( $this->createMock( InvalidTitleStringException::class ) );
 		yield 'Invalid title string' => [
 			'campaignevents-error-invalid-title',
-			$this->getTestDataWithDefault( [ 'page' => $invalidTitleStr ] ),
+			self::getTestDataWithDefault( [ 'page' => $invalidTitleStr ] ),
 			$invalidTitlePageFactory
 		];
 
@@ -147,7 +147,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->willThrowException( $this->createMock( UnexpectedInterwikiException::class ) );
 		yield 'Invalid title interwiki' => [
 			'campaignevents-error-invalid-title-interwiki',
-			$this->getTestDataWithDefault( [ 'page' => $interwikiStr ] ),
+			self::getTestDataWithDefault( [ 'page' => $interwikiStr ] ),
 			$interwikiPageFactory
 		];
 
@@ -159,7 +159,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->willThrowException( $this->createMock( PageNotFoundException::class ) );
 		yield 'Non-existing page' => [
 			'campaignevents-error-page-not-found',
-			$this->getTestDataWithDefault( [ 'page' => $nonExistingPageStr ] ),
+			self::getTestDataWithDefault( [ 'page' => $nonExistingPageStr ] ),
 			$nonExistingCampaignsPageFactory
 		];
 
@@ -173,7 +173,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->willReturn( $nonEventPageObj );
 		yield 'Page not in the event namespace' => [
 			'campaignevents-error-page-not-event-namespace',
-			$this->getTestDataWithDefault( [ 'page' => $nonEventPageStr ] ),
+			self::getTestDataWithDefault( [ 'page' => $nonEventPageStr ] ),
 			$nonEventCampaignsPageFactory
 		];
 
@@ -185,95 +185,95 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->willThrowException( $this->createMock( UnexpectedVirtualNamespaceException::class ) );
 		yield 'Page in a virtual namespace' => [
 			'campaignevents-error-page-not-event-namespace',
-			$this->getTestDataWithDefault( [ 'page' => $specialPageStr ] ),
+			self::getTestDataWithDefault( [ 'page' => $specialPageStr ] ),
 			$specialCampaignsPageFactory
 		];
 
 		yield 'Invalid chat URL' => [
 			'campaignevents-error-invalid-chat-url',
-			$this->getTestDataWithDefault( [ 'chat' => 'not-an-url' ] )
+			self::getTestDataWithDefault( [ 'chat' => 'not-an-url' ] )
 		];
 
 		yield 'Tracking tool without its event ID' => [
 			'campaignevents-error-trackingtool-without-eventid',
-			$this->getTestDataWithDefault( [ 'trackingid' => self::VALID_TRACKING_TOOL, 'trackingeventid' => null ] )
+			self::getTestDataWithDefault( [ 'trackingid' => self::VALID_TRACKING_TOOL, 'trackingeventid' => null ] )
 		];
 		yield 'Tracking tool event ID without tracking tool' => [
 			'campaignevents-error-trackingtool-eventid-without-toolid',
-			$this->getTestDataWithDefault( [ 'trackingid' => null, 'trackingeventid' => 'foo' ] )
+			self::getTestDataWithDefault( [ 'trackingid' => null, 'trackingeventid' => 'foo' ] )
 		];
 		yield 'Invalid tracking tool ID' => [
 			'campaignevents-error-invalid-trackingtool',
-			$this->getTestDataWithDefault( [ 'trackingid' => 'invalid-tracking-tool', 'trackingeventid' => 'foo' ] )
+			self::getTestDataWithDefault( [ 'trackingid' => 'invalid-tracking-tool', 'trackingeventid' => 'foo' ] )
 		];
 
 		yield 'Invalid status' => [
 			'campaignevents-error-invalid-status',
-			$this->getTestDataWithDefault( [ 'status' => 'Some invalid status' ] )
+			self::getTestDataWithDefault( [ 'status' => 'Some invalid status' ] )
 		];
 
 		// Timezone tested more extensively in testNewEvent__invalidTimezone, too
 		yield 'Invalid timezone' => [
 			'campaignevents-error-invalid-timezone',
-			$this->getTestDataWithDefault( [ 'timezone' => 'Some invalid timezone' ] )
+			self::getTestDataWithDefault( [ 'timezone' => 'Some invalid timezone' ] )
 		];
 		yield 'Empty start timestamp' => [
 			'campaignevents-error-empty-start',
-			$this->getTestDataWithDefault( [ 'start' => '' ] )
+			self::getTestDataWithDefault( [ 'start' => '' ] )
 		];
 		yield 'Invalid start timestamp' => [
 			'campaignevents-error-invalid-start',
-			$this->getTestDataWithDefault( [ 'start' => 'Not a timestamp' ] )
+			self::getTestDataWithDefault( [ 'start' => 'Not a timestamp' ] )
 		];
 		yield 'Start timestamp not in TS_MW format' => [
 			'campaignevents-error-invalid-start',
-			$this->getTestDataWithDefault( [ 'start' => '1661199533' ] )
+			self::getTestDataWithDefault( [ 'start' => '1661199533' ] )
 		];
 		yield 'Start timestamp in the past, validated' => [
 			'campaignevents-error-start-past',
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'id' => null,
 				'start' => '19700101120000',
 			] )
 		];
 		yield 'Start timestamp in the past, not validated' => [
 			null,
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'start' => '19700101120000',
 				'validationFlags' => EventFactory::VALIDATE_SKIP_DATES_PAST
 			] )
 		];
 		yield 'Empty end timestamp' => [
 			'campaignevents-error-empty-end',
-			$this->getTestDataWithDefault( [ 'end' => '' ] )
+			self::getTestDataWithDefault( [ 'end' => '' ] )
 		];
 		yield 'Invalid end timestamp' => [
 			'campaignevents-error-invalid-end',
-			$this->getTestDataWithDefault( [ 'end' => 'Not a timestamp' ] )
+			self::getTestDataWithDefault( [ 'end' => 'Not a timestamp' ] )
 		];
 		yield 'End timestamp not in TS_MW format' => [
 			'campaignevents-error-invalid-end',
-			$this->getTestDataWithDefault( [ 'end' => '1661199533' ] )
+			self::getTestDataWithDefault( [ 'end' => '1661199533' ] )
 		];
 		yield 'Start after end' => [
 			'campaignevents-error-start-after-end',
-			$this->getTestDataWithDefault( [ 'start' => '20220308160000', 'end' => '20220308120000' ] )
+			self::getTestDataWithDefault( [ 'start' => '20220308160000', 'end' => '20220308120000' ] )
 		];
 		yield 'Invalid type' => [
 			'campaignevents-error-invalid-type',
-			$this->getTestDataWithDefault( [ 'type' => 'Some invalid type' ] )
+			self::getTestDataWithDefault( [ 'type' => 'Some invalid type' ] )
 		];
 		yield 'No meeting type' => [
 			'campaignevents-error-no-meeting-type',
-			$this->getTestDataWithDefault( [ 'meetingtype' => 0 ] )
+			self::getTestDataWithDefault( [ 'meetingtype' => 0 ] )
 		];
 		yield 'Invalid meeting type' => [
 			'campaignevents-error-no-meeting-type',
-			$this->getTestDataWithDefault( [ 'meetingtype' => 123 ] )
+			self::getTestDataWithDefault( [ 'meetingtype' => 123 ] )
 		];
 		yield 'Online meeting without URL, successful' => [
 			null,
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
 				'meetingurl' => null,
 				'country' => null,
@@ -282,7 +282,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'Online meeting with invalid URL' => [
 			'campaignevents-error-invalid-meeting-url',
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
 				'meetingurl' => 'Not a URL',
 				'country' => null,
@@ -291,7 +291,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'In person meeting without country, successful' => [
 			null,
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'country' => null,
 				'meetingurl' => null,
@@ -299,7 +299,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'In person meeting without address, successful' => [
 			null,
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'address' => null,
 				'meetingurl' => null,
@@ -307,7 +307,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'In person meeting with invalid country' => [
 			'campaignevents-error-invalid-country',
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'country' => '',
 				'meetingurl' => null,
@@ -315,7 +315,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'In person meeting with invalid address' => [
 			'campaignevents-error-invalid-address',
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'address' => '',
 				'meetingurl' => null,
@@ -323,7 +323,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'Online meeting with country' => [
 			'campaignevents-error-countryoraddress-not-in-person',
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
 				'address' => 'Explicitly set',
 				'country' => null,
@@ -331,7 +331,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'Online meeting with address' => [
 			'campaignevents-error-countryoraddress-not-in-person',
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
 				'address' => null,
 				'country' => 'Explicitly set',
@@ -339,7 +339,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'In-person meeting with meeting URL' => [
 			'campaignevents-error-meeting-url-not-online',
-			$this->getTestDataWithDefault( [
+			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'meetingurl' => 'https://explicitly-set.example.org',
 			] )
@@ -356,7 +356,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testNewEvent__invalidTimezone( string $timezone ) {
 		$factory = $this->getEventFactory();
-		$factoryArgs = $this->getTestDataWithDefault( [ 'timezone' => $timezone ] );
+		$factoryArgs = self::getTestDataWithDefault( [ 'timezone' => $timezone ] );
 
 		try {
 			$factory->newEvent( ...$factoryArgs );
@@ -368,7 +368,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideInvalidTimezones(): array {
+	public static function provideInvalidTimezones(): array {
 		return [
 			'Letters only' => [ 'SomethingInvalid' ],
 			'Letters, starting with a number' => [ '1SomethingInvalid' ],
@@ -400,10 +400,10 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		$factory->newEvent( ...$factoryArgs );
 	}
 
-	public function provideEventDataWithInvalidInternalTimestamps(): Generator {
-		yield 'Invalid creation' => [ $this->getTestDataWithDefault( [ 'creation' => 'foobar' ] ) ];
-		yield 'Invalid last edit' => [ $this->getTestDataWithDefault( [ 'lastedit' => 'foobar' ] ) ];
-		yield 'Invalid deletion' => [ $this->getTestDataWithDefault( [ 'deletion' => 'foobar' ] ) ];
+	public static function provideEventDataWithInvalidInternalTimestamps(): Generator {
+		yield 'Invalid creation' => [ self::getTestDataWithDefault( [ 'creation' => 'foobar' ] ) ];
+		yield 'Invalid last edit' => [ self::getTestDataWithDefault( [ 'lastedit' => 'foobar' ] ) ];
+		yield 'Invalid deletion' => [ self::getTestDataWithDefault( [ 'deletion' => 'foobar' ] ) ];
 	}
 
 	/**
@@ -415,7 +415,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testURLValidation( string $url, bool $expectedValid ) {
 		$factory = $this->getEventFactory();
-		$args = $this->getTestDataWithDefault( [ 'chat' => $url ] );
+		$args = self::getTestDataWithDefault( [ 'chat' => $url ] );
 		$ex = null;
 
 		try {
@@ -440,7 +440,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideURLs(): array {
+	public static function provideURLs(): array {
 		return [
 			'Random characters' => [ '24hà°(W!^§*', false ],
 			'Invalid protocol' => [ 'foo://abc.org', false ],
@@ -454,7 +454,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
-	private function getTestDataWithDefault( array $specificData = [] ): array {
+	private static function getTestDataWithDefault( array $specificData = [] ): array {
 		return array_values( array_replace( self::VALID_DEFAULT_DATA, $specificData ) );
 	}
 }

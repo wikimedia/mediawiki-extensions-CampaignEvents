@@ -167,7 +167,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		$this->executeHandlerAndGetBodyData( $handler, $reqData );
 	}
 
-	public function provideRunPrivate(): array {
+	public static function provideRunPrivate(): array {
 		return [
 			'private' => [ true ],
 			'public' => [ false ],

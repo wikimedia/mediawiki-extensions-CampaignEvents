@@ -35,7 +35,7 @@ class PolicyMessagesLookupTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, $lookup->getPolicyMessageForRegistration() );
 	}
 
-	public function provideHookHandlers(): Generator {
+	public static function provideHookHandlers(): Generator {
 		yield 'No handlers' => [ [], null ];
 
 		$notAbortingMsg = 'message-not-aborting';

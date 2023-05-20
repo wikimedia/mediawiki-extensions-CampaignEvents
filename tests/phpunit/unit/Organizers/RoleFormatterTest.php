@@ -37,7 +37,7 @@ class RoleFormatterTest extends MediaWikiUnitTestCase {
 		$this->assertArrayEquals( $allRoles, array_keys( $actualMap ) );
 	}
 
-	public function provideConstants(): array {
+	public static function provideConstants(): array {
 		return [
 			'ROLES_MSG_MAP' => [ 'ROLES_MSG_MAP' ],
 			'DEBUG_NAMES_MAP' => [ 'DEBUG_NAMES_MAP' ],

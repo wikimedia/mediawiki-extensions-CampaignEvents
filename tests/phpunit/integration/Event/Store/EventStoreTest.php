@@ -127,8 +127,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertStoredEvent( $savedID, $storedEvent );
 	}
 
-	public function provideRoundtripByID(): Generator {
-		$baseCtrArgs = $this->getBaseCtrArgs();
+	public static function provideRoundtripByID(): Generator {
+		$baseCtrArgs = self::getBaseCtrArgs();
 		yield 'Event with address and country' => [
 			new EventRegistration( ...array_values( $baseCtrArgs ) )
 		];
@@ -168,8 +168,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertNotNull( $storedEventAfterDeletion->getDeletionTimestamp() );
 	}
 
-	public function provideEventsToDelete(): Generator {
-		$baseCtrArgs = $this->getBaseCtrArgs();
+	public static function provideEventsToDelete(): Generator {
+		$baseCtrArgs = self::getBaseCtrArgs();
 		yield 'Not deleted' => [
 			new EventRegistration( ...array_values( $baseCtrArgs ) ),
 			true
@@ -238,7 +238,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		CampaignEventsServices::getEventLookup()->getEventByID( 1 );
 	}
 
-	private function getBaseCtrArgs(): array {
+	private static function getBaseCtrArgs(): array {
 		return [
 			null,
 			'Some name',

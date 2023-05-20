@@ -24,7 +24,7 @@ class UtilsTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, Utils::guessStringDirection( $str ) );
 	}
 
-	public function provideStringDirection(): array {
+	public static function provideStringDirection(): array {
 		return [
 			'Italian' => [ 'Perché permetterò più preludî.', 'ltr' ],
 			'French' => [ 'Noël n\'est pas en aôut, garçon', 'ltr' ],
@@ -52,7 +52,7 @@ class UtilsTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, Utils::timezoneToUserTimeCorrection( $timezone )->toString() );
 	}
 
-	public function provideValidTimezones(): Generator {
+	public static function provideValidTimezones(): Generator {
 		$romeTimezone = new DateTimeZone( 'Europe/Rome' );
 		// UserTimeCorrection includes the offset, which changes over time.
 		$curRomeOffset = $romeTimezone->getOffset( new DateTime() ) / 60;

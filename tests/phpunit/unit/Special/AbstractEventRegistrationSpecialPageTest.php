@@ -25,7 +25,7 @@ class AbstractEventRegistrationSpecialPageTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, AbstractEventRegistrationSpecialPage::convertTimezoneForForm( $timezone ) );
 	}
 
-	public function provideValidTimezones(): Generator {
+	public static function provideValidTimezones(): Generator {
 		$romeTimezone = new DateTimeZone( 'Europe/Rome' );
 		// The form value includes the offset, which changes over time.
 		$curRomeOffset = $romeTimezone->getOffset( new DateTime() ) / 60;
