@@ -84,6 +84,7 @@ class SetOrganizersHandler extends SimpleHandler {
 
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizers );
+		// Note that no warnings (e.g., from tracking tools) are expected here
 		if ( !$saveStatus->isGood() ) {
 			$httptStatus = $saveStatus instanceof PermissionStatus ? 403 : 400;
 			$this->exitWithStatus( $saveStatus, $httptStatus );

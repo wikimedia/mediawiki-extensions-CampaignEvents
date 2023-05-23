@@ -124,14 +124,14 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 		$toolAssoc = $this->getAssoc( $toolID );
 		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $toolAssoc ] );
 
+		$toolErrorStatus = StatusValue::newFatal( 'some-error' );
 		$toolWithError = $this->createMock( TrackingTool::class );
 		$toolWithError->expects( $this->atLeastOnce() )
 			->method( 'addToEvent' )
-			->willReturn( StatusValue::newFatal( 'some-error' ) );
+			->willReturn( $toolErrorStatus );
 		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
 		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		$expectedErrorStatus = StatusValue::newGood( [] );
-		$expectedErrorStatus->setOK( false );
+		$expectedErrorStatus = StatusValue::newGood( [] )->merge( $toolErrorStatus );
 		yield 'Add tool, error' => [
 			$toolWithErrorRegistry,
 			$this->getLoggerSpy( true ),
@@ -351,12 +351,6 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			return $ret;
 		};
 
-		$getBadStatus = static function ( array $value ): StatusValue {
-			$ret = StatusValue::newGood( $value );
-			$ret->setOK( false );
-			return $ret;
-		};
-
 		$getSyncedAssoc = static function ( TrackingToolAssociation $oldAssoc ): TrackingToolAssociation {
 			return $oldAssoc->asUpdatedWith(
 				TrackingToolAssociation::SYNC_STATUS_SYNCED,
@@ -377,7 +371,7 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			$this->getLoggerSpy( true ),
 			$eventWithoutTools,
 			$eventWithTool1,
-			$getBadStatus( [] )
+			StatusValue::newGood( [] )->merge( $toolAdditionError )
 		];
 		yield 'Had no tools, adding one, success' => [
 			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulAddition ] ),
@@ -400,7 +394,7 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			$this->getLoggerSpy( true ),
 			$eventWithTool1,
 			$eventWithoutTools,
-			$getBadStatus( [ $tool1Assoc ] )
+			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
 		];
 		yield 'Had a tool, removing it without replacement, success' => [
 			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval ] ),
@@ -415,7 +409,7 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			$this->getLoggerSpy( true ),
 			$eventWithTool1,
 			$eventWithTool2,
-			$getBadStatus( [ $tool1Assoc ] )
+			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
 		];
 		yield 'Replacing a tool with another, cannot remove, can add' => [
 			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval, $tool2ID => $toolWithSuccessfulAddition ] ),
@@ -423,14 +417,14 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			$eventWithTool1,
 			$eventWithTool2,
 			// NOTE: This will also include `$getSyncedAssoc( $tool2Assoc )` once we support multiple tracking tools.
-			$getBadStatus( [ $tool1Assoc ] )
+			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
 		];
 		yield 'Replacing a tool with another, can remove but cannot add' => [
 			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithErrorOnAddition ] ),
 			$this->getLoggerSpy( true ),
 			$eventWithTool1,
 			$eventWithTool2,
-			$getBadStatus( [] )
+			StatusValue::newGood( [] )->merge( $toolAdditionError )
 		];
 		yield 'Replacing a tool with another, success' => [
 			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithSuccessfulAddition ] ),
@@ -459,7 +453,7 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			$this->getLoggerSpy( true ),
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
-			$getBadStatus( [ $tool1Assoc ] )
+			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
 		];
 		yield 'Same tool, changing event in the tool, cannot remove, can add' => [
 			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval ] ),
@@ -468,14 +462,14 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			$eventWithTool1AndDifferentToolEventID,
 			// NOTE: This will also include `$getSyncedAssoc( $tool1DifferentAssoc )` once we support
 			// multiple tracking tools.
-			$getBadStatus( [ $tool1Assoc ] )
+			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
 		];
 		yield 'Same tool, changing event in the tool, can remove but cannot add' => [
 			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemovalAndErrorOnAddition ] ),
 			$this->getLoggerSpy( true ),
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
-			$getBadStatus( [] )
+			StatusValue::newGood( [] )->merge( $toolAdditionError )
 		];
 		yield 'Same tool, changing event in the tool, success' => [
 			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemovalAndAddition ] ),

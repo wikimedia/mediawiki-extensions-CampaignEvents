@@ -18,9 +18,15 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 */
 	protected function getSuccessResponse( StatusValue $saveStatus ): Response {
 		$id = $saveStatus->getValue();
-		$resp = $this->getResponseFactory()->createJson( [
+		$respValue = [
 			'id' => $id
-		] );
+		];
+		foreach ( $saveStatus->getErrorsByType( 'warning' ) as $warning ) {
+			$respValue['warnings'] ??= [];
+			// XXX There's no standard way to format warnings.
+			$respValue['warnings'][] = [ 'key' => $warning['message'], 'params' => $warning['params'] ];
+		}
+		$resp = $this->getResponseFactory()->createJson( $respValue );
 		$resp->setStatus( 201 );
 		$resp->setHeader( 'Location', $this->getRouter()->getRouteUrl( "/campaignevents/v0/event_registration/$id" ) );
 		return $resp;

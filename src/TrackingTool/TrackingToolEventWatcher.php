@@ -88,7 +88,7 @@ class TrackingToolEventWatcher {
 	 * @note The caller is responsible for updating the database with the new tools.
 	 */
 	public function onEventCreated( EventRegistration $event, array $organizers ): StatusValue {
-		$hasFailures = false;
+		$ret = StatusValue::newGood();
 		$newTools = [];
 		foreach ( $event->getTrackingTools() as $toolAssociation ) {
 			$tool = $this->trackingToolRegistry->newFromDBID( $toolAssociation->getToolID() );
@@ -99,14 +99,12 @@ class TrackingToolEventWatcher {
 					wfTimestamp()
 				);
 			} else {
+				$ret->merge( $status );
 				$this->logToolFailure( 'event creation', $event, $toolAssociation, $status );
-				$hasFailures = true;
 			}
 		}
-		$ret = StatusValue::newGood( $newTools );
-		if ( $hasFailures ) {
-			$ret->setOK( false );
-		}
+
+		$ret->value = $newTools;
 		return $ret;
 	}
 
@@ -160,24 +158,23 @@ class TrackingToolEventWatcher {
 	): StatusValue {
 		[ $removedTools, $addedTools, $unchangedTools ] = $this->splitToolsForEventUpdate( $oldVersion, $newVersion );
 
-		$hasFailures = false;
+		$ret = StatusValue::newGood();
 		$newTools = $unchangedTools;
 		foreach ( $removedTools as $removedToolAssoc ) {
 			$tool = $this->trackingToolRegistry->newFromDBID( $removedToolAssoc->getToolID() );
 			$status = $tool->removeFromEvent( $oldVersion, $removedToolAssoc->getToolEventID() );
 			if ( !$status->isGood() ) {
+				$ret->merge( $status );
 				$this->logToolFailure( 'event update (tool removal)', $oldVersion, $removedToolAssoc, $status );
-				$hasFailures = true;
 				// Preserve the existing sync status and last sync timestamp
 				$newTools[] = $removedToolAssoc;
 			}
 		}
 
-		if ( $hasFailures ) {
+		if ( !$ret->isGood() ) {
 			// TODO: Remove this when adding support for multiple tracking tools. A failed removal means that the event
 			// might end up having 2 tools even if we support only adding one.
-			$ret = StatusValue::newGood( $newTools );
-			$ret->setOK( false );
+			$ret->value = $newTools;
 			return $ret;
 		}
 
@@ -190,15 +187,12 @@ class TrackingToolEventWatcher {
 					wfTimestamp()
 				);
 			} else {
-				$hasFailures = true;
+				$ret->merge( $status );
 				$this->logToolFailure( 'event update (new tool)', $newVersion, $addedToolAssoc, $status );
 			}
 		}
 
-		$ret = StatusValue::newGood( $newTools );
-		if ( $hasFailures ) {
-			$ret->setOK( false );
-		}
+		$ret->value = $newTools;
 		return $ret;
 	}
 
