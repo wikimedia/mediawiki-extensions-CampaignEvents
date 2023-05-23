@@ -6,8 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\TrackingTool;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
+use MediaWiki\MainConfigNames;
 use RuntimeException;
 use Wikimedia\ObjectFactory\ObjectFactory;
 
@@ -21,7 +23,7 @@ class TrackingToolRegistry {
 	public const CONSTRUCTOR_OPTIONS = [
 		'CampaignEventsProgramsAndEventsDashboardInstance',
 		'CampaignEventsProgramsAndEventsDashboardAPISecret',
-		'CopyUploadProxy'
+		MainConfigNames::CopyUploadProxy,
 	];
 
 	/** @var ObjectFactory */
@@ -104,11 +106,12 @@ class TrackingToolRegistry {
 			'user-id' => 'wikimedia-pe-dashboard',
 			'extra' => [
 				'secret' => $apiSecret,
-				'proxy' => $this->options->get( 'CopyUploadProxy' )
+				'proxy' => $this->options->get( MainConfigNames::CopyUploadProxy ) ?: null
 			],
 			'services' => [
 				'HttpRequestFactory',
-				CampaignsCentralUserLookup::SERVICE_NAME
+				CampaignsCentralUserLookup::SERVICE_NAME,
+				ParticipantsStore::SERVICE_NAME
 			]
 		];
 	}

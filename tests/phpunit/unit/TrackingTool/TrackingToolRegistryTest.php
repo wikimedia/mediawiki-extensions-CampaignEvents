@@ -4,13 +4,16 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\TrackingTool;
 
+use Generator;
 use HashConfig;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\MainConfigNames;
 use MediaWikiUnitTestCase;
 use Psr\Container\ContainerInterface;
 use Wikimedia\ObjectFactory\ObjectFactory;
@@ -33,6 +36,7 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 		'services' => [
 			'HttpRequestFactory',
 			CampaignsCentralUserLookup::SERVICE_NAME,
+			ParticipantsStore::SERVICE_NAME,
 		]
 	];
 	private const TEST_REGISTRY = [
@@ -50,6 +54,8 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 						return $httpReqFactory;
 					case CampaignsCentralUserLookup::SERVICE_NAME:
 						return $this->createMock( CampaignsCentralUserLookup::class );
+					case ParticipantsStore::SERVICE_NAME:
+						return $this->createMock( ParticipantsStore::class );
 					default:
 						throw new NoSuchServiceException( $serviceName );
 				}
@@ -62,13 +68,13 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	 * @param bool $mockRegistry If true, will replace the internal registry with TEST_REGISTRY
 	 * @return TrackingToolRegistry
 	 */
-	private function getRegistry( bool $mockRegistry = true ): TrackingToolRegistry {
+	private function getRegistry( bool $mockRegistry = false ): TrackingToolRegistry {
 		$options = new ServiceOptions(
 			TrackingToolRegistry::CONSTRUCTOR_OPTIONS,
 			new HashConfig( [
 				'CampaignEventsProgramsAndEventsDashboardInstance' => 'staging',
 				'CampaignEventsProgramsAndEventsDashboardAPISecret' => 'foo',
-				'CopyUploadProxy' => null,
+				MainConfigNames::CopyUploadProxy => false,
 			] )
 		);
 		$instance = new TrackingToolRegistry( $this->getObjectFactory(), $options );
@@ -82,7 +88,7 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	 * @covers ::getRegistry
 	 */
 	public function testRegistryConsistency() {
-		$registry = $this->getRegistry( false )->getRegistryForTesting();
+		$registry = $this->getRegistry()->getRegistryForTesting();
 		$numElements = count( $registry );
 		foreach ( $registry as $element ) {
 			$this->assertIsArray( $element, 'Registry entries should be arrays' );
@@ -123,12 +129,19 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	/**
 	 * @covers ::newFromDBID
 	 * @covers ::newFromRegistryEntry
+	 * @dataProvider provideDBIDs
 	 */
-	public function testNewFromDBID() {
-		$dbID = self::TEST_REGISTRY_ENTRY['db-id'];
+	public function testNewFromDBID( int $dbID, string $expectedClass ) {
 		$tool = $this->getRegistry()->newFromDBID( $dbID );
-		$this->assertInstanceOf( self::TEST_REGISTRY_ENTRY['class'], $tool );
+		$this->assertInstanceOf( $expectedClass, $tool );
 		$this->assertSame( $dbID, $tool->getDBID() );
+	}
+
+	public function provideDBIDs(): Generator {
+		$internalRegistry = $this->getRegistry()->getRegistryForTesting();
+		foreach ( $internalRegistry as $toolName => $data ) {
+			yield $toolName => [ $data['db-id'], $data['class'] ];
+		}
 	}
 
 	/**
@@ -137,7 +150,7 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	public function testNewFromDBID__notFound() {
 		$nonExistingDBID = 674587164857435;
 		$this->expectException( ToolNotFoundException::class );
-		$this->getRegistry()->newFromDBID( $nonExistingDBID );
+		$this->getRegistry( true )->newFromDBID( $nonExistingDBID );
 	}
 
 	/**
@@ -150,17 +163,24 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 				'user-id' => self::TEST_REGISTRY_ENTRY['user-id'],
 			]
 		];
-		$this->assertSame( $expected, $this->getRegistry()->getDataForForm() );
+		$this->assertSame( $expected, $this->getRegistry( true )->getDataForForm() );
 	}
 
 	/**
 	 * @covers ::newFromUserIdentifier
 	 * @covers ::newFromRegistryEntry
+	 * @dataProvider provideUserIdentifiers
 	 */
-	public function testNewFromUserIdentifier() {
-		$userID = self::TEST_REGISTRY_ENTRY['user-id'];
+	public function testNewFromUserIdentifier( string $userID, string $expectedClass ) {
 		$tool = $this->getRegistry()->newFromUserIdentifier( $userID );
-		$this->assertInstanceOf( self::TEST_REGISTRY_ENTRY['class'], $tool );
+		$this->assertInstanceOf( $expectedClass, $tool );
+	}
+
+	public function provideUserIdentifiers(): Generator {
+		$internalRegistry = $this->getRegistry()->getRegistryForTesting();
+		foreach ( $internalRegistry as $toolName => $data ) {
+			yield $toolName => [ $data['user-id'], $data['class'] ];
+		}
 	}
 
 	/**
@@ -169,6 +189,6 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	public function testNewFromUserIdentifier__notFound() {
 		$nonExistingUserID = 'ariubarevieubfouayvcuyrueygiuayvgrearvaregerg';
 		$this->expectException( ToolNotFoundException::class );
-		$this->getRegistry()->newFromUserIdentifier( $nonExistingUserID );
+		$this->getRegistry( true )->newFromUserIdentifier( $nonExistingUserID );
 	}
 }

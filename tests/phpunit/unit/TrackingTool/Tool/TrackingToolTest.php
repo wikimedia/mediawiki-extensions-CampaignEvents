@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\TrackingTool\Tool;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWikiUnitTestCase;
@@ -22,6 +23,7 @@ class TrackingToolTest extends MediaWikiUnitTestCase {
 		$tool = new WikiEduDashboard(
 			$this->createMock( HttpRequestFactory::class ),
 			$this->createMock( CampaignsCentralUserLookup::class ),
+			$this->createMock( ParticipantsStore::class ),
 			$dbID,
 			'url',
 			[ 'secret' => 'foo', 'proxy' => null ]

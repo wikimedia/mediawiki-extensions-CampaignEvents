@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWikiUnitTestCase;
@@ -20,7 +21,10 @@ use StatusValue;
  * @covers ::__construct
  */
 class WikiEduDashboardTest extends MediaWikiUnitTestCase {
-	private function getTool( MWHttpRequest $request = null ): WikiEduDashboard {
+	private function getTool(
+		MWHttpRequest $request = null,
+		ParticipantsStore $participantsStore = null
+	): WikiEduDashboard {
 		if ( !$request ) {
 			$request = $this->getJsonReqMock( [ 'success' => true ], false );
 			$request->method( 'execute' )->willReturn( StatusValue::newGood() );
@@ -31,6 +35,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 		return new WikiEduDashboard(
 			$httpRequestFactory,
 			$this->createMock( CampaignsCentralUserLookup::class ),
+			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			1,
 			'some-url',
 			[ 'secret' => '', 'proxy' => null ]
@@ -55,7 +60,10 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @covers ::validateToolAddition
-	 * @dataProvider provideValidateToolAddition
+	 * @covers ::makeNewEventRequest
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideAddTool
 	 */
 	public function testValidateToolAddition(
 		?MWHttpRequest $request,
@@ -73,7 +81,30 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideValidateToolAddition(): Generator {
+	/**
+	 * @covers ::addToEvent
+	 * @covers ::makeNewEventRequest
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideAddTool
+	 */
+	public function testAddToEvent(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->addToEvent(
+			$this->createMock( ExistingEventRegistration::class ),
+			[],
+			'something'
+		);
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
+	}
+
+	public function provideAddTool(): Generator {
 		yield 'Success' => [ null, null ];
 
 		$notJsonResponseReq = $this->createMock( MWHttpRequest::class );
@@ -115,110 +146,274 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::addToEvent
-	 */
-	public function testAddToEvent() {
-		$actual = $this->getTool()->addToEvent(
-			$this->createMock( ExistingEventRegistration::class ),
-			[],
-			'something'
-		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
-	}
-
-	/**
 	 * @covers ::validateToolRemoval
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideRemoveTool
 	 */
-	public function testValidateToolRemoval() {
-		$actual = $this->getTool()->validateToolRemoval(
+	public function testValidateToolRemoval(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->validateToolRemoval(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
 	}
 
 	/**
 	 * @covers ::removeFromEvent
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideRemoveTool
 	 */
-	public function testRemoveFromEvent() {
-		$actual = $this->getTool()->removeFromEvent(
+	public function testRemoveFromEvent(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->removeFromEvent(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
 	}
 
 	/**
 	 * @covers ::validateEventDeletion
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideRemoveTool
 	 */
-	public function testValidateEventDeletion() {
-		$actual = $this->getTool()->validateEventDeletion(
+	public function testValidateEventDeletion(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->validateEventDeletion(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
 	}
 
 	/**
 	 * @covers ::onEventDeleted
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideRemoveTool
 	 */
-	public function testOnEventDeleted() {
-		$actual = $this->getTool()->onEventDeleted(
+	public function testOnEventDeleted(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->onEventDeleted(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
+	}
+
+	public function provideRemoveTool(): Generator {
+		yield 'Success' => [ null, null ];
+
+		$notJsonResponseReq = $this->createMock( MWHttpRequest::class );
+		$notJsonResponseReq->method( 'getResponseHeader' )
+			->with( 'Content-Type' )
+			->willReturn( 'definitely-not-json' );
+		$notJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
+		yield 'Response is not JSON' => [ $notJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
+
+		yield 'No error code in the response' => [
+			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
+			'campaignevents-tracking-tool-http-error'
+		];
+
+		yield 'Invalid secret' => [
+			$this->getJsonReqMock( [ 'error_code' => 'invalid_secret' ] ),
+			'campaignevents-tracking-tool-wikiedu-config-error'
+		];
+
+		yield 'Course not found' => [
+			$this->getJsonReqMock( [ 'error_code' => 'course_not_found' ] ),
+			'campaignevents-tracking-tool-wikiedu-course-not-found-error'
+		];
+
+		yield 'Sync not enabled' => [
+			$this->getJsonReqMock( [ 'error_code' => 'sync_not_enabled' ] ),
+			'campaignevents-tracking-tool-wikiedu-not-connected-error'
+		];
+	}
+
+	/**
+	 * @covers ::validateParticipantAdded
+	 * @covers ::syncParticipants
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideParticipantsChange
+	 */
+	public function testValidateParticipantAdded(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->validateParticipantAdded(
+			$this->createMock( ExistingEventRegistration::class ),
+			'something',
+			$this->createMock( CentralUser::class ),
+			false
+		);
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
 	}
 
 	/**
 	 * @covers ::validateParticipantAdded
 	 */
-	public function testValidateParticipantAdded() {
-		$actual = $this->getTool()->validateParticipantAdded(
+	public function testValidateParticipantAdded__private() {
+		// Verify that we don't do anything if the participant is private.
+		$noopParticipantStore = $this->createNoOpMock( ParticipantsStore::class );
+		$actual = $this->getTool( null, $noopParticipantStore )->validateParticipantAdded(
+			$this->createMock( ExistingEventRegistration::class ),
+			'something',
+			$this->createMock( CentralUser::class ),
+			true
+		);
+		$this->assertStatusGood( $actual );
+	}
+
+	/**
+	 * @covers ::addParticipant
+	 * @covers ::syncParticipants
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideParticipantsChange
+	 */
+	public function testAddParticipant(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->addParticipant(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
 			$this->createMock( CentralUser::class ),
 			false
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
 	}
 
 	/**
 	 * @covers ::addParticipant
 	 */
-	public function testAddParticipant() {
-		$actual = $this->getTool()->addParticipant(
+	public function testAddParticipant__private() {
+		// Verify that we don't do anything if the participant is private.
+		$noopParticipantStore = $this->createNoOpMock( ParticipantsStore::class );
+		$actual = $this->getTool( null, $noopParticipantStore )->addParticipant(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
 			$this->createMock( CentralUser::class ),
-			false
+			true
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		$this->assertStatusGood( $actual );
 	}
 
 	/**
 	 * @covers ::validateParticipantsRemoved
+	 * @covers ::syncParticipants
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideParticipantsChange
 	 */
-	public function testValidateParticipantsRemoved() {
-		$actual = $this->getTool()->validateParticipantsRemoved(
+	public function testValidateParticipantsRemoved(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->validateParticipantsRemoved(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
 			null,
 			false
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
 	}
 
 	/**
 	 * @covers ::removeParticipants
+	 * @covers ::syncParticipants
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideParticipantsChange
 	 */
-	public function testRemoveParticipants() {
-		$actual = $this->getTool()->removeParticipants(
+	public function testRemoveParticipants(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->removeParticipants(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
 			null,
 			false
 		);
-		$this->assertEquals( StatusValue::newGood(), $actual );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
+	}
+
+	public function provideParticipantsChange(): Generator {
+		yield 'Success' => [ null, null ];
+
+		$notJsonResponseReq = $this->createMock( MWHttpRequest::class );
+		$notJsonResponseReq->method( 'getResponseHeader' )
+			->with( 'Content-Type' )
+			->willReturn( 'definitely-not-json' );
+		$notJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
+		yield 'Response is not JSON' => [ $notJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
+
+		yield 'No error code in the response' => [
+			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
+			'campaignevents-tracking-tool-http-error'
+		];
+
+		yield 'Invalid secret' => [
+			$this->getJsonReqMock( [ 'error_code' => 'invalid_secret' ] ),
+			'campaignevents-tracking-tool-wikiedu-config-error'
+		];
+
+		yield 'Course not found' => [
+			$this->getJsonReqMock( [ 'error_code' => 'course_not_found' ] ),
+			'campaignevents-tracking-tool-wikiedu-course-not-found-error'
+		];
+
+		yield 'Sync not enabled' => [
+			$this->getJsonReqMock( [ 'error_code' => 'sync_not_enabled' ] ),
+			'campaignevents-tracking-tool-wikiedu-not-connected-error'
+		];
 	}
 }
