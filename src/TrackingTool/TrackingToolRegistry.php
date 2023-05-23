@@ -5,9 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\TrackingTool;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use RuntimeException;
+use Wikimedia\ObjectFactory\ObjectFactory;
 
 /**
  * This is a registry of known tracking tools, which defines how each tool should be represented in the
@@ -19,8 +21,11 @@ class TrackingToolRegistry {
 	public const CONSTRUCTOR_OPTIONS = [
 		'CampaignEventsProgramsAndEventsDashboardInstance',
 		'CampaignEventsProgramsAndEventsDashboardAPISecret',
+		'CopyUploadProxy'
 	];
 
+	/** @var ObjectFactory */
+	private ObjectFactory $objectFactory;
 	/** @var ServiceOptions */
 	private $options;
 
@@ -28,9 +33,11 @@ class TrackingToolRegistry {
 	private $registryForTests;
 
 	/**
+	 * @param ObjectFactory $objectFactory
 	 * @param ServiceOptions $options
 	 */
-	public function __construct( ServiceOptions $options ) {
+	public function __construct( ObjectFactory $objectFactory, ServiceOptions $options ) {
+		$this->objectFactory = $objectFactory;
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->options = $options;
 	}
@@ -46,6 +53,7 @@ class TrackingToolRegistry {
 	 *  - user-id (string): Identifier of the tool as provided by users via the UI or API
 	 *  - extra (array): Any additional information needed by the tool, like an API key. The structure of this
 	 *    array is dependent on the class which uses it.
+	 *  - services (array): List of services that should be injected into the object (before other arguments)
 	 * Display names, user IDs, and DB IDs are guaranteed to be unique. Classes and base URLs are not, because
 	 * potentially there could be more instances of the same tool, or a server could host more than one tool,
 	 * respectively.
@@ -95,8 +103,13 @@ class TrackingToolRegistry {
 			'db-id' => 1,
 			'user-id' => 'wikimedia-pe-dashboard',
 			'extra' => [
-				'secret' => $apiSecret
+				'secret' => $apiSecret,
+				'proxy' => $this->options->get( 'CopyUploadProxy' )
 			],
+			'services' => [
+				'HttpRequestFactory',
+				CampaignsCentralUserLookup::SERVICE_NAME
+			]
 		];
 	}
 
@@ -177,9 +190,14 @@ class TrackingToolRegistry {
 	 * @phpcs:ignore Generic.Files.LineLength
 	 * @phan-param array{display-name-msg:string,base-url:string,class:class-string,db-id:int,user-id:string,extra:array} $entry
 	 * @return TrackingTool
+	 * @suppress PhanTypeInvalidCallableArraySize https://github.com/phan/phan/issues/1648
 	 */
 	private function newFromRegistryEntry( array $entry ): TrackingTool {
 		$class = $entry['class'];
-		return new $class( $entry['db-id'], $entry['base-url'], $entry['extra'] );
+		return $this->objectFactory->createObject( [
+			'class' => $class,
+			'args' => [ $entry['db-id'], $entry['base-url'], $entry['extra'] ],
+			'services' => $entry['services'] ?? []
+		] );
 	}
 }

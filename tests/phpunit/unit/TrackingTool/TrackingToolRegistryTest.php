@@ -6,10 +6,15 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\TrackingTool;
 
 use HashConfig;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\Http\HttpRequestFactory;
 use MediaWikiUnitTestCase;
+use Psr\Container\ContainerInterface;
+use Wikimedia\ObjectFactory\ObjectFactory;
+use Wikimedia\Services\NoSuchServiceException;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry
@@ -23,11 +28,35 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 		'user-id' => 'test-user-id',
 		'extra' => [
 			'secret' => 'foobar',
+			'proxy' => null,
+		],
+		'services' => [
+			'HttpRequestFactory',
+			CampaignsCentralUserLookup::SERVICE_NAME,
 		]
 	];
 	private const TEST_REGISTRY = [
 		'Test tool' => self::TEST_REGISTRY_ENTRY
 	];
+
+	private function getObjectFactory(): ObjectFactory {
+		$httpReqFactory = $this->createMock( HttpRequestFactory::class );
+		$serviceContainer = $this->createMock( ContainerInterface::class );
+		$serviceContainer->method( 'has' )->willReturn( false );
+		$serviceContainer->method( 'get' )->willReturnCallback(
+			function ( $serviceName ) use ( $httpReqFactory ) {
+				switch ( $serviceName ) {
+					case 'HttpRequestFactory':
+						return $httpReqFactory;
+					case CampaignsCentralUserLookup::SERVICE_NAME:
+						return $this->createMock( CampaignsCentralUserLookup::class );
+					default:
+						throw new NoSuchServiceException( $serviceName );
+				}
+			}
+		);
+		return new ObjectFactory( $serviceContainer );
+	}
 
 	/**
 	 * @param bool $mockRegistry If true, will replace the internal registry with TEST_REGISTRY
@@ -39,9 +68,10 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 			new HashConfig( [
 				'CampaignEventsProgramsAndEventsDashboardInstance' => 'staging',
 				'CampaignEventsProgramsAndEventsDashboardAPISecret' => 'foo',
+				'CopyUploadProxy' => null,
 			] )
 		);
-		$instance = new TrackingToolRegistry( $options );
+		$instance = new TrackingToolRegistry( $this->getObjectFactory(), $options );
 		if ( $mockRegistry ) {
 			$instance->setRegistryForTesting( self::TEST_REGISTRY );
 		}
@@ -57,7 +87,7 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 		foreach ( $registry as $element ) {
 			$this->assertIsArray( $element, 'Registry entries should be arrays' );
 			$this->assertArrayEquals(
-				[ 'display-name-msg', 'base-url', 'class', 'db-id', 'user-id', 'extra' ],
+				[ 'display-name-msg', 'base-url', 'class', 'db-id', 'user-id', 'extra', 'services' ],
 				array_keys( $element ),
 				false,
 				false,
