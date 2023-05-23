@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use Message;
 use RuntimeException;
@@ -43,6 +44,8 @@ class EditEventCommand {
 	private $centralUserLookup;
 	/** @var EventPageCacheUpdater */
 	private EventPageCacheUpdater $eventPageCacheUpdater;
+	/** @var TrackingToolEventWatcher */
+	private $trackingToolEventWatcher;
 
 	/**
 	 * @param IEventStore $eventStore
@@ -51,6 +54,7 @@ class EditEventCommand {
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
+	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
 	 */
 	public function __construct(
 		IEventStore $eventStore,
@@ -58,7 +62,8 @@ class EditEventCommand {
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
-		EventPageCacheUpdater $eventPageCacheUpdater
+		EventPageCacheUpdater $eventPageCacheUpdater,
+		TrackingToolEventWatcher $trackingToolEventWatcher
 	) {
 		$this->eventStore = $eventStore;
 		$this->eventLookup = $eventLookup;
@@ -66,6 +71,7 @@ class EditEventCommand {
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
+		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
 	}
 
 	/**
@@ -159,6 +165,26 @@ class EditEventCommand {
 			}
 		} elseif ( !in_array( $performerCentralUser->getCentralID(), $organizerCentralUserIDs, true ) ) {
 			return StatusValue::newFatal( 'campaignevents-edit-no-creator' );
+		}
+
+		$organizerCentralUsers = array_map( static function ( int $centralID ): CentralUser {
+			return new CentralUser( $centralID );
+		}, $organizerCentralUserIDs );
+		if ( $registrationID ) {
+			$previousVersion = $this->eventLookup->getEventByID( $registrationID );
+			$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateEventUpdate(
+				$previousVersion,
+				$registration,
+				$organizerCentralUsers
+			);
+		} else {
+			$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateEventCreation(
+				$registration,
+				$organizerCentralUsers
+			);
+		}
+		if ( !$trackingToolValidationStatus->isGood() ) {
+			return $trackingToolValidationStatus;
 		}
 
 		$newEventID = $this->eventStore->saveRegistration( $registration );

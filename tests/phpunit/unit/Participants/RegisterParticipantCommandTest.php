@@ -15,10 +15,12 @@ use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
 use MWTimestamp;
 use PHPUnit\Framework\MockObject\MockObject;
+use StatusValue;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand
@@ -42,23 +44,30 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @param ParticipantsStore|null $participantsStore
 	 * @param PermissionChecker|null $permChecker
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @return RegisterParticipantCommand
 	 */
 	private function getCommand(
 		ParticipantsStore $participantsStore = null,
 		PermissionChecker $permChecker = null,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		CampaignsCentralUserLookup $centralUserLookup = null,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): RegisterParticipantCommand {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
 			$permChecker->method( 'userCanRegisterForEvents' )->willReturn( true );
+		}
+		if ( !$trackingToolEventWatcher ) {
+			$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );
+			$trackingToolEventWatcher->method( 'validateParticipantAdded' )->willReturn( StatusValue::newGood() );
 		}
 		return new RegisterParticipantCommand(
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$permChecker,
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$this->createMock( UserNotifier::class ),
-			$this->createMock( EventPageCacheUpdater::class )
+			$this->createMock( EventPageCacheUpdater::class ),
+			$trackingToolEventWatcher
 		);
 	}
 
@@ -200,14 +209,16 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param string $expectedMsg
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @covers ::registerUnsafe
 	 * @dataProvider provideRegisterUnsafeErrors
 	 */
 	public function testRegisterUnsafe__error(
 		string $expectedMsg,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		CampaignsCentralUserLookup $centralUserLookup = null,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	) {
-		$status = $this->getCommand( null, null, $centralUserLookup )->registerUnsafe(
+		$status = $this->getCommand( null, null, $centralUserLookup, $trackingToolEventWatcher )->registerUnsafe(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC
@@ -223,6 +234,17 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		yield 'User not global' => [
 			'campaignevents-register-need-central-account',
 			$notGlobalLookup
+		];
+
+		$trackingToolError = 'some-tracking-tool-error';
+		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$trackingToolWatcher->expects( $this->atLeastOnce() )
+			->method( 'validateParticipantAdded' )
+			->willReturn( StatusValue::newFatal( $trackingToolError ) );
+		yield 'Fails tracking tool validation' => [
+			$trackingToolError,
+			null,
+			$trackingToolWatcher
 		];
 	}
 }

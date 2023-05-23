@@ -14,8 +14,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
+use StatusValue;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand
@@ -26,12 +28,19 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param IEventStore|null $eventStore
 	 * @param PermissionChecker|null $permChecker
+	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @return DeleteEventCommand
 	 */
 	private function getCommand(
 		IEventStore $eventStore = null,
-		PermissionChecker $permChecker = null
+		PermissionChecker $permChecker = null,
+		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): DeleteEventCommand {
+		if ( !$trackingToolEventWatcher ) {
+			$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );
+			$trackingToolEventWatcher->method( 'validateEventDeletion' )->willReturn( StatusValue::newGood() );
+		}
+
 		return new DeleteEventCommand(
 			$eventStore ?? $this->createMock( IEventStore::class ),
 			$permChecker ?? new PermissionChecker(
@@ -39,7 +48,8 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 				$this->createMock( PageAuthorLookup::class ),
 				$this->createMock( CampaignsCentralUserLookup::class ),
 				$this->createMock( IPermissionsLookup::class )
-			)
+			),
+			$trackingToolEventWatcher
 		);
 	}
 
@@ -109,5 +119,33 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 		$alreadyDeletedStore = $this->createMock( IEventStore::class );
 		$alreadyDeletedStore->method( 'deleteRegistration' )->with( $alreadyDeleted )->willReturn( false );
 		yield 'Already deleted' => [ $alreadyDeleted, $alreadyDeletedStore, false ];
+	}
+
+	/**
+	 * @param string $expectedMsg
+	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
+	 * @covers ::deleteUnsafe
+	 * @dataProvider provideDeleteUnsafeErrors
+	 */
+	public function testDeleteUnsafe__error(
+		string $expectedMsg,
+		TrackingToolEventWatcher $trackingToolEventWatcher
+	) {
+		$cmd = $this->getCommand( null, null, $trackingToolEventWatcher );
+		$status = $cmd->deleteUnsafe( $this->createMock( ExistingEventRegistration::class ) );
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( $expectedMsg, $status );
+	}
+
+	public function provideDeleteUnsafeErrors(): Generator {
+		$trackingToolError = 'some-tracking-tool-error';
+		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$trackingToolWatcher->expects( $this->atLeastOnce() )
+			->method( 'validateEventDeletion' )
+			->willReturn( StatusValue::newFatal( $trackingToolError ) );
+		yield 'Fails tracking tool validation' => [
+			$trackingToolError,
+			$trackingToolWatcher
+		];
 	}
 }

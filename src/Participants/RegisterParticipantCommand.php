@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
 use StatusValue;
@@ -37,6 +38,8 @@ class RegisterParticipantCommand {
 	private UserNotifier $userNotifier;
 	/** @var EventPageCacheUpdater */
 	private EventPageCacheUpdater $eventPageCacheUpdater;
+	/** @var TrackingToolEventWatcher */
+	private TrackingToolEventWatcher $trackingToolEventWatcher;
 
 	/**
 	 * @param ParticipantsStore $participantsStore
@@ -44,19 +47,22 @@ class RegisterParticipantCommand {
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserNotifier $userNotifier
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
+	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
 	 */
 	public function __construct(
 		ParticipantsStore $participantsStore,
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserNotifier $userNotifier,
-		EventPageCacheUpdater $eventPageCacheUpdater
+		EventPageCacheUpdater $eventPageCacheUpdater,
+		TrackingToolEventWatcher $trackingToolEventWatcher
 	) {
 		$this->participantsStore = $participantsStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userNotifier = $userNotifier;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
+		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
 	}
 
 	/**
@@ -141,6 +147,15 @@ class RegisterParticipantCommand {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
 		} catch ( UserNotGlobalException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
+		}
+
+		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateParticipantAdded(
+			$registration,
+			$centralUser,
+			$isPrivate
+		);
+		if ( !$trackingToolValidationStatus->isGood() ) {
+			return $trackingToolValidationStatus;
 		}
 
 		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser, $isPrivate );
