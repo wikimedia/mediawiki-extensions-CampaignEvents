@@ -16,13 +16,20 @@ describe( 'MyEvents', function () {
 		await Rest.enableEvent( event );
 	} );
 
+	beforeEach( async function () {
+		MyEventsPage.open();
+	} );
+
 	it( 'can allow organizer to close registration of first event in My Events', async function () {
+		// XXX This might fail if the first registration in the list is already closed
 		await MyEventsPage.closeRegistration();
 		assert.deepEqual( await MyEventsPage.notification.getText(), `${await MyEventsPage.firstEvent.getText()} registration closed.` );
 	} );
 
 	it( 'can allow organizer to delete registration of first event in My Events', async function () {
+		// Save the name of the event now, as the deletion will refresh the page.
+		const eventName = await MyEventsPage.firstEvent.getText();
 		await MyEventsPage.deleteRegistration();
-		assert.deepEqual( `${await MyEventsPage.firstEvent.getText()} deleted.`, await MyEventsPage.notification.getText() );
+		assert.deepEqual( await MyEventsPage.notification.getText(), `${eventName} deleted.` );
 	} );
 } );
