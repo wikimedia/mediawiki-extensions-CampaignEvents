@@ -9,6 +9,8 @@ use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Session\Session;
+use MediaWiki\Session\SessionId;
+use MediaWiki\Session\SessionProviderInterface;
 use User;
 use Wikimedia\Message\DataMessageValue;
 
@@ -70,7 +72,12 @@ trait CSRFTestHelperTrait {
 	public function provideBadTokenSessions(): Generator {
 		$anonUser = $this->createMock( User::class );
 		$anonUser->method( 'isAnon' )->willReturn( true );
-		$anonSession = $this->getSession( false );
+		$anonSessionProvider = $this->createMock( SessionProviderInterface::class );
+		$anonSessionProvider->method( 'safeAgainstCsrf' )->willReturn( false );
+
+		$anonSession = $this->createMock( Session::class );
+		$anonSession->method( 'getSessionId' )->willReturn( new SessionId( 'test' ) );
+		$anonSession->method( 'getProvider' )->willReturn( $anonSessionProvider );
 		$anonSession->expects( $this->atLeastOnce() )->method( 'getUser' )->willReturn( $anonUser );
 		$anonSession->expects( $this->atLeastOnce() )->method( 'isPersistent' )->willReturn( false );
 		yield 'Anon' => [ $anonSession, 'rest-badtoken-nosession', 'some-token' ];
