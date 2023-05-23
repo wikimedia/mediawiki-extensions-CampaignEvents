@@ -28,6 +28,6 @@ describe( 'Enable Event Registration', function () {
 		await EventRegistrationPage.createEventPage( event );
 		await EventRegistrationPage.enableEvent( event );
 
-		assert.deepEqual( await EventRegistrationPage.feedback.getText(), 'Registration is enabled. Participants can now register on the event page.' );
+		assert.deepEqual( await EventRegistrationPage.successNotice.getText(), 'Registration is enabled. Participants can now register on the event page.' );
 	} );
 } );

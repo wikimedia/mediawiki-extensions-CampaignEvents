@@ -22,13 +22,12 @@ class EventRegistrationPage extends Page {
 	get enableRegistration() { return $( '[value="Enable registration"]' ); }
 	get eventPage() { return $( '[name="wpEventPage"]' ); }
 	get generalError() { return $( '[role=alert]' ); }
-	get meetingTypeSelector() { return $( '[role="radiogroup"]' ); }
+	get meetingTypeSelector() { return $( '#mw-input-wpEventMeetingType div[role="radiogroup"]' ); }
 	get startDateInput() { return $( '#mw-input-wpEventStart' ).$( '[size="2"]' ); }
 	get startYearInput() { return $( '#mw-input-wpEventStart' ).$( '[size="4"]' ); }
 	get endDateInput() { return $( '#mw-input-wpEventEnd' ).$( '[size="2"]' ); }
 	get endYearInput() { return $( '#mw-input-wpEventEnd' ).$( '[size="4"]' ); }
-	get feedback() { return $( '#mw-content-text' ); }
-	get successfulRegistration() { return $( '//span[normalize-space() = "You are attending!"]' ); }
+	get successNotice() { return $( '.mw-message-box-success' ); }
 	get body() { return $( 'body' ); }
 
 	open() {
@@ -118,6 +117,7 @@ class EventRegistrationPage extends Page {
 		meetingType
 	} ) {
 		super.openTitle( `Special:EditEventRegistration/${id}` );
+
 		if ( event ) {
 			await this.eventPage.setValue( event );
 		}
@@ -130,6 +130,7 @@ class EventRegistrationPage extends Page {
 		if ( meetingType ) {
 			await this.selectMeetingType( meetingType );
 		}
+
 		await this.editRegistration.click();
 	}
 }

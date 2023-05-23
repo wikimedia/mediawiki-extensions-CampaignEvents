@@ -30,7 +30,7 @@ describe( 'Edit Event Registration', function () {
 			end: { year: 2100, day: 14 }
 		} );
 
-		assert.deepEqual( await EventRegistrationPage.feedback.getText(), 'The registration was edited. See event page.' );
+		assert.deepEqual( await EventRegistrationPage.successNotice.getText(), 'The registration was edited. See event page.' );
 	} );
 
 	it( 'can allow organizer to change the event to be in person', async function () {
