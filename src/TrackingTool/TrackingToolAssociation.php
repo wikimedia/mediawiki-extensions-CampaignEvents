@@ -31,7 +31,7 @@ class TrackingToolAssociation {
 	 * @param int $toolID
 	 * @param string $toolEventID
 	 * @param int $syncStatus One of the self::SYNC_STATUS_* constants
-	 * @param string|null $lastSyncTimestamp
+	 * @param string|null $lastSyncTimestamp UNIX timestamp
 	 */
 	public function __construct( int $toolID, string $toolEventID, int $syncStatus, ?string $lastSyncTimestamp ) {
 		$this->toolID = $toolID;

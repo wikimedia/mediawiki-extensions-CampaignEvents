@@ -81,3 +81,17 @@ CREATE TABLE /*_*/ce_event_address (
   UNIQUE INDEX ceea_event_address (ceea_event, ceea_address),
   PRIMARY KEY(ceea_id)
 ) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_tracking_tools (
+  cett_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  cett_event BIGINT UNSIGNED NOT NULL,
+  cett_tool_id INT NOT NULL,
+  cett_tool_event_id VARBINARY(512) NOT NULL,
+  cett_sync_status INT NOT NULL,
+  cett_last_sync BINARY(14) DEFAULT NULL,
+  UNIQUE INDEX cett_event_tool_teid (
+    cett_event, cett_tool_id, cett_tool_event_id
+  ),
+  PRIMARY KEY(cett_id)
+) /*$wgDBTableOptions*/;
