@@ -129,9 +129,16 @@ class UnregisterParticipantCommand {
 		}
 
 		$modified = $this->participantsStore->removeParticipantFromEvent( $registration->getID(), $centralUser );
+
 		if ( $modified ) {
+			$this->trackingToolEventWatcher->onParticipantsRemoved(
+				$registration,
+				[ $centralUser ],
+				false
+			);
 			$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 		}
+
 		return StatusValue::newGood( $modified );
 	}
 
@@ -207,7 +214,13 @@ class UnregisterParticipantCommand {
 			$users,
 			$invertUsers
 		);
+
 		if ( $removedParticipants > 0 ) {
+			$this->trackingToolEventWatcher->onParticipantsRemoved(
+				$registration,
+				$users,
+				$invertUsers
+			);
 			$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 		}
 

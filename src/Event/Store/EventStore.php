@@ -46,6 +46,8 @@ class EventStore implements IEventStore, IEventLookup {
 	private $campaignsPageFactory;
 	/** @var AddressStore */
 	private $addressStore;
+	/** @var TrackingToolUpdater */
+	private TrackingToolUpdater $trackingToolUpdater;
 
 	/**
 	 * @var array<int,ExistingEventRegistration> Cache of stored registrations, keyed by ID.
@@ -56,15 +58,18 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @param CampaignsDatabaseHelper $dbHelper
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param AddressStore $addressStore
+	 * @param TrackingToolUpdater $trackingToolUpdater
 	 */
 	public function __construct(
 		CampaignsDatabaseHelper $dbHelper,
 		CampaignsPageFactory $campaignsPageFactory,
-		AddressStore $addressStore
+		AddressStore $addressStore,
+		TrackingToolUpdater $trackingToolUpdater
 	) {
 		$this->dbHelper = $dbHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->addressStore = $addressStore;
+		$this->trackingToolUpdater = $trackingToolUpdater;
 	}
 
 	/**
@@ -499,7 +504,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
 		if ( $wgCampaignEventsUseNewTrackingToolsSchema ) {
-			$this->updateStoredTrackingTools( $dbw, $event->getTrackingTools(), $eventID );
+			$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
 		}
 
 		$dbw->endAtomic();
@@ -507,72 +512,6 @@ class EventStore implements IEventStore, IEventLookup {
 		unset( $this->cache[$eventID] );
 
 		return $eventID;
-	}
-
-	/**
-	 * @param ICampaignsDatabase $dbw
-	 * @param TrackingToolAssociation[] $trackingTools
-	 * @param int $eventID
-	 * @return void
-	 */
-	private function updateStoredTrackingTools(
-		ICampaignsDatabase $dbw,
-		array $trackingTools,
-		int $eventID
-	): void {
-		$toolsMap = [];
-		foreach ( $trackingTools as $toolAssociation ) {
-			$toolID = $toolAssociation->getToolID();
-			$toolsMap[$toolID] ??= [];
-			$toolsMap[$toolID][] = $toolAssociation->getToolEventID();
-		}
-
-		// Make changes by primary key to avoid lock contention
-		$currentToolRows = $dbw->select(
-			'ce_tracking_tools',
-			'*',
-			[ 'cett_event' => $eventID ],
-			[ 'FOR UPDATE' ]
-		);
-
-		// TODO Add support for multiple tracking tools per event
-		if ( count( $currentToolRows ) > 1 ) {
-			throw new LogicException( "Events should have only one tracking tool." );
-		}
-
-		$deleteIDs = [];
-		foreach ( $currentToolRows as $curRow ) {
-			$toolID = (int)$curRow->cett_tool_id;
-			if ( !isset( $toolsMap[$toolID] ) || !in_array( $curRow->cett_tool_event_id, $toolsMap[$toolID], true ) ) {
-				$deleteIDs[] = $curRow->cett_id;
-			}
-		}
-
-		if ( $deleteIDs ) {
-			$dbw->delete( 'ce_tracking_tools', [ 'cett_id' => $deleteIDs ] );
-		}
-
-		$newRows = [];
-		$dbSyncStatus = TrackingToolUpdater::syncStatusToDB( TrackingToolAssociation::SYNC_STATUS_UNKNOWN );
-		foreach ( $trackingTools as $tool ) {
-			$newRows[] = [
-				'cett_event' => $eventID,
-				'cett_tool_id' => $tool->getToolID(),
-				'cett_tool_event_id' => $tool->getToolEventID(),
-				'cett_sync_status' => $dbSyncStatus,
-				'cett_last_sync' => null,
-			];
-		}
-
-		if ( $newRows ) {
-			// For existing rows we don't need to update sync_status and last_sync now. The previous values should
-			// remain valid until the tool is synced again, which will happen later anyway.
-			$dbw->insert(
-				'ce_tracking_tools',
-				$newRows,
-				[ 'IGNORE' ]
-			);
-		}
 	}
 
 	/**

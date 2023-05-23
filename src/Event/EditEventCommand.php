@@ -18,10 +18,13 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Permissions\PermissionStatus;
 use Message;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use StatusValue;
+use Wikimedia\ScopedCallback;
 
 /**
  * Command object used for creation and editing of event registrations.
@@ -45,7 +48,11 @@ class EditEventCommand {
 	/** @var EventPageCacheUpdater */
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	/** @var TrackingToolEventWatcher */
-	private $trackingToolEventWatcher;
+	private TrackingToolEventWatcher $trackingToolEventWatcher;
+	/** @var TrackingToolUpdater */
+	private TrackingToolUpdater $trackingToolUpdater;
+	/** @var LoggerInterface */
+	private LoggerInterface $logger;
 
 	/**
 	 * @param IEventStore $eventStore
@@ -55,6 +62,8 @@ class EditEventCommand {
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
+	 * @param TrackingToolUpdater $trackingToolUpdater
+	 * @param LoggerInterface $logger
 	 */
 	public function __construct(
 		IEventStore $eventStore,
@@ -63,7 +72,9 @@ class EditEventCommand {
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventPageCacheUpdater $eventPageCacheUpdater,
-		TrackingToolEventWatcher $trackingToolEventWatcher
+		TrackingToolEventWatcher $trackingToolEventWatcher,
+		TrackingToolUpdater $trackingToolUpdater,
+		LoggerInterface $logger
 	) {
 		$this->eventStore = $eventStore;
 		$this->eventLookup = $eventLookup;
@@ -72,6 +83,8 @@ class EditEventCommand {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
+		$this->trackingToolUpdater = $trackingToolUpdater;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -178,6 +191,7 @@ class EditEventCommand {
 				$organizerCentralUsers
 			);
 		} else {
+			$previousVersion = null;
 			$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateEventCreation(
 				$registration,
 				$organizerCentralUsers
@@ -188,10 +202,71 @@ class EditEventCommand {
 		}
 
 		$newEventID = $this->eventStore->saveRegistration( $registration );
-		$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 		$this->addOrganizers( $registrationID === null, $newEventID, $organizerCentralUserIDs, $performerCentralUser );
+		$this->updateTrackingTools( $newEventID, $previousVersion, $registration, $organizerCentralUsers );
+
+		$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 
 		return StatusValue::newGood( $newEventID );
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param ExistingEventRegistration|null $previousVersion
+	 * @param EventRegistration $newVersion
+	 * @param CentralUser[] $organizers
+	 */
+	private function updateTrackingTools(
+		int $eventID,
+		?ExistingEventRegistration $previousVersion,
+		EventRegistration $newVersion,
+		array $organizers
+	): void {
+		global $wgCampaignEventsUseNewTrackingToolsSchema;
+		if ( $wgCampaignEventsUseNewTrackingToolsSchema === false ) {
+			// Tracking tools are not supported yet, skip this.
+			return;
+		}
+
+		// Use a RAII callback to log failures at this stage that could leave the database in an inconsistent state
+		// but could not be logged elsewhere, e.g. due to timeouts.
+		// @codeCoverageIgnoreStart - testing code run in __destruct is hard and unreliable.
+		$failureLogger = new ScopedCallback( function () use ( $eventID ) {
+			$this->logger->error(
+				'Post-sync update failed for tracking tools, event {event_id}.',
+				[
+					'event_id' => $eventID,
+				]
+			);
+		} );
+		// @codeCoverageIgnoreEnd
+
+		if ( $previousVersion ) {
+			$trackingToolStatus = $this->trackingToolEventWatcher->onEventUpdated(
+				$previousVersion,
+				$newVersion,
+				$organizers
+			);
+		} else {
+			$trackingToolStatus = $this->trackingToolEventWatcher->onEventCreated(
+				$newVersion,
+				$organizers
+			);
+		}
+
+		// Update the tracking tools stored in the DB. This has two purpose:
+		//  - Updates the sync status and TS for tools that are now successfully connecyed
+		//  - Removes any tools that we could not sync, and adds back any tools that could not be removed
+		// Note that we can't do this in reverse, i.e. connecting the tools first, then saving the event with only
+		// tools whose sync succeeded, because we might not have an event ID yet. Also, for that we would
+		// need an atomic section to encapsulate the event update and the tool change, but we can't easily open it
+		// from here.
+		// XXX However, we might be able to save the event without tools first, and then add the tools later once
+		// they were connected, with a separate query.
+		$newTools = $trackingToolStatus->getValue();
+		$this->trackingToolUpdater->replaceEventTools( $eventID, $newTools );
+		ScopedCallback::cancel( $failureLogger );
+		// TODO Inform the user about the failure (T336900)
 	}
 
 	/**

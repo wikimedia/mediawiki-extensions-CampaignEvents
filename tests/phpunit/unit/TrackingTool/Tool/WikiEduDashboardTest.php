@@ -37,6 +37,18 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::addToEvent
+	 */
+	public function testAddToEvent() {
+		$actual = $this->getTool()->addToEvent(
+			$this->createMock( EventRegistration::class ),
+			[],
+			'something'
+		);
+		$this->assertEquals( StatusValue::newGood(), $actual );
+	}
+
+	/**
 	 * @covers ::validateToolRemoval
 	 */
 	public function testValidateToolRemoval() {
@@ -48,10 +60,32 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::removeFromEvent
+	 */
+	public function testRemoveFromEvent() {
+		$actual = $this->getTool()->removeFromEvent(
+			$this->createMock( ExistingEventRegistration::class ),
+			'something'
+		);
+		$this->assertEquals( StatusValue::newGood(), $actual );
+	}
+
+	/**
 	 * @covers ::validateEventDeletion
 	 */
 	public function testValidateEventDeletion() {
 		$actual = $this->getTool()->validateEventDeletion(
+			$this->createMock( ExistingEventRegistration::class ),
+			'something'
+		);
+		$this->assertEquals( StatusValue::newGood(), $actual );
+	}
+
+	/**
+	 * @covers ::onEventDeleted
+	 */
+	public function testOnEventDeleted() {
+		$actual = $this->getTool()->onEventDeleted(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
 		);
@@ -72,10 +106,36 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::addParticipant
+	 */
+	public function testAddParticipant() {
+		$actual = $this->getTool()->addParticipant(
+			$this->createMock( ExistingEventRegistration::class ),
+			'something',
+			$this->createMock( CentralUser::class ),
+			false
+		);
+		$this->assertEquals( StatusValue::newGood(), $actual );
+	}
+
+	/**
 	 * @covers ::validateParticipantsRemoved
 	 */
 	public function testValidateParticipantsRemoved() {
 		$actual = $this->getTool()->validateParticipantsRemoved(
+			$this->createMock( ExistingEventRegistration::class ),
+			'something',
+			null,
+			false
+		);
+		$this->assertEquals( StatusValue::newGood(), $actual );
+	}
+
+	/**
+	 * @covers ::removeParticipants
+	 */
+	public function testRemoveParticipants() {
+		$actual = $this->getTool()->removeParticipants(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
 			null,

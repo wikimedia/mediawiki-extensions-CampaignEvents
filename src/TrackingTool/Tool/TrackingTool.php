@@ -14,6 +14,17 @@ use StatusValue;
  * used for multiple instances of that tool. These objects are not value objects; instead, they follow the handler
  * pattern, and are used to perform actions on each tracking tool.
  * Subclasses must NOT be instantiated directly, use TrackingToolRegistry instead.
+ *
+ * There are exactly two methods defined for each action, one that validates the change and one that executes it (like
+ * validateToolAddition() and addToEvent()), in a sort of two-phase commit approach. In particular:
+ *  - validation methods are called before any write action occurs, giving tracking tools a chance to validate the
+ *    change before any data is committed. Any anticipated error should be reported at this stage.
+ *  - action methods are called when data may have already been written. It is still possible to fail at this stage,
+ *    in which case the change to the data will be rolled back if possible, but this is not guaranteed and failures at
+ *    this stage should be avoided as much as possible. Ideally, only unpredictable failures (e.g., network errors)
+ *    should happen here.
+ * @see \MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher which uses these methods.
+ *
  * Note that in the future, when more tools are added, these methods may be moved to separate interfaces,
  * depending on the capabilities of each tool.
  */
@@ -54,6 +65,18 @@ abstract class TrackingTool {
 	): StatusValue;
 
 	/**
+	 * @param EventRegistration $event That the tool will be added to
+	 * @param CentralUser[] $organizers
+	 * @param string $toolEventID
+	 * @return StatusValue
+	 */
+	abstract public function addToEvent(
+		EventRegistration $event,
+		array $organizers,
+		string $toolEventID
+	): StatusValue;
+
+	/**
 	 * @param ExistingEventRegistration $event That the tool will be removed from
 	 * @param string $toolEventID
 	 * @return StatusValue
@@ -64,11 +87,31 @@ abstract class TrackingTool {
 	): StatusValue;
 
 	/**
+	 * @param ExistingEventRegistration $event That the tool will be removed from
+	 * @param string $toolEventID
+	 * @return StatusValue
+	 */
+	abstract public function removeFromEvent(
+		ExistingEventRegistration $event,
+		string $toolEventID
+	): StatusValue;
+
+	/**
 	 * @param ExistingEventRegistration $event
 	 * @param string $toolEventID
 	 * @return StatusValue
 	 */
 	abstract public function validateEventDeletion(
+		ExistingEventRegistration $event,
+		string $toolEventID
+	): StatusValue;
+
+	/**
+	 * @param ExistingEventRegistration $event
+	 * @param string $toolEventID
+	 * @return StatusValue
+	 */
+	abstract public function onEventDeleted(
 		ExistingEventRegistration $event,
 		string $toolEventID
 	): StatusValue;
@@ -90,6 +133,20 @@ abstract class TrackingTool {
 	/**
 	 * @param ExistingEventRegistration $event
 	 * @param string $toolEventID
+	 * @param CentralUser $participant
+	 * @param bool $private
+	 * @return StatusValue
+	 */
+	abstract public function addParticipant(
+		ExistingEventRegistration $event,
+		string $toolEventID,
+		CentralUser $participant,
+		bool $private
+	): StatusValue;
+
+	/**
+	 * @param ExistingEventRegistration $event
+	 * @param string $toolEventID
 	 * @param CentralUser[]|null $participants Array of participants to remove if $invertSelection is false,
 	 * or array of participants to keep if $invertSelection is true. Null means remove everyone, regardless of
 	 * $invertSelection.
@@ -97,6 +154,22 @@ abstract class TrackingTool {
 	 * @return StatusValue
 	 */
 	abstract public function validateParticipantsRemoved(
+		ExistingEventRegistration $event,
+		string $toolEventID,
+		?array $participants,
+		bool $invertSelection
+	): StatusValue;
+
+	/**
+	 * @param ExistingEventRegistration $event
+	 * @param string $toolEventID
+	 * @param CentralUser[]|null $participants Array of participants to remove if $invertSelection is false,
+	 * or array of participants to keep if $invertSelection is true. Null means remove everyone, regardless of
+	 * $invertSelection.
+	 * @param bool $invertSelection
+	 * @return StatusValue
+	 */
+	abstract public function removeParticipants(
 		ExistingEventRegistration $event,
 		string $toolEventID,
 		?array $participants,
