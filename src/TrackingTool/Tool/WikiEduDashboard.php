@@ -212,6 +212,7 @@ class WikiEduDashboard extends TrackingTool {
 			null,
 			null,
 			null,
+			null,
 			false,
 			null,
 			ParticipantsStore::READ_LATEST

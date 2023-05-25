@@ -17,6 +17,7 @@ class PermissionChecker {
 
 	public const ENABLE_REGISTRATIONS_RIGHT = 'campaignevents-enable-registration';
 	public const ORGANIZE_EVENTS_RIGHT = 'campaignevents-organize-events';
+	public const SEND_EVENTS_EMAIL_RIGHT = 'campaignevents-email-participants';
 
 	/** @var OrganizersStore */
 	private $organizersStore;
@@ -165,5 +166,15 @@ class PermissionChecker {
 	 */
 	public function userCanViewPrivateParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
 		return $this->userCanEditRegistration( $performer, $eventID );
+	}
+
+	/**
+	 * @param ICampaignsAuthority $performer
+	 * @param int $eventID
+	 * @return bool
+	 */
+	public function userCanEmailParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
+		return $this->userCanEditRegistration( $performer, $eventID ) &&
+			$performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );
 	}
 }

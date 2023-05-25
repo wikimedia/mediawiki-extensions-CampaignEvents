@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Rest;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
@@ -18,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWiki\User\UserFactory;
 use MediaWikiIntegrationTestCase;
 
 /**
@@ -43,14 +45,18 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		PermissionChecker $permissionChecker = null,
 		IEventLookup $eventLookup = null,
 		ParticipantsStore $participantsStore = null,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		CampaignsCentralUserLookup $centralUserLookup = null,
+		UserFactory $userFactory = null
+
 	): ListParticipantsHandler {
 		return new ListParticipantsHandler(
 			$permissionChecker ?? $this->createMock( PermissionChecker::class ),
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
-			$this->createMock( UserLinker::class )
+			$this->createMock( UserLinker::class ),
+			$userFactory ?? $this->createMock( UserFactory::class ),
+			$this->createMock( CampaignsUserMailer::class )
 		);
 	}
 
@@ -91,6 +97,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 				'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
 				'user_registered_at_formatted' => '12:00, 15 March 2022',
 				'private' => false,
+				'user_is_valid_recipient' => false,
 			];
 		}
 

@@ -159,6 +159,29 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getEventParticipants
+	 * @dataProvider provideGetEventParticipants_Specific
+	 */
+	public function testGetEventParticipants_SpecificUsers(
+		int $eventID,
+		array $expectedParticipants,
+		array $specificUserIDs,
+		int $limit = null,
+		int $offset = null
+	) {
+		$actualUsers = $this->getStore()->getEventParticipants(
+			$eventID,
+			$limit,
+			$offset,
+			null,
+			$specificUserIDs,
+			true
+		);
+
+		$this->checkParticipants( $actualUsers, $expectedParticipants );
+	}
+
+	/**
+	 * @covers ::getEventParticipants
 	 * @dataProvider provideGetEventParticipants_Public
 	 */
 	public function testGetEventParticipants_Public(
@@ -167,7 +190,11 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		int $limit = null,
 		int $offset = null
 	) {
-		$actualUsers = $this->getStore()->getEventParticipants( $eventID, $limit, $offset );
+		$actualUsers = $this->getStore()->getEventParticipants(
+			$eventID,
+			$limit,
+			$offset
+		);
 
 		$this->checkParticipants( $actualUsers, $expectedParticipants );
 	}
@@ -182,7 +209,13 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		int $limit = null,
 		int $offset = null
 	) {
-		$actualUsers = $this->getStore()->getEventParticipants( $eventID, $limit, $offset, null, true );
+		$actualUsers = $this->getStore()->getEventParticipants(
+			$eventID,
+			$limit,
+			$offset,
+			null,
+			null,
+			true );
 
 		$this->checkParticipants( $actualUsers, $expectedParticipants );
 	}
@@ -201,6 +234,29 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 				$participant->getRegisteredAt()
 			);
 		}
+	}
+
+	public static function provideGetEventParticipants_Specific(): Generator {
+		yield 'Only inludes non-deleted public participants' => [
+			1,
+			[
+				'104' => [
+					'registeredAt' => '20220316120000'
+				],
+			],
+			[ 104 ],
+		];
+		yield 'Test limit and offset' => [
+			1,
+			[
+				'104' => [
+					'registeredAt' => '20220316120000'
+				],
+			],
+			[ 104 ],
+			2,
+			1,
+		];
 	}
 
 	public static function provideGetEventParticipants_Public(): Generator {
@@ -232,7 +288,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public static function provideGetEventParticipants_Private(): Generator {
-		yield 'Only inludes non-deleted participants' => [
+		yield 'Only includes non-deleted participants' => [
 			1,
 			[
 				'101' => [

@@ -333,7 +333,7 @@
 			include_private: this.showPrivateParticipants
 		};
 		if ( thisClass.curUserCentralID !== null ) {
-			params.exclude_user = thisClass.curUserCentralID;
+			params.exclude_users = thisClass.curUserCentralID;
 		}
 		if ( thisClass.lastParticipantID !== null ) {
 			params.last_participant_id = thisClass.lastParticipantID;

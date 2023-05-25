@@ -24,7 +24,8 @@
 	"AvailableRights": [
 		"campaignevents-enable-registration",
 		"campaignevents-delete-registration",
-		"campaignevents-organize-events"
+		"campaignevents-organize-events",
+		"campaignevents-email-participants"
 	],
 	"config": {
 		"CampaignEventsDatabaseCluster": {
@@ -42,6 +43,10 @@
 		"CampaignEventsProgramsAndEventsDashboardAPISecret": {
 			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
 			"value": null
+		},
+		"CampaignEventsEnableEmail": {
+			"description": "Temporary feature flag to enable support for emailing users.",
+			"value": false
 		}
 	},
 	"DefaultUserOptions": {
@@ -51,7 +56,8 @@
 	"GroupPermissions": {
 		"user": {
 			"campaignevents-enable-registration": true,
-			"campaignevents-organize-events": true
+			"campaignevents-organize-events": true,
+			"campaignevents-email-participants": true
 		},
 		"sysop": {
 			"campaignevents-delete-registration": true
@@ -89,6 +95,9 @@
 		"PageDelete": "PageMoveAndDeleteHandler",
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler::onBeforeCreateEchoEvent"
 	},
+	"JobClasses": {
+		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob"
+	},
 	"MessagesDirs": {
 		"CampaignEvents": [
 			"i18n",
@@ -107,6 +116,14 @@
 			"name": "Event_talk"
 		}
 	],
+	"RateLimits": {
+		"campaignevents-email-participants": {
+			"user-global": [
+				5,
+				86400
+			]
+		}
+	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "resources",
 		"remoteExtPath": "CampaignEvents/resources"
@@ -399,7 +416,9 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsUserLinker"
+				"CampaignEventsUserLinker",
+				"UserFactory",
+				"CampaignEventsUserMailer"
 			]
 		},
 		{
@@ -427,6 +446,17 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsUnregisterParticipantCommand"
+			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/email",
+			"method": "POST",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EmailUsersHandler",
+			"services": [
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsUserMailer",
+				"CampaignEventsParticipantsStore",
+				"MainConfig"
 			]
 		}
 	],
@@ -504,6 +534,7 @@
 			]
 		}
 	},
+
 	"TestAutoloadNamespaces": {
 		"MediaWiki\\Extension\\CampaignEvents\\Tests\\Unit\\": "tests/phpunit/unit/",
 		"MediaWiki\\Extension\\CampaignEvents\\Tests\\Integration\\": "tests/phpunit/integration/"

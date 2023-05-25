@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use Wikimedia\Assert\Assert;
 
 class ParticipantsStore implements IDBAccessObject {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
@@ -157,9 +158,10 @@ class ParticipantsStore implements IDBAccessObject {
 	 * @param int|null $limit
 	 * @param int|null $lastParticipantID
 	 * @param string|null $usernameFilter If not null, only include participants whose username contains the
-	 * given string (case-insensitive). Cannot be the empty string.
+	 * given string (case-insensitive). Cannot be an empty string.
+	 * @param int[]|null $userIdFilter If not null, only include participants whose userids are provided
 	 * @param bool $showPrivate
-	 * @param int|null $excludeUser ID of a user to exclude from the result (useful when the request user is handled
+	 * @param int[]|null $excludeUsers IDs of users to exclude from the result (useful when the request user is handled
 	 * separately).
 	 * @param int $readFlags One of the self::READ_* constants
 	 * @return Participant[]
@@ -169,12 +171,16 @@ class ParticipantsStore implements IDBAccessObject {
 		int $limit = null,
 		int $lastParticipantID = null,
 		string $usernameFilter = null,
+		array $userIdFilter = null,
 		bool $showPrivate = false,
-		int $excludeUser = null,
+		array $excludeUsers = null,
 		int $readFlags = self::READ_NORMAL
 	): array {
+		if ( $userIdFilter ) {
+			Assert::parameterElementType( 'integer', $userIdFilter, '$userIdFilter' );
+		}
 		if ( $usernameFilter === '' ) {
-			throw new InvalidArgumentException( "The username filter cannot be the empty string" );
+			throw new InvalidArgumentException( "The username filter cannot be an empty string" );
 		}
 		[ $dbIndex, $dbOptions ] = DBAccessObjectUtils::getDBOptions( $readFlags );
 		$dbr = $this->dbHelper->getDBConnection( $dbIndex );
@@ -186,8 +192,11 @@ class ParticipantsStore implements IDBAccessObject {
 		if ( !$showPrivate ) {
 			$where['cep_private'] = false;
 		}
-		if ( $excludeUser !== null ) {
-			$where[] = "cep_user_id != $excludeUser";
+		if ( is_array( $userIdFilter ) && $userIdFilter ) {
+			$where['cep_user_id'] = $userIdFilter;
+		}
+		if ( is_array( $excludeUsers ) && $excludeUsers ) {
+			$where[] = 'cep_user_id NOT IN (' . $dbr->makeCommaList( $excludeUsers ) . ')';
 		}
 		$opts = [ 'ORDER BY' => 'cep_id' ] + $dbOptions;
 		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter

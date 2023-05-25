@@ -734,8 +734,9 @@ class EventPageDecorator {
 				self::PARTICIPANTS_LIMIT,
 			null,
 			null,
+			null,
 			$showPrivateParticipants,
-			isset( $centralUser ) ? $centralUser->getCentralID() : null );
+			isset( $centralUser ) ? [ $centralUser->getCentralID() ] : null );
 
 		if ( !$curUserParticipant && !$partialParticipants ) {
 			return null;

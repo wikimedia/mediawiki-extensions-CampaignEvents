@@ -12,6 +12,8 @@
 	"right-campaignevents-delete-registration": "Delete event registrations",
 	"action-campaignevents-organize-events": "organize events",
 	"right-campaignevents-organize-events": "Organize events",
+	"action-campaignevents-email-participants": "email event participants",
+	"right-campaignevents-email-participants": "Email event participants",
 	"specialpages-group-campaignevents": "Events",
 	"campaignevents-error-invalid-id": "The event ID must be a positive integer.",
 	"campaignevents-error-empty-title": "Enter an event page title.",

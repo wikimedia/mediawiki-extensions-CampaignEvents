@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
@@ -15,6 +16,8 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use MediaWiki\User\UserFactory;
+use RequestContext;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
@@ -32,9 +35,13 @@ class ListParticipantsHandler extends SimpleHandler {
 	/** @var ParticipantsStore */
 	private $participantsStore;
 	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
+	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var UserLinker */
-	private $userLinker;
+	private UserLinker $userLinker;
+	/** @var UserFactory */
+	private UserFactory $userFactory;
+	/** @var CampaignsUserMailer */
+	private CampaignsUserMailer $campaignsUserMailer;
 
 	/**
 	 * @param PermissionChecker $permissionChecker
@@ -42,19 +49,25 @@ class ListParticipantsHandler extends SimpleHandler {
 	 * @param ParticipantsStore $participantsStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserLinker $userLinker
+	 * @param UserFactory $userFactory
+	 * @param CampaignsUserMailer $campaignsUserMailer
 	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker
+		UserLinker $userLinker,
+		UserFactory $userFactory,
+		CampaignsUserMailer $campaignsUserMailer
 	) {
 		$this->permissionChecker = $permissionChecker;
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userLinker = $userLinker;
+		$this->userFactory = $userFactory;
+		$this->campaignsUserMailer = $campaignsUserMailer;
 	}
 
 	/**
@@ -90,14 +103,18 @@ class ListParticipantsHandler extends SimpleHandler {
 			self::RES_LIMIT,
 			$params['last_participant_id'],
 			$usernameFilter,
+			null,
 			$includePrivate,
-			$params['exclude_user']
+			$params['exclude_users']
 		);
 
 		// TODO: remove global when T269492 is resolved
 
-		$language = \RequestContext::getMain()->getLanguage();
+		$language = RequestContext::getMain()->getLanguage();
 		$respVal = [];
+		$performer = $this->userFactory->newFromUserIdentity(
+			$authority->getUser()
+		);
 		foreach ( $participants as $participant ) {
 			$centralUser = $participant->getUser();
 			$curData = [
@@ -111,17 +128,19 @@ class ListParticipantsHandler extends SimpleHandler {
 				'private' => $participant->isPrivateRegistration(),
 			];
 
-			$userName = null;
 			try {
 				$userName = $this->centralUserLookup->getUserName( $centralUser );
+				$user = $this->userFactory->newFromName( $userName );
 				$curData['user_name'] = $userName;
 				$curData['user_page'] = $this->getUserPagePath( $this->userLinker,  $centralUser );
+				$curData['user_is_valid_recipient'] =
+					$user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null;
+
 			} catch ( CentralUserNotFoundException $_ ) {
 				$curData['not_found'] = true;
 			} catch ( HiddenCentralUserException $_ ) {
 				$curData['hidden'] = true;
 			}
-
 			$respVal[] = $curData;
 		}
 		return $this->getResponseFactory()->createJson( $respVal );
@@ -147,9 +166,10 @@ class ListParticipantsHandler extends SimpleHandler {
 					static::PARAM_SOURCE => 'query',
 					ParamValidator::PARAM_TYPE => 'string'
 				],
-				'exclude_user' => [
+				'exclude_users' => [
 					static::PARAM_SOURCE => 'query',
-					ParamValidator::PARAM_TYPE => 'integer'
+					ParamValidator::PARAM_TYPE => 'integer',
+					ParamValidator::PARAM_ISMULTI => true
 				],
 			]
 		);

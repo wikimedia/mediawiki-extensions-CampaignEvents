@@ -113,8 +113,9 @@ class EventDetailsParticipantsModule {
 			$otherParticipantsNum,
 			null,
 			null,
+			null,
 			$showPrivateParticipants,
-			isset( $centralUser ) ? $centralUser->getCentralID() : null
+			isset( $centralUser ) ? [ $centralUser->getCentralID() ] : null
 		);
 		$lastParticipant = $otherParticipants ? end( $otherParticipants ) : $curUserParticipant;
 		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;

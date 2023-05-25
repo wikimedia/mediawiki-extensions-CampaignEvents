@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
+use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
@@ -82,6 +83,18 @@ return [
 			$services->get( PageAuthorLookup::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( MWPermissionsLookup::SERVICE_NAME )
+		);
+	},
+	CampaignsUserMailer::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsUserMailer {
+		return new CampaignsUserMailer(
+			$services->getUserFactory(),
+			$services->getJobQueueGroup(),
+			new ServiceOptions(
+				CampaignsUserMailer::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->getUserOptionsLookup()
 		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
