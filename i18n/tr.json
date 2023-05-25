@@ -2,16 +2,21 @@
 	"@metadata": {
 		"authors": [
 			"Hedda",
+			"Joseph",
 			"Khalvar",
 			"Rapsar",
 			"ToprakM"
 		]
 	},
 	"campaignevents-desc": "Kampanya düzenleyicileri ve katılımcıları için özellikler sağlar.",
+	"nstab-event": "Etkinlik",
 	"action-campaignevents-enable-registration": "etkinlik kayıtlarını etkinleştir",
 	"right-campaignevents-enable-registration": "Etkinlik kayıtlarını etkinleştir",
 	"action-campaignevents-delete-registration": "etkinlik kayıtlarını sil",
 	"right-campaignevents-delete-registration": "Etkinlik kayıtlarını sil",
+	"action-campaignevents-organize-events": "etkinlikler düzenlemeye",
+	"right-campaignevents-organize-events": "Etkinlikler düzenle",
+	"specialpages-group-campaignevents": "Etkinlikler",
 	"campaignevents-error-invalid-id": "Etkinlik kimliği pozitif bir tam sayı olmalıdır.",
 	"campaignevents-error-empty-title": "Bir etkinlik sayfası başlığı girin.",
 	"campaignevents-error-invalid-title": "Etkinlik sayfası başlığı geçersiz: $1 .",
@@ -180,7 +185,7 @@
 	"campaignevents-event-details-register-prompt": "Bu bilgileri görmek için kaydolmanız gerekmektedir.",
 	"campaignevents-event-details-view-event-page": "Etkinlik sayfasını görüntüle",
 	"campaignevents-event-details-select-all": "Hepsini seç",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|seçildi}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$2 katılımcıdan $1 tanesi {{PLURAL:$1|seçildi}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|Katılımcıyı|Katılımcıları}} kaldır",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Seçilen {{PLURAL:$1|katılımcıyı|katılımcıları}} kaldırmak istediğinizden emin misiniz?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Kaldır",

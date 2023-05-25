@@ -12,5 +12,12 @@
 	"campaignevents-myevents-need-central-account": "Az események listájának megtekintéséhez központi felhasználói fiókra lesz szükséged.",
 	"campaignevents-eventpage-btn-registration-closed": "Regisztráció lezárva",
 	"campaignevents-eventpage-btn-event-ended": "Az esemény véget ért",
-	"campaignevents-event-details-search-participants-placeholder": "Részvevők keresése"
+	"campaignevents-event-details-search-participants-placeholder": "Részvevők keresése",
+	"campaignevents-tracking-tool-http-error": "Ismeretlen hiba történt a tracking eszközök feldolgozása közben.",
+	"campaignevents-tracking-tool-wikiedu-config-error": "Webhelykonfigurációs probléma miatt nem lehet csatlakozni ehhez: $1.",
+	"campaignevents-tracking-tool-wikiedu-course-not-found-error": "A $1 kurzus nem létezik itt: $2.",
+	"campaignevents-tracking-tool-wikiedu-not-organizer-error": "Az esemény szervezői nem adnak elő a $1 kurzuson.",
+	"campaignevents-tracking-tool-wikiedu-already-in-use-error": "A $1 kurzusnak már vannak részvevői, ezért nem kapcsolható ehhez az eseményhez.",
+	"campaignevents-tracking-tool-wikiedu-already-connected-error": "A $1 kurzus már kapcsolódik egy eseményhez, nem lehet újra összekapcsolni.",
+	"campaignevents-tracking-tool-wikiedu-not-connected-error": "A $1 kurzus nem kapcsolódik ehhez az eseményhez, ezért nem szinkronizálható."
 }
