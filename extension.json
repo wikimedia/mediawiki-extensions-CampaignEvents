@@ -42,10 +42,6 @@
 		"CampaignEventsProgramsAndEventsDashboardAPISecret": {
 			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
 			"value": null
-		},
-		"CampaignEventsUseNewTrackingToolsSchema": {
-			"description": "Temporary variable to control the migration to the new tracking tools storage (T334143). This is a simple boolean flag, not a combination of the MIGRATION_* or SCHEMA_COMPAT_* constants, because the schema is still unused.",
-			"value": false
 		}
 	},
 	"DefaultUserOptions": {

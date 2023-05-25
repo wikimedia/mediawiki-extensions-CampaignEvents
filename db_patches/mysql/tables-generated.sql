@@ -10,8 +10,6 @@ CREATE TABLE /*_*/campaign_events (
   event_page_wiki VARBINARY(64) NOT NULL,
   event_page_prefixedtext VARBINARY(512) NOT NULL,
   event_chat_url BLOB NOT NULL,
-  event_tracking_tool_id INT DEFAULT NULL,
-  event_tracking_tool_event_id BLOB DEFAULT NULL,
   event_status INT NOT NULL,
   event_timezone VARBINARY(64) NOT NULL,
   event_start_local BINARY(14) NOT NULL,

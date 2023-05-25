@@ -10,8 +10,6 @@ CREATE TABLE campaign_events (
   event_page_wiki TEXT NOT NULL,
   event_page_prefixedtext TEXT NOT NULL,
   event_chat_url TEXT NOT NULL,
-  event_tracking_tool_id INT DEFAULT NULL,
-  event_tracking_tool_event_id TEXT DEFAULT NULL,
   event_status INT NOT NULL,
   event_timezone TEXT NOT NULL,
   event_start_local TEXT NOT NULL,

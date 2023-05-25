@@ -64,23 +64,6 @@
 				}
 			},
 			{
-				"name": "event_tracking_tool_id",
-				"comment": "The unique ID of the tracking tool the organizers use, as defined by the application.",
-				"type": "integer",
-				"options": {
-					"notnull": false
-				}
-			},
-			{
-				"name": "event_tracking_tool_event_id",
-				"comment": "The unique identifier of the event within the tracking tool.",
-				"type": "blob",
-				"options": {
-					"notnull": false,
-					"length": 65530
-				}
-			},
-			{
 				"name": "event_status",
 				"comment": "Status of the event. 1: Open. 2: Closed. 3: Draft. 4: Canceled.",
 				"type": "integer",

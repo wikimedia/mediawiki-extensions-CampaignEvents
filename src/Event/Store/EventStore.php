@@ -169,20 +169,6 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @return stdClass|null
 	 */
 	private function getEventTrackingToolRow( ICampaignsDatabase $db, int $eventID, stdClass $eventRow ): ?stdClass {
-		global $wgCampaignEventsUseNewTrackingToolsSchema;
-		if ( !$wgCampaignEventsUseNewTrackingToolsSchema ) {
-			if ( !$eventRow->event_tracking_tool_id ) {
-				return null;
-			}
-			return (object)[
-				'cett_tool_id' => $eventRow->event_tracking_tool_id,
-				'cett_tool_event_id' => $eventRow->event_tracking_tool_event_id,
-				'cett_sync_status' =>
-					TrackingToolUpdater::syncStatusToDB( TrackingToolAssociation::SYNC_STATUS_UNKNOWN ),
-				'cett_last_sync' => null,
-			];
-		}
-
 		$trackingToolsRows = $db->select(
 			'ce_tracking_tools',
 			'*',
@@ -329,23 +315,6 @@ class EventStore implements IEventStore, IEventLookup {
 		array $eventIDs,
 		iterable $eventRows
 	): array {
-		global $wgCampaignEventsUseNewTrackingToolsSchema;
-		if ( !$wgCampaignEventsUseNewTrackingToolsSchema ) {
-			$ret = [];
-			foreach ( $eventRows as $eventRow ) {
-				if ( $eventRow->event_tracking_tool_id ) {
-					$ret[$eventRow->event_id] = (object)[
-						'cett_tool_id' => $eventRow->event_tracking_tool_id,
-						'cett_tool_event_id' => $eventRow->event_tracking_tool_event_id,
-						'cett_sync_status' =>
-							TrackingToolUpdater::syncStatusToDB( TrackingToolAssociation::SYNC_STATUS_UNKNOWN ),
-						'cett_last_sync' => null,
-					];
-				}
-			}
-			return $ret;
-		}
-
 		$trackingToolsRows = $db->select(
 			'ce_tracking_tools',
 			'*',
@@ -437,8 +406,6 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function saveRegistration( EventRegistration $event ): int {
-		global $wgCampaignEventsUseNewTrackingToolsSchema;
-
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$curDBTimestamp = $dbw->timestamp();
 
@@ -476,23 +443,6 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
 		];
 
-		if ( !$wgCampaignEventsUseNewTrackingToolsSchema ) {
-			$trackingTools = $event->getTrackingTools();
-			if ( count( $trackingTools ) === 1 ) {
-				$toolAssociation = $trackingTools[0];
-				$trackingToolDBID = $toolAssociation->getToolID();
-				$trackingToolEventID = $toolAssociation->getToolEventID();
-			} elseif ( !$trackingTools ) {
-				$trackingToolDBID = $trackingToolEventID = null;
-			} else {
-				// Not implemented.
-				throw new LogicException( "There should only be at most 1 tracking tool for now" );
-			}
-
-			$newRow['event_tracking_tool_id'] = $trackingToolDBID;
-			$newRow['event_tracking_tool_event_id'] = $trackingToolEventID;
-		}
-
 		$eventID = $event->getID();
 		$dbw->startAtomic();
 		if ( $eventID === null ) {
@@ -503,9 +453,7 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 
 		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
-		if ( $wgCampaignEventsUseNewTrackingToolsSchema ) {
-			$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
-		}
+		$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
 
 		$dbw->endAtomic();
 

@@ -27,7 +27,6 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		MWTimestamp::setFakeTime( self::FAKE_TIME );
-		$this->setMwGlobals( [ 'wgCampaignEventsUseNewTrackingToolsSchema' => true ] );
 	}
 
 	public function addDBData() {

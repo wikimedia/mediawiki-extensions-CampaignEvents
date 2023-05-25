@@ -67,11 +67,6 @@ class TrackingToolUpdater {
 	 * @return void
 	 */
 	public function replaceEventTools( int $eventID, array $tools, ICampaignsDatabase $dbw = null ): void {
-		global $wgCampaignEventsUseNewTrackingToolsSchema;
-		if ( $wgCampaignEventsUseNewTrackingToolsSchema === false ) {
-			throw new LogicException( 'This code should be unreachable.' );
-		}
-
 		$dbw ??= $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		// Make a map of tools with faster lookup to compare existing values
@@ -145,11 +140,6 @@ class TrackingToolUpdater {
 	 * @param int $status One of the TrackingToolAssociation::SYNC_STATUS_* constants
 	 */
 	public function updateToolSyncStatus( int $eventID, int $toolID, string $toolEventID, int $status ): void {
-		global $wgCampaignEventsUseNewTrackingToolsSchema;
-		if ( $wgCampaignEventsUseNewTrackingToolsSchema === false ) {
-			throw new LogicException( 'This code should be unreachable.' );
-		}
-
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$setConds = [
 			'cett_sync_status' => self::syncStatusToDB( $status ),

@@ -29,14 +29,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	protected $tablesUsed = [ 'campaign_events', 'ce_address', 'ce_event_address', 'ce_tracking_tools' ];
 
 	/**
-	 * @inheritDoc
-	 */
-	protected function setUp(): void {
-		parent::setUp();
-		$this->setMwGlobals( [ 'wgCampaignEventsUseNewTrackingToolsSchema' => true ] );
-	}
-
-	/**
 	 * @return EventRegistration
 	 */
 	private function getTestEvent(): EventRegistration {
