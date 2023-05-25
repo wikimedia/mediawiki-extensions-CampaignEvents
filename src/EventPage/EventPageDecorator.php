@@ -59,7 +59,7 @@ use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 
 /**
- * This service is used to adds some widgets to the event page, like the registration header.
+ * This service is used to add some widgets to the event page, like the registration header.
  */
 class EventPageDecorator {
 	public const SERVICE_NAME = 'CampaignEventsEventPageDecorator';

@@ -17,7 +17,6 @@ use Wikimedia\ParamValidator\ParamValidator;
 
 class ListOrganizersHandler extends SimpleHandler {
 	use EventIDParamTrait;
-	use UserLinkTrait;
 
 	// TODO: Implement proper pagination (T305389)
 	private const RES_LIMIT = 11;
@@ -81,7 +80,7 @@ class ListOrganizersHandler extends SimpleHandler {
 				'user_name' => $userName,
 				// TODO Should these be localized? It doesn't seem possible right now anyway (T269492)
 				'roles' => array_map( [ $this->roleFormatter, 'getDebugName' ], $organizer->getRoles() ),
-				'user_page' => $this->getUserPagePath( $this->userLinker,  $user ),
+				'user_page' => $this->userLinker->getUserPagePath( $user ),
 			];
 		}
 		return $this->getResponseFactory()->createJson( $respVal );

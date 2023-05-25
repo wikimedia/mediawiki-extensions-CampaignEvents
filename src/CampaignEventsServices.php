@@ -198,6 +198,10 @@ class CampaignEventsServices {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( UserLinker::SERVICE_NAME );
 	}
 
+	/**
+	 * @param ContainerInterface|null $services
+	 * @return FrontendModulesFactory
+	 */
 	public static function getFrontendModulesFactory( ContainerInterface $services = null ): FrontendModulesFactory {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( FrontendModulesFactory::SERVICE_NAME );
 	}

@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use Html;
 use Linker;
+use Sanitizer;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
@@ -94,5 +95,21 @@ class UserLinker {
 				)
 			);
 		}
+	}
+
+	/**
+	 * @param CentralUser $centralUser
+	 * @return string[]
+	 * NOTE: Make sure that the user is not hidden before calling this method, or it will throw an exception.
+	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::GetUserLink
+	 */
+	public function getUserPagePath( CentralUser $centralUser ): array {
+		$html = $this->generateUserLink( $centralUser );
+		$attribs = Sanitizer::decodeTagAttributes( $html );
+		return [
+			'path' => array_key_exists( 'href', $attribs ) ? $attribs['href'] : '',
+			'title' => array_key_exists( 'title', $attribs ) ? $attribs['title'] : '',
+			'classes' => array_key_exists( 'class', $attribs ) ? $attribs['class'] : ''
+		];
 	}
 }

@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use OOUI\ButtonWidget;
 use OOUI\IndexLayout;
 use OOUI\TabPanelLayout;
@@ -33,21 +34,24 @@ class SpecialEventDetails extends SpecialPage {
 		'oojs-ui-widgets.styles' ];
 	public const EVENT_DETAILS_PANEL = 'EventDetailsPanel';
 	public const PARTICIPANTS_PANEL = 'ParticipantsPanel';
+	public const EMAIL_PANEL = 'EmailPanel';
 
 	/** @var IEventLookup */
-	protected $eventLookup;
+	protected IEventLookup $eventLookup;
 	/** @var ExistingEventRegistration|null */
-	protected $event;
+	protected ?ExistingEventRegistration $event;
 	/** @var ParticipantsStore */
-	private $participantsStore;
+	private ParticipantsStore $participantsStore;
 	/** @var OrganizersStore */
-	private $organizersStore;
+	private OrganizersStore $organizersStore;
 	/** @var IMessageFormatterFactory */
-	private $messageFormatterFactory;
+	private IMessageFormatterFactory $messageFormatterFactory;
 	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
+	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var FrontendModulesFactory */
-	private $frontendModulesFactory;
+	private FrontendModulesFactory $frontendModulesFactory;
+	/** @var PermissionChecker */
+	private PermissionChecker $PermissionChecker;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -56,6 +60,7 @@ class SpecialEventDetails extends SpecialPage {
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param FrontendModulesFactory $frontendModulesFactory
+	 * @param PermissionChecker $PermissionChecker
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -63,7 +68,8 @@ class SpecialEventDetails extends SpecialPage {
 		OrganizersStore $organizersStore,
 		IMessageFormatterFactory $messageFormatterFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
-		FrontendModulesFactory $frontendModulesFactory
+		FrontendModulesFactory $frontendModulesFactory,
+		PermissionChecker $PermissionChecker
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventLookup = $eventLookup;
@@ -72,6 +78,7 @@ class SpecialEventDetails extends SpecialPage {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->frontendModulesFactory = $frontendModulesFactory;
+		$this->PermissionChecker = $PermissionChecker;
 	}
 
 	/**
@@ -130,6 +137,8 @@ class SpecialEventDetails extends SpecialPage {
 
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
+			'wgCampaignEventsEnableEmail' => $this->getConfig()->get( 'CampaignEventsEnableEmail' ),
+			'wgCampaignEventsShowEmailTab' => $this->emailIsEnabledAndAllowed()
 		] );
 		$out->setPageTitle(
 			$msgFormatter->format(
@@ -160,6 +169,7 @@ class SpecialEventDetails extends SpecialPage {
 		] );
 		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule( $this->event, $language );
 		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule();
+		$emailModule = $this->frontendModulesFactory->newEmailParticipantsModule();
 		$tabs = [];
 		$tabs[] = $this->createTab(
 			self::EVENT_DETAILS_PANEL,
@@ -182,6 +192,14 @@ class SpecialEventDetails extends SpecialPage {
 				$isOrganizer,
 				$out )
 		);
+		if ( $this->emailIsEnabledAndAllowed() ) {
+			$tabs[] = $this->createTab(
+				self::EMAIL_PANEL,
+				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-email' ) ),
+				$emailModule->createContent(
+					$language )
+			);
+		}
 
 		$main->addTabPanels( $tabs );
 		$selectedTab = $this->getRequest()->getRawVal( 'tab', self::EVENT_DETAILS_PANEL );
@@ -219,6 +237,16 @@ class SpecialEventDetails extends SpecialPage {
 				'content' => $content
 			]
 		);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function emailIsEnabledAndAllowed(): bool {
+		return $this->PermissionChecker->userCanEmailParticipants(
+				new MWAuthorityProxy( $this->getAuthority() ),
+				$this->event->getID() )
+			&& $this->getConfig()->get( 'CampaignEventsEnableEmail' );
 	}
 
 	/**

@@ -46,15 +46,15 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		IEventLookup $eventLookup = null,
 		ParticipantsStore $participantsStore = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
-		UserFactory $userFactory = null
-
+		UserFactory $userFactory = null,
+		UserLinker $userLink = null
 	): ListParticipantsHandler {
 		return new ListParticipantsHandler(
 			$permissionChecker ?? $this->createMock( PermissionChecker::class ),
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
-			$this->createMock( UserLinker::class ),
+			$userLink ?? $this->createMock( UserLinker::class ),
 			$userFactory ?? $this->createMock( UserFactory::class ),
 			$this->createMock( CampaignsUserMailer::class )
 		);
@@ -68,9 +68,14 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		ParticipantsStore $participantsStore,
 		CampaignsCentralUserLookup $centralUserLookup = null
 	) {
-		$handler = $this->newHandler( null, null, $participantsStore, $centralUserLookup );
+		$userLink = $this->createMock( UserLinker::class );
+		$userLink->method( 'getUserPagePath' )->willReturn( [
+			'path' => '',
+			'title' => '',
+			'classes' => '',
+		] );
+		$handler = $this->newHandler( null, null, $participantsStore, $centralUserLookup, null, $userLink );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
-
 		$this->assertArrayEquals( $expectedResp, $respData );
 	}
 
