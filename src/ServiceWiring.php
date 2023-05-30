@@ -262,7 +262,7 @@ return [
 				$services->get( TrackingToolRegistry::SERVICE_NAME ),
 				$services->get( TrackingToolUpdater::SERVICE_NAME ),
 				LoggerFactory::getInstance( 'CampaignEvents' ),
-				[ DeferredUpdates::class, 'addCallableUpdate' ]
+				$services->getDeferredUpdatesManager()
 			);
 		},
 	TrackingToolUpdater::SERVICE_NAME => static function ( MediaWikiServices $services ): TrackingToolUpdater {

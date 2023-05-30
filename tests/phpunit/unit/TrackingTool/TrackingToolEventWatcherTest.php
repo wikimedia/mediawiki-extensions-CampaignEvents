@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\TrackingTool;
 
 use Generator;
+use MediaWiki\Deferred\DeferredUpdatesManager;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -35,11 +36,14 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 		LoggerInterface $logger = null,
 		TrackingToolUpdater $updater = null
 	): TrackingToolEventWatcher {
+		$deferredUpdatesManager = $this->createMock( DeferredUpdatesManager::class );
+		$deferredUpdatesManager->method( 'addCallableUpdate' )
+			->willReturnCallback( static fn ( callable $fn ) => $fn() );
 		return new TrackingToolEventWatcher(
 			$registry ?? $this->createMock( TrackingToolRegistry::class ),
 			$updater ?? $this->createMock( TrackingToolUpdater::class ),
 			$logger ?? new NullLogger(),
-			fn ( callable $fn ) => $fn()
+			$deferredUpdatesManager
 		);
 	}
 
