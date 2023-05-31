@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Anonymoususer12321",
 			"Funa-enpitu",
 			"Kokage si",
 			"MathXplore",
@@ -80,10 +81,10 @@
 	"campaignevents-edit-page-nonlocal": "[$1 この登録の編集]は受付先のウィキでお願いします：$2。",
 	"campaignevents-edit-error-deleted": "このイベント登録は削除されました。",
 	"campaignevents-edit-need-central-account": "イベント登録を有効にする、もしくは編集するには、利用者アカウントの統合が必要です。",
-	"campaignevents-edit-no-organizers": "少なくとも 1 人の主催者を選択する必要があります。",
+	"campaignevents-edit-no-organizers": "イベントには少なくとも一人の主催者が必要です。主催者を追加するか、イベントが不要になった場合は削除してください。",
 	"campaignevents-edit-removed-creator": "この{{GENDER:$1|利用者}}はイベント作成者であるため除去できません。",
 	"campaignevents-edit-no-creator": "最初にイベント登録を有効にするときに、主催者として自分を追加する必要があります。",
-	"campaignevents-edit-too-many-organizers": "$1を超えて追加することはできません。",
+	"campaignevents-edit-too-many-organizers": "{{PLURAL:$1|主催者}}は$1人までしか追加できません。",
 	"campaignevents-edit-invalid-username": "\"$1\" は有効な利用者名ではありません。",
 	"campaignevents-edit-not-allowed-registration": "あなたはこのイベント登録の編集を許可されていません。",
 	"registerforevent": "イベントに登録する",
