@@ -54,6 +54,10 @@ class EventRegistrationPage extends Page {
 		return $( '#mw-input-wpEventEnd' ).$( '[size="4"]' );
 	}
 
+	get organizersInput() {
+		return $( '.ext-campaignevents-organizers-multiselect-input' ).$( 'input' );
+	}
+
 	get successNotice() {
 		return $( '.mw-message-box-success' );
 	}
@@ -106,6 +110,14 @@ class EventRegistrationPage extends Page {
 	}
 
 	/**
+	 * @param {string} organizer to be added to event
+	 */
+	async addOrganizer( organizer ) {
+		await this.organizersInput.setValue( organizer );
+		await $( `[id='${ organizer }']` ).click();
+	}
+
+	/**
 	 * Enable an event.
 	 *
 	 * Pass in an an event, start date and end date, and an event will be created
@@ -146,7 +158,8 @@ class EventRegistrationPage extends Page {
 		event,
 		start,
 		end,
-		meetingType
+		meetingType,
+		organizer
 	} ) {
 		super.openTitle( `Special:EditEventRegistration/${ id }` );
 
@@ -161,6 +174,9 @@ class EventRegistrationPage extends Page {
 		}
 		if ( meetingType ) {
 			await this.selectMeetingType( meetingType );
+		}
+		if ( organizer ) {
+			await this.addOrganizer( organizer );
 		}
 
 		await this.editRegistration.click();

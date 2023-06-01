@@ -1,11 +1,13 @@
 'use strict';
 
 const assert = require( 'assert' ),
+	Api = require( 'wdio-mediawiki/Api' ),
 	EventPage = require( '../pageobjects/event.page' ),
 	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
 	Rest = require( '../pageobjects/rest.page' ),
-	Util = require( 'wdio-mediawiki/Util' );
+	Util = require( 'wdio-mediawiki/Util' ),
+	userName = Util.getTestString();
 
 let event,
 	id;
@@ -52,4 +54,19 @@ describe( 'Edit Event Registration', function () {
 		EventPage.open( event );
 		assert.deepEqual( await EventPage.eventType.getText(), 'Online and in-person event' );
 	} );
+
+	it( 'can allow organizer to add an additional organizer', async function () {
+		const bot = await Api.bot();
+		const password = 'aaaaaaaaa!';
+		await Api.createAccount( bot, userName, password );
+		await EventRegistrationPage.editEvent( {
+			id,
+			organizer: userName
+		} );
+
+		EventPage.open( event );
+		await EventPage.openMoreDetailsDialog();
+		await expect( await EventPage.eventOrganizers ).toHaveTextContaining( userName );
+	} );
+
 } );
