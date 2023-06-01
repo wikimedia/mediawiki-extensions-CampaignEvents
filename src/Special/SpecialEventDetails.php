@@ -158,15 +158,13 @@ class SpecialEventDetails extends SpecialPage {
 			'framed' => false,
 			'id' => 'ext-campaignevents-eventdetails-tabs'
 		] );
-		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule();
+		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule( $this->event, $language );
 		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule();
 		$tabs = [];
 		$tabs[] = $this->createTab(
 			self::EVENT_DETAILS_PANEL,
 			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-event-details' ) ),
 			$eventDetailsModule->createContent(
-				$language,
-				$this->event,
 				$this->getUser(),
 				$isOrganizer,
 				$isParticipant,

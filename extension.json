@@ -290,7 +290,6 @@
 		"ext.campaignEvents.specialeventdetails.styles": {
 			"styles": [
 				"ext.campaignEvents.specialeventdetails.styles.less",
-				"ext.campaignEvents.TextWithIconWidget.less",
 				"ext.campaignEvents.userlinks.styles.less"
 			],
 			"targets": [

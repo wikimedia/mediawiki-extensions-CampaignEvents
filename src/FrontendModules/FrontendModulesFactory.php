@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use Language;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
@@ -63,13 +65,23 @@ class FrontendModulesFactory {
 		$this->eventTimeFormatter = $eventTimeFormatter;
 	}
 
-	public function newEventDetailsModule(): EventDetailsModule {
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param Language $language
+	 * @return EventDetailsModule
+	 */
+	public function newEventDetailsModule(
+		ExistingEventRegistration $registration,
+		Language $language
+	): EventDetailsModule {
 		return new EventDetailsModule(
 			$this->messageFormatterFactory,
 			$this->organizersStore,
 			$this->pageURLResolver,
 			$this->userLinker,
-			$this->eventTimeFormatter
+			$this->eventTimeFormatter,
+			$registration,
+			$language
 		);
 	}
 
