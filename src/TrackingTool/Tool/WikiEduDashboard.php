@@ -81,7 +81,14 @@ class WikiEduDashboard extends TrackingTool {
 		array $organizers,
 		string $toolEventID
 	): StatusValue {
-		return $this->makeNewEventRequest( $event->getID(), $organizers, $toolEventID, false );
+		$addToolStatus = $this->makeNewEventRequest( $event->getID(), $organizers, $toolEventID, false );
+		if ( !$addToolStatus->isGood() ) {
+			return $addToolStatus;
+		}
+		// Also sync the participants, as the dashboard won't do that automatically when syncing an event.
+		// This is particularly important when the tool is added to an event that already has participants, as
+		// is potentially the case for existing events.
+		return $this->syncParticipants( $event, $toolEventID, false );
 	}
 
 	/**
