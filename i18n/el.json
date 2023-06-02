@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dogogos123"
+		]
+	},
+	"campaignevents-tracking-tool-http-error": "Παρουσιάστηκε άγνωστο σφάλμα κατά την προσπάθεια επεξεργασίας εργαλείων παρακολούθησης.",
+	"campaignevents-tracking-tool-wikiedu-config-error": "Δεν είναι δυνατή η σύνδεση στο $1 λόγω προβλήματος διαμόρφωσης ιστότοπου.",
+	"campaignevents-tracking-tool-wikiedu-course-not-found-error": "Το μάθημα $1 δεν υπάρχει στο $2 .",
+	"campaignevents-tracking-tool-wikiedu-not-organizer-error": "Κανένας από τους διοργανωτές αυτής της εκδήλωσης δεν είναι συντονιστής του μαθήματος $1 .",
+	"campaignevents-tracking-tool-wikiedu-already-in-use-error": "Το μάθημα $1 έχει ήδη συμμετέχοντες και επομένως δεν μπορεί να συνδεθεί με αυτό το συμβάν.",
+	"campaignevents-tracking-tool-wikiedu-already-connected-error": "Το μάθημα $1 είναι ήδη συνδεδεμένο με ένα συμβάν και δεν μπορεί να συνδεθεί ξανά.",
+	"campaignevents-tracking-tool-wikiedu-not-connected-error": "Το μάθημα $1 δεν είναι συνδεδεμένο με αυτό το συμβάν και επομένως δεν μπορεί να συγχρονιστεί."
+}
