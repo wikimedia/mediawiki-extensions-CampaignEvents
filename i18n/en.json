@@ -212,6 +212,7 @@
 	"campaignevents-event-details-in-person-event-label": "In-person event",
 	"campaignevents-event-details-online-label": "Online event",
 	"campaignevents-event-details-chat-link": "Chat group invite link",
+	"campaignevents-event-details-chat-link-not-available": "No chat group is available for this event.",
 	"campaignevents-event-details-organizers-header": "Organizers",
 	"campaignevents-event-details-register-prompt": "You need to register to see this information",
 	"campaignevents-event-details-view-event-page": "View event page",

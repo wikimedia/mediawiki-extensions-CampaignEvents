@@ -218,13 +218,17 @@ class EventDetailsModule {
 			} else {
 				$chatSectionContent = $needToRegisterMsg;
 			}
-
-			$items[] = $this->makeSection(
-				'speechBubbles',
-				$chatSectionContent,
-				'campaignevents-event-details-chat-link'
+		} else {
+			$chatSectionContent = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-chat-link-not-available' )
 			);
 		}
+
+		$items[] = $this->makeSection(
+			'speechBubbles',
+			$chatSectionContent,
+			'campaignevents-event-details-chat-link'
+		);
 
 		$items[] = new ButtonWidget( [
 			'flags' => [ 'progressive' ],
