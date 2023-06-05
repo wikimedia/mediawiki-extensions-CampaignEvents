@@ -930,30 +930,31 @@ class EventPageDecorator {
 	 * @param Participant $participant
 	 * @param Language $language
 	 * @param ITextFormatter $formatter
-	 * @return array
+	 * @return Tag
 	 */
 	private function getParticipantRow(
-		Participant $participant, Language $language, ITextFormatter $formatter ): array {
+		Participant $participant, Language $language, ITextFormatter $formatter ): Tag {
 		$usernameElement = new HtmlSnippet(
 			$this->userLinker->generateUserLinkWithFallback(
 				$participant->getUser(),
 				$language->getCode()
 			)
 		);
-		try {
-			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
-		} catch ( CentralUserNotFoundException | UserNotGlobalException $_ ) {
-			// Hack: use an invalid username to force unspecified gender
-			$userName = '@';
-		}
-		$elements = [];
+
 		$tag = ( new Tag( 'li' ) )
 			->appendContent( $usernameElement );
-		$labelText = $formatter->format(
-			MessageValue::new( 'campaignevents-eventpage-dialog-participant-private-registration-label' )
-			->params( $userName )
-		);
+
 		if ( $participant->isPrivateRegistration() ) {
+			try {
+				$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
+			} catch ( CentralUserNotFoundException | UserNotGlobalException $_ ) {
+				// Hack: use an invalid username to force unspecified gender
+				$userName = '@';
+			}
+			$labelText = $formatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-private-registration-label' )
+					->params( $userName )
+			);
 			$tag->appendContent( new IconWidget( [
 					'icon' => 'lock',
 					'title' => $labelText,
@@ -962,7 +963,7 @@ class EventPageDecorator {
 				] )
 			);
 		}
-		$elements[] = $tag;
-		return $elements;
+
+		return $tag;
 	}
 }
