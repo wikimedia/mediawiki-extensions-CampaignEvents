@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -947,7 +948,7 @@ class EventPageDecorator {
 		if ( $participant->isPrivateRegistration() ) {
 			try {
 				$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
-			} catch ( CentralUserNotFoundException | UserNotGlobalException $_ ) {
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				// Hack: use an invalid username to force unspecified gender
 				$userName = '@';
 			}
