@@ -5,7 +5,7 @@ const Page = require( 'wdio-mediawiki/Page' ),
 
 class EventPage extends Page {
 	get registerForEventButton() { return $( '.ext-campaignevents-eventpage-register-btn' ); }
-	get confirmRegistrationButton() { return $( '.ext-campaignevents-registration-confirmation-dialog .oo-ui-processDialog-actions-primary' ).$( '=Register' ); }
+	get confirmRegistrationButton() { return $( '.ext-campaignevents-registration-dialog .oo-ui-processDialog-actions-primary' ).$( '=Register' ); }
 	get togglePrivate() { return $( '.ext-campaignevents-registration-ack-fieldset .oo-ui-toggleSwitchWidget' ); }
 	get cancelRegistrationButton() { return $( '.ext-campaignevents-event-unregister-btn' ); }
 	get confirmCancellation() { return $( '.oo-ui-window-active' ).$( '=Yes' ); }

@@ -5,10 +5,10 @@
 
 	var EventDetailsDialog = require( './EventDetailsDialog.js' ),
 		ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
-		RegistrationConfirmationDialog = require( './RegistrationConfirmationDialog.js' ),
+		ParticipantRegistrationDialog = require( './ParticipantRegistrationDialog.js' ),
 		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
 		confirmUnregistrationDialog,
-		registrationConfirmationDialog,
+		participantRegistrationDialog,
 		configData = require( './data.json' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( {} );
@@ -99,24 +99,24 @@
 			} );
 	}
 
-	function getRegistrationConfirmationDialog( msg ) {
-		if ( !registrationConfirmationDialog ) {
-			registrationConfirmationDialog = new RegistrationConfirmationDialog(
+	function getParticipantRegistrationDialog( msg ) {
+		if ( !participantRegistrationDialog ) {
+			participantRegistrationDialog = new ParticipantRegistrationDialog(
 				{
 					policyMsg: msg
 				} );
-			windowManager.addWindows( [ registrationConfirmationDialog ] );
+			windowManager.addWindows( [ participantRegistrationDialog ] );
 		}
-		return registrationConfirmationDialog;
+		return participantRegistrationDialog;
 	}
 
 	/**
 	 * @return {jQuery.promise}
 	 */
-	function requireRegistrationConfirmation() {
-		registrationConfirmationDialog = getRegistrationConfirmationDialog( configData.policyMsg );
+	function showParticipantRegistrationDialog() {
+		participantRegistrationDialog = getParticipantRegistrationDialog( configData.policyMsg );
 		windowManager.closeWindow( windowManager.getCurrentWindow() );
-		return windowManager.openWindow( registrationConfirmationDialog ).closed;
+		return windowManager.openWindow( participantRegistrationDialog ).closed;
 	}
 
 	function getConfirmUnregistrationDialog() {
@@ -135,7 +135,7 @@
 				redirectToLogin();
 				return;
 			}
-			requireRegistrationConfirmation().then( function ( data ) {
+			showParticipantRegistrationDialog().then( function ( data ) {
 				if ( data && data.action === 'confirm' ) {
 					registerUser( data.isPrivate )
 						.fail( function () {
