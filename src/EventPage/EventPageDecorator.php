@@ -98,6 +98,12 @@ class EventPageDecorator {
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 
 	/**
+	 * @var bool|null Whether the user is registered publicly or privately. This value is lazy-loaded iff the user
+	 * status is USER_STATUS_PARTICIPANT_CAN_UNREGISTER.
+	 */
+	private ?bool $participantIsPublic = null;
+
+	/**
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
@@ -293,9 +299,6 @@ class EventPageDecorator {
 			UserLinker::MODULE_STYLES
 		) );
 		$out->addModules( [ 'ext.campaignEvents.eventpage' ] );
-		$out->addJsConfigVars( [
-			'wgCampaignEventsEventID' => $registration->getID()
-		] );
 
 		$userStatus = $this->getUserStatus( $registration, $authority );
 		try {
@@ -317,6 +320,10 @@ class EventPageDecorator {
 				$authority,
 				$out )
 		);
+		$out->addJsConfigVars( [
+			'wgCampaignEventsEventID' => $registration->getID(),
+			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
+		] );
 	}
 
 	/**
@@ -331,6 +338,80 @@ class EventPageDecorator {
 	 * @return Tag
 	 */
 	private function getHeaderElement(
+		ExistingEventRegistration $registration,
+		ITextFormatter $msgFormatter,
+		Language $language,
+		UserIdentity $viewingUser,
+		int $userStatus,
+		OutputPage $out
+	): Tag {
+		$content = [];
+
+		$participantNoticeRow = $this->getParticipantNoticeRow(
+			$msgFormatter,
+			$userStatus
+		);
+		if ( $participantNoticeRow ) {
+			$content[] = $participantNoticeRow;
+		}
+
+		$content[] = $this->getEventInfoHeaderRow(
+			$registration,
+			$msgFormatter,
+			$language,
+			$viewingUser,
+			$userStatus,
+			$out
+		);
+
+		$layout = new PanelLayout( [
+			'content' => $content,
+			'padded' => true,
+			'framed' => true,
+			'expanded' => false,
+			'classes' => [ 'ext-campaignevents-eventpage-header' ],
+		] );
+
+		$layout->setAttributes( [
+			// Set the lang/dir explicitly, otherwise it will use that of the site/page language,
+			// not that of the interface.
+			'dir' => $language->getDir(),
+			'lang' => $language->getHtmlCode()
+		] );
+
+		return $layout;
+	}
+
+	/**
+	 * @param ITextFormatter $msgFormatter
+	 * @param int $userStatus
+	 * @return Tag|null
+	 */
+	private function getParticipantNoticeRow( ITextFormatter $msgFormatter, int $userStatus ): ?Tag {
+		if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ) {
+			return null;
+		}
+		$msg = $this->participantIsPublic
+			? 'campaignevents-eventpage-header-registered-publicly'
+			: 'campaignevents-eventpage-header-registered-privately';
+		return new MessageWidget( [
+			'type' => 'success',
+			'label' => $msgFormatter->format( MessageValue::new( $msg ) ),
+			'inline' => true,
+			'classes' => [ 'ext-campaignevents-eventpage-participant-notice' ]
+		] );
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param ITextFormatter $msgFormatter
+	 * @param Language $language
+	 * @param UserIdentity $viewingUser
+	 * @param int $userStatus
+	 * @param OutputPage $out
+	 * @return Tag
+	 */
+	private function getEventInfoHeaderRow(
 		ExistingEventRegistration $registration,
 		ITextFormatter $msgFormatter,
 		Language $language,
@@ -429,22 +510,9 @@ class EventPageDecorator {
 
 		$items[] = $btnContainer;
 
-		$layout = new PanelLayout( [
-			'content' => $items,
-			'padded' => true,
-			'framed' => true,
-			'expanded' => false,
-			'classes' => [ 'ext-campaignevents-eventpage-header' ],
-		] );
-
-		$layout->setAttributes( [
-			// Set the lang/dir explicitly, otherwise it will use that of the site/page language,
-			// not that of the interface.
-			'dir' => $language->getDir(),
-			'lang' => $language->getHtmlCode()
-		] );
-
-		return $layout;
+		return ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-eventpage-header-eventinfo' ] )
+			->appendContent( ...$items );
 	}
 
 	/**
@@ -785,7 +853,7 @@ class EventPageDecorator {
 				'disabled' => true,
 				'label' => $msgFormatter->format( MessageValue::new( $msgKey ) ),
 				'classes' => [
-					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
+					'ext-campaignevents-eventpage-action-element'
 				],
 			] );
 		}
@@ -795,8 +863,7 @@ class EventPageDecorator {
 				'flags' => [ 'progressive' ],
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-manage' ) ),
 				'classes' => [
-					'ext-campaignevents-eventpage-manage-btn',
-					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
+					'ext-campaignevents-eventpage-action-element',
 				],
 				'href' => SpecialPage::getTitleFor(
 					SpecialEventDetails::PAGE_NAME,
@@ -811,26 +878,24 @@ class EventPageDecorator {
 				(string)$eventID
 			)->getLocalURL();
 
+			// Note that this will be replaced with a ButtonMenuSelectWidget in JS.
 			return new HorizontalLayout( [
 				'items' => [
-					new MessageWidget( [
-						'type' => 'success',
-						'label' => $msgFormatter->format(
-							MessageValue::new( 'campaignevents-eventpage-header-attending' )
-						),
-						'inline' => true,
+					new ButtonWidget( [
+						'flags' => [ 'progressive' ],
+						'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-edit' ) ),
+						'href' => SpecialPage::getTitleFor( SpecialRegisterForEvent::PAGE_NAME, (string)$eventID )
+							->getLocalURL(),
 					] ),
 					new ButtonWidget( [
 						'flags' => [ 'destructive' ],
-						'icon' => 'trash',
-						'framed' => false,
+						'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-cancel' ) ),
 						'href' => $unregisterURL,
-						'classes' => [ 'ext-campaignevents-event-unregister-btn' ],
 					] )
 				],
 				'classes' => [
-					'ext-campaignevents-eventpage-unregister-layout',
-					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
+					'ext-campaignevents-eventpage-manage-registration-layout',
+					'ext-campaignevents-eventpage-action-element'
 				]
 			] );
 		}
@@ -841,7 +906,7 @@ class EventPageDecorator {
 				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-btn-register' ) ),
 				'classes' => [
 					'ext-campaignevents-eventpage-register-btn',
-					'ext-campaignevents-eventpage-cloneable-element-for-dialog'
+					'ext-campaignevents-eventpage-action-element'
 				],
 				'href' => SpecialPage::getTitleFor( SpecialRegisterForEvent::PAGE_NAME, (string)$eventID )
 					->getLocalURL(),
@@ -874,12 +939,14 @@ class EventPageDecorator {
 				return self::USER_STATUS_ORGANIZER;
 			}
 
-			if ( $this->participantsStore->userParticipatesInEvent( $event->getID(), $centralUser, true ) ) {
+			$participantRecord = $this->participantsStore->getEventParticipant( $event->getID(), $centralUser, true );
+			if ( $participantRecord ) {
 				$checkUnregistrationAllowedVal = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event );
 				switch ( $checkUnregistrationAllowedVal ) {
 					case UnregisterParticipantCommand::CANNOT_UNREGISTER_DELETED:
 						throw new UnexpectedValueException( "Registration should not be deleted at this point." );
 					case UnregisterParticipantCommand::CAN_UNREGISTER:
+						$this->participantIsPublic = !$participantRecord->isPrivateRegistration();
 						return self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER;
 					default:
 						throw new UnexpectedValueException( "Unexpected value $checkUnregistrationAllowedVal" );

@@ -3,6 +3,17 @@
 
 .ext-campaignevents-eventpage-header {
 	.flex-display();
+	flex-direction: column;
+
+	& > .ext-campaignevents-eventpage-participant-notice {
+		// TODO Use `gap` when allowed.
+		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
+		margin-bottom: 0.5em;
+	}
+}
+
+.ext-campaignevents-eventpage-header-eventinfo {
+	.flex-display();
 	.flex-wrap();
 	align-items: flex-start;
 
@@ -23,7 +34,7 @@
 }
 
 @media ( min-width: ( @width-breakpoint-desktop + 1 ) ) {
-	.ext-campaignevents-eventpage-header > *:not( :last-child ) {
+	.ext-campaignevents-eventpage-header-eventinfo > *:not( :last-child ) {
 		// This is equivalent to using gap: 1em.
 		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
 		margin-right: 1em;
@@ -34,7 +45,7 @@
 	// Change flex direction on small screens so that there's one item per line.
 	// @media queries seem to be the only way to achieve that aside from
 	// display:grid (which is still not supported well enough).
-	.ext-campaignevents-eventpage-header {
+	.ext-campaignevents-eventpage-header-eventinfo {
 		flex-direction: column;
 		align-items: flex-start;
 
@@ -69,7 +80,7 @@
 	margin-left: 0;
 }
 
-.ext-campaignevents-eventpage-unregister-layout.oo-ui-horizontalLayout > .oo-ui-widget {
+.ext-campaignevents-eventpage-manage-registration-layout.oo-ui-horizontalLayout > .oo-ui-widget {
 	/* Remove margin set by HorizontalLayout */
 	margin-bottom: 0;
 }
