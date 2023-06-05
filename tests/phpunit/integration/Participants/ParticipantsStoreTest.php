@@ -77,24 +77,39 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @param int $eventID
 	 * @param int $userID
 	 * @param bool $private
-	 * @param bool $expected
+	 * @param int $expected
 	 * @covers ::addParticipantToEvent
 	 * @dataProvider provideParticipantsToStore
 	 */
-	public function testAddParticipantToEvent( int $eventID, int $userID, bool $private, bool $expected ) {
+	public function testAddParticipantToEvent( int $eventID, int $userID, bool $private, int $expected ) {
 		$user = new CentralUser( $userID );
 		$this->assertSame( $expected, $this->getStore()->addParticipantToEvent( $eventID, $user, $private ) );
 	}
 
 	public static function provideParticipantsToStore(): Generator {
-		yield 'First participant' => [ 10, 102, false , true ];
-		yield 'Add participant to existing event' => [ 1, 103, false , true ];
-		yield 'Add private participant to existing event' => [ 3, 107, true , true ];
-		yield 'Changing a participant from private to public' => [ 1, 106, false, true ];
-		yield 'Changing a participant from public to private' => [ 1, 101, true, true ];
-		yield 'Setting to private a participant that is already private' => [ 1, 106, true, false ];
-		yield 'Already an active participant' => [ 1, 101, false , false ];
-		yield 'Had unregistered' => [ 1, 102, false, true ];
+		yield 'First participant' => [ 10, 102, false , ParticipantsStore::MODIFIED_REGISTRATION ];
+		yield 'Add participant to existing event' => [ 1, 103, false, ParticipantsStore::MODIFIED_REGISTRATION ];
+		yield 'Add private participant to existing event' => [ 3, 107, true, ParticipantsStore::MODIFIED_REGISTRATION ];
+		yield 'Changing a participant from private to public' => [
+			1,
+			106,
+			false,
+			ParticipantsStore::MODIFIED_VISIBILITY
+		];
+		yield 'Changing a participant from public to private' => [
+			1,
+			101,
+			true,
+			ParticipantsStore::MODIFIED_VISIBILITY
+		];
+		yield 'Setting to private a participant that is already private' => [
+			1,
+			106,
+			true,
+			ParticipantsStore::MODIFIED_NOTHING
+		];
+		yield 'Already an active participant' => [ 1, 101, false, ParticipantsStore::MODIFIED_NOTHING ];
+		yield 'Had unregistered' => [ 1, 102, false, ParticipantsStore::MODIFIED_REGISTRATION ];
 	}
 
 	/**

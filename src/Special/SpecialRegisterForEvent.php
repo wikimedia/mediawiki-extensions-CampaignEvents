@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
@@ -30,6 +31,24 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private $policyMessagesLookup;
 	/** @var EventQuestionsRegistry */
 	private $eventQuestionsRegistry;
+
+	/**
+	 * @var Participant|null If the user is already registered, this is their Participant record, containing
+	 * info about their current state.
+	 */
+	private ?Participant $curParticipantData;
+	/**
+	 * @var bool|null Whether the operation resulted in any data about the participant being modified.
+	 */
+	private ?bool $modifiedData;
+	/** @var bool|null Whether the user is editing their registration, as opposed to registering for the first time */
+	private ?bool $isEdit;
+
+	/**
+	 * @var bool Temporary flag to control whether participant questions are shown. This will be removed together
+	 * with the feature flag.
+	 */
+	private bool $showParticipantQuestions;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -56,27 +75,31 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		$this->getOutput()->addModuleStyles( [
 			'ext.campaignEvents.specialregisterforevent.styles',
 			'oojs-ui.styles.icons-location',
-			'oojs-ui.styles.icons-moderation'
-
+			'oojs-ui.styles.icons-moderation',
 		] );
+		$this->showParticipantQuestions = $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	protected function checkRegistrationPrecondition() {
+	protected function getForm(): HTMLForm {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
-			$isParticipating = $this->participantsStore->userParticipatesInEvent(
+			$this->curParticipantData = $this->participantsStore->getEventParticipant(
 				$this->event->getID(),
 				$centralUser,
 				true
 			);
 		} catch ( UserNotGlobalException $_ ) {
-			$isParticipating = false;
+			$this->curParticipantData = null;
 		}
 
-		return $isParticipating ? 'campaignevents-register-already-participant' : true;
+		$this->isEdit = $this->curParticipantData || $this->getRequest()->wasPosted();
+		if ( $this->isEdit ) {
+			$this->showParticipantQuestions = false;
+		}
+		return parent::getForm();
 	}
 
 	/**
@@ -96,22 +119,18 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 		// Use a fake "top" section to force ordering
 		$fields = [
-			'Confirm' => [
-				'type' => 'info',
-				'default' => $this->msg( 'campaignevents-register-confirmation-text' )->text(),
-				'section' => 'top',
-			],
 			'IsPrivate' => [
 				'type' => 'radio',
 				'options' => [
 					$this->msg( 'campaignevents-register-confirmation-radio-public' ) . $publicIcon => false,
 					$this->msg( 'campaignevents-register-confirmation-radio-private' ) . $privateIcon => true
 				],
+				'default' => $this->curParticipantData ? $this->curParticipantData->isPrivateRegistration() : false,
 				'section' => 'top',
 			]
 		];
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+		if ( $this->showParticipantQuestions ) {
 			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm();
 			$questionFields = array_map(
 				static fn ( $fieldDescriptor ) =>
@@ -137,9 +156,15 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	protected function alterForm( HTMLForm $form ): void {
-		$form->setWrapperLegendMsg( 'campaignevents-register-confirmation-top' );
-		$form->setSubmitTextMsg( 'campaignevents-register-confirmation-btn' );
-		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+		if ( $this->isEdit ) {
+			$form->setWrapperLegendMsg( 'campaignevents-register-edit-legend' );
+			$form->setSubmitTextMsg( 'campaignevents-register-edit-btn' );
+		} else {
+			$form->setWrapperLegendMsg( 'campaignevents-register-confirmation-top' );
+			$form->setSubmitTextMsg( 'campaignevents-register-confirmation-btn' );
+		}
+
+		if ( $this->showParticipantQuestions ) {
 			$questionsHeader = Html::rawElement(
 				'div',
 				[ 'class' => 'ext-campaignevents-participant-questions-info-subtitle' ],
@@ -153,21 +178,40 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
-		return Status::wrap( $this->registerParticipantCommand->registerIfAllowed(
+		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
 			new MWAuthorityProxy( $this->getAuthority() ),
-			$data['wpIsPrivate'] ?
+			$data['IsPrivate'] ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC
-		) );
+		);
+		$this->modifiedData = $status->getValue();
+		return Status::wrap( $status );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function onSuccess(): void {
-		$this->getOutput()->addHTML( Html::successBox(
-			$this->msg( 'campaignevents-register-success' )->escaped()
+		if ( $this->modifiedData === false ) {
+			// No change to the previous data, don't show a success message.
+			// TODO We might want to explicitly inform the user that nothing changed.
+			return;
+		}
+		// Note: we can't use isEdit here because that's computed before this method is called,
+		// and it'll always be true at this point.
+		$successMsg = $this->curParticipantData
+			? 'campaignevents-register-success-edit'
+			: 'campaignevents-register-success';
+		$this->getOutput()->prependHTML( Html::successBox(
+			$this->msg( $successMsg )->escaped()
 		) );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getShowAlways(): bool {
+		return true;
 	}
 }

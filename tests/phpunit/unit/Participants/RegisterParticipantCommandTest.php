@@ -191,14 +191,14 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC;
 			$modifiedStore = $this->createMock( ParticipantsStore::class );
-			$modifiedStore->method( 'addParticipantToEvent' )->willReturn( true );
+			$modifiedStore->method( 'addParticipantToEvent' )->willReturn( ParticipantsStore::MODIFIED_REGISTRATION );
 			$modifiedStore->expects( $this->once() )
 				->method( 'addParticipantToEvent' )
 				->with( $this->anything(), $this->anything(), $isPrivate );
 			yield "Modified, $testDescription" => [ $modifiedStore, $isPrivate, true ];
 
 			$notModifiedStore = $this->createMock( ParticipantsStore::class );
-			$notModifiedStore->method( 'addParticipantToEvent' )->willReturn( false );
+			$notModifiedStore->method( 'addParticipantToEvent' )->willReturn( ParticipantsStore::MODIFIED_NOTHING );
 			$notModifiedStore->expects( $this->once() )
 				->method( 'addParticipantToEvent' )
 				->with( $this->anything(), $this->anything(), $isPrivate );

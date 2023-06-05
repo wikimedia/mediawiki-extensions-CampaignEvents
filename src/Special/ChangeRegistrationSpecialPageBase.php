@@ -70,12 +70,14 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	}
 
 	/**
-	 * Checks whether the user can perform this action, i.e.
-	 *  - Whether they are not registered, if they want to register
-	 *  - Whether they are registered, if they want to unregister
+	 * Checks whether the user can perform this action. In particular, this is used to show an error if the user
+	 * is not registered for this event and they try to cancel their registration.
+	 *
 	 * @return string|true Error message key, or true if OK.
 	 */
-	abstract protected function checkRegistrationPrecondition();
+	protected function checkRegistrationPrecondition() {
+		return true;
+	}
 
 	/**
 	 * @inheritDoc

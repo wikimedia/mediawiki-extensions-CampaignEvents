@@ -160,8 +160,10 @@ class RegisterParticipantCommand {
 
 		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser, $isPrivate );
 
-		if ( $modified ) {
-			$this->userNotifier->notifyRegistration( $performer, $registration );
+		if ( $modified !== ParticipantsStore::MODIFIED_NOTHING ) {
+			if ( $modified === ParticipantsStore::MODIFIED_REGISTRATION ) {
+				$this->userNotifier->notifyRegistration( $performer, $registration );
+			}
 			$this->trackingToolEventWatcher->onParticipantAdded(
 				$registration,
 				$centralUser,
@@ -176,6 +178,6 @@ class RegisterParticipantCommand {
 			}
 		}
 
-		return StatusValue::newGood( $modified );
+		return StatusValue::newGood( $modified !== ParticipantsStore::MODIFIED_NOTHING );
 	}
 }

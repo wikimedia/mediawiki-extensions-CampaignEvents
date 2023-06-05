@@ -15,6 +15,16 @@ use Wikimedia\Assert\Assert;
 class ParticipantsStore implements IDBAccessObject {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
 
+	/**
+	 * Constants used to describe whether a registration attempt changed anything:
+	 *  - NOTHING: no change to the existing information
+	 *  - VISIBILITY: only the visibility was changed, but the participant was already registered
+	 *  - REGISTRATION: the participant was not registred, and they now are
+	 */
+	public const MODIFIED_NOTHING = 0;
+	public const MODIFIED_VISIBILITY = 1;
+	public const MODIFIED_REGISTRATION = 2;
+
 	/** @var CampaignsDatabaseHelper */
 	private $dbHelper;
 	/** @var CampaignsCentralUserLookup */
@@ -33,10 +43,9 @@ class ParticipantsStore implements IDBAccessObject {
 	 * @param int $eventID
 	 * @param CentralUser $participant
 	 * @param bool $private
-	 * @return bool True if the participant was just added or their visibility was changed, false if they were
-	 * already listed with the same visibility.
+	 * @return int One of the self::MODIFIED_* constants.
 	 */
-	public function addParticipantToEvent( int $eventID, CentralUser $participant, bool $private ): bool {
+	public function addParticipantToEvent( int $eventID, CentralUser $participant, bool $private ): int {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$dbw->startAtomic();
@@ -62,7 +71,7 @@ class ParticipantsStore implements IDBAccessObject {
 					'cep_unregistered_at' => null
 				]
 			);
-			$modified = true;
+			$modified = self::MODIFIED_REGISTRATION;
 		} elseif ( $previousRow->cep_unregistered_at !== null ) {
 			// User was registered, but then cancelled their registration. Update the visibility, reinstate the
 			// registration, and reset the registration time.
@@ -75,7 +84,7 @@ class ParticipantsStore implements IDBAccessObject {
 				],
 				[ 'cep_id' => $previousRow->cep_id ]
 			);
-			$modified = true;
+			$modified = self::MODIFIED_REGISTRATION;
 		} elseif ( (bool)$previousRow->cep_private !== $private ) {
 			// User is already an active participant, but is changing their visibility. Update that, but not the
 			// registration time.
@@ -84,10 +93,10 @@ class ParticipantsStore implements IDBAccessObject {
 				[ 'cep_private' => $private ],
 				[ 'cep_id' => $previousRow->cep_id ]
 			);
-			$modified = true;
+			$modified = self::MODIFIED_VISIBILITY;
 		} else {
 			// User is already an active participant with the desired visibility, nothing to do.
-			$modified = false;
+			$modified = self::MODIFIED_NOTHING;
 		}
 
 		$dbw->endAtomic();
