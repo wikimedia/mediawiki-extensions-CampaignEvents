@@ -142,7 +142,7 @@
 	 * Handles the user registering for this event or editing their registration.
 	 */
 	function handleRegistrationOrEdit() {
-		if ( mw.user.isAnon() ) {
+		if ( mw.user.isAnon() || mw.user.isTemp() ) {
 			redirectToLogin();
 			return;
 		}

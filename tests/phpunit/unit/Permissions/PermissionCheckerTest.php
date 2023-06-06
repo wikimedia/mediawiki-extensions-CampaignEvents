@@ -15,6 +15,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Permissions\Authority;
+use MediaWiki\Permissions\UltimateAuthority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
@@ -43,6 +45,14 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$this->createMock( CampaignsCentralUserLookup::class ),
 			$permissionsLookup ?? $this->createMock( IPermissionsLookup::class )
 		);
+	}
+
+	/**
+	 * @todo This should probably be in core's MockAuthorityTrait
+	 * @return Authority
+	 */
+	private function mockTempUltimateAuthority(): Authority {
+		return new UltimateAuthority( new UserIdentityValue( 42, '*Unregistered1' ), true );
 	}
 
 	/**
@@ -76,6 +86,10 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			false,
 			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
 		];
+		yield 'Temp user' => [
+			false,
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+		];
 		yield 'Blocked' => [ false, $this->mockSitewideBlockedRegisteredUltimateAuthority() ];
 	}
 
@@ -95,11 +109,11 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 
 	public function provideCanOrganizeEvents(): Generator {
 		$loggedOutPermLookup = $this->createMock( IPermissionsLookup::class );
-		$loggedOutPermLookup->expects( $this->atLeastOnce() )->method( 'userIsRegistered' )->willReturn( false );
-		yield 'Logged out' => [ false, $loggedOutPermLookup ];
+		$loggedOutPermLookup->expects( $this->atLeastOnce() )->method( 'userIsNamed' )->willReturn( false );
+		yield 'Not named' => [ false, $loggedOutPermLookup ];
 
 		$lacksRightPermLookup = $this->createMock( IPermissionsLookup::class );
-		$lacksRightPermLookup->method( 'userIsRegistered' )->willReturn( true );
+		$lacksRightPermLookup->method( 'userIsNamed' )->willReturn( true );
 		$lacksRightPermLookup->expects( $this->atLeastOnce() )
 			->method( 'userHasRight' )
 			->with( $this->anything(), PermissionChecker::ORGANIZE_EVENTS_RIGHT )
@@ -107,13 +121,13 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		yield 'Lacking right' => [ false, $lacksRightPermLookup ];
 
 		$blockedPermLookup = $this->createMock( IPermissionsLookup::class );
-		$blockedPermLookup->method( 'userIsRegistered' )->willReturn( true );
+		$blockedPermLookup->method( 'userIsNamed' )->willReturn( true );
 		$blockedPermLookup->method( 'userHasRight' )->willReturn( true );
 		$blockedPermLookup->expects( $this->atLeastOnce() )->method( 'userIsSitewideBlocked' )->willReturn( true );
 		yield 'Blocked' => [ false, $blockedPermLookup ];
 
 		$authorizedPermLookup = $this->createMock( IPermissionsLookup::class );
-		$authorizedPermLookup->method( 'userIsRegistered' )->willReturn( true );
+		$authorizedPermLookup->method( 'userIsNamed' )->willReturn( true );
 		$authorizedPermLookup->method( 'userHasRight' )->willReturn( true );
 		$authorizedPermLookup->method( 'userIsSitewideBlocked' )->willReturn( false );
 		yield 'Authorized' => [ true, $authorizedPermLookup ];
@@ -208,6 +222,10 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			false,
 			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
 		];
+		yield 'Temp user' => [
+			false,
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+		];
 		yield 'Lacks right to enable registrations' => [
 			false,
 			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
@@ -225,7 +243,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$authorizedOrgStore->method( 'isEventOrganizer' )->willReturn( true );
 
 		$cannotBeOrganizerPermLookup = $this->createMock( IPermissionsLookup::class );
-		$cannotBeOrganizerPermLookup->method( 'userIsRegistered' )->willReturn( true );
+		$cannotBeOrganizerPermLookup->method( 'userIsNamed' )->willReturn( true );
 		$cannotBeOrganizerPermLookup
 			->method( 'userHasRight' )
 			->with( $this->anything(), 'campaignevents-organize-events' )
@@ -233,7 +251,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$cannotBeOrganizerPermLookup->method( 'userIsSitewideBlocked' )->willReturn( false );
 
 		$canBeOrganizerPermLookup = $this->createMock( IPermissionsLookup::class );
-		$canBeOrganizerPermLookup->method( 'userIsRegistered' )->willReturn( true );
+		$canBeOrganizerPermLookup->method( 'userIsNamed' )->willReturn( true );
 		$canBeOrganizerPermLookup
 			->method( 'userHasRight' )
 			->with( $this->anything(), 'campaignevents-organize-events' )
@@ -276,6 +294,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param OrganizersStore|null $organizersStore
 	 * @param IPermissionsLookup|null $permissionsLookup
 	 * @covers ::userCanDeleteRegistration
+	 * @covers ::userCanDeleteRegistrations
 	 * Reuses the data provider for convenience.
 	 * @dataProvider provideCanDeleteRegistration
 	 */
@@ -293,9 +312,13 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function provideCanDeleteRegistration(): Generator {
-		yield 'Logged out but allowed' => [
-			true,
+		yield 'Logged out' => [
+			false,
 			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+		];
+		yield 'Temp user' => [
+			false,
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
 		];
 		yield 'Lacks right to enable registrations' => [
 			false,
@@ -314,7 +337,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$permissionsLookup = $this->createMock( IPermissionsLookup::class );
 		$permissionsLookup->method( 'userHasRight' )->willReturn( true );
 		$permissionsLookup->method( 'userIsSitewideBlocked' )->willReturn( false );
-		$permissionsLookup->method( 'userIsRegistered' )->willReturn( true );
+		$permissionsLookup->method( 'userIsNamed' )->willReturn( true );
 		yield 'Can edit the registration' => [
 			true,
 			new MWAuthorityProxy(
@@ -361,6 +384,10 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		yield 'Logged out' => [
 			false,
 			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+		];
+		yield 'Temp user' => [
+			false,
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
 		];
 		yield 'Blocked' => [ false, $this->mockSitewideBlockedRegisteredUltimateAuthority() ];
 	}

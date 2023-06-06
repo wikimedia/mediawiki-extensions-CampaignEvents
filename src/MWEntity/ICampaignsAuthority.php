@@ -24,7 +24,7 @@ interface ICampaignsAuthority {
 	/**
 	 * @return bool
 	 */
-	public function isRegistered(): bool;
+	public function isNamed(): bool;
 
 	/**
 	 * @return string

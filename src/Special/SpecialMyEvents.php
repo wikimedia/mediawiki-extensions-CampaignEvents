@@ -38,7 +38,7 @@ class SpecialMyEvents extends SpecialPage {
 	 * @inheritDoc
 	 */
 	public function execute( $subPage ): void {
-		$this->requireLogin();
+		$this->requireNamedUser();
 		$this->setHeaders();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 		$this->getOutput()->addModuleStyles( [ 'ext.campaignEvents.specialmyevents.styles' ] );

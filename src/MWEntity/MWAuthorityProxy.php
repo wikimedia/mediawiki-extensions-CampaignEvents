@@ -35,8 +35,8 @@ class MWAuthorityProxy implements ICampaignsAuthority {
 	/**
 	 * @inheritDoc
 	 */
-	public function isRegistered(): bool {
-		return $this->authority->isRegistered();
+	public function isNamed(): bool {
+		return $this->authority->isNamed();
 	}
 
 	/**

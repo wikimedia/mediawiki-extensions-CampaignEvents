@@ -47,13 +47,13 @@ class PermissionChecker {
 	}
 
 	/**
-	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring login, unblock,
-	 * and rights.
+	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring named account,
+	 * unblock, and rights.
 	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
 	public function userCanEnableRegistrations( ICampaignsAuthority $performer ): bool {
-		return $performer->isRegistered()
+		return $performer->isNamed()
 			&& $performer->hasRight( self::ENABLE_REGISTRATIONS_RIGHT )
 			&& !$performer->isSitewideBlocked();
 	}
@@ -86,7 +86,7 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanOrganizeEvents( string $username ): bool {
-		return $this->permissionsLookup->userIsRegistered( $username ) &&
+		return $this->permissionsLookup->userIsNamed( $username ) &&
 			$this->permissionsLookup->userHasRight( $username, self::ORGANIZE_EVENTS_RIGHT ) &&
 			!$this->permissionsLookup->userIsSitewideBlocked( $username );
 	}
@@ -126,28 +126,30 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanDeleteRegistrations( ICampaignsAuthority $performer ): bool {
-		return $performer->hasRight( 'campaignevents-delete-registration' ) &&
+		return $performer->isNamed() &&
+			$performer->hasRight( 'campaignevents-delete-registration' ) &&
 			!$performer->isSitewideBlocked();
 	}
 
 	/**
-	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring login and unblock.
+	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring named account
+	 * and unblock.
 	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
 	public function userCanRegisterForEvents( ICampaignsAuthority $performer ): bool {
 		// TODO Do we need another user right for this?
-		return $performer->isRegistered() && !$performer->isSitewideBlocked();
+		return $performer->isNamed() && !$performer->isSitewideBlocked();
 	}
 
 	/**
-	 * NOTE: This should be kept in sync with the special page, which has its own way of requiring login.
+	 * NOTE: This should be kept in sync with the special page, which has its own way of requiring a named account.
 	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
 	public function userCanUnregisterForEvents( ICampaignsAuthority $performer ): bool {
 		// Note that blocked users can cancel their own registration, see T322380.
-		return $performer->isRegistered();
+		return $performer->isNamed();
 	}
 
 	/**

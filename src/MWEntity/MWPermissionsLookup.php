@@ -48,8 +48,8 @@ class MWPermissionsLookup implements IPermissionsLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function userIsRegistered( string $username ): bool {
-		return $this->getUser( $username )->isRegistered();
+	public function userIsNamed( string $username ): bool {
+		return $this->getUser( $username )->isNamed();
 	}
 
 	/**
