@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -135,7 +136,8 @@ class EventDetailsParticipantsModule {
 			$otherParticipants,
 			$canRemoveParticipants,
 			$language,
-			$viewingUser
+			$viewingUser,
+			$msgFormatter
 		);
 
 		$out->addJsConfigVars( [
@@ -274,6 +276,7 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
+	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getParticipantsContainer(
@@ -281,7 +284,8 @@ class EventDetailsParticipantsModule {
 		array $otherParticipants,
 		bool $canRemoveParticipants,
 		Language $language,
-		UserIdentity $viewingUser
+		UserIdentity $viewingUser,
+		ITextFormatter $msgFormatter
 	): Tag {
 		$participantsContainer = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-users-container' ] );
@@ -294,7 +298,8 @@ class EventDetailsParticipantsModule {
 			$otherParticipants,
 			$canRemoveParticipants,
 			$language,
-			$viewingUser
+			$viewingUser,
+			$msgFormatter
 		);
 
 		$participantsContainer->appendContent( $participantRows );
@@ -308,6 +313,7 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
+	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getParticipantRows(
@@ -315,7 +321,8 @@ class EventDetailsParticipantsModule {
 		array $otherParticipants,
 		bool $canRemoveParticipants,
 		Language $language,
-		UserIdentity $viewingUser
+		UserIdentity $viewingUser,
+		ITextFormatter $msgFormatter
 	): Tag {
 		$participantRows = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
@@ -326,14 +333,15 @@ class EventDetailsParticipantsModule {
 					$curUserParticipant,
 					$canRemoveParticipants,
 					$language,
-					$viewingUser
+					$viewingUser,
+					$msgFormatter
 				)
 			);
 		}
 
 		foreach ( $otherParticipants as $participant ) {
 			$participantRows->appendContent(
-				$this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser )
+				$this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser, $msgFormatter )
 			);
 		}
 		return $participantRows;
@@ -344,15 +352,17 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
+	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getCurUserParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
 		Language $language,
-		UserIdentity $viewingUser
+		UserIdentity $viewingUser,
+		ITextFormatter $msgFormatter
 	): Tag {
-		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser );
+		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser, $msgFormatter );
 		$row->addClasses( [ 'ext-campaignevents-details-current-user-row' ] );
 		return $row;
 	}
@@ -362,13 +372,15 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
+	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
 		Language $language,
-		UserIdentity $viewingUser
+		UserIdentity $viewingUser,
+		ITextFormatter $msgFormatter
 	): Tag {
 		$elements = [];
 		if ( $canRemoveParticipants ) {
@@ -388,8 +400,19 @@ class EventDetailsParticipantsModule {
 			->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
 
 		if ( $participant->isPrivateRegistration() ) {
+			try {
+				$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
+			} catch ( CentralUserNotFoundException | UserNotGlobalException $_ ) {
+				// Hack: use an invalid username to force unspecified gender
+				$userName = '@';
+			}
+			$labelText = $msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-private-participant-label', [ $userName ] )
+			);
 			$elements[] = new IconWidget( [
 				'icon' => 'lock',
+				'label' => $labelText,
+				'title' => $labelText,
 				'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
 			] );
 		}

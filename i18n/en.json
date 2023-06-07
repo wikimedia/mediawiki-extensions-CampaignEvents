@@ -219,6 +219,7 @@
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Are you sure you want to remove the selected {{PLURAL:$1|participant|participants}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Remove",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Cancel",
+	"campaignevents-event-details-private-participant-label": "{{GENDER:$1|Participant registered}} privately",
 	"campaignevents-event-details-no-event-id-provided": "Provide an event ID",
 	"campaignevents-event-details-no-participants-state": "Usernames of participants will appear here when they register",
 	"campaignevents-event-details-event-deleted": "This event registration was deleted.",
