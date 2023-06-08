@@ -12,6 +12,8 @@
 	"right-campaignevents-delete-registration": "Brisanje prijav na dogodke",
 	"action-campaignevents-organize-events": "organiziranje dogodkov",
 	"right-campaignevents-organize-events": "Organiziranje dogodkov",
+	"action-campaignevents-email-participants": "pošiljanje e-pošte udeležencem dogodka",
+	"right-campaignevents-email-participants": "Pošiljanje e-pošte udeležencem dogodka",
 	"specialpages-group-campaignevents": "Dogodki",
 	"campaignevents-error-invalid-id": "ID dogodka mora biti pozitivno celo število.",
 	"campaignevents-error-empty-title": "Vnesite naslov strani dogodka",

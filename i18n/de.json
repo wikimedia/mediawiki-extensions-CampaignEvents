@@ -12,6 +12,8 @@
 	"right-campaignevents-delete-registration": "Veranstaltungsanmeldungen löschen",
 	"action-campaignevents-organize-events": "Veranstaltungen zu organisieren",
 	"right-campaignevents-organize-events": "Veranstaltungen organisieren",
+	"action-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer",
+	"right-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer",
 	"specialpages-group-campaignevents": "Ereignisse",
 	"campaignevents-error-invalid-id": "Die Veranstaltungs-ID muss eine positive ganze Zahl sein.",
 	"campaignevents-error-empty-title": "Gib einen Titel für die Veranstaltungsseite ein.",

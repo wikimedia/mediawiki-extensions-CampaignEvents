@@ -258,7 +258,7 @@
 	"campaignevents-register-confirmation-radio-private": "private registration toggle state label, used in the registration popup on [[Special:RegisterForEvent]]",
 	"campaignevents-register-confirmation-radio-public": "public registration toggle state label, used in the registration popup [[Special:RegisterForEvent]]",
 	"echo-category-title-campaign-events-notification-registration": "{{doc-echo-category-title|tooltip=echo-pref-tooltip-campaign-events-notification-registration}}\nNotification sent when a user registers for an event.",
-	"campaignevents-eventpage-dialog-private-registration-label": "accessibility label and title added to lock icon on [[Special:EventDetails]] to indicate participant has registered privately. Parameters:\n* $1 - Username, for GENDER",
+	"campaignevents-eventpage-dialog-private-registration-label": "Accessibility label and title added to lock icon on [[Special:EventDetails]] to indicate participant has registered privately. Parameters:\n* $1 - Username, for GENDER",
 	"echo-pref-tooltip-campaign-events-notification-registration": "{{doc-echo-pref-tooltip|title=echo-category-title-campaign-events-notification-registration}}\nNotification sent when a user registers for an event using the [[:mw:Help:Extension:CampaignEvents/Registration|Event Registration tool]].",
 	"campaignevents-notification-registration-subject": "Subject of the email notification sent to confirm that the user registered for an event. Parameters:\n* $1 - Name of the event",
 	"campaignevents-notification-registration-header-intro": "Introduction of the email notification sent to confirm that the user registered for an event. Parameters:\n* $1 - Name of the event",

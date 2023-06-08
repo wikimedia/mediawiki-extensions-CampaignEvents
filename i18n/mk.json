@@ -13,6 +13,8 @@
 	"right-campaignevents-delete-registration": "Бришење на пријави за настани",
 	"action-campaignevents-organize-events": "приредување на настани",
 	"right-campaignevents-organize-events": "Приредувње на настани",
+	"action-campaignevents-email-participants": "испраќање е-пошта на учесници на настани",
+	"right-campaignevents-email-participants": "Испраќање е-пошта на учесници на настани",
 	"specialpages-group-campaignevents": "Настани",
 	"campaignevents-error-invalid-id": "Назнаката на настанот мора да биде позитивен цел број.",
 	"campaignevents-error-empty-title": "Насловот на страницата за настанот не може да стои празна.",

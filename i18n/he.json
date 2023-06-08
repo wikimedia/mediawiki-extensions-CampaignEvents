@@ -12,6 +12,8 @@
 	"right-campaignevents-delete-registration": "מחיקת הרשמות לאירועים",
 	"action-campaignevents-organize-events": "לארגן אירועים",
 	"right-campaignevents-organize-events": "ארגון אירועים",
+	"action-campaignevents-email-participants": "לשלוח דואר אלקטרוני למשתתפי האירוע",
+	"right-campaignevents-email-participants": "שליחת דואר אלקטרוני למשתתפי האירוע",
 	"specialpages-group-campaignevents": "אירועים",
 	"campaignevents-error-invalid-id": "מזהה האירוע חייב להיות מספר שלם חיובי.",
 	"campaignevents-error-empty-title": "נא להזין כותרת דף לאירוע.",
