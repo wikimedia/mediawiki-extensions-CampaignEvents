@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"AProdromou",
 			"Dogogos123"
 		]
 	},
+	"right-campaignevents-email-participants": "Στείλτε email στους συμμετέχοντες στην εκδήλωση",
 	"campaignevents-tracking-tool-http-error": "Παρουσιάστηκε άγνωστο σφάλμα κατά την προσπάθεια επεξεργασίας εργαλείων παρακολούθησης.",
 	"campaignevents-tracking-tool-wikiedu-config-error": "Δεν είναι δυνατή η σύνδεση στο $1 λόγω προβλήματος διαμόρφωσης ιστότοπου.",
 	"campaignevents-tracking-tool-wikiedu-course-not-found-error": "Το μάθημα $1 δεν υπάρχει στο $2 .",
