@@ -8,6 +8,7 @@
 	"right-campaignevents-enable-registration": "이벤트 등록 활성화",
 	"action-campaignevents-delete-registration": "이벤트 등록을 삭제할",
 	"right-campaignevents-delete-registration": "이벤트 등록 삭제",
+	"right-campaignevents-email-participants": "이메일 이벤트 참가자",
 	"campaignevents-error-invalid-id": "이벤트 ID는 양의 정수여야 합니다.",
 	"campaignevents-error-empty-title": "이벤트 문서 제목을 입력하십시오.",
 	"campaignevents-error-invalid-title": "이벤트 페이지 제목이 유효하지 않습니다: $1.",

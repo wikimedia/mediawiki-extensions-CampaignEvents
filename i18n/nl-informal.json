@@ -4,8 +4,7 @@
 			"McDutchie"
 		]
 	},
-	"campaignevents-edit-no-organizers": "Je moet ten minste één organisator kiezen.",
-	"campaignevents-edit-removed-creator": "Je mag de maker van het evenement niet verwijderen.",
+	"campaignevents-edit-removed-creator": "Je mag $1 niet verwijderen omdat deze gebruik{{GENDER:$1||st}}er de maker van het evenement is",
 	"campaignevents-edit-no-creator": "Je moet jezelf toevoegen als organisator wanneer je evenementregistratie voor het eerst inschakelt.",
 	"campaignevents-edit-too-many-organizers": "Je kunt niet meer dan $1 organisator{{PLURAL:$1||en}} toevoegen."
 }

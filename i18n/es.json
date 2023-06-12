@@ -16,6 +16,8 @@
 	"right-campaignevents-delete-registration": "Eliminar inscripciones de los eventos",
 	"action-campaignevents-organize-events": "organizar eventos",
 	"right-campaignevents-organize-events": "Organizar eventos",
+	"action-campaignevents-email-participants": "enviar correos electrónicos a los participantes del evento",
+	"right-campaignevents-email-participants": "Enviar correos electrónicos a los participantes del evento",
 	"specialpages-group-campaignevents": "Eventos",
 	"campaignevents-error-invalid-id": "El código identificador del evento tiene que ser un número entero positivo.",
 	"campaignevents-error-empty-title": "Introduce un título para el evento.",

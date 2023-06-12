@@ -12,6 +12,8 @@
 	"right-campaignevents-delete-registration": "Deler inscriptiones de eventos",
 	"action-campaignevents-organize-events": "organisator eventos",
 	"right-campaignevents-organize-events": "Organisar eventos",
+	"action-campaignevents-email-participants": "inviar e-mail al participantes de un evento",
+	"right-campaignevents-email-participants": "Inviar e-mail al participantes de un evento",
 	"specialpages-group-campaignevents": "Eventos",
 	"campaignevents-error-invalid-id": "Le ID del evento debe esser un numero integre positive.",
 	"campaignevents-error-empty-title": "Insere un titulo pro le pagina del evento.",

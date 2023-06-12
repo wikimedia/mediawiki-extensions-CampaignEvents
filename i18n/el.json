@@ -2,9 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"AProdromou",
-			"Dogogos123"
+			"Dogogos123",
+			"Pablothecat"
 		]
 	},
+	"action-campaignevents-email-participants": "Στείλτε email στους συμμετέχοντες στην εκδήλωση",
 	"right-campaignevents-email-participants": "Στείλτε email στους συμμετέχοντες στην εκδήλωση",
 	"campaignevents-tracking-tool-http-error": "Παρουσιάστηκε άγνωστο σφάλμα κατά την προσπάθεια επεξεργασίας εργαλείων παρακολούθησης.",
 	"campaignevents-tracking-tool-wikiedu-config-error": "Δεν είναι δυνατή η σύνδεση στο $1 λόγω προβλήματος διαμόρφωσης ιστότοπου.",

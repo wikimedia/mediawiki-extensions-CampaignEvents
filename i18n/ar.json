@@ -3,6 +3,7 @@
 		"authors": [
 			"Alshamiri1",
 			"Amire80",
+			"Asma",
 			"Bachounda",
 			"Hhaboh162002",
 			"Meno25",
@@ -19,6 +20,8 @@
 	"right-campaignevents-delete-registration": "حذف تسجيلات في الفعالية",
 	"action-campaignevents-organize-events": "تنظيم الفعاليات",
 	"right-campaignevents-organize-events": "تنظيم الفعاليات",
+	"action-campaignevents-email-participants": "المشاركون في الحدث بالبريد الإلكتروني",
+	"right-campaignevents-email-participants": "إرسال بريد إلكتروني للمشاركين في الحدث",
 	"specialpages-group-campaignevents": "الفعاليات",
 	"campaignevents-error-invalid-id": "معرِّف الفعالية يجب أن يكون عددًا صحيحًا موجبًا.",
 	"campaignevents-error-empty-title": "أدخل عنوان صفحة الفعالية.",
