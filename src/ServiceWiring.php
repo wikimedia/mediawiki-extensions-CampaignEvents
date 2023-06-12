@@ -232,7 +232,8 @@ return [
 			$services->get( UserLinker::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
-			$services->get( EventTimeFormatter::SERVICE_NAME )
+			$services->get( EventTimeFormatter::SERVICE_NAME ),
+			$services->get( TrackingToolRegistry::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

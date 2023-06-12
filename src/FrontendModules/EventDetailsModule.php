@@ -7,17 +7,21 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use Html;
 use Language;
 use Linker;
+use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\HtmlSnippet;
 use OOUI\IconWidget;
+use OOUI\MessageWidget;
 use OOUI\PanelLayout;
 use OOUI\Tag;
 use OutputPage;
@@ -35,6 +39,7 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-editing-core',
 		'oojs-ui.styles.icons-alerts',
 		'oojs-ui.styles.icons-user',
+		'oojs-ui.styles.icons-media',
 	];
 
 	/** @var OrganizersStore */
@@ -45,6 +50,8 @@ class EventDetailsModule {
 	private UserLinker $userLinker;
 	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
+	/** @var TrackingToolRegistry */
+	private TrackingToolRegistry $trackingToolRegistry;
 
 	/** @var ExistingEventRegistration */
 	private ExistingEventRegistration $registration;
@@ -59,6 +66,7 @@ class EventDetailsModule {
 	 * @param PageURLResolver $pageURLResolver
 	 * @param UserLinker $userLinker
 	 * @param EventTimeFormatter $eventTimeFormatter
+	 * @param TrackingToolRegistry $trackingToolRegistry
 	 * @param ExistingEventRegistration $registration
 	 * @param Language $language
 	 */
@@ -68,6 +76,7 @@ class EventDetailsModule {
 		PageURLResolver $pageURLResolver,
 		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
+		TrackingToolRegistry $trackingToolRegistry,
 		ExistingEventRegistration $registration,
 		Language $language
 	) {
@@ -75,6 +84,7 @@ class EventDetailsModule {
 		$this->pageURLResolver = $pageURLResolver;
 		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
+		$this->trackingToolRegistry = $trackingToolRegistry;
 
 		$this->registration = $registration;
 		$this->language = $language;
@@ -210,6 +220,11 @@ class EventDetailsModule {
 			$organizersCount,
 			$needToRegisterMsg
 		);
+
+		$trackingToolsSection = $this->getTrackingToolsSection();
+		if ( $trackingToolsSection ) {
+			$items[] = $trackingToolsSection;
+		}
 
 		$chatURL = $this->registration->getChatURL();
 		if ( $chatURL ) {
@@ -364,6 +379,83 @@ class EventDetailsModule {
 			'mapPin',
 			$items,
 			'campaignevents-event-details-location-header'
+		);
+	}
+
+	/**
+	 * @return Tag|null
+	 */
+	private function getTrackingToolsSection(): ?Tag {
+		$trackingTools = $this->registration->getTrackingTools();
+
+		if ( !$trackingTools ) {
+			return null;
+		}
+
+		if ( count( $trackingTools ) > 1 ) {
+			throw new LogicException( "Not expecting more than one tool" );
+		}
+		$toolAssoc = $trackingTools[0];
+		$toolUserInfo = $this->trackingToolRegistry->getUserInfo(
+			$toolAssoc->getToolID(),
+			$toolAssoc->getToolEventID()
+		);
+		if ( $toolUserInfo['user-id'] !== 'wikimedia-pe-dashboard' ) {
+			throw new LogicException( "Only the P&E Dashboard should be available as a tool for now" );
+		}
+
+		$syncStatus = $toolAssoc->getSyncStatus();
+		$lastSyncTS = $toolAssoc->getLastSyncTimestamp();
+		if ( $syncStatus === TrackingToolAssociation::SYNC_STATUS_UNKNOWN || $lastSyncTS === null ) {
+			// Maybe the tool is being added right now. But this shouldn't even happen, as
+			// UNKNOWN should currently only be used as a temporary placeholder within a single
+			// request. At any rate, skip.
+			return null;
+		}
+
+		$sectionItems = [];
+
+		$courseURL = $toolUserInfo['tool-event-url'];
+		$sectionItems[] = new HtmlSnippet( Linker::makeExternalLink( $courseURL, $courseURL ) );
+
+		if ( $syncStatus === TrackingToolAssociation::SYNC_STATUS_SYNCED ) {
+			$msgType = 'success';
+			$msgStatus = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-tracking-tool-p&e-dashboard-synced' )
+			);
+			$msgLastSync = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-tracking-tool-last-update' )
+					->dateTimeParams( $lastSyncTS )
+					->dateParams( $lastSyncTS )
+					->timeParams( $lastSyncTS )
+			);
+
+		} else {
+			$msgType = 'error';
+			$msgStatus = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-tracking-tool-p&e-dashboard-desynced' )
+			);
+			$msgLastSync = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-tracking-tool-last-successful-update' )
+					->dateTimeParams( $lastSyncTS )
+					->dateParams( $lastSyncTS )
+					->timeParams( $lastSyncTS )
+			);
+		}
+		$syncDetailsRawParagraph = ( new Tag( 'p' ) )
+			->addClasses( [ 'ext-campaignevents-event-details-tracking-tool-sync-details' ] )
+			->appendContent( htmlspecialchars( $msgLastSync ) );
+		$sectionItems[] = new MessageWidget( [
+			'type' => $msgType,
+			'label' => new HtmlSnippet( htmlspecialchars( $msgStatus ) . $syncDetailsRawParagraph ),
+			'classes' => [ 'ext-campaignevents-event-details-tracking-tool-sync' ],
+			'inline' => true,
+		] );
+
+		return $this->makeSection(
+			'chart',
+			$sectionItems,
+			$toolUserInfo['display-name-msg']
 		);
 	}
 

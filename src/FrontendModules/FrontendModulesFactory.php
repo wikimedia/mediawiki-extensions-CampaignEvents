@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use Wikimedia\Message\IMessageFormatterFactory;
 
 class FrontendModulesFactory {
@@ -34,6 +35,8 @@ class FrontendModulesFactory {
 	private PermissionChecker $permissionChecker;
 	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
+	/** @var TrackingToolRegistry */
+	private TrackingToolRegistry $trackingToolRegistry;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -44,6 +47,7 @@ class FrontendModulesFactory {
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param PermissionChecker $permissionChecker
 	 * @param EventTimeFormatter $eventTimeFormatter
+	 * @param TrackingToolRegistry $trackingToolRegistry
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -53,7 +57,8 @@ class FrontendModulesFactory {
 		UserLinker $userLinker,
 		CampaignsCentralUserLookup $centralUserLookup,
 		PermissionChecker $permissionChecker,
-		EventTimeFormatter $eventTimeFormatter
+		EventTimeFormatter $eventTimeFormatter,
+		TrackingToolRegistry $trackingToolRegistry
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -63,6 +68,7 @@ class FrontendModulesFactory {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->permissionChecker = $permissionChecker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
+		$this->trackingToolRegistry = $trackingToolRegistry;
 	}
 
 	/**
@@ -80,6 +86,7 @@ class FrontendModulesFactory {
 			$this->pageURLResolver,
 			$this->userLinker,
 			$this->eventTimeFormatter,
+			$this->trackingToolRegistry,
 			$registration,
 			$language
 		);

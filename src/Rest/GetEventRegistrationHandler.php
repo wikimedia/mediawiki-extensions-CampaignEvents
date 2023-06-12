@@ -49,9 +49,11 @@ class GetEventRegistrationHandler extends SimpleHandler {
 
 		$trackingToolsData = [];
 		foreach ( $registration->getTrackingTools() as $toolAssoc ) {
+			$toolEventID = $toolAssoc->getToolEventID();
+			$toolUserInfo = $this->trackingToolRegistry->getUserInfo( $toolAssoc->getToolID(), $toolEventID );
 			$trackingToolsData[] = [
-				'tool_id' => $this->trackingToolRegistry->dbIDtoUserID( $toolAssoc->getToolID() ),
-				'tool_event_id' => $toolAssoc->getToolEventID(),
+				'tool_id' => $toolUserInfo['user-id'],
+				'tool_event_id' => $toolEventID,
 			];
 		}
 

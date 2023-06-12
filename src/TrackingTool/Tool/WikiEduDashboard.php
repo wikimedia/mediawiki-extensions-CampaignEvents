@@ -349,4 +349,11 @@ class WikiEduDashboard extends TrackingTool {
 		}
 		return StatusValue::newFatal( $msg, ...$params );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function buildToolEventURL( string $baseURL, string $toolEventID ): string {
+		return rtrim( $baseURL, '/' ) . '/courses/' . $toolEventID;
+	}
 }

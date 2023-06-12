@@ -189,4 +189,14 @@ abstract class TrackingTool {
 		?array $participants,
 		bool $invertSelection
 	): StatusValue;
+
+	/**
+	 * Given the ID of an event in this tool, return the URL of the resource corresponding to the event on the tool
+	 * itself.
+	 *
+	 * @param string $baseURL
+	 * @param string $toolEventID
+	 * @return string
+	 */
+	abstract public static function buildToolEventURL( string $baseURL, string $toolEventID ): string;
 }
