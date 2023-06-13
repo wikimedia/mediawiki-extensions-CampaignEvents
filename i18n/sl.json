@@ -203,7 +203,7 @@
 	"campaignevents-event-details-dates-label": "Začetni in končni čas",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Udeleženec je odstranjen|Udeleženca sta odstranjena|Udeleženci so odstranjeni}}",
 	"campaignevents-event-details-remove-all-participant-notification": "Vsi udeleženci so odstranjeni",
-	"campaignevents-unregister-participants-permission-denied": "Nimate dovoljenja za odstranitev udeležencev",
+	"campaignevents-unregister-participants-permission-denied": "Odstranjevanje udeležencev vam ni dovoljeno",
 	"campaignevents-unregister-participants-registration-deleted": "Iz tega dogodka ne morete odstraniti udeležencev, ker je bil izbrisan.",
 	"campaignevents-event-details-remove-participant-notification-error": "Pri poskusu odstranitve {{PLURAL:$1|udeleženca|udeležencev}} je prišlo do napake",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter »user_ids« mora biti matrika identifikatorjev uporabnikov ali prazen (za odstranitev vseh uporabnikov)",

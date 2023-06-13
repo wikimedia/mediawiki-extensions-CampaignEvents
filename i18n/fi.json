@@ -1,9 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kyykaarme"
+			"Kyykaarme",
+			"MITO",
+			"Pyscowicz"
 		]
 	},
+	"campaignevents-eventslist-delete-dialog-cancel": "Peruuta",
 	"campaignevents-eventpage-btn-registration-closed": "Rekisteröityminen on päättynyt",
-	"campaignevents-eventpage-btn-event-ended": "Tapahtuma on päättynyt"
+	"campaignevents-eventpage-btn-event-ended": "Tapahtuma on päättynyt",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Kyllä",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Peruuta"
 }
