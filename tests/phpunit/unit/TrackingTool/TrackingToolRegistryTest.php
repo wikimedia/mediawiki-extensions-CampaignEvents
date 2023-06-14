@@ -214,4 +214,27 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 		$this->expectException( ToolNotFoundException::class );
 		$this->getRegistry( true )->getUserInfo( $nonExistingDBID, 'foo' );
 	}
+
+	/**
+	 * @covers ::getToolEventIDFromURL
+	 */
+	public function testGetToolEventIDFromURL() {
+		$toolEventID = 'Institution/Coursename';
+		$this->assertSame(
+			$toolEventID,
+			$this->getRegistry()->getToolEventIDFromURL(
+				'wikimedia-pe-dashboard',
+				"https://dashboard-testing.wikiedu.org/courses/$toolEventID"
+			)
+		);
+	}
+
+	/**
+	 * @covers ::getToolEventIDFromURL
+	 */
+	public function testGetToolEventIDFromURL__notFound() {
+		$nonExistingUserID = "Ceci n'est pas un user-id";
+		$this->expectException( ToolNotFoundException::class );
+		$this->getRegistry( true )->getToolEventIDFromURL( $nonExistingUserID, 'foo' );
+	}
 }

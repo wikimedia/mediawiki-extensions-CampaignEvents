@@ -35,6 +35,7 @@
 	"campaignevents-error-invalid-end": "The event end time is invalid.",
 	"campaignevents-error-start-after-end": "Enter an end date that comes after the start date.",
 	"campaignevents-error-invalid-type": "Enter a valid event type.",
+	"campaignevents-error-invalid-dashboard-url": "The provided Dashboard URL is not in the correct format. The URL should be in this format: $1/[Institution Name]/[Program Title]. For example: $1/Example_Organization/Example_Event_Title.",
 	"campaignevents-error-no-meeting-type": "Choose at least one event meeting type.",
 	"campaignevents-error-invalid-meeting-url": "Enter a valid event meeting URL.",
 	"campaignevents-error-meeting-url-not-online": "The meeting URL must not be specified if the event is not online.",
@@ -57,6 +58,11 @@
 	"campaignevents-edit-field-organizers-placeholder": "Add username",
 	"campaignevents-edit-field-organizers-creator-title": "This is the creator of the event, other organizers can not remove this user.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "This {{GENDER:$1|user}} is not allowed to organize events.",
+
+	"campaignevents-edit-field-tracking-tools": "Programs & Events Dashboard link",
+	"campaignevents-edit-field-tracking-tools-help": "Usernames of publicly registered participants would be automatically sent to the Dashboard. This tool helps you monitor their contributions and measure the impact of your campaign event. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Learn more]",
+	"campaignevents-edit-field-tracking-tools-placeholder": "Enter the Programs & Events Dashboard URL for your event",
+
 	"campaignevents-edit-field-meeting-type": "Event meeting type",
 	"campaignevents-edit-field-type-online": "Online event",
 	"campaignevents-edit-field-type-in-person": "In-person event",
