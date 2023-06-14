@@ -23,17 +23,6 @@
 			this.publicRegistration = true;
 			this.isEdit = false;
 		}
-		this.$visibilityHelpText = $( '<span>' );
-		this.$visibilityHelpText.addClass( 'ext-campaignevents-registration-visibility-helptext' );
-		this.icon = new OO.ui.IconWidget( {
-			icon: this.publicRegistration ? 'globe' : 'lock'
-		} );
-		this.publicHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-public' ).parseDom();
-		this.privateHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-private' ).parseDom();
-		this.toggleSwitch = new OO.ui.ToggleSwitchWidget( {
-			value: this.publicRegistration
-		} );
-
 	}
 
 	OO.inheritClass( ParticipantRegistrationDialog, OO.ui.ProcessDialog );
@@ -73,18 +62,71 @@
 	ParticipantRegistrationDialog.prototype.initialize = function () {
 		ParticipantRegistrationDialog.super.prototype.initialize.apply( this );
 
+		var visibilityFields = this.getVisibilityFields();
+		var fieldset = new OO.ui.FieldsetLayout( {
+			items: visibilityFields
+		} );
+		var formPanel = new OO.ui.PanelLayout( {
+			content: [ fieldset ],
+			padded: true,
+			scrollable: false,
+			expanded: false
+		} );
+		this.$body.append( formPanel.$element );
+
+		if ( this.policyMsg !== null ) {
+			var policyPanel = new OO.ui.PanelLayout( {
+				$content: this.policyMsg,
+				padded: true,
+				scrollable: false,
+				expanded: false,
+				classes: [ 'ext-campaignevents-policy-message-panel' ]
+			} );
+			this.$body.append( policyPanel.$element );
+		}
+	};
+
+	/**
+	 * Returns an array of fields for the registration visibility input.
+	 *
+	 * @return {OO.ui.FieldLayout[]}
+	 */
+	ParticipantRegistrationDialog.prototype.getVisibilityFields = function () {
+		var publicIcon = new OO.ui.IconWidget( { icon: 'globe' } ),
+			privateIcon = new OO.ui.IconWidget( { icon: 'lock' } );
+		var $publicHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-public' ).parseDom(),
+			$privateHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-private' ).parseDom();
+		var $publicLabel = $( '<div>' )
+			.addClass( 'ext-campaignevents-registration-visibility-label' )
+			.append( publicIcon.$element, $( '<span>' ).append( $publicHelpText ) );
+		var $privateLabel = $( '<div>' )
+			.addClass( 'ext-campaignevents-registration-visibility-label' )
+			.append( privateIcon.$element, $( '<span>' ).append( $privateHelpText ) );
+
+		var visibilityHelpLabel = new OO.ui.LabelWidget( {
+				label: this.publicRegistration ? $publicLabel : $privateLabel
+			} ),
+			visibilityHelpField = new OO.ui.FieldLayout( visibilityHelpLabel );
+
+		var visibilityToggle = new OO.ui.ToggleSwitchWidget( {
+			value: this.publicRegistration
+		} );
 		var self = this;
-		self.toggleSwitch.on( 'change',
-			function ( value ) {
-				self.publicRegistration = value;
-				self.$visibilityHelpText.empty()
-					.append( self.getHelpText( self.publicRegistration ) );
-				self.icon.setIcon( self.publicRegistration ? 'globe' : 'lock' );
-				self.updateSize();
+		visibilityToggle.on( 'change', function ( value ) {
+			self.publicRegistration = value;
+			visibilityHelpLabel.setLabel( self.publicRegistration ? $publicLabel : $privateLabel );
+			self.updateSize();
+		} );
+
+		var visibilityField = new OO.ui.FieldLayout(
+			visibilityToggle,
+			{
+				classes: [ 'ext-campaignevents-registration-visibility-toggle-field' ],
+				label: mw.msg( 'campaignevents-registration-confirmation-toggle-public' )
 			}
 		);
-		self.$visibilityHelpText.append( self.getHelpText( self.publicRegistration ) );
-		self.$body.append( self.getDialogContent( self.publicRegistration ) );
+
+		return [ visibilityField, visibilityHelpField ];
 	};
 
 	ParticipantRegistrationDialog.prototype.getActionProcess = function ( action ) {
@@ -100,53 +142,6 @@
 			.next( function () {
 				this.close();
 			}, this );
-	};
-
-	ParticipantRegistrationDialog.prototype.getHelpText = function () {
-		return this.publicRegistration ?
-			this.publicHelpText :
-			this.privateHelpText;
-	};
-
-	ParticipantRegistrationDialog.prototype.getDialogContent = function () {
-		var self = this,
-			icon = this.icon,
-			fieldLayout = new OO.ui.FieldLayout( this.toggleSwitch,
-				{
-					classes: [ 'ext-campaignevents-registration-visibility-toggle-field' ],
-					label: mw.msg( 'campaignevents-registration-confirmation-toggle-public' )
-				} ),
-			regTypePanel = new OO.ui.PanelLayout(
-				{
-					content: [ icon, self.$visibilityHelpText ],
-					padded: false,
-					scrollable: false,
-					expanded: false,
-					classes: [ 'ext-campaignevents-registration-type-panel' ]
-				} ),
-			fieldset = new OO.ui.FieldsetLayout( {
-				items: [ fieldLayout ],
-				classes: [ 'ext-campaignevents-registration-ack-fieldset' ]
-			} );
-		var fieldsPanel = new OO.ui.PanelLayout( {
-			content: [ fieldset, regTypePanel ],
-			padded: true,
-			scrollable: false,
-			expanded: false
-		} );
-		var $elements = $();
-		$elements = $elements.add( fieldsPanel.$element );
-		if ( this.policyMsg !== null ) {
-			var policyPanel = new OO.ui.PanelLayout( {
-				$content: this.policyMsg,
-				padded: true,
-				scrollable: false,
-				expanded: false,
-				classes: [ 'ext-campaignevents-policy-message-panel' ]
-			} );
-			$elements = $elements.add( policyPanel.$element );
-		}
-		return $elements;
 	};
 
 	module.exports = ParticipantRegistrationDialog;

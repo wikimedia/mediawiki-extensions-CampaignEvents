@@ -8,24 +8,22 @@
 		font-size: 85%;
 	}
 
-	.ext-campaignevents-registration-ack-fieldset {
-		color: @color-base;
-		font-weight: bold;
+	.ext-campaignevents-registration-visibility-toggle-field {
+		.oo-ui-labelElement-label {
+			color: @color-base;
+			font-weight: bold;
+		}
 
-		.ext-campaignevents-registration-visibility-toggle-field.oo-ui-labelElement.oo-ui-fieldLayout-align-left > .oo-ui-fieldLayout-body > .oo-ui-fieldLayout-header {
+		&.oo-ui-fieldLayout > div.oo-ui-fieldLayout-body > span.oo-ui-fieldLayout-header {
 			flex-grow: 0.1;
 		}
 	}
 
-	.ext-campaignevents-registration-type-panel {
-		margin: 1em;
+	.ext-campaignevents-registration-visibility-label {
+		margin: 0 1em;
 		display: flex;
-		flex-direction: row;
-
-		.ext-campaignevents-registration-visibility-helptext {
-			color: @color-subtle;
-			margin-top: 0.2em;
-		}
+		color: @color-subtle;
+		font-weight: normal;
 
 		.oo-ui-iconElement {
 			margin: 0 1em;
