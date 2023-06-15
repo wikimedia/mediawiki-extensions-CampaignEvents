@@ -97,4 +97,11 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	public function doesWrites(): bool {
 		return true;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getMessagePrefix() {
+		return '';
+	}
 }

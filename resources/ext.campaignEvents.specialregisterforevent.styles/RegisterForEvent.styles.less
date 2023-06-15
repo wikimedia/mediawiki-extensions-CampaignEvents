@@ -1,3 +1,28 @@
+@import 'mediawiki.skin.variables.less';
+
 span.ext-campaignevents-registerforevent-icon {
 	margin-left: 1em;
+}
+
+.ext-campaignevents-participant-questions-info-subtitle {
+	color: @color-subtle;
+}
+
+.oo-ui-fieldLayout.ext-campaignevents-participant-question-affiliate-name {
+	margin-left: 1em;
+	margin-top: 0.5em;
+	width: 30em;
+}
+
+.mw-htmlform .oo-ui-fieldsetLayout-group {
+	// Remove borders from sections
+	.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
+		border: 0;
+		padding: 0;
+	}
+
+	// Hide the 'top' section, it's only there to force the ordering
+	.oo-ui-panelLayout:first-of-type .oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
+		display: none;
+	}
 }

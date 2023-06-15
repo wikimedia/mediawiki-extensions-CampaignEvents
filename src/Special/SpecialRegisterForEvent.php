@@ -13,11 +13,14 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use OOUI\IconWidget;
 use Status;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	public const PAGE_NAME = 'RegisterForEvent';
+
+	private const QUESTIONS_SECTION_NAME = 'campaignevents-register-questions-label-title';
 
 	/** @var RegisterParticipantCommand */
 	private $registerParticipantCommand;
@@ -25,6 +28,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private $participantsStore;
 	/** @var PolicyMessagesLookup */
 	private $policyMessagesLookup;
+	/** @var EventQuestionsRegistry */
+	private $eventQuestionsRegistry;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -32,18 +37,21 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @param RegisterParticipantCommand $registerParticipantCommand
 	 * @param ParticipantsStore $participantsStore
 	 * @param PolicyMessagesLookup $policyMessagesLookup
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
 		RegisterParticipantCommand $registerParticipantCommand,
 		ParticipantsStore $participantsStore,
-		PolicyMessagesLookup $policyMessagesLookup
+		PolicyMessagesLookup $policyMessagesLookup,
+		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
 		parent::__construct( self::PAGE_NAME, $eventLookup, $centralUserLookup );
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->participantsStore = $participantsStore;
 		$this->policyMessagesLookup = $policyMessagesLookup;
+		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->getOutput()->enableOOUI();
 		$this->getOutput()->addModuleStyles( [
 			'ext.campaignEvents.specialregisterforevent.styles',
@@ -86,10 +94,12 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				'classes' => [ 'ext-campaignevents-registerforevent-icon' ]
 			] );
 
+		// Use a fake "top" section to force ordering
 		$fields = [
 			'Confirm' => [
 				'type' => 'info',
 				'default' => $this->msg( 'campaignevents-register-confirmation-text' )->text(),
+				'section' => 'top',
 			],
 			'IsPrivate' => [
 				'type' => 'radio',
@@ -97,9 +107,20 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 					$this->msg( 'campaignevents-register-confirmation-radio-public' ) . $publicIcon => false,
 					$this->msg( 'campaignevents-register-confirmation-radio-private' ) . $privateIcon => true
 				],
-				'name' => 'IsPrivate'
-			],
+				'section' => 'top',
+			]
 		];
+
+		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm();
+			$questionFields = array_map(
+				static fn ( $fieldDescriptor ) =>
+					[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
+				$questionFields
+			);
+			$fields += $questionFields;
+		}
+
 		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistration();
 		if ( $policyMsg !== null ) {
 			$fields['Policy'] = [
@@ -107,8 +128,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				'raw' => true,
 				'default' => $this->msg( $policyMsg )->parse(),
 			];
-
 		}
+
 		return $fields;
 	}
 
@@ -118,6 +139,14 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	protected function alterForm( HTMLForm $form ): void {
 		$form->setWrapperLegendMsg( 'campaignevents-register-confirmation-top' );
 		$form->setSubmitTextMsg( 'campaignevents-register-confirmation-btn' );
+		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			$questionsHeader = Html::rawElement(
+				'div',
+				[ 'class' => 'ext-campaignevents-participant-questions-info-subtitle' ],
+				$this->msg( 'campaignevents-register-questions-label-subtitle' )->parseAsBlock()
+			);
+			$form->addHeaderHtml( $questionsHeader, self::QUESTIONS_SECTION_NAME );
+		}
 	}
 
 	/**
@@ -127,7 +156,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		return Status::wrap( $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
 			new MWAuthorityProxy( $this->getAuthority() ),
-			$data['IsPrivate'] ?
+			$data['wpIsPrivate'] ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC
 		) );
