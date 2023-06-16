@@ -114,7 +114,7 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 	) {
 		$this->assertEquals(
 			$expected,
-			$this->getWatcher( $registry, $logger )->onEventCreated( $event, [] )
+			$this->getWatcher( $registry, $logger )->onEventCreated( 1, $event, [] )
 		);
 	}
 
@@ -131,7 +131,7 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 		$toolErrorStatus = StatusValue::newFatal( 'some-error' );
 		$toolWithError = $this->createMock( TrackingTool::class );
 		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'addToEvent' )
+			->method( 'addToNewEvent' )
 			->willReturn( $toolErrorStatus );
 		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
 		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
@@ -145,7 +145,7 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 
 		$successfulTool = $this->createMock( TrackingTool::class );
 		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'addToEvent' )
+			->method( 'addToNewEvent' )
 			->willReturn( StatusValue::newGood() );
 		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
 		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
@@ -364,11 +364,11 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 
 		$toolAdditionError = StatusValue::newFatal( 'some-error-for-tool-addition' );
 		$toolWithErrorOnAddition = $this->createMock( TrackingTool::class );
-		$toolWithErrorOnAddition->method( 'addToEvent' )->willReturn( $toolAdditionError );
+		$toolWithErrorOnAddition->method( 'addToExistingEvent' )->willReturn( $toolAdditionError );
 
 		$successfulAdditionStatus = StatusValue::newGood();
 		$toolWithSuccessfulAddition = $this->createMock( TrackingTool::class );
-		$toolWithSuccessfulAddition->method( 'addToEvent' )->willReturn( $successfulAdditionStatus );
+		$toolWithSuccessfulAddition->method( 'addToExistingEvent' )->willReturn( $successfulAdditionStatus );
 
 		yield 'Had no tools, adding one, error' => [
 			$getRegistryMock( [ $tool1ID => $toolWithErrorOnAddition ] ),
@@ -445,11 +445,11 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 			->willReturn( [ $tool1DifferentAssoc ] );
 
 		$toolWithSuccessfulRemovalAndErrorOnAddition = clone $toolWithSuccessfulRemoval;
-		$toolWithSuccessfulRemovalAndErrorOnAddition->method( 'addToEvent' )
+		$toolWithSuccessfulRemovalAndErrorOnAddition->method( 'addToExistingEvent' )
 			->willReturn( $toolAdditionError );
 
 		$toolWithSuccessfulRemovalAndAddition = clone $toolWithSuccessfulRemoval;
-		$toolWithSuccessfulRemovalAndAddition->method( 'addToEvent' )
+		$toolWithSuccessfulRemovalAndAddition->method( 'addToExistingEvent' )
 			->willReturn( $successfulAdditionStatus );
 
 		yield 'Same tool, changing event in the tool, cannot remove, cannot add' => [

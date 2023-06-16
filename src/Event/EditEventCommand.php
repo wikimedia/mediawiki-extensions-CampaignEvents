@@ -256,6 +256,7 @@ class EditEventCommand {
 			);
 		} else {
 			$trackingToolStatus = $this->trackingToolEventWatcher->onEventCreated(
+				$eventID,
 				$newVersion,
 				$organizers
 			);

@@ -82,17 +82,41 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::addToEvent
+	 * @covers ::addToNewEvent
 	 * @covers ::makeNewEventRequest
 	 * @covers ::makePostRequest
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideAddTool
 	 */
-	public function testAddToEvent(
+	public function testAddToNewEvent(
 		?MWHttpRequest $request,
 		?string $expectedError
 	) {
-		$actual = $this->getTool( $request )->addToEvent(
+		$actual = $this->getTool( $request )->addToNewEvent(
+			42,
+			$this->createMock( ExistingEventRegistration::class ),
+			[],
+			'something'
+		);
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $actual );
+		} else {
+			$this->assertStatusError( $expectedError, $actual );
+		}
+	}
+
+	/**
+	 * @covers ::addToExistingEvent
+	 * @covers ::makeNewEventRequest
+	 * @covers ::makePostRequest
+	 * @covers ::makeErrorStatus
+	 * @dataProvider provideAddTool
+	 */
+	public function testAddToExistingEvent(
+		?MWHttpRequest $request,
+		?string $expectedError
+	) {
+		$actual = $this->getTool( $request )->addToExistingEvent(
 			$this->createMock( ExistingEventRegistration::class ),
 			[],
 			'something'

@@ -16,7 +16,7 @@ use StatusValue;
  * Subclasses must NOT be instantiated directly, use TrackingToolRegistry instead.
  *
  * There are exactly two methods defined for each action, one that validates the change and one that executes it (like
- * validateToolAddition() and addToEvent()), in a sort of two-phase commit approach. In particular:
+ * validateToolRemoval() and removeFromEvent()), in a sort of two-phase commit approach. In particular:
  *  - validation methods are called before any write action occurs, giving tracking tools a chance to validate the
  *    change before any data is committed. Any anticipated error should be reported at this stage.
  *  - action methods are called when data may have already been written. It is still possible to fail at this stage,
@@ -65,13 +65,27 @@ abstract class TrackingTool {
 	): StatusValue;
 
 	/**
+	 * @param int $eventID
 	 * @param EventRegistration $event That the tool will be added to
 	 * @param CentralUser[] $organizers
 	 * @param string $toolEventID
 	 * @return StatusValue
 	 */
-	abstract public function addToEvent(
+	abstract public function addToNewEvent(
+		int $eventID,
 		EventRegistration $event,
+		array $organizers,
+		string $toolEventID
+	): StatusValue;
+
+	/**
+	 * @param ExistingEventRegistration $event That the tool will be added to
+	 * @param CentralUser[] $organizers
+	 * @param string $toolEventID
+	 * @return StatusValue
+	 */
+	abstract public function addToExistingEvent(
+		ExistingEventRegistration $event,
 		array $organizers,
 		string $toolEventID
 	): StatusValue;

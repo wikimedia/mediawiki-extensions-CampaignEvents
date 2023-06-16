@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool\Tool;
 
-use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -14,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Http\HttpRequestFactory;
 use Message;
 use StatusValue;
+use Wikimedia\Assert\Assert;
 
 /**
  * This class implements the WikiEduDashboard software as a tracking tool.
@@ -58,38 +58,51 @@ class WikiEduDashboard extends TrackingTool {
 		array $organizers,
 		string $toolEventID
 	): StatusValue {
-		return $this->makeNewEventRequest( $event, $organizers, $toolEventID, true );
+		return $this->makeNewEventRequest( null, $organizers, $toolEventID, true );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function addToEvent( EventRegistration $event, array $organizers, string $toolEventID ): StatusValue {
-		return $this->makeNewEventRequest( $event, $organizers, $toolEventID, false );
+	public function addToNewEvent(
+		int $eventID,
+		EventRegistration $event,
+		array $organizers,
+		string $toolEventID
+	): StatusValue {
+		return $this->makeNewEventRequest( $eventID, $organizers, $toolEventID, false );
 	}
 
 	/**
-	 * @param EventRegistration $event
+	 * @inheritDoc
+	 */
+	public function addToExistingEvent(
+		ExistingEventRegistration $event,
+		array $organizers,
+		string $toolEventID
+	): StatusValue {
+		return $this->makeNewEventRequest( $event->getID(), $organizers, $toolEventID, false );
+	}
+
+	/**
+	 * @param int|null $eventID May only be null when $dryRun is true
 	 * @param CentralUser[] $organizers
 	 * @param string $toolEventID
 	 * @param bool $dryRun
 	 * @return StatusValue
 	 */
 	private function makeNewEventRequest(
-		EventRegistration $event,
+		?int $eventID,
 		array $organizers,
 		string $toolEventID,
 		bool $dryRun
 	): StatusValue {
+		Assert::precondition( $eventID !== null || $dryRun, 'Cannot sync tools with events without ID' );
 		$organizerIDsMap = array_fill_keys(
 			array_map( static fn( CentralUser $u ) => $u->getCentralID(), $organizers ),
 			null
 		);
 		$organizerNames = array_values( $this->centralUserLookup->getNames( $organizerIDsMap ) );
-		$eventID = $event->getID();
-		if ( $eventID === null ) {
-			throw new LogicException( "Cannot sync tools with events without ID" );
-		}
 		return $this->makePostRequest(
 			'confirm_event_sync',
 			$eventID,
@@ -235,7 +248,7 @@ class WikiEduDashboard extends TrackingTool {
 
 	/**
 	 * @param string $endpoint
-	 * @param int $eventID
+	 * @param int|null $eventID
 	 * @param string $courseID
 	 * @param bool $dryRun
 	 * @param array $extraParams
@@ -243,20 +256,23 @@ class WikiEduDashboard extends TrackingTool {
 	 */
 	private function makePostRequest(
 		string $endpoint,
-		int $eventID,
+		?int $eventID,
 		string $courseID,
 		bool $dryRun,
 		array $extraParams = []
 	): StatusValue {
+		$postData = $extraParams + [
+			'course_slug' => $courseID,
+			'secret' => $this->apiSecret,
+			'dry_run' => $dryRun,
+		];
+		if ( $eventID !== null ) {
+			$postData['event_id'] = $eventID;
+		}
 		$options = [
 			'method' => 'POST',
 			'timeout' => 5,
-			'postData' => json_encode( $extraParams + [
-				'course_slug' => $courseID,
-				'event_id' => $eventID,
-				'secret' => $this->apiSecret,
-				'dry_run' => $dryRun
-			] )
+			'postData' => json_encode( $postData )
 		];
 		if ( $this->apiProxy ) {
 			$options['proxy'] = $this->apiProxy;

@@ -77,6 +77,7 @@ class TrackingToolEventWatcher {
 	}
 
 	/**
+	 * @param int $eventID ID assigned to the newly created event
 	 * @param EventRegistration $event
 	 * @param CentralUser[] $organizers
 	 * @return StatusValue Good if all tools were synced successfully. Regardless of whether the status is good, the
@@ -85,12 +86,12 @@ class TrackingToolEventWatcher {
 	 *
 	 * @note The caller is responsible for updating the database with the new tools.
 	 */
-	public function onEventCreated( EventRegistration $event, array $organizers ): StatusValue {
+	public function onEventCreated( int $eventID, EventRegistration $event, array $organizers ): StatusValue {
 		$ret = StatusValue::newGood();
 		$newTools = [];
 		foreach ( $event->getTrackingTools() as $toolAssociation ) {
 			$tool = $this->trackingToolRegistry->newFromDBID( $toolAssociation->getToolID() );
-			$status = $tool->addToEvent( $event, $organizers, $toolAssociation->getToolEventID() );
+			$status = $tool->addToNewEvent( $eventID, $event, $organizers, $toolAssociation->getToolEventID() );
 			if ( $status->isGood() ) {
 				$newTools[] = $toolAssociation->asUpdatedWith(
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
@@ -178,7 +179,7 @@ class TrackingToolEventWatcher {
 
 		foreach ( $addedTools as $addedToolAssoc ) {
 			$tool = $this->trackingToolRegistry->newFromDBID( $addedToolAssoc->getToolID() );
-			$status = $tool->addToEvent( $oldVersion, $organizers, $addedToolAssoc->getToolEventID() );
+			$status = $tool->addToExistingEvent( $oldVersion, $organizers, $addedToolAssoc->getToolEventID() );
 			if ( $status->isGood() ) {
 				$newTools[] = $addedToolAssoc->asUpdatedWith(
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
