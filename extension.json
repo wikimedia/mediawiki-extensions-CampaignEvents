@@ -207,6 +207,7 @@
 				"EnableRegistrationDialog.js",
 				"EventDetailsDialog.js",
 				"ParticipantRegistrationDialog.js",
+				"ManageRegistrationWidget.js",
 				{
 					"name": "data.json",
 					"callback": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\ResourceLoaderCallbacks::getEventPageData"
@@ -217,6 +218,7 @@
 				"ParticipantRegistrationDialog.less"
 			],
 			"messages": [
+				"campaignevents-eventpage-btn-manage-registration",
 				"campaignevents-eventpage-dialog-title",
 				"campaignevents-eventpage-dialog-action-close",
 				"campaignevents-eventpage-register-notification",
@@ -233,7 +235,11 @@
 				"campaignevents-registration-confirmation-helptext-private",
 				"campaignevents-registration-confirmation-toggle-private",
 				"campaignevents-registration-confirmation-toggle-public",
-				"campaignevents-eventpage-register-dialog-title"
+				"campaignevents-eventpage-register-dialog-title",
+				"campaignevents-eventpage-btn-edit",
+				"campaignevents-eventpage-btn-cancel",
+				"campaignevents-eventpage-register-dialog-title-edit",
+				"campaignevents-eventpage-register-dialog-save"
 			],
 			"dependencies": [
 				"mediawiki.api",

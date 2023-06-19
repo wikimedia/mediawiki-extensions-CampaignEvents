@@ -5,7 +5,10 @@
 	 * Dialog used to display a form letting users register for an event.
 	 *
 	 * @param {Object} config Configuration options
-	 * @param {string|null} config.policyMsg Policy acknowledgement message
+	 * @cfg {string|null} [policyMsg] Policy acknowledgement message
+	 * @cfg {Object|undefined} [curParticipantData=true] Current registration data for this user, if
+	 *   available. Undefined otherwise. Must have the following keys:
+	 *    - public (boolean): Whether the user is registered publicly
 	 * @extends OO.ui.ProcessDialog
 	 * @constructor
 	 */
@@ -13,7 +16,13 @@
 		ParticipantRegistrationDialog.super.call( this, config );
 		this.$element.addClass( 'ext-campaignevents-registration-dialog' );
 		this.policyMsg = config.policyMsg;
-		this.publicRegistration = true;
+		if ( typeof config.curParticipantData !== 'undefined' ) {
+			this.publicRegistration = config.curParticipantData.public;
+			this.isEdit = true;
+		} else {
+			this.publicRegistration = true;
+			this.isEdit = false;
+		}
 		this.$visibilityHelpText = $( '<span>' );
 		this.$visibilityHelpText.addClass( 'ext-campaignevents-registration-visibility-helptext' );
 		this.icon = new OO.ui.IconWidget( {
@@ -30,18 +39,36 @@
 	OO.inheritClass( ParticipantRegistrationDialog, OO.ui.ProcessDialog );
 
 	ParticipantRegistrationDialog.static.name = 'campaignEventsParticipantRegistrationDialog';
-	ParticipantRegistrationDialog.static.title = mw.msg( 'campaignevents-eventpage-register-dialog-title' );
-	ParticipantRegistrationDialog.static.actions = [
-		{
-			flags: [ 'safe', 'close' ],
-			action: 'cancel'
-		},
-		{
-			flags: [ 'primary', 'progressive' ],
-			label: mw.msg( 'campaignevents-eventpage-register-dialog-register' ),
-			action: 'confirm'
+
+	ParticipantRegistrationDialog.prototype.getSetupProcess = function ( data ) {
+		var title, submitMsg;
+		if ( this.isEdit ) {
+			title = mw.msg( 'campaignevents-eventpage-register-dialog-title-edit' );
+			submitMsg = mw.msg( 'campaignevents-eventpage-register-dialog-save' );
+		} else {
+			title = mw.msg( 'campaignevents-eventpage-register-dialog-title' );
+			submitMsg = mw.msg( 'campaignevents-eventpage-register-dialog-register' );
 		}
-	];
+
+		data = $.extend(
+			{
+				title: title,
+				actions: [
+					{
+						flags: [ 'safe', 'close' ],
+						action: 'cancel'
+					},
+					{
+						flags: [ 'primary', 'progressive' ],
+						label: submitMsg,
+						action: 'confirm'
+					}
+				]
+			},
+			data
+		);
+		return ParticipantRegistrationDialog.super.prototype.getSetupProcess.call( this, data );
+	};
 
 	ParticipantRegistrationDialog.prototype.initialize = function () {
 		ParticipantRegistrationDialog.super.prototype.initialize.apply( this );

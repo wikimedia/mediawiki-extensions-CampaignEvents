@@ -1,15 +1,20 @@
 ( function () {
 	'use strict';
 
+	var ManageRegistrationWidget = require( './ManageRegistrationWidget.js' );
+
 	/**
 	 * Dialog which shows additional information about an event
 	 *
-	 * @param {Object} config Configuration options
+	 * @param {number} eventID
+	 * @param {boolean} userIsParticipant
 	 * @extends OO.ui.ProcessDialog
 	 * @constructor
 	 */
-	function EventDetailsDialog( config ) {
-		EventDetailsDialog.super.call( this, config );
+	function EventDetailsDialog( eventID, userIsParticipant ) {
+		EventDetailsDialog.super.call( this, {} );
+		this.eventID = eventID;
+		this.userIsParticipant = userIsParticipant;
 		this.$element.addClass( 'ext-campaignevents-eventpage-detailsdialog' );
 	}
 
@@ -33,11 +38,39 @@
 			expanded: false
 		} );
 
-		/* eslint-disable no-jquery/no-global-selector */
+		// eslint-disable-next-line no-jquery/no-global-selector
 		this.content.$element.append( $( '#ext-campaignEvents-detailsDialog-content' ) );
 		this.$body.append( this.content.$element );
-		this.$foot.append( $( '.ext-campaignevents-eventpage-cloneable-element-for-dialog' ).clone( true ) );
-		/* eslint-enable no-jquery/no-global-selector */
+	};
+
+	/**
+	 * Populates the dialog footer with the relevant action elements.
+	 */
+	EventDetailsDialog.prototype.populateFooter = function () {
+		if ( this.userIsParticipant ) {
+			// eslint-disable-next-line no-jquery/no-global-selector
+			this.$foot.append( $( '.ext-campaignevents-eventpage-participant-notice' ).clone( true ) );
+			// Use an overlay attached to the dialog, so that it can extend outside of it.
+			var $menuOverlay = $( '<div>' ).appendTo( this.$element );
+			var manageRegistrationMenu = new ManageRegistrationWidget(
+				this.eventID,
+				{
+					$overlay: $menuOverlay
+				}
+			);
+			var that = this;
+			manageRegistrationMenu
+				.on( 'editregistration', function () {
+					that.emit( 'editregistration' );
+				} )
+				.on( 'cancelregistration', function () {
+					that.emit( 'cancelregistration' );
+				} );
+			this.$foot.append( manageRegistrationMenu.$element );
+		} else {
+			// eslint-disable-next-line no-jquery/no-global-selector
+			this.$foot.append( $( '.ext-campaignevents-eventpage-action-element' ).clone( true ) );
+		}
 	};
 
 	EventDetailsDialog.prototype.getBodyHeight = function () {

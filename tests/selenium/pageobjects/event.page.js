@@ -7,9 +7,10 @@ class EventPage extends Page {
 	get registerForEventButton() { return $( '.ext-campaignevents-eventpage-register-btn' ); }
 	get confirmRegistrationButton() { return $( '.ext-campaignevents-registration-dialog .oo-ui-processDialog-actions-primary' ).$( '=Register' ); }
 	get togglePrivate() { return $( '.ext-campaignevents-registration-ack-fieldset .oo-ui-toggleSwitchWidget' ); }
-	get cancelRegistrationButton() { return $( '.ext-campaignevents-event-unregister-btn' ); }
+	get manageRegistrationButton() { return $( '.ext-campaignevents-eventpage-header-buttons .ext-campaignevents-eventpage-manage-registration-menu' ); }
+	get cancelRegistrationButton() { return this.manageRegistrationButton.$( '*=Cancel registration' ); }
 	get confirmCancellation() { return $( '.oo-ui-window-active' ).$( '=Yes' ); }
-	get successfulRegistration() { return $( '.ext-campaignevents-eventpage-unregister-layout' ).$( '//span[normalize-space() = "You are attending!"]' ); }
+	get successfulRegistration() { return $( '.ext-campaignevents-eventpage-participant-notice' ); }
 
 	get eventType() { return $( '.ext-campaignevents-textwithicon-widget-content' ); }
 
@@ -48,6 +49,7 @@ class EventPage extends Page {
 	 *
 	 */
 	async cancelRegistration() {
+		await this.manageRegistrationButton.click();
 		await this.cancelRegistrationButton.click();
 		await this.confirmCancellation.click();
 	}

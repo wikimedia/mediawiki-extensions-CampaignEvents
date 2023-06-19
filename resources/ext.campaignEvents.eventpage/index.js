@@ -7,13 +7,20 @@
 		ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
 		ParticipantRegistrationDialog = require( './ParticipantRegistrationDialog.js' ),
 		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
+		ManageRegistrationWidget = require( './ManageRegistrationWidget.js' ),
 		confirmUnregistrationDialog,
 		participantRegistrationDialog,
 		configData = require( './data.json' ),
+		eventID = mw.config.get( 'wgCampaignEventsEventID' ),
+		userIsParticipant = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ) !== null,
+		userIsRegisteredPublicly = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ),
 		windowManager = new OO.ui.WindowManager(),
-		detailsDialog = new EventDetailsDialog( {} );
+		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
 
 	windowManager.addWindows( [ detailsDialog ] );
+	detailsDialog
+		.on( 'editregistration', handleRegistrationOrEdit )
+		.on( 'cancelregistration', handleCancelRegistration );
 
 	function redirectToLogin() {
 		var currentUri = new mw.Uri();
@@ -61,10 +68,8 @@
 	 * @return {jQuery.Promise}
 	 */
 	function registerUser( privateRegistration ) {
-		var registrationID = mw.config.get( 'wgCampaignEventsEventID' );
-
 		return new mw.Rest().put(
-			'/campaignevents/v0/event_registration/' + registrationID + '/participants/self',
+			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			{
 				token: mw.user.tokens.get( 'csrfToken' ),
 				// eslint-disable-next-line camelcase
@@ -86,9 +91,8 @@
 	 * @return {jQuery.Promise}
 	 */
 	function unregisterUser() {
-		var registrationID = mw.config.get( 'wgCampaignEventsEventID' );
 		return new mw.Rest().delete(
-			'/campaignevents/v0/event_registration/' + registrationID + '/participants/self',
+			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			{ token: mw.user.tokens.get( 'csrfToken' ) }
 		)
 			.done( function () {
@@ -101,9 +105,16 @@
 
 	function getParticipantRegistrationDialog( msg ) {
 		if ( !participantRegistrationDialog ) {
+			var curParticipantData;
+			if ( userIsParticipant ) {
+				curParticipantData = {
+					public: userIsRegisteredPublicly
+				};
+			}
 			participantRegistrationDialog = new ParticipantRegistrationDialog(
 				{
-					policyMsg: msg
+					policyMsg: msg,
+					curParticipantData: curParticipantData
 				} );
 			windowManager.addWindows( [ participantRegistrationDialog ] );
 		}
@@ -127,43 +138,43 @@
 		return confirmUnregistrationDialog;
 	}
 
-	function installRegisterAndUnregisterHandlers() {
-		$( '.ext-campaignevents-eventpage-register-btn' ).on( 'click', function ( e ) {
-			e.preventDefault();
-			var $btn = $( this );
-			if ( mw.user.isAnon() ) {
-				redirectToLogin();
-				return;
+	/**
+	 * Handles the user registering for this event or editing their registration.
+	 */
+	function handleRegistrationOrEdit() {
+		if ( mw.user.isAnon() ) {
+			redirectToLogin();
+			return;
+		}
+		showParticipantRegistrationDialog().then( function ( data ) {
+			if ( data && data.action === 'confirm' ) {
+				registerUser( data.isPrivate )
+					.fail( function () {
+						// Fall back to the special page
+						// TODO We could also show an error here once T269492 and T311423
+						//  are resolved
+						window.location.assign( mw.util.getUrl( 'Special:RegisterForEvent/' + eventID ) );
+					} );
 			}
-			showParticipantRegistrationDialog().then( function ( data ) {
-				if ( data && data.action === 'confirm' ) {
-					registerUser( data.isPrivate )
-						.fail( function () {
-							// Fall back to the special page
-							// TODO We could also show an error here once T269492 and T311423
-							//  are resolved
-							$btn.off( 'click' ).find( 'a' )[ 0 ].click();
-						} );
-				}
-			} );
 		} );
+	}
 
-		$( '.ext-campaignevents-event-unregister-btn' ).on( 'click', function ( e ) {
-			e.preventDefault();
-			var $btn = $( this );
-			var confirmDialog = getConfirmUnregistrationDialog();
-			windowManager.closeWindow( windowManager.getCurrentWindow() );
-			windowManager.openWindow( confirmDialog ).closed.then( function ( data ) {
-				if ( data && data.action === 'confirm' ) {
-					unregisterUser()
-						.fail( function () {
-							// Fall back to the special page
-							// TODO We could also show an error here once T269492 and T311423
-							//  are resolved
-							$btn.off( 'click' ).find( 'a' )[ 0 ].click();
-						} );
-				}
-			} );
+	/**
+	 * Handles the user cancelling their registration for this event.
+	 */
+	function handleCancelRegistration() {
+		var confirmDialog = getConfirmUnregistrationDialog();
+		windowManager.closeWindow( windowManager.getCurrentWindow() );
+		windowManager.openWindow( confirmDialog ).closed.then( function ( data ) {
+			if ( data && data.action === 'confirm' ) {
+				unregisterUser()
+					.fail( function () {
+						// Fall back to the special page
+						// TODO We could also show an error here once T269492 and T311423
+						//  are resolved
+						window.location.assign( mw.util.getUrl( 'Special:CancelEventRegistration/' + eventID ) );
+					} );
+			}
 		} );
 	}
 
@@ -188,12 +199,35 @@
 		} );
 	}
 
+	/**
+	 * Replace the "manage registration" layout of two buttons with a single menu, if present.
+	 */
+	function replaceManageRegistrationLayout() {
+		var $layout = $( '.ext-campaignevents-eventpage-manage-registration-layout' );
+		if ( !$layout.length ) {
+			return;
+		}
+
+		var menu = new ManageRegistrationWidget( eventID, {} );
+
+		menu
+			.on( 'editregistration', handleRegistrationOrEdit )
+			.on( 'cancelregistration', handleCancelRegistration );
+
+		$layout.replaceWith( menu.$element );
+	}
+
 	$( function () {
 		$( document.body ).append( windowManager.$element );
+		replaceManageRegistrationLayout();
+		detailsDialog.populateFooter();
 
 		maybeShowRegistrationSuccessNotification();
-		installRegisterAndUnregisterHandlers();
 
+		$( '.ext-campaignevents-eventpage-register-btn' ).on( 'click', function ( e ) {
+			e.preventDefault();
+			handleRegistrationOrEdit();
+		} );
 		$( '.ext-campaignevents-event-details-btn' ).on( 'click', function ( e ) {
 			e.preventDefault();
 			windowManager.openWindow( detailsDialog );
