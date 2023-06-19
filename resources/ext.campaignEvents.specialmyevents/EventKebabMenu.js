@@ -177,9 +177,11 @@
 					}
 
 					var trackingToolID, trackingToolEventID = null;
-					if ( data.tracking_tools.length > 0 ) {
-						trackingToolID = data.tracking_tools.tool_id;
-						trackingToolEventID = data.tracking_tools.tool_event_id;
+					if ( data.tracking_tools.length === 1 ) {
+						trackingToolID = data.tracking_tools[ 0 ].tool_id;
+						trackingToolEventID = data.tracking_tools[ 0 ].tool_event_id;
+					} else if ( data.tracking_tools.length > 1 ) {
+						throw new Error( 'Expecting at most one tracking tool' );
 					}
 					return new mw.Rest().put(
 						'/campaignevents/v0/event_registration/' + eventID,
