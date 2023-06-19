@@ -206,7 +206,7 @@
 				"ConfirmUnregistrationDialog.js",
 				"EnableRegistrationDialog.js",
 				"EventDetailsDialog.js",
-				"RegistrationConfirmationDialog.js",
+				"ParticipantRegistrationDialog.js",
 				{
 					"name": "data.json",
 					"callback": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\ResourceLoaderCallbacks::getEventPageData"
@@ -214,7 +214,7 @@
 			],
 			"styles": [
 				"EventDetailsDialog.less",
-				"RegistrationConfirmationDialog.less"
+				"ParticipantRegistrationDialog.less"
 			],
 			"messages": [
 				"campaignevents-eventpage-dialog-title",
@@ -224,7 +224,7 @@
 				"campaignevents-eventpage-unregister-confirmation-body",
 				"campaignevents-eventpage-unregister-confirmation-confirm",
 				"campaignevents-eventpage-unregister-confirmation-dismiss",
-				"campaignevents-eventpage-register-confirmation-confirm",
+				"campaignevents-eventpage-register-dialog-register",
 				"campaignevents-eventpage-enable-registration-dialog-title",
 				"campaignevents-eventpage-enable-registration-dialog-body",
 				"campaignevents-eventpage-enable-registration-dialog-dismiss",
@@ -233,7 +233,7 @@
 				"campaignevents-registration-confirmation-helptext-private",
 				"campaignevents-registration-confirmation-toggle-private",
 				"campaignevents-registration-confirmation-toggle-public",
-				"campaignevents-eventpage-register-confirmation-title"
+				"campaignevents-eventpage-register-dialog-title"
 			],
 			"dependencies": [
 				"mediawiki.api",
