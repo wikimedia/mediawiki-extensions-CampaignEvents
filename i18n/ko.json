@@ -58,7 +58,6 @@
 	"campaignevents-register-not-allowed": "이벤트 등록이 허가되지 않았습니다.",
 	"campaignevents-register-event-past": "이 이벤트의 등록 기간은 이미 끝났습니다.",
 	"campaignevents-register-event-not-open": "이 이벤트 등록은 마감되었습니다.",
-	"campaignevents-register-already-participant": "이 이벤트에 이미 등록되어 있습니다.",
 	"campaignevents-unregister-not-allowed": "등록 취소가 허가되지 않았습니다.",
 	"campaignevents-unregister-not-participant": "당신은 이 이벤트에 등록되어 있지 않습니다.",
 	"myevents": "내 이벤트",

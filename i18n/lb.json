@@ -9,6 +9,7 @@
 	"right-campaignevents-organize-events": "Evenementer organiséieren",
 	"specialpages-group-campaignevents": "Evenementer",
 	"campaignevents-edit-invalid-username": "\"$1\" ass kee valabele Benotzernumm.",
+	"campaignevents-register-edit-btn": "Ännerunge späicheren",
 	"campaignevents-eventpage-header-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-eventpage-register-confirmation-confirm": "Aschreiwen",
@@ -18,5 +19,18 @@
 	"campaignevents-userlink-deleted-user": "geläscht Benotzer",
 	"campaignevents-notification-registration-details-dates-header": "Datum an Auerzäit",
 	"campaignevents-notification-registration-details-dates": "$1 bis $4",
-	"campaignevents-notification-registration-details-dates-timezone": "<strong>Zäitzone:</strong> $1"
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Zäitzone:</strong> $1",
+	"campaignevents-register-questions-label-title": "Informatioune fir Organisateuren",
+	"campaignevents-register-question-gender-option-man": "Mann",
+	"campaignevents-register-question-gender-option-woman": "Fra",
+	"campaignevents-register-question-age": "Wéi al sidd Dir? (optional)",
+	"campaignevents-register-question-age-option-under-18": "Ënner 18",
+	"campaignevents-register-question-profession": "Wat ass Äre Beruff? (optional)",
+	"campaignevents-register-question-profession-placeholder": "Wielt Äre Beruff",
+	"campaignevents-register-question-profession-option-researcher": "Fuerscher",
+	"campaignevents-register-question-profession-option-other": "Beruff net opgezielt",
+	"campaignevents-register-question-confidence-contributing-option-none": "Ech hunn nach ni bei engem Wikimedia-Projet matgemaach",
+	"campaignevents-register-question-affiliate-placeholder": "Wielt eng Optioun",
+	"campaignevents-register-question-affiliate-option-none": "Neen",
+	"campaignevents-register-question-affiliate-option-chapter": "Kapitel"
 }

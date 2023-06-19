@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Umargana1"
+		]
+	},
+	"campaignevents-register-question-gender-option-woman": "Kamu",
+	"campaignevents-register-question-gender-option-other": "Gender sakiyi",
+	"campaignevents-register-question-age": "Ayi sa,anum wo? \n(optional)",
+	"campaignevents-register-question-age-option-under-18": "Sa,a 18 sitiyi"
+}

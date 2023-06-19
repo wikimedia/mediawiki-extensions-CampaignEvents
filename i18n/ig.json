@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Accuratecy051"
+		]
+	},
+	"campaignevents-register-questions-label-subtitle": "You can change or remove your responses before, during and after the event.",
+	"campaignevents-register-question-gender-option-agender": "Agender",
+	"campaignevents-register-question-profession-option-nonprofit": "Non-profit professional",
+	"campaignevents-register-question-confidence-contributing": "How confident do you feel contributing to the Wikimedia projects involved in this event? (optional)",
+	"campaignevents-register-question-confidence-contributing-not-say": "I prefer not to say",
+	"campaignevents-register-question-affiliate-option-none": "No"
+}

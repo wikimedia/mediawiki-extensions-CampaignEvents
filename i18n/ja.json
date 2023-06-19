@@ -93,6 +93,7 @@
 	"campaignevents-register-success": "あなたは現在このイベントに登録されています。",
 	"campaignevents-register-confirmation-top": "登録を確認する",
 	"campaignevents-register-confirmation-btn": "登録",
+	"campaignevents-register-edit-btn": "変更を保存",
 	"canceleventregistration": "イベントへの登録をキャンセルする",
 	"campaignevents-unregister-success": "このイベントへの登録を取り消しました",
 	"campaignevents-unregister-confirmation-btn": "登録をキャンセルする",

@@ -10,6 +10,9 @@
 	"campaignevents-error-invalid-trackingtool": "Jaramlı baqlaw quralı identifikatorın kiritiń",
 	"campaignevents-error-invalid-timezone": "Durıslı waqıt regionın kiritiń.",
 	"campaignevents-edit-field-timezone": "Waqıt zonası",
+	"campaignevents-register-success-edit": "Siziń registraciya maǵlıwmatlarıńız jańalandı.",
+	"campaignevents-register-edit-legend": "Registraciyanı ózgertiw",
+	"campaignevents-register-edit-btn": "Ózgerislerdi saqlaw",
 	"campaignevents-eventpage-header-timezone": "<strong>Waqıt zonası:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Waqıt zonası:</strong> $1",
 	"campaignevents-eventpage-register-confirmation-confirm": "Dizimnen ótiw",
@@ -43,5 +46,9 @@
 	"campaignevents-notification-registration-details-organizers-header": "Ilaj shólkemlestiriwshileri",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|jáne}}",
 	"campaignevents-notification-registration-event-page-link": "Ilaj betin kóriw",
-	"campaignevents-notification-registration-chat-link": "Topar sáwbetine qosılıw"
+	"campaignevents-notification-registration-chat-link": "Topar sáwbetine qosılıw",
+	"campaignevents-register-question-gender-option-man": "Erkek",
+	"campaignevents-register-question-gender-option-woman": "Hayal",
+	"campaignevents-register-question-age-option-under-18": "18 jastan tómen",
+	"campaignevents-register-question-affiliate-option-none": "Yaq"
 }

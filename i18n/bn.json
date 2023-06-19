@@ -36,5 +36,17 @@
 	"campaignevents-event-details-remove-all-participant-notification": "সব অংশগ্রহণকারী অপসারিত",
 	"campaignevents-unregister-participants-permission-denied": "আপনি অংশগ্রহণকারীদের অপসারণ করার জন্য অনুমতি  প্রাপ্ত নন",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|অংশগ্রহণকারী|অংশগ্রহণকারীদের}} অপসারণ করার সময় একটি ত্রুটি দেখা দিয়েছে",
-	"campaignevents-event-details-search-participants-placeholder": "অংশগ্রহণকারীদের জন্য অনুসন্ধান করুন"
+	"campaignevents-event-details-search-participants-placeholder": "অংশগ্রহণকারীদের জন্য অনুসন্ধান করুন",
+	"campaignevents-register-question-gender-option-woman": "নারী",
+	"campaignevents-register-question-gender-option-nonbinary": "অ-বাইনারি",
+	"campaignevents-register-question-age-option-35-44": "৩৫–৪৪",
+	"campaignevents-register-question-age-option-45-54": "৪৫–৫৪",
+	"campaignevents-register-question-age-option-65-74": "৬৫–৭৪",
+	"campaignevents-register-question-profession-option-librarian": "গ্রন্থাগারিক",
+	"campaignevents-register-question-profession-option-software-engineer": "সফটওয়্যার প্রকৌশলী",
+	"campaignevents-register-question-profession-option-student": "শিক্ষার্থী",
+	"campaignevents-register-question-confidence-contributing-not-say": "আমি বলতে চাই না",
+	"campaignevents-register-question-affiliate-placeholder": "একটি বিকল্প নির্বাচন করুন",
+	"campaignevents-register-question-affiliate-option-none": "না",
+	"campaignevents-register-question-affiliate-option-chapter": "অধ্যায়"
 }

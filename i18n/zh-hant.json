@@ -41,7 +41,9 @@
 	"registerforevent": "報名活動",
 	"campaignevents-register-error-no-event": "未指定活動。",
 	"campaignevents-register-confirmation-top": "確認報名",
+	"campaignevents-register-edit-legend": "編輯報名",
 	"campaignevents-register-confirmation-btn": "報名",
+	"campaignevents-register-edit-btn": "儲存變更",
 	"canceleventregistration": "取消報名活動",
 	"campaignevents-unregister-success": "您已取消報名活動。",
 	"campaignevents-unregister-confirmation-top": "確認取消報名",
@@ -144,5 +146,15 @@
 	"campaignevents-notification-registration-details-type-header": "活動類型",
 	"campaignevents-notification-registration-details-type-online-header": "線上活動",
 	"campaignevents-notification-registration-details-type-in-person-header": "實體活動",
-	"campaignevents-notification-registration-event-page-link": "查看活動頁面"
+	"campaignevents-notification-registration-event-page-link": "查看活動頁面",
+	"campaignevents-register-question-gender-option-woman": "女性",
+	"campaignevents-register-question-gender-option-nonbinary": "非二元性別",
+	"campaignevents-register-question-age-placeholder": "選取年齡範圍",
+	"campaignevents-register-question-profession-option-librarian": "圖書館員",
+	"campaignevents-register-question-profession-option-researcher": "研究人員",
+	"campaignevents-register-question-profession-option-software-engineer": "軟體工程師",
+	"campaignevents-register-question-profession-option-student": "學生",
+	"campaignevents-register-question-affiliate-option-none": "否",
+	"campaignevents-register-question-affiliate-option-chapter": "分會",
+	"campaignevents-register-question-affiliate-option-user-group": "使用者群組"
 }

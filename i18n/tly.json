@@ -2,10 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Patriot Kor",
-			"Patriot Kur"
+			"Patriot Kur",
+			"Гусейн"
 		]
 	},
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ne",
 	"campaignevents-eventpage-register-confirmation-confirm": "Ğeydiyot",
-	"campaignevents-event-details-edit-button": "Sərosti bıkə"
+	"campaignevents-event-details-edit-button": "Sərosti bıkə",
+	"campaignevents-register-question-gender-option-woman": "Žen",
+	"campaignevents-register-question-affiliate-option-none": "Ne"
 }
