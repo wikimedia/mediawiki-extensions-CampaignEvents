@@ -60,9 +60,8 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			null,
 			$body['event_page'],
 			$body['chat_url'],
-			// TODO MVP Add these
-			null,
-			null,
+			$body['tracking_tool_id'],
+			$body['tracking_tool_event_id'],
 			EventRegistration::STATUS_OPEN,
 			$body['timezone'],
 			$body['start_time'],

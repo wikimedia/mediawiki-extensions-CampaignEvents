@@ -203,4 +203,19 @@ class TrackingToolRegistry {
 			'services' => $entry['services'] ?? []
 		] );
 	}
+
+	/**
+	 * Returns the user ID of a tool given its database ID.
+	 * @param int $dbID
+	 * @return string
+	 * @throws ToolNotFoundException
+	 */
+	public function dbIDtoUserID( int $dbID ): string {
+		foreach ( $this->getRegistry() as $entry ) {
+			if ( $entry['db-id'] === $dbID ) {
+				return $entry['user-id'];
+			}
+		}
+		throw new ToolNotFoundException( "No tool with DB ID $dbID" );
+	}
 }

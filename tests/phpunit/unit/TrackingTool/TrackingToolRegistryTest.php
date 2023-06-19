@@ -191,4 +191,23 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 		$this->expectException( ToolNotFoundException::class );
 		$this->getRegistry( true )->newFromUserIdentifier( $nonExistingUserID );
 	}
+
+	/**
+	 * @covers ::dbIDtoUserID
+	 */
+	public function testDbIDtoUserID() {
+		$this->assertSame(
+			'wikimedia-pe-dashboard',
+			$this->getRegistry()->dbIDtoUserID( 1 )
+		);
+	}
+
+	/**
+	 * @covers ::dbIDtoUserID
+	 */
+	public function testDbIDtoUserID__notFound() {
+		$nonExistingDBID = 674587164857435;
+		$this->expectException( ToolNotFoundException::class );
+		$this->getRegistry( true )->dbIDtoUserID( $nonExistingDBID );
+	}
 }

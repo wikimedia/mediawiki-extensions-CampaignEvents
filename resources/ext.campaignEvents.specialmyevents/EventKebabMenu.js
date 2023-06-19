@@ -176,6 +176,11 @@
 						return $.Deferred().reject();
 					}
 
+					var trackingToolID, trackingToolEventID = null;
+					if ( data.tracking_tools.length > 0 ) {
+						trackingToolID = data.tracking_tools.tool_id;
+						trackingToolEventID = data.tracking_tools.tool_event_id;
+					}
 					return new mw.Rest().put(
 						'/campaignevents/v0/event_registration/' + eventID,
 						{
@@ -184,6 +189,8 @@
 							event_page: data.event_page,
 							status: status,
 							chat_url: data.chat_url,
+							tracking_tool_id: trackingToolID,
+							tracking_tool_event_id: trackingToolEventID,
 							timezone: data.timezone,
 							start_time: data.start_time,
 							end_time: data.end_time,

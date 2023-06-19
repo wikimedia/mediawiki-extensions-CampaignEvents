@@ -356,7 +356,8 @@
 			"method": "GET",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
-				"CampaignEventsEventLookup"
+				"CampaignEventsEventLookup",
+				"CampaignEventsTrackingToolRegistry"
 			]
 		},
 		{

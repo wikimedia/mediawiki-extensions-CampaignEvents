@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -17,14 +18,19 @@ class GetEventRegistrationHandler extends SimpleHandler {
 
 	/** @var IEventLookup */
 	private $eventLookup;
+	/** @var TrackingToolRegistry */
+	private TrackingToolRegistry $trackingToolRegistry;
 
 	/**
 	 * @param IEventLookup $eventLookup
+	 * @param TrackingToolRegistry $trackingToolRegistry
 	 */
 	public function __construct(
-		IEventLookup $eventLookup
+		IEventLookup $eventLookup,
+		TrackingToolRegistry $trackingToolRegistry
 	) {
 		$this->eventLookup = $eventLookup;
+		$this->trackingToolRegistry = $trackingToolRegistry;
 	}
 
 	/**
@@ -41,13 +47,21 @@ class GetEventRegistrationHandler extends SimpleHandler {
 		}
 		$page = $registration->getPage();
 
+		$trackingToolsData = [];
+		foreach ( $registration->getTrackingTools() as $toolAssoc ) {
+			$trackingToolsData[] = [
+				'tool_id' => $this->trackingToolRegistry->dbIDtoUserID( $toolAssoc->getToolID() ),
+				'tool_event_id' => $toolAssoc->getToolEventID(),
+			];
+		}
+
 		$respVal = [
 			'id' => $registration->getID(),
 			'name' => $registration->getName(),
 			'event_page' => $page->getPrefixedText(),
 			'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
 			'chat_url' => $registration->getChatURL(),
-			// TODO MVP: Add tracking tool
+			'tracking_tools' => $trackingToolsData,
 			'status' => $registration->getStatus(),
 			'timezone' => $registration->getTimezone()->getName(),
 			'start_time' => wfTimestamp( TS_MW, $registration->getStartLocalTimestamp() ),

@@ -12,6 +12,8 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Rest\GetEventRegistrationHandler;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
@@ -31,11 +33,19 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		'pathParams' => [ 'id' => 42 ]
 	];
 
+	private const TRACKING_TOOL_DB_ID = 1;
+	private const TRACKING_TOOL_USER_ID = 'some-tool';
+
 	private function newHandler(
 		IEventLookup $eventLookup = null
 	): GetEventRegistrationHandler {
+		$trackingToolRegistry = $this->createMock( TrackingToolRegistry::class );
+		$trackingToolRegistry->method( 'dbIDtoUserID' )
+			->with( self::TRACKING_TOOL_DB_ID )
+			->willReturn( self::TRACKING_TOOL_USER_ID );
 		return new GetEventRegistrationHandler(
-			$eventLookup ?? $this->createMock( IEventLookup::class )
+			$eventLookup ?? $this->createMock( IEventLookup::class ),
+			$trackingToolRegistry
 		);
 	}
 
@@ -46,7 +56,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			new PageIdentityValue( 1, 1728, 'Foo_bar', WikiAwareEntity::LOCAL ),
 			$eventPageStr
 		);
-		// TODO MVP Add tracking tool
 		$timezoneName = 'UTC';
 		$eventData = [
 			'id' => 1,
@@ -54,6 +63,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'event_page' => $eventPageStr,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'chat_url' => 'https://some-chat.example.org',
+			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
+			'tracking_tool_event_id' => 'bar',
 			'status' => EventRegistration::STATUS_OPEN,
 			'timezone' => new DateTimeZone( $timezoneName ),
 			'start_time' => '20220220200220',
@@ -72,7 +83,14 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['name'],
 			$eventPage,
 			$eventData['chat_url'],
-			[],
+			[
+				new TrackingToolAssociation(
+					self::TRACKING_TOOL_DB_ID,
+					$eventData['tracking_tool_event_id'],
+					TrackingToolAssociation::SYNC_STATUS_UNKNOWN,
+					null
+				)
+			],
 			$eventData['status'],
 			$eventData['timezone'],
 			wfTimestamp( TS_MW, $eventData['start_time'] ),
@@ -93,13 +111,23 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 
 		$handler = $this->newHandler( $eventLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
-		$this->assertSame( $timezoneName, $respData['timezone'], 'timezone' );
-		unset( $respData['timezone'] );
-		$this->assertSame(
-			// TODO MVP Check tracking tools and type, too
-			array_diff_key( $eventData, [ 'type' => 1, 'timezone' => 1 ] ),
-			$respData
+
+		// TODO Check the type when the endpoint will accept it
+		$expected = array_diff_key(
+			$eventData,
+			[ 'type' => 1, 'timezone' => 1, 'tracking_tool_id' => 1, 'tracking_tool_event_id' => 1 ]
 		);
+		$expected['timezone'] = $timezoneName;
+		$expected['tracking_tools'] = [
+			[
+				'tool_id' => $eventData['tracking_tool_id'],
+				'tool_event_id' => $eventData['tracking_tool_event_id']
+			],
+		];
+
+		ksort( $respData );
+		ksort( $expected );
+		$this->assertSame( $expected, $respData );
 	}
 
 	public function testRun__invalidEvent() {

@@ -135,9 +135,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$existingEvent->getID(),
 			$body['event_page'],
 			$body['chat_url'],
-			// TODO MVP Add these
-			null,
-			null,
+			$body['tracking_tool_id'],
+			$body['tracking_tool_event_id'],
 			$body['status'],
 			$body['timezone'],
 			$body['start_time'],
