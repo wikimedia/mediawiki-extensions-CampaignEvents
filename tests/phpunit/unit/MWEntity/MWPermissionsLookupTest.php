@@ -107,33 +107,33 @@ class MWPermissionsLookupTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::userIsRegistered
-	 * @dataProvider provideUserIsRegistered
+	 * @covers ::userIsNamed
+	 * @dataProvider provideUserIsNamed
 	 */
-	public function testUserIsRegistered( UserFactory $userFactory, bool $expected ) {
-		$this->assertSame( $expected, $this->getLookup( $userFactory )->userIsRegistered( 'Foo' ) );
+	public function testUserIsNamed( UserFactory $userFactory, bool $expected ) {
+		$this->assertSame( $expected, $this->getLookup( $userFactory )->userIsNamed( 'Foo' ) );
 	}
 
-	public function provideUserIsRegistered(): Generator {
-		$notRegisteredUser = $this->createMock( User::class );
-		$notRegisteredUser->method( 'isRegistered' )->willReturn( false );
-		$notRegisteredUserFactory = $this->createMock( UserFactory::class );
-		$notRegisteredUserFactory->method( 'newFromName' )->willReturn( $notRegisteredUser );
-		yield 'Not registered' => [ $notRegisteredUserFactory, false ];
+	public function provideUserIsNamed(): Generator {
+		$notNamedUser = $this->createMock( User::class );
+		$notNamedUser->method( 'isNamed' )->willReturn( false );
+		$notNamedUserFactory = $this->createMock( UserFactory::class );
+		$notNamedUserFactory->method( 'newFromName' )->willReturn( $notNamedUser );
+		yield 'Not named' => [ $notNamedUserFactory, false ];
 
-		$registeredUser = $this->createMock( User::class );
-		$registeredUser->method( 'isRegistered' )->willReturn( true );
-		$registeredUserFactory = $this->createMock( UserFactory::class );
-		$registeredUserFactory->method( 'newFromName' )->willReturn( $registeredUser );
-		yield 'Registered' => [ $registeredUserFactory, true ];
+		$namedUser = $this->createMock( User::class );
+		$namedUser->method( 'isNamed' )->willReturn( true );
+		$namedUserFactory = $this->createMock( UserFactory::class );
+		$namedUserFactory->method( 'newFromName' )->willReturn( $namedUser );
+		yield 'Named' => [ $namedUserFactory, true ];
 	}
 
 	/**
-	 * @covers ::userIsRegistered
+	 * @covers ::userIsNamed
 	 */
-	public function testUserIsRegistered__invalidUsername() {
+	public function testUserIsNamed__invalidUsername() {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'not a valid username' );
-		$this->getLookup( $this->getInvalidUsernameUserFactory() )->userIsRegistered( 'Foo' );
+		$this->getLookup( $this->getInvalidUsernameUserFactory() )->userIsNamed( 'Foo' );
 	}
 }

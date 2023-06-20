@@ -39,7 +39,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function execute( $par ): void {
-		$this->requireLogin();
+		$this->requireNamedUser();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 		if ( $par === null ) {
 			$this->setHeaders();

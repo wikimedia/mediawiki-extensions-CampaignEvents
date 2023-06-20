@@ -21,7 +21,7 @@ interface IPermissionsLookup {
 	 * @param string $username Callers should make sure that the username is valid
 	 * @return bool
 	 */
-	public function userIsRegistered( string $username ): bool;
+	public function userIsNamed( string $username ): bool;
 
 	/**
 	 * @param string $username Callers should make sure that the username is valid

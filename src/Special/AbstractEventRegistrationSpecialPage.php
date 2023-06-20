@@ -111,7 +111,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function execute( $par ): void {
-		$this->requireLogin();
+		$this->requireNamedUser();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 		$this->getOutput()->addModules( [
 			'ext.campaignEvents.editeventregistration',
