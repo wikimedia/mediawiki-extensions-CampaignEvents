@@ -6,6 +6,7 @@
 		this.eventCreatorUsername = mw.config.get( 'wgCampaignEventsEventCreatorUsername' );
 		this.eventID = mw.config.get( 'wgCampaignEventsEventID' );
 		this.knownInvalidOrganizers = mw.config.get( 'wgCampaignEventsInvalidOrganizers' );
+		this.api = new mw.Api();
 	}
 
 	OrganizerSelectionFieldEnhancer.prototype.init = function ( $fieldElement ) {
@@ -37,8 +38,8 @@
 			return;
 		}
 
-		this.organizersField.api.abort();
-		this.organizersField.api.get( {
+		this.api.abort();
+		this.api.get( {
 			action: 'query',
 			list: 'users',
 			ususers: organizers,
