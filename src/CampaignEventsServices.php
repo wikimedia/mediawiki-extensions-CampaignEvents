@@ -32,6 +32,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -227,5 +228,9 @@ class CampaignEventsServices {
 	 */
 	public static function getTrackingToolUpdater( ContainerInterface $services = null ): TrackingToolUpdater {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( TrackingToolUpdater::SERVICE_NAME );
+	}
+
+	public static function getEventQuestionsRegistry( ContainerInterface $services = null ): EventQuestionsRegistry {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventQuestionsRegistry::SERVICE_NAME );
 	}
 }
