@@ -14,8 +14,6 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Utils;
-use MediaWiki\Extension\CampaignEvents\Widget\IconLabelContentWidget;
-use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\HtmlSnippet;
@@ -35,10 +33,10 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-location',
 		'oojs-ui.styles.icons-interactions',
 		'oojs-ui.styles.icons-editing-core',
+		'oojs-ui.styles.icons-alerts',
+		'oojs-ui.styles.icons-user',
 	];
 
-	/** @var IMessageFormatterFactory */
-	private IMessageFormatterFactory $messageFormatterFactory;
 	/** @var OrganizersStore */
 	private OrganizersStore $organizersStore;
 	/** @var PageURLResolver */
@@ -48,30 +46,42 @@ class EventDetailsModule {
 	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
 
+	/** @var ExistingEventRegistration */
+	private ExistingEventRegistration $registration;
+	/** @var Language */
+	private Language $language;
+	/** @var ITextFormatter */
+	private ITextFormatter $msgFormatter;
+
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param OrganizersStore $organizersStore
 	 * @param PageURLResolver $pageURLResolver
 	 * @param UserLinker $userLinker
 	 * @param EventTimeFormatter $eventTimeFormatter
+	 * @param ExistingEventRegistration $registration
+	 * @param Language $language
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		OrganizersStore $organizersStore,
 		PageURLResolver $pageURLResolver,
 		UserLinker $userLinker,
-		EventTimeFormatter $eventTimeFormatter
+		EventTimeFormatter $eventTimeFormatter,
+		ExistingEventRegistration $registration,
+		Language $language
 	) {
-		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
 		$this->pageURLResolver = $pageURLResolver;
 		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
+
+		$this->registration = $registration;
+		$this->language = $language;
+		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 	}
 
 	/**
-	 * @param Language $language
-	 * @param ExistingEventRegistration $registration
 	 * @param UserIdentity $viewingUser
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
@@ -82,43 +92,93 @@ class EventDetailsModule {
 	 * probably not worth doing.
 	 */
 	public function createContent(
-		Language $language,
-		ExistingEventRegistration $registration,
 		UserIdentity $viewingUser,
 		bool $isOrganizer,
 		bool $isParticipant,
 		OutputPage $out
 	): PanelLayout {
-		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
-		$eventID = $registration->getID();
+		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $this->registration->getID() );
 
-		$items = [];
+		$header = $this->getHeader( $isOrganizer );
 
+		$contentWrapper = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-eventdetails-content-wrapper' ] );
+
+		$contentWrapper->appendContent(
+			$this->getInfoColumn(
+				$viewingUser,
+				$out,
+				$isOrganizer,
+				$isParticipant,
+				$organizersCount
+			)
+		);
+		$contentWrapper->appendContent(
+			$this->getOrganizersColumn(
+				$out,
+				$organizersCount
+			)
+		);
+
+		return new PanelLayout( [
+			'content' => [ $header, $contentWrapper ],
+			'padded' => true,
+			'framed' => true,
+			'expanded' => false,
+			'classes' => [ 'ext-campaignevents-eventdetails-panel' ],
+		] );
+	}
+
+	/**
+	 * @param bool $isOrganizer
+	 * @return Tag
+	 */
+	private function getHeader( bool $isOrganizer ): Tag {
 		$headerItems = [];
-		$headerItems[] = ( new Tag( 'span' ) )->appendContent(
-			$msgFormatter->format(
+		$headerItems[] = ( new Tag( 'h2' ) )->appendContent(
+			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-label' )
 			)
-		)->addClasses( [ 'ext-campaignevents-event-details-info-header' ] );
+		);
 
 		if ( $isOrganizer ) {
 			$headerItems[] = new ButtonWidget( [
-				'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-edit-button' ) ),
+				'label' => $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-edit-button' )
+				),
 				'href' => SpecialPage::getTitleFor(
 					SpecialEditEventRegistration::PAGE_NAME,
-					(string)$registration->getID()
+					(string)$this->registration->getID()
 				)->getLocalURL(),
 				'icon' => 'edit'
 			] );
 		}
 
-		$items[] = ( new Tag( 'div' ) )
+		return ( new Tag( 'div' ) )
 			->appendContent( $headerItems )
 			->addClasses( [ 'ext-campaignevents-event-details-info-topbar' ] );
+	}
 
-		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
-		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
-		$datesMsg = $msgFormatter->format(
+	/**
+	 * @param UserIdentity $viewingUser
+	 * @param OutputPage $out
+	 * @param bool $isOrganizer
+	 * @param bool $isParticipant
+	 * @param int $organizersCount
+	 * @return Tag
+	 */
+	private function getInfoColumn(
+		UserIdentity $viewingUser,
+		OutputPage $out,
+		bool $isOrganizer,
+		bool $isParticipant,
+		int $organizersCount
+	): Tag {
+		$items = [];
+
+		$formattedStart = $this->eventTimeFormatter->formatStart( $this->registration, $this->language, $viewingUser );
+		$formattedEnd = $this->eventTimeFormatter->formatEnd( $this->registration, $this->language, $viewingUser );
+		$datesMsg = $this->msgFormatter->format(
 			MessageValue::new( 'campaignevents-event-details-dates' )->params(
 				$formattedStart->getTimeAndDate(),
 				$formattedStart->getDate(),
@@ -128,119 +188,76 @@ class EventDetailsModule {
 				$formattedEnd->getTime()
 			)
 		);
-		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $registration, $viewingUser );
-		// XXX Can't use $msgFormatter due to parse()
+		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $this->registration, $viewingUser );
+		// XXX Can't use $this->msgFormatter due to parse()
 		$timezoneMsg = $out->msg( 'campaignevents-event-details-timezone' )->params( $formattedTimezone )->parse();
-		$items[] = new TextWithIconWidget( [
-			'icon' => 'clock',
-			'content' => [
+		$items[] = $this->makeSection(
+			'clock',
+			[
 				$datesMsg,
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
-			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) ),
-			'icon_classes' => [ 'ext-campaignevents-event-details-icons-style' ],
-		] );
-
-		$needToRegisterMsg = ( new Tag( 'p' ) )->appendContent(
-			$msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-register-prompt' )
-			)
+			'campaignevents-event-details-dates-label'
 		);
 
-		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
-
-		$items = array_merge(
-			$items,
-			$this->getLocationContent(
-				$registration,
-				$msgFormatter,
-				$isOrganizer,
-				$isParticipant,
-				$organizersCount,
-				$needToRegisterMsg
-			)
+		$needToRegisterMsg = $this->msgFormatter->format(
+			MessageValue::new( 'campaignevents-event-details-register-prompt' )
 		);
 
-		$chatURL = $registration->getChatURL();
+		$items[] = $this->getLocationSection(
+			$isOrganizer,
+			$isParticipant,
+			$organizersCount,
+			$needToRegisterMsg
+		);
+
+		$chatURL = $this->registration->getChatURL();
 		if ( $chatURL ) {
-			$items[] = ( new Tag() )->appendContent(
-				$msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-chat-link' )
-				)
-			)->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
-
 			if ( $isOrganizer || $isParticipant ) {
-				$iconLink = ( new IconWidget( [
-					'icon' => 'link',
-				] ) )->addClasses( [ 'ext-campaignevents-event-details-icons-style' ] );
-				$items[] = $iconLink;
-				$items[] = new HtmlSnippet(
-					Linker::makeExternalLink(
-						$chatURL,
-						$chatURL,
-						true,
-						'',
-						[ 'class' => 'ext-campaignevents-event-details-icon-link' ]
-					)
-				);
+				$chatSectionContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
 			} else {
-				$items[] = $needToRegisterMsg;
+				$chatSectionContent = $needToRegisterMsg;
 			}
-		}
 
-		$organizerSectionElements = $this->getOrganizersSectionElements(
-			$msgFormatter,
-			$out,
-			$eventID,
-			$organizersCount
-		);
-		$items = array_merge( $items, $organizerSectionElements );
+			$items[] = $this->makeSection(
+				'speechBubbles',
+				$chatSectionContent,
+				'campaignevents-event-details-chat-link'
+			);
+		}
 
 		$items[] = new ButtonWidget( [
 			'flags' => [ 'progressive' ],
-			'label' => $msgFormatter->format( MessageValue::new( 'campaignevents-event-details-view-event-page' ) ),
+			'label' => $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-view-event-page' )
+			),
 			'classes' => [ 'ext-campaignevents-event-details-view-event-page-button' ],
-			'href' => $this->pageURLResolver->getUrl( $registration->getPage() )
+			'href' => $this->pageURLResolver->getUrl( $this->registration->getPage() )
 		] );
 
-		return new PanelLayout( [
-			'content' => $items,
-			'padded' => true,
-			'framed' => true,
-			'expanded' => false,
-			'classes' => [ 'ext-campaignevents-eventdetails-panel' ],
-		] );
+		return ( new Tag( 'div' ) )
+			->appendContent( $items );
 	}
 
 	/**
-	 * @param ITextFormatter $msgFormatter
 	 * @param OutputPage $out
-	 * @param int $eventID
 	 * @param int $organizersCount
-	 * @return array
+	 * @return Tag
 	 */
-	private function getOrganizersSectionElements(
-		ITextFormatter $msgFormatter,
-		OutputPage $out,
-		int $eventID,
-		int $organizersCount
-	): array {
+	private function getOrganizersColumn( OutputPage $out, int $organizersCount ): Tag {
 		$ret = [];
-		$ret[] = ( new Tag() )->appendContent(
-			$msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-organizers-header' )
-			)
-		)->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
 
-		$partialOrganizers = $this->organizersStore->getEventOrganizers( $eventID, self::ORGANIZERS_LIMIT );
-		$langCode = $msgFormatter->getLangCode();
+		$partialOrganizers = $this->organizersStore->getEventOrganizers(
+			$this->registration->getID(),
+			self::ORGANIZERS_LIMIT
+		);
 		$organizerListItems = '';
 		$lastOrganizerID = null;
 		foreach ( $partialOrganizers as $organizer ) {
 			$organizerListItems .= Html::rawElement(
 				'li',
 				[],
-				$this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode )
+				$this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $this->language->getCode() )
 			);
 			$lastOrganizerID = $organizer->getOrganizerID();
 		}
@@ -256,7 +273,7 @@ class EventDetailsModule {
 
 		if ( count( $partialOrganizers ) < $organizersCount ) {
 			$viewMoreBtn = new ButtonWidget( [
-				'label' => $msgFormatter->format(
+				'label' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-organizers-view-more' )
 				),
 				'classes' => [ 'ext-campaignevents-event-details-load-organizers-link' ],
@@ -265,100 +282,113 @@ class EventDetailsModule {
 			] );
 			$viewMoreNoscript = ( new Tag( 'noscript' ) )
 				->appendContent(
-					$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-organizers-noscript' ) )
+					$this->msgFormatter->format(
+						MessageValue::new( 'campaignevents-event-details-organizers-noscript' )
+					)
 				);
 			$ret[] = ( new Tag( 'p' ) )->appendContent( $viewMoreBtn, $viewMoreNoscript );
 		}
 
-		return $ret;
+		return $this->makeSection(
+			// TODO: Use user-right icon when available (T338344)
+			'userAvatar',
+			$ret,
+			'campaignevents-event-details-organizers-header',
+			[ 'ext-campaignevents-eventdetails-column-organizers' ]
+		);
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param ITextFormatter $msgFormatter
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param int $organizersCount
-	 * @param Tag $needToRegisterMsg
-	 * @return array
+	 * @param string $needToRegisterMsg
+	 * @return Tag
 	 */
-	private function getLocationContent(
-		ExistingEventRegistration $registration,
-		ITextFormatter $msgFormatter,
+	private function getLocationSection(
 		bool $isOrganizer,
 		bool $isParticipant,
 		int $organizersCount,
-		Tag $needToRegisterMsg
-	): array {
-		$meetingType = $registration->getMeetingType();
+		string $needToRegisterMsg
+	): Tag {
+		$meetingType = $this->registration->getMeetingType();
 		$items = [];
 		if ( $meetingType & ExistingEventRegistration::MEETING_TYPE_IN_PERSON ) {
-			$rawAddress = $registration->getMeetingAddress();
-			$rawCountry = $registration->getMeetingCountry();
+			$items[] = ( new Tag( 'h4' ) )
+				->appendContent( $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-in-person-event-label' )
+				) );
+
+			$rawAddress = $this->registration->getMeetingAddress();
+			$rawCountry = $this->registration->getMeetingCountry();
 			if ( $rawAddress || $rawCountry ) {
 				// NOTE: This is not pretty if exactly one of address and country is specified, but
 				// that's going to be fixed when we switch to using an actual geocoding service (T309325)
 				$address = $rawAddress . "\n" . $rawCountry;
-				$widgetAttribs = [
-					'content' => $address,
-					'content_direction' => Utils::guessStringDirection( $address ),
-				];
+				$items[] = ( new Tag( 'div' ) )
+					->appendContent( $address )
+					->setAttributes( [ 'dir' => Utils::guessStringDirection( $address ) ] );
 			} else {
-				$widgetAttribs = [
-					'content' => $msgFormatter->format(
-						MessageValue::new( 'campaignevents-event-details-venue-not-available' )
-							->numParams( $organizersCount )
-					),
-				];
+				$items[] = ( new Tag( 'div' ) )
+					->appendContent(
+						$this->msgFormatter->format(
+							MessageValue::new( 'campaignevents-event-details-venue-not-available' )
+								->numParams( $organizersCount )
+						)
+					);
 			}
-			$items[] = new IconLabelContentWidget( $widgetAttribs + [
-				'icon' => 'mapPin',
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-in-person-event-label' )
-				),
-				'icon_classes' => [ 'ext-campaignevents-event-details-icons-style' ],
-			] );
 		}
 
 		if ( $meetingType & ExistingEventRegistration::MEETING_TYPE_ONLINE ) {
-			$meetingURL = $registration->getMeetingURL();
+			$items[] = ( new Tag( 'h4' ) )
+				->appendContent( $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-online-label' )
+				) );
+
+			$meetingURL = $this->registration->getMeetingURL();
 			if ( $meetingURL ) {
 				if ( $isOrganizer || $isParticipant ) {
-					$iconLink = ( new IconWidget( [
-						'icon' => 'link',
-					] ) )->addClasses( [ 'ext-campaignevents-event-details-icons-style' ] );
-					$content = [
-						$iconLink,
-						new HtmlSnippet(
-							Linker::makeExternalLink(
-								$meetingURL,
-								$meetingURL,
-								true,
-								'',
-								[ 'class' => 'ext-campaignevents-event-details-icon-link' ]
-							)
-						)
-					];
+					$items[] = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
 				} else {
-					$content = $needToRegisterMsg;
+					$items[] = $needToRegisterMsg;
 				}
 			} else {
-				$content = $msgFormatter->format(
+				$items[] = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-online-link-not-available' )
 						->numParams( $organizersCount )
 				);
 			}
-
-			$items[] = new IconLabelContentWidget( [
-				'icon' => $meetingType === ExistingEventRegistration::MEETING_TYPE_ONLINE ? 'mapPin' : '',
-				'content' => $content,
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-online-label' )
-				),
-				'icon_classes' => [ 'ext-campaignevents-event-details-icons-style' ],
-			] );
 		}
 
-		return $items;
+		return $this->makeSection(
+			'mapPin',
+			$items,
+			'campaignevents-event-details-location-header'
+		);
+	}
+
+	/**
+	 * @param string $icon
+	 * @param string|Tag|array $content
+	 * @param string $labelMsg
+	 * @param array $classes
+	 * @return Tag
+	 */
+	private function makeSection( string $icon, $content, string $labelMsg, array $classes = [] ): Tag {
+		$iconWidget = new IconWidget( [
+			'icon' => $icon,
+			'classes' => [ 'ext-campaignevents-event-details-icon' ]
+		] );
+		$header = ( new Tag( 'h3' ) )
+			->appendContent( $iconWidget, $this->msgFormatter->format( MessageValue::new( $labelMsg ) ) )
+			->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
+
+		$contentTag = ( new Tag( 'div' ) )
+			->appendContent( $content )
+			->addClasses( [ 'ext-campaignevents-event-details-section-content' ] );
+
+		return ( new Tag( 'div' ) )
+			->appendContent( $header, $contentTag )
+			->addClasses( $classes );
 	}
 }

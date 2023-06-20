@@ -9,6 +9,27 @@
 	max-width: 60em;
 }
 
+.mw-body .ext-campaignevents-eventdetails-panel {
+	width: 60em;
+	max-width: 100%;
+
+	&.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
+		margin-top: 0; // Remove margin set by OOUI
+	}
+
+	h2,
+	h3,
+	h4 {
+		// Override standard MediaWiki header styling
+		font-family: sans-serif;
+		font-weight: bold;
+		color: @color-base;
+		border-bottom: unset;
+		margin-top: 0;
+		padding-top: 0;
+	}
+}
+
 // Increase specificity to enforce the margin.
 span.ext-campaignevents-event-details-participants-private-icon {
 	opacity: @opacity-icon-subtle;
@@ -26,19 +47,13 @@ span.ext-campaignevents-event-details-participants-private-icon {
 	}
 }
 
-.ext-campaignevents-eventdetails-panel {
-	width: 32em;
-	max-width: 100%;
-
-	&.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
-		margin-top: 0; // Remove margin set by OOUI
-	}
+.ext-campaignevents-eventdetails-content-wrapper {
+	display: flex;
+	justify-content: space-between;
 }
 
-.ext-campaignevents-event-details-section-header {
-	font-size: 1.15em;
-	font-weight: 600;
-	margin-top: 1.5em;
+.ext-campaignevents-eventdetails-column-organizers {
+	margin-right: 3em;
 }
 
 .ext-campaignevents-event-details-view-event-page-button.oo-ui-buttonElement {
@@ -53,9 +68,28 @@ span.ext-campaignevents-event-details-participants-private-icon {
 	margin-bottom: 1em;
 }
 
-.ext-campaignevents-event-details-info-header {
-	font-size: 1.4em;
-	font-weight: bold;
+.mw-body .ext-campaignevents-eventdetails-panel .ext-campaignevents-event-details-section-header {
+	margin-bottom: 0.5em;
+	color: @color-subtle;
+
+	.oo-ui-iconElement-icon {
+		margin-right: 0.5em;
+	}
+}
+
+.ext-campaignevents-eventdetails-panel .ext-campaignevents-event-details-section-content {
+	margin-left: 2.5em;
+	margin-bottom: 1.5em;
+	white-space: pre-wrap;
+	.hyphens();
+
+	h4 {
+		color: @color-subtle;
+	}
+}
+
+ul.ext-campaignevents-event-details-organizers-list {
+	margin-left: 0;
 }
 
 .ext-campaignevents-details-participant-registered-at {
@@ -67,10 +101,6 @@ span.ext-campaignevents-event-details-participants-private-icon {
 	min-width: 0; // Ensure correct wrapping inside the flex container
 }
 
-.ext-campaignevents-event-details-icon-link {
-	margin-left: 0.5em;
-}
-
 .ext-campaignevents-details-users-container {
 	/* Set a fixed height so that it does not change while we rebuild the list */
 	height: 36em;
@@ -79,26 +109,6 @@ span.ext-campaignevents-event-details-participants-private-icon {
 
 .ext-campaignevents-event-details-remove-participant-button.oo-ui-widget {
 	display: none;
-}
-
-.ext-campaignevents-icon-label-content-widget-content {
-	margin-top: 0.5em;
-	margin-left: 2.5em;
-	white-space: pre-wrap;
-	.hyphens();
-}
-
-.ext-campaignevents-icon-label-content-widget-header {
-	position: relative; /* The icon uses position:absolute, which makes positioning hard */
-	margin-top: 1.5em;
-
-	> .oo-ui-labelElement-label {
-		margin-top: 0.5em;
-		margin-left: 1.5em;
-		font-weight: 550;
-		color: @color-base;
-		font-size: 1.15em;
-	}
 }
 
 .ext-campaignevents-icon-label-widget-header {
@@ -148,7 +158,7 @@ div.ext-campaignevents-details-participants-search {
 	border-bottom: 2px @border-style-base @color-inverted;
 }
 
-.ext-campaignevents-event-details-icons-style {
+.ext-campaignevents-event-details-icon {
 	opacity: 0.55;
 }
 
