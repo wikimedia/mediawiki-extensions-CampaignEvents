@@ -108,7 +108,6 @@
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|uczestnik|uczestników}}",
 	"campaignevents-eventpage-header-participants-label": "Liczba uczestników",
 	"campaignevents-eventpage-header-details": "Więcej szczegółów",
-	"campaignevents-eventpage-header-attending": "Uczestniczysz!",
 	"campaignevents-eventpage-btn-manage": "Zarządzaj wydarzeniem",
 	"campaignevents-eventpage-btn-register": "Zarejestruj się na wydarzenie",
 	"campaignevents-eventpage-dialog-title": "Szczegóły wydarzenia",

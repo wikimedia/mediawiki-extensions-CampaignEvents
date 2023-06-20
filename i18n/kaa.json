@@ -15,8 +15,7 @@
 	"campaignevents-register-edit-btn": "Ózgerislerdi saqlaw",
 	"campaignevents-eventpage-header-timezone": "<strong>Waqıt zonası:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Waqıt zonası:</strong> $1",
-	"campaignevents-eventpage-register-confirmation-confirm": "Dizimnen ótiw",
-	"campaignevents-eventpage-register-confirmation-title": "Ilaj qupıyalıǵı",
+	"campaignevents-eventpage-register-dialog-register": "Dizimnen ótiw",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|qatnasıwshı|qatnasıwshılar}} jeke dizimnen ótken.",
 	"campaignevents-event-details-timezone": "<strong>Waqıt zonası:</strong> $1",
 	"campaignevents-event-details-organizers-header": "Shólkemlestiriwshiler",
@@ -50,5 +49,6 @@
 	"campaignevents-register-question-gender-option-man": "Erkek",
 	"campaignevents-register-question-gender-option-woman": "Hayal",
 	"campaignevents-register-question-age-option-under-18": "18 jastan tómen",
-	"campaignevents-register-question-affiliate-option-none": "Yaq"
+	"campaignevents-register-question-affiliate-option-none": "Yaq",
+	"campaignevents-register-question-affiliate-option-user-group": "Paydalanıwshı toparı"
 }

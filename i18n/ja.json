@@ -146,7 +146,7 @@
 	"campaignevents-eventpage-unregister-confirmation-body": "登録をキャンセルしてもよろしいですか？",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "はい",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "いいえ",
-	"campaignevents-eventpage-register-confirmation-confirm": "登録",
+	"campaignevents-eventpage-register-dialog-register": "登録",
 	"campaignevents-eventpage-enableheader-organizer": "あなたは主催者です",
 	"campaignevents-eventpage-enable-registration-dialog-title": "イベント登録を有効にする",
 	"campaignevents-eventpage-enable-registration-dialog-confirm": "登録を有効にする",

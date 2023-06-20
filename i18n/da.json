@@ -22,7 +22,6 @@
 	"campaignevents-delete-submit-btn": "Slet",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|deltager|deltagere}}",
 	"campaignevents-eventpage-header-participants-label": "Antal deltagere",
-	"campaignevents-eventpage-header-attending": "Du deltager!",
 	"campaignevents-eventpage-dialog-dates": "$1 til $4",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ja",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Nej",

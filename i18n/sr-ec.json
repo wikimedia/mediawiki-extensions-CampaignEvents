@@ -6,6 +6,7 @@
 	},
 	"specialpages-group-campaignevents": "Догађаји",
 	"campaignevents-edit-invalid-username": "„$1” није важеће корисничко име.",
+	"campaignevents-register-edit-btn": "Сачувај измене",
 	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
 	"campaignevents-eventslist-delete-dialog-delete": "Обриши",
 	"campaignevents-registration-confirmation-toggle-public": "Јавна регистрација",
@@ -32,5 +33,6 @@
 	"campaignevents-register-question-confidence-contributing-not-say": "Не желим да кажем",
 	"campaignevents-register-question-affiliate-placeholder": "Изаберите опцију",
 	"campaignevents-register-question-affiliate-option-none": "Не",
-	"campaignevents-register-question-affiliate-option-user-group": "Корисничка група"
+	"campaignevents-register-question-affiliate-option-user-group": "Корисничка група",
+	"campaignevents-register-question-affiliate-details-placeholder": "Молимо наведите"
 }

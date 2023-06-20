@@ -19,5 +19,5 @@
 	"campaignevents-edit-too-many-organizers": "$1 ထက် ပိုထည့်၍မရပါ {{PLURAL:$1| စီစဉ်သူ|စီစဉ်သူများ}}။",
 	"campaignevents-edit-organizer-need-central-account": "အောက်ပါ {{PLURAL:$1| user does|users do}} တွင် ဗဟိုအသုံးပြုသူအကောင့် မရှိသည့်အပြင် {{PLURAL:$1| အဖြစ်ထည့်၍မရပါ။ စီစဉ်သူ|စီစဉ်သူများ}}- $2 ။",
 	"campaignevents-edit-invalid-username": "\" $1 \" သည် မှန်ကန်သော အသုံးပြုသူအမည်မဟုတ်ပါ။",
-	"campaignevents-eventpage-register-confirmation-confirm": "မှတ်ပုံတင်ရန်"
+	"campaignevents-eventpage-register-dialog-register": "မှတ်ပုံတင်ရန်"
 }
