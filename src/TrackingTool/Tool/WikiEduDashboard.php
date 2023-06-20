@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool\Tool;
 
+use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -342,6 +343,9 @@ class WikiEduDashboard extends TrackingTool {
 				$msg = 'campaignevents-tracking-tool-wikiedu-not-connected-error';
 				$params = [ $courseID ];
 				break;
+			case 'missing_event_id':
+				// This should never happen.
+				throw new LogicException( 'Made request to the Dashboard without an event ID.' );
 			default:
 				$msg = 'campaignevents-tracking-tool-http-error';
 				$params = [];
