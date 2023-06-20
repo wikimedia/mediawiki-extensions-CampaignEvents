@@ -124,16 +124,19 @@
 
 		// Dynamically update the minimum end date to match the current value of
 		// the start date.
-		dateWidgets.start.on( 'change', function () {
+		var updateEndDate = function () {
 			var newMin = dateWidgets.start.getValueAsDate();
 			dateWidgets.end.min.setTime( newMin );
 			if ( newMin > dateWidgets.end.formatter.defaultDate ) {
 				dateWidgets.end.formatter.defaultDate = newMin;
 			}
-			// Let the widget update its fields to recompute validity of the data
+			// Let the widget update its fields to recompute validity of the data,
+			// as well as update the selectable dates in the calendar.
 			// XXX We're calling a @private method here...
-			dateWidgets.end.updateFieldsFromValue();
-		} );
+			dateWidgets.end.onChange();
+		};
+		dateWidgets.start.on( 'change', updateEndDate );
+		updateEndDate();
 	}
 
 	mw.hook( 'htmlform.enhance' ).add( function ( $root ) {
