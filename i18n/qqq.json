@@ -225,6 +225,7 @@
 	"campaignevents-event-details-tracking-tool-p&e-dashboard-desynced": "Error message shown on [[Special:EventDetails]] when the list of event participants cannot be synchronized with the list of participants on the [[:m:Programs & Events Dashboard|]].",
 	"campaignevents-event-details-tracking-tool-last-successful-update": "Message shown on [[Special:EventDetails]] to show when a tracking tool was last updated with the participants' usernames. This message implies that there have been unsuccessful attempts after the last successful one. See also {{msg-mw|campaignevents-event-details-tracking-tool-last-update}}.\nParameters:\n* $1 - Date and time, in a format like \"13:00, 8 April 2022\" depending on the language.\n* $2 - The date alone (optional).\n* $3 - The time alone (optional)",
 	"campaignevents-event-details-chat-link": "Heading used on [[Special:EventDetails]] for a section that contains an invite link to a chat group.",
+	"campaignevents-event-details-chat-link-not-available": "Message used on [[Special:EventDetails]] when the event has no chat group that participants can join.",
 	"campaignevents-event-details-organizers-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of organizers.",
 	"campaignevents-event-details-register-prompt": "Message used on [[Special:EventDetails]] to inform the user that they need to register in order to see a piece of information.",
 	"campaignevents-event-details-view-event-page": "Label of a button used on [[Special:EventDetails]]. By clicking, the event page will open.",
