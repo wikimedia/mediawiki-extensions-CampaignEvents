@@ -42,6 +42,8 @@
 			return;
 		}
 		var tzInputWidget = OO.ui.infuse( tzInput ).fieldWidget;
+		var dateWidgets = {};
+
 		// Infuse the time selectors, setting some options that we need in order to support
 		// non-UTC time zones.
 		// XXX This is quite hacky, shamelessly messing up with the DateTimeInputWidget internals.
@@ -51,10 +53,22 @@
 			// Same as '@default' but without the timezone and seconds (T317542)
 			var dateFormat = '$!{dow|short} ${day|#} ${month|short} ${year|#} ${hour|0}:${minute|0}';
 
+			// Figure out if this is the start or end widget *before* infusing it, as that'll
+			// change the DOM structure.
+			var isStartWidget;
+			if ( $( this ).find( 'input[name="wpEventStart"]' ).length ) {
+				isStartWidget = true;
+			} else if ( $( this ).find( 'input[name="wpEventEnd"]' ).length ) {
+				isStartWidget = false;
+			} else {
+				throw new Error( 'Unexpected time field' );
+			}
+
 			var widget = OO.ui.infuse(
 				$( this ),
 				{ formatter: { format: dateFormat } }
 			).fieldWidget;
+			dateWidgets[ isStartWidget ? 'start' : 'end' ] = widget;
 
 			// Dates selected through the widget should always have seconds set to 00.
 			// Round up the minutes if necessary to ensure that the initial value is valid.
@@ -106,6 +120,19 @@
 
 			tzInputWidget.on( 'change', updateWidgetOnTimezoneChange );
 			updateWidgetOnTimezoneChange( tzInputWidget.getValue() );
+		} );
+
+		// Dynamically update the minimum end date to match the current value of
+		// the start date.
+		dateWidgets.start.on( 'change', function () {
+			var newMin = dateWidgets.start.getValueAsDate();
+			dateWidgets.end.min.setTime( newMin );
+			if ( newMin > dateWidgets.end.formatter.defaultDate ) {
+				dateWidgets.end.formatter.defaultDate = newMin;
+			}
+			// Let the widget update its fields to recompute validity of the data
+			// XXX We're calling a @private method here...
+			dateWidgets.end.updateFieldsFromValue();
 		} );
 	}
 
