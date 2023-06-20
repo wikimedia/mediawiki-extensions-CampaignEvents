@@ -33,13 +33,11 @@
 		}
 	}
 
-	mw.hook( 'htmlform.enhance' ).add( function ( $root ) {
-		// NOTE: This module has a dependency on mediawiki.widgets.UsersMultiselectWidget
-		// because autoinfusion is also handled in a htmlform.enhance callback, so there's no
-		// guarantee on which handler runs first. In fact, it throws when using debug=1.
-		OrganizerSelectionFieldEnhancer.init( $root.find( '.ext-campaignevents-organizers-multiselect-input' ) );
-
-		var tzInput = $root.find( '.ext-campaignevents-timezone-input' ).get( 0 );
+	/**
+	 * @param {jQuery} $formRoot
+	 */
+	function setupTimeFields( $formRoot ) {
+		var tzInput = $formRoot.find( '.ext-campaignevents-timezone-input' ).get( 0 );
 		if ( !tzInput ) {
 			return;
 		}
@@ -49,7 +47,7 @@
 		// XXX This is quite hacky, shamelessly messing up with the DateTimeInputWidget internals.
 		// The proper solution would be for the widget to natively support customizing the
 		// timezone (T315874).
-		$root.find( '.ext-campaignevents-time-input' ).each( function () {
+		$formRoot.find( '.ext-campaignevents-time-input' ).each( function () {
 			// Same as '@default' but without the timezone and seconds (T317542)
 			var dateFormat = '$!{dow|short} ${day|#} ${month|short} ${year|#} ${hour|0}:${minute|0}';
 
@@ -58,13 +56,18 @@
 				{ formatter: { format: dateFormat } }
 			).fieldWidget;
 
-			// Dates selected through the widget should always have seconds set to 00
-			widget.formatter.defaultDate.setSeconds( 0 );
+			// Dates selected through the widget should always have seconds set to 00.
+			// Round up the minutes if necessary to ensure that the initial value is valid.
+			if ( widget.formatter.defaultDate.getSeconds() !== 0 ) {
+				widget.formatter.defaultDate.setSeconds( 0 );
+				// Note that this will also increase the hour, day etc if needed.
+				widget.formatter.defaultDate.setMinutes(
+					widget.formatter.defaultDate.getMinutes() + 1
+				);
+			}
 
-			// The initial values are always UTC; make sure to clone them.
-			var utcDefaultDate = new Date( widget.formatter.defaultDate.getTime() ),
-				utcMin = new Date( widget.min.getTime() ),
-				utcMax = new Date( widget.max.getTime() );
+			// The date widgets always start in UTC.
+			var lastOffset = 0;
 
 			/**
 			 * This function udates default, min and max date of time inputs so that they match
@@ -72,7 +75,7 @@
 			 *
 			 * @param {string} tz
 			 */
-			var updateWidgetDates = function ( tz ) {
+			var updateWidgetOnTimezoneChange = function ( tz ) {
 				var offset;
 				if ( tz.indexOf( '|' ) > -1 ) {
 					// Preset value
@@ -89,17 +92,28 @@
 
 				// Update default date (used when the widget is empty), min and max
 				widget.formatter.defaultDate.setTime(
-					utcDefaultDate.getTime() + offset * 60 * 1000
+					widget.formatter.defaultDate.getTime() + ( offset - lastOffset ) * 60 * 1000
 				);
-				widget.min.setTime( utcMin.getTime() + offset * 60 * 1000 );
-				widget.max.setTime( utcMax.getTime() + offset * 60 * 1000 );
+				widget.min.setTime( widget.min.getTime() + ( offset - lastOffset ) * 60 * 1000 );
+				widget.max.setTime( widget.max.getTime() + ( offset - lastOffset ) * 60 * 1000 );
 
 				// Let the widget update its fields to recompute validity of the data
+				// XXX We're calling a @private method here...
 				widget.updateFieldsFromValue();
+
+				lastOffset = offset;
 			};
 
-			tzInputWidget.on( 'change', updateWidgetDates );
-			updateWidgetDates( tzInputWidget.getValue() );
+			tzInputWidget.on( 'change', updateWidgetOnTimezoneChange );
+			updateWidgetOnTimezoneChange( tzInputWidget.getValue() );
 		} );
+	}
+
+	mw.hook( 'htmlform.enhance' ).add( function ( $root ) {
+		// NOTE: This module has a dependency on mediawiki.widgets.UsersMultiselectWidget
+		// because autoinfusion is also handled in a htmlform.enhance callback, so there's no
+		// guarantee on which handler runs first. In fact, it throws when using debug=1.
+		OrganizerSelectionFieldEnhancer.init( $root.find( '.ext-campaignevents-organizers-multiselect-input' ) );
+		setupTimeFields( $root );
 	} );
 }() );
