@@ -4,11 +4,15 @@
 			"Saraiki"
 		]
 	},
+	"nstab-event": "ایونٹ",
 	"campaignevents-edit-field-status-open": "کھولو",
 	"campaignevents-edit-field-status-closed": "بند تھیا",
+	"campaignevents-edit-field-start": "شروع کرݨ ویلا",
+	"campaignevents-edit-field-end": "مُکݨ ویلا",
 	"campaignevents-edit-field-country": "ملک",
 	"campaignevents-edit-field-address": "پتہ",
 	"campaignevents-register-confirmation-btn": "رجسٹر",
+	"myevents": "تہاݙے ایونٹ",
 	"campaignevents-myevents-label-search": "ڳولو",
 	"campaignevents-myevents-label-status": "حیثیت",
 	"campaignevents-myevents-field-status-any": "کوئی ہک",
@@ -18,6 +22,7 @@
 	"campaignevents-eventslist-delete-dialog-delete": "مٹاؤ",
 	"campaignevents-delete-submit-btn": "مٹاؤ",
 	"campaignevents-eventpage-header-location-label": "محل وقوع",
+	"campaignevents-eventpage-header-details": "ٻیاں تفصیلاں",
 	"campaignevents-eventpage-dialog-location-label": "محل وقوع",
 	"campaignevents-eventpage-dialog-action-close": "بند کرو",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "جیا",
