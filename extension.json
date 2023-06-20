@@ -100,7 +100,7 @@
 		"LoadExtensionSchemaUpdates": "SchemaChanges",
 		"ArticleViewHeader": "ArticleViewHeader",
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
-		"PageDelete": "PageMoveAndDeleteHandler",
+		"PageDeleteComplete": "PageMoveAndDeleteHandler",
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler::onBeforeCreateEchoEvent"
 	},
 	"JobClasses": {

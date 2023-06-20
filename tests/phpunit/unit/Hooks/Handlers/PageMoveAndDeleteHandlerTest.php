@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Hooks\Handlers;
 
 use Generator;
+use ManualLogEntry;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
@@ -13,8 +14,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Revision\RevisionRecord;
 use MediaWikiUnitTestCase;
-use StatusValue;
 use TitleFormatter;
 
 /**
@@ -36,52 +37,43 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param bool $expectedReturn
-	 * @param string|null $expectedStatusError Null if the status is expected to be good
+	 * @param bool $expectsEventDeletion
 	 * @param MWEventLookupFromPage $eventLookupFromPage
-	 * @param DeleteEventCommand|null $deleteEventCommand
 	 * @dataProvider providePageDelete
-	 * @covers ::onPageDelete
+	 * @covers ::onPageDeleteComplete
 	 */
-	public function testOnPageDelete(
-		bool $expectedReturn,
-		?string $expectedStatusError,
-		MWEventLookupFromPage $eventLookupFromPage,
-		DeleteEventCommand $deleteEventCommand = null
+	public function testOnPageDeleteComplete(
+		bool $expectsEventDeletion,
+		MWEventLookupFromPage $eventLookupFromPage
 	) {
-		$status = StatusValue::newGood();
-		$ret = $this->getHandler( $eventLookupFromPage, $deleteEventCommand )->onPageDelete(
+		$deleteEventCommand = $this->createMock( DeleteEventCommand::class );
+		if ( $expectsEventDeletion ) {
+			$deleteEventCommand->expects( $this->once() )->method( 'deleteUnsafe' );
+		} else {
+			$deleteEventCommand->expects( $this->never() )->method( 'deleteUnsafe' );
+		}
+		$this->getHandler( $eventLookupFromPage, $deleteEventCommand )->onPageDeleteComplete(
 			$this->createMock( ProperPageIdentity::class ),
 			$this->createMock( Authority::class ),
 			'Reason',
-			$status,
-			false
+			42,
+			$this->createMock( RevisionRecord::class ),
+			$this->createMock( ManualLogEntry::class ),
+			1
 		);
 
-		$this->assertSame( $expectedReturn, $ret );
-		if ( $expectedStatusError === null ) {
-			$this->assertStatusGood( $status );
-		} else {
-			$this->assertStatusError( $expectedStatusError, $status );
-		}
+		// We use soft assertions above
+		$this->addToAssertionCount( 1 );
 	}
 
 	public function providePageDelete(): Generator {
 		$noRegistrationLookup = $this->createMock( MWEventLookupFromPage::class );
 		$noRegistrationLookup->method( 'getRegistrationForPage' )->willReturn( null );
-		yield 'No registration for page' => [ true, null, $noRegistrationLookup ];
+		yield 'No registration for page' => [ false, $noRegistrationLookup ];
 
 		$existingRegistrationLookup = $this->createMock( MWEventLookupFromPage::class );
 		$existingRegistrationLookup->method( 'getRegistrationForPage' )
 			->willReturn( $this->createMock( ExistingEventRegistration::class ) );
-
-		$deletionError = 'some-error';
-		$errorDeleteCommand = $this->createMock( DeleteEventCommand::class );
-		$errorDeleteCommand->method( 'deleteUnsafe' )->willReturn( StatusValue::newFatal( $deletionError ) );
-		yield 'Deletion error' => [ false, $deletionError, $existingRegistrationLookup, $errorDeleteCommand ];
-
-		$successDeleteCommand = $this->createMock( DeleteEventCommand::class );
-		$successDeleteCommand->method( 'deleteUnsafe' )->willReturn( StatusValue::newGood() );
-		yield 'Deletion succeeds' => [ true, null, $existingRegistrationLookup, $successDeleteCommand ];
+		yield 'Page has event registration' => [ true, $existingRegistrationLookup ];
 	}
 }

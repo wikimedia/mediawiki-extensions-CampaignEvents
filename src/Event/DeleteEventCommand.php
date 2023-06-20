@@ -17,6 +17,9 @@ use StatusValue;
 class DeleteEventCommand {
 	public const SERVICE_NAME = 'CampaignEventsDeleteEventCommand';
 
+	public const VALIDATE_TRACKING_TOOLS = true;
+	public const SKIP_TRACKING_TOOL_VALIDATION = false;
+
 	/** @var IEventStore */
 	private $eventStore;
 	/** @var PermissionChecker */
@@ -73,12 +76,18 @@ class DeleteEventCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
+	 * @param bool $trackingToolsValidation self::VALIDATE_TRACKING_TOOLS or self::SKIP_TRACKING_TOOL_VALIDATION
 	 * @return StatusValue If good, the value is true if the registration was deleted, false if it was already deleted.
 	 */
-	public function deleteUnsafe( ExistingEventRegistration $registration ): StatusValue {
-		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateEventDeletion( $registration );
-		if ( !$trackingToolValidationStatus->isGood() ) {
-			return $trackingToolValidationStatus;
+	public function deleteUnsafe(
+		ExistingEventRegistration $registration,
+		bool $trackingToolsValidation = self::VALIDATE_TRACKING_TOOLS
+	): StatusValue {
+		if ( $trackingToolsValidation === self::VALIDATE_TRACKING_TOOLS ) {
+			$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateEventDeletion( $registration );
+			if ( !$trackingToolValidationStatus->isGood() ) {
+				return $trackingToolValidationStatus;
+			}
 		}
 		$effectivelyDeleted = $this->eventStore->deleteRegistration( $registration );
 
