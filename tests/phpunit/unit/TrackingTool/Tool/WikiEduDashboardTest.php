@@ -440,4 +440,38 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 			'campaignevents-tracking-tool-wikiedu-not-connected-error'
 		];
 	}
+
+	/**
+	 * @dataProvider provideBuildToolEventURL
+	 * @covers ::buildToolEventURL
+	 */
+	public function testBuildToolEventURL( string $baseURL, string $toolEventID, string $expected ) {
+		$this->assertSame( $expected, WikiEduDashboard::buildToolEventURL( $baseURL, $toolEventID ) );
+	}
+
+	public static function provideBuildToolEventURL(): array {
+		$courseSlug = 'SomePerson/SomeCourse';
+		return [
+			'Staging instance, with slash' => [
+				'https://dashboard-testing.wikiedu.org/',
+				$courseSlug,
+				"https://dashboard-testing.wikiedu.org/courses/$courseSlug"
+			],
+			'Staging instance, without slash' => [
+				'https://dashboard-testing.wikiedu.org',
+				$courseSlug,
+				"https://dashboard-testing.wikiedu.org/courses/$courseSlug"
+			],
+			'Production instance, with slash' => [
+				'https://outreachdashboard.wmflabs.org/',
+				$courseSlug,
+				"https://outreachdashboard.wmflabs.org/courses/$courseSlug"
+			],
+			'Production instance, without slash' => [
+				'https://outreachdashboard.wmflabs.org',
+				$courseSlug,
+				"https://outreachdashboard.wmflabs.org/courses/$courseSlug"
+			]
+		];
+	}
 }

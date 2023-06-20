@@ -40,9 +40,9 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		IEventLookup $eventLookup = null
 	): GetEventRegistrationHandler {
 		$trackingToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$trackingToolRegistry->method( 'dbIDtoUserID' )
+		$trackingToolRegistry->method( 'getUserInfo' )
 			->with( self::TRACKING_TOOL_DB_ID )
-			->willReturn( self::TRACKING_TOOL_USER_ID );
+			->willReturn( [ 'user-id' => self::TRACKING_TOOL_USER_ID ] );
 		return new GetEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$trackingToolRegistry

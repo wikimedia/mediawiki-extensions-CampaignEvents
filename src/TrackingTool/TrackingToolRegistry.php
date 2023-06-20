@@ -205,15 +205,26 @@ class TrackingToolRegistry {
 	}
 
 	/**
-	 * Returns the user ID of a tool given its database ID.
+	 * Returns information about a tracking tool association that may be used for presentational purposes.
+	 *
 	 * @param int $dbID
-	 * @return string
-	 * @throws ToolNotFoundException
+	 * @param string $toolEventID
+	 * @return array
+	 * @phan-return array{user-id:string,display-name-msg:string,tool-event-url:string}
 	 */
-	public function dbIDtoUserID( int $dbID ): string {
+	public function getUserInfo( int $dbID, string $toolEventID ): array {
 		foreach ( $this->getRegistry() as $entry ) {
 			if ( $entry['db-id'] === $dbID ) {
-				return $entry['user-id'];
+				/**
+				 * @var TrackingTool $className Note that this is actually a string, but annotating it like this lets
+				 * PHPStorm autocomplete the methods and find their usages.
+				 */
+				$className = $entry['class'];
+				return [
+					'user-id' => $entry['user-id'],
+					'display-name-msg' => $entry['display-name-msg'],
+					'tool-event-url' => $className::buildToolEventURL( $entry['base-url'], $toolEventID ),
+				];
 			}
 		}
 		throw new ToolNotFoundException( "No tool with DB ID $dbID" );

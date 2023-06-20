@@ -193,21 +193,25 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::dbIDtoUserID
+	 * @covers ::getUserInfo
 	 */
-	public function testDbIDtoUserID() {
+	public function testGetUserInfo() {
 		$this->assertSame(
-			'wikimedia-pe-dashboard',
-			$this->getRegistry()->dbIDtoUserID( 1 )
+			[
+				'user-id' => 'wikimedia-pe-dashboard',
+				'display-name-msg' => 'campaignevents-tracking-tool-p&e-dashboard-name',
+				'tool-event-url' => 'https://dashboard-testing.wikiedu.org/courses/foo',
+			],
+			$this->getRegistry()->getUserInfo( 1, 'foo' )
 		);
 	}
 
 	/**
-	 * @covers ::dbIDtoUserID
+	 * @covers ::getUserInfo
 	 */
-	public function testDbIDtoUserID__notFound() {
+	public function testGetUserInfo__notFound() {
 		$nonExistingDBID = 674587164857435;
 		$this->expectException( ToolNotFoundException::class );
-		$this->getRegistry( true )->dbIDtoUserID( $nonExistingDBID );
+		$this->getRegistry( true )->getUserInfo( $nonExistingDBID, 'foo' );
 	}
 }
