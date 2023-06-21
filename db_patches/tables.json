@@ -474,5 +474,173 @@
 			}
 		],
 		"pk": [ "cett_id" ]
+	},
+	{
+		"name": "ce_event_questions",
+		"comment": "Stores what participant questions are enabled for an event.",
+		"columns": [
+			{
+				"name": "ceeq_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceeq_event_id",
+				"comment": "The ID of the event, references campaign_events.event_id.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceeq_question_id",
+				"comment": "The unique ID of a question, as defined by the application.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ceeq_event_question",
+				"columns": [ "ceeq_event_id", "ceeq_question_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "ceeq_id" ]
+	},
+	{
+		"name": "ce_question_answers",
+		"comment": "Stores the participants' answers to the questions asked when registering for an event.",
+		"columns": [
+			{
+				"name": "ceqa_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqa_event_id",
+				"comment": "The ID of the event, references campaign_events.event_id.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqa_user_id",
+				"comment": "Central user ID.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqa_question_id",
+				"comment": "The unique ID of a question, as defined by the application.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqa_answer_option",
+				"comment": "The ID of a possible answer to this question, as defined by the application, if multiple choice. Null otherwise.",
+				"type": "integer",
+				"options": {
+					"notnull": false,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqa_answer_text",
+				"comment": "Free-text answer to this question, if available, null otherwise.",
+				"type": "blob",
+				"options": {
+					"notnull": false,
+					"length": 65530
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ceqa_event_user_question",
+				"columns": [ "ceqa_event_id", "ceqa_user_id", "ceqa_question_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "ceqa_id" ]
+	},
+	{
+		"name": "ce_question_aggregation",
+		"comment": "Stores the aggregated participants' answers to the questions asked when registering for an event.",
+		"columns": [
+			{
+				"name": "ceqag_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqag_event_id",
+				"comment": "The ID of the event, references campaign_events.event_id.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqag_question_id",
+				"comment": "The unique ID of a question, as defined by the application.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqag_answer_option",
+				"comment": "The ID of a possible answer to this question, as defined by the application, if multiple choice. Null otherwise.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceqag_answers_amount",
+				"comment": "The amount of times this question was answered this way.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ceqag_event_question",
+				"columns": [ "ceqag_event_id", "ceqag_question_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "ceqag_id" ]
 	}
 ]

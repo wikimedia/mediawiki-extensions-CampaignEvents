@@ -103,3 +103,42 @@ CREATE TABLE ce_tracking_tools (
 CREATE UNIQUE INDEX cett_event_tool_teid ON ce_tracking_tools (
   cett_event, cett_tool_id, cett_tool_event_id
 );
+
+
+CREATE TABLE ce_event_questions (
+  ceeq_id BIGSERIAL NOT NULL,
+  ceeq_event_id BIGINT NOT NULL,
+  ceeq_question_id INT NOT NULL,
+  PRIMARY KEY(ceeq_id)
+);
+
+CREATE UNIQUE INDEX ceeq_event_question ON ce_event_questions (ceeq_event_id, ceeq_question_id);
+
+
+CREATE TABLE ce_question_answers (
+  ceqa_id BIGSERIAL NOT NULL,
+  ceqa_event_id BIGINT NOT NULL,
+  ceqa_user_id INT NOT NULL,
+  ceqa_question_id INT NOT NULL,
+  ceqa_answer_option INT DEFAULT NULL,
+  ceqa_answer_text TEXT DEFAULT NULL,
+  PRIMARY KEY(ceqa_id)
+);
+
+CREATE UNIQUE INDEX ceqa_event_user_question ON ce_question_answers (
+  ceqa_event_id, ceqa_user_id, ceqa_question_id
+);
+
+
+CREATE TABLE ce_question_aggregation (
+  ceqag_id BIGSERIAL NOT NULL,
+  ceqag_event_id BIGINT NOT NULL,
+  ceqag_question_id INT NOT NULL,
+  ceqag_answer_option INT NOT NULL,
+  ceqag_answers_amount INT NOT NULL,
+  PRIMARY KEY(ceqag_id)
+);
+
+CREATE UNIQUE INDEX ceqag_event_question ON ce_question_aggregation (
+  ceqag_event_id, ceqag_question_id
+);

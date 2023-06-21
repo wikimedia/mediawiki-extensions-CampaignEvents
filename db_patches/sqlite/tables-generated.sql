@@ -85,3 +85,39 @@ CREATE TABLE /*_*/ce_tracking_tools (
 CREATE UNIQUE INDEX cett_event_tool_teid ON /*_*/ce_tracking_tools (
   cett_event, cett_tool_id, cett_tool_event_id
 );
+
+
+CREATE TABLE /*_*/ce_event_questions (
+  ceeq_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceeq_event_id BIGINT UNSIGNED NOT NULL,
+  ceeq_question_id INTEGER UNSIGNED NOT NULL
+);
+
+CREATE UNIQUE INDEX ceeq_event_question ON /*_*/ce_event_questions (ceeq_event_id, ceeq_question_id);
+
+
+CREATE TABLE /*_*/ce_question_answers (
+  ceqa_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceqa_event_id BIGINT UNSIGNED NOT NULL,
+  ceqa_user_id INTEGER UNSIGNED NOT NULL,
+  ceqa_question_id INTEGER UNSIGNED NOT NULL,
+  ceqa_answer_option INTEGER UNSIGNED DEFAULT NULL,
+  ceqa_answer_text BLOB DEFAULT NULL
+);
+
+CREATE UNIQUE INDEX ceqa_event_user_question ON /*_*/ce_question_answers (
+  ceqa_event_id, ceqa_user_id, ceqa_question_id
+);
+
+
+CREATE TABLE /*_*/ce_question_aggregation (
+  ceqag_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceqag_event_id BIGINT UNSIGNED NOT NULL,
+  ceqag_question_id INTEGER UNSIGNED NOT NULL,
+  ceqag_answer_option INTEGER UNSIGNED NOT NULL,
+  ceqag_answers_amount INTEGER UNSIGNED NOT NULL
+);
+
+CREATE UNIQUE INDEX ceqag_event_question ON /*_*/ce_question_aggregation (
+  ceqag_event_id, ceqag_question_id
+);
