@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -14,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\Response;
@@ -41,6 +43,10 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	private OrganizersStore $organizersStore;
 	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
+	/** @var EventQuestionsRegistry */
+	protected EventQuestionsRegistry $eventQuestionsRegistry;
+	/** @var bool */
+	protected bool $participantQuestionsEnabled;
 
 	/**
 	 * @param EventFactory $eventFactory
@@ -48,19 +54,25 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @param EditEventCommand $editEventCommand
 	 * @param OrganizersStore $organizersStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 * @param Config $config
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
 		EditEventCommand $editEventCommand,
 		OrganizersStore $organizersStore,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		Config $config
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
 		$this->editEventCommand = $editEventCommand;
 		$this->organizersStore = $organizersStore;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**

@@ -100,6 +100,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['meeting_url'],
 			$eventData['meeting_country'],
 			$eventData['meeting_address'],
+			[],
 			'1646000000',
 			'1646000000',
 			null

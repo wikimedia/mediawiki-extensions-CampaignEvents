@@ -22,6 +22,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
@@ -58,6 +60,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var TrackingToolRegistry */
 	private TrackingToolRegistry $trackingToolRegistry;
+	/** @var EventQuestionsRegistry */
+	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/** @var int|null */
 	protected $eventID;
@@ -89,6 +93,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param TrackingToolRegistry $trackingToolRegistry
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 */
 	public function __construct(
 		string $name,
@@ -100,7 +105,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
-		TrackingToolRegistry $trackingToolRegistry
+		TrackingToolRegistry $trackingToolRegistry,
+		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -111,6 +117,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->trackingToolRegistry = $trackingToolRegistry;
+		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 
 		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->formMessages = $this->getFormMessages();
@@ -457,6 +464,24 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$trackingToolEventID = null;
 		}
 
+		$participantQuestionNames = [];
+		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			if ( $this->event ) {
+				$currentQuestionIDs = $this->event->getParticipantQuestions();
+				foreach ( $currentQuestionIDs as $questionID ) {
+					try {
+						$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
+					} catch ( UnknownQuestionException $e ) {
+						// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
+						// that case.
+						throw new LogicException( 'Unknown question in the database', 0, $e );
+					}
+				}
+			} else {
+				$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
+			}
+		}
+
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
@@ -474,6 +499,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingAddress'] : null,
+				$participantQuestionNames,
 				$this->event ? $this->event->getCreationTimestamp() : null,
 				$this->event ? $this->event->getLastEditTimestamp() : null,
 				$this->event ? $this->event->getDeletionTimestamp() : null,

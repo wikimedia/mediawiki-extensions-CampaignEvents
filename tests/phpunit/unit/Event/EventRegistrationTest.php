@@ -39,6 +39,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'meeting_url' => 'https://meet.example.org',
 			'country' => 'Some country',
 			'address' => 'Some address',
+			'questions' => [],
 			'creation' => '1650000000',
 			'last_edit' => '1651000000',
 			'deletion' => null
@@ -82,6 +83,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['meeting_url'], $registration->getMeetingURL(), 'meeting_url' );
 		$this->assertSame( $data['country'], $registration->getMeetingCountry(), 'country' );
 		$this->assertSame( $data['address'], $registration->getMeetingAddress(), 'address' );
+		$this->assertSame( $data['questions'], $registration->getParticipantQuestions(), 'questions' );
 		$this->assertSame( $data['creation'], $registration->getCreationTimestamp(), 'creation' );
 		$this->assertSame( $data['last_edit'], $registration->getLastEditTimestamp(), 'last_edit' );
 		$this->assertSame( $data['deletion'], $registration->getDeletionTimestamp(), 'deletion' );

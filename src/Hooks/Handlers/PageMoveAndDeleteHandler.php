@@ -110,6 +110,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 			$registration->getMeetingURL(),
 			$registration->getMeetingCountry(),
 			$registration->getMeetingAddress(),
+			$registration->getParticipantQuestions(),
 			$registration->getCreationTimestamp(),
 			$registration->getLastEditTimestamp(),
 			$registration->getDeletionTimestamp()

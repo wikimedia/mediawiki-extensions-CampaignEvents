@@ -46,6 +46,7 @@
 	"campaignevents-error-countryoraddress-not-in-person": "Error message used when an event meeting country or address is provided but the event is not in-person.",
 	"campaignevents-error-invalid-country": "Error message used when the given event country is invalid.",
 	"campaignevents-error-invalid-address": "Error message used when the given event address URL is invalid.",
+	"campaignevents-error-invalid-question-names": "Error message used when the user provided unrecognized identifiers for participant questions.\nParameters:\n* $1 - List of unrecognized question names",
 	"enableeventregistration": "Description of [[Special:EnableEventRegistration]]",
 	"editeventregistration": "Description of [[Special:EditEventRegistration]]",
 	"campaignevents-edit-form-legend": "Legend of the form on [[Special:EnableEventRegistration]]",

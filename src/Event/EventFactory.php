@@ -16,9 +16,12 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedSectionAnchorException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use Message;
 use MWTimestamp;
 use StatusValue;
 use Wikimedia\RequestTimeout\TimeoutException;
@@ -34,20 +37,25 @@ class EventFactory {
 	private $campaignsPageFormatter;
 	/** @var TrackingToolRegistry */
 	private $trackingToolRegistry;
+	/** @var EventQuestionsRegistry */
+	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/**
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param CampaignsPageFormatter $campaignsPageFormatter
 	 * @param TrackingToolRegistry $trackingToolRegistry
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 */
 	public function __construct(
 		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsPageFormatter $campaignsPageFormatter,
-		TrackingToolRegistry $trackingToolRegistry
+		TrackingToolRegistry $trackingToolRegistry,
+		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
 		$this->trackingToolRegistry = $trackingToolRegistry;
+		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 	}
 
 	/**
@@ -67,6 +75,7 @@ class EventFactory {
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
+	 * @param string[] $participantQuestionNames
 	 * @param string|null $creationTimestamp In the TS_MW format
 	 * @param string|null $lastEditTimestamp In the TS_MW format
 	 * @param string|null $deletionTimestamp In the TS_MW format
@@ -89,6 +98,7 @@ class EventFactory {
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
+		array $participantQuestionNames,
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
 		?string $deletionTimestamp,
@@ -150,6 +160,10 @@ class EventFactory {
 
 		$res->merge( $this->validateMeetingInfo( $meetingType, $meetingURL, $meetingCountry, $meetingAddress ) );
 
+		$questionsStatus = $this->validateParticipantQuestions( $participantQuestionNames );
+		$res->merge( $questionsStatus );
+		$questionIDs = $questionsStatus->getValue();
+
 		$creationTSUnix = wfTimestampOrNull( TS_UNIX, $creationTimestamp );
 		$lastEditTSUnix = wfTimestampOrNull( TS_UNIX, $lastEditTimestamp );
 		$deletionTSUnix = wfTimestampOrNull( TS_UNIX, $deletionTimestamp );
@@ -189,6 +203,7 @@ class EventFactory {
 			$meetingURL,
 			$meetingCountry,
 			$meetingAddress,
+			$questionIDs,
 			$creationTSUnix,
 			$lastEditTSUnix,
 			$deletionTSUnix
@@ -419,6 +434,27 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-address' );
 		}
 		return $res;
+	}
+
+	/**
+	 * @param string[] $questionNames
+	 * @return StatusValue Whose value is an array of the corresponding question DB IDs.
+	 */
+	private function validateParticipantQuestions( array $questionNames ): StatusValue {
+		$questionIDs = [];
+		$invalidNames = [];
+		foreach ( $questionNames as $name ) {
+			try {
+				$questionIDs[] = $this->eventQuestionsRegistry->nameToDBID( $name );
+			} catch ( UnknownQuestionException $_ ) {
+				$invalidNames[] = $name;
+			}
+		}
+		$ret = StatusValue::newGood( $questionIDs );
+		if ( $invalidNames ) {
+			$ret->fatal( 'campaignevents-error-invalid-question names', Message::listParam( $invalidNames ) );
+		}
+		return $ret;
 	}
 
 }

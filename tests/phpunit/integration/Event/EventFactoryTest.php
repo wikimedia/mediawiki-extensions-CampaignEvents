@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWikiIntegrationTestCase;
@@ -46,6 +47,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',
 		'address' => 'Address',
+		'questions' => [ 'age' ],
 		'creation' => '20220308100000',
 		'lastedit' => '20220308100000',
 		'deletion' => null,
@@ -74,10 +76,12 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->method( 'newFromUserIdentifier' )
 			->with( $this->logicalNot( $this->equalTo( self::VALID_TRACKING_TOOL ) ) )
 			->willThrowException( $this->createMock( ToolNotFoundException::class ) );
+		$questionsRegistry = new EventQuestionsRegistry( true );
 		return new EventFactory(
 			$campaignsPageFactory,
 			$this->createMock( CampaignsPageFormatter::class ),
-			$trackingToolRegistry
+			$trackingToolRegistry,
+			$questionsRegistry
 		);
 	}
 
@@ -342,6 +346,13 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			self::getTestDataWithDefault( [
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'meetingurl' => 'https://explicitly-set.example.org',
+			] )
+		];
+
+		yield 'Invalid participant question' => [
+			'campaignevents-error-invalid-question names',
+			self::getTestDataWithDefault( [
+				'questions' => [ 'this-name-definitely-does-not-exist' ]
 			] )
 		];
 	}

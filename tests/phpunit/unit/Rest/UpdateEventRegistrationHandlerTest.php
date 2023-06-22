@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -19,6 +20,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Rest\UpdateEventRegistrationHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -80,6 +82,8 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$editEventCmd ?? $this->getMockEditEventCommand(),
 			$this->createMock( OrganizersStore::class ),
 			$this->createMock( CampaignsCentralUserLookup::class ),
+			$this->createMock( EventQuestionsRegistry::class ),
+			new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => true ] ),
 			$eventLookup
 		);
 	}
