@@ -173,15 +173,22 @@ class EventQuestionsRegistry {
 	}
 
 	/**
-	 * Returns the defined questions in the format accepted by HTMLForm. Each "child" question is given
-	 * the CSS class `ext-campaignevents-participant-question-other-option`, which can be used to style
-	 * the child field.
+	 * Returns the questions corresponding to the given question database IDs, in the format accepted by HTMLForm.
+	 * Each "child" question is given the CSS class `ext-campaignevents-participant-question-other-option`, which can
+	 * be used to style the child field.
 	 *
+	 * @note This method ignores any IDs not corresponding to known questions.
+	 *
+	 * @param int[] $questionIDs
 	 * @return array[]
 	 */
-	public function getQuestionsForHTMLForm(): array {
+	public function getQuestionsForHTMLForm( array $questionIDs ): array {
 		$fields = [];
 		foreach ( $this->getQuestions() as $question ) {
+			$questionID = $question['db-id'];
+			if ( !in_array( $questionID, $questionIDs, true ) ) {
+				continue;
+			}
 			$fieldName = 'Question' . ucfirst( $question['name'] );
 			$fields[$fieldName] = $question[ 'questionData' ];
 			foreach ( $question[ 'otherOptions' ] ?? [] as $showIfVal => $optionData ) {

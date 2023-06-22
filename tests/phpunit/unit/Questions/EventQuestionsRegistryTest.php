@@ -92,7 +92,9 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	 * @covers ::getQuestionsForHTMLForm
 	 */
 	public function testGetQuestionsForHTMLForm(): void {
-		$htmlFormQuestions = $this->getRegistry()->getQuestionsForHTMLForm();
+		$registry = $this->getRegistry();
+		$availableQuestionIDs = array_column( $registry->getQuestionsForTesting(), 'db-id' );
+		$htmlFormQuestions = $this->getRegistry()->getQuestionsForHTMLForm( $availableQuestionIDs );
 		foreach ( $htmlFormQuestions as $key => $descriptor ) {
 			$this->assertIsString( $key, 'HTMLForm keys should be strings (field names)' );
 			$this->assertIsArray( $descriptor, 'HTMLForm descriptors should be arrays' );
