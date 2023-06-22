@@ -95,7 +95,7 @@
 	"campaignevents-register-success": "Message shown on [[Special:RegisterForEvent]] when the registration went through successfully",
 	"campaignevents-register-confirmation-top": "Form label used on [[Special:RegisterForEvent]]",
 	"campaignevents-register-confirmation-text": "Confirmation message used on [[Special:RegisterForEvent]].\n\nThe button label is {{msg-mw|campaignevents-register-confirmation-btn}}.",
-	"campaignevents-register-confirmation-btn": "Label of the submit button on [[Special:RegisterForEvent]]. By clicking, the user will register for the event.",
+	"campaignevents-register-confirmation-btn": "Label of the submit button on [[Special:RegisterForEvent]]. By clicking, the user will register for the event. {{msg-mw|campaignevents-register-edit-btn}} is used instead when the user is already a participant updating their information.",
 	"canceleventregistration": "Description of [[Special:CancelEventRegistration]]",
 	"campaignevents-unregister-success": "Message shown on [[Special:CancelEventRegistration]] when the unregistration went through successfully",
 	"campaignevents-unregister-confirmation-top": "Form label used on [[Special:CancelEventRegistration]]",
