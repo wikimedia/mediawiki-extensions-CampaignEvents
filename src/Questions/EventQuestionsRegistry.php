@@ -37,6 +37,7 @@ class EventQuestionsRegistry {
 	 *  - name (string): Readable identifier of the question, can be used in forms and APIs (potentially prefixed)
 	 *  - db-id (integer): Identifier of the question in the database
 	 *  - wikimedia (bool): Whether the question is Wikimedia-specific
+	 *  - pii (bool): Whether the question is considered PII
 	 *  - questionData (array): User-facing properties of the question, with the following keys:
 	 *    - type (string, required): Type of the question, must be one of the self::*_QUESTION_TYPE constants
 	 *    - label-message (string, required): i18n key for the question label
@@ -58,6 +59,7 @@ class EventQuestionsRegistry {
 				'name' => 'gender',
 				'db-id' => 1,
 				'wikimedia' => false,
+				'pii' => true,
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-gender',
@@ -75,6 +77,7 @@ class EventQuestionsRegistry {
 				'name' => 'age',
 				'db-id' => 2,
 				'wikimedia' => false,
+				'pii' => true,
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-age',
@@ -96,6 +99,7 @@ class EventQuestionsRegistry {
 				'name' => 'profession',
 				'db-id' => 3,
 				'wikimedia' => false,
+				'pii' => true,
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-profession',
@@ -118,6 +122,7 @@ class EventQuestionsRegistry {
 				'name' => 'confidence',
 				'db-id' => 4,
 				'wikimedia' => true,
+				'pii' => false,
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-confidence-contributing',
@@ -134,6 +139,7 @@ class EventQuestionsRegistry {
 				'name' => 'affiliate',
 				'db-id' => 5,
 				'wikimedia' => true,
+				'pii' => false,
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-affiliate',

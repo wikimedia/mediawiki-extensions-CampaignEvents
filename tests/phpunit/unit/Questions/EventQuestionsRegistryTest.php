@@ -46,6 +46,8 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 				$questionDescriptor['wikimedia'],
 				'Values for the "wikimedia" key should be booleans'
 			);
+			$this->assertArrayHasKey( 'pii', $questionDescriptor, 'Questions should specify whether they are PII' );
+			$this->assertIsBool( $questionDescriptor['pii'], 'Values for the "pii" key should be booleans' );
 			$this->assertArrayHasKey( 'questionData', $questionDescriptor, 'Questions should have data' );
 			$questionData = $questionDescriptor['questionData'];
 			$this->assertArrayHasKey( 'type', $questionData, 'Questions should have a type' );
