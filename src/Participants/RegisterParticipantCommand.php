@@ -158,10 +158,15 @@ class RegisterParticipantCommand {
 			return $trackingToolValidationStatus;
 		}
 
-		$modified = $this->participantsStore->addParticipantToEvent( $registration->getID(), $centralUser, $isPrivate );
+		$modified = $this->participantsStore->addParticipantToEvent(
+			$registration->getID(),
+			$centralUser,
+			$isPrivate,
+			[]
+		);
 
 		if ( $modified !== ParticipantsStore::MODIFIED_NOTHING ) {
-			if ( $modified === ParticipantsStore::MODIFIED_REGISTRATION ) {
+			if ( $modified & ParticipantsStore::MODIFIED_REGISTRATION ) {
 				$this->userNotifier->notifyRegistration( $performer, $registration );
 			}
 			$this->trackingToolEventWatcher->onParticipantAdded(

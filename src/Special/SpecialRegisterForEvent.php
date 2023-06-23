@@ -179,12 +179,13 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
+		$privateFlag = $data['IsPrivate'] ?
+			RegisterParticipantCommand::REGISTRATION_PRIVATE :
+			RegisterParticipantCommand::REGISTRATION_PUBLIC;
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
 			new MWAuthorityProxy( $this->getAuthority() ),
-			$data['IsPrivate'] ?
-				RegisterParticipantCommand::REGISTRATION_PRIVATE :
-				RegisterParticipantCommand::REGISTRATION_PUBLIC
+			$privateFlag
 		);
 		$this->modifiedData = $status->getValue();
 		return Status::wrap( $status );
