@@ -5,6 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Questions;
 
 use BadMethodCallException;
+use LogicException;
+use UnexpectedValueException;
 
 class EventQuestionsRegistry {
 	public const SERVICE_NAME = 'CampaignEventsEventQuestionsRegistry';
@@ -40,7 +42,9 @@ class EventQuestionsRegistry {
 	 *  - questionData (array): User-facing properties of the question, with the following keys:
 	 *    - type (string, required): Type of the question, must be one of the self::*_QUESTION_TYPE constants
 	 *    - label-message (string, required): i18n key for the question label
-	 *    - options-messages (array, optional): For multiple-choice questions, the list of possible answers
+	 *    - options-messages (array, optional): For multiple-choice questions, the list of possible answers.
+	 *      NOTE: For multipe-choice questions, the option 0 must be a placeholder value to let the
+	 *      user skip the question.
 	 *  - otherOptions (array): List of fields to show conditionally if the parent field has a certain value. Currently,
 	 *    this has the following requirements:
 	 *      - the parent question must be a multiple-choice question
@@ -199,6 +203,80 @@ class EventQuestionsRegistry {
 			}
 		}
 		return $fields;
+	}
+
+	/**
+	 * Parses an array of form field values from an HTMLForm that was built using getQuestionsForHTMLForm(),
+	 * and returns an array of answers to store.
+	 *
+	 * @param array $formData As given by HTMLForm
+	 * @param int[] $enabledQuestionIDs Enabled question for the event, should match the value passed to
+	 *   getQuestionsForHTMLForm().
+	 * @return Answer[]
+	 */
+	public function extractUserAnswersHTMLForm( array $formData, array $enabledQuestionIDs ): array {
+		$answers = [];
+		foreach ( $this->getQuestions() as $question ) {
+			if ( !in_array( $question['db-id'], $enabledQuestionIDs, true ) ) {
+				continue;
+			}
+			$answer = $this->newAnswerFromHTMLForm( $question, $formData );
+			if ( $answer ) {
+				$answers[] = $answer;
+			}
+		}
+		return $answers;
+	}
+
+	/**
+	 * @param array $questionSpec Must be an entry in the registry
+	 * @param array $formData
+	 * @return Answer|null
+	 */
+	private function newAnswerFromHTMLForm( array $questionSpec, array $formData ): ?Answer {
+		$fieldName = 'Question' . ucfirst( $questionSpec['name'] );
+		if ( !isset( $formData[$fieldName] ) ) {
+			return null;
+		}
+		$type = $questionSpec['questionData']['type'];
+		$ansValue = $formData[$fieldName];
+		if ( $this->isPlaceholderValue( $type, $ansValue ) ) {
+			return null;
+		}
+		if ( $type === self::FREE_TEXT_QUESTION_TYPE ) {
+			$ansOption = null;
+			$ansText = $ansValue;
+		} elseif ( in_array( $type, self::MULTIPLE_CHOICE_TYPES, true ) ) {
+			$ansOption = (int)$ansValue;
+			$ansText = null;
+			if ( isset( $questionSpec['otherOptions'][$ansValue] ) ) {
+				$optionName = $fieldName . '_Other';
+				$ansText = isset( $formData[$optionName] ) && $formData[$optionName] !== ''
+					? $formData[$optionName]
+					: null;
+			}
+		} else {
+			throw new UnexpectedValueException( "Unhandled question type $type" );
+		}
+
+		return new Answer( $questionSpec['db-id'], $ansOption, $ansText );
+	}
+
+	/**
+	 * @param string $questionType
+	 * @param mixed $value
+	 * @return bool
+	 */
+	private function isPlaceholderValue( string $questionType, $value ): bool {
+		switch ( $questionType ) {
+			case self::RADIO_BUTTON_QUESTION_TYPE:
+			case self::SELECT_QUESTION_TYPE:
+				return (int)$value === 0;
+			case self::FREE_TEXT_QUESTION_TYPE:
+				return $value === '';
+			default:
+				throw new LogicException( 'Unhandled question type' );
+		}
 	}
 
 	/**

@@ -376,7 +376,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RegisterForEventHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsRegisterParticipantCommand"
+				"CampaignEventsRegisterParticipantCommand",
+				"MainConfig"
 			]
 		},
 		{

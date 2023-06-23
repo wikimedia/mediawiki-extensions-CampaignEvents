@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use Html;
 use HTMLForm;
+use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -182,10 +183,44 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		$privateFlag = $data['IsPrivate'] ?
 			RegisterParticipantCommand::REGISTRATION_PRIVATE :
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
+
+		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			if ( $this->curParticipantData ) {
+				// Temporarily grab the previous answers
+				try {
+					$centralUser = $this->centralUserLookup->newFromAuthority(
+						new MWAuthorityProxy( $this->getAuthority() )
+					);
+				} catch ( UserNotGlobalException $_ ) {
+					return Status::newFatal( 'campaignevents-register-need-central-account' );
+				}
+				$answers = CampaignEventsServices::getParticipantAnswersStore()->getParticipantAnswers(
+					$this->event->getID(),
+					$centralUser
+				);
+			} else {
+				// FIXME: Use $data when this form is also shown for edits.
+				$htmlformData = [
+					'QuestionGender' => $this->getRequest()->getVal( 'wpQuestionGender' ),
+					'QuestionAge' => $this->getRequest()->getVal( 'wpQuestionAge' ),
+					'QuestionProfession' => $this->getRequest()->getVal( 'wpQuestionProfession' ),
+					'QuestionConfidence' => $this->getRequest()->getVal( 'wpQuestionConfidence' ),
+					'QuestionAffiliate' => $this->getRequest()->getVal( 'wpQuestionAffiliate' ),
+					'QuestionAffiliate_Other' => $this->getRequest()->getVal( 'wpQuestionAffiliate_Other' ),
+				];
+				$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
+					$htmlformData,
+					$this->event->getParticipantQuestions()
+				);
+			}
+		} else {
+			$answers = [];
+		}
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
 			new MWAuthorityProxy( $this->getAuthority() ),
-			$privateFlag
+			$privateFlag,
+			$answers
 		);
 		$this->modifiedData = $status->getValue();
 		return Status::wrap( $status );

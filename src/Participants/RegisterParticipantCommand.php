@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
@@ -69,6 +70,7 @@ class RegisterParticipantCommand {
 	 * @param ExistingEventRegistration $registration
 	 * @param ICampaignsAuthority $performer
 	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
+	 * @param Answer[] $answers
 	 * @return StatusValue Good if everything went fine, fatal with errors otherwise. If good, the value shall be
 	 *   true if the user was not already registered (or they deleted their registration), and false if they were
 	 *   already actively registered. Will be a PermissionStatus for permissions-related errors.
@@ -76,13 +78,14 @@ class RegisterParticipantCommand {
 	public function registerIfAllowed(
 		ExistingEventRegistration $registration,
 		ICampaignsAuthority $performer,
-		bool $isPrivate
+		bool $isPrivate,
+		array $answers
 	): StatusValue {
 		$permStatus = $this->authorizeRegistration( $performer );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
 		}
-		return $this->registerUnsafe( $registration, $performer, $isPrivate );
+		return $this->registerUnsafe( $registration, $performer, $isPrivate, $answers );
 	}
 
 	/**
@@ -118,12 +121,14 @@ class RegisterParticipantCommand {
 	 * @param ExistingEventRegistration $registration
 	 * @param ICampaignsAuthority $performer
 	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
+	 * @param Answer[] $answers
 	 * @return StatusValue
 	 */
 	public function registerUnsafe(
 		ExistingEventRegistration $registration,
 		ICampaignsAuthority $performer,
-		bool $isPrivate
+		bool $isPrivate,
+		array $answers
 	): StatusValue {
 		$registrationAllowedVal = self::checkIsRegistrationAllowed( $registration );
 		if ( $registrationAllowedVal !== self::CAN_REGISTER ) {
@@ -162,7 +167,7 @@ class RegisterParticipantCommand {
 			$registration->getID(),
 			$centralUser,
 			$isPrivate,
-			[]
+			$answers
 		);
 
 		if ( $modified !== ParticipantsStore::MODIFIED_NOTHING ) {

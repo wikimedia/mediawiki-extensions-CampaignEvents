@@ -91,7 +91,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand( null, $permChecker )->registerIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
 			$this->createMock( ICampaignsAuthority::class ),
-			RegisterParticipantCommand::REGISTRATION_PUBLIC
+			RegisterParticipantCommand::REGISTRATION_PUBLIC,
+			[]
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -113,7 +114,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand()->registerIfAllowed(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),
-			RegisterParticipantCommand::REGISTRATION_PUBLIC
+			RegisterParticipantCommand::REGISTRATION_PUBLIC,
+			[]
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -156,7 +158,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$this->createMock( ICampaignsAuthority::class ),
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
-				RegisterParticipantCommand::REGISTRATION_PUBLIC
+				RegisterParticipantCommand::REGISTRATION_PUBLIC,
+			[]
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );
@@ -179,7 +182,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$this->createMock( ICampaignsAuthority::class ),
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
-				RegisterParticipantCommand::REGISTRATION_PUBLIC
+				RegisterParticipantCommand::REGISTRATION_PUBLIC,
+			[]
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );
@@ -221,7 +225,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand( null, null, $centralUserLookup, $trackingToolEventWatcher )->registerUnsafe(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class ),
-			RegisterParticipantCommand::REGISTRATION_PUBLIC
+			RegisterParticipantCommand::REGISTRATION_PUBLIC,
+			[]
 		);
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( $expectedMsg, $status );
