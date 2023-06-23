@@ -168,10 +168,6 @@ class WikiEduDashboard extends TrackingTool {
 		CentralUser $participant,
 		bool $private
 	): StatusValue {
-		if ( $private ) {
-			// Private participants are not synced, so don't bother making a request.
-			return StatusValue::newGood();
-		}
 		return $this->syncParticipants( $event, $toolEventID, true );
 	}
 
@@ -184,10 +180,8 @@ class WikiEduDashboard extends TrackingTool {
 		CentralUser $participant,
 		bool $private
 	): StatusValue {
-		if ( $private ) {
-			// Private participants are not synced, so don't bother making a request.
-			return StatusValue::newGood();
-		}
+		// Note, even if private participants aren't synced, this method can also be called when a previously-public
+		// participant switches to private, so we must sync participant all the same.
 		return $this->syncParticipants( $event, $toolEventID, false );
 	}
 

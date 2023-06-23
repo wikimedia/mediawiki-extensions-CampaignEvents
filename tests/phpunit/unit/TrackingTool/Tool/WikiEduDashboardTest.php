@@ -309,21 +309,6 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::validateParticipantAdded
-	 */
-	public function testValidateParticipantAdded__private() {
-		// Verify that we don't do anything if the participant is private.
-		$noopParticipantStore = $this->createNoOpMock( ParticipantsStore::class );
-		$actual = $this->getTool( null, $noopParticipantStore )->validateParticipantAdded(
-			$this->createMock( ExistingEventRegistration::class ),
-			'something',
-			$this->createMock( CentralUser::class ),
-			true
-		);
-		$this->assertStatusGood( $actual );
-	}
-
-	/**
 	 * @covers ::addParticipant
 	 * @covers ::syncParticipants
 	 * @covers ::makePostRequest
@@ -345,21 +330,6 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 		} else {
 			$this->assertStatusError( $expectedError, $actual );
 		}
-	}
-
-	/**
-	 * @covers ::addParticipant
-	 */
-	public function testAddParticipant__private() {
-		// Verify that we don't do anything if the participant is private.
-		$noopParticipantStore = $this->createNoOpMock( ParticipantsStore::class );
-		$actual = $this->getTool( null, $noopParticipantStore )->addParticipant(
-			$this->createMock( ExistingEventRegistration::class ),
-			'something',
-			$this->createMock( CentralUser::class ),
-			true
-		);
-		$this->assertStatusGood( $actual );
 	}
 
 	/**
