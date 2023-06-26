@@ -93,3 +93,39 @@ CREATE TABLE /*_*/ce_tracking_tools (
   ),
   PRIMARY KEY(cett_id)
 ) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_event_questions (
+  ceeq_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceeq_event_id BIGINT UNSIGNED NOT NULL,
+  ceeq_question_id INT UNSIGNED NOT NULL,
+  UNIQUE INDEX ceeq_event_question (ceeq_event_id, ceeq_question_id),
+  PRIMARY KEY(ceeq_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_question_answers (
+  ceqa_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceqa_event_id BIGINT UNSIGNED NOT NULL,
+  ceqa_user_id INT UNSIGNED NOT NULL,
+  ceqa_question_id INT UNSIGNED NOT NULL,
+  ceqa_answer_option INT UNSIGNED DEFAULT NULL,
+  ceqa_answer_text BLOB DEFAULT NULL,
+  UNIQUE INDEX ceqa_event_user_question (
+    ceqa_event_id, ceqa_user_id, ceqa_question_id
+  ),
+  PRIMARY KEY(ceqa_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_question_aggregation (
+  ceqag_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceqag_event_id BIGINT UNSIGNED NOT NULL,
+  ceqag_question_id INT UNSIGNED NOT NULL,
+  ceqag_answer_option INT UNSIGNED NOT NULL,
+  ceqag_answers_amount INT UNSIGNED NOT NULL,
+  UNIQUE INDEX ceqag_event_question (
+    ceqag_event_id, ceqag_question_id
+  ),
+  PRIMARY KEY(ceqag_id)
+) /*$wgDBTableOptions*/;
