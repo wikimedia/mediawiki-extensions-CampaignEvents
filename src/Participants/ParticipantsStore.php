@@ -248,10 +248,14 @@ class ParticipantsStore implements IDBAccessObject {
 		);
 
 		$centralIDsMap = [];
+		$centralUsersByID = [];
 		foreach ( $rows as $row ) {
-			$centralIDsMap[(int)$row->cep_user_id] = null;
+			$userID = (int)$row->cep_user_id;
+			$centralIDsMap[$userID] = null;
+			$centralUsersByID[$userID] = new CentralUser( $userID );
 		}
 		$globalNames = $this->centralUserLookup->getNames( $centralIDsMap );
+		$answersByUser = $this->answersStore->getParticipantAnswersMulti( $eventID, $centralUsersByID );
 
 		$participants = [];
 		$num = 0;
@@ -267,10 +271,11 @@ class ParticipantsStore implements IDBAccessObject {
 				continue;
 			}
 			$participants[] = new Participant(
-				new CentralUser( $centralID ),
+				$centralUsersByID[$centralID],
 				wfTimestamp( TS_UNIX, $row->cep_registered_at ),
 				(int)$row->cep_id,
-				(bool)$row->cep_private
+				(bool)$row->cep_private,
+				$answersByUser[$centralID]
 			);
 			$num++;
 		}
@@ -310,11 +315,13 @@ class ParticipantsStore implements IDBAccessObject {
 			return null;
 		}
 
+		$user = new CentralUser( (int)$row->cep_user_id );
 		return new Participant(
-			new CentralUser( (int)$row->cep_user_id ),
+			$user,
 			wfTimestamp( TS_UNIX, $row->cep_registered_at ),
 			(int)$row->cep_id,
-			(bool)$row->cep_private
+			(bool)$row->cep_private,
+			$this->answersStore->getParticipantAnswers( $eventID, $user )
 		);
 	}
 

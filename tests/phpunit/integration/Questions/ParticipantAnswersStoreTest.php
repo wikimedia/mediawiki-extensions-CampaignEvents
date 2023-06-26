@@ -246,6 +246,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getParticipantAnswers
+	 * @covers ::getParticipantAnswersMulti
 	 * @dataProvider provideGetParticipantAnswers
 	 */
 	public function testGetParticipantAnswers( int $eventID, int $userID, array $expected ) {
@@ -276,6 +277,50 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 			10,
 			110,
 			[]
+		];
+	}
+
+	/**
+	 * @covers ::getParticipantAnswersMulti
+	 * @dataProvider provideGetParticipantAnswersMulti
+	 */
+	public function testGetParticipantAnswersMulti( int $eventID, array $userIDs, array $expected ) {
+		$store = CampaignEventsServices::getParticipantAnswersStore();
+		$users = array_map( static fn ( int $id ) => new CentralUser( $id ), $userIDs );
+		$this->assertEquals( $expected, $store->getParticipantAnswersMulti( $eventID, $users ) );
+	}
+
+	public function provideGetParticipantAnswersMulti(): Generator {
+		$ans = static fn ( int $quest, ?int $opt, string $text = null ) => new Answer( $quest, $opt, $text );
+
+		yield 'No participants given' => [ 1, [], [] ];
+
+		yield 'Single participant' => [
+			2,
+			[ 103 ],
+			[ 103 => [ $ans( 1, 3 ) ] ]
+		];
+
+		yield 'Multiple participants' => [
+			2,
+			[ 101, 103, 104 ],
+			[
+				101 => [
+					$ans( 1, 1 ),
+					$ans( 4, null, 'quux' ),
+				],
+				103 => [ $ans( 1, 3 ) ],
+				104 => [ $ans( 5, 1 ) ],
+			]
+		];
+
+		yield 'Includes participant without answers' => [
+			2,
+			[ 103, 110 ],
+			[
+				103 => [ $ans( 1, 3 ) ],
+				110 => [],
+			]
 		];
 	}
 }

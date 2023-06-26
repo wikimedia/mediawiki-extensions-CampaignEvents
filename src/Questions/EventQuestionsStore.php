@@ -67,6 +67,10 @@ class EventQuestionsStore {
 	 * elements of $eventIDs as keys.
 	 */
 	public function getEventQuestionsMulti( array $eventIDs ): array {
+		if ( !$eventIDs ) {
+			return [];
+		}
+
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$res = $dbr->select(
 			'ce_event_questions',

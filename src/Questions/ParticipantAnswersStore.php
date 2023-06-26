@@ -98,23 +98,41 @@ class ParticipantAnswersStore {
 	 * @return Answer[]
 	 */
 	public function getParticipantAnswers( int $eventID, CentralUser $participant ): array {
+		$userID = $participant->getCentralID();
+		return $this->getParticipantAnswersMulti( $eventID, [ $participant ] )[$userID];
+	}
+
+	/**
+	 * Returns the answers of multiple participants.
+	 *
+	 * @param int $eventID
+	 * @param CentralUser[] $participants
+	 * @return array<int,Answer[]> Keys are user IDs. This is guaranteed to contain an entry for each
+	 * user ID in $participants.
+	 */
+	public function getParticipantAnswersMulti( int $eventID, array $participants ): array {
+		if ( !$participants ) {
+			return [];
+		}
+		$participantIDs = array_map( static fn ( CentralUser $u ) => $u->getCentralID(), $participants );
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$res = $dbr->select(
 			'ce_question_answers',
 			'*',
 			[
 				'ceqa_event_id' => $eventID,
-				'ceqa_user_id' => $participant->getCentralID()
+				'ceqa_user_id' => $participantIDs
 			]
 		);
-		$answers = [];
+		$answersByUser = array_fill_keys( $participantIDs, [] );
 		foreach ( $res as $row ) {
-			$answers[] = new Answer(
+			$userID = (int)$row->ceqa_user_id;
+			$answersByUser[$userID][] = new Answer(
 				(int)$row->ceqa_question_id,
 				$row->ceqa_answer_option !== null ? (int)$row->ceqa_answer_option : $row->ceqa_answer_option,
 				$row->ceqa_answer_text
 			);
 		}
-		return $answers;
+		return $answersByUser;
 	}
 }
