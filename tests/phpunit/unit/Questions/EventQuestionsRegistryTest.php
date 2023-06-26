@@ -49,12 +49,40 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			$this->assertArrayHasKey( 'questionData', $questionDescriptor, 'Questions should have data' );
 			$questionData = $questionDescriptor['questionData'];
 			$this->assertArrayHasKey( 'type', $questionData, 'Questions should have a type' );
+			$questionType = $questionData['type'];
+			if ( in_array( $questionType, EventQuestionsRegistry::MULTIPLE_CHOICE_TYPES, true ) ) {
+				$this->assertArrayHasKey(
+					'options-messages',
+					$questionData,
+					'Multiple-choice questions must have options-messages'
+				);
+			}
+			$this->assertArrayHasKey( 'label-message', $questionData, 'Questions should have a label' );
 			if ( isset( $questionDescriptor['otherOptions'] ) ) {
 				$this->assertIsArray( $questionDescriptor['otherOptions'], 'otherOptions should be an array' );
+				$this->assertContains(
+					$questionType,
+					EventQuestionsRegistry::MULTIPLE_CHOICE_TYPES,
+					'Only multiple choice questions can have other options'
+				);
 				foreach ( $questionDescriptor['otherOptions'] as $key => $val ) {
-					$this->assertIsString( $key, 'otherOptions should use string names as keys' );
+					$this->assertIsInt( $key, 'otherOptions should use parent values as keys' );
+					$this->assertContains(
+						$key,
+						$questionData['options-messages'],
+						'otherOptions keys must be possible values of the parent field'
+					);
 					$this->assertIsArray( $val, 'Each option in otherOptions should be an array' );
-					$this->assertArrayHasKey( 'type', $val, 'Each option in otherOptions should have a type' );
+					$this->assertSame(
+						EventQuestionsRegistry::FREE_TEXT_QUESTION_TYPE,
+							$val['type'] ?? null,
+						'Each option in otherOptions should be explicitly defined as free text'
+					);
+					$this->assertArrayHasKey(
+						'placeholder-message',
+						$val,
+						'Each option in otherOptions should have a placeholder'
+					);
 				}
 			}
 		}
