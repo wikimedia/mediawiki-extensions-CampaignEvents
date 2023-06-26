@@ -260,10 +260,10 @@ class EventsPager extends TablePager {
 				$eventStatus = EventStore::getEventStatusFromDBVal( $this->mCurrentRow->event_status );
 				$eventPage = $this->getEventPageFromRow( $this->mCurrentRow );
 				$btn->setAttributes( [
-					'data-event-id' => $eventID,
-					'data-event-name' => $this->mCurrentRow->event_name,
-					'data-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
-					'data-event-page-url' => $this->pageURLResolver->getUrl( $eventPage )
+					'data-mw-event-id' => $eventID,
+					'data-mw-event-name' => $this->mCurrentRow->event_name,
+					'data-mw-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
+					'data-mw-event-page-url' => $this->pageURLResolver->getUrl( $eventPage )
 				] );
 				return $btn->toString();
 			default:
