@@ -9,6 +9,8 @@
 	"campaignevents-register-edit-btn": "Сачувај измене",
 	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
 	"campaignevents-eventslist-delete-dialog-delete": "Обриши",
+	"campaignevents-eventpage-register-dialog-save": "Сачувај",
+	"campaignevents-event-details-location-header": "Локација",
 	"campaignevents-registration-confirmation-toggle-public": "Јавна регистрација",
 	"campaignevents-notification-registration-details-dates-header": "Датум и време",
 	"campaignevents-notification-registration-details-dates": "$1 до $4",
@@ -33,6 +35,7 @@
 	"campaignevents-register-question-confidence-contributing-not-say": "Не желим да кажем",
 	"campaignevents-register-question-affiliate-placeholder": "Изаберите опцију",
 	"campaignevents-register-question-affiliate-option-none": "Не",
+	"campaignevents-register-question-affiliate-option-chapter": "Огранак",
 	"campaignevents-register-question-affiliate-option-user-group": "Корисничка група",
 	"campaignevents-register-question-affiliate-details-placeholder": "Молимо наведите"
 }

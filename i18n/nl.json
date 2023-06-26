@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
+			"DiGro",
 			"HanV",
 			"McDutchie",
 			"Siebrand"
@@ -203,9 +204,14 @@
 	"campaignevents-event-details-participants-private": "$1 deelnemer{{PLURAL:$1||s}} privé geregistreerd.",
 	"campaignevents-event-details-dates": "$1 tot $4",
 	"campaignevents-event-details-timezone": "<strong>Tijdzone:</strong> $1",
+	"campaignevents-event-details-location-header": "Locatie",
 	"campaignevents-event-details-in-person-event-label": "Evenement op locatie",
 	"campaignevents-event-details-online-label": "Online evenement",
+	"campaignevents-event-details-tracking-tool-p&e-dashboard-synced": "Gebruikersnamen van deelnemers up-to-date op het dashboard",
+	"campaignevents-event-details-tracking-tool-last-update": "Laatst bijgewerkt: $1",
+	"campaignevents-event-details-tracking-tool-last-successful-update": "Laatste succesvolle update: $1",
 	"campaignevents-event-details-chat-link": "Uitnodigingslink voor chatgroep",
+	"campaignevents-event-details-chat-link-not-available": "Er is geen chatgroep beschikbaar voor dit evenement.",
 	"campaignevents-event-details-organizers-header": "Organisatoren",
 	"campaignevents-event-details-register-prompt": "U moet zich registreren om deze informatie te bekijken",
 	"campaignevents-event-details-view-event-page": "Evenementpagina bekijken",

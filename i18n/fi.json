@@ -6,14 +6,24 @@
 			"Pyscowicz"
 		]
 	},
+	"campaignevents-register-edit-btn": "Tallenna muutokset",
 	"campaignevents-eventslist-delete-dialog-cancel": "Peruuta",
+	"campaignevents-eventpage-btn-cancel": "Peruuta rekisteröinti",
 	"campaignevents-eventpage-btn-registration-closed": "Rekisteröityminen on päättynyt",
 	"campaignevents-eventpage-btn-event-ended": "Tapahtuma on päättynyt",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Kyllä",
 	"campaignevents-eventpage-register-dialog-register": "Rekisteröidy",
+	"campaignevents-eventpage-register-dialog-save": "Tallenna",
+	"campaignevents-event-details-location-header": "Sijainti",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Peruuta",
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Yksityinen rekisteröinti:</strong> Vain tapahtuman järjestäjät näkevät käyttäjätunnuksesi osallistujaluettelossa.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Julkinen rekisteröinti:</strong> Näytä käyttäjänimesi julkisessa osallistujaluettelossa.",
 	"campaignevents-registration-confirmation-toggle-private": "Yksityinen rekisteröinti",
-	"campaignevents-registration-confirmation-toggle-public": "Julkinen rekisteröinti"
+	"campaignevents-registration-confirmation-toggle-public": "Julkinen rekisteröinti",
+	"campaignevents-register-question-gender-option-man": "Mies",
+	"campaignevents-register-question-gender-option-woman": "Nainen",
+	"campaignevents-register-question-gender-option-nonbinary": "Ei-binäärinen",
+	"campaignevents-register-question-profession-option-student": "Opiskelija",
+	"campaignevents-register-question-affiliate-option-none": "Ei",
+	"campaignevents-register-question-affiliate-option-user-group": "Käyttäjäryhmä"
 }
