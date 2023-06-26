@@ -4,7 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Questions;
 
+use Generator;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWikiUnitTestCase;
 
 /**
@@ -21,10 +23,20 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	 */
 	public function testRegistryStructure(): void {
 		$questions = $this->getRegistry()->getQuestionsForTesting();
+		$seenNames = [];
+		$seenDBIDs = [];
 		foreach ( $questions as $questionDescriptor ) {
 			$this->assertIsArray( $questions, 'Question descriptor should be an array' );
 			$this->assertArrayHasKey( 'name', $questionDescriptor, 'Questions should have a name' );
-			$this->assertIsString( $questionDescriptor['name'], 'Question names should be strings' );
+			$name = $questionDescriptor['name'];
+			$this->assertIsString( $name, 'Question names should be strings' );
+			$this->assertArrayNotHasKey( $name, $seenNames, 'Duplicated question name' );
+			$seenNames[$name] = true;
+			$this->assertArrayHasKey( 'db-id', $questionDescriptor, 'Questions should have a DB ID' );
+			$dbID = $questionDescriptor['db-id'];
+			$this->assertIsInt( $dbID, 'Question DB IDs should be integers' );
+			$this->assertArrayNotHasKey( $dbID, $seenDBIDs, 'Duplicated question DB ID' );
+			$seenDBIDs[$dbID] = true;
 			$this->assertArrayHasKey(
 				'wikimedia',
 				$questionDescriptor,
@@ -59,5 +71,57 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			// TODO: We may want to check that $descriptor is valid (e.g., by calling
 			// HTMLForm::loadInputFromParameters), but the code is still heavily reliant on global state.
 		}
+	}
+
+	/**
+	 * @covers ::getAvailableQuestionNames
+	 */
+	public function testGetAvailableQuestionNames() {
+		$expected = [
+			'gender',
+			'age',
+			'profession',
+			'confidence',
+			'affiliate',
+		];
+		$this->assertSame( $expected, $this->getRegistry()->getAvailableQuestionNames() );
+	}
+
+	/**
+	 * @covers ::nameToDBID
+	 * @dataProvider provideNameToDBID
+	 */
+	public function testNameToDBID( string $name, ?int $expected ) {
+		if ( $expected === null ) {
+			$this->expectException( UnknownQuestionException::class );
+		}
+		$actual = $this->getRegistry()->nameToDBID( $name );
+		if ( $expected !== null ) {
+			$this->assertSame( $expected, $actual );
+		}
+	}
+
+	public static function provideNameToDBID(): Generator {
+		yield 'Valid' => [ 'age', 2 ];
+		yield 'Invalid' => [ 'this-is-definitely-invalid', null ];
+	}
+
+	/**
+	 * @covers ::nameToDBID
+	 * @dataProvider provideDbIDToName
+	 */
+	public function testDbIDToName( int $dbID, ?string $expected ) {
+		if ( $expected === null ) {
+			$this->expectException( UnknownQuestionException::class );
+		}
+		$actual = $this->getRegistry()->dbIDToName( $dbID );
+		if ( $expected !== null ) {
+			$this->assertSame( $expected, $actual );
+		}
+	}
+
+	public static function provideDbIDToName(): Generator {
+		yield 'Valid' => [ 2, 'age' ];
+		yield 'Invalid' => [ -142365, null ];
 	}
 }
