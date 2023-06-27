@@ -55,7 +55,8 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 					'ceo_user_id' => $data['user'],
 					'ceo_roles' => $dbRoles,
 					'ceo_created_at' => $ts,
-					'ceo_deleted_at' => $data['deleted'] ? $ts : null
+					'ceo_deleted_at' => $data['deleted'] ? $ts : null,
+					'ceo_agreement_timestamp' => null,
 				];
 			}
 		}

@@ -176,6 +176,8 @@ class OrganizersStore {
 				'ceo_user_id' => $userID,
 				'ceo_roles' => $dbRoles,
 				'ceo_created_at' => $createdAt,
+				// TODO: Add the following when the column has been created in production
+				// 'ceo_agreement_timestamp' => null,
 			];
 		}
 

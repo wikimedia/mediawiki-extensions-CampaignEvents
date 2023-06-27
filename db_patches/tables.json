@@ -336,6 +336,14 @@
 				"options": {
 					"notnull": false
 				}
+			},
+			{
+				"name": "ceo_agreement_timestamp",
+				"comment": "Timestamp of when the organizer agreed to the PII agreement.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
 			}
 		],
 		"indexes": [

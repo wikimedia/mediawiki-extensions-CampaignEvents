@@ -55,7 +55,8 @@ CREATE TABLE /*_*/ce_organizers (
   ceo_event_id BIGINT UNSIGNED NOT NULL,
   ceo_user_id INTEGER UNSIGNED NOT NULL,
   ceo_roles BIGINT UNSIGNED NOT NULL,
-  ceo_created_at BLOB NOT NULL, ceo_deleted_at BLOB DEFAULT NULL
+  ceo_created_at BLOB NOT NULL, ceo_deleted_at BLOB DEFAULT NULL,
+  ceo_agreement_timestamp BLOB DEFAULT NULL
 );
 
 CREATE UNIQUE INDEX ceo_event_user ON /*_*/ce_organizers (ceo_event_id, ceo_user_id);

@@ -68,6 +68,7 @@ CREATE TABLE ce_organizers (
   ceo_roles BIGINT NOT NULL,
   ceo_created_at TIMESTAMPTZ NOT NULL,
   ceo_deleted_at TIMESTAMPTZ DEFAULT NULL,
+  ceo_agreement_timestamp TIMESTAMPTZ DEFAULT NULL,
   PRIMARY KEY(ceo_id)
 );
 
