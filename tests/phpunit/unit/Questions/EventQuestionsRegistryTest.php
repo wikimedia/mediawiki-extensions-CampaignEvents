@@ -100,7 +100,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	public function testGetQuestionsForHTMLForm(): void {
 		$registry = $this->getRegistry();
 		$availableQuestionIDs = array_column( $registry->getQuestionsForTesting(), 'db-id' );
-		$htmlFormQuestions = $this->getRegistry()->getQuestionsForHTMLForm( $availableQuestionIDs );
+		$htmlFormQuestions = $this->getRegistry()->getQuestionsForHTMLForm( $availableQuestionIDs, [] );
 		foreach ( $htmlFormQuestions as $key => $descriptor ) {
 			$this->assertIsString( $key, 'HTMLForm keys should be strings (field names)' );
 			$this->assertIsArray( $descriptor, 'HTMLForm descriptors should be arrays' );
@@ -172,7 +172,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	public function testHTMLFormRoundtrip() {
 		$registry = $this->getRegistry();
 		$enabledQuestions = [ 1, 2, 3, 4, 5 ];
-		$htmlFormDescriptor = $registry->getQuestionsForHTMLForm( $enabledQuestions );
+		$htmlFormDescriptor = $registry->getQuestionsForHTMLForm( $enabledQuestions, [] );
 		$reqData = [];
 		foreach ( $htmlFormDescriptor as $name => $field ) {
 			switch ( $field['type'] ) {

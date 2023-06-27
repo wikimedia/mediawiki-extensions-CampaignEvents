@@ -184,22 +184,42 @@ class EventQuestionsRegistry {
 	 * @note This method ignores any IDs not corresponding to known questions.
 	 *
 	 * @param int[] $questionIDs
+	 * @param Answer[] $curAnswers Current user answers, used for the default values
 	 * @return array[]
 	 */
-	public function getQuestionsForHTMLForm( array $questionIDs ): array {
+	public function getQuestionsForHTMLForm( array $questionIDs, array $curAnswers ): array {
+		$curAnswersByID = [];
+		foreach ( $curAnswers as $answer ) {
+			$curAnswersByID[$answer->getQuestionDBID()] = $answer;
+		}
 		$fields = [];
 		foreach ( $this->getQuestions() as $question ) {
 			$questionID = $question['db-id'];
 			if ( !in_array( $questionID, $questionIDs, true ) ) {
 				continue;
 			}
+			$curAnswer = $curAnswersByID[$questionID] ?? null;
 			$fieldName = 'Question' . ucfirst( $question['name'] );
 			$fields[$fieldName] = $question[ 'questionData' ];
+			if ( $curAnswer ) {
+				$type = $question['questionData']['type'];
+				if ( $type === self::FREE_TEXT_QUESTION_TYPE ) {
+					$default = $curAnswer->getText();
+				} elseif ( in_array( $type, self::MULTIPLE_CHOICE_TYPES, true ) ) {
+					$default = $curAnswer->getOption();
+				} else {
+					throw new UnexpectedValueException( "Unhandled question type $type" );
+				}
+				$fields[$fieldName]['default'] = $default;
+			}
 			foreach ( $question[ 'otherOptions' ] ?? [] as $showIfVal => $optionData ) {
 				$optionName = $fieldName . '_Other';
 				$optionData['hide-if'] = [ '!==', $fieldName, (string)$showIfVal ];
 				$optionData['cssclass'] = 'ext-campaignevents-participant-question-other-option';
 				$fields[$optionName] = $optionData;
+				if ( $curAnswer ) {
+					$fields[$optionName]['default'] = $curAnswer->getText();
+				}
 			}
 		}
 		return $fields;
