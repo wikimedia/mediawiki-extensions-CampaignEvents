@@ -4,6 +4,7 @@
 			"Ajeje Brazorf",
 			"Amire80",
 			"Daimona Eaytoy",
+			"MarcoAurelio",
 			"Verdy p"
 		]
 	},
@@ -235,7 +236,7 @@
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Body of a confirmation dialog shown on [[Special:EventDetails]] when the user presses the button to remove participants from the event. Parameters:\n* $1 - The number of participants, for PLURAL support.",
 	"campaignevents-event-details-remove-participant-remove-btn": "Label of a button in a confirmation dialog shown on Special:EventDetails when the user presses the button to remove participants from the event. By clicking, the selected participant(s) will be removed.",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Label of a button in a confirmation dialog shown on Special:EventDetails when the user presses the button to remove participants from the event. By clicking, the dialog will close without any action being taken.\n\n{{Identical|Cancel}}",
-	"campaignevents-event-details-private-participant-label": "Accessibility label added to lock icons on [[Special:EventDetails]] to indicate that a participant registered privately.Parameters:\n*$1 - Username of the participant, for GENDER",
+	"campaignevents-event-details-private-participant-label": "Accessibility label added to lock icons on [[Special:EventDetails]] to indicate that a participant registered privately.\n\nParameters:\n* $1 - Username of the participant, for GENDER",
 	"campaignevents-event-details-no-event-id-provided": "Error message shown on [[Special:EventDetails]] when the event ID was not provided.",
 	"campaignevents-event-details-no-participants-state": "Label used on [[Special:EventDetails]] when there are no participants.",
 	"campaignevents-event-details-event-deleted": "Error message shown on [[Special:EventDetails]] for deleted registrations",

@@ -70,6 +70,7 @@
 	"campaignevents-register-question-gender-option-man": "بندہ",
 	"campaignevents-register-question-gender-option-woman": "تریمت",
 	"campaignevents-register-question-gender-option-nonbinary": "تریجھی جنس",
+	"campaignevents-register-question-age-placeholder": "عمر دی رینج چݨو",
 	"campaignevents-register-question-age-option-under-18": "١٨ کنوں گھٹ",
 	"campaignevents-register-question-age-option-18-24": "١٨ ــ ٢٤",
 	"campaignevents-register-question-age-option-25-34": "٢٥ ــ ٣٤",
@@ -78,11 +79,15 @@
 	"campaignevents-register-question-age-option-55-64": "٥٥ ــ ٦٤",
 	"campaignevents-register-question-age-option-65-74": "٦٥ـ٧٤",
 	"campaignevents-register-question-age-option-75-84": "٧٥ ــ ٨٤",
+	"campaignevents-register-question-profession-placeholder": "آپݨاں پیشہ چݨو",
 	"campaignevents-register-question-profession-option-librarian": "لائبریرین",
 	"campaignevents-register-question-profession-option-researcher": "محقق",
 	"campaignevents-register-question-profession-option-software-engineer": "سافٹ ویئر انجینیئر",
 	"campaignevents-register-question-profession-option-student": "شاگرد",
 	"campaignevents-register-question-affiliate-placeholder": "ہک اختیار چݨو",
 	"campaignevents-register-question-affiliate-option-none": "کو",
-	"campaignevents-register-question-affiliate-option-chapter": "باب"
+	"campaignevents-register-question-affiliate-option-affiliate": "الحاق کرو",
+	"campaignevents-register-question-affiliate-option-chapter": "باب",
+	"campaignevents-register-question-affiliate-option-user-group": "ورتݨ آلا گروپ",
+	"campaignevents-register-question-affiliate-details-placeholder": "سوہݨا، بیان کرو"
 }
