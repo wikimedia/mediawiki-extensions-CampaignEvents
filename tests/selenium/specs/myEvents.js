@@ -11,6 +11,8 @@ const assert = require( 'assert' ),
 describe( 'MyEvents', function () {
 
 	before( async function () {
+		// Create a new event to make sure that there's at least an (open) event
+		// in the table.
 		await LoginPage.loginAdmin();
 		await EventRegistrationPage.createEventPage( event );
 		await Rest.enableEvent( event );
@@ -21,15 +23,15 @@ describe( 'MyEvents', function () {
 	} );
 
 	it( 'can allow organizer to close registration of first event in My Events', async function () {
-		// XXX This might fail if the first registration in the list is already closed
-		await MyEventsPage.closeRegistration();
+		await MyEventsPage.filterByOpenRegistrations();
+		await MyEventsPage.closeFirstRegistration();
 		assert.deepEqual( await MyEventsPage.notification.getText(), `${await MyEventsPage.firstEvent.getText()} registration closed.` );
 	} );
 
 	it( 'can allow organizer to delete registration of first event in My Events', async function () {
 		// Save the name of the event now, as the deletion will refresh the page.
 		const eventName = await MyEventsPage.firstEvent.getText();
-		await MyEventsPage.deleteRegistration();
+		await MyEventsPage.deleteFirstRegistration();
 		assert.deepEqual( await MyEventsPage.notification.getText(), `${eventName} deleted.` );
 	} );
 } );
