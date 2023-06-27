@@ -42,6 +42,8 @@ CREATE TABLE ce_participants (
   cep_private BOOLEAN NOT NULL,
   cep_registered_at TIMESTAMPTZ NOT NULL,
   cep_unregistered_at TIMESTAMPTZ DEFAULT NULL,
+  cep_first_answer_timestamp TIMESTAMPTZ DEFAULT NULL,
+  cep_aggregation_timestamp TIMESTAMPTZ DEFAULT NULL,
   PRIMARY KEY(cep_id)
 );
 
@@ -55,6 +57,8 @@ CREATE INDEX cep_user_unregistered_event ON ce_participants (
   cep_user_id, cep_unregistered_at,
   cep_event_id
 );
+
+CREATE INDEX cep_aggregation ON ce_participants (cep_aggregation_timestamp);
 
 
 CREATE TABLE ce_organizers (

@@ -31,7 +31,9 @@ CREATE TABLE /*_*/ce_participants (
   cep_event_id BIGINT UNSIGNED NOT NULL,
   cep_user_id INTEGER UNSIGNED NOT NULL,
   cep_private BOOLEAN NOT NULL, cep_registered_at BLOB NOT NULL,
-  cep_unregistered_at BLOB DEFAULT NULL
+  cep_unregistered_at BLOB DEFAULT NULL,
+  cep_first_answer_timestamp BLOB DEFAULT NULL,
+  cep_aggregation_timestamp BLOB DEFAULT NULL
 );
 
 CREATE UNIQUE INDEX cep_event_participant ON /*_*/ce_participants (cep_event_id, cep_user_id);
@@ -44,6 +46,8 @@ CREATE INDEX cep_user_unregistered_event ON /*_*/ce_participants (
   cep_user_id, cep_unregistered_at,
   cep_event_id
 );
+
+CREATE INDEX cep_aggregation ON /*_*/ce_participants (cep_aggregation_timestamp);
 
 
 CREATE TABLE /*_*/ce_organizers (

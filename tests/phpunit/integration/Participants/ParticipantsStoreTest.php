@@ -37,7 +37,9 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_user_id' => 101,
 						'cep_private' => false,
 						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
-						'cep_unregistered_at' => null
+						'cep_unregistered_at' => null,
+						'cep_first_answer_timestamp' => null,
+						'cep_aggregation_timestamp' => null,
 					],
 					[
 						'cep_event_id' => $eventID,
@@ -45,20 +47,26 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_private' => false,
 						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
 						'cep_unregistered_at' => $this->db->timestamp( '20220324120000' ),
+						'cep_first_answer_timestamp' => null,
+						'cep_aggregation_timestamp' => null,
 					],
 					[
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 104,
 						'cep_private' => false,
 						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
-						'cep_unregistered_at' => null
+						'cep_unregistered_at' => null,
+						'cep_first_answer_timestamp' => null,
+						'cep_aggregation_timestamp' => null,
 					],
 					[
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 106,
 						'cep_private' => true,
 						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
-						'cep_unregistered_at' => null
+						'cep_unregistered_at' => null,
+						'cep_first_answer_timestamp' => null,
+						'cep_aggregation_timestamp' => null,
 					],
 				]
 			);

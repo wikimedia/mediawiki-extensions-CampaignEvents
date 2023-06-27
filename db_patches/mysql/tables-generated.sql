@@ -39,6 +39,8 @@ CREATE TABLE /*_*/ce_participants (
   cep_private TINYINT(1) NOT NULL,
   cep_registered_at BINARY(14) NOT NULL,
   cep_unregistered_at BINARY(14) DEFAULT NULL,
+  cep_first_answer_timestamp BINARY(14) DEFAULT NULL,
+  cep_aggregation_timestamp BINARY(14) DEFAULT NULL,
   UNIQUE INDEX cep_event_participant (cep_event_id, cep_user_id),
   INDEX cep_event_unregistered (
     cep_event_id, cep_unregistered_at
@@ -47,6 +49,7 @@ CREATE TABLE /*_*/ce_participants (
     cep_user_id, cep_unregistered_at,
     cep_event_id
   ),
+  INDEX cep_aggregation (cep_aggregation_timestamp),
   PRIMARY KEY(cep_id)
 ) /*$wgDBTableOptions*/;
 
