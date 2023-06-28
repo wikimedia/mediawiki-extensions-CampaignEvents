@@ -34,10 +34,10 @@
 		$( '.ext-campaignevents-eventspager-manage-btn' ).each( function () {
 			var $btn = $( this ),
 				menu = new EventKebabMenu( {
-					eventID: $btn.data( 'event-id' ),
-					eventName: $btn.data( 'event-name' ),
-					isEventClosed: $btn.data( 'is-closed' ),
-					eventPageURL: $btn.data( 'event-page-url' ),
+					eventID: $btn.data( 'mw-event-id' ),
+					eventName: $btn.data( 'mw-event-name' ),
+					isEventClosed: $btn.data( 'mw-is-closed' ),
+					eventPageURL: $btn.data( 'mw-event-page-url' ),
 					windowManager: windowManager
 				} );
 			menu.on( 'deleted', function ( eventName ) {
