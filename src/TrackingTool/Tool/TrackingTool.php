@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\TrackingTool\Tool;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use StatusValue;
 
 /**
@@ -199,4 +200,14 @@ abstract class TrackingTool {
 	 * @return string
 	 */
 	abstract public static function buildToolEventURL( string $baseURL, string $toolEventID ): string;
+
+	/**
+	 * Given the URL of an event in this tool, return the corresponding event ID in the tool.
+	 *
+	 * @param string $baseURL
+	 * @param string $url
+	 * @return string
+	 * @throws InvalidToolURLException
+	 */
+	abstract public static function extractEventIDFromURL( string $baseURL, string $url ): string;
 }

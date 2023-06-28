@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\WikiMap\WikiMap;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
@@ -27,6 +28,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 * @param PolicyMessagesLookup $policyMessagesLookup
 	 * @param OrganizersStore $organizersStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param TrackingToolRegistry $trackingToolRegistry
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -35,7 +37,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		PermissionChecker $permissionChecker,
 		PolicyMessagesLookup $policyMessagesLookup,
 		OrganizersStore $organizersStore,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		TrackingToolRegistry $trackingToolRegistry
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -46,7 +49,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$policyMessagesLookup,
 			$organizersStore,
 			$permissionChecker,
-			$centralUserLookup
+			$centralUserLookup,
+			$trackingToolRegistry
 		);
 	}
 

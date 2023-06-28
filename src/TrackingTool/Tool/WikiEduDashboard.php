@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Http\HttpRequestFactory;
 use Message;
 use StatusValue;
@@ -353,5 +354,49 @@ class WikiEduDashboard extends TrackingTool {
 	 */
 	public static function buildToolEventURL( string $baseURL, string $toolEventID ): string {
 		return rtrim( $baseURL, '/' ) . '/courses/' . $toolEventID;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function extractEventIDFromURL( string $baseURL, string $url ): string {
+		if ( str_starts_with( $url, '//' ) ) {
+			// Protocol-relative, assume HTTPS
+			$urlBits = parse_url( "https:$url" );
+		} else {
+			$urlBits = parse_url( $url );
+			if ( !isset( $urlBits['scheme'] ) ) {
+				// Missing protocol, assume HTTPS
+				$urlBits = parse_url( "https://$url" );
+			}
+		}
+		if ( $urlBits === false ) {
+			throw new InvalidToolURLException( $baseURL, 'Badly malformed URL: ' . $url );
+		}
+		if ( !isset( $urlBits['scheme'] ) ) {
+			// Probably shouldn't happen given the fixes above, but just to be sure...
+			throw new InvalidToolURLException( $baseURL, 'No scheme: ' . $url );
+		}
+		if ( !isset( $urlBits['host'] ) ) {
+			throw new InvalidToolURLException( $baseURL, 'No host: ' . $url );
+		}
+		$scheme = strtolower( $urlBits['scheme'] );
+		if ( $scheme !== 'https' && $scheme !== 'http' ) {
+			throw new InvalidToolURLException( $baseURL, 'Bad scheme: ' . $url );
+		}
+		$expectedHost = parse_url( $baseURL, PHP_URL_HOST );
+		if ( strtolower( $urlBits['host'] ) !== $expectedHost ) {
+			throw new InvalidToolURLException( $baseURL, 'Bad host: ' . $url );
+		}
+		if ( !isset( $urlBits['path'] ) ) {
+			throw new InvalidToolURLException( $baseURL, 'No path: ' . $url );
+		}
+
+		$pathBits = explode( '/', trim( $urlBits['path'], '/' ) );
+		if ( count( $pathBits ) !== 3 || $pathBits[0] !== 'courses' ) {
+			throw new InvalidToolURLException( $baseURL, 'Invalid path: ' . $url );
+		}
+
+		return $pathBits[1] . '/' . $pathBits[2];
 	}
 }

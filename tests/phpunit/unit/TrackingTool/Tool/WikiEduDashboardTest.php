@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWikiUnitTestCase;
@@ -442,6 +443,116 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 				$courseSlug,
 				"https://outreachdashboard.wmflabs.org/courses/$courseSlug"
 			]
+		];
+	}
+
+	/**
+	 * @dataProvider provideExtractEventIDFromURL
+	 * @covers ::extractEventIDFromURL
+	 */
+	public function testExtractEventIDFromURL( string $baseURL, string $url, ?string $expected ) {
+		if ( $expected === null ) {
+			$this->expectException( InvalidToolURLException::class );
+		}
+		$actual = WikiEduDashboard::extractEventIDFromURL( $baseURL, $url );
+		if ( $expected !== null ) {
+			$this->assertSame( $expected, $actual );
+		}
+	}
+
+	public static function provideExtractEventIDFromURL(): array {
+		$baseUrl = 'https://dashboard-testing.wikiedu.org/';
+		return [
+			'Malformed value' => [
+				$baseUrl,
+				':',
+				null,
+			],
+			'Not an URL' => [
+				$baseUrl,
+				'foo',
+				null,
+			],
+			'Not a known Dashboard instance' => [
+				$baseUrl,
+				'https://example.org',
+				null,
+			],
+			'Good URL, no course ID, invalid protocol' => [
+				$baseUrl,
+				'irc://dashboard-testing.wikiedu.org',
+				null,
+			],
+			'Good URL, no course ID, no protocol' => [
+				$baseUrl,
+				'dashboard-testing.wikiedu.org',
+				null,
+			],
+			'Good URL, HTTPS, site homepage' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org',
+				null,
+			],
+			'Good URL, HTTPS, campaign page' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/campaigns/test_campaign/overview',
+				null,
+			],
+			'Good URL, HTTPS, missing course ID' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/courses/',
+				null,
+			],
+			'Good URL, HTTPS, only first part of course ID' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/courses/Organization',
+				null,
+			],
+			'Good URL, HTTPS, missing second part of course ID' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/courses/Organization/',
+				null,
+			],
+			'Good URL, HTTPS, course ID with too many parts' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/courses/Organization/Course/XYZ',
+				null,
+			],
+			'Wrong path letter case' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/Courses/Organization/Course',
+				null,
+			],
+			'Valid, https' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/courses/Organization/Course',
+				'Organization/Course',
+			],
+			'Valid, http' => [
+				$baseUrl,
+				'http://dashboard-testing.wikiedu.org/courses/Organization/Course',
+				'Organization/Course',
+			],
+			'Valid, protocol-relative' => [
+				$baseUrl,
+				'//dashboard-testing.wikiedu.org/courses/Organization/Course',
+				'Organization/Course',
+			],
+			'Valid, no protocol' => [
+				$baseUrl,
+				'dashboard-testing.wikiedu.org/courses/Organization/Course',
+				'Organization/Course',
+			],
+			'Valid, weird scheme and host letter case' => [
+				$baseUrl,
+				'Https://DASHBOARD-TESTING.wikiedu.ORG/courses/Organization/Course',
+				'Organization/Course',
+			],
+			'Valid, additional query parameters' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/courses/Organization/Course?foo=bar&baz=quux',
+				'Organization/Course',
+			],
 		];
 	}
 }

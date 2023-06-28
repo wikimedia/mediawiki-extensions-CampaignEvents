@@ -229,4 +229,24 @@ class TrackingToolRegistry {
 		}
 		throw new ToolNotFoundException( "No tool with DB ID $dbID" );
 	}
+
+	/**
+	 * @param string $userID
+	 * @param string $toolEventURL
+	 * @return string
+	 * @throws InvalidToolURLException
+	 */
+	public function getToolEventIDFromURL( string $userID, string $toolEventURL ): string {
+		foreach ( $this->getRegistry() as $entry ) {
+			if ( $entry['user-id'] === $userID ) {
+				/**
+				 * @var TrackingTool $className Note that this is actually a string, but annotating it like this lets
+				 * PHPStorm autocomplete the methods and find their usages.
+				 */
+				$className = $entry['class'];
+				return $className::extractEventIDFromURL( $entry['base-url'], $toolEventURL );
+			}
+		}
+		throw new ToolNotFoundException( "No tool with user ID $userID" );
+	}
 }

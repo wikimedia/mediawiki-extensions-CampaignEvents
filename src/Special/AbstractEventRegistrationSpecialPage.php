@@ -9,6 +9,7 @@ use DateTimeZone;
 use FormSpecialPage;
 use Html;
 use HTMLForm;
+use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -21,6 +22,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
+use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserTimeCorrection;
 use Message;
@@ -53,6 +56,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected PermissionChecker $permissionChecker;
 	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
+	/** @var TrackingToolRegistry */
+	private TrackingToolRegistry $trackingToolRegistry;
 
 	/** @var int|null */
 	protected $eventID;
@@ -83,6 +88,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @param OrganizersStore $organizersStore
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param TrackingToolRegistry $trackingToolRegistry
 	 */
 	public function __construct(
 		string $name,
@@ -93,18 +99,21 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		PolicyMessagesLookup $policyMessagesLookup,
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		TrackingToolRegistry $trackingToolRegistry
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
 		$this->eventFactory = $eventFactory;
 		$this->editEventCommand = $editEventCommand;
 		$this->policyMessagesLookup = $policyMessagesLookup;
-		$this->formMessages = $this->getFormMessages();
 		$this->organizersStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->trackingToolRegistry = $trackingToolRegistry;
+
 		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
+		$this->formMessages = $this->getFormMessages();
 	}
 
 	/**
@@ -246,7 +255,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'max' => EditEventCommand::MAX_ORGANIZERS_PER_EVENT,
 			'min' => 1,
 			'cssclass' => 'ext-campaignevents-organizers-multiselect-input',
-			'placeholder' => $this->msg( 'campaignevents-edit-field-organizers-placeholder' )->text(),
+			'placeholder-message' => 'campaignevents-edit-field-organizers-placeholder',
 			'validation-callback' => function ( $value, $alldata ) {
 				$organizers = $alldata['EventOrganizerUsernames'] !== ''
 					? explode( "\n", $alldata['EventOrganizerUsernames'] )
@@ -265,6 +274,61 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				return true;
 			},
 		];
+
+		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
+		if ( $availableTrackingTools ) {
+			if (
+				count( $availableTrackingTools ) > 1 ||
+				$availableTrackingTools[0]['user-id'] !== 'wikimedia-pe-dashboard'
+			) {
+				throw new LogicException( "Only the P&E Dashboard should be available as a tool for now" );
+			}
+			$formFields['EventTrackingToolID'] = [
+				'type' => 'hidden',
+				'default' => 'wikimedia-pe-dashboard',
+			];
+			if ( $this->event ) {
+				$curTrackingTools = $this->event->getTrackingTools();
+				if ( $curTrackingTools ) {
+					if (
+						count( $curTrackingTools ) > 1 ||
+						$curTrackingTools[0]->getToolID() !== 1
+					) {
+						throw new LogicException( "Only the P&E Dashboard should be available as a tool for now" );
+					}
+					$userInfo = $this->trackingToolRegistry->getUserInfo(
+						$curTrackingTools[0]->getToolID(),
+						$curTrackingTools[0]->getToolEventID()
+					);
+					$defaultDashboardURL = $userInfo['tool-event-url'];
+				} else {
+					$defaultDashboardURL = '';
+				}
+			} else {
+				$defaultDashboardURL = '';
+			}
+			$formFields['EventDashboardURL'] = [
+				'type' => 'url',
+				'label-message' => 'campaignevents-edit-field-tracking-tools',
+				'default' => $defaultDashboardURL,
+				'help-message' => 'campaignevents-edit-field-tracking-tools-help',
+				'placeholder-message' => 'campaignevents-edit-field-tracking-tools-placeholder',
+				'validation-callback' => function ( $value, $allData ) {
+					if ( $value === '' ) {
+						return true;
+					}
+					try {
+						$this->trackingToolRegistry->getToolEventIDFromURL( $allData['EventTrackingToolID'], $value );
+						return true;
+					} catch ( InvalidToolURLException $e ) {
+						$baseURL = rtrim( $e->getExpectedBaseURL(), '/' ) . '/courses';
+						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )
+							->params( $baseURL )
+							->text();
+					}
+				},
+			];
+		}
 
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
@@ -378,14 +442,28 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			}
 		}
 
+		if ( isset( $data['EventDashboardURL'] ) && $data['EventDashboardURL'] !== '' ) {
+			$trackingToolUserID = $data['EventTrackingToolID'];
+			try {
+				$trackingToolEventID = $this->trackingToolRegistry->getToolEventIDFromURL(
+					$trackingToolUserID,
+					$data['EventDashboardURL']
+				);
+			} catch ( InvalidToolURLException $_ ) {
+				throw new LogicException( 'This should have been caught by validation-callback' );
+			}
+		} else {
+			$trackingToolUserID = null;
+			$trackingToolEventID = null;
+		}
+
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
 				$data['EventChatURL'],
-				// TODO MVP: Tracking tool
-				null,
-				null,
+				$trackingToolUserID,
+				$trackingToolEventID,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
 				$timezone,
 				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
