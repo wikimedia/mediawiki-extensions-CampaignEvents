@@ -68,7 +68,10 @@ class ParticipantsStore implements IDBAccessObject {
 					'cep_user_id' => $participant->getCentralID(),
 					'cep_private' => $private,
 					'cep_registered_at' => $dbw->timestamp(),
-					'cep_unregistered_at' => null
+					'cep_unregistered_at' => null,
+					// TODO: Add the following when the columns have been created in production
+					// 'cep_first_answer_timestamp' => null,
+					// 'cep_aggregation_timestamp' => null,
 				]
 			);
 			$modified = self::MODIFIED_REGISTRATION;
