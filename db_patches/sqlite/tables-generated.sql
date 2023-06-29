@@ -47,8 +47,6 @@ CREATE INDEX cep_user_unregistered_event ON /*_*/ce_participants (
   cep_event_id
 );
 
-CREATE INDEX cep_aggregation ON /*_*/ce_participants (cep_aggregation_timestamp);
-
 
 CREATE TABLE /*_*/ce_organizers (
   ceo_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

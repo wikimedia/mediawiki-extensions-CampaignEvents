@@ -58,8 +58,6 @@ CREATE INDEX cep_user_unregistered_event ON ce_participants (
   cep_event_id
 );
 
-CREATE INDEX cep_aggregation ON ce_participants (cep_aggregation_timestamp);
-
 
 CREATE TABLE ce_organizers (
   ceo_id BIGSERIAL NOT NULL,
