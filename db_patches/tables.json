@@ -271,12 +271,6 @@
 				"columns": [ "cep_user_id", "cep_unregistered_at", "cep_event_id" ],
 				"unique": false,
 				"comment": "For JOINs."
-			},
-			{
-				"name": "cep_aggregation",
-				"columns": [ "cep_aggregation_timestamp" ],
-				"unique": false,
-				"comment": "Used when deleting answers by timestamp."
 			}
 		],
 		"pk": [ "cep_id" ]

@@ -49,7 +49,6 @@ CREATE TABLE /*_*/ce_participants (
     cep_user_id, cep_unregistered_at,
     cep_event_id
   ),
-  INDEX cep_aggregation (cep_aggregation_timestamp),
   PRIMARY KEY(cep_id)
 ) /*$wgDBTableOptions*/;
 
