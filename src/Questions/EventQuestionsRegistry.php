@@ -33,6 +33,7 @@ class EventQuestionsRegistry {
 		$questions = [
 			[
 				'name' => 'gender',
+				'db-id' => 1,
 				'wikimedia' => false,
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
@@ -49,6 +50,7 @@ class EventQuestionsRegistry {
 			],
 			[
 				'name' => 'age',
+				'db-id' => 2,
 				'wikimedia' => false,
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
@@ -69,6 +71,7 @@ class EventQuestionsRegistry {
 			],
 			[
 				'name' => 'profession',
+				'db-id' => 3,
 				'wikimedia' => false,
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
@@ -90,6 +93,7 @@ class EventQuestionsRegistry {
 			],
 			[
 				'name' => 'confidence',
+				'db-id' => 4,
 				'wikimedia' => true,
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
@@ -105,6 +109,7 @@ class EventQuestionsRegistry {
 			],
 			[
 				'name' => 'affiliate',
+				'db-id' => 5,
 				'wikimedia' => true,
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
@@ -174,5 +179,44 @@ class EventQuestionsRegistry {
 			}
 		}
 		return $fields;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getAvailableQuestionNames(): array {
+		return array_column( $this->getQuestions(), 'name' );
+	}
+
+	/**
+	 * Given a question name, returns the corresponding database ID.
+	 *
+	 * @param string $name
+	 * @return int
+	 * @throws UnknownQuestionException
+	 */
+	public function nameToDBID( string $name ): int {
+		foreach ( $this->getQuestions() as $question ) {
+			if ( $question['name'] === $name ) {
+				return $question['db-id'];
+			}
+		}
+		throw new UnknownQuestionException( "Unknown question name $name" );
+	}
+
+	/**
+	 * Given a question database ID, returns its name.
+	 *
+	 * @param int $dbID
+	 * @return string
+	 * @throws UnknownQuestionException
+	 */
+	public function dbIDToName( int $dbID ): string {
+		foreach ( $this->getQuestions() as $question ) {
+			if ( $question['db-id'] === $dbID ) {
+				return $question['name'];
+			}
+		}
+		throw new UnknownQuestionException( "Unknown question DB ID $dbID" );
 	}
 }
