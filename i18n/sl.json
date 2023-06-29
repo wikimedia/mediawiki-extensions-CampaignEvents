@@ -179,7 +179,7 @@
 	"campaignevents-eventpage-dialog-link-register": "Prijavite se za ogled povezave dogodka.",
 	"campaignevents-eventpage-dialog-venue-not-available": "Naslov prizorišča {{PLURAL:$1|bo zagotovil|bosta zagotovila|bodo zagotovili}} {{PLURAL:$1|organizator|organizatorja|organizatorji}}.",
 	"campaignevents-eventpage-dialog-chat-label": "Pridružite se klepetalni skupini dogodka",
-	"campaignevents-eventpage-dialog-chat-not-available": "Klepetalna skupina za ta dogodek ne obstaja.",
+	"campaignevents-eventpage-dialog-chat-not-available": "Za ta dogodek ne obstaja nobena klepetalna skupina.",
 	"campaignevents-eventpage-dialog-chat-register": "Prijavite se za ogled povezave klepetalne skupine.",
 	"campaignevents-eventpage-dialog-action-close": "Zapri",
 	"campaignevents-eventpage-register-notification": "Zdaj ste prijavljeni na dogodek $1.",
