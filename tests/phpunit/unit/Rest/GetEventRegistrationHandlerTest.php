@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
+use HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -45,7 +46,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			->willReturn( [ 'user-id' => self::TRACKING_TOOL_USER_ID ] );
 		return new GetEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$trackingToolRegistry
+			$trackingToolRegistry,
+				new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => true ] )
 		);
 	}
 
@@ -75,6 +77,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'meeting_url' => 'https://meeting-url.example.org',
 			'meeting_country' => 'My country',
 			'meeting_address' => 'My address 123',
+			'questions' => [],
 		];
 		$meetingType = ( $eventData['online_meeting'] ? EventRegistration::MEETING_TYPE_ONLINE : 0 )
 			| ( $eventData['inperson_meeting'] ? EventRegistration::MEETING_TYPE_IN_PERSON : 0 );
@@ -100,7 +103,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['meeting_url'],
 			$eventData['meeting_country'],
 			$eventData['meeting_address'],
-			[],
+			$eventData['questions'],
 			'1646000000',
 			'1646000000',
 			null
