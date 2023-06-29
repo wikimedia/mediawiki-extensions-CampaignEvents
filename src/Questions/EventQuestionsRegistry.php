@@ -26,6 +26,9 @@ class EventQuestionsRegistry {
 	 */
 	private bool $wikimediaQuestionsEnabled;
 
+	/** @var array|null Question overrides used in test. Null means no override. */
+	private ?array $testOverrides = null;
+
 	/**
 	 * @param bool $wikimediaQuestionsEnabled
 	 */
@@ -57,6 +60,10 @@ class EventQuestionsRegistry {
 	 * @return array[]
 	 */
 	private function getQuestions(): array {
+		if ( $this->testOverrides !== null ) {
+			return $this->testOverrides;
+		}
+
 		$questions = [
 			[
 				'name' => 'gender',
@@ -177,6 +184,17 @@ class EventQuestionsRegistry {
 	}
 
 	/**
+	 * @codeCoverageIgnore
+	 * @param array[] $questions
+	 */
+	public function overrideQuestionsForTesting( array $questions ): void {
+		if ( !defined( 'MW_PHPUNIT_TEST' ) ) {
+			throw new BadMethodCallException( 'This method can only be used in tests' );
+		}
+		$this->testOverrides = $questions;
+	}
+
+	/**
 	 * Returns the questions corresponding to the given question database IDs, in the format accepted by HTMLForm.
 	 * Each "child" question is given the CSS class `ext-campaignevents-participant-question-other-option`, which can
 	 * be used to style the child field.
@@ -277,6 +295,47 @@ class EventQuestionsRegistry {
 			default:
 				throw new LogicException( 'Unhandled question type' );
 		}
+	}
+
+	/**
+	 * Returns the questions corresponding to the given question database IDs, in a format suitable for the API.
+	 *
+	 * @note This method ignores any IDs not corresponding to known questions.
+	 *
+	 * @param int[]|null $questionIDs Only include questions with these IDs, or null to include all questions
+	 * @return array[] The keys are question IDs, and the values are arrays with the following keys: `name`, `type`,
+	 *   `label-message`. `options-messages` is also present if the question is multiple choice. `other-option` is
+	 *    also set if the question has additional options. This is an array where the keys are possible values for
+	 *    the parent question, and the values are arrays with `type` and `label-message`.
+	 */
+	public function getQuestionsForAPI( array $questionIDs = null ): array {
+		$ret = [];
+		foreach ( $this->getQuestions() as $question ) {
+			$questionID = $question['db-id'];
+			if ( $questionIDs !== null && !in_array( $questionID, $questionIDs, true ) ) {
+				continue;
+			}
+			$questionData = $question['questionData'];
+			$ret[$questionID] = [
+				'name' => $question['name'],
+				'type' => $questionData['type'],
+				'label-message' => $questionData['label-message'],
+			];
+			if ( isset( $questionData['options-messages'] ) ) {
+				$ret[$questionID]['options-messages'] = $questionData['options-messages'];
+			}
+			$otherOptions = [];
+			foreach ( $question[ 'otherOptions' ] ?? [] as $showIfVal => $optionData ) {
+				$otherOptions[$showIfVal] = [
+					'type' => $optionData['type'],
+					'label-message' => $optionData['placeholder-message'],
+				];
+			}
+			if ( $otherOptions ) {
+				$ret[$questionID]['other-options'] = $otherOptions;
+			}
+		}
+		return $ret;
 	}
 
 	/**

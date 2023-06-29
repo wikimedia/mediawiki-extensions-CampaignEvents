@@ -14,6 +14,95 @@ use MediaWikiUnitTestCase;
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry
  */
 class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
+	private const QUESTION_OVERRIDES = [
+		[
+			'name' => 'testradio',
+			'db-id' => 1,
+			'wikimedia' => false,
+			'questionData' => [
+				'type' => EventQuestionsRegistry::RADIO_BUTTON_QUESTION_TYPE,
+				'label-message' => 'question-1-label',
+				'options-messages' => [
+					'question-1-option-0' => 0,
+					'question-1-option-1' => 1,
+					'question-1-option-2' => 2,
+				],
+			],
+		],
+		[
+			'name' => 'testselect',
+			'db-id' => 2,
+			'wikimedia' => false,
+			'questionData' => [
+				'type' => EventQuestionsRegistry::SELECT_QUESTION_TYPE,
+				'label-message' => 'question-2-label',
+				'options-messages' => [
+					'question-2-option-0' => 0,
+					'question-2-option-1' => 1,
+					'question-2-option-2' => 2,
+				],
+			],
+		],
+		[
+			'name' => 'testother',
+			'db-id' => 3,
+			'wikimedia' => false,
+			'questionData' => [
+				'type' => EventQuestionsRegistry::SELECT_QUESTION_TYPE,
+				'label-message' => 'question-3-label',
+				'options-messages' => [
+					'question-3-option-0' => 0,
+					'question-3-option-1' => 1,
+					'question-3-option-2' => 2,
+				],
+			],
+			'otherOptions' => [
+				1 => [
+					'type' => EventQuestionsRegistry::FREE_TEXT_QUESTION_TYPE,
+					'placeholder-message' => 'question-3-placeholder',
+				],
+			],
+		],
+	];
+
+	private const QUESTION_OVERRIDES_API = [
+		1 => [
+			'name' => 'testradio',
+			'type' => EventQuestionsRegistry::RADIO_BUTTON_QUESTION_TYPE,
+			'label-message' => 'question-1-label',
+			'options-messages' => [
+				'question-1-option-0' => 0,
+				'question-1-option-1' => 1,
+				'question-1-option-2' => 2,
+			],
+		],
+		2 => [
+			'name' => 'testselect',
+			'type' => EventQuestionsRegistry::SELECT_QUESTION_TYPE,
+			'label-message' => 'question-2-label',
+			'options-messages' => [
+				'question-2-option-0' => 0,
+				'question-2-option-1' => 1,
+				'question-2-option-2' => 2,
+			],
+		],
+		3 => [
+			'name' => 'testother',
+			'type' => EventQuestionsRegistry::SELECT_QUESTION_TYPE,
+			'label-message' => 'question-3-label',
+			'options-messages' => [
+				'question-3-option-0' => 0,
+				'question-3-option-1' => 1,
+				'question-3-option-2' => 2,
+			],
+			'other-options' => [
+				1 => [
+					'type' => EventQuestionsRegistry::FREE_TEXT_QUESTION_TYPE,
+					'label-message' => 'question-3-placeholder',
+				],
+			],
+		],
+	];
 
 	private function getRegistry(): EventQuestionsRegistry {
 		return new EventQuestionsRegistry( true );
@@ -198,6 +287,35 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			new Answer( 5, 2, 'foo' ),
 		];
 		$this->assertEquals( $expected, $parsedAnswers );
+	}
+
+	/**
+	 * @covers ::getQuestionsForAPI
+	 * @dataProvider provideGetQuestionsForAPI
+	 */
+	public function testGetQuestionsForAPI( ?array $questionIDs, array $expected ) {
+		$registry = $this->getRegistry();
+		$registry->overrideQuestionsForTesting( self::QUESTION_OVERRIDES );
+		$this->assertSame( $expected, $registry->getQuestionsForAPI( $questionIDs ) );
+	}
+
+	public function provideGetQuestionsForAPI(): Generator {
+		yield 'No filter' => [
+			null,
+			self::QUESTION_OVERRIDES_API
+		];
+		yield 'Empty filter' => [
+			[],
+			[]
+		];
+		yield 'Filter by single question' => [
+			[ 1 ],
+			[ 1 => self::QUESTION_OVERRIDES_API[1] ]
+		];
+		yield 'Filter by multiple questions' => [
+			[ 1, 2 ],
+			[ 1 => self::QUESTION_OVERRIDES_API[1], 2 => self::QUESTION_OVERRIDES_API[2] ]
+		];
 	}
 
 	/**
