@@ -4,16 +4,21 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use Config;
+use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
 use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class RegisterForEventHandler extends SimpleHandler {
@@ -25,17 +30,22 @@ class RegisterForEventHandler extends SimpleHandler {
 	private $eventLookup;
 	/** @var RegisterParticipantCommand */
 	private $registerParticipantCommand;
+	/** @var bool */
+	private bool $participantQuestionsEnabled;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
+	 * @param Config $config
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		RegisterParticipantCommand $registerParticipantCommand
+		RegisterParticipantCommand $registerParticipantCommand,
+		Config $config
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->registerParticipantCommand = $registerParticipantCommand;
+		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**
@@ -54,12 +64,28 @@ class RegisterForEventHandler extends SimpleHandler {
 		$body = $this->getValidatedBody();
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		$privateFlag = $body['is_private'] ?
+			RegisterParticipantCommand::REGISTRATION_PRIVATE :
+			RegisterParticipantCommand::REGISTRATION_PUBLIC;
+		if ( $this->participantQuestionsEnabled ) {
+			// Temporary hack: grab the existing answers.
+			try {
+				$centralUser = CampaignEventsServices::getCentralUserLookup()->newFromAuthority( $performer );
+			} catch ( UserNotGlobalException $_ ) {
+				throw new LocalizedHttpException( new MessageValue( 'campaignevents-register-need-central-account' ) );
+			}
+			$answers = CampaignEventsServices::getParticipantAnswersStore()->getParticipantAnswers(
+				$eventRegistration->getID(),
+				$centralUser
+			);
+		} else {
+			$answers = [];
+		}
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$eventRegistration,
 			$performer,
-			$body['is_private'] ?
-				RegisterParticipantCommand::REGISTRATION_PRIVATE :
-				RegisterParticipantCommand::REGISTRATION_PUBLIC
+			$privateFlag,
+			$answers
 		);
 		if ( !$status->isGood() ) {
 			$httpStatus = $status instanceof PermissionStatus ? 403 : 400;

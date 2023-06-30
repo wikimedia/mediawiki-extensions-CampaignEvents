@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Questions;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWikiUnitTestCase;
@@ -58,6 +59,11 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 					$questionData,
 					'Multiple-choice questions must have options-messages'
 				);
+				$this->assertContains(
+					0,
+					$questionData['options-messages'],
+					'There must be a placeholder option with value 0'
+				);
 			}
 			$this->assertArrayHasKey( 'label-message', $questionData, 'Questions should have a label' );
 			if ( isset( $questionDescriptor['otherOptions'] ) ) {
@@ -103,6 +109,97 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			// TODO: We may want to check that $descriptor is valid (e.g., by calling
 			// HTMLForm::loadInputFromParameters), but the code is still heavily reliant on global state.
 		}
+	}
+
+	/**
+	 * @covers ::extractUserAnswersHTMLForm
+	 * @covers ::newAnswerFromHTMLForm
+	 * @covers ::isPlaceholderValue
+	 * @dataProvider provideExtractUserAnswersHTMLForm
+	 */
+	public function testExtractUserAnswersHTMLForm( array $formData, array $enabledQuestions, array $expectedAnswers ) {
+		$this->assertEquals(
+			$expectedAnswers,
+			$this->getRegistry()->extractUserAnswersHTMLForm( $formData, $enabledQuestions )
+		);
+	}
+
+	public function provideExtractUserAnswersHTMLForm(): Generator {
+		yield 'Empty form data' => [ [], [ 1, 2, 3 ], [] ];
+		yield 'No answers in form data' => [ [ 'notaquestion' => 42 ], [ 1 ], [] ];
+		yield 'Form data contains answer to question not enabled' => [ [ 'QuestionAge' => 2 ], [], [] ];
+		yield 'Placeholder radio' => [ [ 'QuestionGender' => 0 ], [ 1 ], [] ];
+		yield 'Placeholder select' => [ [ 'QuestionAge' => 0 ], [ 2 ], [] ];
+		yield 'Simple answer with no other value' => [
+			[ 'QuestionGender' => 1 ],
+			[ 1 ],
+			[ new Answer( 1, 1, null ) ]
+		];
+		yield 'No value provided for otherOption' => [
+			[ 'QuestionAffiliate' => 2 ],
+			[ 5 ],
+			[ new Answer( 5, 2, null ) ]
+		];
+		yield 'Placeholder provided for otherOption' => [
+			[ 'QuestionAffiliate' => 2, 'QuestionAffiliate_Other' => '' ],
+			[ 5 ],
+			[ new Answer( 5, 2, null ) ]
+		];
+		yield 'Answer with other value' => [
+			[ 'QuestionAffiliate' => 2, 'QuestionAffiliate_Other' => 'some-affiliate' ],
+			[ 5 ],
+			[ new Answer( 5, 2, 'some-affiliate' ) ]
+		];
+		yield 'Multiple answer types' => [
+			[
+				'QuestionGender' => 3,
+				'QuestionAge' => 5,
+				'QuestionAffiliate' => 2,
+				'QuestionAffiliate_Other' => 'some-affiliate'
+			],
+			[ 1, 2, 3, 4, 5 ],
+			[
+				new Answer( 1, 3, null ),
+				new Answer( 2, 5, null ),
+				new Answer( 5, 2, 'some-affiliate' )
+			]
+		];
+	}
+
+	/**
+	 * @covers ::getQuestionsForHTMLForm
+	 * @covers ::extractUserAnswersHTMLForm
+	 * @covers ::newAnswerFromHTMLForm
+	 */
+	public function testHTMLFormRoundtrip() {
+		$registry = $this->getRegistry();
+		$enabledQuestions = [ 1, 2, 3, 4, 5 ];
+		$htmlFormDescriptor = $registry->getQuestionsForHTMLForm( $enabledQuestions );
+		$reqData = [];
+		foreach ( $htmlFormDescriptor as $name => $field ) {
+			switch ( $field['type'] ) {
+				case 'radio':
+				case 'select':
+					// Note: this assumes that the affiliate question only uses 'otherOption' when the value is 2
+					$val = 2;
+					break;
+				case 'text':
+					$val = 'foo';
+					break;
+				default:
+					$this->fail( "Unhandled field type " . $field['type'] );
+			}
+			$reqData[$name] = $val;
+		}
+		$parsedAnswers = $registry->extractUserAnswersHTMLForm( $reqData, $enabledQuestions );
+		$expected = [
+			new Answer( 1, 2, null ),
+			new Answer( 2, 2, null ),
+			new Answer( 3, 2, null ),
+			new Answer( 4, 2, null ),
+			new Answer( 5, 2, 'foo' ),
+		];
+		$this->assertEquals( $expected, $parsedAnswers );
 	}
 
 	/**
