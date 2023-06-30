@@ -1,10 +1,26 @@
 @import 'mediawiki.skin.variables.less';
 @import 'mediawiki.mixins.less';
 
+.ext-campaignevents-detailsdialog-header {
+	border-bottom: unset;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-bottom: 0.4em;
+	font-size: 170%;
+}
+
+.ext-campaignevents-detailsdialog-organizers {
+	margin-bottom: 1em;
+}
+
 .ext-campaignevents-detailsdialog-body-container {
 	.flex-display();
 	justify-content: space-between;
 	flex-wrap: wrap;
+	// Set a row gap for when the flex elements wrap (i.e., small screens). Note that is not supported
+	// by all grade C browsers. In those, the elements will be closer together, but that's hopefully
+	// just a minor visual glitch that can be tolerated.
+	row-gap: 1em;
 
 	> * {
 		// Make both columns have the same width, but wrap them if they would shrink too much.
@@ -17,7 +33,7 @@
 	}
 }
 
-.ext-campaignevents-detailsdialog-organizeranddetails-container {
+.ext-campaignevents-detailsdialog-eventinfo-container {
 	.flex-display();
 	flex-direction: column;
 
@@ -33,14 +49,6 @@
 		padding: 0 0.5em;
 		opacity: @opacity-icon-base;
 	}
-}
-
-.ext-campaignevents-detailsdialog-participants {
-	// Set a top margin so that if the flex elements wrap, there's some space between
-	// event details and participants. Ideally we'd use gap, but that is not supported
-	// by all grade C browsers. In this case it's not a big deal because the margin
-	// doesn't look visually wrong when the element is still on the first row.
-	margin-top: 1em;
 }
 
 .ext-campaignevents-eventpage-detailsdialog {

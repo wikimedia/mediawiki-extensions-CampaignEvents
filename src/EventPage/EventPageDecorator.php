@@ -609,10 +609,64 @@ class EventPageDecorator {
 		OutputPage $out
 	): string {
 		$eventID = $registration->getID();
-
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
+
+		$eventInfoContainer = $this->getDetailsDialogEventInfo(
+			$registration,
+			$language,
+			$viewingUser,
+			$msgFormatter,
+			$out,
+			$organizersCount,
+			$userStatus
+		);
+		$participantsContainer = $this->getDetailsDialogParticipants(
+			$authority,
+			$eventID,
+			$language,
+			$participant,
+			$msgFormatter
+		);
+
+		$dialogContent = Html::element(
+			'h2',
+			[ 'class' => 'ext-campaignevents-detailsdialog-header' ],
+			$registration->getName()
+		);
+		$dialogContent .= $this->getDetailsDialogOrganizers(
+			$eventID,
+			$msgFormatter,
+			$out,
+			$language,
+			$organizersCount
+		);
+		$dialogContent .= Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-detailsdialog-body-container' ],
+			$eventInfoContainer . $participantsContainer
+		);
+
+		return Html::rawElement( 'div', [ 'id' => 'ext-campaignEvents-detailsDialog-content' ], $dialogContent );
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param ITextFormatter $msgFormatter
+	 * @param OutputPage $out
+	 * @param Language $language
+	 * @param int $organizersCount
+	 * @return string
+	 */
+	private function getDetailsDialogOrganizers(
+		int $eventID,
+		ITextFormatter $msgFormatter,
+		OutputPage $out,
+		Language $language,
+		int $organizersCount
+	): string {
 		$partialOrganizers = $this->organizersStore->getEventOrganizers( $eventID, self::ORGANIZERS_LIMIT );
 		$langCode = $msgFormatter->getLangCode();
+
 		$organizerElements = [];
 		foreach ( $partialOrganizers as $organizer ) {
 			$organizerElements[] = $this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $langCode );
@@ -634,7 +688,74 @@ class EventPageDecorator {
 				)
 			);
 		}
-		$organizersAndDetails = Html::rawElement( 'div', [], $organizersStr );
+
+		return Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-detailsdialog-organizers' ],
+			$organizersStr
+		);
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param Language $language
+	 * @param UserIdentity $viewingUser
+	 * @param ITextFormatter $msgFormatter
+	 * @param OutputPage $out
+	 * @param int $organizersCount
+	 * @param int $userStatus
+	 * @return string
+	 */
+	private function getDetailsDialogEventInfo(
+		ExistingEventRegistration $registration,
+		Language $language,
+		UserIdentity $viewingUser,
+		ITextFormatter $msgFormatter,
+		OutputPage $out,
+		int $organizersCount,
+		int $userStatus
+	): string {
+		$eventInfo = $this->getDetailsDialogDates(
+			$registration,
+			$language,
+			$viewingUser,
+			$msgFormatter,
+			$out
+		);
+		$eventInfo .= $this->getDetailsDialogLocation(
+			$registration,
+			$msgFormatter,
+			$organizersCount,
+			$userStatus
+		);
+		$eventInfo .= $this->getDetailsDialogChat(
+			$registration,
+			$msgFormatter,
+			$userStatus
+		);
+
+		return Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-detailsdialog-eventinfo-container' ],
+			$eventInfo
+		);
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param Language $language
+	 * @param UserIdentity $viewingUser
+	 * @param ITextFormatter $msgFormatter
+	 * @param OutputPage $out
+	 * @return string
+	 */
+	private function getDetailsDialogDates(
+		ExistingEventRegistration $registration,
+		Language $language,
+		UserIdentity $viewingUser,
+		ITextFormatter $msgFormatter,
+		OutputPage $out
+	): string {
 		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $language, $viewingUser );
 		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $language, $viewingUser );
 		$datesMsg = $msgFormatter->format(
@@ -662,8 +783,22 @@ class EventPageDecorator {
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
 		] );
-		$organizersAndDetails .= Html::rawElement( 'div', [], $datesWidget );
+		return Html::rawElement( 'div', [], $datesWidget );
+	}
 
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param ITextFormatter $msgFormatter
+	 * @param int $organizersCount
+	 * @param int $userStatus
+	 * @return string
+	 */
+	private function getDetailsDialogLocation(
+		ExistingEventRegistration $registration,
+		ITextFormatter $msgFormatter,
+		int $organizersCount,
+		int $userStatus
+	): string {
 		$locationElements = [];
 		$onlineLocationElements = [];
 		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) {
@@ -741,8 +876,20 @@ class EventPageDecorator {
 			),
 			'content' => $locationElements
 		] );
-		$organizersAndDetails .= Html::rawElement( 'div', [], $locationWidget );
+		return Html::rawElement( 'div', [], $locationWidget );
+	}
 
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @param ITextFormatter $msgFormatter
+	 * @param int $userStatus
+	 * @return string
+	 */
+	private function getDetailsDialogChat(
+		ExistingEventRegistration $registration,
+		ITextFormatter $msgFormatter,
+		int $userStatus
+	): string {
 		$chatURL = $registration->getChatURL();
 		if ( $chatURL === null ) {
 			$chatURLContent = $msgFormatter->format(
@@ -773,14 +920,24 @@ class EventPageDecorator {
 			),
 			'content' => $chatURLContent
 		] );
-		$organizersAndDetails .= Html::rawElement( 'div', [], $chatURLWidget );
+		return Html::rawElement( 'div', [], $chatURLWidget );
+	}
 
-		$organizersAndDetailsContainer = Html::rawElement(
-			'div',
-			[ 'class' => 'ext-campaignevents-detailsdialog-organizeranddetails-container' ],
-			$organizersAndDetails
-		);
-
+	/**
+	 * @param ICampaignsAuthority $authority
+	 * @param int $eventID
+	 * @param Language $language
+	 * @param Participant|null $participant
+	 * @param ITextFormatter $msgFormatter
+	 * @return string
+	 */
+	private function getDetailsDialogParticipants(
+		ICampaignsAuthority $authority,
+		int $eventID,
+		Language $language,
+		?Participant $participant,
+		ITextFormatter $msgFormatter
+	): string {
 		$showPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID );
 		$participantsCount = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );
@@ -795,6 +952,7 @@ class EventPageDecorator {
 		if ( self::PARTICIPANTS_LIMIT < $participantsCount ) {
 			$participantsFooter = $this->getParticipantFooter( $eventID, $msgFormatter );
 		}
+
 		$participantsWidget = new EventDetailsWidget( [
 			'icon' => 'userGroup',
 			'label' => $msgFormatter->format(
@@ -802,7 +960,6 @@ class EventPageDecorator {
 					->numParams( $participantsCount )
 			),
 			'content' => [ $participantsList ?: '', $participantsFooter ],
-			'classes' => [ 'ext-campaignevents-detailsdialog-participants' ]
 		] );
 		$privateCountWidget = '';
 
@@ -813,30 +970,23 @@ class EventPageDecorator {
 			] );
 			$privateCountIcon = new IconWidget( [
 				'icon' => 'lock'
-				] );
+			] );
 			$privateCountText = new Tag( 'span' );
 			$privateCountText->appendContent(
 				$msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-participants-private' )
-					->numParams( $privateCount )
+						->numParams( $privateCount )
 				)
 			);
 
 			$privateCountWidget->appendContent( [ $privateCountIcon,$privateCountText ] );
 		}
-		$participantsContainer = Html::rawElement(
+
+		return Html::rawElement(
 			'div',
 			[ 'class' => 'ext-campaignevents-detailsdialog-participants-container' ],
 			$participantsWidget . $privateCountWidget
 		);
-		$dialogContent = Html::element( 'h2', [], $registration->getName() );
-		$dialogContent .= Html::rawElement(
-			'div',
-			[ 'class' => 'ext-campaignevents-detailsdialog-body-container' ],
-			$organizersAndDetailsContainer . $participantsContainer
-		);
-
-		return Html::rawElement( 'div', [ 'id' => 'ext-campaignEvents-detailsDialog-content' ], $dialogContent );
 	}
 
 	/**
