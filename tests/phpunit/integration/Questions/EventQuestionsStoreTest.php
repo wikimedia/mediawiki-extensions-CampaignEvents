@@ -65,6 +65,7 @@ class EventQuestionsStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public static function provideGetEventQuestionsMulti(): Generator {
+		yield 'No events given' => [ [], [] ];
 		yield 'Single event' => [ [ 1 ], [ 1 => [ 1, 2 ] ] ];
 		yield 'Multiple events' => [ [ 1, 2 ], [ 1 => [ 1, 2 ], 2 => [ 1 ] ] ];
 		yield 'Includes event with no questions' => [ [ 1, 1000 ], [ 1 => [ 1, 2 ], 1000 => [] ] ];
