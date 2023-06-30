@@ -358,7 +358,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsTrackingToolRegistry"
+				"CampaignEventsTrackingToolRegistry",
+				"MainConfig"
 			]
 		},
 		{
@@ -387,6 +388,17 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsUnregisterParticipantCommand"
+			]
+		},
+		{
+			"path": "/campaignevents/v0/event_registration/{id}/participants/self",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetOwnRegistrationInfoHandler",
+			"services": [
+				"CampaignEventsEventLookup",
+				"CampaignEventsParticipantsStore",
+				"CampaignEventsCentralUserLookup",
+				"MainConfig"
 			]
 		},
 		{
