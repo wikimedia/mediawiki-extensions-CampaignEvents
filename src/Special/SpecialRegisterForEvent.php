@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use Html;
 use HTMLForm;
-use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -97,9 +96,6 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		}
 
 		$this->isEdit = $this->curParticipantData || $this->getRequest()->wasPosted();
-		if ( $this->isEdit ) {
-			$this->showParticipantQuestions = false;
-		}
 		return parent::getForm();
 	}
 
@@ -133,7 +129,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 		if ( $this->showParticipantQuestions ) {
 			$enabledQuestions = $this->event->getParticipantQuestions();
-			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm( $enabledQuestions );
+			$curAnswers = $this->curParticipantData ? $this->curParticipantData->getAnswers() : [];
+			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm( $enabledQuestions, $curAnswers );
 			$questionFields = array_map(
 				static fn ( $fieldDescriptor ) =>
 					[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
@@ -184,35 +181,11 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			RegisterParticipantCommand::REGISTRATION_PRIVATE :
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
-			if ( $this->curParticipantData ) {
-				// Temporarily grab the previous answers
-				try {
-					$centralUser = $this->centralUserLookup->newFromAuthority(
-						new MWAuthorityProxy( $this->getAuthority() )
-					);
-				} catch ( UserNotGlobalException $_ ) {
-					return Status::newFatal( 'campaignevents-register-need-central-account' );
-				}
-				$answers = CampaignEventsServices::getParticipantAnswersStore()->getParticipantAnswers(
-					$this->event->getID(),
-					$centralUser
-				);
-			} else {
-				// FIXME: Use $data when this form is also shown for edits.
-				$htmlformData = [
-					'QuestionGender' => $this->getRequest()->getVal( 'wpQuestionGender' ),
-					'QuestionAge' => $this->getRequest()->getVal( 'wpQuestionAge' ),
-					'QuestionProfession' => $this->getRequest()->getVal( 'wpQuestionProfession' ),
-					'QuestionConfidence' => $this->getRequest()->getVal( 'wpQuestionConfidence' ),
-					'QuestionAffiliate' => $this->getRequest()->getVal( 'wpQuestionAffiliate' ),
-					'QuestionAffiliate_Other' => $this->getRequest()->getVal( 'wpQuestionAffiliate_Other' ),
-				];
-				$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
-					$htmlformData,
-					$this->event->getParticipantQuestions()
-				);
-			}
+		if ( $this->showParticipantQuestions ) {
+			$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
+				$data,
+				$this->event->getParticipantQuestions()
+			);
 		} else {
 			$answers = [];
 		}
