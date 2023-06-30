@@ -489,6 +489,17 @@
 				"CampaignEventsParticipantsStore",
 				"MainConfig"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/participant_questions",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetParticipantQuestionsHandler",
+			"services": [
+				"CampaignEventsEventQuestionsRegistry",
+				"MessageFormatterFactory",
+				"ContentLanguage",
+				"MainConfig"
+			]
 		}
 	],
 	"ServiceWiringFiles": [
