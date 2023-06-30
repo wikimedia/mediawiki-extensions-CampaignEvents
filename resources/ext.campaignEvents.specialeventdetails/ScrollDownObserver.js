@@ -16,7 +16,7 @@
 		this.scrollingEnd = false;
 		var that = this;
 		$( observedElement ).on( 'scroll', function () {
-			if ( that.scrolledToBottom() ) {
+			if ( !that.paused && that.scrolledToBottom() ) {
 				onScrolledToBottom();
 			}
 		} );
@@ -41,6 +41,14 @@
 	ScrollDownObserver.prototype.reset = function () {
 		this.lastTop = 0;
 		this.scrollingEnd = false;
+	};
+
+	ScrollDownObserver.prototype.pause = function () {
+		this.paused = true;
+	};
+
+	ScrollDownObserver.prototype.unpause = function () {
+		this.paused = false;
 	};
 
 	module.exports = ScrollDownObserver;
