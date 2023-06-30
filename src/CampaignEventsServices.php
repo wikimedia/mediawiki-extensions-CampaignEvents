@@ -34,6 +34,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
+use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -237,5 +238,9 @@ class CampaignEventsServices {
 
 	public static function getEventQuestionsStore( ContainerInterface $services = null ): EventQuestionsStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventQuestionsStore::SERVICE_NAME );
+	}
+
+	public static function getParticipantAnswersStore( ContainerInterface $services = null ): ParticipantAnswersStore {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( ParticipantAnswersStore::SERVICE_NAME );
 	}
 }

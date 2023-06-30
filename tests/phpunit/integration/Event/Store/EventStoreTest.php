@@ -293,7 +293,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$savedID = $this->storeEvent( $event );
 		$partStore = CampaignEventsServices::getParticipantsStore();
 		$participantID = 42;
-		$partStore->addParticipantToEvent( $savedID, new CentralUser( $participantID ), false );
+		$partStore->addParticipantToEvent( $savedID, new CentralUser( $participantID ), false, [] );
 		$eventsByParticipant = CampaignEventsServices::getEventLookup()->getEventsByParticipant( $participantID, 5 );
 		$this->assertCount( 1, $eventsByParticipant, 'Should be only one event' );
 		$this->assertEventsEqual( $event, $eventsByParticipant[0] );

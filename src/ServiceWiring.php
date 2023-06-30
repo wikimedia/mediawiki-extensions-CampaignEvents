@@ -35,6 +35,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
+use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -116,7 +117,8 @@ return [
 	ParticipantsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): ParticipantsStore {
 		return new ParticipantsStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( ParticipantAnswersStore::SERVICE_NAME )
 		);
 	},
 	OrganizersStore::SERVICE_NAME => static function ( MediaWikiServices $services ): OrganizersStore {
@@ -295,6 +297,11 @@ return [
 	},
 	EventQuestionsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventQuestionsStore {
 		return new EventQuestionsStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+		);
+	},
+	ParticipantAnswersStore::SERVICE_NAME => static function ( MediaWikiServices $services ): ParticipantAnswersStore {
+		return new ParticipantAnswersStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},

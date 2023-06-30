@@ -10,51 +10,71 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Questions\Answer;
+use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use Wikimedia\Assert\Assert;
 
 class ParticipantsStore implements IDBAccessObject {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
 
 	/**
-	 * Constants used to describe whether a registration attempt changed anything:
+	 * Bit flags used to describe whether a registration attempt changed anything:
 	 *  - NOTHING: no change to the existing information
-	 *  - VISIBILITY: only the visibility was changed, but the participant was already registered
-	 *  - REGISTRATION: the participant was not registred, and they now are
+	 *  - VISIBILITY: the visibility was changed
+	 *  - ANSWERS: answers to the participant questions were changed
+	 *  - REGISTRATION: the participant was not registred, and they now are. When this flag is set, the
+	 *    other ones are irrelevant and may or may not be set; callers should not expect them to (not) be set.
 	 */
 	public const MODIFIED_NOTHING = 0;
-	public const MODIFIED_VISIBILITY = 1;
-	public const MODIFIED_REGISTRATION = 2;
+	public const MODIFIED_VISIBILITY = 2 << 0;
+	public const MODIFIED_ANSWERS = 2 << 1;
+	public const MODIFIED_REGISTRATION = 2 << 10;
 
 	/** @var CampaignsDatabaseHelper */
 	private $dbHelper;
 	/** @var CampaignsCentralUserLookup */
 	private $centralUserLookup;
+	/** @var ParticipantAnswersStore */
+	private ParticipantAnswersStore $answersStore;
 
 	/**
 	 * @param CampaignsDatabaseHelper $dbHelper
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param ParticipantAnswersStore $answersStore
 	 */
-	public function __construct( CampaignsDatabaseHelper $dbHelper, CampaignsCentralUserLookup $centralUserLookup ) {
+	public function __construct(
+		CampaignsDatabaseHelper $dbHelper,
+		CampaignsCentralUserLookup $centralUserLookup,
+		ParticipantAnswersStore $answersStore
+	) {
 		$this->dbHelper = $dbHelper;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->answersStore = $answersStore;
 	}
 
 	/**
 	 * @param int $eventID
 	 * @param CentralUser $participant
 	 * @param bool $private
-	 * @return int One of the self::MODIFIED_* constants.
+	 * @param Answer[] $answers
+	 * @return int A combination of the self::MODIFIED_* constants.
 	 */
-	public function addParticipantToEvent( int $eventID, CentralUser $participant, bool $private ): int {
+	public function addParticipantToEvent(
+		int $eventID,
+		CentralUser $participant,
+		bool $private,
+		array $answers
+	): int {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
+		$userID = $participant->getCentralID();
 		$dbw->startAtomic();
 		$previousRow = $dbw->selectRow(
 			'ce_participants',
 			'*',
 			[
 				'cep_event_id' => $eventID,
-				'cep_user_id' => $participant->getCentralID()
+				'cep_user_id' => $userID
 			],
 			[ 'FOR UPDATE' ]
 		);
@@ -65,7 +85,7 @@ class ParticipantsStore implements IDBAccessObject {
 				'ce_participants',
 				[
 					'cep_event_id' => $eventID,
-					'cep_user_id' => $participant->getCentralID(),
+					'cep_user_id' => $userID,
 					'cep_private' => $private,
 					'cep_registered_at' => $dbw->timestamp(),
 					'cep_unregistered_at' => null,
@@ -98,10 +118,14 @@ class ParticipantsStore implements IDBAccessObject {
 			);
 			$modified = self::MODIFIED_VISIBILITY;
 		} else {
-			// User is already an active participant with the desired visibility, nothing to do.
+			// User is already an active participant with the desired visibility.
 			$modified = self::MODIFIED_NOTHING;
 		}
 
+		$answersModified = $this->answersStore->replaceParticipantAnswers( $eventID, $participant, $answers );
+		if ( $modified !== self::MODIFIED_REGISTRATION && $answersModified ) {
+			$modified |= self::MODIFIED_ANSWERS;
+		}
 		$dbw->endAtomic();
 		return $modified;
 	}
