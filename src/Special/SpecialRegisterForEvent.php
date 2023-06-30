@@ -131,7 +131,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		];
 
 		if ( $this->showParticipantQuestions ) {
-			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm();
+			$enabledQuestions = $this->event->getParticipantQuestions();
+			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm( $enabledQuestions );
 			$questionFields = array_map(
 				static fn ( $fieldDescriptor ) =>
 					[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
@@ -164,7 +165,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			$form->setSubmitTextMsg( 'campaignevents-register-confirmation-btn' );
 		}
 
-		if ( $this->showParticipantQuestions ) {
+		if ( $this->showParticipantQuestions && $this->event->getParticipantQuestions() ) {
 			$questionsHeader = Html::rawElement(
 				'div',
 				[ 'class' => 'ext-campaignevents-participant-questions-info-subtitle' ],
