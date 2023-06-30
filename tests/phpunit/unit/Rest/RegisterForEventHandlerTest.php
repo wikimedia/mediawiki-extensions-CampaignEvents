@@ -9,6 +9,8 @@ use HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
 use MediaWiki\Extension\CampaignEvents\Rest\RegisterForEventHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -38,7 +40,8 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 
 	private function newHandler(
 		RegisterParticipantCommand $registerCommand = null,
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		EventQuestionsRegistry $eventQuestionsRegistry = null
 	): RegisterForEventHandler {
 		if ( !$registerCommand ) {
 			$registerCommand = $this->createMock( RegisterParticipantCommand::class );
@@ -47,7 +50,8 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		return new RegisterForEventHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$registerCommand,
-			new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => false ] )
+			$eventQuestionsRegistry ?? $this->createMock( EventQuestionsRegistry::class ),
+			new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => true ] )
 		);
 	}
 
@@ -69,15 +73,17 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	 * @param string|null $expectedErrorKey
 	 * @param RegisterParticipantCommand|null $registerParticipantCommand
 	 * @param IEventLookup|null $eventLookup
+	 * @param EventQuestionsRegistry|null $eventQuestionsRegistry
 	 * @dataProvider provideRequestDataWithErrors
 	 */
 	public function testRun__error(
 		int $expectedStatusCode,
 		?string $expectedErrorKey,
 		RegisterParticipantCommand $registerParticipantCommand = null,
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		EventQuestionsRegistry $eventQuestionsRegistry = null
 	) {
-		$handler = $this->newHandler( $registerParticipantCommand, $eventLookup );
+		$handler = $this->newHandler( $registerParticipantCommand, $eventLookup, $eventQuestionsRegistry );
 
 		try {
 			$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
@@ -100,6 +106,19 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 			'campaignevents-rest-event-not-found',
 			null,
 			$eventDoesNotExistLookup
+		];
+
+		$invalidAnsError = 'campaignevents-register-invalid-answer';
+		$invalidQuestRegistry = $this->createMock( EventQuestionsRegistry::class );
+		$invalidQuestRegistry->expects( $this->atLeastOnce() )
+			->method( 'extractUserQuestionsAPI' )
+			->willThrowException( $this->createMock( InvalidAnswerDataException::class ) );
+		yield 'Invalid participant answers' => [
+			400,
+			$invalidAnsError,
+			null,
+			null,
+			$invalidQuestRegistry
 		];
 
 		$permError = 'some-permission-error';

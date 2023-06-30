@@ -5,11 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use Config;
-use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -30,21 +30,26 @@ class RegisterForEventHandler extends SimpleHandler {
 	private $eventLookup;
 	/** @var RegisterParticipantCommand */
 	private $registerParticipantCommand;
+	/** @var EventQuestionsRegistry */
+	private EventQuestionsRegistry $eventQuestionsRegistry;
 	/** @var bool */
 	private bool $participantQuestionsEnabled;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 * @param Config $config
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		RegisterParticipantCommand $registerParticipantCommand,
+		EventQuestionsRegistry $eventQuestionsRegistry,
 		Config $config
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->registerParticipantCommand = $registerParticipantCommand;
+		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
@@ -68,16 +73,18 @@ class RegisterForEventHandler extends SimpleHandler {
 			RegisterParticipantCommand::REGISTRATION_PRIVATE :
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
 		if ( $this->participantQuestionsEnabled ) {
-			// Temporary hack: grab the existing answers.
 			try {
-				$centralUser = CampaignEventsServices::getCentralUserLookup()->newFromAuthority( $performer );
-			} catch ( UserNotGlobalException $_ ) {
-				throw new LocalizedHttpException( new MessageValue( 'campaignevents-register-need-central-account' ) );
+				$answers = $this->eventQuestionsRegistry->extractUserQuestionsAPI(
+					$body['answers'] ?? [],
+					$eventRegistration->getParticipantQuestions()
+				);
+			} catch ( InvalidAnswerDataException $e ) {
+				throw new LocalizedHttpException(
+					MessageValue::new( 'campaignevents-register-invalid-answer' )
+						->params( $e->getQuestionName() ),
+					400
+				);
 			}
-			$answers = CampaignEventsServices::getParticipantAnswersStore()->getParticipantAnswers(
-				$eventRegistration->getID(),
-				$centralUser
-			);
 		} else {
 			$answers = [];
 		}
@@ -123,13 +130,19 @@ class RegisterForEventHandler extends SimpleHandler {
 	 * @return array
 	 */
 	protected function getBodyParams(): array {
-		return [
-			'is_private' =>
-				[
-					static::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_TYPE => 'boolean',
-					ParamValidator::PARAM_REQUIRED => true,
-				]
+		$params = [
+			'is_private' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
 		];
+		if ( $this->participantQuestionsEnabled ) {
+			$params['answers'] = [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'array',
+			];
+		}
+		return $params;
 	}
 }

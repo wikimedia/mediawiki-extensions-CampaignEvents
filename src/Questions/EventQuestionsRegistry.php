@@ -382,7 +382,8 @@ class EventQuestionsRegistry {
 	}
 
 	/**
-	 * Formats a list of answers for use in API (GET) requests.
+	 * Formats a list of answers for use in API (GET) requests. This is the same format expected by
+	 * extractUserQuestionsAPI().
 	 *
 	 * @param Answer[] $answers
 	 * @return array[]
@@ -409,6 +410,76 @@ class EventQuestionsRegistry {
 			$ret[$question['name']] = $formattedAnswer;
 		}
 		return $ret;
+	}
+
+	/**
+	 * Extracts user answers given in the API format returned by formatAnswersForAPI().
+	 *
+	 * @param array[] $data
+	 * @param int[] $enabledQuestionIDs
+	 * @return Answer[]
+	 * @throws InvalidAnswerDataException If an answer's value is malformed
+	 */
+	public function extractUserQuestionsAPI( array $data, array $enabledQuestionIDs ): array {
+		$answers = [];
+		foreach ( $this->getQuestions() as $question ) {
+			if ( !in_array( $question['db-id'], $enabledQuestionIDs, true ) ) {
+				continue;
+			}
+			$questionName = $question['name'];
+			if ( !isset( $data[$questionName] ) ) {
+				continue;
+			}
+			$answer = $this->newAnswerFromAPI( $question, $questionName, $data[$questionName] );
+			if ( $answer ) {
+				$answers[] = $answer;
+			}
+		}
+		return $answers;
+	}
+
+	/**
+	 * @param array $questionSpec Must be an entry in the registry
+	 * @param string $questionName
+	 * @param array $answerData
+	 * @return Answer|null
+	 * @throws InvalidAnswerDataException If an answer's value is malformed
+	 */
+	private function newAnswerFromAPI( array $questionSpec, string $questionName, array $answerData ): ?Answer {
+		$type = $questionSpec['questionData']['type'];
+		$ansValue = $answerData['value'];
+		if ( $this->isPlaceholderValue( $type, $ansValue ) ) {
+			return null;
+		}
+		if ( $type === self::FREE_TEXT_QUESTION_TYPE ) {
+			if ( !is_string( $ansValue ) ) {
+				throw new InvalidAnswerDataException( $questionName );
+			}
+			$ansOption = null;
+			$ansText = $ansValue;
+		} elseif ( in_array( $type, self::MULTIPLE_CHOICE_TYPES, true ) ) {
+			if ( !is_int( $ansValue ) ) {
+				throw new InvalidAnswerDataException( $questionName );
+			}
+			if ( !in_array( $ansValue, $questionSpec['questionData']['options-messages'], true ) ) {
+				throw new InvalidAnswerDataException( $questionName );
+			}
+			$ansOption = $ansValue;
+			$ansText = null;
+			if ( isset( $questionSpec['otherOptions'][$ansValue] ) && isset( $answerData['other'] ) ) {
+				$answerOther = $answerData['other'];
+				if ( $answerOther !== '' ) {
+					if ( !is_string( $answerOther ) ) {
+						throw new InvalidAnswerDataException( $questionName );
+					}
+					$ansText = $answerData['other'];
+				}
+			}
+		} else {
+			throw new UnexpectedValueException( "Unhandled question type $type" );
+		}
+
+		return new Answer( $questionSpec['db-id'], $ansOption, $ansText );
 	}
 
 	/**
