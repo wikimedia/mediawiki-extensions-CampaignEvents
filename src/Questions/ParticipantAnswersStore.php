@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Questions;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
@@ -90,6 +91,38 @@ class ParticipantAnswersStore {
 			]
 		);
 		return true;
+	}
+
+	/**
+	 * Deletes all the answers provided by the given users.
+	 *
+	 * @param int $eventID
+	 * @param CentralUser[]|null $participants Must never be empty, pass null to remove answers for all participants.
+	 * @param bool $invertSelection Whether the selection of $participants should be inverted, i.e., only answers
+	 *  of users not in $participants will be removed. If true, $participants must not be null.
+	 * @return void
+	 */
+	public function deleteAllAnswers( int $eventID, ?array $participants, bool $invertSelection = false ): void {
+		if ( $participants === null && $invertSelection ) {
+			throw new InvalidArgumentException( 'Cannot use $invertSelection when removing all answers' );
+		}
+		if ( is_array( $participants ) && !$participants ) {
+			throw new InvalidArgumentException( '$participants cannot be the empty array' );
+		}
+
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$where = [
+			'ceqa_event_id' => $eventID,
+		];
+		if ( $participants !== null ) {
+			$userIDs = array_map( static fn ( CentralUser $u ): int => $u->getCentralID(), $participants );
+			if ( $invertSelection ) {
+				$where[] = 'ceqa_user_id NOT IN (' . $dbw->makeCommaList( $userIDs ) . ')';
+			} else {
+				$where['ceqa_user_id'] = $userIDs;
+			}
+		}
+		$dbw->delete( 'ce_question_answers', $where );
 	}
 
 	/**

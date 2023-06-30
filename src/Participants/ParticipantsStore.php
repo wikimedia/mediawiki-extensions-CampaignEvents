@@ -185,8 +185,10 @@ class ParticipantsStore implements IDBAccessObject {
 			[ 'cep_unregistered_at' => $dbw->timestamp() ],
 			$where
 		);
+		$updatedParticipants = $dbw->affectedRows();
+		$this->answersStore->deleteAllAnswers( $eventID, $users, $invertUsers );
 
-		return $dbw->affectedRows();
+		return $updatedParticipants;
 	}
 
 	/**

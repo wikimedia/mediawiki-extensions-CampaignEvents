@@ -245,6 +245,68 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * @covers ::deleteAllAnswers
+	 * @dataProvider provideDeleteAllAnswers
+	 */
+	public function testDeleteAllAnswers(
+		int $eventID,
+		?array $userIDs,
+		bool $invert,
+		array $expectedRemainingCounts
+	) {
+		$users = is_array( $userIDs )
+			? array_map( static fn ( int $id ): CentralUser => new CentralUser( $id ), $userIDs )
+			: $userIDs;
+		$store = CampaignEventsServices::getParticipantAnswersStore();
+		$store->deleteAllAnswers( $eventID, $users, $invert );
+		$remainingDataCounts = $this->getDb()->select(
+			'ce_question_answers',
+			[ 'ceqa_user_id', 'num' => 'COUNT(*)' ],
+			[ 'ceqa_event_id' => $eventID ],
+			__METHOD__,
+			[ 'GROUP BY' => 'ceqa_user_id' ]
+		);
+		$actualRemainingCounts = [];
+		foreach ( $remainingDataCounts as $row ) {
+			$actualRemainingCounts[$row->ceqa_user_id] = (int)$row->num;
+		}
+		$this->assertSame( $expectedRemainingCounts, $actualRemainingCounts );
+	}
+
+	public function provideDeleteAllAnswers(): Generator {
+		yield 'Nothing to delete' => [
+			10,
+			[ 101 ],
+			false,
+			[]
+		];
+		yield 'Single user' => [
+			1,
+			[ 101 ],
+			false,
+			[ 102 => 2 ]
+		];
+		yield 'Multiple users' => [
+			1,
+			[ 101, 102 ],
+			false,
+			[]
+		];
+		yield 'All users' => [
+			1,
+			null,
+			false,
+			[]
+		];
+		yield 'Inverted selection' => [
+			1,
+			[ 102 ],
+			true,
+			[ 102 => 2 ]
+		];
+	}
+
+	/**
 	 * @covers ::getParticipantAnswers
 	 * @covers ::getParticipantAnswersMulti
 	 * @dataProvider provideGetParticipantAnswers
