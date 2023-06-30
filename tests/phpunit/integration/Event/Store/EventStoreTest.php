@@ -57,6 +57,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'Meeting URL',
 			'Country',
 			'Address',
+			[],
 			null,
 			null,
 			null
@@ -257,6 +258,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'Meeting URL',
 			'Country' => 'Country',
 			'Address' => 'Address',
+			[],
 			null,
 			null,
 			'del' => null,

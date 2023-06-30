@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Extension\CampaignEvents\Utils;
@@ -48,6 +49,8 @@ class EventStore implements IEventStore, IEventLookup {
 	private $addressStore;
 	/** @var TrackingToolUpdater */
 	private TrackingToolUpdater $trackingToolUpdater;
+	/** @var EventQuestionsStore */
+	private EventQuestionsStore $eventQuestionsStore;
 
 	/**
 	 * @var array<int,ExistingEventRegistration> Cache of stored registrations, keyed by ID.
@@ -59,17 +62,20 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param AddressStore $addressStore
 	 * @param TrackingToolUpdater $trackingToolUpdater
+	 * @param EventQuestionsStore $eventQuestionsStore
 	 */
 	public function __construct(
 		CampaignsDatabaseHelper $dbHelper,
 		CampaignsPageFactory $campaignsPageFactory,
 		AddressStore $addressStore,
-		TrackingToolUpdater $trackingToolUpdater
+		TrackingToolUpdater $trackingToolUpdater,
+		EventQuestionsStore $eventQuestionsStore
 	) {
 		$this->dbHelper = $dbHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->addressStore = $addressStore;
 		$this->trackingToolUpdater = $trackingToolUpdater;
+		$this->eventQuestionsStore = $eventQuestionsStore;
 	}
 
 	/**
@@ -93,7 +99,8 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->cache[$eventID] = $this->newEventFromDBRow(
 			$eventRow,
 			$this->getEventAddressRow( $dbr, $eventID ),
-			$this->getEventTrackingToolRow( $dbr, $eventID, $eventRow )
+			$this->getEventTrackingToolRow( $dbr, $eventID, $eventRow ),
+			$this->eventQuestionsStore->getEventQuestions( $eventID )
 		);
 		return $this->cache[$eventID];
 	}
@@ -129,7 +136,8 @@ class EventStore implements IEventStore, IEventLookup {
 		return $this->newEventFromDBRow(
 			$eventRow,
 			$this->getEventAddressRow( $db, $eventID ),
-			$this->getEventTrackingToolRow( $db, $eventID, $eventRow )
+			$this->getEventTrackingToolRow( $db, $eventID, $eventRow ),
+			$this->eventQuestionsStore->getEventQuestions( $eventID )
 		);
 	}
 
@@ -263,6 +271,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$addressRowsByEvent = $this->getAddressRowsForEvents( $db, $eventIDs );
 		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs, $eventRows );
+		$questionsByEvent = $this->eventQuestionsStore->getEventQuestionsMulti( $eventIDs );
 
 		$events = [];
 		foreach ( $eventRows as $row ) {
@@ -270,7 +279,8 @@ class EventStore implements IEventStore, IEventLookup {
 			$events[] = $this->newEventFromDBRow(
 				$row,
 				$addressRowsByEvent[$curEventID] ?? null,
-				$trackingToolRowsByEvent[$curEventID] ?? null
+				$trackingToolRowsByEvent[$curEventID] ?? null,
+				$questionsByEvent[$curEventID]
 			);
 		}
 		return $events;
@@ -337,12 +347,14 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @param stdClass $row
 	 * @param stdClass|null $addressRow
 	 * @param stdClass|null $trackingToolRow
+	 * @param int[] $questionIDs
 	 * @return ExistingEventRegistration
 	 */
 	private function newEventFromDBRow(
 		stdClass $row,
 		?stdClass $addressRow,
-		?stdClass $trackingToolRow
+		?stdClass $trackingToolRow,
+		array $questionIDs
 	): ExistingEventRegistration {
 		$eventPage = $this->campaignsPageFactory->newPageFromDB(
 			(int)$row->event_page_namespace,
@@ -396,6 +408,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
 			$country,
 			$address,
+			$questionIDs,
 			wfTimestamp( TS_UNIX, $row->event_created_at ),
 			wfTimestamp( TS_UNIX, $row->event_last_edit ),
 			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at )
@@ -454,6 +467,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
 		$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
+		$this->eventQuestionsStore->replaceEventQuestions( $eventID, $event->getParticipantQuestions() );
 
 		$dbw->endAtomic();
 

@@ -30,6 +30,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
+	 * @param int[] $participantQuestions
 	 * @param string $creationTimestamp UNIX timestamp
 	 * @param string $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
@@ -49,6 +50,7 @@ class ExistingEventRegistration extends EventRegistration {
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
+		array $participantQuestions,
 		string $creationTimestamp,
 		string $lastEditTimestamp,
 		?string $deletionTimestamp

@@ -65,6 +65,8 @@ class EventRegistration {
 	private $meetingCountry;
 	/** @var string|null */
 	private $meetingAddress;
+	/** @var int[] Array of database IDs */
+	private array $participantQuestions;
 	/** @var string|null */
 	private $creationTimestamp;
 	/** @var string|null */
@@ -88,6 +90,7 @@ class EventRegistration {
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
+	 * @param array $participantQuestions
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
@@ -107,6 +110,7 @@ class EventRegistration {
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
+		array $participantQuestions,
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
 		?string $deletionTimestamp
@@ -140,6 +144,7 @@ class EventRegistration {
 		$this->meetingURL = $meetingURL;
 		$this->meetingCountry = $meetingCountry;
 		$this->meetingAddress = $meetingAddress;
+		$this->participantQuestions = $participantQuestions;
 		$this->creationTimestamp = $creationTimestamp;
 		$this->lastEditTimestamp = $lastEditTimestamp;
 		$this->deletionTimestamp = $deletionTimestamp;
@@ -260,6 +265,13 @@ class EventRegistration {
 	 */
 	public function getMeetingAddress(): ?string {
 		return $this->meetingAddress;
+	}
+
+	/**
+	 * @return int[]
+	 */
+	public function getParticipantQuestions(): array {
+		return $this->participantQuestions;
 	}
 
 	/**

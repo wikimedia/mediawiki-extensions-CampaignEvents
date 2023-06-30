@@ -56,6 +56,12 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$meetingType |= EventRegistration::MEETING_TYPE_IN_PERSON;
 		}
 
+		if ( $this->participantQuestionsEnabled ) {
+			$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
+		} else {
+			$participantQuestionNames = [];
+		}
+
 		return $this->eventFactory->newEvent(
 			null,
 			$body['event_page'],
@@ -72,6 +78,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['meeting_url'],
 			$body['meeting_country'],
 			$body['meeting_address'],
+			$participantQuestionNames,
 			null,
 			null,
 			null,

@@ -34,6 +34,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -72,7 +73,8 @@ return [
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->get( CampaignsPageFactory::SERVICE_NAME ),
 			$services->get( AddressStore::SERVICE_NAME ),
-			$services->get( TrackingToolUpdater::SERVICE_NAME )
+			$services->get( TrackingToolUpdater::SERVICE_NAME ),
+			$services->get( EventQuestionsStore::SERVICE_NAME )
 		);
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {
@@ -102,7 +104,8 @@ return [
 		return new EventFactory(
 			$services->get( CampaignsPageFactory::SERVICE_NAME ),
 			$services->get( CampaignsPageFormatter::SERVICE_NAME ),
-			$services->get( TrackingToolRegistry::SERVICE_NAME )
+			$services->get( TrackingToolRegistry::SERVICE_NAME ),
+			$services->get( EventQuestionsRegistry::SERVICE_NAME )
 		);
 	},
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {
@@ -288,6 +291,11 @@ return [
 	EventQuestionsRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): EventQuestionsRegistry {
 		return new EventQuestionsRegistry(
 			$services->getMainConfig()->get( 'CampaignEventsEnableWikimediaParticipantQuestions' )
+		);
+	},
+	EventQuestionsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventQuestionsStore {
+		return new EventQuestionsStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
 ];

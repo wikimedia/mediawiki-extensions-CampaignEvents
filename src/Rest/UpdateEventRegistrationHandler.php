@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use Config;
+use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -14,6 +16,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use StatusValue;
@@ -32,6 +36,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @param EditEventCommand $editEventCommand
 	 * @param OrganizersStore $organizersStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 * @param Config $config
 	 * @param IEventLookup $eventLookup
 	 */
 	public function __construct(
@@ -40,6 +46,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		EditEventCommand $editEventCommand,
 		OrganizersStore $organizersStore,
 		CampaignsCentralUserLookup $centralUserLookup,
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		Config $config,
 		IEventLookup $eventLookup
 	) {
 		parent::__construct(
@@ -47,7 +55,9 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$permissionChecker,
 			$editEventCommand,
 			$organizersStore,
-			$centralUserLookup
+			$centralUserLookup,
+			$eventQuestionsRegistry,
+			$config
 		);
 		$this->eventLookup = $eventLookup;
 	}
@@ -131,6 +141,20 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$meetingType |= EventRegistration::MEETING_TYPE_IN_PERSON;
 		}
 
+		$participantQuestionNames = [];
+		if ( $this->participantQuestionsEnabled ) {
+			$currentQuestionIDs = $existingEvent->getParticipantQuestions();
+			foreach ( $currentQuestionIDs as $questionID ) {
+				try {
+					$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
+				} catch ( UnknownQuestionException $e ) {
+					// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
+					// that case.
+					throw new LogicException( 'Unknown question in the database', 0, $e );
+				}
+			}
+		}
+
 		return $this->eventFactory->newEvent(
 			$existingEvent->getID(),
 			$body['event_page'],
@@ -147,6 +171,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['meeting_url'],
 			$body['meeting_country'],
 			$body['meeting_address'],
+			$participantQuestionNames,
 			$existingEvent->getCreationTimestamp(),
 			$existingEvent->getLastEditTimestamp(),
 			$existingEvent->getDeletionTimestamp(),

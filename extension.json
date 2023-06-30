@@ -347,7 +347,9 @@
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsEditEventCommand",
 				"CampaignEventsOrganizersStore",
-				"CampaignEventsCentralUserLookup"
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsEventQuestionsRegistry",
+				"MainConfig"
 			]
 		},
 		{
@@ -396,6 +398,8 @@
 				"CampaignEventsEditEventCommand",
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsCentralUserLookup",
+				"CampaignEventsEventQuestionsRegistry",
+				"MainConfig",
 				"CampaignEventsEventLookup"
 			]
 		},
@@ -488,7 +492,8 @@
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsTrackingToolRegistry"
+				"CampaignEventsTrackingToolRegistry",
+				"CampaignEventsEventQuestionsRegistry"
 			]
 		},
 		"EditEventRegistration": {
@@ -501,7 +506,8 @@
 				"CampaignEventsPolicyMessagesLookup",
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsTrackingToolRegistry"
+				"CampaignEventsTrackingToolRegistry",
+				"CampaignEventsEventQuestionsRegistry"
 			]
 		},
 		"DeleteEventRegistration": {
