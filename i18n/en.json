@@ -341,5 +341,6 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Organizing partner",
 	"campaignevents-register-question-affiliate-details-placeholder": "Please state",
 	"campaignevents-eventpage-register-dialog-questions-title": "Information for organizers",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "All questions are optional"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "All questions are optional",
+	"campaignevents-register-invalid-answer": "Invalid answer to the question $1"
 }

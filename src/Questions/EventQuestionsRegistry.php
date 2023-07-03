@@ -257,6 +257,7 @@ class EventQuestionsRegistry {
 	 * @param int[] $enabledQuestionIDs Enabled question for the event, should match the value passed to
 	 *   getQuestionsForHTMLForm().
 	 * @return Answer[]
+	 * @throws InvalidAnswerDataException
 	 */
 	public function extractUserAnswersHTMLForm( array $formData, array $enabledQuestionIDs ): array {
 		$answers = [];
@@ -276,6 +277,7 @@ class EventQuestionsRegistry {
 	 * @param array $questionSpec Must be an entry in the registry
 	 * @param array $formData
 	 * @return Answer|null
+	 * @throws InvalidAnswerDataException
 	 */
 	private function newAnswerFromHTMLForm( array $questionSpec, array $formData ): ?Answer {
 		$fieldName = 'Question' . ucfirst( $questionSpec['name'] );
@@ -288,16 +290,31 @@ class EventQuestionsRegistry {
 			return null;
 		}
 		if ( $type === self::FREE_TEXT_QUESTION_TYPE ) {
+			if ( !is_string( $ansValue ) ) {
+				throw new InvalidAnswerDataException( $fieldName );
+			}
 			$ansOption = null;
 			$ansText = $ansValue;
 		} elseif ( in_array( $type, self::MULTIPLE_CHOICE_TYPES, true ) ) {
-			$ansOption = (int)$ansValue;
+			// Note, HTMLForm always uses strings for field values
+			if ( !is_numeric( $ansValue ) ) {
+				throw new InvalidAnswerDataException( $fieldName );
+			}
+			$ansValue = (int)$ansValue;
+			if ( !in_array( $ansValue, $questionSpec['questionData']['options-messages'], true ) ) {
+				throw new InvalidAnswerDataException( $fieldName );
+			}
+			$ansOption = $ansValue;
 			$ansText = null;
-			if ( isset( $questionSpec['otherOptions'][$ansValue] ) ) {
-				$optionName = $fieldName . '_Other';
-				$ansText = isset( $formData[$optionName] ) && $formData[$optionName] !== ''
-					? $formData[$optionName]
-					: null;
+			$otherOptionName = $fieldName . '_Other';
+			if ( isset( $questionSpec['otherOptions'][$ansValue] ) && isset( $formData[$otherOptionName] ) ) {
+				$answerOther = $formData[$otherOptionName];
+				if ( $answerOther !== '' ) {
+					if ( !is_string( $answerOther ) ) {
+						throw new InvalidAnswerDataException( $otherOptionName );
+					}
+					$ansText = $answerOther;
+				}
 			}
 		} else {
 			throw new UnexpectedValueException( "Unhandled question type $type" );
@@ -315,7 +332,7 @@ class EventQuestionsRegistry {
 		switch ( $questionType ) {
 			case self::RADIO_BUTTON_QUESTION_TYPE:
 			case self::SELECT_QUESTION_TYPE:
-				return (int)$value === 0;
+				return $value === 0 || $value === '0';
 			case self::FREE_TEXT_QUESTION_TYPE:
 				return $value === '';
 			default:

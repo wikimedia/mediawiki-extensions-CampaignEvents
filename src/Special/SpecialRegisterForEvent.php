@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
 use OOUI\IconWidget;
 use Status;
 
@@ -182,10 +183,15 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
 
 		if ( $this->showParticipantQuestions ) {
-			$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
-				$data,
-				$this->event->getParticipantQuestions()
-			);
+			try {
+				$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
+					$data,
+					$this->event->getParticipantQuestions()
+				);
+			} catch ( InvalidAnswerDataException $e ) {
+				// Should never happen unless the user messes up with the form, so don't bother making this too pretty.
+				return Status::newFatal( 'campaignevents-register-invalid-answer', $e->getQuestionName() );
+			}
 		} else {
 			$answers = [];
 		}
