@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Rest\GetOwnRegistrationInfoHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
@@ -40,6 +41,7 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
+			new EventQuestionsRegistry( true ),
 			new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => true ] )
 		);
 	}
@@ -92,8 +94,8 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 			[
 				'private' => true,
 				'answers' => [
-					1 => [ 'option' => 2, 'text' => null ],
-					5 => [ 'option' => 3, 'text' => 'foo' ],
+					'gender' => [ 'value' => 2 ],
+					'affiliate' => [ 'value' => 3, 'other' => 'foo' ],
 				],
 			],
 			$privateWithAnswersStore

@@ -402,6 +402,7 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsCentralUserLookup",
+				"CampaignEventsEventQuestionsRegistry",
 				"MainConfig"
 			]
 		},
