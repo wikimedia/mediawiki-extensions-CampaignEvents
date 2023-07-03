@@ -18,6 +18,7 @@ class Participant {
 	private $privateRegistration;
 	/** @var Answer[] */
 	private array $answers;
+	private ?string $firstAnswerTimestamp;
 
 	/**
 	 * @param CentralUser $user
@@ -25,19 +26,22 @@ class Participant {
 	 * @param int $participantID participant_id, ID generated when a participant register for an event
 	 * @param bool $privateRegistration
 	 * @param Answer[] $answers
+	 * @param string|null $firstAnswerTimestamp Timestamp in the TS_UNIX format
 	 */
 	public function __construct(
 		CentralUser $user,
 		string $registeredAt,
 		int $participantID,
 		bool $privateRegistration,
-		array $answers
+		array $answers,
+		?string $firstAnswerTimestamp
 	) {
 		$this->user = $user;
 		$this->registeredAt = $registeredAt;
 		$this->participantID = $participantID;
 		$this->privateRegistration = $privateRegistration;
 		$this->answers = $answers;
+		$this->firstAnswerTimestamp = $firstAnswerTimestamp;
 	}
 
 	/**
@@ -73,5 +77,12 @@ class Participant {
 	 */
 	public function getAnswers(): array {
 		return $this->answers;
+	}
+
+	/**
+	 * @return string|null Timestamp in the TS_UNIX format, or null
+	 */
+	public function getFirstAnswerTimestamp(): ?string {
+		return $this->firstAnswerTimestamp;
 	}
 }
