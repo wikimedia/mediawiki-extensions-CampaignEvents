@@ -63,11 +63,12 @@
 		ParticipantRegistrationDialog.super.prototype.initialize.apply( this );
 
 		var visibilityFields = this.getVisibilityFields();
-		var fieldset = new OO.ui.FieldsetLayout( {
-			items: visibilityFields
+		var visibilityFieldset = new OO.ui.FieldsetLayout( {
+			items: visibilityFields,
+			label: mw.msg( 'campaignevents-eventpage-register-dialog-visibility-title' )
 		} );
 		var formPanel = new OO.ui.PanelLayout( {
-			content: [ fieldset ],
+			content: [ visibilityFieldset ],
 			padded: true,
 			scrollable: false,
 			expanded: false
