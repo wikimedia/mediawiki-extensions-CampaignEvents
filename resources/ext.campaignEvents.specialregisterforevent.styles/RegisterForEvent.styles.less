@@ -8,10 +8,17 @@ span.ext-campaignevents-registerforevent-icon {
 	color: @color-subtle;
 }
 
-.oo-ui-fieldLayout.ext-campaignevents-participant-question-other-option {
-	margin-left: 1em;
-	margin-top: 0.5em;
-	width: 30em;
+.ext-campaignevents-participant-question-other-option {
+	&.oo-ui-fieldLayout {
+		margin-left: 1em;
+		margin-top: 0.5em;
+	}
+
+	&.oo-ui-widget {
+		// Apply these styles on the widget itself so that 100% is computed on the parent layout element.
+		width: 30em;
+		max-width: 100%;
+	}
 }
 
 .mw-htmlform .oo-ui-fieldsetLayout-group {
