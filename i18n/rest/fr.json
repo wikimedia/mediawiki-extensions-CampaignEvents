@@ -3,6 +3,7 @@
 		"authors": [
 			"Gomoko",
 			"Pols12",
+			"SleaY",
 			"Verdy p"
 		]
 	},
@@ -15,5 +16,6 @@
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour retirer tous les utilisateurs)",
 	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Vous n’avez pas le droit de voir les participants qui se sont inscrits en privé pour cet événement.",
-	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> doit être un tableau de noms d’utilisateur et ne peut pas être vide"
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> doit être un tableau de noms d’utilisateur et ne peut pas être vide",
+	"campaignevents-rest-get-registration-info-notparticipant": "Vous ne participez pas à cet événement."
 }
