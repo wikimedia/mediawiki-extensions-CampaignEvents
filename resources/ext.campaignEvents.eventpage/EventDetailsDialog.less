@@ -20,7 +20,7 @@
 	// Set a row gap for when the flex elements wrap (i.e., small screens). Note that is not supported
 	// by all grade C browsers. In those, the elements will be closer together, but that's hopefully
 	// just a minor visual glitch that can be tolerated.
-	row-gap: 1em;
+	row-gap: 2em;
 
 	> * {
 		// Make both columns have the same width, but wrap them if they would shrink too much.
@@ -45,9 +45,27 @@
 }
 
 .ext-campaignevents-detailsdialog-participants-container {
+	.ext-campaignevents-detailsdialog-participants-list {
+		list-style-position: inside;
+		margin-left: 0;
+
+		li {
+			padding: 0.2em 0;
+			margin-bottom: 0;
+			// The lock icon's height is 1.42857143em (20px with normal font size). Make that the minimum
+			// height of every element for consistency. This is harmless if no participant is private
+			// (and therefore there are no icons).
+			min-height: 1.42857143em;
+
+			> *:first-child {
+				vertical-align: middle;
+			}
+		}
+	}
+
 	.ext-campaignevents-event-details-participants-private-icon {
-		padding: 0 0.5em;
-		opacity: @opacity-icon-base;
+		margin-left: 0.5em;
+		opacity: @opacity-icon-subtle;
 	}
 }
 
@@ -79,12 +97,6 @@
 	margin-left: 2.5em;
 }
 
-.ext-campaignevents-eventpage-details-widget-content ul {
-	li {
-		padding: 0.2em;
-	}
-}
-
 .ext-campaignevents-eventpage-details-address {
 	white-space: pre-wrap;
 	.hyphens(); /* Break long words if necessary */
@@ -94,11 +106,14 @@
 	font-weight: bold;
 }
 
-.ext-campaignevents-detailsdialog-private-participants {
-	margin-top: 1em;
-	opacity: @opacity-icon-subtle;
+.ext-campaignevents-detailsdialog-private-participants-footer {
+	.oo-ui-iconElement-icon {
+		opacity: @opacity-icon-subtle;
+	}
 
-	> span:last-child {
-		margin-left: 1em;
+	.ext-campaignevents-detailsdialog-private-participants-footer-text {
+		margin-left: 0.5em;
+		vertical-align: middle;
+		color: @color-subtle;
 	}
 }

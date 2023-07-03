@@ -961,17 +961,18 @@ class EventPageDecorator {
 			),
 			'content' => [ $participantsList ?: '', $participantsFooter ],
 		] );
-		$privateCountWidget = '';
 
+		$privateCountFooter = '';
 		if ( $privateCount > 0 ) {
-			$privateCountWidget = new Tag();
-			$privateCountWidget->addClasses( [
-				'ext-campaignevents-detailsdialog-private-participants'
+			$privateCountFooter = new Tag();
+			$privateCountFooter->addClasses( [
+				'ext-campaignevents-detailsdialog-private-participants-footer'
 			] );
 			$privateCountIcon = new IconWidget( [
 				'icon' => 'lock'
 			] );
-			$privateCountText = new Tag( 'span' );
+			$privateCountText = ( new Tag( 'span' ) )
+				->addClasses( [ 'ext-campaignevents-detailsdialog-private-participants-footer-text' ] );
 			$privateCountText->appendContent(
 				$msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-participants-private' )
@@ -979,13 +980,13 @@ class EventPageDecorator {
 				)
 			);
 
-			$privateCountWidget->appendContent( [ $privateCountIcon,$privateCountText ] );
+			$privateCountFooter->appendContent( [ $privateCountIcon, $privateCountText ] );
 		}
 
 		return Html::rawElement(
 			'div',
 			[ 'class' => 'ext-campaignevents-detailsdialog-participants-container' ],
-			$participantsWidget . $privateCountWidget
+			$participantsWidget . $privateCountFooter
 		);
 	}
 
@@ -1005,7 +1006,8 @@ class EventPageDecorator {
 		ITextFormatter $msgFormatter,
 		bool $showPrivateParticipants
 	): ?Tag {
-		$participantsList = new Tag( 'ul' );
+		$participantsList = ( new Tag( 'ul' ) )
+			->addClasses( [ 'ext-campaignevents-detailsdialog-participants-list' ] );
 		$partialParticipants = $this->participantsStore->getEventParticipants(
 			$eventID,
 			$curUserParticipant ?
@@ -1190,20 +1192,16 @@ class EventPageDecorator {
 	 * @return Tag
 	 */
 	private function getParticipantFooter( int $eventID, ITextFormatter $msgFormatter ): Tag {
-		$tag = new Tag( 'div' );
-
-		$tag->appendContent(
-				new HtmlSnippet( $this->linkRenderer->makeKnownLink(
-					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
-					$msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
-					),
-					[],
-					[ 'tab' => SpecialEventDetails::PARTICIPANTS_PANEL ]
-				)
-			) );
-
-		return $tag;
+		$viewParticipantsURL = SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID )
+			->getLocalURL( [ 'tab' => SpecialEventDetails::PARTICIPANTS_PANEL ] );
+		return new ButtonWidget( [
+			'framed' => false,
+			'flags' => [ 'progressive' ],
+			'label' => $msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
+			),
+			'href' => $viewParticipantsURL,
+		] );
 	}
 
 	/**
