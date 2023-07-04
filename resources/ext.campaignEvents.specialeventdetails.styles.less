@@ -12,6 +12,8 @@
 .mw-body .ext-campaignevents-eventdetails-panel {
 	width: 60em;
 	max-width: 100%;
+	// Include paddings in the max-width
+	box-sizing: border-box;
 
 	&.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
 		margin-top: 0; // Remove margin set by OOUI
@@ -50,15 +52,25 @@ span.ext-campaignevents-event-details-participants-private-icon {
 .ext-campaignevents-eventdetails-content-wrapper {
 	display: flex;
 	justify-content: space-between;
-}
+	flex-wrap: wrap;
+	// Set a column gap for when the flex elements wrap (i.e., small screens). Note that is not supported
+	// by all grade C browsers. In those, the elements will be closer together, but that's hopefully
+	// just a minor visual glitch that can be tolerated.
+	column-gap: 1em;
 
-.ext-campaignevents-eventdetails-column-organizers {
-	margin-right: 3em;
+	> * {
+		// Set min-width to allow shrinking and wrapping
+		min-width: 0;
+		// Allow items to grow to 100% width then they can (e.g., when wrapping)
+		flex-grow: 1;
+		// But make sure that the columns have a sensible minimum width of about half the total width
+		flex-basis: 28em;
+	}
 }
 
 .ext-campaignevents-event-details-view-event-page-button.oo-ui-buttonElement {
 	display: block;
-	margin-top: 2em;
+	margin-top: 1em;
 }
 
 .ext-campaignevents-event-details-info-topbar {
