@@ -310,12 +310,19 @@ class EventPageDecorator {
 
 		$out->addModules( [ 'ext.campaignEvents.eventpage' ] );
 
-		$userStatus = $this->getUserStatus( $registration, $authority );
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
 		} catch ( UserNotGlobalException $_ ) {
 			$centralUser = null;
 		}
+		$curParticipant = $centralUser ? $this->participantsStore->getEventParticipant(
+			$registration->getID(),
+			$centralUser,
+			true
+		) : null;
+
+		$userStatus = $this->getUserStatus( $registration, $authority, $centralUser, $curParticipant );
+
 		$out->addHTML(
 			$this->getHeaderElement( $registration, $msgFormatter, $language, $viewingUser, $userStatus, $out )
 		);
@@ -326,16 +333,17 @@ class EventPageDecorator {
 				$language,
 				$viewingUser,
 				$userStatus,
-				$centralUser,
+				$curParticipant,
 				$authority,
-				$out )
+				$out
+			)
 		);
 
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $registration->getID(),
 			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
 			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData(
-				$registration, $msgFormatter, $centralUser
+				$registration, $msgFormatter, $curParticipant
 			),
 			// temporarily feature flag to prevent participants from seeing the event questions
 			'wgCampaignEventsEnableParticipantQuestions' =>
@@ -346,21 +354,16 @@ class EventPageDecorator {
 	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param ITextFormatter $msgFormatter
-	 * @param CentralUser|null $centralUser
-	 * @return array
+	 * @param Participant|null $participant
+	 * @return array[]
 	 */
 	private function getEventQuestionsData(
 		ExistingEventRegistration $registration,
 		ITextFormatter $msgFormatter,
-		?CentralUser $centralUser
-	) {
+		?Participant $participant
+	): array {
 		$enabledQuestions = $registration->getParticipantQuestions();
-		$curParticipantData = $centralUser ? $this->participantsStore->getEventParticipant(
-			$registration->getID(),
-			$centralUser,
-			true
-		) : [];
-		$curAnswers = $curParticipantData ? $curParticipantData->getAnswers() : [];
+		$curAnswers = $participant ? $participant->getAnswers() : [];
 		$eventQuestionsData = $this->eventQuestionsRegistry->getQuestionsForHTMLForm( $enabledQuestions, $curAnswers );
 		foreach ( $eventQuestionsData as &$eventQuestion ) {
 			if ( isset( $eventQuestion[ 'label-message' ] ) ) {
@@ -590,7 +593,7 @@ class EventPageDecorator {
 	 * @param Language $language
 	 * @param UserIdentity $viewingUser
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
-	 * @param CentralUser|null $centralUser
+	 * @param Participant|null $participant
 	 * @param ICampaignsAuthority $authority
 	 * @param OutputPage $out
 	 * @return string
@@ -601,7 +604,7 @@ class EventPageDecorator {
 		Language $language,
 		UserIdentity $viewingUser,
 		int $userStatus,
-		?CentralUser $centralUser,
+		?Participant $participant,
 		ICampaignsAuthority $authority,
 		OutputPage $out
 	): string {
@@ -784,7 +787,7 @@ class EventPageDecorator {
 		$participantsList = $this->getParticipantRows(
 			$eventID,
 			$language,
-			$centralUser,
+			$participant,
 			$msgFormatter,
 			$showPrivateParticipants
 		);
@@ -839,7 +842,7 @@ class EventPageDecorator {
 	/**
 	 * @param int $eventID
 	 * @param Language $language
-	 * @param CentralUser|null $centralUser
+	 * @param Participant|null $curUserParticipant
 	 * @param ITextFormatter $msgFormatter
 	 * @param bool $showPrivateParticipants
 	 *
@@ -848,15 +851,11 @@ class EventPageDecorator {
 	private function getParticipantRows(
 		int $eventID,
 		Language $language,
-		?CentralUser $centralUser,
+		?Participant $curUserParticipant,
 		ITextFormatter $msgFormatter,
 		bool $showPrivateParticipants
 	): ?Tag {
-		$curUserParticipant = null;
 		$participantsList = new Tag( 'ul' );
-		if ( $centralUser ) {
-			$curUserParticipant = $this->participantsStore->getEventParticipant( $eventID, $centralUser, true );
-		}
 		$partialParticipants = $this->participantsStore->getEventParticipants(
 			$eventID,
 			$curUserParticipant ?
@@ -866,7 +865,8 @@ class EventPageDecorator {
 			null,
 			null,
 			$showPrivateParticipants,
-			isset( $centralUser ) ? [ $centralUser->getCentralID() ] : null );
+			$curUserParticipant ? [ $curUserParticipant->getUser()->getCentralID() ] : null
+		);
 
 		if ( !$curUserParticipant && !$partialParticipants ) {
 			return null;
@@ -980,15 +980,16 @@ class EventPageDecorator {
 	/**
 	 * @param ExistingEventRegistration $event
 	 * @param ICampaignsAuthority $performer
+	 * @param CentralUser|null $centralUser Corresponding to $performer, if it exists
+	 * @param Participant|null $participant For $centralUser, if they're a participant
 	 * @return int One of the SELF::USER_STATUS_* constants
 	 */
-	private function getUserStatus( ExistingEventRegistration $event, ICampaignsAuthority $performer ): int {
-		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
-			$centralUser = null;
-		}
-
+	private function getUserStatus(
+		ExistingEventRegistration $event,
+		ICampaignsAuthority $performer,
+		?CentralUser $centralUser,
+		?Participant $participant
+	): int {
 		// Do not check user blocks or other user-dependent conditions for logged-out users, so that we can serve the
 		// same (cached) version of the page to everyone. Also, even if the IP is blocked, the user might have an
 		// account that they can log into, so showing the button is fine.
@@ -1001,14 +1002,13 @@ class EventPageDecorator {
 				return self::USER_STATUS_ORGANIZER;
 			}
 
-			$participantRecord = $this->participantsStore->getEventParticipant( $event->getID(), $centralUser, true );
-			if ( $participantRecord ) {
+			if ( $participant ) {
 				$checkUnregistrationAllowedVal = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event );
 				switch ( $checkUnregistrationAllowedVal ) {
 					case UnregisterParticipantCommand::CANNOT_UNREGISTER_DELETED:
 						throw new UnexpectedValueException( "Registration should not be deleted at this point." );
 					case UnregisterParticipantCommand::CAN_UNREGISTER:
-						$this->participantIsPublic = !$participantRecord->isPrivateRegistration();
+						$this->participantIsPublic = !$participant->isPrivateRegistration();
 						return self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER;
 					default:
 						throw new UnexpectedValueException( "Unexpected value $checkUnregistrationAllowedVal" );
