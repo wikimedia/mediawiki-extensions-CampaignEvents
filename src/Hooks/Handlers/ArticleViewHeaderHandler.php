@@ -4,18 +4,17 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Page\Hook\ArticleViewHeaderHook;
 
 class ArticleViewHeaderHandler implements ArticleViewHeaderHook {
-	/** @var EventPageDecorator */
-	private $eventPageDecorator;
+	private EventPageDecoratorFactory $eventPageDecoratorFactory;
 
 	/**
-	 * @param EventPageDecorator $eventPageDecorator
+	 * @param EventPageDecoratorFactory $eventPageDecoratorFactory
 	 */
-	public function __construct( EventPageDecorator $eventPageDecorator ) {
-		$this->eventPageDecorator = $eventPageDecorator;
+	public function __construct( EventPageDecoratorFactory $eventPageDecoratorFactory ) {
+		$this->eventPageDecoratorFactory = $eventPageDecoratorFactory;
 	}
 
 	/**
@@ -28,12 +27,11 @@ class ArticleViewHeaderHandler implements ArticleViewHeaderHook {
 		}
 
 		$ctx = $article->getContext();
-		$this->eventPageDecorator->decoratePage(
-			$ctx->getOutput(),
-			$wikiPage,
+		$decorator = $this->eventPageDecoratorFactory->newDecorator(
 			$ctx->getLanguage(),
-			$ctx->getUser(),
-			$ctx->getAuthority()
+			$ctx->getAuthority(),
+			$ctx->getOutput()
 		);
+		$decorator->decoratePage( $wikiPage );
 	}
 }

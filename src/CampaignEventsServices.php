@@ -12,7 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
-use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -142,8 +142,10 @@ class CampaignEventsServices {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventsPagerFactory::SERVICE_NAME );
 	}
 
-	public static function getEventPageDecorator( ContainerInterface $services = null ): EventPageDecorator {
-		return ( $services ?? MediaWikiServices::getInstance() )->get( EventPageDecorator::SERVICE_NAME );
+	public static function getEventPageDecoratorFactory(
+		ContainerInterface $services = null
+	): EventPageDecoratorFactory {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventPageDecoratorFactory::SERVICE_NAME );
 	}
 
 	public static function getHookRunner( ContainerInterface $services = null ): CampaignEventsHookRunner {
