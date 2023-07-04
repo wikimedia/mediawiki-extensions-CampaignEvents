@@ -773,17 +773,16 @@ class EventPageDecorator {
 		$timezoneMsg = $out->msg( 'campaignevents-eventpage-dialog-timezone' )
 			->params( $formattedTimezone )
 			->parse();
-		$datesWidget = new EventDetailsWidget( [
-			'icon' => 'clock',
-			'label' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-dates-label' )
-			),
-			'content' => [
+		return $this->makeDetailsDialogSection(
+			'clock',
+			[
 				$datesMsg,
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
-		] );
-		return Html::rawElement( 'div', [], $datesWidget );
+			$msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-dates-label' )
+			)
+		);
 	}
 
 	/**
@@ -802,7 +801,7 @@ class EventPageDecorator {
 		$locationElements = [];
 		$onlineLocationElements = [];
 		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) {
-			$onlineLocationElements[] = ( new Tag( 'span' ) )
+			$onlineLocationElements[] = ( new Tag( 'h4' ) )
 				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-location-header' ] )
 				->appendContent(
 					$msgFormatter->format(
@@ -855,7 +854,7 @@ class EventPageDecorator {
 				) );
 			}
 			if ( $onlineLocationElements ) {
-				$inPersonLabel = ( new Tag( 'span' ) )
+				$inPersonLabel = ( new Tag( 'h4' ) )
 					->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-location-header' ] )
 					->appendContent( $msgFormatter->format(
 						MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
@@ -869,14 +868,13 @@ class EventPageDecorator {
 		} else {
 			$locationElements = array_merge( $locationElements, $onlineLocationElements );
 		}
-		$locationWidget = new EventDetailsWidget( [
-			'icon' => 'mapPin',
-			'label' => $msgFormatter->format(
+		return $this->makeDetailsDialogSection(
+			'mapPin',
+			$locationElements,
+			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-location-label' )
-			),
-			'content' => $locationElements
-		] );
-		return Html::rawElement( 'div', [], $locationWidget );
+			)
+		);
 	}
 
 	/**
@@ -913,14 +911,13 @@ class EventPageDecorator {
 		} else {
 			throw new LogicException( "Unexpected user status $userStatus" );
 		}
-		$chatURLWidget = new EventDetailsWidget( [
-			'icon' => 'speechBubbles',
-			'label' => $msgFormatter->format(
+		return $this->makeDetailsDialogSection(
+			'speechBubbles',
+			$chatURLContent,
+			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-chat-label' )
-			),
-			'content' => $chatURLContent
-		] );
-		return Html::rawElement( 'div', [], $chatURLWidget );
+			)
+		);
 	}
 
 	/**
@@ -953,15 +950,6 @@ class EventPageDecorator {
 			$participantsFooter = $this->getParticipantFooter( $eventID, $msgFormatter );
 		}
 
-		$participantsWidget = new EventDetailsWidget( [
-			'icon' => 'userGroup',
-			'label' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-participants' )
-					->numParams( $participantsCount )
-			),
-			'content' => [ $participantsList ?: '', $participantsFooter ],
-		] );
-
 		$privateCountFooter = '';
 		if ( $privateCount > 0 ) {
 			$privateCountFooter = new Tag();
@@ -983,10 +971,14 @@ class EventPageDecorator {
 			$privateCountFooter->appendContent( [ $privateCountIcon, $privateCountText ] );
 		}
 
-		return Html::rawElement(
-			'div',
-			[ 'class' => 'ext-campaignevents-detailsdialog-participants-container' ],
-			$participantsWidget . $privateCountFooter
+		return $this->makeDetailsDialogSection(
+			'userGroup',
+			[ $participantsList ?: '', $participantsFooter ],
+			$msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-participants' )
+					->numParams( $participantsCount )
+			),
+			$privateCountFooter
 		);
 	}
 
@@ -1243,5 +1235,29 @@ class EventPageDecorator {
 		}
 
 		return $tag;
+	}
+
+	/**
+	 * @param string $icon
+	 * @param string|Tag|array $content
+	 * @param string $label
+	 * @param string|Tag|array $footer
+	 * @return string
+	 */
+	private function makeDetailsDialogSection( string $icon, $content, string $label, $footer = '' ): string {
+		$iconWidget = new IconWidget( [
+			'icon' => $icon,
+			'classes' => [ 'ext-campaignevents-eventpage-detailsdialog-section-icon' ]
+		] );
+		$header = ( new Tag( 'h3' ) )
+			->appendContent( $iconWidget, ( new Tag( 'span' ) )->appendContent( $label ) )
+			->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-section-header' ] );
+
+		$contentTag = ( new Tag( 'div' ) )
+			->appendContent( $content )
+			->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-section-content' ] );
+
+		return (string)( new Tag( 'div' ) )
+			->appendContent( $header, $contentTag, $footer );
 	}
 }
