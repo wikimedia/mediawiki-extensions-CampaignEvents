@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Questions;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWikiUnitTestCase;
 
@@ -215,35 +216,40 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 
 	public function provideExtractUserAnswersHTMLForm(): Generator {
 		yield 'Empty form data' => [ [], [ 1, 2, 3 ], [] ];
-		yield 'No answers in form data' => [ [ 'notaquestion' => 42 ], [ 1 ], [] ];
-		yield 'Form data contains answer to question not enabled' => [ [ 'QuestionAge' => 2 ], [], [] ];
-		yield 'Placeholder radio' => [ [ 'QuestionGender' => 0 ], [ 1 ], [] ];
-		yield 'Placeholder select' => [ [ 'QuestionAge' => 0 ], [ 2 ], [] ];
+		yield 'No answers in form data' => [ [ 'notaquestion' => '42' ], [ 1 ], [] ];
+		yield 'Form data contains answer to question not enabled' => [ [ 'QuestionAge' => '2' ], [], [] ];
+		yield 'Placeholder radio' => [ [ 'QuestionGender' => '0' ], [ 1 ], [] ];
+		yield 'Placeholder select' => [ [ 'QuestionAge' => '0' ], [ 2 ], [] ];
 		yield 'Simple answer with no other value' => [
-			[ 'QuestionGender' => 1 ],
+			[ 'QuestionGender' => '1' ],
 			[ 1 ],
 			[ new Answer( 1, 1, null ) ]
 		];
 		yield 'No value provided for otherOption' => [
-			[ 'QuestionAffiliate' => 2 ],
+			[ 'QuestionAffiliate' => '2' ],
 			[ 5 ],
 			[ new Answer( 5, 2, null ) ]
 		];
+		yield 'otherOption provided for wrong value' => [
+			[ 'QuestionAffiliate' => '3', 'QuestionAffiliate_Other' => 'Foo' ],
+			[ 5 ],
+			[ new Answer( 5, 3, null ) ]
+		];
 		yield 'Placeholder provided for otherOption' => [
-			[ 'QuestionAffiliate' => 2, 'QuestionAffiliate_Other' => '' ],
+			[ 'QuestionAffiliate' => '2', 'QuestionAffiliate_Other' => '' ],
 			[ 5 ],
 			[ new Answer( 5, 2, null ) ]
 		];
 		yield 'Answer with other value' => [
-			[ 'QuestionAffiliate' => 2, 'QuestionAffiliate_Other' => 'some-affiliate' ],
+			[ 'QuestionAffiliate' => '2', 'QuestionAffiliate_Other' => 'some-affiliate' ],
 			[ 5 ],
 			[ new Answer( 5, 2, 'some-affiliate' ) ]
 		];
 		yield 'Multiple answer types' => [
 			[
-				'QuestionGender' => 3,
-				'QuestionAge' => 5,
-				'QuestionAffiliate' => 2,
+				'QuestionGender' => '3',
+				'QuestionAge' => '5',
+				'QuestionAffiliate' => '2',
 				'QuestionAffiliate_Other' => 'some-affiliate'
 			],
 			[ 1, 2, 3, 4, 5 ],
@@ -252,6 +258,35 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 				new Answer( 2, 5, null ),
 				new Answer( 5, 2, 'some-affiliate' )
 			]
+		];
+	}
+
+	/**
+	 * @covers ::extractUserAnswersHTMLForm
+	 * @covers ::newAnswerFromHTMLForm
+	 * @dataProvider provideExtractUserAnswersHTMLForm__error
+	 *
+	 */
+	public function testExtractUserAnswersHTMLForm__error( array $formData ) {
+		$this->expectException( InvalidAnswerDataException::class );
+		$this->getRegistry()->extractUserAnswersHTMLForm( $formData, [ 1, 2, 3, 4, 5 ] );
+	}
+
+	public function provideExtractUserAnswersHTMLForm__error(): Generator {
+		yield 'Radio wrong answer type' => [
+			[ 'QuestionGender' => 'foo' ],
+		];
+		yield 'Non-existing radio option' => [
+			[ 'QuestionGender' => 10000 ],
+		];
+		yield 'Select wrong answer type' => [
+			[ 'QuestionAge' => 'foo' ],
+		];
+		yield 'Non-existing select option' => [
+			[ 'QuestionAge' => 100000 ],
+		];
+		yield 'otherOption wrong type' => [
+			[ 'QuestionAffiliate' => 2, 'QuestionAffiliate_Other' => true ],
 		];
 	}
 

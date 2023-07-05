@@ -344,5 +344,6 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Possible answer to the question {{msg-mw|campaignevents-register-question-affiliate}}.",
 	"campaignevents-register-question-affiliate-details-placeholder": "Placeholder of a free-text field where users can enter the name of an affiliate they belong to, if they chose the {{msg-mw|campaignevents-register-question-affiliate-option-affiliate}} answer to the {{msg-mw|campaignevents-register-question-affiliate}} question.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Title shown above the questions section on a modal on the event page, when the user clicks on the Register button, this title is to inform the user that the provided answers are information for organizers",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Subtitle shown above the questions section on a modal on the event page, when the user clicks on the Register button, this subtitle is to inform the user that all questions are optional"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Subtitle shown above the questions section on a modal on the event page, when the user clicks on the Register button, this subtitle is to inform the user that all questions are optional",
+	"campaignevents-register-invalid-answer": "Error message shown on [[Special:RegisterForEvent]] when the answer to a participant question is not valid.\nParameters:\n* $1 - Identifier of the given question, will be a string like \"wpQuestionAge\"."
 }
