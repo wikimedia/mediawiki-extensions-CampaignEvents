@@ -203,6 +203,7 @@
 	"campaignevents-eventpage-register-dialog-save": "Shrani",
 	"campaignevents-eventpage-register-dialog-title": "Prijava na dogodek",
 	"campaignevents-eventpage-register-dialog-title-edit": "Uredi prijavo",
+	"campaignevents-eventpage-register-dialog-visibility-title": "Zasebnost registracije",
 	"campaignevents-eventpage-enableheader-organizer": "Ste organizator",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Stran dogodka</strong>: Omogočite prijavo, da se lahko udeleženci prijavijo na vaš dogodek neposredno na strani.",
 	"campaignevents-eventpage-enableheader-button-label": "Omogoči prijavo",
@@ -327,5 +328,7 @@
 	"campaignevents-register-question-affiliate-option-chapter": "Podružnica",
 	"campaignevents-register-question-affiliate-option-user-group": "Uporabniška skupina",
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Organizacijski partner",
-	"campaignevents-register-question-affiliate-details-placeholder": "Prosimo, navedite"
+	"campaignevents-register-question-affiliate-details-placeholder": "Prosimo, navedite",
+	"campaignevents-eventpage-register-dialog-questions-title": "Informacije za organizatorje",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Vsa vprašanja so izbirna"
 }

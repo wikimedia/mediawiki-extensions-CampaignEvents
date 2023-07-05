@@ -203,6 +203,7 @@
 	"campaignevents-eventpage-register-dialog-save": "Salveguardar",
 	"campaignevents-eventpage-register-dialog-title": "Inscriber se al evento",
 	"campaignevents-eventpage-register-dialog-title-edit": "Modificar inscription",
+	"campaignevents-eventpage-register-dialog-visibility-title": "Confidentialitate de inscription",
 	"campaignevents-eventpage-enableheader-organizer": "Tu es un organisator",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Pagina del evento</strong>: activa le inscription de sorta que le participantes pote inscriber se a tu evento directemente sur le pagina.",
 	"campaignevents-eventpage-enableheader-button-label": "Activar inscription",
@@ -327,5 +328,7 @@
 	"campaignevents-register-question-affiliate-option-chapter": "Division regional (capitulo)",
 	"campaignevents-register-question-affiliate-option-user-group": "Gruppo de usatores",
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Partner organisante",
-	"campaignevents-register-question-affiliate-details-placeholder": "Per favor precisa"
+	"campaignevents-register-question-affiliate-details-placeholder": "Per favor precisa",
+	"campaignevents-eventpage-register-dialog-questions-title": "Information pro organisatores",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Tote le questiones es optional"
 }

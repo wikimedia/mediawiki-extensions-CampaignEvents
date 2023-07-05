@@ -204,6 +204,7 @@
 	"campaignevents-eventpage-register-dialog-save": "שמירה",
 	"campaignevents-eventpage-register-dialog-title": "רישום לאירוע",
 	"campaignevents-eventpage-register-dialog-title-edit": "עריכת הרשמה",
+	"campaignevents-eventpage-register-dialog-visibility-title": "פרטיות הרשמה",
 	"campaignevents-eventpage-enableheader-organizer": "{{GENDER:|אתה המארגן|את המארגנת}}",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>דף אירוע</strong>: יש להפעיל הרשמה כדי שמשתתפים יוכלו להירשם לאירוע שלך ישירות בדף.",
 	"campaignevents-eventpage-enableheader-button-label": "הפעלת הרשמה",
@@ -328,5 +329,7 @@
 	"campaignevents-register-question-affiliate-option-chapter": "עמותה (Chapter)",
 	"campaignevents-register-question-affiliate-option-user-group": "קבוצות משתמשים",
 	"campaignevents-register-question-affiliate-option-organizing-partner": "שותף מארגן",
-	"campaignevents-register-question-affiliate-details-placeholder": "נא להשיב"
+	"campaignevents-register-question-affiliate-details-placeholder": "נא להשיב",
+	"campaignevents-eventpage-register-dialog-questions-title": "מידע למארגנים",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "כל השאלות הן רשות"
 }

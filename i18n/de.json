@@ -203,6 +203,7 @@
 	"campaignevents-eventpage-register-dialog-save": "Speichern",
 	"campaignevents-eventpage-register-dialog-title": "Zur Veranstaltung anmelden",
 	"campaignevents-eventpage-register-dialog-title-edit": "Anmeldung bearbeiten",
+	"campaignevents-eventpage-register-dialog-visibility-title": "Anmeldung privat",
 	"campaignevents-eventpage-enableheader-organizer": "Du bist ein Organisator",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Veranstaltungsseite</strong>: Schalte die Registrierung frei, damit sich Teilnehmer direkt auf der Seite für deine Veranstaltung anmelden können.",
 	"campaignevents-eventpage-enableheader-button-label": "Anmeldung freigeben",
@@ -327,5 +328,7 @@
 	"campaignevents-register-question-affiliate-option-chapter": "Chapter",
 	"campaignevents-register-question-affiliate-option-user-group": "Benutzergruppe",
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Organisationspartner",
-	"campaignevents-register-question-affiliate-details-placeholder": "Bitte angeben"
+	"campaignevents-register-question-affiliate-details-placeholder": "Bitte angeben",
+	"campaignevents-eventpage-register-dialog-questions-title": "Informationen für Veranstalter",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Alle Fragen sind optional"
 }

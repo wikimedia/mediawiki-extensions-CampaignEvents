@@ -48,6 +48,7 @@
 	"campaignevents-eventpage-register-dialog-save": "بچاؤ",
 	"campaignevents-eventpage-register-dialog-title": "ایونٹ کیتے رجسٹر تھیوو",
 	"campaignevents-eventpage-register-dialog-title-edit": "رجسٹریشن وچ تبدیلی کرو",
+	"campaignevents-eventpage-register-dialog-visibility-title": "رجسٹریشن رازداری",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "مکاؤ",
 	"eventdetails": "ایونٹ تفصیلاں",
 	"campaignevents-event-details-label": "ایونٹ تفصیلاں",
@@ -94,5 +95,6 @@
 	"campaignevents-register-question-affiliate-option-affiliate": "الحاق کرو",
 	"campaignevents-register-question-affiliate-option-chapter": "باب",
 	"campaignevents-register-question-affiliate-option-user-group": "ورتݨ آلا گروپ",
-	"campaignevents-register-question-affiliate-details-placeholder": "سوہݨا، بیان کرو"
+	"campaignevents-register-question-affiliate-details-placeholder": "سوہݨا، بیان کرو",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "سارے سوال اختیاری ہن"
 }
