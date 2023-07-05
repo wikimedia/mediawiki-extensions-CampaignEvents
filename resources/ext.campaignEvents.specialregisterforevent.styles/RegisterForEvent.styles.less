@@ -29,7 +29,13 @@ span.ext-campaignevents-registerforevent-icon {
 	}
 
 	// Hide the 'top' section, it's only there to force the ordering
-	.oo-ui-panelLayout:first-of-type .oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
-		display: none;
+	.oo-ui-panelLayout {
+		.oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
+			display: none;
+		}
+
+		~ .oo-ui-panelLayout .oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
+			display: unset;
+		}
 	}
 }
