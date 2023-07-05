@@ -198,6 +198,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Register to view the chat group link.",
 	"campaignevents-eventpage-dialog-action-close": "Close",
 	"campaignevents-eventpage-register-notification": "You are now registered for $1.",
+	"campaignevents-eventpage-register-notification-edit": "Your registration information has been updated.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Cancel registration",
 	"campaignevents-eventpage-unregister-confirmation-body": "Are you sure you want to cancel your registration?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Yes",

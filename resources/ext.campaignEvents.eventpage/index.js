@@ -50,18 +50,22 @@
 	}
 
 	var SUCCESS_NOTIFICATION_COOKIE = 'showsuccessnotif';
+	var SUCCESS_COOKIE_NEW_REGISTRATION = 'new',
+		SUCCESS_COOKIE_REGISTRATION_UPDATED = 'update';
 	/**
 	 * Checks whether the user just registered for this event, and thus a succes
 	 * notification should be shown. The cookie has a very short expiry and is
 	 * removed immediately on page refresh.
 	 */
 	function maybeShowRegistrationSuccessNotification() {
-		if ( mw.cookie.get( SUCCESS_NOTIFICATION_COOKIE ) ) {
-			mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 1, { expires: 1 } );
-			mw.notify(
-				mw.message( 'campaignevents-eventpage-register-notification', mw.config.get( 'wgTitle' ) ),
-				{ type: 'success' }
-			);
+		var cookieVal = mw.cookie.get( SUCCESS_NOTIFICATION_COOKIE );
+		if ( cookieVal ) {
+			mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 0, { expires: 1 } );
+			var msg = cookieVal === SUCCESS_COOKIE_NEW_REGISTRATION ?
+				mw.message( 'campaignevents-eventpage-register-notification', mw.config.get( 'wgTitle' ) ) :
+				mw.message( 'campaignevents-eventpage-register-notification-edit' );
+
+			mw.notify( msg, { type: 'success' } );
 		}
 	}
 
@@ -79,7 +83,10 @@
 			}
 		)
 			.done( function () {
-				mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 1, { expires: 30 } );
+				var cookieVal = userIsParticipant ?
+					SUCCESS_COOKIE_REGISTRATION_UPDATED :
+					SUCCESS_COOKIE_NEW_REGISTRATION;
+				mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, cookieVal, { expires: 30 } );
 				// Reload the page so that the number and list of participants are updated.
 				// TODO This should be improved at some point, see T312646#8105313
 				window.location.reload();

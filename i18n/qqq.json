@@ -200,6 +200,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Message used in the registration popup on event pages, shown when the user hasn't registered for the event and thus cannot see the chat group link until they do.",
 	"campaignevents-eventpage-dialog-action-close": "Label of a button in the registration popup on event pages. By clicking this button, the popup will close.",
 	"campaignevents-eventpage-register-notification": "Text of a notification shown when the user registers for an event while on the event page. Parameters:\n* $1 - The name of the event",
+	"campaignevents-eventpage-register-notification-edit": "Text of a notification shown when the user updates their registration information for an event while on the event page.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Title of a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-body": "Content of a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
