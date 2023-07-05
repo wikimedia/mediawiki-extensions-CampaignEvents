@@ -130,8 +130,10 @@ class EventDetailsModule {
 			)
 		);
 
+		$footer = $this->getFooter();
+
 		return new PanelLayout( [
-			'content' => [ $header, $contentWrapper ],
+			'content' => [ $header, $contentWrapper, $footer ],
 			'padded' => true,
 			'framed' => true,
 			'expanded' => false,
@@ -245,15 +247,6 @@ class EventDetailsModule {
 			'campaignevents-event-details-chat-link'
 		);
 
-		$items[] = new ButtonWidget( [
-			'flags' => [ 'progressive' ],
-			'label' => $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-view-event-page' )
-			),
-			'classes' => [ 'ext-campaignevents-event-details-view-event-page-button' ],
-			'href' => $this->pageURLResolver->getUrl( $this->registration->getPage() )
-		] );
-
 		return ( new Tag( 'div' ) )
 			->appendContent( $items );
 	}
@@ -312,8 +305,7 @@ class EventDetailsModule {
 			// TODO: Use user-right icon when available (T338344)
 			'userAvatar',
 			$ret,
-			'campaignevents-event-details-organizers-header',
-			[ 'ext-campaignevents-eventdetails-column-organizers' ]
+			'campaignevents-event-details-organizers-header'
 		);
 	}
 
@@ -463,14 +455,24 @@ class EventDetailsModule {
 		);
 	}
 
+	private function getFooter(): Tag {
+		return new ButtonWidget( [
+			'flags' => [ 'progressive' ],
+			'label' => $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-view-event-page' )
+			),
+			'classes' => [ 'ext-campaignevents-event-details-view-event-page-button' ],
+			'href' => $this->pageURLResolver->getUrl( $this->registration->getPage() )
+		] );
+	}
+
 	/**
 	 * @param string $icon
 	 * @param string|Tag|array $content
 	 * @param string $labelMsg
-	 * @param array $classes
 	 * @return Tag
 	 */
-	private function makeSection( string $icon, $content, string $labelMsg, array $classes = [] ): Tag {
+	private function makeSection( string $icon, $content, string $labelMsg ): Tag {
 		$iconWidget = new IconWidget( [
 			'icon' => $icon,
 			'classes' => [ 'ext-campaignevents-event-details-icon' ]
@@ -484,7 +486,6 @@ class EventDetailsModule {
 			->addClasses( [ 'ext-campaignevents-event-details-section-content' ] );
 
 		return ( new Tag( 'div' ) )
-			->appendContent( $header, $contentTag )
-			->addClasses( $classes );
+			->appendContent( $header, $contentTag );
 	}
 }
