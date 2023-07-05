@@ -307,6 +307,8 @@
 	 * username filter changes.
 	 */
 	ParticipantsManager.prototype.rebuildList = function () {
+		// Pause the scrolldown observer while we rebuild the list (T340897)
+		this.scrollDownObserver.pause();
 		// eslint-disable-next-line no-jquery/no-global-selector
 		$( '.ext-campaignevents-details-user-row' )
 			.not( this.$curUserRow )
@@ -323,6 +325,11 @@
 		this.lastParticipantID = null;
 		// Note that the selected participants should persist and are not reset here.
 		this.loadMoreParticipants();
+		var that = this;
+		// Unpause the scrolldown observer once everything's settled.
+		setTimeout( function () {
+			that.scrollDownObserver.unpause();
+		}, 0 );
 	};
 
 	ParticipantsManager.prototype.loadMoreParticipants = function () {
