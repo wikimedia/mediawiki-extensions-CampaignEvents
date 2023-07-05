@@ -8,6 +8,7 @@ use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -402,7 +403,7 @@ class EventDetailsParticipantsModule {
 		if ( $participant->isPrivateRegistration() ) {
 			try {
 				$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
-			} catch ( CentralUserNotFoundException | UserNotGlobalException $_ ) {
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				// Hack: use an invalid username to force unspecified gender
 				$userName = '@';
 			}
