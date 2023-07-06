@@ -12,7 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
-use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -180,22 +180,23 @@ return [
 			$services->getLinkBatchFactory()
 		);
 	},
-	EventPageDecorator::SERVICE_NAME => static function ( MediaWikiServices $services ): EventPageDecorator {
-		return new EventPageDecorator(
-			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
-			$services->get( ParticipantsStore::SERVICE_NAME ),
-			$services->get( OrganizersStore::SERVICE_NAME ),
-			$services->get( PermissionChecker::SERVICE_NAME ),
-			$services->getMessageFormatterFactory(),
-			$services->getLinkRenderer(),
-			$services->getTitleFormatter(),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-			$services->get( UserLinker::SERVICE_NAME ),
-			$services->get( EventTimeFormatter::SERVICE_NAME ),
-			$services->get( EventPageCacheUpdater::SERVICE_NAME ),
-			$services->get( EventQuestionsRegistry::SERVICE_NAME )
-		);
-	},
+	EventPageDecoratorFactory::SERVICE_NAME =>
+		static function ( MediaWikiServices $services ): EventPageDecoratorFactory {
+			return new EventPageDecoratorFactory(
+				$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
+				$services->get( ParticipantsStore::SERVICE_NAME ),
+				$services->get( OrganizersStore::SERVICE_NAME ),
+				$services->get( PermissionChecker::SERVICE_NAME ),
+				$services->getMessageFormatterFactory(),
+				$services->getLinkRenderer(),
+				$services->getTitleFormatter(),
+				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+				$services->get( UserLinker::SERVICE_NAME ),
+				$services->get( EventTimeFormatter::SERVICE_NAME ),
+				$services->get( EventPageCacheUpdater::SERVICE_NAME ),
+				$services->get( EventQuestionsRegistry::SERVICE_NAME )
+			);
+		},
 	CampaignEventsHookRunner::SERVICE_NAME =>
 		static function ( MediaWikiServices $services ): CampaignEventsHookRunner {
 			return new CampaignEventsHookRunner( $services->getHookContainer() );

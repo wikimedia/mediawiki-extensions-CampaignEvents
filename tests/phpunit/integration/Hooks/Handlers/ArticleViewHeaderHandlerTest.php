@@ -9,6 +9,7 @@ use Generator;
 use IContextSource;
 use Language;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\ArticleViewHeaderHandler;
 use MediaWikiIntegrationTestCase;
 use OutputPage;
@@ -35,7 +36,9 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 		} else {
 			$decorator->expects( $this->never() )->method( 'decoratePage' );
 		}
-		$handler = new ArticleViewHeaderHandler( $decorator );
+		$decoratorFactory = $this->createMock( EventPageDecoratorFactory::class );
+		$decoratorFactory->method( 'newDecorator' )->willReturn( $decorator );
+		$handler = new ArticleViewHeaderHandler( $decoratorFactory );
 		$outputDone = true;
 		$pcache = true;
 		$handler->onArticleViewHeader( $article, $outputDone, $pcache );
