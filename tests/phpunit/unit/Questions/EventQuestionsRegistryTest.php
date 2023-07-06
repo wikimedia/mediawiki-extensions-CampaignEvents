@@ -356,6 +356,41 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::formatAnswersForAPI
+	 * @dataProvider provideFormatAnswersForAPI
+	 */
+	public function testFormatAnswersForAPI( array $answers, array $expected ) {
+		$this->assertSame( $expected, $this->getRegistry()->formatAnswersForAPI( $answers ) );
+	}
+
+	public function provideFormatAnswersForAPI(): Generator {
+		yield 'No answers' => [ [], [] ];
+		yield 'Unrecognized question' => [
+			[ new Answer( 10000000, 1, 'foo' ) ],
+			[],
+		];
+		yield 'Various types of answers' => [
+			[
+				new Answer( 1, 3, null ),
+				new Answer( 2, 5, null ),
+				new Answer( 5, 2, 'some-affiliate' )
+			],
+			[
+				'gender' => [
+					'value' => 3,
+				],
+				'age' => [
+					'value' => 5,
+				],
+				'affiliate' => [
+					'value' => 2,
+					'other' => 'some-affiliate',
+				],
+			],
+		];
+	}
+
+	/**
 	 * @covers ::getAvailableQuestionNames
 	 */
 	public function testGetAvailableQuestionNames() {

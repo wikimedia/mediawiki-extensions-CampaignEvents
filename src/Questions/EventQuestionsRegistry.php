@@ -382,6 +382,36 @@ class EventQuestionsRegistry {
 	}
 
 	/**
+	 * Formats a list of answers for use in API (GET) requests.
+	 *
+	 * @param Answer[] $answers
+	 * @return array[]
+	 */
+	public function formatAnswersForAPI( array $answers ): array {
+		$answersByID = [];
+		foreach ( $answers as $answer ) {
+			$answersByID[$answer->getQuestionDBID()] = $answer;
+		}
+		$ret = [];
+		foreach ( $this->getQuestions() as $question ) {
+			$questionID = $question['db-id'];
+			if ( !isset( $answersByID[$questionID] ) ) {
+				continue;
+			}
+			$answer = $answersByID[$questionID];
+			$option = $answer->getOption();
+			$formattedAnswer = [
+				'value' => $option,
+			];
+			if ( $answer->getText() !== null ) {
+				$formattedAnswer['other'] = $answer->getText();
+			}
+			$ret[$question['name']] = $formattedAnswer;
+		}
+		return $ret;
+	}
+
+	/**
 	 * @return string[]
 	 */
 	public function getAvailableQuestionNames(): array {
