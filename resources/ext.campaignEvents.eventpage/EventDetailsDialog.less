@@ -44,29 +44,27 @@
 	}
 }
 
-.ext-campaignevents-detailsdialog-participants-container {
-	.ext-campaignevents-detailsdialog-participants-list {
-		list-style-position: inside;
-		margin-left: 0;
+.ext-campaignevents-detailsdialog-participants-list {
+	list-style-position: inside;
+	margin-left: 0;
 
-		li {
-			padding: 0.2em 0;
-			margin-bottom: 0;
-			// The lock icon's height is 1.42857143em (20px with normal font size). Make that the minimum
-			// height of every element for consistency. This is harmless if no participant is private
-			// (and therefore there are no icons).
-			min-height: 1.42857143em;
+	li {
+		padding: 0.2em 0;
+		margin-bottom: 0;
+		// The lock icon's height is 1.42857143em (20px with normal font size). Make that the minimum
+		// height of every element for consistency. This is harmless if no participant is private
+		// (and therefore there are no icons).
+		min-height: 1.42857143em;
 
-			> *:first-child {
-				vertical-align: middle;
-			}
+		> *:first-child {
+			vertical-align: middle;
 		}
 	}
+}
 
-	.ext-campaignevents-event-details-participants-private-icon {
-		margin-left: 0.5em;
-		opacity: @opacity-icon-subtle;
-	}
+.ext-campaignevents-event-details-participants-private-icon {
+	margin-left: 0.5em;
+	opacity: @opacity-icon-subtle;
 }
 
 .ext-campaignevents-eventpage-detailsdialog {
@@ -82,18 +80,23 @@
 	}
 }
 
-.ext-campaignevents-eventpage-details-widget-header {
-	position: relative; /* The icon uses position:absolute, which makes positioning hard */
-	opacity: @opacity-icon-subtle;
+.ext-campaignevents-eventpage-detailsdialog-section-header {
+	font-size: 100%;
+	color: @color-subtle;
+	margin: 0 0 0.5em 0;
+	padding: 0;
 
-	> .oo-ui-labelElement-label {
-		margin-left: 2.5em;
-		font-weight: bold;
+	> span {
+		vertical-align: middle;
+	}
+
+	.ext-campaignevents-eventpage-detailsdialog-section-icon {
+		opacity: @opacity-icon-subtle;
+		margin-right: 1em;
 	}
 }
 
-.ext-campaignevents-eventpage-details-widget > .ext-campaignevents-eventpage-details-widget-content {
-	margin-top: 0.5em;
+.ext-campaignevents-eventpage-detailsdialog-section-content {
 	margin-left: 2.5em;
 }
 
@@ -103,7 +106,9 @@
 }
 
 .ext-campaignevents-eventpage-detailsdialog-location-header {
-	font-weight: bold;
+	font-size: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 .ext-campaignevents-detailsdialog-private-participants-footer {
