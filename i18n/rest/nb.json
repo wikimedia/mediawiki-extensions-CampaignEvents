@@ -13,5 +13,6 @@
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameteren «user_ids» må være ei liste over bruker-ID-er eller null (for å fjerne alle brukere)",
 	"campaignevents-rest-list-participants-empty-filter": "Brukernavnfilteret, hvis det er angitt, må være en ikke-tom streng.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Du har ikke autorisasjon til å se deltakere som har registrert seg privat på dette arrangementet.",
-	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> må være ei liste over brukernavn, og kan ikke være tom."
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> må være ei liste over brukernavn, og kan ikke være tom.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Du deltar ikke i dette arrangementet."
 }

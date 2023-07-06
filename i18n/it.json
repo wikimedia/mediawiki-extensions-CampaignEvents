@@ -102,6 +102,7 @@
 	"campaignevents-eventpage-dialog-chat-label": "Unisciti alla chat di gruppo dell'evento",
 	"campaignevents-eventpage-dialog-chat-not-available": "Nessuna chat di gruppo è disponibile per questo evento.",
 	"campaignevents-eventpage-dialog-action-close": "Chiudi",
+	"campaignevents-eventpage-register-notification-edit": "Le tue informazioni di registrazione sono state aggiornate.",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Sì",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "No",
 	"campaignevents-eventpage-register-dialog-save": "Salva",
@@ -195,5 +196,8 @@
 	"campaignevents-register-question-affiliate-placeholder": "Seleziona un'opzione",
 	"campaignevents-register-question-affiliate-option-none": "No",
 	"campaignevents-register-question-affiliate-option-affiliate": "Affiliato",
-	"campaignevents-register-question-affiliate-option-chapter": "Capitolo"
+	"campaignevents-register-question-affiliate-option-chapter": "Capitolo",
+	"campaignevents-eventpage-register-dialog-questions-title": "Informazioni per gli organizzatori",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Tutte le domande sono facoltative",
+	"campaignevents-register-invalid-answer": "Risposta non valida alla domanda $1"
 }

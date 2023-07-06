@@ -201,6 +201,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Inscrivez-vous pour voir le lien du groupe de discussion.",
 	"campaignevents-eventpage-dialog-action-close": "Fermer",
 	"campaignevents-eventpage-register-notification": "Vous êtes maintenant inscrit{{GENDER:||e}} à $1.",
+	"campaignevents-eventpage-register-notification-edit": "Vos informations d’inscription ont été mises à jour.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Annuler l’inscription",
 	"campaignevents-eventpage-unregister-confirmation-body": "Êtes-vous sûr{{GENDER:||e}} de vouloir annuler votre inscription ?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Oui",
@@ -209,6 +210,7 @@
 	"campaignevents-eventpage-register-dialog-save": "Enregistrer",
 	"campaignevents-eventpage-register-dialog-title": "S’inscrire à un événement",
 	"campaignevents-eventpage-register-dialog-title-edit": "Modifier l’inscription",
+	"campaignevents-eventpage-register-dialog-visibility-title": "Confidentialité de l’inscription",
 	"campaignevents-eventpage-enableheader-organizer": "Vous êtes organisat{{GENDER:|eur|rice}}",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Page de l’événement</strong> : activez les inscriptions afin que les participants puissent s’inscrire à votre événement directement sur la page.",
 	"campaignevents-eventpage-enableheader-button-label": "Activer les inscriptions",
@@ -341,5 +343,8 @@
 	"campaignevents-register-question-affiliate-option-chapter": "Association locale (« chapitre »)",
 	"campaignevents-register-question-affiliate-option-user-group": "Groupes d’utilisateurs",
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Partenaire organisateur",
-	"campaignevents-register-question-affiliate-details-placeholder": "Veuillez préciser"
+	"campaignevents-register-question-affiliate-details-placeholder": "Veuillez préciser",
+	"campaignevents-eventpage-register-dialog-questions-title": "Information pour les organisateurs",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Toutes les questions sont facultatives",
+	"campaignevents-register-invalid-answer": "Réponse non valide à la question $1"
 }

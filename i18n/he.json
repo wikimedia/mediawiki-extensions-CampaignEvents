@@ -196,6 +196,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "יש להירשם כדי לצפות בקישור לקבוצת הצ'אט.",
 	"campaignevents-eventpage-dialog-action-close": "סגירה",
 	"campaignevents-eventpage-register-notification": "עכשיו {{GENDER:|אתה רשום|את רשומה|נרשמת}} לאירוע $1.",
+	"campaignevents-eventpage-register-notification-edit": "פרטי ההרשמה שלך עודכנו.",
 	"campaignevents-eventpage-unregister-confirmation-title": "ביטול הרשמה",
 	"campaignevents-eventpage-unregister-confirmation-body": "האם {{GENDER:|אתה בטוח שאתה|את בטוחה שאת}} רוצה לבטל את הרשמה שלך?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "כן",
@@ -331,5 +332,6 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "שותף מארגן",
 	"campaignevents-register-question-affiliate-details-placeholder": "נא להשיב",
 	"campaignevents-eventpage-register-dialog-questions-title": "מידע למארגנים",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "כל השאלות הן רשות"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "כל השאלות הן רשות",
+	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1"
 }

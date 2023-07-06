@@ -195,6 +195,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Registriere dich, um den Chat-Gruppen-Link anzuzeigen.",
 	"campaignevents-eventpage-dialog-action-close": "Schließen",
 	"campaignevents-eventpage-register-notification": "Du bist jetzt für $1 registriert.",
+	"campaignevents-eventpage-register-notification-edit": "Deine Anmeldeinformation wurden aktualisiert.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Registrierung abbrechen",
 	"campaignevents-eventpage-unregister-confirmation-body": "Bist du sicher, dass du deine Registrierung abbrechen möchtest?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ja",
@@ -330,5 +331,6 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Organisationspartner",
 	"campaignevents-register-question-affiliate-details-placeholder": "Bitte angeben",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informationen für Veranstalter",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Alle Fragen sind optional"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Alle Fragen sind optional",
+	"campaignevents-register-invalid-answer": "Ungültige Antwort auf die Frage $1"
 }

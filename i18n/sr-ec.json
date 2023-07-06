@@ -43,5 +43,6 @@
 	"campaignevents-register-question-affiliate-option-none": "Не",
 	"campaignevents-register-question-affiliate-option-chapter": "Огранак",
 	"campaignevents-register-question-affiliate-option-user-group": "Корисничка група",
-	"campaignevents-register-question-affiliate-details-placeholder": "Молимо наведите"
+	"campaignevents-register-question-affiliate-details-placeholder": "Молимо наведите",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Сва питања су необавезна"
 }
