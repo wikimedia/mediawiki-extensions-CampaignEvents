@@ -302,8 +302,7 @@ class EventDetailsModule {
 		}
 
 		return $this->makeSection(
-			// TODO: Use user-right icon when available (T338344)
-			'userAvatar',
+			'userRights',
 			$ret,
 			'campaignevents-event-details-organizers-header'
 		);
