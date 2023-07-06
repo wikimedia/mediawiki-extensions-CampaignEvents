@@ -51,7 +51,7 @@ class SpecialEventDetails extends SpecialPage {
 	/** @var FrontendModulesFactory */
 	private FrontendModulesFactory $frontendModulesFactory;
 	/** @var PermissionChecker */
-	private PermissionChecker $PermissionChecker;
+	private PermissionChecker $permissionChecker;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -60,7 +60,7 @@ class SpecialEventDetails extends SpecialPage {
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param FrontendModulesFactory $frontendModulesFactory
-	 * @param PermissionChecker $PermissionChecker
+	 * @param PermissionChecker $permissionChecker
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -69,7 +69,7 @@ class SpecialEventDetails extends SpecialPage {
 		IMessageFormatterFactory $messageFormatterFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
 		FrontendModulesFactory $frontendModulesFactory,
-		PermissionChecker $PermissionChecker
+		PermissionChecker $permissionChecker
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventLookup = $eventLookup;
@@ -78,7 +78,7 @@ class SpecialEventDetails extends SpecialPage {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->frontendModulesFactory = $frontendModulesFactory;
-		$this->PermissionChecker = $PermissionChecker;
+		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**
@@ -168,8 +168,6 @@ class SpecialEventDetails extends SpecialPage {
 			'id' => 'ext-campaignevents-eventdetails-tabs'
 		] );
 		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule( $this->event, $language );
-		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule();
-		$emailModule = $this->frontendModulesFactory->newEmailParticipantsModule();
 		$tabs = [];
 		$tabs[] = $this->createTab(
 			self::EVENT_DETAILS_PANEL,
@@ -181,23 +179,24 @@ class SpecialEventDetails extends SpecialPage {
 				$out
 			)
 		);
+		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule( $language );
 		$tabs[] = $this->createTab(
 			self::PARTICIPANTS_PANEL,
 			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-participants' ) ),
 			$eventParticipantsModule->createContent(
-				$language,
 				$this->event,
 				$this->getUser(),
 				new MWAuthorityProxy( $this->getAuthority() ),
 				$isOrganizer,
-				$out )
+				$out
+			)
 		);
 		if ( $this->emailIsEnabledAndAllowed() ) {
+			$emailModule = $this->frontendModulesFactory->newEmailParticipantsModule();
 			$tabs[] = $this->createTab(
 				self::EMAIL_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-email' ) ),
-				$emailModule->createContent(
-					$language )
+				$emailModule->createContent( $language )
 			);
 		}
 
@@ -243,7 +242,7 @@ class SpecialEventDetails extends SpecialPage {
 	 * @return bool
 	 */
 	public function emailIsEnabledAndAllowed(): bool {
-		return $this->PermissionChecker->userCanEmailParticipants(
+		return $this->permissionChecker->userCanEmailParticipants(
 				new MWAuthorityProxy( $this->getAuthority() ),
 				$this->event->getID() )
 			&& $this->getConfig()->get( 'CampaignEventsEnableEmail' );

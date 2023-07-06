@@ -103,7 +103,9 @@ class FrontendModulesFactory {
 		);
 	}
 
-	public function newEventDetailsParticipantsModule(): EventDetailsParticipantsModule {
+	public function newEventDetailsParticipantsModule(
+		Language $language
+	): EventDetailsParticipantsModule {
 		return new EventDetailsParticipantsModule(
 			$this->messageFormatterFactory,
 			$this->userLinker,
@@ -111,7 +113,8 @@ class FrontendModulesFactory {
 			$this->centralUserLookup,
 			$this->permissionChecker,
 			$this->userFactory,
-			$this->userMailer
+			$this->userMailer,
+			$language
 		);
 	}
 

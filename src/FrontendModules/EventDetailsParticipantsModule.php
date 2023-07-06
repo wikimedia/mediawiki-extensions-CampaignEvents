@@ -41,8 +41,6 @@ class EventDetailsParticipantsModule {
 		...UserLinker::MODULE_STYLES
 	];
 
-	/** @var IMessageFormatterFactory */
-	private $messageFormatterFactory;
 	/** @var UserLinker */
 	private $userLinker;
 	/** @var ParticipantsStore */
@@ -56,6 +54,9 @@ class EventDetailsParticipantsModule {
 	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $userMailer;
 
+	private ITextFormatter $msgFormatter;
+	private Language $language;
+
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param UserLinker $userLinker
@@ -64,6 +65,7 @@ class EventDetailsParticipantsModule {
 	 * @param PermissionChecker $permissionChecker
 	 * @param UserFactory $userFactory
 	 * @param CampaignsUserMailer $userMailer
+	 * @param Language $language
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -72,19 +74,21 @@ class EventDetailsParticipantsModule {
 		CampaignsCentralUserLookup $centralUserLookup,
 		PermissionChecker $permissionChecker,
 		UserFactory $userFactory,
-		CampaignsUserMailer $userMailer
+		CampaignsUserMailer $userMailer,
+		Language $language
 	) {
-		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->userLinker = $userLinker;
 		$this->participantsStore = $participantsStore;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->permissionChecker = $permissionChecker;
 		$this->userFactory = $userFactory;
 		$this->userMailer = $userMailer;
+
+		$this->language = $language;
+		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 	}
 
 	/**
-	 * @param Language $language
 	 * @param ExistingEventRegistration $event
 	 * @param UserIdentity $viewingUser
 	 * @param ICampaignsAuthority $authority
@@ -96,7 +100,6 @@ class EventDetailsParticipantsModule {
 	 * probably not worth doing.
 	 */
 	public function createContent(
-		Language $language,
 		ExistingEventRegistration $event,
 		UserIdentity $viewingUser,
 		ICampaignsAuthority $authority,
@@ -104,7 +107,6 @@ class EventDetailsParticipantsModule {
 		OutputPage $out
 	): Tag {
 		$eventID = $event->getID();
-		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 
 		try {
@@ -134,19 +136,15 @@ class EventDetailsParticipantsModule {
 		}
 
 		$items = [];
-		$items[] = $this->getHeader( $msgFormatter, $totalParticipants, $canRemoveParticipants );
-		if ( $totalParticipants ) {
-			$items[] = $this->getTableHeaders( $msgFormatter, $canRemoveParticipants );
-		}
-		$items[] = $this->getEmptyStateElement( $totalParticipants, $msgFormatter );
-		$items[] = $this->getParticipantsContainer(
-			$curUserParticipant,
-			$otherParticipants,
-			$canRemoveParticipants,
-			$language,
+		$items[] = $this->getHeader( $totalParticipants, $canRemoveParticipants );
+		$items[] = $this->getParticipantsTable(
 			$viewingUser,
-			$msgFormatter
+			$totalParticipants,
+			$canRemoveParticipants,
+			$curUserParticipant,
+			$otherParticipants
 		);
+		$items[] = $this->getEmptyStateElement( $totalParticipants );
 
 		$out->addJsConfigVars( [
 			// TODO This may change when we add the feature to send messages
@@ -168,7 +166,7 @@ class EventDetailsParticipantsModule {
 			->addClasses( [ 'ext-campaignevents-event-details-participants-panel' ] )
 			->appendContent( $layout );
 
-		$footer = $this->getFooter( $eventID, $msgFormatter );
+		$footer = $this->getFooter( $eventID );
 		if ( $footer ) {
 			$content->appendContent( $footer );
 		}
@@ -177,17 +175,16 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param ITextFormatter $msgFormatter
 	 * @param int $totalParticipants
+	 * @param bool $viewerCanRemoveParticipants
 	 * @return Tag
 	 */
 	private function getHeader(
-		ITextFormatter $msgFormatter,
 		int $totalParticipants,
 		bool $viewerCanRemoveParticipants
 	): Tag {
 		$headerText = ( new Tag( 'div' ) )->appendContent(
-			$msgFormatter->format(
+			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-header-participants' )
 					->numParams( $totalParticipants )
 			)
@@ -198,18 +195,45 @@ class EventDetailsParticipantsModule {
 		)->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
 
 		if ( $totalParticipants ) {
-			$header->appendContent( $this->getSearchBar( $msgFormatter, $viewerCanRemoveParticipants ) );
+			$header->appendContent( $this->getSearchBar( $viewerCanRemoveParticipants ) );
 		}
 
 		return $header;
 	}
 
 	/**
+	 * @param UserIdentity $viewingUser
 	 * @param int $totalParticipants
-	 * @param ITextFormatter $msgFormatter
+	 * @param bool $canRemoveParticipants
+	 * @param Participant|null $curUserParticipant
+	 * @param Participant[] $otherParticipants
 	 * @return Tag
 	 */
-	private function getEmptyStateElement( int $totalParticipants, ITextFormatter $msgFormatter ): Tag {
+	private function getParticipantsTable(
+		UserIdentity $viewingUser,
+		int $totalParticipants,
+		bool $canRemoveParticipants,
+		?Participant $curUserParticipant,
+		array $otherParticipants
+	): Tag {
+		$table = new Tag( 'div' );
+		if ( $totalParticipants ) {
+			$table->appendContent( $this->getTableHeaders( $canRemoveParticipants ) );
+		}
+		$table->appendContent( $this->getParticipantsContainer(
+			$curUserParticipant,
+			$otherParticipants,
+			$canRemoveParticipants,
+			$viewingUser
+		) );
+		return $table;
+	}
+
+	/**
+	 * @param int $totalParticipants
+	 * @return Tag
+	 */
+	private function getEmptyStateElement( int $totalParticipants ): Tag {
 		$noParticipantsIcon = new IconWidget( [
 			'icon' => 'userGroup',
 			'classes' => [ 'ext-campaignevents-event-details-no-participants-icon' ]
@@ -222,7 +246,7 @@ class EventDetailsParticipantsModule {
 		return ( new Tag() )->appendContent(
 			$noParticipantsIcon,
 			( new Tag() )->appendContent(
-				$msgFormatter->format(
+				$this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-no-participants-state' )
 				)
 			)->addClasses( [ 'ext-campaignevents-details-no-participants-description' ] )
@@ -230,14 +254,13 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param ITextFormatter $msgFormatter
 	 * @param bool $viewerCanRemoveParticipants
 	 * @return Tag
 	 */
-	private function getSearchBar( ITextFormatter $msgFormatter, bool $viewerCanRemoveParticipants ): Tag {
+	private function getSearchBar( bool $viewerCanRemoveParticipants ): Tag {
 		$container = ( new Tag( 'div' ) )->appendContent(
 			new SearchInputWidget( [
-				'placeholder' => $msgFormatter->format(
+				'placeholder' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
 				),
 				'infusable' => true,
@@ -252,7 +275,7 @@ class EventDetailsParticipantsModule {
 					'destructive'
 				],
 				'disabled' => true,
-				'label' => $msgFormatter->format(
+				'label' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
 				),
 				'id' => 'ext-campaignevents-event-details-remove-participant-button',
@@ -261,7 +284,7 @@ class EventDetailsParticipantsModule {
 			$messageAllParticipantsButton = new ButtonWidget( [
 				'infusable' => true,
 				'framed' => true,
-				'label' => $msgFormatter->format(
+				'label' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-message-all' )
 				),
 				'flags' => [ 'progressive' ],
@@ -273,10 +296,10 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param ITextFormatter $msgFormatter
+	 * @param bool $canRemoveParticipants
 	 * @return Tag
 	 */
-	private function getTableHeaders( ITextFormatter $msgFormatter, bool $canRemoveParticipants ): Tag {
+	private function getTableHeaders( bool $canRemoveParticipants ): Tag {
 		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-user-actions-container' ] );
 		$selectAllCheckBoxField = new FieldLayout(
 			new CheckboxInputWidget( [
@@ -286,7 +309,7 @@ class EventDetailsParticipantsModule {
 				'align' => 'inline',
 				'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox-field' ],
 				'infusable' => true,
-				'label' => $msgFormatter->format(
+				'label' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-select-all' )
 				),
 				'invisibleLabel' => true
@@ -294,9 +317,9 @@ class EventDetailsParticipantsModule {
 		);
 
 		$headings = [
-			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-participants' ) ),
-			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-time-registered' ) ),
-			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-has-email' ) )
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-participants' ) ),
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-time-registered' ) ),
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-has-email' ) )
 		];
 		$row = new Tag( 'div' );
 		if ( $canRemoveParticipants ) {
@@ -316,18 +339,14 @@ class EventDetailsParticipantsModule {
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
-	 * @param Language $language
 	 * @param UserIdentity $viewingUser
-	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getParticipantsContainer(
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		bool $canRemoveParticipants,
-		Language $language,
-		UserIdentity $viewingUser,
-		ITextFormatter $msgFormatter
+		UserIdentity $viewingUser
 	): Tag {
 		$participantsContainer = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-users-container' ] );
@@ -339,9 +358,7 @@ class EventDetailsParticipantsModule {
 			$curUserParticipant,
 			$otherParticipants,
 			$canRemoveParticipants,
-			$language,
-			$viewingUser,
-			$msgFormatter
+			$viewingUser
 		);
 
 		$participantsContainer->appendContent( $participantRows );
@@ -353,18 +370,14 @@ class EventDetailsParticipantsModule {
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
-	 * @param Language $language
 	 * @param UserIdentity $viewingUser
-	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getParticipantRows(
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		bool $canRemoveParticipants,
-		Language $language,
-		UserIdentity $viewingUser,
-		ITextFormatter $msgFormatter
+		UserIdentity $viewingUser
 	): Tag {
 		$participantRows = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
@@ -374,16 +387,14 @@ class EventDetailsParticipantsModule {
 				$this->getCurUserParticipantRow(
 					$curUserParticipant,
 					$canRemoveParticipants,
-					$language,
-					$viewingUser,
-					$msgFormatter
+					$viewingUser
 				)
 			);
 		}
 
 		foreach ( $otherParticipants as $participant ) {
 			$participantRows->appendContent(
-				$this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser, $msgFormatter )
+				$this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser )
 			);
 		}
 		return $participantRows;
@@ -392,19 +403,15 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param Participant $participant
 	 * @param bool $canRemoveParticipants
-	 * @param Language $language
 	 * @param UserIdentity $viewingUser
-	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getCurUserParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
-		Language $language,
-		UserIdentity $viewingUser,
-		ITextFormatter $msgFormatter
+		UserIdentity $viewingUser
 	): Tag {
-		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $language, $viewingUser, $msgFormatter );
+		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser );
 		$row->addClasses( [ 'ext-campaignevents-details-current-user-row' ] );
 		return $row;
 	}
@@ -412,17 +419,13 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param Participant $participant
 	 * @param bool $canRemoveParticipants
-	 * @param Language $language
 	 * @param UserIdentity $viewingUser
-	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
 	private function getParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
-		Language $language,
-		UserIdentity $viewingUser,
-		ITextFormatter $msgFormatter
+		UserIdentity $viewingUser
 	): Tag {
 		$row = new Tag( 'div' );
 		$performer = $this->userFactory->newFromId( $viewingUser->getId() );
@@ -458,7 +461,7 @@ class EventDetailsParticipantsModule {
 		}
 
 		$usernameElement = new HtmlSnippet(
-			$this->userLinker->generateUserLinkWithFallback( $participant->getUser(), $language->getCode() )
+			$this->userLinker->generateUserLinkWithFallback( $participant->getUser(), $this->language->getCode() )
 		);
 		$usernameDivider = ( new Tag( 'div' ) )
 			->appendContent( $usernameElement )
@@ -466,7 +469,7 @@ class EventDetailsParticipantsModule {
 
 		if ( $participant->isPrivateRegistration() ) {
 
-			$labelText = $msgFormatter->format(
+			$labelText = $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-private-participant-label', [ $genderUserName ] )
 			);
 			$privateIcon = new IconWidget( [
@@ -481,7 +484,7 @@ class EventDetailsParticipantsModule {
 
 		$registrationDateDivider = new Tag( 'div' );
 		$registrationDateDivider->appendContent(
-			$language->userTimeAndDate(
+			$this->language->userTimeAndDate(
 				$participant->getRegisteredAt(),
 				$viewingUser
 			)
@@ -490,8 +493,8 @@ class EventDetailsParticipantsModule {
 
 		$row->appendContent( ( new Tag( 'div' ) )->appendContent(
 			$recipientIsValid
-				? $msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-yes' ) )
-				: $msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-no' ) )
+				? $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-yes' ) )
+				: $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-no' ) )
 		)->addClasses( [ 'ext-campaignevents-details-participant-has-email' ] ) );
 
 		return $row
@@ -500,10 +503,9 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param int $eventID
-	 * @param ITextFormatter $msgFormatter
 	 * @return Tag|null
 	 */
-	private function getFooter( int $eventID, ITextFormatter $msgFormatter ): ?Tag {
+	private function getFooter( int $eventID ): ?Tag {
 		$privateParticipantsCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );
 		if ( $privateParticipantsCount === 0 ) {
 			// Don't show anything, it would be redundant.
@@ -511,7 +513,7 @@ class EventDetailsParticipantsModule {
 		}
 
 		$icon = new IconWidget( [ 'icon' => 'lock' ] );
-		$text = $msgFormatter->format(
+		$text = $this->msgFormatter->format(
 			MessageValue::new( 'campaignevents-event-details-participants-private' )
 				->numParams( $privateParticipantsCount )
 		);
