@@ -183,7 +183,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "View all organizers",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|participant|participants}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|participant|participants}} registered privately",
-	"campaignevents-eventpage-dialog-participants-view-list": "View full list",
+	"campaignevents-eventpage-dialog-participants-view-list": "View all",
 	"campaignevents-eventpage-dialog-dates-label": "Start and end time",
 	"campaignevents-eventpage-dialog-dates": "$1 to $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Timezone:</strong> $1",
