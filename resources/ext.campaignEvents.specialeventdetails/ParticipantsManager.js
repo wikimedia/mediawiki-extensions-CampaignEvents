@@ -33,8 +33,6 @@
 		this.usernameFilter = null;
 
 		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
-		this.$userActionsContainer = $( '.ext-campaignevents-details-user-actions-container' );
-		this.$userRowsContainer = $( '.ext-campaignevents-details-users-rows-container' );
 		this.$curUserRow = $( '.ext-campaignevents-details-current-user-row' );
 		// Note: this can be null if the user is not logged in
 		this.curUserName = mw.user.getName();
@@ -44,7 +42,8 @@
 		} );
 		this.$messageParticipantsButton = $( '.ext-campaignevents-event-details-message-all-participants-button' );
 		this.windowManager = new OO.ui.WindowManager();
-		this.$usersContainer = $( '.ext-campaignevents-details-users-container' );
+		this.$participantsContainer = $( '.ext-campaignevents-details-participants-container' );
+		this.$participantsTable = $( '.ext-campaignevents-details-participants-table' );
 		this.$searchParticipantsContainer = $( '.ext-campaignevents-details-participants-search-container' );
 		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
 		this.selectedParticipantsAmount = 0;
@@ -123,11 +122,10 @@
 		}
 
 		this.scrollDownObserver = new ScrollDownObserver(
-			this.$usersContainer[ 0 ],
+			this.$participantsContainer[ 0 ],
 			function () {
-				if (
-					thisClass.participantsTotal > thisClass.$userRowsContainer.children().length
-				) {
+				// eslint-disable-next-line no-jquery/no-global-selector
+				if ( thisClass.participantsTotal > $( '.ext-campaignevents-details-user-row' ).length ) {
 					thisClass.loadMoreParticipants();
 				}
 			}
@@ -309,8 +307,7 @@
 				if ( thisClass.participantsTotal === 0 ) {
 					thisClass.$noParticipantsStateElement.removeClass( 'ext-campaignevents-details-hide-element' );
 					thisClass.$searchParticipantsContainer.hide();
-					thisClass.$userActionsContainer.hide();
-					thisClass.$usersContainer.hide();
+					thisClass.$participantsContainer.hide();
 				}
 				thisClass.scrollDownObserver.reset();
 				thisClass.showNotification( 'success', successMsg );
@@ -520,7 +517,7 @@
 				content: items
 			} );
 
-			this.$userRowsContainer.append( layout.$element );
+			this.$participantsTable.append( layout.$element );
 		}
 
 		this.scrollDownObserver.reset();
