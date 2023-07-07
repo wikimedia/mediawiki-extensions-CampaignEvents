@@ -113,25 +113,57 @@ ul.ext-campaignevents-event-details-organizers-list {
 	margin-left: 0;
 }
 
-.ext-campaignevents-details-participant-registered-at {
-	margin: auto;
-}
-
-.ext-campaignevents-details-participant-username {
-	.hyphens();
-	min-width: 0; // Ensure correct wrapping inside the flex container
-}
-
 .ext-campaignevents-details-participants-container {
-	.ext-campaignevents-details-participants-table-header {
-		position: sticky;
-		top: 0;
-		z-index: @z-index-sticky;
-		background-color: @background-color-base;
+	.ext-campaignevents-details-participants-table {
+		width: 100%;
+		border-collapse: collapse;
+		// Set fixed layout and allow wrapping so that the size of the cells doesn't change
+		// even if the content (like usernames) is really long
+		table-layout: fixed;
+		.hyphens();
+
+		tr {
+			border-bottom: @border-subtle;
+
+			th {
+				text-align: left;
+				padding: 1em;
+			}
+
+			td {
+				padding: 1em;
+			}
+		}
+
+		.ext-campaignevents-details-participants-table-header th {
+			position: sticky;
+			top: 0;
+			z-index: @z-index-sticky;
+			background-color: @background-color-base;
+			// Prevent any wrapping on th elements and set a fixed width which will determine the
+			// width of all columns given the fixed table layout.
+			.hyphens( none );
+			white-space: nowrap;
+			width: 15em;
+		}
+
+		th.ext-campaignevents-details-user-row-checkbox,
+		th.ext-campaignevents-details-participants-selectall-checkbox-cell {
+			// Set the width of the cell to that of the checkbox to prevent it from stretching
+			width: 1.42857143em;
+		}
 	}
+
 	/* Set a fixed height so that it does not change while we rebuild the list */
 	height: 40em;
 	overflow: auto;
+}
+
+body.skin-minerva .ext-campaignevents-details-participants-table {
+	// Minerva sets display:block on tables to try and avoid issues in articles.
+	// This is not an article though; we're making sure that this table looks OK
+	// on mobile, so don't let Minerva interfere.
+	display: table;
 }
 
 .ext-campaignevents-icon-label-widget-header {
@@ -179,34 +211,6 @@ div.ext-campaignevents-details-participants-search {
 	li {
 		display: inline-block;
 		padding: 0.2em;
-	}
-}
-
-.ext-campaignevents-details-user-row {
-	display: flex;
-	justify-content: space-between;
-	padding: 1em;
-	border-bottom: @border-subtle;
-
-	div {
-		flex: 3;
-	}
-
-	div.ext-campaignevents-details-user-row-checkbox {
-		flex: 0.5;
-	}
-}
-
-.ext-campaignevents-details-user-actions-row {
-	&:extend( .ext-campaignevents-details-user-row );
-
-	.ext-campaignevents-details-user-actions-heading {
-		flex: 3;
-		font-weight: bold;
-	}
-
-	div.ext-campaignevents-event-details-select-all-participant-checkbox-field {
-		flex: 0.5;
 	}
 }
 

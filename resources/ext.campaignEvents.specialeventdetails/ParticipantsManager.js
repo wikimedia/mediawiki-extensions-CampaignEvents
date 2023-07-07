@@ -13,7 +13,7 @@
 		var $selectAllParticipantsField = $(
 			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
 		);
-		this.$selectAllParticipantsLabel = $selectAllParticipantsField.next();
+		this.$selectAllParticipantsLabel = $( '.ext-campaignevents-details-participants-selectall-checkbox-cell' ).next();
 		if ( $selectAllParticipantsField.length ) {
 			this.selectAllParticipantsField = OO.ui.FieldLayout.static.infuse(
 				$selectAllParticipantsField
@@ -449,10 +449,9 @@
 								userPageLink: curParticipantData.user_page
 							}
 						} ),
-					container = new OO.ui.Element( {
-						$element: $( '<div>' ),
-						content:
-						[ newParticipantCheckbox ],
+					checkboxCell = new OO.ui.Element( {
+						$element: $( '<td>' ),
+						content: [ newParticipantCheckbox ],
 						classes: [ 'ext-campaignevents-details-user-row-checkbox' ]
 					} );
 				newParticipantCheckbox.on( 'change', function ( selected ) {
@@ -460,7 +459,7 @@
 				}, [], newParticipantCheckbox );
 
 				this.participantCheckboxes.push( newParticipantCheckbox );
-				items.push( container );
+				items.push( checkboxCell );
 			}
 
 			var $usernameElement;
@@ -475,14 +474,13 @@
 				);
 			}
 
-			var username = new OO.ui.Element( {
-				$element: $( '<div>' ),
-				$content: $usernameElement,
-				classes: [ 'ext-campaignevents-details-participant-username' ]
+			var usernameCell = new OO.ui.Element( {
+				$element: $( '<td>' ),
+				$content: $usernameElement
 			} );
 
 			if ( curParticipantData.private ) {
-				username.$element.append(
+				usernameCell.$element.append(
 					new OO.ui.IconWidget( {
 						icon: 'lock',
 						classes: [ 'ext-campaignevents-event-details-participants-private-icon' ]
@@ -490,34 +488,31 @@
 				);
 			}
 
-			items.push(
-				username
-			);
+			items.push( usernameCell );
 
 			items.push(
 				new OO.ui.Element( {
-					$element: $( '<div>' ),
-					text: curParticipantData.user_registered_at_formatted,
-					classes: [ 'ext-campaignevents-details-participant-registered-at' ]
+					$element: $( '<td>' ),
+					text: curParticipantData.user_registered_at_formatted
 				} )
 			);
 
 			items.push(
 				new OO.ui.Element( {
-					$element: $( '<div>' ),
+					$element: $( '<td>' ),
 					text: thisClass.getValidRecipientLabel(
 						curParticipantData.user_is_valid_recipient
-					),
-					classes: [ 'ext-campaignevents-details-participant-has-email' ]
+					)
 				} )
 			);
 
-			var layout = new OO.ui.Element( {
+			var row = new OO.ui.Element( {
+				$element: $( '<tr>' ),
 				classes: [ 'ext-campaignevents-details-user-row' ],
 				content: items
 			} );
 
-			this.$participantsTable.append( layout.$element );
+			this.$participantsTable.append( row.$element );
 		}
 
 		this.scrollDownObserver.reset();
