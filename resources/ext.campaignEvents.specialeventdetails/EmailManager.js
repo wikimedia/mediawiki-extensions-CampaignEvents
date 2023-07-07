@@ -1,41 +1,43 @@
-/* eslint-disable no-jquery/no-global-selector */
-// # sourceURL=EmailManager.js
-
 ( function () {
 	'use strict';
 	var participantsManager = require( './ParticipantsManager.js' );
 
 	function EmailManager() {
-		if ( mw.config.get( 'wgCampaignEventsEnableEmail' ) ) {
-			this.registrationID = mw.config.get( 'wgCampaignEventsEventID' );
-			this.message = OO.ui.infuse( $( '.ext-campaignevents-details-email-message' ) );
-			this.subject = OO.ui.infuse( $( '.ext-campaignevents-details-email-subject' ) );
-			this.button = OO.ui.infuse( $( '.ext-campaignevents-details-email-button' ) );
-			this.recipientsLink = OO.ui.infuse( $( '.ext-campaignevents-details-email-recipients-link' ) );
-			this.resultMessage = OO.ui.infuse( $( '.ext-campaignevents-details-email-notification' ) );
-			this.resultMessage.toggle( false );
-			this.tabLayout = OO.ui.infuse( $( '#ext-campaignevents-eventdetails-tabs' ) );
-			this.recipientsList = [];
-			this.$recipientsListElement = $( '.ext-campaignevents-details-email-recipient-list' );
-			this.addValidation();
-			this.installEventListeners();
-		}
+		this.registrationID = mw.config.get( 'wgCampaignEventsEventID' );
+		/* eslint-disable no-jquery/no-global-selector */
+		this.message = OO.ui.infuse( $( '.ext-campaignevents-details-email-message' ) );
+		this.subject = OO.ui.infuse( $( '.ext-campaignevents-details-email-subject' ) );
+		this.button = OO.ui.infuse( $( '.ext-campaignevents-details-email-button' ) );
+		this.recipientsLink = OO.ui.infuse( $( '.ext-campaignevents-details-email-recipients-link' ) );
+		this.resultMessageField = OO.ui.infuse( $( '.ext-campaignevents-details-email-notification' ) );
+		this.resultMessageField.toggle( false );
+		this.resultMessage = this.resultMessageField.getField();
+		this.tabLayout = OO.ui.infuse( $( '#ext-campaignevents-eventdetails-tabs' ) );
+		this.recipientsList = [];
+		this.$recipientsListElement = $( '.ext-campaignevents-details-email-recipient-list' );
+		/* eslint-enable no-jquery/no-global-selector */
+		this.addValidation();
+		this.installEventListeners();
 	}
+
 	EmailManager.prototype.setError = function ( error ) {
 		this.resultMessage.setType( 'error' );
 		this.resultMessage.setInline( true );
 		this.resultMessage.setLabel( error );
-		this.resultMessage.toggle( true );
+		this.resultMessageField.toggle( true );
 	};
+
 	EmailManager.prototype.setSuccess = function ( message ) {
 		this.showNotification( 'success', message );
 	};
+
 	EmailManager.prototype.setWarning = function ( message ) {
 		this.resultMessage.setType( 'warning' );
 		this.resultMessage.setInline( true );
 		this.resultMessage.setLabel( message );
-		this.resultMessage.toggle( true );
+		this.resultMessageField.toggle( true );
 	};
+
 	/**
 	 * @param {string} type
 	 * @param {string} message
@@ -56,70 +58,11 @@
 		this.subject.setValue();
 		this.button.setDisabled( true );
 	};
+
 	EmailManager.prototype.installEventListeners = function () {
 		var self = this;
 
-		function getRecipientsListCheckboxes() {
-			return participantsManager.participantCheckboxes.filter( function ( item ) {
-				return participantsManager.isSelectionInverted ?
-					!item.isSelected() :
-					item.isSelected();
-			} );
-		}
-		function hasNoEmail( data ) {
-			return participantsManager.isSelectionInverted ?
-				data.hasEmail : !data.hasEmail;
-		}
-		this.onRecipientsUpdate = function () {
-			var recipientsListCheckboxes = getRecipientsListCheckboxes();
-			this.$recipientsListElement.empty();
-			this.recipientsList = recipientsListCheckboxes.map( function ( recipientCheckbox ) {
-				return recipientCheckbox.getData();
-			} ).filter(
-				function ( recipient ) {
-					return recipient.username !== undefined;
-				} );
-			var allSelected =
-				participantsManager.selectedParticipantsAmount ===
-				participantsManager.participantsTotal,
-				recipientsListItems = this.recipientsList.map( function ( recipient ) {
-					return new OO.ui.Element( {
-						$element: $( '<li>' ),
-						$content: participantsManager.makeUserLink(
-							recipient.username,
-							recipient.userPageLink ),
-						classes: [ 'ext-campaignevents-email-participant-username' ]
-					}
-					).$element;
-				} );
-
-			if ( self.recipientsList.some( hasNoEmail ) ) {
-				self.setWarning( mw.message( 'campaignevents-email-participants-missing-address' )
-					.text() );
-			} else {
-				self.resultMessage.toggle( false );
-			}
-
-			if ( allSelected ) {
-				this.$recipientsListElement.append( $( '<li>' ).text(
-					mw.message( 'campaignevents-email-participants-all' ).text() ) );
-				return;
-			}
-
-			if ( participantsManager.selectAllParticipantsCheckbox.selected ) {
-				this.$recipientsListElement.append(
-					mw.message( 'campaignevents-email-participants-except', recipientsListItems )
-						.parseDom()
-				);
-				return;
-			}
-			this.$recipientsListElement.append( recipientsListItems );
-
-		};
-
-		participantsManager.on( 'change', function () {
-			self.onRecipientsUpdate();
-		} );
+		participantsManager.on( 'change', this.onRecipientsUpdate.bind( this ) );
 
 		this.button.on( 'click', this.emailUsers.bind( this ) );
 
@@ -132,6 +75,64 @@
 				self.button.setDisabled( false );
 			}
 		} );
+	};
+
+	EmailManager.prototype.onRecipientsUpdate = function () {
+		var getRecipientsListCheckboxes = function () {
+			return participantsManager.participantCheckboxes.filter( function ( item ) {
+				return participantsManager.isSelectionInverted ?
+					!item.isSelected() :
+					item.isSelected();
+			} );
+		};
+
+		var hasNoEmail = function ( data ) {
+			return participantsManager.isSelectionInverted ? data.hasEmail : !data.hasEmail;
+		};
+
+		var recipientsListCheckboxes = getRecipientsListCheckboxes();
+		this.$recipientsListElement.empty();
+		this.recipientsList = recipientsListCheckboxes.map( function ( recipientCheckbox ) {
+			return recipientCheckbox.getData();
+		} ).filter(
+			function ( recipient ) {
+				return recipient.username !== undefined;
+			} );
+		var allSelected =
+				participantsManager.selectedParticipantsAmount ===
+				participantsManager.participantsTotal;
+
+		if ( this.recipientsList.some( hasNoEmail ) ) {
+			this.setWarning( mw.message( 'campaignevents-email-participants-missing-address' )
+				.text() );
+		} else {
+			this.resultMessageField.toggle( false );
+		}
+
+		if ( allSelected ) {
+			this.$recipientsListElement.append( mw.message( 'campaignevents-email-participants-all' ).text() );
+			return;
+		}
+
+		var recipientsListItems = this.recipientsList.map( function ( recipient ) {
+			return new OO.ui.Element( {
+				$element: $( '<li>' ),
+				$content: participantsManager.makeUserLink(
+					recipient.username,
+					recipient.userPageLink ),
+				classes: [ 'ext-campaignevents-email-participant-username' ]
+			} ).$element;
+		} );
+		var $recipientsList = $( '<ul>' ).append( recipientsListItems );
+		if ( participantsManager.selectAllParticipantsCheckbox.selected ) {
+			this.$recipientsListElement.append(
+				mw.message( 'campaignevents-email-participants-except', $recipientsList )
+					.parseDom()
+			);
+			return;
+		}
+		this.$recipientsListElement.append( $recipientsList );
+
 	};
 
 	EmailManager.prototype.addValidation = function () {
@@ -189,18 +190,9 @@
 						'campaignevents-email-error-notification'
 					).text()
 				);
-				logRequestError( errData );
+				mw.log.error( errData.xhr.responseText || 'Unknown error' );
 			} );
 	};
-	function logRequestError( errData ) {
-		var errorText;
-		if ( errData.xhr ) {
-			errorText = errData.xhr.responseText || 'Unknown error';
-		} else {
-			errorText = 'Unknown error';
-		}
-		mw.log.error( errorText );
-	}
 
 	module.exports = new EmailManager();
 

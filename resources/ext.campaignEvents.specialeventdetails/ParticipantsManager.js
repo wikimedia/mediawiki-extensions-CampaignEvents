@@ -48,13 +48,13 @@
 		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
 		this.selectedParticipantsAmount = 0;
 		this.$tabPanel = $( '#ext-campaignevents-eventdetails-tabs' );
+		/* eslint-enable no-jquery/no-global-selector */
 
 		this.installEventListeners();
 		OO.EventEmitter.call( this );
-		OO.mixinClass( ParticipantsManager, OO.EventEmitter );
-
-		/* eslint-enable no-jquery/no-global-selector */
 	}
+
+	OO.mixinClass( ParticipantsManager, OO.EventEmitter );
 
 	ParticipantsManager.prototype.installEventListeners = function () {
 		var thisClass = this;
