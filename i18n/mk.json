@@ -181,7 +181,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Погл. сите приредувачи",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|учесник|учесници}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 приватно {{PLURAL:$1|пријавен учесник|пријавени учесници}}",
-	"campaignevents-eventpage-dialog-participants-view-list": "Погл. целосен список",
+	"campaignevents-eventpage-dialog-participants-view-list": "Погл. сите",
 	"campaignevents-eventpage-dialog-dates-label": "Почетно и завршно време",
 	"campaignevents-eventpage-dialog-dates": "$1 до $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Часовен појас:</strong> $1",
@@ -196,6 +196,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Пријавете се за да ја видите врската за разговорната група.",
 	"campaignevents-eventpage-dialog-action-close": "Затвори",
 	"campaignevents-eventpage-register-notification": "Сега сте пријавени за $1.",
+	"campaignevents-eventpage-register-notification-edit": "Вашите информации за пријава се подновени.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Откажи пријава",
 	"campaignevents-eventpage-unregister-confirmation-body": "Дали сигурно сакате да ја откажете пријавата?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Да",
@@ -329,5 +330,8 @@
 	"campaignevents-register-question-affiliate-option-chapter": "Огранок",
 	"campaignevents-register-question-affiliate-option-user-group": "Корисничка група",
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Партнер во приредувањето",
-	"campaignevents-register-question-affiliate-details-placeholder": "Наведете"
+	"campaignevents-register-question-affiliate-details-placeholder": "Наведете",
+	"campaignevents-eventpage-register-dialog-questions-title": "Информации за приредувачи",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Сите прашања се незадолжителни",
+	"campaignevents-register-invalid-answer": "Неважечки одговор на прашањето $1"
 }

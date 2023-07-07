@@ -97,7 +97,7 @@
 	"campaignevents-register-error-no-event": "Določen ni noben dogodek.",
 	"campaignevents-register-error-event-not-found": "Dogodek s tem ID-jem ne obstaja.",
 	"campaignevents-register-success": "Zdaj ste prijavljeni na ta dogodek.",
-	"campaignevents-register-success-edit": "Vaši podatki o registraciji so bili posodobljeni.",
+	"campaignevents-register-success-edit": "Vaši registracijski podatki so posodobljeni.",
 	"campaignevents-register-confirmation-top": "Potrdite registracijo",
 	"campaignevents-register-edit-legend": "Uredi registracijo",
 	"campaignevents-register-confirmation-btn": "Prijava",
@@ -195,6 +195,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Prijavite se za ogled povezave klepetalne skupine.",
 	"campaignevents-eventpage-dialog-action-close": "Zapri",
 	"campaignevents-eventpage-register-notification": "Zdaj ste prijavljeni na dogodek $1.",
+	"campaignevents-eventpage-register-notification-edit": "Vaši registracijski podatki so posodobljeni.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Prekliči registracijo",
 	"campaignevents-eventpage-unregister-confirmation-body": "Ali res želite izbrisati svojo prijavo?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Da",
@@ -330,5 +331,6 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Organizacijski partner",
 	"campaignevents-register-question-affiliate-details-placeholder": "Prosimo, navedite",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informacije za organizatorje",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Vsa vprašanja so izbirna"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Vsa vprašanja so izbirna",
+	"campaignevents-register-invalid-answer": "Neveljaven odgovor na vprašanje $1"
 }

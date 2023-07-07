@@ -181,7 +181,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "הצגת כל המארגנים",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}}",
 	"campaignevents-eventpage-dialog-participants-private": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}} נרשם באופן פרטי",
-	"campaignevents-eventpage-dialog-participants-view-list": "הצגת רשימה מלאה",
+	"campaignevents-eventpage-dialog-participants-view-list": "להציג הכול",
 	"campaignevents-eventpage-dialog-dates-label": "זמן התחלה וסיום",
 	"campaignevents-eventpage-dialog-dates": "$1 עד $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>אזור זמן:</strong> $1",

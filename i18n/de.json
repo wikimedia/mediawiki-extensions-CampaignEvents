@@ -180,7 +180,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Alle Organisatoren anzeigen",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|Ein|$1}} Teilnehmer",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|Teilnehmer ist|Teilnehmer sind}} privat registriert",
-	"campaignevents-eventpage-dialog-participants-view-list": "Vollständige Liste ansehen",
+	"campaignevents-eventpage-dialog-participants-view-list": "Alle ansehen",
 	"campaignevents-eventpage-dialog-dates-label": "Startdatum und -zeit",
 	"campaignevents-eventpage-dialog-dates": "$1 bis $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Zeitzone:</strong> $1",

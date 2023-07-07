@@ -198,6 +198,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Registrer deg for å kunne se chattegruppens lenke",
 	"campaignevents-eventpage-dialog-action-close": "Lukk",
 	"campaignevents-eventpage-register-notification": "Du er nå meldt på $1.",
+	"campaignevents-eventpage-register-notification-edit": "Påmeldingsinformasjonen din har blitt oppdatert.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Meld deg av",
 	"campaignevents-eventpage-unregister-confirmation-body": "Er du sikker på at du vil melde deg av?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ja",
@@ -206,6 +207,7 @@
 	"campaignevents-eventpage-register-dialog-save": "Lagre",
 	"campaignevents-eventpage-register-dialog-title": "Meld deg på arrangementet",
 	"campaignevents-eventpage-register-dialog-title-edit": "Rediger påmelding",
+	"campaignevents-eventpage-register-dialog-visibility-title": "Personvern ved påmelding",
 	"campaignevents-eventpage-enableheader-organizer": "Du er en organisator",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Arrangementsside:</strong> Aktiver påmelding så deltakere kan melde seg på direkte på siden.",
 	"campaignevents-eventpage-enableheader-button-label": "Aktiver påmelding",
@@ -302,5 +304,8 @@
 	"campaignevents-register-question-gender-option-nonbinary": "Ikke-binær",
 	"campaignevents-register-question-age": "Hva er alderen din?",
 	"campaignevents-register-question-age-placeholder": "Velg aldersgruppe",
-	"campaignevents-register-question-age-option-under-18": "Under 18"
+	"campaignevents-register-question-age-option-under-18": "Under 18",
+	"campaignevents-eventpage-register-dialog-questions-title": "Informasjon for arrangører",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Alle spørsmålene er valgfrie",
+	"campaignevents-register-invalid-answer": "Ugyldig svar på spørsmålet $1"
 }

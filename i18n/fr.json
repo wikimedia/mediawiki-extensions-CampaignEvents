@@ -186,7 +186,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Voir tous les organisateurs",
 	"campaignevents-eventpage-dialog-participants": "$1 participant{{PLURAL:$1||s}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 participant{{PLURAL:$1||s}} inscrits en privé",
-	"campaignevents-eventpage-dialog-participants-view-list": "Afficher la liste complète",
+	"campaignevents-eventpage-dialog-participants-view-list": "Afficher tout",
 	"campaignevents-eventpage-dialog-dates-label": "Heure de début et de fin",
 	"campaignevents-eventpage-dialog-dates": "du $1 au $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Fuseau horaire :</strong> $1",
