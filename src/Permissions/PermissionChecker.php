@@ -176,7 +176,7 @@ class PermissionChecker {
 	 * @return bool
 	 */
 	public function userCanEmailParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
-		return $this->userCanEditRegistration( $performer, $eventID ) &&
-			$performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );
+		return $this->userCanEditRegistration( $performer, $eventID )
+			&& $performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );
 	}
 }

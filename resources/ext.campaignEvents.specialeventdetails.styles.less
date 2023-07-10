@@ -114,7 +114,7 @@ ul.ext-campaignevents-event-details-organizers-list {
 }
 
 .ext-campaignevents-details-participant-registered-at {
-	margin-left: auto;
+	margin: auto;
 }
 
 .ext-campaignevents-details-participant-username {
@@ -126,10 +126,6 @@ ul.ext-campaignevents-event-details-organizers-list {
 	/* Set a fixed height so that it does not change while we rebuild the list */
 	height: 36em;
 	overflow: auto;
-}
-
-.ext-campaignevents-event-details-remove-participant-button.oo-ui-widget {
-	display: none;
 }
 
 .ext-campaignevents-icon-label-widget-header {
@@ -147,7 +143,7 @@ ul.ext-campaignevents-event-details-organizers-list {
 
 .ext-campaignevents-details-participants-header {
 	padding: 0.75em 1.5em 0.75em 1.5em;
-	background-color: #f8f9fa;
+	background-color: #eaecf0;
 }
 
 .ext-campaignevents-details-participants-header-text {
@@ -157,26 +153,51 @@ ul.ext-campaignevents-event-details-organizers-list {
 
 .ext-campaignevents-details-participants-search-container {
 	margin-top: 0.5em;
+	display: flex;
 }
 
 div.ext-campaignevents-details-participants-search {
-	width: 75%;
+	flex: 3;
 }
 
-.ext-campaignevents-details-user-actions-container {
-	display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	align-items: center;
-	padding: 1.5em 1em 1.5em 1em;
+.ext-campaignevents-details-email-recipient-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+
+	li {
+		display: inline-block;
+		padding: 0.2em;
+	}
 }
 
 .ext-campaignevents-details-user-row {
 	display: flex;
-	align-items: center;
+	justify-content: space-between;
 	padding: 1em;
-	background: #f8f9fa;
-	border-bottom: 2px @border-style-base @color-inverted;
+	border-bottom: @border-subtle;
+
+	div {
+		flex: 3;
+	}
+
+	div.ext-campaignevents-details-user-row-checkbox {
+		flex: 0.5;
+	}
+}
+
+.ext-campaignevents-details-user-actions-row {
+	&:extend( .ext-campaignevents-details-user-row );
+
+	.ext-campaignevents-details-user-actions-heading {
+		flex: 3;
+		font-weight: bold;
+	}
+
+	div.ext-campaignevents-event-details-select-all-participant-checkbox-field {
+		flex: 0.5;
+	}
 }
 
 .ext-campaignevents-event-details-icon {
@@ -205,6 +226,23 @@ div.ext-campaignevents-details-participants-search {
 	font-size: 1.1em;
 	padding: 0 1em;
 	text-align: center;
+}
+
+.ext-campaignevents-email-participants-info-header {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.ext-campaignevents-email-label {
+	padding: 1em 0 0.5em 0;
+}
+
+.ext-campaignevents-details-email-button {
+	padding-top: 1.5em;
+}
+
+.ext-campaignevents-details-email-recipients-link.oo-ui-buttonElement {
+	display: block;
 }
 
 // This rule should come last so that it overrides other styles set in this file.

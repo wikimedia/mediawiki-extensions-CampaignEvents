@@ -240,7 +240,9 @@ return [
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
 			$services->get( EventTimeFormatter::SERVICE_NAME ),
-			$services->get( TrackingToolRegistry::SERVICE_NAME )
+			$services->getUserFactory(),
+			$services->get( TrackingToolRegistry::SERVICE_NAME ),
+			$services->get( CampaignsUserMailer::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

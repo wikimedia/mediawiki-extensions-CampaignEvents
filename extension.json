@@ -268,11 +268,14 @@
 				"index.js",
 				"OrganizersLoader.js",
 				"ParticipantsManager.js",
+				"EmailManager.js",
 				"RemoveParticipantDialog.js",
 				"ScrollDownObserver.js"
 			],
 			"messages": [
 				"campaignevents-event-details-select-all",
+				"campaignevents-event-details-message-all",
+				"campaignevents-event-details-message-participants",
 				"campaignevents-event-details-participants-checkboxes-selected",
 				"campaignevents-event-details-remove-participant-confirmation-title",
 				"campaignevents-event-details-remove-participant-confirmation-msg",
@@ -283,7 +286,16 @@
 				"campaignevents-event-details-remove-participant-notification-error",
 				"campaignevents-event-details-header-participants",
 				"campaignevents-userlink-suppressed-user",
-				"campaignevents-userlink-deleted-user"
+				"campaignevents-userlink-deleted-user",
+				"campaignevents-event-details-participants",
+				"campaignevents-email-select-participant-notification",
+				"campaignevents-email-success-notification",
+				"campaignevents-email-error-notification",
+				"campaignevents-email-participants-missing-address",
+				"campaignevents-email-participants-all",
+				"campaignevents-email-participants-except",
+				"campaignevents-email-participants-yes",
+				"campaignevents-email-participants-no"
 			],
 			"dependencies": [
 				"mediawiki.language",
@@ -583,7 +595,8 @@
 				"CampaignEventsOrganizersStore",
 				"MessageFormatterFactory",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsFrontendModulesFactory"
+				"CampaignEventsFrontendModulesFactory",
+				"CampaignEventsPermissionChecker"
 			]
 		}
 	},

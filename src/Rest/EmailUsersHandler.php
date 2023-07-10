@@ -69,15 +69,15 @@ class EmailUsersHandler extends SimpleHandler {
 			// todo add more details to error message
 			return $this->getResponseFactory()->createHttpError( 403 );
 		}
-
+		$userIds = $params['user_ids'] ? array_map( 'intval', $params['user_ids'] ) : [];
 		$participants = $this->participantsStore->getEventParticipants(
 			$eventId,
 			null,
 			null,
 			null,
-			$params['invert_users'] ? null : $params['user_ids'],
+			$params['invert_users'] ? null : $userIds,
 			true,
-			$params['invert_users'] ? $params['user_ids'] : null
+			$params['invert_users'] ? $userIds : null
 		);
 		if ( !$participants ) {
 			return $this->getResponseFactory()->createJson( [ 'sent' => 0 ] );

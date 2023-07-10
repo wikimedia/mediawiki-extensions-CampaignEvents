@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
@@ -14,29 +15,33 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\User\UserFactory;
 use Wikimedia\Message\IMessageFormatterFactory;
 
 class FrontendModulesFactory {
 	public const SERVICE_NAME = 'CampaignEventsFrontendModulesFactory';
 
 	/** @var IMessageFormatterFactory */
-	private $messageFormatterFactory;
+	private IMessageFormatterFactory $messageFormatterFactory;
 	/** @var OrganizersStore */
-	private $organizersStore;
+	private OrganizersStore $organizersStore;
 	/** @var ParticipantsStore */
-	private $participantsStore;
+	private ParticipantsStore $participantsStore;
 	/** @var PageURLResolver */
-	private $pageURLResolver;
+	private PageURLResolver $pageURLResolver;
 	/** @var UserLinker */
-	private $userLinker;
+	private UserLinker $userLinker;
 	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var PermissionChecker */
 	private PermissionChecker $permissionChecker;
 	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
+	/** @var UserFactory */
+	private UserFactory $userFactory;
 	/** @var TrackingToolRegistry */
 	private TrackingToolRegistry $trackingToolRegistry;
+	private CampaignsUserMailer $userMailer;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -47,7 +52,9 @@ class FrontendModulesFactory {
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param PermissionChecker $permissionChecker
 	 * @param EventTimeFormatter $eventTimeFormatter
+	 * @param UserFactory $userFactory
 	 * @param TrackingToolRegistry $trackingToolRegistry
+	 * @param CampaignsUserMailer $userMailer
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -58,7 +65,9 @@ class FrontendModulesFactory {
 		CampaignsCentralUserLookup $centralUserLookup,
 		PermissionChecker $permissionChecker,
 		EventTimeFormatter $eventTimeFormatter,
-		TrackingToolRegistry $trackingToolRegistry
+		UserFactory $userFactory,
+		TrackingToolRegistry $trackingToolRegistry,
+		CampaignsUserMailer $userMailer
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -68,7 +77,9 @@ class FrontendModulesFactory {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->permissionChecker = $permissionChecker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
+		$this->userFactory = $userFactory;
 		$this->trackingToolRegistry = $trackingToolRegistry;
+		$this->userMailer = $userMailer;
 	}
 
 	/**
@@ -98,7 +109,15 @@ class FrontendModulesFactory {
 			$this->userLinker,
 			$this->participantsStore,
 			$this->centralUserLookup,
-			$this->permissionChecker
+			$this->permissionChecker,
+			$this->userFactory,
+			$this->userMailer
+		);
+	}
+
+	public function newEmailParticipantsModule(): EmailParticipantsModule {
+		return new EmailParticipantsModule(
+			$this->messageFormatterFactory
 		);
 	}
 }

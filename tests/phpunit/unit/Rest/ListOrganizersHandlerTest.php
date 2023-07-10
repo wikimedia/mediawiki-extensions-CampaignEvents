@@ -34,7 +34,8 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		OrganizersStore $organizersStore = null
+		OrganizersStore $organizersStore = null,
+		UserLinker $userLink = null
 	): ListOrganizersHandler {
 		$roleFormatter = $this->createMock( RoleFormatter::class );
 		// Return the constant value for simplicity
@@ -46,7 +47,7 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
 			$roleFormatter,
 			$centralUserLookup,
-			$this->createMock( UserLinker::class )
+			$userLink ?? $this->createMock( UserLinker::class )
 		);
 	}
 
@@ -54,8 +55,15 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideRunData
 	 */
 	public function testRun( array $expectedResp, OrganizersStore $organizersStore ) {
-		$handler = $this->newHandler( null, $organizersStore );
+		$userLink = $this->createMock( UserLinker::class );
+		$userLink->method( 'getUserPagePath' )->willReturn( [
+			'path' => '',
+			'title' => '',
+			'classes' => '',
+		] );
+		$handler = $this->newHandler( null, $organizersStore, $userLink );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
+
 		$this->assertSame( $expectedResp, $respData );
 	}
 
@@ -63,7 +71,6 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		yield 'No organizers' => [ [], $this->createMock( OrganizersStore::class ) ];
 
 		$user1 = new CentralUser( 1 );
-
 		$singleCreatorStore = $this->createMock( OrganizersStore::class );
 		$singleCreatorStore->expects( $this->atLeastOnce() )
 			->method( 'getEventOrganizers' )

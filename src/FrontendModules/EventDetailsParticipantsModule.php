@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
@@ -16,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
@@ -31,8 +33,8 @@ use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 
 class EventDetailsParticipantsModule {
-	private const PARTICIPANTS_LIMIT = 20;
 
+	private const PARTICIPANTS_LIMIT = 20;
 	public const MODULE_STYLES = [
 		'oojs-ui.styles.icons-moderation',
 		'oojs-ui.styles.icons-user',
@@ -49,6 +51,10 @@ class EventDetailsParticipantsModule {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var PermissionChecker */
 	private PermissionChecker $permissionChecker;
+	/** @var UserFactory */
+	private UserFactory $userFactory;
+	/** @var CampaignsUserMailer */
+	private CampaignsUserMailer $userMailer;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -56,19 +62,25 @@ class EventDetailsParticipantsModule {
 	 * @param ParticipantsStore $participantsStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param PermissionChecker $permissionChecker
+	 * @param UserFactory $userFactory
+	 * @param CampaignsUserMailer $userMailer
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		UserLinker $userLinker,
 		ParticipantsStore $participantsStore,
 		CampaignsCentralUserLookup $centralUserLookup,
-		PermissionChecker $permissionChecker
+		PermissionChecker $permissionChecker,
+		UserFactory $userFactory,
+		CampaignsUserMailer $userMailer
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->userLinker = $userLinker;
 		$this->participantsStore = $participantsStore;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->permissionChecker = $permissionChecker;
+		$this->userFactory = $userFactory;
+		$this->userMailer = $userMailer;
 	}
 
 	/**
@@ -93,13 +105,7 @@ class EventDetailsParticipantsModule {
 	): Tag {
 		$eventID = $event->getID();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
-
 		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
-
-		$items = [];
-		$items[] = $this->getHeader( $msgFormatter, $totalParticipants );
-
-		$items[] = $this->getEmptyStateElement( $totalParticipants, $msgFormatter );
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
@@ -121,17 +127,18 @@ class EventDetailsParticipantsModule {
 		);
 		$lastParticipant = $otherParticipants ? end( $otherParticipants ) : $curUserParticipant;
 		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;
-
 		$canRemoveParticipants = false;
 		if ( $isOrganizer ) {
 			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
 				UnregisterParticipantCommand::CAN_UNREGISTER;
 		}
 
-		if ( $canRemoveParticipants && $totalParticipants ) {
-			$items[] = $this->getListControls( $msgFormatter );
+		$items = [];
+		$items[] = $this->getHeader( $msgFormatter, $totalParticipants, $canRemoveParticipants );
+		if ( $totalParticipants ) {
+			$items[] = $this->getTableHeaders( $msgFormatter, $canRemoveParticipants );
 		}
-
+		$items[] = $this->getEmptyStateElement( $totalParticipants, $msgFormatter );
 		$items[] = $this->getParticipantsContainer(
 			$curUserParticipant,
 			$otherParticipants,
@@ -174,7 +181,11 @@ class EventDetailsParticipantsModule {
 	 * @param int $totalParticipants
 	 * @return Tag
 	 */
-	private function getHeader( ITextFormatter $msgFormatter, int $totalParticipants ): Tag {
+	private function getHeader(
+		ITextFormatter $msgFormatter,
+		int $totalParticipants,
+		bool $viewerCanRemoveParticipants
+	): Tag {
 		$headerText = ( new Tag( 'div' ) )->appendContent(
 			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-header-participants' )
@@ -187,7 +198,7 @@ class EventDetailsParticipantsModule {
 		)->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
 
 		if ( $totalParticipants ) {
-			$header->appendContent( $this->getSearchBar( $msgFormatter ) );
+			$header->appendContent( $this->getSearchBar( $msgFormatter, $viewerCanRemoveParticipants ) );
 		}
 
 		return $header;
@@ -220,10 +231,11 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param ITextFormatter $msgFormatter
+	 * @param bool $viewerCanRemoveParticipants
 	 * @return Tag
 	 */
-	private function getSearchBar( ITextFormatter $msgFormatter ): Tag {
-		return ( new Tag( 'div' ) )->appendContent(
+	private function getSearchBar( ITextFormatter $msgFormatter, bool $viewerCanRemoveParticipants ): Tag {
+		$container = ( new Tag( 'div' ) )->appendContent(
 			new SearchInputWidget( [
 				'placeholder' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
@@ -232,43 +244,72 @@ class EventDetailsParticipantsModule {
 				'classes' => [ 'ext-campaignevents-details-participants-search' ]
 			] )
 		)->addClasses( [ 'ext-campaignevents-details-participants-search-container' ] );
+		if ( $viewerCanRemoveParticipants ) {
+			$removeButton = new ButtonWidget( [
+				'infusable' => true,
+				'framed' => true,
+				'flags' => [
+					'destructive'
+				],
+				'disabled' => true,
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
+				),
+				'id' => 'ext-campaignevents-event-details-remove-participant-button',
+				'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
+			] );
+			$messageAllParticipantsButton = new ButtonWidget( [
+				'infusable' => true,
+				'framed' => true,
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-message-all' )
+				),
+				'flags' => [ 'progressive' ],
+				'classes' => [ 'ext-campaignevents-event-details-message-all-participants-button' ],
+			] );
+			$container->appendContent( $removeButton, $messageAllParticipantsButton );
+		}
+		return $container;
 	}
 
 	/**
 	 * @param ITextFormatter $msgFormatter
 	 * @return Tag
 	 */
-	private function getListControls( ITextFormatter $msgFormatter ): Tag {
+	private function getTableHeaders( ITextFormatter $msgFormatter, bool $canRemoveParticipants ): Tag {
+		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-user-actions-container' ] );
 		$selectAllCheckBoxField = new FieldLayout(
 			new CheckboxInputWidget( [
 				'name' => 'event-details-select-all-participants',
 			] ),
 			[
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-select-all' )
-				),
 				'align' => 'inline',
 				'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox-field' ],
 				'infusable' => true,
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-select-all' )
+				),
+				'invisibleLabel' => true
 			]
 		);
 
-		$removeButton = new ButtonWidget( [
-			'infusable' => true,
-			'framed' => false,
-			'flags' => [
-				'destructive'
-			],
-			'icon' => 'trash',
-			'label' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
-			),
-			'id' => 'ext-campaignevents-event-details-remove-participant-button',
-			'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
-		] );
-
-		return ( new Tag( 'div' ) )->appendContent( $selectAllCheckBoxField, $removeButton )
-			->addClasses( [ 'ext-campaignevents-details-user-actions-container' ] );
+		$headings = [
+			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-participants' ) ),
+			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-time-registered' ) ),
+			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-has-email' ) )
+		];
+		$row = new Tag( 'div' );
+		if ( $canRemoveParticipants ) {
+			$row->appendContent( $selectAllCheckBoxField );
+		}
+		$row->addClasses( [ 'ext-campaignevents-details-user-actions-row' ] );
+		foreach ( $headings as $heading ) {
+			$row->appendContent(
+				( new Tag( 'div' ) )->appendContent( $heading )
+					->addClasses( [ 'ext-campaignevents-details-user-actions-heading' ] ) );
+		}
+		$container->appendContent( $row );
+		return $container;
 	}
 
 	/**
@@ -383,50 +424,77 @@ class EventDetailsParticipantsModule {
 		UserIdentity $viewingUser,
 		ITextFormatter $msgFormatter
 	): Tag {
-		$elements = [];
+		$row = new Tag( 'div' );
+		$performer = $this->userFactory->newFromId( $viewingUser->getId() );
+		try {
+			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
+			$genderUserName = $userName;
+			$user = $this->userFactory->newFromName( $userName );
+			$userLink = $this->userLinker->getUserPagePath( $participant->getUser() );
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			$user = null;
+			$userName = null;
+			$genderUserName = '@';
+		}
+		$recipientIsValid = $user !== null && $this->userMailer->validateTarget( $user, $performer ) === null;
+
 		if ( $canRemoveParticipants ) {
-			$elements[] = ( new CheckboxInputWidget( [
+			$checkboxDivider = new Tag( 'div' );
+			$checkboxDivider->addClasses( [ 'ext-campaignevents-details-user-row-checkbox' ] );
+			$userId = $participant->getUser()->getCentralID();
+			$checkboxDivider->appendContent( new CheckboxInputWidget( [
 				'name' => 'event-details-participants-checkboxes',
 				'infusable' => true,
-				'value' => $participant->getUser()->getCentralID(),
+				'value' => $userId,
 				'classes' => [ 'ext-campaignevents-event-details-participants-checkboxes' ],
+				'data' => [
+					'hasEmail' => $recipientIsValid,
+					'username' => $userName,
+					'userId' => $userId,
+					'userPageLink' => $userLink ?? ""
+				]
 			] ) );
+			$row->appendContent( $checkboxDivider );
 		}
 
 		$usernameElement = new HtmlSnippet(
 			$this->userLinker->generateUserLinkWithFallback( $participant->getUser(), $language->getCode() )
 		);
-		$elements[] = ( new Tag( 'span' ) )
+		$usernameDivider = ( new Tag( 'div' ) )
 			->appendContent( $usernameElement )
 			->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
 
 		if ( $participant->isPrivateRegistration() ) {
-			try {
-				$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
-				// Hack: use an invalid username to force unspecified gender
-				$userName = '@';
-			}
+
 			$labelText = $msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-private-participant-label', [ $userName ] )
+				MessageValue::new( 'campaignevents-event-details-private-participant-label', [ $genderUserName ] )
 			);
-			$elements[] = new IconWidget( [
+			$privateIcon = new IconWidget( [
 				'icon' => 'lock',
 				'label' => $labelText,
 				'title' => $labelText,
 				'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
 			] );
+			$usernameDivider->appendContent( $privateIcon );
 		}
+		$row->appendContent( $usernameDivider );
 
-		$elements[] = ( new Tag( 'span' ) )->appendContent(
+		$registrationDateDivider = new Tag( 'div' );
+		$registrationDateDivider->appendContent(
 			$language->userTimeAndDate(
 				$participant->getRegisteredAt(),
 				$viewingUser
 			)
 		)->addClasses( [ 'ext-campaignevents-details-participant-registered-at' ] );
+		$row->appendContent( $registrationDateDivider );
 
-		return ( new Tag( 'div' ) )
-			->appendContent( ...$elements )
+		$row->appendContent( ( new Tag( 'div' ) )->appendContent(
+			$recipientIsValid
+				? $msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-yes' ) )
+				: $msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-no' ) )
+		)->addClasses( [ 'ext-campaignevents-details-participant-has-email' ] ) );
+
+		return $row
 			->addClasses( [ 'ext-campaignevents-details-user-row' ] );
 	}
 

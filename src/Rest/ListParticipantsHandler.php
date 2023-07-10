@@ -23,7 +23,6 @@ use Wikimedia\ParamValidator\ParamValidator;
 
 class ListParticipantsHandler extends SimpleHandler {
 	use EventIDParamTrait;
-	use UserLinkTrait;
 
 	// TODO: Implement proper pagination (T305389)
 	private const RES_LIMIT = 20;
@@ -132,15 +131,16 @@ class ListParticipantsHandler extends SimpleHandler {
 				$userName = $this->centralUserLookup->getUserName( $centralUser );
 				$user = $this->userFactory->newFromName( $userName );
 				$curData['user_name'] = $userName;
-				$curData['user_page'] = $this->getUserPagePath( $this->userLinker,  $centralUser );
+				$curData['user_page'] = $this->userLinker->getUserPagePath( $centralUser );
 				$curData['user_is_valid_recipient'] =
-					$user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null;
+					( $user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null );
 
 			} catch ( CentralUserNotFoundException $_ ) {
 				$curData['not_found'] = true;
 			} catch ( HiddenCentralUserException $_ ) {
 				$curData['hidden'] = true;
 			}
+
 			$respVal[] = $curData;
 		}
 		return $this->getResponseFactory()->createJson( $respVal );

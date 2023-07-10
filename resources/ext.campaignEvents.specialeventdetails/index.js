@@ -2,6 +2,9 @@ $( function () {
 	'use strict';
 	require( './ParticipantsManager.js' );
 	require( './OrganizersLoader.js' );
+	if ( mw.config.get( 'wgCampaignEventsShowEmailTab' ) ) {
+		require( './EmailManager.js' );
+	}
 	// eslint-disable-next-line no-jquery/no-global-selector
 	var tabLayout = OO.ui.IndexLayout.static.infuse( $( '#ext-campaignevents-eventdetails-tabs' ) ),
 		tabs = tabLayout.getTabs().items;
