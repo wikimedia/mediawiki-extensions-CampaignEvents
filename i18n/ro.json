@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Alesaru"
+		]
+	},
+	"campaignevents-eventpage-dialog-participants-view-list": "Vezi tot",
+	"campaignevents-eventpage-register-notification-edit": "Informațiile dvs. de înregistrare au fost actualizate.",
+	"campaignevents-register-questions-label-subtitle": "Puteți modifica sau elimina răspunsurile înainte, în timpul și după eveniment.",
+	"campaignevents-eventpage-register-dialog-questions-title": "Informații pentru organizatori",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Toate întrebările sunt opționale",
+	"campaignevents-register-invalid-answer": "Răspuns nevalid la întrebarea $1"
+}

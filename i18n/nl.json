@@ -169,7 +169,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Alle organisatoren bekijken",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|deelnemer|deelnemers}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 deelnemer{{PLURAL:$1||s}} privé geregistreerd",
-	"campaignevents-eventpage-dialog-participants-view-list": "Volledige lijst bekijken",
+	"campaignevents-eventpage-dialog-participants-view-list": "alles weergeven",
 	"campaignevents-eventpage-dialog-dates-label": "Begin- en eindtijd",
 	"campaignevents-eventpage-dialog-dates": "$1 tot $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Tijdzone:</strong> $1",

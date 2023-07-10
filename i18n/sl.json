@@ -180,7 +180,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Ogled vseh organizatorjev",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|udeleženec|udeleženca|udeleženci|udeležencev}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|udeleženec se je registriral|udeleženca sta se registrirala|udeleženci so se registrirali|udeležencev se je registriralo}} zasebno.",
-	"campaignevents-eventpage-dialog-participants-view-list": "Ogled celotnega seznama",
+	"campaignevents-eventpage-dialog-participants-view-list": "Ogled vseh",
 	"campaignevents-eventpage-dialog-dates-label": "Začetni in končni čas",
 	"campaignevents-eventpage-dialog-dates": "od $1 do $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Časovni pas:</strong> $1",

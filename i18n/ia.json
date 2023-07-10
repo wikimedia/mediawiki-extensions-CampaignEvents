@@ -180,7 +180,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Vider tote le organisatores",
 	"campaignevents-eventpage-dialog-participants": "$1 participante{{PLURAL:$1||s}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 participante{{PLURAL:$1||s}} inscribite in privato",
-	"campaignevents-eventpage-dialog-participants-view-list": "Vider lista complete",
+	"campaignevents-eventpage-dialog-participants-view-list": "Vider totes",
 	"campaignevents-eventpage-dialog-dates-label": "Hora de initio e de fin",
 	"campaignevents-eventpage-dialog-dates": "de $1 a $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Fuso horari:</strong> $1",
@@ -195,6 +195,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Inscribe te pro vider le ligamine al gruppo de conversation.",
 	"campaignevents-eventpage-dialog-action-close": "Clauder",
 	"campaignevents-eventpage-register-notification": "Tu es ora inscribite pro $1.",
+	"campaignevents-eventpage-register-notification-edit": "Tu information de inscription ha essite actualisate.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Cancellar inscription",
 	"campaignevents-eventpage-unregister-confirmation-body": "Es tu secur de voler cancellar tu inscription?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Si",
@@ -330,5 +331,6 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Partner organisante",
 	"campaignevents-register-question-affiliate-details-placeholder": "Per favor precisa",
 	"campaignevents-eventpage-register-dialog-questions-title": "Information pro organisatores",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Tote le questiones es optional"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Tote le questiones es optional",
+	"campaignevents-register-invalid-answer": "Responsa non valide al question $1"
 }
