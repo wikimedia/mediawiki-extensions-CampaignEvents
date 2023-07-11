@@ -157,15 +157,18 @@ class EventQuestionsRegistry {
 						'campaignevents-register-question-affiliate-placeholder' => 0,
 						'campaignevents-register-question-affiliate-option-none' => 1,
 						'campaignevents-register-question-affiliate-option-affiliate' => 2,
-						'campaignevents-register-question-affiliate-option-chapter' => 3,
-						'campaignevents-register-question-affiliate-option-user-group' => 4,
-						'campaignevents-register-question-affiliate-option-organizing-partner' => 5,
+						'campaignevents-register-question-affiliate-option-organizing-partner' => 3,
 					],
 				],
 				'otherOptions' => [
 					2 => [
 						'type' => self::FREE_TEXT_QUESTION_TYPE,
 						'placeholder-message' => 'campaignevents-register-question-affiliate-details-placeholder',
+					],
+					3 => [
+						'type' => self::FREE_TEXT_QUESTION_TYPE,
+						'placeholder-message' =>
+							'campaignevents-register-question-organizing-partner-details-placeholder',
 					],
 				],
 			],
@@ -236,7 +239,7 @@ class EventQuestionsRegistry {
 				$fields[$fieldName]['default'] = $default;
 			}
 			foreach ( $question[ 'otherOptions' ] ?? [] as $showIfVal => $optionData ) {
-				$optionName = $fieldName . '_Other';
+				$optionName = $fieldName . '_Other' . '_' . $showIfVal;
 				$optionData['hide-if'] = [ '!==', $fieldName, (string)$showIfVal ];
 				$optionData['cssclass'] = 'ext-campaignevents-participant-question-other-option';
 				$fields[$optionName] = $optionData;
@@ -305,7 +308,7 @@ class EventQuestionsRegistry {
 			}
 			$ansOption = $ansValue;
 			$ansText = null;
-			$otherOptionName = $fieldName . '_Other';
+			$otherOptionName = $fieldName . '_Other' . '_' . $ansValue;
 			if ( isset( $questionSpec['otherOptions'][$ansValue] ) && isset( $formData[$otherOptionName] ) ) {
 				$answerOther = $formData[$otherOptionName];
 				if ( $answerOther !== '' ) {

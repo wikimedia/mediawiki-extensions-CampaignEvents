@@ -357,12 +357,11 @@
 	"campaignevents-register-question-affiliate": "Do you belong to any Wikimedia chapters, organizing partners, user groups, affiliates, or other organizations outside Wikimedia? (optional)",
 	"campaignevents-register-question-affiliate-placeholder": "Select an option",
 	"campaignevents-register-question-affiliate-option-none": "No",
-	"campaignevents-register-question-affiliate-option-affiliate": "Affiliate",
-	"campaignevents-register-question-affiliate-option-chapter": "Chapter",
-	"campaignevents-register-question-affiliate-option-user-group": "User group",
-	"campaignevents-register-question-affiliate-option-organizing-partner": "Organizing partner",
+	"campaignevents-register-question-affiliate-option-affiliate": "Affiliate (chapters, user groups, thematic organizations)",
+	"campaignevents-register-question-affiliate-option-organizing-partner": "Other organizing partners",
 	"campaignevents-register-question-affiliate-details-placeholder": "Please state",
 	"campaignevents-eventpage-register-dialog-questions-title": "Information for organizers",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "All questions are optional",
-	"campaignevents-register-invalid-answer": "Invalid answer to the question $1"
+	"campaignevents-register-invalid-answer": "Invalid answer to the question $1",
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Please state"
 }
