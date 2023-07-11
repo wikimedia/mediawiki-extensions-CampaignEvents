@@ -80,7 +80,7 @@ class RegisterForEventHandler extends SimpleHandler {
 				);
 			} catch ( InvalidAnswerDataException $e ) {
 				throw new LocalizedHttpException(
-					MessageValue::new( 'campaignevents-register-invalid-answer' )
+					MessageValue::new( 'campaignevents-rest-register-invalid-answer' )
 						->params( $e->getQuestionName() ),
 					400
 				);

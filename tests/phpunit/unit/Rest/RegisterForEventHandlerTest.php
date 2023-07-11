@@ -108,7 +108,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 			$eventDoesNotExistLookup
 		];
 
-		$invalidAnsError = 'campaignevents-register-invalid-answer';
+		$invalidAnsError = 'campaignevents-rest-register-invalid-answer';
 		$invalidQuestRegistry = $this->createMock( EventQuestionsRegistry::class );
 		$invalidQuestRegistry->expects( $this->atLeastOnce() )
 			->method( 'extractUserQuestionsAPI' )
