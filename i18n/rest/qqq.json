@@ -17,5 +17,6 @@
 	"campaignevents-rest-list-participants-empty-filter": "Error message used by the API endpoint for listing participants when a username filter was provided but it's the empty string.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Error message used by the API endpoint for listing participants when the client passed the option to include privately registered participants, but the user is not allowed to see them.",
 	"campaignevents-rest-set-organizers-empty-list": "{{doc-important|Do not translate <code>organizer_usernames</code>.}}\nError message returned by the API if the <code>organizer_usernames</code> field is empty.",
-	"campaignevents-rest-get-registration-info-notparticipant": "Error messaged used by the API endpoint for obtaining your registration information when you're not a participant."
+	"campaignevents-rest-get-registration-info-notparticipant": "Error message used by the API endpoint for obtaining your registration information when you're not a participant.",
+	"campaignevents-register-invalid-answer": "Error messaged used by the API when registering for an event if the given participant questions are not valid, for instance if an option doesn't exist or the given value has the wrong type.\nParameters:\n* $1 - Name of the question for which an invalid answer was provided."
 }

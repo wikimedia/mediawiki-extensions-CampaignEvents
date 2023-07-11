@@ -395,6 +395,7 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsRegisterParticipantCommand",
+				"CampaignEventsEventQuestionsRegistry",
 				"MainConfig"
 			]
 		},

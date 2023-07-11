@@ -15,5 +15,6 @@
 	"campaignevents-rest-list-participants-empty-filter": "The username filter, if specified, must be a non-empty string.",
 	"campaignevents-rest-list-participants-cannot-see-private": "You are not authorized to view participants who registered privately for this event.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> must be an array of usernames and cannot be empty",
-	"campaignevents-rest-get-registration-info-notparticipant": "You are not participating in this event."
+	"campaignevents-rest-get-registration-info-notparticipant": "You are not participating in this event.",
+	"campaignevents-register-invalid-answer": "Invalid answer to the question $1"
 }

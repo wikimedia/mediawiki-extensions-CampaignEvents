@@ -391,6 +391,130 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::extractUserQuestionsAPI
+	 * @covers ::newAnswerFromAPI
+	 * @dataProvider provideExtractUserQuestionsAPI
+	 *
+	 */
+	public function testExtractUserQuestionsAPI( array $data, array $enabledQuestions, array $expected ) {
+		$this->assertEquals(
+			$expected,
+			$this->getRegistry()->extractUserQuestionsAPI( $data, $enabledQuestions )
+		);
+	}
+
+	public function provideExtractUserQuestionsAPI(): Generator {
+		yield 'No answers' => [ [], [ 1, 2, 3 ], [] ];
+		yield 'Unrecognized answer' => [
+			[ 'notaquestion' => [ 'value' => 42 ] ],
+			[ 1 ],
+			[]
+		];
+		yield 'Contains answer to question not enabled' => [
+			[ 'age' => [ 'value' => 2 ] ],
+			[],
+			[]
+		];
+		yield 'Placeholder radio' => [
+			[ 'gender' => [ 'value' => 0 ] ],
+			[ 1 ],
+			[]
+		];
+		yield 'Placeholder select' => [
+			[ 'age' => [ 'value' => 0 ] ],
+			[ 2 ],
+			[]
+		];
+		yield 'Simple answer with no other value' => [
+			[ 'gender' => [ 'value' => 1 ] ],
+			[ 1 ],
+			[ new Answer( 1, 1, null ) ]
+		];
+		yield 'No value provided for otherOption' => [
+			[ 'affiliate' => [ 'value' => 2 ] ],
+			[ 5 ],
+			[ new Answer( 5, 2, null ) ]
+		];
+		yield 'otherOption provided for wrong value' => [
+			[ 'affiliate' => [ 'value' => 3, 'other' => 'foo' ] ],
+			[ 5 ],
+			[ new Answer( 5, 3, null ) ]
+		];
+		yield 'Placeholder provided for otherOption' => [
+			[ 'affiliate' => [ 'value' => 2, 'other' => '' ] ],
+			[ 5 ],
+			[ new Answer( 5, 2, null ) ]
+		];
+		yield 'Answer with other value' => [
+			[ 'affiliate' => [ 'value' => 2, 'other' => 'some-affiliate' ] ],
+			[ 5 ],
+			[ new Answer( 5, 2, 'some-affiliate' ) ]
+		];
+		yield 'Multiple answer types' => [
+			[
+				'gender' => [ 'value' => 3 ],
+				'age' => [ 'value' => 5 ],
+				'affiliate' => [ 'value' => 2, 'other' => 'some-affiliate' ],
+			],
+			[ 1, 2, 3, 4, 5 ],
+			[
+				new Answer( 1, 3, null ),
+				new Answer( 2, 5, null ),
+				new Answer( 5, 2, 'some-affiliate' )
+			]
+		];
+	}
+
+	/**
+	 * @covers ::extractUserQuestionsAPI
+	 * @covers ::newAnswerFromAPI
+	 * @dataProvider provideExtractUserQuestionsAPI__error
+	 *
+	 */
+	public function testExtractUserQuestionsAPI__error( array $data ) {
+		$this->expectException( InvalidAnswerDataException::class );
+		$this->getRegistry()->extractUserQuestionsAPI( $data, [ 1, 2, 3, 4, 5 ] );
+	}
+
+	public function provideExtractUserQuestionsAPI__error(): Generator {
+		yield 'Radio wrong answer type' => [
+			[ 'gender' => [ 'value' => 'foo' ] ],
+		];
+		yield 'Non-existing radio option' => [
+			[ 'gender' => [ 'value' => 10000 ] ],
+		];
+		yield 'Select wrong answer type' => [
+			[ 'age' => [ 'value' => 'foo' ] ],
+		];
+		yield 'Non-existing select option' => [
+			[ 'age' => [ 'value' => 100000 ] ],
+		];
+		yield 'otherOption wrong type' => [
+			[ 'affiliate' => [ 'value' => 2, 'other' => true ] ],
+		];
+	}
+
+	/**
+	 * @covers ::formatAnswersForAPI
+	 * @covers ::extractUserQuestionsAPI
+	 */
+	public function testAPIRoundtrip() {
+		$answers = [
+			new Answer( 1, 1, null ),
+			new Answer( 2, 2, null ),
+			new Answer( 5, 2, 'foo' ),
+		];
+		$registry = $this->getRegistry();
+		$this->assertEquals(
+			$answers,
+			$registry->extractUserQuestionsAPI(
+				$registry->formatAnswersForAPI( $answers ),
+				[ 1, 2, 5 ]
+			)
+		);
+	}
+
+	/**
 	 * @covers ::getAvailableQuestionNames
 	 */
 	public function testGetAvailableQuestionNames() {
