@@ -48,7 +48,8 @@
 	 * @param {Object} question
 	 */
 	EventQuestions.prototype.addQuestionRadioType = function ( questionKey, question ) {
-		var options = [];
+		var options = [],
+			defaultValue = question.default || 0;
 		for ( var optionMessage in question[ 'options-messages' ] ) {
 			options.push(
 				new OO.ui.RadioOptionWidget( {
@@ -58,7 +59,7 @@
 			);
 		}
 
-		options[ 0 ].setSelected( true );
+		options[ defaultValue ].setSelected( true );
 		this.questions[ questionKey ] = new OO.ui.FieldLayout(
 			new OO.ui.RadioSelectWidget( {
 				items: options
@@ -76,7 +77,9 @@
 	 * @param {Object} question
 	 */
 	EventQuestions.prototype.addQuestionSelectType = function ( questionKey, question ) {
-		var options = [];
+		var options = [],
+			defaultValue = question.default || 0;
+
 		for ( var optionMessage in question[ 'options-messages' ] ) {
 			options.push(
 				{
@@ -88,7 +91,8 @@
 
 		this.questions[ questionKey ] = new OO.ui.FieldLayout(
 			new OO.ui.DropdownInputWidget( {
-				options: options
+				options: options,
+				value: defaultValue
 			} ),
 			{
 				label: question[ 'label-message' ],
@@ -103,9 +107,11 @@
 	 * @param {Object} question
 	 */
 	EventQuestions.prototype.addQuestionTextType = function ( questionKey, question ) {
+		var defaultValue = question.default || '';
 		this.questions[ questionKey ] = new OO.ui.FieldLayout(
 			new OO.ui.TextInputWidget( {
-				placeholder: question[ 'placeholder-message' ] ? question[ 'placeholder-message' ] : ''
+				placeholder: question[ 'placeholder-message' ] ? question[ 'placeholder-message' ] : '',
+				value: defaultValue
 			} ),
 			// there is only on class, it is in EventQuestionsRegistry.php
 			/* eslint-disable-next-line */
@@ -130,10 +136,10 @@
 		conditionValue
 	) {
 		var that = this;
-		this.questions[ questionKey ].toggle( false );
-		this.questions[ questionListener ].fieldWidget.on( 'change', function ( val ) {
+		this.questions[ questionListener ].fieldWidget.on( 'change', selectOnChange );
+		function selectOnChange( val ) {
 			if ( condition === '!==' ) {
-				if ( val !== conditionValue ) {
+				if ( String( val ) !== String( conditionValue ) ) {
 					that.questions[ questionKey ].toggle( false );
 				} else {
 					that.questions[ questionKey ].toggle( true );
@@ -141,7 +147,8 @@
 			} else {
 				throw new Error( 'Unexpected hide-if condition ' + condition );
 			}
-		} );
+		}
+		selectOnChange( this.eventQuestions[ questionListener ].default );
 	};
 
 	module.exports = EventQuestions;

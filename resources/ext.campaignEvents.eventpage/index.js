@@ -71,15 +71,17 @@
 
 	/**
 	 * @param {boolean} privateRegistration
+	 * @param {Object} answers
 	 * @return {jQuery.Promise}
 	 */
-	function registerUser( privateRegistration ) {
+	function registerUser( privateRegistration, answers ) {
 		return new mw.Rest().put(
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			{
 				token: mw.user.tokens.get( 'csrfToken' ),
 				// eslint-disable-next-line camelcase
-				is_private: privateRegistration
+				is_private: privateRegistration,
+				answers: answers
 			}
 		)
 			.done( function () {
@@ -160,7 +162,7 @@
 		}
 		showParticipantRegistrationDialog().then( function ( data ) {
 			if ( data && data.action === 'confirm' ) {
-				registerUser( data.isPrivate )
+				registerUser( data.isPrivate, data.answers )
 					.fail( function () {
 						// Fall back to the special page
 						// TODO We could also show an error here once T269492 and T311423

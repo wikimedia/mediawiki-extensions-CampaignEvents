@@ -150,7 +150,8 @@
 			return new OO.ui.Process( function () {
 				this.close( {
 					action: action,
-					isPrivate: !this.publicRegistration
+					isPrivate: !this.publicRegistration,
+					answers: this.getParticipantAnswers()
 				} );
 			}, this );
 		}
@@ -158,6 +159,37 @@
 			.next( function () {
 				this.close();
 			}, this );
+	};
+
+	ParticipantRegistrationDialog.prototype.getParticipantAnswers = function () {
+		var answers = {};
+		for ( var questionId in this.eventQuestions.questions ) {
+			var question = this.eventQuestions.questions[ questionId ].getField(),
+				questionName = questionId.replace( 'Question', '' ).toLowerCase();
+
+			if ( question instanceof OO.ui.RadioSelectWidget ) {
+				answers[ questionName ] = {
+					value: parseInt( question.findSelectedItem().getData() )
+				};
+			} else if ( question instanceof OO.ui.DropdownInputWidget ) {
+				answers[ questionName ] = { value: parseInt( question.getValue() ) };
+			} else if ( question instanceof OO.ui.TextInputWidget ) {
+				var questionOther = questionId.split( '_' );
+				if ( questionOther.length === 3 && questionOther[ 1 ] === 'Other' ) {
+					var questionOtherName =
+						questionOther[ 0 ].replace( 'Question', '' ).toLowerCase();
+					if ( answers[ questionOtherName ].value === parseInt( questionOther[ 2 ] ) ) {
+						answers[ questionOtherName ].other = question.getValue();
+					}
+				} else {
+					answers[ questionName ] = { value: question.getValue() };
+				}
+			} else {
+				throw new Error( 'Unexpected question type' );
+			}
+		}
+
+		return answers;
 	};
 
 	module.exports = ParticipantRegistrationDialog;
