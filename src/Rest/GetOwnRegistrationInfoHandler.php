@@ -62,8 +62,8 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
 		} catch ( UserNotGlobalException $_ ) {
 			throw new LocalizedHttpException(
-				new MessageValue( 'campaignevents-register-need-central-account' ),
-				400
+				new MessageValue( 'campaignevents-register-not-allowed' ),
+				403
 			);
 		}
 

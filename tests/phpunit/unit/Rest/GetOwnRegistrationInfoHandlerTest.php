@@ -137,8 +137,8 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 		$notGlobalUserLookup->method( 'newFromAuthority' )
 			->willThrowException( $this->createMock( UserNotGlobalException::class ) );
 		yield 'User not global' => [
-			'campaignevents-register-need-central-account',
-			400,
+			'campaignevents-register-not-allowed',
+			403,
 			null,
 			$notGlobalUserLookup
 		];
