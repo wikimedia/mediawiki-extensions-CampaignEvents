@@ -272,7 +272,6 @@ class EventPageDecorator {
 				'oojs-ui.styles.icons-interactions',
 				'oojs-ui.styles.icons-moderation',
 				'oojs-ui.styles.icons-user',
-				'oojs-ui.styles.icons-editing-core',
 				'oojs-ui.styles.icons-alerts',
 			],
 			UserLinker::MODULE_STYLES
@@ -700,10 +699,7 @@ class EventPageDecorator {
 				$userStatus === self::USER_STATUS_ORGANIZER ||
 				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
 			) {
-				$linkIcon = new IconWidget( [ 'icon' => 'link' ] );
-				$linkContent = new HtmlSnippet(
-					$linkIcon . '&nbsp;' . Linker::makeExternalLink( $meetingURL, $meetingURL )
-				);
+				$linkContent = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
 			} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
 				$linkContent = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-link-register' )
