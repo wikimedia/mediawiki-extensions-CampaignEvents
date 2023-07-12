@@ -22,6 +22,7 @@ CREATE TABLE /*_*/campaign_events (
   event_created_at BINARY(14) NOT NULL,
   event_last_edit BINARY(14) NOT NULL,
   event_deleted_at BINARY(14) DEFAULT NULL,
+  event_answers_status INT DEFAULT 0 NOT NULL,
   UNIQUE INDEX event_page (
     event_page_wiki, event_page_namespace,
     event_page_title

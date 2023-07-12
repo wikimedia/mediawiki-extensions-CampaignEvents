@@ -13,7 +13,8 @@ CREATE TABLE /*_*/campaign_events (
   event_end_utc BLOB NOT NULL, event_type BLOB NOT NULL,
   event_meeting_type INTEGER NOT NULL,
   event_meeting_url BLOB NOT NULL, event_created_at BLOB NOT NULL,
-  event_last_edit BLOB NOT NULL, event_deleted_at BLOB DEFAULT NULL
+  event_last_edit BLOB NOT NULL, event_deleted_at BLOB DEFAULT NULL,
+  event_answers_status INTEGER DEFAULT 0 NOT NULL
 );
 
 CREATE UNIQUE INDEX event_page ON /*_*/campaign_events (
