@@ -5,6 +5,7 @@
 			"Amire80",
 			"Daimona Eaytoy",
 			"MarcoAurelio",
+			"McDutchie",
 			"Verdy p"
 		]
 	},
@@ -239,8 +240,8 @@
 	"campaignevents-event-details-view-event-page": "Label of a button used on [[Special:EventDetails]]. By clicking, the event page will open.",
 	"campaignevents-event-details-participants": "Label text for participant column on participants table",
 	"campaignevents-event-details-select-all": "Label of a checkbox on [[Special:EventDetails]] that allows you to select all the participants of an event.",
-	"campaignevents-event-details-message-all": "Label of a button on [[Special:EventDetails]] that allows you to that allows you to send a message to all the participants of an event.",
-	"campaignevents-event-details-message-participants": "Label of a button on [[Special:EventDetails]] that allows you to send a message to the chosen participants of an event.",
+	"campaignevents-event-details-message-all": "'''Message is a verb'''. Label of a button on [[Special:EventDetails]] that allows you to send a message to all the participants of an event.",
+	"campaignevents-event-details-message-participants": "'''Message is a verb'''. Label of a button on [[Special:EventDetails]] that allows you to send a message to the chosen participants of an event.",
 	"campaignevents-event-details-participants-checkboxes-selected": "Label used on [[Special:EventDetails]] to inform how many of the participants are selected. \nParameters:\n* $1 - the number of selected participants - for PLURAL support\n* $2 - the total participants available to select",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Title of a confirmation dialog shown on [[Special:EventDetails]] when the user presses the button to remove participants from the event.\nParameters:\n* $1 - Number of selected participants, for PLURAL support",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Body of a confirmation dialog shown on [[Special:EventDetails]] when the user presses the button to remove participants from the event. Parameters:\n* $1 - The number of participants, for PLURAL support.",
@@ -262,7 +263,7 @@
 	"campaignevents-unregister-participants-registration-deleted": "Message in case the specified event registration is deleted",
 	"campaignevents-event-details-remove-participant-notification-error": "Message shown on [[Special:EventDetails]] if there is an error when trying to remove participants",
 	"campaignevents-event-details-tab-participants": "Participants tab label used on [[Special:EventDetails]]",
-	"campaignevents-event-details-tab-email": "Tab label used on [[Special:EventDetails]]. \"Message\" is a verb. Since this message is used in a tabbed layout, the translation should be as concise as possible.",
+	"campaignevents-event-details-tab-email": "Tab label used on [[Special:EventDetails]]. '''\"Message\" is a verb.''' Since this message is used in a tabbed layout, the translation should be as concise as possible.",
 	"campaignevents-event-details-tab-event-details": "Event details tab label used on [[Special:EventDetails]]",
 	"campaignevents-event-details-search-participants-placeholder": "A placeholder message for the search participants input on [[Special:EventDetails]]",
 	"campaignevents-event-details-organizers-view-more": "Label of a link on [[Special:EventDetails]] that, if clicked, will load more organizers to display.",
@@ -366,5 +367,5 @@
 	"campaignevents-register-question-affiliate-details-placeholder": "Placeholder of a free-text field where users can enter the name of an affiliate they belong to, if they chose the {{msg-mw|campaignevents-register-question-affiliate-option-affiliate}} answer to the {{msg-mw|campaignevents-register-question-affiliate}} question.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Title shown above the questions section on a modal on the event page, when the user clicks on the Register button, this title is to inform the user that the provided answers are information for organizers",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Subtitle shown above the questions section on a modal on the event page, when the user clicks on the Register button, this subtitle is to inform the user that all questions are optional",
-	"campaignevents-register-invalid-answer": "Error message shown on [[Special:RegisterForEvent]] when the answer to a participant question is not valid.\nParameters:\n* $1 - Identifier of the given question, will be a string like \"wpQuestionAge\"."
+	"campaignevents-register-invalid-answer": "Error messaged used by the API when registering for an event if the given participant questions are not valid, for instance if an option doesn't exist or the given value has the wrong type.\nParameters:\n* $1 - Name of the question for which an invalid answer was provided."
 }

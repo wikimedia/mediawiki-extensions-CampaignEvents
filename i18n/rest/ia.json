@@ -14,5 +14,6 @@
 	"campaignevents-rest-list-participants-empty-filter": "Le filtro del nomine de usator, si specificate, debe esser un texto non vacue.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Tu non es autorisate a vider le participantes que se ha inscribite in privato pro iste evento.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe esser un vector/matrice de nomines de usator e non pote esser vacue",
-	"campaignevents-rest-get-registration-info-notparticipant": "Tu non participa in iste evento."
+	"campaignevents-rest-get-registration-info-notparticipant": "Tu non participa in iste evento.",
+	"campaignevents-register-invalid-answer": "Responsa non valide al question $1"
 }
