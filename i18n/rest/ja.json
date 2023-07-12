@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"MagicAho",
 			"MathXplore",
 			"Omotecho"
 		]
@@ -9,5 +10,6 @@
 	"campaignevents-rest-enable-registration-permission-denied": "イベント登録を有効にする権限がありません。",
 	"campaignevents-rest-edit-page-nonlocal": "このイベントの登録は次のウィキで受け付けているため、そちらを編集してください:$1。",
 	"campaignevents-rest-delete-already-deleted": "このイベント登録はすでに削除されています。",
-	"campaignevents-rest-get-registration-deleted": "このイベント登録は削除されました。"
+	"campaignevents-rest-get-registration-deleted": "このイベント登録は削除されました。",
+	"campaignevents-register-invalid-answer": "質問に対する無効な答え$1"
 }
