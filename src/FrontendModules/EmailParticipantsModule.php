@@ -7,13 +7,15 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use Language;
 use OOUI\ButtonWidget;
 use OOUI\FieldLayout;
-use OOUI\LabelWidget;
+use OOUI\FieldsetLayout;
 use OOUI\MessageWidget;
 use OOUI\MultilineTextInputWidget;
 use OOUI\PanelLayout;
 use OOUI\Tag;
 use OOUI\TextInputWidget;
+use OOUI\Widget;
 use Wikimedia\Message\IMessageFormatterFactory;
+use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 
 class EmailParticipantsModule {
@@ -43,90 +45,12 @@ class EmailParticipantsModule {
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$items = [];
 
-		$items[] = ( new Tag( 'div' ) )->appendContent(
+		$items[] = ( new Tag( 'h2' ) )->appendContent(
 			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-email-participants-label' )
 			)
-		)->addClasses( [ 'ext-campaignevents-email-participants-info-header' ] );
-		$items[] = ( new LabelWidget( [
-			'label' => $msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-email-recipients-label' )
-			),
-		] ) )->addClasses( [ 'ext-campaignevents-email-label' ] );
-
-		$items[] = new ButtonWidget(
-			[
-				'framed' => false,
-				'flags' => [ 'progressive' ],
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-email-recipients-link-text' )
-				),
-				'infusable' => true,
-				'classes' => [ 'ext-campaignevents-details-email-recipients-link' ]
-			] );
-
-		$items[] = ( new Tag( 'ul' ) )->addClasses( [ 'ext-campaignevents-details-email-recipient-list' ] );
-
-		$items[] = new MessageWidget( [
-			'name' => 'ext-campaignevents-details-email-message',
-			'infusable' => true,
-			'inline' => true,
-			'type' => 'warning',
-			'classes' => [ 'ext-campaignevents-details-email-notification', 'oo-ui-element-hidden' ]
-		] );
-
-		$items[] = new FieldLayout(
-			new TextInputWidget(
-				[
-					'placeholder' => $msgFormatter->format(
-						MessageValue::new( 'campaignevents-event-details-email-subject-placeholder' )
-					),
-
-					'infusable' => true,
-					'classes' => [ 'ext-campaignevents-details-email-subject' ]
-				]
-			),
-			[
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-email-subject-label' )
-				),
-				'classes' => [ 'ext-campaignevents-email-label' ],
-				'align' => 'top'
-			]
 		);
-
-		$items[] = new FieldLayout(
-			new MultiLineTextInputWidget
-			(
-				[
-					'placeholder' => $msgFormatter->format(
-						MessageValue::new( 'campaignevents-event-details-email-message-placeholder' )
-					),
-					'infusable' => true,
-					'classes' => [ 'ext-campaignevents-details-email-message' ],
-					'minLength' => 10,
-					'maxLength' => 2000
-				]
-			),
-			[
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-email-message-label' )
-				),
-				'classes' => [ 'ext-campaignevents-email-label' ],
-				'align' => 'top'
-			]
-		);
-
-		$items[] = new ButtonWidget(
-			[
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-email-recipients-button-text' )
-				),
-				'classes' => [ 'ext-campaignevents-details-email-button' ],
-				'infusable' => true,
-				'flags' => [ 'primary', 'progressive' ],
-			]
-		);
+		$items[] = $this->getEmailForm( $msgFormatter );
 
 		$layout = new PanelLayout( [
 			'content' => $items,
@@ -138,6 +62,99 @@ class EmailParticipantsModule {
 		return ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-event-details-email-panel' ] )
 			->appendContent( $layout );
+	}
+
+	/**
+	 * @param ITextFormatter $msgFormatter
+	 * @return FieldsetLayout
+	 */
+	private function getEmailForm( ITextFormatter $msgFormatter ): FieldsetLayout {
+		$fields = [];
+
+		$recipientsList = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-email-recipient-list' ] );
+		$addRecipientsBtn = new ButtonWidget( [
+			'framed' => false,
+			'flags' => [ 'progressive' ],
+			'label' => $msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-email-recipients-link-text' )
+			),
+			'infusable' => true,
+			'classes' => [ 'ext-campaignevents-details-email-recipients-link' ]
+		] );
+
+		$fields[] = new FieldLayout(
+			new Widget( [
+				'content' => [ $recipientsList, $addRecipientsBtn ]
+			] ),
+			[
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-email-recipients-label' )
+				),
+				'align' => 'top',
+			]
+		);
+
+		$fields[] = new FieldLayout(
+			new MessageWidget( [
+				'type' => 'warning',
+				'inline' => true,
+			] ),
+			[
+				'infusable' => true,
+				'classes' => [ 'ext-campaignevents-details-email-notification', 'oo-ui-element-hidden' ]
+			]
+		);
+
+		$fields[] = new FieldLayout(
+			new TextInputWidget( [
+				'placeholder' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-email-subject-placeholder' )
+				),
+				'infusable' => true,
+				'classes' => [ 'ext-campaignevents-details-email-subject' ]
+			] ),
+			[
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-email-subject-label' )
+				),
+				'align' => 'top',
+			]
+		);
+
+		$fields[] = new FieldLayout(
+			new MultiLineTextInputWidget( [
+				'placeholder' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-email-message-placeholder' )
+				),
+				'infusable' => true,
+				'classes' => [ 'ext-campaignevents-details-email-message' ],
+				'minLength' => 10,
+				'maxLength' => 2000,
+				'rows' => 17,
+			] ),
+			[
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-email-message-label' )
+				),
+				'align' => 'top',
+			]
+		);
+
+		$fields[] = new FieldLayout(
+			new ButtonWidget( [
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-email-recipients-button-text' )
+				),
+				'classes' => [ 'ext-campaignevents-details-email-button' ],
+				'infusable' => true,
+				'flags' => [ 'primary', 'progressive' ],
+			] )
+		);
+
+		return new FieldsetLayout( [
+			'items' => $fields,
+			'classes' => [ 'ext-campaignevents-details-email-form' ]
+		] );
 	}
 
 }

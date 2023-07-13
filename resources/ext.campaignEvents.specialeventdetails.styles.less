@@ -5,6 +5,22 @@
 	margin-bottom: 1em;
 }
 
+/* stylelint-disable selector-max-id */
+#ext-campaignevents-eventdetails-tabs {
+	h2,
+	h3,
+	h4 {
+		// Override standard MediaWiki header styling
+		font-family: sans-serif;
+		font-weight: bold;
+		color: @color-base;
+		border-bottom: unset;
+		margin-top: 0;
+		padding-top: 0;
+	}
+}
+/* stylelint-enable selector-max-id */
+
 .ext-campaignevents-event-details-participants-panel {
 	max-width: 60em;
 }
@@ -17,18 +33,6 @@
 
 	&.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
 		margin-top: 0; // Remove margin set by OOUI
-	}
-
-	h2,
-	h3,
-	h4 {
-		// Override standard MediaWiki header styling
-		font-family: sans-serif;
-		font-weight: bold;
-		color: @color-base;
-		border-bottom: unset;
-		margin-top: 0;
-		padding-top: 0;
 	}
 }
 
@@ -202,11 +206,12 @@ div.ext-campaignevents-details-participants-search {
 	flex-grow: 1;
 }
 
-.ext-campaignevents-details-email-recipient-list {
+.ext-campaignevents-details-email-recipient-list ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
+	display: inline;
 
 	li {
 		display: inline-block;
@@ -242,21 +247,8 @@ div.ext-campaignevents-details-participants-search {
 	text-align: center;
 }
 
-.ext-campaignevents-email-participants-info-header {
-	font-size: 1.5em;
-	font-weight: bold;
-}
-
-.ext-campaignevents-email-label {
-	padding: 1em 0 0.5em 0;
-}
-
-.ext-campaignevents-details-email-button {
-	padding-top: 1.5em;
-}
-
-.ext-campaignevents-details-email-recipients-link.oo-ui-buttonElement {
-	display: block;
+fieldset.ext-campaignevents-details-email-form {
+	margin-top: 1em;
 }
 
 // This rule should come last so that it overrides other styles set in this file.
