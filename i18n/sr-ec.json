@@ -18,6 +18,8 @@
 	"campaignevents-event-details-location-header": "Локација",
 	"campaignevents-event-details-tracking-tool-last-update": "Последња промена: $1",
 	"campaignevents-event-details-participants": "Корисничко име",
+	"campaignevents-event-details-select-all": "Изабери све учеснике",
+	"campaignevents-event-details-message-all": "Управљање учесницима",
 	"campaignevents-event-details-remove-participant-remove-btn": "Обриши",
 	"campaignevents-event-details-tab-email": "Порука",
 	"campaignevents-registration-confirmation-toggle-public": "Јавна регистрација",
@@ -31,6 +33,7 @@
 	"campaignevents-event-details-email-subject-placeholder": "Тема имејла",
 	"campaignevents-event-details-email-message-label": "Порука",
 	"campaignevents-event-details-email-recipients-button-text": "Пошаљи имејл",
+	"campaignevents-email-participants-label": "Направи имејл",
 	"campaignevents-email-success-notification": "Порука послата!",
 	"campaignevents-email-error-notification": "Порука није послата!",
 	"campaignevents-email-participants-all": "Сви учесници",
@@ -45,6 +48,7 @@
 	"campaignevents-register-question-gender-option-woman": "Жена",
 	"campaignevents-register-question-age": "Колико имате година? (необавезно)",
 	"campaignevents-register-question-age-placeholder": "Изаберите опсег година",
+	"campaignevents-register-question-age-option-under-24": "мање од 24",
 	"campaignevents-register-question-profession": "Ваша професија? (необавезно)",
 	"campaignevents-register-question-profession-placeholder": "Изаберите вашу професију",
 	"campaignevents-register-question-profession-option-artist-creative": "Уметник/креативни професионалац",
@@ -57,8 +61,7 @@
 	"campaignevents-register-question-confidence-contributing-not-say": "Не желим да кажем",
 	"campaignevents-register-question-affiliate-placeholder": "Изаберите опцију",
 	"campaignevents-register-question-affiliate-option-none": "Не",
-	"campaignevents-register-question-affiliate-option-chapter": "Огранак",
-	"campaignevents-register-question-affiliate-option-user-group": "Корисничка група",
 	"campaignevents-register-question-affiliate-details-placeholder": "Молимо наведите",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Сва питања су необавезна"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Сва питања су необавезна",
+	"campaignevents-register-invalid-answer": "Одоговор на питање $1 није ваљан"
 }

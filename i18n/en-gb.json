@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Reedy"
+		]
+	},
+	"campaignevents-desc": "Provides features for campaign organisers and participants.",
+	"action-campaignevents-organize-events": "organise events",
+	"right-campaignevents-organize-events": "Organise events",
+	"campaignevents-error-invalid-question-names": "The following questions were not recognised: $1",
+	"campaignevents-edit-field-organizers": "Organisers",
+	"campaignevents-edit-field-organizers-help": "Add the username of other organisers to give them permission to manage this event.",
+	"campaignevents-edit-field-organizers-creator-title": "This is the creator of the event, other organisers can not remove this user.",
+	"campaignevents-edit-field-organizers-user-not-allowed": "This {{GENDER:$1|user}} is not allowed to organise events.",
+	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|doesn't|don't}} have the needed permissions to be {{PLURAL:$1|an organiser|organisers}}.",
+	"campaignevents-edit-no-creator": "You need to add yourself as an organiser when you first enable event registration.",
+	"campaignevents-edit-too-many-organizers": "You can't add more than $1 {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-edit-organizer-need-central-account": "The following {{PLURAL:$1|user does|users do}} not have a central user account and cannot be added as {{PLURAL:$1|organiser|organisers}}: $2.",
+	"campaignevents-role-organizer": "{{GENDER:$1|organiser}}",
+	"campaignevents-eventpage-dialog-organizers": "Organised by: $1",
+	"campaignevents-eventpage-dialog-organizers-view-all": "View all organisers",
+	"campaignevents-eventpage-dialog-link-not-available": "The link will be made available by the {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-eventpage-dialog-venue-not-available": "The venue address will be made available by the {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-eventpage-enableheader-organizer": "You are an organiser",
+	"campaignevents-event-details-organizers-header": "Organisers",
+	"campaignevents-event-details-online-link-not-available": "The link will be made available by the {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-event-details-venue-not-available": "The venue address will be made available by the {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-event-details-organizers-noscript": "You need to enable JavaScript in order to see the full list of organisers.",
+	"campaignevents-tracking-tool-wikiedu-not-organizer-error": "None of the organiser of this event are facilitators of the course $1.",
+	"campaignevents-tracking-tool-wikiedu-not-connected-error": "The course $1 is not connected to this event, and therefore it cannot be synchronised.",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>Private registration:</strong> Only the event organisers can see your username in the participant list. Your contributions during the event may be excluded by the organisers on the [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] or other tools to collect statistics.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Public registration:</strong> Show your username on a public participant list. Your contributions during the event may be included by the organisers on the [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] or other tools to collect statistics.",
+	"campaignevents-notification-registration-header-chat": "Join the $1 to connect with other participants and get additional updates from the organisers.",
+	"campaignevents-notification-registration-details-organizers-header": "Event organisers",
+	"campaignevents-register-questions-label-title": "Information for organisers",
+	"campaignevents-eventpage-register-dialog-questions-title": "Information for organisers"
+}

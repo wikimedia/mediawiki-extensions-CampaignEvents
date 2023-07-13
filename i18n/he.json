@@ -326,6 +326,7 @@
 	"campaignevents-register-question-gender-option-other": "המגדר אינו רשום",
 	"campaignevents-register-question-age": "מה הגיל שלך? (לא חובה)",
 	"campaignevents-register-question-age-placeholder": "נא לבחור את טווח הגיל",
+	"campaignevents-register-question-age-option-under-24": "מתחת ל־24",
 	"campaignevents-register-question-profession": "מה המקצוע שלך? (לא חובה)",
 	"campaignevents-register-question-profession-placeholder": "נא לבחור את המקצוע שלך",
 	"campaignevents-register-question-profession-option-artist-creative": "אומן/יוצר מקצועי",
@@ -347,12 +348,11 @@
 	"campaignevents-register-question-affiliate": "האם אתה שייך לעמותת ויקימדיה כלשהי, לשותף מארגן, לקבוצת משתמשים, לשותפים או לארגונים אחרים מחוץ לוויקימדיה? (לא חובה)",
 	"campaignevents-register-question-affiliate-placeholder": "יש לבחור אחת מהאפשריות",
 	"campaignevents-register-question-affiliate-option-none": "לא",
-	"campaignevents-register-question-affiliate-option-affiliate": "שותף",
-	"campaignevents-register-question-affiliate-option-chapter": "עמותה (Chapter)",
-	"campaignevents-register-question-affiliate-option-user-group": "קבוצות משתמשים",
-	"campaignevents-register-question-affiliate-option-organizing-partner": "שותף מארגן",
+	"campaignevents-register-question-affiliate-option-affiliate": "שותף (עמותות, קבוצות משתמשים, ארגוני נושא)",
+	"campaignevents-register-question-affiliate-option-organizing-partner": "שותפים מארגנים אחרים",
 	"campaignevents-register-question-affiliate-details-placeholder": "נא להשיב",
 	"campaignevents-eventpage-register-dialog-questions-title": "מידע למארגנים",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "כל השאלות הן רשות",
-	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1"
+	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1",
+	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב"
 }

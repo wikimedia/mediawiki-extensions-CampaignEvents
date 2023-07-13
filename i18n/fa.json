@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Havadar-hvac",
 			"Jeeputer"
 		]
 	},
@@ -88,5 +89,6 @@
 	"campaignevents-event-details-dates-label": "زمان آغاز و پایان",
 	"campaignevents-event-details-search-participants-placeholder": "جستجوی شرکت‌کنندگان",
 	"campaignevents-registration-confirmation-toggle-public": "ثبت نام عمومی",
-	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|مورد بیشتر}}"
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|مورد بیشتر}}",
+	"campaignevents-register-question-age-option-under-24": "زیر 24"
 }

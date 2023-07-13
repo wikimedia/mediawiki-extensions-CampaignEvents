@@ -42,11 +42,16 @@
 	"campaignevents-eventpage-register-dialog-save": "सहेजें",
 	"campaignevents-event-details-location-header": "स्थान",
 	"campaignevents-event-details-tracking-tool-last-update": "अंतिम अद्यतन: $1",
+	"campaignevents-event-details-remove-participant-remove-btn": "हटाएँ",
+	"campaignevents-event-details-tab-email": "संदेश",
 	"campaignevents-event-details-organizers-view-more": "और देखें",
+	"campaignevents-event-details-email-subject-label": "विषय",
+	"campaignevents-event-details-email-message-label": "संदेश",
+	"campaignevents-email-participants-yes": "हाँ",
+	"campaignevents-email-participants-no": "नहीं",
 	"campaignevents-register-question-gender-option-man": "आदमी",
 	"campaignevents-register-question-gender-option-woman": "महिला",
 	"campaignevents-register-question-profession-option-educator": "शिक्षक",
 	"campaignevents-register-question-profession-option-student": "विद्यार्थी",
-	"campaignevents-register-question-affiliate-option-none": "नहीं",
-	"campaignevents-register-question-affiliate-option-chapter": "पाठ"
+	"campaignevents-register-question-affiliate-option-none": "नहीं"
 }

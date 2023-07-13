@@ -22,8 +22,11 @@
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|qatnasıwshı|qatnasıwshılar}} jeke dizimnen ótken.",
 	"campaignevents-event-details-timezone": "<strong>Waqıt zonası:</strong> $1",
 	"campaignevents-event-details-organizers-header": "Shólkemlestiriwshiler",
+	"campaignevents-event-details-participants": "Paydalanıwshı atı",
 	"campaignevents-event-details-participants-checkboxes-selected": "$2 den $1 {{PLURAL:$1|tańlanǵan}}",
+	"campaignevents-event-details-remove-participant-remove-btn": "Óshiriw",
 	"campaignevents-event-details-tab-participants": "Qatnasıwshılar",
+	"campaignevents-event-details-tab-email": "Xabar",
 	"campaignevents-event-details-tab-event-details": "Waqıya haqqında tolıǵıraq maǵlıwmatlar",
 	"campaignevents-event-details-organizers-view-more": "Kóbirek kóriw",
 	"campaignevents-event-details-organizers-noscript": "Shólkemlestiriwshilerdiń tolıq dizimin kóriw ushın JavaScriptti qosıwıńız kerek.",
@@ -49,8 +52,11 @@
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|jáne}}",
 	"campaignevents-notification-registration-event-page-link": "Ilaj betin kóriw",
 	"campaignevents-notification-registration-chat-link": "Topar sáwbetine qosılıw",
+	"campaignevents-event-details-email-subject-label": "Tema",
+	"campaignevents-event-details-email-message-label": "Xabar",
+	"campaignevents-email-participants-yes": "Awa",
+	"campaignevents-email-participants-no": "Yaq",
 	"campaignevents-register-question-gender-option-man": "Erkek",
 	"campaignevents-register-question-gender-option-woman": "Hayal",
-	"campaignevents-register-question-affiliate-option-none": "Yaq",
-	"campaignevents-register-question-affiliate-option-user-group": "Paydalanıwshı toparı"
+	"campaignevents-register-question-affiliate-option-none": "Yaq"
 }
