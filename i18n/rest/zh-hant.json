@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly"
+		]
+	},
+	"campaignevents-rest-event-not-found": "沒有此 ID 的活動。",
+	"campaignevents-rest-enable-registration-permission-denied": "您不被允許啟用活動註冊。",
+	"campaignevents-rest-edit-page-nonlocal": "此活動註冊已在以下 wiki 上啟用，應在那裡進行編輯：$1。",
+	"campaignevents-rest-delete-already-deleted": "已經刪除此活動註冊。",
+	"campaignevents-rest-user-not-found": "沒有此中央 ID 的使用者。",
+	"campaignevents-rest-get-registration-deleted": "已刪除此活動註冊。",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "參數「user_ids」必須是使用者 ID 陣列，或為 null（用於刪除所有使用者）",
+	"campaignevents-rest-list-participants-empty-filter": "若有指定使用者名稱篩選，必須是非空值的字串。",
+	"campaignevents-rest-list-participants-cannot-see-private": "您無權查看私下註冊參加此活動的參與者。",
+	"campaignevents-rest-set-organizers-empty-list": "<var>Organizer_usernames</var> 必須是使用者名稱陣列，且不能為空"
+}

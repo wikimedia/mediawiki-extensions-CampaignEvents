@@ -12,5 +12,6 @@
 	"campaignevents-rest-get-registration-deleted": "As inscrições neste evento foram eliminadas.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "O parâmetro 'user_ids' tem de ser uma matriz de identificadores de utilizador ou ser nulo (para remover todos os utilizadores)",
 	"campaignevents-rest-list-participants-empty-filter": "O filtro do nome de utilizador, se especificado, tem de ser um texto não vazio.",
-	"campaignevents-rest-list-participants-cannot-see-private": "Não está autorizado a ver os participantes que se inscreveram de forma privada neste evento."
+	"campaignevents-rest-list-participants-cannot-see-private": "Não está autorizado a ver os participantes que se inscreveram de forma privada neste evento.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> tem de ser uma matriz de nomes de utilizador e não pode estar vazia"
 }
