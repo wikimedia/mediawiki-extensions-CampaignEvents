@@ -122,9 +122,15 @@ ul.ext-campaignevents-event-details-organizers-list {
 	min-width: 0; // Ensure correct wrapping inside the flex container
 }
 
-.ext-campaignevents-details-users-container {
+.ext-campaignevents-details-participants-container {
+	.ext-campaignevents-details-participants-table-header {
+		position: sticky;
+		top: 0;
+		z-index: @z-index-sticky;
+		background-color: @background-color-base;
+	}
 	/* Set a fixed height so that it does not change while we rebuild the list */
-	height: 36em;
+	height: 40em;
 	overflow: auto;
 }
 

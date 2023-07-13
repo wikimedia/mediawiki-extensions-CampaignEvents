@@ -137,13 +137,15 @@ class EventDetailsParticipantsModule {
 
 		$items = [];
 		$items[] = $this->getHeader( $totalParticipants, $canRemoveParticipants );
-		$items[] = $this->getParticipantsTable(
-			$viewingUser,
-			$totalParticipants,
-			$canRemoveParticipants,
-			$curUserParticipant,
-			$otherParticipants
-		);
+		if ( $totalParticipants ) {
+			$items[] = $this->getParticipantsTable(
+				$viewingUser,
+				$canRemoveParticipants,
+				$curUserParticipant,
+				$otherParticipants
+			);
+		}
+		// This is added even if there are participants, because they might be removed from this page.
 		$items[] = $this->getEmptyStateElement( $totalParticipants );
 
 		$out->addJsConfigVars( [
@@ -203,7 +205,6 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param UserIdentity $viewingUser
-	 * @param int $totalParticipants
 	 * @param bool $canRemoveParticipants
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
@@ -211,22 +212,24 @@ class EventDetailsParticipantsModule {
 	 */
 	private function getParticipantsTable(
 		UserIdentity $viewingUser,
-		int $totalParticipants,
 		bool $canRemoveParticipants,
 		?Participant $curUserParticipant,
 		array $otherParticipants
 	): Tag {
-		$table = new Tag( 'div' );
-		if ( $totalParticipants ) {
-			$table->appendContent( $this->getTableHeaders( $canRemoveParticipants ) );
-		}
-		$table->appendContent( $this->getParticipantsContainer(
+		// Use an outer container for the infinite scrolling
+		$container = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-details-participants-container' ] );
+		$table = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-details-participants-table' ] );
+		$table->appendContent( $this->getTableHeaders( $canRemoveParticipants ) );
+		$table->appendContent( $this->getParticipantRows(
 			$curUserParticipant,
 			$otherParticipants,
 			$canRemoveParticipants,
 			$viewingUser
 		) );
-		return $table;
+		$container->appendContent( $table );
+		return $container;
 	}
 
 	/**
@@ -300,7 +303,7 @@ class EventDetailsParticipantsModule {
 	 * @return Tag
 	 */
 	private function getTableHeaders( bool $canRemoveParticipants ): Tag {
-		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-user-actions-container' ] );
+		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-table-header' ] );
 		$selectAllCheckBoxField = new FieldLayout(
 			new CheckboxInputWidget( [
 				'name' => 'event-details-select-all-participants',
@@ -340,62 +343,25 @@ class EventDetailsParticipantsModule {
 	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
 	 * @param UserIdentity $viewingUser
-	 * @return Tag
-	 */
-	private function getParticipantsContainer(
-		?Participant $curUserParticipant,
-		array $otherParticipants,
-		bool $canRemoveParticipants,
-		UserIdentity $viewingUser
-	): Tag {
-		$participantsContainer = ( new Tag( 'div' ) )
-			->addClasses( [ 'ext-campaignevents-details-users-container' ] );
-		if ( !$curUserParticipant && !$otherParticipants ) {
-			$participantsContainer->addClasses( [ 'ext-campaignevents-details-hide-element' ] );
-		}
-
-		$participantRows = $this->getParticipantRows(
-			$curUserParticipant,
-			$otherParticipants,
-			$canRemoveParticipants,
-			$viewingUser
-		);
-
-		$participantsContainer->appendContent( $participantRows );
-
-		return $participantsContainer;
-	}
-
-	/**
-	 * @param Participant|null $curUserParticipant
-	 * @param Participant[] $otherParticipants
-	 * @param bool $canRemoveParticipants
-	 * @param UserIdentity $viewingUser
-	 * @return Tag
+	 * @return Tag[]
 	 */
 	private function getParticipantRows(
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		bool $canRemoveParticipants,
 		UserIdentity $viewingUser
-	): Tag {
-		$participantRows = ( new Tag( 'div' ) )
-			->addClasses( [ 'ext-campaignevents-details-users-rows-container' ] );
-
+	): array {
+		$participantRows = [];
 		if ( $curUserParticipant ) {
-			$participantRows->appendContent(
-				$this->getCurUserParticipantRow(
-					$curUserParticipant,
-					$canRemoveParticipants,
-					$viewingUser
-				)
+			$participantRows[] = $this->getCurUserParticipantRow(
+				$curUserParticipant,
+				$canRemoveParticipants,
+				$viewingUser
 			);
 		}
 
 		foreach ( $otherParticipants as $participant ) {
-			$participantRows->appendContent(
-				$this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser )
-			);
+			$participantRows[] = $this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser );
 		}
 		return $participantRows;
 	}
