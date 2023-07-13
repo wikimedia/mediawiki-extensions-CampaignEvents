@@ -219,7 +219,7 @@ class EventDetailsParticipantsModule {
 		// Use an outer container for the infinite scrolling
 		$container = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-participants-container' ] );
-		$table = ( new Tag( 'div' ) )
+		$table = ( new Tag( 'table' ) )
 			->addClasses( [ 'ext-campaignevents-details-participants-table' ] );
 		$table->appendContent( $this->getTableHeaders( $canRemoveParticipants ) );
 		$table->appendContent( $this->getParticipantRows(
@@ -303,36 +303,40 @@ class EventDetailsParticipantsModule {
 	 * @return Tag
 	 */
 	private function getTableHeaders( bool $canRemoveParticipants ): Tag {
-		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-table-header' ] );
-		$selectAllCheckBoxField = new FieldLayout(
-			new CheckboxInputWidget( [
-				'name' => 'event-details-select-all-participants',
-			] ),
-			[
-				'align' => 'inline',
-				'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox-field' ],
-				'infusable' => true,
-				'label' => $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-select-all' )
-				),
-				'invisibleLabel' => true
-			]
-		);
+		$container = ( new Tag( 'thead' ) )->addClasses( [ 'ext-campaignevents-details-participants-table-header' ] );
+		$row = ( new Tag( 'tr' ) )
+			->addClasses( [ 'ext-campaignevents-details-user-actions-row' ] );
+
+		if ( $canRemoveParticipants ) {
+			$selectAllCheckBoxField = new FieldLayout(
+				new CheckboxInputWidget( [
+					'name' => 'event-details-select-all-participants',
+				] ),
+				[
+					'align' => 'inline',
+					'classes' => [ 'ext-campaignevents-event-details-select-all-participant-checkbox-field' ],
+					'infusable' => true,
+					'label' => $this->msgFormatter->format(
+						MessageValue::new( 'campaignevents-event-details-select-all' )
+					),
+					'invisibleLabel' => true
+				]
+			);
+
+			$selectAllCell = ( new Tag( 'th' ) )
+				->addClasses( [ 'ext-campaignevents-details-participants-selectall-checkbox-cell' ] )
+				->appendContent( $selectAllCheckBoxField );
+			$row->appendContent( $selectAllCell );
+		}
 
 		$headings = [
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-participants' ) ),
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-time-registered' ) ),
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-has-email' ) )
 		];
-		$row = new Tag( 'div' );
-		if ( $canRemoveParticipants ) {
-			$row->appendContent( $selectAllCheckBoxField );
-		}
-		$row->addClasses( [ 'ext-campaignevents-details-user-actions-row' ] );
+
 		foreach ( $headings as $heading ) {
-			$row->appendContent(
-				( new Tag( 'div' ) )->appendContent( $heading )
-					->addClasses( [ 'ext-campaignevents-details-user-actions-heading' ] ) );
+			$row->appendContent( ( new Tag( 'th' ) )->appendContent( $heading ) );
 		}
 		$container->appendContent( $row );
 		return $container;
@@ -343,27 +347,27 @@ class EventDetailsParticipantsModule {
 	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
 	 * @param UserIdentity $viewingUser
-	 * @return Tag[]
+	 * @return Tag
 	 */
 	private function getParticipantRows(
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		bool $canRemoveParticipants,
 		UserIdentity $viewingUser
-	): array {
-		$participantRows = [];
+	): Tag {
+		$body = new Tag( 'tbody' );
 		if ( $curUserParticipant ) {
-			$participantRows[] = $this->getCurUserParticipantRow(
+			$body->appendContent( $this->getCurUserParticipantRow(
 				$curUserParticipant,
 				$canRemoveParticipants,
 				$viewingUser
-			);
+			) );
 		}
 
 		foreach ( $otherParticipants as $participant ) {
-			$participantRows[] = $this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser );
+			$body->appendContent( $this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser ) );
 		}
-		return $participantRows;
+		return $body;
 	}
 
 	/**
@@ -393,7 +397,7 @@ class EventDetailsParticipantsModule {
 		bool $canRemoveParticipants,
 		UserIdentity $viewingUser
 	): Tag {
-		$row = new Tag( 'div' );
+		$row = new Tag( 'tr' );
 		$performer = $this->userFactory->newFromId( $viewingUser->getId() );
 		try {
 			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
@@ -408,10 +412,10 @@ class EventDetailsParticipantsModule {
 		$recipientIsValid = $user !== null && $this->userMailer->validateTarget( $user, $performer ) === null;
 
 		if ( $canRemoveParticipants ) {
-			$checkboxDivider = new Tag( 'div' );
-			$checkboxDivider->addClasses( [ 'ext-campaignevents-details-user-row-checkbox' ] );
+			$checkboxCell = new Tag( 'td' );
+			$checkboxCell->addClasses( [ 'ext-campaignevents-details-user-row-checkbox' ] );
 			$userId = $participant->getUser()->getCentralID();
-			$checkboxDivider->appendContent( new CheckboxInputWidget( [
+			$checkboxCell->appendContent( new CheckboxInputWidget( [
 				'name' => 'event-details-participants-checkboxes',
 				'infusable' => true,
 				'value' => $userId,
@@ -423,15 +427,14 @@ class EventDetailsParticipantsModule {
 					'userPageLink' => $userLink ?? ""
 				]
 			] ) );
-			$row->appendContent( $checkboxDivider );
+			$row->appendContent( $checkboxCell );
 		}
 
 		$usernameElement = new HtmlSnippet(
 			$this->userLinker->generateUserLinkWithFallback( $participant->getUser(), $this->language->getCode() )
 		);
-		$usernameDivider = ( new Tag( 'div' ) )
-			->appendContent( $usernameElement )
-			->addClasses( [ 'ext-campaignevents-details-participant-username' ] );
+		$usernameCell = ( new Tag( 'td' ) )
+			->appendContent( $usernameElement );
 
 		if ( $participant->isPrivateRegistration() ) {
 
@@ -444,24 +447,24 @@ class EventDetailsParticipantsModule {
 				'title' => $labelText,
 				'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
 			] );
-			$usernameDivider->appendContent( $privateIcon );
+			$usernameCell->appendContent( $privateIcon );
 		}
-		$row->appendContent( $usernameDivider );
+		$row->appendContent( $usernameCell );
 
-		$registrationDateDivider = new Tag( 'div' );
-		$registrationDateDivider->appendContent(
+		$registrationDateCell = new Tag( 'td' );
+		$registrationDateCell->appendContent(
 			$this->language->userTimeAndDate(
 				$participant->getRegisteredAt(),
 				$viewingUser
 			)
-		)->addClasses( [ 'ext-campaignevents-details-participant-registered-at' ] );
-		$row->appendContent( $registrationDateDivider );
+		);
+		$row->appendContent( $registrationDateCell );
 
-		$row->appendContent( ( new Tag( 'div' ) )->appendContent(
+		$row->appendContent( ( new Tag( 'td' ) )->appendContent(
 			$recipientIsValid
 				? $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-yes' ) )
 				: $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-no' ) )
-		)->addClasses( [ 'ext-campaignevents-details-participant-has-email' ] ) );
+		) );
 
 		return $row
 			->addClasses( [ 'ext-campaignevents-details-user-row' ] );
