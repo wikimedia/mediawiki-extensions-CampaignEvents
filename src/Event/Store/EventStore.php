@@ -454,6 +454,8 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
 			'event_last_edit' => $curDBTimestamp,
 			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
+			// TODO Use actual value and constants
+			'event_answers_status' => 0,
 		];
 
 		$eventID = $event->getID();
