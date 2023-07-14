@@ -243,7 +243,7 @@ class EventQuestionsRegistry {
 				$optionData['hide-if'] = [ '!==', $fieldName, (string)$showIfVal ];
 				$optionData['cssclass'] = 'ext-campaignevents-participant-question-other-option';
 				$fields[$optionName] = $optionData;
-				if ( $curAnswer ) {
+				if ( $curAnswer && $curAnswer->getOption() === $showIfVal ) {
 					$fields[$optionName]['default'] = $curAnswer->getText();
 				}
 			}
