@@ -88,7 +88,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$participants = [];
 		$expected = [];
 		for ( $i = 1; $i < 4; $i++ ) {
-			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i, false, [] );
+			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i, false, [], null );
 
 			$expected[] = [
 				'participant_id' => $i,
@@ -113,7 +113,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			$partStore
 		];
 
-		$deletedParticipant = new Participant( new CentralUser( 1 ), '20220315120000', 1, false, [] );
+		$deletedParticipant = new Participant( new CentralUser( 1 ), '20220315120000', 1, false, [], null );
 		$deletedUserExpected = [
 			[
 				'participant_id' => 1,

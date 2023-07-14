@@ -79,6 +79,8 @@ class ParticipantsStore implements IDBAccessObject {
 			[ 'FOR UPDATE' ]
 		);
 
+		$curTimestamp = $dbw->timestamp();
+		$updatedFirstAnsTs = $answers ? $curTimestamp : null;
 		if ( !$previousRow ) {
 			// User never registered for this event, so we're just adding a new record.
 			$dbw->insert(
@@ -87,9 +89,9 @@ class ParticipantsStore implements IDBAccessObject {
 					'cep_event_id' => $eventID,
 					'cep_user_id' => $userID,
 					'cep_private' => $private,
-					'cep_registered_at' => $dbw->timestamp(),
+					'cep_registered_at' => $curTimestamp,
 					'cep_unregistered_at' => null,
-					'cep_first_answer_timestamp' => null,
+					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
 					'cep_aggregation_timestamp' => null,
 				]
 			);
@@ -102,7 +104,8 @@ class ParticipantsStore implements IDBAccessObject {
 				[
 					'cep_private' => $private,
 					'cep_unregistered_at' => null,
-					'cep_registered_at' => $dbw->timestamp()
+					'cep_registered_at' => $curTimestamp,
+					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
 				],
 				[ 'cep_id' => $previousRow->cep_id ]
 			);
@@ -112,12 +115,26 @@ class ParticipantsStore implements IDBAccessObject {
 			// registration time.
 			$dbw->update(
 				'ce_participants',
-				[ 'cep_private' => $private ],
+				[
+					'cep_private' => $private,
+					'cep_first_answer_timestamp' => $previousRow->cep_first_answer_timestamp ?? $updatedFirstAnsTs,
+				],
 				[ 'cep_id' => $previousRow->cep_id ]
 			);
 			$modified = self::MODIFIED_VISIBILITY;
+		} elseif ( $previousRow->cep_first_answer_timestamp === null && $updatedFirstAnsTs !== null ) {
+			// Adding answers for the first time
+			$dbw->update(
+				'ce_participants',
+				[
+					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
+				],
+				[ 'cep_id' => $previousRow->cep_id ]
+			);
+			$modified = self::MODIFIED_ANSWERS;
 		} else {
-			// User is already an active participant with the desired visibility.
+			// User is already an active participant with the desired visibility and is not answering for the first
+			// time.
 			$modified = self::MODIFIED_NOTHING;
 		}
 
@@ -181,7 +198,10 @@ class ParticipantsStore implements IDBAccessObject {
 
 		$dbw->update(
 			'ce_participants',
-			[ 'cep_unregistered_at' => $dbw->timestamp() ],
+			[
+				'cep_unregistered_at' => $dbw->timestamp(),
+				'cep_first_answer_timestamp' => null,
+			],
 			$where
 		);
 		$updatedParticipants = $dbw->affectedRows();
@@ -246,7 +266,7 @@ class ParticipantsStore implements IDBAccessObject {
 
 		$rows = $dbr->select(
 			'ce_participants',
-			[ 'cep_id', 'cep_user_id', 'cep_registered_at', 'cep_private' ],
+			[ 'cep_id', 'cep_user_id', 'cep_registered_at', 'cep_private', 'cep_first_answer_timestamp' ],
 			$where,
 			$opts
 		);
@@ -279,7 +299,8 @@ class ParticipantsStore implements IDBAccessObject {
 				wfTimestamp( TS_UNIX, $row->cep_registered_at ),
 				(int)$row->cep_id,
 				(bool)$row->cep_private,
-				$answersByUser[$centralID]
+				$answersByUser[$centralID],
+				wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp )
 			);
 			$num++;
 		}
@@ -325,7 +346,8 @@ class ParticipantsStore implements IDBAccessObject {
 			wfTimestamp( TS_UNIX, $row->cep_registered_at ),
 			(int)$row->cep_id,
 			(bool)$row->cep_private,
-			$this->answersStore->getParticipantAnswers( $eventID, $user )
+			$this->answersStore->getParticipantAnswers( $eventID, $user ),
+			wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp )
 		);
 	}
 
