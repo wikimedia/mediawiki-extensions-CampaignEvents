@@ -2,34 +2,34 @@
 	'use strict';
 
 	function EventQuestions( eventQuestionsData ) {
-		this.questions = {};
+		this.questionFields = {};
 		if ( mw.config.get( 'wgCampaignEventsEnableParticipantQuestions' ) ) {
-			this.eventQuestions = eventQuestionsData;
+			this.questionList = eventQuestionsData;
 			this.addQuestions();
 		}
 	}
 
 	EventQuestions.prototype.addQuestions = function () {
-		for ( var questionKey in this.eventQuestions ) {
-			switch ( this.eventQuestions[ questionKey ].type ) {
+		for ( var questionKey in this.questionList ) {
+			switch ( this.questionList[ questionKey ].type ) {
 				case 'radio':
-					this.addQuestionRadioType( questionKey, this.eventQuestions[ questionKey ] );
+					this.addQuestionRadioType( questionKey, this.questionList[ questionKey ] );
 					break;
 				case 'select':
-					this.addQuestionSelectType( questionKey, this.eventQuestions[ questionKey ] );
+					this.addQuestionSelectType( questionKey, this.questionList[ questionKey ] );
 					break;
 				case 'text':
-					this.addQuestionTextType( questionKey, this.eventQuestions[ questionKey ] );
+					this.addQuestionTextType( questionKey, this.questionList[ questionKey ] );
 					break;
 				default:
-					throw new Error( 'Unsupported field type ' + this.eventQuestions[ questionKey ].type );
+					throw new Error( 'Unsupported field type ' + this.questionList[ questionKey ].type );
 			}
 
-			if ( this.eventQuestions[ questionKey ][ 'hide-if' ] ) {
-				var hideIfCondition = this.eventQuestions[ questionKey ][ 'hide-if' ][ 0 ],
-					hideIfQuestionKey = this.eventQuestions[ questionKey ][ 'hide-if' ][ 1 ],
-					hideIfValue = this.eventQuestions[ questionKey ][ 'hide-if' ][ 2 ];
-				if ( this.eventQuestions[ hideIfQuestionKey ].type === 'select' ) {
+			if ( this.questionList[ questionKey ][ 'hide-if' ] ) {
+				var hideIfCondition = this.questionList[ questionKey ][ 'hide-if' ][ 0 ],
+					hideIfQuestionKey = this.questionList[ questionKey ][ 'hide-if' ][ 1 ],
+					hideIfValue = this.questionList[ questionKey ][ 'hide-if' ][ 2 ];
+				if ( this.questionList[ hideIfQuestionKey ].type === 'select' ) {
 					this.selectTypeHideIfListener(
 						hideIfCondition,
 						hideIfQuestionKey,
@@ -37,10 +37,48 @@
 						hideIfValue
 					);
 				} else {
-					throw new Error( 'Unsupported field type for hide event listener' + this.eventQuestions[ questionKey ].type );
+					throw new Error( 'Unsupported field type for hide event listener' + this.questionList[ questionKey ].type );
 				}
 			}
 		}
+	};
+
+	EventQuestions.prototype.getQuestionFields = function () {
+		var that = this;
+		return Object.keys( this.questionFields ).map( function ( q ) {
+			return that.questionFields[ q ];
+		} );
+	};
+
+	EventQuestions.prototype.getParticipantAnswers = function () {
+		var answers = {};
+		for ( var questionId in this.questionFields ) {
+			var questionField = this.questionFields[ questionId ].getField(),
+				questionName = questionId.replace( 'Question', '' ).toLowerCase();
+
+			if ( questionField instanceof OO.ui.RadioSelectInputWidget ) {
+				answers[ questionName ] = {
+					value: parseInt( questionField.getValue() )
+				};
+			} else if ( questionField instanceof OO.ui.DropdownInputWidget ) {
+				answers[ questionName ] = { value: parseInt( questionField.getValue() ) };
+			} else if ( questionField instanceof OO.ui.TextInputWidget ) {
+				var questionOther = questionId.split( '_' );
+				if ( questionOther.length === 3 && questionOther[ 1 ] === 'Other' ) {
+					var questionOtherName =
+						questionOther[ 0 ].replace( 'Question', '' ).toLowerCase();
+					if ( answers[ questionOtherName ].value === parseInt( questionOther[ 2 ] ) ) {
+						answers[ questionOtherName ].other = questionField.getValue();
+					}
+				} else {
+					answers[ questionName ] = { value: questionField.getValue() };
+				}
+			} else {
+				throw new Error( 'Unexpected question type' );
+			}
+		}
+
+		return answers;
 	};
 
 	/**
@@ -52,17 +90,17 @@
 			defaultValue = question.default || 0;
 		for ( var optionMessage in question[ 'options-messages' ] ) {
 			options.push(
-				new OO.ui.RadioOptionWidget( {
+				{
 					data: question[ 'options-messages' ][ optionMessage ].value,
 					label: question[ 'options-messages' ][ optionMessage ].message
-				} )
+				}
 			);
 		}
 
-		options[ defaultValue ].setSelected( true );
-		this.questions[ questionKey ] = new OO.ui.FieldLayout(
-			new OO.ui.RadioSelectWidget( {
-				items: options
+		this.questionFields[ questionKey ] = new OO.ui.FieldLayout(
+			new OO.ui.RadioSelectInputWidget( {
+				options: options,
+				value: defaultValue
 			} ),
 			{
 				label: question[ 'label-message' ],
@@ -89,7 +127,7 @@
 			);
 		}
 
-		this.questions[ questionKey ] = new OO.ui.FieldLayout(
+		this.questionFields[ questionKey ] = new OO.ui.FieldLayout(
 			new OO.ui.DropdownInputWidget( {
 				options: options,
 				value: defaultValue
@@ -108,7 +146,7 @@
 	 */
 	EventQuestions.prototype.addQuestionTextType = function ( questionKey, question ) {
 		var defaultValue = question.default || '';
-		this.questions[ questionKey ] = new OO.ui.FieldLayout(
+		this.questionFields[ questionKey ] = new OO.ui.FieldLayout(
 			new OO.ui.TextInputWidget( {
 				placeholder: question[ 'placeholder-message' ] ? question[ 'placeholder-message' ] : '',
 				value: defaultValue
@@ -135,20 +173,21 @@
 		questionKey,
 		conditionValue
 	) {
-		var that = this;
-		this.questions[ questionListener ].fieldWidget.on( 'change', selectOnChange );
+		var that = this,
+			questionField = this.questionFields[ questionListener ].getField();
 		function selectOnChange( val ) {
 			if ( condition === '!==' ) {
 				if ( String( val ) !== String( conditionValue ) ) {
-					that.questions[ questionKey ].toggle( false );
+					that.questionFields[ questionKey ].toggle( false );
 				} else {
-					that.questions[ questionKey ].toggle( true );
+					that.questionFields[ questionKey ].toggle( true );
 				}
 			} else {
 				throw new Error( 'Unexpected hide-if condition ' + condition );
 			}
 		}
-		selectOnChange( this.eventQuestions[ questionListener ].default );
+		questionField.on( 'change', selectOnChange );
+		selectOnChange( questionField.getValue() );
 	};
 
 	module.exports = EventQuestions;
