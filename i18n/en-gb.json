@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Piano1forte2",
 			"Reedy"
 		]
 	},
@@ -16,7 +17,10 @@
 	"campaignevents-edit-no-creator": "You need to add yourself as an organiser when you first enable event registration.",
 	"campaignevents-edit-too-many-organizers": "You can't add more than $1 {{PLURAL:$1|organiser|organisers}}.",
 	"campaignevents-edit-organizer-need-central-account": "The following {{PLURAL:$1|user does|users do}} not have a central user account and cannot be added as {{PLURAL:$1|organiser|organisers}}: $2.",
+	"campaignevents-edit-invalid-username": "'$1' is not a valid username.",
+	"campaignevents-unregister-confirmation-text": "Confirm that you want to cancel your registration for this event by using the '{{int:campaignevents-unregister-confirmation-btn}}' button.",
 	"campaignevents-role-organizer": "{{GENDER:$1|organiser}}",
+	"campaignevents-delete-confirmation-text": "Confirm that you want to delete this event registration by using the '{{int:campaignevents-delete-submit-btn}}' button. This action cannot be reverted.",
 	"campaignevents-eventpage-dialog-organizers": "Organised by: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "View all organisers",
 	"campaignevents-eventpage-dialog-link-not-available": "The link will be made available by the {{PLURAL:$1|organiser|organisers}}.",

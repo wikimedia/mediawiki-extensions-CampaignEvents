@@ -24,5 +24,6 @@
 	"campaignevents-register-questions-label-subtitle": "Puteți modifica sau elimina răspunsurile înainte, în timpul și după eveniment.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informații pentru organizatori",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Toate întrebările sunt opționale",
-	"campaignevents-register-invalid-answer": "Răspuns nevalid la întrebarea $1"
+	"campaignevents-register-invalid-answer": "Răspuns nevalid la întrebarea $1",
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Vă rugăm să precizați"
 }

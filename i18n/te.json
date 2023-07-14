@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Bvprasadenwiki",
+			"Chaduvari",
 			"V Bhavya"
 		]
 	},
@@ -24,5 +25,27 @@
 	"campaignevents-register-error-no-event": "ప్రత్యేకించి ఏ కార్యక్రమం నిర్దేశించలేదు",
 	"campaignevents-unregister-success": "మీరు ఈ కార్యక్రమానికి నమోదు చేసుకోలేదు",
 	"campaignevents-role-creator": "రూపొందించిన వారు",
-	"campaignevents-role-organizer": "నిర్వాహకుడు"
+	"campaignevents-role-organizer": "నిర్వాహకుడు",
+	"campaignevents-event-details-participants": "వాడుకరిపేరు",
+	"campaignevents-event-details-select-all": "పాల్గొనే వారందరినీ ఎంచుకోండి",
+	"campaignevents-event-details-message-all": "పాల్గొనే వారందరికీ సందేశం పంపండి",
+	"campaignevents-event-details-message-participants": "పాల్గొనేవారికి సందేశం పంపండి",
+	"campaignevents-event-details-remove-participant-remove-btn": "తొలగించు",
+	"campaignevents-event-details-tab-email": "సందేశం",
+	"campaignevents-event-details-email-recipients-label": "గ్రహీతలు",
+	"campaignevents-event-details-email-recipients-link-text": "గ్రహీతలను జోడించండి",
+	"campaignevents-event-details-email-subject-label": "విషయం",
+	"campaignevents-event-details-email-subject-placeholder": "మీ ఇమెయిల్ సందేశపు విషయం",
+	"campaignevents-event-details-email-message-label": "సందేశం",
+	"campaignevents-event-details-email-recipients-button-text": "ఈమెయిలు పంపించు",
+	"campaignevents-email-participants-label": "ఇమెయిల్ రాయండి",
+	"campaignevents-email-success-notification": "సందేశాన్ని పంపించాం",
+	"campaignevents-email-error-notification": "సందేశాన్ని పంపించలేదు!",
+	"campaignevents-email-select-participant-notification": "దయచేసి సరైన ఇమెయిల్ స్వీకర్తలను ఎంచుకోండి",
+	"campaignevents-email-participants-all": "పాల్గొనేవారందరూ",
+	"campaignevents-email-participants-except": "$1 తప్ప మిగతావన్నీ",
+	"campaignevents-email-participants-yes": "అవును",
+	"campaignevents-email-participants-no": "లేదు",
+	"campaignevents-event-details-time-registered": "నమోదైన సమయం",
+	"campaignevents-event-details-has-email": "ఈమెయిలు ఉంది"
 }

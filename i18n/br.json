@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Adriendelucca"
+		]
+	},
+	"campaignevents-eventpage-dialog-participants-view-list": "Gwelet pep tra",
+	"campaignevents-event-details-participants": "Anv implijer",
+	"campaignevents-event-details-remove-participant-remove-btn": "Dilemel",
+	"campaignevents-event-details-email-subject-label": "Danvez",
+	"campaignevents-event-details-email-recipients-button-text": "Kas ur postel",
+	"campaignevents-email-participants-label": "Skrivañ ur postel",
+	"campaignevents-email-success-notification": "Kemennadenn kaset!",
+	"campaignevents-email-error-notification": "N'eo ket bet kaset ar gemennadenn!",
+	"campaignevents-email-participants-except": "An holl war bouez $1",
+	"campaignevents-email-participants-yes": "Ya",
+	"campaignevents-email-participants-no": "Ket"
+}
