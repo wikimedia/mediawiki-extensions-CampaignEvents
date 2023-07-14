@@ -4,106 +4,119 @@
 	function EventQuestions( eventQuestionsData ) {
 		this.questionFields = {};
 		if ( mw.config.get( 'wgCampaignEventsEnableParticipantQuestions' ) ) {
-			this.questionList = eventQuestionsData;
+			this.questionList = eventQuestionsData.questions;
+			this.prevAnswers = eventQuestionsData.answers;
 			this.addQuestions();
 		}
 	}
 
 	EventQuestions.prototype.addQuestions = function () {
-		for ( var questionKey in this.questionList ) {
-			switch ( this.questionList[ questionKey ].type ) {
-				case 'radio':
-					this.addQuestionRadioType( questionKey, this.questionList[ questionKey ] );
-					break;
-				case 'select':
-					this.addQuestionSelectType( questionKey, this.questionList[ questionKey ] );
-					break;
-				case 'text':
-					this.addQuestionTextType( questionKey, this.questionList[ questionKey ] );
-					break;
-				default:
-					throw new Error( 'Unsupported field type ' + this.questionList[ questionKey ].type );
-			}
+		for ( var questionName in this.questionList ) {
+			var questionData = this.questionList[ questionName ],
+				prevAnswerData = this.prevAnswers[ questionName ],
+				prevAnswer = typeof prevAnswerData !== 'undefined' ? prevAnswerData.value : null;
 
-			if ( this.questionList[ questionKey ][ 'hide-if' ] ) {
-				var hideIfCondition = this.questionList[ questionKey ][ 'hide-if' ][ 0 ],
-					hideIfQuestionKey = this.questionList[ questionKey ][ 'hide-if' ][ 1 ],
-					hideIfValue = this.questionList[ questionKey ][ 'hide-if' ][ 2 ];
-				if ( this.questionList[ hideIfQuestionKey ].type === 'select' ) {
-					this.selectTypeHideIfListener(
-						hideIfCondition,
-						hideIfQuestionKey,
-						questionKey,
-						hideIfValue
-					);
-				} else {
-					throw new Error( 'Unsupported field type for hide event listener' + this.questionList[ questionKey ].type );
+			var field = this.getQuestionField( questionData, prevAnswer ),
+				curFieldsData = { main: field, other: {} };
+
+			if ( questionData[ 'other-options' ] ) {
+				for ( var showIfVal in questionData[ 'other-options' ] ) {
+					var otherOptionData = questionData[ 'other-options' ][ showIfVal ],
+						prevOtherAns = String( showIfVal ) === String( prevAnswer ) ?
+							prevAnswerData.other :
+							null;
+
+					var otherOptionField = this.getQuestionField( otherOptionData, prevOtherAns );
+					otherOptionField.$element.addClass( 'ext-campaignevents-question-other-option' );
+					this.makeFieldConditionallyVisible( otherOptionField, field, showIfVal );
+					curFieldsData.other[ showIfVal ] = otherOptionField;
 				}
 			}
+
+			this.questionFields[ questionName ] = curFieldsData;
 		}
 	};
 
 	EventQuestions.prototype.getQuestionFields = function () {
-		var that = this;
-		return Object.keys( this.questionFields ).map( function ( q ) {
-			return that.questionFields[ q ];
-		} );
+		var fields = [];
+		for ( var questionName in this.questionFields ) {
+			var fieldData = this.questionFields[ questionName ];
+			fields.push( fieldData.main );
+			if ( fieldData.other ) {
+				for ( var otherKey in fieldData.other ) {
+					fields.push( fieldData.other[ otherKey ] );
+				}
+			}
+		}
+		return fields;
 	};
 
 	EventQuestions.prototype.getParticipantAnswers = function () {
 		var answers = {};
-		for ( var questionId in this.questionFields ) {
-			var questionField = this.questionFields[ questionId ].getField(),
-				questionName = questionId.replace( 'Question', '' ).toLowerCase();
+		for ( var questionName in this.questionFields ) {
+			var fieldData = this.questionFields[ questionName ],
+				questionField = fieldData.main.getField(),
+				ansVal = questionField.getValue();
 
-			if ( questionField instanceof OO.ui.RadioSelectInputWidget ) {
-				answers[ questionName ] = {
-					value: parseInt( questionField.getValue() )
-				};
-			} else if ( questionField instanceof OO.ui.DropdownInputWidget ) {
-				answers[ questionName ] = { value: parseInt( questionField.getValue() ) };
-			} else if ( questionField instanceof OO.ui.TextInputWidget ) {
-				var questionOther = questionId.split( '_' );
-				if ( questionOther.length === 3 && questionOther[ 1 ] === 'Other' ) {
-					var questionOtherName =
-						questionOther[ 0 ].replace( 'Question', '' ).toLowerCase();
-					if ( answers[ questionOtherName ].value === parseInt( questionOther[ 2 ] ) ) {
-						answers[ questionOtherName ].other = questionField.getValue();
-					}
-				} else {
-					answers[ questionName ] = { value: questionField.getValue() };
-				}
-			} else {
-				throw new Error( 'Unexpected question type' );
+			if (
+				questionField instanceof OO.ui.RadioSelectInputWidget ||
+				questionField instanceof OO.ui.DropdownInputWidget
+			) {
+				// getValue always returns a string for these field types.
+				ansVal = parseInt( ansVal );
 			}
+
+			var curAnswer = { value: ansVal };
+			if ( fieldData.other && fieldData.other[ ansVal ] ) {
+				curAnswer.other = fieldData.other[ ansVal ].getField().getValue();
+			}
+			answers[ questionName ] = curAnswer;
 		}
 
 		return answers;
 	};
 
 	/**
-	 * @param {string} questionKey
-	 * @param {Object} question
+	 * @param {Object} questionData
+	 * @param {string|number|null} defaultValue
+	 * @return {OO.ui.FieldLayout}
 	 */
-	EventQuestions.prototype.addQuestionRadioType = function ( questionKey, question ) {
-		var options = [],
-			defaultValue = question.default || 0;
-		for ( var optionMessage in question[ 'options-messages' ] ) {
+	EventQuestions.prototype.getQuestionField = function ( questionData, defaultValue ) {
+		switch ( questionData.type ) {
+			case 'radio':
+				return this.getRadioField( questionData, defaultValue );
+			case 'select':
+				return this.getSelectField( questionData, defaultValue );
+			case 'text':
+				return this.getTextField( questionData, defaultValue );
+			default:
+				throw new Error( 'Unsupported field type ' + questionData.type );
+		}
+	};
+
+	/**
+	 * @param {Object} questionData
+	 * @param {string|number|null} defaultValue
+	 * @return {OO.ui.FieldLayout}
+	 */
+	EventQuestions.prototype.getRadioField = function ( questionData, defaultValue ) {
+		var options = [];
+		for ( var optionMessage in questionData.options ) {
 			options.push(
 				{
-					data: question[ 'options-messages' ][ optionMessage ].value,
-					label: question[ 'options-messages' ][ optionMessage ].message
+					data: questionData.options[ optionMessage ].value,
+					label: questionData.options[ optionMessage ].message
 				}
 			);
 		}
 
-		this.questionFields[ questionKey ] = new OO.ui.FieldLayout(
+		return new OO.ui.FieldLayout(
 			new OO.ui.RadioSelectInputWidget( {
 				options: options,
-				value: defaultValue
+				value: defaultValue || 0
 			} ),
 			{
-				label: question[ 'label-message' ],
+				label: questionData.label,
 				align: 'top',
 				classes: [ 'ext-campaingevents-question-radio-button' ]
 			}
@@ -111,29 +124,29 @@
 	};
 
 	/**
-	 * @param {string} questionKey
-	 * @param {Object} question
+	 * @param {Object} questionData
+	 * @param {string|number|null} defaultValue
+	 * @return {OO.ui.FieldLayout}
 	 */
-	EventQuestions.prototype.addQuestionSelectType = function ( questionKey, question ) {
-		var options = [],
-			defaultValue = question.default || 0;
+	EventQuestions.prototype.getSelectField = function ( questionData, defaultValue ) {
+		var options = [];
 
-		for ( var optionMessage in question[ 'options-messages' ] ) {
+		for ( var optionMessage in questionData.options ) {
 			options.push(
 				{
-					data: question[ 'options-messages' ][ optionMessage ].value,
-					label: question[ 'options-messages' ][ optionMessage ].message
+					data: questionData.options[ optionMessage ].value,
+					label: questionData.options[ optionMessage ].message
 				}
 			);
 		}
 
-		this.questionFields[ questionKey ] = new OO.ui.FieldLayout(
+		return new OO.ui.FieldLayout(
 			new OO.ui.DropdownInputWidget( {
 				options: options,
-				value: defaultValue
+				value: defaultValue || 0
 			} ),
 			{
-				label: question[ 'label-message' ],
+				label: questionData.label,
 				align: 'top',
 				classes: [ 'ext-campaignevents-dropdown-question' ]
 			}
@@ -141,53 +154,40 @@
 	};
 
 	/**
-	 * @param {string} questionKey
-	 * @param {Object} question
+	 * @param {Object} questionData
+	 * @param {string|number|null} defaultValue
+	 * @return {OO.ui.FieldLayout}
 	 */
-	EventQuestions.prototype.addQuestionTextType = function ( questionKey, question ) {
-		var defaultValue = question.default || '';
-		this.questionFields[ questionKey ] = new OO.ui.FieldLayout(
+	EventQuestions.prototype.getTextField = function ( questionData, defaultValue ) {
+		return new OO.ui.FieldLayout(
 			new OO.ui.TextInputWidget( {
-				placeholder: question[ 'placeholder-message' ] ? question[ 'placeholder-message' ] : '',
-				value: defaultValue
+				placeholder: questionData.placeholder || '',
+				value: defaultValue || ''
 			} ),
-			// there is only on class, it is in EventQuestionsRegistry.php
-			/* eslint-disable-next-line */
 			{
-				classes: question.cssclass ? [ question.cssclass ] : [],
-				label: question[ 'label-message' ] ? question[ 'label-message' ] : '',
+				label: questionData.label || '',
 				align: 'top'
 			}
 		);
 	};
 
 	/**
-	 * @param {string} condition
-	 * @param {string} questionListener
-	 * @param {string} questionKey
-	 * @param {string} conditionValue
+	 * @param {OO.ui.FieldLayout} field
+	 * @param {OO.ui.FieldLayout} parentField
+	 * @param {string|number} showIfVal
 	 */
-	EventQuestions.prototype.selectTypeHideIfListener = function (
-		condition,
-		questionListener,
-		questionKey,
-		conditionValue
+	EventQuestions.prototype.makeFieldConditionallyVisible = function (
+		field,
+		parentField,
+		showIfVal
 	) {
-		var that = this,
-			questionField = this.questionFields[ questionListener ].getField();
-		function selectOnChange( val ) {
-			if ( condition === '!==' ) {
-				if ( String( val ) !== String( conditionValue ) ) {
-					that.questionFields[ questionKey ].toggle( false );
-				} else {
-					that.questionFields[ questionKey ].toggle( true );
-				}
-			} else {
-				throw new Error( 'Unexpected hide-if condition ' + condition );
-			}
+		var parentWidget = parentField.getField();
+		function visibilityUpdater( val ) {
+			var shouldBeShown = String( val ) === String( showIfVal );
+			field.toggle( shouldBeShown );
 		}
-		questionField.on( 'change', selectOnChange );
-		selectOnChange( questionField.getValue() );
+		parentWidget.on( 'change', visibilityUpdater );
+		visibilityUpdater( parentWidget.getValue() );
 	};
 
 	module.exports = EventQuestions;

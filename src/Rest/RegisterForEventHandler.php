@@ -74,7 +74,7 @@ class RegisterForEventHandler extends SimpleHandler {
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
 		if ( $this->participantQuestionsEnabled ) {
 			try {
-				$answers = $this->eventQuestionsRegistry->extractUserQuestionsAPI(
+				$answers = $this->eventQuestionsRegistry->extractUserAnswersAPI(
 					$body['answers'] ?? [],
 					$eventRegistration->getParticipantQuestions()
 				);

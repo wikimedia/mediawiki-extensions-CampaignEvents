@@ -391,7 +391,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::extractUserQuestionsAPI
+	 * @covers ::extractUserAnswersAPI
 	 * @covers ::newAnswerFromAPI
 	 * @dataProvider provideExtractUserQuestionsAPI
 	 *
@@ -399,7 +399,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	public function testExtractUserQuestionsAPI( array $data, array $enabledQuestions, array $expected ) {
 		$this->assertEquals(
 			$expected,
-			$this->getRegistry()->extractUserQuestionsAPI( $data, $enabledQuestions )
+			$this->getRegistry()->extractUserAnswersAPI( $data, $enabledQuestions )
 		);
 	}
 
@@ -476,14 +476,14 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::extractUserQuestionsAPI
+	 * @covers ::extractUserAnswersAPI
 	 * @covers ::newAnswerFromAPI
 	 * @dataProvider provideExtractUserQuestionsAPI__error
 	 *
 	 */
 	public function testExtractUserQuestionsAPI__error( array $data ) {
 		$this->expectException( InvalidAnswerDataException::class );
-		$this->getRegistry()->extractUserQuestionsAPI( $data, [ 1, 2, 3, 4, 5 ] );
+		$this->getRegistry()->extractUserAnswersAPI( $data, [ 1, 2, 3, 4, 5 ] );
 	}
 
 	public function provideExtractUserQuestionsAPI__error(): Generator {
@@ -506,7 +506,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @covers ::formatAnswersForAPI
-	 * @covers ::extractUserQuestionsAPI
+	 * @covers ::extractUserAnswersAPI
 	 */
 	public function testAPIRoundtrip() {
 		$answers = [
@@ -517,7 +517,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		$registry = $this->getRegistry();
 		$this->assertEquals(
 			$answers,
-			$registry->extractUserQuestionsAPI(
+			$registry->extractUserAnswersAPI(
 				$registry->formatAnswersForAPI( $answers ),
 				[ 1, 2, 5 ]
 			)

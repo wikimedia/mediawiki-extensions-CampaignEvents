@@ -111,7 +111,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		$invalidAnsError = 'campaignevents-rest-register-invalid-answer';
 		$invalidQuestRegistry = $this->createMock( EventQuestionsRegistry::class );
 		$invalidQuestRegistry->expects( $this->atLeastOnce() )
-			->method( 'extractUserQuestionsAPI' )
+			->method( 'extractUserAnswersAPI' )
 			->willThrowException( $this->createMock( InvalidAnswerDataException::class ) );
 		yield 'Invalid participant answers' => [
 			400,

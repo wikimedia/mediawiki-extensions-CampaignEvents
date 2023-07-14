@@ -322,31 +322,43 @@ class EventPageDecorator {
 	): array {
 		$enabledQuestions = $registration->getParticipantQuestions();
 		$curAnswers = $participant ? $participant->getAnswers() : [];
-		$eventQuestionsData = $this->eventQuestionsRegistry->getQuestionsForHTMLForm( $enabledQuestions, $curAnswers );
-		foreach ( $eventQuestionsData as &$eventQuestion ) {
-			if ( isset( $eventQuestion[ 'label-message' ] ) ) {
-				$eventQuestion[ 'label-message' ] = $this->msgFormatter->format(
-					MessageValue::new( $eventQuestion[ 'label-message' ] )
-				);
-			}
-			if ( isset( $eventQuestion[ 'placeholder-message' ] ) ) {
-				$eventQuestion[ 'placeholder-message' ] = $this->msgFormatter->format(
-					MessageValue::new( $eventQuestion[ 'placeholder-message' ] )
-				);
-			}
-			if ( isset( $eventQuestion[ 'options-messages' ] ) ) {
-				foreach ( $eventQuestion[ 'options-messages' ] as $messageKey => $value ) {
+
+		$questionsData = [];
+		$questionsAPI = $this->eventQuestionsRegistry->getQuestionsForAPI( $enabledQuestions );
+		// Localise all messages to avoid having to do that in the client side.
+		foreach ( $questionsAPI as $questionAPIData ) {
+			$curQuestionData = [
+				'type' => $questionAPIData['type'],
+				'label' => $this->msgFormatter->format( MessageValue::new( $questionAPIData['label-message'] ) ),
+			];
+			if ( isset( $questionAPIData['options-messages'] ) ) {
+				$curQuestionData['options'] = [];
+				foreach ( $questionAPIData['options-messages'] as $messageKey => $value ) {
 					$message = $this->msgFormatter->format( MessageValue::new( $messageKey ) );
-					$eventQuestion[ 'options-messages' ][ $messageKey ] = [
+					$curQuestionData['options'][$messageKey] = [
 						'value' => $value,
 						'message' => $message
 					];
 				}
 			}
+			if ( isset( $questionAPIData['other-options'] ) ) {
+				$curQuestionData['other-options'] = [];
+				foreach ( $questionAPIData['other-options'] as $showIfVal => $otherOptData ) {
+					$curQuestionData['other-options'][$showIfVal] = [
+						'type' => $otherOptData['type'],
+						'placeholder' => $this->msgFormatter->format(
+							MessageValue::new( $otherOptData['label-message'] )
+						),
+					];
+				}
+			}
+			$questionsData[$questionAPIData['name']] = $curQuestionData;
 		}
-		unset( $eventQuestion );
 
-		return $eventQuestionsData;
+		return [
+			'questions' => $questionsData,
+			'answers' => $this->eventQuestionsRegistry->formatAnswersForAPI( $curAnswers )
+		];
 	}
 
 	/**

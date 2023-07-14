@@ -422,7 +422,7 @@ class EventQuestionsRegistry {
 	 * @return Answer[]
 	 * @throws InvalidAnswerDataException If an answer's value is malformed
 	 */
-	public function extractUserQuestionsAPI( array $data, array $enabledQuestionIDs ): array {
+	public function extractUserAnswersAPI( array $data, array $enabledQuestionIDs ): array {
 		$answers = [];
 		foreach ( $this->getQuestions() as $question ) {
 			if ( !in_array( $question['db-id'], $enabledQuestionIDs, true ) ) {
