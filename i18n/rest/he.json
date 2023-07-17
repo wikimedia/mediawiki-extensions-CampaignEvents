@@ -15,5 +15,5 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "אין לך הרשאה לצפות במשתתפים שנרשמו באופן פרטי לאירוע הזה.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> חייב להיות מערך של שמות משתמש ואינו יכול להיות ריק",
 	"campaignevents-rest-get-registration-info-notparticipant": "אינך ברשימת במשתתפים באירוע הזה.",
-	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1"
+	"campaignevents-rest-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1"
 }

@@ -15,5 +15,5 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Du har ikke autorisasjon til å se deltakere som har registrert seg privat på dette arrangementet.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> må være ei liste over brukernavn, og kan ikke være tom.",
 	"campaignevents-rest-get-registration-info-notparticipant": "Du deltar ikke i dette arrangementet.",
-	"campaignevents-register-invalid-answer": "Ugyldig svar på spørsmålet $1"
+	"campaignevents-rest-register-invalid-answer": "Ugyldig svar på spørsmålet $1"
 }

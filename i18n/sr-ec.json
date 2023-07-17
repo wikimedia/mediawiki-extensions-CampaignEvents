@@ -61,7 +61,8 @@
 	"campaignevents-register-question-confidence-contributing-not-say": "Не желим да кажем",
 	"campaignevents-register-question-affiliate-placeholder": "Изаберите опцију",
 	"campaignevents-register-question-affiliate-option-none": "Не",
+	"campaignevents-register-question-affiliate-option-affiliate": "Подружница (огранак, корисничка група, тематска организација)",
 	"campaignevents-register-question-affiliate-details-placeholder": "Молимо наведите",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Сва питања су необавезна",
-	"campaignevents-register-invalid-answer": "Одоговор на питање $1 није ваљан"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Молимо наведите"
 }

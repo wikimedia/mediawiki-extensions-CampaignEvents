@@ -205,6 +205,5 @@
 	"campaignevents-register-question-affiliate-option-none": "No",
 	"campaignevents-register-question-affiliate-option-affiliate": "Affiliato",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informazioni per gli organizzatori",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Tutte le domande sono facoltative",
-	"campaignevents-register-invalid-answer": "Risposta non valida alla domanda $1"
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Tutte le domande sono facoltative"
 }

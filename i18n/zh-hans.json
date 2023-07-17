@@ -48,8 +48,8 @@
 	"campaignevents-event-details-edit-button": "编辑",
 	"campaignevents-event-details-timezone": "<strong>时区：</strong>$1",
 	"campaignevents-event-details-organizers-header": "组织者",
-	"campaignevents-event-details-select-all": "全选",
-	"campaignevents-event-details-remove-participant-remove-btn": "移除",
+	"campaignevents-event-details-select-all": "选择所有参与者",
+	"campaignevents-event-details-remove-participant-remove-btn": "删除",
 	"campaignevents-event-details-remove-participant-cancel-btn": "取消",
 	"campaignevents-event-details-dates-label": "开始和结束时间",
 	"campaignevents-event-details-organizers-view-more": "查看更多"

@@ -15,5 +15,5 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Nimate dovoljenja za ogled udeležencev, ki so se zasebno registrirali za ta dogodek.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> mora biti polje uporabniških imen in ne sme biti prazno",
 	"campaignevents-rest-get-registration-info-notparticipant": "Ne sodelujete v tem dogodku.",
-	"campaignevents-register-invalid-answer": "Neveljaven odgovor na vprašanje $1"
+	"campaignevents-rest-register-invalid-answer": "Neveljaven odgovor na vprašanje $1"
 }

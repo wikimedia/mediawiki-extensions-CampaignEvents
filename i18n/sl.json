@@ -325,6 +325,7 @@
 	"campaignevents-register-question-gender-option-other": "Spol ni naveden",
 	"campaignevents-register-question-age": "koliko ste stari? (izbirno)",
 	"campaignevents-register-question-age-placeholder": "Izberite starostni razpon",
+	"campaignevents-register-question-age-option-under-24": "Pod 24",
 	"campaignevents-register-question-profession": "Kateri poklic opravljate? (izbirno)",
 	"campaignevents-register-question-profession-placeholder": "Izberite svoj poklic",
 	"campaignevents-register-question-profession-option-artist-creative": "Umetnik/kreativni strokovnjak",
@@ -346,10 +347,11 @@
 	"campaignevents-register-question-affiliate": "Ali pripadate kateri koli podružnici Wikimedie, organizacijskemu partnerju, uporabniški skupini, skupnosti ali drugim organizacijam zunaj Wikimedije? (izbirno)",
 	"campaignevents-register-question-affiliate-placeholder": "Izberite možnost",
 	"campaignevents-register-question-affiliate-option-none": "Ne",
-	"campaignevents-register-question-affiliate-option-affiliate": "Podružnica",
-	"campaignevents-register-question-affiliate-option-organizing-partner": "Organizacijski partner",
+	"campaignevents-register-question-affiliate-option-affiliate": "Povezana skupina (podružnice, skupine uporabnikov, tematske organizacije)",
+	"campaignevents-register-question-affiliate-option-organizing-partner": "Drugi organizacijski partnerji",
 	"campaignevents-register-question-affiliate-details-placeholder": "Prosimo, navedite",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informacije za organizatorje",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Vsa vprašanja so izbirna",
-	"campaignevents-register-invalid-answer": "Neveljaven odgovor na vprašanje $1"
+	"campaignevents-register-invalid-answer": "Neveljaven odgovor na vprašanje $1",
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Prosimo, navedite"
 }

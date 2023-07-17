@@ -13,5 +13,5 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Du bist nicht berechtigt, Teilnehmer anzuzeigen, die sich privat für diese Veranstaltung angemeldet haben.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> muss ein Array von Benutzernamen sein und darf nicht leer sein",
 	"campaignevents-rest-get-registration-info-notparticipant": "Du nimmst nicht an dieser Veranstaltung teil.",
-	"campaignevents-register-invalid-answer": "Ungültige Antwort auf die Frage $1"
+	"campaignevents-rest-register-invalid-answer": "Ungültige Antwort auf die Frage $1"
 }

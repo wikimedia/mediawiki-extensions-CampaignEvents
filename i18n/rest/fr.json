@@ -18,5 +18,5 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Vous n’avez pas le droit de voir les participants qui se sont inscrits en privé pour cet événement.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> doit être un tableau de noms d’utilisateur et ne peut pas être vide",
 	"campaignevents-rest-get-registration-info-notparticipant": "Vous ne participez pas à cet événement.",
-	"campaignevents-register-invalid-answer": "Réponse non valide à la question $1"
+	"campaignevents-rest-register-invalid-answer": "Réponse non valide à la question $1"
 }

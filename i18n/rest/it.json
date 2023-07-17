@@ -7,5 +7,5 @@
 	"campaignevents-rest-user-not-found": "Non esiste alcun utente con questo ID centrale.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> deve essere un array di nomi utente e non può essere vuoto",
 	"campaignevents-rest-get-registration-info-notparticipant": "Non stai partecipando a questo evento",
-	"campaignevents-register-invalid-answer": "Risposta non valida alla domanda $1"
+	"campaignevents-rest-register-invalid-answer": "Risposta non valida alla domanda $1"
 }

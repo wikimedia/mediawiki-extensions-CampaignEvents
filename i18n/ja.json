@@ -194,5 +194,5 @@
 	"campaignevents-register-questions-label-subtitle": "イベント前、イベント中、イベント後に応答を変更または削除できます。",
 	"campaignevents-eventpage-register-dialog-questions-title": "主催者向け情報",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "すべての質問は任意です",
-	"campaignevents-register-invalid-answer": "質問に対する無効な答え$1"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "場所の状態："
 }

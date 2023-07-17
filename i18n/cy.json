@@ -90,6 +90,7 @@
 	"campaignevents-event-details-in-person-event-label": "Digwyddiad wyneb-yn-wyneb",
 	"campaignevents-event-details-online-label": "Digwyddiad ar-lein",
 	"campaignevents-event-details-tracking-tool-last-update": "Diweddarwyd ddiwethaf: $1",
+	"campaignevents-event-details-participants": "Enw defnyddiwr",
 	"campaignevents-event-details-remove-participant-remove-btn": "Dileu",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Canslo",
 	"campaignevents-event-details-dates-label": "Amser dechrau a gorffen",
@@ -106,6 +107,10 @@
 	"campaignevents-notification-registration-details-type-in-person-header": "Digwyddiad wyneb-yn-wyneb",
 	"campaignevents-notification-registration-event-page-link": "Gweld tudalen y digwyddiad",
 	"campaignevents-notification-registration-chat-link": "Ymuno â sgwrs grŵp",
+	"campaignevents-event-details-email-subject-label": "Pwnc",
+	"campaignevents-event-details-email-message-label": "Neges",
+	"campaignevents-email-participants-yes": "Ie",
+	"campaignevents-email-participants-no": "Na",
 	"campaignevents-register-questions-label-title": "Gwybodaeth i drefnwyr",
 	"campaignevents-register-questions-label-subtitle": "Gallwch newid neu ddileu eich ymatebion cyn, yn ystod ac ar ôl y digwyddiad.",
 	"campaignevents-register-question-gender": "Beth yw eich hunaniaeth o ran rhywedd? (dewisol)",
@@ -128,6 +133,6 @@
 	"campaignevents-register-question-confidence-contributing-not-say": "Mae'n well gen i beidio â dweud",
 	"campaignevents-register-question-affiliate-placeholder": "Dewiswch opsiwn",
 	"campaignevents-register-question-affiliate-option-none": "Na",
-	"campaignevents-register-question-affiliate-option-organizing-partner": "Partner trefnu",
+	"campaignevents-register-question-affiliate-option-organizing-partner": "Partneriaid trefnu eraill",
 	"campaignevents-register-question-affiliate-details-placeholder": "Nodwch os gwelwch yn dda"
 }

@@ -52,8 +52,12 @@
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
 	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы.",
 	"campaignevents-event-details-organizers-header": "Организаторы",
+	"campaignevents-event-details-remove-participant-remove-btn": "Удалить",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Отмена",
 	"campaignevents-event-details-organizers-view-more": "Показать больше",
 	"campaignevents-event-details-organizers-noscript": "Вам необходимо включить JavaScript, чтобы увидеть полный список организаторов.",
-	"campaignevents-userlink-suppressed-user": "имя пользователя скрыто"
+	"campaignevents-userlink-suppressed-user": "имя пользователя скрыто",
+	"campaignevents-email-participants-except": "Все, кроме $1",
+	"campaignevents-email-participants-yes": "Да",
+	"campaignevents-email-participants-no": "Нет"
 }
