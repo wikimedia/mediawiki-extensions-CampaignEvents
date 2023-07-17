@@ -53,6 +53,10 @@
 						flags: [ 'primary', 'progressive' ],
 						label: submitMsg,
 						action: 'confirm'
+					},
+					{
+						label: mw.msg( 'campaignevents-eventpage-register-dialog-clear' ),
+						action: 'clear'
 					}
 				]
 			},
@@ -147,6 +151,9 @@
 	};
 
 	ParticipantRegistrationDialog.prototype.getActionProcess = function ( action ) {
+		if ( action === 'clear' ) {
+			return new OO.ui.Process( this.eventQuestions.resetToDefault, this.eventQuestions );
+		}
 		if ( action === 'confirm' ) {
 			return new OO.ui.Process( function () {
 				this.close( {

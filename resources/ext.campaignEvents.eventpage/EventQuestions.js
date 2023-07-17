@@ -6,6 +6,11 @@
 		if ( mw.config.get( 'wgCampaignEventsEnableParticipantQuestions' ) ) {
 			this.questionList = eventQuestionsData.questions;
 			this.prevAnswers = eventQuestionsData.answers;
+			this.emptyDefaultsByType = {
+				radio: 0,
+				select: 0,
+				text: ''
+			};
 			this.addQuestions();
 		}
 	}
@@ -76,6 +81,24 @@
 		return answers;
 	};
 
+	EventQuestions.prototype.resetToDefault = function () {
+		for ( var questionName in this.questionFields ) {
+			var questionSpec = this.questionList[ questionName ],
+				fieldData = this.questionFields[ questionName ],
+				questionField = fieldData.main.getField();
+
+			questionField.setValue( this.emptyDefaultsByType[ questionSpec.type ] );
+			if ( fieldData.other ) {
+				for ( var otherKey in fieldData.other ) {
+					var otherType = questionSpec[ 'other-options' ][ otherKey ].type;
+					fieldData.other[ otherKey ].getField().setValue(
+						this.emptyDefaultsByType[ otherType ]
+					);
+				}
+			}
+		}
+	};
+
 	/**
 	 * @param {Object} questionData
 	 * @param {string|number|null} defaultValue
@@ -113,7 +136,7 @@
 		return new OO.ui.FieldLayout(
 			new OO.ui.RadioSelectInputWidget( {
 				options: options,
-				value: defaultValue || 0
+				value: defaultValue || this.emptyDefaultsByType.radio
 			} ),
 			{
 				label: questionData.label,
@@ -143,7 +166,7 @@
 		return new OO.ui.FieldLayout(
 			new OO.ui.DropdownInputWidget( {
 				options: options,
-				value: defaultValue || 0
+				value: defaultValue || this.emptyDefaultsByType.select
 			} ),
 			{
 				label: questionData.label,
@@ -162,7 +185,7 @@
 		return new OO.ui.FieldLayout(
 			new OO.ui.TextInputWidget( {
 				placeholder: questionData.placeholder || '',
-				value: defaultValue || ''
+				value: defaultValue || this.emptyDefaultsByType.text
 			} ),
 			{
 				label: questionData.label || '',

@@ -208,6 +208,7 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Label of a button used in a dialog asking the user to confirm whether they want to cancel their registration for an event.",
 	"campaignevents-eventpage-register-dialog-register": "Label of a button used in a dialog on event pages where users can register for an event.",
 	"campaignevents-eventpage-register-dialog-save": "Label of a button used in a dialog on event pages where users can register for an event. By clicking this button, the user can save changes to their registration information.",
+	"campaignevents-eventpage-register-dialog-clear": "Label of a button used in a dialog on event pages where users can register for an event. By clicking this button, everything that the user entered into the form will be deleted.",
 	"campaignevents-eventpage-register-dialog-title": "Title of a dialog on event pages where users can register for an event.",
 	"campaignevents-eventpage-register-dialog-title-edit": "Title of a dialog on event pages where users can register for an event. This message is used when the user is already a participant and is changing their registration information.",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Header used in the dialog on event pages where users can register for an event. In this section, participants can choose whether to register publicly or privately, see {{msg-mw|ext-campaignevents-registration-visibility-label}}.",
