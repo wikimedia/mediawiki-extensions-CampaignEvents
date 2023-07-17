@@ -93,6 +93,7 @@ class EventDetailsParticipantsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param ICampaignsAuthority $authority
 	 * @param bool $isOrganizer
+	 * @param bool $canEmailParticipants
 	 * @param OutputPage $out
 	 * @return Tag
 	 *
@@ -104,6 +105,7 @@ class EventDetailsParticipantsModule {
 		UserIdentity $viewingUser,
 		ICampaignsAuthority $authority,
 		bool $isOrganizer,
+		bool $canEmailParticipants,
 		OutputPage $out
 	): Tag {
 		$eventID = $event->getID();
@@ -136,7 +138,11 @@ class EventDetailsParticipantsModule {
 		}
 
 		$items = [];
-		$items[] = $this->getHeader( $totalParticipants, $canRemoveParticipants );
+		$items[] = $this->getHeader(
+			$totalParticipants,
+			$canRemoveParticipants,
+			$canEmailParticipants
+		);
 		if ( $totalParticipants ) {
 			$items[] = $this->getParticipantsTable(
 				$viewingUser,
@@ -183,7 +189,8 @@ class EventDetailsParticipantsModule {
 	 */
 	private function getHeader(
 		int $totalParticipants,
-		bool $viewerCanRemoveParticipants
+		bool $viewerCanRemoveParticipants,
+		bool $viewerCanEmailParticipants
 	): Tag {
 		$headerText = ( new Tag( 'div' ) )->appendContent(
 			$this->msgFormatter->format(
@@ -197,7 +204,10 @@ class EventDetailsParticipantsModule {
 		)->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
 
 		if ( $totalParticipants ) {
-			$header->appendContent( $this->getSearchBar( $viewerCanRemoveParticipants ) );
+			$header->appendContent( $this->getSearchBar(
+				$viewerCanRemoveParticipants,
+				$viewerCanEmailParticipants
+			) );
 		}
 
 		return $header;
@@ -260,7 +270,10 @@ class EventDetailsParticipantsModule {
 	 * @param bool $viewerCanRemoveParticipants
 	 * @return Tag
 	 */
-	private function getSearchBar( bool $viewerCanRemoveParticipants ): Tag {
+	private function getSearchBar(
+		bool $viewerCanRemoveParticipants,
+		bool $viewerCanEmailParticipants
+	): Tag {
 		$container = ( new Tag( 'div' ) )->appendContent(
 			new SearchInputWidget( [
 				'placeholder' => $this->msgFormatter->format(
@@ -284,6 +297,9 @@ class EventDetailsParticipantsModule {
 				'id' => 'ext-campaignevents-event-details-remove-participant-button',
 				'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
 			] );
+			$container->appendContent( $removeButton );
+		}
+		if ( $viewerCanEmailParticipants ) {
 			$messageAllParticipantsButton = new ButtonWidget( [
 				'infusable' => true,
 				'framed' => true,
@@ -293,8 +309,9 @@ class EventDetailsParticipantsModule {
 				'flags' => [ 'progressive' ],
 				'classes' => [ 'ext-campaignevents-event-details-message-all-participants-button' ],
 			] );
-			$container->appendContent( $removeButton, $messageAllParticipantsButton );
+			$container->appendContent( $messageAllParticipantsButton );
 		}
+
 		return $container;
 	}
 

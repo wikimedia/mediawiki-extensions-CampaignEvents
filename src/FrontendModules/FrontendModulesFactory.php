@@ -41,6 +41,7 @@ class FrontendModulesFactory {
 	private UserFactory $userFactory;
 	/** @var TrackingToolRegistry */
 	private TrackingToolRegistry $trackingToolRegistry;
+	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $userMailer;
 
 	/**

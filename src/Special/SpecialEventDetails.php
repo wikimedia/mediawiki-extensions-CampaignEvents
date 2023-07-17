@@ -188,6 +188,7 @@ class SpecialEventDetails extends SpecialPage {
 				$this->getUser(),
 				new MWAuthorityProxy( $this->getAuthority() ),
 				$isOrganizer,
+				$this->emailIsEnabledAndAllowed(),
 				$out
 			)
 		);

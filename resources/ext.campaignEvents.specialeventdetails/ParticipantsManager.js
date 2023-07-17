@@ -173,17 +173,21 @@
 					mw.language.convertNumber( this.participantsTotal )
 				).text()
 			);
-			this.messageParticipantsButton.setLabel(
-				mw.message( 'campaignevents-event-details-message-participants' ).text()
-			);
+			if ( this.$messageParticipantsButton.length ) {
+				this.messageParticipantsButton.setLabel(
+					mw.message( 'campaignevents-event-details-message-participants' ).text()
+				);
+			}
 			return;
 		}
 		this.$selectAllParticipantsLabel.text(
 			mw.message( 'campaignevents-event-details-participants' ).text()
 		);
-		this.messageParticipantsButton.setLabel(
-			mw.message( 'campaignevents-event-details-message-all' ).text()
-		);
+		if ( this.$messageParticipantsButton.length ) {
+			this.messageParticipantsButton.setLabel(
+				mw.message( 'campaignevents-event-details-message-all' ).text()
+			);
+		}
 	};
 
 	ParticipantsManager.prototype.onParticipantCheckboxChange = function ( selected, el ) {
