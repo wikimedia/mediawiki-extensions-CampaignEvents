@@ -244,18 +244,19 @@ class EventsPager extends TablePager {
 				return htmlspecialchars( $this->getLanguage()->formatNum( $value ) );
 			case 'manage_event':
 				$eventID = $this->mCurrentRow->event_id;
+				$btnLabel = $this->msg( 'campaignevents-eventslist-manage-btn-info' )->text();
 				// This will be replaced with a ButtonMenuSelectWidget in JS.
 				$btn = new ButtonWidget( [
 					'framed' => false,
-					'label' => $this->msg( 'campaignevents-eventslist-manage-btn-info' )->text(),
-					'title' => $this->msg( 'campaignevents-eventslist-manage-btn-info' )->text(),
+					'label' => $btnLabel,
+					'title' => $btnLabel,
 					'invisibleLabel' => true,
 					'icon' => 'ellipsis',
 					'href' => SpecialPage::getTitleFor(
 						SpecialEditEventRegistration::PAGE_NAME,
 						$eventID
 					)->getLocalURL(),
-					'classes' => [ 'ext-campaignevents-eventspager-manage-btn' ]
+					'classes' => [ 'ext-campaignevents-eventspager-manage-btn' ],
 				] );
 				$eventStatus = EventStore::getEventStatusFromDBVal( $this->mCurrentRow->event_status );
 				$eventPage = $this->getEventPageFromRow( $this->mCurrentRow );
@@ -263,7 +264,8 @@ class EventsPager extends TablePager {
 					'data-mw-event-id' => $eventID,
 					'data-mw-event-name' => $this->mCurrentRow->event_name,
 					'data-mw-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
-					'data-mw-event-page-url' => $this->pageURLResolver->getUrl( $eventPage )
+					'data-mw-event-page-url' => $this->pageURLResolver->getUrl( $eventPage ),
+					'data-mw-label' => $btnLabel,
 				] );
 				return $btn->toString();
 			default:
