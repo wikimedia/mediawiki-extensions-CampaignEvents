@@ -434,6 +434,18 @@
 			var curParticipantData = apiResponse[ i ],
 				items = [];
 
+			var $usernameElement;
+			if ( curParticipantData.user_name ) {
+				$usernameElement = thisClass.makeUserLink(
+					curParticipantData.user_name,
+					curParticipantData.user_page
+				);
+			} else {
+				$usernameElement = thisClass.getDeletedOrNotFoundParticipantElement(
+					curParticipantData
+				);
+			}
+
 			if ( this.showParticipantCheckboxes ) {
 				// eslint-disable-next-line camelcase
 				curParticipantData.user_id = String( curParticipantData.user_id );
@@ -453,9 +465,16 @@
 								userPageLink: curParticipantData.user_page
 							}
 						} ),
+					checkboxField = new OO.ui.FieldLayout(
+						newParticipantCheckbox,
+						{
+							label: $usernameElement.text(),
+							invisibleLabel: true
+						}
+					),
 					checkboxCell = new OO.ui.Element( {
 						$element: $( '<td>' ),
-						content: [ newParticipantCheckbox ],
+						content: [ checkboxField ],
 						classes: [ 'ext-campaignevents-details-user-row-checkbox' ]
 					} );
 				newParticipantCheckbox.on( 'change', function ( selected ) {
@@ -464,18 +483,6 @@
 
 				this.participantCheckboxes.push( newParticipantCheckbox );
 				items.push( checkboxCell );
-			}
-
-			var $usernameElement;
-			if ( curParticipantData.user_name ) {
-				$usernameElement = thisClass.makeUserLink(
-					curParticipantData.user_name,
-					curParticipantData.user_page
-				);
-			} else {
-				$usernameElement = thisClass.getDeletedOrNotFoundParticipantElement(
-					curParticipantData
-				);
 			}
 
 			var usernameCell = new OO.ui.Element( {

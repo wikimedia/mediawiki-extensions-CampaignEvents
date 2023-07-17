@@ -28,6 +28,7 @@ use OOUI\PanelLayout;
 use OOUI\SearchInputWidget;
 use OOUI\Tag;
 use OutputPage;
+use Sanitizer;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
@@ -420,19 +421,23 @@ class EventDetailsParticipantsModule {
 			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
 			$genderUserName = $userName;
 			$user = $this->userFactory->newFromName( $userName );
-			$userLink = $this->userLinker->getUserPagePath( $participant->getUser() );
+			$userLinkComponents = $this->userLinker->getUserPagePath( $participant->getUser() );
 		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 			$user = null;
 			$userName = null;
 			$genderUserName = '@';
 		}
 		$recipientIsValid = $user !== null && $this->userMailer->validateTarget( $user, $performer ) === null;
+		$userLink = $this->userLinker->generateUserLinkWithFallback(
+			$participant->getUser(),
+			$this->language->getCode()
+		);
 
 		if ( $canRemoveParticipants ) {
 			$checkboxCell = new Tag( 'td' );
 			$checkboxCell->addClasses( [ 'ext-campaignevents-details-user-row-checkbox' ] );
 			$userId = $participant->getUser()->getCentralID();
-			$checkboxCell->appendContent( new CheckboxInputWidget( [
+			$checkbox = new CheckboxInputWidget( [
 				'name' => 'event-details-participants-checkboxes',
 				'infusable' => true,
 				'value' => $userId,
@@ -441,15 +446,21 @@ class EventDetailsParticipantsModule {
 					'hasEmail' => $recipientIsValid,
 					'username' => $userName,
 					'userId' => $userId,
-					'userPageLink' => $userLink ?? ""
+					'userPageLink' => $userLinkComponents ?? ""
+				],
+			] );
+			$checkboxField = new FieldLayout(
+				$checkbox,
+				[
+					'label' => Sanitizer::stripAllTags( $userLink ),
+					'invisibleLabel' => true,
 				]
-			] ) );
+			);
+			$checkboxCell->appendContent( $checkboxField );
 			$row->appendContent( $checkboxCell );
 		}
 
-		$usernameElement = new HtmlSnippet(
-			$this->userLinker->generateUserLinkWithFallback( $participant->getUser(), $this->language->getCode() )
-		);
+		$usernameElement = new HtmlSnippet( $userLink );
 		$usernameCell = ( new Tag( 'td' ) )
 			->appendContent( $usernameElement );
 
