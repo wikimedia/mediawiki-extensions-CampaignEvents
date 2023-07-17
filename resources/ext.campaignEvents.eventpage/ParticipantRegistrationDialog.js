@@ -9,7 +9,7 @@
 	 * @cfg {Object|undefined} [curParticipantData=true] Current registration data for this user, if
 	 *   available. Undefined otherwise. Must have the following keys:
 	 *    - public (boolean): Whether the user is registered publicly
-	 * @cfg {Object} [eventQuestions] event questions
+	 * @cfg {Object} [eventQuestions] EventQuestions object
 	 * @extends OO.ui.ProcessDialog
 	 * @constructor
 	 */
@@ -70,20 +70,21 @@
 			label: mw.msg( 'campaignevents-eventpage-register-dialog-visibility-title' )
 		} );
 
-		var questionsObj = this.eventQuestions.questions;
-		var questionsArray = Object.keys( questionsObj ).map( function ( q ) {
-			return questionsObj[ q ];
-		} );
+		var fieldsets = [ visibilityFieldset ];
 
-		var questionsFieldset = questionsArray.length === 0 ? '' : new OO.ui.FieldsetLayout( {
-			items: questionsArray,
-			label: mw.msg( 'campaignevents-eventpage-register-dialog-questions-title' ),
-			help: mw.msg( 'campaignevents-eventpage-register-dialog-questions-subtitle' ),
-			helpInline: true
-		} );
+		var questionFields = this.eventQuestions.getQuestionFields();
+		if ( questionFields.length > 0 ) {
+			var questionsFieldset = new OO.ui.FieldsetLayout( {
+				items: questionFields,
+				label: mw.msg( 'campaignevents-eventpage-register-dialog-questions-title' ),
+				help: mw.msg( 'campaignevents-eventpage-register-dialog-questions-subtitle' ),
+				helpInline: true
+			} );
+			fieldsets.push( questionsFieldset );
+		}
 
 		var formPanel = new OO.ui.PanelLayout( {
-			content: [ visibilityFieldset, questionsFieldset ],
+			content: fieldsets,
 			padded: true,
 			scrollable: false,
 			expanded: false
@@ -151,7 +152,7 @@
 				this.close( {
 					action: action,
 					isPrivate: !this.publicRegistration,
-					answers: this.getParticipantAnswers()
+					answers: this.eventQuestions.getParticipantAnswers()
 				} );
 			}, this );
 		}
@@ -159,37 +160,6 @@
 			.next( function () {
 				this.close();
 			}, this );
-	};
-
-	ParticipantRegistrationDialog.prototype.getParticipantAnswers = function () {
-		var answers = {};
-		for ( var questionId in this.eventQuestions.questions ) {
-			var question = this.eventQuestions.questions[ questionId ].getField(),
-				questionName = questionId.replace( 'Question', '' ).toLowerCase();
-
-			if ( question instanceof OO.ui.RadioSelectWidget ) {
-				answers[ questionName ] = {
-					value: parseInt( question.findSelectedItem().getData() )
-				};
-			} else if ( question instanceof OO.ui.DropdownInputWidget ) {
-				answers[ questionName ] = { value: parseInt( question.getValue() ) };
-			} else if ( question instanceof OO.ui.TextInputWidget ) {
-				var questionOther = questionId.split( '_' );
-				if ( questionOther.length === 3 && questionOther[ 1 ] === 'Other' ) {
-					var questionOtherName =
-						questionOther[ 0 ].replace( 'Question', '' ).toLowerCase();
-					if ( answers[ questionOtherName ].value === parseInt( questionOther[ 2 ] ) ) {
-						answers[ questionOtherName ].other = question.getValue();
-					}
-				} else {
-					answers[ questionName ] = { value: question.getValue() };
-				}
-			} else {
-				throw new Error( 'Unexpected question type' );
-			}
-		}
-
-		return answers;
 	};
 
 	module.exports = ParticipantRegistrationDialog;
