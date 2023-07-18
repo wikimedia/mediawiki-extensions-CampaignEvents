@@ -202,6 +202,7 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Nein",
 	"campaignevents-eventpage-register-dialog-register": "Anmelden",
 	"campaignevents-eventpage-register-dialog-save": "Speichern",
+	"campaignevents-eventpage-register-dialog-clear": "Formular leeren",
 	"campaignevents-eventpage-register-dialog-title": "Zur Veranstaltung anmelden",
 	"campaignevents-eventpage-register-dialog-title-edit": "Anmeldung bearbeiten",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Anmeldung privat",
@@ -351,6 +352,7 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Weitere Veranstaltungspartner",
 	"campaignevents-register-question-affiliate-details-placeholder": "Bitte angeben",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informationen für Veranstalter",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Alle Fragen sind optional",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Diese Informationen werden nur an die Veranstalter weitergegeben.",
+	"campaignevents-register-invalid-answer": "Ungültige Antwort auf die Frage $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Bitte angeben"
 }
