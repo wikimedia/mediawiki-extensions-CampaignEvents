@@ -34,6 +34,8 @@
 		$( '.ext-campaignevents-eventspager-manage-btn' ).each( function () {
 			var $btn = $( this ),
 				menu = new EventKebabMenu( {
+					label: $btn.data( 'mw-label' ),
+					invisibleLabel: true,
 					eventID: $btn.data( 'mw-event-id' ),
 					eventName: $btn.data( 'mw-event-name' ),
 					isEventClosed: $btn.data( 'mw-is-closed' ),
