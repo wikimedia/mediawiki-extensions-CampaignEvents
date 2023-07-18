@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Piano1forte2",
+			"Reedy"
+		]
+	},
+	"campaignevents-desc": "Provides features for campaign organisers and participants.",
+	"campaignevents-role-organizer": "{{GENDER:$1|organiser}}",
+	"campaignevents-eventpage-dialog-organizers": "Organised by: $1",
+	"campaignevents-eventpage-dialog-organizers-view-all": "View all organisers",
+	"campaignevents-eventpage-dialog-link-not-available": "The link will be made available by the {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-eventpage-dialog-venue-not-available": "The venue address will be made available by the {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-eventpage-enableheader-organizer": "You are an organiser",
+	"campaignevents-event-details-online-link-not-available": "The link will be made available by the {{PLURAL:$1|organiser|organisers}}.",
+	"campaignevents-event-details-venue-not-available": "The venue address will be made available by the {{PLURAL:$1|organiser|organisers}}."
+}
