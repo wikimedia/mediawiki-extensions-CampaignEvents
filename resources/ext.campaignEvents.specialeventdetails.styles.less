@@ -156,6 +156,13 @@ ul.ext-campaignevents-event-details-organizers-list {
 			// Set the width of the cell to that of the checkbox to prevent it from stretching
 			width: 1.42857143em;
 		}
+
+		.ext-campaignevents-details-user-row-checkbox .oo-ui-fieldLayout-header {
+			// Invisible labels use absolute positioning, and without a positioned ancestor
+			// they would overflow the table and produce a lot of unwantd white space after
+			// the table itself (T342292)
+			position: relative;
+		}
 	}
 
 	/* Set a fixed height so that it does not change while we rebuild the list */
