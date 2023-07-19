@@ -115,6 +115,7 @@ span.ext-campaignevents-event-details-participants-private-icon {
 
 ul.ext-campaignevents-event-details-organizers-list {
 	margin-left: 0;
+	list-style-type: none;
 }
 
 .ext-campaignevents-details-participants-container {
@@ -195,16 +196,24 @@ body.skin-minerva .ext-campaignevents-details-participants-table {
 	background-color: #eaecf0;
 }
 
+.ext-campaignevents-details-participants-header-title {
+	display: flex;
+}
+
+.ext-campaignevents-details-participants-controls {
+	padding: 0.75em 0 0.75em 0;
+	display: flex;
+	justify-content: space-between;
+
+	.ext-campaignevents-details-participants-count-button {
+		display: none;
+	}
+}
+
 .ext-campaignevents-details-participants-header-text {
 	font-size: 1.5em;
 	font-weight: bold;
-}
-
-.ext-campaignevents-details-participants-search-container {
-	margin-top: 0.5em;
-	display: flex;
-	flex-wrap: wrap;
-	row-gap: 0.5em;
+	flex: 1;
 }
 
 div.ext-campaignevents-details-participants-search {
@@ -258,11 +267,14 @@ fieldset.ext-campaignevents-details-email-form {
 	margin-top: 1em;
 }
 
-// This rule should come last so that it overrides other styles set in this file.
-.ext-campaignevents-details-hide-element {
+.ext-campaignevents-event-details-remove-participant-button.oo-ui-buttonElement {
 	display: none;
 }
 
 .client-nojs .ext-campaignevents-event-details-load-organizers-link {
+	display: none;
+}
+// This rule should come last so that it overrides other styles set in this file.
+.ext-campaignevents-details-hide-element {
 	display: none;
 }

@@ -13,7 +13,7 @@
 		var $selectAllParticipantsField = $(
 			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
 		);
-		this.$selectAllParticipantsLabel = $( '.ext-campaignevents-details-participants-selectall-checkbox-cell' ).next();
+		this.$participantCountLabel = $( '.ext-campaignevents-details-participants-count-button' );
 		if ( $selectAllParticipantsField.length ) {
 			this.selectAllParticipantsField = OO.ui.FieldLayout.static.infuse(
 				$selectAllParticipantsField
@@ -44,7 +44,6 @@
 		this.windowManager = new OO.ui.WindowManager();
 		this.$participantsContainer = $( '.ext-campaignevents-details-participants-container' );
 		this.$participantsTable = $( '.ext-campaignevents-details-participants-table' );
-		this.$searchParticipantsContainer = $( '.ext-campaignevents-details-participants-search-container' );
 		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
 		this.selectedParticipantsAmount = 0;
 		this.$tabPanel = $( '#ext-campaignevents-eventdetails-tabs' );
@@ -56,8 +55,30 @@
 
 	OO.mixinClass( ParticipantsManager, OO.EventEmitter );
 
+	ParticipantsManager.prototype.toggleSelectAll = function ( selected ) {
+		for ( var i = 0; i < this.participantCheckboxes.length; i++ ) {
+			this.participantCheckboxes[ i ].setSelected( selected, true );
+		}
+		this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
+		this.selectAllParticipantsCheckbox.setSelected( selected, true );
+		if ( selected ) {
+			this.onSelectAll();
+		} else {
+			this.onDeselectAll();
+		}
+	};
+
 	ParticipantsManager.prototype.installEventListeners = function () {
 		var thisClass = this;
+		if ( this.$participantCountLabel.length ) {
+			this.participantCountLabel = OO.ui.ButtonWidget.static.infuse(
+				this.$participantCountLabel
+			);
+			this.participantCountLabel.on( 'click', function () {
+				thisClass.toggleSelectAll( false );
+				thisClass.updateSelectedLabel();
+			} );
+		}
 		if ( this.$tabPanel.length ) {
 			this.tabPanel = OO.ui.IndexLayout.static.infuse(
 				thisClass.$tabPanel
@@ -65,14 +86,7 @@
 		}
 		if ( thisClass.selectAllParticipantsCheckbox ) {
 			thisClass.selectAllParticipantsCheckbox.on( 'change', function ( selected ) {
-				for ( var i = 0; i < thisClass.participantCheckboxes.length; i++ ) {
-					thisClass.participantCheckboxes[ i ].setSelected( selected, true );
-				}
-				if ( selected ) {
-					thisClass.onSelectAll();
-				} else {
-					thisClass.onDeselectAll();
-				}
+				thisClass.toggleSelectAll( selected );
 				thisClass.updateSelectedLabel();
 			} );
 		}
@@ -132,10 +146,10 @@
 		);
 
 		if ( this.$searchParticipantsElement.length ) {
-			var searchParticipantsWidget = OO.ui.SearchInputWidget.static.infuse(
+			thisClass.searchParticipantsWidget = OO.ui.SearchInputWidget.static.infuse(
 				this.$searchParticipantsElement
 			);
-			searchParticipantsWidget.on(
+			thisClass.searchParticipantsWidget.on(
 				'change',
 				mw.util.debounce( function ( inputVal ) {
 					thisClass.usernameFilter = inputVal === '' ? null : inputVal;
@@ -150,7 +164,7 @@
 		this.isSelectionInverted = false;
 		this.selectedParticipantsAmount = this.participantsTotal;
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.setDisabled( false );
+			this.removeParticipantsButton.$element.show();
 		}
 		this.emit( 'change' );
 	};
@@ -160,19 +174,21 @@
 		this.isSelectionInverted = false;
 		this.selectedParticipantsAmount = 0;
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.setDisabled( true );
+			this.removeParticipantsButton.$element.hide();
 		}
 		this.emit( 'change' );
 	};
 
 	ParticipantsManager.prototype.updateSelectedLabel = function () {
+		this.participantCountLabel.$element.hide();
 		if ( this.selectedParticipantsAmount > 0 ) {
-			this.$selectAllParticipantsLabel.text(
+			this.participantCountLabel.setLabel(
 				mw.message( 'campaignevents-event-details-participants-checkboxes-selected',
 					mw.language.convertNumber( this.selectedParticipantsAmount ),
 					mw.language.convertNumber( this.participantsTotal )
 				).text()
 			);
+			this.participantCountLabel.$element.show();
 			if ( this.$messageParticipantsButton.length ) {
 				this.messageParticipantsButton.setLabel(
 					mw.message( 'campaignevents-event-details-message-participants' ).text()
@@ -180,9 +196,6 @@
 			}
 			return;
 		}
-		this.$selectAllParticipantsLabel.text(
-			mw.message( 'campaignevents-event-details-participants' ).text()
-		);
 		if ( this.$messageParticipantsButton.length ) {
 			this.messageParticipantsButton.setLabel(
 				mw.message( 'campaignevents-event-details-message-all' ).text()
@@ -214,8 +227,9 @@
 		} else {
 			this.selectedParticipantIDs.push( checkbox.getValue() );
 		}
-
-		this.removeParticipantsButton.setDisabled( false );
+		if ( this.removeParticipantsButton ) {
+			this.removeParticipantsButton.$element.show();
+		}
 	};
 
 	ParticipantsManager.prototype.onDeselectParticipant = function ( checkbox ) {
@@ -224,7 +238,7 @@
 			this.selectAllParticipantsCheckbox.setSelected( false, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 			this.selectedParticipantIDs = [];
-			this.removeParticipantsButton.setDisabled( true );
+			this.removeParticipantsButton.$element.hide();
 			this.isSelectionInverted = false;
 			return;
 		}
@@ -294,6 +308,10 @@
 					successMsg = mw.message(
 						'campaignevents-event-details-remove-all-participant-notification'
 					).text();
+					thisClass.$noParticipantsStateElement.removeClass( 'ext-campaignevents-details-hide-element' );
+					thisClass.searchParticipantsWidget.$element.hide();
+					thisClass.messageParticipantsButton.$element.hide();
+					thisClass.$participantsContainer.hide();
 				} else {
 					successMsg = mw.message(
 						'campaignevents-event-details-remove-participant-notification',
@@ -308,11 +326,6 @@
 						mw.language.convertNumber( thisClass.participantsTotal )
 					)
 				);
-				if ( thisClass.participantsTotal === 0 ) {
-					thisClass.$noParticipantsStateElement.removeClass( 'ext-campaignevents-details-hide-element' );
-					thisClass.$searchParticipantsContainer.hide();
-					thisClass.$participantsContainer.hide();
-				}
 				thisClass.scrollDownObserver.reset();
 				thisClass.showNotification( 'success', successMsg );
 			} )

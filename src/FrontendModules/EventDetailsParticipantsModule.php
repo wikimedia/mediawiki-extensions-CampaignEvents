@@ -43,9 +43,9 @@ class EventDetailsParticipantsModule {
 	];
 
 	/** @var UserLinker */
-	private $userLinker;
+	private UserLinker $userLinker;
 	/** @var ParticipantsStore */
-	private $participantsStore;
+	private ParticipantsStore $participantsStore;
 	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var PermissionChecker */
@@ -139,7 +139,7 @@ class EventDetailsParticipantsModule {
 		}
 
 		$items = [];
-		$items[] = $this->getHeader(
+		$items[] = $this->getPrimaryHeader(
 			$totalParticipants,
 			$canRemoveParticipants,
 			$canEmailParticipants
@@ -185,30 +185,34 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param int $totalParticipants
-	 * @param bool $viewerCanRemoveParticipants
+	 * @param bool $canRemoveParticipants
+	 * @param bool $canEmailParticipants
 	 * @return Tag
 	 */
-	private function getHeader(
-		int $totalParticipants,
-		bool $viewerCanRemoveParticipants,
-		bool $viewerCanEmailParticipants
+	private function getPrimaryHeader(
+		int $totalParticipants, $canRemoveParticipants, $canEmailParticipants
 	): Tag {
-		$headerText = ( new Tag( 'div' ) )->appendContent(
+		$headerText = ( new Tag( 'span' ) )->appendContent(
 			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-header-participants' )
 					->numParams( $totalParticipants )
 			)
 		)->addClasses( [ 'ext-campaignevents-details-participants-header-text' ] );
-
-		$header = ( new Tag() )->appendContent(
+		$headerTitle = ( new Tag() )->appendContent(
 			$headerText
-		)->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
+		)->addClasses( [ 'ext-campaignevents-details-participants-header-title' ] );
+		$header = ( new Tag() )->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
 
 		if ( $totalParticipants ) {
-			$header->appendContent( $this->getSearchBar(
-				$viewerCanRemoveParticipants,
-				$viewerCanEmailParticipants
-			) );
+			$headerTitle->appendContent( $this->getSearchBar() );
+			$header->appendContent(
+				$headerTitle
+			);
+			$header->appendContent( $this->getHeaderControls( $canRemoveParticipants, $canEmailParticipants ) );
+		} else {
+			$header->appendContent(
+				$headerTitle
+			);
 		}
 
 		return $header;
@@ -268,52 +272,16 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param bool $viewerCanRemoveParticipants
 	 * @return Tag
 	 */
-	private function getSearchBar(
-		bool $viewerCanRemoveParticipants,
-		bool $viewerCanEmailParticipants
-	): Tag {
-		$container = ( new Tag( 'div' ) )->appendContent(
-			new SearchInputWidget( [
+	private function getSearchBar(): Tag {
+			return new SearchInputWidget( [
 				'placeholder' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
 				),
 				'infusable' => true,
 				'classes' => [ 'ext-campaignevents-details-participants-search' ]
-			] )
-		)->addClasses( [ 'ext-campaignevents-details-participants-search-container' ] );
-		if ( $viewerCanRemoveParticipants ) {
-			$removeButton = new ButtonWidget( [
-				'infusable' => true,
-				'framed' => true,
-				'flags' => [
-					'destructive'
-				],
-				'disabled' => true,
-				'label' => $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
-				),
-				'id' => 'ext-campaignevents-event-details-remove-participant-button',
-				'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
 			] );
-			$container->appendContent( $removeButton );
-		}
-		if ( $viewerCanEmailParticipants ) {
-			$messageAllParticipantsButton = new ButtonWidget( [
-				'infusable' => true,
-				'framed' => true,
-				'label' => $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-message-all' )
-				),
-				'flags' => [ 'progressive' ],
-				'classes' => [ 'ext-campaignevents-event-details-message-all-participants-button' ],
-			] );
-			$container->appendContent( $messageAllParticipantsButton );
-		}
-
-		return $container;
 	}
 
 	/**
@@ -520,5 +488,61 @@ class EventDetailsParticipantsModule {
 		return ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-event-details-participants-footer' ] )
 			->appendContent( $icon, $textElement );
+	}
+
+	/**
+	 * @param bool $viewerCanRemoveParticipants
+	 * @param bool $viewerCanEmailParticipants
+	 * @return Tag
+	 */
+	private function getHeaderControls(
+		bool $viewerCanRemoveParticipants,
+		bool $viewerCanEmailParticipants
+	): Tag {
+		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-controls' ] );
+		$removeButton = new ButtonWidget( [
+			'icon' => 'close',
+			'title' => $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-participants-deselect' )
+			),
+			'framed' => false,
+			'flags' => [ 'progressive' ],
+			'infusable' => true,
+			'label' => $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-participants-checkboxes-selected', [ 0,0 ] )
+			),
+			'classes' => [ 'ext-campaignevents-details-participants-count-button' ]
+		] );
+		$container->appendContent( [ $removeButton ] );
+		$buttonContainer = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-buttons' ] );
+		if ( $viewerCanRemoveParticipants ) {
+			$removeButton = new ButtonWidget( [
+				'infusable' => true,
+				'framed' => true,
+				'flags' => [
+					'destructive'
+				],
+				'label' => $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
+				),
+				'id' => 'ext-campaignevents-event-details-remove-participant-button',
+				'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
+			] );
+			$buttonContainer->appendContent( $removeButton );
+		}
+		if ( $viewerCanEmailParticipants ) {
+			$messageAllParticipantsButton = new ButtonWidget( [
+				'infusable' => true,
+				'framed' => true,
+				'label' => $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-message-all' )
+				),
+				'flags' => [ 'progressive' ],
+				'classes' => [ 'ext-campaignevents-event-details-message-all-participants-button' ],
+			] );
+			$buttonContainer->appendContent( $messageAllParticipantsButton );
+		}
+		$container->appendContent( $buttonContainer );
+		return $container;
 	}
 }
