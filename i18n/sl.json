@@ -202,6 +202,7 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ne",
 	"campaignevents-eventpage-register-dialog-register": "Registrirajte se",
 	"campaignevents-eventpage-register-dialog-save": "Shrani",
+	"campaignevents-eventpage-register-dialog-clear": "Počisti obrazec",
 	"campaignevents-eventpage-register-dialog-title": "Prijava na dogodek",
 	"campaignevents-eventpage-register-dialog-title-edit": "Uredi prijavo",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Zasebnost registracije",
@@ -351,7 +352,7 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Drugi organizacijski partnerji",
 	"campaignevents-register-question-affiliate-details-placeholder": "Prosimo, navedite",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informacije za organizatorje",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Vsa vprašanja so izbirna",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Te informacije bodo posredovane samo organizatorjem dogodka.",
 	"campaignevents-register-invalid-answer": "Neveljaven odgovor na vprašanje $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Prosimo, navedite"
 }

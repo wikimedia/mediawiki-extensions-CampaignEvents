@@ -203,6 +203,7 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "לא",
 	"campaignevents-eventpage-register-dialog-register": "להירשם",
 	"campaignevents-eventpage-register-dialog-save": "שמירה",
+	"campaignevents-eventpage-register-dialog-clear": "ניקוי טופס",
 	"campaignevents-eventpage-register-dialog-title": "רישום לאירוע",
 	"campaignevents-eventpage-register-dialog-title-edit": "עריכת הרשמה",
 	"campaignevents-eventpage-register-dialog-visibility-title": "פרטיות הרשמה",
@@ -352,7 +353,7 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "שותפים מארגנים אחרים",
 	"campaignevents-register-question-affiliate-details-placeholder": "נא להשיב",
 	"campaignevents-eventpage-register-dialog-questions-title": "מידע למארגנים",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "כל השאלות הן רשות",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "המידע הזה ישותף רק עם מארגני האירוע.",
 	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב"
 }

@@ -202,6 +202,7 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "No",
 	"campaignevents-eventpage-register-dialog-register": "Inscriber",
 	"campaignevents-eventpage-register-dialog-save": "Salveguardar",
+	"campaignevents-eventpage-register-dialog-clear": "Rader formulario",
 	"campaignevents-eventpage-register-dialog-title": "Inscriber se al evento",
 	"campaignevents-eventpage-register-dialog-title-edit": "Modificar inscription",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Confidentialitate de inscription",
@@ -351,7 +352,7 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Altere partners de organisation",
 	"campaignevents-register-question-affiliate-details-placeholder": "Per favor precisa",
 	"campaignevents-eventpage-register-dialog-questions-title": "Information pro organisatores",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Tote le questiones es optional",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Iste information essera condividite solmente con le organisatores del evento.",
 	"campaignevents-register-invalid-answer": "Responsa non valide al question $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Per favor precisa"
 }
