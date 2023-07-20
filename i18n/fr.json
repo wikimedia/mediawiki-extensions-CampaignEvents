@@ -209,6 +209,7 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Non",
 	"campaignevents-eventpage-register-dialog-register": "S’inscrire",
 	"campaignevents-eventpage-register-dialog-save": "Enregistrer",
+	"campaignevents-eventpage-register-dialog-clear": "Effacer le formulaire",
 	"campaignevents-eventpage-register-dialog-title": "S’inscrire à un événement",
 	"campaignevents-eventpage-register-dialog-title-edit": "Modifier l’inscription",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Confidentialité de l’inscription",
@@ -353,7 +354,7 @@
 	"campaignevents-register-question-profession-option-student": "Étudiant(e)",
 	"campaignevents-register-question-profession-option-other": "Métier non listé",
 	"campaignevents-register-question-confidence-contributing": "Dans quelle mesure vous sentez-vous à l’aise pour contribuer aux projets Wikimedia impliqués dans cet événement ? (facultatif)",
-	"campaignevents-register-question-confidence-contributing-not-say": "Je préfère ne pas le dire",
+	"campaignevents-register-question-confidence-contributing-not-say": "Préfère ne pas le dire",
 	"campaignevents-register-question-confidence-contributing-option-none": "Je n’ai jamais contribué à un projet Wikimedia auparavant",
 	"campaignevents-register-question-confidence-contributing-option-some-not-confident": "J’ai de l’expérience, mais je ne le me sens pas à l’aise ou en confiance",
 	"campaignevents-register-question-confidence-contributing-option-some-confident": "J’ai une certaine expérience et je me sens confiant pour contribuer, mais j’aimerais en savoir plus",
@@ -365,7 +366,7 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Autres partenaires organisateurs",
 	"campaignevents-register-question-affiliate-details-placeholder": "Veuillez préciser",
 	"campaignevents-eventpage-register-dialog-questions-title": "Information pour les organisateurs",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Toutes les questions sont facultatives",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Cette information ne sera partagée qu’avec les organisateurs de l’événement.",
 	"campaignevents-register-invalid-answer": "Réponse non valide à la question $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Veuillez préciser"
 }
