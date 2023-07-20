@@ -317,7 +317,7 @@
 	"campaignevents-event-details-time-registered": "Time registered",
 	"campaignevents-event-details-has-email": "Has email",
 	"campaignevents-register-questions-label-title": "Information for organizers",
-	"campaignevents-register-questions-label-subtitle": "You can change or remove your responses before, during, and after the event.",
+	"campaignevents-register-questions-label-subtitle": "This information will only be shared with the event organizers.",
 	"campaignevents-register-question-gender": "What is your gender identity? (optional)",
 	"campaignevents-register-question-gender-option-not-say": "Prefer not to say",
 	"campaignevents-register-question-gender-option-man": "Man",
