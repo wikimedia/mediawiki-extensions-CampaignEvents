@@ -5,6 +5,7 @@
 		]
 	},
 	"campaignevents-eventpage-dialog-participants-view-list": "Gwelet pep tra",
+	"campaignevents-eventpage-register-dialog-clear": "Skarzhañ diouzh",
 	"campaignevents-event-details-participants": "Anv implijer",
 	"campaignevents-event-details-remove-participant-remove-btn": "Dilemel",
 	"campaignevents-event-details-email-subject-label": "Danvez",
@@ -14,5 +15,6 @@
 	"campaignevents-email-error-notification": "N'eo ket bet kaset ar gemennadenn!",
 	"campaignevents-email-participants-except": "An holl war bouez $1",
 	"campaignevents-email-participants-yes": "Ya",
-	"campaignevents-email-participants-no": "Ket"
+	"campaignevents-email-participants-no": "Ket",
+	"campaignevents-register-question-confidence-contributing-not-say": "Gwell eo ganin chom hep lâret"
 }
