@@ -128,8 +128,9 @@ CREATE TABLE /*_*/ce_question_aggregation (
   ceqag_question_id INT UNSIGNED NOT NULL,
   ceqag_answer_option INT UNSIGNED NOT NULL,
   ceqag_answers_amount INT UNSIGNED NOT NULL,
-  UNIQUE INDEX ceqag_event_question (
-    ceqag_event_id, ceqag_question_id
+  UNIQUE INDEX ceqag_event_question_option (
+    ceqag_event_id, ceqag_question_id,
+    ceqag_answer_option
   ),
   PRIMARY KEY(ceqag_id)
 ) /*$wgDBTableOptions*/;
