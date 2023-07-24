@@ -450,16 +450,6 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			[ 5 ],
 			[ new Answer( 5, 2, 'some-affiliate' ) ]
 		];
-		yield 'Placeholder provided for otherOption organizing partner' => [
-			[ 'affiliate' => [ 'value' => 3, 'other' => '' ] ],
-			[ 5 ],
-			[ new Answer( 5, 3, null ) ]
-		];
-		yield 'Answer with other value for option organizing partner' => [
-			[ 'affiliate' => [ 'value' => 3, 'other' => 'some-organizing-partner' ] ],
-			[ 5 ],
-			[ new Answer( 5, 3, 'some-organizing-partner' ) ]
-		];
 		yield 'Multiple answer types' => [
 			[
 				'gender' => [ 'value' => 3 ],
