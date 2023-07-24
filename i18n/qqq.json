@@ -322,7 +322,7 @@
 	"campaignevents-event-details-time-registered": "Label text for time registered column on participants table",
 	"campaignevents-event-details-has-email": "Label text for has email column on participants table",
 	"campaignevents-register-questions-label-title": "Title shown on [[Special:RegisterForEvent]] introducing a list of questions (defined by the event organizers) that the participant can answer to.",
-	"campaignevents-register-questions-label-subtitle": "Subtitle shown on [[Special:RegisterForEvent]] to inform that the participant can change or remove responses before and during the event",
+	"campaignevents-register-questions-label-subtitle": "Subtitle shown on [[Special:RegisterForEvent]] to introduce a list of questions (defined by the event organizers) that the participant can answer to.",
 	"campaignevents-register-question-gender": "Label of a question shown when registering for an event, asking participants what is their gender identity. The question is optional for participants to answer. Example answers are {{msg-mw|campaignevents-register-question-gender-option-woman}} and {{msg-mw|campaignevents-register-question-gender-option-nonbinary}}.",
 	"campaignevents-register-question-gender-option-not-say": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}.",
 	"campaignevents-register-question-gender-option-man": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}.",
