@@ -122,6 +122,7 @@ CREATE TABLE /*_*/ce_question_aggregation (
   ceqag_answers_amount INTEGER UNSIGNED NOT NULL
 );
 
-CREATE UNIQUE INDEX ceqag_event_question ON /*_*/ce_question_aggregation (
-  ceqag_event_id, ceqag_question_id
+CREATE UNIQUE INDEX ceqag_event_question_option ON /*_*/ce_question_aggregation (
+  ceqag_event_id, ceqag_question_id,
+  ceqag_answer_option
 );

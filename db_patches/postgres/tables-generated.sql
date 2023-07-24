@@ -143,6 +143,7 @@ CREATE TABLE ce_question_aggregation (
   PRIMARY KEY(ceqag_id)
 );
 
-CREATE UNIQUE INDEX ceqag_event_question ON ce_question_aggregation (
-  ceqag_event_id, ceqag_question_id
+CREATE UNIQUE INDEX ceqag_event_question_option ON ce_question_aggregation (
+  ceqag_event_id, ceqag_question_id,
+  ceqag_answer_option
 );

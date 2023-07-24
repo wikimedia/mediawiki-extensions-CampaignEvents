@@ -668,8 +668,8 @@
 		],
 		"indexes": [
 			{
-				"name": "ceqag_event_question",
-				"columns": [ "ceqag_event_id", "ceqag_question_id" ],
+				"name": "ceqag_event_question_option",
+				"columns": [ "ceqag_event_id", "ceqag_question_id", "ceqag_answer_option" ],
 				"unique": true
 			}
 		],
