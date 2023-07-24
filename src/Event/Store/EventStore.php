@@ -99,7 +99,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->cache[$eventID] = $this->newEventFromDBRow(
 			$eventRow,
 			$this->getEventAddressRow( $dbr, $eventID ),
-			$this->getEventTrackingToolRow( $dbr, $eventID, $eventRow ),
+			$this->getEventTrackingToolRow( $dbr, $eventID ),
 			$this->eventQuestionsStore->getEventQuestions( $eventID )
 		);
 		return $this->cache[$eventID];
@@ -136,7 +136,7 @@ class EventStore implements IEventStore, IEventLookup {
 		return $this->newEventFromDBRow(
 			$eventRow,
 			$this->getEventAddressRow( $db, $eventID ),
-			$this->getEventTrackingToolRow( $db, $eventID, $eventRow ),
+			$this->getEventTrackingToolRow( $db, $eventID ),
 			$this->eventQuestionsStore->getEventQuestions( $eventID )
 		);
 	}
@@ -173,10 +173,9 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @param ICampaignsDatabase $db
 	 * @param int $eventID
-	 * @param stdClass $eventRow
 	 * @return stdClass|null
 	 */
-	private function getEventTrackingToolRow( ICampaignsDatabase $db, int $eventID, stdClass $eventRow ): ?stdClass {
+	private function getEventTrackingToolRow( ICampaignsDatabase $db, int $eventID ): ?stdClass {
 		$trackingToolsRows = $db->select(
 			'ce_tracking_tools',
 			'*',
@@ -270,7 +269,7 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 
 		$addressRowsByEvent = $this->getAddressRowsForEvents( $db, $eventIDs );
-		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs, $eventRows );
+		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs );
 		$questionsByEvent = $this->eventQuestionsStore->getEventQuestionsMulti( $eventIDs );
 
 		$events = [];
@@ -317,13 +316,11 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @param ICampaignsDatabase $db
 	 * @param int[] $eventIDs
-	 * @param iterable<stdClass> $eventRows
 	 * @return array<int,stdClass> Maps event IDs to the corresponding tracking tool row
 	 */
 	private function getTrackingToolsRowsForEvents(
 		ICampaignsDatabase $db,
-		array $eventIDs,
-		iterable $eventRows
+		array $eventIDs
 	): array {
 		$trackingToolsRows = $db->select(
 			'ce_tracking_tools',
