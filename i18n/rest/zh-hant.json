@@ -14,5 +14,6 @@
 	"campaignevents-rest-list-participants-empty-filter": "若有指定使用者名稱篩選，必須是非空值的字串。",
 	"campaignevents-rest-list-participants-cannot-see-private": "您無權查看私下註冊參加此活動的參與者。",
 	"campaignevents-rest-set-organizers-empty-list": "<var>Organizer_usernames</var> 必須是使用者名稱陣列，且不能為空",
-	"campaignevents-rest-get-registration-info-notparticipant": "您沒參與此活動。"
+	"campaignevents-rest-get-registration-info-notparticipant": "您沒參與此活動。",
+	"campaignevents-rest-register-invalid-answer": "問題$1的答案無效"
 }
