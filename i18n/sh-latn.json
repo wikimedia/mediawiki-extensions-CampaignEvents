@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Winston Sung"
+		]
+	},
+	"campaignevents-desc": "Pruža značajke za organizatore i sudionike kampanje.",
+	"nstab-event": "Događaj",
+	"campaignevents-edit-field-chat-url-help": "Ako imate online chat grupu za sudionike ovog događaja, ovdje stavite link za poziv. Sudionici će nakon registracije moći vidjeti link s pozivnicom.",
+	"campaignevents-eventpage-dialog-chat-label": "Pridružite se chat grupi događaja",
+	"campaignevents-eventpage-dialog-chat-not-available": "Nije dostupna chat grupa za ovaj događaj.",
+	"campaignevents-eventpage-dialog-chat-register": "Registrirajte se za pregled poveznice grupe za chat."
+}
