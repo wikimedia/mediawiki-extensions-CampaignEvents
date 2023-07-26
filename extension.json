@@ -353,7 +353,9 @@
 				"campaignevents-edit-organizers-not-allowed",
 				"campaignevents-edit-no-organizers",
 				"campaignevents-edit-field-organizers-creator-title",
-				"campaignevents-edit-field-organizers-user-not-allowed"
+				"campaignevents-edit-field-organizers-user-not-allowed",
+				"campaignevents-event-dates-cannot-be-changed",
+				"campaignevents-warning-change-event-end-date-past"
 			]
 		},
 		"ext.campaignEvents.specialregisterforevent.styles": {

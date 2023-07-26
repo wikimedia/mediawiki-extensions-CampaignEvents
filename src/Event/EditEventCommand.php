@@ -459,9 +459,12 @@ class EditEventCommand {
 	): bool {
 		$givenUnixTimestamp = wfTimestamp( TS_UNIX, $registration->getEndUTCTimestamp() );
 		$currentUnixTimestamp = MWTimestamp::now( TS_UNIX );
+		// if there are answers for this event and end date is past
+		// then the organizer can not edit the event dates and they should be disabled
 		if (
 			$givenUnixTimestamp > $currentUnixTimestamp &&
-			$this->isPastEventWithAnswers( $previousVersion )
+			$previousVersion->isPast() &&
+			$this->eventHasAnswersOrAggregates( $previousVersion->getID() )
 		) {
 			return false;
 		}
@@ -469,17 +472,11 @@ class EditEventCommand {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $previousVersion
+	 * @param int $registrationID
 	 * @return bool
 	 */
-	public function isPastEventWithAnswers( ExistingEventRegistration $previousVersion ): bool {
-		// if there are answers for this event and end date is past
-		// then the organizer can not edit the event dates and they should be disabled
-		$registrationID = $previousVersion->getID();
-		if ( $previousVersion->isPast() ) {
-			return $this->answersStore->eventHasAnswers( $registrationID ) ||
-					$this->aggregatedAnswersStore->eventHasAggregates( $registrationID );
-		}
-		return false;
+	public function eventHasAnswersOrAggregates( int $registrationID ): bool {
+		return $this->answersStore->eventHasAnswers( $registrationID ) ||
+			$this->aggregatedAnswersStore->eventHasAggregates( $registrationID );
 	}
 }
