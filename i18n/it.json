@@ -177,7 +177,7 @@
 	"campaignevents-email-participants-yes": "Sì",
 	"campaignevents-email-participants-no": "No",
 	"campaignevents-register-questions-label-title": "Informazioni per gli organizzatori",
-	"campaignevents-register-questions-label-subtitle": "Puoi modificare o rimuovere le tue risposte prima, durante e dopo l'evento.",
+	"campaignevents-register-questions-label-subtitle": "Queste informazioni saranno condivise solo con gli organizzatori dell'evento.",
 	"campaignevents-register-question-gender": "Qual è la tua identità di genere? (opzionale)",
 	"campaignevents-register-question-gender-option-not-say": "Preferisco non dirlo",
 	"campaignevents-register-question-gender-option-man": "Uomo",

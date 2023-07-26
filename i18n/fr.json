@@ -323,7 +323,7 @@
 	"campaignevents-event-details-time-registered": "Horodatage d’inscription",
 	"campaignevents-event-details-has-email": "A un courriel",
 	"campaignevents-register-questions-label-title": "Informations pour les organisateurs",
-	"campaignevents-register-questions-label-subtitle": "Vous pouvez modifier ou retirer vos réponses avant, pendant et après l’événement.",
+	"campaignevents-register-questions-label-subtitle": "Cette information ne sera partagée qu’avec les organisateurs de l’événement.",
 	"campaignevents-register-question-gender": "Quelle est votre identité de genre ? (facultatif)",
 	"campaignevents-register-question-gender-option-not-say": "Je préfère ne pas le dire",
 	"campaignevents-register-question-gender-option-man": "Homme",
