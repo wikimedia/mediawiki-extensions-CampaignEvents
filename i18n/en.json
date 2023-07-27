@@ -317,7 +317,7 @@
 	"campaignevents-event-details-time-registered": "Time registered",
 	"campaignevents-event-details-has-email": "Has email",
 	"campaignevents-register-questions-label-title": "Your information",
-	"campaignevents-register-questions-label-subtitle": "This information will only be shared with the event organizers.",
+	"campaignevents-register-questions-label-subtitle": "This information will be shared with the event organizers only.",
 	"campaignevents-register-question-gender": "What is your gender identity? (optional)",
 	"campaignevents-register-question-gender-option-not-say": "Prefer not to say",
 	"campaignevents-register-question-gender-option-man": "Man",
@@ -360,7 +360,7 @@
 	"campaignevents-register-question-affiliate-option-organizing-partner": "Other organizing partners",
 	"campaignevents-register-question-affiliate-details-placeholder": "Please state",
 	"campaignevents-eventpage-register-dialog-questions-title": "Your information",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "This information will only be shared with the event organizers.",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "This information will be shared with the event organizers only.",
 	"campaignevents-register-invalid-answer": "Invalid answer to the question $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Please state"
 }
