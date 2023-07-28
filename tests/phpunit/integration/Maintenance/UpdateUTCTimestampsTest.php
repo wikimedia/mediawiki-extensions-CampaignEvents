@@ -47,7 +47,6 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 			'event_created_at' => $dbw->timestamp(),
 			'event_last_edit' => $dbw->timestamp(),
 			'event_deleted_at' => null,
-			'event_answers_status' => 0,
 		];
 
 		$getRow = static function ( array $timeFields ) use ( $baseRow ): array {

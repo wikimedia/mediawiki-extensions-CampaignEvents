@@ -22,7 +22,6 @@ CREATE TABLE campaign_events (
   event_created_at TIMESTAMPTZ NOT NULL,
   event_last_edit TIMESTAMPTZ NOT NULL,
   event_deleted_at TIMESTAMPTZ DEFAULT NULL,
-  event_answers_status INT NOT NULL,
   PRIMARY KEY(event_id)
 );
 
