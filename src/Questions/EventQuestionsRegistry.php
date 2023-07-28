@@ -94,7 +94,7 @@ class EventQuestionsRegistry {
 					'label-message' => 'campaignevents-register-question-age',
 					'options-messages' => [
 						'campaignevents-register-question-age-placeholder' => 0,
-						'campaignevents-register-question-age-option-under-24' => 1,
+						'campaignevents-register-question-age-option-under-25' => 1,
 						'campaignevents-register-question-age-option-25-34' => 2,
 						'campaignevents-register-question-age-option-35-44' => 3,
 						'campaignevents-register-question-age-option-45-54' => 4,
@@ -157,18 +157,12 @@ class EventQuestionsRegistry {
 						'campaignevents-register-question-affiliate-placeholder' => 0,
 						'campaignevents-register-question-affiliate-option-none' => 1,
 						'campaignevents-register-question-affiliate-option-affiliate' => 2,
-						'campaignevents-register-question-affiliate-option-organizing-partner' => 3,
 					],
 				],
 				'otherOptions' => [
 					2 => [
 						'type' => self::FREE_TEXT_QUESTION_TYPE,
 						'placeholder-message' => 'campaignevents-register-question-affiliate-details-placeholder',
-					],
-					3 => [
-						'type' => self::FREE_TEXT_QUESTION_TYPE,
-						'placeholder-message' =>
-							'campaignevents-register-question-organizing-partner-details-placeholder',
 					],
 				],
 			],
