@@ -160,14 +160,6 @@
 				"options": {
 					"notnull": false
 				}
-			},
-			{
-				"name": "event_answers_status",
-				"comment": "Field representing the \"status\" of the answers for this event. Possible values: 0 - The event has no answers; 1 - The event has answers, and more answers might be added; 2 - The event has answers, they've already been aggregated and therefore no new answers can be added. The information stored here might also be derived from other tables, so this field serves mostly as an optimization.",
-				"type": "integer",
-				"options": {
-					"notnull": true
-				}
 			}
 		],
 		"indexes": [
