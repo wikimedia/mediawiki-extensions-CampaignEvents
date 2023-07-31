@@ -17,10 +17,13 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
+use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Permissions\PermissionStatus;
 use Message;
+use MWTimestamp;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use StatusValue;
@@ -53,6 +56,10 @@ class EditEventCommand {
 	private TrackingToolUpdater $trackingToolUpdater;
 	/** @var LoggerInterface */
 	private LoggerInterface $logger;
+	/** @var ParticipantAnswersStore */
+	private ParticipantAnswersStore $answersStore;
+	/** @var EventAggregatedAnswersStore */
+	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 
 	/**
 	 * @param IEventStore $eventStore
@@ -64,6 +71,8 @@ class EditEventCommand {
 	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
 	 * @param TrackingToolUpdater $trackingToolUpdater
 	 * @param LoggerInterface $logger
+	 * @param ParticipantAnswersStore $answersStore
+	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
 	 */
 	public function __construct(
 		IEventStore $eventStore,
@@ -74,7 +83,9 @@ class EditEventCommand {
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		TrackingToolEventWatcher $trackingToolEventWatcher,
 		TrackingToolUpdater $trackingToolUpdater,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		ParticipantAnswersStore $answersStore,
+		EventAggregatedAnswersStore $aggregatedAnswersStore
 	) {
 		$this->eventStore = $eventStore;
 		$this->eventLookup = $eventLookup;
@@ -85,6 +96,8 @@ class EditEventCommand {
 		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
 		$this->trackingToolUpdater = $trackingToolUpdater;
 		$this->logger = $logger;
+		$this->answersStore = $answersStore;
+		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
 	}
 
 	/**
@@ -186,6 +199,9 @@ class EditEventCommand {
 		}, $organizerCentralUserIDs );
 		if ( $registrationID ) {
 			$previousVersion = $this->eventLookup->getEventByID( $registrationID );
+			if ( !$this->checkCanEditEventDates( $registration, $previousVersion ) ) {
+				return StatusValue::newFatal( 'campaignevents-event-dates-cannot-be-changed' );
+			}
 			$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateEventUpdate(
 				$previousVersion,
 				$registration,
@@ -430,5 +446,45 @@ class EditEventCommand {
 		}
 
 		return StatusValue::newGood();
+	}
+
+	/**
+	 * @param EventRegistration $registration
+	 * @param ExistingEventRegistration $previousVersion
+	 * @return bool
+	 */
+	private function checkCanEditEventDates(
+		EventRegistration $registration,
+		ExistingEventRegistration $previousVersion
+	): bool {
+		$givenUnixTimestamp = wfTimestamp( TS_UNIX, $registration->getEndUTCTimestamp() );
+		$currentUnixTimestamp = MWTimestamp::now( TS_UNIX );
+		if (
+			$givenUnixTimestamp > $currentUnixTimestamp &&
+			$this->isPastEventWithAnswers( $previousVersion )
+		) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param ExistingEventRegistration $previousVersion
+	 * @return bool
+	 */
+	public function isPastEventWithAnswers( ExistingEventRegistration $previousVersion ): bool {
+		$currentEndUnixTimestamp = wfTimestamp( TS_UNIX, $previousVersion->getEndUTCTimestamp() );
+		$currentUnixTimestamp = MWTimestamp::now( TS_UNIX );
+
+		// if there are answers for this event and end date is past
+		// then the organizer can not edit the event dates and they should be disabled
+		$registrationID = $previousVersion->getID();
+		if (
+			$currentEndUnixTimestamp < $currentUnixTimestamp
+		) {
+			return $this->answersStore->eventHasAnswers( $registrationID ) ||
+					$this->aggregatedAnswersStore->eventHasAggregates( $registrationID );
+		}
+		return false;
 	}
 }

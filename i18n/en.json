@@ -390,5 +390,6 @@
 	"campaignevents-details-stats-header-percentage": "Percentage",
 	"campaignevents-details-stats-header-number": "Number",
 	"campaignevents-details-stats-few-answers-option": "less than $1",
-	"campaignevents-details-stats-no-response": "No response"
+	"campaignevents-details-stats-no-response": "No response",
+	"campaignevents-event-dates-cannot-be-changed": "Past event dates cannot be changed to future dates to protect participant data."
 }
