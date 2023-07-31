@@ -47,6 +47,7 @@
 	"campaignevents-register-question-gender-option-other": "Geschlecht net opgezielt",
 	"campaignevents-register-question-age": "Wéi al sidd Dir? (optional)",
 	"campaignevents-register-question-age-placeholder": "Altersgrupp auswielen",
+	"campaignevents-register-question-age-option-under-25": "Ënner 25",
 	"campaignevents-register-question-profession": "Wat ass Äre Beruff? (optional)",
 	"campaignevents-register-question-profession-placeholder": "Wielt Äre Beruff",
 	"campaignevents-register-question-profession-option-librarian": "Bibliothecaire",
@@ -59,6 +60,7 @@
 	"campaignevents-register-question-confidence-contributing-option-some-not-confident": "Ech hunn e bëssen Erfarung, fille mech awer net sécher",
 	"campaignevents-register-question-affiliate-placeholder": "Wielt eng Optioun",
 	"campaignevents-register-question-affiliate-option-none": "Neen",
+	"campaignevents-register-question-affiliate-option-affiliate": "Jo",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informatioune fir Organisateuren",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "All d'Froe si fakultativ"
 }

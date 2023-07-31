@@ -1,8 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Caden99",
 			"Pisceskaze"
 		]
 	},
-	"campaignevents-eventpage-register-dialog-clear": "Làm lại"
+	"campaignevents-eventpage-register-dialog-clear": "Làm lại",
+	"campaignevents-register-question-age-option-under-25": "Dưới 25 tuổi",
+	"campaignevents-register-question-affiliate": "Bạn có thuộc bất kỳ chi nhánh nào của Wikimedia (chi nhánh, nhóm người dùng, tổ chức chuyên đề) không? (không bắt buộc)",
+	"campaignevents-register-question-affiliate-option-affiliate": "Có"
 }

@@ -152,6 +152,7 @@
 	"campaignevents-email-participants-all": "سارے شرکاء",
 	"campaignevents-email-participants-yes": "جیا",
 	"campaignevents-email-participants-no": "کو",
+	"campaignevents-register-questions-label-title": "تہاݙیاں معلومات",
 	"campaignevents-register-question-gender-option-man": "بندہ",
 	"campaignevents-register-question-gender-option-woman": "تریمت",
 	"campaignevents-register-question-gender-option-nonbinary": "تریجھی جنس",
@@ -174,8 +175,9 @@
 	"campaignevents-register-question-profession-option-other": "پیشہ تندیر وچ کائنی",
 	"campaignevents-register-question-affiliate-placeholder": "ہک اختیار چݨو",
 	"campaignevents-register-question-affiliate-option-none": "کو",
-	"campaignevents-register-question-affiliate-option-affiliate": "الحاق کرو",
+	"campaignevents-register-question-affiliate-option-affiliate": "جیا",
 	"campaignevents-register-question-affiliate-details-placeholder": "سوہݨا، بیان کرو",
+	"campaignevents-eventpage-register-dialog-questions-title": "تہاݙیاں معلومات",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "سارے سوال اختیاری ہن",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "سوہݨا، بیان کرو"
 }

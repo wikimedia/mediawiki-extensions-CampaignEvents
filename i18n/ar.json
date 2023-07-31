@@ -223,6 +223,7 @@
 	"campaignevents-event-details-organizers-header": "المنظمون",
 	"campaignevents-event-details-register-prompt": "تحتاج إلى التسجيل لمشاهدة هذه المعلومات",
 	"campaignevents-event-details-view-event-page": "عرض صفحة الفعالية",
+	"campaignevents-event-details-participants": "اسم المستخدم",
 	"campaignevents-event-details-select-all": "اختر الكل",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 من $2 {{PLURAL:$1|محدد|محددة}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "حذف {{PLURAL:$1|المشارك|المشاركين}}",
@@ -282,6 +283,10 @@
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1| أكثر}}",
 	"campaignevents-notification-registration-event-page-link": "عرض صفحة الفعالية",
 	"campaignevents-notification-registration-chat-link": "إنضم للدردشة الجماعية",
+	"campaignevents-email-success-notification": "أُرسلت الرسالة!",
+	"campaignevents-email-participants-all": "كل المشاركين",
+	"campaignevents-email-participants-yes": "نعم",
+	"campaignevents-email-participants-no": "لا",
 	"campaignevents-register-question-gender": "ما هي هويتك الجنسية؟ (خياري)",
 	"campaignevents-register-question-gender-option-not-say": "أفضل ألا أقول",
 	"campaignevents-register-question-gender-option-man": "رجل",
@@ -305,5 +310,6 @@
 	"campaignevents-register-question-confidence-contributing-option-confident": "أنا واثق أنني أستطيع المساهمة بدون أي دعم",
 	"campaignevents-register-question-affiliate-placeholder": "اختر خيارا",
 	"campaignevents-register-question-affiliate-option-none": "لا",
+	"campaignevents-register-question-affiliate-option-affiliate": "نعم",
 	"campaignevents-register-question-affiliate-details-placeholder": "من فضلك حدد"
 }
