@@ -4,6 +4,18 @@
 			"Milicevic01"
 		]
 	},
+	"campaignevents-edit-field-start": "Почетак",
+	"campaignevents-edit-field-end": "Крај",
+	"campaignevents-edit-field-type-online": "Онлајн догађај",
+	"campaignevents-edit-field-type-in-person": "Уживо догађај",
+	"campaignevents-edit-field-country": "Држава",
+	"campaignevents-edit-field-address": "Адреса",
+	"campaignevents-eventslist-column-location": "Локација",
 	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
-	"campaignevents-eventslist-delete-dialog-delete": "Обриши"
+	"campaignevents-eventslist-delete-dialog-delete": "Обриши",
+	"campaignevents-delete-submit-btn": "Обриши",
+	"campaignevents-eventpage-dialog-dates": "$1 до $4",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Да",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Не",
+	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Одбаци"
 }
