@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
 use HashConfig;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -31,17 +32,27 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 		'invert_users' => "false"
 	];
 
+	/**
+	 * @param PermissionChecker|null $permissionsChecker
+	 * @param CampaignsUserMailer|null $campaignsUserMailer
+	 * @param ParticipantsStore|null $participantsStore
+	 * @param bool $featureEnabled
+	 * @param IEventLookup|null $eventLookup
+	 * @return EmailUsersHandler
+	 */
 	private function newHandler(
 		PermissionChecker $permissionsChecker = null,
 		CampaignsUserMailer $campaignsUserMailer = null,
 		ParticipantsStore $participantsStore = null,
-		bool $featureEnabled = false
+		bool $featureEnabled = false,
+		IEventLookup $eventLookup = null
 	): EmailUsersHandler {
 		return new EmailUsersHandler(
 			$permissionsChecker ?? $this->createMock( PermissionChecker::class ),
 			$campaignsUserMailer ?? $this->createMock( CampaignsUserMailer::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
-			new HashConfig( [ 'CampaignEventsEnableEmail' => $featureEnabled ] )
+			new HashConfig( [ 'CampaignEventsEnableEmail' => $featureEnabled ] ),
+				$eventLookup ?? $this->createMock( IEventLookup::class ),
 		);
 	}
 

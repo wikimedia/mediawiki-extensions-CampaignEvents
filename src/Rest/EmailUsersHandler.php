@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use Config;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -31,22 +32,25 @@ class EmailUsersHandler extends SimpleHandler {
 	private ParticipantsStore $participantsStore;
 	/** @var bool */
 	private bool $endpointEnabled;
+	private IEventLookup $eventLookup;
 
 	/**
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsUserMailer $userMailer
 	 * @param ParticipantsStore $participantsStore
 	 * @param Config $config
+	 * @param IEventLookup $eventLookup
 	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
 		CampaignsUserMailer $userMailer,
 		ParticipantsStore $participantsStore,
-		Config $config ) {
+		Config $config, IEventLookup $eventLookup ) {
 		$this->permissionChecker = $permissionChecker;
 		$this->userMailer = $userMailer;
 		$this->participantsStore = $participantsStore;
 		$this->endpointEnabled = $config->get( 'CampaignEventsEnableEmail' );
+		$this->eventLookup = $eventLookup;
 	}
 
 	/**
@@ -61,8 +65,8 @@ class EmailUsersHandler extends SimpleHandler {
 				421
 			);
 		}
+		$this->getRegistrationOrThrow( $this->eventLookup, $eventId );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
-
 		$params = $this->getValidatedBody();
 
 		if ( !$this->permissionChecker->userCanEmailParticipants( $performer, $eventId ) ) {
@@ -121,7 +125,18 @@ class EmailUsersHandler extends SimpleHandler {
 		}
 
 		return new JsonBodyValidator(
-			[
+			array_merge(
+				$this->getBodyParams(),
+				$this->getTokenParamDefinition()
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getBodyParams(): array {
+		return [
 				'user_ids' => [
 					static::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_TYPE => 'array',
@@ -143,7 +158,6 @@ class EmailUsersHandler extends SimpleHandler {
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_REQUIRED => true,
 				]
-			] + $this->getTokenParamDefinition()
-		);
+			];
 	}
 }

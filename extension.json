@@ -507,7 +507,8 @@
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsUserMailer",
 				"CampaignEventsParticipantsStore",
-				"MainConfig"
+				"MainConfig",
+				"CampaignEventsEventLookup"
 			]
 		},
 		{
