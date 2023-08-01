@@ -37,7 +37,7 @@ class CampaignsDatabaseHelper {
 		$lb = $this->dbCluster === false
 			? $this->lbFactory->getMainLB( $this->dbName )
 			: $this->lbFactory->getExternalLB( $this->dbCluster );
-		return new MWDatabaseProxy( $lb->getConnectionRef( $type, [], $this->dbName ) );
+		return new MWDatabaseProxy( $lb->getConnection( $type, [], $this->dbName ) );
 	}
 
 	/**
