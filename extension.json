@@ -295,6 +295,8 @@
 				"campaignevents-email-participants-missing-address",
 				"campaignevents-email-participants-all",
 				"campaignevents-email-participants-except",
+				"campaignevents-email-participants-except-count",
+				"campaignevents-email-participants-count",
 				"campaignevents-email-participants-yes",
 				"campaignevents-email-participants-no"
 			],
