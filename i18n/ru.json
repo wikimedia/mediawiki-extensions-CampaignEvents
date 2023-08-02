@@ -59,5 +59,6 @@
 	"campaignevents-userlink-suppressed-user": "имя пользователя скрыто",
 	"campaignevents-email-participants-except": "Все, кроме $1",
 	"campaignevents-email-participants-yes": "Да",
-	"campaignevents-email-participants-no": "Нет"
+	"campaignevents-email-participants-no": "Нет",
+	"campaignevents-register-question-affiliate-option-affiliate": "Да"
 }
