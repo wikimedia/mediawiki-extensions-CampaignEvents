@@ -110,7 +110,27 @@
 		}
 
 		if ( allSelected ) {
-			this.$recipientsListElement.append( mw.message( 'campaignevents-email-participants-all' ).text() );
+			this.$recipientsListElement.append(
+				mw.message( 'campaignevents-email-participants-all' ).text() );
+			return;
+		}
+
+		if ( this.recipientsList.length > 1 ) {
+			if ( participantsManager.selectAllParticipantsCheckbox.selected ) {
+				this.$recipientsListElement.append(
+					mw.message(
+						'campaignevents-email-participants-except-count',
+						mw.language.convertNumber(
+							this.recipientsList.length
+						) ).text() );
+				return;
+			}
+			this.$recipientsListElement.append(
+				mw.message(
+					'campaignevents-email-participants-count',
+					mw.language.convertNumber(
+						this.recipientsList.length
+					) ).text() );
 			return;
 		}
 
