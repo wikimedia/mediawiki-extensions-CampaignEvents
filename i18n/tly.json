@@ -10,8 +10,10 @@
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ne",
 	"campaignevents-eventpage-register-dialog-register": "Ğeydiyot",
 	"campaignevents-event-details-edit-button": "Sərosti bıkə",
+	"campaignevents-register-questions-label-title": "Šymə məlumot",
 	"campaignevents-register-question-gender-option-woman": "Žen",
 	"campaignevents-register-question-age-option-under-25": "Bə 25",
 	"campaignevents-register-question-affiliate-option-none": "Ne",
-	"campaignevents-register-question-affiliate-option-affiliate": "Ha"
+	"campaignevents-register-question-affiliate-option-affiliate": "Ha",
+	"campaignevents-eventpage-register-dialog-questions-title": "Šymə məlumot"
 }

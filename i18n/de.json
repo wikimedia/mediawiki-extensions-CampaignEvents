@@ -311,6 +311,8 @@
 	"campaignevents-email-participants-missing-address": "Einige der ausgewählten Teilnehmer haben keine E-Mail-Adresse in ihrem Konto und erhalten deine E-Mail nicht. Du kannst ihnen eine Nachricht senden, indem du auf ihren Benutzernamen klickst und auf ihre Benutzerdiskussionsseite gehst.",
 	"campaignevents-email-participants-all": "Alle Teilnehmer",
 	"campaignevents-email-participants-except": "Alles außer $1",
+	"campaignevents-email-participants-except-count": "Alle außer $1",
+	"campaignevents-email-participants-count": "{{PLURAL:$1|Ein|$1}} Teilnehmer",
 	"campaignevents-email-participants-yes": "Ja",
 	"campaignevents-email-participants-no": "Nein",
 	"campaignevents-event-details-time-registered": "Zeit registriert",

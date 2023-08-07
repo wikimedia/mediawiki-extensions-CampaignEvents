@@ -38,7 +38,8 @@
 	"campaignevents-email-participants-except": "All ausser $1",
 	"campaignevents-email-participants-yes": "Jo",
 	"campaignevents-email-participants-no": "Neen",
-	"campaignevents-register-questions-label-title": "Informatioune fir Organisateuren",
+	"campaignevents-register-questions-label-title": "Är Informatiounen",
+	"campaignevents-register-questions-label-subtitle": "Dës Informatioune ginn nëmme mat den Organisateure vum Evenement gedeelt.",
 	"campaignevents-register-question-gender": "Wat ass Är Geschlechtsidentitéit? (fakultativ)",
 	"campaignevents-register-question-gender-option-not-say": "Wëll ech léiwer net uginn",
 	"campaignevents-register-question-gender-option-man": "Mann",
@@ -61,6 +62,6 @@
 	"campaignevents-register-question-affiliate-placeholder": "Wielt eng Optioun",
 	"campaignevents-register-question-affiliate-option-none": "Neen",
 	"campaignevents-register-question-affiliate-option-affiliate": "Jo",
-	"campaignevents-eventpage-register-dialog-questions-title": "Informatioune fir Organisateuren",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "All d'Froe si fakultativ"
+	"campaignevents-eventpage-register-dialog-questions-title": "Är Informatiounen",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Dës Informatioune ginn nëmme mat den Organisateure vum Evenement gedeelt."
 }

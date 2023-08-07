@@ -312,6 +312,8 @@
 	"campaignevents-email-participants-missing-address": "לחלק מהמשתתפים שנבחרו אין כתובת דוא\"ל בחשבון שלהם והם לא יקבלו את הדוא\"ל שלך. באפשרותך לשלוח להם הודעה על־ידי לחיצה על שמות המשתמש שלהם ומעבר לדף שיחת המשתמש שלהם.",
 	"campaignevents-email-participants-all": "כל המשתתפים",
 	"campaignevents-email-participants-except": "כולם מלבד $1",
+	"campaignevents-email-participants-except-count": "הכול למעט $1",
+	"campaignevents-email-participants-count": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}}",
 	"campaignevents-email-participants-yes": "כן",
 	"campaignevents-email-participants-no": "לא",
 	"campaignevents-event-details-time-registered": "זמן הרישום",

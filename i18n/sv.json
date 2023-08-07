@@ -200,5 +200,7 @@
 	"campaignevents-unregister-participants-permission-denied": "Du får inte ta bort deltagare",
 	"campaignevents-unregister-participants-registration-deleted": "Du får inte ta bort deltagare från detta evenemang eftersom det har raderats.",
 	"campaignevents-event-details-remove-participant-notification-error": "Det uppstod ett fel när {{PLURAL:$1|deltagare}} skulle tas bort",
-	"campaignevents-event-details-search-participants-placeholder": "Sök efter deltagare"
+	"campaignevents-event-details-search-participants-placeholder": "Sök efter deltagare",
+	"campaignevents-email-participants-except-count": "Alla förutom $1",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:participant|deltagare}}"
 }

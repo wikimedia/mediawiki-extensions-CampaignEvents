@@ -311,6 +311,8 @@
 	"campaignevents-email-participants-missing-address": "Alcunes del participantes seligite non ha un adresse de e-mail sur lor conto e non recipera tu message. Tu pote inviar les un message cliccante sur lor nomines de usator e visitante lor pagina de discussion personal.",
 	"campaignevents-email-participants-all": "Tote le participantes",
 	"campaignevents-email-participants-except": "Totes excepte $1",
+	"campaignevents-email-participants-except-count": "Totes excepte $1",
+	"campaignevents-email-participants-count": "$1 participante{{PLURAL:|s}}",
 	"campaignevents-email-participants-yes": "Si",
 	"campaignevents-email-participants-no": "No",
 	"campaignevents-event-details-time-registered": "Hora de inscription",
