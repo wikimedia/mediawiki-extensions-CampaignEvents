@@ -318,6 +318,8 @@
 	"campaignevents-email-participants-missing-address": "Certains des participants sélectionnés n’ont pas d’adresse de messagerie sur leur compte et ne recevront pas votre courriel. Vous pouvez leur envoyer un message en cliquant sur leur nom d’utilisateur et en allant sur leur page de discussion utilisateur.",
 	"campaignevents-email-participants-all": "Tous les participants",
 	"campaignevents-email-participants-except": "Tous sauf $1",
+	"campaignevents-email-participants-except-count": "Tous sauf $1",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:participant|participants}}",
 	"campaignevents-email-participants-yes": "Oui",
 	"campaignevents-email-participants-no": "Non",
 	"campaignevents-event-details-time-registered": "Horodatage d’inscription",

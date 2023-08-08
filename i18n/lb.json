@@ -36,6 +36,8 @@
 	"campaignevents-email-error-notification": "Message net geschéckt!",
 	"campaignevents-email-participants-all": "All Participanten",
 	"campaignevents-email-participants-except": "All ausser $1",
+	"campaignevents-email-participants-except-count": "All ausser $1",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:Participant|Participanten}}",
 	"campaignevents-email-participants-yes": "Jo",
 	"campaignevents-email-participants-no": "Neen",
 	"campaignevents-register-questions-label-title": "Är Informatiounen",
