@@ -6,6 +6,7 @@
 		]
 	},
 	"campaignevents-desc": "Provides features for campaign organisers and participants.",
+	"campaignevents-edit-form-legend": "Provide general information about the event you are organising",
 	"campaignevents-role-organizer": "{{GENDER:$1|organiser}}",
 	"campaignevents-eventpage-dialog-organizers": "Organised by: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "View all organisers",

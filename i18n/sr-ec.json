@@ -4,18 +4,26 @@
 			"Milicevic01"
 		]
 	},
+	"campaignevents-error-empty-start": "Почетак.",
+	"campaignevents-error-empty-end": "Крај.",
 	"campaignevents-edit-field-start": "Почетак",
 	"campaignevents-edit-field-end": "Крај",
 	"campaignevents-edit-field-type-online": "Онлајн догађај",
 	"campaignevents-edit-field-type-in-person": "Уживо догађај",
 	"campaignevents-edit-field-country": "Држава",
 	"campaignevents-edit-field-address": "Адреса",
+	"campaignevents-unregister-confirmation-btn": "Откажи регистрацију",
+	"campaignevents-myevents-label-status": "Статус",
 	"campaignevents-eventslist-column-location": "Локација",
 	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
 	"campaignevents-eventslist-delete-dialog-delete": "Обриши",
+	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> обрисан.",
 	"campaignevents-delete-submit-btn": "Обриши",
+	"campaignevents-eventpage-header-participants-label": "Број учесника",
 	"campaignevents-eventpage-dialog-dates": "$1 до $4",
+	"campaignevents-eventpage-dialog-action-close": "Затвори",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Да",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Не",
-	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Одбаци"
+	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Одбаци",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи"
 }
