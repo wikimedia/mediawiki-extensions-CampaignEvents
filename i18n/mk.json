@@ -312,6 +312,8 @@
 	"campaignevents-email-participants-missing-address": "Некои од избраните учесници немаат внесено е-пошта за нивните сметки и затоа нема да ја добијат вашата порека. Можете да им испратите порака стискајќи на нивните кориснички имиња, и потоа одејќи на нивните разговорни страници.",
 	"campaignevents-email-participants-all": "Сите учесници",
 	"campaignevents-email-participants-except": "Сите освен $1",
+	"campaignevents-email-participants-except-count": "Сите освен $1",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:учесник|учесници}}",
 	"campaignevents-email-participants-yes": "Да",
 	"campaignevents-email-participants-no": "Не",
 	"campaignevents-event-details-time-registered": "Зачленет од",

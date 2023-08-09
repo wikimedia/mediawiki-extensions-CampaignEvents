@@ -63,6 +63,7 @@
 	"campaignevents-email-error-notification": "Порука није послата!",
 	"campaignevents-email-participants-all": "Сви учесници",
 	"campaignevents-email-participants-except": "Све осим $1",
+	"campaignevents-email-participants-except-count": "Све осим $1",
 	"campaignevents-email-participants-yes": "Да",
 	"campaignevents-email-participants-no": "Не",
 	"campaignevents-event-details-time-registered": "Време регистрације",
