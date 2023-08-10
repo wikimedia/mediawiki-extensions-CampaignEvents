@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Reedy"
+		]
+	},
+	"campaignevents-rest-list-participants-cannot-see-private": "You are not authorised to view participants who registered privately for this event."
+}
