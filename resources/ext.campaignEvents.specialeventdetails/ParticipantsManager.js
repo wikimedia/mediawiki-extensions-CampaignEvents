@@ -430,6 +430,7 @@
 	ParticipantsManager.prototype.addParticipantsToList = function ( apiResponse ) {
 		var thisClass = this;
 		this.lastParticipantID = apiResponse[ apiResponse.length - 1 ].participant_id;
+
 		for ( var i = 0; i < apiResponse.length; i++ ) {
 			var curParticipantData = apiResponse[ i ],
 				items = [];
@@ -491,9 +492,16 @@
 			} );
 
 			if ( curParticipantData.private ) {
+				// TODO: Implement gender correctly
+				var privateLabel = mw.message(
+					'campaignevents-event-details-private-participant-label',
+					'unknown'
+				).text();
 				usernameCell.$element.append(
 					new OO.ui.IconWidget( {
 						icon: 'lock',
+						label: privateLabel,
+						title: privateLabel,
 						classes: [ 'ext-campaignevents-event-details-participants-private-icon' ]
 					} ).$element
 				);

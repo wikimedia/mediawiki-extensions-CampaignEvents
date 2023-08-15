@@ -250,6 +250,7 @@
 			"dependencies": [
 				"mediawiki.api",
 				"mediawiki.cookie",
+				"mediawiki.jqueryMsg",
 				"mediawiki.user",
 				"mediawiki.util",
 				"mediawiki.Uri",
@@ -298,7 +299,8 @@
 				"campaignevents-email-participants-except-count",
 				"campaignevents-email-participants-count",
 				"campaignevents-email-participants-yes",
-				"campaignevents-email-participants-no"
+				"campaignevents-email-participants-no",
+				"campaignevents-event-details-private-participant-label"
 			],
 			"dependencies": [
 				"mediawiki.language",
