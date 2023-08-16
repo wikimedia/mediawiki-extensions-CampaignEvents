@@ -36,5 +36,7 @@
 	"campaignevents-notification-registration-header-chat": "Join the $1 to connect with other participants and get additional updates from the organisers.",
 	"campaignevents-notification-registration-details-organizers-header": "Event organisers",
 	"campaignevents-register-questions-label-title": "Information for organisers",
+	"campaignevents-register-questions-label-subtitle": "This information will be shared with the event organisers only.",
+	"campaignevents-register-question-affiliate": "Do you belong to any Wikimedia affiliates (chapters, user groups, thematic organisations)? (optional)",
 	"campaignevents-eventpage-register-dialog-questions-title": "Information for organisers"
 }
