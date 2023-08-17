@@ -13,5 +13,7 @@
 	"campaignevents-rest-remove-participants-invalid-users-ids": "El parámetro 'user_ids' debe ser un conjunto de códigos identificadores de usuario o null (para eliminar a todos los usuarios)",
 	"campaignevents-rest-list-participants-empty-filter": "El filtro de nombres de usuario, si se especifica, debe ser una cadena que no esté vacía.",
 	"campaignevents-rest-list-participants-cannot-see-private": "No tienes permiso para ver la lista de participantes que se inscribieron para este evento de forma privada.",
-	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe ser una cadena de nombres de usuario, y no puede estar vacía"
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe ser una cadena de nombres de usuario, y no puede estar vacía",
+	"campaignevents-rest-get-registration-info-notparticipant": "No participas en este evento.",
+	"campaignevents-rest-register-invalid-answer": "Respuesta no válida a la pregunta $1"
 }
