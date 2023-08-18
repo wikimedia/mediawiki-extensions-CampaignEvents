@@ -146,6 +146,7 @@
 	"campaignevents-notification-registration-details-type-online-header": "線上活動",
 	"campaignevents-notification-registration-details-type-in-person-header": "實體活動",
 	"campaignevents-notification-registration-event-page-link": "查看活動頁面",
+	"campaignevents-email-participants-count": "{{PLURAL:$1|$1 位參與者}}",
 	"campaignevents-register-question-gender-option-woman": "女性",
 	"campaignevents-register-question-gender-option-nonbinary": "非二元性別",
 	"campaignevents-register-question-age-placeholder": "選取年齡範圍",
