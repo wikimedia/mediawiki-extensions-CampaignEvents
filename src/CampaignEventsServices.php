@@ -32,6 +32,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
@@ -248,5 +249,11 @@ class CampaignEventsServices {
 
 	public static function getParticipantAnswersStore( ContainerInterface $services = null ): ParticipantAnswersStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( ParticipantAnswersStore::SERVICE_NAME );
+	}
+
+	public static function getEventAggregatedAnswersStore(
+		ContainerInterface $services = null
+	): EventAggregatedAnswersStore {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventAggregatedAnswersStore::SERVICE_NAME );
 	}
 }

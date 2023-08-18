@@ -33,6 +33,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
@@ -306,6 +307,13 @@ return [
 	},
 	ParticipantAnswersStore::SERVICE_NAME => static function ( MediaWikiServices $services ): ParticipantAnswersStore {
 		return new ParticipantAnswersStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+		);
+	},
+	EventAggregatedAnswersStore::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): EventAggregatedAnswersStore {
+		return new EventAggregatedAnswersStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
