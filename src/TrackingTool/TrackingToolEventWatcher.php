@@ -4,7 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 
-use MediaWiki\Deferred\DeferredUpdatesManager;
+use DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -39,25 +39,20 @@ class TrackingToolEventWatcher {
 	private TrackingToolUpdater $trackingToolUpdater;
 	/** @var LoggerInterface */
 	private LoggerInterface $logger;
-	/** @var DeferredUpdatesManager */
-	private DeferredUpdatesManager $deferredUpdatesManager;
 
 	/**
 	 * @param TrackingToolRegistry $trackingToolRegistry
 	 * @param TrackingToolUpdater $trackingToolUpdater
 	 * @param LoggerInterface $logger
-	 * @param DeferredUpdatesManager $deferredUpdatesManager
 	 */
 	public function __construct(
 		TrackingToolRegistry $trackingToolRegistry,
 		TrackingToolUpdater $trackingToolUpdater,
-		LoggerInterface $logger,
-		DeferredUpdatesManager $deferredUpdatesManager
+		LoggerInterface $logger
 	) {
 		$this->trackingToolRegistry = $trackingToolRegistry;
 		$this->trackingToolUpdater = $trackingToolUpdater;
 		$this->logger = $logger;
-		$this->deferredUpdatesManager = $deferredUpdatesManager;
 	}
 
 	/**
@@ -250,7 +245,7 @@ class TrackingToolEventWatcher {
 	 * @note This method is also responsible for updating the database.
 	 */
 	public function onEventDeleted( ExistingEventRegistration $event ): void {
-		$this->deferredUpdatesManager->addCallableUpdate( function () use ( $event ) {
+		DeferredUpdates::addCallableUpdate( function () use ( $event ) {
 			foreach ( $event->getTrackingTools() as $toolAssociation ) {
 				$toolID = $toolAssociation->getToolID();
 				$toolEventID = $toolAssociation->getToolEventID();
@@ -308,7 +303,7 @@ class TrackingToolEventWatcher {
 		CentralUser $participant,
 		bool $private
 	): void {
-		$this->deferredUpdatesManager->addCallableUpdate( function () use ( $event, $participant, $private ) {
+		DeferredUpdates::addCallableUpdate( function () use ( $event, $participant, $private ) {
 			foreach ( $event->getTrackingTools() as $toolAssociation ) {
 				$toolID = $toolAssociation->getToolID();
 				$toolEventID = $toolAssociation->getToolEventID();
@@ -370,7 +365,7 @@ class TrackingToolEventWatcher {
 		?array $participants,
 		bool $invertSelection
 	): void {
-		$this->deferredUpdatesManager->addCallableUpdate( function () use ( $event, $participants, $invertSelection ) {
+		DeferredUpdates::addCallableUpdate( function () use ( $event, $participants, $invertSelection ) {
 			foreach ( $event->getTrackingTools() as $toolAssociation ) {
 				$toolID = $toolAssociation->getToolID();
 				$toolEventID = $toolAssociation->getToolEventID();

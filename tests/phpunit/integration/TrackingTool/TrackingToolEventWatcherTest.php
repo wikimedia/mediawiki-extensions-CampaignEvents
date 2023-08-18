@@ -2,10 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\TrackingTool;
+namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\TrackingTool;
 
 use Generator;
-use MediaWiki\Deferred\DeferredUpdatesManager;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -14,7 +13,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
-use MediaWikiUnitTestCase;
+use MediaWikiIntegrationTestCase;
 use MWTimestamp;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -24,7 +23,7 @@ use StatusValue;
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher
  * @covers ::__construct
  */
-class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
+class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 	private const FAKE_TIME = '123456789';
 
 	protected function setUp(): void {
@@ -36,14 +35,10 @@ class TrackingToolEventWatcherTest extends MediaWikiUnitTestCase {
 		LoggerInterface $logger = null,
 		TrackingToolUpdater $updater = null
 	): TrackingToolEventWatcher {
-		$deferredUpdatesManager = $this->createMock( DeferredUpdatesManager::class );
-		$deferredUpdatesManager->method( 'addCallableUpdate' )
-			->willReturnCallback( static fn ( callable $fn ) => $fn() );
 		return new TrackingToolEventWatcher(
 			$registry ?? $this->createMock( TrackingToolRegistry::class ),
 			$updater ?? $this->createMock( TrackingToolUpdater::class ),
-			$logger ?? new NullLogger(),
-			$deferredUpdatesManager
+			$logger ?? new NullLogger()
 		);
 	}
 
