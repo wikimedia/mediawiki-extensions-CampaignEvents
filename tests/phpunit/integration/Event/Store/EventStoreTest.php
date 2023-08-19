@@ -14,9 +14,9 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Page\PageIdentityValue;
+use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 use RuntimeException;
-use Title;
 
 /**
  * @group Test

@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
-use Title;
+use MediaWiki\Title\Title;
 
 class UserNotifier {
 	public const SERVICE_NAME = 'CampaignEventsUserNotifier';
