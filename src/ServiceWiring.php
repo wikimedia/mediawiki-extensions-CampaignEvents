@@ -286,8 +286,7 @@ return [
 			return new TrackingToolEventWatcher(
 				$services->get( TrackingToolRegistry::SERVICE_NAME ),
 				$services->get( TrackingToolUpdater::SERVICE_NAME ),
-				LoggerFactory::getInstance( 'CampaignEvents' ),
-				$services->getDeferredUpdatesManager()
+				LoggerFactory::getInstance( 'CampaignEvents' )
 			);
 		},
 	TrackingToolUpdater::SERVICE_NAME => static function ( MediaWikiServices $services ): TrackingToolUpdater {
