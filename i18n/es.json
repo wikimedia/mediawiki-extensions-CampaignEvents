@@ -307,7 +307,7 @@
 	"campaignevents-email-error-notification": "¡Mensaje no enviado!",
 	"campaignevents-email-participants-all": "Todos los participantes",
 	"campaignevents-email-participants-except": "Todos excepto $1",
-	"campaignevents-email-participants-count": "$1 {{PLURAL:participante|participantes}}",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-email-participants-yes": "Sí",
 	"campaignevents-email-participants-no": "No",
 	"campaignevents-event-details-time-registered": "Tiempo registrado",

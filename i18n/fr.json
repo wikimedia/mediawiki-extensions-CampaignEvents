@@ -319,7 +319,7 @@
 	"campaignevents-email-participants-all": "Tous les participants",
 	"campaignevents-email-participants-except": "Tous sauf $1",
 	"campaignevents-email-participants-except-count": "Tous sauf $1",
-	"campaignevents-email-participants-count": "$1 {{PLURAL:participant|participants}}",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|participant|participants}}",
 	"campaignevents-email-participants-yes": "Oui",
 	"campaignevents-email-participants-no": "Non",
 	"campaignevents-event-details-time-registered": "Horodatage d’inscription",

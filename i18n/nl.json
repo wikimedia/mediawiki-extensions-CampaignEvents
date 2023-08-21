@@ -316,7 +316,7 @@
 	"campaignevents-email-participants-all": "Alle deelnemers",
 	"campaignevents-email-participants-except": "Alle, behalve $1",
 	"campaignevents-email-participants-except-count": "Alle, behalve $1",
-	"campaignevents-email-participants-count": "$1 {{PLURAL:deelnemer|deelnemers}}",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|deelnemer|deelnemers}}",
 	"campaignevents-email-participants-yes": "Ja",
 	"campaignevents-email-participants-no": "Nee",
 	"campaignevents-event-details-time-registered": "Tijd registratie",
@@ -334,5 +334,9 @@
 	"campaignevents-register-question-age-placeholder": "Selecteer leeftijdsbereik",
 	"campaignevents-register-question-age-option-under-25": "Onder de 25",
 	"campaignevents-register-question-profession": "Wat is uw beroep? (optioneel)",
-	"campaignevents-register-question-profession-placeholder": "Selecteer uw beroep"
+	"campaignevents-register-question-profession-placeholder": "Selecteer uw beroep",
+	"campaignevents-register-question-profession-option-artist-creative": "Kunstenaar/creatieve professional",
+	"campaignevents-register-question-profession-option-educator": "Onderwijzer",
+	"campaignevents-register-question-profession-option-librarian": "Bibliothecaris",
+	"campaignevents-register-question-profession-option-mass-media": "Massamedia-professional"
 }

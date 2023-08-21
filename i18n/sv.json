@@ -202,5 +202,5 @@
 	"campaignevents-event-details-remove-participant-notification-error": "Det uppstod ett fel när {{PLURAL:$1|deltagare}} skulle tas bort",
 	"campaignevents-event-details-search-participants-placeholder": "Sök efter deltagare",
 	"campaignevents-email-participants-except-count": "Alla förutom $1",
-	"campaignevents-email-participants-count": "$1 {{PLURAL:participant|deltagare}}"
+	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|participant|deltagare}}"
 }

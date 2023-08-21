@@ -312,7 +312,7 @@
 	"campaignevents-email-participants-all": "Vsi udeleženci",
 	"campaignevents-email-participants-except": "Vse, razen $1",
 	"campaignevents-email-participants-except-count": "Vse, razen $1",
-	"campaignevents-email-participants-count": "$1 {{PLURAL:udeleženec|udeleženca|udeležencev|udeleženci}}",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|udeleženec|udeleženca|udeležencev|udeleženci}}",
 	"campaignevents-email-participants-yes": "Da",
 	"campaignevents-email-participants-no": "Ne",
 	"campaignevents-event-details-time-registered": "Čas registracije",

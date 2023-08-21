@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Cookai1205",
 			"Willy1018",
 			"Winston Sung",
 			"列维劳德"
@@ -97,7 +98,7 @@
 	"campaignevents-eventpage-dialog-organizers": "主辦單位： $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "查看所有組織者",
 	"campaignevents-eventpage-dialog-participants": "$1位{{PLURAL:$1|參與者}}",
-	"campaignevents-eventpage-dialog-participants-view-list": "檢視完整清單",
+	"campaignevents-eventpage-dialog-participants-view-list": "檢視全部",
 	"campaignevents-eventpage-dialog-dates-label": "開始和結束時間",
 	"campaignevents-eventpage-dialog-dates": "$1到$4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>時區：</strong>$1",
