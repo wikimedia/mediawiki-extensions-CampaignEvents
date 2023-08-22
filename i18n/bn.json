@@ -130,6 +130,8 @@
 	"campaignevents-event-details-email-subject-label": "বিষয়",
 	"campaignevents-event-details-email-message-label": "বার্তা",
 	"campaignevents-email-participants-except": "$1 ছাড়া সকল",
+	"campaignevents-email-participants-except-count": "$1 ছাড়া সকল",
+	"campaignevents-email-participants-count": "$1 জন {{PLURAL:$1|অংশগ্রহণকারী}}",
 	"campaignevents-email-participants-yes": "হ্যাঁ",
 	"campaignevents-email-participants-no": "না",
 	"campaignevents-event-details-time-registered": "নিবন্ধনের সময়",
