@@ -155,12 +155,12 @@ class EventQuestionsRegistry {
 					'label-message' => 'campaignevents-register-question-affiliate',
 					'options-messages' => [
 						'campaignevents-register-question-affiliate-placeholder' => 0,
-						'campaignevents-register-question-affiliate-option-none' => 1,
-						'campaignevents-register-question-affiliate-option-affiliate' => 2,
+						'campaignevents-register-question-affiliate-option-affiliate' => 1,
+						'campaignevents-register-question-affiliate-option-none' => 2,
 					],
 				],
 				'otherOptions' => [
-					2 => [
+					1 => [
 						'type' => self::FREE_TEXT_QUESTION_TYPE,
 						'placeholder-message' => 'campaignevents-register-question-affiliate-details-placeholder',
 					],
