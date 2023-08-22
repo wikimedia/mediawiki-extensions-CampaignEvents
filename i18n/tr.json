@@ -93,6 +93,7 @@
 	"campaignevents-register-event-past": "Bu etkinlik kayıt dönemi sona ermiştir.",
 	"campaignevents-register-event-not-open": "Bu etkinlik kaydı kapatılmıştır.",
 	"campaignevents-register-already-participant": "Bu etkinlik için zaten kayıtlısınız.",
+	"campaignevents-register-need-central-account": "Etkinliklere kaydolmak için merkezi bir kullanıcı hesabına ihtiyacınız var.",
 	"campaignevents-unregister-not-allowed": "Kaydınızı iptal etmenize izin verilmiyor.",
 	"campaignevents-unregister-event-past": "Bu etkinlik kayıt dönemi sona ermiştir.",
 	"campaignevents-unregister-not-participant": "Bu etkinlik için kayıtlı değilsiniz.",
