@@ -6,6 +6,7 @@
 			"Fúlvio",
 			"Glaucia Japui Gonçalves",
 			"Re demz",
+			"Stephanyb76",
 			"Tiagoquix"
 		]
 	},
@@ -220,7 +221,7 @@
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 de $2 {{PLURAL:$1|selecionado|selecionados}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Remover {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Tem certeza de que deseja remover {{PLURAL:$1|participante|participantes}} selecionados?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Remover",
+	"campaignevents-event-details-remove-participant-remove-btn": "Excluir",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Cancelar",
 	"campaignevents-event-details-no-event-id-provided": "Forneça um ID de evento",
 	"campaignevents-event-details-no-participants-state": "Os nomes de usuário dos participantes aparecerão aqui quando eles se inscreverem",

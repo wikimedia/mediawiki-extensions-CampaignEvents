@@ -257,5 +257,6 @@
 	"campaignevents-notification-registration-details-organizers-header": "Renginio organizatoriai",
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|dar}} $1",
 	"campaignevents-notification-registration-event-page-link": "Žiūrėti įvykio puslapį",
-	"campaignevents-notification-registration-chat-link": "Prisijungti prie grupės pokalbio"
+	"campaignevents-notification-registration-chat-link": "Prisijungti prie grupės pokalbio",
+	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|dalyvis|dalyviai}}"
 }
