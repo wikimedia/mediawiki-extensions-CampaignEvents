@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
+use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionOptionException;
 use MediaWikiUnitTestCase;
 
 /**
@@ -168,6 +169,12 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			);
 			$this->assertArrayHasKey( 'questionData', $questionDescriptor, 'Questions should have data' );
 			$questionData = $questionDescriptor['questionData'];
+			if ( !$questionDescriptor['pii'] ) {
+				$this->assertIsString(
+					$questionDescriptor[ 'non-pii-label-message' ],
+					'"non-pii-label-message" should be a string'
+				);
+			}
 			$this->assertArrayHasKey( 'type', $questionData, 'Questions should have a type' );
 			$questionType = $questionData['type'];
 			if ( in_array( $questionType, EventQuestionsRegistry::MULTIPLE_CHOICE_TYPES, true ) ) {
@@ -606,5 +613,60 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		$registry->overrideQuestionsForTesting( [] );
 		$this->assertArrayHasKey( 'pii', $labels, 'Empty registry' );
 		$this->assertArrayHasKey( 'non-pii', $labels, 'Empty registry' );
+	}
+
+	/**
+	 * @covers ::getQuestionOptionMessageByID
+	 * @dataProvider provideGetQuestionOptionMessageByID
+	 */
+	public function testGetQuestionOptionMessageByID(
+		int $questionID,
+		int $optionID,
+		?string $expected,
+		?string $exception = null
+	) {
+		if ( $exception !== null ) {
+			$this->expectException( $exception );
+		}
+		$actual = $this->getRegistry()->getQuestionOptionMessageByID( $questionID, $optionID );
+		if ( $expected !== null ) {
+			$this->assertSame( $expected, $actual );
+		}
+	}
+
+	public function provideGetQuestionOptionMessageByID(): Generator {
+		yield 'Valid question and option' => [
+			5,
+			1,
+			'campaignevents-register-question-affiliate-option-affiliate'
+		];
+		yield 'Invalid question' => [ 12, 2, null, UnknownQuestionException::class ];
+		yield 'Invalid option' => [ 5, 3, null, UnknownQuestionOptionException::class ];
+	}
+
+	/**
+	 * @covers ::getNonPIIQuestionIDs
+	 */
+	public function testGetNonPIIQuestionIDs() {
+		$nonPIIQuestionIDs = $this->getRegistry()->getNonPIIQuestionIDs(
+			[ 1, 2, 3, 4, 5 ]
+		);
+		$this->assertSame( [ 4, 5 ], $nonPIIQuestionIDs );
+	}
+
+	/**
+	 * @covers ::getNonPIIQuestionLabels
+	 */
+	public function testGetNonPIIQuestionLabels() {
+		$nonPIIQuestionLabels = $this->getRegistry()->getNonPIIQuestionLabels(
+			[ 1, 2, 3, 4, 5 ]
+		);
+		$this->assertSame(
+			[
+				'campaignevents-individual-stats-label-message-confidence',
+				'campaignevents-individual-stats-label-message-affiliate'
+			],
+			$nonPIIQuestionLabels
+		);
 	}
 }

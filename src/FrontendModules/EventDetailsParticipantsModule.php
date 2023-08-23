@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use Config;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -17,8 +18,11 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\Answer;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
+use MediaWiki\Utils\MWTimestamp;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
@@ -56,7 +60,10 @@ class EventDetailsParticipantsModule {
 	private CampaignsUserMailer $userMailer;
 
 	private ITextFormatter $msgFormatter;
+	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private Language $language;
+	private bool $isPastEvent;
+	private bool $participantQuestionsEnabled;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -66,6 +73,8 @@ class EventDetailsParticipantsModule {
 	 * @param PermissionChecker $permissionChecker
 	 * @param UserFactory $userFactory
 	 * @param CampaignsUserMailer $userMailer
+	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 * @param Config $config
 	 * @param Language $language
 	 */
 	public function __construct(
@@ -76,6 +85,8 @@ class EventDetailsParticipantsModule {
 		PermissionChecker $permissionChecker,
 		UserFactory $userFactory,
 		CampaignsUserMailer $userMailer,
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		Config $config,
 		Language $language
 	) {
 		$this->userLinker = $userLinker;
@@ -85,8 +96,13 @@ class EventDetailsParticipantsModule {
 		$this->userFactory = $userFactory;
 		$this->userMailer = $userMailer;
 
-		$this->language = $language;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
+		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->language = $language;
+		$this->isPastEvent = false;
+		$this->participantQuestionsEnabled = $config->get(
+			'CampaignEventsEnableParticipantQuestions'
+		);
 	}
 
 	/**
@@ -110,6 +126,7 @@ class EventDetailsParticipantsModule {
 		OutputPage $out
 	): Tag {
 		$eventID = $event->getID();
+		$this->isPastEvent = $this->isPastEvent( $event );
 		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 
 		try {
@@ -150,7 +167,9 @@ class EventDetailsParticipantsModule {
 				$canRemoveParticipants,
 				$canEmailParticipants,
 				$curUserParticipant,
-				$otherParticipants
+				$otherParticipants,
+				$authority,
+				$event
 			);
 		}
 		// This is added even if there are participants, because they might be removed from this page.
@@ -227,6 +246,8 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canEmailParticipants
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
+	 * @param ICampaignsAuthority $authority
+	 * @param ExistingEventRegistration $event
 	 * @return Tag
 	 */
 	private function getParticipantsTable(
@@ -234,20 +255,42 @@ class EventDetailsParticipantsModule {
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
 		?Participant $curUserParticipant,
-		array $otherParticipants
+		array $otherParticipants,
+		ICampaignsAuthority $authority,
+		ExistingEventRegistration $event
 	): Tag {
 		// Use an outer container for the infinite scrolling
 		$container = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-participants-container' ] );
 		$table = ( new Tag( 'table' ) )
 			->addClasses( [ 'ext-campaignevents-details-participants-table' ] );
-		$table->appendContent( $this->getTableHeaders( $canRemoveParticipants, $canEmailParticipants ) );
+
+		$nonPIIQuestionIDs = $this->eventQuestionsRegistry->getNonPIIQuestionIDs(
+			$event->getParticipantQuestions()
+		);
+
+		$userCanViewNonPIIParticipantsData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
+			$authority, $event->getID()
+		);
+		$table->appendContent( $this->getTableHeaders(
+				$canRemoveParticipants,
+				$canEmailParticipants,
+				$event,
+				$authority,
+				$nonPIIQuestionIDs,
+				$userCanViewNonPIIParticipantsData
+			)
+		);
 		$table->appendContent( $this->getParticipantRows(
 			$curUserParticipant,
 			$otherParticipants,
 			$canRemoveParticipants,
 			$canEmailParticipants,
-			$viewingUser
+			$viewingUser,
+			$authority,
+			$event->getID(),
+			$nonPIIQuestionIDs,
+			$userCanViewNonPIIParticipantsData
 		) );
 		$container->appendContent( $table );
 		return $container;
@@ -293,11 +336,19 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
+	 * @param ExistingEventRegistration $event
+	 * @param ICampaignsAuthority $authority
+	 * @param array $nonPIIQuestionIDs
+	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
 	private function getTableHeaders(
 		bool $canRemoveParticipants,
-		bool $canEmailParticipants
+		bool $canEmailParticipants,
+		ExistingEventRegistration $event,
+		ICampaignsAuthority $authority,
+		array $nonPIIQuestionIDs,
+		bool $userCanViewNonPIIParticipantsData
 	): Tag {
 		$container = ( new Tag( 'thead' ) )->addClasses( [ 'ext-campaignevents-details-participants-table-header' ] );
 		$row = ( new Tag( 'tr' ) )
@@ -326,17 +377,52 @@ class EventDetailsParticipantsModule {
 		}
 
 		$headings = [
-			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-participants' ) ),
-			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-time-registered' ) ),
+			[
+				'message' => $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-participants' )
+				),
+				'cssClasses' => [ 'ext-campaignevents-details-participants-username-cell' ],
+			],
+			[
+				'message' => $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-time-registered' )
+				),
+				'cssClasses' => [ 'ext-campaignevents-details-participants-time-registered-cell' ],
+			],
 		];
 		if ( $canEmailParticipants ) {
-			$headings[] = $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-can-receive-email' )
+			$headings[] = [
+				'message' => $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-can-receive-email' )
+				),
+				'cssClasses' => [ 'ext-campaignevents-details-participants-can-receive-email-cell' ],
+			];
+		}
+
+		if (
+			$this->participantQuestionsEnabled &&
+			!$this->isPastEvent &&
+			$userCanViewNonPIIParticipantsData
+		) {
+			$nonPIIQuestionLabels = $this->eventQuestionsRegistry->getNonPIIQuestionLabels(
+				$nonPIIQuestionIDs
 			);
+			if ( $nonPIIQuestionLabels ) {
+				foreach ( $nonPIIQuestionLabels as $nonPIIQuestionLabel ) {
+					$headings[] = [
+						'message' => $this->msgFormatter->format(
+							MessageValue::new( $nonPIIQuestionLabel )
+						),
+						'cssClasses' => [ 'ext-campaignevents-details-participants-non-pii-question-cells' ],
+					];
+				}
+			}
 		}
 
 		foreach ( $headings as $heading ) {
-			$row->appendContent( ( new Tag( 'th' ) )->appendContent( $heading ) );
+			$row->appendContent(
+				( new Tag( 'th' ) )->appendContent( $heading[ 'message' ] )->addClasses( $heading[ 'cssClasses' ] )
+			);
 		}
 		$container->appendContent( $row );
 		return $container;
@@ -348,6 +434,10 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
+	 * @param ICampaignsAuthority $authority
+	 * @param int $eventID
+	 * @param array $nonPIIQuestionIDs
+	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
 	private function getParticipantRows(
@@ -355,7 +445,11 @@ class EventDetailsParticipantsModule {
 		array $otherParticipants,
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
-		UserIdentity $viewingUser
+		UserIdentity $viewingUser,
+		ICampaignsAuthority $authority,
+		int $eventID,
+		array $nonPIIQuestionIDs,
+		bool $userCanViewNonPIIParticipantsData
 	): Tag {
 		$body = new Tag( 'tbody' );
 		if ( $curUserParticipant ) {
@@ -363,13 +457,26 @@ class EventDetailsParticipantsModule {
 				$curUserParticipant,
 				$canRemoveParticipants,
 				$canEmailParticipants,
-				$viewingUser
+				$viewingUser,
+				$authority,
+				$eventID,
+				$nonPIIQuestionIDs,
+				$userCanViewNonPIIParticipantsData
 			) );
 		}
 
 		foreach ( $otherParticipants as $participant ) {
 			$body->appendContent(
-				$this->getParticipantRow( $participant, $canRemoveParticipants, $canEmailParticipants, $viewingUser )
+				$this->getParticipantRow(
+					$participant,
+					$canRemoveParticipants,
+					$canEmailParticipants,
+					$viewingUser,
+					$authority,
+					$eventID,
+					$nonPIIQuestionIDs,
+					$userCanViewNonPIIParticipantsData
+				)
 			);
 		}
 		return $body;
@@ -380,15 +487,32 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
+	 * @param ICampaignsAuthority $authority
+	 * @param int $eventID
+	 * @param array $nonPIIQuestionIDs
+	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
 	private function getCurUserParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
-		UserIdentity $viewingUser
+		UserIdentity $viewingUser,
+		ICampaignsAuthority $authority,
+		int $eventID,
+		array $nonPIIQuestionIDs,
+		bool $userCanViewNonPIIParticipantsData
 	): Tag {
-		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $canEmailParticipants, $viewingUser );
+		$row = $this->getParticipantRow(
+			$participant,
+			$canRemoveParticipants,
+			$canEmailParticipants,
+			$viewingUser,
+			$authority,
+			$eventID,
+			$nonPIIQuestionIDs,
+			$userCanViewNonPIIParticipantsData
+		);
 		$row->addClasses( [ 'ext-campaignevents-details-current-user-row' ] );
 		return $row;
 	}
@@ -398,13 +522,21 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
+	 * @param ICampaignsAuthority $authority
+	 * @param int $eventID
+	 * @param array $nonPIIQuestionIDs
+	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
 	private function getParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
-		UserIdentity $viewingUser
+		UserIdentity $viewingUser,
+		ICampaignsAuthority $authority,
+		int $eventID,
+		array $nonPIIQuestionIDs,
+		bool $userCanViewNonPIIParticipantsData
 	): Tag {
 		$row = new Tag( 'tr' );
 		$performer = $this->userFactory->newFromId( $viewingUser->getId() );
@@ -487,8 +619,82 @@ class EventDetailsParticipantsModule {
 			) );
 		}
 
+		if (
+			$this->participantQuestionsEnabled &&
+			!$this->isPastEvent &&
+			$userCanViewNonPIIParticipantsData
+		) {
+			$row = $this->addNonPIIParticipantAnswers( $row, $participant, $nonPIIQuestionIDs, $genderUserName );
+		}
 		return $row
 			->addClasses( [ 'ext-campaignevents-details-user-row' ] );
+	}
+
+	/**
+	 * @param Tag $row
+	 * @param Participant $participant
+	 * @param array $nonPIIQuestionIDs
+	 * @param string $genderUserName
+	 * @return Tag
+	 */
+	private function addNonPIIParticipantAnswers(
+		Tag $row,
+		Participant $participant,
+		array $nonPIIQuestionIDs,
+		string $genderUserName
+	): Tag {
+		if ( $participant->getAggregationTimestamp() ) {
+			$aggregatedMessage = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-participant-question-have-been-aggregated', [ $genderUserName ] )
+			);
+			$td = ( new Tag( 'td' ) )->setAttributes( [ 'colspan' => 2 ] )
+				->appendContent( $aggregatedMessage )
+				->addClasses( [ 'ext-campaignevents-details-participants-responses-aggregated-notice' ] );
+			$row->appendContent( $td );
+			return $row;
+		} else {
+			$answeredQuestions = [];
+			foreach ( $participant->getAnswers() as $answer ) {
+				$answeredQuestions[ $answer->getQuestionDBID() ] = $answer;
+			}
+
+			$noResponseMessage = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-participant-question-no-response' )
+			);
+			foreach ( $nonPIIQuestionIDs as $nonPIIQuestionID ) {
+				if ( array_key_exists( $nonPIIQuestionID, $answeredQuestions ) ) {
+					$nonPIIAnswer = $this->getQuestionAnswer( $answeredQuestions[ $nonPIIQuestionID ] );
+					$row->appendContent( ( new Tag( 'td' ) )->appendContent( $nonPIIAnswer ) );
+				} else {
+					$row->appendContent( ( new Tag( 'td' ) )->appendContent( $noResponseMessage ) );
+				}
+			}
+		}
+		return $row;
+	}
+
+	/**
+	 * @param Answer $answer
+	 * @return string
+	 */
+	private function getQuestionAnswer( Answer $answer ) {
+		$option = $answer->getOption();
+		if ( $option === null ) {
+			return $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-participant-question-no-response' )
+			);
+		}
+		$optionMessageKey = $this->eventQuestionsRegistry->getQuestionOptionMessageByID(
+			$answer->getQuestionDBID(),
+			$option
+		);
+		$participantAnswer = $this->msgFormatter->format( MessageValue::new( $optionMessageKey ) );
+		if ( $answer->getText() ) {
+			$participantAnswer .= $this->msgFormatter->format(
+				MessageValue::new( 'colon-separator' )
+			) . $answer->getText();
+		}
+		return $participantAnswer;
 	}
 
 	/**
@@ -569,5 +775,13 @@ class EventDetailsParticipantsModule {
 		}
 		$container->appendContent( $buttonContainer );
 		return $container;
+	}
+
+	/**
+	 * @param ExistingEventRegistration $event
+	 * @return bool
+	 */
+	private function isPastEvent( ExistingEventRegistration $event ): bool {
+		return wfTimestamp( TS_UNIX, $event->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 	}
 }

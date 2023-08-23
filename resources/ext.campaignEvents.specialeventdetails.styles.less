@@ -22,7 +22,7 @@
 /* stylelint-enable selector-max-id */
 
 .ext-campaignevents-event-details-participants-panel {
-	max-width: 60em;
+	max-width: 90em;
 }
 
 .mw-body .ext-campaignevents-eventdetails-panel {
@@ -145,11 +145,24 @@ ul.ext-campaignevents-event-details-organizers-list {
 			top: 0;
 			z-index: @z-index-sticky;
 			background-color: @background-color-base;
-			// Prevent any wrapping on th elements and set a fixed width which will determine the
-			// width of all columns given the fixed table layout.
-			.hyphens( none );
-			white-space: nowrap;
+			.hyphens(none);
+			white-space: normal;
+		}
+
+		th.ext-campaignevents-details-participants-username-cell {
 			width: 15em;
+		}
+
+		th.ext-campaignevents-details-participants-time-registered-cell {
+			width: 15em;
+		}
+
+		th.ext-campaignevents-details-participants-can-receive-email-cell {
+			width: 8em;
+		}
+
+		th.ext-campaignevents-details-participants-non-pii-question-cells {
+			width: 25em;
 		}
 
 		th.ext-campaignevents-details-user-row-checkbox,
@@ -167,7 +180,7 @@ ul.ext-campaignevents-event-details-organizers-list {
 	}
 
 	/* Set a fixed height so that it does not change while we rebuild the list */
-	height: 40em;
+	height: 80vh;
 	overflow: auto;
 }
 
@@ -346,6 +359,11 @@ fieldset.ext-campaignevents-details-email-form {
 .client-nojs .ext-campaignevents-event-details-load-organizers-link {
 	display: none;
 }
+
+.ext-campaignevents-details-participants-responses-aggregated-notice {
+	color: @color-subtle;
+}
+
 // This rule should come last so that it overrides other styles set in this file.
 .ext-campaignevents-details-hide-element {
 	display: none;

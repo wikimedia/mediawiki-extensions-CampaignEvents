@@ -45,6 +45,8 @@ class EventQuestionsRegistry {
 	 *  - pii (bool): Whether the question is considered PII
 	 *  - stats-label-message (string): Key of a message that should be used when introducing the response statistics
 	 *      for this question.
+	 *  - non-pii-label-message (string): Key of a message that should be used when introducing the response of
+	 *      non-pii responses
 	 *  - questionData (array): User-facing properties of the question, with the following keys:
 	 *    - type (string, required): Type of the question, must be one of the self::*_QUESTION_TYPE constants
 	 *    - label-message (string, required): i18n key for the question label
@@ -142,6 +144,7 @@ class EventQuestionsRegistry {
 				'wikimedia' => true,
 				'pii' => false,
 				'stats-label-message' => 'campaignevents-register-question-confidence-stats-label',
+				'non-pii-label-message' => 'campaignevents-individual-stats-label-message-confidence',
 				'organizer-label-message' => 'campaignevents-register-question-confidence-organizer-label',
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
@@ -161,6 +164,7 @@ class EventQuestionsRegistry {
 				'wikimedia' => true,
 				'pii' => false,
 				'stats-label-message' => 'campaignevents-register-question-affiliate-stats-label',
+				'non-pii-label-message' => 'campaignevents-individual-stats-label-message-affiliate',
 				'organizer-label-message' => 'campaignevents-register-question-affiliate-organizer-label',
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
@@ -541,6 +545,24 @@ class EventQuestionsRegistry {
 	}
 
 	/**
+	 * @param int $questionID
+	 * @param int $optionID
+	 * @return string
+	 */
+	public function getQuestionOptionMessageByID( int $questionID, int $optionID ): string {
+		foreach ( $this->getQuestions() as $question ) {
+			if ( $question['db-id'] === $questionID ) {
+				$optionMessages = array_flip( $question['questionData']['options-messages'] );
+				if ( !isset( $optionMessages[ $optionID ] ) ) {
+					throw new UnknownQuestionOptionException( "Unknown option with ID $optionID" );
+				}
+				return $optionMessages[ $optionID ];
+			}
+		}
+		throw new UnknownQuestionException( "Unknown question with ID $questionID" );
+	}
+
+	/**
 	 * @return string[]
 	 */
 	public function getAvailableQuestionNames(): array {
@@ -577,5 +599,37 @@ class EventQuestionsRegistry {
 			}
 		}
 		throw new UnknownQuestionException( "Unknown question DB ID $dbID" );
+	}
+
+	/**
+	 * Returns non PII questions labels.
+	 *
+	 * @param array $eventQuestions
+	 * @return array
+	 */
+	public function getNonPIIQuestionLabels( array $eventQuestions ): array {
+		$nonPIIquestionLabels = [];
+		foreach ( $this->getQuestions() as $question ) {
+			if ( in_array( $question[ 'db-id' ], $eventQuestions, true ) && $question['pii'] === false ) {
+				$nonPIIquestionLabels[] = $question['non-pii-label-message'];
+			}
+		}
+		return $nonPIIquestionLabels;
+	}
+
+	/**
+	 * Returns non PII questions IDs.
+	 *
+	 * @param array $eventQuestions
+	 * @return array
+	 */
+	public function getNonPIIQuestionIDs( array $eventQuestions ): array {
+		$nonPIIquestionIDs = [];
+		foreach ( $this->getQuestions() as $question ) {
+			if ( in_array( $question[ 'db-id' ], $eventQuestions, true ) && $question['pii'] === false ) {
+				$nonPIIquestionIDs[] = $question['db-id'];
+			}
+		}
+		return $nonPIIquestionIDs;
 	}
 }

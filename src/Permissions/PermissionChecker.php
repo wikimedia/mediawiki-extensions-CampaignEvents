@@ -175,6 +175,15 @@ class PermissionChecker {
 	 * @param int $eventID
 	 * @return bool
 	 */
+	public function userCanViewNonPIIParticipantsData( ICampaignsAuthority $performer, int $eventID ): bool {
+		return $this->userCanEditRegistration( $performer, $eventID );
+	}
+
+	/**
+	 * @param ICampaignsAuthority $performer
+	 * @param int $eventID
+	 * @return bool
+	 */
 	public function userCanEmailParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
 		return $this->userCanEditRegistration( $performer, $eventID )
 			&& $performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );

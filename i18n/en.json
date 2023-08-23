@@ -404,5 +404,9 @@
 	"campaignevents-details-stats-range-number": "Between $1 and $2",
 	"campaignevents-details-stats-range-percentage": "Between $1% and $2%",
 	"campaignevents-details-stats-no-response": "No response",
-	"campaignevents-event-dates-cannot-be-changed": "Past event dates cannot be changed to future dates to protect participant data."
+	"campaignevents-event-dates-cannot-be-changed": "Past event dates cannot be changed to future dates to protect participant data.",
+	"campaignevents-individual-stats-label-message-confidence": "How confident do you feel contributing to the Wikimedia projects involved in this event?",
+	"campaignevents-individual-stats-label-message-affiliate": "Do you belong to any Wikimedia affiliates (chapters, user groups, thematic organizations)?",
+	"campaignevents-participant-question-have-been-aggregated": "This {{GENDER:$1|participant's}} responses have been aggregated and deleted",
+	"campaignevents-participant-question-no-response": "No response"
 }

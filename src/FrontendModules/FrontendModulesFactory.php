@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use Config;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -49,6 +50,7 @@ class FrontendModulesFactory {
 	private ParticipantAnswersStore $answersStore;
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 	private EventQuestionsRegistry $questionsRegistry;
+	private Config $config;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -65,6 +67,7 @@ class FrontendModulesFactory {
 	 * @param ParticipantAnswersStore $answersStore
 	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
 	 * @param EventQuestionsRegistry $questionsRegistry
+	 * @param Config $config
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -80,7 +83,8 @@ class FrontendModulesFactory {
 		CampaignsUserMailer $userMailer,
 		ParticipantAnswersStore $answersStore,
 		EventAggregatedAnswersStore $aggregatedAnswersStore,
-		EventQuestionsRegistry $questionsRegistry
+		EventQuestionsRegistry $questionsRegistry,
+		Config $config
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -96,6 +100,7 @@ class FrontendModulesFactory {
 		$this->answersStore = $answersStore;
 		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
 		$this->questionsRegistry = $questionsRegistry;
+		$this->config = $config;
 	}
 
 	/**
@@ -130,6 +135,8 @@ class FrontendModulesFactory {
 			$this->permissionChecker,
 			$this->userFactory,
 			$this->userMailer,
+			$this->questionsRegistry,
+			$this->config,
 			$language
 		);
 	}
