@@ -368,6 +368,8 @@
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "This information will be shared with the event organizers only.",
 	"campaignevents-eventpage-register-dialog-retention-title": "Data retention information",
 	"campaignevents-eventpage-register-dialog-retention-base": "Your responses are aggregated and then deleted 90 days after submission or at the end of the event, whichever comes first. Edit responses anytime before then. Once deleted, they cannot be changed, re-answered, or retrieved.",
+	"campaignevents-eventpage-register-dialog-retention-days": "The remaining time until your responses are aggregated and deleted is: <strong>$1 {{PLURAL:$1|day|days}}</strong>.",
+	"campaignevents-eventpage-register-dialog-retention-hours": "The remaining time until your responses are aggregated and deleted is: <strong>less than 24 hours</strong>.",
 	"campaignevents-register-invalid-answer": "Invalid answer to the question $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Please state"
 }

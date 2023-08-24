@@ -301,13 +301,17 @@ class EventPageDecorator {
 			)
 		);
 
+		$aggregationTimestamp = $curParticipant
+			? Utils::getAnswerAggregationTimestamp( $curParticipant, $registration )
+			: null;
 		$this->out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $registration->getID(),
 			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
 			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData( $registration, $curParticipant ),
 			// temporarily feature flag to prevent participants from seeing the event questions
 			'wgCampaignEventsEnableParticipantQuestions' =>
-				MediaWikiServices::getInstance()->getMainConfig()->get( 'CampaignEventsEnableParticipantQuestions' )
+				MediaWikiServices::getInstance()->getMainConfig()->get( 'CampaignEventsEnableParticipantQuestions' ),
+			'wgCampaignEventsAggregationTimestamp' => $aggregationTimestamp
 		] );
 	}
 

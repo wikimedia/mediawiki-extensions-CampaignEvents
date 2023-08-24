@@ -16,6 +16,7 @@
 		configData = require( './data.json' ),
 		userIsParticipant = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ) !== null,
 		userIsRegisteredPublicly = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ),
+		aggregationTimestamp = mw.config.get( 'wgCampaignEventsAggregationTimestamp' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
 
@@ -119,7 +120,8 @@
 			var curParticipantData;
 			if ( userIsParticipant ) {
 				curParticipantData = {
-					public: userIsRegisteredPublicly
+					public: userIsRegisteredPublicly,
+					aggregationTimestamp: aggregationTimestamp
 				};
 			}
 			participantRegistrationDialog = new ParticipantRegistrationDialog(
