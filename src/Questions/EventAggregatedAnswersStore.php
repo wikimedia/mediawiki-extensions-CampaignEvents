@@ -9,6 +9,11 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 class EventAggregatedAnswersStore {
 	public const SERVICE_NAME = 'CampaignEventsEventAggregatedAnswersStore';
 
+	/**
+	 * The TTL of raw answers before they are aggregated, in seconds.
+	 */
+	public const ANSWERS_TTL_SEC = 90 * 24 * 60 * 60;
+
 	/** @var CampaignsDatabaseHelper */
 	private CampaignsDatabaseHelper $dbHelper;
 

@@ -9,6 +9,7 @@ use Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MWTimestamp;
 use RuntimeException;
 
@@ -16,8 +17,6 @@ use RuntimeException;
  * Maintenance script that aggregates and deletes participant answers after a predefined amount of time.
  */
 class AggregateParticipantAnswers extends Maintenance {
-	private const TTL_SEC = 90 * 24 * 60 * 60;
-
 	private ?ICampaignsDatabase $dbw;
 	private ?ICampaignsDatabase $dbr;
 
@@ -74,7 +73,7 @@ class AggregateParticipantAnswers extends Maintenance {
 		$this->output( "Aggregating old participant answers...\n" );
 
 		$this->curTimeUnix = (int)MWTimestamp::now( TS_UNIX );
-		$this->cutoffTimeUnix = $this->curTimeUnix - self::TTL_SEC;
+		$this->cutoffTimeUnix = $this->curTimeUnix - EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
 		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );
 		$dbw = $dbHelper->getDBConnection( DB_PRIMARY );

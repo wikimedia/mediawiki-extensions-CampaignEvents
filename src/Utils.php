@@ -7,7 +7,11 @@ namespace MediaWiki\Extension\CampaignEvents;
 use DateTime;
 use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\User\UserTimeCorrection;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
 
 /**
@@ -71,5 +75,30 @@ class Utils {
 		$randomTime = '2022-10-20 18:00:00 ' . $timezoneName;
 		$offset = ( new DateTime( $randomTime ) )->format( 'P' );
 		return new UserTimeCorrection( $offset );
+	}
+
+	/**
+	 * Given a participant and an event registration, returns the timestamp when the answers of this participant should
+	 * be aggregated. This method may return a timestamp in the past (e.g., if it's recent enough that we still haven't
+	 * been able to aggregate the answers), but it will return null if the participant never answered any questions, or
+	 * if their answers have already been aggregated. In particular, this means that if the answers have already been
+	 * aggregated, the aggregation timestamp is ignored. This is motivated by the current UI, where participant whose
+	 * answers have been aggregated are treated the same as those who never answered any question.
+	 *
+	 * @param Participant $participant
+	 * @param ExistingEventRegistration $event
+	 * @return string|null Timestamp in TS_UNIX format
+	 */
+	public static function getAnswerAggregationTimestamp(
+		Participant $participant,
+		ExistingEventRegistration $event
+	): ?string {
+		$firstAnswerTime = $participant->getFirstAnswerTimestamp();
+		if ( $firstAnswerTime === null || $participant->getAggregationTimestamp() !== null ) {
+			return null;
+		}
+		$participantAggregationTS = (int)$firstAnswerTime + EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
+		$eventAggregationTS = (int)MWTimestamp::convert( TS_UNIX, $event->getEndUTCTimestamp() );
+		return (string)min( $participantAggregationTS, $eventAggregationTS );
 	}
 }
