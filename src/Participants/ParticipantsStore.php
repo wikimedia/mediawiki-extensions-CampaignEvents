@@ -266,7 +266,7 @@ class ParticipantsStore implements IDBAccessObject {
 
 		$rows = $dbr->select(
 			'ce_participants',
-			[ 'cep_id', 'cep_user_id', 'cep_registered_at', 'cep_private', 'cep_first_answer_timestamp' ],
+			'*',
 			$where,
 			$opts
 		);
@@ -300,7 +300,8 @@ class ParticipantsStore implements IDBAccessObject {
 				(int)$row->cep_id,
 				(bool)$row->cep_private,
 				$answersByUser[$centralID],
-				wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp )
+				wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp ),
+				wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp )
 			);
 			$num++;
 		}
@@ -347,7 +348,8 @@ class ParticipantsStore implements IDBAccessObject {
 			(int)$row->cep_id,
 			(bool)$row->cep_private,
 			$this->answersStore->getParticipantAnswers( $eventID, $user ),
-			wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp )
+			wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp ),
+			wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp )
 		);
 	}
 

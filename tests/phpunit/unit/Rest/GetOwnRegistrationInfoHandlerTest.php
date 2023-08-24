@@ -65,6 +65,7 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 			10,
 			false,
 			[],
+			null,
 			null
 		);
 		$publicNoAnswersStore = $this->createMock( ParticipantsStore::class );
@@ -87,7 +88,8 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 				new Answer( 1, 2, null ),
 				new Answer( 5, 3, 'foo' ),
 			],
-			$timestamp
+			$timestamp,
+			null
 		);
 		$privateWithAnswersStore = $this->createMock( ParticipantsStore::class );
 		$privateWithAnswersStore->method( 'getEventParticipant' )
