@@ -35,7 +35,8 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 			timezone: 'UTC',
 			start_time: '30200220200220',
 			end_time: '30200220200222',
-			type: 'generic',
+			// TODO: Add this when the feature is implemented
+			// type: 'generic',
 			online_meeting: true,
 			token: token
 		};
