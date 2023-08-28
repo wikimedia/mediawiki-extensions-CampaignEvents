@@ -139,6 +139,15 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			);
 			$this->assertArrayHasKey( 'pii', $questionDescriptor, 'Questions should specify whether they are PII' );
 			$this->assertIsBool( $questionDescriptor['pii'], 'Values for the "pii" key should be booleans' );
+			$this->assertArrayHasKey(
+				'stats-label-message',
+				$questionDescriptor,
+				'Questions should specify a label message for stats'
+			);
+			$this->assertIsString(
+				$questionDescriptor['stats-label-message'],
+				'"stats-label-message" should be a string'
+			);
 			$this->assertArrayHasKey( 'questionData', $questionDescriptor, 'Questions should have data' );
 			$questionData = $questionDescriptor['questionData'];
 			$this->assertArrayHasKey( 'type', $questionData, 'Questions should have a type' );

@@ -208,11 +208,11 @@ class SpecialEventDetails extends SpecialPage {
 		$eventEndUnix = (int)wfTimestamp( TS_UNIX, $this->event->getEndUTCTimestamp() );
 		$eventHasEnded = $eventEndUnix < (int)MWTimestamp::now( TS_UNIX );
 		if ( $isOrganizer && $eventHasEnded && $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
-			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $language );
+			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
 			$tabs[] = $this->createTab(
 				self::STATS_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-stats' ) ),
-				$statsModule->createContent( $this->event )
+				$statsModule->createContent()
 			);
 		}
 

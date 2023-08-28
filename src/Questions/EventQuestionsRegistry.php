@@ -43,6 +43,8 @@ class EventQuestionsRegistry {
 	 *  - db-id (integer): Identifier of the question in the database
 	 *  - wikimedia (bool): Whether the question is Wikimedia-specific
 	 *  - pii (bool): Whether the question is considered PII
+	 *  - stats-label-message (string): Key of a message that should be used when introducing the response statistics
+	 *      for this question.
 	 *  - questionData (array): User-facing properties of the question, with the following keys:
 	 *    - type (string, required): Type of the question, must be one of the self::*_QUESTION_TYPE constants
 	 *    - label-message (string, required): i18n key for the question label
@@ -71,6 +73,7 @@ class EventQuestionsRegistry {
 				'db-id' => 1,
 				'wikimedia' => false,
 				'pii' => true,
+				'stats-label-message' => 'campaignevents-register-question-gender-stats-label',
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-gender',
@@ -89,6 +92,7 @@ class EventQuestionsRegistry {
 				'db-id' => 2,
 				'wikimedia' => false,
 				'pii' => true,
+				'stats-label-message' => 'campaignevents-register-question-age-stats-label',
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-age',
@@ -110,6 +114,7 @@ class EventQuestionsRegistry {
 				'db-id' => 3,
 				'wikimedia' => false,
 				'pii' => true,
+				'stats-label-message' => 'campaignevents-register-question-profession-stats-label',
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-profession',
@@ -133,6 +138,7 @@ class EventQuestionsRegistry {
 				'db-id' => 4,
 				'wikimedia' => true,
 				'pii' => false,
+				'stats-label-message' => 'campaignevents-register-question-confidence-stats-label',
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-confidence-contributing',
@@ -150,6 +156,7 @@ class EventQuestionsRegistry {
 				'db-id' => 5,
 				'wikimedia' => true,
 				'pii' => false,
+				'stats-label-message' => 'campaignevents-register-question-affiliate-stats-label',
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-affiliate',
@@ -476,6 +483,40 @@ class EventQuestionsRegistry {
 		}
 
 		return new Answer( $questionSpec['db-id'], $ansOption, $ansText );
+	}
+
+	/**
+	 * Returns the key of a message to be used when introducing stats for the given question.
+	 *
+	 * @param int $questionID
+	 * @return string
+	 */
+	public function getQuestionLabelForStats( int $questionID ): string {
+		foreach ( $this->getQuestions() as $question ) {
+			if ( $question['db-id'] === $questionID ) {
+				return $question['stats-label-message'];
+			}
+		}
+		throw new UnknownQuestionException( "Unknown question with ID $questionID" );
+	}
+
+	/**
+	 * @param int $questionID
+	 * @return array<int,string> Map of [ answer ID => message key ]
+	 */
+	public function getQuestionOptionsForStats( int $questionID ): array {
+		foreach ( $this->getQuestions() as $question ) {
+			if ( $question['db-id'] === $questionID ) {
+				$questionData = $question['questionData'];
+				if ( !in_array( $questionData['type'], self::MULTIPLE_CHOICE_TYPES, true ) ) {
+					throw new LogicException( 'Not implemented' );
+				}
+				$options = array_flip( $questionData['options-messages'] );
+				unset( $options[0] );
+				return $options;
+			}
+		}
+		throw new UnknownQuestionException( "Unknown question with ID $questionID" );
 	}
 
 	/**

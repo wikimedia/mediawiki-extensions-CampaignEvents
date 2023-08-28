@@ -363,6 +363,11 @@
 	"campaignevents-register-question-affiliate-option-none": "No",
 	"campaignevents-register-question-affiliate-option-affiliate": "Yes",
 	"campaignevents-register-question-affiliate-details-placeholder": "Please state",
+	"campaignevents-register-question-gender-stats-label": "What is your gender identity?",
+	"campaignevents-register-question-age-stats-label": "What is your age?",
+	"campaignevents-register-question-profession-stats-label": "What is your profession?",
+	"campaignevents-register-question-confidence-stats-label": "How confident do you feel contributing to the Wikimedia projects involved in this event?",
+	"campaignevents-register-question-affiliate-stats-label": "Do you belong to any Wikimedia affiliates (chapters, user groups, thematic organizations)?",
 	"campaignevents-register-answers-aggregated": "Your responses have been aggregated and deleted per the data retention information.",
 	"campaignevents-register-retention-title": "Data retention information",
 	"campaignevents-register-retention-base": "Your responses are aggregated and then deleted 90 days after submission or at the end of the event, whichever comes first. Edit responses anytime before then. Once deleted, they cannot be changed, re-answered, or retrieved.",
@@ -378,5 +383,11 @@
 	"campaignevents-register-invalid-answer": "Invalid answer to the question $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Please state",
 	"campaignevents-details-stats-no-responses": "This event has no responses from participants to aggregate.",
-	"campaignevents-details-stats-not-ready": "Participants' responses will be aggregated and made available here shortly."
+	"campaignevents-details-stats-not-ready": "Participants' responses will be aggregated and made available here shortly.",
+	"campaignevents-details-stats-not-enough-answers": "This question has received less than $1 total responses.",
+	"campaignevents-details-stats-header-option": "Option",
+	"campaignevents-details-stats-header-percentage": "Percentage",
+	"campaignevents-details-stats-header-number": "Number",
+	"campaignevents-details-stats-few-answers-option": "less than $1",
+	"campaignevents-details-stats-no-response": "No response"
 }

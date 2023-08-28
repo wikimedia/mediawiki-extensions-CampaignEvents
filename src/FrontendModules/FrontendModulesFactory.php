@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -47,6 +48,7 @@ class FrontendModulesFactory {
 	private CampaignsUserMailer $userMailer;
 	private ParticipantAnswersStore $answersStore;
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
+	private EventQuestionsRegistry $questionsRegistry;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -62,6 +64,7 @@ class FrontendModulesFactory {
 	 * @param CampaignsUserMailer $userMailer
 	 * @param ParticipantAnswersStore $answersStore
 	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
+	 * @param EventQuestionsRegistry $questionsRegistry
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -76,7 +79,8 @@ class FrontendModulesFactory {
 		TrackingToolRegistry $trackingToolRegistry,
 		CampaignsUserMailer $userMailer,
 		ParticipantAnswersStore $answersStore,
-		EventAggregatedAnswersStore $aggregatedAnswersStore
+		EventAggregatedAnswersStore $aggregatedAnswersStore,
+		EventQuestionsRegistry $questionsRegistry
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -91,6 +95,7 @@ class FrontendModulesFactory {
 		$this->userMailer = $userMailer;
 		$this->answersStore = $answersStore;
 		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
+		$this->questionsRegistry = $questionsRegistry;
 	}
 
 	/**
@@ -135,11 +140,17 @@ class FrontendModulesFactory {
 		);
 	}
 
-	public function newResponseStatisticsModule( Language $language ): ResponseStatisticsModule {
+	public function newResponseStatisticsModule(
+		ExistingEventRegistration $event,
+		Language $language
+	): ResponseStatisticsModule {
 		return new ResponseStatisticsModule(
 			$this->messageFormatterFactory,
 			$this->answersStore,
 			$this->aggregatedAnswersStore,
+			$this->questionsRegistry,
+			$this->participantsStore,
+			$event,
 			$language
 		);
 	}
