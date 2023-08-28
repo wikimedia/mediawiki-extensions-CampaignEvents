@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bengtsson96",
 			"Sabelöga"
 		]
 	},
@@ -143,7 +144,7 @@
 	"campaignevents-eventpage-dialog-organizers": "Organiserad av: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Visa alla organisatörer",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|deltagare}}",
-	"campaignevents-eventpage-dialog-participants-view-list": "Visa fullständig lista",
+	"campaignevents-eventpage-dialog-participants-view-list": "Visa alla",
 	"campaignevents-eventpage-dialog-dates-label": "Start- och sluttid",
 	"campaignevents-eventpage-dialog-dates": "$1 till $4",
 	"campaignevents-eventpage-dialog-location-label": "Plats",
@@ -180,11 +181,11 @@
 	"campaignevents-event-details-chat-link": "Inbjudningslänk till chattgrupp",
 	"campaignevents-event-details-register-prompt": "Du måste registrera dig för att se den här information",
 	"campaignevents-event-details-view-event-page": "Visa evenemangssida",
-	"campaignevents-event-details-select-all": "Välj alla",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|vald|valda}}",
+	"campaignevents-event-details-select-all": "Välj alla deltagare",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 av $2 {{PLURAL:$1|vald|valda}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Ta bort {{PLURAL:$1|deltagare}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Är du säker på att du vill ta bort {{PLURAL:$1|den valda deltagaren|de valda deltagarna}}?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Ta bort",
+	"campaignevents-event-details-remove-participant-remove-btn": "Radera",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Avbryt",
 	"campaignevents-event-details-no-event-id-provided": "Erbjud ett evenemangs-ID",
 	"campaignevents-event-details-no-participants-state": "Deltagarnas användarnamn kommer visas här när de registrerat sig",
@@ -202,5 +203,5 @@
 	"campaignevents-event-details-remove-participant-notification-error": "Det uppstod ett fel när {{PLURAL:$1|deltagare}} skulle tas bort",
 	"campaignevents-event-details-search-participants-placeholder": "Sök efter deltagare",
 	"campaignevents-email-participants-except-count": "Alla förutom $1",
-	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|participant|deltagare}}"
+	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|deltagare}}"
 }

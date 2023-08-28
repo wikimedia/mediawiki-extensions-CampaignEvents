@@ -5,6 +5,7 @@
 			"DiGro",
 			"HanV",
 			"McDutchie",
+			"Romaine",
 			"Siebrand"
 		]
 	},
@@ -338,5 +339,14 @@
 	"campaignevents-register-question-profession-option-artist-creative": "Kunstenaar/creatieve professional",
 	"campaignevents-register-question-profession-option-educator": "Onderwijzer",
 	"campaignevents-register-question-profession-option-librarian": "Bibliothecaris",
-	"campaignevents-register-question-profession-option-mass-media": "Massamedia-professional"
+	"campaignevents-register-question-profession-option-mass-media": "Massamedia-professional",
+	"campaignevents-register-question-profession-option-museum-archive": "Museum- of archiefprofessional",
+	"campaignevents-register-question-profession-option-nonprofit": "Non-profit professional",
+	"campaignevents-register-question-profession-option-researcher": "Onderzoeker",
+	"campaignevents-register-question-profession-option-software-engineer": "Software-ingenieur",
+	"campaignevents-register-question-profession-option-student": "Student",
+	"campaignevents-register-question-profession-option-other": "Beroep niet vermeld",
+	"campaignevents-register-question-confidence-contributing": "Hoe zeker voelt u zich om bij te dragen aan de Wikimedia-projecten die bij dit evenement betrokken zijn? (optioneel)",
+	"campaignevents-register-question-confidence-contributing-not-say": "Zeg ik liever niet",
+	"campaignevents-register-question-confidence-contributing-option-none": "Ik heb nog nooit eerder bijgedragen aan een Wikimedia-project"
 }
