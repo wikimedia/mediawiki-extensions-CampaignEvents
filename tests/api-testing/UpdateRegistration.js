@@ -47,7 +47,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 			timezone: 'UTC',
 			start_time: '30200220200220',
 			end_time: '30200220200222',
-			type: 'generic',
+			// TODO: Add this when the feature is implemented
+			// type: 'generic',
 			status: 'open',
 			online_meeting: true,
 			token: token

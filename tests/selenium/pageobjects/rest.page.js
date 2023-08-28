@@ -25,11 +25,11 @@ module.exports = {
 		/* eslint-disable camelcase */
 		const data = JSON.stringify( {
 			token: csrfToken,
-			name: event,
 			event_page: event,
 			start_time: '29990414160000',
 			end_time: '29990515170000',
-			type: 'generic',
+			// TODO: Add this when the feature is implemented
+			// type: 'generic',
 			online_meeting: true,
 			timezone: 'EST'
 		} );

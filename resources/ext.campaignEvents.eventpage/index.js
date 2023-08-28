@@ -75,14 +75,17 @@
 	 * @return {jQuery.Promise}
 	 */
 	function registerUser( privateRegistration, answers ) {
+		var reqParams = {
+			token: mw.user.tokens.get( 'csrfToken' ),
+			// eslint-disable-next-line camelcase
+			is_private: privateRegistration
+		};
+		if ( mw.config.get( 'wgCampaignEventsEnableParticipantQuestions' ) ) {
+			reqParams.answers = answers;
+		}
 		return new mw.Rest().put(
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
-			{
-				token: mw.user.tokens.get( 'csrfToken' ),
-				// eslint-disable-next-line camelcase
-				is_private: privateRegistration,
-				answers: answers
-			}
+			reqParams
 		)
 			.done( function () {
 				var cookieVal = userIsParticipant ?
