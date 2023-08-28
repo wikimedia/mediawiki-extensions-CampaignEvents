@@ -13,6 +13,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
+use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\User\UserFactory;
@@ -43,6 +45,8 @@ class FrontendModulesFactory {
 	private TrackingToolRegistry $trackingToolRegistry;
 	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $userMailer;
+	private ParticipantAnswersStore $answersStore;
+	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -56,6 +60,8 @@ class FrontendModulesFactory {
 	 * @param UserFactory $userFactory
 	 * @param TrackingToolRegistry $trackingToolRegistry
 	 * @param CampaignsUserMailer $userMailer
+	 * @param ParticipantAnswersStore $answersStore
+	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -68,7 +74,9 @@ class FrontendModulesFactory {
 		EventTimeFormatter $eventTimeFormatter,
 		UserFactory $userFactory,
 		TrackingToolRegistry $trackingToolRegistry,
-		CampaignsUserMailer $userMailer
+		CampaignsUserMailer $userMailer,
+		ParticipantAnswersStore $answersStore,
+		EventAggregatedAnswersStore $aggregatedAnswersStore
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -81,6 +89,8 @@ class FrontendModulesFactory {
 		$this->userFactory = $userFactory;
 		$this->trackingToolRegistry = $trackingToolRegistry;
 		$this->userMailer = $userMailer;
+		$this->answersStore = $answersStore;
+		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
 	}
 
 	/**
@@ -122,6 +132,15 @@ class FrontendModulesFactory {
 	public function newEmailParticipantsModule(): EmailParticipantsModule {
 		return new EmailParticipantsModule(
 			$this->messageFormatterFactory
+		);
+	}
+
+	public function newResponseStatisticsModule( Language $language ): ResponseStatisticsModule {
+		return new ResponseStatisticsModule(
+			$this->messageFormatterFactory,
+			$this->answersStore,
+			$this->aggregatedAnswersStore,
+			$language
 		);
 	}
 }

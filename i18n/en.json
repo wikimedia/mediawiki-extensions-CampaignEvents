@@ -262,6 +262,7 @@
 	"campaignevents-event-details-tab-participants": "Participants",
 	"campaignevents-event-details-tab-email": "Message",
 	"campaignevents-event-details-tab-event-details": "Event details",
+	"campaignevents-event-details-tab-stats": "Response statistics",
 	"campaignevents-event-details-search-participants-placeholder": "Search for participants",
 	"campaignevents-event-details-organizers-view-more": "View more",
 	"campaignevents-event-details-organizers-noscript": "You need to enable JavaScript in order to see the full list of organizers.",
@@ -375,5 +376,7 @@
 	"campaignevents-eventpage-register-dialog-retention-days": "The remaining time until your responses are aggregated and deleted is: <strong>$1 {{PLURAL:$1|day|days}}</strong>.",
 	"campaignevents-eventpage-register-dialog-retention-hours": "The remaining time until your responses are aggregated and deleted is: <strong>less than 24 hours</strong>.",
 	"campaignevents-register-invalid-answer": "Invalid answer to the question $1",
-	"campaignevents-register-question-organizing-partner-details-placeholder": "Please state"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Please state",
+	"campaignevents-details-stats-no-responses": "This event has no responses from participants to aggregate.",
+	"campaignevents-details-stats-not-ready": "Participants' responses will be aggregated and made available here shortly."
 }

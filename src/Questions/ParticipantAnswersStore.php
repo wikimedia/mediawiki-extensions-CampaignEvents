@@ -168,4 +168,20 @@ class ParticipantAnswersStore {
 		}
 		return $answersByUser;
 	}
+
+	/**
+	 * Returns whether the given event has any answers.
+	 *
+	 * @param int $eventID
+	 * @return bool
+	 */
+	public function eventHasAnswers( int $eventID ): bool {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$res = $dbr->selectRow(
+			'ce_question_answers',
+			'1',
+			[ 'ceqa_event_id' => $eventID ]
+		);
+		return $res !== null;
+	}
 }
