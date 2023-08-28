@@ -305,6 +305,7 @@
 	"campaignevents-event-details-email-message-label": "Message",
 	"campaignevents-event-details-email-message-placeholder": "The plaintext content of your email message, this must be at least 10 characters",
 	"campaignevents-event-details-email-recipients-button-text": "Send email",
+	"campaignevents-event-details-participants-deselect": "Deselect",
 	"campaignevents-email-participants-label": "Compose email",
 	"campaignevents-email-success-notification": "Message sent!",
 	"campaignevents-email-error-notification": "Message not sent!",
