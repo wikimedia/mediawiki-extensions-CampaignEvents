@@ -304,6 +304,7 @@
 	"campaignevents-event-details-email-message-label": "Nachricht",
 	"campaignevents-event-details-email-message-placeholder": "Der Klartextinhalt deiner E-Mail-Nachricht. Dieser muss mindestens 10 Zeichen lang sein",
 	"campaignevents-event-details-email-recipients-button-text": "E-Mail senden",
+	"campaignevents-event-details-participants-deselect": "Auswahl aufheben",
 	"campaignevents-email-participants-label": "E-Mail verfassen",
 	"campaignevents-email-success-notification": "Nachricht gesendet!",
 	"campaignevents-email-error-notification": "Nachricht nicht gesendet!",

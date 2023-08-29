@@ -304,6 +304,7 @@
 	"campaignevents-event-details-email-message-label": "Message",
 	"campaignevents-event-details-email-message-placeholder": "Le contento in texto simple de tu message de e-mail; debe haber al minus 10 characteres",
 	"campaignevents-event-details-email-recipients-button-text": "Inviar e-mail",
+	"campaignevents-event-details-participants-deselect": "Deseliger",
 	"campaignevents-email-participants-label": "Componer e-mail",
 	"campaignevents-email-success-notification": "Message inviate!",
 	"campaignevents-email-error-notification": "Message non inviate!",

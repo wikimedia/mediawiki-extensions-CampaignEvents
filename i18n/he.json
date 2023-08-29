@@ -305,6 +305,7 @@
 	"campaignevents-event-details-email-message-label": "הודעה",
 	"campaignevents-event-details-email-message-placeholder": "תוכן בטקסט הפשוט של הודעת הדוא\"ל שלך, זה חייב להכיל לפחות 10 תווים",
 	"campaignevents-event-details-email-recipients-button-text": "שליחת דוא\"ל",
+	"campaignevents-event-details-participants-deselect": "ביטול בחירה",
 	"campaignevents-email-participants-label": "כתיבת דואר אלקטרוני",
 	"campaignevents-email-success-notification": "ההודעה נשלחה!",
 	"campaignevents-email-error-notification": "ההודעה לא נשלחה",
