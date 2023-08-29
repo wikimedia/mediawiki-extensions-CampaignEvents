@@ -6,6 +6,8 @@
 	},
 	"campaignevents-error-empty-start": "Почетак.",
 	"campaignevents-error-empty-end": "Крај.",
+	"campaignevents-edit-field-status-open": "Отворено",
+	"campaignevents-edit-field-status-closed": "Затворено",
 	"campaignevents-edit-field-start": "Почетак",
 	"campaignevents-edit-field-end": "Крај",
 	"campaignevents-edit-field-type-online": "Онлајн догађај",
