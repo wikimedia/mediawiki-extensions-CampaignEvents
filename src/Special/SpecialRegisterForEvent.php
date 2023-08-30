@@ -138,6 +138,11 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				$questionFields
 			);
 			$fields += $questionFields;
+			$fields['DataRetentionInfo'] = [
+				'type' => 'info',
+				'default' => $this->msg( 'campaignevents-register-retention-base' )->text(),
+				'section' => 'campaignevents-register-retention-title',
+			];
 		}
 
 		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistration();

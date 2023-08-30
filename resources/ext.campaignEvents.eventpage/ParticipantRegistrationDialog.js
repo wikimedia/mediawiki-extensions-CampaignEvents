@@ -85,6 +85,8 @@
 				helpInline: true
 			} );
 			fieldsets.push( questionsFieldset );
+
+			fieldsets.push( this.getDataRetentionFieldset() );
 		}
 
 		var formPanel = new OO.ui.PanelLayout( {
@@ -148,6 +150,25 @@
 		);
 
 		return [ visibilityField, visibilityHelpField ];
+	};
+
+	/**
+	 * Returns a fieldset with information about the data retention policy.
+	 *
+	 * @return {OO.ui.FieldsetLayout}
+	 */
+	ParticipantRegistrationDialog.prototype.getDataRetentionFieldset = function () {
+		var retentionInfoField = new OO.ui.FieldLayout(
+			new OO.ui.LabelWidget( {
+				label: mw.msg( 'campaignevents-eventpage-register-dialog-retention-base' ),
+				classes: [ 'ext-campaignevents-registration-retention-label' ]
+			} )
+		);
+
+		return new OO.ui.FieldsetLayout( {
+			items: [ retentionInfoField ],
+			label: mw.msg( 'campaignevents-eventpage-register-dialog-retention-title' )
+		} );
 	};
 
 	ParticipantRegistrationDialog.prototype.getActionProcess = function ( action ) {
