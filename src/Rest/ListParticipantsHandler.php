@@ -131,6 +131,14 @@ class ListParticipantsHandler extends SimpleHandler {
 
 		$centralIDsMap = array_fill_keys( array_keys( $respDataByCentralID ), null );
 		$usernamesMap = $this->centralUserLookup->getNamesIncludingDeletedAndSuppressed( $centralIDsMap );
+		$usernamesToPreload = array_filter(
+			$usernamesMap,
+			static function ( $name ) {
+				return $name !== CampaignsCentralUserLookup::USER_HIDDEN &&
+					$name !== CampaignsCentralUserLookup::USER_NOT_FOUND;
+			}
+		);
+		$this->userLinker->preloadUserLinks( $usernamesToPreload );
 
 		foreach ( $respDataByCentralID as $centralID => $data ) {
 			$usernameOrError = $usernamesMap[$centralID];

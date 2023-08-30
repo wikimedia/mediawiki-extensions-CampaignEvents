@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use Html;
 use Linker;
+use MediaWiki\Cache\LinkBatchFactory;
 use Sanitizer;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
@@ -25,17 +26,21 @@ class UserLinker {
 	private $centralUserLookup;
 	/** @var IMessageFormatterFactory */
 	private $messageFormatterFactory;
+	private LinkBatchFactory $linkBatchFactory;
 
 	/**
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param IMessageFormatterFactory $messageFormatterFactory
+	 * @param LinkBatchFactory $linkBatchFactory
 	 */
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
-		IMessageFormatterFactory $messageFormatterFactory
+		IMessageFormatterFactory $messageFormatterFactory,
+		LinkBatchFactory $linkBatchFactory
 	) {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->messageFormatterFactory = $messageFormatterFactory;
+		$this->linkBatchFactory = $linkBatchFactory;
 	}
 
 	/**
@@ -108,5 +113,19 @@ class UserLinker {
 			'title' => $attribs['title'] ?? '',
 			'classes' => $attribs['class'] ?? '',
 		];
+	}
+
+	/**
+	 * Preloads link data for linking to the user pages of the given users.
+	 *
+	 * @param string[] $usernames
+	 */
+	public function preloadUserLinks( array $usernames ): void {
+		$lb = $this->linkBatchFactory->newLinkBatch();
+		foreach ( $usernames as $username ) {
+			$lb->add( NS_USER, $username );
+		}
+		$lb->setCaller( wfGetCaller() );
+		$lb->execute();
 	}
 }
