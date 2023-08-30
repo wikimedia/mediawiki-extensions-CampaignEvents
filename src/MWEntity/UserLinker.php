@@ -49,14 +49,11 @@ class UserLinker {
 	 */
 	public function generateUserLink( CentralUser $user ): string {
 		$name = $this->centralUserLookup->getUserName( $user );
-		if ( $this->centralUserLookup->existsLocally( $user ) ) {
-			// Semi-hack: Linker::userLink does not really need the user ID, so don't bother looking it up. (T308000)
-			return Linker::userLink( 1, $name );
-		} else {
-			// TODO This case should be improved. Perhaps we could at least link to Special:CentralAuth if
-			// CA is installed. For now we simply generate a red link.
-			return Linker::userLink( 2, $name );
-		}
+		// HACK: Linker::userLink does not really need the user ID (T308000), so don't bother looking it up, which
+		// would be too slow (T345250).
+		// TODO: Here we'll generate a red link if the account does not exist locally. Is that OK? Could we maybe
+		// link to Special:CentralAuth (if CA is installed)?
+		return Linker::userLink( 1, $name );
 	}
 
 	/**
@@ -71,7 +68,7 @@ class UserLinker {
 	 * ext.campaignEvents.userlinks.styles.less file as well.
 	 * @note This assumes that the given central user exists, or existed in the past. As such, if the account
 	 * cannot be found it will consider it as being deleted.
-	 * @fixme This must be kept in sync with ParticipantsManager.getDeletedOrNotFoundParticipantElement
+	 * @fixme This must be kept in sync with ParticipantsManager.getDeletedOrNotFoundParticipantElement in JS
 	 */
 	public function generateUserLinkWithFallback( CentralUser $user, string $langCode ): string {
 		try {
@@ -101,15 +98,15 @@ class UserLinker {
 	 * @param CentralUser $centralUser
 	 * @return string[]
 	 * NOTE: Make sure that the user is not hidden before calling this method, or it will throw an exception.
-	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::GetUserLink
+	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::userLink
 	 */
 	public function getUserPagePath( CentralUser $centralUser ): array {
 		$html = $this->generateUserLink( $centralUser );
 		$attribs = Sanitizer::decodeTagAttributes( $html );
 		return [
-			'path' => array_key_exists( 'href', $attribs ) ? $attribs['href'] : '',
-			'title' => array_key_exists( 'title', $attribs ) ? $attribs['title'] : '',
-			'classes' => array_key_exists( 'class', $attribs ) ? $attribs['class'] : ''
+			'path' => $attribs['href'] ?? '',
+			'title' => $attribs['title'] ?? '',
+			'classes' => $attribs['class'] ?? '',
 		];
 	}
 }
