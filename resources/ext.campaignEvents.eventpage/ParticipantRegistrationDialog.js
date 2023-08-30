@@ -6,9 +6,11 @@
 	 *
 	 * @param {Object} config Configuration options
 	 * @cfg {string|null} [policyMsg] Policy acknowledgement message
-	 * @cfg {Object|undefined} [curParticipantData=true] Current registration data for this user, if
+	 * @cfg {Object|undefined} [curParticipantData] Current registration data for this user, if
 	 *   available. Undefined otherwise. Must have the following keys:
 	 *    - public (boolean): Whether the user is registered publicly
+	 *    - aggregationTimestamp (string|null): Planned timestamp of when the user's answers will be
+	 *       aggregated.
 	 * @cfg {Object} [eventQuestions] EventQuestions object
 	 * @extends OO.ui.ProcessDialog
 	 * @constructor
@@ -19,9 +21,11 @@
 		this.policyMsg = config.policyMsg;
 		if ( typeof config.curParticipantData !== 'undefined' ) {
 			this.publicRegistration = config.curParticipantData.public;
+			this.aggregationTimestamp = config.curParticipantData.aggregationTimestamp;
 			this.isEdit = true;
 		} else {
 			this.publicRegistration = true;
+			this.aggregationTimestamp = null;
 			this.isEdit = false;
 		}
 		this.eventQuestions = config.eventQuestions;
@@ -158,9 +162,24 @@
 	 * @return {OO.ui.FieldsetLayout}
 	 */
 	ParticipantRegistrationDialog.prototype.getDataRetentionFieldset = function () {
+		var retentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-base' ).escaped();
+		if ( this.aggregationTimestamp !== null ) {
+			var additionalRetentionMsg,
+				curTimestamp = Math.floor( Date.now() / 1000 ),
+				timeRemaining = parseInt( this.aggregationTimestamp ) - curTimestamp;
+			if ( timeRemaining < 60 * 60 * 24 ) {
+				additionalRetentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-hours' ).parse();
+			} else {
+				var remainingDays = Math.round( timeRemaining / ( 60 * 60 * 24 ) );
+				additionalRetentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-days' )
+					.params( [ mw.language.convertNumber( remainingDays ) ] )
+					.parse();
+			}
+			retentionMsg += mw.message( 'word-separator' ).escaped() + additionalRetentionMsg;
+		}
 		var retentionInfoField = new OO.ui.FieldLayout(
 			new OO.ui.LabelWidget( {
-				label: mw.msg( 'campaignevents-eventpage-register-dialog-retention-base' ),
+				label: new OO.ui.HtmlSnippet( retentionMsg ),
 				classes: [ 'ext-campaignevents-registration-retention-label' ]
 			} )
 		);

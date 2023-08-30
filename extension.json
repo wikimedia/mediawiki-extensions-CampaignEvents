@@ -247,7 +247,10 @@
 				"campaignevents-eventpage-register-dialog-questions-title",
 				"campaignevents-eventpage-register-dialog-questions-subtitle",
 				"campaignevents-eventpage-register-dialog-retention-title",
-				"campaignevents-eventpage-register-dialog-retention-base"
+				"campaignevents-eventpage-register-dialog-retention-base",
+				"campaignevents-eventpage-register-dialog-retention-days",
+				"campaignevents-eventpage-register-dialog-retention-hours",
+				"word-separator"
 			],
 			"dependencies": [
 				"mediawiki.api",
