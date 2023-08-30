@@ -9,12 +9,15 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
@@ -214,19 +217,24 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @param string $expectedMsg
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
+	 * @param ParticipantsStore|null $participantsStore
+	 * @param array $answers
 	 * @covers ::registerUnsafe
 	 * @dataProvider provideRegisterUnsafeErrors
 	 */
 	public function testRegisterUnsafe__error(
 		string $expectedMsg,
 		CampaignsCentralUserLookup $centralUserLookup = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		TrackingToolEventWatcher $trackingToolEventWatcher = null,
+		ParticipantsStore $participantsStore = null,
+		array $answers = []
 	) {
-		$status = $this->getCommand( null, null, $centralUserLookup, $trackingToolEventWatcher )->registerUnsafe(
+		$cmd = $this->getCommand( $participantsStore, null, $centralUserLookup, $trackingToolEventWatcher );
+		$status = $cmd->registerUnsafe(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC,
-			[]
+			$answers
 		);
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( $expectedMsg, $status );
@@ -239,6 +247,25 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		yield 'User not global' => [
 			'campaignevents-register-need-central-account',
 			$notGlobalLookup
+		];
+
+		$participant = new Participant(
+			new CentralUser( 1 ),
+			'20200220202020',
+			42,
+			false,
+			[],
+			'20200220202020',
+			'20200220202021',
+		);
+		$participantStore = $this->createMock( ParticipantsStore::class );
+		$participantStore->method( 'getEventParticipant' )->willReturn( $participant );
+		yield 'Answers provided but already aggregated' => [
+			'campaignevents-register-answers-aggregated-error',
+			null,
+			null,
+			$participantStore,
+			[ new Answer( 1, 1, null ) ]
 		];
 
 		$trackingToolError = 'some-tracking-tool-error';

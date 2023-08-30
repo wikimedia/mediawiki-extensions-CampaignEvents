@@ -154,6 +154,17 @@ class RegisterParticipantCommand {
 			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
 		}
 
+		if ( $answers ) {
+			$existingRecord = $this->participantsStore->getEventParticipant(
+				$registration->getID(),
+				$centralUser,
+				true
+			);
+			if ( $existingRecord && $existingRecord->getAggregationTimestamp() !== null ) {
+				return StatusValue::newFatal( 'campaignevents-register-answers-aggregated-error' );
+			}
+		}
+
 		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateParticipantAdded(
 			$registration,
 			$centralUser,

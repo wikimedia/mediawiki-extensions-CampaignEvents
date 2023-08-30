@@ -119,6 +119,7 @@
 	"campaignevents-register-event-past": "Error message used when the event that the user wants to register for has already finished.",
 	"campaignevents-register-event-not-open": "Error message used when the event that the user wants to register for is closed.",
 	"campaignevents-register-need-central-account": "Error message used when a user tries to register for an event but their user account is not global.",
+	"campaignevents-register-answers-aggregated-error": "Error message used when a user tries to register for an event and provides answers, but their answers have already been aggregated.",
 	"campaignevents-unregister-not-allowed": "Error message used when an unauthorized user attempts to cancel their registration for an event.",
 	"campaignevents-unregister-not-participant": "Error message used when a user tries to cancel their registration for an event that they are not registered for.",
 	"campaignevents-unregister-need-central-account": "Error message used when a user tries to cancel their registration for an event but their user account is not global.",
