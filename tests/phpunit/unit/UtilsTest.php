@@ -7,13 +7,19 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit;
 use DateTime;
 use DateTimeZone;
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Utils
  */
 class UtilsTest extends MediaWikiUnitTestCase {
+	private const FAKE_TIME_FOR_AGGREGATION = 123456789;
+
 	/**
 	 * @param string $str
 	 * @param string $expected
@@ -63,5 +69,52 @@ class UtilsTest extends MediaWikiUnitTestCase {
 		yield 'Large negative offset' => [ new DateTimeZone( '-99:00' ), 'Offset|-720' ];
 		yield 'Abbreviation' => [ new DateTimeZone( 'CEST' ), 'Offset|120' ];
 		yield 'Abbreviation 2' => [ new DateTimeZone( 'CET' ), 'Offset|60' ];
+	}
+
+	/**
+	 * @covers ::getAnswerAggregationTimestamp
+	 * @dataProvider provideAnswerAggregationTimestamp
+	 */
+	public function testGetAnswerAggregationTimestamp(
+		?string $firstAnswerTS,
+		?string $aggregationTS,
+		string $eventEndTS,
+		?string $expected
+	) {
+		MWTimestamp::setFakeTime( self::FAKE_TIME_FOR_AGGREGATION );
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getEndUTCTimestamp' )->willReturn( $eventEndTS );
+		$participant = $this->createMock( Participant::class );
+		$participant->method( 'getFirstAnswerTimestamp' )->willReturn( $firstAnswerTS );
+		$participant->method( 'getAggregationTimestamp' )->willReturn( $aggregationTS );
+		$this->assertSame( $expected, Utils::getAnswerAggregationTimestamp( $participant, $event ) );
+	}
+
+	public static function provideAnswerAggregationTimestamp(): array {
+		$ttl = EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
+		$endedEventTS = (string)( self::FAKE_TIME_FOR_AGGREGATION - 10 );
+		$notEndedEventTS = (string)( self::FAKE_TIME_FOR_AGGREGATION + 10 );
+		$recentAnswerTS = (string)( self::FAKE_TIME_FOR_AGGREGATION - ( $ttl - 1 ) );
+		$recentAnswerCutoffTS = (string)( (int)$recentAnswerTS + $ttl );
+		$oldAnswerTS = (string)( self::FAKE_TIME_FOR_AGGREGATION - ( $ttl + 1 ) );
+		$oldAnswerCutoffTS = (string)( (int)$oldAnswerTS + $ttl );
+		return [
+			'Never answered, event ended' => [ null, null, $endedEventTS, null ],
+			'Never answered, event has not ended' => [ null, null, $notEndedEventTS, null ],
+			'Answered recently, event ended' => [ $recentAnswerTS, null, $endedEventTS, $endedEventTS ],
+			'Answered recently, event has not ended' =>
+				[ $recentAnswerTS, null, $notEndedEventTS, min( $notEndedEventTS, $recentAnswerCutoffTS ) ],
+			'Answered long ago, event ended' =>
+				[ $oldAnswerTS, null, $endedEventTS, min( $oldAnswerCutoffTS, $endedEventTS ) ],
+			'Answered long ago, event has not ended' => [ $oldAnswerTS, null, $notEndedEventTS, $oldAnswerCutoffTS ],
+			'Answers already aggregated, answered recently, event ended' =>
+				[ $recentAnswerTS, '111111111', $endedEventTS, null ],
+			'Answers already aggregated, answered long ago, event ended' =>
+				[ $oldAnswerTS, '111111111', $endedEventTS, null ],
+			'Answers already aggregated, answered recently, event has not ended' =>
+				[ $recentAnswerTS, '111111111', $notEndedEventTS, null ],
+			'Answers already aggregated, answered long ago, event has not ended' =>
+				[ $oldAnswerTS, '111111111', $notEndedEventTS, null ],
+		];
 	}
 }

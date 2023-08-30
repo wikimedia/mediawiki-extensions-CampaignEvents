@@ -16,6 +16,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
+use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\Utils\MWTimestamp;
 use OOUI\IconWidget;
 use Status;
 
@@ -138,9 +140,27 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				$questionFields
 			);
 			$fields += $questionFields;
+
+			$retentionMsg = $this->msg( 'campaignevents-register-retention-base' )->escaped();
+			if ( $this->curParticipantData ) {
+				$plannedAggregationTS = Utils::getAnswerAggregationTimestamp( $this->curParticipantData, $this->event );
+				if ( $plannedAggregationTS !== null ) {
+					$timeRemaining = (int)$plannedAggregationTS - (int)MWTimestamp::now( TS_UNIX );
+					if ( $timeRemaining < 60 * 60 * 24 ) {
+						$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-hours' )->parse();
+					} else {
+						$remainingDays  = (int)round( $timeRemaining / ( 60 * 60 * 24 ) );
+						$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-days' )
+							->numParams( $remainingDays )
+							->parse();
+					}
+					$retentionMsg .= $this->msg( 'word-separator' )->escaped() . $additionalRetentionMsg;
+				}
+			}
 			$fields['DataRetentionInfo'] = [
 				'type' => 'info',
-				'default' => $this->msg( 'campaignevents-register-retention-base' )->text(),
+				'raw' => true,
+				'default' => $retentionMsg,
 				'section' => 'campaignevents-register-retention-title',
 			];
 		}
