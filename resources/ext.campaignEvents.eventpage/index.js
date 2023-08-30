@@ -17,6 +17,7 @@
 		userIsParticipant = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ) !== null,
 		userIsRegisteredPublicly = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ),
 		aggregationTimestamp = mw.config.get( 'wgCampaignEventsAggregationTimestamp' ),
+		answersAlreadyAggregated = mw.config.get( 'wgCampaignEventsAnswersAlreadyAggregated' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
 
@@ -124,7 +125,8 @@
 			if ( userIsParticipant ) {
 				curParticipantData = {
 					public: userIsRegisteredPublicly,
-					aggregationTimestamp: aggregationTimestamp
+					aggregationTimestamp: aggregationTimestamp,
+					answersAggregated: answersAlreadyAggregated
 				};
 			}
 			participantRegistrationDialog = new ParticipantRegistrationDialog(

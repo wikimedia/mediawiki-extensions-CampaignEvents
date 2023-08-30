@@ -308,6 +308,8 @@ class EventPageDecorator {
 			'wgCampaignEventsEventID' => $registration->getID(),
 			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
 			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData( $registration, $curParticipant ),
+			'wgCampaignEventsAnswersAlreadyAggregated' => $curParticipant ?
+				$curParticipant->getAggregationTimestamp() !== null : false,
 			// temporarily feature flag to prevent participants from seeing the event questions
 			'wgCampaignEventsEnableParticipantQuestions' =>
 				MediaWikiServices::getInstance()->getMainConfig()->get( 'CampaignEventsEnableParticipantQuestions' ),

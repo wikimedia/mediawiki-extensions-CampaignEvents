@@ -11,6 +11,7 @@
 	 *    - public (boolean): Whether the user is registered publicly
 	 *    - aggregationTimestamp (string|null): Planned timestamp of when the user's answers will be
 	 *       aggregated.
+	 *    - answersAggregated (boolean): Whether the user's answers have already been aggregated.
 	 * @cfg {Object} [eventQuestions] EventQuestions object
 	 * @extends OO.ui.ProcessDialog
 	 * @constructor
@@ -22,10 +23,12 @@
 		if ( typeof config.curParticipantData !== 'undefined' ) {
 			this.publicRegistration = config.curParticipantData.public;
 			this.aggregationTimestamp = config.curParticipantData.aggregationTimestamp;
+			this.answersAggregated = config.curParticipantData.answersAggregated;
 			this.isEdit = true;
 		} else {
 			this.publicRegistration = true;
 			this.aggregationTimestamp = null;
+			this.answersAggregated = false;
 			this.isEdit = false;
 		}
 		this.eventQuestions = config.eventQuestions;
@@ -80,7 +83,20 @@
 
 		var fieldsets = [ visibilityFieldset ];
 
-		var questionFields = this.eventQuestions.getQuestionFields();
+		var questionFields;
+		if ( this.answersAggregated ) {
+			questionFields = [
+				new OO.ui.FieldLayout(
+					new OO.ui.MessageWidget( {
+						type: 'notice',
+						inline: true,
+						label: mw.msg( 'campaignevents-eventpage-register-dialog-answers-aggregated' )
+					} )
+				)
+			];
+		} else {
+			questionFields = this.eventQuestions.getQuestionFields();
+		}
 		if ( questionFields.length > 0 ) {
 			var questionsFieldset = new OO.ui.FieldsetLayout( {
 				items: questionFields,
