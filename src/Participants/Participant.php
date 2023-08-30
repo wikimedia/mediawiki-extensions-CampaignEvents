@@ -19,6 +19,7 @@ class Participant {
 	/** @var Answer[] */
 	private array $answers;
 	private ?string $firstAnswerTimestamp;
+	private ?string $aggregationTimestamp;
 
 	/**
 	 * @param CentralUser $user
@@ -27,6 +28,7 @@ class Participant {
 	 * @param bool $privateRegistration
 	 * @param Answer[] $answers
 	 * @param string|null $firstAnswerTimestamp Timestamp in the TS_UNIX format
+	 * @param string|null $aggregationTimestamp Timestamp in the TS_UNIX format
 	 */
 	public function __construct(
 		CentralUser $user,
@@ -34,7 +36,8 @@ class Participant {
 		int $participantID,
 		bool $privateRegistration,
 		array $answers,
-		?string $firstAnswerTimestamp
+		?string $firstAnswerTimestamp,
+		?string $aggregationTimestamp
 	) {
 		$this->user = $user;
 		$this->registeredAt = $registeredAt;
@@ -42,6 +45,7 @@ class Participant {
 		$this->privateRegistration = $privateRegistration;
 		$this->answers = $answers;
 		$this->firstAnswerTimestamp = $firstAnswerTimestamp;
+		$this->aggregationTimestamp = $aggregationTimestamp;
 	}
 
 	/**
@@ -84,5 +88,12 @@ class Participant {
 	 */
 	public function getFirstAnswerTimestamp(): ?string {
 		return $this->firstAnswerTimestamp;
+	}
+
+	/**
+	 * @return string|null Timestamp in the TS_UNIX format, or null
+	 */
+	public function getAggregationTimestamp(): ?string {
+		return $this->aggregationTimestamp;
 	}
 }
