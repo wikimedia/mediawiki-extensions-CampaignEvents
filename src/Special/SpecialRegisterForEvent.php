@@ -131,15 +131,35 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		];
 
 		if ( $this->showParticipantQuestions ) {
-			$enabledQuestions = $this->event->getParticipantQuestions();
-			$curAnswers = $this->curParticipantData ? $this->curParticipantData->getAnswers() : [];
-			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm( $enabledQuestions, $curAnswers );
-			$questionFields = array_map(
-				static fn ( $fieldDescriptor ) =>
-					[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
-				$questionFields
-			);
-			$fields += $questionFields;
+			$alreadyAggregated = $this->curParticipantData
+				? $this->curParticipantData->getAggregationTimestamp() !== null
+				: false;
+
+			if ( $alreadyAggregated ) {
+				$fields['AnswersAggregated'] = [
+					'type' => 'info',
+					'default' => Html::element(
+						'strong',
+						[],
+						$this->msg( 'campaignevents-register-answers-aggregated' )->text()
+					),
+					'raw' => true,
+					'section' => self::QUESTIONS_SECTION_NAME,
+				];
+			} else {
+				$enabledQuestions = $this->event->getParticipantQuestions();
+				$curAnswers = $this->curParticipantData ? $this->curParticipantData->getAnswers() : [];
+				$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm(
+					$enabledQuestions,
+					$curAnswers
+				);
+				$questionFields = array_map(
+					static fn ( $fieldDescriptor ) =>
+						[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
+					$questionFields
+				);
+				$fields += $questionFields;
+			}
 
 			$retentionMsg = $this->msg( 'campaignevents-register-retention-base' )->escaped();
 			if ( $this->curParticipantData ) {
