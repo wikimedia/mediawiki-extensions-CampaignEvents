@@ -17,6 +17,9 @@ use User;
 class CampaignsCentralUserLookup {
 	public const SERVICE_NAME = 'CampaignEventsCentralUserLookup';
 
+	public const USER_NOT_FOUND = '[not found]';
+	public const USER_HIDDEN = '[hidden]';
+
 	/** @var CentralIdLookup */
 	private $centralIDLookup;
 	/** @var UserFactory */
@@ -131,15 +134,39 @@ class CampaignsCentralUserLookup {
 	}
 
 	/**
+	 * Returns the usernames of the users with the given central user IDs. Suppressed and non-existing users are
+	 * excluded from the return value.
+	 *
 	 * @param array<int,null> $centralIDsMap The central IDs are used as keys, the values must be null
-	 * @return array<int,string> Same keys as given to the method, but the values are the names. Suppressed and
-	 * non-existing users are excluded from the return value.
+	 * @return array<int,string> Same keys as given to the method, but the values are the names.
 	 */
 	public function getNames( array $centralIDsMap ): array {
 		$names = $this->centralIDLookup->lookupCentralIds( $centralIDsMap );
 		$ret = [];
 		foreach ( $names as $id => $name ) {
 			if ( $name !== null && $name !== '' ) {
+				$ret[$id] = $name;
+			}
+		}
+		return $ret;
+	}
+
+	/**
+	 * Returns the usernames of the users with the given central user IDs. Suppressed and non-existing users are
+	 * included in the return value, with self::USER_NOT_FOUND or self::USER_HIDDEN as the value.
+	 *
+	 * @param array<int,null> $centralIDsMap The central IDs are used as keys, the values must be null
+	 * @return array<int,string> Same keys as given to the method, but the values are the names.
+	 */
+	public function getNamesIncludingDeletedAndSuppressed( array $centralIDsMap ): array {
+		$names = $this->centralIDLookup->lookupCentralIds( $centralIDsMap );
+		$ret = [];
+		foreach ( $names as $id => $name ) {
+			if ( $name === null ) {
+				$ret[$id] = self::USER_NOT_FOUND;
+			} elseif ( $name === '' ) {
+				$ret[$id] = self::USER_HIDDEN;
+			} else {
 				$ret[$id] = $name;
 			}
 		}
