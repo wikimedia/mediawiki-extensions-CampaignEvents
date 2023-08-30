@@ -311,6 +311,7 @@
 	"campaignevents-event-details-email-message-label": "Message",
 	"campaignevents-event-details-email-message-placeholder": "Le contenu en texte brut de votre message par courriel ; il doit comporter au moins 10 caractères",
 	"campaignevents-event-details-email-recipients-button-text": "Envoyer le courriel",
+	"campaignevents-event-details-participants-deselect": "Désélectionner",
 	"campaignevents-email-participants-label": "Composer le courriel",
 	"campaignevents-email-success-notification": "Message envoyé !",
 	"campaignevents-email-error-notification": "Message non envoyé !",

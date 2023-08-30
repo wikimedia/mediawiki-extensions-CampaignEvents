@@ -304,6 +304,7 @@
 	"campaignevents-event-details-email-message-label": "Sporočilo",
 	"campaignevents-event-details-email-message-placeholder": "Vsebina navadnega besedila vašega e-poštnega sporočila mora vsebovati vsaj 10 znakov",
 	"campaignevents-event-details-email-recipients-button-text": "Pošlji e-pošto",
+	"campaignevents-event-details-participants-deselect": "Odizberi",
 	"campaignevents-email-participants-label": "Sestavi e-pošto",
 	"campaignevents-email-success-notification": "Sporočilo poslano!",
 	"campaignevents-email-error-notification": "Sporočilo ni poslano!",

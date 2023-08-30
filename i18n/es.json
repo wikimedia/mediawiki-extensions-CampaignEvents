@@ -303,6 +303,7 @@
 	"campaignevents-event-details-email-subject-placeholder": "El asunto de su mensaje de correo electrónico",
 	"campaignevents-event-details-email-message-label": "Mensaje",
 	"campaignevents-event-details-email-recipients-button-text": "Enviar correo electrónico",
+	"campaignevents-event-details-participants-deselect": "Deseleccionar",
 	"campaignevents-email-success-notification": "¡Mensaje enviado!",
 	"campaignevents-email-error-notification": "¡Mensaje no enviado!",
 	"campaignevents-email-participants-all": "Todos los participantes",

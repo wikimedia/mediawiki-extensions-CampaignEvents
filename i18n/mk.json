@@ -305,6 +305,7 @@
 	"campaignevents-event-details-email-message-label": "Порака",
 	"campaignevents-event-details-email-message-placeholder": "Содржината на пораката со прост текст. Мора да содржи барем 10 знаци.",
 	"campaignevents-event-details-email-recipients-button-text": "Испрати",
+	"campaignevents-event-details-participants-deselect": "Одизбери",
 	"campaignevents-email-participants-label": "Состави порака",
 	"campaignevents-email-success-notification": "Пораката е испратена!",
 	"campaignevents-email-error-notification": "Пораката не е испратена!",

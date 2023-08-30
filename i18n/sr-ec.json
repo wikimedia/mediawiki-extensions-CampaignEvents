@@ -60,6 +60,7 @@
 	"campaignevents-event-details-email-subject-placeholder": "Тема имејла",
 	"campaignevents-event-details-email-message-label": "Порука",
 	"campaignevents-event-details-email-recipients-button-text": "Пошаљи имејл",
+	"campaignevents-event-details-participants-deselect": "Поништи избор",
 	"campaignevents-email-participants-label": "Направи имејл",
 	"campaignevents-email-success-notification": "Порука послата!",
 	"campaignevents-email-error-notification": "Порука није послата!",
