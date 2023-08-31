@@ -36,6 +36,12 @@ class EventPage extends Page {
 		);
 
 		await this.registerForEventButton.click();
+		// Wait for the dialog to be ready, and the click handlers functional
+		await browser.waitUntil(
+			() => browser.execute( () => $( '.ext-campaignevents-registration-dialog.oo-ui-window' ).hasClass( 'oo-ui-window-ready' ) ),
+			1000,
+			'Dialog is not ready'
+		);
 		if ( isPrivate ) {
 			await this.togglePrivate.click();
 		}
