@@ -92,7 +92,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Visualizza tutti gli organizzatori",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|partecipante registrato|partecipanti registrati}} privatamente",
-	"campaignevents-eventpage-dialog-participants-view-list": "Mostra tutto",
+	"campaignevents-eventpage-dialog-participants-view-list": "Mostra tutti",
 	"campaignevents-eventpage-dialog-dates-label": "Ora di inizio e fine",
 	"campaignevents-eventpage-dialog-dates": "Dalle $3 {{PLURAL:$2|1=dell'$2|8=dell'$2|11=dell'$2|del $2}} alle $6 {{PLURAL:$5|1=dell'$5|8=dell'$5|11=dell'$5|del $5}}",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Fuso orario:</strong> $1",
@@ -207,6 +207,9 @@
 	"campaignevents-register-question-affiliate-placeholder": "Seleziona un'opzione",
 	"campaignevents-register-question-affiliate-option-none": "No",
 	"campaignevents-register-question-affiliate-option-affiliate": "Sì",
+	"campaignevents-register-retention-title": "Informazioni sulla conservazione dei dati",
+	"campaignevents-register-retention-hours": "Il tempo rimanente prima che le tue risposte vengano aggregate e cancellate è: <strong>meno di 24 ore</strong>.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Le tue informazioni",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Queste informazioni saranno condivise solo con gli organizzatori dell'evento."
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Queste informazioni saranno condivise solo con gli organizzatori dell'evento.",
+	"campaignevents-eventpage-register-dialog-retention-title": "Informazioni sulla conservazione dei dati"
 }

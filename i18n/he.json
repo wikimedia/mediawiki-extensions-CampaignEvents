@@ -354,8 +354,16 @@
 	"campaignevents-register-question-affiliate-option-none": "לא",
 	"campaignevents-register-question-affiliate-option-affiliate": "כן",
 	"campaignevents-register-question-affiliate-details-placeholder": "נא להשיב",
+	"campaignevents-register-retention-title": "מידע על שמירת נתונים",
+	"campaignevents-register-retention-base": "התשובות שלך מצטברות ולאחר מכן נמחקות 90 יום לאחר ההגשה או בסוף האירוע, המוקדם מביניהם. באפשרותך לערוך את תגובות בכל עת לפני־כן. לאחר המחיקה, לא ניתן לשנות אותם, לענות מחדש או לאחזר אותם.",
+	"campaignevents-register-retention-days": "הזמן שנותר עד שהתגובות שלך יצטברו ויימחקו הוא: <strong>$1 {{PLURAL:$1|יום אחד|יומיים|$1 ימים}}</strong>.",
+	"campaignevents-register-retention-hours": "הזמן שנותר עד שהתגובות שלך יצטברו ויימחקו הוא: <strong>פחות מ־24 שעות</strong>.",
 	"campaignevents-eventpage-register-dialog-questions-title": "המידע שלך",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "המידע הזה ישותף רק עם מארגני האירוע.",
+	"campaignevents-eventpage-register-dialog-retention-title": "מידע על שמירת נתונים",
+	"campaignevents-eventpage-register-dialog-retention-base": "התשובות שלך מצטברות ולאחר מכן נמחקות 90 יום לאחר ההגשה או בסוף האירוע, המוקדם מביניהם. באפשרותך לערוך את תגובות בכל עת לפני־כן. לאחר המחיקה, לא ניתן לשנות אותם, לענות מחדש או לאחזר אותם.",
+	"campaignevents-eventpage-register-dialog-retention-days": "הזמן שנותר עד שהתגובות שלך יצטברו ויימחקו הוא: <strong>$1 {{PLURAL:$1|יום אחד|יומיים|$1 ימים}}</strong>.",
+	"campaignevents-eventpage-register-dialog-retention-hours": "הזמן שנותר עד שהתגובות שלך יצטברו ויימחקו הוא: <strong>פחות מ־24 שעות</strong>.",
 	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב"
 }
