@@ -228,7 +228,8 @@ return [
 	UserLinker::SERVICE_NAME => static function ( MediaWikiServices $services ): UserLinker {
 		return new UserLinker(
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-			$services->getMessageFormatterFactory()
+			$services->getMessageFormatterFactory(),
+			$services->getLinkBatchFactory()
 		);
 	},
 	FrontendModulesFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): FrontendModulesFactory {
