@@ -28,6 +28,12 @@ class CampaignsCentralUserLookup {
 	private $userNameUtils;
 
 	/**
+	 * @var array<int,string> Cache of usernames by central user ID. Values can be either usernames, or the special
+	 * values self::USER_NOT_FOUND and self::USER_HIDDEN.
+	 */
+	private array $nameByIDCache = [];
+
+	/**
 	 * @param CentralIdLookup $centralIdLookup
 	 * @param UserFactory $userFactory
 	 * @param UserNameUtils $userNameUtils
@@ -98,14 +104,14 @@ class CampaignsCentralUserLookup {
 	 */
 	public function getUserName( CentralUser $user ): string {
 		$centralID = $user->getCentralID();
-		$val = $this->centralIDLookup->nameFromCentralId( $centralID );
-		if ( $val === null ) {
+		$ret = $this->getNamesIncludingDeletedAndSuppressed( [ $centralID => null ] )[$centralID];
+		if ( $ret === self::USER_NOT_FOUND ) {
 			throw new CentralUserNotFoundException( $centralID );
-		} elseif ( $val === '' ) {
+		}
+		if ( $ret === self::USER_HIDDEN ) {
 			throw new HiddenCentralUserException( $centralID );
 		}
-
-		return $val;
+		return $ret;
 	}
 
 	/**
@@ -141,14 +147,11 @@ class CampaignsCentralUserLookup {
 	 * @return array<int,string> Same keys as given to the method, but the values are the names.
 	 */
 	public function getNames( array $centralIDsMap ): array {
-		$names = $this->centralIDLookup->lookupCentralIds( $centralIDsMap );
-		$ret = [];
-		foreach ( $names as $id => $name ) {
-			if ( $name !== null && $name !== '' ) {
-				$ret[$id] = $name;
-			}
-		}
-		return $ret;
+		$allNames = $this->getNamesIncludingDeletedAndSuppressed( $centralIDsMap );
+		return array_filter(
+			$allNames,
+			static fn ( $name ) => $name !== self::USER_HIDDEN && $name !== self::USER_NOT_FOUND
+		);
 	}
 
 	/**
@@ -159,9 +162,13 @@ class CampaignsCentralUserLookup {
 	 * @return array<int,string> Same keys as given to the method, but the values are the names.
 	 */
 	public function getNamesIncludingDeletedAndSuppressed( array $centralIDsMap ): array {
-		$names = $this->centralIDLookup->lookupCentralIds( $centralIDsMap );
-		$ret = [];
-		foreach ( $names as $id => $name ) {
+		$ret = array_intersect_key( $this->nameByIDCache, $centralIDsMap );
+		$remainingIDsMap = array_diff_key( $centralIDsMap, $this->nameByIDCache );
+		if ( !$remainingIDsMap ) {
+			return $ret;
+		}
+		$remainingNames = $this->centralIDLookup->lookupCentralIds( $remainingIDsMap );
+		foreach ( $remainingNames as $id => $name ) {
 			if ( $name === null ) {
 				$ret[$id] = self::USER_NOT_FOUND;
 			} elseif ( $name === '' ) {
@@ -169,6 +176,7 @@ class CampaignsCentralUserLookup {
 			} else {
 				$ret[$id] = $name;
 			}
+			$this->nameByIDCache[$id] = $ret[$id];
 		}
 		return $ret;
 	}
