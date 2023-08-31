@@ -353,8 +353,17 @@
 	"campaignevents-register-question-affiliate-option-none": "Nein",
 	"campaignevents-register-question-affiliate-option-affiliate": "Ja",
 	"campaignevents-register-question-affiliate-details-placeholder": "Bitte angeben",
+	"campaignevents-register-answers-aggregated": "Deine Antworten wurden gemäß den Informationen zur Datenaufbewahrung aggregiert und gelöscht.",
+	"campaignevents-register-retention-title": "Informationen zur Datenaufbewahrung",
+	"campaignevents-register-retention-base": "Deine Antworten werden zusammengefasst und dann 90 Tage nach der Einreichung oder am Ende der Veranstaltung gelöscht, je nachdem, was zuerst eintritt. Bearbeite die Antworten jederzeit vorher. Nach dem Löschen können sie nicht mehr geändert, erneut beantwortet oder abgerufen werden.",
+	"campaignevents-register-retention-days": "Die verbleibende Zeit, bis deine Antworten aggregiert und gelöscht werden, beträgt: <strong>$1 {{PLURAL:$1|Tag|Tage}}</strong>.",
+	"campaignevents-register-retention-hours": "Die verbleibende Zeit bis zur Zusammenfassung und Löschung deiner Antworten beträgt: <strong>weniger als 24 Stunden</strong>.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Deine Informationen",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Diese Informationen werden nur an die Veranstalter weitergegeben.",
+	"campaignevents-eventpage-register-dialog-retention-title": "Informationen zur Datenaufbewahrung",
+	"campaignevents-eventpage-register-dialog-retention-base": "Deine Antworten werden zusammengefasst und dann 90 Tage nach der Einreichung oder am Ende der Veranstaltung gelöscht, je nachdem, was zuerst eintritt. Bearbeite die Antworten jederzeit vorher. Nach dem Löschen können sie nicht mehr geändert, erneut beantwortet oder abgerufen werden.",
+	"campaignevents-eventpage-register-dialog-retention-days": "Die verbleibende Zeit, bis deine Antworten aggregiert und gelöscht werden, beträgt: <strong>$1 {{PLURAL:$1|Tag|Tage}}</strong>.",
+	"campaignevents-eventpage-register-dialog-retention-hours": "Die verbleibende Zeit bis zur Zusammenfassung und Löschung deiner Antworten beträgt: <strong>weniger als 24 Stunden</strong>.",
 	"campaignevents-register-invalid-answer": "Ungültige Antwort auf die Frage $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Bitte angeben"
 }

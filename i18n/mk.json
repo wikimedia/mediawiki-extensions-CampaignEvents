@@ -354,8 +354,16 @@
 	"campaignevents-register-question-affiliate-option-none": "Не",
 	"campaignevents-register-question-affiliate-option-affiliate": "Да",
 	"campaignevents-register-question-affiliate-details-placeholder": "Наведете",
+	"campaignevents-register-retention-title": "Информации за задршка на податоците",
+	"campaignevents-register-retention-base": "Вашите одговори се собираат и потоа ќе се бидат избришани 90 дена по поднесувањето или на крајот од настанот (зависи кое ќе биде попрво). Одговорите можете да ги менувате било кога пред истекот на рокот. Откако ќе се избришат, одговорите не можат да се менуваат, да се преодговараат или да се повраќаат.",
+	"campaignevents-register-retention-days": "Преостанатото време додека вашите одговори не се соберат и избришат е: <strong>$1 {{PLURAL:$1|ден|дена}}</strong>.",
+	"campaignevents-register-retention-hours": "Преостанатото време додека вашите одговори не се соберат и избришат е: <strong>помалку од 24 часа</strong>.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Ваши информации",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Оваа информација ќе се сподели само со приредувачите на настанот.",
+	"campaignevents-eventpage-register-dialog-retention-title": "Информации за задршка на податоците",
+	"campaignevents-eventpage-register-dialog-retention-base": "Вашите одговори се собираат и потоа ќе се бидат избришани 90 дена по поднесувањето или на крајот од настанот (зависи кое ќе биде попрво). Одговорите можете да ги менувате било кога пред истекот на рокот. Откако ќе се избришат, одговорите не можат да се менуваат, да се преодговараат или да се повраќаат.",
+	"campaignevents-eventpage-register-dialog-retention-days": "Преостанатото време додека вашите одговори не се соберат и избришат е: <strong>$1 {{PLURAL:$1|ден|дена}}</strong>.",
+	"campaignevents-eventpage-register-dialog-retention-hours": "Преостанатото време додека вашите одговори не се соберат и избришат е: <strong>помалку од 24 часа</strong>.",
 	"campaignevents-register-invalid-answer": "Неважечки одговор на прашањето $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Наведете"
 }
