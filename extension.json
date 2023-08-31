@@ -305,7 +305,8 @@
 				"campaignevents-email-participants-count",
 				"campaignevents-email-participants-yes",
 				"campaignevents-email-participants-no",
-				"campaignevents-event-details-private-participant-label"
+				"campaignevents-event-details-private-participant-label",
+				"campaignevents-event-details-no-organizer-email"
 			],
 			"dependencies": [
 				"mediawiki.language",

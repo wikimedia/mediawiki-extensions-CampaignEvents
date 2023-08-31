@@ -61,7 +61,15 @@
 
 	EmailManager.prototype.installEventListeners = function () {
 		var self = this;
-
+		if ( !participantsManager.viewerHasEmail ) {
+			this.setWarning(
+				new OO.ui.HtmlSnippet(
+					mw.message( 'campaignevents-event-details-no-organizer-email' ).parse()
+				)
+			);
+			this.subject.setDisabled( true );
+			this.message.setDisabled( true );
+		}
 		participantsManager.on( 'change', this.onRecipientsUpdate.bind( this ) );
 
 		this.button.on( 'click', this.emailUsers.bind( this ) );

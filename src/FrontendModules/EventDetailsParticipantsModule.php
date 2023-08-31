@@ -162,6 +162,8 @@ class EventDetailsParticipantsModule {
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
 			'wgCampaignEventsLastParticipantID' => $lastParticipantID,
 			'wgCampaignEventsCurUserCentralID' => isset( $centralUser ) ? $centralUser->getCentralID() : null,
+			'wgCampaignEventsViewerHasEmail' =>
+				$this->userFactory->newFromUserIdentity( $viewingUser )->isEmailConfirmed()
 		] );
 
 		$layout = new PanelLayout( [
