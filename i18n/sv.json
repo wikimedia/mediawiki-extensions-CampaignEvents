@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Sabelöga"
+			"Sabelöga",
+			"Bengtsson96"
 		]
 	},
 	"campaignevents-desc": "Erbjuder funktioner för kampanjorganisatörer och -deltagare.",
@@ -32,8 +33,6 @@
 	"campaignevents-error-countryoraddress-not-in-person": "Mötets land och adress behöver inte anges om evenemanget inte är på plats.",
 	"campaignevents-error-invalid-country": "Ange ett giltigt landsnamn.",
 	"campaignevents-error-invalid-address": "Ange en giltig adress.",
-	"campaignevents-rest-event-not-found": "Det finns inget evenemang med det angivna ID:t.",
-	"campaignevents-rest-enable-registration-permission-denied": "Du får inte aktivera evenemangsregistreringar.",
 	"enableeventregistration": "Aktivera evenemangsregistrering",
 	"editeventregistration": "Redigera evenemangsregistrering",
 	"campaignevents-edit-form-legend": "Tillhandahåll allmän information om evenemanget du organiserar",
@@ -61,7 +60,6 @@
 	"campaignevents-edit-invalid-id": "Ange ett giltigt evenemangs-ID.",
 	"campaignevents-edit-no-event-id-provided": "Ange ett evenemangs-ID.",
 	"campaignevents-edit-event-notfound": "Det finns inget evenemang med det angivna ID:t.",
-	"campaignevents-rest-edit-page-nonlocal": "Detta evenemangsregistrering har aktiverats på följande wiki och borde redigeras där: $1.",
 	"campaignevents-edit-page-nonlocal": "[$1 Redigera denna registrering] på wikin den aktiverats på: $2.",
 	"campaignevents-edit-error-deleted": "Denna registrering har raderats.",
 	"campaignevents-edit-need-central-account": "Du behöver ett centralt användarkonto för att aktivera eller redigera evenemangsregistreringar.",
@@ -82,10 +80,8 @@
 	"campaignevents-unregister-confirmation-text": "Bekräfta att du vill avbryta din registrering för det här evenemanget genom att använda knappen \"{{int:campaignevents-unregister-confirmation-btn}}\".",
 	"campaignevents-unregister-confirmation-btn": "Avbryt registrering",
 	"campaignevents-delete-not-allowed-registration": "Du får inte radera denna evenemangsregistrering.",
-	"campaignevents-rest-delete-already-deleted": "Denna evenemangsregistreringen har redan raderats.",
 	"campaignevents-role-creator": "{{GENDER:$1|skapare}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organisatör}}",
-	"campaignevents-rest-user-not-found": "Det finns ingen användare med detta central-ID.",
 	"campaignevents-register-not-allowed": "Du får inte registrera dig för evenemang.",
 	"campaignevents-register-event-past": "Denna evenemangsregistreringsperiod har redan avslutats.",
 	"campaignevents-register-event-not-open": "Denna evenemangsregistrering har stängts.",
@@ -131,7 +127,6 @@
 	"campaignevents-delete-confirmation-text": "Bekräfta att du vill radera denna evenemangsregistrering genom att använda knappen \"{{int:campaignevents-delete-submit-btn}}\". Denna åtgärd kan inte återställas.",
 	"campaignevents-delete-submit-btn": "Radera",
 	"campaignevents-delete-success": "Evenemangsregistreringen har raderats.",
-	"campaignevents-rest-get-registration-deleted": "Denna evenemangsregistreringen har raderats.",
 	"campaignevents-edit-registration-deleted": "Denna evenemangsregistreringen har raderats.",
 	"campaignevents-register-registration-deleted": "Du kan inte registrera dig för detta evenemang eftersom den raderas.",
 	"campaignevents-unregister-registration-deleted": "Du kan inte avbryta din evenemangsregistrering eftersom den har raderats.",
@@ -190,7 +185,7 @@
 	"campaignevents-event-details-register-prompt": "Du måste registrera dig för att se den här information",
 	"campaignevents-event-details-view-event-page": "Visa evenemangssida",
 	"campaignevents-event-details-select-all": "Välj alla",
-	"campaignevents-event-details-participants-checkboxes-selected": "$1 {{PLURAL:$1|vald|valda}}",
+	"campaignevents-event-details-participants-checkboxes-selected": "$1 av $2 {{PLURAL:$1|vald|valda}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Ta bort {{PLURAL:$1|deltagare}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Är du säker på att du vill ta bort {{PLURAL:$1|den valda deltagaren|de valda deltagarna}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Ta bort",
@@ -209,7 +204,5 @@
 	"campaignevents-unregister-participants-permission-denied": "Du får inte ta bort deltagare",
 	"campaignevents-unregister-participants-registration-deleted": "Du får inte ta bort deltagare från detta evenemang eftersom det har raderats.",
 	"campaignevents-event-details-remove-participant-notification-error": "Det uppstod ett fel när {{PLURAL:$1|deltagare}} skulle tas bort",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter \"user_ids\" måste vara en uppsättning användar-ID:n eller null (för att ta bort alla användare)",
-	"campaignevents-event-details-search-participants-placeholder": "Sök efter deltagare",
-	"campaignevents-rest-list-participants-empty-filter": "Användarnamnsfiltret, om det angetts, får inte vara en tom sträng."
+	"campaignevents-event-details-search-participants-placeholder": "Sök efter deltagare"
 }
