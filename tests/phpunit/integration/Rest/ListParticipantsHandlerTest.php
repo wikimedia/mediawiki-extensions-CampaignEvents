@@ -25,7 +25,8 @@ use MediaWikiIntegrationTestCase;
  * @group Test
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler
  * @covers \MediaWiki\Extension\CampaignEvents\Rest\EventIDParamTrait
- * TODO: Make a unit test once Language is available in the REST framework (T269492)
+ * TODO: Make a unit test once Language is available in the REST framework (T269492) and we get rid
+ * of User/UserArray.
  */
 class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	use HandlerTestTrait;

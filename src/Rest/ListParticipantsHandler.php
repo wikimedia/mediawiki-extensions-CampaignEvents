@@ -17,6 +17,7 @@ use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\User\UserFactory;
 use RequestContext;
+use UserArray;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
@@ -139,6 +140,20 @@ class ListParticipantsHandler extends SimpleHandler {
 			}
 		);
 		$this->userLinker->preloadUserLinks( $usernamesToPreload );
+		$usersByName = [];
+		// XXX We have to use MW-specific classes (including the god object User) because email-related
+		// code still lives mostly inside User.
+		if ( !defined( 'MW_PHPUNIT_TEST' ) ) {
+			$userArray = UserArray::newFromNames( $usernamesToPreload );
+			foreach ( $userArray as $user ) {
+				$usersByName[$user->getName()] = $user;
+			}
+		} else {
+			// UserArray is highly untestable, fall back to the slow version
+			foreach ( $usernamesToPreload as $name ) {
+				$usersByName[$name] = $this->userFactory->newFromName( $name );
+			}
+		}
 
 		foreach ( $respDataByCentralID as $centralID => $data ) {
 			$usernameOrError = $usernamesMap[$centralID];
@@ -147,7 +162,7 @@ class ListParticipantsHandler extends SimpleHandler {
 			} elseif ( $usernameOrError === CampaignsCentralUserLookup::USER_NOT_FOUND ) {
 				$additionalData = [ 'not_found' => true ];
 			} else {
-				$user = $this->userFactory->newFromName( $usernameOrError );
+				$user = $usersByName[$usernameOrError];
 				$additionalData = [
 					'user_name' => $usernameOrError,
 					'user_page' => $this->userLinker->getUserPagePath( new CentralUser( $centralID ) ),
