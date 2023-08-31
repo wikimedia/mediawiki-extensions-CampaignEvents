@@ -10,7 +10,6 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -87,13 +86,15 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$participants = [];
 		$expected = [];
+		$usernames = [];
 		for ( $i = 1; $i < 4; $i++ ) {
 			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i, false, [], null, null );
+			$usernames[$i] = "Test user $i";
 
 			$expected[] = [
 				'participant_id' => $i,
 				'user_id' => $i,
-				'user_name' => '',
+				'user_name' => $usernames[$i],
 				'user_page' => [
 					'path' => '',
 					'title' => '',
@@ -108,16 +109,28 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$partStore = $this->createMock( ParticipantsStore::class );
 		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $participants );
+		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$userLookup->method( 'getNamesIncludingDeletedAndSuppressed' )->willReturn( $usernames );
 		yield 'Has participants' => [
 			$expected,
-			$partStore
+			$partStore,
+			$userLookup,
 		];
 
-		$deletedParticipant = new Participant( new CentralUser( 1 ), '20220315120000', 1, false, [], null, null );
+		$deletedUserID = 1;
+		$deletedParticipant = new Participant(
+			new CentralUser( $deletedUserID ),
+			'20220315120000',
+			1,
+			false,
+			[],
+			null,
+			null
+		);
 		$deletedUserExpected = [
 			[
 				'participant_id' => 1,
-				'user_id' => 1,
+				'user_id' => $deletedUserID,
 				'hidden' => true,
 				'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
 				'user_registered_at_formatted' => '12:00, 15 March 2022',
@@ -129,8 +142,8 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			->method( 'getEventParticipants' )
 			->willReturn( [ $deletedParticipant ] );
 		$delUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$delUserLookup->method( 'getUserName' )
-			->willThrowException( $this->createMock( HiddenCentralUserException::class ) );
+		$delUserLookup->method( 'getNamesIncludingDeletedAndSuppressed' )
+			->willReturn( [ $deletedUserID => CampaignsCentralUserLookup::USER_HIDDEN ] );
 		yield 'Deleted user' => [ $deletedUserExpected, $delPartStore, $delUserLookup ];
 	}
 
