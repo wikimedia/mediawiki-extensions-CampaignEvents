@@ -244,7 +244,9 @@ return [
 			$services->get( EventTimeFormatter::SERVICE_NAME ),
 			$services->getUserFactory(),
 			$services->get( TrackingToolRegistry::SERVICE_NAME ),
-			$services->get( CampaignsUserMailer::SERVICE_NAME )
+			$services->get( CampaignsUserMailer::SERVICE_NAME ),
+			$services->get( ParticipantAnswersStore::SERVICE_NAME ),
+			$services->get( EventAggregatedAnswersStore::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

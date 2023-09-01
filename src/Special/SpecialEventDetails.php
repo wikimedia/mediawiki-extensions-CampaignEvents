@@ -18,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Utils\MWTimestamp;
 use OOUI\ButtonWidget;
 use OOUI\IndexLayout;
 use OOUI\TabPanelLayout;
@@ -31,10 +32,13 @@ class SpecialEventDetails extends SpecialPage {
 	private const MODULE_STYLES = [
 		'oojs-ui.styles.icons-movement',
 		'ext.campaignEvents.specialeventdetails.styles',
-		'oojs-ui-widgets.styles' ];
+		'oojs-ui-widgets.styles'
+	];
+
 	public const EVENT_DETAILS_PANEL = 'EventDetailsPanel';
 	public const PARTICIPANTS_PANEL = 'ParticipantsPanel';
 	public const EMAIL_PANEL = 'EmailPanel';
+	public const STATS_PANEL = 'StatsPanel';
 
 	/** @var IEventLookup */
 	protected IEventLookup $eventLookup;
@@ -198,6 +202,17 @@ class SpecialEventDetails extends SpecialPage {
 				self::EMAIL_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-email' ) ),
 				$emailModule->createContent( $language )
+			);
+		}
+
+		$eventEndUnix = (int)wfTimestamp( TS_UNIX, $this->event->getEndUTCTimestamp() );
+		$eventHasEnded = $eventEndUnix < (int)MWTimestamp::now( TS_UNIX );
+		if ( $isOrganizer && $eventHasEnded && $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $language );
+			$tabs[] = $this->createTab(
+				self::STATS_PANEL,
+				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-stats' ) ),
+				$statsModule->createContent( $this->event )
 			);
 		}
 
