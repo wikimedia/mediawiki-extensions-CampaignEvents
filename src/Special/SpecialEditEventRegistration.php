@@ -64,7 +64,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	protected function getFormMessages(): array {
 		return [
 			'success' => 'campaignevents-edit-success-msg',
-			'form-legend' => 'campaignevents-edit-form-legend',
+			'details-section-subtitle' => 'campaignevents-edit-form-details-subtitle',
 			'submit' => 'campaignevents-edit-form-submit',
 		];
 	}

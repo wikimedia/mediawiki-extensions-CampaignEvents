@@ -60,7 +60,7 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 	protected function getFormMessages(): array {
 		return [
 			'success' => 'campaignevents-enable-registration-success-msg',
-			'form-legend' => 'campaignevents-edit-form-legend',
+			'details-section-subtitle' => 'campaignevents-edit-form-details-subtitle',
 			'submit' => 'campaignevents-enable-registration-form-submit',
 		];
 	}
