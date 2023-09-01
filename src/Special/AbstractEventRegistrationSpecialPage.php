@@ -391,7 +391,48 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
+		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			$formFields['ParticipantQuestionsInfo'] = $this->getParticipantQuestionsInfoField();
+		}
+
 		return $formFields;
+	}
+
+	private function getParticipantQuestionsInfoField(): array {
+		$text = Html::element( 'p', [], $this->msg( 'campaignevents-edit-form-questions-intro' )->text() ) .
+			Html::element( 'p', [], $this->msg( 'campaignevents-edit-form-questions-explanation' )->text() );
+		$questionLabels = $this->eventQuestionsRegistry->getQuestionLabelsForOrganizerForm();
+		$sections = [];
+		if ( $questionLabels['pii'] ) {
+			$sections['campaignevents-edit-form-questions-pii-label'] = $questionLabels['pii'];
+		}
+		if ( $questionLabels['non-pii'] ) {
+			$sections['campaignevents-edit-form-questions-non-pii-label'] = $questionLabels['non-pii'];
+		}
+
+		foreach ( $sections as $sectionHeader => $sectionQuestions ) {
+			// Note: here we're skipping some levels for the headings, which we shouldn't do. But we also shouldn't
+			// put headers inside the <label> generated for the "info" field. Nor paragraphs. There doesn't seem to be
+			// a better way though.
+			$text .= Html::element(
+				'h4',
+				// HACK: Use inline style to avoid creating a new RL module.
+				[ 'style' => 'color: #54595d' ],
+				$this->msg( $sectionHeader )->text()
+			);
+			$questionList = '';
+			foreach ( $sectionQuestions as $labelMsg ) {
+				$questionList .= Html::element( 'li', [], $this->msg( $labelMsg )->text() );
+			}
+			$text .= Html::rawElement( 'ul', [], $questionList );
+		}
+
+		return [
+			'type' => 'info',
+			'default' => $text,
+			'raw' => true,
+			'section' => 'campaignevents-edit-form-questions-label'
+		];
 	}
 
 	/**
