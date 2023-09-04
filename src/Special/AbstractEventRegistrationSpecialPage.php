@@ -41,6 +41,7 @@ use StatusValue;
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
 	public const PAGE_FIELD_NAME = 'wp' . self::PAGE_FIELD_NAME_HTMLFORM;
+	private const DETAILS_SECTION = 'campaignevents-edit-form-details-label';
 
 	/** @var array */
 	private $formMessages;
@@ -181,7 +182,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	/**
 	 * Returns messages to be used on the page. 'form-legend' and 'submit' must not use markup or take any parameter.
 	 * 'success' can contain markup, and will be passed the prefixedtext of the event page as the $1 parameter.
-	 * @phan-return array{success:string,form-legend:string,submit:string}
+	 * @phan-return array{success:string,details-section-subtitle:string,submit:string}
 	 * @return array
 	 */
 	abstract protected function getFormMessages(): array;
@@ -206,6 +207,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'help-message' => 'campaignevents-edit-field-page-help',
 			'help-inline' => false,
 			'required' => true,
+			'section' => self::DETAILS_SECTION,
 		];
 
 		if ( $this->event ) {
@@ -218,6 +220,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 					'campaignevents-edit-field-status-closed' => EventRegistration::STATUS_CLOSED,
 				],
 				'required' => true,
+				'section' => self::DETAILS_SECTION,
 			];
 		}
 
@@ -232,7 +235,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-timezone',
 			'default' => $defaultTimezone,
 			'required' => true,
-			'cssclass' => 'ext-campaignevents-timezone-input'
+			'cssclass' => 'ext-campaignevents-timezone-input',
+			'section' => self::DETAILS_SECTION,
 		];
 		// Disable auto-infusion because we want to change the configuration.
 		$timeFieldClasses = 'ext-campaignevents-time-input mw-htmlform-autoinfuse-lazy';
@@ -243,6 +247,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartLocalTimestamp() ) : '',
 			'required' => true,
 			'cssclass' => $timeFieldClasses,
+			'section' => self::DETAILS_SECTION,
 		];
 		$formFields['EventEnd'] = [
 			'type' => 'datetime',
@@ -251,6 +256,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
 			'required' => true,
 			'cssclass' => $timeFieldClasses,
+			'section' => self::DETAILS_SECTION,
 		];
 
 		$formFields['EventOrganizerUsernames'] = [
@@ -280,6 +286,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 				return true;
 			},
+			'section' => self::DETAILS_SECTION,
 		];
 
 		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
@@ -293,6 +300,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$formFields['EventTrackingToolID'] = [
 				'type' => 'hidden',
 				'default' => 'wikimedia-pe-dashboard',
+				'section' => self::DETAILS_SECTION,
 			];
 			if ( $this->event ) {
 				$curTrackingTools = $this->event->getTrackingTools();
@@ -334,6 +342,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 							->text();
 					}
 				},
+				'section' => self::DETAILS_SECTION,
 			];
 		}
 
@@ -348,6 +357,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			],
 			'default' => $this->event ? $this->event->getMeetingType() : null,
 			'required' => true,
+			'section' => self::DETAILS_SECTION,
 		];
 
 		$formFields['EventMeetingURL'] = [
@@ -355,12 +365,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-meeting-url',
 			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_IN_PERSON ],
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
+			'section' => self::DETAILS_SECTION,
 		];
 		$formFields['EventMeetingCountry'] = [
 			'type' => 'text',
 			'label-message' => 'campaignevents-edit-field-country',
 			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingCountry() : '',
+			'section' => self::DETAILS_SECTION,
 		];
 		$formFields['EventMeetingAddress'] = [
 			'type' => 'textarea',
@@ -368,6 +380,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-address',
 			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingAddress() : '',
+			'section' => self::DETAILS_SECTION,
 		];
 		$formFields['EventChatURL'] = [
 			'type' => 'url',
@@ -375,6 +388,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $this->event ? $this->event->getChatURL() : '',
 			'help-message' => 'campaignevents-edit-field-chat-url-help',
 			'help-inline' => false,
+			'section' => self::DETAILS_SECTION,
 		];
 
 		return $formFields;
@@ -399,7 +413,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	protected function alterForm( HTMLForm $form ): void {
-		$form->setWrapperLegendMsg( $this->formMessages['form-legend'] );
+		$form->addHeaderHtml(
+			$this->msg( $this->formMessages['details-section-subtitle'] )->parseAsBlock(),
+			self::DETAILS_SECTION
+		);
 		$form->setSubmitTextMsg( $this->formMessages['submit'] );
 		// XXX HACK: Override the font weight with inline style to avoid creating a new RL module just for this. T316820
 		$footerNotice = ( new Tag( 'span' ) )
@@ -582,6 +599,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	public function doesWrites(): bool {
 		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getMessagePrefix(): string {
+		return '';
 	}
 
 	/**
