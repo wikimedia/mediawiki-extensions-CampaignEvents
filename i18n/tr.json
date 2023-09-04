@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Hedda",
+			"JackUKElliott",
 			"Joseph",
 			"Khalvar",
 			"Rapsar",
@@ -111,6 +112,7 @@
 	"campaignevents-register-event-past": "Bu etkinlik kayıt dönemi sona ermiştir.",
 	"campaignevents-register-event-not-open": "Bu etkinlik kaydı kapatılmıştır.",
 	"campaignevents-register-need-central-account": "Etkinliklere kaydolmak için merkezi bir kullanıcı hesabına ihtiyacınız var.",
+	"campaignevents-register-answers-aggregated-error": "Daha önce sağladığınız yanıtlar zaten toplanıp silindiğinden yanıt sağlayamazsınız.",
 	"campaignevents-unregister-not-allowed": "Kaydınızı iptal etmenize izin verilmiyor.",
 	"campaignevents-unregister-not-participant": "Bu etkinlik için kayıtlı değilsiniz.",
 	"campaignevents-unregister-need-central-account": "Etkinlik kaydınızı iptal etmek için merkezi bir kullanıcı hesabına ihtiyacınız var.",
@@ -340,8 +342,17 @@
 	"campaignevents-register-question-affiliate-option-none": "Hayır",
 	"campaignevents-register-question-affiliate-option-affiliate": "Evet",
 	"campaignevents-register-question-affiliate-details-placeholder": "Lütfen belirtin",
+	"campaignevents-register-answers-aggregated": "Yanıtlarınız veri saklama bilgilerine göre toplandı ve silindi.",
+	"campaignevents-register-retention-title": "Veri saklama bilgileri",
+	"campaignevents-register-retention-base": "Yanıtlarınız toplanır ve gönderildikten 90 gün sonra veya etkinliğin sonunda (hangisi önce gerçekleşirse) silinir. Yanıtları bu süreden önce istediğiniz zaman düzenleyebilirsiniz. Silindikten sonra değiştirilemez, yeniden yanıtlanamaz veya geri alınamaz.",
+	"campaignevents-register-retention-days": "Yanıtlarınızın toplanması ve silinmesi için kalan süre: <strong>$1 {{PLURAL:$1|gün|gün}}</strong> .",
 	"campaignevents-eventpage-register-dialog-questions-title": "Bilgileriniz",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Bu bilgiler sadece etkinlik düzenleyicileri ile paylaşılacaktır.",
+	"campaignevents-eventpage-register-dialog-answers-aggregated": "Yanıtlarınız veri saklama bilgilerine göre toplandı ve silindi.",
+	"campaignevents-eventpage-register-dialog-retention-title": "Veri saklama bilgileri",
+	"campaignevents-eventpage-register-dialog-retention-base": "Yanıtlarınız toplanır ve gönderildikten 90 gün sonra veya etkinliğin sonunda (hangisi önce gerçekleşirse) silinir. Yanıtları bu süreden önce istediğiniz zaman düzenleyebilirsiniz. Silindikten sonra değiştirilemez, yeniden yanıtlanamaz veya geri alınamaz.",
+	"campaignevents-eventpage-register-dialog-retention-days": "Yanıtlarınızın toplanması ve silinmesi için kalan süre: <strong>$1 {{PLURAL:$1|gün|gün}}</strong> .",
+	"campaignevents-eventpage-register-dialog-retention-hours": "Yanıtlarınızın toplanması ve silinmesi için kalan süre: <strong>24 saatten az</strong>.",
 	"campaignevents-register-invalid-answer": "$1 sorusuna geçersiz yanıt",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Lütfen belirtin"
 }

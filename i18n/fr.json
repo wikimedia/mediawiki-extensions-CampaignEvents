@@ -120,6 +120,7 @@
 	"campaignevents-register-event-past": "La période d’inscription à cet événement est déjà terminée.",
 	"campaignevents-register-event-not-open": "Les inscriptions pour cet événement sont fermées.",
 	"campaignevents-register-need-central-account": "Vous avez besoin d’un compte d’utilisateur central pour vous inscrire aux événements.",
+	"campaignevents-register-answers-aggregated-error": "Vous ne pouvez pas fournir de réponses parce que celles que vous avez déjà fournies ont déjà été agrégées et supprimées.",
 	"campaignevents-unregister-not-allowed": "Vous n’êtes pas autorisé{{GENDER:||e}} à annuler votre inscription.",
 	"campaignevents-unregister-not-participant": "Vous n’êtes pas inscrit{{GENDER:||e}} à cet événement.",
 	"campaignevents-unregister-need-central-account": "Vous avez besoin d’un compte d’utilisateur central pour annuler votre inscription à un événement.",
@@ -367,11 +368,15 @@
 	"campaignevents-register-question-affiliate-option-none": "Non",
 	"campaignevents-register-question-affiliate-option-affiliate": "Oui",
 	"campaignevents-register-question-affiliate-details-placeholder": "Veuillez préciser",
+	"campaignevents-register-answers-aggregated": "Vos réponses ont été agrégées et supprimées par les informations de conservation des données.",
 	"campaignevents-register-retention-title": "Information de conservation des données",
 	"campaignevents-register-retention-base": "Vos réponses sont agrégées puis supprimées 90 jours après leur envoi, ou à la fin de l’événement, selon le premier qui se produit. Modifiez les réponses à tout moment avant cela. Une fois supprimées, elles ne peuvent plus être modifiées, répondues de nouveau ou récupérées.",
 	"campaignevents-register-retention-days": "Le temps restant avant que vos réponses ne soient agrégées et supprimées est de : <strong>$1 {{PLURAL:$1|jour|jours}}</strong>.",
+	"campaignevents-register-retention-hours": "Le temps restant jusqu’à ce que vos réponses soient agrégées et supprimées est de: <strong>moins de 24 heures</strong>.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Vos informations",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Cette information sera partagée uniquement avec les organisateurs de l’événement.",
+	"campaignevents-eventpage-register-dialog-answers-aggregated": "Vos réponses ont été agrégées et supprimées par les informations de conservation des données.",
+	"campaignevents-eventpage-register-dialog-retention-title": "Informations de conservation des données",
 	"campaignevents-register-invalid-answer": "Réponse non valide à la question $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Veuillez préciser"
 }

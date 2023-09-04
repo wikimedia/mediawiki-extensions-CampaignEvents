@@ -262,6 +262,7 @@
 	"campaignevents-event-details-tab-participants": "משתתפים",
 	"campaignevents-event-details-tab-email": "שליחת הודעה",
 	"campaignevents-event-details-tab-event-details": "פרטי האירוע",
+	"campaignevents-event-details-tab-stats": "סטטיסטיקת תשובות",
 	"campaignevents-event-details-search-participants-placeholder": "חיפוש משתתפים",
 	"campaignevents-event-details-organizers-view-more": "להציג עוד",
 	"campaignevents-event-details-organizers-noscript": "יש להפעיל JavaScript כדי לראות את רשימת המארגנים המלאה.",
@@ -368,5 +369,7 @@
 	"campaignevents-eventpage-register-dialog-retention-days": "הזמן שנותר עד שהתגובות שלך יצטברו ויימחקו הוא: <strong>$1 {{PLURAL:$1|יום אחד|יומיים|$1 ימים}}</strong>.",
 	"campaignevents-eventpage-register-dialog-retention-hours": "הזמן שנותר עד שהתגובות שלך יצטברו ויימחקו הוא: <strong>פחות מ־24 שעות</strong>.",
 	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1",
-	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב",
+	"campaignevents-details-stats-no-responses": "לאירוע הזה אין תגובות מהמשתתפים שאפשר לצבור.",
+	"campaignevents-details-stats-not-ready": "תשובות המשתתפים יצטברו ויהיו זמינות כאן בקרוב."
 }

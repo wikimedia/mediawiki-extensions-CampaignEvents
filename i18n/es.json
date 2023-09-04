@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Angoca",
 			"DarkGames26",
 			"Fitoschido",
 			"JDíaz32",
@@ -115,6 +116,7 @@
 	"campaignevents-register-event-past": "El plazo para inscribirse a este evento ha finalizado.",
 	"campaignevents-register-event-not-open": "Las inscripciones para este evento están cerradas.",
 	"campaignevents-register-need-central-account": "Necesitas una cuenta global para inscribirte en eventos.",
+	"campaignevents-register-answers-aggregated-error": "No puedes proporcionar respuestas porque las que ya proporcionó ya se han agregado y eliminado.",
 	"campaignevents-unregister-not-allowed": "No puedes cancelar tu propia inscripción.",
 	"campaignevents-unregister-not-participant": "No estás inscrito para este evento.",
 	"campaignevents-unregister-need-central-account": "Necesitas una cuenta global para cancelar tu inscripción en el evento.",
@@ -260,6 +262,7 @@
 	"campaignevents-event-details-tab-participants": "Participantes",
 	"campaignevents-event-details-tab-email": "Mensaje",
 	"campaignevents-event-details-tab-event-details": "Detalles del evento",
+	"campaignevents-event-details-tab-stats": "Estadísticas de respuesta",
 	"campaignevents-event-details-search-participants-placeholder": "Buscar participantes",
 	"campaignevents-event-details-organizers-view-more": "Ver más",
 	"campaignevents-event-details-organizers-noscript": "Debes habilitar JavaScript para ver la lista completa de organizadores.",
@@ -352,5 +355,14 @@
 	"campaignevents-register-question-affiliate-placeholder": "Selecciona una opción",
 	"campaignevents-register-question-affiliate-option-none": "No",
 	"campaignevents-register-question-affiliate-option-affiliate": "Sí",
-	"campaignevents-register-question-affiliate-details-placeholder": "Especifica"
+	"campaignevents-register-question-affiliate-details-placeholder": "Especifica",
+	"campaignevents-register-answers-aggregated": "Sus respuestas se han agregado y eliminado según la información de retención de datos.",
+	"campaignevents-register-retention-base": "Tus respuestas se agregan y luego se eliminan 90 días después del envío o al final del evento, lo que ocurra primero. Edita las respuestas en cualquier momento antes de esa fecha. Una vez eliminadas, no se pueden cambiar, volver a responder, ni recuperar.",
+	"campaignevents-register-retention-days": "El tiempo restante hasta que tus respuestas sean agregadas y eliminadas es: <strong>$1 {{PLURAL:$1| día|días}}</strong>.",
+	"campaignevents-register-retention-hours": "El tiempo restante hasta que se agreguen y eliminen tus respuestas es: <strong>menos de 24 horas</strong>.",
+	"campaignevents-eventpage-register-dialog-answers-aggregated": "Sus respuestas se han agregado y eliminado según la información de retención de datos.",
+	"campaignevents-eventpage-register-dialog-retention-base": "Tus respuestas se agregan y luego se eliminan 90 días después del envío o al final del evento, lo que ocurra primero. Edita las respuestas en cualquier momento antes de esa fecha. Una vez eliminadas, no se pueden cambiar, volver a responder, ni recuperar.",
+	"campaignevents-eventpage-register-dialog-retention-hours": "El tiempo restante hasta que se agreguen y eliminen tus respuestas es: <strong>menos de 24 horas</strong>.",
+	"campaignevents-details-stats-no-responses": "Este evento no tiene respuestas de los participantes para agregar.",
+	"campaignevents-details-stats-not-ready": "Las respuestas de los participantes se agregarán y estarán disponibles aquí en breve."
 }

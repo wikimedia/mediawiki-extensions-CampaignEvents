@@ -261,6 +261,7 @@
 	"campaignevents-event-details-tab-participants": "Teilnehmer",
 	"campaignevents-event-details-tab-email": "Nachricht",
 	"campaignevents-event-details-tab-event-details": "Veranstaltungsdetails",
+	"campaignevents-event-details-tab-stats": "Antwortstatistiken",
 	"campaignevents-event-details-search-participants-placeholder": "Teilnehmer suchen",
 	"campaignevents-event-details-organizers-view-more": "Mehr anzeigen",
 	"campaignevents-event-details-organizers-noscript": "Du musst JavaScript aktivieren, um die vollständige Liste der Organisatoren anzuzeigen.",
@@ -367,5 +368,7 @@
 	"campaignevents-eventpage-register-dialog-retention-days": "Die verbleibende Zeit, bis deine Antworten zusammengefasst und gelöscht werden, beträgt: <strong>$1 {{PLURAL:$1|Tag|Tage}}</strong>.",
 	"campaignevents-eventpage-register-dialog-retention-hours": "Die verbleibende Zeit bis zur Zusammenfassung und Löschung deiner Antworten beträgt: <strong>weniger als 24 Stunden</strong>.",
 	"campaignevents-register-invalid-answer": "Ungültige Antwort auf die Frage $1",
-	"campaignevents-register-question-organizing-partner-details-placeholder": "Bitte angeben"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Bitte angeben",
+	"campaignevents-details-stats-no-responses": "Für diese Veranstaltung liegen keine Antworten von Teilnehmern vor.",
+	"campaignevents-details-stats-not-ready": "Die Antworten der Teilnehmer werden zusammengefasst und in Kürze hier verfügbar gemacht."
 }

@@ -46,6 +46,7 @@
 	"campaignevents-register-edit-btn": "Salva modifiche",
 	"campaignevents-role-creator": "{{GENDER:$1|creatore|creatrice|creatore/trice}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|organizzatore|organizzatrice|organizzatore/trice}}",
+	"campaignevents-register-answers-aggregated-error": "Non puoi fornire risposte perché quelle che hai già fornito sono già state aggregate e cancellate.",
 	"myevents": "I tuoi eventi",
 	"campaignevents-myevents-need-central-account": "Devi avere un account utente centralizzato per poter vedere la lista dei tuoi eventi.",
 	"campaignevents-myevents-filter-legend": "Filtra gli eventi",
@@ -144,6 +145,7 @@
 	"campaignevents-event-details-remove-participant-notification-error": "Si è verificato un errore durante la rimozione {{PLURAL:$1|del partecipante|dei partecipanti}}",
 	"campaignevents-event-details-tab-participants": "Partecipanti",
 	"campaignevents-event-details-tab-event-details": "Dettagli evento",
+	"campaignevents-event-details-tab-stats": "Statistiche delle risposte",
 	"campaignevents-event-details-search-participants-placeholder": "Cerca partecipanti",
 	"campaignevents-event-details-organizers-view-more": "Mostra altro",
 	"campaignevents-event-details-organizers-noscript": "Devi abilitare JavaScript per vedere l'elenco completo degli organizzatori.",
@@ -207,9 +209,13 @@
 	"campaignevents-register-question-affiliate-placeholder": "Seleziona un'opzione",
 	"campaignevents-register-question-affiliate-option-none": "No",
 	"campaignevents-register-question-affiliate-option-affiliate": "Sì",
+	"campaignevents-register-answers-aggregated": "Le tue risposte sono state aggregate e cancellate in base alle informazioni sulla conservazione dei dati.",
 	"campaignevents-register-retention-title": "Informazioni sulla conservazione dei dati",
 	"campaignevents-register-retention-hours": "Il tempo rimanente prima che le tue risposte vengano aggregate e cancellate è: <strong>meno di 24 ore</strong>.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Le tue informazioni",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Queste informazioni saranno condivise solo con gli organizzatori dell'evento.",
-	"campaignevents-eventpage-register-dialog-retention-title": "Informazioni sulla conservazione dei dati"
+	"campaignevents-eventpage-register-dialog-answers-aggregated": "Le tue risposte sono state aggregate e cancellate in base alle informazioni sulla conservazione dei dati.",
+	"campaignevents-eventpage-register-dialog-retention-title": "Informazioni sulla conservazione dei dati",
+	"campaignevents-details-stats-no-responses": "Questo evento non ha risposte da parte dei partecipanti da aggregare.",
+	"campaignevents-details-stats-not-ready": "Le risposte dei partecipanti verranno aggregate e rese disponibili qui a breve."
 }

@@ -158,5 +158,8 @@
 	"campaignevents-event-details-edit-button": "Редагувати",
 	"campaignevents-event-details-dates": "$1 до $4",
 	"campaignevents-event-details-online-label": "Онлайн-подія",
-	"campaignevents-event-details-event": "Деталі події: $1"
+	"campaignevents-event-details-event": "Деталі події: $1",
+	"campaignevents-event-details-tab-stats": "Статистика відповідей",
+	"campaignevents-details-stats-no-responses": "Ця подія не має відповідей від учасників для зведення.",
+	"campaignevents-details-stats-not-ready": "Відповіді учасників будуть зведені та незабаром доступні тут."
 }
