@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Notifications;
 
+use DeferredUpdates;
 use EchoEvent;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -33,14 +34,16 @@ class UserNotifier {
 			if ( !$eventPage instanceof MWPageProxy ) {
 				throw new InvalidArgumentException( "Unexpected Page implementation" );
 			}
-			EchoEvent::create( [
-				'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
-				'title' => Title::castFromPageIdentity( $eventPage->getPageIdentity() ),
-				'extra' => [
-					'user' => $performer->getLocalUserID(),
-					'event-id' => $event->getID()
-				]
-			] );
+			DeferredUpdates::addCallableUpdate( static function () use ( $performer, $event, $eventPage ) {
+				EchoEvent::create( [
+					'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
+					'title' => Title::castFromPageIdentity( $eventPage->getPageIdentity() ),
+					'extra' => [
+						'user' => $performer->getLocalUserID(),
+						'event-id' => $event->getID()
+					]
+				] );
+			} );
 		}
 	}
 }
