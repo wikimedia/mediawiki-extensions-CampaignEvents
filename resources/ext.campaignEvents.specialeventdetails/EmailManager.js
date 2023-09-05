@@ -94,8 +94,10 @@
 			} );
 		};
 
-		var hasNoEmail = function ( data ) {
-			return participantsManager.isSelectionInverted ? data.hasEmail : !data.hasEmail;
+		var isInvalidRecipient = function ( data ) {
+			return participantsManager.isSelectionInverted ?
+				data.canReceiveEmail :
+				!data.canReceiveEmail;
 		};
 
 		var recipientsListCheckboxes = getRecipientsListCheckboxes();
@@ -110,7 +112,7 @@
 				participantsManager.selectedParticipantsAmount ===
 				participantsManager.participantsTotal;
 
-		if ( this.recipientsList.some( hasNoEmail ) ) {
+		if ( this.recipientsList.some( isInvalidRecipient ) ) {
 			this.setWarning( mw.message( 'campaignevents-email-participants-missing-address' )
 				.text() );
 		} else {

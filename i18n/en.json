@@ -322,7 +322,7 @@
 	"campaignevents-email-participants-yes": "Yes",
 	"campaignevents-email-participants-no": "No",
 	"campaignevents-event-details-time-registered": "Time registered",
-	"campaignevents-event-details-has-email": "Has email",
+	"campaignevents-event-details-can-receive-email": "Can receive email",
 	"campaignevents-register-questions-label-title": "Your information",
 	"campaignevents-register-questions-label-subtitle": "This information will be shared with the event organizers only.",
 	"campaignevents-register-question-gender": "What is your gender identity? (optional)",

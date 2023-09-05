@@ -148,6 +148,7 @@ class EventDetailsParticipantsModule {
 			$items[] = $this->getParticipantsTable(
 				$viewingUser,
 				$canRemoveParticipants,
+				$canEmailParticipants,
 				$curUserParticipant,
 				$otherParticipants
 			);
@@ -223,6 +224,7 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param UserIdentity $viewingUser
 	 * @param bool $canRemoveParticipants
+	 * @param bool $canEmailParticipants
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
 	 * @return Tag
@@ -230,6 +232,7 @@ class EventDetailsParticipantsModule {
 	private function getParticipantsTable(
 		UserIdentity $viewingUser,
 		bool $canRemoveParticipants,
+		bool $canEmailParticipants,
 		?Participant $curUserParticipant,
 		array $otherParticipants
 	): Tag {
@@ -238,11 +241,12 @@ class EventDetailsParticipantsModule {
 			->addClasses( [ 'ext-campaignevents-details-participants-container' ] );
 		$table = ( new Tag( 'table' ) )
 			->addClasses( [ 'ext-campaignevents-details-participants-table' ] );
-		$table->appendContent( $this->getTableHeaders( $canRemoveParticipants ) );
+		$table->appendContent( $this->getTableHeaders( $canRemoveParticipants, $canEmailParticipants ) );
 		$table->appendContent( $this->getParticipantRows(
 			$curUserParticipant,
 			$otherParticipants,
 			$canRemoveParticipants,
+			$canEmailParticipants,
 			$viewingUser
 		) );
 		$container->appendContent( $table );
@@ -288,9 +292,13 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param bool $canRemoveParticipants
+	 * @param bool $canEmailParticipants
 	 * @return Tag
 	 */
-	private function getTableHeaders( bool $canRemoveParticipants ): Tag {
+	private function getTableHeaders(
+		bool $canRemoveParticipants,
+		bool $canEmailParticipants
+	): Tag {
 		$container = ( new Tag( 'thead' ) )->addClasses( [ 'ext-campaignevents-details-participants-table-header' ] );
 		$row = ( new Tag( 'tr' ) )
 			->addClasses( [ 'ext-campaignevents-details-user-actions-row' ] );
@@ -320,8 +328,12 @@ class EventDetailsParticipantsModule {
 		$headings = [
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-participants' ) ),
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-time-registered' ) ),
-			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-has-email' ) )
 		];
+		if ( $canEmailParticipants ) {
+			$headings[] = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-can-receive-email' )
+			);
+		}
 
 		foreach ( $headings as $heading ) {
 			$row->appendContent( ( new Tag( 'th' ) )->appendContent( $heading ) );
@@ -334,6 +346,7 @@ class EventDetailsParticipantsModule {
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
+	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
 	 * @return Tag
 	 */
@@ -341,6 +354,7 @@ class EventDetailsParticipantsModule {
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		bool $canRemoveParticipants,
+		bool $canEmailParticipants,
 		UserIdentity $viewingUser
 	): Tag {
 		$body = new Tag( 'tbody' );
@@ -348,12 +362,15 @@ class EventDetailsParticipantsModule {
 			$body->appendContent( $this->getCurUserParticipantRow(
 				$curUserParticipant,
 				$canRemoveParticipants,
+				$canEmailParticipants,
 				$viewingUser
 			) );
 		}
 
 		foreach ( $otherParticipants as $participant ) {
-			$body->appendContent( $this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser ) );
+			$body->appendContent(
+				$this->getParticipantRow( $participant, $canRemoveParticipants, $canEmailParticipants, $viewingUser )
+			);
 		}
 		return $body;
 	}
@@ -361,15 +378,17 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param Participant $participant
 	 * @param bool $canRemoveParticipants
+	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
 	 * @return Tag
 	 */
 	private function getCurUserParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
+		bool $canEmailParticipants,
 		UserIdentity $viewingUser
 	): Tag {
-		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $viewingUser );
+		$row = $this->getParticipantRow( $participant, $canRemoveParticipants, $canEmailParticipants, $viewingUser );
 		$row->addClasses( [ 'ext-campaignevents-details-current-user-row' ] );
 		return $row;
 	}
@@ -377,12 +396,14 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param Participant $participant
 	 * @param bool $canRemoveParticipants
+	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
 	 * @return Tag
 	 */
 	private function getParticipantRow(
 		Participant $participant,
 		bool $canRemoveParticipants,
+		bool $canEmailParticipants,
 		UserIdentity $viewingUser
 	): Tag {
 		$row = new Tag( 'tr' );
@@ -397,7 +418,8 @@ class EventDetailsParticipantsModule {
 			$userName = null;
 			$genderUserName = '@';
 		}
-		$recipientIsValid = $user !== null && $this->userMailer->validateTarget( $user, $performer ) === null;
+		$recipientIsValid = $user !== null && $canEmailParticipants &&
+			$this->userMailer->validateTarget( $user, $performer ) === null;
 		$userLink = $this->userLinker->generateUserLinkWithFallback(
 			$participant->getUser(),
 			$this->language->getCode()
@@ -413,7 +435,7 @@ class EventDetailsParticipantsModule {
 				'value' => $userId,
 				'classes' => [ 'ext-campaignevents-event-details-participants-checkboxes' ],
 				'data' => [
-					'hasEmail' => $recipientIsValid,
+					'canReceiveEmail' => $recipientIsValid,
 					'username' => $userName,
 					'userId' => $userId,
 					'userPageLink' => $userLinkComponents ?? ""
@@ -435,7 +457,6 @@ class EventDetailsParticipantsModule {
 			->appendContent( $usernameElement );
 
 		if ( $participant->isPrivateRegistration() ) {
-
 			$labelText = $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-private-participant-label', [ $genderUserName ] )
 			);
@@ -458,11 +479,13 @@ class EventDetailsParticipantsModule {
 		);
 		$row->appendContent( $registrationDateCell );
 
-		$row->appendContent( ( new Tag( 'td' ) )->appendContent(
-			$recipientIsValid
-				? $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-yes' ) )
-				: $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-no' ) )
-		) );
+		if ( $canEmailParticipants ) {
+			$row->appendContent( ( new Tag( 'td' ) )->appendContent(
+				$recipientIsValid
+					? $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-yes' ) )
+					: $this->msgFormatter->format( MessageValue::new( 'campaignevents-email-participants-no' ) )
+			) );
+		}
 
 		return $row
 			->addClasses( [ 'ext-campaignevents-details-user-row' ] );

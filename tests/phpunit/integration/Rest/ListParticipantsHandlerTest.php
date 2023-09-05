@@ -49,8 +49,13 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		UserFactory $userFactory = null,
 		UserLinker $userLink = null
 	): ListParticipantsHandler {
+		if ( !$permissionChecker ) {
+			$permissionChecker = $this->createMock( PermissionChecker::class );
+			$permissionChecker->method( 'userCanViewPrivateParticipants' )->willReturn( true );
+			$permissionChecker->method( 'userCanEmailParticipants' )->willReturn( true );
+		}
 		return new ListParticipantsHandler(
-			$permissionChecker ?? $this->createMock( PermissionChecker::class ),
+			$permissionChecker,
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
