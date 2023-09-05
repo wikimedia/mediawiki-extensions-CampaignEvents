@@ -21,4 +21,12 @@ $( function () {
 	if ( tabLayout.getTabPanel( tab ) ) {
 		tabLayout.setTabPanel( tab );
 	}
+
+	// Enable collapsible stats section explicitly, for skins that disable it by
+	// default (like Minerva)
+	// eslint-disable-next-line no-jquery/no-global-selector
+	var $statsSections = $( '.ext-campaignevents-details-stats-question-container.mw-collapsible' );
+	if ( $statsSections.length ) {
+		$statsSections.makeCollapsible();
+	}
 } );

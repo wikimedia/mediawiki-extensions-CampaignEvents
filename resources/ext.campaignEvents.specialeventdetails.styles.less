@@ -171,11 +171,14 @@ ul.ext-campaignevents-event-details-organizers-list {
 	overflow: auto;
 }
 
-body.skin-minerva .ext-campaignevents-details-participants-table {
-	// Minerva sets display:block on tables to try and avoid issues in articles.
-	// This is not an article though; we're making sure that this table looks OK
-	// on mobile, so don't let Minerva interfere.
-	display: table;
+body.skin-minerva {
+	.ext-campaignevents-details-participants-table,
+	.ext-campaignevents-details-stats-question-table {
+		// Minerva sets display:block on tables to try and avoid issues in articles.
+		// This is not an article though; we're making sure that this table looks OK
+		// on mobile, so don't let Minerva interfere.
+		display: table;
+	}
 }
 
 .ext-campaignevents-icon-label-widget-header {
@@ -269,6 +272,64 @@ fieldset.ext-campaignevents-details-email-form {
 
 .ext-campaignevents-event-details-remove-participant-button.oo-ui-buttonElement {
 	display: none;
+}
+
+.ext-campaignevents-details-stats-question-container {
+	border-bottom: @border-base;
+
+	&.ext-campaignevents-details-stats-question-container > .mw-collapsible-toggle {
+		float: unset;
+		width: 100%;
+		padding: 1em;
+		box-sizing: border-box;
+
+		h3 {
+			display: inline;
+			padding-left: 0.5em;
+		}
+	}
+
+	// Icon styles for collapsed and expanded status, copied from CollapsibleFieldsetLayout
+	.mw-collapsible-toggle .oo-ui-icon-expand {
+		display: none;
+	}
+
+	&.mw-collapsed {
+		.mw-collapsible-toggle .oo-ui-icon-expand {
+			display: inline-block;
+		}
+
+		.mw-collapsible-toggle .oo-ui-icon-collapse {
+			display: none;
+		}
+	}
+}
+
+.ext-campaignevents-details-stats-question-table {
+	width: 70%;
+	border-collapse: collapse;
+	border: @border-width-base @border-style-base #eaecf0;
+	margin-bottom: 1em;
+
+	thead {
+		background-color: #eaecf0;
+	}
+
+	tr {
+		border-bottom: @border-subtle;
+	}
+
+	th,
+	td {
+		padding: 1em;
+		text-align: left;
+
+		&:first-child {
+			// Set a minimum width on the first column: it contains option labels,
+			// some of which are quite long, and we don't want a lot of wrapping.
+			min-width: 12em;
+		}
+	}
 }
 
 .client-nojs .ext-campaignevents-event-details-load-organizers-link {

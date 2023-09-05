@@ -313,7 +313,8 @@
 				"oojs-ui-windows",
 				"mediawiki.api",
 				"mediawiki.user",
-				"mediawiki.util"
+				"mediawiki.util",
+				"jquery.makeCollapsible"
 			],
 			"targets": [
 				"desktop",
