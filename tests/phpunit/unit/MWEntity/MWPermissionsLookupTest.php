@@ -46,8 +46,8 @@ class MWPermissionsLookupTest extends MediaWikiUnitTestCase {
 		$user = $this->createMock( User::class );
 		$user->method( 'isAllowed' )
 			->willReturnMap( [
-				[ $allowedRight, true ],
-				[ $notAllowedRight, false ]
+				[ $allowedRight, null, true ],
+				[ $notAllowedRight, null, false ]
 			] );
 		$userFactory = $this->createMock( UserFactory::class );
 		$userFactory->method( 'newFromName' )->willReturn( $user );
