@@ -31,7 +31,7 @@
 	"campaignevents-error-invalid-address": "Введіть дійсну адресу.",
 	"enableeventregistration": "Увімкнення реєстрації на подію",
 	"editeventregistration": "Редагувати реєстрацію на подію",
-	"campaignevents-edit-form-legend": "Вкажіть загальну інформацію про подію, яку ви організовуєте",
+	"campaignevents-edit-form-details-subtitle": "Вкажіть загальну інформацію про подію, яку ви організовуєте",
 	"campaignevents-edit-field-page": "Сторінка події",
 	"campaignevents-edit-field-page-help": "Сторінка події містить інформацію про вашу подію. Люди можуть зареєструватися як учасники на сторінці події.",
 	"campaignevents-edit-field-event-status": "Статус події",

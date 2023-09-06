@@ -31,7 +31,7 @@
 	"campaignevents-error-invalid-address": "โปรดป้อนที่อยู่ที่ถูกต้อง",
 	"enableeventregistration": "เปิดการลงทะเบียนกิจกรรม",
 	"editeventregistration": "แก้ไขการลงทะเบียนกิจกรรม",
-	"campaignevents-edit-form-legend": "ให้สารสนเทศทั่วไปเกี่ยวกับกิจกรรมที่คุณเป็นผู้จัด",
+	"campaignevents-edit-form-details-subtitle": "ให้สารสนเทศทั่วไปเกี่ยวกับกิจกรรมที่คุณเป็นผู้จัด",
 	"campaignevents-edit-field-page": "หน้ากิจกรรม",
 	"campaignevents-edit-field-page-help": "หน้ากิจกรรมมีสารสนเทศที่เกี่ยวข้องกับกิจกรรมของคุณ ผู้คนสามารถลงทะเบียนในฐานะผู้มีส่วนร่วมได้ในหน้ากิจกรรม",
 	"campaignevents-edit-field-event-status": "สถานะกิจกรรม",

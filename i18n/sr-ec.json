@@ -8,6 +8,7 @@
 	"campaignevents-error-empty-start": "Почетак.",
 	"campaignevents-error-empty-end": "Крај.",
 	"campaignevents-error-invalid-question-names": "Следећа питања нису препозната: $1",
+	"campaignevents-edit-form-details-label": "Детаљи догађаја",
 	"campaignevents-edit-field-status-open": "Отворено",
 	"campaignevents-edit-field-status-closed": "Затворено",
 	"campaignevents-edit-field-timezone": "Временска зона",

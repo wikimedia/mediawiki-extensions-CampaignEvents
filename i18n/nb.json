@@ -48,7 +48,7 @@
 	"campaignevents-error-invalid-question-names": "Følgende spørsmål ble ikke gjenkjent: $1",
 	"enableeventregistration": "Aktiver arrangementsregistrering",
 	"editeventregistration": "Rediger arrangementsregistrering",
-	"campaignevents-edit-form-legend": "Angi generell informasjon om arrangementet du organiserer",
+	"campaignevents-edit-form-details-subtitle": "Angi generell informasjon om arrangementet du organiserer",
 	"campaignevents-edit-field-page": "Arrangementsside",
 	"campaignevents-edit-field-page-help": "En arrangementsside inneholder informasjon om arrangementet ditt. Deltakerne kan registrere seg på arrangementssiden.",
 	"campaignevents-edit-field-event-status": "Arrangementsstatus",

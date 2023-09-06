@@ -33,7 +33,7 @@
 	"campaignevents-error-invalid-address": "Andika aho uba nyaho.",
 	"enableeventregistration": "Gushoboza kwiyandikisha mu gikorwa",
 	"editeventregistration": "Hinyanyura kwiyandikisha mu gikorwa",
-	"campaignevents-edit-form-legend": "Tanga inkuru rusangi kubijanye n'igikorwa uriko uratunganya",
+	"campaignevents-edit-form-details-subtitle": "Tanga inkuru rusangi kubijanye n'igikorwa uriko uratunganya",
 	"campaignevents-edit-field-page": "Urupapuro rw'igikorwa",
 	"campaignevents-edit-field-page-help": "Urupapuro rw'igikorwa ruriko inkuru ijanye n'igikorwa cawe. Abantu bashobora kwiyandikisha nk'abitabiriye ku rupapuro rw'igikorwa.",
 	"campaignevents-edit-field-event-status": "Ukwo igikorwa kiri",

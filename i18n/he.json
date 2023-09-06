@@ -46,7 +46,8 @@
 	"campaignevents-error-invalid-question-names": "השאלות הבאות לא מוכרות: $1",
 	"enableeventregistration": "הפעלת הרשמה לאירוע",
 	"editeventregistration": "עריכת הרשמה לאירוע",
-	"campaignevents-edit-form-legend": "{{GENDER:|ספק|ספקי}} מידע כללי על האירוע {{GENDER:|שאתה מארגן|שאת מארגנת}}",
+	"campaignevents-edit-form-details-label": "פרטי האירוע",
+	"campaignevents-edit-form-details-subtitle": "{{GENDER:|ספק|ספקי}} מידע כללי על האירוע {{GENDER:|שאתה מארגן|שאת מארגנת}}",
 	"campaignevents-edit-field-page": "דף האירוע",
 	"campaignevents-edit-field-page-help": "דף האירוע מכיל מידע על האירוע שלך. אנשים יכולים להירשם בתור משתתפים בדף האירוע.",
 	"campaignevents-edit-field-event-status": "מצב האירוע",
@@ -356,6 +357,11 @@
 	"campaignevents-register-question-affiliate-option-none": "לא",
 	"campaignevents-register-question-affiliate-option-affiliate": "כן",
 	"campaignevents-register-question-affiliate-details-placeholder": "נא להשיב",
+	"campaignevents-register-question-gender-stats-label": "מהי הזהות המגדרית שלך?",
+	"campaignevents-register-question-age-stats-label": "מה הגיל שלך?",
+	"campaignevents-register-question-profession-stats-label": "מה המקצוע שלך?",
+	"campaignevents-register-question-confidence-stats-label": "כמה ביטחון יש לך בקשר לתרומה שלך למיזמי ויקימדיה שקשורים לאירוע הזה?",
+	"campaignevents-register-question-affiliate-stats-label": "האם יש לך קשר לשותפי ויקימדיה כלשהם (עמותות, קבוצות משתמשים, ארגוני נושא)?",
 	"campaignevents-register-answers-aggregated": "התשובות שלך נצברו ונמחקו בהתאם למידע על שמירת הנתונים.",
 	"campaignevents-register-retention-title": "מידע על שמירת נתונים",
 	"campaignevents-register-retention-base": "התשובות שלך מצטברות ולאחר מכן נמחקות 90 יום לאחר ההגשה או בסוף האירוע, המוקדם מביניהם. באפשרותך לערוך את תגובות בכל עת לפני־כן. לאחר המחיקה, לא ניתן לשנות אותם, לענות מחדש או לאחזר אותם.",
@@ -371,5 +377,6 @@
 	"campaignevents-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב",
 	"campaignevents-details-stats-no-responses": "לאירוע הזה אין תגובות מהמשתתפים שאפשר לצבור.",
-	"campaignevents-details-stats-not-ready": "תשובות המשתתפים יצטברו ויהיו זמינות כאן בקרוב."
+	"campaignevents-details-stats-not-ready": "תשובות המשתתפים יצטברו ויהיו זמינות כאן בקרוב.",
+	"campaignevents-details-stats-not-enough-answers": "השאלה הזאת קיבלה פחות מ־$1 תשובות בסך הכול."
 }

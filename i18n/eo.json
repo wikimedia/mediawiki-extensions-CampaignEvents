@@ -32,7 +32,7 @@
 	"campaignevents-error-invalid-address": "Enigu validan adreson.",
 	"enableeventregistration": "Ebligi eventajn registriĝojn",
 	"editeventregistration": "Redakti eventan registriĝon",
-	"campaignevents-edit-form-legend": "Provizu ĝeneralan informon pri la evento, kiun vi organizantas",
+	"campaignevents-edit-form-details-subtitle": "Provizu ĝeneralan informon pri la evento, kiun vi organizantas",
 	"campaignevents-edit-field-page": "Eventa paĝo",
 	"campaignevents-edit-field-page-help": "Eventa paĝo enhavas informon pri via evento. Homoj povas registri kiel partoprenantoj sur la eventa paĝo.",
 	"campaignevents-edit-field-event-status": "Eventa statuso",

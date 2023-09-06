@@ -49,7 +49,7 @@
 	"campaignevents-error-invalid-address": "有効な住所を入力。",
 	"enableeventregistration": "イベント登録を有効にする",
 	"editeventregistration": "イベント登録を編集",
-	"campaignevents-edit-form-legend": "主催イベントに関する一般的な情報を指定",
+	"campaignevents-edit-form-details-subtitle": "主催イベントに関する一般的な情報を指定",
 	"campaignevents-edit-field-page": "イベントページ",
 	"campaignevents-edit-field-page-help": "イベント ページには、皆さんのイベントに関する情報を載せてあります。そのイベントページでは参加登録ができます。",
 	"campaignevents-edit-field-event-status": "イベントの状態",

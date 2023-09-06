@@ -49,7 +49,7 @@
 	"campaignevents-error-invalid-question-names": "Şu sorular tanınmadı: $1",
 	"enableeventregistration": "Etkinlik kaydını etkinleştir",
 	"editeventregistration": "Etkinlik kaydını değiştir",
-	"campaignevents-edit-form-legend": "Düzenlediğiniz etkinlik hakkında genel bilgi verin",
+	"campaignevents-edit-form-details-subtitle": "Düzenlediğiniz etkinlik hakkında genel bilgi verin",
 	"campaignevents-edit-field-page": "Etkinlik sayfası",
 	"campaignevents-edit-field-page-help": "Bir etkinlik sayfası, etkinliğiniz hakkında bilgiler içerir. Kişiler etkinlik sayfasında katılımcı olarak kayıt olabilirler.",
 	"campaignevents-edit-field-event-status": "Etkinlik durumu",

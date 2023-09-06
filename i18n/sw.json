@@ -39,7 +39,7 @@
 	"campaignevents-error-invalid-address": "Weka anwani sahihi.",
 	"enableeventregistration": "wezesha usajili wa tukio",
 	"editeventregistration": "Hariri usajili wa tukio",
-	"campaignevents-edit-form-legend": "Toa maelezo ya jumla kuhusu tukio unaloandaa",
+	"campaignevents-edit-form-details-subtitle": "Toa maelezo ya jumla kuhusu tukio unaloandaa",
 	"campaignevents-edit-field-page": "Ukurasa wa tukio",
 	"campaignevents-edit-field-page-help": "Ukurasa wa tukio una habari kuhusu tukio lako. Watu wanaweza kujiandikisha kama washiriki kwenye ukurasa wa tukio.",
 	"campaignevents-edit-field-event-status": "Hali ya tukio",

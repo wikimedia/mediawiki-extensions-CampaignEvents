@@ -39,7 +39,7 @@
 	"campaignevents-error-invalid-address": "Introduza um endereço válido.",
 	"enableeventregistration": "Permitir inscrições no evento",
 	"editeventregistration": "Editar inscrições no evento",
-	"campaignevents-edit-form-legend": "Forneça informações gerais sobre o evento que está a organizar",
+	"campaignevents-edit-form-details-subtitle": "Forneça informações gerais sobre o evento que está a organizar",
 	"campaignevents-edit-field-page": "Página do evento",
 	"campaignevents-edit-field-page-help": "Uma página de evento contém informações sobre o seu evento. As pessoas podem inscrever-se como participantes na página do evento.",
 	"campaignevents-edit-field-event-status": "Estado do evento",

@@ -9,7 +9,7 @@
 	"right-campaignevents-organize-events": "ఈవెంట్స్ నిర్వహించండి",
 	"campaignevents-error-invalid-id": "కార్యక్రమం ఐడీ  తప్పనిసరిగా ధనాత్మక పూర్ణాంకం అయి ఉండాలి",
 	"campaignevents-error-start-past": "కార్యక్రమం ప్రారంభ సమయం గడచినదై ఉండకూడదు",
-	"campaignevents-edit-form-legend": "మీరు నిర్వహిస్తున్న కార్యక్రమం  గురించి సాధారణ సమాచారాన్ని అందించండి",
+	"campaignevents-edit-form-details-subtitle": "మీరు నిర్వహిస్తున్న కార్యక్రమం  గురించి సాధారణ సమాచారాన్ని అందించండి",
 	"campaignevents-edit-field-event-status": "కార్యక్రమ స్థితి",
 	"campaignevents-edit-field-status-open": "అందరికీ",
 	"campaignevents-edit-field-status-closed": "ముగించబడింది",

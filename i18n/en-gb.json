@@ -9,7 +9,7 @@
 	"action-campaignevents-organize-events": "organise events",
 	"right-campaignevents-organize-events": "Organise events",
 	"campaignevents-error-invalid-question-names": "The following questions were not recognised: $1",
-	"campaignevents-edit-form-legend": "Provide general information about the event you are organising",
+	"campaignevents-edit-form-details-subtitle": "Provide general information about the event you are organising",
 	"campaignevents-edit-field-organizers": "Organisers",
 	"campaignevents-edit-field-organizers-help": "Add the username of other organisers to give them permission to manage this event.",
 	"campaignevents-edit-field-organizers-creator-title": "This is the creator of the event, other organisers can not remove this user.",

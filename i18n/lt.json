@@ -42,7 +42,7 @@
 	"campaignevents-error-invalid-address": "Įveskite tinkamą adresą.",
 	"enableeventregistration": "Įjungti įvykio registraciją",
 	"editeventregistration": "Redaguoti įvykio registraciją",
-	"campaignevents-edit-form-legend": "Pateikite bendrą informaciją apie organizuojamą įvykį",
+	"campaignevents-edit-form-details-subtitle": "Pateikite bendrą informaciją apie organizuojamą įvykį",
 	"campaignevents-edit-field-page": "Įvykio puslapis",
 	"campaignevents-edit-field-page-help": "Įvykio puslapyje pateikiama informacija apie jūsų įvykį. Žmonės gali užsiregistruoti kaip dalyviai įvykio puslapyje.",
 	"campaignevents-edit-field-event-status": "Įvykio būsena",

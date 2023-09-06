@@ -35,7 +35,7 @@
 	"campaignevents-error-invalid-address": "Ange en giltig adress.",
 	"enableeventregistration": "Aktivera evenemangsregistrering",
 	"editeventregistration": "Redigera evenemangsregistrering",
-	"campaignevents-edit-form-legend": "Tillhandahåll allmän information om evenemanget du organiserar",
+	"campaignevents-edit-form-details-subtitle": "Tillhandahåll allmän information om evenemanget du organiserar",
 	"campaignevents-edit-field-page": "Evenemangssida",
 	"campaignevents-edit-field-page-help": "En evenemangssida innehåller information om ditt evenemang. Man kan registrera sig som deltagare på evenemangssidan.",
 	"campaignevents-edit-field-event-status": "Evenemangets status",

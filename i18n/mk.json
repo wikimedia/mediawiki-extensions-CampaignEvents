@@ -46,7 +46,7 @@
 	"campaignevents-error-invalid-question-names": "Не ги препознав следниве прашања: $1",
 	"enableeventregistration": "Овозможи пријавување за настан",
 	"editeventregistration": "Измени пријава за настан",
-	"campaignevents-edit-form-legend": "Внесете општи информации за настанот што го приредувате",
+	"campaignevents-edit-form-details-subtitle": "Внесете општи информации за настанот што го приредувате",
 	"campaignevents-edit-field-page": "Страница на настанот",
 	"campaignevents-edit-field-page-help": "Страницата за настан содржи информации за вашиот настан. Учесниците можат да се пријават на страницата за настанот.",
 	"campaignevents-edit-field-event-status": "Статус на настанот",

@@ -54,7 +54,7 @@
 	"campaignevents-error-invalid-question-names": "لم يتم التعرف على الأسئلة التالية: $1",
 	"enableeventregistration": "تفعيل التسجيل في الفعالية",
 	"editeventregistration": "تعديل التسجيل في الفعالية",
-	"campaignevents-edit-form-legend": "أدخل معلومات عامة عن الفعالية التي تنوي تنظيمها",
+	"campaignevents-edit-form-details-subtitle": "أدخل معلومات عامة عن الفعالية التي تنوي تنظيمها",
 	"campaignevents-edit-field-page": "صفحة الفعالية",
 	"campaignevents-edit-field-page-help": "صفحة الفعالية هذه تحتوي معلومات عن فعاليتك. يمكن لأي فرد التسجيل فيها كمشارك.",
 	"campaignevents-edit-field-event-status": "حالة الفعالية",

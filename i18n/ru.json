@@ -20,7 +20,7 @@
 	"campaignevents-error-start-past": "Укажите время начала мероприятия в будущем.",
 	"campaignevents-error-empty-end": "Введите время окончания.",
 	"editeventregistration": "Изменить форму регистрации на мероприятие",
-	"campaignevents-edit-form-legend": "Предоставьте основную информацию о мероприятии, которое вы организуете",
+	"campaignevents-edit-form-details-subtitle": "Предоставьте основную информацию о мероприятии, которое вы организуете",
 	"campaignevents-edit-field-page": "Страница мероприятия",
 	"campaignevents-edit-field-page-help": "Страница мероприятия содержит информацию о вашем мероприятии. Люди могут зарегистрироваться в качестве участников на странице мероприятия.",
 	"campaignevents-edit-field-event-status": "Статус мероприятия",
