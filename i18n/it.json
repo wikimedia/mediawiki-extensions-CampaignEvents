@@ -210,6 +210,9 @@
 	"campaignevents-register-question-affiliate-placeholder": "Seleziona un'opzione",
 	"campaignevents-register-question-affiliate-option-none": "No",
 	"campaignevents-register-question-affiliate-option-affiliate": "Sì",
+	"campaignevents-register-question-gender-stats-label": "Qual è la tua identità di genere?",
+	"campaignevents-register-question-age-stats-label": "Quanti anni hai?",
+	"campaignevents-register-question-profession-stats-label": "Qual è la tua professione?",
 	"campaignevents-register-answers-aggregated": "Le tue risposte sono state aggregate e cancellate in base alle informazioni sulla conservazione dei dati.",
 	"campaignevents-register-retention-title": "Informazioni sulla conservazione dei dati",
 	"campaignevents-register-retention-hours": "Il tempo rimanente prima che le tue risposte vengano aggregate e cancellate è: <strong>meno di 24 ore</strong>.",
@@ -218,5 +221,9 @@
 	"campaignevents-eventpage-register-dialog-answers-aggregated": "Le tue risposte sono state aggregate e cancellate in base alle informazioni sulla conservazione dei dati.",
 	"campaignevents-eventpage-register-dialog-retention-title": "Informazioni sulla conservazione dei dati",
 	"campaignevents-details-stats-no-responses": "Questo evento non ha risposte da parte dei partecipanti da aggregare.",
-	"campaignevents-details-stats-not-ready": "Le risposte dei partecipanti verranno aggregate e rese disponibili qui a breve."
+	"campaignevents-details-stats-not-ready": "Le risposte dei partecipanti verranno aggregate e rese disponibili qui a breve.",
+	"campaignevents-details-stats-header-percentage": "Percentuale",
+	"campaignevents-details-stats-header-number": "Numero",
+	"campaignevents-details-stats-few-answers-option": "meno di $1",
+	"campaignevents-details-stats-no-response": "Nessuna risposta"
 }

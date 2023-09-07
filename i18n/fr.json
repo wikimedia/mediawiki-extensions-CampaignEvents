@@ -370,6 +370,11 @@
 	"campaignevents-register-question-affiliate-option-none": "Non",
 	"campaignevents-register-question-affiliate-option-affiliate": "Oui",
 	"campaignevents-register-question-affiliate-details-placeholder": "Veuillez préciser",
+	"campaignevents-register-question-gender-stats-label": "Quelle est l’identité de votre genre ?",
+	"campaignevents-register-question-age-stats-label": "Quel est votre âge ?",
+	"campaignevents-register-question-profession-stats-label": "Quelle est votre profession ?",
+	"campaignevents-register-question-confidence-stats-label": "Dans quelle mesure vous sentez-vous confiant pour contribuer aux projets de Wikimédia impliqués dans cet événement ?",
+	"campaignevents-register-question-affiliate-stats-label": "Appartenez-vous à un affilié de Wikimédia (chapitres, groupes utilisateur, organisations thématiques) ?",
 	"campaignevents-register-answers-aggregated": "Vos réponses ont été agrégées et supprimées par les informations de conservation des données.",
 	"campaignevents-register-retention-title": "Information de conservation des données",
 	"campaignevents-register-retention-base": "Vos réponses sont agrégées puis supprimées 90 jours après leur envoi, ou à la fin de l’événement, selon le premier qui se produit. Modifiez les réponses à tout moment avant cela. Une fois supprimées, elles ne peuvent plus être modifiées, répondues de nouveau ou récupérées.",
@@ -385,5 +390,11 @@
 	"campaignevents-register-invalid-answer": "Réponse non valide à la question $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Veuillez préciser",
 	"campaignevents-details-stats-no-responses": "Cet événement n’a pas de réponses à agréger de la part des participants.",
-	"campaignevents-details-stats-not-ready": "Les réponses des participants seront agrégées et rendues disponibles ici prochainement."
+	"campaignevents-details-stats-not-ready": "Les réponses des participants seront agrégées et rendues disponibles ici prochainement.",
+	"campaignevents-details-stats-not-enough-answers": "Cette question a reçu moins de $1 réponses en tout.",
+	"campaignevents-details-stats-header-option": "Option",
+	"campaignevents-details-stats-header-percentage": "Pourcentage",
+	"campaignevents-details-stats-header-number": "Nombre",
+	"campaignevents-details-stats-few-answers-option": "moins de $1",
+	"campaignevents-details-stats-no-response": "Aucune réponse"
 }

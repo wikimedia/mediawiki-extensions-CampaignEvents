@@ -378,5 +378,10 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב",
 	"campaignevents-details-stats-no-responses": "לאירוע הזה אין תגובות מהמשתתפים שאפשר לצבור.",
 	"campaignevents-details-stats-not-ready": "תשובות המשתתפים יצטברו ויהיו זמינות כאן בקרוב.",
-	"campaignevents-details-stats-not-enough-answers": "השאלה הזאת קיבלה פחות מ־$1 תשובות בסך הכול."
+	"campaignevents-details-stats-not-enough-answers": "השאלה הזאת קיבלה פחות מ־$1 תשובות בסך הכול.",
+	"campaignevents-details-stats-header-option": "אפשרות",
+	"campaignevents-details-stats-header-percentage": "אחוזים",
+	"campaignevents-details-stats-header-number": "מספר",
+	"campaignevents-details-stats-few-answers-option": "פחות מ־$1",
+	"campaignevents-details-stats-no-response": "אין תשובה"
 }

@@ -64,6 +64,13 @@
 	"campaignevents-register-question-affiliate-placeholder": "Wielt eng Optioun",
 	"campaignevents-register-question-affiliate-option-none": "Neen",
 	"campaignevents-register-question-affiliate-option-affiliate": "Jo",
+	"campaignevents-register-question-gender-stats-label": "Wat ass Är Geschlechtsidentitéit?",
+	"campaignevents-register-question-age-stats-label": "Wéi al sidd Dir?",
+	"campaignevents-register-question-profession-stats-label": "Wat ass Äre Beruff?",
 	"campaignevents-eventpage-register-dialog-questions-title": "Är Informatiounen",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "Dës Informatioune ginn nëmme mat den Organisateure vum Evenement gedeelt."
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Dës Informatioune ginn nëmme mat den Organisateure vum Evenement gedeelt.",
+	"campaignevents-details-stats-not-enough-answers": "Op dës Fro gouf manner wéi $1-mol geäntwert.",
+	"campaignevents-details-stats-header-percentage": "Prozentsaz",
+	"campaignevents-details-stats-few-answers-option": "manner wéi $1",
+	"campaignevents-details-stats-no-response": "Keng Äntwert"
 }
