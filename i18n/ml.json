@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jinoytommanjaly"
+		]
+	},
+	"nstab-event": "പരിപാടി",
+	"action-campaignevents-enable-registration": "ഇവന്റ് രജിസ്ട്രേഷനുകൾ പ്രവർത്തനക്ഷമമാക്കുക",
+	"right-campaignevents-enable-registration": "ഇവന്റ് രജിസ്ട്രേഷനുകൾ പ്രവർത്തനക്ഷമമാക്കുക",
+	"action-campaignevents-delete-registration": "ഇവന്റ് രജിസ്ട്രേഷനുകൾ ഇല്ലാതാക്കുക",
+	"right-campaignevents-delete-registration": "ഇവന്റ് രജിസ്ട്രേഷനുകൾ ഇല്ലാതാക്കുക",
+	"action-campaignevents-organize-events": "പരിപാടികൾ സംഘടിപ്പിക്കുക",
+	"right-campaignevents-organize-events": "പരിപാടികൾ സംഘടിപ്പിക്കുക"
+}
