@@ -61,7 +61,7 @@
 	"campaignevents-edit-field-organizers-creator-title": "This is the creator of the event, other organizers can not remove this user.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "This {{GENDER:$1|user}} is not allowed to organize events.",
 	"campaignevents-edit-field-tracking-tools": "Programs & Events Dashboard link",
-	"campaignevents-edit-field-tracking-tools-help": "Usernames of publicly registered participants would be automatically sent to the Dashboard. This tool helps you monitor their contributions and measure the impact of your campaign event. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Learn more]",
+	"campaignevents-edit-field-tracking-tools-help": "Usernames of publicly registered participants will be automatically sent to the Dashboard. This tool helps you monitor participant contributions and measure the impact of your campaign event. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Learn more].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Enter the Programs & Events Dashboard URL for your event",
 	"campaignevents-edit-field-meeting-type": "Event meeting type",
 	"campaignevents-edit-field-type-online": "Online event",
