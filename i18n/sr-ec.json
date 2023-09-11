@@ -94,7 +94,14 @@
 	"campaignevents-register-question-affiliate-option-none": "Не",
 	"campaignevents-register-question-affiliate-option-affiliate": "Да",
 	"campaignevents-register-question-affiliate-details-placeholder": "Молимо наведите",
+	"campaignevents-register-question-gender-stats-label": "Ваш пол?",
+	"campaignevents-register-question-age-stats-label": "Колико година имате?",
+	"campaignevents-register-question-profession-stats-label": "Ваша професија?",
 	"campaignevents-eventpage-register-dialog-questions-title": "Ваше информације",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Информације ће бити подељене само са организаторима догађаја.",
-	"campaignevents-register-question-organizing-partner-details-placeholder": "Молимо наведите"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Молимо наведите",
+	"campaignevents-details-stats-header-percentage": "Постотак",
+	"campaignevents-details-stats-header-number": "Број",
+	"campaignevents-details-stats-few-answers-option": "мање од $1",
+	"campaignevents-details-stats-no-response": "Нема одговора"
 }
