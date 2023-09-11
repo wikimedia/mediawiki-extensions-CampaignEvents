@@ -9,6 +9,7 @@
 		this.showPrivateParticipants = mw.config.get( 'wgCampaignEventsShowPrivateParticipants' );
 		this.lastParticipantID = mw.config.get( 'wgCampaignEventsLastParticipantID' );
 		this.curUserCentralID = mw.config.get( 'wgCampaignEventsCurUserCentralID' );
+		this.viewerHasEmail = mw.config.get( 'wgCampaignEventsViewerHasEmail' );
 		/* eslint-disable no-jquery/no-global-selector */
 		var $selectAllParticipantsField = $(
 			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
@@ -90,16 +91,36 @@
 				thisClass.updateSelectedLabel();
 			} );
 		}
+
 		if ( this.$messageParticipantsButton.length ) {
-			this.messageParticipantsButton = OO.ui.ButtonWidget.static.infuse(
-				this.$messageParticipantsButton
-			);
-			this.messageParticipantsButton.on( 'click', function () {
-				if ( thisClass.selectedParticipantsAmount === 0 ) {
-					thisClass.selectAllParticipantsCheckbox.setSelected( true );
-				}
-				thisClass.tabPanel.setTabPanel( 'EmailPanel' );
-			} );
+			if ( this.viewerHasEmail ) {
+				this.messageParticipantsButton = OO.ui.ButtonWidget.static.infuse(
+					this.$messageParticipantsButton
+				);
+				this.messageParticipantsButton.on( 'click', function () {
+					if ( thisClass.selectedParticipantsAmount === 0 ) {
+						thisClass.selectAllParticipantsCheckbox.setSelected( true );
+					}
+					thisClass.tabPanel.setTabPanel( 'EmailPanel' );
+				} );
+			} else {
+				var popup = {
+					$content: $( '<p>' ).append(
+						mw.message( 'campaignevents-event-details-no-organizer-email' ).parse() ),
+					padded: true,
+					classes: [ 'ext-campaignevents-event-details-message-all-participants-button-popup' ],
+					align: 'forwards'
+				};
+				this.messageParticipantsButton = new OO.ui.PopupButtonWidget( {
+					label: mw.message( 'campaignevents-event-details-message-participants' ).text(),
+					classes: [ 'ext-campaignevents-event-details-message-all-participants-button' ],
+					popup: popup
+				} );
+				this.$messageParticipantsButton.replaceWith(
+					this.messageParticipantsButton.$element
+				);
+				this.messageParticipantsButton.getPopup().toggle( true );
+			}
 		}
 
 		// eslint-disable-next-line no-jquery/no-global-selector
@@ -131,6 +152,7 @@
 					}
 				} );
 			} );
+
 			$( document.body ).append( this.windowManager.$element );
 			this.windowManager.addWindows( [ this.removeParticipantDialog ] );
 		}

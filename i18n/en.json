@@ -241,6 +241,7 @@
 	"campaignevents-event-details-message-all": "Message all participants",
 	"campaignevents-event-details-message-participants": "Message participants",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 out of $2 {{PLURAL:$1|selected}}",
+	"campaignevents-event-details-no-organizer-email": "To message participants, you'll need an email address on your account. [[Special:ChangeEmail|Add email]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Remove {{PLURAL:$1|participant|participants}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Are you sure you want to remove the selected {{PLURAL:$1|participant|participants}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Delete",
