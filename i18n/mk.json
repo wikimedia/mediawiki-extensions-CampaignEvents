@@ -241,6 +241,7 @@
 	"campaignevents-event-details-message-all": "Испрати порака до сите учесници",
 	"campaignevents-event-details-message-participants": "Испрати порака до учесниците",
 	"campaignevents-event-details-participants-checkboxes-selected": "{{PLURAL:$1|Избран|Избрани}} $1 од $2",
+	"campaignevents-event-details-no-organizer-email": "За да испраќате пораки на учесниците, на вашата сметката ќе ѝ треба е-поштенска адреса. [[Special:ChangeEmail|Додајте е-пошта]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Отстрани {{PLURAL:$1|учесник|учесници}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Сигурно сакате да {{PLURAL:$1|го отстраните избраниот учесник|ги отстраните избраните учесници}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Избриши",

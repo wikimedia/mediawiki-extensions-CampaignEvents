@@ -241,6 +241,7 @@
 	"campaignevents-event-details-message-all": "שליחת הודעה לכל המשתתפים",
 	"campaignevents-event-details-message-participants": "שליחת הודעה למשתתפים",
 	"campaignevents-event-details-participants-checkboxes-selected": "{{PLURAL:$1|נבחר אחד|נבחרו $1}} מתוך $2",
+	"campaignevents-event-details-no-organizer-email": "כדי לשלוח הודעות למשתתפים, יהיה נחוצה כתובת דוא\"ל בחשבון שלך. [[Special:ChangeEmail|להוסיף כתובת דוא\"ל]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "הסרת {{PLURAL:$1|משתתף|משתתפים}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "האם ברצונך באמת להסיר את {{PLURAL:$1|המשתתף שנבחר|המשתתפים שנבחרו}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "מחיקה",

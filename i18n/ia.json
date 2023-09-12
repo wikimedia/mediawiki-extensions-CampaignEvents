@@ -240,6 +240,7 @@
 	"campaignevents-event-details-message-all": "Inviar message a tote le participantes",
 	"campaignevents-event-details-message-participants": "Inviar message al participantes",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 de $2 seligite{{PLURAL:$1|}}",
+	"campaignevents-event-details-no-organizer-email": "Pro inviar messages al participantes, es necessari haber un adresse de e-mail sur tu conto. [[Special:ChangeEmail|Adder e-mail]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Remover participante{{PLURAL:$1||s}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Es tu secur de voler remover le participante{{PLURAL:$1||s}} seligite?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Deler",

@@ -240,6 +240,7 @@
 	"campaignevents-event-details-message-all": "Nachricht an alle Teilnehmer",
 	"campaignevents-event-details-message-participants": "Teilnehmer benachrichtigen",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 von $2 {{PLURAL:$1|ausgewählt}}",
+	"campaignevents-event-details-no-organizer-email": "Um Teilnehmern Nachrichten senden zu können, benötigst du eine E-Mail-Adresse in deinem Konto. [[Special:ChangeEmail|E-Mail-Adresse hinzufügen]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Entferne {{PLURAL:$1|Teilnehmer}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Bist du sicher, dass du {{PLURAL:$1|den ausgewählten Teilnehmer|die ausgewählten Teilnehmer}} entfernen möchtest?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Löschen",
