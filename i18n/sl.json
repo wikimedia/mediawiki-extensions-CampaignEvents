@@ -240,6 +240,7 @@
 	"campaignevents-event-details-message-all": "Pošlji sporočilo vsem udeležencem",
 	"campaignevents-event-details-message-participants": "Pošlji udeležencem sporočilo",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 od $2 {{PLURAL:$1|izbran|izbrana|izbrani|izbranih}}",
+	"campaignevents-event-details-no-organizer-email": "Za pošiljanje sporočil udeležencem potrebujete v svojem računu e-poštni naslov. [[Special:ChangeEmail|Dodaj e-poštni naslov]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Odstrani {{PLURAL:$1|one=udeleženca|two=udeleženca|few=udeležence|udeležence}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Ste prepričani, da želite odstraniti {{PLURAL:$1|izbranega udeleženca|izbrana udeleženca|izbrane udeležence}}?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Izbriši",

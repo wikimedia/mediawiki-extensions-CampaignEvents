@@ -247,6 +247,7 @@
 	"campaignevents-event-details-message-all": "Envoyer un message à tous les participants",
 	"campaignevents-event-details-message-participants": "Envoyer un message aux participants",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 sélectionné{{PLURAL:$1||s}} sur $2",
+	"campaignevents-event-details-no-organizer-email": "Aux paerticipants du message, vous aurez besoin d’une adresse de messagerie sur votre compte. [[Special:ChangeEmail|Ajouter un courriel]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Retirer {{PLURAL:$1|un|des}} participant{{PLURAL:$1||s}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Êtes-vous sûr{{GENDER:||e}} de vouloir retirer le{{PLURAL:$1||s}} participant{{PLURAL:$1||s}} sélectionné{{PLURAL:$1||s}} ?",
 	"campaignevents-event-details-remove-participant-remove-btn": "Supprimer",
