@@ -154,18 +154,24 @@ class EventDetailsParticipantsModule {
 			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
 				UnregisterParticipantCommand::CAN_UNREGISTER;
 		}
+		$canViewNonPIIParticipantsData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
+			$authority, $event->getID()
+		);
 
 		$items = [];
 		$items[] = $this->getPrimaryHeader(
+			$event,
 			$totalParticipants,
 			$canRemoveParticipants,
-			$canEmailParticipants
+			$canEmailParticipants,
+			$canViewNonPIIParticipantsData
 		);
 		if ( $totalParticipants ) {
 			$items[] = $this->getParticipantsTable(
 				$viewingUser,
 				$canRemoveParticipants,
 				$canEmailParticipants,
+				$canViewNonPIIParticipantsData,
 				$curUserParticipant,
 				$otherParticipants,
 				$authority,
@@ -206,35 +212,58 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
+	 * @param ExistingEventRegistration $event
 	 * @param int $totalParticipants
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
+	 * @param bool $canViewNonPIIParticipantsData
 	 * @return Tag
 	 */
 	private function getPrimaryHeader(
-		int $totalParticipants, $canRemoveParticipants, $canEmailParticipants
+		ExistingEventRegistration $event,
+		int $totalParticipants,
+		bool $canRemoveParticipants,
+		bool $canEmailParticipants,
+		bool $canViewNonPIIParticipantsData
 	): Tag {
-		$headerText = ( new Tag( 'span' ) )->appendContent(
-			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-header-participants' )
-					->numParams( $totalParticipants )
-			)
-		)->addClasses( [ 'ext-campaignevents-details-participants-header-text' ] );
-		$headerTitle = ( new Tag() )->appendContent(
-			$headerText
-		)->addClasses( [ 'ext-campaignevents-details-participants-header-title' ] );
-		$header = ( new Tag() )->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
+		$participantCountText = $this->msgFormatter->format(
+			MessageValue::new( 'campaignevents-event-details-header-participants' )
+				->numParams( $totalParticipants )
+		);
+		$participantsCountElement = ( new Tag( 'span' ) )
+			->appendContent( $participantCountText )
+			->addClasses( [ 'ext-campaignevents-details-participants-header-participant-count' ] );
+		$participantsElement = ( new Tag( 'div' ) )
+			->appendContent( $participantsCountElement )
+			->addClasses( [ 'ext-campaignevents-details-participants-header-participants' ] );
+		if (
+			$this->participantQuestionsEnabled &&
+			$canViewNonPIIParticipantsData &&
+			!$this->isPastEvent &&
+			$event->getParticipantQuestions()
+		) {
+			$questionsHelp = new ButtonWidget( [
+				'framed' => false,
+				'icon' => 'info',
+				'label' => $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-header-questions-help' )
+				),
+				'invisibleLabel' => true,
+				'classes' => [ 'ext-campaignevents-details-participants-header-questions-help' ]
+			] );
+			$participantsElement->appendContent( $questionsHelp );
+		}
+		$headerTitle = ( new Tag( 'div' ) )
+			->appendContent( $participantsElement )
+			->addClasses( [ 'ext-campaignevents-details-participants-header-title' ] );
+		$header = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
 
 		if ( $totalParticipants ) {
 			$headerTitle->appendContent( $this->getSearchBar() );
-			$header->appendContent(
-				$headerTitle
-			);
+			$header->appendContent( $headerTitle );
 			$header->appendContent( $this->getHeaderControls( $canRemoveParticipants, $canEmailParticipants ) );
 		} else {
-			$header->appendContent(
-				$headerTitle
-			);
+			$header->appendContent( $headerTitle );
 		}
 
 		return $header;
@@ -244,6 +273,7 @@ class EventDetailsParticipantsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
+	 * @param bool $canViewNonPIIParticipantsData
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
 	 * @param ICampaignsAuthority $authority
@@ -254,6 +284,7 @@ class EventDetailsParticipantsModule {
 		UserIdentity $viewingUser,
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
+		bool $canViewNonPIIParticipantsData,
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		ICampaignsAuthority $authority,
@@ -269,16 +300,13 @@ class EventDetailsParticipantsModule {
 			$event->getParticipantQuestions()
 		);
 
-		$userCanViewNonPIIParticipantsData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
-			$authority, $event->getID()
-		);
 		$table->appendContent( $this->getTableHeaders(
 				$canRemoveParticipants,
 				$canEmailParticipants,
 				$event,
 				$authority,
 				$nonPIIQuestionIDs,
-				$userCanViewNonPIIParticipantsData
+				$canViewNonPIIParticipantsData
 			)
 		);
 		$table->appendContent( $this->getParticipantRows(
@@ -290,7 +318,7 @@ class EventDetailsParticipantsModule {
 			$authority,
 			$event->getID(),
 			$nonPIIQuestionIDs,
-			$userCanViewNonPIIParticipantsData
+			$canViewNonPIIParticipantsData
 		) );
 		$container->appendContent( $table );
 		return $container;
