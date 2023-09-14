@@ -100,11 +100,10 @@ class CampaignsUserMailer {
 			}
 			$validTarget = $this->validateTarget( $user, $performerUser );
 			if ( $validTarget === null ) {
-
 				$validSend++;
 				$address = MailAddress::newFromUser( $user );
 				$performerAddress = MailAddress::newFromUser( $performerUser );
-				$jobs[] = $this->createEmails( $address, $subject, $message, $performerAddress );
+				$jobs[] = $this->createEmailJob( $address, $subject, $message, $performerAddress );
 			}
 		}
 		$this->jobQueueGroup->push( $jobs );
@@ -119,7 +118,7 @@ class CampaignsUserMailer {
 	 * @param MailAddress $from
 	 * @return EmailUsersJob
 	 */
-	public function createEmails(
+	private function createEmailJob(
 		MailAddress $to,
 		string $subject,
 		string $message,
@@ -127,12 +126,17 @@ class CampaignsUserMailer {
 	): EmailUsersJob {
 		[ $mailFrom, $replyTo ] = $this->getFromAndReplyTo( $from );
 
+		// TODO: This could be improved by making MailAddress JSON-serializable, see T346406
+		$toComponents = [ $to->address, $to->name, $to->realName ];
+		$fromComponents = [ $mailFrom->address, $mailFrom->name, $mailFrom->realName ];
+		$replyToComponents = $replyTo ? [ $replyTo->address, $replyTo->name, $replyTo->realName ] : null;
+
 		$params = [
-			'to' => $to,
-			'from' => $mailFrom,
+			'to' => $toComponents,
+			'from' => $fromComponents,
 			'subject' => $subject,
 			'message' => $message,
-			'replyTo' => $replyTo
+			'replyTo' => $replyToComponents
 		];
 
 		return new EmailUsersJob(
@@ -203,7 +207,7 @@ class CampaignsUserMailer {
 	 * @param User $user
 	 * @return null|string Null on success, string on error.
 	 */
-	public function validateSender( User $user ): ?string {
+	private function validateSender( User $user ): ?string {
 		if ( !$user->canSendEmail() ) {
 			return 'badaccess';
 		}
@@ -224,7 +228,7 @@ class CampaignsUserMailer {
 
 	/**
 	 * @param MailAddress $fromAddress
-	 * @return array
+	 * @return array<MailAddress|null>
 	 * @phan-return array{0:MailAddress,1:?MailAddress}
 	 */
 	private function getFromAndReplyTo( MailAddress $fromAddress ): array {
@@ -237,9 +241,14 @@ class CampaignsUserMailer {
 			 * wiki-borne mails from direct mails and protects against
 			 * SPF and bounce problems with some mailers (see below).
 			 */
+			if ( defined( 'MW_PHPUNIT_TEST' ) ) {
+				$emailSenderName = '(emailsender)';
+			} else {
+				$emailSenderName = RequestContext::getMain()->msg( 'emailsender' )->inContentLanguage()->text();
+			}
 			$mailFrom = new MailAddress(
 				$this->options->get( MainConfigNames::PasswordSender ),
-				RequestContext::getMain()->msg( 'emailsender' )->inContentLanguage()->text()
+				$emailSenderName
 			);
 			$replyTo = $fromAddress;
 		} else {

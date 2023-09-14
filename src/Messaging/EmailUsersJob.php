@@ -9,20 +9,17 @@ use UserMailer;
 
 class EmailUsersJob extends Job {
 
-	/** @var MailAddress */
 	private MailAddress $to;
-	/** @var string */
 	private string $subject;
-	/** @var string */
 	private string $message;
-	/** @var MailAddress */
-	private MailAddress $replyTo;
-	/** @var MailAddress */
+	private ?MailAddress $replyTo;
 	private MailAddress $from;
 
 	/**
 	 * @param string $command
 	 * @param array $params
+	 * @phpcs:ignore Generic.Files.LineLength
+	 * @phan-param array{to:array{0:string,1:?string,2:?string},subject:string,message:string,from:array{0:string,1:?string,2:?string},replyTo:?array{0:string,1:?string,2:?string}} $params
 	 */
 	public function __construct( $command, array $params ) {
 		parent::__construct( $command, $params );
@@ -35,18 +32,21 @@ class EmailUsersJob extends Job {
 		$this->command = $command;
 		$this->subject = $params['subject'];
 		$this->message = $params['message'];
-		$this->to = $params['to'];
-		$this->from = $params['from'];
-		$this->replyTo = $params['replyTo'];
+		$this->to = new MailAddress( ...$params['to'] );
+		$this->from = new MailAddress( ...$params['from'] );
+		$this->replyTo = $params['replyTo'] ? new MailAddress( ...$params['replyTo'] ) : null;
 	}
 
-	public function run() {
+	public function run(): bool {
+		$opts = $this->replyTo !== null
+			? [ 'replyTo' => $this->replyTo ]
+			: [];
 		$status = UserMailer::send(
 			$this->to,
 			$this->from,
 			$this->subject,
 			$this->message,
-			[ 'replyTo' => $this->replyTo ]
+			$opts
 		);
 		return $status->isGood();
 	}
