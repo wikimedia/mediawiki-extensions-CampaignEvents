@@ -86,16 +86,17 @@ class ListParticipantsHandler extends SimpleHandler {
 		}
 
 		$includePrivate = $params['include_private'];
-		$authority = $this->getAuthority();
+		$authority = new MWAuthorityProxy( $this->getAuthority() );
 		if (
 			$includePrivate &&
-			!$this->permissionChecker->userCanViewPrivateParticipants( new MWAuthorityProxy( $authority ), $eventID )
+			!$this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID )
 		) {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-rest-list-participants-cannot-see-private' ),
 				403
 			);
 		}
+		$canEmailParticipants = $this->permissionChecker->userCanEmailParticipants( $authority, $eventID );
 
 		$participants = $this->participantsStore->getEventParticipants(
 			$eventID,
@@ -109,8 +110,8 @@ class ListParticipantsHandler extends SimpleHandler {
 
 		// TODO: remove global when T269492 is resolved
 		$language = RequestContext::getMain()->getLanguage();
-		$performer = $this->userFactory->newFromUserIdentity(
-			$authority->getUser()
+		$performer = $this->userFactory->newFromAuthority(
+			$this->getAuthority()
 		);
 		// Iterate over the participants twice, preloading usernames in the first iteration, so that we can issue
 		// a single DB queries for all users later.
@@ -124,7 +125,7 @@ class ListParticipantsHandler extends SimpleHandler {
 				'user_registered_at' => wfTimestamp( TS_MW, $participant->getRegisteredAt() ),
 				'user_registered_at_formatted' => $language->userTimeAndDate(
 					$participant->getRegisteredAt(),
-					$authority->getUser()
+					$this->getAuthority()->getUser()
 				),
 				'private' => $participant->isPrivateRegistration(),
 			];
@@ -166,9 +167,11 @@ class ListParticipantsHandler extends SimpleHandler {
 				$additionalData = [
 					'user_name' => $usernameOrError,
 					'user_page' => $this->userLinker->getUserPagePath( new CentralUser( $centralID ) ),
-					'user_is_valid_recipient' =>
-						$user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null,
 				];
+				if ( $canEmailParticipants ) {
+					$additionalData['user_is_valid_recipient'] =
+						$user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null;
+				}
 			}
 
 			$respDataByCentralID[$centralID] += $additionalData;

@@ -42,6 +42,7 @@
 			classes: [ 'ext-campaignevents-details-remove-participant-dialog' ]
 		} );
 		this.$messageParticipantsButton = $( '.ext-campaignevents-event-details-message-all-participants-button' );
+		this.canEmailParticipants = this.$messageParticipantsButton.length !== 0;
 		this.windowManager = new OO.ui.WindowManager();
 		this.$participantsContainer = $( '.ext-campaignevents-details-participants-container' );
 		this.$participantsTable = $( '.ext-campaignevents-details-participants-table' );
@@ -486,6 +487,7 @@
 				// eslint-disable-next-line camelcase
 				curParticipantData.user_id = String( curParticipantData.user_id );
 				var loadAsSelected = this.loadParticipantAsSelected( curParticipantData.user_id ),
+					canReceiveEmail = curParticipantData.user_is_valid_recipient || false,
 					newParticipantCheckbox =
 						new OO.ui.CheckboxInputWidget( {
 							selected: loadAsSelected,
@@ -495,7 +497,7 @@
 								'ext-campaignevents-event-details-participants-checkboxes'
 							],
 							data: {
-								hasEmail: curParticipantData.user_is_valid_recipient,
+								canReceiveEmail: canReceiveEmail,
 								username: curParticipantData.user_name,
 								userId: curParticipantData.user_id,
 								userPageLink: curParticipantData.user_page
@@ -551,14 +553,16 @@
 				} )
 			);
 
-			items.push(
-				new OO.ui.Element( {
-					$element: $( '<td>' ),
-					text: thisClass.getValidRecipientLabel(
-						curParticipantData.user_is_valid_recipient
-					)
-				} )
-			);
+			if ( this.canEmailParticipants ) {
+				items.push(
+					new OO.ui.Element( {
+						$element: $( '<td>' ),
+						text: thisClass.getValidRecipientLabel(
+							curParticipantData.user_is_valid_recipient
+						)
+					} )
+				);
+			}
 
 			var row = new OO.ui.Element( {
 				$element: $( '<tr>' ),
