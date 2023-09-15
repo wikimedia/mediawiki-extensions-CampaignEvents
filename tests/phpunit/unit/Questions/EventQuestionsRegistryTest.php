@@ -20,6 +20,9 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			'name' => 'testradio',
 			'db-id' => 1,
 			'wikimedia' => false,
+			'pii' => true,
+			'stats-label-message' => 'question-1-stats-label',
+			'organizer-label-message' => 'question-1-organizer-label',
 			'questionData' => [
 				'type' => EventQuestionsRegistry::RADIO_BUTTON_QUESTION_TYPE,
 				'label-message' => 'question-1-label',
@@ -34,6 +37,9 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			'name' => 'testselect',
 			'db-id' => 2,
 			'wikimedia' => false,
+			'pii' => false,
+			'stats-label-message' => 'question-2-stats-label',
+			'organizer-label-message' => 'question-2-organizer-label',
 			'questionData' => [
 				'type' => EventQuestionsRegistry::SELECT_QUESTION_TYPE,
 				'label-message' => 'question-2-label',
@@ -48,6 +54,9 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			'name' => 'testother',
 			'db-id' => 3,
 			'wikimedia' => false,
+			'pii' => false,
+			'stats-label-message' => 'question-3-stats-label',
+			'organizer-label-message' => 'question-3-organizer-label',
 			'questionData' => [
 				'type' => EventQuestionsRegistry::SELECT_QUESTION_TYPE,
 				'label-message' => 'question-3-label',
@@ -147,6 +156,15 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			$this->assertIsString(
 				$questionDescriptor['stats-label-message'],
 				'"stats-label-message" should be a string'
+			);
+			$this->assertArrayHasKey(
+				'organizer-label-message',
+				$questionDescriptor,
+				'Questions should specify a label message for the organizer form'
+			);
+			$this->assertIsString(
+				$questionDescriptor['organizer-label-message'],
+				'"organizer-label-message" should be a string'
 			);
 			$this->assertArrayHasKey( 'questionData', $questionDescriptor, 'Questions should have data' );
 			$questionData = $questionDescriptor['questionData'];
@@ -574,5 +592,19 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	public static function provideDbIDToName(): Generator {
 		yield 'Valid' => [ 2, 'age' ];
 		yield 'Invalid' => [ -142365, null ];
+	}
+
+	/**
+	 * @covers ::getQuestionLabelsForOrganizerForm
+	 */
+	public function testGetQuestionLabelsForOrganizerForm() {
+		$registry = $this->getRegistry();
+		$labels = $registry->getQuestionLabelsForOrganizerForm();
+		$this->assertArrayHasKey( 'pii', $labels, 'Real registry' );
+		$this->assertArrayHasKey( 'non-pii', $labels, 'Real registry' );
+
+		$registry->overrideQuestionsForTesting( [] );
+		$this->assertArrayHasKey( 'pii', $labels, 'Empty registry' );
+		$this->assertArrayHasKey( 'non-pii', $labels, 'Empty registry' );
 	}
 }

@@ -74,6 +74,7 @@ class EventQuestionsRegistry {
 				'wikimedia' => false,
 				'pii' => true,
 				'stats-label-message' => 'campaignevents-register-question-gender-stats-label',
+				'organizer-label-message' => 'campaignevents-register-question-gender-organizer-label',
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-gender',
@@ -93,6 +94,7 @@ class EventQuestionsRegistry {
 				'wikimedia' => false,
 				'pii' => true,
 				'stats-label-message' => 'campaignevents-register-question-age-stats-label',
+				'organizer-label-message' => 'campaignevents-register-question-age-organizer-label',
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-age',
@@ -115,6 +117,7 @@ class EventQuestionsRegistry {
 				'wikimedia' => false,
 				'pii' => true,
 				'stats-label-message' => 'campaignevents-register-question-profession-stats-label',
+				'organizer-label-message' => 'campaignevents-register-question-profession-organizer-label',
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-profession',
@@ -139,6 +142,7 @@ class EventQuestionsRegistry {
 				'wikimedia' => true,
 				'pii' => false,
 				'stats-label-message' => 'campaignevents-register-question-confidence-stats-label',
+				'organizer-label-message' => 'campaignevents-register-question-confidence-organizer-label',
 				'questionData' => [
 					'type' => self::RADIO_BUTTON_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-confidence-contributing',
@@ -157,6 +161,7 @@ class EventQuestionsRegistry {
 				'wikimedia' => true,
 				'pii' => false,
 				'stats-label-message' => 'campaignevents-register-question-affiliate-stats-label',
+				'organizer-label-message' => 'campaignevents-register-question-affiliate-organizer-label',
 				'questionData' => [
 					'type' => self::SELECT_QUESTION_TYPE,
 					'label-message' => 'campaignevents-register-question-affiliate',
@@ -483,6 +488,22 @@ class EventQuestionsRegistry {
 		}
 
 		return new Answer( $questionSpec['db-id'], $ansOption, $ansText );
+	}
+
+	/**
+	 * Returns message keys to use as labels for each question in the form shown to organizers when they enable
+	 * or edit an event registation. Labels for PII and non-PII questions are provided separately.
+	 *
+	 * @return string[][]
+	 * @phan-return array{pii:string[],non-pii:string[]}
+	 */
+	public function getQuestionLabelsForOrganizerForm(): array {
+		$ret = [ 'pii' => [], 'non-pii' => [] ];
+		foreach ( $this->getQuestions() as $question ) {
+			$key = $question['pii'] ? 'pii' : 'non-pii';
+			$ret[$key][] = $question['organizer-label-message'];
+		}
+		return $ret;
 	}
 
 	/**
