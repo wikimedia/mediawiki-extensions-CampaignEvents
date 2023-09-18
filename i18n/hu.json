@@ -5,6 +5,8 @@
 		]
 	},
 	"nstab-event": "Esemény",
+	"campaignevents-edit-form-questions-label": "Kérdések a résztvevők számára",
+	"campaignevents-edit-form-questions-non-pii-label": "Egyéb kérdések (nem PII)",
 	"campaignevents-edit-need-central-account": "Eseményregisztráció engedélyezéséhez vagy szerkesztéséhez központi felhasználói fiókra lesz szükséged.",
 	"campaignevents-role-organizer": "{{GENDER:$1|szervező}}",
 	"campaignevents-register-need-central-account": "Eseményre való regisztrációhoz központi felhasználói fiókra lesz szükséged.",
@@ -23,6 +25,10 @@
 	"campaignevents-tracking-tool-wikiedu-already-connected-error": "A $1 kurzus már kapcsolódik egy eseményhez, nem lehet újra összekapcsolni.",
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "A $1 kurzus nem kapcsolódik ehhez az eseményhez, ezért nem szinkronizálható.",
 	"campaignevents-event-details-participants-deselect": "Kiválasztás törlése",
+	"campaignevents-event-details-can-receive-email": "Fogadhat e-mailt",
+	"campaignevents-register-question-gender-organizer-label": "Mi a nemi identitásod?",
+	"campaignevents-register-question-age-organizer-label": "Hány éves vagy?",
+	"campaignevents-register-question-profession-organizer-label": "Mi a foglalkozásod?",
 	"campaignevents-details-stats-no-responses": "Ezen az eseményen nem születtek összesíthető válaszok a résztvevőktől.",
 	"campaignevents-details-stats-not-ready": "A résztvevők válaszait összesítjük, és hamarosan elérhetővé tesszük itt."
 }
