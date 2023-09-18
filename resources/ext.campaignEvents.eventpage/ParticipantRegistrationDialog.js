@@ -48,24 +48,27 @@
 			submitMsg = mw.msg( 'campaignevents-eventpage-register-dialog-register' );
 		}
 
+		var actions = [
+			{
+				flags: [ 'safe', 'close' ],
+				action: 'cancel'
+			},
+			{
+				flags: [ 'primary', 'progressive' ],
+				label: submitMsg,
+				action: 'confirm'
+			}
+		];
+		if ( !this.answersAggregated ) {
+			actions.push( {
+				label: mw.msg( 'campaignevents-eventpage-register-dialog-clear' ),
+				action: 'clear'
+			} );
+		}
 		data = $.extend(
 			{
 				title: title,
-				actions: [
-					{
-						flags: [ 'safe', 'close' ],
-						action: 'cancel'
-					},
-					{
-						flags: [ 'primary', 'progressive' ],
-						label: submitMsg,
-						action: 'confirm'
-					},
-					{
-						label: mw.msg( 'campaignevents-eventpage-register-dialog-clear' ),
-						action: 'clear'
-					}
-				]
+				actions: actions
 			},
 			data
 		);
