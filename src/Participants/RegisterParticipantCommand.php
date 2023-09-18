@@ -17,7 +17,6 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MWTimestamp;
 use StatusValue;
-use UnexpectedValueException;
 
 class RegisterParticipantCommand {
 	public const SERVICE_NAME = 'CampaignEventsRegisterParticipantCommand';
@@ -131,22 +130,12 @@ class RegisterParticipantCommand {
 		array $answers
 	): StatusValue {
 		$registrationAllowedVal = self::checkIsRegistrationAllowed( $registration );
-		if ( $registrationAllowedVal !== self::CAN_REGISTER ) {
-			switch ( $registrationAllowedVal ) {
-				case self::CANNOT_REGISTER_DELETED:
-					$msg = 'campaignevents-register-registration-deleted';
-					break;
-				case self::CANNOT_REGISTER_ENDED:
-					$msg = 'campaignevents-register-event-past';
-					break;
-				case self::CANNOT_REGISTER_CLOSED:
-					$msg = 'campaignevents-register-event-not-open';
-					break;
-				default:
-					throw new UnexpectedValueException( "Unexpected val $registrationAllowedVal" );
-			}
-			return StatusValue::newFatal( $msg );
+		if ( $registrationAllowedVal === self::CANNOT_REGISTER_DELETED ) {
+			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' );
 		}
+		// The other values are checked below after we determined whether this is an edit or a first time
+		// registration. Edits should be allowed even if the registration has closed or the event has
+		// ended, see T345735.
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
@@ -154,15 +143,23 @@ class RegisterParticipantCommand {
 			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
 		}
 
-		if ( $answers ) {
-			$existingRecord = $this->participantsStore->getEventParticipant(
-				$registration->getID(),
-				$centralUser,
-				true
-			);
-			if ( $existingRecord && $existingRecord->getAggregationTimestamp() !== null ) {
-				return StatusValue::newFatal( 'campaignevents-register-answers-aggregated-error' );
+		$existingRecord = $this->participantsStore->getEventParticipant(
+			$registration->getID(),
+			$centralUser,
+			true
+		);
+
+		if ( !$existingRecord ) {
+			if ( $registrationAllowedVal === self::CANNOT_REGISTER_ENDED ) {
+				return StatusValue::newFatal( 'campaignevents-register-event-past' );
 			}
+			if ( $registrationAllowedVal === self::CANNOT_REGISTER_CLOSED ) {
+				return StatusValue::newFatal( 'campaignevents-register-event-not-open' );
+			}
+		}
+
+		if ( $answers && $existingRecord && $existingRecord->getAggregationTimestamp() !== null ) {
+			return StatusValue::newFatal( 'campaignevents-register-answers-aggregated-error' );
 		}
 
 		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateParticipantAdded(
