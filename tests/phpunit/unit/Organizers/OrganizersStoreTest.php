@@ -21,7 +21,12 @@ use Wikimedia\TestingAccessWrapper;
 class OrganizersStoreTest extends MediaWikiUnitTestCase {
 	private function getOrganizersStore(): OrganizersStore {
 		$db = $this->createMock( ICampaignsDatabase::class );
-		$db->method( 'selectRow' )->willReturn( (object)[ 'ceo_id' => 1, 'ceo_user_id' => 1, 'ceo_roles' => 1 ] );
+		$db->method( 'selectRow' )->willReturn( (object)[
+			'ceo_id' => 1,
+			'ceo_user_id' => 1,
+			'ceo_roles' => 1,
+			'ceo_agreement_timestamp' => null
+		] );
 		$dbHelper = $this->createMock( CampaignsDatabaseHelper::class );
 		$dbHelper->method( 'getDBConnection' )->willReturn( $db );
 		return new OrganizersStore( $dbHelper );

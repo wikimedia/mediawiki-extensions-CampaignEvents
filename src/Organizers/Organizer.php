@@ -16,15 +16,20 @@ class Organizer {
 	/** @var int */
 	private $organizerID;
 
+	/** @var bool */
+	private $clickwrapAcceptance;
+
 	/**
 	 * @param CentralUser $user
 	 * @param string[] $roles List of Roles::ROLE_* constants
 	 * @param int $organizerID Unique ID which identifies this specific organizer, for a specific event, in the DB.
+	 * @param bool $clickwrapAcceptance boolean which indicates if the user has accepted the PII clickwrap agreement
 	 */
-	public function __construct( CentralUser $user, array $roles, int $organizerID ) {
+	public function __construct( CentralUser $user, array $roles, int $organizerID, bool $clickwrapAcceptance ) {
 		$this->user = $user;
 		$this->roles = $roles;
 		$this->organizerID = $organizerID;
+		$this->clickwrapAcceptance = $clickwrapAcceptance;
 	}
 
 	/**
@@ -46,5 +51,12 @@ class Organizer {
 	 */
 	public function getOrganizerID(): int {
 		return $this->organizerID;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getClickwrapAcceptance(): bool {
+		return $this->clickwrapAcceptance;
 	}
 }

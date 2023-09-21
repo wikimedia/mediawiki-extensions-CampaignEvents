@@ -25,16 +25,21 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 
 	private const ORGANIZERS_BY_EVENT = [
 		1 => [
-			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ], 'deleted' => false ],
-			[ 'user' => 102, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false ],
-			[ 'user' => 103, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => true ],
+			[
+				'user' => 101,
+				'roles' => [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ],
+				'deleted' => false,
+				'clickwrap' => false
+			],
+			[ 'user' => 102, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false, 'clickwrap' => true ],
+			[ 'user' => 103, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => true, 'clickwrap' => false ],
 		],
 		3 => [
-			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => false ],
+			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => false, 'clickwrap' => false ],
 		],
 		10 => [
-			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => true ],
-		],
+			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => true, 'clickwrap' => false ],
+		]
 	];
 
 	/**
@@ -56,7 +61,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 					'ceo_roles' => $dbRoles,
 					'ceo_created_at' => $ts,
 					'ceo_deleted_at' => $data['deleted'] ? $ts : null,
-					'ceo_agreement_timestamp' => null,
+					'ceo_agreement_timestamp' => $data['clickwrap'] ? $ts : null,
 				];
 			}
 		}
@@ -95,6 +100,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @param int $userID
 	 * @param bool $expected
 	 * @covers ::isEventOrganizer
+	 * @covers ::getEventOrganizer
 	 * @dataProvider provideIsOrganizer
 	 */
 	public function testIsEventOrganizer( int $eventID, int $userID, bool $expected ) {
@@ -110,6 +116,35 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Yes, secondary role' => [ 1, 102, true ];
 		yield 'No, deleted' => [ 1, 103, false ];
 		yield 'Nope' => [ 2, 101, false ];
+	}
+
+	/**
+	 * @param int $eventID
+	 * @param int $userID
+	 * @param array $expectedIDs
+	 * @covers ::updateClickwrapAcceptance
+	 * @dataProvider provideClickwrapAcceptance
+	 */
+	public function testUpdateClickwrapAcceptance( int $eventID, int $userID, array $expectedIDs ) {
+		$user = new CentralUser( $userID );
+		$store = new OrganizersStore(
+			CampaignEventsServices::getDatabaseHelper()
+		);
+		$store->updateClickwrapAcceptance( $eventID, $user );
+		$organizers = $store->getEventOrganizers( $eventID );
+		$actualIDs = [];
+		foreach ( $organizers as $organizer ) {
+			if ( $organizer->getClickwrapAcceptance() ) {
+				$actualIDs[] = $organizer->getUser()->getCentralID();
+			}
+		}
+
+		$this->assertSame( $expectedIDs, $actualIDs );
+	}
+
+	public static function provideClickwrapAcceptance(): Generator {
+		yield 'Clickwrap accepted by test' => [ 1, 101, [ 101, 102 ] ];
+		yield 'Clickwrap accepted before test' => [ 1, 102, [ 102 ] ];
 	}
 
 	/**

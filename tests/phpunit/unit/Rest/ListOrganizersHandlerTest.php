@@ -74,7 +74,7 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$singleCreatorStore = $this->createMock( OrganizersStore::class );
 		$singleCreatorStore->expects( $this->atLeastOnce() )
 			->method( 'getEventOrganizers' )
-			->willReturn( [ new Organizer( $user1, [ Roles::ROLE_CREATOR ], 1 ) ] );
+			->willReturn( [ new Organizer( $user1, [ Roles::ROLE_CREATOR ], 1, false ) ] );
 		yield 'Single organizer, creator only' => [
 			[
 				[
@@ -97,8 +97,8 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$multiCreatorStore->expects( $this->atLeastOnce() )
 			->method( 'getEventOrganizers' )
 			->willReturn( [
-				new Organizer( $user1, [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ], 2 ),
-				new Organizer( $user2, [ Roles::ROLE_ORGANIZER ], 3 ),
+				new Organizer( $user1, [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ], 2, false ),
+				new Organizer( $user2, [ Roles::ROLE_ORGANIZER ], 3, false ),
 			] );
 		yield 'Multiple organizers, multiple roles' => [
 			[

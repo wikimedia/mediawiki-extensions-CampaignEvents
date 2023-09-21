@@ -107,7 +107,11 @@ class OrganizersStore {
 				$roles[] = $role;
 			}
 		}
-		return new Organizer( new CentralUser( (int)$row->ceo_user_id ), $roles, (int)$row->ceo_id );
+		return new Organizer(
+			new CentralUser( (int)$row->ceo_user_id ),
+			$roles,
+			(int)$row->ceo_id,
+			$row->ceo_agreement_timestamp !== null );
 	}
 
 	/**
@@ -116,6 +120,10 @@ class OrganizersStore {
 	 * @return bool
 	 */
 	public function isEventOrganizer( int $eventID, CentralUser $user ): bool {
+		return $this->getEventOrganizer( $eventID, $user ) !== null;
+	}
+
+	public function getEventOrganizer( int $eventID, CentralUser $user ): ?Organizer {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$row = $dbr->selectRow(
 			'ce_organizers',
@@ -126,7 +134,11 @@ class OrganizersStore {
 				'ceo_deleted_at' => null,
 			]
 		);
-		return $row !== null;
+
+		if ( $row ) {
+			return $this->rowToOrganizerObject( $row );
+		}
+		return null;
 	}
 
 	/**
@@ -146,6 +158,19 @@ class OrganizersStore {
 		);
 		// Intentionally casting false to int if no rows were found.
 		return (int)$ret;
+	}
+
+	/**
+	 * @param int $eventID
+	 * @return void
+	 */
+	public function updateClickwrapAcceptance( int $eventID, CentralUser $organizer ) {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw->update( 'ce_organizers',
+			[ 'ceo_agreement_timestamp' => $dbw->timestamp() ],
+			[ 'ceo_event_id' => $eventID ,
+			  'ceo_user_id' => $organizer->getCentralID() ],
+		);
 	}
 
 	/**
