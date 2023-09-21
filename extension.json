@@ -481,7 +481,10 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsUserLinker",
 				"UserFactory",
-				"CampaignEventsUserMailer"
+				"CampaignEventsUserMailer",
+				"CampaignEventsEventQuestionsRegistry",
+				"MessageFormatterFactory",
+				"MainConfig"
 			]
 		},
 		{

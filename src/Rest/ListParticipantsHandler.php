@@ -4,20 +4,28 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use Config;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\Answer;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\User\UserFactory;
+use MediaWiki\Utils\MWTimestamp;
 use RequestContext;
 use UserArray;
+use Wikimedia\Message\IMessageFormatterFactory;
+use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
@@ -41,6 +49,11 @@ class ListParticipantsHandler extends SimpleHandler {
 	private UserFactory $userFactory;
 	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $campaignsUserMailer;
+	private EventQuestionsRegistry $questionsRegistry;
+	/** @var IMessageFormatterFactory */
+	private IMessageFormatterFactory $messageFormatterFactory;
+	private bool $isPastEvent = false;
+	private bool $participantQuestionsEnabled;
 
 	/**
 	 * @param PermissionChecker $permissionChecker
@@ -50,6 +63,9 @@ class ListParticipantsHandler extends SimpleHandler {
 	 * @param UserLinker $userLinker
 	 * @param UserFactory $userFactory
 	 * @param CampaignsUserMailer $campaignsUserMailer
+	 * @param EventQuestionsRegistry $questionsRegistry
+	 * @param IMessageFormatterFactory $messageFormatterFactory
+	 * @param Config $config
 	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
@@ -58,7 +74,10 @@ class ListParticipantsHandler extends SimpleHandler {
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserLinker $userLinker,
 		UserFactory $userFactory,
-		CampaignsUserMailer $campaignsUserMailer
+		CampaignsUserMailer $campaignsUserMailer,
+		EventQuestionsRegistry $questionsRegistry,
+		IMessageFormatterFactory $messageFormatterFactory,
+		Config $config
 	) {
 		$this->permissionChecker = $permissionChecker;
 		$this->eventLookup = $eventLookup;
@@ -67,6 +86,11 @@ class ListParticipantsHandler extends SimpleHandler {
 		$this->userLinker = $userLinker;
 		$this->userFactory = $userFactory;
 		$this->campaignsUserMailer = $campaignsUserMailer;
+		$this->questionsRegistry = $questionsRegistry;
+		$this->messageFormatterFactory = $messageFormatterFactory;
+		$this->participantQuestionsEnabled = $config->get(
+			'CampaignEventsEnableParticipantQuestions'
+		);
 	}
 
 	/**
@@ -74,7 +98,8 @@ class ListParticipantsHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		$this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		$this->isPastEvent = wfTimestamp( TS_UNIX, $event->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 
 		$params = $this->getValidatedParams();
 		$usernameFilter = $params['username_filter'];
@@ -110,12 +135,17 @@ class ListParticipantsHandler extends SimpleHandler {
 
 		// TODO: remove global when T269492 is resolved
 		$language = RequestContext::getMain()->getLanguage();
+		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$performer = $this->userFactory->newFromAuthority(
 			$this->getAuthority()
 		);
 		// Iterate over the participants twice, preloading usernames in the first iteration, so that we can issue
 		// a single DB queries for all users later.
 		$respDataByCentralID = [];
+		$userCanViewNonPIIParticipantData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
+			$authority,
+			$eventID
+		);
 		foreach ( $participants as $participant ) {
 			$centralUser = $participant->getUser();
 			$centralID = $centralUser->getCentralID();
@@ -129,6 +159,22 @@ class ListParticipantsHandler extends SimpleHandler {
 				),
 				'private' => $participant->isPrivateRegistration(),
 			];
+
+			if (
+				$this->participantQuestionsEnabled &&
+				!$this->isPastEvent &&
+				$userCanViewNonPIIParticipantData
+			) {
+				if ( $participant->getAggregationTimestamp() ) {
+					$respDataByCentralID[$centralID]['non_pii_answers'] = $msgFormatter->format(
+						MessageValue::new( 'campaignevents-participant-question-have-been-aggregated' )
+					);
+				} else {
+					$respDataByCentralID[$centralID]['non_pii_answers'] = $this->getParticipantNonPIIAnswers(
+						$participant, $event, $msgFormatter
+					);
+				}
+			}
 		}
 
 		$centralIDsMap = array_fill_keys( array_keys( $respDataByCentralID ), null );
@@ -176,8 +222,75 @@ class ListParticipantsHandler extends SimpleHandler {
 
 			$respDataByCentralID[$centralID] += $additionalData;
 		}
-
 		return $this->getResponseFactory()->createJson( array_values( $respDataByCentralID ) );
+	}
+
+	/**
+	 * @param Participant $participant
+	 * @param ExistingEventRegistration $event
+	 * @param ITextFormatter $msgFormatter
+	 * @return array
+	 */
+	private function getParticipantNonPIIAnswers(
+		Participant $participant,
+		ExistingEventRegistration $event,
+		ITextFormatter $msgFormatter
+	): array {
+		$answeredQuestions = [];
+		foreach ( $participant->getAnswers() as $answer ) {
+			$answeredQuestions[ $answer->getQuestionDBID() ] = $answer;
+		}
+
+		$nonPIIQuestionIDs = $this->questionsRegistry->getNonPIIQuestionIDs(
+			$event->getParticipantQuestions()
+		);
+		$answers = [];
+		foreach ( $nonPIIQuestionIDs as $nonPIIQuestionID ) {
+			if ( array_key_exists( $nonPIIQuestionID, $answeredQuestions ) ) {
+				$answers[] = $this->getQuestionAnswer( $answeredQuestions[ $nonPIIQuestionID ], $msgFormatter );
+			} else {
+				$answers[] = [
+					'message' => $msgFormatter->format(
+							MessageValue::new( 'campaignevents-participant-question-no-response' )
+						),
+					'questionID' => $nonPIIQuestionID
+				];
+			}
+		}
+		return $answers;
+	}
+
+	/**
+	 * @param Answer $answer
+	 * @param ITextFormatter $msgFormatter
+	 * @return array
+	 */
+	private function getQuestionAnswer( Answer $answer, ITextFormatter $msgFormatter ): array {
+		$questionAnswer = [
+			'message' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-participant-question-no-response' )
+				),
+			'questionID' => $answer->getQuestionDBID()
+		];
+		$option = $answer->getOption();
+		if ( $option === null ) {
+			return $questionAnswer;
+		}
+		$questionAnswerMessageKey = $this->questionsRegistry->getQuestionOptionMessageByID(
+				$answer->getQuestionDBID(),
+				$option
+			);
+		$questionAnswer[ 'message' ] = $msgFormatter->format(
+			MessageValue::new( $questionAnswerMessageKey )
+		);
+
+		$textOption = $answer->getText();
+		if ( $textOption ) {
+			$questionAnswer[ 'message' ] .= $msgFormatter->format(
+				MessageValue::new( 'colon-separator' )
+			) . $textOption;
+		}
+		return $questionAnswer;
 	}
 
 	/**

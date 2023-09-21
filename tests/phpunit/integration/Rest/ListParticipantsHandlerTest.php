@@ -4,7 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Rest;
 
+use Config;
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -14,12 +16,17 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\Answer;
+use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Rest\ListParticipantsHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWiki\User\UserFactory;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Message\IMessageFormatterFactory;
+use Wikimedia\Message\ITextFormatter;
+use Wikimedia\Message\MessageValue;
 
 /**
  * @group Test
@@ -47,13 +54,24 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		ParticipantsStore $participantsStore = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		UserFactory $userFactory = null,
-		UserLinker $userLink = null
+		UserLinker $userLink = null,
+		bool $participantQuestionsEnabled = true
 	): ListParticipantsHandler {
 		if ( !$permissionChecker ) {
 			$permissionChecker = $this->createMock( PermissionChecker::class );
 			$permissionChecker->method( 'userCanViewPrivateParticipants' )->willReturn( true );
 			$permissionChecker->method( 'userCanEmailParticipants' )->willReturn( true );
 		}
+
+		$configMock = $this->createMock( Config::class );
+		$configMock->method( 'get' )
+			->with( 'CampaignEventsEnableParticipantQuestions' )
+			->willReturn( $participantQuestionsEnabled );
+
+		$msgFormatter = $this->createMock( ITextFormatter::class );
+		$msgFormatter->method( 'format' )->willReturnCallback( static fn ( MessageValue $msg ) => $msg->getKey() );
+		$msgFormatterFactory = $this->createMock( IMessageFormatterFactory::class );
+		$msgFormatterFactory->method( 'getTextFormatter' )->willReturn( $msgFormatter );
 		return new ListParticipantsHandler(
 			$permissionChecker,
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
@@ -61,7 +79,10 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$userLink ?? $this->createMock( UserLinker::class ),
 			$userFactory ?? $this->createMock( UserFactory::class ),
-			$this->createMock( CampaignsUserMailer::class )
+			$this->createMock( CampaignsUserMailer::class ),
+			new EventQuestionsRegistry( $participantQuestionsEnabled ),
+			$msgFormatterFactory,
+			$configMock
 		);
 	}
 
@@ -96,21 +117,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		for ( $i = 1; $i < 4; $i++ ) {
 			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i, false, [], null, null );
 			$usernames[$i] = "Test user $i";
-
-			$expected[] = [
-				'participant_id' => $i,
-				'user_id' => $i,
-				'user_name' => $usernames[$i],
-				'user_page' => [
-					'path' => '',
-					'title' => '',
-					'classes' => ''
-				],
-				'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
-				'user_registered_at_formatted' => '12:00, 15 March 2022',
-				'private' => false,
-				'user_is_valid_recipient' => false,
-			];
+			$expected[] = $this->getExpectedParticipantsData( $i, $i, false );
 		}
 
 		$partStore = $this->createMock( ParticipantsStore::class );
@@ -151,6 +158,152 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$delUserLookup->method( 'getNamesIncludingDeletedAndSuppressed' )
 			->willReturn( [ $deletedUserID => CampaignsCentralUserLookup::USER_HIDDEN ] );
 		yield 'Deleted user' => [ $deletedUserExpected, $delPartStore, $delUserLookup ];
+	}
+
+	/**
+	 * @dataProvider provideRunParticipantQuestions
+	 */
+	public function testRunParticipantQuestions(
+		bool $questionsEnabled = true,
+		bool $userCanSeeParticipantNonPIIData = false,
+		bool $isPastEvent = false,
+		array $answers = [],
+		?array $nonPiiAnswers = null,
+		?string $participantAnswersAggregatedDate = null,
+		?string $aggregatedMessage = null
+	) {
+		$userLink = $this->createMock( UserLinker::class );
+		$userLink->method( 'getUserPagePath' )->willReturn( [
+			'path' => '',
+			'title' => '',
+			'classes' => '',
+		] );
+		$participants = [];
+		$expectedResp = [];
+		$usernames = [];
+		for ( $i = 1; $i < 4; $i++ ) {
+			$participants[] = new Participant(
+				new CentralUser( $i ), '20220315120000', $i, false, $answers, null, $participantAnswersAggregatedDate
+			);
+			$usernames[$i] = "Test user $i";
+			$expectedResp[] = $this->getExpectedParticipantsData( $i, $i, null, $nonPiiAnswers, $aggregatedMessage );
+		}
+
+		$partStore = $this->createMock( ParticipantsStore::class );
+		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $participants );
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->method( 'getNamesIncludingDeletedAndSuppressed' )->willReturn( $usernames );
+
+		$permChecker = $this->createMock( PermissionChecker::class );
+		$permChecker->method( 'userCanViewNonPIIParticipantsData' )
+			->willReturn( $userCanSeeParticipantNonPIIData );
+
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventRegistration = $this->createMock( ExistingEventRegistration::class );
+		$eventRegistration->method( 'getParticipantQuestions' )->willReturn( [ 1, 2, 3, 4, 5 ] );
+		$eventLookup->method( 'getEventByID' )->willReturn( $eventRegistration );
+
+		if ( $isPastEvent ) {
+			$eventRegistration->method( 'getEndUTCTimestamp' )->willReturn( '20220315120000' );
+		}
+		$handler = $this->newHandler(
+			$permChecker, $eventLookup, $partStore, $centralUserLookup, null, $userLink, $questionsEnabled
+		);
+		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
+		$this->assertArrayEquals( $expectedResp, $respData );
+	}
+
+	/**
+	 * @param array $answers
+	 *
+	 * @return array
+	 */
+	private function generateNoPiiAnswers( array $answers ): array {
+		$nonPiiAnswers = [];
+		foreach ( $answers as $answer ) {
+			$nonPiiAnswers[] = [
+				'message' => $answer[ 1 ],
+				'questionID' => $answer[ 0 ]
+			];
+		}
+		return $nonPiiAnswers;
+	}
+
+	public function provideRunParticipantQuestions(): Generator {
+		yield 'Event without questions enabled' => [ false ];
+		yield 'Future event with questions enabled and user cannot view non pii data' => [];
+
+		$noNonPiiAnswers = $this->generateNoPiiAnswers( [
+			[ 4, 'campaignevents-participant-question-no-response' ],
+			[ 5, 'campaignevents-participant-question-no-response' ],
+		] );
+		yield 'Future event with questions enabled and no non PII answers' => [
+			true, true, false, [], $noNonPiiAnswers
+		];
+
+		$nonPiiAnswers = $this->generateNoPiiAnswers( [
+			[ 4, 'campaignevents-register-question-confidence-contributing-option-some-not-confident' ],
+			[ 5, 'campaignevents-register-question-affiliate-option-affiliate' ],
+		] );
+		yield 'Future event with questions enabled and all non PII answers' => [
+			true, true, false, [ new Answer( 4, 2, null ), new Answer( 5, 1, null ) ], $nonPiiAnswers
+		];
+
+		$onlyOneNonPiiAnswer = $this->generateNoPiiAnswers( [
+			[ 4, 'campaignevents-participant-question-no-response' ],
+			[ 5, 'campaignevents-register-question-affiliate-option-affiliate' ],
+		] );
+		yield 'Future event with questions enabled and only one non PII answer' => [
+			true, true, false, [ new Answer( 5, 1, null ) ], $onlyOneNonPiiAnswer
+		];
+
+		$aggregatedMessage = 'campaignevents-participant-question-have-been-aggregated';
+		yield 'Future event with questions enabled and participant aggregated answers' => [
+			true, true, false, [ new Answer( 5, 1, null ) ], null, '20220315120000', $aggregatedMessage
+		];
+
+		yield 'Past event with questions enabled' => [ true, true, true ];
+	}
+
+	/**
+	 * @param int $participantID
+	 * @param int $userID
+	 * @param bool|null $isValidRecipient
+	 * @param array|null $nonPiiAnswers
+	 * @param string|null $aggregatedAnswersMessage
+	 *
+	 * @return array
+	 */
+	private function getExpectedParticipantsData(
+		int $participantID,
+		int $userID,
+		?bool $isValidRecipient = null,
+		?array $nonPiiAnswers = null,
+		?string $aggregatedAnswersMessage = null
+	) {
+		$participantData = [
+			'participant_id' => $participantID,
+			'user_id' => $userID,
+			'user_name' => 'Test user ' . $userID,
+			'user_page' => [
+				'path' => '',
+				'title' => '',
+				'classes' => ''
+			],
+			'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
+			'user_registered_at_formatted' => '12:00, 15 March 2022',
+			'private' => false,
+		];
+
+		if ( $isValidRecipient !== null ) {
+			$participantData[ 'user_is_valid_recipient' ] = $isValidRecipient;
+		}
+		if ( is_array( $nonPiiAnswers ) ) {
+			$participantData[ 'non_pii_answers' ] = $nonPiiAnswers;
+		} elseif ( $aggregatedAnswersMessage ) {
+			$participantData[ 'non_pii_answers' ] = $aggregatedAnswersMessage;
+		}
+		return $participantData;
 	}
 
 	/**
