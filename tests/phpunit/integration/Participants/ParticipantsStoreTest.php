@@ -295,7 +295,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @return void
 	 */
 	public function checkParticipants( array $actualUsers, array $expectedParticipants ): void {
-		$this->assertCount( count( $actualUsers ), $expectedParticipants );
+		$this->assertSameSize( $actualUsers, $expectedParticipants );
 		foreach ( $actualUsers as $participant ) {
 			$participantID = $participant->getUser()->getCentralID();
 			$this->assertSame(

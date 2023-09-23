@@ -534,7 +534,7 @@ class EventDetailsParticipantsModule {
 			'flags' => [ 'progressive' ],
 			'infusable' => true,
 			'label' => $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-participants-checkboxes-selected', [ 0,0 ] )
+				MessageValue::new( 'campaignevents-event-details-participants-checkboxes-selected', [ 0, 0 ] )
 			),
 			'classes' => [ 'ext-campaignevents-details-participants-count-button' ]
 		] );

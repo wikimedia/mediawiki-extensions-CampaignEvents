@@ -35,7 +35,7 @@ class CampaignsCentralUserLookupTest extends MediaWikiUnitTestCase {
 		if ( !$centralIdLookup ) {
 			$centralIdLookup = $this->createMock( CentralIdLookup::class );
 			$centralIdLookup->method( 'lookupCentralIds' )
-				->willReturnCallback( fn( array $map ) => array_intersect_key( self::ID_NAME_MAP, $map ) );
+				->willReturnCallback( fn ( array $map ) => array_intersect_key( self::ID_NAME_MAP, $map ) );
 		}
 		return new CampaignsCentralUserLookup(
 			$centralIdLookup,

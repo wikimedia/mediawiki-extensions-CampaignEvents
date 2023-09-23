@@ -128,7 +128,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		$store->addOrganizerToEvent( $eventID, $userID, $roles );
 
 		$actualOrganizers = $store->getEventOrganizers( $eventID );
-		$this->assertCount( count( $expectedOrganizers ), $actualOrganizers );
+		$this->assertSameSize( $expectedOrganizers, $actualOrganizers );
 		foreach ( $actualOrganizers as $actualOrg ) {
 			$userID = $actualOrg->getUser()->getCentralID();
 			$this->assertArrayHasKey( $userID, $expectedOrganizers );
@@ -192,7 +192,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 
 		$store->addOrganizersToEvent( $eventID, $organizersToAdd );
 		$actualOrganizers = $store->getEventOrganizers( $eventID );
-		$this->assertCount( count( $allExpectedOrganizers ), $actualOrganizers );
+		$this->assertSameSize( $allExpectedOrganizers, $actualOrganizers );
 
 		foreach ( $actualOrganizers as $actualOrg ) {
 			$userID = $actualOrg->getUser()->getCentralID();
@@ -325,7 +325,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 
 		$store->removeOrganizersFromEventExcept( $eventID, $IDSToKeep );
 		$actualRemaining = $store->getEventOrganizers( $eventID );
-		$this->assertCount( count( $expectedRemaining ), $actualRemaining );
+		$this->assertSameSize( $expectedRemaining, $actualRemaining );
 		foreach ( $actualRemaining as $organizer ) {
 			$userID = $organizer->getUser()->getCentralID();
 			$this->assertArrayHasKey( $userID, $expectedRemaining );

@@ -108,7 +108,7 @@ class WikiEduDashboard extends TrackingTool {
 	): StatusValue {
 		Assert::precondition( $eventID !== null || $dryRun, 'Cannot sync tools with events without ID' );
 		$organizerIDsMap = array_fill_keys(
-			array_map( static fn( CentralUser $u ) => $u->getCentralID(), $organizers ),
+			array_map( static fn ( CentralUser $u ) => $u->getCentralID(), $organizers ),
 			null
 		);
 		$organizerNames = array_values( $this->centralUserLookup->getNames( $organizerIDsMap ) );
@@ -234,7 +234,7 @@ class WikiEduDashboard extends TrackingTool {
 			ParticipantsStore::READ_LATEST
 		);
 		$participantIDsMap = array_fill_keys(
-			array_map( static fn( Participant $p ) => $p->getUser()->getCentralID(), $latestParticipants ),
+			array_map( static fn ( Participant $p ) => $p->getUser()->getCentralID(), $latestParticipants ),
 			null
 		);
 		$participantNames = array_values( $this->centralUserLookup->getNames( $participantIDsMap ) );
