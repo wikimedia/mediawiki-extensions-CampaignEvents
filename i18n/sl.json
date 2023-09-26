@@ -61,7 +61,7 @@
 	"campaignevents-edit-field-organizers-creator-title": "To je ustvaritelj dogodka; drugi organizatorji tega uporabnika ne morejo odstraniti.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Ta {{GENDER:$1|uporabnik|uporabnica|uporabnik_ca}} nima dovoljenja za organiziranje dogodkov.",
 	"campaignevents-edit-field-tracking-tools": "Nadzorna plošča programov in dogodkov",
-	"campaignevents-edit-field-tracking-tools-help": "Uporabniška imena javno registriranih udeležencev se samodejno pošljejo na nadzorno ploščo. S tem orodjem lahko spremljate njihove prispevke in merite učinek kampanjskega dogodka. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Več o tem]",
+	"campaignevents-edit-field-tracking-tools-help": "Uporabniška imena javno registriranih udeležencev bodo samodejno poslana na nadzorno ploščo. S tem orodjem lahko spremljate prispevke udeležencev in merite učinek kampanjskega dogodka. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Več o tem]",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Vnesite na nadzorno ploščo programov in dogodkov URL-naslov svojega dogodka.",
 	"campaignevents-edit-field-meeting-type": "Vrsta srečanja na dogodku",
 	"campaignevents-edit-field-type-online": "Spletni dogodek",

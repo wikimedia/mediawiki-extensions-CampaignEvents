@@ -61,7 +61,7 @@
 	"campaignevents-edit-field-organizers-creator-title": "Dies ist der Ersteller der Veranstaltung, andere Organisatoren können diesen Benutzer nicht entfernen.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Dieser Benutzer|Diese Benutzerin}} darf keine Veranstaltungen organisieren.",
 	"campaignevents-edit-field-tracking-tools": "Programme & Veranstaltungen Dashboard Link",
-	"campaignevents-edit-field-tracking-tools-help": "Die Benutzernamen der öffentlich angemeldeten Teilnehmer werden automatisch an das Dashboard gesendet. Mit diesem Tool kannst du die Beiträge der Teilnehmer überwachen und die Wirkung deiner Kampagne messen. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Mehr erfahren]",
+	"campaignevents-edit-field-tracking-tools-help": "Die Benutzernamen der öffentlich angemeldeten Teilnehmer werden automatisch an das Dashboard gesendet. Mit diesem Tool kannst du die Beiträge der Teilnehmer beobachten und die Wirkung deiner Veranstaltung messen. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Mehr erfahren].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Gib die URL des Dashboards Programme & Veranstaltungen für deine Veranstaltung ein.",
 	"campaignevents-edit-field-meeting-type": "Veranstaltungstyp",
 	"campaignevents-edit-field-type-online": "Online-Veranstaltung",

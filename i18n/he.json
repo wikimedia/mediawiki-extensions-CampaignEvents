@@ -62,7 +62,7 @@
 	"campaignevents-edit-field-organizers-creator-title": "זה היוצר של האירוע, מארגנים אחרים לא יכולים להסיר את המשתמש הזה.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|המשתמש הזה אינו רשאי|המשתמשת הזאת אינה רשאית}} לארגן אירועים.",
 	"campaignevents-edit-field-tracking-tools": "קישור ללוח הבקרה של תוכניות ואירועים",
-	"campaignevents-edit-field-tracking-tools-help": "שמות משתמש של משתתפים הרשומים באופן ציבורי יישלחו אוטומטית ללוח הבקרה. הכלי הזה עוזר לך לעקוב אחר התרומות שלהם ולמדוד את ההשפעה של האירוע שלך.  [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard למידע נוסף]",
+	"campaignevents-edit-field-tracking-tools-help": "שמות משתמש של משתתפים הרשומים באופן ציבורי יישלחו אוטומטית ללוח הבקרה. הכלי הזה עוזר לך לעקוב אחר התרומות המשתתפים ולמדוד את ההשפעה של האירוע שלך.  [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard למידע נוסף]",
 	"campaignevents-edit-field-tracking-tools-placeholder": "כניסה לכתובת ללוח הבקרה של תוכניות ואירועים עבור האירוע שלך",
 	"campaignevents-edit-field-meeting-type": "סוג מפגש אירוע",
 	"campaignevents-edit-field-type-online": "אירוע מקוון",

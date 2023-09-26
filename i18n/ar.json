@@ -362,6 +362,7 @@
 	"campaignevents-register-question-affiliate-option-affiliate": "نعم",
 	"campaignevents-register-question-affiliate-details-placeholder": "من فضلك حدد",
 	"campaignevents-register-question-profession-stats-label": "ما هي مهنتك؟",
+	"campaignevents-register-question-profession-organizer-label": "ما هي مهنتك؟",
 	"campaignevents-eventpage-register-dialog-questions-title": "معلوماتكم",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "ستشارك هذه المعلومات فقط مع منظمي الفعالية.",
 	"campaignevents-register-invalid-answer": "إجابة غير صحيحة على السؤال $1",
