@@ -137,7 +137,9 @@ return [
 			$services->get( EventPageCacheUpdater::SERVICE_NAME ),
 			$services->get( TrackingToolEventWatcher::SERVICE_NAME ),
 			$services->get( TrackingToolUpdater::SERVICE_NAME ),
-			LoggerFactory::getInstance( 'CampaignEvents' )
+			LoggerFactory::getInstance( 'CampaignEvents' ),
+			$services->get( ParticipantAnswersStore::SERVICE_NAME ),
+			$services->get( EventAggregatedAnswersStore::SERVICE_NAME )
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {

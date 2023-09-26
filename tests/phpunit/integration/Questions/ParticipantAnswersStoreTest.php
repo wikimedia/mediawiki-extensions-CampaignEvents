@@ -385,4 +385,18 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 			]
 		];
 	}
+
+	/**
+	 * @covers ::eventHasAnswers
+	 * @dataProvider provideEventHasAnswers
+	 */
+	public function testEventHasAnswers( int $eventID, bool $expected ) {
+		$store = CampaignEventsServices::getParticipantAnswersStore();
+		$this->assertEquals( $expected, $store->eventHasAnswers( $eventID ) );
+	}
+
+	public function provideEventHasAnswers(): Generator {
+		yield 'Has answers' => [ 1, true ];
+		yield 'Has no answers' => [ 5, false ];
+	}
 }

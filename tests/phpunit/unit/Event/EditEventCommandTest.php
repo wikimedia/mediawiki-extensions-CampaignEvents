@@ -20,11 +20,14 @@ use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
+use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
+use MWTimestamp;
 use Psr\Log\NullLogger;
 use StatusValue;
 
@@ -36,6 +39,16 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 	private const ORGANIZER_USERNAMES = [ 'organizerA', 'organizerB' ];
 
+	private const FAKE_TIME = '123456789';
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+		MWTimestamp::setFakeTime( self::FAKE_TIME );
+	}
+
 	/**
 	 * @param IEventStore|null $eventStore
 	 * @param PermissionChecker|null $permChecker
@@ -44,6 +57,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param OrganizersStore|null $organizersStore
 	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @param TrackingToolUpdater|null $trackingToolUpdater
+	 * @param ParticipantAnswersStore|null $participantAnswersStore
+	 * @param EventAggregatedAnswersStore|null $eventAggregatedAnswersStore
 	 * @return EditEventCommand
 	 */
 	private function getCommand(
@@ -53,7 +68,9 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		OrganizersStore $organizersStore = null,
 		TrackingToolEventWatcher $trackingToolEventWatcher = null,
-		TrackingToolUpdater $trackingToolUpdater = null
+		TrackingToolUpdater $trackingToolUpdater = null,
+		ParticipantAnswersStore $participantAnswersStore = null,
+		EventAggregatedAnswersStore $eventAggregatedAnswersStore = null
 	): EditEventCommand {
 		$eventStore ??= $this->createMock( IEventStore::class );
 		if ( !$eventLookup ) {
@@ -96,7 +113,9 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$this->createMock( EventPageCacheUpdater::class ),
 			$trackingToolEventWatcher,
 			$trackingToolUpdater ?? $this->createMock( TrackingToolUpdater::class ),
-			new NullLogger()
+			new NullLogger(),
+			$participantAnswersStore ?? $this->createMock( ParticipantAnswersStore::class ),
+			$eventAggregatedAnswersStore ?? $this->createMock( EventAggregatedAnswersStore::class ),
 		);
 	}
 
@@ -555,6 +574,101 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$errorCreationWatcher,
 			$errorCreationUpdater,
 			$changStatusErrorsToWarnings( $creationError )
+		];
+	}
+
+	/**
+	 * @param string $newEndDate
+	 * @param string $oldEndDate
+	 * @param bool $hasAnswers
+	 * @param bool $hasAggregates
+	 * @param bool $success
+	 * @covers ::checkCanEditEventDates
+	 * @covers ::isPastEventWithAnswers
+	 * @dataProvider provideEventRegistrationsEditEventDates
+	 */
+	public function testDoEditIfAllowed__editEventDates(
+		string $newEndDate,
+		string $oldEndDate,
+		bool $hasAnswers,
+		bool $hasAggregates,
+		bool $success
+	) {
+		$permChecker = $this->createMock( PermissionChecker::class );
+		$permChecker->method( 'userCanEditRegistration' )->willReturn( true );
+		$permChecker->method( 'userCanOrganizeEvents' )->willReturn( true );
+
+		$currentRegistrationData = $this->createMock( ExistingEventRegistration::class );
+		$currentRegistrationData->method( 'getID' )->willReturn( 1 );
+		$currentRegistrationData->method( 'getEndUTCTimestamp' )->willReturn( $oldEndDate );
+
+		$registration = $this->createMock( EventRegistration::class );
+		$registration->method( 'getID' )->willReturn( 1 );
+		$registration->method( 'getEndUTCTimestamp' )->willReturn( $newEndDate );
+
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->method( 'getEventByPage' )->willReturn( $currentRegistrationData );
+		$eventLookup->method( 'getEventByID' )->willReturn( $currentRegistrationData );
+
+		$participantAnswersStore = $this->createMock( ParticipantAnswersStore::class );
+		$eventAggregatedAnswersStore = $this->createMock( EventAggregatedAnswersStore::class );
+
+		$participantAnswersStore->method( 'eventHasAnswers' )->willReturn( $hasAnswers );
+		$eventAggregatedAnswersStore->method( 'eventHasAggregates' )->willReturn( $hasAggregates );
+
+		$status = $this->getCommand(
+			null,
+			$permChecker,
+			$eventLookup,
+			null,
+			null,
+			null,
+			null,
+			$participantAnswersStore,
+			$eventAggregatedAnswersStore
+		)->doEditIfAllowed(
+			$registration,
+			$this->createMock( ICampaignsAuthority::class ),
+			self::ORGANIZER_USERNAMES
+		);
+
+		if ( !$success ) {
+			$this->assertStatusNotGood( $status );
+			$this->assertStatusMessage( 'campaignevents-event-dates-cannot-be-changed', $status );
+		} else {
+			$this->assertStatusGood( $status );
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function provideEventRegistrationsEditEventDates() {
+		return [
+			'There are answers, end date is past, and is changing the end date to future' => [
+				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
+				wfTimestamp( TS_MW, self::FAKE_TIME - 1 ),
+				true,
+				false,
+				false
+			],
+			'There are aggregates, end date is past, and is changing the end date to future' => [
+				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
+				wfTimestamp( TS_MW, self::FAKE_TIME - 1 ),
+				false,
+				true,
+				false
+			],
+			'There are no answers, and is changing the end date to future' => [
+				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
+				wfTimestamp( TS_MW, self::FAKE_TIME - 1 ),
+				false,
+				false,
+				true
+			],
+			'There are aggregates, but it is not changing event dates' => [
+				wfTimestamp( TS_MW, self::FAKE_TIME ), wfTimestamp( TS_MW, self::FAKE_TIME ), false, false, true
+			]
 		];
 	}
 }
