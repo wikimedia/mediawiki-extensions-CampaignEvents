@@ -44,6 +44,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
 	public const PAGE_FIELD_NAME = 'wp' . self::PAGE_FIELD_NAME_HTMLFORM;
 	private const DETAILS_SECTION = 'campaignevents-edit-form-details-label';
+	private const PARTICIPANT_QUESTIONS_SECTION = 'campaignevents-edit-form-questions-label';
 
 	/** @var array */
 	private $formMessages;
@@ -412,6 +413,21 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			( !$this->event || $this->event->getParticipantQuestions() )
 		) {
 			$formFields['ParticipantQuestionsInfo'] = $this->getParticipantQuestionsInfoField();
+			$clickwrapAccepted = false;
+			if ( $this->event ) {
+				$organizer = $this->organizersStore->getEventOrganizer(
+					$this->eventID,
+					$this->centralUserLookup->newFromAuthority( $this->performer )
+				);
+				$clickwrapAccepted = $organizer && $organizer->getClickwrapAcceptance();
+			}
+			$formFields['ClickWrapCheckbox'] = [
+				'type' => 'check',
+				'default' => $clickwrapAccepted,
+				'disabled' => $clickwrapAccepted,
+				'label-message' => 'campaignevents-edit-field-clickwrap-checkbox-label',
+				'section' => self::PARTICIPANT_QUESTIONS_SECTION,
+			];
 		}
 
 		return $formFields;
@@ -444,13 +460,18 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$questionList .= Html::element( 'li', [], $this->msg( $labelMsg )->text() );
 			}
 			$text .= Html::rawElement( 'ul', [], $questionList );
+			$text .= Html::element(
+				'p',
+				[],
+				$this->msg( 'campaignevents-edit-field-clickwrap-checkbox-pretext' )->text(),
+			);
 		}
 
 		return [
 			'type' => 'info',
 			'default' => $text,
 			'raw' => true,
-			'section' => 'campaignevents-edit-form-questions-label'
+			'section' => self::PARTICIPANT_QUESTIONS_SECTION,
 		];
 	}
 
@@ -609,8 +630,15 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$res = $this->editEventCommand->doEditIfAllowed(
 			$event,
 			$this->performer,
-			$organizerUsernames
+			$organizerUsernames,
 		);
+		if ( $res->isOK() === true && !empty( $data['ClickWrapCheckbox'] ) ) {
+			$this->organizersStore->updateClickwrapAcceptance(
+				$res->getValue(),
+				$this->centralUserLookup->newFromAuthority( $this->performer )
+			);
+		}
+
 		[ $errorsStatus, $this->saveWarningsStatus ] = $res->splitByErrorType();
 		return Status::wrap( $errorsStatus );
 	}

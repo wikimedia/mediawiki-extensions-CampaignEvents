@@ -132,12 +132,13 @@ class SpecialEventDetails extends SpecialPage {
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
-			$isOrganizer = $this->organizersStore->isEventOrganizer( $eventID, $centralUser );
+			$organizer = $this->organizersStore->getEventOrganizer( $eventID, $centralUser );
 			$isParticipant = $this->participantsStore->userParticipatesInEvent( $eventID, $centralUser, true );
 		} catch ( UserNotGlobalException $_ ) {
-			$isOrganizer = $isParticipant = false;
+			$organizer = null;
+			$isParticipant = false;
 		}
-
+		$isOrganizer = $organizer !== null;
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
 			'wgCampaignEventsEnableEmail' => $this->getConfig()->get( 'CampaignEventsEnableEmail' ),
@@ -205,15 +206,33 @@ class SpecialEventDetails extends SpecialPage {
 		}
 
 		if (
-			$isOrganizer &&
-			$this->event->isPast() &&
-			$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' )
+			$isOrganizer
+			&& $this->event->isPast()
+			&& $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' )
 		) {
-			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
+			$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $language );
+			$form = $formModule->createContent(
+				$this->getContext(),
+				$this->getPageTitle( strval( $this->event->getID() ) )
+					->getLocalURL( [ 'tab' => $this::STATS_PANEL ] )
+			);
+			if (
+				$form['isSubmitted'] ||
+				$organizer->getClickwrapAcceptance()
+			) {
+				$statsModule = $this->frontendModulesFactory
+					->newResponseStatisticsModule( $this->event, $language )
+					->createContent();
+			} else {
+				$statsModule = new Tag();
+				$statsModule->appendContent(
+					$form['content']
+				);
+			}
 			$tabs[] = $this->createTab(
 				self::STATS_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-stats' ) ),
-				$statsModule->createContent()
+				$statsModule
 			);
 		}
 

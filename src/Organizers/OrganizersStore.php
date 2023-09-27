@@ -107,6 +107,7 @@ class OrganizersStore {
 				$roles[] = $role;
 			}
 		}
+
 		return new Organizer(
 			new CentralUser( (int)$row->ceo_user_id ),
 			$roles,
