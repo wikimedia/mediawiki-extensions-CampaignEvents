@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Alesaru"
+			"Alesaru",
+			"Strainu"
 		]
 	},
 	"campaignevents-eventpage-dialog-participants-view-list": "Vezi tot",
@@ -11,9 +12,9 @@
 	"campaignevents-event-details-remove-participant-remove-btn": "Șterge",
 	"campaignevents-event-details-email-recipients-label": "Destinatari",
 	"campaignevents-event-details-email-subject-label": "Subiect",
-	"campaignevents-event-details-email-subject-placeholder": "Subiectul mesajului dvs. de e-mail",
-	"campaignevents-event-details-email-message-placeholder": "Conținutul text simplu al mesajului dvs. de e-mail, acesta trebuie să aibă cel puțin 10 caractere",
-	"campaignevents-event-details-participants-deselect": "Deselectați",
+	"campaignevents-event-details-email-subject-placeholder": "Subiectul mesajului dvs.",
+	"campaignevents-event-details-email-message-placeholder": "Conținutul text simplu al mesajului dvs. de e-mail trebuie să aibă cel puțin 10 caractere",
+	"campaignevents-event-details-participants-deselect": "Deselectează",
 	"campaignevents-email-participants-label": "Scrie un email",
 	"campaignevents-email-success-notification": "Mesaj trimis!",
 	"campaignevents-email-participants-missing-address": "Unii dintre participanții selectați nu au o adresă de e-mail în contul lor și nu vor primi e-mailul dvs. Le puteți trimite un mesaj făcând clic pe numele lor de utilizator și accesând pagina de discuții pentru utilizatori.",

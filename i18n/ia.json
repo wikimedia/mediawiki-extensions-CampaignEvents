@@ -61,7 +61,7 @@
 	"campaignevents-edit-field-organizers-creator-title": "Isto es le creator del evento. Altere organisatores non pote remover iste usator.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Iste usat{{GENDER:$1|or|rice}} non es autorisate a organisar eventos.",
 	"campaignevents-edit-field-tracking-tools": "Ligamine al Tabuliero de programmas e eventos",
-	"campaignevents-edit-field-tracking-tools-help": "Le nomines de usator del participantes publicamente inscribite esserea inviate automaticamente al Tabuliero de instrumentos. Iste utensile te adjuta a surveliar lor contributiones e a mesurar le impacto de tu evento de campania. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Leger plus]",
+	"campaignevents-edit-field-tracking-tools-help": "Le nomines de usator del participantes publicamente inscribite essera inviate automaticamente al Tabuliero de instrumentos. Iste utensile te adjuta a surveliar le contributiones del participantes e a mesurar le impacto de tu evento de campania. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Leger plus].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Insere le URL del Tabuliero de Programmas e Eventos pro tu evento",
 	"campaignevents-edit-field-meeting-type": "Typo de reunion del evento",
 	"campaignevents-edit-field-type-online": "Evento in linea",
@@ -393,5 +393,6 @@
 	"campaignevents-details-stats-header-percentage": "Percentage",
 	"campaignevents-details-stats-header-number": "Numero",
 	"campaignevents-details-stats-few-answers-option": "minus de $1",
-	"campaignevents-details-stats-no-response": "Necun responsa"
+	"campaignevents-details-stats-no-response": "Necun responsa",
+	"campaignevents-event-dates-cannot-be-changed": "Le datas de eventos passate non pote esser cambiate a datas futur pro proteger le datos del participantes."
 }
