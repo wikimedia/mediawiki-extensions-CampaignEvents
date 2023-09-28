@@ -129,7 +129,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	public function execute( $par ): void {
 		$this->requireNamedUser();
-		$this->addHelpLink( 'Extension:CampaignEvents' );
+		$this->addHelpLink( 'Help:Extension:CampaignEvents/Registration' );
 		$this->getOutput()->addModules( [
 			'ext.campaignEvents.editeventregistration',
 		] );
