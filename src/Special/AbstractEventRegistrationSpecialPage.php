@@ -461,20 +461,29 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$form->setSubmitTextMsg( $this->formMessages['submit'] );
 		// XXX HACK: Override the font weight with inline style to avoid creating a new RL module just for this. T316820
 		$footerNotice = ( new Tag( 'span' ) )
-			->appendContent( new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() ) )
 			->setAttributes( [ 'style' => 'font-weight: normal' ] );
+
+		$footerHasContent = false;
+		if ( !$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			$footerHasContent = true;
+			$footerNotice->appendContent( new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() ) );
+		}
 
 		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistrationForm();
 		if ( $policyMsg !== null ) {
+			$footerHasContent = true;
 			$footerNotice->appendContent(
 				new HtmlSnippet( $this->msg( $policyMsg )->parseAsBlock() )
 			);
 		}
-		$form->addFooterHtml( new FieldLayout( new MessageWidget( [
-			'type' => 'notice',
-			'inline' => true,
-			'label' => $footerNotice
-		] ) ) );
+
+		if ( $footerHasContent ) {
+			$form->addFooterHtml( new FieldLayout( new MessageWidget( [
+				'type' => 'notice',
+				'inline' => true,
+				'label' => $footerNotice
+			] ) ) );
+		}
 	}
 
 	/**
