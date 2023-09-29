@@ -54,8 +54,11 @@
 	};
 
 	EmailManager.prototype.resetFields = function () {
-		this.message.setValue();
-		this.subject.setValue();
+		// FIXME HACK: set the value property first so that the 'change' listener isn't fired
+		// and the field remains valid. See T346838, T347748.
+		this.message.value = '';
+		this.message.setValue( '' );
+		this.subject.setValue( '' );
 		this.button.setDisabled( true );
 	};
 
