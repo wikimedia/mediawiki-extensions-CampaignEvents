@@ -150,7 +150,7 @@ class ResponseStatisticsModule {
 			] );
 			$content = $notice;
 		} else {
-			$content = $this->makeAnswerTable( $questionID, $questionAggregates, $totalAnswers, $totalParticipants );
+			$content = $this->makeAnswerTable( $questionID, $questionAggregates, $totalParticipants );
 		}
 		$content->addClasses( [ 'mw-collapsible-content' ] );
 		$container->appendContent( $content );
@@ -160,14 +160,12 @@ class ResponseStatisticsModule {
 	/**
 	 * @param int $questionID
 	 * @param array<int,int> $questionAggregates
-	 * @param int $totalAnswers
 	 * @param int $totalParticipants
 	 * @return Tag
 	 */
 	private function makeAnswerTable(
 		int $questionID,
 		array $questionAggregates,
-		int $totalAnswers,
 		int $totalParticipants
 	): Tag {
 		$table = ( new Tag( 'table' ) )
@@ -179,49 +177,72 @@ class ResponseStatisticsModule {
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-details-stats-header-number' ) )
 		];
 
+		// Calculate the percentage corresponding to MIN_ANSWERS_PER_OPTION, used when the percentage is shown
+		// as a range.
+		$percentageThreshold = round( 100 * ( self::MIN_ANSWERS_PER_OPTION - 1 ) / $totalParticipants, 1 );
 		$allOptions = $this->questionsRegistry->getQuestionOptionsForStats( $questionID );
 		$tableCellContentByRow = [];
-		$canShowPercentages = true;
+		// See https://www.mediawiki.org/wiki/Extension:CampaignEvents/Aggregating_participants%27_responses for
+		// the formulas used here.
+		$answersBelowThreshold = 0;
+		$knownAnswersNum = 0;
 		foreach ( $allOptions as $id => $msgKey ) {
 			$rowElements = [
 				$this->msgFormatter->format( MessageValue::new( $msgKey ) )
 			];
 
 			$numAnswers = $questionAggregates[$id] ?? 0;
-			// Note, we're always adding the percentage here, but will remove it later if we find at least 1 option
-			// that doesn't have enough answers.
-			$percentage = round( $numAnswers / $totalParticipants * 100, 1 );
-			$rowElements[] = $this->msgFormatter->format(
-				MessageValue::new( 'percent' )->numParams( $percentage )
-			);
 			if ( $numAnswers < self::MIN_ANSWERS_PER_OPTION ) {
-				$canShowPercentages = false;
+				$answersBelowThreshold++;
+				$rowElements[] = $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-details-stats-range-percentage' )
+						->numParams( 0, $percentageThreshold )
+				);
 				$rowElements[] = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-details-stats-few-answers-option' )
 						->numParams( self::MIN_ANSWERS_PER_OPTION )
 				);
 			} else {
+				$knownAnswersNum += $numAnswers;
+				$percentage = round( $numAnswers / $totalParticipants * 100, 1 );
+				$rowElements[] = $this->msgFormatter->format(
+					MessageValue::new( 'percent' )->numParams( $percentage )
+				);
 				$rowElements[] = $this->language->formatNum( $numAnswers );
 			}
 			$tableCellContentByRow[] = $rowElements;
 		}
-		$noResponseNum = $totalParticipants - $totalAnswers;
-		$noResponsePercentage = round( $noResponseNum / $totalParticipants * 100, 1 );
-		$tableCellContentByRow[] = [
-			$this->msgFormatter->format( MessageValue::new( 'campaignevents-details-stats-no-response' ) ),
-			$this->msgFormatter->format(
-				MessageValue::new( 'percent' )->numParams( $noResponsePercentage )
-			),
-			$this->language->formatNum( $noResponseNum )
-		];
 
-		if ( !$canShowPercentages ) {
-			// Remove percentages from the table header and from each row
-			unset( $tableHeaderContents[1] );
-			array_walk( $tableCellContentByRow, static function ( &$rowContent ) {
-				unset( $rowContent[1] );
-			} );
+		$noResponseRowElements = [
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-details-stats-no-response' ) )
+		];
+		$noResponseMin = max(
+			$totalParticipants - $knownAnswersNum - ( self::MIN_ANSWERS_PER_OPTION - 1 ) * $answersBelowThreshold,
+			0
+		);
+		$noResponseMax = $totalParticipants - $knownAnswersNum;
+		if ( $noResponseMin === $noResponseMax ) {
+			// No answers below threshold, we can just show this as a number.
+			$noResponsePercentage = round( $noResponseMin / $totalParticipants * 100, 1 );
+			$noResponseRowElements[] = $this->msgFormatter->format(
+				MessageValue::new( 'percent' )->numParams( $noResponsePercentage )
+			);
+			$noResponseRowElements[] = $this->language->formatNum( $noResponseMin );
+		} else {
+			// Show it as a range.
+			$noResponsePercentageMin = round( $noResponseMin / $totalParticipants * 100, 1 );
+			$noResponsePercentageMax = round( $noResponseMax / $totalParticipants * 100, 1 );
+			$noResponseRowElements[] = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-details-stats-range-percentage' )
+					->numParams( $noResponsePercentageMin, $noResponsePercentageMax )
+			);
+			$noResponseRowElements[] = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-details-stats-range-number' )
+					->numParams( $noResponseMin, $noResponseMax )
+			);
 		}
+
+		$tableCellContentByRow[] = $noResponseRowElements;
 
 		$tableHeader = new Tag( 'thead' );
 		$tableHeaderRow = new Tag( 'tr' );
