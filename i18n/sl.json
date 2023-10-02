@@ -393,5 +393,6 @@
 	"campaignevents-details-stats-header-percentage": "Odstotek",
 	"campaignevents-details-stats-header-number": "Število",
 	"campaignevents-details-stats-few-answers-option": "manj kot $1",
-	"campaignevents-details-stats-no-response": "Ni odgovora"
+	"campaignevents-details-stats-no-response": "Ni odgovora",
+	"campaignevents-event-dates-cannot-be-changed": "Zaradi zaščite podatkov udeležencev datumov preteklih dogodkov ni mogoče spremeniti v prihodnje datume."
 }

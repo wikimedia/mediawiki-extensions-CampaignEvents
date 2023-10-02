@@ -394,5 +394,6 @@
 	"campaignevents-details-stats-header-percentage": "אחוזים",
 	"campaignevents-details-stats-header-number": "מספר",
 	"campaignevents-details-stats-few-answers-option": "פחות מ־$1",
-	"campaignevents-details-stats-no-response": "אין תשובה"
+	"campaignevents-details-stats-no-response": "אין תשובה",
+	"campaignevents-event-dates-cannot-be-changed": "לא ניתן לשנות תאריכים של אירועים בעבר לתאריכים עתידיים כדי להגן על נתוני המשתתפים."
 }

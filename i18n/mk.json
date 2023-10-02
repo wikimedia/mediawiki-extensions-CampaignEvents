@@ -394,5 +394,6 @@
 	"campaignevents-details-stats-header-percentage": "Постоток",
 	"campaignevents-details-stats-header-number": "Број",
 	"campaignevents-details-stats-few-answers-option": "помалку од $1",
-	"campaignevents-details-stats-no-response": "Нема одговор"
+	"campaignevents-details-stats-no-response": "Нема одговор",
+	"campaignevents-event-dates-cannot-be-changed": "Датумите на изминатите настани не можат да се променат во идни за да се заштитат податоците на учесниците."
 }
