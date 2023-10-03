@@ -30,5 +30,8 @@
 	"campaignevents-register-question-age-organizer-label": "Hány éves vagy?",
 	"campaignevents-register-question-profession-organizer-label": "Mi a foglalkozásod?",
 	"campaignevents-details-stats-no-responses": "Ezen az eseményen nem születtek összesíthető válaszok a résztvevőktől.",
-	"campaignevents-details-stats-not-ready": "A résztvevők válaszait összesítjük, és hamarosan elérhetővé tesszük itt."
+	"campaignevents-details-stats-not-ready": "A résztvevők válaszait összesítjük, és hamarosan elérhetővé tesszük itt.",
+	"campaignevents-details-stats-few-answers-option": "Kevesebb, mint $1",
+	"campaignevents-details-stats-range-number": "$1 és $2 között",
+	"campaignevents-details-stats-range-percentage": "$1 és $2 között"
 }

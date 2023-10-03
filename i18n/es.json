@@ -386,5 +386,7 @@
 	"campaignevents-register-invalid-answer": "Respuesta no válida a la pregunta $1",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Especifica",
 	"campaignevents-details-stats-no-responses": "Este evento no tiene respuestas de los participantes para agregar.",
-	"campaignevents-details-stats-not-ready": "Las respuestas de los participantes se agregarán y estarán disponibles aquí en breve."
+	"campaignevents-details-stats-not-ready": "Las respuestas de los participantes se agregarán y estarán disponibles aquí en breve.",
+	"campaignevents-details-stats-range-number": "Entre $1 y $2",
+	"campaignevents-details-stats-range-percentage": "Entre $1% y $2%"
 }

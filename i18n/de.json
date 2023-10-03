@@ -392,7 +392,9 @@
 	"campaignevents-details-stats-header-option": "Option",
 	"campaignevents-details-stats-header-percentage": "Prozentsatz",
 	"campaignevents-details-stats-header-number": "Zahl",
-	"campaignevents-details-stats-few-answers-option": "weniger als $1",
+	"campaignevents-details-stats-few-answers-option": "Weniger als $1",
+	"campaignevents-details-stats-range-number": "Zwischen $1 und $2",
+	"campaignevents-details-stats-range-percentage": "Zwischen $1 % und $2 %",
 	"campaignevents-details-stats-no-response": "Keine Antwort",
 	"campaignevents-event-dates-cannot-be-changed": "Vergangene Veranstaltungstermine können zum Schutz der Teilnehmerdaten nicht auf zukünftige Termine geändert werden."
 }
