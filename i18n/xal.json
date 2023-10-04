@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ukhant Erdemt"
+		]
+	},
+	"campaignevents-details-stats-few-answers-option": "$1-әс баһ",
+	"campaignevents-details-stats-range-number": "$1 болн $2 хоорнд",
+	"campaignevents-details-stats-range-percentage": "$1 болн $2 хоорнд"
+}

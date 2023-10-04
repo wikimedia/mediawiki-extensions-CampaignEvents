@@ -393,7 +393,9 @@
 	"campaignevents-details-stats-header-option": "Можност",
 	"campaignevents-details-stats-header-percentage": "Постоток",
 	"campaignevents-details-stats-header-number": "Број",
-	"campaignevents-details-stats-few-answers-option": "помалку од $1",
+	"campaignevents-details-stats-few-answers-option": "Помалку од $1",
+	"campaignevents-details-stats-range-number": "Помеѓу $1 и $2",
+	"campaignevents-details-stats-range-percentage": "Помеѓу $1 и $2 %",
 	"campaignevents-details-stats-no-response": "Нема одговор",
 	"campaignevents-event-dates-cannot-be-changed": "Датумите на изминатите настани не можат да се променат во идни за да се заштитат податоците на учесниците."
 }

@@ -78,6 +78,8 @@
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Dës Informatioune ginn nëmme mat den Organisateure vum Evenement gedeelt.",
 	"campaignevents-details-stats-not-enough-answers": "Op dës Fro gouf manner wéi $1-mol geäntwert.",
 	"campaignevents-details-stats-header-percentage": "Prozentsaz",
-	"campaignevents-details-stats-few-answers-option": "manner wéi $1",
+	"campaignevents-details-stats-few-answers-option": "Manner wéi $1",
+	"campaignevents-details-stats-range-number": "Tëscht $1 an $2",
+	"campaignevents-details-stats-range-percentage": "Tëscht $1% an $2%",
 	"campaignevents-details-stats-no-response": "Keng Äntwert"
 }

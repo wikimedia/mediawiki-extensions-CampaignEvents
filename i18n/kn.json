@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ashay vb"
+		]
+	},
+	"campaignevents-details-stats-few-answers-option": "$1 ಕ್ಕಿಂತ ಕಡಿಮೆ",
+	"campaignevents-details-stats-range-number": "$1 ಮತ್ತು $2 ನಡುವೆ",
+	"campaignevents-details-stats-range-percentage": "$1 ಮತ್ತು $2 ನಡುವೆ"
+}

@@ -16,6 +16,7 @@
 	"campaignevents-edit-field-address": "Адрес",
 	"campaignevents-enable-registration-form-submit": "Латайе регистраци",
 	"campaignevents-edit-form-submit": "Регистрацин форма хийца",
+	"campaignevents-register-confirmation-btn": "Регистраци",
 	"campaignevents-role-creator": "{{GENDER:$1|кхоллархо}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|вовшахтохархо}}",
 	"campaignevents-myevents-label-search": "Лахар",
