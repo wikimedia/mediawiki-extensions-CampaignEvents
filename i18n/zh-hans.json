@@ -4,7 +4,8 @@
 			"GuoPC",
 			"Kishinsagi",
 			"LittlePaw365",
-			"Wzl19371"
+			"Wzl19371",
+			"Xyb"
 		]
 	},
 	"campaignevents-error-empty-title": "请输入活动页面标题。",
@@ -52,5 +53,8 @@
 	"campaignevents-event-details-remove-participant-remove-btn": "删除",
 	"campaignevents-event-details-remove-participant-cancel-btn": "取消",
 	"campaignevents-event-details-dates-label": "开始和结束时间",
-	"campaignevents-event-details-organizers-view-more": "查看更多"
+	"campaignevents-event-details-organizers-view-more": "查看更多",
+	"campaignevents-details-stats-few-answers-option": "小于 $1",
+	"campaignevents-details-stats-range-number": "$1和$2之间",
+	"campaignevents-details-stats-range-percentage": "$1和$2之间"
 }
