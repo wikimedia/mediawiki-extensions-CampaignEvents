@@ -17,7 +17,6 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
-use MWTimestamp;
 use PHPUnit\Framework\MockObject\MockObject;
 use StatusValue;
 
@@ -26,19 +25,6 @@ use StatusValue;
  * @covers ::__construct
  */
 class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
-
-	private const TEST_TIME = '20220227120000';
-	private const PAST_TIME = '20220227100000';
-	private const FUTURE_TIME = '20220227150000';
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function setUp(): void {
-		parent::setUp();
-		MWTimestamp::setFakeTime( self::TEST_TIME );
-	}
-
 	/**
 	 * @param ParticipantsStore|null $participantsStore
 	 * @param PermissionChecker|null $permChecker
@@ -75,7 +61,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	private function getValidRegistration(): ExistingEventRegistration {
 		$registration = $this->createMock( ExistingEventRegistration::class );
-		$registration->method( 'getEndUTCTimestamp' )->willReturn( self::FUTURE_TIME );
+		$registration->method( 'isPast' )->willReturn( false );
 		return $registration;
 	}
 
@@ -208,7 +194,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	public function testCanUnregisterFromClosedEvent() {
 		$closedEvent = $this->createMock( ExistingEventRegistration::class );
 		$closedEvent->method( 'getStatus' )->willReturn( EventRegistration::STATUS_CLOSED );
-		$closedEvent->method( 'getEndUTCTimestamp' )->willReturn( self::FUTURE_TIME );
+		$closedEvent->method( 'isPast' )->willReturn( false );
 		$status = $this->getCommand()->unregisterUnsafe(
 			$closedEvent,
 			$this->createMock( ICampaignsAuthority::class )
@@ -221,7 +207,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testCanUnregisterFromFinishedEvent() {
 		$finishedEvent = $this->createMock( ExistingEventRegistration::class );
-		$finishedEvent->method( 'getEndUTCTimestamp' )->willReturn( self::PAST_TIME );
+		$finishedEvent->method( 'isPast' )->willReturn( true );
 		$status = $this->getCommand()->unregisterUnsafe(
 			$finishedEvent,
 			$this->createMock( ICampaignsAuthority::class )

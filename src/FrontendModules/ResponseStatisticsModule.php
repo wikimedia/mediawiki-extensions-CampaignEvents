@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswers;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
-use MediaWiki\Utils\MWTimestamp;
 use OOUI\IconWidget;
 use OOUI\MessageWidget;
 use OOUI\Tag;
@@ -62,9 +61,7 @@ class ResponseStatisticsModule {
 	}
 
 	public function createContent(): Tag {
-		$eventEndUnix = (int)wfTimestamp( TS_UNIX, $this->event->getEndUTCTimestamp() );
-		$eventHasEnded = $eventEndUnix < (int)MWTimestamp::now( TS_UNIX );
-		if ( !$eventHasEnded ) {
+		if ( !$this->event->isPast() ) {
 			throw new LogicException( __METHOD__ . ' called for event that has not ended' );
 		}
 

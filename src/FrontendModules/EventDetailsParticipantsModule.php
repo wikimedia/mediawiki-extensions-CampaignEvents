@@ -22,7 +22,6 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
-use MediaWiki\Utils\MWTimestamp;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
@@ -126,7 +125,7 @@ class EventDetailsParticipantsModule {
 		OutputPage $out
 	): Tag {
 		$eventID = $event->getID();
-		$this->isPastEvent = $this->isPastEvent( $event );
+		$this->isPastEvent = $event->isPast();
 		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 
 		try {
@@ -803,13 +802,5 @@ class EventDetailsParticipantsModule {
 		}
 		$container->appendContent( $buttonContainer );
 		return $container;
-	}
-
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @return bool
-	 */
-	private function isPastEvent( ExistingEventRegistration $event ): bool {
-		return wfTimestamp( TS_UNIX, $event->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 	}
 }

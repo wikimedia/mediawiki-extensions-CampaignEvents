@@ -473,15 +473,10 @@ class EditEventCommand {
 	 * @return bool
 	 */
 	public function isPastEventWithAnswers( ExistingEventRegistration $previousVersion ): bool {
-		$currentEndUnixTimestamp = wfTimestamp( TS_UNIX, $previousVersion->getEndUTCTimestamp() );
-		$currentUnixTimestamp = MWTimestamp::now( TS_UNIX );
-
 		// if there are answers for this event and end date is past
 		// then the organizer can not edit the event dates and they should be disabled
 		$registrationID = $previousVersion->getID();
-		if (
-			$currentEndUnixTimestamp < $currentUnixTimestamp
-		) {
+		if ( $previousVersion->isPast() ) {
 			return $this->answersStore->eventHasAnswers( $registrationID ) ||
 					$this->aggregatedAnswersStore->eventHasAggregates( $registrationID );
 		}

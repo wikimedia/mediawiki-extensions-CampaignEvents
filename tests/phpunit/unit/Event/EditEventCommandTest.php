@@ -39,7 +39,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 	private const ORGANIZER_USERNAMES = [ 'organizerA', 'organizerB' ];
 
-	private const FAKE_TIME = '123456789';
+	private const FAKE_TIME = 123456789;
 
 	/**
 	 * @inheritDoc
@@ -579,7 +579,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param string $newEndDate
-	 * @param string $oldEndDate
+	 * @param bool $isPast
 	 * @param bool $hasAnswers
 	 * @param bool $hasAggregates
 	 * @param bool $success
@@ -589,7 +589,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testDoEditIfAllowed__editEventDates(
 		string $newEndDate,
-		string $oldEndDate,
+		bool $isPast,
 		bool $hasAnswers,
 		bool $hasAggregates,
 		bool $success
@@ -600,7 +600,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 		$currentRegistrationData = $this->createMock( ExistingEventRegistration::class );
 		$currentRegistrationData->method( 'getID' )->willReturn( 1 );
-		$currentRegistrationData->method( 'getEndUTCTimestamp' )->willReturn( $oldEndDate );
+		$currentRegistrationData->method( 'isPast' )->willReturn( $isPast );
 
 		$registration = $this->createMock( EventRegistration::class );
 		$registration->method( 'getID' )->willReturn( 1 );
@@ -647,27 +647,31 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		return [
 			'There are answers, end date is past, and is changing the end date to future' => [
 				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
-				wfTimestamp( TS_MW, self::FAKE_TIME - 1 ),
+				true,
 				true,
 				false,
 				false
 			],
 			'There are aggregates, end date is past, and is changing the end date to future' => [
 				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
-				wfTimestamp( TS_MW, self::FAKE_TIME - 1 ),
+				true,
 				false,
 				true,
 				false
 			],
 			'There are no answers, and is changing the end date to future' => [
 				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
-				wfTimestamp( TS_MW, self::FAKE_TIME - 1 ),
+				true,
 				false,
 				false,
 				true
 			],
 			'There are aggregates, but it is not changing event dates' => [
-				wfTimestamp( TS_MW, self::FAKE_TIME ), wfTimestamp( TS_MW, self::FAKE_TIME ), false, false, true
+				wfTimestamp( TS_MW, self::FAKE_TIME ),
+				false,
+				false,
+				false,
+				true
 			]
 		];
 	}

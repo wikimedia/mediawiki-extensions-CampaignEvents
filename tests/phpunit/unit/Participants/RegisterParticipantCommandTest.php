@@ -21,7 +21,6 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
-use MWTimestamp;
 use PHPUnit\Framework\MockObject\MockObject;
 use StatusValue;
 
@@ -30,19 +29,6 @@ use StatusValue;
  * @covers ::__construct
  */
 class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
-
-	private const TEST_TIME = '20220227120000';
-	private const PAST_TIME = '20220227100000';
-	private const FUTURE_TIME = '20220227150000';
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function setUp(): void {
-		parent::setUp();
-		MWTimestamp::setFakeTime( self::TEST_TIME );
-	}
-
 	/**
 	 * @param ParticipantsStore|null $participantsStore
 	 * @param PermissionChecker|null $permChecker
@@ -79,7 +65,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	private function getValidRegistration(): ExistingEventRegistration {
 		$registration = $this->createMock( ExistingEventRegistration::class );
-		$registration->method( 'getEndUTCTimestamp' )->willReturn( self::FUTURE_TIME );
+		$registration->method( 'isPast' )->willReturn( false );
 		$registration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
 		return $registration;
 	}
@@ -127,12 +113,12 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
 	public function provideInvalidRegistrationsAndErrors(): Generator {
 		$finishedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$finishedRegistration->method( 'getEndUTCTimestamp' )->willReturn( self::PAST_TIME );
+		$finishedRegistration->method( 'isPast' )->willReturn( true );
 		$finishedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
 		yield 'Already finished' => [ $finishedRegistration, 'campaignevents-register-event-past' ];
 
 		$closedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$closedRegistration->method( 'getEndUTCTimestamp' )->willReturn( self::FUTURE_TIME );
+		$closedRegistration->method( 'isPast' )->willReturn( false );
 		$closedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_CLOSED );
 		yield 'Not open' => [ $closedRegistration, 'campaignevents-register-event-not-open' ];
 

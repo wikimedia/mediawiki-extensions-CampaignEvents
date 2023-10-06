@@ -15,7 +15,6 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
-use MWTimestamp;
 use StatusValue;
 
 class RegisterParticipantCommand {
@@ -106,8 +105,7 @@ class RegisterParticipantCommand {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			return self::CANNOT_REGISTER_DELETED;
 		}
-		$endTSUnix = wfTimestamp( TS_UNIX, $registration->getEndUTCTimestamp() );
-		if ( (int)$endTSUnix < (int)MWTimestamp::now( TS_UNIX ) ) {
+		if ( $registration->isPast() ) {
 			return self::CANNOT_REGISTER_ENDED;
 		}
 		if ( $registration->getStatus() !== EventRegistration::STATUS_OPEN ) {

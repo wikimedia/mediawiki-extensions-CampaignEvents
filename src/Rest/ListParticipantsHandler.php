@@ -22,7 +22,6 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\User\UserFactory;
-use MediaWiki\Utils\MWTimestamp;
 use RequestContext;
 use UserArray;
 use Wikimedia\Message\IMessageFormatterFactory;
@@ -53,7 +52,6 @@ class ListParticipantsHandler extends SimpleHandler {
 	private EventQuestionsRegistry $questionsRegistry;
 	/** @var IMessageFormatterFactory */
 	private IMessageFormatterFactory $messageFormatterFactory;
-	private bool $isPastEvent = false;
 	private bool $participantQuestionsEnabled;
 
 	/**
@@ -100,7 +98,6 @@ class ListParticipantsHandler extends SimpleHandler {
 	 */
 	protected function run( int $eventID ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
-		$this->isPastEvent = wfTimestamp( TS_UNIX, $event->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 
 		$params = $this->getValidatedParams();
 		$usernameFilter = $params['username_filter'];
@@ -157,6 +154,9 @@ class ListParticipantsHandler extends SimpleHandler {
 			$authority,
 			$event->getID()
 		);
+		$includeNonPIIData = $this->participantQuestionsEnabled &&
+			!$event->isPast() &&
+			$userCanViewNonPIIParticipantData;
 
 		$centralIDs = array_map( static fn ( Participant $p ) => $p->getUser()->getCentralID(), $participants );
 		[ $usernamesMap, $usersByName ] = $this->getUserBatch( $centralIDs );
@@ -196,11 +196,7 @@ class ListParticipantsHandler extends SimpleHandler {
 				}
 			}
 
-			if (
-				$this->participantQuestionsEnabled &&
-				!$this->isPastEvent &&
-				$userCanViewNonPIIParticipantData
-			) {
+			if ( $includeNonPIIData ) {
 				if ( $participant->getAggregationTimestamp() ) {
 					$respDataByCentralID[$centralID]['non_pii_answers'] = $msgFormatter->format(
 						MessageValue::new( 'campaignevents-participant-question-have-been-aggregated' )

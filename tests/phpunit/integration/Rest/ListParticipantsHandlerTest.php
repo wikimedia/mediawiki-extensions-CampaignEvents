@@ -201,11 +201,9 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$eventLookup = $this->createMock( IEventLookup::class );
 		$eventRegistration = $this->createMock( ExistingEventRegistration::class );
 		$eventRegistration->method( 'getParticipantQuestions' )->willReturn( [ 1, 2, 3, 4, 5 ] );
+		$eventRegistration->method( 'isPast' )->willReturn( $isPastEvent );
 		$eventLookup->method( 'getEventByID' )->willReturn( $eventRegistration );
 
-		if ( $isPastEvent ) {
-			$eventRegistration->method( 'getEndUTCTimestamp' )->willReturn( '20220315120000' );
-		}
 		$handler = $this->newHandler(
 			$permChecker, $eventLookup, $partStore, $centralUserLookup, null, $userLink, $questionsEnabled
 		);

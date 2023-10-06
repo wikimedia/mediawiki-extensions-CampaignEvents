@@ -18,7 +18,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Utils\MWTimestamp;
 use OOUI\ButtonWidget;
 use OOUI\IndexLayout;
 use OOUI\TabPanelLayout;
@@ -205,9 +204,11 @@ class SpecialEventDetails extends SpecialPage {
 			);
 		}
 
-		$eventEndUnix = (int)wfTimestamp( TS_UNIX, $this->event->getEndUTCTimestamp() );
-		$eventHasEnded = $eventEndUnix < (int)MWTimestamp::now( TS_UNIX );
-		if ( $isOrganizer && $eventHasEnded && $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+		if (
+			$isOrganizer &&
+			$this->event->isPast() &&
+			$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' )
+		) {
 			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
 			$tabs[] = $this->createTab(
 				self::STATS_PANEL,

@@ -9,6 +9,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use Wikimedia\Assert\ParameterAssertionException;
 
@@ -242,5 +243,29 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			// PHP assumes the last occurrence of that time, so UTC+1
 			'20221030013000'
 		];
+	}
+
+	/**
+	 * @covers ::isPast
+	 * @dataProvider provideIsPast
+	 */
+	public function testIsPast( EventRegistration $event, bool $expected ) {
+		$this->assertSame( $expected, $event->isPast() );
+	}
+
+	public function provideIsPast(): Generator {
+		$now = (int)MWTimestamp::now( TS_UNIX );
+
+		$pastTS = wfTimestamp( TS_MW, $now - 100000 );
+		$pastEvent = new EventRegistration(
+			...array_values( array_replace( $this->getValidConstructorArgs(), [ 'end' => $pastTS ] ) )
+		);
+		yield 'past' => [ $pastEvent, true ];
+
+		$futureTS = wfTimestamp( TS_MW, $now + 100000 );
+		$futureEvent = new EventRegistration(
+			...array_values( array_replace( $this->getValidConstructorArgs(), [ 'end' => $futureTS ] ) )
+		);
+		yield 'future' => [ $futureEvent, false ];
 	}
 }

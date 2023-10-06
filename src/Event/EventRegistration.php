@@ -8,7 +8,7 @@ use DateTime;
 use DateTimeZone;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
-use MWTimestamp;
+use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\Assert\Assert;
 
 /**
@@ -230,6 +230,13 @@ class EventRegistration {
 		$localDateTime = new DateTime( $this->endLocalTimestamp, $this->timezone );
 		$utcEndTime = $localDateTime->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp();
 		return wfTimestamp( TS_MW, $utcEndTime );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isPast(): bool {
+		return wfTimestamp( TS_UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 	}
 
 	/**
