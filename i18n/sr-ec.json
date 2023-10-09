@@ -105,5 +105,6 @@
 	"campaignevents-details-stats-header-percentage": "Постотак",
 	"campaignevents-details-stats-header-number": "Број",
 	"campaignevents-details-stats-few-answers-option": "Мање од $1",
-	"campaignevents-details-stats-no-response": "Нема одговора"
+	"campaignevents-details-stats-no-response": "Нема одговора",
+	"campaignevents-participant-question-no-response": "Без одговора"
 }

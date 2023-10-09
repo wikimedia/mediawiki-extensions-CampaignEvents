@@ -397,5 +397,9 @@
 	"campaignevents-details-stats-range-number": "בין $1 לבין $2",
 	"campaignevents-details-stats-range-percentage": "בין $1% לבין $2%",
 	"campaignevents-details-stats-no-response": "אין תשובה",
-	"campaignevents-event-dates-cannot-be-changed": "לא ניתן לשנות תאריכים של אירועים בעבר לתאריכים עתידיים כדי להגן על נתוני המשתתפים."
+	"campaignevents-event-dates-cannot-be-changed": "לא ניתן לשנות תאריכים של אירועים בעבר לתאריכים עתידיים כדי להגן על נתוני המשתתפים.",
+	"campaignevents-individual-stats-label-message-confidence": "כמה ביטחון יש לך בקשר לתרומה שלך למיזמי ויקימדיה שקשורים לאירוע הזה?",
+	"campaignevents-individual-stats-label-message-affiliate": "האם יש לך קשר לשותפי ויקימדיה כלשהם (עמותות, קבוצות משתמשים, ארגוני נושא)?",
+	"campaignevents-participant-question-have-been-aggregated": "התגובות של {{GENDER:$1|המשתתף הזה|המשתתפת הזאת}} נצברו ונמחקו",
+	"campaignevents-participant-question-no-response": "אין תשובה"
 }

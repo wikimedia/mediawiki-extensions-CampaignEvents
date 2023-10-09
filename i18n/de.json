@@ -396,5 +396,9 @@
 	"campaignevents-details-stats-range-number": "Zwischen $1 und $2",
 	"campaignevents-details-stats-range-percentage": "Zwischen $1 % und $2 %",
 	"campaignevents-details-stats-no-response": "Keine Antwort",
-	"campaignevents-event-dates-cannot-be-changed": "Vergangene Veranstaltungstermine können zum Schutz der Teilnehmerdaten nicht auf zukünftige Termine geändert werden."
+	"campaignevents-event-dates-cannot-be-changed": "Vergangene Veranstaltungstermine können zum Schutz der Teilnehmerdaten nicht auf zukünftige Termine geändert werden.",
+	"campaignevents-individual-stats-label-message-confidence": "Wie sicher fühlst du dich, zu den Wikimedia-Projekten beizutragen, die an dieser Veranstaltung beteiligt sind?",
+	"campaignevents-individual-stats-label-message-affiliate": "Gehörst du einer der Wikimedia-Mitgliedsorganisationen (Chapter,  Benutzergruppeen, thematische Organisationen) an?",
+	"campaignevents-participant-question-have-been-aggregated": "Die Antworten {{GENDER:$1|des Teilnehmers|der Teilnehmerin}} wurden aggregiert und gelöscht",
+	"campaignevents-participant-question-no-response": "Keine Rückmeldung"
 }

@@ -397,5 +397,9 @@
 	"campaignevents-details-stats-range-number": "Помеѓу $1 и $2",
 	"campaignevents-details-stats-range-percentage": "Помеѓу $1 и $2 %",
 	"campaignevents-details-stats-no-response": "Нема одговор",
-	"campaignevents-event-dates-cannot-be-changed": "Датумите на изминатите настани не можат да се променат во идни за да се заштитат податоците на учесниците."
+	"campaignevents-event-dates-cannot-be-changed": "Датумите на изминатите настани не можат да се променат во идни за да се заштитат податоците на учесниците.",
+	"campaignevents-individual-stats-label-message-confidence": "Со колкава самодоверба учествувате во Викимедиините проекти поврзани со овој настан?",
+	"campaignevents-individual-stats-label-message-affiliate": "Дали припаѓате на некоја Викимедиина подружница (огранок, корисничка група, тематска организација)?",
+	"campaignevents-participant-question-have-been-aggregated": "Одговорите на {{GENDER:$1|овој учесник|оваа учесничка}} се насобрани и избришани",
+	"campaignevents-participant-question-no-response": "Нема одговор"
 }
