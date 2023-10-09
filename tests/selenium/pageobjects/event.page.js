@@ -27,20 +27,22 @@ class EventPage extends Page {
 	 */
 	async register( isPrivate = false ) {
 		// Wait until the click handlers have been installed
-		Util.waitForModuleState( 'ext.campaignEvents.eventpage' );
+		await Util.waitForModuleState( 'ext.campaignEvents.eventpage' );
 		await browser.waitUntil(
-			// eslint-disable-next-line no-underscore-dangle
-			() => browser.execute( () => $._data( $( '.ext-campaignevents-eventpage-register-btn' ).get( 0 ), 'events' ).click.length >= 1 ),
-			1000,
-			'Click listener not installed.'
+			() => browser.execute( () => {
+				const btn = $( '.ext-campaignevents-eventpage-register-btn' ).get( 0 ),
+					// eslint-disable-next-line no-underscore-dangle
+					btnEvents = $._data( btn, 'events' );
+				return btnEvents && btnEvents.click && btnEvents.click.length >= 1;
+			} ),
+			{ timeoutMsg: 'Click listener not installed.' }
 		);
 
 		await this.registerForEventButton.click();
 		// Wait for the dialog to be ready, and the click handlers functional
 		await browser.waitUntil(
 			() => browser.execute( () => $( '.ext-campaignevents-registration-dialog.oo-ui-window' ).hasClass( 'oo-ui-window-ready' ) ),
-			1000,
-			'Dialog is not ready'
+			{ timeoutMsg: 'Dialog is not ready' }
 		);
 		if ( isPrivate ) {
 			await this.togglePrivate.click();
