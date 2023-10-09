@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -31,6 +32,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param TrackingToolRegistry $trackingToolRegistry
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 * @param CampaignEventsHookRunner $hookRunner
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -41,7 +43,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		OrganizersStore $organizersStore,
 		CampaignsCentralUserLookup $centralUserLookup,
 		TrackingToolRegistry $trackingToolRegistry,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		CampaignEventsHookRunner $hookRunner
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -54,7 +57,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$permissionChecker,
 			$centralUserLookup,
 			$trackingToolRegistry,
-			$eventQuestionsRegistry
+			$eventQuestionsRegistry,
+			$hookRunner
 		);
 	}
 
