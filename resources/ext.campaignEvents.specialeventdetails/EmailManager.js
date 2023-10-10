@@ -82,9 +82,14 @@
 		} );
 
 		this.message.on( 'change', function ( value ) {
-			if ( self.message.validate( value ) ) {
-				self.button.setDisabled( false );
-			}
+			var toggleButton = function ( enabled ) {
+				return function () {
+					self.button.setDisabled( !enabled );
+				};
+			};
+			self.message.getValidity( value )
+				.done( toggleButton( true ) )
+				.fail( toggleButton( false ) );
 		} );
 	};
 
@@ -169,9 +174,8 @@
 	};
 
 	EmailManager.prototype.addValidation = function () {
-		this.button.setDisabled( true );
 		this.message.setValidation( function ( value ) {
-			return value.length > 10;
+			return value.length >= 10;
 		} );
 	};
 

@@ -148,6 +148,7 @@ class EmailParticipantsModule {
 				'classes' => [ 'ext-campaignevents-details-email-button' ],
 				'infusable' => true,
 				'flags' => [ 'primary', 'progressive' ],
+				'disabled' => true,
 			] )
 		);
 
