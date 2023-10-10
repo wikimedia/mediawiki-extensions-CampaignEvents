@@ -5,7 +5,9 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use ApiMessage;
+use DateTime;
 use DateTimeZone;
+use Exception;
 use FormSpecialPage;
 use Html;
 use HTMLForm;
@@ -29,7 +31,6 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\User\UserTimeCorrection;
 use Message;
-use MWTimestamp;
 use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
@@ -37,6 +38,7 @@ use OOUI\Tag;
 use RuntimeException;
 use Status;
 use StatusValue;
+use Wikimedia\RequestTimeout\TimeoutException;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
@@ -238,12 +240,40 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'cssclass' => 'ext-campaignevents-timezone-input',
 			'section' => self::DETAILS_SECTION,
 		];
+
+		if ( $this->event ) {
+			$minTime = '';
+		} else {
+			// HACK: If the form has been submitted, adjust the minimum allowed dates according to the selected
+			// time zone, or the validation will be off (T348579). The proper solution would be for time fields to
+			// accept a timezone parameter (T315874).
+			if ( $this->getRequest()->wasPosted() ) {
+				$rawTZ = $this->getRequest()->getVal( 'wpTimeZone' );
+				if ( $rawTZ === 'other' ) {
+					// See HTMLSelectOrOtherField::loadDataFromRequest
+					$rawTZ = $this->getRequest()->getVal( 'wpTimeZone-other' );
+				}
+				$tzString = $this->parseSubmittedTimezone( $rawTZ );
+				try {
+					$timezone = new DateTimeZone( $tzString );
+				} catch ( TimeoutException $e ) {
+					throw $e;
+				} catch ( Exception $_ ) {
+					$timezone = new DateTimeZone( 'UTC' );
+				}
+			} else {
+				$timezone = new DateTimeZone( 'UTC' );
+			}
+			// Do not call getTimestamp(), that would bring us back to UTC.
+			$curLocalTime = ( new DateTime( 'now', $timezone ) )->format( 'Y-m-d H:i:s' );
+			$minTime = wfTimestamp( TS_MW, $curLocalTime );
+		}
 		// Disable auto-infusion because we want to change the configuration.
 		$timeFieldClasses = 'ext-campaignevents-time-input mw-htmlform-autoinfuse-lazy';
 		$formFields['EventStart'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-start',
-			'min' => $this->event ? '' : MWTimestamp::now(),
+			'min' => $minTime,
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartLocalTimestamp() ) : '',
 			'required' => true,
 			'cssclass' => $timeFieldClasses,
@@ -252,7 +282,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventEnd'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-end',
-			'min' => $this->event ? '' : MWTimestamp::now(),
+			'min' => $minTime,
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
 			'required' => true,
 			'cssclass' => $timeFieldClasses,
@@ -477,6 +507,25 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		] ) ) );
 	}
 
+	private function parseSubmittedTimezone( string $rawVal ): string {
+		$timeCorrection = new UserTimeCorrection( $rawVal );
+		$timezoneObj = $timeCorrection->getTimeZone();
+		if ( $timezoneObj ) {
+			$timezone = $timezoneObj->getName();
+		} elseif ( $timeCorrection->getCorrectionType() === UserTimeCorrection::SYSTEM ) {
+			$timezone = UserTimeCorrection::formatTimezoneOffset( $timeCorrection->getTimeOffset() );
+		} else {
+			// User entered an offset directly, pass the value through without letting UserTimeCorrection
+			// parse and accept raw offsets in minutes or things like "+0:555" that DateTimeZone doesn't support.
+			// However, add a plus sign to valid positive offsets for consistency with the timezone selector core widget
+			$timezone = $rawVal;
+			if ( preg_match( '/^\d{2}:\d{2}$/', $timezone ) ) {
+				$timezone = "+$timezone";
+			}
+		}
+		return $timezone;
+	}
+
 	/**
 	 * @inheritDoc
 	 */
@@ -489,22 +538,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$nullableFields = [ 'EventMeetingURL', 'EventMeetingCountry', 'EventMeetingAddress', 'EventChatURL' ];
 		foreach ( $nullableFields as $fieldName ) {
 			$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
-		}
-
-		$timeCorrection = new UserTimeCorrection( $data['TimeZone'] );
-		$timezoneObj = $timeCorrection->getTimeZone();
-		if ( $timezoneObj ) {
-			$timezone = $timezoneObj->getName();
-		} elseif ( $timeCorrection->getCorrectionType() === UserTimeCorrection::SYSTEM ) {
-			$timezone = UserTimeCorrection::formatTimezoneOffset( $timeCorrection->getTimeOffset() );
-		} else {
-			// User entered an offset directly, pass the value through without letting UserTimeCorrection
-			// parse and accept raw offsets in minutes or things like "+0:555" that DateTimeZone doesn't support.
-			// However, add a plus sign to valid positive offsets for consistency with the timezone selector core widget
-			$timezone = $data['TimeZone'];
-			if ( preg_match( '/^\d{2}:\d{2}$/', $timezone ) ) {
-				$timezone = "+$timezone";
-			}
 		}
 
 		if ( isset( $data['EventDashboardURL'] ) && $data['EventDashboardURL'] !== '' ) {
@@ -548,7 +581,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
-				$timezone,
+				$this->parseSubmittedTimezone( $data['TimeZone'] ),
 				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
