@@ -637,15 +637,17 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$res = $this->editEventCommand->doEditIfAllowed(
 			$event,
 			$this->performer,
-			$organizerUsernames,
+			$organizerUsernames
 		);
-		if ( $res->isOK() === true && !empty( $data['ClickWrapCheckbox'] ) ) {
-			$this->organizersStore->updateClickwrapAcceptance(
-				$res->getValue(),
-				$this->centralUserLookup->newFromAuthority( $this->performer )
-			);
+		if ( $res->isOK() === true ) {
+			if ( !empty( $data[ 'ClickWrapCheckbox' ] ) ) {
+				$this->organizersStore->updateClickwrapAcceptance(
+					$res->getValue(),
+					$this->centralUserLookup->newFromAuthority( $this->performer )
+				);
+			}
+			$this->hookRunner->onCampaignEventsRegistrationFormSubmit( $data, $res->getValue() );
 		}
-
 		[ $errorsStatus, $this->saveWarningsStatus ] = $res->splitByErrorType();
 		return Status::wrap( $errorsStatus );
 	}
