@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Умар"
+		]
+	},
+	"nstab-event": "Хилам",
+	"campaignevents-edit-field-status-open": "Схьайиллина",
+	"campaignevents-edit-field-status-closed": "ДӀачӀаьгӀна",
+	"campaignevents-edit-field-start": "Йолайелла хан",
+	"campaignevents-edit-field-end": "Чекхйаьлла хан",
+	"campaignevents-edit-field-country": "Пачхьалкх",
+	"campaignevents-edit-field-address": "Адрес",
+	"campaignevents-enable-registration-form-submit": "Латайе регистраци",
+	"campaignevents-edit-form-submit": "Регистрацин форма хийца",
+	"campaignevents-register-confirmation-btn": "Регистраци",
+	"campaignevents-role-creator": "{{GENDER:$1|кхоллархо}}",
+	"campaignevents-role-organizer": "{{GENDER:$1|вовшахтохархо}}",
+	"campaignevents-myevents-label-search": "Лахар",
+	"campaignevents-myevents-label-status": "Статус",
+	"campaignevents-eventslist-column-date": "Терахь",
+	"campaignevents-eventslist-delete-dialog-cancel": "Йухайаккха",
+	"campaignevents-eventslist-delete-dialog-delete": "ДӀайаккха",
+	"campaignevents-delete-submit-btn": "ДӀайаккха",
+	"campaignevents-eventpage-dialog-action-close": "ДӀачӀагӀа",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "ХӀаъ",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "ХӀан-хӀа",
+	"campaignevents-event-details-edit-button": "Нисйе",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Йухайаккха"
+}
