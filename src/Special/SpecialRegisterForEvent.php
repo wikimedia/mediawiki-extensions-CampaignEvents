@@ -131,58 +131,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		];
 
 		if ( $this->showParticipantQuestions ) {
-			$alreadyAggregated = $this->curParticipantData
-				? $this->curParticipantData->getAggregationTimestamp() !== null
-				: false;
-
-			if ( $alreadyAggregated ) {
-				$fields['AnswersAggregated'] = [
-					'type' => 'info',
-					'default' => Html::element(
-						'strong',
-						[],
-						$this->msg( 'campaignevents-register-answers-aggregated' )->text()
-					),
-					'raw' => true,
-					'section' => self::QUESTIONS_SECTION_NAME,
-				];
-			} else {
-				$enabledQuestions = $this->event->getParticipantQuestions();
-				$curAnswers = $this->curParticipantData ? $this->curParticipantData->getAnswers() : [];
-				$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm(
-					$enabledQuestions,
-					$curAnswers
-				);
-				$questionFields = array_map(
-					static fn ( $fieldDescriptor ) =>
-						[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
-					$questionFields
-				);
-				$fields += $questionFields;
-			}
-
-			$retentionMsg = $this->msg( 'campaignevents-register-retention-base' )->escaped();
-			if ( $this->curParticipantData ) {
-				$plannedAggregationTS = Utils::getAnswerAggregationTimestamp( $this->curParticipantData, $this->event );
-				if ( $plannedAggregationTS !== null ) {
-					$timeRemaining = (int)$plannedAggregationTS - (int)MWTimestamp::now( TS_UNIX );
-					if ( $timeRemaining < 60 * 60 * 24 ) {
-						$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-hours' )->parse();
-					} else {
-						$remainingDays  = (int)round( $timeRemaining / ( 60 * 60 * 24 ) );
-						$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-days' )
-							->numParams( $remainingDays )
-							->parse();
-					}
-					$retentionMsg .= $this->msg( 'word-separator' )->escaped() . $additionalRetentionMsg;
-				}
-			}
-			$fields['DataRetentionInfo'] = [
-				'type' => 'info',
-				'raw' => true,
-				'default' => $retentionMsg,
-				'section' => 'campaignevents-register-retention-title',
-			];
+			$this->addParticipantQuestionFields( $fields );
 		}
 
 		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistration();
@@ -195,6 +144,65 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		}
 
 		return $fields;
+	}
+
+	private function addParticipantQuestionFields( array &$fields ): void {
+		$alreadyAggregated = $this->curParticipantData
+			? $this->curParticipantData->getAggregationTimestamp() !== null
+			: false;
+
+		if ( $alreadyAggregated ) {
+			$fields['AnswersAggregated'] = [
+				'type' => 'info',
+				'default' => Html::element(
+					'strong',
+					[],
+					$this->msg( 'campaignevents-register-answers-aggregated' )->text()
+				),
+				'raw' => true,
+				'section' => self::QUESTIONS_SECTION_NAME,
+			];
+		} else {
+			$enabledQuestions = $this->event->getParticipantQuestions();
+			if ( !$enabledQuestions ) {
+				// No need to show anything.
+				return;
+			}
+			$curAnswers = $this->curParticipantData ? $this->curParticipantData->getAnswers() : [];
+			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm(
+				$enabledQuestions,
+				$curAnswers
+			);
+			$questionFields = array_map(
+				static fn ( $fieldDescriptor ) =>
+					[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
+				$questionFields
+			);
+			$fields += $questionFields;
+		}
+
+		$retentionMsg = $this->msg( 'campaignevents-register-retention-base' )->escaped();
+		if ( $this->curParticipantData ) {
+			$plannedAggregationTS = Utils::getAnswerAggregationTimestamp( $this->curParticipantData, $this->event );
+			if ( $plannedAggregationTS !== null ) {
+				$timeRemaining = (int)$plannedAggregationTS - (int)MWTimestamp::now( TS_UNIX );
+				if ( $timeRemaining < 60 * 60 * 24 ) {
+					$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-hours' )->parse();
+				} else {
+					$remainingDays  = (int)round( $timeRemaining / ( 60 * 60 * 24 ) );
+					$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-days' )
+						->numParams( $remainingDays )
+						->parse();
+				}
+				$retentionMsg .= $this->msg( 'word-separator' )->escaped() . $additionalRetentionMsg;
+			}
+		}
+		$fields['DataRetentionInfo'] = [
+			'type' => 'info',
+			'raw' => true,
+			'default' => $retentionMsg,
+			'section' => 'campaignevents-register-retention-title',
+		];
 	}
 
 	/**
