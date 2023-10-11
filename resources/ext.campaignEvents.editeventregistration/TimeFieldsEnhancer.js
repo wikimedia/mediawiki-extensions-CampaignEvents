@@ -1,0 +1,145 @@
+( function () {
+	'use strict';
+
+	function TimeFieldsEnhancer() {
+	}
+
+	/**
+	 * @param {jQuery} $formRoot
+	 */
+	TimeFieldsEnhancer.prototype.init = function ( $formRoot ) {
+		var tzInput = $formRoot.find( '.ext-campaignevents-timezone-input' ).get( 0 );
+		if ( !tzInput ) {
+			return;
+		}
+		var that = this;
+		var tzInputWidget = OO.ui.infuse( tzInput ).fieldWidget;
+		var dateWidgets = {};
+
+		// Infuse the time selectors, setting some options that we need in order to support
+		// non-UTC time zones.
+		// XXX This is quite hacky, shamelessly messing up with the DateTimeInputWidget internals.
+		// The proper solution would be for the widget to natively support customizing the
+		// timezone (T315874).
+		$formRoot.find( '.ext-campaignevents-time-input' ).each( function () {
+			// Same as '@default' but without the timezone and seconds (T317542)
+			var dateFormat = '$!{dow|short} ${day|#} ${month|short} ${year|#} ${hour|0}:${minute|0}';
+
+			// Figure out if this is the start or end widget *before* infusing it, as that'll
+			// change the DOM structure.
+			var isStartWidget;
+			if ( $( this ).find( 'input[name="wpEventStart"]' ).length ) {
+				isStartWidget = true;
+			} else if ( $( this ).find( 'input[name="wpEventEnd"]' ).length ) {
+				isStartWidget = false;
+			} else {
+				throw new Error( 'Unexpected time field' );
+			}
+
+			var widget = OO.ui.infuse(
+				$( this ),
+				{ formatter: { format: dateFormat } }
+			).fieldWidget;
+			dateWidgets[ isStartWidget ? 'start' : 'end' ] = widget;
+
+			// Dates selected through the widget should always have seconds set to 00.
+			// Round up the minutes if necessary to ensure that the initial value is valid.
+			if ( widget.formatter.defaultDate.getSeconds() !== 0 ) {
+				widget.formatter.defaultDate.setSeconds( 0 );
+				// Note that this will also increase the hour, day etc if needed.
+				widget.formatter.defaultDate.setMinutes(
+					widget.formatter.defaultDate.getMinutes() + 1
+				);
+			}
+
+			// The date widgets always start in UTC.
+			var lastOffset = 0;
+
+			/**
+			 * This function udates default, min and max date of time inputs so that they match
+			 * the selected timezone.
+			 *
+			 * @param {string} tz
+			 */
+			var updateWidgetOnTimezoneChange = function ( tz ) {
+				var offset;
+				if ( tz.indexOf( '|' ) > -1 ) {
+					// Preset value
+					var tzParts = tz.split( '|' );
+					if ( tzParts.length <= 1 || isNaN( tzParts[ 1 ] ) ) {
+						// Unexpected.
+						return;
+					}
+					offset = parseInt( tzParts[ 1 ], 10 );
+				} else {
+					// Offset specified manually.
+					offset = that.hoursToMinutes( tz );
+				}
+
+				// Update default date (used when the widget is empty), min and max
+				widget.formatter.defaultDate.setTime(
+					widget.formatter.defaultDate.getTime() + ( offset - lastOffset ) * 60 * 1000
+				);
+				widget.min.setTime( widget.min.getTime() + ( offset - lastOffset ) * 60 * 1000 );
+				widget.max.setTime( widget.max.getTime() + ( offset - lastOffset ) * 60 * 1000 );
+
+				// Let the widget update its fields to recompute validity of the data
+				// XXX We're calling a @private method here...
+				widget.updateFieldsFromValue();
+
+				lastOffset = offset;
+			};
+
+			tzInputWidget.on( 'change', updateWidgetOnTimezoneChange );
+			updateWidgetOnTimezoneChange( tzInputWidget.getValue() );
+		} );
+
+		// Dynamically update the minimum end date to match the current value of
+		// the start date.
+		var updateEndDate = function () {
+			var newMin = dateWidgets.start.getValueAsDate();
+			dateWidgets.end.min.setTime( newMin );
+			if ( newMin > dateWidgets.end.formatter.defaultDate ) {
+				dateWidgets.end.formatter.defaultDate = newMin;
+			}
+			// Let the widget update its fields to recompute validity of the data,
+			// as well as update the selectable dates in the calendar.
+			// XXX We're calling a @private method here...
+			dateWidgets.end.onChange();
+		};
+		dateWidgets.start.on( 'change', updateEndDate );
+		updateEndDate();
+	};
+
+	/**
+	 * FIXME Shamelessly stolen from mediawiki.special.preferences.ooui/timezone.js
+	 *
+	 * @param {string} hour
+	 * @return {number}
+	 */
+	TimeFieldsEnhancer.prototype.hoursToMinutes = function ( hour ) {
+		var arr = hour.split( ':' );
+
+		arr[ 0 ] = parseInt( arr[ 0 ], 10 );
+
+		var minutes;
+		if ( arr.length === 1 ) {
+			// Specification is of the form [-]XX
+			minutes = arr[ 0 ] * 60;
+		} else {
+			// Specification is of the form [-]XX:XX
+			minutes = Math.abs( arr[ 0 ] ) * 60 + parseInt( arr[ 1 ], 10 );
+			if ( arr[ 0 ] < 0 ) {
+				minutes *= -1;
+			}
+		}
+		// Gracefully handle non-numbers.
+		if ( isNaN( minutes ) ) {
+			return 0;
+		} else {
+			return minutes;
+		}
+	};
+
+	module.exports = new TimeFieldsEnhancer();
+}() );

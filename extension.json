@@ -337,7 +337,8 @@
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.editeventregistration",
 			"packageFiles": [
 				"index.js",
-				"OrganizerSelectionFieldEnhancer.js"
+				"OrganizerSelectionFieldEnhancer.js",
+				"TimeFieldsEnhancer.js"
 			],
 			"dependencies": [
 				"mediawiki.widgets.datetime",
