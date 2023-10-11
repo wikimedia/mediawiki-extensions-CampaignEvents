@@ -326,6 +326,9 @@ class EventPageDecorator {
 		ExistingEventRegistration $registration,
 		?Participant $participant
 	): array {
+		if ( !MediaWikiServices::getInstance()->getMainConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+			return [ 'questions' => [], 'answers' => [] ];
+		}
 		$enabledQuestions = $registration->getParticipantQuestions();
 		$curAnswers = $participant ? $participant->getAnswers() : [];
 

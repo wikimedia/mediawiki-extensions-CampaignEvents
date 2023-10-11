@@ -59,7 +59,7 @@
 				action: 'confirm'
 			}
 		];
-		if ( !this.answersAggregated ) {
+		if ( !this.answersAggregated && this.eventQuestions.hasQuestions() ) {
 			actions.push( {
 				label: mw.msg( 'campaignevents-eventpage-register-dialog-clear' ),
 				action: 'clear'

@@ -3,17 +3,19 @@
 
 	function EventQuestions( eventQuestionsData ) {
 		this.questionFields = {};
-		if ( mw.config.get( 'wgCampaignEventsEnableParticipantQuestions' ) ) {
-			this.questionList = eventQuestionsData.questions;
-			this.prevAnswers = eventQuestionsData.answers;
-			this.emptyDefaultsByType = {
-				radio: 0,
-				select: 0,
-				text: ''
-			};
-			this.addQuestions();
-		}
+		this.questionList = eventQuestionsData.questions;
+		this.prevAnswers = eventQuestionsData.answers;
+		this.emptyDefaultsByType = {
+			radio: 0,
+			select: 0,
+			text: ''
+		};
+		this.addQuestions();
 	}
+
+	EventQuestions.prototype.hasQuestions = function () {
+		return Object.keys( this.questionList ).length > 0;
+	};
 
 	EventQuestions.prototype.addQuestions = function () {
 		for ( var questionName in this.questionList ) {
