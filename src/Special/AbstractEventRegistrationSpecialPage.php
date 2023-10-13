@@ -494,7 +494,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			->setAttributes( [ 'style' => 'font-weight: normal' ] );
 
 		$footerHasContent = false;
-		if ( !$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+		if (
+			!$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ||
+			( $this->event && !$this->event->getParticipantQuestions() )
+		) {
 			$footerHasContent = true;
 			$footerNotice->appendContent( new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() ) );
 		}
