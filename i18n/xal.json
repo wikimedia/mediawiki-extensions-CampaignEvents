@@ -1,11 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ukhant Erdemt"
+			"Ukhant Erdemt",
+			"Алия"
 		]
 	},
 	"campaignevents-details-stats-few-answers-option": "$1-әс баһ",
 	"campaignevents-details-stats-range-number": "$1 болн $2 хоорнд",
 	"campaignevents-details-stats-range-percentage": "$1 болн $2 хоорнд",
-	"campaignevents-individual-stats-label-message-confidence": "Та эн арһ-кемҗәнд орлцҗ бәәх Викимедиа төслмүдт хүв-немрән орулна гидгт кер итклтә бәәнәт?"
+	"campaignevents-event-dates-cannot-be-changed": "Орлцачнрин медәллиг хамһалхин төлә өңгрсн үүл-йовдлын цаг-өдриг иргчин цаг-өдр болһн хүврүлх болмҗ уга.",
+	"campaignevents-individual-stats-label-message-confidence": "Та эн арһ-кемҗәнд орлцҗ бәәх Викимедиа төслмүдт хүв-немрән орулна гидгт кер итклтә бәәнәт?",
+	"campaignevents-individual-stats-label-message-affiliate": "Та ямаран болв чигн Wikimedia-н салвр (бөлг, керглгчин бөлгүд, седвчлсн бәәһүллһ)-д орлцҗанат?",
+	"campaignevents-participant-question-have-been-aggregated": "Эн {{GENDER:$1|орлцачин}} хәрүлтиг негдүләд уга кев",
+	"campaignevents-participant-question-no-response": "Хәрү уга"
 }
