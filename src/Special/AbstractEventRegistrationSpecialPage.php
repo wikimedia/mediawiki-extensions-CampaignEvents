@@ -421,7 +421,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
+		if (
+			$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) &&
+			( !$this->event || $this->event->getParticipantQuestions() )
+		) {
 			$formFields['ParticipantQuestionsInfo'] = $this->getParticipantQuestionsInfoField();
 		}
 
