@@ -176,28 +176,15 @@ class ListParticipantsHandler extends SimpleHandler {
 				'private' => $participant->isPrivateRegistration(),
 			];
 
-			if (
-				$this->participantQuestionsEnabled &&
-				!$this->isPastEvent &&
-				$userCanViewNonPIIParticipantData
-			) {
-				if ( $participant->getAggregationTimestamp() ) {
-					$respDataByCentralID[$centralID]['non_pii_answers'] = $msgFormatter->format(
-						MessageValue::new( 'campaignevents-participant-question-have-been-aggregated' )
-					);
-				} else {
-					$respDataByCentralID[$centralID]['non_pii_answers'] = $this->getParticipantNonPIIAnswers(
-						$participant, $event, $msgFormatter
-					);
-				}
-			}
-
 			$usernameOrError = $usernamesMap[$centralID];
+			// Use an invalid username to force unspecified gender when the real username can't be determined.
+			$genderUsername = '@';
 			if ( $usernameOrError === CampaignsCentralUserLookup::USER_HIDDEN ) {
 				$respDataByCentralID[$centralID]['hidden'] = true;
 			} elseif ( $usernameOrError === CampaignsCentralUserLookup::USER_NOT_FOUND ) {
 				$respDataByCentralID[$centralID]['not_found'] = true;
 			} else {
+				$genderUsername = $usernameOrError;
 				$user = $usersByName[$usernameOrError];
 				$respDataByCentralID[$centralID] += [
 					'user_name' => $usernameOrError,
@@ -206,6 +193,23 @@ class ListParticipantsHandler extends SimpleHandler {
 				if ( $canEmailParticipants ) {
 					$respDataByCentralID[$centralID]['user_is_valid_recipient'] =
 						$user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null;
+				}
+			}
+
+			if (
+				$this->participantQuestionsEnabled &&
+				!$this->isPastEvent &&
+				$userCanViewNonPIIParticipantData
+			) {
+				if ( $participant->getAggregationTimestamp() ) {
+					$respDataByCentralID[$centralID]['non_pii_answers'] = $msgFormatter->format(
+						MessageValue::new( 'campaignevents-participant-question-have-been-aggregated' )
+							->params( $genderUsername )
+					);
+				} else {
+					$respDataByCentralID[$centralID]['non_pii_answers'] = $this->getParticipantNonPIIAnswers(
+						$participant, $event, $msgFormatter
+					);
 				}
 			}
 		}
