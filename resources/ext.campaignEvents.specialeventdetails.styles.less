@@ -228,10 +228,22 @@ body.skin-minerva {
 	}
 }
 
-.ext-campaignevents-details-participants-header-text {
-	font-size: 1.5em;
-	font-weight: bold;
+.ext-campaignevents-details-participants-header-participants {
 	flex: 1;
+
+	.ext-campaignevents-details-participants-header-participant-count {
+		font-size: 1.5em;
+		font-weight: bold;
+		vertical-align: middle;
+	}
+}
+
+.client-nojs .ext-campaignevents-details-participants-header-questions-help > .oo-ui-buttonElement-button {
+	cursor: help;
+}
+
+.ext-campaignevents-details-participants-header-participants .oo-ui-popupWidget {
+	z-index: @z-index-tooltip;
 }
 
 div.ext-campaignevents-details-participants-search {

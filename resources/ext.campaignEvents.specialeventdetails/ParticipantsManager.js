@@ -22,7 +22,7 @@
 			this.selectAllParticipantsCheckbox = this.selectAllParticipantsField.getField();
 		}
 
-		this.$participantsTitle = $( '.ext-campaignevents-details-participants-header-text' );
+		this.$participantsCountTitle = $( '.ext-campaignevents-details-participants-header-participant-count' );
 		this.participantCheckboxes = [];
 		this.curParticipantCheckbox = null;
 		this.isSelectionInverted = false;
@@ -52,10 +52,29 @@
 		/* eslint-enable no-jquery/no-global-selector */
 
 		this.installEventListeners();
+		this.replaceQuestionsHelp();
+
 		OO.EventEmitter.call( this );
 	}
 
 	OO.mixinClass( ParticipantsManager, OO.EventEmitter );
+
+	ParticipantsManager.prototype.replaceQuestionsHelp = function () {
+		// eslint-disable-next-line no-jquery/no-global-selector
+		var $nojsButton = $( '.ext-campaignevents-details-participants-header-questions-help' ),
+			helpText = $nojsButton.find( '.oo-ui-buttonElement-button' ).attr( 'title' );
+		var helpButton = new OO.ui.PopupButtonWidget( {
+			icon: 'info',
+			framed: false,
+			label: mw.msg( 'campaignevents-event-details-header-questions-help-label' ),
+			invisibleLabel: true,
+			popup: {
+				$content: $( '<p>' ).text( helpText ),
+				padded: true
+			}
+		} );
+		$nojsButton.replaceWith( helpButton.$element );
+	};
 
 	ParticipantsManager.prototype.toggleSelectAll = function ( selected ) {
 		for ( var i = 0; i < this.participantCheckboxes.length; i++ ) {
@@ -343,7 +362,7 @@
 					thisClass.loadMoreParticipants();
 				}
 
-				thisClass.$participantsTitle.text(
+				thisClass.$participantsCountTitle.text(
 					mw.message(
 						'campaignevents-event-details-header-participants',
 						mw.language.convertNumber( thisClass.participantsTotal )

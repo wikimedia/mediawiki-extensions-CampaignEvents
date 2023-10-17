@@ -226,6 +226,8 @@
 	"campaignevents-back-to-your-events": "Back to your events",
 	"campaignevents-event-details-edit-button": "Edit",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|participant|participants}}",
+	"campaignevents-event-details-header-questions-help-label": "Data retention information",
+	"campaignevents-event-details-header-questions-help": "Individual participants' responses displayed on the table will be aggregated and then deleted, either 90 days after submission or at the end of the event (whichever comes first). The aggregated responses will be available in the \"{{int:campaignevents-event-details-tab-stats}}\" tab, which will become visible after the event ends.",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|participant|participants}} registered privately.",
 	"campaignevents-event-details-dates": "$1 to $4",
 	"campaignevents-event-details-timezone": "<strong>Timezone:</strong> $1",
