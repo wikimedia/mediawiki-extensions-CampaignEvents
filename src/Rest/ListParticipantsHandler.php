@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
@@ -121,7 +122,6 @@ class ListParticipantsHandler extends SimpleHandler {
 				403
 			);
 		}
-		$canEmailParticipants = $this->permissionChecker->userCanEmailParticipants( $authority, $eventID );
 
 		$participants = $this->participantsStore->getEventParticipants(
 			$eventID,
@@ -133,19 +133,35 @@ class ListParticipantsHandler extends SimpleHandler {
 			$params['exclude_users']
 		);
 
+		$responseData = $this->getResponseData( $authority, $event, $participants );
+		return $this->getResponseFactory()->createJson( $responseData );
+	}
+
+	/**
+	 * @param ICampaignsAuthority $authority
+	 * @param ExistingEventRegistration $event
+	 * @param Participant[] $participants
+	 * @return array
+	 */
+	private function getResponseData(
+		ICampaignsAuthority $authority,
+		ExistingEventRegistration $event,
+		array $participants
+	): array {
 		// TODO: remove global when T269492 is resolved
 		$language = RequestContext::getMain()->getLanguage();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
-		$performer = $this->userFactory->newFromAuthority(
-			$this->getAuthority()
-		);
-		// Iterate over the participants twice, preloading usernames in the first iteration, so that we can issue
-		// a single DB queries for all users later.
-		$respDataByCentralID = [];
+		$performer = $this->userFactory->newFromAuthority( $this->getAuthority() );
+		$canEmailParticipants = $this->permissionChecker->userCanEmailParticipants( $authority, $event->getID() );
 		$userCanViewNonPIIParticipantData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
 			$authority,
-			$eventID
+			$event->getID()
 		);
+
+		$centralIDs = array_map( static fn ( Participant $p ) => $p->getUser()->getCentralID(), $participants );
+		[ $usernamesMap, $usersByName ] = $this->getUserBatch( $centralIDs );
+
+		$respDataByCentralID = [];
 		foreach ( $participants as $participant ) {
 			$centralUser = $participant->getUser();
 			$centralID = $centralUser->getCentralID();
@@ -175,9 +191,38 @@ class ListParticipantsHandler extends SimpleHandler {
 					);
 				}
 			}
+
+			$usernameOrError = $usernamesMap[$centralID];
+			if ( $usernameOrError === CampaignsCentralUserLookup::USER_HIDDEN ) {
+				$respDataByCentralID[$centralID]['hidden'] = true;
+			} elseif ( $usernameOrError === CampaignsCentralUserLookup::USER_NOT_FOUND ) {
+				$respDataByCentralID[$centralID]['not_found'] = true;
+			} else {
+				$user = $usersByName[$usernameOrError];
+				$respDataByCentralID[$centralID] += [
+					'user_name' => $usernameOrError,
+					'user_page' => $this->userLinker->getUserPagePath( new CentralUser( $centralID ) ),
+				];
+				if ( $canEmailParticipants ) {
+					$respDataByCentralID[$centralID]['user_is_valid_recipient'] =
+						$user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null;
+				}
+			}
 		}
 
-		$centralIDsMap = array_fill_keys( array_keys( $respDataByCentralID ), null );
+		return array_values( $respDataByCentralID );
+	}
+
+	/**
+	 * Loads usernames and User objects for a list of given central user IDs. This must use a single DB query for
+	 * performance. It also preloads the data needed for user page links.
+	 *
+	 * @param int[] $centralIDs
+	 * @return array
+	 * @phan-return array{0:array<int,string>,1:array<string,\MediaWiki\User\User|null>}
+	 */
+	private function getUserBatch( array $centralIDs ): array {
+		$centralIDsMap = array_fill_keys( $centralIDs, null );
 		$usernamesMap = $this->centralUserLookup->getNamesIncludingDeletedAndSuppressed( $centralIDsMap );
 		$usernamesToPreload = array_filter(
 			$usernamesMap,
@@ -202,27 +247,7 @@ class ListParticipantsHandler extends SimpleHandler {
 			}
 		}
 
-		foreach ( $respDataByCentralID as $centralID => $data ) {
-			$usernameOrError = $usernamesMap[$centralID];
-			if ( $usernameOrError === CampaignsCentralUserLookup::USER_HIDDEN ) {
-				$additionalData = [ 'hidden' => true ];
-			} elseif ( $usernameOrError === CampaignsCentralUserLookup::USER_NOT_FOUND ) {
-				$additionalData = [ 'not_found' => true ];
-			} else {
-				$user = $usersByName[$usernameOrError];
-				$additionalData = [
-					'user_name' => $usernameOrError,
-					'user_page' => $this->userLinker->getUserPagePath( new CentralUser( $centralID ) ),
-				];
-				if ( $canEmailParticipants ) {
-					$additionalData['user_is_valid_recipient'] =
-						$user !== null && $this->campaignsUserMailer->validateTarget( $user, $performer ) === null;
-				}
-			}
-
-			$respDataByCentralID[$centralID] += $additionalData;
-		}
-		return $this->getResponseFactory()->createJson( array_values( $respDataByCentralID ) );
+		return [ $usernamesMap, $usersByName ];
 	}
 
 	/**
