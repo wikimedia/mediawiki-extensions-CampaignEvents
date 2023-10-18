@@ -160,6 +160,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'wgCampaignEventsIsEventCreator' => $isEventCreator,
 			'wgCampaignEventsEventCreatorUsername' => $eventCreatorUsername,
 			'wgCampaignEventsEventID' => $this->eventID,
+			'wgCampaignEventsIsPastEvent' => $this->event && $this->event->isPast(),
+			'wgCampaignEventsEventHasAnswers' => $this->event &&
+				$this->editEventCommand->eventHasAnswersOrAggregates( $this->eventID ),
 		] );
 
 		parent::execute( $par );
@@ -241,52 +244,35 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		if ( $this->event ) {
-			$minTime = '';
-		} else {
-			// HACK: If the form has been submitted, adjust the minimum allowed dates according to the selected
-			// time zone, or the validation will be off (T348579). The proper solution would be for time fields to
-			// accept a timezone parameter (T315874).
-			if ( $this->getRequest()->wasPosted() ) {
-				$rawTZ = $this->getRequest()->getVal( 'wpTimeZone' );
-				if ( $rawTZ === 'other' ) {
-					// See HTMLSelectOrOtherField::loadDataFromRequest
-					$rawTZ = $this->getRequest()->getVal( 'wpTimeZone-other' );
-				}
-				$tzString = $this->parseSubmittedTimezone( $rawTZ );
-				try {
-					$timezone = new DateTimeZone( $tzString );
-				} catch ( TimeoutException $e ) {
-					throw $e;
-				} catch ( Exception $_ ) {
-					$timezone = new DateTimeZone( 'UTC' );
-				}
-			} else {
-				$timezone = new DateTimeZone( 'UTC' );
-			}
-			// Do not call getTimestamp(), that would bring us back to UTC.
-			$curLocalTime = ( new DateTime( 'now', $timezone ) )->format( 'Y-m-d H:i:s' );
-			$minTime = wfTimestamp( TS_MW, $curLocalTime );
-		}
+		$timezone = $this->getTimezone();
+		$curLocalTime = ( new DateTime( 'now', $timezone ) )->format( 'Y-m-d H:i:s' );
+		$minTime = $this->event ? '' : wfTimestamp( TS_MW, $curLocalTime );
+		$maxTime = $this->eventID && $this->event->isPast() &&
+			$this->editEventCommand->eventHasAnswersOrAggregates( $this->eventID ) ?
+				wfTimestamp( TS_MW, $curLocalTime ) :
+				'';
+
 		// Disable auto-infusion because we want to change the configuration.
 		$timeFieldClasses = 'ext-campaignevents-time-input mw-htmlform-autoinfuse-lazy';
 		$formFields['EventStart'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-start',
 			'min' => $minTime,
+			'max' => $maxTime,
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartLocalTimestamp() ) : '',
 			'required' => true,
-			'cssclass' => $timeFieldClasses,
 			'section' => self::DETAILS_SECTION,
+			'cssclass' => 'ext-campaignevents-time-input-event-start ' . $timeFieldClasses,
 		];
 		$formFields['EventEnd'] = [
 			'type' => 'datetime',
 			'label-message' => 'campaignevents-edit-field-end',
 			'min' => $minTime,
+			'max' => $maxTime,
 			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
 			'required' => true,
-			'cssclass' => $timeFieldClasses,
 			'section' => self::DETAILS_SECTION,
+			'cssclass' => 'ext-campaignevents-time-input-event-end ' . $timeFieldClasses,
 		];
 
 		$formFields['EventOrganizerUsernames'] = [
@@ -627,6 +613,32 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		);
 		[ $errorsStatus, $this->saveWarningsStatus ] = $res->splitByErrorType();
 		return Status::wrap( $errorsStatus );
+	}
+
+	/**
+	 * @return DateTimeZone
+	 */
+	private function getTimezone() {
+		// HACK: If the form has been submitted, adjust the minimum allowed dates according to the selected
+		// time zone, or the validation will be off (T348579). The proper solution would be for time fields to
+		// accept a timezone parameter (T315874).
+		if ( $this->getRequest()->wasPosted() ) {
+			$rawTZ = $this->getRequest()->getVal( 'wpTimeZone' );
+			if ( $rawTZ === 'other' ) {
+				// See HTMLSelectOrOtherField::loadDataFromRequest
+				$rawTZ = $this->getRequest()->getVal( 'wpTimeZone-other' );
+			}
+			$tzString = $this->parseSubmittedTimezone( $rawTZ );
+			try {
+				return new DateTimeZone( $tzString );
+			} catch ( TimeoutException $e ) {
+				throw $e;
+			} catch ( Exception $_ ) {
+				return new DateTimeZone( 'UTC' );
+			}
+		}
+
+		return $this->event ? $this->event->getTimezone() : new DateTimeZone( 'UTC' );
 	}
 
 	/**

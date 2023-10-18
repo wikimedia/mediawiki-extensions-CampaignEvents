@@ -584,7 +584,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @param bool $hasAggregates
 	 * @param bool $success
 	 * @covers ::checkCanEditEventDates
-	 * @covers ::isPastEventWithAnswers
+	 * @covers ::eventHasAnswersOrAggregates
 	 * @dataProvider provideEventRegistrationsEditEventDates
 	 */
 	public function testDoEditIfAllowed__editEventDates(
