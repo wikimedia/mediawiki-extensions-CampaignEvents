@@ -396,5 +396,6 @@
 	"campaignevents-details-stats-range-number": "Med $1 in $2",
 	"campaignevents-details-stats-range-percentage": "Med $1&nbsp;% in $2&nbsp;%",
 	"campaignevents-details-stats-no-response": "Ni odgovora",
-	"campaignevents-event-dates-cannot-be-changed": "Zaradi zaščite podatkov udeležencev datumov preteklih dogodkov ni mogoče spremeniti v prihodnje datume."
+	"campaignevents-event-dates-cannot-be-changed": "Zaradi zaščite podatkov udeležencev datumov preteklih dogodkov ni mogoče spremeniti v prihodnje datume.",
+	"campaignevents-individual-stats-label-message-confidence": "Kako samozavestno se počutite, ko prispevate k projektom Wikimedie, vključenim v ta dogodek?"
 }

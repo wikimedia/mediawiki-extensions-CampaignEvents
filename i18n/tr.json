@@ -354,5 +354,12 @@
 	"campaignevents-eventpage-register-dialog-retention-days": "Yanıtlarınızın toplanması ve silinmesi için kalan süre: <strong>$1 {{PLURAL:$1|gün|gün}}</strong> .",
 	"campaignevents-eventpage-register-dialog-retention-hours": "Yanıtlarınızın toplanması ve silinmesi için kalan süre: <strong>24 saatten az</strong>.",
 	"campaignevents-register-invalid-answer": "$1 sorusuna geçersiz yanıt",
-	"campaignevents-register-question-organizing-partner-details-placeholder": "Lütfen belirtin"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Lütfen belirtin",
+	"campaignevents-details-stats-not-enough-answers": "Bu soru toplamda en az $1 yanıt aldı.",
+	"campaignevents-details-stats-header-option": "Seçenek",
+	"campaignevents-details-stats-header-percentage": "Yüzde",
+	"campaignevents-details-stats-header-number": "Sayı",
+	"campaignevents-details-stats-range-number": "$1 ile $2 arası",
+	"campaignevents-details-stats-range-percentage": "$1% ve $2% arası",
+	"campaignevents-details-stats-no-response": "Yanıt yok"
 }
