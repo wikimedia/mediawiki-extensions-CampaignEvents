@@ -225,6 +225,8 @@
 	"campaignevents-back-to-your-events": "Zurück zu deinen Veranstaltungen",
 	"campaignevents-event-details-edit-button": "Bearbeiten",
 	"campaignevents-event-details-header-participants": "{{PLURAL:$1|Ein Teilnehmer|$1 Teilnehmer}}",
+	"campaignevents-event-details-header-questions-help-label": "Informationen zur Datenaufbewahrung",
+	"campaignevents-event-details-header-questions-help": "Die in der Tabelle angezeigten Antworten einzelner Teilnehmer werden zusammengefasst und dann entweder 90 Tage nach der Einreichung oder am Ende der Veranstaltung (je nachdem, was zuerst eintritt) gelöscht. Die aggregierten Antworten sind auf der Registerkarte „{{int:campaignevents-event-details-tab-stats}}“ verfügbar, die nach Ende der Veranstaltung sichtbar wird.",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|Teilnehmer ist|Teilnehmer sind}} privat angemeldet.",
 	"campaignevents-event-details-dates": "$1 bis $4",
 	"campaignevents-event-details-timezone": "<strong>Zeitzone:</strong> $1",
@@ -396,9 +398,10 @@
 	"campaignevents-details-stats-range-number": "Zwischen $1 und $2",
 	"campaignevents-details-stats-range-percentage": "Zwischen $1 % und $2 %",
 	"campaignevents-details-stats-no-response": "Keine Antwort",
-	"campaignevents-event-dates-cannot-be-changed": "Vergangene Veranstaltungstermine können zum Schutz der Teilnehmerdaten nicht auf zukünftige Termine geändert werden.",
+	"campaignevents-event-dates-cannot-be-changed": "Die Veranstaltung ist beendet, daher kannst du die Veranstaltungstermine nicht auf zukünftige Termine ändern. Diese Einschränkung schützt die Teilnehmerdaten.",
 	"campaignevents-individual-stats-label-message-confidence": "Wie sicher fühlst du dich, zu den Wikimedia-Projekten beizutragen, die an dieser Veranstaltung beteiligt sind?",
 	"campaignevents-individual-stats-label-message-affiliate": "Gehörst du einer der Wikimedia-Mitgliedsorganisationen (Chapter,  Benutzergruppeen, thematische Organisationen) an?",
 	"campaignevents-participant-question-have-been-aggregated": "Die Antworten {{GENDER:$1|des Teilnehmers|der Teilnehmerin}} wurden aggregiert und gelöscht",
-	"campaignevents-participant-question-no-response": "Keine Rückmeldung"
+	"campaignevents-participant-question-no-response": "Keine Rückmeldung",
+	"campaignevents-warning-change-event-end-date-past": "Wenn du das Enddatum auf ein vergangenes Datum ändern, wird die Veranstaltung geschlossen und du erhältst eine Zusammenfassung der Teilnehmerantworten. Diese Aktion kann nicht rückgängig gemacht werden. Dies gilt nur, wenn Teilnehmer Antworten auf die Teilnehmerfragen gegeben haben."
 }

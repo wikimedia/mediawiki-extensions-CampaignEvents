@@ -4,6 +4,7 @@
 			"Римма"
 		]
 	},
+	"campaignevents-event-details-header-questions-help-label": "Даннӧйез видзӧм сьӧрті юӧр",
 	"campaignevents-individual-stats-label-message-confidence": "Бура я асьнытӧ кылатӧ индӧм уджын,Викимедия проектӧ пай пуктікӧ?",
 	"campaignevents-individual-stats-label-message-affiliate": "Пыратӧ я Викимедиялӧн кытшӧмкӧ юкӧнӧ (чукӧрӧ,вӧдитчись чукӧрӧ,тематическӧй чукӧртчанінӧ)?",
 	"campaignevents-participant-question-have-been-aggregated": "Этна{{ ИНЬ ДА АЙ ВЫЛӦ ЮКСЬӦМ:$1|участвуйтісь}} очакыввес вӧлісӧ ӧтувтӧмась да чышкӧмась",

@@ -5,6 +5,8 @@
 			"Алия"
 		]
 	},
+	"campaignevents-event-details-header-questions-help-label": "Өггдл хадһлх медән",
+	"campaignevents-event-details-header-questions-help": "Көснгт деер үзүлгдсн орлцачнрин хәрүг илгәснәс хооран 90 хонгин дару эс гиҗ үүл-йовдл төгсхд (алькнь түрүлҗ ирх) негдүлҗ, уга кех. Негдсн хәрүснь үүл-йовдл дууссна дару \"{{int:campaignevents-event-details-tab-stats}}\" таб-т үзгдәд һарх.",
 	"campaignevents-details-stats-few-answers-option": "$1-әс баһ",
 	"campaignevents-details-stats-range-number": "$1 болн $2 хоорнд",
 	"campaignevents-details-stats-range-percentage": "$1 болн $2 хоорнд",

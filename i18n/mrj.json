@@ -4,5 +4,7 @@
 			"Nadezhda"
 		]
 	},
-	"campaignevents-details-stats-range-number": "$1 дон $2 лошты"
+	"campaignevents-event-details-header-questions-help-label": "Данныйвлӓм перегӹмӹ гишӓн информаци",
+	"campaignevents-details-stats-range-number": "$1 дон $2 лошты",
+	"campaignevents-event-dates-cannot-be-changed": "Мероприятие завершилось, поэтому вы не можете изменить даты проведения на будущие. Это ограничение защищает данные участников.\n\nМероприяти пӹтен, седӹндон тӓ эртӓрӹмӹ датывлӓм анзыкылаш датывлӓш вашталтен ада керд. Ти ограничени участниквлӓн данныйвлӓштӹм перегӓ."
 }
