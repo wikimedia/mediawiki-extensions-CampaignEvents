@@ -27,6 +27,7 @@ use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
 use OOUI\IconWidget;
+use OOUI\MessageWidget;
 use OOUI\PanelLayout;
 use OOUI\SearchInputWidget;
 use OOUI\Tag;
@@ -61,6 +62,7 @@ class EventDetailsParticipantsModule {
 	private ITextFormatter $msgFormatter;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private Language $language;
+	private string $statisticsTabUrl;
 	private bool $isPastEvent;
 	private bool $participantQuestionsEnabled;
 
@@ -75,6 +77,7 @@ class EventDetailsParticipantsModule {
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 * @param Config $config
 	 * @param Language $language
+	 * @param string $statisticsTabUrl
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -86,7 +89,8 @@ class EventDetailsParticipantsModule {
 		CampaignsUserMailer $userMailer,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		Config $config,
-		Language $language
+		Language $language,
+		string $statisticsTabUrl
 	) {
 		$this->userLinker = $userLinker;
 		$this->participantsStore = $participantsStore;
@@ -98,6 +102,7 @@ class EventDetailsParticipantsModule {
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->language = $language;
+		$this->statisticsTabUrl = $statisticsTabUrl;
 		$this->isPastEvent = false;
 		$this->participantQuestionsEnabled = $config->get(
 			'CampaignEventsEnableParticipantQuestions'
@@ -202,7 +207,7 @@ class EventDetailsParticipantsModule {
 			->addClasses( [ 'ext-campaignevents-event-details-participants-panel' ] )
 			->appendContent( $layout );
 
-		$footer = $this->getFooter( $eventID );
+		$footer = $this->getFooter( $eventID, $canViewNonPIIParticipantsData, $event, $out );
 		if ( $footer ) {
 			$content->appendContent( $footer );
 		}
@@ -452,6 +457,7 @@ class EventDetailsParticipantsModule {
 			);
 		}
 		$container->appendContent( $row );
+
 		return $container;
 	}
 
@@ -726,26 +732,56 @@ class EventDetailsParticipantsModule {
 
 	/**
 	 * @param int $eventID
+	 * @param bool $userCanViewNonPIIParticipantsData
+	 * @param ExistingEventRegistration $event
+	 * @param OutputPage $out
 	 * @return Tag|null
 	 */
-	private function getFooter( int $eventID ): ?Tag {
+	private function getFooter(
+		int $eventID,
+		bool $userCanViewNonPIIParticipantsData,
+		ExistingEventRegistration $event,
+		OutputPage $out
+	): ?Tag {
 		$privateParticipantsCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );
-		if ( $privateParticipantsCount === 0 ) {
-			// Don't show anything, it would be redundant.
-			return null;
+
+		$footer = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-event-details-participants-footer' ] );
+		if ( $privateParticipantsCount > 0 ) {
+			$icon = new IconWidget( [ 'icon' => 'lock' ] );
+			$text = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-participants-private' )
+					->numParams( $privateParticipantsCount )
+			);
+			$textElement = ( new Tag( 'span' ) )
+				->appendContent( $text );
+			$privateParticipants = ( new Tag( 'div' ) )
+				->addClasses( [ 'ext-campaignevents-event-details-participants-private-count-footer' ] )
+				->appendContent( $icon, $textElement );
+			// TODO The number should be updated dynamically when (private) participants are removed, see T322275.
+			$footer->appendContent( $privateParticipants );
 		}
 
-		$icon = new IconWidget( [ 'icon' => 'lock' ] );
-		$text = $this->msgFormatter->format(
-			MessageValue::new( 'campaignevents-event-details-participants-private' )
-				->numParams( $privateParticipantsCount )
-		);
-		$textElement = ( new Tag( 'span' ) )
-			->appendContent( $text );
-		// TODO The number should be updated dynamically when (private) participants are removed, see T322275.
-		return ( new Tag( 'div' ) )
-			->addClasses( [ 'ext-campaignevents-event-details-participants-footer' ] )
-			->appendContent( $icon, $textElement );
+		if (
+			$this->participantQuestionsEnabled &&
+			$event->getParticipantQuestions() &&
+			$this->isPastEvent &&
+			$userCanViewNonPIIParticipantsData
+		) {
+			$deletedNonPiiInfoNoticeElement = new MessageWidget( [
+				'type' => 'notice',
+				'label' => new HtmlSnippet(
+					$out->msg( 'campaignevents-event-details-participants-individual-data-deleted' )
+						->params( $this->statisticsTabUrl )->parse()
+				),
+				'inline' => true
+			] );
+			$deletedNonPiiInfoNoticeElement->addClasses(
+				[ 'ext-campaignevents-event-details-participants-individual-data-deleted-notice' ]
+			);
+
+			$footer->appendContent( $deletedNonPiiInfoNoticeElement );
+		}
+		return $footer;
 	}
 
 	/**

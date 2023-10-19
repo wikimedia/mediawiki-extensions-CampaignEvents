@@ -124,8 +124,14 @@ class FrontendModulesFactory {
 		);
 	}
 
+	/**
+	 * @param Language $language
+	 * @param string $statisticsTabUrl
+	 * @return EventDetailsParticipantsModule
+	 */
 	public function newEventDetailsParticipantsModule(
-		Language $language
+		Language $language,
+		string $statisticsTabUrl
 	): EventDetailsParticipantsModule {
 		return new EventDetailsParticipantsModule(
 			$this->messageFormatterFactory,
@@ -137,7 +143,8 @@ class FrontendModulesFactory {
 			$this->userMailer,
 			$this->questionsRegistry,
 			$this->config,
-			$language
+			$language,
+			$statisticsTabUrl
 		);
 	}
 

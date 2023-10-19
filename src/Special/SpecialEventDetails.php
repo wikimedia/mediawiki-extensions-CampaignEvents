@@ -183,7 +183,10 @@ class SpecialEventDetails extends SpecialPage {
 				$out
 			)
 		);
-		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule( $language );
+		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule(
+			$language,
+			$this->getFullTitle()->getFullURL( [ 'tab' => self::STATS_PANEL ] )
+		);
 		$tabs[] = $this->createTab(
 			self::PARTICIPANTS_PANEL,
 			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-participants' ) ),
