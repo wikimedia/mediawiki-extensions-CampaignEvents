@@ -401,7 +401,7 @@
 	"campaignevents-details-stats-range-number": "Tussen $1 en $2",
 	"campaignevents-details-stats-range-percentage": "Tussen $1% en $2%",
 	"campaignevents-details-stats-no-response": "Geen antwoord",
-	"campaignevents-event-dates-cannot-be-changed": "Data van eerdere evenementen kunnen niet worden gewijzigd naar toekomstige data; dit is om de gegevens van deelnemers te beschermen.",
+	"campaignevents-event-dates-cannot-be-changed": "Het evenement is afgelopen. Daarom kunt u de evenementdata niet wijzigen naar data in de toekomst. Deze beperking dient ter bescherming van de deelnemergegevens.",
 	"campaignevents-individual-stats-label-message-confidence": "Hoe zeker voelt u zich om bij te dragen aan de Wikimedia-projecten die bij dit evenement betrokken zijn?",
 	"campaignevents-individual-stats-label-message-affiliate": "Bent u lid van Wikimedia-filialen (afdelingen, gebruikersgroepen, thematische organisaties)?",
 	"campaignevents-participant-question-have-been-aggregated": "De antwoorden van deze {{GENDER:$1|deelnemer|deelneemster}} zijn samengevoegd en verwijderd",

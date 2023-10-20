@@ -226,6 +226,8 @@
 	"campaignevents-back-to-your-events": "Назад на вашите настани",
 	"campaignevents-event-details-edit-button": "Уреди",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|учесник|учесници}}",
+	"campaignevents-event-details-header-questions-help-label": "Информации за задршка на податоците",
+	"campaignevents-event-details-header-questions-help": "Одговорите на поединечни учесници прикажани на табелата ќе бидат насобрани и потоа избришани, или 90 дена по поднесувањето или на крајот од настанот (кое ќе дојде попрво). Насобраните одговори ќе бидат достапни во јазичето „{{int:campaignevents-event-details-tab-stats}}“, кое ќе стане видливо кога ќе заврши настанот.",
 	"campaignevents-event-details-participants-private": "$1 приватно {{PLURAL:$1|пријавен учесник|пријавени учесници}}.",
 	"campaignevents-event-details-dates": "$1 до $4",
 	"campaignevents-event-details-timezone": "<strong>Часовен појас:</strong> $1",
@@ -397,9 +399,10 @@
 	"campaignevents-details-stats-range-number": "Помеѓу $1 и $2",
 	"campaignevents-details-stats-range-percentage": "Помеѓу $1 и $2 %",
 	"campaignevents-details-stats-no-response": "Нема одговор",
-	"campaignevents-event-dates-cannot-be-changed": "Датумите на изминатите настани не можат да се променат во идни за да се заштитат податоците на учесниците.",
+	"campaignevents-event-dates-cannot-be-changed": "Настанот заврши, па затоа не можете да ги менувате неговите датуми на идни. Ова ограничување ги штити податоците на учесниците.",
 	"campaignevents-individual-stats-label-message-confidence": "Со колкава самодоверба учествувате во Викимедиините проекти поврзани со овој настан?",
 	"campaignevents-individual-stats-label-message-affiliate": "Дали припаѓате на некоја Викимедиина подружница (огранок, корисничка група, тематска организација)?",
 	"campaignevents-participant-question-have-been-aggregated": "Одговорите на {{GENDER:$1|овој учесник|оваа учесничка}} се насобрани и избришани",
-	"campaignevents-participant-question-no-response": "Нема одговор"
+	"campaignevents-participant-question-no-response": "Нема одговор",
+	"campaignevents-warning-change-event-end-date-past": "Ако го замените завршниот датум со изминат, настанот ќе се затвори и ќе добиете преглед на одговори од учесниците. Ова дејство е неповратно. Ова важи само ако учесниците дале одговори на зададените прашања."
 }

@@ -117,6 +117,7 @@
 	"campaignevents-back-to-your-events": "Torna ai tuoi eventi",
 	"campaignevents-event-details-edit-button": "Modifica",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
+	"campaignevents-event-details-header-questions-help-label": "Informazioni sulla conservazione dei dati",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|partecipante registrato|partecipanti registrati}} privatamente.",
 	"campaignevents-event-details-dates": "Dalle $3 {{PLURAL:$2|1=dell'$2|8=dell'$2|11=dell'$2|del $2}} alle $6 {{PLURAL:$5|1=dell'$5|8=dell'$5|11=dell'$5|del $5}}",
 	"campaignevents-event-details-timezone": "<strong>Fuso orario:</strong> $1",

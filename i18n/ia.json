@@ -402,5 +402,6 @@
 	"campaignevents-individual-stats-label-message-confidence": "Quanto confidente te senti tu in contribuer al projectos de Wikimedia implicate in iste evento?",
 	"campaignevents-individual-stats-label-message-affiliate": "Pertine tu a alcun affiliato de Wikimedia (sectiones regional, gruppos de usatores, organisationes thematic)?",
 	"campaignevents-participant-question-have-been-aggregated": "Le responsa de iste {{GENDER:$1|participante}} ha essite aggregate e delite",
-	"campaignevents-participant-question-no-response": "Necun responsa"
+	"campaignevents-participant-question-no-response": "Necun responsa",
+	"campaignevents-warning-change-event-end-date-past": "Si tu cambia le data de fin a un data passate, le evento essera claudite e tu recipera un summario del responsas del participantes. Iste action non pote esser disfacite. Isto es solmente applicabile si le participantes ha fornite responsas al questiones pro le participantes."
 }
