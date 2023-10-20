@@ -161,4 +161,22 @@ class FrontendModulesFactory {
 			$language
 		);
 	}
+
+	/**
+	 * @param ExistingEventRegistration $event
+	 * @param Language $language
+	 * @return ClickwrapFormModule
+	 */
+	public function newClickwrapFormModule(
+		ExistingEventRegistration $event,
+		Language $language
+	): ClickwrapFormModule {
+		return new ClickwrapFormModule(
+			$event,
+			$this->organizersStore,
+			$this->messageFormatterFactory,
+			$language,
+			$this->centralUserLookup
+		);
+	}
 }
