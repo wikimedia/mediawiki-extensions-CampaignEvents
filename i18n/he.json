@@ -402,6 +402,10 @@
 	"campaignevents-event-dates-cannot-be-changed": "האירוע הסתיים, כך שלא ניתן לשנות את תאריכי האירוע לתאריכים עתידיים. ההגבלה הזאת מגינה על נתוני המשתתפים.",
 	"campaignevents-individual-stats-label-message-confidence": "כמה ביטחון יש לך בקשר לתרומה שלך למיזמי ויקימדיה שקשורים לאירוע הזה?",
 	"campaignevents-individual-stats-label-message-affiliate": "האם יש לך קשר לשותפי ויקימדיה כלשהם (עמותות, קבוצות משתמשים, ארגוני נושא)?",
+	"campaignevents-edit-field-clickwrap-checkbox-info": "הדף הזה מכיל את התגובות המצטברות של המשתתפים לשאלות טופס ההרשמה.",
+	"campaignevents-edit-field-clickwrap-checkbox-pretext": "כדי לצפות בתגובות המצטברות של המשתתפים, יש להסכים לדבר הבא:",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "אטפל בזהירות במידע על המשתתפים שנאסף במהלך רישום האירוע.",
+	"campaignevents-edit-field-clickwrap-form-continue": "המשך",
 	"campaignevents-participant-question-have-been-aggregated": "התגובות של {{GENDER:$1|המשתתף הזה|המשתתפת הזאת}} נצברו ונמחקו",
 	"campaignevents-participant-question-no-response": "אין תשובה",
 	"campaignevents-warning-change-event-end-date-past": "שינוי תאריך הסיום לתאריך בעבר יגרום לכך שהאירוע להיסגר ויתקבל אצלך סיכום תגובות המשתתפים. לא ניתן לבטל את הפעולה הזאת. ניתן לעשות את זה רק אם המשתתפים סיפקו תשובות לשאלות המשתתף."

@@ -230,6 +230,8 @@
 	"campaignevents-back-to-your-events": "Terug naar je evenementen",
 	"campaignevents-event-details-edit-button": "Bewerken",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|deelnemer|deelnemers}}",
+	"campaignevents-event-details-header-questions-help-label": "Informatie over het bewaren van gegevens",
+	"campaignevents-event-details-header-questions-help": "De antwoorden van individuele deelnemers die in de tabel worden weergegeven, worden samengevoegd en vervolgens verwijderd, ofwel 90 dagen na indiening, ofwel aan het einde van het evenement (afhankelijk van wat zich het eerst voordoet). De verzamelde antwoorden komen beschikbaar op het tabblad “{{int:campaignevents-event-details-tab-stats}}” dat zichtbaar wordt nadat het evenement is afgelopen.",
 	"campaignevents-event-details-participants-private": "$1 deelnemer{{PLURAL:$1||s}} privé geregistreerd.",
 	"campaignevents-event-details-dates": "$1 tot $4",
 	"campaignevents-event-details-timezone": "<strong>Tijdzone:</strong> $1",
@@ -404,6 +406,11 @@
 	"campaignevents-event-dates-cannot-be-changed": "Het evenement is afgelopen. Daarom kunt u de evenementdata niet wijzigen naar data in de toekomst. Deze beperking dient ter bescherming van de deelnemergegevens.",
 	"campaignevents-individual-stats-label-message-confidence": "Hoe zeker voelt u zich om bij te dragen aan de Wikimedia-projecten die bij dit evenement betrokken zijn?",
 	"campaignevents-individual-stats-label-message-affiliate": "Bent u lid van Wikimedia-filialen (afdelingen, gebruikersgroepen, thematische organisaties)?",
+	"campaignevents-edit-field-clickwrap-checkbox-info": "Op deze pagina staan de samengevoegde antwoorden van deelnemers op de vragen van het registratieformulier.",
+	"campaignevents-edit-field-clickwrap-checkbox-pretext": "Om de samengevoegde antwoorden van deelnemers te bekijken, moet u akkoord gaan met het volgende:",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "Ik ga ermee akkoord dat ik zorgvuldig omga met de deelnemersgegevens die tijdens de registratie van het evenement worden verzameld.",
+	"campaignevents-edit-field-clickwrap-form-continue": "Doorgaan",
 	"campaignevents-participant-question-have-been-aggregated": "De antwoorden van deze {{GENDER:$1|deelnemer|deelneemster}} zijn samengevoegd en verwijderd",
-	"campaignevents-participant-question-no-response": "Geen antwoord"
+	"campaignevents-participant-question-no-response": "Geen antwoord",
+	"campaignevents-warning-change-event-end-date-past": "Als u de einddatum wijzigt naar een datum in het verleden, wordt het evenement gesloten en ontvangt u een overzicht van de antwoorden van deelnemers. Deze handeling is onomkeerbaar. Dit is alleen van toepassing als deelnemers antwoorden hebben gegeven op de deelnemersvragen."
 }
