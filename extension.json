@@ -556,7 +556,8 @@
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsTrackingToolRegistry",
-				"CampaignEventsEventQuestionsRegistry"
+				"CampaignEventsEventQuestionsRegistry",
+				"CampaignEventsHookRunner"
 			]
 		},
 		"EditEventRegistration": {
@@ -570,7 +571,8 @@
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsTrackingToolRegistry",
-				"CampaignEventsEventQuestionsRegistry"
+				"CampaignEventsEventQuestionsRegistry",
+				"CampaignEventsHookRunner"
 			]
 		},
 		"DeleteEventRegistration": {

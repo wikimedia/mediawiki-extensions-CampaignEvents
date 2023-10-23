@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
@@ -43,7 +44,7 @@ use Wikimedia\RequestTimeout\TimeoutException;
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
 	public const PAGE_FIELD_NAME = 'wp' . self::PAGE_FIELD_NAME_HTMLFORM;
-	private const DETAILS_SECTION = 'campaignevents-edit-form-details-label';
+	public const DETAILS_SECTION = 'campaignevents-edit-form-details-label';
 	private const PARTICIPANT_QUESTIONS_SECTION = 'campaignevents-edit-form-questions-label';
 
 	/** @var array */
@@ -66,6 +67,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private TrackingToolRegistry $trackingToolRegistry;
 	/** @var EventQuestionsRegistry */
 	private EventQuestionsRegistry $eventQuestionsRegistry;
+	/** @var CampaignEventsHookRunner */
+	private $hookRunner;
 
 	/** @var int|null */
 	protected $eventID;
@@ -98,6 +101,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param TrackingToolRegistry $trackingToolRegistry
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 * @param CampaignEventsHookRunner $hookRunner
 	 */
 	public function __construct(
 		string $name,
@@ -110,7 +114,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
 		TrackingToolRegistry $trackingToolRegistry,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		CampaignEventsHookRunner $hookRunner
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -122,6 +127,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->trackingToolRegistry = $trackingToolRegistry;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->hookRunner = $hookRunner;
 
 		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->formMessages = $this->getFormMessages();
@@ -408,6 +414,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
+		$this->hookRunner->onCampaignEventsRegistrationFormLoad( $formFields, $this->eventID );
 		if (
 			$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) &&
 			( !$this->event || $this->event->getParticipantQuestions() )
