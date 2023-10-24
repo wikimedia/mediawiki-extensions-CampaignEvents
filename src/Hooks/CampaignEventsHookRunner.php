@@ -9,7 +9,8 @@ use MediaWiki\HookContainer\HookContainer;
 class CampaignEventsHookRunner implements
 	CampaignEventsGetPolicyMessageForRegistrationHook,
 	CampaignEventsGetPolicyMessageForRegistrationFormHook,
-	CampaignEventsRegistrationFormLoadHook
+	CampaignEventsRegistrationFormLoadHook,
+	CampaignEventsRegistrationFormSubmitHook
 {
 	public const SERVICE_NAME = 'CampaignEventsHookRunner';
 
@@ -51,5 +52,16 @@ class CampaignEventsHookRunner implements
 			'CampaignEventsRegistrationFormLoad',
 			[ &$formFields, $eventID ]
 		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onCampaignEventsRegistrationFormSubmit(
+		array $data,
+		int $eventID ): bool {
+		return $this->hookContainer->run(
+			'CampaignEventsRegistrationFormSubmit',
+			[ $data, $eventID ] );
 	}
 }
