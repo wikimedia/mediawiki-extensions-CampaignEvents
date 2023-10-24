@@ -10,8 +10,8 @@ interface CampaignEventsRegistrationFormLoadHook {
 	 * on Special:EditEventRegistration
 	 *
 	 * @param array &$formFields
-	 * @param int|null $evendID
+	 * @param int|null $eventID
 	 * @return bool
 	 */
-	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $evendID );
+	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID );
 }
