@@ -402,7 +402,12 @@
 	"campaignevents-event-dates-cannot-be-changed": "Настанот заврши, па затоа не можете да ги менувате неговите датуми на идни. Ова ограничување ги штити податоците на учесниците.",
 	"campaignevents-individual-stats-label-message-confidence": "Со колкава самодоверба учествувате во Викимедиините проекти поврзани со овој настан?",
 	"campaignevents-individual-stats-label-message-affiliate": "Дали припаѓате на некоја Викимедиина подружница (огранок, корисничка група, тематска организација)?",
+	"campaignevents-edit-field-clickwrap-checkbox-info": "На оваа страница се насобраните одговори на оние што се одзвале на прашањата во образецот за пријава.",
+	"campaignevents-edit-field-clickwrap-checkbox-pretext": "За да ги видите насобраните одговори на учесниците ќе мора да го прифатите следово:",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "Се согласувам дека внимателно ќе постапувам со информациите насобрани во текот на овој настан.",
+	"campaignevents-edit-field-clickwrap-form-continue": "Продолжи",
 	"campaignevents-participant-question-have-been-aggregated": "Одговорите на {{GENDER:$1|овој учесник|оваа учесничка}} се насобрани и избришани",
 	"campaignevents-participant-question-no-response": "Нема одговор",
-	"campaignevents-warning-change-event-end-date-past": "Ако го замените завршниот датум со изминат, настанот ќе се затвори и ќе добиете преглед на одговори од учесниците. Ова дејство е неповратно. Ова важи само ако учесниците дале одговори на зададените прашања."
+	"campaignevents-warning-change-event-end-date-past": "Ако го замените завршниот датум со изминат, настанот ќе се затвори и ќе добиете преглед на одговори од учесниците. Ова дејство е неповратно. Ова важи само ако учесниците дале одговори на зададените прашања.",
+	"campaignevents-event-details-participants-individual-data-deleted": "Одговорите на поединечните учесници се ибришани во насобраните одговори и достапни се под [$1 {{int:campaignevents-event-details-tab-stats}}]."
 }

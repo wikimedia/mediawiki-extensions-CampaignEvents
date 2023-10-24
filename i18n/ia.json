@@ -407,5 +407,6 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "Continuar",
 	"campaignevents-participant-question-have-been-aggregated": "Le responsa de iste {{GENDER:$1|participante}} ha essite aggregate e delite",
 	"campaignevents-participant-question-no-response": "Necun responsa",
-	"campaignevents-warning-change-event-end-date-past": "Si tu cambia le data de fin a un data passate, le evento essera claudite e tu recipera un summario del responsas del participantes. Iste action non pote esser disfacite. Isto es solmente applicabile si le participantes ha fornite responsas al questiones pro le participantes."
+	"campaignevents-warning-change-event-end-date-past": "Si tu cambia le data de fin a un data passate, le evento essera claudite e tu recipera un summario del responsas del participantes. Iste action non pote esser disfacite. Isto es solmente applicabile si le participantes ha fornite responsas al questiones pro le participantes.",
+	"campaignevents-event-details-participants-individual-data-deleted": "Le responsas de participantes individual ha essite delite e le responsas aggregate es disponibile sub [$1 {{int:campaignevents-event-details-tab-stats}}]."
 }

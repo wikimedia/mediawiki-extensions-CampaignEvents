@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mansur"
+		]
+	},
+	"campaignevents-event-details-header-questions-help-label": "Мәгълүматларны саклау хәбәре",
+	"campaignevents-edit-field-clickwrap-checkbox-info": "Бу биттә катнашучыларның теркәү формасындагы сорауларга гомумиләштерелгән җаваплары бар.",
+	"campaignevents-edit-field-clickwrap-checkbox-pretext": "Катнашучыларның агрегирлаштырылган җавапларын карау өчен түбәндәгеләрне кабул итәргә кирәк:",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "Мин чарага теркәлгәндә җыелган катнашучылар турындагы мәгълүмат белән сак мөрәҗәгать итәргә риза.",
+	"campaignevents-edit-field-clickwrap-form-continue": "Дәвам итәргә",
+	"campaignevents-warning-change-event-end-date-past": "Әгәр дә сез тәмамлану датасын үткән датага үзгәртсәгез чара ябылачак һәм сез катнашучыларның җаваплар җыентыгын алачаксыз. Бу гамәл кире кагыла алмый. Бу катнашучылар катнашучыларның сорауларына җавап биргән очракта гына кулланыла ала.",
+	"campaignevents-event-details-participants-individual-data-deleted": "Аерым катнашучыларның җаваплары бетерелде, ә агрегирлаштырылган җаваплар [$1 {{int:campaignevents-event-details-tab-stats}}] бүлегендә бар."
+}

@@ -5,9 +5,15 @@
 		]
 	},
 	"campaignevents-event-details-header-questions-help-label": "Даннӧйез видзӧм сьӧрті юӧр",
+	"campaignevents-event-details-header-questions-help": "Таблицаын сетӧм пырӧтчиссезлӧн очакыввез лоасӧ ӧтлаӧтӧмась, а сёрӧнжык чышкӧмась ыстӧм бӧрас 90 лунӧ либо мероприятие бӧрас ( мый одзжык лоӧ).Ӧтлаалӧм очакыввез позьӧ адззыны\"{{int:campaignevents-event-details-tab-stats}}\"пыртӧтын, кӧда лоас адззана мероприятие помасьӧм бӧрын.",
 	"campaignevents-event-dates-cannot-be-changed": "Мероприятие ештіс, сійӧн тійӧ одӧ вермӧ вежны одзӧ вылӧ кадпас.Дзескӧтӧмыс дорйӧ пырӧтчиссезлісь даннӧйез",
 	"campaignevents-individual-stats-label-message-confidence": "Бура я асьнытӧ кылатӧ индӧм уджын,Викимедия проектӧ пай пуктікӧ?",
 	"campaignevents-individual-stats-label-message-affiliate": "Пыратӧ я Викимедиялӧн кытшӧмкӧ юкӧнӧ (чукӧрӧ,вӧдитчись чукӧрӧ,тематическӧй чукӧртчанінӧ)?",
+	"campaignevents-edit-field-clickwrap-checkbox-info": "Эта листбок вылын чукӧртӧмась пырӧтчиссезлӧн ӧтлаалӧм очакыввез гижсян формалӧн юалӧммез вылӧ",
+	"campaignevents-edit-field-clickwrap-checkbox-pretext": "Медбы видзӧтны пырӧтчиссезлісь ӧтлаалӧм очакыввез, колӧ примитны этӧ:",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "Ме сета кыв бура кутны мероприятие вылӧ гижсьӧм дырни чукӧртӧм пырӧтчиссез йылісь юӧр",
+	"campaignevents-edit-field-clickwrap-form-continue": "Нуӧтны одзӧ",
 	"campaignevents-participant-question-have-been-aggregated": "Этна{{ ИНЬ ДА АЙ ВЫЛӦ ЮКСЬӦМ:$1|участвуйтісь}} очакыввес вӧлісӧ ӧтувтӧмась да чышкӧмась",
-	"campaignevents-participant-question-no-response": "Очакыв абу"
+	"campaignevents-participant-question-no-response": "Очакыв абу",
+	"campaignevents-warning-change-event-end-date-past": "Ті кӧ вежатӧ помасьӧм кадпассӧ одззася вылас, мероприятиеыс лоас пӧдналӧм, и ті верматӧ босьтны пырӧтчиссезлісь очакыввез ӧтлаалӧм. Эта позяна куш сэк, пырӧтчиссез кӧ сетісӧ очакыввез пырӧтчиссезлӧн юалӧммез вылӧ."
 }

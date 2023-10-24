@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Confidence"
+		]
+	},
+	"campaignevents-edit-field-clickwrap-checkbox-info": "This page carry all the total answers to the registration from the people wey participate",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "i agree say i go handle the poeple wey paticipate information with care",
+	"campaignevents-edit-field-clickwrap-form-continue": "continue",
+	"campaignevents-event-details-participants-individual-data-deleted": "them delete the answers of people wey participate and all the answers wey them get dey for under [$1 {{int:campignevents-event-details-tab-stats}}]."
+}

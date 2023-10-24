@@ -407,5 +407,6 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "Fortfahren",
 	"campaignevents-participant-question-have-been-aggregated": "Die Antworten {{GENDER:$1|des Teilnehmers|der Teilnehmerin}} wurden aggregiert und gelöscht",
 	"campaignevents-participant-question-no-response": "Keine Rückmeldung",
-	"campaignevents-warning-change-event-end-date-past": "Wenn du das Enddatum auf ein vergangenes Datum änderst, wird die Veranstaltung geschlossen und du erhältst eine Zusammenfassung der Teilnehmerantworten. Diese Aktion kann nicht rückgängig gemacht werden. Dies gilt nur, wenn Teilnehmer Antworten auf die Teilnehmerfragen gegeben haben."
+	"campaignevents-warning-change-event-end-date-past": "Wenn du das Enddatum auf ein vergangenes Datum änderst, wird die Veranstaltung geschlossen und du erhältst eine Zusammenfassung der Teilnehmerantworten. Diese Aktion kann nicht rückgängig gemacht werden. Dies gilt nur, wenn Teilnehmer Antworten auf die Teilnehmerfragen gegeben haben.",
+	"campaignevents-event-details-participants-individual-data-deleted": "Die Antworten einzelner Teilnehmer wurden gelöscht und die aggregierten Antworten sind unter [$1 {{int:campaignevents-event-details-tab-stats}}] verfügbar."
 }

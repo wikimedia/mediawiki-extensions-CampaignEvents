@@ -412,5 +412,6 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "Doorgaan",
 	"campaignevents-participant-question-have-been-aggregated": "De antwoorden van deze {{GENDER:$1|deelnemer|deelneemster}} zijn samengevoegd en verwijderd",
 	"campaignevents-participant-question-no-response": "Geen antwoord",
-	"campaignevents-warning-change-event-end-date-past": "Als u de einddatum wijzigt naar een datum in het verleden, wordt het evenement gesloten en ontvangt u een overzicht van de antwoorden van deelnemers. Deze handeling is onomkeerbaar. Dit is alleen van toepassing als deelnemers antwoorden hebben gegeven op de deelnemersvragen."
+	"campaignevents-warning-change-event-end-date-past": "Als u de einddatum wijzigt naar een datum in het verleden, wordt het evenement gesloten en ontvangt u een overzicht van de antwoorden van deelnemers. Deze handeling is onomkeerbaar. Dit is alleen van toepassing als deelnemers antwoorden hebben gegeven op de deelnemersvragen.",
+	"campaignevents-event-details-participants-individual-data-deleted": "De antwoorden van de individuele deelnemers zijn verwijderd en de geaggregeerde antwoorden zijn beschikbaar onder [$1 {{int:campaginevents-event-details-tab-stats}}]."
 }

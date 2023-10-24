@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Jadnapac",
+			"Stacy Lavuha",
 			"Wangombe"
 		]
 	},
@@ -243,5 +244,9 @@
 	"campaignevents-notification-registration-details-organizers-header": "Waandaaji wa tukio",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|zaidi}}",
 	"campaignevents-notification-registration-event-page-link": "Angalia ukurasa wa tukio",
-	"campaignevents-notification-registration-chat-link": "Jiunge na gumzo la kikundi"
+	"campaignevents-notification-registration-chat-link": "Jiunge na gumzo la kikundi",
+	"campaignevents-edit-field-clickwrap-checkbox-info": "Ukurasa huu una majibu ya jumla ya washiriki kwa maswali ya fomu za usajili.",
+	"campaignevents-edit-field-clickwrap-checkbox-pretext": "Ili kuona majibu ya jumla ya washiriki lazima ukubali yafuatayo:",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "Ninakubali kushughulikia taarifa za mshiriki zilizokusanywa wakati wa usajili wa tukio kwa uangalifu.",
+	"campaignevents-edit-field-clickwrap-form-continue": "Endelea"
 }

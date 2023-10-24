@@ -405,5 +405,6 @@
 	"campaignevents-edit-field-clickwrap-checkbox-label": "Strinjam se, da bom s podatki o udeležencih, zbranih med registracijo dogodka, ravnal_a skrbno.",
 	"campaignevents-edit-field-clickwrap-form-continue": "Nadaljuj",
 	"campaignevents-participant-question-no-response": "Brez odgovora",
-	"campaignevents-warning-change-event-end-date-past": "Če spremenite končni datum na pretekli datum, bo dogodek zaprt in boste prejeli povzetek odgovorov udeležencev. Tega dejanja ni mogoče razveljaviti. To velja samo, če so udeleženci odgovorili na vprašanja za udeležence."
+	"campaignevents-warning-change-event-end-date-past": "Če spremenite končni datum na pretekli datum, bo dogodek zaprt in boste prejeli povzetek odgovorov udeležencev. Tega dejanja ni mogoče razveljaviti. To velja samo, če so udeleženci odgovorili na vprašanja za udeležence.",
+	"campaignevents-event-details-participants-individual-data-deleted": "Odgovori posameznih udeležencev so bili izbrisani, združeni odgovori pa so na voljo pod [$1 {{int:campaignevents-event-details-tab-stats}}]."
 }
