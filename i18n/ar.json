@@ -234,6 +234,8 @@
 	"campaignevents-back-to-your-events": "العودة إلى الفعاليات الخاصة بك",
 	"campaignevents-event-details-edit-button": "تعديل",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|مشارك}}",
+	"campaignevents-event-details-header-questions-help-label": "معلومات الاحتفاظ بالبيانات",
+	"campaignevents-event-details-header-questions-help": "سيتم جمع ردود المشاركين الفردية المعروضة على الجدول ثم حذفها، إما بعد 90 يوما من تقديمها أو في نهاية الفعالية (أياً كان من يأتي أولاً). ستتوفر الردود المجمعة في علامة التبويب \"{{int:campaignevents-event-details-tab-stats}}\"، والتي ستصبح مرئية بعد انتهاء الحدث.",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1| مشارك }} مسجّل تحت الخصوصية.",
 	"campaignevents-event-details-dates": "من $1 إلى $4",
 	"campaignevents-event-details-timezone": "<strong>المنطقة الزمنية:</strong> $1",
@@ -405,9 +407,15 @@
 	"campaignevents-details-stats-range-number": "بين $1 و $2",
 	"campaignevents-details-stats-range-percentage": "بين $1 % و $2 %",
 	"campaignevents-details-stats-no-response": "لا رد",
-	"campaignevents-event-dates-cannot-be-changed": "لا يمكن تغيير تواريخ الفعاليات الماضية إلى تواريخ مستقبلية لحماية بيانات المشاركين.",
+	"campaignevents-event-dates-cannot-be-changed": "انتهت الفعالية، لذا لا يمكنك تغيير تواريخ الفعالية لتواريخ مستقبلية. يحمي هذا التقييد بيانات المشاركين.",
 	"campaignevents-individual-stats-label-message-confidence": "إلى اي  مدى تثق بمشاركتك في مشاريع ويكيميديا خلال الفعالية؟",
 	"campaignevents-individual-stats-label-message-affiliate": "هل تنتمي إلى أي من الجهات الشقيقة التابعة لويكيميديا (فصول ومجموعات مستخدمين ومنظمات موضوعية)؟",
+	"campaignevents-edit-field-clickwrap-checkbox-info": "تحتوي هذه الصفحة على الردود المجمعة للمشاركين على أسئلة استمارة التسجيل.",
+	"campaignevents-edit-field-clickwrap-checkbox-pretext": "لمشاهدة الإجابات المجمعة للمشاركين يجب عليك قبول ما يلي:",
+	"campaignevents-edit-field-clickwrap-checkbox-label": "أوافق على التعامل مع المعلومات المُجمعة خلال تسجيل الفعالية بحذر.",
+	"campaignevents-edit-field-clickwrap-form-continue": "استمرار",
 	"campaignevents-participant-question-have-been-aggregated": "هذا {{GENDER:$1| تم تجميع ردود المشاركين}} وحذفها",
-	"campaignevents-participant-question-no-response": "لا رد"
+	"campaignevents-participant-question-no-response": "لا رد",
+	"campaignevents-warning-change-event-end-date-past": "إذا قمت بتغيير تاريخ النهاية إلى تاريخ سابق، سيتم إغلاق الفعالية وستتلقى ملخصاً للردود المشاركة. هذا الإجراء لا يمكن إلغاءه هذا لا ينطبق إلا إذا قدم المشاركون إجابات على أسئلة المشاركين.",
+	"campaignevents-event-details-participants-individual-data-deleted": "تم حذف ردود المشاركين الفردية وتتوفر الردود المجمعة ضمن [ $1 {{int:campaignevents-event-details-tab-stats}}]."
 }

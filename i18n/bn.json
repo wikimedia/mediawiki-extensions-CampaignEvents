@@ -172,5 +172,6 @@
 	"campaignevents-register-question-age-stats-label": "আপনার বয়স কত?",
 	"campaignevents-eventpage-register-dialog-questions-title": "আপনার তথ্যাদি",
 	"campaignevents-details-stats-header-percentage": "শতাংশ",
-	"campaignevents-details-stats-header-number": "সংখ্যা"
+	"campaignevents-details-stats-header-number": "সংখ্যা",
+	"campaignevents-edit-field-clickwrap-form-continue": "অগ্রসর হোন"
 }

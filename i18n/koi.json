@@ -15,5 +15,6 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "Нуӧтны одзӧ",
 	"campaignevents-participant-question-have-been-aggregated": "Этна{{ ИНЬ ДА АЙ ВЫЛӦ ЮКСЬӦМ:$1|участвуйтісь}} очакыввес вӧлісӧ ӧтувтӧмась да чышкӧмась",
 	"campaignevents-participant-question-no-response": "Очакыв абу",
-	"campaignevents-warning-change-event-end-date-past": "Ті кӧ вежатӧ помасьӧм кадпассӧ одззася вылас, мероприятиеыс лоас пӧдналӧм, и ті верматӧ босьтны пырӧтчиссезлісь очакыввез ӧтлаалӧм. Эта позяна куш сэк, пырӧтчиссез кӧ сетісӧ очакыввез пырӧтчиссезлӧн юалӧммез вылӧ."
+	"campaignevents-warning-change-event-end-date-past": "Ті кӧ вежатӧ помасьӧм кадпассӧ одззася вылас, мероприятиеыс лоас пӧдналӧм, и ті верматӧ босьтны пырӧтчиссезлісь очакыввез ӧтлаалӧм. Эта позяна куш сэк, пырӧтчиссез кӧ сетісӧ очакыввез пырӧтчиссезлӧн юалӧммез вылӧ.",
+	"campaignevents-event-details-participants-individual-data-deleted": "Торья пырӧтчиссезлӧн очакыввез вӧлісӧ чышкӧмась, а ӧтлаалӧм очакыввез позьӧ адззыны [$1 {{int:campaignevents-event-details-tab-stats}}] юкӧмын."
 }
