@@ -169,6 +169,7 @@ class SpecialEventDetails extends SpecialPage {
 			'infusable' => true,
 			'expanded' => false,
 			'framed' => false,
+			'autoFocus' => false,
 			'id' => 'ext-campaignevents-eventdetails-tabs'
 		] );
 		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule( $this->event, $language );
