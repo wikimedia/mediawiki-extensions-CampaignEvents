@@ -33,7 +33,7 @@
 	}
 }
 
-@media ( min-width: ( @width-breakpoint-desktop + 1 ) ) {
+@media ( min-width: @min-width-breakpoint-desktop ) {
 	.ext-campaignevents-eventpage-header-eventinfo > *:not( :last-child ) {
 		// This is equivalent to using gap: 1em.
 		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
@@ -41,7 +41,7 @@
 	}
 }
 
-@media ( max-width: @width-breakpoint-desktop ) {
+@media ( max-width: @max-width-breakpoint-tablet ) {
 	// Change flex direction on small screens so that there's one item per line.
 	// @media queries seem to be the only way to achieve that aside from
 	// display:grid (which is still not supported well enough).
@@ -127,7 +127,7 @@
 	}
 }
 
-@media ( max-width: @width-breakpoint-desktop ) {
+@media ( max-width: @max-width-breakpoint-tablet ) {
 	// Change flex direction on small screens so that there's one item per line.
 	// @media queries seem to be the only way to achieve that aside from
 	// display:grid (which is still not supported well enough).
@@ -143,7 +143,7 @@
 	}
 }
 
-@media ( max-width: @width-breakpoint-tablet ) {
+@media ( max-width: @max-width-breakpoint-mobile ) {
 	.ext-campaignevents-eventpage-enableheader .ext-campaignevents-eventpage-enable-registration-btn {
 		&,
 		& .oo-ui-buttonElement-button {
