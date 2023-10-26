@@ -63,6 +63,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @covers ::validateToolAddition
 	 * @covers ::makeNewEventRequest
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideAddTool
 	 */
@@ -86,6 +87,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @covers ::addToNewEvent
 	 * @covers ::makeNewEventRequest
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideAddTool
 	 */
@@ -110,6 +112,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @covers ::addToExistingEvent
 	 * @covers ::makeNewEventRequest
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideAddTool
 	 */
@@ -129,8 +132,13 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideAddTool(): Generator {
-		yield 'Success' => [ null, null ];
+	private function provideInvalidResponseCases(): Generator {
+		$noContentTypeResponseReq = $this->createMock( MWHttpRequest::class );
+		$noContentTypeResponseReq->method( 'getResponseHeader' )
+			->with( 'Content-Type' )
+			->willReturn( null );
+		$noContentTypeResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
+		yield 'No Content-Type header' => [ $noContentTypeResponseReq, 'campaignevents-tracking-tool-http-error' ];
 
 		$notJsonResponseReq = $this->createMock( MWHttpRequest::class );
 		$notJsonResponseReq->method( 'getResponseHeader' )
@@ -138,6 +146,31 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 			->willReturn( 'definitely-not-json' );
 		$notJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
 		yield 'Response is not JSON' => [ $notJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
+
+		$invalidJsonResponseReq = $this->createMock( MWHttpRequest::class );
+		$invalidJsonResponseReq->method( 'getResponseHeader' )
+			->with( 'Content-Type' )
+			->willReturn( 'application/json' );
+		$invalidJsonResponseReq->method( 'getContent' )->willReturn( '{' );
+		$invalidJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
+		yield 'Response is invalid JSON' => [ $invalidJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
+
+		$notObjectJsonResponseReq = $this->createMock( MWHttpRequest::class );
+		$notObjectJsonResponseReq->method( 'getResponseHeader' )
+			->with( 'Content-Type' )
+			->willReturn( 'application/json' );
+		$notObjectJsonResponseReq->method( 'getContent' )->willReturn( 'false' );
+		$notObjectJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
+		yield 'JSON response is not an object' => [
+			$notObjectJsonResponseReq,
+			'campaignevents-tracking-tool-http-error'
+		];
+	}
+
+	public function provideAddTool(): Generator {
+		yield 'Success' => [ null, null ];
+
+		yield from $this->provideInvalidResponseCases();
 
 		yield 'No error code in the response' => [
 			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
@@ -173,6 +206,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	/**
 	 * @covers ::validateToolRemoval
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideRemoveTool
 	 */
@@ -194,6 +228,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	/**
 	 * @covers ::removeFromEvent
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideRemoveTool
 	 */
@@ -215,6 +250,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	/**
 	 * @covers ::validateEventDeletion
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideRemoveTool
 	 */
@@ -236,6 +272,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	/**
 	 * @covers ::onEventDeleted
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideRemoveTool
 	 */
@@ -257,12 +294,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	public function provideRemoveTool(): Generator {
 		yield 'Success' => [ null, null ];
 
-		$notJsonResponseReq = $this->createMock( MWHttpRequest::class );
-		$notJsonResponseReq->method( 'getResponseHeader' )
-			->with( 'Content-Type' )
-			->willReturn( 'definitely-not-json' );
-		$notJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
-		yield 'Response is not JSON' => [ $notJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
+		yield from $this->provideInvalidResponseCases();
 
 		yield 'No error code in the response' => [
 			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
@@ -289,6 +321,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @covers ::validateParticipantAdded
 	 * @covers ::syncParticipants
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideParticipantsChange
 	 */
@@ -313,6 +346,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @covers ::addParticipant
 	 * @covers ::syncParticipants
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideParticipantsChange
 	 */
@@ -337,6 +371,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @covers ::validateParticipantsRemoved
 	 * @covers ::syncParticipants
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideParticipantsChange
 	 */
@@ -361,6 +396,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @covers ::removeParticipants
 	 * @covers ::syncParticipants
 	 * @covers ::makePostRequest
+	 * @covers ::parseResponseJSON
 	 * @covers ::makeErrorStatus
 	 * @dataProvider provideParticipantsChange
 	 */
@@ -384,12 +420,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	public function provideParticipantsChange(): Generator {
 		yield 'Success' => [ null, null ];
 
-		$notJsonResponseReq = $this->createMock( MWHttpRequest::class );
-		$notJsonResponseReq->method( 'getResponseHeader' )
-			->with( 'Content-Type' )
-			->willReturn( 'definitely-not-json' );
-		$notJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
-		yield 'Response is not JSON' => [ $notJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
+		yield from $this->provideInvalidResponseCases();
 
 		yield 'No error code in the response' => [
 			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
