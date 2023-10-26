@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Bvprasadenwiki",
-			"V Bhavya"
+			"V Bhavya",
+			"Chaduvari"
 		]
 	},
 	"right-campaignevents-organize-events": "ఈవెంట్స్ నిర్వహించండి",
@@ -23,5 +24,6 @@
 	"campaignevents-register-error-no-event": "ప్రత్యేకించి ఏ కార్యక్రమం నిర్దేశించలేదు",
 	"campaignevents-unregister-success": "మీరు ఈ కార్యక్రమానికి నమోదు చేసుకోలేదు",
 	"campaignevents-role-creator": "రూపొందించిన వారు",
-	"campaignevents-role-organizer": "నిర్వాహకుడు"
+	"campaignevents-role-organizer": "నిర్వాహకుడు",
+	"campaignevents-myevents-label-search": "వెతుకు"
 }
