@@ -309,10 +309,6 @@ fieldset.ext-campaignevents-details-email-form {
 	z-index: @z-index-tooltip;
 }
 
-.ext-campaignevents-event-details-remove-participant-button.oo-ui-buttonElement {
-	display: none;
-}
-
 .ext-campaignevents-details-stats-question-container {
 	border-bottom: @border-base;
 
@@ -384,6 +380,7 @@ fieldset.ext-campaignevents-details-email-form {
 }
 
 // This rule should come last so that it overrides other styles set in this file.
-.ext-campaignevents-details-hide-element {
+// Repeat the selector to increase specificity (e.g., for buttons).
+.ext-campaignevents-details-hide-element.ext-campaignevents-details-hide-element {
 	display: none;
 }
