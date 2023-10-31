@@ -5,13 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\EmailUsersHandler;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Session\Session;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
@@ -36,7 +34,6 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 	 * @param PermissionChecker|null $permissionsChecker
 	 * @param CampaignsUserMailer|null $campaignsUserMailer
 	 * @param ParticipantsStore|null $participantsStore
-	 * @param bool $featureEnabled
 	 * @param IEventLookup|null $eventLookup
 	 * @return EmailUsersHandler
 	 */
@@ -44,14 +41,12 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 		PermissionChecker $permissionsChecker = null,
 		CampaignsUserMailer $campaignsUserMailer = null,
 		ParticipantsStore $participantsStore = null,
-		bool $featureEnabled = false,
 		IEventLookup $eventLookup = null
 	): EmailUsersHandler {
 		return new EmailUsersHandler(
 			$permissionsChecker ?? $this->createMock( PermissionChecker::class ),
 			$campaignsUserMailer ?? $this->createMock( CampaignsUserMailer::class ),
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
-			new HashConfig( [ 'CampaignEventsEnableEmail' => $featureEnabled ] ),
 				$eventLookup ?? $this->createMock( IEventLookup::class ),
 		);
 	}
@@ -67,17 +62,6 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 			'bodyContents' => json_encode( $data ),
 			'headers' => [ 'Content-Type' => 'application/json' ],
 		];
-	}
-
-	public function testRun__featureDisabled() {
-		$handler = $this->newHandler();
-		$this->expectException( HttpException::class );
-		$this->expectExceptionMessage( 'This endpoint is not enabled on this wiki' );
-		$this->expectExceptionCode( 421 );
-		$this->executeHandler( $handler, new RequestData(
-			$this->getRequestData( self::REQ_DATA )
-			)
-		);
 	}
 
 	/**
@@ -99,7 +83,7 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 	public function testRun_success( array $expectedResp ) {
 		$permissionCheckerMock = $this->createMock( PermissionChecker::class );
 		$permissionCheckerMock->method( "userCanEmailParticipants" )->willReturn( true );
-		$handler = $this->newHandler( $permissionCheckerMock, null, null, true );
+		$handler = $this->newHandler( $permissionCheckerMock );
 		$request = new RequestData(
 			$this->getRequestData( self::REQ_DATA )
 		);
