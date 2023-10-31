@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use Config;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -51,6 +52,8 @@ class FrontendModulesFactory {
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 	private EventQuestionsRegistry $questionsRegistry;
 	private Config $config;
+	/** @var CampaignEventsHookRunner */
+	private $hookRunner;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -68,6 +71,7 @@ class FrontendModulesFactory {
 	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
 	 * @param EventQuestionsRegistry $questionsRegistry
 	 * @param Config $config
+	 * @param CampaignEventsHookRunner $hookRunner
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -84,7 +88,8 @@ class FrontendModulesFactory {
 		ParticipantAnswersStore $answersStore,
 		EventAggregatedAnswersStore $aggregatedAnswersStore,
 		EventQuestionsRegistry $questionsRegistry,
-		Config $config
+		Config $config,
+		CampaignEventsHookRunner $hookRunner
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -101,6 +106,7 @@ class FrontendModulesFactory {
 		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
 		$this->questionsRegistry = $questionsRegistry;
 		$this->config = $config;
+		$this->hookRunner = $hookRunner;
 	}
 
 	/**
@@ -119,6 +125,7 @@ class FrontendModulesFactory {
 			$this->userLinker,
 			$this->eventTimeFormatter,
 			$this->trackingToolRegistry,
+			$this->hookRunner,
 			$registration,
 			$language
 		);
