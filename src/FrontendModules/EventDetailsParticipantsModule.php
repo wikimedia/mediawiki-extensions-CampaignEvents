@@ -22,6 +22,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
+use OOUI\ButtonGroupWidget;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
@@ -794,7 +795,7 @@ class EventDetailsParticipantsModule {
 		bool $viewerCanEmailParticipants
 	): Tag {
 		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-controls' ] );
-		$removeButton = new ButtonWidget( [
+		$deselectButton = new ButtonWidget( [
 			'icon' => 'close',
 			'title' => $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-participants-deselect' )
@@ -807,10 +808,11 @@ class EventDetailsParticipantsModule {
 			),
 			'classes' => [ 'ext-campaignevents-details-participants-count-button' ]
 		] );
-		$container->appendContent( [ $removeButton ] );
-		$buttonContainer = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-buttons' ] );
+		$container->appendContent( [ $deselectButton ] );
+
+		$extraButtons = [];
 		if ( $viewerCanRemoveParticipants ) {
-			$removeButton = new ButtonWidget( [
+			$extraButtons[] = new ButtonWidget( [
 				'infusable' => true,
 				'framed' => true,
 				'flags' => [
@@ -820,12 +822,14 @@ class EventDetailsParticipantsModule {
 					MessageValue::new( 'campaignevents-event-details-remove-participant-remove-btn' )
 				),
 				'id' => 'ext-campaignevents-event-details-remove-participant-button',
-				'classes' => [ 'ext-campaignevents-event-details-remove-participant-button' ],
+				'classes' => [
+					'ext-campaignevents-event-details-remove-participant-button',
+					'ext-campaignevents-details-hide-element'
+				],
 			] );
-			$buttonContainer->appendContent( $removeButton );
 		}
 		if ( $viewerCanEmailParticipants ) {
-			$messageAllParticipantsButton = new ButtonWidget( [
+			$extraButtons[] = new ButtonWidget( [
 				'infusable' => true,
 				'framed' => true,
 				'label' => $this->msgFormatter->format(
@@ -834,9 +838,11 @@ class EventDetailsParticipantsModule {
 				'flags' => [ 'progressive' ],
 				'classes' => [ 'ext-campaignevents-event-details-message-all-participants-button' ],
 			] );
-			$buttonContainer->appendContent( $messageAllParticipantsButton );
 		}
-		$container->appendContent( $buttonContainer );
+
+		if ( $extraButtons ) {
+			$container->appendContent( new ButtonGroupWidget( [ 'items' => $extraButtons ] ) );
+		}
 		return $container;
 	}
 }

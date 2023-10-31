@@ -206,7 +206,7 @@
 		this.isSelectionInverted = false;
 		this.selectedParticipantsAmount = this.participantsTotal;
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.$element.show();
+			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-details-hide-element' );
 		}
 		this.emit( 'change' );
 	};
@@ -216,7 +216,7 @@
 		this.isSelectionInverted = false;
 		this.selectedParticipantsAmount = 0;
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.$element.hide();
+			this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-details-hide-element' );
 		}
 		this.emit( 'change' );
 	};
@@ -270,7 +270,7 @@
 			this.selectedParticipantIDs.push( checkbox.getValue() );
 		}
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.$element.show();
+			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-details-hide-element' );
 		}
 	};
 
@@ -280,7 +280,7 @@
 			this.selectAllParticipantsCheckbox.setSelected( false, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 			this.selectedParticipantIDs = [];
-			this.removeParticipantsButton.$element.hide();
+			this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-details-hide-element' );
 			this.isSelectionInverted = false;
 			return;
 		}
