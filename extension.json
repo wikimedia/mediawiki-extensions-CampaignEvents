@@ -44,10 +44,6 @@
 			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
 			"value": null
 		},
-		"CampaignEventsEnableEmail": {
-			"description": "Temporary feature flag to enable support for emailing users.",
-			"value": false
-		},
 		"CampaignEventsEnableParticipantQuestions": {
 			"description": "Temporary feature flag to enable support for participant questions.",
 			"value": false
@@ -528,7 +524,6 @@
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsUserMailer",
 				"CampaignEventsParticipantsStore",
-				"MainConfig",
 				"CampaignEventsEventLookup"
 			]
 		},

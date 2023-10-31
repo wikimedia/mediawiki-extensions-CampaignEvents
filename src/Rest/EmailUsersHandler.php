@@ -4,13 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use Config;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
@@ -30,26 +28,23 @@ class EmailUsersHandler extends SimpleHandler {
 	private PermissionChecker $permissionChecker;
 	/** @var ParticipantsStore */
 	private ParticipantsStore $participantsStore;
-	/** @var bool */
-	private bool $endpointEnabled;
 	private IEventLookup $eventLookup;
 
 	/**
 	 * @param PermissionChecker $permissionChecker
 	 * @param CampaignsUserMailer $userMailer
 	 * @param ParticipantsStore $participantsStore
-	 * @param Config $config
 	 * @param IEventLookup $eventLookup
 	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
 		CampaignsUserMailer $userMailer,
 		ParticipantsStore $participantsStore,
-		Config $config, IEventLookup $eventLookup ) {
+		IEventLookup $eventLookup
+	) {
 		$this->permissionChecker = $permissionChecker;
 		$this->userMailer = $userMailer;
 		$this->participantsStore = $participantsStore;
-		$this->endpointEnabled = $config->get( 'CampaignEventsEnableEmail' );
 		$this->eventLookup = $eventLookup;
 	}
 
@@ -58,13 +53,6 @@ class EmailUsersHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	public function run( int $eventId ): Response {
-		if ( !$this->endpointEnabled ) {
-			throw new HttpException(
-			// No need to localize this, since the feature flag is temporary.
-				'This endpoint is not enabled on this wiki.',
-				421
-			);
-		}
 		$this->getRegistrationOrThrow( $this->eventLookup, $eventId );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$params = $this->getValidatedBody();
