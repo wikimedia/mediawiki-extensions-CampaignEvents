@@ -280,7 +280,9 @@
 			this.selectAllParticipantsCheckbox.setSelected( false, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 			this.selectedParticipantIDs = [];
-			this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-details-hide-element' );
+			if ( this.removeParticipantsButton ) {
+				this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-details-hide-element' );
+			}
 			this.isSelectionInverted = false;
 			return;
 		}
