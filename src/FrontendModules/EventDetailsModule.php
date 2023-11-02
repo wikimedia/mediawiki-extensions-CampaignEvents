@@ -41,7 +41,6 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-alerts',
 		'oojs-ui.styles.icons-user',
 		'oojs-ui.styles.icons-media',
-		'oojs-ui.styles.icons-editing-advanced',
 	];
 
 	/** @var OrganizersStore */
@@ -122,23 +121,24 @@ class EventDetailsModule {
 		$contentWrapper = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-eventdetails-content-wrapper' ] );
 
-		$contentWrapper->appendContent(
-			$this->getInfoColumn(
-				$viewingUser,
-				$out,
-				$isOrganizer,
-				$isParticipant,
-				$organizersCount
-			)
+		$infoColumn = $this->getInfoColumn(
+			$viewingUser,
+			$out,
+			$isOrganizer,
+			$isParticipant,
+			$organizersCount
+		);
+		$organizersColumn = $this->getOrganizersColumn( $out, $organizersCount );
+
+		$this->hookRunner->onCampaignEventsGetEventDetails(
+			$infoColumn,
+			$organizersColumn,
+			$eventID,
+			$isOrganizer,
+			$out
 		);
 
-		$items = $this->getOrganizersColumn( $out, $organizersCount );
-		if ( $isOrganizer ) {
-			$this->hookRunner->onCampaignEventDetailsLoad( $items, $eventID, $this->language->getCode() );
-		}
-		$contentWrapper->appendContent(
-			( new Tag( 'div' ) )->appendContent( $items )
-		);
+		$contentWrapper->appendContent( $infoColumn, $organizersColumn );
 
 		$footer = $this->getFooter();
 		return new PanelLayout( [
@@ -212,13 +212,13 @@ class EventDetailsModule {
 		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $this->registration, $viewingUser );
 		// XXX Can't use $this->msgFormatter due to parse()
 		$timezoneMsg = $out->msg( 'campaignevents-event-details-timezone' )->params( $formattedTimezone )->parse();
-		$items[] = $this->makeSection(
+		$items[] = self::makeSection(
 			'clock',
 			[
 				$datesMsg,
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
-			'campaignevents-event-details-dates-label'
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) )
 		);
 
 		$needToRegisterMsg = $this->msgFormatter->format(
@@ -250,10 +250,10 @@ class EventDetailsModule {
 			);
 		}
 
-		$items[] = $this->makeSection(
+		$items[] = self::makeSection(
 			'speechBubbles',
 			$chatSectionContent,
-			'campaignevents-event-details-chat-link'
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-chat-link' ) )
 		);
 
 		return ( new Tag( 'div' ) )
@@ -263,9 +263,9 @@ class EventDetailsModule {
 	/**
 	 * @param OutputPage $out
 	 * @param int $organizersCount
-	 * @return array
+	 * @return Tag
 	 */
-	private function getOrganizersColumn( OutputPage $out, int $organizersCount ): array {
+	private function getOrganizersColumn( OutputPage $out, int $organizersCount ): Tag {
 		$ret = [];
 
 		$partialOrganizers = $this->organizersStore->getEventOrganizers(
@@ -310,13 +310,13 @@ class EventDetailsModule {
 			$ret[] = ( new Tag( 'p' ) )->appendContent( $viewMoreBtn, $viewMoreNoscript );
 		}
 
-		return [
-			$this->makeSection(
-				'userRights',
-				$ret,
-				'campaignevents-event-details-organizers-header'
-			)
-		];
+		$organizersSection = self::makeSection(
+			'userRights',
+			$ret,
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-organizers-header' ) )
+		);
+
+		return ( new Tag( 'div' ) )->appendContent( $organizersSection );
 	}
 
 	/**
@@ -381,10 +381,10 @@ class EventDetailsModule {
 			}
 		}
 
-		return $this->makeSection(
+		return self::makeSection(
 			'mapPin',
 			$items,
-			'campaignevents-event-details-location-header'
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-location-header' ) )
 		);
 	}
 
@@ -458,10 +458,10 @@ class EventDetailsModule {
 			'inline' => true,
 		] );
 
-		return $this->makeSection(
+		return self::makeSection(
 			'chart',
 			$sectionItems,
-			$toolUserInfo['display-name-msg']
+			$this->msgFormatter->format( MessageValue::new( $toolUserInfo['display-name-msg'] ) )
 		);
 	}
 
@@ -477,18 +477,21 @@ class EventDetailsModule {
 	}
 
 	/**
+	 * Builds a section for the info panel. This method might be called in handlers of the
+	 * CampaignEventsGetEventDetails hook.
+	 *
 	 * @param string $icon
 	 * @param string|Tag|array $content
-	 * @param string $labelMsg
+	 * @param string $label
 	 * @return Tag
 	 */
-	private function makeSection( string $icon, $content, string $labelMsg ): Tag {
+	public static function makeSection( string $icon, $content, string $label ): Tag {
 		$iconWidget = new IconWidget( [
 			'icon' => $icon,
 			'classes' => [ 'ext-campaignevents-event-details-icon' ]
 		] );
 		$header = ( new Tag( 'h3' ) )
-			->appendContent( $iconWidget, $this->msgFormatter->format( MessageValue::new( $labelMsg ) ) )
+			->appendContent( $iconWidget, $label )
 			->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
 
 		$contentTag = ( new Tag( 'div' ) )

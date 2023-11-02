@@ -5,13 +5,15 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks;
 
 use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Output\OutputPage;
+use OOUI\Tag;
 
 class CampaignEventsHookRunner implements
 	CampaignEventsGetPolicyMessageForRegistrationHook,
 	CampaignEventsGetPolicyMessageForRegistrationFormHook,
 	CampaignEventsRegistrationFormLoadHook,
 	CampaignEventsRegistrationFormSubmitHook,
-	CampaignEventDetailsLoadHook
+	CampaignEventsGetEventDetailsHook
 {
 	public const SERVICE_NAME = 'CampaignEventsHookRunner';
 
@@ -69,13 +71,16 @@ class CampaignEventsHookRunner implements
 	/**
 	 * @inheritDoc
 	 */
-	public function onCampaignEventDetailsLoad(
-		array &$items,
+	public function onCampaignEventsGetEventDetails(
+		Tag $infoColumn,
+		Tag $organizersColumn,
 		int $eventID,
-		string $languageCode
+		bool $isOrganizer,
+		OutputPage $outputPage
 	): bool {
 		return $this->hookContainer->run(
-			'CampaignEventDetailsLoad',
-			[ &$items, $eventID, $languageCode ] );
+			'CampaignEventsGetEventDetails',
+			[ $infoColumn, $organizersColumn, $eventID, $isOrganizer, $outputPage ]
+		);
 	}
 }
