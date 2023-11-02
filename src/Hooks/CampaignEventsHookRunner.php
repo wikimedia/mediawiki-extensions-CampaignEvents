@@ -10,7 +10,8 @@ class CampaignEventsHookRunner implements
 	CampaignEventsGetPolicyMessageForRegistrationHook,
 	CampaignEventsGetPolicyMessageForRegistrationFormHook,
 	CampaignEventsRegistrationFormLoadHook,
-	CampaignEventsRegistrationFormSubmitHook
+	CampaignEventsRegistrationFormSubmitHook,
+	CampaignEventDetailsLoadHook
 {
 	public const SERVICE_NAME = 'CampaignEventsHookRunner';
 
@@ -63,5 +64,18 @@ class CampaignEventsHookRunner implements
 		return $this->hookContainer->run(
 			'CampaignEventsRegistrationFormSubmit',
 			[ $data, $eventID ] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onCampaignEventDetailsLoad(
+		array &$items,
+		int $eventID,
+		string $languageCode
+	): bool {
+		return $this->hookContainer->run(
+			'CampaignEventDetailsLoad',
+			[ &$items, $eventID, $languageCode ] );
 	}
 }

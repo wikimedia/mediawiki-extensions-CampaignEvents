@@ -9,6 +9,7 @@ use Language;
 use Linker;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -40,6 +41,7 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-alerts',
 		'oojs-ui.styles.icons-user',
 		'oojs-ui.styles.icons-media',
+		'oojs-ui.styles.icons-editing-advanced',
 	];
 
 	/** @var OrganizersStore */
@@ -59,6 +61,8 @@ class EventDetailsModule {
 	private Language $language;
 	/** @var ITextFormatter */
 	private ITextFormatter $msgFormatter;
+	/** @var CampaignEventsHookRunner */
+	private $hookRunner;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -67,6 +71,7 @@ class EventDetailsModule {
 	 * @param UserLinker $userLinker
 	 * @param EventTimeFormatter $eventTimeFormatter
 	 * @param TrackingToolRegistry $trackingToolRegistry
+	 * @param CampaignEventsHookRunner $hookRunner
 	 * @param ExistingEventRegistration $registration
 	 * @param Language $language
 	 */
@@ -77,6 +82,7 @@ class EventDetailsModule {
 		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
 		TrackingToolRegistry $trackingToolRegistry,
+		CampaignEventsHookRunner $hookRunner,
 		ExistingEventRegistration $registration,
 		Language $language
 	) {
@@ -86,6 +92,7 @@ class EventDetailsModule {
 		$this->eventTimeFormatter = $eventTimeFormatter;
 		$this->trackingToolRegistry = $trackingToolRegistry;
 
+		$this->hookRunner = $hookRunner;
 		$this->registration = $registration;
 		$this->language = $language;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
@@ -107,7 +114,8 @@ class EventDetailsModule {
 		bool $isParticipant,
 		OutputPage $out
 	): PanelLayout {
-		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $this->registration->getID() );
+		$eventID = $this->registration->getID();
+		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
 		$header = $this->getHeader( $isOrganizer );
 
@@ -123,15 +131,16 @@ class EventDetailsModule {
 				$organizersCount
 			)
 		);
+
+		$items = $this->getOrganizersColumn( $out, $organizersCount );
+		if ( $isOrganizer ) {
+			$this->hookRunner->onCampaignEventDetailsLoad( $items, $eventID, $this->language->getCode() );
+		}
 		$contentWrapper->appendContent(
-			$this->getOrganizersColumn(
-				$out,
-				$organizersCount
-			)
+			( new Tag( 'div' ) )->appendContent( $items )
 		);
 
 		$footer = $this->getFooter();
-
 		return new PanelLayout( [
 			'content' => [ $header, $contentWrapper, $footer ],
 			'padded' => true,
@@ -254,9 +263,9 @@ class EventDetailsModule {
 	/**
 	 * @param OutputPage $out
 	 * @param int $organizersCount
-	 * @return Tag
+	 * @return array
 	 */
-	private function getOrganizersColumn( OutputPage $out, int $organizersCount ): Tag {
+	private function getOrganizersColumn( OutputPage $out, int $organizersCount ): array {
 		$ret = [];
 
 		$partialOrganizers = $this->organizersStore->getEventOrganizers(
@@ -301,11 +310,13 @@ class EventDetailsModule {
 			$ret[] = ( new Tag( 'p' ) )->appendContent( $viewMoreBtn, $viewMoreNoscript );
 		}
 
-		return $this->makeSection(
-			'userRights',
-			$ret,
-			'campaignevents-event-details-organizers-header'
-		);
+		return [
+			$this->makeSection(
+				'userRights',
+				$ret,
+				'campaignevents-event-details-organizers-header'
+			)
+		];
 	}
 
 	/**
