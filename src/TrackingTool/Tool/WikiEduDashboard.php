@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool\Tool;
 
+use JsonException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -14,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Http\HttpRequestFactory;
 use Message;
+use MWHttpRequest;
 use StatusValue;
 use Wikimedia\Assert\Assert;
 
@@ -288,16 +290,33 @@ class WikiEduDashboard extends TrackingTool {
 		$req->setHeader( 'Content-Type', 'application/json' );
 
 		$status = $req->execute();
-		$contentTypeHeader = $req->getResponseHeader( 'Content-Type' );
-		$contentType = strtolower( explode( ';', $contentTypeHeader )[0] );
-		if ( $contentType !== 'application/json' ) {
+		$respObj = $this->parseResponseJSON( $req );
+		if ( $respObj === null ) {
 			return StatusValue::newFatal( 'campaignevents-tracking-tool-http-error' );
 		}
 		if ( $status->isGood() ) {
 			return StatusValue::newGood();
 		}
-		$respObj = json_decode( $req->getContent(), true );
 		return $this->makeErrorStatus( $respObj, $courseID );
+	}
+
+	private function parseResponseJSON( MWHttpRequest $request ): ?array {
+		$contentTypeHeader = $request->getResponseHeader( 'Content-Type' );
+		if ( !$contentTypeHeader ) {
+			return null;
+		}
+		$contentType = strtolower( explode( ';', $contentTypeHeader )[0] );
+		if ( $contentType !== 'application/json' ) {
+			return null;
+		}
+
+		try {
+			$parsedResponse = json_decode( $request->getContent(), true, 512, JSON_THROW_ON_ERROR );
+		} catch ( JsonException $_ ) {
+			return null;
+		}
+
+		return is_array( $parsedResponse ) ? $parsedResponse : null;
 	}
 
 	/**
