@@ -94,6 +94,9 @@
 				"PageStore",
 				"TitleFormatter"
 			]
+		},
+		"EchoHooksHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler"
 		}
 	},
 	"Hooks": {
@@ -101,7 +104,7 @@
 		"ArticleViewHeader": "ArticleViewHeader",
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
 		"PageDeleteComplete": "PageMoveAndDeleteHandler",
-		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler::onBeforeCreateEchoEvent"
+		"BeforeCreateEchoEvent": "EchoHooksHandler"
 	},
 	"JobClasses": {
 		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob"
