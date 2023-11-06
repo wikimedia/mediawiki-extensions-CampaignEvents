@@ -7,8 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 use EchoAttributeManager;
 use EchoUserLocator;
 use MediaWiki\Extension\CampaignEvents\Notifications\RegistrationNotificationPresentationModel;
+use MediaWiki\Extension\Notifications\Hooks\BeforeCreateEchoEventHook;
 
-class EchoHooksHandler {
+class EchoHooksHandler implements BeforeCreateEchoEventHook {
 
 	private const REGISTRATION_NOTIFICATION_CATEGORY = 'campaign-events-notification-registration';
 
@@ -17,7 +18,7 @@ class EchoHooksHandler {
 	 * @param array &$notificationCategories
 	 * @param array &$icons
 	 */
-	public static function onBeforeCreateEchoEvent(
+	public function onBeforeCreateEchoEvent(
 		array &$notifications,
 		array &$notificationCategories,
 		array &$icons
