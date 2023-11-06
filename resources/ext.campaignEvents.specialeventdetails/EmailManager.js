@@ -128,14 +128,14 @@
 		}
 
 		if ( allSelected ) {
-			this.$recipientsListElement.append(
+			this.$recipientsListElement.text(
 				mw.message( 'campaignevents-email-participants-all' ).text() );
 			return;
 		}
 
 		if ( this.recipientsList.length > 1 ) {
 			if ( participantsManager.selectAllParticipantsCheckbox.selected ) {
-				this.$recipientsListElement.append(
+				this.$recipientsListElement.text(
 					mw.message(
 						'campaignevents-email-participants-except-count',
 						mw.language.convertNumber(
@@ -143,7 +143,7 @@
 						) ).text() );
 				return;
 			}
-			this.$recipientsListElement.append(
+			this.$recipientsListElement.text(
 				mw.message(
 					'campaignevents-email-participants-count',
 					mw.language.convertNumber(
