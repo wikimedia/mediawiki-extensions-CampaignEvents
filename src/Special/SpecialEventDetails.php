@@ -139,10 +139,13 @@ class SpecialEventDetails extends SpecialPage {
 			$isParticipant = false;
 		}
 		$isOrganizer = $organizer !== null;
+		$userCanEmailParticipants = $this->permissionChecker->userCanEmailParticipants(
+			new MWAuthorityProxy( $this->getAuthority() ),
+			$this->event->getID()
+		);
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
-			'wgCampaignEventsEnableEmail' => $this->getConfig()->get( 'CampaignEventsEnableEmail' ),
-			'wgCampaignEventsShowEmailTab' => $this->emailIsEnabledAndAllowed()
+			'wgCampaignEventsShowEmailTab' => $userCanEmailParticipants,
 		] );
 		$out->setPageTitle(
 			$msgFormatter->format(
@@ -196,11 +199,11 @@ class SpecialEventDetails extends SpecialPage {
 				$this->getUser(),
 				new MWAuthorityProxy( $this->getAuthority() ),
 				$isOrganizer,
-				$this->emailIsEnabledAndAllowed(),
+				$userCanEmailParticipants,
 				$out
 			)
 		);
-		if ( $this->emailIsEnabledAndAllowed() ) {
+		if ( $userCanEmailParticipants ) {
 			$emailModule = $this->frontendModulesFactory->newEmailParticipantsModule();
 			$tabs[] = $this->createTab(
 				self::EMAIL_PANEL,
@@ -276,16 +279,6 @@ class SpecialEventDetails extends SpecialPage {
 				'content' => $content
 			]
 		);
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function emailIsEnabledAndAllowed(): bool {
-		return $this->permissionChecker->userCanEmailParticipants(
-				new MWAuthorityProxy( $this->getAuthority() ),
-				$this->event->getID() )
-			&& $this->getConfig()->get( 'CampaignEventsEnableEmail' );
 	}
 
 	/**
