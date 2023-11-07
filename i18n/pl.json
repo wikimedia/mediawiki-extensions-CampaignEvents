@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Woytecr",
-			"Rzuwig"
+			"Rzuwig",
+			"Msz2001"
 		]
 	},
 	"campaignevents-desc": "Dostarcza narzędzia dla organizatorów i uczestników kampanii.",
+	"nstab-event": "Wydarzenie",
 	"action-campaignevents-enable-registration": "włączania rejestracji na wydarzenia",
 	"right-campaignevents-enable-registration": "Włączanie rejestracji na wydarzenia",
 	"action-campaignevents-delete-registration": "usuwania rejestracji na wydarzenia",
@@ -16,6 +18,7 @@
 	"campaignevents-error-invalid-title-interwiki": "Określ stronę wydarzenia na lokalnej wiki.",
 	"campaignevents-error-page-not-found": "Nie ma strony wydarzenia o tej nazwie.",
 	"campaignevents-error-page-not-event-namespace": "Strona wydarzenia musi znajdować się w przestrzeni nazw {{ns:event}}.",
+	"campaignevents-error-page-with-section": "Strona wydarzenia nie może zawierać nazwy sekcji.",
 	"campaignevents-error-invalid-chat-url": "Wpisz prawidłowy adres URL czatu.",
 	"campaignevents-error-invalid-status": "Wskaż, czy wydarzenie jest otwarte czy zamknięte.",
 	"campaignevents-error-empty-start": "Wybierz czas rozpoczęcia.",
