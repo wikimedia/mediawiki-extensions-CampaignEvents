@@ -20,9 +20,6 @@ use Wikimedia\TestingAccessWrapper;
  * @covers ::__construct()
  */
 class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'ce_organizers' ];
-
 	private const ORGANIZERS_BY_EVENT = [
 		1 => [
 			[

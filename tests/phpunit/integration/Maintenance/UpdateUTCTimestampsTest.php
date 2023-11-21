@@ -16,10 +16,6 @@ use stdClass;
  * @covers \MediaWiki\Extension\CampaignEvents\Maintenance\UpdateUTCTimestamps
  */
 class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
-
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'campaign_events' ];
-
 	/** @var stdClass[]|null Rows added by addDBData() */
 	private $oldRows;
 

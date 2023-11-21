@@ -14,10 +14,6 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @covers \MediaWiki\Extension\CampaignEvents\Maintenance\AggregateParticipantAnswers
  */
 class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
-
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'campaign_events', 'ce_participants', 'ce_question_answers', 'ce_question_aggregation' ];
-
 	private const TIME_NOW = 1680000000;
 	private const PREVIOUS_AGGREGATION_TIME = self::TIME_NOW - 24 * 60 * 60;
 

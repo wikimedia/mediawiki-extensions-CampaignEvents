@@ -18,9 +18,6 @@ use MWTimestamp;
 class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 	private const FAKE_TIME = '20210115000000';
 
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'ce_tracking_tools' ];
-
 	/**
 	 * @inheritDoc
 	 */

@@ -14,9 +14,6 @@ use MediaWikiIntegrationTestCase;
  * @group Database
  */
 class EventQuestionsStoreTest extends MediaWikiIntegrationTestCase {
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'ce_event_questions' ];
-
 	public function addDBData() {
 		$rows = [
 			[

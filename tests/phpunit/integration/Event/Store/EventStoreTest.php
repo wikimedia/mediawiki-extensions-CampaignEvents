@@ -25,9 +25,6 @@ use RuntimeException;
  * @covers ::__construct()
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'campaign_events', 'ce_address', 'ce_event_address', 'ce_tracking_tools' ];
-
 	/**
 	 * @return EventRegistration
 	 */

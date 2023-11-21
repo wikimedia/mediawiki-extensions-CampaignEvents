@@ -15,9 +15,6 @@ use MediaWikiIntegrationTestCase;
  * @covers ::__construct()
  */
 class AddressStoreTest extends MediaWikiIntegrationTestCase {
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'ce_address' ];
-
 	/**
 	 * @inheritDoc
 	 */

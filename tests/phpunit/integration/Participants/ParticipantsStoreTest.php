@@ -21,9 +21,6 @@ use MWTimestamp;
  * @covers ::__construct()
  */
 class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
-	/** @inheritDoc */
-	protected $tablesUsed = [ 'ce_participants', 'ce_question_answers' ];
-
 	/**
 	 * @inheritDoc
 	 */
