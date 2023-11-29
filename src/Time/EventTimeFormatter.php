@@ -7,8 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Time;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\UserIdentity;
-use MediaWiki\User\UserOptionsLookup;
 use MediaWiki\User\UserTimeCorrection;
 
 /**
