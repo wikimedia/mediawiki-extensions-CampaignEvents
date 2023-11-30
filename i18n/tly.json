@@ -2,9 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Patriot Kor",
-			"Patriot Kur"
+			"Patriot Kur",
+			"Jamil",
+			"Гусейн"
 		]
 	},
+	"specialpages-group-campaignevents": "Tədbiron",
+	"campaignevents-myevents-field-status-open": "Ožə tədbiron",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ne",
 	"campaignevents-eventpage-register-confirmation-confirm": "Ğeydiyot",
 	"campaignevents-event-details-edit-button": "Sərosti bıkə"

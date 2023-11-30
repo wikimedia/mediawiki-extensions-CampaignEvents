@@ -4,6 +4,7 @@
 			"Jinoytommanjaly"
 		]
 	},
+	"campaignevents-desc": "പ്രചാരണ സംഘാടകർക്കും പങ്കെടുക്കുന്നവർക്കും സവിശേഷതകൾ നൽകുന്നു.",
 	"nstab-event": "പരിപാടി",
 	"action-campaignevents-enable-registration": "ഇവന്റ് രജിസ്ട്രേഷനുകൾ പ്രവർത്തനക്ഷമമാക്കുക",
 	"right-campaignevents-enable-registration": "ഇവന്റ് രജിസ്ട്രേഷനുകൾ പ്രവർത്തനക്ഷമമാക്കുക",
@@ -12,6 +13,15 @@
 	"action-campaignevents-organize-events": "പരിപാടികൾ സംഘടിപ്പിക്കുക",
 	"right-campaignevents-organize-events": "പരിപാടികൾ സംഘടിപ്പിക്കുക",
 	"specialpages-group-campaignevents": "പരിപാടികൾ",
+	"campaignevents-error-invalid-id": "ഇവന്റ് ഐഡി ഒരു പോസിറ്റീവ് പൂർണ്ണസംഖ്യയായിരിക്കണം.",
+	"campaignevents-error-empty-title": "ഒരു ഇവന്റ് പേജ് ശീർഷകം നൽകുക.",
+	"campaignevents-error-invalid-title": "ഇവന്റ് താളിന്റെ തലക്കെട്ട് അസാധുവായതാണ്: $1.",
+	"campaignevents-error-invalid-title-interwiki": "പ്രാദേശിക വിക്കിയിലെ ഒരു ഇവന്റ് പേജ് വ്യക്തമാക്കുക.",
+	"campaignevents-error-page-not-found": "ഈ പേരിൽ ഒരു ഇവന്റ് താളില്ല.",
+	"campaignevents-error-invalid-chat-url": "സാധുവായ ഒരു ചാറ്റ് URL നൽകുക.",
+	"campaignevents-error-invalid-timezone": "സാധുവായ ഒരു സമയമേഖല നൽകുക.",
+	"campaignevents-error-empty-start": "ഒരു ആരംഭ സമയം തിരഞ്ഞെടുക്കുക.",
+	"campaignevents-edit-field-page": "ഇവന്റ് പേജ്",
 	"campaignevents-edit-field-event-status": "പരിപാടിയുടെ അവസ്ഥ",
 	"campaignevents-edit-field-status-open": "തുറക്കുക",
 	"campaignevents-edit-field-status-closed": "അടച്ചു",
@@ -32,6 +42,8 @@
 	"campaignevents-edit-field-chat-url": "ഗ്രൂപ്പ് ചാറ്റ് ക്ഷണം",
 	"campaignevents-enable-registration-form-submit": "രജിസ്ട്രേഷൻ പ്രവർത്തനക്ഷമമാക്കുക",
 	"campaignevents-edit-form-submit": "രജിസ്ട്രേഷൻ എഡിറ്റ് ചെയ്യുക",
+	"campaignevents-edit-invalid-id": "സാധുവായ ഒരു ഇവന്റ് ഐഡി നൽകുക.",
+	"campaignevents-edit-no-event-id-provided": "ഒരു ഇവന്റ് ഐഡി നൽകുക.",
 	"registerforevent": "ഒരു പരിപാടിക്ക് രജിസ്റ്റർ ചെയ്യുക",
 	"campaignevents-register-confirmation-top": "രജിസ്ട്രേഷൻ സ്ഥിരീകരിക്കുക",
 	"campaignevents-register-confirmation-btn": "രജിസ്റ്റർ ചെയ്യുക",
@@ -39,6 +51,8 @@
 	"campaignevents-unregister-success": "താങ്കൾ താങ്കളുടെ ഇവന്റ് രജിസ്ട്രേഷൻ റദ്ദാക്കി.",
 	"campaignevents-unregister-confirmation-top": "രജിസ്ട്രേഷൻ റദ്ദാക്കിയതായി സ്ഥിരീകരിക്കുക",
 	"campaignevents-unregister-confirmation-btn": "രജിസ്ട്രേഷൻ റദ്ദാക്കുക",
+	"campaignevents-delete-not-allowed-registration": "ഈ ഇവന്റ് രജിസ്ട്രേഷൻ ഇല്ലാതാക്കാൻ നിങ്ങൾക്ക് അനുവാദമില്ല.",
+	"campaignevents-register-event-not-open": "ഈ ഇവന്റ് രജിസ്ട്രേഷൻ അവസാനിച്ചിരിക്കുന്നു.",
 	"campaignevents-unregister-not-allowed": "താങ്കളുടെ രജിസ്ട്രേഷൻ റദ്ദാക്കാൻ താങ്കൾക്ക് അനുവാദമില്ല.",
 	"campaignevents-unregister-not-participant": "ഈ പരിപാടിയിൽ താങ്കൾ രജിസ്റ്റർ ചെയ്തിട്ടില്ല.",
 	"myevents": "താങ്കളുടെ പരിപാടികൾ",
@@ -75,5 +89,9 @@
 	"campaignevents-eventpage-dialog-dates-label": "ആരംഭിക്കുന്നതിനും അവസാനിപ്പിക്കുന്നതിനുമുള്ള സമയം",
 	"campaignevents-eventpage-dialog-dates": "$1 മുതൽ $4 വരെ",
 	"campaignevents-eventpage-dialog-timezone": "<strong>സമയമേഖല:</strong> $1",
-	"campaignevents-eventpage-dialog-action-close": "അടയ്ക്കുക"
+	"campaignevents-eventpage-dialog-action-close": "അടയ്ക്കുക",
+	"campaignevents-registration-confirmation-toggle-private": "സ്വകാര്യ രജിസ്ട്രേഷൻ",
+	"campaignevents-registration-confirmation-toggle-public": "പൊതു രജിസ്ട്രേഷൻ",
+	"campaignevents-register-confirmation-radio-private": "സ്വകാര്യ രജിസ്ട്രേഷൻ",
+	"campaignevents-register-confirmation-radio-public": "പൊതു രജിസ്ട്രേഷൻ"
 }
