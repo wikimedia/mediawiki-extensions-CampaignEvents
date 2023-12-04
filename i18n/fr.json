@@ -11,6 +11,7 @@
 			"VIGNERON",
 			"Verdy p",
 			"Wladek92",
+			"Wnagxsi",
 			"ߒߓߋ߫ ߝߏߝߣߊ߫"
 		]
 	},
@@ -410,8 +411,8 @@
 	"campaignevents-details-stats-header-option": "Option",
 	"campaignevents-details-stats-header-percentage": "Pourcentage",
 	"campaignevents-details-stats-header-number": "Nombre",
-	"campaignevents-details-stats-few-answers-option": "moins de $1",
+	"campaignevents-details-stats-few-answers-option": "Inférieur à $1",
 	"campaignevents-details-stats-no-response": "Aucune réponse",
-	"campaignevents-event-dates-cannot-be-changed": "Les dates des événements passés ne peuvent pas être modifiées dans le futur, pour protéger les données des participants.",
+	"campaignevents-event-dates-cannot-be-changed": "L'événement est terminé, vous ne pouvez donc pas modifier les dates de l'événement vers des dates ultérieures. Cette restriction protège les données des participants.",
 	"campaignevents-edit-field-clickwrap-form-continue": "Continuer"
 }
