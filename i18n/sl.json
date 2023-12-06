@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Eleassar"
+			"Eleassar",
+			"Upwinxp"
 		]
 	},
 	"campaignevents-desc": "Zagotavlja možnosti za organizatorje in udeležence kampanj.",
@@ -59,7 +60,7 @@
 	"campaignevents-edit-field-organizers-help": "Dodajte uporabniška imena drugih organizatorjev, da jim omogočite upravljanje tega dogodka.",
 	"campaignevents-edit-field-organizers-placeholder": "Dodajte uporabniško ime",
 	"campaignevents-edit-field-organizers-creator-title": "To je ustvaritelj dogodka; drugi organizatorji tega uporabnika ne morejo odstraniti.",
-	"campaignevents-edit-field-organizers-user-not-allowed": "Ta {{GENDER:$1|uporabnik|uporabnica|uporabnik_ca}} nima dovoljenja za organiziranje dogodkov.",
+	"campaignevents-edit-field-organizers-user-not-allowed": "Ta {{GENDER:$1|uporabnik|uporabnica|uporabnik/ca}} nima dovoljenja za organiziranje dogodkov.",
 	"campaignevents-edit-field-tracking-tools": "Nadzorna plošča programov in dogodkov",
 	"campaignevents-edit-field-tracking-tools-help": "Uporabniška imena javno registriranih udeležencev bodo samodejno poslana na nadzorno ploščo. S tem orodjem lahko spremljate prispevke udeležencev in merite učinek kampanjskega dogodka. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Več o tem]",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Vnesite na nadzorno ploščo programov in dogodkov URL-naslov svojega dogodka.",
@@ -90,7 +91,7 @@
 	"campaignevents-edit-need-central-account": "Da lahko omogočite ali urejate prijave na dogodek, potrebujete centralni uporabniški račun.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|nima|nimata|nimajo}} potrebnih dovoljenj za {{PLURAL:$1|organizatorja|organizatorja|organizatorje}}.",
 	"campaignevents-edit-no-organizers": "Dogodki morajo imeti vsaj enega organizatorja. Dodajte organizatorja ali izbrišite dogodek, če ni več potreben.",
-	"campaignevents-edit-removed-creator": "{{GENDER:$1|Uporabnika|Uporabnice|Uporabnika_ce}} $1 ne morete odstraniti, ker je {{GENDER:$1|ustvaritelj|ustvariteljica|ustvaritelj_ica}} dogodka.",
+	"campaignevents-edit-removed-creator": "{{GENDER:$1|Uporabnika|Uporabnice|Uporabnika/ce}} $1 ne morete odstraniti, ker je {{GENDER:$1|ustvaritelj|ustvariteljica|ustvaritelj/ica}} dogodka.",
 	"campaignevents-edit-no-creator": "Ko prvič omogočite registracijo dogodka, se morate dodati kot organizator.",
 	"campaignevents-edit-too-many-organizers": "Ne morete dodati več kot $1 {{PLURAL:$1|organizatorja|organizatorjev}}.",
 	"campaignevents-edit-organizer-need-central-account": "{{PLURAL:$1|Naslednji uporabnik nima|Naslednja uporabnika nimata|Naslednji uporabniki nimajo}} centralnega uporabniškega računa in {{PLURAL:$1|ga|ju|jih}} ni mogoče dodati kot {{PLURAL:$1|organizatorja|organizatorja|organizatorje}}: $2.",
@@ -289,7 +290,7 @@
 	"campaignevents-register-confirmation-radio-private": "Zasebna registracija",
 	"campaignevents-register-confirmation-radio-public": "Javna registracija",
 	"echo-category-title-campaign-events-notification-registration": "Prijava na dogodek",
-	"campaignevents-eventpage-dialog-private-registration-label": "Zasebno se je {{GENDER:$1|registriral udeleženec|registrirala udeleženka|registriral_a udeleženec_ka}}",
+	"campaignevents-eventpage-dialog-private-registration-label": "Zasebno se je {{GENDER:$1|registriral udeleženec|registrirala udeleženka|registriral/a udeleženec/ka}}",
 	"echo-pref-tooltip-campaign-events-notification-registration": "Obvesti me, ko se prijavim na dogodek, ki uporablja orodje za registracijo dogodkov.",
 	"campaignevents-notification-registration-subject": "Prijava na $1 potrjena",
 	"campaignevents-notification-registration-header-intro": "Hvala za prijavo na $1.",
@@ -398,5 +399,7 @@
 	"campaignevents-details-stats-no-response": "Ni odgovora",
 	"campaignevents-event-dates-cannot-be-changed": "Zaradi zaščite podatkov udeležencev datumov preteklih dogodkov ni mogoče spremeniti v prihodnje datume.",
 	"campaignevents-individual-stats-label-message-confidence": "Kako samozavestno se počutite, ko prispevate k projektom Wikimedie, vključenim v ta dogodek?",
+	"campaignevents-individual-stats-label-message-affiliate": "Ali pripadate kateremu koli združenju, povezanemu z Wikimedio (podružnice, uporabniške skupine, tematske organizacije)?",
+	"campaignevents-participant-question-have-been-aggregated": "Odgovori {{GENDER:$1|tega udeležencema|te udeleženke|tega_te udeleženca_ke}} so bili združeni in izbrisani",
 	"campaignevents-participant-question-no-response": "Brez odgovora"
 }

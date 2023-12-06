@@ -140,7 +140,7 @@
 	"campaignevents-eventpage-dialog-organizers": "Організатор: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Переглянути всіх організаторів",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|користувач|користувачі|користувачів}}",
-	"campaignevents-eventpage-dialog-participants-view-list": "Переглянути повний список",
+	"campaignevents-eventpage-dialog-participants-view-list": "Переглянути всіх",
 	"campaignevents-eventpage-dialog-dates-label": "Час початку і закінчення",
 	"campaignevents-eventpage-dialog-dates": "$1 до $4",
 	"campaignevents-eventpage-dialog-location-label": "Розташування",
