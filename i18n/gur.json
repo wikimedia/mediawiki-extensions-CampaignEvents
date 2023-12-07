@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Akakiiri"
+		]
+	},
+	"campaignevents-notification-registration-header-chat-label": "'event' tigerɛ sɔ̃sega",
+	"campaignevents-notification-registration-details-header": "'event'gãresegɔ duma",
+	"campaignevents-notification-registration-details-dates-header": "Dabeserɛ le saŋa",
+	"campaignevents-notification-registration-details-dates": "$1ta paɛ $4",
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Timezone:</strong>$1",
+	"campaignevents-notification-registration-details-type-header": "'event'buuri",
+	"campaignevents-notification-registration-details-organizers-header": "'event' tigesigo duma",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|more}}",
+	"campaignevents-notification-registration-event-page-link": "Bisɛ 'event' pɛgerɛ la",
+	"campaignevents-notification-registration-chat-link": "Toŋe tigerɛ sɔ̃sega la"
+}

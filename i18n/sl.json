@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Eleassar"
+			"Eleassar",
+			"Upwinxp"
 		]
 	},
 	"campaignevents-desc": "Zagotavlja možnosti za organizatorje in udeležence kampanj.",
@@ -54,7 +55,7 @@
 	"campaignevents-edit-field-organizers-help": "Dodajte uporabniška imena drugih organizatorjev, da jim omogočite upravljanje tega dogodka.",
 	"campaignevents-edit-field-organizers-placeholder": "Dodajte več organizatorjev",
 	"campaignevents-edit-field-organizers-creator-title": "To je ustvaritelj dogodka; drugi organizatorji tega uporabnika ne morejo odstraniti.",
-	"campaignevents-edit-field-organizers-user-not-allowed": "Ta {{GENDER:$1|uporabnik|uporabnica|uporabnik_ca}} nima dovoljenja za organiziranje dogodkov.",
+	"campaignevents-edit-field-organizers-user-not-allowed": "Ta {{GENDER:$1|uporabnik|uporabnica|uporabnik/ca}} nima dovoljenja za organiziranje dogodkov.",
 	"campaignevents-edit-field-meeting-type": "Vrsta srečanja na dogodku",
 	"campaignevents-edit-field-type-online": "Spletni dogodek",
 	"campaignevents-edit-field-type-in-person": "Dogodek v živo",
@@ -245,7 +246,7 @@
 	"campaignevents-register-confirmation-radio-private": "Zasebna registracija",
 	"campaignevents-register-confirmation-radio-public": "Javna registracija",
 	"echo-category-title-campaign-events-notification-registration": "Prijava na dogodek",
-	"campaignevents-eventpage-dialog-private-registration-label": "Zasebno se je {{GENDER:$1|registriral udeleženec|registrirala udeleženka|registriral_a udeleženec_ka}}",
+	"campaignevents-eventpage-dialog-private-registration-label": "Zasebno se je {{GENDER:$1|registriral udeleženec|registrirala udeleženka|registriral/a udeleženec/ka}}",
 	"echo-pref-tooltip-campaign-events-notification-registration": "Obvesti me, ko se prijavim na dogodek, ki uporablja orodje za registracijo dogodkov.",
 	"campaignevents-notification-registration-subject": "Prijava na $1 potrjena",
 	"campaignevents-notification-registration-header-intro": "Hvala za prijavo na $1.",
