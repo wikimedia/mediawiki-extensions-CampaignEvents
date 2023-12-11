@@ -8,8 +8,8 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiIntegrationTestCase;
-use MWTimestamp;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater

@@ -5,8 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use HashConfig;
 use Language;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Rest\GetParticipantQuestionsHandler;
 use MediaWiki\Rest\RequestData;

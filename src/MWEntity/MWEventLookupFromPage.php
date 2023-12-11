@@ -11,7 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageLookup;
-use TitleFormatter;
+use MediaWiki\Title\TitleFormatter;
 
 /**
  * This class is a MediaWiki-specific registration lookup that works on wikipage objects and simplifies the interaction

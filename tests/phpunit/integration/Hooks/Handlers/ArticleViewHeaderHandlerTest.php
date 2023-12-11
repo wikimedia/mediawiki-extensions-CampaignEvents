@@ -11,9 +11,9 @@ use Language;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\ArticleViewHeaderHandler;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\User\User;
 use MediaWikiIntegrationTestCase;
-use OutputPage;
-use User;
 use WikiPage;
 
 /**

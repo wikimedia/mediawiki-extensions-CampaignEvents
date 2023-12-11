@@ -26,8 +26,8 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
-use MWTimestamp;
 use Psr\Log\NullLogger;
 use StatusValue;
 

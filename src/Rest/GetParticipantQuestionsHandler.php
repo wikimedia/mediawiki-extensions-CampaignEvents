@@ -4,8 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use Config;
 use Language;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;

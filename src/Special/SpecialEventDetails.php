@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
-use Html;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -18,11 +17,12 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Html\Html;
+use MediaWiki\SpecialPage\SpecialPage;
 use OOUI\ButtonWidget;
 use OOUI\IndexLayout;
 use OOUI\TabPanelLayout;
 use OOUI\Tag;
-use SpecialPage;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 

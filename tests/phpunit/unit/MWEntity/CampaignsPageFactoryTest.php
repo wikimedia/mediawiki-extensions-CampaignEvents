@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MWEntity;
 
 use Generator;
-use MalformedTitleException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
@@ -15,10 +14,11 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceExcept
 use MediaWiki\Page\ExistingPageRecord;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\PageStoreFactory;
+use MediaWiki\Title\MalformedTitleException;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
+use MediaWiki\Title\TitleValue;
 use MediaWikiUnitTestCase;
-use TitleFormatter;
-use TitleParser;
-use TitleValue;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory

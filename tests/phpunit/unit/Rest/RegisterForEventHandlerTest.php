@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use HashConfig;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;

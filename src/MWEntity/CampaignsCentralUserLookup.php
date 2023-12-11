@@ -4,12 +4,12 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use CentralIdLookup;
 use InvalidArgumentException;
+use MediaWiki\User\CentralId\CentralIdLookup;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\User\UserNameUtils;
-use User;
 
 /**
  * This class is used to retrieve data about global user accounts, like MW's CentralIdLookup.

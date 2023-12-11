@@ -18,11 +18,11 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Pager\TablePager;
+use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
-use SpecialPage;
 use stdClass;
-use TablePager;
 use Wikimedia\Rdbms\IResultWrapper;
 
 class EventsPager extends TablePager {

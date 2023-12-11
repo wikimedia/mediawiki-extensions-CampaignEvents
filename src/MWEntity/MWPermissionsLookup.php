@@ -5,9 +5,9 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use InvalidArgumentException;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserNameUtils;
-use User;
 
 class MWPermissionsLookup implements IPermissionsLookup {
 

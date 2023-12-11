@@ -4,13 +4,13 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use MalformedTitleException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\PageStoreFactory;
+use MediaWiki\Title\MalformedTitleException;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
 use MediaWiki\WikiMap\WikiMap;
-use TitleFormatter;
-use TitleParser;
 
 class CampaignsPageFactory {
 	public const SERVICE_NAME = 'CampaignEventsPageFactory';

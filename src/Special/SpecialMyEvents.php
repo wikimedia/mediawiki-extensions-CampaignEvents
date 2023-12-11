@@ -4,14 +4,14 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
-use Html;
 use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPager;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
-use SpecialPage;
+use MediaWiki\Html\Html;
+use MediaWiki\SpecialPage\SpecialPage;
 
 class SpecialMyEvents extends SpecialPage {
 	public const PAGE_NAME = 'MyEvents';

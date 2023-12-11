@@ -3,9 +3,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Notifications;
 
-use DeferredUpdates;
 use EchoEvent;
 use InvalidArgumentException;
+use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;

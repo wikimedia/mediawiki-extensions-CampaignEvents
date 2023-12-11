@@ -14,9 +14,9 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
-use OutputPage;
-use TitleFormatter;
+use MediaWiki\Title\TitleFormatter;
 use Wikimedia\Message\IMessageFormatterFactory;
 
 class EventPageDecoratorFactory {

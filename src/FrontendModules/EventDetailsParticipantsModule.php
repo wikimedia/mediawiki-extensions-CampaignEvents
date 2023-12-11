@@ -4,8 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
-use Config;
 use Language;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -20,6 +20,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Parser\Sanitizer;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonGroupWidget;
@@ -32,8 +34,6 @@ use OOUI\MessageWidget;
 use OOUI\PanelLayout;
 use OOUI\SearchInputWidget;
 use OOUI\Tag;
-use OutputPage;
-use Sanitizer;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;

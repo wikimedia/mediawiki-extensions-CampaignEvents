@@ -4,17 +4,17 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks;
 
-use Config;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
-use ResourceLoaderContext;
+use MediaWiki\ResourceLoader\Context;
 
 class ResourceLoaderCallbacks {
 	/**
-	 * @param ResourceLoaderContext $context
+	 * @param Context $context
 	 * @param Config $config
 	 * @return array
 	 */
-	public static function getEventPageData( ResourceLoaderContext $context, Config $config ): array {
+	public static function getEventPageData( Context $context, Config $config ): array {
 		$policyMessagesLookup = CampaignEventsServices::getPolicyMessagesLookup();
 		$msgKey = $policyMessagesLookup->getPolicyMessageForRegistration();
 		$msgHTML = $msgKey !== null ? $context->msg( $msgKey )->parseAsBlock() : null;

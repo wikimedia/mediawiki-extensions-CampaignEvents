@@ -4,7 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use TitleFormatter;
+use MediaWiki\Title\TitleFormatter;
 use UnexpectedValueException;
 
 /**

@@ -11,7 +11,7 @@ use MediaWiki\Rest\RequestData;
 use MediaWiki\Session\Session;
 use MediaWiki\Session\SessionId;
 use MediaWiki\Session\SessionProviderInterface;
-use User;
+use MediaWiki\User\User;
 use Wikimedia\Message\DataMessageValue;
 
 /**

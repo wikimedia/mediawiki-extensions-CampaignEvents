@@ -13,10 +13,10 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Preferences\MultiUsernameFilter;
 use MediaWiki\User\Options\UserOptionsLookup;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use RequestContext;
 use StatusValue;
-use User;
 
 /**
  * This class uses a lot of MW classes as the core email code is not ideal and there aren't many alternatives.

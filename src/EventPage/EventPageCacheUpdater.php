@@ -8,8 +8,8 @@ use HtmlCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
-use MWTimestamp;
-use OutputPage;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Utils\MWTimestamp;
 use RuntimeException;
 
 /**

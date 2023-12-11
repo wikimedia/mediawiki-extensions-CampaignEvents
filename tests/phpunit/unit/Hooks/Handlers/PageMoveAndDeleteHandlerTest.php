@@ -15,8 +15,8 @@ use MediaWiki\Page\PageStore;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Title\TitleFormatter;
 use MediaWikiUnitTestCase;
-use TitleFormatter;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PageMoveAndDeleteHandler

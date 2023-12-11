@@ -15,9 +15,9 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\Options\UserOptionsLookup;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
-use User;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer

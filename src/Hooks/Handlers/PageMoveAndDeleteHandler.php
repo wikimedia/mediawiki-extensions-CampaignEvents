@@ -16,7 +16,7 @@ use MediaWiki\Page\PageStore;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\RevisionRecord;
-use TitleFormatter;
+use MediaWiki\Title\TitleFormatter;
 
 /**
  * This handler is used for page move and deletion. If the page is an event page, we update the registration:

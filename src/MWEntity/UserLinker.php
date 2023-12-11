@@ -4,10 +4,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use Html;
-use Linker;
 use MediaWiki\Cache\LinkBatchFactory;
-use Sanitizer;
+use MediaWiki\Html\Html;
+use MediaWiki\Linker\Linker;
+use MediaWiki\Parser\Sanitizer;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 

@@ -11,8 +11,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiIntegrationTestCase;
-use MWTimestamp;
 
 /**
  * @group Test

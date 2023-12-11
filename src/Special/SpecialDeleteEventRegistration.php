@@ -4,8 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
-use FormSpecialPage;
-use Html;
 use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -13,8 +11,10 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use Status;
-use User;
+use MediaWiki\Html\Html;
+use MediaWiki\SpecialPage\FormSpecialPage;
+use MediaWiki\Status\Status;
+use MediaWiki\User\User;
 
 class SpecialDeleteEventRegistration extends FormSpecialPage {
 	/** @var IEventLookup */

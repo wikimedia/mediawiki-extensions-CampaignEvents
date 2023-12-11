@@ -8,10 +8,10 @@ use Generator;
 use InvalidArgumentException;
 use MediaWiki\Block\AbstractBlock;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserNameUtils;
 use MediaWikiUnitTestCase;
-use User;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup

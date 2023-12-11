@@ -19,8 +19,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceExcept
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiIntegrationTestCase;
-use MWTimestamp;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventFactory

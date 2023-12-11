@@ -8,9 +8,9 @@ use Generator;
 use HtmlCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
-use MWTimestamp;
-use OutputPage;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater

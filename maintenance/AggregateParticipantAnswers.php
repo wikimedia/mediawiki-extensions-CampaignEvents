@@ -10,7 +10,7 @@ use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
-use MWTimestamp;
+use MediaWiki\Utils\MWTimestamp;
 use RuntimeException;
 
 /**

@@ -4,12 +4,12 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MWEntity;
 
-use CentralIdLookup;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
+use MediaWiki\User\CentralId\CentralIdLookup;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserNameUtils;
 use MediaWikiUnitTestCase;
