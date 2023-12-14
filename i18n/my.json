@@ -2,19 +2,20 @@
 	"@metadata": {
 		"authors": [
 			"Dr Lotus Black",
-			"Msuantak"
+			"Msuantak",
+			"Ninjastrikers"
 		]
 	},
 	"action-campaignevents-organize-events": "ပွဲများကိုစီစဉ်ပါ",
 	"right-campaignevents-organize-events": "ပွဲများကိုစီစဉ်ပါ",
 	"campaignevents-edit-field-organizers": "စီစဉ်သူများ",
 	"campaignevents-edit-field-organizers-help": "ဤအစီအစဉ်ကို စီမံခန့်ခွဲခွင့်ပြုရန် အခြားစီစဉ်သူများ၏ အသုံးပြုသူအမည်ကို ထည့်ပါ။",
-	"campaignevents-edit-field-organizers-placeholder": "စီစဉ်သူများ ထပ်ထည့်ပါ",
+	"campaignevents-edit-field-organizers-placeholder": "အသုံးပြုသူ ပေါင်းထည့်",
 	"campaignevents-edit-field-organizers-creator-title": "၎င်းသည် ပွဲဖန်တီးသူဖြစ်ပြီး အခြားစီစဉ်သူများက ဤအသုံးပြုသူကို ဖယ်ရှား၍မရပါ။",
 	"campaignevents-edit-field-organizers-user-not-allowed": "ဤ {{GENDER:$1| user}} သည် ပွဲများစီစဉ်ခွင့်မရှိပါ။",
 	"campaignevents-edit-organizers-not-allowed": "{{PLURAL:$1|စီစဉ်သူ|စီစဉ်သူများ}} ဖြစ်ရန် လိုအပ်သော ခွင့်ပြုချက်များ $2 {{PLURAL:$1|မရှိ|မရှိပါ}}။",
-	"campaignevents-edit-no-organizers": "အနည်းဆုံး စီစဉ်သူတစ်ဦးကို ရွေးချယ်ရန် လိုအပ်သည်။",
-	"campaignevents-edit-removed-creator": "ပွဲဖန်တီးသူကို ဖယ်ရှားရန် သင့်အား ခွင့်မပြုပါ။",
+	"campaignevents-edit-no-organizers": "ပွဲများအတွက် အနည်းဆုံး စီစဉ်သူတစ်ဦးကို ရွေးချယ်ရန် လိုအပ်သည်။ ကျေးဇူးပြု၍ စီစဉ်သူတစ်ဦးကို ပေါင်းထည့်ပါ သို့မဟုတ် မလိုအပ်တော့ပါက အစီအစဉ်အား ဖျက်သိမ်းပါ။",
+	"campaignevents-edit-removed-creator": "{{GENDER:$1|အသုံးပြုသူ}} သည် ပွဲဖန်တီးသူဖြစ်သောကြောင့် ဖယ်ရှားရန် သင့်အား ခွင့်မပြုပါ။",
 	"campaignevents-edit-no-creator": "ပွဲမှတ်ပုံတင်ခြင်းကို ပထမဆုံးစဖွင့်သောအခါတွင် သင်ကိုယ်တိုင် စီစဉ်သူအဖြစ် ထည့်သွင်းရန် လိုအပ်ပါသည်။",
 	"campaignevents-edit-too-many-organizers": "$1 ထက် ပိုထည့်၍မရပါ {{PLURAL:$1| စီစဉ်သူ|စီစဉ်သူများ}}။",
 	"campaignevents-edit-organizer-need-central-account": "အောက်ပါ {{PLURAL:$1| user does|users do}} တွင် ဗဟိုအသုံးပြုသူအကောင့် မရှိသည့်အပြင် {{PLURAL:$1| အဖြစ်ထည့်၍မရပါ။ စီစဉ်သူ|စီစဉ်သူများ}}- $2 ။",
