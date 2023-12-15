@@ -292,7 +292,7 @@
 	"campaignevents-register-confirmation-radio-private": "Zasebna registracija",
 	"campaignevents-register-confirmation-radio-public": "Javna registracija",
 	"echo-category-title-campaign-events-notification-registration": "Prijava na dogodek",
-	"campaignevents-eventpage-dialog-private-registration-label": "Zasebno se je {{GENDER:$1|registriral udeleženec|registrirala udeleženka|registriral/a udeleženec/ka}}",
+	"campaignevents-eventpage-dialog-private-registration-label": "Zasebno se je {{GENDER:$1|registriral udeleženec|registrirala udeleženka|registriral_a udeleženec_ka}}",
 	"echo-pref-tooltip-campaign-events-notification-registration": "Obvesti me, ko se prijavim na dogodek, ki uporablja orodje za registracijo dogodkov.",
 	"campaignevents-notification-registration-subject": "Prijava na $1 potrjena",
 	"campaignevents-notification-registration-header-intro": "Hvala za prijavo na $1.",
