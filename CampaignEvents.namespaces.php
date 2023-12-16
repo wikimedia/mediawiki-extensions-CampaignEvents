@@ -26,3 +26,13 @@ $namespaceNames['he'] = [
 	NS_EVENT => 'אירוע',
 	NS_EVENT_TALK => 'שיחת_אירוע',
 ];
+
+$namespaceNames['nb'] = [
+	NS_EVENT => 'Arrangement',
+	NS_EVENT_TALK => 'Arrangementsdiskusjon',
+];
+
+$namespaceNames['nn'] = [
+	NS_EVENT => 'Arrangement',
+	NS_EVENT_TALK => 'Arrangementsdiskusjon',
+];
