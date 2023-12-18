@@ -2,12 +2,17 @@
 	"@metadata": {
 		"authors": [
 			"Cookai1205",
+			"SunAfterRain",
 			"Willy1018",
 			"Winston Sung",
 			"列维劳德"
 		]
 	},
 	"nstab-event": "活動",
+	"action-campaignevents-enable-registration": "啟用活動註冊",
+	"action-campaignevents-delete-registration": "刪除活動註冊",
+	"action-campaignevents-organize-events": "組織活動",
+	"action-campaignevents-email-participants": "給活動參與者傳送電子郵件",
 	"specialpages-group-campaignevents": "活動",
 	"campaignevents-error-invalid-title": "活動頁面標題無效：$1。",
 	"campaignevents-error-page-not-found": "沒有具有此名稱的活動頁面。",
