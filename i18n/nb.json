@@ -379,11 +379,20 @@
 	"campaignevents-register-retention-title": "Informasjon om dataoppbevaring",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informasjon for arrangører",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Alle spørsmålene er valgfrie",
+	"campaignevents-eventpage-register-dialog-retention-title": "Informasjon om dataoppbevaring",
+	"campaignevents-eventpage-register-dialog-retention-base": "Svarene dine samles opp og slettes 90 dager etter at de er sendt inn eller arrangementet er ferdig, avhengig av hva som kommer først. Du kan redigere svarene før den tid. Når de er slettet kan ikke svarene endres eller hentes igjen.",
+	"campaignevents-eventpage-register-dialog-retention-days": "Tiden som gjenstår før svarene dine samles opp og slettes er: <strong>$1 {{PLURAL:$1|dag|dager}}</strong>.",
+	"campaignevents-eventpage-register-dialog-retention-hours": "Tiden som gjenstår før svarene dine samles opp og slettes er: <strong>mindre enn ett døgn</strong>.",
 	"campaignevents-register-invalid-answer": "Ugyldig svar på spørsmålet $1",
 	"campaignevents-details-stats-header-option": "Alternativ",
 	"campaignevents-details-stats-header-percentage": "Prosent",
+	"campaignevents-details-stats-header-number": "Antall",
 	"campaignevents-details-stats-few-answers-option": "Mindre enn $1",
 	"campaignevents-details-stats-range-number": "Mellom $1 og $2",
 	"campaignevents-details-stats-range-percentage": "Mellom $1 % og $2 %",
-	"campaignevents-details-stats-no-response": "Ikke noe svar"
+	"campaignevents-details-stats-no-response": "Ikke noe svar",
+	"campaignevents-individual-stats-label-message-confidence": "Hvor trygg føler du deg på å bidra til Wikimedia-prosjektene som er involvert i dette arrengementet?",
+	"campaignevents-individual-stats-label-message-affiliate": "Tilhører du en Wikimedia-organisasjon (chapter, brukergruppe, tematisk organisasjon)?",
+	"campaignevents-participant-question-have-been-aggregated": "Denne {{GENDER:$1|deltakerens}} svar har blitt samlet opp og slettet",
+	"campaignevents-participant-question-no-response": "Intet svar"
 }
