@@ -11,6 +11,7 @@
 	"campaignevents-edit-invalid-username": "\"$1\" ass kee valabele Benotzernumm.",
 	"campaignevents-eventpage-header-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Zäitzone:</strong> $1",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Jo",
 	"campaignevents-eventpage-register-confirmation-confirm": "Aschreiwen",
 	"campaignevents-event-details-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-event-details-in-person-event-label": "Event am Presentiel",
@@ -18,6 +19,5 @@
 	"campaignevents-userlink-deleted-user": "geläscht Benotzer",
 	"campaignevents-notification-registration-details-dates-header": "Datum an Auerzäit",
 	"campaignevents-notification-registration-details-dates": "$1 bis $4",
-	"campaignevents-notification-registration-details-dates-timezone": "<strong>Zäitzone:</strong> $1",
-	"campaignevents-rest-set-organizers-empty-list": "<var>organisator_usernames</var> muss en Array vu Benotzernimm sinn an däerf net eidel sinn"
+	"campaignevents-notification-registration-details-dates-timezone": "<strong>Zäitzone:</strong> $1"
 }
