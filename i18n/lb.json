@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Robby"
+			"Robby",
+			"Volvox"
 		]
 	},
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Jo",
 	"campaignevents-event-details-in-person-event-label": "Event am Presentiel",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Ofbriechen"
 }
