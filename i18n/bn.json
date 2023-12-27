@@ -4,7 +4,8 @@
 			"Yahya",
 			"আজিজ",
 			"আফতাবুজ্জামান",
-			"মোঃ মারুফ হাসান24"
+			"মোঃ মারুফ হাসান24",
+			"Aishik Rehman"
 		]
 	},
 	"nstab-event": "ইভেন্ট",
@@ -39,7 +40,7 @@
 	"campaignevents-myevents-need-central-account": "আপনার ইভেন্টের তালিকা দেখতে হলে আপনার একটি কেন্দ্রীয় ব্যবহারকারী অ্যাকাউন্টের থাকতে হবে।",
 	"campaignevents-myevents-label-search": "অনুসন্ধান",
 	"campaignevents-myevents-label-status": "স্থিতি",
-	"campaignevents-myevents-field-status-any": "যেকোন",
+	"campaignevents-myevents-field-status-any": "যেকোনো",
 	"campaignevents-myevents-field-status-open": "উন্মুক্ত ইভেন্ট",
 	"campaignevents-myevents-field-status-closed": "বন্ধ ইভেন্ট",
 	"campaignevents-eventslist-column-date": "তারিখ",

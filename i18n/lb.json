@@ -17,6 +17,7 @@
 	"campaignevents-register-edit-btn": "Ännerunge späicheren",
 	"campaignevents-eventpage-header-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Zäitzone:</strong> $1",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Jo",
 	"campaignevents-eventpage-register-dialog-register": "Aschreiwen",
 	"campaignevents-eventpage-register-dialog-save": "Späicheren",
 	"campaignevents-event-details-timezone": "<strong>Zäitzone:</strong> $1",

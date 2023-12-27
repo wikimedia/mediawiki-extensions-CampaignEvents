@@ -139,7 +139,7 @@
 	"campaignevents-eventpage-dialog-organizers": "Organizowane przez: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Zobacz wszystkich organizatorów",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|uczestnik|uczestników}}",
-	"campaignevents-eventpage-dialog-participants-view-list": "Zobacz pełną listę",
+	"campaignevents-eventpage-dialog-participants-view-list": "Zobacz wszystkich",
 	"campaignevents-eventpage-dialog-dates-label": "Czas rozpoczęcia i zakończenia",
 	"campaignevents-eventpage-dialog-dates": "$1 do $4",
 	"campaignevents-eventpage-dialog-location-label": "Miejsce",
