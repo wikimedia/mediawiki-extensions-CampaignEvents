@@ -528,6 +528,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		if ( $footerHasContent ) {
+			// By default, OOUI is only enabled upon showing the form. Since we're using MessageWidget directly here,
+			// we need to manually enable OOUI now (T354384).
+			$this->getOutput()->enableOOUI();
 			$form->addFooterHtml( new FieldLayout( new MessageWidget( [
 				'type' => 'notice',
 				'inline' => true,
