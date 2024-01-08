@@ -1,9 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kareyac"
+			"Kareyac",
+			"Armenoid"
 		]
 	},
+	"campaignevents-edit-field-status-open": "Բաց է",
+	"campaignevents-edit-field-status-closed": "Փակված է",
+	"campaignevents-edit-field-start": "Սկսման ժամը",
+	"campaignevents-edit-field-end": "Ավարտի ժամը",
+	"campaignevents-edit-field-country": "Երկիր",
+	"campaignevents-edit-field-address": "Հասցե",
 	"campaignevents-role-organizer": "{{GENDER:$1| կազմակերպիչ}}",
 	"myevents": "Ձեր իրադարձությունները",
 	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",
@@ -18,6 +25,7 @@
 	"campaignevents-eventslist-delete-dialog-body": "Դուք կկորցնեք գրանցման բոլոր տվյալները, բայց միջոցառման էջը չի ջնջվի։",
 	"campaignevents-eventslist-delete-dialog-cancel": "Չեղարկել",
 	"campaignevents-eventslist-delete-dialog-delete": "Ջնջել",
+	"campaignevents-delete-submit-btn": "Ջնջել",
 	"campaignevents-eventpage-header-location-label": "Տեղադրություն",
 	"campaignevents-eventpage-header-dates-label": "Սկսելու և ավարտելու ժամանակը",
 	"campaignevents-eventpage-dialog-organizers": "Կազմակերպվում է $1",
