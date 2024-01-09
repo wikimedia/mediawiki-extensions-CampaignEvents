@@ -5,8 +5,14 @@
 			"Kareyac"
 		]
 	},
+	"campaignevents-edit-field-status-open": "Բաց է",
+	"campaignevents-edit-field-status-closed": "Փակված է",
 	"campaignevents-edit-field-timezone": "Ժամագոտի",
+	"campaignevents-edit-field-start": "Սկսման ժամը",
+	"campaignevents-edit-field-end": "Ավարտի ժամը",
 	"campaignevents-edit-field-organizers": "Կազմակերպիչներ",
+	"campaignevents-edit-field-country": "Երկիր",
+	"campaignevents-edit-field-address": "Հասցե",
 	"campaignevents-role-organizer": "{{GENDER:$1| կազմակերպիչ}}",
 	"myevents": "Ձեր իրադարձությունները",
 	"campaignevents-myevents-filter-legend": "Զտել միջոցառումները",
@@ -21,6 +27,7 @@
 	"campaignevents-eventslist-delete-dialog-body": "Դուք կկորցնեք գրանցման բոլոր տվյալները, բայց միջոցառման էջը չի ջնջվի։",
 	"campaignevents-eventslist-delete-dialog-cancel": "Չեղարկել",
 	"campaignevents-eventslist-delete-dialog-delete": "Ջնջել",
+	"campaignevents-delete-submit-btn": "Ջնջել",
 	"campaignevents-eventpage-header-location-label": "Տեղադրություն",
 	"campaignevents-eventpage-header-dates-label": "Սկսելու և ավարտելու ժամանակը",
 	"campaignevents-eventpage-dialog-organizers": "Կազմակերպվում է $1",
@@ -34,5 +41,10 @@
 	"campaignevents-event-details-organizers-header": "Կազմակերպիչներ",
 	"campaignevents-event-details-remove-participant-remove-btn": "Հեռացնել",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Չեղարկել",
-	"campaignevents-event-details-organizers-view-more": "Դիտել ավելին"
+	"campaignevents-event-details-tab-event-details": "Միջոցառման մանրամասները",
+	"campaignevents-event-details-organizers-view-more": "Դիտել ավելին",
+	"campaignevents-notification-registration-details-type-header": "Միջոցառման տեսակը",
+	"campaignevents-notification-registration-details-type-online-header": "Առցանց միջոցառում",
+	"campaignevents-notification-registration-details-type-in-person-header": "Անձնական միջոցառում",
+	"campaignevents-notification-registration-details-organizers-header": "Միջոցառման կազմակերպիչներ"
 }
