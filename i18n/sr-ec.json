@@ -17,6 +17,7 @@
 	"campaignevents-edit-field-start": "Почетак",
 	"campaignevents-edit-field-end": "Крај",
 	"campaignevents-edit-field-organizers": "Организатори",
+	"campaignevents-edit-field-organizers-placeholder": "Додај корисничко име",
 	"campaignevents-edit-field-type-online": "Онлајн догађај",
 	"campaignevents-edit-field-type-in-person": "Уживо догађај",
 	"campaignevents-edit-field-country": "Држава",
