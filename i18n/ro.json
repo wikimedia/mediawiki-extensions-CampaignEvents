@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Alesaru",
-			"Strainu"
+			"Strainu",
+			"NGC 54"
 		]
 	},
 	"campaignevents-eventpage-dialog-participants-view-list": "Vezi tot",
@@ -10,6 +11,7 @@
 	"campaignevents-event-details-participants": "Utilizator",
 	"campaignevents-event-details-message-all": "Trimite mesaj tuturor participanților",
 	"campaignevents-event-details-remove-participant-remove-btn": "Șterge",
+	"echo-category-title-campaign-events-notification-registration": "Înregistrare de eveniment",
 	"campaignevents-event-details-email-recipients-label": "Destinatari",
 	"campaignevents-event-details-email-subject-label": "Subiect",
 	"campaignevents-event-details-email-subject-placeholder": "Subiectul mesajului dvs.",
