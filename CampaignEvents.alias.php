@@ -17,6 +17,7 @@ $specialPageAliases['en'] = [
 	'RegisterForEvent' => [ 'RegisterForEvent' ],
 	'CancelEventRegistration' => [ 'CancelEventRegistration' ],
 	'MyEvents' => [ 'MyEvents' ],
+	'AllEvents' => [ 'AllEvents' ],
 	'EventDetails' => [ 'EventDetails' ],
 ];
 

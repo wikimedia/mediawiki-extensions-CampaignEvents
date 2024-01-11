@@ -181,7 +181,10 @@ return [
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->get( CampaignsPageFactory::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
-			$services->getLinkBatchFactory()
+			$services->getLinkBatchFactory(),
+			$services->get( UserLinker::SERVICE_NAME ),
+			$services->get( OrganizersStore::SERVICE_NAME ),
+			$services->getUserOptionsLookup()
 		);
 	},
 	EventPageDecoratorFactory::SERVICE_NAME =>

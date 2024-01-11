@@ -129,11 +129,13 @@
 	},
 	"ResourceModules": {
 		"ext.campaignEvents.specialeventslist.styles": {
-			"localBasePath": "resources/ext.campaignEvents.specialeventslist.styles",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialeventslist.styles",
+			"localBasePath": "resources",
+			"remoteExtPath": "CampaignEvents/resources",
 			"styles": [
-				"EventsPager.less",
-				"SpecialMyEvents.less"
+				"ext.campaignEvents.specialeventslist.styles/SpecialMyEvents.less",
+				"ext.campaignEvents.specialeventslist.styles/SpecialAllEvents.less",
+				"ext.campaignEvents.specialeventslist.styles/EventsPager.less",
+				"ext.campaignEvents.TextWithIconWidget.less"
 			]
 		},
 		"ext.campaignEvents.specialeventslist": {
@@ -561,6 +563,12 @@
 			"services": [
 				"CampaignEventsEventsPagerFactory",
 				"CampaignEventsCentralUserLookup"
+			]
+		},
+		"AllEvents": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialAllEvents",
+			"services": [
+				"CampaignEventsEventsPagerFactory"
 			]
 		},
 		"EventDetails": {

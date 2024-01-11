@@ -1,0 +1,23 @@
+@import 'mediawiki.skin.variables.less';
+@import 'mediawiki.mixins.less';
+
+#ext-campaignevents-allevents-form > fieldset > .oo-ui-fieldsetLayout-group > .oo-ui-widget-enabled:first-of-type { // stylelint-disable-line selector-max-id
+	@media ( min-width: 38em ) {
+		display: grid;
+		grid-template-columns: repeat( 2, 45% );
+		grid-gap: 10px;
+	}
+
+	> .mw-htmlform-submit-buttons {// stylelint-disable-line selector-max-id
+		grid-column-start: 1;
+	}
+
+	.mw-htmlform-field-HTMLTextField.ext-campaignevents-allevents-search-field {// stylelint-disable-line selector-max-id
+		margin-top: 12px;
+	}
+
+	.ext-campaignevents-allevents-calendar-field .oo-ui-textInputWidget {// stylelint-disable-line selector-max-id
+		width: 100%;
+		max-width: 50em;
+	}
+}

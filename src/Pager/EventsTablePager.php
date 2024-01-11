@@ -12,19 +12,19 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Pager\TablePager;
 use MediaWiki\SpecialPage\SpecialPage;
-use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
-use stdClass;
-use Wikimedia\Rdbms\IResultWrapper;
 
 class EventsTablePager extends TablePager {
+	use EventPagerTrait {
+		EventPagerTrait::getSubqueryInfo as getDefaultSubqueryInfo;
+	}
+
 	public const STATUS_ANY = 'any';
 	public const STATUS_OPEN = 'open';
 	public const STATUS_CLOSED = 'closed';
@@ -44,9 +44,6 @@ class EventsTablePager extends TablePager {
 	private string $search;
 	private string $status;
 
-	/** @var array<int,ICampaignsPage> Cache of event page objects, keyed by event ID */
-	private array $eventPageCache = [];
-
 	/**
 	 * @param IContextSource $context
 	 * @param LinkRenderer $linkRenderer
@@ -54,9 +51,9 @@ class EventsTablePager extends TablePager {
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param PageURLResolver $pageURLResolver
 	 * @param LinkBatchFactory $linkBatchFactory
-	 * @param CentralUser $user
 	 * @param string $search
 	 * @param string $status One of the self::STATUS_* constants
+	 * @param CentralUser $user
 	 */
 	public function __construct(
 		IContextSource $context,
@@ -65,9 +62,9 @@ class EventsTablePager extends TablePager {
 		CampaignsPageFactory $campaignsPageFactory,
 		PageURLResolver $pageURLResolver,
 		LinkBatchFactory $linkBatchFactory,
-		CentralUser $user,
 		string $search,
-		string $status
+		string $status,
+		CentralUser $user
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
@@ -78,130 +75,6 @@ class EventsTablePager extends TablePager {
 		$this->centralUser = $user;
 		$this->search = $search;
 		$this->status = $status;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getQueryInfo(): array {
-		$conds = [];
-
-		if ( $this->search !== '' ) {
-			// TODO Make this case-insensitive. Not easy right now because the name is a binary string and the DBAL does
-			// not provide a method for converting it to a non-binary value on which LOWER can be applied.
-			$conds[] = 'event_name' . $this->mDb->buildLike(
-				$this->mDb->anyString(), $this->search, $this->mDb->anyString() );
-		}
-
-		switch ( $this->status ) {
-			case self::STATUS_ANY:
-				break;
-			case self::STATUS_OPEN:
-				$conds['event_status'] = EventStore::getEventStatusDBVal( EventRegistration::STATUS_OPEN );
-				break;
-			case self::STATUS_CLOSED:
-				$conds['event_status'] = EventStore::getEventStatusDBVal( EventRegistration::STATUS_CLOSED );
-				break;
-			default:
-				// Invalid statuses can only be entered by messing with the HTML or query params, ignore.
-		}
-
-		// Use a subquery and a temporary table to work around IndexPager not using HAVING for aggregates (T308694)
-		// and to support postgres (which doesn't allow aliases in HAVING).
-		$subquery = $this->mDb->buildSelectSubquery(
-			[ 'campaign_events', 'ce_participants', 'ce_organizers' ],
-			[
-				'event_id',
-				'event_name',
-				'event_page_namespace',
-				'event_page_title',
-				'event_page_prefixedtext',
-				'event_page_wiki',
-				'event_status',
-				'event_start_utc',
-				'event_meeting_type',
-				'num_participants' => 'COUNT(cep_id)'
-			],
-			array_merge(
-				$conds,
-				[
-					'event_deleted_at' => null,
-				]
-			),
-			__METHOD__,
-			[
-				'GROUP BY' => [
-					'cep_event_id',
-					'event_id',
-					'event_name',
-					'event_page_namespace',
-					'event_page_title',
-					'event_page_prefixedtext',
-					'event_page_wiki',
-					'event_status',
-					'event_start_utc',
-					'event_meeting_type'
-				]
-			],
-			[
-				'ce_participants' => [
-					'LEFT JOIN',
-					[
-						'event_id=cep_event_id',
-						'cep_unregistered_at' => null,
-					]
-				],
-				'ce_organizers' => [
-					'JOIN',
-					[
-						'event_id=ceo_event_id',
-						'ceo_user_id' => $this->centralUser->getCentralID(),
-						'ceo_deleted_at' => null,
-					]
-				]
-			]
-		);
-
-		return [
-			'tables' => [ 'tmp' => $subquery ],
-			'fields' => [
-				'event_id',
-				'event_name',
-				'event_page_namespace',
-				'event_page_title',
-				'event_page_prefixedtext',
-				'event_page_wiki',
-				'event_status',
-				'event_start_utc',
-				'event_meeting_type',
-				'num_participants'
-			],
-			'conds' => [],
-			'options' => [],
-			'join_conds' => []
-		];
-	}
-
-	/**
-	 * Add event pages to a LinkBatch to improve performance and not make one query per page.
-	 * This code was stolen from AbuseFilter's pager et al.
-	 * @param IResultWrapper $result
-	 */
-	protected function preprocessResults( $result ): void {
-		if ( $this->getNumRows() === 0 ) {
-			return;
-		}
-		$lb = $this->linkBatchFactory->newLinkBatch();
-		$lb->setCaller( __METHOD__ );
-		$curWikiID = WikiMap::getCurrentWikiId();
-		foreach ( $result as $row ) {
-			// XXX LinkCache only supports local pages, and it's not used in foreign instances of PageStore.
-			if ( $row->event_page_wiki === $curWikiID ) {
-				$lb->add( (int)$row->event_page_namespace, $row->event_page_title );
-			}
-		}
-		$lb->execute();
-		$result->seek( 0 );
 	}
 
 	/**
@@ -260,23 +133,6 @@ class EventsTablePager extends TablePager {
 			default:
 				throw new LogicException( "Unexpected name $name" );
 		}
-	}
-
-	/**
-	 * @param stdClass $eventRow
-	 * @return ICampaignsPage
-	 */
-	private function getEventPageFromRow( stdClass $eventRow ): ICampaignsPage {
-		$eventID = $eventRow->event_id;
-		if ( !isset( $this->eventPageCache[$eventID] ) ) {
-			$this->eventPageCache[$eventID] = $this->campaignsPageFactory->newPageFromDB(
-				(int)$eventRow->event_page_namespace,
-				$eventRow->event_page_title,
-				$eventRow->event_page_prefixedtext,
-				$eventRow->event_page_wiki
-			);
-		}
-		return $this->eventPageCache[$eventID];
 	}
 
 	/**
@@ -358,5 +214,28 @@ class EventsTablePager extends TablePager {
 	public function getModules(): array {
 		// Avoid creating a new module for the pager only.
 		return [ 'ext.campaignEvents.specialeventslist' ];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getSubqueryInfo(): array {
+		$query = $this->getDefaultSubqueryInfo();
+		switch ( $this->status ) {
+			case self::STATUS_ANY:
+				break;
+			case self::STATUS_OPEN:
+				$query['conds']['event_status'] = EventStore::getEventStatusDBVal( EventRegistration::STATUS_OPEN );
+				break;
+			case self::STATUS_CLOSED:
+				$query['conds']['event_status'] = EventStore::getEventStatusDBVal( EventRegistration::STATUS_CLOSED );
+				break;
+			default:
+				// Invalid statuses can only be entered by messing with the HTML or query params, ignore.
+		}
+		// This should be abstracted at a later date.
+		// the current implementation ties presentation and data retrieval too closely
+		$query['join_conds']['ce_organizers'][1]['ceo_user_id'] = $this->centralUser->getCentralID();
+		return $query;
 	}
 }

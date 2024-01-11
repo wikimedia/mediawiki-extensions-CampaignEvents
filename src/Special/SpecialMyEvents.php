@@ -57,12 +57,12 @@ class SpecialMyEvents extends SpecialPage {
 			) );
 			return;
 		}
-		$pager = $this->eventsPagerFactory->newPager(
+		$pager = $this->eventsPagerFactory->newTablePager(
 			$this->getContext(),
 			$this->getLinkRenderer(),
-			$centralUser,
 			$searchedVal,
-			$status
+			$status,
+			$centralUser
 		);
 
 		$formDescriptor = [
