@@ -142,10 +142,6 @@
 			"styles": [
 				"EventsPager.less",
 				"SpecialMyEvents.less"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			]
 		},
 		"ext.campaignEvents.specialmyevents": {
@@ -180,10 +176,6 @@
 				"oojs-ui-widgets",
 				"oojs-ui-windows",
 				"oojs-ui.styles.icons-interactions"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			]
 		},
 		"ext.campaignEvents.eventpage.styles": {
@@ -191,10 +183,6 @@
 				"ext.campaignEvents.eventpage.styles.less",
 				"ext.campaignEvents.TextWithIconWidget.less",
 				"ext.campaignEvents.userlinks.styles.less"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			]
 		},
 		"ext.campaignEvents.eventpage": {
@@ -262,10 +250,6 @@
 				"oojs-ui-core",
 				"oojs-ui-windows",
 				"oojs-ui-widgets"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			]
 		},
 		"ext.campaignEvents.specialeventdetails": {
@@ -316,20 +300,12 @@
 				"mediawiki.user",
 				"mediawiki.util",
 				"jquery.makeCollapsible"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			]
 		},
 		"ext.campaignEvents.specialeventdetails.styles": {
 			"styles": [
 				"ext.campaignEvents.specialeventdetails.styles.less",
 				"ext.campaignEvents.userlinks.styles.less"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			]
 		},
 		"ext.campaignEvents.editeventregistration": {
@@ -343,10 +319,6 @@
 			"dependencies": [
 				"mediawiki.widgets.datetime",
 				"mediawiki.widgets.UsersMultiselectWidget"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			],
 			"messages": [
 				"campaignevents-edit-organizers-not-allowed",
@@ -362,10 +334,6 @@
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialregisterforevent.styles",
 			"styles": [
 				"RegisterForEvent.styles.less"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
 			]
 		}
 	},
