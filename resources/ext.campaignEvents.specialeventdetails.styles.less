@@ -186,8 +186,11 @@ ul.ext-campaignevents-event-details-organizers-list {
 		}
 	}
 
-	/* Set a fixed height so that it does not change while we rebuild the list */
+	/* Set a fixed height so that it does not change while we rebuild the list
+	 70em as max-height was the best we could find to make the infinite scrolling to work on all resolutions
+	*/
 	height: 80vh;
+	max-height: 70em;
 	overflow: auto;
 }
 
