@@ -37,7 +37,6 @@ use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\Linker;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
@@ -310,9 +309,6 @@ class EventPageDecorator {
 			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData( $registration, $curParticipant ),
 			'wgCampaignEventsAnswersAlreadyAggregated' => $curParticipant ?
 				$curParticipant->getAggregationTimestamp() !== null : false,
-			// temporarily feature flag to prevent participants from seeing the event questions
-			'wgCampaignEventsEnableParticipantQuestions' =>
-				MediaWikiServices::getInstance()->getMainConfig()->get( 'CampaignEventsEnableParticipantQuestions' ),
 			'wgCampaignEventsAggregationTimestamp' => $aggregationTimestamp
 		] );
 	}
@@ -326,9 +322,6 @@ class EventPageDecorator {
 		ExistingEventRegistration $registration,
 		?Participant $participant
 	): array {
-		if ( !MediaWikiServices::getInstance()->getMainConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
-			return [ 'questions' => [], 'answers' => [] ];
-		}
 		$enabledQuestions = $registration->getParticipantQuestions();
 		$curAnswers = $participant ? $participant->getAnswers() : [];
 

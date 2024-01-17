@@ -5,10 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use Language;
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Rest\Handler;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
@@ -22,39 +20,25 @@ class GetParticipantQuestionsHandler extends Handler {
 	/** @var Language */
 	private Language $contentLanguage;
 
-	/** @var bool */
-	private bool $participantQuestionsEnabled;
-
 	/**
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param Language $contentLanguage
-	 * @param Config $config
 	 */
 	public function __construct(
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		IMessageFormatterFactory $messageFormatterFactory,
-		Language $contentLanguage,
-		Config $config
+		Language $contentLanguage
 	) {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->contentLanguage = $contentLanguage;
-		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**
 	 * @return Response
 	 */
 	public function execute(): Response {
-		if ( !$this->participantQuestionsEnabled ) {
-			throw new HttpException(
-				// No need to localize this, since the feature flag is temporary.
-				'This endpoint is not enabled on this wiki.',
-				421
-			);
-		}
-
 		$params = $this->getValidatedParams();
 		$questionIDs = $params['question_ids'] ?? null;
 		$questions = $this->eventQuestionsRegistry->getQuestionsForAPI( $questionIDs );

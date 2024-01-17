@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -45,8 +44,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var EventQuestionsRegistry */
 	protected EventQuestionsRegistry $eventQuestionsRegistry;
-	/** @var bool */
-	protected bool $participantQuestionsEnabled;
 
 	/**
 	 * @param EventFactory $eventFactory
@@ -55,7 +52,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @param OrganizersStore $organizersStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param Config $config
 	 */
 	public function __construct(
 		EventFactory $eventFactory,
@@ -63,8 +59,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		EditEventCommand $editEventCommand,
 		OrganizersStore $organizersStore,
 		CampaignsCentralUserLookup $centralUserLookup,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		Config $config
+		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
@@ -72,7 +67,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->organizersStore = $organizersStore;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**

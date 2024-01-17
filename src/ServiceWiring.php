@@ -250,7 +250,6 @@ return [
 			$services->get( ParticipantAnswersStore::SERVICE_NAME ),
 			$services->get( EventAggregatedAnswersStore::SERVICE_NAME ),
 			$services->get( EventQuestionsRegistry::SERVICE_NAME ),
-			$services->getMainConfig(),
 			$services->get( CampaignEventsHookRunner::SERVICE_NAME )
 		);
 	},

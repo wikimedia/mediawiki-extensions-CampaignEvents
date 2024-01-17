@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -65,7 +64,6 @@ class EventDetailsParticipantsModule {
 	private Language $language;
 	private string $statisticsTabUrl;
 	private bool $isPastEvent;
-	private bool $participantQuestionsEnabled;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -76,7 +74,6 @@ class EventDetailsParticipantsModule {
 	 * @param UserFactory $userFactory
 	 * @param CampaignsUserMailer $userMailer
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param Config $config
 	 * @param Language $language
 	 * @param string $statisticsTabUrl
 	 */
@@ -89,7 +86,6 @@ class EventDetailsParticipantsModule {
 		UserFactory $userFactory,
 		CampaignsUserMailer $userMailer,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		Config $config,
 		Language $language,
 		string $statisticsTabUrl
 	) {
@@ -105,9 +101,6 @@ class EventDetailsParticipantsModule {
 		$this->language = $language;
 		$this->statisticsTabUrl = $statisticsTabUrl;
 		$this->isPastEvent = false;
-		$this->participantQuestionsEnabled = $config->get(
-			'CampaignEventsEnableParticipantQuestions'
-		);
 	}
 
 	/**
@@ -242,7 +235,6 @@ class EventDetailsParticipantsModule {
 			->appendContent( $participantsCountElement )
 			->addClasses( [ 'ext-campaignevents-details-participants-header-participants' ] );
 		if (
-			$this->participantQuestionsEnabled &&
 			$canViewNonPIIParticipantsData &&
 			!$this->isPastEvent &&
 			$event->getParticipantQuestions()
@@ -432,11 +424,7 @@ class EventDetailsParticipantsModule {
 			];
 		}
 
-		if (
-			$this->participantQuestionsEnabled &&
-			!$this->isPastEvent &&
-			$userCanViewNonPIIParticipantsData
-		) {
+		if ( !$this->isPastEvent && $userCanViewNonPIIParticipantsData ) {
 			$nonPIIQuestionLabels = $this->eventQuestionsRegistry->getNonPIIQuestionLabels(
 				$nonPIIQuestionIDs
 			);
@@ -653,11 +641,7 @@ class EventDetailsParticipantsModule {
 			) );
 		}
 
-		if (
-			$this->participantQuestionsEnabled &&
-			!$this->isPastEvent &&
-			$userCanViewNonPIIParticipantsData
-		) {
+		if ( !$this->isPastEvent && $userCanViewNonPIIParticipantsData ) {
 			$row = $this->addNonPIIParticipantAnswers( $row, $participant, $nonPIIQuestionIDs, $genderUserName );
 		}
 		return $row
@@ -763,7 +747,6 @@ class EventDetailsParticipantsModule {
 		}
 
 		if (
-			$this->participantQuestionsEnabled &&
 			$event->getParticipantQuestions() &&
 			$this->isPastEvent &&
 			$userCanViewNonPIIParticipantsData

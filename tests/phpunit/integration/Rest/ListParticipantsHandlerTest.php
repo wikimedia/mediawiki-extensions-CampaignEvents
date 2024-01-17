@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Rest;
 
 use Generator;
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -54,19 +53,13 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		ParticipantsStore $participantsStore = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		UserFactory $userFactory = null,
-		UserLinker $userLink = null,
-		bool $participantQuestionsEnabled = true
+		UserLinker $userLink = null
 	): ListParticipantsHandler {
 		if ( !$permissionChecker ) {
 			$permissionChecker = $this->createMock( PermissionChecker::class );
 			$permissionChecker->method( 'userCanViewPrivateParticipants' )->willReturn( true );
 			$permissionChecker->method( 'userCanEmailParticipants' )->willReturn( true );
 		}
-
-		$configMock = $this->createMock( Config::class );
-		$configMock->method( 'get' )
-			->with( 'CampaignEventsEnableParticipantQuestions' )
-			->willReturn( $participantQuestionsEnabled );
 
 		$msgFormatter = $this->createMock( ITextFormatter::class );
 		$msgFormatter->method( 'format' )->willReturnCallback( static fn ( MessageValue $msg ) => $msg->getKey() );
@@ -80,9 +73,8 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			$userLink ?? $this->createMock( UserLinker::class ),
 			$userFactory ?? $this->createMock( UserFactory::class ),
 			$this->createMock( CampaignsUserMailer::class ),
-			new EventQuestionsRegistry( $participantQuestionsEnabled ),
-			$msgFormatterFactory,
-			$configMock
+			new EventQuestionsRegistry( true ),
+			$msgFormatterFactory
 		);
 	}
 
@@ -164,7 +156,6 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideRunParticipantQuestions
 	 */
 	public function testRunParticipantQuestions(
-		bool $questionsEnabled = true,
 		bool $userCanSeeParticipantNonPIIData = false,
 		bool $isPastEvent = false,
 		array $answers = [],
@@ -205,7 +196,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$eventLookup->method( 'getEventByID' )->willReturn( $eventRegistration );
 
 		$handler = $this->newHandler(
-			$permChecker, $eventLookup, $partStore, $centralUserLookup, null, $userLink, $questionsEnabled
+			$permChecker, $eventLookup, $partStore, $centralUserLookup, null, $userLink
 		);
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 		$this->assertArrayEquals( $expectedResp, $respData );
@@ -228,39 +219,38 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideRunParticipantQuestions(): Generator {
-		yield 'Event without questions enabled' => [ false ];
-		yield 'Future event with questions enabled and user cannot view non pii data' => [];
+		yield 'Future event, user cannot view non pii data' => [];
 
 		$noNonPiiAnswers = $this->generateNoPiiAnswers( [
 			[ 4, 'campaignevents-participant-question-no-response' ],
 			[ 5, 'campaignevents-participant-question-no-response' ],
 		] );
-		yield 'Future event with questions enabled and no non PII answers' => [
-			true, true, false, [], $noNonPiiAnswers
+		yield 'Future event without PII answers' => [
+			true, false, [], $noNonPiiAnswers
 		];
 
 		$nonPiiAnswers = $this->generateNoPiiAnswers( [
 			[ 4, 'campaignevents-register-question-confidence-contributing-option-some-not-confident' ],
 			[ 5, 'campaignevents-register-question-affiliate-option-affiliate' ],
 		] );
-		yield 'Future event with questions enabled and all non PII answers' => [
-			true, true, false, [ new Answer( 4, 2, null ), new Answer( 5, 1, null ) ], $nonPiiAnswers
+		yield 'Future event with all non PII answers' => [
+			true, false, [ new Answer( 4, 2, null ), new Answer( 5, 1, null ) ], $nonPiiAnswers
 		];
 
 		$onlyOneNonPiiAnswer = $this->generateNoPiiAnswers( [
 			[ 4, 'campaignevents-participant-question-no-response' ],
 			[ 5, 'campaignevents-register-question-affiliate-option-affiliate' ],
 		] );
-		yield 'Future event with questions enabled and only one non PII answer' => [
-			true, true, false, [ new Answer( 5, 1, null ) ], $onlyOneNonPiiAnswer
+		yield 'Future event with only one non PII answer' => [
+			true, false, [ new Answer( 5, 1, null ) ], $onlyOneNonPiiAnswer
 		];
 
 		$aggregatedMessage = 'campaignevents-participant-question-have-been-aggregated';
-		yield 'Future event with questions enabled and participant aggregated answers' => [
-			true, true, false, [ new Answer( 5, 1, null ) ], null, '20220315120000', $aggregatedMessage
+		yield 'Future event with participant aggregated answers' => [
+			true, false, [ new Answer( 5, 1, null ) ], null, '20220315120000', $aggregatedMessage
 		];
 
-		yield 'Past event with questions enabled' => [ true, true, true ];
+		yield 'Past event' => [ true, true ];
 	}
 
 	/**

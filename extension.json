@@ -44,10 +44,6 @@
 			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
 			"value": null
 		},
-		"CampaignEventsEnableParticipantQuestions": {
-			"description": "Temporary feature flag to enable support for participant questions.",
-			"value": false
-		},
 		"CampaignEventsEnableWikimediaParticipantQuestions": {
 			"description": "Flag to enable Wikimedia-specific participant questions. This flag could be reconsidered in the future, in favour of other solutions (like a hook to add Wikimedia-specific questions).",
 			"value": true
@@ -348,8 +344,7 @@
 				"CampaignEventsEditEventCommand",
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsEventQuestionsRegistry",
-				"MainConfig"
+				"CampaignEventsEventQuestionsRegistry"
 			]
 		},
 		{
@@ -358,8 +353,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsTrackingToolRegistry",
-				"MainConfig"
+				"CampaignEventsTrackingToolRegistry"
 			]
 		},
 		{
@@ -378,8 +372,7 @@
 			"services": [
 				"CampaignEventsEventLookup",
 				"CampaignEventsRegisterParticipantCommand",
-				"CampaignEventsEventQuestionsRegistry",
-				"MainConfig"
+				"CampaignEventsEventQuestionsRegistry"
 			]
 		},
 		{
@@ -399,8 +392,7 @@
 				"CampaignEventsEventLookup",
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsEventQuestionsRegistry",
-				"MainConfig"
+				"CampaignEventsEventQuestionsRegistry"
 			]
 		},
 		{
@@ -414,7 +406,6 @@
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventQuestionsRegistry",
-				"MainConfig",
 				"CampaignEventsEventLookup"
 			]
 		},
@@ -453,8 +444,7 @@
 				"UserFactory",
 				"CampaignEventsUserMailer",
 				"CampaignEventsEventQuestionsRegistry",
-				"MessageFormatterFactory",
-				"MainConfig"
+				"MessageFormatterFactory"
 			]
 		},
 		{
@@ -502,8 +492,7 @@
 			"services": [
 				"CampaignEventsEventQuestionsRegistry",
 				"MessageFormatterFactory",
-				"ContentLanguage",
-				"MainConfig"
+				"ContentLanguage"
 			]
 		}
 	],

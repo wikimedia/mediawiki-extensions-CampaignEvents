@@ -212,11 +212,7 @@ class SpecialEventDetails extends SpecialPage {
 			);
 		}
 
-		if (
-			$isOrganizer
-			&& $this->event->isPast()
-			&& $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' )
-		) {
+		if ( $isOrganizer && $this->event->isPast() ) {
 			$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $language );
 			$form = $formModule->createContent(
 				$this->getContext(),

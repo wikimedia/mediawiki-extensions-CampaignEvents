@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
 use Language;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Rest\GetParticipantQuestionsHandler;
 use MediaWiki\Rest\RequestData;
@@ -123,8 +122,7 @@ class GetParticipantQuestionsHandlerTest extends MediaWikiUnitTestCase {
 		return new GetParticipantQuestionsHandler(
 			$registry,
 			$msgFormatterFactory,
-			$this->createMock( Language::class ),
-			new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => true ] )
+			$this->createMock( Language::class )
 		);
 	}
 
