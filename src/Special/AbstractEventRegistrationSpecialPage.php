@@ -467,12 +467,12 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$questionList .= Html::element( 'li', [], $this->msg( $labelMsg )->text() );
 			}
 			$text .= Html::rawElement( 'ul', [], $questionList );
-			$text .= Html::element(
-				'p',
-				[],
-				$this->msg( 'campaignevents-edit-field-clickwrap-checkbox-pretext' )->text(),
-			);
 		}
+		$text .= Html::element(
+			'p',
+			[],
+			$this->msg( 'campaignevents-edit-field-clickwrap-checkbox-pretext' )->text(),
+		);
 
 		return [
 			'type' => 'info',
