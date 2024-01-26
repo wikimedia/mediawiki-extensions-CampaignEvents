@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use DateTimeZone;
 use DBAccessObjectUtils;
+use IDBAccessObject;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
@@ -110,7 +111,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 */
 	public function getEventByPage(
 		ICampaignsPage $page,
-		int $readFlags = self::READ_NORMAL
+		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ExistingEventRegistration {
 		[ $dbIndex, $dbOptions ] = DBAccessObjectUtils::getDBOptions( $readFlags );
 		$db = $this->dbHelper->getDBConnection( $dbIndex );

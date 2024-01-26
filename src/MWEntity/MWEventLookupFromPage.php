@@ -17,7 +17,7 @@ use MediaWiki\Title\TitleFormatter;
  * This class is a MediaWiki-specific registration lookup that works on wikipage objects and simplifies the interaction
  * between MW-specific code (e.g., hook handlers) and IEventLookup.
  */
-class MWEventLookupFromPage implements IDBAccessObject {
+class MWEventLookupFromPage {
 	public const SERVICE_NAME = 'CampaignEventsMWEventLookupFromPage';
 
 	/** @var IEventLookup */
@@ -40,10 +40,13 @@ class MWEventLookupFromPage implements IDBAccessObject {
 
 	/**
 	 * @param PageIdentity|LinkTarget $page
-	 * @param int $readFlags One of the self::READ_* constants
+	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
 	 * @return ExistingEventRegistration|null
 	 */
-	public function getRegistrationForPage( $page, int $readFlags = self::READ_NORMAL ): ?ExistingEventRegistration {
+	public function getRegistrationForPage(
+		$page,
+		int $readFlags = IDBAccessObject::READ_NORMAL
+	): ?ExistingEventRegistration {
 		if ( $page->getNamespace() !== NS_EVENT ) {
 			return null;
 		}

@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool\Tool;
 
+use IDBAccessObject;
 use JsonException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -233,7 +234,7 @@ class WikiEduDashboard extends TrackingTool {
 			null,
 			false,
 			null,
-			ParticipantsStore::READ_LATEST
+			IDBAccessObject::READ_LATEST
 		);
 		$participantIDsMap = array_fill_keys(
 			array_map( static fn ( Participant $p ) => $p->getUser()->getCentralID(), $latestParticipants ),

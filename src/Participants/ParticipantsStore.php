@@ -14,7 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use Wikimedia\Assert\Assert;
 
-class ParticipantsStore implements IDBAccessObject {
+class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
 
 	/**
@@ -220,7 +220,7 @@ class ParticipantsStore implements IDBAccessObject {
 	 * @param bool $showPrivate
 	 * @param int[]|null $excludeUsers IDs of users to exclude from the result (useful when the request user is handled
 	 * separately).
-	 * @param int $readFlags One of the self::READ_* constants
+	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
 	 * @return Participant[]
 	 */
 	public function getEventParticipants(
@@ -231,7 +231,7 @@ class ParticipantsStore implements IDBAccessObject {
 		array $userIdFilter = null,
 		bool $showPrivate = false,
 		array $excludeUsers = null,
-		int $readFlags = self::READ_NORMAL
+		int $readFlags = IDBAccessObject::READ_NORMAL
 	): array {
 		if ( $userIdFilter ) {
 			Assert::parameterElementType( 'integer', $userIdFilter, '$userIdFilter' );

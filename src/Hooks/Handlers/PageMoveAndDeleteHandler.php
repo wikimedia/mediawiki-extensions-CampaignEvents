@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
+use IDBAccessObject;
 use ManualLogEntry;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -70,7 +71,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 		ManualLogEntry $logEntry,
 		int $archivedRevisionCount
 	) {
-		$registration = $this->eventLookupFromPage->getRegistrationForPage( $page, MWEventLookupFromPage::READ_LATEST );
+		$registration = $this->eventLookupFromPage->getRegistrationForPage( $page, IDBAccessObject::READ_LATEST );
 		if ( !$registration ) {
 			return;
 		}
@@ -88,7 +89,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	 */
 	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ) {
 		// This code runs in a DeferredUpdate, load the data from DB master (T302858#8354617)
-		$registration = $this->eventLookupFromPage->getRegistrationForPage( $old, MWEventLookupFromPage::READ_LATEST );
+		$registration = $this->eventLookupFromPage->getRegistrationForPage( $old, IDBAccessObject::READ_LATEST );
 		if ( !$registration ) {
 			return;
 		}
