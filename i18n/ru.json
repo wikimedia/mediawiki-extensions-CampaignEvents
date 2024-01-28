@@ -4,6 +4,7 @@
 			"Ajiniyaz",
 			"Deltaspace",
 			"Kareyac",
+			"Mitte27",
 			"Okras",
 			"Pacha Tchernof",
 			"UniCollab"
@@ -48,6 +49,7 @@
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
 	"campaignevents-eventslist-delete-dialog-cancel": "Отмена",
+	"campaignevents-delete-submit-btn": "Удалить",
 	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
 	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы.",
