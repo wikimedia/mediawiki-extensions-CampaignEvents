@@ -6,7 +6,8 @@
 			"Kareyac",
 			"Okras",
 			"Pacha Tchernof",
-			"UniCollab"
+			"UniCollab",
+			"Mitte27"
 		]
 	},
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
@@ -45,10 +46,10 @@
 	"campaignevents-unregister-success": "Вы отменили регистрацию на ваше мероприятие.",
 	"campaignevents-unregister-confirmation-top": "Подтвердите отмену регистрации",
 	"campaignevents-delete-not-allowed-registration": "У вас нет разрешения удалить регистрацию на это мероприятие.",
-	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена.",
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
 	"campaignevents-eventslist-delete-dialog-cancel": "Отмена",
+	"campaignevents-delete-submit-btn": "Удалить",
 	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
 	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы.",
