@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Patsagorn Y.",
-			"Trisorn Triboon"
+			"Trisorn Triboon",
+			"Ekminarin"
 		]
 	},
 	"campaignevents-desc": "ให้ฟีเจอร์สำหรับผู้จัดแคมเปญและผู้มีส่วนร่วม",
@@ -153,5 +154,6 @@
 	"campaignevents-eventpage-enable-registration-dialog-title": "เปิดใช้งานการลงทะเบียน",
 	"campaignevents-eventpage-enable-registration-dialog-body": "ให้ผู้มีส่วนร่วมสามารถลงทะเบียนเพื่อนเข้าร่วมกิจกรรมของคุณในหน้านี้ได้โดยตรง",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "ปิด",
-	"campaignevents-eventpage-enable-registration-dialog-confirm": "เปิดการลงทะเบียน"
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "เปิดการลงทะเบียน",
+	"campaignevents-event-details-edit-button": "แก้ไข"
 }
