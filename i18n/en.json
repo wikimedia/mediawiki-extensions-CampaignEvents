@@ -398,7 +398,7 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Please state",
 	"campaignevents-details-stats-no-responses": "This event has no responses from participants to aggregate.",
 	"campaignevents-details-stats-not-ready": "Participants' responses will be aggregated and made available here shortly.",
-	"campaignevents-details-stats-not-enough-answers": "This question has received less than $1 total responses.",
+	"campaignevents-details-stats-not-enough-answers": "This question has received less than $1 total {{PLURAL:$1|response|responses}}.",
 	"campaignevents-details-stats-header-option": "Option",
 	"campaignevents-details-stats-header-percentage": "Percentage",
 	"campaignevents-details-stats-header-number": "Number",
