@@ -31,8 +31,6 @@ class RegisterForEventHandler extends SimpleHandler {
 	private $registerParticipantCommand;
 	/** @var EventQuestionsRegistry */
 	private EventQuestionsRegistry $eventQuestionsRegistry;
-	/** @var bool */
-	private bool $participantQuestionsEnabled;
 
 	/**
 	 * @param IEventLookup $eventLookup
