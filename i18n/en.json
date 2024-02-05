@@ -328,6 +328,7 @@
 	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|participant|participants}}",
 	"campaignevents-email-participants-yes": "Yes",
 	"campaignevents-email-participants-no": "No",
+	"campaignevents-email-footer": "This email was {{GENDER:$1|sent}} by $1 to {{GENDER:$2|$2}}, as a registered participant of the following event: $3. If {{GENDER:$2|you}} reply to this email, {{GENDER:$2|your}} email will be sent directly to the {{GENDER:$1|original sender}}, revealing {{GENDER:$2|your}} email address to {{GENDER:$1|them}}.",
 	"campaignevents-event-details-time-registered": "Time registered",
 	"campaignevents-event-details-can-receive-email": "Can receive email",
 	"campaignevents-register-questions-label-title": "Your information",

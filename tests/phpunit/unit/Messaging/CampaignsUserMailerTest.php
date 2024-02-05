@@ -7,10 +7,12 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Messaging;
 use Generator;
 use JobQueueGroup;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\Messaging\EmailUsersJob;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
@@ -18,6 +20,7 @@ use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
+use Wikimedia\Message\ITextFormatter;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer
@@ -47,7 +50,8 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 				MainConfigNames::PasswordSender => 'passwordsender@example.org',
 				MainConfigNames::EnableEmail => true,
 				MainConfigNames::EnableUserEmail => true,
-				MainConfigNames::UserEmailUseReplyTo => false
+				MainConfigNames::UserEmailUseReplyTo => false,
+				MainConfigNames::EnableSpecialMute => false,
 			]
 		);
 		return new CampaignsUserMailer(
@@ -55,7 +59,9 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 			$jobQueueGroup ?? $this->createMock( JobQueueGroup::class ),
 			$serviceOptions,
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
-			$userOptionsLookup ?? $this->createMock( UserOptionsLookup::class )
+			$userOptionsLookup ?? $this->createMock( UserOptionsLookup::class ),
+			$this->createMock( ITextFormatter::class ),
+			$this->createMock( PageURLResolver::class )
 		);
 	}
 
@@ -151,7 +157,13 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 			[ MainConfigNames::UserEmailUseReplyTo => $useReplyTo ],
 			$centralUserLookup
 		);
-		$status = $userMailer->sendEmail( $performer, $recipients, 'Some subject', 'Some message' );
+		$status = $userMailer->sendEmail(
+			$performer,
+			$recipients,
+			'Some subject',
+			'Some message',
+			$this->createMock( ExistingEventRegistration::class )
+		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( 1, $status );
 	}

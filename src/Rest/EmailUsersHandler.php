@@ -53,7 +53,7 @@ class EmailUsersHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	public function run( int $eventId ): Response {
-		$this->getRegistrationOrThrow( $this->eventLookup, $eventId );
+		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventId );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$params = $this->getValidatedBody();
 
@@ -78,7 +78,8 @@ class EmailUsersHandler extends SimpleHandler {
 			$this->getAuthority(),
 			$participants,
 			$params['subject'],
-			$params['message']
+			$params['message'],
+			$event
 		);
 
 		if ( !$result->isGood() ) {
