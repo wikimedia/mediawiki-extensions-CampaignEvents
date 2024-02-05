@@ -92,6 +92,9 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		}
 
 		$this->isEdit = $this->curParticipantData || $this->getRequest()->wasPosted();
+		$this->getOutput()->setPageTitleMsg(
+			$this->msg( 'campaignevents-event-register-for-event-title', $this->event->getName() )
+		);
 		return parent::getForm();
 	}
 
