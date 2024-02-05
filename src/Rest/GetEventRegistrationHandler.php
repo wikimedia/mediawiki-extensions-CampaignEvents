@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -22,22 +21,16 @@ class GetEventRegistrationHandler extends SimpleHandler {
 	/** @var TrackingToolRegistry */
 	private TrackingToolRegistry $trackingToolRegistry;
 
-	/** @var bool */
-	private bool $participantQuestionsEnabled;
-
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param Config $config
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		TrackingToolRegistry $trackingToolRegistry,
-		Config $config
+		TrackingToolRegistry $trackingToolRegistry
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->trackingToolRegistry = $trackingToolRegistry;
-		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**
@@ -82,10 +75,8 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'meeting_url' => $registration->getMeetingURL(),
 			'meeting_country' => $registration->getMeetingCountry(),
 			'meeting_address' => $registration->getMeetingAddress(),
+			'questions' => $registration->getParticipantQuestions(),
 		];
-		if ( $this->participantQuestionsEnabled ) {
-			$respVal['questions'] = $registration->getParticipantQuestions();
-		}
 		return $this->getResponseFactory()->createJson( $respVal );
 	}
 

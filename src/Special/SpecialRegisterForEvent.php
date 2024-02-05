@@ -48,12 +48,6 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private ?bool $isEdit;
 
 	/**
-	 * @var bool Temporary flag to control whether participant questions are shown. This will be removed together
-	 * with the feature flag.
-	 */
-	private bool $showParticipantQuestions;
-
-	/**
 	 * @param IEventLookup $eventLookup
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
@@ -80,7 +74,6 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			'oojs-ui.styles.icons-location',
 			'oojs-ui.styles.icons-moderation',
 		] );
-		$this->showParticipantQuestions = $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**
@@ -130,9 +123,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			]
 		];
 
-		if ( $this->showParticipantQuestions ) {
-			$this->addParticipantQuestionFields( $fields );
-		}
+		$this->addParticipantQuestionFields( $fields );
 
 		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistration();
 		if ( $policyMsg !== null ) {
@@ -217,7 +208,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			$form->setSubmitTextMsg( 'campaignevents-register-confirmation-btn' );
 		}
 
-		if ( $this->showParticipantQuestions && $this->event->getParticipantQuestions() ) {
+		if ( $this->event->getParticipantQuestions() ) {
 			$questionsHeader = Html::rawElement(
 				'div',
 				[ 'class' => 'ext-campaignevents-participant-questions-info-subtitle' ],
@@ -235,19 +226,16 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			RegisterParticipantCommand::REGISTRATION_PRIVATE :
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
 
-		if ( $this->showParticipantQuestions ) {
-			try {
-				$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
-					$data,
-					$this->event->getParticipantQuestions()
-				);
-			} catch ( InvalidAnswerDataException $e ) {
-				// Should never happen unless the user messes up with the form, so don't bother making this too pretty.
-				return Status::newFatal( 'campaignevents-register-invalid-answer', $e->getQuestionName() );
-			}
-		} else {
-			$answers = [];
+		try {
+			$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
+				$data,
+				$this->event->getParticipantQuestions()
+			);
+		} catch ( InvalidAnswerDataException $e ) {
+			// Should never happen unless the user messes up with the form, so don't bother making this too pretty.
+			return Status::newFatal( 'campaignevents-register-invalid-answer', $e->getQuestionName() );
 		}
+
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
 			new MWAuthorityProxy( $this->getAuthority() ),

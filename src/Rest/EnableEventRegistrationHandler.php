@@ -56,11 +56,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$meetingType |= EventRegistration::MEETING_TYPE_IN_PERSON;
 		}
 
-		if ( $this->participantQuestionsEnabled ) {
-			$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
-		} else {
-			$participantQuestionNames = [];
-		}
+		$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
 
 		return $this->eventFactory->newEvent(
 			null,

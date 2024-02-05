@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -39,18 +38,15 @@ class RegisterForEventHandler extends SimpleHandler {
 	 * @param IEventLookup $eventLookup
 	 * @param RegisterParticipantCommand $registerParticipantCommand
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param Config $config
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		RegisterParticipantCommand $registerParticipantCommand,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		Config $config
+		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**
@@ -72,21 +68,17 @@ class RegisterForEventHandler extends SimpleHandler {
 		$privateFlag = $body['is_private'] ?
 			RegisterParticipantCommand::REGISTRATION_PRIVATE :
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
-		if ( $this->participantQuestionsEnabled ) {
-			try {
-				$answers = $this->eventQuestionsRegistry->extractUserAnswersAPI(
-					$body['answers'] ?? [],
-					$eventRegistration->getParticipantQuestions()
-				);
-			} catch ( InvalidAnswerDataException $e ) {
-				throw new LocalizedHttpException(
-					MessageValue::new( 'campaignevents-rest-register-invalid-answer' )
-						->params( $e->getQuestionName() ),
-					400
-				);
-			}
-		} else {
-			$answers = [];
+		try {
+			$answers = $this->eventQuestionsRegistry->extractUserAnswersAPI(
+				$body['answers'] ?? [],
+				$eventRegistration->getParticipantQuestions()
+			);
+		} catch ( InvalidAnswerDataException $e ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-register-invalid-answer' )
+					->params( $e->getQuestionName() ),
+				400
+			);
 		}
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$eventRegistration,
@@ -130,19 +122,16 @@ class RegisterForEventHandler extends SimpleHandler {
 	 * @return array
 	 */
 	protected function getBodyParams(): array {
-		$params = [
+		return [
 			'is_private' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-		];
-		if ( $this->participantQuestionsEnabled ) {
-			$params['answers'] = [
+			'answers' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'array',
-			];
-		}
-		return $params;
+			],
+		];
 	}
 }

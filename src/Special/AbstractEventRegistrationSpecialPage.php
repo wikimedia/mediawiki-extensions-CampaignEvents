@@ -415,10 +415,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		];
 
 		$this->hookRunner->onCampaignEventsRegistrationFormLoad( $formFields, $this->eventID );
-		if (
-			$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) &&
-			( !$this->event || $this->event->getParticipantQuestions() )
-		) {
+		if ( !$this->event || $this->event->getParticipantQuestions() ) {
 			$formFields['ParticipantQuestionsInfo'] = $this->getParticipantQuestionsInfoField();
 			$clickwrapAccepted = false;
 			if ( $this->event ) {
@@ -511,10 +508,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			->setAttributes( [ 'style' => 'font-weight: normal' ] );
 
 		$footerHasContent = false;
-		if (
-			!$this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ||
-			( $this->event && !$this->event->getParticipantQuestions() )
-		) {
+		if ( $this->event && !$this->event->getParticipantQuestions() ) {
 			$footerHasContent = true;
 			$footerNotice->appendContent( new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() ) );
 		}
@@ -588,21 +582,19 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		$participantQuestionNames = [];
-		if ( $this->getConfig()->get( 'CampaignEventsEnableParticipantQuestions' ) ) {
-			if ( $this->event ) {
-				$currentQuestionIDs = $this->event->getParticipantQuestions();
-				foreach ( $currentQuestionIDs as $questionID ) {
-					try {
-						$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
-					} catch ( UnknownQuestionException $e ) {
-						// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
-						// that case.
-						throw new LogicException( 'Unknown question in the database', 0, $e );
-					}
+		if ( $this->event ) {
+			$currentQuestionIDs = $this->event->getParticipantQuestions();
+			foreach ( $currentQuestionIDs as $questionID ) {
+				try {
+					$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
+				} catch ( UnknownQuestionException $e ) {
+					// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
+					// that case.
+					throw new LogicException( 'Unknown question in the database', 0, $e );
 				}
-			} else {
-				$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
 			}
+		} else {
+			$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
 		}
 
 		try {

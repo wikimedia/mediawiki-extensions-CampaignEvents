@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use LogicException;
-use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -37,7 +36,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @param OrganizersStore $organizersStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param Config $config
 	 * @param IEventLookup $eventLookup
 	 */
 	public function __construct(
@@ -47,7 +45,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		OrganizersStore $organizersStore,
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		Config $config,
 		IEventLookup $eventLookup
 	) {
 		parent::__construct(
@@ -56,8 +53,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$editEventCommand,
 			$organizersStore,
 			$centralUserLookup,
-			$eventQuestionsRegistry,
-			$config
+			$eventQuestionsRegistry
 		);
 		$this->eventLookup = $eventLookup;
 	}
@@ -142,16 +138,14 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		}
 
 		$participantQuestionNames = [];
-		if ( $this->participantQuestionsEnabled ) {
-			$currentQuestionIDs = $existingEvent->getParticipantQuestions();
-			foreach ( $currentQuestionIDs as $questionID ) {
-				try {
-					$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
-				} catch ( UnknownQuestionException $e ) {
-					// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
-					// that case.
-					throw new LogicException( 'Unknown question in the database', 0, $e );
-				}
+		$currentQuestionIDs = $existingEvent->getParticipantQuestions();
+		foreach ( $currentQuestionIDs as $questionID ) {
+			try {
+				$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
+			} catch ( UnknownQuestionException $e ) {
+				// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
+				// that case.
+				throw new LogicException( 'Unknown question in the database', 0, $e );
 			}
 		}
 

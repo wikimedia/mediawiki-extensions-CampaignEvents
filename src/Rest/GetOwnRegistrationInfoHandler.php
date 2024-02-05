@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -27,28 +26,22 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 
-	/** @var bool */
-	private bool $participantQuestionsEnabled;
-
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param Config $config
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
 		CampaignsCentralUserLookup $centralUserLookup,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		Config $config
+		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->participantQuestionsEnabled = $config->get( 'CampaignEventsEnableParticipantQuestions' );
 	}
 
 	/**
@@ -77,10 +70,8 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 
 		$response = [
 			'private' => $participant->isPrivateRegistration(),
+			'answers' => $this->eventQuestionsRegistry->formatAnswersForAPI( $participant->getAnswers() ),
 		];
-		if ( $this->participantQuestionsEnabled ) {
-			$response['answers'] = $this->eventQuestionsRegistry->formatAnswersForAPI( $participant->getAnswers() );
-		}
 
 		return $this->getResponseFactory()->createJson( $response );
 	}

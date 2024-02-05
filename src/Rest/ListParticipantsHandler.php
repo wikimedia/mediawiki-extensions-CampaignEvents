@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -52,7 +51,6 @@ class ListParticipantsHandler extends SimpleHandler {
 	private EventQuestionsRegistry $questionsRegistry;
 	/** @var IMessageFormatterFactory */
 	private IMessageFormatterFactory $messageFormatterFactory;
-	private bool $participantQuestionsEnabled;
 
 	/**
 	 * @param PermissionChecker $permissionChecker
@@ -64,7 +62,6 @@ class ListParticipantsHandler extends SimpleHandler {
 	 * @param CampaignsUserMailer $campaignsUserMailer
 	 * @param EventQuestionsRegistry $questionsRegistry
 	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param Config $config
 	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
@@ -75,8 +72,7 @@ class ListParticipantsHandler extends SimpleHandler {
 		UserFactory $userFactory,
 		CampaignsUserMailer $campaignsUserMailer,
 		EventQuestionsRegistry $questionsRegistry,
-		IMessageFormatterFactory $messageFormatterFactory,
-		Config $config
+		IMessageFormatterFactory $messageFormatterFactory
 	) {
 		$this->permissionChecker = $permissionChecker;
 		$this->eventLookup = $eventLookup;
@@ -87,9 +83,6 @@ class ListParticipantsHandler extends SimpleHandler {
 		$this->campaignsUserMailer = $campaignsUserMailer;
 		$this->questionsRegistry = $questionsRegistry;
 		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->participantQuestionsEnabled = $config->get(
-			'CampaignEventsEnableParticipantQuestions'
-		);
 	}
 
 	/**
@@ -154,9 +147,7 @@ class ListParticipantsHandler extends SimpleHandler {
 			$authority,
 			$event->getID()
 		);
-		$includeNonPIIData = $this->participantQuestionsEnabled &&
-			!$event->isPast() &&
-			$userCanViewNonPIIParticipantData;
+		$includeNonPIIData = !$event->isPast() && $userCanViewNonPIIParticipantData;
 
 		$centralIDs = array_map( static fn ( Participant $p ) => $p->getUser()->getCentralID(), $participants );
 		[ $usernamesMap, $usersByName ] = $this->getUserBatch( $centralIDs );

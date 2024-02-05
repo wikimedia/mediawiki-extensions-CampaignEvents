@@ -80,11 +80,9 @@
 		var reqParams = {
 			token: mw.user.tokens.get( 'csrfToken' ),
 			// eslint-disable-next-line camelcase
-			is_private: privateRegistration
+			is_private: privateRegistration,
+			answers: answers
 		};
-		if ( mw.config.get( 'wgCampaignEventsEnableParticipantQuestions' ) ) {
-			reqParams.answers = answers;
-		}
 		return new mw.Rest().put(
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			reqParams

@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
@@ -60,8 +59,7 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$editEventCmd ?? $this->getMockEditEventCommand(),
 			$this->createMock( OrganizersStore::class ),
 			$this->createMock( CampaignsCentralUserLookup::class ),
-			$this->createMock( EventQuestionsRegistry::class ),
-			new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => true ] )
+			$this->createMock( EventQuestionsRegistry::class )
 		);
 	}
 

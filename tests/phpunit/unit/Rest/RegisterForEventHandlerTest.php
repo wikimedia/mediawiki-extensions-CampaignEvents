@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -50,8 +49,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		return new RegisterForEventHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$registerCommand,
-			$eventQuestionsRegistry ?? $this->createMock( EventQuestionsRegistry::class ),
-			new HashConfig( [ 'CampaignEventsEnableParticipantQuestions' => true ] )
+			$eventQuestionsRegistry ?? $this->createMock( EventQuestionsRegistry::class )
 		);
 	}
 
