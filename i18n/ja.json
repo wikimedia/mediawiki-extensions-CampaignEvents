@@ -8,7 +8,9 @@
 			"Shirayuki",
 			"Sou0012",
 			"もなー(偽物)",
-			"Anonymoususer12321"
+			"Anonymoususer12321",
+			"MagicAho",
+			"春春眠眠"
 		]
 	},
 	"campaignevents-desc": "キャンペーンの主催者用と参加者用の機能を提供。",
@@ -177,6 +179,7 @@
 	"campaignevents-notification-registration-details-dates-header": "日付と時刻",
 	"campaignevents-notification-registration-details-type-header": "イベントの種類",
 	"campaignevents-notification-registration-details-type-online-header": "オンラインイベント",
+	"campaignevents-notification-registration-details-organizers-header": "イベント主催者",
 	"campaignevents-notification-registration-event-page-link": "イベントページを見る",
 	"campaignevents-notification-registration-chat-link": "グループチャットに参加"
 }
