@@ -414,5 +414,6 @@
 	"campaignevents-individual-stats-label-message-confidence": "¿Qué tan seguro se siente al contribuir a los proyectos de Wikimedia involucrados en este evento?",
 	"campaignevents-individual-stats-label-message-affiliate": "¿Pertenece a algún afiliado de Wikimedia (capítulos, grupos de usuarios, organizaciones temáticas)?",
 	"campaignevents-participant-question-have-been-aggregated": "Las respuestas de est{{GENDER:$1|e|a}} participante han sido agregadas y eliminadas",
-	"campaignevents-participant-question-no-response": "Ninguna respuesta"
+	"campaignevents-participant-question-no-response": "Ninguna respuesta",
+	"campaignevents-event-register-for-event-title": "Regístrate por $1"
 }

@@ -391,7 +391,7 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Наведете",
 	"campaignevents-details-stats-no-responses": "Овој настан нема одговори од учесниците кои би се насобирале.",
 	"campaignevents-details-stats-not-ready": "Одговорите на учесниците ќе бидат насобрани и набргу тука ќе бидат на располагање.",
-	"campaignevents-details-stats-not-enough-answers": "Ова прашање доби помалку од $1 одговори (вкупно).",
+	"campaignevents-details-stats-not-enough-answers": "Ова прашање доби помалку од $1 {{PLURAL:$1|одговор|одговори}} (вкупно).",
 	"campaignevents-details-stats-header-option": "Можност",
 	"campaignevents-details-stats-header-percentage": "Постоток",
 	"campaignevents-details-stats-header-number": "Број",
@@ -409,5 +409,6 @@
 	"campaignevents-participant-question-have-been-aggregated": "Одговорите на {{GENDER:$1|овој учесник|оваа учесничка}} се насобрани и избришани",
 	"campaignevents-participant-question-no-response": "Нема одговор",
 	"campaignevents-warning-change-event-end-date-past": "Ако го замените завршниот датум со изминат, настанот ќе се затвори и ќе добиете преглед на одговори од учесниците. Ова дејство е неповратно. Ова важи само ако учесниците дале одговори на зададените прашања.",
-	"campaignevents-event-details-participants-individual-data-deleted": "Одговорите на поединечните учесници се ибришани во насобраните одговори и достапни се под [$1 {{int:campaignevents-event-details-tab-stats}}]."
+	"campaignevents-event-details-participants-individual-data-deleted": "Одговорите на поединечните учесници се ибришани во насобраните одговори и достапни се под [$1 {{int:campaignevents-event-details-tab-stats}}].",
+	"campaignevents-event-register-for-event-title": "Пријавете се за $1"
 }

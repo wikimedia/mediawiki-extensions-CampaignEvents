@@ -391,7 +391,7 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "נא להשיב",
 	"campaignevents-details-stats-no-responses": "לאירוע הזה אין תגובות מהמשתתפים שאפשר לצבור.",
 	"campaignevents-details-stats-not-ready": "תשובות המשתתפים יצטברו ויהיו זמינות כאן בקרוב.",
-	"campaignevents-details-stats-not-enough-answers": "השאלה הזאת קיבלה פחות מ־$1 תשובות בסך הכול.",
+	"campaignevents-details-stats-not-enough-answers": "השאלה הזאת קיבלה פחות {{PLURAL:$1|מתשובה אחת|מ־$1 תשובות}} בסך הכול.",
 	"campaignevents-details-stats-header-option": "אפשרות",
 	"campaignevents-details-stats-header-percentage": "אחוזים",
 	"campaignevents-details-stats-header-number": "מספר",
@@ -409,5 +409,6 @@
 	"campaignevents-participant-question-have-been-aggregated": "התגובות של {{GENDER:$1|המשתתף הזה|המשתתפת הזאת}} נצברו ונמחקו",
 	"campaignevents-participant-question-no-response": "אין תשובה",
 	"campaignevents-warning-change-event-end-date-past": "שינוי תאריך הסיום לתאריך בעבר יגרום לכך שהאירוע להיסגר ויתקבל אצלך סיכום תגובות המשתתפים. לא ניתן לבטל את הפעולה הזאת. ניתן לעשות את זה רק אם המשתתפים סיפקו תשובות לשאלות המשתתף.",
-	"campaignevents-event-details-participants-individual-data-deleted": "התגובות של משתתפים בודדים נמחקו והתגובות הצבורות זמינות תחת [$1 {{int:campaignevents-event-details-tab-stats}}]."
+	"campaignevents-event-details-participants-individual-data-deleted": "התגובות של משתתפים בודדים נמחקו והתגובות הצבורות זמינות תחת [$1 {{int:campaignevents-event-details-tab-stats}}].",
+	"campaignevents-event-register-for-event-title": "להירשם לאירוע $1"
 }
