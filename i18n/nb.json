@@ -411,5 +411,6 @@
 	"campaignevents-participant-question-have-been-aggregated": "Denne {{GENDER:$1|deltakerens}} svar har blitt samlet opp og slettet",
 	"campaignevents-participant-question-no-response": "Intet svar",
 	"campaignevents-warning-change-event-end-date-past": "Hvis du endrer sluttdatoen til en dato i fortida vil arrangementet stenges, og du vil få et sammendrag av deltakernes svar. Denne handlingen kan ikke gjøres om. Dette gjelder kun hvis deltakerne har svart på deltakerspørsmålene.",
-	"campaignevents-event-details-participants-individual-data-deleted": "Individuelle deltakeres svar har blitt slettet, og de oppsamlede svarene er tilgjengelige under [$1 {{int:campaignevents-event-details-tab-stats}}]."
+	"campaignevents-event-details-participants-individual-data-deleted": "Individuelle deltakeres svar har blitt slettet, og de oppsamlede svarene er tilgjengelige under [$1 {{int:campaignevents-event-details-tab-stats}}].",
+	"campaignevents-event-register-for-event-title": "Meld deg på $1"
 }

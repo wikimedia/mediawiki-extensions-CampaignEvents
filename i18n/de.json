@@ -327,6 +327,7 @@
 	"campaignevents-email-participants-count": "{{PLURAL:$1|Ein|$1}} Teilnehmer",
 	"campaignevents-email-participants-yes": "Ja",
 	"campaignevents-email-participants-no": "Nein",
+	"campaignevents-email-footer": "Diese E-Mail wurde von $1 an {{GENDER:$2|$2}} {{GENDER:$1|gesendet}}, als registrierter Teilnehmer der folgenden Veranstaltung: $3. Wenn {{GENDER:$2|du}} auf diese E-Mail antwortest, wird {{GENDER:$2|deine}} E-Mail-Adresse direkt an {{GENDER:$1|den ursprünglichen Absender|die ursprüngliche Absenderin}} übermittelt und damit {{GENDER:$2|deine}} E-Mail-Adresse für {{GENDER:$1|die Person}} sichtbar.",
 	"campaignevents-event-details-time-registered": "Anmeldezeitpunkt",
 	"campaignevents-event-details-can-receive-email": "Kann E-Mails empfangen",
 	"campaignevents-register-questions-label-title": "Deine Informationen",

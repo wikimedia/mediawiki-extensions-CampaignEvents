@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AMtavangu (WMF)",
 			"Jadnapac",
 			"Stacy Lavuha",
 			"Wangombe"
@@ -12,6 +13,11 @@
 	"right-campaignevents-enable-registration": "Wezesha usajili wa matukio",
 	"action-campaignevents-delete-registration": "futa usajili wa tukio",
 	"right-campaignevents-delete-registration": "Futa usajili wa tukio",
+	"action-campaignevents-organize-events": "andaa matukio",
+	"right-campaignevents-organize-events": "Andaa matukio",
+	"action-campaignevents-email-participants": "watumie barua pepe washiriki wa tukio",
+	"right-campaignevents-email-participants": "Watumie barua pepe washiriki wa tukio",
+	"specialpages-group-campaignevents": "Matukio",
 	"campaignevents-error-invalid-id": "Kitambulisho cha tukio lazima kiwe nambari kamili iliyo chanya.",
 	"campaignevents-error-empty-title": "Weka kichwa cha habari cha ukurasa wa tukio.",
 	"campaignevents-error-invalid-title": "Kichwa cha habari cha ukurasa wa tukio ni batili: $1 .",

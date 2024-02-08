@@ -390,7 +390,7 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Especifique, por favor",
 	"campaignevents-details-stats-no-responses": "Este evento não tem respostas dos participantes para agregar.",
 	"campaignevents-details-stats-not-ready": "As respostas dos participantes serão agregadas e disponibilizadas aqui em breve.",
-	"campaignevents-details-stats-not-enough-answers": "Esta pergunta recebeu um total de menos de $1 respostas.",
+	"campaignevents-details-stats-not-enough-answers": "Esta pergunta recebeu um total de menos de $1 {{PLURAL:$1|resposta|respostas}}.",
 	"campaignevents-details-stats-header-option": "Opção",
 	"campaignevents-details-stats-header-percentage": "Percentagem",
 	"campaignevents-details-stats-header-number": "Número",
@@ -408,5 +408,6 @@
 	"campaignevents-participant-question-have-been-aggregated": "As respostas {{GENDER:$1|deste|desta}} participante foram agregadas e apagadas",
 	"campaignevents-participant-question-no-response": "Respondeu \"Não\"",
 	"campaignevents-warning-change-event-end-date-past": "Se alterar a data de fim para uma data passada, o evento será encerrado e receberá um resumo das respostas dos participantes. Esta operação não pode ser desfeita. Isto só se aplica se os participantes tiverem dado respostas às perguntas para participantes.",
-	"campaignevents-event-details-participants-individual-data-deleted": "As respostas dos participantes individuais já foram apagadas e as respostas agregadas estão disponíveis em [$1 {{int:campaignevents-event-details-tab-stats}}]."
+	"campaignevents-event-details-participants-individual-data-deleted": "As respostas dos participantes individuais já foram apagadas e as respostas agregadas estão disponíveis em [$1 {{int:campaignevents-event-details-tab-stats}}].",
+	"campaignevents-event-register-for-event-title": "Inscrever-se no evento $1"
 }

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AMtavangu (WMF)",
 			"Jadnapac"
 		]
 	},
@@ -12,5 +13,8 @@
 	"campaignevents-rest-get-registration-deleted": "Usajili wa tukio hili ulifutwa.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Kigezo 'user_ids' lazima kiwe safu ya vitambulisho vya mtumiaji, au batili (ili kuondoa watumiaji wote)",
 	"campaignevents-rest-list-participants-empty-filter": "Kichujio cha jina la mtumiaji, ikiwa kimebainishwa, lazima kiwe neno lisilo tupu.",
-	"campaignevents-rest-list-participants-cannot-see-private": "Hujaidhinishwa kutazama washiriki waliojiandikisha kwa faragha kwa tukio hili."
+	"campaignevents-rest-list-participants-cannot-see-private": "Hujaidhinishwa kutazama washiriki waliojiandikisha kwa faragha kwa tukio hili.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> lazima iwe safu ya majina ya watumiaji na haiwezi kuwa tupu.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Haushiriki katika tukio hili.",
+	"campaignevents-rest-register-invalid-answer": "Jibu batili kwa swali $1"
 }

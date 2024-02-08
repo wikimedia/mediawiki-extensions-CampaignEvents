@@ -9,6 +9,7 @@
 			"Omotecho",
 			"Shirayuki",
 			"Sou0012",
+			"Tmv",
 			"もなー(偽物)",
 			"春春眠眠"
 		]
@@ -21,6 +22,8 @@
 	"right-campaignevents-delete-registration": "イベント登録を削除",
 	"action-campaignevents-organize-events": "イベントの開催",
 	"right-campaignevents-organize-events": "イベントを開催",
+	"action-campaignevents-email-participants": "メールイベントに参加",
+	"right-campaignevents-email-participants": "メールイベントに参加",
 	"specialpages-group-campaignevents": "イベント",
 	"campaignevents-error-invalid-id": "イベントIDは正の整数である必要があります。",
 	"campaignevents-error-empty-title": "イベントページのタイトルを入力して下さい。",
@@ -48,6 +51,7 @@
 	"campaignevents-error-countryoraddress-not-in-person": "イベントが対面式ではない場合、会合の国や住所を指定しません。",
 	"campaignevents-error-invalid-country": "有効な国名を入力。",
 	"campaignevents-error-invalid-address": "有効な住所を入力。",
+	"campaignevents-error-invalid-question-names": "以下の質問は認識されませんでした：$1",
 	"enableeventregistration": "イベント登録を有効にする",
 	"editeventregistration": "イベント登録を編集",
 	"campaignevents-edit-form-details-label": "イベントの詳細",
