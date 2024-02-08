@@ -5,18 +5,23 @@ namespace MediaWiki\Extension\CampaignEvents\Messaging;
 use JobQueueGroup;
 use MailAddress;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Preferences\MultiUsernameFilter;
+use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use RequestContext;
 use StatusValue;
+use Wikimedia\Message\ITextFormatter;
+use Wikimedia\Message\MessageValue;
 
 /**
  * This class uses a lot of MW classes as the core email code is not ideal and there aren't many alternatives.
@@ -29,7 +34,8 @@ class CampaignsUserMailer {
 		MainConfigNames::PasswordSender,
 		MainConfigNames::EnableEmail,
 		MainConfigNames::EnableUserEmail,
-		MainConfigNames::UserEmailUseReplyTo
+		MainConfigNames::UserEmailUseReplyTo,
+		MainConfigNames::EnableSpecialMute,
 	];
 
 	/** @var UserFactory */
@@ -42,6 +48,8 @@ class CampaignsUserMailer {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	/** @var UserOptionsLookup */
 	private UserOptionsLookup $userOptionsLookup;
+	private ITextFormatter $contLangMsgFormatter;
+	private PageURLResolver $pageURLResolver;
 
 	/**
 	 * @param UserFactory $userFactory
@@ -49,20 +57,26 @@ class CampaignsUserMailer {
 	 * @param ServiceOptions $options
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserOptionsLookup $userOptionsLookup
+	 * @param ITextFormatter $contLangMsgFormatter
+	 * @param PageURLResolver $pageURLResolver
 	 */
 	public function __construct(
 		UserFactory $userFactory,
 		JobQueueGroup $jobQueueGroup,
 		ServiceOptions $options,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UserOptionsLookup $userOptionsLookup
+		UserOptionsLookup $userOptionsLookup,
+		ITextFormatter $contLangMsgFormatter,
+		PageURLResolver $pageURLResolver
 	) {
 		$this->userFactory = $userFactory;
 		$this->jobQueueGroup = $jobQueueGroup;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->userOptionsLookup = $userOptionsLookup;
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->options = $options;
+		$this->centralUserLookup = $centralUserLookup;
+		$this->userOptionsLookup = $userOptionsLookup;
+		$this->contLangMsgFormatter = $contLangMsgFormatter;
+		$this->pageURLResolver = $pageURLResolver;
 	}
 
 	/**
@@ -70,13 +84,15 @@ class CampaignsUserMailer {
 	 * @param Participant[] $participants
 	 * @param string $subject
 	 * @param string $message
+	 * @param ExistingEventRegistration $event
 	 * @return StatusValue
 	 */
 	public function sendEmail(
 		Authority $performer,
 		array $participants,
 		string $subject,
-		string $message
+		string $message,
+		ExistingEventRegistration $event
 	): StatusValue {
 		$centralIdsMap = [];
 		foreach ( $participants as $participant ) {
@@ -93,22 +109,59 @@ class CampaignsUserMailer {
 			return StatusValue::newFatal( 'badaccess' );
 		}
 		$jobs = [];
-		foreach ( $recipients as $recipient ) {
-			$user = $this->userFactory->newFromName( $recipient );
-			if ( $user === null ) {
+		foreach ( $recipients as $recipientName ) {
+			$recipientUser = $this->userFactory->newFromName( $recipientName );
+			if ( $recipientUser === null ) {
 				continue;
 			}
-			$validTarget = $this->validateTarget( $user, $performerUser );
+			$validTarget = $this->validateTarget( $recipientUser, $performerUser );
 			if ( $validTarget === null ) {
 				$validSend++;
-				$address = MailAddress::newFromUser( $user );
+				$recipientAddress = MailAddress::newFromUser( $recipientUser );
 				$performerAddress = MailAddress::newFromUser( $performerUser );
-				$jobs[] = $this->createEmailJob( $address, $subject, $message, $performerAddress );
+				$curMessage = $this->getMessageWithFooter( $message, $performerAddress, $recipientAddress, $event );
+				$jobs[] = $this->createEmailJob( $recipientAddress, $subject, $curMessage, $performerAddress );
 			}
 		}
 		$this->jobQueueGroup->push( $jobs );
 
 		return StatusValue::newGood( $validSend );
+	}
+
+	/**
+	 * Add a predefined footer to the email body, similar to EmailUser::sendEmailUnsafe().
+	 * @todo It might make sense to move this to the job, for performance. However, it should wait until
+	 * T339821 is ready, as that will give us a better holistic view of how to refactor this code.
+	 *
+	 * @param string $body
+	 * @param MailAddress $from
+	 * @param MailAddress $to
+	 * @param ExistingEventRegistration $event
+	 * @return string
+	 */
+	private function getMessageWithFooter(
+		string $body,
+		MailAddress $from,
+		MailAddress $to,
+		ExistingEventRegistration $event
+	): string {
+		$body = rtrim( $body ) . "\n\n-- \n";
+		$eventPageURL = $this->pageURLResolver->getFullUrl( $event->getPage() );
+		$body .= $this->contLangMsgFormatter->format(
+			MessageValue::new( 'campaignevents-email-footer', [ $from->name, $to->name, $eventPageURL ] )
+		);
+		if ( $this->options->get( MainConfigNames::EnableSpecialMute ) ) {
+			$body .= "\n" . $this->contLangMsgFormatter->format(
+				MessageValue::new(
+					'specialmute-email-footer',
+					[
+						SpecialPage::getTitleFor( 'Mute', $from->name )->getCanonicalURL(),
+						$from->name
+					]
+				)
+			);
+		}
+		return $body;
 	}
 
 	/**

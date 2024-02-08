@@ -333,6 +333,7 @@
 	"campaignevents-email-participants-count": "Label text that shows the number of participants selected \nParameters:\n* $1 - The number of selected participants",
 	"campaignevents-email-participants-yes": "Label text that indicates a participant is able to receive email from the organiser",
 	"campaignevents-email-participants-no": "Label text that indicates a participant is not able to receive email from the organiser",
+	"campaignevents-email-footer": "Footer appended to every email sent by event organizers through the \"Message participants\" function. Parameters:\n* $1 - username of the sender\n* $2 - username of the recipient\n* $3 - Link to the event page\n\nSee also {{msg-mw|emailuserfooter}}\n\n{{doc-singularthey}}",
 	"campaignevents-event-details-time-registered": "Label text for time registered column on participants table",
 	"campaignevents-event-details-can-receive-email": "Table header used for the participants table in [[Special:EventDetails]]. The values that can be used for cells in this column are {{msg-mw|campaignevents-email-participants-yes}} and {{msg-mw|campaignevents-email-participants-no}}, answering the question of whether each participant can receive email from the organizer.",
 	"campaignevents-register-questions-label-title": "Title shown on [[Special:RegisterForEvent]] introducing a list of questions (defined by the event organizers) that the participant can answer to.",
