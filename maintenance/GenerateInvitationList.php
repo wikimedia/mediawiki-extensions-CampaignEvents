@@ -159,7 +159,11 @@ class GenerateInvitationList extends Maintenance {
 		$lastTimestamp = $dbr->timestamp( '20000101000000' );
 		$lastRevID = 0;
 		$revisions = [];
+		$batchIdx = 1;
 		do {
+			if ( $batchIdx % 10 === 1 ) {
+				$this->output( "Running batch #$batchIdx from pageID=$lastPage, ts=$lastTimestamp, rev=$lastRevID\n" );
+			}
 			$revQueryBuilder = $revisionStore->newSelectQueryBuilder( $dbr );
 			$res = $revQueryBuilder
 				->field( 'actor_name' )
@@ -203,6 +207,7 @@ class GenerateInvitationList extends Maintenance {
 				$lastRevID = (int)$row->rev_id;
 			}
 
+			$batchIdx++;
 		} while ( $res->numRows() >= $batchSize );
 
 		return $revisions;
