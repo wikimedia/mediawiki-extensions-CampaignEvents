@@ -330,6 +330,7 @@
 	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|deltaker|deltakere}}",
 	"campaignevents-email-participants-yes": "Ja",
 	"campaignevents-email-participants-no": "Nei",
+	"campaignevents-email-footer": "Denne e-posten ble {{GENDER:$1|sendt}} fra $1 til {{GENDER:$2|$2}}, som påmeldt deltaker i arrangementet «$3». Hvis du svarer på denne e-posten vil svaret gå direkte til den opprinnelige avsenderen, og {{GENDER:$2|han|hun|hen}} vil kunne se e-postadressen din.",
 	"campaignevents-event-details-time-registered": "Tid registrert",
 	"campaignevents-event-details-can-receive-email": "Kan motta e-post",
 	"campaignevents-register-questions-label-title": "Din informasjon",

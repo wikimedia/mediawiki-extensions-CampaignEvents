@@ -328,6 +328,7 @@
 	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|учесник|учесници}}",
 	"campaignevents-email-participants-yes": "Да",
 	"campaignevents-email-participants-no": "Не",
+	"campaignevents-email-footer": "Оваа порака е {{GENDER:$1|испратена}} од $1 до {{GENDER:$2|$2}}, како пријатен учесник на следниов настан: $3. Ако {{GENDER:$2|одговорите}} на пораката, {{GENDER:$2|вашата}} порака ќе биде испратена право на {{GENDER:$1|изворниот испраќач}}, откривајќи {{GENDER:$2|му}} ја {{GENDER:$1|вашата}} е-поштенска адреса.",
 	"campaignevents-event-details-time-registered": "Зачленет од",
 	"campaignevents-event-details-can-receive-email": "Може да прима е-пошта",
 	"campaignevents-register-questions-label-title": "Ваши информации",

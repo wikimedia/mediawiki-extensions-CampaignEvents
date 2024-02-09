@@ -328,6 +328,7 @@
 	"campaignevents-email-participants-count": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}}",
 	"campaignevents-email-participants-yes": "כן",
 	"campaignevents-email-participants-no": "לא",
+	"campaignevents-email-footer": "$1 {{GENDER:$1|שלח|שלחה}} את הדוא\"ל הזה {{GENDER:$2|למשתמש|למשתמשת}} $2 בתור {{GENDER:$1|משתתף רשום|משתתפת רשומה}} באירוע הבא: $3. אם {{GENDER:$2|תגיב|תגיבי}} לדוא\"ל הזה, התשובה שלך תישלח ישירות {{GENDER:$1|לשולח המקורי|לשולחת המקורית}}, ותחשוף {{GENDER:$1|בפניו|בפניה}} את כתובת הדוא\"ל שלך.",
 	"campaignevents-event-details-time-registered": "זמן הרישום",
 	"campaignevents-event-details-can-receive-email": "יכול לקבל דואר אלקטרוני",
 	"campaignevents-register-questions-label-title": "המידע שלך",

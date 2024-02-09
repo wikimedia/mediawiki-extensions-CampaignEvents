@@ -327,6 +327,7 @@
 	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-email-participants-yes": "Sim",
 	"campaignevents-email-participants-no": "Não",
+	"campaignevents-email-footer": "Esta mensagem foi enviada {{GENDER:$1|pelo utilizador|pela utilizadora}} $1 a $2 por ser {{GENDER:$2|um participante registado|uma participante registada}} no seguinte evento: $3. Se responder a esta mensagem, a sua resposta será enviada diretamente {{GENDER:$1|ao|à}} remetente original, e irá revelar-lhe o seu endereço de correio eletrónico.",
 	"campaignevents-event-details-time-registered": "Hora de inscrição",
 	"campaignevents-event-details-can-receive-email": "Pode receber correio eletrónico",
 	"campaignevents-register-questions-label-title": "As suas informações",
