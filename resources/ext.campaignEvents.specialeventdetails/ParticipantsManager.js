@@ -615,7 +615,6 @@
 	};
 
 	/**
-	 *
 	 * @param {string} userID
 	 * @return {boolean}
 	 */

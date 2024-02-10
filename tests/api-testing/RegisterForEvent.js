@@ -45,7 +45,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 
 	function getPathSuffix( pathEventID ) {
 		pathEventID = pathEventID || eventID;
-		return `${pathEventID}/participants/self`;
+		return `${ pathEventID }/participants/self`;
 	}
 
 	describe( 'permission error', () => {

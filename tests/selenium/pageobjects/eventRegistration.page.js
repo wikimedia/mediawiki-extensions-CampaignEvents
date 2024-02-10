@@ -18,17 +18,49 @@ class EventRegistrationPage extends Page {
 		};
 	}
 
-	get editRegistration() { return $( '[value="Edit registration"]' ); }
-	get enableRegistration() { return $( '[value="Enable registration"]' ); }
-	get eventPage() { return $( '[name="wpEventPage"]' ); }
-	get generalError() { return $( '[role=alert]' ); }
-	get meetingTypeSelector() { return $( '#mw-input-wpEventMeetingType div[role="radiogroup"]' ); }
-	get startDateInput() { return $( '#mw-input-wpEventStart' ).$( '[size="2"]' ); }
-	get startYearInput() { return $( '#mw-input-wpEventStart' ).$( '[size="4"]' ); }
-	get endDateInput() { return $( '#mw-input-wpEventEnd' ).$( '[size="2"]' ); }
-	get endYearInput() { return $( '#mw-input-wpEventEnd' ).$( '[size="4"]' ); }
-	get successNotice() { return $( '.mw-message-box-success' ); }
-	get body() { return $( 'body' ); }
+	get editRegistration() {
+		return $( '[value="Edit registration"]' );
+	}
+
+	get enableRegistration() {
+		return $( '[value="Enable registration"]' );
+	}
+
+	get eventPage() {
+		return $( '[name="wpEventPage"]' );
+	}
+
+	get generalError() {
+		return $( '[role=alert]' );
+	}
+
+	get meetingTypeSelector() {
+		return $( '#mw-input-wpEventMeetingType div[role="radiogroup"]' );
+	}
+
+	get startDateInput() {
+		return $( '#mw-input-wpEventStart' ).$( '[size="2"]' );
+	}
+
+	get startYearInput() {
+		return $( '#mw-input-wpEventStart' ).$( '[size="4"]' );
+	}
+
+	get endDateInput() {
+		return $( '#mw-input-wpEventEnd' ).$( '[size="2"]' );
+	}
+
+	get endYearInput() {
+		return $( '#mw-input-wpEventEnd' ).$( '[size="4"]' );
+	}
+
+	get successNotice() {
+		return $( '.mw-message-box-success' );
+	}
+
+	get body() {
+		return $( 'body' );
+	}
 
 	open() {
 		super.openTitle( 'Special:EnableEventRegistration' );
@@ -116,7 +148,7 @@ class EventRegistrationPage extends Page {
 		end,
 		meetingType
 	} ) {
-		super.openTitle( `Special:EditEventRegistration/${id}` );
+		super.openTitle( `Special:EditEventRegistration/${ id }` );
 
 		if ( event ) {
 			await this.eventPage.setValue( event );

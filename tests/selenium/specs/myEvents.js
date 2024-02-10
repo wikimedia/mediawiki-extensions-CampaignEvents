@@ -25,13 +25,13 @@ describe( 'MyEvents', function () {
 	it( 'can allow organizer to close registration of first event in My Events', async function () {
 		await MyEventsPage.filterByOpenRegistrations();
 		await MyEventsPage.closeFirstRegistration();
-		assert.deepEqual( await MyEventsPage.notification.getText(), `${await MyEventsPage.firstEvent.getText()} registration closed.` );
+		assert.deepEqual( await MyEventsPage.notification.getText(), `${ await MyEventsPage.firstEvent.getText() } registration closed.` );
 	} );
 
 	it( 'can allow organizer to delete registration of first event in My Events', async function () {
 		// Save the name of the event now, as the deletion will refresh the page.
 		const eventName = await MyEventsPage.firstEvent.getText();
 		await MyEventsPage.deleteFirstRegistration();
-		assert.deepEqual( await MyEventsPage.notification.getText(), `${eventName} deleted.` );
+		assert.deepEqual( await MyEventsPage.notification.getText(), `${ eventName } deleted.` );
 	} );
 } );

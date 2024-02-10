@@ -2,7 +2,6 @@
 	'use strict';
 
 	/**
-	 *
 	 * @param {Element} observedElement A plain DOM node that should be observed when
 	 *   scrolling on it.
 	 * @param {Function} onScrolledToBottom Callback to execute when the bottom
