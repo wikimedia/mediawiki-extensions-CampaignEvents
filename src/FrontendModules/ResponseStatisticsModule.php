@@ -71,16 +71,6 @@ class ResponseStatisticsModule {
 			throw new LogicException( __METHOD__ . ' called for event that has not ended' );
 		}
 
-		$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $this->language );
-		$form = $formModule->createContent( $context, $pageURL );
-		if ( $form['isSubmitted'] || $organizer->getClickwrapAcceptance() ) {
-			return $this->makeAnswersContent();
-		}
-
-		return ( new Tag( 'div' ) )->appendContent( $form['content'] );
-	}
-
-	private function makeAnswersContent(): Tag {
 		$eventID = $this->event->getID();
 		$hasAnswers = $this->answersStore->eventHasAnswers( $eventID );
 		$hasAggregates = $this->aggregatedAnswersStore->eventHasAggregates( $eventID );
@@ -106,7 +96,13 @@ class ResponseStatisticsModule {
 			] );
 		}
 
-		return $this->makeContentWithAggregates();
+		$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $this->language );
+		$form = $formModule->createContent( $context, $pageURL );
+		if ( $form['isSubmitted'] || $organizer->getClickwrapAcceptance() ) {
+			return $this->makeContentWithAggregates();
+		}
+
+		return ( new Tag( 'div' ) )->appendContent( $form['content'] );
 	}
 
 	private function makeContentWithAggregates(): Tag {
