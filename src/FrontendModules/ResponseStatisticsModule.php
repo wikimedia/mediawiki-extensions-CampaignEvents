@@ -4,9 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use IContextSource;
 use Language;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswers;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
@@ -24,11 +26,12 @@ class ResponseStatisticsModule {
 	private const MIN_ANSWERS_PER_QUESTION = 10;
 	private const MIN_ANSWERS_PER_OPTION = 5;
 
+	private ITextFormatter $msgFormatter;
 	private ParticipantAnswersStore $answersStore;
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 	private EventQuestionsRegistry $questionsRegistry;
 	private ParticipantsStore $participantsStore;
-	private ITextFormatter $msgFormatter;
+	private FrontendModulesFactory $frontendModulesFactory;
 
 	private Language $language;
 	private ExistingEventRegistration $event;
@@ -39,6 +42,7 @@ class ResponseStatisticsModule {
 	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
 	 * @param EventQuestionsRegistry $questionsRegistry
 	 * @param ParticipantsStore $participantsStore
+	 * @param FrontendModulesFactory $frontendModulesFactory
 	 * @param ExistingEventRegistration $event
 	 * @param Language $language
 	 */
@@ -48,23 +52,35 @@ class ResponseStatisticsModule {
 		EventAggregatedAnswersStore $aggregatedAnswersStore,
 		EventQuestionsRegistry $questionsRegistry,
 		ParticipantsStore $participantsStore,
+		FrontendModulesFactory $frontendModulesFactory,
 		ExistingEventRegistration $event,
 		Language $language
 	) {
+		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$this->answersStore = $answersStore;
 		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
 		$this->questionsRegistry = $questionsRegistry;
 		$this->participantsStore = $participantsStore;
-		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
+		$this->frontendModulesFactory = $frontendModulesFactory;
 		$this->language = $language;
 		$this->event = $event;
 	}
 
-	public function createContent(): Tag {
+	public function createContent( Organizer $organizer, IContextSource $context, string $pageURL ): Tag {
 		if ( !$this->event->isPast() ) {
 			throw new LogicException( __METHOD__ . ' called for event that has not ended' );
 		}
 
+		$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $this->language );
+		$form = $formModule->createContent( $context, $pageURL );
+		if ( $form['isSubmitted'] || $organizer->getClickwrapAcceptance() ) {
+			return $this->makeAnswersContent();
+		}
+
+		return ( new Tag( 'div' ) )->appendContent( $form['content'] );
+	}
+
+	private function makeAnswersContent(): Tag {
 		$eventID = $this->event->getID();
 		$hasAnswers = $this->answersStore->eventHasAnswers( $eventID );
 		$hasAggregates = $this->aggregatedAnswersStore->eventHasAggregates( $eventID );

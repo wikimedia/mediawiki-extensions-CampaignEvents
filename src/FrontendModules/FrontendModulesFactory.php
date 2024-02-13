@@ -165,6 +165,7 @@ class FrontendModulesFactory {
 			$this->aggregatedAnswersStore,
 			$this->questionsRegistry,
 			$this->participantsStore,
+			$this,
 			$event,
 			$language
 		);
