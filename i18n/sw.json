@@ -2,7 +2,9 @@
 	"@metadata": {
 		"authors": [
 			"Jadnapac",
-			"Wangombe"
+			"Wangombe",
+			"AMtavangu (WMF)",
+			"Stacy Lavuha"
 		]
 	},
 	"campaignevents-desc": "Hutoa vipengele kwa waandaaji wa kampeni na washiriki.",
@@ -11,6 +13,9 @@
 	"right-campaignevents-enable-registration": "Wezesha usajili wa matukio",
 	"action-campaignevents-delete-registration": "futa usajili wa tukio",
 	"right-campaignevents-delete-registration": "Futa usajili wa tukio",
+	"action-campaignevents-organize-events": "andaa matukio",
+	"right-campaignevents-organize-events": "Andaa matukio",
+	"specialpages-group-campaignevents": "Matukio",
 	"campaignevents-error-invalid-id": "Kitambulisho cha tukio lazima kiwe nambari kamili iliyo chanya.",
 	"campaignevents-error-empty-title": "Weka kichwa cha habari cha ukurasa wa tukio.",
 	"campaignevents-error-invalid-title": "Kichwa cha habari cha ukurasa wa tukio ni batili: $1 .",
@@ -48,6 +53,10 @@
 	"campaignevents-edit-field-timezone": "Saa za eneo",
 	"campaignevents-edit-field-start": "Muda wa kuanza",
 	"campaignevents-edit-field-end": "Muda wa kumaliza",
+	"campaignevents-edit-field-organizers": "Waandaaji wa tukio",
+	"campaignevents-edit-field-organizers-help": "Ongeza jina la mtumiaji la waandaaji wengine ili kuwapa ruhusa ya kuratibu tukio hili.",
+	"campaignevents-edit-field-organizers-creator-title": "Huyu ndiye muundaji wa tukio, waandaaji wengine hawawezi kumwondoa mtumiaji huyu.",
+	"campaignevents-edit-field-organizers-user-not-allowed": "Huyu{{GENDER:$1|mtumiaji}} haruhusiwi kupanga matukio",
 	"campaignevents-edit-field-meeting-type": "Aina ya mkutano wa tukio",
 	"campaignevents-edit-field-type-online": "Tukio la mtandaoni",
 	"campaignevents-edit-field-type-in-person": "Tukio la ana kwa ana",
@@ -68,6 +77,7 @@
 	"campaignevents-edit-page-nonlocal": "Tafadhali [ $1 hariri ya usajili huu] kwenye wiki iliwezeshwa mnamo: $2 .",
 	"campaignevents-edit-error-deleted": "Usajili wa tukio hili ulifutwa.",
 	"campaignevents-edit-need-central-account": "Unahitaji akaunti kuu ya mtumiaji ili kuwezesha au kuhariri usajili wa tukio.",
+	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|doesn't|hana}} ruhusa zinazohitajika kuwa  {{PLURAL:$1|an organizer|mmoja wa wapangaji matukio}}.",
 	"campaignevents-error-page-already-registered": "Ukurasa huu wa tukio tayari una usajili unaohusishwa nao.",
 	"campaignevents-error-page-already-registered-deleted": "Huwezi kukamilisha kitendo hiki kwa sababu usajili wa tukio umefutwa kutoka kwenye ukurasa huu wa tukio.",
 	"campaignevents-edit-not-allowed-registration": "Huruhusiwi kuhariri usajili huu wa tukio.",
