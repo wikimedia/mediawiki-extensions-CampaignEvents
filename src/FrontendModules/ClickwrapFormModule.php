@@ -14,7 +14,6 @@ use MediaWiki\Permissions\Authority;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use Wikimedia\Message\IMessageFormatterFactory;
-use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 
 class ClickwrapFormModule {
@@ -47,23 +46,15 @@ class ClickwrapFormModule {
 	public function createContent( IContextSource $context, string $action ): array {
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $this->language->getCode() );
 		$container = new Tag();
-		$intro = new Tag( 'p' );
-		$intro->appendContent(
-			$msgFormatter->format(
-				MessageValue::new( 'campaignevents-edit-field-clickwrap-checkbox-info' )
-			)
-		);
 		$label = new Tag( 'p' );
 		$label->appendContent(
 			$msgFormatter->format(
 				MessageValue::new( 'campaignevents-edit-field-clickwrap-checkbox-pretext' )
 			)
 		);
-		$container->appendContent( [ $intro, $label ] );
-		$form = $this->createForm( $context, $msgFormatter )
-			->setAction(
-				$action
-			)
+		$container->appendContent( $label );
+		$form = $this->createForm( $context )
+			->setAction( $action )
 			->setSubmitCallback( [ $this, 'processInput' ] )
 			->suppressDefaultSubmit()
 			->setPreHtml( $container )
@@ -72,15 +63,15 @@ class ClickwrapFormModule {
 
 		return [
 			'isSubmitted' => $isFormSubmitted,
-			'content' => new HtmlSnippet( $form->getHTML( $isFormSubmitted ) ) ];
+			'content' => new HtmlSnippet( $form->getHTML( $isFormSubmitted ) )
+		];
 	}
 
 	/**
 	 * @param IContextSource $context
-	 * @param ITextFormatter $msgFormatter
 	 * @return HTMLForm
 	 */
-	public function createForm( IContextSource $context, ITextFormatter $msgFormatter ): HTMLForm {
+	private function createForm( IContextSource $context ): HTMLForm {
 		$this->authority = $context->getAuthority();
 		$formDescriptor = [
 			'Acceptance' => [
@@ -88,16 +79,13 @@ class ClickwrapFormModule {
 				'type' => 'check'
 			],
 			'Submit' => [
-				'buttonlabel' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-edit-field-clickwrap-form-continue' )
-				),
+				'buttonlabel-message' => 'campaignevents-edit-field-clickwrap-form-continue',
 				'disable-if' => [ '!==', 'Acceptance', '1' ],
 				'type' => 'submit'
 			]
 		];
 
-		$htmlForm = HTMLForm::factory( 'ooui', $formDescriptor, $context );
-		return $htmlForm;
+		return HTMLForm::factory( 'ooui', $formDescriptor, $context );
 	}
 
 	/**

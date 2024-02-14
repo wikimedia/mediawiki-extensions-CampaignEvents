@@ -96,21 +96,69 @@ class ResponseStatisticsModule {
 			] );
 		}
 
-		$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $this->language );
-		$form = $formModule->createContent( $context, $pageURL );
-		if ( $form['isSubmitted'] || $organizer->getClickwrapAcceptance() ) {
-			return $this->makeContentWithAggregates();
-		}
-
-		return ( new Tag( 'div' ) )->appendContent( $form['content'] );
+		return $this->makeContentWithAggregates( $organizer, $context, $pageURL );
 	}
 
-	private function makeContentWithAggregates(): Tag {
+	private function makeContentWithAggregates(
+		Organizer $organizer,
+		IContextSource $context,
+		string $pageURL
+	): Tag {
 		$aggregates = $this->aggregatedAnswersStore->getEventAggregatedAnswers( $this->event->getID() );
 		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $this->event->getID() );
 		$eventQuestions = $this->event->getParticipantQuestions();
+
+		$nonPIIQuestions = $this->questionsRegistry->getNonPIIQuestionIDs( $eventQuestions );
+		$piiQuestions = array_diff( $eventQuestions, $nonPIIQuestions );
+
+		$content = new Tag( 'div' );
+		if ( $nonPIIQuestions ) {
+			$nonPIISection = $this->makeQuestionCategorySectionContainer(
+				'campaignevents-details-stats-section-non-pii'
+			);
+			$nonPIISection->appendContent( $this->makeQuestionCategorySection(
+				$nonPIIQuestions,
+				$aggregates,
+				$totalParticipants
+			) );
+			$content->appendContent( $nonPIISection );
+		}
+
+		if ( $piiQuestions ) {
+			$piiSection = $this->makeQuestionCategorySectionContainer(
+				'campaignevents-details-stats-section-pii'
+			);
+			$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $this->language );
+			$form = $formModule->createContent( $context, $pageURL );
+			if ( $form['isSubmitted'] || $organizer->getClickwrapAcceptance() ) {
+				$piiSection->appendContent( $this->makeQuestionCategorySection(
+					$piiQuestions,
+					$aggregates,
+					$totalParticipants
+				) );
+			} else {
+				$piiSection->appendContent( $form['content'] );
+			}
+			$content->appendContent( $piiSection );
+		}
+		return $content;
+	}
+
+	private function makeQuestionCategorySectionContainer( string $headerMsg ): Tag {
+		$section = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-stats-section' ] );
+		$header = ( new Tag( 'h2' ) )
+			->appendContent( $this->msgFormatter->format( MessageValue::new( $headerMsg ) )	)
+			->addClasses( [ 'ext-campaignevents-details-stats-section-header' ] );
+		return $section->appendContent( $header );
+	}
+
+	private function makeQuestionCategorySection(
+		array $questionIDs,
+		EventAggregatedAnswers $aggregates,
+		int $totalParticipants
+	): Tag {
 		$container = new Tag( 'div' );
-		foreach ( $eventQuestions as $questionID ) {
+		foreach ( $questionIDs as $questionID ) {
 			$container->appendContent( $this->makeQuestionSection( $questionID, $aggregates, $totalParticipants ) );
 		}
 		return $container;
