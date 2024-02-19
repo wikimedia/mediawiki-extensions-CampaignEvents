@@ -55,7 +55,7 @@ class SetOrganizersHandler extends SimpleHandler {
 		parent::validate( $restValidator );
 		$this->validateToken();
 		// XXX JsonBodyValidator does not validate parameters, see T305973
-		$organizerNames = $this->getValidatedBody()['organizer_usernames'];
+		$organizerNames = $this->getValidatedBody()['organizer_usernames'] ?? [];
 		foreach ( $organizerNames as $name ) {
 			if ( !$this->centralUserLookup->isValidLocalUsername( $name ) ) {
 				throw new LocalizedHttpException(
@@ -73,7 +73,7 @@ class SetOrganizersHandler extends SimpleHandler {
 	protected function run( int $eventID ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
-		$body = $this->getValidatedBody();
+		$body = $this->getValidatedBody() ?? [];
 		$organizers = $body['organizer_usernames'];
 		if ( !is_array( $organizers ) || !$organizers ) {
 			throw new LocalizedHttpException(

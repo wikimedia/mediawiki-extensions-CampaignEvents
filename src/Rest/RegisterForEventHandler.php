@@ -60,7 +60,7 @@ class RegisterForEventHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		$body = $this->getValidatedBody();
+		$body = $this->getValidatedBody() ?? [];
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$privateFlag = $body['is_private'] ?
