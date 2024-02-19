@@ -147,68 +147,68 @@ class GenerateInvitationList extends Maintenance {
 			$pagesByID[$pageID] = $page;
 		}
 
-		$baseWhereConds = array_merge(
-			[
-				'rev_page' => array_keys( $pagesByID ),
-			],
-			$this->getRevisionFilterConditions( $wikiID, $dbr )
-		);
+		$baseWhereConds = $this->getRevisionFilterConditions( $wikiID, $dbr );
 
-		$batchSize = 1000;
-		$lastPage = 0;
-		$lastTimestamp = $dbr->timestamp( '20000101000000' );
-		$lastRevID = 0;
+		$batchSize = 2500;
 		$revisions = [];
 		$batchIdx = 1;
-		do {
-			if ( $batchIdx % 10 === 1 ) {
+
+		// Process the list of pages in smaller chunks, to avoid the optimizer making wrong decisions, and also to keep
+		// the queries more readable.
+		foreach ( array_chunk( array_keys( $pagesByID ), 25 ) as $batchPageIDs ) {
+			$lastPage = 0;
+			$lastTimestamp = $dbr->timestamp( '20000101000000' );
+			$lastRevID = 0;
+			do {
 				$this->output( "Running batch #$batchIdx from pageID=$lastPage, ts=$lastTimestamp, rev=$lastRevID\n" );
-			}
-			$revQueryBuilder = $revisionStore->newSelectQueryBuilder( $dbr );
-			$res = $revQueryBuilder
-				->field( 'actor_name' )
-				// Needed for the user_is_temp check.
-				->joinUser()
-				->where( $baseWhereConds )
-				->andWhere( [
-					$dbr->buildComparison( '>', [
-						'rev_page' => $lastPage,
-						'rev_timestamp' => $lastTimestamp,
-						'rev_id' => $lastRevID
+				$revQueryBuilder = $revisionStore->newSelectQueryBuilder( $dbr );
+				$res = $revQueryBuilder
+					->field( 'actor_name' )
+					// Needed for the user_is_temp check.
+					->joinUser()
+					->where( $baseWhereConds )
+					->andWhere( [ 'rev_page' => $batchPageIDs ] )
+					->andWhere( [
+						$dbr->buildComparison( '>', [
+							'rev_page' => $lastPage,
+							'rev_timestamp' => $lastTimestamp,
+							'rev_id' => $lastRevID
+						] )
 					] )
-				] )
-				->orderBy( [ 'rev_page', 'rev_timestamp', 'rev_id' ], SelectQueryBuilder::SORT_ASC )
-				->limit( $batchSize )
-				->caller( __METHOD__ )
-				->fetchResultSet();
+					->orderBy( [ 'rev_page', 'rev_timestamp', 'rev_id' ], SelectQueryBuilder::SORT_ASC )
+					->limit( $batchSize )
+					->caller( __METHOD__ )
+					->fetchResultSet();
 
-			$parents = [];
-			foreach ( $res as $row ) {
-				$parentID = (int)$row->rev_parent_id;
-				if ( $parentID !== 0 ) {
-					$parents[$row->rev_id] = $parentID;
+				$parents = [];
+				foreach ( $res as $row ) {
+					$parentID = (int)$row->rev_parent_id;
+					if ( $parentID !== 0 ) {
+						$parents[$row->rev_id] = $parentID;
+					}
 				}
-			}
 
-			$parentSizes = $revisionStore->getRevisionSizes( array_values( $parents ) );
+				$parentSizes = $revisionStore->getRevisionSizes( array_values( $parents ) );
 
-			foreach ( $res as $row ) {
-				$parentID = $parents[$row->rev_id] ?? null;
-				$parentSize = $parentID ? $parentSizes[$parentID] : 0;
-				$revisions[] = [
-					'username' => $row->actor_name,
-					'userID' => $row->rev_user,
-					'actorID' => $row->rev_actor,
-					'page' => $pagesByID[$row->rev_page]->__toString(),
-					'delta' => (int)$row->rev_len - $parentSize
-				];
-				$lastPage = (int)$row->rev_page;
-				$lastTimestamp = $row->rev_timestamp;
-				$lastRevID = (int)$row->rev_id;
-			}
+				foreach ( $res as $row ) {
+					$parentID = $parents[$row->rev_id] ?? null;
+					$parentSize = $parentID ? $parentSizes[$parentID] : 0;
+					$revisions[] = [
+						'username' => $row->actor_name,
+						'userID' => $row->rev_user,
+						'actorID' => $row->rev_actor,
+						'page' => $pagesByID[$row->rev_page]->__toString(),
+						'delta' => (int)$row->rev_len - $parentSize
+					];
+					$lastPage = (int)$row->rev_page;
+					$lastTimestamp = $row->rev_timestamp;
+					$lastRevID = (int)$row->rev_id;
+				}
 
-			$batchIdx++;
-		} while ( $res->numRows() >= $batchSize );
+				$batchIdx++;
+				sleep( 1 );
+			} while ( $res->numRows() >= $batchSize );
+		}
 
 		return $revisions;
 	}
