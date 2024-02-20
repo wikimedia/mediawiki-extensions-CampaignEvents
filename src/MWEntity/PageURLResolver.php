@@ -5,8 +5,10 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\WikiMap\WikiMap;
+use RuntimeException;
 use UnexpectedValueException;
 
 class PageURLResolver {
@@ -19,6 +21,8 @@ class PageURLResolver {
 	private array $urlCache = [];
 	/** @var string[] Cached results of getFullUrl() */
 	private array $fullUrlCache = [];
+	/** @var string[] Cached results of getCanonicalUrl() */
+	private array $canonicalUrlCache = [];
 
 	/**
 	 * @param TitleFactory $titleFactory
@@ -64,6 +68,35 @@ class PageURLResolver {
 				: WikiMap::getForeignURL( $wikiID, $page->getPrefixedText() );
 		}
 		return $this->fullUrlCache[$cacheKey];
+	}
+
+	/**
+	 * Returns the canonical URL of a page. This should be used for things like email notifications.
+	 * @see Title::getCanonicalURL()
+	 *
+	 * @param ICampaignsPage $page
+	 * @return string
+	 */
+	public function getCanonicalUrl( ICampaignsPage $page ): string {
+		if ( !$page instanceof MWPageProxy ) {
+			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
+		}
+		$cacheKey = $this->getCacheKey( $page );
+		if ( !isset( $this->canonicalUrlCache[$cacheKey] ) ) {
+			$wikiID = $page->getWikiId();
+			if ( $wikiID === WikiAwareEntity::LOCAL ) {
+				$this->canonicalUrlCache[$cacheKey] = $this->titleFactory
+					->castFromPageIdentity( $page->getPageIdentity() )
+					->getCanonicalURL();
+			} else {
+				$wiki = WikiMap::getWiki( $wikiID );
+				if ( !$wiki ) {
+					throw new RuntimeException( "Cannot obtain reference to wiki $wikiID" );
+				}
+				$this->canonicalUrlCache[$cacheKey] = $wiki->getCanonicalUrl( $page->getPrefixedText() );
+			}
+		}
+		return $this->canonicalUrlCache[$cacheKey];
 	}
 
 	/**

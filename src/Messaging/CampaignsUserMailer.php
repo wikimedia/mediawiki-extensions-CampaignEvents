@@ -146,7 +146,7 @@ class CampaignsUserMailer {
 		ExistingEventRegistration $event
 	): string {
 		$body = rtrim( $body ) . "\n\n-- \n";
-		$eventPageURL = $this->pageURLResolver->getFullUrl( $event->getPage() );
+		$eventPageURL = $this->pageURLResolver->getCanonicalUrl( $event->getPage() );
 		$body .= $this->contLangMsgFormatter->format(
 			MessageValue::new( 'campaignevents-email-footer', [ $from->name, $to->name, $eventPageURL ] )
 		);
