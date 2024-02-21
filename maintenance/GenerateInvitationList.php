@@ -146,21 +146,30 @@ class GenerateInvitationList extends Maintenance {
 			$pageID = $page->getId( $wikiID );
 			$pagesByID[$pageID] = $page;
 		}
+		asort( $pagesByID );
+		$pageChunks = array_chunk( array_keys( $pagesByID ), 25 );
+		$totalPageChunks = count( $pageChunks );
 
 		$baseWhereConds = $this->getRevisionFilterConditions( $wikiID, $dbr );
 
 		$batchSize = 2500;
 		$revisions = [];
-		$batchIdx = 1;
+		$pageBatchIdx = 1;
 
 		// Process the list of pages in smaller chunks, to avoid the optimizer making wrong decisions, and also to keep
 		// the queries more readable.
-		foreach ( array_chunk( array_keys( $pagesByID ), 25 ) as $batchPageIDs ) {
+		foreach ( $pageChunks as $batchPageIDs ) {
 			$lastPage = 0;
 			$lastTimestamp = $dbr->timestamp( '20000101000000' );
 			$lastRevID = 0;
+			$innerBatchIdx = 1;
 			do {
-				$this->output( "Running batch #$batchIdx from pageID=$lastPage, ts=$lastTimestamp, rev=$lastRevID\n" );
+				$progressMsg = "Running $wikiID batch #$pageBatchIdx.$innerBatchIdx of $totalPageChunks " .
+					"from pageID=" . min( $batchPageIDs );
+				if ( $lastRevID !== 0 ) {
+					$progressMsg .= ", ts=$lastTimestamp, rev=$lastRevID";
+				}
+				$this->output( $progressMsg . "\n" );
 				$revQueryBuilder = $revisionStore->newSelectQueryBuilder( $dbr );
 				$res = $revQueryBuilder
 					->field( 'actor_name' )
@@ -205,9 +214,10 @@ class GenerateInvitationList extends Maintenance {
 					$lastRevID = (int)$row->rev_id;
 				}
 
-				$batchIdx++;
+				$innerBatchIdx++;
 				sleep( 1 );
 			} while ( $res->numRows() >= $batchSize );
+			$pageBatchIdx++;
 		}
 
 		return $revisions;

@@ -206,10 +206,10 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 		$this->assertCount( 4, $outSections );
 		[ $articlesSection, $contributionsSection, $scoresDebugSection ] = $outSections;
 
-		$progressInfo = 'Running batch #1 from pageID=0, ts=20000101000000, rev=0';
+		$curWikiID = WikiMap::getCurrentWikiId();
+		$progressInfo = "Running $curWikiID batch #1.1 of 1 from pageID=1";
 		$this->assertStringContainsString( $progressInfo, $articlesSection );
 		$articlesSection = str_replace( $progressInfo, '', $articlesSection );
-		$curWikiID = WikiMap::getCurrentWikiId();
 		$this->assertSame(
 			"==Articles==\n[0:Page_1]@$curWikiID\n[0:Page_2]@$curWikiID\n[0:Page_3]@$curWikiID",
 			trim( $articlesSection )
