@@ -55,7 +55,7 @@ class EmailUsersHandler extends SimpleHandler {
 	public function run( int $eventId ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventId );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		$params = $this->getValidatedBody();
+		$params = $this->getValidatedBody() ?? [];
 
 		if ( !$this->permissionChecker->userCanEmailParticipants( $performer, $eventId ) ) {
 			// todo add more details to error message

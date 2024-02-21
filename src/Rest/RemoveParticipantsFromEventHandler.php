@@ -54,7 +54,7 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		$body = $this->getValidatedBody();
+		$body = $this->getValidatedBody() ?? [];
 
 		if ( is_array( $body[ 'user_ids' ] ) && !$body[ 'user_ids' ] ) {
 			throw new LocalizedHttpException(
