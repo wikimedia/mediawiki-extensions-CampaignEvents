@@ -390,7 +390,7 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Per favor precisa",
 	"campaignevents-details-stats-no-responses": "Iste evento non ha responsas de participantes a aggregar.",
 	"campaignevents-details-stats-not-ready": "Le responsas del participantes essera aggregate e rendite disponibile hic in breve.",
-	"campaignevents-details-stats-not-enough-answers": "Iste question ha recipite minus de $1 responsas in total.",
+	"campaignevents-details-stats-not-enough-answers": "Iste question ha recipite minus de $1 responsa{{PLURAL:$1||s}} in total.",
 	"campaignevents-details-stats-header-option": "Option",
 	"campaignevents-details-stats-header-percentage": "Percentage",
 	"campaignevents-details-stats-header-number": "Numero",
