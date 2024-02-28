@@ -395,12 +395,16 @@ class EventQuestionsRegistry {
 
 	/**
 	 * Formats a list of answers for use in API (GET) requests. This is the same format expected by
-	 * extractUserQuestionsAPI().
+	 * extractUserAnswersAPI().
 	 *
 	 * @param Answer[] $answers
-	 * @return array[]
+	 * @param int[] $enabledQuestions IDs of the questions currently enabled for the event
+	 * @return array<string,array> Maps question names to arrays containing the following properties:
+	 *  - value: ?int, identifier of the chosen option for multiple choice questions
+	 *  - other: string (optional), free text of the answer
+	 *  - removed: true (optional), only set if the question has since been removed from the event
 	 */
-	public function formatAnswersForAPI( array $answers ): array {
+	public function formatAnswersForAPI( array $answers, array $enabledQuestions ): array {
 		$answersByID = [];
 		foreach ( $answers as $answer ) {
 			$answersByID[$answer->getQuestionDBID()] = $answer;
@@ -418,6 +422,9 @@ class EventQuestionsRegistry {
 			];
 			if ( $answer->getText() !== null ) {
 				$formattedAnswer['other'] = $answer->getText();
+			}
+			if ( !in_array( $questionID, $enabledQuestions, true ) ) {
+				$formattedAnswer['removed'] = true;
 			}
 			$ret[$question['name']] = $formattedAnswer;
 		}

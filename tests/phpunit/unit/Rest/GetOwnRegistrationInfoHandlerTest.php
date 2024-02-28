@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -36,8 +37,14 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 		ParticipantsStore $participantsStore = null,
 		CampaignsCentralUserLookup $centralUserLookup = null
 	): GetOwnRegistrationInfoHandler {
+		if ( !$eventLookup ) {
+			$mockEvent = $this->createMock( ExistingEventRegistration::class );
+			$mockEvent->method( 'getParticipantQuestions' )->willReturn( range( 1, 5 ) );
+			$eventLookup = $this->createMock( IEventLookup::class );
+			$eventLookup->method( 'getEventByID' )->willReturn( $mockEvent );
+		}
 		return new GetOwnRegistrationInfoHandler(
-			$eventLookup ?? $this->createMock( IEventLookup::class ),
+			$eventLookup,
 			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			new EventQuestionsRegistry( true )

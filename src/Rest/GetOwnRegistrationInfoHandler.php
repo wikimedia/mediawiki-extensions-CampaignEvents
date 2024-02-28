@@ -46,7 +46,7 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
-		$this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
@@ -67,7 +67,10 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 
 		$response = [
 			'private' => $participant->isPrivateRegistration(),
-			'answers' => $this->eventQuestionsRegistry->formatAnswersForAPI( $participant->getAnswers() ),
+			'answers' => $this->eventQuestionsRegistry->formatAnswersForAPI(
+				$participant->getAnswers(),
+				$event->getParticipantQuestions()
+			),
 		];
 
 		return $this->getResponseFactory()->createJson( $response );
