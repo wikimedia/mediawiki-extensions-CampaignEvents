@@ -307,9 +307,10 @@ class EventPageDecorator {
 	): array {
 		$enabledQuestions = $registration->getParticipantQuestions();
 		$curAnswers = $participant ? $participant->getAnswers() : [];
+		$questionsToShow = EventQuestionsRegistry::getParticipantQuestionsToShow( $enabledQuestions, $curAnswers );
 
 		$questionsData = [];
-		$questionsAPI = $this->eventQuestionsRegistry->getQuestionsForAPI( $enabledQuestions );
+		$questionsAPI = $this->eventQuestionsRegistry->getQuestionsForAPI( $questionsToShow );
 		// Localise all messages to avoid having to do that in the client side.
 		foreach ( $questionsAPI as $questionAPIData ) {
 			$curQuestionData = [

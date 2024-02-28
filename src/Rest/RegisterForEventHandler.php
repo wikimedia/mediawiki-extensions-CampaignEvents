@@ -6,7 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
@@ -29,20 +32,21 @@ class RegisterForEventHandler extends SimpleHandler {
 	private IEventLookup $eventLookup;
 	private RegisterParticipantCommand $registerParticipantCommand;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
+	private ParticipantsStore $participantsStore;
+	private CampaignsCentralUserLookup $centralUserLookup;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param RegisterParticipantCommand $registerParticipantCommand
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		RegisterParticipantCommand $registerParticipantCommand,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		ParticipantsStore $participantsStore,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->registerParticipantCommand = $registerParticipantCommand;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->participantsStore = $participantsStore;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -59,8 +63,21 @@ class RegisterForEventHandler extends SimpleHandler {
 	 */
 	protected function run( int $eventID ): Response {
 		$body = $this->getValidatedBody() ?? [];
-		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+			$curParticipantData = $this->participantsStore->getEventParticipant( $eventID, $centralUser );
+			$curAnswers = $curParticipantData ? $curParticipantData->getAnswers() : [];
+		} catch ( UserNotGlobalException $_ ) {
+			// Silently ignore it for now, it's going to be thrown when attempting to register
+			$curAnswers = [];
+		}
+		$allowedQuestions = EventQuestionsRegistry::getParticipantQuestionsToShow(
+			$eventRegistration->getParticipantQuestions(),
+			$curAnswers
+		);
+
 		$privateFlag = $body['is_private'] ?
 			RegisterParticipantCommand::REGISTRATION_PRIVATE :
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
@@ -76,7 +93,7 @@ class RegisterForEventHandler extends SimpleHandler {
 		try {
 			$answers = $this->eventQuestionsRegistry->extractUserAnswersAPI(
 				$body['answers'] ?? [],
-				$eventRegistration->getParticipantQuestions()
+				$allowedQuestions
 			);
 		} catch ( InvalidAnswerDataException $e ) {
 			throw new LocalizedHttpException(
