@@ -9,8 +9,7 @@ use Wikimedia\Rdbms\IDatabase;
 
 class MWDatabaseProxy implements ICampaignsDatabase {
 
-	/** @var IDatabase */
-	private $db;
+	private IDatabase $db;
 
 	/**
 	 * @param IDatabase $db

@@ -19,13 +19,9 @@ class TrackingToolAssociation {
 	public const SYNC_STATUS_SYNCED = 1;
 	public const SYNC_STATUS_FAILED = 2;
 
-	/** @var int */
 	private int $toolID;
-	/** @var string */
 	private string $toolEventID;
-	/** @var int */
 	private int $syncStatus;
-	/** @var string|null */
 	private ?string $lastSyncTimestamp;
 
 	/**

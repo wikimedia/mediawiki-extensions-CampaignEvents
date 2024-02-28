@@ -17,12 +17,9 @@ use MediaWiki\Status\Status;
 use MediaWiki\User\User;
 
 class SpecialDeleteEventRegistration extends FormSpecialPage {
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var DeleteEventCommand */
-	private $deleteEventCommand;
-	/** @var PermissionChecker */
-	private $permissionChecker;
+	private IEventLookup $eventLookup;
+	private DeleteEventCommand $deleteEventCommand;
+	private PermissionChecker $permissionChecker;
 
 	/** @var ExistingEventRegistration|null */
 	private $event;

@@ -13,11 +13,8 @@ use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class GetParticipantQuestionsHandler extends Handler {
-	/** @var EventQuestionsRegistry */
 	private EventQuestionsRegistry $eventQuestionsRegistry;
-	/** @var IMessageFormatterFactory */
 	private IMessageFormatterFactory $messageFormatterFactory;
-	/** @var Language */
 	private Language $contentLanguage;
 
 	/**

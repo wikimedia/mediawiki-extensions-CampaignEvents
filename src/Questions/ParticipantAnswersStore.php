@@ -11,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 class ParticipantAnswersStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantAnswersStore';
 
-	/** @var CampaignsDatabaseHelper */
 	private CampaignsDatabaseHelper $dbHelper;
 
 	/**

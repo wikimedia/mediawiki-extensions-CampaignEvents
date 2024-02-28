@@ -22,10 +22,8 @@ class UserLinker {
 		'mediawiki.interface.helpers.styles',
 	];
 
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var IMessageFormatterFactory */
-	private $messageFormatterFactory;
+	private CampaignsCentralUserLookup $centralUserLookup;
+	private IMessageFormatterFactory $messageFormatterFactory;
 	private LinkBatchFactory $linkBatchFactory;
 
 	/**

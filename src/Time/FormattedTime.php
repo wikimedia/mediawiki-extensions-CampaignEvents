@@ -9,11 +9,8 @@ namespace MediaWiki\Extension\CampaignEvents\Time;
  * and timezone.
  */
 class FormattedTime {
-	/** @var string */
 	private string $time;
-	/** @var string */
 	private string $date;
-	/** @var string */
 	private string $timeAndDate;
 
 	/**

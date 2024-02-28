@@ -26,8 +26,7 @@ use Wikimedia\ParamValidator\ParamValidator;
 class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
 	use EventIDParamTrait;
 
-	/** @var IEventLookup */
-	private $eventLookup;
+	private IEventLookup $eventLookup;
 
 	/**
 	 * @param EventFactory $eventFactory

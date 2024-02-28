@@ -38,15 +38,10 @@ class CampaignsUserMailer {
 		MainConfigNames::EnableSpecialMute,
 	];
 
-	/** @var UserFactory */
 	private UserFactory $userFactory;
-	/** @var JobQueueGroup */
 	private JobQueueGroup $jobQueueGroup;
-	/** @var ServiceOptions */
 	private ServiceOptions $options;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var UserOptionsLookup */
 	private UserOptionsLookup $userOptionsLookup;
 	private ITextFormatter $contLangMsgFormatter;
 	private PageURLResolver $pageURLResolver;

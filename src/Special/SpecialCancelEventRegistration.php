@@ -17,10 +17,8 @@ use MediaWiki\Status\Status;
 class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	public const PAGE_NAME = 'CancelEventRegistration';
 
-	/** @var UnregisterParticipantCommand */
-	private $unregisterParticipantCommand;
-	/** @var ParticipantsStore */
-	private $participantsStore;
+	private UnregisterParticipantCommand $unregisterParticipantCommand;
+	private ParticipantsStore $participantsStore;
 
 	/**
 	 * @param IEventLookup $eventLookup

@@ -26,10 +26,8 @@ class TrackingToolRegistry {
 		MainConfigNames::CopyUploadProxy,
 	];
 
-	/** @var ObjectFactory */
 	private ObjectFactory $objectFactory;
-	/** @var ServiceOptions */
-	private $options;
+	private ServiceOptions $options;
 
 	/** @var array|null Mock registry that can be set in tests. */
 	private $registryForTests;

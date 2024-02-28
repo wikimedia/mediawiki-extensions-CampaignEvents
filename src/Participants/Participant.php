@@ -8,14 +8,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 
 class Participant {
-	/** @var CentralUser */
-	private $user;
-	/** @var string */
-	private $registeredAt;
-	/** @var int */
-	private $participantID;
-	/** @var bool */
-	private $privateRegistration;
+	private CentralUser $user;
+	private string $registeredAt;
+	private int $participantID;
+	private bool $privateRegistration;
 	/** @var Answer[] */
 	private array $answers;
 	private ?string $firstAnswerTimestamp;

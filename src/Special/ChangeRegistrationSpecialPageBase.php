@@ -12,13 +12,10 @@ use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\FormSpecialPage;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
-	/** @var IEventLookup */
-	private $eventLookup;
+	private IEventLookup $eventLookup;
 
-	/** @var CampaignsCentralUserLookup */
-	protected $centralUserLookup;
-	/** @var ExistingEventRegistration|null */
-	protected $event;
+	protected CampaignsCentralUserLookup $centralUserLookup;
+	protected ?ExistingEventRegistration $event = null;
 
 	/**
 	 * @param string $name

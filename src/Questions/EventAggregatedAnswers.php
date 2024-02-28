@@ -8,7 +8,7 @@ namespace MediaWiki\Extension\CampaignEvents\Questions;
  * Value object representing the aggregated data of the event.
  */
 class EventAggregatedAnswers {
-	/** @var array */
+	/** @var array<int,array<int,int>> */
 	private array $data = [];
 
 	/**

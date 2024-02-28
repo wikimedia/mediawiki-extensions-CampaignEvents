@@ -13,8 +13,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
  * is unnecessarily expensive.
  */
 class CentralUser {
-	/** @var int */
-	private $centralID;
+	private int $centralID;
 
 	/**
 	 * @param int $centralID

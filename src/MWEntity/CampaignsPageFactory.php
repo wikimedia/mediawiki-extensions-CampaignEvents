@@ -15,12 +15,9 @@ use MediaWiki\WikiMap\WikiMap;
 class CampaignsPageFactory {
 	public const SERVICE_NAME = 'CampaignEventsPageFactory';
 
-	/** @var PageStoreFactory */
-	private $pageStoreFactory;
-	/** @var TitleParser */
-	private $titleParser;
-	/** @var TitleFormatter */
-	private $titleFormatter;
+	private PageStoreFactory $pageStoreFactory;
+	private TitleParser $titleParser;
+	private TitleFormatter $titleFormatter;
 
 	/**
 	 * @param PageStoreFactory $pageStoreFactory

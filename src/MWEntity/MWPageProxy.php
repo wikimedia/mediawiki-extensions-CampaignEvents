@@ -7,10 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 use MediaWiki\Page\ProperPageIdentity;
 
 class MWPageProxy implements ICampaignsPage {
-	/** @var ProperPageIdentity */
-	private $page;
-	/** @var string */
-	private $prefixedText;
+	private ProperPageIdentity $page;
+	private string $prefixedText;
 
 	/**
 	 * @param ProperPageIdentity $page

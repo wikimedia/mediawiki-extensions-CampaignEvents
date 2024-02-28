@@ -9,7 +9,6 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 class EventQuestionsStore {
 	public const SERVICE_NAME = 'CampaignEventsEventQuestionsStore';
 
-	/** @var CampaignsDatabaseHelper */
 	private CampaignsDatabaseHelper $dbHelper;
 
 	/**

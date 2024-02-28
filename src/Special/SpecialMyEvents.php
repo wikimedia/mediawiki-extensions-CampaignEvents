@@ -16,10 +16,8 @@ use MediaWiki\SpecialPage\SpecialPage;
 class SpecialMyEvents extends SpecialPage {
 	public const PAGE_NAME = 'MyEvents';
 
-	/** @var EventsPagerFactory */
-	private $eventsPagerFactory;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
+	private EventsPagerFactory $eventsPagerFactory;
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/**
 	 * @param EventsPagerFactory $eventsPagerFactory

@@ -26,14 +26,10 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 	private const QUESTIONS_SECTION_NAME = 'campaignevents-register-questions-label-title';
 
-	/** @var RegisterParticipantCommand */
-	private $registerParticipantCommand;
-	/** @var ParticipantsStore */
-	private $participantsStore;
-	/** @var PolicyMessagesLookup */
-	private $policyMessagesLookup;
-	/** @var EventQuestionsRegistry */
-	private $eventQuestionsRegistry;
+	private RegisterParticipantCommand $registerParticipantCommand;
+	private ParticipantsStore $participantsStore;
+	private PolicyMessagesLookup $policyMessagesLookup;
+	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/**
 	 * @var Participant|null If the user is already registered, this is their Participant record, containing

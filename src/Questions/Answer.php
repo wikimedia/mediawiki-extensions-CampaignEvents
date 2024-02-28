@@ -8,11 +8,8 @@ namespace MediaWiki\Extension\CampaignEvents\Questions;
  * Value object represting an answer to a participant question.
  */
 class Answer {
-	/** @var int */
 	private int $questionDBID;
-	/** @var int|null */
 	private ?int $option;
-	/** @var string|null */
 	private ?string $text;
 
 	/**
