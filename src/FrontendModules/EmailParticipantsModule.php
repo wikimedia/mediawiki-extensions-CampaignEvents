@@ -20,7 +20,6 @@ use Wikimedia\Message\MessageValue;
 
 class EmailParticipantsModule {
 
-	/** @var IMessageFormatterFactory */
 	private IMessageFormatterFactory $messageFormatterFactory;
 
 	/**

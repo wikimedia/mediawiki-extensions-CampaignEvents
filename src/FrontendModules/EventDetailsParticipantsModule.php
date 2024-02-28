@@ -46,17 +46,11 @@ class EventDetailsParticipantsModule {
 		...UserLinker::MODULE_STYLES
 	];
 
-	/** @var UserLinker */
 	private UserLinker $userLinker;
-	/** @var ParticipantsStore */
 	private ParticipantsStore $participantsStore;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var PermissionChecker */
 	private PermissionChecker $permissionChecker;
-	/** @var UserFactory */
 	private UserFactory $userFactory;
-	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $userMailer;
 
 	private ITextFormatter $msgFormatter;

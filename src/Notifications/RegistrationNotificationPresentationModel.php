@@ -28,15 +28,10 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 
 	private const ORGANIZERS_LIMIT = 4;
 
-	/** @var ExistingEventRegistration */
 	private ExistingEventRegistration $eventRegistration;
-	/** @var PageURLResolver */
 	private PageURLResolver $pageUrlResolver;
-	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
-	/** @var OrganizersStore */
 	private OrganizersStore $organizersStore;
-	/** @var UserLinker */
 	private UserLinker $userLinker;
 
 	/**

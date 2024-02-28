@@ -15,14 +15,10 @@ use MediaWiki\Linker\LinkRenderer;
 class EventsPagerFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventsPagerFactory';
 
-	/** @var CampaignsDatabaseHelper */
-	private $databaseHelper;
-	/** @var CampaignsPageFactory */
-	private $campaignsPageFactory;
-	/** @var PageURLResolver */
-	private $pageURLResolver;
-	/** @var LinkBatchFactory */
-	private $linkBatchFactory;
+	private CampaignsDatabaseHelper $databaseHelper;
+	private CampaignsPageFactory $campaignsPageFactory;
+	private PageURLResolver $pageURLResolver;
+	private LinkBatchFactory $linkBatchFactory;
 
 	/**
 	 * @param CampaignsDatabaseHelper $databaseHelper

@@ -20,12 +20,9 @@ class CampaignsCentralUserLookup {
 	public const USER_NOT_FOUND = '[not found]';
 	public const USER_HIDDEN = '[hidden]';
 
-	/** @var CentralIdLookup */
-	private $centralIDLookup;
-	/** @var UserFactory */
-	private $userFactory;
-	/** @var UserNameUtils */
-	private $userNameUtils;
+	private CentralIdLookup $centralIDLookup;
+	private UserFactory $userFactory;
+	private UserNameUtils $userNameUtils;
 
 	/**
 	 * @var array<int,string> Cache of usernames by central user ID. Values can be either usernames, or the special

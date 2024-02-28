@@ -43,25 +43,16 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-media',
 	];
 
-	/** @var OrganizersStore */
 	private OrganizersStore $organizersStore;
-	/** @var PageURLResolver */
 	private PageURLResolver $pageURLResolver;
-	/** @var UserLinker */
 	private UserLinker $userLinker;
-	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
-	/** @var TrackingToolRegistry */
 	private TrackingToolRegistry $trackingToolRegistry;
 
-	/** @var ExistingEventRegistration */
 	private ExistingEventRegistration $registration;
-	/** @var Language */
 	private Language $language;
-	/** @var ITextFormatter */
 	private ITextFormatter $msgFormatter;
-	/** @var CampaignEventsHookRunner */
-	private $hookRunner;
+	private CampaignEventsHookRunner $hookRunner;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory

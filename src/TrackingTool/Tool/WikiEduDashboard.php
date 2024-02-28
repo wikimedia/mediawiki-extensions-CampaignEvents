@@ -24,16 +24,11 @@ use Wikimedia\Assert\Assert;
  * This class implements the WikiEduDashboard software as a tracking tool.
  */
 class WikiEduDashboard extends TrackingTool {
-	/** @var HttpRequestFactory */
 	private HttpRequestFactory $httpRequestFactory;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var ParticipantsStore */
 	private ParticipantsStore $participantsStore;
 
-	/** @var string */
-	private $apiSecret;
-	/** @var string|null */
+	private string $apiSecret;
 	private ?string $apiProxy;
 
 	/**
