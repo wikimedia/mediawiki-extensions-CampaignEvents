@@ -15,14 +15,18 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Status\Status;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
-use MediaWikiUnitTestCase;
+use MediaWiki\User\User;
+use MediaWikiIntegrationTestCase;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PageMoveAndDeleteHandler
  * @covers ::__construct
+ * @todo Make this a unit test once it's possible to use namespace constants (T310375)
  */
-class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
+class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
 	public function getHandler(
 		PageEventLookup $pageEventLookup = null,
 		DeleteEventCommand $deleteEventCommand = null
@@ -75,5 +79,45 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 		$existingRegistrationLookup->method( 'getRegistrationForLocalPage' )
 			->willReturn( $this->createMock( ExistingEventRegistration::class ) );
 		yield 'Page has event registration' => [ true, $existingRegistrationLookup ];
+	}
+
+	/**
+	 * @dataProvider provideOnTitleMove
+	 * @covers ::onTitleMove
+	 */
+	public function testOnTitleMove( bool $hasRegistration, int $toNamespace, ?string $expectedError ) {
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$registration = $hasRegistration ? $this->createMock( ExistingEventRegistration::class ) : null;
+		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturn( $registration );
+		$handler = $this->getHandler( $pageEventLookup );
+
+		$status = Status::newGood();
+		$newTitle = Title::makeTitle( $toNamespace, __METHOD__ );
+		$res = $handler->onTitleMove(
+			$this->createMock( Title::class ),
+			$newTitle,
+			$this->createMock( User::class ),
+			'Test move',
+			$status
+		);
+
+		if ( $expectedError === null ) {
+			$this->assertTrue( $res );
+			$this->assertStatusGood( $status );
+		} else {
+			$this->assertFalse( $res );
+			$this->assertStatusMessage( $expectedError, $status );
+		}
+	}
+
+	public static function provideOnTitleMove(): Generator {
+		yield 'No registration, to Event namespace' => [ false, NS_EVENT, null ];
+		yield 'No registration, to non-Event namespace' => [ false, NS_PROJECT, null ];
+		yield 'Has registration, to Event namespace' => [ true, NS_EVENT, null ];
+		yield 'Has registration, to non-Event namespace' => [
+			true,
+			NS_PROJECT,
+			'campaignevents-error-move-eventpage-namespace'
+		];
 	}
 }

@@ -96,6 +96,7 @@
 		"ArticleViewHeader": "ArticleViewHeader",
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
 		"PageDeleteComplete": "PageMoveAndDeleteHandler",
+		"TitleMove": "PageMoveAndDeleteHandler",
 		"BeforeCreateEchoEvent": "EchoHooksHandler"
 	},
 	"JobClasses": {

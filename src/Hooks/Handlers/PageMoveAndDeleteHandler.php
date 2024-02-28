@@ -12,18 +12,22 @@ use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Hook\PageMoveCompleteHook;
+use MediaWiki\Hook\TitleMoveHook;
 use MediaWiki\Page\Hook\PageDeleteCompleteHook;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Status\Status;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
+use MediaWiki\User\User;
 
 /**
  * This handler is used for page move and deletion. If the page is an event page, we update the registration:
  *  - Delete it in case of event page deletion
  *  - Make it point to the new page in case of page move
  */
-class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteCompleteHook {
+class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteCompleteHook, TitleMoveHook {
 	private PageEventLookup $pageEventLookup;
 	private IEventStore $eventStore;
 	private DeleteEventCommand $deleteEventCommand;
@@ -76,6 +80,20 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 			// no control over.
 			DeleteEventCommand::SKIP_TRACKING_TOOL_VALIDATION
 		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onTitleMove( Title $old, Title $nt, User $user, $reason, Status &$status ) {
+		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $old );
+		// Disallow moving event pages with registration enabled outside of the Event namespace, see T358704.
+		// This will change if we decide to allow event registration outside of the namespace (T318179).
+		if ( $registration && !$nt->inNamespace( NS_EVENT ) ) {
+			$status->fatal( 'campaignevents-error-move-eventpage-namespace' );
+			return false;
+		}
+		return true;
 	}
 
 	/**

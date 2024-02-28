@@ -43,6 +43,7 @@
 	"campaignevents-error-invalid-country": "Enter a valid country name.",
 	"campaignevents-error-invalid-address": "Enter a valid address.",
 	"campaignevents-error-invalid-question-names": "The following questions were not recognized: $1",
+	"campaignevents-error-move-eventpage-namespace": "This event page cannot be moved outside the {{ns:event}} namespace because it has, or had, event registration enabled.",
 	"enableeventregistration": "Enable event registration",
 	"editeventregistration": "Edit event registration",
 	"campaignevents-edit-form-details-label": "Event details",
