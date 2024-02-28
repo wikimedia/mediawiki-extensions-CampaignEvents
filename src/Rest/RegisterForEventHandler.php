@@ -25,11 +25,8 @@ class RegisterForEventHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var RegisterParticipantCommand */
-	private $registerParticipantCommand;
-	/** @var EventQuestionsRegistry */
+	private IEventLookup $eventLookup;
+	private RegisterParticipantCommand $registerParticipantCommand;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/**

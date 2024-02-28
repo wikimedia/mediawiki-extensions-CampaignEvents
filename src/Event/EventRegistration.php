@@ -31,48 +31,36 @@ class EventRegistration {
 		self::MEETING_TYPE_ONLINE_AND_IN_PERSON
 	];
 
-	/** @var int|null */
-	private $id;
+	private ?int $id;
 	/**
 	 * @var string
 	 * @todo Is this necessary?
 	 */
-	private $name;
-	/** @var ICampaignsPage */
-	private $page;
-	/** @var string|null */
-	private $chatURL;
+	private string $name;
+	private ICampaignsPage $page;
+	private ?string $chatURL;
 	/**
 	 * @var TrackingToolAssociation[]
 	 * @phan-var list<TrackingToolAssociation>
 	 */
-	private $trackingTools;
+	private array $trackingTools;
 	/** @var string One of the STATUS_* constants */
-	private $status;
-	/** @var DateTimeZone */
-	private $timezone;
-	/** @var string */
-	private $startLocalTimestamp;
-	/** @var string */
-	private $endLocalTimestamp;
+	private string $status;
+	private DateTimeZone $timezone;
+	private string $startLocalTimestamp;
+	private string $endLocalTimestamp;
 	/** @var string One of the TYPE_* constants */
-	private $type;
+	private string $type;
 	/** @var int One of the MEETING_TYPE_* constants */
-	private $meetingType;
-	/** @var string|null */
-	private $meetingURL;
-	/** @var string|null */
-	private $meetingCountry;
-	/** @var string|null */
-	private $meetingAddress;
+	private int $meetingType;
+	private ?string $meetingURL;
+	private ?string $meetingCountry;
+	private ?string $meetingAddress;
 	/** @var int[] Array of database IDs */
 	private array $participantQuestions;
-	/** @var string|null */
-	private $creationTimestamp;
-	/** @var string|null */
-	private $lastEditTimestamp;
-	/** @var string|null */
-	private $deletionTimestamp;
+	private ?string $creationTimestamp;
+	private ?string $lastEditTimestamp;
+	private ?string $deletionTimestamp;
 
 	/**
 	 * @param int|null $id

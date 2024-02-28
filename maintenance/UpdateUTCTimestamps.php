@@ -27,11 +27,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
  * UTC timestamp on save anyway, and so we don't have to do it here.
  */
 class UpdateUTCTimestamps extends Maintenance {
-	/** @var ICampaignsDatabase|null */
 	private ?ICampaignsDatabase $dbw;
-	/** @var ICampaignsDatabase|null */
 	private ?ICampaignsDatabase $dbr;
-	/** @var DateTimeZone|null */
 	private ?DateTimeZone $utcTimezone;
 
 	public function __construct() {

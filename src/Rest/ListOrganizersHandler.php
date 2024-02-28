@@ -21,16 +21,11 @@ class ListOrganizersHandler extends SimpleHandler {
 	// TODO: Implement proper pagination (T305389)
 	private const RES_LIMIT = 11;
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var OrganizersStore */
-	private $organizersStore;
-	/** @var RoleFormatter */
-	private $roleFormatter;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var UserLinker */
-	private $userLinker;
+	private IEventLookup $eventLookup;
+	private OrganizersStore $organizersStore;
+	private RoleFormatter $roleFormatter;
+	private CampaignsCentralUserLookup $centralUserLookup;
+	private UserLinker $userLinker;
 
 	/**
 	 * @param IEventLookup $eventLookup

@@ -16,9 +16,7 @@ use Wikimedia\Message\MessageValue;
 class GetEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var TrackingToolRegistry */
+	private IEventLookup $eventLookup;
 	private TrackingToolRegistry $trackingToolRegistry;
 
 	/**

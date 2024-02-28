@@ -24,16 +24,11 @@ class UnregisterParticipantCommand {
 	public const DO_NOT_INVERT_USERS = false;
 	public const INVERT_USERS = true;
 
-	/** @var ParticipantsStore */
-	private $participantsStore;
-	/** @var PermissionChecker */
-	private $permissionChecker;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var EventPageCacheUpdater */
+	private ParticipantsStore $participantsStore;
+	private PermissionChecker $permissionChecker;
+	private CampaignsCentralUserLookup $centralUserLookup;
 	private EventPageCacheUpdater $eventPageCacheUpdater;
-	/** @var TrackingToolEventWatcher */
-	private $trackingToolEventWatcher;
+	private TrackingToolEventWatcher $trackingToolEventWatcher;
 
 	/**
 	 * @param ParticipantsStore $participantsStore

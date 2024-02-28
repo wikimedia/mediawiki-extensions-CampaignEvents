@@ -14,8 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 class AddressStore {
 	public const SERVICE_NAME = 'CampaignEventsAddressStore';
 
-	/** @var CampaignsDatabaseHelper */
-	private $dbHelper;
+	private CampaignsDatabaseHelper $dbHelper;
 
 	/**
 	 * @param CampaignsDatabaseHelper $dbHelper

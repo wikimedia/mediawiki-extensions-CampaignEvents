@@ -14,10 +14,8 @@ use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 abstract class AbstractListEventsByUserHandler extends Handler {
-	/** @var IEventLookup */
-	protected $eventLookup;
-	/** @var CampaignsCentralUserLookup */
-	private $userLookup;
+	protected IEventLookup $eventLookup;
+	private CampaignsCentralUserLookup $userLookup;
 
 	// TODO: Implement proper pagination (T305389)
 	protected const RES_LIMIT = 50;

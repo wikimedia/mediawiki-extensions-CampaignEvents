@@ -18,7 +18,6 @@ use RuntimeException;
 class EventPageCacheUpdater {
 	public const SERVICE_NAME = 'CampaignEventsEventPageCacheUpdater';
 
-	/** @var HtmlCacheUpdater */
 	private HtmlCacheUpdater $htmlCacheUpdater;
 
 	/**

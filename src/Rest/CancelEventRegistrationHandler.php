@@ -20,10 +20,8 @@ class CancelEventRegistrationHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var UnregisterParticipantCommand */
-	private $unregisterParticipantCommand;
+	private IEventLookup $eventLookup;
+	private UnregisterParticipantCommand $unregisterParticipantCommand;
 
 	/**
 	 * @param IEventLookup $eventLookup

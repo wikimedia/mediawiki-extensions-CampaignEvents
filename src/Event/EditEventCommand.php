@@ -38,27 +38,16 @@ class EditEventCommand {
 
 	public const MAX_ORGANIZERS_PER_EVENT = 10;
 
-	/** @var IEventStore */
-	private $eventStore;
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var OrganizersStore */
-	private $organizerStore;
-	/** @var PermissionChecker */
-	private $permissionChecker;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var EventPageCacheUpdater */
+	private IEventStore $eventStore;
+	private IEventLookup $eventLookup;
+	private OrganizersStore $organizerStore;
+	private PermissionChecker $permissionChecker;
+	private CampaignsCentralUserLookup $centralUserLookup;
 	private EventPageCacheUpdater $eventPageCacheUpdater;
-	/** @var TrackingToolEventWatcher */
 	private TrackingToolEventWatcher $trackingToolEventWatcher;
-	/** @var TrackingToolUpdater */
 	private TrackingToolUpdater $trackingToolUpdater;
-	/** @var LoggerInterface */
 	private LoggerInterface $logger;
-	/** @var ParticipantAnswersStore */
 	private ParticipantAnswersStore $answersStore;
-	/** @var EventAggregatedAnswersStore */
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 
 	/**

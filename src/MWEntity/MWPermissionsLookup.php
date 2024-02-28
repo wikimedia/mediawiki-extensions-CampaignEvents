@@ -13,9 +13,7 @@ class MWPermissionsLookup implements IPermissionsLookup {
 
 	public const SERVICE_NAME = 'CampaignEventsPermissionLookup';
 
-	/** @var UserFactory */
 	private UserFactory $userFactory;
-	/** @var UserNameUtils */
 	private UserNameUtils $userNameUtils;
 
 	/**

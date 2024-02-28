@@ -7,8 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 use MediaWiki\Permissions\Authority;
 
 class MWAuthorityProxy implements ICampaignsAuthority {
-	/** @var Authority */
-	private $authority;
+	private Authority $authority;
 
 	/**
 	 * @param Authority $authority

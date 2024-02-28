@@ -42,15 +42,10 @@ class EventStore implements IEventStore, IEventLookup {
 		EventRegistration::MEETING_TYPE_ONLINE => 2,
 	];
 
-	/** @var CampaignsDatabaseHelper */
-	private $dbHelper;
-	/** @var CampaignsPageFactory */
-	private $campaignsPageFactory;
-	/** @var AddressStore */
-	private $addressStore;
-	/** @var TrackingToolUpdater */
+	private CampaignsDatabaseHelper $dbHelper;
+	private CampaignsPageFactory $campaignsPageFactory;
+	private AddressStore $addressStore;
 	private TrackingToolUpdater $trackingToolUpdater;
-	/** @var EventQuestionsStore */
 	private EventQuestionsStore $eventQuestionsStore;
 
 	/**

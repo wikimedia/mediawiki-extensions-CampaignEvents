@@ -25,16 +25,11 @@ use MediaWiki\Title\TitleFormatter;
  *  - Make it point to the new page in case of page move
  */
 class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteCompleteHook {
-	/** @var MWEventLookupFromPage */
-	private $eventLookupFromPage;
-	/** @var IEventStore */
-	private $eventStore;
-	/** @var DeleteEventCommand */
+	private MWEventLookupFromPage $eventLookupFromPage;
+	private IEventStore $eventStore;
 	private DeleteEventCommand $deleteEventCommand;
-	/** @var PageStore */
-	private $pageStore;
-	/** @var TitleFormatter */
-	private $titleFormatter;
+	private PageStore $pageStore;
+	private TitleFormatter $titleFormatter;
 
 	/**
 	 * @param MWEventLookupFromPage $eventLookupFromPage

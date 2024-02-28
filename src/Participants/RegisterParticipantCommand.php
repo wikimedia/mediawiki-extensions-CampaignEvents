@@ -27,17 +27,11 @@ class RegisterParticipantCommand {
 	public const REGISTRATION_PRIVATE = true;
 	public const REGISTRATION_PUBLIC = false;
 
-	/** @var ParticipantsStore */
-	private $participantsStore;
-	/** @var PermissionChecker */
-	private $permissionChecker;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var UserNotifier */
+	private ParticipantsStore $participantsStore;
+	private PermissionChecker $permissionChecker;
+	private CampaignsCentralUserLookup $centralUserLookup;
 	private UserNotifier $userNotifier;
-	/** @var EventPageCacheUpdater */
 	private EventPageCacheUpdater $eventPageCacheUpdater;
-	/** @var TrackingToolEventWatcher */
 	private TrackingToolEventWatcher $trackingToolEventWatcher;
 
 	/**

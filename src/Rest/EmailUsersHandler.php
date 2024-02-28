@@ -22,11 +22,8 @@ class EmailUsersHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $userMailer;
-	/** @var PermissionChecker */
 	private PermissionChecker $permissionChecker;
-	/** @var ParticipantsStore */
 	private ParticipantsStore $participantsStore;
 	private IEventLookup $eventLookup;
 
