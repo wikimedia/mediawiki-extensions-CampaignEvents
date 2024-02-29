@@ -11,13 +11,13 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -41,7 +41,6 @@ use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\SpecialPage\SpecialPage;
-use MediaWiki\Title\TitleFormatter;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\Element;
@@ -80,7 +79,7 @@ class EventPageDecorator {
 	private OrganizersStore $organizersStore;
 	private PermissionChecker $permissionChecker;
 	private LinkRenderer $linkRenderer;
-	private TitleFormatter $titleFormatter;
+	private CampaignsPageFactory $campaignsPageFactory;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private UserLinker $userLinker;
 	private EventTimeFormatter $eventTimeFormatter;
@@ -106,7 +105,7 @@ class EventPageDecorator {
 	 * @param PermissionChecker $permissionChecker
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param LinkRenderer $linkRenderer
-	 * @param TitleFormatter $titleFormatter
+	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserLinker $userLinker
 	 * @param EventTimeFormatter $eventTimeFormatter
@@ -123,7 +122,7 @@ class EventPageDecorator {
 		PermissionChecker $permissionChecker,
 		IMessageFormatterFactory $messageFormatterFactory,
 		LinkRenderer $linkRenderer,
-		TitleFormatter $titleFormatter,
+		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
@@ -138,7 +137,7 @@ class EventPageDecorator {
 		$this->organizersStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->linkRenderer = $linkRenderer;
-		$this->titleFormatter = $titleFormatter;
+		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
@@ -159,7 +158,7 @@ class EventPageDecorator {
 	 * @param ProperPageIdentity $page
 	 */
 	public function decoratePage( ProperPageIdentity $page ): void {
-		$campaignsPage = new MWPageProxy( $page, $this->titleFormatter->getPrefixedText( $page ) );
+		$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
 		try {
 			$registration = $this->eventLookup->getEventByPage( $campaignsPage );
 		} catch ( EventNotFoundException $_ ) {

@@ -10,8 +10,6 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Page\PageLookup;
-use MediaWiki\Title\TitleFormatter;
 
 /**
  * This class is a MediaWiki-specific registration lookup that works on wikipage objects and simplifies the interaction
@@ -21,18 +19,18 @@ class MWEventLookupFromPage {
 	public const SERVICE_NAME = 'CampaignEventsMWEventLookupFromPage';
 
 	private IEventLookup $eventLookup;
-	private PageLookup $pageLookup;
-	private TitleFormatter $titleFormatter;
+	private CampaignsPageFactory $campaignsPageFactory;
 
 	/**
 	 * @param IEventLookup $eventLookup
-	 * @param PageLookup $pageLookup
-	 * @param TitleFormatter $titleFormatter
+	 * @param CampaignsPageFactory $campaignsPageFactory
 	 */
-	public function __construct( IEventLookup $eventLookup, PageLookup $pageLookup, TitleFormatter $titleFormatter ) {
+	public function __construct(
+		IEventLookup $eventLookup,
+		CampaignsPageFactory $campaignsPageFactory
+	) {
 		$this->eventLookup = $eventLookup;
-		$this->pageLookup = $pageLookup;
-		$this->titleFormatter = $titleFormatter;
+		$this->campaignsPageFactory = $campaignsPageFactory;
 	}
 
 	/**
@@ -40,7 +38,7 @@ class MWEventLookupFromPage {
 	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
 	 * @return ExistingEventRegistration|null
 	 */
-	public function getRegistrationForPage(
+	public function getRegistrationForLocalPage(
 		$page,
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ?ExistingEventRegistration {
@@ -48,15 +46,8 @@ class MWEventLookupFromPage {
 			return null;
 		}
 
-		if ( $page instanceof LinkTarget ) {
-			$pageIdentity = $this->pageLookup->getPageForLink( $page );
-		} else {
-			$pageIdentity = $page;
-		}
-
-		$campaignsPage = new MWPageProxy( $pageIdentity, $this->titleFormatter->getPrefixedText( $page ) );
+		$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
 		try {
-			// Note that both this class and IEventLookup implement IDBAccessObject, so we can pass the flags through.
 			return $this->eventLookup->getEventByPage( $campaignsPage, $readFlags );
 		} catch ( EventNotFoundException $_ ) {
 			return null;

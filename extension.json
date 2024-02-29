@@ -83,8 +83,8 @@
 				"CampaignEventsMWEventLookupFromPage",
 				"CampaignEventsEventStore",
 				"CampaignEventsDeleteEventCommand",
-				"PageStore",
-				"TitleFormatter"
+				"TitleFormatter",
+				"CampaignEventsPageFactory"
 			]
 		},
 		"EchoHooksHandler": {

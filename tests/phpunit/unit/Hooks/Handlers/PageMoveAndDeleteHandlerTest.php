@@ -10,8 +10,8 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PageMoveAndDeleteHandler;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
-use MediaWiki\Page\PageStore;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\RevisionRecord;
@@ -31,8 +31,8 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 			$eventLookupFromPage ?? $this->createMock( MWEventLookupFromPage::class ),
 			$this->createMock( IEventStore::class ),
 			$deleteEventCommand ?? $this->createMock( DeleteEventCommand::class ),
-			$this->createMock( PageStore::class ),
-			$this->createMock( TitleFormatter::class )
+			$this->createMock( TitleFormatter::class ),
+			$this->createMock( CampaignsPageFactory::class )
 		);
 	}
 
@@ -68,11 +68,11 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 
 	public function providePageDelete(): Generator {
 		$noRegistrationLookup = $this->createMock( MWEventLookupFromPage::class );
-		$noRegistrationLookup->method( 'getRegistrationForPage' )->willReturn( null );
+		$noRegistrationLookup->method( 'getRegistrationForLocalPage' )->willReturn( null );
 		yield 'No registration for page' => [ false, $noRegistrationLookup ];
 
 		$existingRegistrationLookup = $this->createMock( MWEventLookupFromPage::class );
-		$existingRegistrationLookup->method( 'getRegistrationForPage' )
+		$existingRegistrationLookup->method( 'getRegistrationForLocalPage' )
 			->willReturn( $this->createMock( ExistingEventRegistration::class ) );
 		yield 'Page has event registration' => [ true, $existingRegistrationLookup ];
 	}

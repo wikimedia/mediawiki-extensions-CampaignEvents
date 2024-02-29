@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\EventPage;
 use Language;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -16,7 +17,6 @@ use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
-use MediaWiki\Title\TitleFormatter;
 use Wikimedia\Message\IMessageFormatterFactory;
 
 class EventPageDecoratorFactory {
@@ -28,7 +28,7 @@ class EventPageDecoratorFactory {
 	private PermissionChecker $permissionChecker;
 	private IMessageFormatterFactory $messageFormatterFactory;
 	private LinkRenderer $linkRenderer;
-	private TitleFormatter $titleFormatter;
+	private CampaignsPageFactory $campaignsPageFactory;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private UserLinker $userLinker;
 	private EventTimeFormatter $eventTimeFormatter;
@@ -42,7 +42,7 @@ class EventPageDecoratorFactory {
 	 * @param PermissionChecker $permissionChecker
 	 * @param IMessageFormatterFactory $messageFormatterFactory
 	 * @param LinkRenderer $linkRenderer
-	 * @param TitleFormatter $titleFormatter
+	 * @param CampaignsPageFactory $campaignsPageFactory
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserLinker $userLinker
 	 * @param EventTimeFormatter $eventTimeFormatter
@@ -57,7 +57,7 @@ class EventPageDecoratorFactory {
 		PermissionChecker $permissionChecker,
 		IMessageFormatterFactory $messageFormatterFactory,
 		LinkRenderer $linkRenderer,
-		TitleFormatter $titleFormatter,
+		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
@@ -70,7 +70,7 @@ class EventPageDecoratorFactory {
 		$this->permissionChecker = $permissionChecker;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->linkRenderer = $linkRenderer;
-		$this->titleFormatter = $titleFormatter;
+		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
@@ -90,7 +90,7 @@ class EventPageDecoratorFactory {
 			$this->permissionChecker,
 			$this->messageFormatterFactory,
 			$this->linkRenderer,
-			$this->titleFormatter,
+			$this->campaignsPageFactory,
 			$this->centralUserLookup,
 			$this->userLinker,
 			$this->eventTimeFormatter,

@@ -194,7 +194,7 @@ return [
 				$services->get( PermissionChecker::SERVICE_NAME ),
 				$services->getMessageFormatterFactory(),
 				$services->getLinkRenderer(),
-				$services->getTitleFormatter(),
+				$services->get( CampaignsPageFactory::SERVICE_NAME ),
 				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 				$services->get( UserLinker::SERVICE_NAME ),
 				$services->get( EventTimeFormatter::SERVICE_NAME ),
@@ -219,8 +219,7 @@ return [
 	MWEventLookupFromPage::SERVICE_NAME => static function ( MediaWikiServices $services ): MWEventLookupFromPage {
 		return new MWEventLookupFromPage(
 			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
-			$services->getPageStore(),
-			$services->getTitleFormatter()
+			$services->get( CampaignsPageFactory::SERVICE_NAME )
 		);
 	},
 	PageAuthorLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PageAuthorLookup {
