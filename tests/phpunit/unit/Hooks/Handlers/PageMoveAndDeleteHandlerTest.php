@@ -8,10 +8,10 @@ use Generator;
 use ManualLogEntry;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PageMoveAndDeleteHandler;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\RevisionRecord;
@@ -24,11 +24,11 @@ use MediaWikiUnitTestCase;
  */
 class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 	public function getHandler(
-		MWEventLookupFromPage $eventLookupFromPage = null,
+		PageEventLookup $pageEventLookup = null,
 		DeleteEventCommand $deleteEventCommand = null
 	): PageMoveAndDeleteHandler {
 		return new PageMoveAndDeleteHandler(
-			$eventLookupFromPage ?? $this->createMock( MWEventLookupFromPage::class ),
+			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),
 			$this->createMock( IEventStore::class ),
 			$deleteEventCommand ?? $this->createMock( DeleteEventCommand::class ),
 			$this->createMock( TitleFormatter::class ),
@@ -38,13 +38,13 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param bool $expectsEventDeletion
-	 * @param MWEventLookupFromPage $eventLookupFromPage
+	 * @param PageEventLookup $pageEventLookup
 	 * @dataProvider providePageDelete
 	 * @covers ::onPageDeleteComplete
 	 */
 	public function testOnPageDeleteComplete(
 		bool $expectsEventDeletion,
-		MWEventLookupFromPage $eventLookupFromPage
+		PageEventLookup $pageEventLookup
 	) {
 		$deleteEventCommand = $this->createMock( DeleteEventCommand::class );
 		if ( $expectsEventDeletion ) {
@@ -52,7 +52,7 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 		} else {
 			$deleteEventCommand->expects( $this->never() )->method( 'deleteUnsafe' );
 		}
-		$this->getHandler( $eventLookupFromPage, $deleteEventCommand )->onPageDeleteComplete(
+		$this->getHandler( $pageEventLookup, $deleteEventCommand )->onPageDeleteComplete(
 			$this->createMock( ProperPageIdentity::class ),
 			$this->createMock( Authority::class ),
 			'Reason',
@@ -67,11 +67,11 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function providePageDelete(): Generator {
-		$noRegistrationLookup = $this->createMock( MWEventLookupFromPage::class );
+		$noRegistrationLookup = $this->createMock( PageEventLookup::class );
 		$noRegistrationLookup->method( 'getRegistrationForLocalPage' )->willReturn( null );
 		yield 'No registration for page' => [ false, $noRegistrationLookup ];
 
-		$existingRegistrationLookup = $this->createMock( MWEventLookupFromPage::class );
+		$existingRegistrationLookup = $this->createMock( PageEventLookup::class );
 		$existingRegistrationLookup->method( 'getRegistrationForLocalPage' )
 			->willReturn( $this->createMock( ExistingEventRegistration::class ) );
 		yield 'Page has event registration' => [ true, $existingRegistrationLookup ];

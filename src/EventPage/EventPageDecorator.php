@@ -8,8 +8,7 @@ use Language;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
-use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -74,7 +73,7 @@ class EventPageDecorator {
 	private const USER_STATUS_CANNOT_REGISTER_ENDED = 5;
 	private const USER_STATUS_CANNOT_REGISTER_CLOSED = 6;
 
-	private IEventLookup $eventLookup;
+	private PageEventLookup $pageEventLookup;
 	private ParticipantsStore $participantsStore;
 	private OrganizersStore $organizersStore;
 	private PermissionChecker $permissionChecker;
@@ -99,7 +98,7 @@ class EventPageDecorator {
 	private ?bool $participantIsPublic = null;
 
 	/**
-	 * @param IEventLookup $eventLookup
+	 * @param PageEventLookup $pageEventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
 	 * @param PermissionChecker $permissionChecker
@@ -116,7 +115,7 @@ class EventPageDecorator {
 	 * @param OutputPage $out
 	 */
 	public function __construct(
-		IEventLookup $eventLookup,
+		PageEventLookup $pageEventLookup,
 		ParticipantsStore $participantsStore,
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
@@ -132,7 +131,7 @@ class EventPageDecorator {
 		Authority $viewingAuthority,
 		OutputPage $out
 	) {
-		$this->eventLookup = $eventLookup;
+		$this->pageEventLookup = $pageEventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
@@ -158,12 +157,7 @@ class EventPageDecorator {
 	 * @param ProperPageIdentity $page
 	 */
 	public function decoratePage( ProperPageIdentity $page ): void {
-		$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
-		try {
-			$registration = $this->eventLookup->getEventByPage( $campaignsPage );
-		} catch ( EventNotFoundException $_ ) {
-			$registration = null;
-		}
+		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $page );
 
 		if ( $registration && $registration->getDeletionTimestamp() !== null ) {
 			return;
@@ -173,6 +167,7 @@ class EventPageDecorator {
 			$this->addRegistrationHeader( $registration );
 			$this->eventPageCacheUpdater->adjustCacheForPageWithRegistration( $this->out, $registration );
 		} else {
+			$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
 			$this->maybeAddEnableRegistrationHeader( $campaignsPage );
 		}
 	}

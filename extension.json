@@ -80,7 +80,7 @@
 		"PageMoveAndDeleteHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\PageMoveAndDeleteHandler",
 			"services": [
-				"CampaignEventsMWEventLookupFromPage",
+				"CampaignEventsPageEventLookup",
 				"CampaignEventsEventStore",
 				"CampaignEventsDeleteEventCommand",
 				"TitleFormatter",

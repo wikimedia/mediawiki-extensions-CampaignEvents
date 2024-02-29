@@ -8,7 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -52,32 +52,30 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param IEventStore|null $eventStore
 	 * @param PermissionChecker|null $permChecker
-	 * @param IEventLookup|null $eventLookup
+	 * @param PageEventLookup|null $pageEventLookup
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @param OrganizersStore|null $organizersStore
 	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @param TrackingToolUpdater|null $trackingToolUpdater
 	 * @param ParticipantAnswersStore|null $participantAnswersStore
 	 * @param EventAggregatedAnswersStore|null $eventAggregatedAnswersStore
+	 * @param IEventLookup|null $eventLookup
 	 * @return EditEventCommand
 	 */
 	private function getCommand(
 		IEventStore $eventStore = null,
 		PermissionChecker $permChecker = null,
-		IEventLookup $eventLookup = null,
+		PageEventLookup $pageEventLookup = null,
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		OrganizersStore $organizersStore = null,
 		TrackingToolEventWatcher $trackingToolEventWatcher = null,
 		TrackingToolUpdater $trackingToolUpdater = null,
 		ParticipantAnswersStore $participantAnswersStore = null,
-		EventAggregatedAnswersStore $eventAggregatedAnswersStore = null
+		EventAggregatedAnswersStore $eventAggregatedAnswersStore = null,
+		IEventLookup $eventLookup = null
 	): EditEventCommand {
 		$eventStore ??= $this->createMock( IEventStore::class );
-		if ( !$eventLookup ) {
-			$eventLookup = $this->createMock( IEventLookup::class );
-			$eventLookup->method( 'getEventByPage' )
-				->willThrowException( $this->createMock( EventNotFoundException::class ) );
-		}
+
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
 			$permChecker->method( 'userCanEnableRegistration' )->willReturn( true );
@@ -106,7 +104,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 		return new EditEventCommand(
 			$eventStore,
-			$eventLookup,
+			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$organizersStore,
 			$permChecker,
 			$centralUserLookup,
@@ -116,6 +114,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			new NullLogger(),
 			$participantAnswersStore ?? $this->createMock( ParticipantAnswersStore::class ),
 			$eventAggregatedAnswersStore ?? $this->createMock( EventAggregatedAnswersStore::class ),
+			$pageEventLookup ?? $this->createMock( PageEventLookup::class )
 		);
 	}
 
@@ -144,21 +143,21 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param IEventLookup $eventLookup
+	 * @param PageEventLookup $pageEventLookup
 	 * @param int $existingRegistrationID
 	 * @param string $expectedMsg
 	 * @covers ::doEditIfAllowed
 	 * @dataProvider providePageWithRegistrationAlreadyEnabled
 	 */
 	public function testDoEditIfAllowed__pageAlreadyHasRegistration(
-		IEventLookup $eventLookup,
+		PageEventLookup $pageEventLookup,
 		int $existingRegistrationID,
 		string $expectedMsg
 	) {
 		$newRegistration = $this->createMock( EventRegistration::class );
 		$newRegistration->method( 'getID' )->willReturn( $existingRegistrationID + 1 );
 
-		$status = $this->getCommand( null, null, $eventLookup )->doEditIfAllowed(
+		$status = $this->getCommand( null, null, $pageEventLookup )->doEditIfAllowed(
 			$newRegistration,
 			$this->createMock( ICampaignsAuthority::class ),
 			self::ORGANIZER_USERNAMES
@@ -173,9 +172,9 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 		$nonDeletedRegistration = $this->createMock( ExistingEventRegistration::class );
 		$nonDeletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
-		$nonDeletedEventLookup = $this->createMock( IEventLookup::class );
+		$nonDeletedEventLookup = $this->createMock( PageEventLookup::class );
 		$nonDeletedEventLookup->expects( $this->once() )
-			->method( 'getEventByPage' )
+			->method( 'getRegistrationForPage' )
 			->willReturn( $nonDeletedRegistration );
 		yield 'Already has non-deleted registration' => [
 			$nonDeletedEventLookup,
@@ -186,9 +185,9 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$deletedRegistration = $this->createMock( ExistingEventRegistration::class );
 		$deletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
 		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1646000000' );
-		$deletedEventLookup = $this->createMock( IEventLookup::class );
+		$deletedEventLookup = $this->createMock( PageEventLookup::class );
 		$deletedEventLookup->expects( $this->once() )
-			->method( 'getEventByPage' )
+			->method( 'getRegistrationForPage' )
 			->willReturn( $deletedRegistration );
 		yield 'Already has a deleted registration' => [
 			$deletedEventLookup,
@@ -208,9 +207,11 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$newRegistration = $this->createMock( EventRegistration::class );
 		$newRegistration->method( 'getID' )->willReturn( $id );
 
-		$eventLookup = $this->createMock( IEventLookup::class );
-		$eventLookup->expects( $this->once() )->method( 'getEventByPage' )->willReturn( $existingRegistration );
-		$status = $this->getCommand( null, null, $eventLookup )->doEditUnsafe(
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->expects( $this->once() )
+			->method( 'getRegistrationForPage' )
+			->willReturn( $existingRegistration );
+		$status = $this->getCommand( null, null, $pageEventLookup )->doEditUnsafe(
 			$newRegistration,
 			$this->createMock( ICampaignsAuthority::class ),
 			self::ORGANIZER_USERNAMES
@@ -607,7 +608,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$registration->method( 'getEndUTCTimestamp' )->willReturn( $newEndDate );
 
 		$eventLookup = $this->createMock( IEventLookup::class );
-		$eventLookup->method( 'getEventByPage' )->willReturn( $currentRegistrationData );
 		$eventLookup->method( 'getEventByID' )->willReturn( $currentRegistrationData );
 
 		$participantAnswersStore = $this->createMock( ParticipantAnswersStore::class );
@@ -619,13 +619,14 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand(
 			null,
 			$permChecker,
-			$eventLookup,
+			null,
 			null,
 			null,
 			null,
 			null,
 			$participantAnswersStore,
-			$eventAggregatedAnswersStore
+			$eventAggregatedAnswersStore,
+			$eventLookup
 		)->doEditIfAllowed(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),

@@ -8,9 +8,9 @@ use IDBAccessObject;
 use ManualLogEntry;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Hook\PageMoveCompleteHook;
 use MediaWiki\Page\Hook\PageDeleteCompleteHook;
 use MediaWiki\Page\ProperPageIdentity;
@@ -24,27 +24,27 @@ use MediaWiki\Title\TitleFormatter;
  *  - Make it point to the new page in case of page move
  */
 class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteCompleteHook {
-	private MWEventLookupFromPage $eventLookupFromPage;
+	private PageEventLookup $pageEventLookup;
 	private IEventStore $eventStore;
 	private DeleteEventCommand $deleteEventCommand;
 	private TitleFormatter $titleFormatter;
 	private CampaignsPageFactory $campaignsPageFactory;
 
 	/**
-	 * @param MWEventLookupFromPage $eventLookupFromPage
+	 * @param PageEventLookup $pageEventLookup
 	 * @param IEventStore $eventStore
 	 * @param DeleteEventCommand $deleteEventCommand
 	 * @param TitleFormatter $titleFormatter
 	 * @param CampaignsPageFactory $campaignsPageFactory
 	 */
 	public function __construct(
-		MWEventLookupFromPage $eventLookupFromPage,
+		PageEventLookup $pageEventLookup,
 		IEventStore $eventStore,
 		DeleteEventCommand $deleteEventCommand,
 		TitleFormatter $titleFormatter,
 		CampaignsPageFactory $campaignsPageFactory
 	) {
-		$this->eventLookupFromPage = $eventLookupFromPage;
+		$this->pageEventLookup = $pageEventLookup;
 		$this->eventStore = $eventStore;
 		$this->deleteEventCommand = $deleteEventCommand;
 		$this->titleFormatter = $titleFormatter;
@@ -65,7 +65,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 		ManualLogEntry $logEntry,
 		int $archivedRevisionCount
 	) {
-		$registration = $this->eventLookupFromPage->getRegistrationForLocalPage( $page, IDBAccessObject::READ_LATEST );
+		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $page, IDBAccessObject::READ_LATEST );
 		if ( !$registration ) {
 			return;
 		}
@@ -83,7 +83,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	 */
 	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ) {
 		// This code runs in a DeferredUpdate, load the data from DB master (T302858#8354617)
-		$registration = $this->eventLookupFromPage->getRegistrationForLocalPage( $old, IDBAccessObject::READ_LATEST );
+		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $old, IDBAccessObject::READ_LATEST );
 		if ( !$registration ) {
 			return;
 		}

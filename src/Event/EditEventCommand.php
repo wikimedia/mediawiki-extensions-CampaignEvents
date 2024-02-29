@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -49,6 +48,7 @@ class EditEventCommand {
 	private LoggerInterface $logger;
 	private ParticipantAnswersStore $answersStore;
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
+	private PageEventLookup $pageEventLookup;
 
 	/**
 	 * @param IEventStore $eventStore
@@ -62,6 +62,7 @@ class EditEventCommand {
 	 * @param LoggerInterface $logger
 	 * @param ParticipantAnswersStore $answersStore
 	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
+	 * @param PageEventLookup $pageEventLookup
 	 */
 	public function __construct(
 		IEventStore $eventStore,
@@ -74,7 +75,8 @@ class EditEventCommand {
 		TrackingToolUpdater $trackingToolUpdater,
 		LoggerInterface $logger,
 		ParticipantAnswersStore $answersStore,
-		EventAggregatedAnswersStore $aggregatedAnswersStore
+		EventAggregatedAnswersStore $aggregatedAnswersStore,
+		PageEventLookup $pageEventLookup
 	) {
 		$this->eventStore = $eventStore;
 		$this->eventLookup = $eventLookup;
@@ -87,6 +89,7 @@ class EditEventCommand {
 		$this->logger = $logger;
 		$this->answersStore = $answersStore;
 		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
+		$this->pageEventLookup = $pageEventLookup;
 	}
 
 	/**
@@ -141,8 +144,8 @@ class EditEventCommand {
 		ICampaignsAuthority $performer,
 		array $organizerUsernames
 	): StatusValue {
-		try {
-			$existingRegistrationForPage = $this->eventLookup->getEventByPage( $registration->getPage() );
+		$existingRegistrationForPage = $this->pageEventLookup->getRegistrationForPage( $registration->getPage() );
+		if ( $existingRegistrationForPage ) {
 			if ( $existingRegistrationForPage->getID() !== $registration->getID() ) {
 				$msg = $existingRegistrationForPage->getDeletionTimestamp() !== null
 					? 'campaignevents-error-page-already-registered-deleted'
@@ -152,8 +155,6 @@ class EditEventCommand {
 			if ( $existingRegistrationForPage->getDeletionTimestamp() !== null ) {
 				return StatusValue::newFatal( 'campaignevents-edit-registration-deleted' );
 			}
-		} catch ( EventNotFoundException $_ ) {
-			// The page has no associated registration, and we're creating one now. No problem.
 		}
 
 		try {

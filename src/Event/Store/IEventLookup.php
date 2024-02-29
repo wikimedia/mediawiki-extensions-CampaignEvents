@@ -19,6 +19,12 @@ interface IEventLookup {
 	public function getEventByID( int $eventID ): ExistingEventRegistration;
 
 	/**
+	 * Get the event associated with the given page.
+	 *
+	 * @note This does not perform any canonicalization on the given page. For that, see {@see PageEventLookup}.
+	 * This method should not be used directly unless you want to avoid canonicalization (which you usually don't want
+	 * to avoid outside the storage layer).
+	 *
 	 * @param ICampaignsPage $page
 	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
 	 * @return ExistingEventRegistration

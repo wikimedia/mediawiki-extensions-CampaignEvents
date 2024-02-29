@@ -2,21 +2,22 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\MWEntity;
+namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use IDBAccessObject;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\PageIdentity;
 
 /**
- * This class is a MediaWiki-specific registration lookup that works on wikipage objects and simplifies the interaction
- * between MW-specific code (e.g., hook handlers) and IEventLookup.
+ * This class is responsible for finding the event registration associated with a given page. This includes
+ * canonicalizing the page, in case the same event is associated with multiple pages.
  */
-class MWEventLookupFromPage {
-	public const SERVICE_NAME = 'CampaignEventsMWEventLookupFromPage';
+class PageEventLookup {
+	public const SERVICE_NAME = 'CampaignEventsPageEventLookup';
 
 	private IEventLookup $eventLookup;
 	private CampaignsPageFactory $campaignsPageFactory;
@@ -49,6 +50,18 @@ class MWEventLookupFromPage {
 		$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
 		try {
 			return $this->eventLookup->getEventByPage( $campaignsPage, $readFlags );
+		} catch ( EventNotFoundException $_ ) {
+			return null;
+		}
+	}
+
+	public function getRegistrationForPage( ICampaignsPage $page ): ?ExistingEventRegistration {
+		if ( $page->getNamespace() !== NS_EVENT ) {
+			return null;
+		}
+
+		try {
+			return $this->eventLookup->getEventByPage( $page );
 		} catch ( EventNotFoundException $_ ) {
 			return null;
 		}

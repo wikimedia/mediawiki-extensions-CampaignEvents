@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
@@ -19,7 +20,6 @@ use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -141,7 +141,8 @@ return [
 			$services->get( TrackingToolUpdater::SERVICE_NAME ),
 			LoggerFactory::getInstance( 'CampaignEvents' ),
 			$services->get( ParticipantAnswersStore::SERVICE_NAME ),
-			$services->get( EventAggregatedAnswersStore::SERVICE_NAME )
+			$services->get( EventAggregatedAnswersStore::SERVICE_NAME ),
+			$services->get( PageEventLookup::SERVICE_NAME )
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {
@@ -188,7 +189,7 @@ return [
 	EventPageDecoratorFactory::SERVICE_NAME =>
 		static function ( MediaWikiServices $services ): EventPageDecoratorFactory {
 			return new EventPageDecoratorFactory(
-				$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
+				$services->get( PageEventLookup::SERVICE_NAME ),
 				$services->get( ParticipantsStore::SERVICE_NAME ),
 				$services->get( OrganizersStore::SERVICE_NAME ),
 				$services->get( PermissionChecker::SERVICE_NAME ),
@@ -216,8 +217,8 @@ return [
 			$services->getTitleFactory()
 		);
 	},
-	MWEventLookupFromPage::SERVICE_NAME => static function ( MediaWikiServices $services ): MWEventLookupFromPage {
-		return new MWEventLookupFromPage(
+	PageEventLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PageEventLookup {
+		return new PageEventLookup(
 			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
 			$services->get( CampaignsPageFactory::SERVICE_NAME )
 		);

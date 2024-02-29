@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -19,7 +20,6 @@ use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWEventLookupFromPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -185,8 +185,8 @@ class CampaignEventsServices {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( PageURLResolver::SERVICE_NAME );
 	}
 
-	public static function getMWEventLookupFromPage( ContainerInterface $services = null ): MWEventLookupFromPage {
-		return ( $services ?? MediaWikiServices::getInstance() )->get( MWEventLookupFromPage::SERVICE_NAME );
+	public static function getPageEventLookup( ContainerInterface $services = null ): PageEventLookup {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( PageEventLookup::SERVICE_NAME );
 	}
 
 	public static function getPageAuthorLookup( ContainerInterface $services = null ): PageAuthorLookup {

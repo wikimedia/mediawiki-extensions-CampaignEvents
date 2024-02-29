@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
 use Language;
-use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
@@ -22,7 +22,7 @@ use Wikimedia\Message\IMessageFormatterFactory;
 class EventPageDecoratorFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventPageDecoratorFactory';
 
-	private IEventLookup $eventLookup;
+	private PageEventLookup $pageEventLookup;
 	private ParticipantsStore $participantsStore;
 	private OrganizersStore $organizersStore;
 	private PermissionChecker $permissionChecker;
@@ -36,7 +36,7 @@ class EventPageDecoratorFactory {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/**
-	 * @param IEventLookup $eventLookup
+	 * @param PageEventLookup $pageEventLookup
 	 * @param ParticipantsStore $participantsStore
 	 * @param OrganizersStore $organizersStore
 	 * @param PermissionChecker $permissionChecker
@@ -51,7 +51,7 @@ class EventPageDecoratorFactory {
 	 *
 	 */
 	public function __construct(
-		IEventLookup $eventLookup,
+		PageEventLookup $pageEventLookup,
 		ParticipantsStore $participantsStore,
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
@@ -64,7 +64,7 @@ class EventPageDecoratorFactory {
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		EventQuestionsRegistry $eventQuestionsRegistry
 	) {
-		$this->eventLookup = $eventLookup;
+		$this->pageEventLookup = $pageEventLookup;
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
@@ -84,7 +84,7 @@ class EventPageDecoratorFactory {
 		OutputPage $out
 	): EventPageDecorator {
 		return new EventPageDecorator(
-			$this->eventLookup,
+			$this->pageEventLookup,
 			$this->participantsStore,
 			$this->organizersStore,
 			$this->permissionChecker,
