@@ -154,7 +154,7 @@ class AggregateParticipantAnswers extends Maintenance {
 				$newAggregateTuples[$eventID] ??= [];
 				$newAggregateTuples[$eventID][$question] ??= [];
 				$newAggregateTuples[$eventID][$question][$option] ??= 0;
-				$newAggregateTuples[$eventID][$question][$option] ++;
+				$newAggregateTuples[$eventID][$question][$option]++;
 
 				$participantID = $this->participantRowIDsMap[$eventID][$userID];
 				$this->participantRowsToUpdateMap[$participantID] = true;

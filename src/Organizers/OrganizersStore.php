@@ -169,7 +169,7 @@ class OrganizersStore {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$dbw->update( 'ce_organizers',
 			[ 'ceo_agreement_timestamp' => $dbw->timestamp() ],
-			[ 'ceo_event_id' => $eventID ,
+			[ 'ceo_event_id' => $eventID,
 			  'ceo_user_id' => $organizer->getCentralID() ],
 		);
 	}
