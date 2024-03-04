@@ -396,7 +396,7 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Geef aan",
 	"campaignevents-details-stats-no-responses": "Dit evenement heeft geen antwoorden van deelnemers om samen te voegen.",
 	"campaignevents-details-stats-not-ready": "De antwoorden van de deelnemers worden samengevoegd en binnenkort hier beschikbaar gesteld.",
-	"campaignevents-details-stats-not-enough-answers": "Deze vraag heeft in totaal minder dan $1 antwoorden opgeleverd.",
+	"campaignevents-details-stats-not-enough-answers": "Deze vraag heeft in totaal minder dan $1 {{PLURAL:$1|antwoord|antwoorden}} opgeleverd.",
 	"campaignevents-details-stats-header-option": "Optie",
 	"campaignevents-details-stats-header-percentage": "Percentage",
 	"campaignevents-details-stats-header-number": "Aantal",
