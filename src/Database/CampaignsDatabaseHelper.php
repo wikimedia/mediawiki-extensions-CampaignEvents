@@ -11,8 +11,7 @@ use Wikimedia\Rdbms\LBFactory;
 class CampaignsDatabaseHelper {
 	public const SERVICE_NAME = 'CampaignEventsDatabaseHelper';
 
-	/** @var LBFactory */
-	private $lbFactory;
+	private LBFactory $lbFactory;
 	/** @var false|string */
 	private $dbCluster;
 	/** @var false|string */

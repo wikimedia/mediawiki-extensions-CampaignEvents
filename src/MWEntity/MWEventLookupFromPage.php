@@ -20,12 +20,9 @@ use MediaWiki\Title\TitleFormatter;
 class MWEventLookupFromPage {
 	public const SERVICE_NAME = 'CampaignEventsMWEventLookupFromPage';
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var PageLookup */
-	private $pageLookup;
-	/** @var TitleFormatter */
-	private $titleFormatter;
+	private IEventLookup $eventLookup;
+	private PageLookup $pageLookup;
+	private TitleFormatter $titleFormatter;
 
 	/**
 	 * @param IEventLookup $eventLookup

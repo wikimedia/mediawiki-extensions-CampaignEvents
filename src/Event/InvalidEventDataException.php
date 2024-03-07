@@ -8,8 +8,7 @@ use InvalidArgumentException;
 use StatusValue;
 
 class InvalidEventDataException extends InvalidArgumentException {
-	/** @var StatusValue */
-	private $status;
+	private StatusValue $status;
 
 	/**
 	 * @param StatusValue $status

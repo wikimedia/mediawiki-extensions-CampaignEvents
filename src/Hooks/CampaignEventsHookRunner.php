@@ -17,8 +17,7 @@ class CampaignEventsHookRunner implements
 {
 	public const SERVICE_NAME = 'CampaignEventsHookRunner';
 
-	/** @var HookContainer */
-	private $hookContainer;
+	private HookContainer $hookContainer;
 
 	/**
 	 * @param HookContainer $hookContainer

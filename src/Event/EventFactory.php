@@ -31,13 +31,9 @@ class EventFactory {
 	public const VALIDATE_ALL = 0;
 	public const VALIDATE_SKIP_DATES_PAST = 1 << 0;
 
-	/** @var CampaignsPageFactory */
-	private $campaignsPageFactory;
-	/** @var CampaignsPageFormatter */
-	private $campaignsPageFormatter;
-	/** @var TrackingToolRegistry */
-	private $trackingToolRegistry;
-	/** @var EventQuestionsRegistry */
+	private CampaignsPageFactory $campaignsPageFactory;
+	private CampaignsPageFormatter $campaignsPageFormatter;
+	private TrackingToolRegistry $trackingToolRegistry;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/**

@@ -20,12 +20,9 @@ class DeleteEventCommand {
 	public const VALIDATE_TRACKING_TOOLS = true;
 	public const SKIP_TRACKING_TOOL_VALIDATION = false;
 
-	/** @var IEventStore */
-	private $eventStore;
-	/** @var PermissionChecker */
-	private $permissionChecker;
-	/** @var TrackingToolEventWatcher */
-	private $trackingToolEventWatcher;
+	private IEventStore $eventStore;
+	private PermissionChecker $permissionChecker;
+	private TrackingToolEventWatcher $trackingToolEventWatcher;
 
 	/**
 	 * @param IEventStore $eventStore

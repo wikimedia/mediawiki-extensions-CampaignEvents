@@ -32,17 +32,11 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	/** @var EventFactory */
-	protected $eventFactory;
-	/** @var PermissionChecker */
-	protected $permissionChecker;
-	/** @var EditEventCommand */
-	protected $editEventCommand;
-	/** @var OrganizersStore */
+	protected EventFactory $eventFactory;
+	protected PermissionChecker $permissionChecker;
+	protected EditEventCommand $editEventCommand;
 	private OrganizersStore $organizersStore;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var EventQuestionsRegistry */
 	protected EventQuestionsRegistry $eventQuestionsRegistry;
 
 	/**

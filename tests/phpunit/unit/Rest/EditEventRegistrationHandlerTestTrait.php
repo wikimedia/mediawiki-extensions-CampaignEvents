@@ -12,10 +12,7 @@ trait EditEventRegistrationHandlerTestTrait {
 	use CSRFTestHelperTrait;
 	use HandlerTestTrait;
 
-	/**
-	 * @var array
-	 */
-	private static $defaultEventParams = [
+	private static array $defaultEventParams = [
 		'event_page' => 'Some event page title',
 		'chat_url' => 'https://chaturl.example.org',
 		'timezone' => 'UTC',

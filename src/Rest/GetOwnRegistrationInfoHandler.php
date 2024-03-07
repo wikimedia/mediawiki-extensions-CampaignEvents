@@ -18,11 +18,8 @@ use Wikimedia\Message\MessageValue;
 class GetOwnRegistrationInfoHandler extends SimpleHandler {
 	use EventIDParamTrait;
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var ParticipantsStore */
-	private $participantsStore;
-	/** @var CampaignsCentralUserLookup */
+	private IEventLookup $eventLookup;
+	private ParticipantsStore $participantsStore;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 

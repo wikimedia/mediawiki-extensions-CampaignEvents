@@ -34,22 +34,14 @@ class ListParticipantsHandler extends SimpleHandler {
 	// TODO: Implement proper pagination (T305389)
 	private const RES_LIMIT = 20;
 
-	/** @var PermissionChecker */
 	private PermissionChecker $permissionChecker;
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var ParticipantsStore */
-	private $participantsStore;
-	/** @var CampaignsCentralUserLookup */
+	private IEventLookup $eventLookup;
+	private ParticipantsStore $participantsStore;
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var UserLinker */
 	private UserLinker $userLinker;
-	/** @var UserFactory */
 	private UserFactory $userFactory;
-	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $campaignsUserMailer;
 	private EventQuestionsRegistry $questionsRegistry;
-	/** @var IMessageFormatterFactory */
 	private IMessageFormatterFactory $messageFormatterFactory;
 
 	/**
