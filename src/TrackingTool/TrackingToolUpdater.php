@@ -21,7 +21,6 @@ class TrackingToolUpdater {
 		TrackingToolAssociation::SYNC_STATUS_FAILED => 3,
 	];
 
-	/** @var CampaignsDatabaseHelper */
 	private CampaignsDatabaseHelper $dbHelper;
 
 	/**

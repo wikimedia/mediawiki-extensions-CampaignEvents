@@ -19,14 +19,10 @@ class PermissionChecker {
 	public const ORGANIZE_EVENTS_RIGHT = 'campaignevents-organize-events';
 	public const SEND_EVENTS_EMAIL_RIGHT = 'campaignevents-email-participants';
 
-	/** @var OrganizersStore */
-	private $organizersStore;
-	/** @var PageAuthorLookup */
-	private $pageAuthorLookup;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var IPermissionsLookup */
-	private $permissionsLookup;
+	private OrganizersStore $organizersStore;
+	private PageAuthorLookup $pageAuthorLookup;
+	private CampaignsCentralUserLookup $centralUserLookup;
+	private IPermissionsLookup $permissionsLookup;
 
 	/**
 	 * @param OrganizersStore $organizersStore

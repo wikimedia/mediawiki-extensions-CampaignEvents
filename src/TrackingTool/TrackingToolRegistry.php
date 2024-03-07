@@ -30,7 +30,7 @@ class TrackingToolRegistry {
 	private ServiceOptions $options;
 
 	/** @var array|null Mock registry that can be set in tests. */
-	private $registryForTests;
+	private ?array $registryForTests = null;
 
 	/**
 	 * @param ObjectFactory $objectFactory

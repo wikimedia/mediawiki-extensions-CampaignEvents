@@ -40,7 +40,7 @@ class SpecialEventDetails extends SpecialPage {
 	public const STATS_PANEL = 'StatsPanel';
 
 	protected IEventLookup $eventLookup;
-	protected ?ExistingEventRegistration $event;
+	protected ?ExistingEventRegistration $event = null;
 	private ParticipantsStore $participantsStore;
 	private OrganizersStore $organizersStore;
 	private IMessageFormatterFactory $messageFormatterFactory;

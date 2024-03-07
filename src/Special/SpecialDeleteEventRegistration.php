@@ -21,8 +21,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	private DeleteEventCommand $deleteEventCommand;
 	private PermissionChecker $permissionChecker;
 
-	/** @var ExistingEventRegistration|null */
-	private $event;
+	private ?ExistingEventRegistration $event;
 
 	/**
 	 * @param IEventLookup $eventLookup

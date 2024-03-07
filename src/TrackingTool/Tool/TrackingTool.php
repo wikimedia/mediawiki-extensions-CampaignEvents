@@ -30,10 +30,8 @@ use StatusValue;
  * depending on the capabilities of each tool.
  */
 abstract class TrackingTool {
-	/** @var int */
-	private $dbID;
-	/** @var string */
-	protected $baseURL;
+	private int $dbID;
+	protected string $baseURL;
 
 	/**
 	 * @param int $dbID ID that identifies this specific tracking tool in the DB

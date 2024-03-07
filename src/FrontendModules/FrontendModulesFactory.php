@@ -25,33 +25,21 @@ use Wikimedia\Message\IMessageFormatterFactory;
 class FrontendModulesFactory {
 	public const SERVICE_NAME = 'CampaignEventsFrontendModulesFactory';
 
-	/** @var IMessageFormatterFactory */
 	private IMessageFormatterFactory $messageFormatterFactory;
-	/** @var OrganizersStore */
 	private OrganizersStore $organizersStore;
-	/** @var ParticipantsStore */
 	private ParticipantsStore $participantsStore;
-	/** @var PageURLResolver */
 	private PageURLResolver $pageURLResolver;
-	/** @var UserLinker */
 	private UserLinker $userLinker;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var PermissionChecker */
 	private PermissionChecker $permissionChecker;
-	/** @var EventTimeFormatter */
 	private EventTimeFormatter $eventTimeFormatter;
-	/** @var UserFactory */
 	private UserFactory $userFactory;
-	/** @var TrackingToolRegistry */
 	private TrackingToolRegistry $trackingToolRegistry;
-	/** @var CampaignsUserMailer */
 	private CampaignsUserMailer $userMailer;
 	private ParticipantAnswersStore $answersStore;
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 	private EventQuestionsRegistry $questionsRegistry;
-	/** @var CampaignEventsHookRunner */
-	private $hookRunner;
+	private CampaignEventsHookRunner $hookRunner;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory

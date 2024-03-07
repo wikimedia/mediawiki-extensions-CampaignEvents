@@ -14,7 +14,6 @@ use MediaWiki\Title\Title;
 class UserNotifier {
 	public const SERVICE_NAME = 'CampaignEventsUserNotifier';
 
-	/** @var bool */
 	private bool $isEchoLoaded;
 
 	/**

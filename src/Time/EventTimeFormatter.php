@@ -18,7 +18,6 @@ use MediaWiki\User\UserTimeCorrection;
 class EventTimeFormatter {
 	public const SERVICE_NAME = 'CampaignEventsEventTimeFormatter';
 
-	/** @var UserOptionsLookup */
 	private UserOptionsLookup $userOptionsLookup;
 
 	private const FORMAT_START = 'start';

@@ -36,23 +36,17 @@ class EventsPager extends TablePager {
 		'num_participants' => [ 'num_participants', 'event_start_utc', 'event_id' ],
 	];
 
-	/** @var CampaignsPageFactory */
-	private $campaignsPageFactory;
-	/** @var PageURLResolver */
-	private $pageURLResolver;
-	/** @var LinkBatchFactory */
-	private $linkBatchFactory;
+	private CampaignsPageFactory $campaignsPageFactory;
+	private PageURLResolver $pageURLResolver;
+	private LinkBatchFactory $linkBatchFactory;
 
-	/** @var CentralUser */
-	private $centralUser;
+	private CentralUser $centralUser;
 
-	/** @var string */
-	private $search;
-	/** @var string */
-	private $status;
+	private string $search;
+	private string $status;
 
 	/** @var array<int,ICampaignsPage> Cache of event page objects, keyed by event ID */
-	private $eventPageCache = [];
+	private array $eventPageCache = [];
 
 	/**
 	 * @param IContextSource $context
