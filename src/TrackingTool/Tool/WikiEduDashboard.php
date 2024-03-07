@@ -125,24 +125,34 @@ class WikiEduDashboard extends TrackingTool {
 	 * @inheritDoc
 	 */
 	public function validateToolRemoval( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
-		return $this->makePostRequest(
+		$status = $this->makePostRequest(
 			'unsync_event',
 			$event->getID(),
 			$toolEventID,
 			true
 		);
+		if ( $status->hasMessage( 'campaignevents-tracking-tool-wikiedu-course-not-found-error' ) ) {
+			// T358732 - Do not fail if the course no longer exists in the Dashboard
+			return StatusValue::newGood();
+		}
+		return $status;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function removeFromEvent( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
-		return $this->makePostRequest(
+		$status = $this->makePostRequest(
 			'unsync_event',
 			$event->getID(),
 			$toolEventID,
 			false
 		);
+		if ( $status->hasMessage( 'campaignevents-tracking-tool-wikiedu-course-not-found-error' ) ) {
+			// T358732 - Do not fail if the course no longer exists in the Dashboard
+			return StatusValue::newGood();
+		}
+		return $status;
 	}
 
 	/**

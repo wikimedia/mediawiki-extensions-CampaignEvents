@@ -308,7 +308,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 
 		yield 'Course not found' => [
 			$this->getJsonReqMock( [ 'error_code' => 'course_not_found' ] ),
-			'campaignevents-tracking-tool-wikiedu-course-not-found-error'
+			null
 		];
 
 		yield 'Sync not enabled' => [
