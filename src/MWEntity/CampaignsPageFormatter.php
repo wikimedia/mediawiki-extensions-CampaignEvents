@@ -14,8 +14,7 @@ use UnexpectedValueException;
 class CampaignsPageFormatter {
 	public const SERVICE_NAME = 'CampaignEventsCampaignsPageFormatter';
 
-	/** @var TitleFormatter */
-	private $titleFormatter;
+	private TitleFormatter $titleFormatter;
 
 	/**
 	 * @param TitleFormatter $titleFormatter

@@ -7,10 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 use RuntimeException;
 
 class InvalidTitleStringException extends RuntimeException {
-	/** @var string */
-	private $errorMsgKey;
-	/** @var array */
-	private $errorMsgParams;
+	private string $errorMsgKey;
+	private array $errorMsgParams;
 
 	/**
 	 * @param string $titleString

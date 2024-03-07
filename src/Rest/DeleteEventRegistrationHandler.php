@@ -22,10 +22,8 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
 	use FailStatusUtilTrait;
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var DeleteEventCommand */
-	private $deleteEventCommand;
+	private IEventLookup $eventLookup;
+	private DeleteEventCommand $deleteEventCommand;
 
 	/**
 	 * @param IEventLookup $eventLookup

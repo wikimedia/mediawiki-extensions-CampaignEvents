@@ -26,11 +26,8 @@ class SetOrganizersHandler extends SimpleHandler {
 	use FailStatusUtilTrait;
 	use TokenAwareHandlerTrait;
 
-	/** @var IEventLookup */
 	private IEventLookup $eventLookup;
-	/** @var EditEventCommand */
 	private EditEventCommand $editEventCommand;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/**

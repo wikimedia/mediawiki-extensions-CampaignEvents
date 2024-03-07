@@ -75,27 +75,16 @@ class EventPageDecorator {
 	private const USER_STATUS_CANNOT_REGISTER_ENDED = 5;
 	private const USER_STATUS_CANNOT_REGISTER_CLOSED = 6;
 
-	/** @var IEventLookup */
-	private $eventLookup;
-	/** @var ParticipantsStore */
-	private $participantsStore;
-	/** @var OrganizersStore */
-	private $organizersStore;
-	/** @var PermissionChecker */
-	private $permissionChecker;
-	/** @var LinkRenderer */
-	private $linkRenderer;
-	/** @var TitleFormatter */
-	private $titleFormatter;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var UserLinker */
-	private $userLinker;
-	/** @var EventTimeFormatter */
+	private IEventLookup $eventLookup;
+	private ParticipantsStore $participantsStore;
+	private OrganizersStore $organizersStore;
+	private PermissionChecker $permissionChecker;
+	private LinkRenderer $linkRenderer;
+	private TitleFormatter $titleFormatter;
+	private CampaignsCentralUserLookup $centralUserLookup;
+	private UserLinker $userLinker;
 	private EventTimeFormatter $eventTimeFormatter;
-	/** @var EventPageCacheUpdater */
 	private EventPageCacheUpdater $eventPageCacheUpdater;
-	/** @var EventQuestionsRegistry */
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 
 	private Language $language;

@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 use Exception;
 
 class InvalidToolURLException extends Exception {
-	/** @var string */
 	private string $baseURL;
 
 	/**

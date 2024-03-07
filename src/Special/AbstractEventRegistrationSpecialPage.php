@@ -47,46 +47,32 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	public const DETAILS_SECTION = 'campaignevents-edit-form-details-label';
 	private const PARTICIPANT_QUESTIONS_SECTION = 'campaignevents-edit-form-questions-label';
 
-	/** @var array */
-	private $formMessages;
-	/** @var IEventLookup */
-	protected $eventLookup;
-	/** @var EventFactory */
-	private $eventFactory;
-	/** @var EditEventCommand */
-	private $editEventCommand;
-	/** @var PolicyMessagesLookup */
+	/** @var array<string,string> */
+	private array $formMessages;
+	protected IEventLookup $eventLookup;
+	private EventFactory $eventFactory;
+	private EditEventCommand $editEventCommand;
 	private PolicyMessagesLookup $policyMessagesLookup;
-	/** @var OrganizersStore */
 	private OrganizersStore $organizersStore;
-	/** @var PermissionChecker */
 	protected PermissionChecker $permissionChecker;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var TrackingToolRegistry */
 	private TrackingToolRegistry $trackingToolRegistry;
-	/** @var EventQuestionsRegistry */
 	private EventQuestionsRegistry $eventQuestionsRegistry;
-	/** @var CampaignEventsHookRunner */
-	private $hookRunner;
+	private CampaignEventsHookRunner $hookRunner;
 
-	/** @var int|null */
-	protected $eventID;
-	/** @var EventRegistration|null */
-	protected $event;
-	/** @var MWAuthorityProxy */
-	protected $performer;
+	protected ?int $eventID = null;
+	protected ?EventRegistration $event = null;
+	protected MWAuthorityProxy $performer;
 
 	/**
 	 * @var string|null Prefixedtext of the event page, set upon form submission and guaranteed to be
 	 * a string on success.
 	 */
-	private $eventPagePrefixedText;
+	private ?string $eventPagePrefixedText = null;
 	/**
 	 * @var string[] Usernames of invalid organizers, used for live validation in JavaScript.
 	 */
 	private array $invalidOrganizerNames = [];
-	/** @var StatusValue|null */
 	private ?StatusValue $saveWarningsStatus;
 
 	/**

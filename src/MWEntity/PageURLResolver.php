@@ -12,8 +12,7 @@ use UnexpectedValueException;
 class PageURLResolver {
 	public const SERVICE_NAME = 'CampaignEventsPageURLResolver';
 
-	/** @var TitleFactory */
-	private $titleFactory;
+	private TitleFactory $titleFactory;
 
 	/** @var string[] Cached results of getUrl() */
 	private array $urlCache = [];

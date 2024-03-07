@@ -14,7 +14,6 @@ class EventAggregatedAnswersStore {
 	 */
 	public const ANSWERS_TTL_SEC = 90 * 24 * 60 * 60;
 
-	/** @var CampaignsDatabaseHelper */
 	private CampaignsDatabaseHelper $dbHelper;
 
 	/**

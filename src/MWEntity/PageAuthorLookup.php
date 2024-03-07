@@ -14,10 +14,8 @@ use UnexpectedValueException;
 class PageAuthorLookup {
 	public const SERVICE_NAME = 'CampaignEventsPageAuthorLookup';
 
-	/** @var RevisionStoreFactory */
-	private $revisionStoreFactory;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
+	private RevisionStoreFactory $revisionStoreFactory;
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/**
 	 * @param RevisionStoreFactory $revisionStoreFactory

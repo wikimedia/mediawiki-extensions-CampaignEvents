@@ -21,8 +21,7 @@ class OrganizersStore {
 		Roles::ROLE_TEST => 1 << 2,
 	];
 
-	/** @var CampaignsDatabaseHelper */
-	private $dbHelper;
+	private CampaignsDatabaseHelper $dbHelper;
 
 	/**
 	 * @param CampaignsDatabaseHelper $dbHelper

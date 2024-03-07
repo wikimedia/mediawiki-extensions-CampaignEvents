@@ -7,17 +7,11 @@ namespace MediaWiki\Extension\CampaignEvents\Organizers;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 
 class Organizer {
-	/** @var CentralUser */
-	private $user;
-
+	private CentralUser $user;
 	/** @var string[] */
-	private $roles;
-
-	/** @var int */
-	private $organizerID;
-
-	/** @var bool */
-	private $clickwrapAcceptance;
+	private array $roles;
+	private int $organizerID;
+	private bool $clickwrapAcceptance;
 
 	/**
 	 * @param CentralUser $user

@@ -39,21 +39,13 @@ class SpecialEventDetails extends SpecialPage {
 	public const EMAIL_PANEL = 'EmailPanel';
 	public const STATS_PANEL = 'StatsPanel';
 
-	/** @var IEventLookup */
 	protected IEventLookup $eventLookup;
-	/** @var ExistingEventRegistration|null */
 	protected ?ExistingEventRegistration $event;
-	/** @var ParticipantsStore */
 	private ParticipantsStore $participantsStore;
-	/** @var OrganizersStore */
 	private OrganizersStore $organizersStore;
-	/** @var IMessageFormatterFactory */
 	private IMessageFormatterFactory $messageFormatterFactory;
-	/** @var CampaignsCentralUserLookup */
 	private CampaignsCentralUserLookup $centralUserLookup;
-	/** @var FrontendModulesFactory */
 	private FrontendModulesFactory $frontendModulesFactory;
-	/** @var PermissionChecker */
 	private PermissionChecker $permissionChecker;
 
 	/**

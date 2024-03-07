@@ -30,11 +30,8 @@ class ParticipantsStore {
 	public const MODIFIED_ANSWERS = 2 << 1;
 	public const MODIFIED_REGISTRATION = 2 << 10;
 
-	/** @var CampaignsDatabaseHelper */
-	private $dbHelper;
-	/** @var CampaignsCentralUserLookup */
-	private $centralUserLookup;
-	/** @var ParticipantAnswersStore */
+	private CampaignsDatabaseHelper $dbHelper;
+	private CampaignsCentralUserLookup $centralUserLookup;
 	private ParticipantAnswersStore $answersStore;
 
 	/**

@@ -24,8 +24,7 @@ class RoleFormatter {
 		Roles::ROLE_ORGANIZER => 'organizer',
 	];
 
-	/** @var IMessageFormatterFactory */
-	private $messageFormatterFactory;
+	private IMessageFormatterFactory $messageFormatterFactory;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
