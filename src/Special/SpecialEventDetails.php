@@ -204,30 +204,14 @@ class SpecialEventDetails extends SpecialPage {
 			);
 		}
 
-		if ( $isOrganizer && $this->event->isPast() ) {
-			$formModule = $this->frontendModulesFactory->newClickwrapFormModule( $this->event, $language );
-			$form = $formModule->createContent(
-				$this->getContext(),
-				$this->getPageTitle( strval( $this->event->getID() ) )
-					->getLocalURL( [ 'tab' => $this::STATS_PANEL ] )
-			);
-			if (
-				$form['isSubmitted'] ||
-				$organizer->getClickwrapAcceptance()
-			) {
-				$statsModule = $this->frontendModulesFactory
-					->newResponseStatisticsModule( $this->event, $language )
-					->createContent();
-			} else {
-				$statsModule = new Tag();
-				$statsModule->appendContent(
-					$form['content']
-				);
-			}
+		if ( $organizer && $this->event->isPast() ) {
+			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
+			$pageURL = $this->getPageTitle( (string)$this->event->getID() )
+				->getLocalURL( [ 'tab' => $this::STATS_PANEL ] );
 			$tabs[] = $this->createTab(
 				self::STATS_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-stats' ) ),
-				$statsModule
+				$statsModule->createContent( $organizer, $this->getContext(), $pageURL )
 			);
 		}
 
