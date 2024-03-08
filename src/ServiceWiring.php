@@ -220,7 +220,9 @@ return [
 	PageEventLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PageEventLookup {
 		return new PageEventLookup(
 			$services->get( IEventLookup::LOOKUP_SERVICE_NAME ),
-			$services->get( CampaignsPageFactory::SERVICE_NAME )
+			$services->get( CampaignsPageFactory::SERVICE_NAME ),
+			$services->getTitleFactory(),
+			ExtensionRegistry::getInstance()->isLoaded( 'Translate' )
 		);
 	},
 	PageAuthorLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): PageAuthorLookup {

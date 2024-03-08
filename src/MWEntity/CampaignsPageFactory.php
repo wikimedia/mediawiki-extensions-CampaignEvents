@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\PageStoreFactory;
-use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Title\MalformedTitleException;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
@@ -101,7 +101,7 @@ class CampaignsPageFactory {
 	 * Convert a MW page interface (LinkTarget or ProperPageIdentity) into an ICampaignsPage, without
 	 * further checks (e.g. existence).
 	 *
-	 * @param ProperPageIdentity|LinkTarget $page Must be a page in the local wiki
+	 * @param PageIdentity|LinkTarget $page Must be a page in the local wiki
 	 * @return ICampaignsPage
 	 */
 	public function newFromLocalMediaWikiPage( $page ): ICampaignsPage {
