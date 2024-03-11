@@ -4,6 +4,7 @@ const Page = require( 'wdio-mediawiki/Page' ),
 	Util = require( 'wdio-mediawiki/Util' );
 
 class EventPage extends Page {
+
 	get registerForEventButton() {
 		return $( '.ext-campaignevents-eventpage-register-btn' );
 	}
@@ -20,6 +21,10 @@ class EventPage extends Page {
 		return $( '.ext-campaignevents-eventpage-header-buttons .ext-campaignevents-eventpage-manage-registration-menu' );
 	}
 
+	get moreDetailsDialogButton() {
+		return $( '.ext-campaignevents-event-details-btn' );
+	}
+
 	get cancelRegistrationButton() {
 		return this.manageRegistrationButton.$( '*=Cancel registration' );
 	}
@@ -34,6 +39,10 @@ class EventPage extends Page {
 
 	get eventType() {
 		return $( '.ext-campaignevents-textwithicon-widget-content' );
+	}
+
+	get eventOrganizers() {
+		return $( '.ext-campaignevents-detailsdialog-organizers' );
 	}
 
 	open( event ) {
@@ -82,6 +91,13 @@ class EventPage extends Page {
 		await this.manageRegistrationButton.click();
 		await this.cancelRegistrationButton.click();
 		await this.confirmCancellation.click();
+	}
+
+	/**
+	 * Opens the more details dialog.
+	 */
+	async openMoreDetailsDialog() {
+		await this.moreDetailsDialogButton.click();
 	}
 }
 
