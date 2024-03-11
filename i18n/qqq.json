@@ -344,7 +344,7 @@
 	"campaignevents-register-question-gender-option-man": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}.",
 	"campaignevents-register-question-gender-option-woman": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}.",
 	"campaignevents-register-question-gender-option-agender": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}.",
-	"campaignevents-register-question-gender-option-nonbinary": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}.",
+	"campaignevents-register-question-gender-option-nonbinary": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}. See the Wikipedia article [[:w:en:Non-binary gender|Non-binary gender]] and its translations.",
 	"campaignevents-register-question-gender-option-other": "Possible answer to the question {{msg-mw|campaignevents-register-question-gender}}.",
 	"campaignevents-register-question-age": "Label of a question shown when registering for an event, asking participants what is their age range (from a predefined list). The question is optional for participants to answer. Example answers are {{msg-mw|campaignevents-register-question-age-option-under-25}} and {{msg-mw|campaignevents-register-question-age-option-85-plus}}.",
 	"campaignevents-register-question-age-placeholder": "Placeholder for the question {{msg-mw|campaignevents-register-question-age}}, inviting the user to select an option.",

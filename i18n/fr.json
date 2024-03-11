@@ -421,7 +421,7 @@
 	"campaignevents-individual-stats-label-message-confidence": "Dans quelle mesure vous sentez-vous confiant pour contribuer aux projets de Wikimédia impliqués dans cet événement ?",
 	"campaignevents-individual-stats-label-message-affiliate": "Appartenez-vous à un affilié de Wikimédia (chapitres, groupes utilisateur, organisations thématiques) ?",
 	"campaignevents-edit-field-clickwrap-checkbox-pretext": "Pour voir les réponses agrégées des participants, vous devez accepter ce qui suit :",
-	"campaignevents-edit-field-clickwrap-form-continue": "Continuer",
+	"campaignevents-edit-field-clickwrap-form-continue": "Voir les réponses",
 	"campaignevents-participant-question-have-been-aggregated": "Les réponses de {{GENDER:$1|ce participant|cette participante}} ont été agrégées et supprimées.",
 	"campaignevents-participant-question-no-response": "Aucune réponse",
 	"campaignevents-warning-change-event-end-date-past": "Si vous modifiez la date de fin vers une date dans le passé, l'événement sera fermé et vous recevrez un résumé des réponses des participants. Cette action ne peut être annulée. Ceci n'est applicable que si les participants ont fourni des réponses aux questions."
