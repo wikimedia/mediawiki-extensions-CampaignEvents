@@ -20,6 +20,7 @@ use MediaWiki\Permissions\UltimateAuthority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker
@@ -295,7 +296,6 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param IPermissionsLookup|null $permissionsLookup
 	 * @covers ::userCanDeleteRegistration
 	 * @covers ::userCanDeleteRegistrations
-	 * Reuses the data provider for convenience.
 	 * @dataProvider provideCanDeleteRegistration
 	 */
 	public function testUserCanDeleteRegistration(
@@ -392,6 +392,33 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		yield 'Blocked' => [ false, $this->mockSitewideBlockedRegisteredUltimateAuthority() ];
 	}
 
+	/**
+	 * @covers ::userCanCancelRegistration
+	 * @dataProvider provideCanCancelRegistration
+	 */
+	public function testUserCanCancelRegistration( bool $expected, ICampaignsAuthority $performer ) {
+		$this->assertSame(
+			$expected,
+			$this->getPermissionChecker()->userCanCancelRegistration( $performer )
+		);
+	}
+
+	public function provideCanCancelRegistration(): Generator {
+		yield 'Authorized' => [
+			true,
+			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() )
+		];
+		yield 'Logged out' => [
+			false,
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+		];
+		yield 'Temp user' => [
+			false,
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+		];
+		yield 'Blocked' => [ true, $this->mockSitewideBlockedRegisteredUltimateAuthority() ];
+	}
+
 	private function mockSitewideBlockedRegisteredUltimateAuthority(): ICampaignsAuthority {
 		$block = $this->createMock( Block::class );
 		$block->expects( $this->atLeastOnce() )->method( 'isSitewide' )->willReturn( true );
@@ -402,7 +429,26 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			},
 			$block
 		);
+		/** @var Authority&MockObject $authority */
+		$authority->method( 'isNamed' )->willReturn( true );
 		return new MWAuthorityProxy( $authority );
+	}
+
+	/**
+	 * @covers ::userCanRemoveParticipants
+	 * @dataProvider provideGenericEditPermissions
+	 */
+	public function testUserCanRemoveParticipants(
+		bool $expected,
+		ICampaignsAuthority $performer,
+		OrganizersStore $organizersStore = null,
+		IPermissionsLookup $permissionsLookup = null
+	) {
+		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
+		$this->assertSame(
+			$expected,
+			$checker->userCanRemoveParticipants( $performer, 42 )
+		);
 	}
 
 	/**
@@ -424,5 +470,83 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$expected,
 			$checker->userCanViewPrivateParticipants( $performer, 42 )
 		);
+	}
+
+	/**
+	 * @covers ::userCanViewNonPIIParticipantsData
+	 * @dataProvider provideGenericEditPermissions
+	 */
+	public function testUserCanViewNonPIIParticipantsData(
+		bool $expected,
+		ICampaignsAuthority $performer,
+		OrganizersStore $organizersStore = null,
+		IPermissionsLookup $permissionsLookup = null
+	) {
+		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
+		$this->assertSame(
+			$expected,
+			$checker->userCanViewNonPIIParticipantsData( $performer, 42 )
+		);
+	}
+
+	/**
+	 * @covers ::userCanEmailParticipants
+	 * @dataProvider provideUserCanEmailParticipants
+	 */
+	public function testUserCanEmailParticipants(
+		bool $expected,
+		ICampaignsAuthority $performer,
+		OrganizersStore $organizersStore = null
+	) {
+		$checker = $this->getPermissionChecker( $organizersStore );
+		$this->assertSame(
+			$expected,
+			$checker->userCanEmailParticipants( $performer, 42 )
+		);
+	}
+
+	public function provideUserCanEmailParticipants(): Generator {
+		yield 'Logged out' => [
+			false,
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+		];
+		yield 'Temp user' => [
+			false,
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+		];
+		yield 'Lacks right to enable registrations' => [
+			false,
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+		];
+		yield 'Blocked' => [
+			false,
+			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
+		];
+		yield 'Not an organizer' => [
+			false,
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+		];
+
+		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
+		$authorizedOrgStore->method( 'isEventOrganizer' )->willReturn( true );
+
+		yield 'Is organizer but does not have email permissions' => [
+			false,
+			new MWAuthorityProxy(
+				$this->mockRegisteredAuthorityWithoutPermissions( [ PermissionChecker::SEND_EVENTS_EMAIL_RIGHT ] )
+			),
+			$authorizedOrgStore
+		];
+
+		yield 'Authorized' => [
+			true,
+			new MWAuthorityProxy(
+				$this->mockRegisteredAuthorityWithPermissions( [
+					PermissionChecker::ENABLE_REGISTRATIONS_RIGHT,
+					PermissionChecker::SEND_EVENTS_EMAIL_RIGHT
+				] )
+			),
+			$authorizedOrgStore
+		];
 	}
 }

@@ -143,7 +143,7 @@ class PermissionChecker {
 	 * @param ICampaignsAuthority $performer
 	 * @return bool
 	 */
-	public function userCanUnregisterForEvents( ICampaignsAuthority $performer ): bool {
+	public function userCanCancelRegistration( ICampaignsAuthority $performer ): bool {
 		// Note that blocked users can cancel their own registration, see T322380.
 		return $performer->isNamed();
 	}
