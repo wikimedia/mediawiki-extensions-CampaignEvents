@@ -12,7 +12,8 @@
 			"Wladek92",
 			"ߒߓߋ߫ ߝߏߝߣߊ߫",
 			"BlueCamille",
-			"Wnagxsi"
+			"Wnagxsi",
+			"MacOS Weed"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -412,6 +413,12 @@
 	"campaignevents-details-stats-header-percentage": "Pourcentage",
 	"campaignevents-details-stats-header-number": "Nombre",
 	"campaignevents-details-stats-few-answers-option": "Inférieur à $1",
+	"campaignevents-details-stats-range-number": "Entre $1 et $2",
+	"campaignevents-details-stats-range-percentage": "Entre $1% et $2%",
 	"campaignevents-details-stats-no-response": "Aucune réponse",
-	"campaignevents-event-dates-cannot-be-changed": "Les dates des événements passés ne peuvent pas être modifiées dans le futur, pour protéger les données des participants."
+	"campaignevents-event-dates-cannot-be-changed": "Les dates des événements passés ne peuvent pas être modifiées dans le futur, pour protéger les données des participants.",
+	"campaignevents-individual-stats-label-message-confidence": "Dans quelle mesure vous sentez-vous confiant pour contribuer aux projets de Wikimédia impliqués dans cet événement ?",
+	"campaignevents-individual-stats-label-message-affiliate": "Appartenez-vous à un affilié de Wikimédia (chapitres, groupes utilisateur, organisations thématiques) ?",
+	"campaignevents-participant-question-have-been-aggregated": "Les réponses de {{GENDER:$1|ce participant|cette participante}} ont été agrégées et supprimées.",
+	"campaignevents-participant-question-no-response": "Aucune réponse"
 }
