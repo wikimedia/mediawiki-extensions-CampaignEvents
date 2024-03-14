@@ -86,7 +86,7 @@
 	"campaignevents-edit-invalid-id": "Provide a valid event ID.",
 	"campaignevents-edit-no-event-id-provided": "Provide an event ID.",
 	"campaignevents-edit-event-notfound": "There is no event with this ID.",
-	"campaignevents-edit-page-nonlocal": "Please [$1 edit this registration] on the wiki it was enabled on: $2.",
+	"campaignevents-edit-page-nonlocal": "Please [$1 edit the event registration details on $2], the wiki where the event was created.",
 	"campaignevents-edit-error-deleted": "This event registration was deleted.",
 	"campaignevents-edit-need-central-account": "You need a central user account in order to enable or edit event registrations.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|doesn't|don't}} have the needed permissions to be {{PLURAL:$1|an organizer|organizers}}.",
