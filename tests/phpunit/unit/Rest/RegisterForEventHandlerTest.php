@@ -5,8 +5,10 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
@@ -40,14 +42,29 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	private function newHandler(
 		RegisterParticipantCommand $registerCommand = null,
 		IEventLookup $eventLookup = null,
-		EventQuestionsRegistry $eventQuestionsRegistry = null
+		EventQuestionsRegistry $eventQuestionsRegistry = null,
+		MWPageProxy $page = null
 	): RegisterForEventHandler {
 		if ( !$registerCommand ) {
 			$registerCommand = $this->createMock( RegisterParticipantCommand::class );
 			$registerCommand->method( 'registerIfAllowed' )->willReturn( StatusValue::newGood( true ) );
 		}
+
+		if ( !$page ) {
+			$page = $this->createMock( MWPageProxy::class );
+			$page->method( 'getWikiId' )->willReturn( false );
+		}
+
+		if ( !$eventLookup ) {
+			$eventRegistration = $this->createMock( ExistingEventRegistration::class );
+			$eventRegistration->method( 'getPage' )->willReturn( $page );
+
+			$eventLookup = $this->createMock( IEventLookup::class );
+			$eventLookup->method( 'getEventByID' )->willReturn( $eventRegistration );
+		}
+
 		return new RegisterForEventHandler(
-			$eventLookup ?? $this->createMock( IEventLookup::class ),
+			$eventLookup,
 			$registerCommand,
 			$eventQuestionsRegistry ?? $this->createMock( EventQuestionsRegistry::class )
 		);
@@ -79,9 +96,15 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		?string $expectedErrorKey,
 		RegisterParticipantCommand $registerParticipantCommand = null,
 		IEventLookup $eventLookup = null,
-		EventQuestionsRegistry $eventQuestionsRegistry = null
+		EventQuestionsRegistry $eventQuestionsRegistry = null,
+		MWPageProxy $page = null
 	) {
-		$handler = $this->newHandler( $registerParticipantCommand, $eventLookup, $eventQuestionsRegistry );
+		$handler = $this->newHandler(
+			$registerParticipantCommand,
+			$eventLookup,
+			$eventQuestionsRegistry,
+			$page
+		);
 
 		try {
 			$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
@@ -104,6 +127,18 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 			'campaignevents-rest-event-not-found',
 			null,
 			$eventDoesNotExistLookup
+		];
+
+		$page = $this->createMock( MWPageProxy::class );
+		$page->method( 'getWikiId' )->willReturn( 'anotherwiki' );
+		$nonLocalErrorMessage = 'campaignevents-rest-register-for-event-nonlocal-error-message';
+		yield 'Non local event' => [
+			400,
+			$nonLocalErrorMessage,
+			null,
+			null,
+			null,
+			$page
 		];
 
 		$invalidAnsError = 'campaignevents-rest-register-invalid-answer';
