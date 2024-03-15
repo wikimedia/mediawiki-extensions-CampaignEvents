@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Kizule",
 			"Milicevic01"
 		]
 	},
@@ -52,18 +53,28 @@
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Одбаци",
 	"campaignevents-event-details-location-header": "Локација",
 	"campaignevents-event-details-tracking-tool-last-update": "Последња промена: $1",
+	"campaignevents-event-details-organizers-header": "Организатори",
 	"campaignevents-event-details-participants": "Корисничко име",
 	"campaignevents-event-details-select-all": "Изабери све учеснике",
 	"campaignevents-event-details-message-all": "Управљање учесницима",
 	"campaignevents-event-details-remove-participant-remove-btn": "Обриши",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи",
+	"campaignevents-event-details-event": "Детаљи догађаја: $1",
+	"campaignevents-event-details-tab-participants": "Учесници",
 	"campaignevents-event-details-tab-email": "Порука",
+	"campaignevents-event-details-tab-event-details": "Детаљи догађаја",
 	"campaignevents-event-details-organizers-view-more": "Прикажи још",
 	"campaignevents-registration-confirmation-toggle-public": "Јавна регистрација",
+	"campaignevents-notification-registration-details-header": "Детаљи догађаја",
 	"campaignevents-notification-registration-details-dates-header": "Датум и време",
 	"campaignevents-notification-registration-details-dates": "$1 до $4",
 	"campaignevents-notification-registration-details-dates-timezone": "<strong>Временска зона:</strong> $1",
+	"campaignevents-notification-registration-details-type-header": "Тип догађаја",
+	"campaignevents-notification-registration-details-type-online-header": "Онлајн догађај",
+	"campaignevents-notification-registration-details-type-in-person-header": "Догађај уживо",
+	"campaignevents-notification-registration-details-organizers-header": "Организатори догађаја",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|више}}",
+	"campaignevents-notification-registration-event-page-link": "Прикажи страницу догађаја",
 	"campaignevents-event-details-email-recipients-label": "Прималац",
 	"campaignevents-event-details-email-recipients-link-text": "Додај примаоца",
 	"campaignevents-event-details-email-subject-label": "Тема",
