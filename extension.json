@@ -112,12 +112,14 @@
 		{
 			"id": 1728,
 			"constant": "NS_EVENT",
-			"name": "Event"
+			"name": "Event",
+			"subpages": true
 		},
 		{
 			"id": 1729,
 			"constant": "NS_EVENT_TALK",
-			"name": "Event_talk"
+			"name": "Event_talk",
+			"subpages": true
 		}
 	],
 	"RateLimits": {
