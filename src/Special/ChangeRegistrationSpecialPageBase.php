@@ -4,12 +4,16 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\FormSpecialPage;
+use MediaWiki\WikiMap\WikiMap;
+use OOUI\HtmlSnippet;
+use OOUI\MessageWidget;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	private IEventLookup $eventLookup;
@@ -55,6 +59,29 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 			) );
 			return;
 		}
+
+		$eventPage = $this->event->getPage();
+		$wikiID = $eventPage->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			$foreignEditURL = WikiMap::getForeignURL(
+				$wikiID, 'Special:' . SpecialRegisterForEvent::PAGE_NAME . "/{$eventID}"
+			);
+
+			$this->setHeaders();
+			$messageWidget = new MessageWidget( [
+				'type' => 'notice',
+				'label' => new HtmlSnippet(
+					$this->msg( 'campaignevents-register-page-nonlocal' )
+						->params( [
+							$foreignEditURL, WikiMap::getWikiName( $wikiID )
+						] )->parse()
+				)
+			] );
+
+			$this->getOutput()->addHTML( $messageWidget );
+			return;
+		}
+
 		$preconditionResult = $this->checkRegistrationPrecondition();
 		if ( is_string( $preconditionResult ) ) {
 			$this->setHeaders();
