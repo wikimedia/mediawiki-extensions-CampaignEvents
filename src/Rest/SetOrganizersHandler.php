@@ -4,7 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -64,12 +66,26 @@ class SetOrganizersHandler extends SimpleHandler {
 	}
 
 	/**
+	 * @param ExistingEventRegistration $event
+	 */
+	private function validateEventWiki( ExistingEventRegistration $event ): void {
+		$wikiID = $event->getPage()->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-set-organizers-nonlocal-error-message' )
+					->params( $wikiID ),
+				400
+			);
+		}
+	}
+
+	/**
 	 * @param int $eventID
 	 * @return Response
 	 */
 	protected function run( int $eventID ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
-
+		$this->validateEventWiki( $event );
 		$body = $this->getValidatedBody() ?? [];
 		$organizers = $body['organizer_usernames'];
 		if ( !is_array( $organizers ) || !$organizers ) {
