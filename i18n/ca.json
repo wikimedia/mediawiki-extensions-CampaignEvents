@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Lluis Cat"
+		]
+	},
+	"campaignevents-edit-field-country": "País",
+	"campaignevents-edit-field-address": "Adreça",
+	"campaignevents-myevents-field-status-any": "Qualsevol",
+	"campaignevents-edit-field-clickwrap-form-continue": "Visualitza les respostes"
+}
