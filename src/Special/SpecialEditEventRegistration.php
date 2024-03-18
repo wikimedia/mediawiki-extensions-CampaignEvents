@@ -18,6 +18,8 @@ use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\WikiMap\WikiMap;
+use OOUI\HtmlSnippet;
+use OOUI\MessageWidget;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EditEventRegistration';
@@ -108,7 +110,21 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		$wikiID = $eventPage->getWikiId();
 		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
 			$foreignEditURL = WikiMap::getForeignURL( $wikiID, 'Special:' . self::PAGE_NAME . "/{$this->eventID}" );
-			$this->outputErrorBox( 'campaignevents-edit-page-nonlocal', $foreignEditURL, $wikiID );
+
+			$this->setHeaders();
+			$this->getOutput()->enableOOUI();
+
+			$messageWidget = new MessageWidget( [
+				'type' => 'notice',
+				'label' => new HtmlSnippet(
+					$this->msg( 'campaignevents-edit-page-nonlocal' )
+						->params( [
+							$foreignEditURL, WikiMap::getWikiName( $wikiID )
+						] )->parse()
+				)
+			] );
+
+			$this->getOutput()->addHTML( $messageWidget );
 			return;
 		}
 		parent::execute( $par );

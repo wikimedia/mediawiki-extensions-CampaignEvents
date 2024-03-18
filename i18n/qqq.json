@@ -91,7 +91,7 @@
 	"campaignevents-edit-invalid-id": "Error message shown on [[Special:EditEventRegistration]]",
 	"campaignevents-edit-no-event-id-provided": "Error message shown on [[Special:EditEventRegistration]] when the event id is not provided",
 	"campaignevents-edit-event-notfound": "Error message shown on [[Special:EditEventRegistration]]",
-	"campaignevents-edit-page-nonlocal": "Error message shown on [[Special:EditEventRegistration]] when trying to edit an event registration that was enabled on another wiki, and thus should be edited there.\nParameters:\n*$1 - Link to [[Special:EditEventRegistration]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
+	"campaignevents-edit-page-nonlocal": "Notice message shown on [[Special:EditEventRegistration]] when trying to edit an event registration that was enabled on another wiki, and thus should be edited there.\nParameters:\n*$1 - Link to [[Special:EditEventRegistration]] on the other wiki.\n*$2 - The name of the wiki where the event was created",
 	"campaignevents-edit-error-deleted": "Error message shown on [[Special:EditEventRegistration]] when the given registration was deleted, and thus cannot be edited.",
 	"campaignevents-edit-need-central-account": "Error message used when the user tries to enable or edit a registration, but their user account is not global.",
 	"campaignevents-edit-organizers-not-allowed": "Error message used when some users that were specified as organizers are not allowed to organize events.\nParameters:\n* $1 - number of users, for PLURAL.\n* $2 - list of users",
