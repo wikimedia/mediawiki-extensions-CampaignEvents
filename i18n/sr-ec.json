@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Milicevic01"
+			"Milicevic01",
+			"Kizule"
 		]
 	},
 	"nstab-event": "Догађај",
@@ -34,5 +35,6 @@
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Да",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Не",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Одбаци",
-	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи"
+	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи",
+	"campaignevents-event-details-event": "Детаљи догађаја: $1"
 }
