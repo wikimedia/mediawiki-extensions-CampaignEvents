@@ -86,7 +86,7 @@
 	"campaignevents-edit-invalid-id": "Gib eine gültige Veranstaltungs-ID an.",
 	"campaignevents-edit-no-event-id-provided": "Gib eine Veranstaltungs-ID an.",
 	"campaignevents-edit-event-notfound": "Es gibt keine Veranstaltung mit dieser ID.",
-	"campaignevents-edit-page-nonlocal": "Bitte [$1 bearbeite diese Registrierung] in dem Wiki, in dem sie aktiviert wurde: $2.",
+	"campaignevents-edit-page-nonlocal": "Bitte [$1 bearbeit die Registrierungsdetails für die Veranstaltung auf $2], dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-edit-error-deleted": "Diese Veranstaltungsanmeldung wurde gelöscht.",
 	"campaignevents-edit-need-central-account": "Du benötigst ein zentrales Benutzerkonto, um Veranstaltungsanmeldungen zu ermöglichen oder zu bearbeiten.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|hat nicht|haben nicht}} die erforderlichen Berechtigungen, um {{PLURAL:$1|Organisator|Organisatoren}} zu sein.",
@@ -413,5 +413,6 @@
 	"campaignevents-participant-question-no-response": "Keine Rückmeldung",
 	"campaignevents-warning-change-event-end-date-past": "Wenn du das Enddatum auf ein vergangenes Datum änderst, wird die Veranstaltung geschlossen und du erhältst eine Zusammenfassung der Teilnehmerantworten. Diese Aktion kann nicht rückgängig gemacht werden. Dies gilt nur, wenn Teilnehmer Antworten auf die Teilnehmerfragen gegeben haben.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Die Antworten einzelner Teilnehmer wurden gelöscht und die aggregierten Antworten sind unter [$1 {{int:campaignevents-event-details-tab-stats}}] verfügbar.",
-	"campaignevents-event-register-for-event-title": "Anmelden für $1"
+	"campaignevents-event-register-for-event-title": "Anmelden für $1",
+	"campaignevents-register-page-nonlocal": "Bitte [$1 vervollständige deine Veranstaltungs-Registrierung auf $2], dem Wiki, in dem die Veranstaltung erstellt wurde."
 }

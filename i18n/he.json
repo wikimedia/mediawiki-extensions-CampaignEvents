@@ -87,7 +87,7 @@
 	"campaignevents-edit-invalid-id": "יש לספק מזהה אירוע תקין.",
 	"campaignevents-edit-no-event-id-provided": "יש לספק מזהה אירוע.",
 	"campaignevents-edit-event-notfound": "אין אירוע עם מזהה כזה.",
-	"campaignevents-edit-page-nonlocal": "נא [$1 לערוך את ההרשמה הזאת] בוויקי שבו היא הופעלה: $2.",
+	"campaignevents-edit-page-nonlocal": "נא [$1 לערוך את פרטי ההרשמה לאירוע באתר $2], הוויקי שהאירוע נוצר בו.",
 	"campaignevents-edit-error-deleted": "ההרשמה לאירוע הזה נמחקה.",
 	"campaignevents-edit-need-central-account": "חובה להחזיר בחשבון משתמש גלובלי כדי להפעיל או לערוך הרשמות לאירועים.",
 	"campaignevents-edit-organizers-not-allowed": "$2 לא {{PLURAL:$1|מחזיק|מחזיקים}} הההרשאות הדרושות כדי להיות {{PLURAL:$1|{{GENDER:$2|מארגן|מארגנת}}|מארגנים}}.",
@@ -414,5 +414,6 @@
 	"campaignevents-participant-question-no-response": "אין תשובה",
 	"campaignevents-warning-change-event-end-date-past": "שינוי תאריך הסיום לתאריך בעבר יגרום לכך שהאירוע להיסגר ויתקבל אצלך סיכום תגובות המשתתפים. לא ניתן לבטל את הפעולה הזאת. ניתן לעשות את זה רק אם המשתתפים סיפקו תשובות לשאלות המשתתף.",
 	"campaignevents-event-details-participants-individual-data-deleted": "התגובות של משתתפים בודדים נמחקו והתגובות הצבורות זמינות תחת [$1 {{int:campaignevents-event-details-tab-stats}}].",
-	"campaignevents-event-register-for-event-title": "להירשם לאירוע $1"
+	"campaignevents-event-register-for-event-title": "להירשם לאירוע $1",
+	"campaignevents-register-page-nonlocal": "נא [$1 להשלים את ההרשמה שלך לאירוע שלך באתר $2], הוויקי שהאירוע נוצר בו."
 }

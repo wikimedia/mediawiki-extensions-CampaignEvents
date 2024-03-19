@@ -87,7 +87,7 @@
 	"campaignevents-edit-invalid-id": "Укажете важечка назнака за настан.",
 	"campaignevents-edit-no-event-id-provided": "Укажете назнака на настан.",
 	"campaignevents-edit-event-notfound": "Нема настан со таа назнака.",
-	"campaignevents-edit-page-nonlocal": "[$1 Уредете го ова пријавување] на викито кајшто е овозможено: $2.",
+	"campaignevents-edit-page-nonlocal": "[$1 Уредете ги поединостите за пријавување на настанот на $2], викито на кое е создаден настанот.",
 	"campaignevents-edit-error-deleted": "Оваа пријава за настан е избришана.",
 	"campaignevents-edit-need-central-account": "Ќе ви треба централна корисничка сметка за да овозможите менувате пријави за настани.",
 	"campaignevents-edit-organizers-not-allowed": "$2 ја {{PLURAL:$1|нема|немаат}} потребната дозвола за да {{PLURAL:$1|биде приредувач|бидат приредувачи}}.",
@@ -414,5 +414,6 @@
 	"campaignevents-participant-question-no-response": "Нема одговор",
 	"campaignevents-warning-change-event-end-date-past": "Ако го замените завршниот датум со изминат, настанот ќе се затвори и ќе добиете преглед на одговори од учесниците. Ова дејство е неповратно. Ова важи само ако учесниците дале одговори на зададените прашања.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Одговорите на поединечните учесници се ибришани во насобраните одговори и достапни се под [$1 {{int:campaignevents-event-details-tab-stats}}].",
-	"campaignevents-event-register-for-event-title": "Пријавете се за $1"
+	"campaignevents-event-register-for-event-title": "Пријавете се за $1",
+	"campaignevents-register-page-nonlocal": "[$1 Пополнете ја пријавата за вашиот настан на $2], викито на кое е создаден настанот."
 }

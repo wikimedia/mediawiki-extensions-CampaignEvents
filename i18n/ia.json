@@ -86,7 +86,7 @@
 	"campaignevents-edit-invalid-id": "Forni un ID de evento valide.",
 	"campaignevents-edit-no-event-id-provided": "Forni un ID de evento.",
 	"campaignevents-edit-event-notfound": "Non existe un evento con iste ID.",
-	"campaignevents-edit-page-nonlocal": "Per favor [$1 modifica iste inscription] sur le wiki ubi illo ha essite activate: $2.",
+	"campaignevents-edit-page-nonlocal": "Per favor [$1 modifica le detalios de iste inscription sur $2], le wiki ubi le evento ha essite create.",
 	"campaignevents-edit-error-deleted": "Iste inscription de evento ha essite delite.",
 	"campaignevents-edit-need-central-account": "Un conto de usator central es necessari pro poter activar o modificar inscriptiones a eventos.",
 	"campaignevents-edit-organizers-not-allowed": "$2 non ha le permissiones necessari pro esser organisator{{PLURAL:$1||es}}.",
@@ -413,5 +413,6 @@
 	"campaignevents-participant-question-no-response": "Necun responsa",
 	"campaignevents-warning-change-event-end-date-past": "Si tu cambia le data de fin a un data passate, le evento essera claudite e tu recipera un summario del responsas del participantes. Iste action non pote esser disfacite. Isto es solmente applicabile si le participantes ha fornite responsas al questiones pro le participantes.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Le responsas de participantes individual ha essite delite e le responsas aggregate es disponibile sub [$1 {{int:campaignevents-event-details-tab-stats}}].",
-	"campaignevents-event-register-for-event-title": "Inscribe te a $1"
+	"campaignevents-event-register-for-event-title": "Inscribe te a $1",
+	"campaignevents-register-page-nonlocal": "Per favor [$1 completa tu inscription al evento sur $2], le wiki ubi le evento ha essite create."
 }
