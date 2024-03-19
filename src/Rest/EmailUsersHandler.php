@@ -4,17 +4,20 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
 use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class EmailUsersHandler extends SimpleHandler {
@@ -58,6 +61,16 @@ class EmailUsersHandler extends SimpleHandler {
 			// todo add more details to error message
 			return $this->getResponseFactory()->createHttpError( 403 );
 		}
+
+		$wikiID = $event->getPage()->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-email-participants-nonlocal-error-message' )
+					->params( $wikiID ),
+				400
+			);
+		}
+
 		$userIds = $params['user_ids'] ? array_map( 'intval', $params['user_ids'] ) : [];
 		$participants = $this->participantsStore->getEventParticipants(
 			$eventId,
