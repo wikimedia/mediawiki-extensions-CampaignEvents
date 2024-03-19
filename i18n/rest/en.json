@@ -17,6 +17,6 @@
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> must be an array of usernames and cannot be empty",
 	"campaignevents-rest-get-registration-info-notparticipant": "You are not participating in this event.",
 	"campaignevents-rest-register-invalid-answer": "Invalid answer to the question $1",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "Please complete your event registration on $1, the wiki where the event was created."
-
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Please complete your event registration on $1, the wiki where the event was created.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Please delete your event registration on $1, the wiki where the event was created."
 }

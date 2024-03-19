@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Rest\DeleteEventRegistrationHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -39,14 +40,28 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 */
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		DeleteEventCommand $deleteEventCommand = null
+		DeleteEventCommand $deleteEventCommand = null,
+		MWPageProxy $page = null
 	): DeleteEventRegistrationHandler {
+		if ( !$page ) {
+			$page = $this->createMock( MWPageProxy::class );
+			$page->method( 'getWikiId' )->willReturn( false );
+		}
+
+		if ( !$eventLookup ) {
+			$eventRegistration = $this->createMock( ExistingEventRegistration::class );
+			$eventRegistration->method( 'getPage' )->willReturn( $page );
+
+			$eventLookup = $this->createMock( IEventLookup::class );
+			$eventLookup->method( 'getEventByID' )->willReturn( $eventRegistration );
+		}
+
 		if ( !$deleteEventCommand ) {
 			$deleteEventCommand = $this->createMock( DeleteEventCommand::class );
 			$deleteEventCommand->method( 'deleteIfAllowed' )->willReturn( StatusValue::newGood() );
 		}
 		return new DeleteEventRegistrationHandler(
-			$eventLookup ?? $this->createMock( IEventLookup::class ),
+			$eventLookup,
 			$deleteEventCommand
 		);
 	}
@@ -75,10 +90,11 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	public function testExecute__error(
 		string $expectedMsgKey,
 		int $expectedCode,
-		IEventLookup $eventLookup = null
+		IEventLookup $eventLookup = null,
+		MWPageProxy $page = null
 	) {
 		$performer = $this->mockAnonNullAuthority();
-		$handler = $this->newHandler( $eventLookup );
+		$handler = $this->newHandler( $eventLookup, null, $page );
 		$request = new RequestData( self::DEFAULT_REQ_DATA );
 
 		try {
@@ -103,6 +119,16 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$lookupDeleted = $this->createMock( IEventLookup::class );
 		$lookupDeleted->expects( $this->once() )->method( 'getEventById' )->willReturn( $deletedRegistration );
 		yield 'Event already deleted' => [ 'campaignevents-rest-delete-already-deleted', 404, $lookupDeleted ];
+
+		$page = $this->createMock( MWPageProxy::class );
+		$page->method( 'getWikiId' )->willReturn( 'anotherwiki' );
+		$nonLocalErrorMessage = 'campaignevents-rest-delete-event-nonlocal-error-message';
+		yield 'Non local event' => [
+			$nonLocalErrorMessage,
+			400,
+			null,
+			$page
+		];
 	}
 
 	/**

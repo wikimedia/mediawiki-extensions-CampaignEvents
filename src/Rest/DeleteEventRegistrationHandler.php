@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -55,6 +56,15 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-rest-delete-already-deleted' ),
 				404
+			);
+		}
+
+		$wikiID = $registration->getPage()->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-delete-event-nonlocal-error-message' )
+					->params( $wikiID ),
+				400
 			);
 		}
 
