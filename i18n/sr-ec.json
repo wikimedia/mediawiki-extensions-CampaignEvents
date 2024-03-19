@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Milicevic01"
+			"Milicevic01",
+			"Kizule"
 		]
 	},
 	"nstab-event": "Догађај",
@@ -9,6 +10,8 @@
 	"campaignevents-error-invalid-timezone": "Наведите важећу временску зону.",
 	"campaignevents-error-empty-start": "Почетак.",
 	"campaignevents-error-empty-end": "Крај.",
+	"campaignevents-edit-field-page": "Страница догађаја",
+	"campaignevents-edit-field-event-status": "Статус догађаја",
 	"campaignevents-edit-field-status-open": "Отворено",
 	"campaignevents-edit-field-status-closed": "Затворено",
 	"campaignevents-edit-field-timezone": "Временска зона",
@@ -25,13 +28,23 @@
 	"campaignevents-unregister-confirmation-btn": "Откажи регистрацију",
 	"campaignevents-myevents-label-status": "Статус",
 	"campaignevents-myevents-field-status-any": "Било који",
+	"campaignevents-eventslist-column-date": "Датум",
+	"campaignevents-eventslist-column-name": "Назив догађаја",
 	"campaignevents-eventslist-column-location": "Локација",
+	"campaignevents-eventslist-column-participants-number": "Број учесника",
+	"campaignevents-eventslist-location-online": "Онлајн догађај",
+	"campaignevents-eventslist-location-in-person": "Догађај уживо",
 	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
 	"campaignevents-eventslist-delete-dialog-delete": "Обриши",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> обрисан.",
 	"campaignevents-delete-submit-btn": "Обриши",
+	"campaignevents-eventpage-header-location-label": "Локација",
+	"campaignevents-eventpage-header-type-online": "Онлајн догађај",
+	"campaignevents-eventpage-header-type-in-person": "Догађај уживо",
 	"campaignevents-eventpage-header-participants-label": "Број учесника",
 	"campaignevents-eventpage-header-details": "Више детаља",
+	"campaignevents-eventpage-dialog-title": "Детаљи догађаја",
+	"campaignevents-eventpage-dialog-organizers": "Организовано од стране: $1",
 	"campaignevents-eventpage-dialog-dates": "$1 до $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Временска зона:</strong> $1",
 	"campaignevents-eventpage-dialog-location-label": "Локација",
@@ -40,11 +53,23 @@
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Да",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Не",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Одбаци",
+	"campaignevents-event-details-organizers-header": "Организатори",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи",
+	"campaignevents-event-details-event": "Детаљи догађаја: $1",
+	"campaignevents-event-details-tab-participants": "Учесници",
+	"campaignevents-event-details-tab-event-details": "Детаљи догађаја",
 	"campaignevents-event-details-organizers-view-more": "Прикажи још",
 	"campaignevents-registration-confirmation-toggle-public": "Јавна регистрација",
+	"campaignevents-notification-registration-header-intro": "Хвала Вам на регистрацији за $1.",
+	"campaignevents-notification-registration-header-chat": "Придружите се $1 да би сте се повезали са осталим учесницима и добили додатне информације од стране организатора.",
+	"campaignevents-notification-registration-details-header": "Детаљи догађаја",
 	"campaignevents-notification-registration-details-dates-header": "Датум и време",
 	"campaignevents-notification-registration-details-dates": "$1 до $4",
 	"campaignevents-notification-registration-details-dates-timezone": "<strong>Временска зона:</strong> $1",
-	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|више}}"
+	"campaignevents-notification-registration-details-type-header": "Тип догађаја",
+	"campaignevents-notification-registration-details-type-online-header": "Онлајн догађај",
+	"campaignevents-notification-registration-details-type-in-person-header": "Догађај уживо",
+	"campaignevents-notification-registration-details-organizers-header": "Организатори догађаја",
+	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|више}}",
+	"campaignevents-notification-registration-event-page-link": "Прикажи страницу догађаја"
 }
