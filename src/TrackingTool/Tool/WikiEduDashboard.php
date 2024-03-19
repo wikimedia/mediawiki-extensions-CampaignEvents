@@ -422,6 +422,6 @@ class WikiEduDashboard extends TrackingTool {
 			throw new InvalidToolURLException( $baseURL, 'Invalid path: ' . $url );
 		}
 
-		return $pathBits[1] . '/' . $pathBits[2];
+		return urldecode( $pathBits[1] ) . '/' . urldecode( $pathBits[2] );
 	}
 }
