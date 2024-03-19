@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use HTMLForm;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
@@ -15,8 +16,14 @@ use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\User\User;
+use MediaWiki\WikiMap\WikiMap;
+use OOUI\HtmlSnippet;
+use OOUI\MessageWidget;
 
 class SpecialDeleteEventRegistration extends FormSpecialPage {
+
+	public const PAGE_NAME = 'DeleteEventRegistration';
+
 	private IEventLookup $eventLookup;
 	private DeleteEventCommand $deleteEventCommand;
 	private PermissionChecker $permissionChecker;
@@ -33,7 +40,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 		DeleteEventCommand $deleteEventCommand,
 		PermissionChecker $permissionChecker
 	) {
-		parent::__construct( 'DeleteEventRegistration' );
+		parent::__construct( self::PAGE_NAME );
 		$this->eventLookup = $eventLookup;
 		$this->deleteEventCommand = $deleteEventCommand;
 		$this->permissionChecker = $permissionChecker;
@@ -67,6 +74,29 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-delete-error-already-deleted' )->escaped()
 			) );
+			return;
+		}
+
+		$eventPage = $this->event->getPage();
+		$wikiID = $eventPage->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			$foreignDeleteURL = WikiMap::getForeignURL(
+				$wikiID, 'Special:' . self::PAGE_NAME . "/{$eventID}"
+			);
+
+			$this->setHeaders();
+			$this->getOutput()->enableOOUI();
+			$messageWidget = new MessageWidget( [
+				'type' => 'notice',
+				'label' => new HtmlSnippet(
+					$this->msg( 'campaignevents-delete-registration-page-nonlocal' )
+						->params( [
+							$foreignDeleteURL, WikiMap::getWikiName( $wikiID )
+						] )->parse()
+				)
+			] );
+
+			$this->getOutput()->addHTML( $messageWidget );
 			return;
 		}
 

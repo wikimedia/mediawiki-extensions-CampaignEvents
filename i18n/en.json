@@ -422,5 +422,6 @@
 	"campaignevents-warning-change-event-end-date-past": "If you change the end date to a past date, the event will be closed and you will receive a summary of participant responses. This action cannot be undone. This is only applicable if participants have provided answers to the participant questions.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Individual participants' responses have been deleted and the aggregated responses are available under [$1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Register for $1",
-	"campaignevents-register-page-nonlocal": "Please [$1 complete your event registration on $2], the wiki where the event was created."
+	"campaignevents-register-page-nonlocal": "Please [$1 complete your event registration on $2], the wiki where the event was created.",
+	"campaignevents-delete-registration-page-nonlocal": "Please [$1 delete your event registration on $2], the wiki where the event was created."
 }
