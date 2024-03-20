@@ -584,6 +584,13 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 				'https://dashboard-testing.wikiedu.org/courses/Organization/Course?foo=bar&baz=quux',
 				'Organization/Course',
 			],
+			'Valid, URL needs decoding' => [
+				$baseUrl,
+				'https://dashboard-testing.wikiedu.org/courses/Org/Per%C3%B2_pi%C3%B1a_crian%C3%A7a_No%C3%ABl_' .
+					's%C3%BC%C3%9F_%E7%BB%9D%E4%B8%8D_%D1%8F_%D0%B1%D1%83%D0%B4%D1%83_%D7%9C%D7%95%D7%95%D7%AA%D7%A8_' .
+					'%D7%9C%D7%9A',
+				'Org/Però_piña_criança_Noël_süß_绝不_я_буду_לוותר_לך',
+			],
 		];
 	}
 }
