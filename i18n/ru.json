@@ -7,6 +7,7 @@
 			"Mitte27",
 			"Okras",
 			"Pacha Tchernof",
+			"Stjn",
 			"UniCollab",
 			"Yurina Tatiana"
 		]
@@ -71,5 +72,6 @@
 	"campaignevents-email-participants-except": "Все, кроме $1",
 	"campaignevents-email-participants-yes": "Да",
 	"campaignevents-email-participants-no": "Нет",
-	"campaignevents-register-question-affiliate-option-affiliate": "Да"
+	"campaignevents-register-question-affiliate-option-affiliate": "Да",
+	"campaignevents-register-page-nonlocal": "Пожалуйста, [$1 завершите регистрацию на мероприятии на $2], вики, где оно было создано."
 }
