@@ -434,5 +434,7 @@
 	"campaignevents-event-details-participants-individual-data-deleted": "Individual participants' responses have been deleted and the aggregated responses are available under [$1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Register for $1",
 	"campaignevents-register-page-nonlocal": "Please '''[$1 complete your event registration on $2]''', the wiki where the event was created.",
-	"campaignevents-delete-registration-page-nonlocal": "Please '''[$1 delete your event registration on $2]''', the wiki where the event was created."
+	"campaignevents-delete-registration-page-nonlocal": "Please '''[$1 delete your event registration on $2]''', the wiki where the event was created.",
+	"campaignevents-event-details-page-nonlocal": "You are currently viewing a limited version of this page. Please <b>[$1 visit this page on $2]</b>, the wiki where the event was created, to access the full event details and additional features.",
+	"campaignevents-event-details-organizer-not-local-wiki-prompt": "View on [$1 $2]."
 }
