@@ -49,6 +49,7 @@
 	"campaignevents-error-invalid-country": "Voer een geldige landnaam in.",
 	"campaignevents-error-invalid-address": "Voer een geldig adres in.",
 	"campaignevents-error-invalid-question-names": "De volgende vragen zijn niet herkend: $1",
+	"campaignevents-error-move-eventpage-namespace": "Deze evenementpagina kan niet buiten de naamruimte {{ns:event}} worden verplaatst omdat evenementregistratie is ingeschakeld of was ingeschakeld.",
 	"enableeventregistration": "Evenementregistratie inschakelen",
 	"editeventregistration": "Evenementregistratie bewerken",
 	"campaignevents-edit-form-details-label": "Evenementgegevens",
@@ -91,7 +92,7 @@
 	"campaignevents-edit-invalid-id": "Geef een geldig evenement-ID op.",
 	"campaignevents-edit-no-event-id-provided": "Geef een evenement-ID op.",
 	"campaignevents-edit-event-notfound": "Er is geen evenement met dit ID.",
-	"campaignevents-edit-page-nonlocal": "[$1 Bewerk deze registratie] op de wiki waarop die is ingeschakeld: $2 .",
+	"campaignevents-edit-page-nonlocal": "[$1 Bewerk de details van deze registratie] op de wiki $2 waarop het evenement is aangemaakt.",
 	"campaignevents-edit-error-deleted": "Deze evenementregistratie is verwijderd.",
 	"campaignevents-edit-need-central-account": "U hebt een centraal gebruikersaccount nodig om de inschrijving op evenementen in te schakelen of te bewerken.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|heeft|hebben}} niet de benodigde rechten om organisator{{PLURAL:$1||en}} te zijn.",
@@ -333,6 +334,7 @@
 	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|deelnemer|deelnemers}}",
 	"campaignevents-email-participants-yes": "Ja",
 	"campaignevents-email-participants-no": "Nee",
+	"campaignevents-email-footer": "Deze e-mail is {{GENDER:$1|verzonden}} door $1 naar {{GENDER:$2|$2 }}, een geregistreerde deelnemer aan het volgende evenement: $3. Als {{GENDER:$2|u}} deze e-mail beantwoordt, wordt {{GENDER:$2|uw}} e-mail rechtstreeks naar de {{GENDER:$1|oorspronkelijke afzender}} gestuurd, waardoor {{GENDER:$2|uw}} e-mailadres aan {{GENDER:$1|hen}} bekend wordt gemaakt.",
 	"campaignevents-event-details-time-registered": "Tijd registratie",
 	"campaignevents-event-details-can-receive-email": "Kan e-mail ontvangen",
 	"campaignevents-register-questions-label-title": "Uw gegevens",
@@ -396,6 +398,8 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "Geef aan",
 	"campaignevents-details-stats-no-responses": "Dit evenement heeft geen antwoorden van deelnemers om samen te voegen.",
 	"campaignevents-details-stats-not-ready": "De antwoorden van de deelnemers worden samengevoegd en binnenkort hier beschikbaar gesteld.",
+	"campaignevents-details-stats-section-non-pii": "Vragen over niet-persoonlijk identificeerbare informatie (niet-PII)",
+	"campaignevents-details-stats-section-pii": "Vragen over persoonlijk identificeerbare informatie (PII)",
 	"campaignevents-details-stats-not-enough-answers": "Deze vraag heeft in totaal minder dan $1 {{PLURAL:$1|antwoord|antwoorden}} opgeleverd.",
 	"campaignevents-details-stats-header-option": "Optie",
 	"campaignevents-details-stats-header-percentage": "Percentage",
@@ -415,5 +419,6 @@
 	"campaignevents-participant-question-no-response": "Geen antwoord",
 	"campaignevents-warning-change-event-end-date-past": "Als u de einddatum wijzigt naar een datum in het verleden, wordt het evenement gesloten en ontvangt u een overzicht van de antwoorden van deelnemers. Deze handeling is onomkeerbaar. Dit is alleen van toepassing als deelnemers antwoorden hebben gegeven op de deelnemersvragen.",
 	"campaignevents-event-details-participants-individual-data-deleted": "De antwoorden van de individuele deelnemers zijn verwijderd en de geaggregeerde antwoorden zijn beschikbaar onder [$1 {{int:campaginevents-event-details-tab-stats}}].",
-	"campaignevents-event-register-for-event-title": "Schrijf je in voor $1"
+	"campaignevents-event-register-for-event-title": "Schrijf je in voor $1",
+	"campaignevents-register-page-nonlocal": "[$1 voltooi uw evenementregistratie op $2], de wiki waar het evenement is aangemaakt."
 }
