@@ -6,7 +6,14 @@
 			"Verdy p",
 			"Wladek92",
 			"ߒߓߋ߫ ߝߏߝߣߊ߫",
-			"LD"
+			"LD",
+			"BlueCamille",
+			"MacOS Weed",
+			"McDutchie",
+			"Obscaeris",
+			"Thibaut120094",
+			"VIGNERON",
+			"Wnagxsi"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -68,7 +75,7 @@
 	"campaignevents-rest-edit-page-nonlocal": "Les inscriptions à cet événement ont été activées sur le wiki suivant et doivent être modifiées ici : $1.",
 	"campaignevents-edit-page-nonlocal": "Veuillez [$1 modifier ce formulaire d’inscription] sur le wiki où il a été activé : $2.",
 	"campaignevents-edit-error-deleted": "Les inscriptions pour cet événement sont fermées.",
-	"campaignevents-edit-need-central-account": "Vous avez besoin d’un compte d’utilisateur central pour activer ou modifier les inscriptions aux événements.",
+	"campaignevents-edit-need-central-account": "Vous avez besoin d’un compte utilisateur global pour activer ou modifier les inscriptions aux événements.",
 	"campaignevents-error-page-already-registered": "La page d’événement donnée a déjà à une inscription associée.",
 	"campaignevents-error-page-already-registered-deleted": "Vous ne pouvez pas terminer l’action car le formulaire d’inscription à l'événement a été supprimé de cette page d’événement.",
 	"campaignevents-edit-not-allowed-registration": "Vous n’êtes pas autorisé{{GENDER:||e}} à modifier le formulaire d’inscription à cet événement.",
@@ -164,7 +171,7 @@
 	"campaignevents-eventpage-dialog-location-label": "Lieu",
 	"campaignevents-eventpage-dialog-online-label": "Événement en ligne",
 	"campaignevents-eventpage-dialog-in-person-label": "Événement en présentiel",
-	"campaignevents-eventpage-dialog-link-not-available": "Le lien sera mis à disposition par {{PLURAL:$1|l’organisateur|les organisateurs}}.",
+	"campaignevents-eventpage-dialog-link-not-available": "Le lien sera mis à disposition par l’équipe d’organisation{{PLURAL:$1}}.",
 	"campaignevents-eventpage-dialog-link-register": "Inscrivez-vous pour voir le lien de l’événement.",
 	"campaignevents-eventpage-dialog-venue-not-available": "L’adresse du lieu d’accueil sera mise à disposition par {{PLURAL:$1|l’organisateur|les organisateurs}}.",
 	"campaignevents-eventpage-dialog-chat-label": "Rejoindre le groupe de discussion de l’événement",

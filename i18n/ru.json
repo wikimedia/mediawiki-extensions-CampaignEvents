@@ -7,7 +7,10 @@
 			"Deltaspace",
 			"UniCollab",
 			"Ajiniyaz",
-			"Mitte27"
+			"Mitte27",
+			"Dirruw'o",
+			"Stjn",
+			"Yurina Tatiana"
 		]
 	},
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
@@ -44,10 +47,15 @@
 	"campaignevents-rest-delete-already-deleted": "Регистрация на это мероприятие уже удалена.",
 	"campaignevents-role-creator": "{{GENDER:$1|создатель|создательница}}",
 	"campaignevents-role-organizer": "{{GENDER:$1|организатор}}",
+	"campaignevents-eventslist-column-date": "Дата",
 	"campaignevents-eventslist-delete-dialog-cancel": "Отмена",
+	"campaignevents-eventslist-delete-dialog-delete": "Удалить",
 	"campaignevents-delete-submit-btn": "Удалить",
 	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
 	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы.",
+	"campaignevents-eventpage-dialog-action-close": "Закрыть",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "Да",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Нет",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Отмена"
 }

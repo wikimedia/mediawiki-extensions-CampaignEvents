@@ -6,9 +6,15 @@
 			"Pyscowicz"
 		]
 	},
+	"campaignevents-edit-field-address": "Osoite",
 	"campaignevents-eventslist-delete-dialog-cancel": "Peruuta",
+	"campaignevents-eventslist-delete-dialog-delete": "Poista",
+	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> poistettu.",
+	"campaignevents-delete-submit-btn": "Poista",
 	"campaignevents-eventpage-btn-registration-closed": "Rekisteröityminen on päättynyt",
 	"campaignevents-eventpage-btn-event-ended": "Tapahtuma on päättynyt",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Kyllä",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ei",
+	"campaignevents-event-details-edit-button": "Muokkaa",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Peruuta"
 }
