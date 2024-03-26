@@ -28,14 +28,6 @@
 		"campaignevents-email-participants"
 	],
 	"config": {
-		"CampaignEventsDatabaseCluster": {
-			"description": "The database cluster to use. False means the cluster of the current wiki will be used. In order to use a shared central database for a wiki farm, you need to setup single sign-on for that wiki farm. See https://www.mediawiki.org/wiki/Manual:Central_ID for more information.",
-			"value": false
-		},
-		"CampaignEventsDatabaseName": {
-			"description": "The database to use. False means the database of the current wiki will be used. In order to use a shared central database for a wiki farm, you need to setup single sign-on for that wiki farm. See https://www.mediawiki.org/wiki/Manual:Central_ID for more information.",
-			"value": false
-		},
 		"CampaignEventsProgramsAndEventsDashboardInstance": {
 			"description": "Determines which instance of the P&E Dashboard should be used, if any. Supported values are 'production', 'staging', or null to not use the dashboard.",
 			"value": null
@@ -49,6 +41,7 @@
 			"value": true
 		}
 	},
+	"DatabaseVirtualDomains": [ "virtual-campaignevents" ],
 	"DefaultUserOptions": {
 		"echo-subscriptions-email-campaign-events-notification-registration": true,
 		"echo-subscriptions-web-campaign-events-notification-registration": false

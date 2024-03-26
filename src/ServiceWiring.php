@@ -50,9 +50,7 @@ use MediaWiki\MediaWikiServices;
 return [
 	CampaignsDatabaseHelper::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsDatabaseHelper {
 		return new CampaignsDatabaseHelper(
-			$services->getDBLoadBalancerFactory(),
-			$services->getMainConfig()->get( 'CampaignEventsDatabaseCluster' ),
-			$services->getMainConfig()->get( 'CampaignEventsDatabaseName' )
+			$services->getDBLoadBalancerFactory()
 		);
 	},
 	CampaignsPageFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFactory {
