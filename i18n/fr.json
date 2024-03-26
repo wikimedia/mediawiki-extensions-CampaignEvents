@@ -240,7 +240,7 @@
 	"campaignevents-event-details-edit-button": "Modifier",
 	"campaignevents-event-details-header-participants": "$1 participant{{PLURAL:$1||s}}",
 	"campaignevents-event-details-header-questions-help-label": "Informations sur la conservation des données",
-	"campaignevents-event-details-header-questions-help": "Les réponses individuelles des participants affichées dans le tableau seront compilées puis supprimées, soit 90 jours après leur soumission, soit à la fin de l’événement (la date la plus tôt des deux). Les réponses compilées seront disponible dans l’onglet « {{int:campaignevents-event-details-tab-stats}} » qui deviendra visible à la fin de l’évènement.",
+	"campaignevents-event-details-header-questions-help": "Les réponses individuelles des participants affichées dans le tableau seront compilées puis supprimées, soit 90 jours après leur soumission, soit à la fin de l’événement (la date au plus tôt des deux). Les réponses compilées seront disponible dans l’onglet « {{int:campaignevents-event-details-tab-stats}} » qui sera visible à la fin de l’événement.",
 	"campaignevents-event-details-participants-private": "$1 participant{{PLURAL:$1||s}} inscrit{{PLURAL:$1||s}} en privé.",
 	"campaignevents-event-details-dates": "du $1 au $4",
 	"campaignevents-event-details-timezone": "<strong>Fuseau horaire :</strong> $1",
