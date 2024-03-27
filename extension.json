@@ -135,17 +135,17 @@
 		"remoteExtPath": "CampaignEvents/resources"
 	},
 	"ResourceModules": {
-		"ext.campaignEvents.specialmyevents.styles": {
-			"localBasePath": "resources/ext.campaignEvents.specialmyevents.styles",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialmyevents.styles",
+		"ext.campaignEvents.specialeventslist.styles": {
+			"localBasePath": "resources/ext.campaignEvents.specialeventslist.styles",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialeventslist.styles",
 			"styles": [
 				"EventsPager.less",
 				"SpecialMyEvents.less"
 			]
 		},
-		"ext.campaignEvents.specialmyevents": {
-			"localBasePath": "resources/ext.campaignEvents.specialmyevents",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialmyevents",
+		"ext.campaignEvents.specialeventslist": {
+			"localBasePath": "resources/ext.campaignEvents.specialeventslist",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialeventslist",
 			"packageFiles": [
 				"index.js",
 				"ConfirmEventDeletionDialog.js",
