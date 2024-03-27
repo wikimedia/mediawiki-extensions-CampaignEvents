@@ -40,7 +40,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	): UnregisterParticipantCommand {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
-			$permChecker->method( 'userCanUnregisterForEvents' )->willReturn( true );
+			$permChecker->method( 'userCanCancelRegistration' )->willReturn( true );
 			$permChecker->method( 'userCanRemoveParticipants' )->willReturn( true );
 		}
 		if ( !$trackingToolEventWatcher ) {
@@ -71,7 +71,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testUnregisterIfAllowed__permissionError() {
 		$permChecker = $this->createMock( PermissionChecker::class );
-		$permChecker->expects( $this->once() )->method( 'userCanUnregisterForEvents' )->willReturn( false );
+		$permChecker->expects( $this->once() )->method( 'userCanCancelRegistration' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->unregisterIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
 			$this->createMock( ICampaignsAuthority::class )

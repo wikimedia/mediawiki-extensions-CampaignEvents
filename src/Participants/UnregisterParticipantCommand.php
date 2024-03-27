@@ -74,7 +74,7 @@ class UnregisterParticipantCommand {
 	 * @return PermissionStatus
 	 */
 	private function authorizeUnregistration( ICampaignsAuthority $performer ): PermissionStatus {
-		if ( !$this->permissionChecker->userCanUnregisterForEvents( $performer ) ) {
+		if ( !$this->permissionChecker->userCanCancelRegistration( $performer ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-unregister-not-allowed' );
 		}
 		return PermissionStatus::newGood();
