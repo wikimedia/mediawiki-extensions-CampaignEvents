@@ -11,7 +11,6 @@ interface CampaignEventsRegistrationFormLoadHook {
 	 *
 	 * @param array &$formFields
 	 * @param int|null $eventID
-	 * @return bool
 	 */
 	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID );
 }
