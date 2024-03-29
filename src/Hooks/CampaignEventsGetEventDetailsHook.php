@@ -25,5 +25,5 @@ interface CampaignEventsGetEventDetailsHook {
 		int $eventID,
 		bool $isOrganizer,
 		OutputPage $outputPage
-	);
+	): void;
 }

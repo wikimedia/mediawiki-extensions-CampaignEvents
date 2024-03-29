@@ -12,5 +12,5 @@ interface CampaignEventsRegistrationFormLoadHook {
 	 * @param array &$formFields
 	 * @param int|null $eventID
 	 */
-	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID );
+	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID ): void;
 }
