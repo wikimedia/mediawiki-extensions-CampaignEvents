@@ -13,7 +13,8 @@
 			"Obscaeris",
 			"Thibaut120094",
 			"VIGNERON",
-			"Wnagxsi"
+			"Wnagxsi",
+			"Urhixidur"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -75,7 +76,7 @@
 	"campaignevents-rest-edit-page-nonlocal": "Les inscriptions à cet événement ont été activées sur le wiki suivant et doivent être modifiées ici : $1.",
 	"campaignevents-edit-page-nonlocal": "Veuillez [$1 modifier ce formulaire d’inscription] sur le wiki où il a été activé : $2.",
 	"campaignevents-edit-error-deleted": "Les inscriptions pour cet événement sont fermées.",
-	"campaignevents-edit-need-central-account": "Vous avez besoin d’un compte utilisateur global pour activer ou modifier les inscriptions aux événements.",
+	"campaignevents-edit-need-central-account": "Vous avez besoin d’un compte utilisateur global pour activer ou modifier l'inscription aux événements.",
 	"campaignevents-error-page-already-registered": "La page d’événement donnée a déjà à une inscription associée.",
 	"campaignevents-error-page-already-registered-deleted": "Vous ne pouvez pas terminer l’action car le formulaire d’inscription à l'événement a été supprimé de cette page d’événement.",
 	"campaignevents-edit-not-allowed-registration": "Vous n’êtes pas autorisé{{GENDER:||e}} à modifier le formulaire d’inscription à cet événement.",
