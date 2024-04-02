@@ -6,26 +6,19 @@ namespace MediaWiki\Extension\CampaignEvents\Database;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use Wikimedia\Rdbms\LBFactory;
 
 class CampaignsDatabaseHelper {
 	public const SERVICE_NAME = 'CampaignEventsDatabaseHelper';
 
 	private LBFactory $lbFactory;
-	/** @var false|string */
-	private $dbCluster;
-	/** @var false|string */
-	private $dbName;
 
 	/**
 	 * @param LBFactory $lbFactory
-	 * @param string|false $dbCluster
-	 * @param string|false $dbName
 	 */
-	public function __construct( LBFactory $lbFactory, $dbCluster, $dbName ) {
+	public function __construct( LBFactory $lbFactory ) {
 		$this->lbFactory = $lbFactory;
-		$this->dbCluster = $dbCluster;
-		$this->dbName = $dbName;
 	}
 
 	/**
@@ -33,10 +26,10 @@ class CampaignsDatabaseHelper {
 	 * @return ICampaignsDatabase
 	 */
 	public function getDBConnection( int $type ): ICampaignsDatabase {
-		$lb = $this->dbCluster === false
-			? $this->lbFactory->getMainLB( $this->dbName )
-			: $this->lbFactory->getExternalLB( $this->dbCluster );
-		return new MWDatabaseProxy( $lb->getConnection( $type, [], $this->dbName ) );
+		$conn = $type === DB_REPLICA
+			? $this->lbFactory->getReplicaDatabase( Utils::VIRTUAL_DB_DOMAIN )
+			: $this->lbFactory->getPrimaryDatabase( Utils::VIRTUAL_DB_DOMAIN );
+		return new MWDatabaseProxy( $conn );
 	}
 
 	/**

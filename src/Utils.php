@@ -18,6 +18,8 @@ use MediaWiki\WikiMap\WikiMap;
  * Simple utility methods.
  */
 class Utils {
+	public const VIRTUAL_DB_DOMAIN = 'virtual-campaignevents';
+
 	/**
 	 * @param string|false $wikiID
 	 * @return string
