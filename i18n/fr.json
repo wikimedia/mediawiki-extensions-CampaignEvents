@@ -13,7 +13,8 @@
 			"ߒߓߋ߫ ߝߏߝߣߊ߫",
 			"BlueCamille",
 			"Wnagxsi",
-			"MacOS Weed"
+			"MacOS Weed",
+			"Urhixidur"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -339,7 +340,7 @@
 	"campaignevents-email-participants-yes": "Oui",
 	"campaignevents-email-participants-no": "Non",
 	"campaignevents-event-details-time-registered": "Horodatage d’inscription",
-	"campaignevents-event-details-can-receive-email": "Peut recevoir des e-mails",
+	"campaignevents-event-details-can-receive-email": "Peut recevoir des courriels",
 	"campaignevents-register-questions-label-title": "Vos informations",
 	"campaignevents-register-questions-label-subtitle": "Cette information sera partagée uniquement avec les organisateurs de l’événement.",
 	"campaignevents-register-question-gender": "Quelle est votre identité de genre ? (facultatif)",
