@@ -1,7 +1,7 @@
 Purpose
 ======================
 
-This directory contains wrappers around commonly-used MediaWiki entities like UserIdentity, Database, and PageIdentity.
+This directory contains wrappers around commonly-used MediaWiki entities like UserIdentity and PageIdentity.
 
 These wrappers serve two purposes: first, they help with DI and error handling when some legacy MediaWiki classes are involved (like `Linker`).
 Second, and most importantly: the WMF Campaigns team originally considered putting the backend code outside MediaWiki, and only have

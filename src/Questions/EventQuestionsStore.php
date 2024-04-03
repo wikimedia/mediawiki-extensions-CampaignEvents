@@ -30,6 +30,7 @@ class EventQuestionsStore {
 			'ce_event_questions',
 			'*',
 			[ 'ceeq_event_id' => $eventID ],
+			__METHOD__,
 			[ 'FOR UPDATE' ]
 		);
 		$currentQuestionIDs = [];
@@ -42,7 +43,7 @@ class EventQuestionsStore {
 			}
 		}
 		if ( $rowIDsToRemove ) {
-			$dbw->delete( 'ce_event_questions', [ 'ceeq_id' => $rowIDsToRemove ] );
+			$dbw->delete( 'ce_event_questions', [ 'ceeq_id' => $rowIDsToRemove ], __METHOD__ );
 		}
 
 		$questionsToAdd = array_diff( $questionIDs, $currentQuestionIDs );
@@ -54,7 +55,7 @@ class EventQuestionsStore {
 					'ceeq_question_id' => $questionID
 				];
 			}
-			$dbw->insert( 'ce_event_questions', $newRows );
+			$dbw->insert( 'ce_event_questions', $newRows, __METHOD__ );
 		}
 	}
 
@@ -74,7 +75,8 @@ class EventQuestionsStore {
 		$res = $dbr->select(
 			'ce_event_questions',
 			'*',
-			[ 'ceeq_event_id' => $eventIDs ]
+			[ 'ceeq_event_id' => $eventIDs ],
+			__METHOD__
 		);
 		$questionsByEvent = array_fill_keys( $eventIDs, [] );
 		foreach ( $res as $row ) {

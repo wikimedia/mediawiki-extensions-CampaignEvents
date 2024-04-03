@@ -6,11 +6,11 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Organizers;
 
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiUnitTestCase;
 use ReflectionClass;
+use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -20,7 +20,7 @@ use Wikimedia\TestingAccessWrapper;
  */
 class OrganizersStoreTest extends MediaWikiUnitTestCase {
 	private function getOrganizersStore(): OrganizersStore {
-		$db = $this->createMock( ICampaignsDatabase::class );
+		$db = $this->createMock( IDatabase::class );
 		$db->method( 'selectRow' )->willReturn( (object)[
 			'ceo_id' => 1,
 			'ceo_user_id' => 1,

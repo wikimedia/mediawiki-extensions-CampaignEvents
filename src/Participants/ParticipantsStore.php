@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use Wikimedia\Assert\Assert;
+use Wikimedia\Rdbms\IDatabase;
 
 class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
@@ -65,7 +66,7 @@ class ParticipantsStore {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$userID = $participant->getCentralID();
-		$dbw->startAtomic();
+		$dbw->startAtomic( __METHOD__ );
 		$previousRow = $dbw->selectRow(
 			'ce_participants',
 			'*',
@@ -73,6 +74,7 @@ class ParticipantsStore {
 				'cep_event_id' => $eventID,
 				'cep_user_id' => $userID
 			],
+			__METHOD__,
 			[ 'FOR UPDATE' ]
 		);
 
@@ -90,7 +92,8 @@ class ParticipantsStore {
 					'cep_unregistered_at' => null,
 					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
 					'cep_aggregation_timestamp' => null,
-				]
+				],
+				__METHOD__
 			);
 			$modified = self::MODIFIED_REGISTRATION;
 		} elseif ( $previousRow->cep_unregistered_at !== null ) {
@@ -104,7 +107,8 @@ class ParticipantsStore {
 					'cep_registered_at' => $curTimestamp,
 					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
 				],
-				[ 'cep_id' => $previousRow->cep_id ]
+				[ 'cep_id' => $previousRow->cep_id ],
+				__METHOD__
 			);
 			$modified = self::MODIFIED_REGISTRATION;
 		} elseif ( (bool)$previousRow->cep_private !== $private ) {
@@ -116,7 +120,8 @@ class ParticipantsStore {
 					'cep_private' => $private,
 					'cep_first_answer_timestamp' => $previousRow->cep_first_answer_timestamp ?? $updatedFirstAnsTs,
 				],
-				[ 'cep_id' => $previousRow->cep_id ]
+				[ 'cep_id' => $previousRow->cep_id ],
+				__METHOD__
 			);
 			$modified = self::MODIFIED_VISIBILITY;
 		} elseif ( $previousRow->cep_first_answer_timestamp === null && $updatedFirstAnsTs !== null ) {
@@ -126,7 +131,8 @@ class ParticipantsStore {
 				[
 					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
 				],
-				[ 'cep_id' => $previousRow->cep_id ]
+				[ 'cep_id' => $previousRow->cep_id ],
+				__METHOD__
 			);
 			$modified = self::MODIFIED_ANSWERS;
 		} else {
@@ -139,7 +145,7 @@ class ParticipantsStore {
 		if ( $modified !== self::MODIFIED_REGISTRATION && $answersModified ) {
 			$modified |= self::MODIFIED_ANSWERS;
 		}
-		$dbw->endAtomic();
+		$dbw->endAtomic( __METHOD__ );
 		return $modified;
 	}
 
@@ -189,7 +195,7 @@ class ParticipantsStore {
 			if ( !$invertUsers ) {
 				$where['cep_user_id'] = $userIDs;
 			} else {
-				$where[] = 'cep_user_id NOT IN (' . $dbw->makeCommaList( $userIDs ) . ')';
+				$where[] = 'cep_user_id NOT IN (' . $dbw->makeList( $userIDs, IDatabase::LIST_COMMA ) . ')';
 			}
 		}
 
@@ -199,7 +205,8 @@ class ParticipantsStore {
 				'cep_unregistered_at' => $dbw->timestamp(),
 				'cep_first_answer_timestamp' => null,
 			],
-			$where
+			$where,
+			__METHOD__
 		);
 		$updatedParticipants = $dbw->affectedRows();
 		$this->answersStore->deleteAllAnswers( $eventID, $users, $invertUsers );
@@ -250,7 +257,7 @@ class ParticipantsStore {
 			$where['cep_user_id'] = $userIdFilter;
 		}
 		if ( is_array( $excludeUsers ) && $excludeUsers ) {
-			$where[] = 'cep_user_id NOT IN (' . $dbr->makeCommaList( $excludeUsers ) . ')';
+			$where[] = 'cep_user_id NOT IN (' . $dbr->makeList( $excludeUsers, IDatabase::LIST_COMMA ) . ')';
 		}
 		$opts = [ 'ORDER BY' => 'cep_id' ] + $dbOptions;
 		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter
@@ -265,6 +272,7 @@ class ParticipantsStore {
 			'ce_participants',
 			'*',
 			$where,
+			__METHOD__,
 			$opts
 		);
 
@@ -331,10 +339,11 @@ class ParticipantsStore {
 		$row = $dbr->selectRow(
 			'ce_participants',
 			'*',
-			$conditions
+			$conditions,
+			__METHOD__
 		);
 
-		if ( $row === null ) {
+		if ( $row === false ) {
 			return null;
 		}
 
@@ -368,7 +377,8 @@ class ParticipantsStore {
 		$ret = $dbr->selectField(
 			'ce_participants',
 			'COUNT(*)',
-			$where
+			$where,
+			__METHOD__
 		);
 		// Intentionally casting false to int if no rows were found.
 		return (int)$ret;

@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Questions;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use Wikimedia\Rdbms\IDatabase;
 
 class ParticipantAnswersStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantAnswersStore';
@@ -36,6 +37,7 @@ class ParticipantAnswersStore {
 				'ceqa_event_id' => $eventID,
 				'ceqa_user_id' => $userID,
 			],
+			__METHOD__,
 			[ 'FOR UPDATE' ]
 		);
 		$newQuestionIDs = array_map( static fn ( Answer $a ): int => $a->getQuestionDBID(), $answers );
@@ -52,7 +54,7 @@ class ParticipantAnswersStore {
 			}
 		}
 		if ( $rowIDsToRemove ) {
-			$dbw->delete( 'ce_question_answers', [ 'ceqa_id' => $rowIDsToRemove ] );
+			$dbw->delete( 'ce_question_answers', [ 'ceqa_id' => $rowIDsToRemove ], __METHOD__ );
 		}
 
 		$newRows = [];
@@ -87,7 +89,8 @@ class ParticipantAnswersStore {
 			[
 				'ceqa_answer_option = ' . $dbw->buildExcludedValue( 'ceqa_answer_option' ),
 				'ceqa_answer_text = ' . $dbw->buildExcludedValue( 'ceqa_answer_text' ),
-			]
+			],
+			__METHOD__
 		);
 		return true;
 	}
@@ -116,12 +119,12 @@ class ParticipantAnswersStore {
 		if ( $participants !== null ) {
 			$userIDs = array_map( static fn ( CentralUser $u ): int => $u->getCentralID(), $participants );
 			if ( $invertSelection ) {
-				$where[] = 'ceqa_user_id NOT IN (' . $dbw->makeCommaList( $userIDs ) . ')';
+				$where[] = 'ceqa_user_id NOT IN (' . $dbw->makeList( $userIDs, IDatabase::LIST_COMMA ) . ')';
 			} else {
 				$where['ceqa_user_id'] = $userIDs;
 			}
 		}
-		$dbw->delete( 'ce_question_answers', $where );
+		$dbw->delete( 'ce_question_answers', $where, __METHOD__ );
 	}
 
 	/**
@@ -154,7 +157,8 @@ class ParticipantAnswersStore {
 			[
 				'ceqa_event_id' => $eventID,
 				'ceqa_user_id' => $participantIDs
-			]
+			],
+			__METHOD__
 		);
 		$answersByUser = array_fill_keys( $participantIDs, [] );
 		foreach ( $res as $row ) {
@@ -179,8 +183,9 @@ class ParticipantAnswersStore {
 		$res = $dbr->selectRow(
 			'ce_question_answers',
 			'1',
-			[ 'ceqa_event_id' => $eventID ]
+			[ 'ceqa_event_id' => $eventID ],
+			__METHOD__
 		);
-		return $res !== null;
+		return $res !== false;
 	}
 }

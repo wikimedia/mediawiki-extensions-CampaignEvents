@@ -14,7 +14,6 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
@@ -22,6 +21,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use RuntimeException;
 use stdClass;
+use Wikimedia\Rdbms\IDatabase;
 
 /**
  * @note Some pieces of code involving addresses may seem unnecessarily complex, but this is necessary because
@@ -86,7 +86,8 @@ class EventStore implements IEventStore, IEventLookup {
 		$eventRow = $dbr->selectRow(
 			'campaign_events',
 			'*',
-			[ 'event_id' => $eventID ]
+			[ 'event_id' => $eventID ],
+			__METHOD__
 		);
 		if ( !$eventRow ) {
 			throw new EventNotFoundException( "Event $eventID not found" );
@@ -119,6 +120,7 @@ class EventStore implements IEventStore, IEventLookup {
 				'event_page_title' => $page->getDBkey(),
 				'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
 			],
+			__METHOD__,
 			$dbOptions
 		);
 		if ( !$eventRow ) {
@@ -138,15 +140,16 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param ICampaignsDatabase $db
+	 * @param IDatabase $db
 	 * @param int $eventID
 	 * @return stdClass|null
 	 */
-	private function getEventAddressRow( ICampaignsDatabase $db, int $eventID ): ?stdClass {
+	private function getEventAddressRow( IDatabase $db, int $eventID ): ?stdClass {
 		$addressRows = $db->select(
 			[ 'ce_address', 'ce_event_address' ],
 			'*',
 			[],
+			__METHOD__,
 			[],
 			[
 				'ce_event_address' => [ 'INNER JOIN', [ 'ceea_address=cea_id', 'ceea_event' => $eventID ] ]
@@ -167,15 +170,16 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param ICampaignsDatabase $db
+	 * @param IDatabase $db
 	 * @param int $eventID
 	 * @return stdClass|null
 	 */
-	private function getEventTrackingToolRow( ICampaignsDatabase $db, int $eventID ): ?stdClass {
+	private function getEventTrackingToolRow( IDatabase $db, int $eventID ): ?stdClass {
 		$trackingToolsRows = $db->select(
 			'ce_tracking_tools',
 			'*',
-			[ 'cett_event' => $eventID ]
+			[ 'cett_event' => $eventID ],
+			__METHOD__
 		);
 
 		// TODO Add support for multiple tracking tools per event
@@ -205,6 +209,7 @@ class EventStore implements IEventStore, IEventLookup {
 			[ 'campaign_events', 'ce_organizers' ],
 			'*',
 			[ 'ceo_user_id' => $organizerID ],
+			__METHOD__,
 			$opts,
 			[
 				'ce_organizers' => [
@@ -237,6 +242,7 @@ class EventStore implements IEventStore, IEventLookup {
 				'cep_user_id' => $participantID,
 				'cep_unregistered_at' => null,
 			],
+			__METHOD__,
 			$opts,
 			[
 				'ce_participants' => [
@@ -254,11 +260,11 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param ICampaignsDatabase $db
+	 * @param IDatabase $db
 	 * @param iterable<stdClass> $eventRows
 	 * @return ExistingEventRegistration[]
 	 */
-	private function newEventsFromDBRows( ICampaignsDatabase $db, iterable $eventRows ): array {
+	private function newEventsFromDBRows( IDatabase $db, iterable $eventRows ): array {
 		$eventIDs = [];
 		foreach ( $eventRows as $eventRow ) {
 			$eventIDs[] = (int)$eventRow->event_id;
@@ -282,15 +288,16 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param ICampaignsDatabase $db
+	 * @param IDatabase $db
 	 * @param int[] $eventIDs
 	 * @return array<int,stdClass> Maps event IDs to the corresponding address row
 	 */
-	private function getAddressRowsForEvents( ICampaignsDatabase $db, array $eventIDs ): array {
+	private function getAddressRowsForEvents( IDatabase $db, array $eventIDs ): array {
 		$addressRows = $db->select(
 			[ 'ce_address', 'ce_event_address' ],
 			'*',
 			[],
+			__METHOD__,
 			[],
 			[
 				'ce_event_address' => [ 'INNER JOIN', [ 'ceea_address=cea_id', 'ceea_event' => $eventIDs ] ]
@@ -310,18 +317,19 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param ICampaignsDatabase $db
+	 * @param IDatabase $db
 	 * @param int[] $eventIDs
 	 * @return array<int,stdClass> Maps event IDs to the corresponding tracking tool row
 	 */
 	private function getTrackingToolsRowsForEvents(
-		ICampaignsDatabase $db,
+		IDatabase $db,
 		array $eventIDs
 	): array {
 		$trackingToolsRows = $db->select(
 			'ce_tracking_tools',
 			'*',
-			[ 'cett_event' => $eventIDs ]
+			[ 'cett_event' => $eventIDs ],
+			__METHOD__
 		);
 
 		$trackingToolsRowsByEvent = [];
@@ -450,19 +458,19 @@ class EventStore implements IEventStore, IEventLookup {
 		];
 
 		$eventID = $event->getID();
-		$dbw->startAtomic();
+		$dbw->startAtomic( __METHOD__ );
 		if ( $eventID === null ) {
-			$dbw->insert( 'campaign_events', $newRow );
+			$dbw->insert( 'campaign_events', $newRow, __METHOD__ );
 			$eventID = $dbw->insertId();
 		} else {
-			$dbw->update( 'campaign_events', $newRow, [ 'event_id' => $eventID ] );
+			$dbw->update( 'campaign_events', $newRow, [ 'event_id' => $eventID ], __METHOD__ );
 		}
 
 		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
 		$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
 		$this->eventQuestionsStore->replaceEventQuestions( $eventID, $event->getParticipantQuestions() );
 
-		$dbw->endAtomic();
+		$dbw->endAtomic( __METHOD__ );
 
 		unset( $this->cache[$eventID] );
 
@@ -470,14 +478,14 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param ICampaignsDatabase $dbw
+	 * @param IDatabase $dbw
 	 * @param string|null $meetingAddress
 	 * @param string|null $meetingCountry
 	 * @param int $eventID
 	 * @return void
 	 */
 	private function updateStoredAddresses(
-		ICampaignsDatabase $dbw,
+		IDatabase $dbw,
 		?string $meetingAddress,
 		?string $meetingCountry,
 		int $eventID
@@ -485,7 +493,9 @@ class EventStore implements IEventStore, IEventLookup {
 		$where = [ 'ceea_event' => $eventID ];
 		if ( $meetingAddress || $meetingCountry ) {
 			$meetingAddress .= " \n " . $meetingCountry;
-			$where[] = 'cea_full_address NOT IN (' . $dbw->makeCommaList( [ $meetingAddress ] ) . ' ) ';
+			$where[] = 'cea_full_address NOT IN (' .
+				$dbw->makeList( [ $meetingAddress ], IDatabase::LIST_COMMA ) .
+			' ) ';
 		}
 
 		$dbw->deleteJoin(
@@ -493,7 +503,8 @@ class EventStore implements IEventStore, IEventLookup {
 			'ce_address',
 			'ceea_address',
 			'cea_id',
-			$where
+			$where,
+			__METHOD__
 		);
 
 		if ( $meetingAddress ) {
@@ -504,6 +515,7 @@ class EventStore implements IEventStore, IEventLookup {
 					'ceea_event' => $eventID,
 					'ceea_address' => $addressID
 				],
+				__METHOD__,
 				[ 'IGNORE' ]
 			);
 		}
@@ -520,7 +532,8 @@ class EventStore implements IEventStore, IEventLookup {
 			[
 				'event_id' => $registration->getID(),
 				'event_deleted_at' => null
-			]
+			],
+			__METHOD__
 		);
 		unset( $this->cache[$registration->getID()] );
 		return $dbw->affectedRows() > 0;

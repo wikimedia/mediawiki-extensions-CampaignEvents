@@ -4,21 +4,19 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Maintenance;
 
-use LogicException;
 use Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Utils\MWTimestamp;
 use RuntimeException;
+use Wikimedia\Rdbms\IDatabase;
 
 /**
  * Maintenance script that aggregates and deletes participant answers after a predefined amount of time.
  */
 class AggregateParticipantAnswers extends Maintenance {
-	private ?ICampaignsDatabase $dbw;
-	private ?ICampaignsDatabase $dbr;
+	private ?IDatabase $dbw;
+	private ?IDatabase $dbr;
 
 	private int $curTimeUnix;
 	private int $cutoffTimeUnix;
@@ -76,20 +74,15 @@ class AggregateParticipantAnswers extends Maintenance {
 		$this->cutoffTimeUnix = $this->curTimeUnix - EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
 		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );
-		$dbw = $dbHelper->getDBConnection( DB_PRIMARY );
-		// Enforce the MW-specific class so we can use beginTransaction/commitTransaction.
-		if ( !$dbw instanceof MWDatabaseProxy ) {
-			throw new LogicException( 'Unexpected ICampaignsDatabase implementation.' );
-		}
-		$this->dbw = $dbw;
+		$this->dbw = $dbHelper->getDBConnection( DB_PRIMARY );
 		$batchSize = $this->getBatchSize();
 
-		$maxRowID = (int)$this->dbr->selectField( 'ce_question_answers', 'MAX(ceqa_id)' );
+		$maxRowID = (int)$this->dbr->selectField( 'ce_question_answers', 'MAX(ceqa_id)', '', __METHOD__ );
 		if ( $maxRowID === 0 ) {
 			$this->output( "Table is empty.\n" );
 			return;
 		}
-		$minRowID = (int)$this->dbr->selectField( 'ce_question_answers', 'MIN(ceqa_id)' );
+		$minRowID = (int)$this->dbr->selectField( 'ce_question_answers', 'MIN(ceqa_id)', '', __METHOD__ );
 
 		// Wrap all the changes into a transaction to make sure we don't leave incomplete updates behind. This is also
 		// needed to avoid edge cases like:
@@ -98,9 +91,9 @@ class AggregateParticipantAnswers extends Maintenance {
 		// Because of the PII nature of participant answers, we want to try and avoid these edge cases as much as
 		// possible, especially those that could inadvertently leak PII.
 		$transactionName = __METHOD__;
-		$this->beginTransaction( $dbw->getMWDatabase(), $transactionName );
-		$this->rollbackTransactionFn = function () use ( $dbw, $transactionName ) {
-			$this->rollbackTransaction( $dbw->getMWDatabase(), $transactionName );
+		$this->beginTransaction( $this->dbw, $transactionName );
+		$this->rollbackTransactionFn = function () use ( $transactionName ) {
+			$this->rollbackTransaction( $this->dbw, $transactionName );
 		};
 		$prevID = $minRowID - 1;
 		$curID = $prevID + $batchSize;
@@ -112,7 +105,7 @@ class AggregateParticipantAnswers extends Maintenance {
 		} while ( $prevID < $maxRowID );
 
 		$this->updateAggregationTimestamps();
-		$this->commitTransaction( $dbw->getMWDatabase(), $transactionName );
+		$this->commitTransaction( $this->dbw, $transactionName );
 
 		$this->output( "Done.\n" );
 	}
@@ -126,6 +119,7 @@ class AggregateParticipantAnswers extends Maintenance {
 				'ceqa_id > ' . $startID,
 				'ceqa_id <= ' . $endID,
 			],
+			__METHOD__,
 			[ 'FOR UPDATE' ]
 		);
 
@@ -183,12 +177,13 @@ class AggregateParticipantAnswers extends Maintenance {
 				[
 					'ceqag_answers_amount = ceqag_answers_amount + ' .
 						$this->dbw->buildExcludedValue( 'ceqag_answers_amount' )
-				]
+				],
+				__METHOD__
 			);
 		}
 
 		if ( $deleteRowIDs ) {
-			$this->dbw->delete( 'ce_question_answers', [ 'ceqa_id' => $deleteRowIDs ] );
+			$this->dbw->delete( 'ce_question_answers', [ 'ceqa_id' => $deleteRowIDs ], __METHOD__ );
 		}
 
 		$this->output( "Batch $startID-$endID done.\n" );
@@ -222,6 +217,7 @@ class AggregateParticipantAnswers extends Maintenance {
 				'campaign_events',
 				[ 'event_id', 'event_end_utc' ],
 				[ 'event_id' => $eventsWithNoInfo ],
+				__METHOD__,
 				[ 'FOR UPDATE' ]
 			);
 			foreach ( $eventRows as $row ) {
@@ -257,7 +253,8 @@ class AggregateParticipantAnswers extends Maintenance {
 			[
 				'cep_event_id' => array_keys( $missingUsersByEventMap ),
 				'cep_user_id' => array_keys( $allMissingUsersMap ),
-			]
+			],
+			__METHOD__
 		);
 
 		foreach ( $userRows as $row ) {
@@ -296,7 +293,8 @@ class AggregateParticipantAnswers extends Maintenance {
 			$this->dbw->update(
 				'ce_participants',
 				[ 'cep_aggregation_timestamp' => $dbTimestamp ],
-				[ 'cep_id' => $idBatch ]
+				[ 'cep_id' => $idBatch ],
+				__METHOD__
 			);
 		}
 	}
