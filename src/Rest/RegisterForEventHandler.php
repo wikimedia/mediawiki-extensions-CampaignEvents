@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -63,6 +64,15 @@ class RegisterForEventHandler extends SimpleHandler {
 		$privateFlag = $body['is_private'] ?
 			RegisterParticipantCommand::REGISTRATION_PRIVATE :
 			RegisterParticipantCommand::REGISTRATION_PUBLIC;
+
+		$wikiID = $eventRegistration->getPage()->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-register-for-event-nonlocal-error-message' )
+					->params( $wikiID ),
+				400
+			);
+		}
 		try {
 			$answers = $this->eventQuestionsRegistry->extractUserAnswersAPI(
 				$body['answers'] ?? [],
