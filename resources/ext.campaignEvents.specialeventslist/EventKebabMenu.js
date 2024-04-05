@@ -4,7 +4,7 @@
 	var ConfirmEventDeletionDialog = require( './ConfirmEventDeletionDialog.js' );
 
 	/**
-	 * Widgets for the kebab menu used in EventsPager.
+	 * Widgets for the kebab menu used in EventsTablePager.
 	 *
 	 * @extends OO.ui.ButtonMenuSelectWidget
 	 *

@@ -8,8 +8,8 @@ use HTMLForm;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
-use MediaWiki\Extension\CampaignEvents\Pager\EventsPager;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Pager\EventsTablePager;
 use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\SpecialPage;
 
@@ -47,7 +47,7 @@ class SpecialMyEvents extends SpecialPage {
 	private function showFormAndEvents(): void {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
-		$status = $request->getVal( 'wpStatus', EventsPager::STATUS_ANY );
+		$status = $request->getVal( 'wpStatus', EventsTablePager::STATUS_ANY );
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
@@ -75,9 +75,9 @@ class SpecialMyEvents extends SpecialPage {
 				'type' => 'select',
 				'label-message' => 'campaignevents-myevents-label-status',
 				'options-messages' => [
-					'campaignevents-myevents-field-status-any' => EventsPager::STATUS_ANY,
-					'campaignevents-myevents-field-status-open' => EventsPager::STATUS_OPEN,
-					'campaignevents-myevents-field-status-closed' => EventsPager::STATUS_CLOSED
+					'campaignevents-myevents-field-status-any' => EventsTablePager::STATUS_ANY,
+					'campaignevents-myevents-field-status-open' => EventsTablePager::STATUS_OPEN,
+					'campaignevents-myevents-field-status-closed' => EventsTablePager::STATUS_CLOSED
 				],
 				'default' => $status,
 				'cssclass' => 'ext-campaignevents-myevents-filter-field'

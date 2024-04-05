@@ -24,7 +24,7 @@ use OOUI\ButtonWidget;
 use stdClass;
 use Wikimedia\Rdbms\IResultWrapper;
 
-class EventsPager extends TablePager {
+class EventsTablePager extends TablePager {
 	public const STATUS_ANY = 'any';
 	public const STATUS_OPEN = 'open';
 	public const STATUS_CLOSED = 'closed';
