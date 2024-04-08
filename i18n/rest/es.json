@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Eulalio",
 			"MarcoAurelio"
 		]
 	},
@@ -15,5 +16,6 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "No tienes permiso para ver la lista de participantes que se inscribieron para este evento de forma privada.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe ser una cadena de nombres de usuario, y no puede estar vacía",
 	"campaignevents-rest-get-registration-info-notparticipant": "No participas en este evento.",
-	"campaignevents-rest-register-invalid-answer": "Respuesta no válida a la pregunta $1"
+	"campaignevents-rest-register-invalid-answer": "Respuesta no válida a la pregunta $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor complete su registro de suceso en $1, la wiki donde se creó el suceso."
 }

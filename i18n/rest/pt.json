@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"B3rnas",
 			"Hamilton Abreu"
 		]
 	},
@@ -15,5 +16,6 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Não está autorizado a ver os participantes que se inscreveram de forma privada neste evento.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> tem de ser uma matriz de nomes de utilizador e não pode estar vazia",
 	"campaignevents-rest-get-registration-info-notparticipant": "Não está a participar neste evento.",
-	"campaignevents-rest-register-invalid-answer": "Resposta inválida à pergunta $1"
+	"campaignevents-rest-register-invalid-answer": "Resposta inválida à pergunta $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor, complete o registro do seu evento em $1, a wiki onde o evento foi criado."
 }

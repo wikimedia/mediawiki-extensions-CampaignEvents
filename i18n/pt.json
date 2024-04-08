@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"B3rnas",
 			"Hamilton Abreu"
 		]
 	},
@@ -410,5 +411,6 @@
 	"campaignevents-participant-question-no-response": "Respondeu \"Não\"",
 	"campaignevents-warning-change-event-end-date-past": "Se alterar a data de fim para uma data passada, o evento será encerrado e receberá um resumo das respostas dos participantes. Esta operação não pode ser desfeita. Isto só se aplica se os participantes tiverem dado respostas às perguntas para participantes.",
 	"campaignevents-event-details-participants-individual-data-deleted": "As respostas dos participantes individuais já foram apagadas e as respostas agregadas estão disponíveis em [$1 {{int:campaignevents-event-details-tab-stats}}].",
-	"campaignevents-event-register-for-event-title": "Inscrever-se no evento $1"
+	"campaignevents-event-register-for-event-title": "Inscrever-se no evento $1",
+	"campaignevents-delete-registration-page-nonlocal": "Por favor, [$1 apague o registo do seu evento em $2], a wiki onde o evento foi criado."
 }

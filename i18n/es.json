@@ -425,5 +425,6 @@
 	"campaignevents-participant-question-have-been-aggregated": "Las respuestas de est{{GENDER:$1|e|a}} participante han sido agregadas y eliminadas",
 	"campaignevents-participant-question-no-response": "Ninguna respuesta",
 	"campaignevents-event-register-for-event-title": "Regístrate por $1",
-	"campaignevents-register-page-nonlocal": "Por favor [$1 complete su registro de suceso en $2], la wiki donde se creó el suceso."
+	"campaignevents-register-page-nonlocal": "Por favor [$1 complete su registro de suceso en $2], la wiki donde se creó el suceso.",
+	"campaignevents-delete-registration-page-nonlocal": "Por favor [$1 elimina tu registro de suceso en $2], el wiki donde se creó el mismo."
 }
