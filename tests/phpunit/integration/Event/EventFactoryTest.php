@@ -462,6 +462,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'Valid, HTTP' => [ "http://example.org", true ],
 			'Valid, HTTPS' => [ "https://example.org", true ],
 			'Valid, relative protocol' => [ "//example.org", true ],
+			'Valid, diacritics url ' => [ "https://testchat.com/Iñtërnâtiônàlizætiønمثال字ッ", true ],
 		];
 	}
 

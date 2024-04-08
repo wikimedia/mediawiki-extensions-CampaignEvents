@@ -408,12 +408,39 @@ class EventFactory {
 		// TODO There's a lot of space for improvement here, e.g., expand the list of allowed protocols, and
 		// possibly avoid having to do all the normalization and checks ourselves.
 		$allowedSchemes = [ 'http', 'https' ];
-		if ( !preg_match( '/^((' . implode( '|', $allowedSchemes ) . '):)?\/\//i', $data ) ) {
+
+		// Add the HTTPS protocol explicitly, since FILTER_VALIDATE_URL wants a scheme.
+		$urlToCheck = preg_match( '/^\/\/.*/', $data ) ? "https:$data" : $data;
+		$urlParts = parse_url( $urlToCheck );
+
+		// Validate scheme, host presence, and allowed schemes
+		if (
+			$urlParts === false || !isset( $urlParts[ 'scheme' ] ) ||
+			!isset( $urlParts[ 'host' ] ) ||
+			!in_array( strtolower( $urlParts[ 'scheme' ] ), $allowedSchemes, true )
+		) {
 			return false;
 		}
-		// Add the HTTPS protocol explicitly, since FILTER_VALIDATE_URL wants a scheme.
-		$urlToCheck = str_starts_with( $data, '//' ) ? "https:$data" : $data;
-		return filter_var( $urlToCheck, FILTER_VALIDATE_URL ) !== false;
+
+		// Convert URL host from IDN to ASCII (Punycode)
+		$hostASCII = idn_to_ascii( $urlParts[ 'host' ], IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46 );
+		if ( $hostASCII === false ) {
+			return false;
+		}
+
+		// Rebuild the URL with the ASCII host for validation
+		$urlToCheckASCII = $urlParts[ 'scheme' ] . "://" . $hostASCII;
+		if ( isset( $urlParts[ 'path' ] ) ) {
+			$urlToCheckASCII .= '/' . urlencode( $urlParts[ 'path' ] );
+		}
+		if ( isset( $urlParts[ 'query' ] ) ) {
+			$urlToCheckASCII .= '?' . urlencode( $urlParts[ 'query' ] );
+		}
+		if ( isset( $urlParts[ 'fragment' ] ) ) {
+			$urlToCheckASCII .= '#' . urlencode( $urlParts[ 'fragment' ] );
+		}
+
+		return filter_var( $urlToCheckASCII, FILTER_VALIDATE_URL ) !== false;
 	}
 
 	/**
