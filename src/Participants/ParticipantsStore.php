@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
-use DBAccessObjectUtils;
 use IDBAccessObject;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
@@ -243,38 +242,42 @@ class ParticipantsStore {
 		if ( $usernameFilter === '' ) {
 			throw new InvalidArgumentException( "The username filter cannot be an empty string" );
 		}
-		[ $dbIndex, $dbOptions ] = DBAccessObjectUtils::getDBOptions( $readFlags );
-		$dbr = $this->dbHelper->getDBConnection( $dbIndex );
 
-		$where = [ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ];
+		if ( ( $readFlags & IDBAccessObject::READ_LATEST ) === IDBAccessObject::READ_LATEST ) {
+			$db = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		} else {
+			$db = $this->dbHelper->getDBConnection( DB_REPLICA );
+		}
+
+		$queryBuilder = $db->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_participants' )
+			->where( [ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ] );
 		if ( $lastParticipantID !== null ) {
-			$where[] = 'cep_id > ' . $dbr->addQuotes( $lastParticipantID );
+			$queryBuilder->andWhere( 'cep_id > ' . $db->addQuotes( $lastParticipantID ) );
 		}
 		if ( !$showPrivate ) {
-			$where['cep_private'] = false;
+			$queryBuilder->andWhere( [ 'cep_private' => false ] );
 		}
 		if ( is_array( $userIdFilter ) && $userIdFilter ) {
-			$where['cep_user_id'] = $userIdFilter;
+			$queryBuilder->andWhere( [ 'cep_user_id' => $userIdFilter ] );
 		}
 		if ( is_array( $excludeUsers ) && $excludeUsers ) {
-			$where[] = 'cep_user_id NOT IN (' . $dbr->makeList( $excludeUsers, IDatabase::LIST_COMMA ) . ')';
+			$queryBuilder->andWhere(
+				'cep_user_id NOT IN (' . $db->makeList( $excludeUsers, IDatabase::LIST_COMMA ) . ')'
+			);
 		}
-		$opts = [ 'ORDER BY' => 'cep_id' ] + $dbOptions;
+		$queryBuilder->orderBy( 'cep_id' )
+			->recency( $readFlags );
 		// XXX If a username filter is specified, we run an unfiltered query without limit and then filter
 		// and limit the results later. This is a bit hacky but there seems to be no super-clean alternative, since
 		// we can't join whatever table is used for central users and storing the username is non-trivial due to
 		// users being renamed. See T308574 and T312645.
 		if ( $limit !== null && $usernameFilter === null ) {
-			$opts[ 'LIMIT' ] = $limit;
+			$queryBuilder->limit( $limit );
 		}
 
-		$rows = $dbr->select(
-			'ce_participants',
-			'*',
-			$where,
-			__METHOD__,
-			$opts
-		);
+		$rows = $queryBuilder->caller( __METHOD__ )->fetchResultSet();
 
 		$centralIDsMap = [];
 		$centralUsersByID = [];

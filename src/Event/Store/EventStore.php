@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use DateTimeZone;
-use DBAccessObjectUtils;
 use IDBAccessObject;
 use InvalidArgumentException;
 use LogicException;
@@ -109,20 +108,23 @@ class EventStore implements IEventStore, IEventLookup {
 		ICampaignsPage $page,
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ExistingEventRegistration {
-		[ $dbIndex, $dbOptions ] = DBAccessObjectUtils::getDBOptions( $readFlags );
-		$db = $this->dbHelper->getDBConnection( $dbIndex );
+		if ( ( $readFlags & IDBAccessObject::READ_LATEST ) === IDBAccessObject::READ_LATEST ) {
+			$db = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		} else {
+			$db = $this->dbHelper->getDBConnection( DB_REPLICA );
+		}
 
-		$eventRow = $db->selectRow(
-			'campaign_events',
-			'*',
-			[
+		$eventRow = $db->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'campaign_events' )
+			->where( [
 				'event_page_namespace' => $page->getNamespace(),
 				'event_page_title' => $page->getDBkey(),
 				'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
-			],
-			__METHOD__,
-			$dbOptions
-		);
+			] )
+			->caller( __METHOD__ )
+			->recency( $readFlags )
+			->fetchRow();
 		if ( !$eventRow ) {
 			throw new EventNotFoundException(
 				"No event found for the given page (ns={$page->getNamespace()}, " .
