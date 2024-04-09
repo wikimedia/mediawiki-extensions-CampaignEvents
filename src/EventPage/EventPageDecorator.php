@@ -342,7 +342,7 @@ class EventPageDecorator {
 
 		return [
 			'questions' => $questionsData,
-			'answers' => $this->eventQuestionsRegistry->formatAnswersForAPI( $curAnswers )
+			'answers' => $this->eventQuestionsRegistry->formatAnswersForAPI( $curAnswers, $enabledQuestions )
 		];
 	}
 

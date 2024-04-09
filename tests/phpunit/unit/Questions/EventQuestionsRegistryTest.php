@@ -395,7 +395,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideFormatAnswersForAPI
 	 */
 	public function testFormatAnswersForAPI( array $answers, array $expected ) {
-		$this->assertSame( $expected, $this->getRegistry()->formatAnswersForAPI( $answers ) );
+		$this->assertSame( $expected, $this->getRegistry()->formatAnswersForAPI( $answers, range( 1, 5 ) ) );
 	}
 
 	public function provideFormatAnswersForAPI(): Generator {
@@ -543,7 +543,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		$this->assertEquals(
 			$answers,
 			$registry->extractUserAnswersAPI(
-				$registry->formatAnswersForAPI( $answers ),
+				$registry->formatAnswersForAPI( $answers, [ 1, 2, 5 ] ),
 				[ 1, 2, 5 ]
 			)
 		);
