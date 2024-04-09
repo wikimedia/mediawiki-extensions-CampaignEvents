@@ -6,7 +6,7 @@ const assert = require( 'assert' ),
 	Util = require( 'wdio-mediawiki/Util' ),
 	event = Util.getTestString( 'Event:Test EnableEventRegistration' );
 
-describe( 'Enable Event Registration', function () {
+describe( 'Enable Event Registration @daily', function () {
 
 	before( async function () {
 		await LoginPage.loginAdmin();

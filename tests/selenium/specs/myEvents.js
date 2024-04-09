@@ -8,7 +8,7 @@ const assert = require( 'assert' ),
 	Util = require( 'wdio-mediawiki/Util' ),
 	event = Util.getTestString( 'Event:Test MyEvents' );
 
-describe( 'MyEvents', function () {
+describe( 'MyEvents @daily', function () {
 
 	before( async function () {
 		// Create a new event to make sure that there's at least an (open) event
