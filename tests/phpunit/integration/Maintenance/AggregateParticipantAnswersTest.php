@@ -192,6 +192,21 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'ceqa_answer_option' => 3,
 				'ceqa_answer_text' => 'e4u3q2',
 			],
+			// Event 5, user 1 (removed questions)
+			[
+				'ceqa_event_id' => 5,
+				'ceqa_user_id' => 1,
+				'ceqa_question_id' => 1,
+				'ceqa_answer_option' => 1,
+				'ceqa_answer_text' => null,
+			],
+			[
+				'ceqa_event_id' => 5,
+				'ceqa_user_id' => 1,
+				'ceqa_question_id' => 2,
+				'ceqa_answer_option' => 2,
+				'ceqa_answer_text' => null,
+			],
 		];
 		$dbw->insert( 'ce_question_answers', $answerRows );
 
@@ -268,6 +283,12 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'cep_user_id' => 3,
 				'cep_first_answer_timestamp' => $tsAfterCutoff,
 			] + $baseParticipantRow,
+			// Event 5
+			[
+				'cep_event_id' => 5,
+				'cep_user_id' => 1,
+				'cep_first_answer_timestamp' => $tsAfterCutoff,
+			] + $baseParticipantRow,
 		];
 		$dbw->insert( 'ce_participants', $participantRows );
 
@@ -312,18 +333,42 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'event_id' => 4,
 				'event_end_utc' => $futureEventTS,
 			] ),
+			$makeEventRow( [
+				'event_id' => 5,
+				'event_end_utc' => $endedEventTS,
+			] ),
 		];
 		$dbw->insert( 'campaign_events', $eventRows );
 
 		$previousAggregateRows = [
+			// Partial aggregates for event 1
 			[
 				'ceqag_event_id' => 1,
 				'ceqag_question_id' => 1,
 				'ceqag_answer_option' => 1,
 				'ceqag_answers_amount' => 2,
-			]
+			],
+			// Old aggregates for event 5
+			[
+				'ceqag_event_id' => 5,
+				'ceqag_question_id' => 1,
+				'ceqag_answer_option' => 1,
+				'ceqag_answers_amount' => 2,
+			],
 		];
 		$dbw->insert( 'ce_question_aggregation', $previousAggregateRows );
+
+		$eventQuestionRows = [];
+		// Event 5 intentionally has no questions enabled.
+		foreach ( [ 1, 2, 3, 4 ] as $event ) {
+			foreach ( range( 1, 5 ) as $question ) {
+				$eventQuestionRows[] = [
+					'ceeq_event_id' => $event,
+					'ceeq_question_id' => $question
+				];
+			}
+		}
+		$dbw->insert( 'ce_event_questions', $eventQuestionRows );
 	}
 
 	public function testExecute() {
@@ -390,6 +435,7 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 					2 => 1,
 				],
 			],
+			// Event 5 has no questions, and therefore should have no aggregates
 		];
 
 		$aggregateRows = $dbr->select( 'ce_question_aggregation', '*' );
@@ -431,6 +477,9 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				1 => $justAggregatedTS,
 				2 => null,
 				3 => null,
+			],
+			5 => [
+				1 => $justAggregatedTS,
 			],
 		];
 		$participantRows = $dbr->select( 'ce_participants', '*' );

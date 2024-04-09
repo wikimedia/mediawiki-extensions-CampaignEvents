@@ -68,6 +68,15 @@ class AggregateParticipantAnswers extends Maintenance {
 	 * @inheritDoc
 	 */
 	public function execute(): void {
+		$this->aggregateAnswers();
+		$this->purgeAggregates();
+	}
+
+	/**
+	 * Main method that handles the aggregation of individual answers (updates the aggregates and the aggregation
+	 * timestamps, and deletes the individual answers).
+	 */
+	private function aggregateAnswers(): void {
 		$this->output( "Aggregating old participant answers...\n" );
 
 		$this->curTimeUnix = (int)MWTimestamp::now( TS_UNIX );
@@ -296,6 +305,92 @@ class AggregateParticipantAnswers extends Maintenance {
 				[ 'cep_id' => $idBatch ],
 				__METHOD__
 			);
+		}
+	}
+
+	/**
+	 * Purge redundant aggregated data: for each event that has ended, delete any aggregated answers to questions that
+	 * are no longer enabled for that event.
+	 * Note that the aggregation itself ({@see self::processBatch()}) uses `ce_question_answers` as its data source,
+	 * and does not make any distinction between old answers and finished events; therefore, it cannot handle the
+	 * deletion of redundant aggregates as part of its execution: if a certain event has redundant aggregates but
+	 * nothing to aggregate, it won't be processed at all.
+	 * Also, note that the DB schema does not store whether the "final" aggregation (i.e., the first aggregation after
+	 * the event end date) has occurred for a given event. Therefore, we need to check all the events here.
+	 */
+	private function purgeAggregates(): void {
+		$this->output( "Purging old aggregated data...\n" );
+
+		$maxEventID = (int)$this->dbr->selectField( 'campaign_events', 'MAX(event_id)' );
+		if ( $maxEventID === 0 ) {
+			$this->output( "No events.\n" );
+			return;
+		}
+
+		$batchSize = $this->getBatchSize();
+		$startID = 0;
+		$endID = $batchSize;
+		$curDBTimestamp = $this->dbr->timestamp( $this->curTimeUnix );
+		do {
+			// Note, we may already have partial data in $this->eventEndTimes. However, since it's partial, we'll need
+			// to query the DB again. Excluding events for which we already have data is probably useless, as it would
+			// introduce complexity and give little to nothing in return.
+			$eventsToCheck = $this->dbr->selectFieldValues(
+				'campaign_events',
+				'event_id',
+				[
+					'event_id > ' . $startID,
+					'event_id <= ' . $endID,
+					'event_end_utc < ' . $this->dbr->addQuotes( $curDBTimestamp ),
+				]
+			);
+			if ( $eventsToCheck ) {
+				$eventsToCheck = array_map( 'intval', $eventsToCheck );
+				$this->purgeAggregatesForEvents( $eventsToCheck );
+			}
+
+			$startID = $endID;
+			$endID += $batchSize;
+		} while ( $startID < $maxEventID );
+
+		$this->output( "Done.\n" );
+	}
+
+	/**
+	 * @param int[] $eventIDs
+	 */
+	private function purgeAggregatesForEvents( array $eventIDs ): void {
+		$eventQuestionRows = $this->dbr->select(
+			'ce_event_questions',
+			[ 'ceeq_event_id', 'ceeq_question_id' ],
+			[
+				'ceeq_event_id' => $eventIDs
+			]
+		);
+		$questionsByEvent = array_fill_keys( $eventIDs, [] );
+		foreach ( $eventQuestionRows as $eventQuestionRow ) {
+			$eventID = (int)$eventQuestionRow->ceeq_event_id;
+			$questionsByEvent[$eventID][] = (int)$eventQuestionRow->ceeq_question_id;
+		}
+
+		$aggregatedAnswersRows = $this->dbr->select(
+			'ce_question_aggregation',
+			[ 'ceqag_id', 'ceqag_event_id', 'ceqag_question_id' ],
+			[
+				'ceqag_event_id' => $eventIDs
+			]
+		);
+		$deleteRowIDs = [];
+		foreach ( $aggregatedAnswersRows as $aggregatedAnswersRow ) {
+			$eventID = (int)$aggregatedAnswersRow->ceqag_event_id;
+			$questionID = (int)$aggregatedAnswersRow->ceqag_question_id;
+			if ( !in_array( $questionID, $questionsByEvent[$eventID], true ) ) {
+				$deleteRowIDs[] = (int)$aggregatedAnswersRow->ceqag_id;
+			}
+		}
+
+		if ( $deleteRowIDs ) {
+			$this->dbw->delete( 'ce_question_aggregation', [ 'ceqag_id' => $deleteRowIDs ] );
 		}
 	}
 }
