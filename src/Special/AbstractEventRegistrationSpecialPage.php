@@ -441,8 +441,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'type' => 'multiselect',
 			'options-messages' => $questionOptions,
 			'default' => $this->event ? $this->event->getParticipantQuestions() : [],
-			// For now, these cannot be changed. See T354880.
-			'disabled' => $this->event !== null,
+			// Edits are not allowed once an event has ended, see T354880
+			'disabled' => $this->event && $this->event->isPast(),
 			'section' => self::PARTICIPANT_QUESTIONS_SECTION,
 		];
 
@@ -568,8 +568,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$trackingToolEventID = null;
 		}
 
-		if ( $this->event ) {
-			// Edits are currently not allowed. See T354880.
+		if ( $this->event && $this->event->isPast() ) {
+			// Edits are not allowed once an event has ended, see T354880
 			$participantQuestionIDs = $this->event->getParticipantQuestions();
 		} else {
 			$participantQuestionIDs = array_map( 'intval', $data['ParticipantQuestions'] );
