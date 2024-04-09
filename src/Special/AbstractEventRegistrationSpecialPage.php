@@ -157,6 +157,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'wgCampaignEventsEventHasAnswers' => $this->event &&
 				$this->editEventCommand->eventHasAnswersOrAggregates( $this->eventID ),
 		] );
+		// By default, OOUI is only enabled upon showing the form. But since we're using MessageWidget directly in a
+		// couple places, we need to manually enable OOUI now (T354384).
+		$this->getOutput()->enableOOUI();
 
 		parent::execute( $par );
 		// Note: this has to be added after parent::execute, which is where the validation runs.
@@ -401,68 +404,69 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		];
 
 		$this->hookRunner->onCampaignEventsRegistrationFormLoad( $formFields, $this->eventID );
-		if ( !$this->event || $this->event->getParticipantQuestions() ) {
-			$formFields['ParticipantQuestionsInfo'] = $this->getParticipantQuestionsInfoField();
-			$clickwrapAccepted = false;
-			if ( $this->event ) {
-				$organizer = $this->organizersStore->getEventOrganizer(
-					$this->eventID,
-					$this->centralUserLookup->newFromAuthority( $this->performer )
-				);
-				$clickwrapAccepted = $organizer && $organizer->getClickwrapAcceptance();
-			}
-			$formFields['ClickWrapCheckbox'] = [
-				'type' => 'check',
-				'default' => $clickwrapAccepted,
-				'disabled' => $clickwrapAccepted,
-				'label-message' => 'campaignevents-edit-field-clickwrap-checkbox-label',
-				'section' => self::PARTICIPANT_QUESTIONS_SECTION,
-			];
-		}
+		$formFields = array_merge( $formFields, $this->getParticipantQuestionsFields() );
 
 		return $formFields;
 	}
 
-	private function getParticipantQuestionsInfoField(): array {
-		$text = Html::element( 'p', [], $this->msg( 'campaignevents-edit-form-questions-intro' )->text() ) .
+	/**
+	 * Return the form fields for the participant questions section.
+	 *
+	 * @return array
+	 */
+	private function getParticipantQuestionsFields(): array {
+		$fields = [];
+
+		$introText = Html::element( 'p', [], $this->msg( 'campaignevents-edit-form-questions-intro' )->text() ) .
 			Html::element( 'p', [], $this->msg( 'campaignevents-edit-form-questions-explanation' )->text() );
-		$questionLabels = $this->eventQuestionsRegistry->getQuestionLabelsForOrganizerForm();
-		$sections = [];
-		if ( $questionLabels['pii'] ) {
-			$sections['campaignevents-edit-form-questions-pii-label'] = $questionLabels['pii'];
-		}
-		if ( $questionLabels['non-pii'] ) {
-			$sections['campaignevents-edit-form-questions-non-pii-label'] = $questionLabels['non-pii'];
-		}
-
-		foreach ( $sections as $sectionHeader => $sectionQuestions ) {
-			// Note: here we're skipping some levels for the headings, which we shouldn't do. But we also shouldn't
-			// put headers inside the <label> generated for the "info" field. Nor paragraphs. There doesn't seem to be
-			// a better way though.
-			$text .= Html::element(
-				'h4',
-				// HACK: Use inline style to avoid creating a new RL module.
-				[ 'style' => 'color: #54595d' ],
-				$this->msg( $sectionHeader )->text()
-			);
-			$questionList = '';
-			foreach ( $sectionQuestions as $labelMsg ) {
-				$questionList .= Html::element( 'li', [], $this->msg( $labelMsg )->text() );
-			}
-			$text .= Html::rawElement( 'ul', [], $questionList );
-		}
-		$text .= Html::element(
-			'p',
-			[],
-			$this->msg( 'campaignevents-edit-field-clickwrap-checkbox-pretext' )->text(),
-		);
-
-		return [
+		$fields['ParticipantQuestionsInfo'] = [
 			'type' => 'info',
-			'default' => $text,
+			'default' => $introText,
 			'raw' => true,
 			'section' => self::PARTICIPANT_QUESTIONS_SECTION,
 		];
+
+		$questionLabels = $this->eventQuestionsRegistry->getQuestionLabelsForOrganizerForm();
+		$questionOptions = [];
+		if ( $questionLabels['non-pii'] ) {
+			$questionOptions['campaignevents-edit-form-questions-non-pii-label'] = $questionLabels['non-pii'];
+		}
+		if ( $questionLabels['pii'] ) {
+			$questionOptions['campaignevents-edit-form-questions-pii-label'] = $questionLabels['pii'];
+		}
+
+		// XXX: The section headers of this field look identical to the form section headers and might be confusing.
+		// See T358490.
+		$fields['ParticipantQuestions'] = [
+			'type' => 'multiselect',
+			'options-messages' => $questionOptions,
+			'default' => $this->event ? $this->event->getParticipantQuestions() : [],
+			// For now, these cannot be changed. See T354880.
+			'disabled' => $this->event !== null,
+			'section' => self::PARTICIPANT_QUESTIONS_SECTION,
+		];
+
+		$piiNotice = new MessageWidget( [
+			'type' => 'notice',
+			'inline' => true,
+			'label' => ( new Tag( 'span' ) )
+				->appendContent( new HtmlSnippet(
+					$this->msg( 'campaignevents-edit-form-questions-pii-notice' )->parse()
+				) )
+				// XXX HACK: Override the font weight with inline style to avoid creating a new RL module. T351818
+				->setAttributes( [ 'style' => 'font-weight: normal' ] )
+		] );
+		$fields['ParticipantQuestionsPIINotice'] = [
+			'type' => 'info',
+			'default' => $piiNotice->toString(),
+			'raw' => true,
+			'section' => self::PARTICIPANT_QUESTIONS_SECTION,
+			// XXX: Ideally we would use a `hide-if` here, but that doesn't work with `multiselect` (T358060).
+			// Or we could implement it manually in JS, except it still won't work because the multiselect cannot
+			// be infused (T358682).
+		];
+
+		return $fields;
 	}
 
 	/**
@@ -508,9 +512,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		if ( $footerHasContent ) {
-			// By default, OOUI is only enabled upon showing the form. Since we're using MessageWidget directly here,
-			// we need to manually enable OOUI now (T354384).
-			$this->getOutput()->enableOOUI();
 			$form->addFooterHtml( new FieldLayout( new MessageWidget( [
 				'type' => 'notice',
 				'inline' => true,
@@ -567,20 +568,21 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$trackingToolEventID = null;
 		}
 
-		$participantQuestionNames = [];
 		if ( $this->event ) {
-			$currentQuestionIDs = $this->event->getParticipantQuestions();
-			foreach ( $currentQuestionIDs as $questionID ) {
-				try {
-					$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
-				} catch ( UnknownQuestionException $e ) {
-					// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
-					// that case.
-					throw new LogicException( 'Unknown question in the database', 0, $e );
-				}
-			}
+			// Edits are currently not allowed. See T354880.
+			$participantQuestionIDs = $this->event->getParticipantQuestions();
 		} else {
-			$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
+			$participantQuestionIDs = array_map( 'intval', $data['ParticipantQuestions'] );
+		}
+		$participantQuestionNames = [];
+		foreach ( $participantQuestionIDs as $questionID ) {
+			try {
+				$participantQuestionNames[] = $this->eventQuestionsRegistry->dbIDToName( $questionID );
+			} catch ( UnknownQuestionException $e ) {
+				// TODO This could presumably happen if a question is removed. Maybe we should just ignore it in
+				// that case.
+				throw new LogicException( 'Unknown question in the database', 0, $e );
+			}
 		}
 
 		try {
@@ -620,7 +622,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$this->performer,
 			$organizerUsernames
 		);
-		if ( $res->isOK() === true ) {
+		if ( $res->isOK() ) {
 			if ( !empty( $data[ 'ClickWrapCheckbox' ] ) ) {
 				$this->organizersStore->updateClickwrapAcceptance(
 					$res->getValue(),

@@ -496,16 +496,18 @@ class EventQuestionsRegistry {
 
 	/**
 	 * Returns message keys to use as labels for each question in the form shown to organizers when they enable
-	 * or edit an event registation. Labels for PII and non-PII questions are provided separately.
+	 * or edit an event registation. Labels for PII and non-PII questions are provided separately. Question labels
+	 * are mapped to question IDs.
 	 *
 	 * @return string[][]
-	 * @phan-return array{pii:string[],non-pii:string[]}
+	 * @phan-return array{pii:array<string,int>,non-pii:array<string,int>}
 	 */
 	public function getQuestionLabelsForOrganizerForm(): array {
 		$ret = [ 'pii' => [], 'non-pii' => [] ];
 		foreach ( $this->getQuestions() as $question ) {
 			$key = $question['pii'] ? 'pii' : 'non-pii';
-			$ret[$key][] = $question['organizer-label-message'];
+			$questionMsg = $question['organizer-label-message'];
+			$ret[$key][$questionMsg] = $question['db-id'];
 		}
 		return $ret;
 	}
