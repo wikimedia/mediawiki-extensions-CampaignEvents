@@ -312,7 +312,9 @@ class GenerateInvitationList extends Maintenance {
 		$this->output( "==Scoring debug info==\n" );
 		$rankedUsers = [];
 		foreach ( $deltasByUser as $username => $byteDeltas ) {
-			$score = $this->getUserScore( $username, $byteDeltas, $userDataByWiki[$username] );
+			// Make sure the username is a string to satisfy the type hint. PHP will have transformed it to an integer
+			// if the username is numeric (when used as array key).
+			$score = $this->getUserScore( (string)$username, $byteDeltas, $userDataByWiki[$username] );
 			$rankedUsers[$username] = $score;
 		}
 		arsort( $rankedUsers );
