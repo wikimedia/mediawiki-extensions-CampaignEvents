@@ -15,5 +15,5 @@ interface CampaignEventsRegistrationFormSubmitHook {
 	public function onCampaignEventsRegistrationFormSubmit(
 		array $formFields,
 		int $eventID
-	);
+	): void;
 }
