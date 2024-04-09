@@ -14,5 +14,6 @@
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> muss ein Array von Benutzernamen sein und darf nicht leer sein",
 	"campaignevents-rest-get-registration-info-notparticipant": "Du nimmst nicht an dieser Veranstaltung teil.",
 	"campaignevents-rest-register-invalid-answer": "Ungültige Antwort auf die Frage $1",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "Bitte vervollständige deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde."
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Bitte vervollständige deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Bitte lösche deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde."
 }
