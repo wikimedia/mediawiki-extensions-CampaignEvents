@@ -8,7 +8,9 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
@@ -66,7 +68,9 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		return new RegisterForEventHandler(
 			$eventLookup,
 			$registerCommand,
-			$eventQuestionsRegistry ?? $this->createMock( EventQuestionsRegistry::class )
+			$eventQuestionsRegistry ?? $this->createMock( EventQuestionsRegistry::class ),
+			$this->createMock( ParticipantsStore::class ),
+			$this->createMock( CampaignsCentralUserLookup::class )
 		);
 	}
 

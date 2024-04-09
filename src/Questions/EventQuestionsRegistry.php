@@ -641,4 +641,21 @@ class EventQuestionsRegistry {
 		}
 		return $nonPIIquestionIDs;
 	}
+
+	/**
+	 * Given a list of questions currently enabled for an event and a list of all answers a user has ever provided for
+	 * the event, merge the two to get a list of questions that the user should see when registering, or when editing
+	 * their registration information.
+	 *
+	 * @param int[] $enabledQuestions
+	 * @param Answer[] $userAnswers
+	 * @return int[]
+	 */
+	public static function getParticipantQuestionsToShow( array $enabledQuestions, array $userAnswers ): array {
+		$answeredQuestionIDs = array_map( static fn ( Answer $a ) => $a->getQuestionDBID(), $userAnswers );
+		$allQuestions = array_unique( array_merge( $enabledQuestions, $answeredQuestionIDs ) );
+		// Sorting not strictly necessary, just for debugging etc.
+		sort( $allQuestions );
+		return $allQuestions;
+	}
 }

@@ -669,4 +669,32 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 			$nonPIIQuestionLabels
 		);
 	}
+
+	/**
+	 * @param int[] $enabledQuestions
+	 * @param Answer[] $userAnswers
+	 * @param int[] $expected
+	 * @covers ::getParticipantQuestionsToShow
+	 * @dataProvider provideParticipantQuestionsToShow
+	 */
+	public function testGetParticipantQuestionsToShow( array $enabledQuestions, array $userAnswers, array $expected ) {
+		$this->assertSame(
+			$expected,
+			EventQuestionsRegistry::getParticipantQuestionsToShow( $enabledQuestions, $userAnswers )
+		);
+	}
+
+	public static function provideParticipantQuestionsToShow() {
+		$ans = static function ( int $id ): Answer {
+			return new Answer( $id, 42, null );
+		};
+		return [
+			'Nothing enabled, no answers' => [ [], [], [] ],
+			'Some questions enabled, no answers' => [ [ 1, 2, 3 ], [], [ 1, 2, 3 ] ],
+			'Nothing enabled, some answers' => [ [], [ $ans( 1 ), $ans( 2 ), $ans( 3 ) ], [ 1, 2, 3 ] ],
+			'Enabled same as answers' => [ [ 1, 2, 3 ], [ $ans( 1 ), $ans( 2 ), $ans( 3 ) ], [ 1, 2, 3 ] ],
+			'Some of enabled have no answer' => [ [ 1, 2, 3 ], [ $ans( 1 ), $ans( 2 ) ], [ 1, 2, 3 ] ],
+			'Some answered are not enabled' => [ [ 1 ], [ $ans( 1 ), $ans( 2 ), $ans( 3 ) ], [ 1, 2, 3 ] ],
+		];
+	}
 }

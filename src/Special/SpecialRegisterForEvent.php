@@ -42,6 +42,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private ?bool $modifiedData;
 	/** @var bool|null Whether the user is editing their registration, as opposed to registering for the first time */
 	private ?bool $isEdit;
+	/** @var array|null IDs of participant questions to show in the form */
+	private ?array $participantQuestionsToShow;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -88,6 +90,12 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		}
 
 		$this->isEdit = $this->curParticipantData || $this->getRequest()->wasPosted();
+		$enabledQuestions = $this->event->getParticipantQuestions();
+		$curAnswers = $this->curParticipantData ? $this->curParticipantData->getAnswers() : [];
+		$this->participantQuestionsToShow = EventQuestionsRegistry::getParticipantQuestionsToShow(
+			$enabledQuestions,
+			$curAnswers
+		);
 		$this->getOutput()->setPageTitleMsg(
 			$this->msg( 'campaignevents-event-register-for-event-title', $this->event->getName() )
 		);
@@ -152,17 +160,19 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				'raw' => true,
 				'section' => self::QUESTIONS_SECTION_NAME,
 			];
+		} elseif ( !$this->participantQuestionsToShow ) {
+			return;
 		} else {
-			$enabledQuestions = $this->event->getParticipantQuestions();
-			if ( !$enabledQuestions ) {
-				// No need to show anything.
-				return;
-			}
 			$curAnswers = $this->curParticipantData ? $this->curParticipantData->getAnswers() : [];
 			$questionFields = $this->eventQuestionsRegistry->getQuestionsForHTMLForm(
-				$enabledQuestions,
+				$this->participantQuestionsToShow,
 				$curAnswers
 			);
+			// XXX: This is affected by the following bug. Say we have an answer for question 1, and the organizer has
+			// removed that question. We would show it here initially, which is correct. But then, if the user blanks
+			// out the field and submit, it will still be shown after submission, even though it will no longer be
+			// possible to submit a different value. This seems non-trivial to fix because this code runs before
+			// onSubmit(), i.e. before we know what the updated user answers will be after form submission.
 			$questionFields = array_map(
 				static fn ( $fieldDescriptor ) =>
 					[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
@@ -207,7 +217,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			$form->setSubmitTextMsg( 'campaignevents-register-confirmation-btn' );
 		}
 
-		if ( $this->event->getParticipantQuestions() ) {
+		if ( $this->participantQuestionsToShow ) {
 			$questionsHeader = Html::rawElement(
 				'div',
 				[ 'class' => 'ext-campaignevents-participant-questions-info-subtitle' ],
@@ -228,7 +238,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		try {
 			$answers = $this->eventQuestionsRegistry->extractUserAnswersHTMLForm(
 				$data,
-				$this->event->getParticipantQuestions()
+				$this->participantQuestionsToShow
 			);
 		} catch ( InvalidAnswerDataException $e ) {
 			// Should never happen unless the user messes up with the form, so don't bother making this too pretty.
