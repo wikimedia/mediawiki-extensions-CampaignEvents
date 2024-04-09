@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use stdClass;
+use Wikimedia\Rdbms\IDatabase;
 
 class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
@@ -53,6 +54,7 @@ class OrganizersStore {
 			'ce_organizers',
 			'*',
 			$where,
+			__METHOD__,
 			$opts
 		);
 
@@ -85,6 +87,7 @@ class OrganizersStore {
 			'ce_organizers',
 			'*',
 			$where,
+			__METHOD__
 		);
 
 		if ( $row ) {
@@ -132,7 +135,8 @@ class OrganizersStore {
 				'ceo_event_id' => $eventID,
 				'ceo_user_id' => $user->getCentralID(),
 				'ceo_deleted_at' => null,
-			]
+			],
+			__METHOD__
 		);
 
 		if ( $row ) {
@@ -154,7 +158,8 @@ class OrganizersStore {
 			[
 				'ceo_event_id' => $eventID,
 				'ceo_deleted_at' => null,
-			]
+			],
+			__METHOD__
 		);
 		// Intentionally casting false to int if no rows were found.
 		return (int)$ret;
@@ -162,14 +167,18 @@ class OrganizersStore {
 
 	/**
 	 * @param int $eventID
+	 * @param CentralUser $organizer
 	 * @return void
 	 */
 	public function updateClickwrapAcceptance( int $eventID, CentralUser $organizer ) {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$dbw->update( 'ce_organizers',
 			[ 'ceo_agreement_timestamp' => $dbw->timestamp() ],
-			[ 'ceo_event_id' => $eventID,
-			  'ceo_user_id' => $organizer->getCentralID() ],
+			[
+				'ceo_event_id' => $eventID,
+				'ceo_user_id' => $organizer->getCentralID()
+			],
+			__METHOD__
 		);
 	}
 
@@ -212,7 +221,8 @@ class OrganizersStore {
 			[
 				'ceo_deleted_at' => null,
 				'ceo_roles = ' . $dbw->buildExcludedValue( 'ceo_roles' ),
-			]
+			],
+			__METHOD__
 		);
 	}
 
@@ -239,9 +249,10 @@ class OrganizersStore {
 			],
 			[
 				'ceo_event_id' => $eventID,
-				'ceo_user_id NOT IN (' . $dbw->makeCommaList( $userIDsToNotRemove ) . ')',
+				'ceo_user_id NOT IN (' . $dbw->makeList( $userIDsToNotRemove, IDatabase::LIST_COMMA ) . ')',
 				'ceo_deleted_at' => null,
 			],
+			__METHOD__
 		);
 	}
 }

@@ -13,7 +13,6 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWDatabaseProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
@@ -71,11 +70,7 @@ class EventsPager extends TablePager {
 		string $status
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
-		$dbWrapper = $databaseHelper->getDBConnection( DB_REPLICA );
-		if ( !$dbWrapper instanceof MWDatabaseProxy ) {
-			throw new LogicException( "Wrong DB class?!" );
-		}
-		$this->mDb = $dbWrapper->getMWDatabase();
+		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
 		parent::__construct( $context, $linkRenderer );
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->pageURLResolver = $pageURLResolver;

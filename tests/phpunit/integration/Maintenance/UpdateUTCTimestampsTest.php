@@ -91,7 +91,7 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 			'event_end_utc' => $dbw->timestamp( '20220815200000' ),
 		] );
 
-		$dbw->insert( 'campaign_events', $rows );
+		$dbw->insert( 'campaign_events', $rows, __METHOD__ );
 		$this->oldRows = $rows;
 	}
 
@@ -100,7 +100,7 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 		$this->expectOutputRegex( '/~3 updated/' );
 		$this->maintenance->execute();
 		$dbr = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_REPLICA );
-		$res = $dbr->select( 'campaign_events', '*' );
+		$res = $dbr->select( 'campaign_events', '*', '', __METHOD__ );
 		$this->assertCount( 4, $res, 'Total number of rows' );
 		$this->assertNotNull( $this->oldRows, 'oldRows should be set by this point' );
 		$changedRowsCount = 0;

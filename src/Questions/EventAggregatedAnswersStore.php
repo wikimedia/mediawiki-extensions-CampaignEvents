@@ -37,6 +37,7 @@ class EventAggregatedAnswersStore {
 			[
 				'ceqag_event_id' => $eventID
 			],
+			__METHOD__
 		);
 
 		$eventAggregatedAnswers = new EventAggregatedAnswers();
@@ -61,8 +62,9 @@ class EventAggregatedAnswersStore {
 			'ce_question_aggregation',
 			'ceqag_id',
 			[ 'ceqag_event_id' => $eventID ],
+			__METHOD__,
 			[ 'LIMIT' => 1 ]
 		);
-		return $res !== null;
+		return $res !== false;
 	}
 }

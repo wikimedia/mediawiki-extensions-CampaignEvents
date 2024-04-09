@@ -17,7 +17,7 @@ use DateTimeZone;
 use Exception;
 use Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
+use Wikimedia\Rdbms\IDatabase;
 
 /**
  * This script can be used to update UTC timestamps stored in the campaign_events table to make sure
@@ -27,8 +27,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
  * UTC timestamp on save anyway, and so we don't have to do it here.
  */
 class UpdateUTCTimestamps extends Maintenance {
-	private ?ICampaignsDatabase $dbw;
-	private ?ICampaignsDatabase $dbr;
+	private ?IDatabase $dbw;
+	private ?IDatabase $dbr;
 	private ?DateTimeZone $utcTimezone;
 
 	public function __construct() {
@@ -58,7 +58,7 @@ class UpdateUTCTimestamps extends Maintenance {
 		$updateTimezones = $this->getOption( 'timezone' );
 		$this->validateTimezones( $updateTimezones );
 
-		$maxRowID = (int)$this->dbr->selectField( 'campaign_events', 'MAX(event_id)' );
+		$maxRowID = (int)$this->dbr->selectField( 'campaign_events', 'MAX(event_id)', '', __METHOD__ );
 		if ( $maxRowID === 0 ) {
 			$this->output( "Table is empty.\n" );
 			return;
@@ -106,7 +106,7 @@ class UpdateUTCTimestamps extends Maintenance {
 		if ( $updateTimezones ) {
 			$where['event_timezone'] = $updateTimezones;
 		}
-		$res = $this->dbr->select( 'campaign_events', '*', $where );
+		$res = $this->dbr->select( 'campaign_events', '*', $where, __METHOD__ );
 
 		$newRows = [];
 		foreach ( $res as $row ) {
@@ -134,7 +134,8 @@ class UpdateUTCTimestamps extends Maintenance {
 				[
 					'event_start_utc = ' . $this->getUpdateTimeConditional( 'event_start_utc' ),
 					'event_end_utc = ' . $this->getUpdateTimeConditional( 'event_end_utc' )
-				]
+				],
+				__METHOD__
 			);
 
 			// TODO: Ideally we would use affectedRows here, but our implementation does not distinguish between

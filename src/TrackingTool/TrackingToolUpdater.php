@@ -7,7 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsDatabase;
+use Wikimedia\Rdbms\IDatabase;
 
 /**
  * This class updates the information about tracking tools stored in our database.
@@ -61,11 +61,11 @@ class TrackingToolUpdater {
 	 *
 	 * @param int $eventID
 	 * @param TrackingToolAssociation[] $tools
-	 * @param ICampaignsDatabase|null $dbw Optional, in case the caller opened an atomic section and wants to make sure
+	 * @param IDatabase|null $dbw Optional, in case the caller opened an atomic section and wants to make sure
 	 * that writes are done on the same DB handle.
 	 * @return void
 	 */
-	public function replaceEventTools( int $eventID, array $tools, ICampaignsDatabase $dbw = null ): void {
+	public function replaceEventTools( int $eventID, array $tools, IDatabase $dbw = null ): void {
 		$dbw ??= $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		// Make a map of tools with faster lookup to compare existing values
@@ -80,6 +80,7 @@ class TrackingToolUpdater {
 			'ce_tracking_tools',
 			'*',
 			[ 'cett_event' => $eventID ],
+			__METHOD__,
 			[ 'FOR UPDATE' ]
 		);
 
@@ -103,7 +104,7 @@ class TrackingToolUpdater {
 		}
 
 		if ( $deleteIDs ) {
-			$dbw->delete( 'ce_tracking_tools', [ 'cett_id' => $deleteIDs ] );
+			$dbw->delete( 'ce_tracking_tools', [ 'cett_id' => $deleteIDs ], __METHOD__ );
 		}
 
 		$newRows = [];
@@ -124,6 +125,7 @@ class TrackingToolUpdater {
 			$dbw->insert(
 				'ce_tracking_tools',
 				$newRows,
+				__METHOD__,
 				[ 'IGNORE' ]
 			);
 		}
@@ -154,7 +156,8 @@ class TrackingToolUpdater {
 				'cett_event' => $eventID,
 				'cett_tool_id' => $toolID,
 				'cett_tool_event_id' => $toolEventID
-			]
+			],
+			__METHOD__
 		);
 	}
 }
