@@ -49,10 +49,11 @@ class CampaignEventsHookRunner implements
 	/**
 	 * @inheritDoc
 	 */
-	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID ) {
-		return $this->hookContainer->run(
+	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID ): void {
+		$this->hookContainer->run(
 			'CampaignEventsRegistrationFormLoad',
-			[ &$formFields, $eventID ]
+			[ &$formFields, $eventID ],
+			[ 'abortable' => false ]
 		);
 	}
 
@@ -61,10 +62,13 @@ class CampaignEventsHookRunner implements
 	 */
 	public function onCampaignEventsRegistrationFormSubmit(
 		array $data,
-		int $eventID ): bool {
-		return $this->hookContainer->run(
+		int $eventID
+	): void {
+		$this->hookContainer->run(
 			'CampaignEventsRegistrationFormSubmit',
-			[ $data, $eventID ] );
+			[ $data, $eventID ],
+			[ 'abortable' => false ]
+		);
 	}
 
 	/**
@@ -76,10 +80,11 @@ class CampaignEventsHookRunner implements
 		int $eventID,
 		bool $isOrganizer,
 		OutputPage $outputPage
-	): bool {
-		return $this->hookContainer->run(
+	): void {
+		$this->hookContainer->run(
 			'CampaignEventsGetEventDetails',
-			[ $infoColumn, $organizersColumn, $eventID, $isOrganizer, $outputPage ]
+			[ $infoColumn, $organizersColumn, $eventID, $isOrganizer, $outputPage ],
+			[ 'abortable' => false ]
 		);
 	}
 }

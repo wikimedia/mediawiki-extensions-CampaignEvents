@@ -18,7 +18,6 @@ interface CampaignEventsGetEventDetailsHook {
 	 * @param int $eventID
 	 * @param bool $isOrganizer
 	 * @param OutputPage $outputPage
-	 * @return bool
 	 */
 	public function onCampaignEventsGetEventDetails(
 		Tag $infoColumn,
@@ -26,5 +25,5 @@ interface CampaignEventsGetEventDetailsHook {
 		int $eventID,
 		bool $isOrganizer,
 		OutputPage $outputPage
-	): bool;
+	);
 }
