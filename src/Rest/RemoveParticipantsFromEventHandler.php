@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -62,6 +64,7 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		}
 
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		$this->validateEventWiki( $eventRegistration );
 
 		if ( $body['user_ids'] ) {
 			$usersToRemove = [];
@@ -120,5 +123,19 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 				],
 			] + $this->getTokenParamDefinition()
 		);
+	}
+
+	/**
+	 * @param ExistingEventRegistration $event
+	 */
+	private function validateEventWiki( ExistingEventRegistration $event ): void {
+		$wikiID = $event->getPage()->getWikiId();
+		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-remove-participants-nonlocal-error-message' )
+					->params( $wikiID ),
+				400
+			);
+		}
 	}
 }

@@ -5,8 +5,10 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Rest\RemoveParticipantsFromEventHandler;
 use MediaWiki\Permissions\PermissionStatus;
@@ -47,19 +49,34 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param IEventLookup|null $eventLookup
 	 * @param UnregisterParticipantCommand|null $unregisterParticipantCommand
+	 * @param MWPageProxy|null $page
 	 * @return RemoveParticipantsFromEventHandler
 	 */
 	private function newHandler(
 		IEventLookup $eventLookup = null,
-		UnregisterParticipantCommand $unregisterParticipantCommand = null
+		UnregisterParticipantCommand $unregisterParticipantCommand = null,
+		MWPageProxy $page = null
 	): RemoveParticipantsFromEventHandler {
+		if ( !$page ) {
+			$page = $this->createMock( MWPageProxy::class );
+			$page->method( 'getWikiId' )->willReturn( false );
+		}
+
+		if ( !$eventLookup ) {
+			$eventRegistration = $this->createMock( ExistingEventRegistration::class );
+			$eventRegistration->method( 'getPage' )->willReturn( $page );
+
+			$eventLookup = $this->createMock( IEventLookup::class );
+			$eventLookup->method( 'getEventByID' )->willReturn( $eventRegistration );
+		}
+
 		if ( !$unregisterParticipantCommand ) {
 			$unregisterParticipantCommand = $this->createMock( UnregisterParticipantCommand::class );
 			$unregisterParticipantCommand->method( 'removeParticipantsIfAllowed' )
 				->willReturn( StatusValue::newGood( true ) );
 		}
 		return new RemoveParticipantsFromEventHandler(
-			$eventLookup ?? $this->createMock( IEventLookup::class ),
+			$eventLookup,
 			$unregisterParticipantCommand
 		);
 	}
@@ -83,6 +100,7 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 	 * @param UnregisterParticipantCommand|null $unregisterParticipantCommand
 	 * @param IEventLookup|null $eventLookup
 	 * @param array $requestData
+	 * @param MWPageProxy|null $page
 	 * @dataProvider provideRequestDataWithErrors
 	 */
 	public function testRun__error(
@@ -90,9 +108,10 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 		string $expectedErrorKey,
 		?UnregisterParticipantCommand $unregisterParticipantCommand,
 		?IEventLookup $eventLookup,
-		array $requestData
+		array $requestData,
+		?MWPageProxy $page
 	) {
-		$handler = $this->newHandler( $eventLookup, $unregisterParticipantCommand );
+		$handler = $this->newHandler( $eventLookup, $unregisterParticipantCommand, $page );
 
 		try {
 			$this->executeHandler( $handler, new RequestData( $requestData ) );
@@ -116,7 +135,8 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 			'campaignevents-rest-event-not-found',
 			null,
 			$eventDoesNotExistLookup,
-			$requestData
+			$requestData,
+			null
 		];
 
 		$permError = 'some-permission-error';
@@ -129,7 +149,8 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 			$permError,
 			$commandWithPermError,
 			null,
-			$requestData
+			$requestData,
+			null
 		];
 
 		$commandError = 'some-error-from-command';
@@ -142,7 +163,8 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 			$commandError,
 			$commandWithError,
 			null,
-			$requestData
+			$requestData,
+			null
 		];
 
 		$eventDoesNotExistLookup = $this->createMock( IEventLookup::class );
@@ -151,7 +173,19 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 			"campaignevents-rest-remove-participants-invalid-users-ids",
 			null,
 			$eventDoesNotExistLookup,
-			$this->getRequestData( [] )
+			$this->getRequestData( [] ),
+			null
+		];
+
+		$page = $this->createMock( MWPageProxy::class );
+		$page->method( 'getWikiId' )->willReturn( 'anotherwiki' );
+		yield 'Non local event' => [
+			400,
+			'campaignevents-rest-remove-participants-nonlocal-error-message',
+			null,
+			null,
+			$this->getRequestData(),
+			$page
 		];
 	}
 
