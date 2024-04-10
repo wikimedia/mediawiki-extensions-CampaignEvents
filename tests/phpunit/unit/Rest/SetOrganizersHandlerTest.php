@@ -6,8 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Rest\SetOrganizersHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -25,9 +27,28 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	use CSRFTestHelperTrait;
 	use HandlerTestTrait;
 
+	/**
+	 * @param IEventLookup|null $eventLookup
+	 * @param EditEventCommand|null $editEventCommand
+	 * @param MWPageProxy|null $page
+	 * @return SetOrganizersHandler
+	 */
 	private function newHandler(
-		EditEventCommand $editEventCommand = null
+		IEventLookup $eventLookup = null,
+		EditEventCommand $editEventCommand = null,
+		MWPageProxy $page = null
 	): SetOrganizersHandler {
+		if ( !$page ) {
+			$page = $this->createMock( MWPageProxy::class );
+			$page->method( 'getWikiId' )->willReturn( false );
+		}
+		if ( !$eventLookup ) {
+			$eventRegistration = $this->createMock( ExistingEventRegistration::class );
+			$eventRegistration->method( 'getPage' )->willReturn( $page );
+
+			$eventLookup = $this->createMock( IEventLookup::class );
+			$eventLookup->method( 'getEventByID' )->willReturn( $eventRegistration );
+		}
 		if ( !$editEventCommand ) {
 			$editEventCommand = $this->createMock( EditEventCommand::class );
 			$editEventCommand->method( 'doEditIfAllowed' )->willReturn( StatusValue::newGood( 42 ) );
@@ -35,7 +56,7 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$centralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
 		return new SetOrganizersHandler(
-			$this->createMock( IEventLookup::class ),
+			$eventLookup,
 			$editEventCommand,
 			$centralUserLookup
 		);
@@ -91,7 +112,7 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		string $expectedErrorMsg,
 		int $expectedCode
 	) {
-		$handler = $this->newHandler( $editEventCommand );
+		$handler = $this->newHandler( null, $editEventCommand );
 		$performer = $this->mockRegisteredUltimateAuthority();
 		$request = new RequestData( $this->getRequestData( [ 'foo' ] ) );
 
@@ -122,5 +143,23 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$performer = $this->mockRegisteredUltimateAuthority();
 		$resp = $this->executeHandler( $handler, $request, [], [], [], [], $performer );
 		$this->assertSame( 204, $resp->getStatusCode() );
+	}
+
+	public function testRun__nonLocalWikiError() {
+		$page = $this->createMock( MWPageProxy::class );
+		$page->method( 'getWikiId' )->willReturn( 'anotherwiki' );
+		$request = new RequestData( $this->getRequestData( [ 'foo' ] ) );
+		$performer = $this->mockRegisteredUltimateAuthority();
+		try {
+			$handler = $this->newHandler( null, null, $page );
+			$this->executeHandler( $handler, $request, [], [], [], [], $performer );
+			$this->fail( 'No exception thrown' );
+		} catch ( LocalizedHttpException $e ) {
+			$this->assertSame( 400, $e->getCode() );
+			$this->assertSame(
+				'campaignevents-rest-set-organizers-nonlocal-error-message',
+				$e->getMessageValue()->getKey()
+			);
+		}
 	}
 }
