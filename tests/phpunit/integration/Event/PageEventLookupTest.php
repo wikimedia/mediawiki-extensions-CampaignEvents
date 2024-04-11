@@ -44,9 +44,16 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 		[ $translationSubpage, $eventID ] = $this->createTranslationPageWithEventAndSubpage();
 		$pageEventLookup = CampaignEventsServices::getPageEventLookup();
-		$event = $pageEventLookup->getRegistrationForLocalPage( $translationSubpage );
-		$this->assertNotNull( $event );
-		$this->assertSame( $eventID, $event->getID() );
+
+		$subpageEvent = $pageEventLookup->getRegistrationForLocalPage( $translationSubpage );
+		$this->assertNotNull( $subpageEvent, 'Finds event when canonicalizing' );
+		$this->assertSame( $eventID, $subpageEvent->getID() );
+
+		$directEvent = $pageEventLookup->getRegistrationForLocalPage(
+			$translationSubpage,
+			PageEventLookup::GET_DIRECT
+		);
+		$this->assertNull( $directEvent, 'No event found when not canonicalizing' );
 	}
 
 	public function testGetRegistrationForPage__notInEventNamespace() {
@@ -62,9 +69,16 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 		$pageEventLookup = CampaignEventsServices::getPageEventLookup();
 		$campaignsTranslationSubpage = CampaignEventsServices::getPageFactory()
 			->newFromLocalMediaWikiPage( $translationSubpage );
-		$event = $pageEventLookup->getRegistrationForPage( $campaignsTranslationSubpage );
-		$this->assertNotNull( $event );
-		$this->assertSame( $eventID, $event->getID() );
+
+		$subpageEvent = $pageEventLookup->getRegistrationForPage( $campaignsTranslationSubpage );
+		$this->assertNotNull( $subpageEvent, 'Finds event when canonicalizing' );
+		$this->assertSame( $eventID, $subpageEvent->getID() );
+
+		$directEvent = $pageEventLookup->getRegistrationForPage(
+			$campaignsTranslationSubpage,
+			PageEventLookup::GET_DIRECT
+		);
+		$this->assertNull( $directEvent, 'No event found when not canonicalizing' );
 	}
 
 	/**

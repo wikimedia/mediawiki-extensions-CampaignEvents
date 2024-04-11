@@ -24,6 +24,9 @@ use RuntimeException;
 class PageEventLookup {
 	public const SERVICE_NAME = 'CampaignEventsPageEventLookup';
 
+	public const GET_CANONICALIZE = 'canonicalize';
+	public const GET_DIRECT = 'direct';
+
 	private IEventLookup $eventLookup;
 	private CampaignsPageFactory $campaignsPageFactory;
 	private TitleFactory $titleFactory;
@@ -49,14 +52,20 @@ class PageEventLookup {
 
 	/**
 	 * @param PageIdentity|LinkTarget $page
+	 * @param string $canonicalize self::GET_CANONICALIZE to canonicalize the given page, or self::GET_DIRECT to
+	 * avoid canonicalization.
 	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
 	 * @return ExistingEventRegistration|null
 	 */
 	public function getRegistrationForLocalPage(
 		$page,
+		string $canonicalize = self::GET_CANONICALIZE,
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ?ExistingEventRegistration {
-		$page = $this->getCanonicalPage( $page );
+		if ( $canonicalize === self::GET_CANONICALIZE ) {
+			$page = $this->getCanonicalPage( $page );
+		}
+
 		if ( $page->getNamespace() !== NS_EVENT ) {
 			return null;
 		}
@@ -69,15 +78,28 @@ class PageEventLookup {
 		}
 	}
 
-	public function getRegistrationForPage( ICampaignsPage $page ): ?ExistingEventRegistration {
+	/**
+	 * @param ICampaignsPage $page
+	 * @param string $canonicalize self::GET_CANONICALIZE to canonicalize the given page, or self::GET_DIRECT to
+	 * avoid canonicalization.
+	 * @return ExistingEventRegistration|null
+	 */
+	public function getRegistrationForPage(
+		ICampaignsPage $page,
+		string $canonicalize = self::GET_CANONICALIZE
+	): ?ExistingEventRegistration {
 		if ( !$page instanceof MWPageProxy ) {
 			throw new RuntimeException( 'Unexpected ICampaignsPage implementation.' );
 		}
-		$pageIdentity = $page->getPageIdentity();
-		$canonicalPageIdentity = $this->getCanonicalPage( $pageIdentity );
-		if ( $canonicalPageIdentity !== $pageIdentity ) {
-			$page = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $canonicalPageIdentity );
+
+		if ( $canonicalize === self::GET_CANONICALIZE ) {
+			$pageIdentity = $page->getPageIdentity();
+			$canonicalPageIdentity = $this->getCanonicalPage( $pageIdentity );
+			if ( $canonicalPageIdentity !== $pageIdentity ) {
+				$page = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $canonicalPageIdentity );
+			}
 		}
+
 		if ( $page->getNamespace() !== NS_EVENT ) {
 			return null;
 		}
