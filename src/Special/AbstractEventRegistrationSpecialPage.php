@@ -689,14 +689,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function onSuccess(): void {
-		$this->getOutput()->addHTML( Html::successBox(
+		$this->getOutput()->prependHTML( Html::successBox(
 			$this->msg( $this->formMessages['success'] )->params( $this->eventPagePrefixedText )->parse()
 		) );
 		if ( $this->saveWarningsStatus ) {
 			foreach ( $this->saveWarningsStatus->getErrors() as $error ) {
 				// XXX: This is ugly, but it's the easiest way to convert a Status error to a Message.
 				$msg = Message::newFromSpecifier( ApiMessage::create( $error ) );
-				$this->getOutput()->addHTML( Html::warningBox( $this->msg( $msg )->escaped() ) );
+				$this->getOutput()->prependHTML( Html::warningBox( $this->msg( $msg )->escaped() ) );
 			}
 		}
 	}
@@ -727,6 +727,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	protected function getMessagePrefix(): string {
 		return '';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getShowAlways(): bool {
+		return true;
 	}
 
 	/**
