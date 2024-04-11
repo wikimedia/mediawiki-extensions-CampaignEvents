@@ -80,10 +80,11 @@
 	"campaignevents-edit-field-chat-url": "Groepschat-uitnodiging",
 	"campaignevents-edit-field-chat-url-help": "Als u een online chatgroep hebt voor de deelnemers van dit evenement, kunt u hier de uitnodigingslink toevoegen. Deelnemers kunnen na registratie de uitnodigingslink bekijken.",
 	"campaignevents-edit-form-questions-label": "Vragen voor deelnemers",
-	"campaignevents-edit-form-questions-intro": "De deelnemers kunnen tijdens de registratie voor het evenement de onderstaande vragen beantwoorden.",
+	"campaignevents-edit-form-questions-intro": "Selecteer een van de volgende vragen die deelnemers moeten beantwoorden tijdens de registratie voor het evenement.",
 	"campaignevents-edit-form-questions-explanation": "Tijdens het evenement kunt u toegang krijgen tot de antwoorden van individuele deelnemers op vragen die geen persoonlijk identificeerbare informatie (PII) bevatten. Na het einde van het evenement blijven de antwoorden op alle vragen beschikbaar (alleen in geaggregeerde vorm) en zullen de individuele antwoorden worden verwijderd.",
-	"campaignevents-edit-form-questions-non-pii-label": "Overige vragen (niet-PII)",
-	"campaignevents-edit-form-questions-pii-label": "Persoonlijk identificeerbare informatie (PII)",
+	"campaignevents-edit-form-questions-non-pii-label": "Vragen over niet-persoonlijk identificeerbare informatie (niet-PII)",
+	"campaignevents-edit-form-questions-pii-label": "Vragen over persoonlijk identificeerbare informatie (PII)",
+	"campaignevents-edit-form-questions-pii-notice": "Om de verzamelde reacties van deelnemers te bekijken die persoonlijke informatie bevatten, wordt u gevraagd om zorgvuldig om te gaan met deelnemersinformatie, inclusief persoonlijk identificeerbare deelnemersinformatie, verzameld tijdens de registratie van het evenement.",
 	"campaignevents-enable-registration-form-submit": "Registratie inschakelen",
 	"campaignevents-edit-form-submit": "Registratie bewerken",
 	"campaignevents-edit-form-notice": "Tijdens de inschrijving worden van deelnemers alleen gebruikersnamen verzameld. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Meer informatie].",
@@ -92,7 +93,7 @@
 	"campaignevents-edit-invalid-id": "Geef een geldig evenement-ID op.",
 	"campaignevents-edit-no-event-id-provided": "Geef een evenement-ID op.",
 	"campaignevents-edit-event-notfound": "Er is geen evenement met dit ID.",
-	"campaignevents-edit-page-nonlocal": "[$1 Bewerk de details van deze registratie] op de wiki $2 waarop het evenement is aangemaakt.",
+	"campaignevents-edit-page-nonlocal": "'''[$1 Bewerk de details van deze registratie]''' op de wiki $2 waarop het evenement is aangemaakt.",
 	"campaignevents-edit-error-deleted": "Deze evenementregistratie is verwijderd.",
 	"campaignevents-edit-need-central-account": "U hebt een centraal gebruikersaccount nodig om de inschrijving op evenementen in te schakelen of te bewerken.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|heeft|hebben}} niet de benodigde rechten om organisator{{PLURAL:$1||en}} te zijn.",
@@ -420,5 +421,6 @@
 	"campaignevents-warning-change-event-end-date-past": "Als u de einddatum wijzigt naar een datum in het verleden, wordt het evenement gesloten en ontvangt u een overzicht van de antwoorden van deelnemers. Deze handeling is onomkeerbaar. Dit is alleen van toepassing als deelnemers antwoorden hebben gegeven op de deelnemersvragen.",
 	"campaignevents-event-details-participants-individual-data-deleted": "De antwoorden van de individuele deelnemers zijn verwijderd en de geaggregeerde antwoorden zijn beschikbaar onder [$1 {{int:campaginevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Schrijf je in voor $1",
-	"campaignevents-register-page-nonlocal": "[$1 voltooi uw evenementregistratie op $2], de wiki waar het evenement is aangemaakt."
+	"campaignevents-register-page-nonlocal": "[$1 voltooi uw evenementregistratie op $2], de wiki waar het evenement is aangemaakt.",
+	"campaignevents-delete-registration-page-nonlocal": "[$1 Verwijder uw evenementregistratie op $2], de wiki waar het evenement is aangemaakt."
 }

@@ -18,5 +18,6 @@
 	"campaignevents-rest-get-registration-info-notparticipant": "No participas en este evento.",
 	"campaignevents-rest-register-invalid-answer": "Respuesta no válida a la pregunta $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor complete su registro de suceso en $1, la wiki donde se creó el suceso.",
-	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor elimina tu registro de suceso en 01, la wiki donde se creó."
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor elimine tu registro de suceso en 01, la wiki donde se creó.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Envíe un correo electrónico a los participantes a $1, la wiki donde se creó el acto."
 }
