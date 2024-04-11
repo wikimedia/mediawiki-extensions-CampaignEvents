@@ -43,8 +43,8 @@ class EventsPagerFactory {
 	 * @param LinkRenderer $linkRenderer
 	 * @param CentralUser $user
 	 * @param string $search
-	 * @param string $status One of the EventsPager::STATUS_* constants
-	 * @return EventsPager
+	 * @param string $status One of the EventsTablePager::STATUS_* constants
+	 * @return EventsTablePager
 	 */
 	public function newPager(
 		IContextSource $context,
@@ -52,8 +52,8 @@ class EventsPagerFactory {
 		CentralUser $user,
 		string $search,
 		string $status
-	): EventsPager {
-		return new EventsPager(
+	): EventsTablePager {
+		return new EventsTablePager(
 			$context,
 			$linkRenderer,
 			$this->databaseHelper,
