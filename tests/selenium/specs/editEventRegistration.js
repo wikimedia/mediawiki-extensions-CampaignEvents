@@ -55,7 +55,9 @@ describe( 'Edit Event Registration', function () {
 		assert.deepEqual( await EventPage.eventType.getText(), 'Online and in-person event' );
 	} );
 
-	it( 'can allow organizer to add an additional organizer', async function () {
+	// skipping this test for now as the user
+	// in Api.createAccount is not being created on betacluster
+	it.skip( 'can allow organizer to add an additional organizer', async function () {
 		const bot = await Api.bot();
 		const password = 'aaaaaaaaa!';
 		await Api.createAccount( bot, userName, password );
