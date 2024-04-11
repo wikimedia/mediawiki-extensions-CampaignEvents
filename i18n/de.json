@@ -86,7 +86,7 @@
 	"campaignevents-edit-invalid-id": "Gib eine gültige Veranstaltungs-ID an.",
 	"campaignevents-edit-no-event-id-provided": "Gib eine Veranstaltungs-ID an.",
 	"campaignevents-edit-event-notfound": "Es gibt keine Veranstaltung mit dieser ID.",
-	"campaignevents-edit-page-nonlocal": "Bitte [$1 bearbeite die Registrierungsdetails für die Veranstaltung auf $2], dem Wiki, in dem die Veranstaltung erstellt wurde.",
+	"campaignevents-edit-page-nonlocal": "Bitte '''[$1 bearbeite die Registrierungsdetails für die Veranstaltung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-edit-error-deleted": "Diese Veranstaltungsanmeldung wurde gelöscht.",
 	"campaignevents-edit-need-central-account": "Du benötigst ein zentrales Benutzerkonto, um Veranstaltungsanmeldungen zu ermöglichen oder zu bearbeiten.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|hat nicht|haben nicht}} die erforderlichen Berechtigungen, um {{PLURAL:$1|Organisator|Organisatoren}} zu sein.",

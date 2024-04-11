@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jeeputer"
+			"Jeeputer",
+			"کهربا"
 		]
 	},
-	"campaignevents-rest-user-not-found": "کاربر $1 موجود نیست."
+	"campaignevents-rest-user-not-found": "کاربر $1 موجود نیست.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Please delete your event registration on $1, the wiki where the event was created.\nلطفا ثبت رویداد خود را در ویکی حذف کنید"
 }

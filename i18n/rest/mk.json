@@ -16,5 +16,7 @@
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> мора да биде строј од кориснички имиња и не може да стои празно",
 	"campaignevents-rest-get-registration-info-notparticipant": "Не учествувате на овој настан.",
 	"campaignevents-rest-register-invalid-answer": "Неважечки одговор на прашањето $1",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "Пополнете ја пријавата за вашиот настан на $1, викито на кое е создаден настанот."
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Пополнете ја пријавата за вашиот настан на $1, викито на кое е создаден настанот.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Избришете ја пријавата за вашиот настан на $1, викито на кое е создаден настанот.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Пишете им на учесниците на $1, викито на кое е создаден настанот."
 }

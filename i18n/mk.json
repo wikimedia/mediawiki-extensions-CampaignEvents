@@ -87,7 +87,7 @@
 	"campaignevents-edit-invalid-id": "Укажете важечка назнака за настан.",
 	"campaignevents-edit-no-event-id-provided": "Укажете назнака на настан.",
 	"campaignevents-edit-event-notfound": "Нема настан со таа назнака.",
-	"campaignevents-edit-page-nonlocal": "[$1 Уредете ги поединостите за пријавување на настанот на $2], викито на кое е создаден настанот.",
+	"campaignevents-edit-page-nonlocal": "'''[$1 Уредете ги поединостите за пријавување на настанот на $2]''', викито на кое е создаден настанот.",
 	"campaignevents-edit-error-deleted": "Оваа пријава за настан е избришана.",
 	"campaignevents-edit-need-central-account": "Ќе ви треба централна корисничка сметка за да овозможите менувате пријави за настани.",
 	"campaignevents-edit-organizers-not-allowed": "$2 ја {{PLURAL:$1|нема|немаат}} потребната дозвола за да {{PLURAL:$1|биде приредувач|бидат приредувачи}}.",

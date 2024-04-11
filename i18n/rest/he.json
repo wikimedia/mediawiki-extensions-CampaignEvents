@@ -16,5 +16,7 @@
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> חייב להיות מערך של שמות משתמש ואינו יכול להיות ריק",
 	"campaignevents-rest-get-registration-info-notparticipant": "אינך ברשימת במשתתפים באירוע הזה.",
 	"campaignevents-rest-register-invalid-answer": "תשובה בלתי־תקינה לשאלה $1",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "נא למלא את ההרשמה שלך לאירוע באתר $1, הוויקי שהאירוע נוצר בו."
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "נא למלא את ההרשמה שלך לאירוע באתר $1, הוויקי שהאירוע נוצר בו.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "נא למלא את ההרשמה שלך לאירוע באתר $1, הוויקי שהאירוע נוצר בו.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "נא לשלוח דוא\"ל למשתתפים באתר $1, הוויקי שהאירוע נוצר בו."
 }

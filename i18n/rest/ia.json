@@ -16,5 +16,6 @@
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe esser un vector/matrice de nomines de usator e non pote esser vacue",
 	"campaignevents-rest-get-registration-info-notparticipant": "Tu non participa in iste evento.",
 	"campaignevents-rest-register-invalid-answer": "Responsa non valide al question $1",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "Per favor completa tu inscription al evento sur $1, le wiki ubi le evento ha essite create."
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Per favor completa tu inscription al evento sur $1, le wiki ubi le evento ha essite create.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Per favor retira tu inscription al evento sur $1, le wiki ubi le evento ha essite create."
 }
