@@ -233,14 +233,12 @@
 					'/campaignevents/v0/event_registration/' + eventID,
 					{ token: mw.user.tokens.get( 'csrfToken' ) }
 				)
-					.then(
-						function () {
-							return $.Deferred().resolve( { deleted: true } );
-						},
-						function ( _errCode, errData ) {
-							mw.log.error( errData.xhr.responseText );
-						}
-					);
+					.then( function () {
+						return $.Deferred().resolve( { deleted: true } );
+					} )
+					.fail( function ( _errCode, errData ) {
+						mw.log.error( errData.xhr.responseText );
+					} );
 			}
 		} );
 	};
