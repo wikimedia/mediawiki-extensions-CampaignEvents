@@ -12,12 +12,14 @@
 	"campaignevents-rest-user-not-found": "No existe ningún usuario con ese código.",
 	"campaignevents-rest-get-registration-deleted": "Las inscripciones para este evento han sido eliminadas.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "El parámetro 'user_ids' debe ser un conjunto de códigos identificadores de usuario o null (para eliminar a todos los usuarios)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Elimine a los participantes en $1 , la wiki donde se creó el acto.",
 	"campaignevents-rest-list-participants-empty-filter": "El filtro de nombres de usuario, si se especifica, debe ser una cadena que no esté vacía.",
 	"campaignevents-rest-list-participants-cannot-see-private": "No tienes permiso para ver la lista de participantes que se inscribieron para este evento de forma privada.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe ser una cadena de nombres de usuario, y no puede estar vacía",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Configure los organizadores en $1 , la wiki donde se creó el acto.",
 	"campaignevents-rest-get-registration-info-notparticipant": "No participas en este evento.",
 	"campaignevents-rest-register-invalid-answer": "Respuesta no válida a la pregunta $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor complete su registro de suceso en $1, la wiki donde se creó el suceso.",
-	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor elimine tu registro de suceso en 01, la wiki donde se creó.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor elimine su registro de suceso en 01, la wiki donde se creó.",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "Envíe un correo electrónico a los participantes a $1, la wiki donde se creó el acto."
 }
