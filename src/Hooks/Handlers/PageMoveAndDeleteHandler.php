@@ -69,7 +69,11 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 		ManualLogEntry $logEntry,
 		int $archivedRevisionCount
 	) {
-		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $page, IDBAccessObject::READ_LATEST );
+		$registration = $this->pageEventLookup->getRegistrationForLocalPage(
+			$page,
+			PageEventLookup::GET_DIRECT,
+			IDBAccessObject::READ_LATEST
+		);
 		if ( !$registration ) {
 			return;
 		}
@@ -86,7 +90,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	 * @inheritDoc
 	 */
 	public function onTitleMove( Title $old, Title $nt, User $user, $reason, Status &$status ) {
-		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $old );
+		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $old, PageEventLookup::GET_DIRECT );
 		// Disallow moving event pages with registration enabled outside of the Event namespace, see T358704.
 		// This will change if we decide to allow event registration outside of the namespace (T318179).
 		if ( $registration && !$nt->inNamespace( NS_EVENT ) ) {
@@ -101,7 +105,11 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	 */
 	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ) {
 		// This code runs in a DeferredUpdate, load the data from DB master (T302858#8354617)
-		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $old, IDBAccessObject::READ_LATEST );
+		$registration = $this->pageEventLookup->getRegistrationForLocalPage(
+			$old,
+			PageEventLookup::GET_DIRECT,
+			IDBAccessObject::READ_LATEST
+		);
 		if ( !$registration ) {
 			return;
 		}
