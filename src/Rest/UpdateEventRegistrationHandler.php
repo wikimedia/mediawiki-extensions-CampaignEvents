@@ -68,14 +68,14 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @inheritDoc
 	 */
 	protected function getSuccessResponse( StatusValue $saveStatus ): Response {
-		$warnings = $saveStatus->getErrorsByType( 'warning' );
+		$warnings = $saveStatus->getMessages( 'warning' );
 		if ( !$warnings ) {
 			return $this->getResponseFactory()->createNoContent();
 		}
 		$respWarnings = [];
-		foreach ( $warnings as $warning ) {
+		foreach ( $warnings as $msg ) {
 			// XXX There's no standard way to format warnings.
-			$respWarnings[] = [ 'key' => $warning['message'], 'params' => $warning['params'] ];
+			$respWarnings[] = [ 'key' => $msg->getKey(), 'params' => $msg->getParams() ];
 		}
 		return $this->getResponseFactory()->createJson( [
 			'warnings' => $respWarnings

@@ -221,8 +221,8 @@ class EditEventCommand {
 
 		$ret = StatusValue::newGood( $newEventID );
 		if ( !$toolStatus->isGood() ) {
-			foreach ( $toolStatus->getErrors() as $error ) {
-				$ret->warning( $error['message'], ...$error['params'] );
+			foreach ( $toolStatus->getMessages( 'error' ) as $msg ) {
+				$ret->warning( $msg );
 			}
 		}
 		return $ret;

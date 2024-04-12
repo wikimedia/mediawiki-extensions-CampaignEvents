@@ -511,8 +511,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 
 		$changStatusErrorsToWarnings = static function ( StatusValue $status ): StatusValue {
 			$ret = StatusValue::newGood();
-			foreach ( $status->getErrors() as $err ) {
-				$ret->warning( $err['message'], ...$err['params'] );
+			foreach ( $status->getMessages() as $msg ) {
+				$ret->warning( $msg );
 			}
 			return $ret;
 		};
