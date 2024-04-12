@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use IContextSource;
 use LogicException;
 use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
@@ -128,6 +129,7 @@ class EventsTablePager extends TablePager {
 					'data-mw-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
 					'data-mw-event-page-url' => $this->pageURLResolver->getUrl( $eventPage ),
 					'data-mw-label' => $btnLabel,
+					'data-mw-is-local-wiki' => $eventPage->getWikiId() === WikiAwareEntity::LOCAL,
 				] );
 				return $btn->toString();
 			default:
