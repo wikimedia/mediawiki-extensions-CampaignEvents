@@ -43,12 +43,17 @@ class SpecialAllEvents extends SpecialPage {
 	private function showFormAndEvents(): void {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
-		$status = $request->getVal( 'wpMeetingType', '' );
+		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
+		$startDate = $request->getVal( 'wpStartDate', '' );
+		$startTime = $startDate !== '' ? $startDate . ' 00:00:00' : $startDate;
+		$endDate = $request->getVal( 'wpEndDate', '' );
+		$endTime = $endDate !== '' ? $endDate . ' 23:59:59' : $endDate;
+
 		$pager = $this->eventsPagerFactory->newListPager(
 			$searchedVal,
-			$status,
-			$request->getVal( 'wpStartDate' ) . ' 00:00:00',
-			$request->getVal( 'wpEndDate' ) . ' 00:00:00'
+			$meetingType,
+			$startTime,
+			$endTime
 		);
 
 		$formDescriptor = [
@@ -62,13 +67,13 @@ class SpecialAllEvents extends SpecialPage {
 				'type' => 'select',
 				'label-message' => 'campaignevents-allevents-label-meeting-type',
 				'options-messages' => [
-					'campaignevents-eventslist-location-all-events' => '',
+					'campaignevents-eventslist-location-all-events' => null,
 					'campaignevents-eventslist-location-online' => EventRegistration::MEETING_TYPE_ONLINE,
 					'campaignevents-eventslist-location-in-person' => EventRegistration::MEETING_TYPE_IN_PERSON,
-					'campaignevents-eventslist-location-online-and-in-person'
-					=> EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON
+					'campaignevents-eventslist-location-online-and-in-person' =>
+						EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON
 				],
-				'default' => $status,
+				'default' => $meetingType,
 				'cssclass' => 'ext-campaignevents-allevents-meetingtype-field'
 			],
 			'StartDate' => [
@@ -98,7 +103,7 @@ class SpecialAllEvents extends SpecialPage {
 			->setSubmitTextMsg( 'campaignevents-allevents-label-submit' )
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
-			->setSubmitCallback( fn ()=>true )
+			->setSubmitCallback( fn () => true )
 			->showAlways();
 		$navigation = $pager->getNavigationBar();
 		$this->getOutput()->addHTML( $navigation . $pager->getBody() . $navigation );

@@ -19,6 +19,7 @@ use MediaWiki\User\UserOptionsLookup;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use stdClass;
+use UnexpectedValueException;
 
 class EventsListPager extends RangeChronologicalPager {
 	use EventPagerTrait {
@@ -31,7 +32,8 @@ class EventsListPager extends RangeChronologicalPager {
 	private OrganizersStore $organizerStore;
 	private string $lastHeaderMonth;
 	private string $search;
-	private ?string $meetingType;
+	/** One of the EventRegistration::MEETING_TYPE_* constants */
+	private ?int $meetingType;
 	private LinkBatchFactory $linkBatchFactory;
 	private UserOptionsLookup $options;
 
@@ -44,7 +46,7 @@ class EventsListPager extends RangeChronologicalPager {
 	 * @param UserOptionsLookup $options
 	 * @param CampaignsDatabaseHelper $databaseHelper
 	 * @param string $search
-	 * @param string|null $meetingType
+	 * @param int|null $meetingType
 	 * @param string $startDate
 	 * @param string $endDate
 	 */
@@ -57,20 +59,21 @@ class EventsListPager extends RangeChronologicalPager {
 		UserOptionsLookup $options,
 		CampaignsDatabaseHelper $databaseHelper,
 		string $search,
-		?string $meetingType,
+		?int $meetingType,
 		string $startDate,
 		string $endDate
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
-
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
+		parent::__construct( $this->getContext(), $this->getLinkRenderer() );
+
 		$this->options = $options;
 		$this->userLinker = $userLinker;
 		$this->campaignsPageFactory = $pageFactory;
 		$this->pageURLResolver = $pageURLResolver;
 		$this->organizerStore = $organizerStore;
 		$this->linkBatchFactory = $linkBatchFactory;
-		parent::__construct( $this->getContext(), $this->getLinkRenderer() );
+
 		$this->getDateRangeCond( $startDate, $endDate );
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderMonth = '';
@@ -86,14 +89,14 @@ class EventsListPager extends RangeChronologicalPager {
 
 		$timestampField = $this->getTimestampField();
 		$timestamp = $row->$timestampField;
-		$Month = $this->getMonthFromTimestamp( $timestamp );
-		$closeList = $this->lastHeaderMonth && $Month !== $this->lastHeaderMonth;
+		$month = $this->getMonthFromTimestamp( $timestamp );
+		$closeList = $this->lastHeaderMonth && $month !== $this->lastHeaderMonth;
 		if ( $closeList ) {
 			$s .= $this->getEndGroup();
 		}
-		if ( $Month && $this->isHeaderRowNeeded( $Month ) ) {
-			$s .= $this->getHeaderRow( $Month );
-			$this->lastHeaderMonth = $Month;
+		if ( $month && $this->isHeaderRowNeeded( $month ) ) {
+			$s .= $this->getHeaderRow( $month );
+			$this->lastHeaderMonth = $month;
 		}
 		$s .= $this->formatRow( $row );
 
@@ -101,10 +104,9 @@ class EventsListPager extends RangeChronologicalPager {
 	}
 
 	/**
-	 * Get a list of items to show in a "<select>" element of limits.
-	 * This can be passed directly to XmlSelect::addOptions().
+	 * Copied from {@see TablePager::getLimitSelectList()}.
+	 * XXX This should probably live elsewhere in core and be easier to reuse.
 	 *
-	 * @since 1.22
 	 * @return array
 	 */
 	public function getLimitSelectList() {
@@ -140,16 +142,16 @@ class EventsListPager extends RangeChronologicalPager {
 	 */
 	public function formatRow( $row ) {
 		$htmlRow = ( new Tag( 'li' ) )
-			->setAttributes( [ "class" => 'ext-campaignevents-events-list-pager-row' ] );
+			->addClasses( [ 'ext-campaignevents-events-list-pager-row' ] );
 		$page = $this->getEventPageFromRow( $row );
 		$pageUrlResolver = $this->pageURLResolver;
 		$timestampField = $this->getTimestampField();
 		$timestamp = $row->$timestampField;
 		$htmlRow->appendContent( ( new Tag() )
-			->setAttributes( [ "class" => 'ext-campaignevents-events-list-pager-day' ] )
+			->addClasses( [ 'ext-campaignevents-events-list-pager-day' ] )
 			->appendContent( $this->getDayFromTimestamp( $timestamp ) ) );
 		$detailContainer = ( new Tag() )
-			->setAttributes( [ "class" => 'ext-campaignevents-events-list-pager-details' ] );
+			->addClasses( [ 'ext-campaignevents-events-list-pager-details' ] );
 		$eventPageLinkElement = ( new Tag( 'a' ) )
 			->setAttributes( [
 				"href" => $pageUrlResolver->getUrl( $page ),
@@ -159,17 +161,15 @@ class EventsListPager extends RangeChronologicalPager {
 		$detailContainer->appendContent(
 			( new Tag( 'h4' ) )->appendContent( $eventPageLinkElement )
 		);
-		$meetingType = $this->msg( $this->getMeetingType( $row ) );
+		$meetingType = $this->msg( $this->getMeetingTypeMsg( $row ) )->text();
 		$detailContainer->appendContent(
 			new TextWithIconWidget( [
 				'icon' => 'clock',
-				'content' => ( new Tag( 'p' ) )->appendContent(
-					$this->msg( 'campaignevents-allevents-date-separator',
-						$this->getLanguage()->userDate( $row->event_start_utc, $this->getUser() ),
-						$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() ) )
-						->parse()
-
-				),
+				'content' => $this->msg(
+					'campaignevents-allevents-date-separator',
+					$this->getLanguage()->userDate( $row->event_start_utc, $this->getUser() ),
+					$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() )
+				)->text(),
 				'label' => 'campaignevents-allevents-date-label',
 				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
 			] )
@@ -189,8 +189,7 @@ class EventsListPager extends RangeChronologicalPager {
 		$userLinkElement = new TextWithIconWidget( [
 			'icon' => 'userRights',
 			'content' => new HtmlSnippet(
-				$userLinker->generateUserLinkWithFallback( $organizer->getUser(), $this->getLanguage()->getCode()
-				)
+				$userLinker->generateUserLinkWithFallback( $organizer->getUser(), $this->getLanguage()->getCode() )
 			),
 			'label' => 'campaignevents-allevents-organiser-label',
 			'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
@@ -234,22 +233,18 @@ class EventsListPager extends RangeChronologicalPager {
 	 * @param stdClass $row
 	 * @return string
 	 */
-	private function getMeetingType( $row ): string {
-		$meetingtype = EventStore::getMeetingTypeFromDBVal( $row->event_meeting_type );
-		if (
-			$meetingtype === EventStore::getMeetingTypeFromDBVal( (string)EventRegistration::MEETING_TYPE_IN_PERSON )
-		) {
-			return 'campaignevents-eventslist-location-in-person';
+	private function getMeetingTypeMsg( stdClass $row ): string {
+		$meetingType = EventStore::getMeetingTypeFromDBVal( $row->event_meeting_type );
+		switch ( $meetingType ) {
+			case EventRegistration::MEETING_TYPE_IN_PERSON:
+				return 'campaignevents-eventslist-location-in-person';
+			case EventRegistration::MEETING_TYPE_ONLINE:
+				return 'campaignevents-eventslist-location-online';
+			case EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON:
+				return 'campaignevents-eventslist-location-online-and-in-person';
+			default:
+				throw new UnexpectedValueException( "Unexpected meeting type $meetingType" );
 		}
-		if ( $meetingtype === EventStore::getMeetingTypeFromDBVal( (string)EventRegistration::MEETING_TYPE_ONLINE ) ) {
-			return 'campaignevents-eventslist-location-online';
-		}
-		if (
-			$meetingtype
-			=== EventStore::getMeetingTypeFromDBVal( (string)EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON ) ) {
-			return 'campaignevents-eventslist-location-online-and-in-person';
-		}
-		return '';
 	}
 
 	/**
@@ -258,6 +253,8 @@ class EventsListPager extends RangeChronologicalPager {
 	 */
 	private function getMonthFromTimestamp( string $timestamp ): string {
 		$timestamp = $this->offsetTimestamp( $timestamp );
+		// TODO This is not guaranteed to return the month name in a format suitable for section headings (e.g.,
+		// it may need to be capitalized).
 		return $this->getLanguage()->sprintfDate( 'F', $timestamp );
 	}
 
@@ -274,7 +271,7 @@ class EventsListPager extends RangeChronologicalPager {
 	 * @param string $timestamp
 	 * @return string
 	 */
-	public function offsetTimestamp( string $timestamp ): string {
+	private function offsetTimestamp( string $timestamp ): string {
 		$offset = $this->options
 			->getOption( $this->getUser(), 'timecorrection' );
 
@@ -286,8 +283,8 @@ class EventsListPager extends RangeChronologicalPager {
 	 */
 	public function getSubqueryInfo(): array {
 		$query = $this->getDefaultSubqueryInfo();
-		if ( $this->meetingType !== '' ) {
-			$query['conds']['event_meeting_type'] = $this->meetingType;
+		if ( $this->meetingType !== null ) {
+			$query['conds']['event_meeting_type'] = EventStore::meetingTypeToDBVal( $this->meetingType );
 		}
 		return $query;
 	}

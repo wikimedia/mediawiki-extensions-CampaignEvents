@@ -21,6 +21,10 @@ use MediaWiki\Pager\TablePager;
 use MediaWiki\SpecialPage\SpecialPage;
 use OOUI\ButtonWidget;
 
+/**
+ * This pager can be used to display a list of events organized by the given user, formatted as a table. In the future,
+ * this might be expanded to allow listing all events, not just those of a single user.
+ */
 class EventsTablePager extends TablePager {
 	use EventPagerTrait {
 		EventPagerTrait::getSubqueryInfo as getDefaultSubqueryInfo;
