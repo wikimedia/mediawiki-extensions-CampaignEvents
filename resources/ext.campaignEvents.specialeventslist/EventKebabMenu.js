@@ -21,6 +21,7 @@
 		this.eventName = config.eventName;
 		this.isClosed = config.isEventClosed;
 		this.windowManager = config.windowManager;
+		this.isLocalWiki = config.isLocalWiki;
 
 		var editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID ),
 			deleteHref = mw.util.getUrl( 'Special:DeleteEventRegistration/' + this.eventID );
@@ -146,6 +147,10 @@
 					} );
 				break;
 			case 'delete':
+				if ( !this.isLocalWiki ) {
+					window.location.assign( data.href );
+					break;
+				}
 				this.maybeDeleteRegistration()
 					.done( function ( deleteData ) {
 						if ( deleteData && deleteData.deleted ) {
@@ -222,7 +227,6 @@
 			eventID = this.eventID;
 
 		this.windowManager.addWindows( [ confirmDelDialog ] );
-
 		return this.windowManager.openWindow( confirmDelDialog ).closed.then( function ( data ) {
 			if ( data && data.action === 'confirm' ) {
 				return new mw.Rest().delete(
