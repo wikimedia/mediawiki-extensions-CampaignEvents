@@ -118,7 +118,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			);
 		} else {
 			$this->assertNotNull( $ex, 'Should throw an exception' );
-			$statusErrorKeys = array_column( $ex->getStatus()->getErrors(), 'message' );
+			$statusErrorKeys = array_map( fn ( $msg ) => $msg->getKey(), $ex->getStatus()->getMessages() );
 			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
 			$this->assertSame( $expectedErrorKey, $statusErrorKeys[0], 'Error message should match' );
 		}
@@ -373,7 +373,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			$factory->newEvent( ...$factoryArgs );
 			$this->fail( 'Should throw an exception' );
 		} catch ( InvalidEventDataException $ex ) {
-			$statusErrorKeys = array_column( $ex->getStatus()->getErrors(), 'message' );
+			$statusErrorKeys = array_map( fn ( $msg ) => $msg->getKey(), $ex->getStatus()->getMessages() );
 			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
 			$this->assertSame( 'campaignevents-error-invalid-timezone', $statusErrorKeys[0] );
 		}
@@ -441,7 +441,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			);
 		} else {
 			$this->assertNotNull( $ex, 'Should throw an exception' );
-			$statusErrorKeys = array_column( $ex->getStatus()->getErrors(), 'message' );
+			$statusErrorKeys = array_map( fn ( $msg ) => $msg->getKey(), $ex->getStatus()->getMessages() );
 			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
 			$this->assertSame(
 				'campaignevents-error-invalid-chat-url',

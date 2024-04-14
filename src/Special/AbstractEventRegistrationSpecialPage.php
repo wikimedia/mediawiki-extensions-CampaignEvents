@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
-use ApiMessage;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -32,7 +31,6 @@ use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\User\UserTimeCorrection;
-use Message;
 use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
@@ -291,9 +289,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 					if ( $validationStatus->getValue() ) {
 						$this->invalidOrganizerNames = $validationStatus->getValue();
 					}
-					$error = $validationStatus->getErrors()[0];
-					$errorApiMsg = ApiMessage::create( $error );
-					return $this->msg( $errorApiMsg->getKey(), ...$errorApiMsg->getParams() )->text();
+					$msg = $validationStatus->getMessages()[0];
+					return $this->msg( $msg )->text();
 				}
 
 				return true;
@@ -693,9 +690,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$this->msg( $this->formMessages['success'] )->params( $this->eventPagePrefixedText )->parse()
 		) );
 		if ( $this->saveWarningsStatus ) {
-			foreach ( $this->saveWarningsStatus->getErrors() as $error ) {
-				// XXX: This is ugly, but it's the easiest way to convert a Status error to a Message.
-				$msg = Message::newFromSpecifier( ApiMessage::create( $error ) );
+			foreach ( $this->saveWarningsStatus->getMessages() as $msg ) {
 				$this->getOutput()->prependHTML( Html::warningBox( $this->msg( $msg )->escaped() ) );
 			}
 		}

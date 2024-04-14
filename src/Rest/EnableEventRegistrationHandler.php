@@ -21,10 +21,10 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		$respValue = [
 			'id' => $id
 		];
-		foreach ( $saveStatus->getErrorsByType( 'warning' ) as $warning ) {
+		foreach ( $saveStatus->getMessages( 'warning' ) as $msg ) {
 			$respValue['warnings'] ??= [];
 			// XXX There's no standard way to format warnings.
-			$respValue['warnings'][] = [ 'key' => $warning['message'], 'params' => $warning['params'] ];
+			$respValue['warnings'][] = [ 'key' => $msg->getKey(), 'params' => $msg->getParams() ];
 		}
 		$resp = $this->getResponseFactory()->createJson( $respValue );
 		$resp->setStatus( 201 );
