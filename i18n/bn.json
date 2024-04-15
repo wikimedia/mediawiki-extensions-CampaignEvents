@@ -37,6 +37,7 @@
 	"campaignevents-unregister-not-participant": "আপনি এই ইভেন্টের জন্য নিবন্ধন করেন নি।",
 	"campaignevents-unregister-need-central-account": "ইভেন্ট নিবন্ধন বাতিল করতে হলে আপনার একটি কেন্দ্রীয় ব্যবহারকারী অ্যাকাউন্ট থাকতে হবে৷",
 	"myevents": "আপনার ইভেন্ট",
+	"allevents": "সকল ইভেন্ট",
 	"campaignevents-myevents-need-central-account": "আপনার ইভেন্টের তালিকা দেখতে হলে আপনার একটি কেন্দ্রীয় ব্যবহারকারী অ্যাকাউন্টের থাকতে হবে।",
 	"campaignevents-myevents-label-search": "অনুসন্ধান",
 	"campaignevents-myevents-label-status": "স্থিতি",
