@@ -365,13 +365,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_page_prefixedtext,
 			$row->event_page_wiki
 		);
-		$dbMeetingType = (int)$row->event_meeting_type;
-		$meetingType = 0;
-		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
-			if ( $dbMeetingType & $dbVal ) {
-				$meetingType |= $eventVal;
-			}
-		}
+		$meetingType = self::getMeetingTypeFromDBVal( $row->event_meeting_type );
 
 		$address = null;
 		$country = null;
@@ -425,13 +419,6 @@ class EventStore implements IEventStore, IEventLookup {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$curDBTimestamp = $dbw->timestamp();
 
-		$meetingType = 0;
-		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
-			if ( $event->getMeetingType() & $eventVal ) {
-				$meetingType |= $dbVal;
-			}
-		}
-
 		$curCreationTS = $event->getCreationTimestamp();
 		$curDeletionTS = $event->getDeletionTimestamp();
 		// The local timestamps are already guaranteed to be in TS_MW format and the EventRegistration constructor
@@ -452,7 +439,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_end_local' => $localEndDB,
 			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
 			'event_type' => self::EVENT_TYPE_MAP[$event->getType()],
-			'event_meeting_type' => $meetingType,
+			'event_meeting_type' => self::meetingTypeToDBVal( $event->getMeetingType() ),
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
 			'event_last_edit' => $curDBTimestamp,
@@ -555,6 +542,21 @@ class EventStore implements IEventStore, IEventLookup {
 			}
 		}
 		return $ret;
+	}
+
+	/**
+	 * Converts an EventRegistration::MEETING_TYPE_* constant to the corresponding value used in the database.
+	 * @param int $meetingType
+	 * @return int
+	 */
+	public static function meetingTypeToDBVal( int $meetingType ): int {
+		$dbMeetingType = 0;
+		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
+			if ( $meetingType & $eventVal ) {
+				$dbMeetingType |= $dbVal;
+			}
+		}
+		return $dbMeetingType;
 	}
 
 	/**

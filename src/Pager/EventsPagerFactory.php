@@ -82,13 +82,17 @@ class EventsPagerFactory {
 
 	/**
 	 * @param string $search
-	 * @param string $status
+	 * @param int|null $meetingType
 	 * @param string $startDate
 	 * @param string $endDate
 	 * @return EventsListPager
 	 */
 	public function newListPager(
-		string $search, string $status, string $startDate, string $endDate ): EventsListPager {
+		string $search,
+		?int $meetingType,
+		string $startDate,
+		string $endDate
+	): EventsListPager {
 		return new EventsListPager(
 			$this->userLinker,
 			$this->campaignsPageFactory,
@@ -98,7 +102,7 @@ class EventsPagerFactory {
 			$this->options,
 			$this->databaseHelper,
 			$search,
-			$status,
+			$meetingType,
 			$startDate,
 			$endDate
 		);

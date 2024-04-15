@@ -23,10 +23,12 @@ trait EventPagerTrait {
 	private array $eventPageCache = [];
 
 	/**
+	 * @todo The joins and grouping below are not used by EventsListPager (which wouldn't even need a subquery), and
+	 * they just slow the query down. We should either implement those features in the list pager, or move the
+	 * complexity to EventsTablePager.
 	 * @return array
 	 */
 	public function getSubqueryInfo(): array {
-		$conds = [];
 		$options = [
 			'GROUP BY' => [
 				'cep_event_id',

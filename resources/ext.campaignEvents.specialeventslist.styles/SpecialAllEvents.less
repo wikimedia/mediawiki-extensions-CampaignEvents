@@ -2,7 +2,7 @@
 @import 'mediawiki.mixins.less';
 
 #ext-campaignevents-allevents-form > fieldset > .oo-ui-fieldsetLayout-group > .oo-ui-widget-enabled:first-of-type { // stylelint-disable-line selector-max-id
-	@media ( min-width: 38em ) {
+	@media ( min-width: @min-width-breakpoint-tablet ) {
 		display: grid;
 		grid-template-columns: repeat( 2, 45% );
 		grid-gap: 10px;
