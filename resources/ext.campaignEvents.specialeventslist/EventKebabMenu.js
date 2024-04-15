@@ -79,7 +79,9 @@
 							},
 							label: mw.msg( 'campaignevents-eventslist-menu-view-eventpage' )
 						} ),
-						this.isClosed ? this.openRegistrationOption : this.closeRegistrationOption,
+						// Temp hide open/close kebabe menu option T360051
+						// this.isClosed ? this.openRegistrationOption :
+						// this.closeRegistrationOption,
 						new OO.ui.MenuOptionWidget( {
 							$element: getLinkWithLeftClickDisabled( deleteHref ),
 							data: {
