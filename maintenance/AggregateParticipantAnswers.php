@@ -303,12 +303,12 @@ class AggregateParticipantAnswers extends Maintenance {
 		$participantRowsToUpdate = array_keys( $this->participantRowsToUpdateMap );
 		$dbTimestamp = $this->dbw->timestamp( $this->curTimeUnix );
 		foreach ( array_chunk( $participantRowsToUpdate, $this->getBatchSize() ) as $idBatch ) {
-			$this->dbw->update(
-				'ce_participants',
-				[ 'cep_aggregation_timestamp' => $dbTimestamp ],
-				[ 'cep_id' => $idBatch ],
-				__METHOD__
-			);
+			$this->dbw->newUpdateQueryBuilder()
+				->update( 'ce_participants' )
+				->set( [ 'cep_aggregation_timestamp' => $dbTimestamp ] )
+				->where( [ 'cep_id' => $idBatch ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 	}
 

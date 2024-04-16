@@ -452,7 +452,12 @@ class EventStore implements IEventStore, IEventLookup {
 			$dbw->insert( 'campaign_events', $newRow, __METHOD__ );
 			$eventID = $dbw->insertId();
 		} else {
-			$dbw->update( 'campaign_events', $newRow, [ 'event_id' => $eventID ], __METHOD__ );
+			$dbw->newUpdateQueryBuilder()
+				->update( 'campaign_events' )
+				->set( $newRow )
+				->where( [ 'event_id' => $eventID ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
@@ -515,15 +520,15 @@ class EventStore implements IEventStore, IEventLookup {
 	 */
 	public function deleteRegistration( ExistingEventRegistration $registration ): bool {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$dbw->update(
-			'campaign_events',
-			[ 'event_deleted_at' => $dbw->timestamp() ],
-			[
+		$dbw->newUpdateQueryBuilder()
+			->update( 'campaign_events' )
+			->set( [ 'event_deleted_at' => $dbw->timestamp() ] )
+			->where( [
 				'event_id' => $registration->getID(),
 				'event_deleted_at' => null
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->execute();
 		unset( $this->cache[$registration->getID()] );
 		return $dbw->affectedRows() > 0;
 	}

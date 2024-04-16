@@ -98,41 +98,41 @@ class ParticipantsStore {
 		} elseif ( $previousRow->cep_unregistered_at !== null ) {
 			// User was registered, but then cancelled their registration. Update the visibility, reinstate the
 			// registration, and reset the registration time.
-			$dbw->update(
-				'ce_participants',
-				[
+			$dbw->newUpdateQueryBuilder()
+				->update( 'ce_participants' )
+				->set( [
 					'cep_private' => $private,
 					'cep_unregistered_at' => null,
 					'cep_registered_at' => $curTimestamp,
 					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
-				],
-				[ 'cep_id' => $previousRow->cep_id ],
-				__METHOD__
-			);
+				] )
+				->where( [ 'cep_id' => $previousRow->cep_id ] )
+				->caller( __METHOD__ )
+				->execute();
 			$modified = self::MODIFIED_REGISTRATION;
 		} elseif ( (bool)$previousRow->cep_private !== $private ) {
 			// User is already an active participant, but is changing their visibility. Update that, but not the
 			// registration time.
-			$dbw->update(
-				'ce_participants',
-				[
+			$dbw->newUpdateQueryBuilder()
+				->update( 'ce_participants' )
+				->set( [
 					'cep_private' => $private,
 					'cep_first_answer_timestamp' => $previousRow->cep_first_answer_timestamp ?? $updatedFirstAnsTs,
-				],
-				[ 'cep_id' => $previousRow->cep_id ],
-				__METHOD__
-			);
+				] )
+				->where( [ 'cep_id' => $previousRow->cep_id ] )
+				->caller( __METHOD__ )
+				->execute();
 			$modified = self::MODIFIED_VISIBILITY;
 		} elseif ( $previousRow->cep_first_answer_timestamp === null && $updatedFirstAnsTs !== null ) {
 			// Adding answers for the first time
-			$dbw->update(
-				'ce_participants',
-				[
+			$dbw->newUpdateQueryBuilder()
+				->update( 'ce_participants' )
+				->set( [
 					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
-				],
-				[ 'cep_id' => $previousRow->cep_id ],
-				__METHOD__
-			);
+				] )
+				->where( [ 'cep_id' => $previousRow->cep_id ] )
+				->caller( __METHOD__ )
+				->execute();
 			$modified = self::MODIFIED_ANSWERS;
 		} else {
 			// User is already an active participant with the desired visibility and is not answering for the first
@@ -194,19 +194,19 @@ class ParticipantsStore {
 			if ( !$invertUsers ) {
 				$where['cep_user_id'] = $userIDs;
 			} else {
-				$where[] = 'cep_user_id NOT IN (' . $dbw->makeList( $userIDs, IDatabase::LIST_COMMA ) . ')';
+				$where[] = $dbw->expr( 'cep_user_id', '!=', $userIDs );
 			}
 		}
 
-		$dbw->update(
-			'ce_participants',
-			[
+		$dbw->newUpdateQueryBuilder()
+			->update( 'ce_participants' )
+			->set( [
 				'cep_unregistered_at' => $dbw->timestamp(),
 				'cep_first_answer_timestamp' => null,
-			],
-			$where,
-			__METHOD__
-		);
+			] )
+			->where( $where )
+			->caller( __METHOD__ )
+			->execute();
 		$updatedParticipants = $dbw->affectedRows();
 		$this->answersStore->deleteAllAnswers( $eventID, $users, $invertUsers );
 
