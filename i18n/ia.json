@@ -424,6 +424,6 @@
 	"campaignevents-warning-change-event-end-date-past": "Si tu cambia le data de fin a un data passate, le evento essera claudite e tu recipera un summario del responsas del participantes. Iste action non pote esser disfacite. Isto es solmente applicabile si le participantes ha fornite responsas al questiones pro le participantes.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Le responsas de participantes individual ha essite delite e le responsas aggregate es disponibile sub [$1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Inscribe te a $1",
-	"campaignevents-register-page-nonlocal": "Per favor [$1 completa tu inscription al evento sur $2], le wiki ubi le evento ha essite create.",
-	"campaignevents-delete-registration-page-nonlocal": "Per favor [$1 retira tu inscription al evento sur $2], le wiki ubi le evento ha essite create."
+	"campaignevents-register-page-nonlocal": "Per favor '''[$1 completa tu inscription al evento sur $2],''' le wiki ubi le evento ha essite create.",
+	"campaignevents-delete-registration-page-nonlocal": "Per favor '''[$1 retira tu inscription al evento sur $2],''' le wiki ubi le evento ha essite create."
 }
