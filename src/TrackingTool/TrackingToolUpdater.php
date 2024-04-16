@@ -104,7 +104,11 @@ class TrackingToolUpdater {
 		}
 
 		if ( $deleteIDs ) {
-			$dbw->delete( 'ce_tracking_tools', [ 'cett_id' => $deleteIDs ], __METHOD__ );
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_tracking_tools' )
+				->where( [ 'cett_id' => $deleteIDs ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		$newRows = [];

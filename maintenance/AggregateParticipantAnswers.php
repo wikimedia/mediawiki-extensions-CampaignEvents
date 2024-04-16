@@ -192,7 +192,11 @@ class AggregateParticipantAnswers extends Maintenance {
 		}
 
 		if ( $deleteRowIDs ) {
-			$this->dbw->delete( 'ce_question_answers', [ 'ceqa_id' => $deleteRowIDs ], __METHOD__ );
+			$this->dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_question_answers' )
+				->where( [ 'ceqa_id' => $deleteRowIDs ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		$this->output( "Batch $startID-$endID done.\n" );
@@ -390,7 +394,11 @@ class AggregateParticipantAnswers extends Maintenance {
 		}
 
 		if ( $deleteRowIDs ) {
-			$this->dbw->delete( 'ce_question_aggregation', [ 'ceqag_id' => $deleteRowIDs ] );
+			$this->dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_question_aggregation' )
+				->where( [ 'ceqag_id' => $deleteRowIDs ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 	}
 }

@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Questions;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use Wikimedia\Rdbms\IDatabase;
 
 class ParticipantAnswersStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantAnswersStore';
@@ -54,7 +53,11 @@ class ParticipantAnswersStore {
 			}
 		}
 		if ( $rowIDsToRemove ) {
-			$dbw->delete( 'ce_question_answers', [ 'ceqa_id' => $rowIDsToRemove ], __METHOD__ );
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_question_answers' )
+				->where( [ 'ceqa_id' => $rowIDsToRemove ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		$newRows = [];
@@ -119,12 +122,16 @@ class ParticipantAnswersStore {
 		if ( $participants !== null ) {
 			$userIDs = array_map( static fn ( CentralUser $u ): int => $u->getCentralID(), $participants );
 			if ( $invertSelection ) {
-				$where[] = 'ceqa_user_id NOT IN (' . $dbw->makeList( $userIDs, IDatabase::LIST_COMMA ) . ')';
+				$where[] = $dbw->expr( 'ceqa_user_id', '!=', $userIDs );
 			} else {
 				$where['ceqa_user_id'] = $userIDs;
 			}
 		}
-		$dbw->delete( 'ce_question_answers', $where, __METHOD__ );
+		$dbw->newDeleteQueryBuilder()
+			->deleteFrom( 'ce_question_answers' )
+			->where( $where )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**

@@ -43,7 +43,11 @@ class EventQuestionsStore {
 			}
 		}
 		if ( $rowIDsToRemove ) {
-			$dbw->delete( 'ce_event_questions', [ 'ceeq_id' => $rowIDsToRemove ], __METHOD__ );
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_event_questions' )
+				->where( [ 'ceeq_id' => $rowIDsToRemove ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		$questionsToAdd = array_diff( $questionIDs, $currentQuestionIDs );
