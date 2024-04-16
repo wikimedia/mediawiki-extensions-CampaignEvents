@@ -136,4 +136,11 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	protected function getValidationFlags(): int {
 		return EventFactory::VALIDATE_SKIP_DATES_PAST;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getShowAlways(): bool {
+		return true;
+	}
 }
