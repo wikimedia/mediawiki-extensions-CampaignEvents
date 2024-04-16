@@ -55,7 +55,11 @@ class EventQuestionsStore {
 					'ceeq_question_id' => $questionID
 				];
 			}
-			$dbw->insert( 'ce_event_questions', $newRows, __METHOD__ );
+			$dbw->newInsertQueryBuilder()
+				->insertInto( 'ce_event_questions' )
+				->rows( $newRows )
+				->caller( __METHOD__ )
+				->execute();
 		}
 	}
 

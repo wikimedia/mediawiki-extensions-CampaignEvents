@@ -206,7 +206,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'event_last_edit' => '20220811142657',
 			'event_deleted_at' => null,
 		];
-		$this->db->insert( 'campaign_events', [ $eventData ] );
+		$this->db->newInsertQueryBuilder()
+			->insertInto( 'campaign_events' )
+			->row( $eventData )
+			->caller( __METHOD__ )
+			->execute();
 
 		$addresses = [
 			[
@@ -218,7 +222,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_country' => 'Country 2',
 			]
 		];
-		$this->db->insert( 'ce_address', $addresses );
+		$this->db->newInsertQueryBuilder()
+			->insertInto( 'ce_address' )
+			->rows( $addresses )
+			->caller( __METHOD__ )
+			->execute();
 
 		$eventAddresses = [
 			[
@@ -230,7 +238,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'ceea_address' => 2,
 			]
 		];
-		$this->db->insert( 'ce_event_address', $eventAddresses );
+		$this->db->newInsertQueryBuilder()
+			->insertInto( 'ce_event_address' )
+			->rows( $eventAddresses )
+			->caller( __METHOD__ )
+			->execute();
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Events should have only one address' );
 		CampaignEventsServices::getEventLookup()->getEventByID( 1 );

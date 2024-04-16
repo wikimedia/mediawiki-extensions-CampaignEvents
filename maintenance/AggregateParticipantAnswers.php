@@ -179,16 +179,17 @@ class AggregateParticipantAnswers extends Maintenance {
 				}
 			}
 
-			$this->dbw->upsert(
-				'ce_question_aggregation',
-				$newAggregateRows,
-				[ [ 'ceqag_event_id', 'ceqag_question_id', 'ceqag_answer_option' ] ],
-				[
+			$this->dbw->newInsertQueryBuilder()
+				->insertInto( 'ce_question_aggregation' )
+				->rows( $newAggregateRows )
+				->onDuplicateKeyUpdate()
+				->uniqueIndexFields( [ 'ceqag_event_id', 'ceqag_question_id', 'ceqag_answer_option' ] )
+				->set( [
 					'ceqag_answers_amount = ceqag_answers_amount + ' .
 						$this->dbw->buildExcludedValue( 'ceqag_answers_amount' )
-				],
-				__METHOD__
-			);
+				] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		if ( $deleteRowIDs ) {

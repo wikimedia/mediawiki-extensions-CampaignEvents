@@ -208,7 +208,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'ceqa_answer_text' => null,
 			],
 		];
-		$dbw->insert( 'ce_question_answers', $answerRows );
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'ce_question_answers' )
+			->rows( $answerRows )
+			->caller( __METHOD__ )
+			->execute();
 
 		$baseParticipantRow = [
 			'cep_private' => false,
@@ -290,7 +294,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'cep_first_answer_timestamp' => $tsAfterCutoff,
 			] + $baseParticipantRow,
 		];
-		$dbw->insert( 'ce_participants', $participantRows );
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'ce_participants' )
+			->rows( $participantRows )
+			->caller( __METHOD__ )
+			->execute();
 
 		$makeEventRow = static function ( array $data ) use ( $dbw ): array {
 			$eventName = wfRandomString();
@@ -338,7 +346,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'event_end_utc' => $endedEventTS,
 			] ),
 		];
-		$dbw->insert( 'campaign_events', $eventRows );
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'campaign_events' )
+			->rows( $eventRows )
+			->caller( __METHOD__ )
+			->execute();
 
 		$previousAggregateRows = [
 			// Partial aggregates for event 1
@@ -356,7 +368,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'ceqag_answers_amount' => 2,
 			],
 		];
-		$dbw->insert( 'ce_question_aggregation', $previousAggregateRows );
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'ce_question_aggregation' )
+			->rows( $previousAggregateRows )
+			->caller( __METHOD__ )
+			->execute();
 
 		$eventQuestionRows = [];
 		// Event 5 intentionally has no questions enabled.
@@ -368,7 +384,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				];
 			}
 		}
-		$dbw->insert( 'ce_event_questions', $eventQuestionRows );
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'ce_event_questions' )
+			->rows( $eventQuestionRows )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	public function testExecute() {

@@ -89,7 +89,11 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 				'ceqa_answer_text' => null,
 			],
 		];
-		$this->getDb()->insert( 'ce_question_answers', $rows, __METHOD__ );
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_question_answers' )
+			->rows( $rows )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**

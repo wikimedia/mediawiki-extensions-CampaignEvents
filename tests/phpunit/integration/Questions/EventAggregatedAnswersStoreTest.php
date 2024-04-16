@@ -42,7 +42,11 @@ class EventAggregatedAnswersStoreTest extends MediaWikiIntegrationTestCase {
 				'ceqag_answers_amount' => 1,
 			],
 		];
-		$this->getDb()->insert( 'ce_question_aggregation', $rows, __METHOD__ );
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_question_aggregation' )
+			->rows( $rows )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**
