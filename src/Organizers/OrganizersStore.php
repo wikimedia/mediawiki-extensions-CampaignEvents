@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use stdClass;
-use Wikimedia\Rdbms\IDatabase;
 
 class OrganizersStore {
 	public const SERVICE_NAME = 'CampaignEventsOrganizersStore';
@@ -172,14 +171,15 @@ class OrganizersStore {
 	 */
 	public function updateClickwrapAcceptance( int $eventID, CentralUser $organizer ) {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$dbw->update( 'ce_organizers',
-			[ 'ceo_agreement_timestamp' => $dbw->timestamp() ],
-			[
+		$dbw->newUpdateQueryBuilder()
+			->update( 'ce_organizers' )
+			->set( [ 'ceo_agreement_timestamp' => $dbw->timestamp() ] )
+			->where( [
 				'ceo_event_id' => $eventID,
 				'ceo_user_id' => $organizer->getCentralID()
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**
@@ -242,17 +242,17 @@ class OrganizersStore {
 	public function removeOrganizersFromEventExcept( int $eventID, array $userIDsToNotRemove ): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
-		$dbw->update(
-			'ce_organizers',
-			[
+		$dbw->newUpdateQueryBuilder()
+			->update( 'ce_organizers' )
+			->set( [
 				'ceo_deleted_at' => $dbw->timestamp()
-			],
-			[
+			] )
+			->where( [
 				'ceo_event_id' => $eventID,
-				'ceo_user_id NOT IN (' . $dbw->makeList( $userIDsToNotRemove, IDatabase::LIST_COMMA ) . ')',
+				$dbw->expr( 'ceo_user_id', '!=', $userIDsToNotRemove ),
 				'ceo_deleted_at' => null,
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->execute();
 	}
 }

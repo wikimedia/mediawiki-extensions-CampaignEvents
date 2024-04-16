@@ -149,15 +149,15 @@ class TrackingToolUpdater {
 			$setConds['cett_last_sync'] = $dbw->timestamp();
 		}
 
-		$dbw->update(
-			'ce_tracking_tools',
-			$setConds,
-			[
+		$dbw->newUpdateQueryBuilder()
+			->update( 'ce_tracking_tools' )
+			->set( $setConds )
+			->where( [
 				'cett_event' => $eventID,
 				'cett_tool_id' => $toolID,
 				'cett_tool_event_id' => $toolEventID
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->execute();
 	}
 }
