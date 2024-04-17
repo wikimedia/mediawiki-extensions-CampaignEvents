@@ -6,6 +6,7 @@
 			"Joseph",
 			"Khalvar",
 			"Rapsar",
+			"RuzDD",
 			"ToprakM"
 		]
 	},
@@ -127,6 +128,7 @@
 	"campaignevents-myevents-field-status-closed": "Kapalı etkinlikler",
 	"campaignevents-myevents-label-events-per-page": "Sayfa başına etkinlikler",
 	"campaignevents-myevents-filter-btn-label": "Etkinlikleri filtrele",
+	"campaignevents-allevents-label-submit": "Filtreleri uygula",
 	"campaignevents-eventslist-column-date": "Tarih",
 	"campaignevents-eventslist-column-name": "Etkinlik adı",
 	"campaignevents-eventslist-column-location": "Konum",
@@ -134,6 +136,7 @@
 	"campaignevents-eventslist-location-online": "Çevrimiçi etkinlik",
 	"campaignevents-eventslist-location-in-person": "Yüz yüze etkinlik",
 	"campaignevents-eventslist-location-online-and-in-person": "Çevrimiçi ve yüz yüze etkinlik",
+	"campaignevents-eventslist-location-all-events": "Tüm olaylar",
 	"campaignevents-eventslist-manage-btn-info": "Etkinliği yönet",
 	"campaignevents-eventslist-menu-edit": "Etkinliği düzenle",
 	"campaignevents-eventslist-menu-view-eventpage": "Etkinlik sayfasını görüntüle",
