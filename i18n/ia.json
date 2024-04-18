@@ -86,7 +86,7 @@
 	"campaignevents-edit-invalid-id": "Forni un ID de evento valide.",
 	"campaignevents-edit-no-event-id-provided": "Forni un ID de evento.",
 	"campaignevents-edit-event-notfound": "Non existe un evento con iste ID.",
-	"campaignevents-edit-page-nonlocal": "Per favor [$1 modifica le detalios de iste inscription sur $2], le wiki ubi le evento ha essite create.",
+	"campaignevents-edit-page-nonlocal": "Per favor '''[$1 modifica le detalios de iste inscription sur $2],''' le wiki ubi le evento ha essite create.",
 	"campaignevents-edit-error-deleted": "Iste inscription de evento ha essite delite.",
 	"campaignevents-edit-need-central-account": "Un conto de usator central es necessari pro poter activar o modificar inscriptiones a eventos.",
 	"campaignevents-edit-organizers-not-allowed": "$2 non ha le permissiones necessari pro esser organisator{{PLURAL:$1||es}}.",

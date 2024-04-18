@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"TomatoCake"
+		]
 	},
 	"campaignevents-rest-event-not-found": "Es gibt keine Veranstaltung mit dieser ID.",
 	"campaignevents-rest-enable-registration-permission-denied": "Du bist nicht berechtigt, die Registrierung von Veranstaltungen zu aktivieren.",
@@ -16,5 +18,5 @@
 	"campaignevents-rest-register-invalid-answer": "Ungültige Antwort auf die Frage $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Bitte vervollständige deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Bitte lösche deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Bitte senden den Teilnehmenden eine E-Mail auf $1, das Wiki, in dem die Veranstaltung erstellt wurde."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Bitte sende den Teilnehmenden eine E-Mail auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde."
 }

@@ -87,7 +87,7 @@
 	"campaignevents-edit-invalid-id": "Navedite veljaven ID dogodka.",
 	"campaignevents-edit-no-event-id-provided": "Navedite ID dogodka.",
 	"campaignevents-edit-event-notfound": "Dogodek s tem ID-jem ne obstaja.",
-	"campaignevents-edit-page-nonlocal": "Prosimo, [$1 uredite prijavo] v vikiju, v katerem je bila omogočena: $2.",
+	"campaignevents-edit-page-nonlocal": "Prosimo, '''[$1 uredite podrobnosti prijave na dogodek]''' v vikiju, v katerem je bil dogodek ustvarjen: $2.",
 	"campaignevents-edit-error-deleted": "Prijava na ta dogodek je bila izbrisana.",
 	"campaignevents-edit-need-central-account": "Da lahko omogočite ali urejate prijave na dogodek, potrebujete centralni uporabniški račun.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|nima|nimata|nimajo}} potrebnih dovoljenj za {{PLURAL:$1|organizatorja|organizatorja|organizatorje}}.",

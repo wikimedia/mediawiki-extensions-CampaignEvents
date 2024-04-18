@@ -92,7 +92,7 @@
 	"campaignevents-edit-invalid-id": "Geef een geldig evenement-ID op.",
 	"campaignevents-edit-no-event-id-provided": "Geef een evenement-ID op.",
 	"campaignevents-edit-event-notfound": "Er is geen evenement met dit ID.",
-	"campaignevents-edit-page-nonlocal": "[$1 Bewerk de details van deze registratie] op de wiki $2 waarop het evenement is aangemaakt.",
+	"campaignevents-edit-page-nonlocal": "'''[$1 Bewerk de details van deze registratie]''' op de wiki $2 waarop het evenement is aangemaakt.",
 	"campaignevents-edit-error-deleted": "Deze evenementregistratie is verwijderd.",
 	"campaignevents-edit-need-central-account": "U hebt een centraal gebruikersaccount nodig om de inschrijving op evenementen in te schakelen of te bewerken.",
 	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|heeft|hebben}} niet de benodigde rechten om organisator{{PLURAL:$1||en}} te zijn.",

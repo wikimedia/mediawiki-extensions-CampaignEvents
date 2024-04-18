@@ -95,7 +95,7 @@
 	"campaignevents-edit-invalid-id": "Proporciona un código identificador válido para el evento.",
 	"campaignevents-edit-no-event-id-provided": "Proporciona un código identificador para el evento.",
 	"campaignevents-edit-event-notfound": "No existe ningún evento con ese código identificador.",
-	"campaignevents-edit-page-nonlocal": "Por favor [$1 edite los detalles de registro del suceso en $2], la wiki donde se creó el mismo.",
+	"campaignevents-edit-page-nonlocal": "Por favor '''[$1 edite los detalles de registro del acto en $2]''', la wiki donde se creó el acto.",
 	"campaignevents-edit-error-deleted": "Las inscripciones para este evento fueron eliminadas.",
 	"campaignevents-edit-need-central-account": "Necesita una cuenta de usuario global para habilitar o editar las inscripciones para los eventos.",
 	"campaignevents-edit-organizers-not-allowed": "$2 no {{PLURAL:$1|tiene|tienen}} permisos suficientes para ser {{PLURAL:$1|organizador|organizadores}}.",
