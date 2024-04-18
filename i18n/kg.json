@@ -1,10 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bergerdias",
 			"Cgmbo"
 		]
 	},
+	"campaignevents-allevents-label-submit": "Kusadila ba kiyungulu",
 	"campaignevents-allevents-label-search": "Sosa ngogo ya mfunu",
 	"campaignevents-allevents-label-meeting-type": "Mutindu ya lukutakanu",
-	"campaignevents-allevents-label-end-date": "Na"
+	"campaignevents-allevents-label-end-date": "Na",
+	"campaignevents-eventslist-location-all-events": "Mambu yonso"
 }
