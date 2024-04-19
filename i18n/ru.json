@@ -55,7 +55,9 @@
 	"allevents": "Все события",
 	"campaignevents-allevents-filter-legend": "Фильтровать события",
 	"campaignevents-allevents-label-submit": "Применить фильтры",
+	"campaignevents-allevents-label-search": "Поиск ключевых слов",
 	"campaignevents-allevents-label-meeting-type": "Тип встречи",
+	"campaignevents-allevents-label-events-per-page": "События на странице",
 	"campaignevents-allevents-label-start-date": "От",
 	"campaignevents-allevents-label-end-date": "Кому",
 	"campaignevents-eventslist-column-date": "Дата",
@@ -82,5 +84,6 @@
 	"campaignevents-email-participants-yes": "Да",
 	"campaignevents-email-participants-no": "Нет",
 	"campaignevents-register-question-affiliate-option-affiliate": "Да",
-	"campaignevents-register-page-nonlocal": "Пожалуйста, [$1 завершите регистрацию на мероприятии на $2], вики, где оно было создано."
+	"campaignevents-register-page-nonlocal": "Пожалуйста, '''[ $1 завершите регистрацию на мероприятие на $2 ]''', вики, где было создано событие.",
+	"campaignevents-delete-registration-page-nonlocal": "Пожалуйста, [$1 завершите регистрацию на мероприятии на $2], вики, где оно было создано."
 }
