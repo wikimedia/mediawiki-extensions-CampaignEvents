@@ -214,16 +214,17 @@ class OrganizersStore {
 			];
 		}
 
-		$dbw->upsert(
-			'ce_organizers',
-			$newRows,
-			[ [ 'ceo_event_id', 'ceo_user_id' ] ],
-			[
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'ce_organizers' )
+			->rows( $newRows )
+			->onDuplicateKeyUpdate()
+			->uniqueIndexFields( [ 'ceo_event_id', 'ceo_user_id' ] )
+			->set( [
 				'ceo_deleted_at' => null,
 				'ceo_roles = ' . $dbw->buildExcludedValue( 'ceo_roles' ),
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**

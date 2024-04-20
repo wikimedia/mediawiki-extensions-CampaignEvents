@@ -29,7 +29,11 @@ class EventQuestionsStoreTest extends MediaWikiIntegrationTestCase {
 				'ceeq_question_id' => 1,
 			],
 		];
-		$this->getDb()->insert( 'ce_event_questions', $rows, __METHOD__ );
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_event_questions' )
+			->rows( $rows )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**

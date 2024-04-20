@@ -63,7 +63,11 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 			}
 		}
 
-		$this->db->insert( 'ce_organizers', $rows );
+		$this->db->newInsertQueryBuilder()
+			->insertInto( 'ce_organizers' )
+			->rows( $rows )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**

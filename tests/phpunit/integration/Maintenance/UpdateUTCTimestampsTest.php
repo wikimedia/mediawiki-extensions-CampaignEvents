@@ -91,7 +91,11 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 			'event_end_utc' => $dbw->timestamp( '20220815200000' ),
 		] );
 
-		$dbw->insert( 'campaign_events', $rows, __METHOD__ );
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'campaign_events' )
+			->rows( $rows )
+			->caller( __METHOD__ )
+			->execute();
 		$this->oldRows = $rows;
 	}
 

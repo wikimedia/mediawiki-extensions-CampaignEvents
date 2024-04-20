@@ -41,14 +41,14 @@ class AddressStore {
 		if ( $addressID !== false ) {
 			$addressID = (int)$addressID;
 		} else {
-			$dbw->insert(
-				'ce_address',
-				[
+			$dbw->newInsertQueryBuilder()
+				->insertInto( 'ce_address' )
+				->row( [
 					'cea_full_address' => $fullAddress,
 					'cea_country' => $country
-				],
-				__METHOD__
-			);
+				] )
+				->caller( __METHOD__ )
+				->execute();
 			$addressID = $dbw->insertId();
 		}
 		return $addressID;

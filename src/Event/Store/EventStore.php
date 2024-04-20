@@ -449,7 +449,11 @@ class EventStore implements IEventStore, IEventLookup {
 		$eventID = $event->getID();
 		$dbw->startAtomic( __METHOD__ );
 		if ( $eventID === null ) {
-			$dbw->insert( 'campaign_events', $newRow, __METHOD__ );
+			$dbw->newInsertQueryBuilder()
+				->insertInto( 'campaign_events' )
+				->row( $newRow )
+				->caller( __METHOD__ )
+				->execute();
 			$eventID = $dbw->insertId();
 		} else {
 			$dbw->newUpdateQueryBuilder()
@@ -503,15 +507,15 @@ class EventStore implements IEventStore, IEventLookup {
 
 		if ( $meetingAddress ) {
 			$addressID = $this->addressStore->acquireAddressID( $meetingAddress, $meetingCountry );
-			$dbw->insert(
-				'ce_event_address',
-				[
+			$dbw->newInsertQueryBuilder()
+				->insertInto( 'ce_event_address' )
+				->ignore()
+				->row( [
 					'ceea_event' => $eventID,
 					'ceea_address' => $addressID
-				],
-				__METHOD__,
-				[ 'IGNORE' ]
-			);
+				] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 	}
 

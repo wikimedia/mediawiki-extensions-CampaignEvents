@@ -126,12 +126,12 @@ class TrackingToolUpdater {
 		if ( $newRows ) {
 			// Insert the remaining rows. We can ignore conflicting rows in the database, as the checks above guarantee
 			// that they're identical to the new rows.
-			$dbw->insert(
-				'ce_tracking_tools',
-				$newRows,
-				__METHOD__,
-				[ 'IGNORE' ]
-			);
+			$dbw->newInsertQueryBuilder()
+				->insertInto( 'ce_tracking_tools' )
+				->ignore()
+				->rows( $newRows )
+				->caller( __METHOD__ )
+				->execute();
 		}
 	}
 

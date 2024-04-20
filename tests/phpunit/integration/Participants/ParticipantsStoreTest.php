@@ -69,7 +69,11 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 				]
 			);
 		}
-		$this->db->insert( 'ce_participants', $rows );
+		$this->db->newInsertQueryBuilder()
+			->insertInto( 'ce_participants' )
+			->rows( $rows )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	private function getStore(): ParticipantsStore {

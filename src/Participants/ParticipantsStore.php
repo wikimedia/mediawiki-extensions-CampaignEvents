@@ -81,9 +81,9 @@ class ParticipantsStore {
 		$updatedFirstAnsTs = $answers ? $curTimestamp : null;
 		if ( !$previousRow ) {
 			// User never registered for this event, so we're just adding a new record.
-			$dbw->insert(
-				'ce_participants',
-				[
+			$dbw->newInsertQueryBuilder()
+				->insertInto( 'ce_participants' )
+				->row( [
 					'cep_event_id' => $eventID,
 					'cep_user_id' => $userID,
 					'cep_private' => $private,
@@ -91,9 +91,9 @@ class ParticipantsStore {
 					'cep_unregistered_at' => null,
 					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
 					'cep_aggregation_timestamp' => null,
-				],
-				__METHOD__
-			);
+				] )
+				->caller( __METHOD__ )
+				->execute();
 			$modified = self::MODIFIED_REGISTRATION;
 		} elseif ( $previousRow->cep_unregistered_at !== null ) {
 			// User was registered, but then cancelled their registration. Update the visibility, reinstate the

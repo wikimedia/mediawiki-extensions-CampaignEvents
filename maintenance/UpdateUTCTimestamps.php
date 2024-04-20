@@ -127,16 +127,18 @@ class UpdateUTCTimestamps extends Maintenance {
 		}
 		if ( $newRows ) {
 			// Use INSERT ODKU to update all rows at once. This will never insert, only update.
-			$this->dbw->upsert(
-				'campaign_events',
-				$newRows,
-				'event_id',
-				[
+			// @phan-suppress-next-line SecurityCheck-SQLInjection False positive due to use of get_object_vars
+			$this->dbw->newInsertQueryBuilder()
+				->insertInto( 'campaign_events' )
+				->rows( $newRows )
+				->onDuplicateKeyUpdate()
+				->uniqueIndexFields( 'event_id' )
+				->set( [
 					'event_start_utc = ' . $this->getUpdateTimeConditional( 'event_start_utc' ),
 					'event_end_utc = ' . $this->getUpdateTimeConditional( 'event_end_utc' )
-				],
-				__METHOD__
-			);
+				] )
+				->caller( __METHOD__ )
+				->execute();
 
 			// TODO: Ideally we would use affectedRows here, but our implementation does not distinguish between
 			// matched and changed rows (T304680); additionally, MySQL counts updated rows as 2 (T314100).

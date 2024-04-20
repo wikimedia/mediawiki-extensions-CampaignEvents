@@ -85,16 +85,17 @@ class ParticipantAnswersStore {
 			return $rowIDsToRemove !== [];
 		}
 
-		$dbw->upsert(
-			'ce_question_answers',
-			$newRows,
-			[ [ 'ceqa_event_id', 'ceqa_user_id', 'ceqa_question_id' ] ],
-			[
+		$dbw->newInsertQueryBuilder()
+			->insertInto( 'ce_question_answers' )
+			->rows( $newRows )
+			->onDuplicateKeyUpdate()
+			->uniqueIndexFields( [ 'ceqa_event_id', 'ceqa_user_id', 'ceqa_question_id' ] )
+			->set( [
 				'ceqa_answer_option = ' . $dbw->buildExcludedValue( 'ceqa_answer_option' ),
 				'ceqa_answer_text = ' . $dbw->buildExcludedValue( 'ceqa_answer_text' ),
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->execute();
 		return true;
 	}
 

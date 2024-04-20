@@ -47,7 +47,11 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 				'cett_last_sync' => '20230115000000',
 			]
 		];
-		$this->getDb()->insert( 'ce_tracking_tools', $rows, __METHOD__ );
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_tracking_tools' )
+			->rows( $rows )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	/**
