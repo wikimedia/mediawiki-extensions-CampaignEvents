@@ -20,28 +20,28 @@
 	}
 
 	.ext-campaignevents-registration-visibility-label {
-		margin: 0 1em;
+		margin: 0 @spacing-100;
 		display: flex;
 		color: @color-subtle;
 		font-weight: @font-weight-normal;
 
 		.oo-ui-iconElement {
-			margin: 0 1em;
+			margin: 0 @spacing-100;
 		}
 	}
-	@dropdownQuestionWidth: 28em;
+	@width-dropdown-question: 28em;
 
 	.ext-campaignevents-dropdown-question {
-		width: @dropdownQuestionWidth;
+		width: @width-dropdown-question;
 		max-width: 100%;
 	}
 
 	.ext-campaignevents-question-other-option {
-		margin-top: 0.1em;
-		@otherOptionIndent: 1em;
-		width: calc( @dropdownQuestionWidth - @otherOptionIndent );
-		margin-left: @otherOptionIndent;
-		max-width: calc( 100% - @otherOptionIndent );
+		margin-top: @spacing-50;
+		@margin-start-other-option: @spacing-125;
+		width: calc( @width-dropdown-question - @margin-start-other-option );
+		margin-left: @margin-start-other-option;
+		max-width: calc( 100% - @margin-start-other-option );
 	}
 
 	.ext-campaignevents-registration-retention-label {
