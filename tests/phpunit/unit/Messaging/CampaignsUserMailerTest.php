@@ -14,12 +14,15 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
+use MediaWiki\Mail\EmailUser;
+use MediaWiki\Mail\EmailUserFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
+use StatusValue;
 use Wikimedia\Message\ITextFormatter;
 
 /**
@@ -34,6 +37,7 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 	 * @param array $optionsOverrides
 	 * @param CampaignsCentralUserLookup|null $centralUserLookup
 	 * @param UserOptionsLookup|null $userOptionsLookup
+	 * @param EmailUserFactory|null $emailUserFactory
 	 * @return CampaignsUserMailer
 	 */
 	private function getCampaignsUserMailer(
@@ -41,8 +45,8 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 		JobQueueGroup $jobQueueGroup = null,
 		array $optionsOverrides = [],
 		CampaignsCentralUserLookup $centralUserLookup = null,
-		UserOptionsLookup $userOptionsLookup = null
-
+		UserOptionsLookup $userOptionsLookup = null,
+		?EmailUserFactory $emailUserFactory = null
 	): CampaignsUserMailer {
 		$serviceOptions = new ServiceOptions(
 			CampaignsUserMailer::CONSTRUCTOR_OPTIONS,
@@ -61,7 +65,8 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$userOptionsLookup ?? $this->createMock( UserOptionsLookup::class ),
 			$this->createMock( ITextFormatter::class ),
-			$this->createMock( PageURLResolver::class )
+			$this->createMock( PageURLResolver::class ),
+			$emailUserFactory ?? $this->createMock( EmailUserFactory::class ),
 		);
 	}
 
@@ -136,8 +141,6 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 
 		$performer = $this->mockRegisteredUltimateAuthority();
 		$performerUser = $this->createMock( User::class );
-		$performerUser->method( 'canSendEmail' )->willReturn( true );
-		$performerUser->method( 'isBlockedFromEmailuser' )->willReturn( false );
 		$performerUser->method( 'pingLimiter' )->willReturn( false );
 		$performerUser->method( 'getEmail' )->willReturn( 'sender@example.org' );
 
@@ -151,11 +154,18 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 		$userFactory->method( 'newFromAuthority' )->with( $performer )->willReturn( $performerUser );
 		$userFactory->method( 'newFromName' )->with( $recipientName )->willReturn( $recipientUser );
 
+		$emailUser = $this->createMock( EmailUser::class );
+		$emailUser->method( 'canSend' )->willReturn( StatusValue::newGood() );
+		$emailUserFactory = $this->createMock( EmailUserFactory::class );
+		$emailUserFactory->method( 'newEmailUser' )->with( $performerUser )->willReturn( $emailUser );
+
 		$userMailer = $this->getCampaignsUserMailer(
 			$userFactory,
 			$jobQueueGroupSpy,
 			[ MainConfigNames::UserEmailUseReplyTo => $useReplyTo ],
-			$centralUserLookup
+			$centralUserLookup,
+			null,
+			$emailUserFactory,
 		);
 		$status = $userMailer->sendEmail(
 			$performer,

@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Mail\EmailUserFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\Authority;
@@ -45,6 +46,7 @@ class CampaignsUserMailer {
 	private UserOptionsLookup $userOptionsLookup;
 	private ITextFormatter $contLangMsgFormatter;
 	private PageURLResolver $pageURLResolver;
+	private EmailUserFactory $emailUserFactory;
 
 	/**
 	 * @param UserFactory $userFactory
@@ -54,6 +56,7 @@ class CampaignsUserMailer {
 	 * @param UserOptionsLookup $userOptionsLookup
 	 * @param ITextFormatter $contLangMsgFormatter
 	 * @param PageURLResolver $pageURLResolver
+	 * @param EmailUserFactory $emailUserFactory
 	 */
 	public function __construct(
 		UserFactory $userFactory,
@@ -62,7 +65,8 @@ class CampaignsUserMailer {
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserOptionsLookup $userOptionsLookup,
 		ITextFormatter $contLangMsgFormatter,
-		PageURLResolver $pageURLResolver
+		PageURLResolver $pageURLResolver,
+		EmailUserFactory $emailUserFactory
 	) {
 		$this->userFactory = $userFactory;
 		$this->jobQueueGroup = $jobQueueGroup;
@@ -72,6 +76,7 @@ class CampaignsUserMailer {
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->contLangMsgFormatter = $contLangMsgFormatter;
 		$this->pageURLResolver = $pageURLResolver;
+		$this->emailUserFactory = $emailUserFactory;
 	}
 
 	/**
@@ -98,10 +103,9 @@ class CampaignsUserMailer {
 
 		$validSend = 0;
 		$performerUser = $this->userFactory->newFromAuthority( $performer );
-		$validSender = $this->validateSender( $performerUser );
-		if ( $validSender !== null ) {
-			// TODO: Use appropriate error messages when switching to core's EmailUser
-			return StatusValue::newFatal( 'badaccess' );
+		$status = $this->validateSender( $performerUser );
+		if ( !$status->isGood() ) {
+			return $status;
 		}
 		$jobs = [];
 		foreach ( $recipients as $recipientName ) {
@@ -251,27 +255,24 @@ class CampaignsUserMailer {
 
 	/**
 	 * Check whether a user is allowed to send email
-	 * This code was copied from EmailUser::getPermissionsError
 	 * @param User $user
-	 * @return null|string Null on success, string on error.
+	 * @return StatusValue status indicating whether the user can send an email or not
 	 */
-	private function validateSender( User $user ): ?string {
-		if ( !$user->canSendEmail() ) {
-			return 'badaccess';
-		}
-
-		if ( $user->isBlockedFromEmailuser() ) {
-			wfDebug( "User is blocked from sending e-mail." );
-
-			return "blockedemailuser";
+	private function validateSender( User $user ): StatusValue {
+		$status = $this->emailUserFactory
+			->newEmailUser( $user )
+			->canSend();
+		if ( !$status->isGood() ) {
+			return $status;
 		}
 
 		if ( $user->pingLimiter( PermissionChecker::SEND_EVENTS_EMAIL_RIGHT ) ) {
 			wfDebug( "Ping limiter triggered." );
 
-			return 'actionthrottledtext';
+			return StatusValue::newFatal( 'actionthrottledtext' );
 		}
-		return null;
+
+		return StatusValue::newGood();
 	}
 
 	/**

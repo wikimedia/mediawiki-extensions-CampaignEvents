@@ -99,7 +99,8 @@ return [
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->getUserOptionsLookup(),
 			$services->getMessageFormatterFactory()->getTextFormatter( $services->getContentLanguage()->getCode() ),
-			$services->get( PageURLResolver::SERVICE_NAME )
+			$services->get( PageURLResolver::SERVICE_NAME ),
+			$services->getEmailUserFactory(),
 		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
