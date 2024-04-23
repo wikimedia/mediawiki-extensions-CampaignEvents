@@ -10,6 +10,7 @@
 		this.lastParticipantID = mw.config.get( 'wgCampaignEventsLastParticipantID' );
 		this.curUserCentralID = mw.config.get( 'wgCampaignEventsCurUserCentralID' );
 		this.viewerHasEmail = mw.config.get( 'wgCampaignEventsViewerHasEmail' );
+		this.nonPIIQuestionIDs = mw.config.get( 'wgCampaignEventsNonPIIQuestionIDs' );
 		/* eslint-disable no-jquery/no-global-selector */
 		var $selectAllParticipantsField = $(
 			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
@@ -583,23 +584,26 @@
 					} )
 				);
 			}
-			if ( typeof curParticipantData.non_pii_answers === 'object' ) {
-				// TO DO - This is implicitly relying on the answers returned by the API
-				// being in the same ordered, improve this code to make it knows what
-				// each column is for
-				for ( var j = 0; j < curParticipantData.non_pii_answers.length; j++ ) {
-					items.push(
-						new OO.ui.Element( {
-							$element: $( '<td>' ),
-							text: curParticipantData.non_pii_answers[ j ].message
-						} )
-					);
+
+			if ( this.nonPIIQuestionIDs.length ) {
+				if ( typeof curParticipantData.non_pii_answers === 'object' ) {
+					// TO DO - This is implicitly relying on the answers returned by the API
+					// being in the same ordered, improve this code to make it knows what
+					// each column is for
+					for ( var j = 0; j < curParticipantData.non_pii_answers.length; j++ ) {
+						items.push(
+							new OO.ui.Element( {
+								$element: $( '<td>' ),
+								text: curParticipantData.non_pii_answers[ j ].message
+							} )
+						);
+					}
+				} else if ( typeof curParticipantData.non_pii_answers === 'string' ) {
+					var $tableCell = $( '<td>' ).attr( 'colspan', this.nonPIIQuestionIDs.length )
+						.addClass( 'ext-campaignevents-details-participants-responses-aggregated-notice' )
+						.text( curParticipantData.non_pii_answers );
+					items.push( new OO.ui.Element( { $element: $tableCell } ) );
 				}
-			} else if ( typeof curParticipantData.non_pii_answers === 'string' ) {
-				var $tableCell = $( '<td>' ).attr( 'colspan', '2' )
-					.addClass( 'ext-campaignevents-details-participants-responses-aggregated-notice' )
-					.text( curParticipantData.non_pii_answers );
-				items.push( new OO.ui.Element( { $element: $tableCell } ) );
 			}
 
 			var row = new OO.ui.Element( {
