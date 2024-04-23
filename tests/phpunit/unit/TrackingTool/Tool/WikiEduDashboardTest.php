@@ -313,7 +313,7 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 
 		yield 'Sync not enabled' => [
 			$this->getJsonReqMock( [ 'error_code' => 'sync_not_enabled' ] ),
-			'campaignevents-tracking-tool-wikiedu-not-connected-error'
+			null
 		];
 	}
 
