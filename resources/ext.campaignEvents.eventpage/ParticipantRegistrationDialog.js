@@ -11,7 +11,7 @@
 	 *    - public (boolean): Whether the user is registered publicly
 	 *    - aggregationTimestamp (string|null): Planned timestamp of when the user's answers will be
 	 *       aggregated.
-	 *    - answersAggregated (boolean): Whether the user's answers have already been aggregated.
+	 * @cfg {boolean} [answersAggregated] Whether the user's answers have already been aggregated.
 	 * @cfg {Object} [eventQuestions] EventQuestions object
 	 * @extends OO.ui.ProcessDialog
 	 * @constructor
@@ -23,14 +23,13 @@
 		if ( typeof config.curParticipantData !== 'undefined' ) {
 			this.publicRegistration = config.curParticipantData.public;
 			this.aggregationTimestamp = config.curParticipantData.aggregationTimestamp;
-			this.answersAggregated = config.curParticipantData.answersAggregated;
 			this.isEdit = true;
 		} else {
 			this.publicRegistration = true;
 			this.aggregationTimestamp = null;
-			this.answersAggregated = false;
 			this.isEdit = false;
 		}
+		this.answersAggregated = config.answersAggregated;
 		this.eventQuestions = config.eventQuestions;
 	}
 

@@ -63,8 +63,17 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_private' => true,
 						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
 						'cep_unregistered_at' => null,
-						'cep_first_answer_timestamp' => null,
-						'cep_aggregation_timestamp' => null,
+						'cep_first_answer_timestamp' => $this->db->timestamp( '20220316120000' ),
+						'cep_aggregation_timestamp' => $this->db->timestamp( '20230316120000' ),
+					],
+					[
+						'cep_event_id' => $eventID,
+						'cep_user_id' => 107,
+						'cep_private' => false,
+						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
+						'cep_unregistered_at' => $this->db->timestamp( '20220324120000' ),
+						'cep_first_answer_timestamp' => $this->db->timestamp( '20220316120000' ),
+						'cep_aggregation_timestamp' => $this->db->timestamp( '20230316120000' ),
 					],
 				]
 			);
@@ -433,6 +442,25 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertFalse( $store->userParticipatesInEvent( $eventID, $participant, true ), 'precondition' );
 		$store->addParticipantToEvent( $eventID, $participant, false, [] );
 		$this->assertTrue( $store->userParticipatesInEvent( $eventID, $participant, true ) );
+	}
+
+	/**
+	 * @dataProvider provideUserHasAggregatedAnswers
+	 * @covers ::userHasAggregatedAnswers
+	 */
+	public function testUserHasAggregatedAnswers( int $event, int $userID, bool $expected ) {
+		$this->assertSame(
+			$expected,
+			$this->getStore()->userHasAggregatedAnswers( $event, new CentralUser( $userID ) )
+		);
+	}
+
+	public static function provideUserHasAggregatedAnswers() {
+		yield 'Active participant, no aggregation' => [ 1, 101, false ];
+		yield 'Active participant, has aggregation' => [ 1, 106, true ];
+		yield 'Deleted participant, no aggregation' => [ 1, 102, false ];
+		yield 'Deleted participant, has aggregation' => [ 1, 107, true ];
+		yield 'Not a participant' => [ 1, 99999, false ];
 	}
 
 	/**

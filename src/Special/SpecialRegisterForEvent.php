@@ -37,6 +37,11 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 */
 	private ?Participant $curParticipantData;
 	/**
+	 * @var bool Whether the user has any aggregated answers for this event. This can be true even if the user is not
+	 * a participant (if they cancelled their registration after their answers had been aggregated).
+	 */
+	private bool $hasAggregatedAnswers;
+	/**
 	 * @var bool|null Whether the operation resulted in any data about the participant being modified.
 	 */
 	private ?bool $modifiedData;
@@ -85,8 +90,13 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				$centralUser,
 				true
 			);
+			$this->hasAggregatedAnswers = $this->participantsStore->userHasAggregatedAnswers(
+				$this->event->getID(),
+				$centralUser
+			);
 		} catch ( UserNotGlobalException $_ ) {
 			$this->curParticipantData = null;
+			$this->hasAggregatedAnswers = false;
 		}
 
 		$this->isEdit = $this->curParticipantData || $this->getRequest()->wasPosted();
@@ -145,11 +155,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	}
 
 	private function addParticipantQuestionFields( array &$fields ): void {
-		$alreadyAggregated = $this->curParticipantData
-			? $this->curParticipantData->getAggregationTimestamp() !== null
-			: false;
-
-		if ( $alreadyAggregated ) {
+		if ( $this->hasAggregatedAnswers ) {
 			$fields['AnswersAggregated'] = [
 				'type' => 'info',
 				'default' => Html::element(

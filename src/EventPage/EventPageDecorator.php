@@ -263,14 +263,20 @@ class EventPageDecorator {
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $this->authority );
+			$curParticipant = $this->participantsStore->getEventParticipant(
+				$registration->getID(),
+				$centralUser,
+				true
+			);
+			$hasAggregatedAnswers = $this->participantsStore->userHasAggregatedAnswers(
+				$registration->getID(),
+				$centralUser
+			);
 		} catch ( UserNotGlobalException $_ ) {
 			$centralUser = null;
+			$curParticipant = null;
+			$hasAggregatedAnswers = false;
 		}
-		$curParticipant = $centralUser ? $this->participantsStore->getEventParticipant(
-			$registration->getID(),
-			$centralUser,
-			true
-		) : null;
 
 		$userStatus = $this->getUserStatus( $registration, $centralUser, $curParticipant );
 
@@ -290,8 +296,7 @@ class EventPageDecorator {
 			'wgCampaignEventsEventID' => $registration->getID(),
 			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
 			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData( $registration, $curParticipant ),
-			'wgCampaignEventsAnswersAlreadyAggregated' => $curParticipant ?
-				$curParticipant->getAggregationTimestamp() !== null : false,
+			'wgCampaignEventsAnswersAlreadyAggregated' => $hasAggregatedAnswers,
 			'wgCampaignEventsAggregationTimestamp' => $aggregationTimestamp
 		] );
 	}

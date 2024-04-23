@@ -150,7 +150,7 @@ class RegisterParticipantCommand {
 			}
 		}
 
-		if ( $answers && $existingRecord && $existingRecord->getAggregationTimestamp() !== null ) {
+		if ( $answers && $this->participantsStore->userHasAggregatedAnswers( $registration->getID(), $centralUser ) ) {
 			return StatusValue::newFatal( 'campaignevents-register-answers-aggregated-error' );
 		}
 

@@ -246,7 +246,19 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		);
 		$participantStore = $this->createMock( ParticipantsStore::class );
 		$participantStore->method( 'getEventParticipant' )->willReturn( $participant );
-		yield 'Answers provided but already aggregated' => [
+		$participantStore->method( 'userHasAggregatedAnswers' )->willReturn( true );
+		yield 'Active participant with already aggregated answers' => [
+			'campaignevents-register-answers-aggregated-error',
+			null,
+			null,
+			$participantStore,
+			[ new Answer( 1, 1, null ) ]
+		];
+
+		$participantStore = $this->createMock( ParticipantsStore::class );
+		$participantStore->method( 'getEventParticipant' )->willReturn( null );
+		$participantStore->method( 'userHasAggregatedAnswers' )->willReturn( true );
+		yield 'Previous participant with already aggregated answers' => [
 			'campaignevents-register-answers-aggregated-error',
 			null,
 			null,
