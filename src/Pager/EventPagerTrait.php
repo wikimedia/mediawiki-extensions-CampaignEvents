@@ -117,7 +117,8 @@ trait EventPagerTrait {
 				'event_status',
 				'event_start_utc',
 				'event_end_utc',
-				'event_meeting_type'
+				'event_meeting_type',
+				'num_participants'
 			],
 			'conds' => $conds,
 			'options' => [],
