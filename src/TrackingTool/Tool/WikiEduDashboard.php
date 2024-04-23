@@ -131,8 +131,12 @@ class WikiEduDashboard extends TrackingTool {
 			$toolEventID,
 			true
 		);
-		if ( $status->hasMessage( 'campaignevents-tracking-tool-wikiedu-course-not-found-error' ) ) {
+		if (
+			$status->hasMessage( 'campaignevents-tracking-tool-wikiedu-course-not-found-error' ) ||
+			$status->hasMessage( 'campaignevents-tracking-tool-wikiedu-not-connected-error' )
+		) {
 			// T358732 - Do not fail if the course no longer exists in the Dashboard
+			// T363187 - Do not fail if the course has been unsynced somehow
 			return StatusValue::newGood();
 		}
 		return $status;
@@ -148,8 +152,12 @@ class WikiEduDashboard extends TrackingTool {
 			$toolEventID,
 			false
 		);
-		if ( $status->hasMessage( 'campaignevents-tracking-tool-wikiedu-course-not-found-error' ) ) {
+		if (
+			$status->hasMessage( 'campaignevents-tracking-tool-wikiedu-course-not-found-error' ) ||
+			$status->hasMessage( 'campaignevents-tracking-tool-wikiedu-not-connected-error' )
+		) {
 			// T358732 - Do not fail if the course no longer exists in the Dashboard
+			// T363187 - Do not fail if the course has been unsynced somehow
 			return StatusValue::newGood();
 		}
 		return $status;
