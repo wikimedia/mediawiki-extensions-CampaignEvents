@@ -80,13 +80,15 @@ class SpecialAllEvents extends SpecialPage {
 				'type' => 'date',
 				'label-message' => 'campaignevents-allevents-label-start-date',
 				'icon' => 'calendar',
-				'cssclass' => 'ext-campaignevents-allevents-calendar-field'
+				'cssclass' => 'ext-campaignevents-allevents-calendar-field',
+				'default' => '',
 			],
 			'EndDate' => [
 				'type' => 'date',
 				'label-message' => 'campaignevents-allevents-label-end-date',
 				'icon' => 'calendar',
-				'cssclass' => 'ext-campaignevents-allevents-calendar-field'
+				'cssclass' => 'ext-campaignevents-allevents-calendar-field',
+				'default' => '',
 			],
 			'Limit' => [
 				// NOTE: This has to be called 'limit' because the pager expects that name.
