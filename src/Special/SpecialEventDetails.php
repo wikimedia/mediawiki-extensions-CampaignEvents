@@ -171,7 +171,7 @@ class SpecialEventDetails extends SpecialPage {
 		}
 
 		$foreignDetailsURL = '';
-		$wikiName = Utils::getWikiIDString( $wikiID );
+		$wikiName = WikiMap::getWikiName( Utils::getWikiIDString( $wikiID ) );
 		if ( $isOrganizer && !$isLocalWiki ) {
 			$foreignDetailsURL = WikiMap::getForeignURL(
 				$wikiID, 'Special:' . self::PAGE_NAME . "/{$eventID}"
