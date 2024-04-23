@@ -308,8 +308,16 @@ fieldset.ext-campaignevents-details-email-form {
 }
 
 .oo-ui-popupWidget.ext-campaignevents-event-details-message-all-participants-button-popup {
-	//set manual z-index to put this above sticky header
+	// Set manual z-index to put this above sticky header
 	z-index: @z-index-tooltip;
+}
+
+.oo-ui-buttonGroupWidget.ext-campaignevents-event-details-extra-buttons {
+	&,
+	.ext-campaignevents-event-details-message-all-participants-button {
+		// Remove the default z-index of 0 from the ButtonGroupWidget and the button to let the rule above work.
+		z-index: unset;
+	}
 }
 
 .ext-campaignevents-details-stats-question-container {

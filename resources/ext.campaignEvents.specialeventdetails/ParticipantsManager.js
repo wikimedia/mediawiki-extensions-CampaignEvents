@@ -139,7 +139,6 @@
 				this.$messageParticipantsButton.replaceWith(
 					this.messageParticipantsButton.$element
 				);
-				this.messageParticipantsButton.getPopup().toggle( true );
 			}
 		}
 
