@@ -92,6 +92,9 @@ class EventDetailsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
+	 * @param bool $isLocalWiki
+	 * @param string $foreignDetailsURL
+	 * @param string $wikiName
 	 * @param OutputPage $out
 	 * @return PanelLayout
 	 *
@@ -102,12 +105,15 @@ class EventDetailsModule {
 		UserIdentity $viewingUser,
 		bool $isOrganizer,
 		bool $isParticipant,
+		bool $isLocalWiki,
+		string $foreignDetailsURL,
+		string $wikiName,
 		OutputPage $out
 	): PanelLayout {
 		$eventID = $this->registration->getID();
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
-		$header = $this->getHeader( $isOrganizer );
+		$header = $this->getHeader( $isOrganizer, $isLocalWiki );
 
 		$contentWrapper = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-eventdetails-content-wrapper' ] );
@@ -117,6 +123,9 @@ class EventDetailsModule {
 			$out,
 			$isOrganizer,
 			$isParticipant,
+			$isLocalWiki,
+			$foreignDetailsURL,
+			$wikiName,
 			$organizersCount
 		);
 		$organizersColumn = $this->getOrganizersColumn( $out, $organizersCount );
@@ -126,7 +135,8 @@ class EventDetailsModule {
 			$organizersColumn,
 			$eventID,
 			$isOrganizer,
-			$out
+			$out,
+			$isLocalWiki
 		);
 
 		$contentWrapper->appendContent( $infoColumn, $organizersColumn );
@@ -143,9 +153,10 @@ class EventDetailsModule {
 
 	/**
 	 * @param bool $isOrganizer
+	 * @param bool $isLocalWiki
 	 * @return Tag
 	 */
-	private function getHeader( bool $isOrganizer ): Tag {
+	private function getHeader( bool $isOrganizer, $isLocalWiki ): Tag {
 		$headerItems = [];
 		$headerItems[] = ( new Tag( 'h2' ) )->appendContent(
 			$this->msgFormatter->format(
@@ -153,7 +164,7 @@ class EventDetailsModule {
 			)
 		);
 
-		if ( $isOrganizer ) {
+		if ( $isOrganizer && $isLocalWiki ) {
 			$headerItems[] = new ButtonWidget( [
 				'label' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-edit-button' )
@@ -176,6 +187,9 @@ class EventDetailsModule {
 	 * @param OutputPage $out
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
+	 * @param bool $isLocalWiki
+	 * @param string $foreignDetailsURL
+	 * @param string $wikiName
 	 * @param int $organizersCount
 	 * @return Tag
 	 */
@@ -184,6 +198,9 @@ class EventDetailsModule {
 		OutputPage $out,
 		bool $isOrganizer,
 		bool $isParticipant,
+		bool $isLocalWiki,
+		string $foreignDetailsURL,
+		string $wikiName,
 		int $organizersCount
 	): Tag {
 		$items = [];
@@ -216,11 +233,19 @@ class EventDetailsModule {
 			MessageValue::new( 'campaignevents-event-details-register-prompt' )
 		);
 
+		$needToBeOnLocalWikiMessage = new HtmlSnippet(
+			$out->msg( 'campaignevents-event-details-organizer-not-local-wiki-prompt' )
+				->params( [
+					$foreignDetailsURL, $wikiName
+				] )->parse()
+		);
 		$items[] = $this->getLocationSection(
 			$isOrganizer,
 			$isParticipant,
+			$isLocalWiki,
 			$organizersCount,
-			$needToRegisterMsg
+			$needToRegisterMsg,
+			$needToBeOnLocalWikiMessage
 		);
 
 		$trackingToolsSection = $this->getTrackingToolsSection();
@@ -230,7 +255,9 @@ class EventDetailsModule {
 
 		$chatURL = $this->registration->getChatURL();
 		if ( $chatURL ) {
-			if ( $isOrganizer || $isParticipant ) {
+			if ( $isOrganizer && !$isLocalWiki ) {
+				$chatSectionContent = $needToBeOnLocalWikiMessage;
+			} elseif ( $isOrganizer || $isParticipant ) {
 				$chatSectionContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
 			} else {
 				$chatSectionContent = $needToRegisterMsg;
@@ -313,15 +340,19 @@ class EventDetailsModule {
 	/**
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
+	 * @param bool $isLocalWiki
 	 * @param int $organizersCount
 	 * @param string $needToRegisterMsg
+	 * @param HtmlSnippet $needToBeOnLocalWikiMessage
 	 * @return Tag
 	 */
 	private function getLocationSection(
 		bool $isOrganizer,
 		bool $isParticipant,
+		bool $isLocalWiki,
 		int $organizersCount,
-		string $needToRegisterMsg
+		string $needToRegisterMsg,
+		HtmlSnippet $needToBeOnLocalWikiMessage
 	): Tag {
 		$meetingType = $this->registration->getMeetingType();
 		$items = [];
@@ -359,7 +390,9 @@ class EventDetailsModule {
 
 			$meetingURL = $this->registration->getMeetingURL();
 			if ( $meetingURL ) {
-				if ( $isOrganizer || $isParticipant ) {
+				if ( $isOrganizer && !$isLocalWiki ) {
+					$items[] = $needToBeOnLocalWikiMessage;
+				} elseif ( $isOrganizer || $isParticipant ) {
 					$items[] = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
 				} else {
 					$items[] = $needToRegisterMsg;

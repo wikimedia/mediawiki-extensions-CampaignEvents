@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -17,10 +18,14 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
+use OOUI\HtmlSnippet;
 use OOUI\IndexLayout;
+use OOUI\MessageWidget;
 use OOUI\TabPanelLayout;
 use OOUI\Tag;
 use Wikimedia\Message\IMessageFormatterFactory;
@@ -131,10 +136,15 @@ class SpecialEventDetails extends SpecialPage {
 			$isParticipant = false;
 		}
 		$isOrganizer = $organizer !== null;
-		$userCanEmailParticipants = $this->permissionChecker->userCanEmailParticipants(
-			new MWAuthorityProxy( $this->getAuthority() ),
-			$this->event->getID()
-		);
+		$userCanEmailParticipants = false;
+		$wikiID = $this->event->getPage()->getWikiId();
+		$isLocalWiki = $wikiID === WikiAwareEntity::LOCAL;
+		if ( $isLocalWiki ) {
+			$userCanEmailParticipants = $this->permissionChecker->userCanEmailParticipants(
+				new MWAuthorityProxy( $this->getAuthority() ),
+				$this->event->getID()
+			);
+		}
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
 			'wgCampaignEventsShowEmailTab' => $userCanEmailParticipants,
@@ -160,6 +170,25 @@ class SpecialEventDetails extends SpecialPage {
 			$out->addHTML( $backLink );
 		}
 
+		$foreignDetailsURL = '';
+		$wikiName = Utils::getWikiIDString( $wikiID );
+		if ( $isOrganizer && !$isLocalWiki ) {
+			$foreignDetailsURL = WikiMap::getForeignURL(
+				$wikiID, 'Special:' . self::PAGE_NAME . "/{$eventID}"
+			);
+
+			$messageWidget = new MessageWidget( [
+				'type' => 'notice',
+				'label' => new HtmlSnippet(
+					$this->msg( 'campaignevents-event-details-page-nonlocal' )
+						->params( [
+							$foreignDetailsURL, $wikiName
+						] )->parse()
+				)
+			] );
+			$out->addHTML( $messageWidget );
+		}
+
 		$main = new IndexLayout( [
 			'infusable' => true,
 			'expanded' => false,
@@ -176,6 +205,9 @@ class SpecialEventDetails extends SpecialPage {
 				$this->getUser(),
 				$isOrganizer,
 				$isParticipant,
+				$isLocalWiki,
+				$foreignDetailsURL,
+				$wikiName,
 				$out
 			)
 		);
@@ -192,6 +224,7 @@ class SpecialEventDetails extends SpecialPage {
 				new MWAuthorityProxy( $this->getAuthority() ),
 				$isOrganizer,
 				$userCanEmailParticipants,
+				$isLocalWiki,
 				$out
 			)
 		);
@@ -204,7 +237,7 @@ class SpecialEventDetails extends SpecialPage {
 			);
 		}
 
-		if ( $organizer && $this->event->isPast() ) {
+		if ( $organizer && $isLocalWiki && $this->event->isPast() ) {
 			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
 			$pageURL = $this->getPageTitle( (string)$this->event->getID() )
 				->getLocalURL( [ 'tab' => $this::STATS_PANEL ] );

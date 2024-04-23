@@ -103,6 +103,7 @@ class EventDetailsParticipantsModule {
 	 * @param ICampaignsAuthority $authority
 	 * @param bool $isOrganizer
 	 * @param bool $canEmailParticipants
+	 * @param bool $isLocalWiki
 	 * @param OutputPage $out
 	 * @return Tag
 	 *
@@ -115,6 +116,7 @@ class EventDetailsParticipantsModule {
 		ICampaignsAuthority $authority,
 		bool $isOrganizer,
 		bool $canEmailParticipants,
+		bool $isLocalWiki,
 		OutputPage $out
 	): Tag {
 		$eventID = $event->getID();
@@ -142,13 +144,17 @@ class EventDetailsParticipantsModule {
 		$lastParticipant = $otherParticipants ? end( $otherParticipants ) : $curUserParticipant;
 		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;
 		$canRemoveParticipants = false;
-		if ( $isOrganizer ) {
+		if ( $isOrganizer && $isLocalWiki ) {
 			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
 				UnregisterParticipantCommand::CAN_UNREGISTER;
 		}
-		$canViewNonPIIParticipantsData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
-			$authority, $event->getID()
-		);
+
+		$canViewNonPIIParticipantsData = false;
+		if ( $isOrganizer && $isLocalWiki ) {
+			$canViewNonPIIParticipantsData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
+				$authority, $event->getID()
+			);
+		}
 
 		$items = [];
 		$items[] = $this->getPrimaryHeader(

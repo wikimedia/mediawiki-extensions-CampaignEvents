@@ -79,11 +79,12 @@ class CampaignEventsHookRunner implements
 		Tag $organizersColumn,
 		int $eventID,
 		bool $isOrganizer,
-		OutputPage $outputPage
+		OutputPage $outputPage,
+		bool $isLocalWiki
 	): void {
 		$this->hookContainer->run(
 			'CampaignEventsGetEventDetails',
-			[ $infoColumn, $organizersColumn, $eventID, $isOrganizer, $outputPage ],
+			[ $infoColumn, $organizersColumn, $eventID, $isOrganizer, $outputPage, $isLocalWiki ],
 			[ 'abortable' => false ]
 		);
 	}

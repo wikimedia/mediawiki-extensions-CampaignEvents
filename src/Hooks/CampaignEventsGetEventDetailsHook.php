@@ -18,12 +18,14 @@ interface CampaignEventsGetEventDetailsHook {
 	 * @param int $eventID
 	 * @param bool $isOrganizer
 	 * @param OutputPage $outputPage
+	 * @param bool $isLocalWiki
 	 */
 	public function onCampaignEventsGetEventDetails(
 		Tag $infoColumn,
 		Tag $organizersColumn,
 		int $eventID,
 		bool $isOrganizer,
-		OutputPage $outputPage
+		OutputPage $outputPage,
+		bool $isLocalWiki
 	): void;
 }
