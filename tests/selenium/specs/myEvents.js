@@ -22,7 +22,8 @@ describe( 'MyEvents', function () {
 		MyEventsPage.open();
 	} );
 
-	it( 'can allow organizer to close registration of first event in My Events', async function () {
+	// Skip it because we temporarily removed this option from the menu.
+	it.skip( 'can allow organizer to close registration of first event in My Events', async function () {
 		await MyEventsPage.filterByOpenRegistrations();
 		await MyEventsPage.closeFirstRegistration();
 		assert.deepEqual( await MyEventsPage.notification.getText(), `${ await MyEventsPage.firstEvent.getText() } registration closed.` );
