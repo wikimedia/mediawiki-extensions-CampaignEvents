@@ -548,7 +548,8 @@ class EventPageDecorator {
 		);
 		$participantsContainer = $this->getDetailsDialogParticipants(
 			$eventID,
-			$participant
+			$participant,
+			$registration
 		);
 
 		$dialogContent = Html::element(
@@ -803,15 +804,17 @@ class EventPageDecorator {
 	/**
 	 * @param int $eventID
 	 * @param Participant|null $participant
+	 * @param ExistingEventRegistration $registration
 	 * @return string
 	 */
 	private function getDetailsDialogParticipants(
 		int $eventID,
-		?Participant $participant
+		?Participant $participant,
+		ExistingEventRegistration $registration
 	): string {
 		$showPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants(
 			$this->authority,
-			$eventID
+			$registration
 		);
 		$participantsCount = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );

@@ -125,8 +125,9 @@ class EditEventCommand {
 		$eventPage = $registration->getPage();
 		if ( $isCreation && !$this->permissionChecker->userCanEnableRegistration( $performer, $eventPage ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-enable-registration-not-allowed-page' );
-		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration( $performer, $registrationID ) ) {
-			// @phan-suppress-previous-line PhanTypeMismatchArgumentNullable
+		} elseif ( !$isCreation && !$this->permissionChecker->userCanEditRegistration(
+			$performer,
+			$this->eventLookup->getEventByID( (int)$registrationID ) ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-edit-not-allowed-registration' );
 		}
 		return PermissionStatus::newGood();

@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use DateTime;
 use DateTimeZone;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Utils\MWTimestamp;
@@ -288,5 +289,14 @@ class EventRegistration {
 	 */
 	public function getDeletionTimestamp(): ?string {
 		return $this->deletionTimestamp;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isOnLocalWiki(): bool {
+		$eventPage = $this->getPage();
+		$wikiID = $eventPage->getWikiId();
+		return $wikiID === WikiAwareEntity::LOCAL;
 	}
 }

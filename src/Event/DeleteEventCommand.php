@@ -65,7 +65,7 @@ class DeleteEventCommand {
 		ExistingEventRegistration $registration,
 		ICampaignsAuthority $performer
 	): PermissionStatus {
-		if ( !$this->permissionChecker->userCanDeleteRegistration( $performer, $registration->getID() ) ) {
+		if ( !$this->permissionChecker->userCanDeleteRegistration( $performer, $registration ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-delete-not-allowed-registration' );
 		}
 		return PermissionStatus::newGood();

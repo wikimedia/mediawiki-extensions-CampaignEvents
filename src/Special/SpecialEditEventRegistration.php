@@ -96,7 +96,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		}
 
 		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
-		if ( !$this->permissionChecker->userCanEditRegistration( $mwAuthority, $this->eventID ) ) {
+		if ( !$this->permissionChecker->userCanEditRegistration( $mwAuthority, $this->event ) ) {
 			$this->outputErrorBox( 'campaignevents-edit-not-allowed-registration' );
 			return;
 		}

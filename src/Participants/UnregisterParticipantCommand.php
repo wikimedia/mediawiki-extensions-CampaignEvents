@@ -167,8 +167,7 @@ class UnregisterParticipantCommand {
 		ExistingEventRegistration $registration,
 		ICampaignsAuthority $performer
 	): PermissionStatus {
-		$registrationID = $registration->getID();
-		if ( !$this->permissionChecker->userCanRemoveParticipants( $performer, $registrationID ) ) {
+		if ( !$this->permissionChecker->userCanRemoveParticipants( $performer, $registration ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-unregister-participants-permission-denied' );
 		}
 		return PermissionStatus::newGood();

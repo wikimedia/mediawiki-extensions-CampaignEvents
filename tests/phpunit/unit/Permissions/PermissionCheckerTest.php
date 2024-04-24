@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Permissions;
 
 use Generator;
 use MediaWiki\Block\Block;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
@@ -200,6 +201,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param bool $expected
 	 * @param ICampaignsAuthority $performer
+	 * @param ExistingEventRegistration $event
 	 * @param OrganizersStore|null $organizersStore
 	 * @param IPermissionsLookup|null $permissionsLookup
 	 * @covers ::userCanEditRegistration
@@ -208,36 +210,47 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	public function testUserCanEditRegistration(
 		bool $expected,
 		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event,
 		OrganizersStore $organizersStore = null,
 		IPermissionsLookup $permissionsLookup = null
 	) {
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
-			$checker->userCanEditRegistration( $performer, 42 )
+			$checker->userCanEditRegistration( $performer, $event )
 		);
 	}
 
 	public function provideGenericEditPermissions(): Generator {
 		yield 'Logged out' => [
 			false,
-			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Temp user' => [
 			false,
-			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true ),
 		];
 		yield 'Lacks right to enable registrations' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Blocked' => [
 			false,
 			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Not an organizer' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
+			$this->mockExistingEventRegistration( true )
+		];
+		yield 'Event is not local' => [
+			false,
+			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() ),
+			$this->mockExistingEventRegistration( false )
 		];
 
 		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
@@ -263,6 +276,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			new MWAuthorityProxy(
 				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] )
 			),
+			$this->mockExistingEventRegistration( true ),
 			$authorizedOrgStore,
 			$cannotBeOrganizerPermLookup
 		];
@@ -272,6 +286,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			new MWAuthorityProxy(
 				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-organize-events' ] )
 			),
+			$this->mockExistingEventRegistration( true ),
 			$authorizedOrgStore,
 			$canBeOrganizerPermLookup
 		];
@@ -284,6 +299,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 					'campaignevents-organize-events'
 				] )
 			),
+			$this->mockExistingEventRegistration( true ),
 			$authorizedOrgStore,
 			$canBeOrganizerPermLookup
 		];
@@ -292,6 +308,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @param bool $expected
 	 * @param ICampaignsAuthority $performer
+	 * @param ExistingEventRegistration $event
 	 * @param OrganizersStore|null $organizersStore
 	 * @param IPermissionsLookup|null $permissionsLookup
 	 * @covers ::userCanDeleteRegistration
@@ -301,36 +318,47 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	public function testUserCanDeleteRegistration(
 		bool $expected,
 		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event,
 		OrganizersStore $organizersStore = null,
 		IPermissionsLookup $permissionsLookup = null
 	) {
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
-			$checker->userCanDeleteRegistration( $performer, 42 )
+			$checker->userCanDeleteRegistration( $performer, $event )
 		);
 	}
 
 	public function provideCanDeleteRegistration(): Generator {
 		yield 'Logged out' => [
 			false,
-			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Temp user' => [
 			false,
-			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Lacks right to enable registrations' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Blocked' => [
 			false,
-			$this->mockSitewideBlockedRegisteredUltimateAuthority()
+			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Not an organizer' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
+			$this->mockExistingEventRegistration( true )
+		];
+		yield 'Event is not local' => [
+			false,
+			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() ),
+			$this->mockExistingEventRegistration( false )
 		];
 		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
 		$authorizedOrgStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
@@ -346,6 +374,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 					'campaignevents-organize-events',
 				] )
 			),
+			$this->mockExistingEventRegistration( true ),
 			$authorizedOrgStore,
 			$permissionsLookup
 		];
@@ -356,40 +385,55 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 					'campaignevents-delete-registration',
 					'campaignevents-organize-events'
 				] )
-			)
+			),
+			$this->mockExistingEventRegistration( true )
 		];
 	}
 
 	/**
 	 * @param bool $expected
 	 * @param ICampaignsAuthority $performer
-	 * @covers ::userCanRegisterForEvents
+	 * @param ExistingEventRegistration $registration
+	 * @covers ::userCanRegisterForEvent
 	 * @dataProvider provideCanRegisterForEvents
 	 */
 	public function testUserCanRegisterForEvents(
 		bool $expected,
-		ICampaignsAuthority $performer
+		ICampaignsAuthority $performer,
+		ExistingEventRegistration $registration
 	) {
 		$this->assertSame(
 			$expected,
-			$this->getPermissionChecker()->userCanRegisterForEvents( $performer )
+			$this->getPermissionChecker()->userCanRegisterForEvent( $performer, $registration )
 		);
 	}
 
 	public function provideCanRegisterForEvents(): Generator {
 		yield 'Authorized' => [
 			true,
-			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Logged out' => [
 			false,
-			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Temp user' => [
 			false,
-			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
-		yield 'Blocked' => [ false, $this->mockSitewideBlockedRegisteredUltimateAuthority() ];
+		yield 'Blocked' => [
+			false,
+			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
+			$this->mockExistingEventRegistration( true )
+		];
+		yield 'Event is not local' => [
+			false,
+			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() ),
+			$this->mockExistingEventRegistration( false )
+		];
 	}
 
 	/**
@@ -441,19 +485,21 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	public function testUserCanRemoveParticipants(
 		bool $expected,
 		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event,
 		OrganizersStore $organizersStore = null,
 		IPermissionsLookup $permissionsLookup = null
 	) {
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
-			$checker->userCanRemoveParticipants( $performer, 42 )
+			$checker->userCanRemoveParticipants( $performer, $event )
 		);
 	}
 
 	/**
 	 * @param bool $expected
 	 * @param ICampaignsAuthority $performer
+	 * @param ExistingEventRegistration $event
 	 * @param OrganizersStore|null $organizersStore
 	 * @param IPermissionsLookup|null $permissionsLookup
 	 * @covers ::userCanViewPrivateParticipants
@@ -462,13 +508,14 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	public function testUserCanViewPrivateParticipants(
 		bool $expected,
 		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event,
 		OrganizersStore $organizersStore = null,
 		IPermissionsLookup $permissionsLookup = null
 	) {
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
-			$checker->userCanViewPrivateParticipants( $performer, 42 )
+			$checker->userCanViewPrivateParticipants( $performer, $event )
 		);
 	}
 
@@ -479,13 +526,14 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	public function testUserCanViewNonPIIParticipantsData(
 		bool $expected,
 		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event,
 		OrganizersStore $organizersStore = null,
 		IPermissionsLookup $permissionsLookup = null
 	) {
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
-			$checker->userCanViewNonPIIParticipantsData( $performer, 42 )
+			$checker->userCanViewNonPIIParticipantsData( $performer, $event )
 		);
 	}
 
@@ -496,35 +544,46 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	public function testUserCanEmailParticipants(
 		bool $expected,
 		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event,
 		OrganizersStore $organizersStore = null
 	) {
 		$checker = $this->getPermissionChecker( $organizersStore );
 		$this->assertSame(
 			$expected,
-			$checker->userCanEmailParticipants( $performer, 42 )
+			$checker->userCanEmailParticipants( $performer, $event )
 		);
 	}
 
 	public function provideUserCanEmailParticipants(): Generator {
 		yield 'Logged out' => [
 			false,
-			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Temp user' => [
 			false,
-			new MWAuthorityProxy( $this->mockTempUltimateAuthority() )
+			new MWAuthorityProxy( $this->mockTempUltimateAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Lacks right to enable registrations' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Blocked' => [
 			false,
 			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
+			$this->mockExistingEventRegistration( true )
 		];
 		yield 'Not an organizer' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() )
+			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
+			$this->mockExistingEventRegistration( true )
+		];
+		yield 'Event is not local' => [
+			false,
+			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() ),
+			$this->mockExistingEventRegistration( false )
 		];
 
 		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
@@ -535,6 +594,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			new MWAuthorityProxy(
 				$this->mockRegisteredAuthorityWithoutPermissions( [ PermissionChecker::SEND_EVENTS_EMAIL_RIGHT ] )
 			),
+			$this->mockExistingEventRegistration( true ),
 			$authorizedOrgStore
 		];
 
@@ -546,7 +606,19 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 					PermissionChecker::SEND_EVENTS_EMAIL_RIGHT
 				] )
 			),
+			$this->mockExistingEventRegistration( true ),
 			$authorizedOrgStore
 		];
+	}
+
+	/**
+	 * @param bool $isLocal
+	 * @return ExistingEventRegistration
+	 */
+	private function mockExistingEventRegistration( bool $isLocal ): ExistingEventRegistration {
+		$mock = $this->createMock( ExistingEventRegistration::class );
+		$mock->method( 'isOnLocalWiki' )->willReturn( $isLocal );
+		$mock->method( 'getID' )->willReturn( 42 );
+		return $mock;
 	}
 }

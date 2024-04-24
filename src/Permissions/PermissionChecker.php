@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
@@ -89,13 +90,16 @@ class PermissionChecker {
 
 	/**
 	 * @param ICampaignsAuthority $performer
-	 * @param int $registrationID
+	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
-	public function userCanEditRegistration( ICampaignsAuthority $performer, int $registrationID ): bool {
+	public function userCanEditRegistration( ICampaignsAuthority $performer, ExistingEventRegistration $event ): bool {
 		if (
-			!$this->userCanEnableRegistrations( $performer ) &&
-			!$this->userCanOrganizeEvents( $performer->getName() )
+			!$event->isOnLocalWiki() ||
+			(
+				!$this->userCanEnableRegistrations( $performer ) &&
+				!$this->userCanOrganizeEvents( $performer->getName() )
+			)
 		) {
 			return false;
 		}
@@ -104,17 +108,25 @@ class PermissionChecker {
 		} catch ( UserNotGlobalException $_ ) {
 			return false;
 		}
-		return $this->organizersStore->isEventOrganizer( $registrationID, $centralUser );
+		$eventID = $event->getID();
+		if ( $eventID ) {
+			return $this->organizersStore->isEventOrganizer( $eventID, $centralUser );
+		}
+		return false;
 	}
 
 	/**
 	 * @param ICampaignsAuthority $performer
-	 * @param int $registrationID
+	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
-	public function userCanDeleteRegistration( ICampaignsAuthority $performer, int $registrationID ): bool {
-		return $this->userCanDeleteRegistrations( $performer ) ||
-			$this->userCanEditRegistration( $performer, $registrationID );
+	public function userCanDeleteRegistration(
+		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event
+	): bool {
+		return $event->isOnLocalWiki() &&
+			$this->userCanDeleteRegistrations( $performer ) ||
+			$this->userCanEditRegistration( $performer, $event );
 	}
 
 	/**
@@ -131,11 +143,12 @@ class PermissionChecker {
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring named account
 	 * and unblock.
 	 * @param ICampaignsAuthority $performer
+	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
-	public function userCanRegisterForEvents( ICampaignsAuthority $performer ): bool {
+	public function userCanRegisterForEvent( ICampaignsAuthority $performer, ExistingEventRegistration $event ): bool {
 		// TODO Do we need another user right for this?
-		return $performer->isNamed() && !$performer->isSitewideBlocked();
+		return $event->isOnLocalWiki() && $performer->isNamed() && !$performer->isSitewideBlocked();
 	}
 
 	/**
@@ -150,38 +163,47 @@ class PermissionChecker {
 
 	/**
 	 * @param ICampaignsAuthority $performer
-	 * @param int $registrationID
+	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
-	public function userCanRemoveParticipants( ICampaignsAuthority $performer, int $registrationID ): bool {
-		return $this->userCanEditRegistration( $performer, $registrationID );
+	public function userCanRemoveParticipants(
+		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event
+	): bool {
+		return $this->userCanEditRegistration( $performer, $event );
 	}
 
 	/**
 	 * @param ICampaignsAuthority $performer
-	 * @param int $eventID
+	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
-	public function userCanViewPrivateParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
-		return $this->userCanEditRegistration( $performer, $eventID );
+	public function userCanViewPrivateParticipants(
+		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event
+	): bool {
+		return $this->userCanEditRegistration( $performer, $event );
 	}
 
 	/**
 	 * @param ICampaignsAuthority $performer
-	 * @param int $eventID
+	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
-	public function userCanViewNonPIIParticipantsData( ICampaignsAuthority $performer, int $eventID ): bool {
-		return $this->userCanEditRegistration( $performer, $eventID );
+	public function userCanViewNonPIIParticipantsData(
+		ICampaignsAuthority $performer,
+		ExistingEventRegistration $event
+	): bool {
+		return $this->userCanEditRegistration( $performer, $event );
 	}
 
 	/**
 	 * @param ICampaignsAuthority $performer
-	 * @param int $eventID
+	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
-	public function userCanEmailParticipants( ICampaignsAuthority $performer, int $eventID ): bool {
-		return $this->userCanEditRegistration( $performer, $eventID )
+	public function userCanEmailParticipants( ICampaignsAuthority $performer, ExistingEventRegistration $event ): bool {
+		return $this->userCanEditRegistration( $performer, $event )
 			&& $performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );
 	}
 }

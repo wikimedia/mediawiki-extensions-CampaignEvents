@@ -142,7 +142,7 @@ class SpecialEventDetails extends SpecialPage {
 		if ( $isLocalWiki ) {
 			$userCanEmailParticipants = $this->permissionChecker->userCanEmailParticipants(
 				new MWAuthorityProxy( $this->getAuthority() ),
-				$this->event->getID()
+				$this->event
 			);
 		}
 		$out->addJsConfigVars( [

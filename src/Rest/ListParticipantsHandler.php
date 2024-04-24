@@ -97,7 +97,7 @@ class ListParticipantsHandler extends SimpleHandler {
 		$authority = new MWAuthorityProxy( $this->getAuthority() );
 		if (
 			$includePrivate &&
-			!$this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID )
+			!$this->permissionChecker->userCanViewPrivateParticipants( $authority, $event )
 		) {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-rest-list-participants-cannot-see-private' ),
@@ -134,10 +134,10 @@ class ListParticipantsHandler extends SimpleHandler {
 		$language = RequestContext::getMain()->getLanguage();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$performer = $this->userFactory->newFromAuthority( $this->getAuthority() );
-		$canEmailParticipants = $this->permissionChecker->userCanEmailParticipants( $authority, $event->getID() );
+		$canEmailParticipants = $this->permissionChecker->userCanEmailParticipants( $authority, $event );
 		$userCanViewNonPIIParticipantData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
 			$authority,
-			$event->getID()
+			$event
 		);
 		$includeNonPIIData = !$event->isPast() && $userCanViewNonPIIParticipantData;
 

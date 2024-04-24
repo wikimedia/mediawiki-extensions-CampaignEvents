@@ -108,7 +108,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	 */
 	public function userCanExecute( User $user ): bool {
 		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
-		return $this->permissionChecker->userCanDeleteRegistration( $mwAuthority, $this->event->getID() );
+		return $this->permissionChecker->userCanDeleteRegistration( $mwAuthority, $this->event );
 	}
 
 	/**

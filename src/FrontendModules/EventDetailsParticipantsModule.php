@@ -131,7 +131,7 @@ class EventDetailsParticipantsModule {
 		}
 
 		$showPrivateParticipants = $isLocalWiki &&
-			$this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID );
+			$this->permissionChecker->userCanViewPrivateParticipants( $authority, $event );
 		$otherParticipantsNum = $curUserParticipant ? self::PARTICIPANTS_LIMIT - 1 : self::PARTICIPANTS_LIMIT;
 		$otherParticipants = $this->participantsStore->getEventParticipants(
 			$eventID,
@@ -153,7 +153,7 @@ class EventDetailsParticipantsModule {
 		$canViewNonPIIParticipantsData = false;
 		if ( $isOrganizer && $isLocalWiki ) {
 			$canViewNonPIIParticipantsData = $this->permissionChecker->userCanViewNonPIIParticipantsData(
-				$authority, $event->getID()
+				$authority, $event
 			);
 		}
 

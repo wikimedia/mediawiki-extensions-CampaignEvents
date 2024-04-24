@@ -57,7 +57,7 @@ class EmailUsersHandler extends SimpleHandler {
 		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$params = $this->getValidatedBody() ?? [];
 
-		if ( !$this->permissionChecker->userCanEmailParticipants( $performer, $eventId ) ) {
+		if ( !$this->permissionChecker->userCanEmailParticipants( $performer, $event ) ) {
 			// todo add more details to error message
 			return $this->getResponseFactory()->createHttpError( 403 );
 		}

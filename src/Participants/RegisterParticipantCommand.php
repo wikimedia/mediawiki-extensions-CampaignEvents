@@ -73,7 +73,7 @@ class RegisterParticipantCommand {
 		bool $isPrivate,
 		array $answers
 	): StatusValue {
-		$permStatus = $this->authorizeRegistration( $performer );
+		$permStatus = $this->authorizeRegistration( $performer, $registration );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
 		}
@@ -84,8 +84,11 @@ class RegisterParticipantCommand {
 	 * @param ICampaignsAuthority $performer
 	 * @return PermissionStatus
 	 */
-	private function authorizeRegistration( ICampaignsAuthority $performer ): PermissionStatus {
-		if ( !$this->permissionChecker->userCanRegisterForEvents( $performer ) ) {
+	private function authorizeRegistration(
+		ICampaignsAuthority $performer,
+		ExistingEventRegistration $registration
+	): PermissionStatus {
+		if ( !$this->permissionChecker->userCanRegisterForEvent( $performer, $registration ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-register-not-allowed' );
 		}
 		return PermissionStatus::newGood();

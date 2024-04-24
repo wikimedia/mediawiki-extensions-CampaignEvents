@@ -44,7 +44,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	): RegisterParticipantCommand {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
-			$permChecker->method( 'userCanRegisterForEvents' )->willReturn( true );
+			$permChecker->method( 'userCanRegisterForEvent' )->willReturn( true );
 		}
 		if ( !$trackingToolEventWatcher ) {
 			$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );
@@ -76,7 +76,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testRegisterIfAllowed__permissionError() {
 		$permChecker = $this->createMock( PermissionChecker::class );
-		$permChecker->expects( $this->once() )->method( 'userCanRegisterForEvents' )->willReturn( false );
+		$permChecker->expects( $this->once() )->method( 'userCanRegisterForEvent' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->registerIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
 			$this->createMock( ICampaignsAuthority::class ),
