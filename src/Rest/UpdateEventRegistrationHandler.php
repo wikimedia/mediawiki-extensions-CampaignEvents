@@ -61,7 +61,13 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
-		return $this->getIDParamSetting();
+		return [
+			'status' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => EventRegistration::VALID_STATUSES,
+				ParamValidator::PARAM_REQUIRED => true,
+			]
+		] + $this->getIDParamSetting() + parent::getParamSettings();
 	}
 
 	/**
@@ -105,22 +111,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 */
 	protected function checkPermissions( ICampaignsAuthority $performer ): void {
 		// Nothing to check now. Deeper check will happen in EditEventCommand.
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function getBodyParams(): array {
-		return array_merge(
-			parent::getBodyParams(),
-			[
-				'status' => [
-					static::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_TYPE => EventRegistration::VALID_STATUSES,
-					ParamValidator::PARAM_REQUIRED => true,
-				]
-			]
-		);
 	}
 
 	/**

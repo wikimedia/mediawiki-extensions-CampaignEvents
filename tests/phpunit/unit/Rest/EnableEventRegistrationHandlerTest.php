@@ -19,6 +19,7 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Session\Session;
 use MediaWikiUnitTestCase;
+use MockTitleTrait;
 use StatusValue;
 
 /**
@@ -28,6 +29,15 @@ use StatusValue;
  */
 class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	use EditEventRegistrationHandlerTestTrait;
+	use MockTitleTrait;
+
+	protected function setUp(): void {
+		parent::setUp();
+		$this->setService(
+			'TitleFactory',
+			$this->makeMockTitleFactory()
+		);
+	}
 
 	private function getRequestData(): array {
 		return [

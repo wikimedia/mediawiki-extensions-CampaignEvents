@@ -64,9 +64,8 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 		it( 'fails if no parameters were given', async () => {
 			const { body: sourceBody } = await organizerClient.post( '' );
 			assert.strictEqual( sourceBody.httpCode, 400 );
-			assert.property( sourceBody, 'messageTranslations' );
-			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'Mandatory field' );
+			assert.property( sourceBody, 'failureCode' );
+			assert.equal( sourceBody.failureCode, 'missingparam' );
 		} );
 	} );
 

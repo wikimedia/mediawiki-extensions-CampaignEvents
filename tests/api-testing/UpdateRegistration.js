@@ -80,9 +80,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 		it( 'fails if no parameters were given', async () => {
 			const { body: sourceBody } = await organizerClient.put( eventID );
 			assert.strictEqual( sourceBody.httpCode, 400 );
-			assert.property( sourceBody, 'messageTranslations' );
-			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'Mandatory field' );
+			assert.property( sourceBody, 'failureCode' );
+			assert.equal( sourceBody.failureCode, 'missingparam' );
 		} );
 		it( 'cannot be used to create a new event', async () => {
 			const nonExistentEventID = eventID + 1000;

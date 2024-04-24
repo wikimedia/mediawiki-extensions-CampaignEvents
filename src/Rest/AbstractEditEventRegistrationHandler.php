@@ -19,9 +19,6 @@ use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
-use MediaWiki\Rest\Validator\BodyValidator;
-use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
 use RuntimeException;
 use StatusValue;
@@ -124,21 +121,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	abstract protected function getSuccessResponse( StatusValue $saveStatus ): Response;
 
 	/**
-	 * @inheritDoc
-	 */
-	public function getBodyValidator( $contentType ): BodyValidator {
-		if ( $contentType !== 'application/json' ) {
-			return new UnsupportedContentTypeBodyValidator( $contentType );
-		}
-
-		// NOTE: The param types are not validated yet, see T305973
-		return new JsonBodyValidator( $this->getBodyParams() );
-	}
-
-	/**
 	 * @return array
 	 */
-	protected function getBodyParams(): array {
+	public function getParamSettings(): array {
 		return [
 			'event_page' => [
 				static::PARAM_SOURCE => 'body',
