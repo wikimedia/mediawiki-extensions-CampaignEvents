@@ -237,7 +237,7 @@ class SpecialEventDetails extends SpecialPage {
 			);
 		}
 
-		if ( $organizer && $isLocalWiki && $this->event->isPast() ) {
+		if ( $organizer && $isLocalWiki && $this->event->isPast() && $this->event->getParticipantQuestions() ) {
 			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
 			$pageURL = $this->getPageTitle( (string)$this->event->getID() )
 				->getLocalURL( [ 'tab' => $this::STATS_PANEL ] );
