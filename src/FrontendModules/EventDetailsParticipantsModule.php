@@ -312,8 +312,6 @@ class EventDetailsParticipantsModule {
 			$canRemoveParticipants,
 			$canEmailParticipants,
 			$viewingUser,
-			$authority,
-			$event->getID(),
 			$nonPIIQuestionIDs,
 			$canViewNonPIIParticipantsData
 		) );
@@ -456,8 +454,6 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
-	 * @param ICampaignsAuthority $authority
-	 * @param int $eventID
 	 * @param array $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
@@ -468,8 +464,6 @@ class EventDetailsParticipantsModule {
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
 		UserIdentity $viewingUser,
-		ICampaignsAuthority $authority,
-		int $eventID,
 		array $nonPIIQuestionIDs,
 		bool $userCanViewNonPIIParticipantsData
 	): Tag {
@@ -480,8 +474,6 @@ class EventDetailsParticipantsModule {
 				$canRemoveParticipants,
 				$canEmailParticipants,
 				$viewingUser,
-				$authority,
-				$eventID,
 				$nonPIIQuestionIDs,
 				$userCanViewNonPIIParticipantsData
 			) );
@@ -494,8 +486,6 @@ class EventDetailsParticipantsModule {
 					$canRemoveParticipants,
 					$canEmailParticipants,
 					$viewingUser,
-					$authority,
-					$eventID,
 					$nonPIIQuestionIDs,
 					$userCanViewNonPIIParticipantsData
 				)
@@ -509,8 +499,6 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
-	 * @param ICampaignsAuthority $authority
-	 * @param int $eventID
 	 * @param array $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
@@ -520,8 +508,6 @@ class EventDetailsParticipantsModule {
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
 		UserIdentity $viewingUser,
-		ICampaignsAuthority $authority,
-		int $eventID,
 		array $nonPIIQuestionIDs,
 		bool $userCanViewNonPIIParticipantsData
 	): Tag {
@@ -530,8 +516,6 @@ class EventDetailsParticipantsModule {
 			$canRemoveParticipants,
 			$canEmailParticipants,
 			$viewingUser,
-			$authority,
-			$eventID,
 			$nonPIIQuestionIDs,
 			$userCanViewNonPIIParticipantsData
 		);
@@ -544,8 +528,6 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
-	 * @param ICampaignsAuthority $authority
-	 * @param int $eventID
 	 * @param array $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
@@ -555,8 +537,6 @@ class EventDetailsParticipantsModule {
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
 		UserIdentity $viewingUser,
-		ICampaignsAuthority $authority,
-		int $eventID,
 		array $nonPIIQuestionIDs,
 		bool $userCanViewNonPIIParticipantsData
 	): Tag {
