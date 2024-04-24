@@ -156,6 +156,10 @@ class EventDetailsParticipantsModule {
 			);
 		}
 
+		$nonPIIQuestionIDs = $this->eventQuestionsRegistry->getNonPIIQuestionIDs(
+			$event->getParticipantQuestions()
+		);
+
 		$items = [];
 		$items[] = $this->getPrimaryHeader(
 			$event,
@@ -173,7 +177,8 @@ class EventDetailsParticipantsModule {
 				$curUserParticipant,
 				$otherParticipants,
 				$authority,
-				$event
+				$event,
+				$nonPIIQuestionIDs
 			);
 		}
 		// This is added even if there are participants, because they might be removed from this page.
@@ -187,7 +192,8 @@ class EventDetailsParticipantsModule {
 			'wgCampaignEventsLastParticipantID' => $lastParticipantID,
 			'wgCampaignEventsCurUserCentralID' => isset( $centralUser ) ? $centralUser->getCentralID() : null,
 			'wgCampaignEventsViewerHasEmail' =>
-				$this->userFactory->newFromUserIdentity( $viewingUser )->isEmailConfirmed()
+				$this->userFactory->newFromUserIdentity( $viewingUser )->isEmailConfirmed(),
+			'wgCampaignEventsNonPIIQuestionIDs' => $nonPIIQuestionIDs,
 		] );
 
 		$layout = new PanelLayout( [
@@ -275,6 +281,7 @@ class EventDetailsParticipantsModule {
 	 * @param Participant[] $otherParticipants
 	 * @param ICampaignsAuthority $authority
 	 * @param ExistingEventRegistration $event
+	 * @param int[] $nonPIIQuestionIDs
 	 * @return Tag
 	 */
 	private function getParticipantsTable(
@@ -285,17 +292,14 @@ class EventDetailsParticipantsModule {
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		ICampaignsAuthority $authority,
-		ExistingEventRegistration $event
+		ExistingEventRegistration $event,
+		array $nonPIIQuestionIDs
 	): Tag {
 		// Use an outer container for the infinite scrolling
 		$container = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-details-participants-container' ] );
 		$table = ( new Tag( 'table' ) )
 			->addClasses( [ 'ext-campaignevents-details-participants-table' ] );
-
-		$nonPIIQuestionIDs = $this->eventQuestionsRegistry->getNonPIIQuestionIDs(
-			$event->getParticipantQuestions()
-		);
 
 		$table->appendContent( $this->getTableHeaders(
 				$canRemoveParticipants,
@@ -641,11 +645,15 @@ class EventDetailsParticipantsModule {
 		array $nonPIIQuestionIDs,
 		string $genderUserName
 	): Tag {
+		if ( !$nonPIIQuestionIDs ) {
+			return $row;
+		}
+
 		if ( $participant->getAggregationTimestamp() ) {
 			$aggregatedMessage = $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-participant-question-have-been-aggregated', [ $genderUserName ] )
 			);
-			$td = ( new Tag( 'td' ) )->setAttributes( [ 'colspan' => 2 ] )
+			$td = ( new Tag( 'td' ) )->setAttributes( [ 'colspan' => count( $nonPIIQuestionIDs ) ] )
 				->appendContent( $aggregatedMessage )
 				->addClasses( [ 'ext-campaignevents-details-participants-responses-aggregated-notice' ] );
 			$row->appendContent( $td );
