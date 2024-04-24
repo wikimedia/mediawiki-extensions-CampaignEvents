@@ -44,7 +44,7 @@ class SpecialAllEvents extends SpecialPage {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
-		$startDate = $request->getVal( 'wpStartDate', '' );
+		$startDate = $request->getVal( 'wpStartDate', date( 'Y-m-d' ) );
 		$startTime = $startDate !== '' ? $startDate . ' 00:00:00' : $startDate;
 		$endDate = $request->getVal( 'wpEndDate', '' );
 		$endTime = $endDate !== '' ? $endDate . ' 23:59:59' : $endDate;
@@ -81,7 +81,7 @@ class SpecialAllEvents extends SpecialPage {
 				'label-message' => 'campaignevents-allevents-label-start-date',
 				'icon' => 'calendar',
 				'cssclass' => 'ext-campaignevents-allevents-calendar-field',
-				'default' => '',
+				'default' => $startDate,
 			],
 			'EndDate' => [
 				'type' => 'date',
