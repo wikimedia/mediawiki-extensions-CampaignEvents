@@ -209,14 +209,6 @@ class EventsListPager extends RangeChronologicalPager {
 		return [ [ 'event_start_utc', 'event_name', 'event_id' ] ];
 	}
 
-	public function getDefaultQuery(): array {
-		parent::getDefaultQuery();
-		$this->mDefaultQuery['wpStartDate'] = '';
-		$this->mDefaultQuery['wpEndDate'] = '';
-
-		return $this->mDefaultQuery;
-	}
-
 	public function getNavigationBar(): string {
 		if ( !$this->isNavigationBarShown() ) {
 			return '';
