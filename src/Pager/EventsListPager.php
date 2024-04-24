@@ -30,7 +30,7 @@ class EventsListPager extends RangeChronologicalPager {
 	private CampaignsPageFactory $campaignsPageFactory;
 	private PageURLResolver $pageURLResolver;
 	private OrganizersStore $organizerStore;
-	private string $lastHeaderMonth;
+	private string $lastHeaderTimestamp;
 	private string $search;
 	/** One of the EventRegistration::MEETING_TYPE_* constants */
 	private ?int $meetingType;
@@ -76,7 +76,7 @@ class EventsListPager extends RangeChronologicalPager {
 
 		$this->getDateRangeCond( $startDate, $endDate );
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
-		$this->lastHeaderMonth = '';
+		$this->lastHeaderTimestamp = '';
 		$this->search = $search;
 		$this->meetingType = $meetingType;
 	}
@@ -89,14 +89,13 @@ class EventsListPager extends RangeChronologicalPager {
 
 		$timestampField = $this->getTimestampField();
 		$timestamp = $row->$timestampField;
-		$month = $this->getMonthFromTimestamp( $timestamp );
-		$closeList = $this->lastHeaderMonth && $month !== $this->lastHeaderMonth;
+		$closeList = $this->isHeaderRowNeeded( $timestamp );
 		if ( $closeList ) {
 			$s .= $this->getEndGroup();
 		}
-		if ( $month && $this->isHeaderRowNeeded( $month ) ) {
-			$s .= $this->getHeaderRow( $month );
-			$this->lastHeaderMonth = $month;
+		if ( $this->isHeaderRowNeeded( $timestamp ) ) {
+			$s .= $this->getHeaderRow( $this->getMonthFromTimestamp( $timestamp ) );
+			$this->lastHeaderTimestamp = $timestamp;
 		}
 		$s .= $this->formatRow( $row );
 
@@ -133,8 +132,15 @@ class EventsListPager extends RangeChronologicalPager {
 		return $ret;
 	}
 
-	protected function isHeaderRowNeeded( string $month ): bool {
-		return $this->lastHeaderMonth !== $month;
+	protected function isHeaderRowNeeded( string $date ): bool {
+		if ( !$this->lastHeaderTimestamp ) {
+			return true;
+		}
+		$month = $this->getMonthFromTimestamp( $date );
+		$prevMonth = $this->getMonthFromTimestamp( $this->lastHeaderTimestamp );
+		$year = $this->getYearFromTimestamp( $date );
+		$prevYear = $this->getYearFromTimestamp( $this->lastHeaderTimestamp );
+		return $month !== $prevMonth || $year !== $prevYear;
 	}
 
 	/**
@@ -245,6 +251,15 @@ class EventsListPager extends RangeChronologicalPager {
 			default:
 				throw new UnexpectedValueException( "Unexpected meeting type $meetingType" );
 		}
+	}
+
+	/**
+	 * @param string $timestamp
+	 * @return string
+	 */
+	private function getYearFromTimestamp( string $timestamp ): string {
+		$timestamp = $this->offsetTimestamp( $timestamp );
+		return $this->getLanguage()->sprintfDate( 'Y', $timestamp );
 	}
 
 	/**
