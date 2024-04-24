@@ -812,7 +812,10 @@ class EventDetailsParticipantsModule {
 		}
 
 		if ( $extraButtons ) {
-			$container->appendContent( new ButtonGroupWidget( [ 'items' => $extraButtons ] ) );
+			$container->appendContent( new ButtonGroupWidget( [
+				'items' => $extraButtons,
+				'classes' => [ 'ext-campaignevents-event-details-extra-buttons' ],
+			] ) );
 		}
 		return $container;
 	}
