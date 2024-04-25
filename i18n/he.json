@@ -426,5 +426,7 @@
 	"campaignevents-event-details-participants-individual-data-deleted": "התגובות של משתתפים בודדים נמחקו והתגובות הצבורות זמינות תחת [$1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "להירשם לאירוע $1",
 	"campaignevents-register-page-nonlocal": "נא '''[$1 להשלים את ההרשמה שלך לאירוע שלך באתר $2]''', הוויקי שהאירוע נוצר בו.",
-	"campaignevents-delete-registration-page-nonlocal": "נא '''[$1 למחוק את ההרשמה שלך לאירוע באתר $2]''', הוויקי שהאירוע נוצר בו."
+	"campaignevents-delete-registration-page-nonlocal": "נא '''[$1 למחוק את ההרשמה שלך לאירוע באתר $2]''', הוויקי שהאירוע נוצר בו.",
+	"campaignevents-event-details-page-nonlocal": "מוצגת לך כעת גרסה מוגבלת של הדף הזה. נא <b>[$1 לבקר בדף הזה באתר $2]</b>, הוויקי שהאירוע נוצר בו, כדי לגשת לפרטי האירוע המלאים ולתכונות נוספות.",
+	"campaignevents-event-details-organizer-not-local-wiki-prompt": "הצג באתר [$1 $2]"
 }

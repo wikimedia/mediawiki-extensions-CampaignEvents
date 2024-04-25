@@ -425,6 +425,8 @@
 	"campaignevents-warning-change-event-end-date-past": "Ако го замените завршниот датум со изминат, настанот ќе се затвори и ќе добиете преглед на одговори од учесниците. Ова дејство е неповратно. Ова важи само ако учесниците дале одговори на зададените прашања.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Одговорите на поединечните учесници се ибришани во насобраните одговори и достапни се под [$1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Пријавете се за $1",
-	"campaignevents-register-page-nonlocal": "[$1 Пополнете ја пријавата за вашиот настан на $2], викито на кое е создаден настанот.",
-	"campaignevents-delete-registration-page-nonlocal": "[$1 Избришете ја пријавата за вашиот настан на $2], викито на кое е создаден настанот."
+	"campaignevents-register-page-nonlocal": "'''[$1 Пополнете ја пријавата за вашиот настан на $2]''', викито на кое е создаден настанот.",
+	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Избришете ја пријавата за вашиот настан на $2]''', викито на кое е создаден настанот.",
+	"campaignevents-event-details-page-nonlocal": "Во моментов гледате ограничена верзија на оваа страница. <b>[$1 посетете ја оваа страница на $2]</b>, викито на кое е создаден настанот, за да ги добиете сите поединости за настанот и дополнителни функции.",
+	"campaignevents-event-details-organizer-not-local-wiki-prompt": "Прикажи на [$1 $2]"
 }
