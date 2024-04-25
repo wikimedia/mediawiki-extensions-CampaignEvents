@@ -14,7 +14,8 @@
 			"Verdy p",
 			"Wladek92",
 			"Wnagxsi",
-			"ߒߓߋ߫ ߝߏߝߣߊ߫"
+			"ߒߓߋ߫ ߝߏߝߣߊ߫",
+			"Alien333"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -99,7 +100,7 @@
 	"campaignevents-edit-invalid-id": "Indiquez un identifiant d’événement valide.",
 	"campaignevents-edit-no-event-id-provided": "Indiquez un identifiant d’événement.",
 	"campaignevents-edit-event-notfound": "Il n’y a aucun événement avec cet identifiant.",
-	"campaignevents-edit-page-nonlocal": "Veuillez [$1 modifier les renseignements sur l’inscription à l’évènement sur $2], le wiki où l’évènement a été créé.",
+	"campaignevents-edit-page-nonlocal": "Veuillez '''[$1 modifier les renseignements sur l’inscription à l’évènement sur $2]''', le wiki où l’évènement a été créé.",
 	"campaignevents-edit-error-deleted": "Les inscriptions pour cet événement sont fermées.",
 	"campaignevents-edit-need-central-account": "Vous avez besoin d’un compte utilisateur global pour activer ou modifier l'inscription aux événements.",
 	"campaignevents-edit-organizers-not-allowed": "$2 n’{{PLURAL:$1|a|ont}} pas les droits nécessaires pour être {{PLURAL:$1|un|des}} organisateur{{PLURAL:$1||s}}.",

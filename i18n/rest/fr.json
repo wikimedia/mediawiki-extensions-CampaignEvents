@@ -4,7 +4,8 @@
 			"Gomoko",
 			"Pols12",
 			"SleaY",
-			"Verdy p"
+			"Verdy p",
+			"Alien333"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Il n’y a aucun événement avec cet identifiant.",
@@ -18,5 +19,8 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Vous n’avez pas le droit de voir les participants qui se sont inscrits en privé pour cet événement.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> doit être un tableau de noms d’utilisateur et ne peut pas être vide",
 	"campaignevents-rest-get-registration-info-notparticipant": "Vous ne participez pas à cet événement.",
-	"campaignevents-rest-register-invalid-answer": "Réponse non valide à la question $1"
+	"campaignevents-rest-register-invalid-answer": "Réponse non valide à la question $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Veuillez compléter votre inscription à l'événement sur $1 , le wiki où l'événement a été créé.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Veuillez supprimer votre inscription à l'événement sur $1 , le wiki où l'événement a été créé.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Veuillez contacter les participants sur $1 , le wiki sur lequel l'événement a été créé."
 }
