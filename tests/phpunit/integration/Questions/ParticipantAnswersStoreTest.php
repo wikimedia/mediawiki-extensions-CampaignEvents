@@ -260,13 +260,13 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 			: $userIDs;
 		$store = CampaignEventsServices::getParticipantAnswersStore();
 		$store->deleteAllAnswers( $eventID, $users, $invert );
-		$remainingDataCounts = $this->getDb()->select(
-			'ce_question_answers',
-			[ 'ceqa_user_id', 'num' => 'COUNT(*)' ],
-			[ 'ceqa_event_id' => $eventID ],
-			__METHOD__,
-			[ 'GROUP BY' => 'ceqa_user_id' ]
-		);
+		$remainingDataCounts = $this->getDb()->newSelectQueryBuilder()
+			->select( [ 'ceqa_user_id', 'num' => 'COUNT(*)' ] )
+			->from( 'ce_question_answers' )
+			->where( [ 'ceqa_event_id' => $eventID ] )
+			->groupBy( 'ceqa_user_id' )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$actualRemainingCounts = [];
 		foreach ( $remainingDataCounts as $row ) {
 			$actualRemainingCounts[$row->ceqa_user_id] = (int)$row->num;

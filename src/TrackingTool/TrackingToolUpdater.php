@@ -76,13 +76,13 @@ class TrackingToolUpdater {
 		}
 
 		// Make changes by primary key to avoid lock contention
-		$currentToolRows = $dbw->select(
-			'ce_tracking_tools',
-			'*',
-			[ 'cett_event' => $eventID ],
-			__METHOD__,
-			[ 'FOR UPDATE' ]
-		);
+		$currentToolRows = $dbw->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_tracking_tools' )
+			->where( [ 'cett_event' => $eventID ] )
+			->forUpdate()
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		// TODO Add support for multiple tracking tools per event
 		if ( count( $currentToolRows ) > 1 && !defined( 'MW_PHPUNIT_TEST' ) ) {

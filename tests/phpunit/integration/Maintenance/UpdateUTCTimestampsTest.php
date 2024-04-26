@@ -104,7 +104,11 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 		$this->expectOutputRegex( '/~3 updated/' );
 		$this->maintenance->execute();
 		$dbr = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_REPLICA );
-		$res = $dbr->select( 'campaign_events', '*', '', __METHOD__ );
+		$res = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'campaign_events' )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$this->assertCount( 4, $res, 'Total number of rows' );
 		$this->assertNotNull( $this->oldRows, 'oldRows should be set by this point' );
 		$changedRowsCount = 0;

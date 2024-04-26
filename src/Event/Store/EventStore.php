@@ -82,12 +82,12 @@ class EventStore implements IEventStore, IEventLookup {
 		}
 
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$eventRow = $dbr->selectRow(
-			'campaign_events',
-			'*',
-			[ 'event_id' => $eventID ],
-			__METHOD__
-		);
+		$eventRow = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'campaign_events' )
+			->where( [ 'event_id' => $eventID ] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		if ( !$eventRow ) {
 			throw new EventNotFoundException( "Event $eventID not found" );
 		}
@@ -147,16 +147,12 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @return stdClass|null
 	 */
 	private function getEventAddressRow( IDatabase $db, int $eventID ): ?stdClass {
-		$addressRows = $db->select(
-			[ 'ce_address', 'ce_event_address' ],
-			'*',
-			[],
-			__METHOD__,
-			[],
-			[
-				'ce_event_address' => [ 'INNER JOIN', [ 'ceea_address=cea_id', 'ceea_event' => $eventID ] ]
-			]
-		);
+		$addressRows = $db->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_address' )
+			->join( 'ce_event_address', null, [ 'ceea_address=cea_id', 'ceea_event' => $eventID ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		// TODO Add support for multiple addresses per event
 		if ( count( $addressRows ) > 1 ) {
@@ -177,12 +173,12 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @return stdClass|null
 	 */
 	private function getEventTrackingToolRow( IDatabase $db, int $eventID ): ?stdClass {
-		$trackingToolsRows = $db->select(
-			'ce_tracking_tools',
-			'*',
-			[ 'cett_event' => $eventID ],
-			__METHOD__
-		);
+		$trackingToolsRows = $db->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_tracking_tools' )
+			->where( [ 'cett_event' => $eventID ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		// TODO Add support for multiple tracking tools per event
 		if ( count( $trackingToolsRows ) > 1 ) {
@@ -203,26 +199,20 @@ class EventStore implements IEventStore, IEventLookup {
 	public function getEventsByOrganizer( int $organizerID, int $limit = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
-		$opts = [ 'ORDER BY' => 'event_id' ];
+		$queryBuilder = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'campaign_events' )
+			->join( 'ce_organizers', null, [
+				'event_id=ceo_event_id',
+				'ceo_deleted_at' => null
+			] )
+			->where( [ 'ceo_user_id' => $organizerID ] )
+			->orderBy( 'event_id' )
+			->caller( __METHOD__ );
 		if ( $limit !== null ) {
-			$opts['LIMIT'] = $limit;
+			$queryBuilder->limit( $limit );
 		}
-		$eventRows = $dbr->select(
-			[ 'campaign_events', 'ce_organizers' ],
-			'*',
-			[ 'ceo_user_id' => $organizerID ],
-			__METHOD__,
-			$opts,
-			[
-				'ce_organizers' => [
-					'INNER JOIN',
-					[
-						'event_id=ceo_event_id',
-						'ceo_deleted_at' => null
-					]
-				]
-			]
-		);
+		$eventRows = $queryBuilder->fetchResultSet();
 
 		return $this->newEventsFromDBRows( $dbr, $eventRows );
 	}
@@ -233,30 +223,24 @@ class EventStore implements IEventStore, IEventLookup {
 	public function getEventsByParticipant( int $participantID, int $limit = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
-		$opts = [ 'ORDER BY' => 'event_id' ];
-		if ( $limit !== null ) {
-			$opts['LIMIT'] = $limit;
-		}
-		$eventRows = $dbr->select(
-			[ 'campaign_events', 'ce_participants' ],
-			'*',
-			[
+		$queryBuilder = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'campaign_events' )
+			->join( 'ce_participants', null, [
+				'event_id=cep_event_id',
+				// TODO Perhaps consider more granular permission check here.
+				'cep_private' => false,
+			] )
+			->where( [
 				'cep_user_id' => $participantID,
 				'cep_unregistered_at' => null,
-			],
-			__METHOD__,
-			$opts,
-			[
-				'ce_participants' => [
-					'INNER JOIN',
-					[
-						'event_id=cep_event_id',
-						// TODO Perhaps consider more granular permission check here.
-						'cep_private' => false,
-					]
-				]
-			]
-		);
+			] )
+			->orderBy( 'event_id' )
+			->caller( __METHOD__ );
+		if ( $limit !== null ) {
+			$queryBuilder->limit( $limit );
+		}
+		$eventRows = $queryBuilder->fetchResultSet();
 
 		return $this->newEventsFromDBRows( $dbr, $eventRows );
 	}
@@ -295,16 +279,12 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @return array<int,stdClass> Maps event IDs to the corresponding address row
 	 */
 	private function getAddressRowsForEvents( IDatabase $db, array $eventIDs ): array {
-		$addressRows = $db->select(
-			[ 'ce_address', 'ce_event_address' ],
-			'*',
-			[],
-			__METHOD__,
-			[],
-			[
-				'ce_event_address' => [ 'INNER JOIN', [ 'ceea_address=cea_id', 'ceea_event' => $eventIDs ] ]
-			]
-		);
+		$addressRows = $db->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_address' )
+			->join( 'ce_event_address', null, [ 'ceea_address=cea_id', 'ceea_event' => $eventIDs ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		$addressRowsByEvent = [];
 		foreach ( $addressRows as $addressRow ) {
@@ -327,12 +307,12 @@ class EventStore implements IEventStore, IEventLookup {
 		IDatabase $db,
 		array $eventIDs
 	): array {
-		$trackingToolsRows = $db->select(
-			'ce_tracking_tools',
-			'*',
-			[ 'cett_event' => $eventIDs ],
-			__METHOD__
-		);
+		$trackingToolsRows = $db->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_tracking_tools' )
+			->where( [ 'cett_event' => $eventIDs ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		$trackingToolsRowsByEvent = [];
 		foreach ( $trackingToolsRows as $trackingToolRow ) {
@@ -491,9 +471,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$where = [ 'ceea_event' => $eventID ];
 		if ( $meetingAddress || $meetingCountry ) {
 			$meetingAddress .= " \n " . $meetingCountry;
-			$where[] = 'cea_full_address NOT IN (' .
-				$dbw->makeList( [ $meetingAddress ], IDatabase::LIST_COMMA ) .
-			' ) ';
+			$where[] = $dbw->expr( 'cea_full_address', '!=', $meetingAddress );
 		}
 
 		$dbw->deleteJoin(

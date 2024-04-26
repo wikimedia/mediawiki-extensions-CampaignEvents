@@ -31,14 +31,14 @@ class EventAggregatedAnswersStore {
 	 */
 	public function getEventAggregatedAnswers( int $eventID ): EventAggregatedAnswers {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$res = $dbr->select(
-			'ce_question_aggregation',
-			[ 'ceqag_question_id', 'ceqag_answer_option', 'ceqag_answers_amount' ],
-			[
+		$res = $dbr->newSelectQueryBuilder()
+			->select( [ 'ceqag_question_id', 'ceqag_answer_option', 'ceqag_answers_amount' ] )
+			->from( 'ce_question_aggregation' )
+			->where( [
 				'ceqag_event_id' => $eventID
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		$eventAggregatedAnswers = new EventAggregatedAnswers();
 		foreach ( $res as $row ) {
@@ -58,13 +58,12 @@ class EventAggregatedAnswersStore {
 	 */
 	public function eventHasAggregates( int $eventID ): bool {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$res = $dbr->selectRow(
-			'ce_question_aggregation',
-			'ceqag_id',
-			[ 'ceqag_event_id' => $eventID ],
-			__METHOD__,
-			[ 'LIMIT' => 1 ]
-		);
+		$res = $dbr->newSelectQueryBuilder()
+			->select( 'ceqag_id' )
+			->from( 'ce_question_aggregation' )
+			->where( [ 'ceqag_event_id' => $eventID ] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		return $res !== false;
 	}
 }

@@ -37,7 +37,12 @@ class AddressStore {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		// TODO This query is not indexed; for the future we will need to use some indexed field (like unique
 		// address identifiers) instead of the full address.
-		$addressID = $dbw->selectField( 'ce_address', 'cea_id', [ 'cea_full_address' => $fullAddress ], __METHOD__ );
+		$addressID = $dbw->newSelectQueryBuilder()
+			->select( 'cea_id' )
+			->from( 'ce_address' )
+			->where( [ 'cea_full_address' => $fullAddress ] )
+			->caller( __METHOD__ )
+			->fetchField();
 		if ( $addressID !== false ) {
 			$addressID = (int)$addressID;
 		} else {

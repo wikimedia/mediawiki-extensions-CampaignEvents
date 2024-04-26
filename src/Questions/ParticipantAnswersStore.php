@@ -29,16 +29,16 @@ class ParticipantAnswersStore {
 	public function replaceParticipantAnswers( int $eventID, CentralUser $participant, array $answers ): bool {
 		$userID = $participant->getCentralID();
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$currentAnswers = $dbw->select(
-			'ce_question_answers',
-			'*',
-			[
+		$currentAnswers = $dbw->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_question_answers' )
+			->where( [
 				'ceqa_event_id' => $eventID,
 				'ceqa_user_id' => $userID,
-			],
-			__METHOD__,
-			[ 'FOR UPDATE' ]
-		);
+			] )
+			->forUpdate()
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$newQuestionIDs = array_map( static fn ( Answer $a ): int => $a->getQuestionDBID(), $answers );
 		$currentAnswersByID = [];
 		$rowIDsToRemove = [];
@@ -159,15 +159,15 @@ class ParticipantAnswersStore {
 		}
 		$participantIDs = array_map( static fn ( CentralUser $u ) => $u->getCentralID(), $participants );
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$res = $dbr->select(
-			'ce_question_answers',
-			'*',
-			[
+		$res = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_question_answers' )
+			->where( [
 				'ceqa_event_id' => $eventID,
 				'ceqa_user_id' => $participantIDs
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$answersByUser = array_fill_keys( $participantIDs, [] );
 		foreach ( $res as $row ) {
 			$userID = (int)$row->ceqa_user_id;
@@ -188,12 +188,12 @@ class ParticipantAnswersStore {
 	 */
 	public function eventHasAnswers( int $eventID ): bool {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$res = $dbr->selectRow(
-			'ce_question_answers',
-			'1',
-			[ 'ceqa_event_id' => $eventID ],
-			__METHOD__
-		);
+		$res = $dbr->newSelectQueryBuilder()
+			->select( '1' )
+			->from( 'ce_question_answers' )
+			->where( [ 'ceqa_event_id' => $eventID ] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		return $res !== false;
 	}
 }

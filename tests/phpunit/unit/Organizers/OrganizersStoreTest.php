@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiUnitTestCase;
 use ReflectionClass;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\SelectQueryBuilder;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -20,13 +21,17 @@ use Wikimedia\TestingAccessWrapper;
  */
 class OrganizersStoreTest extends MediaWikiUnitTestCase {
 	private function getOrganizersStore(): OrganizersStore {
-		$db = $this->createMock( IDatabase::class );
-		$db->method( 'selectRow' )->willReturn( (object)[
+		$queryBuilder = $this->createMock( SelectQueryBuilder::class );
+		$queryBuilder->method( $this->logicalOr( 'select', 'from', 'where', 'orderBy', 'caller' ) )->willReturnSelf();
+		$queryBuilder->method( 'fetchRow' )->willReturn( (object)[
 			'ceo_id' => 1,
 			'ceo_user_id' => 1,
 			'ceo_roles' => 1,
 			'ceo_agreement_timestamp' => null
 		] );
+		$db = $this->createMock( IDatabase::class );
+		$db->method( 'newSelectQueryBuilder' )
+			->willReturn( $queryBuilder );
 		$dbHelper = $this->createMock( CampaignsDatabaseHelper::class );
 		$dbHelper->method( 'getDBConnection' )->willReturn( $db );
 		return new OrganizersStore( $dbHelper );

@@ -65,13 +65,13 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 	) {
 		$updater = CampaignEventsServices::getTrackingToolUpdater();
 		$updater->replaceEventTools( $eventID, $tools );
-		$res = $this->getDb()->select(
-			'ce_tracking_tools',
-			[ 'cett_event', 'cett_tool_id', 'cett_tool_event_id', 'cett_sync_status', 'cett_last_sync' ],
-			[ 'cett_event' => $eventID ],
-			__METHOD__,
-			[ 'ORDER BY' => 'cett_id' ]
-		);
+		$res = $this->getDb()->newSelectQueryBuilder()
+			->select( [ 'cett_event', 'cett_tool_id', 'cett_tool_event_id', 'cett_sync_status', 'cett_last_sync' ] )
+			->from( 'ce_tracking_tools' )
+			->where( [ 'cett_event' => $eventID ] )
+			->orderBy( 'cett_id' )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$actualRows = [];
 		foreach ( $res as $row ) {
 			$actualRows[] = get_object_vars( $row );
@@ -286,15 +286,16 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 	) {
 		$updater = CampaignEventsServices::getTrackingToolUpdater();
 		$updater->updateToolSyncStatus( $eventID, $toolID, $toolEventID, $status );
-		$row = $this->getDb()->selectRow(
-			'ce_tracking_tools',
-			'*',
-			[
+		$row = $this->getDb()->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_tracking_tools' )
+			->where( [
 				'cett_event' => $eventID,
 				'cett_tool_id' => $toolID,
 				'cett_tool_event_id' => $toolEventID
-			]
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		$this->assertSame( TrackingToolUpdater::syncStatusToDB( $status ), (int)$row->cett_sync_status );
 		$this->assertSame( $expectedTS, $row->cett_last_sync );
 	}

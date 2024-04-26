@@ -573,13 +573,13 @@ class GenerateInvitationList extends Maintenance {
 		foreach ( $userDataByWiki as $wiki => [ 'actorID' => $actorID ] ) {
 			$dbr = MediaWikiServices::getInstance()->getDBLoadBalancerFactory()
 				->getReplicaDatabase( $wiki );
-			$curWikiTS = $dbr->selectField(
-				'revision',
-				'rev_timestamp',
-				[ 'rev_actor' => $actorID ],
-				__METHOD__,
-				[ 'ORDER BY' => 'rev_timestamp DESC' ]
-			);
+			$curWikiTS = $dbr->newSelectQueryBuilder()
+				->select( 'rev_timestamp' )
+				->from( 'revision' )
+				->where( [ 'rev_actor' => $actorID ] )
+				->orderBy( 'rev_timestamp', SelectQueryBuilder::SORT_DESC )
+				->caller( __METHOD__ )
+				->fetchField();
 			if ( $curWikiTS ) {
 				$lastEditTS = max( $lastEditTS, (int)MWTimestamp::convert( TS_UNIX, $curWikiTS ) );
 			}

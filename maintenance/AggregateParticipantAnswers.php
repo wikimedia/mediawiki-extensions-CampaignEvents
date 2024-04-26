@@ -86,12 +86,20 @@ class AggregateParticipantAnswers extends Maintenance {
 		$this->dbw = $dbHelper->getDBConnection( DB_PRIMARY );
 		$batchSize = $this->getBatchSize();
 
-		$maxRowID = (int)$this->dbr->selectField( 'ce_question_answers', 'MAX(ceqa_id)', '', __METHOD__ );
+		$maxRowID = (int)$this->dbr->newSelectQueryBuilder()
+			->select( 'MAX(ceqa_id)' )
+			->from( 'ce_question_answers' )
+			->caller( __METHOD__ )
+			->fetchField();
 		if ( $maxRowID === 0 ) {
 			$this->output( "Table is empty.\n" );
 			return;
 		}
-		$minRowID = (int)$this->dbr->selectField( 'ce_question_answers', 'MIN(ceqa_id)', '', __METHOD__ );
+		$minRowID = (int)$this->dbr->newSelectQueryBuilder()
+			->select( 'MIN(ceqa_id)' )
+			->from( 'ce_question_answers' )
+			->caller( __METHOD__ )
+			->fetchField();
 
 		// Wrap all the changes into a transaction to make sure we don't leave incomplete updates behind. This is also
 		// needed to avoid edge cases like:
@@ -121,16 +129,16 @@ class AggregateParticipantAnswers extends Maintenance {
 
 	private function processBatch( int $startID, int $endID ): void {
 		// Lock the rows to prevent further changes.
-		$res = $this->dbw->select(
-			'ce_question_answers',
-			'*',
-			[
-				'ceqa_id > ' . $startID,
-				'ceqa_id <= ' . $endID,
-			],
-			__METHOD__,
-			[ 'FOR UPDATE' ]
-		);
+		$res = $this->dbw->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_question_answers' )
+			->where( [
+				$this->dbw->expr( 'ceqa_id', '>', $startID ),
+				$this->dbw->expr( 'ceqa_id', '<=', $endID ),
+			] )
+			->forUpdate()
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		$this->loadDataForBatch( $res );
 
@@ -227,13 +235,13 @@ class AggregateParticipantAnswers extends Maintenance {
 		$eventsWithNoInfo = array_keys( array_diff_key( $eventsMap, $this->eventEndTimes ) );
 		if ( $eventsWithNoInfo ) {
 			// Lock the event rows as well, to prevent changes while we aggregate the answers.
-			$eventRows = $this->dbw->select(
-				'campaign_events',
-				[ 'event_id', 'event_end_utc' ],
-				[ 'event_id' => $eventsWithNoInfo ],
-				__METHOD__,
-				[ 'FOR UPDATE' ]
-			);
+			$eventRows = $this->dbw->newSelectQueryBuilder()
+				->select( [ 'event_id', 'event_end_utc' ] )
+				->from( 'campaign_events' )
+				->where( [ 'event_id' => $eventsWithNoInfo ] )
+				->forUpdate()
+				->caller( __METHOD__ )
+				->fetchResultSet();
 			foreach ( $eventRows as $row ) {
 				$eventID = (int)$row->event_id;
 				$this->eventEndTimes[$eventID] = (int)wfTimestamp( TS_UNIX, $row->event_end_utc );
@@ -261,15 +269,15 @@ class AggregateParticipantAnswers extends Maintenance {
 		// by tuples in the where condition. Results are filtered later.
 		// No need to obtain these from the primary DB, because concurrent changes to a record should not really
 		// affect the script execution.
-		$userRows = $this->dbr->select(
-			'ce_participants',
-			'*',
-			[
+		$userRows = $this->dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_participants' )
+			->where( [
 				'cep_event_id' => array_keys( $missingUsersByEventMap ),
 				'cep_user_id' => array_keys( $allMissingUsersMap ),
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		foreach ( $userRows as $row ) {
 			$eventID = (int)$row->cep_event_id;
@@ -326,7 +334,11 @@ class AggregateParticipantAnswers extends Maintenance {
 	private function purgeAggregates(): void {
 		$this->output( "Purging old aggregated data...\n" );
 
-		$maxEventID = (int)$this->dbr->selectField( 'campaign_events', 'MAX(event_id)' );
+		$maxEventID = (int)$this->dbr->newSelectQueryBuilder()
+			->select( 'MAX(event_id)' )
+			->from( 'campaign_events' )
+			->caller( __METHOD__ )
+			->fetchField();
 		if ( $maxEventID === 0 ) {
 			$this->output( "No events.\n" );
 			return;
@@ -340,15 +352,16 @@ class AggregateParticipantAnswers extends Maintenance {
 			// Note, we may already have partial data in $this->eventEndTimes. However, since it's partial, we'll need
 			// to query the DB again. Excluding events for which we already have data is probably useless, as it would
 			// introduce complexity and give little to nothing in return.
-			$eventsToCheck = $this->dbr->selectFieldValues(
-				'campaign_events',
-				'event_id',
-				[
-					'event_id > ' . $startID,
-					'event_id <= ' . $endID,
-					'event_end_utc < ' . $this->dbr->addQuotes( $curDBTimestamp ),
-				]
-			);
+			$eventsToCheck = $this->dbr->newSelectQueryBuilder()
+				->select( 'event_id' )
+				->from( 'campaign_events' )
+				->where( [
+					$this->dbr->expr( 'event_id', '>', $startID ),
+					$this->dbr->expr( 'event_id', '<=', $endID ),
+					$this->dbr->expr( 'event_end_utc', '<', $curDBTimestamp ),
+				] )
+				->caller( __METHOD__ )
+				->fetchFieldValues();
 			if ( $eventsToCheck ) {
 				$eventsToCheck = array_map( 'intval', $eventsToCheck );
 				$this->purgeAggregatesForEvents( $eventsToCheck );
@@ -365,26 +378,28 @@ class AggregateParticipantAnswers extends Maintenance {
 	 * @param int[] $eventIDs
 	 */
 	private function purgeAggregatesForEvents( array $eventIDs ): void {
-		$eventQuestionRows = $this->dbr->select(
-			'ce_event_questions',
-			[ 'ceeq_event_id', 'ceeq_question_id' ],
-			[
+		$eventQuestionRows = $this->dbr->newSelectQueryBuilder()
+			->select( [ 'ceeq_event_id', 'ceeq_question_id' ] )
+			->from( 'ce_event_questions' )
+			->where( [
 				'ceeq_event_id' => $eventIDs
-			]
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$questionsByEvent = array_fill_keys( $eventIDs, [] );
 		foreach ( $eventQuestionRows as $eventQuestionRow ) {
 			$eventID = (int)$eventQuestionRow->ceeq_event_id;
 			$questionsByEvent[$eventID][] = (int)$eventQuestionRow->ceeq_question_id;
 		}
 
-		$aggregatedAnswersRows = $this->dbr->select(
-			'ce_question_aggregation',
-			[ 'ceqag_id', 'ceqag_event_id', 'ceqag_question_id' ],
-			[
+		$aggregatedAnswersRows = $this->dbr->newSelectQueryBuilder()
+			->select( [ 'ceqag_id', 'ceqag_event_id', 'ceqag_question_id' ] )
+			->from( 'ce_question_aggregation' )
+			->where( [
 				'ceqag_event_id' => $eventIDs
-			]
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$deleteRowIDs = [];
 		foreach ( $aggregatedAnswersRows as $aggregatedAnswersRow ) {
 			$eventID = (int)$aggregatedAnswersRow->ceqag_event_id;

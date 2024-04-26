@@ -58,7 +58,11 @@ class UpdateUTCTimestamps extends Maintenance {
 		$updateTimezones = $this->getOption( 'timezone' );
 		$this->validateTimezones( $updateTimezones );
 
-		$maxRowID = (int)$this->dbr->selectField( 'campaign_events', 'MAX(event_id)', '', __METHOD__ );
+		$maxRowID = (int)$this->dbr->newSelectQueryBuilder()
+			->select( 'MAX(event_id)' )
+			->from( 'campaign_events' )
+			->caller( __METHOD__ )
+			->fetchField();
 		if ( $maxRowID === 0 ) {
 			$this->output( "Table is empty.\n" );
 			return;
@@ -100,13 +104,18 @@ class UpdateUTCTimestamps extends Maintenance {
 	 */
 	private function updateBatch( int $prevID, int $curID, ?array $updateTimezones ): void {
 		$where = [
-			"event_id > $prevID",
-			"event_id <= $curID",
+			$this->dbr->expr( 'event_id', '>', $prevID ),
+			$this->dbr->expr( 'event_id', '<=', $curID ),
 		];
 		if ( $updateTimezones ) {
 			$where['event_timezone'] = $updateTimezones;
 		}
-		$res = $this->dbr->select( 'campaign_events', '*', $where, __METHOD__ );
+		$res = $this->dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'campaign_events' )
+			->where( $where )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		$newRows = [];
 		foreach ( $res as $row ) {

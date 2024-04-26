@@ -8,8 +8,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\WikiMap\WikiMap;
 use stdClass;
+use Wikimedia\Rdbms\IExpression;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
+use Wikimedia\Rdbms\LikeValue;
 
 /**
  * @property string $search;
@@ -101,8 +103,8 @@ trait EventPagerTrait {
 		if ( $this->search !== '' ) {
 			// TODO Make this case-insensitive. Not easy right now because the name is a binary string and the DBAL does
 			// not provide a method for converting it to a non-binary value on which LOWER can be applied.
-			$conds[] = 'event_name' . $this->mDb->buildLike(
-					$this->mDb->anyString(), $this->search, $this->mDb->anyString() );
+			$conds[] = $this->mDb->expr( 'event_name', IExpression::LIKE,
+				new LikeValue( $this->mDb->anyString(), $this->search, $this->mDb->anyString() ) );
 		}
 
 		return [

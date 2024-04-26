@@ -405,7 +405,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				3 => [ 2 ],
 			],
 		];
-		$actualQuestionRows = $dbr->select( 'ce_question_answers', '*' );
+		$actualQuestionRows = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_question_answers' )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$actualQuestionTuples = [];
 		foreach ( $actualQuestionRows as $row ) {
 			$eventID = $row->ceqa_event_id;
@@ -458,7 +462,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 			// Event 5 has no questions, and therefore should have no aggregates
 		];
 
-		$aggregateRows = $dbr->select( 'ce_question_aggregation', '*' );
+		$aggregateRows = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_question_aggregation' )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$actualAggregates = [];
 		foreach ( $aggregateRows as $row ) {
 			$event = $row->ceqag_event_id;
@@ -502,7 +510,11 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				1 => $justAggregatedTS,
 			],
 		];
-		$participantRows = $dbr->select( 'ce_participants', '*' );
+		$participantRows = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_participants' )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$actualParticipantAggregationTimes = [];
 		foreach ( $participantRows as $row ) {
 			$event = $row->cep_event_id;

@@ -26,13 +26,13 @@ class EventQuestionsStore {
 	 */
 	public function replaceEventQuestions( int $eventID, array $questionIDs ): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$currentQuestions = $dbw->select(
-			'ce_event_questions',
-			'*',
-			[ 'ceeq_event_id' => $eventID ],
-			__METHOD__,
-			[ 'FOR UPDATE' ]
-		);
+		$currentQuestions = $dbw->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_event_questions' )
+			->where( [ 'ceeq_event_id' => $eventID ] )
+			->forUpdate()
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$currentQuestionIDs = [];
 		$rowIDsToRemove = [];
 		foreach ( $currentQuestions as $row ) {
@@ -80,12 +80,12 @@ class EventQuestionsStore {
 		}
 
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$res = $dbr->select(
-			'ce_event_questions',
-			'*',
-			[ 'ceeq_event_id' => $eventIDs ],
-			__METHOD__
-		);
+		$res = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_event_questions' )
+			->where( [ 'ceeq_event_id' => $eventIDs ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 		$questionsByEvent = array_fill_keys( $eventIDs, [] );
 		foreach ( $res as $row ) {
 			$eventID = $row->ceeq_event_id;

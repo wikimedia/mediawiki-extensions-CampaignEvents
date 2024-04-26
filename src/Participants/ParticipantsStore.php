@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use Wikimedia\Assert\Assert;
-use Wikimedia\Rdbms\IDatabase;
 
 class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
@@ -66,16 +65,16 @@ class ParticipantsStore {
 
 		$userID = $participant->getCentralID();
 		$dbw->startAtomic( __METHOD__ );
-		$previousRow = $dbw->selectRow(
-			'ce_participants',
-			'*',
-			[
+		$previousRow = $dbw->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_participants' )
+			->where( [
 				'cep_event_id' => $eventID,
 				'cep_user_id' => $userID
-			],
-			__METHOD__,
-			[ 'FOR UPDATE' ]
-		);
+			] )
+			->forUpdate()
+			->caller( __METHOD__ )
+			->fetchRow();
 
 		$curTimestamp = $dbw->timestamp();
 		$updatedFirstAnsTs = $answers ? $curTimestamp : null;
@@ -254,7 +253,7 @@ class ParticipantsStore {
 			->from( 'ce_participants' )
 			->where( [ 'cep_event_id' => $eventID, 'cep_unregistered_at' => null ] );
 		if ( $lastParticipantID !== null ) {
-			$queryBuilder->andWhere( 'cep_id > ' . $db->addQuotes( $lastParticipantID ) );
+			$queryBuilder->andWhere( $db->expr( 'cep_id', '>', $lastParticipantID ) );
 		}
 		if ( !$showPrivate ) {
 			$queryBuilder->andWhere( [ 'cep_private' => false ] );
@@ -263,9 +262,7 @@ class ParticipantsStore {
 			$queryBuilder->andWhere( [ 'cep_user_id' => $userIdFilter ] );
 		}
 		if ( is_array( $excludeUsers ) && $excludeUsers ) {
-			$queryBuilder->andWhere(
-				'cep_user_id NOT IN (' . $db->makeList( $excludeUsers, IDatabase::LIST_COMMA ) . ')'
-			);
+			$queryBuilder->andWhere( $db->expr( 'cep_user_id', '!=', $excludeUsers ) );
 		}
 		$queryBuilder->orderBy( 'cep_id' )
 			->recency( $readFlags );
@@ -339,12 +336,12 @@ class ParticipantsStore {
 		if ( !$showPrivate ) {
 			$conditions['cep_private'] = false;
 		}
-		$row = $dbr->selectRow(
-			'ce_participants',
-			'*',
-			$conditions,
-			__METHOD__
-		);
+		$row = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_participants' )
+			->where( $conditions )
+			->caller( __METHOD__ )
+			->fetchRow();
 
 		if ( $row === false ) {
 			return null;
@@ -397,12 +394,12 @@ class ParticipantsStore {
 		if ( !$public ) {
 			$where['cep_private'] = true;
 		}
-		$ret = $dbr->selectField(
-			'ce_participants',
-			'COUNT(*)',
-			$where,
-			__METHOD__
-		);
+		$ret = $dbr->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_participants' )
+			->where( $where )
+			->caller( __METHOD__ )
+			->fetchField();
 		// Intentionally casting false to int if no rows were found.
 		return (int)$ret;
 	}

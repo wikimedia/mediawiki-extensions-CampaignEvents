@@ -204,11 +204,11 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$user = new CentralUser( $userID );
 		$store = $this->getStore();
 		$getActualTS = function () use ( $eventID, $userID ): ?string {
-			$ts = $this->db->selectField(
-				'ce_participants',
-				'cep_registered_at',
-				[ 'cep_event_id' => $eventID, 'cep_user_id' => $userID ]
-			);
+			$ts = $this->db->newSelectQueryBuilder()
+				->select( 'cep_registered_at' )
+				->from( 'ce_participants' )
+				->where( [ 'cep_event_id' => $eventID, 'cep_user_id' => $userID ] )
+				->fetchField();
 			if ( $ts === false ) {
 				$this->fail( 'No actual timestamp' );
 			}

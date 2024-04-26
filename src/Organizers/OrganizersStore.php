@@ -43,19 +43,18 @@ class OrganizersStore {
 			'ceo_deleted_at' => null,
 		];
 		if ( $lastOrganizerId !== null ) {
-			$where[] = 'ceo_id > ' . $dbr->addQuotes( $lastOrganizerId );
+			$where[] = $dbr->expr( 'ceo_id', '>', $lastOrganizerId );
 		}
-		$opts = [ 'ORDER BY' => 'ceo_id' ];
+		$queryBuilder = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_organizers' )
+			->where( $where )
+			->orderBy( 'ceo_id' )
+			->caller( __METHOD__ );
 		if ( $limit !== null ) {
-			$opts['LIMIT'] = $limit;
+			$queryBuilder->limit( $limit );
 		}
-		$res = $dbr->select(
-			'ce_organizers',
-			'*',
-			$where,
-			__METHOD__,
-			$opts
-		);
+		$res = $queryBuilder->fetchResultSet();
 
 		$organizers = [];
 		foreach ( $res as $row ) {
@@ -82,12 +81,12 @@ class OrganizersStore {
 			$where['ceo_deleted_at'] = null;
 		}
 
-		$row = $dbr->selectRow(
-			'ce_organizers',
-			'*',
-			$where,
-			__METHOD__
-		);
+		$row = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_organizers' )
+			->where( $where )
+			->caller( __METHOD__ )
+			->fetchRow();
 
 		if ( $row ) {
 			return $this->rowToOrganizerObject( $row );
@@ -127,16 +126,16 @@ class OrganizersStore {
 
 	public function getEventOrganizer( int $eventID, CentralUser $user ): ?Organizer {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$row = $dbr->selectRow(
-			'ce_organizers',
-			'*',
-			[
+		$row = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_organizers' )
+			->where( [
 				'ceo_event_id' => $eventID,
 				'ceo_user_id' => $user->getCentralID(),
 				'ceo_deleted_at' => null,
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
 
 		if ( $row ) {
 			return $this->rowToOrganizerObject( $row );
@@ -151,15 +150,15 @@ class OrganizersStore {
 	 */
 	public function getOrganizerCountForEvent( int $eventID ): int {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$ret = $dbr->selectField(
-			'ce_organizers',
-			'COUNT(*)',
-			[
+		$ret = $dbr->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_organizers' )
+			->where( [
 				'ceo_event_id' => $eventID,
 				'ceo_deleted_at' => null,
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
 		// Intentionally casting false to int if no rows were found.
 		return (int)$ret;
 	}
