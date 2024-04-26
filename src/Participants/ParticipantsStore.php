@@ -363,6 +363,26 @@ class ParticipantsStore {
 	}
 
 	/**
+	 * @param int $eventID
+	 * @param CentralUser $user
+	 * @return bool Whether the given user has any aggregated answers for the given event. This can be true even if the
+	 * user is not a participant (if they cancelled their registration after their answers had been aggregated).
+	 */
+	public function userHasAggregatedAnswers( int $eventID, CentralUser $user ): bool {
+		$aggregationTS = $this->dbHelper->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->select( 'cep_aggregation_timestamp' )
+			->from( 'ce_participants' )
+			->where( [
+				'cep_event_id' => $eventID,
+				'cep_user_id' => $user->getCentralID(),
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
+		return $aggregationTS !== false && $aggregationTS !== null;
+	}
+
+	/**
 	 * Returns the count of participants to an event.
 	 * @param int $eventID
 	 * @param bool $public

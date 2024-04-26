@@ -123,14 +123,14 @@
 			if ( userIsParticipant ) {
 				curParticipantData = {
 					public: userIsRegisteredPublicly,
-					aggregationTimestamp: aggregationTimestamp,
-					answersAggregated: answersAlreadyAggregated
+					aggregationTimestamp: aggregationTimestamp
 				};
 			}
 			participantRegistrationDialog = new ParticipantRegistrationDialog(
 				{
 					policyMsg: msg,
 					curParticipantData: curParticipantData,
+					answersAggregated: answersAlreadyAggregated,
 					eventQuestions: eventQuestions
 				} );
 			windowManager.addWindows( [ participantRegistrationDialog ] );
