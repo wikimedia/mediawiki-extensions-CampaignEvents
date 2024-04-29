@@ -234,7 +234,7 @@ class EventDetailsModule {
 		);
 
 		$needToBeOnLocalWikiMessage = new HtmlSnippet(
-			$out->msg( 'campaignevents-event-details-organizer-not-local-wiki-prompt' )
+			$out->msg( 'campaignevents-event-details-not-local-wiki-prompt' )
 				->params( [
 					$foreignDetailsURL, $wikiName
 				] )->parse()
@@ -255,7 +255,7 @@ class EventDetailsModule {
 
 		$chatURL = $this->registration->getChatURL();
 		if ( $chatURL ) {
-			if ( $isOrganizer && !$isLocalWiki ) {
+			if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
 				$chatSectionContent = $needToBeOnLocalWikiMessage;
 			} elseif ( $isOrganizer || $isParticipant ) {
 				$chatSectionContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
@@ -390,7 +390,7 @@ class EventDetailsModule {
 
 			$meetingURL = $this->registration->getMeetingURL();
 			if ( $meetingURL ) {
-				if ( $isOrganizer && !$isLocalWiki ) {
+				if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
 					$items[] = $needToBeOnLocalWikiMessage;
 				} elseif ( $isOrganizer || $isParticipant ) {
 					$items[] = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
