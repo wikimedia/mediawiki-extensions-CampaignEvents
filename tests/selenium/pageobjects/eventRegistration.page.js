@@ -114,7 +114,9 @@ class EventRegistrationPage extends Page {
 	 */
 	async addOrganizer( organizer ) {
 		await this.organizersInput.setValue( organizer );
-		await $( `[id='${ organizer }']` ).click();
+		const menuItem = $( `.oo-ui-menuSelectWidget [id='${ organizer }']` );
+		await menuItem.waitForDisplayed();
+		await menuItem.click();
 	}
 
 	/**
