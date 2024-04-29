@@ -168,5 +168,6 @@
 	"campaignevents-details-stats-no-response": "Нема одговора",
 	"campaignevents-edit-field-clickwrap-form-continue": "Види одговоре",
 	"campaignevents-participant-question-no-response": "Без одговора",
-	"campaignevents-event-register-for-event-title": "Регистрација за $1"
+	"campaignevents-event-register-for-event-title": "Регистрација за $1",
+	"campaignevents-event-details-organizer-not-local-wiki-prompt": "Прикажи на [$1 $2]"
 }
