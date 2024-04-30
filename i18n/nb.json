@@ -77,10 +77,10 @@
 	"campaignevents-edit-field-chat-url": "Invitasjon til gruppechat",
 	"campaignevents-edit-field-chat-url-help": "Hvis du har en chattegruppe for deltakerne i dette arrengementet kan du legge til en invitasjonslenke her. Deltakerne vil kunne se invitasjonslenka etter at de har registrert seg.",
 	"campaignevents-edit-form-questions-label": "Spørsmål til deltakerne",
-	"campaignevents-edit-form-questions-intro": "Deltakerne kan svare på spørsmålene nedenfor når de melder seg på arrangementet.",
+	"campaignevents-edit-form-questions-intro": "Velg om noen av følgende spørsmål skal stiles til deltakerne når de melder seg på arrangementet.",
 	"campaignevents-edit-form-questions-explanation": "I løpet av arrangementet kan du få tilgang til individuelle deltakeres spørsmål som ikke inkluderer identifiserbar informasjon. Etter at arrangementet er over vil svarene på alle spørsmålene (i aggregert form) være tilgjengelige, og individuelle svar blir slettet.",
-	"campaignevents-edit-form-questions-non-pii-label": "Andre spørsmål (ikke identifiserbare)",
-	"campaignevents-edit-form-questions-pii-label": "Personlig identifiserbar informasjon",
+	"campaignevents-edit-form-questions-non-pii-label": "Spørsmål som ikke inneholder personlig identifiserbar informasjon",
+	"campaignevents-edit-form-questions-pii-label": "Spørsmål med personlig identifiserbar informasjon",
 	"campaignevents-enable-registration-form-submit": "Aktiver registrering",
 	"campaignevents-edit-form-submit": "Rediger registrering",
 	"campaignevents-edit-form-notice": "Kun brukernavn samles inn fra deltakerne under påmelding. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Lær mer].",
@@ -89,7 +89,7 @@
 	"campaignevents-edit-invalid-id": "Angi en gyldig arrangements-ID.",
 	"campaignevents-edit-no-event-id-provided": "Angi en arrangements-ID.",
 	"campaignevents-edit-event-notfound": "Det er ingen arrangementer med denne ID-en.",
-	"campaignevents-edit-page-nonlocal": "[$1 Rediger påmeldingsdetaljene på $2], som er wikien arrangementet ble opprettet på.",
+	"campaignevents-edit-page-nonlocal": "'''[$1 Rediger påmeldingsdetaljene på $2]''', som er wikien arrangementet ble opprettet på.",
 	"campaignevents-edit-error-deleted": "Denne arrangementspåmeldingen har blitt slettet.",
 	"campaignevents-edit-need-central-account": "Du må ha en sentral brukerkonto for å kunne aktivere eller redigere arrangementspåmeldinger.",
 	"campaignevents-edit-organizers-not-allowed": "$2 har ikke de nødvendige tillatelsene til å bli {{PLURAL:$1|arrangør|arrangører}}.",
@@ -429,5 +429,5 @@
 	"campaignevents-register-page-nonlocal": "'''[$1 Fullfør påmeldingen på $2]''', som er wikien der arrangementet ble opprettet.",
 	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Slett påmeldingen din på $2]''', som er wikien der arrangementet ble opprettet.",
 	"campaignevents-event-details-page-nonlocal": "Du ser for tiden en begrenset versjon av denne siden. <b>[$1 Besøk siden på $2]</b>, som er wikien der arrangementet ble opprettet, for å få tilgang til alle arrangementsdetaljene og annen funksjonalitet.",
-	"campaignevents-event-details-organizer-not-local-wiki-prompt": "Vis på [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Vis på [$1 $2]"
 }

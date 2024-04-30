@@ -428,5 +428,5 @@
 	"campaignevents-register-page-nonlocal": "'''[$1 Пополнете ја пријавата за вашиот настан на $2]''', викито на кое е создаден настанот.",
 	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Избришете ја пријавата за вашиот настан на $2]''', викито на кое е создаден настанот.",
 	"campaignevents-event-details-page-nonlocal": "Во моментов гледате ограничена верзија на оваа страница. <b>[$1 посетете ја оваа страница на $2]</b>, викито на кое е создаден настанот, за да ги добиете сите поединости за настанот и дополнителни функции.",
-	"campaignevents-event-details-organizer-not-local-wiki-prompt": "Прикажи на [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Прикажи на [$1 $2]"
 }

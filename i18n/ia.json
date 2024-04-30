@@ -427,5 +427,5 @@
 	"campaignevents-register-page-nonlocal": "Per favor '''[$1 completa tu inscription al evento sur $2],''' le wiki ubi le evento ha essite create.",
 	"campaignevents-delete-registration-page-nonlocal": "Per favor '''[$1 retira tu inscription al evento sur $2],''' le wiki ubi le evento ha essite create.",
 	"campaignevents-event-details-page-nonlocal": "Tu vide ora un version limitate de iste pagina. Per favor <b>[$1 visita iste pagina sur $2]</b>, le wiki ubi le evento ha essite create, pro acceder al detalios complete del evento e a functiones supplementari.",
-	"campaignevents-event-details-organizer-not-local-wiki-prompt": "Visita isto sur [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Visita isto sur [$1 $2]"
 }

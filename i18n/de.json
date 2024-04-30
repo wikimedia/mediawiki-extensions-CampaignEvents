@@ -427,5 +427,5 @@
 	"campaignevents-register-page-nonlocal": "Bitte '''[$1 vervollständige deine Veranstaltungs-Registrierung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-delete-registration-page-nonlocal": "Bitte '''[$1 lösche deine Veranstaltungs-Registrierung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-event-details-page-nonlocal": "Du siehst derzeit eine eingeschränkte Version dieser Seite. Bitte <b>[$1 rufe diese Seite auf $2 auf]</b>, das Wiki, in dem die Veranstaltung erstellt wurde, um auf die vollständigen Veranstaltungsdetails und zusätzliche Funktionen zuzugreifen.",
-	"campaignevents-event-details-organizer-not-local-wiki-prompt": "Ansicht auf [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Ansicht auf [$1 $2]"
 }
