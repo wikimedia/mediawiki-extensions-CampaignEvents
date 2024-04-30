@@ -1,7 +1,14 @@
 @import 'mediawiki.skin.variables.less';
 
-.ext-campaignevents-events-list-pager-details > *:not( :last-child ) {
-	margin-bottom: 0.5em;
+.ext-campaignevents-events-list-pager-details {
+	> *:not( :last-child ) {
+		margin-bottom: 0.5em;
+	}
+
+	&& > h4 {
+		// Remove top margin and padding set by skins (needs high specificity)
+		margin-top: 0;
+	}
 }
 
 .ext-campaignevents-eventslist-pager-icon {
@@ -10,20 +17,27 @@
 
 .ext-campaignevents-eventslist-pager-bottom {
 	display: flex;
+	flex-wrap: wrap;
+	// Add vertical gaps when wrapping. Only works on modern browsers.
+	row-gap: 0.5em;
+	// Prevent overflows with long usernames (T363864)
+	overflow-wrap: anywhere;
 
-	> div {
+	> div:not( :last-child ) {
+		// Alternative for `gap` when on a single row.
+		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
 		padding-right: 10px;
 	}
 }
 
 .ext-campaignevents-events-list-pager-row {
+	margin-left: 25px;
 	display: flex;
 
 	> .ext-campaignevents-events-list-pager-day {
-		padding: 0 20px 20px 0;
 		font-size: 2em;
-		min-width: 3em;
-		text-align: center;
+		flex: 0 0 1.5em;
+		margin-right: 20px;
 	}
 }
 
@@ -31,8 +45,10 @@
 	font-size: 1.2em;
 }
 
-.mw-contributions-list {
+ul.mw-contributions-list.mw-contributions-list {
+	// Remove any left margin or padding set by the skin on ul elements (needs high specificity)
 	margin-left: 0;
+	padding-left: 0;
 }
 
 .ext-campaignevents-events-list-pager-link {
