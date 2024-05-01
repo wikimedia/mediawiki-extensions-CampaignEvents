@@ -178,7 +178,8 @@ class EventDetailsParticipantsModule {
 				$otherParticipants,
 				$authority,
 				$event,
-				$nonPIIQuestionIDs
+				$nonPIIQuestionIDs,
+				$isLocalWiki
 			);
 		}
 		// This is added even if there are participants, because they might be removed from this page.
@@ -282,6 +283,7 @@ class EventDetailsParticipantsModule {
 	 * @param ICampaignsAuthority $authority
 	 * @param ExistingEventRegistration $event
 	 * @param int[] $nonPIIQuestionIDs
+	 * @param bool $isLocalWiki
 	 * @return Tag
 	 */
 	private function getParticipantsTable(
@@ -293,7 +295,8 @@ class EventDetailsParticipantsModule {
 		array $otherParticipants,
 		ICampaignsAuthority $authority,
 		ExistingEventRegistration $event,
-		array $nonPIIQuestionIDs
+		array $nonPIIQuestionIDs,
+		bool $isLocalWiki
 	): Tag {
 		// Use an outer container for the infinite scrolling
 		$container = ( new Tag( 'div' ) )
@@ -317,7 +320,8 @@ class EventDetailsParticipantsModule {
 			$canEmailParticipants,
 			$viewingUser,
 			$nonPIIQuestionIDs,
-			$canViewNonPIIParticipantsData
+			$canViewNonPIIParticipantsData,
+			$isLocalWiki
 		) );
 		$container->appendContent( $table );
 		return $container;
@@ -460,6 +464,7 @@ class EventDetailsParticipantsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param array $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
+	 * @param bool $isLocalWiki
 	 * @return Tag
 	 */
 	private function getParticipantRows(
@@ -469,7 +474,8 @@ class EventDetailsParticipantsModule {
 		bool $canEmailParticipants,
 		UserIdentity $viewingUser,
 		array $nonPIIQuestionIDs,
-		bool $userCanViewNonPIIParticipantsData
+		bool $userCanViewNonPIIParticipantsData,
+		bool $isLocalWiki
 	): Tag {
 		$body = new Tag( 'tbody' );
 		if ( $curUserParticipant ) {
@@ -484,6 +490,12 @@ class EventDetailsParticipantsModule {
 		}
 
 		foreach ( $otherParticipants as $participant ) {
+			if (
+				$participant->isPrivateRegistration() &&
+				!$isLocalWiki
+			) {
+				continue;
+			}
 			$body->appendContent(
 				$this->getParticipantRow(
 					$participant,
