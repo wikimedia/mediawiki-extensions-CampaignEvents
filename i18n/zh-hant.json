@@ -6,7 +6,8 @@
 			"Winston Sung",
 			"列维劳德",
 			"SunAfterRain",
-			"Arielyurusova"
+			"Arielyurusova",
+			"沈澄心"
 		]
 	},
 	"campaignevents-desc": "為活動組織者和參與者提供功能。",
@@ -336,11 +337,11 @@
 	"campaignevents-register-questions-label-subtitle": "此資訊將僅與活動組織者共用。",
 	"campaignevents-register-question-gender": "性別認同（非必填）",
 	"campaignevents-register-question-gender-option-not-say": "我不想回答",
-	"campaignevents-register-question-gender-option-man": "男性性別認同",
-	"campaignevents-register-question-gender-option-woman": "女性性別認同",
-	"campaignevents-register-question-gender-option-agender": "無性別認同",
+	"campaignevents-register-question-gender-option-man": "男性",
+	"campaignevents-register-question-gender-option-woman": "女性",
+	"campaignevents-register-question-gender-option-agender": "無性別",
 	"campaignevents-register-question-gender-option-nonbinary": "非二元性別",
-	"campaignevents-register-question-gender-option-other": "未列出的性別認同",
+	"campaignevents-register-question-gender-option-other": "未列出的性別",
 	"campaignevents-register-question-age": "年齡（非必填）",
 	"campaignevents-register-question-age-placeholder": "選取年齡範圍",
 	"campaignevents-register-question-age-option-under-25": "25歲以下",

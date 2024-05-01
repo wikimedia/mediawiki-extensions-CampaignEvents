@@ -14,7 +14,8 @@
 			"BlueCamille",
 			"Wnagxsi",
 			"MacOS Weed",
-			"Urhixidur"
+			"Urhixidur",
+			"Alien333"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -378,7 +379,7 @@
 	"campaignevents-register-question-confidence-contributing-option-some-not-confident": "J’ai de l’expérience, mais je ne le me sens pas à l’aise ou en confiance",
 	"campaignevents-register-question-confidence-contributing-option-some-confident": "J’ai une certaine expérience et je me sens confiant pour contribuer, mais j’aimerais en savoir plus",
 	"campaignevents-register-question-confidence-contributing-option-confident": "Je suis confiant de pouvoir contribuer sans aucun soutien",
-	"campaignevents-register-question-affiliate": "Appartenez-vous à une affiliation de Wikimédia (chapitres, groupes utilisateur, organisations thématiques) ? (facultatif)",
+	"campaignevents-register-question-affiliate": "Appartenez-vous à une organisation affiliée à Wikimedia (section locale, groupe d’utilisateurs, organisation thématique) ? (facultatif)",
 	"campaignevents-register-question-affiliate-placeholder": "Sélectionnez une option",
 	"campaignevents-register-question-affiliate-option-none": "Non",
 	"campaignevents-register-question-affiliate-option-affiliate": "Oui",
@@ -387,12 +388,12 @@
 	"campaignevents-register-question-age-stats-label": "Quel est votre âge ?",
 	"campaignevents-register-question-profession-stats-label": "Quelle est votre profession ?",
 	"campaignevents-register-question-confidence-stats-label": "Dans quelle mesure vous sentez-vous confiant pour contribuer aux projets de Wikimédia impliqués dans cet événement ?",
-	"campaignevents-register-question-affiliate-stats-label": "Appartenez-vous à un affilié de Wikimédia (chapitres, groupes utilisateur, organisations thématiques) ?",
+	"campaignevents-register-question-affiliate-stats-label": "Appartenez-vous à une organisation affiliée à Wikimedia (section locale, groupe d’utilisateurs ou organisation thématique) ?",
 	"campaignevents-register-question-gender-organizer-label": "Quelle est votre identité de genre ?",
 	"campaignevents-register-question-age-organizer-label": "Quel est votre âge ?",
 	"campaignevents-register-question-profession-organizer-label": "Quelle est votre profession ?",
 	"campaignevents-register-question-confidence-organizer-label": "Dans quelle mesure vous sentez-vous confiant pour contribuer aux projets de Wikimédia impliqués dans cet événement ?",
-	"campaignevents-register-question-affiliate-organizer-label": "Appartenez-vous à un affilié de Wikimédia (chapitres, groupes utilisateur, organisations thématiques) ?",
+	"campaignevents-register-question-affiliate-organizer-label": "Appartenez-vous à une organisation affiliée à Wikimedia (section locale, groupe d’utilisateurs ou organisation thématique) ?",
 	"campaignevents-register-answers-aggregated": "Vos réponses ont été agrégées et supprimées par les informations de conservation des données.",
 	"campaignevents-register-retention-title": "Information de conservation des données",
 	"campaignevents-register-retention-base": "Vos réponses sont agrégées puis supprimées 90 jours après leur envoi, ou à la fin de l’événement, selon le premier qui se produit. Modifiez les réponses à tout moment avant cela. Une fois supprimées, elles ne peuvent plus être modifiées, répondues de nouveau ou récupérées.",
@@ -419,7 +420,7 @@
 	"campaignevents-details-stats-no-response": "Aucune réponse",
 	"campaignevents-event-dates-cannot-be-changed": "Les dates des événements passés ne peuvent pas être modifiées dans le futur, pour protéger les données des participants.",
 	"campaignevents-individual-stats-label-message-confidence": "Dans quelle mesure vous sentez-vous confiant pour contribuer aux projets de Wikimédia impliqués dans cet événement ?",
-	"campaignevents-individual-stats-label-message-affiliate": "Appartenez-vous à un affilié de Wikimédia (chapitres, groupes utilisateur, organisations thématiques) ?",
+	"campaignevents-individual-stats-label-message-affiliate": "Appartenez-vous à une organisation affiliée à Wikimedia (section locale, groupe d’utilisateurs ou organisation thématique) ?",
 	"campaignevents-participant-question-have-been-aggregated": "Les réponses de {{GENDER:$1|ce participant|cette participante}} ont été agrégées et supprimées.",
 	"campaignevents-participant-question-no-response": "Aucune réponse"
 }
