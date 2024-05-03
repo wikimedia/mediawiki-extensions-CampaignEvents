@@ -421,6 +421,6 @@
 	"campaignevents-warning-change-event-end-date-past": "Als u de einddatum wijzigt naar een datum in het verleden, wordt het evenement gesloten en ontvangt u een overzicht van de antwoorden van deelnemers. Deze handeling is onomkeerbaar. Dit is alleen van toepassing als deelnemers antwoorden hebben gegeven op de deelnemersvragen.",
 	"campaignevents-event-details-participants-individual-data-deleted": "De antwoorden van de individuele deelnemers zijn verwijderd en de geaggregeerde antwoorden zijn beschikbaar onder [$1 {{int:campaginevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Schrijf je in voor $1",
-	"campaignevents-register-page-nonlocal": "[$1 voltooi uw evenementregistratie op $2], de wiki waar het evenement is aangemaakt.",
-	"campaignevents-delete-registration-page-nonlocal": "[$1 Verwijder uw evenementregistratie op $2], de wiki waar het evenement is aangemaakt."
+	"campaignevents-register-page-nonlocal": "'''[$1 Voltooi uw inschrijving voor het evenement op $2],''' de wiki waar het evenement is aangemaakt.",
+	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Verwijder uw inschrijving voor het evenement op $2],''' de wiki waar het evenement is aangemaakt."
 }
