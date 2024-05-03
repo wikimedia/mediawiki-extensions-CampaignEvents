@@ -130,7 +130,8 @@ class EventDetailsParticipantsModule {
 			$curUserParticipant = null;
 		}
 
-		$showPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID );
+		$showPrivateParticipants = $isLocalWiki &&
+			$this->permissionChecker->userCanViewPrivateParticipants( $authority, $eventID );
 		$otherParticipantsNum = $curUserParticipant ? self::PARTICIPANTS_LIMIT - 1 : self::PARTICIPANTS_LIMIT;
 		$otherParticipants = $this->participantsStore->getEventParticipants(
 			$eventID,
