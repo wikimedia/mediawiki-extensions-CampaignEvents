@@ -6,12 +6,14 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use Language;
 use LogicException;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -21,6 +23,7 @@ use MediaWiki\Linker\Linker;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\UserIdentity;
+use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
 use OOUI\HtmlSnippet;
 use OOUI\IconWidget;
@@ -92,9 +95,7 @@ class EventDetailsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
-	 * @param bool $isLocalWiki
-	 * @param string $foreignDetailsURL
-	 * @param string $wikiName
+	 * @param string|false $wikiID
 	 * @param OutputPage $out
 	 * @return PanelLayout
 	 *
@@ -105,12 +106,11 @@ class EventDetailsModule {
 		UserIdentity $viewingUser,
 		bool $isOrganizer,
 		bool $isParticipant,
-		bool $isLocalWiki,
-		string $foreignDetailsURL,
-		string $wikiName,
+		$wikiID,
 		OutputPage $out
 	): PanelLayout {
 		$eventID = $this->registration->getID();
+		$isLocalWiki = $wikiID === WikiAwareEntity::LOCAL;
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
 		$header = $this->getHeader( $isOrganizer, $isLocalWiki );
@@ -124,8 +124,7 @@ class EventDetailsModule {
 			$isOrganizer,
 			$isParticipant,
 			$isLocalWiki,
-			$foreignDetailsURL,
-			$wikiName,
+			$wikiID,
 			$organizersCount
 		);
 		$organizersColumn = $this->getOrganizersColumn( $out, $organizersCount );
@@ -156,7 +155,7 @@ class EventDetailsModule {
 	 * @param bool $isLocalWiki
 	 * @return Tag
 	 */
-	private function getHeader( bool $isOrganizer, $isLocalWiki ): Tag {
+	private function getHeader( bool $isOrganizer, bool $isLocalWiki ): Tag {
 		$headerItems = [];
 		$headerItems[] = ( new Tag( 'h2' ) )->appendContent(
 			$this->msgFormatter->format(
@@ -188,8 +187,7 @@ class EventDetailsModule {
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param bool $isLocalWiki
-	 * @param string $foreignDetailsURL
-	 * @param string $wikiName
+	 * @param string|false $wikiID
 	 * @param int $organizersCount
 	 * @return Tag
 	 */
@@ -199,8 +197,7 @@ class EventDetailsModule {
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,
-		string $foreignDetailsURL,
-		string $wikiName,
+		$wikiID,
 		int $organizersCount
 	): Tag {
 		$items = [];
@@ -233,6 +230,10 @@ class EventDetailsModule {
 			MessageValue::new( 'campaignevents-event-details-register-prompt' )
 		);
 
+		$wikiName = WikiMap::getWikiName( Utils::getWikiIDString( $wikiID ) );
+		$foreignDetailsURL = WikiMap::getForeignURL(
+			$wikiID, 'Special:' . SpecialEventDetails::PAGE_NAME . "/{$this->registration->getID()}"
+		);
 		$needToBeOnLocalWikiMessage = new HtmlSnippet(
 			$out->msg( 'campaignevents-event-details-not-local-wiki-prompt' )
 				->params( [
