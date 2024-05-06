@@ -116,7 +116,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $newRevTS(),
 					'rev_actor' => 1,
 					'rev_len' => 42,
-					'rev_parent_id' => null
+					'rev_parent_id' => null,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 2
@@ -124,7 +125,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $newRevTS(),
 					'rev_actor' => 1,
 					'rev_len' => 142,
-					'rev_parent_id' => 1
+					'rev_parent_id' => 1,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 3
@@ -132,7 +134,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $newRevTS(),
 					'rev_actor' => 1,
 					'rev_len' => 132,
-					'rev_parent_id' => 2
+					'rev_parent_id' => 2,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 4
@@ -140,7 +143,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $oldRevTS(),
 					'rev_actor' => 2,
 					'rev_len' => 10000,
-					'rev_parent_id' => 3
+					'rev_parent_id' => 3,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 5
@@ -148,7 +152,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $oldRevTS(),
 					'rev_actor' => 1,
 					'rev_len' => 20000,
-					'rev_parent_id' => 4
+					'rev_parent_id' => 4,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 6
@@ -156,7 +161,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $newRevTS(),
 					'rev_actor' => 2,
 					'rev_len' => 20005,
-					'rev_parent_id' => 5
+					'rev_parent_id' => 5,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 7
@@ -164,7 +170,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $oldRevTS(),
 					'rev_actor' => 1,
 					'rev_len' => 1000,
-					'rev_parent_id' => null
+					'rev_parent_id' => null,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 8
@@ -172,7 +179,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $newRevTS(),
 					'rev_actor' => 3,
 					'rev_len' => 31000,
-					'rev_parent_id' => 7
+					'rev_parent_id' => 7,
+					'rev_comment_id' => 1000,
 				],
 				[
 					// 'rev_id' => 9
@@ -180,7 +188,8 @@ class GenerateInvitationListTest extends MaintenanceBaseTestCase {
 					'rev_timestamp' => $newRevTS(),
 					'rev_actor' => 1,
 					'rev_len' => 40000,
-					'rev_parent_id' => 8
+					'rev_parent_id' => 8,
+					'rev_comment_id' => 1000,
 				],
 			] )
 			->caller( __METHOD__ )
