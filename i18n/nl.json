@@ -133,6 +133,7 @@
 	"campaignevents-unregister-not-participant": "U bent niet ingeschreven voor dit evenement.",
 	"campaignevents-unregister-need-central-account": "U hebt een centraal gebruikersaccount nodig om uw inschrijving voor het evenement op te zeggen.",
 	"myevents": "Uw evenementen",
+	"allevents": "Alle evenementen",
 	"campaignevents-myevents-need-central-account": "U hebt een centraal gebruikersaccount nodig om de lijst met uw evenementen te zien.",
 	"campaignevents-myevents-filter-legend": "Evenementen filteren",
 	"campaignevents-myevents-label-search": "Zoeken",
@@ -142,6 +143,13 @@
 	"campaignevents-myevents-field-status-closed": "Besloten evenementen",
 	"campaignevents-myevents-label-events-per-page": "Evenementen per pagina",
 	"campaignevents-myevents-filter-btn-label": "Evenementen filteren",
+	"campaignevents-allevents-filter-legend": "Evenementen filteren",
+	"campaignevents-allevents-label-submit": "Filters toepassen",
+	"campaignevents-allevents-label-search": "Zoekwoord",
+	"campaignevents-allevents-label-meeting-type": "Type vergadering",
+	"campaignevents-allevents-label-events-per-page": "Evenementen per pagina",
+	"campaignevents-allevents-label-start-date": "Van",
+	"campaignevents-allevents-label-end-date": "Tot",
 	"campaignevents-eventslist-column-date": "Datum",
 	"campaignevents-eventslist-column-name": "Evenementnaam",
 	"campaignevents-eventslist-column-location": "Locatie",
@@ -149,6 +157,7 @@
 	"campaignevents-eventslist-location-online": "Online evenement",
 	"campaignevents-eventslist-location-in-person": "Evenement op locatie",
 	"campaignevents-eventslist-location-online-and-in-person": "Evenement online en op locatie",
+	"campaignevents-eventslist-location-all-events": "Alle evenementen",
 	"campaignevents-eventslist-manage-btn-info": "Evenement beheren",
 	"campaignevents-eventslist-menu-edit": "Evenement bewerken",
 	"campaignevents-eventslist-menu-view-eventpage": "Evenementpagina bekijken",
@@ -422,5 +431,7 @@
 	"campaignevents-event-details-participants-individual-data-deleted": "De antwoorden van de individuele deelnemers zijn verwijderd en de geaggregeerde antwoorden zijn beschikbaar onder [$1 {{int:campaginevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Schrijf je in voor $1",
 	"campaignevents-register-page-nonlocal": "'''[$1 Voltooi uw inschrijving voor het evenement op $2],''' de wiki waar het evenement is aangemaakt.",
-	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Verwijder uw inschrijving voor het evenement op $2],''' de wiki waar het evenement is aangemaakt."
+	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Verwijder uw inschrijving voor het evenement op $2],''' de wiki waar het evenement is aangemaakt.",
+	"campaignevents-event-details-page-nonlocal": "U bekijkt momenteel een beperkte versie van deze pagina. <b>[$1 Bezoek deze pagina op $2]</b>, de wiki waar het evenement is aangemaakt, om toegang te krijgen tot de volledige details over het evenement en extra functies.",
+	"campaignevents-event-details-not-local-wiki-prompt": "Bekijk dit op [$1 $2]"
 }

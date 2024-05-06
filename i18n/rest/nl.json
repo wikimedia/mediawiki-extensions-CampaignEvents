@@ -13,9 +13,14 @@
 	"campaignevents-rest-user-not-found": "Er is geen gebruiker met deze centrale ID.",
 	"campaignevents-rest-get-registration-deleted": "Deze evenementregistratie is verwijderd.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' moet een array van gebruikers-ID's zijn, of null (om alle gebruikers te verwijderen)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Verwijder deelnemers op $1, de wiki waar het evenement is aangemaakt.",
 	"campaignevents-rest-list-participants-empty-filter": "Het gebruikersnaamfilter, indien opgegeven, moet een niet-lege tekenreeks zijn.",
 	"campaignevents-rest-list-participants-cannot-see-private": "U bent niet bevoegd om deelnemers te zien die zich privé hebben aangemeld voor dit evenement.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> moet een array van gebruikersnamen zijn en mag niet leeg zijn",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Stel de organisatoren in op $1, de wiki waar het evenement is aangemaakt.",
 	"campaignevents-rest-get-registration-info-notparticipant": "U neemt niet deel aan dit evenement.",
-	"campaignevents-rest-register-invalid-answer": "Ongeldig antwoord op de vraag $1"
+	"campaignevents-rest-register-invalid-answer": "Ongeldig antwoord op de vraag $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Voltooi uw inschrijving voor het evenement op $1, de wiki waar het evenement is aangemaakt.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Verwijder uw inschrijving voor het evenement op $1, de wiki waar het evenement is aangemaakt.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Stuur de deelnemers een e-mail op $1, de wiki waar het evenement is aangemaakt."
 }
