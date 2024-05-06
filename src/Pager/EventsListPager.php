@@ -15,7 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Pager\IndexPager;
 use MediaWiki\Pager\RangeChronologicalPager;
-use MediaWiki\User\UserOptionsLookup;
+use MediaWiki\User\Options\UserOptionsLookup;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use stdClass;

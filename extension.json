@@ -41,7 +41,9 @@
 			"value": true
 		}
 	},
-	"DatabaseVirtualDomains": [ "virtual-campaignevents" ],
+	"DatabaseVirtualDomains": [
+		"virtual-campaignevents"
+	],
 	"DefaultUserOptions": {
 		"echo-subscriptions-email-campaign-events-notification-registration": true,
 		"echo-subscriptions-web-campaign-events-notification-registration": false
