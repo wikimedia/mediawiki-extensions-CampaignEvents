@@ -14,14 +14,17 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Pager\IndexPager;
-use MediaWiki\Pager\RangeChronologicalPager;
-use MediaWiki\User\Options\UserOptionsLookup;
+use MediaWiki\Pager\ReverseChronologicalPager;
+use MediaWiki\User\UserOptionsLookup;
+use MediaWiki\Utils\MWTimestamp;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use stdClass;
 use UnexpectedValueException;
+use Wikimedia\Rdbms\OrExpressionGroup;
+use Wikimedia\Timestamp\TimestampException;
 
-class EventsListPager extends RangeChronologicalPager {
+class EventsListPager extends ReverseChronologicalPager {
 	use EventPagerTrait {
 		EventPagerTrait::getSubqueryInfo as getDefaultSubqueryInfo;
 	}
@@ -36,6 +39,9 @@ class EventsListPager extends RangeChronologicalPager {
 	private ?int $meetingType;
 	private LinkBatchFactory $linkBatchFactory;
 	private UserOptionsLookup $options;
+	private string $startDate;
+	private string $endDate;
+	private string $startOffset;
 
 	/**
 	 * @param UserLinker $userLinker
@@ -73,8 +79,8 @@ class EventsListPager extends RangeChronologicalPager {
 		$this->pageURLResolver = $pageURLResolver;
 		$this->organizerStore = $organizerStore;
 		$this->linkBatchFactory = $linkBatchFactory;
-
-		$this->getDateRangeCond( $startDate, $endDate );
+		$this->startDate = $startDate;
+		$this->endDate = $endDate;
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderTimestamp = '';
 		$this->search = $search;
@@ -212,7 +218,7 @@ class EventsListPager extends RangeChronologicalPager {
 	 * @inheritDoc
 	 */
 	public function getIndexField() {
-		return [ [ 'event_start_utc', 'event_name', 'event_id' ] ];
+		return [ [ 'event_start_utc', 'event_id' ] ];
 	}
 
 	public function getNavigationBar(): string {
@@ -302,5 +308,61 @@ class EventsListPager extends RangeChronologicalPager {
 			$query['conds']['event_meeting_type'] = EventStore::meetingTypeToDBVal( $this->meetingType );
 		}
 		return $query;
+	}
+
+	/**
+	 * @param int|null|string $offset
+	 * @param int $limit
+	 * @param bool $order
+	 * @return array
+	 */
+	public function buildQueryInfo( $offset, $limit, $order ): array {
+		[ $tables, $fields, $conds, $fname, $options, $join_conds ] = parent::buildQueryInfo( $offset, $limit, $order );
+		// ignore the default WHERE clause, it is incorrect
+		$queries = [];
+		// this is required to set the offsets correctly
+		$this->getDateRangeCond( $this->startDate, $this->endDate );
+		if ( $this->startOffset ) {
+			$queries[] = $this->mDb->expr( $this->getTimestampField(), '<=', $this->startOffset )
+				->and( 'event_end_utc', '>=', $this->startOffset );
+
+			$filterquery = $this->mDb->expr( $this->getTimestampField(), '>=', $this->startOffset );
+			if ( $this->endOffset ) {
+				$filterquery = $filterquery->and( 'event_end_utc', '<=', $this->endOffset );
+			}
+			$queries[] = $filterquery;
+
+			$conds[] = new OrExpressionGroup( ...$queries );
+		}
+		return [ $tables, $fields, $conds, $fname, $options, $join_conds ];
+	}
+
+	/**
+	 * @param string $startDate
+	 * @param string $endDate
+	 * @return void|null
+	 */
+	private function getDateRangeCond( string $startDate, string $endDate ) {
+		try {
+			if ( $startDate !== '' ) {
+				$startTimestamp = MWTimestamp::getInstance( $startDate );
+				$this->startOffset = $this->mDb->timestamp( $startTimestamp->getTimestamp() );
+			}
+
+			if ( $endDate !== '' ) {
+				$endTimestamp = MWTimestamp::getInstance( $endDate );
+				// Turned to use '<' for consistency with the parent class,
+				// add one second for compatibility with existing use cases
+				$endTimestamp->timestamp = $endTimestamp->timestamp->modify( '+1 second' );
+				$this->endOffset = $this->mDb->timestamp( $endTimestamp->getTimestamp() );
+
+				// populate existing variables for compatibility with parent
+				$this->mYear = (int)$endTimestamp->format( 'Y' );
+				$this->mMonth = (int)$endTimestamp->format( 'm' );
+				$this->mDay = (int)$endTimestamp->format( 'd' );
+			}
+		} catch ( TimestampException $ex ) {
+			return null;
+		}
 	}
 }
