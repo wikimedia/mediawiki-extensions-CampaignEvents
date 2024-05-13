@@ -11,10 +11,14 @@
 	"campaignevents-rest-user-not-found": "Uporabnik s tem centralnim ID-jem ne obstaja.",
 	"campaignevents-rest-get-registration-deleted": "Prijave na ta dogodek so izbrisane.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter »user_ids« mora biti matrika identifikatorjev uporabnikov ali prazen (za odstranitev vseh uporabnikov)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Prosimo, odstranite udeležence v $1, vikiju, kjer je bil dogodek ustvarjen.",
 	"campaignevents-rest-list-participants-empty-filter": "Filter uporabniških imen, če je določen, mora biti neprazen niz.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Nimate dovoljenja za ogled udeležencev, ki so se zasebno registrirali za ta dogodek.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> mora biti matrika uporabniških imen in ne sme biti prazno",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Prosimo, nastavite organizatorje v $1, vikiju, kjer je bil dogodek ustvarjen.",
 	"campaignevents-rest-get-registration-info-notparticipant": "Ne sodelujete v tem dogodku.",
 	"campaignevents-rest-register-invalid-answer": "Neveljaven odgovor na vprašanje $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Prosimo, dokončajte registracijo dogodka v $1, vikiju, kjer je bil dogodek ustvarjen.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Prosimo, izbrišite svojo registracijo dogodka v $1, vikiju, kjer je bil dogodek ustvarjen.",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "Prosimo, da udeležencem pošljete e-pošto na $1, viki, kjer je bil ustvarjen dogodek."
 }
