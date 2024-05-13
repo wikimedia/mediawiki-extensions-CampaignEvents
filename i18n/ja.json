@@ -7,7 +7,12 @@
 			"Shirayuki",
 			"Sou0012",
 			"Kokage si",
-			"もなー(偽物)"
+			"もなー(偽物)",
+			"Anonymoususer12321",
+			"Chqaz",
+			"MagicAho",
+			"Tmv",
+			"春春眠眠"
 		]
 	},
 	"campaignevents-desc": "キャンペーンの主催者用と参加者用の機能を提供。",
@@ -88,8 +93,11 @@
 	"campaignevents-register-event-not-open": "このイベントへの登録は締め切らせていただきました。",
 	"campaignevents-unregister-event-past": "このイベントへの登録期間は終了しました。",
 	"myevents": "あなたのイベント",
+	"campaignevents-myevents-filter-legend": "イベントを絞り込み",
 	"campaignevents-myevents-label-search": "検索",
 	"campaignevents-myevents-label-status": "状態",
+	"campaignevents-myevents-field-status-any": "全て",
+	"campaignevents-myevents-filter-btn-label": "イベントを絞り込み",
 	"campaignevents-eventslist-column-date": "日付",
 	"campaignevents-eventslist-column-name": "イベント名",
 	"campaignevents-eventslist-column-location": "位置",
@@ -120,6 +128,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "登録は終了しました",
 	"campaignevents-eventpage-btn-event-ended": "イベント終了",
 	"campaignevents-eventpage-dialog-title": "イベントの詳細",
+	"campaignevents-eventpage-dialog-organizers": "主催者: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "すべての主催者を表示",
 	"campaignevents-eventpage-dialog-dates-label": "開始時間と終了時間",
 	"campaignevents-eventpage-dialog-location-label": "位置",
@@ -139,6 +148,7 @@
 	"campaignevents-eventpage-enable-registration-dialog-confirm": "登録を有効にする",
 	"eventdetails": "イベントの詳細",
 	"campaignevents-event-details-label": "イベントの詳細",
+	"campaignevents-back-to-your-events": "あなたのイベントに戻る",
 	"campaignevents-event-details-edit-button": "編集",
 	"campaignevents-event-details-in-person-event-label": "対面イベント",
 	"campaignevents-event-details-online-label": "オンラインイベント",
@@ -152,8 +162,11 @@
 	"campaignevents-event-details-no-event-id-provided": "イベントIDを入力してください。",
 	"campaignevents-event-details-event-deleted": "このイベント登録は削除されました。",
 	"campaignevents-event-details-invalid-id": "有効なイベントIDを入力してください。",
+	"campaignevents-event-details-event": "イベントの詳細: $1",
 	"campaignevents-event-details-not-found": "このIDを持つイベントは存在しません",
 	"campaignevents-event-details-venue-not-available": "会場の住所は{{PLURAL:$1|organizer|主催者}}から提供されます。",
 	"campaignevents-event-details-dates-label": "開始時間と終了時間",
+	"campaignevents-event-details-remove-all-participant-notification": "参加者全員を除去",
+	"campaignevents-unregister-participants-permission-denied": "参加者を除去することはできません",
 	"campaignevents-event-details-search-participants-placeholder": "参加者を検索する"
 }
