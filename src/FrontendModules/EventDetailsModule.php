@@ -191,6 +191,36 @@ class EventDetailsModule {
 	}
 
 	/**
+	 * Return a message to inform the user that they need to see the event details on the wiki of the event.
+	 * This method must only be called if the event is not local.
+	 *
+	 * @param string|false $wikiID
+	 * @param OutputPage $out
+	 * @return HtmlSnippet
+	 */
+	private function getNonLocalWikiMessage( $wikiID, OutputPage $out ): HtmlSnippet {
+		static $message = null;
+
+		if ( $wikiID === WikiAwareEntity::LOCAL ) {
+			throw new LogicException( __METHOD__ . ' called for the local wiki' );
+		}
+
+		if ( !$message ) {
+			$wikiName = WikiMap::getWikiName( $wikiID );
+			$foreignDetailsURL = WikiMap::getForeignURL(
+				$wikiID, 'Special:' . SpecialEventDetails::PAGE_NAME . "/{$this->registration->getID()}"
+			);
+			$message = new HtmlSnippet(
+				$out->msg( 'campaignevents-event-details-not-local-wiki-prompt' )
+					->params( $foreignDetailsURL, $wikiName )
+					->parse()
+			);
+		}
+
+		return $message;
+	}
+
+	/**
 	 * @param UserIdentity $viewingUser
 	 * @param ICampaignsAuthority $authority
 	 * @param OutputPage $out
@@ -241,27 +271,17 @@ class EventDetailsModule {
 			MessageValue::new( 'campaignevents-event-details-register-prompt' )
 		);
 
-		$wikiName = WikiMap::getWikiName( Utils::getWikiIDString( $wikiID ) );
-		$foreignDetailsURL = WikiMap::getForeignURL(
-			$wikiID, 'Special:' . SpecialEventDetails::PAGE_NAME . "/{$this->registration->getID()}"
-		);
-		$needToBeOnLocalWikiMessage = new HtmlSnippet(
-			$out->msg( 'campaignevents-event-details-not-local-wiki-prompt' )
-				->params( [
-					$foreignDetailsURL, $wikiName
-				] )->parse()
-		);
-
 		$userCanViewSensitiveEventData = $this->permissionChecker->userCanViewSensitiveEventData( $authority );
 		$items[] = $this->getLocationSection(
 			$authority,
 			$isOrganizer,
 			$isParticipant,
 			$isLocalWiki,
+			$wikiID,
 			$organizersCount,
 			$needToRegisterMsg,
-			$needToBeOnLocalWikiMessage,
-			$userCanViewSensitiveEventData
+			$userCanViewSensitiveEventData,
+			$out
 		);
 
 		$trackingToolsSection = $this->getTrackingToolsSection();
@@ -272,7 +292,7 @@ class EventDetailsModule {
 		$chatURL = $this->registration->getChatURL();
 		if ( $userCanViewSensitiveEventData && $chatURL ) {
 			if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
-				$chatSectionContent = $needToBeOnLocalWikiMessage;
+				$chatSectionContent = $this->getNonLocalWikiMessage( $wikiID, $out );
 			} elseif ( $isOrganizer || $isParticipant ) {
 				$chatSectionContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
 			} else {
@@ -362,10 +382,11 @@ class EventDetailsModule {
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param bool $isLocalWiki
+	 * @param string|false $wikiID
 	 * @param int $organizersCount
 	 * @param string $needToRegisterMsg
-	 * @param HtmlSnippet $needToBeOnLocalWikiMessage
 	 * @param bool $userCanViewSensitiveEventData
+	 * @param OutputPage $out
 	 * @return Tag
 	 */
 	private function getLocationSection(
@@ -373,10 +394,11 @@ class EventDetailsModule {
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,
+		$wikiID,
 		int $organizersCount,
 		string $needToRegisterMsg,
-		HtmlSnippet $needToBeOnLocalWikiMessage,
-		bool $userCanViewSensitiveEventData
+		bool $userCanViewSensitiveEventData,
+		OutputPage $out
 	): Tag {
 		$meetingType = $this->registration->getMeetingType();
 		$items = [];
@@ -415,7 +437,7 @@ class EventDetailsModule {
 			$meetingURL = $this->registration->getMeetingURL();
 			if ( $userCanViewSensitiveEventData && $meetingURL ) {
 				if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
-					$items[] = $needToBeOnLocalWikiMessage;
+					$items[] = $this->getNonLocalWikiMessage( $wikiID, $out );
 				} elseif ( $isOrganizer || $isParticipant ) {
 					$items[] = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
 				} else {
@@ -533,7 +555,7 @@ class EventDetailsModule {
 	 * CampaignEventsGetEventDetails hook.
 	 *
 	 * @param string $icon
-	 * @param string|Tag|array $content
+	 * @param string|Tag|array|HtmlSnippet $content
 	 * @param string $label
 	 * @return Tag
 	 */
