@@ -41,7 +41,6 @@ class EventsListPager extends ReverseChronologicalPager {
 	private UserOptionsLookup $options;
 	private string $startDate;
 	private string $endDate;
-	private string $startOffset;
 
 	/**
 	 * @param UserLinker $userLinker
@@ -318,21 +317,22 @@ class EventsListPager extends ReverseChronologicalPager {
 	 */
 	public function buildQueryInfo( $offset, $limit, $order ): array {
 		[ $tables, $fields, $conds, $fname, $options, $join_conds ] = parent::buildQueryInfo( $offset, $limit, $order );
-		// ignore the default WHERE clause, it is incorrect
-		$queries = [];
 		// this is required to set the offsets correctly
-		$this->getDateRangeCond( $this->startDate, $this->endDate );
-		if ( $this->startOffset ) {
-			$queries[] = $this->mDb->expr( $this->getTimestampField(), '<=', $this->startOffset )
-				->and( 'event_end_utc', '>=', $this->startOffset );
+		$offsets = $this->getDateRangeCond( $this->startDate, $this->endDate );
+		if ( $offsets ) {
+			[ $startOffset, $endOffset ] = $offsets;
+			if ( $startOffset ) {
+				$crossStartCondition = $this->mDb->expr( $this->getTimestampField(), '<=', $startOffset )
+					->and( 'event_end_utc', '>=', $startOffset );
 
-			$filterquery = $this->mDb->expr( $this->getTimestampField(), '>=', $this->startOffset );
-			if ( $this->endOffset ) {
-				$filterquery = $filterquery->and( 'event_end_utc', '<=', $this->endOffset );
+				$withinDatesCondition = $this->mDb->expr( $this->getTimestampField(), '>=', $startOffset );
+				if ( $endOffset ) {
+					$withinDatesCondition = $withinDatesCondition->and( 'event_end_utc', '<=', $endOffset );
+				}
+				$conds[] = new OrExpressionGroup( $crossStartCondition, $withinDatesCondition );
+			} elseif ( $endOffset ) {
+				$conds[] = $this->mDb->expr( $this->getTimestampField(), '<=', $endOffset );
 			}
-			$queries[] = $filterquery;
-
-			$conds[] = new OrExpressionGroup( ...$queries );
 		}
 		return [ $tables, $fields, $conds, $fname, $options, $join_conds ];
 	}
@@ -340,13 +340,14 @@ class EventsListPager extends ReverseChronologicalPager {
 	/**
 	 * @param string $startDate
 	 * @param string $endDate
-	 * @return void|null
+	 * @return array|null
 	 */
-	private function getDateRangeCond( string $startDate, string $endDate ) {
+	private function getDateRangeCond( string $startDate, string $endDate ): ?array {
 		try {
+			$startOffset = null;
 			if ( $startDate !== '' ) {
 				$startTimestamp = MWTimestamp::getInstance( $startDate );
-				$this->startOffset = $this->mDb->timestamp( $startTimestamp->getTimestamp() );
+				$startOffset = $this->mDb->timestamp( $startTimestamp->getTimestamp() );
 			}
 
 			if ( $endDate !== '' ) {
@@ -361,6 +362,8 @@ class EventsListPager extends ReverseChronologicalPager {
 				$this->mMonth = (int)$endTimestamp->format( 'm' );
 				$this->mDay = (int)$endTimestamp->format( 'd' );
 			}
+
+			return [ $startOffset, $this->endOffset ];
 		} catch ( TimestampException $ex ) {
 			return null;
 		}
