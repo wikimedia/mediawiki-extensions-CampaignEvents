@@ -12,6 +12,7 @@ use Wikimedia\Rdbms\IExpression;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\LikeValue;
+use Wikimedia\Rdbms\Subquery;
 
 /**
  * @property string $search;
@@ -91,14 +92,9 @@ trait EventPagerTrait {
 		// Use a subquery and a temporary table to work around IndexPager not using HAVING for aggregates (T308694)
 		// and to support postgres (which doesn't allow aliases in HAVING).
 		$subqueryInfo = $this->getSubqueryInfo();
-		$subquery = $this->mDb->buildSelectSubquery(
-			$subqueryInfo['tables'],
-			$subqueryInfo['fields'],
-			$subqueryInfo['conds'],
-			__METHOD__,
-			$subqueryInfo['options'],
-			$subqueryInfo['join_conds']
-		);
+		$subquery = $this->mDb->newSelectQueryBuilder()
+			->queryInfo( $subqueryInfo )
+			->caller( __METHOD__ );
 		$conds = [];
 		if ( $this->search !== '' ) {
 			// TODO Make this case-insensitive. Not easy right now because the name is a binary string and the DBAL does
@@ -108,7 +104,7 @@ trait EventPagerTrait {
 		}
 
 		return [
-			'tables' => [ 'tmp' => $subquery ],
+			'tables' => [ 'tmp' => new Subquery( $subquery->getSQL() ) ],
 			'fields' => [
 				'event_id',
 				'event_name',
