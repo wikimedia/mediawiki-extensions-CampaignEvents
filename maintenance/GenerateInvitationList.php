@@ -30,6 +30,9 @@ class GenerateInvitationList extends Maintenance {
 	 * TODO: Is 3 years OK?
 	 */
 	public const CUTOFF_DAYS = 3 * 365;
+	private const ARTICLES_LIMIT = 300;
+	private const RESULT_USER_LIMIT = 200;
+	private const REVISIONS_PER_PAGE_LIMIT = 5_000;
 
 	public function __construct() {
 		parent::__construct();
@@ -67,6 +70,9 @@ class GenerateInvitationList extends Maintenance {
 		}
 
 		$rankedUsers = $this->rankUsers( $revisionsByWiki );
+		// Output just the top scores to avoid useless mile-long invitation lists. Preserve integer keys
+		// in case an username is numeric and PHP cast it to int.
+		$rankedUsers = array_slice( $rankedUsers, 0, self::RESULT_USER_LIMIT, true );
 		$out = "\n==Contributor scores==\n";
 		foreach ( $rankedUsers as $username => $score ) {
 			$out .= "$username - $score\n";
@@ -88,14 +94,15 @@ class GenerateInvitationList extends Maintenance {
 			$this->fatalError( "Cannot read list of articles" );
 		}
 
+		$listLines = array_filter( explode( "\n", $rawList ), static fn ( string $line ) => $line !== '' );
+		if ( count( $listLines ) > self::ARTICLES_LIMIT ) {
+			$this->fatalError( "The worklist has more than " . self::ARTICLES_LIMIT . ' articles' );
+		}
+
 		$curWikiID = WikiMap::getCurrentWikiId();
 		$pageStoreFactory = MediaWikiServices::getInstance()->getPageStoreFactory();
 		$pagesByWiki = [];
-		foreach ( explode( "\n", $rawList ) as $line ) {
-			if ( $line === '' ) {
-				continue;
-			}
-
+		foreach ( $listLines as $line ) {
 			$lineParts = explode( ':', $line, 2 );
 			if ( count( $lineParts ) !== 2 ) {
 				$this->fatalError( "Line without wiki ID: $line" );
@@ -146,6 +153,7 @@ class GenerateInvitationList extends Maintenance {
 			$pageID = $page->getId( $wikiID );
 			$pagesByID[$pageID] = $page;
 		}
+		// For simplicity (e.g. below when limiting the number of revisions), order the list of page IDs
 		asort( $pagesByID );
 		$pageChunks = array_chunk( array_keys( $pagesByID ), 25 );
 		$totalPageChunks = count( $pageChunks );
@@ -153,6 +161,7 @@ class GenerateInvitationList extends Maintenance {
 		$baseWhereConds = $this->getRevisionFilterConditions( $wikiID, $dbr );
 
 		$batchSize = 2500;
+		$scannedRevisionsPerPage = [];
 		$revisions = [];
 		$pageBatchIdx = 1;
 
@@ -160,16 +169,30 @@ class GenerateInvitationList extends Maintenance {
 		// the queries more readable.
 		foreach ( $pageChunks as $batchPageIDs ) {
 			$lastPage = 0;
-			$lastTimestamp = $dbr->timestamp( '20000101000000' );
-			$lastRevID = 0;
+			$lastTimestamp = null;
+			$lastRevID = null;
 			$innerBatchIdx = 1;
 			do {
 				$progressMsg = "Running $wikiID batch #$pageBatchIdx.$innerBatchIdx of $totalPageChunks " .
 					"from pageID=" . min( $batchPageIDs );
-				if ( $lastRevID !== 0 ) {
+				if ( $lastTimestamp !== null && $lastRevID !== null ) {
 					$progressMsg .= ", ts=$lastTimestamp, rev=$lastRevID";
 				}
 				$this->output( $progressMsg . "\n" );
+
+				$paginationConds = [
+					'rev_page' => $lastPage
+				];
+				if ( $lastTimestamp && $lastRevID ) {
+					$paginationConds = array_merge(
+						$paginationConds,
+						[
+							'rev_timestamp' => $lastTimestamp,
+							'rev_id' => $lastRevID
+						]
+					);
+				}
+
 				$revQueryBuilder = $revisionStore->newSelectQueryBuilder( $dbr );
 				$res = $revQueryBuilder
 					->field( 'actor_name' )
@@ -177,13 +200,7 @@ class GenerateInvitationList extends Maintenance {
 					->joinUser()
 					->where( $baseWhereConds )
 					->andWhere( [ 'rev_page' => $batchPageIDs ] )
-					->andWhere( [
-						$dbr->buildComparison( '>', [
-							'rev_page' => $lastPage,
-							'rev_timestamp' => $lastTimestamp,
-							'rev_id' => $lastRevID
-						] )
-					] )
+					->andWhere( $dbr->buildComparison( '>', $paginationConds ) )
 					->orderBy( [ 'rev_page', 'rev_timestamp', 'rev_id' ], SelectQueryBuilder::SORT_ASC )
 					->limit( $batchSize )
 					->caller( __METHOD__ )
@@ -200,6 +217,7 @@ class GenerateInvitationList extends Maintenance {
 				$parentSizes = $revisionStore->getRevisionSizes( array_values( $parents ) );
 
 				foreach ( $res as $row ) {
+					$pageID = (int)$row->rev_page;
 					$parentID = $parents[$row->rev_id] ?? null;
 					$parentSize = $parentID ? $parentSizes[$parentID] : 0;
 					$revisions[] = [
@@ -209,11 +227,23 @@ class GenerateInvitationList extends Maintenance {
 						'page' => $pagesByID[$row->rev_page]->__toString(),
 						'delta' => (int)$row->rev_len - $parentSize
 					];
-					$lastPage = (int)$row->rev_page;
+					$scannedRevisionsPerPage[$pageID] ??= 0;
+					$scannedRevisionsPerPage[$pageID]++;
+					$lastPage = $pageID;
 					$lastTimestamp = $row->rev_timestamp;
 					$lastRevID = (int)$row->rev_id;
 				}
 
+				if ( $scannedRevisionsPerPage[$lastPage] >= self::REVISIONS_PER_PAGE_LIMIT ) {
+					// If we've already analyzed enough revisions for this page, move on to the next one.
+					// Ideally we'd set a limit in the query above, but that seems difficult, especially considering
+					// the limited subset of SQL we can use. So, just use this as an approximate limit. The ultimate
+					// goal is to avoid choking on pages with lots of revisions, so the limit doesn't have to be exact.
+					// Unsetting all the pagination conditions except for the page one makes us go straight to the
+					// next page in the list.
+					$lastTimestamp = null;
+					$lastRevID = null;
+				}
 				$innerBatchIdx++;
 				sleep( 1 );
 			} while ( $res->numRows() >= $batchSize );
