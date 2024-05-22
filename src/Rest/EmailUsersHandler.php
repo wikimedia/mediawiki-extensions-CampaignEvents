@@ -14,8 +14,6 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
-use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -116,25 +114,9 @@ class EmailUsersHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function getBodyValidator( $contentType ) {
-		if ( $contentType !== 'application/json' ) {
-			return new UnsupportedContentTypeBodyValidator( $contentType );
-		}
-
-		return new JsonBodyValidator(
-			array_merge(
-				$this->getBodyParams(),
-				$this->getTokenParamDefinition()
-			)
-		);
-	}
-
-	/**
 	 * @return array
 	 */
-	private function getBodyParams(): array {
+	public function getBodyParamSettings(): array {
 		return [
 				'user_ids' => [
 					static::PARAM_SOURCE => 'body',
@@ -143,7 +125,7 @@ class EmailUsersHandler extends SimpleHandler {
 				],
 				'invert_users' => [
 					static::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_TYPE => 'bool',
+					ParamValidator::PARAM_TYPE => 'boolean',
 					ParamValidator::PARAM_REQUIRED => false,
 					ParamValidator::PARAM_DEFAULT => false,
 				],
@@ -157,6 +139,6 @@ class EmailUsersHandler extends SimpleHandler {
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_REQUIRED => true,
 				]
-			];
+			] + $this->getTokenParamDefinition();
 	}
 }

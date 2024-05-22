@@ -18,8 +18,6 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
-use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -125,25 +123,9 @@ class RegisterForEventHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function getBodyValidator( $contentType ) {
-		if ( $contentType !== 'application/json' ) {
-			return new UnsupportedContentTypeBodyValidator( $contentType );
-		}
-
-		return new JsonBodyValidator(
-			array_merge(
-				$this->getTokenParamDefinition(),
-				$this->getBodyParams()
-			)
-		);
-	}
-
-	/**
 	 * @return array
 	 */
-	protected function getBodyParams(): array {
+	public function getBodyParamSettings(): array {
 		return [
 			'is_private' => [
 				static::PARAM_SOURCE => 'body',
@@ -154,6 +136,6 @@ class RegisterForEventHandler extends SimpleHandler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'array',
 			],
-		];
+		] + $this->getTokenParamDefinition();
 	}
 }

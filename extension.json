@@ -430,8 +430,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\SetOrganizersHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsEditEventCommand",
-				"CampaignEventsCentralUserLookup"
+				"CampaignEventsEditEventCommand"
 			]
 		},
 		{
