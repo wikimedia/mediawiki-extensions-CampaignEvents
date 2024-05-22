@@ -9,9 +9,11 @@ use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
@@ -56,6 +58,7 @@ class EventDetailsModule {
 	private Language $language;
 	private ITextFormatter $msgFormatter;
 	private CampaignEventsHookRunner $hookRunner;
+	private PermissionChecker $permissionChecker;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -65,6 +68,7 @@ class EventDetailsModule {
 	 * @param EventTimeFormatter $eventTimeFormatter
 	 * @param TrackingToolRegistry $trackingToolRegistry
 	 * @param CampaignEventsHookRunner $hookRunner
+	 * @param PermissionChecker $permissionChecker
 	 * @param ExistingEventRegistration $registration
 	 * @param Language $language
 	 */
@@ -76,6 +80,7 @@ class EventDetailsModule {
 		EventTimeFormatter $eventTimeFormatter,
 		TrackingToolRegistry $trackingToolRegistry,
 		CampaignEventsHookRunner $hookRunner,
+		PermissionChecker $permissionChecker,
 		ExistingEventRegistration $registration,
 		Language $language
 	) {
@@ -86,6 +91,7 @@ class EventDetailsModule {
 		$this->trackingToolRegistry = $trackingToolRegistry;
 
 		$this->hookRunner = $hookRunner;
+		$this->permissionChecker = $permissionChecker;
 		$this->registration = $registration;
 		$this->language = $language;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
@@ -93,6 +99,7 @@ class EventDetailsModule {
 
 	/**
 	 * @param UserIdentity $viewingUser
+	 * @param ICampaignsAuthority $authority
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param string|false $wikiID
@@ -104,6 +111,7 @@ class EventDetailsModule {
 	 */
 	public function createContent(
 		UserIdentity $viewingUser,
+		ICampaignsAuthority $authority,
 		bool $isOrganizer,
 		bool $isParticipant,
 		$wikiID,
@@ -120,6 +128,7 @@ class EventDetailsModule {
 
 		$infoColumn = $this->getInfoColumn(
 			$viewingUser,
+			$authority,
 			$out,
 			$isOrganizer,
 			$isParticipant,
@@ -183,6 +192,7 @@ class EventDetailsModule {
 
 	/**
 	 * @param UserIdentity $viewingUser
+	 * @param ICampaignsAuthority $authority
 	 * @param OutputPage $out
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
@@ -193,6 +203,7 @@ class EventDetailsModule {
 	 */
 	private function getInfoColumn(
 		UserIdentity $viewingUser,
+		ICampaignsAuthority $authority,
 		OutputPage $out,
 		bool $isOrganizer,
 		bool $isParticipant,
@@ -240,13 +251,16 @@ class EventDetailsModule {
 					$foreignDetailsURL, $wikiName
 				] )->parse()
 		);
+
+		$userCanViewSensitiveEventData = $this->permissionChecker->userCanViewSensitiveEventData( $authority );
 		$items[] = $this->getLocationSection(
 			$isOrganizer,
 			$isParticipant,
 			$isLocalWiki,
 			$organizersCount,
 			$needToRegisterMsg,
-			$needToBeOnLocalWikiMessage
+			$needToBeOnLocalWikiMessage,
+			$userCanViewSensitiveEventData
 		);
 
 		$trackingToolsSection = $this->getTrackingToolsSection();
@@ -255,7 +269,7 @@ class EventDetailsModule {
 		}
 
 		$chatURL = $this->registration->getChatURL();
-		if ( $chatURL ) {
+		if ( $userCanViewSensitiveEventData && $chatURL ) {
 			if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
 				$chatSectionContent = $needToBeOnLocalWikiMessage;
 			} elseif ( $isOrganizer || $isParticipant ) {
@@ -345,6 +359,7 @@ class EventDetailsModule {
 	 * @param int $organizersCount
 	 * @param string $needToRegisterMsg
 	 * @param HtmlSnippet $needToBeOnLocalWikiMessage
+	 * @param bool $userCanViewSensitiveEventData
 	 * @return Tag
 	 */
 	private function getLocationSection(
@@ -353,7 +368,8 @@ class EventDetailsModule {
 		bool $isLocalWiki,
 		int $organizersCount,
 		string $needToRegisterMsg,
-		HtmlSnippet $needToBeOnLocalWikiMessage
+		HtmlSnippet $needToBeOnLocalWikiMessage,
+		bool $userCanViewSensitiveEventData
 	): Tag {
 		$meetingType = $this->registration->getMeetingType();
 		$items = [];
@@ -390,7 +406,7 @@ class EventDetailsModule {
 				) );
 
 			$meetingURL = $this->registration->getMeetingURL();
-			if ( $meetingURL ) {
+			if ( $userCanViewSensitiveEventData && $meetingURL ) {
 				if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
 					$items[] = $needToBeOnLocalWikiMessage;
 				} elseif ( $isOrganizer || $isParticipant ) {

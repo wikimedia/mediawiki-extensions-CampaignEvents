@@ -109,6 +109,7 @@ class FrontendModulesFactory {
 			$this->eventTimeFormatter,
 			$this->trackingToolRegistry,
 			$this->hookRunner,
+			$this->permissionChecker,
 			$registration,
 			$language
 		);
