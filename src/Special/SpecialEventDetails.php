@@ -203,6 +203,7 @@ class SpecialEventDetails extends SpecialPage {
 			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-event-details' ) ),
 			$eventDetailsModule->createContent(
 				$this->getUser(),
+				new MWAuthorityProxy( $this->getAuthority() ),
 				$isOrganizer,
 				$isParticipant,
 				$wikiID,

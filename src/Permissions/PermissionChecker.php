@@ -187,6 +187,14 @@ class PermissionChecker {
 
 	/**
 	 * @param ICampaignsAuthority $performer
+	 * @return bool
+	 */
+	public function userCanViewSensitiveEventData( ICampaignsAuthority $performer ): bool {
+		return !$performer->isSitewideBlocked();
+	}
+
+	/**
+	 * @param ICampaignsAuthority $performer
 	 * @param ExistingEventRegistration $event
 	 * @return bool
 	 */
