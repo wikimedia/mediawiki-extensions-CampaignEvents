@@ -4,6 +4,10 @@
 			"Accuratecy051"
 		]
 	},
+	"campaignevents-desc": "Na-enye atụmatụ maka ndị na-ahazi mkpọsa na ndị sonyere.",
+	"nstab-event": "Ihe omume",
+	"action-campaignevents-enable-registration": "mee ka ndebanye aha ihe omume",
+	"action-campaignevents-delete-registration": "ihichapụ ndebanye aha ihe omume",
 	"campaignevents-register-questions-label-subtitle": "You can change or remove your responses before, during and after the event.",
 	"campaignevents-register-question-gender-option-agender": "Agender",
 	"campaignevents-register-question-profession-option-nonprofit": "Non-profit professional",
