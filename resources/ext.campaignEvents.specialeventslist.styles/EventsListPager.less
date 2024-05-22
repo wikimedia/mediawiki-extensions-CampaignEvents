@@ -18,8 +18,11 @@
 .ext-campaignevents-eventslist-pager-bottom {
 	display: flex;
 	flex-wrap: wrap;
+
 	// Add vertical gaps when wrapping. Only works on modern browsers.
-	row-gap: 0.5em;
+	// Add space between elements (T364606)
+	gap: 0.5em @spacing-300;
+
 	// Prevent overflows with long usernames (T363864)
 	overflow-wrap: anywhere;
 
@@ -34,10 +37,14 @@
 	margin-left: 25px;
 	display: flex;
 
+	&:not( :first-child ) {
+		margin-top: @spacing-125;
+	}
+
 	> .ext-campaignevents-events-list-pager-day {
 		font-size: 2em;
 		flex: 0 0 1.5em;
-		margin-right: 20px;
+		margin-right: @spacing-125;
 	}
 }
 
