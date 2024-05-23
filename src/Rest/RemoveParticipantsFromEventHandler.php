@@ -15,8 +15,6 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
-use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -103,26 +101,20 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 	/**
 	 * @inheritDoc
 	 */
-	public function getBodyValidator( $contentType ) {
-		if ( $contentType !== 'application/json' ) {
-			return new UnsupportedContentTypeBodyValidator( $contentType );
-		}
-
-		return new JsonBodyValidator(
-			[
-				// TODO Here we should specify that each ID must be an integer. Right now this wouldn't
-				// work anyway due to T305973.
-				'user_ids' => [
-					static::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_DEFAULT => null
-				],
-				'invert_users' => [
-					static::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_DEFAULT => false,
-					ParamValidator::PARAM_TYPE => 'boolean',
-				],
-			] + $this->getTokenParamDefinition()
-		);
+	public function getBodyParamSettings(): array {
+		return [
+			'user_ids' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_DEFAULT => null,
+				ParamValidator::PARAM_TYPE => 'integer',
+				ParamValidator::PARAM_ISMULTI => true,
+			],
+			'invert_users' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_DEFAULT => false,
+				ParamValidator::PARAM_TYPE => 'boolean',
+			],
+		] + $this->getTokenParamDefinition();
 	}
 
 	/**

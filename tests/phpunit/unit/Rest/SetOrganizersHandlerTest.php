@@ -8,7 +8,6 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Rest\SetOrganizersHandler;
 use MediaWiki\Permissions\PermissionStatus;
@@ -16,7 +15,10 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Session\Session;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWiki\Title\TitleParser;
+use MediaWiki\User\UserIdentityLookup;
 use MediaWikiUnitTestCase;
+use MockTitleTrait;
 use StatusValue;
 
 /**
@@ -26,6 +28,23 @@ use StatusValue;
 class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	use CSRFTestHelperTrait;
 	use HandlerTestTrait;
+	use MockTitleTrait;
+
+	protected function setUp(): void {
+		parent::setUp();
+		$this->setService(
+			'TitleParser',
+			$this->createNoOpMock( TitleParser::class )
+		);
+		$this->setService(
+			'UserNameUtils',
+			$this->getDummyUserNameUtils()
+		);
+		$this->setService(
+			'UserIdentityLookup',
+			$this->createMock( UserIdentityLookup::class )
+		);
+	}
 
 	/**
 	 * @param IEventLookup|null $eventLookup
@@ -53,12 +72,9 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 			$editEventCommand = $this->createMock( EditEventCommand::class );
 			$editEventCommand->method( 'doEditIfAllowed' )->willReturn( StatusValue::newGood( 42 ) );
 		}
-		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$centralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
 		return new SetOrganizersHandler(
 			$eventLookup,
 			$editEventCommand,
-			$centralUserLookup
 		);
 	}
 

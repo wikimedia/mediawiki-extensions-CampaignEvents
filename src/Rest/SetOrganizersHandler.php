@@ -8,7 +8,6 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Permissions\PermissionStatus;
@@ -16,9 +15,6 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
-use MediaWiki\Rest\Validator\BodyValidator;
-use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MediaWiki\Rest\Validator\UnsupportedContentTypeBodyValidator;
 use MediaWiki\Rest\Validator\Validator;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -30,21 +26,17 @@ class SetOrganizersHandler extends SimpleHandler {
 
 	private IEventLookup $eventLookup;
 	private EditEventCommand $editEventCommand;
-	private CampaignsCentralUserLookup $centralUserLookup;
 
 	/**
 	 * @param IEventLookup $eventLookup
 	 * @param EditEventCommand $editEventCommand
-	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
-		EditEventCommand $editEventCommand,
-		CampaignsCentralUserLookup $centralUserLookup
+		EditEventCommand $editEventCommand
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->editEventCommand = $editEventCommand;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -53,16 +45,6 @@ class SetOrganizersHandler extends SimpleHandler {
 	public function validate( Validator $restValidator ): void {
 		parent::validate( $restValidator );
 		$this->validateToken();
-		// XXX JsonBodyValidator does not validate parameters, see T305973
-		$organizerNames = $this->getValidatedBody()['organizer_usernames'] ?? [];
-		foreach ( $organizerNames as $name ) {
-			if ( !$this->centralUserLookup->isValidLocalUsername( $name ) ) {
-				throw new LocalizedHttpException(
-					MessageValue::new( 'paramvalidator-baduser' )->plaintextParams( 'organizer_usernames', $name ),
-					400
-				);
-			}
-		}
 	}
 
 	/**
@@ -116,12 +98,8 @@ class SetOrganizersHandler extends SimpleHandler {
 	/**
 	 * @inheritDoc
 	 */
-	public function getBodyValidator( $contentType ): BodyValidator {
-		if ( $contentType !== 'application/json' ) {
-			return new UnsupportedContentTypeBodyValidator( $contentType );
-		}
-
-		return new JsonBodyValidator( [
+	public function getBodyParamSettings(): array {
+		return [
 			'organizer_usernames' => [
 				ParamValidator::PARAM_REQUIRED => true,
 				ParamValidator::PARAM_TYPE => 'user',
@@ -130,7 +108,7 @@ class SetOrganizersHandler extends SimpleHandler {
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_DEFAULT => [],
 			],
-		] + $this->getTokenParamDefinition() );
+		] + $this->getTokenParamDefinition();
 	}
 
 }
