@@ -788,17 +788,21 @@ class EventPageDecorator {
 			$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
 			$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
 		) {
-			$chatURLContent = '';
+			$chatURLContent = null;
 		} else {
 			throw new LogicException( "Unexpected user status $userStatus" );
 		}
-		return $this->makeDetailsDialogSection(
-			'speechBubbles',
-			$chatURLContent,
-			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-chat-label' )
-			)
-		);
+
+		if ( $chatURLContent ) {
+			return $this->makeDetailsDialogSection(
+				'speechBubbles',
+				$chatURLContent,
+				$this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-eventpage-dialog-chat-label' )
+				)
+			);
+		}
+		return '';
 	}
 
 	/**
