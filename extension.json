@@ -39,6 +39,14 @@
 		"CampaignEventsEnableWikimediaParticipantQuestions": {
 			"description": "Flag to enable Wikimedia-specific participant questions. This flag could be reconsidered in the future, in favour of other solutions (like a hook to add Wikimedia-specific questions).",
 			"value": true
+		},
+		"CampaignEventsEnableEventInvitation": {
+			"description": "Flag to enable event invitation feature on a wiki",
+			"value": false
+		},
+		"CampaignEventsShowEventInvitationSpecialPages": {
+			"description": "Temporary flag to show/hide Special pages related to event invitation",
+			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
@@ -84,6 +92,12 @@
 		},
 		"EchoHooksHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler"
+		},
+		"SpecialPageInitList": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\SpecialPageInitListHandler",
+			"services": [
+				"MainConfig"
+			]
 		}
 	},
 	"Hooks": {
@@ -92,7 +106,8 @@
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
 		"PageDeleteComplete": "PageMoveAndDeleteHandler",
 		"TitleMove": "PageMoveAndDeleteHandler",
-		"BeforeCreateEchoEvent": "EchoHooksHandler"
+		"BeforeCreateEchoEvent": "EchoHooksHandler",
+		"SpecialPage_initList": "SpecialPageInitList"
 	},
 	"JobClasses": {
 		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob"

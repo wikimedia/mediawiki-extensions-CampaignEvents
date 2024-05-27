@@ -436,5 +436,16 @@
 	"campaignevents-register-page-nonlocal": "Please '''[$1 complete your event registration on $2]''', the wiki where the event was created.",
 	"campaignevents-delete-registration-page-nonlocal": "Please '''[$1 delete your event registration on $2]''', the wiki where the event was created.",
 	"campaignevents-event-details-page-nonlocal": "You are currently viewing a limited version of this page. Please <b>[$1 visit this page on $2]</b>, the wiki where the event was created, to access the full event details and additional features.",
-	"campaignevents-event-details-not-local-wiki-prompt": "View on [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "View on [$1 $2]",
+	"generateinvitationlist": "Generate invitation list",
+	"campaignevents-generateinvitationlist-name-field-label": "Invitation list name",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "My event invitation list",
+	"campaignevents-generateinvitationlist-event-page-field-label": "Event page",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:My event",
+	"campaignevents-generateinvitationlist-article-list-field-label": "Article list",
+	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sun\nMoon\nHouse",
+	"campaignevents-generateinvitationlist-article-list-field-help": "Enter the names of up to $1 articles that cover the topics of your event. Each article should be on a new line.",
+	"campaignevents-generateinvitationlist-submit-button-text": "Generate",
+	"campaignevents-invitation-list-disabled": "This wiki does not have invitation list enabled.",
+	"campaignevents-invitation-list-not-allowed": "You are not allowed to use invitation lists."
 }
