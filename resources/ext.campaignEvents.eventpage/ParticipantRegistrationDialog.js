@@ -4,17 +4,20 @@
 	/**
 	 * Dialog used to display a form letting users register for an event.
 	 *
-	 * @param {Object} config Configuration options
-	 * @cfg {string|null} [policyMsg] Policy acknowledgement message
-	 * @cfg {Object|undefined} [curParticipantData] Current registration data for this user, if
-	 *   available. Undefined otherwise. Must have the following keys:
-	 *    - public (boolean): Whether the user is registered publicly
-	 *    - aggregationTimestamp (string|null): Planned timestamp of when the user's answers will be
-	 *       aggregated.
-	 * @cfg {boolean} [answersAggregated] Whether the user's answers have already been aggregated.
-	 * @cfg {Object} [eventQuestions] EventQuestions object
+	 * @class
 	 * @extends OO.ui.ProcessDialog
+	 *
 	 * @constructor
+	 * @param {Object} config Configuration options
+	 * @param {string|null} [config.policyMsg] Policy acknowledgement message
+	 * @param {Object|undefined} [config.curParticipantData] Current registration data for
+	 *   this user, if available. Undefined otherwise. Must have the following keys:
+	 *    - public (boolean): Whether the user is registered publicly
+	 *    - aggregationTimestamp (string|null): Planned timestamp of when the user's answers
+	 *       will be aggregated.
+	 * @param {boolean} [config.answersAggregated] Whether the user's answers have already
+	 *   been aggregated.
+	 * @param {Object} [config.eventQuestions] EventQuestions object
 	 */
 	function ParticipantRegistrationDialog( config ) {
 		ParticipantRegistrationDialog.super.call( this, config );
