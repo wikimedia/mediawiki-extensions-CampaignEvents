@@ -180,11 +180,11 @@ class EventsListPager extends ReverseChronologicalPager {
 			new TextWithIconWidget( [
 				'icon' => 'clock',
 				'content' => $this->msg(
-					'campaignevents-allevents-date-separator',
+					'campaignevents-eventslist-date-separator',
 					$this->getLanguage()->userDate( $row->event_start_utc, $this->getUser() ),
 					$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() )
 				)->text(),
-				'label' => 'campaignevents-allevents-date-label',
+				'label' => $this->msg( 'campaignevents-eventslist-date-label' )->text(),
 				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
 			] )
 		);
@@ -192,7 +192,7 @@ class EventsListPager extends ReverseChronologicalPager {
 			new TextWithIconWidget( [
 				'icon' => 'mapPin',
 				'content' => $this->msg( $this->getMeetingTypeMsg( $row ) )->text(),
-				'label' => 'campaignevents-allevents-meeting-type-label',
+				'label' => $this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
 				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
 			] )
 		);
@@ -200,7 +200,7 @@ class EventsListPager extends ReverseChronologicalPager {
 			new TextWithIconWidget( [
 				'icon' => 'userRights',
 				'content' => $this->getOrganizersText( $row ),
-				'label' => 'campaignevents-allevents-organiser-label',
+				'label' => $this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
 				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
 				'classes' => [ 'ext-campaignevents-eventslist-pager-organizers' ],
 			] )
