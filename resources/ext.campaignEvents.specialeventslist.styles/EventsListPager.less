@@ -2,7 +2,7 @@
 
 .ext-campaignevents-events-list-pager-details {
 	> *:not( :last-child ) {
-		margin-bottom: 0.5em;
+		margin-bottom: @spacing-50;
 	}
 
 	&& > h4 {
@@ -15,22 +15,9 @@
 	opacity: @opacity-icon-subtle;
 }
 
-.ext-campaignevents-eventslist-pager-bottom {
-	display: flex;
-	flex-wrap: wrap;
-
-	// Add vertical gaps when wrapping. Only works on modern browsers.
-	// Add space between elements (T364606)
-	gap: 0.5em @spacing-300;
-
+.ext-campaignevents-eventslist-pager-organizers {
 	// Prevent overflows with long usernames (T363864)
 	overflow-wrap: anywhere;
-
-	> div:not( :last-child ) {
-		// Alternative for `gap` when on a single row.
-		// Support: IE11, Chrome and Edge < 84, FF < 63, Safari < 14.1, iOS < 14.5 and others
-		padding-right: 10px;
-	}
 }
 
 .ext-campaignevents-events-list-pager-row {
