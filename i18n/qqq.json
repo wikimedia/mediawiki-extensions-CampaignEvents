@@ -171,6 +171,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Label of a button used in a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration. By clicking, the registration will not be deleted.\n\n{{Identical|Cancel}}",
 	"campaignevents-eventslist-delete-dialog-delete": "Label of a button used in a confirmation dialog shown on [[Special:MyEvents]] when the user selected the option to delete an event registration. By clicking, the registration will be deleted.",
 	"campaignevents-eventslist-delete-success": "Success message shown on [[Special:MyEvents]] when an event is deleted. Parameters:\n* $1 - Name of the event that was deleted.",
+	"campaignevents-eventslist-organizers-more": "Message shown in [[Special:AllEvents]] at the end of a list of organizers, to indicate that there are more organizers that are not shown. The text is hyperlinked to [[Special:EventDetails]]. Parameters:\n* $1 - Number of additional organizers.",
 	"deleteeventregistration": "Description of [[Special:DeleteEventRegistration]]",
 	"campaignevents-delete-error-no-event": "Error message shown on [[Special:DeleteEventRegistration]] when no event ID was provided.",
 	"campaignevents-delete-error-event-not-found": "Error message shown on [[Special:DeleteEventRegistration]] when the event ID provided does not correspond to an existing event.",

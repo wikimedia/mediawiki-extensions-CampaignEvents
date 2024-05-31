@@ -11,10 +11,14 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Pager\IndexPager;
 use MediaWiki\Pager\ReverseChronologicalPager;
+use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\UserOptionsLookup;
 use MediaWiki\Utils\MWTimestamp;
 use OOUI\HtmlSnippet;
@@ -192,24 +196,55 @@ class EventsListPager extends ReverseChronologicalPager {
 				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
 			] )
 		);
-		$userLinker = $this->userLinker;
-		$organizerStore = $this->organizerStore;
-		$eventID = (int)$row->event_id;
-		$organizer = $organizerStore
-			->getEventCreator( $eventID, OrganizersStore::GET_CREATOR_EXCLUDE_DELETED );
-		$organizer ??= $organizerStore->getEventOrganizers( $eventID, 1 )[0];
 		$detailContainer->appendContent(
 			new TextWithIconWidget( [
 				'icon' => 'userRights',
-				'content' => new HtmlSnippet(
-					$userLinker->generateUserLinkWithFallback( $organizer->getUser(), $this->getLanguage()->getCode() )
-				),
+				'content' => $this->getOrganizersText( $row ),
 				'label' => 'campaignevents-allevents-organiser-label',
 				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
 				'classes' => [ 'ext-campaignevents-eventslist-pager-organizers' ],
 			] )
 		);
 		return $htmlRow->appendContent( $detailContainer );
+	}
+
+	private function getOrganizersText( stdClass $row ): HtmlSnippet {
+		$eventID = (int)$row->event_id;
+		$organizersToShow = [];
+		$creator = $this->organizerStore->getEventCreator( $eventID, OrganizersStore::GET_CREATOR_EXCLUDE_DELETED );
+		if ( $creator ) {
+			$organizersToShow[] = $creator;
+		}
+		$organizers = $this->organizerStore->getEventOrganizers( $eventID, 2 );
+		foreach ( $organizers as $organizer ) {
+			if ( !$organizer->hasRole( Roles::ROLE_CREATOR ) ) {
+				$organizersToShow[] = $organizer;
+			}
+			if ( count( $organizersToShow ) === 2 ) {
+				break;
+			}
+		}
+
+		$language = $this->getLanguage();
+		$organizerLinks = array_map(
+			fn ( Organizer $organizer ) => $this->userLinker->generateUserLinkWithFallback(
+				$organizer->getUser(),
+				$language->getCode()
+			),
+			$organizersToShow
+		);
+
+		$organizerCount = $this->organizerStore->getOrganizerCountForEvent( $eventID );
+		if ( $organizerCount > 2 ) {
+			$organizerLinks[] = $this->getLinkRenderer()->makeKnownLink(
+				SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
+				$this->msg( 'campaignevents-eventslist-organizers-more' )
+					->numParams( $organizerCount - 2 )
+					->text()
+			);
+		}
+
+		return new HtmlSnippet( $language->listToText( $organizerLinks ) );
 	}
 
 	/**
