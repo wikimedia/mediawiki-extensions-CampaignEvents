@@ -708,8 +708,11 @@ class EventPageDecorator {
 				$linkContent = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-link-register' )
 				);
+			} elseif ( $userStatus === self::USER_STATUS_BLOCKED ) {
+				$linkContent = $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
+				);
 			} elseif (
-				$userStatus === self::USER_STATUS_BLOCKED ||
 				$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
 				$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
 			) {
@@ -784,11 +787,16 @@ class EventPageDecorator {
 				MessageValue::new( 'campaignevents-eventpage-dialog-chat-register' )
 			);
 		} elseif (
-			$userStatus === self::USER_STATUS_BLOCKED ||
+			$userStatus === self::USER_STATUS_BLOCKED
+		) {
+			$chatURLContent = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
+			);
+		} elseif (
 			$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
 			$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
 		) {
-			$chatURLContent = null;
+			$chatURLContent = '';
 		} else {
 			throw new LogicException( "Unexpected user status $userStatus" );
 		}

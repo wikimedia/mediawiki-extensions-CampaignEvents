@@ -254,6 +254,7 @@ class EventDetailsModule {
 
 		$userCanViewSensitiveEventData = $this->permissionChecker->userCanViewSensitiveEventData( $authority );
 		$items[] = $this->getLocationSection(
+			$authority,
 			$isOrganizer,
 			$isParticipant,
 			$isLocalWiki,
@@ -277,6 +278,10 @@ class EventDetailsModule {
 			} else {
 				$chatSectionContent = $needToRegisterMsg;
 			}
+		} elseif ( !$userCanViewSensitiveEventData && $chatURL && $authority->isSitewideBlocked() ) {
+			$chatSectionContent = $this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
+			);
 		} else {
 			$chatSectionContent = $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-chat-link-not-available' )
@@ -353,6 +358,7 @@ class EventDetailsModule {
 	}
 
 	/**
+	 * @param ICampaignsAuthority $performer
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param bool $isLocalWiki
@@ -363,6 +369,7 @@ class EventDetailsModule {
 	 * @return Tag
 	 */
 	private function getLocationSection(
+		ICampaignsAuthority $performer,
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,
@@ -414,6 +421,10 @@ class EventDetailsModule {
 				} else {
 					$items[] = $needToRegisterMsg;
 				}
+			} elseif ( !$userCanViewSensitiveEventData && $meetingURL && $performer->isSitewideBlocked() ) {
+				$items[] = $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
+				);
 			} else {
 				$items[] = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-online-link-not-available' )
