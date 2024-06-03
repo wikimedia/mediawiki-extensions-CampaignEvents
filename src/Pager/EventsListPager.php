@@ -172,7 +172,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		$detailContainer->appendContent(
 			( new Tag( 'h4' ) )->appendContent( $eventPageLinkElement )
 		);
-		$meetingType = $this->msg( $this->getMeetingTypeMsg( $row ) )->text();
 		$detailContainer->appendContent(
 			new TextWithIconWidget( [
 				'icon' => 'clock',
@@ -185,30 +184,30 @@ class EventsListPager extends ReverseChronologicalPager {
 				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
 			] )
 		);
-		$eventType = new TextWithIconWidget( [
-			'icon' => 'mapPin',
-			'content' => $meetingType,
-			'label' => 'campaignevents-allevents-meeting-type-label',
-			'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
-		] );
+		$detailContainer->appendContent(
+			new TextWithIconWidget( [
+				'icon' => 'mapPin',
+				'content' => $this->msg( $this->getMeetingTypeMsg( $row ) )->text(),
+				'label' => 'campaignevents-allevents-meeting-type-label',
+				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
+			] )
+		);
 		$userLinker = $this->userLinker;
 		$organizerStore = $this->organizerStore;
 		$eventID = (int)$row->event_id;
 		$organizer = $organizerStore
 			->getEventCreator( $eventID, OrganizersStore::GET_CREATOR_EXCLUDE_DELETED );
 		$organizer ??= $organizerStore->getEventOrganizers( $eventID, 1 )[0];
-		$userLinkElement = new TextWithIconWidget( [
-			'icon' => 'userRights',
-			'content' => new HtmlSnippet(
-				$userLinker->generateUserLinkWithFallback( $organizer->getUser(), $this->getLanguage()->getCode() )
-			),
-			'label' => 'campaignevents-allevents-organiser-label',
-			'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
-		] );
 		$detailContainer->appendContent(
-			( new Tag() )->addClasses(
-				[ 'ext-campaignevents-eventslist-pager-bottom' ]
-			)->appendContent( $eventType, $userLinkElement )
+			new TextWithIconWidget( [
+				'icon' => 'userRights',
+				'content' => new HtmlSnippet(
+					$userLinker->generateUserLinkWithFallback( $organizer->getUser(), $this->getLanguage()->getCode() )
+				),
+				'label' => 'campaignevents-allevents-organiser-label',
+				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
+				'classes' => [ 'ext-campaignevents-eventslist-pager-organizers' ],
+			] )
 		);
 		return $htmlRow->appendContent( $detailContainer );
 	}
