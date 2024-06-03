@@ -40,6 +40,10 @@ class Organizer {
 		return $this->roles;
 	}
 
+	public function hasRole( string $role ): bool {
+		return in_array( $role, $this->roles, true );
+	}
+
 	/**
 	 * @return int
 	 */
