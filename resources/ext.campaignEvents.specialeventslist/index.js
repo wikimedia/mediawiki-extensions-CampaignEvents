@@ -1,11 +1,17 @@
 /* eslint-disable no-jquery/no-global-selector */
 ( function () {
 	'use strict';
-
 	var FilterEventsWidget = require( './FilterEventsWidget.js' ),
 		EventKebabMenu = require( './EventKebabMenu.js' ),
+		DateTimeWidgetsEnhancer = require( './DateTimeWidgetsEnhancer.js' ),
 		deletedEventParam = 'deletedEvent';
-
+	mw.loader.using( [ 'mediawiki.widgets.datetime' ], function () {
+		mw.hook( 'htmlform.enhance' ).add( function ( $root ) {
+			if ( $root ) {
+				DateTimeWidgetsEnhancer.init( $root );
+			}
+		} );
+	} );
 	function checkEventJustDeleted() {
 		var deletedName = mw.util.getParamValue( deletedEventParam );
 		if ( deletedName ) {
