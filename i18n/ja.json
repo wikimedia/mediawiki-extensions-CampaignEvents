@@ -110,6 +110,7 @@
 	"campaignevents-myevents-label-search": "検索",
 	"campaignevents-myevents-label-status": "状態",
 	"campaignevents-myevents-field-status-any": "全て",
+	"campaignevents-myevents-label-events-per-page": "1ページあたりのイベント数",
 	"campaignevents-myevents-filter-btn-label": "イベントを絞り込み",
 	"campaignevents-eventslist-column-date": "日付",
 	"campaignevents-eventslist-column-name": "イベント名",
