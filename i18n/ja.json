@@ -118,6 +118,7 @@
 	"campaignevents-myevents-label-search": "検索",
 	"campaignevents-myevents-label-status": "状態",
 	"campaignevents-myevents-field-status-any": "全て",
+	"campaignevents-myevents-label-events-per-page": "1ページあたりのイベント数",
 	"campaignevents-myevents-filter-btn-label": "イベントを絞り込み",
 	"campaignevents-eventslist-column-date": "日付",
 	"campaignevents-eventslist-column-name": "イベント名",
@@ -177,6 +178,7 @@
 	"campaignevents-back-to-your-events": "あなたのイベントに戻る",
 	"campaignevents-event-details-edit-button": "編集",
 	"campaignevents-event-details-timezone": "<strong>タイムゾーン:</strong> $1",
+	"campaignevents-event-details-location-header": "場所",
 	"campaignevents-event-details-in-person-event-label": "対面イベント",
 	"campaignevents-event-details-online-label": "オンラインイベント",
 	"campaignevents-event-details-tracking-tool-last-update": "最終更新: $1",
@@ -223,7 +225,7 @@
 	"campaignevents-register-question-affiliate-option-none": "いいえ",
 	"campaignevents-register-question-affiliate-option-affiliate": "はい",
 	"campaignevents-register-question-age-stats-label": "あなたの年齢は?",
-	"campaignevents-eventpage-register-dialog-questions-title": "主催者向け情報",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "すべての質問は任意です",
+	"campaignevents-eventpage-register-dialog-questions-title": "あなたの情報",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "この情報はイベント主催者とのみ共有されます。",
 	"campaignevents-register-question-organizing-partner-details-placeholder": "場所の状態："
 }
