@@ -165,7 +165,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Abbrechen",
 	"campaignevents-eventslist-delete-dialog-delete": "Löschen",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> gelöscht.",
-	"campaignevents-eventslist-organizers-more": "$1 weitere",
+	"campaignevents-eventslist-organizers-more": "$1 {{PLURAL:$1|weiterer|weitere}}",
 	"deleteeventregistration": "Veranstaltungsanmeldungen löschen",
 	"campaignevents-delete-error-no-event": "Keine Veranstaltung angegeben.",
 	"campaignevents-delete-error-event-not-found": "Es gibt keine Veranstaltung mit dieser ID.",
