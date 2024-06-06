@@ -666,5 +666,180 @@
 			}
 		],
 		"pk": [ "ceqag_id" ]
+	},
+	{
+		"name": "ce_worklists",
+		"comment": "Stores the worklists.",
+		"columns": [
+			{
+				"name": "cew_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cew_name",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "cew_event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": false,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cew_status",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cew_created_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklists_event_id",
+				"columns": [ "cew_event_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "cew_id" ]
+	},
+	{
+		"name": "ce_worklists_articles",
+		"comment": "Stores the articles related to worklists.",
+		"columns": [
+			{
+				"name": "cewa_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewa_page_namespace",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cewa_page_title",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "cewa_page_wiki",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "cew_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklists_articles_cew_id",
+				"columns": [ "cew_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_worklists_articles_cewa_page_wiki",
+				"columns": [ "cewa_page_wiki" ],
+				"unique": false
+			}
+		],
+		"pk": [ "cewa_id" ]
+	},
+	{
+		"name": "ce_worklists_user_articles",
+		"comment": "Stores the user assignments to articles in worklists.",
+		"columns": [
+			{
+				"name": "cewuba_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewuba_user_id",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cew_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewa_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewuba_score",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklists_user_articles_cew_id",
+				"columns": [ "cew_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_worklists_user_articles_cewa_id",
+				"columns": [ "cewa_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_worklists_user_articles_cewuba_user_id",
+				"columns": [ "cewuba_user_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "cewuba_id" ]
 	}
 ]
