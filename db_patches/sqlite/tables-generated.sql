@@ -125,37 +125,3 @@ CREATE UNIQUE INDEX ceqag_event_question_option ON /*_*/ce_question_aggregation 
   ceqag_event_id, ceqag_question_id,
   ceqag_answer_option
 );
-
-
-CREATE TABLE /*_*/ce_worklists (
-  cew_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  cew_name BLOB NOT NULL, cew_event_id BIGINT UNSIGNED DEFAULT NULL,
-  cew_status INTEGER NOT NULL, cew_created_at BLOB NOT NULL
-);
-
-CREATE INDEX ce_worklists_event_id ON /*_*/ce_worklists (cew_event_id);
-
-
-CREATE TABLE /*_*/ce_worklists_articles (
-  cewa_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  cewa_page_namespace INTEGER NOT NULL,
-  cewa_page_title BLOB NOT NULL, cewa_page_wiki BLOB NOT NULL,
-  cew_id BIGINT UNSIGNED NOT NULL
-);
-
-CREATE INDEX ce_worklists_articles_cew_id ON /*_*/ce_worklists_articles (cew_id);
-
-CREATE INDEX ce_worklists_articles_cewa_page_wiki ON /*_*/ce_worklists_articles (cewa_page_wiki);
-
-
-CREATE TABLE /*_*/ce_worklists_user_articles (
-  cewuba_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  cewuba_user_id INTEGER NOT NULL, cew_id BIGINT UNSIGNED NOT NULL,
-  cewa_id BIGINT UNSIGNED NOT NULL, cewuba_score INTEGER NOT NULL
-);
-
-CREATE INDEX ce_worklists_user_articles_cew_id ON /*_*/ce_worklists_user_articles (cew_id);
-
-CREATE INDEX ce_worklists_user_articles_cewa_id ON /*_*/ce_worklists_user_articles (cewa_id);
-
-CREATE INDEX ce_worklists_user_articles_cewuba_user_id ON /*_*/ce_worklists_user_articles (cewuba_user_id);
