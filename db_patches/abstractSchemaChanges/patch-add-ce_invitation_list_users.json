@@ -1,0 +1,56 @@
+{
+	"before": {},
+	"after": {
+		"name": "ce_invitation_list_users",
+		"comment": "Stores the users related to invitation lists.",
+		"columns": [
+			{
+				"name": "ceilu_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceilu_user_id",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "ceilu_ceil_id",
+				"comment": "ID of the associated ce_invitation_lists table",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceilu_score",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_invitation_list_users_ceil_id",
+				"comment": "Get the list of users by invitation list ID",
+				"columns": [ "ceilu_ceil_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_invitation_list_users_ceilu_user_id",
+				"comment": "Get the invitation list IDs a given user is assigned to. For now, it will be used only for analytics, but this may also be used in the application later",
+				"columns": [ "ceilu_user_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "ceilu_id" ]
+	}
+}

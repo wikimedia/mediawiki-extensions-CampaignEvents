@@ -23,5 +23,29 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/tables-generated.sql",
 			true
 		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_invitation_lists',
+			"$dir/$dbType/patch-add-ce_invitation_lists.sql",
+			true
+		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_worklist_articles',
+			"$dir/$dbType/patch-add-ce_worklist_articles.sql",
+			true
+		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_invitation_list_users',
+			"$dir/$dbType/patch-add-ce_invitation_list_users.sql",
+			true
+		] );
 	}
 }

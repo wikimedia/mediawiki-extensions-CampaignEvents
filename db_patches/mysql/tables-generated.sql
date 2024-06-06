@@ -133,3 +133,39 @@ CREATE TABLE /*_*/ce_question_aggregation (
   ),
   PRIMARY KEY(ceqag_id)
 ) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_invitation_lists (
+  ceil_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceil_name VARBINARY(255) NOT NULL,
+  ceil_event_id BIGINT UNSIGNED DEFAULT NULL,
+  ceil_status INT NOT NULL,
+  ceil_user_id INT NOT NULL,
+  ceil_wiki VARBINARY(64) NOT NULL,
+  ceil_created_at BINARY(14) NOT NULL,
+  INDEX ce_invitation_lists_event_id (ceil_event_id),
+  INDEX ce_invitation_lists_wiki (ceil_wiki),
+  INDEX ce_invitation_lists_user_wiki (ceil_user_id, ceil_wiki),
+  PRIMARY KEY(ceil_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_worklist_articles (
+  cewa_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  cewa_page_id INT UNSIGNED NOT NULL,
+  cewa_page_title VARBINARY(255) NOT NULL,
+  cewa_ceil_id BIGINT UNSIGNED NOT NULL,
+  INDEX ce_worklist_articles_ceil_id (cewa_ceil_id),
+  PRIMARY KEY(cewa_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_invitation_list_users (
+  ceilu_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceilu_user_id INT NOT NULL,
+  ceilu_ceil_id BIGINT UNSIGNED NOT NULL,
+  ceilu_score INT NOT NULL,
+  INDEX ce_invitation_list_users_ceil_id (ceilu_ceil_id),
+  INDEX ce_invitation_list_users_ceilu_user_id (ceilu_user_id),
+  PRIMARY KEY(ceilu_id)
+) /*$wgDBTableOptions*/;

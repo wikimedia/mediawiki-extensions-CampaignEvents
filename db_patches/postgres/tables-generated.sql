@@ -146,3 +146,45 @@ CREATE UNIQUE INDEX ceqag_event_question_option ON ce_question_aggregation (
   ceqag_event_id, ceqag_question_id,
   ceqag_answer_option
 );
+
+
+CREATE TABLE ce_invitation_lists (
+  ceil_id BIGSERIAL NOT NULL,
+  ceil_name TEXT NOT NULL,
+  ceil_event_id BIGINT DEFAULT NULL,
+  ceil_status INT NOT NULL,
+  ceil_user_id INT NOT NULL,
+  ceil_wiki TEXT NOT NULL,
+  ceil_created_at TIMESTAMPTZ NOT NULL,
+  PRIMARY KEY(ceil_id)
+);
+
+CREATE INDEX ce_invitation_lists_event_id ON ce_invitation_lists (ceil_event_id);
+
+CREATE INDEX ce_invitation_lists_wiki ON ce_invitation_lists (ceil_wiki);
+
+CREATE INDEX ce_invitation_lists_user_wiki ON ce_invitation_lists (ceil_user_id, ceil_wiki);
+
+
+CREATE TABLE ce_worklist_articles (
+  cewa_id BIGSERIAL NOT NULL,
+  cewa_page_id INT NOT NULL,
+  cewa_page_title TEXT NOT NULL,
+  cewa_ceil_id BIGINT NOT NULL,
+  PRIMARY KEY(cewa_id)
+);
+
+CREATE INDEX ce_worklist_articles_ceil_id ON ce_worklist_articles (cewa_ceil_id);
+
+
+CREATE TABLE ce_invitation_list_users (
+  ceilu_id BIGSERIAL NOT NULL,
+  ceilu_user_id INT NOT NULL,
+  ceilu_ceil_id BIGINT NOT NULL,
+  ceilu_score INT NOT NULL,
+  PRIMARY KEY(ceilu_id)
+);
+
+CREATE INDEX ce_invitation_list_users_ceil_id ON ce_invitation_list_users (ceilu_ceil_id);
+
+CREATE INDEX ce_invitation_list_users_ceilu_user_id ON ce_invitation_list_users (ceilu_user_id);
