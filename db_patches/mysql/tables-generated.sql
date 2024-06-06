@@ -133,39 +133,3 @@ CREATE TABLE /*_*/ce_question_aggregation (
   ),
   PRIMARY KEY(ceqag_id)
 ) /*$wgDBTableOptions*/;
-
-
-CREATE TABLE /*_*/ce_worklists (
-  cew_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
-  cew_name VARBINARY(255) NOT NULL,
-  cew_event_id BIGINT UNSIGNED DEFAULT NULL,
-  cew_status INT NOT NULL,
-  cew_created_at BINARY(14) NOT NULL,
-  INDEX ce_worklists_event_id (cew_event_id),
-  PRIMARY KEY(cew_id)
-) /*$wgDBTableOptions*/;
-
-
-CREATE TABLE /*_*/ce_worklists_articles (
-  cewa_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
-  cewa_page_namespace INT NOT NULL,
-  cewa_page_title VARBINARY(255) NOT NULL,
-  cewa_page_wiki VARBINARY(64) NOT NULL,
-  cew_id BIGINT UNSIGNED NOT NULL,
-  INDEX ce_worklists_articles_cew_id (cew_id),
-  INDEX ce_worklists_articles_cewa_page_wiki (cewa_page_wiki),
-  PRIMARY KEY(cewa_id)
-) /*$wgDBTableOptions*/;
-
-
-CREATE TABLE /*_*/ce_worklists_user_articles (
-  cewuba_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
-  cewuba_user_id INT NOT NULL,
-  cew_id BIGINT UNSIGNED NOT NULL,
-  cewa_id BIGINT UNSIGNED NOT NULL,
-  cewuba_score INT NOT NULL,
-  INDEX ce_worklists_user_articles_cew_id (cew_id),
-  INDEX ce_worklists_user_articles_cewa_id (cewa_id),
-  INDEX ce_worklists_user_articles_cewuba_user_id (cewuba_user_id),
-  PRIMARY KEY(cewuba_id)
-) /*$wgDBTableOptions*/;
