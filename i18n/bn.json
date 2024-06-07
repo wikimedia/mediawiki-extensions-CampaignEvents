@@ -51,6 +51,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "বাতিল",
 	"campaignevents-eventslist-delete-dialog-delete": "মুছুন",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> মুছে ফেলা হয়েছে।",
+	"campaignevents-eventslist-organizers-more": "{{PLURAL:$1|আরও}} $1 জন",
 	"campaignevents-delete-submit-btn": "মুছুন",
 	"campaignevents-register-registration-deleted": "আপনি এই ইভেন্টের জন্য নিবন্ধন করতে পারবেন না কারণ এটি মুছে ফেলা হয়েছে।",
 	"campaignevents-eventpage-header-location-label": "অবস্থান",

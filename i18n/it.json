@@ -74,7 +74,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Annulla",
 	"campaignevents-eventslist-delete-dialog-delete": "Cancella",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> cancellato.",
-	"campaignevents-eventslist-organizers-more": "altri $1",
+	"campaignevents-eventslist-organizers-more": "$1 {{PLURAL:$1|altro|altri}}",
 	"campaignevents-delete-error-no-event": "Nessun evento specificato.",
 	"campaignevents-delete-submit-btn": "Cancella",
 	"campaignevents-eventpage-header-type-online": "Evento online",

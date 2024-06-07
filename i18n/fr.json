@@ -159,7 +159,7 @@
 	"campaignevents-allevents-label-events-per-page": "Évènements par page",
 	"campaignevents-allevents-label-start-date": "Du",
 	"campaignevents-allevents-label-end-date": "au",
-	"campaignevents-allevents-date-separator": "$1 – $2",
+	"campaignevents-eventslist-date-separator": "$1 – $2",
 	"campaignevents-eventslist-column-date": "Date",
 	"campaignevents-eventslist-column-name": "Nom de l’événement",
 	"campaignevents-eventslist-column-location": "Lieu",

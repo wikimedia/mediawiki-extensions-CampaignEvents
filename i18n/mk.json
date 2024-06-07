@@ -166,6 +166,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
 	"campaignevents-eventslist-delete-dialog-delete": "Избриши",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> избришани.",
+	"campaignevents-eventslist-organizers-more": "{{PLURAL:$1|уште}} $1",
 	"deleteeventregistration": "Бришење на пријава за настан",
 	"campaignevents-delete-error-no-event": "Нема укажано настан.",
 	"campaignevents-delete-error-event-not-found": "Нема настан со таа назнака.",
