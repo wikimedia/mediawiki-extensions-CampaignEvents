@@ -21,8 +21,8 @@ use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\Message\Message;
 use MediaWiki\Utils\MWTimestamp;
-use Message;
 use StatusValue;
 use Wikimedia\RequestTimeout\TimeoutException;
 

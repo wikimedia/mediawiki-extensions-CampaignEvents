@@ -19,7 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Pager\IndexPager;
 use MediaWiki\Pager\ReverseChronologicalPager;
 use MediaWiki\SpecialPage\SpecialPage;
-use MediaWiki\User\UserOptionsLookup;
+use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\Utils\MWTimestamp;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;

@@ -4,10 +4,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use EchoAttributeManager;
-use EchoUserLocator;
 use MediaWiki\Extension\CampaignEvents\Notifications\RegistrationNotificationPresentationModel;
+use MediaWiki\Extension\Notifications\AttributeManager;
 use MediaWiki\Extension\Notifications\Hooks\BeforeCreateEchoEventHook;
+use MediaWiki\Extension\Notifications\UserLocator;
 
 class EchoHooksHandler implements BeforeCreateEchoEventHook {
 
@@ -39,9 +39,9 @@ class EchoHooksHandler implements BeforeCreateEchoEventHook {
 			'group' => 'positive',
 			'section' => 'message',
 			'presentation-model' => RegistrationNotificationPresentationModel::class,
-			EchoAttributeManager::ATTR_LOCATORS => [
+			AttributeManager::ATTR_LOCATORS => [
 				[
-					[ EchoUserLocator::class, 'locateFromEventExtra' ],
+					[ UserLocator::class, 'locateFromEventExtra' ],
 					[ 'user' ]
 				]
 			],

@@ -3,12 +3,12 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Notifications;
 
-use EchoEvent;
 use InvalidArgumentException;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\Notifications\Model\Event;
 use MediaWiki\Title\Title;
 
 class UserNotifier {
@@ -34,7 +34,7 @@ class UserNotifier {
 				throw new InvalidArgumentException( "Unexpected Page implementation" );
 			}
 			DeferredUpdates::addCallableUpdate( static function () use ( $performer, $event, $eventPage ) {
-				EchoEvent::create( [
+				Event::create( [
 					'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
 					'title' => Title::castFromPageIdentity( $eventPage->getPageIdentity() ),
 					'extra' => [

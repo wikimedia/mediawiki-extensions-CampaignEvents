@@ -4,7 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
-use HtmlCacheUpdater;
+use MediaWiki\Cache\HTMLCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
@@ -18,12 +18,12 @@ use RuntimeException;
 class EventPageCacheUpdater {
 	public const SERVICE_NAME = 'CampaignEventsEventPageCacheUpdater';
 
-	private HtmlCacheUpdater $htmlCacheUpdater;
+	private HTMLCacheUpdater $htmlCacheUpdater;
 
 	/**
-	 * @param HtmlCacheUpdater $htmlCacheUpdater
+	 * @param HTMLCacheUpdater $htmlCacheUpdater
 	 */
-	public function __construct( HtmlCacheUpdater $htmlCacheUpdater ) {
+	public function __construct( HTMLCacheUpdater $htmlCacheUpdater ) {
 		$this->htmlCacheUpdater = $htmlCacheUpdater;
 	}
 
@@ -58,7 +58,7 @@ class EventPageCacheUpdater {
 		}
 		$this->htmlCacheUpdater->purgeTitleUrls(
 			[ $eventPage->getPageIdentity() ],
-			HtmlCacheUpdater::PURGE_INTENT_TXROUND_REFLECTED
+			HTMLCacheUpdater::PURGE_INTENT_TXROUND_REFLECTED
 		);
 	}
 }

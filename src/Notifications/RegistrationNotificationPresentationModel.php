@@ -3,7 +3,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Notifications;
 
-use EchoEvent;
 use Language;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -16,11 +15,12 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\Notifications\Formatters\EchoEventPresentationModel;
+use MediaWiki\Extension\Notifications\Model\Event;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\RawMessage;
+use MediaWiki\Message\Message;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\User;
-use Message;
 
 class RegistrationNotificationPresentationModel extends EchoEventPresentationModel {
 	public const NOTIFICATION_NAME = 'campaign-events-notification-registration-confirmation';
@@ -35,13 +35,13 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 	private UserLinker $userLinker;
 
 	/**
-	 * @param EchoEvent $event
+	 * @param Event $event
 	 * @param Language $language
 	 * @param User $user Only used for permissions checking and GENDER
 	 * @param string $distributionType
 	 */
 	protected function __construct(
-		EchoEvent $event,
+		Event $event,
 		Language $language,
 		User $user,
 		$distributionType

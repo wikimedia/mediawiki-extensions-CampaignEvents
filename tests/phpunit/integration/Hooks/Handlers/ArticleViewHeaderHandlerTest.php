@@ -6,8 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 
 use Article;
 use Generator;
-use IContextSource;
 use Language;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\ArticleViewHeaderHandler;

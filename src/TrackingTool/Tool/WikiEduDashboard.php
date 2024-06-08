@@ -15,7 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Http\HttpRequestFactory;
-use Message;
+use MediaWiki\Message\Message;
 use MWHttpRequest;
 use StatusValue;
 use Wikimedia\Assert\Assert;
