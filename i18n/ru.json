@@ -69,6 +69,8 @@
 	"campaignevents-allevents-label-events-per-page": "События на странице",
 	"campaignevents-allevents-label-start-date": "От",
 	"campaignevents-allevents-label-end-date": "Кому",
+	"campaignevents-eventslist-meeting-type-label": "Тип встречи",
+	"campaignevents-eventslist-organizer-label": "Организаторы",
 	"campaignevents-eventslist-column-date": "Дата",
 	"campaignevents-eventslist-column-name": "Название мероприятия",
 	"campaignevents-eventslist-column-location": "Местоположение",
