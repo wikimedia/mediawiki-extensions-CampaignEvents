@@ -8,6 +8,7 @@ use Generator;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWikiIntegrationTestCase;
@@ -36,6 +37,18 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		],
 		10 => [
 			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => true, 'clickwrap' => false ],
+		],
+		11 => [
+			[ 'user' => 102, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => false, 'clickwrap' => false ],
+			[ 'user' => 101, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false, 'clickwrap' => false ],
+			[ 'user' => 103, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false, 'clickwrap' => false ],
+			[ 'user' => 104, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false, 'clickwrap' => false ],
+			[ 'user' => 105, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false, 'clickwrap' => false ],
+		],
+		15 => [
+			[ 'user' => 101, 'roles' => [ Roles::ROLE_CREATOR ], 'deleted' => true, 'clickwrap' => false ],
+			[ 'user' => 102, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false, 'clickwrap' => false ],
+			[ 'user' => 103, 'roles' => [ Roles::ROLE_ORGANIZER ], 'deleted' => false, 'clickwrap' => false ],
 		]
 	];
 
@@ -94,6 +107,62 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Has organizers, including a deleted one' => [ 1, [ 101, 102 ] ];
 		yield 'Does not have organizers' => [ 2, [] ];
 		yield 'Providing ID of the last organizer' => [ 1, [ 102 ], 1 ];
+	}
+
+	/**
+	 * @param int[] $eventIDs
+	 * @param int $limit
+	 * @param array $expectedIDs
+	 * @covers ::getOrganizersForEvents
+	 * @covers ::rowToOrganizerObject
+	 * @dataProvider provideOrganizersForEvents
+	 */
+	public function testGetOrganizersForEvents( array $eventIDs, int $limit, array $expectedIDs ) {
+		$store = new OrganizersStore(
+			CampaignEventsServices::getDatabaseHelper()
+		);
+		$actualOrganizers = $store->getOrganizersForEvents( $eventIDs, $limit );
+		$actualUserIDs = [];
+		foreach ( $actualOrganizers as $event => $organizersPerEvent ) {
+			$actualUserIDs[$event] = array_map(
+				static fn ( Organizer $organizer ) => $organizer->getUser()->getCentralID(),
+				$organizersPerEvent
+			);
+		}
+		$this->assertSame( $expectedIDs, $actualUserIDs );
+	}
+
+	public static function provideOrganizersForEvents(): Generator {
+		yield 'One with multiple organizers, including a deleted one, one with single organizer, limit 2' => [
+			[ 1, 3 ],
+			2,
+			[ 1 => [ 101, 102 ], 3 => [ 101 ] ]
+		];
+		yield 'One with multiple organizers, including a deleted one, one with single organizer, limit 1' => [
+			[ 1, 3 ],
+			1,
+			[ 1 => [ 101 ], 3 => [ 101 ] ]
+		];
+		yield 'One without organizers, one with single organizer, limit 10' => [
+			[ 2, 3 ],
+			10,
+			[ 2 => [], 3 => [ 101 ] ]
+		];
+		yield 'Many events, limit 1' => [
+			[ 1, 2, 3, 10, 11 ],
+			1,
+			[ 1 => [ 101 ], 2 => [], 3 => [ 101 ], 10 => [], 11 => [ 102 ] ]
+		];
+		yield 'Many events, limit 10' => [
+			[ 1, 2, 3, 10, 11 ],
+			10,
+			[ 1 => [ 101, 102 ], 2 => [], 3 => [ 101 ], 10 => [], 11 => [ 102, 101, 103, 104, 105 ] ]
+		];
+		yield 'No creator, has others' => [
+			[ 15 ],
+			2,
+			[ 15 => [ 102, 103 ] ]
+		];
 	}
 
 	/**
@@ -313,6 +382,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @param string $includeDeleted
 	 * @param int|null $expected User ID or null if the event is expected not to have a creator.
 	 * @covers ::getEventCreator
+	 * @covers ::getEventCreators
 	 * @covers ::rowToOrganizerObject
 	 * @dataProvider provideGetEventCreator
 	 */
@@ -343,6 +413,70 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 			2,
 			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED,
 			null
+		];
+	}
+
+	/**
+	 * @param int[] $eventIDs
+	 * @param string $includeDeleted
+	 * @param array<int|null> $expectedIDs Array of user IDs, or null if the event is expected not to have a creator.
+	 * @covers ::getEventCreators
+	 * @covers ::rowToOrganizerObject
+	 * @dataProvider provideGetEventCreators
+	 */
+	public function testGetEventCreators( array $eventIDs, string $includeDeleted, array $expectedIDs ) {
+		$store = new OrganizersStore(
+			CampaignEventsServices::getDatabaseHelper()
+		);
+
+		$actual = $store->getEventCreators( $eventIDs, $includeDeleted );
+		$actualIDs = array_map(
+			static fn ( $val ) => $val instanceof Organizer ? $val->getUser()->getCentralID() : null,
+			$actual
+		);
+		$this->assertSame( $expectedIDs, $actualIDs );
+	}
+
+	public static function provideGetEventCreators(): Generator {
+		yield 'Single event with creator, include deleted' => [
+			[ 1 ],
+			OrganizersStore::GET_CREATOR_INCLUDE_DELETED,
+			[ 1 => 101 ]
+		];
+		yield 'Single event with creator, exclude deleted' => [
+			[ 1 ],
+			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED,
+			[ 1 => 101 ]
+		];
+		yield 'Two events, one where creator was deleted, include deleted' => [
+			[ 10, 11 ],
+			OrganizersStore::GET_CREATOR_INCLUDE_DELETED,
+			[ 10 => 101, 11 => 102 ]
+		];
+		yield 'Two events, one where creator was deleted, exclude deleted' => [
+			[ 10, 11 ],
+			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED,
+			[ 10 => null, 11 => 102 ]
+		];
+		yield 'Two events, one does not have a creator at all, include deleted' => [
+			[ 1, 2 ],
+			OrganizersStore::GET_CREATOR_INCLUDE_DELETED,
+			[ 1 => 101, 2 => null ]
+		];
+		yield 'Two events, one does not have a creator at all, exclude deleted' => [
+			[ 1, 2 ],
+			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED,
+			[ 1 => 101, 2 => null ]
+		];
+		yield 'Multiple events, same creator, include deleted' => [
+			[ 1, 3, 10 ],
+			OrganizersStore::GET_CREATOR_INCLUDE_DELETED,
+			[ 1 => 101, 3 => 101, 10 => 101 ]
+		];
+		yield 'Multiple events, same creator, exclude deleted' => [
+			[ 1, 3, 10 ],
+			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED,
+			[ 1 => 101, 3 => 101, 10 => null ]
 		];
 	}
 
@@ -423,8 +557,9 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @param int $event
 	 * @param int $expected
-	 * @dataProvider provideOrganizerCount
+	 * @dataProvider provideOrganizerCountForEvent
 	 * @covers ::getOrganizerCountForEvent
+	 * @covers ::getOrganizerCountForEvents
 	 */
 	public function testGetOrganizerCountForEvent( int $event, int $expected ) {
 		$store = new OrganizersStore(
@@ -433,7 +568,28 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected, $store->getOrganizerCountForEvent( $event ) );
 	}
 
-	public static function provideOrganizerCount(): array {
+	public static function provideOrganizerCountForEvent(): array {
+		return [
+			'One organizer' => [ 3, 1 ],
+			'Two organizers (third one deleted)' => [ 1, 2 ],
+			'No organizers' => [ 1000, 0 ],
+		];
+	}
+
+	/**
+	 * @covers ::getOrganizerCountForEvents
+	 */
+	public function testGetOrganizerCountForEvents() {
+		$store = new OrganizersStore(
+			CampaignEventsServices::getDatabaseHelper()
+		);
+		$this->assertSame(
+			[ 1 => 2, 3 => 1, 1000 => 0 ],
+			$store->getOrganizerCountForEvents( [ 1, 3, 1000 ] )
+		);
+	}
+
+	public static function provideOrganizerCountForEvents(): array {
 		return [
 			'One organizer' => [ 3, 1 ],
 			'Two organizers (third one deleted)' => [ 1, 2 ],
