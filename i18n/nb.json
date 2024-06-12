@@ -167,6 +167,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Avbryt",
 	"campaignevents-eventslist-delete-dialog-delete": "Slett",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> slettet.",
+	"campaignevents-eventslist-organizers-more": "$1 {{PLURAL:$1|til}}",
 	"deleteeventregistration": "Slett arrangementspåmelding",
 	"campaignevents-delete-error-no-event": "Ikke noe arrangement angitt.",
 	"campaignevents-delete-error-event-not-found": "Det er ikke noe arrangement med denne ID-en.",
