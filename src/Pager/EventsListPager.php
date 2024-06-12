@@ -8,6 +8,7 @@ use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
@@ -25,6 +26,7 @@ use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use stdClass;
 use UnexpectedValueException;
+use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\OrExpressionGroup;
 use Wikimedia\Timestamp\TimestampException;
 
@@ -39,6 +41,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	private OrganizersStore $organizerStore;
 	private LinkBatchFactory $linkBatchFactory;
 	private UserOptionsLookup $userOptionsLookup;
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	private string $search;
 	/** One of the EventRegistration::MEETING_TYPE_* constants */
@@ -47,6 +50,15 @@ class EventsListPager extends ReverseChronologicalPager {
 	private string $endDate;
 
 	private string $lastHeaderTimestamp;
+	/** @var array<int,Organizer|null> Maps event ID to the event creator, if available, else to null. */
+	private array $creators = [];
+	/**
+	 * @var array<int,Organizer[]> Maps event ID to a list of additional event organizers,
+	 * NOT including the event creator.
+	 */
+	private array $extraOrganizers = [];
+	/** @var array<int,int> Maps event ID to the total number of organizers of that event. */
+	private array $organizerCounts = [];
 
 	/**
 	 * @param UserLinker $userLinker
@@ -56,6 +68,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @param LinkBatchFactory $linkBatchFactory
 	 * @param UserOptionsLookup $userOptionsLookup
 	 * @param CampaignsDatabaseHelper $databaseHelper
+	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param string $search
 	 * @param int|null $meetingType
 	 * @param string $startDate
@@ -69,6 +82,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		LinkBatchFactory $linkBatchFactory,
 		UserOptionsLookup $userOptionsLookup,
 		CampaignsDatabaseHelper $databaseHelper,
+		CampaignsCentralUserLookup $centralUserLookup,
 		string $search,
 		?int $meetingType,
 		string $startDate,
@@ -84,6 +98,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->organizerStore = $organizerStore;
 		$this->linkBatchFactory = $linkBatchFactory;
 		$this->userOptionsLookup = $userOptionsLookup;
+		$this->centralUserLookup = $centralUserLookup;
 
 		$this->search = $search;
 		$this->meetingType = $meetingType;
@@ -92,6 +107,40 @@ class EventsListPager extends ReverseChronologicalPager {
 
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderTimestamp = '';
+	}
+
+	/**
+	 * @see EventPagerTrait::doExtraPreprocessing
+	 */
+	private function doExtraPreprocessing( IResultWrapper $result ): void {
+		$eventIDs = [];
+		foreach ( $result as $row ) {
+			$eventIDs[] = (int)$row->event_id;
+		}
+		$result->seek( 0 );
+
+		$this->creators = $this->organizerStore->getEventCreators(
+			$eventIDs,
+			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED
+		);
+		$this->extraOrganizers = $this->organizerStore->getOrganizersForEvents( $eventIDs, 2 );
+		$this->organizerCounts = $this->organizerStore->getOrganizerCountForEvents( $eventIDs );
+
+		$organizerUserIDsMap = [];
+		foreach ( $this->creators as $creator ) {
+			if ( $creator ) {
+				$organizerUserIDsMap[$creator->getUser()->getCentralID()] = true;
+			}
+		}
+		foreach ( $this->extraOrganizers as $eventExtraOrganizer ) {
+			foreach ( $eventExtraOrganizer as $organizer ) {
+				$organizerUserIDsMap[ $organizer->getUser()->getCentralID() ] = true;
+			}
+		}
+
+		// Run a single query to get all the organizer names at once, and also check for user page existence.
+		$organizerNames = $this->centralUserLookup->getNamesIncludingDeletedAndSuppressed( $organizerUserIDsMap );
+		$this->userLinker->preloadUserLinks( $organizerNames );
 	}
 
 	/**
@@ -215,12 +264,11 @@ class EventsListPager extends ReverseChronologicalPager {
 	private function getOrganizersText( stdClass $row ): HtmlSnippet {
 		$eventID = (int)$row->event_id;
 		$organizersToShow = [];
-		$creator = $this->organizerStore->getEventCreator( $eventID, OrganizersStore::GET_CREATOR_EXCLUDE_DELETED );
+		$creator = $this->creators[$eventID];
 		if ( $creator ) {
 			$organizersToShow[] = $creator;
 		}
-		$organizers = $this->organizerStore->getEventOrganizers( $eventID, 2 );
-		foreach ( $organizers as $organizer ) {
+		foreach ( $this->extraOrganizers[$eventID] as $organizer ) {
 			if ( !$organizer->hasRole( Roles::ROLE_CREATOR ) ) {
 				$organizersToShow[] = $organizer;
 			}
@@ -238,7 +286,7 @@ class EventsListPager extends ReverseChronologicalPager {
 			$organizersToShow
 		);
 
-		$organizerCount = $this->organizerStore->getOrganizerCountForEvent( $eventID );
+		$organizerCount = $this->organizerCounts[$eventID];
 		if ( $organizerCount > 2 ) {
 			$organizerLinks[] = $this->getLinkRenderer()->makeKnownLink(
 				SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
