@@ -24,16 +24,8 @@ class EventsPagerFactory {
 	private LinkBatchFactory $linkBatchFactory;
 	private UserLinker $userLinker;
 	private OrganizersStore $organiserStore;
-	private UserOptionsLookup $options;
+	private UserOptionsLookup $userOptionsLookup;
 
-	/**
-	 * @param CampaignsDatabaseHelper $databaseHelper
-	 * @param CampaignsPageFactory $campaignsPageFactory
-	 * @param PageURLResolver $pageURLResolver
-	 * @param LinkBatchFactory $linkBatchFactory
-	 * @param UserLinker $userLinker
-	 * @param OrganizersStore $organiserStore
-	 */
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsPageFactory $campaignsPageFactory,
@@ -41,7 +33,7 @@ class EventsPagerFactory {
 		LinkBatchFactory $linkBatchFactory,
 		UserLinker $userLinker,
 		OrganizersStore $organiserStore,
-		UserOptionsLookup $options
+		UserOptionsLookup $userOptionsLookup
 	) {
 		$this->databaseHelper = $databaseHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -49,7 +41,7 @@ class EventsPagerFactory {
 		$this->linkBatchFactory = $linkBatchFactory;
 		$this->userLinker = $userLinker;
 		$this->organiserStore = $organiserStore;
-		$this->options = $options;
+		$this->userOptionsLookup = $userOptionsLookup;
 	}
 
 	/**
@@ -99,7 +91,7 @@ class EventsPagerFactory {
 			$this->pageURLResolver,
 			$this->organiserStore,
 			$this->linkBatchFactory,
-			$this->options,
+			$this->userOptionsLookup,
 			$this->databaseHelper,
 			$search,
 			$meetingType,

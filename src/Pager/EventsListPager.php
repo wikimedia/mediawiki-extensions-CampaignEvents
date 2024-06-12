@@ -37,14 +37,16 @@ class EventsListPager extends ReverseChronologicalPager {
 	private CampaignsPageFactory $campaignsPageFactory;
 	private PageURLResolver $pageURLResolver;
 	private OrganizersStore $organizerStore;
-	private string $lastHeaderTimestamp;
+	private LinkBatchFactory $linkBatchFactory;
+	private UserOptionsLookup $userOptionsLookup;
+
 	private string $search;
 	/** One of the EventRegistration::MEETING_TYPE_* constants */
 	private ?int $meetingType;
-	private LinkBatchFactory $linkBatchFactory;
-	private UserOptionsLookup $options;
 	private string $startDate;
 	private string $endDate;
+
+	private string $lastHeaderTimestamp;
 
 	/**
 	 * @param UserLinker $userLinker
@@ -52,7 +54,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @param PageURLResolver $pageURLResolver
 	 * @param OrganizersStore $organizerStore
 	 * @param LinkBatchFactory $linkBatchFactory
-	 * @param UserOptionsLookup $options
+	 * @param UserOptionsLookup $userOptionsLookup
 	 * @param CampaignsDatabaseHelper $databaseHelper
 	 * @param string $search
 	 * @param int|null $meetingType
@@ -65,7 +67,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		PageURLResolver $pageURLResolver,
 		OrganizersStore $organizerStore,
 		LinkBatchFactory $linkBatchFactory,
-		UserOptionsLookup $options,
+		UserOptionsLookup $userOptionsLookup,
 		CampaignsDatabaseHelper $databaseHelper,
 		string $search,
 		?int $meetingType,
@@ -76,18 +78,20 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
 		parent::__construct( $this->getContext(), $this->getLinkRenderer() );
 
-		$this->options = $options;
 		$this->userLinker = $userLinker;
 		$this->campaignsPageFactory = $pageFactory;
 		$this->pageURLResolver = $pageURLResolver;
 		$this->organizerStore = $organizerStore;
 		$this->linkBatchFactory = $linkBatchFactory;
-		$this->startDate = $startDate;
-		$this->endDate = $endDate;
-		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
-		$this->lastHeaderTimestamp = '';
+		$this->userOptionsLookup = $userOptionsLookup;
+
 		$this->search = $search;
 		$this->meetingType = $meetingType;
+		$this->startDate = $startDate;
+		$this->endDate = $endDate;
+
+		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
+		$this->lastHeaderTimestamp = '';
 	}
 
 	/**
@@ -326,7 +330,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @return string
 	 */
 	private function offsetTimestamp( string $timestamp ): string {
-		$offset = $this->options
+		$offset = $this->userOptionsLookup
 			->getOption( $this->getUser(), 'timecorrection' );
 
 		return $this->getLanguage()->userAdjust( $timestamp, $offset );
