@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
@@ -49,7 +50,8 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 				$this->createMock( CampaignsCentralUserLookup::class ),
 				$this->createMock( IPermissionsLookup::class )
 			),
-			$trackingToolEventWatcher
+			$trackingToolEventWatcher,
+			$this->createMock( EventPageCacheUpdater::class )
 		);
 	}
 
