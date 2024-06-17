@@ -123,7 +123,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	/**
 	 * @return array
 	 */
-	public function getParamSettings(): array {
+	public function getBodyParamSettings(): array {
 		return [
 			'event_page' => [
 				static::PARAM_SOURCE => 'body',
