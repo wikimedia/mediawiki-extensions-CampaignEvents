@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Умар"
+			"Умар",
+			"Исмаил Садуев"
 		]
 	},
 	"nstab-event": "Хилам",
@@ -25,6 +26,6 @@
 	"campaignevents-eventpage-dialog-action-close": "ДӀачӀагӀа",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "ХӀаъ",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "ХӀан-хӀа",
-	"campaignevents-event-details-edit-button": "Нисйе",
+	"campaignevents-event-details-edit-button": "Нисйан",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Йухайаккха"
 }
