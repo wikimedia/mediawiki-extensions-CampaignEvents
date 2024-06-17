@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -25,6 +26,7 @@ class EventsPagerFactory {
 	private UserLinker $userLinker;
 	private OrganizersStore $organiserStore;
 	private UserOptionsLookup $userOptionsLookup;
+	private CampaignsCentralUserLookup $centralUserLookup;
 
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
@@ -33,7 +35,8 @@ class EventsPagerFactory {
 		LinkBatchFactory $linkBatchFactory,
 		UserLinker $userLinker,
 		OrganizersStore $organiserStore,
-		UserOptionsLookup $userOptionsLookup
+		UserOptionsLookup $userOptionsLookup,
+		CampaignsCentralUserLookup $centralUserLookup
 	) {
 		$this->databaseHelper = $databaseHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -42,6 +45,7 @@ class EventsPagerFactory {
 		$this->userLinker = $userLinker;
 		$this->organiserStore = $organiserStore;
 		$this->userOptionsLookup = $userOptionsLookup;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -93,6 +97,7 @@ class EventsPagerFactory {
 			$this->linkBatchFactory,
 			$this->userOptionsLookup,
 			$this->databaseHelper,
+			$this->centralUserLookup,
 			$search,
 			$meetingType,
 			$startDate,

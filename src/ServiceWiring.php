@@ -186,7 +186,8 @@ return [
 			$services->getLinkBatchFactory(),
 			$services->get( UserLinker::SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
-			$services->getUserOptionsLookup()
+			$services->getUserOptionsLookup(),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
 		);
 	},
 	EventPageDecoratorFactory::SERVICE_NAME =>

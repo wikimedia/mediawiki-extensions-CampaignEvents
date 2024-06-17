@@ -147,6 +147,13 @@ trait EventPagerTrait {
 		}
 		$lb->execute();
 		$result->seek( 0 );
+		$this->doExtraPreprocessing( $result );
+	}
+
+	/**
+	 * Override this method to run extra preprocessing steps on the result set.
+	 */
+	private function doExtraPreprocessing( IResultWrapper $result ): void {
 	}
 
 	/**
