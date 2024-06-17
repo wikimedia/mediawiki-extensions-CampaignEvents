@@ -148,7 +148,8 @@ return [
 		return new DeleteEventCommand(
 			$services->get( IEventStore::STORE_SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
-			$services->get( TrackingToolEventWatcher::SERVICE_NAME )
+			$services->get( TrackingToolEventWatcher::SERVICE_NAME ),
+			$services->get( EventPageCacheUpdater::SERVICE_NAME )
 		);
 	},
 	RoleFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): RoleFormatter {

@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
@@ -23,20 +24,18 @@ class DeleteEventCommand {
 	private IEventStore $eventStore;
 	private PermissionChecker $permissionChecker;
 	private TrackingToolEventWatcher $trackingToolEventWatcher;
+	private EventPageCacheUpdater $eventPageCacheUpdater;
 
-	/**
-	 * @param IEventStore $eventStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
-	 */
 	public function __construct(
 		IEventStore $eventStore,
 		PermissionChecker $permissionChecker,
-		TrackingToolEventWatcher $trackingToolEventWatcher
+		TrackingToolEventWatcher $trackingToolEventWatcher,
+		EventPageCacheUpdater $eventPageCacheUpdater
 	) {
 		$this->eventStore = $eventStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
+		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 	}
 
 	/**
@@ -90,6 +89,7 @@ class DeleteEventCommand {
 
 		if ( $effectivelyDeleted ) {
 			$this->trackingToolEventWatcher->onEventDeleted( $registration );
+			$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 		}
 		return StatusValue::newGood( $effectivelyDeleted );
 	}
