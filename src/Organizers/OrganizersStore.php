@@ -64,16 +64,76 @@ class OrganizersStore {
 	}
 
 	/**
+	 * Returns an array of lists of organizers for the given events. The limit is for each individual event.
+	 * @param int[] $eventIDs
+	 * @param int $perEventLimit
+	 * @return Organizer[][]
+	 */
+	public function getOrganizersForEvents( array $eventIDs, int $perEventLimit ): array {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		// This uses a self-join to let us count and limit the number of rows for each group (event).
+		// Rownumber/partition-based approaches would likely be cleaner, but it seems that we can't use those.
+		$res = $dbr->newSelectQueryBuilder()
+			->select( 'org1.*' )
+			->from( 'ce_organizers', 'org1' )
+			->join(
+				'ce_organizers',
+				'org2',
+				[
+					'org1.ceo_event_id = org2.ceo_event_id',
+					'org2.ceo_id <= org1.ceo_id',
+					'org2.ceo_deleted_at' => null,
+				]
+			)
+			->where( [
+				'org1.ceo_event_id' => $eventIDs,
+				'org1.ceo_deleted_at' => null,
+			] )
+			->groupBy( [
+				// List all columns explcitly to please MariaDB and its lack of functional dependency detection
+				// with ONLY_FULL_GROUP_BY.
+				'org1.ceo_event_id',
+				'org1.ceo_id',
+				'org1.ceo_user_id',
+				'org1.ceo_roles',
+				'org1.ceo_created_at',
+				'org1.ceo_deleted_at',
+				'org1.ceo_agreement_timestamp',
+			] )
+			->having( "COUNT(*) <= $perEventLimit" )
+			->orderBy( [ 'ceo_event_id', 'ceo_id' ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
+
+		$organizers = array_fill_keys( $eventIDs, [] );
+		foreach ( $res as $row ) {
+			$eventID = $row->ceo_event_id;
+			$organizers[$eventID][] = $this->rowToOrganizerObject( $row );
+		}
+		return $organizers;
+	}
+
+	/**
 	 * @param int $eventID
 	 * @param string $includeDeleted One of the GET_CREATOR_* constants.
 	 * @return Organizer|null This may return null if deleted organizers are not included, and also if the event
 	 * has never had a creator (e.g., if the event doesn't exist at all).
 	 */
 	public function getEventCreator( int $eventID, string $includeDeleted ): ?Organizer {
+		return $this->getEventCreators( [ $eventID ], $includeDeleted )[ $eventID ];
+	}
+
+	/**
+	 * @param int[] $eventIDs
+	 * @param string $includeDeleted One of the GET_CREATOR_* constants.
+	 * @return array<int,Organizer|null> Maps event ID to the creator, or null if deleted organizers are not included,
+	 * and also if the event has never had a creator (e.g., if the event doesn't exist at all).
+	 */
+	public function getEventCreators( array $eventIDs, string $includeDeleted ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$creatorRole = self::ROLES_MAP[Roles::ROLE_CREATOR];
 		$where = [
-			'ceo_event_id' => $eventID,
+			'ceo_event_id' => $eventIDs,
 			$dbr->bitAnd( 'ceo_roles', $creatorRole ) . " = " . $creatorRole
 		];
 
@@ -81,18 +141,20 @@ class OrganizersStore {
 			$where['ceo_deleted_at'] = null;
 		}
 
-		$row = $dbr->newSelectQueryBuilder()
+		$res = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_organizers' )
 			->where( $where )
 			->caller( __METHOD__ )
-			->fetchRow();
+			->fetchResultSet();
 
-		if ( $row ) {
-			return $this->rowToOrganizerObject( $row );
+		$creators = array_fill_keys( $eventIDs, null );
+		foreach ( $res as $row ) {
+			$eventID = $row->ceo_event_id;
+			$creators[$eventID] = $this->rowToOrganizerObject( $row );
 		}
 
-		return null;
+		return $creators;
 	}
 
 	/**
@@ -149,18 +211,31 @@ class OrganizersStore {
 	 * @return int
 	 */
 	public function getOrganizerCountForEvent( int $eventID ): int {
+		return $this->getOrganizerCountForEvents( [ $eventID ] )[ $eventID ];
+	}
+
+	/**
+	 * Returns the number of organizers of each event in a list.
+	 * @param int[] $eventIDs
+	 * @return array<int,int> Maps event ID to number of organizers
+	 */
+	public function getOrganizerCountForEvents( array $eventIDs ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$ret = $dbr->newSelectQueryBuilder()
-			->select( 'COUNT(*)' )
+		$res = $dbr->newSelectQueryBuilder()
+			->select( [ 'num' => 'COUNT(*)', 'ceo_event_id' ] )
 			->from( 'ce_organizers' )
 			->where( [
-				'ceo_event_id' => $eventID,
+				'ceo_event_id' => $eventIDs,
 				'ceo_deleted_at' => null,
 			] )
+			->groupBy( 'ceo_event_id' )
 			->caller( __METHOD__ )
-			->fetchField();
-		// Intentionally casting false to int if no rows were found.
-		return (int)$ret;
+			->fetchResultSet();
+		$counts = array_fill_keys( $eventIDs, 0 );
+		foreach ( $res as $row ) {
+			$counts[ $row->ceo_event_id ] = (int)$row->num;
+		}
+		return $counts;
 	}
 
 	/**
