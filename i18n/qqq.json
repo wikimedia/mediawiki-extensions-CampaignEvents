@@ -457,5 +457,4 @@
 	"campaignevents-generateinvitationlist-submit-button-text": "Text for the submit button on [[Special:GenerateInvitationList]]",
 	"campaignevents-invitation-list-disabled": "Notice shown on [[Special:GenerateInvitationList]] if the invitation list is disabled in the wiki",
 	"campaignevents-invitation-list-not-allowed": "Message shown on [[Special:GenerateInvitationList]] if the invitation list is enabled, but the user doesn't have the organizer right"
-
 }

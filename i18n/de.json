@@ -431,5 +431,16 @@
 	"campaignevents-register-page-nonlocal": "Bitte '''[$1 vervollständige deine Veranstaltungs-Registrierung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-delete-registration-page-nonlocal": "Bitte '''[$1 lösche deine Veranstaltungs-Registrierung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-event-details-page-nonlocal": "Du siehst derzeit eine eingeschränkte Version dieser Seite. Bitte <b>[$1 rufe diese Seite auf $2 auf]</b>, das Wiki, in dem die Veranstaltung erstellt wurde, um auf die vollständigen Veranstaltungsdetails und zusätzliche Funktionen zuzugreifen.",
-	"campaignevents-event-details-not-local-wiki-prompt": "Ansicht auf [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Ansicht auf [$1 $2]",
+	"generateinvitationlist": "Einladungsliste generieren",
+	"campaignevents-generateinvitationlist-name-field-label": "Name der Einladungsliste",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "Meine Veranstaltungseinladungsliste",
+	"campaignevents-generateinvitationlist-event-page-field-label": "Veranstaltungsseite",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:Meine Veranstaltung",
+	"campaignevents-generateinvitationlist-article-list-field-label": "Artikelliste",
+	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sonne\nMond\nHaus",
+	"campaignevents-generateinvitationlist-article-list-field-help": "{{#FORMAL|Gib|Geben Sie}} die Namen von bis zu $1 Artikeln ein, die die Themen {{#FORMAL|deine|Ihrer}} Veranstaltung behandeln. Jeder Artikel sollte in einer neuen Zeile stehen.",
+	"campaignevents-generateinvitationlist-submit-button-text": "Erzeugen",
+	"campaignevents-invitation-list-disabled": "In diesem Wiki ist die Einladungsliste nicht aktiviert.",
+	"campaignevents-invitation-list-not-allowed": "Die Nutzung von Einladungslisten ist nicht gestattet."
 }
