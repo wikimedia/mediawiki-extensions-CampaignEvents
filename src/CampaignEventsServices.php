@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
+use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\Invitation\PotentialInviteesFinder;
 use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -270,5 +271,9 @@ class CampaignEventsServices {
 
 	public static function getInvitationListGenerator( ContainerInterface $services = null ): InvitationListGenerator {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( InvitationListGenerator::SERVICE_NAME );
+	}
+
+	public static function getInvitationListStore( ContainerInterface $services = null ): InvitationListStore {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( InvitationListStore::SERVICE_NAME );
 	}
 }
