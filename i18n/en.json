@@ -448,7 +448,7 @@
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:My event",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Article list",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sun\nMoon\nHouse",
-	"campaignevents-generateinvitationlist-article-list-field-help": "Enter the names of up to $1 articles that cover the topics of your event. Each article should be on a new line.",
+	"campaignevents-generateinvitationlist-article-list-field-help": "Enter the names of up to $1 {{PLURAL:$1|article|articles}} that cover the topics of your event. Each article should be on a new line.",
 	"campaignevents-generateinvitationlist-submit-button-text": "Generate",
 	"campaignevents-invitation-list-disabled": "This wiki does not have invitation list enabled.",
 	"campaignevents-invitation-list-not-allowed": "You are not allowed to use invitation lists."
