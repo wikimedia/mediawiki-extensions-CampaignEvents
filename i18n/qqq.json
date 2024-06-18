@@ -445,5 +445,17 @@
 	"campaignevents-register-page-nonlocal": "Notice message shown on [[Special:RegisterForEvent]] when trying to register for an event that was enabled on another wiki, and thus should register there.\nParameters:\n*$1 - Link to [[Special:RegisterForEvent]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
 	"campaignevents-delete-registration-page-nonlocal": "Notice message shown on [[Special:DeleteEventRegistration]] when trying to delete an event that was enabled on another wiki, and thus should be delete there.\nParameters:\n*$1 - Link to [[Special:DeleteEventRegistration]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
 	"campaignevents-event-details-page-nonlocal": "Notice message shown on [[Special:EventDetails]] when an organizer access the [[Special:EventDetails]] on another wiki.\nParameters:\n*$1 - Link to [[Special:EventDetails]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
-	"campaignevents-event-details-not-local-wiki-prompt": "Message used on [[Special:EventDetails]] to inform users that they need to be on the wiki where the event was created in order to see a piece of information.\nParameters:\n*$1 - Link to [[Special:EventDetails]] on the other wiki.\n*$2 - The ID of the wiki where the event was created"
+	"campaignevents-event-details-not-local-wiki-prompt": "Message used on [[Special:EventDetails]] to inform users that they need to be on the wiki where the event was created in order to see a piece of information.\nParameters:\n*$1 - Link to [[Special:EventDetails]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
+	"generateinvitationlist": "Description of [[Special:GenerateInvitationList]]",
+	"campaignevents-generateinvitationlist-name-field-label": "Label of the list name field on [[Special:GenerateInvitationList]]",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "Placeholder message for list name field on [[Special:GenerateInvitationList]]",
+	"campaignevents-generateinvitationlist-event-page-field-label": "Label of the event page field on [[Special:GenerateInvitationList]]",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "Placeholder message for event page field on [[Special:GenerateInvitationList]]",
+	"campaignevents-generateinvitationlist-article-list-field-label": "Label of the article list field on [[Special:GenerateInvitationList]]",
+	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Placeholder message for the article list field on [[Special:GenerateInvitationList]] this field accepts a list of article names",
+	"campaignevents-generateinvitationlist-article-list-field-help": "Help message for the article list field on [[Special:GenerateInvitationList]] \nParameters:\n*$1 - The max number of the articles that can be added",
+	"campaignevents-generateinvitationlist-submit-button-text": "Text for the submit button on [[Special:GenerateInvitationList]]",
+	"campaignevents-invitation-list-disabled": "Notice shown on [[Special:GenerateInvitationList]] if the invitation list is disabled in the wiki",
+	"campaignevents-invitation-list-not-allowed": "Message shown on [[Special:GenerateInvitationList]] if the invitation list is enabled, but the user doesn't have the organizer right"
+
 }

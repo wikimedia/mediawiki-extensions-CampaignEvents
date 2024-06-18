@@ -30,7 +30,7 @@ class GenerateInvitationList extends Maintenance {
 	 * TODO: Is 3 years OK?
 	 */
 	public const CUTOFF_DAYS = 3 * 365;
-	private const ARTICLES_LIMIT = 300;
+	public const ARTICLES_LIMIT = 300;
 	private const RESULT_USER_LIMIT = 200;
 	private const REVISIONS_PER_PAGE_LIMIT = 5_000;
 
