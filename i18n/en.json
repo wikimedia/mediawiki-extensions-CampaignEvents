@@ -451,5 +451,8 @@
 	"campaignevents-generateinvitationlist-article-list-field-help": "Enter the names of up to $1 {{PLURAL:$1|article|articles}} that cover the topics of your event. Each article should be on a new line.",
 	"campaignevents-generateinvitationlist-submit-button-text": "Generate",
 	"campaignevents-invitation-list-disabled": "This wiki does not have invitation lists enabled.",
-	"campaignevents-invitation-list-not-allowed": "You are not allowed to use invitation lists."
+	"campaignevents-invitation-list-not-allowed": "You are not allowed to use invitation lists.",
+	"myinvitationlists": "Your invitation lists",
+	"campaignevents-myinvitationslist-empty-text": "Discover new participants for your project or event. Provide a list of articles that cover your topical focus areas. Then, you will receive an invitation list of editors who may be interested in joining your project or event.",
+	"campaignevents-myinvitationslist-generate-button": "Create new invitation list"
 }
