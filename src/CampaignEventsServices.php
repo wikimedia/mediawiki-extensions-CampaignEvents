@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Invitation\PotentialInviteesFinder;
+use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -260,5 +261,9 @@ class CampaignEventsServices {
 
 	public static function getPotentialInviteesFinder( ContainerInterface $services = null ): PotentialInviteesFinder {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( PotentialInviteesFinder::SERVICE_NAME );
+	}
+
+	public static function getWorklistParser( ContainerInterface $services = null ): WorklistParser {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistParser::SERVICE_NAME );
 	}
 }

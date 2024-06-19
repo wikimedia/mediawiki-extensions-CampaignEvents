@@ -55,7 +55,8 @@ class FindPotentialInvitees extends Maintenance {
 		}
 		$this->output( "\n\n" );
 
-		$invitationList = $finder->generate( $pageNamesByWiki );
+		$worklist = CampaignEventsServices::getWorklistParser()->parseWorklist( $pageNamesByWiki );
+		$invitationList = $finder->generate( $worklist );
 		$out = "\n==Contributor scores==\n";
 		foreach ( $invitationList as $username => $score ) {
 			$out .= "$username - $score\n";
@@ -67,7 +68,7 @@ class FindPotentialInvitees extends Maintenance {
 	 * Reads a list of articles from the file passed as `listfile` to the script.
 	 *
 	 * @return string[][] Map of [ wiki ID => non-empty list of articles ]
-	 * @phan-return non-empty-array<string|false,non-empty-list<string>>
+	 * @phan-return non-empty-array<string,non-empty-list<string>>
 	 */
 	private function getArticlesByWiki(): array {
 		$listPath = $this->getOption( 'listfile' );
@@ -86,8 +87,6 @@ class FindPotentialInvitees extends Maintenance {
 			if ( count( $lineParts ) !== 2 ) {
 				$this->fatalError( "Line without wiki ID: $line" );
 			}
-			// XXX: We're using the actual wiki ID instead of WikiAwareEntity::LOCAL for the local wiki, so that PHP
-			// won't autocast it to `0` when used as array key.
 			$wikiID = $lineParts[0] === '' ? $curWikiID : $lineParts[0];
 			$title = $lineParts[1];
 			$pageNamesByWiki[$wikiID] ??= [];

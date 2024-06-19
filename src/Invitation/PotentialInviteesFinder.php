@@ -5,13 +5,13 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Invitation;
 
 use ChangeTags;
-use InvalidArgumentException;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\Revision\RevisionStoreFactory;
 use MediaWiki\Storage\NameTableAccessException;
 use MediaWiki\Storage\NameTableStoreFactory;
 use MediaWiki\Utils\MWTimestamp;
+use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
@@ -30,11 +30,9 @@ class PotentialInviteesFinder {
 	 * TODO: Is 3 years OK?
 	 */
 	private const CUTOFF_DAYS = 3 * 365;
-	public const ARTICLES_LIMIT = 300;
 	private const RESULT_USER_LIMIT = 200;
 	private const REVISIONS_PER_PAGE_LIMIT = 5_000;
 
-	private PageStoreFactory $pageStoreFactory;
 	private RevisionStoreFactory $revisionStoreFactory;
 	private IConnectionProvider $dbProvider;
 	private NameTableStoreFactory $nameTableStoreFactory;
@@ -46,13 +44,11 @@ class PotentialInviteesFinder {
 	private $debugLogger;
 
 	public function __construct(
-		PageStoreFactory $pageStoreFactory,
 		RevisionStoreFactory $revisionStoreFactory,
 		IConnectionProvider $dbProvider,
 		NameTableStoreFactory $nameTableStoreFactory,
 		int $blockTargetMigrationStage
 	) {
-		$this->pageStoreFactory = $pageStoreFactory;
 		$this->revisionStoreFactory = $revisionStoreFactory;
 		$this->dbProvider = $dbProvider;
 		$this->nameTableStoreFactory = $nameTableStoreFactory;
@@ -70,14 +66,12 @@ class PotentialInviteesFinder {
 	}
 
 	/**
-	 * @param array<string|false,string[]> $pageNamesByWiki Array which maps wiki IDs to lists of page names
-	 * @return array
+	 * @param Worklist $worklist
+	 * @return array<string,int>
 	 */
-	public function generate( array $pageNamesByWiki ): array {
-		$pagesByWiki = $this->parsePages( $pageNamesByWiki );
-
+	public function generate( Worklist $worklist ): array {
 		$revisionsByWiki = [];
-		foreach ( $pagesByWiki as $wiki => $pages ) {
+		foreach ( $worklist->getPagesByWiki() as $wiki => $pages ) {
 			$revisionsByWiki[$wiki] = $this->getAllRevisionsForWiki( $wiki, $pages );
 		}
 		$revisionsByWiki = array_filter( $revisionsByWiki );
@@ -92,53 +86,16 @@ class PotentialInviteesFinder {
 	}
 
 	/**
-	 * Converts raw page titles to PageIdentity object, validating them in the process.
-	 *
-	 * @return PageIdentity[][] Map of [ wiki ID => non-empty list of articles ]
-	 * @phan-return non-empty-array<string|false,non-empty-list<PageIdentity>>
-	 * @todo Change exceptions to user-facing errors.
-	 */
-	private function parsePages( array $pageNamesByWiki ): array {
-		$totalPageCount = array_sum( array_map( 'count', $pageNamesByWiki ) );
-		if ( $totalPageCount > self::ARTICLES_LIMIT ) {
-			throw new InvalidArgumentException( "The worklist has more than " . self::ARTICLES_LIMIT . ' articles' );
-		}
-
-		$pagesByWiki = [];
-		foreach ( $pageNamesByWiki as $wikiID => $pageNames ) {
-			foreach ( $pageNames as $pageName ) {
-				$pageStore = $this->pageStoreFactory->getPageStore( $wikiID );
-				// Note: If $pageName happens to contain a namespace identifier, or really anything that cannot be
-				// parsed in the context of the current wiki, this method won't behave correctly due to T353916. There
-				// doesn't seem to be much that we can do about it.
-				$page = $pageStore->getPageByText( $pageName );
-				if ( !$page ) {
-					throw new InvalidArgumentException( "Invalid title: $pageName" );
-				} elseif ( !$page->exists() ) {
-					throw new InvalidArgumentException( "Page does not exist: $pageName" );
-				} elseif ( $page->getNamespace() !== NS_MAIN ) {
-					throw new InvalidArgumentException( "Page is not in the mainspace: $pageName" );
-				}
-				$pagesByWiki[$wikiID] ??= [];
-				$pagesByWiki[$wikiID][] = $page;
-			}
-		}
-
-		if ( !$pagesByWiki ) {
-			throw new InvalidArgumentException( "Empty list of articles" );
-		}
-
-		return $pagesByWiki;
-	}
-
-	/**
-	 * @param string|false $wikiID
+	 * @param string $wikiIDStr
 	 * @param PageIdentity[] $pages
 	 * @return array[] List of arrays with revision data. The page is only included for debugging, and callers should
 	 * not rely on its format.
 	 * @phan-return list<array{username:string,userID:int,actorID:int,page:string,delta:int}>
 	 */
-	private function getAllRevisionsForWiki( $wikiID, array $pages ): array {
+	private function getAllRevisionsForWiki( string $wikiIDStr, array $pages ): array {
+		$wikiID = $wikiIDStr === WikiMap::getCurrentWikiId()
+			? WikiAwareEntity::LOCAL
+			: $wikiIDStr;
 		$revisionStore = $this->revisionStoreFactory->getRevisionStore( $wikiID );
 		// This script may potentially scan a lot of revisions. Although the queries can use good indexes, sending them
 		// to vslow hosts shouldn't hurt.
@@ -169,7 +126,7 @@ class PotentialInviteesFinder {
 			$lastRevID = null;
 			$innerBatchIdx = 1;
 			do {
-				$progressMsg = "Running $wikiID batch #$pageBatchIdx.$innerBatchIdx of $totalPageChunks " .
+				$progressMsg = "Running $wikiIDStr batch #$pageBatchIdx.$innerBatchIdx of $totalPageChunks " .
 					"from pageID=" . min( $batchPageIDs );
 				if ( $lastTimestamp !== null && $lastRevID !== null ) {
 					$progressMsg .= ", ts=$lastTimestamp, rev=$lastRevID";
