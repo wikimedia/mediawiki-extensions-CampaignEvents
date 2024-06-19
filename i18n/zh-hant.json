@@ -232,8 +232,8 @@
 	"campaignevents-tracking-tool-p&e-dashboard-name": "計畫與活動面板",
 	"campaignevents-userlink-suppressed-user": "已隱藏使用者名稱",
 	"campaignevents-userlink-deleted-user": "已刪除使用者",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>不公開報名：</strong>只有活動籌辦人員才能在參與者清單中看到您的使用者名稱。籌辦人員可能會在[https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard 計畫與活動面板]或其他統計工具中排除您在活動期間的貢獻。",
-	"campaignevents-registration-confirmation-helptext-public": "<strong>公開報名：</strong>您的使用者名稱會公開顯示在參與者清單中。籌辦人員可能會在 [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard 計畫與活動面板]或其他統計工具中納入您在活動期間的貢獻。",
+	"campaignevents-registration-confirmation-helptext-private": "<strong>不公開報名：</strong>只有活動籌辦人員才能在參與者名單中看到您的使用者名稱。籌辦人員可能會在[https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard 計畫與活動面板]或其他統計工具中排除您在活動期間的貢獻。",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>公開報名：</strong>您的使用者名稱會公開顯示在參與者名單中。籌辦人員可能會在[https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard 計畫與活動面板]或其他統計工具中納入您在活動期間的貢獻。",
 	"campaignevents-registration-confirmation-toggle-private": "不公開報名",
 	"campaignevents-registration-confirmation-toggle-public": "公開報名",
 	"campaignevents-register-confirmation-radio-private": "不公開報名",
@@ -335,5 +335,14 @@
 	"campaignevents-participant-question-have-been-aggregated": "這位{{GENDER:$1|參與者}}的回覆已被匯總並刪除",
 	"campaignevents-participant-question-no-response": "沒有回覆",
 	"campaignevents-event-register-for-event-title": "報名$1",
-	"campaignevents-event-details-not-local-wiki-prompt": "在[$1 $2]檢視"
+	"campaignevents-event-details-not-local-wiki-prompt": "在[$1 $2]檢視",
+	"generateinvitationlist": "產生邀請名單",
+	"campaignevents-generateinvitationlist-name-field-label": "邀請名單名稱",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "我的活動邀請名單",
+	"campaignevents-generateinvitationlist-event-page-field-label": "活動頁面",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:我的活動",
+	"campaignevents-generateinvitationlist-article-list-field-label": "條目清單",
+	"campaignevents-generateinvitationlist-article-list-field-placeholder": "太陽\n月球\n住宅",
+	"campaignevents-generateinvitationlist-submit-button-text": "產生",
+	"campaignevents-invitation-list-not-allowed": "您不被允許使用邀請名單。"
 }
