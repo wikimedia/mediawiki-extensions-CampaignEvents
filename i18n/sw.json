@@ -4,7 +4,8 @@
 			"Jadnapac",
 			"Wangombe",
 			"AMtavangu (WMF)",
-			"Stacy Lavuha"
+			"Stacy Lavuha",
+			"Daimona Eaytoy"
 		]
 	},
 	"campaignevents-desc": "Hutoa vipengele kwa waandaaji wa kampeni na washiriki.",
@@ -63,7 +64,7 @@
 	"campaignevents-edit-field-organizers-placeholder": "Ongeza jina la mtumiaji",
 	"campaignevents-edit-field-organizers-creator-title": "Huyu ndiye muundaji wa tukio, waandaaji wengine hawawezi kumwondoa mtumiaji huyu.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Huyu{{GENDER:$1|mtumiaji}} haruhusiwi kupanga matukio",
-	"campaignevents-edit-field-tracking-tools": "Kiungo cha Dashibodi ya Mipango\n & Matukio",
+	"campaignevents-edit-field-tracking-tools": "Kiungo cha Dashibodi ya Mipango & Matukio",
 	"campaignevents-edit-field-tracking-tools-help": "Majina ya watumiaji ya washiriki waliosajiliwa kwa aina ya majina yao kuonekana na umma yatatumwa kiotomatiki kwenye Dashibodi. Zana hii inasaidia kufuatilia michango ya washiriki na kupima athari za tukio la kampeni yako. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard_Pata maelezo zaidi].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Ingiza URL ya Dashibodi ya Mipango na Matukio ya tukio lako",
 	"campaignevents-edit-field-meeting-type": "Aina ya mkutano wa tukio",
