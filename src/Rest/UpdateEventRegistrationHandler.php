@@ -61,13 +61,20 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
+		return $this->getIDParamSetting() + parent::getParamSettings();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getBodyParamSettings(): array {
 		return [
 			'status' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => EventRegistration::VALID_STATUSES,
 				ParamValidator::PARAM_REQUIRED => true,
 			]
-		] + $this->getIDParamSetting() + parent::getParamSettings();
+		] + parent::getBodyParamSettings();
 	}
 
 	/**
