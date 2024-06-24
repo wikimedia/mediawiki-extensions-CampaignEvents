@@ -464,5 +464,7 @@
 	"campaignevents-worklist-error-too-large": "You have entered $1 {{PLURAL:$1|article|articles}}. Please enter between 1 and $2 {{PLURAL:$2|articles}}.",
 	"campaignevents-worklist-error-invalid-titles": "The following {{PLURAL:$1|article has an invalid title|articles have invalid titles}}. Please correct {{PLURAL:$1|it|the titles}} and try again.\n$2",
 	"campaignevents-worklist-error-nonexistent-titles": "The following {{PLURAL:$1|article was|articles were}} not found. Please verify the {{PLURAL:$1|title|titles}} and try again.\n$2",
-	"campaignevents-worklist-error-titles-not-mainspace": "The following {{PLURAL:$1|article is|articles are}} not in the main namespace. Please enter articles in the main namespace only.\n$2"
+	"campaignevents-worklist-error-titles-not-mainspace": "The following {{PLURAL:$1|article is|articles are}} not in the main namespace. Please enter articles in the main namespace only.\n$2",
+	"invitationlist": "Invitation list",
+	"campaignevents-invitation-list-processing": "<strong>Your list of editors to invite is being generated.</strong> Refresh the page in 5-10 minutes to view your invitation list."
 }

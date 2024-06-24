@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
 use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialGenerateInvitationList;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialInvitationList;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialMyInvitationLists;
 use MediaWiki\SpecialPage\Hook\SpecialPage_initListHook;
 
@@ -35,6 +36,12 @@ class SpecialPageInitListHandler implements SpecialPage_initListHook {
 			];
 			$list[ 'MyInvitationLists' ] = [
 				'class' => SpecialMyInvitationLists::class,
+				'services' => [
+					'CampaignEventsPermissionChecker'
+				],
+			];
+			$list[ 'InvitationList' ] = [
+				'class' => SpecialInvitationList::class,
 				'services' => [
 					'CampaignEventsPermissionChecker'
 				],
