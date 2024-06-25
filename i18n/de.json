@@ -441,6 +441,6 @@
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sonne\nMond\nHaus",
 	"campaignevents-generateinvitationlist-article-list-field-help": "{{#FORMAL|Gib|Geben Sie}} die Namen von {{PLURAL:$1|1 Artikel|bis zu $1 Artikeln}} ein, die die Themen {{#FORMAL|deiner|Ihrer}} Veranstaltung behandeln. Jeder Artikel sollte in einer neuen Zeile stehen.",
 	"campaignevents-generateinvitationlist-submit-button-text": "Erzeugen",
-	"campaignevents-invitation-list-disabled": "In diesem Wiki ist die Einladungsliste nicht aktiviert.",
+	"campaignevents-invitation-list-disabled": "In diesem Wiki sind keine Einladungslisten aktiviert.",
 	"campaignevents-invitation-list-not-allowed": "Die Nutzung von Einladungslisten ist nicht gestattet."
 }
