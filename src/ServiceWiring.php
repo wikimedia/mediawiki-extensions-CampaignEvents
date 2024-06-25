@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
+use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -42,6 +43,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Logger\LoggerFactory;
+use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
 
 // This file is actually covered by CampaignEventsServicesTest, but it's not possible to specify a path
@@ -329,6 +331,15 @@ return [
 	): EventAggregatedAnswersStore {
 		return new EventAggregatedAnswersStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+		);
+	},
+	InvitationListGenerator::SERVICE_NAME => static function ( MediaWikiServices $services ): InvitationListGenerator {
+		return new InvitationListGenerator(
+			$services->getPageStoreFactory(),
+			$services->getRevisionStoreFactory(),
+			$services->getConnectionProvider(),
+			$services->getNameTableStoreFactory(),
+			$services->getMainConfig()->get( MainConfigNames::BlockTargetMigrationStage )
 		);
 	},
 ];
