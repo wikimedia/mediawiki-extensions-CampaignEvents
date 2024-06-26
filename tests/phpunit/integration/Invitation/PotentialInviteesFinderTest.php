@@ -12,9 +12,9 @@ use MediaWikiIntegrationTestCase;
 /**
  * @group Test
  * @group Database
- * @covers \MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator
+ * @covers \MediaWiki\Extension\CampaignEvents\Invitation\PotentialInviteesFinder
  */
-class InvitationListGeneratorTest extends MediaWikiIntegrationTestCase {
+class PotentialInviteesFinderTest extends MediaWikiIntegrationTestCase {
 	use InvitationListTestHelperTrait;
 
 	public function addDBDataOnce(): void {
@@ -33,9 +33,9 @@ class InvitationListGeneratorTest extends MediaWikiIntegrationTestCase {
 		$debugLogCollector = static function ( string $msg ) use ( &$debugLogs ): void {
 			$debugLogs .= $msg . "\n";
 		};
-		$listGenerator = CampaignEventsServices::getInvitationListGenerator();
-		$listGenerator->setDebugLogger( $debugLogCollector );
-		$invitationList = $listGenerator->generate( $pageNamesByWiki );
+		$finder = CampaignEventsServices::getPotentialInviteesFinder();
+		$finder->setDebugLogger( $debugLogCollector );
+		$invitationList = $finder->generate( $pageNamesByWiki );
 
 		$this->assertArrayEquals(
 			[

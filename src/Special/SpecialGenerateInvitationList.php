@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use HTMLForm;
-use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
+use MediaWiki\Extension\CampaignEvents\Invitation\PotentialInviteesFinder;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Message\Message;
@@ -85,7 +85,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 				'placeholder-message' => 'campaignevents-generateinvitationlist-article-list-field-placeholder',
 				'help-message' => [
 					'campaignevents-generateinvitationlist-article-list-field-help',
-					Message::numParam( InvitationListGenerator::ARTICLES_LIMIT )
+					Message::numParam( PotentialInviteesFinder::ARTICLES_LIMIT )
 				],
 				'rows' => 10,
 				'required' => true
