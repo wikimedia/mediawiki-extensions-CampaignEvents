@@ -16,11 +16,9 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Permissions\Authority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker
@@ -171,43 +169,40 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param bool $expected
-	 * @param IPermissionsLookup $permissionsLookup
 	 * @covers ::userCanOrganizeEvents
 	 * @dataProvider provideCanOrganizeEvents
 	 */
 	public function testUserCanOrganizeEvents(
 		bool $expected,
-		IPermissionsLookup $permissionsLookup
+		?bool $isNamed = null,
+		$userRights = null,
+		?bool $isBlocked = null
 	) {
+		$permissionsLookup = $this->createMock( IPermissionsLookup::class );
+		if ( $isNamed !== null ) {
+			$permissionsLookup->expects( $this->atLeastOnce() )->method( 'userIsNamed' )->willReturn( $isNamed );
+		}
+		if ( $userRights !== null ) {
+			$permissionsLookup->expects( $this->atLeastOnce() )
+				->method( 'userHasRight' )
+				->willReturnCallback( static fn ( $user, $right ) =>
+					$userRights === self::ALL_RIGHTS || in_array( $right, $userRights, true )
+				);
+		}
+		if ( $isBlocked !== null ) {
+			$permissionsLookup->expects( $this->atLeastOnce() )
+				->method( 'userIsSitewideBlocked' )
+				->willReturn( $isBlocked );
+		}
 		$permissionChecker = $this->getPermissionChecker( null, null, $permissionsLookup );
 		$this->assertSame( $expected, $permissionChecker->userCanOrganizeEvents( 'Some username' ) );
 	}
 
-	public function provideCanOrganizeEvents(): Generator {
-		$loggedOutPermLookup = $this->createMock( IPermissionsLookup::class );
-		$loggedOutPermLookup->expects( $this->atLeastOnce() )->method( 'userIsNamed' )->willReturn( false );
-		yield 'Not named' => [ false, $loggedOutPermLookup ];
-
-		$lacksRightPermLookup = $this->createMock( IPermissionsLookup::class );
-		$lacksRightPermLookup->method( 'userIsNamed' )->willReturn( true );
-		$lacksRightPermLookup->expects( $this->atLeastOnce() )
-			->method( 'userHasRight' )
-			->with( $this->anything(), PermissionChecker::ORGANIZE_EVENTS_RIGHT )
-			->willReturn( false );
-		yield 'Lacking right' => [ false, $lacksRightPermLookup ];
-
-		$blockedPermLookup = $this->createMock( IPermissionsLookup::class );
-		$blockedPermLookup->method( 'userIsNamed' )->willReturn( true );
-		$blockedPermLookup->method( 'userHasRight' )->willReturn( true );
-		$blockedPermLookup->expects( $this->atLeastOnce() )->method( 'userIsSitewideBlocked' )->willReturn( true );
-		yield 'Blocked' => [ false, $blockedPermLookup ];
-
-		$authorizedPermLookup = $this->createMock( IPermissionsLookup::class );
-		$authorizedPermLookup->method( 'userIsNamed' )->willReturn( true );
-		$authorizedPermLookup->method( 'userHasRight' )->willReturn( true );
-		$authorizedPermLookup->method( 'userIsSitewideBlocked' )->willReturn( false );
-		yield 'Authorized' => [ true, $authorizedPermLookup ];
+	public static function provideCanOrganizeEvents(): Generator {
+		yield 'Not named' => [ false, false ];
+		yield 'Lacking right' => [ false, true, [] ];
+		yield 'Blocked' => [ false, true, self::ALL_RIGHTS, true ];
+		yield 'Authorized' => [ true, true, self::ALL_RIGHTS, false ];
 	}
 
 	/**
@@ -268,21 +263,27 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param bool $expected
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @param OrganizersStore|null $organizersStore
-	 * @param IPermissionsLookup|null $permissionsLookup
 	 * @covers ::userCanEditRegistration
 	 * @dataProvider provideGenericEditPermissions
 	 */
 	public function testUserCanEditRegistration(
 		bool $expected,
-		ICampaignsAuthority $performer,
-		ExistingEventRegistration $event,
-		OrganizersStore $organizersStore = null,
-		IPermissionsLookup $permissionsLookup = null
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null
 	) {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
@@ -290,87 +291,79 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	public function provideGenericEditPermissions(): Generator {
+	public static function provideGenericEditPermissions(): Generator {
 		yield 'Logged out' => [
 			false,
-			new MWAuthorityProxy( $this->mockAnonUltimateAuthority() ),
-			$this->mockExistingEventRegistration( true )
+			self::LOGGED_OUT,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			self::ALL_RIGHTS,
+			self::LOCAL_EVENT,
 		];
 		yield 'Temp user' => [
 			false,
-			new MWAuthorityProxy( $this->mockTempUltimateAuthority() ),
-			$this->mockExistingEventRegistration( true ),
+			self::LOGGED_IN,
+			self::TEMP,
+			self::NOT_BLOCKED,
+			self::ALL_RIGHTS,
+			self::LOCAL_EVENT,
 		];
 		yield 'Lacks right to enable registrations' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
-			$this->mockExistingEventRegistration( true )
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[],
+			self::LOCAL_EVENT,
 		];
 		yield 'Blocked' => [
 			false,
-			$this->mockSitewideBlockedRegisteredUltimateAuthority(),
-			$this->mockExistingEventRegistration( true )
-		];
-		yield 'Not an organizer' => [
-			false,
-			new MWAuthorityProxy( $this->mockRegisteredNullAuthority() ),
-			$this->mockExistingEventRegistration( true )
+			self::LOGGED_IN,
+			self::NAMED,
+			self::BLOCKED,
+			self::ALL_RIGHTS,
+			self::LOCAL_EVENT,
 		];
 		yield 'Event is not local' => [
 			false,
-			new MWAuthorityProxy( $this->mockRegisteredUltimateAuthority() ),
-			$this->mockExistingEventRegistration( false )
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			self::ALL_RIGHTS,
+			self::FOREIGN_EVENT,
 		];
 
-		$authorizedOrgStore = $this->createMock( OrganizersStore::class );
-		$authorizedOrgStore->method( 'isEventOrganizer' )->willReturn( true );
-
-		$cannotBeOrganizerPermLookup = $this->createMock( IPermissionsLookup::class );
-		$cannotBeOrganizerPermLookup->method( 'userIsNamed' )->willReturn( true );
-		$cannotBeOrganizerPermLookup
-			->method( 'userHasRight' )
-			->with( $this->anything(), 'campaignevents-organize-events' )
-			->willReturn( false );
-		$cannotBeOrganizerPermLookup->method( 'userIsSitewideBlocked' )->willReturn( false );
-
-		$canBeOrganizerPermLookup = $this->createMock( IPermissionsLookup::class );
-		$canBeOrganizerPermLookup->method( 'userIsNamed' )->willReturn( true );
-		$canBeOrganizerPermLookup
-			->method( 'userHasRight' )
-			->with( $this->anything(), 'campaignevents-organize-events' )
-			->willReturn( true );
-		$canBeOrganizerPermLookup->method( 'userIsSitewideBlocked' )->willReturn( false );
 		yield 'Authorized: can enable registrations but not be an organizer' => [
 			true,
-			new MWAuthorityProxy(
-				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] )
-			),
-			$this->mockExistingEventRegistration( true ),
-			$authorizedOrgStore,
-			$cannotBeOrganizerPermLookup
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[ 'campaignevents-enable-registration' ],
+			self::LOCAL_EVENT,
+			true,
 		];
 
 		yield 'Authorized: can be an organizer but not enable registrations' => [
 			true,
-			new MWAuthorityProxy(
-				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-organize-events' ] )
-			),
-			$this->mockExistingEventRegistration( true ),
-			$authorizedOrgStore,
-			$canBeOrganizerPermLookup
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[ 'campaignevents-organize-events' ],
+			self::LOCAL_EVENT,
+			true,
 		];
 
 		yield 'Authorized: can enable registrations and be an organizer' => [
 			true,
-			new MWAuthorityProxy(
-				$this->mockRegisteredAuthorityWithPermissions( [
-					'campaignevents-enable-registration',
-					'campaignevents-organize-events'
-				] )
-			),
-			$this->mockExistingEventRegistration( true ),
-			$authorizedOrgStore,
-			$canBeOrganizerPermLookup
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[
+				'campaignevents-enable-registration',
+				'campaignevents-organize-events'
+			],
+			self::LOCAL_EVENT,
+			true,
 		];
 	}
 
@@ -571,32 +564,28 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		];
 	}
 
-	private function mockSitewideBlockedRegisteredUltimateAuthority(): ICampaignsAuthority {
-		$block = $this->createMock( Block::class );
-		$block->expects( $this->atLeastOnce() )->method( 'isSitewide' )->willReturn( true );
-		$authority = $this->mockAuthority(
-			new UserIdentityValue( 42, 'Test' ),
-			static function () {
-				return true;
-			},
-			$block
-		);
-		/** @var Authority&MockObject $authority */
-		$authority->method( 'isNamed' )->willReturn( true );
-		return new MWAuthorityProxy( $authority );
-	}
-
 	/**
 	 * @covers ::userCanRemoveParticipants
 	 * @dataProvider provideGenericEditPermissions
 	 */
 	public function testUserCanRemoveParticipants(
 		bool $expected,
-		ICampaignsAuthority $performer,
-		ExistingEventRegistration $event,
-		OrganizersStore $organizersStore = null,
-		IPermissionsLookup $permissionsLookup = null
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null
 	) {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
@@ -605,21 +594,27 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param bool $expected
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @param OrganizersStore|null $organizersStore
-	 * @param IPermissionsLookup|null $permissionsLookup
 	 * @covers ::userCanViewPrivateParticipants
 	 * @dataProvider provideGenericEditPermissions
 	 */
 	public function testUserCanViewPrivateParticipants(
 		bool $expected,
-		ICampaignsAuthority $performer,
-		ExistingEventRegistration $event,
-		OrganizersStore $organizersStore = null,
-		IPermissionsLookup $permissionsLookup = null
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null
 	) {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
@@ -633,11 +628,22 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 */
 	public function testUserCanViewNonPIIParticipantsData(
 		bool $expected,
-		ICampaignsAuthority $performer,
-		ExistingEventRegistration $event,
-		OrganizersStore $organizersStore = null,
-		IPermissionsLookup $permissionsLookup = null
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null
 	) {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
 		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
 		$this->assertSame(
 			$expected,
