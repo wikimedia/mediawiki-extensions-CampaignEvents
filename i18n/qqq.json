@@ -460,5 +460,9 @@
 	"campaignevents-invitation-list-not-allowed": "Message shown on [[Special:GenerateInvitationList]] and [[Special:MyInvitationLists]] if the invitation list is enabled, but the user doesn't have the organizer right",
 	"myinvitationlists": "Description of [[Special:MyInvitationLists]]",
 	"campaignevents-myinvitationslist-empty-text": "Information provided to users who have not yet used [[Special:GenerateInvitationList]], displayed on [[Special:MyInvitationLists]]",
-	"campaignevents-myinvitationslist-generate-button": "Button label text shown on [[Special:MyInvitationLists]], this button navigates to [[Special:GenerateInvitationList]]"
+	"campaignevents-myinvitationslist-generate-button": "Button label text shown on [[Special:MyInvitationLists]], this button navigates to [[Special:GenerateInvitationList]]",
+	"campaignevents-invitation-list-error-empty-name": "Error message shown on [[Special:GenerateInvitationList]] when the user does not enter a name for the invitation list.",
+	"campaignevents-invitation-list-error-invalid-page": "Error message shown on [[Special:GenerateInvitationList]] when the user enters an invalid event page (for example, a page that is not in the Event: namespace, or an event page that does not use Event Registration).",
+	"campaignevents-invitation-list-error-event-ended": "Error message shown on [[Special:GenerateInvitationList]] when the user enters the name of an event which has already ended.",
+	"campaignevents-invitation-list-error-not-organizer": "Error message shown on [[Special:GenerateInvitationList]] when the user enters the name of an event for which they are not listed as an organizer."
 }
