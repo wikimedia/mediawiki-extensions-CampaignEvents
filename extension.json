@@ -163,7 +163,8 @@
 				"index.js",
 				"ConfirmEventDeletionDialog.js",
 				"FilterEventsWidget.js",
-				"EventKebabMenu.js"
+				"EventKebabMenu.js",
+				"DateTimeWidgetsEnhancer.js"
 			],
 			"messages": [
 				"campaignevents-myevents-filter-btn-label",

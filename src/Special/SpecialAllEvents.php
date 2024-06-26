@@ -8,6 +8,8 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\SpecialPage;
+use Wikimedia\Timestamp\ConvertibleTimestamp;
+use Wikimedia\Timestamp\TimestampException;
 
 class SpecialAllEvents extends SpecialPage {
 	public const PAGE_NAME = 'AllEvents';
@@ -44,10 +46,11 @@ class SpecialAllEvents extends SpecialPage {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
-		$startDate = $request->getVal( 'wpStartDate', date( 'Y-m-d' ) );
-		$startTime = $startDate !== '' ? $startDate . ' 00:00:00' : $startDate;
-		$endDate = $request->getVal( 'wpEndDate', '' );
-		$endTime = $endDate !== '' ? $endDate . ' 23:59:59' : $endDate;
+
+		$rawStartTime = $request->getVal( 'wpStartDate', (string)time() );
+		$startTime = $rawStartTime === '' ? '' : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
+		$rawEndTime = $request->getVal( 'wpEndDate', '' );
+		$endTime = $rawEndTime === '' ? '' : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 
 		$pager = $this->eventsPagerFactory->newListPager(
 			$searchedVal,
@@ -77,17 +80,17 @@ class SpecialAllEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-meetingtype-field'
 			],
 			'StartDate' => [
-				'type' => 'date',
+				'type' => 'datetime',
 				'label-message' => 'campaignevents-allevents-label-start-date',
 				'icon' => 'calendar',
-				'cssclass' => 'ext-campaignevents-allevents-calendar-field',
-				'default' => $startDate,
+				'cssclass' => 'ext-campaignevents-allevents-calendar-start-field mw-htmlform-autoinfuse-lazy',
+				'default' => $this->formatDate( $startTime, 'Y-m-d\TH:i:s.000\Z' ),
 			],
 			'EndDate' => [
-				'type' => 'date',
+				'type' => 'datetime',
 				'label-message' => 'campaignevents-allevents-label-end-date',
 				'icon' => 'calendar',
-				'cssclass' => 'ext-campaignevents-allevents-calendar-field',
+				'cssclass' => 'ext-campaignevents-allevents-calendar-end-field mw-htmlform-autoinfuse-lazy',
 				'default' => '',
 			],
 			'Limit' => [
@@ -116,5 +119,14 @@ class SpecialAllEvents extends SpecialPage {
 	 */
 	protected function getGroupName(): string {
 		return 'campaignevents';
+	}
+
+	private function formatDate( string $date, string $format = 'Y-m-d' ): string {
+		try {
+			$date = ( new ConvertibleTimestamp( $date ) )->format( $format );
+		} catch ( TimestampException $exception ) {
+			return '';
+		}
+		return $date;
 	}
 }
