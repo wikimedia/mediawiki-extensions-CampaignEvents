@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
@@ -39,13 +40,15 @@ class SpecialPageInitListHandler implements SpecialPage_initListHook {
 			$list[ 'MyInvitationLists' ] = [
 				'class' => SpecialMyInvitationLists::class,
 				'services' => [
-					'CampaignEventsPermissionChecker'
+					PermissionChecker::SERVICE_NAME,
+					CampaignsCentralUserLookup::SERVICE_NAME,
+					CampaignsDatabaseHelper::SERVICE_NAME,
 				],
 			];
 			$list[ 'InvitationList' ] = [
 				'class' => SpecialInvitationList::class,
 				'services' => [
-					'CampaignEventsPermissionChecker',
+					PermissionChecker::SERVICE_NAME,
 					InvitationListStore::SERVICE_NAME,
 					CampaignsCentralUserLookup::SERVICE_NAME,
 				],
