@@ -57,7 +57,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function addDBData(): void {
 		$rolesMap = TestingAccessWrapper::constant( OrganizersStore::class, 'ROLES_MAP' );
-		$ts = $this->db->timestamp();
+		$ts = $this->getDb()->timestamp();
 		$rows = [];
 		foreach ( self::ORGANIZERS_BY_EVENT as $event => $organizers ) {
 			foreach ( $organizers as $data ) {
@@ -76,7 +76,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 			}
 		}
 
-		$this->db->newInsertQueryBuilder()
+		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'ce_organizers' )
 			->rows( $rows )
 			->caller( __METHOD__ )

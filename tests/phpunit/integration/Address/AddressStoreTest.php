@@ -29,7 +29,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_country' => '',
 			],
 		];
-		$this->db->newInsertQueryBuilder()
+		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'ce_address' )
 			->rows( $rows )
 			->caller( __METHOD__ )

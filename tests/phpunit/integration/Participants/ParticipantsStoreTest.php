@@ -34,7 +34,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 101,
 						'cep_private' => false,
-						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
+						'cep_registered_at' => $this->getDb()->timestamp( '20220315120000' ),
 						'cep_unregistered_at' => null,
 						'cep_first_answer_timestamp' => null,
 						'cep_aggregation_timestamp' => null,
@@ -43,8 +43,8 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 102,
 						'cep_private' => false,
-						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
-						'cep_unregistered_at' => $this->db->timestamp( '20220324120000' ),
+						'cep_registered_at' => $this->getDb()->timestamp( '20220315120000' ),
+						'cep_unregistered_at' => $this->getDb()->timestamp( '20220324120000' ),
 						'cep_first_answer_timestamp' => null,
 						'cep_aggregation_timestamp' => null,
 					],
@@ -52,7 +52,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 104,
 						'cep_private' => false,
-						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
+						'cep_registered_at' => $this->getDb()->timestamp( '20220316120000' ),
 						'cep_unregistered_at' => null,
 						'cep_first_answer_timestamp' => null,
 						'cep_aggregation_timestamp' => null,
@@ -61,24 +61,24 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 106,
 						'cep_private' => true,
-						'cep_registered_at' => $this->db->timestamp( '20220316120000' ),
+						'cep_registered_at' => $this->getDb()->timestamp( '20220316120000' ),
 						'cep_unregistered_at' => null,
-						'cep_first_answer_timestamp' => $this->db->timestamp( '20220316120000' ),
-						'cep_aggregation_timestamp' => $this->db->timestamp( '20230316120000' ),
+						'cep_first_answer_timestamp' => $this->getDb()->timestamp( '20220316120000' ),
+						'cep_aggregation_timestamp' => $this->getDb()->timestamp( '20230316120000' ),
 					],
 					[
 						'cep_event_id' => $eventID,
 						'cep_user_id' => 107,
 						'cep_private' => false,
-						'cep_registered_at' => $this->db->timestamp( '20220315120000' ),
-						'cep_unregistered_at' => $this->db->timestamp( '20220324120000' ),
-						'cep_first_answer_timestamp' => $this->db->timestamp( '20220316120000' ),
-						'cep_aggregation_timestamp' => $this->db->timestamp( '20230316120000' ),
+						'cep_registered_at' => $this->getDb()->timestamp( '20220315120000' ),
+						'cep_unregistered_at' => $this->getDb()->timestamp( '20220324120000' ),
+						'cep_first_answer_timestamp' => $this->getDb()->timestamp( '20220316120000' ),
+						'cep_aggregation_timestamp' => $this->getDb()->timestamp( '20230316120000' ),
 					],
 				]
 			);
 		}
-		$this->db->newInsertQueryBuilder()
+		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'ce_participants' )
 			->rows( $rows )
 			->caller( __METHOD__ )
@@ -204,7 +204,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$user = new CentralUser( $userID );
 		$store = $this->getStore();
 		$getActualTS = function () use ( $eventID, $userID ): ?string {
-			$ts = $this->db->newSelectQueryBuilder()
+			$ts = $this->getDb()->newSelectQueryBuilder()
 				->select( 'cep_registered_at' )
 				->from( 'ce_participants' )
 				->where( [ 'cep_event_id' => $eventID, 'cep_user_id' => $userID ] )

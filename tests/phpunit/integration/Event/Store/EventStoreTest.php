@@ -206,7 +206,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'event_last_edit' => '20220811142657',
 			'event_deleted_at' => null,
 		];
-		$this->db->newInsertQueryBuilder()
+		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'campaign_events' )
 			->row( $eventData )
 			->caller( __METHOD__ )
@@ -222,7 +222,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_country' => 'Country 2',
 			]
 		];
-		$this->db->newInsertQueryBuilder()
+		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'ce_address' )
 			->rows( $addresses )
 			->caller( __METHOD__ )
@@ -238,7 +238,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'ceea_address' => 2,
 			]
 		];
-		$this->db->newInsertQueryBuilder()
+		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'ce_event_address' )
 			->rows( $eventAddresses )
 			->caller( __METHOD__ )
