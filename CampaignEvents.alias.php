@@ -20,6 +20,7 @@ $specialPageAliases['en'] = [
 	'AllEvents' => [ 'AllEvents' ],
 	'EventDetails' => [ 'EventDetails' ],
 	'GenerateInvitationList' => [ 'GenerateInvitationList' ],
+	'MyInvitationLists' => [ 'MyInvitationLists' ],
 ];
 
 $specialPageAliases['he'] = [

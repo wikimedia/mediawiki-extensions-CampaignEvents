@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialGenerateInvitationList;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialMyInvitationLists;
 use MediaWiki\SpecialPage\Hook\SpecialPage_initListHook;
 
 /**
@@ -23,6 +24,12 @@ class SpecialPageInitListHandler implements SpecialPage_initListHook {
 		if ( $this->config->get( 'CampaignEventsShowEventInvitationSpecialPages' ) ) {
 			$list[ 'GenerateInvitationList' ] = [
 				'class' => SpecialGenerateInvitationList::class,
+				'services' => [
+					'CampaignEventsPermissionChecker'
+				],
+			];
+			$list[ 'MyInvitationLists' ] = [
+				'class' => SpecialMyInvitationLists::class,
 				'services' => [
 					'CampaignEventsPermissionChecker'
 				],
