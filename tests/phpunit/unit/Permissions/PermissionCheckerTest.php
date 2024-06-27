@@ -17,7 +17,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\Authority;
-use MediaWiki\Permissions\UltimateAuthority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
@@ -29,6 +28,14 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	use MockAuthorityTrait;
+
+	private const LOGGED_IN = true;
+	private const TEMP = true;
+	private const BLOCKED = true;
+	private const LOGGED_OUT = false;
+	private const NAMED = false;
+	private const NOT_BLOCKED = false;
+	private const ALL_RIGHTS = '*';
 
 	/**
 	 * @param OrganizersStore|null $organizersStore
@@ -50,11 +57,53 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @todo This should probably be in core's MockAuthorityTrait
-	 * @return Authority
+	 * @param bool $isLoggedIn
+	 * @param bool $isTemp
+	 * @param bool $isBlocked
+	 * @param array|string $userRights Array of rights, or self::ALL_RIGHTS to indicate all.
+	 * @return ICampaignsAuthority
 	 */
-	private function mockTempUltimateAuthority(): Authority {
-		return new UltimateAuthority( new UserIdentityValue( 42, '*Unregistered1' ), true );
+	private function makeAuthority(
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights
+	): ICampaignsAuthority {
+		if ( $isTemp ) {
+			$user = new UserIdentityValue( 42, '*Unregistered1' );
+		} elseif ( $isLoggedIn ) {
+			$user = new UserIdentityValue( 100, 'Rick Astley' );
+		} else {
+			$user = new UserIdentityValue( 0, '127.0.0.1' );
+		}
+		if ( $isBlocked ) {
+			$block = $this->createMock( Block::class );
+			$block->method( 'isSitewide' )->willReturn( true );
+		} else {
+			$block = null;
+		}
+		$authority = $this->mockAuthority(
+			$user,
+			static fn ( $right ) => $userRights === self::ALL_RIGHTS || in_array( $right, $userRights, true ),
+			$block,
+			$isTemp
+		);
+		return new MWAuthorityProxy( $authority );
+	}
+
+	private function makePermLookup(
+		bool $isNamed,
+		$userRights,
+		bool $isSitewideBlocked
+	): IPermissionsLookup {
+		$lookup = $this->createMock( IPermissionsLookup::class );
+		$lookup->method( 'userIsNamed' )->willReturn( $isNamed );
+		$lookup->method( 'userHasRight' )
+			->willReturnCallback( static fn ( $user, $right ) =>
+				$userRights === self::ALL_RIGHTS || in_array( $right, $userRights, true )
+			);
+		$lookup->method( 'userIsSitewideBlocked' )->willReturn( $isSitewideBlocked );
+		return $lookup;
 	}
 
 	/**
@@ -608,6 +657,79 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			),
 			$this->mockExistingEventRegistration( true ),
 			$authorizedOrgStore
+		];
+	}
+
+	/**
+	 * @covers ::userCanUseInvitationLists
+	 * @dataProvider provideCanUseInvitationLists
+	 */
+	public function testUserCanUseInvitationLists(
+		bool $expected,
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights
+	) {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$permLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
+
+		$permChecker = $this->getPermissionChecker( null, null, $permLookup );
+		$this->assertSame(
+			$expected,
+			$permChecker->userCanUseInvitationLists( $performer )
+		);
+	}
+
+	public static function provideCanUseInvitationLists(): Generator {
+		yield 'Logged out' => [
+			false,
+			self::LOGGED_OUT,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			self::ALL_RIGHTS,
+		];
+		yield 'Temp user' => [
+			false,
+			self::LOGGED_IN,
+			self::TEMP,
+			self::NOT_BLOCKED,
+			self::ALL_RIGHTS,
+		];
+		yield 'Blocked' => [
+			false,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::BLOCKED,
+			self::ALL_RIGHTS,
+		];
+		yield 'Can be organizer but not enable registration' => [
+			true,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[
+				PermissionChecker::ORGANIZE_EVENTS_RIGHT
+			],
+		];
+		yield 'Can enable registration but not be organizer' => [
+			true,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[
+				PermissionChecker::ENABLE_REGISTRATIONS_RIGHT
+			],
+		];
+		yield 'Can be organizer and enable registration' => [
+			true,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[
+				PermissionChecker::ORGANIZE_EVENTS_RIGHT,
+				PermissionChecker::ENABLE_REGISTRATIONS_RIGHT
+			],
 		];
 	}
 

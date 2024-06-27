@@ -124,9 +124,10 @@ class PermissionChecker {
 		ICampaignsAuthority $performer,
 		ExistingEventRegistration $event
 	): bool {
-		return $event->isOnLocalWiki() &&
-			$this->userCanDeleteRegistrations( $performer ) ||
-			$this->userCanEditRegistration( $performer, $event );
+		return $event->isOnLocalWiki() && (
+				$this->userCanDeleteRegistrations( $performer ) ||
+				$this->userCanEditRegistration( $performer, $event )
+			);
 	}
 
 	/**
@@ -213,5 +214,10 @@ class PermissionChecker {
 	public function userCanEmailParticipants( ICampaignsAuthority $performer, ExistingEventRegistration $event ): bool {
 		return $this->userCanEditRegistration( $performer, $event )
 			&& $performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );
+	}
+
+	public function userCanUseInvitationLists( ICampaignsAuthority $performer ): bool {
+		return $this->userCanOrganizeEvents( $performer->getName() ) ||
+			$this->userCanEnableRegistrations( $performer );
 	}
 }

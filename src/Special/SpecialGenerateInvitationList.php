@@ -47,7 +47,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 		}
 
 		$this->requireNamedUser();
-		if ( !$this->permissionChecker->userCanOrganizeEvents( $mwAuthority->getName() ) ) {
+		if ( !$this->permissionChecker->userCanUseInvitationLists( $mwAuthority ) ) {
 			$out = $this->getOutput();
 			$out->enableOOUI();
 			$messageWidget = new MessageWidget( [
