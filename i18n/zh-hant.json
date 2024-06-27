@@ -353,6 +353,7 @@
 	"campaignevents-participant-question-no-response": "沒有回覆",
 	"campaignevents-event-register-for-event-title": "報名$1",
 	"campaignevents-event-details-not-local-wiki-prompt": "在[$1 $2]檢視",
+	"campaignevents-event-details-sensitive-data-message-blocked-user": "您的帳號已被封鎖。您無權存取此內容。",
 	"generateinvitationlist": "產生邀請名單",
 	"campaignevents-generateinvitationlist-name-field-label": "邀請名單名稱",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "我的活動邀請名單",

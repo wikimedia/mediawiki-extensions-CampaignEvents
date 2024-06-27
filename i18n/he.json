@@ -433,6 +433,7 @@
 	"campaignevents-delete-registration-page-nonlocal": "נא '''[$1 למחוק את ההרשמה שלך לאירוע באתר $2]''', הוויקי שהאירוע נוצר בו.",
 	"campaignevents-event-details-page-nonlocal": "מוצגת לך כעת גרסה מוגבלת של הדף הזה. נא <b>[$1 לבקר בדף הזה באתר $2]</b>, הוויקי שהאירוע נוצר בו, כדי לגשת לפרטי האירוע המלאים ולתכונות נוספות.",
 	"campaignevents-event-details-not-local-wiki-prompt": "הצג באתר [$1 $2]",
+	"campaignevents-event-details-sensitive-data-message-blocked-user": "החשבון שלך חסום. אין לך גישה לזה.",
 	"generateinvitationlist": "יצירת רשימת הזמנות",
 	"campaignevents-generateinvitationlist-name-field-label": "שם רשימת ההזמנות",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "רשימת ההזמנות לאירועים שלי",
@@ -442,6 +443,6 @@
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "שמש\nירח\nבית",
 	"campaignevents-generateinvitationlist-article-list-field-help": "נא להזין שמות של {{PLURAL:$1|עד $1 ערכים}} שמכסים את נושאי האירוע שלך. כל ערך צריך להיות בשורה חדשה.",
 	"campaignevents-generateinvitationlist-submit-button-text": "יצירה",
-	"campaignevents-invitation-list-disabled": "בוויקי הזה לא מופעלת רשימת הזמנות.",
+	"campaignevents-invitation-list-disabled": "בוויקי הזה לא מופעלות רשימות הזמנות.",
 	"campaignevents-invitation-list-not-allowed": "אין לך הרשאה להשתמש ברשימות הזמנות."
 }

@@ -441,6 +441,6 @@
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sol\nLuna\nCasa",
 	"campaignevents-generateinvitationlist-article-list-field-help": "Insere le nomines de usque a $1 articulo{{PLURAL:$1||s}} que coperi le topicos de tu evento. Cata articulo debe esser sur un nove linea.",
 	"campaignevents-generateinvitationlist-submit-button-text": "Generar",
-	"campaignevents-invitation-list-disabled": "Le lista de invitationes non es activate sur iste wiki.",
+	"campaignevents-invitation-list-disabled": "Le listas de invitationes non es activate sur iste wiki.",
 	"campaignevents-invitation-list-not-allowed": "Tu non es autorisate a usar listas de invitationes."
 }
