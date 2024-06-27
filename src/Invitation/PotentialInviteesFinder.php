@@ -22,8 +22,8 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * This class generates a list of potential event participants ("invitation list") by looking at who contributed
  * to a given list of pages ("worklist").
  */
-class InvitationListGenerator {
-	public const SERVICE_NAME = 'CampaignEventsInvitationListGenerator';
+class PotentialInviteesFinder {
+	public const SERVICE_NAME = 'CampaignEventsPotentialInviteesFinder';
 
 	/**
 	 * How many days to look back into the past when scanning revisions.

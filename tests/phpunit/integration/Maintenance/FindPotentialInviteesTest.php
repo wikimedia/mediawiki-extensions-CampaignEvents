@@ -4,7 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Maintenance;
 
-use MediaWiki\Extension\CampaignEvents\Maintenance\GenerateInvitationList;
+use MediaWiki\Extension\CampaignEvents\Maintenance\FindPotentialInvitees;
 use MediaWiki\Extension\CampaignEvents\Tests\Integration\InvitationListTestHelperTrait;
 use MediaWiki\Tests\Maintenance\MaintenanceBaseTestCase;
 use MediaWiki\WikiMap\WikiMap;
@@ -12,16 +12,16 @@ use MediaWiki\WikiMap\WikiMap;
 /**
  * @group Test
  * @group Database
- * @covers \MediaWiki\Extension\CampaignEvents\Maintenance\GenerateInvitationList
+ * @covers \MediaWiki\Extension\CampaignEvents\Maintenance\FindPotentialInvitees
  */
-class GenerateInvitationListTest extends MaintenanceBaseTestCase {
+class FindPotentialInviteesTest extends MaintenanceBaseTestCase {
 	use InvitationListTestHelperTrait;
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function getMaintenanceClass(): string {
-		return GenerateInvitationList::class;
+		return FindPotentialInvitees::class;
 	}
 
 	public function addDBDataOnce(): void {

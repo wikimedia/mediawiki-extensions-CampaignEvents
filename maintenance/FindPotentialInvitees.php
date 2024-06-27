@@ -16,7 +16,7 @@ use MediaWiki\WikiMap\WikiMap;
  * NOTE: This script is just a demo / proof of concept. It is not based on any real-world data and the calculations
  * are very much non-rigorous.
  */
-class GenerateInvitationList extends Maintenance {
+class FindPotentialInvitees extends Maintenance {
 	/**
 	 * How many days to look back into the past when scanning revisions.
 	 * TODO: Is 3 years OK?
@@ -43,8 +43,8 @@ class GenerateInvitationList extends Maintenance {
 	 * @inheritDoc
 	 */
 	public function execute(): void {
-		$listGenerator = CampaignEventsServices::getInvitationListGenerator();
-		$listGenerator->setDebugLogger( function ( string $msg ): void {
+		$finder = CampaignEventsServices::getPotentialInviteesFinder();
+		$finder->setDebugLogger( function ( string $msg ): void {
 			$this->output( $msg . "\n" );
 		} );
 
@@ -55,7 +55,7 @@ class GenerateInvitationList extends Maintenance {
 		}
 		$this->output( "\n\n" );
 
-		$invitationList = $listGenerator->generate( $pageNamesByWiki );
+		$invitationList = $finder->generate( $pageNamesByWiki );
 		$out = "\n==Contributor scores==\n";
 		foreach ( $invitationList as $username => $score ) {
 			$out .= "$username - $score\n";
@@ -98,4 +98,4 @@ class GenerateInvitationList extends Maintenance {
 	}
 }
 
-return GenerateInvitationList::class;
+return FindPotentialInvitees::class;

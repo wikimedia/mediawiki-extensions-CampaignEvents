@@ -4,7 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration;
 
-use MediaWiki\Extension\CampaignEvents\Maintenance\GenerateInvitationList;
+use MediaWiki\Extension\CampaignEvents\Maintenance\FindPotentialInvitees;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 trait InvitationListTestHelperTrait {
@@ -85,7 +85,7 @@ trait InvitationListTestHelperTrait {
 			->caller( __METHOD__ )
 			->execute();
 
-		$revCutoff = GenerateInvitationList::CUTOFF_DAYS * 24 * 60 * 60;
+		$revCutoff = FindPotentialInvitees::CUTOFF_DAYS * 24 * 60 * 60;
 		$curTime = ConvertibleTimestamp::time();
 		// Randomize the revision dates. This isn't really necessary, but it more closely resembles real data.
 		$newRevTS = static fn () => $db->timestamp( random_int( $curTime - $revCutoff + 1000, $curTime ) );
