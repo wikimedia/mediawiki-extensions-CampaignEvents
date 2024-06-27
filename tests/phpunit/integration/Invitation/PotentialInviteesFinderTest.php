@@ -29,13 +29,14 @@ class PotentialInviteesFinderTest extends MediaWikiIntegrationTestCase {
 				'Page 3',
 			]
 		];
+		$worklist = CampaignEventsServices::getWorklistParser()->parseWorklist( $pageNamesByWiki );
 		$debugLogs = '';
 		$debugLogCollector = static function ( string $msg ) use ( &$debugLogs ): void {
 			$debugLogs .= $msg . "\n";
 		};
 		$finder = CampaignEventsServices::getPotentialInviteesFinder();
 		$finder->setDebugLogger( $debugLogCollector );
-		$invitationList = $finder->generate( $pageNamesByWiki );
+		$invitationList = $finder->generate( $worklist );
 
 		$this->assertArrayEquals(
 			[
@@ -56,10 +57,10 @@ class PotentialInviteesFinderTest extends MediaWikiIntegrationTestCase {
 			rtrim( $progressText )
 		);
 		$expectedContribs = "==Contributions==\n" .
-			"User1 - [0:Page_1]@$curWikiID - 132\n" .
-			"User1 - [0:Page_3]@$curWikiID - 9000\n" .
-			"User2 - [0:Page_2]@$curWikiID - 5\n" .
-			"User3 - [0:Page_3]@$curWikiID - 30000";
+			"User1 - [0:Page_1] - 132\n" .
+			"User1 - [0:Page_3] - 9000\n" .
+			"User2 - [0:Page_2] - 5\n" .
+			"User3 - [0:Page_3] - 30000";
 		$this->assertSame( $expectedContribs, trim( $contributionsSection ) );
 		$this->assertStringContainsString( 'User User1 edit count 561,', $scoresDebugSection );
 		$this->assertStringContainsString( 'User User2 edit count 1105,', $scoresDebugSection );
