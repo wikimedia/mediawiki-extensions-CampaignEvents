@@ -4,9 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use RuntimeException;
-
-class UnexpectedVirtualNamespaceException extends RuntimeException {
+class UnexpectedVirtualNamespaceException extends InvalidEventPageException {
 	/**
 	 * @param int $ns
 	 */

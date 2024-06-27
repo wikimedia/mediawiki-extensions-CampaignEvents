@@ -5,9 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\DAO\WikiAwareEntity;
-use RuntimeException;
 
-class PageNotFoundException extends RuntimeException {
+class PageNotFoundException extends InvalidEventPageException {
 	/**
 	 * @param int $namespace
 	 * @param string $title

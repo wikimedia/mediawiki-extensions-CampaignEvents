@@ -4,9 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use RuntimeException;
-
-class InvalidTitleStringException extends RuntimeException {
+class InvalidTitleStringException extends InvalidEventPageException {
 	private string $errorMsgKey;
 	private array $errorMsgParams;
 
