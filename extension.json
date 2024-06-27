@@ -110,7 +110,11 @@
 		"SpecialPage_initList": "SpecialPageInitList"
 	},
 	"JobClasses": {
-		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob"
+		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob",
+		"CampaignEventsFindPotentialInvitees": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Invitation\\CampaignEventsFindPotentialInvitees",
+			"needsPage": false
+		}
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [

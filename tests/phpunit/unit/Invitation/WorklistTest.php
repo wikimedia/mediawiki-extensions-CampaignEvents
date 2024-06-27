@@ -53,7 +53,19 @@ class WorklistTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testGetter() {
-		$pagesByWiki = [
+		$pagesByWiki = self::getSamplePagesByWiki();
+		$worklist = new Worklist( $pagesByWiki );
+		$this->assertSame( $pagesByWiki, $worklist->getPagesByWiki() );
+	}
+
+	public function testSerialization() {
+		$pagesByWiki = self::getSamplePagesByWiki();
+		$worklist = new Worklist( $pagesByWiki );
+		$this->assertEquals( $worklist, Worklist::fromPlainArray( $worklist->toPlainArray() ) );
+	}
+
+	private static function getSamplePagesByWiki(): array {
+		return [
 			WikiMap::getCurrentWikiId() => [
 				new PageIdentityValue( 42, NS_MAIN, 'Test', WikiAwareEntity::LOCAL ),
 				new PageIdentityValue( 100, NS_MAIN, 'Test2', WikiAwareEntity::LOCAL )
@@ -62,7 +74,5 @@ class WorklistTest extends MediaWikiUnitTestCase {
 				new PageIdentityValue( 1, NS_MAIN, 'Foreign_test', 'some_other_wiki' )
 			]
 		];
-		$worklist = new Worklist( $pagesByWiki );
-		$this->assertSame( $pagesByWiki, $worklist->getPagesByWiki() );
 	}
 }

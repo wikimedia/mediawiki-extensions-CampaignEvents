@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Invitation;
 
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\Assert\Assert;
 
@@ -49,5 +50,42 @@ class Worklist {
 	 */
 	public function getPagesByWiki(): array {
 		return $this->pagesByWiki;
+	}
+
+	/**
+	 * Converts this object into an array of native types, suitable for JSON serialization.
+	 * @return array
+	 */
+	public function toPlainArray(): array {
+		$ret = [];
+		foreach ( $this->pagesByWiki as $wiki => $pages ) {
+			$ret[$wiki] = [];
+			foreach ( $pages as $page ) {
+				$ret[$wiki][] = [
+					$page->getId( $page->getWikiId() ),
+					$page->getNamespace(),
+					$page->getDBkey(),
+					$page->getWikiId()
+				];
+			}
+		}
+		return $ret;
+	}
+
+	/**
+	 * Creates a new instance from the given array (created through {@see self::toPlainArray}
+	 * @param array $array
+	 * @phan-param array<string|false,array<array{0:int,1:int,2:string,3:string|false}>> $array
+	 * @return Worklist
+	 */
+	public static function fromPlainArray( array $array ): Worklist {
+		$pagesByWiki = [];
+		foreach ( $array as $wiki => $wikiPageData ) {
+			$pagesByWiki[$wiki] = [];
+			foreach ( $wikiPageData as $pageData ) {
+				$pagesByWiki[$wiki][] = new PageIdentityValue( ...$pageData );
+			}
+		}
+		return new self( $pagesByWiki );
 	}
 }

@@ -119,6 +119,7 @@ class CampaignsUserMailer {
 				$recipientAddress = MailAddress::newFromUser( $recipientUser );
 				$performerAddress = MailAddress::newFromUser( $performerUser );
 				$curMessage = $this->getMessageWithFooter( $message, $performerAddress, $recipientAddress, $event );
+				// @phan-suppress-next-line SecurityCheck-XSS Gets confused by HTML and text body being passed together
 				$jobs[] = $this->createEmailJob( $recipientAddress, $subject, $curMessage, $performerAddress );
 			}
 		}
