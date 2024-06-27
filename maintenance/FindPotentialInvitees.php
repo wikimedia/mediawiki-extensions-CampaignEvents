@@ -55,8 +55,11 @@ class FindPotentialInvitees extends Maintenance {
 		}
 		$this->output( "\n\n" );
 
-		$worklist = CampaignEventsServices::getWorklistParser()->parseWorklist( $pageNamesByWiki );
-		$invitationList = $finder->generate( $worklist );
+		$worklistStatus = CampaignEventsServices::getWorklistParser()->parseWorklist( $pageNamesByWiki );
+		if ( !$worklistStatus->isGood() ) {
+			$this->fatalError( $worklistStatus );
+		}
+		$invitationList = $finder->generate( $worklistStatus->getValue() );
 		$out = "\n==Contributor scores==\n";
 		foreach ( $invitationList as $username => $score ) {
 			$out .= "$username - $score\n";

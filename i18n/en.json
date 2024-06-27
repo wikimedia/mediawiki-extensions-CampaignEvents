@@ -459,5 +459,10 @@
 	"campaignevents-invitation-list-error-empty-name": "Provide a name for the invitation list.",
 	"campaignevents-invitation-list-error-invalid-page": "Enter an event page that uses Event Registration.",
 	"campaignevents-invitation-list-error-event-ended": "This event has ended. Enter an active event.",
-	"campaignevents-invitation-list-error-not-organizer": "Enter an event page that lists you as an organizer."
+	"campaignevents-invitation-list-error-not-organizer": "Enter an event page that lists you as an organizer.",
+	"campaignevents-worklist-error-empty": "Enter at least one article title.",
+	"campaignevents-worklist-error-too-large": "You have entered $1 {{PLURAL:$1|article|articles}}. Please enter between 1 and $2 {{PLURAL:$2|articles}}.",
+	"campaignevents-worklist-error-invalid-titles": "The following {{PLURAL:$1|article has an invalid title|articles have invalid titles}}. Please correct {{PLURAL:$1|it|the titles}} and try again.\n$2",
+	"campaignevents-worklist-error-nonexistent-titles": "The following {{PLURAL:$1|article was|articles were}} not found. Please verify the {{PLURAL:$1|title|titles}} and try again.\n$2",
+	"campaignevents-worklist-error-titles-not-mainspace": "The following {{PLURAL:$1|article is|articles are}} not in the main namespace. Please enter articles in the main namespace only.\n$2"
 }

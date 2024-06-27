@@ -4,10 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Invitation;
 
-use InvalidArgumentException;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Message\Message;
 use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\WikiMap\WikiMap;
+use StatusValue;
 use Wikimedia\Assert\Assert;
 
 class WorklistParser {
@@ -28,18 +29,27 @@ class WorklistParser {
 	 *
 	 * @param array<string,string[]> $pageNamesByWiki $pageNamesByWiki Wiki IDs should always be string, and not use
 	 * WikiAwareEntity::LOCAL to avoid fun autocasting issues where PHP turns `false` into `0` when used as array key.
-	 * @return Worklist
-	 * @todo Change exceptions to user-facing errors.
+	 * @return StatusValue If good, the value is a Worklist object.
 	 */
-	public function parseWorklist( array $pageNamesByWiki ): Worklist {
+	public function parseWorklist( array $pageNamesByWiki ): StatusValue {
 		Assert::parameterKeyType( 'string', $pageNamesByWiki, '$pageNamesByWiki' );
 		$totalPageCount = array_sum( array_map( 'count', $pageNamesByWiki ) );
+		if ( $totalPageCount === 0 ) {
+			return StatusValue::newFatal( 'campaignevents-worklist-error-empty' );
+		}
 		if ( $totalPageCount > self::ARTICLES_LIMIT ) {
-			throw new InvalidArgumentException( "The worklist has more than " . self::ARTICLES_LIMIT . ' articles' );
+			return StatusValue::newFatal(
+				'campaignevents-worklist-error-too-large',
+				Message::numParam( $totalPageCount ),
+				Message::numParam( self::ARTICLES_LIMIT )
+			);
 		}
 
 		$curWikiID = WikiMap::getCurrentWikiId();
 		$pagesByWiki = [];
+		$invalidTitles = [];
+		$nonexistentPages = [];
+		$nonMainspacePages = [];
 		foreach ( $pageNamesByWiki as $wikiID => $pageNames ) {
 			$pageStore = $this->pageStoreFactory->getPageStore(
 				$wikiID !== $curWikiID ? $wikiID : WikiAwareEntity::LOCAL
@@ -51,21 +61,67 @@ class WorklistParser {
 				// FIXME: Batching!
 				$page = $pageStore->getPageByText( $pageName );
 				if ( !$page ) {
-					throw new InvalidArgumentException( "Invalid title: $pageName" );
+					$invalidTitles[] = $pageName;
 				} elseif ( !$page->exists() ) {
-					throw new InvalidArgumentException( "Page does not exist: $pageName" );
+					$nonexistentPages[] = $pageName;
 				} elseif ( $page->getNamespace() !== NS_MAIN ) {
-					throw new InvalidArgumentException( "Page is not in the mainspace: $pageName" );
+					$nonMainspacePages[] = $pageName;
+				} else {
+					$pagesByWiki[$wikiID] ??= [];
+					$pagesByWiki[$wikiID][] = $page;
 				}
-				$pagesByWiki[$wikiID] ??= [];
-				$pagesByWiki[$wikiID][] = $page;
 			}
 		}
 
-		if ( !$pagesByWiki ) {
-			throw new InvalidArgumentException( "Empty list of articles" );
+		$ret = StatusValue::newGood();
+		// NOTE: The messages below need to be wrapped in Message objects due to T368821.
+		if ( $invalidTitles ) {
+			$ret->fatal( new Message(
+				'campaignevents-worklist-error-invalid-titles',
+				[
+					Message::numParam( count( $invalidTitles ) ),
+					self::pagesToBulletList( $invalidTitles )
+				]
+			) );
+		}
+		if ( $nonexistentPages ) {
+			$ret->fatal( new Message(
+				'campaignevents-worklist-error-nonexistent-titles',
+				[
+					Message::numParam( count( $nonexistentPages ) ),
+					self::pagesToBulletList( $nonexistentPages )
+				]
+			) );
+		}
+		if ( $nonMainspacePages ) {
+			$ret->fatal( new Message(
+				'campaignevents-worklist-error-titles-not-mainspace',
+				[
+					Message::numParam( count( $nonMainspacePages ) ),
+					self::pagesToBulletList( $nonMainspacePages )
+				]
+			) );
 		}
 
-		return new Worklist( $pagesByWiki );
+		if ( $ret->isGood() ) {
+			$ret->setResult( true, new Worklist( $pagesByWiki ) );
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Given a list of page titles, return a bullet list with those titles.
+	 * @param string[] $pageTitles
+	 * @return string
+	 */
+	private static function pagesToBulletList( array $pageTitles ): string {
+		// Don't call wfEscapeWikiText in unit tests since it uses global state.
+		$pageEscaper = defined( 'MW_PHPUNIT_TEST' )
+			? static fn ( $x ) => $x
+			: 'wfEscapeWikiText';
+		return "<ul>\n<li>" .
+			implode( "</li>\n<li>", array_map( $pageEscaper, $pageTitles ) ) .
+			"</li>\n</ul>";
 	}
 }
