@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\Translate\MessageGroupProcessing\MessageGroups;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageIdentityValue;
@@ -22,7 +23,6 @@ use MediaWikiIntegrationTestCase;
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Event\PageEventLookup
  * @group Database
- * @todo The Translate tests aren't run in CI due to T358985
  */
 class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 	private function getLookup( IEventLookup $eventLookup = null ): PageEventLookup {
@@ -90,6 +90,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 		$translatablePage = TranslatablePage::newFromTitle( $page->getTitle() );
 		$editStatus = $this->editPage( $page, '<translate>Foo</translate>' );
 		$translatablePage->addMarkedTag( $editStatus->getNewRevision()->getId() );
+		MessageGroups::singleton()->recache();
 
 		$sourceLang = $translatablePage->getMessageGroup()->getSourceLanguage();
 		$transLang = $sourceLang !== 'it' ? 'it' : 'en';
