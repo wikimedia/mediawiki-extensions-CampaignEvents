@@ -443,5 +443,8 @@
 	"campaignevents-generateinvitationlist-article-list-field-help": "{{#FORMAL|Gib|Geben Sie}} die Namen von {{PLURAL:$1|1 Artikel|bis zu $1 Artikeln}} ein, die die Themen {{#FORMAL|deiner|Ihrer}} Veranstaltung behandeln. Jeder Artikel sollte in einer neuen Zeile stehen.",
 	"campaignevents-generateinvitationlist-submit-button-text": "Erzeugen",
 	"campaignevents-invitation-list-disabled": "In diesem Wiki sind keine Einladungslisten aktiviert.",
-	"campaignevents-invitation-list-not-allowed": "Die Nutzung von Einladungslisten ist nicht gestattet."
+	"campaignevents-invitation-list-not-allowed": "Die Nutzung von Einladungslisten ist nicht gestattet.",
+	"myinvitationlists": "{{#FORMAL|Deine|Ihre}} Einladungslisten",
+	"campaignevents-myinvitationslist-empty-text": "Entdecke neue Teilnehmer für dein Projekt oder deine Veranstaltung. Stelle eine Liste mit Artikeln bereit, die deine Themenschwerpunkte abdecken. Anschließend erhältst du eine Einladungsliste mit Benutzern, die möglicherweise an der Teilnahme an deinem Projekt oder deiner Veranstaltung interessiert sind.",
+	"campaignevents-myinvitationslist-generate-button": "Neue Einladungsliste erstellen"
 }

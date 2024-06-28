@@ -172,6 +172,7 @@
 	"campaignevents-participant-question-no-response": "Без одговора",
 	"campaignevents-event-register-for-event-title": "Регистрација за $1",
 	"campaignevents-event-details-not-local-wiki-prompt": "Прикажи на [$1 $2]",
+	"campaignevents-event-details-sensitive-data-message-blocked-user": "Ваш налог је блокиран. Немате приступ овоме.",
 	"campaignevents-generateinvitationlist-event-page-field-label": "Страница догађаја",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Списак чланака",
 	"campaignevents-generateinvitationlist-submit-button-text": "Генериши"
