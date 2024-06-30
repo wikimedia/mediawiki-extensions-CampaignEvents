@@ -592,6 +592,7 @@ class EventPageDecorator {
 		// MessageFormatterFactory...
 		$organizersStr = $this->out->msg( 'campaignevents-eventpage-dialog-organizers' )
 			->rawParams( $this->language->commaList( $organizerElements ) )
+			->numParams( count( $organizerElements ) )
 			->escaped();
 		if ( count( $partialOrganizers ) < $organizersCount ) {
 			$organizersStr .= Html::rawElement(
