@@ -17,15 +17,20 @@ use Wikimedia\Assert\AssertionException;
  */
 class WorklistTest extends MediaWikiUnitTestCase {
 	/**
-	 * @dataProvider provideConstructorErrors
+	 * @dataProvider provideConstructorData
 	 */
-	public function testConstructor__errors( array $pages, string $expectedError ) {
-		$this->expectException( AssertionException::class );
-		$this->expectExceptionMessage( $expectedError );
+	public function testConstructor( array $pages, ?string $expectedError ) {
+		if ( $expectedError !== null ) {
+			$this->expectException( AssertionException::class );
+			$this->expectExceptionMessage( $expectedError );
+		}
 		new Worklist( $pages );
+		if ( $expectedError === null ) {
+			$this->addToAssertionCount( 1 );
+		}
 	}
 
-	public static function provideConstructorErrors(): Generator {
+	public static function provideConstructorData(): Generator {
 		yield 'Malformed array' => [
 			[ 'some_wiki' => true ],
 			'Bad value for parameter $pagesByWiki',
@@ -44,11 +49,11 @@ class WorklistTest extends MediaWikiUnitTestCase {
 		];
 		yield 'Page does not exist' => [
 			[ 'some_wiki' => [ new PageIdentityValue( 0, NS_MAIN, 'Foo', 'some_wiki' ) ] ],
-			'Pages must exist',
+			null,
 		];
 		yield 'Page is not in the mainspace' => [
 			[ 'some_wiki' => [ new PageIdentityValue( 42, NS_TEMPLATE, 'Foo', 'some_wiki' ) ] ],
-			'Pages must be in the mainspace',
+			null,
 		];
 	}
 

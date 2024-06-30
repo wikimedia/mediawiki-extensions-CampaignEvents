@@ -21,7 +21,8 @@ class Worklist {
 	private array $pagesByWiki;
 
 	/**
-	 * @param array<string,PageIdentity[]> $pagesByWiki Must have been validated by WorklistParser.
+	 * @param array<string,PageIdentity[]> $pagesByWiki Must have been validated by WorklistParser if it comes from
+	 * the user.
 	 * @phan-param non-empty-array<string,non-empty-list<PageIdentity>> $pagesByWiki
 	 */
 	public function __construct( array $pagesByWiki ) {
@@ -37,8 +38,7 @@ class Worklist {
 				} else {
 					Assert::precondition( $page->getWikiId() === $wiki, 'Page wiki ID should match array key' );
 				}
-				Assert::precondition( $page->exists(), 'Pages must exist' );
-				Assert::precondition( $page->getNamespace() === NS_MAIN, 'Pages must be in the mainspace' );
+				// No existence and namespace check, they might fail for stored worklists.
 			}
 		}
 		$this->pagesByWiki = $pagesByWiki;
