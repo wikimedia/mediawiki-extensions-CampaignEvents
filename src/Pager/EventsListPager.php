@@ -129,12 +129,12 @@ class EventsListPager extends ReverseChronologicalPager {
 		$organizerUserIDsMap = [];
 		foreach ( $this->creators as $creator ) {
 			if ( $creator ) {
-				$organizerUserIDsMap[$creator->getUser()->getCentralID()] = true;
+				$organizerUserIDsMap[$creator->getUser()->getCentralID()] = null;
 			}
 		}
 		foreach ( $this->extraOrganizers as $eventExtraOrganizer ) {
 			foreach ( $eventExtraOrganizer as $organizer ) {
-				$organizerUserIDsMap[ $organizer->getUser()->getCentralID() ] = true;
+				$organizerUserIDsMap[ $organizer->getUser()->getCentralID() ] = null;
 			}
 		}
 
