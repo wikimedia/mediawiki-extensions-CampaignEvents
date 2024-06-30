@@ -4,9 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use RuntimeException;
-
-class UnexpectedSectionAnchorException extends RuntimeException {
+class UnexpectedSectionAnchorException extends InvalidEventPageException {
 	/**
 	 * @param string $fragment
 	 */

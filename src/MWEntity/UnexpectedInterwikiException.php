@@ -4,9 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use RuntimeException;
-
-class UnexpectedInterwikiException extends RuntimeException {
+class UnexpectedInterwikiException extends InvalidEventPageException {
 	/**
 	 * @param string $interwiki
 	 */
