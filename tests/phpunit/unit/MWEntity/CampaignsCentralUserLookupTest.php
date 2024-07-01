@@ -36,6 +36,11 @@ class CampaignsCentralUserLookupTest extends MediaWikiUnitTestCase {
 			$centralIdLookup = $this->createMock( CentralIdLookup::class );
 			$centralIdLookup->method( 'lookupCentralIds' )
 				->willReturnCallback( fn ( array $map ) => array_intersect_key( self::ID_NAME_MAP, $map ) );
+			$centralIdLookup->method( 'lookupUserNames' )
+				->willReturnCallback( fn ( array $map ) => array_replace(
+					$map,
+					[ self::ID_NAME_MAP[self::EXISTING_ID] => self::EXISTING_ID ]
+				) );
 		}
 		return new CampaignsCentralUserLookup(
 			$centralIdLookup,
@@ -73,6 +78,23 @@ class CampaignsCentralUserLookupTest extends MediaWikiUnitTestCase {
 		$idsMap = array_fill_keys( array_keys( self::ID_NAME_MAP ), null );
 		$expected = [ self::EXISTING_ID => self::ID_NAME_MAP[self::EXISTING_ID] ];
 		$this->assertSame( $expected, $this->getLookup()->getNames( $idsMap ) );
+	}
+
+	/**
+	 * @covers ::getIDs
+	 */
+	public function testGetIDs() {
+		$existingName = self::ID_NAME_MAP[self::EXISTING_ID];
+		$nonexistingName = 'Does not exist ' . wfRandomString();
+		$namesMap = [
+			$existingName => true,
+			$nonexistingName => true,
+		];
+		$expected = [
+			$existingName => self::EXISTING_ID,
+			$nonexistingName => true,
+		];
+		$this->assertSame( $expected, $this->getLookup()->getIDs( $namesMap ) );
 	}
 
 	/**

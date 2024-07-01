@@ -152,6 +152,18 @@ class CampaignsCentralUserLookup {
 	}
 
 	/**
+	 * Given a map whose keys are normalized local usernames, returns a copy of that map where every user with a
+	 * global account has the corresponding value replaced by their central user ID. Users without a global account
+	 * have their values unchanged.
+	 *
+	 * @param array<string,mixed> $localNamesMap
+	 * @return array<string,mixed>
+	 */
+	public function getIDs( array $localNamesMap ): array {
+		return $this->centralIDLookup->lookupUserNames( $localNamesMap );
+	}
+
+	/**
 	 * Returns the usernames of the users with the given central user IDs. Suppressed and non-existing users are
 	 * included in the return value, with self::USER_NOT_FOUND or self::USER_HIDDEN as the value.
 	 *
