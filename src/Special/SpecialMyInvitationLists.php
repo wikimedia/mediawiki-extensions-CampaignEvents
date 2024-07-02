@@ -45,7 +45,7 @@ class SpecialMyInvitationLists extends SpecialPage {
 		}
 
 		$this->requireNamedUser();
-		if ( !$this->permissionChecker->userCanOrganizeEvents( $mwAuthority->getName() ) ) {
+		if ( !$this->permissionChecker->userCanUseInvitationLists( $mwAuthority ) ) {
 			$messageWidget = new MessageWidget( [
 				'type' => 'error',
 				'label' => $this->msg( 'campaignevents-invitation-list-not-allowed' )->text()
