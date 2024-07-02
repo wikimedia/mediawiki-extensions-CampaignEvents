@@ -434,15 +434,18 @@
 	"campaignevents-event-details-page-nonlocal": "Во моментов гледате ограничена верзија на оваа страница. <b>[$1 посетете ја оваа страница на $2]</b>, викито на кое е создаден настанот, за да ги добиете сите поединости за настанот и дополнителни функции.",
 	"campaignevents-event-details-not-local-wiki-prompt": "Прикажи на [$1 $2]",
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "Вашата сметка е блокирана. Немате пристап до ова.",
-	"generateinvitationlist": "Создај список на покани",
+	"generateinvitationlist": "Создај список со покани",
 	"campaignevents-generateinvitationlist-name-field-label": "Име на списокот со покани",
-	"campaignevents-generateinvitationlist-name-field-placeholder": "Мој список на покани за настан",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "Мој список со покани за настан",
 	"campaignevents-generateinvitationlist-event-page-field-label": "Страница на настанот",
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:Мој настан",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Список на статии",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Сонце\nМесечина\nКуќа",
 	"campaignevents-generateinvitationlist-article-list-field-help": "Внесете ги имињата на до $1 {{PLURAL:$1|статија која ги опфаќа|статии кои ги опфаќаат}} темите на вашиот настан. Секоја статија треба да е во нов ред.",
 	"campaignevents-generateinvitationlist-submit-button-text": "Создај",
-	"campaignevents-invitation-list-disabled": "Списоците на покани не се овозможени на ова вики.",
-	"campaignevents-invitation-list-not-allowed": "Не ви е дозволено да користите списоци на покани."
+	"campaignevents-invitation-list-disabled": "Списоците со покани не се овозможени на ова вики.",
+	"campaignevents-invitation-list-not-allowed": "Не ви е дозволено да користите списоци со покани.",
+	"myinvitationlists": "Ваши списоци со покани",
+	"campaignevents-myinvitationslist-empty-text": "Откријте нови учесници на вашиот проект или настан. Дајте список на статии кои ги покриваат вашите тематски подрачја. Потоа ќе добиете список со покани кон уредници кои можеби се заинтересирани да ви се приклучат во проектот или настанот.",
+	"campaignevents-myinvitationslist-generate-button": "Создај нов список со покани"
 }

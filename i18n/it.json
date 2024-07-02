@@ -93,7 +93,7 @@
 	"campaignevents-eventpage-btn-cancel": "Annulla registrazione",
 	"campaignevents-eventpage-btn-event-ended": "Evento terminato",
 	"campaignevents-eventpage-dialog-title": "Dettagli evento",
-	"campaignevents-eventpage-dialog-organizers": "Organizzato da: $1",
+	"campaignevents-eventpage-dialog-organizers": "Organizzato {{PLURAL:$2|da}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Visualizza tutti gli organizzatori",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|partecipante|partecipanti}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|partecipante registrato|partecipanti registrati}} privatamente",

@@ -455,5 +455,9 @@
 	"campaignevents-register-page-nonlocal": "Veuillez '''[$1 procéder à votre inscription sur $2]''', le wiki où l’évènement a été créé.",
 	"campaignevents-delete-registration-page-nonlocal": "Vous devez '''[$1 désactiver le processus d’inscription à l’évènement sur $2]''', le wiki il a été créé.",
 	"campaignevents-event-details-page-nonlocal": "Vous consultez actuellement une version limitée de cette page. Veuillez <b>[$1 visiter cette page sur $2]</b>, le wiki sur lequel l'événement a été créé, pour accéder aux détails complets de l'événement et aux fonctionnalités supplémentaires.",
-	"campaignevents-event-details-not-local-wiki-prompt": "Voir sur [ $1 $2 ]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Voir sur [ $1 $2 ]",
+	"campaignevents-generateinvitationlist-submit-button-text": "Générer",
+	"campaignevents-invitation-list-disabled": "Ce wiki n'a pas de listes d'invitations activées.",
+	"campaignevents-invitation-list-not-allowed": "Vous n'êtes pas autorisé à utiliser les listes d'invitations.",
+	"myinvitationlists": "Vos listes d'invitations"
 }

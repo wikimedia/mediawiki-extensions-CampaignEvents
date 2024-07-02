@@ -203,7 +203,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "Inschrijving gesloten",
 	"campaignevents-eventpage-btn-event-ended": "Evenement beëindigd",
 	"campaignevents-eventpage-dialog-title": "Evenementgegevens",
-	"campaignevents-eventpage-dialog-organizers": "Georganiseerd door: $1",
+	"campaignevents-eventpage-dialog-organizers": "Georganiseerd {{PLURAL:$2|door}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Alle organisatoren bekijken",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|deelnemer|deelnemers}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 deelnemer{{PLURAL:$1||s}} privé geregistreerd",

@@ -198,7 +198,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "Anmeldung geschlossen",
 	"campaignevents-eventpage-btn-event-ended": "Veranstaltung beendet",
 	"campaignevents-eventpage-dialog-title": "Veranstaltungsdetails",
-	"campaignevents-eventpage-dialog-organizers": "Organisiert von: $1",
+	"campaignevents-eventpage-dialog-organizers": "Organisiert {{PLURAL:$2|von}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Alle Organisatoren anzeigen",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|Ein|$1}} Teilnehmer",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|Teilnehmer ist|Teilnehmer sind}} privat registriert",

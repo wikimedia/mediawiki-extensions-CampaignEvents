@@ -362,5 +362,7 @@
 	"campaignevents-generateinvitationlist-article-list-field-label": "條目清單",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "太陽\n月球\n住宅",
 	"campaignevents-generateinvitationlist-submit-button-text": "產生",
-	"campaignevents-invitation-list-not-allowed": "您不被允許使用邀請名單。"
+	"campaignevents-invitation-list-not-allowed": "您不被允許使用邀請名單。",
+	"myinvitationlists": "您的邀請名單",
+	"campaignevents-myinvitationslist-generate-button": "建立新的邀請名單"
 }

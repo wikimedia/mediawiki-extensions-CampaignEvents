@@ -199,7 +199,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "ההרשמה נסגרה",
 	"campaignevents-eventpage-btn-event-ended": "האירוע הסתיים",
 	"campaignevents-eventpage-dialog-title": "פרטי האירוע",
-	"campaignevents-eventpage-dialog-organizers": "מאורגן על־ידי: $1",
+	"campaignevents-eventpage-dialog-organizers": "מאורגן {{PLURAL:$2|על־ידי}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "הצגת כל המארגנים",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}}",
 	"campaignevents-eventpage-dialog-participants-private": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}} נרשם באופן פרטי",
@@ -444,5 +444,8 @@
 	"campaignevents-generateinvitationlist-article-list-field-help": "נא להזין שמות של {{PLURAL:$1|עד $1 ערכים}} שמכסים את נושאי האירוע שלך. כל ערך צריך להיות בשורה חדשה.",
 	"campaignevents-generateinvitationlist-submit-button-text": "יצירה",
 	"campaignevents-invitation-list-disabled": "בוויקי הזה לא מופעלות רשימות הזמנות.",
-	"campaignevents-invitation-list-not-allowed": "אין לך הרשאה להשתמש ברשימות הזמנות."
+	"campaignevents-invitation-list-not-allowed": "אין לך הרשאה להשתמש ברשימות הזמנות.",
+	"myinvitationlists": "רשימות ההזמנות שלך",
+	"campaignevents-myinvitationslist-empty-text": "{{GENDER:|גלה|גלי}} משתתפים חדשים לפרויקט או לאירוע שלך. {{GENDER:|ספק|ספקי}} רשימת ערכים המכסים את הנושאים {{GENDER:|שאתה מתמקד|שאת מתמקדת}} בהם. לאחר מכן, {{GENDER:|תקבל|תקבלי}} רשימת הזמנות של עורכים שעשויים להיות מעוניינים להצטרף לפרויקט או לאירוע שלך.",
+	"campaignevents-myinvitationslist-generate-button": "יצירת רשימת הזמנות חדשה"
 }
