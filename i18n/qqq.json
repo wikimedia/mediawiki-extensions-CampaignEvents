@@ -6,7 +6,8 @@
 			"Daimona Eaytoy",
 			"MarcoAurelio",
 			"McDutchie",
-			"Verdy p"
+			"Verdy p",
+			"Tacsipacsi"
 		]
 	},
 	"campaignevents-desc": "{{desc|name=CampaignEvents|url=https://www.mediawiki.org/wiki/Extension:CampaignEvents}}",
@@ -146,7 +147,7 @@
 	"campaignevents-eventslist-location-online": "Label used on [[Special:MyEvents]] for events that happen online.",
 	"campaignevents-eventslist-location-in-person": "Label used on [[Special:MyEvents]] for events that happen in person.",
 	"campaignevents-eventslist-location-online-and-in-person": "Label used on [[Special:MyEvents]] for events that happen both online and in person.",
-	"campaignevents-eventslist-manage-btn-info": "Label used on [[Special:MyEvents]] for a button with some options that let a organizer manage an event.",
+	"campaignevents-eventslist-manage-btn-info": "Label used on [[Special:MyEvents]] for a button with some options that let an organizer manage an event.",
 	"campaignevents-eventslist-menu-edit": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user will be sent to a page where they can edit the event.",
 	"campaignevents-eventslist-menu-view-eventpage": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user will be sent to the event page of the event they're looking at.",
 	"campaignevents-eventslist-menu-close": "Label of a menu option on [[Special:MyEvents]]. By clicking, the user can close the registration for the event.",
