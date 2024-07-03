@@ -71,7 +71,7 @@
 	"campaignevents-eventpage-btn-edit": "Уреди регистрацију",
 	"campaignevents-eventpage-btn-cancel": "Откажи регистрацију",
 	"campaignevents-eventpage-dialog-title": "Детаљи догађаја",
-	"campaignevents-eventpage-dialog-organizers": "Организовано од стране: $1",
+	"campaignevents-eventpage-dialog-organizers": "Организовано од {{PLURAL:$2|стране}}: $1",
 	"campaignevents-eventpage-dialog-participants-view-list": "Прикажи све",
 	"campaignevents-eventpage-dialog-dates": "$1 до $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Временска зона:</strong> $1",

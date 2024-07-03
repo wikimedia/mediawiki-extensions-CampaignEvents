@@ -129,6 +129,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "Regisztráció lezárva",
 	"campaignevents-eventpage-btn-event-ended": "Az esemény véget ért",
 	"campaignevents-eventpage-dialog-title": "Esemény részletei",
+	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|Szervező|Szervezők}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Az összes szervező megtekintése",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|résztvevő}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Összes megtekintése",
