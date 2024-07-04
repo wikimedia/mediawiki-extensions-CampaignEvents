@@ -666,5 +666,190 @@
 			}
 		],
 		"pk": [ "ceqag_id" ]
+	},
+	{
+		"name": "ce_invitation_lists",
+		"comment": "Stores invitation lists.",
+		"columns": [
+			{
+				"name": "ceil_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceil_name",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "ceil_event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": false,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceil_status",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "ceil_user_id",
+				"comment": "ID of the user who created the list",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "ceil_wiki",
+				"comment": "Wiki where the invitation list was created",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "ceil_created_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_invitation_lists_event_id",
+				"comment": "Get the invitation list by event ID",
+				"columns": [ "ceil_event_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_invitation_lists_wiki",
+				"comment": "Get invitation list by wiki, it will be used only for analytics",
+				"columns": [ "ceil_wiki" ],
+				"unique": false
+			},
+			{
+				"name": "ce_invitation_lists_user_wiki",
+				"comment": "Get invitation list by user id and wiki",
+				"columns": [ "ceil_user_id", "ceil_wiki" ],
+				"unique": false
+			}
+		],
+		"pk": [ "ceil_id" ]
+	},
+	{
+		"name": "ce_worklist_articles",
+		"comment": "Stores the articles related to invitation list.",
+		"columns": [
+			{
+				"name": "cewa_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewa_page_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewa_page_title",
+				"comment": "This will be used to handle deleted pages to show redlinks, not storing page namespace because we're only supporting mainspace pages for now",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "cewa_ceil_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklist_articles_ceil_id",
+				"comment": "Get the list of articles by invitation list ID",
+				"columns": [ "cewa_ceil_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "cewa_id" ]
+	},
+	{
+		"name": "ce_invitation_list_users",
+		"comment": "Stores the users related to invitation lists.",
+		"columns": [
+			{
+				"name": "ceilu_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceilu_user_id",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "ceilu_ceil_id",
+				"comment": "ID of the associated ce_invitation_lists table",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceilu_score",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_invitation_list_users_ceil_id",
+				"comment": "Get the list of users by invitation list ID",
+				"columns": [ "ceilu_ceil_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_invitation_list_users_ceilu_user_id",
+				"comment": "Get the invitation list IDs a given user is assigned to. For now, it will be used only for analytics, but this may also be used in the application later",
+				"columns": [ "ceilu_user_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "ceilu_id" ]
 	}
 ]

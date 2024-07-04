@@ -1,0 +1,52 @@
+{
+	"before": {},
+	"after": {
+		"name": "ce_worklist_articles",
+		"comment": "Stores the articles related to invitation list.",
+		"columns": [
+			{
+				"name": "cewa_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewa_page_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewa_page_title",
+				"comment": "This will be used to handle deleted pages to show redlinks, not storing page namespace because we're only supporting mainspace pages for now",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "cewa_ceil_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklist_articles_ceil_id",
+				"comment": "Get the list of articles by invitation list ID",
+				"columns": [ "cewa_ceil_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "cewa_id" ]
+	}
+}

@@ -125,3 +125,37 @@ CREATE UNIQUE INDEX ceqag_event_question_option ON /*_*/ce_question_aggregation 
   ceqag_event_id, ceqag_question_id,
   ceqag_answer_option
 );
+
+
+CREATE TABLE /*_*/ce_invitation_lists (
+  ceil_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceil_name BLOB NOT NULL, ceil_event_id BIGINT UNSIGNED DEFAULT NULL,
+  ceil_status INTEGER NOT NULL, ceil_user_id INTEGER NOT NULL,
+  ceil_wiki BLOB NOT NULL, ceil_created_at BLOB NOT NULL
+);
+
+CREATE INDEX ce_invitation_lists_event_id ON /*_*/ce_invitation_lists (ceil_event_id);
+
+CREATE INDEX ce_invitation_lists_wiki ON /*_*/ce_invitation_lists (ceil_wiki);
+
+CREATE INDEX ce_invitation_lists_user_wiki ON /*_*/ce_invitation_lists (ceil_user_id, ceil_wiki);
+
+
+CREATE TABLE /*_*/ce_worklist_articles (
+  cewa_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  cewa_page_id INTEGER UNSIGNED NOT NULL,
+  cewa_page_title BLOB NOT NULL, cewa_ceil_id BIGINT UNSIGNED NOT NULL
+);
+
+CREATE INDEX ce_worklist_articles_ceil_id ON /*_*/ce_worklist_articles (cewa_ceil_id);
+
+
+CREATE TABLE /*_*/ce_invitation_list_users (
+  ceilu_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceilu_user_id INTEGER NOT NULL, ceilu_ceil_id BIGINT UNSIGNED NOT NULL,
+  ceilu_score INTEGER NOT NULL
+);
+
+CREATE INDEX ce_invitation_list_users_ceil_id ON /*_*/ce_invitation_list_users (ceilu_ceil_id);
+
+CREATE INDEX ce_invitation_list_users_ceilu_user_id ON /*_*/ce_invitation_list_users (ceilu_user_id);
