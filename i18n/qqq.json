@@ -472,5 +472,9 @@
 	"campaignevents-worklist-error-nonexistent-titles": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist that contains pages that do not exist. Parameters:\n* $1 - Number of such pages, for PLURAL.\n* $2 - Bullet list that lists with the non-existent pages.",
 	"campaignevents-worklist-error-titles-not-mainspace": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist that contains pages that are not in the main namespace. Parameters:\n* $1 - Number of such pages, for PLURAL.\n* $2 - Bullet list with those pages.",
 	"invitationlist": "Description of [[Special:InvitationList]]",
-	"campaignevents-invitation-list-processing": "Message on [[Special:InvitationList]] to inform the organizer that the invitation list is being processed."
+	"campaignevents-invitation-list-processing": "Message on [[Special:InvitationList]] to inform the organizer that the invitation list is being processed.",
+	"campaignevents-invitation-list-invalid-id": "Error message shown on [[Special:InvitationList]] when the ID that the user provided is not valid (e.g., if it's not a number).",
+	"campaignevents-invitation-list-does-not-exist": "Error message shown on [[Special:InvitationList]] when the requested invitation list does not exist.",
+	"campaignevents-invitation-list-not-creator": "Error message shown on [[Special:InvitationList]] when the user is attempting to view an invitation list that was not created by them."
+
 }

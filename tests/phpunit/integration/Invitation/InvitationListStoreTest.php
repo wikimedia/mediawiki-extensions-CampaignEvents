@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Invitation;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationList;
+use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Page\PageIdentity;
@@ -57,6 +58,12 @@ class InvitationListStoreTest extends MediaWikiIntegrationTestCase {
 			null,
 			123,
 		];
+	}
+
+	public function testGetInvitationList__doesNotExist() {
+		$store = CampaignEventsServices::getInvitationListStore();
+		$this->expectException( InvitationListNotFoundException::class );
+		$store->getInvitationList( 1234556789 );
 	}
 
 	public function testWorklistRoundtrip() {
