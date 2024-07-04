@@ -475,8 +475,16 @@
 	"campaignevents-worklist-error-nonexistent-titles": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist that contains pages that do not exist. Parameters:\n* $1 - Number of such pages, for PLURAL.\n* $2 - Bullet list that lists with the non-existent pages.",
 	"campaignevents-worklist-error-titles-not-mainspace": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist that contains pages that are not in the main namespace. Parameters:\n* $1 - Number of such pages, for PLURAL.\n* $2 - Bullet list with those pages.",
 	"invitationlist": "Description of [[Special:InvitationList]]",
+	"campaignevents-invitationlist-event": "Title of [[Special:InvitationList]] (see also {{msg-mw|invitationlist}}) used when a specific invitation list is opened. Parameters:\n* $1 - Name of the invitation list.",
 	"campaignevents-invitation-list-processing": "Message on [[Special:InvitationList]] to inform the organizer that the invitation list is being processed.",
 	"campaignevents-invitation-list-invalid-id": "Error message shown on [[Special:InvitationList]] when the ID that the user provided is not valid (e.g., if it's not a number).",
 	"campaignevents-invitation-list-does-not-exist": "Error message shown on [[Special:InvitationList]] when the requested invitation list does not exist.",
-	"campaignevents-invitation-list-not-creator": "Error message shown on [[Special:InvitationList]] when the user is attempting to view an invitation list that was not created by them."
+	"campaignevents-invitation-list-not-creator": "Error message shown on [[Special:InvitationList]] when the user is attempting to view an invitation list that was not created by them.",
+	"campaignevents-invitation-list-intro": "Introductory text shown on [[Special:InvitationList]] to describe the content of the page. Parameters:\n* $1 - Number of potentially interested editors found.",
+	"campaignevents-invitationlist-no-editors": "Message shown on [[Special:InvitationList]] when no potentially interested editors were found.",
+	"campaignevents-invitationlist-highly-recommended": "Section label used on [[Special:InvitationList]] to introduce a list of users who are more likely to be interested in joining the organizer's activity. See {{msg-mw|campaignevents-invitationlist-highly-recommended-info}}.",
+	"campaignevents-invitationlist-highly-recommended-info": "Informational text used on [[Special:InvitationList]] to provide more information about the {{msg-mw|campaignevents-invitationlist-highly-recommended}} section.",
+	"campaignevents-invitationlist-recommended": "Section label used on [[Special:InvitationList]] to introduce a list of users who might be interested in joining the organizer's activity. See {{msg-mw|campaignevents-invitationlist-recommended-info}}.",
+	"campaignevents-invitationlist-recommended-info": "Informational text used on [[Special:InvitationList]] to provide more information about the {{msg-mw|campaignevents-invitationlist-recommended}} section.",
+	"campaignevents-invitationlist-worklist-label": "Section label used on [[Special:InvitationList]] for the list of articles (provided by the organizer) that were used to generate a list of potentially interested editors. The section is initially collapsed, and clicking on the label makes it visible; \"View\" is a verb."
 }

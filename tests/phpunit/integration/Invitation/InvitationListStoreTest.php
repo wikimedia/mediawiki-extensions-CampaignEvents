@@ -141,6 +141,7 @@ class InvitationListStoreTest extends MediaWikiIntegrationTestCase {
 		];
 		$listID = 10;
 		$store->storeInvitationListUsers( $listID, $users );
+		arsort( $users );
 		$this->assertSame( $users, $store->getInvitationListUsers( $listID ) );
 	}
 }

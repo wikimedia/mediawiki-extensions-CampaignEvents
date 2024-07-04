@@ -30,7 +30,7 @@ class PotentialInviteesFinder {
 	 * TODO: Is 3 years OK?
 	 */
 	private const CUTOFF_DAYS = 3 * 365;
-	private const RESULT_USER_LIMIT = 200;
+	public const RESULT_USER_LIMIT = 200;
 	private const REVISIONS_PER_PAGE_LIMIT = 5_000;
 
 	private RevisionStoreFactory $revisionStoreFactory;
