@@ -355,7 +355,9 @@ return [
 			$services->get( CampaignsPageFactory::SERVICE_NAME ),
 			$services->get( PageEventLookup::SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( InvitationListStore::SERVICE_NAME ),
+			$services->getJobQueueGroup()
 		);
 	},
 	InvitationListStore::SERVICE_NAME => static function ( MediaWikiServices $services ): InvitationListStore {
