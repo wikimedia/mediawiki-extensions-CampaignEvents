@@ -465,5 +465,11 @@
 	"campaignevents-invitation-list-error-empty-name": "Error message shown on [[Special:GenerateInvitationList]] when the user does not enter a name for the invitation list.",
 	"campaignevents-invitation-list-error-invalid-page": "Error message shown on [[Special:GenerateInvitationList]] when the user enters an invalid event page (for example, a page that is not in the Event: namespace, or an event page that does not use Event Registration).",
 	"campaignevents-invitation-list-error-event-ended": "Error message shown on [[Special:GenerateInvitationList]] when the user enters the name of an event which has already ended.",
-	"campaignevents-invitation-list-error-not-organizer": "Error message shown on [[Special:GenerateInvitationList]] when the user enters the name of an event for which they are not listed as an organizer."
+	"campaignevents-invitation-list-error-not-organizer": "Error message shown on [[Special:GenerateInvitationList]] when the user enters the name of an event for which they are not listed as an organizer.",
+
+	"campaignevents-worklist-error-empty": "Error message shown on [[Special:GenerateInvitationList]] when the user submits an empty worklist.",
+	"campaignevents-worklist-error-too-large": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist with too many articles. Parameters:\n*$1 - number of article entered;\n*$2 - maximum number of allowed articles (in the order of hundreds)",
+	"campaignevents-worklist-error-invalid-titles": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist that contains invalid titles. Parameters:\n* $1 - Number of invalid titles, for PLURAL.\n* $2 - Bullet list with the invalid titles.",
+	"campaignevents-worklist-error-nonexistent-titles": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist that contains pages that do not exist. Parameters:\n* $1 - Number of such pages, for PLURAL.\n* $2 - Bullet list that lists with the non-existent pages.",
+	"campaignevents-worklist-error-titles-not-mainspace": "Error message shown on [[Special:GenerateInvitationList]] when the user submits a worklist that contains pages that are not in the main namespace. Parameters:\n* $1 - Number of such pages, for PLURAL.\n* $2 - Bullet list with those pages."
 }

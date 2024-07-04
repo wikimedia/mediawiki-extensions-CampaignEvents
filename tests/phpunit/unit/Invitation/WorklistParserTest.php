@@ -5,15 +5,16 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Invitation;
 
 use Generator;
-use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
 use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
+use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWikiUnitTestCase;
+use StatusValue;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser
@@ -51,17 +52,19 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 		$expectedWorklist = new Worklist( [
 			$wiki => array_values( $pages )
 		] );
-		$this->assertEquals( $expectedWorklist, $parser->parseWorklist( [ $wiki => array_keys( $pages ) ] ) );
+		$status = $parser->parseWorklist( [ $wiki => array_keys( $pages ) ] );
+		$this->assertStatusGood( $status );
+		$this->assertEquals( $expectedWorklist, $status->getValue() );
 	}
 
 	/**
 	 * @param array $pages
 	 * @param array<string,ProperPageIdentity|null> $pageToObjMap Array that maps page names to the page identity
 	 * (or null) that PageStore should return for that page.
-	 * @param string $expectedError
+	 * @param StatusValue $expected
 	 * @dataProvider provideParseWorklist
 	 */
-	public function testParseWorklist__error( array $pages, array $pageToObjMap, string $expectedError ) {
+	public function testParseWorklist__error( array $pages, array $pageToObjMap, StatusValue $expected ) {
 		$pageStore = $this->createMock( PageStore::class );
 		$pageStore->method( 'getPageByText' )
 			->willReturnCallback( static function ( $page ) use ( $pageToObjMap ) {
@@ -73,9 +76,8 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 		$pageStoreFactory = $this->createMock( PageStoreFactory::class );
 		$pageStoreFactory->method( 'getPageStore' )->willReturn( $pageStore );
 		$parser = $this->getWorklistParser( $pageStoreFactory );
-		$this->expectException( InvalidArgumentException::class );
-		$this->expectExceptionMessage( $expectedError );
-		$parser->parseWorklist( $pages );
+		$status = $parser->parseWorklist( $pages );
+		$this->assertStatusMessagesExactly( $expected, $status );
 	}
 
 	public static function provideParseWorklist(): Generator {
@@ -110,6 +112,8 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 			$pageToObjMap[$validTitle] = new PageIdentityValue( random_int( 1, 1000 ), NS_MAIN, $validTitle, $wiki );
 		}
 
+		$makeList = static fn ( ...$titles ) => "<ul>\n<li>" . implode( "</li>\n<li>", $titles ) . "</li>\n</ul>";
+
 		yield 'Single invalid title' => [
 			[
 				$wiki => [
@@ -118,7 +122,11 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				]
 			],
 			$pageToObjMap,
-			"Invalid title: $invalidTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-invalid-titles',
+				1,
+				$makeList( $invalidTitles[0] )
+			),
 		];
 		yield 'Multiple invalid titles' => [
 			[
@@ -129,7 +137,11 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Invalid title: $invalidTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-invalid-titles',
+				2,
+				$makeList( $invalidTitles[0], $invalidTitles[1] )
+			),
 		];
 		yield 'Single nonexistent page' => [
 			[
@@ -139,7 +151,11 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Page does not exist: $nonexistentTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-nonexistent-titles',
+				1,
+				$makeList( $nonexistentTitles[0] )
+			),
 		];
 		yield 'Multiple nonexistent pages' => [
 			[
@@ -150,7 +166,11 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Page does not exist: $nonexistentTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-nonexistent-titles',
+				2,
+				$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
+			),
 		];
 		yield 'Single non-mainspace page' => [
 			[
@@ -160,7 +180,11 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Page is not in the mainspace: $nonMainspaceTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-titles-not-mainspace',
+				1,
+				$makeList( $nonMainspaceTitles[0] )
+			),
 		];
 		yield 'Multiple non-mainspace pages' => [
 			[
@@ -171,7 +195,11 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Page is not in the mainspace: $nonMainspaceTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-titles-not-mainspace',
+				2,
+				$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
+			),
 		];
 
 		yield 'Two invalid, two nonexistent pages' => [
@@ -184,7 +212,16 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Invalid title: $invalidTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-invalid-titles',
+				2,
+				$makeList( $invalidTitles[0], $invalidTitles[1] )
+			)
+				->fatal(
+					'campaignevents-worklist-error-nonexistent-titles',
+					2,
+					$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
+				),
 		];
 		yield 'Two nonexistent, two non-mainspace pages' => [
 			[
@@ -196,7 +233,16 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Page does not exist: $nonexistentTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-nonexistent-titles',
+				2,
+				$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
+			)
+				->fatal(
+					'campaignevents-worklist-error-titles-not-mainspace',
+					2,
+					$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
+				),
 		];
 		yield 'Two invalid, two non-mainspace pages' => [
 			[
@@ -208,7 +254,16 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Invalid title: $invalidTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-invalid-titles',
+				2,
+				$makeList( $invalidTitles[0], $invalidTitles[1] )
+			)
+				->fatal(
+					'campaignevents-worklist-error-titles-not-mainspace',
+					2,
+					$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
+				),
 		];
 		yield 'Two invalid, two nonexistent, two non-mainspace pages' => [
 			[
@@ -222,7 +277,21 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Invalid title: $invalidTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-invalid-titles',
+				2,
+				$makeList( $invalidTitles[0], $invalidTitles[1] )
+			)
+				->fatal(
+					'campaignevents-worklist-error-nonexistent-titles',
+					2,
+					$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
+				)
+				->fatal(
+					'campaignevents-worklist-error-titles-not-mainspace',
+					2,
+					$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
+				),
 		];
 
 		yield 'Page does not exist and is not in the mainspace' => [
@@ -232,13 +301,17 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				],
 			],
 			$pageToObjMap,
-			"Page does not exist: $nonExistentNonMainspaceTitles[0]",
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-nonexistent-titles',
+				1,
+				$makeList( $nonExistentNonMainspaceTitles[0] )
+			),
 		];
 
 		yield 'Empty list' => [
 			[],
 			$pageToObjMap,
-			'Empty list of articles'
+			StatusValue::newFatal( 'campaignevents-worklist-error-empty' ),
 		];
 
 		yield 'Wiki with empty list' => [
@@ -246,7 +319,7 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				$wiki => []
 			],
 			$pageToObjMap,
-			'Empty list of articles'
+			StatusValue::newFatal( 'campaignevents-worklist-error-empty' ),
 		];
 
 		yield 'Too many pages' => [
@@ -254,7 +327,11 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 				$wiki => range( 1, WorklistParser::ARTICLES_LIMIT + 1 )
 			],
 			[],
-			'The worklist has more than'
+			StatusValue::newFatal(
+				'campaignevents-worklist-error-too-large',
+				Message::numParam( WorklistParser::ARTICLES_LIMIT + 1 ),
+				Message::numParam( WorklistParser::ARTICLES_LIMIT )
+			),
 		];
 	}
 }

@@ -29,14 +29,15 @@ class PotentialInviteesFinderTest extends MediaWikiIntegrationTestCase {
 				'Page 3',
 			]
 		];
-		$worklist = CampaignEventsServices::getWorklistParser()->parseWorklist( $pageNamesByWiki );
+		$worklistStatus = CampaignEventsServices::getWorklistParser()->parseWorklist( $pageNamesByWiki );
+		$this->assertStatusGood( $worklistStatus );
 		$debugLogs = '';
 		$debugLogCollector = static function ( string $msg ) use ( &$debugLogs ): void {
 			$debugLogs .= $msg . "\n";
 		};
 		$finder = CampaignEventsServices::getPotentialInviteesFinder();
 		$finder->setDebugLogger( $debugLogCollector );
-		$invitationList = $finder->generate( $worklist );
+		$invitationList = $finder->generate( $worklistStatus->getValue() );
 
 		$this->assertArrayEquals(
 			[
