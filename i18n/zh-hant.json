@@ -158,7 +158,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "已截止報名",
 	"campaignevents-eventpage-btn-event-ended": "活動結束",
 	"campaignevents-eventpage-dialog-title": "活動詳情",
-	"campaignevents-eventpage-dialog-organizers": "籌辦人員：$1",
+	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|籌辦人員}}：$1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "檢視所有籌辦人員",
 	"campaignevents-eventpage-dialog-participants": "$1位{{PLURAL:$1|參與者}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1位{{PLURAL:$1|參與者}}未公開報名",
@@ -364,5 +364,6 @@
 	"campaignevents-generateinvitationlist-submit-button-text": "產生",
 	"campaignevents-invitation-list-not-allowed": "您不被允許使用邀請名單。",
 	"myinvitationlists": "您的邀請名單",
-	"campaignevents-myinvitationslist-generate-button": "建立新的邀請名單"
+	"campaignevents-myinvitationslist-generate-button": "建立新的邀請名單",
+	"invitationlist": "邀請名單"
 }

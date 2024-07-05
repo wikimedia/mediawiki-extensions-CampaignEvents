@@ -446,5 +446,16 @@
 	"campaignevents-invitation-list-not-allowed": "Die Nutzung von Einladungslisten ist nicht gestattet.",
 	"myinvitationlists": "{{#FORMAL|Deine|Ihre}} Einladungslisten",
 	"campaignevents-myinvitationslist-empty-text": "Entdecke neue Teilnehmer für dein Projekt oder deine Veranstaltung. Stelle eine Liste mit Artikeln bereit, die deine Themenschwerpunkte abdecken. Anschließend erhältst du eine Einladungsliste mit Benutzern, die möglicherweise an der Teilnahme an deinem Projekt oder deiner Veranstaltung interessiert sind.",
-	"campaignevents-myinvitationslist-generate-button": "Neue Einladungsliste erstellen"
+	"campaignevents-myinvitationslist-generate-button": "Neue Einladungsliste erstellen",
+	"campaignevents-invitation-list-error-empty-name": "Einen Namen für die Einladungsliste angeben.",
+	"campaignevents-invitation-list-error-invalid-page": "Gib eine Veranstaltungsseite ein, die die Veranstaltungsanmeldung verwendet.",
+	"campaignevents-invitation-list-error-event-ended": "Diese Veranstaltung ist beendet. Gib eine aktive Veranstaltung ein.",
+	"campaignevents-invitation-list-error-not-organizer": "Ruf eine Veranstaltungenseite auf, auf der du als Veranstalter aufgeführt bist.",
+	"campaignevents-worklist-error-empty": "Gib mindestens einen Artikeltitel ein.",
+	"campaignevents-worklist-error-too-large": "Du hast $1 {{PLURAL:$1|Artikel}} eingegeben. Bitte gib zwischen 1 und $2 {{PLURAL:$2|Artikel}} ein.",
+	"campaignevents-worklist-error-invalid-titles": "{{PLURAL:$1|Der folgende Artikel hat einen ungültigen Titel|Die folgenden Artikel haben ungültige Titel}}. Bitte korrigiere {{PLURAL:$1|den|die}} Titel und versuchen Sie es erneut.\n$2",
+	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Der folgende Artikel wurde|Die folgenden Artikel wurden}} nicht gefunden. Bitte überprüfe {{PLURAL:$1|den Titel|die folgenden Titel}} und versuche es erneut.\n$2",
+	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Der folgende Artikel ist|Die folgenden Artikel sind}} nicht im Haupt-Namensraum. Bitte gib nur Artikel im Haupt-Namensraum ein.\n$2",
+	"invitationlist": "Einladungsliste",
+	"campaignevents-invitation-list-processing": "<strong>Deine Liste der einzuladenden Benutzer wird generiert.</strong> Aktualisiere die Seite in 5-10 Minuten, um deine Einladungsliste anzuzeigen."
 }
