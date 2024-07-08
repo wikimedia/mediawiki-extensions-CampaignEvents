@@ -30,16 +30,9 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 	private const REQ_DATA = [
 		"message" => "Test this with a long message",
 		"subject" => "Test",
-		'invert_users' => "false"
+		'invert_users' => false
 	];
 
-	/**
-	 * @param PermissionChecker|null $permissionsChecker
-	 * @param CampaignsUserMailer|null $campaignsUserMailer
-	 * @param ParticipantsStore|null $participantsStore
-	 * @param IEventLookup|null $eventLookup
-	 * @return EmailUsersHandler
-	 */
 	private function newHandler(
 		PermissionChecker $permissionsChecker = null,
 		CampaignsUserMailer $campaignsUserMailer = null,
