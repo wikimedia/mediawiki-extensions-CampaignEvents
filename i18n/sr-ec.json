@@ -175,5 +175,6 @@
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "Ваш налог је блокиран. Немате приступ овоме.",
 	"campaignevents-generateinvitationlist-event-page-field-label": "Страница догађаја",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Списак чланака",
-	"campaignevents-generateinvitationlist-submit-button-text": "Генериши"
+	"campaignevents-generateinvitationlist-submit-button-text": "Генериши",
+	"campaignevents-worklist-error-empty": "Наведите бар један чланак."
 }

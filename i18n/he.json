@@ -455,7 +455,7 @@
 	"campaignevents-worklist-error-empty": "יש להזין לפחות כותרת ערך אחת.",
 	"campaignevents-worklist-error-too-large": "הזנת {{PLURAL:$1|ערך אחד|$1 ערכים}}. נא להזין בין 1 ל־$2 {{PLURAL:$2|ערכים}}.",
 	"campaignevents-worklist-error-invalid-titles": " {{PLURAL:$1|לערך הבא יש כותרת בלתי־תקינה|לערכים הבאים יש כותרות בלתי־תקינות}}. נאל תקן את {{PLURAL:$1|הכותרת|הכותרות}} ולנסות שוב.\n$2",
-	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|הערך הבא לא נמצא|הערכים הבאים לא נמצאו}}. נא לוודא את {{PLURAL:$1|הכותרת|הכותרות}} ולנסות שוב.",
+	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|הערך הבא לא נמצא|הערכים הבאים לא נמצאו}}. נא לוודא את {{PLURAL:$1|הכותרת|הכותרות}} ולנסות שוב.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|הערך הבא|הערכים הבאים}} לא נמצאים במרחב השם הראשי. נא להזין ערכים במרחב השם הראשי בלבד.\n$2",
 	"invitationlist": "רשימת הזמנות",
 	"campaignevents-invitation-list-processing": "<strong>רשימת העורכים המוזמנים שלך נוצרת.</strong> יש לרענן את הדף תוך 5-10 דקות כדי להציג את רשימת ההזמנות שלך."

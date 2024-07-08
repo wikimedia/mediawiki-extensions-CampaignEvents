@@ -428,5 +428,16 @@
 	"campaignevents-register-page-nonlocal": "Prosimo, '''[$1 dokončajte registracijo dogodka v $2]''', vikiju, kjer je bil dogodek ustvarjen.",
 	"campaignevents-delete-registration-page-nonlocal": "Prosimo, '''[$1 izbrišite registracijo dogodka v $2]''', vikiju, kjer je bil dogodek ustvarjen.",
 	"campaignevents-event-details-page-nonlocal": "Trenutno si ogledujete omejeno različico te strani. Za dostop do vseh podrobnosti dogodka in dodatnih možnosti <b>[$1 obiščite to stran v $2]</b>, vikiju, kjer je bil dogodek ustvarjen.",
-	"campaignevents-event-details-not-local-wiki-prompt": "Ogled v [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Ogled v [$1 $2]",
+	"campaignevents-invitation-list-error-empty-name": "Vnesite ime seznama povabil.",
+	"campaignevents-invitation-list-error-invalid-page": "Vnesite stran dogodka, ki uporablja prijavo na dogodek.",
+	"campaignevents-invitation-list-error-event-ended": "Ta dogodek se je končal. Vnesite aktiven dogodek.",
+	"campaignevents-invitation-list-error-not-organizer": "Vnesite stran dogodka, na kateri ste navedeni kot organizator.",
+	"campaignevents-worklist-error-empty": "Vnesite vsaj en naslov članka.",
+	"campaignevents-worklist-error-too-large": "Vnesli ste $1 {{PLURAL:$1|članek|članka|članke|člankov}}. Vnesite med 1 in $2 {{PLURAL:$2|članki}}.",
+	"campaignevents-worklist-error-invalid-titles": "{{PLURAL:$1|Naslednji članek ima neveljaven naslov|Naslednja članka imata neveljavna naslova|Naslednji članki imajo neveljavne naslove}}. Popravite {{PLURAL:$1|ga|ju|jih}} in poskusite znova.\n $2",
+	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Naslednji članek je bil najden|Naslednja članka sta bila najdena|Naslednji članki so bili najdeni}}. Preverite {{PLURAL:$1|naslov|naslova|naslove}} in poskusite znova.\n$2",
+	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Naslednji članek ni|Naslednja članka nista|Naslednji članki niso}} v glavnem imenskem prostoru. Prosimo, vnašajte članke samo v glavni imenski prostor.\n $2",
+	"invitationlist": "Seznam povabil",
+	"campaignevents-invitation-list-processing": "<strong>Vaš seznam urejevalcev, ki jih želite povabiti, se ustvarja.</strong> Osvežite stran v 5–10 minutah, da si ogledate seznam povabil."
 }

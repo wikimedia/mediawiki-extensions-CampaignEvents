@@ -199,7 +199,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "Пријавувањето е завршено",
 	"campaignevents-eventpage-btn-event-ended": "Настанот заврши",
 	"campaignevents-eventpage-dialog-title": "Поединости за настанот",
-	"campaignevents-eventpage-dialog-organizers": "Приредувач: $1",
+	"campaignevents-eventpage-dialog-organizers": "Приредено {{PLURAL:$2|од}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Погл. сите приредувачи",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|учесник|учесници}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 приватно {{PLURAL:$1|пријавен учесник|пријавени учесници}}",
@@ -447,5 +447,16 @@
 	"campaignevents-invitation-list-not-allowed": "Не ви е дозволено да користите списоци со покани.",
 	"myinvitationlists": "Ваши списоци со покани",
 	"campaignevents-myinvitationslist-empty-text": "Откријте нови учесници на вашиот проект или настан. Дајте список на статии кои ги покриваат вашите тематски подрачја. Потоа ќе добиете список со покани кон уредници кои можеби се заинтересирани да ви се приклучат во проектот или настанот.",
-	"campaignevents-myinvitationslist-generate-button": "Создај нов список со покани"
+	"campaignevents-myinvitationslist-generate-button": "Создај нов список со покани",
+	"campaignevents-invitation-list-error-empty-name": "Внесете име на списокот со покани.",
+	"campaignevents-invitation-list-error-invalid-page": "Внесете страница за настанот што користи Пријавување на настани.",
+	"campaignevents-invitation-list-error-event-ended": "Овој настан заврши. Внесете тековен настан.",
+	"campaignevents-invitation-list-error-not-organizer": "Внесете страница за настанот што ве наведува како приредувач.",
+	"campaignevents-worklist-error-empty": "Внесете барем еден наслов на статија.",
+	"campaignevents-worklist-error-too-large": "Внесовте $1 {{PLURAL:$1|статија|статии}}. Внесете помеѓу 1 и $2 {{PLURAL:$2|статија|статии}}.",
+	"campaignevents-worklist-error-invalid-titles": "{{PLURAL:$1|Следнава статија има неважечки наслов|Следниве статии имаат неважечки наслови}}. Исправете {{PLURAL:$1|го|ги насловите}} и обидете се повторно.\n$2",
+	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Следнава статија не е најдена|Следниве статии не се најдени}}. Проверете {{PLURAL:$1|го насловот|ги насловите}} и обидете се повторно.\n$2",
+	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Следнава статија не е|Следниве статии не се}} во главниот именски простор. Внесувајте само статии во тој простор.\n$2",
+	"invitationlist": "Список со покани",
+	"campaignevents-invitation-list-processing": "<strong>Вашиот список со покани до уредници е создаден.</strong> Превчитајте ја страницата за 5-10 минути за да го погледате."
 }

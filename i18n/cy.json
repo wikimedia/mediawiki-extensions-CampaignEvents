@@ -70,7 +70,7 @@
 	"campaignevents-eventpage-btn-cancel": "Canslo cofrestriad",
 	"campaignevents-eventpage-btn-event-ended": "Digwyddiad wedi gorffen",
 	"campaignevents-eventpage-dialog-title": "Manylion y digwyddiad",
-	"campaignevents-eventpage-dialog-organizers": "Trefnwyd gan: $1",
+	"campaignevents-eventpage-dialog-organizers": "Wedi trefnu {{PLURAL:$2|gan}}: $1",
 	"campaignevents-eventpage-dialog-dates": "$1 - $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Cylchfa amser:</strong> $1",
 	"campaignevents-eventpage-dialog-location-label": "Lleoliad",
