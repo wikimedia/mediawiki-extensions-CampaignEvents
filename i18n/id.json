@@ -3,6 +3,7 @@
 		"authors": [
 			"DARMAS BUDI SANTOSO",
 			"Rachmat04",
+			"Rebeccayoga",
 			"Veracious"
 		]
 	},
@@ -415,5 +416,7 @@
 	"campaignevents-participant-question-no-response": "Tidak ada respons",
 	"campaignevents-warning-change-event-end-date-past": "Jika Anda mengubah tanggal akhir ke tanggal yang lalu, acara akan ditutup dan Anda akan menerima ringkasan tanggapan peserta. Tindakan ini tidak bisa dibatalkan. Hal ini hanya berlaku jika peserta telah memberikan jawaban atas pertanyaannya.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Respons setiap peserta telah dihapus dan respons gabungan tersedia di [$1 {{int:campaignevents-event-details-tab-stats}}].",
-	"campaignevents-event-register-for-event-title": "Daftar untuk $1"
+	"campaignevents-event-register-for-event-title": "Daftar untuk $1",
+	"myinvitationlists": "Daftar undangan Anda",
+	"campaignevents-myinvitationslist-generate-button": "Buat daftar undangan baru"
 }
