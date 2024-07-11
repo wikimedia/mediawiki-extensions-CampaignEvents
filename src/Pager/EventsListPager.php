@@ -27,7 +27,6 @@ use OOUI\Tag;
 use stdClass;
 use UnexpectedValueException;
 use Wikimedia\Rdbms\IResultWrapper;
-use Wikimedia\Rdbms\OrExpressionGroup;
 use Wikimedia\Timestamp\TimestampException;
 
 class EventsListPager extends ReverseChronologicalPager {
@@ -415,7 +414,7 @@ class EventsListPager extends ReverseChronologicalPager {
 				if ( $endOffset ) {
 					$withinDatesCondition = $withinDatesCondition->and( 'event_end_utc', '<=', $endOffset );
 				}
-				$conds[] = new OrExpressionGroup( $crossStartCondition, $withinDatesCondition );
+				$conds[] = $this->mDb->orExpr( [ $crossStartCondition, $withinDatesCondition ] );
 			} elseif ( $endOffset ) {
 				$conds[] = $this->mDb->expr( $this->getTimestampField(), '<=', $endOffset );
 			}
