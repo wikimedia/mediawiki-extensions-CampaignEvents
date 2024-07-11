@@ -23,6 +23,7 @@ describe( 'MyEvents', function () {
 	} );
 
 	// Skip it because we temporarily removed this option from the menu.
+	// Skipped on 2024-04-15 in 1019807 because of T360051
 	it.skip( 'can allow organizer to close registration of first event in My Events', async function () {
 		await MyEventsPage.filterByOpenRegistrations();
 		await MyEventsPage.closeFirstRegistration();
