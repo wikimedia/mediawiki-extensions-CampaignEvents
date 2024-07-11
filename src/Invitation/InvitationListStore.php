@@ -107,6 +107,11 @@ class InvitationListStore {
 			->execute();
 	}
 
+	/**
+	 * @param int $listID
+	 * @return InvitationList
+	 * @throws InvitationListNotFoundException
+	 */
 	public function getInvitationList( int $listID ): InvitationList {
 		$dbr = $this->databaseHelper->getDBConnection( DB_REPLICA );
 		$row = $dbr->newSelectQueryBuilder()
@@ -115,6 +120,10 @@ class InvitationListStore {
 			->where( [ 'ceil_id' => $listID ] )
 			->caller( __METHOD__ )
 			->fetchRow();
+
+		if ( !$row ) {
+			throw new InvitationListNotFoundException( $listID );
+		}
 
 		$eventID = $row->ceil_event_id !== null ? (int)$row->ceil_event_id : null;
 		return new InvitationList(
