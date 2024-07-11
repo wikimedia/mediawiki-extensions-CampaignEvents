@@ -112,7 +112,7 @@
 	"JobClasses": {
 		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob",
 		"CampaignEventsFindPotentialInvitees": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Invitation\\CampaignEventsFindPotentialInvitees",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Invitation\\FindPotentialInviteesJob",
 			"needsPage": false
 		}
 	},

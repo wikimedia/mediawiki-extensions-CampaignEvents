@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Invitation;
 
+use JobQueueGroup;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -25,21 +26,34 @@ class InvitationListGenerator {
 	private PageEventLookup $pageEventLookup;
 	private OrganizersStore $organizersStore;
 	private CampaignsCentralUserLookup $centralUserLookup;
+	private InvitationListStore $invitationListStore;
+	private JobQueueGroup $jobQueueGroup;
 
 	public function __construct(
 		PermissionChecker $permissionChecker,
 		CampaignsPageFactory $pageFactory,
 		PageEventLookup $pageEventLookup,
 		OrganizersStore $organizersStore,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		InvitationListStore $invitationListStore,
+		JobQueueGroup $jobQueueGroup
 	) {
 		$this->permissionChecker = $permissionChecker;
 		$this->pageFactory = $pageFactory;
 		$this->pageEventLookup = $pageEventLookup;
 		$this->organizersStore = $organizersStore;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->invitationListStore = $invitationListStore;
+		$this->jobQueueGroup = $jobQueueGroup;
 	}
 
+	/**
+	 * @param string $name
+	 * @param string|null $eventPage
+	 * @param Worklist $worklist
+	 * @param ICampaignsAuthority $performer
+	 * @return StatusValue If good, the value shall be the ID of the invitation list.
+	 */
 	public function createIfAllowed(
 		string $name,
 		?string $eventPage,
@@ -60,6 +74,13 @@ class InvitationListGenerator {
 		return PermissionStatus::newGood();
 	}
 
+	/**
+	 * @param string $name
+	 * @param string|null $eventPage
+	 * @param Worklist $worklist
+	 * @param ICampaignsAuthority $performer
+	 * @return StatusValue If good, the value shall be the ID of the invitation list.
+	 */
 	public function createUnsafe(
 		string $name,
 		?string $eventPage,
@@ -69,15 +90,34 @@ class InvitationListGenerator {
 		if ( trim( $name ) === '' ) {
 			return StatusValue::newFatal( 'campaignevents-invitation-list-error-empty-name' );
 		}
+
+		$eventID = null;
 		if ( $eventPage !== null ) {
 			$eventPageStatus = $this->validateEventPage( $eventPage, $performer );
 			if ( !$eventPageStatus->isGood() ) {
 				return $eventPageStatus;
 			}
+			$eventID = $eventPageStatus->getValue();
 		}
-		return StatusValue::newGood();
+
+		$user = $this->centralUserLookup->newFromAuthority( $performer );
+		$listID = $this->invitationListStore->createInvitationList( $name, $eventID, $user );
+		$this->invitationListStore->storeWorklist( $listID, $worklist );
+
+		$findInviteesJob = new FindPotentialInviteesJob( [
+			'list-id' => $listID,
+			'serialized-worklist' => $worklist->toPlainArray()
+		] );
+		$this->jobQueueGroup->push( $findInviteesJob );
+
+		return StatusValue::newGood( $listID );
 	}
 
+	/**
+	 * @param string $eventPage
+	 * @param ICampaignsAuthority $performer
+	 * @return StatusValue Can have fatal errors, or if good, the value shall be the event ID.
+	 */
 	public function validateEventPage( string $eventPage, ICampaignsAuthority $performer ): StatusValue {
 		try {
 			$page = $this->pageFactory->newLocalExistingPageFromString( $eventPage );
@@ -98,6 +138,6 @@ class InvitationListGenerator {
 			return StatusValue::newFatal( 'campaignevents-invitation-list-error-not-organizer' );
 		}
 
-		return StatusValue::newGood();
+		return StatusValue::newGood( $event->getID() );
 	}
 }

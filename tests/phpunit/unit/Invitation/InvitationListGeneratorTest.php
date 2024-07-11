@@ -5,9 +5,12 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Invitation;
 
 use Generator;
+use JobQueueGroup;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
+use MediaWiki\Extension\CampaignEvents\Invitation\FindPotentialInviteesJob;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
+use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -16,7 +19,9 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidEventPageException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Page\PageIdentityValue;
 use MediaWikiUnitTestCase;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator
@@ -36,7 +41,9 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 		PermissionChecker $permissionChecker = null,
 		CampaignsPageFactory $campaignsPageFactory = null,
 		PageEventLookup $pageEventLookup = null,
-		OrganizersStore $organizersStore = null
+		OrganizersStore $organizersStore = null,
+		InvitationListStore $invitationListStore = null,
+		JobQueueGroup $jobQueueGroup = null
 	): InvitationListGenerator {
 		if ( !$permissionChecker ) {
 			$permissionChecker = $this->createMock( PermissionChecker::class );
@@ -47,7 +54,9 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 			$campaignsPageFactory ?? $this->createMock( CampaignsPageFactory::class ),
 			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
-			$this->createMock( CampaignsCentralUserLookup::class )
+			$this->createMock( CampaignsCentralUserLookup::class ),
+			$invitationListStore ?? $this->createMock( InvitationListStore::class ),
+			$jobQueueGroup ?? $this->createMock( JobQueueGroup::class )
 		);
 	}
 
@@ -115,15 +124,43 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 		$organizersStore->method( 'isEventOrganizer' )
 			->willReturn( $isOrganizer );
 
-		$generator = $this->getGenerator( null, $pageFactory, $pageEventLookup, $organizersStore );
-		$worklist = $this->createMock( Worklist::class );
+		$worklist = new Worklist( [
+			'some_wiki' => [
+				new PageIdentityValue( 42, NS_MAIN, 'Some_title', 'some_wiki' )
+			]
+		] );
 		$performer = $this->createMock( ICampaignsAuthority::class );
+
+		$invitationListStore = $this->createMock( InvitationListStore::class );
+		$jobQueueGroup = $this->createMock( JobQueueGroup::class );
+		$listID = 123456;
+		if ( !$expectedError ) {
+			$invitationListStore->expects( $this->once() )
+				->method( 'createInvitationList' )
+				->willReturn( $listID );
+			$serializedWorkList = [ 'some_wiki' => [ [ 42, NS_MAIN, 'Some_title', 'some_wiki' ] ] ];
+			$jobQueueGroup->expects( $this->once() )
+				->method( 'push' )
+				->willReturnCallback( function ( $job ) use ( $listID, $worklist ) {
+					$this->assertInstanceOf( FindPotentialInviteesJob::class, $job );
+					/** @var TestingAccessWrapper&FindPotentialInviteesJob $jobWrapper */
+					$jobWrapper = TestingAccessWrapper::newFromObject( $job );
+					$this->assertSame( $listID, $jobWrapper->listID );
+					$this->assertEquals( $worklist, $jobWrapper->worklist );
+				} );
+		}
+
+		$generator = $this->getGenerator(
+			null, $pageFactory, $pageEventLookup, $organizersStore, $invitationListStore, $jobQueueGroup
+		);
+
 		$res = $generator->createUnsafe( $name, $eventPageTitle, $worklist, $performer );
 		if ( $expectedError ) {
 			$this->assertStatusNotGood( $res );
 			$this->assertStatusMessage( $expectedError, $res );
 		} else {
 			$this->assertStatusGood( $res );
+			$this->assertStatusValue( $listID, $res );
 		}
 	}
 

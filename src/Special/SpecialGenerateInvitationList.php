@@ -11,9 +11,11 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
 use MediaWiki\SpecialPage\FormSpecialPage;
+use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\MessageWidget;
+use RuntimeException;
 use StatusValue;
 
 class SpecialGenerateInvitationList extends FormSpecialPage {
@@ -22,6 +24,9 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 	private PermissionChecker $permissionChecker;
 	private InvitationListGenerator $invitationListGenerator;
 	private WorklistParser $worklistParser;
+
+	/** @var int|null ID of the newly-generated list. Only set upon successful form submission. */
+	private ?int $listID = null;
 
 	public function __construct(
 		PermissionChecker $permissionChecker,
@@ -129,12 +134,28 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 			// This shouldn't actually happen in practice thanks to validation-callback
 			return Status::wrap( $worklistStatus );
 		}
-		return Status::wrap( $this->invitationListGenerator->createIfAllowed(
+
+		$invitationListStatus = $this->invitationListGenerator->createIfAllowed(
 			$data['InvitationListName'],
 			$eventPage,
 			$worklistStatus->getValue(),
 			new MWAuthorityProxy( $this->getAuthority() )
-		) );
+		);
+		if ( $invitationListStatus->isGood() ) {
+			$this->listID = $invitationListStatus->getValue();
+		}
+		return Status::wrap( $invitationListStatus );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onSuccess(): void {
+		if ( $this->listID === null ) {
+			throw new RuntimeException( "List ID is unset" );
+		}
+		$invitationListPage = SpecialPage::getTitleFor( SpecialInvitationList::PAGE_NAME, (string)$this->listID );
+		$this->getOutput()->redirect( $invitationListPage->getLocalURL() );
 	}
 
 	/**
