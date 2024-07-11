@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nemoralis"
+		]
+	},
+	"campaignevents-desc": "Tədbir təşkilatçıları və iştirakçıları üçün funksiyalar təqdim edir.",
+	"nstab-event": "Tədbir",
+	"action-campaignevents-enable-registration": "tədbir qeydiyyatını aktivləşdirmək",
+	"right-campaignevents-enable-registration": "Tədbir qeydiyyatını aktivləşdirmək",
+	"action-campaignevents-delete-registration": "tədbir qeydiyyatını silmək",
+	"right-campaignevents-delete-registration": "Tədbir qeydiyyatını silmək",
+	"action-campaignevents-organize-events": "tədbirlər təşkil etmək",
+	"right-campaignevents-organize-events": "Tədbirlər təşkil etmək",
+	"action-campaignevents-email-participants": "tədbir iştirakçılarına e-poçt göndərmək",
+	"right-campaignevents-email-participants": "Tədbir iştirakçılarına e-poçt göndərmək",
+	"specialpages-group-campaignevents": "Tədbirlər",
+	"campaignevents-error-invalid-id": "Tədbir identifikatoru müsbət tam ədəd olmalıdır.",
+	"campaignevents-error-empty-title": "Tədbir səhifəsinin başlığını daxil edin.",
+	"campaignevents-error-invalid-title": "Tədbir səhifəsinin başlığı etibarsızdır: $1.",
+	"campaignevents-error-invalid-title-interwiki": "Yerli vikidə tədbir səhifəsini göstərin.",
+	"campaignevents-error-page-not-found": "Bu adda tədbir səhifəsi yoxdur.",
+	"campaignevents-error-page-not-event-namespace": "Tədbir səhifəsi {{ns:event}} ad fəzasında olmalıdır.",
+	"campaignevents-error-page-with-section": "Tədbir səhifəsində bölmə adı olmamalıdır.",
+	"campaignevents-error-invalid-chat-url": "Etibarlı söhbət URL-i daxil edin.",
+	"campaignevents-error-trackingtool-without-eventid": "Verilmiş izləmə alətində tədbirin identifikatorunu təqdim edin."
+}
