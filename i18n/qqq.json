@@ -476,5 +476,4 @@
 	"campaignevents-invitation-list-invalid-id": "Error message shown on [[Special:InvitationList]] when the ID that the user provided is not valid (e.g., if it's not a number).",
 	"campaignevents-invitation-list-does-not-exist": "Error message shown on [[Special:InvitationList]] when the requested invitation list does not exist.",
 	"campaignevents-invitation-list-not-creator": "Error message shown on [[Special:InvitationList]] when the user is attempting to view an invitation list that was not created by them."
-
 }

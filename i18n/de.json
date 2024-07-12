@@ -457,5 +457,8 @@
 	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Der folgende Artikel wurde|Die folgenden Artikel wurden}} nicht gefunden. Bitte überprüfe {{PLURAL:$1|den Titel|die folgenden Titel}} und versuche es erneut.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Der folgende Artikel ist|Die folgenden Artikel sind}} nicht im Haupt-Namensraum. Bitte gib nur Artikel im Haupt-Namensraum ein.\n$2",
 	"invitationlist": "Einladungsliste",
-	"campaignevents-invitation-list-processing": "<strong>Deine Liste der einzuladenden Benutzer wird generiert.</strong> Aktualisiere die Seite in 5-10 Minuten, um deine Einladungsliste anzuzeigen."
+	"campaignevents-invitation-list-processing": "<strong>Deine Liste der einzuladenden Benutzer wird generiert.</strong> Aktualisiere die Seite in 5-10 Minuten, um deine Einladungsliste anzuzeigen.",
+	"campaignevents-invitation-list-invalid-id": "Gib eine gültige Einladungslisten-ID ein. [[Special:MyInvitationLists|Deine Einladungslisten]].",
+	"campaignevents-invitation-list-does-not-exist": "Diese Einladungsliste existiert nicht. [[Special:MyInvitationLists|Deine Einladungslisten]].",
+	"campaignevents-invitation-list-not-creator": "Du hast keine Berechtigung, diese Einladungsliste anzuzeigen, da du sie nicht erstellt hast. [[Special:MyInvitationLists|Deine Einladungslisten]]."
 }

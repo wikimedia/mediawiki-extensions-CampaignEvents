@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Elmonitis"
+		]
+	},
+	"campaignevents-invitation-list-invalid-id": "Paghatag og tinuod nga ID sa talaan sa mga gipang-imbitar. [[Special:MyInvitationLists | Tan-awa ang imong mga talaan sa gipang-imbitar ]].",
+	"campaignevents-invitation-list-does-not-exist": "Wala pa'y talaan sa mga gipang-imbitar. [[Special:MyInvitationLists|Tan-awa ang imong mga lista sa gipang-imbitar]].",
+	"campaignevents-invitation-list-not-creator": "Wala ka'y pagtugot sa pagtan-aw niining talaan sa mga gipang-imbitar kay dili ikaw ang naghimo niini. [[Special:MyInvitationLists|Tan-awa ang imong mga talaan sa gipang-imbitar]]."
+}
