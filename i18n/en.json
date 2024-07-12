@@ -467,7 +467,7 @@
 	"campaignevents-worklist-error-titles-not-mainspace": "The following {{PLURAL:$1|article is|articles are}} not in the main namespace. Please enter articles in the main namespace only.\n$2",
 	"invitationlist": "Invitation list",
 	"campaignevents-invitation-list-processing": "<strong>Your list of editors to invite is being generated.</strong> Refresh the page in 5-10 minutes to view your invitation list.",
-	"campaignevents-invitation-list-invalid-id": "Provide a valid invitation list ID. [[Special:MyInvitationLists | View your invitation lists ]].",
+	"campaignevents-invitation-list-invalid-id": "Provide a valid invitation list ID. [[Special:MyInvitationLists|View your invitation lists]].",
 	"campaignevents-invitation-list-does-not-exist": "This invitation list does not exist. [[Special:MyInvitationLists|View your invitation lists]].",
 	"campaignevents-invitation-list-not-creator": "You don't have permission to view this invitation list because you didn't create it. [[Special:MyInvitationLists|View your invitation lists]]."
 }
