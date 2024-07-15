@@ -458,5 +458,8 @@
 	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Следнава статија не е најдена|Следниве статии не се најдени}}. Проверете {{PLURAL:$1|го насловот|ги насловите}} и обидете се повторно.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Следнава статија не е|Следниве статии не се}} во главниот именски простор. Внесувајте само статии во тој простор.\n$2",
 	"invitationlist": "Список со покани",
-	"campaignevents-invitation-list-processing": "<strong>Вашиот список со покани до уредници е создаден.</strong> Превчитајте ја страницата за 5-10 минути за да го погледате."
+	"campaignevents-invitation-list-processing": "<strong>Вашиот список со покани до уредници е создаден.</strong> Превчитајте ја страницата за 5-10 минути за да го погледате.",
+	"campaignevents-invitation-list-invalid-id": "Укажете важечка назнака на список со покани. [[Special:MyInvitationLists | Погледајте ги вашите списоци со покани]].",
+	"campaignevents-invitation-list-does-not-exist": "Овој список со покани не постои. [[Special:MyInvitationLists|Погледајте ги вашите списоци со покани]].",
+	"campaignevents-invitation-list-not-creator": "Немате дозвола да го гледате овој список со покани бидејќи вие не сте го создале. [[Special:MyInvitationLists|Погледајте ги вашите списоци со покани]]."
 }

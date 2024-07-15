@@ -365,5 +365,6 @@
 	"campaignevents-invitation-list-not-allowed": "您不被允許使用邀請名單。",
 	"myinvitationlists": "您的邀請名單",
 	"campaignevents-myinvitationslist-generate-button": "建立新的邀請名單",
+	"campaignevents-worklist-error-empty": "請輸入至少一個條目標題。",
 	"invitationlist": "邀請名單"
 }
