@@ -454,7 +454,7 @@
 	"campaignevents-invitation-list-disabled": "This wiki does not have invitation lists enabled.",
 	"campaignevents-invitation-list-not-allowed": "You are not allowed to use invitation lists.",
 	"myinvitationlists": "Your invitation lists",
-	"campaignevents-myinvitationslist-empty-text": "Discover new participants for your project or event. Provide a list of articles that cover your topical focus areas. Then, you will receive an invitation list of editors who may be interested in joining your project or event.",
+	"campaignevents-myinvitationslist-empty-text": "Discover new participants for your project or event. Provide a list of articles that cover the topics of your activity. Then, you will receive an invitation list of editors who may be interested in joining your project or event.",
 	"campaignevents-myinvitationslist-generate-button": "Create new invitation list",
 	"campaignevents-invitation-list-error-empty-name": "Provide a name for the invitation list.",
 	"campaignevents-invitation-list-error-invalid-page": "Enter an event page that uses Event Registration.",
