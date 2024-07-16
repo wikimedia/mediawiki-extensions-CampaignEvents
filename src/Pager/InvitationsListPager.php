@@ -140,15 +140,16 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	private function getInfoChip( stdClass $row ): string {
 		if ( (int)$row->ceil_status === InvitationList::STATUS_PENDING ) {
 			$data = [
-				'iconClass' => 'alert',
+				'iconClass' => 'notice',
 				'message' => $this->msg( 'campaignevents-invitations-pager-status-processing' )->text()
 			];
 		} else {
+			$editorCount = (int)$row->ceil_editor_count;
 			$data = [
-				'iconClass' => 'check',
+				'iconClass' => $editorCount > 0 ? 'check' : 'alert',
 				'message' => $this->msg( 'campaignevents-invitations-pager-status-editors' )
-				->numParams( $row->ceil_editor_count )
-				->text()
+					->numParams( $editorCount )
+					->text()
 			];
 		}
 
