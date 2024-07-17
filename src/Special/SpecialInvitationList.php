@@ -19,6 +19,7 @@ class SpecialInvitationList extends SpecialPage {
 
 	public const PAGE_NAME = 'InvitationList';
 
+	public const RECOMMENDED_MIN_SCORE = 25;
 	private PermissionChecker $permissionChecker;
 	private InvitationListStore $invitationListStore;
 	private CampaignsCentralUserLookup $centralUserLookup;
