@@ -32,6 +32,7 @@ class PotentialInviteesFinder {
 	private const CUTOFF_DAYS = 3 * 365;
 	private const RESULT_USER_LIMIT = 200;
 	private const REVISIONS_PER_PAGE_LIMIT = 5_000;
+	private const MIN_SCORE = 5;
 
 	private RevisionStoreFactory $revisionStoreFactory;
 	private IConnectionProvider $dbProvider;
@@ -306,7 +307,9 @@ class PotentialInviteesFinder {
 			// Make sure the username is a string to satisfy the type hint. PHP will have transformed it to an integer
 			// if the username is numeric (when used as array key).
 			$score = $this->getUserScore( (string)$username, $byteDeltas, $userDataByWiki[$username] );
-			$rankedUsers[$username] = $score;
+			if ( $score >= self::MIN_SCORE ) {
+				$rankedUsers[$username] = $score;
+			}
 		}
 		arsort( $rankedUsers );
 		( $this->debugLogger )( "\n" );
