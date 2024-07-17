@@ -446,7 +446,7 @@
 	"campaignevents-invitation-list-disabled": "בוויקי הזה לא מופעלות רשימות הזמנות.",
 	"campaignevents-invitation-list-not-allowed": "אין לך הרשאה להשתמש ברשימות הזמנות.",
 	"myinvitationlists": "רשימות ההזמנות שלך",
-	"campaignevents-myinvitationslist-empty-text": "{{GENDER:|גלה|גלי}} משתתפים חדשים לפרויקט או לאירוע שלך. {{GENDER:|ספק|ספקי}} רשימת ערכים המכסים את הנושאים {{GENDER:|שאתה מתמקד|שאת מתמקדת}} בהם. לאחר מכן, {{GENDER:|תקבל|תקבלי}} רשימת הזמנות של עורכים שעשויים להיות מעוניינים להצטרף לפרויקט או לאירוע שלך.",
+	"campaignevents-myinvitationslist-empty-text": "{{GENDER:|גלה|גלי}} משתתפים חדשים לפרויקט או לאירוע שלך. {{GENDER:|ספק|ספקי}} רשימת ערכים המכסים את הנושאים של הפעילות שלך. לאחר מכן, {{GENDER:|תקבל|תקבלי}} רשימת הזמנות של עורכים שעשויים להיות מעוניינים להצטרף לפרויקט או לאירוע שלך.",
 	"campaignevents-myinvitationslist-generate-button": "יצירת רשימת הזמנות חדשה",
 	"campaignevents-invitation-list-error-empty-name": "נא לתת שם לרשימת ההזמנות.",
 	"campaignevents-invitation-list-error-invalid-page": "יש להיכנס לדף אירוע המשתמש ברישום אירועים.",
