@@ -42,7 +42,7 @@ class PotentialInviteesFinderTest extends MediaWikiIntegrationTestCase {
 		$this->assertArrayEquals(
 			[
 				'User1',
-				'User2',
+				// Not User2 because their score is too low.
 				'User3'
 			],
 			array_keys( $invitationList )
