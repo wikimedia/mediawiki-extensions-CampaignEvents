@@ -93,4 +93,23 @@ class FindPotentialInviteesJobTest extends MediaWikiIntegrationTestCase {
 		$job = new FindPotentialInviteesJob( [ 'list-id' => $listID, 'serialized-worklist' => [] ] );
 		$job->run();
 	}
+
+	public function testRun__noEditors() {
+		$listID = 1234;
+
+		$invitationListStore = $this->createMock( InvitationListStore::class );
+		$invitationListStore->expects( $this->never() )
+			->method( 'storeInvitationListUsers' );
+		$invitationListStore->expects( $this->once() )
+			->method( 'updateStatus' )
+			->with( $listID, InvitationList::STATUS_READY );
+		$this->setService( InvitationListStore::SERVICE_NAME, $invitationListStore );
+
+		$inviteesFinder = $this->createMock( PotentialInviteesFinder::class );
+		$inviteesFinder->method( 'generate' )->willReturn( [] );
+		$this->setService( PotentialInviteesFinder::SERVICE_NAME, $inviteesFinder );
+
+		$job = new FindPotentialInviteesJob( [ 'list-id' => $listID, 'serialized-worklist' => [] ] );
+		$job->run();
+	}
 }
