@@ -125,7 +125,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 			return ( new ButtonWidget(
 				[
 					'href' => SpecialPage::getTitleFor( SpecialGenerateInvitationList::PAGE_NAME )->getLocalURL(),
-					'label' => $this->msg( 'campaignevents-myinvitationslist-add-button' )->text(),
+					'label' => $this->msg( 'campaignevents-myinvitationslist-new-button' )->text(),
 					'icon' => 'add',
 				]
 			) ) . parent::getStartBody();
