@@ -469,8 +469,16 @@
 	"campaignevents-worklist-error-nonexistent-titles": "The following {{PLURAL:$1|article was|articles were}} not found. Please verify the {{PLURAL:$1|title|titles}} and try again.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "The following {{PLURAL:$1|article is|articles are}} not in the main namespace. Please enter articles in the main namespace only.\n$2",
 	"invitationlist": "Invitation list",
+	"campaignevents-invitationlist-event": "$1: Invitation list",
 	"campaignevents-invitation-list-processing": "<strong>Your list of editors to invite is being generated.</strong> Refresh the page in 5-10 minutes to view your invitation list.",
 	"campaignevents-invitation-list-invalid-id": "Provide a valid invitation list ID. [[Special:MyInvitationLists|View your invitation lists]].",
 	"campaignevents-invitation-list-does-not-exist": "This invitation list does not exist. [[Special:MyInvitationLists|View your invitation lists]].",
-	"campaignevents-invitation-list-not-creator": "You don't have permission to view this invitation list because you didn't create it. [[Special:MyInvitationLists|View your invitation lists]]."
+	"campaignevents-invitation-list-not-creator": "You don't have permission to view this invitation list because you didn't create it. [[Special:MyInvitationLists|View your invitation lists]].",
+	"campaignevents-invitation-list-intro": "$1 {{PLURAL:$1|editor|editors}} generated, based on the following criteria: the bytes they contributed to the articles, the number of edits they made to the articles, their overall edit count on the wikis, and how recently they have edited the wikis.",
+	"campaignevents-invitationlist-no-editors": "<strong>No editors meet the [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation list criteria] from your article list.</strong> You can [[Special:GenerateInvitationList|create a new invitation list]] with a new article list.",
+	"campaignevents-invitationlist-highly-recommended": "Highly recommended to invite",
+	"campaignevents-invitationlist-highly-recommended-info": "These editors received a high invitation list ranking, so they are more likely to be interested in joining your activity.",
+	"campaignevents-invitationlist-recommended": "Recommended to invite",
+	"campaignevents-invitationlist-recommended-info": "These editors received a mid-range invitation list ranking, but they still may be interested in joining your activity.",
+	"campaignevents-invitationlist-worklist-label": "View article list"
 }

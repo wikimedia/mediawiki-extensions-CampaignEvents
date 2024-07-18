@@ -13,6 +13,7 @@ use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\Assert\Assert;
 use Wikimedia\Rdbms\IResultWrapper;
+use Wikimedia\Rdbms\SelectQueryBuilder;
 
 class InvitationListStore {
 	public const SERVICE_NAME = 'CampaignEventsInvitationListStore';
@@ -191,7 +192,7 @@ class InvitationListStore {
 
 	/**
 	 * @param int $invitationListID
-	 * @return array<int,int> [ user => score ]
+	 * @return array<int,int> [ user => score ] A maximum of 200 users is returned, ordered by score (high to low)
 	 */
 	public function getInvitationListUsers( int $invitationListID ): array {
 		$dbr = $this->databaseHelper->getDBConnection( DB_REPLICA );
@@ -199,6 +200,8 @@ class InvitationListStore {
 			->select( [ 'ceilu_user_id', 'ceilu_score' ] )
 			->from( 'ce_invitation_list_users' )
 			->where( [ 'ceilu_ceil_id' => $invitationListID ] )
+			->orderBy( 'ceilu_score', SelectQueryBuilder::SORT_DESC )
+			->limit( PotentialInviteesFinder::RESULT_USER_LIMIT )
 			->caller( __METHOD__ )
 			->fetchResultSet();
 
