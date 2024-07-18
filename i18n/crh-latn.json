@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Don Alessandro",
 			"TayfunEt.",
 			"Zolgoyo"
 		]
 	},
 	"campaignevents-event-details-remove-participant-remove-btn": "Sil",
-	"campaignevents-event-details-dates-label": "Başlağan ve soñ tapqan vaqtı"
+	"campaignevents-event-details-dates-label": "Başlağan ve bitken vaqtı"
 }
