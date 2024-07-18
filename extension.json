@@ -149,28 +149,75 @@
 		"remoteExtPath": "CampaignEvents/resources"
 	},
 	"ResourceModules": {
-		"ext.campaignEvents.specialeventslist.styles": {
-			"localBasePath": "resources",
-			"remoteExtPath": "CampaignEvents/resources",
-			"styles": [
-				"ext.campaignEvents.specialeventslist.styles/SpecialMyEvents.less",
-				"ext.campaignEvents.specialeventslist.styles/SpecialAllEvents.less",
-				"ext.campaignEvents.specialeventslist.styles/EventsTablePager.less",
-				"ext.campaignEvents.specialeventslist.styles/EventsListPager.less",
-				"ext.campaignEvents.TextWithIconWidget.less"
-			]
-		},
-		"ext.campaignEvents.specialeventslist": {
-			"localBasePath": "resources/ext.campaignEvents.specialeventslist",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialeventslist",
+		"ext.campaignEvents.specialPages": {
+			"localBasePath": "resources/ext.campaignEvents.specialPages",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialPages",
 			"packageFiles": [
-				"index.js",
-				"ConfirmEventDeletionDialog.js",
-				"FilterEventsWidget.js",
-				"EventKebabMenu.js",
-				"DateTimeWidgetsEnhancer.js"
+				"dispatcher.js",
+				"editeventregistration/index.js",
+				"editeventregistration/OrganizerSelectionFieldEnhancer.js",
+				"editeventregistration/TimeFieldsEnhancer.js",
+				"eventdetails/index.js",
+				"eventdetails/OrganizersLoader.js",
+				"eventdetails/ParticipantsManager.js",
+				"eventdetails/EmailManager.js",
+				"eventdetails/RemoveParticipantDialog.js",
+				"eventdetails/ScrollDownObserver.js",
+				"eventlists/index.js",
+				"eventlists/ConfirmEventDeletionDialog.js",
+				"eventlists/FilterEventsWidget.js",
+				"eventlists/EventKebabMenu.js",
+				"eventlists/DateTimeWidgetsEnhancer.js"
+			],
+			"dependencies": [
+				"mediawiki.language",
+				"oojs-ui-core",
+				"oojs-ui-windows",
+				"oojs-ui-widgets",
+				"oojs-ui.styles.icons-interactions",
+				"mediawiki.api",
+				"mediawiki.user",
+				"mediawiki.util",
+				"mediawiki.jqueryMsg",
+				"mediawiki.Uri",
+				"mediawiki.widgets.datetime",
+				"mediawiki.widgets.UsersMultiselectWidget",
+				"jquery.makeCollapsible"
 			],
 			"messages": [
+				"campaignevents-edit-organizers-not-allowed",
+				"campaignevents-edit-no-organizers",
+				"campaignevents-edit-field-organizers-creator-title",
+				"campaignevents-edit-field-organizers-user-not-allowed",
+				"campaignevents-event-dates-cannot-be-changed",
+				"campaignevents-warning-change-event-end-date-past",
+				"campaignevents-event-details-select-all",
+				"campaignevents-event-details-message-all",
+				"campaignevents-event-details-message-participants",
+				"campaignevents-event-details-participants-checkboxes-selected",
+				"campaignevents-event-details-remove-participant-confirmation-title",
+				"campaignevents-event-details-remove-participant-confirmation-msg",
+				"campaignevents-event-details-remove-participant-remove-btn",
+				"campaignevents-event-details-remove-participant-cancel-btn",
+				"campaignevents-event-details-remove-participant-notification",
+				"campaignevents-event-details-remove-all-participant-notification",
+				"campaignevents-event-details-remove-participant-notification-error",
+				"campaignevents-event-details-header-participants",
+				"campaignevents-userlink-suppressed-user",
+				"campaignevents-userlink-deleted-user",
+				"campaignevents-email-select-participant-notification",
+				"campaignevents-email-success-notification",
+				"campaignevents-email-error-notification",
+				"campaignevents-email-participants-missing-address",
+				"campaignevents-email-participants-all",
+				"campaignevents-email-participants-except",
+				"campaignevents-email-participants-except-count",
+				"campaignevents-email-participants-count",
+				"campaignevents-email-participants-yes",
+				"campaignevents-email-participants-no",
+				"campaignevents-event-details-private-participant-label",
+				"campaignevents-event-details-no-organizer-email",
+				"campaignevents-event-details-header-questions-help-label",
 				"campaignevents-myevents-filter-btn-label",
 				"campaignevents-eventslist-menu-edit",
 				"campaignevents-eventslist-menu-view-eventpage",
@@ -184,15 +231,17 @@
 				"campaignevents-eventslist-delete-dialog-cancel",
 				"campaignevents-eventslist-delete-dialog-delete",
 				"campaignevents-eventslist-delete-success"
-			],
-			"dependencies": [
-				"mediawiki.api",
-				"mediawiki.jqueryMsg",
-				"mediawiki.Uri",
-				"mediawiki.util",
-				"oojs-ui-widgets",
-				"oojs-ui-windows",
-				"oojs-ui.styles.icons-interactions"
+			]
+		},
+		"ext.campaignEvents.specialeventslist.styles": {
+			"localBasePath": "resources",
+			"remoteExtPath": "CampaignEvents/resources",
+			"styles": [
+				"ext.campaignEvents.specialeventslist.styles/SpecialMyEvents.less",
+				"ext.campaignEvents.specialeventslist.styles/SpecialAllEvents.less",
+				"ext.campaignEvents.specialeventslist.styles/EventsTablePager.less",
+				"ext.campaignEvents.specialeventslist.styles/EventsListPager.less",
+				"ext.campaignEvents.TextWithIconWidget.less"
 			]
 		},
 		"ext.campaignEvents.eventpage.styles": {
@@ -269,81 +318,10 @@
 				"oojs-ui-widgets"
 			]
 		},
-		"ext.campaignEvents.specialeventdetails": {
-			"localBasePath": "resources/ext.campaignEvents.specialeventdetails",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialeventdetails",
-			"packageFiles": [
-				"index.js",
-				"OrganizersLoader.js",
-				"ParticipantsManager.js",
-				"EmailManager.js",
-				"RemoveParticipantDialog.js",
-				"ScrollDownObserver.js"
-			],
-			"messages": [
-				"campaignevents-event-details-select-all",
-				"campaignevents-event-details-message-all",
-				"campaignevents-event-details-message-participants",
-				"campaignevents-event-details-participants-checkboxes-selected",
-				"campaignevents-event-details-remove-participant-confirmation-title",
-				"campaignevents-event-details-remove-participant-confirmation-msg",
-				"campaignevents-event-details-remove-participant-remove-btn",
-				"campaignevents-event-details-remove-participant-cancel-btn",
-				"campaignevents-event-details-remove-participant-notification",
-				"campaignevents-event-details-remove-all-participant-notification",
-				"campaignevents-event-details-remove-participant-notification-error",
-				"campaignevents-event-details-header-participants",
-				"campaignevents-userlink-suppressed-user",
-				"campaignevents-userlink-deleted-user",
-				"campaignevents-email-select-participant-notification",
-				"campaignevents-email-success-notification",
-				"campaignevents-email-error-notification",
-				"campaignevents-email-participants-missing-address",
-				"campaignevents-email-participants-all",
-				"campaignevents-email-participants-except",
-				"campaignevents-email-participants-except-count",
-				"campaignevents-email-participants-count",
-				"campaignevents-email-participants-yes",
-				"campaignevents-email-participants-no",
-				"campaignevents-event-details-private-participant-label",
-				"campaignevents-event-details-no-organizer-email",
-				"campaignevents-event-details-header-questions-help-label"
-			],
-			"dependencies": [
-				"mediawiki.language",
-				"oojs-ui-core",
-				"oojs-ui-windows",
-				"mediawiki.api",
-				"mediawiki.user",
-				"mediawiki.util",
-				"jquery.makeCollapsible"
-			]
-		},
 		"ext.campaignEvents.specialeventdetails.styles": {
 			"styles": [
 				"ext.campaignEvents.specialeventdetails.styles.less",
 				"ext.campaignEvents.userlinks.styles.less"
-			]
-		},
-		"ext.campaignEvents.editeventregistration": {
-			"localBasePath": "resources/ext.campaignEvents.editeventregistration",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.editeventregistration",
-			"packageFiles": [
-				"index.js",
-				"OrganizerSelectionFieldEnhancer.js",
-				"TimeFieldsEnhancer.js"
-			],
-			"dependencies": [
-				"mediawiki.widgets.datetime",
-				"mediawiki.widgets.UsersMultiselectWidget"
-			],
-			"messages": [
-				"campaignevents-edit-organizers-not-allowed",
-				"campaignevents-edit-no-organizers",
-				"campaignevents-edit-field-organizers-creator-title",
-				"campaignevents-edit-field-organizers-user-not-allowed",
-				"campaignevents-event-dates-cannot-be-changed",
-				"campaignevents-warning-change-event-end-date-past"
 			]
 		},
 		"ext.campaignEvents.specialregisterforevent.styles": {

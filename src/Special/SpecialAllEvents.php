@@ -38,7 +38,7 @@ class SpecialAllEvents extends SpecialPage {
 			'oojs-ui.styles.icons-user',
 			'oojs-ui.styles.icons-editing-advanced'
 		] );
-		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialeventslist' ] );
+		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
 		$this->showFormAndEvents();
 	}
 
