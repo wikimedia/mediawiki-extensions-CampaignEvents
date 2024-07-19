@@ -14,7 +14,7 @@
 		this.resultMessage = this.resultMessageField.getField();
 		this.tabLayout = OO.ui.infuse( $( '#ext-campaignevents-eventdetails-tabs' ) );
 		this.recipientsList = [];
-		this.$recipientsListElement = $( '.ext-campaignevents-details-email-recipient-list' );
+		this.$recipientsListElement = $( '.ext-campaignevents-eventdetails-email-recipient-list' );
 		/* eslint-enable no-jquery/no-global-selector */
 		this.addValidation();
 		this.installEventListeners();

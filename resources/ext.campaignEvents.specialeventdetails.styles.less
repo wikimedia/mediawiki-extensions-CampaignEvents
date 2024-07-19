@@ -21,7 +21,7 @@
 }
 /* stylelint-enable selector-max-id */
 
-.ext-campaignevents-event-details-participants-panel {
+.ext-campaignevents-eventdetails-participants-panel {
 	max-width: 90em;
 }
 
@@ -37,12 +37,12 @@
 }
 
 // Increase specificity to enforce the margin.
-span.ext-campaignevents-event-details-participants-private-icon {
+span.ext-campaignevents-eventdetails-participants-private-icon {
 	opacity: @opacity-icon-subtle;
 	margin-left: 1em;
 }
 
-.ext-campaignevents-event-details-participants-private-count-footer {
+.ext-campaignevents-eventdetails-participants-private-count-footer {
 	display: flex;
 	color: @color-subtle;
 
@@ -52,11 +52,11 @@ span.ext-campaignevents-event-details-participants-private-icon {
 	}
 }
 
-.ext-campaignevents-event-details-participants-individual-data-deleted-notice {
+.ext-campaignevents-eventdetails-participants-individual-data-deleted-notice {
 	margin-top: 0.75em;
 }
 
-.ext-campaignevents-event-details-participants-footer {
+.ext-campaignevents-eventdetails-participants-footer {
 	margin-top: 0.5em;
 }
 
@@ -79,19 +79,19 @@ span.ext-campaignevents-event-details-participants-private-icon {
 	}
 }
 
-.ext-campaignevents-event-details-view-event-page-button.oo-ui-buttonElement {
+.ext-campaignevents-eventdetails-view-event-page-button.oo-ui-buttonElement {
 	display: block;
 	margin-top: 1em;
 }
 
-.ext-campaignevents-event-details-info-topbar {
+.ext-campaignevents-eventdetails-info-topbar {
 	display: flex;
 	justify-content: space-between;
 	.flex-wrap();
 	margin-bottom: 1em;
 }
 
-.mw-body .ext-campaignevents-eventdetails-panel .ext-campaignevents-event-details-section-header {
+.mw-body .ext-campaignevents-eventdetails-panel .ext-campaignevents-eventdetails-section-header {
 	margin-bottom: 0.5em;
 	color: @color-subtle;
 
@@ -100,7 +100,7 @@ span.ext-campaignevents-event-details-participants-private-icon {
 	}
 }
 
-.ext-campaignevents-eventdetails-panel .ext-campaignevents-event-details-section-content {
+.ext-campaignevents-eventdetails-panel .ext-campaignevents-eventdetails-section-content {
 	margin-left: 2.5em;
 	margin-bottom: 1.5em;
 	white-space: pre-wrap;
@@ -111,22 +111,22 @@ span.ext-campaignevents-event-details-participants-private-icon {
 	}
 }
 
-.ext-campaignevents-event-details-tracking-tool-sync {
+.ext-campaignevents-eventdetails-tracking-tool-sync {
 	margin-top: 0.5em;
 
-	p.ext-campaignevents-event-details-tracking-tool-sync-details {
+	p.ext-campaignevents-eventdetails-tracking-tool-sync-details {
 		font-weight: normal;
 		margin: 0;
 	}
 }
 
-ul.ext-campaignevents-event-details-organizers-list {
+ul.ext-campaignevents-eventdetails-organizers-list {
 	margin-left: 0;
 	list-style-type: none;
 }
 
-.ext-campaignevents-details-participants-container {
-	.ext-campaignevents-details-participants-table {
+.ext-campaignevents-eventdetails-participants-container {
+	.ext-campaignevents-eventdetails-participants-table {
 		width: 100%;
 		border-collapse: collapse;
 		// Set fixed layout and allow wrapping so that the size of the cells doesn't change
@@ -147,7 +147,7 @@ ul.ext-campaignevents-event-details-organizers-list {
 			}
 		}
 
-		.ext-campaignevents-details-participants-table-header th {
+		.ext-campaignevents-eventdetails-participants-table-header th {
 			position: sticky;
 			top: 0;
 			z-index: @z-index-sticky;
@@ -156,29 +156,29 @@ ul.ext-campaignevents-event-details-organizers-list {
 			white-space: normal;
 		}
 
-		th.ext-campaignevents-details-participants-username-cell {
+		th.ext-campaignevents-eventdetails-participants-username-cell {
 			width: 15em;
 		}
 
-		th.ext-campaignevents-details-participants-time-registered-cell {
+		th.ext-campaignevents-eventdetails-participants-time-registered-cell {
 			width: 15em;
 		}
 
-		th.ext-campaignevents-details-participants-can-receive-email-cell {
+		th.ext-campaignevents-eventdetails-participants-can-receive-email-cell {
 			width: 8em;
 		}
 
-		th.ext-campaignevents-details-participants-non-pii-question-cells {
+		th.ext-campaignevents-eventdetails-participants-non-pii-question-cells {
 			width: 25em;
 		}
 
-		th.ext-campaignevents-details-user-row-checkbox,
-		th.ext-campaignevents-details-participants-selectall-checkbox-cell {
+		th.ext-campaignevents-eventdetails-user-row-checkbox,
+		th.ext-campaignevents-eventdetails-participants-selectall-checkbox-cell {
 			// Set the width of the cell to that of the checkbox to prevent it from stretching
 			width: 1.42857143em;
 		}
 
-		.ext-campaignevents-details-user-row-checkbox .oo-ui-fieldLayout-header {
+		.ext-campaignevents-eventdetails-user-row-checkbox .oo-ui-fieldLayout-header {
 			// Invisible labels use absolute positioning, and without a positioned ancestor
 			// they would overflow the table and produce a lot of unwantd white space after
 			// the table itself (T342292)
@@ -195,8 +195,8 @@ ul.ext-campaignevents-event-details-organizers-list {
 }
 
 body.skin-minerva {
-	.ext-campaignevents-details-participants-table,
-	.ext-campaignevents-details-stats-question-table {
+	.ext-campaignevents-eventdetails-participants-table,
+	.ext-campaignevents-eventdetails-stats-question-table {
 		// Minerva sets display:block on tables to try and avoid issues in articles.
 		// This is not an article though; we're making sure that this table looks OK
 		// on mobile, so don't let Minerva interfere.
@@ -204,65 +204,52 @@ body.skin-minerva {
 	}
 }
 
-.ext-campaignevents-icon-label-widget-header {
-	position: relative; /* The icon uses position:absolute, which makes positioning hard */
-
-	> .oo-ui-labelElement-label {
-		left: 1.75em;
-		font-weight: 500;
-		color: @color-base;
-		font-size: 1.15em;
-		position: relative;
-		margin-left: 0.5em;
-	}
-}
-
-.ext-campaignevents-details-participants-header {
+.ext-campaignevents-eventdetails-participants-header {
 	padding: 0.75em 1.5em 0.75em 1.5em;
 	background-color: #eaecf0;
 }
 
-.ext-campaignevents-details-participants-header-title {
+.ext-campaignevents-eventdetails-participants-header-title {
 	display: flex;
 	flex-wrap: wrap;
 }
 
-.ext-campaignevents-details-participants-controls {
+.ext-campaignevents-eventdetails-participants-controls {
 	padding: 0.75em 0 0.75em 0;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
 
-	.ext-campaignevents-details-participants-count-button {
+	.ext-campaignevents-eventdetails-participants-count-button {
 		display: none;
 	}
 }
 
-.ext-campaignevents-details-participants-header-participants {
+.ext-campaignevents-eventdetails-participants-header-participants {
 	flex: 1;
 
-	.ext-campaignevents-details-participants-header-participant-count {
+	.ext-campaignevents-eventdetails-participants-header-participant-count {
 		font-size: 1.5em;
 		font-weight: bold;
 		vertical-align: middle;
 	}
 }
 
-.client-nojs .ext-campaignevents-details-participants-header-questions-help > .oo-ui-buttonElement-button {
+.client-nojs .ext-campaignevents-eventdetails-participants-header-questions-help > .oo-ui-buttonElement-button {
 	cursor: help;
 }
 
-.ext-campaignevents-details-participants-header-participants .oo-ui-popupWidget {
+.ext-campaignevents-eventdetails-participants-header-participants .oo-ui-popupWidget {
 	z-index: @z-index-tooltip;
 }
 
-div.ext-campaignevents-details-participants-search {
+div.ext-campaignevents-eventdetails-participants-search {
 	min-width: 15em;
 	flex-basis: 0;
 	flex-grow: 1;
 }
 
-.ext-campaignevents-details-email-recipient-list ul {
+.ext-campaignevents-eventdetails-email-recipient-list ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -275,11 +262,11 @@ div.ext-campaignevents-details-participants-search {
 	}
 }
 
-.ext-campaignevents-event-details-icon {
+.ext-campaignevents-eventdetails-icon {
 	opacity: 0.55;
 }
 
-.ext-campaignevents-details-no-participants-state {
+.ext-campaignevents-eventdetails-no-participants-state {
 	// TODO: Ideally here we wouldn't need flex at all. We could just set the icon
 	// to have a width of 40% and aspect ratio of 1, without having to specify
 	// any height. Unfortunately, aspect-ratio is not supported by all grade C+
@@ -290,40 +277,40 @@ div.ext-campaignevents-details-participants-search {
 	height: 34em;
 }
 
-.ext-campaignevents-event-details-no-participants-icon.oo-ui-iconElement {
+.ext-campaignevents-eventdetails-no-participants-icon.oo-ui-iconElement {
 	width: 40%;
 	flex-grow: 4;
 	opacity: 0.25;
 }
 
-.ext-campaignevents-details-no-participants-description {
+.ext-campaignevents-eventdetails-no-participants-description {
 	flex-grow: 3;
 	font-size: 1.1em;
 	padding: 0 1em;
 	text-align: center;
 }
 
-fieldset.ext-campaignevents-details-email-form {
+fieldset.ext-campaignevents-eventdetails-email-form {
 	margin-top: 1em;
 }
 
-.oo-ui-popupWidget.ext-campaignevents-event-details-message-all-participants-button-popup {
+.oo-ui-popupWidget.ext-campaignevents-eventdetails-message-all-participants-button-popup {
 	// Set manual z-index to put this above sticky header
 	z-index: @z-index-tooltip;
 }
 
-.oo-ui-buttonGroupWidget.ext-campaignevents-event-details-extra-buttons {
+.oo-ui-buttonGroupWidget.ext-campaignevents-eventdetails-extra-buttons {
 	&,
-	.ext-campaignevents-event-details-message-all-participants-button {
+	.ext-campaignevents-eventdetails-message-all-participants-button {
 		// Remove the default z-index of 0 from the ButtonGroupWidget and the button to let the rule above work.
 		z-index: unset;
 	}
 }
 
-.ext-campaignevents-details-stats-question-container {
+.ext-campaignevents-eventdetails-stats-question-container {
 	border-bottom: @border-subtle;
 
-	&.ext-campaignevents-details-stats-question-container > .mw-collapsible-toggle {
+	&.ext-campaignevents-eventdetails-stats-question-container > .mw-collapsible-toggle {
 		float: unset;
 		width: 100%;
 		padding: 1em;
@@ -359,17 +346,17 @@ fieldset.ext-campaignevents-details-email-form {
 }
 
 /* stylelint-disable selector-max-id */
-#StatsPanel h2.ext-campaignevents-details-stats-section-header {
+#StatsPanel h2.ext-campaignevents-eventdetails-stats-section-header {
 	font-size: @font-size-medium;
 	line-height: @line-height-xxx-small;
 }
 /* stylelint-enable selector-max-id */
 
-.ext-campaignevents-details-stats-section:not( :last-child ) {
+.ext-campaignevents-eventdetails-stats-section:not( :last-child ) {
 	margin-bottom: 1.7em;
 }
 
-.ext-campaignevents-details-stats-question-table {
+.ext-campaignevents-eventdetails-stats-question-table {
 	width: 70%;
 	border-collapse: collapse;
 	border: @border-width-base @border-style-base #eaecf0;
@@ -395,16 +382,16 @@ fieldset.ext-campaignevents-details-email-form {
 	}
 }
 
-.client-nojs .ext-campaignevents-event-details-load-organizers-link {
+.client-nojs .ext-campaignevents-eventdetails-load-organizers-link {
 	display: none;
 }
 
-.ext-campaignevents-details-participants-responses-aggregated-notice {
+.ext-campaignevents-eventdetails-participants-responses-aggregated-notice {
 	color: @color-subtle;
 }
 
 // This rule should come last so that it overrides other styles set in this file.
 // Repeat the selector to increase specificity (e.g., for buttons).
-.ext-campaignevents-details-hide-element.ext-campaignevents-details-hide-element {
+.ext-campaignevents-eventdetails-hide-element.ext-campaignevents-eventdetails-hide-element {
 	display: none;
 }

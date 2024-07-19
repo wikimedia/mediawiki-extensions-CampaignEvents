@@ -226,11 +226,12 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		if ( $this->participantQuestionsToShow ) {
 			$questionsHeader = Html::rawElement(
 				'div',
-				[ 'class' => 'ext-campaignevents-participant-questions-info-subtitle' ],
+				[ 'class' => 'ext-campaignevents-registerforevent-participant-questions-info-subtitle' ],
 				$this->msg( 'campaignevents-register-questions-label-subtitle' )->parseAsBlock()
 			);
 			$form->addHeaderHtml( $questionsHeader, self::QUESTIONS_SECTION_NAME );
 		}
+		$form->setId( 'ext-campaignevents-registerforevent-form' );
 	}
 
 	/**

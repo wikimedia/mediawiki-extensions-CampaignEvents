@@ -4,38 +4,42 @@ span.ext-campaignevents-registerforevent-icon {
 	margin-left: 1em;
 }
 
-.ext-campaignevents-participant-questions-info-subtitle {
+.ext-campaignevents-registerforevent-participant-questions-info-subtitle {
 	color: @color-subtle;
 }
 
-.ext-campaignevents-participant-question-other-option {
-	&.oo-ui-fieldLayout {
-		margin-left: 1em;
-		margin-top: 0.5em;
-	}
-
-	&.oo-ui-widget {
-		// Apply these styles on the widget itself so that 100% is computed on the parent layout element.
-		width: 30em;
-		max-width: 100%;
-	}
-}
-
-.mw-htmlform .oo-ui-fieldsetLayout-group {
-	// Remove borders from sections
-	.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
-		border: 0;
-		padding: 0;
-	}
-
-	// Hide the 'top' section, it's only there to force the ordering
-	.oo-ui-panelLayout {
-		.oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
-			display: none;
+/* stylelint-disable selector-max-id */
+#ext-campaignevents-registerforevent-form {
+	.ext-campaignevents-participant-question-other-option {
+		&.oo-ui-fieldLayout {
+			margin-left: 1em;
+			margin-top: 0.5em;
 		}
 
-		~ .oo-ui-panelLayout .oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
-			display: unset;
+		&.oo-ui-widget {
+			// Apply these styles on the widget itself so that 100% is computed on the parent layout element.
+			width: 30em;
+			max-width: 100%;
+		}
+	}
+
+	&.mw-htmlform .oo-ui-fieldsetLayout-group {
+		// Remove borders from sections
+		.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
+			border: 0;
+			padding: 0;
+		}
+
+		// Hide the 'top' section, it's only there to force the ordering
+		.oo-ui-panelLayout {
+			.oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
+				display: none;
+			}
+
+			~ .oo-ui-panelLayout .oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-fieldsetLayout-header {
+				display: unset;
+			}
 		}
 	}
 }
+/* stylelint-enable selector-max-id */

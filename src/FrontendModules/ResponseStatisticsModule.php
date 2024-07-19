@@ -145,10 +145,10 @@ class ResponseStatisticsModule {
 	}
 
 	private function makeQuestionCategorySectionContainer( string $headerMsg ): Tag {
-		$section = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-stats-section' ] );
+		$section = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-eventdetails-stats-section' ] );
 		$header = ( new Tag( 'h2' ) )
 			->appendContent( $this->msgFormatter->format( MessageValue::new( $headerMsg ) )	)
-			->addClasses( [ 'ext-campaignevents-details-stats-section-header' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-stats-section-header' ] );
 		return $section->appendContent( $header );
 	}
 
@@ -172,7 +172,7 @@ class ResponseStatisticsModule {
 		// TODO: Use accordion component when available (see T145934 and T338184)
 		$container = ( new Tag( 'div' ) )
 			->addClasses( [
-				'ext-campaignevents-details-stats-question-container',
+				'ext-campaignevents-eventdetails-stats-question-container',
 				'mw-collapsible',
 				'mw-collapsed',
 			] );
@@ -226,7 +226,7 @@ class ResponseStatisticsModule {
 		int $totalParticipants
 	): Tag {
 		$table = ( new Tag( 'table' ) )
-			->addClasses( [ 'ext-campaignevents-details-stats-question-table' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-stats-question-table' ] );
 
 		$tableHeaderContents = [
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-details-stats-header-option' ) ),

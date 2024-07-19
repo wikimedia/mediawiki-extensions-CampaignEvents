@@ -504,7 +504,7 @@ class EventPageDecorator {
 			'framed' => false,
 			'flags' => [ 'progressive' ],
 			'label' => $this->msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-header-details' ) ),
-			'classes' => [ 'ext-campaignevents-event-details-btn' ],
+			'classes' => [ 'ext-campaignevents-eventpage-details-btn' ],
 			'href' => SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID )->getLocalURL(),
 		] ) );
 
@@ -567,7 +567,11 @@ class EventPageDecorator {
 			$eventInfoContainer . $participantsContainer
 		);
 
-		return Html::rawElement( 'div', [ 'id' => 'ext-campaignEvents-detailsDialog-content' ], $dialogContent );
+		return Html::rawElement(
+			'div',
+			[ 'id' => 'ext-campaignevents-eventpage-details-dialog-content' ],
+			$dialogContent
+		);
 	}
 
 	/**

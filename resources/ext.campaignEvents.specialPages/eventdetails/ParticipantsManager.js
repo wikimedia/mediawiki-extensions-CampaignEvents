@@ -15,7 +15,7 @@
 		var $selectAllParticipantsField = $(
 			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
 		);
-		this.$participantCountLabel = $( '.ext-campaignevents-details-participants-count-button' );
+		this.$participantCountLabel = $( '.ext-campaignevents-eventdetails-participants-count-button' );
 		if ( $selectAllParticipantsField.length ) {
 			this.selectAllParticipantsField = OO.ui.FieldLayout.static.infuse(
 				$selectAllParticipantsField
@@ -23,7 +23,7 @@
 			this.selectAllParticipantsCheckbox = this.selectAllParticipantsField.getField();
 		}
 
-		this.$participantsCountTitle = $( '.ext-campaignevents-details-participants-header-participant-count' );
+		this.$participantsCountTitle = $( '.ext-campaignevents-eventdetails-participants-header-participant-count' );
 		this.participantCheckboxes = [];
 		this.curParticipantCheckbox = null;
 		this.isSelectionInverted = false;
@@ -34,7 +34,7 @@
 		this.participantsTotal = mw.config.get( 'wgCampaignEventsEventDetailsParticipantsTotal' );
 		this.usernameFilter = null;
 
-		this.$noParticipantsStateElement = $( '.ext-campaignevents-details-no-participants-state' );
+		this.$noParticipantsStateElement = $( '.ext-campaignevents-eventdetails-no-participants-state' );
 		this.$curUserRow = $( '.ext-campaignevents-details-current-user-row' );
 		// Note: this can be null if the user is not logged in
 		this.curUserName = mw.user.getName();
@@ -42,12 +42,12 @@
 		this.removeParticipantDialog = new RemoveParticipantDialog( {
 			classes: [ 'ext-campaignevents-details-remove-participant-dialog' ]
 		} );
-		this.$messageParticipantsButton = $( '.ext-campaignevents-event-details-message-all-participants-button' );
+		this.$messageParticipantsButton = $( '.ext-campaignevents-eventdetails-message-all-participants-button' );
 		this.canEmailParticipants = this.$messageParticipantsButton.length !== 0;
 		this.windowManager = new OO.ui.WindowManager();
-		this.$participantsContainer = $( '.ext-campaignevents-details-participants-container' );
-		this.$participantsTable = $( '.ext-campaignevents-details-participants-table' );
-		this.$searchParticipantsElement = $( '.ext-campaignevents-details-participants-search' );
+		this.$participantsContainer = $( '.ext-campaignevents-eventdetails-participants-container' );
+		this.$participantsTable = $( '.ext-campaignevents-eventdetails-participants-table' );
+		this.$searchParticipantsElement = $( '.ext-campaignevents-eventdetails-participants-search' );
 		this.selectedParticipantsAmount = 0;
 		this.$tabPanel = $( '#ext-campaignevents-eventdetails-tabs' );
 		/* eslint-enable no-jquery/no-global-selector */
@@ -62,7 +62,7 @@
 
 	ParticipantsManager.prototype.replaceQuestionsHelp = function () {
 		// eslint-disable-next-line no-jquery/no-global-selector
-		var $nojsButton = $( '.ext-campaignevents-details-participants-header-questions-help' ),
+		var $nojsButton = $( '.ext-campaignevents-eventdetails-participants-header-questions-help' ),
 			helpText = $nojsButton.find( '.oo-ui-buttonElement-button' ).attr( 'title' );
 		var helpButton = new OO.ui.PopupButtonWidget( {
 			icon: 'info',
@@ -129,12 +129,12 @@
 					$content: $( '<p>' ).append(
 						mw.message( 'campaignevents-event-details-no-organizer-email' ).parse() ),
 					padded: true,
-					classes: [ 'ext-campaignevents-event-details-message-all-participants-button-popup' ],
+					classes: [ 'ext-campaignevents-eventdetails-message-all-participants-button-popup' ],
 					align: 'forwards'
 				};
 				this.messageParticipantsButton = new OO.ui.PopupButtonWidget( {
 					label: mw.message( 'campaignevents-event-details-message-participants' ).text(),
-					classes: [ 'ext-campaignevents-event-details-message-all-participants-button' ],
+					classes: [ 'ext-campaignevents-eventdetails-message-all-participants-button' ],
 					popup: popup
 				} );
 				this.$messageParticipantsButton.replaceWith(
@@ -206,7 +206,7 @@
 		this.isSelectionInverted = false;
 		this.selectedParticipantsAmount = this.participantsTotal;
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-details-hide-element' );
+			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-eventdetails-hide-element' );
 		}
 		this.emit( 'change' );
 	};
@@ -216,7 +216,7 @@
 		this.isSelectionInverted = false;
 		this.selectedParticipantsAmount = 0;
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-details-hide-element' );
+			this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-eventdetails-hide-element' );
 		}
 		this.emit( 'change' );
 	};
@@ -270,7 +270,7 @@
 			this.selectedParticipantIDs.push( checkbox.getValue() );
 		}
 		if ( this.removeParticipantsButton ) {
-			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-details-hide-element' );
+			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-eventdetails-hide-element' );
 		}
 	};
 
@@ -281,7 +281,7 @@
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 			this.selectedParticipantIDs = [];
 			if ( this.removeParticipantsButton ) {
-				this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-details-hide-element' );
+				this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-eventdetails-hide-element' );
 			}
 			this.isSelectionInverted = false;
 			return;
@@ -352,7 +352,7 @@
 					successMsg = mw.message(
 						'campaignevents-event-details-remove-all-participant-notification'
 					).text();
-					thisClass.$noParticipantsStateElement.removeClass( 'ext-campaignevents-details-hide-element' );
+					thisClass.$noParticipantsStateElement.removeClass( 'ext-campaignevents-eventdetails-hide-element' );
 					thisClass.searchParticipantsWidget.$element.hide();
 					thisClass.messageParticipantsButton.$element.hide();
 					thisClass.$participantsContainer.hide();
@@ -533,7 +533,7 @@
 					checkboxCell = new OO.ui.Element( {
 						$element: $( '<td>' ),
 						content: [ checkboxField ],
-						classes: [ 'ext-campaignevents-details-user-row-checkbox' ]
+						classes: [ 'ext-campaignevents-eventdetails-user-row-checkbox' ]
 					} );
 				newParticipantCheckbox.on( 'change', function ( selected ) {
 					thisClass.onParticipantCheckboxChange( selected, this );
@@ -559,7 +559,7 @@
 						icon: 'lock',
 						label: privateLabel,
 						title: privateLabel,
-						classes: [ 'ext-campaignevents-event-details-participants-private-icon' ]
+						classes: [ 'ext-campaignevents-eventdetails-participants-private-icon' ]
 					} ).$element
 				);
 			}
@@ -599,7 +599,7 @@
 					}
 				} else if ( typeof curParticipantData.non_pii_answers === 'string' ) {
 					var $tableCell = $( '<td>' ).attr( 'colspan', this.nonPIIQuestionIDs.length )
-						.addClass( 'ext-campaignevents-details-participants-responses-aggregated-notice' )
+						.addClass( 'ext-campaignevents-eventdetails-participants-responses-aggregated-notice' )
 						.text( curParticipantData.non_pii_answers );
 					items.push( new OO.ui.Element( { $element: $tableCell } ) );
 				}

@@ -39,7 +39,7 @@
 		} );
 
 		// eslint-disable-next-line no-jquery/no-global-selector
-		this.content.$element.append( $( '#ext-campaignEvents-detailsDialog-content' ) );
+		this.content.$element.append( $( '#ext-campaignevents-eventpage-details-dialog-content' ) );
 		this.$body.append( this.content.$element );
 	};
 

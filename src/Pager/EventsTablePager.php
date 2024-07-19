@@ -93,7 +93,7 @@ class EventsTablePager extends TablePager {
 				return $this->getLinkRenderer()->makeKnownLink(
 					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, $this->mCurrentRow->event_id ),
 					$value,
-					[ 'class' => 'ext-campaignevents-eventspager-eventpage-link' ]
+					[ 'class' => 'ext-campaignevents-events-table-eventpage-link' ]
 				);
 			case 'event_location':
 				$meetingType = EventStore::getMeetingTypeFromDBVal( $this->mCurrentRow->event_meeting_type );
@@ -182,7 +182,7 @@ class EventsTablePager extends TablePager {
 	 * @inheritDoc
 	 */
 	protected function getTableClass() {
-		return parent::getTableClass() . ' ext-campaignevents-eventspager-table';
+		return parent::getTableClass() . ' ext-campaignevents-events-table';
 	}
 
 	/**
@@ -192,7 +192,7 @@ class EventsTablePager extends TablePager {
 		$ret = parent::getCellAttrs( $field, $value );
 		$addClass = null;
 		if ( $field === 'manage_event' ) {
-			$addClass = 'ext-campaignevents-eventspager-cell-manage';
+			$addClass = 'ext-campaignevents-events-table-cell-manage';
 		}
 		if ( $addClass ) {
 			$ret['class'] = isset( $ret['class'] ) ? $ret['class'] . " $addClass" : $addClass;

@@ -239,6 +239,7 @@
 			"styles": [
 				"ext.campaignEvents.specialeventslist.styles/SpecialMyEvents.less",
 				"ext.campaignEvents.specialeventslist.styles/SpecialAllEvents.less",
+				"ext.campaignEvents.specialeventslist.styles/SpecialMyInvitationLists.less",
 				"ext.campaignEvents.specialeventslist.styles/EventsTablePager.less",
 				"ext.campaignEvents.specialeventslist.styles/EventsListPager.less",
 				"ext.campaignEvents.TextWithIconWidget.less"

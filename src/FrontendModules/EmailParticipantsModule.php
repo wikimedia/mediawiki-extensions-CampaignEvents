@@ -70,7 +70,8 @@ class EmailParticipantsModule {
 	private function getEmailForm( ITextFormatter $msgFormatter ): FieldsetLayout {
 		$fields = [];
 
-		$recipientsList = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-email-recipient-list' ] );
+		$recipientsList = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-eventdetails-email-recipient-list' ] );
 		$addRecipientsBtn = new ButtonWidget( [
 			'framed' => false,
 			'flags' => [ 'progressive' ],
@@ -153,7 +154,7 @@ class EmailParticipantsModule {
 
 		return new FieldsetLayout( [
 			'items' => $fields,
-			'classes' => [ 'ext-campaignevents-details-email-form' ]
+			'classes' => [ 'ext-campaignevents-eventdetails-email-form' ]
 		] );
 	}
 

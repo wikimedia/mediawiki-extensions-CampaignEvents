@@ -5,15 +5,15 @@ const Page = require( 'wdio-mediawiki/Page' );
 class MyEventsPage extends Page {
 
 	get manageEventMenuButton() {
-		return $( '.ext-campaignevents-eventspager-cell-manage .oo-ui-icon-ellipsis' );
+		return $( '.ext-campaignevents-events-table-cell-manage .oo-ui-icon-ellipsis' );
 	}
 
 	get closeRegistrationButton() {
-		return $( '.ext-campaignevents-eventspager-cell-manage' ).$( '*=Close' );
+		return $( '.ext-campaignevents-events-table-cell-manage' ).$( '*=Close' );
 	}
 
 	get deleteRegistrationButton() {
-		return $( '.ext-campaignevents-eventspager-cell-manage' ).$( '*=Delete' );
+		return $( '.ext-campaignevents-events-table-cell-manage' ).$( '*=Delete' );
 	}
 
 	get notification() {
@@ -21,7 +21,7 @@ class MyEventsPage extends Page {
 	}
 
 	get firstEvent() {
-		return $( '.ext-campaignevents-eventspager-eventpage-link' );
+		return $( '.ext-campaignevents-events-table-eventpage-link' );
 	}
 
 	get deleteConfirmationButton() {

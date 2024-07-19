@@ -22,7 +22,7 @@ class EventPage extends Page {
 	}
 
 	get moreDetailsDialogButton() {
-		return $( '.ext-campaignevents-event-details-btn' );
+		return $( '.ext-campaignevents-eventpage-details-btn' );
 	}
 
 	get cancelRegistrationButton() {
