@@ -215,7 +215,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "Inscriptions fermées",
 	"campaignevents-eventpage-btn-event-ended": "Événement terminé",
 	"campaignevents-eventpage-dialog-title": "Détails de l’évènement",
-	"campaignevents-eventpage-dialog-organizers": "Organisé par : $1",
+	"campaignevents-eventpage-dialog-organizers": "Organisé {{PLURAL:$2|}}par : $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Voir tous les organisateurs",
 	"campaignevents-eventpage-dialog-participants": "$1 participant{{PLURAL:$1||s}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|participant inscrit|participants inscrits}} en privé",

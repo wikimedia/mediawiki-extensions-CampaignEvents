@@ -450,7 +450,6 @@
 	"campaignevents-invitations-pager-status-processing": "Обработувам...",
 	"campaignevents-myinvitationslist-empty-text": "Откријте нови учесници на вашиот проект или настан. Дајте список на статии кои ги покриваат темите на вашата активност. Потоа ќе добиете список со покани кон уредници кои можеби се заинтересирани да ви се приклучат во проектот или настанот.",
 	"campaignevents-myinvitationslist-generate-button": "Создај нов список со покани",
-	"campaignevents-myinvitationslist-add-button": "Додај",
 	"campaignevents-invitation-list-error-empty-name": "Внесете име на списокот со покани.",
 	"campaignevents-invitation-list-error-invalid-page": "Внесете страница за настанот што користи Пријавување на настани.",
 	"campaignevents-invitation-list-error-event-ended": "Овој настан заврши. Внесете тековен настан.",

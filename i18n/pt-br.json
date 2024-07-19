@@ -3,6 +3,7 @@
 		"authors": [
 			"Duke of Wikipädia",
 			"Eduardoaddad",
+			"Flaviane da Silva",
 			"Fúlvio",
 			"Glaucia Japui Gonçalves",
 			"Re demz",
@@ -302,5 +303,7 @@
 	"campaignevents-register-question-profession-stats-label": "Qual é a sua profissão?",
 	"campaignevents-details-stats-header-option": "Opção",
 	"campaignevents-details-stats-header-percentage": "Porcentagem",
-	"campaignevents-details-stats-header-number": "Número"
+	"campaignevents-details-stats-header-number": "Número",
+	"campaignevents-invitationlist-event": "$1: lista de convites",
+	"campaignevents-invitationlist-worklist-label": "Ver lista de artigos"
 }

@@ -449,7 +449,7 @@
 	"campaignevents-invitations-pager-status-processing": "Verarbeite …",
 	"campaignevents-myinvitationslist-empty-text": "Entdecke neue Teilnehmer für dein Projekt oder deine Veranstaltung. Stelle eine Liste mit Artikeln bereit, die die Themen deiner Aktivitäten abdecken. Anschließend erhältst du eine Einladungsliste mit Benutzern, die möglicherweise an der Teilnahme an deinem Projekt oder deiner Veranstaltung interessiert sind.",
 	"campaignevents-myinvitationslist-generate-button": "Neue Einladungsliste erstellen",
-	"campaignevents-myinvitationslist-add-button": "Hinzufügen",
+	"campaignevents-myinvitationslist-new-button": "Neu",
 	"campaignevents-invitation-list-error-empty-name": "Einen Namen für die Einladungsliste angeben.",
 	"campaignevents-invitation-list-error-invalid-page": "Gib eine Veranstaltungsseite ein, die die Veranstaltungsanmeldung verwendet.",
 	"campaignevents-invitation-list-error-event-ended": "Diese Veranstaltung ist beendet. Gib eine aktive Veranstaltung ein.",
@@ -460,8 +460,16 @@
 	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Der folgende Artikel wurde|Die folgenden Artikel wurden}} nicht gefunden. Bitte überprüfe {{PLURAL:$1|den Titel|die folgenden Titel}} und versuche es erneut.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Der folgende Artikel ist|Die folgenden Artikel sind}} nicht im Haupt-Namensraum. Bitte gib nur Artikel im Haupt-Namensraum ein.\n$2",
 	"invitationlist": "Einladungsliste",
+	"campaignevents-invitationlist-event": "$1: Einladungsliste",
 	"campaignevents-invitation-list-processing": "<strong>Deine Liste der einzuladenden Benutzer wird generiert.</strong> Aktualisiere die Seite in 5-10 Minuten, um deine Einladungsliste anzuzeigen.",
 	"campaignevents-invitation-list-invalid-id": "Gib eine gültige Einladungslisten-ID ein. [[Special:MyInvitationLists|Deine Einladungslisten]].",
 	"campaignevents-invitation-list-does-not-exist": "Diese Einladungsliste existiert nicht. [[Special:MyInvitationLists|Deine Einladungslisten]].",
-	"campaignevents-invitation-list-not-creator": "Du hast keine Berechtigung, diese Einladungsliste anzuzeigen, da du sie nicht erstellt hast. [[Special:MyInvitationLists|Deine Einladungslisten]]."
+	"campaignevents-invitation-list-not-creator": "Du hast keine Berechtigung, diese Einladungsliste anzuzeigen, da du sie nicht erstellt hast. [[Special:MyInvitationLists|Deine Einladungslisten]].",
+	"campaignevents-invitation-list-intro": "$1 {{PLURAL:$1|Benutzer}} erstellt, basierend auf den folgenden Kriterien: die Bytes, die sie zu den Artikeln beigetragen haben, die Anzahl der Bearbeitungen, die sie an den Artikeln vorgenommen haben, ihre Gesamtzahl an Bearbeitungen in den Wikis und wie lange sie in den Wikis bearbeitet haben.",
+	"campaignevents-invitationlist-no-editors": "<strong>Keine Benutzer erfüllen die [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists Kriterien für die Einladungsliste] aus deiner Artikelliste.</strong> Du kannst [[Special:GenerateInvitationList|eine neue Einladungsliste erstellen]] mit einer neuen Artikelliste.",
+	"campaignevents-invitationlist-highly-recommended": "Sehr empfehlenswert, um einzuladen",
+	"campaignevents-invitationlist-highly-recommended-info": "Diese Benutzer erhielten eine hohe Platzierung auf der Einladungsliste, so dass sie mit größerer Wahrscheinlichkeit an einer Teilnahme an deiner Aktivität interessiert sind.",
+	"campaignevents-invitationlist-recommended": "Es wird empfohlen, einzuladen",
+	"campaignevents-invitationlist-recommended-info": "Diese Benutzer haben einen mittleren Platz auf der Einladungsliste erhalten, könnten aber dennoch an einer Teilnahme an deiner Aktivität interessiert sein.",
+	"campaignevents-invitationlist-worklist-label": "Artikelliste anzeigen"
 }

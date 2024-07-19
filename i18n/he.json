@@ -449,7 +449,6 @@
 	"campaignevents-invitations-pager-status-processing": "עיבוד...",
 	"campaignevents-myinvitationslist-empty-text": "{{GENDER:|גלה|גלי}} משתתפים חדשים לפרויקט או לאירוע שלך. {{GENDER:|ספק|ספקי}} רשימת ערכים המכסים את הנושאים של הפעילות שלך. לאחר מכן, {{GENDER:|תקבל|תקבלי}} רשימת הזמנות של עורכים שעשויים להיות מעוניינים להצטרף לפרויקט או לאירוע שלך.",
 	"campaignevents-myinvitationslist-generate-button": "יצירת רשימת הזמנות חדשה",
-	"campaignevents-myinvitationslist-add-button": "הוספה",
 	"campaignevents-invitation-list-error-empty-name": "נא לתת שם לרשימת ההזמנות.",
 	"campaignevents-invitation-list-error-invalid-page": "יש להיכנס לדף אירוע המשתמש ברישום אירועים.",
 	"campaignevents-invitation-list-error-event-ended": "האירוע הזה הסתיים. יש להזין אירוע פעיל.",
@@ -460,8 +459,15 @@
 	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|הערך הבא לא נמצא|הערכים הבאים לא נמצאו}}. נא לוודא את {{PLURAL:$1|הכותרת|הכותרות}} ולנסות שוב.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|הערך הבא|הערכים הבאים}} לא נמצאים במרחב השם הראשי. נא להזין ערכים במרחב השם הראשי בלבד.\n$2",
 	"invitationlist": "רשימת הזמנות",
+	"campaignevents-invitationlist-event": "$1: רשימת הזמנות",
 	"campaignevents-invitation-list-processing": "<strong>רשימת העורכים המוזמנים שלך נוצרת.</strong> יש לרענן את הדף תוך 5-10 דקות כדי להציג את רשימת ההזמנות שלך.",
 	"campaignevents-invitation-list-invalid-id": "יש ספק מזהה רשימת הזמנות תקין. [[Special:MyInvitationLists|צפייה ברשימות ההזמנות שלך]].",
 	"campaignevents-invitation-list-does-not-exist": "רשימת ההזמנות הזאת אינה קיימת. [[Special:MyInvitationLists|צפייה ברשימות ההזמנות שלך]].",
-	"campaignevents-invitation-list-not-creator": "אין לך הרשאה להציג את רשימת ההזמנות הזאת כי לא יצרת אותה. [[Special:MyInvitationLists|צפייה ברשימות ההזמנות שלך]]."
+	"campaignevents-invitation-list-not-creator": "אין לך הרשאה להציג את רשימת ההזמנות הזאת כי לא יצרת אותה. [[Special:MyInvitationLists|צפייה ברשימות ההזמנות שלך]].",
+	"campaignevents-invitationlist-no-editors": "<strong>אין עורכים שמתאימים ל[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists תנאים של רשימת הזמנות] מתוך רשימת הערכים שלך.</strong> אפשר [[Special:GenerateInvitationList|ליצור רשימת הזמנות חדשה]] עם רשימת ערכים חדשה.",
+	"campaignevents-invitationlist-highly-recommended": "מומלץ מאוד להזמין",
+	"campaignevents-invitationlist-highly-recommended-info": "העורכים האלה קיבלו דירוג גבוה ברשימת ההזמנות, ויש סבירות גבוהה יותר שהם יהיו מעוניינים בהצטרפות לפעילות שלך.",
+	"campaignevents-invitationlist-recommended": "מומלץ להזמין",
+	"campaignevents-invitationlist-recommended-info": "העורכים האלה קיבלו דירוג בינוני ברשימת ההזמנות, אבל בכל־זאת ייתכן שהם יהיו מעוניינים בהצטרפות לפעילות שלך.",
+	"campaignevents-invitationlist-worklist-label": "צפייה ברשימת ערכים"
 }

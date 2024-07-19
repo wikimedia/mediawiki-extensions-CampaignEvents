@@ -259,5 +259,7 @@
 	"campaignevents-worklist-error-invalid-titles": "{{PLURAL:$1|De follgenden Artikel huet|Déi follgend Artikelen hunn}} en ongültegen Titel. Verbessert {{PLURAL:$1|e|d'Titele}} wgl. a probéiert nach eng Kéier.\n$2",
 	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|De follgenden Artikel gouf|Déi follgend Artikele goufen}} net fonnt. Iwwerpréift wgl. {{PLURAL:$1|den Titel|d'Titelen}} a probéiert nach eng Kéier.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|De follgenden Artikel ass|Déi follgend Artikele sinn}} net am Haaptnummraum. Gitt wgl. just Artikelen am Haaptnummraum an.\n$2",
-	"invitationlist": "Invitatiounslëscht"
+	"invitationlist": "Invitatiounslëscht",
+	"campaignevents-invitationlist-event": "$1: Invitatiounslëscht",
+	"campaignevents-invitationlist-worklist-label": "Artikellëscht weisen"
 }

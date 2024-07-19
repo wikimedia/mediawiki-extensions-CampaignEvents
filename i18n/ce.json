@@ -7,6 +7,7 @@
 	},
 	"nstab-event": "Хилам",
 	"specialpages-group-campaignevents": "Хиламаш",
+	"campaignevents-error-invalid-chat-url": "Чатан нийса URL-адрес йазде.",
 	"campaignevents-error-empty-start": "ДӀадолоран хан къастайе.",
 	"campaignevents-error-start-past": "ТӀейогӀучу хенахь мероприяти дӀайолоран хан билгалйаккха.",
 	"campaignevents-error-empty-end": "Чекхйаларан хан йазйе.",
@@ -178,6 +179,7 @@
 	"campaignevents-details-stats-header-number": "Лоьмар",
 	"campaignevents-register-page-nonlocal": "Дехар до, '''[$2 тӀехь $1 мероприяте регистраци чекхйаккха]''', хилам кхоьллина йолу вики.",
 	"campaignevents-delete-registration-page-nonlocal": "Дехар до, [$1 мероприятин регистраци чекхйаккха $2], вики иза тӀехь кхоьллина йолу.",
+	"campaignevents-generateinvitationlist-event-page-field-label": "Мероприятин агӀо",
 	"campaignevents-invitation-list-error-invalid-page": "Схьайелла мероприятин агӀо, регистрацин хиламаш болу.",
 	"campaignevents-invitation-list-error-not-organizer": "Схьайелла мероприятин агӀо, хьо вовшахтохархо санна хӀоттина йолу.",
 	"campaignevents-worklist-error-empty": "Цхьа йаззаман цӀе мукъане а йазйе."
