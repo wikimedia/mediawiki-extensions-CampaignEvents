@@ -40,7 +40,7 @@ class SpecialMyEvents extends SpecialPage {
 		$this->setHeaders();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 		$this->getOutput()->addModuleStyles( [ 'ext.campaignEvents.specialeventslist.styles' ] );
-		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialeventslist' ] );
+		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
 		$this->showFormAndEvents();
 	}
 

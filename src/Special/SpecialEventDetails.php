@@ -122,7 +122,7 @@ class SpecialEventDetails extends SpecialPage {
 
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 
-		$out->addModules( [ 'ext.campaignEvents.specialeventdetails', 'oojs-ui-widgets' ] );
+		$out->addModules( [ 'ext.campaignEvents.specialPages', 'oojs-ui-widgets' ] );
 
 		$eventID = $this->event->getID();
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
