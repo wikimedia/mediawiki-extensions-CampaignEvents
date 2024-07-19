@@ -49,7 +49,9 @@ class FindPotentialInviteesJob extends Job implements GenericParameterJob {
 		}
 
 		$invitationListStore = CampaignEventsServices::getInvitationListStore();
-		$invitationListStore->storeInvitationListUsers( $this->listID, $inviteesByID );
+		if ( $inviteesByID ) {
+			$invitationListStore->storeInvitationListUsers( $this->listID, $inviteesByID );
+		}
 		$invitationListStore->updateStatus( $this->listID, InvitationList::STATUS_READY );
 
 		return true;
