@@ -460,7 +460,7 @@
 	"campaignevents-invitation-list-disabled": "Notice shown on [[Special:GenerateInvitationList]], [[Special:InvitationList]] and [[Special:MyInvitationLists]] if the invitation list is disabled in the wiki",
 	"campaignevents-invitation-list-not-allowed": "Message shown on [[Special:GenerateInvitationList]] and [[Special:MyInvitationLists]] if the invitation list is enabled, but the user doesn't have the organizer right",
 	"myinvitationlists": "Description of [[Special:MyInvitationLists]]",
-	"campaignevents-invitations-pager-status-editors": "Text on [[Special:MyInvitationsLists]] to indicate how many editors were found for a specific invitation list. Parameters:\n* $1 - Number of generated editors",
+	"campaignevents-invitations-pager-status-editors": "Text on [[Special:MyInvitationsLists]] to indicate how many editors were found for a specific invitation list. Parameters:\n* $1 - Number of editors",
 	"campaignevents-invitations-pager-status-processing": "Text on [[Special:MyInvitationsLists]] to indicate that an invitation list is still generating.",
 	"campaignevents-myinvitationslist-empty-text": "Information provided to users who have not yet used [[Special:GenerateInvitationList]], displayed on [[Special:MyInvitationLists]]",
 	"campaignevents-myinvitationslist-generate-button": "Button label text shown on [[Special:MyInvitationLists]], this button navigates to [[Special:GenerateInvitationList]]",
