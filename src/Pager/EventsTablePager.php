@@ -207,8 +207,7 @@ class EventsTablePager extends TablePager {
 		return array_merge(
 			parent::getModuleStyles(),
 			[
-				// Avoid creating a new module for the pager only.
-				'ext.campaignEvents.specialeventslist.styles',
+				'ext.campaignEvents.specialPages.styles',
 				'oojs-ui.styles.icons-interactions'
 			]
 		);

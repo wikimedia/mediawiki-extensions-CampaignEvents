@@ -35,7 +35,7 @@ class SpecialEventDetails extends SpecialPage {
 	public const PAGE_NAME = 'EventDetails';
 	private const MODULE_STYLES = [
 		'oojs-ui.styles.icons-movement',
-		'ext.campaignEvents.specialeventdetails.styles',
+		'ext.campaignEvents.specialPages.styles',
 		'oojs-ui-widgets.styles'
 	];
 
