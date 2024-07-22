@@ -459,5 +459,7 @@
 	"campaignevents-generateinvitationlist-submit-button-text": "Générer",
 	"campaignevents-invitation-list-disabled": "Ce wiki n'a pas de listes d'invitations activées.",
 	"campaignevents-invitation-list-not-allowed": "Vous n'êtes pas autorisé à utiliser les listes d'invitations.",
-	"myinvitationlists": "Vos listes d'invitations"
+	"myinvitationlists": "Vos listes d'invitations",
+	"campaignevents-invitations-pager-status-processing": "Traitement en cours...",
+	"campaignevents-myinvitationslist-new-button": "Nouveau"
 }

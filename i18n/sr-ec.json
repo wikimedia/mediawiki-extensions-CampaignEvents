@@ -176,5 +176,7 @@
 	"campaignevents-generateinvitationlist-event-page-field-label": "Страница догађаја",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Списак чланака",
 	"campaignevents-generateinvitationlist-submit-button-text": "Генериши",
+	"campaignevents-invitations-pager-status-processing": "Обрађујем...",
+	"campaignevents-myinvitationslist-new-button": "Ново",
 	"campaignevents-worklist-error-empty": "Наведите бар један чланак."
 }

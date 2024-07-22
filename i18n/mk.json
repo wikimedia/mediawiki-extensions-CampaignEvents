@@ -450,6 +450,7 @@
 	"campaignevents-invitations-pager-status-processing": "Обработувам...",
 	"campaignevents-myinvitationslist-empty-text": "Откријте нови учесници на вашиот проект или настан. Дајте список на статии кои ги покриваат темите на вашата активност. Потоа ќе добиете список со покани кон уредници кои можеби се заинтересирани да ви се приклучат во проектот или настанот.",
 	"campaignevents-myinvitationslist-generate-button": "Создај нов список со покани",
+	"campaignevents-myinvitationslist-new-button": "Ново",
 	"campaignevents-invitation-list-error-empty-name": "Внесете име на списокот со покани.",
 	"campaignevents-invitation-list-error-invalid-page": "Внесете страница за настанот што користи Пријавување на настани.",
 	"campaignevents-invitation-list-error-event-ended": "Овој настан заврши. Внесете тековен настан.",
@@ -460,8 +461,16 @@
 	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Следнава статија не е најдена|Следниве статии не се најдени}}. Проверете {{PLURAL:$1|го насловот|ги насловите}} и обидете се повторно.\n$2",
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Следнава статија не е|Следниве статии не се}} во главниот именски простор. Внесувајте само статии во тој простор.\n$2",
 	"invitationlist": "Список со покани",
+	"campaignevents-invitationlist-event": "$1: Список со покани",
 	"campaignevents-invitation-list-processing": "<strong>Вашиот список со покани до уредници е создаден.</strong> Превчитајте ја страницата за 5-10 минути за да го погледате.",
 	"campaignevents-invitation-list-invalid-id": "Укажете важечка назнака на список со покани. [[Special:MyInvitationLists | Погледајте ги вашите списоци со покани]].",
 	"campaignevents-invitation-list-does-not-exist": "Овој список со покани не постои. [[Special:MyInvitationLists|Погледајте ги вашите списоци со покани]].",
-	"campaignevents-invitation-list-not-creator": "Немате дозвола да го гледате овој список со покани бидејќи вие не сте го создале. [[Special:MyInvitationLists|Погледајте ги вашите списоци со покани]]."
+	"campaignevents-invitation-list-not-creator": "Немате дозвола да го гледате овој список со покани бидејќи вие не сте го создале. [[Special:MyInvitationLists|Погледајте ги вашите списоци со покани]].",
+	"campaignevents-invitation-list-intro": "{{PLURAL:$1|Создаден $1 уредник|Создадени $1 уредници}} врз основа на следниве критериуми: придонес во статиите во бајти, број на уредувања во статии, севкупен број уредувања на викијата и колку неодамна уредувале на викијата.",
+	"campaignevents-invitationlist-no-editors": "<strong>Ниеден уредник не ги задоволува [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists критериумите за покана] од вашиот список на статии.</strong> Можете да [[Special:GenerateInvitationList|создадете нов список со покани]] со нов список на статии.",
+	"campaignevents-invitationlist-highly-recommended": "Високопрепорачани за канење",
+	"campaignevents-invitationlist-highly-recommended-info": "Овие уредници се котираат високо на списокот со покани, па затоа е поверојатно да се заинтересирани да ви се приклучат во вашата активност.",
+	"campaignevents-invitationlist-recommended": "Препорачани за канење",
+	"campaignevents-invitationlist-recommended-info": "Овие уредници средно се котираат на списокот со покани, но сепак би можело да се заинтересирани да ви се приклучат во вашата активност.",
+	"campaignevents-invitationlist-worklist-label": "Погл. список на статии"
 }
