@@ -233,16 +233,19 @@
 				"campaignevents-eventslist-delete-success"
 			]
 		},
-		"ext.campaignEvents.specialeventslist.styles": {
+		"ext.campaignEvents.specialPages.styles": {
 			"localBasePath": "resources",
 			"remoteExtPath": "CampaignEvents/resources",
 			"styles": [
-				"ext.campaignEvents.specialeventslist.styles/SpecialMyEvents.less",
-				"ext.campaignEvents.specialeventslist.styles/SpecialAllEvents.less",
-				"ext.campaignEvents.specialeventslist.styles/SpecialMyInvitationLists.less",
-				"ext.campaignEvents.specialeventslist.styles/EventsTablePager.less",
-				"ext.campaignEvents.specialeventslist.styles/EventsListPager.less",
-				"ext.campaignEvents.TextWithIconWidget.less"
+				"ext.campaignEvents.specialPages.styles/pagers/EventsListPager.less",
+				"ext.campaignEvents.specialPages.styles/pagers/EventsTablePager.less",
+				"ext.campaignEvents.specialPages.styles/pagers/InvitationsListPager.less",
+				"ext.campaignEvents.specialPages.styles/specials/SpecialAllEvents.less",
+				"ext.campaignEvents.specialPages.styles/specials/SpecialEventDetails.less",
+				"ext.campaignEvents.specialPages.styles/specials/SpecialMyEvents.less",
+				"ext.campaignEvents.specialPages.styles/specials/SpecialRegisterForEvent.less",
+				"ext.campaignEvents.TextWithIconWidget.less",
+				"ext.campaignEvents.userlinks.styles.less"
 			]
 		},
 		"ext.campaignEvents.eventpage.styles": {
@@ -317,19 +320,6 @@
 				"oojs-ui-core",
 				"oojs-ui-windows",
 				"oojs-ui-widgets"
-			]
-		},
-		"ext.campaignEvents.specialeventdetails.styles": {
-			"styles": [
-				"ext.campaignEvents.specialeventdetails.styles.less",
-				"ext.campaignEvents.userlinks.styles.less"
-			]
-		},
-		"ext.campaignEvents.specialregisterforevent.styles": {
-			"localBasePath": "resources/ext.campaignEvents.specialregisterforevent.styles",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialregisterforevent.styles",
-			"styles": [
-				"RegisterForEvent.styles.less"
 			]
 		}
 	},

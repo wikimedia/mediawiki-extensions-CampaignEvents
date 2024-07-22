@@ -73,7 +73,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->getOutput()->enableOOUI();
 		$this->getOutput()->addModuleStyles( [
-			'ext.campaignEvents.specialregisterforevent.styles',
+			'ext.campaignEvents.specialPages.styles',
 			'oojs-ui.styles.icons-location',
 			'oojs-ui.styles.icons-moderation',
 		] );

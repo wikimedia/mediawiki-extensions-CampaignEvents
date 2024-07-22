@@ -45,7 +45,7 @@ class SpecialMyInvitationLists extends SpecialPage {
 		$out->enableOOUI();
 		$out->addModuleStyles( [
 			'codex-styles',
-			'ext.campaignEvents.specialeventslist.styles',
+			'ext.campaignEvents.specialPages.styles',
 			'oojs-ui.styles.icons-alerts'
 		] );
 		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
