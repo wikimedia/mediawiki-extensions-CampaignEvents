@@ -247,7 +247,7 @@
 			e.preventDefault();
 			handleRegistrationOrEdit();
 		} );
-		$( '.ext-campaignevents-event-details-btn' ).on( 'click', function ( e ) {
+		$( '.ext-campaignevents-eventpage-details-btn' ).on( 'click', function ( e ) {
 			e.preventDefault();
 			windowManager.openWindow( detailsDialog );
 		} );

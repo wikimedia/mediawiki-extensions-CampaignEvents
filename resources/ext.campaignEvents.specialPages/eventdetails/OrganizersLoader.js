@@ -6,8 +6,8 @@
 		this.eventID = mw.config.get( 'wgCampaignEventsEventID' );
 		this.lastOrganizerID = mw.config.get( 'wgCampaignEventsLastOrganizerID' );
 		/* eslint-disable no-jquery/no-global-selector */
-		this.$organizersList = $( '.ext-campaignevents-event-details-organizers-list' );
-		this.$loadOrganizersLink = $( '.ext-campaignevents-event-details-load-organizers-link' );
+		this.$organizersList = $( '.ext-campaignevents-eventdetails-organizers-list' );
+		this.$loadOrganizersLink = $( '.ext-campaignevents-eventdetails-load-organizers-link' );
 		/* eslint-enable no-jquery/no-global-selector */
 		this.installEventListeners();
 	}

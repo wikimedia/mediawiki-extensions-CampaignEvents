@@ -187,7 +187,7 @@ class EventDetailsModule {
 
 		return ( new Tag( 'div' ) )
 			->appendContent( $headerItems )
-			->addClasses( [ 'ext-campaignevents-event-details-info-topbar' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-info-topbar' ] );
 	}
 
 	/**
@@ -345,7 +345,7 @@ class EventDetailsModule {
 		] );
 		$organizersList = Html::rawElement(
 			'ul',
-			[ 'class' => 'ext-campaignevents-event-details-organizers-list' ],
+			[ 'class' => 'ext-campaignevents-eventdetails-organizers-list' ],
 			$organizerListItems
 		);
 		$ret[] = new HtmlSnippet( $organizersList );
@@ -355,7 +355,7 @@ class EventDetailsModule {
 				'label' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-organizers-view-more' )
 				),
-				'classes' => [ 'ext-campaignevents-event-details-load-organizers-link' ],
+				'classes' => [ 'ext-campaignevents-eventdetails-load-organizers-link' ],
 				'framed' => false,
 				'flags' => [ 'progressive' ]
 			] );
@@ -523,12 +523,12 @@ class EventDetailsModule {
 			);
 		}
 		$syncDetailsRawParagraph = ( new Tag( 'p' ) )
-			->addClasses( [ 'ext-campaignevents-event-details-tracking-tool-sync-details' ] )
+			->addClasses( [ 'ext-campaignevents-eventdetails-tracking-tool-sync-details' ] )
 			->appendContent( htmlspecialchars( $msgLastSync ) );
 		$sectionItems[] = new MessageWidget( [
 			'type' => $msgType,
 			'label' => new HtmlSnippet( htmlspecialchars( $msgStatus ) . $syncDetailsRawParagraph ),
-			'classes' => [ 'ext-campaignevents-event-details-tracking-tool-sync' ],
+			'classes' => [ 'ext-campaignevents-eventdetails-tracking-tool-sync' ],
 			'inline' => true,
 		] );
 
@@ -545,7 +545,7 @@ class EventDetailsModule {
 			'label' => $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-view-event-page' )
 			),
-			'classes' => [ 'ext-campaignevents-event-details-view-event-page-button' ],
+			'classes' => [ 'ext-campaignevents-eventdetails-view-event-page-button' ],
 			'href' => $this->pageURLResolver->getUrl( $this->registration->getPage() )
 		] );
 	}
@@ -562,15 +562,15 @@ class EventDetailsModule {
 	public static function makeSection( string $icon, $content, string $label ): Tag {
 		$iconWidget = new IconWidget( [
 			'icon' => $icon,
-			'classes' => [ 'ext-campaignevents-event-details-icon' ]
+			'classes' => [ 'ext-campaignevents-eventdetails-icon' ]
 		] );
 		$header = ( new Tag( 'h3' ) )
 			->appendContent( $iconWidget, $label )
-			->addClasses( [ 'ext-campaignevents-event-details-section-header' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-section-header' ] );
 
 		$contentTag = ( new Tag( 'div' ) )
 			->appendContent( $content )
-			->addClasses( [ 'ext-campaignevents-event-details-section-content' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-section-content' ] );
 
 		return ( new Tag( 'div' ) )
 			->appendContent( $header, $contentTag );

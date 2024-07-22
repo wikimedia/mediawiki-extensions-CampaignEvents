@@ -1,6 +1,6 @@
 @import 'mediawiki.skin.variables.less';
 
-.ext-campaignevents-events-list-pager-details {
+.ext-campaignevents-events-list-details {
 	> *:not( :last-child ) {
 		margin-bottom: @spacing-50;
 	}
@@ -11,16 +11,16 @@
 	}
 }
 
-.ext-campaignevents-eventslist-pager-icon {
+.ext-campaignevents-events-list-icon {
 	opacity: @opacity-icon-subtle;
 }
 
-.ext-campaignevents-eventslist-pager-organizers {
+.ext-campaignevents-events-list-organizers {
 	// Prevent overflows with long usernames (T363864)
 	overflow-wrap: anywhere;
 }
 
-.ext-campaignevents-events-list-pager-row {
+.ext-campaignevents-events-list-row {
 	margin-left: 25px;
 	display: flex;
 
@@ -28,24 +28,26 @@
 		margin-top: @spacing-125;
 	}
 
-	> .ext-campaignevents-events-list-pager-day {
+	> .ext-campaignevents-events-list-day {
 		font-size: 2em;
 		flex: 0 0 1.5em;
 		margin-right: @spacing-125;
 	}
 }
 
-.mw-index-pager-list-header {
-	font-size: 1.2em;
+.mw-special-AllEvents {
+	.mw-index-pager-list-header {
+		font-size: 1.2em;
+	}
+
+	ul.mw-contributions-list.mw-contributions-list {
+		// Remove any left margin or padding set by the skin on ul elements (needs high specificity)
+		margin-left: 0;
+		padding-left: 0;
+	}
 }
 
-ul.mw-contributions-list.mw-contributions-list {
-	// Remove any left margin or padding set by the skin on ul elements (needs high specificity)
-	margin-left: 0;
-	padding-left: 0;
-}
-
-.ext-campaignevents-events-list-pager-link {
+.ext-campaignevents-events-list-link {
 	font-size: 1.1em;
 	overflow-wrap: anywhere;
 }

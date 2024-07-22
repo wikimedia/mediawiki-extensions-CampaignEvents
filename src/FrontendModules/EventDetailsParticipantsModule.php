@@ -205,7 +205,7 @@ class EventDetailsParticipantsModule {
 		] );
 
 		$content = ( new Tag( 'div' ) )
-			->addClasses( [ 'ext-campaignevents-event-details-participants-panel' ] )
+			->addClasses( [ 'ext-campaignevents-eventdetails-participants-panel' ] )
 			->appendContent( $layout );
 
 		$footer = $this->getFooter( $eventID, $canViewNonPIIParticipantsData, $event, $out );
@@ -237,10 +237,10 @@ class EventDetailsParticipantsModule {
 		);
 		$participantsCountElement = ( new Tag( 'span' ) )
 			->appendContent( $participantCountText )
-			->addClasses( [ 'ext-campaignevents-details-participants-header-participant-count' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-participants-header-participant-count' ] );
 		$participantsElement = ( new Tag( 'div' ) )
 			->appendContent( $participantsCountElement )
-			->addClasses( [ 'ext-campaignevents-details-participants-header-participants' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-participants-header-participants' ] );
 		if (
 			$canViewNonPIIParticipantsData &&
 			!$this->isPastEvent &&
@@ -253,14 +253,14 @@ class EventDetailsParticipantsModule {
 					MessageValue::new( 'campaignevents-event-details-header-questions-help' )
 				),
 				'invisibleLabel' => true,
-				'classes' => [ 'ext-campaignevents-details-participants-header-questions-help' ]
+				'classes' => [ 'ext-campaignevents-eventdetails-participants-header-questions-help' ]
 			] );
 			$participantsElement->appendContent( $questionsHelp );
 		}
 		$headerTitle = ( new Tag( 'div' ) )
 			->appendContent( $participantsElement )
-			->addClasses( [ 'ext-campaignevents-details-participants-header-title' ] );
-		$header = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-header' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-participants-header-title' ] );
+		$header = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-eventdetails-participants-header' ] );
 
 		if ( $totalParticipants ) {
 			$headerTitle->appendContent( $this->getSearchBar() );
@@ -298,9 +298,9 @@ class EventDetailsParticipantsModule {
 	): Tag {
 		// Use an outer container for the infinite scrolling
 		$container = ( new Tag( 'div' ) )
-			->addClasses( [ 'ext-campaignevents-details-participants-container' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-participants-container' ] );
 		$table = ( new Tag( 'table' ) )
-			->addClasses( [ 'ext-campaignevents-details-participants-table' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-participants-table' ] );
 
 		$table->appendContent( $this->getTableHeaders(
 				$canRemoveParticipants,
@@ -331,12 +331,12 @@ class EventDetailsParticipantsModule {
 	private function getEmptyStateElement( int $totalParticipants ): Tag {
 		$noParticipantsIcon = new IconWidget( [
 			'icon' => 'userGroup',
-			'classes' => [ 'ext-campaignevents-event-details-no-participants-icon' ]
+			'classes' => [ 'ext-campaignevents-eventdetails-no-participants-icon' ]
 		] );
 
-		$noParticipantsClasses = [ 'ext-campaignevents-details-no-participants-state' ];
+		$noParticipantsClasses = [ 'ext-campaignevents-eventdetails-no-participants-state' ];
 		if ( $totalParticipants > 0 ) {
-			$noParticipantsClasses[] = 'ext-campaignevents-details-hide-element';
+			$noParticipantsClasses[] = 'ext-campaignevents-eventdetails-hide-element';
 		}
 		return ( new Tag() )->appendContent(
 			$noParticipantsIcon,
@@ -344,7 +344,7 @@ class EventDetailsParticipantsModule {
 				$this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-no-participants-state' )
 				)
-			)->addClasses( [ 'ext-campaignevents-details-no-participants-description' ] )
+			)->addClasses( [ 'ext-campaignevents-eventdetails-no-participants-description' ] )
 		)->addClasses( $noParticipantsClasses );
 	}
 
@@ -357,7 +357,7 @@ class EventDetailsParticipantsModule {
 					MessageValue::new( 'campaignevents-event-details-search-participants-placeholder' )
 				),
 				'infusable' => true,
-				'classes' => [ 'ext-campaignevents-details-participants-search' ]
+				'classes' => [ 'ext-campaignevents-eventdetails-participants-search' ]
 			] );
 	}
 
@@ -378,7 +378,8 @@ class EventDetailsParticipantsModule {
 		array $nonPIIQuestionIDs,
 		bool $userCanViewNonPIIParticipantsData
 	): Tag {
-		$container = ( new Tag( 'thead' ) )->addClasses( [ 'ext-campaignevents-details-participants-table-header' ] );
+		$container = ( new Tag( 'thead' ) )
+			->addClasses( [ 'ext-campaignevents-eventdetails-participants-table-header' ] );
 		$row = ( new Tag( 'tr' ) )
 			->addClasses( [ 'ext-campaignevents-details-user-actions-row' ] );
 
@@ -399,7 +400,7 @@ class EventDetailsParticipantsModule {
 			);
 
 			$selectAllCell = ( new Tag( 'th' ) )
-				->addClasses( [ 'ext-campaignevents-details-participants-selectall-checkbox-cell' ] )
+				->addClasses( [ 'ext-campaignevents-eventdetails-participants-selectall-checkbox-cell' ] )
 				->appendContent( $selectAllCheckBoxField );
 			$row->appendContent( $selectAllCell );
 		}
@@ -409,13 +410,13 @@ class EventDetailsParticipantsModule {
 				'message' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-participants' )
 				),
-				'cssClasses' => [ 'ext-campaignevents-details-participants-username-cell' ],
+				'cssClasses' => [ 'ext-campaignevents-eventdetails-participants-username-cell' ],
 			],
 			[
 				'message' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-time-registered' )
 				),
-				'cssClasses' => [ 'ext-campaignevents-details-participants-time-registered-cell' ],
+				'cssClasses' => [ 'ext-campaignevents-eventdetails-participants-time-registered-cell' ],
 			],
 		];
 		if ( $canEmailParticipants ) {
@@ -423,7 +424,7 @@ class EventDetailsParticipantsModule {
 				'message' => $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-can-receive-email' )
 				),
-				'cssClasses' => [ 'ext-campaignevents-details-participants-can-receive-email-cell' ],
+				'cssClasses' => [ 'ext-campaignevents-eventdetails-participants-can-receive-email-cell' ],
 			];
 		}
 
@@ -437,7 +438,7 @@ class EventDetailsParticipantsModule {
 						'message' => $this->msgFormatter->format(
 							MessageValue::new( $nonPIIQuestionLabel )
 						),
-						'cssClasses' => [ 'ext-campaignevents-details-participants-non-pii-question-cells' ],
+						'cssClasses' => [ 'ext-campaignevents-eventdetails-participants-non-pii-question-cells' ],
 					];
 				}
 			}
@@ -566,7 +567,7 @@ class EventDetailsParticipantsModule {
 
 		if ( $canRemoveParticipants ) {
 			$checkboxCell = new Tag( 'td' );
-			$checkboxCell->addClasses( [ 'ext-campaignevents-details-user-row-checkbox' ] );
+			$checkboxCell->addClasses( [ 'ext-campaignevents-eventdetails-user-row-checkbox' ] );
 			$userId = $participant->getUser()->getCentralID();
 			$checkbox = new CheckboxInputWidget( [
 				'name' => 'event-details-participants-checkboxes',
@@ -603,7 +604,7 @@ class EventDetailsParticipantsModule {
 				'icon' => 'lock',
 				'label' => $labelText,
 				'title' => $labelText,
-				'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
+				'classes' => [ 'ext-campaignevents-eventdetails-participants-private-icon' ]
 			] );
 			$usernameCell->appendContent( $privateIcon );
 		}
@@ -656,7 +657,7 @@ class EventDetailsParticipantsModule {
 			);
 			$td = ( new Tag( 'td' ) )->setAttributes( [ 'colspan' => count( $nonPIIQuestionIDs ) ] )
 				->appendContent( $aggregatedMessage )
-				->addClasses( [ 'ext-campaignevents-details-participants-responses-aggregated-notice' ] );
+				->addClasses( [ 'ext-campaignevents-eventdetails-participants-responses-aggregated-notice' ] );
 			$row->appendContent( $td );
 			return $row;
 		} else {
@@ -719,7 +720,7 @@ class EventDetailsParticipantsModule {
 	): ?Tag {
 		$privateParticipantsCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );
 
-		$footer = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-event-details-participants-footer' ] );
+		$footer = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-eventdetails-participants-footer' ] );
 		if ( $privateParticipantsCount > 0 ) {
 			$icon = new IconWidget( [ 'icon' => 'lock' ] );
 			$text = $this->msgFormatter->format(
@@ -729,7 +730,7 @@ class EventDetailsParticipantsModule {
 			$textElement = ( new Tag( 'span' ) )
 				->appendContent( $text );
 			$privateParticipants = ( new Tag( 'div' ) )
-				->addClasses( [ 'ext-campaignevents-event-details-participants-private-count-footer' ] )
+				->addClasses( [ 'ext-campaignevents-eventdetails-participants-private-count-footer' ] )
 				->appendContent( $icon, $textElement );
 			// TODO The number should be updated dynamically when (private) participants are removed, see T322275.
 			$footer->appendContent( $privateParticipants );
@@ -749,7 +750,7 @@ class EventDetailsParticipantsModule {
 				'inline' => true
 			] );
 			$deletedNonPiiInfoNoticeElement->addClasses(
-				[ 'ext-campaignevents-event-details-participants-individual-data-deleted-notice' ]
+				[ 'ext-campaignevents-eventdetails-participants-individual-data-deleted-notice' ]
 			);
 
 			$footer->appendContent( $deletedNonPiiInfoNoticeElement );
@@ -766,7 +767,7 @@ class EventDetailsParticipantsModule {
 		bool $viewerCanRemoveParticipants,
 		bool $viewerCanEmailParticipants
 	): Tag {
-		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-details-participants-controls' ] );
+		$container = ( new Tag( 'div' ) )->addClasses( [ 'ext-campaignevents-eventdetails-participants-controls' ] );
 		$deselectButton = new ButtonWidget( [
 			'icon' => 'close',
 			'title' => $this->msgFormatter->format(
@@ -778,7 +779,7 @@ class EventDetailsParticipantsModule {
 			'label' => $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-participants-checkboxes-selected', [ 0, 0 ] )
 			),
-			'classes' => [ 'ext-campaignevents-details-participants-count-button' ]
+			'classes' => [ 'ext-campaignevents-eventdetails-participants-count-button' ]
 		] );
 		$container->appendContent( [ $deselectButton ] );
 
@@ -796,7 +797,7 @@ class EventDetailsParticipantsModule {
 				'id' => 'ext-campaignevents-event-details-remove-participant-button',
 				'classes' => [
 					'ext-campaignevents-event-details-remove-participant-button',
-					'ext-campaignevents-details-hide-element'
+					'ext-campaignevents-eventdetails-hide-element'
 				],
 			] );
 		}
@@ -808,14 +809,14 @@ class EventDetailsParticipantsModule {
 					MessageValue::new( 'campaignevents-event-details-message-all' )
 				),
 				'flags' => [ 'progressive' ],
-				'classes' => [ 'ext-campaignevents-event-details-message-all-participants-button' ],
+				'classes' => [ 'ext-campaignevents-eventdetails-message-all-participants-button' ],
 			] );
 		}
 
 		if ( $extraButtons ) {
 			$container->appendContent( new ButtonGroupWidget( [
 				'items' => $extraButtons,
-				'classes' => [ 'ext-campaignevents-event-details-extra-buttons' ],
+				'classes' => [ 'ext-campaignevents-eventdetails-extra-buttons' ],
 			] ) );
 		}
 		return $container;

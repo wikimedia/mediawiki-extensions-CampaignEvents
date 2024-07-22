@@ -209,20 +209,20 @@ class EventsListPager extends ReverseChronologicalPager {
 	 */
 	public function formatRow( $row ) {
 		$htmlRow = ( new Tag( 'li' ) )
-			->addClasses( [ 'ext-campaignevents-events-list-pager-row' ] );
+			->addClasses( [ 'ext-campaignevents-events-list-row' ] );
 		$page = $this->getEventPageFromRow( $row );
 		$pageUrlResolver = $this->pageURLResolver;
 		$timestampField = $this->getTimestampField();
 		$timestamp = $row->$timestampField;
 		$htmlRow->appendContent( ( new Tag() )
-			->addClasses( [ 'ext-campaignevents-events-list-pager-day' ] )
+			->addClasses( [ 'ext-campaignevents-events-list-day' ] )
 			->appendContent( $this->getDayFromTimestamp( $timestamp ) ) );
 		$detailContainer = ( new Tag() )
-			->addClasses( [ 'ext-campaignevents-events-list-pager-details' ] );
+			->addClasses( [ 'ext-campaignevents-events-list-details' ] );
 		$eventPageLinkElement = ( new Tag( 'a' ) )
 			->setAttributes( [
 				"href" => $pageUrlResolver->getUrl( $page ),
-				"class" => 'ext-campaignevents-events-list-pager-link'
+				"class" => 'ext-campaignevents-events-list-link'
 			] )
 			->appendContent( $row->event_name );
 		$detailContainer->appendContent(
@@ -237,7 +237,7 @@ class EventsListPager extends ReverseChronologicalPager {
 					$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() )
 				)->text(),
 				'label' => $this->msg( 'campaignevents-eventslist-date-label' )->text(),
-				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
+				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
 			] )
 		);
 		$detailContainer->appendContent(
@@ -245,7 +245,7 @@ class EventsListPager extends ReverseChronologicalPager {
 				'icon' => 'mapPin',
 				'content' => $this->msg( $this->getMeetingTypeMsg( $row ) )->text(),
 				'label' => $this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
-				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
+				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
 			] )
 		);
 		$detailContainer->appendContent(
@@ -253,8 +253,8 @@ class EventsListPager extends ReverseChronologicalPager {
 				'icon' => 'userRights',
 				'content' => $this->getOrganizersText( $row ),
 				'label' => $this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
-				'icon_classes' => [ 'ext-campaignevents-eventslist-pager-icon' ],
-				'classes' => [ 'ext-campaignevents-eventslist-pager-organizers' ],
+				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+				'classes' => [ 'ext-campaignevents-events-list-organizers' ],
 			] )
 		);
 		return $htmlRow->appendContent( $detailContainer );
