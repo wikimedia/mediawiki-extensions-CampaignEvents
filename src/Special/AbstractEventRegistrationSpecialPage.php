@@ -34,7 +34,6 @@ use MediaWiki\User\UserTimeCorrection;
 use OOUI\FieldLayout;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
-use OOUI\Tag;
 use RuntimeException;
 use StatusValue;
 use Wikimedia\RequestTimeout\TimeoutException;
@@ -125,6 +124,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->addHelpLink( 'Help:Extension:CampaignEvents/Registration' );
 		$this->getOutput()->addModules( [
 			'ext.campaignEvents.specialPages',
+		] );
+		$this->getOutput()->addModuleStyles( [
+			'ext.campaignEvents.specialPages.styles',
 		] );
 
 		if ( $this->eventID ) {
@@ -446,12 +448,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$piiNotice = new MessageWidget( [
 			'type' => 'notice',
 			'inline' => true,
-			'label' => ( new Tag( 'span' ) )
-				->appendContent( new HtmlSnippet(
-					$this->msg( 'campaignevents-edit-form-questions-pii-notice' )->parse()
-				) )
-				// XXX HACK: Override the font weight with inline style to avoid creating a new RL module. T351818
-				->setAttributes( [ 'style' => 'font-weight: normal' ] )
+			'label' => new HtmlSnippet( $this->msg( 'campaignevents-edit-form-questions-pii-notice' )->parse() ),
+			'classes' => [ 'ext-campaignevents-eventregistration-notice-plain' ]
 		] );
 		$fields['ParticipantQuestionsPIINotice'] = [
 			'type' => 'info',
@@ -490,29 +488,24 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			self::DETAILS_SECTION
 		);
 		$form->setSubmitTextMsg( $this->formMessages['submit'] );
-		// XXX HACK: Override the font weight with inline style to avoid creating a new RL module just for this. T316820
-		$footerNotice = ( new Tag( 'span' ) )
-			->setAttributes( [ 'style' => 'font-weight: normal' ] );
 
-		$footerHasContent = false;
+		$footerNotice = '';
+
 		if ( $this->event && !$this->event->getParticipantQuestions() ) {
-			$footerHasContent = true;
-			$footerNotice->appendContent( new HtmlSnippet( $this->msg( 'campaignevents-edit-form-notice' )->parse() ) );
+			$footerNotice .= $this->msg( 'campaignevents-edit-form-notice' )->parse();
 		}
 
 		$policyMsg = $this->policyMessagesLookup->getPolicyMessageForRegistrationForm();
 		if ( $policyMsg !== null ) {
-			$footerHasContent = true;
-			$footerNotice->appendContent(
-				new HtmlSnippet( $this->msg( $policyMsg )->parseAsBlock() )
-			);
+			$footerNotice .= $this->msg( $policyMsg )->parseAsBlock();
 		}
 
-		if ( $footerHasContent ) {
+		if ( $footerNotice ) {
 			$form->addFooterHtml( new FieldLayout( new MessageWidget( [
 				'type' => 'notice',
 				'inline' => true,
-				'label' => $footerNotice
+				'label' => new HtmlSnippet( $footerNotice ),
+				'classes' => [ 'ext-campaignevents-eventregistration-notice-plain' ],
 			] ) ) );
 		}
 	}

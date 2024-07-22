@@ -240,6 +240,7 @@
 				"ext.campaignEvents.specialPages.styles/pagers/EventsListPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventsTablePager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/InvitationsListPager.less",
+				"ext.campaignEvents.specialPages.styles/specials/EventRegistrationSpecialPage.less",
 				"ext.campaignEvents.specialPages.styles/specials/SpecialAllEvents.less",
 				"ext.campaignEvents.specialPages.styles/specials/SpecialEventDetails.less",
 				"ext.campaignEvents.specialPages.styles/specials/SpecialMyEvents.less",
