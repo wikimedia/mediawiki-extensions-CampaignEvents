@@ -24,6 +24,7 @@ use OOUI\MessageWidget;
 use TemplateParser;
 
 class SpecialInvitationList extends SpecialPage {
+	use InvitationFeatureAccessTrait;
 
 	public const PAGE_NAME = 'InvitationList';
 
@@ -59,26 +60,13 @@ class SpecialInvitationList extends SpecialPage {
 		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
 		$out = $this->getOutput();
 		$out->enableOOUI();
-		if ( !$this->getConfig()->get( 'CampaignEventsEnableEventInvitation' ) ) {
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => new HtmlSnippet( $this->msg( 'campaignevents-invitation-list-processing' )->parse() )
-			] );
-			$out->addHTML( $messageWidget );
-			return;
+		$isEnabledAndPermitted = $this->checkInvitationFeatureAccess(
+			$this->getOutput(),
+			$mwAuthority
+		);
+		if ( $isEnabledAndPermitted ) {
+			$this->maybeDisplayList( $par );
 		}
-
-		$this->requireNamedUser();
-		if ( !$this->permissionChecker->userCanUseInvitationLists( $mwAuthority ) ) {
-			$messageWidget = new MessageWidget( [
-				'type' => 'error',
-				'label' => $this->msg( 'campaignevents-invitation-list-not-allowed' )->text()
-			] );
-			$out->addHTML( $messageWidget );
-			return;
-		}
-
-		$this->maybeDisplayList( $par );
 	}
 
 	private function maybeDisplayList( ?string $par ): void {

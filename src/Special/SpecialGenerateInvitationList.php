@@ -14,11 +14,12 @@ use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\WikiMap\WikiMap;
-use OOUI\MessageWidget;
 use RuntimeException;
 use StatusValue;
 
 class SpecialGenerateInvitationList extends FormSpecialPage {
+	use InvitationFeatureAccessTrait;
+
 	public const PAGE_NAME = 'GenerateInvitationList';
 
 	private PermissionChecker $permissionChecker;
@@ -46,27 +47,11 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 		$this->setHeaders();
 		$this->outputHeader();
 		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
-		if ( !$this->getConfig()->get( 'CampaignEventsEnableEventInvitation' ) ) {
-			$out = $this->getOutput();
-			$out->enableOOUI();
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => $this->msg( 'campaignevents-invitation-list-disabled' )->text()
-			] );
-			$out->addHTML( $messageWidget );
-			return;
-		}
-
-		$this->requireNamedUser();
-		if ( !$this->permissionChecker->userCanUseInvitationLists( $mwAuthority ) ) {
-			$out = $this->getOutput();
-			$out->enableOOUI();
-			$messageWidget = new MessageWidget( [
-				'type' => 'error',
-				'label' => $this->msg( 'campaignevents-invitation-list-not-allowed' )->text()
-			] );
-			$out->addHTML( $messageWidget );
-		} else {
+		$isEnabledAndPermitted = $this->checkInvitationFeatureAccess(
+			$this->getOutput(),
+			$mwAuthority
+		);
+		if ( $isEnabledAndPermitted ) {
 			parent::execute( $par );
 		}
 	}

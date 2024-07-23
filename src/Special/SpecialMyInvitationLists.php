@@ -10,9 +10,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Pager\InvitationsListPager;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\SpecialPage\SpecialPage;
-use OOUI\MessageWidget;
 
 class SpecialMyInvitationLists extends SpecialPage {
+	use InvitationFeatureAccessTrait;
+
 	public const PAGE_NAME = 'MyInvitationLists';
 
 	private PermissionChecker $permissionChecker;
@@ -49,36 +50,24 @@ class SpecialMyInvitationLists extends SpecialPage {
 			'oojs-ui.styles.icons-alerts'
 		] );
 		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
-		if ( !$this->getConfig()->get( 'CampaignEventsEnableEventInvitation' ) ) {
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => $this->msg( 'campaignevents-invitation-list-disabled' )->text()
-			] );
-			$out->addHTML( $messageWidget );
-			return;
-		}
-
-		$this->requireNamedUser();
-		if ( !$this->permissionChecker->userCanUseInvitationLists( $mwAuthority ) ) {
-			$messageWidget = new MessageWidget( [
-				'type' => 'error',
-				'label' => $this->msg( 'campaignevents-invitation-list-not-allowed' )->text()
-			] );
-			$out->addHTML( $messageWidget );
-			return;
-		}
-		$centralUser = $this->centralUserLookup->newFromAuthority( $mwAuthority );
-		$pager = new InvitationsListPager(
-			$centralUser,
-			$this->databaseHelper,
-			$this->getContext(),
-			$this->getLinkRenderer()
+		$isEnabledAndPermitted = $this->checkInvitationFeatureAccess(
+			$this->getOutput(),
+			$mwAuthority
 		);
-		$out->addHTML(
-			$pager->getBody() .
-			$pager->getNavigationBar()
-		);
-		parent::execute( $par );
+		if ( $isEnabledAndPermitted ) {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $mwAuthority );
+			$pager = new InvitationsListPager(
+				$centralUser,
+				$this->databaseHelper,
+				$this->getContext(),
+				$this->getLinkRenderer()
+			);
+			$out->addHTML(
+				$pager->getBody() .
+				$pager->getNavigationBar()
+			);
+			parent::execute( $par );
+		}
 	}
 
 	/**
