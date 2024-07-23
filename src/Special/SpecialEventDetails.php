@@ -288,6 +288,13 @@ class SpecialEventDetails extends SpecialPage {
 	/**
 	 * @inheritDoc
 	 */
+	public function doesWrites(): bool {
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	protected function getGroupName(): string {
 		return 'campaignevents';
 	}
