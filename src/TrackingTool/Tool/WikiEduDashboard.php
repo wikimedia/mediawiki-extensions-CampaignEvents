@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\Message\Message;
 use MWHttpRequest;
 use StatusValue;
@@ -291,7 +292,8 @@ class WikiEduDashboard extends TrackingTool {
 		$options = [
 			'method' => 'POST',
 			'timeout' => 5,
-			'postData' => json_encode( $postData )
+			'postData' => json_encode( $postData ),
+			'logger' => LoggerFactory::getInstance( 'CampaignEvents' )
 		];
 		if ( $this->apiProxy ) {
 			$options['proxy'] = $this->apiProxy;
