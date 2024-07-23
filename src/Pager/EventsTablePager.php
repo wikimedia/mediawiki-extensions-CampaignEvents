@@ -217,7 +217,6 @@ class EventsTablePager extends TablePager {
 	 * @return string[] An array of (non-style) RL modules.
 	 */
 	public function getModules(): array {
-		// Avoid creating a new module for the pager only.
 		return [ 'ext.campaignEvents.specialPages' ];
 	}
 
