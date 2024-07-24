@@ -47,6 +47,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	private ?int $meetingType;
 	private string $startDate;
 	private string $endDate;
+	private bool $showOngoing;
 
 	private string $lastHeaderTimestamp;
 	/** @var array<int,Organizer|null> Maps event ID to the event creator, if available, else to null. */
@@ -59,20 +60,6 @@ class EventsListPager extends ReverseChronologicalPager {
 	/** @var array<int,int> Maps event ID to the total number of organizers of that event. */
 	private array $organizerCounts = [];
 
-	/**
-	 * @param UserLinker $userLinker
-	 * @param CampaignsPageFactory $pageFactory
-	 * @param PageURLResolver $pageURLResolver
-	 * @param OrganizersStore $organizerStore
-	 * @param LinkBatchFactory $linkBatchFactory
-	 * @param UserOptionsLookup $userOptionsLookup
-	 * @param CampaignsDatabaseHelper $databaseHelper
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param string $search
-	 * @param int|null $meetingType
-	 * @param string $startDate
-	 * @param string $endDate
-	 */
 	public function __construct(
 		UserLinker $userLinker,
 		CampaignsPageFactory $pageFactory,
@@ -85,7 +72,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		string $search,
 		?int $meetingType,
 		string $startDate,
-		string $endDate
+		string $endDate,
+		bool $showOngoing
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
@@ -103,7 +91,9 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->meetingType = $meetingType;
 		$this->startDate = $startDate;
 		$this->endDate = $endDate;
+		$this->showOngoing = $showOngoing;
 
+		$this->getDateRangeCond( $startDate, $endDate );
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderTimestamp = '';
 	}
@@ -406,11 +396,21 @@ class EventsListPager extends ReverseChronologicalPager {
 		$offsets = $this->getDateRangeCond( $this->startDate, $this->endDate );
 		if ( $offsets ) {
 			[ $startOffset, $endOffset ] = $offsets;
-			if ( $startOffset ) {
-				$conds[] = $this->mDb->expr( 'event_end_utc', '>=', $startOffset );
-			}
-			if ( $endOffset ) {
-				$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
+
+			if ( $this->showOngoing ) {
+				if ( $startOffset ) {
+					$conds[] = $this->mDb->expr( 'event_end_utc', '>=', $startOffset );
+				}
+				if ( $endOffset ) {
+					$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
+				}
+			} else {
+				if ( $startOffset ) {
+					$conds[] = $this->mDb->expr( 'event_start_utc', '>=', $startOffset );
+				}
+				if ( $endOffset ) {
+					$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
+				}
 			}
 		}
 		return [ $tables, $fields, $conds, $fname, $options, $join_conds ];

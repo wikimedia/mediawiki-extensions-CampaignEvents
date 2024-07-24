@@ -52,11 +52,23 @@ class SpecialAllEvents extends SpecialPage {
 		$rawEndTime = $request->getVal( 'wpEndDate', '' );
 		$endTime = $rawEndTime === '' ? '' : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 
+		$showOngoing = true;
+		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
+		// distinguish between form not submitted and form submitted but checkbox unchecked. This is important because
+		// the checkbox is checked by default.
+		// Note that we can't do all this in a submit callback because the pager needs to be instantiated before the
+		// HTMLForm, due to the "limit" field.
+		$formIdentifier = 'campaignevents-allevents';
+		if ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
+			$showOngoing = $request->getCheck( 'wpShowOngoing' );
+		}
+
 		$pager = $this->eventsPagerFactory->newListPager(
 			$searchedVal,
 			$meetingType,
 			$startTime,
-			$endTime
+			$endTime,
+			$showOngoing
 		);
 
 		$formDescriptor = [
@@ -93,6 +105,12 @@ class SpecialAllEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-calendar-end-field mw-htmlform-autoinfuse-lazy',
 				'default' => '',
 			],
+			'ShowOngoing' => [
+				'type' => 'toggle',
+				'label-message' => 'campaignevents-allevents-label-show-ongoing',
+				'cssclass' => 'ext-campaignevents-allevents-show-ongoing-field',
+				'default' => true,
+			],
 			'Limit' => [
 				// NOTE: This has to be called 'limit' because the pager expects that name.
 				'name' => 'limit',
@@ -109,6 +127,7 @@ class SpecialAllEvents extends SpecialPage {
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
 			->setSubmitCallback( fn () => true )
+			->setFormIdentifier( $formIdentifier, true )
 			->showAlways();
 		$navigation = $pager->getNavigationBar();
 		$this->getOutput()->addHTML( $navigation . $pager->getBody() . $navigation );

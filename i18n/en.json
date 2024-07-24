@@ -144,6 +144,7 @@
 	"campaignevents-allevents-label-events-per-page": "Events per page",
 	"campaignevents-allevents-label-start-date": "From",
 	"campaignevents-allevents-label-end-date": "To",
+	"campaignevents-allevents-label-show-ongoing": "Include ongoing events within the date range",
 	"campaignevents-eventslist-date-separator": "$1 – $2",
 	"campaignevents-eventslist-date-label": "Event dates",
 	"campaignevents-eventslist-meeting-type-label": "Meeting type",
