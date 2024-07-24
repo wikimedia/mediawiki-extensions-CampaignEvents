@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ella Lachow"
+			"Ella Lachow",
+			"Malaalaa"
 		]
 	},
 	"campaignevents-edit-field-organizers-placeholder": "Yaraa sunttaa gujja",
-	"campaignevents-invitations-pager-status-processing": "Poliiddi..."
+	"campaignevents-invitations-pager-status-processing": "Poliiddi...",
+	"campaignevents-myinvitationslist-new-button": "Oorattaa"
 }
