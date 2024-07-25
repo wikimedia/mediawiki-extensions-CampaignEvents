@@ -52,6 +52,7 @@
 	"campaignevents-error-invalid-country": "أدخل اسم بلد صحيح.",
 	"campaignevents-error-invalid-address": "أدخل عنوان صحيح.",
 	"campaignevents-error-invalid-question-names": "لم يتم التعرف على الأسئلة التالية: $1",
+	"campaignevents-error-move-eventpage-namespace": "لا يمكن نقل صفحة الفعالية هذه خارج نطاق {{ns:event}} لأنها تحتوي على، أو كانت تحتوي على، تسجيل الفعالية.",
 	"enableeventregistration": "تفعيل التسجيل في الفعالية",
 	"editeventregistration": "تعديل التسجيل في الفعالية",
 	"campaignevents-edit-form-details-label": "تفاصيل الفعالية",
@@ -235,7 +236,7 @@
 	"campaignevents-event-details-edit-button": "تعديل",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|مشارك}}",
 	"campaignevents-event-details-header-questions-help-label": "معلومات الاحتفاظ بالبيانات",
-	"campaignevents-event-details-header-questions-help": "سيتم جمع ردود المشاركين الفردية المعروضة على الجدول ثم حذفها، إما بعد 90 يوما من تقديمها أو في نهاية الفعالية (أياً كان من يأتي أولاً). ستتوفر الردود المجمعة في علامة التبويب \"{{int:campaignevents-event-details-tab-stats}}\"، والتي ستصبح مرئية بعد انتهاء الحدث.",
+	"campaignevents-event-details-header-questions-help": "سيتم جمع ردود المشاركين الفردية المعروضة على الجدول ثم حذفها، إما بعد 90 يوما من تقديمها أو في نهاية الفعالية (أياً كان من يأتي أولاً). ستتوفر الردود المجمعة في علامة التبويب \"{{int:campaignevents-event-details-tab-stats}}\"، والتي ستصبح مرئية بعد انتهاء الفعالية.",
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1| مشارك }} مسجّل تحت الخصوصية.",
 	"campaignevents-event-details-dates": "من $1 إلى $4",
 	"campaignevents-event-details-timezone": "<strong>المنطقة الزمنية:</strong> $1",
@@ -336,6 +337,7 @@
 	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|مشارك|مشاركون}}",
 	"campaignevents-email-participants-yes": "نعم",
 	"campaignevents-email-participants-no": "لا",
+	"campaignevents-email-footer": "هذا البريد الإلكتروني تم {{GENDER:$1|إرساله}} بواسطة $1 إلى {{GENDER:$2|$2}}، وهو مشارك مسجل في الفعالية التالية: $3. لو {{GENDER:$2|أنك}} رددت على هذا البريد الإلكتروني، فسيتم إرسال البريد الإلكتروني {{GENDER:$2|لديك}} مباشرة إلى {{GENDER:$1|المرسل الأصلي}}، كاشفاً عنوان البريد الإلكتروني {{GENDER:$2|الخاص بك }} إلى {{GENDER:$1|لديك}}.",
 	"campaignevents-event-details-time-registered": "وقت التسجيل",
 	"campaignevents-event-details-can-receive-email": "يتلقى البريد الإلكتروني",
 	"campaignevents-register-questions-label-title": "معلوماتكم",
@@ -399,7 +401,9 @@
 	"campaignevents-register-question-organizing-partner-details-placeholder": "من فضلك حدد",
 	"campaignevents-details-stats-no-responses": "الفعالية لا تحتوي على ردود من المشاركين لتجميعها.",
 	"campaignevents-details-stats-not-ready": "سيتم تجميع ردود المشاركين وإتاحتها هنا قريبًا.",
-	"campaignevents-details-stats-not-enough-answers": "لقد تلقى هذا السؤال أقل من $1 إجمالي {{PLURAL:$1|إجابة|إجابة}}.",
+	"campaignevents-details-stats-section-non-pii": "أسئلة المعلومات غير الشخصية غير القابلة للتحديد (غير معلومات التعريف الشخصية)",
+	"campaignevents-details-stats-section-pii": "أسئلة معلومات التعريف الشخصية (PII)",
+	"campaignevents-details-stats-not-enough-answers": "لقد تلقى هذا السؤال أقل من $1 {{PLURAL:$1|إجابة|من الإجابات}} إجمالا.",
 	"campaignevents-details-stats-header-option": "خيار",
 	"campaignevents-details-stats-header-percentage": "نسبة مئوية",
 	"campaignevents-details-stats-header-number": "رقم",
@@ -417,5 +421,6 @@
 	"campaignevents-participant-question-have-been-aggregated": "هذا {{GENDER:$1| تم تجميع ردود المشاركين}} وحذفها",
 	"campaignevents-participant-question-no-response": "لا رد",
 	"campaignevents-warning-change-event-end-date-past": "إذا قمت بتغيير تاريخ النهاية إلى تاريخ سابق، سيتم إغلاق الفعالية وستتلقى ملخصاً للردود المشاركة. هذا الإجراء لا يمكن إلغاءه هذا لا ينطبق إلا إذا قدم المشاركون إجابات على أسئلة المشاركين.",
-	"campaignevents-event-details-participants-individual-data-deleted": "تم حذف ردود المشاركين الفردية وتتوفر الردود المجمعة ضمن [ $1 {{int:campaignevents-event-details-tab-stats}}]."
+	"campaignevents-event-details-participants-individual-data-deleted": "تم حذف ردود المشاركين الفردية وتتوفر الردود المجمعة ضمن [ $1 {{int:campaignevents-event-details-tab-stats}}].",
+	"campaignevents-event-register-for-event-title": "التسجيل في $1"
 }

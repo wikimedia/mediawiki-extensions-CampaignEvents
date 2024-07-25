@@ -16,5 +16,8 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "غير مصرح لك بعرض المشاركين المسجلين تحت الخصوصية في هذه الفعالية.",
 	"campaignevents-rest-set-organizers-empty-list": "يجب أن تكون <var>Organizer_usernames</var> مصفوفة من أسماء المستخدمين ولا يمكن أن تكون فارغة",
 	"campaignevents-rest-get-registration-info-notparticipant": "أنت لا تشارك في هذه الفعالية.",
-	"campaignevents-rest-register-invalid-answer": "إجابة غير صحيحة على السؤال $1"
+	"campaignevents-rest-register-invalid-answer": "إجابة غير صحيحة على السؤال $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "يُرجى إكمال تسجيل الفعالية على $1، الويكي حيث تم إنشاء الفعالية فيه.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "يرجى حذف تسجيل الفعالية الخاصة بك على $1، الويكي حيث تم إنشاء الفعالية فيه.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "يُرجى إرسال بريد إلكتروني للمشاركين على $1، الويكي حيث تم إنشاء الفعالية."
 }
