@@ -1,32 +1,38 @@
 @import 'mediawiki.skin.variables.less';
 @import 'mediawiki.mixins.less';
 
-#ext-campaignevents-allevents-form > fieldset > .oo-ui-fieldsetLayout-group > .oo-ui-widget-enabled:first-of-type { // stylelint-disable-line selector-max-id
+/* stylelint-disable selector-max-id */
+#ext-campaignevents-allevents-form > fieldset > .oo-ui-fieldsetLayout-group > .oo-ui-widget-enabled:first-of-type {
 	@media ( min-width: @min-width-breakpoint-tablet ) {
 		display: grid;
 		grid-template-columns: repeat( 2, 45% );
 		grid-gap: 10px;
 	}
 
-	> .mw-htmlform-ooui-header {// stylelint-disable-line selector-max-id
+	> .mw-htmlform-ooui-header {
 		grid-column: ~'1 / 3';
 	}
 
-	> .mw-htmlform-submit-buttons {// stylelint-disable-line selector-max-id
+	> .mw-htmlform-submit-buttons {
 		grid-column-start: 1;
 	}
 
-	.mw-htmlform-field-HTMLTextField.ext-campaignevents-allevents-search-field {// stylelint-disable-line selector-max-id
+	.mw-htmlform-field-HTMLTextField.ext-campaignevents-allevents-search-field {
 		margin-top: 12px;
 	}
 
-	.ext-campaignevents-allevents-calendar-start-field .oo-ui-inputWidget {// stylelint-disable-line selector-max-id
+	.ext-campaignevents-allevents-calendar-start-field .oo-ui-inputWidget {
 		width: 100%;
 		max-width: 50em;
 	}
 
-	.ext-campaignevents-allevents-calendar-end-field .oo-ui-inputWidget {// stylelint-disable-line selector-max-id
+	.ext-campaignevents-allevents-calendar-end-field .oo-ui-inputWidget {
 		width: 100%;
 		max-width: 50em;
 	}
+
+	.ext-campaignevents-allevents-show-ongoing-field {
+		grid-column: ~'1 / -1';
+	}
 }
+/* stylelint-enable selector-max-id */

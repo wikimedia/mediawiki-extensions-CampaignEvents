@@ -69,6 +69,7 @@ class EventListPagerTest extends MediaWikiIntegrationTestCase {
 	public function testDateFilters(
 		?int $searchStart,
 		?int $searchTo,
+		bool $showOngoing,
 		bool $expectsFound
 	): void {
 		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : '';
@@ -77,7 +78,8 @@ class EventListPagerTest extends MediaWikiIntegrationTestCase {
 			'',
 			null,
 			$searchStartStr,
-			$searchToStr
+			$searchToStr,
+			$showOngoing
 		);
 		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
 	}
@@ -85,21 +87,98 @@ class EventListPagerTest extends MediaWikiIntegrationTestCase {
 	public static function provideDateFilters(): Generator {
 		$delta = 10000;
 
-		yield 'No filters' => [ null, null, true ];
+		yield 'Show ongoing, no filters' => [ null, null, true, true ];
 
-		yield 'Start only, before event' => [ self::EVENT_START - $delta, null, true ];
-		yield 'Start only, during event' => [ self::EVENT_START + $delta, null, true ];
-		yield 'Start only, after event' => [ self::EVENT_END + $delta, null, false ];
+		yield 'Show ongoing, start only, before event' => [ self::EVENT_START - $delta, null, true, true ];
+		yield 'Show ongoing, start only, during event' => [ self::EVENT_START + $delta, null, true, true ];
+		yield 'Show ongoing, start only, after event' => [ self::EVENT_END + $delta, null, true, false ];
 
-		yield 'End only, before event' => [ null, self::EVENT_START - $delta, false ];
-		yield 'End only, during event' => [ null, self::EVENT_START + $delta, true ];
-		yield 'End only, after event' => [ null, self::EVENT_END + $delta, true ];
+		yield 'Show ongoing, end only, before event' => [ null, self::EVENT_START - $delta, true, false ];
+		yield 'Show ongoing, end only, during event' => [ null, self::EVENT_START + $delta, true, true ];
+		yield 'Show ongoing, end only, after event' => [ null, self::EVENT_END + $delta, true, true ];
 
-		yield 'Start before, end before' => [ self::EVENT_START - $delta, self::EVENT_START - $delta / 2, false ];
-		yield 'Start before, end during' => [ self::EVENT_START - $delta, self::EVENT_START + $delta, true ];
-		yield 'Start before, end after' => [ self::EVENT_START - $delta, self::EVENT_END + $delta, true ];
-		yield 'Start during, end during' => [ self::EVENT_START + $delta / 2, self::EVENT_START + $delta, true ];
-		yield 'Start during, end after' => [ self::EVENT_START + $delta, self::EVENT_END + $delta, true ];
-		yield 'Start after, end after' => [ self::EVENT_END + $delta / 2, self::EVENT_END + $delta, false ];
+		yield 'Show ongoing, start before, end before' => [
+			self::EVENT_START - $delta,
+			self::EVENT_START - $delta / 2,
+			true,
+			false
+		];
+		yield 'Show ongoing, start before, end during' => [
+			self::EVENT_START - $delta,
+			self::EVENT_START + $delta,
+			true,
+			true
+		];
+		yield 'Show ongoing, start before, end after' => [
+			self::EVENT_START - $delta,
+			self::EVENT_END + $delta,
+			true,
+			true
+		];
+		yield 'Show ongoing, start during, end during' => [
+			self::EVENT_START + $delta / 2,
+			self::EVENT_START + $delta,
+			true,
+			true
+		];
+		yield 'Show ongoing, start during, end after' => [
+			self::EVENT_START + $delta,
+			self::EVENT_END + $delta,
+			true,
+			true
+		];
+		yield 'Show ongoing, start after, end after' => [
+			self::EVENT_END + $delta / 2,
+			self::EVENT_END + $delta,
+			true,
+			false
+		];
+
+		yield 'Hide ongoing, no filters' => [ null, null, false, true ];
+
+		yield 'Hide ongoing, start only, before event' => [ self::EVENT_START - $delta, null, false, true ];
+		yield 'Hide ongoing, start only, during event' => [ self::EVENT_START + $delta, null, false, false ];
+		yield 'Hide ongoing, start only, after event' => [ self::EVENT_END + $delta, null, false, false ];
+
+		yield 'Hide ongoing, end only, before event' => [ null, self::EVENT_START - $delta, false, false ];
+		yield 'Hide ongoing, end only, during event' => [ null, self::EVENT_START + $delta, false, true ];
+		yield 'Hide ongoing, end only, after event' => [ null, self::EVENT_END + $delta, false, true ];
+
+		yield 'Hide ongoing, start before, end before' => [
+			self::EVENT_START - $delta,
+			self::EVENT_START - $delta / 2,
+			false,
+			false
+		];
+		yield 'Hide ongoing, start before, end during' => [
+			self::EVENT_START - $delta,
+			self::EVENT_START + $delta,
+			false,
+			true
+		];
+		yield 'Hide ongoing, start before, end after' => [
+			self::EVENT_START - $delta,
+			self::EVENT_END + $delta,
+			false,
+			true
+		];
+		yield 'Hide ongoing, start during, end during' => [
+			self::EVENT_START + $delta / 2,
+			self::EVENT_START + $delta,
+			false,
+			false
+		];
+		yield 'Hide ongoing, start during, end after' => [
+			self::EVENT_START + $delta,
+			self::EVENT_END + $delta,
+			false,
+			false
+		];
+		yield 'Hide ongoing, start after, end after' => [
+			self::EVENT_END + $delta / 2,
+			self::EVENT_END + $delta,
+			false,
+			false
+		];
 	}
 }

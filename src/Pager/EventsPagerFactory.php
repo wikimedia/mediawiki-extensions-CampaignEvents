@@ -76,18 +76,12 @@ class EventsPagerFactory {
 		);
 	}
 
-	/**
-	 * @param string $search
-	 * @param int|null $meetingType
-	 * @param string $startDate
-	 * @param string $endDate
-	 * @return EventsListPager
-	 */
 	public function newListPager(
 		string $search,
 		?int $meetingType,
 		string $startDate,
-		string $endDate
+		string $endDate,
+		bool $showOngoing
 	): EventsListPager {
 		return new EventsListPager(
 			$this->userLinker,
@@ -101,7 +95,8 @@ class EventsPagerFactory {
 			$search,
 			$meetingType,
 			$startDate,
-			$endDate
+			$endDate,
+			$showOngoing
 		);
 	}
 }
