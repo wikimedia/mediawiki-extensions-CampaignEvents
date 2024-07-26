@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
+use MediaWiki\Html\Html;
 use MediaWiki\Pager\IndexPager;
 use MediaWiki\Pager\ReverseChronologicalPager;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -145,7 +146,7 @@ class EventsListPager extends ReverseChronologicalPager {
 			$s .= $this->getEndGroup();
 		}
 		if ( $this->isHeaderRowNeeded( $timestamp ) ) {
-			$s .= $this->getHeaderRow( $this->getMonthFromTimestamp( $timestamp ) );
+			$s .= $this->getHeaderRow( $this->getMonthHeader( $timestamp ) );
 			$this->lastHeaderTimestamp = $timestamp;
 		}
 		$s .= $this->formatRow( $row );
@@ -187,8 +188,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		if ( !$this->lastHeaderTimestamp ) {
 			return true;
 		}
-		$month = $this->getMonthFromTimestamp( $date );
-		$prevMonth = $this->getMonthFromTimestamp( $this->lastHeaderTimestamp );
+		$month = $this->getMonthHeader( $date );
+		$prevMonth = $this->getMonthHeader( $this->lastHeaderTimestamp );
 		$year = $this->getYearFromTimestamp( $date );
 		$prevYear = $this->getYearFromTimestamp( $this->lastHeaderTimestamp );
 		return $month !== $prevMonth || $year !== $prevYear;
@@ -218,18 +219,16 @@ class EventsListPager extends ReverseChronologicalPager {
 		$detailContainer->appendContent(
 			( new Tag( 'h4' ) )->appendContent( $eventPageLinkElement )
 		);
-		$detailContainer->appendContent(
-			new TextWithIconWidget( [
-				'icon' => 'clock',
-				'content' => $this->msg(
-					'campaignevents-eventslist-date-separator',
-					$this->getLanguage()->userDate( $row->event_start_utc, $this->getUser() ),
-					$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() )
-				)->text(),
-				'label' => $this->msg( 'campaignevents-eventslist-date-label' )->text(),
-				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
-			] )
+		$datesText = Html::element(
+			'strong',
+			[],
+			$this->msg(
+				'campaignevents-eventslist-date-separator',
+				$this->getLanguage()->userDate( $row->event_start_utc, $this->getUser() ),
+				$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() )
+			)->text()
 		);
+		$detailContainer->appendContent( new HtmlSnippet( Html::rawElement( 'div', [], $datesText ) ) );
 		$detailContainer->appendContent(
 			new TextWithIconWidget( [
 				'icon' => 'mapPin',
@@ -346,11 +345,11 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @param string $timestamp
 	 * @return string
 	 */
-	private function getMonthFromTimestamp( string $timestamp ): string {
+	private function getMonthHeader( string $timestamp ): string {
 		$timestamp = $this->offsetTimestamp( $timestamp );
 		// TODO This is not guaranteed to return the month name in a format suitable for section headings (e.g.,
 		// it may need to be capitalized).
-		return $this->getLanguage()->sprintfDate( 'F', $timestamp );
+		return $this->getLanguage()->sprintfDate( 'F Y', $timestamp );
 	}
 
 	/**
