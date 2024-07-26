@@ -117,7 +117,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "Регистрация закрыта",
 	"campaignevents-eventpage-btn-event-ended": "Мероприятие завершено",
 	"campaignevents-eventpage-dialog-title": "Подробности мероприятия",
-	"campaignevents-eventpage-dialog-organizers": "Организаторы: $1",
+	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|Организаторы}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Посмотреть всех организаторов",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|участник|участника|участников}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|участник|участника|участников}} зарегистрировано приватно",
