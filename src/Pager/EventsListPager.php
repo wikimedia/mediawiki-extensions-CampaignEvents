@@ -407,16 +407,10 @@ class EventsListPager extends ReverseChronologicalPager {
 		if ( $offsets ) {
 			[ $startOffset, $endOffset ] = $offsets;
 			if ( $startOffset ) {
-				$crossStartCondition = $this->mDb->expr( $this->getTimestampField(), '<=', $startOffset )
-					->and( 'event_end_utc', '>=', $startOffset );
-
-				$withinDatesCondition = $this->mDb->expr( $this->getTimestampField(), '>=', $startOffset );
-				if ( $endOffset ) {
-					$withinDatesCondition = $withinDatesCondition->and( 'event_end_utc', '<=', $endOffset );
-				}
-				$conds[] = $this->mDb->orExpr( [ $crossStartCondition, $withinDatesCondition ] );
-			} elseif ( $endOffset ) {
-				$conds[] = $this->mDb->expr( $this->getTimestampField(), '<=', $endOffset );
+				$conds[] = $this->mDb->expr( 'event_end_utc', '>=', $startOffset );
+			}
+			if ( $endOffset ) {
+				$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
 			}
 		}
 		return [ $tables, $fields, $conds, $fname, $options, $join_conds ];
