@@ -145,6 +145,7 @@
 	"campaignevents-allevents-label-events-per-page": "אירועים לכל דף",
 	"campaignevents-allevents-label-start-date": "מאז",
 	"campaignevents-allevents-label-end-date": "עד",
+	"campaignevents-allevents-label-show-ongoing": "לכלול אירועים שנערכים בתוך טווח התאריכים",
 	"campaignevents-eventslist-date-label": "תאריכי האירוע",
 	"campaignevents-eventslist-meeting-type-label": "סוג הפגישה",
 	"campaignevents-eventslist-organizer-label": "מארגנים",

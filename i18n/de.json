@@ -144,6 +144,7 @@
 	"campaignevents-allevents-label-events-per-page": "Veranstaltungen pro Seite",
 	"campaignevents-allevents-label-start-date": "Von",
 	"campaignevents-allevents-label-end-date": "Bis",
+	"campaignevents-allevents-label-show-ongoing": "Laufende Ereignisse im Datumsbereich einbeziehen",
 	"campaignevents-eventslist-date-label": "Veranstaltungstermine",
 	"campaignevents-eventslist-meeting-type-label": "Veranstaltungstyp",
 	"campaignevents-eventslist-organizer-label": "Organisatoren",

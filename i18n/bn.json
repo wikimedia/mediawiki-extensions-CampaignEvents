@@ -177,5 +177,6 @@
 	"campaignevents-details-stats-header-percentage": "শতাংশ",
 	"campaignevents-details-stats-header-number": "সংখ্যা",
 	"campaignevents-edit-field-clickwrap-form-continue": "প্রতিক্রিয়াগুলি দেখুন",
-	"campaignevents-generateinvitationlist-article-list-field-placeholder": "সূর্য\nচাঁদ\nঘর"
+	"campaignevents-generateinvitationlist-article-list-field-placeholder": "সূর্য\nচাঁদ\nঘর",
+	"campaignevents-myinvitationslist-new-button": "নতুন"
 }
