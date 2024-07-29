@@ -152,7 +152,6 @@
 	"campaignevents-allevents-label-end-date": "Label for a field on [[Special:AllEvents]] that lets the user select the latest end date of events they want to see.",
 	"campaignevents-allevents-label-show-ongoing": "Label for a checkbox on [[Special:AllEvents]]. When checked, all events will be shown that are ongoing within the selected date range, even if they began before the selected start date.",
 	"campaignevents-eventslist-date-separator": "{{Optional}}\nCharacter that is placed between start and end dates on [[Special:AllEvents]].Parameters:\n* $1 - the start date of the event, $2 - the end date of the event",
-	"campaignevents-eventslist-date-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the event date",
 	"campaignevents-eventslist-meeting-type-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the meeting type",
 	"campaignevents-eventslist-organizer-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the organizers",
 	"campaignevents-eventslist-column-date": "Column header used on [[Special:MyEvents]]. The column contains the start date of each event.",
