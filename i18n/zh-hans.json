@@ -51,6 +51,7 @@
 	"campaignevents-edit-error-deleted": "该活动注册已被删除。",
 	"registerforevent": "报名活动",
 	"campaignevents-register-error-no-event": "未指定活动。",
+	"campaignevents-register-confirmation-top": "确认报名",
 	"campaignevents-register-confirmation-btn": "注册",
 	"canceleventregistration": "取消您的活动注册",
 	"campaignevents-unregister-success": "您已取消活动注册。",
