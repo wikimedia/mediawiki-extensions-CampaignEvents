@@ -63,7 +63,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 				'ceil_status',
 				'ceil_created_at',
 				'ceil_user_id',
-				'ceil_editor_count' => 'COUNT (ceilu_id)'
+				'ceil_editor_count' => 'COUNT(ceilu_id)'
 			],
 			'conds' => [
 				 'ceil_wiki' => WikiMap::getCurrentWikiId(),
