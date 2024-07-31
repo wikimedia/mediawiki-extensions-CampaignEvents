@@ -30,11 +30,4 @@ class CampaignsDatabaseHelper {
 			? $this->lbFactory->getReplicaDatabase( Utils::VIRTUAL_DB_DOMAIN )
 			: $this->lbFactory->getPrimaryDatabase( Utils::VIRTUAL_DB_DOMAIN );
 	}
-
-	/**
-	 * Waits for the replica DBs to catch up to the current primary position
-	 */
-	public function waitForReplication(): void {
-		$this->lbFactory->waitForReplication();
-	}
 }

@@ -75,7 +75,7 @@ class UpdateUTCTimestamps extends Maintenance {
 			$this->updateBatch( $prevID, $curID, $updateTimezones );
 			$prevID = $curID;
 			$curID += $batchSize;
-			$dbHelper->waitForReplication();
+			$this->waitForReplication();
 		} while ( $prevID < $maxRowID );
 
 		$this->output( "Done.\n" );
