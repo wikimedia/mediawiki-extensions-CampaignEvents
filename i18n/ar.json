@@ -7,7 +7,11 @@
 			"Mohanad Kh",
 			"محمد أحمد عبد الفتاح",
 			"Meno25",
-			"Sandra Hanbo"
+			"Sandra Hanbo",
+			"Alshamiri1",
+			"Asma",
+			"Daimona Eaytoy",
+			"أيوب"
 		]
 	},
 	"campaignevents-desc": "يوفّر ميزات لمنظمي الحملة والمشاركين فيها.",
@@ -145,6 +149,7 @@
 	"campaignevents-eventpage-header-type-online": "فعاليات عن بعد",
 	"campaignevents-eventpage-header-type-in-person": "فعالية حضورية",
 	"campaignevents-eventpage-header-type-online-and-in-person": "فعالية حضورية وعن بعد",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-dates-label": "تاريخ وتوقيت البداية والنهاية",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|مشارك}}",
 	"campaignevents-eventpage-header-participants-label": "عدد المشاركين",
