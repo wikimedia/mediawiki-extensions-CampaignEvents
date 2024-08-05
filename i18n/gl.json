@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Avelino"
+			"Avelino",
+			"Toliño"
 		]
 	},
 	"campaignevents-eventpage-header-timezone": "<strong>Fuso horario:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Fuso horario:</strong> $1",
-	"campaignevents-event-details-timezone": "<strong>fuso horario:</strong> $1"
+	"campaignevents-event-details-timezone": "<strong>Fuso horario:</strong> $1"
 }
