@@ -118,7 +118,7 @@ class AggregateParticipantAnswers extends Maintenance {
 			$this->processBatch( $prevID, $curID );
 			$prevID = $curID;
 			$curID += $batchSize;
-			$dbHelper->waitForReplication();
+			$this->waitForReplication();
 		} while ( $prevID < $maxRowID );
 
 		$this->updateAggregationTimestamps();
