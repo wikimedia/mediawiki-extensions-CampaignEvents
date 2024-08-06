@@ -465,6 +465,7 @@
 	"campaignevents-invitations-pager-status-processing": "Traitement en cours...",
 	"campaignevents-myinvitationslist-empty-text": "Découvrez de nouveaux participants à votre projet ou événement. Faites une liste des articles qui abordent les sujets de votre activité. Ensuite, vous recevrez une liste d'invitations de rédacteurs qui pourraient être intéressés à participer à votre projet ou événement.",
 	"campaignevents-myinvitationslist-new-button": "Nouveau",
+	"campaignevents-invitationlist-event": "1 $: Liste des invitations",
 	"campaignevents-invitation-list-intro": "1 {{PLURAL:$1|editor|editors}} trouvés, sur la base des critères suivants : le nombre d'octets qu'ils ont contribué aux articles, le nombre d'éditions qu'ils ont apportées aux articles, leur nombre global d'éditions sur les wikis, et la date à laquelle ils ont édité les wikis.",
 	"campaignevents-invitationlist-no-editors": "strong>Aucun éditeur ne répond aux [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists critères de la liste d'invitation] de votre liste d'articles.</strong> Vous pouvez [[Special:GenerateInvitationList|créer une nouvelle liste d'invitation]] avec une nouvelle liste d'articles.",
 	"campaignevents-invitationlist-highly-recommended-info": "Ces rédacteurs ont reçu un classement élevé de listes d'invitations, de sorte qu'ils sont plus susceptibles d'être intéressés à rejoindre votre activité.",
