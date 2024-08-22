@@ -5,6 +5,8 @@
 		]
 	},
 	"campaignevents-edit-field-address": "Addrõs",
+	"campaignevents-register-confirmation-btn": "Rekisterââʹst",
+	"campaignevents-register-edit-btn": "Ruõkk muttsid",
 	"campaignevents-myevents-label-search": "Ooʒʒ",
 	"campaignevents-eventslist-column-date": "Peiʹvvmieʹrr",
 	"campaignevents-eventslist-menu-delete": "Jaukkâd šõddmõõžž",
@@ -13,6 +15,7 @@
 	"campaignevents-delete-submit-btn": "Jaukkâd",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
+	"campaignevents-eventpage-register-dialog-save": "Ruõkk",
 	"campaignevents-event-details-edit-button": "Muuʹtt",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
 	"campaignevents-event-details-remove-participant-remove-btn": "Jaukkâd",

@@ -15,5 +15,8 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "您無權查看私下註冊參加此活動的參與者。",
 	"campaignevents-rest-set-organizers-empty-list": "<var>Organizer_usernames</var> 必須是使用者名稱陣列，且不能為空",
 	"campaignevents-rest-get-registration-info-notparticipant": "您沒參與此活動。",
-	"campaignevents-rest-register-invalid-answer": "問題$1的答案無效"
+	"campaignevents-rest-register-invalid-answer": "問題$1的答案無效",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "請完成您在建立該活動的 wiki $1上的活動註冊。",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "請刪除您在建立該活動的 wiki $1上的活動註冊。",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "請發送電郵給建立該活動的 wiki $1上的參與者。"
 }
