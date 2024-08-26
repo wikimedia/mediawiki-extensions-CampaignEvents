@@ -7,5 +7,18 @@
 	"campaignevents-rest-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-rest-enable-registration-permission-denied": "Nie masz pozwolenia na włączenie rejestracji na wydarzenia.",
 	"campaignevents-rest-edit-page-nonlocal": "Ta rejestracja na wydarzenie została włączona na następującej wiki i powinna być tam edytowana: $1.",
-	"campaignevents-rest-user-not-found": "Użytkownik „$1” nie istnieje."
+	"campaignevents-rest-delete-already-deleted": "Ta rejestracja na wydarzenie została już usunięta.",
+	"campaignevents-rest-user-not-found": "Użytkownik „$1” nie istnieje.",
+	"campaignevents-rest-get-registration-deleted": "Ta rejestracja na wydarzenie została usunięta.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parametr „user_ids” musi być tablicą identyfikatorów użytkowników lub wartością null (aby usunąć wszystkich użytkowników)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Proszę usunąć uczestników z $1, czyli wiki, gdzie wydarzenie zostało utworzone.",
+	"campaignevents-rest-list-participants-empty-filter": "Filtr nazwy użytkownika, jeśli jest określony, nie może być pustym ciągiem znaków.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Nie masz uprawnień do przeglądania uczestników, którzy zarejestrowali się na to wydarzenie prywatnie.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> musi być tablicą nazw użytkowników i nie może być pusta",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Proszę ustawić organizatorów na $1, czyli wiki, gdzie wydarzenie zostało utworzone.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Nie bierzesz udziału w tym wydarzeniu.",
+	"campaignevents-rest-register-invalid-answer": "Nieprawidłowa odpowiedź na pytanie $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Proszę o ukończenie rejestracji na wydarzenie na $1, czyli wiki, gdzie utworzono to wydarzenie.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Proszę usunąć swoją rejestrację na wydarzenie na $1, czyli wiki, gdzie wydarzenie zostało utworzone.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Proszę wysłać e-mail do uczestników na $1, czyli wiki, gdzie wydarzenie zostało utworzone."
 }
