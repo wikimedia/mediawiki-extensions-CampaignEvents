@@ -461,5 +461,21 @@
 	"campaignevents-invitation-list-error-event-ended": "Dit evenement is afgelopen. Voer een actief evenement in.",
 	"campaignevents-invitation-list-error-not-organizer": "Voer een evenementpagina in waarin u als organisator wordt vermeld.",
 	"campaignevents-worklist-error-empty": "Voer minimaal één artikeltitel in.",
-	"campaignevents-worklist-error-too-large": "U hebt $1 artikel{{PLURAL:$1||en}} ingevoerd. Voer er tussen 1 en $2 in."
+	"campaignevents-worklist-error-too-large": "U hebt $1 artikel{{PLURAL:$1||en}} ingevoerd. Voer er tussen 1 en $2 in.",
+	"campaignevents-worklist-error-invalid-titles": "{{PLURAL:$1|Het volgende artikel heeft een ongeldige titel|De volgende artikelen hebben ongeldige titels}}. Corrigeer de titel{{PLURAL:$1||s}} en probeer het opnieuw.\n$2",
+	"campaignevents-worklist-error-nonexistent-titles": "{{PLURAL:$1|Het volgende artikel is|De volgende artikelen zijn}} niet gevonden. Controleer de titel{{PLURAL:$1||s}} en probeer het opnieuw.\n$2",
+	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|Het volgende artikel bevindt|De volgende artikelen bevinden}} zich niet in de hoofdnaamruimte. Voer alleen artikelen uit de hoofdnaamruimte in.\n$2",
+	"invitationlist": "Uitnodigingslijst",
+	"campaignevents-invitationlist-event": "$1: Uitnodigingslijst",
+	"campaignevents-invitation-list-processing": "<strong>Uw lijst met bijdragers om uit te nodigen wordt aangemaakt.</strong> Vernieuw de pagina over 5 à 10 minuten om uw uitnodigingslijst te bekijken.",
+	"campaignevents-invitation-list-invalid-id": "Geef een geldige uitnodigingslijst-ID op. [[Special:MyInvitationLists|Bekijk uw uitnodigingslijsten]].",
+	"campaignevents-invitation-list-does-not-exist": "Deze uitnodigingslijst bestaat niet. [[Special:MyInvitationLists|Bekijk uw uitnodigingslijsten]].",
+	"campaignevents-invitation-list-not-creator": "U hebt geen toestemming om deze uitnodigingslijst te bekijken, omdat u deze niet hebt aangemaakt. [[Special:MyInvitationLists|Bekijk uw uitnodigingslijsten]].",
+	"campaignevents-invitation-list-intro": "$1 bijdrager{{PLURAL:$1||s}} gevonden, op basis van de volgende criteria: het aantal bytes dat ze aan de artikelen hebben bijgedragen, het aantal bewerkingen dat ze aan de artikelen hebben aangebracht, het totale aantal bewerkingen op de wiki’s en hoe recent ze de wiki's hebben bewerkt.",
+	"campaignevents-invitationlist-no-editors": "<strong>Geen enkele bijdrager voldoet aan de [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists uitnodigingslijstcriteria] van uw artikelenlijst.</strong> U kunt [[Special:GenerateInvitationList|een nieuwe uitnodigingslijst maken]] met een nieuwe artikelenlijst.",
+	"campaignevents-invitationlist-highly-recommended": "Een echte aanrader om uit te nodigen",
+	"campaignevents-invitationlist-highly-recommended-info": "Deze bijdragers staan hoog op de uitnodigingslijst en zijn daarom eerder geneigd om deel te nemen aan uw activiteit.",
+	"campaignevents-invitationlist-recommended": "Aanbevolen om uit te nodigen",
+	"campaignevents-invitationlist-recommended-info": "Deze redacteuren hebben een gemiddelde notering op de uitnodigingslijst, maar ze zijn mogelijk toch geïnteresseerd om deel te nemen aan uw activiteit.",
+	"campaignevents-invitationlist-worklist-label": "Artikelenlijst bekijken"
 }

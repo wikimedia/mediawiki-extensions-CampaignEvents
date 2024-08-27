@@ -455,7 +455,7 @@
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "Placeholder message for event page field on [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Label of the article list field on [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Placeholder message for the article list field on [[Special:GenerateInvitationList]] this field accepts a list of article names",
-	"campaignevents-generateinvitationlist-article-list-field-help": "Help message for the article list field on [[Special:GenerateInvitationList]] \nParameters:\n*$1 - The max number of the articles that can be added",
+	"campaignevents-generateinvitationlist-article-list-field-help": "Help message for the article list field on [[Special:GenerateInvitationList]] \nParameters:\n*$1 - The max number of the articles that can be added (in the hundreds)",
 	"campaignevents-generateinvitationlist-submit-button-text": "Text for the submit button on [[Special:GenerateInvitationList]]",
 	"campaignevents-invitation-list-disabled": "Notice shown on [[Special:GenerateInvitationList]], [[Special:InvitationList]] and [[Special:MyInvitationLists]] if the invitation list is disabled in the wiki",
 	"campaignevents-invitation-list-not-allowed": "Message shown on [[Special:GenerateInvitationList]] and [[Special:MyInvitationLists]] if the invitation list is enabled, but the user doesn't have the organizer right",
