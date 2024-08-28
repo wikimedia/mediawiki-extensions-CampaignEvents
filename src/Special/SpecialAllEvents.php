@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -15,14 +16,18 @@ class SpecialAllEvents extends SpecialPage {
 	public const PAGE_NAME = 'AllEvents';
 	private EventsPagerFactory $eventsPagerFactory;
 
+	private CampaignEventsHookRunner $hookRunner;
+
 	/**
 	 * @param EventsPagerFactory $eventsPagerFactory
+	 * @param CampaignEventsHookRunner $hookRunner
 	 */
 	public function __construct(
-		EventsPagerFactory $eventsPagerFactory
+		EventsPagerFactory $eventsPagerFactory, CampaignEventsHookRunner $hookRunner
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventsPagerFactory = $eventsPagerFactory;
+		$this->hookRunner = $hookRunner;
 	}
 
 	/**
@@ -39,10 +44,15 @@ class SpecialAllEvents extends SpecialPage {
 			'oojs-ui.styles.icons-editing-advanced'
 		] );
 		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
-		$this->showFormAndEvents();
+		$eventsContent = $this->getFormAndEvents();
+		$this->hookRunner->onCampaignEventsGetCommunityList(
+			$this->getOutput(),
+			$eventsContent
+		);
+		$this->getOutput()->addHTML( $eventsContent );
 	}
 
-	private function showFormAndEvents(): void {
+	public function getFormAndEvents(): string {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
@@ -121,16 +131,20 @@ class SpecialAllEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-filter-field'
 			],
 		];
-		HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
+		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
 			->setWrapperLegendMsg( 'campaignevents-allevents-filter-legend' )
 			->setSubmitTextMsg( 'campaignevents-allevents-label-submit' )
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
 			->setSubmitCallback( fn () => true )
 			->setFormIdentifier( $formIdentifier, true )
-			->showAlways();
+			->prepareForm();
+
 		$navigation = $pager->getNavigationBar();
-		$this->getOutput()->addHTML( $navigation . $pager->getBody() . $navigation );
+
+		$result = $form->tryAuthorizedSubmit();
+
+		return $form->getHTML( $result ) . $navigation . $pager->getBody() . $navigation;
 	}
 
 	/**
