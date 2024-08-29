@@ -23,5 +23,16 @@
 	"campaignevents-error-page-not-event-namespace": "Tədbir səhifəsi {{ns:event}} ad fəzasında olmalıdır.",
 	"campaignevents-error-page-with-section": "Tədbir səhifəsində bölmə adı olmamalıdır.",
 	"campaignevents-error-invalid-chat-url": "Etibarlı söhbət URL-i daxil edin.",
-	"campaignevents-error-trackingtool-without-eventid": "Verilmiş izləmə alətində tədbirin identifikatorunu təqdim edin."
+	"campaignevents-error-trackingtool-without-eventid": "Verilmiş izləmə alətində tədbirin identifikatorunu təqdim edin.",
+	"campaignevents-error-trackingtool-eventid-without-toolid": "İzləmə vasitəsinin identifikatorunu təqdim edin",
+	"campaignevents-error-invalid-trackingtool": "Etibarlı alət ID-si təqdim edin",
+	"campaignevents-error-invalid-status": "Tədbirin açıq və ya qapalı olduğunu göstərin.",
+	"campaignevents-error-invalid-timezone": "Etibarlı vaxt zonası daxil edin.",
+	"campaignevents-error-empty-start": "Başlanğıc vaxtını seçin.",
+	"campaignevents-error-invalid-start": "Başlama vaxtı etibarsızdır.",
+	"campaignevents-error-start-past": "Gələcək zamanda olan başlama vaxtı daxil edin.",
+	"campaignevents-error-empty-end": "Bitmə tarixini daxil edin.",
+	"campaignevents-error-invalid-end": "Bitmə tarixi etibarsızdır.",
+	"campaignevents-error-start-after-end": "Başlama tarixindən sonra gələn bitmə tarixi daxil edin.",
+	"campaignevents-error-invalid-type": "Etibarlı tədbir növü daxil edin."
 }
