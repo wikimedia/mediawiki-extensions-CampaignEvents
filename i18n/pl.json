@@ -64,6 +64,8 @@
 	"campaignevents-edit-event-notfound": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-rest-edit-page-nonlocal": "Ta rejestracja na wydarzenie została włączona na następującej wiki i powinna być tam edytowana: $1.",
 	"campaignevents-edit-page-nonlocal": "[$1 Edytuj tę rejestrację] na wiki, na której została ona włączona: $2.",
+	"campaignevents-edit-error-deleted": "Zapis na to wydarzenie został usunięty.",
+	"campaignevents-edit-need-central-account": "Aby móc włączać i edytować zapisy na wydarzenia, potrzebne jest centralne konto użytkownika.",
 	"registerforevent": "Zarejestruj się na wydarzenie",
 	"campaignevents-register-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-register-success": "Zostałeś właśnie zarejestrowany na to wydarzenie.",
