@@ -257,6 +257,7 @@
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {
 		this.selectedParticipantsAmount++;
+		var checkboxValue = parseInt( checkbox.getValue() );
 		if ( this.selectedParticipantsAmount === this.participantsTotal ) {
 			this.selectAllParticipantsCheckbox.setSelected( true, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
@@ -264,10 +265,10 @@
 			this.selectedParticipantIDs = null;
 		} else if ( this.isSelectionInverted ) {
 			this.selectedParticipantIDs.splice(
-				this.selectedParticipantIDs.indexOf( checkbox.getValue() ), 1
+				this.selectedParticipantIDs.indexOf( checkboxValue ), 1
 			);
 		} else {
-			this.selectedParticipantIDs.push( checkbox.getValue() );
+			this.selectedParticipantIDs.push( checkboxValue );
 		}
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-eventdetails-hide-element' );
@@ -276,6 +277,7 @@
 
 	ParticipantsManager.prototype.onDeselectParticipant = function ( checkbox ) {
 		this.selectedParticipantsAmount--;
+		var checkboxValue = parseInt( checkbox.getValue() );
 		if ( this.selectedParticipantsAmount === 0 ) {
 			this.selectAllParticipantsCheckbox.setSelected( false, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
@@ -294,10 +296,10 @@
 
 		this.selectedParticipantIDs = this.selectedParticipantIDs || [];
 		if ( this.isSelectionInverted ) {
-			this.selectedParticipantIDs.push( checkbox.getValue() );
+			this.selectedParticipantIDs.push( checkboxValue );
 		} else {
 			this.selectedParticipantIDs.splice(
-				this.selectedParticipantIDs.indexOf( checkbox.getValue() ), 1
+				this.selectedParticipantIDs.indexOf( checkboxValue ), 1
 			);
 		}
 	};
@@ -504,22 +506,19 @@
 			}
 
 			if ( this.showParticipantCheckboxes ) {
-				// eslint-disable-next-line camelcase
-				curParticipantData.user_id = String( curParticipantData.user_id );
 				var loadAsSelected = this.loadParticipantAsSelected( curParticipantData.user_id ),
 					canReceiveEmail = curParticipantData.user_is_valid_recipient || false,
 					newParticipantCheckbox =
 						new OO.ui.CheckboxInputWidget( {
 							selected: loadAsSelected,
 							name: 'event-details-participants-checkboxes',
-							value: curParticipantData.user_id,
+							value: String( curParticipantData.user_id ),
 							classes: [
 								'ext-campaignevents-event-details-participants-checkboxes'
 							],
 							data: {
 								canReceiveEmail: canReceiveEmail,
 								username: curParticipantData.user_name,
-								userId: curParticipantData.user_id,
 								userPageLink: curParticipantData.user_page
 							}
 						} ),
@@ -618,7 +617,7 @@
 	};
 
 	/**
-	 * @param {string} userID
+	 * @param {number} userID
 	 * @return {boolean}
 	 */
 	ParticipantsManager.prototype.loadParticipantAsSelected = function ( userID ) {
