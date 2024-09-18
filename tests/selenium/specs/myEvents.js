@@ -1,7 +1,6 @@
 'use strict';
 
-const assert = require( 'assert' ),
-	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
+const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	MyEventsPage = require( '../pageobjects/myEvents.page' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
 	Rest = require( '../pageobjects/rest.page' ),
@@ -27,13 +26,13 @@ describe( 'MyEvents', function () {
 	it.skip( 'can allow organizer to close registration of first event in My Events', async function () {
 		await MyEventsPage.filterByOpenRegistrations();
 		await MyEventsPage.closeFirstRegistration();
-		assert.deepEqual( await MyEventsPage.notification.getText(), `${ await MyEventsPage.firstEvent.getText() } registration closed.` );
+		await expect( await MyEventsPage.notification ).toHaveText( `${ await MyEventsPage.firstEvent.getText() } registration closed.` );
 	} );
 
 	it( 'can allow organizer to delete registration of first event in My Events', async function () {
 		// Save the name of the event now, as the deletion will refresh the page.
 		const eventName = await MyEventsPage.firstEvent.getText();
 		await MyEventsPage.deleteFirstRegistration();
-		assert.deepEqual( await MyEventsPage.notification.getText(), `${ eventName } deleted.` );
+		await expect( await MyEventsPage.notification ).toHaveText( `${ eventName } deleted.` );
 	} );
 } );

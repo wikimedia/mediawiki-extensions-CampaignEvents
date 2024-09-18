@@ -1,7 +1,6 @@
 'use strict';
 
-const assert = require( 'assert' ),
-	Api = require( 'wdio-mediawiki/Api' ),
+const Api = require( 'wdio-mediawiki/Api' ),
 	EventPage = require( '../pageobjects/event.page' ),
 	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
@@ -32,7 +31,7 @@ describe( 'Edit Event Registration', function () {
 			end: { year: 2100, day: 14 }
 		} );
 
-		assert.deepEqual( await EventRegistrationPage.successNotice.getText(), 'The registration was edited. See event page.' );
+		await expect( await EventRegistrationPage.successNotice ).toHaveText( 'The registration was edited. See event page.' );
 	} );
 
 	it( 'can allow organizer to change the event to be in person', async function () {
@@ -42,7 +41,7 @@ describe( 'Edit Event Registration', function () {
 		} );
 
 		EventPage.open( event );
-		assert.deepEqual( await EventPage.eventType.getText(), 'In-person event' );
+		await expect( await EventPage.eventType ).toHaveText( 'In-person event' );
 	} );
 
 	it( 'can allow organizer to change the event to be online and in-person', async function () {
@@ -52,7 +51,7 @@ describe( 'Edit Event Registration', function () {
 		} );
 
 		EventPage.open( event );
-		assert.deepEqual( await EventPage.eventType.getText(), 'Online and in-person event' );
+		await expect( await EventPage.eventType ).toHaveText( 'Online and in-person event' );
 	} );
 
 	it( 'can allow organizer to add an additional organizer', async function () {
