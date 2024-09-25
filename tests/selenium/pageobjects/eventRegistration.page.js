@@ -59,7 +59,7 @@ class EventRegistrationPage extends Page {
 	}
 
 	get successNotice() {
-		return $( '.mw-message-box-success' );
+		return $( '.cdx-message--success' );
 	}
 
 	get body() {
