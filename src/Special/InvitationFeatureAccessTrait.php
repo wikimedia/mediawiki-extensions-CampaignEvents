@@ -14,7 +14,7 @@ use OOUI\MessageWidget;
  * @property PermissionChecker $permissionChecker
  * @method Config getConfig()
  * @method Message msg($key, ...$params)
- * @method void requireNamedUser($reasonMsg = '', $titleMsg = '')
+ * @method void requireNamedUser($reasonMsg = '', $titleMsg = '', $alwaysRedirectToLoginPage = true)
  */
 trait InvitationFeatureAccessTrait {
 	/**
