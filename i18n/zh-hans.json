@@ -6,14 +6,17 @@
 			"Kishinsagi",
 			"LittlePaw365",
 			"Xyb",
-			"沈澄心"
+			"沈澄心",
+			"Midleading"
 		]
 	},
+	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
 	"nstab-event": "活动",
 	"action-campaignevents-enable-registration": "启用活动注册",
 	"right-campaignevents-enable-registration": "启用活动注册",
 	"action-campaignevents-delete-registration": "删除活动注册",
 	"right-campaignevents-delete-registration": "删除活动注册",
+	"campaignevents-error-invalid-id": "活动ID必须是正整数。",
 	"campaignevents-error-empty-title": "请输入活动页面标题。",
 	"campaignevents-error-invalid-title": "活动页面标题无效：$1。",
 	"campaignevents-error-invalid-chat-url": "请输入有效的聊天 URL。",
@@ -129,6 +132,7 @@
 	"campaignevents-back-to-your-events": "返回您的活动",
 	"campaignevents-event-details-edit-button": "编辑",
 	"campaignevents-event-details-header-participants": "$1位{{PLURAL:$1|参与者}}",
+	"campaignevents-event-details-dates": "$1—$4",
 	"campaignevents-event-details-in-person-event-label": "现场活动",
 	"campaignevents-event-details-online-label": "线上活动",
 	"campaignevents-event-details-chat-link": "聊天群邀请链接",
