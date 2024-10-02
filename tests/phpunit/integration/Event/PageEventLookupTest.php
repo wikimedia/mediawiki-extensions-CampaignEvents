@@ -14,7 +14,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\Translate\MessageGroupProcessing\MessageGroups;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
@@ -95,7 +94,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 		$sourceLang = $translatablePage->getMessageGroup()->getSourceLanguage();
 		$transLang = $sourceLang !== 'it' ? 'it' : 'en';
 		$transTitle = $title->getSubpage( $transLang );
-		$subpage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $transTitle );
+		$subpage = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $transTitle );
 
 		$event = new EventRegistration(
 			null,
