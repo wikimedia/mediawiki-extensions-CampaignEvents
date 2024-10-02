@@ -101,6 +101,7 @@ return [
 				CampaignsUserMailer::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			),
+			$services->getCentralIdLookup(),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->getUserOptionsLookup(),
 			$services->getMessageFormatterFactory()->getTextFormatter( $services->getContentLanguage()->getCode() ),

@@ -13,10 +13,10 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Mail\EmailUserFactory;
 use MediaWiki\MainConfigNames;
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Preferences\MultiUsernameFilter;
 use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\User\CentralId\CentralIdLookup;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
@@ -42,6 +42,7 @@ class CampaignsUserMailer {
 	private UserFactory $userFactory;
 	private JobQueueGroup $jobQueueGroup;
 	private ServiceOptions $options;
+	private CentralIdLookup $centralIdLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private UserOptionsLookup $userOptionsLookup;
 	private ITextFormatter $contLangMsgFormatter;
@@ -52,6 +53,7 @@ class CampaignsUserMailer {
 	 * @param UserFactory $userFactory
 	 * @param JobQueueGroup $jobQueueGroup
 	 * @param ServiceOptions $options
+	 * @param CentralIdLookup $centralIdLookup
 	 * @param CampaignsCentralUserLookup $centralUserLookup
 	 * @param UserOptionsLookup $userOptionsLookup
 	 * @param ITextFormatter $contLangMsgFormatter
@@ -62,6 +64,7 @@ class CampaignsUserMailer {
 		UserFactory $userFactory,
 		JobQueueGroup $jobQueueGroup,
 		ServiceOptions $options,
+		CentralIdLookup $centralIdLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
 		UserOptionsLookup $userOptionsLookup,
 		ITextFormatter $contLangMsgFormatter,
@@ -72,6 +75,7 @@ class CampaignsUserMailer {
 		$this->jobQueueGroup = $jobQueueGroup;
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->options = $options;
+		$this->centralIdLookup = $centralIdLookup;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->contLangMsgFormatter = $contLangMsgFormatter;
@@ -241,9 +245,7 @@ class CampaignsUserMailer {
 		);
 		if ( $muteList ) {
 			$muteList = MultiUsernameFilter::splitIds( $muteList );
-			$senderId = MediaWikiServices::getInstance()
-				->getCentralIdLookup()
-				->centralIdFromLocalUser( $sender );
+			$senderId = $this->centralIdLookup->centralIdFromLocalUser( $sender );
 			if ( $senderId !== 0 && in_array( $senderId, $muteList, true ) ) {
 				wfDebug( "User does not allow user emails from this user." );
 

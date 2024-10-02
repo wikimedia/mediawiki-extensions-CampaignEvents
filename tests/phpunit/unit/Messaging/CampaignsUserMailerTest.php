@@ -18,6 +18,7 @@ use MediaWiki\Mail\EmailUser;
 use MediaWiki\Mail\EmailUserFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
+use MediaWiki\User\CentralId\CentralIdLookup;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
@@ -62,6 +63,7 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 			$userFactory ?? $this->createMock( UserFactory::class ),
 			$jobQueueGroup ?? $this->createMock( JobQueueGroup::class ),
 			$serviceOptions,
+			$this->createMock( CentralIdLookup::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$userOptionsLookup ?? $this->createMock( UserOptionsLookup::class ),
 			$this->createMock( ITextFormatter::class ),
