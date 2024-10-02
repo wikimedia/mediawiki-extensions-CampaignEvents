@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Chulsu463"
+			"Chulsu463",
+			"MiiCii"
 		]
 	},
 	"campaignevents-register-edit-btn": "kūbulinggw be asaraki",
@@ -9,11 +10,11 @@
 	"campaignevents-eventpage-register-dialog-save": "asaraki",
 	"campaignevents-eventpage-register-dialog-visibility-title": "dosirengge i cisu baita",
 	"campaignevents-event-details-location-header": "bana",
-	"campaignevents-register-questions-label-subtitle": "si sini jaburengge be amaga, te, manggi kūbulirengge mutembi.",
+	"campaignevents-register-questions-label-subtitle": "Ere mejige oci aššan be belhebume icihiyara niyalma -i teile sasari gaijarangge.",
 	"campaignevents-register-question-gender-option-man": "haha",
 	"campaignevents-register-question-affiliate-option-none": "waka",
-	"campaignevents-eventpage-register-dialog-questions-title": "arasi be jalin medege",
-	"campaignevents-eventpage-register-dialog-questions-subtitle": "geren fonjin oci sini ciha",
+	"campaignevents-eventpage-register-dialog-questions-title": "Sini mejige",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Ere mejige oci aššan be belhebume icihiyara niyalma -i teile sasari gaijarangge.",
 	"campaignevents-myinvitationslist-new-button": "ice",
 	"campaignevents-invitationlist-worklist-label": "meyen i afaha be tuwabumbi"
 }
