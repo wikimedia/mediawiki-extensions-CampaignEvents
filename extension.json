@@ -43,10 +43,6 @@
 		"CampaignEventsEnableEventInvitation": {
 			"description": "Flag to enable event invitation feature on a wiki",
 			"value": false
-		},
-		"CampaignEventsShowEventInvitationSpecialPages": {
-			"description": "Temporary flag to show/hide Special pages related to event invitation",
-			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
@@ -92,12 +88,6 @@
 		},
 		"EchoHooksHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler"
-		},
-		"SpecialPageInitList": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\SpecialPageInitListHandler",
-			"services": [
-				"MainConfig"
-			]
 		}
 	},
 	"Hooks": {
@@ -106,8 +96,7 @@
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
 		"PageDeleteComplete": "PageMoveAndDeleteHandler",
 		"TitleMove": "PageMoveAndDeleteHandler",
-		"BeforeCreateEchoEvent": "EchoHooksHandler",
-		"SpecialPage_initList": "SpecialPageInitList"
+		"BeforeCreateEchoEvent": "EchoHooksHandler"
 	},
 	"JobClasses": {
 		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob",
@@ -574,6 +563,31 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsFrontendModulesFactory",
 				"CampaignEventsPermissionChecker"
+			]
+		},
+		"GenerateInvitationList": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialGenerateInvitationList",
+			"services": [
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsInvitationListGenerator",
+				"CampaignEventsWorklistParser"
+			]
+		},
+		"MyInvitationLists": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialMyInvitationLists",
+			"services": [
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsDatabaseHelper"
+			]
+		},
+		"InvitationList": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialInvitationList",
+			"services": [
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsInvitationListStore",
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsUserLinker"
 			]
 		}
 	},
