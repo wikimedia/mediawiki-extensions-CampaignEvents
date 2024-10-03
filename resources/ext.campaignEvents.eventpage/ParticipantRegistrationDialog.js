@@ -191,7 +191,7 @@
 			if ( timeRemaining < 60 * 60 * 24 ) {
 				additionalRetentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-hours' ).parse();
 			} else {
-				var remainingDays = Math.round( timeRemaining / ( 60 * 60 * 24 ) );
+				var remainingDays = Math.floor( timeRemaining / ( 60 * 60 * 24 ) );
 				additionalRetentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-days' )
 					.params( [ mw.language.convertNumber( remainingDays ) ] )
 					.parse();

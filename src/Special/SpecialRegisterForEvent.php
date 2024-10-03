@@ -195,7 +195,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				if ( $timeRemaining < 60 * 60 * 24 ) {
 					$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-hours' )->parse();
 				} else {
-					$remainingDays  = (int)round( $timeRemaining / ( 60 * 60 * 24 ) );
+					$remainingDays = intdiv( $timeRemaining, 60 * 60 * 24 );
 					$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-days' )
 						->numParams( $remainingDays )
 						->parse();
