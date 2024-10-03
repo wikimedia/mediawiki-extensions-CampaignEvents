@@ -248,7 +248,7 @@ class SpecialEventDetails extends SpecialPage {
 		}
 
 		$main->addTabPanels( $tabs );
-		$selectedTab = $this->getRequest()->getRawVal( 'tab', self::EVENT_DETAILS_PANEL );
+		$selectedTab = $this->getRequest()->getRawVal( 'tab' ) ?? self::EVENT_DETAILS_PANEL;
 		$main->setTabPanel( $selectedTab );
 		$out->addHTML( $main );
 	}
