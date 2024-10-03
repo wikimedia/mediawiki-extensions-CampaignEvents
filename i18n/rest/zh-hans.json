@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Wzl19371",
-			"沈澄心"
+			"沈澄心",
+			"ZhaoFJx"
 		]
 	},
 	"campaignevents-rest-event-not-found": "没有具有此ID的活动。",
+	"campaignevents-rest-enable-registration-permission-denied": "您不允许启用活动注册。",
 	"campaignevents-rest-get-registration-info-notparticipant": "您未参加此活动。",
 	"campaignevents-rest-register-invalid-answer": "问题$1的答案无效"
 }
