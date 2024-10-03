@@ -16,12 +16,12 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\Html;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
-use TemplateParser;
 
 class SpecialInvitationList extends SpecialPage {
 	use InvitationFeatureAccessTrait;

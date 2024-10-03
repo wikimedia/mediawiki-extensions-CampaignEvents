@@ -4,9 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
-use IDBAccessObject;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 interface IEventLookup {
 	public const LOOKUP_SERVICE_NAME = 'CampaignEventsEventLookup';

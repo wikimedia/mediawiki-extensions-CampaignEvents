@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
-use Language;
 use LogicException;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -14,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswers;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
+use MediaWiki\Language\Language;
 use OOUI\IconWidget;
 use OOUI\MessageWidget;
 use OOUI\Tag;

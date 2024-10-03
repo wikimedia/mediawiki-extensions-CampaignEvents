@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool\Tool;
 
-use IDBAccessObject;
 use JsonException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -20,6 +19,7 @@ use MediaWiki\Message\Message;
 use MWHttpRequest;
 use StatusValue;
 use Wikimedia\Assert\Assert;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * This class implements the WikiEduDashboard software as a tracking tool.

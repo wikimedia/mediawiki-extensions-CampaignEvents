@@ -4,8 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use Language;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Language\Language;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\Response;
 use Wikimedia\Message\IMessageFormatterFactory;

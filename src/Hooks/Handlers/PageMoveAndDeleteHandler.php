@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use IDBAccessObject;
 use ManualLogEntry;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -21,6 +20,7 @@ use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\User\User;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * This handler is used for page move and deletion. If the page is an event page, we update the registration:

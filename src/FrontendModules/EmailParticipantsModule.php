@@ -4,7 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
-use Language;
+use MediaWiki\Language\Language;
 use OOUI\ButtonWidget;
 use OOUI\FieldLayout;
 use OOUI\FieldsetLayout;

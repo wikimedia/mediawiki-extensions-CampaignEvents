@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use DateTimeZone;
-use IDBAccessObject;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
@@ -21,6 +20,7 @@ use MediaWiki\Extension\CampaignEvents\Utils;
 use RuntimeException;
 use stdClass;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * @note Some pieces of code involving addresses may seem unnecessarily complex, but this is necessary because

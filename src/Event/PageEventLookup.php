@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
-use IDBAccessObject;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -16,6 +15,7 @@ use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\TitleFactory;
 use RuntimeException;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * This class is responsible for finding the event registration associated with a given page. This includes
