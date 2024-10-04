@@ -45,7 +45,7 @@ class SpecialAllEvents extends SpecialPage {
 		] );
 		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
 		$eventsContent = $this->getFormAndEvents();
-		$this->hookRunner->onCampaignEventsGetCommunityList(
+		$this->hookRunner->onCampaignEventsGetAllEventsContent(
 			$this->getOutput(),
 			$eventsContent
 		);
