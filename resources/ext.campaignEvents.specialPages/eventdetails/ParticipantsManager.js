@@ -50,6 +50,9 @@
 		this.$searchParticipantsElement = $( '.ext-campaignevents-eventdetails-participants-search' );
 		this.selectedParticipantsAmount = 0;
 		this.$tabPanel = $( '#ext-campaignevents-eventdetails-tabs' );
+		this.$privateParticipantsFooter = $( '.ext-campaignevents-eventdetails-participants-footer' );
+		this.$privateParticipantsMsg = $( '.ext-campaignevents-eventdetails-participants-private-count-msg' );
+		this.privateParticipantsTotal = this.$privateParticipantsMsg.data( 'mw-count' );
 		/* eslint-enable no-jquery/no-global-selector */
 
 		this.installEventListeners();
@@ -375,6 +378,19 @@
 						mw.language.convertNumber( thisClass.participantsTotal )
 					)
 				);
+				if ( removedPrivate > 0 ) {
+					thisClass.privateParticipantsTotal -= removedPrivate;
+					if ( thisClass.privateParticipantsTotal > 0 ) {
+						thisClass.$privateParticipantsMsg.text(
+							mw.message(
+								'campaignevents-event-details-participants-private',
+								mw.language.convertNumber( thisClass.privateParticipantsTotal )
+							)
+						);
+					} else {
+						thisClass.$privateParticipantsFooter.remove();
+					}
+				}
 				thisClass.scrollDownObserver.reset();
 				thisClass.showNotification( 'success', successMsg );
 			} )

@@ -728,6 +728,8 @@ class EventDetailsParticipantsModule {
 					->numParams( $privateParticipantsCount )
 			);
 			$textElement = ( new Tag( 'span' ) )
+				->addClasses( [ 'ext-campaignevents-eventdetails-participants-private-count-msg' ] )
+				->setAttributes( [ 'data-mw-count' => $privateParticipantsCount ] )
 				->appendContent( $text );
 			$privateParticipants = ( new Tag( 'div' ) )
 				->addClasses( [ 'ext-campaignevents-eventdetails-participants-private-count-footer' ] )
