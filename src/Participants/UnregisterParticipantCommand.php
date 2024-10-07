@@ -142,7 +142,8 @@ class UnregisterParticipantCommand {
 	 * @param CentralUser[]|null $users Array of users, if null remove all
 	 * @param ICampaignsAuthority $performer
 	 * @param bool $invertUsers self::DO_NOT_INVERT_USERS or self::INVERT_USERS
-	 * @return StatusValue The StatusValue's "value" property has the number of participants removed
+	 * @return StatusValue The StatusValue's "value" property is an array with two keys, `public` and `private`, that
+	 * respectively contain the number of public and private participants removed.
 	 */
 	public function removeParticipantsIfAllowed(
 		ExistingEventRegistration $registration,
@@ -177,7 +178,8 @@ class UnregisterParticipantCommand {
 	 * @param ExistingEventRegistration $registration
 	 * @param CentralUser[]|null $users Array of users, if null remove all
 	 * @param bool $invertUsers self::DO_NOT_INVERT_USERS or self::INVERT_USERS
-	 * @return StatusValue The StatusValue's "value" property has the number of participants removed
+	 * @return StatusValue The StatusValue's "value" property is an array with two keys, `public` and `private`, that
+	 *  respectively contain the number of public and private participants removed.
 	 */
 	public function removeParticipantsUnsafe(
 		ExistingEventRegistration $registration,
@@ -209,7 +211,7 @@ class UnregisterParticipantCommand {
 			$invertUsers
 		);
 
-		if ( $removedParticipants > 0 ) {
+		if ( $removedParticipants['public'] + $removedParticipants['private'] > 0 ) {
 			$this->trackingToolEventWatcher->onParticipantsRemoved(
 				$registration,
 				$users,

@@ -38,6 +38,11 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		CampaignsCentralUserLookup $centralUserLookup = null,
 		TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): UnregisterParticipantCommand {
+		if ( !$participantsStore ) {
+			$participantsStore = $this->createMock( ParticipantsStore::class );
+			$participantsStore->method( 'removeParticipantsFromEvent' )
+				->willReturn( [ 'public' => 0, 'private' => 0 ] );
+		}
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
 			$permChecker->method( 'userCanCancelRegistration' )->willReturn( true );
@@ -48,7 +53,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$trackingToolEventWatcher->method( 'validateParticipantsRemoved' )->willReturn( StatusValue::newGood() );
 		}
 		return new UnregisterParticipantCommand(
-			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
+			$participantsStore,
 			$permChecker,
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$this->createMock( EventPageCacheUpdater::class ),

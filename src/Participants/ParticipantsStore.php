@@ -154,8 +154,8 @@ class ParticipantsStore {
 	 * they registered but then unregistered.
 	 */
 	public function removeParticipantFromEvent( int $eventID, CentralUser $participant ): bool {
-		$affectedRows = $this->removeParticipantsFromEvent( $eventID, [ $participant ] );
-		return $affectedRows > 0;
+		$removedUsers = $this->removeParticipantsFromEvent( $eventID, [ $participant ] );
+		return $removedUsers['public'] + $removedUsers['private'] > 0;
 	}
 
 	/**
@@ -163,13 +163,14 @@ class ParticipantsStore {
 	 * @param CentralUser[]|null $users Array of users, if null remove all participants,
 	 * if is an empty array do nothing and return 0.
 	 * @param bool $invertUsers
-	 * @return int number of participants removed
+	 * @return int[] An array with two keys, `public` and `private`, that respectively contain the number of public and
+	 * private participants removed.
 	 */
 	public function removeParticipantsFromEvent(
 		int $eventID,
 		array $users = null,
 		bool $invertUsers = false
-	): int {
+	): array {
 		if ( $users === null && $invertUsers ) {
 			throw new InvalidArgumentException( "The users must be an array of user ids if invertUsers is true" );
 		}
@@ -197,19 +198,24 @@ class ParticipantsStore {
 			}
 		}
 
-		$dbw->newUpdateQueryBuilder()
+		$queryBuilder = $dbw->newUpdateQueryBuilder()
 			->update( 'ce_participants' )
 			->set( [
 				'cep_unregistered_at' => $dbw->timestamp(),
 				'cep_first_answer_timestamp' => null,
 			] )
 			->where( $where )
-			->caller( __METHOD__ )
-			->execute();
-		$updatedParticipants = $dbw->affectedRows();
+			->caller( __METHOD__ );
+
+		( clone $queryBuilder )->where( [ 'cep_private' => false ] )->execute();
+		$removedPublicParticipants = $dbw->affectedRows();
+
+		( clone $queryBuilder )->where( [ 'cep_private' => true ] )->execute();
+		$removedPrivateParticipants = $dbw->affectedRows();
+
 		$this->answersStore->deleteAllAnswers( $eventID, $users, $invertUsers );
 
-		return $updatedParticipants;
+		return [ 'public' => $removedPublicParticipants, 'private' => $removedPrivateParticipants ];
 	}
 
 	/**

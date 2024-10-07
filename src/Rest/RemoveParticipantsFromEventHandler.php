@@ -86,8 +86,9 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 			$this->exitWithStatus( $status, $httptStatus );
 		}
 
+		$removedParticipants = $status->getValue();
 		return $this->getResponseFactory()->createJson( [
-			'modified' => $status->getValue()
+			'modified' => $removedParticipants['public'] + $removedParticipants['private']
 		] );
 	}
 

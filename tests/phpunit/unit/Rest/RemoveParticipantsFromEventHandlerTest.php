@@ -73,7 +73,7 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 		if ( !$unregisterParticipantCommand ) {
 			$unregisterParticipantCommand = $this->createMock( UnregisterParticipantCommand::class );
 			$unregisterParticipantCommand->method( 'removeParticipantsIfAllowed' )
-				->willReturn( StatusValue::newGood( true ) );
+				->willReturn( StatusValue::newGood( [ 'public' => 1, 'private' => 1 ] ) );
 		}
 		return new RemoveParticipantsFromEventHandler(
 			$eventLookup,
@@ -210,7 +210,8 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 
 	public function provideRequestDataSuccessful(): Generator {
 		$modifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
-		$modifiedCommand->method( 'removeParticipantsIfAllowed' )->willReturn( StatusValue::newGood( 1 ) );
+		$modifiedCommand->method( 'removeParticipantsIfAllowed' )
+			->willReturn( StatusValue::newGood( [ 'public' => 1, 'private' => 0 ] ) );
 		yield 'Some Modified' => [ $modifiedCommand, 1, $this->getRequestData() ];
 
 		$invertReqData = $this->getRequestData();
@@ -223,11 +224,13 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 		yield 'Some Modified and invert_users true' => [ $modifiedCommand, 1, $invertReqData ];
 
 		$notModifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
-		$notModifiedCommand->method( 'removeParticipantsIfAllowed' )->willReturn( StatusValue::newGood( 0 ) );
+		$notModifiedCommand->method( 'removeParticipantsIfAllowed' )
+			->willReturn( StatusValue::newGood( [ 'public' => 0, 'private' => 0 ] ) );
 		yield 'None modified' => [ $notModifiedCommand, 0, $this->getRequestData() ];
 
 		$allModifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
-		$allModifiedCommand->method( 'removeParticipantsIfAllowed' )->willReturn( StatusValue::newGood( 2 ) );
+		$allModifiedCommand->method( 'removeParticipantsIfAllowed' )
+			->willReturn( StatusValue::newGood( [ 'public' => 1, 'private' => 1 ] ) );
 		$invertReqData = $this->getRequestData();
 		$invertReqData[ 'bodyContents' ] = json_encode(
 			[

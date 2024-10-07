@@ -509,15 +509,19 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	public function testRemoveParticipantsFromEvent(
 		int $eventID,
 		?array $userIDs,
-		int $expected
+		array $expected
 	) {
 		$this->assertSame( $expected, $this->getStore()->removeParticipantsFromEvent( $eventID, $userIDs ) );
 	}
 
 	public static function provideParticipantsToRemoveFromEvent(): Generator {
-		yield 'Remove two participants' => [ 2, [ new CentralUser( 101 ), new CentralUser( 104 ) ], 2 ];
-		yield 'Remove all participants' => [ 3, null, 3 ];
-		yield 'Remove one participant' => [ 1, [ new CentralUser( 101 ) ], 1 ];
+		yield 'Remove two participants' => [
+			2,
+			[ new CentralUser( 101 ), new CentralUser( 104 ) ],
+			[ 'public' => 2, 'private' => 0 ]
+		];
+		yield 'Remove all participants' => [ 3, null, [ 'public' => 2, 'private' => 1 ] ];
+		yield 'Remove one participant' => [ 1, [ new CentralUser( 101 ) ], [ 'public' => 1, 'private' => 0 ] ];
 	}
 
 	/**
