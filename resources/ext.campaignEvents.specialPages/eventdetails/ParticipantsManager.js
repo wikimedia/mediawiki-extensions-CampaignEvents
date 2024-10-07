@@ -332,6 +332,9 @@
 			}
 		)
 			.done( function ( response ) {
+				var removedPublic = response.public,
+					removedPrivate = response.private,
+					removedTotal = removedPublic + removedPrivate;
 				thisClass.participantCheckboxes =
 					thisClass.participantCheckboxes.filter( function ( el ) {
 						if ( el.isSelected() ) {
@@ -349,7 +352,7 @@
 				thisClass.onDeselectAll();
 				thisClass.updateSelectedLabel();
 				var successMsg;
-				thisClass.participantsTotal = thisClass.participantsTotal - response.modified;
+				thisClass.participantsTotal = thisClass.participantsTotal - removedTotal;
 				if ( thisClass.participantsTotal === 0 ) {
 					successMsg = mw.message(
 						'campaignevents-event-details-remove-all-participant-notification'
@@ -361,7 +364,7 @@
 				} else {
 					successMsg = mw.message(
 						'campaignevents-event-details-remove-participant-notification',
-						mw.language.convertNumber( response.modified )
+						mw.language.convertNumber( removedTotal )
 					).text();
 					thisClass.loadMoreParticipants();
 				}

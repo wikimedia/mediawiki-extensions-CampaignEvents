@@ -191,28 +191,27 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
-	 * @param int $expectedModified
+	 * @param array $expectedModified
 	 * @param array $reqData
 	 * @dataProvider provideRequestDataSuccessful
 	 */
 	public function testRun__successful(
 		UnregisterParticipantCommand $unregisterParticipantCommand,
-		int $expectedModified,
+		array $expectedModified,
 		array $reqData
 	) {
 		$handler = $this->newHandler( null, $unregisterParticipantCommand );
 		$reqData = new RequestData( $reqData );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, $reqData );
 
-		$this->assertArrayHasKey( 'modified', $respData );
-		$this->assertSame( $expectedModified, $respData['modified'] );
+		$this->assertSame( $expectedModified, $respData );
 	}
 
 	public function provideRequestDataSuccessful(): Generator {
 		$modifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
 		$modifiedCommand->method( 'removeParticipantsIfAllowed' )
 			->willReturn( StatusValue::newGood( [ 'public' => 1, 'private' => 0 ] ) );
-		yield 'Some Modified' => [ $modifiedCommand, 1, $this->getRequestData() ];
+		yield 'Some Modified' => [ $modifiedCommand, [ 'public' => 1, 'private' => 0 ], $this->getRequestData() ];
 
 		$invertReqData = $this->getRequestData();
 		$invertReqData[ 'bodyContents' ] = json_encode(
@@ -221,12 +220,16 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 				'invert_users' => true,
 			]
 		);
-		yield 'Some Modified and invert_users true' => [ $modifiedCommand, 1, $invertReqData ];
+		yield 'Some Modified and invert_users true' => [
+			$modifiedCommand,
+			[ 'public' => 1, 'private' => 0 ],
+			$invertReqData
+		];
 
 		$notModifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
 		$notModifiedCommand->method( 'removeParticipantsIfAllowed' )
 			->willReturn( StatusValue::newGood( [ 'public' => 0, 'private' => 0 ] ) );
-		yield 'None modified' => [ $notModifiedCommand, 0, $this->getRequestData() ];
+		yield 'None modified' => [ $notModifiedCommand, [ 'public' => 0, 'private' => 0 ], $this->getRequestData() ];
 
 		$allModifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
 		$allModifiedCommand->method( 'removeParticipantsIfAllowed' )
@@ -238,6 +241,6 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 				'invert_users' => false,
 			]
 		);
-		yield 'All mofified' => [ $allModifiedCommand, 2, $invertReqData ];
+		yield 'All mofified' => [ $allModifiedCommand, [ 'public' => 1, 'private' => 1 ], $invertReqData ];
 	}
 }
