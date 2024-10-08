@@ -14,9 +14,8 @@ module.exports = {
 	 * @return {Promise<number>}
 	 */
 	async enableEvent( event ) {
-		const csrfToken = await browser.execute( () => {
-			return mw.user.tokens.values.csrfToken; // eslint-disable-line no-undef
-		} );
+		// eslint-disable-next-line no-undef
+		const csrfToken = await browser.execute( () => mw.user.tokens.values.csrfToken );
 		const cookies = await browser.getCookies();
 		const cookieString = cookies.map( ( cookie ) => `${ cookie.name }=${ cookie.value };` ).join( '' );
 		const baseUrl = await browser.options.baseUrl;
