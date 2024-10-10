@@ -481,5 +481,7 @@
 	"campaignevents-invitationlist-highly-recommended-info": "These editors received a high invitation list ranking, so they are more likely to be interested in joining your activity.",
 	"campaignevents-invitationlist-recommended": "Recommended to invite",
 	"campaignevents-invitationlist-recommended-info": "These editors received a mid-range invitation list ranking, but they still may be interested in joining your activity.",
-	"campaignevents-invitationlist-worklist-label": "View article list"
+	"campaignevents-invitationlist-worklist-label": "View article list",
+	"campaignevents-invitationlist-preference": "Include me in [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation lists].",
+	"prefs-campaignevents-invitations": "Invitation Lists"
 }

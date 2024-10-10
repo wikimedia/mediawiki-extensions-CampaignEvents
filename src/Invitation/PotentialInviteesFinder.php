@@ -6,13 +6,17 @@ namespace MediaWiki\Extension\CampaignEvents\Invitation;
 
 use ChangeTags;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\GetPreferencesHandler;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Revision\RevisionStoreFactory;
 use MediaWiki\Storage\NameTableAccessException;
 use MediaWiki\Storage\NameTableStoreFactory;
+use MediaWiki\User\Options\UserOptionsLookup;
+use MediaWiki\User\UserIdentityValue;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
+use UnexpectedValueException;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\SelectQueryBuilder;
@@ -43,17 +47,20 @@ class PotentialInviteesFinder {
 	 * @phan-var callable(string $msg):void
 	 */
 	private $debugLogger;
+	private UserOptionsLookup $userOptionsLookup;
 
 	public function __construct(
 		RevisionStoreFactory $revisionStoreFactory,
 		IConnectionProvider $dbProvider,
 		NameTableStoreFactory $nameTableStoreFactory,
-		int $blockTargetMigrationStage
+		int $blockTargetMigrationStage,
+		UserOptionsLookup $userOptionsLookup
 	) {
 		$this->revisionStoreFactory = $revisionStoreFactory;
 		$this->dbProvider = $dbProvider;
 		$this->nameTableStoreFactory = $nameTableStoreFactory;
 		$this->blockTargetMigrationStage = $blockTargetMigrationStage;
+		$this->userOptionsLookup = $userOptionsLookup;
 		$this->debugLogger = static function ( string $msg ): void {
 		};
 	}
@@ -73,6 +80,11 @@ class PotentialInviteesFinder {
 	public function generate( Worklist $worklist ): array {
 		$revisionsByWiki = [];
 		foreach ( $worklist->getPagesByWiki() as $wiki => $pages ) {
+			if ( $wiki !== WikiMap::getCurrentWikiID() ) {
+				// TODO: Re-implement support for multi-wiki worklists. Currently not doable because we'd need to read,
+				// and possibly merge, cross-wiki user preferences. Note that this code is currently unreachable.
+				throw new UnexpectedValueException( "Unexpected foreign page on $wiki" );
+			}
 			$revisionsByWiki[$wiki] = $this->getAllRevisionsForWiki( $wiki, $pages );
 		}
 		$revisionsByWiki = array_filter( $revisionsByWiki );
@@ -82,7 +94,7 @@ class PotentialInviteesFinder {
 
 		$rankedUsers = $this->rankUsers( $revisionsByWiki );
 		// Return just the top scores to avoid useless mile-long invitation lists. Preserve integer keys
-		// in case an username is numeric and PHP cast it to int.
+		// in case a username is numeric and PHP cast it to int.
 		return array_slice( $rankedUsers, 0, self::RESULT_USER_LIMIT, true );
 	}
 
@@ -299,8 +311,10 @@ class PotentialInviteesFinder {
 	 * @return array<string,int> List of users along with their score, sorted from highest to lowest.
 	 */
 	private function rankUsers( array $revisionsByWiki ): array {
-		$deltasByUser = $this->getDeltasByUser( $revisionsByWiki );
-		$userDataByWiki = $this->getUserDataByWiki( $revisionsByWiki );
+		// get unique usernames and remove those who have opted out of invitation lists
+		$filteredRevisions = $this->filterUsersByPreference( $revisionsByWiki );
+		$deltasByUser = $this->getDeltasByUser( $filteredRevisions );
+		$userDataByWiki = $this->getUserDataByWiki( $filteredRevisions );
 		( $this->debugLogger )( "==Scoring debug info==" );
 		$rankedUsers = [];
 		foreach ( $deltasByUser as $username => $byteDeltas ) {
@@ -326,10 +340,12 @@ class PotentialInviteesFinder {
 		$listByUser = [];
 		// Flatten the list, merging revisions from all wikis.
 		$revisions = array_merge( ...array_values( $revisionsByWiki ) );
-		foreach ( $revisions as [ 'username' => $username, 'page' => $pageKey, 'delta' => $delta ] ) {
-			$listByUser[$username] ??= [];
-			$listByUser[$username][$pageKey] ??= 0;
-			$listByUser[$username][$pageKey] += $delta;
+		foreach (
+			$revisions as [ 'userID' => $userID, 'username' => $username, 'page' => $pageKey, 'delta' => $delta ]
+		) {
+				$listByUser[$username] ??= [];
+				$listByUser[$username][$pageKey] ??= 0;
+				$listByUser[$username][$pageKey] += $delta;
 		}
 
 		$deltas = [];
@@ -370,7 +386,7 @@ class PotentialInviteesFinder {
 		$userData = [];
 		foreach ( $revisionsByWiki as $wiki => $revisions ) {
 			foreach ( $revisions as [ 'username' => $username, 'userID' => $userID, 'actorID' => $actorID ] ) {
-				$userData[$username][$wiki] = [ 'userID' => $userID, 'actorID' => $actorID ];
+					$userData[$username][$wiki] = [ 'userID' => $userID, 'actorID' => $actorID ];
 			}
 		}
 		return $userData;
@@ -570,5 +586,22 @@ class PotentialInviteesFinder {
 			throw new RuntimeException( "No last edit from user who has edits?!" );
 		}
 		return ( MWTimestamp::time() - $lastEditTS ) / ( 60 * 60 * 24 );
+	}
+
+	/**
+	 * @param array $revisionsByWiki
+	 * @return array
+	 */
+	private function filterUsersByPreference( array $revisionsByWiki ): array {
+		array_walk( $revisionsByWiki, function ( &$subArray ) {
+			$subArray = array_filter( $subArray, function ( $item ) {
+				$user = UserIdentityValue::newRegistered( (int)$item['userID'], $item['username'] );
+				return $this->userOptionsLookup->getBoolOption(
+					$user,
+					GetPreferencesHandler::ALLOW_INVITATIONS_PREFERENCE
+				);
+			} );
+		} );
+		return $revisionsByWiki;
 	}
 }
