@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Udehb"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Enweghị mmemme nwere ID a.",
+	"campaignevents-rest-enable-registration-permission-denied": "Anaghị ekwe ka ị mee ka ndebanye aha mmemme.",
+	"campaignevents-rest-edit-page-nonlocal": "Enyere ndebanye aha mmemme a ikike na wiki na-esonụ ma kwesị idezi ya n'ebe ahụ: $1.",
+	"campaignevents-rest-delete-already-deleted": "Ehichapụla ndebanye aha mmemme a.",
+	"campaignevents-rest-user-not-found": "Enweghị onye ọrụ nwere ID etiti a.",
+	"campaignevents-rest-get-registration-deleted": "Ehichapụrụ ndebanye aha mmemme a",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' ga-abụrịrị usoro ID onye ọrụ, ma ọ bụ null (iji wepụ ndị ọrụ niile)",
+	"campaignevents-rest-list-participants-empty-filter": "Ihe nzacha aha njirimara, ọ bụrụ na e kwupụtara ya, ga-abụ eriri na-adịghị efu.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Ịnweghị ikike ịhụ ndị sonyere debanye aha na nzuzo maka mmemme a.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>aha ndị nhazi mmemme a</var> ga-abụrịrị usoro aha njirimara ma enweghị ike ịdị efu"
+}

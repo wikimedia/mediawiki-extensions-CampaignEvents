@@ -1,9 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kuldeepburjbhalaike"
+			"Kuldeepburjbhalaike",
+			"Cabal"
 		]
 	},
+	"campaignevents-register-confirmation-btn": "ਇੰਦਰਾਜ ਕਰਾਓ",
+	"campaignevents-eventpage-register-dialog-register": "ਇੰਦਰਾਜ ਕਰਾਓ",
 	"campaignevents-eventpage-register-dialog-visibility-title": "ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਗੋਪਨੀਯਤਾ",
 	"campaignevents-eventpage-register-dialog-questions-title": "ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "ਇਹ ਜਾਣਕਾਰੀ ਸਿਰਫ਼ ਪ੍ਰੋਗਰਾਮ ਦੇ ਪ੍ਰਬੰਧਕਾਂ ਨਾਲ ਸਾਂਝੀ ਕੀਤੀ ਜਾਵੇਗੀ।"
