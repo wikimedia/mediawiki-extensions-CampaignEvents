@@ -4,14 +4,19 @@ namespace MediaWiki\Extension\CampaignEvents\Hooks;
 
 use MediaWiki\Output\OutputPage;
 
-interface CampaignEventsGetCommunityListHook {
+interface CampaignEventsGetAllEventsContentHook {
 	/**
 	 * @param OutputPage $outputPage
 	 * @param string &$eventsContent
 	 * @return void
 	 */
-	public function onCampaignEventsGetCommunityList(
+	public function onCampaignEventsGetAllEventsContent(
 		OutputPage $outputPage,
 		string &$eventsContent
 	): void;
 }
+
+class_alias(
+	CampaignEventsGetAllEventsContentHook::class,
+	'MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsGetCommunityListHook'
+);

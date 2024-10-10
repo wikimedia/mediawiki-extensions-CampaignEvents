@@ -14,7 +14,7 @@ class CampaignEventsHookRunner implements
 	CampaignEventsRegistrationFormLoadHook,
 	CampaignEventsRegistrationFormSubmitHook,
 	CampaignEventsGetEventDetailsHook,
-	CampaignEventsGetCommunityListHook
+	CampaignEventsGetAllEventsContentHook
 {
 	public const SERVICE_NAME = 'CampaignEventsHookRunner';
 
@@ -93,12 +93,12 @@ class CampaignEventsHookRunner implements
 	/**
 	 * @inheritDoc
 	 */
-	public function onCampaignEventsGetCommunityList(
+	public function onCampaignEventsGetAllEventsContent(
 		OutputPage $outputPage,
 		string &$eventsContent
 	): void {
 		$this->hookContainer->run(
-			'CampaignEventsGetCommunityList',
+			'CampaignEventsGetAllEventsContent',
 			[ $outputPage, &$eventsContent ],
 			[ 'abortable' => false ]
 		);
