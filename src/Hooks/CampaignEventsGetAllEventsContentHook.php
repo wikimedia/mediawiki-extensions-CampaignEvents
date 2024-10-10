@@ -15,8 +15,3 @@ interface CampaignEventsGetAllEventsContentHook {
 		string &$eventsContent
 	): void;
 }
-
-class_alias(
-	CampaignEventsGetAllEventsContentHook::class,
-	'MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsGetCommunityListHook'
-);
