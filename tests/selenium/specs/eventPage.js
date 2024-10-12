@@ -8,8 +8,8 @@ const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' )
 	Util = require( 'wdio-mediawiki/Util' ),
 	event = Util.getTestString( 'Event:Test event page' );
 
-describe( 'Event page', function () {
-	before( async function () {
+describe( 'Event page', () => {
+	before( async () => {
 		await LoginPage.loginAdmin();
 		await EventRegistrationPage.createEventPage( event );
 		await Rest.enableEvent( event );
@@ -22,7 +22,7 @@ describe( 'Event page', function () {
 		await LoginPage.login( userName, password );
 	}
 
-	it( 'can have one user register publicly', async function () {
+	it( 'can have one user register publicly', async () => {
 		const userName = Util.getTestString( 'Public' );
 		await loginWithNewAccount( userName );
 		await EventPage.open( event );
@@ -30,7 +30,7 @@ describe( 'Event page', function () {
 		await expect( await EventPage.successfulRegistration ).toBeDisplayed();
 	} );
 
-	it( 'can have one user register privately', async function () {
+	it( 'can have one user register privately', async () => {
 		const userName = Util.getTestString( 'Private' );
 		await loginWithNewAccount( userName );
 		await EventPage.open( event );
@@ -38,7 +38,7 @@ describe( 'Event page', function () {
 		await expect( await EventPage.successfulRegistration ).toBeDisplayed();
 	} );
 
-	it( 'can have a user cancel registration', async function () {
+	it( 'can have a user cancel registration', async () => {
 		const userName = Util.getTestString( 'Cancel' );
 		await loginWithNewAccount( userName );
 		await EventPage.open( event );

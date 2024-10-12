@@ -5,25 +5,25 @@ const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' )
 	Util = require( 'wdio-mediawiki/Util' ),
 	event = Util.getTestString( 'Event:Test EnableEventRegistration' );
 
-describe( 'Enable Event Registration @daily', function () {
+describe( 'Enable Event Registration @daily', () => {
 
-	before( async function () {
+	before( async () => {
 		await LoginPage.loginAdmin();
 	} );
 
-	it( 'is configured correctly', async function () {
+	it( 'is configured correctly', async () => {
 		EventRegistrationPage.open();
 
 		await expect( await EventRegistrationPage.enableRegistration ).toExist();
 	} );
 
-	it( 'requires event data', async function () {
+	it( 'requires event data', async () => {
 		await EventRegistrationPage.enableEvent( event );
 
 		await expect( await EventRegistrationPage.generalError ).toHaveText( 'There are problems with some of your input.' );
 	} );
 
-	it( 'can be enabled', async function () {
+	it( 'can be enabled', async () => {
 		await EventRegistrationPage.createEventPage( event );
 		await EventRegistrationPage.enableEvent( event );
 

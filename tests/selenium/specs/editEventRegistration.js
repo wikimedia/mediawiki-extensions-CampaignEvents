@@ -11,16 +11,16 @@ const Api = require( 'wdio-mediawiki/Api' ),
 let event,
 	id;
 
-describe( 'Edit Event Registration', function () {
+describe( 'Edit Event Registration', () => {
 
-	beforeEach( async function () {
+	beforeEach( async () => {
 		event = Util.getTestString( 'Event:Test EditEventRegistration' );
 		await LoginPage.loginAdmin();
 		await EventRegistrationPage.createEventPage( event );
 		id = await Rest.enableEvent( event );
 	} );
 
-	it( 'can allow organizer to update event data', async function () {
+	it( 'can allow organizer to update event data', async () => {
 		const updatedEventPage = Util.getTestString( 'Event:New page for EditEventRegistration' );
 		await EventRegistrationPage.createEventPage( updatedEventPage );
 
@@ -34,7 +34,7 @@ describe( 'Edit Event Registration', function () {
 		await expect( await EventRegistrationPage.successNotice ).toHaveText( 'The registration was edited. See event page.' );
 	} );
 
-	it( 'can allow organizer to change the event to be in person', async function () {
+	it( 'can allow organizer to change the event to be in person', async () => {
 		await EventRegistrationPage.editEvent( {
 			id,
 			meetingType: 'inperson'
@@ -44,7 +44,7 @@ describe( 'Edit Event Registration', function () {
 		await expect( await EventPage.eventType ).toHaveText( 'In-person event' );
 	} );
 
-	it( 'can allow organizer to change the event to be online and in-person', async function () {
+	it( 'can allow organizer to change the event to be online and in-person', async () => {
 		await EventRegistrationPage.editEvent( {
 			id,
 			meetingType: 'hybrid'
@@ -54,7 +54,7 @@ describe( 'Edit Event Registration', function () {
 		await expect( await EventPage.eventType ).toHaveText( 'Online and in-person event' );
 	} );
 
-	it( 'can allow organizer to add an additional organizer', async function () {
+	it( 'can allow organizer to add an additional organizer', async () => {
 		const bot = await Api.bot();
 		const password = 'aaaaaaaaa!';
 		await Api.createAccount( bot, userName, password );
