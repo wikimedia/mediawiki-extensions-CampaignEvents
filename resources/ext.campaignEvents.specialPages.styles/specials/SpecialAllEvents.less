@@ -35,6 +35,7 @@
 		grid-column: ~'1 / -1';
 	}
 }
+/* stylelint-enable selector-max-id */
 
 .ext-campaignevents-collaboration-list-empty-state {
 	.cdx-message__icon.cdx-css-icon--page {
@@ -52,4 +53,27 @@
 	}
 }
 
-/* stylelint-enable selector-max-id */
+.ext-campaignevents-collaboration-list-wikiproject .cdx-card__text__title {
+	> a {
+		vertical-align: middle;
+	}
+
+	.wikimediacampaignevents-collaboration-list-edit-button {
+		margin-left: @spacing-50;
+
+		> a {
+			min-width: unset;
+			width: 20px;
+			min-height: unset;
+			height: 20px;
+			padding: 0;
+
+			> .oo-ui-iconElement-icon {
+				position: unset;
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+			}
+		}
+	}
+}
