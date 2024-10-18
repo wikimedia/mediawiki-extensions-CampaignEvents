@@ -53,7 +53,7 @@ class CampaignsPageFactory {
 		$page = $pageStore->getPageByName( $namespace, $dbKey );
 		if ( !$page ) {
 			// The page does not exist; this can happen e.g. if the event page was deleted.
-			$page = new PageIdentityValue( 0, $namespace, $dbKey, $wikiID );
+			$page = new PageIdentityValue( 0, $namespace, $dbKey, $adjustedWikiID );
 		}
 		return new MWPageProxy( $page, $prefixedText );
 	}
