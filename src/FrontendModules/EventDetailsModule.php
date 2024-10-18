@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
@@ -267,9 +268,8 @@ class EventDetailsModule {
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) )
 		);
 
-		$needToRegisterMsg = $this->msgFormatter->format(
-			MessageValue::new( 'campaignevents-event-details-register-prompt' )
-		);
+		$canRegister = RegisterParticipantCommand::checkIsRegistrationAllowed( $this->registration ) ===
+			RegisterParticipantCommand::CAN_REGISTER;
 
 		$userCanViewSensitiveEventData = $this->permissionChecker->userCanViewSensitiveEventData( $authority );
 		$items[] = $this->getLocationSection(
@@ -279,7 +279,7 @@ class EventDetailsModule {
 			$isLocalWiki,
 			$wikiID,
 			$organizersCount,
-			$needToRegisterMsg,
+			$canRegister,
 			$userCanViewSensitiveEventData,
 			$out
 		);
@@ -295,8 +295,10 @@ class EventDetailsModule {
 				$chatSectionContent = $this->getNonLocalWikiMessage( $wikiID, $out );
 			} elseif ( $isOrganizer || $isParticipant ) {
 				$chatSectionContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
+			} elseif ( $canRegister ) {
+				$chatSectionContent = $this->getNeedsToRegisterMsg();
 			} else {
-				$chatSectionContent = $needToRegisterMsg;
+				$chatSectionContent = null;
 			}
 		} elseif ( !$userCanViewSensitiveEventData && $chatURL && $authority->isSitewideBlocked() ) {
 			$chatSectionContent = $this->msgFormatter->format(
@@ -308,14 +310,22 @@ class EventDetailsModule {
 			);
 		}
 
-		$items[] = self::makeSection(
-			'speechBubbles',
-			$chatSectionContent,
-			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-chat-link' ) )
-		);
+		if ( $chatSectionContent ) {
+			$items[] = self::makeSection(
+				'speechBubbles',
+				$chatSectionContent,
+				$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-chat-link' ) )
+			);
+		}
 
 		return ( new Tag( 'div' ) )
 			->appendContent( $items );
+	}
+
+	private function getNeedsToRegisterMsg(): string {
+		return $this->msgFormatter->format(
+			MessageValue::new( 'campaignevents-event-details-register-prompt' )
+		);
 	}
 
 	/**
@@ -384,7 +394,7 @@ class EventDetailsModule {
 	 * @param bool $isLocalWiki
 	 * @param string|false $wikiID
 	 * @param int $organizersCount
-	 * @param string $needToRegisterMsg
+	 * @param bool $canRegister
 	 * @param bool $userCanViewSensitiveEventData
 	 * @param OutputPage $out
 	 * @return Tag
@@ -396,7 +406,7 @@ class EventDetailsModule {
 		bool $isLocalWiki,
 		$wikiID,
 		int $organizersCount,
-		string $needToRegisterMsg,
+		bool $canRegister,
 		bool $userCanViewSensitiveEventData,
 		OutputPage $out
 	): Tag {
@@ -440,8 +450,8 @@ class EventDetailsModule {
 					$items[] = $this->getNonLocalWikiMessage( $wikiID, $out );
 				} elseif ( $isOrganizer || $isParticipant ) {
 					$items[] = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
-				} else {
-					$items[] = $needToRegisterMsg;
+				} elseif ( $canRegister ) {
+					$items[] = $this->getNeedsToRegisterMsg();
 				}
 			} elseif ( !$userCanViewSensitiveEventData && $meetingURL && $performer->isSitewideBlocked() ) {
 				$items[] = $this->msgFormatter->format(
