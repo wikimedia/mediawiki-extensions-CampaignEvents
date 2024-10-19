@@ -48,6 +48,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Registration\ExtensionRegistry;
 
 // This file is actually covered by CampaignEventsServicesTest, but it's not possible to specify a path
 // in @covers annotations (https://github.com/sebastianbergmann/phpunit/issues/3794)

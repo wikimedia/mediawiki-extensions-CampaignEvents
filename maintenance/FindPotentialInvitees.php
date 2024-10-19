@@ -4,8 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Maintenance;
 
-use Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\Maintenance\Maintenance;
 use MediaWiki\WikiMap\WikiMap;
 
 /**

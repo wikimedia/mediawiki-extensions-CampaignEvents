@@ -15,8 +15,8 @@ require_once "$IP/maintenance/Maintenance.php";
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\Maintenance\Maintenance;
 use Wikimedia\Rdbms\IDatabase;
 
 /**

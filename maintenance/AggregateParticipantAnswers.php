@@ -4,9 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Maintenance;
 
-use Maintenance;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
+use MediaWiki\Maintenance\Maintenance;
 use MediaWiki\Utils\MWTimestamp;
 use RuntimeException;
 use Wikimedia\Rdbms\IDatabase;
