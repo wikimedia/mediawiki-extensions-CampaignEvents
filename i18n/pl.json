@@ -144,7 +144,7 @@
 	"campaignevents-eventpage-btn-manage": "Zarządzaj wydarzeniem",
 	"campaignevents-eventpage-btn-register": "Zarejestruj się na wydarzenie",
 	"campaignevents-eventpage-dialog-title": "Szczegóły wydarzenia",
-	"campaignevents-eventpage-dialog-organizers": "Organizowane przez: $1",
+	"campaignevents-eventpage-dialog-organizers": "Organizowane {{PLURAL:$2|przez}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Zobacz wszystkich organizatorów",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|uczestnik|uczestników}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Zobacz wszystkich",
