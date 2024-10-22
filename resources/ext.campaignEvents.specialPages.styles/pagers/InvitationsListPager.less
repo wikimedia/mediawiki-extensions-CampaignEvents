@@ -1,21 +1,15 @@
 @import 'mediawiki.skin.variables.less';
 
-.ext-campaignevents-invitations-pager-check {
-	.cdx-mixin-css-icon(
-		@cdx-icon-success, @param-fill-color: @color-success
-	);
+.ext-campaignevents-invitations-pager-chip--success {
+	.cdx-mixin-css-icon( @cdx-icon-success, @color-success, @size-icon-small );
 }
 
-.ext-campaignevents-invitations-pager-alert {
-	.cdx-mixin-css-icon(
-		@cdx-icon-alert, @param-fill-color: @color-warning
-	);
+.ext-campaignevents-invitations-pager-chip--warning {
+	.cdx-mixin-css-icon( @cdx-icon-alert, @color-warning, @size-icon-small );
 }
 
-.ext-campaignevents-invitations-pager-notice {
-	.cdx-mixin-css-icon(
-		@cdx-icon-notice
-	);
+.ext-campaignevents-invitations-pager-chip--notice {
+	.cdx-mixin-css-icon( @cdx-icon-info-filled, @color-notice, @size-icon-small );
 }
 
 .ext-campaignevents-invitations-pager-row {
