@@ -5,9 +5,9 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use InvalidArgumentException;
-use MediaWiki\Message\Converter;
 use MediaWiki\Rest\LocalizedHttpException;
 use StatusValue;
+use Wikimedia\Message\MessageValue;
 
 /**
  * Helper to exit in case of a fatal StatusValue.
@@ -24,7 +24,6 @@ trait FailStatusUtilTrait {
 			throw new InvalidArgumentException( "Got status without errors" );
 		}
 		// TODO Report all errors, not just the first one.
-		$converter = new Converter();
-		throw new LocalizedHttpException( $converter->convertMessage( $msgs[0] ), $statusCode );
+		throw new LocalizedHttpException( MessageValue::newFromSpecifier( $msgs[0] ), $statusCode );
 	}
 }
