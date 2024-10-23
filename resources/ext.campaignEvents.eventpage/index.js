@@ -33,7 +33,7 @@
 		// TODO Should we also add a parameter to show a modal right after the user comes back?
 
 		window.location.href = mw.util.getUrl(
-			'Special:UserLogin',
+			mw.user.isTemp() ? 'Special:CreateAccount' : 'Special:UserLogin',
 			{
 				returnto: mw.config.get( 'wgPageName' ),
 				returntoquery: currentUri.getQueryString()
