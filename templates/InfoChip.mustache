@@ -1,4 +1,9 @@
-<div class="cdx-info-chip">
-	<span class="cdx-info-chip--text ext-campaignevents-invitations-pager-{{{iconClass}}}"></span>
-	<div>{{{message}}}</div>
+<div class="cdx-info-chip cdx-info-chip--{{{status}}}">
+	<!-- Classes used here:
+	 * ext-campaignevents-invitations-pager-chip--success
+	 * ext-campaignevents-invitations-pager-chip--notice
+	 * ext-campaignevents-invitations-pager-chip--warning
+	-->
+	<span class="cdx-icon ext-campaignevents-invitations-pager-chip--{{{status}}}"></span>
+	<span class="cdx-info-chip--text">{{{message}}}</span>
 </div>
