@@ -450,7 +450,7 @@
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "Message used on [[Special:EventDetails]] to inform users that they can't see sensitive information, for instance event meeting link and chat goup link, because their account is blocked",
 	"generateinvitationlist": "Description of [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-name-field-label": "Label of the list name field on [[Special:GenerateInvitationList]]",
-	"campaignevents-generateinvitationlist-name-field-placeholder": "Placeholder message for list name field on [[Special:GenerateInvitationList]]",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "Placeholder message for the invitation list name field on [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-event-page-field-label": "Label of the event page field on [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "Placeholder message for event page field on [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Label of the article list field on [[Special:GenerateInvitationList]]",
