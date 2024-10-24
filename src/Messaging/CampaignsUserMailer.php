@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialAllEvents;
 use MediaWiki\Mail\EmailUserFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\Authority;
@@ -165,6 +166,20 @@ class CampaignsUserMailer {
 				)
 			);
 		}
+		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
+			$collaborationListLink = '(Collaboration list link)';
+		} else {
+			$collaborationListLink = "\n\n" . $this->contLangMsgFormatter->format(
+					MessageValue::new(
+						'campaignevents-email-footer-collaboration-list-link',
+						[
+							SpecialPage::getTitleFor( SpecialAllEvents::PAGE_NAME )->getCanonicalURL()
+						]
+					)
+				);
+		}
+		$body .= $collaborationListLink;
+
 		return $body;
 	}
 
