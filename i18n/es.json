@@ -155,6 +155,8 @@
 	"campaignevents-allevents-label-events-per-page": "Eventos por página",
 	"campaignevents-allevents-label-start-date": "De",
 	"campaignevents-allevents-label-end-date": "A",
+	"campaignevents-allevents-label-show-ongoing": "Incluir eventos en curso dentro de este rango de fechas",
+	"campaignevents-eventslist-date-separator": "$1 – $2",
 	"campaignevents-eventslist-meeting-type-label": "Tipo de encuentro",
 	"campaignevents-eventslist-organizer-label": "Organizadores/as",
 	"campaignevents-eventslist-column-date": "Fecha",
@@ -193,6 +195,7 @@
 	"campaignevents-eventpage-header-type-online": "Evento en línea",
 	"campaignevents-eventpage-header-type-in-person": "Evento presencial",
 	"campaignevents-eventpage-header-type-online-and-in-person": "Evento mixto en línea y presencial",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Zona horaria:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Fecha y hora de inicio y de finalización",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|participante|participantes}}",
@@ -462,9 +465,13 @@
 	"campaignevents-invitation-list-disabled": "Esta wiki no tiene listas de invitación habilitadas.",
 	"campaignevents-invitation-list-not-allowed": "No puedes utilizar las listas de invitación.",
 	"myinvitationlists": "Tus listas de invitación",
+	"campaignevents-invitations-pager-status-editors": "$1 {{PLURAL:$1|editor|editores}} encontrados",
+	"campaignevents-invitations-pager-status-processing": "Procesando...",
 	"campaignevents-myinvitationslist-empty-text": "Descubre nuevas personas que quieran participar en tu proyecto o evento. Proporciona una lista de artículos que cubran los temas de tu actividad. A continuación, recibirás una lista de potenciales editores/as a quiénes podría interesar unirse a tu proyecto o evento.",
 	"campaignevents-myinvitationslist-generate-button": "Crear una nueva lista de invitación",
+	"campaignevents-myinvitationslist-new-button": "Nuevo",
 	"campaignevents-invitation-list-error-empty-name": "Proporcionar un nombre a la lista de invitación.",
 	"campaignevents-invitation-list-error-invalid-page": "Introduce una página de eventos que utilice Registro de eventos.",
-	"campaignevents-invitation-list-error-event-ended": "El evento ha terminado. Introduce un evento activo."
+	"campaignevents-invitation-list-error-event-ended": "El evento ha terminado. Introduce un evento activo.",
+	"campaignevents-invitation-list-error-not-organizer": "Accede una página de evento de la que seas organizador/a."
 }

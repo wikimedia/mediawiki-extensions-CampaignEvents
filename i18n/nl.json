@@ -1,7 +1,6 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80",
 			"DiGro",
 			"HanV",
 			"McDutchie",
@@ -441,12 +440,12 @@
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "Uw account is geblokkeerd. U hebt hier geen toegang toe.",
 	"generateinvitationlist": "Uitnodigingslijst genereren",
 	"campaignevents-generateinvitationlist-name-field-label": "Naam van de uitnodigingslijst",
-	"campaignevents-generateinvitationlist-name-field-placeholder": "Mijn lijst met uitnodigingen voor evenementen",
-	"campaignevents-generateinvitationlist-event-page-field-label": "Evenementpagina",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "Uitnodigingslijst voor de Edit-a-thon",
+	"campaignevents-generateinvitationlist-event-page-field-label": "Naam van de evenementpagina",
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:Mijn evenement",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Artikellijst",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Zon\nMaan\nHuis",
-	"campaignevents-generateinvitationlist-article-list-field-help": "Voer de {{PLURAL:$1|naam|namen}} in van {{PLURAL:$1|één artikel dat|maximaal $1 artikelen die}} de onderwerpen van uw evenement {{PLURAL:$1|behandelt|behandelen}}.\n{{PLURAL:$1||Elk artikel moet op een nieuwe regel staan.}}",
+	"campaignevents-generateinvitationlist-article-list-field-help": "Voer de {{PLURAL:$1|naam|namen}} in van {{PLURAL:$1|één artikel dat|maximaal $1 artikelen die}} de onderwerpen van uw evenement {{PLURAL:$1|behandelt|behandelen}}.\n{{PLURAL:$1||Elk artikel moet op een nieuwe regel staan.}}\nEr wordt dan een lijst met bijdragers aangemaakt op basis van de artikelen die u hebt toegevoegd.",
 	"campaignevents-generateinvitationlist-submit-button-text": "Aanmaken",
 	"campaignevents-invitation-list-disabled": "Op deze wiki zijn uitnodigingslijsten niet ingeschakeld.",
 	"campaignevents-invitation-list-not-allowed": "U mag geen uitnodigingslijsten gebruiken.",
