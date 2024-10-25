@@ -325,6 +325,7 @@
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|more}}",
 	"campaignevents-notification-registration-event-page-link": "View event page",
 	"campaignevents-notification-registration-chat-link": "Join group chat",
+	"campaignevents-notification-registration-collaboration-list-link": "Visit the [[Special:AllEvents|Collaboration List]] to find more events and communities on the wikis.",
 	"campaignevents-event-details-email-recipients-label": "Recipients",
 	"campaignevents-event-details-email-recipients-link-text": "Add recipients",
 	"campaignevents-event-details-email-subject-label": "Subject",

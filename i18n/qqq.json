@@ -331,6 +331,7 @@
 	"campaignevents-notification-registration-details-organizers-more": "Message used in the email notification sent to confirm that the user registered for an event. This message is used as the last item of a comma-separated list of usernames, when there are more users than can be shown. The full sentence could be something like \"User1, User2, User3 and 3 more\".\nParameters:\n* $1 - Number of users not included in the list.",
 	"campaignevents-notification-registration-event-page-link": "Primary link of the email notification sent to confirm that the user registered for an event. By clicking the link, the user can visit the event page.",
 	"campaignevents-notification-registration-chat-link": "Secondary link of the email notification sent to confirm that the user registered for an event. By clicking the link, the user can join the group chat of event participants and organizers.",
+	"campaignevents-notification-registration-collaboration-list-link": "Link on the email notification sent to confirm that the user registered for an event, to guide them to [[Special:AllEvents]]",
 	"campaignevents-event-details-email-recipients-label": "Label text for Recipients field on the email form",
 	"campaignevents-event-details-email-recipients-link-text": "Button text for the Add recipients link on the email form",
 	"campaignevents-event-details-email-subject-label": "Label text for Subject field on the email form",
