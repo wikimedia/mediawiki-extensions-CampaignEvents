@@ -128,7 +128,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		$body .= $this->getDatesBodySection();
 		$body .= $this->getTypeBodySection();
 		$body .= $this->gerOrganizersBodySection();
-
+		$body .= $this->msg( 'campaignevents-notification-registration-collaboration-list-link' )->parse();
 		$body = Html::rawElement(
 			'div',
 			[ 'style' => 'font-weight:normal' ],
