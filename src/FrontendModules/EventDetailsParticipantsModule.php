@@ -123,11 +123,12 @@ class EventDetailsParticipantsModule {
 		$this->isPastEvent = $event->isPast();
 		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
 
+		$centralUser = null;
+		$curUserParticipant = null;
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
 			$curUserParticipant = $this->participantsStore->getEventParticipant( $eventID, $centralUser, true );
 		} catch ( UserNotGlobalException $_ ) {
-			$curUserParticipant = null;
 		}
 
 		$showPrivateParticipants = $isLocalWiki &&
@@ -140,7 +141,7 @@ class EventDetailsParticipantsModule {
 			null,
 			null,
 			$showPrivateParticipants,
-			isset( $centralUser ) ? [ $centralUser->getCentralID() ] : null
+			$centralUser ? [ $centralUser->getCentralID() ] : null
 		);
 		$lastParticipant = $otherParticipants ? end( $otherParticipants ) : $curUserParticipant;
 		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;
@@ -191,7 +192,7 @@ class EventDetailsParticipantsModule {
 			'wgCampaignEventsShowPrivateParticipants' => $showPrivateParticipants,
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
 			'wgCampaignEventsLastParticipantID' => $lastParticipantID,
-			'wgCampaignEventsCurUserCentralID' => isset( $centralUser ) ? $centralUser->getCentralID() : null,
+			'wgCampaignEventsCurUserCentralID' => $centralUser ? $centralUser->getCentralID() : null,
 			'wgCampaignEventsViewerHasEmail' =>
 				$this->userFactory->newFromUserIdentity( $viewingUser )->isEmailConfirmed(),
 			'wgCampaignEventsNonPIIQuestionIDs' => $nonPIIQuestionIDs,
