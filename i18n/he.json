@@ -324,6 +324,7 @@
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|ועוד}} $1",
 	"campaignevents-notification-registration-event-page-link": "צפייה בדף האירוע",
 	"campaignevents-notification-registration-chat-link": "הצטרפות לצ'אט קבוצתי",
+	"campaignevents-notification-registration-collaboration-list-link": "נא לבקר ב[[Special:AllEvents|רשימת העבודה המשותפת]] כדי למצוא עוד אירועים וקהילות באתרי הוויקי.",
 	"campaignevents-event-details-email-recipients-label": "נמענים",
 	"campaignevents-event-details-email-recipients-link-text": "הוספת נמענים",
 	"campaignevents-event-details-email-subject-label": "נושא",
