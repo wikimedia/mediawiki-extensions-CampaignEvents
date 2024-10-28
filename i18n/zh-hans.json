@@ -135,6 +135,7 @@
 	"campaignevents-eventpage-unregister-confirmation-confirm": "是",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "否",
 	"campaignevents-eventpage-enableheader-organizer": "您是筹办人员",
+	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>活动页面</strong>: 启用注册，以便参与者可以直接在页面上注册您的活动。",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "关闭",
 	"eventdetails": "活动详情",
 	"campaignevents-event-details-label": "活动详情",

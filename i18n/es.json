@@ -150,6 +150,7 @@
 	"campaignevents-eventpage-header-type-online": "Evento en línea",
 	"campaignevents-eventpage-header-type-in-person": "Evento presencial",
 	"campaignevents-eventpage-header-type-online-and-in-person": "Evento mixto en línea y presencial",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-dates-label": "Fecha y hora de inicio y de finalización",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-eventpage-header-participants-label": "Número de participantes",
