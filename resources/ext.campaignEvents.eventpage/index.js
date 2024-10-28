@@ -63,11 +63,21 @@
 		var cookieVal = mw.cookie.get( SUCCESS_NOTIFICATION_COOKIE );
 		if ( cookieVal ) {
 			mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 0, { expires: 1 } );
-			var msg = cookieVal === SUCCESS_COOKIE_NEW_REGISTRATION ?
-				mw.message( 'campaignevents-eventpage-register-notification', mw.config.get( 'wgTitle' ) ) :
-				mw.message( 'campaignevents-eventpage-register-notification-edit' );
-
-			mw.notify( msg, { type: 'success' } );
+			var $msg;
+			if ( cookieVal === SUCCESS_COOKIE_NEW_REGISTRATION ) {
+				$msg = $( '<p>' ).append(
+					mw.message(
+						'campaignevents-eventpage-register-notification',
+						mw.config.get( 'wgTitle' )
+					).parseDom()
+				).add(
+					$( '<p>' )
+						.append( mw.message( 'campaignevents-eventpage-register-notification-more' ).parseDom() )
+				);
+			} else {
+				$msg = mw.message( 'campaignevents-eventpage-register-notification-edit' ).parseDom();
+			}
+			mw.notify( $msg, { type: 'success' } );
 		}
 	}
 
