@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -62,10 +63,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected MWAuthorityProxy $performer;
 
 	/**
-	 * @var string|null Prefixedtext of the event page, set upon form submission and guaranteed to be
-	 * a string on success.
+	 * @var ICampaignsPage|null The event page, set upon form submission and guaranteed to be set on success.
 	 */
-	private ?string $eventPagePrefixedText = null;
+	private ?ICampaignsPage $eventPage = null;
 	/**
 	 * @var string[] Usernames of invalid organizers, used for live validation in JavaScript.
 	 */
@@ -602,7 +602,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			return Status::wrap( $e->getStatus() );
 		}
 
-		$this->eventPagePrefixedText = $event->getPage()->getPrefixedText();
+		$this->eventPage = $event->getPage();
 		$organizerUsernames = $data[ 'EventOrganizerUsernames' ]
 			? explode( "\n", $data[ 'EventOrganizerUsernames' ] )
 			: [];
@@ -680,7 +680,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	public function onSuccess(): void {
 		$this->getOutput()->prependHTML( Html::successBox(
-			$this->msg( $this->formMessages['success'] )->params( $this->eventPagePrefixedText )->parse()
+			$this->msg( $this->formMessages['success'] )->params( $this->eventPage->getPrefixedText() )->parse()
 		) );
 		if ( $this->saveWarningsStatus ) {
 			foreach ( $this->saveWarningsStatus->getMessages() as $msg ) {
