@@ -27,16 +27,16 @@
 		.on( 'cancelregistration', handleCancelRegistration );
 
 	function redirectToLogin() {
-		var currentUri = new mw.Uri();
+		var currentQuery = new URL( window.location.href ).searchParams;
 		// Prevent duplicate "title" param
-		delete currentUri.query.title;
+		currentQuery.delete( 'title' );
 		// TODO Should we also add a parameter to show a modal right after the user comes back?
 
 		window.location.href = mw.util.getUrl(
 			mw.user.isTemp() ? 'Special:CreateAccount' : 'Special:UserLogin',
 			{
 				returnto: mw.config.get( 'wgPageName' ),
-				returntoquery: currentUri.getQueryString()
+				returntoquery: currentQuery.toString()
 			}
 		);
 	}

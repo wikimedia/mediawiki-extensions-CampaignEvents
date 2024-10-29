@@ -50,16 +50,17 @@
 					windowManager: windowManager
 				} );
 			menu.on( 'deleted', function ( eventName ) {
-				var currentUri = new mw.Uri();
-				delete currentUri.query[ deletedEventParam ];
-				delete currentUri.query.title;
+				var newParams = new URL( window.location.href ).searchParams;
+				newParams.set( deletedEventParam, eventName );
+				newParams.delete( 'title' );
 
-				var newParams = currentUri.query;
-				newParams[ deletedEventParam ] = eventName;
-
+				var newQuery = {};
+				newParams.forEach( function ( value, key ) {
+					newQuery[ key ] = value;
+				} );
 				window.location.href = mw.util.getUrl(
 					mw.config.get( 'wgPageName' ),
-					newParams
+					newQuery
 				);
 			} );
 			$btn.replaceWith( menu.$element );
