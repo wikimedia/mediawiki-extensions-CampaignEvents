@@ -277,6 +277,7 @@
 				"campaignevents-eventpage-register-notification",
 				"campaignevents-eventpage-register-notification-more",
 				"campaignevents-eventpage-register-notification-edit",
+				"campaignevents-enable-registration-success-msg",
 				"campaignevents-eventpage-unregister-confirmation-title",
 				"campaignevents-eventpage-unregister-confirmation-body",
 				"campaignevents-eventpage-unregister-confirmation-confirm",
@@ -498,7 +499,8 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsTrackingToolRegistry",
 				"CampaignEventsEventQuestionsRegistry",
-				"CampaignEventsHookRunner"
+				"CampaignEventsHookRunner",
+				"CampaignEventsPageURLResolver"
 			]
 		},
 		"EditEventRegistration": {

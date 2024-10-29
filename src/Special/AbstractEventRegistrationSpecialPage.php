@@ -45,6 +45,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	public const DETAILS_SECTION = 'campaignevents-edit-form-details-label';
 	private const PARTICIPANT_QUESTIONS_SECTION = 'campaignevents-edit-form-questions-label';
 
+	public const REGISTRATION_UPDATED_SESSION_KEY = 'campaignevents-registration-updated';
+	public const REGISTRATION_UPDATED_WARNINGS_SESSION_KEY = 'campaignevents-registration-updated-warnings';
+
 	/** @var array<string,string> */
 	private array $formMessages;
 	protected IEventLookup $eventLookup;
@@ -65,12 +68,15 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	/**
 	 * @var ICampaignsPage|null The event page, set upon form submission and guaranteed to be set on success.
 	 */
-	private ?ICampaignsPage $eventPage = null;
+	protected ?ICampaignsPage $eventPage = null;
 	/**
 	 * @var string[] Usernames of invalid organizers, used for live validation in JavaScript.
 	 */
 	private array $invalidOrganizerNames = [];
-	private ?StatusValue $saveWarningsStatus;
+	/**
+	 * @var StatusValue|null Status with warnings from the update. Guaranteed to be set upon successful form submission.
+	 */
+	protected ?StatusValue $saveWarningsStatus = null;
 
 	/**
 	 * @param string $name

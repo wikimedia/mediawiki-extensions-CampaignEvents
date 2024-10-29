@@ -18,6 +18,8 @@
 		userIsRegisteredPublicly = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ),
 		aggregationTimestamp = mw.config.get( 'wgCampaignEventsAggregationTimestamp' ),
 		answersAlreadyAggregated = mw.config.get( 'wgCampaignEventsAnswersAlreadyAggregated' ),
+		hasUpdatedRegistration = mw.config.get( 'wgCampaignEventsRegistrationUpdated' ),
+		registrationUpdatedWarnings = mw.config.get( 'wgCampaignEventsRegistrationUpdatedWarnings' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
 
@@ -246,6 +248,23 @@
 		$layout.replaceWith( menu.$element );
 	}
 
+	/**
+	 * If the user has just updated the registration, show a success notifications, and warnings
+	 * if there are any.
+	 */
+	function maybeShowRegistrationUpdatedNotification() {
+		if ( !hasUpdatedRegistration ) {
+			return;
+		}
+		mw.notify(
+			mw.message( 'campaignevents-enable-registration-success-msg', mw.config.get( 'wgTitle' ) ),
+			{ type: 'success', classes: [ 'ext-campaignevents-eventpage-registration-success-notif' ] }
+		);
+		registrationUpdatedWarnings.forEach( function ( warning ) {
+			mw.notify( warning, { type: 'warn' } );
+		} );
+	}
+
 	$( function () {
 		$( document.body ).append( windowManager.$element );
 		replaceManageRegistrationLayout();
@@ -263,5 +282,6 @@
 		} );
 
 		showEnableRegistrationDialogOnPageCreation();
+		maybeShowRegistrationUpdatedNotification();
 	} );
 }() );

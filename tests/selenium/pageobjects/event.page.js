@@ -5,6 +5,10 @@ const Page = require( 'wdio-mediawiki/Page' ),
 
 class EventPage extends Page {
 
+	get eventName() {
+		return $( '.mw-page-title-main' );
+	}
+
 	get registerForEventButton() {
 		return $( '.ext-campaignevents-eventpage-register-btn' );
 	}
@@ -43,6 +47,10 @@ class EventPage extends Page {
 
 	get eventOrganizers() {
 		return $( '.ext-campaignevents-detailsdialog-organizers' );
+	}
+
+	get registrationUpdatedNotification() {
+		return $( '.ext-campaignevents-eventpage-registration-success-notif' );
 	}
 
 	open( event ) {

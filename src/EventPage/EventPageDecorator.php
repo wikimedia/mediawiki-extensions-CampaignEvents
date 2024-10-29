@@ -25,6 +25,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Special\AbstractEventRegistrationSpecialPage;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialCancelEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
@@ -292,12 +293,27 @@ class EventPageDecorator {
 		$aggregationTimestamp = $curParticipant
 			? Utils::getAnswerAggregationTimestamp( $curParticipant, $registration )
 			: null;
+
+		$session = $this->out->getRequest()->getSession();
+		$registrationUpdatedVal = $session
+			->get( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_SESSION_KEY );
+		$registrationUpdatedWarnings = [];
+		if ( $registrationUpdatedVal ) {
+			// User just enabled registration, show a success notification, plus any warnings.
+			$registrationUpdatedWarnings = $session
+				->get( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY, [] );
+			$session->remove( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_SESSION_KEY );
+			$session->remove( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY );
+		}
+
 		$this->out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $registration->getID(),
 			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
 			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData( $registration, $curParticipant ),
 			'wgCampaignEventsAnswersAlreadyAggregated' => $hasAggregatedAnswers,
-			'wgCampaignEventsAggregationTimestamp' => $aggregationTimestamp
+			'wgCampaignEventsAggregationTimestamp' => $aggregationTimestamp,
+			'wgCampaignEventsRegistrationUpdated' => (bool)$registrationUpdatedVal,
+			'wgCampaignEventsRegistrationUpdatedWarnings' => $registrationUpdatedWarnings,
 		] );
 	}
 

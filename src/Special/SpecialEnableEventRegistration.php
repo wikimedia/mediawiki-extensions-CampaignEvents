@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
@@ -18,18 +19,8 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EnableEventRegistration';
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param EventFactory $eventFactory
-	 * @param EditEventCommand $editEventCommand
-	 * @param PolicyMessagesLookup $policyMessagesLookup
-	 * @param OrganizersStore $organizersStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param CampaignEventsHookRunner $hookRunner
-	 */
+	private PageURLResolver $pageUrlResolver;
+
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
@@ -40,7 +31,8 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 		CampaignsCentralUserLookup $centralUserLookup,
 		TrackingToolRegistry $trackingToolRegistry,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		CampaignEventsHookRunner $hookRunner
+		CampaignEventsHookRunner $hookRunner,
+		PageURLResolver $pageURLResolver
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -56,6 +48,27 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 			$eventQuestionsRegistry,
 			$hookRunner
 		);
+		$this->pageUrlResolver = $pageURLResolver;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onSuccess(): void {
+		$out = $this->getOutput();
+		$session = $out->getRequest()->getSession();
+		// Use session variables, as opposed to query parameters, so that the notification will only be seen once, and
+		// not on every page refresh (and possibly end up in shared links etc.)
+		$session->set( self::REGISTRATION_UPDATED_SESSION_KEY, 1 );
+		$warningMessages = $this->saveWarningsStatus->getMessages();
+		if ( $warningMessages ) {
+			$warningMessagesText = array_map(
+				fn ( $msg ) => $this->msg( $msg )->text(),
+				$warningMessages
+			);
+			$session->set( self::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY, $warningMessagesText );
+		}
+		$out->redirect( $this->pageUrlResolver->getUrl( $this->eventPage ) );
 	}
 
 	/**
