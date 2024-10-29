@@ -33,9 +33,9 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 	 * @return DeleteEventCommand
 	 */
 	private function getCommand(
-		IEventStore $eventStore = null,
-		PermissionChecker $permChecker = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?IEventStore $eventStore = null,
+		?PermissionChecker $permChecker = null,
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): DeleteEventCommand {
 		if ( !$trackingToolEventWatcher ) {
 			$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );

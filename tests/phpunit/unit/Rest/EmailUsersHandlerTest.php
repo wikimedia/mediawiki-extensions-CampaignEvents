@@ -34,11 +34,11 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 	];
 
 	private function newHandler(
-		PermissionChecker $permissionsChecker = null,
-		CampaignsUserMailer $campaignsUserMailer = null,
-		ParticipantsStore $participantsStore = null,
-		IEventLookup $eventLookup = null,
-		MWPageProxy $page = null
+		?PermissionChecker $permissionsChecker = null,
+		?CampaignsUserMailer $campaignsUserMailer = null,
+		?ParticipantsStore $participantsStore = null,
+		?IEventLookup $eventLookup = null,
+		?MWPageProxy $page = null
 	): EmailUsersHandler {
 		if ( !$page ) {
 			$page = $this->createMock( MWPageProxy::class );

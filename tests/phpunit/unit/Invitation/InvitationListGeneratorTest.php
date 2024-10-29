@@ -38,12 +38,12 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 	private const IS_NOT_ORGANIZER = false;
 
 	private function getGenerator(
-		PermissionChecker $permissionChecker = null,
-		CampaignsPageFactory $campaignsPageFactory = null,
-		PageEventLookup $pageEventLookup = null,
-		OrganizersStore $organizersStore = null,
-		InvitationListStore $invitationListStore = null,
-		JobQueueGroup $jobQueueGroup = null
+		?PermissionChecker $permissionChecker = null,
+		?CampaignsPageFactory $campaignsPageFactory = null,
+		?PageEventLookup $pageEventLookup = null,
+		?OrganizersStore $organizersStore = null,
+		?InvitationListStore $invitationListStore = null,
+		?JobQueueGroup $jobQueueGroup = null
 	): InvitationListGenerator {
 		if ( !$permissionChecker ) {
 			$permissionChecker = $this->createMock( PermissionChecker::class );

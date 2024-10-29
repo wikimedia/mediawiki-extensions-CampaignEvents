@@ -36,7 +36,7 @@ class OrganizersStore {
 	 * @param int|null $lastOrganizerId
 	 * @return Organizer[]
 	 */
-	public function getEventOrganizers( int $eventID, int $limit = null, int $lastOrganizerId = null ): array {
+	public function getEventOrganizers( int $eventID, ?int $limit = null, ?int $lastOrganizerId = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$where = [
 			'ceo_event_id' => $eventID,

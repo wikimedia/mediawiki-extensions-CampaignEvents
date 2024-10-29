@@ -53,9 +53,9 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	 * @return SetOrganizersHandler
 	 */
 	private function newHandler(
-		IEventLookup $eventLookup = null,
-		EditEventCommand $editEventCommand = null,
-		MWPageProxy $page = null
+		?IEventLookup $eventLookup = null,
+		?EditEventCommand $editEventCommand = null,
+		?MWPageProxy $page = null
 	): SetOrganizersHandler {
 		if ( !$page ) {
 			$page = $this->createMock( MWPageProxy::class );

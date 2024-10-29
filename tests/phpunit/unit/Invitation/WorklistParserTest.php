@@ -21,7 +21,7 @@ use StatusValue;
  */
 class WorklistParserTest extends MediaWikiUnitTestCase {
 	private function getWorklistParser(
-		PageStoreFactory $pageStoreFactory = null
+		?PageStoreFactory $pageStoreFactory = null
 	): WorklistParser {
 		return new WorklistParser(
 			$pageStoreFactory ?? $this->createMock( PageStoreFactory::class )

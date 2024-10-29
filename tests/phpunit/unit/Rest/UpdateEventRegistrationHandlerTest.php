@@ -66,9 +66,9 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 * @return UpdateEventRegistrationHandler
 	 */
 	protected function newHandler(
-		EventFactory $eventFactory = null,
-		EditEventCommand $editEventCmd = null,
-		IEventLookup $eventLookup = null
+		?EventFactory $eventFactory = null,
+		?EditEventCommand $editEventCmd = null,
+		?IEventLookup $eventLookup = null
 	): UpdateEventRegistrationHandler {
 		if ( !$eventLookup ) {
 			// Ensure that the wiki ID of the event page is not null, otherwise it will be passed to

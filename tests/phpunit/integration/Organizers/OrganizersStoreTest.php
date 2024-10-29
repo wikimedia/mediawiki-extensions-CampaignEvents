@@ -91,7 +91,7 @@ class OrganizersStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::rowToOrganizerObject
 	 * @dataProvider provideOrganizers
 	 */
-	public function testGetEventOrganizers( int $eventID, array $expectedIDs, int $lastOrganizerID = null ) {
+	public function testGetEventOrganizers( int $eventID, array $expectedIDs, ?int $lastOrganizerID = null ) {
 		$store = new OrganizersStore(
 			CampaignEventsServices::getDatabaseHelper()
 		);

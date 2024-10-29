@@ -48,12 +48,12 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function newHandler(
-		PermissionChecker $permissionChecker = null,
-		IEventLookup $eventLookup = null,
-		ParticipantsStore $participantsStore = null,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		UserFactory $userFactory = null,
-		UserLinker $userLink = null
+		?PermissionChecker $permissionChecker = null,
+		?IEventLookup $eventLookup = null,
+		?ParticipantsStore $participantsStore = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?UserFactory $userFactory = null,
+		?UserLinker $userLink = null
 	): ListParticipantsHandler {
 		if ( !$permissionChecker ) {
 			$permissionChecker = $this->createMock( PermissionChecker::class );
@@ -84,7 +84,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	public function testRun(
 		array $expectedResp,
 		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		?CampaignsCentralUserLookup $centralUserLookup = null
 	) {
 		$userLink = $this->createMock( UserLinker::class );
 		$userLink->method( 'getUserPagePath' )->willReturn( [
@@ -301,8 +301,8 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		string $expectedMsg,
 		int $expectedCode,
 		array $reqData,
-		PermissionChecker $permissionChecker = null,
-		IEventLookup $eventLookup = null
+		?PermissionChecker $permissionChecker = null,
+		?IEventLookup $eventLookup = null
 	) {
 		$handler = $this->newHandler( $permissionChecker, $eventLookup );
 

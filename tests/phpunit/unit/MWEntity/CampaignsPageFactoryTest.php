@@ -26,8 +26,8 @@ use MediaWikiUnitTestCase;
  */
 class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 	private function getFactory(
-		TitleParser $titleParser = null,
-		PageStoreFactory $pageStoreFactory = null
+		?TitleParser $titleParser = null,
+		?PageStoreFactory $pageStoreFactory = null
 	): CampaignsPageFactory {
 		$titleFormatter = $this->createMock( TitleFormatter::class );
 		// TODO Remove the followig line once the return value of getPrefixedText is typehinted
@@ -50,8 +50,8 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 	public function testNewLocalExistingPageFromString(
 		string $titleString,
 		?string $expectedExcepClass,
-		TitleParser $titleParser = null,
-		PageStoreFactory $pageStoreFactory = null
+		?TitleParser $titleParser = null,
+		?PageStoreFactory $pageStoreFactory = null
 	) {
 		$factory = $this->getFactory( $titleParser, $pageStoreFactory );
 		if ( $expectedExcepClass !== null ) {

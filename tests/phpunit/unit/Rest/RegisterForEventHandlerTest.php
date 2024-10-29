@@ -42,10 +42,10 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	private function newHandler(
-		RegisterParticipantCommand $registerCommand = null,
-		IEventLookup $eventLookup = null,
-		EventQuestionsRegistry $eventQuestionsRegistry = null,
-		MWPageProxy $page = null
+		?RegisterParticipantCommand $registerCommand = null,
+		?IEventLookup $eventLookup = null,
+		?EventQuestionsRegistry $eventQuestionsRegistry = null,
+		?MWPageProxy $page = null
 	): RegisterForEventHandler {
 		if ( !$registerCommand ) {
 			$registerCommand = $this->createMock( RegisterParticipantCommand::class );
@@ -98,10 +98,10 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	public function testRun__error(
 		int $expectedStatusCode,
 		?string $expectedErrorKey,
-		RegisterParticipantCommand $registerParticipantCommand = null,
-		IEventLookup $eventLookup = null,
-		EventQuestionsRegistry $eventQuestionsRegistry = null,
-		MWPageProxy $page = null
+		?RegisterParticipantCommand $registerParticipantCommand = null,
+		?IEventLookup $eventLookup = null,
+		?EventQuestionsRegistry $eventQuestionsRegistry = null,
+		?MWPageProxy $page = null
 	) {
 		$handler = $this->newHandler(
 			$registerParticipantCommand,

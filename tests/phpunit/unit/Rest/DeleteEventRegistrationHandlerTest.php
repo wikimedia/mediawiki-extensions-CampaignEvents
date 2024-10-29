@@ -39,9 +39,9 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 * @return DeleteEventRegistrationHandler
 	 */
 	private function newHandler(
-		IEventLookup $eventLookup = null,
-		DeleteEventCommand $deleteEventCommand = null,
-		MWPageProxy $page = null
+		?IEventLookup $eventLookup = null,
+		?DeleteEventCommand $deleteEventCommand = null,
+		?MWPageProxy $page = null
 	): DeleteEventRegistrationHandler {
 		if ( !$page ) {
 			$page = $this->createMock( MWPageProxy::class );
@@ -90,8 +90,8 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	public function testExecute__error(
 		string $expectedMsgKey,
 		int $expectedCode,
-		IEventLookup $eventLookup = null,
-		MWPageProxy $page = null
+		?IEventLookup $eventLookup = null,
+		?MWPageProxy $page = null
 	) {
 		$performer = $this->mockAnonNullAuthority();
 		$handler = $this->newHandler( $eventLookup, null, $page );

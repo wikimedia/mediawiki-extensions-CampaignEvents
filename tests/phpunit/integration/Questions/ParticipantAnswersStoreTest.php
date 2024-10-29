@@ -116,7 +116,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public static function provideReplaceParticipantAnswers(): Generator {
-		$ans = static fn ( int $quest, ?int $opt, string $text = null ) => new Answer( $quest, $opt, $text );
+		$ans = static fn ( int $quest, ?int $opt, ?string $text = null ) => new Answer( $quest, $opt, $text );
 		yield 'No change' => [
 			1,
 			101,
@@ -319,7 +319,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideGetParticipantAnswers(): Generator {
-		$ans = static fn ( int $quest, ?int $opt, string $text = null ) => new Answer( $quest, $opt, $text );
+		$ans = static fn ( int $quest, ?int $opt, ?string $text = null ) => new Answer( $quest, $opt, $text );
 
 		yield 'Multiple answers' => [
 			1,
@@ -354,7 +354,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function provideGetParticipantAnswersMulti(): Generator {
-		$ans = static fn ( int $quest, ?int $opt, string $text = null ) => new Answer( $quest, $opt, $text );
+		$ans = static fn ( int $quest, ?int $opt, ?string $text = null ) => new Answer( $quest, $opt, $text );
 
 		yield 'No participants given' => [ 1, [], [] ];
 

@@ -31,9 +31,9 @@ class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function getWatcher(
-		TrackingToolRegistry $registry = null,
-		LoggerInterface $logger = null,
-		TrackingToolUpdater $updater = null
+		?TrackingToolRegistry $registry = null,
+		?LoggerInterface $logger = null,
+		?TrackingToolUpdater $updater = null
 	): TrackingToolEventWatcher {
 		return new TrackingToolEventWatcher(
 			$registry ?? $this->createMock( TrackingToolRegistry::class ),

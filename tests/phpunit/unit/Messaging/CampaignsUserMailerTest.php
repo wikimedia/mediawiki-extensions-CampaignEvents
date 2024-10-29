@@ -42,11 +42,11 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 	 * @return CampaignsUserMailer
 	 */
 	private function getCampaignsUserMailer(
-		UserFactory $userFactory = null,
-		JobQueueGroup $jobQueueGroup = null,
+		?UserFactory $userFactory = null,
+		?JobQueueGroup $jobQueueGroup = null,
 		array $optionsOverrides = [],
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		UserOptionsLookup $userOptionsLookup = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?UserOptionsLookup $userOptionsLookup = null,
 		?EmailUserFactory $emailUserFactory = null
 	): CampaignsUserMailer {
 		$serviceOptions = new ServiceOptions(

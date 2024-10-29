@@ -28,8 +28,8 @@ use MediaWikiIntegrationTestCase;
  */
 class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
 	public function getHandler(
-		PageEventLookup $pageEventLookup = null,
-		DeleteEventCommand $deleteEventCommand = null
+		?PageEventLookup $pageEventLookup = null,
+		?DeleteEventCommand $deleteEventCommand = null
 	): PageMoveAndDeleteHandler {
 		return new PageMoveAndDeleteHandler(
 			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),

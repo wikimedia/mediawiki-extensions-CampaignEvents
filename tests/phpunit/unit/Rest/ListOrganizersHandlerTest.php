@@ -33,9 +33,9 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	];
 
 	private function newHandler(
-		IEventLookup $eventLookup = null,
-		OrganizersStore $organizersStore = null,
-		UserLinker $userLink = null
+		?IEventLookup $eventLookup = null,
+		?OrganizersStore $organizersStore = null,
+		?UserLinker $userLink = null
 	): ListOrganizersHandler {
 		$roleFormatter = $this->createMock( RoleFormatter::class );
 		// Return the constant value for simplicity
