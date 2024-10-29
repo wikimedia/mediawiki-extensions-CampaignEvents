@@ -349,6 +349,7 @@
 	"campaignevents-email-participants-yes": "Ja",
 	"campaignevents-email-participants-no": "Nee",
 	"campaignevents-email-footer": "Deze e-mail is {{GENDER:$1|verzonden}} door $1 naar {{GENDER:$2|$2 }}, een geregistreerde deelnemer aan het volgende evenement: $3. Als {{GENDER:$2|u}} deze e-mail beantwoordt, wordt {{GENDER:$2|uw}} e-mail rechtstreeks naar de {{GENDER:$1|oorspronkelijke afzender}} gestuurd, waardoor {{GENDER:$2|uw}} e-mailadres aan {{GENDER:$1|hen}} bekend wordt gemaakt.",
+	"campaignevents-email-footer-collaboration-list-link": "Zie de samenwerkingslijst voor meer evenementen en gemeenschappen op de wiki‘s: $1",
 	"campaignevents-event-details-time-registered": "Tijd registratie",
 	"campaignevents-event-details-can-receive-email": "Kan e-mail ontvangen",
 	"campaignevents-register-questions-label-title": "Uw gegevens",
