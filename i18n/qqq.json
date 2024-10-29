@@ -237,6 +237,7 @@
 	"campaignevents-eventpage-register-dialog-title-edit": "Title of a dialog on event pages where users can register for an event. This message is used when the user is already a participant and is changing their registration information.",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Header used in the dialog on event pages where users can register for an event. In this section, participants can choose whether to register publicly or privately, see {{msg-mw|ext-campaignevents-registration-visibility-label}}.",
 	"campaignevents-eventpage-registration-enabled-notification": "Text of a notification shown on event pages after the organizer has enabled registration for their event.",
+	"campaignevents-eventpage-registration-updated-notification-list": "Text of a notification shown on event pages after the organizer has enabled or updated registration for their event.",
 	"campaignevents-eventpage-enableheader-organizer": "Message shown on event pages when the user is an organizer and they can thus enable registration for that page.",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "Message shown on event pages to explain how the registration system works.",
 	"campaignevents-eventpage-enableheader-button-label": "Label of a button shown on event pages that lets the user enable registration for that event.",
