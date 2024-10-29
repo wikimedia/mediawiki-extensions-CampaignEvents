@@ -37,10 +37,10 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @return RegisterParticipantCommand
 	 */
 	private function getCommand(
-		ParticipantsStore $participantsStore = null,
-		PermissionChecker $permChecker = null,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?ParticipantsStore $participantsStore = null,
+		?PermissionChecker $permChecker = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): RegisterParticipantCommand {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
@@ -210,9 +210,9 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testRegisterUnsafe__error(
 		string $expectedMsg,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null,
-		ParticipantsStore $participantsStore = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null,
+		?ParticipantsStore $participantsStore = null,
 		array $answers = []
 	) {
 		$cmd = $this->getCommand( $participantsStore, null, $centralUserLookup, $trackingToolEventWatcher );

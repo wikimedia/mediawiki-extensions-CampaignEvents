@@ -18,7 +18,7 @@ use MediaWikiUnitTestCase;
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter
  */
 class EventTimeFormatterTest extends MediaWikiUnitTestCase {
-	private function getFormatter( UserOptionsLookup $userOptionsLookup = null ): EventTimeFormatter {
+	private function getFormatter( ?UserOptionsLookup $userOptionsLookup = null ): EventTimeFormatter {
 		return new EventTimeFormatter(
 			$userOptionsLookup ?? $this->createMock( UserOptionsLookup::class )
 		);
@@ -164,7 +164,7 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 	}
 
 	public function provideTimezones(): Generator {
-		$mockEvent = function ( int $meetingType, string $timeZone = null ): EventRegistration {
+		$mockEvent = function ( int $meetingType, ?string $timeZone = null ): EventRegistration {
 			$event = $this->createMock( EventRegistration::class );
 			$event->method( 'getMeetingType' )->willReturn( $meetingType );
 			if ( $timeZone !== null ) {

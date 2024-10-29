@@ -45,9 +45,9 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @return PermissionChecker
 	 */
 	private function getPermissionChecker(
-		OrganizersStore $organizersStore = null,
-		PageAuthorLookup $pageAuthorLookup = null,
-		IPermissionsLookup $permissionsLookup = null
+		?OrganizersStore $organizersStore = null,
+		?PageAuthorLookup $pageAuthorLookup = null,
+		?IPermissionsLookup $permissionsLookup = null
 	): PermissionChecker {
 		return new PermissionChecker(
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
@@ -380,7 +380,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$userRights,
 		bool $eventIsLocal,
 		?bool $isStoredOrganizer = null,
-		IPermissionsLookup $permissionsLookup = null
+		?IPermissionsLookup $permissionsLookup = null
 	) {
 		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
 		$event = $this->mockExistingEventRegistration( $eventIsLocal );

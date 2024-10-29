@@ -53,9 +53,9 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 	 * @return RemoveParticipantsFromEventHandler
 	 */
 	private function newHandler(
-		IEventLookup $eventLookup = null,
-		UnregisterParticipantCommand $unregisterParticipantCommand = null,
-		MWPageProxy $page = null
+		?IEventLookup $eventLookup = null,
+		?UnregisterParticipantCommand $unregisterParticipantCommand = null,
+		?MWPageProxy $page = null
 	): RemoveParticipantsFromEventHandler {
 		if ( !$page ) {
 			$page = $this->createMock( MWPageProxy::class );

@@ -63,16 +63,16 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @return EditEventCommand
 	 */
 	private function getCommand(
-		IEventStore $eventStore = null,
-		PermissionChecker $permChecker = null,
-		PageEventLookup $pageEventLookup = null,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		OrganizersStore $organizersStore = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null,
-		TrackingToolUpdater $trackingToolUpdater = null,
-		ParticipantAnswersStore $participantAnswersStore = null,
-		EventAggregatedAnswersStore $eventAggregatedAnswersStore = null,
-		IEventLookup $eventLookup = null
+		?IEventStore $eventStore = null,
+		?PermissionChecker $permChecker = null,
+		?PageEventLookup $pageEventLookup = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?OrganizersStore $organizersStore = null,
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null,
+		?TrackingToolUpdater $trackingToolUpdater = null,
+		?ParticipantAnswersStore $participantAnswersStore = null,
+		?EventAggregatedAnswersStore $eventAggregatedAnswersStore = null,
+		?IEventLookup $eventLookup = null
 	): EditEventCommand {
 		$eventStore ??= $this->createMock( IEventStore::class );
 
@@ -257,10 +257,10 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		EventRegistration $registration,
 		string $expectedMsg,
 		array $organizers,
-		PermissionChecker $permChecker = null,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		OrganizersStore $organizersStore = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?PermissionChecker $permChecker = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?OrganizersStore $organizersStore = null,
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null
 	) {
 		$command = $this->getCommand(
 			null,

@@ -24,7 +24,7 @@ use MediaWikiIntegrationTestCase;
  * @group Database
  */
 class PageEventLookupTest extends MediaWikiIntegrationTestCase {
-	private function getLookup( IEventLookup $eventLookup = null ): PageEventLookup {
+	private function getLookup( ?IEventLookup $eventLookup = null ): PageEventLookup {
 		return new PageEventLookup(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$this->createMock( CampaignsPageFactory::class ),

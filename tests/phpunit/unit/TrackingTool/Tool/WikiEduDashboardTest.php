@@ -23,8 +23,8 @@ use StatusValue;
  */
 class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	private function getTool(
-		MWHttpRequest $request = null,
-		ParticipantsStore $participantsStore = null
+		?MWHttpRequest $request = null,
+		?ParticipantsStore $participantsStore = null
 	): WikiEduDashboard {
 		if ( !$request ) {
 			$request = $this->getJsonReqMock( [ 'success' => true ], false );

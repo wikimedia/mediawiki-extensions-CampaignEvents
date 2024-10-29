@@ -196,7 +196,7 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEventsByOrganizer( int $organizerID, int $limit = null ): array {
+	public function getEventsByOrganizer( int $organizerID, ?int $limit = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
 		$queryBuilder = $dbr->newSelectQueryBuilder()
@@ -220,7 +220,7 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEventsByParticipant( int $participantID, int $limit = null ): array {
+	public function getEventsByParticipant( int $participantID, ?int $limit = null ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
 		$queryBuilder = $dbr->newSelectQueryBuilder()

@@ -33,9 +33,9 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 	];
 
 	private function newHandler(
-		IEventLookup $eventLookup = null,
-		ParticipantsStore $participantsStore = null,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		?IEventLookup $eventLookup = null,
+		?ParticipantsStore $participantsStore = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null
 	): GetOwnRegistrationInfoHandler {
 		if ( !$eventLookup ) {
 			$mockEvent = $this->createMock( ExistingEventRegistration::class );
@@ -117,9 +117,9 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 	public function testRun__errors(
 		string $expectedMsg,
 		int $expectedCode,
-		IEventLookup $eventLookup = null,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		ParticipantsStore $participantsStore = null
+		?IEventLookup $eventLookup = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?ParticipantsStore $participantsStore = null
 	) {
 		$handler = $this->newHandler( $eventLookup, $participantsStore, $centralUserLookup );
 		try {

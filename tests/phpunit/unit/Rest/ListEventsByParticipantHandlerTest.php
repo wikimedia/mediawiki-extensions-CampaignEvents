@@ -36,8 +36,8 @@ class ListEventsByParticipantHandlerTest extends MediaWikiUnitTestCase {
 	 * @return Handler
 	 */
 	protected function newHandler(
-		IEventLookup $eventLookup = null,
-		CampaignsCentralUserLookup $centralUserLookup = null
+		?IEventLookup $eventLookup = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null
 	): Handler {
 		if ( !$centralUserLookup ) {
 			$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );

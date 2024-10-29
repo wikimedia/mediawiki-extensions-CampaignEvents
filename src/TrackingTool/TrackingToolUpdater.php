@@ -65,7 +65,7 @@ class TrackingToolUpdater {
 	 * that writes are done on the same DB handle.
 	 * @return void
 	 */
-	public function replaceEventTools( int $eventID, array $tools, IDatabase $dbw = null ): void {
+	public function replaceEventTools( int $eventID, array $tools, ?IDatabase $dbw = null ): void {
 		$dbw ??= $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		// Make a map of tools with faster lookup to compare existing values

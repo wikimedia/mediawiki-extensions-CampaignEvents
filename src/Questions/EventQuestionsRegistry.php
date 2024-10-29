@@ -363,7 +363,7 @@ class EventQuestionsRegistry {
 	 *    also set if the question has additional options. This is an array where the keys are possible values for
 	 *    the parent question, and the values are arrays with `type` and `label-message`.
 	 */
-	public function getQuestionsForAPI( array $questionIDs = null ): array {
+	public function getQuestionsForAPI( ?array $questionIDs = null ): array {
 		$ret = [];
 		foreach ( $this->getQuestions() as $question ) {
 			$questionID = $question['db-id'];

@@ -168,7 +168,7 @@ class ParticipantsStore {
 	 */
 	public function removeParticipantsFromEvent(
 		int $eventID,
-		array $users = null,
+		?array $users = null,
 		bool $invertUsers = false
 	): array {
 		if ( $users === null && $invertUsers ) {
@@ -233,12 +233,12 @@ class ParticipantsStore {
 	 */
 	public function getEventParticipants(
 		int $eventID,
-		int $limit = null,
-		int $lastParticipantID = null,
-		string $usernameFilter = null,
-		array $userIdFilter = null,
+		?int $limit = null,
+		?int $lastParticipantID = null,
+		?string $usernameFilter = null,
+		?array $userIdFilter = null,
 		bool $showPrivate = false,
-		array $excludeUsers = null,
+		?array $excludeUsers = null,
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): array {
 		if ( $userIdFilter ) {

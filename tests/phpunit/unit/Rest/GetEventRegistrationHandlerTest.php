@@ -37,7 +37,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	private const TRACKING_TOOL_USER_ID = 'some-tool';
 
 	private function newHandler(
-		IEventLookup $eventLookup = null
+		?IEventLookup $eventLookup = null
 	): GetEventRegistrationHandler {
 		$trackingToolRegistry = $this->createMock( TrackingToolRegistry::class );
 		$trackingToolRegistry->method( 'getUserInfo' )

@@ -55,8 +55,8 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	 * @return EnableEventRegistrationHandler
 	 */
 	protected function newHandler(
-		EventFactory $eventFactory = null,
-		EditEventCommand $editEventCmd = null
+		?EventFactory $eventFactory = null,
+		?EditEventCommand $editEventCmd = null
 	): EnableEventRegistrationHandler {
 		return new EnableEventRegistrationHandler(
 			$eventFactory ?? $this->createMock( EventFactory::class ),

@@ -244,8 +244,8 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		int $eventID,
 		array $expectedParticipants,
 		array $specificUserIDs,
-		int $limit = null,
-		int $offset = null
+		?int $limit = null,
+		?int $offset = null
 	) {
 		$actualUsers = $this->getStore()->getEventParticipants(
 			$eventID,
@@ -266,8 +266,8 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	public function testGetEventParticipants_Public(
 		int $eventID,
 		array $expectedParticipants,
-		int $limit = null,
-		int $offset = null
+		?int $limit = null,
+		?int $offset = null
 	) {
 		$actualUsers = $this->getStore()->getEventParticipants(
 			$eventID,
@@ -285,8 +285,8 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	public function testGetEventParticipants_Private(
 		int $eventID,
 		array $expectedParticipants,
-		int $limit = null,
-		int $offset = null
+		?int $limit = null,
+		?int $offset = null
 	) {
 		$actualUsers = $this->getStore()->getEventParticipants(
 			$eventID,

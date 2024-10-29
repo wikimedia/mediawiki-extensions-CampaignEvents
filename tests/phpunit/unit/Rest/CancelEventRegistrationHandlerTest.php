@@ -32,8 +32,8 @@ class CancelEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	];
 
 	private function newHandler(
-		UnregisterParticipantCommand $unregisterCommand = null,
-		IEventLookup $eventLookup = null
+		?UnregisterParticipantCommand $unregisterCommand = null,
+		?IEventLookup $eventLookup = null
 	): CancelEventRegistrationHandler {
 		if ( !$unregisterCommand ) {
 			$unregisterCommand = $this->createMock( UnregisterParticipantCommand::class );
@@ -68,8 +68,8 @@ class CancelEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	public function testRun__error(
 		int $expectedStatusCode,
 		string $expectedErrorKey,
-		UnregisterParticipantCommand $unregisterParticipantCommand = null,
-		IEventLookup $eventLookup = null
+		?UnregisterParticipantCommand $unregisterParticipantCommand = null,
+		?IEventLookup $eventLookup = null
 	) {
 		$handler = $this->newHandler( $unregisterParticipantCommand, $eventLookup );
 

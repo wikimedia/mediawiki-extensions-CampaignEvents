@@ -30,7 +30,7 @@ class CampaignsCentralUserLookupTest extends MediaWikiUnitTestCase {
 	];
 
 	private function getLookup(
-		CentralIdLookup $centralIdLookup = null
+		?CentralIdLookup $centralIdLookup = null
 	): CampaignsCentralUserLookup {
 		if ( !$centralIdLookup ) {
 			$centralIdLookup = $this->createMock( CentralIdLookup::class );

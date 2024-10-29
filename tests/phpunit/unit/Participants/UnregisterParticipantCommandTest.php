@@ -33,10 +33,10 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 * @return UnregisterParticipantCommand
 	 */
 	private function getCommand(
-		ParticipantsStore $participantsStore = null,
-		PermissionChecker $permChecker = null,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?ParticipantsStore $participantsStore = null,
+		?PermissionChecker $permChecker = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null
 	): UnregisterParticipantCommand {
 		if ( !$participantsStore ) {
 			$participantsStore = $this->createMock( ParticipantsStore::class );
@@ -161,8 +161,8 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testUnregisterUnsafe__error(
 		string $expectedMsg,
-		CampaignsCentralUserLookup $centralUserLookup = null,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null
 	) {
 		$status = $this->getCommand( null, null, $centralUserLookup, $trackingToolEventWatcher )->unregisterUnsafe(
 			$this->getValidRegistration(),
@@ -299,7 +299,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	 */
 	public function testRemoveParticipantsUnsafe__error(
 		string $expectedMsg,
-		TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null
 	) {
 		$cmd = $this->getCommand( null, null, null, $trackingToolEventWatcher );
 		$status = $cmd->removeParticipantsUnsafe(

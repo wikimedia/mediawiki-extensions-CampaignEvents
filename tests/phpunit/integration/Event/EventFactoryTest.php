@@ -63,7 +63,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function getEventFactory(
-		CampaignsPageFactory $campaignsPageFactory = null
+		?CampaignsPageFactory $campaignsPageFactory = null
 	): EventFactory {
 		if ( !$campaignsPageFactory ) {
 			$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
@@ -101,7 +101,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	public function testNewEvent(
 		?string $expectedErrorKey,
 		array $factoryArgs,
-		CampaignsPageFactory $campaignsPageFactory = null
+		?CampaignsPageFactory $campaignsPageFactory = null
 	) {
 		$factory = $this->getEventFactory( $campaignsPageFactory );
 		$ex = null;
