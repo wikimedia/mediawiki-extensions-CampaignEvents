@@ -343,7 +343,8 @@ return [
 			$services->getRevisionStoreFactory(),
 			$services->getConnectionProvider(),
 			$services->getNameTableStoreFactory(),
-			$services->getMainConfig()->get( MainConfigNames::BlockTargetMigrationStage )
+			$services->getMainConfig()->get( MainConfigNames::BlockTargetMigrationStage ),
+			$services->getUserOptionsLookup()
 		);
 	},
 	WorklistParser::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistParser {

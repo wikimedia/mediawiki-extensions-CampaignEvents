@@ -50,7 +50,8 @@
 	],
 	"DefaultUserOptions": {
 		"echo-subscriptions-email-campaign-events-notification-registration": true,
-		"echo-subscriptions-web-campaign-events-notification-registration": false
+		"echo-subscriptions-web-campaign-events-notification-registration": false,
+		"campaignevents-allow-invitations": true
 	},
 	"GroupPermissions": {
 		"user": {
@@ -88,6 +89,9 @@
 		},
 		"EchoHooksHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler"
+		},
+		"GetPreferencesHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\GetPreferencesHandler"
 		}
 	},
 	"Hooks": {
@@ -96,7 +100,8 @@
 		"PageMoveComplete": "PageMoveAndDeleteHandler",
 		"PageDeleteComplete": "PageMoveAndDeleteHandler",
 		"TitleMove": "PageMoveAndDeleteHandler",
-		"BeforeCreateEchoEvent": "EchoHooksHandler"
+		"BeforeCreateEchoEvent": "EchoHooksHandler",
+		"GetPreferences": "GetPreferencesHandler"
 	},
 	"JobClasses": {
 		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob",
