@@ -490,6 +490,7 @@
 	"campaignevents-invitationlist-recommended": "Section label used on [[Special:InvitationList]] to introduce a list of users who might be interested in joining the organizer's activity. See {{msg-mw|campaignevents-invitationlist-recommended-info}}.",
 	"campaignevents-invitationlist-recommended-info": "Informational text used on [[Special:InvitationList]] to provide more information about the {{msg-mw|campaignevents-invitationlist-recommended}} section.",
 	"campaignevents-invitationlist-worklist-label": "Section label used on [[Special:InvitationList]] for the list of articles (provided by the organizer) that were used to generate a list of potentially interested editors. The section is initially collapsed, and clicking on the label makes it visible; \"View\" is a verb.",
+	"campaignevents-event-details-footer": "Footer text on [[Special:EventDetails]] containing a link to [[Special:AllEvents]]",
 	"campaignevents-invitationlist-preference": "Input label used on [[Special:Preferences]] for the setting to permit or prevent the user being included in invitation lists",
 	"prefs-campaignevents-invitations": "Section label used on [[Special:Preferences]] for the setting to permit or prevent the user being included in invitation lists"
 }

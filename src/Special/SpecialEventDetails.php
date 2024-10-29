@@ -250,7 +250,12 @@ class SpecialEventDetails extends SpecialPage {
 		$main->addTabPanels( $tabs );
 		$selectedTab = $this->getRequest()->getRawVal( 'tab' ) ?? self::EVENT_DETAILS_PANEL;
 		$main->setTabPanel( $selectedTab );
+		$footer = ( new Tag() )->addClasses( [ 'ext-campaignevents-eventdetails-footer' ] )->appendContent(
+			new HtmlSnippet( $this->msg( 'campaignevents-event-details-footer' )->parse() )
+		);
+
 		$out->addHTML( $main );
+		$out->addHTML( $footer );
 	}
 
 	/**
