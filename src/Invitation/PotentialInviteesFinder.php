@@ -29,10 +29,7 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
 class PotentialInviteesFinder {
 	public const SERVICE_NAME = 'CampaignEventsPotentialInviteesFinder';
 
-	/**
-	 * How many days to look back into the past when scanning revisions.
-	 * TODO: Is 3 years OK?
-	 */
+	/** How many days to look back into the past when scanning revisions. */
 	private const CUTOFF_DAYS = 3 * 365;
 	public const RESULT_USER_LIMIT = 200;
 	private const REVISIONS_PER_PAGE_LIMIT = 5_000;
