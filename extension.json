@@ -173,7 +173,6 @@
 				"mediawiki.user",
 				"mediawiki.util",
 				"mediawiki.jqueryMsg",
-				"mediawiki.Uri",
 				"mediawiki.widgets.datetime",
 				"mediawiki.widgets.UsersMultiselectWidget",
 				"jquery.makeCollapsible"
@@ -313,7 +312,6 @@
 				"mediawiki.jqueryMsg",
 				"mediawiki.user",
 				"mediawiki.util",
-				"mediawiki.Uri",
 				"oojs-ui-core",
 				"oojs-ui-windows",
 				"oojs-ui-widgets"
