@@ -408,5 +408,6 @@
 	"campaignevents-invitationlist-event": "$1：邀請名單",
 	"campaignevents-invitationlist-highly-recommended": "強烈推薦邀請",
 	"campaignevents-invitationlist-recommended": "推薦邀請",
-	"campaignevents-invitationlist-worklist-label": "檢視條目清單"
+	"campaignevents-invitationlist-worklist-label": "檢視條目清單",
+	"prefs-campaignevents-invitations": "邀請名單"
 }
