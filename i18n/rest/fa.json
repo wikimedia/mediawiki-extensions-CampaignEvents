@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jeeputer"
+			"Jeeputer",
+			"کهربا"
 		]
 	},
 	"campaignevents-rest-user-not-found": "کاربر $1 موجود نیست."

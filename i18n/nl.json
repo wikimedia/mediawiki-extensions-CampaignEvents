@@ -1,12 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80",
 			"DiGro",
 			"HanV",
 			"McDutchie",
 			"Romaine",
-			"Siebrand"
+			"Siebrand",
+			"Mitsjol"
 		]
 	},
 	"campaignevents-desc": "Biedt functies voor organisatoren van en deelnemers aan campagnes.",
