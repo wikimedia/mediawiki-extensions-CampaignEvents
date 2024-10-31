@@ -24,6 +24,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Message\Message;
 use MediaWiki\Utils\MWTimestamp;
 use StatusValue;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\RequestTimeout\TimeoutException;
 
 class EventFactory {
@@ -221,10 +222,9 @@ class EventFactory {
 		try {
 			$campaignsPage = $this->campaignsPageFactory->newLocalExistingPageFromString( $pageTitleStr );
 		} catch ( InvalidTitleStringException $e ) {
-			// TODO: Ideally we wouldn't need wfMessage here.
 			return StatusValue::newFatal(
 				'campaignevents-error-invalid-title',
-				wfMessage( $e->getErrorMsgKey(), $e->getErrorMsgParams() )
+				new MessageValue( $e->getErrorMsgKey(), $e->getErrorMsgParams() )
 			);
 		} catch ( UnexpectedInterwikiException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );

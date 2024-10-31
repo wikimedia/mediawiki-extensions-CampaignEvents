@@ -15,10 +15,10 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
-use MediaWiki\Message\Message;
 use MWHttpRequest;
 use StatusValue;
 use Wikimedia\Assert\Assert;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
@@ -348,13 +348,13 @@ class WikiEduDashboard extends TrackingTool {
 		switch ( $response['error_code'] ) {
 			case 'invalid_secret':
 				$msg = 'campaignevents-tracking-tool-wikiedu-config-error';
-				$params = [ new Message( 'campaignevents-tracking-tool-p&e-dashboard-name' ) ];
+				$params = [ new MessageValue( 'campaignevents-tracking-tool-p&e-dashboard-name' ) ];
 				break;
 			case 'course_not_found':
 				$msg = 'campaignevents-tracking-tool-wikiedu-course-not-found-error';
 				$params = [
 					$courseID,
-					new Message( 'campaignevents-tracking-tool-p&e-dashboard-name' )
+					new MessageValue( 'campaignevents-tracking-tool-p&e-dashboard-name' )
 				];
 				break;
 			case 'not_organizer':
