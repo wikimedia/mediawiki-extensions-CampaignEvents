@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
@@ -24,18 +25,6 @@ use OOUI\MessageWidget;
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EditEventRegistration';
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param EventFactory $eventFactory
-	 * @param EditEventCommand $editEventCommand
-	 * @param PermissionChecker $permissionChecker
-	 * @param PolicyMessagesLookup $policyMessagesLookup
-	 * @param OrganizersStore $organizersStore
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param CampaignEventsHookRunner $hookRunner
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
@@ -46,7 +35,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		CampaignsCentralUserLookup $centralUserLookup,
 		TrackingToolRegistry $trackingToolRegistry,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		CampaignEventsHookRunner $hookRunner
+		CampaignEventsHookRunner $hookRunner,
+		PageURLResolver $pageURLResolver
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -60,7 +50,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$centralUserLookup,
 			$trackingToolRegistry,
 			$eventQuestionsRegistry,
-			$hookRunner
+			$hookRunner,
+			$pageURLResolver
 		);
 	}
 
@@ -69,7 +60,6 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 */
 	protected function getFormMessages(): array {
 		return [
-			'success' => 'campaignevents-edit-success-msg',
 			'details-section-subtitle' => 'campaignevents-edit-form-details-subtitle',
 			'submit' => 'campaignevents-edit-form-submit',
 		];

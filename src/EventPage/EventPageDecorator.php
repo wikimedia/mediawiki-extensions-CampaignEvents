@@ -298,10 +298,13 @@ class EventPageDecorator {
 		$registrationUpdatedVal = $session
 			->get( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_SESSION_KEY );
 		$registrationUpdatedWarnings = [];
+		$isNewRegistration = false;
 		if ( $registrationUpdatedVal ) {
-			// User just enabled registration, show a success notification, plus any warnings.
+			// User just updated registration, show a success notification, plus any warnings.
 			$registrationUpdatedWarnings = $session
 				->get( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY, [] );
+			$isNewRegistration = $registrationUpdatedVal ===
+				AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_SESSION_ENABLED;
 			$session->remove( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_SESSION_KEY );
 			$session->remove( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY );
 		}
@@ -313,6 +316,7 @@ class EventPageDecorator {
 			'wgCampaignEventsAnswersAlreadyAggregated' => $hasAggregatedAnswers,
 			'wgCampaignEventsAggregationTimestamp' => $aggregationTimestamp,
 			'wgCampaignEventsRegistrationUpdated' => (bool)$registrationUpdatedVal,
+			'wgCampaignEventsIsNewRegistration' => $isNewRegistration,
 			'wgCampaignEventsRegistrationUpdatedWarnings' => $registrationUpdatedWarnings,
 		] );
 	}

@@ -58,10 +58,6 @@ class EventRegistrationPage extends Page {
 		return $( '.ext-campaignevents-organizers-multiselect-input' ).$( 'input' );
 	}
 
-	get successNotice() {
-		return $( '.cdx-message--success' );
-	}
-
 	get body() {
 		return $( 'body' );
 	}
