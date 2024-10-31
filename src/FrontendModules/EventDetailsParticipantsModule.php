@@ -187,8 +187,7 @@ class EventDetailsParticipantsModule {
 		$items[] = $this->getEmptyStateElement( $totalParticipants );
 
 		$out->addJsConfigVars( [
-			// TODO This may change when we add the feature to send messages
-			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants,
+			'wgCampaignEventsShowParticipantCheckboxes' => $canRemoveParticipants || $canEmailParticipants,
 			'wgCampaignEventsShowPrivateParticipants' => $showPrivateParticipants,
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
 			'wgCampaignEventsLastParticipantID' => $lastParticipantID,
@@ -735,7 +734,6 @@ class EventDetailsParticipantsModule {
 			$privateParticipants = ( new Tag( 'div' ) )
 				->addClasses( [ 'ext-campaignevents-eventdetails-participants-private-count-footer' ] )
 				->appendContent( $icon, $textElement );
-			// TODO The number should be updated dynamically when (private) participants are removed, see T322275.
 			$footer->appendContent( $privateParticipants );
 		}
 
