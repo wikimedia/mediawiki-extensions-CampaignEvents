@@ -487,5 +487,6 @@
 	"campaignevents-invitationlist-worklist-label": "View article list",
 	"campaignevents-event-details-footer": "Visit the <strong>[[Special:AllEvents|Collaboration list]]</strong> to find more events and communities.",
 	"campaignevents-invitationlist-preference": "Include me in [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation lists].",
-	"prefs-campaignevents-invitations": "Invitation lists"
+	"prefs-campaignevents-invitations": "Invitation lists",
+	"campaignevents-eventpage-btn-collaboration-list": "Find more events"
 }

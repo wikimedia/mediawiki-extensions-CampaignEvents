@@ -75,8 +75,17 @@
 	.oo-ui-window-foot {
 		padding: 1em;
 		.flex-display();
+		flex-wrap: wrap;
+		// Add spacing, especially for when children wrap. Doesn't look *too* bad in browsers
+		// without `gap` support in flexbox.
+		gap: @spacing-100;
 		justify-content: space-between;
 		align-items: center;
+
+		.oo-ui-processDialog-actions-other {
+			// As a flex child, the element takes up space even when empty.
+			display: none;
+		}
 	}
 }
 

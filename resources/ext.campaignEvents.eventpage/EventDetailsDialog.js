@@ -47,6 +47,17 @@
 	 * Populates the dialog footer with the relevant action elements.
 	 */
 	EventDetailsDialog.prototype.populateFooter = function () {
+		var collabButton = new OO.ui.ButtonWidget( {
+			flags: [ 'quiet', 'progressive' ],
+			label: mw.msg( 'campaignevents-eventpage-btn-collaboration-list' ),
+			classes: [
+				'ext-campaignevents-eventpage-collaboration-list-btn'
+			],
+			href: mw.util.getUrl( 'Special:AllEvents' )
+		} );
+		this.$foot.append(
+			collabButton.$element
+		);
 		if ( this.userIsParticipant ) {
 			// eslint-disable-next-line no-jquery/no-global-selector
 			this.$foot.append( $( '.ext-campaignevents-eventpage-participant-notice' ).clone( true ) );
