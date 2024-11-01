@@ -262,5 +262,6 @@
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|De follgenden Artikel ass|Déi follgend Artikele sinn}} net am Haaptnummraum. Gitt wgl. just Artikelen am Haaptnummraum an.\n$2",
 	"invitationlist": "Invitatiounslëscht",
 	"campaignevents-invitationlist-event": "$1: Invitatiounslëscht",
-	"campaignevents-invitationlist-worklist-label": "Artikellëscht weisen"
+	"campaignevents-invitationlist-worklist-label": "Artikellëscht weisen",
+	"prefs-campaignevents-invitations": "Invitatiounslëschten"
 }

@@ -222,7 +222,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "Schrijf u in om de koppeling naar de chatgroep te zien.",
 	"campaignevents-eventpage-dialog-action-close": "Sluiten",
 	"campaignevents-eventpage-register-notification": "U bent nu geregistreerd voor $1 .",
-	"campaignevents-eventpage-register-notification-more": "Bezoek de <strong>[[Special:AllEvents|samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen te vinden.",
+	"campaignevents-eventpage-register-notification-more": "Bekijk de <strong>[[Special:AllEvents|samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen te vinden.",
 	"campaignevents-eventpage-register-notification-edit": "Uw registratiegegevens zijn bijgewerkt.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Registratie annuleren",
 	"campaignevents-eventpage-unregister-confirmation-body": "Weet u zeker dat u uw inschrijving wilt annuleren?",
@@ -329,7 +329,7 @@
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|}}nog $1",
 	"campaignevents-notification-registration-event-page-link": "Evenementpagina bekijken",
 	"campaignevents-notification-registration-chat-link": "Aan groepschat meedoen",
-	"campaignevents-notification-registration-collaboration-list-link": "Bezoek de <strong>[[Special:AllEvents|samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen op de wiki’s te vinden.",
+	"campaignevents-notification-registration-collaboration-list-link": "Bekijk de <strong>[[Special:AllEvents|samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen op de wiki’s te vinden.",
 	"campaignevents-event-details-email-recipients-label": "Ontvangers",
 	"campaignevents-event-details-email-recipients-link-text": "Ontvangers toevoegen",
 	"campaignevents-event-details-email-subject-label": "Onderwerp",
@@ -480,7 +480,7 @@
 	"campaignevents-invitationlist-recommended": "Aanbevolen om uit te nodigen",
 	"campaignevents-invitationlist-recommended-info": "Deze redacteuren hebben een gemiddelde notering op de uitnodigingslijst, maar ze zijn mogelijk toch geïnteresseerd om deel te nemen aan uw activiteit.",
 	"campaignevents-invitationlist-worklist-label": "Artikelenlijst bekijken",
-	"campaignevents-event-details-footer": "Bezoek de <strong>[[ Special:AllEvents|samenwerkingslijst ]]</strong> om meer evenementen en gemeenschappen te vinden.",
+	"campaignevents-event-details-footer": "Bekijk de <strong>[[Special:AllEvents|samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen te vinden.",
 	"campaignevents-invitationlist-preference": "Voeg mij toe aan de [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists uitnodigingslijsten].",
 	"prefs-campaignevents-invitations": "Uitnodigingslijsten"
 }

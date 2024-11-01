@@ -475,7 +475,7 @@
 	"campaignevents-invitationlist-recommended": "Dəvət etmək tövsiyə olunur",
 	"campaignevents-invitationlist-recommended-info": "Bu redaktorlar orta səviyyəli dəvət siyahısı reytinqi alıblar, lakin onlar hələ də fəaliyyətinizə qoşulmaqda maraqlı ola bilərlər.",
 	"campaignevents-invitationlist-worklist-label": "Məqalə siyahısına bax",
-	"campaignevents-event-details-footer": "Daha çox tədbir və icma tapmaq üçün <strong>[[ Special:AllEvents|Əməkdaşlıq Siyahısına ]]</strong> daxil olun.",
+	"campaignevents-event-details-footer": "Daha çox tədbir və icma tapmaq üçün <strong>[[Special:AllEvents|Əməkdaşlıq Siyahısına]]</strong> daxil olun.",
 	"campaignevents-invitationlist-preference": "Məni [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists dəvət siyahılarına] əlavə et.",
 	"prefs-campaignevents-invitations": "Dəvət siyahıları"
 }
