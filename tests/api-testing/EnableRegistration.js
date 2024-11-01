@@ -45,34 +45,32 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 	describe( 'permission error', () => {
 		it( 'fails session check for anonymous users', async () => {
 			const { body: sourceBody } = await anonClient.post( '', getBody( anonToken ) );
-			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
+			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.property( sourceBody, 'messageTranslations' );
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
 		} );
 		it( 'fails for a blocked user', async () => {
 			const { body: sourceBody } = await blockedUserClient.post( '', getBody( blockedUserToken ) );
+			assert.strictEqual( sourceBody.errorKey, 'campaignevents-rest-enable-registration-permission-denied' );
 			assert.strictEqual( sourceBody.httpCode, 403 );
-			assert.property( sourceBody, 'messageTranslations' );
-			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'not allowed' );
 		} );
 	} );
 
 	describe( 'param validation', () => {
 		it( 'fails if no parameters were given', async () => {
 			const { body: sourceBody } = await organizerClient.post( '' );
-			assert.strictEqual( sourceBody.httpCode, 400 );
 			assert.property( sourceBody, 'failureCode' );
 			assert.equal( sourceBody.failureCode, 'missingparam' );
+			assert.strictEqual( sourceBody.httpCode, 400 );
 		} );
 	} );
 
 	describe( 'successful', () => {
 		it( 'succeeds for an authorized user if the request body is valid', async () => {
 			const { status: statusCode, body: sourceBody } = await organizerClient.post( '', getBody( organizerToken ) );
-			assert.strictEqual( statusCode, 201 );
+			assert.strictEqual( statusCode, 201, 'Got error: ' + sourceBody.errorKey );
 			assert.property( sourceBody, 'id' );
 			assert.isNumber( sourceBody.id );
 		} );

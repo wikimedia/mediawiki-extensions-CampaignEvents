@@ -58,8 +58,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 	describe( 'permission error', () => {
 		it( 'fails session check for anonymous users', async () => {
 			const { body: sourceBody } = await anonClient.put( eventID, getBody( anonToken ) );
-			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
+			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.property( sourceBody, 'messageTranslations' );
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
@@ -69,19 +69,17 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 				eventID,
 				getBody( blockedUserToken )
 			);
+			assert.strictEqual( sourceBody.errorKey, 'campaignevents-edit-not-allowed-registration' );
 			assert.strictEqual( sourceBody.httpCode, 403 );
-			assert.property( sourceBody, 'messageTranslations' );
-			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'not allowed' );
 		} );
 	} );
 
 	describe( 'param validation', () => {
 		it( 'fails if no parameters were given', async () => {
 			const { body: sourceBody } = await organizerClient.put( eventID );
-			assert.strictEqual( sourceBody.httpCode, 400 );
 			assert.property( sourceBody, 'failureCode' );
 			assert.equal( sourceBody.failureCode, 'missingparam' );
+			assert.strictEqual( sourceBody.httpCode, 400 );
 		} );
 		it( 'cannot be used to create a new event', async () => {
 			const nonExistentEventID = eventID + 1000;
@@ -89,20 +87,18 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 				nonExistentEventID,
 				getBody( organizerToken )
 			);
+			assert.strictEqual( sourceBody.errorKey, 'campaignevents-rest-event-not-found' );
 			assert.strictEqual( sourceBody.httpCode, 404 );
-			assert.property( sourceBody, 'messageTranslations' );
-			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'There is no event with this ID' );
 		} );
 	} );
 
 	describe( 'successful', () => {
 		it( 'succeeds for an authorized user if the request body is valid', async () => {
-			const { status: statusCode } = await organizerClient.put(
+			const { status: statusCode, body: sourceBody } = await organizerClient.put(
 				eventID,
 				getBody( organizerToken )
 			);
-			assert.strictEqual( statusCode, 204 );
+			assert.strictEqual( statusCode, 204, 'Got error: ' + sourceBody.errorKey );
 		} );
 	} );
 } );
