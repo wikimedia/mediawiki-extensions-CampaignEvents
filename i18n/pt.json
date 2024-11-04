@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Hamilton Abreu"
+			"Hamilton Abreu",
+			"B3rnas"
 		]
 	},
 	"campaignevents-desc": "Fornece funcionalidades para organizadores e participantes de campanhas.",

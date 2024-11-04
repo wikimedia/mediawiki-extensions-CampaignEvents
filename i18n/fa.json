@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jeeputer"
+			"Jeeputer",
+			"Havadar-hvac"
 		]
 	},
 	"campaignevents-error-invalid-title": "عنوان صفحهٔ رویداد نامعتبر است: $1",
