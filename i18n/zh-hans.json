@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Diskdance",
 			"GuoPC",
 			"Kishinsagi",
 			"LittlePaw365",
@@ -29,7 +30,7 @@
 	"campaignevents-error-page-not-found": "没有具有该名称的活动页面。",
 	"campaignevents-error-page-not-event-namespace": "活动页面必须在{{ns:event}}命名空间下。",
 	"campaignevents-error-page-with-section": "活动页面不得包含章节链接。",
-	"campaignevents-error-invalid-chat-url": "请输入有效的聊天 URL。",
+	"campaignevents-error-invalid-chat-url": "请输入有效的聊天URL。",
 	"campaignevents-error-trackingtool-without-eventid": "请在跟踪工具上提供活动标识符。",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "请提供跟踪工具标识符。",
 	"campaignevents-error-invalid-trackingtool": "请提供有效的跟踪工具标识符。",
