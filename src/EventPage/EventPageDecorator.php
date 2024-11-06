@@ -469,7 +469,9 @@ class EventPageDecorator {
 				$formattedEnd->getTime()
 			)
 		);
-		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $registration, $this->viewingUser );
+		$formattedTimezone = EventTimeFormatter::wrapTimeZoneForConversion(
+			$this->eventTimeFormatter->formatTimezone( $registration, $this->viewingUser )
+		);
 		// XXX Can't use ITextFormatter due to parse()
 		$timezoneMsg = $this->out->msg( 'campaignevents-eventpage-header-timezone' )
 			->params( $formattedTimezone )
@@ -477,13 +479,14 @@ class EventPageDecorator {
 		$items[] = new TextWithIconWidget( [
 			'icon' => 'clock',
 			'content' => [
-				$datesMsg,
+				EventTimeFormatter::wrapRangeForConversion( $registration, $datesMsg ),
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
 			'label' => $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-dates-label' )
 			),
 			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
+			'classes' => [ 'ext-campaignevents-eventpage-header-time' ],
 		] );
 
 		$items[] = new TextWithIconWidget( [

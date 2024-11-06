@@ -9,6 +9,7 @@
 		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
 		ManageRegistrationWidget = require( './ManageRegistrationWidget.js' ),
 		EventQuestions = require( './EventQuestions.js' ),
+		timeZoneConverter = require( '../TimeZoneConverter.js' ),
 		confirmUnregistrationDialog,
 		participantRegistrationDialog,
 		eventID = mw.config.get( 'wgCampaignEventsEventID' ),
@@ -229,6 +230,20 @@
 	}
 
 	/**
+	 * Convert the displayed time and timezone according to the user's browser preferences,
+	 * if the wiki timezone was used.
+	 */
+	function setupTimeConversion() {
+		var $headerTime = $( '.ext-campaignevents-eventpage-header-time' );
+		if ( $headerTime.length ) {
+			timeZoneConverter.convert(
+				$headerTime,
+				'campaignevents-eventpage-header-dates'
+			);
+		}
+	}
+
+	/**
 	 * Replace the "manage registration" layout of two buttons with a single menu, if present.
 	 */
 	function replaceManageRegistrationLayout() {
@@ -252,6 +267,7 @@
 		detailsDialog.populateFooter();
 
 		maybeShowRegistrationSuccessNotification();
+		setupTimeConversion();
 
 		$( '.ext-campaignevents-eventpage-register-btn' ).on( 'click', function ( e ) {
 			e.preventDefault();
