@@ -1,5 +1,8 @@
 {
 	"root": true,
+	"globals": {
+		"moment": "readonly"
+	},
 	"extends": [
 		"wikimedia/client-es5",
 		"wikimedia/jquery",

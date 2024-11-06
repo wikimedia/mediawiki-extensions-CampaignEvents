@@ -12,6 +12,9 @@
 		case 'MyEvents':
 			require( './eventlists/index.js' );
 			break;
+		case null:
+			// QUnit tests and the like.
+			break;
 		default:
 			mw.log.error( 'module has been loaded on an unexpected page: ' + pageName );
 	}

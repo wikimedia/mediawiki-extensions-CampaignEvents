@@ -130,6 +130,18 @@
 			"subpages": true
 		}
 	],
+	"QUnitTestModule": {
+		"localBasePath": "",
+		"remoteExtPath": "CampaignEvents",
+		"packageFiles": [
+			"tests/qunit/ext.campaignEvents.TimeZoneConverter.test.js",
+			"resources/TimeZoneConverter.js"
+		],
+		"dependencies": [
+			"ext.campaignEvents.eventpage",
+			"ext.campaignEvents.specialPages"
+		]
+	},
 	"RateLimits": {
 		"campaignevents-email-participants": {
 			"user-global": [
@@ -144,24 +156,25 @@
 	},
 	"ResourceModules": {
 		"ext.campaignEvents.specialPages": {
-			"localBasePath": "resources/ext.campaignEvents.specialPages",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.specialPages",
+			"localBasePath": "resources",
+			"remoteExtPath": "CampaignEvents/resources",
 			"packageFiles": [
-				"dispatcher.js",
-				"editeventregistration/index.js",
-				"editeventregistration/OrganizerSelectionFieldEnhancer.js",
-				"editeventregistration/TimeFieldsEnhancer.js",
-				"eventdetails/index.js",
-				"eventdetails/OrganizersLoader.js",
-				"eventdetails/ParticipantsManager.js",
-				"eventdetails/EmailManager.js",
-				"eventdetails/RemoveParticipantDialog.js",
-				"eventdetails/ScrollDownObserver.js",
-				"eventlists/index.js",
-				"eventlists/ConfirmEventDeletionDialog.js",
-				"eventlists/FilterEventsWidget.js",
-				"eventlists/EventKebabMenu.js",
-				"eventlists/DateTimeWidgetsEnhancer.js"
+				"ext.campaignEvents.specialPages/dispatcher.js",
+				"ext.campaignEvents.specialPages/editeventregistration/index.js",
+				"ext.campaignEvents.specialPages/editeventregistration/OrganizerSelectionFieldEnhancer.js",
+				"ext.campaignEvents.specialPages/editeventregistration/TimeFieldsEnhancer.js",
+				"ext.campaignEvents.specialPages/eventdetails/index.js",
+				"ext.campaignEvents.specialPages/eventdetails/OrganizersLoader.js",
+				"ext.campaignEvents.specialPages/eventdetails/ParticipantsManager.js",
+				"ext.campaignEvents.specialPages/eventdetails/EmailManager.js",
+				"ext.campaignEvents.specialPages/eventdetails/RemoveParticipantDialog.js",
+				"ext.campaignEvents.specialPages/eventdetails/ScrollDownObserver.js",
+				"ext.campaignEvents.specialPages/eventlists/index.js",
+				"ext.campaignEvents.specialPages/eventlists/ConfirmEventDeletionDialog.js",
+				"ext.campaignEvents.specialPages/eventlists/FilterEventsWidget.js",
+				"ext.campaignEvents.specialPages/eventlists/EventKebabMenu.js",
+				"ext.campaignEvents.specialPages/eventlists/DateTimeWidgetsEnhancer.js",
+				"TimeZoneConverter.js"
 			],
 			"dependencies": [
 				"mediawiki.language",
@@ -175,7 +188,8 @@
 				"mediawiki.jqueryMsg",
 				"mediawiki.widgets.datetime",
 				"mediawiki.widgets.UsersMultiselectWidget",
-				"jquery.makeCollapsible"
+				"jquery.makeCollapsible",
+				"moment"
 			],
 			"messages": [
 				"campaignevents-edit-organizers-not-allowed",
@@ -251,24 +265,25 @@
 			]
 		},
 		"ext.campaignEvents.eventpage": {
-			"localBasePath": "resources/ext.campaignEvents.eventpage",
-			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.eventpage",
+			"localBasePath": "resources",
+			"remoteExtPath": "CampaignEvents/resources",
 			"packageFiles": [
-				"index.js",
-				"ConfirmUnregistrationDialog.js",
-				"EnableRegistrationDialog.js",
-				"EventDetailsDialog.js",
-				"ParticipantRegistrationDialog.js",
-				"ManageRegistrationWidget.js",
-				"EventQuestions.js",
+				"ext.campaignEvents.eventpage/index.js",
+				"ext.campaignEvents.eventpage/ConfirmUnregistrationDialog.js",
+				"ext.campaignEvents.eventpage/EnableRegistrationDialog.js",
+				"ext.campaignEvents.eventpage/EventDetailsDialog.js",
+				"ext.campaignEvents.eventpage/ParticipantRegistrationDialog.js",
+				"ext.campaignEvents.eventpage/ManageRegistrationWidget.js",
+				"ext.campaignEvents.eventpage/EventQuestions.js",
+				"TimeZoneConverter.js",
 				{
-					"name": "data.json",
+					"name": "ext.campaignEvents.eventpage/data.json",
 					"callback": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\ResourceLoaderCallbacks::getEventPageData"
 				}
 			],
 			"styles": [
-				"EventDetailsDialog.less",
-				"ParticipantRegistrationDialog.less"
+				"ext.campaignEvents.eventpage/EventDetailsDialog.less",
+				"ext.campaignEvents.eventpage/ParticipantRegistrationDialog.less"
 			],
 			"messages": [
 				"campaignevents-eventpage-btn-manage-registration",
@@ -314,7 +329,8 @@
 				"mediawiki.util",
 				"oojs-ui-core",
 				"oojs-ui-windows",
-				"oojs-ui-widgets"
+				"oojs-ui-widgets",
+				"moment"
 			]
 		}
 	},
