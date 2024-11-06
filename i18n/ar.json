@@ -454,7 +454,7 @@
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "حسابك محظور. ليس لديك حق الولوج إلى هذا.",
 	"generateinvitationlist": "توليد قائمة المدعوين",
 	"campaignevents-generateinvitationlist-name-field-label": "Invitation list name",
-	"campaignevents-generateinvitationlist-name-field-placeholder": "قائمة دعوات الفعاليات الخاصة بي",
+	"campaignevents-generateinvitationlist-name-field-placeholder": "قائمة المدعوين لـ Edit-a-thon",
 	"campaignevents-generateinvitationlist-event-page-field-label": "صفحة الفعالية",
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}: فعاليتي",
 	"campaignevents-generateinvitationlist-article-list-field-label": "قائمة المقالات",
