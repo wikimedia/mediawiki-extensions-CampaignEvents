@@ -480,6 +480,14 @@
 				"MessageFormatterFactory",
 				"ContentLanguage"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/formatted_time/{languageCode}/{start}/{end}",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetFormattedTimeHandler",
+			"services": [
+				"LanguageFactory"
+			]
 		}
 	],
 	"ServiceWiringFiles": [
