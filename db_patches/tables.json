@@ -851,5 +851,46 @@
 			}
 		],
 		"pk": [ "ceilu_id" ]
+	},
+	{
+		"name": "ce_event_wikis",
+		"comment": "Stores the wikis related to events.",
+		"columns": [
+			{
+				"name": "ceew_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceew_event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceew_wiki",
+				"type": "binary",
+				"comment": "Wiki ID, or the special value `*all*` to indicate \"all wikis\".",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_event_wikis_event_id_wiki",
+				"comment": "Retrieve all wikis associated with a specific event and filter by wiki.",
+				"columns": [ "ceew_event_id", "ceew_wiki" ],
+				"unique": true
+			}
+		],
+		"pk": [ "ceew_id" ]
 	}
 ]

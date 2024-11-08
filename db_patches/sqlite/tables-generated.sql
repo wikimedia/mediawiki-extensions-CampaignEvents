@@ -159,3 +159,12 @@ CREATE TABLE /*_*/ce_invitation_list_users (
 CREATE INDEX ce_invitation_list_users_ceil_id ON /*_*/ce_invitation_list_users (ceilu_ceil_id);
 
 CREATE INDEX ce_invitation_list_users_ceilu_user_id ON /*_*/ce_invitation_list_users (ceilu_user_id);
+
+
+CREATE TABLE /*_*/ce_event_wikis (
+  ceew_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceew_event_id BIGINT UNSIGNED NOT NULL,
+  ceew_wiki BLOB NOT NULL
+);
+
+CREATE UNIQUE INDEX ce_event_wikis_event_id_wiki ON /*_*/ce_event_wikis (ceew_event_id, ceew_wiki);
