@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -280,5 +281,13 @@ class CampaignEventsServices {
 
 	public static function getWikiLookup( ?ContainerInterface $services = null ): WikiLookup {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( WikiLookup::SERVICE_NAME );
+	}
+
+	/**
+	 * @param ContainerInterface|null $services
+	 * @return EventWikisStore
+	 */
+	public static function getEventWikisStore( ?ContainerInterface $services = null ): EventWikisStore {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventWikisStore::SERVICE_NAME );
 	}
 }
