@@ -234,11 +234,18 @@
 	 * if the wiki timezone was used.
 	 */
 	function setupTimeConversion() {
-		var $headerTime = $( '.ext-campaignevents-eventpage-header-time' );
+		var $headerTime = $( '.ext-campaignevents-eventpage-header-time' ),
+			$dialogTime = $( '.ext-campaignevents-eventpage-detailsdialog-time' );
 		if ( $headerTime.length ) {
 			timeZoneConverter.convert(
 				$headerTime,
 				'campaignevents-eventpage-header-dates'
+			);
+		}
+		if ( $dialogTime.length ) {
+			timeZoneConverter.convert(
+				$dialogTime,
+				'campaignevents-eventpage-dialog-dates'
 			);
 		}
 	}

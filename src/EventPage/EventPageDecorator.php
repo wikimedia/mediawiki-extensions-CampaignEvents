@@ -664,7 +664,9 @@ class EventPageDecorator {
 				$formattedEnd->getTime()
 			)
 		);
-		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $registration, $this->viewingUser );
+		$formattedTimezone = EventTimeFormatter::wrapTimeZoneForConversion(
+			$this->eventTimeFormatter->formatTimezone( $registration, $this->viewingUser )
+		);
 		// XXX Can't use $msgFormatter due to parse()
 		$timezoneMsg = $this->out->msg( 'campaignevents-eventpage-dialog-timezone' )
 			->params( $formattedTimezone )
@@ -672,12 +674,14 @@ class EventPageDecorator {
 		return $this->makeDetailsDialogSection(
 			'clock',
 			[
-				$datesMsg,
+				EventTimeFormatter::wrapRangeForConversion( $registration, $datesMsg ),
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
 			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-dates-label' )
-			)
+			),
+			'',
+			[ 'ext-campaignevents-eventpage-detailsdialog-time' ]
 		);
 	}
 
@@ -1128,9 +1132,16 @@ class EventPageDecorator {
 	 * @param string|Tag|array $content
 	 * @param string $label
 	 * @param string|Tag|array $footer
+	 * @param string[] $classes
 	 * @return string
 	 */
-	private function makeDetailsDialogSection( string $icon, $content, string $label, $footer = '' ): string {
+	private function makeDetailsDialogSection(
+		string $icon,
+		$content,
+		string $label,
+		$footer = '',
+		array $classes = []
+	): string {
 		$iconWidget = new IconWidget( [
 			'icon' => $icon,
 			'classes' => [ 'ext-campaignevents-eventpage-detailsdialog-section-icon' ]
@@ -1141,7 +1152,7 @@ class EventPageDecorator {
 
 		$contentTag = ( new Tag( 'div' ) )
 			->appendContent( $content )
-			->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-section-content' ] );
+			->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-section-content', ...$classes ] );
 
 		return (string)( new Tag( 'div' ) )
 			->appendContent( $header, $contentTag, $footer );
