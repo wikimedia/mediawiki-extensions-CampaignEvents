@@ -173,5 +173,6 @@
 	"campaignevents-notification-registration-details-dates-header": "날짜 및 시간",
 	"campaignevents-edit-field-clickwrap-form-continue": "응답 보기",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "에디터톤 초대 목록",
-	"campaignevents-generateinvitationlist-event-page-field-label": "이벤트 페이지 이름"
+	"campaignevents-generateinvitationlist-event-page-field-label": "이벤트 페이지 이름",
+	"prefs-campaignevents-invitations": "초대 목록"
 }
