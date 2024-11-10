@@ -31,6 +31,6 @@ describe( 'Enable Event Registration @daily', () => {
 
 		await expect( await EventPage.eventName ).toHaveText( eventName );
 		await expect( await EventPage.registrationUpdatedNotification )
-			.toHaveText( 'Registration is enabled. Participants can now register on the event page.' );
+			.toHaveText( 'Registration is enabled. Participants can now register on your event page.' );
 	} );
 } );

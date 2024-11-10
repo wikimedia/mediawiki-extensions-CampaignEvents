@@ -189,7 +189,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	/**
 	 * Returns messages to be used on the page. 'form-legend' and 'submit' must not use markup or take any parameter.
 	 * 'success' can contain markup, and will be passed the prefixedtext of the event page as the $1 parameter.
-	 * @phan-return array{success:string,details-section-subtitle:string,submit:string}
+	 * @phan-return array{success?:string,details-section-subtitle:string,submit:string}
 	 * @return array
 	 */
 	abstract protected function getFormMessages(): array;

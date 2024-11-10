@@ -257,7 +257,7 @@
 			return;
 		}
 		mw.notify(
-			mw.message( 'campaignevents-enable-registration-success-msg', mw.config.get( 'wgTitle' ) ),
+			mw.message( 'campaignevents-eventpage-registration-enabled-notification' ),
 			{ type: 'success', classes: [ 'ext-campaignevents-eventpage-registration-success-notif' ] }
 		);
 		registrationUpdatedWarnings.forEach( function ( warning ) {
