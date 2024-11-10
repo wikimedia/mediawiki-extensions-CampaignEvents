@@ -231,6 +231,7 @@
 	"campaignevents-eventpage-register-dialog-title-edit": "Edit registration",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Registration privacy",
 	"campaignevents-eventpage-registration-enabled-notification": "Registration is enabled. Participants can now register on your event page.",
+	"campaignevents-eventpage-registration-updated-notification-list": "This event is included in the <strong>[[Special:AllEvents|Collaboration list]]</strong>.",
 	"campaignevents-eventpage-enableheader-organizer": "You are an organizer",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Event page</strong>: Enable registration so participants can register for your event directly on the page.",
 	"campaignevents-eventpage-enableheader-button-label": "Enable registration",

@@ -30,7 +30,10 @@ describe( 'Enable Event Registration @daily', () => {
 		await EventRegistrationPage.enableEvent( eventTitle );
 
 		await expect( await EventPage.eventName ).toHaveText( eventName );
-		await expect( await EventPage.registrationUpdatedNotification )
-			.toHaveText( 'Registration is enabled. Participants can now register on your event page.' );
+		const registrationUpdatedNotification = await EventPage.registrationUpdatedNotification;
+		await expect( registrationUpdatedNotification )
+			.toHaveTextContaining( 'Registration is enabled. Participants can now register on your event page.' );
+		await expect( registrationUpdatedNotification )
+			.toHaveTextContaining( 'This event is included in the Collaboration list.' );
 	} );
 } );

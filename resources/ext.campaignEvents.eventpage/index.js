@@ -256,8 +256,15 @@
 		if ( !hasUpdatedRegistration ) {
 			return;
 		}
+		var $msg = $( '<p>' ).append(
+			mw.message( 'campaignevents-eventpage-registration-enabled-notification' ).parseDom()
+		).add(
+			$( '<p>' ).append(
+				mw.message( 'campaignevents-eventpage-registration-updated-notification-list' ).parseDom()
+			)
+		);
 		mw.notify(
-			mw.message( 'campaignevents-eventpage-registration-enabled-notification' ),
+			$msg,
 			{ type: 'success', classes: [ 'ext-campaignevents-eventpage-registration-success-notif' ] }
 		);
 		registrationUpdatedWarnings.forEach( function ( warning ) {
