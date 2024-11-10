@@ -31,7 +31,11 @@ describe( 'Edit Event Registration', () => {
 			end: { year: 2100, day: 14 }
 		} );
 
-		await expect( await EventRegistrationPage.successNotice ).toHaveText( 'The registration was edited. See event page.' );
+		const registrationUpdatedNotification = await EventPage.registrationUpdatedNotification;
+		await expect( registrationUpdatedNotification )
+			.toHaveTextContaining( 'The registration information has been updated.' );
+		await expect( registrationUpdatedNotification )
+			.toHaveTextContaining( 'This event is included in the Collaboration list.' );
 	} );
 
 	it( 'can allow organizer to change the event to be in person', async () => {
@@ -40,7 +44,6 @@ describe( 'Edit Event Registration', () => {
 			meetingType: 'inperson'
 		} );
 
-		EventPage.open( event );
 		await expect( await EventPage.eventType ).toHaveText( 'In-person event' );
 	} );
 
@@ -50,7 +53,6 @@ describe( 'Edit Event Registration', () => {
 			meetingType: 'hybrid'
 		} );
 
-		EventPage.open( event );
 		await expect( await EventPage.eventType ).toHaveText( 'Online and in-person event' );
 	} );
 
@@ -63,7 +65,6 @@ describe( 'Edit Event Registration', () => {
 			organizer: userName
 		} );
 
-		EventPage.open( event );
 		await EventPage.openMoreDetailsDialog();
 		await expect( await EventPage.eventOrganizers ).toHaveTextContaining( userName );
 	} );

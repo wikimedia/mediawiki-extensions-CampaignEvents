@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
@@ -46,6 +47,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PARTICIPANT_QUESTIONS_SECTION = 'campaignevents-edit-form-questions-label';
 
 	public const REGISTRATION_UPDATED_SESSION_KEY = 'campaignevents-registration-updated';
+	public const REGISTRATION_UPDATED_SESSION_ENABLED = 1;
+	public const REGISTRATION_UPDATED_SESSION_UPDATED = 2;
 	public const REGISTRATION_UPDATED_WARNINGS_SESSION_KEY = 'campaignevents-registration-updated-warnings';
 
 	/** @var array<string,string> */
@@ -60,6 +63,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private TrackingToolRegistry $trackingToolRegistry;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private CampaignEventsHookRunner $hookRunner;
+	private PageURLResolver $pageUrlResolver;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -78,20 +82,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	protected ?StatusValue $saveWarningsStatus = null;
 
-	/**
-	 * @param string $name
-	 * @param string $restriction
-	 * @param IEventLookup $eventLookup
-	 * @param EventFactory $eventFactory
-	 * @param EditEventCommand $editEventCommand
-	 * @param PolicyMessagesLookup $policyMessagesLookup
-	 * @param OrganizersStore $organizersStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param CampaignEventsHookRunner $hookRunner
-	 */
 	public function __construct(
 		string $name,
 		string $restriction,
@@ -104,7 +94,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		CampaignsCentralUserLookup $centralUserLookup,
 		TrackingToolRegistry $trackingToolRegistry,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		CampaignEventsHookRunner $hookRunner
+		CampaignEventsHookRunner $hookRunner,
+		PageURLResolver $pageURLResolver
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -117,6 +108,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->trackingToolRegistry = $trackingToolRegistry;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->hookRunner = $hookRunner;
+		$this->pageUrlResolver = $pageURLResolver;
 
 		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->formMessages = $this->getFormMessages();
@@ -187,9 +179,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	}
 
 	/**
-	 * Returns messages to be used on the page. 'form-legend' and 'submit' must not use markup or take any parameter.
-	 * 'success' can contain markup, and will be passed the prefixedtext of the event page as the $1 parameter.
-	 * @phan-return array{success?:string,details-section-subtitle:string,submit:string}
+	 * Returns messages to be used on the page. These must not use markup or take any parameter.
+	 * @phan-return array{details-section-subtitle:string,submit:string}
 	 * @return array
 	 */
 	abstract protected function getFormMessages(): array;
@@ -684,14 +675,24 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function onSuccess(): void {
-		$this->getOutput()->prependHTML( Html::successBox(
-			$this->msg( $this->formMessages['success'] )->params( $this->eventPage->getPrefixedText() )->parse()
-		) );
-		if ( $this->saveWarningsStatus ) {
-			foreach ( $this->saveWarningsStatus->getMessages() as $msg ) {
-				$this->getOutput()->prependHTML( Html::warningBox( $this->msg( $msg )->escaped() ) );
-			}
+		$out = $this->getOutput();
+		$session = $out->getRequest()->getSession();
+		$isUpdate = $this instanceof SpecialEditEventRegistration;
+		// Use session variables, as opposed to query parameters, so that the notification will only be seen once, and
+		// not on every page refresh (and possibly end up in shared links etc.)
+		$session->set(
+			self::REGISTRATION_UPDATED_SESSION_KEY,
+			$isUpdate ? self::REGISTRATION_UPDATED_SESSION_UPDATED : self::REGISTRATION_UPDATED_SESSION_ENABLED
+		);
+		$warningMessages = $this->saveWarningsStatus->getMessages();
+		if ( $warningMessages ) {
+			$warningMessagesText = array_map(
+				fn ( $msg ) => $this->msg( $msg )->text(),
+				$warningMessages
+			);
+			$session->set( self::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY, $warningMessagesText );
 		}
+		$out->redirect( $this->pageUrlResolver->getUrl( $this->eventPage ) );
 	}
 
 	/**

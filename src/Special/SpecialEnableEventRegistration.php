@@ -19,8 +19,6 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EnableEventRegistration';
 
-	private PageURLResolver $pageUrlResolver;
-
 	public function __construct(
 		IEventLookup $eventLookup,
 		EventFactory $eventFactory,
@@ -46,29 +44,9 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 			$centralUserLookup,
 			$trackingToolRegistry,
 			$eventQuestionsRegistry,
-			$hookRunner
+			$hookRunner,
+			$pageURLResolver
 		);
-		$this->pageUrlResolver = $pageURLResolver;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function onSuccess(): void {
-		$out = $this->getOutput();
-		$session = $out->getRequest()->getSession();
-		// Use session variables, as opposed to query parameters, so that the notification will only be seen once, and
-		// not on every page refresh (and possibly end up in shared links etc.)
-		$session->set( self::REGISTRATION_UPDATED_SESSION_KEY, 1 );
-		$warningMessages = $this->saveWarningsStatus->getMessages();
-		if ( $warningMessages ) {
-			$warningMessagesText = array_map(
-				fn ( $msg ) => $this->msg( $msg )->text(),
-				$warningMessages
-			);
-			$session->set( self::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY, $warningMessagesText );
-		}
-		$out->redirect( $this->pageUrlResolver->getUrl( $this->eventPage ) );
 	}
 
 	/**

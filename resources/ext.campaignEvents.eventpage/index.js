@@ -19,6 +19,7 @@
 		aggregationTimestamp = mw.config.get( 'wgCampaignEventsAggregationTimestamp' ),
 		answersAlreadyAggregated = mw.config.get( 'wgCampaignEventsAnswersAlreadyAggregated' ),
 		hasUpdatedRegistration = mw.config.get( 'wgCampaignEventsRegistrationUpdated' ),
+		isNewRegistration = mw.config.get( 'wgCampaignEventsIsNewRegistration' ),
 		registrationUpdatedWarnings = mw.config.get( 'wgCampaignEventsRegistrationUpdatedWarnings' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
@@ -256,13 +257,16 @@
 		if ( !hasUpdatedRegistration ) {
 			return;
 		}
-		var $msg = $( '<p>' ).append(
-			mw.message( 'campaignevents-eventpage-registration-enabled-notification' ).parseDom()
-		).add(
+
+		var baseMsg = isNewRegistration ?
+			mw.message( 'campaignevents-eventpage-registration-enabled-notification' ) :
+			mw.message( 'campaignevents-eventpage-registration-edit-notification' );
+		var $msg = $( '<p>' ).append( baseMsg.parseDom() ).add(
 			$( '<p>' ).append(
 				mw.message( 'campaignevents-eventpage-registration-updated-notification-list' ).parseDom()
 			)
 		);
+
 		mw.notify(
 			$msg,
 			{ type: 'success', classes: [ 'ext-campaignevents-eventpage-registration-success-notif' ] }
