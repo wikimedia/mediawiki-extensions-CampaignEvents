@@ -28,6 +28,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
@@ -275,5 +276,9 @@ class CampaignEventsServices {
 
 	public static function getInvitationListStore( ?ContainerInterface $services = null ): InvitationListStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( InvitationListStore::SERVICE_NAME );
+	}
+
+	public static function getWikiLookup( ?ContainerInterface $services = null ): WikiLookup {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( WikiLookup::SERVICE_NAME );
 	}
 }
