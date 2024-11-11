@@ -323,7 +323,8 @@
 				"campaignevents-eventpage-register-dialog-retention-hours",
 				"word-separator",
 				"campaignevents-eventpage-register-dialog-answers-aggregated",
-				"campaignevents-eventpage-header-dates"
+				"campaignevents-eventpage-header-dates",
+				"campaignevents-eventpage-dialog-dates"
 			],
 			"dependencies": [
 				"mediawiki.api",
