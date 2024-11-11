@@ -10,6 +10,9 @@ use MediaWiki\Language\Language;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\User\UserTimeCorrection;
+use OOUI\HtmlSnippet;
+use OOUI\Tag;
+use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
  * This service formats the time of an event according to the event type, in a given language and for a given user.
@@ -109,5 +112,29 @@ class EventTimeFormatter {
 		}
 		$timeCorrectionPref = $this->userOptionsLookup->getOption( $user, 'timecorrection' ) ?? '';
 		return new UserTimeCorrection( $timeCorrectionPref );
+	}
+
+	/**
+	 * Wrap a time range in an HTML structure that can be read by the TimeZoneConverter JavaScript utility.
+	 * The timezone must also be wrapped, using {@see self::wrapTimeZoneForConversion}.
+	 */
+	public static function wrapRangeForConversion( EventRegistration $event, string $range ): Tag {
+		return ( new Tag( 'span' ) )
+			->addClasses( [ 'ext-campaignevents-time-range' ] )
+			->setAttributes( [
+				'data-mw-start' => ConvertibleTimestamp::convert( TS_ISO_8601, $event->getStartUTCTimestamp() ),
+				'data-mw-end' => ConvertibleTimestamp::convert( TS_ISO_8601, $event->getEndUTCTimestamp() ),
+			] )
+			->appendContent( $range );
+	}
+
+	/**
+	 * Wrap a timezone name in an HTML structure that can be read by the TimeZoneConverter JavaScript utility.
+	 * The time range must also be wrapped, using {@see self::wrapRangeForConversion}.
+	 */
+	public static function wrapTimeZoneForConversion( string $timezone ): Tag {
+		return ( new Tag( 'span' ) )
+			->addClasses( [ 'ext-campaignevents-timezone' ] )
+			->appendContent( new HtmlSnippet( $timezone ) );
 	}
 }
