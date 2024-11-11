@@ -29,4 +29,11 @@ $( function () {
 	if ( $statsSections.length ) {
 		$statsSections.makeCollapsible();
 	}
+
+	// eslint-disable-next-line no-jquery/no-global-selector
+	var $eventTime = $( '.ext-campaignevents-eventdetails-section-content' );
+	if ( $eventTime.length ) {
+		var timeZoneConverter = require( '../../TimeZoneConverter.js' );
+		timeZoneConverter.convert( $eventTime, 'campaignevents-event-details-dates' );
+	}
 } );

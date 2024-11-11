@@ -256,16 +256,19 @@ class EventDetailsModule {
 				$formattedEnd->getTime()
 			)
 		);
-		$formattedTimezone = $this->eventTimeFormatter->formatTimezone( $this->registration, $viewingUser );
+		$formattedTimezone = EventTimeFormatter::wrapTimeZoneForConversion(
+			$this->eventTimeFormatter->formatTimezone( $this->registration, $viewingUser )
+		);
 		// XXX Can't use $this->msgFormatter due to parse()
 		$timezoneMsg = $out->msg( 'campaignevents-event-details-timezone' )->params( $formattedTimezone )->parse();
 		$items[] = self::makeSection(
 			'clock',
 			[
-				$datesMsg,
+				EventTimeFormatter::wrapRangeForConversion( $this->registration, $datesMsg ),
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
-			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) )
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) ),
+			[ 'ext-campaignevents-eventdetails-time' ]
 		);
 
 		$canRegister = RegisterParticipantCommand::checkIsRegistrationAllowed( $this->registration ) ===
@@ -567,9 +570,10 @@ class EventDetailsModule {
 	 * @param string $icon
 	 * @param string|Tag|array|HtmlSnippet $content
 	 * @param string $label
+	 * @param string[] $classes
 	 * @return Tag
 	 */
-	public static function makeSection( string $icon, $content, string $label ): Tag {
+	public static function makeSection( string $icon, $content, string $label, array $classes = [] ): Tag {
 		$iconWidget = new IconWidget( [
 			'icon' => $icon,
 			'classes' => [ 'ext-campaignevents-eventdetails-icon' ]
@@ -580,7 +584,7 @@ class EventDetailsModule {
 
 		$contentTag = ( new Tag( 'div' ) )
 			->appendContent( $content )
-			->addClasses( [ 'ext-campaignevents-eventdetails-section-content' ] );
+			->addClasses( [ 'ext-campaignevents-eventdetails-section-content', ...$classes ] );
 
 		return ( new Tag( 'div' ) )
 			->appendContent( $header, $contentTag );
