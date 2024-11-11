@@ -84,8 +84,6 @@
 	"campaignevents-enable-registration-form-submit": "Włącz rejestrację",
 	"campaignevents-edit-form-submit": "Edytuj rejestrację",
 	"campaignevents-edit-form-notice": "Podczas rejestracji od uczestników będą zbierane tylko nazwy użytkowników. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Dowiedz się więcej].",
-	"campaignevents-edit-success-msg": "Rejestracja została zmieniona. Zobacz [[$1|stronę wydarzenia]].",
-	"campaignevents-enable-registration-success-msg": "Rejestracja jest włączona. Uczestnicy mogą teraz zarejestrować się na [[$1|stronie wydarzenia]].",
 	"campaignevents-edit-invalid-id": "Podaj prawidłowy identyfikator wydarzenia.",
 	"campaignevents-edit-no-event-id-provided": "Podaj identyfikator wydarzenia.",
 	"campaignevents-edit-event-notfound": "Nie ma wydarzenia o tym identyfikatorze.",

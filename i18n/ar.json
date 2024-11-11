@@ -92,8 +92,6 @@
 	"campaignevents-enable-registration-form-submit": "تفعيل التسجيل",
 	"campaignevents-edit-form-submit": "تعديل التسجيل",
 	"campaignevents-edit-form-notice": "سيتم جمع أسماء المستخدمين فقط من المشاركين أثناء التسجيل. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration مزيد من المعلومات].",
-	"campaignevents-edit-success-msg": "تم تعديل التسجيل. راجع [[$1|صفحة الفعالية]].",
-	"campaignevents-enable-registration-success-msg": "التسجيل مُفَعَّل الآن. بإمكان المشاركين التسجيل على [[$1|صفحة الفعالية]].",
 	"campaignevents-edit-invalid-id": "قدّم معرّف فعالية صحيح.",
 	"campaignevents-edit-no-event-id-provided": "قدّم معرّف فعالية.",
 	"campaignevents-edit-event-notfound": "لا توجد فعالية مقترنة بهذا المعرّف.",

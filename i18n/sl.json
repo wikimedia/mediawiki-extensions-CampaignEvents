@@ -83,8 +83,6 @@
 	"campaignevents-enable-registration-form-submit": "Omogoči prijavo",
 	"campaignevents-edit-form-submit": "Uredi prijavo",
 	"campaignevents-edit-form-notice": "Pri prijavi se bodo zbirala samo uporabniška imena udeležencev. [https\n://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Več o tem].",
-	"campaignevents-edit-success-msg": "Prijava je bila urejena. Glejte [[$1|stran dogodka]].",
-	"campaignevents-enable-registration-success-msg": "Prijava je omogočena. Udeleženci se zdaj lahko prijavijo na [[$1|strani dogodka]].",
 	"campaignevents-edit-invalid-id": "Navedite veljaven ID dogodka.",
 	"campaignevents-edit-no-event-id-provided": "Navedite ID dogodka.",
 	"campaignevents-edit-event-notfound": "Dogodek s tem ID-jem ne obstaja.",

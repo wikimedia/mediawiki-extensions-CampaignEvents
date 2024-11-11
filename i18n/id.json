@@ -84,8 +84,6 @@
 	"campaignevents-enable-registration-form-submit": "Aktifkan pendaftaran",
 	"campaignevents-edit-form-submit": "Ubah pendaftaran",
 	"campaignevents-edit-form-notice": "Hanya nama pengguna yang akan dikumpulkan dari peserta saat pendaftaran. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Pelajari lebih lanjut].",
-	"campaignevents-edit-success-msg": "Pendaftaran telah diedit. Lihat [[$1|halaman acara]].",
-	"campaignevents-enable-registration-success-msg": "Pendaftaran diaktifkan. Peserta sekarang dapat mendaftar di [[$1|halaman acara]].",
 	"campaignevents-edit-invalid-id": "Berikan ID acara yang benar.",
 	"campaignevents-edit-no-event-id-provided": "Berikan ID acara.",
 	"campaignevents-edit-event-notfound": "Tidak ada acara dengan ID ini.",

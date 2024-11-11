@@ -58,8 +58,6 @@
 	"campaignevents-edit-field-chat-url-help": "Якщо у вас є груповий онлайн-чат для учасників цієї події, ви можете додати посилання запрошення сюди. Учасники зможуть переглянути посилання запрошення після реєстрації.",
 	"campaignevents-enable-registration-form-submit": "Увімкнути реєстрацію",
 	"campaignevents-edit-form-submit": "Редагувати реєстрацію",
-	"campaignevents-edit-success-msg": "Реєстрацію відредаговано. Перегляньте [[$1|сторінку події]].",
-	"campaignevents-enable-registration-success-msg": "Реєстрацію увімкнено. Тепер учасники можуть зареєструватися на [[$1|сторінці події]].",
 	"campaignevents-edit-invalid-id": "Укажіть дійсний ідентифікатор події.",
 	"campaignevents-edit-no-event-id-provided": "Укажіть ідентифікатор події.",
 	"campaignevents-edit-event-notfound": "Не існує події з таким ідентифікатором.",
@@ -172,5 +170,6 @@
 	"campaignevents-event-details-tab-event-details": "Деталі події",
 	"campaignevents-event-details-tab-stats": "Статистика відповідей",
 	"campaignevents-details-stats-no-responses": "Ця подія не має відповідей від учасників для зведення.",
-	"campaignevents-details-stats-not-ready": "Відповіді учасників будуть зведені та незабаром доступні тут."
+	"campaignevents-details-stats-not-ready": "Відповіді учасників будуть зведені та незабаром доступні тут.",
+	"campaignevents-invitation-list-error-not-organizer": "Введіть сторінку події, на якій ви вказані як організатор."
 }

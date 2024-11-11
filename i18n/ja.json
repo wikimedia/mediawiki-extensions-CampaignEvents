@@ -82,8 +82,6 @@
 	"campaignevents-enable-registration-form-submit": "登録を可能にする",
 	"campaignevents-edit-form-submit": "登録内容を編集する",
 	"campaignevents-edit-form-notice": "登録時に参加者から取得する情報は利用者名のみです。[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration 詳細はこちら]をご参照ください。",
-	"campaignevents-edit-success-msg": "登録内容が編集されました。[[$1|イベントページ]]をご参照ください。",
-	"campaignevents-enable-registration-success-msg": "登録ができます。[[$1|イベントページ]]で参加登録ができるようになりました。",
 	"campaignevents-edit-invalid-id": "有効なイベントIDを入力してください。",
 	"campaignevents-edit-no-event-id-provided": "有効なイベントIDを入力してください。",
 	"campaignevents-edit-event-notfound": "このIDを持つイベントは存在しません。",

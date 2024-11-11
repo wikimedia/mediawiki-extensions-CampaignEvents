@@ -94,8 +94,6 @@
 	"campaignevents-enable-registration-form-submit": "Activar inscripciones",
 	"campaignevents-edit-form-submit": "Editar inscripciones",
 	"campaignevents-edit-form-notice": "Solo se recopilarán los nombres de usuario/a de quienes participan durante en el momento del registro. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Más información].",
-	"campaignevents-edit-success-msg": "Se ha editado la inscripción. Ver [[$1|la página del evento]].",
-	"campaignevents-enable-registration-success-msg": "Las inscripciones están abiertas. Las personas participantes pueden registrarse en la [[$1|página del evento]].",
 	"campaignevents-edit-invalid-id": "Proporciona un código identificador válido para el evento.",
 	"campaignevents-edit-no-event-id-provided": "Proporciona un código identificador para el evento.",
 	"campaignevents-edit-event-notfound": "No existe ningún evento con ese código identificador.",

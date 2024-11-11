@@ -51,8 +51,6 @@
 	"campaignevents-edit-field-chat-url-help": "หากคุณมีกลุ่มแชตออนไลน์สำหรับผู้มีส่วนร่วมในกิจกรรม คุณสามารถใส่ลิงก์เชิญได้ที่นี่ ผู้มีส่วนร่วมจะสามารถเห็นลิงก์ได้หลังลงทะเบียนกิจกรรมแล้ว",
 	"campaignevents-enable-registration-form-submit": "เปิดใช้งานการลงทะเบียน",
 	"campaignevents-edit-form-submit": "แก้ไขการลงทะเบียน",
-	"campaignevents-edit-success-msg": "แก้ไขการลงทะเบียนแล้ว ดู[[$1|หน้ากิจกรรม]]",
-	"campaignevents-enable-registration-success-msg": "เปิดใช้งานการลงทะเบียนแล้ว ผู้เข้าร่วมสามารถลงทะเบียนได้ที่[[$1|หน้ากิจกรรม]]",
 	"campaignevents-edit-invalid-id": "ระบุ ID กิจกรรมที่ถูกต้อง",
 	"campaignevents-edit-no-event-id-provided": "ระบุ ID เหตุการณ์",
 	"campaignevents-edit-event-notfound": "ไม่มีกิจกรรมที่มี ID นี้",

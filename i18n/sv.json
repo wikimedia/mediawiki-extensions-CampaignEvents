@@ -55,8 +55,6 @@
 	"campaignevents-enable-registration-form-submit": "Aktivera registrering",
 	"campaignevents-edit-form-submit": "Redigera registrering",
 	"campaignevents-edit-form-notice": "Endast användarnamn kommer samlas in från deltagarna under registreringen. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Läs mer].",
-	"campaignevents-edit-success-msg": "Registreringen har redigerats. Se [[$1|evenemangssida]].",
-	"campaignevents-enable-registration-success-msg": "Registrering har aktiverats. Deltagare kan nu registrera sig på [[$1|evenemangssidan]].",
 	"campaignevents-edit-invalid-id": "Ange ett giltigt evenemangs-ID.",
 	"campaignevents-edit-no-event-id-provided": "Ange ett evenemangs-ID.",
 	"campaignevents-edit-event-notfound": "Det finns inget evenemang med det angivna ID:t.",

@@ -85,8 +85,6 @@
 	"campaignevents-enable-registration-form-submit": "Wezesha usajili",
 	"campaignevents-edit-form-submit": "Hariri usajili",
 	"campaignevents-edit-form-notice": "Majina ya watumiaji pekee ndiyo yatakusanywa kutoka kwa washiriki wakati wa usajili. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Pata maelezo zaidi].",
-	"campaignevents-edit-success-msg": "Usajili ulihaririwa. Tazama [[$1|event page]].",
-	"campaignevents-enable-registration-success-msg": "Usajili umewezeshwa. Washiriki sasa wanaweza kujiandikisha kwenye [[$1|event page]].",
 	"campaignevents-edit-invalid-id": "Toa kitambulisho sahihi cha tukio.",
 	"campaignevents-edit-no-event-id-provided": "Toa kitambulisho cha tukio.",
 	"campaignevents-edit-event-notfound": "Hakuna tukio lenye kitambulisho hiki.",

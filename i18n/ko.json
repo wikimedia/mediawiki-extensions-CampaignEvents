@@ -36,7 +36,6 @@
 	"campaignevents-edit-field-type-in-person": "대면 이벤트",
 	"campaignevents-edit-field-type-online-and-in-person": "온라인 및 대면 이벤트",
 	"campaignevents-edit-field-address": "주소",
-	"campaignevents-edit-success-msg": "등록이 편집되었습니다. [[$1|이벤트 페이지]]를 참고하십시오.",
 	"campaignevents-edit-invalid-id": "유효한 이벤트 ID를 지정하십시오.",
 	"campaignevents-edit-no-event-id-provided": "이벤트 ID를 지정하십시오.",
 	"campaignevents-edit-event-notfound": "이 ID에 해당하는 이벤트가 없습니다.",

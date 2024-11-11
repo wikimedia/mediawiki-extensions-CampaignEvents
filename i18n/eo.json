@@ -51,8 +51,6 @@
 	"campaignevents-edit-field-chat-url-help": "Se vi havas enretan babilejon por la partoprenantoj de ĉi tiu evento, vi povas aldoni la invitligon ĉi tie. Partoprenontoj povos vidi la invitligon post registriĝo.",
 	"campaignevents-enable-registration-form-submit": "Ebligi registriĝon",
 	"campaignevents-edit-form-submit": "Redakti registriĝon",
-	"campaignevents-edit-success-msg": "La registriĝo estis redaktita. Vidu [[$1|event page]].",
-	"campaignevents-enable-registration-success-msg": "Registrado estas ebligita. Partoprenontoj nun povas registriĝi sur la [[$1|event page]].",
 	"campaignevents-edit-invalid-id": "Provizu validan eventan ID-n.",
 	"campaignevents-edit-no-event-id-provided": "Provizu eventan ID-n.",
 	"campaignevents-edit-event-notfound": "Estas neniu evento kun ĉi tiu ID."

@@ -51,8 +51,6 @@
 	"campaignevents-edit-field-chat-url-help": "Ukaba ufise umurwi wo guhanahana ivyiyumviro w'abitabiye iki gikorwa, urashobora gushiramwo umurongo w'ubutumire hano. Abitabira bazoshobora kuraba ubutumire bahejeje kwiyandikisha.",
 	"campaignevents-enable-registration-form-submit": "Gushoboza kwiyandikisha mu gikorwa",
 	"campaignevents-edit-form-submit": "Guhinyanyura kwiyandikisha",
-	"campaignevents-edit-success-msg": "Ukwiyandikisha kwahinyanyuwe. Raba [[$1|urupapauro rw'igikorwa]].",
-	"campaignevents-enable-registration-success-msg": "Kwiyandikisha birashoboka. Ubu abitabira barashobora kwiyandikisha ku [[$1|urupapuro rw'igikorwa]].",
 	"campaignevents-edit-invalid-id": "Tanga indangakintu yo y'igikorwa.",
 	"campaignevents-edit-no-event-id-provided": "Tanga indangakintu y'igikorwa.",
 	"campaignevents-edit-event-notfound": "Nta gikorwa kiriho kuri ino ndangakintu.",

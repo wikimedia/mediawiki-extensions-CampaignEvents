@@ -33,8 +33,6 @@
 	"campaignevents-enable-registration-form-submit": "पंजीकरण सक्षम करें",
 	"campaignevents-edit-form-submit": "पंजीकरण संपादित करें",
 	"campaignevents-edit-form-notice": "पंजीकरण के समय हिस्सेदारों से सिर्फ सदस्यनाम प्राप्त किया जाएगा। [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration अधिक जानें]।",
-	"campaignevents-edit-success-msg": "पंजीकरण संपादित किया गया था। देखें [[$1|कार्यक्रम पृष्ठ]]।",
-	"campaignevents-enable-registration-success-msg": "पंजीकरण सक्षम है। प्रतिभागी अब [[$1|कार्यक्रम पृष्ठ]] पर पंजीकरण कर सकते हैं।",
 	"campaignevents-edit-invalid-id": "एक मान्य कार्यक्रम आईडी प्रदान करें।",
 	"campaignevents-edit-no-event-id-provided": "कार्यक्रम आईडी प्रदान करें।",
 	"campaignevents-edit-event-notfound": "इस आईडी के साथ कोई कार्यक्रम नहीं है।",

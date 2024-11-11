@@ -80,8 +80,6 @@
 	"campaignevents-enable-registration-form-submit": "Ativar inscrições",
 	"campaignevents-edit-form-submit": "Editar inscrição",
 	"campaignevents-edit-form-notice": "Apenas os nomes de usuário serão coletados dos participantes durante a inscrição.\n[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Saiba mais].",
-	"campaignevents-edit-success-msg": "A inscrição foi editada. Veja [[$1|página do evento]].",
-	"campaignevents-enable-registration-success-msg": "A inscrição está ativada. Os participantes agora podem se registrar na [[$1|página do evento]].",
 	"campaignevents-edit-invalid-id": "Forneça um ID de evento válido.",
 	"campaignevents-edit-no-event-id-provided": "Forneça um ID de evento.",
 	"campaignevents-edit-event-notfound": "Não há nenhum evento com este ID.",

@@ -77,8 +77,6 @@
 	"campaignevents-enable-registration-form-submit": "Kaydı etkinleştir",
 	"campaignevents-edit-form-submit": "Kaydı düzenle",
 	"campaignevents-edit-form-notice": "Kayıt sırasında katılımcılardan sadece kullanıcı adları alınacaktır. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Daha fazla bilgi edinin].",
-	"campaignevents-edit-success-msg": "Kayıt düzenlendi. Bkz. [[$1|etkinlik sayfası]].",
-	"campaignevents-enable-registration-success-msg": "Kayıt etkinleştirildi. Katılımcılar artık [[$1|etkinlik sayfasına]] kayıt olabilirler.",
 	"campaignevents-edit-invalid-id": "Geçerli bir etkinlik kimliği sağlayın.",
 	"campaignevents-edit-no-event-id-provided": "Bir etkinlik kimliği sağlayın.",
 	"campaignevents-edit-event-notfound": "Bu kimliğe sahip bir etkinlik yok.",

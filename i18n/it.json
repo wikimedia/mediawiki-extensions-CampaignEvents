@@ -37,7 +37,6 @@
 	"campaignevents-edit-field-country": "Nazione",
 	"campaignevents-edit-field-address": "Indirizzo",
 	"campaignevents-edit-field-chat-url": "Invito alla chat di gruppo",
-	"campaignevents-edit-success-msg": "La registrazione è stata modificata. Vedi la [[$1|pagina dell'evento]].",
 	"campaignevents-edit-no-organizers": "Gli eventi devono avere almeno un organizzatore. Aggiungi un organizzatore o cancella l'evento se non è più necessario.",
 	"campaignevents-edit-removed-creator": "Non puoi rimuovere $1 perché {{GENDER:$1|questo|questa}} utente è {{GENDER:$1|il creatore|la creatrice}} dell'evento",
 	"campaignevents-edit-too-many-organizers": "Non puoi aggiungere più di $1 {{PLURAL:$1|organizzatore|organizzatori}}.",

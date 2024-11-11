@@ -82,8 +82,6 @@
 	"campaignevents-enable-registration-form-submit": "Activar inscription",
 	"campaignevents-edit-form-submit": "Modificar inscription",
 	"campaignevents-edit-form-notice": "Solmente nomines de usator essera colligite de participantes durante le inscription. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Leger plus].",
-	"campaignevents-edit-success-msg": "Le inscription ha essite modificate. Vide le [[$1|pagina del evento]].",
-	"campaignevents-enable-registration-success-msg": "Le inscription ha essite activate. Participantes pote ora inscriber se sur le [[$1|pagina del evento]].",
 	"campaignevents-edit-invalid-id": "Forni un ID de evento valide.",
 	"campaignevents-edit-no-event-id-provided": "Forni un ID de evento.",
 	"campaignevents-edit-event-notfound": "Non existe un evento con iste ID.",

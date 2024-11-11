@@ -83,8 +83,6 @@
 	"campaignevents-enable-registration-form-submit": "Овозможи пријавување",
 	"campaignevents-edit-form-submit": "Измени пријавување",
 	"campaignevents-edit-form-notice": "При пријавата ќе се собираат само корисничките имиња на учесниците. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Дознајте повеќе].",
-	"campaignevents-edit-success-msg": "Пријавувањето е затворено. Погледајте ја [[$1|страницата за настанот]].",
-	"campaignevents-enable-registration-success-msg": "Пријавувањето е овозможено. Сега учесниците можат да се пријават на [[$1|страницата за настанот]].",
 	"campaignevents-edit-invalid-id": "Укажете важечка назнака за настан.",
 	"campaignevents-edit-no-event-id-provided": "Укажете назнака на настан.",
 	"campaignevents-edit-event-notfound": "Нема настан со таа назнака.",

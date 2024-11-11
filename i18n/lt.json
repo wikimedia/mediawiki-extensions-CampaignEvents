@@ -68,8 +68,6 @@
 	"campaignevents-enable-registration-form-submit": "Įgalinti registraciją",
 	"campaignevents-edit-form-submit": "Redaguoti registraciją",
 	"campaignevents-edit-form-notice": "Registracijos metu iš dalyvių bus renkami tik naudotojo vardai. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Sužinokite daugiau].",
-	"campaignevents-edit-success-msg": "Registracija buvo pakeista. Žiūrėkite [[$1|įvykio puslapį]].",
-	"campaignevents-enable-registration-success-msg": "Registracija įjungta. Dalyviai dabar gali registruotis [[$1|įvykio puslapyje]].",
 	"campaignevents-edit-invalid-id": "Pateikite galiojantį įvykio ID.",
 	"campaignevents-edit-no-event-id-provided": "Pateikite įvykio ID.",
 	"campaignevents-edit-event-notfound": "Nėra įvykio su šiuo ID.",
