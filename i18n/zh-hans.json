@@ -8,7 +8,8 @@
 			"Xyb",
 			"沈澄心",
 			"Midleading",
-			"ZhaoFJx"
+			"ZhaoFJx",
+			"Diskdance"
 		]
 	},
 	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
@@ -24,7 +25,7 @@
 	"campaignevents-error-page-not-found": "没有具有该名称的活动页面。",
 	"campaignevents-error-page-not-event-namespace": "活动页面必须在{{ns:event}}命名空间下。",
 	"campaignevents-error-page-with-section": "活动页面不得包含章节链接。",
-	"campaignevents-error-invalid-chat-url": "请输入有效的聊天 URL。",
+	"campaignevents-error-invalid-chat-url": "请输入有效的聊天URL。",
 	"campaignevents-error-invalid-status": "请表明活动状态是开放还是关闭。",
 	"campaignevents-error-empty-start": "请选择一个开始时间。",
 	"campaignevents-error-invalid-start": "活动开始时间无效。",
