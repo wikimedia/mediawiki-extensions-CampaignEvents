@@ -172,5 +172,6 @@
 	"campaignevents-event-details-tab-event-details": "Деталі події",
 	"campaignevents-event-details-tab-stats": "Статистика відповідей",
 	"campaignevents-details-stats-no-responses": "Ця подія не має відповідей від учасників для зведення.",
-	"campaignevents-details-stats-not-ready": "Відповіді учасників будуть зведені та незабаром доступні тут."
+	"campaignevents-details-stats-not-ready": "Відповіді учасників будуть зведені та незабаром доступні тут.",
+	"campaignevents-invitation-list-error-not-organizer": "Введіть сторінку події, на якій ви вказані як організатор."
 }

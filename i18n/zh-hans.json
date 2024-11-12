@@ -8,7 +8,8 @@
 			"Wzl19371",
 			"Xyb",
 			"ZhaoFJx",
-			"沈澄心"
+			"沈澄心",
+			"Diskdance"
 		]
 	},
 	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
@@ -29,7 +30,7 @@
 	"campaignevents-error-page-not-found": "没有具有该名称的活动页面。",
 	"campaignevents-error-page-not-event-namespace": "活动页面必须在{{ns:event}}命名空间下。",
 	"campaignevents-error-page-with-section": "活动页面不得包含章节链接。",
-	"campaignevents-error-invalid-chat-url": "请输入有效的聊天 URL。",
+	"campaignevents-error-invalid-chat-url": "请输入有效的聊天URL。",
 	"campaignevents-error-trackingtool-without-eventid": "请在跟踪工具上提供活动标识符。",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "请提供跟踪工具标识符。",
 	"campaignevents-error-invalid-trackingtool": "请提供有效的跟踪工具标识符。",
@@ -68,6 +69,7 @@
 	"campaignevents-edit-field-organizers-creator-title": "这是活动创建者，其他组织者不能移除该用户。",
 	"campaignevents-edit-field-organizers-user-not-allowed": "该{{GENDER:$1|用户}}不被允许组织活动。",
 	"campaignevents-edit-field-tracking-tools": "计划与活动面板链接",
+	"campaignevents-edit-field-tracking-tools-help": "公开注册的参与者的用户名将自动发送到仪表板。此工具可帮助您监控参与者的贡献并衡量活动的影响。[https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard 了解更多]。",
 	"campaignevents-edit-field-tracking-tools-placeholder": "输入计划与活动面板的网页链接",
 	"campaignevents-edit-field-meeting-type": "活动会议类型",
 	"campaignevents-edit-field-type-online": "线上活动",
@@ -182,6 +184,7 @@
 	"campaignevents-eventpage-register-dialog-title": "报名活动",
 	"campaignevents-eventpage-register-dialog-title-edit": "编辑报名",
 	"campaignevents-eventpage-enableheader-organizer": "您是筹办人员",
+	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>活动页面</strong>: 启用注册，以便参与者可以直接在页面上注册您的活动。",
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "关闭",
 	"eventdetails": "活动详情",
 	"campaignevents-event-details-label": "活动详情",
