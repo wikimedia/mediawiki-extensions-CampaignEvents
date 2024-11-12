@@ -228,6 +228,9 @@
 	"campaignevents-eventpage-register-dialog-title": "Пријава за настан",
 	"campaignevents-eventpage-register-dialog-title-edit": "Измена на пријава",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Приватност на зачленувањето",
+	"campaignevents-eventpage-registration-enabled-notification": "Пријавувањето е овозможено. Учесниците сега можат да се пријават на страницата на настанот.",
+	"campaignevents-eventpage-registration-updated-notification-list": "Овој настан е вклучен на <strong>[[Special:AllEvents|Списокот на соработки]]</strong>.",
+	"campaignevents-eventpage-registration-edit-notification": "Информациите за пријава се подновени.",
 	"campaignevents-eventpage-enableheader-organizer": "Вие сте приредувач",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Страница за настан</strong>: овозможете пријавување за учесниците да можат да се пријават за вашиот настан непосредно на страницата.",
 	"campaignevents-eventpage-enableheader-button-label": "Овозможи пријавување",
@@ -474,7 +477,7 @@
 	"campaignevents-invitationlist-recommended": "Препорачани за канење",
 	"campaignevents-invitationlist-recommended-info": "Овие уредници средно се котираат на списокот со покани, но сепак би можело да се заинтересирани да ви се приклучат во вашата активност.",
 	"campaignevents-invitationlist-worklist-label": "Погл. список на статии",
-	"campaignevents-event-details-footer": "Посетете го <strong>[[ Special:AllEvents|Списокот на соработки]]</strong> за да најдете повеќе настани и заедници.",
+	"campaignevents-event-details-footer": "Посетете го <strong>[[Special:AllEvents|Списокот на соработки]]</strong> за да најдете повеќе настани и заедници.",
 	"campaignevents-invitationlist-preference": "Вклучи ме на [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списокот со покани].",
 	"prefs-campaignevents-invitations": "Список со покани"
 }

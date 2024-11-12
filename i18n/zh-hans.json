@@ -6,6 +6,7 @@
 			"Kishinsagi",
 			"LittlePaw365",
 			"Midleading",
+			"Stang",
 			"Wzl19371",
 			"Xyb",
 			"ZhaoFJx",
@@ -267,5 +268,7 @@
 	"campaignevents-register-question-profession-organizer-label": "职业",
 	"campaignevents-details-stats-few-answers-option": "小于 $1",
 	"campaignevents-details-stats-range-number": "$1和$2之间",
-	"campaignevents-details-stats-range-percentage": "$1和$2之间"
+	"campaignevents-details-stats-range-percentage": "$1和$2之间",
+	"campaignevents-invitationlist-preference": "将我添加到[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀请名单]中。",
+	"prefs-campaignevents-invitations": "邀请名单"
 }
