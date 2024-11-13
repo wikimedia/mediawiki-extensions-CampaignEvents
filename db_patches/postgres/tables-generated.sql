@@ -188,3 +188,13 @@ CREATE TABLE ce_invitation_list_users (
 CREATE INDEX ce_invitation_list_users_ceil_id ON ce_invitation_list_users (ceilu_ceil_id);
 
 CREATE INDEX ce_invitation_list_users_ceilu_user_id ON ce_invitation_list_users (ceilu_user_id);
+
+
+CREATE TABLE ce_event_wikis (
+  ceew_id BIGSERIAL NOT NULL,
+  ceew_event_id BIGINT NOT NULL,
+  ceew_wiki TEXT NOT NULL,
+  PRIMARY KEY(ceew_id)
+);
+
+CREATE UNIQUE INDEX ce_event_wikis_event_id_wiki ON ce_event_wikis (ceew_event_id, ceew_wiki);

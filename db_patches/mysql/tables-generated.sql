@@ -169,3 +169,12 @@ CREATE TABLE /*_*/ce_invitation_list_users (
   INDEX ce_invitation_list_users_ceilu_user_id (ceilu_user_id),
   PRIMARY KEY(ceilu_id)
 ) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_event_wikis (
+  ceew_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceew_event_id BIGINT UNSIGNED NOT NULL,
+  ceew_wiki VARBINARY(64) NOT NULL,
+  UNIQUE INDEX ce_event_wikis_event_id_wiki (ceew_event_id, ceew_wiki),
+  PRIMARY KEY(ceew_id)
+) /*$wgDBTableOptions*/;
