@@ -47,5 +47,13 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-add-ce_invitation_list_users.sql",
 			true
 		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_event_wikis',
+			"$dir/$dbType/patch-add-ce_event_wikis.sql",
+			true
+		] );
 	}
 }
