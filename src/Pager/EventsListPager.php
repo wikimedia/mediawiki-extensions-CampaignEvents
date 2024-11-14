@@ -8,10 +8,12 @@ use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
@@ -23,6 +25,8 @@ use MediaWiki\Pager\ReverseChronologicalPager;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\Utils\MWTimestamp;
+use MediaWiki\WikiMap\WikiMap;
+use OOUI\Exception;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use stdClass;
@@ -35,6 +39,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		EventPagerTrait::getSubqueryInfo as getDefaultSubqueryInfo;
 	}
 
+	private const DISPLAYED_WIKI_COUNT = 3;
 	private UserLinker $userLinker;
 	private CampaignsPageFactory $campaignsPageFactory;
 	private PageURLResolver $pageURLResolver;
@@ -42,6 +47,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private LinkBatchFactory $linkBatchFactory;
 	private UserOptionsLookup $userOptionsLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
+	private WikiLookup $wikiLookup;
+	private EventWikisStore $eventWikisStore;
 
 	private string $search;
 	/** One of the EventRegistration::MEETING_TYPE_* constants */
@@ -60,6 +67,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $extraOrganizers = [];
 	/** @var array<int,int> Maps event ID to the total number of organizers of that event. */
 	private array $organizerCounts = [];
+	/** @var array<int,string[]|true> Maps event ID to all wikis assigned to the event. */
+	private array $eventWikis = [];
 
 	public function __construct(
 		UserLinker $userLinker,
@@ -70,6 +79,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		UserOptionsLookup $userOptionsLookup,
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsCentralUserLookup $centralUserLookup,
+		WikiLookup $wikiLookup,
+		EventWikisStore $eventWikisStore,
 		string $search,
 		?int $meetingType,
 		string $startDate,
@@ -97,6 +108,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->getDateRangeCond( $startDate, $endDate );
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderTimestamp = '';
+		$this->wikiLookup = $wikiLookup;
+		$this->eventWikisStore = $eventWikisStore;
 	}
 
 	/**
@@ -108,6 +121,8 @@ class EventsListPager extends ReverseChronologicalPager {
 			$eventIDs[] = (int)$row->event_id;
 		}
 		$result->seek( 0 );
+
+		$this->eventWikis = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
 
 		$this->creators = $this->organizerStore->getEventCreators(
 			$eventIDs,
@@ -237,6 +252,11 @@ class EventsListPager extends ReverseChronologicalPager {
 				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
 			] )
 		);
+		if ( $this->eventWikis[$row->event_id] ) {
+			$detailContainer->appendContent(
+				$this->getWikiList( $row->event_id )
+			);
+		}
 		$detailContainer->appendContent(
 			new TextWithIconWidget( [
 				'icon' => 'userRights',
@@ -445,5 +465,53 @@ class EventsListPager extends ReverseChronologicalPager {
 		} catch ( TimestampException $ex ) {
 			return null;
 		}
+	}
+
+	private function getWikiList( string $eventID ): TextWithIconWidget {
+		$eventWikis = $this->eventWikis[(int)$eventID];
+
+		if ( $eventWikis === EventRegistration::ALL_WIKIS ) {
+			$wikiName = [ $this->msg( 'campaignevents-eventslist-all-wikis' )->text() ];
+			return $this->getWikiListWidget( $eventID, $wikiName );
+		}
+		$currentWikiId = WikiMap::getCurrentWikiId();
+		if ( array_key_exists( $currentWikiId, $eventWikis ) ) {
+			unset( $eventWikis[$currentWikiId] );
+			array_unshift( $eventWikis, $currentWikiId );
+		}
+		return $this->getWikiListWidget( $eventID, $eventWikis );
+	}
+
+	/**
+	 * @param string $eventID
+	 * @param string[] $eventWikis
+	 * @return TextWithIconWidget
+	 * @throws Exception
+	 */
+	public function getWikiListWidget( string $eventID, array $eventWikis ): TextWithIconWidget {
+		$language = $this->getLanguage();
+		$displayedWikiNames = $this->wikiLookup->getLocalizedNames(
+			array_slice( $eventWikis, 0, self::DISPLAYED_WIKI_COUNT )
+		);
+		$wikiCount = count( $eventWikis );
+		$escapedWikiNames = [];
+		foreach ( $displayedWikiNames as $name ) {
+			$escapedWikiNames[] = htmlspecialchars( $name );
+		}
+
+		if ( $wikiCount > self::DISPLAYED_WIKI_COUNT ) {
+			$escapedWikiNames[] = $this->getLinkRenderer()->makeKnownLink(
+				SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, $eventID ),
+				$this->msg( 'campaignevents-eventslist-wikis-more' )
+					->numParams( $wikiCount - self::DISPLAYED_WIKI_COUNT )
+					->text()
+			);
+		}
+		return new TextWithIconWidget( [
+			'icon' => $this->wikiLookup->getWikiIcon( $eventWikis ),
+			'content' => new HtmlSnippet( $language->listToText( $escapedWikiNames ) ),
+			'label' => $this->msg( 'campaignevents-eventslist-wiki-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+		] );
 	}
 }

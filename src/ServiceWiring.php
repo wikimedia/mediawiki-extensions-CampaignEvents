@@ -198,7 +198,9 @@ return [
 			$services->get( UserLinker::SERVICE_NAME ),
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->getUserOptionsLookup(),
-			$services->get( CampaignsCentralUserLookup::SERVICE_NAME )
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( WikiLookup::SERVICE_NAME ),
+			$services->get( EventWikisStore::SERVICE_NAME )
 		);
 	},
 	EventPageDecoratorFactory::SERVICE_NAME =>

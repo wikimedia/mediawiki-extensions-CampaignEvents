@@ -40,6 +40,7 @@ class SpecialAllEvents extends SpecialPage {
 			'ext.campaignEvents.specialPages.styles',
 			'oojs-ui.styles.icons-location',
 			'oojs-ui.styles.icons-interactions',
+			'oojs-ui.styles.icons-wikimedia',
 			'oojs-ui.styles.icons-user',
 			'oojs-ui.styles.icons-editing-advanced'
 		] );

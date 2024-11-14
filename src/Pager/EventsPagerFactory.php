@@ -7,11 +7,13 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\User\Options\UserOptionsLookup;
@@ -27,6 +29,8 @@ class EventsPagerFactory {
 	private OrganizersStore $organiserStore;
 	private UserOptionsLookup $userOptionsLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
+	private WikiLookup $wikiLookup;
+	private EventWikisStore $eventWikisStore;
 
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
@@ -36,7 +40,9 @@ class EventsPagerFactory {
 		UserLinker $userLinker,
 		OrganizersStore $organiserStore,
 		UserOptionsLookup $userOptionsLookup,
-		CampaignsCentralUserLookup $centralUserLookup
+		CampaignsCentralUserLookup $centralUserLookup,
+		WikiLookup $wikiLookup,
+		EventWikisStore $eventWikisStore
 	) {
 		$this->databaseHelper = $databaseHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -46,6 +52,8 @@ class EventsPagerFactory {
 		$this->organiserStore = $organiserStore;
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->wikiLookup = $wikiLookup;
+		$this->eventWikisStore = $eventWikisStore;
 	}
 
 	/**
@@ -92,6 +100,8 @@ class EventsPagerFactory {
 			$this->userOptionsLookup,
 			$this->databaseHelper,
 			$this->centralUserLookup,
+			$this->wikiLookup,
+			$this->eventWikisStore,
 			$search,
 			$meetingType,
 			$startDate,

@@ -497,5 +497,8 @@
 	"campaignevents-event-details-footer": "Visit the <strong>[[Special:AllEvents|Collaboration list]]</strong> to find more events and communities.",
 	"campaignevents-invitationlist-preference": "Include me in [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation lists].",
 	"prefs-campaignevents-invitations": "Invitation lists",
-	"campaignevents-eventpage-btn-collaboration-list": "Find more events"
+	"campaignevents-eventslist-all-wikis": "This event is open to all wikis.",
+	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|more}}",
+	"campaignevents-eventpage-btn-collaboration-list": "Find more events",
+	"campaignevents-eventslist-wiki-label": "Wikis"
 }
