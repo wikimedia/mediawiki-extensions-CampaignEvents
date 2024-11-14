@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -376,6 +377,11 @@ return [
 			$wgConf,
 			$services->getMainWANObjectCache(),
 			RequestContext::getMain()
+		);
+	},
+	EventWikisStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventWikisStore {
+		return new EventWikisStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
 ];
