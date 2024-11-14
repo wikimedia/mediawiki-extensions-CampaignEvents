@@ -84,6 +84,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['name'],
 			$eventPage,
 			$eventData['chat_url'],
+			[ 'awiki', 'bwiki' ],
 			[
 				new TrackingToolAssociation(
 					self::TRACKING_TOOL_DB_ID,

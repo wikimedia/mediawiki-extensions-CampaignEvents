@@ -102,6 +102,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			new MWPageProxy( $page, $page->getTitle()->getPrefixedText() ),
 			null,
 			[],
+			[],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20240229120000',

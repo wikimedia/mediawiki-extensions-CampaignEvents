@@ -23,6 +23,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'name' => 'Name',
 			'page' => $this->createMock( ICampaignsPage::class ),
 			'chat' => 'https://chat.example.org',
+			'wikis' => [ 'awiki', 'bwiki' ],
 			'tracking_tools' => [
 				new TrackingToolAssociation(
 					1,
@@ -53,6 +54,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @covers ::getName
 	 * @covers ::getPage
 	 * @covers ::getChatURL
+	 * @covers ::getWikis
 	 * @covers ::getTrackingTools
 	 * @covers ::getStatus
 	 * @covers ::getTimezone
@@ -74,6 +76,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['name'], $registration->getName(), 'name' );
 		$this->assertSame( $data['page'], $registration->getPage(), 'page' );
 		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
+		$this->assertSame( $data['wikis'], $registration->getWikis(), 'wikis' );
 		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
 		$this->assertSame( $data['status'], $registration->getStatus(), 'status' );
 		$this->assertSame( $data['timezone']->getName(), $registration->getTimezone()->getName(), 'timezone' );

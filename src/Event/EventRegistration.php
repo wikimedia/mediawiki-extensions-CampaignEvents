@@ -23,6 +23,8 @@ class EventRegistration {
 	public const TYPE_GENERIC = 'generic';
 	public const VALID_TYPES = [ self::TYPE_GENERIC ];
 
+	public const ALL_WIKIS = true;
+
 	public const MEETING_TYPE_ONLINE = 1 << 0;
 	public const MEETING_TYPE_IN_PERSON = 1 << 1;
 	public const MEETING_TYPE_ONLINE_AND_IN_PERSON = self::MEETING_TYPE_ONLINE | self::MEETING_TYPE_IN_PERSON;
@@ -40,6 +42,8 @@ class EventRegistration {
 	private string $name;
 	private ICampaignsPage $page;
 	private ?string $chatURL;
+	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
+	private $wikis;
 	/**
 	 * @var TrackingToolAssociation[]
 	 * @phan-var list<TrackingToolAssociation>
@@ -68,6 +72,7 @@ class EventRegistration {
 	 * @param string $name
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
+	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string $status
@@ -89,6 +94,7 @@ class EventRegistration {
 		string $name,
 		ICampaignsPage $page,
 		?string $chatURL,
+		$wikis,
 		array $trackingTools,
 		string $status,
 		DateTimeZone $timezone,
@@ -123,6 +129,7 @@ class EventRegistration {
 		$this->name = $name;
 		$this->page = $page;
 		$this->chatURL = $chatURL;
+		$this->wikis = $wikis;
 		$this->trackingTools = $trackingTools;
 		$this->status = $status;
 		$this->timezone = $timezone;
@@ -165,6 +172,13 @@ class EventRegistration {
 	 */
 	public function getChatURL(): ?string {
 		return $this->chatURL;
+	}
+
+	/**
+	 * @return string[]|true A list of wiki IDs, or {@see self::ALL_WIKIS}.
+	 */
+	public function getWikis() {
+		return $this->wikis;
 	}
 
 	/**

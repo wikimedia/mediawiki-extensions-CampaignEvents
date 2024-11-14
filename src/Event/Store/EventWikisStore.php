@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 
 /**
  * This class abstracts access to the ce_event_wikis DB table.
@@ -12,7 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
  */
 class EventWikisStore {
 	public const SERVICE_NAME = 'CampaignEventsEventWikisStore';
-	public const ALL_WIKIS = '*all*';
+	public const ALL_WIKIS_DB_VALUE = '*all*';
 
 	private CampaignsDatabaseHelper $dbHelper;
 
@@ -29,25 +30,47 @@ class EventWikisStore {
 	 * Retrieves all wikis (ceew_wiki) associated with a specific event ID.
 	 *
 	 * @param int $eventID
-	 * @return array
+	 * @return string[]|true List of wiki IDs or {@see EventRegistration::ALL_WIKIS}
 	 */
-	public function getEventWikis( int $eventID ): array {
-		$dbw = $this->dbHelper->getDBConnection( DB_REPLICA );
-		$queryBuilder = $dbw->newSelectQueryBuilder();
-		return $queryBuilder->select( 'ceew_wiki' )
+	public function getEventWikis( int $eventID ) {
+		return $this->getEventWikisMulti( [ $eventID ] )[$eventID];
+	}
+
+	/**
+	 * Retrieves all wikis associated with the given events.
+	 *
+	 * @param int[] $eventIDs
+	 * @return array<int,string[]|true> Maps event ID to a list of wiki IDs or {@see EventRegistration::ALL_WIKIS}
+	 */
+	public function getEventWikisMulti( array $eventIDs ): array {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$queryBuilder = $dbr->newSelectQueryBuilder();
+		$res = $queryBuilder->select( [ 'ceew_event_id', 'ceew_wiki' ] )
 			->from( 'ce_event_wikis' )
-			->where( [ 'ceew_event_id' => $eventID ] )
+			->where( [ 'ceew_event_id' => $eventIDs ] )
 			->caller( __METHOD__ )
-			->fetchFieldValues();
+			->fetchResultSet();
+
+		$wikisByEvent = array_fill_keys( $eventIDs, [] );
+		foreach ( $res as $row ) {
+			$curEvent = $row->ceew_event_id;
+			$storedWiki = $row->ceew_wiki;
+			if ( $storedWiki === self::ALL_WIKIS_DB_VALUE ) {
+				$wikisByEvent[$curEvent] = EventRegistration::ALL_WIKIS;
+			} else {
+				$wikisByEvent[$curEvent][] = $storedWiki;
+			}
+		}
+		return $wikisByEvent;
 	}
 
 	/**
 	 * Adds wikis for a specific event ID.
 	 *
-	 * @param array $eventWikis An array of wikis to add, the special value `*all*` to indicate all wikis
 	 * @param int $eventID The event ID to associate these wikis with.
+	 * @param string[]|true $eventWikis An array of wiki IDs to add, or {@see EventRegistration::ALL_WIKIS}
 	 */
-	public function addOrUpdateEventWikis( array $eventWikis, int $eventID ): void {
+	public function addOrUpdateEventWikis( int $eventID, $eventWikis ): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();
@@ -56,29 +79,30 @@ class EventWikisStore {
 			->where( [ 'ceew_event_id' => $eventID ] )
 			->caller( __METHOD__ )
 			->fetchFieldValues();
-		// Calculate the wikis to remove and add using array_diff
-		$wikisToRemove = array_diff( $currentEventWikis, $eventWikis );
-		$wikisToAdd = array_diff( $eventWikis, $currentEventWikis );
 
-		// only remove wikis if there are wikis to remove
+		$newWikisForDB = $eventWikis === EventRegistration::ALL_WIKIS
+			? [ self::ALL_WIKIS_DB_VALUE ]
+			: $eventWikis;
+
+		$wikisToRemove = array_diff( $currentEventWikis, $newWikisForDB );
+		$wikisToAdd = array_diff( $newWikisForDB, $currentEventWikis );
+
 		if ( count( $wikisToRemove ) > 0 ) {
 			$deleteQueryBuilder = $dbw->newDeleteQueryBuilder();
 			$deleteQueryBuilder->delete( 'ce_event_wikis' )
 				->where( [ 'ceew_event_id' => $eventID ] )
 				->caller( __METHOD__ );
 
-			// If $eventWikis is empty or is ['*all*'] and there are wikis to remove
-			// it means we need to remove all the current ones, so this where is not needed
-			if ( count( $eventWikis ) > 0 && !in_array( self::ALL_WIKIS, $eventWikis, true ) ) {
+			// When changing the value to "all wikis", we can remove everything about the old state.
+			if ( $eventWikis !== EventRegistration::ALL_WIKIS ) {
 				$deleteQueryBuilder->andWhere( [ 'ceew_wiki' => $wikisToRemove ] );
 			}
 			$deleteQueryBuilder->execute();
 		}
 
-		// add wikis if there are wikis to add
 		if ( count( $wikisToAdd ) > 0 ) {
 			$rows = [];
-			foreach ( $eventWikis as $wiki ) {
+			foreach ( $wikisToAdd as $wiki ) {
 				$rows[] = [
 					'ceew_event_id' => $eventID,
 					'ceew_wiki' => $wiki
@@ -89,9 +113,8 @@ class EventWikisStore {
 			$insertQueryBuilder->insertInto( 'ce_event_wikis' )
 				->ignore()
 				->rows( $rows )
-				->caller( __METHOD__ );
-
-			$insertQueryBuilder->execute();
+				->caller( __METHOD__ )
+				->execute();
 		}
 	}
 }
