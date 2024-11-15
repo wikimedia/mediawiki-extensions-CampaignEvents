@@ -79,7 +79,8 @@ class EventListPagerTest extends MediaWikiIntegrationTestCase {
 			null,
 			$searchStartStr,
 			$searchToStr,
-			$showOngoing
+			$showOngoing,
+			[]
 		);
 		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
 	}

@@ -599,7 +599,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Special\\SpecialAllEvents",
 			"services": [
 				"CampaignEventsEventsPagerFactory",
-				"CampaignEventsHookRunner"
+				"CampaignEventsHookRunner",
+				"CampaignEventsWikiLookup"
 			]
 		},
 		"EventDetails": {

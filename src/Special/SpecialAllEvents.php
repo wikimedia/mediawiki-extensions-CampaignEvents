@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -17,17 +18,22 @@ class SpecialAllEvents extends SpecialPage {
 	private EventsPagerFactory $eventsPagerFactory;
 
 	private CampaignEventsHookRunner $hookRunner;
+	private WikiLookup $wikiLookup;
 
 	/**
 	 * @param EventsPagerFactory $eventsPagerFactory
 	 * @param CampaignEventsHookRunner $hookRunner
+	 * @param WikiLookup $wikiLookup
 	 */
 	public function __construct(
-		EventsPagerFactory $eventsPagerFactory, CampaignEventsHookRunner $hookRunner
+		EventsPagerFactory $eventsPagerFactory,
+		CampaignEventsHookRunner $hookRunner,
+		WikiLookup $wikiLookup
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventsPagerFactory = $eventsPagerFactory;
 		$this->hookRunner = $hookRunner;
+		$this->wikiLookup = $wikiLookup;
 	}
 
 	/**
@@ -56,8 +62,8 @@ class SpecialAllEvents extends SpecialPage {
 	public function getFormAndEvents(): string {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
+		$filterWiki = $request->getArray( 'wpFilterWikis', [] );
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
-
 		$rawStartTime = $request->getVal( 'wpStartDate', (string)time() );
 		$startTime = $rawStartTime === '' ? '' : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
 		$rawEndTime = $request->getVal( 'wpEndDate', '' );
@@ -79,7 +85,8 @@ class SpecialAllEvents extends SpecialPage {
 			$meetingType,
 			$startTime,
 			$endTime,
-			$showOngoing
+			$showOngoing,
+			$filterWiki
 		);
 
 		$formDescriptor = [
@@ -132,6 +139,16 @@ class SpecialAllEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-filter-field'
 			],
 		];
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
+			$formDescriptor['FilterWikis'] = [
+				'type' => 'multiselect',
+				'dropdown' => true,
+				'label-message' => 'campaignevents-allevents-label-filter-wikis',
+				'options' => $this->wikiLookup->getListForSelect(),
+				'placeholder-message' => 'campaignevents-allevents-placeholder-add-wikis',
+				'max' => 10
+			];
+		}
 		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
 			->setWrapperLegendMsg( 'campaignevents-allevents-filter-legend' )
 			->setSubmitTextMsg( 'campaignevents-allevents-label-submit' )
