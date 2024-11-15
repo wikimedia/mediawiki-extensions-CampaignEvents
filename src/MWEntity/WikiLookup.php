@@ -33,6 +33,10 @@ class WikiLookup {
 		return array_values( array_unique( $this->siteConfig->getLocalDatabases() ) );
 	}
 
+	/**
+	 * @return array<string,string> That maps localized names to wiki IDs, suitable for use
+	 * in multiselect widgets.
+	 */
 	public function getListForSelect(): array {
 		return $this->cache->getWithSetCallback(
 			$this->cache->makeGlobalKey( 'CampaignEvents-WikiList' ),
@@ -42,7 +46,7 @@ class WikiLookup {
 	}
 
 	private function computeListForSelect(): array {
-		return $this->getLocalizedNames( $this->getAllWikis() );
+		return array_flip( $this->getLocalizedNames( $this->getAllWikis() ) );
 	}
 
 	public function getLocalizedNames( array $wikiIDs ): array {

@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
@@ -36,7 +37,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		TrackingToolRegistry $trackingToolRegistry,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		CampaignEventsHookRunner $hookRunner,
-		PageURLResolver $pageURLResolver
+		PageURLResolver $pageURLResolver,
+		WikiLookup $wikiLookup
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -51,7 +53,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$trackingToolRegistry,
 			$eventQuestionsRegistry,
 			$hookRunner,
-			$pageURLResolver
+			$pageURLResolver,
+			$wikiLookup
 		);
 	}
 

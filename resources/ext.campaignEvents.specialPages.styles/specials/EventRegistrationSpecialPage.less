@@ -1,4 +1,23 @@
 /* Common styles for Special:EnableEventRegistration and Special:EditEventRegistration */
+@import 'mediawiki.mixins.less';
+
+div.ext-campaignevents-edit-wikis-input.oo-ui-fieldLayout {
+	// Make the field appear as a sub-field of the radio selector, keeping the
+	// label for accessibility.
+	margin-top: 0;
+	margin-left: 2em;
+
+	> .oo-ui-fieldLayout-body > .oo-ui-fieldLayout-header label {
+		.mixin-screen-reader-text();
+	}
+}
+
+html.client-js .ext-campaignevents-edit-wikis-input.oo-ui-checkboxMultiselectInputWidget {
+	// Limit the height of the checkbox multiselect while the field is being infused, to avoid
+	// flooding the interface with potentially hundreds of wikis.
+	max-height: 20px;
+	overflow: hidden;
+}
 
 .ext-campaignevents-eventregistration-notice-plain.oo-ui-messageWidget {
 	font-weight: normal;

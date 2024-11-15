@@ -41,7 +41,7 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 		$localWikis = [ 'foowiki', 'barwiki' ];
 		$lookup = $this->getLookup( $localWikis );
 		$this->assertSame(
-			[ 'foowiki' => '(project-localized-name-foowiki)', 'barwiki' => '(project-localized-name-barwiki)' ],
+			[ '(project-localized-name-foowiki)' => 'foowiki', '(project-localized-name-barwiki)' => 'barwiki' ],
 			$lookup->getListForSelect()
 		);
 	}

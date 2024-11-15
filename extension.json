@@ -538,7 +538,8 @@
 				"CampaignEventsTrackingToolRegistry",
 				"CampaignEventsEventQuestionsRegistry",
 				"CampaignEventsHookRunner",
-				"CampaignEventsPageURLResolver"
+				"CampaignEventsPageURLResolver",
+				"CampaignEventsWikiLookup"
 			]
 		},
 		"EditEventRegistration": {
@@ -554,7 +555,8 @@
 				"CampaignEventsTrackingToolRegistry",
 				"CampaignEventsEventQuestionsRegistry",
 				"CampaignEventsHookRunner",
-				"CampaignEventsPageURLResolver"
+				"CampaignEventsPageURLResolver",
+				"CampaignEventsWikiLookup"
 			]
 		},
 		"DeleteEventRegistration": {

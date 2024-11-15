@@ -20,6 +20,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
@@ -51,6 +52,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	public const REGISTRATION_UPDATED_SESSION_UPDATED = 2;
 	public const REGISTRATION_UPDATED_WARNINGS_SESSION_KEY = 'campaignevents-registration-updated-warnings';
 
+	private const WIKI_TYPE_NONE = 1;
+	private const WIKI_TYPE_ALL = 2;
+	private const WIKI_TYPE_SPECIFIC = 3;
+
 	/** @var array<string,string> */
 	private array $formMessages;
 	protected IEventLookup $eventLookup;
@@ -64,6 +69,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private CampaignEventsHookRunner $hookRunner;
 	private PageURLResolver $pageUrlResolver;
+	private WikiLookup $wikiLookup;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -95,7 +101,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		TrackingToolRegistry $trackingToolRegistry,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		CampaignEventsHookRunner $hookRunner,
-		PageURLResolver $pageURLResolver
+		PageURLResolver $pageURLResolver,
+		WikiLookup $wikiLookup
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -109,6 +116,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->hookRunner = $hookRunner;
 		$this->pageUrlResolver = $pageURLResolver;
+		$this->wikiLookup = $wikiLookup;
 
 		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->formMessages = $this->getFormMessages();
@@ -295,6 +303,41 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			},
 			'section' => self::DETAILS_SECTION,
 		];
+
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
+			$eventWikis = $this->event ? $this->event->getWikis() : [];
+			if ( $eventWikis === [] ) {
+				$defaultWikiType = self::WIKI_TYPE_NONE;
+			} elseif ( $eventWikis === EventRegistration::ALL_WIKIS ) {
+				$defaultWikiType = self::WIKI_TYPE_ALL;
+			} else {
+				$defaultWikiType = self::WIKI_TYPE_SPECIFIC;
+			}
+			$formFields['WikiType'] = [
+				'type' => 'radio',
+				'label-message' => 'campaignevents-edit-field-wiki-type',
+				'options-messages' => [
+					'campaignevents-edit-field-wiki-type-none' => self::WIKI_TYPE_NONE,
+					'campaignevents-edit-field-wiki-type-all' => self::WIKI_TYPE_ALL,
+					'campaignevents-edit-field-wiki-type-specific' => self::WIKI_TYPE_SPECIFIC,
+				],
+				'default' => $defaultWikiType,
+				'required' => true,
+				'section' => self::DETAILS_SECTION,
+			];
+			$formFields['Wikis'] = [
+				'type' => 'multiselect',
+				'dropdown' => true,
+				'label-message' => 'campaignevents-edit-field-wikis-label',
+				'default' => is_array( $eventWikis ) ? $eventWikis : [],
+				'options' => $this->wikiLookup->getListForSelect(),
+				'placeholder-message' => 'campaignevents-edit-field-wikis-placeholder',
+				'help-message' => 'campaignevents-edit-field-wikis-help',
+				'hide-if' => [ '!==', 'WikiType', (string)self::WIKI_TYPE_SPECIFIC ],
+				'cssclass' => 'ext-campaignevents-edit-wikis-input',
+				'section' => self::DETAILS_SECTION,
+			];
+		}
 
 		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
 		if ( $availableTrackingTools ) {
@@ -571,12 +614,25 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			}
 		}
 
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
+			$wikiType = (int)$data['WikiType'];
+			if ( $wikiType === self::WIKI_TYPE_ALL ) {
+				$wikis = EventRegistration::ALL_WIKIS;
+			} elseif ( $wikiType === self::WIKI_TYPE_NONE ) {
+				$wikis = [];
+			} else {
+				$wikis = $data['Wikis'];
+			}
+		} else {
+			$wikis = [];
+		}
+
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
 				$data['EventChatURL'],
-				[],
+				$wikis,
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
