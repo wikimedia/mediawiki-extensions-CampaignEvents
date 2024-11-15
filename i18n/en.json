@@ -22,6 +22,8 @@
 	"campaignevents-error-page-not-found": "There is no event page with this name.",
 	"campaignevents-error-page-not-event-namespace": "The event page must be in the {{ns:event}} namespace.",
 	"campaignevents-error-page-with-section": "The event page must not contain a section name.",
+	"campaignevents-error-too-many-wikis": "Enter a maximum of {{PLURAL:$1|one wiki|$1 wikis}}.",
+	"campaignevents-error-invalid-wikis": "The following wiki IDs are not recognized: $1.",
 	"campaignevents-error-invalid-chat-url": "Enter a valid chat URL.",
 	"campaignevents-error-trackingtool-without-eventid": "Provide the identifier of the event on the given tracking tool.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Provide the identifier of the tracking tool",
