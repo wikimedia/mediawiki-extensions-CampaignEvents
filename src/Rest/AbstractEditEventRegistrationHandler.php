@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -12,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
@@ -35,22 +37,18 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	private OrganizersStore $organizersStore;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	protected EventQuestionsRegistry $eventQuestionsRegistry;
+	protected WikiLookup $wikiLookup;
+	protected bool $eventWikisEnabled;
 
-	/**
-	 * @param EventFactory $eventFactory
-	 * @param PermissionChecker $permissionChecker
-	 * @param EditEventCommand $editEventCommand
-	 * @param OrganizersStore $organizersStore
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
 		EditEventCommand $editEventCommand,
 		OrganizersStore $organizersStore,
 		CampaignsCentralUserLookup $centralUserLookup,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		WikiLookup $wikiLookup,
+		Config $config
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
@@ -58,6 +56,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->organizersStore = $organizersStore;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->wikiLookup = $wikiLookup;
+		$this->eventWikisEnabled = $config->get( 'CampaignEventsEnableEventWikis' );
 	}
 
 	/**
@@ -124,7 +124,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @return array
 	 */
 	public function getBodyParamSettings(): array {
-		return [
+		$params = [
 			'event_page' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'title',
@@ -187,6 +187,19 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 		] + $this->getTokenParamDefinition();
+
+		if ( $this->eventWikisEnabled ) {
+			$params['wikis'] = [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),
+				ParamValidator::PARAM_ISMULTI => true,
+				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_WIKIS,
+				ParamValidator::PARAM_ALL => true,
+				ParamValidator::PARAM_REQUIRED => true,
+			];
+		}
+
+		return $params;
 	}
 
 	/**

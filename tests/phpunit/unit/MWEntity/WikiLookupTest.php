@@ -31,6 +31,12 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $localWikis, $lookup->getAllWikis() );
 	}
 
+	public function testGetAllWikis__duplicates() {
+		$localWikis = [ 'foowiki', 'foowiki', 'barwiki' ];
+		$lookup = $this->getLookup( $localWikis );
+		$this->assertSame( [ 'foowiki', 'barwiki' ], $lookup->getAllWikis() );
+	}
+
 	public function testGetListForSelect() {
 		$localWikis = [ 'foowiki', 'barwiki' ];
 		$lookup = $this->getLookup( $localWikis );
