@@ -4,6 +4,7 @@
 			"Къарачайлы"
 		]
 	},
+	"nstab-event": "Болуу",
 	"campaignevents-eventpage-header-timezone": "<strong>Заман беллик:</strong> $1",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|къошулуучу}} таша халда регистрация этилгенди.",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Заман беллик:</strong> $1",
