@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -36,6 +37,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'id' => 42,
 		'page' => 'Event:Some event page title',
 		'chat' => 'https://chaturl.example.org',
+		'wikis' => [ 'aawiki' ],
 		'trackingid' => null,
 		'trackingeventid' => null,
 		'status' => EventRegistration::STATUS_OPEN,
@@ -62,6 +64,18 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		MWTimestamp::setFakeTime( self::TEST_TIME );
 	}
 
+	/**
+	 * @return string[] A list of wiki IDs that are considered valid within this test class. This is guaranteed to be
+	 * a list of all possible "XYwiki" combinations, and is provided for convenience.
+	 */
+	private static function getValidWikis(): array {
+		$validWikis = [];
+		for ( $prefix = 'aa'; $prefix !== 'aaa'; $prefix++ ) {
+			$validWikis[] = $prefix . 'wiki';
+		}
+		return $validWikis;
+	}
+
 	private function getEventFactory(
 		?CampaignsPageFactory $campaignsPageFactory = null
 	): EventFactory {
@@ -77,12 +91,52 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->with( $this->logicalNot( $this->equalTo( self::VALID_TRACKING_TOOL ) ) )
 			->willThrowException( $this->createMock( ToolNotFoundException::class ) );
 		$questionsRegistry = new EventQuestionsRegistry( true );
+
+		$wikiLookup = $this->createMock( WikiLookup::class );
+		$wikiLookup->method( 'getAllWikis' )->willReturn( self::getValidWikis() );
+
 		return new EventFactory(
 			$campaignsPageFactory,
 			$this->createMock( CampaignsPageFormatter::class ),
 			$trackingToolRegistry,
-			$questionsRegistry
+			$questionsRegistry,
+			$wikiLookup
 		);
+	}
+
+	/**
+	 * Internal helper for testing ::newEvent.
+	 *
+	 * @param array $factoryArgs
+	 * @param array|null $expectedErrors Array of expected error keys, or null to expect success.
+	 * @param CampaignsPageFactory|null $campaignsPageFactory
+	 * @return EventRegistration The newly created object when successful, else null.
+	 */
+	private function doTestWithArgs(
+		array $factoryArgs,
+		?array $expectedErrors,
+		?CampaignsPageFactory $campaignsPageFactory = null
+	): ?EventRegistration {
+		$factory = $this->getEventFactory( $campaignsPageFactory );
+		$ex = null;
+
+		try {
+			$event = $factory->newEvent( ...$factoryArgs );
+		} catch ( InvalidEventDataException $ex ) {
+		}
+
+		if ( !$expectedErrors ) {
+			$this->assertNull(
+				$ex,
+				'Should have succeeded, got exception with status: ' . ( $ex ? $ex->getStatus() : '' )
+			);
+		} else {
+			$this->assertNotNull( $ex, 'Should throw an exception' );
+			$statusErrorKeys = array_map( static fn ( $msg ) => $msg->getKey(), $ex->getStatus()->getMessages() );
+			$this->assertSame( $expectedErrors, $statusErrorKeys, 'Error messages should match' );
+		}
+
+		return $event ?? null;
 	}
 
 	/**
@@ -103,25 +157,8 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		array $factoryArgs,
 		?CampaignsPageFactory $campaignsPageFactory = null
 	) {
-		$factory = $this->getEventFactory( $campaignsPageFactory );
-		$ex = null;
-
-		try {
-			$factory->newEvent( ...$factoryArgs );
-		} catch ( InvalidEventDataException $ex ) {
-		}
-
-		if ( !$expectedErrorKey ) {
-			$this->assertNull(
-				$ex,
-				'Should have succeeded, got exception with status: ' . ( $ex ? $ex->getStatus() : '' )
-			);
-		} else {
-			$this->assertNotNull( $ex, 'Should throw an exception' );
-			$statusErrorKeys = array_map( fn ( $msg ) => $msg->getKey(), $ex->getStatus()->getMessages() );
-			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
-			$this->assertSame( $expectedErrorKey, $statusErrorKeys[0], 'Error message should match' );
-		}
+		$expectedErrors = $expectedErrorKey ? [ $expectedErrorKey ] : null;
+		$this->doTestWithArgs( $factoryArgs, $expectedErrors, $campaignsPageFactory );
 	}
 
 	public function provideEventData(): Generator {
@@ -366,17 +403,8 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideInvalidTimezones
 	 */
 	public function testNewEvent__invalidTimezone( string $timezone ) {
-		$factory = $this->getEventFactory();
 		$factoryArgs = self::getTestDataWithDefault( [ 'timezone' => $timezone ] );
-
-		try {
-			$factory->newEvent( ...$factoryArgs );
-			$this->fail( 'Should throw an exception' );
-		} catch ( InvalidEventDataException $ex ) {
-			$statusErrorKeys = array_map( fn ( $msg ) => $msg->getKey(), $ex->getStatus()->getMessages() );
-			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
-			$this->assertSame( 'campaignevents-error-invalid-timezone', $statusErrorKeys[0] );
-		}
+		$this->doTestWithArgs( $factoryArgs, [ 'campaignevents-error-invalid-timezone' ] );
 	}
 
 	public static function provideInvalidTimezones(): array {
@@ -425,30 +453,9 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideURLs
 	 */
 	public function testURLValidation( string $url, bool $expectedValid ) {
-		$factory = $this->getEventFactory();
 		$args = self::getTestDataWithDefault( [ 'chat' => $url ] );
-		$ex = null;
-
-		try {
-			$factory->newEvent( ...$args );
-		} catch ( InvalidEventDataException $ex ) {
-		}
-
-		if ( $expectedValid ) {
-			$this->assertNull(
-				$ex,
-				'Should have succeeded; got exception with status: ' . ( $ex ? $ex->getStatus() : '' )
-			);
-		} else {
-			$this->assertNotNull( $ex, 'Should throw an exception' );
-			$statusErrorKeys = array_map( fn ( $msg ) => $msg->getKey(), $ex->getStatus()->getMessages() );
-			$this->assertCount( 1, $statusErrorKeys, 'Should only have 1 error' );
-			$this->assertSame(
-				'campaignevents-error-invalid-chat-url',
-				$statusErrorKeys[0],
-				'Error message should match'
-			);
-		}
+		$expectedErrors = $expectedValid ? null : [ 'campaignevents-error-invalid-chat-url' ];
+		$this->doTestWithArgs( $args, $expectedErrors );
 	}
 
 	public static function provideURLs(): array {
@@ -463,6 +470,54 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			'Valid, HTTPS' => [ "https://example.org", true ],
 			'Valid, relative protocol' => [ "//example.org", true ],
 			'Valid, diacritics url ' => [ "https://testchat.com/Iñtërnâtiônàlizætiønمثال字ッ", true ],
+		];
+	}
+
+	/**
+	 * @covers ::validateWikis
+	 * @dataProvider provideWikis
+	 */
+	public function testValidateWikis( $wikis, ?array $expectedErrors, $expectedWikis = null ) {
+		$args = self::getTestDataWithDefault( [ 'wikis' => $wikis ] );
+		$event = $this->doTestWithArgs( $args, $expectedErrors );
+		if ( $event ) {
+			$this->assertSame( $expectedWikis, $event->getWikis() );
+		}
+	}
+
+	public static function provideWikis(): Generator {
+		yield 'All wikis, valid' => [ EventRegistration::ALL_WIKIS, null, EventRegistration::ALL_WIKIS ];
+		yield 'One wiki, valid' => [ [ 'aawiki' ], null, [ 'aawiki' ] ];
+		yield 'Multiple unique wikis, valid' => [ [ 'aawiki', 'abwiki' ], null, [ 'aawiki', 'abwiki' ] ];
+		yield 'Multiple wikis with duplicates, valid' => [
+			[ 'aawiki', 'abwiki', 'aawiki', 'abwiki' ],
+			null,
+			[ 'aawiki', 'abwiki' ]
+		];
+		yield 'Duplicates are only counted once' => [
+			array_fill( 0, EventFactory::MAX_WIKIS * 2, 'aawiki' ),
+			null,
+			[ 'aawiki' ]
+		];
+		yield 'Too many wikis' => [
+			self::getValidWikis(),
+			[ 'campaignevents-error-too-many-wikis' ]
+		];
+		yield 'Valid and invalid wikis' => [
+			[ 'aawiki', 'doesnotexistwiki' ],
+			[ 'campaignevents-error-invalid-wikis' ]
+		];
+		yield 'Valid and invalid wikis with duplicates' => [
+			[ 'aawiki', 'doesnotexistwiki', 'aawiki', 'doesnotexistwiki' ],
+			[ 'campaignevents-error-invalid-wikis' ]
+		];
+		yield 'Only invalid wikis' => [
+			[ 'doesnotexistwiki', 'alsodoesnotexistwiki' ],
+			[ 'campaignevents-error-invalid-wikis' ]
+		];
+		yield 'Invalid and too many wikis' => [
+			[ 'doesnotexistwiki', ...self::getValidWikis() ],
+			[ 'campaignevents-error-too-many-wikis', 'campaignevents-error-invalid-wikis' ]
 		];
 	}
 

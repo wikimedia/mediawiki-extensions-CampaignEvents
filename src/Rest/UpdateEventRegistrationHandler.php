@@ -149,6 +149,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$existingEvent->getID(),
 			$body['event_page'],
 			$body['chat_url'],
+			[],
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$body['status'],

@@ -576,6 +576,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$this->eventID,
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
 				$data['EventChatURL'],
+				[],
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,

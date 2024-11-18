@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedSectionAnchorException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
@@ -24,6 +25,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Message\Message;
 use MediaWiki\Utils\MWTimestamp;
 use StatusValue;
+use Wikimedia\Message\ListType;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\RequestTimeout\TimeoutException;
 
@@ -32,27 +34,26 @@ class EventFactory {
 	public const VALIDATE_ALL = 0;
 	public const VALIDATE_SKIP_DATES_PAST = 1 << 0;
 
+	public const MAX_WIKIS = 100;
+
 	private CampaignsPageFactory $campaignsPageFactory;
 	private CampaignsPageFormatter $campaignsPageFormatter;
 	private TrackingToolRegistry $trackingToolRegistry;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
+	private WikiLookup $wikiLookup;
 
-	/**
-	 * @param CampaignsPageFactory $campaignsPageFactory
-	 * @param CampaignsPageFormatter $campaignsPageFormatter
-	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 */
 	public function __construct(
 		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsPageFormatter $campaignsPageFormatter,
 		TrackingToolRegistry $trackingToolRegistry,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		WikiLookup $wikiLookup
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
 		$this->trackingToolRegistry = $trackingToolRegistry;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->wikiLookup = $wikiLookup;
 	}
 
 	/**
@@ -61,6 +62,7 @@ class EventFactory {
 	 * @param int|null $id
 	 * @param string $pageTitleStr
 	 * @param string|null $chatURL
+	 * @param string[]|true $wikis List of wiki IDs, or {@see EventRegistration::ALL_WIKIS}
 	 * @param string|null $trackingToolUserID User identifier of a tracking tool
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
@@ -84,6 +86,7 @@ class EventFactory {
 		?int $id,
 		string $pageTitleStr,
 		?string $chatURL,
+		$wikis,
 		?string $trackingToolUserID,
 		?string $trackingToolEventID,
 		string $status,
@@ -117,6 +120,10 @@ class EventFactory {
 				$res->error( 'campaignevents-error-invalid-chat-url' );
 			}
 		}
+
+		$wikisStatus = $this->validateWikis( $wikis );
+		$res->merge( $wikisStatus );
+		$wikis = $wikisStatus->getValue();
 
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
 		$res->merge( $trackingToolStatus );
@@ -190,7 +197,7 @@ class EventFactory {
 			$this->campaignsPageFormatter->getText( $campaignsPage ),
 			$campaignsPage,
 			$chatURL,
-			[],
+			$wikis,
 			$trackingTools,
 			$status,
 			$timezoneObj,
@@ -242,6 +249,32 @@ class EventFactory {
 		}
 
 		return StatusValue::newGood( $campaignsPage );
+	}
+
+	/**
+	 * @param string[]|true $wikis
+	 * @return StatusValue Having a canonicalized list of wiki IDs as value.
+	 */
+	private function validateWikis( $wikis ): StatusValue {
+		if ( $wikis === EventRegistration::ALL_WIKIS ) {
+			return StatusValue::newGood( $wikis );
+		}
+
+		$wikis = array_unique( $wikis );
+		$ret = StatusValue::newGood( $wikis );
+		if ( count( $wikis ) > self::MAX_WIKIS ) {
+			$ret->error( 'campaignevents-error-too-many-wikis', Message::numParam( self::MAX_WIKIS ) );
+		}
+
+		$invalidWikis = array_diff( $wikis, $this->wikiLookup->getAllWikis() );
+		if ( $invalidWikis ) {
+			$ret->error(
+				'campaignevents-error-invalid-wikis',
+				Message::listParam( $invalidWikis, ListType::COMMA )
+			);
+		}
+
+		return $ret;
 	}
 
 	/**
