@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -45,7 +46,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			->willReturn( [ 'user-id' => self::TRACKING_TOOL_USER_ID ] );
 		return new GetEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$trackingToolRegistry
+			$trackingToolRegistry,
+			new HashConfig( [ 'CampaignEventsEnableEventWikis' => true ] )
 		);
 	}
 
@@ -63,6 +65,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'event_page' => $eventPageStr,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'chat_url' => 'https://some-chat.example.org',
+			'wikis' => [ 'awiki', 'bwiki' ],
 			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
 			'tracking_tool_event_id' => 'bar',
 			'status' => EventRegistration::STATUS_OPEN,
@@ -84,7 +87,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['name'],
 			$eventPage,
 			$eventData['chat_url'],
-			[ 'awiki', 'bwiki' ],
+			$eventData['wikis'],
 			[
 				new TrackingToolAssociation(
 					self::TRACKING_TOOL_DB_ID,

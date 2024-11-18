@@ -43,6 +43,10 @@
 		"CampaignEventsEnableEventInvitation": {
 			"description": "Flag to enable event invitation feature on a wiki",
 			"value": false
+		},
+		"CampaignEventsEnableEventWikis": {
+			"description": "Temporary flag to enable a feature that lets organizers specify the target wikis of an event.",
+			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
@@ -351,7 +355,9 @@
 				"CampaignEventsEditEventCommand",
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsEventQuestionsRegistry"
+				"CampaignEventsEventQuestionsRegistry",
+				"CampaignEventsWikiLookup",
+				"MainConfig"
 			]
 		},
 		{
@@ -360,7 +366,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsTrackingToolRegistry"
+				"CampaignEventsTrackingToolRegistry",
+				"MainConfig"
 			]
 		},
 		{
@@ -415,6 +422,8 @@
 				"CampaignEventsOrganizersStore",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventQuestionsRegistry",
+				"CampaignEventsWikiLookup",
+				"MainConfig",
 				"CampaignEventsEventLookup"
 			]
 		},

@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use LogicException;
+use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -13,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
@@ -28,15 +30,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 
 	private IEventLookup $eventLookup;
 
-	/**
-	 * @param EventFactory $eventFactory
-	 * @param PermissionChecker $permissionChecker
-	 * @param EditEventCommand $editEventCommand
-	 * @param OrganizersStore $organizersStore
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param IEventLookup $eventLookup
-	 */
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
@@ -44,6 +37,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		OrganizersStore $organizersStore,
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventQuestionsRegistry $eventQuestionsRegistry,
+		WikiLookup $wikiLookup,
+		Config $config,
 		IEventLookup $eventLookup
 	) {
 		parent::__construct(
@@ -52,7 +47,9 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$editEventCommand,
 			$organizersStore,
 			$centralUserLookup,
-			$eventQuestionsRegistry
+			$eventQuestionsRegistry,
+			$wikiLookup,
+			$config
 		);
 		$this->eventLookup = $eventLookup;
 	}
@@ -145,11 +142,15 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			}
 		}
 
+		$rawWikis = $body['wikis'] ?? [];
+		$allWikis = $this->wikiLookup->getAllWikis();
+		$wikis = $rawWikis === $allWikis ? EventRegistration::ALL_WIKIS : $rawWikis;
+
 		return $this->eventFactory->newEvent(
 			$existingEvent->getID(),
 			$body['event_page'],
 			$body['chat_url'],
-			[],
+			$wikis,
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$body['status'],

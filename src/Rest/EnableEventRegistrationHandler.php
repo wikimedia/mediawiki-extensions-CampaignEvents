@@ -58,11 +58,15 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 
 		$participantQuestionNames = $this->eventQuestionsRegistry->getAvailableQuestionNames();
 
+		$rawWikis = $body['wikis'] ?? [];
+		$allWikis = $this->wikiLookup->getAllWikis();
+		$wikis = $rawWikis === $allWikis ? EventRegistration::ALL_WIKIS : $rawWikis;
+
 		return $this->eventFactory->newEvent(
 			null,
 			$body['event_page'],
 			$body['chat_url'],
-			[],
+			$wikis,
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			EventRegistration::STATUS_OPEN,

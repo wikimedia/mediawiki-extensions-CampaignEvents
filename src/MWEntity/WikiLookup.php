@@ -30,7 +30,7 @@ class WikiLookup {
 	}
 
 	public function getAllWikis(): array {
-		return $this->siteConfig->getLocalDatabases();
+		return array_values( array_unique( $this->siteConfig->getLocalDatabases() ) );
 	}
 
 	public function getListForSelect(): array {
