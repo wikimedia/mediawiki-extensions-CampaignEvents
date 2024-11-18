@@ -208,7 +208,10 @@ class PotentialInviteesFinder {
 					$lastRevID = null;
 				}
 				$innerBatchIdx++;
-				sleep( 1 );
+				if ( !defined( 'MW_PHPUNIT_TEST' ) ) {
+					// Sleep after every batch to avoid putting too much load on DB servers with the revision queries.
+					sleep( 1 );
+				}
 			} while ( $res->numRows() >= $batchSize );
 			$pageBatchIdx++;
 		}
