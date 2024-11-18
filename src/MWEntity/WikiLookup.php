@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Config\SiteConfiguration;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MessageLocalizer;
 use Wikimedia\ObjectCache\WANObjectCache;
 
@@ -59,5 +60,50 @@ class WikiLookup {
 			$ret[$dbname] = $localizedNameMsg->exists() ? $localizedNameMsg->text() : $dbname;
 		}
 		return $ret;
+	}
+
+	/**
+	 * This code will not behave as expected outside of production, if we require something more
+	 * robust, we can steal the sitematrix implementation which uses values from $wgConf
+	 * @param string[]|true $wikiIDs
+	 * @return string
+	 */
+	public function getWikiIcon( $wikiIDs ): string {
+		$defaultIcon = 'logoWikimedia';
+		if ( $wikiIDs === EventRegistration::ALL_WIKIS ) {
+			return $defaultIcon;
+		}
+		// The 'wiki' is order sensitive as it is a final fall-through case
+		$wikiIcons = [
+			'commonswiki' => 'logoWikimediaCommons',
+			'metawiki' => 'logoMetaWiki',
+			'wikibooks' => 'logoWikibooks',
+			'wikidatawiki' => 'logoWikidata',
+			'wikifunctionswiki' => 'logoWikifunctions',
+			'wikinews' => 'logoWikinews',
+			'wikiquote' => 'logoWikiquote',
+			'wikisource' => 'logoWikisource',
+			'specieswiki' => 'logoWikispecies',
+			'wikiversity' => 'logoWikiversity',
+			'wikivoyage' => 'logoWikivoyage',
+			'wiktionary' => 'logoWiktionary',
+			'officewiki' => 'logoWikimedia',
+			'mediawikiwiki' => 'logoMediaWiki',
+			'wiki' => 'logoWikipedia',
+		];
+		$matchedSuffixes = [];
+		foreach ( $wikiIDs as $dbname ) {
+			foreach ( array_keys( $wikiIcons ) as $suffix ) {
+				if ( str_ends_with( $dbname, $suffix ) ) {
+					$matchedSuffixes[$suffix] = true;
+					break;
+				}
+			}
+		}
+		if ( count( $matchedSuffixes ) !== 1 ) {
+			return $defaultIcon;
+		}
+		$foundSuffix = key( $matchedSuffixes );
+		return $wikiIcons[$foundSuffix];
 	}
 }

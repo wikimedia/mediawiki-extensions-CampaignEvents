@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MWEntity;
 
 use MediaWiki\Config\SiteConfiguration;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWikiUnitTestCase;
@@ -54,5 +55,42 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 			'barwiki' => '(project-localized-name-barwiki)'
 		];
 		$this->assertSame( $expectedLocalized, $lookup->getLocalizedNames( array_keys( $expectedLocalized ) ) );
+	}
+
+	/**
+	 * @param string[]|true $wikis
+	 * @param string $expectedIcon
+	 * @dataProvider provideWikiIconData
+	 * @return void
+	 */
+	public function testGetWikiIcon( $wikis, string $expectedIcon ) {
+		$lookup = $this->getLookup( [] );
+		$this->assertSame( $expectedIcon, $lookup->getWikiIcon( $wikis ) );
+	}
+
+	public static function provideWikiIconData(): array {
+		return [
+			'Mixed wikis' => [
+				[ 'acommonswiki', 'anothercommonswiki', 'awikidatawiki' ],
+				'logoWikimedia'
+			],
+			'All wikis' => [
+				EventRegistration::ALL_WIKIS,
+				'logoWikimedia'
+			],
+			'Single wikiGroup' => [
+				[ 'acommonswiki', 'anothercommonswiki', 'adifferentcommonswiki' ],
+				'logoWikimediaCommons'
+			],
+			'Wikipedia family' => [
+				[ 'enwiki', 'frwiki', 'eswiki' ],
+				'logoWikipedia'
+			],
+			'Unknown wikis' => [
+				[ 'foo', 'bar', 'baz' ],
+				'logoWikimedia'
+			],
+			'No wikis' => [ [], 'logoWikimedia' ],
+		];
 	}
 }
