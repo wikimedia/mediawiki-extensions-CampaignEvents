@@ -120,6 +120,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 			$this->titleFormatter->getText( $new ),
 			$newEventPage,
 			$registration->getChatURL(),
+			$registration->getWikis(),
 			$registration->getTrackingTools(),
 			$registration->getStatus(),
 			$registration->getTimezone(),

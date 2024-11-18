@@ -190,6 +190,7 @@ class EventFactory {
 			$this->campaignsPageFormatter->getText( $campaignsPage ),
 			$campaignsPage,
 			$chatURL,
+			[],
 			$trackingTools,
 			$status,
 			$timezoneObj,
