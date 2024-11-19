@@ -18,6 +18,7 @@
 	"campaignevents-eventpage-register-dialog-save": "Ruõkk",
 	"campaignevents-event-details-edit-button": "Muuʹtt",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
+	"campaignevents-event-details-participants": "Õõʹnninõmm",
 	"campaignevents-event-details-remove-participant-remove-btn": "Jaukkâd",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Jõõsk",
 	"campaignevents-userlink-deleted-user": "jaukkuum õõʹnni"

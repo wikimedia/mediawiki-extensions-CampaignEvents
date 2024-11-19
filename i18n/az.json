@@ -22,6 +22,8 @@
 	"campaignevents-error-page-not-found": "Bu adda tədbir səhifəsi yoxdur.",
 	"campaignevents-error-page-not-event-namespace": "Tədbir səhifəsi {{ns:event}} ad fəzasında olmalıdır.",
 	"campaignevents-error-page-with-section": "Tədbir səhifəsində bölmə adı olmamalıdır.",
+	"campaignevents-error-too-many-wikis": "Maksimum {{PLURAL:$1|1 viki|$1 viki}} əlavə edin",
+	"campaignevents-error-invalid-wikis": "Aşağıdakı viki identifikatorları tanınmır: $1.",
 	"campaignevents-error-invalid-chat-url": "Etibarlı söhbət URL-i daxil edin.",
 	"campaignevents-error-trackingtool-without-eventid": "Verilmiş izləmə alətində tədbirin identifikatorunu təqdim edin.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "İzləmə vasitəsinin identifikatorunu təqdim edin",

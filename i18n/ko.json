@@ -16,6 +16,7 @@
 	"campaignevents-error-page-not-found": "이 이름에 해당하는 이벤트가 없습니다.",
 	"campaignevents-error-page-not-event-namespace": "이벤트 페이지는 {{ns:event}} 이름공간에 있어야 합니다.",
 	"campaignevents-error-page-with-section": "이벤트 페이지는 섹션 이름을 포함할 수 없습니다.",
+	"campaignevents-error-invalid-wikis": "다음 위키 ID가 인식되지 않습니다: $1.",
 	"campaignevents-error-invalid-chat-url": "유효한 채팅 URL을 입력하십시오.",
 	"campaignevents-error-invalid-status": "이벤트가 열려 있는지, 아니면 닫혀 있는지를 표시합니다.",
 	"campaignevents-error-empty-start": "시작 시간을 선택하십시오.",
