@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -60,6 +61,7 @@ class EventDetailsModule {
 	private ITextFormatter $msgFormatter;
 	private CampaignEventsHookRunner $hookRunner;
 	private PermissionChecker $permissionChecker;
+	private WikiLookup $wikiLookup;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -70,6 +72,7 @@ class EventDetailsModule {
 	 * @param TrackingToolRegistry $trackingToolRegistry
 	 * @param CampaignEventsHookRunner $hookRunner
 	 * @param PermissionChecker $permissionChecker
+	 * @param WikiLookup $wikiLookup
 	 * @param ExistingEventRegistration $registration
 	 * @param Language $language
 	 */
@@ -82,6 +85,7 @@ class EventDetailsModule {
 		TrackingToolRegistry $trackingToolRegistry,
 		CampaignEventsHookRunner $hookRunner,
 		PermissionChecker $permissionChecker,
+		WikiLookup $wikiLookup,
 		ExistingEventRegistration $registration,
 		Language $language
 	) {
@@ -93,6 +97,7 @@ class EventDetailsModule {
 
 		$this->hookRunner = $hookRunner;
 		$this->permissionChecker = $permissionChecker;
+		$this->wikiLookup = $wikiLookup;
 		$this->registration = $registration;
 		$this->language = $language;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
@@ -137,8 +142,8 @@ class EventDetailsModule {
 			$wikiID,
 			$organizersCount
 		);
+		// TDB Rename this column since it is not only the "organizer column"
 		$organizersColumn = $this->getOrganizersColumn( $out, $organizersCount );
-
 		$this->hookRunner->onCampaignEventsGetEventDetails(
 			$infoColumn,
 			$organizersColumn,
@@ -148,11 +153,18 @@ class EventDetailsModule {
 			$isLocalWiki
 		);
 
-		$contentWrapper->appendContent( $infoColumn, $organizersColumn );
+		// TDB remove the feature flag after it passes QA
+		if ( $out->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
+			$eventWikis = $this->getEventWikisSection( $out );
+			if ( $eventWikis !== null ) {
+				$organizersColumn->appendContent( $eventWikis );
+			}
+		}
 
 		$footer = $this->getFooter();
+		$contentWrapper->appendContent( $infoColumn, $organizersColumn, $footer );
 		return new PanelLayout( [
-			'content' => [ $header, $contentWrapper, $footer ],
+			'content' => [ $header, $contentWrapper ],
 			'padded' => true,
 			'framed' => true,
 			'expanded' => false,
@@ -388,6 +400,51 @@ class EventDetailsModule {
 		);
 
 		return ( new Tag( 'div' ) )->appendContent( $organizersSection );
+	}
+
+	/**
+	 * @param OutputPage $out
+	 * @return ?Tag
+	 */
+	private function getEventWikisSection( OutputPage $out ): ?Tag {
+		$eventWikis = $this->registration->getWikis();
+
+		if ( $eventWikis === ExistingEventRegistration::ALL_WIKIS ) {
+			$eventWikisContent = Html::element(
+				'span',
+				[],
+				$out->msg( 'campaignevents-event-details-wikis-all' )->text()
+			);
+		} elseif ( count( $eventWikis ) > 0 ) {
+			$currentWikiId = WikiMap::getCurrentWikiId();
+			$curWikiKey = array_search( $currentWikiId, $eventWikis, true );
+			if ( $curWikiKey !== false ) {
+				unset( $eventWikis[ $curWikiKey ] );
+				array_unshift( $eventWikis, $currentWikiId );
+			}
+
+			$eventWikiNames = $this->wikiLookup->getLocalizedNames( $eventWikis );
+			$eventWikisListItems = '';
+			foreach ( $eventWikiNames as $eventWiki ) {
+				$eventWikisListItems .= Html::element( 'li', [], $eventWiki );
+			}
+			$eventWikisContent = Html::rawElement(
+				'ul',
+				[ 'class' => 'ext-campaignevents-eventdetails-event-wikis-list' ],
+				$eventWikisListItems
+			);
+		} else {
+			return null;
+		}
+
+		$wikiIcon = $this->wikiLookup->getWikiIcon( $eventWikis );
+		$eventWikisSection = self::makeSection(
+			$wikiIcon,
+			new HtmlSnippet( $eventWikisContent ),
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-wikis-header' ) )
+		);
+
+		return ( new Tag( 'div' ) )->appendContent( $eventWikisSection );
 	}
 
 	/**

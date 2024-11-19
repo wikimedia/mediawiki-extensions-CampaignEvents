@@ -274,6 +274,8 @@
 	"campaignevents-event-details-chat-link": "Heading used on [[Special:EventDetails]] for a section that contains an invite link to a chat group.",
 	"campaignevents-event-details-chat-link-not-available": "Message used on [[Special:EventDetails]] when the event has no chat group that participants can join.",
 	"campaignevents-event-details-organizers-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of organizers.",
+	"campaignevents-event-details-wikis-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of wikis.",
+	"campaignevents-event-details-wikis-all": "Message used on [[Special:EventDetails]] for events that are open to all wikis.",
 	"campaignevents-event-details-register-prompt": "Message used on [[Special:EventDetails]] to inform the user that they need to register in order to see a piece of information.",
 	"campaignevents-event-details-view-event-page": "Label of a button used on [[Special:EventDetails]]. By clicking, the event page will open.",
 	"campaignevents-event-details-participants": "Label text for participant column on participants table",
