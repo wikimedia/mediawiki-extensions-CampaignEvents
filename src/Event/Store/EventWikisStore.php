@@ -16,14 +16,14 @@ class EventWikisStore {
 	public const ALL_WIKIS_DB_VALUE = '*all*';
 
 	private CampaignsDatabaseHelper $dbHelper;
+	private bool $featureEnabled;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 */
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper
+		CampaignsDatabaseHelper $dbHelper,
+		bool $featureEnabled
 	) {
 		$this->dbHelper = $dbHelper;
+		$this->featureEnabled = $featureEnabled;
 	}
 
 	/**
@@ -43,6 +43,11 @@ class EventWikisStore {
 	 * @return array<int,string[]|true> Maps event ID to a list of wiki IDs or {@see EventRegistration::ALL_WIKIS}
 	 */
 	public function getEventWikisMulti( array $eventIDs ): array {
+		$wikisByEvent = array_fill_keys( $eventIDs, [] );
+		if ( !$this->featureEnabled ) {
+			return $wikisByEvent;
+		}
+
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$queryBuilder = $dbr->newSelectQueryBuilder();
 		$res = $queryBuilder->select( [ 'ceew_event_id', 'ceew_wiki' ] )
@@ -51,7 +56,6 @@ class EventWikisStore {
 			->caller( __METHOD__ )
 			->fetchResultSet();
 
-		$wikisByEvent = array_fill_keys( $eventIDs, [] );
 		foreach ( $res as $row ) {
 			$curEvent = $row->ceew_event_id;
 			$storedWiki = $row->ceew_wiki;
@@ -71,6 +75,9 @@ class EventWikisStore {
 	 * @param string[]|true $eventWikis An array of wiki IDs to add, or {@see EventRegistration::ALL_WIKIS}
 	 */
 	public function addOrUpdateEventWikis( int $eventID, $eventWikis ): void {
+		if ( !$this->featureEnabled ) {
+			return;
+		}
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();

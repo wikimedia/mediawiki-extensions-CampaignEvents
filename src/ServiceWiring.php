@@ -383,7 +383,8 @@ return [
 	},
 	EventWikisStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventWikisStore {
 		return new EventWikisStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getMainConfig()->get( 'CampaignEventsEnableEventWikis' )
 		);
 	},
 ];
