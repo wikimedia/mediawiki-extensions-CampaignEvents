@@ -23,6 +23,8 @@
 	"campaignevents-error-page-not-found": "Нема страница за настан со тоа име.",
 	"campaignevents-error-page-not-event-namespace": "Страницата за настанот мора да биде во именскиот простор {{ns:event}}.",
 	"campaignevents-error-page-with-section": "Страницата за настанот не треба да содржи има на оддел.",
+	"campaignevents-error-too-many-wikis": "Внесете највеќе {{PLURAL:$1|едно вики|$1 викија}}.",
+	"campaignevents-error-invalid-wikis": "Следниве викиназнаки не се препознаени: $1.",
 	"campaignevents-error-invalid-chat-url": "Внесете важечка URL-адреса за разговорот.",
 	"campaignevents-error-trackingtool-without-eventid": "Укажете ја назнаката за настанот на дадената следечка алатка.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Укажете ја назнаката на следечката алатка",
