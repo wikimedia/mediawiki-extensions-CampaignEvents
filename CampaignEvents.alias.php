@@ -67,3 +67,17 @@ $specialPageAliases['pl'] = [
 	'MyInvitationLists' => [ 'Moje_listy_zaproszeń' ],
 	'InvitationList' => [ 'Lista_zaproszeń' ],
 ];
+
+$specialPageAliases['pt'] = [
+	'EnableEventRegistration' => [ 'Ativar_inscrições_em_evento' ],
+	'DeleteEventRegistration' => [ 'Eliminar_inscrições_em_evento' ],
+	'EditEventRegistration' => [ 'Editar_inscrições_em_evento' ],
+	'RegisterForEvent' => [ 'Registrar_em_evento' ],
+	'CancelEventRegistration' => [ 'Cancelar_registro_de_evento' ],
+	'MyEvents' => [ 'Seus_eventos' ],
+	'EventDetails' => [ 'Detalhes_do_evento' ],
+	'AllEvents' => [ 'Todos_os_eventos' ],
+	'GenerateInvitationList' => [ 'Gerar_lista_de_convites' ],
+	'MyInvitationLists' => [ 'Minhas_listas_de_convites' ],
+	'InvitationList' => [ 'Lista_de_convites' ],
+];

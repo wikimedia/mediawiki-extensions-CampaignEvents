@@ -46,3 +46,8 @@ $namespaceNames['pl'] = [
 	NS_EVENT => 'Wydarzenie',
 	NS_EVENT_TALK => 'Dyskusja_wydarzenia',
 ];
+
+$namespaceNames['pt'] = [
+	NS_EVENT => 'Evento',
+	NS_EVENT_TALK => 'Evento_Discussão',
+];
