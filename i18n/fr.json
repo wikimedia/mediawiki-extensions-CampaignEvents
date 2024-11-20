@@ -41,6 +41,8 @@
 	"campaignevents-error-page-not-found": "Il n’y a aucune page d’événement avec ce nom.",
 	"campaignevents-error-page-not-event-namespace": "La page d’événement doit se trouver dans l’espace de noms {{ns:event}}.",
 	"campaignevents-error-page-with-section": "La page de l’événement ne doit contenir aucun nom de section.",
+	"campaignevents-error-too-many-wikis": "Indiquez un maximum de {{PLURAL:$1|un wiki|$1 wikis}}.",
+	"campaignevents-error-invalid-wikis": "Les identifiants wiki suivants ne sont pas reconnus : $1.",
 	"campaignevents-error-invalid-chat-url": "Saisissez une URL de discussion en direct valide.",
 	"campaignevents-error-trackingtool-without-eventid": "Fournissez l’identifiant de l’événement sur l’outil de suivi donné.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Fournissez l’identifiant de l’outil de suivi",
@@ -80,6 +82,13 @@
 	"campaignevents-edit-field-organizers-placeholder": "Ajouter un nom d’utilisateur",
 	"campaignevents-edit-field-organizers-creator-title": "Il s’agit du créateur de l’événement, les autres organisateurs ne peuvent pas supprimer cet utilisateur.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Cet{{GENDER:$1||te}} utilisat{{GENDER:$1|eur|rice}} n'est pas autorisé{{GENDER:$1||e}} à organiser des événements.",
+	"campaignevents-edit-field-wiki-type": "Cet événement porte-t-il sur des wikis spécifiques ?",
+	"campaignevents-edit-field-wiki-type-none": "Pas de wikis spécifiques",
+	"campaignevents-edit-field-wiki-type-all": "Oui (ouvert à tous les wikis)",
+	"campaignevents-edit-field-wiki-type-specific": "Oui, à des wikis spécifiques",
+	"campaignevents-edit-field-wikis-label": "Wikis cibles",
+	"campaignevents-edit-field-wikis-placeholder": "Ajouter des wikis spécifiques",
+	"campaignevents-edit-field-wikis-help": "Si votre événement se déroule sur des wikis spécifiques, veuillez les répertorier ici. Cela permet aux utilisateurs de décider à quels événements participer et facilite également les analyses.",
 	"campaignevents-edit-field-tracking-tools": "Lien du tableau de bord Programmes et Événements",
 	"campaignevents-edit-field-tracking-tools-help": "Les noms d’utilisateur des participants publiquement inscrits seront automatiquement envoyés au tableau de bord. Cet outil vous aide à suivre les contributions des participants et à mesurer l’impact de votre événement de campagne. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard En savoir plus].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Entrer l’URL du tableau de bord Programmes et événements pour votre événement",
@@ -506,5 +515,6 @@
 	"campaignevents-invitationlist-worklist-label": "Voir liste d'articles",
 	"campaignevents-event-details-footer": "Visitez la <strong>[[Special:AllEvents|liste de collaboration]]</strong> pour trouver plus d'événements et de communautés.",
 	"campaignevents-invitationlist-preference": "Incluez-moi dans les [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists listes d'invitation].",
-	"prefs-campaignevents-invitations": "Listes d'invitation"
+	"prefs-campaignevents-invitations": "Listes d'invitation",
+	"campaignevents-eventpage-btn-collaboration-list": "Trouver plus d'événements"
 }

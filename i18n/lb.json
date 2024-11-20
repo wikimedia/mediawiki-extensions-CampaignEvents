@@ -16,6 +16,8 @@
 	"campaignevents-error-invalid-title-interwiki": "Gitt eng Säit vun engem Evenement op der lokaler Wiki un.",
 	"campaignevents-error-page-not-found": "Et gëtt keng Evenementssäit mat dësem Numm.",
 	"campaignevents-error-page-not-event-namespace": "D'Evenementssäit muss am {{ns:event}}-Nummraum leien.",
+	"campaignevents-error-too-many-wikis": "Gitt maximal {{PLURAL:$1|eng Wiki|$1 Wikien}} an.",
+	"campaignevents-error-invalid-wikis": "Déi follgend IDe goufen net erkannt: $1.",
 	"campaignevents-error-invalid-chat-url": "Gitt eng gülteg Chat-URL an.",
 	"campaignevents-error-invalid-timezone": "Gitt eng gülteg Zäitzon an.",
 	"campaignevents-error-invalid-country": "Gitt ee gültegen Lännernumm an.",
@@ -28,6 +30,12 @@
 	"campaignevents-edit-field-timezone": "Zäitzon",
 	"campaignevents-edit-field-organizers": "Organisateuren",
 	"campaignevents-edit-field-organizers-placeholder": "Benotzernumm derbäisetzen",
+	"campaignevents-edit-field-wiki-type": "Konzentréiert sech dëst Evenement op spezifesch Wikien?",
+	"campaignevents-edit-field-wiki-type-none": "Keng spezifesch Wikien",
+	"campaignevents-edit-field-wiki-type-all": "Jo (oppe fir all Wikien)",
+	"campaignevents-edit-field-wiki-type-specific": "Jo, spezifesch Wikien",
+	"campaignevents-edit-field-wikis-label": "Zilwikien",
+	"campaignevents-edit-field-wikis-placeholder": "Spezifesch Wikien derbäisetzen",
 	"campaignevents-edit-field-type-online": "Online-Evenement",
 	"campaignevents-edit-field-country": "Land",
 	"campaignevents-edit-field-address": "Adress",
@@ -265,5 +273,6 @@
 	"invitationlist": "Invitatiounslëscht",
 	"campaignevents-invitationlist-event": "$1: Invitatiounslëscht",
 	"campaignevents-invitationlist-worklist-label": "Artikellëscht weisen",
-	"prefs-campaignevents-invitations": "Invitatiounslëschten"
+	"prefs-campaignevents-invitations": "Invitatiounslëschten",
+	"campaignevents-eventpage-btn-collaboration-list": "Méi Evenementer fannen"
 }

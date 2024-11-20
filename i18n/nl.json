@@ -68,6 +68,13 @@
 	"campaignevents-edit-field-organizers-placeholder": "Gebruikersnaam toevoegen",
 	"campaignevents-edit-field-organizers-creator-title": "Dit is de maker van het evenement. Andere organisatoren kunnen deze gebruiker niet verwijderen.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Deze gebruik{{GENDER:$1||st}}er mag geen evenementen organiseren.",
+	"campaignevents-edit-field-wiki-type": "Is dit evenement op bepaalde wiki’s gericht?",
+	"campaignevents-edit-field-wiki-type-none": "Geen bepaalde wiki’s",
+	"campaignevents-edit-field-wiki-type-all": "Ja (open voor alle wiki’s)",
+	"campaignevents-edit-field-wiki-type-specific": "Ja, bepaalde wiki’s",
+	"campaignevents-edit-field-wikis-label": "Doelwiki’s",
+	"campaignevents-edit-field-wikis-placeholder": "Bepaalde wiki’s toevoegen",
+	"campaignevents-edit-field-wikis-help": "Als uw evenement op bepaalde wiki’s plaatsvindt, vermeld die dan hier. Dit helpt mensen te beslissen welke evenementen ze willen bijwonen, en helpt ook bij de analyse.",
 	"campaignevents-edit-field-tracking-tools": "Link voor dashboard Programma's & Evenementen",
 	"campaignevents-edit-field-tracking-tools-help": "Gebruikersnamen van openbaar geregistreerde deelnemers worden automatisch naar het dashboard gestuurd. Met deze tool kunt u de bijdragen van deelnemers volgen en het effect van uw campagne-evenement meten. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Meer informatie].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Voer de dashboard-URL Programma's & Evenementen voor uw evenement in",
@@ -485,5 +492,6 @@
 	"campaignevents-invitationlist-worklist-label": "Artikelenlijst bekijken",
 	"campaignevents-event-details-footer": "Bekijk de <strong>[[Special:AllEvents|samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen te vinden.",
 	"campaignevents-invitationlist-preference": "Voeg mij toe aan de [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists uitnodigingslijsten].",
-	"prefs-campaignevents-invitations": "Uitnodigingslijsten"
+	"prefs-campaignevents-invitations": "Uitnodigingslijsten",
+	"campaignevents-eventpage-btn-collaboration-list": "Meer evenementen zoeken"
 }

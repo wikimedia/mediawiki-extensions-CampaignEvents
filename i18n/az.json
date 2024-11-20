@@ -63,6 +63,13 @@
 	"campaignevents-edit-field-organizers-placeholder": "İstifadəçi adı əlavə et",
 	"campaignevents-edit-field-organizers-creator-title": "Bu istifadəçi tədbirin yaradıcısıdır, digər təşkilatçılar bu istifadəçini silə bilməz.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Bu {{GENDER:$1|istifadəçinin}} tədbir təşkil etməsinə icazə verilmir.",
+	"campaignevents-edit-field-wiki-type": "Bu tədbir spesifik vikilərə fokuslanıb?",
+	"campaignevents-edit-field-wiki-type-none": "Spesifik viki yoxdur",
+	"campaignevents-edit-field-wiki-type-all": "Bəli (bütün vikilərə açıqdır)",
+	"campaignevents-edit-field-wiki-type-specific": "Bəli, spesifik vikilər üçündür",
+	"campaignevents-edit-field-wikis-label": "Hədəf vikilər",
+	"campaignevents-edit-field-wikis-placeholder": "Spesifik vikiləri əlavə et",
+	"campaignevents-edit-field-wikis-help": "Tədbiriniz spesifik vikilərdə keçirilirsə, onları burada qeyd edin. Bu, insanlara hansı tədbirlərdə iştirak edəcəklərinə qərar verməkdə kömək edir, Bu, həmçinin analitikaya da kömək edir.",
 	"campaignevents-edit-field-tracking-tools": "Proqramlar və Tədbirlər Paneli linki",
 	"campaignevents-edit-field-tracking-tools-help": "Açıq şəkildə qeydiyyatdan keçmiş iştirakçıların istifadəçi adları avtomatik olaraq İdarə Panelinə göndəriləcək. Bu alət sizə iştirakçı töhfələrini izləməyə və tədbirinizin təsirini ölçməyə kömək edir. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Ətraflı öyrənin].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Tədbiriniz üçün Proqramlar və Tədbirlər Panelinin URL-ni daxil edin",
@@ -480,5 +487,6 @@
 	"campaignevents-invitationlist-worklist-label": "Məqalə siyahısına bax",
 	"campaignevents-event-details-footer": "Daha çox tədbir və icma tapmaq üçün <strong>[[Special:AllEvents|Əməkdaşlıq Siyahısına]]</strong> daxil olun.",
 	"campaignevents-invitationlist-preference": "Məni [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists dəvət siyahılarına] əlavə et.",
-	"prefs-campaignevents-invitations": "Dəvət siyahıları"
+	"prefs-campaignevents-invitations": "Dəvət siyahıları",
+	"campaignevents-eventpage-btn-collaboration-list": "Daha çox tədbir kəşf edin"
 }

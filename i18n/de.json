@@ -63,6 +63,13 @@
 	"campaignevents-edit-field-organizers-placeholder": "Benutzernamen hinzufügen",
 	"campaignevents-edit-field-organizers-creator-title": "Dies ist der Ersteller der Veranstaltung, andere Organisatoren können diesen Benutzer nicht entfernen.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Dieser Benutzer|Diese Benutzerin}} darf keine Veranstaltungen organisieren.",
+	"campaignevents-edit-field-wiki-type": "Konzentriert sich diese Veranstaltung auf bestimmte Wikis?",
+	"campaignevents-edit-field-wiki-type-none": "Keine spezifischen Wikis",
+	"campaignevents-edit-field-wiki-type-all": "Ja (offen für alle Wikis)",
+	"campaignevents-edit-field-wiki-type-specific": "Ja, spezifische Wikis",
+	"campaignevents-edit-field-wikis-label": "Zielwikis",
+	"campaignevents-edit-field-wikis-placeholder": "Spezifische Wiki hinzufügen",
+	"campaignevents-edit-field-wikis-help": "Wenn deine Veranstaltung auf bestimmten Wikis stattfindet, liste sie bitte hier auf. Dies erleichtert den Benutzern die Entscheidung, an welchen Veranstaltungen sie teilnehmen möchten, und hilft auch bei der Analyse.",
 	"campaignevents-edit-field-tracking-tools": "Programme & Veranstaltungen Dashboard Link",
 	"campaignevents-edit-field-tracking-tools-help": "Die Benutzernamen der öffentlich angemeldeten Teilnehmer werden automatisch an das Dashboard gesendet. Mit diesem Tool kannst du die Beiträge der Teilnehmer beobachten und die Wirkung deiner Veranstaltung messen. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Mehr erfahren].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Gib die URL des Dashboards Programme & Veranstaltungen für deine Veranstaltung ein.",
@@ -480,5 +487,6 @@
 	"campaignevents-invitationlist-worklist-label": "Artikelliste anzeigen",
 	"campaignevents-event-details-footer": "Besuche die <strong>[[Special:AllEvents|Kollaborationsliste]],</strong> um weitere Veranstaltungen und Communitys zu finden.",
 	"campaignevents-invitationlist-preference": "Nimm mich in die [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists Einladungslisten] auf.",
-	"prefs-campaignevents-invitations": "Einladungslisten"
+	"prefs-campaignevents-invitations": "Einladungslisten",
+	"campaignevents-eventpage-btn-collaboration-list": "Weitere Veranstaltungen finden"
 }

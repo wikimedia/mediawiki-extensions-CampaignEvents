@@ -34,6 +34,12 @@
 	"campaignevents-error-invalid-address": "유효한 주소를 입력하십시오.",
 	"enableeventregistration": "이벤트 등록 활성화",
 	"campaignevents-edit-field-event-status": "이벤트 상태",
+	"campaignevents-edit-field-wiki-type": "이 이벤트가 특정 위키에 집중되나요?",
+	"campaignevents-edit-field-wiki-type-none": "특정 위키 없음",
+	"campaignevents-edit-field-wiki-type-all": "예 (모든 위키에 공개)",
+	"campaignevents-edit-field-wiki-type-specific": "예 (특정 위키 한정)",
+	"campaignevents-edit-field-wikis-label": "대상 위키",
+	"campaignevents-edit-field-wikis-placeholder": "특정 위키 추가",
 	"campaignevents-edit-field-type-in-person": "대면 이벤트",
 	"campaignevents-edit-field-type-online-and-in-person": "온라인 및 대면 이벤트",
 	"campaignevents-edit-field-address": "주소",
@@ -176,5 +182,6 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "응답 보기",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "에디터톤 초대 목록",
 	"campaignevents-generateinvitationlist-event-page-field-label": "이벤트 페이지 이름",
-	"prefs-campaignevents-invitations": "초대 목록"
+	"prefs-campaignevents-invitations": "초대 목록",
+	"campaignevents-eventpage-btn-collaboration-list": "더 많은 이벤트 찾기"
 }
