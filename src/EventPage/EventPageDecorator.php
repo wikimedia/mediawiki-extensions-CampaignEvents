@@ -8,6 +8,7 @@ use LogicException;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
+use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -18,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -85,6 +87,7 @@ class EventPageDecorator {
 	private EventTimeFormatter $eventTimeFormatter;
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
+	private WikiLookup $wikiLookup;
 
 	private Language $language;
 	private ICampaignsAuthority $authority;
@@ -111,6 +114,7 @@ class EventPageDecorator {
 	 * @param EventTimeFormatter $eventTimeFormatter
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 * @param WikiLookup $wikiLookup
 	 * @param Language $language
 	 * @param Authority $viewingAuthority
 	 * @param OutputPage $out
@@ -128,6 +132,7 @@ class EventPageDecorator {
 		EventTimeFormatter $eventTimeFormatter,
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		EventQuestionsRegistry $eventQuestionsRegistry,
+		WikiLookup $wikiLookup,
 		Language $language,
 		Authority $viewingAuthority,
 		OutputPage $out
@@ -143,6 +148,7 @@ class EventPageDecorator {
 		$this->eventTimeFormatter = $eventTimeFormatter;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->wikiLookup = $wikiLookup;
 
 		$this->language = $language;
 		$this->authority = new MWAuthorityProxy( $viewingAuthority );
@@ -256,6 +262,7 @@ class EventPageDecorator {
 				'oojs-ui.styles.icons-moderation',
 				'oojs-ui.styles.icons-user',
 				'oojs-ui.styles.icons-alerts',
+				'oojs-ui.styles.icons-wikimedia'
 			],
 			UserLinker::MODULE_STYLES
 		) );
@@ -658,6 +665,9 @@ class EventPageDecorator {
 			$organizersCount,
 			$userStatus
 		);
+		if ( $registration->getWikis() ) {
+			$eventInfo .= $this->getDetailsDialogWikis( $registration );
+		}
 		$eventInfo .= $this->getDetailsDialogChat( $registration, $userStatus );
 
 		return Html::rawElement(
@@ -1149,7 +1159,7 @@ class EventPageDecorator {
 
 	/**
 	 * @param string $icon
-	 * @param string|Tag|array $content
+	 * @param string|Tag|array|HtmlSnippet $content
 	 * @param string $label
 	 * @param string|Tag|array $footer
 	 * @param string[] $classes
@@ -1176,5 +1186,28 @@ class EventPageDecorator {
 
 		return (string)( new Tag( 'div' ) )
 			->appendContent( $header, $contentTag, $footer );
+	}
+
+	/**
+	 * @param ExistingEventRegistration $registration
+	 * @return string
+	 */
+	private function getDetailsDialogWikis( ExistingEventRegistration $registration ): string {
+		$content = EventFormatter::formatWikis(
+			$registration,
+			$this->msgFormatter,
+			$this->wikiLookup,
+			$this->language,
+			$this->linkRenderer,
+			'campaignevents-eventpage-all-wikis',
+			'campaignevents-eventpage-wikis-more',
+		);
+		return $this->makeDetailsDialogSection(
+			$this->wikiLookup->getWikiIcon( $registration->getWikis() ),
+			$content,
+			$this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-wikis-label' )
+			)
+		);
 	}
 }

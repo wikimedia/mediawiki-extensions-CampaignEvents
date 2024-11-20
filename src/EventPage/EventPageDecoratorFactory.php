@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -34,6 +35,7 @@ class EventPageDecoratorFactory {
 	private EventTimeFormatter $eventTimeFormatter;
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
+	private WikiLookup $wikiLookup;
 
 	/**
 	 * @param PageEventLookup $pageEventLookup
@@ -48,6 +50,7 @@ class EventPageDecoratorFactory {
 	 * @param EventTimeFormatter $eventTimeFormatter
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
+	 * @param WikiLookup $wikiLookup
 	 *
 	 */
 	public function __construct(
@@ -62,7 +65,8 @@ class EventPageDecoratorFactory {
 		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
 		EventPageCacheUpdater $eventPageCacheUpdater,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		EventQuestionsRegistry $eventQuestionsRegistry,
+		WikiLookup $wikiLookup
 	) {
 		$this->pageEventLookup = $pageEventLookup;
 		$this->participantsStore = $participantsStore;
@@ -76,6 +80,7 @@ class EventPageDecoratorFactory {
 		$this->eventTimeFormatter = $eventTimeFormatter;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
+		$this->wikiLookup = $wikiLookup;
 	}
 
 	public function newDecorator(
@@ -96,6 +101,7 @@ class EventPageDecoratorFactory {
 			$this->eventTimeFormatter,
 			$this->eventPageCacheUpdater,
 			$this->eventQuestionsRegistry,
+			$this->wikiLookup,
 			$language,
 			$viewingAuthority,
 			$out
