@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"B3rnas",
-			"Hamilton Abreu"
+			"Hamilton Abreu",
+			"Mbs262"
 		]
 	},
 	"campaignevents-desc": "Fornece funcionalidades para organizadores e participantes de campanhas.",
@@ -406,7 +407,7 @@
 	"campaignevents-edit-field-clickwrap-checkbox-info": "Esta página contém as respostas agregadas dos participantes às perguntas do formulário de inscrição.",
 	"campaignevents-edit-field-clickwrap-checkbox-pretext": "Para ver as respostas agregadas dos participantes, tem de aceitar o seguinte:",
 	"campaignevents-edit-field-clickwrap-checkbox-label": "Concordo em tratar com cuidado as informações dos participantes recolhidas durante a inscrição no evento.",
-	"campaignevents-edit-field-clickwrap-form-continue": "Continuar",
+	"campaignevents-edit-field-clickwrap-form-continue": "Ver respostas",
 	"campaignevents-participant-question-have-been-aggregated": "As respostas {{GENDER:$1|deste|desta}} participante foram agregadas e apagadas",
 	"campaignevents-participant-question-no-response": "Respondeu \"Não\"",
 	"campaignevents-warning-change-event-end-date-past": "Se alterar a data de fim para uma data passada, o evento será encerrado e receberá um resumo das respostas dos participantes. Esta operação não pode ser desfeita. Isto só se aplica se os participantes tiverem dado respostas às perguntas para participantes.",
