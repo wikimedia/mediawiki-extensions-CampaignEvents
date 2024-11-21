@@ -64,6 +64,13 @@
 	"campaignevents-edit-field-organizers-placeholder": "הוספת שם משתמש",
 	"campaignevents-edit-field-organizers-creator-title": "זה היוצר של האירוע, מארגנים אחרים לא יכולים להסיר את המשתמש הזה.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|המשתמש הזה אינו רשאי|המשתמשת הזאת אינה רשאית}} לארגן אירועים.",
+	"campaignevents-edit-field-wiki-type": "האם האירוע הזה מתמקד באתרי ויקי מסוימים?",
+	"campaignevents-edit-field-wiki-type-none": "לא באתרי ויקי מסוימים",
+	"campaignevents-edit-field-wiki-type-all": "כן (פתוח לכל האתרי הוויקי)",
+	"campaignevents-edit-field-wiki-type-specific": "כן, אתרי ויקי מסוימים",
+	"campaignevents-edit-field-wikis-label": "אתרי הוויקי המיועדים",
+	"campaignevents-edit-field-wikis-placeholder": "הוספת אתרי ויקי מסוימים",
+	"campaignevents-edit-field-wikis-help": "אם האירוע שלך נערך באתרי ויקי מסוימים, נא לרשום אותם כאן. זה עוזר לאנשים להחליט באילו אירועים להשתתף, וזה גם עוזר בניתוח.",
 	"campaignevents-edit-field-tracking-tools": "קישור ללוח הבקרה של תוכניות ואירועים",
 	"campaignevents-edit-field-tracking-tools-help": "שמות משתמש של משתתפים הרשומים באופן ציבורי יישלחו אוטומטית ללוח הבקרה. הכלי הזה עוזר לך לעקוב אחר התרומות המשתתפים ולמדוד את ההשפעה של האירוע שלך.  [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard למידע נוסף]",
 	"campaignevents-edit-field-tracking-tools-placeholder": "כניסה לכתובת ללוח הבקרה של תוכניות ואירועים עבור האירוע שלך",
@@ -481,5 +488,6 @@
 	"campaignevents-invitationlist-worklist-label": "צפייה ברשימת ערכים",
 	"campaignevents-event-details-footer": "נא לבקר ב<strong>[[Special:AllEvents|רשימת העבודה המשותפת]]</strong> כדי למצוא עוד אירועים וקהילות.",
 	"campaignevents-invitationlist-preference": "לכלול אותי ב[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists רשימות הזמנות].",
-	"prefs-campaignevents-invitations": "רשימות הזמנות"
+	"prefs-campaignevents-invitations": "רשימות הזמנות",
+	"campaignevents-eventpage-btn-collaboration-list": "מציאת אירועים נוספים"
 }
