@@ -53,3 +53,17 @@ $specialPageAliases['nn'] = [
 	'MyEvents' => [ 'Mine_arrangement' ],
 	'EventDetails' => [ 'Arrangementsdetaljar' ],
 ];
+
+$specialPageAliases['pl'] = [
+	'EnableEventRegistration' => [ 'Włącz_rejestrację_na_wydarzenie' ],
+	'DeleteEventRegistration' => [ 'Usuń_rejestrację_na_wydarzenie' ],
+	'EditEventRegistration' => [ 'Edytuj_rejestrację_na_wydarzenie' ],
+	'RegisterForEvent' => [ 'Zarejestruj_się_na_wydarzenie' ],
+	'CancelEventRegistration' => [ 'Anuluj_rejestrację_na_wydarzenie' ],
+	'MyEvents' => [ 'Moje_wydarzenia' ],
+	'AllEvents' => [ 'Wszystkie_wydarzenia' ],
+	'EventDetails' => [ 'Szczegóły_wydarzenia' ],
+	'GenerateInvitationList' => [ 'Wygeneruj_listę_zaproszeń' ],
+	'MyInvitationLists' => [ 'Moje_listy_zaproszeń' ],
+	'InvitationList' => [ 'Lista_zaproszeń' ],
+];
