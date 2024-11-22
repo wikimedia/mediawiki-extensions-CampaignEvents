@@ -64,6 +64,13 @@
 	"campaignevents-edit-field-organizers-placeholder": "Додај корисничко име",
 	"campaignevents-edit-field-organizers-creator-title": "Ова е творецот на настанот. Другите приредувачи не можат да го отстранат корисников.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "На овој {{GENDER:$1|корисник}} не му е дозволено да приредува настани.",
+	"campaignevents-edit-field-wiki-type": "Дали овој настан се задржува на конкретни викија?",
+	"campaignevents-edit-field-wiki-type-none": "Нема конкретни викија",
+	"campaignevents-edit-field-wiki-type-all": "Да (отворено за сите викија)",
+	"campaignevents-edit-field-wiki-type-specific": "Да, конкретни викија",
+	"campaignevents-edit-field-wikis-label": "Целни викија",
+	"campaignevents-edit-field-wikis-placeholder": "Сите конкретни викија",
+	"campaignevents-edit-field-wikis-help": "Ако вашиот настан се одржува на конкретни викија, тогаш наведете ги тука. Ова ќе им помогне на луѓето да одлучат на кои настани да присуствуваат, а помага со аналитиката.",
 	"campaignevents-edit-field-tracking-tools": "врска до Управувачницата за програми и настани",
 	"campaignevents-edit-field-tracking-tools-help": "Корисничките имиња на јавно пријавените учесници автоматски ќе се испраќаат на Управувачнциата. Оваа алатка ви овозможува да ги надгледувате нивните придонеси и да го измерите влијанието на вашиот походен настан. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Дознајте повеќе]",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Внесете ја URL-адресата што ќе оди на Управувачницата за вашиот настан",
@@ -481,5 +488,6 @@
 	"campaignevents-invitationlist-worklist-label": "Погл. список на статии",
 	"campaignevents-event-details-footer": "Посетете го <strong>[[Special:AllEvents|Списокот на соработки]]</strong> за да најдете повеќе настани и заедници.",
 	"campaignevents-invitationlist-preference": "Вклучи ме на [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списокот со покани].",
-	"prefs-campaignevents-invitations": "Список со покани"
+	"prefs-campaignevents-invitations": "Список со покани",
+	"campaignevents-eventpage-btn-collaboration-list": "Најдете повеќе настани"
 }
