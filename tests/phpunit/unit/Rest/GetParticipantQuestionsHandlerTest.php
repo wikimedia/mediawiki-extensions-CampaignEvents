@@ -115,14 +115,18 @@ class GetParticipantQuestionsHandlerTest extends MediaWikiUnitTestCase {
 	private function newHandler(): GetParticipantQuestionsHandler {
 		$registry = new EventQuestionsRegistry( true );
 		$registry->overrideQuestionsForTesting( self::QUESTION_OVERRIDES );
+
 		$msgFormatter = $this->createMock( ITextFormatter::class );
 		$msgFormatter->method( 'format' )->willReturnCallback( static fn ( MessageValue $msg ) => $msg->getKey() );
 		$msgFormatterFactory = $this->createMock( IMessageFormatterFactory::class );
 		$msgFormatterFactory->method( 'getTextFormatter' )->willReturn( $msgFormatter );
+
+		$contLang = $this->createMock( Language::class );
+		$contLang->method( 'getCode' )->willReturn( 'en' );
 		return new GetParticipantQuestionsHandler(
 			$registry,
 			$msgFormatterFactory,
-			$this->createMock( Language::class )
+			$contLang
 		);
 	}
 
