@@ -493,5 +493,8 @@
 	"campaignevents-event-details-footer": "Bekijk de <strong>[[Special:AllEvents|samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen te vinden.",
 	"campaignevents-invitationlist-preference": "Voeg mij toe aan de [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists uitnodigingslijsten].",
 	"prefs-campaignevents-invitations": "Uitnodigingslijsten",
-	"campaignevents-eventpage-btn-collaboration-list": "Meer evenementen zoeken"
+	"campaignevents-eventslist-all-wikis": "Dit evenement staat open voor alle wiki’s.",
+	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|}}nog $1",
+	"campaignevents-eventpage-btn-collaboration-list": "Meer evenementen zoeken",
+	"campaignevents-eventslist-wiki-label": "Wiki's"
 }

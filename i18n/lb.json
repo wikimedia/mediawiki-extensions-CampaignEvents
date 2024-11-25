@@ -274,5 +274,7 @@
 	"campaignevents-invitationlist-event": "$1: Invitatiounslëscht",
 	"campaignevents-invitationlist-worklist-label": "Artikellëscht weisen",
 	"prefs-campaignevents-invitations": "Invitatiounslëschten",
-	"campaignevents-eventpage-btn-collaboration-list": "Méi Evenementer fannen"
+	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|méi}}",
+	"campaignevents-eventpage-btn-collaboration-list": "Méi Evenementer fannen",
+	"campaignevents-eventslist-wiki-label": "Wikien"
 }
