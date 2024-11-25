@@ -2,7 +2,9 @@
 	"@metadata": {
 		"authors": [
 			"Hamilton Abreu",
-			"B3rnas"
+			"B3rnas",
+			"Albertoleoncio",
+			"Mbs262"
 		]
 	},
 	"campaignevents-desc": "Fornece funcionalidades para organizadores e participantes de campanhas.",
@@ -140,6 +142,7 @@
 	"campaignevents-eventpage-header-type-online": "Evento ''online''",
 	"campaignevents-eventpage-header-type-in-person": "Evento presencial",
 	"campaignevents-eventpage-header-type-online-and-in-person": "Evento ''online'' e presencial",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-dates-label": "Hora de início e fim",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|participante|participantes}}",
 	"campaignevents-eventpage-header-participants-label": "Número de participantes",
