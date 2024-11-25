@@ -49,8 +49,9 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	private function getRequestData(): array {
-		$bodyParams = self::$defaultEventParams + [ 'status' => EventRegistration::STATUS_OPEN ];
+	private function getRequestData( ?array $params = null ): array {
+		$params ??= self::$defaultEventParams;
+		$bodyParams = $params + [ 'status' => EventRegistration::STATUS_OPEN ];
 		return [
 			'method' => 'PUT',
 			'pathParams' => [ 'id' => 1 ],
@@ -61,16 +62,11 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		];
 	}
 
-	/**
-	 * @param EventFactory|null $eventFactory
-	 * @param EditEventCommand|null $editEventCmd
-	 * @param IEventLookup|null $eventLookup
-	 * @return UpdateEventRegistrationHandler
-	 */
 	protected function newHandler(
 		?EventFactory $eventFactory = null,
 		?EditEventCommand $editEventCmd = null,
-		?IEventLookup $eventLookup = null
+		?IEventLookup $eventLookup = null,
+		?WikiLookup $wikiLookup = null
 	): UpdateEventRegistrationHandler {
 		if ( !$eventLookup ) {
 			// Ensure that the wiki ID of the event page is not null, otherwise it will be passed to
@@ -94,7 +90,7 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->createMock( OrganizersStore::class ),
 			$this->createMock( CampaignsCentralUserLookup::class ),
 			$this->createMock( EventQuestionsRegistry::class ),
-			$this->createMock( WikiLookup::class ),
+			$wikiLookup ?? $this->createMock( WikiLookup::class ),
 			new HashConfig( [ 'CampaignEventsEnableEventWikis' => true ] ),
 			$eventLookup
 		);
@@ -240,5 +236,34 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->assertSame( $expectedError, $e->getMessageValue()->getKey() );
 			$this->assertSame( 400, $e->getCode() );
 		}
+	}
+
+	/**
+	 * @dataProvider provideAllWikis
+	 */
+	public function testExecute__allWikis( array $allWikis, array $requestWikis ) {
+		$wikiLookup = $this->createMock( WikiLookup::class );
+		$wikiLookup->method( 'getAllWikis' )->willReturn( $allWikis );
+
+		$eventFactory = $this->createMock( EventFactory::class );
+		$eventFactory->expects( $this->once() )->method( 'newEvent' )
+			->willReturnCallback( function ( $id, $page, $url, $wikis ) {
+				$this->assertSame( EventRegistration::ALL_WIKIS, $wikis );
+				return $this->createMock( EventRegistration::class );
+			} );
+
+		$handler = $this->newHandler( $eventFactory, null, null, $wikiLookup );
+
+		$reqParams = [ 'wikis' => $requestWikis ] + self::$defaultEventParams;
+		$request = new RequestData( $this->getRequestData( $reqParams ) );
+
+		$resp = $this->executeHandler( $handler, $request, [], [], [], [], $this->mockRegisteredUltimateAuthority() );
+		$this->assertSame( 204, $resp->getStatusCode() );
+	}
+
+	public static function provideAllWikis(): Generator {
+		$allWikis = [ 'aawiki', 'bbwiki' ];
+		yield 'Same order' => [ $allWikis, $allWikis ];
+		yield 'Flipped order' => [ $allWikis, array_reverse( $allWikis ) ];
 	}
 }
