@@ -144,7 +144,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 
 		$rawWikis = $body['wikis'] ?? [];
 		$allWikis = $this->wikiLookup->getAllWikis();
-		$wikis = $rawWikis === $allWikis ? EventRegistration::ALL_WIKIS : $rawWikis;
+		// Compare the counts, not the arrays, because order does not matter
+		$wikis = count( $rawWikis ) === count( $allWikis ) ? EventRegistration::ALL_WIKIS : $rawWikis;
 
 		return $this->eventFactory->newEvent(
 			$existingEvent->getID(),
