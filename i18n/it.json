@@ -235,5 +235,6 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "Visualizza risposte",
 	"campaignevents-participant-question-no-response": "Nessuna risposta",
 	"campaignevents-myinvitationslist-new-button": "Nuovo",
-	"prefs-campaignevents-invitations": "Elenchi di inviti"
+	"prefs-campaignevents-invitations": "Elenchi di inviti",
+	"campaignevents-eventslist-wiki-label": "Wiki"
 }

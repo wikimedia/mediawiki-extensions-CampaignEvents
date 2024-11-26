@@ -180,5 +180,6 @@
 	"campaignevents-generateinvitationlist-submit-button-text": "Генериши",
 	"campaignevents-invitations-pager-status-processing": "Обрађујем...",
 	"campaignevents-myinvitationslist-new-button": "Ново",
-	"campaignevents-worklist-error-empty": "Наведите бар један чланак."
+	"campaignevents-worklist-error-empty": "Наведите бар један чланак.",
+	"campaignevents-eventslist-wiki-label": "Викији"
 }
