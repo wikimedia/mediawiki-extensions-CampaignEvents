@@ -331,6 +331,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'label-message' => 'campaignevents-edit-field-wikis-label',
 				'default' => is_array( $eventWikis ) ? $eventWikis : [],
 				'options' => $this->wikiLookup->getListForSelect(),
+				'max' => EventFactory::MAX_WIKIS,
 				'placeholder-message' => 'campaignevents-edit-field-wikis-placeholder',
 				'help-message' => 'campaignevents-edit-field-wikis-help',
 				'hide-if' => [ '!==', 'WikiType', (string)self::WIKI_TYPE_SPECIFIC ],
