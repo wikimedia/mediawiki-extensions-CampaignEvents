@@ -54,8 +54,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 				getPathSuffix(),
 				getBody( anonToken )
 			);
-			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.strictEqual( sourceBody.errorKey, 'rest-badtoken' );
+			assert.strictEqual( sourceBody.httpCode, 403 );
 			assert.property( sourceBody, 'messageTranslations' );
 			assert.property( sourceBody.messageTranslations, 'en' );
 			assert.include( sourceBody.messageTranslations.en, 'no session' );
@@ -65,10 +65,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 				getPathSuffix(),
 				getBody( blockedUserToken )
 			);
+			assert.strictEqual( sourceBody.errorKey, 'campaignevents-register-not-allowed' );
 			assert.strictEqual( sourceBody.httpCode, 403 );
-			assert.property( sourceBody, 'messageTranslations' );
-			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'not allowed' );
 		} );
 	} );
 
@@ -79,10 +77,8 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 				getPathSuffix( nonExistentEventID ),
 				getBody( participantToken )
 			);
+			assert.strictEqual( sourceBody.errorKey, 'campaignevents-rest-event-not-found' );
 			assert.strictEqual( sourceBody.httpCode, 404 );
-			assert.property( sourceBody, 'messageTranslations' );
-			assert.property( sourceBody.messageTranslations, 'en' );
-			assert.include( sourceBody.messageTranslations.en, 'There is no event with this ID' );
 		} );
 	} );
 
@@ -92,7 +88,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 				getPathSuffix(),
 				getBody( participantToken, false )
 			);
-			assert.strictEqual( statusCode, 200 );
+			assert.strictEqual( statusCode, 200, 'Got error: ' + sourceBody.errorKey );
 			assert.property( sourceBody, 'modified' );
 			assert.strictEqual( sourceBody.modified, true );
 		} );
@@ -101,7 +97,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 				getPathSuffix(),
 				getBody( participantToken, true )
 			);
-			assert.strictEqual( statusCode, 200 );
+			assert.strictEqual( statusCode, 200, 'Got error: ' + sourceBody.errorKey );
 			assert.property( sourceBody, 'modified' );
 			assert.strictEqual( sourceBody.modified, true );
 		} );
@@ -110,7 +106,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 				getPathSuffix(),
 				getBody( participantToken, true )
 			);
-			assert.strictEqual( statusCode, 200 );
+			assert.strictEqual( statusCode, 200, 'Got error: ' + sourceBody.errorKey );
 			assert.property( sourceBody, 'modified' );
 			assert.strictEqual( sourceBody.modified, false );
 		} );
