@@ -24,6 +24,20 @@ $specialPageAliases['en'] = [
 	'InvitationList' => [ 'InvitationList' ],
 ];
 
+$specialPageAliases['az'] = [
+	'EnableEventRegistration' => [ 'TədbirQeydiyyatınıAktivləşdir' ],
+	'DeleteEventRegistration' => [ 'TədbirQeydiyyatınıSil' ],
+	'EditEventRegistration' => [ 'TədbirQeydiyyatınıRedaktə' ],
+	'RegisterForEvent' => [ 'TədbirəQeydiyyat' ],
+	'CancelEventRegistration' => [ 'TədbirQeydiyyatıLəğv' ],
+	'MyEvents' => [ 'Tədbirlərim' ],
+	'AllEvents' => [ 'BütünTədbirlər' ],
+	'EventDetails' => [ 'TədbirDetalları' ],
+	'GenerateInvitationList' => [ 'DəvətSiyahısıYarat' ],
+	'MyInvitationLists' => [ 'DəvətSiyahılarım' ],
+	'InvitationList' => [ 'DəvətSiyahısı' ],
+];
+
 $specialPageAliases['he'] = [
 	'EnableEventRegistration' => [ 'הפעלת_הרשמה_לאירוע' ],
 	'DeleteEventRegistration' => [ 'מחיקת_הרשמה_לאירוע' ],
