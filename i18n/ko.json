@@ -185,5 +185,6 @@
 	"campaignevents-generateinvitationlist-name-field-placeholder": "에디터톤 초대 목록",
 	"campaignevents-generateinvitationlist-event-page-field-label": "이벤트 페이지 이름",
 	"prefs-campaignevents-invitations": "초대 목록",
-	"campaignevents-eventpage-btn-collaboration-list": "더 많은 이벤트 찾기"
+	"campaignevents-eventpage-btn-collaboration-list": "더 많은 이벤트 찾기",
+	"campaignevents-eventslist-wiki-label": "위키"
 }
