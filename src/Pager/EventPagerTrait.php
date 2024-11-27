@@ -44,7 +44,7 @@ trait EventPagerTrait {
 				'event_status',
 				'event_start_utc',
 				'event_end_utc',
-				'event_meeting_type'
+				'event_meeting_type',
 			] ];
 		$join_conds = [
 			'ce_participants' => [
@@ -60,7 +60,7 @@ trait EventPagerTrait {
 					'event_id=ceo_event_id',
 					'ceo_deleted_at' => null,
 				]
-			]
+			],
 		];
 		return [
 			'tables' => [ 'campaign_events', 'ce_participants', 'ce_organizers' ],
