@@ -489,8 +489,8 @@
 	"campaignevents-event-details-footer": "Посетете го <strong>[[Special:AllEvents|Списокот на соработки]]</strong> за да најдете повеќе настани и заедници.",
 	"campaignevents-invitationlist-preference": "Вклучи ме на [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списокот со покани].",
 	"prefs-campaignevents-invitations": "Список со покани",
+	"campaignevents-eventpage-btn-collaboration-list": "Најдете повеќе настани",
 	"campaignevents-eventslist-all-wikis": "Овој настан е отворен за сите викија.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|уште}} $1",
-	"campaignevents-eventpage-btn-collaboration-list": "Најдете повеќе настани",
 	"campaignevents-eventslist-wiki-label": "Викија"
 }

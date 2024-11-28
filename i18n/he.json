@@ -489,8 +489,8 @@
 	"campaignevents-event-details-footer": "נא לבקר ב<strong>[[Special:AllEvents|רשימת העבודה המשותפת]]</strong> כדי למצוא עוד אירועים וקהילות.",
 	"campaignevents-invitationlist-preference": "לכלול אותי ב[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists רשימות הזמנות].",
 	"prefs-campaignevents-invitations": "רשימות הזמנות",
+	"campaignevents-eventpage-btn-collaboration-list": "מציאת אירועים נוספים",
 	"campaignevents-eventslist-all-wikis": "האירוע הזה פתוח לכל אתרי הוויקי.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|עוד}} $1",
-	"campaignevents-eventpage-btn-collaboration-list": "מציאת אירועים נוספים",
 	"campaignevents-eventslist-wiki-label": "אתרי ויקי"
 }
