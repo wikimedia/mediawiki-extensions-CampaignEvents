@@ -22,8 +22,9 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
-use MediaWiki\Linker\Linker;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\WikiMap\WikiMap;
@@ -105,6 +106,7 @@ class EventDetailsModule {
 	 * @param bool $isParticipant
 	 * @param string|false $wikiID
 	 * @param OutputPage $out
+	 * @param LinkRenderer $linkRenderer
 	 * @return PanelLayout
 	 *
 	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and
@@ -116,7 +118,8 @@ class EventDetailsModule {
 		bool $isOrganizer,
 		bool $isParticipant,
 		$wikiID,
-		OutputPage $out
+		OutputPage $out,
+		LinkRenderer $linkRenderer
 	): PanelLayout {
 		$eventID = $this->registration->getID();
 		$isLocalWiki = $wikiID === WikiAwareEntity::LOCAL;
@@ -131,6 +134,7 @@ class EventDetailsModule {
 			$viewingUser,
 			$authority,
 			$out,
+			$linkRenderer,
 			$isOrganizer,
 			$isParticipant,
 			$isLocalWiki,
@@ -225,6 +229,7 @@ class EventDetailsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param ICampaignsAuthority $authority
 	 * @param OutputPage $out
+	 * @param LinkRenderer $linkRenderer
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param bool $isLocalWiki
@@ -236,6 +241,7 @@ class EventDetailsModule {
 		UserIdentity $viewingUser,
 		ICampaignsAuthority $authority,
 		OutputPage $out,
+		LinkRenderer $linkRenderer,
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,
@@ -284,10 +290,11 @@ class EventDetailsModule {
 			$organizersCount,
 			$canRegister,
 			$userCanViewSensitiveEventData,
-			$out
+			$out,
+			$linkRenderer
 		);
 
-		$trackingToolsSection = $this->getTrackingToolsSection();
+		$trackingToolsSection = $this->getTrackingToolsSection( $out->getTitle(), $linkRenderer );
 		if ( $trackingToolsSection ) {
 			$items[] = $trackingToolsSection;
 		}
@@ -297,7 +304,9 @@ class EventDetailsModule {
 			if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
 				$chatSectionContent = $this->getNonLocalWikiMessage( $wikiID, $out );
 			} elseif ( $isOrganizer || $isParticipant ) {
-				$chatSectionContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
+				$chatSectionContent = new HtmlSnippet(
+					$linkRenderer->makeExternalLink( $chatURL, $chatURL, $out->getTitle() )
+				);
 			} elseif ( $canRegister ) {
 				$chatSectionContent = $this->getNeedsToRegisterMsg();
 			} else {
@@ -400,6 +409,7 @@ class EventDetailsModule {
 	 * @param bool $canRegister
 	 * @param bool $userCanViewSensitiveEventData
 	 * @param OutputPage $out
+	 * @param LinkRenderer $linkRenderer
 	 * @return Tag
 	 */
 	private function getLocationSection(
@@ -411,7 +421,8 @@ class EventDetailsModule {
 		int $organizersCount,
 		bool $canRegister,
 		bool $userCanViewSensitiveEventData,
-		OutputPage $out
+		OutputPage $out,
+		LinkRenderer $linkRenderer
 	): Tag {
 		$meetingType = $this->registration->getMeetingType();
 		$items = [];
@@ -452,7 +463,9 @@ class EventDetailsModule {
 				if ( ( $isOrganizer || $isParticipant ) && !$isLocalWiki ) {
 					$items[] = $this->getNonLocalWikiMessage( $wikiID, $out );
 				} elseif ( $isOrganizer || $isParticipant ) {
-					$items[] = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
+					$items[] = new HtmlSnippet(
+						$linkRenderer->makeExternalLink( $meetingURL, $meetingURL, $out->getTitle() )
+					);
 				} elseif ( $canRegister ) {
 					$items[] = $this->getNeedsToRegisterMsg();
 				}
@@ -475,10 +488,10 @@ class EventDetailsModule {
 		);
 	}
 
-	/**
-	 * @return Tag|null
-	 */
-	private function getTrackingToolsSection(): ?Tag {
+	private function getTrackingToolsSection(
+		PageIdentity $currentPage,
+		LinkRenderer $linkRenderer
+	): ?Tag {
 		$trackingTools = $this->registration->getTrackingTools();
 
 		if ( !$trackingTools ) {
@@ -509,7 +522,7 @@ class EventDetailsModule {
 		$sectionItems = [];
 
 		$courseURL = $toolUserInfo['tool-event-url'];
-		$sectionItems[] = new HtmlSnippet( Linker::makeExternalLink( $courseURL, $courseURL ) );
+		$sectionItems[] = new HtmlSnippet( $linkRenderer->makeExternalLink( $courseURL, $courseURL, $currentPage ) );
 
 		if ( $syncStatus === TrackingToolAssociation::SYNC_STATUS_SYNCED ) {
 			$msgType = 'success';

@@ -207,7 +207,8 @@ class SpecialEventDetails extends SpecialPage {
 				$isOrganizer,
 				$isParticipant,
 				$wikiID,
-				$out
+				$out,
+				$this->getLinkRenderer()
 			)
 		);
 		$eventParticipantsModule = $this->frontendModulesFactory->newEventDetailsParticipantsModule(

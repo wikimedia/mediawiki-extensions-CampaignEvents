@@ -37,7 +37,6 @@ use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
-use MediaWiki\Linker\Linker;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\ProperPageIdentity;
@@ -171,7 +170,7 @@ class EventPageDecorator {
 		}
 
 		if ( $registration ) {
-			$this->addRegistrationHeader( $registration );
+			$this->addRegistrationHeader( $page, $registration );
 			$this->eventPageCacheUpdater->adjustCacheForPageWithRegistration( $this->out, $registration );
 		} else {
 			$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
@@ -248,10 +247,7 @@ class EventPageDecorator {
 		return $layout;
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 */
-	private function addRegistrationHeader( ExistingEventRegistration $registration ): void {
+	private function addRegistrationHeader( ProperPageIdentity $page, ExistingEventRegistration $registration ): void {
 		$this->out->setPreventClickjacking( true );
 		$this->out->enableOOUI();
 		$this->out->addModuleStyles( array_merge(
@@ -291,6 +287,7 @@ class EventPageDecorator {
 		$this->out->addHTML( $this->getHeaderElement( $registration, $userStatus ) );
 		$this->out->addHTML(
 			$this->getDetailsDialogContent(
+				$page,
 				$registration,
 				$userStatus,
 				$curParticipant
@@ -558,12 +555,14 @@ class EventPageDecorator {
 	 * - Other utilities are missing (e.g., generating user links)
 	 * - Secondarily, no need to make 3 API requests and worry about them failing.
 	 *
+	 * @param ProperPageIdentity $page
 	 * @param ExistingEventRegistration $registration
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
 	 * @param Participant|null $participant
 	 * @return string
 	 */
 	private function getDetailsDialogContent(
+		ProperPageIdentity $page,
 		ExistingEventRegistration $registration,
 		int $userStatus,
 		?Participant $participant
@@ -572,6 +571,7 @@ class EventPageDecorator {
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
 
 		$eventInfoContainer = $this->getDetailsDialogEventInfo(
+			$page,
 			$registration,
 			$organizersCount,
 			$userStatus
@@ -648,19 +648,15 @@ class EventPageDecorator {
 		);
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param int $organizersCount
-	 * @param int $userStatus
-	 * @return string
-	 */
 	private function getDetailsDialogEventInfo(
+		ProperPageIdentity $page,
 		ExistingEventRegistration $registration,
 		int $organizersCount,
 		int $userStatus
 	): string {
 		$eventInfo = $this->getDetailsDialogDates( $registration );
 		$eventInfo .= $this->getDetailsDialogLocation(
+			$page,
 			$registration,
 			$organizersCount,
 			$userStatus
@@ -668,7 +664,7 @@ class EventPageDecorator {
 		if ( $registration->getWikis() ) {
 			$eventInfo .= $this->getDetailsDialogWikis( $registration );
 		}
-		$eventInfo .= $this->getDetailsDialogChat( $registration, $userStatus );
+		$eventInfo .= $this->getDetailsDialogChat( $page, $registration, $userStatus );
 
 		return Html::rawElement(
 			'div',
@@ -715,13 +711,8 @@ class EventPageDecorator {
 		);
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param int $organizersCount
-	 * @param int $userStatus
-	 * @return string
-	 */
 	private function getDetailsDialogLocation(
+		ProperPageIdentity $page,
 		ExistingEventRegistration $registration,
 		int $organizersCount,
 		int $userStatus
@@ -745,7 +736,9 @@ class EventPageDecorator {
 				$userStatus === self::USER_STATUS_ORGANIZER ||
 				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
 			) {
-				$linkContent = new HtmlSnippet( Linker::makeExternalLink( $meetingURL, $meetingURL ) );
+				$linkContent = new HtmlSnippet(
+					$this->linkRenderer->makeExternalLink( $meetingURL, $meetingURL, $page )
+				);
 			} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
 				$linkContent = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-link-register' )
@@ -805,12 +798,8 @@ class EventPageDecorator {
 		);
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param int $userStatus
-	 * @return string
-	 */
 	private function getDetailsDialogChat(
+		ProperPageIdentity $page,
 		ExistingEventRegistration $registration,
 		int $userStatus
 	): string {
@@ -823,7 +812,9 @@ class EventPageDecorator {
 			$userStatus === self::USER_STATUS_ORGANIZER ||
 			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
 		) {
-			$chatURLContent = new HtmlSnippet( Linker::makeExternalLink( $chatURL, $chatURL ) );
+			$chatURLContent = new HtmlSnippet(
+				$this->linkRenderer->makeExternalLink( $chatURL, $chatURL, $page )
+			);
 		} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
 			$chatURLContent = $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-chat-register' )
