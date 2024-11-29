@@ -14,7 +14,6 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\PermissionStatus;
 use StatusValue;
-use UnexpectedValueException;
 
 class UnregisterParticipantCommand {
 	public const SERVICE_NAME = 'CampaignEventsUnregisterParticipantCommand';
@@ -82,13 +81,18 @@ class UnregisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @return int self::CAN_UNREGISTER or one of the self::CANNOT_UNREGISTER_* contants.
+	 * @return StatusValue Statusvalue where value is self::CAN_UNREGISTER or self::CANNOT_UNREGISTER_DELETED constant.
 	 */
-	public static function checkIsUnregistrationAllowed( ExistingEventRegistration $registration ): int {
+	public static function checkIsUnregistrationAllowed(
+		ExistingEventRegistration $registration,
+		bool $userIsSelf = true ): StatusValue {
 		if ( $registration->getDeletionTimestamp() !== null ) {
-			return self::CANNOT_UNREGISTER_DELETED;
+			$msg = $userIsSelf
+				? 'campaignevents-unregister-registration-deleted'
+				: 'campaignevents-unregister-participants-registration-deleted';
+			return StatusValue::newFatal( $msg )->setResult( false, self::CANNOT_UNREGISTER_DELETED );
 		}
-		return self::CAN_UNREGISTER;
+		return StatusValue::newGood( self::CAN_UNREGISTER );
 	}
 
 	/**
@@ -101,11 +105,8 @@ class UnregisterParticipantCommand {
 		ICampaignsAuthority $performer
 	): StatusValue {
 		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
-		if ( $unregistrationAllowedVal !== self::CAN_UNREGISTER ) {
-			if ( $unregistrationAllowedVal === self::CANNOT_UNREGISTER_DELETED ) {
-				return StatusValue::newFatal( 'campaignevents-unregister-registration-deleted' );
-			}
-			throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
+		if ( !$unregistrationAllowedVal->isGood() ) {
+			return $unregistrationAllowedVal;
 		}
 
 		try {
@@ -186,13 +187,10 @@ class UnregisterParticipantCommand {
 		?array $users,
 		bool $invertUsers
 	): StatusValue {
-		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
+		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration, false );
 
-		if ( $unregistrationAllowedVal === self::CANNOT_UNREGISTER_DELETED ) {
-			return StatusValue::newFatal( 'campaignevents-unregister-participants-registration-deleted' );
-		}
-		if ( $unregistrationAllowedVal !== self::CAN_UNREGISTER ) {
-			throw new UnexpectedValueException( "Unexpected val $unregistrationAllowedVal" );
+		if ( !$unregistrationAllowedVal->isGood() ) {
+			return $unregistrationAllowedVal;
 		}
 
 		$trackingToolValidationStatus = $this->trackingToolEventWatcher->validateParticipantsRemoved(

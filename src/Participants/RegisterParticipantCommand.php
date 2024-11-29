@@ -102,26 +102,30 @@ class RegisterParticipantCommand {
 	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param string $registrationType {@see self::REGISTRATION_NEW} or {@see self::REGISTRATION_EDIT}.
-	 * @return int self::CAN_REGISTER or one of the self::CANNOT_REGISTER_* constants
+	 * @return StatusValue return statusvalue with any relevant error message and self::CAN_REGISTER
+	 * or one of the self::CANNOT_REGISTER_* constants in the value property
 	 */
 	public static function checkIsRegistrationAllowed(
 		ExistingEventRegistration $registration,
 		string $registrationType
-	): int {
+	): StatusValue {
 		if ( $registration->getDeletionTimestamp() !== null ) {
-			return self::CANNOT_REGISTER_DELETED;
+			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' )
+				->setResult( false, self::CANNOT_REGISTER_DELETED );
 		}
 		if ( $registrationType === self::REGISTRATION_NEW ) {
 			// Edits should be allowed even if the registration has closed or the event has
 			// ended, see T345735.
 			if ( $registration->isPast() ) {
-				return self::CANNOT_REGISTER_ENDED;
+				return StatusValue::newFatal( 'campaignevents-register-event-past' )
+					->setResult( false, self::CANNOT_REGISTER_ENDED );
 			}
 			if ( $registration->getStatus() !== EventRegistration::STATUS_OPEN ) {
-				return self::CANNOT_REGISTER_CLOSED;
+				return StatusValue::newFatal( 'campaignevents-register-event-not-open' )
+					->setResult( false, self::CANNOT_REGISTER_CLOSED );
 			}
 		}
-		return self::CAN_REGISTER;
+		return StatusValue::newGood( self::CAN_REGISTER );
 	}
 
 	/**
@@ -151,16 +155,9 @@ class RegisterParticipantCommand {
 		$registrationType = $existingRecord !== null ? self::REGISTRATION_EDIT : self::REGISTRATION_NEW;
 
 		$registrationAllowedVal = self::checkIsRegistrationAllowed( $registration, $registrationType );
-		if ( $registrationAllowedVal === self::CANNOT_REGISTER_DELETED ) {
-			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' );
+		if ( !$registrationAllowedVal->isGood() ) {
+			return $registrationAllowedVal;
 		}
-		if ( $registrationAllowedVal === self::CANNOT_REGISTER_ENDED ) {
-			return StatusValue::newFatal( 'campaignevents-register-event-past' );
-		}
-		if ( $registrationAllowedVal === self::CANNOT_REGISTER_CLOSED ) {
-			return StatusValue::newFatal( 'campaignevents-register-event-not-open' );
-		}
-
 		if ( $answers && $this->participantsStore->userHasAggregatedAnswers( $registration->getID(), $centralUser ) ) {
 			return StatusValue::newFatal( 'campaignevents-register-answers-aggregated-error' );
 		}

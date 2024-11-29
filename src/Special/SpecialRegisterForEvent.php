@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
@@ -20,6 +21,7 @@ use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Status\Status;
 use MediaWiki\Utils\MWTimestamp;
 use OOUI\IconWidget;
+use StatusValue;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	public const PAGE_NAME = 'RegisterForEvent';
@@ -49,6 +51,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private ?bool $isEdit;
 	/** @var array|null IDs of participant questions to show in the form */
 	private ?array $participantQuestionsToShow;
+	private ?CentralUser $centralUser;
 
 	/**
 	 * @param IEventLookup $eventLookup
@@ -83,20 +86,11 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	protected function getForm(): HTMLForm {
-		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
-			$this->curParticipantData = $this->participantsStore->getEventParticipant(
-				$this->event->getID(),
-				$centralUser,
-				true
-			);
+		if ( $this->centralUser !== null ) {
 			$this->hasAggregatedAnswers = $this->participantsStore->userHasAggregatedAnswers(
 				$this->event->getID(),
-				$centralUser
+				$this->centralUser
 			);
-		} catch ( UserNotGlobalException $_ ) {
-			$this->curParticipantData = null;
-			$this->hasAggregatedAnswers = false;
 		}
 
 		$this->isEdit = $this->curParticipantData || $this->getRequest()->wasPosted();
@@ -286,5 +280,31 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	 */
 	protected function getShowAlways(): bool {
 		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function checkEventIsValid(): StatusValue {
+		try {
+			$this->centralUser = $this->centralUserLookup->newFromAuthority(
+				new MWAuthorityProxy( $this->getAuthority() )
+			);
+			$this->curParticipantData = $this->participantsStore->getEventParticipant(
+				$this->event->getID(),
+				$this->centralUser,
+				true
+			);
+		} catch ( UserNotGlobalException $_ ) {
+			$this->centralUser = null;
+			$this->curParticipantData = null;
+			$this->hasAggregatedAnswers = false;
+		}
+		return RegisterParticipantCommand::checkIsRegistrationAllowed(
+			$this->event,
+			$this->curParticipantData ?
+				RegisterParticipantCommand::REGISTRATION_EDIT :
+				RegisterParticipantCommand::REGISTRATION_NEW
+		);
 	}
 }

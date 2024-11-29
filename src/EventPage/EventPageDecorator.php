@@ -1064,7 +1064,7 @@ class EventPageDecorator {
 
 			if ( $participant ) {
 				$checkUnregistrationAllowedVal = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event );
-				switch ( $checkUnregistrationAllowedVal ) {
+				switch ( $checkUnregistrationAllowedVal->getValue() ) {
 					case UnregisterParticipantCommand::CANNOT_UNREGISTER_DELETED:
 						throw new UnexpectedValueException( "Registration should not be deleted at this point." );
 					case UnregisterParticipantCommand::CAN_UNREGISTER:
@@ -1082,7 +1082,7 @@ class EventPageDecorator {
 			$event,
 			RegisterParticipantCommand::REGISTRATION_NEW
 		);
-		switch ( $checkRegistrationAllowedVal ) {
+		switch ( $checkRegistrationAllowedVal->value ) {
 			case RegisterParticipantCommand::CANNOT_REGISTER_DELETED:
 				throw new UnexpectedValueException( "Registration should not be deleted at this point." );
 			case RegisterParticipantCommand::CANNOT_REGISTER_ENDED:
