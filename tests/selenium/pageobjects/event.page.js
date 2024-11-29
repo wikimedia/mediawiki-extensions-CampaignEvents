@@ -53,6 +53,10 @@ class EventPage extends Page {
 		return $( '.ext-campaignevents-eventpage-registration-success-notif' );
 	}
 
+	get participantRegisteredNotification() {
+		return $( '.ext-campaignevents-eventpage-registered-notif' );
+	}
+
 	open( event ) {
 		super.openTitle( event );
 	}
@@ -90,12 +94,23 @@ class EventPage extends Page {
 	}
 
 	/**
-	 * Cancel registration for an event.
-	 *
 	 * Cancel a user's registration for an event and confirm that cancellation
 	 *
+	 * @param {boolean} isPostRegistration Whether we just registered for the event.
 	 */
-	async cancelRegistration() {
+	async cancelRegistration( isPostRegistration ) {
+		if ( isPostRegistration ) {
+			// If we just registered, the success notification is going to pop up. In the small
+			// selenium window, it overlaps with the manage registration menu, which becomes
+			// unclickable. But because the element is there, puppeteer just throws a generic error
+			// immediately. So, wait for the notification to appear, click on it, then wait until
+			// it's gone for good. The `isPostRegistration` parameter is necessary because we can't
+			// just unconditionally wait for a notification that may never come; and we also cannot
+			// assume that the notification is already visible by the time this method is called.
+			const registeredNotif = await this.participantRegisteredNotification;
+			await registeredNotif.click();
+			await registeredNotif.waitForDisplayed( { reverse: true } );
+		}
 		await this.manageRegistrationButton.click();
 		await this.cancelRegistrationButton.click();
 		await this.confirmCancellation.click();

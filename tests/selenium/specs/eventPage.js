@@ -43,7 +43,8 @@ describe( 'Event page', () => {
 		await loginWithNewAccount( userName );
 		await EventPage.open( event );
 		await EventPage.register();
-		await EventPage.cancelRegistration();
+		await expect( await EventPage.successfulRegistration ).toBeDisplayed();
+		await EventPage.cancelRegistration( true );
 		await expect( await EventPage.registerForEventButton ).toBeDisplayed();
 	} );
 } );
