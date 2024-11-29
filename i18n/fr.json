@@ -517,6 +517,8 @@
 	"campaignevents-invitationlist-preference": "Incluez-moi dans les [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists listes d'invitation].",
 	"prefs-campaignevents-invitations": "Listes d'invitation",
 	"campaignevents-eventpage-btn-collaboration-list": "Trouver plus d'événements",
+	"campaignevents-allevents-label-filter-wikis": "Wikis",
+	"campaignevents-allevents-placeholder-add-wikis": "Ajouter des wikis...",
 	"campaignevents-eventslist-all-wikis": "Cet événement est ouvert à tous les wikis.",
 	"campaignevents-eventslist-wikis-more": "$1 autre{{PLURAL:$1||s}}",
 	"campaignevents-eventslist-wiki-label": "Wikis"

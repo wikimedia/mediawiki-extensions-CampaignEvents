@@ -236,5 +236,7 @@
 	"campaignevents-participant-question-no-response": "Nessuna risposta",
 	"campaignevents-myinvitationslist-new-button": "Nuovo",
 	"prefs-campaignevents-invitations": "Elenchi di inviti",
+	"campaignevents-allevents-label-filter-wikis": "Wiki",
+	"campaignevents-allevents-placeholder-add-wikis": "Aggiungi wiki...",
 	"campaignevents-eventslist-wiki-label": "Wiki"
 }

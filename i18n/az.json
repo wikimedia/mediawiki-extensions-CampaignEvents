@@ -489,6 +489,8 @@
 	"campaignevents-invitationlist-preference": "Məni [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists dəvət siyahılarına] əlavə et.",
 	"prefs-campaignevents-invitations": "Dəvət siyahıları",
 	"campaignevents-eventpage-btn-collaboration-list": "Daha çox tədbir kəşf edin",
+	"campaignevents-allevents-label-filter-wikis": "Vikilər",
+	"campaignevents-allevents-placeholder-add-wikis": "Viki əlavə et...",
 	"campaignevents-eventslist-all-wikis": "Bu tədbir bütün vikilərə açıqdır.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|daha çox}}",
 	"campaignevents-eventslist-wiki-label": "Vikilər"

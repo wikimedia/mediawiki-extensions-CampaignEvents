@@ -490,6 +490,8 @@
 	"campaignevents-invitationlist-preference": "Вклучи ме на [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списокот со покани].",
 	"prefs-campaignevents-invitations": "Список со покани",
 	"campaignevents-eventpage-btn-collaboration-list": "Најдете повеќе настани",
+	"campaignevents-allevents-label-filter-wikis": "Викија",
+	"campaignevents-allevents-placeholder-add-wikis": "Додајте викија...",
 	"campaignevents-eventslist-all-wikis": "Овој настан е отворен за сите викија.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|уште}} $1",
 	"campaignevents-eventslist-wiki-label": "Викија"

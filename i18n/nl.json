@@ -494,6 +494,8 @@
 	"campaignevents-invitationlist-preference": "Voeg mij toe aan de [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists uitnodigingslijsten].",
 	"prefs-campaignevents-invitations": "Uitnodigingslijsten",
 	"campaignevents-eventpage-btn-collaboration-list": "Meer evenementen zoeken",
+	"campaignevents-allevents-label-filter-wikis": "Wiki’s",
+	"campaignevents-allevents-placeholder-add-wikis": "Wiki’s toevoegen…",
 	"campaignevents-eventslist-all-wikis": "Dit evenement staat open voor alle wiki’s.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|}}nog $1",
 	"campaignevents-eventslist-wiki-label": "Wiki's"

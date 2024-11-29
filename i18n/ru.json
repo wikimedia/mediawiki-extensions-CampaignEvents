@@ -149,5 +149,6 @@
 	"campaignevents-invitation-list-error-invalid-page": "Откройте страницу мероприятия, на которой используется регистрация событий.",
 	"campaignevents-invitation-list-error-not-organizer": "Откройте страницу мероприятия, на которой вы указаны в качестве организатора.",
 	"campaignevents-worklist-error-empty": "Введите хотя бы одно название статьи.",
+	"campaignevents-allevents-placeholder-add-wikis": "Добавить вики...",
 	"campaignevents-eventslist-wiki-label": "Вики"
 }
