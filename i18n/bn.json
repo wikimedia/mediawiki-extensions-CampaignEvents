@@ -179,5 +179,6 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "প্রতিক্রিয়াগুলি দেখুন",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "সূর্য\nচাঁদ\nঘর",
 	"campaignevents-myinvitationslist-new-button": "নতুন",
+	"campaignevents-allevents-placeholder-add-wikis": "উইকি যোগ করুন...",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|আরও}} $1টি"
 }
