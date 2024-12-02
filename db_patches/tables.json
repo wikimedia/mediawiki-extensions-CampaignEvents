@@ -160,6 +160,14 @@
 				"options": {
 					"notnull": false
 				}
+			},
+			{
+				"name": "event_is_test_event",
+				"type": "mwtinyint",
+				"options": {
+					"length": 1,
+					"default": 0
+				}
 			}
 		],
 		"indexes": [
