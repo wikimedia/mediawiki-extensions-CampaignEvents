@@ -37,6 +37,13 @@
 }
 /* stylelint-enable selector-max-id */
 
+html.client-js .ext-campaignevents-allevents-wikis-field.oo-ui-checkboxMultiselectInputWidget {
+	// Limit the height of the checkbox multiselect while the field is being infused, to avoid
+	// flooding the interface with potentially hundreds of wikis.
+	height: 20px;
+	visibility: hidden;
+}
+
 .ext-campaignevents-collaboration-list-empty-state {
 	.cdx-message__icon.cdx-css-icon--page {
 		.cdx-mixin-css-icon(

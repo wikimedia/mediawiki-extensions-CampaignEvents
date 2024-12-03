@@ -146,7 +146,8 @@ class SpecialAllEvents extends SpecialPage {
 				'label-message' => 'campaignevents-allevents-label-filter-wikis',
 				'options' => $this->wikiLookup->getListForSelect(),
 				'placeholder-message' => 'campaignevents-allevents-placeholder-add-wikis',
-				'max' => 10
+				'max' => 10,
+				'cssclass' => 'ext-campaignevents-allevents-wikis-field',
 			];
 		}
 		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
