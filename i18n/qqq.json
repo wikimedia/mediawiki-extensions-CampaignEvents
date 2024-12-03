@@ -508,5 +508,8 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Placeholder message for the wiki filter field on [[Special:AllEvents]]",
 	"campaignevents-eventslist-all-wikis": "Message shown in [[Special:AllEvents]] instead of a list of wikis, to indicate that the event is relevant to all wikis",
 	"campaignevents-eventslist-wikis-more": "Message shown in [[Special:AllEvents]] at the end of a list of wikis, to indicate that there are more wikis that are not shown. The text is hyperlinked to [[Special:EventDetails]]. Parameters:\n* $1 - Number of additional wikis.",
+	"campaignevents-eventpage-all-wikis": "Message shown in [[Special:AllEvents]] instead of a list of wikis, to indicate that the event is relevant to all wikis",
+	"campaignevents-eventpage-wikis-more": "Message shown in [[Special:AllEvents]] at the end of a list of wikis, to indicate that there are more wikis that are not shown. The text is hyperlinked to [[Special:EventDetails]]. Parameters:\\n* $1 - Number of additional wikis.",
+	"campaignevents-eventpage-dialog-wikis-label": "Accessibility label and title added to wiki icon on [[Special:EventDetails]]",
 	"campaignevents-eventslist-wiki-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen wikis for the event"
 }
