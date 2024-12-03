@@ -24,8 +24,13 @@ class RegisterParticipantCommand {
 	public const CANNOT_REGISTER_DELETED = 1;
 	public const CANNOT_REGISTER_ENDED = 2;
 	public const CANNOT_REGISTER_CLOSED = 3;
+
 	public const REGISTRATION_PRIVATE = true;
 	public const REGISTRATION_PUBLIC = false;
+
+	// Whether the user is registering for the first time, or updating their registration information.
+	public const REGISTRATION_NEW = 'new';
+	public const REGISTRATION_EDIT = 'edit';
 
 	private ParticipantsStore $participantsStore;
 	private PermissionChecker $permissionChecker;
@@ -96,17 +101,25 @@ class RegisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
+	 * @param string $registrationType {@see self::REGISTRATION_NEW} or {@see self::REGISTRATION_EDIT}.
 	 * @return int self::CAN_REGISTER or one of the self::CANNOT_REGISTER_* constants
 	 */
-	public static function checkIsRegistrationAllowed( ExistingEventRegistration $registration ): int {
+	public static function checkIsRegistrationAllowed(
+		ExistingEventRegistration $registration,
+		string $registrationType
+	): int {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			return self::CANNOT_REGISTER_DELETED;
 		}
-		if ( $registration->isPast() ) {
-			return self::CANNOT_REGISTER_ENDED;
-		}
-		if ( $registration->getStatus() !== EventRegistration::STATUS_OPEN ) {
-			return self::CANNOT_REGISTER_CLOSED;
+		if ( $registrationType === self::REGISTRATION_NEW ) {
+			// Edits should be allowed even if the registration has closed or the event has
+			// ended, see T345735.
+			if ( $registration->isPast() ) {
+				return self::CANNOT_REGISTER_ENDED;
+			}
+			if ( $registration->getStatus() !== EventRegistration::STATUS_OPEN ) {
+				return self::CANNOT_REGISTER_CLOSED;
+			}
 		}
 		return self::CAN_REGISTER;
 	}
@@ -124,14 +137,6 @@ class RegisterParticipantCommand {
 		bool $isPrivate,
 		array $answers
 	): StatusValue {
-		$registrationAllowedVal = self::checkIsRegistrationAllowed( $registration );
-		if ( $registrationAllowedVal === self::CANNOT_REGISTER_DELETED ) {
-			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' );
-		}
-		// The other values are checked below after we determined whether this is an edit or a first time
-		// registration. Edits should be allowed even if the registration has closed or the event has
-		// ended, see T345735.
-
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
 		} catch ( UserNotGlobalException $_ ) {
@@ -143,14 +148,17 @@ class RegisterParticipantCommand {
 			$centralUser,
 			true
 		);
+		$registrationType = $existingRecord !== null ? self::REGISTRATION_EDIT : self::REGISTRATION_NEW;
 
-		if ( !$existingRecord ) {
-			if ( $registrationAllowedVal === self::CANNOT_REGISTER_ENDED ) {
-				return StatusValue::newFatal( 'campaignevents-register-event-past' );
-			}
-			if ( $registrationAllowedVal === self::CANNOT_REGISTER_CLOSED ) {
-				return StatusValue::newFatal( 'campaignevents-register-event-not-open' );
-			}
+		$registrationAllowedVal = self::checkIsRegistrationAllowed( $registration, $registrationType );
+		if ( $registrationAllowedVal === self::CANNOT_REGISTER_DELETED ) {
+			return StatusValue::newFatal( 'campaignevents-register-registration-deleted' );
+		}
+		if ( $registrationAllowedVal === self::CANNOT_REGISTER_ENDED ) {
+			return StatusValue::newFatal( 'campaignevents-register-event-past' );
+		}
+		if ( $registrationAllowedVal === self::CANNOT_REGISTER_CLOSED ) {
+			return StatusValue::newFatal( 'campaignevents-register-event-not-open' );
 		}
 
 		if ( $answers && $this->participantsStore->userHasAggregatedAnswers( $registration->getID(), $centralUser ) ) {

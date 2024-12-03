@@ -277,4 +277,86 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$trackingToolWatcher
 		];
 	}
+
+	/**
+	 * @dataProvider provideCheckIsRegistrationAllowed
+	 * @covers ::checkIsRegistrationAllowed
+	 */
+	public function testCheckIsRegistrationAllowed(
+		?string $deletionTS,
+		bool $isPast,
+		string $eventStatus,
+		string $registrationType,
+		int $expected
+	): void {
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getDeletionTimestamp' )->willReturn( $deletionTS );
+		$event->method( 'isPast' )->willReturn( $isPast );
+		$event->method( 'getStatus' )->willReturn( $eventStatus );
+		$this->assertSame(
+			$expected,
+			RegisterParticipantCommand::checkIsRegistrationAllowed( $event, $registrationType )
+		);
+	}
+
+	public static function provideCheckIsRegistrationAllowed(): Generator {
+		$ts = '1733259876';
+		yield 'New registration, deleted' => [
+			$ts,
+			false,
+			EventRegistration::STATUS_OPEN,
+			RegisterParticipantCommand::REGISTRATION_NEW,
+			RegisterParticipantCommand::CANNOT_REGISTER_DELETED
+		];
+		yield 'New registration, past' => [
+			null,
+			true,
+			EventRegistration::STATUS_OPEN,
+			RegisterParticipantCommand::REGISTRATION_NEW,
+			RegisterParticipantCommand::CANNOT_REGISTER_ENDED
+		];
+		yield 'New registration, closed' => [
+			null,
+			false,
+			EventRegistration::STATUS_CLOSED,
+			RegisterParticipantCommand::REGISTRATION_NEW,
+			RegisterParticipantCommand::CANNOT_REGISTER_CLOSED
+		];
+		yield 'New registration, valid' => [
+			null,
+			false,
+			EventRegistration::STATUS_OPEN,
+			RegisterParticipantCommand::REGISTRATION_NEW,
+			RegisterParticipantCommand::CAN_REGISTER
+		];
+
+		yield 'Edit registration, deleted' => [
+			$ts,
+			false,
+			EventRegistration::STATUS_OPEN,
+			RegisterParticipantCommand::REGISTRATION_EDIT,
+			RegisterParticipantCommand::CANNOT_REGISTER_DELETED
+		];
+		yield 'Edit registration, past' => [
+			null,
+			true,
+			EventRegistration::STATUS_OPEN,
+			RegisterParticipantCommand::REGISTRATION_EDIT,
+			RegisterParticipantCommand::CAN_REGISTER
+		];
+		yield 'Edit registration, closed' => [
+			null,
+			false,
+			EventRegistration::STATUS_CLOSED,
+			RegisterParticipantCommand::REGISTRATION_EDIT,
+			RegisterParticipantCommand::CAN_REGISTER
+		];
+		yield 'Edit registration, valid' => [
+			null,
+			false,
+			EventRegistration::STATUS_OPEN,
+			RegisterParticipantCommand::REGISTRATION_EDIT,
+			RegisterParticipantCommand::CAN_REGISTER
+		];
+	}
 }

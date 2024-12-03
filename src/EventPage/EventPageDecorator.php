@@ -1077,7 +1077,10 @@ class EventPageDecorator {
 
 		// User is logged-in and not already participating, or logged-out, in which case we'll know better
 		// once they log in.
-		$checkRegistrationAllowedVal = RegisterParticipantCommand::checkIsRegistrationAllowed( $event );
+		$checkRegistrationAllowedVal = RegisterParticipantCommand::checkIsRegistrationAllowed(
+			$event,
+			RegisterParticipantCommand::REGISTRATION_NEW
+		);
 		switch ( $checkRegistrationAllowedVal ) {
 			case RegisterParticipantCommand::CANNOT_REGISTER_DELETED:
 				throw new UnexpectedValueException( "Registration should not be deleted at this point." );
