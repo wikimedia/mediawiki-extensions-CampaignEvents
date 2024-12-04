@@ -47,8 +47,9 @@ class EventFormatter {
 			return $messageFormatter->format( MessageValue::new( $allWikisMessage ) );
 		}
 		$currentWikiId = WikiMap::getCurrentWikiId();
-		if ( array_key_exists( $currentWikiId, $wikis ) ) {
-			unset( $wikis[$currentWikiId] );
+		$curWikiKey = array_search( $currentWikiId, $wikis, true );
+		if ( $curWikiKey !== false ) {
+			unset( $wikis[$curWikiKey] );
 			array_unshift( $wikis, $currentWikiId );
 		}
 		$displayedWikiNames = $wikiLookup->getLocalizedNames(

@@ -490,8 +490,9 @@ class EventsListPager extends ReverseChronologicalPager {
 			return $this->getWikiListWidget( $eventID, $wikiName );
 		}
 		$currentWikiId = WikiMap::getCurrentWikiId();
-		if ( array_key_exists( $currentWikiId, $eventWikis ) ) {
-			unset( $eventWikis[$currentWikiId] );
+		$curWikiKey = array_search( $currentWikiId, $eventWikis, true );
+		if ( $curWikiKey !== false ) {
+			unset( $eventWikis[$curWikiKey] );
 			array_unshift( $eventWikis, $currentWikiId );
 		}
 		return $this->getWikiListWidget( $eventID, $eventWikis );
