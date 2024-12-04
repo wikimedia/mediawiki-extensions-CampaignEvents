@@ -116,7 +116,8 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			[],
 			null,
 			null,
-			null
+			null,
+			false
 		);
 		$eventID = CampaignEventsServices::getEventStore()->saveRegistration( $event );
 

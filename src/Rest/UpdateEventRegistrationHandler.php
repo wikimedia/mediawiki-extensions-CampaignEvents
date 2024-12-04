@@ -172,6 +172,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$existingEvent->getCreationTimestamp(),
 			$existingEvent->getLastEditTimestamp(),
 			$existingEvent->getDeletionTimestamp(),
+			$body['is_test_event'],
 			EventFactory::VALIDATE_SKIP_DATES_PAST
 		);
 	}

@@ -83,6 +83,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'meeting_country' => 'My country',
 			'meeting_address' => 'My address 123',
 			'questions' => [],
+			'is_test_event' => false,
 		];
 		$meetingType = ( $eventData['online_meeting'] ? EventRegistration::MEETING_TYPE_ONLINE : 0 )
 			| ( $eventData['inperson_meeting'] ? EventRegistration::MEETING_TYPE_IN_PERSON : 0 );
@@ -113,7 +114,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['questions'],
 			'1646000000',
 			'1646000000',
-			null
+			null,
+			$eventData['is_test_event']
 		);
 		$eventLookup = $this->createMock( IEventLookup::class );
 		$eventLookup->expects( $this->once() )

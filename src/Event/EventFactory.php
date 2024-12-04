@@ -92,6 +92,7 @@ class EventFactory {
 	 * @param string|null $creationTimestamp In the TS_MW format
 	 * @param string|null $lastEditTimestamp In the TS_MW format
 	 * @param string|null $deletionTimestamp In the TS_MW format
+	 * @param bool $isTestEvent
 	 * @param int $validationFlags
 	 *
 	 * @return EventRegistration
@@ -118,6 +119,7 @@ class EventFactory {
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
 		?string $deletionTimestamp,
+		bool $isTestEvent,
 		int $validationFlags = self::VALIDATE_ALL
 	): EventRegistration {
 		$res = StatusValue::newGood();
@@ -232,7 +234,8 @@ class EventFactory {
 			$questionIDs,
 			$creationTSUnix,
 			$lastEditTSUnix,
-			$deletionTSUnix
+			$deletionTSUnix,
+			$isTestEvent
 		);
 	}
 

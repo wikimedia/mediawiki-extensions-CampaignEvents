@@ -681,6 +681,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$this->event ? $this->event->getCreationTimestamp() : null,
 				$this->event ? $this->event->getLastEditTimestamp() : null,
 				$this->event ? $this->event->getDeletionTimestamp() : null,
+				false,
 				$this->getValidationFlags()
 			);
 		} catch ( InvalidEventDataException $e ) {

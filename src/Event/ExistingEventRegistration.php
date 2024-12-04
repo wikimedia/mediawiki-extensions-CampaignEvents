@@ -36,6 +36,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string $creationTimestamp UNIX timestamp
 	 * @param string $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
+	 * @param bool $isTestEvent
 	 */
 	public function __construct(
 		int $id,
@@ -57,7 +58,8 @@ class ExistingEventRegistration extends EventRegistration {
 		array $participantQuestions,
 		string $creationTimestamp,
 		string $lastEditTimestamp,
-		?string $deletionTimestamp
+		?string $deletionTimestamp,
+		bool $isTestEvent
 	) {
 		// @phan-suppress-next-line PhanParamTooFewUnpack
 		parent::__construct( ...func_get_args() );

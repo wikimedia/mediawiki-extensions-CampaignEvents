@@ -65,7 +65,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[],
 			null,
 			null,
-			null
+			null,
+			false
 		);
 	}
 
@@ -215,6 +216,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'event_created_at' => '20220811142657',
 			'event_last_edit' => '20220811142657',
 			'event_deleted_at' => null,
+			'event_is_test_event' => false,
 		];
 		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'campaign_events' )
@@ -283,6 +285,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			null,
 			null,
 			'del' => null,
+			false
 		];
 	}
 

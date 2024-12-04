@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -85,7 +84,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			null,
 			null,
 			null,
-			EventFactory::VALIDATE_ALL
+			$body['is_test_event']
 		);
 	}
 }

@@ -195,6 +195,11 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'string',
 				StringDef::PARAM_MAX_BYTES => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			],
+			'is_test_event' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_DEFAULT => false,
+			],
 		] + $this->getTokenParamDefinition();
 
 		if ( $this->eventWikisEnabled ) {

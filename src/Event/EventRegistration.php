@@ -68,6 +68,7 @@ class EventRegistration {
 	private ?string $creationTimestamp;
 	private ?string $lastEditTimestamp;
 	private ?string $deletionTimestamp;
+	private bool $isTestEvent;
 
 	/**
 	 * @param int|null $id
@@ -91,6 +92,7 @@ class EventRegistration {
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
+	 * @param bool $isTestEvent
 	 */
 	public function __construct(
 		?int $id,
@@ -112,7 +114,8 @@ class EventRegistration {
 		array $participantQuestions,
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
-		?string $deletionTimestamp
+		?string $deletionTimestamp,
+		bool $isTestEvent
 	) {
 		Assert::parameter(
 			MWTimestamp::convert( TS_MW, $startLocalTimestamp ) === $startLocalTimestamp,
@@ -148,6 +151,7 @@ class EventRegistration {
 		$this->creationTimestamp = $creationTimestamp;
 		$this->lastEditTimestamp = $lastEditTimestamp;
 		$this->deletionTimestamp = $deletionTimestamp;
+		$this->isTestEvent = $isTestEvent;
 		$this->topics = $topics;
 	}
 
@@ -315,6 +319,13 @@ class EventRegistration {
 	 */
 	public function getDeletionTimestamp(): ?string {
 		return $this->deletionTimestamp;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsTestEvent(): bool {
+		return $this->isTestEvent;
 	}
 
 	/**

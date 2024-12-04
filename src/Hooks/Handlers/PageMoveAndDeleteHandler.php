@@ -135,7 +135,8 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 			$registration->getParticipantQuestions(),
 			$registration->getCreationTimestamp(),
 			$registration->getLastEditTimestamp(),
-			$registration->getDeletionTimestamp()
+			$registration->getDeletionTimestamp(),
+			$registration->getIsTestEvent()
 		);
 
 		$this->eventStore->saveRegistration( $newRegistration );

@@ -50,7 +50,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'questions' => [],
 			'creation' => '1650000000',
 			'last_edit' => '1651000000',
-			'deletion' => null
+			'deletion' => null,
+			'is_test_event' => false
 		];
 	}
 
@@ -99,6 +100,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['creation'], $registration->getCreationTimestamp(), 'creation' );
 		$this->assertSame( $data['last_edit'], $registration->getLastEditTimestamp(), 'last_edit' );
 		$this->assertSame( $data['deletion'], $registration->getDeletionTimestamp(), 'deletion' );
+		$this->assertSame( $data['is_test_event'], $registration->getIsTestEvent(), 'is_test_event' );
 	}
 
 	/**

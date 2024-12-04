@@ -27,6 +27,7 @@ trait EditEventRegistrationHandlerTestTrait {
 		'meeting_url' => 'https://meetingurl.example.org',
 		'meeting_country' => 'Country',
 		'meeting_address' => 'Address',
+		'is_test_event' => false,
 	];
 
 	/**

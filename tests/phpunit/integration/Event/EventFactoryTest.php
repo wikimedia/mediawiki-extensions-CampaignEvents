@@ -55,6 +55,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'creation' => '20220308100000',
 		'lastedit' => '20220308100000',
 		'deletion' => null,
+		false,
 		'validationFlags' => EventFactory::VALIDATE_ALL
 	];
 

@@ -76,6 +76,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'meeting_country' => $registration->getMeetingCountry(),
 			'meeting_address' => $registration->getMeetingAddress(),
 			'questions' => $registration->getParticipantQuestions(),
+			'is_test_event' => $registration->getIsTestEvent(),
 		];
 
 		if ( $this->eventWikisEnabled ) {

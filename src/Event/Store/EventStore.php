@@ -380,7 +380,6 @@ class EventStore implements IEventStore, IEventLookup {
 		} else {
 			$trackingTools = [];
 		}
-
 		return new ExistingEventRegistration(
 			(int)$row->event_id,
 			$row->event_name,
@@ -401,7 +400,8 @@ class EventStore implements IEventStore, IEventLookup {
 			$questionIDs,
 			wfTimestamp( TS_UNIX, $row->event_created_at ),
 			wfTimestamp( TS_UNIX, $row->event_last_edit ),
-			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at )
+			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at ),
+			(bool)$row->event_is_test_event
 		);
 	}
 
@@ -437,6 +437,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
 			'event_last_edit' => $curDBTimestamp,
 			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
+			'event_is_test_event' => $event->getIsTestEvent()
 		];
 
 		$eventID = $event->getID();
