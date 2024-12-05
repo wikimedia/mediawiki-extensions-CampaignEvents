@@ -277,8 +277,11 @@ class EventDetailsModule {
 			[ 'ext-campaignevents-eventdetails-time' ]
 		);
 
-		$canRegister = RegisterParticipantCommand::checkIsRegistrationAllowed( $this->registration ) ===
-			RegisterParticipantCommand::CAN_REGISTER;
+		$registrationAllowedVal = RegisterParticipantCommand::checkIsRegistrationAllowed(
+			$this->registration,
+			RegisterParticipantCommand::REGISTRATION_NEW
+		);
+		$canRegister = $registrationAllowedVal === RegisterParticipantCommand::CAN_REGISTER;
 
 		$userCanViewSensitiveEventData = $this->permissionChecker->userCanViewSensitiveEventData( $authority );
 		$items[] = $this->getLocationSection(
