@@ -493,5 +493,8 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Wikis hinzufügen …",
 	"campaignevents-eventslist-all-wikis": "Diese Veranstaltung ist für alle Wikis offen.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|mehr}}",
+	"campaignevents-eventpage-all-wikis": "Diese Veranstaltung ist für alle Wikis offen.",
+	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|mehr}}",
+	"campaignevents-eventpage-dialog-wikis-label": "Wikis",
 	"campaignevents-eventslist-wiki-label": "Wikis"
 }

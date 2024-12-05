@@ -277,5 +277,8 @@
 	"campaignevents-eventpage-btn-collaboration-list": "Méi Evenementer fannen",
 	"campaignevents-allevents-label-filter-wikis": "Wikien",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|méi}}",
+	"campaignevents-eventpage-all-wikis": "Dëst Evenement ass oppe fir all Wikien.",
+	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|méi}}",
+	"campaignevents-eventpage-dialog-wikis-label": "Wikien",
 	"campaignevents-eventslist-wiki-label": "Wikien"
 }

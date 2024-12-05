@@ -494,5 +494,8 @@
 	"campaignevents-allevents-placeholder-add-wikis": "נא להוסיף אתרי ויקי...",
 	"campaignevents-eventslist-all-wikis": "האירוע הזה פתוח לכל אתרי הוויקי.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|עוד}} $1",
+	"campaignevents-eventpage-all-wikis": "האירוע הזה פתוח לכל אתרי הוויקי.",
+	"campaignevents-eventpage-wikis-more": "{{PLURAL:$1|ועוד}} $1",
+	"campaignevents-eventpage-dialog-wikis-label": "אתרי ויקי",
 	"campaignevents-eventslist-wiki-label": "אתרי ויקי"
 }
