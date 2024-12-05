@@ -5,7 +5,11 @@ const Page = require( 'wdio-mediawiki/Page' );
 class MyEventsPage extends Page {
 
 	get manageEventMenuButton() {
-		return $( '.ext-campaignevents-events-table-cell-manage .oo-ui-icon-ellipsis' );
+		return $( '.ext-campaignevents-events-table-cell-manage .oo-ui-buttonMenuSelectWidget' );
+	}
+
+	get firstRegistrationNameCell() {
+		return $( '.TablePager_col_event_name' );
 	}
 
 	get closeRegistrationButton() {
@@ -40,6 +44,10 @@ class MyEventsPage extends Page {
 		return $( '.oo-ui-defaultOverlay .oo-ui-selectWidget' ).$( '.oo-ui-optionWidget=Open events' );
 	}
 
+	get eventNameFilter() {
+		return $( 'input[name="wpSearch"]' );
+	}
+
 	get filtersSubmitButton() {
 		return $( '#ext-campaignevents-myevents-form button[type="submit"]' );
 	}
@@ -52,6 +60,11 @@ class MyEventsPage extends Page {
 		await this.filterMenu.click();
 		await this.eventStatusFilter.click();
 		await this.openEventsFilter.click();
+		await this.filtersSubmitButton.click();
+	}
+
+	async filterByName( name ) {
+		await this.eventNameFilter.setValue( name );
 		await this.filtersSubmitButton.click();
 	}
 
