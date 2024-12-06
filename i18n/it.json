@@ -238,5 +238,8 @@
 	"prefs-campaignevents-invitations": "Elenchi di inviti",
 	"campaignevents-allevents-label-filter-wikis": "Wiki",
 	"campaignevents-allevents-placeholder-add-wikis": "Aggiungi wiki...",
+	"campaignevents-eventpage-all-wikis": "Questo evento è aperto a tutti i wiki.",
+	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|altro|altri}}",
+	"campaignevents-eventpage-dialog-wikis-label": "Wiki",
 	"campaignevents-eventslist-wiki-label": "Wiki"
 }
