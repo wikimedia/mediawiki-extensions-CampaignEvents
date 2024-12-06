@@ -81,7 +81,10 @@
 			} else {
 				$msg = mw.message( 'campaignevents-eventpage-register-notification-edit' ).parseDom();
 			}
-			mw.notify( $msg, { type: 'success' } );
+			mw.notify(
+				$msg,
+				{ type: 'success', classes: [ 'ext-campaignevents-eventpage-registered-notif' ] }
+			);
 		}
 	}
 
