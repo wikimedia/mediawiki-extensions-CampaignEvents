@@ -469,6 +469,17 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		];
 
 		$this->hookRunner->onCampaignEventsRegistrationFormLoad( $formFields, $this->eventID );
+		$isTestEvent = $this->event && $this->event->getIsTestEvent();
+		$formFields['TestEvent'] = [
+			'type' => 'select',
+			'label-message' => 'campaignevents-edit-field-event-is-test',
+			'default' => $isTestEvent,
+			'options-messages' => [
+				'campaignevents-edit-field-status-live' => 0,
+				'campaignevents-edit-field-status-test' => 1,
+			],
+			'section' => self::DETAILS_SECTION,
+		];
 		$formFields = array_merge( $formFields, $this->getParticipantQuestionsFields() );
 
 		return $formFields;
@@ -653,6 +664,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		} else {
 			$wikis = [];
 		}
+		$testEvent = $data['TestEvent'] === "1";
 		$topics = [];
 		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
 			$topics = $data['Topics'] ?? [];
@@ -681,7 +693,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$this->event ? $this->event->getCreationTimestamp() : null,
 				$this->event ? $this->event->getLastEditTimestamp() : null,
 				$this->event ? $this->event->getDeletionTimestamp() : null,
-				false,
+				$testEvent,
 				$this->getValidationFlags()
 			);
 		} catch ( InvalidEventDataException $e ) {

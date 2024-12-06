@@ -423,6 +423,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		if ( $this->meetingType !== null ) {
 			$query['conds']['event_meeting_type'] = EventStore::meetingTypeToDBVal( $this->meetingType );
 		}
+		$query['conds']['event_is_test_event'] = false;
 		if ( $this->filterWiki && $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
 			$query['tables'][] = 'ce_event_wikis';
 			array_push( $query['fields'], 'ceew_wiki', 'ceew_event_id' );

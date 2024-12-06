@@ -328,6 +328,7 @@ class EventPageDecorator {
 			'wgCampaignEventsRegistrationUpdated' => (bool)$registrationUpdatedVal,
 			'wgCampaignEventsIsNewRegistration' => $isNewRegistration,
 			'wgCampaignEventsRegistrationUpdatedWarnings' => $registrationUpdatedWarnings,
+			'wgCampaignEventsIsTestRegistration' => $registration->getIsTestEvent(),
 		] );
 	}
 

@@ -21,6 +21,7 @@
 		answersAlreadyAggregated = mw.config.get( 'wgCampaignEventsAnswersAlreadyAggregated' ),
 		hasUpdatedRegistration = mw.config.get( 'wgCampaignEventsRegistrationUpdated' ),
 		isNewRegistration = mw.config.get( 'wgCampaignEventsIsNewRegistration' ),
+		isTestRegistration = mw.config.get( 'wgCampaignEventsIsTestRegistration' ),
 		registrationUpdatedWarnings = mw.config.get( 'wgCampaignEventsRegistrationUpdatedWarnings' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
@@ -286,11 +287,14 @@
 		var baseMsg = isNewRegistration ?
 			mw.message( 'campaignevents-eventpage-registration-enabled-notification' ) :
 			mw.message( 'campaignevents-eventpage-registration-edit-notification' );
-		var $msg = $( '<p>' ).append( baseMsg.parseDom() ).add(
-			$( '<p>' ).append(
-				mw.message( 'campaignevents-eventpage-registration-updated-notification-list' ).parseDom()
-			)
-		);
+		var $msg = baseMsg;
+		if ( !isTestRegistration ) {
+			$msg = $( '<p>' ).append( baseMsg.parseDom() ).add(
+				$( '<p>' ).append(
+					mw.message( 'campaignevents-eventpage-registration-updated-notification-list' ).parseDom()
+				)
+			);
+		}
 
 		mw.notify(
 			$msg,
