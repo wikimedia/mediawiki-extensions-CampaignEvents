@@ -14,7 +14,7 @@ describe( 'Enable Event Registration @daily', () => {
 	} );
 
 	it( 'is configured correctly', async () => {
-		EventRegistrationPage.open();
+		await EventRegistrationPage.open();
 
 		await expect( await EventRegistrationPage.enableRegistration ).toExist();
 	} );

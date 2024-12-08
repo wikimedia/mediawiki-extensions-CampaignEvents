@@ -18,7 +18,7 @@ module.exports = {
 		const csrfToken = await browser.execute( () => mw.user.tokens.values.csrfToken );
 		const cookies = await browser.getCookies();
 		const cookieString = cookies.map( ( cookie ) => `${ cookie.name }=${ cookie.value };` ).join( '' );
-		const baseUrl = await browser.options.baseUrl;
+		const baseUrl = browser.options.baseUrl;
 		const baseUrlString = baseUrl.endsWith( '/' ) ? baseUrl.slice( 0, -1 ) : baseUrl;
 
 		/* eslint-disable camelcase */
@@ -37,10 +37,10 @@ module.exports = {
 		const config = {
 			method: 'post',
 			maxBodyLength: Infinity,
-			url: `${ await baseUrlString }/rest.php/campaignevents/v0/event_registration`,
+			url: `${ baseUrlString }/rest.php/campaignevents/v0/event_registration`,
 			headers: {
 				'Content-type': 'application/json',
-				Cookie: await cookieString
+				Cookie: cookieString
 			},
 			data: data
 		};

@@ -44,8 +44,8 @@ class MyEventsPage extends Page {
 		return $( '#ext-campaignevents-myevents-form button[type="submit"]' );
 	}
 
-	open() {
-		super.openTitle( 'Special:MyEvents' );
+	async open() {
+		await super.openTitle( 'Special:MyEvents' );
 	}
 
 	async filterByOpenRegistrations() {

@@ -57,8 +57,8 @@ class EventPage extends Page {
 		return $( '.ext-campaignevents-eventpage-registered-notif' );
 	}
 
-	open( event ) {
-		super.openTitle( event );
+	async open( event ) {
+		await super.openTitle( event );
 	}
 
 	/**
