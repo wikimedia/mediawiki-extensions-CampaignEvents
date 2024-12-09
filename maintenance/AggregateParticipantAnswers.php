@@ -115,7 +115,9 @@ class AggregateParticipantAnswers extends Maintenance {
 		$prevID = $minRowID - 1;
 		$curID = $prevID + $batchSize;
 		do {
-			$this->processBatch( $prevID, $curID );
+			// Avoid locking nonexistent rows (T381622)
+			$batchEnd = min( $curID, $maxRowID );
+			$this->processBatch( $prevID, $batchEnd );
 			$prevID = $curID;
 			$curID += $batchSize;
 			$this->waitForReplication();
