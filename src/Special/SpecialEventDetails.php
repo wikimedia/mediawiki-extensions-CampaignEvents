@@ -35,6 +35,7 @@ class SpecialEventDetails extends SpecialPage {
 	public const PAGE_NAME = 'EventDetails';
 	private const MODULE_STYLES = [
 		'oojs-ui.styles.icons-movement',
+		'oojs-ui.styles.icons-wikimedia',
 		'ext.campaignEvents.specialPages.styles',
 		'oojs-ui-widgets.styles'
 	];
@@ -196,6 +197,7 @@ class SpecialEventDetails extends SpecialPage {
 			'autoFocus' => false,
 			'id' => 'ext-campaignevents-eventdetails-tabs'
 		] );
+
 		$eventDetailsModule = $this->frontendModulesFactory->newEventDetailsModule( $this->event, $language );
 		$tabs = [];
 		$tabs[] = $this->createTab(

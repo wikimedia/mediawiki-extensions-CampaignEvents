@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -40,6 +41,7 @@ class FrontendModulesFactory {
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 	private EventQuestionsRegistry $questionsRegistry;
 	private CampaignEventsHookRunner $hookRunner;
+	private WikiLookup $wikiLookup;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -57,6 +59,7 @@ class FrontendModulesFactory {
 	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
 	 * @param EventQuestionsRegistry $questionsRegistry
 	 * @param CampaignEventsHookRunner $hookRunner
+	 * @param WikiLookup $wikiLookup
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -73,7 +76,8 @@ class FrontendModulesFactory {
 		ParticipantAnswersStore $answersStore,
 		EventAggregatedAnswersStore $aggregatedAnswersStore,
 		EventQuestionsRegistry $questionsRegistry,
-		CampaignEventsHookRunner $hookRunner
+		CampaignEventsHookRunner $hookRunner,
+		WikiLookup $wikiLookup
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -90,6 +94,7 @@ class FrontendModulesFactory {
 		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
 		$this->questionsRegistry = $questionsRegistry;
 		$this->hookRunner = $hookRunner;
+		$this->wikiLookup = $wikiLookup;
 	}
 
 	/**
@@ -110,6 +115,7 @@ class FrontendModulesFactory {
 			$this->trackingToolRegistry,
 			$this->hookRunner,
 			$this->permissionChecker,
+			$this->wikiLookup,
 			$registration,
 			$language
 		);

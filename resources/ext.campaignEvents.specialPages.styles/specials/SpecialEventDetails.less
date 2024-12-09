@@ -26,13 +26,20 @@
 }
 
 .mw-body .ext-campaignevents-eventdetails-panel {
-	width: 60em;
+	width: 62em;
 	max-width: 100%;
 	// Include paddings in the max-width
 	box-sizing: border-box;
 
 	&.oo-ui-panelLayout-padded.oo-ui-panelLayout-framed {
 		margin-top: 0; // Remove margin set by OOUI
+	}
+}
+
+@media ( min-width: @min-width-breakpoint-tablet ) {
+	.mw-body .ext-campaignevents-eventdetails-panel {
+		max-height: 32em;
+		overflow-y: auto;
 	}
 }
 
@@ -84,6 +91,13 @@ span.ext-campaignevents-eventdetails-participants-private-icon {
 	margin-top: 1em;
 }
 
+@media ( min-width: @min-width-breakpoint-tablet ) {
+	.ext-campaignevents-eventdetails-view-event-page-button.oo-ui-buttonElement {
+		position: sticky;
+		bottom: 0;
+	}
+}
+
 .ext-campaignevents-eventdetails-info-topbar {
 	display: flex;
 	justify-content: space-between;
@@ -120,7 +134,8 @@ span.ext-campaignevents-eventdetails-participants-private-icon {
 	}
 }
 
-ul.ext-campaignevents-eventdetails-organizers-list {
+ul.ext-campaignevents-eventdetails-organizers-list,
+ul.ext-campaignevents-eventdetails-event-wikis-list {
 	margin-left: 0;
 	list-style-type: none;
 }

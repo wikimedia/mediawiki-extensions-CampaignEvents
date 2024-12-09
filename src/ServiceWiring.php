@@ -273,7 +273,8 @@ return [
 			$services->get( ParticipantAnswersStore::SERVICE_NAME ),
 			$services->get( EventAggregatedAnswersStore::SERVICE_NAME ),
 			$services->get( EventQuestionsRegistry::SERVICE_NAME ),
-			$services->get( CampaignEventsHookRunner::SERVICE_NAME )
+			$services->get( CampaignEventsHookRunner::SERVICE_NAME ),
+			$services->get( WikiLookup::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
