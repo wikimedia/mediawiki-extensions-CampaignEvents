@@ -189,5 +189,9 @@
 	"campaignevents-allevents-label-filter-wikis": "위키",
 	"campaignevents-allevents-placeholder-add-wikis": "위키 추가...",
 	"campaignevents-eventslist-all-wikis": "이 이벤트는 모든 위키에 개방됩니다.",
+	"campaignevents-eventslist-wikis-more": "$1개 {{PLURAL:$1|더 보기}}",
+	"campaignevents-eventpage-all-wikis": "이 이벤트는 모든 위키에 개방됩니다.",
+	"campaignevents-eventpage-wikis-more": "$1개 {{PLURAL:$1|더 보기}}",
+	"campaignevents-eventpage-dialog-wikis-label": "위키",
 	"campaignevents-eventslist-wiki-label": "위키"
 }
