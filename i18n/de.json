@@ -266,6 +266,8 @@
 	"campaignevents-event-details-chat-link": "Einladungslink für die Chat-Gruppe",
 	"campaignevents-event-details-chat-link-not-available": "Für diese Veranstaltung ist keine Chat-Gruppe verfügbar.",
 	"campaignevents-event-details-organizers-header": "Organisatoren",
+	"campaignevents-event-details-wikis-header": "Wikis",
+	"campaignevents-event-details-wikis-all": "Diese Veranstaltung ist für alle Wikis offen.",
 	"campaignevents-event-details-register-prompt": "Du musst dich anmelden, um diese Information sehen zu können.",
 	"campaignevents-event-details-view-event-page": "Veranstaltungsseite ansehen",
 	"campaignevents-event-details-participants": "Benutzername",
