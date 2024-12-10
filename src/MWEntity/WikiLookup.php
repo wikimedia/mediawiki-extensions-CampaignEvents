@@ -19,15 +19,18 @@ class WikiLookup {
 	private SiteConfiguration $siteConfig;
 	private WANObjectCache $cache;
 	private MessageLocalizer $messageLocalizer;
+	private string $languageCode;
 
 	public function __construct(
 		SiteConfiguration $siteConfig,
 		WANObjectCache $cache,
-		MessageLocalizer $messageLocalizer
+		MessageLocalizer $messageLocalizer,
+		string $languageCode
 	) {
 		$this->siteConfig = $siteConfig;
 		$this->cache = $cache;
 		$this->messageLocalizer = $messageLocalizer;
+		$this->languageCode = $languageCode;
 	}
 
 	public function getAllWikis(): array {
@@ -40,7 +43,7 @@ class WikiLookup {
 	 */
 	public function getListForSelect(): array {
 		return $this->cache->getWithSetCallback(
-			$this->cache->makeGlobalKey( 'CampaignEvents-WikiList' ),
+			$this->cache->makeGlobalKey( 'CampaignEvents-WikiList', $this->languageCode ),
 			WANObjectCache::TTL_HOUR,
 			fn () => $this->computeListForSelect()
 		);

@@ -383,7 +383,8 @@ return [
 		return new WikiLookup(
 			$wgConf,
 			$services->getMainWANObjectCache(),
-			RequestContext::getMain()
+			RequestContext::getMain(),
+			RequestContext::getMain()->getLanguage()->getCode()
 		);
 	},
 	EventWikisStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventWikisStore {
