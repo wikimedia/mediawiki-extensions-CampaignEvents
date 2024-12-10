@@ -43,6 +43,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
@@ -289,5 +290,12 @@ class CampaignEventsServices {
 	 */
 	public static function getEventWikisStore( ?ContainerInterface $services = null ): EventWikisStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventWikisStore::SERVICE_NAME );
+	}
+
+	/**
+	 * @return ITopicRegistry
+	 */
+	public static function getTopicRegistry( ?ContainerInterface $services = null ): ITopicRegistry {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( ITopicRegistry::SERVICE_NAME );
 	}
 }
