@@ -128,6 +128,8 @@
 	"campaignevents-event-details-online-label": "Evento online",
 	"campaignevents-event-details-tracking-tool-last-update": "Ultimo aggiornamento: $1",
 	"campaignevents-event-details-organizers-header": "Organizzatori",
+	"campaignevents-event-details-wikis-header": "Wiki",
+	"campaignevents-event-details-wikis-all": "Questo evento è aperto a tutti i wiki.",
 	"campaignevents-event-details-register-prompt": "Devi registrarti per vedere queste informazioni",
 	"campaignevents-event-details-view-event-page": "Vedi pagina dell'evento",
 	"campaignevents-event-details-participants": "Nome utente",

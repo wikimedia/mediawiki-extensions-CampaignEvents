@@ -152,6 +152,8 @@
 	"campaignevents-event-details-tracking-tool-last-successful-update": "Lescht erfollegräich Aktualiséierung: $1",
 	"campaignevents-event-details-chat-link-not-available": "Fir dëst Evenement ass keng Chat-Grupp verfügbar.",
 	"campaignevents-event-details-organizers-header": "Organisateuren",
+	"campaignevents-event-details-wikis-header": "Wikien",
+	"campaignevents-event-details-wikis-all": "Dëst Evenement ass oppe fir all Wikien.",
 	"campaignevents-event-details-register-prompt": "Dir musst Iech umelle fir dës Informatiounen ze gesinn",
 	"campaignevents-event-details-view-event-page": "Säit vum Evenement weisen",
 	"campaignevents-event-details-participants": "Benotzernumm",

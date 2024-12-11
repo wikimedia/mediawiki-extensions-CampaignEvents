@@ -271,6 +271,8 @@
 	"campaignevents-event-details-chat-link": "Uitnodigingslink voor chatgroep",
 	"campaignevents-event-details-chat-link-not-available": "Er is geen chatgroep beschikbaar voor dit evenement.",
 	"campaignevents-event-details-organizers-header": "Organisatoren",
+	"campaignevents-event-details-wikis-header": "Wiki’s",
+	"campaignevents-event-details-wikis-all": "Dit evenement staat voor alle wiki’s open.",
 	"campaignevents-event-details-register-prompt": "U moet zich registreren om deze informatie te bekijken",
 	"campaignevents-event-details-view-event-page": "Evenementpagina bekijken",
 	"campaignevents-event-details-participants": "Gebruikersnaam",

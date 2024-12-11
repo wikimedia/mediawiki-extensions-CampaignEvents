@@ -287,6 +287,8 @@
 	"campaignevents-event-details-chat-link": "Lien d’invitation à un groupe de discussion en direct",
 	"campaignevents-event-details-chat-link-not-available": "Aucun groupe de discussion n’est disponible pour cet événement.",
 	"campaignevents-event-details-organizers-header": "Organisateurs",
+	"campaignevents-event-details-wikis-header": "Wikis",
+	"campaignevents-event-details-wikis-all": "Cet événement est ouvert à tous les wikis.",
 	"campaignevents-event-details-register-prompt": "Vous devez vous inscrire pour voir ces informations",
 	"campaignevents-event-details-view-event-page": "Afficher la page de l’événement",
 	"campaignevents-event-details-participants": "Nom d’utilisateur",

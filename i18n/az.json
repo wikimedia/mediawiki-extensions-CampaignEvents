@@ -266,6 +266,8 @@
 	"campaignevents-event-details-chat-link": "Söhbət qrupu dəvət linki",
 	"campaignevents-event-details-chat-link-not-available": "Bu tədbir üçün heç bir söhbət qrupu mövcud deyil.",
 	"campaignevents-event-details-organizers-header": "Təşkilatçılar",
+	"campaignevents-event-details-wikis-header": "Vikilər",
+	"campaignevents-event-details-wikis-all": "Bu tədbir bütün vikilərə açıqdır.",
 	"campaignevents-event-details-register-prompt": "Bu məlumatı görmək üçün qeydiyyatdan keçməlisiniz",
 	"campaignevents-event-details-view-event-page": "Tədbir səhifəsinə bax",
 	"campaignevents-event-details-participants": "İstifadəçi adı",
