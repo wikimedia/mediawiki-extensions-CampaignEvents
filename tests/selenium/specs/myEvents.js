@@ -18,7 +18,7 @@ describe( 'MyEvents', () => {
 	} );
 
 	beforeEach( async () => {
-		MyEventsPage.open();
+		await MyEventsPage.open();
 	} );
 
 	// Skip it because we temporarily removed this option from the menu.

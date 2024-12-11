@@ -62,8 +62,8 @@ class EventRegistrationPage extends Page {
 		return $( 'body' );
 	}
 
-	open() {
-		super.openTitle( 'Special:EnableEventRegistration' );
+	async open() {
+		await super.openTitle( 'Special:EnableEventRegistration' );
 	}
 
 	loseFocus() {
@@ -128,7 +128,7 @@ class EventRegistrationPage extends Page {
 	 * example: {day: 15, year: 2024}
 	 */
 	async enableEvent( event, start = this.startDefault, end = this.endDefault ) {
-		this.open();
+		await this.open();
 		await this.eventPage.setValue( event );
 		await this.setStartDate( start );
 		await this.setEndDate( end );
@@ -159,7 +159,7 @@ class EventRegistrationPage extends Page {
 		meetingType,
 		organizer
 	} ) {
-		super.openTitle( `Special:EditEventRegistration/${ id }` );
+		await super.openTitle( `Special:EditEventRegistration/${ id }` );
 
 		if ( event ) {
 			await this.eventPage.setValue( event );
