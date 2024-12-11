@@ -168,3 +168,12 @@ CREATE TABLE /*_*/ce_event_wikis (
 );
 
 CREATE UNIQUE INDEX ce_event_wikis_event_id_wiki ON /*_*/ce_event_wikis (ceew_event_id, ceew_wiki);
+
+
+CREATE TABLE /*_*/ce_event_topics (
+  ceet_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceet_event_id BIGINT UNSIGNED NOT NULL,
+  ceet_topic BLOB NOT NULL
+);
+
+CREATE UNIQUE INDEX ce_event_topics_event_id_topic ON /*_*/ce_event_topics (ceet_event_id, ceet_topic);

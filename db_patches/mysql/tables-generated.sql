@@ -178,3 +178,12 @@ CREATE TABLE /*_*/ce_event_wikis (
   UNIQUE INDEX ce_event_wikis_event_id_wiki (ceew_event_id, ceew_wiki),
   PRIMARY KEY(ceew_id)
 ) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_event_topics (
+  ceet_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceet_event_id BIGINT UNSIGNED NOT NULL,
+  ceet_topic VARBINARY(64) NOT NULL,
+  UNIQUE INDEX ce_event_topics_event_id_topic (ceet_event_id, ceet_topic),
+  PRIMARY KEY(ceet_id)
+) /*$wgDBTableOptions*/;
