@@ -48,6 +48,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Topics\EmptyTopicRegistry;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
+use MediaWiki\Extension\CampaignEvents\Topics\WikimediaTopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
@@ -402,6 +403,9 @@ return [
 		);
 	},
 	ITopicRegistry::SERVICE_NAME => static function (): ITopicRegistry {
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'WikimediaMessages' ) ) {
+			return new WikimediaTopicRegistry();
+		}
 		return new EmptyTopicRegistry();
 	},
 	EventTopicsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTopicsStore {

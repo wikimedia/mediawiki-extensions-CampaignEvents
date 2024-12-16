@@ -13,6 +13,6 @@ class EmptyTopicRegistry implements ITopicRegistry {
 	}
 
 	public function getTopicMessages( array $topicIDs ): array {
-		return $topicIDs;
+		return [];
 	}
 }
