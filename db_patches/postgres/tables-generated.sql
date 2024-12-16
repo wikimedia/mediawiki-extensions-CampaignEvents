@@ -198,3 +198,13 @@ CREATE TABLE ce_event_wikis (
 );
 
 CREATE UNIQUE INDEX ce_event_wikis_event_id_wiki ON ce_event_wikis (ceew_event_id, ceew_wiki);
+
+
+CREATE TABLE ce_event_topics (
+  ceet_id BIGSERIAL NOT NULL,
+  ceet_event_id BIGINT NOT NULL,
+  ceet_topic TEXT NOT NULL,
+  PRIMARY KEY(ceet_id)
+);
+
+CREATE UNIQUE INDEX ce_event_topics_event_id_topic ON ce_event_topics (ceet_event_id, ceet_topic);

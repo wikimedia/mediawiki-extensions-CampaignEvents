@@ -1,0 +1,44 @@
+{
+	"before": {},
+	"after": {
+		"name": "ce_event_topics",
+		"comment": "Stores the topics related to events.",
+		"columns": [
+			{
+				"name": "ceet_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceet_event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "ceet_topic",
+				"type": "binary",
+				"comment": "Topic ID",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_event_topics_event_id_topic",
+				"comment": "Retrieve all topics associated with a specific event and filter by topics.",
+				"columns": [ "ceet_event_id", "ceet_topic" ],
+				"unique": true
+			}
+		],
+		"pk": [ "ceet_id" ]
+	}
+}
