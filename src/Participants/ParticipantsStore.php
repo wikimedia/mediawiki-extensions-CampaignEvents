@@ -72,7 +72,6 @@ class ParticipantsStore {
 				'cep_event_id' => $eventID,
 				'cep_user_id' => $userID
 			] )
-			->forUpdate()
 			->caller( __METHOD__ )
 			->fetchRow();
 

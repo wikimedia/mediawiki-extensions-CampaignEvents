@@ -36,7 +36,6 @@ class ParticipantAnswersStore {
 				'ceqa_event_id' => $eventID,
 				'ceqa_user_id' => $userID,
 			] )
-			->forUpdate()
 			->caller( __METHOD__ )
 			->fetchResultSet();
 		$newQuestionIDs = array_map( static fn ( Answer $a ): int => $a->getQuestionDBID(), $answers );

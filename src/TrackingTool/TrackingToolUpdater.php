@@ -80,7 +80,6 @@ class TrackingToolUpdater {
 			->select( '*' )
 			->from( 'ce_tracking_tools' )
 			->where( [ 'cett_event' => $eventID ] )
-			->forUpdate()
 			->caller( __METHOD__ )
 			->fetchResultSet();
 

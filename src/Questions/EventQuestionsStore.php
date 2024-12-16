@@ -30,7 +30,6 @@ class EventQuestionsStore {
 			->select( '*' )
 			->from( 'ce_event_questions' )
 			->where( [ 'ceeq_event_id' => $eventID ] )
-			->forUpdate()
 			->caller( __METHOD__ )
 			->fetchResultSet();
 		$currentQuestionIDs = [];
