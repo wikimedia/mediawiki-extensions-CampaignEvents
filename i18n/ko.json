@@ -152,6 +152,8 @@
 	"campaignevents-event-details-in-person-event-label": "대면 이벤트",
 	"campaignevents-event-details-online-label": "온라인 이벤트",
 	"campaignevents-event-details-chat-link": "채팅 그룹 초대 링크",
+	"campaignevents-event-details-wikis-header": "위키",
+	"campaignevents-event-details-wikis-all": "이 이벤트는 모든 위키에 개방됩니다.",
 	"campaignevents-event-details-register-prompt": "이 정보를 보려면 등록해야 합니다",
 	"campaignevents-event-details-view-event-page": "이벤트 문서 보기",
 	"campaignevents-event-details-select-all": "모든 참가자 선택",

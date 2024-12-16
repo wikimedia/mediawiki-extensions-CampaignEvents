@@ -267,6 +267,8 @@
 	"campaignevents-event-details-chat-link": "Врска со покана за групен разговор",
 	"campaignevents-event-details-chat-link-not-available": "Нема развогорна група за овој настан.",
 	"campaignevents-event-details-organizers-header": "Приредувачи",
+	"campaignevents-event-details-wikis-header": "Викија",
+	"campaignevents-event-details-wikis-all": "Овој настан е отворен за сите викија.",
 	"campaignevents-event-details-register-prompt": "Ќе треб ада се пријавите за да ги гледате овие информации",
 	"campaignevents-event-details-view-event-page": "Погл. страница за настанот",
 	"campaignevents-event-details-participants": "Корисничко име",
@@ -494,5 +496,8 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Додајте викија...",
 	"campaignevents-eventslist-all-wikis": "Овој настан е отворен за сите викија.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|уште}} $1",
+	"campaignevents-eventpage-all-wikis": "Овој настан е отворен за сите викија.",
+	"campaignevents-eventpage-wikis-more": "{{PLURAL:$1|уште}} $1",
+	"campaignevents-eventpage-dialog-wikis-label": "Викија",
 	"campaignevents-eventslist-wiki-label": "Викија"
 }
