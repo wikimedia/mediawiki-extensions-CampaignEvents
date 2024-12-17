@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
@@ -397,5 +398,11 @@ return [
 	},
 	ITopicRegistry::SERVICE_NAME => static function (): ITopicRegistry {
 		return new EmptyTopicRegistry();
-	}
+	},
+	EventTopicsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTopicsStore {
+		return new EventTopicsStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getMainConfig()->get( 'CampaignEventsEnableEventTopics' )
+		);
+	},
 ];

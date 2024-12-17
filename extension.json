@@ -47,6 +47,10 @@
 		"CampaignEventsEnableEventWikis": {
 			"description": "Temporary flag to enable a feature that lets organizers specify the target wikis of an event.",
 			"value": false
+		},
+		"CampaignEventsEnableEventTopics": {
+			"description": "Temporary flag to enable a feature that lets organizers specify the topics of an event.",
+			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
