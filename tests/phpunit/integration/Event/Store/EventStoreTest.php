@@ -28,6 +28,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->overrideConfigValue( 'CampaignEventsEnableEventWikis', true );
+		$this->overrideConfigValue( 'CampaignEventsEnableEventTopics', true );
 	}
 
 	/**
@@ -43,6 +44,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			),
 			'Chat URL',
 			[ 'awiki', 'bwiki' ],
+			[ 'atopic', 'btopic' ],
 			[
 				new TrackingToolAssociation(
 					1,
@@ -73,6 +75,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getPage()->getDBkey(), $actual->getPage()->getDBkey(), 'Page dbkey' );
 		$this->assertSame( $expected->getPage()->getWikiId(), $actual->getPage()->getWikiId(), 'Page wiki ID' );
 		$this->assertSame( $expected->getWikis(), $actual->getWikis(), 'wikis' );
+		$this->assertSame( $expected->getTopics(), $actual->getTopics(), 'topics' );
 		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
 		$this->assertSame( $expected->getStatus(), $actual->getStatus(), 'status' );
 		$this->assertSame( $expected->getTimezone()->getName(), $actual->getTimezone()->getName(), 'timezone' );
@@ -265,6 +268,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			),
 			'Chat URL',
 			[ 'awiki', 'bwiki', 'cwiki' ],
+			[ 'atopic', 'btopic' ],
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),

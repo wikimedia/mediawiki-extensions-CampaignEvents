@@ -103,6 +103,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			null,
 			[],
 			[],
+			[],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20240229120000',

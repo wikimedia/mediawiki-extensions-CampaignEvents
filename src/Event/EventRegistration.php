@@ -44,6 +44,8 @@ class EventRegistration {
 	private ?string $chatURL;
 	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
 	private $wikis;
+	/** @var string[] */
+	private array $topics;
 	/**
 	 * @var TrackingToolAssociation[]
 	 * @phan-var list<TrackingToolAssociation>
@@ -73,6 +75,7 @@ class EventRegistration {
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
+	 * @param string[] $topics
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string $status
@@ -95,6 +98,7 @@ class EventRegistration {
 		ICampaignsPage $page,
 		?string $chatURL,
 		$wikis,
+		array $topics,
 		array $trackingTools,
 		string $status,
 		DateTimeZone $timezone,
@@ -144,6 +148,7 @@ class EventRegistration {
 		$this->creationTimestamp = $creationTimestamp;
 		$this->lastEditTimestamp = $lastEditTimestamp;
 		$this->deletionTimestamp = $deletionTimestamp;
+		$this->topics = $topics;
 	}
 
 	/**
@@ -179,6 +184,13 @@ class EventRegistration {
 	 */
 	public function getWikis() {
 		return $this->wikis;
+	}
+
+	/**
+	 * @return string[] A list of topics.
+	 */
+	public function getTopics(): array {
+		return $this->topics;
 	}
 
 	/**

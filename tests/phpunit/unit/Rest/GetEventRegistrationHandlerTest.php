@@ -88,6 +88,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventPage,
 			$eventData['chat_url'],
 			$eventData['wikis'],
+			[ 'atopic', 'btopic' ],
 			[
 				new TrackingToolAssociation(
 					self::TRACKING_TOOL_DB_ID,

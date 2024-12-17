@@ -87,7 +87,8 @@ return [
 			$services->get( AddressStore::SERVICE_NAME ),
 			$services->get( TrackingToolUpdater::SERVICE_NAME ),
 			$services->get( EventQuestionsStore::SERVICE_NAME ),
-			$services->get( EventWikisStore::SERVICE_NAME )
+			$services->get( EventWikisStore::SERVICE_NAME ),
+			$services->get( EventTopicsStore::SERVICE_NAME ),
 		);
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {

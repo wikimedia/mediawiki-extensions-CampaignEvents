@@ -20,6 +20,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param ICampaignsPage $page
 	 * @param string|null $chatURL
 	 * @param string[]|true $wikis
+	 * @param string[] $topics
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string $status
@@ -42,6 +43,7 @@ class ExistingEventRegistration extends EventRegistration {
 		ICampaignsPage $page,
 		?string $chatURL,
 		$wikis,
+		array $topics,
 		array $trackingTools,
 		string $status,
 		DateTimeZone $timezone,
