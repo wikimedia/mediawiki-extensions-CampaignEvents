@@ -147,8 +147,7 @@ class EventDetailsParticipantsModule {
 		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;
 		$canRemoveParticipants = false;
 		if ( $isOrganizer && $isLocalWiki ) {
-			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event ) ===
-				UnregisterParticipantCommand::CAN_UNREGISTER;
+			$canRemoveParticipants = UnregisterParticipantCommand::checkIsUnregistrationAllowed( $event )->isGood();
 		}
 
 		$canViewNonPIIParticipantsData = false;

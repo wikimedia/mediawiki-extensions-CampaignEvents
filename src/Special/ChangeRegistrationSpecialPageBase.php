@@ -14,6 +14,7 @@ use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
+use StatusValue;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	private IEventLookup $eventLookup;
@@ -42,21 +43,18 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	public function execute( $par ): void {
 		$this->requireNamedUser();
 		$this->addHelpLink( 'Extension:CampaignEvents' );
-		if ( $par === null ) {
-			$this->setHeaders();
-			$this->getOutput()->addHTML( Html::errorBox(
-				$this->msg( 'campaignevents-register-error-no-event' )->escaped()
-			) );
+		$eventExists = $this->checkEventExists( $par );
+		if ( !$eventExists ) {
 			return;
 		}
-		$eventID = (int)$par;
-		try {
-			$this->event = $this->eventLookup->getEventByID( $eventID );
-		} catch ( EventNotFoundException $_ ) {
+		$validationResult = $this->checkEventIsValid();
+		if ( !$validationResult->isGood() ) {
 			$this->setHeaders();
-			$this->getOutput()->addHTML( Html::errorBox(
-				$this->msg( 'campaignevents-register-error-event-not-found' )->escaped()
-			) );
+			foreach ( $validationResult->getMessages( 'error' ) as $error ) {
+				$this->getOutput()->addHTML( Html::errorBox(
+					$this->msg( $error )->escaped()
+				) );
+			}
 			return;
 		}
 
@@ -64,7 +62,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 		$wikiID = $eventPage->getWikiId();
 		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
 			$foreignEditURL = WikiMap::getForeignURL(
-				$wikiID, 'Special:' . SpecialRegisterForEvent::PAGE_NAME . "/{$eventID}"
+				$wikiID, 'Special:' . SpecialRegisterForEvent::PAGE_NAME . "/{$this->event->getID()}"
 			);
 
 			$this->setHeaders();
@@ -104,6 +102,16 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	}
 
 	/**
+	 * Checks whether the event is in a state which can currently accept registrations. Specifically, that it
+	 * is not over, deleted or closed.
+	 *
+	 * @return StatusValue
+	 */
+	protected function checkEventIsValid(): StatusValue {
+		return StatusValue::newGood();
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	protected function getDisplayFormat(): string {
@@ -129,5 +137,30 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	 */
 	protected function getMessagePrefix() {
 		return '';
+	}
+
+	/**
+	 * @param string|null $par
+	 * @return bool
+	 */
+	protected function checkEventExists( ?string $par ) {
+		if ( $par === null ) {
+			$this->setHeaders();
+			$this->getOutput()->addHTML( Html::errorBox(
+				$this->msg( 'campaignevents-register-error-no-event' )->escaped()
+			) );
+			return false;
+		}
+		$eventID = (int)$par;
+		try {
+			$this->event = $this->eventLookup->getEventByID( $eventID );
+		} catch ( EventNotFoundException $_ ) {
+			$this->setHeaders();
+			$this->getOutput()->addHTML( Html::errorBox(
+				$this->msg( 'campaignevents-register-error-event-not-found' )->escaped()
+			) );
+			return false;
+		}
+		return true;
 	}
 }

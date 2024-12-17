@@ -295,7 +295,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$event->method( 'getStatus' )->willReturn( $eventStatus );
 		$this->assertSame(
 			$expected,
-			RegisterParticipantCommand::checkIsRegistrationAllowed( $event, $registrationType )
+			RegisterParticipantCommand::checkIsRegistrationAllowed( $event, $registrationType )->getValue()
 		);
 	}
 

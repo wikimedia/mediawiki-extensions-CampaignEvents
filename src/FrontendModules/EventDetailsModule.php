@@ -293,7 +293,7 @@ class EventDetailsModule {
 			$this->registration,
 			RegisterParticipantCommand::REGISTRATION_NEW
 		);
-		$canRegister = $registrationAllowedVal === RegisterParticipantCommand::CAN_REGISTER;
+		$canRegister = $registrationAllowedVal->isGood();
 
 		$userCanViewSensitiveEventData = $this->permissionChecker->userCanViewSensitiveEventData( $authority );
 		$items[] = $this->getLocationSection(

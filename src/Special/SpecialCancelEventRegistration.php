@@ -12,7 +12,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
-use MediaWiki\Status\Status;
+use Status;
+use StatusValue;
 
 class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	public const PAGE_NAME = 'CancelEventRegistration';
@@ -99,5 +100,12 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	 */
 	public function requiresUnblock(): bool {
 		return false;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function checkEventIsValid(): StatusValue {
+		return UnregisterParticipantCommand::checkIsUnregistrationAllowed( $this->event );
 	}
 }
