@@ -199,6 +199,7 @@
 	"campaignevents-delete-registration-page-nonlocal": "Дехар до, [$1 мероприятин регистраци чекхйаккха $2], вики иза тӀехь кхоьллина йолу.",
 	"campaignevents-event-details-not-local-wiki-prompt": "Хьажа [$1 $2] тӀехь.",
 	"campaignevents-generateinvitationlist-event-page-field-label": "Мероприятин агӀо",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:Сан мероприяти",
 	"campaignevents-invitations-pager-status-editors": "{{PLURAL:$1|редактор}}",
 	"campaignevents-invitations-pager-status-processing": "Кечдар...",
 	"campaignevents-myinvitationslist-new-button": "Керла",
