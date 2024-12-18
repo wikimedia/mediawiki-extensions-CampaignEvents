@@ -397,6 +397,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			];
 		}
 
+		// TODO: Maybe consider dropping the default when switching to Codex, if that allows indeterminate radios.
+		$defaultMeetingType = EventRegistration::MEETING_TYPE_ONLINE;
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
 			'label-message' => 'campaignevents-edit-field-meeting-type',
@@ -406,7 +408,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'campaignevents-edit-field-type-online-and-in-person' =>
 					EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON
 			],
-			'default' => $this->event ? $this->event->getMeetingType() : null,
+			'default' => $this->event ? $this->event->getMeetingType() : $defaultMeetingType,
 			'required' => true,
 			'section' => self::DETAILS_SECTION,
 		];
