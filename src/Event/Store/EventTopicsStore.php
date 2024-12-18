@@ -73,22 +73,23 @@ class EventTopicsStore {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();
-		$currentEventTopics = $queryBuilder->select( 'ceet_topic' )
+		$currentTopicsRes = $queryBuilder->select( [ 'ceet_id', 'ceet_topic' ] )
 			->from( 'ce_event_topics' )
 			->where( [ 'ceet_event_id' => $eventID ] )
 			->caller( __METHOD__ )
-			->fetchFieldValues();
+			->fetchResultSet();
+		$currentTopicsByID = [];
+		foreach ( $currentTopicsRes as $row ) {
+			$currentTopicsByID[$row->ceet_id] = $row->ceet_topic;
+		}
 
-		$topicsToRemove = array_diff( $currentEventTopics, $eventTopics );
-		$topicsToAdd = array_diff( $eventTopics, $currentEventTopics );
+		$rowIDsToRemove = array_keys( array_diff( $currentTopicsByID, $eventTopics ) );
+		$topicsToAdd = array_diff( $eventTopics, $currentTopicsByID );
 
-		if ( count( $topicsToRemove ) > 0 ) {
+		if ( count( $rowIDsToRemove ) > 0 ) {
 			$deleteQueryBuilder = $dbw->newDeleteQueryBuilder();
 			$deleteQueryBuilder->delete( 'ce_event_topics' )
-				->where( [
-					'ceet_event_id' => $eventID,
-					'ceet_topic' => $topicsToRemove
-				] )
+				->where( [ 'ceet_id' => $rowIDsToRemove ] )
 				->caller( __METHOD__ )
 				->execute();
 		}
