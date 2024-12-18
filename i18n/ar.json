@@ -278,6 +278,8 @@
 	"campaignevents-event-details-chat-link": "رابط دعوة لمجموعة الدردشة",
 	"campaignevents-event-details-chat-link-not-available": "لا توجد مجموعة دردشة مخصصة للفعالية.",
 	"campaignevents-event-details-organizers-header": "المنظمون",
+	"campaignevents-event-details-wikis-header": "الويكيات",
+	"campaignevents-event-details-wikis-all": "هذا الحدث مفتوح لجميع الويكيات.",
 	"campaignevents-event-details-register-prompt": "تحتاج إلى التسجيل لمشاهدة هذه المعلومات",
 	"campaignevents-event-details-view-event-page": "عرض صفحة الفعالية",
 	"campaignevents-event-details-participants": "اسم المستخدم",
@@ -466,7 +468,7 @@
 	"campaignevents-event-details-not-local-wiki-prompt": "عرض على [$1 $2]",
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "حسابك محظور. ليس لديك حق الولوج إلى هذا.",
 	"generateinvitationlist": "توليد قائمة المدعوين",
-	"campaignevents-generateinvitationlist-name-field-label": "Invitation list name",
+	"campaignevents-generateinvitationlist-name-field-label": "اسم قائمة الدعوات",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "قائمة المدعوين لماراثون تحرير",
 	"campaignevents-generateinvitationlist-event-page-field-label": "صفحة الفعالية",
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}: فعاليتي",
@@ -512,5 +514,8 @@
 	"campaignevents-allevents-placeholder-add-wikis": "أضف الويكيات...",
 	"campaignevents-eventslist-all-wikis": "هذه الفعالية مفتوحة لجميع الويكيات.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1| أكثر}}",
+	"campaignevents-eventpage-all-wikis": "هذا الحدث مفتوح لجميع الويكيات.",
+	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|المزيد}}",
+	"campaignevents-eventpage-dialog-wikis-label": "الويكيات",
 	"campaignevents-eventslist-wiki-label": "الويكيات"
 }
