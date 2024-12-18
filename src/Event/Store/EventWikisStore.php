@@ -81,30 +81,35 @@ class EventWikisStore {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();
-		$currentEventWikis = $queryBuilder->select( 'ceew_wiki' )
+		$currentWikisRes = $queryBuilder->select( [ 'ceew_id', 'ceew_wiki' ] )
 			->from( 'ce_event_wikis' )
 			->where( [ 'ceew_event_id' => $eventID ] )
 			->caller( __METHOD__ )
-			->fetchFieldValues();
+			->fetchResultSet();
+		$currentWikisByID = [];
+		foreach ( $currentWikisRes as $row ) {
+			$currentWikisByID[$row->ceew_id] = $row->ceew_wiki;
+		}
 
-		$newWikisForDB = $eventWikis === EventRegistration::ALL_WIKIS
-			? [ self::ALL_WIKIS_DB_VALUE ]
-			: $eventWikis;
+		if ( $eventWikis === EventRegistration::ALL_WIKIS ) {
+			if ( array_values( $currentWikisByID ) === [ self::ALL_WIKIS_DB_VALUE ] ) {
+				// Already in the desired state, no need to make changes.
+				$rowIDsToRemove = $wikisToAdd = [];
+			} else {
+				$rowIDsToRemove = array_keys( $currentWikisByID );
+				$wikisToAdd = [ self::ALL_WIKIS_DB_VALUE ];
+			}
+		} else {
+			$rowIDsToRemove = array_keys( array_diff( $currentWikisByID, $eventWikis ) );
+			$wikisToAdd = array_diff( $eventWikis, $currentWikisByID );
+		}
 
-		$wikisToRemove = array_diff( $currentEventWikis, $newWikisForDB );
-		$wikisToAdd = array_diff( $newWikisForDB, $currentEventWikis );
-
-		if ( count( $wikisToRemove ) > 0 ) {
+		if ( count( $rowIDsToRemove ) > 0 ) {
 			$deleteQueryBuilder = $dbw->newDeleteQueryBuilder();
 			$deleteQueryBuilder->delete( 'ce_event_wikis' )
-				->where( [ 'ceew_event_id' => $eventID ] )
-				->caller( __METHOD__ );
-
-			// When changing the value to "all wikis", we can remove everything about the old state.
-			if ( $eventWikis !== EventRegistration::ALL_WIKIS ) {
-				$deleteQueryBuilder->andWhere( [ 'ceew_wiki' => $wikisToRemove ] );
-			}
-			$deleteQueryBuilder->execute();
+				->where( [ 'ceew_id' => $rowIDsToRemove ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		if ( count( $wikisToAdd ) > 0 ) {
