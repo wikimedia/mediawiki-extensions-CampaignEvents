@@ -198,6 +198,7 @@ class EventFactory {
 			$campaignsPage,
 			$chatURL,
 			$wikis,
+			[],
 			$trackingTools,
 			$status,
 			$timezoneObj,

@@ -47,6 +47,7 @@ class EventStore implements IEventStore, IEventLookup {
 	private TrackingToolUpdater $trackingToolUpdater;
 	private EventQuestionsStore $eventQuestionsStore;
 	private EventWikisStore $eventWikisStore;
+	private EventTopicsStore $eventTopicsStore;
 
 	/**
 	 * @var array<int,ExistingEventRegistration> Cache of stored registrations, keyed by ID.
@@ -59,7 +60,8 @@ class EventStore implements IEventStore, IEventLookup {
 		AddressStore $addressStore,
 		TrackingToolUpdater $trackingToolUpdater,
 		EventQuestionsStore $eventQuestionsStore,
-		EventWikisStore $eventWikisStore
+		EventWikisStore $eventWikisStore,
+		EventTopicsStore $eventTopicsStore
 	) {
 		$this->dbHelper = $dbHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -67,6 +69,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->trackingToolUpdater = $trackingToolUpdater;
 		$this->eventQuestionsStore = $eventQuestionsStore;
 		$this->eventWikisStore = $eventWikisStore;
+		$this->eventTopicsStore = $eventTopicsStore;
 	}
 
 	/**
@@ -93,6 +96,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$this->getEventAddressRow( $dbr, $eventID ),
 			$this->getEventTrackingToolRow( $dbr, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
+			$this->eventTopicsStore->getEventTopics( $eventID ),
 			$this->eventQuestionsStore->getEventQuestions( $eventID )
 		);
 		return $this->cache[$eventID];
@@ -135,6 +139,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$this->getEventAddressRow( $db, $eventID ),
 			$this->getEventTrackingToolRow( $db, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
+			$this->eventTopicsStore->getEventTopics( $eventID ),
 			$this->eventQuestionsStore->getEventQuestions( $eventID )
 		);
 	}
@@ -257,6 +262,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$addressRowsByEvent = $this->getAddressRowsForEvents( $db, $eventIDs );
 		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs );
 		$wikisByEvent = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
+		$topicsByEvent = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
 		$questionsByEvent = $this->eventQuestionsStore->getEventQuestionsMulti( $eventIDs );
 
 		$events = [];
@@ -267,6 +273,7 @@ class EventStore implements IEventStore, IEventLookup {
 				$addressRowsByEvent[$curEventID] ?? null,
 				$trackingToolRowsByEvent[$curEventID] ?? null,
 				$wikisByEvent[$curEventID],
+				$topicsByEvent[$curEventID],
 				$questionsByEvent[$curEventID]
 			);
 		}
@@ -331,6 +338,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @param stdClass|null $addressRow
 	 * @param stdClass|null $trackingToolRow
 	 * @param string[]|true $wikis List of wiki IDs or {@see EventRegistration::ALL_WIKIS}
+	 * @param string[] $topics
 	 * @param int[] $questionIDs
 	 * @return ExistingEventRegistration
 	 */
@@ -339,6 +347,7 @@ class EventStore implements IEventStore, IEventLookup {
 		?stdClass $addressRow,
 		?stdClass $trackingToolRow,
 		$wikis,
+		array $topics,
 		array $questionIDs
 	): ExistingEventRegistration {
 		$eventPage = $this->campaignsPageFactory->newPageFromDB(
@@ -378,6 +387,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$eventPage,
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			$wikis,
+			$topics,
 			$trackingTools,
 			array_search( (int)$row->event_status, self::EVENT_STATUS_MAP, true ),
 			new DateTimeZone( $row->event_timezone ),
@@ -451,6 +461,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
 		$this->eventQuestionsStore->replaceEventQuestions( $eventID, $event->getParticipantQuestions() );
 		$this->eventWikisStore->addOrUpdateEventWikis( $eventID, $event->getWikis() );
+		$this->eventTopicsStore->addOrUpdateEventTopics( $eventID, $event->getTopics() );
 
 		$dbw->endAtomic( __METHOD__ );
 

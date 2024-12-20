@@ -66,7 +66,7 @@ class EventTopicsStore {
 	 * @param int $eventID The event ID to associate these topics with.
 	 * @param string[] $eventTopics An array of topic IDs to add
 	 */
-	public function addOrUpdateEventTopics( int $eventID, $eventTopics ): void {
+	public function addOrUpdateEventTopics( int $eventID, array $eventTopics ): void {
 		if ( !$this->featureEnabled ) {
 			return;
 		}
