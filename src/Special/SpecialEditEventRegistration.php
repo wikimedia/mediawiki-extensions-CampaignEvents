@@ -18,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
@@ -38,7 +39,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		CampaignEventsHookRunner $hookRunner,
 		PageURLResolver $pageURLResolver,
-		WikiLookup $wikiLookup
+		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -54,7 +56,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$eventQuestionsRegistry,
 			$hookRunner,
 			$pageURLResolver,
-			$wikiLookup
+			$wikiLookup,
+			$topicRegistry
 		);
 	}
 

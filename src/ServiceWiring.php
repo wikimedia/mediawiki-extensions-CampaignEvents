@@ -124,7 +124,8 @@ return [
 			$services->get( CampaignsPageFormatter::SERVICE_NAME ),
 			$services->get( TrackingToolRegistry::SERVICE_NAME ),
 			$services->get( EventQuestionsRegistry::SERVICE_NAME ),
-			$services->get( WikiLookup::SERVICE_NAME )
+			$services->get( WikiLookup::SERVICE_NAME ),
+			$services->get( ITopicRegistry::SERVICE_NAME ),
 		);
 	},
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {
