@@ -17,5 +17,6 @@
 	"campaignevents-allevents-label-filter-wikis": "ਵਿਕੀਆਂ",
 	"campaignevents-allevents-placeholder-add-wikis": "ਵਿਕੀਆਂ ਜੋੜੋ...",
 	"campaignevents-eventpage-all-wikis": "ਇਹ ਸਮਾਗਮ ਸਾਰੇ ਵਿਕੀਆਂ ਲਈ ਖੁੱਲ੍ਹਾ ਹੈ।",
+	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1| ਹੋਰ}}",
 	"campaignevents-eventpage-dialog-wikis-label": "ਵਿਕੀਆਂ"
 }
