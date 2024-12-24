@@ -2,7 +2,6 @@
 	"@metadata": {
 		"authors": [
 			"Alshamiri1",
-			"Amire80",
 			"Asma",
 			"Bachounda",
 			"Daimona Eaytoy",
@@ -454,7 +453,7 @@
 	"campaignevents-event-details-not-local-wiki-prompt": "عرض على [$1 $2]",
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "حسابك محظور. ليس لديك حق الولوج إلى هذا.",
 	"generateinvitationlist": "توليد قائمة المدعوين",
-	"campaignevents-generateinvitationlist-name-field-label": "Invitation list name",
+	"campaignevents-generateinvitationlist-name-field-label": "اسم قائمة الدعوات",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "قائمة دعوات الفعاليات الخاصة بي",
 	"campaignevents-generateinvitationlist-event-page-field-label": "صفحة الفعالية",
 	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}: فعاليتي",
