@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Bachounda",
-			"Hhaboh162002"
+			"Hhaboh162002",
+			"Meno25"
 		]
 	},
 	"campaignevents-rest-event-not-found": "لا توجد فعالية مقترنة بهذا المعرّف.",
@@ -14,7 +15,7 @@
 	"campaignevents-rest-remove-participants-invalid-users-ids": "يجب أن تكون المعلمة 'User_ids' مصفوفة من معرّفات المستخدمين، أو فارغة (لإزالة جميع المستخدمين)",
 	"campaignevents-rest-list-participants-empty-filter": "عامل تصفية اسم المستخدم عند تحديده، يجب أن يكون سلسلة غير فارغة.",
 	"campaignevents-rest-list-participants-cannot-see-private": "غير مصرح لك بعرض المشاركين المسجلين تحت الخصوصية في هذه الفعالية.",
-	"campaignevents-rest-set-organizers-empty-list": "يجب أن تكون <var>Organizer_usernames</var> مصفوفة من أسماء المستخدمين ولا يمكن أن تكون فارغة",
+	"campaignevents-rest-set-organizers-empty-list": "يجب أن تكون <var>organizer_usernames</var> مصفوفة من أسماء المستخدمين ولا يمكن أن تكون فارغة",
 	"campaignevents-rest-get-registration-info-notparticipant": "أنت لا تشارك في هذه الفعالية.",
 	"campaignevents-rest-register-invalid-answer": "إجابة غير صحيحة على السؤال $1"
 }
