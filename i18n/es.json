@@ -10,6 +10,7 @@
 			"JDíaz32",
 			"MarcoAurelio",
 			"No se",
+			"PoLuX124",
 			"Rajadinho",
 			"SpikeShroom",
 			"Whovian Biologist",
@@ -491,5 +492,7 @@
 	"campaignevents-invitationlist-highly-recommended-info": "Estos editores y editoras recibieron una alta clasificación en la lista de invitación, por lo que es más probable que tengan interés en unirse a tu actividad.",
 	"campaignevents-invitationlist-recommended": "Recomendado invitar",
 	"campaignevents-invitationlist-recommended-info": "Estos editores y editoras recibieron una clasificación media en la lista de invitación, pero aún así pueden tener interés en unirse a tu actividad.",
-	"campaignevents-invitationlist-worklist-label": "Ver el listado de artículos"
+	"campaignevents-invitationlist-worklist-label": "Ver el listado de artículos",
+	"campaignevents-invitationlist-preference": "Incluirme en [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists listas de invitación].",
+	"prefs-campaignevents-invitations": "Listas de invitación"
 }
