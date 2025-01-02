@@ -25,6 +25,7 @@ use MediaWiki\Rest\Validator\Validator;
 use RuntimeException;
 use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
+use Wikimedia\ParamValidator\TypeDef\StringDef;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
 
 abstract class AbstractEditEventRegistrationHandler extends Handler {
@@ -181,10 +182,12 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			'meeting_country' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
+				StringDef::PARAM_MAX_BYTES => EventFactory::COUNTRY_MAXLENGTH_BYTES,
 			],
 			'meeting_address' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
+				StringDef::PARAM_MAX_BYTES => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			],
 		] + $this->getTokenParamDefinition();
 

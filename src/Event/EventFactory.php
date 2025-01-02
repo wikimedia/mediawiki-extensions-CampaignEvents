@@ -36,6 +36,14 @@ class EventFactory {
 
 	public const MAX_WIKIS = 100;
 
+	/**
+	 * Constants for limiting the length of country and address. These are intentionally quite high and shouldn't be
+	 * hit under normal circumstances. So, we just truncate the given strings instead of displaying an error. For the
+	 * same reason, we use bytes and not more sensible units like characters or graphemes.
+	 */
+	public const COUNTRY_MAXLENGTH_BYTES = 256;
+	public const ADDRESS_MAXLENGTH_BYTES = 8192;
+
 	private CampaignsPageFactory $campaignsPageFactory;
 	private CampaignsPageFormatter $campaignsPageFormatter;
 	private TrackingToolRegistry $trackingToolRegistry;
@@ -421,10 +429,10 @@ class EventFactory {
 
 		if ( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) {
 			if ( $meetingCountry !== null ) {
-				$meetingCountry = trim( $meetingCountry );
+				$meetingCountry = mb_strcut( trim( $meetingCountry ), 0, self::COUNTRY_MAXLENGTH_BYTES );
 			}
 			if ( $meetingAddress !== null ) {
-				$meetingAddress = trim( $meetingAddress );
+				$meetingAddress = mb_strcut( trim( $meetingAddress ), 0, self::ADDRESS_MAXLENGTH_BYTES );
 			}
 			if ( $meetingCountry !== null && $meetingAddress !== null ) {
 				$res->merge( $this->validateLocation( $meetingCountry, $meetingAddress ) );
