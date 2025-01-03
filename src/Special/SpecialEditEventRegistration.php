@@ -88,12 +88,6 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			return;
 		}
 
-		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
-		if ( !$this->permissionChecker->userCanEditRegistration( $mwAuthority, $this->event ) ) {
-			$this->outputErrorBox( 'campaignevents-edit-not-allowed-registration' );
-			return;
-		}
-
 		if ( $this->event->getDeletionTimestamp() !== null ) {
 			$this->outputErrorBox( 'campaignevents-edit-error-deleted' );
 			return;
@@ -120,6 +114,13 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$this->getOutput()->addHTML( $messageWidget );
 			return;
 		}
+
+		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
+		if ( !$this->permissionChecker->userCanEditRegistration( $mwAuthority, $this->event ) ) {
+			$this->outputErrorBox( 'campaignevents-edit-not-allowed-registration' );
+			return;
+		}
+
 		parent::execute( $par );
 	}
 
