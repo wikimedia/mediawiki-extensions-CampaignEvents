@@ -171,7 +171,6 @@ class SpecialEventDetails extends SpecialPage {
 			$out->addHTML( $backLink );
 		}
 
-		$wikiName = WikiMap::getWikiName( Utils::getWikiIDString( $wikiID ) );
 		if ( $isOrganizer && !$isLocalWiki ) {
 			$foreignDetailsURL = WikiMap::getForeignURL(
 				$wikiID, 'Special:' . self::PAGE_NAME . "/$eventID"
@@ -183,7 +182,7 @@ class SpecialEventDetails extends SpecialPage {
 					$this->msg( 'campaignevents-event-details-page-nonlocal' )
 						->params( [
 							$foreignDetailsURL,
-							$wikiName
+							WikiMap::getWikiName( Utils::getWikiIDString( $wikiID ) )
 						] )->parse()
 				)
 			] );
