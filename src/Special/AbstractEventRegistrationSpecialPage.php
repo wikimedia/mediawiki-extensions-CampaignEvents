@@ -816,4 +816,29 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @return int
 	 */
 	abstract protected function getValidationFlags(): int;
+
+	protected function showForm() {
+		HTMLForm::factory( 'ooui', [
+			'eventId' => [
+				'type' => 'int',
+				'name' => 'eventId',
+				'label-message' => 'campaignevents-register-event-id',
+			],
+		], $this->getContext(), 'campaignevents' )
+			->setSubmitTextMsg( 'campaignevents-register-redirect-submit' )
+			->setSubmitCallback( [ $this, 'onFormSubmit' ] )
+			->show();
+	}
+
+	/**
+	 * @param array $formData
+	 *
+	 * @return void
+	 */
+	public function onFormSubmit( array $formData ) {
+		$eventId = $formData['eventId'];
+		$title = $this->getPageTitle( $eventId ?: null );
+		$url = $title->getFullUrlForRedirect();
+		$this->getOutput()->redirect( $url );
+	}
 }
