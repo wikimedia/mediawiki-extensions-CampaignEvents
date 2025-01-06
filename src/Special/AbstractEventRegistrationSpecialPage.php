@@ -420,11 +420,15 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
 			'section' => self::DETAILS_SECTION,
 		];
+		// For country and address, note that we're using length limit in bytes for `maxlength`, which uses UTF-16
+		// codepoints. Could be fixed up via jquery.lengthLimit, but it isn't worthwhile given how high
+		// these limits are.
 		$formFields['EventMeetingCountry'] = [
 			'type' => 'text',
 			'label-message' => 'campaignevents-edit-field-country',
 			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingCountry() : '',
+			'maxlength' => EventFactory::COUNTRY_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
 		];
 		$formFields['EventMeetingAddress'] = [
@@ -433,6 +437,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-address',
 			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingAddress() : '',
+			'maxlength' => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
 		];
 		$formFields['EventChatURL'] = [
