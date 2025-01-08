@@ -180,7 +180,7 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 		$this->assertStatusValue( 1, $status );
 	}
 
-	public function provideTestSendEmail(): array {
+	public static function provideTestSendEmail(): array {
 		return [
 			'With Reply-To' => [ true ],
 			'Without Reply-To' => [ false ],

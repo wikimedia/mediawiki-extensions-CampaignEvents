@@ -72,18 +72,17 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param IEventStore $store
-	 * @param bool $expectedVal
 	 * @covers ::deleteIfAllowed
 	 * @covers ::authorizeDeletion
-	 * @dataProvider provideRegistrationAndStore
+	 * @dataProvider provideRegistration
 	 */
 	public function testDeleteIfAllowed__successful(
-		ExistingEventRegistration $registration,
-		IEventStore $store,
+		bool $alreadyDeleted,
 		bool $expectedVal
 	) {
+		$registration = $this->createMock( ExistingEventRegistration::class );
+		$store = $this->createMock( IEventStore::class );
+		$store->method( 'deleteRegistration' )->with( $registration )->willReturn( !$alreadyDeleted );
 		$permChecker = $this->createMock( PermissionChecker::class );
 		$permChecker->expects( $this->once() )->method( 'userCanDeleteRegistration' )->willReturn( true );
 		$status = $this->getCommand( $store, $permChecker )->deleteIfAllowed(
@@ -95,32 +94,24 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param IEventStore $store
-	 * @param bool $expectedVal
 	 * @covers ::deleteUnsafe
-	 * @dataProvider provideRegistrationAndStore
+	 * @dataProvider provideRegistration
 	 */
 	public function testDeleteUnsafe__successful(
-		ExistingEventRegistration $registration,
-		IEventStore $store,
+		bool $alreadyDeleted,
 		bool $expectedVal
 	) {
+		$registration = $this->createMock( ExistingEventRegistration::class );
+		$store = $this->createMock( IEventStore::class );
+		$store->method( 'deleteRegistration' )->with( $registration )->willReturn( !$alreadyDeleted );
 		$status = $this->getCommand( $store )->deleteUnsafe( $registration );
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedVal, $status );
 	}
 
-	public function provideRegistrationAndStore(): Generator {
-		$neverDeleted = $this->createMock( ExistingEventRegistration::class );
-		$neverDeletedStore = $this->createMock( IEventStore::class );
-		$neverDeletedStore->method( 'deleteRegistration' )->with( $neverDeleted )->willReturn( true );
-		yield 'Never deleted' => [ $neverDeleted, $neverDeletedStore, true ];
-
-		$alreadyDeleted = $this->createMock( ExistingEventRegistration::class );
-		$alreadyDeletedStore = $this->createMock( IEventStore::class );
-		$alreadyDeletedStore->method( 'deleteRegistration' )->with( $alreadyDeleted )->willReturn( false );
-		yield 'Already deleted' => [ $alreadyDeleted, $alreadyDeletedStore, false ];
+	public static function provideRegistration(): Generator {
+		yield 'Never deleted' => [ false, true ];
+		yield 'Already deleted' => [ true, false ];
 	}
 
 	/**

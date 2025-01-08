@@ -274,7 +274,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expectedRemainingCounts, $actualRemainingCounts );
 	}
 
-	public function provideDeleteAllAnswers(): Generator {
+	public static function provideDeleteAllAnswers(): Generator {
 		yield 'Nothing to delete' => [
 			10,
 			[ 101 ],
@@ -318,7 +318,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $expected, $store->getParticipantAnswers( $eventID, $user ) );
 	}
 
-	public function provideGetParticipantAnswers(): Generator {
+	public static function provideGetParticipantAnswers(): Generator {
 		$ans = static fn ( int $quest, ?int $opt, ?string $text = null ) => new Answer( $quest, $opt, $text );
 
 		yield 'Multiple answers' => [
@@ -353,7 +353,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $expected, $store->getParticipantAnswersMulti( $eventID, $users ) );
 	}
 
-	public function provideGetParticipantAnswersMulti(): Generator {
+	public static function provideGetParticipantAnswersMulti(): Generator {
 		$ans = static fn ( int $quest, ?int $opt, ?string $text = null ) => new Answer( $quest, $opt, $text );
 
 		yield 'No participants given' => [ 1, [], [] ];
@@ -396,7 +396,7 @@ class ParticipantAnswersStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $expected, $store->eventHasAnswers( $eventID ) );
 	}
 
-	public function provideEventHasAnswers(): Generator {
+	public static function provideEventHasAnswers(): Generator {
 		yield 'Has answers' => [ 1, true ];
 		yield 'Has no answers' => [ 5, false ];
 	}

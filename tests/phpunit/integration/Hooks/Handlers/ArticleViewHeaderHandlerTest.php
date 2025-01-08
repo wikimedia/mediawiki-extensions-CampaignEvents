@@ -24,12 +24,10 @@ use WikiPage;
  */
 class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 	/**
-	 * @param Article $article
-	 * @param bool $expectedDecorates
 	 * @dataProvider provideArticle
 	 * @covers ::onArticleViewHeader
 	 */
-	public function testOnArticleViewHeader( Article $article, bool $expectedDecorates ) {
+	public function testOnArticleViewHeader( int $ns, bool $exists, bool $expectedDecorates ) {
 		$decorator = $this->createMock( EventPageDecorator::class );
 		if ( $expectedDecorates ) {
 			$decorator->expects( $this->once() )->method( 'decoratePage' );
@@ -41,30 +39,34 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 		$handler = new ArticleViewHeaderHandler( $decoratorFactory );
 		$outputDone = true;
 		$pcache = true;
+		$article = $this->getMockArticle( $ns, $exists );
 		$handler->onArticleViewHeader( $article, $outputDone, $pcache );
 		// The soft assertions in the mock are sufficient
 		$this->addToAssertionCount( 1 );
 	}
 
-	public function provideArticle(): Generator {
-		$mockArticleInNamespace = function ( int $ns, bool $exists = true ): Article {
-			$wikiPage = $this->createMock( WikiPage::class );
-			$wikiPage->method( 'getNamespace' )->willReturn( $ns );
-			$wikiPage->method( 'exists' )->willReturn( $exists );
-			$article = $this->createMock( Article::class );
-			$article->method( 'getPage' )->willReturn( $wikiPage );
-			// XXX Need to mock all this stuff because the methods are not typehinted
-			$ctx = $this->createMock( IContextSource::class );
-			$ctx->method( 'getOutput' )->willReturn( $this->createMock( OutputPage::class ) );
-			$ctx->method( 'getLanguage' )->willReturn( $this->createMock( Language::class ) );
-			$ctx->method( 'getUser' )->willReturn( $this->createMock( User::class ) );
-			$article->method( 'getContext' )->willReturn( $ctx );
-			return $article;
-		};
+	public static function provideArticle(): Generator {
+		$exists = true;
+		$doesNotExist = false;
 
-		yield 'Mainspace article' => [ $mockArticleInNamespace( NS_MAIN ), false ];
-		yield 'Project page' => [ $mockArticleInNamespace( NS_PROJECT ), false ];
-		yield 'Event page, does not exist' => [ $mockArticleInNamespace( NS_EVENT, false ), false ];
-		yield 'Event page, exists' => [ $mockArticleInNamespace( NS_EVENT ), true ];
+		yield 'Mainspace article' => [ NS_MAIN, $exists, false ];
+		yield 'Project page' => [ NS_PROJECT, $exists, false ];
+		yield 'Event page, does not exist' => [ NS_EVENT, $doesNotExist, false ];
+		yield 'Event page, exists' => [ NS_EVENT, $exists, true ];
+	}
+
+	private function getMockArticle( int $ns, bool $exists ): Article {
+		$wikiPage = $this->createMock( WikiPage::class );
+		$wikiPage->method( 'getNamespace' )->willReturn( $ns );
+		$wikiPage->method( 'exists' )->willReturn( $exists );
+		$article = $this->createMock( Article::class );
+		$article->method( 'getPage' )->willReturn( $wikiPage );
+		// XXX Need to mock all this stuff because the methods are not typehinted
+		$ctx = $this->createMock( IContextSource::class );
+		$ctx->method( 'getOutput' )->willReturn( $this->createMock( OutputPage::class ) );
+		$ctx->method( 'getLanguage' )->willReturn( $this->createMock( Language::class ) );
+		$ctx->method( 'getUser' )->willReturn( $this->createMock( User::class ) );
+		$article->method( 'getContext' )->willReturn( $ctx );
+		return $article;
 	}
 }

@@ -104,52 +104,41 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param ParticipantsStore $store
-	 * @param bool $expectedModified
 	 * @covers ::unregisterIfAllowed
 	 * @covers ::authorizeUnregistration
 	 * @covers ::checkIsUnregistrationAllowed
 	 * @covers ::unregisterUnsafe
-	 * @dataProvider provideStoreAndModified
+	 * @dataProvider provideModified
 	 */
-	public function testUnregisterIfAllowed__successful(
-		ParticipantsStore $store,
-		bool $expectedModified
-	) {
+	public function testUnregisterIfAllowed__successful( bool $modified ) {
+		$store = $this->createMock( ParticipantsStore::class );
+		$store->method( 'removeParticipantFromEvent' )->willReturn( $modified );
 		$status = $this->getCommand( $store )->unregisterIfAllowed(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusGood( $status );
-		$this->assertStatusValue( $expectedModified, $status );
+		$this->assertStatusValue( $modified, $status );
 	}
 
 	/**
-	 * @param ParticipantsStore $store
-	 * @param bool $expectedModified
 	 * @covers ::unregisterUnsafe
-	 * @dataProvider provideStoreAndModified
+	 * @dataProvider provideModified
 	 */
-	public function testUnregisterUnsafe__successful(
-		ParticipantsStore $store,
-		bool $expectedModified
-	) {
+	public function testUnregisterUnsafe__successful( bool $modified ) {
+		$store = $this->createMock( ParticipantsStore::class );
+		$store->method( 'removeParticipantFromEvent' )->willReturn( $modified );
 		$status = $this->getCommand( $store )->unregisterUnsafe(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class )
 		);
 		$this->assertStatusGood( $status );
-		$this->assertStatusValue( $expectedModified, $status );
+		$this->assertStatusValue( $modified, $status );
 	}
 
-	public function provideStoreAndModified(): Generator {
-		$modifiedStore = $this->createMock( ParticipantsStore::class );
-		$modifiedStore->method( 'removeParticipantFromEvent' )->willReturn( true );
-		yield 'Modified' => [ $modifiedStore, true ];
-
-		$notModifiedStore = $this->createMock( ParticipantsStore::class );
-		$notModifiedStore->method( 'removeParticipantFromEvent' )->willReturn( false );
-		yield 'Not modified' => [ $notModifiedStore, false ];
+	public static function provideModified(): Generator {
+		yield 'Modified' => [ true ];
+		yield 'Not modified' => [ false ];
 	}
 
 	/**

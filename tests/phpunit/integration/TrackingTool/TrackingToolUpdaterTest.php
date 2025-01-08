@@ -87,7 +87,7 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( array_values( $formattedExpected ), array_values( $actualRows ) );
 	}
 
-	public function provideReplaceEventTools(): Generator {
+	public static function provideReplaceEventTools(): Generator {
 		yield 'Has no tools, adding one' => [
 			2,
 			[ new TrackingToolAssociation( 5, 'foobar', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
@@ -300,7 +300,7 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expectedTS, $row->cett_last_sync );
 	}
 
-	public function provideUpdateToolSyncStatus(): Generator {
+	public static function provideUpdateToolSyncStatus(): Generator {
 		yield 'Unknown -> synced' => [ 1, 42, 'foo', TrackingToolAssociation::SYNC_STATUS_SYNCED, self::FAKE_TIME ];
 		yield 'Synced -> unknown' => [ 1, 42, 'bar', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, '20230115000000' ];
 		yield 'Synced -> synced' => [ 1, 42, 'bar', TrackingToolAssociation::SYNC_STATUS_SYNCED, self::FAKE_TIME ];

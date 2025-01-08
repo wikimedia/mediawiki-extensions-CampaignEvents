@@ -142,7 +142,7 @@ class GetParticipantQuestionsHandlerTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, $respData );
 	}
 
-	public function provideExecute(): Generator {
+	public static function provideExecute(): Generator {
 		yield 'No filter' => [
 			[],
 			self::QUESTION_OVERRIDES_API

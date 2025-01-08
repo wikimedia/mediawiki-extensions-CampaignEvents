@@ -248,7 +248,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	public function provideExtractUserAnswersHTMLForm(): Generator {
+	public static function provideExtractUserAnswersHTMLForm(): Generator {
 		yield 'Empty form data' => [ [], [ 1, 2, 3 ], [] ];
 		yield 'No answers in form data' => [ [ 'notaquestion' => '42' ], [ 1 ], [] ];
 		yield 'Form data contains answer to question not enabled' => [ [ 'QuestionAge' => '2' ], [], [] ];
@@ -306,7 +306,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		$this->getRegistry()->extractUserAnswersHTMLForm( $formData, [ 1, 2, 3, 4, 5 ] );
 	}
 
-	public function provideExtractUserAnswersHTMLForm__error(): Generator {
+	public static function provideExtractUserAnswersHTMLForm__error(): Generator {
 		yield 'Radio wrong answer type' => [
 			[ 'QuestionGender' => 'foo' ],
 		];
@@ -371,7 +371,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, $registry->getQuestionsForAPI( $questionIDs ) );
 	}
 
-	public function provideGetQuestionsForAPI(): Generator {
+	public static function provideGetQuestionsForAPI(): Generator {
 		yield 'No filter' => [
 			null,
 			self::QUESTION_OVERRIDES_API
@@ -398,7 +398,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, $this->getRegistry()->formatAnswersForAPI( $answers, range( 1, 5 ) ) );
 	}
 
-	public function provideFormatAnswersForAPI(): Generator {
+	public static function provideFormatAnswersForAPI(): Generator {
 		yield 'No answers' => [ [], [] ];
 		yield 'Unrecognized question' => [
 			[ new Answer( 10000000, 1, 'foo' ) ],
@@ -438,7 +438,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	public function provideExtractUserQuestionsAPI(): Generator {
+	public static function provideExtractUserQuestionsAPI(): Generator {
 		yield 'No answers' => [ [], [ 1, 2, 3 ], [] ];
 		yield 'Unrecognized answer' => [
 			[ 'notaquestion' => [ 'value' => 42 ] ],
@@ -511,7 +511,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		$this->getRegistry()->extractUserAnswersAPI( $data, [ 1, 2, 3, 4, 5 ] );
 	}
 
-	public function provideExtractUserQuestionsAPI__error(): Generator {
+	public static function provideExtractUserQuestionsAPI__error(): Generator {
 		yield 'Radio wrong answer type' => [
 			[ 'gender' => [ 'value' => 'foo' ] ],
 		];
@@ -634,7 +634,7 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideGetQuestionOptionMessageByID(): Generator {
+	public static function provideGetQuestionOptionMessageByID(): Generator {
 		yield 'Valid question and option' => [
 			5,
 			1,
