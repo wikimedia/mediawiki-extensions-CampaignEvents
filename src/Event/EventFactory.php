@@ -41,7 +41,7 @@ class EventFactory {
 	 * hit under normal circumstances. So, we just truncate the given strings instead of displaying an error. For the
 	 * same reason, we use bytes and not more sensible units like characters or graphemes.
 	 */
-	public const COUNTRY_MAXLENGTH_BYTES = 256;
+	public const COUNTRY_MAXLENGTH_BYTES = 255;
 	public const ADDRESS_MAXLENGTH_BYTES = 8192;
 
 	private CampaignsPageFactory $campaignsPageFactory;
