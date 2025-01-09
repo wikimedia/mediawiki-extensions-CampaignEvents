@@ -23,13 +23,9 @@ use StatusValue;
  */
 class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	private function getTool(
-		?MWHttpRequest $request = null,
+		MWHttpRequest $request,
 		?ParticipantsStore $participantsStore = null
 	): WikiEduDashboard {
-		if ( !$request ) {
-			$request = $this->getJsonReqMock( [ 'success' => true ], false );
-			$request->method( 'execute' )->willReturn( StatusValue::newGood() );
-		}
 		$httpRequestFactory = $this->createMock( HttpRequestFactory::class );
 		$httpRequestFactory->method( 'create' )->willReturn( $request );
 
@@ -44,17 +40,15 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param array $respBody
-	 * @param bool $error
 	 * @return MWHttpRequest&MockObject
 	 */
-	private function getJsonReqMock( array $respBody = [], bool $error = true ): MWHttpRequest {
+	private function getJsonReqMock( ?string $contentType, ?string $content, bool $hasError ): MWHttpRequest {
 		$request = $this->createMock( MWHttpRequest::class );
 		$request->method( 'getResponseHeader' )
 			->with( 'Content-Type' )
-			->willReturn( 'application/json' );
-		$request->method( 'getContent' )->willReturn( json_encode( $respBody ) );
-		$status = $error ? StatusValue::newFatal( 'unused' ) : StatusValue::newGood();
+			->willReturn( $contentType );
+		$request->method( 'getContent' )->willReturn( $content );
+		$status = $hasError ? StatusValue::newFatal( 'unused' ) : StatusValue::newGood();
 		$request->method( 'execute' )->willReturn( $status );
 		return $request;
 	}
@@ -68,9 +62,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideAddTool
 	 */
 	public function testValidateToolAddition(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->validateToolAddition(
 			$this->createMock( ExistingEventRegistration::class ),
 			[],
@@ -92,9 +88,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideAddTool
 	 */
 	public function testAddToNewEvent(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->addToNewEvent(
 			42,
 			$this->createMock( ExistingEventRegistration::class ),
@@ -117,9 +115,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideAddTool
 	 */
 	public function testAddToExistingEvent(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->addToExistingEvent(
 			$this->createMock( ExistingEventRegistration::class ),
 			[],
@@ -132,73 +132,59 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	private function provideInvalidResponseCases(): Generator {
-		$noContentTypeResponseReq = $this->createMock( MWHttpRequest::class );
-		$noContentTypeResponseReq->method( 'getResponseHeader' )
-			->with( 'Content-Type' )
-			->willReturn( null );
-		$noContentTypeResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
-		yield 'No Content-Type header' => [ $noContentTypeResponseReq, 'campaignevents-tracking-tool-http-error' ];
+	private static function provideSuccessfulResponse(): Generator {
+		yield 'Success' => [ 'application/json', json_encode( [ 'success' => true ] ), null ];
+	}
 
-		$notJsonResponseReq = $this->createMock( MWHttpRequest::class );
-		$notJsonResponseReq->method( 'getResponseHeader' )
-			->with( 'Content-Type' )
-			->willReturn( 'definitely-not-json' );
-		$notJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
-		yield 'Response is not JSON' => [ $notJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
-
-		$invalidJsonResponseReq = $this->createMock( MWHttpRequest::class );
-		$invalidJsonResponseReq->method( 'getResponseHeader' )
-			->with( 'Content-Type' )
-			->willReturn( 'application/json' );
-		$invalidJsonResponseReq->method( 'getContent' )->willReturn( '{' );
-		$invalidJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
-		yield 'Response is invalid JSON' => [ $invalidJsonResponseReq, 'campaignevents-tracking-tool-http-error' ];
-
-		$notObjectJsonResponseReq = $this->createMock( MWHttpRequest::class );
-		$notObjectJsonResponseReq->method( 'getResponseHeader' )
-			->with( 'Content-Type' )
-			->willReturn( 'application/json' );
-		$notObjectJsonResponseReq->method( 'getContent' )->willReturn( 'false' );
-		$notObjectJsonResponseReq->method( 'execute' )->willReturn( StatusValue::newGood() );
+	private static function provideInvalidResponseCases(): Generator {
+		yield 'No Content-Type header' => [ null, null, 'campaignevents-tracking-tool-http-error' ];
+		yield 'Response is not JSON' => [ 'definitely-not-json', null, 'campaignevents-tracking-tool-http-error' ];
+		yield 'Response is invalid JSON' => [ 'application/json', '{', 'campaignevents-tracking-tool-http-error' ];
 		yield 'JSON response is not an object' => [
-			$notObjectJsonResponseReq,
+			'application/json',
+			'false',
 			'campaignevents-tracking-tool-http-error'
 		];
 	}
 
-	public function provideAddTool(): Generator {
-		yield 'Success' => [ null, null ];
+	public static function provideAddTool(): Generator {
+		yield from self::provideSuccessfulResponse();
 
-		yield from $this->provideInvalidResponseCases();
+		yield from self::provideInvalidResponseCases();
 
 		yield 'No error code in the response' => [
-			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
+			'application/json',
+			json_encode( [ 'no_error_code_here' => true ] ),
 			'campaignevents-tracking-tool-http-error'
 		];
 
 		yield 'Invalid secret' => [
-			$this->getJsonReqMock( [ 'error_code' => 'invalid_secret' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'invalid_secret' ] ),
 			'campaignevents-tracking-tool-wikiedu-config-error'
 		];
 
 		yield 'Course not found' => [
-			$this->getJsonReqMock( [ 'error_code' => 'course_not_found' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'course_not_found' ] ),
 			'campaignevents-tracking-tool-wikiedu-course-not-found-error'
 		];
 
 		yield 'Invalid organizers' => [
-			$this->getJsonReqMock( [ 'error_code' => 'not_organizer' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'not_organizer' ] ),
 			'campaignevents-tracking-tool-wikiedu-not-organizer-error'
 		];
 
 		yield 'Already in use' => [
-			$this->getJsonReqMock( [ 'error_code' => 'already_in_use' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'already_in_use' ] ),
 			'campaignevents-tracking-tool-wikiedu-already-in-use-error'
 		];
 
 		yield 'Sync already enabled' => [
-			$this->getJsonReqMock( [ 'error_code' => 'sync_already_enabled' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'sync_already_enabled' ] ),
 			'campaignevents-tracking-tool-wikiedu-already-connected-error'
 		];
 	}
@@ -211,9 +197,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideRemoveTool
 	 */
 	public function testValidateToolRemoval(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->validateToolRemoval(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
@@ -233,9 +221,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideRemoveTool
 	 */
 	public function testRemoveFromEvent(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->removeFromEvent(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
@@ -255,9 +245,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideRemoveTool
 	 */
 	public function testValidateEventDeletion(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->validateEventDeletion(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
@@ -277,9 +269,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideRemoveTool
 	 */
 	public function testOnEventDeleted(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->onEventDeleted(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something'
@@ -291,28 +285,32 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideRemoveTool(): Generator {
-		yield 'Success' => [ null, null ];
+	public static function provideRemoveTool(): Generator {
+		yield from self::provideSuccessfulResponse();
 
-		yield from $this->provideInvalidResponseCases();
+		yield from self::provideInvalidResponseCases();
 
 		yield 'No error code in the response' => [
-			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
+			'application/json',
+			json_encode( [ 'no_error_code_here' => true ] ),
 			'campaignevents-tracking-tool-http-error'
 		];
 
 		yield 'Invalid secret' => [
-			$this->getJsonReqMock( [ 'error_code' => 'invalid_secret' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'invalid_secret' ] ),
 			'campaignevents-tracking-tool-wikiedu-config-error'
 		];
 
 		yield 'Course not found' => [
-			$this->getJsonReqMock( [ 'error_code' => 'course_not_found' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'course_not_found' ] ),
 			null
 		];
 
 		yield 'Sync not enabled' => [
-			$this->getJsonReqMock( [ 'error_code' => 'sync_not_enabled' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'sync_not_enabled' ] ),
 			null
 		];
 	}
@@ -326,9 +324,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideParticipantsChange
 	 */
 	public function testValidateParticipantAdded(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->validateParticipantAdded(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
@@ -351,9 +351,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideParticipantsChange
 	 */
 	public function testAddParticipant(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->addParticipant(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
@@ -376,9 +378,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideParticipantsChange
 	 */
 	public function testValidateParticipantsRemoved(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->validateParticipantsRemoved(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
@@ -401,9 +405,11 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideParticipantsChange
 	 */
 	public function testRemoveParticipants(
-		?MWHttpRequest $request,
+		?string $responseContentType,
+		?string $responseContent,
 		?string $expectedError
 	) {
+		$request = $this->getJsonReqMock( $responseContentType, $responseContent, $expectedError !== null );
 		$actual = $this->getTool( $request )->removeParticipants(
 			$this->createMock( ExistingEventRegistration::class ),
 			'something',
@@ -417,28 +423,32 @@ class WikiEduDashboardTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideParticipantsChange(): Generator {
-		yield 'Success' => [ null, null ];
+	public static function provideParticipantsChange(): Generator {
+		yield from self::provideSuccessfulResponse();
 
-		yield from $this->provideInvalidResponseCases();
+		yield from self::provideInvalidResponseCases();
 
 		yield 'No error code in the response' => [
-			$this->getJsonReqMock( [ 'no_error_code_here' => true ] ),
+			'application/json',
+			json_encode( [ 'no_error_code_here' => true ] ),
 			'campaignevents-tracking-tool-http-error'
 		];
 
 		yield 'Invalid secret' => [
-			$this->getJsonReqMock( [ 'error_code' => 'invalid_secret' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'invalid_secret' ] ),
 			'campaignevents-tracking-tool-wikiedu-config-error'
 		];
 
 		yield 'Course not found' => [
-			$this->getJsonReqMock( [ 'error_code' => 'course_not_found' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'course_not_found' ] ),
 			'campaignevents-tracking-tool-wikiedu-course-not-found-error'
 		];
 
 		yield 'Sync not enabled' => [
-			$this->getJsonReqMock( [ 'error_code' => 'sync_not_enabled' ] ),
+			'application/json',
+			json_encode( [ 'error_code' => 'sync_not_enabled' ] ),
 			'campaignevents-tracking-tool-wikiedu-not-connected-error'
 		];
 	}
