@@ -71,15 +71,7 @@ class EventPage extends Page {
 	async register( isPrivate = false ) {
 		// Wait until the click handlers have been installed
 		await Util.waitForModuleState( 'ext.campaignEvents.eventpage' );
-		await browser.waitUntil(
-			() => browser.execute( () => {
-				const btn = $( '.ext-campaignevents-eventpage-register-btn' ).get( 0 ),
-					// eslint-disable-next-line no-underscore-dangle
-					btnEvents = $._data( btn, 'events' );
-				return btnEvents && btnEvents.click && btnEvents.click.length >= 1;
-			} ),
-			{ timeoutMsg: 'Click listener not installed.' }
-		);
+		await this.waitForClickHandler( '.ext-campaignevents-eventpage-register-btn' );
 
 		await this.registerForEventButton.click();
 		// Wait for the dialog to be ready, and the click handlers functional
@@ -120,7 +112,26 @@ class EventPage extends Page {
 	 * Opens the more details dialog.
 	 */
 	async openMoreDetailsDialog() {
+		await this.waitForClickHandler( '.ext-campaignevents-eventpage-details-btn' );
 		await this.moreDetailsDialogButton.click();
+	}
+
+	/**
+	 * Wait for a click handler to be installed on an element with the given selector.
+	 *
+	 * @param {string} selector Must be a valid jQuery selector (not wdio)
+	 * @return {Promise<void>}
+	 */
+	async waitForClickHandler( selector ) {
+		await browser.waitUntil(
+			() => browser.execute( ( browserSelector ) => {
+				const btn = $( browserSelector ).get( 0 ),
+					// eslint-disable-next-line no-underscore-dangle
+					btnEvents = $._data( btn, 'events' );
+				return btnEvents && btnEvents.click && btnEvents.click.length >= 1;
+			}, selector ),
+			{ timeoutMsg: `Click listener on ${ selector } not installed.` }
+		);
 	}
 }
 
