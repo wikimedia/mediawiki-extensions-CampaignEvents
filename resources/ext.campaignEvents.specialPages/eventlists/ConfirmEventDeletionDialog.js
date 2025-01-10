@@ -12,6 +12,7 @@
 	function ConfirmEventDeletionDialog( config ) {
 		this.eventName = config.eventName;
 		ConfirmEventDeletionDialog.super.call( this, config );
+		this.$element.addClass( 'ext-campaignevents-myevents-delete-confirm-dialog' );
 	}
 	OO.inheritClass( ConfirmEventDeletionDialog, OO.ui.MessageDialog );
 

@@ -76,6 +76,14 @@ class MyEventsPage extends Page {
 	async deleteFirstRegistration() {
 		await this.manageEventMenuButton.click();
 		await this.deleteRegistrationButton.click();
+		// Wait for the dialog actions to become functional (T382143)
+		await browser.waitUntil(
+			() => browser.execute(
+				() => $( '.ext-campaignevents-myevents-delete-confirm-dialog.oo-ui-window' )
+					.hasClass( 'oo-ui-window-ready' )
+			),
+			{ timeoutMsg: 'Dialog is not ready' }
+		);
 		await this.deleteConfirmationButton.click();
 	}
 }
