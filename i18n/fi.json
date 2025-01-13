@@ -326,8 +326,12 @@
 	"campaignevents-register-question-profession-organizer-label": "Mikä on ammattisi?",
 	"campaignevents-register-retention-title": "Tietoja henkilötietojen säilytyksestä",
 	"campaignevents-eventpage-register-dialog-retention-title": "Tietoja henkilötietojen säilytyksestä",
+	"myinvitationlists": "Kutsulistasi",
+	"campaignevents-invitations-pager-status-editors": "$1 {{PLURAL:$1|muokkaaja|muokkaajaa}} löytyi",
 	"campaignevents-invitations-pager-status-processing": "Käsitellään...",
+	"campaignevents-myinvitationslist-generate-button": "Luo uusi kutsulista",
 	"campaignevents-myinvitationslist-new-button": "Uusi",
 	"invitationlist": "Kutsulista",
-	"campaignevents-invitationlist-event": "$1: Kutsulista"
+	"campaignevents-invitationlist-event": "$1: Kutsulista",
+	"prefs-campaignevents-invitations": "Kutsulistat"
 }
