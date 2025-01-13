@@ -510,5 +510,6 @@
 	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|more}}",
 	"campaignevents-eventpage-dialog-wikis-label": "Wikis",
 	"campaignevents-eventslist-wiki-label": "Wikis",
-	"campaignevents-eventslist-topics-label": "Topics"
+	"campaignevents-eventslist-topics-label": "Topics",
+	"campaignevents-event-details-topics-header": "Topics"
 }

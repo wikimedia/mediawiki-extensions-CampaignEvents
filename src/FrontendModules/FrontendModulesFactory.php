@@ -18,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Language\Language;
 use MediaWiki\User\UserFactory;
@@ -42,6 +43,7 @@ class FrontendModulesFactory {
 	private EventQuestionsRegistry $questionsRegistry;
 	private CampaignEventsHookRunner $hookRunner;
 	private WikiLookup $wikiLookup;
+	private ITopicRegistry $topicRegistry;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -60,6 +62,7 @@ class FrontendModulesFactory {
 	 * @param EventQuestionsRegistry $questionsRegistry
 	 * @param CampaignEventsHookRunner $hookRunner
 	 * @param WikiLookup $wikiLookup
+	 * @param ITopicRegistry $topicRegistry
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -77,7 +80,8 @@ class FrontendModulesFactory {
 		EventAggregatedAnswersStore $aggregatedAnswersStore,
 		EventQuestionsRegistry $questionsRegistry,
 		CampaignEventsHookRunner $hookRunner,
-		WikiLookup $wikiLookup
+		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -95,6 +99,7 @@ class FrontendModulesFactory {
 		$this->questionsRegistry = $questionsRegistry;
 		$this->hookRunner = $hookRunner;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 	}
 
 	/**
@@ -116,6 +121,7 @@ class FrontendModulesFactory {
 			$this->hookRunner,
 			$this->permissionChecker,
 			$this->wikiLookup,
+			$this->topicRegistry,
 			$registration,
 			$language
 		);

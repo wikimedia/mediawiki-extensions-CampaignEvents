@@ -18,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEditEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
@@ -49,6 +50,7 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-alerts',
 		'oojs-ui.styles.icons-user',
 		'oojs-ui.styles.icons-media',
+		'oojs-ui.styles.icons-content',
 	];
 
 	private OrganizersStore $organizersStore;
@@ -63,6 +65,7 @@ class EventDetailsModule {
 	private CampaignEventsHookRunner $hookRunner;
 	private PermissionChecker $permissionChecker;
 	private WikiLookup $wikiLookup;
+	private ITopicRegistry $topicRegistry;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -74,6 +77,7 @@ class EventDetailsModule {
 	 * @param CampaignEventsHookRunner $hookRunner
 	 * @param PermissionChecker $permissionChecker
 	 * @param WikiLookup $wikiLookup
+	 * @param ITopicRegistry $topicRegistry
 	 * @param ExistingEventRegistration $registration
 	 * @param Language $language
 	 */
@@ -87,6 +91,7 @@ class EventDetailsModule {
 		CampaignEventsHookRunner $hookRunner,
 		PermissionChecker $permissionChecker,
 		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry,
 		ExistingEventRegistration $registration,
 		Language $language
 	) {
@@ -99,6 +104,7 @@ class EventDetailsModule {
 		$this->hookRunner = $hookRunner;
 		$this->permissionChecker = $permissionChecker;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 		$this->registration = $registration;
 		$this->language = $language;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
@@ -345,6 +351,12 @@ class EventDetailsModule {
 			);
 		}
 
+		$eventTopics = $this->topicRegistry->getTopicMessages( $this->registration->getTopics() );
+		sort( $eventTopics );
+		if ( $eventTopics ) {
+			$items[] = $this->getEventTopicsSection( $out, $eventTopics );
+		}
+
 		return ( new Tag( 'div' ) )
 			->appendContent( $items );
 	}
@@ -457,6 +469,30 @@ class EventDetailsModule {
 		);
 
 		return ( new Tag( 'div' ) )->appendContent( $eventWikisSection );
+	}
+
+	/**
+	 * @param OutputPage $out
+	 * @param array $eventTopics
+	 * @return ?Tag
+	 */
+	private function getEventTopicsSection( OutputPage $out, array $eventTopics ): ?Tag {
+		$eventTopicListItems = '';
+		foreach ( $eventTopics as $eventTopic ) {
+			$eventTopicListItems .= Html::element( 'li', [], $out->msg( $eventTopic ) );
+		}
+		$eventTopicContent = Html::rawElement(
+			'ul',
+			[ 'class' => 'ext-campaignevents-eventdetails-event-wiki-list' ],
+			$eventTopicListItems
+		);
+		$eventTopicsSection = self::makeSection(
+			'tag',
+			new HtmlSnippet( $eventTopicContent ),
+			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-topics-header' ) )
+		);
+
+		return $eventTopicsSection;
 	}
 
 	/**
