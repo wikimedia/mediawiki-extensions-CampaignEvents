@@ -13,7 +13,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 		// Increase the timeout, because we need to block a user and edit a page
 		this.timeout( 5000 );
 
-		const organizerUser = await action.root();
+		const organizerUser = await EventUtils.getOrganizerUser();
 		organizerToken = await organizerUser.token();
 
 		const anonUser = action.getAnon();

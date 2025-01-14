@@ -1,6 +1,7 @@
 'use strict';
 
-const { action, assert, REST, clientFactory, utils } = require( 'api-testing' );
+const { action, assert, REST, clientFactory, utils } = require( 'api-testing' ),
+	EventUtils = require( './EventUtils.js' );
 
 describe( 'POST /campaignevents/v0/event_registration', () => {
 	let anonClient, organizerClient, blockedUserClient,
@@ -11,7 +12,7 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 		// Increase the timeout, because we need to block a user and edit a page
 		this.timeout( 5000 );
 
-		const organizerUser = await action.root();
+		const organizerUser = await EventUtils.getOrganizerUser();
 		organizerToken = await organizerUser.token();
 
 		const anonUser = action.getAnon();

@@ -6,14 +6,28 @@ const Util = require( 'wdio-mediawiki/Util' ),
 
 module.exports = {
 	/** Credentials for the default organizer account */
-	organizerName: browser.config.mwUser,
-	organizerPassword: browser.config.mwPwd,
+	organizerName: Util.getTestString( 'Event organizer' ),
+	organizerPassword: 'correct horse battery staple',
 
 	/**
-	 * Logs in as an event organizer.
+	 * Logs in as an event organizer. Creates the organizer account if necessary (i.e., unless it
+	 * was already done in this test run).
 	 */
 	async loginAsOrganizer() {
+		await this.createOrganizerAccount( this.organizerName, this.organizerPassword );
 		await LoginPage.login( this.organizerName, this.organizerPassword );
+	},
+
+	/**
+	 * Create an event organizer account.
+	 *
+	 * @param {string} username
+	 * @param {string} password
+	 */
+	async createOrganizerAccount( username, password = this.organizerPassword ) {
+		const adminBot = await Api.bot();
+		await Api.createAccount( adminBot, username, password );
+		await Api.addUserToGroup( adminBot, username, 'event-organizer' );
 	},
 
 	/**

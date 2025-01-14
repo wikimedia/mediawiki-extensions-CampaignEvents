@@ -1,11 +1,9 @@
 'use strict';
 
-const Api = require( 'wdio-mediawiki/Api' ),
-	EventPage = require( '../pageobjects/event.page' ),
+const EventPage = require( '../pageobjects/event.page' ),
 	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	EventUtils = require( '../EventUtils.js' ),
-	Util = require( 'wdio-mediawiki/Util' ),
-	userName = Util.getTestString();
+	Util = require( 'wdio-mediawiki/Util' );
 
 let id;
 
@@ -54,16 +52,15 @@ describe( 'Edit Event Registration', () => {
 	} );
 
 	it( 'can allow organizer to add an additional organizer', async () => {
-		const bot = await Api.bot();
-		const password = 'aaaaaaaaa!';
-		await Api.createAccount( bot, userName, password );
+		const otherOrganizerName = Util.getTestString( 'Another event organizer' );
+		await EventUtils.createOrganizerAccount( otherOrganizerName );
 		await EventRegistrationPage.editEvent( {
 			id,
-			organizer: userName
+			organizer: otherOrganizerName
 		} );
 
 		await EventPage.openMoreDetailsDialog();
-		await expect( await EventPage.eventOrganizers ).toHaveTextContaining( userName );
+		await expect( await EventPage.eventOrganizers ).toHaveTextContaining( otherOrganizerName );
 	} );
 
 } );

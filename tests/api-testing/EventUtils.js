@@ -1,6 +1,6 @@
 'use strict';
 
-const { assert, clientFactory, action, utils } = require( 'api-testing' );
+const { action, assert, clientFactory, utils } = require( 'api-testing' );
 
 module.exports = {
 	async enableRegistration( user, reqBody ) {
@@ -14,8 +14,8 @@ module.exports = {
 
 	async enableRandomRegistration() {
 		const eventPage = utils.title( 'Event:Event page ' ),
-			rootUser = await action.root();
-		await rootUser.edit( eventPage, {} );
+			organizerUser = await this.getOrganizerUser();
+		await organizerUser.edit( eventPage, {} );
 		const reqBody = {
 			event_page: eventPage,
 			timezone: 'UTC',
@@ -25,8 +25,12 @@ module.exports = {
 			// type: 'generic',
 			wikis: [],
 			online_meeting: true,
-			token: await rootUser.token()
+			token: await organizerUser.token()
 		};
-		return this.enableRegistration( rootUser, reqBody );
+		return this.enableRegistration( organizerUser, reqBody );
+	},
+
+	async getOrganizerUser() {
+		return action.user( 'Organizer', [ 'event-organizer' ] );
 	}
 };

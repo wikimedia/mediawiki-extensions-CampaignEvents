@@ -58,7 +58,7 @@
 		"campaignevents-allow-invitations": true
 	},
 	"GroupPermissions": {
-		"user": {
+		"event-organizer": {
 			"campaignevents-enable-registration": true,
 			"campaignevents-organize-events": true,
 			"campaignevents-email-participants": true
@@ -66,6 +66,16 @@
 		"sysop": {
 			"campaignevents-delete-registration": true
 		}
+	},
+	"AddGroups": {
+		"sysop": [
+			"event-organizer"
+		]
+	},
+	"RemoveGroups": {
+		"sysop": [
+			"event-organizer"
+		]
 	},
 	"ExtensionMessagesFiles": {
 		"CampaignEventsAliases": "CampaignEvents.alias.php",
