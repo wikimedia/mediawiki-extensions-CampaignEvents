@@ -18,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Rest\EnableEventRegistrationHandler;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Session\Session;
@@ -70,7 +71,11 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->createMock( CampaignsCentralUserLookup::class ),
 			$this->createMock( EventQuestionsRegistry::class ),
 			$wikiLookup ?? $this->createMock( WikiLookup::class ),
-			new HashConfig( [ 'CampaignEventsEnableEventWikis' => true ] )
+			$this->createMock( ITopicRegistry::class ),
+			new HashConfig( [
+				'CampaignEventsEnableEventWikis' => true,
+				'CampaignEventsEnableEventTopics' => true,
+			] )
 		);
 	}
 

@@ -68,7 +68,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['event_page'],
 			$body['chat_url'],
 			$wikis,
-			[],
+			$body['topics'] ?? [],
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			EventRegistration::STATUS_OPEN,

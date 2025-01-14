@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use StatusValue;
@@ -38,6 +39,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry,
 		Config $config,
 		IEventLookup $eventLookup
 	) {
@@ -49,6 +51,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$centralUserLookup,
 			$eventQuestionsRegistry,
 			$wikiLookup,
+			$topicRegistry,
 			$config
 		);
 		$this->eventLookup = $eventLookup;
@@ -152,7 +155,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['event_page'],
 			$body['chat_url'],
 			$wikis,
-			[],
+			$body['topics'] ?? [],
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$body['status'],

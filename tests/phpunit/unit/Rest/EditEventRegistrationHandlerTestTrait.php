@@ -16,6 +16,7 @@ trait EditEventRegistrationHandlerTestTrait {
 		'event_page' => 'Some event page title',
 		'chat_url' => 'https://chaturl.example.org',
 		'wikis' => [ '*' ],
+		'topics' => [],
 		'timezone' => 'UTC',
 		'start_time' => '20220308120000',
 		'end_time' => '20220308150000',
