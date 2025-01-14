@@ -55,6 +55,14 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-add-ce_event_wikis.sql",
 			true
 		] );
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addField',
+			'campaign_events',
+			"event_is_test_event",
+			"$dir/$dbType/patch-add-event_is_test_event.sql",
+			true
+		] );
 
 		$updater->addExtensionUpdateOnVirtualDomain( [
 			Utils::VIRTUAL_DB_DOMAIN,
