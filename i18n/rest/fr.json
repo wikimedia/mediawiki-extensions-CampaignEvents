@@ -4,11 +4,12 @@
 			"Gomoko",
 			"Pols12",
 			"SleaY",
-			"Verdy p"
+			"Verdy p",
+			"Alien333"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Il n’y a aucun événement avec cet identifiant.",
-	"campaignevents-rest-enable-registration-permission-denied": "Vous n’êtes pas autorisé{{GENDER:||e}} à activer les inscriptions aux événements.",
+	"campaignevents-rest-enable-registration-permission-denied": "Vous n’êtes pas {{GENDER:|autorisé|autorisée}} à activer les inscriptions aux événements.",
 	"campaignevents-rest-edit-page-nonlocal": "Les inscriptions à cet événement ont été activées sur le wiki suivant et doivent être modifiées ici : $1.",
 	"campaignevents-rest-delete-already-deleted": "Cette inscription à l’événement est déjà supprimée.",
 	"campaignevents-rest-user-not-found": "Il n’y a aucun utilisateur avec cet identifiant central.",
