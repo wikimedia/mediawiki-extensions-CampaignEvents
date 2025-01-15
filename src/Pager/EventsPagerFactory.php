@@ -98,7 +98,8 @@ class EventsPagerFactory {
 		string $startDate,
 		string $endDate,
 		bool $showOngoing,
-		array $filterWiki
+		array $filterWiki,
+		array $filterTopics
 	): EventsListPager {
 		return new EventsListPager(
 			$this->userLinker,
@@ -118,7 +119,8 @@ class EventsPagerFactory {
 			$startDate,
 			$endDate,
 			$showOngoing,
-			$filterWiki
+			$filterWiki,
+			$filterTopics
 		);
 	}
 }
