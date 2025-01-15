@@ -48,7 +48,8 @@ class SpecialAllEvents extends SpecialPage {
 			'oojs-ui.styles.icons-interactions',
 			'oojs-ui.styles.icons-wikimedia',
 			'oojs-ui.styles.icons-user',
-			'oojs-ui.styles.icons-editing-advanced'
+			'oojs-ui.styles.icons-editing-advanced',
+			'oojs-ui.styles.icons-content',
 		] );
 		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
 		$eventsContent = $this->getFormAndEvents();

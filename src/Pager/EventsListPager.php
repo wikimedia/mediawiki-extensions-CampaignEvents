@@ -8,6 +8,7 @@ use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -18,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Html\Html;
 use MediaWiki\Pager\IndexPager;
@@ -49,6 +51,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private WikiLookup $wikiLookup;
 	private EventWikisStore $eventWikisStore;
+	private ITopicRegistry $topicRegistry;
+	private EventTopicsStore $eventTopicsStore;
 
 	private string $search;
 	/** One of the EventRegistration::MEETING_TYPE_* constants */
@@ -71,6 +75,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $organizerCounts = [];
 	/** @var array<int,string[]|true> Maps event ID to all wikis assigned to the event. */
 	private array $eventWikis = [];
+	/** @var array<int,string[]> Maps event ID to all topics assigned to the event. */
+	private array $eventTopics = [];
 
 	public function __construct(
 		UserLinker $userLinker,
@@ -83,6 +89,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		CampaignsCentralUserLookup $centralUserLookup,
 		WikiLookup $wikiLookup,
 		EventWikisStore $eventWikisStore,
+		ITopicRegistry $topicRegistry,
+		EventTopicsStore $eventTopicsStore,
 		string $search,
 		?int $meetingType,
 		string $startDate,
@@ -101,6 +109,10 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->linkBatchFactory = $linkBatchFactory;
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->centralUserLookup = $centralUserLookup;
+		$this->wikiLookup = $wikiLookup;
+		$this->eventWikisStore = $eventWikisStore;
+		$this->topicRegistry = $topicRegistry;
+		$this->eventTopicsStore = $eventTopicsStore;
 
 		$this->search = $search;
 		$this->meetingType = $meetingType;
@@ -112,8 +124,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderTimestamp = '';
 		$this->filterWiki = $filterWiki;
-		$this->wikiLookup = $wikiLookup;
-		$this->eventWikisStore = $eventWikisStore;
 	}
 
 	/**
@@ -127,6 +137,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$result->seek( 0 );
 
 		$this->eventWikis = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
+		$this->eventTopics = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
 
 		$this->creators = $this->organizerStore->getEventCreators(
 			$eventIDs,
@@ -260,6 +271,10 @@ class EventsListPager extends ReverseChronologicalPager {
 			$detailContainer->appendContent(
 				$this->getWikiList( $row->event_id )
 			);
+		}
+		$eventTopics = $this->eventTopics[(int)$row->event_id];
+		if ( $eventTopics ) {
+			$detailContainer->appendContent( $this->getTopicList( $eventTopics ) );
 		}
 		$detailContainer->appendContent(
 			new TextWithIconWidget( [
@@ -527,6 +542,21 @@ class EventsListPager extends ReverseChronologicalPager {
 			'icon' => $this->wikiLookup->getWikiIcon( $eventWikis ),
 			'content' => new HtmlSnippet( $language->listToText( $escapedWikiNames ) ),
 			'label' => $this->msg( 'campaignevents-eventslist-wiki-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+		] );
+	}
+
+	private function getTopicList( array $topics ): TextWithIconWidget {
+		$localizedTopicNames = array_map(
+			fn ( string $msgKey ) => $this->msg( $msgKey )->escaped(),
+			$this->topicRegistry->getTopicMessages( $topics )
+		);
+		sort( $localizedTopicNames );
+
+		return new TextWithIconWidget( [
+			'icon' => 'tag',
+			'content' => new HtmlSnippet( $this->getLanguage()->commaList( $localizedTopicNames ) ),
+			'label' => $this->msg( 'campaignevents-eventslist-topics-label' )->text(),
 			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
 		] );
 	}
