@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Rachmat04"
+			"Rachmat04",
+			"BAPerdana-WMF"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Tidak ada acara dengan ID ini.",
@@ -15,5 +16,8 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Anda tidak berwenang melihat peserta yang mendaftar secara pribadi untuk acara ini.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> harus berupa larik nama pengguna dan tidak boleh kosong",
 	"campaignevents-rest-get-registration-info-notparticipant": "Anda tidak berpartisipasi dalam acara ini.",
-	"campaignevents-rest-register-invalid-answer": "Jawaban tidak sah terhadap pertanyaan $1"
+	"campaignevents-rest-register-invalid-answer": "Jawaban tidak sah terhadap pertanyaan $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Harap selesaikan pendaftaran acara Anda di $1, yaitu proyek wiki di mana acara tersebut dibuat.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Harap hapus pendaftaran acara Anda di $1, yaitu proyek wiki di mana acara tersebut dibuat.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Harap hubungi peserta acara melalui surel di $1, yaitu proyek wiki di mana acara tersebut dibuat."
 }
