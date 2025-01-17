@@ -26,6 +26,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
@@ -70,6 +71,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private CampaignEventsHookRunner $hookRunner;
 	private PageURLResolver $pageUrlResolver;
 	private WikiLookup $wikiLookup;
+	private ITopicRegistry $topicRegistry;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -102,7 +104,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		CampaignEventsHookRunner $hookRunner,
 		PageURLResolver $pageURLResolver,
-		WikiLookup $wikiLookup
+		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -117,6 +120,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->hookRunner = $hookRunner;
 		$this->pageUrlResolver = $pageURLResolver;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 
 		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->formMessages = $this->getFormMessages();
@@ -338,6 +342,21 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'cssclass' => 'ext-campaignevents-edit-wikis-input',
 				'section' => self::DETAILS_SECTION,
 			];
+			$availableTopics = $this->topicRegistry->getTopicsForSelect();
+			if ( $availableTopics && $this->getConfig()->get( 'CampaignEventsEnableEventTopics' ) ) {
+				$formFields['Topics'] = [
+					'type' => 'multiselect',
+					'dropdown' => true,
+					'label-message' => 'campaignevents-edit-field-topics-label',
+					'default' => $this->event ? $this->event->getTopics() : [],
+					'options-messages' => $availableTopics,
+					'placeholder-message' => 'campaignevents-edit-field-topics-placeholder',
+					'help-message' => 'campaignevents-edit-field-topics-help',
+					'cssclass' => 'ext-campaignevents-edit-topics-input',
+					'section' => self::DETAILS_SECTION,
+					'max' => EventFactory::MAX_TOPICS
+				];
+			}
 		}
 
 		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
@@ -634,6 +653,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		} else {
 			$wikis = [];
 		}
+		$topics = [];
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
+			$topics = $data['Topics'] ?? [];
+		}
 
 		try {
 			$event = $this->eventFactory->newEvent(
@@ -641,6 +664,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
 				$data['EventChatURL'],
 				$wikis,
+				$topics,
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,

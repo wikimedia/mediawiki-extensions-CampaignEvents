@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceExcept
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -43,25 +44,29 @@ class EventFactory {
 	 */
 	public const COUNTRY_MAXLENGTH_BYTES = 255;
 	public const ADDRESS_MAXLENGTH_BYTES = 8192;
+	public const MAX_TOPICS = 5;
 
 	private CampaignsPageFactory $campaignsPageFactory;
 	private CampaignsPageFormatter $campaignsPageFormatter;
 	private TrackingToolRegistry $trackingToolRegistry;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
+	private ITopicRegistry $topicRegistry;
 
 	public function __construct(
 		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsPageFormatter $campaignsPageFormatter,
 		TrackingToolRegistry $trackingToolRegistry,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		WikiLookup $wikiLookup
+		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
 		$this->trackingToolRegistry = $trackingToolRegistry;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 	}
 
 	/**
@@ -71,6 +76,7 @@ class EventFactory {
 	 * @param string $pageTitleStr
 	 * @param string|null $chatURL
 	 * @param string[]|true $wikis List of wiki IDs, or {@see EventRegistration::ALL_WIKIS}
+	 * @param string[] $topics
 	 * @param string|null $trackingToolUserID User identifier of a tracking tool
 	 * @param string|null $trackingToolEventID
 	 * @param string $status
@@ -87,6 +93,7 @@ class EventFactory {
 	 * @param string|null $lastEditTimestamp In the TS_MW format
 	 * @param string|null $deletionTimestamp In the TS_MW format
 	 * @param int $validationFlags
+	 *
 	 * @return EventRegistration
 	 * @throws InvalidEventDataException
 	 */
@@ -95,6 +102,7 @@ class EventFactory {
 		string $pageTitleStr,
 		?string $chatURL,
 		$wikis,
+		array $topics,
 		?string $trackingToolUserID,
 		?string $trackingToolEventID,
 		string $status,
@@ -132,6 +140,10 @@ class EventFactory {
 		$wikisStatus = $this->validateWikis( $wikis );
 		$res->merge( $wikisStatus );
 		$wikis = $wikisStatus->getValue();
+
+		$topicsStatus = $this->validateTopics( $topics );
+		$res->merge( $topicsStatus );
+		$topics = $topicsStatus->getValue();
 
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
 		$res->merge( $trackingToolStatus );
@@ -206,7 +218,7 @@ class EventFactory {
 			$campaignsPage,
 			$chatURL,
 			$wikis,
-			[],
+			$topics,
 			$trackingTools,
 			$status,
 			$timezoneObj,
@@ -280,6 +292,29 @@ class EventFactory {
 			$ret->error(
 				'campaignevents-error-invalid-wikis',
 				Message::listParam( $invalidWikis, ListType::COMMA )
+			);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * @param string[] $topics
+	 *
+	 * @return StatusValue Having a canonicalized list of topics IDs as value.
+	 */
+	private function validateTopics( array $topics ): StatusValue {
+		$topics = array_unique( $topics );
+		$ret = StatusValue::newGood( $topics );
+		if ( count( $topics ) > self::MAX_TOPICS ) {
+			$ret->error( 'campaignevents-error-too-many-topics', Message::numParam( self::MAX_TOPICS ) );
+		}
+
+		$invalidTopics = array_diff( $topics, $this->topicRegistry->getAllTopics() );
+		if ( $invalidTopics ) {
+			$ret->error(
+				'campaignevents-error-invalid-topics',
+				Message::listParam( $invalidTopics, ListType::COMMA )
 			);
 		}
 

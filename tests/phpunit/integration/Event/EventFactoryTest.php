@@ -18,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Utils\MWTimestamp;
@@ -38,6 +39,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'page' => 'Event:Some event page title',
 		'chat' => 'https://chaturl.example.org',
 		'wikis' => [ 'aawiki' ],
+		'topics' => [ 'atopic', 'btopic' ],
 		'trackingid' => null,
 		'trackingeventid' => null,
 		'status' => EventRegistration::STATUS_OPEN,
@@ -76,6 +78,18 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		return $validWikis;
 	}
 
+	/**
+	 * @return string[] A list of wiki IDs that are considered valid within this test class. This is guaranteed to be
+	 * a list of all possible "XYwiki" combinations, and is provided for convenience.
+	 */
+	private static function getValidTopics(): array {
+		$validWikis = [];
+		for ( $prefix = 'a'; $prefix !== 'aa'; $prefix++ ) {
+			$validWikis[] = $prefix . 'topic';
+		}
+		return $validWikis;
+	}
+
 	private function getEventFactory(
 		?CampaignsPageFactory $campaignsPageFactory = null
 	): EventFactory {
@@ -95,12 +109,16 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		$wikiLookup = $this->createMock( WikiLookup::class );
 		$wikiLookup->method( 'getAllWikis' )->willReturn( self::getValidWikis() );
 
+		$topicLookup = $this->createMock( ITopicRegistry::class );
+		$topicLookup->method( 'getAllTopics' )->willReturn( self::getValidTopics() );
+
 		return new EventFactory(
 			$campaignsPageFactory,
 			$this->createMock( CampaignsPageFormatter::class ),
 			$trackingToolRegistry,
 			$questionsRegistry,
-			$wikiLookup
+			$wikiLookup,
+			$topicLookup
 		);
 	}
 
@@ -518,6 +536,53 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		yield 'Invalid and too many wikis' => [
 			[ 'doesnotexistwiki', ...self::getValidWikis() ],
 			[ 'campaignevents-error-too-many-wikis', 'campaignevents-error-invalid-wikis' ]
+		];
+	}
+
+	/**
+	 * @covers ::validateTopics
+	 * @dataProvider provideTopics
+	 */
+	public function testValidateTopics( $topics, ?array $expectedErrors, $expectedTopics = null ) {
+		$args = self::getTestDataWithDefault( [ 'topics' => $topics ] );
+		$event = $this->doTestWithArgs( $args, $expectedErrors );
+		if ( $event ) {
+			$this->assertSame( $expectedTopics, $event->gettopics() );
+		}
+	}
+
+	public static function provideTopics(): Generator {
+		yield 'One topic, valid' => [ [ 'atopic' ], null, [ 'atopic' ] ];
+		yield 'Multiple unique topics, valid' => [ [ 'atopic', 'btopic' ], null, [ 'atopic', 'btopic' ] ];
+		yield 'Multiple topics with duplicates, valid' => [
+			[ 'atopic', 'btopic', 'atopic', 'btopic' ],
+			null,
+			[ 'atopic', 'btopic' ]
+		];
+		yield 'Duplicates are only counted once' => [
+			array_fill( 0, EventFactory::MAX_TOPICS * 2, 'atopic' ),
+			null,
+			[ 'atopic' ]
+		];
+		yield 'Too many topics' => [
+			self::getValidtopics(),
+			[ 'campaignevents-error-too-many-topics' ]
+		];
+		yield 'Valid and invalid topics' => [
+			[ 'atopic', 'doesnotexisttopic' ],
+			[ 'campaignevents-error-invalid-topics' ]
+		];
+		yield 'Valid and invalid topics with duplicates' => [
+			[ 'atopic', 'doesnotexisttopic', 'atopic', 'doesnotexisttopic' ],
+			[ 'campaignevents-error-invalid-topics' ]
+		];
+		yield 'Only invalid topics' => [
+			[ 'doesnotexisttopic', 'alsodoesnotexisttopic' ],
+			[ 'campaignevents-error-invalid-topics' ]
+		];
+		yield 'Invalid and too many topics' => [
+			[ 'doesnotexisttopic', ...self::getValidtopics() ],
+			[ 'campaignevents-error-too-many-topics', 'campaignevents-error-invalid-topics' ]
 		];
 	}
 
