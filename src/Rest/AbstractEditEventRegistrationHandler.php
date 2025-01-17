@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\Response;
@@ -39,7 +40,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	protected EventQuestionsRegistry $eventQuestionsRegistry;
 	protected WikiLookup $wikiLookup;
+	protected ITopicRegistry $topicRegistry;
 	protected bool $eventWikisEnabled;
+	protected bool $eventTopicsEnabled;
 
 	public function __construct(
 		EventFactory $eventFactory,
@@ -49,6 +52,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry,
 		Config $config
 	) {
 		$this->eventFactory = $eventFactory;
@@ -58,7 +62,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 		$this->eventWikisEnabled = $config->get( 'CampaignEventsEnableEventWikis' );
+		$this->eventTopicsEnabled = $config->get( 'CampaignEventsEnableEventTopics' );
 	}
 
 	/**
@@ -199,6 +205,14 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_WIKIS,
 				ParamValidator::PARAM_ALL => true,
 				ParamValidator::PARAM_REQUIRED => true,
+			];
+		}
+		if ( $this->eventTopicsEnabled ) {
+			$params['topics'] = [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => $this->topicRegistry->getAllTopics(),
+				ParamValidator::PARAM_ISMULTI => true,
+				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TOPICS,
 			];
 		}
 

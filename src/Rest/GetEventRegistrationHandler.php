@@ -20,6 +20,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 	private IEventLookup $eventLookup;
 	private TrackingToolRegistry $trackingToolRegistry;
 	private bool $eventWikisEnabled;
+	private bool $eventTopicsEnabled;
 
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -29,6 +30,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 		$this->eventLookup = $eventLookup;
 		$this->trackingToolRegistry = $trackingToolRegistry;
 		$this->eventWikisEnabled = $config->get( 'CampaignEventsEnableEventWikis' );
+		$this->eventTopicsEnabled = $config->get( 'CampaignEventsEnableEventTopics' );
 	}
 
 	/**
@@ -80,6 +82,9 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			$wikis = $registration->getWikis();
 			// Use the same format as the write endpoint, which rely on ParamValidator::PARAM_ALL.
 			$respVal['wikis'] = $wikis === EventRegistration::ALL_WIKIS ? [ '*' ] : $wikis;
+		}
+		if ( $this->eventTopicsEnabled ) {
+			$respVal['topics'] = $registration->getTopics();
 		}
 
 		return $this->getResponseFactory()->createJson( $respVal );
