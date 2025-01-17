@@ -28,7 +28,7 @@
 	"campaignevents-error-page-not-found": "Error message used when the given event page does not exist.",
 	"campaignevents-error-page-not-event-namespace": "Error message used when the given event page name does not exist in the “{{ns:event}}” namespace.",
 	"campaignevents-error-page-with-section": "Error message used when the given event page contains a section name, like \"Event:Test#Section\".",
-	"campaignevents-error-too-many-wikis": "Error message used when the user entered to many target wikis for an event.\nParameters:\n*$1 - The maximum allowed number of wikis. This is guaranteed to be a large number (e.g., 100).",
+	"campaignevents-error-too-many-wikis": "Error message used when the user entered too many target wikis for an event.\nParameters:\n*$1 - The maximum allowed number of wikis. This is guaranteed to be a large number (e.g., 100).",
 	"campaignevents-error-invalid-wikis": "Error message used when the user entered invalid target wikis for an event.\nParameters:\n*$1 - A comma-separated list of invalid wiki IDs.",
 	"campaignevents-error-invalid-chat-url": "Error message used when the given chat URL is invalid.",
 	"campaignevents-error-trackingtool-without-eventid": "Error message used when a tracking tool ID was provided, but not the identifier of the event in that tool.",

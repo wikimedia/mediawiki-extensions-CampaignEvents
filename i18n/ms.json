@@ -5,6 +5,18 @@
 			"Tofeiku"
 		]
 	},
+	"campaignevents-desc": "Menyediakan ciri untuk penganjur dan peserta kempen.",
+	"nstab-event": "Acara",
+	"action-campaignevents-enable-registration": "dayakan pendaftaran acara",
+	"right-campaignevents-enable-registration": "Dayakan pendaftaran acara",
+	"action-campaignevents-delete-registration": "Padamkan pendaftaran acara",
+	"right-campaignevents-delete-registration": "Padamkan pendaftaran acara",
+	"action-campaignevents-organize-events": "menganjurkan acara",
+	"right-campaignevents-organize-events": "Menganjurkan acara",
+	"action-campaignevents-email-participants": "e-mel peserta acara",
+	"right-campaignevents-email-participants": "E-mel peserta acara",
 	"specialpages-group-campaignevents": "Acara",
-	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi."
+	"campaignevents-edit-field-organizers": "Penganjur",
+	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi.",
+	"campaignevents-event-details-organizers-header": "Penganjur"
 }
