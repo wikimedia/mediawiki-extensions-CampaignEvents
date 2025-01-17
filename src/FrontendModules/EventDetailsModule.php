@@ -351,8 +351,7 @@ class EventDetailsModule {
 			);
 		}
 
-		$eventTopics = $this->topicRegistry->getTopicMessages( $this->registration->getTopics() );
-		sort( $eventTopics );
+		$eventTopics = $this->registration->getTopics();
 		if ( $eventTopics ) {
 			$items[] = $this->getEventTopicsSection( $out, $eventTopics );
 		}
@@ -477,13 +476,18 @@ class EventDetailsModule {
 	 * @return ?Tag
 	 */
 	private function getEventTopicsSection( OutputPage $out, array $eventTopics ): ?Tag {
+		$localizedTopicNames = array_map(
+			static fn ( string $msgKey ) => $out->msg( $msgKey )->text(),
+			$this->topicRegistry->getTopicMessages( $eventTopics )
+		);
+		sort( $localizedTopicNames );
 		$eventTopicListItems = '';
-		foreach ( $eventTopics as $eventTopic ) {
-			$eventTopicListItems .= Html::element( 'li', [], $out->msg( $eventTopic ) );
+		foreach ( $localizedTopicNames as $localizedTopic ) {
+			$eventTopicListItems .= Html::element( 'li', [], $localizedTopic );
 		}
 		$eventTopicContent = Html::rawElement(
 			'ul',
-			[ 'class' => 'ext-campaignevents-eventdetails-event-wiki-list' ],
+			[ 'class' => 'ext-campaignevents-eventdetails-event-topics-list' ],
 			$eventTopicListItems
 		);
 		$eventTopicsSection = self::makeSection(
