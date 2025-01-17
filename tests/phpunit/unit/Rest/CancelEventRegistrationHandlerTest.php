@@ -120,28 +120,20 @@ class CancelEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
-	 * @param bool $expectedModified
 	 * @dataProvider provideRequestDataSuccessful
 	 */
-	public function testRun__successful(
-		UnregisterParticipantCommand $unregisterParticipantCommand,
-		bool $expectedModified
-	) {
+	public function testRun__successful( bool $modified ) {
+		$unregisterParticipantCommand = $this->createMock( UnregisterParticipantCommand::class );
+		$unregisterParticipantCommand->method( 'unregisterIfAllowed' )->willReturn( StatusValue::newGood( $modified ) );
 		$handler = $this->newHandler( $unregisterParticipantCommand );
 		$reqData = new RequestData( self::DEFAULT_REQ_DATA );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, $reqData );
 		$this->assertArrayHasKey( 'modified', $respData );
-		$this->assertSame( $expectedModified, $respData['modified'] );
+		$this->assertSame( $modified, $respData['modified'] );
 	}
 
-	public function provideRequestDataSuccessful(): Generator {
-		$modifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
-		$modifiedCommand->method( 'unregisterIfAllowed' )->willReturn( StatusValue::newGood( true ) );
-		yield 'Modified' => [ $modifiedCommand, true ];
-
-		$notModifiedCommand = $this->createMock( UnregisterParticipantCommand::class );
-		$notModifiedCommand->method( 'unregisterIfAllowed' )->willReturn( StatusValue::newGood( false ) );
-		yield 'Not modified' => [ $notModifiedCommand, false ];
+	public static function provideRequestDataSuccessful(): Generator {
+		yield 'Modified' => [ true ];
+		yield 'Not modified' => [ false ];
 	}
 }

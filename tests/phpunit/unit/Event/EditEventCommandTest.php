@@ -644,7 +644,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	/**
 	 * @return array
 	 */
-	public function provideEventRegistrationsEditEventDates() {
+	public static function provideEventRegistrationsEditEventDates() {
 		return [
 			'There are answers, end date is past, and is changing the end date to future' => [
 				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),

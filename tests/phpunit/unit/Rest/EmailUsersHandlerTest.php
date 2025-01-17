@@ -101,7 +101,7 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedResp, $respData );
 	}
 
-	public function provideRunData(): Generator {
+	public static function provideRunData(): Generator {
 		yield 'No participants selected' => [ [ 'sent' => 0 ] ];
 	}
 

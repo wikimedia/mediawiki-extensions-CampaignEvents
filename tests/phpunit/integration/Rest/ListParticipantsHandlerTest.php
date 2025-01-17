@@ -207,7 +207,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	 *
 	 * @return array
 	 */
-	private function generateNoPiiAnswers( array $answers ): array {
+	private static function generateNoPiiAnswers( array $answers ): array {
 		$nonPiiAnswers = [];
 		foreach ( $answers as $answer ) {
 			$nonPiiAnswers[] = [
@@ -218,10 +218,10 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		return $nonPiiAnswers;
 	}
 
-	public function provideRunParticipantQuestions(): Generator {
+	public static function provideRunParticipantQuestions(): Generator {
 		yield 'Future event, user cannot view non pii data' => [];
 
-		$noNonPiiAnswers = $this->generateNoPiiAnswers( [
+		$noNonPiiAnswers = self::generateNoPiiAnswers( [
 			[ 4, 'campaignevents-participant-question-no-response' ],
 			[ 5, 'campaignevents-participant-question-no-response' ],
 		] );
@@ -229,7 +229,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			true, false, [], $noNonPiiAnswers
 		];
 
-		$nonPiiAnswers = $this->generateNoPiiAnswers( [
+		$nonPiiAnswers = self::generateNoPiiAnswers( [
 			[ 4, 'campaignevents-register-question-confidence-contributing-option-some-not-confident' ],
 			[ 5, 'campaignevents-register-question-affiliate-option-affiliate' ],
 		] );
@@ -237,7 +237,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			true, false, [ new Answer( 4, 2, null ), new Answer( 5, 1, null ) ], $nonPiiAnswers
 		];
 
-		$onlyOneNonPiiAnswer = $this->generateNoPiiAnswers( [
+		$onlyOneNonPiiAnswer = self::generateNoPiiAnswers( [
 			[ 4, 'campaignevents-participant-question-no-response' ],
 			[ 5, 'campaignevents-register-question-affiliate-option-affiliate' ],
 		] );

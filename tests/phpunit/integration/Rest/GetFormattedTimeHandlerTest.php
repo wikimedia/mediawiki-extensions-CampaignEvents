@@ -63,7 +63,7 @@ class GetFormattedTimeHandlerTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expectedResponse, $respData );
 	}
 
-	public function provideRun(): Generator {
+	public static function provideRun(): Generator {
 		$startTS = '20231106123042';
 		$endTS = '20231231235959';
 

@@ -7,8 +7,9 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use DateTimeZone;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
+use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use Wikimedia\Assert\ParameterAssertionException;
@@ -17,11 +18,15 @@ use Wikimedia\Assert\ParameterAssertionException;
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventRegistration
  */
 class EventRegistrationTest extends MediaWikiUnitTestCase {
-	private function getValidConstructorArgs(): array {
+	private static function getValidConstructorArgs(): array {
 		return [
 			'id' => null,
 			'name' => 'Name',
-			'page' => $this->createMock( ICampaignsPage::class ),
+			'page' => new MWPageProxy(
+				// XXX: use NS_EVENT when T310375 is resolved
+				new PageIdentityValue( 42, 1728, 'Name', PageIdentityValue::LOCAL ),
+				'Event:Name'
+			),
 			'chat' => 'https://chat.example.org',
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
@@ -72,7 +77,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @covers ::getDeletionTimestamp
 	 */
 	public function testConstructAndGetters() {
-		$data = $this->getValidConstructorArgs();
+		$data = self::getValidConstructorArgs();
 		$registration = new EventRegistration( ...array_values( $data ) );
 		$this->assertSame( $data['id'], $registration->getID(), 'id' );
 		$this->assertSame( $data['name'], $registration->getName(), 'name' );
@@ -108,13 +113,13 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		new EventRegistration( ...$constructorArgs );
 	}
 
-	public function provideInvalidTimestampFormat(): Generator {
+	public static function provideInvalidTimestampFormat(): Generator {
 		yield 'Start timestamp' => [
-			array_values( array_replace( $this->getValidConstructorArgs(), [ 'start' => '1654000000' ] ) ),
+			array_values( array_replace( self::getValidConstructorArgs(), [ 'start' => '1654000000' ] ) ),
 			'$startLocalTimestamp'
 		];
 		yield 'End timestamp' => [
-			array_values( array_replace( $this->getValidConstructorArgs(), [ 'end' => '1654000000' ] ) ),
+			array_values( array_replace( self::getValidConstructorArgs(), [ 'end' => '1654000000' ] ) ),
 			'$endLocalTimestamp'
 		];
 	}
@@ -129,8 +134,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedEndUTC, $event->getEndUTCTimestamp(), 'end' );
 	}
 
-	public function provideEventsForUTCConversion(): Generator {
-		$baseCtrArgs = $this->getValidConstructorArgs();
+	public static function provideEventsForUTCConversion(): Generator {
+		$baseCtrArgs = self::getValidConstructorArgs();
 		$replaceArgs = static function ( array $replacements ) use ( $baseCtrArgs ): array {
 			return array_values( array_replace( $baseCtrArgs, $replacements ) );
 		};
@@ -215,8 +220,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedUTC, $event->getEndUTCTimestamp(), 'UTC end' );
 	}
 
-	public function provideAmbiguousLocalTimes(): Generator {
-		$baseCtrArgs = $this->getValidConstructorArgs();
+	public static function provideAmbiguousLocalTimes(): Generator {
+		$baseCtrArgs = self::getValidConstructorArgs();
 		$replaceArgs = static function ( array $replacements ) use ( $baseCtrArgs ): array {
 			return array_values( array_replace( $baseCtrArgs, $replacements ) );
 		};
@@ -259,18 +264,18 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, $event->isPast() );
 	}
 
-	public function provideIsPast(): Generator {
+	public static function provideIsPast(): Generator {
 		$now = (int)MWTimestamp::now( TS_UNIX );
 
 		$pastTS = wfTimestamp( TS_MW, $now - 100000 );
 		$pastEvent = new EventRegistration(
-			...array_values( array_replace( $this->getValidConstructorArgs(), [ 'end' => $pastTS ] ) )
+			...array_values( array_replace( self::getValidConstructorArgs(), [ 'end' => $pastTS ] ) )
 		);
 		yield 'past' => [ $pastEvent, true ];
 
 		$futureTS = wfTimestamp( TS_MW, $now + 100000 );
 		$futureEvent = new EventRegistration(
-			...array_values( array_replace( $this->getValidConstructorArgs(), [ 'end' => $futureTS ] ) )
+			...array_values( array_replace( self::getValidConstructorArgs(), [ 'end' => $futureTS ] ) )
 		);
 		yield 'future' => [ $futureEvent, false ];
 	}

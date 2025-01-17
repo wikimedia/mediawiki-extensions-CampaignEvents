@@ -41,15 +41,17 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @param bool $expectsEventDeletion
-	 * @param PageEventLookup $pageEventLookup
 	 * @dataProvider providePageDelete
 	 * @covers ::onPageDeleteComplete
 	 */
 	public function testOnPageDeleteComplete(
 		bool $expectsEventDeletion,
-		PageEventLookup $pageEventLookup
+		bool $pageHasRegistration
 	) {
+		$registration = $pageHasRegistration ? $this->createMock( ExistingEventRegistration::class ) : null;
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturn( $registration );
+
 		$deleteEventCommand = $this->createMock( DeleteEventCommand::class );
 		if ( $expectsEventDeletion ) {
 			$deleteEventCommand->expects( $this->once() )->method( 'deleteUnsafe' );
@@ -70,15 +72,9 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
 		$this->addToAssertionCount( 1 );
 	}
 
-	public function providePageDelete(): Generator {
-		$noRegistrationLookup = $this->createMock( PageEventLookup::class );
-		$noRegistrationLookup->method( 'getRegistrationForLocalPage' )->willReturn( null );
-		yield 'No registration for page' => [ false, $noRegistrationLookup ];
-
-		$existingRegistrationLookup = $this->createMock( PageEventLookup::class );
-		$existingRegistrationLookup->method( 'getRegistrationForLocalPage' )
-			->willReturn( $this->createMock( ExistingEventRegistration::class ) );
-		yield 'Page has event registration' => [ true, $existingRegistrationLookup ];
+	public static function providePageDelete(): Generator {
+		yield 'No registration for page' => [ false, false ];
+		yield 'Page has event registration' => [ true, true ];
 	}
 
 	/**
