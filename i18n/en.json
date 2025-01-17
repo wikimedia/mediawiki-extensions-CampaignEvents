@@ -502,6 +502,8 @@
 	"campaignevents-eventpage-btn-collaboration-list": "Find more events",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",
 	"campaignevents-allevents-placeholder-add-wikis": "Add wikis...",
+	"campaignevents-allevents-label-filter-topics": "Topics",
+	"campaignevents-allevents-placeholder-topics": "Add topics...",
 	"campaignevents-eventslist-all-wikis": "This event is open to all wikis.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|more}}",
 	"campaignevents-eventpage-all-wikis": "This event is open to all wikis.",

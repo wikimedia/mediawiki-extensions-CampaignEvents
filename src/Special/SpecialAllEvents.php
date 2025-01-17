@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\SpecialPage;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
@@ -15,25 +16,23 @@ use Wikimedia\Timestamp\TimestampException;
 
 class SpecialAllEvents extends SpecialPage {
 	public const PAGE_NAME = 'AllEvents';
-	private EventsPagerFactory $eventsPagerFactory;
 
+	private EventsPagerFactory $eventsPagerFactory;
 	private CampaignEventsHookRunner $hookRunner;
 	private WikiLookup $wikiLookup;
+	private ITopicRegistry $topicRegistry;
 
-	/**
-	 * @param EventsPagerFactory $eventsPagerFactory
-	 * @param CampaignEventsHookRunner $hookRunner
-	 * @param WikiLookup $wikiLookup
-	 */
 	public function __construct(
 		EventsPagerFactory $eventsPagerFactory,
 		CampaignEventsHookRunner $hookRunner,
-		WikiLookup $wikiLookup
+		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventsPagerFactory = $eventsPagerFactory;
 		$this->hookRunner = $hookRunner;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 	}
 
 	/**
@@ -64,6 +63,7 @@ class SpecialAllEvents extends SpecialPage {
 		$request = $this->getRequest();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
 		$filterWiki = $request->getArray( 'wpFilterWikis', [] );
+		$filterTopics = $request->getArray( 'wpFilterTopics', [] );
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
 		$rawStartTime = $request->getVal( 'wpStartDate', (string)time() );
 		$startTime = $rawStartTime === '' ? '' : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
@@ -87,7 +87,8 @@ class SpecialAllEvents extends SpecialPage {
 			$startTime,
 			$endTime,
 			$showOngoing,
-			$filterWiki
+			$filterWiki,
+			$filterTopics
 		);
 
 		$formDescriptor = [
@@ -149,6 +150,17 @@ class SpecialAllEvents extends SpecialPage {
 				'placeholder-message' => 'campaignevents-allevents-placeholder-add-wikis',
 				'max' => 10,
 				'cssclass' => 'ext-campaignevents-allevents-wikis-field',
+			];
+		}
+		$availableTopics = $this->topicRegistry->getTopicsForSelect();
+		if ( $availableTopics && $this->getConfig()->get( 'CampaignEventsEnableEventTopics' ) ) {
+			$formDescriptor['FilterTopics'] = [
+				'type' => 'multiselect',
+				'dropdown' => true,
+				'label-message' => 'campaignevents-allevents-label-filter-topics',
+				'options-messages' => $availableTopics,
+				'placeholder-message' => 'campaignevents-allevents-placeholder-topics',
+				'max' => 5,
 			];
 		}
 		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )

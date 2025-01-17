@@ -604,7 +604,8 @@
 			"services": [
 				"CampaignEventsEventsPagerFactory",
 				"CampaignEventsHookRunner",
-				"CampaignEventsWikiLookup"
+				"CampaignEventsWikiLookup",
+				"CampaignEventsTopicRegistry"
 			]
 		},
 		"EventDetails": {

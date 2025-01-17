@@ -59,6 +59,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private ?int $meetingType;
 	/** dbnames of the wikis chosen */
 	private array $filterWiki;
+	/** @var string[] */
+	private array $filterTopics;
 	private string $startDate;
 	private string $endDate;
 	private bool $showOngoing;
@@ -96,7 +98,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		string $startDate,
 		string $endDate,
 		bool $showOngoing,
-		array $filterWiki
+		array $filterWiki,
+		array $filterTopics
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
@@ -124,6 +127,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderTimestamp = '';
 		$this->filterWiki = $filterWiki;
+		$this->filterTopics = $filterTopics;
 	}
 
 	/**
@@ -427,6 +431,17 @@ class EventsListPager extends ReverseChronologicalPager {
 				[
 					'event_id=ceew_event_id',
 					'ceew_wiki' => [ ...$this->filterWiki, EventWikisStore::ALL_WIKIS_DB_VALUE ]
+				]
+			];
+		}
+		if ( $this->filterTopics && $this->getConfig()->get( 'CampaignEventsEnableEventTopics' ) ) {
+			$query['tables'][] = 'ce_event_topics';
+			array_push( $query['fields'], 'ceet_topic', 'ceet_event_id' );
+			$query['join_conds']['ce_event_topics'] = [
+				'JOIN',
+				[
+					'event_id=ceet_event_id',
+					'ceet_topic' => $this->filterTopics,
 				]
 			];
 		}
