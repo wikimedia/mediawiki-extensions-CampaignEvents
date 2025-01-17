@@ -55,7 +55,8 @@ class EventRegistrationPage extends Page {
 	}
 
 	get organizersInput() {
-		return $( '.ext-campaignevents-organizers-multiselect-input' ).$( 'input' );
+		// Note, this needs to target the <input> inside the infused version of the field.
+		return $( '.ext-campaignevents-organizers-multiselect-input .oo-ui-menuTagMultiselectWidget input' );
 	}
 
 	get body() {
@@ -110,7 +111,7 @@ class EventRegistrationPage extends Page {
 	 */
 	async addOrganizer( organizer ) {
 		await this.organizersInput.setValue( organizer );
-		const menuItem = $( `.oo-ui-menuSelectWidget [id='${ organizer }']` );
+		const menuItem = await $( `.oo-ui-menuSelectWidget [id='${ organizer }']` );
 		await menuItem.waitForDisplayed();
 		await menuItem.click();
 	}
