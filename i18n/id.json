@@ -4,7 +4,8 @@
 			"Veracious",
 			"DARMAS BUDI SANTOSO",
 			"Rachmat04",
-			"Rebeccayoga"
+			"Rebeccayoga",
+			"BAPerdana-WMF"
 		]
 	},
 	"campaignevents-desc": "Menyediakan fitur untuk penyelenggara dan peserta kampanye.",
@@ -20,7 +21,7 @@
 	"campaignevents-error-page-not-found": "Tidak ada halaman acara dengan nama ini.",
 	"campaignevents-error-page-not-event-namespace": "Halaman acara harus berada dalam ruang nama {{ns:event}}.",
 	"campaignevents-error-page-with-section": "Halaman acara tidak boleh berisi nama bagian halaman.",
-	"campaignevents-error-invalid-chat-url": "Masukkan URL obrolan yang valid.",
+	"campaignevents-error-invalid-chat-url": "Masukkan pranala obrolan yang valid.",
 	"campaignevents-error-invalid-status": "Tentukan apakah acara tersebut terbuka atau tertutup.",
 	"campaignevents-error-empty-start": "Pilih waktu mulai.",
 	"campaignevents-error-invalid-start": "Waktu mulai acara tidak sesuai.",
@@ -48,7 +49,7 @@
 	"campaignevents-edit-field-type-online": "Acara daring",
 	"campaignevents-edit-field-type-in-person": "Acara tatap muka",
 	"campaignevents-edit-field-type-online-and-in-person": "Acara daring dan tatap muka",
-	"campaignevents-edit-field-meeting-url": "URL pertemuan",
+	"campaignevents-edit-field-meeting-url": "Pranala pertemuan",
 	"campaignevents-edit-field-country": "Negara",
 	"campaignevents-edit-field-address": "Alamat",
 	"campaignevents-edit-field-chat-url": "Undangan obrolan grup",
@@ -71,7 +72,7 @@
 	"campaignevents-register-error-no-event": "Tidak ada acara yang ditentukan.",
 	"campaignevents-register-error-event-not-found": "Tidak ada kejadian dengan ID ini.",
 	"campaignevents-register-success": "Anda sekarang terdaftar dalam acara ini.",
-	"campaignevents-register-confirmation-top": "Konfirmasikan pendaftaran",
+	"campaignevents-register-confirmation-top": "Konfirmasi pendaftaran",
 	"campaignevents-register-confirmation-btn": "Daftar",
 	"canceleventregistration": "Batalkan pendaftaran Anda untuk suatu acara",
 	"campaignevents-unregister-success": "Anda telah membatalkan pendaftaran acara Anda.",

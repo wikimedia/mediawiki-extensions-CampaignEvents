@@ -4,5 +4,11 @@
 			"Hakimi97",
 			"Tofeiku"
 		]
-	}
+	},
+	"campaignevents-desc": "Menyediakan ciri untuk penganjur dan peserta kempen.",
+	"nstab-event": "Acara",
+	"action-campaignevents-enable-registration": "dayakan pendaftaran acara",
+	"right-campaignevents-enable-registration": "Dayakan pendaftaran acara",
+	"action-campaignevents-delete-registration": "Padamkan pendaftaran acara",
+	"right-campaignevents-delete-registration": "Padamkan pendaftaran acara"
 }
