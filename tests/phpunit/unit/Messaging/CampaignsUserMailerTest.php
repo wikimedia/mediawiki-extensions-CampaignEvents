@@ -73,40 +73,45 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param User $target
-	 * @param string|null $expected
 	 * @covers ::validateTarget
 	 * @dataProvider provideValidateTarget
 	 */
 	public function testValidateTarget(
-		User $target,
+		int $userID,
+		bool $isEmailConfirmed,
+		string $email,
 		string $expected
 	) {
 		$performer = $this->createMock( User::class );
+
+		$target = $this->createMock( User::class );
+		$target->method( 'getId' )->willReturn( $userID );
+		$target->method( 'isEmailConfirmed' )->willReturn( $isEmailConfirmed );
+		$target->method( 'getEmail' )->willReturn( $email );
+
 		$this->assertSame(
 			$expected,
 			$this->getCampaignsUserMailer()->validateTarget( $target, $performer )
 		);
 	}
 
-	public function provideValidateTarget(): Generator {
-		$target1 = $this->createMock( User::class );
-		$target2 = $this->createMock( User::class );
-		$target3 = $this->createMock( User::class );
-
-		yield 'no id' => [
-			$target1,
+	public static function provideValidateTarget(): Generator {
+		yield 'Anon' => [
+			0,
+			false,
+			'',
 			"notarget"
 		];
-		$target2->method( "getId" )->willReturn( 1 );
-		yield 'email not confirmed' => [
-			$target2,
+		yield 'Email not confirmed' => [
+			1,
+			false,
+			'',
 			"noemail"
 		];
-		$target3->method( "getId" )->willReturn( 1 );
-		$target3->method( "isEmailConfirmed" )->willReturn( true );
-		yield 'no email' => [
-			$target3,
+		yield 'No email' => [
+			2,
+			true,
+			'',
 			"nowikiemail"
 		];
 	}
