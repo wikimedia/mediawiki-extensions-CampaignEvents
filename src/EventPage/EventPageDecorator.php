@@ -33,6 +33,7 @@ use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Html\Html;
@@ -87,6 +88,7 @@ class EventPageDecorator {
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
+	private ITopicRegistry $topicRegistry;
 
 	private Language $language;
 	private ICampaignsAuthority $authority;
@@ -114,6 +116,7 @@ class EventPageDecorator {
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 * @param WikiLookup $wikiLookup
+	 * @param ITopicRegistry $topicRegistry
 	 * @param Language $language
 	 * @param Authority $viewingAuthority
 	 * @param OutputPage $out
@@ -132,6 +135,7 @@ class EventPageDecorator {
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry,
 		Language $language,
 		Authority $viewingAuthority,
 		OutputPage $out
@@ -148,6 +152,7 @@ class EventPageDecorator {
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 
 		$this->language = $language;
 		$this->authority = new MWAuthorityProxy( $viewingAuthority );
@@ -258,7 +263,8 @@ class EventPageDecorator {
 				'oojs-ui.styles.icons-moderation',
 				'oojs-ui.styles.icons-user',
 				'oojs-ui.styles.icons-alerts',
-				'oojs-ui.styles.icons-wikimedia'
+				'oojs-ui.styles.icons-wikimedia',
+				'oojs-ui.styles.icons-content'
 			],
 			UserLinker::MODULE_STYLES
 		) );
@@ -665,6 +671,11 @@ class EventPageDecorator {
 			$eventInfo .= $this->getDetailsDialogWikis( $registration );
 		}
 		$eventInfo .= $this->getDetailsDialogChat( $page, $registration, $userStatus );
+
+		$eventTopics = $registration->getTopics();
+		if ( $eventTopics ) {
+			$eventInfo .= $this->getDetailsDialogTopics( $eventTopics );
+		}
 
 		return Html::rawElement(
 			'div',
@@ -1201,6 +1212,29 @@ class EventPageDecorator {
 			$content,
 			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-wikis-label' )
+			)
+		);
+	}
+
+	/**
+	 * @param array $eventTopics
+	 * @return string
+	 */
+	private function getDetailsDialogTopics( array $eventTopics ): string {
+		$localizedTopicNames = array_map(
+			fn ( string $msgKey ) => $this->msgFormatter->format(
+				MessageValue::new( $msgKey )
+			),
+			$this->topicRegistry->getTopicMessages( $eventTopics )
+		);
+		sort( $localizedTopicNames );
+		$content = $this->language->commaList( $localizedTopicNames );
+
+		return $this->makeDetailsDialogSection(
+			'tag',
+			$content,
+			$this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-eventpage-dialog-topics-label' )
 			)
 		);
 	}

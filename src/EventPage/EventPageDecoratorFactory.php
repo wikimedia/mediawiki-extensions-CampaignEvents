@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
+use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
@@ -36,6 +37,7 @@ class EventPageDecoratorFactory {
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
+	private ITopicRegistry $topicRegistry;
 
 	/**
 	 * @param PageEventLookup $pageEventLookup
@@ -51,6 +53,7 @@ class EventPageDecoratorFactory {
 	 * @param EventPageCacheUpdater $eventPageCacheUpdater
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 * @param WikiLookup $wikiLookup
+	 * @param ITopicRegistry $topicRegistry
 	 *
 	 */
 	public function __construct(
@@ -66,7 +69,8 @@ class EventPageDecoratorFactory {
 		EventTimeFormatter $eventTimeFormatter,
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		WikiLookup $wikiLookup
+		WikiLookup $wikiLookup,
+		ITopicRegistry $topicRegistry
 	) {
 		$this->pageEventLookup = $pageEventLookup;
 		$this->participantsStore = $participantsStore;
@@ -81,6 +85,7 @@ class EventPageDecoratorFactory {
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
+		$this->topicRegistry = $topicRegistry;
 	}
 
 	public function newDecorator(
@@ -102,6 +107,7 @@ class EventPageDecoratorFactory {
 			$this->eventPageCacheUpdater,
 			$this->eventQuestionsRegistry,
 			$this->wikiLookup,
+			$this->topicRegistry,
 			$language,
 			$viewingAuthority,
 			$out
