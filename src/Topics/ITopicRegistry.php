@@ -20,7 +20,9 @@ interface ITopicRegistry {
 	public function getTopicsForSelect(): array;
 
 	/**
-	 * Returns message keys for the given topic IDs.
+	 * Returns message keys for the given topic IDs. Callers are responsible for validating that all the given
+	 * topics exist.
+	 *
 	 * @param string[] $topicIDs
 	 * @return array<string,string>
 	 */
