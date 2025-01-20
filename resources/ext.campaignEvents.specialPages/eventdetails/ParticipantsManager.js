@@ -633,6 +633,9 @@
 		}
 
 		this.scrollDownObserver.reset();
+		// Fire the wikipage.content hook for checkboxShift to work on dynamically added
+		// checkboxes (T318261)
+		mw.hook( 'wikipage.content' ).fire( this.$participantsTable );
 	};
 
 	/**
