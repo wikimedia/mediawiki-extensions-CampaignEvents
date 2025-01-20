@@ -184,5 +184,6 @@
 	"campaignevents-worklist-error-empty": "Наведите бар један чланак.",
 	"campaignevents-eventpage-wikis-more": "{{PLURAL:$1|још}} $1",
 	"campaignevents-eventpage-dialog-wikis-label": "Викији",
-	"campaignevents-eventslist-wiki-label": "Викији"
+	"campaignevents-eventslist-wiki-label": "Викији",
+	"campaignevents-event-details-topics-header": "Теме"
 }

@@ -18,5 +18,6 @@
 	"specialpages-group-campaignevents": "Acara",
 	"campaignevents-edit-field-organizers": "Penganjur",
 	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi.",
-	"campaignevents-event-details-organizers-header": "Penganjur"
+	"campaignevents-event-details-organizers-header": "Penganjur",
+	"echo-category-title-campaign-events-notification-registration": "Pendaftaran acara"
 }

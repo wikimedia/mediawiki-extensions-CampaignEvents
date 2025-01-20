@@ -24,6 +24,8 @@
 	"campaignevents-error-page-with-section": "Die Veranstaltungsseite darf keinen Abschnittsnamen enthalten.",
 	"campaignevents-error-too-many-wikis": "Gib maximal {{PLURAL:$1|ein Wiki|$1 Wikis}} ein.",
 	"campaignevents-error-invalid-wikis": "Die folgenden Wiki-IDs wurden nicht erkannt: $1.",
+	"campaignevents-error-too-many-topics": "Gib maximal {{PLURAL:$1|ein Thema|$1 Themen}} ein.",
+	"campaignevents-error-invalid-topics": "Die folgenden Themen werden nicht erkannt: $1.",
 	"campaignevents-error-invalid-chat-url": "Gib eine gültige Chat-URL ein.",
 	"campaignevents-error-trackingtool-without-eventid": "Gib die Kennung des Ereignisses im angegebenen Tracking-Tool an.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Gib die Kennung des Tracking-Tools an",
@@ -82,6 +84,8 @@
 	"campaignevents-edit-field-address": "Adresse",
 	"campaignevents-edit-field-chat-url": "Einladung zum Gruppenchat",
 	"campaignevents-edit-field-chat-url-help": "Wenn du eine Online-Chat-Gruppe für die Teilnehmer dieser Veranstaltung hast, kannst du den Einladungslink hier hinzufügen. Die Teilnehmer können den Einladungslink nach der Registrierung sehen.",
+	"campaignevents-edit-field-topics-label": "Veranstaltungsthemen",
+	"campaignevents-edit-field-topics-placeholder": "Thema hinzufügen",
 	"campaignevents-edit-form-questions-label": "Fragen an die Teilnehmer",
 	"campaignevents-edit-form-questions-intro": "Wähle eine der folgenden Fragen aus, die die Teilnehmern bei der Registrierung für die Veranstaltung beantworten sollen.",
 	"campaignevents-edit-form-questions-explanation": "Während der Veranstaltung kannst du auf die Antworten einzelner Teilnehmer auf Fragen zugreifen, die keine personenbezogenen Daten (PII) enthalten. Nach Ende der Veranstaltung sind Antworten auf alle Fragen verfügbar (nur in zusammengefasster Form) und einzelne Antworten werden gelöscht.",
@@ -493,10 +497,14 @@
 	"campaignevents-eventpage-btn-collaboration-list": "Weitere Veranstaltungen finden",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",
 	"campaignevents-allevents-placeholder-add-wikis": "Wikis hinzufügen …",
+	"campaignevents-allevents-label-filter-topics": "Themen",
+	"campaignevents-allevents-placeholder-topics": "Themen hinzufügen...",
 	"campaignevents-eventslist-all-wikis": "Diese Veranstaltung ist für alle Wikis offen.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|mehr}}",
 	"campaignevents-eventpage-all-wikis": "Diese Veranstaltung ist für alle Wikis offen.",
 	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|mehr}}",
 	"campaignevents-eventpage-dialog-wikis-label": "Wikis",
-	"campaignevents-eventslist-wiki-label": "Wikis"
+	"campaignevents-eventslist-wiki-label": "Wikis",
+	"campaignevents-eventslist-topics-label": "Themen",
+	"campaignevents-event-details-topics-header": "Themen"
 }
