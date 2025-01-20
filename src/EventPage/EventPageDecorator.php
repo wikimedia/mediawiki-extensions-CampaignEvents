@@ -670,12 +670,13 @@ class EventPageDecorator {
 		if ( $registration->getWikis() ) {
 			$eventInfo .= $this->getDetailsDialogWikis( $registration );
 		}
-		$eventInfo .= $this->getDetailsDialogChat( $page, $registration, $userStatus );
 
 		$eventTopics = $registration->getTopics();
 		if ( $eventTopics ) {
 			$eventInfo .= $this->getDetailsDialogTopics( $eventTopics );
 		}
+
+		$eventInfo .= $this->getDetailsDialogChat( $page, $registration, $userStatus );
 
 		return Html::rawElement(
 			'div',
