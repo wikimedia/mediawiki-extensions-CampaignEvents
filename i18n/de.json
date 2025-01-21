@@ -506,5 +506,6 @@
 	"campaignevents-eventpage-dialog-wikis-label": "Wikis",
 	"campaignevents-eventslist-wiki-label": "Wikis",
 	"campaignevents-eventslist-topics-label": "Themen",
-	"campaignevents-event-details-topics-header": "Themen"
+	"campaignevents-event-details-topics-header": "Themen",
+	"campaignevents-eventpage-dialog-topics-label": "Themen"
 }
