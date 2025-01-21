@@ -156,6 +156,7 @@ class EventQuestionsRegistry {
 						'campaignevents-register-question-confidence-contributing-option-some-confident' => 3,
 						'campaignevents-register-question-confidence-contributing-option-confident' => 4,
 					],
+					'options-messages-parse' => true,
 				],
 			],
 			[
