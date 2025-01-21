@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Rachmat04"
+			"Rachmat04",
+			"BAPerdana-WMF"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Tidak ada acara dengan ID ini.",
@@ -11,9 +12,14 @@
 	"campaignevents-rest-user-not-found": "Tidak ada pengguna dengan ID pusat ini.",
 	"campaignevents-rest-get-registration-deleted": "Pendaftaran acara ini telah dihapus.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' harus berupa larik id pengguna, atau kosong (untuk menghapus semua pengguna)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Harap hapus peserta di $1, yaitu proyek wiki di mana acara tersebut dibuat.",
 	"campaignevents-rest-list-participants-empty-filter": "Penyaring nama pengguna, jika ditentukan, harus berupa rangkaian yang tidak kosong.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Anda tidak berwenang melihat peserta yang mendaftar secara pribadi untuk acara ini.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> harus berupa larik nama pengguna dan tidak boleh kosong",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Harap tetapkan penyelenggara di $1, yaitu proyek wiki di mana acara tersebut dibuat.",
 	"campaignevents-rest-get-registration-info-notparticipant": "Anda tidak berpartisipasi dalam acara ini.",
-	"campaignevents-rest-register-invalid-answer": "Jawaban tidak sah terhadap pertanyaan $1"
+	"campaignevents-rest-register-invalid-answer": "Jawaban tidak sah terhadap pertanyaan $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Harap selesaikan pendaftaran acara Anda di $1, yaitu proyek wiki di mana acara tersebut dibuat.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Harap hapus pendaftaran acara Anda di $1, yaitu proyek wiki di mana acara tersebut dibuat.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Harap hubungi peserta acara melalui surel di $1, yaitu proyek wiki di mana acara tersebut dibuat."
 }

@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hakimi97",
+			"Zahirulnukman"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Tidak terdapat acara dengan ID ini.",
+	"campaignevents-rest-enable-registration-permission-denied": "Anda tidak dibenarkan untuk mendayakan pendaftaran acara.",
+	"campaignevents-rest-edit-page-nonlocal": "Pendaftaran acara ini telah didayakan pada wiki berikut dan harus disunting di sana: $1.",
+	"campaignevents-rest-delete-already-deleted": "Pendaftaran acara ini telah dihapuskan.",
+	"campaignevents-rest-user-not-found": "Tidak terdapat pengguna dengan ID pusat ini.",
+	"campaignevents-rest-get-registration-deleted": "Pendaftaran acara ini telah dihapuskan.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' mestilah dalam bentuk tatasusunan ID pengguna, atau null (untuk mengalih keluar semua pengguna)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Sila alih keluar peserta pada $1, yakni wiki acara itu dicipta.",
+	"campaignevents-rest-list-participants-empty-filter": "Penapis nama pengguna, jika dinyatakan, mestilah rentetan bukan kosong.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Anda tidak dibenarkan untuk melihat peserta yang mendaftar secara sulit bagi acara ini.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> mestilah senarai pengguna dan tidak boleh kosong",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Sila tetapkan penganjur pada $1, wiki di mana acara ini dicipta.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Anda tidak menyertai acara ini.",
+	"campaignevents-rest-register-invalid-answer": "Jawapan tidak sah untuk soalan $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Sila lengkapkan pendaftaran acara anda pada $1, yakni wiki acara itu dicipta.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Sila padamkan pendaftaran acara anda pada $1, yakni wiki acara itu dicipta.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Sila e-mel peserta pada $1, yakni wiki acara itu dicipta."
+}
