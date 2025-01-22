@@ -311,5 +311,6 @@
 	"campaignevents-eventpage-dialog-wikis-label": "Wiki",
 	"campaignevents-eventslist-wiki-label": "Wiki",
 	"campaignevents-eventslist-topics-label": "Argomenti",
-	"campaignevents-event-details-topics-header": "Argomenti"
+	"campaignevents-event-details-topics-header": "Argomenti",
+	"campaignevents-eventpage-dialog-topics-label": "Argomenti"
 }

@@ -350,5 +350,6 @@
 	"campaignevents-eventpage-dialog-wikis-label": "Wikit",
 	"campaignevents-eventslist-wiki-label": "Wikit",
 	"campaignevents-eventslist-topics-label": "Aiheet",
-	"campaignevents-event-details-topics-header": "Aiheet"
+	"campaignevents-event-details-topics-header": "Aiheet",
+	"campaignevents-eventpage-dialog-topics-label": "Aiheet"
 }
