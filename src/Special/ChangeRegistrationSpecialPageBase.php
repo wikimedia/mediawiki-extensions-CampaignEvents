@@ -151,7 +151,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-edit-no-event-id' )->parseAsBlock()
 			) );
-			$this->showForm();
+			$this->showEventIDForm();
 			return false;
 		}
 		$eventID = (int)$par;
@@ -167,25 +167,23 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 		return true;
 	}
 
-	private function showForm() {
-		HTMLForm::factory( 'ooui', [
-			'eventId' => [
-				'type' => 'int',
-				'name' => 'eventId',
-				'label-message' => 'campaignevents-register-event-id',
+	private function showEventIDForm(): void {
+		HTMLForm::factory(
+			'ooui',
+			[
+				'eventId' => [
+					'type' => 'int',
+					'name' => 'eventId',
+					'label-message' => 'campaignevents-register-event-id',
+				],
 			],
-		], $this->getContext(), 'campaignevents' )
-			->setSubmitTextMsg( 'campaignevents-register-redirect-submit' )
+			$this->getContext()
+		)
 			->setSubmitCallback( [ $this, 'onFormSubmit' ] )
 			->show();
 	}
 
-	/**
-	 * @param array $formData
-	 *
-	 * @return void
-	 */
-	public function onFormSubmit( array $formData ) {
+	public function onFormSubmit( array $formData ): void {
 		$eventId = $formData['eventId'];
 		$title = $this->getPageTitle( $eventId ?: null );
 		$url = $title->getFullUrlForRedirect();

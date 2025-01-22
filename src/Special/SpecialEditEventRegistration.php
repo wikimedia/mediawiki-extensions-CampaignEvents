@@ -20,6 +20,7 @@ use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
@@ -76,10 +77,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 */
 	public function execute( $par ): void {
 		if ( $par === null ) {
-			$this->setHeaders();
-			$this->outputHeader();
 			$this->outputErrorBox( 'campaignevents-edit-no-event-id' );
-			$this->showForm();
+			$this->showEventIDForm();
 			return;
 		}
 		$this->eventID = (int)$par;
@@ -142,5 +141,28 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 */
 	protected function getShowAlways(): bool {
 		return true;
+	}
+
+	protected function showEventIDForm(): void {
+		HTMLForm::factory(
+			'ooui',
+			[
+				'eventId' => [
+					'type' => 'int',
+					'name' => 'eventId',
+					'label-message' => 'campaignevents-register-event-id',
+				],
+			],
+			$this->getContext()
+		)
+			->setSubmitCallback( [ $this, 'onFormSubmit' ] )
+			->show();
+	}
+
+	public function onFormSubmit( array $formData ): void {
+		$eventId = $formData['eventId'];
+		$title = $this->getPageTitle( $eventId ?: null );
+		$url = $title->getFullUrlForRedirect();
+		$this->getOutput()->redirect( $url );
 	}
 }
