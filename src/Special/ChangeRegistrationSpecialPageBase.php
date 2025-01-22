@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Html\Html;
+use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
@@ -143,12 +144,14 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	 * @param string|null $par
 	 * @return bool
 	 */
-	protected function checkEventExists( ?string $par ) {
+	protected function checkEventExists( ?string $par ): bool {
 		if ( $par === null ) {
 			$this->setHeaders();
+			$this->outputHeader();
 			$this->getOutput()->addHTML( Html::errorBox(
-				$this->msg( 'campaignevents-register-error-no-event' )->escaped()
+				$this->msg( 'campaignevents-edit-no-event-id' )->parseAsBlock()
 			) );
+			$this->showForm();
 			return false;
 		}
 		$eventID = (int)$par;
@@ -162,5 +165,30 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 			return false;
 		}
 		return true;
+	}
+
+	private function showForm() {
+		HTMLForm::factory( 'ooui', [
+			'eventId' => [
+				'type' => 'int',
+				'name' => 'eventId',
+				'label-message' => 'campaignevents-register-event-id',
+			],
+		], $this->getContext(), 'campaignevents' )
+			->setSubmitTextMsg( 'campaignevents-register-redirect-submit' )
+			->setSubmitCallback( [ $this, 'onFormSubmit' ] )
+			->show();
+	}
+
+	/**
+	 * @param array $formData
+	 *
+	 * @return void
+	 */
+	public function onFormSubmit( array $formData ) {
+		$eventId = $formData['eventId'];
+		$title = $this->getPageTitle( $eventId ?: null );
+		$url = $title->getFullUrlForRedirect();
+		$this->getOutput()->redirect( $url );
 	}
 }

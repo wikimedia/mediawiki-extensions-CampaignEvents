@@ -76,7 +76,10 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	 */
 	public function execute( $par ): void {
 		if ( $par === null ) {
-			$this->outputErrorBox( 'campaignevents-edit-no-event-id-provided' );
+			$this->setHeaders();
+			$this->outputHeader();
+			$this->outputErrorBox( 'campaignevents-edit-no-event-id' );
+			$this->showForm();
 			return;
 		}
 		$this->eventID = (int)$par;
