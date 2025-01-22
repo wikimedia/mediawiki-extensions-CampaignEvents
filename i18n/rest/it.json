@@ -1,10 +1,18 @@
 {
 	"@metadata": {
 		"authors": [
-			"Beta16"
+			"Beta16",
+			"Yiyi"
 		]
 	},
+	"campaignevents-rest-event-not-found": "Non ci sono eventi con questo ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Non sei autorizzato ad abilitare le registrazioni all'evento.",
+	"campaignevents-rest-edit-page-nonlocal": "La registrazione a questo evento è stata abilitata sul seguente wiki e dovrebbe essere modificata lì: $1",
+	"campaignevents-rest-delete-already-deleted": "La registrazione a questo evento è già stata cancellata.",
 	"campaignevents-rest-user-not-found": "Non esiste alcun utente con questo ID centrale.",
+	"campaignevents-rest-get-registration-deleted": "La registrazione a questo evento è stata cancellata.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Il parametro 'user_ids' deve essere un insieme di ID utenti o deve essere nullo (per rimuovere tutti gli utenti)",
+	"campaignevents-rest-list-participants-cannot-see-private": "Non sei autorizzato a visualizzare i partecipanti che si sono registrati privatamente a questo evento.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> deve essere un array di nomi utente e non può essere vuoto",
 	"campaignevents-rest-get-registration-info-notparticipant": "Non stai partecipando a questo evento",
 	"campaignevents-rest-register-invalid-answer": "Risposta non valida alla domanda $1"

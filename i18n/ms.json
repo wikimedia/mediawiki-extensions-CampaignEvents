@@ -5,6 +5,27 @@
 			"Tofeiku"
 		]
 	},
+	"campaignevents-desc": "Menyediakan ciri untuk penganjur dan peserta kempen.",
+	"nstab-event": "Acara",
+	"action-campaignevents-enable-registration": "dayakan pendaftaran acara",
+	"right-campaignevents-enable-registration": "Dayakan pendaftaran acara",
+	"action-campaignevents-delete-registration": "Padamkan pendaftaran acara",
+	"right-campaignevents-delete-registration": "Padamkan pendaftaran acara",
+	"action-campaignevents-organize-events": "menganjurkan acara",
+	"right-campaignevents-organize-events": "Menganjurkan acara",
+	"action-campaignevents-email-participants": "e-mel peserta acara",
+	"right-campaignevents-email-participants": "E-mel peserta acara",
 	"specialpages-group-campaignevents": "Acara",
-	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi."
+	"campaignevents-error-invalid-id": "ID acara mesti dalam bentuk angka bulat positif.",
+	"campaignevents-error-empty-title": "Masukkan tajuk laman acara.",
+	"campaignevents-error-invalid-title": "Tajuk laman acara tidak sah: $1.",
+	"campaignevents-error-invalid-title-interwiki": "Tentukan laman acara pada wiki tempatan.",
+	"campaignevents-error-page-not-found": "Tiada laman acara dengan nama ini.",
+	"campaignevents-error-page-not-event-namespace": "Laman acara mestilah dalam ruang nama {{ns:event}}.",
+	"campaignevents-error-page-with-section": "Laman acara tidak boleh mengandungi nama bahagian.",
+	"campaignevents-error-invalid-chat-url": "Masukkan URL sembang yang sah.",
+	"campaignevents-edit-field-organizers": "Penganjur",
+	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi.",
+	"campaignevents-event-details-organizers-header": "Penganjur",
+	"echo-category-title-campaign-events-notification-registration": "Pendaftaran acara"
 }
