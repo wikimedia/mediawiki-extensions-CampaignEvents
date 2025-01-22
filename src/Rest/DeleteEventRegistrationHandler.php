@@ -24,10 +24,6 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	private IEventLookup $eventLookup;
 	private DeleteEventCommand $deleteEventCommand;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param DeleteEventCommand $deleteEventCommand
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		DeleteEventCommand $deleteEventCommand
@@ -44,10 +40,6 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 		$this->validateToken();
 	}
 
-	/**
-	 * @param int $id
-	 * @return Response
-	 */
 	public function run( int $id ): Response {
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $id );
 		if ( $registration->getDeletionTimestamp() !== null ) {

@@ -19,10 +19,6 @@ class SpecialMyEvents extends SpecialPage {
 	private EventsPagerFactory $eventsPagerFactory;
 	private CampaignsCentralUserLookup $centralUserLookup;
 
-	/**
-	 * @param EventsPagerFactory $eventsPagerFactory
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 */
 	public function __construct(
 		EventsPagerFactory $eventsPagerFactory,
 		CampaignsCentralUserLookup $centralUserLookup

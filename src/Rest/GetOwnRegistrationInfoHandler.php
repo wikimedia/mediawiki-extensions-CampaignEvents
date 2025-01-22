@@ -23,12 +23,6 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param ParticipantsStore $participantsStore
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
@@ -41,10 +35,6 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 

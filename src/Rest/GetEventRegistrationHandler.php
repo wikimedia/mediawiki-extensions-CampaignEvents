@@ -33,10 +33,6 @@ class GetEventRegistrationHandler extends SimpleHandler {
 		$this->eventTopicsEnabled = $config->get( 'CampaignEventsEnableEventTopics' );
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		if ( $registration->getDeletionTimestamp() !== null ) {

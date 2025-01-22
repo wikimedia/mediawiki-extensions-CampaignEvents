@@ -95,9 +95,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		] );
 	}
 
-	/**
-	 * @return ExistingEventRegistration
-	 */
 	protected function getExistingEvent(): ExistingEventRegistration {
 		$id = $this->getValidatedParams()['id'];
 		$registration = $this->getRegistrationOrThrow( $this->eventLookup, $id );

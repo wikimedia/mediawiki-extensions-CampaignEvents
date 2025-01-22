@@ -54,15 +54,6 @@ class SpecialEventDetails extends SpecialPage {
 	private FrontendModulesFactory $frontendModulesFactory;
 	private PermissionChecker $permissionChecker;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param ParticipantsStore $participantsStore
-	 * @param OrganizersStore $organizersStore
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param FrontendModulesFactory $frontendModulesFactory
-	 * @param PermissionChecker $permissionChecker
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		ParticipantsStore $participantsStore,
@@ -271,12 +262,6 @@ class SpecialEventDetails extends SpecialPage {
 		) );
 	}
 
-	/**
-	 * @param string $name
-	 * @param string $label
-	 * @param Tag $content
-	 * @return TabPanelLayout
-	 */
 	private function createTab( string $name, string $label, Tag $content ): TabPanelLayout {
 		return new TabPanelLayout(
 			$name,

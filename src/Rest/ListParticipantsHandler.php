@@ -44,17 +44,6 @@ class ListParticipantsHandler extends SimpleHandler {
 	private EventQuestionsRegistry $questionsRegistry;
 	private IMessageFormatterFactory $messageFormatterFactory;
 
-	/**
-	 * @param PermissionChecker $permissionChecker
-	 * @param IEventLookup $eventLookup
-	 * @param ParticipantsStore $participantsStore
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UserLinker $userLinker
-	 * @param UserFactory $userFactory
-	 * @param CampaignsUserMailer $campaignsUserMailer
-	 * @param EventQuestionsRegistry $questionsRegistry
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
 		IEventLookup $eventLookup,
@@ -77,10 +66,6 @@ class ListParticipantsHandler extends SimpleHandler {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 

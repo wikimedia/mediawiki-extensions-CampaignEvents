@@ -26,19 +26,10 @@ class EventTimeFormatter {
 	private const FORMAT_START = 'start';
 	private const FORMAT_END = 'end';
 
-	/**
-	 * @param UserOptionsLookup $userOptionsLookup
-	 */
 	public function __construct( UserOptionsLookup $userOptionsLookup ) {
 		$this->userOptionsLookup = $userOptionsLookup;
 	}
 
-	/**
-	 * @param EventRegistration $event
-	 * @param Language $language
-	 * @param UserIdentity $user
-	 * @return FormattedTime
-	 */
 	public function formatStart(
 		EventRegistration $event,
 		Language $language,
@@ -47,12 +38,6 @@ class EventTimeFormatter {
 		return $this->formatTimeInternal( self::FORMAT_START, $event, $language, $user );
 	}
 
-	/**
-	 * @param EventRegistration $event
-	 * @param Language $language
-	 * @param UserIdentity $user
-	 * @return FormattedTime
-	 */
 	public function formatEnd(
 		EventRegistration $event,
 		Language $language,
@@ -83,11 +68,6 @@ class EventTimeFormatter {
 		);
 	}
 
-	/**
-	 * @param EventRegistration $eventRegistration
-	 * @param UserIdentity $user
-	 * @return string
-	 */
 	public function formatTimezone( EventRegistration $eventRegistration, UserIdentity $user ): string {
 		$userTimeCorrection = $this->getTimeCorrection( $eventRegistration, $user );
 		$tzObj = $userTimeCorrection->getTimeZone();
@@ -101,10 +81,6 @@ class EventTimeFormatter {
 	 * Returns the time correction that should be used when formatting time, date, and timezone.
 	 * This uses the event timezone for in-person events, and the user preference for online and hybrid events,
 	 * see T316688.
-	 *
-	 * @param EventRegistration $event
-	 * @param UserIdentity $user
-	 * @return UserTimeCorrection
 	 */
 	private function getTimeCorrection( EventRegistration $event, UserIdentity $user ): UserTimeCorrection {
 		if ( $event->getMeetingType() === EventRegistration::MEETING_TYPE_IN_PERSON ) {

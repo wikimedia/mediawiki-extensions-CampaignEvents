@@ -12,34 +12,20 @@ class Answer {
 	private ?int $option;
 	private ?string $text;
 
-	/**
-	 * @param int $questionDBID
-	 * @param int|null $option
-	 * @param string|null $text
-	 */
 	public function __construct( int $questionDBID, ?int $option, ?string $text ) {
 		$this->questionDBID = $questionDBID;
 		$this->option = $option;
 		$this->text = $text;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getQuestionDBID(): int {
 		return $this->questionDBID;
 	}
 
-	/**
-	 * @return int|null
-	 */
 	public function getOption(): ?int {
 		return $this->option;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getText(): ?string {
 		return $this->text;
 	}

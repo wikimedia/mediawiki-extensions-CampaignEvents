@@ -10,9 +10,6 @@ use RuntimeException;
  * This exception is thrown when a local account does not correspond to any global account.
  */
 class UserNotGlobalException extends RuntimeException {
-	/**
-	 * @param int $localID
-	 */
 	public function __construct( int $localID ) {
 		parent::__construct( "User with local ID $localID does not have a global account." );
 	}

@@ -21,10 +21,6 @@ class CancelEventRegistrationHandler extends SimpleHandler {
 	private IEventLookup $eventLookup;
 	private UnregisterParticipantCommand $unregisterParticipantCommand;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		UnregisterParticipantCommand $unregisterParticipantCommand
@@ -41,10 +37,6 @@ class CancelEventRegistrationHandler extends SimpleHandler {
 		$this->validateToken();
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );

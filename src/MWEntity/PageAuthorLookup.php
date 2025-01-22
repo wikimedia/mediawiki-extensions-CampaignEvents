@@ -17,10 +17,6 @@ class PageAuthorLookup {
 	private RevisionStoreFactory $revisionStoreFactory;
 	private CampaignsCentralUserLookup $centralUserLookup;
 
-	/**
-	 * @param RevisionStoreFactory $revisionStoreFactory
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 */
 	public function __construct(
 		RevisionStoreFactory $revisionStoreFactory,
 		CampaignsCentralUserLookup $centralUserLookup

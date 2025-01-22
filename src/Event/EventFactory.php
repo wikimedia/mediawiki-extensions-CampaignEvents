@@ -381,13 +381,6 @@ class EventFactory {
 		}
 	}
 
-	/**
-	 * @param int $validationFlags
-	 * @param DateTimeZone $timezone
-	 * @param string $start
-	 * @param string $end
-	 * @return StatusValue
-	 */
 	private function validateLocalDates(
 		int $validationFlags,
 		DateTimeZone $timezone,
@@ -433,13 +426,6 @@ class EventFactory {
 		return $res;
 	}
 
-	/**
-	 * @param int $meetingType
-	 * @param string|null &$meetingURL
-	 * @param string|null &$meetingCountry
-	 * @param string|null &$meetingAddress
-	 * @return StatusValue
-	 */
 	private function validateMeetingInfo(
 		int $meetingType,
 		?string &$meetingURL,
@@ -481,10 +467,6 @@ class EventFactory {
 		return $res;
 	}
 
-	/**
-	 * @param string $data
-	 * @return bool
-	 */
 	private function isValidURL( string $data ): bool {
 		// TODO There's a lot of space for improvement here, e.g., expand the list of allowed protocols, and
 		// possibly avoid having to do all the normalization and checks ourselves.
@@ -524,11 +506,6 @@ class EventFactory {
 		return filter_var( $urlToCheckASCII, FILTER_VALIDATE_URL ) !== false;
 	}
 
-	/**
-	 * @param string $country
-	 * @param string $address
-	 * @return StatusValue
-	 */
 	private function validateLocation( string $country, string $address ): StatusValue {
 		$res = StatusValue::newGood();
 		if ( $country === '' ) {

@@ -357,10 +357,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		return $this->mNavigationBar;
 	}
 
-	/**
-	 * @param stdClass $row
-	 * @return string
-	 */
 	private function getMeetingTypeMsg( stdClass $row ): string {
 		$meetingType = EventStore::getMeetingTypeFromDBVal( $row->event_meeting_type );
 		switch ( $meetingType ) {
@@ -384,10 +380,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		return $this->getLanguage()->sprintfDate( 'Y', $timestamp );
 	}
 
-	/**
-	 * @param string $timestamp
-	 * @return string
-	 */
 	private function getMonthHeader( string $timestamp ): string {
 		$timestamp = $this->offsetTimestamp( $timestamp );
 		// TODO This is not guaranteed to return the month name in a format suitable for section headings (e.g.,
@@ -395,19 +387,11 @@ class EventsListPager extends ReverseChronologicalPager {
 		return $this->getLanguage()->sprintfDate( 'F Y', $timestamp );
 	}
 
-	/**
-	 * @param string $timestamp
-	 * @return string
-	 */
 	private function getDayFromTimestamp( string $timestamp ): string {
 		$timestamp = $this->offsetTimestamp( $timestamp );
 		return $this->getLanguage()->sprintfDate( 'j', $timestamp );
 	}
 
-	/**
-	 * @param string $timestamp
-	 * @return string
-	 */
 	private function offsetTimestamp( string $timestamp ): string {
 		$offset = $this->userOptionsLookup
 			->getOption( $this->getUser(), 'timecorrection' );

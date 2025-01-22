@@ -53,14 +53,6 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private ?array $participantQuestionsToShow;
 	private ?CentralUser $centralUser;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param RegisterParticipantCommand $registerParticipantCommand
-	 * @param ParticipantsStore $participantsStore
-	 * @param PolicyMessagesLookup $policyMessagesLookup
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $centralUserLookup,

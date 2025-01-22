@@ -156,10 +156,6 @@ trait EventPagerTrait {
 	private function doExtraPreprocessing( IResultWrapper $result ): void {
 	}
 
-	/**
-	 * @param stdClass $eventRow
-	 * @return ICampaignsPage
-	 */
 	private function getEventPageFromRow( stdClass $eventRow ): ICampaignsPage {
 		$eventID = $eventRow->event_id;
 		$eventPageCache = $this->eventPageCache;

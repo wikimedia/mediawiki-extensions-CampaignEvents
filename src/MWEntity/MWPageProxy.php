@@ -10,10 +10,6 @@ class MWPageProxy implements ICampaignsPage {
 	private ProperPageIdentity $page;
 	private string $prefixedText;
 
-	/**
-	 * @param ProperPageIdentity $page
-	 * @param string $prefixedText
-	 */
 	public function __construct( ProperPageIdentity $page, string $prefixedText ) {
 		$this->page = $page;
 		$this->prefixedText = $prefixedText;
@@ -47,9 +43,6 @@ class MWPageProxy implements ICampaignsPage {
 		return $this->prefixedText;
 	}
 
-	/**
-	 * @return ProperPageIdentity
-	 */
 	public function getPageIdentity(): ProperPageIdentity {
 		return $this->page;
 	}

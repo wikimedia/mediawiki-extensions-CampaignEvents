@@ -75,9 +75,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->validateToken();
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 */
 	abstract protected function checkPermissions( ICampaignsAuthority $performer ): void;
 
 	/**
@@ -121,10 +118,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		return $this->getSuccessResponse( $saveStatus );
 	}
 
-	/**
-	 * @param StatusValue $saveStatus
-	 * @return Response
-	 */
 	abstract protected function getSuccessResponse( StatusValue $saveStatus ): Response;
 
 	/**

@@ -23,9 +23,6 @@ class PageURLResolver {
 	/** @var string[] Cached results of getCanonicalUrl() */
 	private array $canonicalUrlCache = [];
 
-	/**
-	 * @param TitleFactory $titleFactory
-	 */
 	public function __construct( TitleFactory $titleFactory ) {
 		$this->titleFactory = $titleFactory;
 	}
@@ -33,8 +30,6 @@ class PageURLResolver {
 	/**
 	 * Returns the URL of a page. This could be a local URL (for local pages) or a full URL (for
 	 * foreign wiki pages).
-	 * @param ICampaignsPage $page
-	 * @return string
 	 */
 	public function getUrl( ICampaignsPage $page ): string {
 		if ( !$page instanceof MWPageProxy ) {
@@ -52,8 +47,6 @@ class PageURLResolver {
 
 	/**
 	 * Returns the full URL of a page. Unlike getUrl, this is guaranteed to be the full URL even for local pages.
-	 * @param ICampaignsPage $page
-	 * @return string
 	 */
 	public function getFullUrl( ICampaignsPage $page ): string {
 		if ( !$page instanceof MWPageProxy ) {
@@ -72,9 +65,6 @@ class PageURLResolver {
 	/**
 	 * Returns the canonical URL of a page. This should be used for things like email notifications.
 	 * @see Title::getCanonicalURL()
-	 *
-	 * @param ICampaignsPage $page
-	 * @return string
 	 */
 	public function getCanonicalUrl( ICampaignsPage $page ): string {
 		if ( !$page instanceof MWPageProxy ) {
@@ -98,10 +88,6 @@ class PageURLResolver {
 		return $this->canonicalUrlCache[$cacheKey];
 	}
 
-	/**
-	 * @param ICampaignsPage $page
-	 * @return string
-	 */
 	private function getCacheKey( ICampaignsPage $page ): string {
 		// No need to actually convert it to the wiki ID if it's local.
 		$wikiIDStr = $page->getWikiId() === WikiAwareEntity::LOCAL ? '' : $page->getWikiId();

@@ -17,11 +17,6 @@ class GetParticipantQuestionsHandler extends Handler {
 	private IMessageFormatterFactory $messageFormatterFactory;
 	private Language $contentLanguage;
 
-	/**
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param Language $contentLanguage
-	 */
 	public function __construct(
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -32,9 +27,6 @@ class GetParticipantQuestionsHandler extends Handler {
 		$this->contentLanguage = $contentLanguage;
 	}
 
-	/**
-	 * @return Response
-	 */
 	public function execute(): Response {
 		$params = $this->getValidatedParams();
 		$questionIDs = $params['question_ids'] ?? null;

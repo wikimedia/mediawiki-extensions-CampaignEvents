@@ -39,23 +39,6 @@ class EventPageDecoratorFactory {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 
-	/**
-	 * @param PageEventLookup $pageEventLookup
-	 * @param ParticipantsStore $participantsStore
-	 * @param OrganizersStore $organizersStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param LinkRenderer $linkRenderer
-	 * @param CampaignsPageFactory $campaignsPageFactory
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UserLinker $userLinker
-	 * @param EventTimeFormatter $eventTimeFormatter
-	 * @param EventPageCacheUpdater $eventPageCacheUpdater
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param WikiLookup $wikiLookup
-	 * @param ITopicRegistry $topicRegistry
-	 *
-	 */
 	public function __construct(
 		PageEventLookup $pageEventLookup,
 		ParticipantsStore $participantsStore,

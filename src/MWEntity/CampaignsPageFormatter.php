@@ -16,17 +16,10 @@ class CampaignsPageFormatter {
 
 	private TitleFormatter $titleFormatter;
 
-	/**
-	 * @param TitleFormatter $titleFormatter
-	 */
 	public function __construct( TitleFormatter $titleFormatter ) {
 		$this->titleFormatter = $titleFormatter;
 	}
 
-	/**
-	 * @param ICampaignsPage $page
-	 * @return string
-	 */
 	public function getText( ICampaignsPage $page ): string {
 		if ( $page instanceof MWPageProxy ) {
 			return $this->titleFormatter->getText( $page->getPageIdentity() );

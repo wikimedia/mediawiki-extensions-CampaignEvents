@@ -55,10 +55,6 @@ class RegisterForEventHandler extends SimpleHandler {
 		$this->validateToken();
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$body = $this->getValidatedBody() ?? [];
 		$performer = new MWAuthorityProxy( $this->getAuthority() );

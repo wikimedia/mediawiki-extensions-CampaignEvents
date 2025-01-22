@@ -21,11 +21,6 @@ class CampaignsPageFactory {
 	private TitleParser $titleParser;
 	private TitleFormatter $titleFormatter;
 
-	/**
-	 * @param PageStoreFactory $pageStoreFactory
-	 * @param TitleParser $titleParser
-	 * @param TitleFormatter $titleFormatter
-	 */
 	public function __construct(
 		PageStoreFactory $pageStoreFactory,
 		TitleParser $titleParser,

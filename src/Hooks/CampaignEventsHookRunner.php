@@ -20,9 +20,6 @@ class CampaignEventsHookRunner implements
 
 	private HookContainer $hookContainer;
 
-	/**
-	 * @param HookContainer $hookContainer
-	 */
 	public function __construct( HookContainer $hookContainer ) {
 		$this->hookContainer = $hookContainer;
 	}
@@ -90,9 +87,6 @@ class CampaignEventsHookRunner implements
 		);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function onCampaignEventsGetAllEventsContent(
 		OutputPage $outputPage,
 		string &$eventsContent

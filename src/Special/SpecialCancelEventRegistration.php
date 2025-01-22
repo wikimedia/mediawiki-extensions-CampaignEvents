@@ -21,12 +21,6 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	private UnregisterParticipantCommand $unregisterParticipantCommand;
 	private ParticipantsStore $participantsStore;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
-	 * @param ParticipantsStore $participantsStore
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $centralUserLookup,

@@ -12,9 +12,6 @@ use StatusValue;
 use Wikimedia\Message\MessageValue;
 
 class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
-	/**
-	 * @inheritDoc
-	 */
 	protected function getSuccessResponse( StatusValue $saveStatus ): Response {
 		$id = $saveStatus->getValue();
 		$respValue = [

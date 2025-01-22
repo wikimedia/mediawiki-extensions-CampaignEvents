@@ -27,13 +27,6 @@ class ListOrganizersHandler extends SimpleHandler {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private UserLinker $userLinker;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param OrganizersStore $organizersStore
-	 * @param RoleFormatter $roleFormatter
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UserLinker $userLinker
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		OrganizersStore $organizersStore,
@@ -48,10 +41,6 @@ class ListOrganizersHandler extends SimpleHandler {
 		$this->userLinker = $userLinker;
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 

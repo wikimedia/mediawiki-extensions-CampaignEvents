@@ -50,20 +50,6 @@ class EditEventCommand {
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 	private PageEventLookup $pageEventLookup;
 
-	/**
-	 * @param IEventStore $eventStore
-	 * @param IEventLookup $eventLookup
-	 * @param OrganizersStore $organizersStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param EventPageCacheUpdater $eventPageCacheUpdater
-	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
-	 * @param TrackingToolUpdater $trackingToolUpdater
-	 * @param LoggerInterface $logger
-	 * @param ParticipantAnswersStore $answersStore
-	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
-	 * @param PageEventLookup $pageEventLookup
-	 */
 	public function __construct(
 		IEventStore $eventStore,
 		IEventLookup $eventLookup,
@@ -111,11 +97,6 @@ class EditEventCommand {
 		return $this->doEditUnsafe( $registration, $performer, $organizerUsernames );
 	}
 
-	/**
-	 * @param EventRegistration $registration
-	 * @param ICampaignsAuthority $performer
-	 * @return PermissionStatus
-	 */
 	private function authorizeEdit(
 		EventRegistration $registration,
 		ICampaignsAuthority $performer
@@ -439,11 +420,6 @@ class EditEventCommand {
 		return StatusValue::newGood();
 	}
 
-	/**
-	 * @param EventRegistration $registration
-	 * @param ExistingEventRegistration $previousVersion
-	 * @return bool
-	 */
 	private function checkCanEditEventDates(
 		EventRegistration $registration,
 		ExistingEventRegistration $previousVersion
@@ -462,10 +438,6 @@ class EditEventCommand {
 		return true;
 	}
 
-	/**
-	 * @param int $registrationID
-	 * @return bool
-	 */
 	public function eventHasAnswersOrAggregates( int $registrationID ): bool {
 		return $this->answersStore->eventHasAnswers( $registrationID ) ||
 			$this->aggregatedAnswersStore->eventHasAggregates( $registrationID );

@@ -16,9 +16,6 @@ class AddressStore {
 
 	private CampaignsDatabaseHelper $dbHelper;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 */
 	public function __construct(
 		CampaignsDatabaseHelper $dbHelper
 	) {
@@ -28,10 +25,6 @@ class AddressStore {
 	/**
 	 * Returns the ID that identifies the given address in the database. This may return the ID of an existing entry,
 	 * or insert a new entry.
-	 *
-	 * @param string $fullAddress
-	 * @param string|null $country
-	 * @return int
 	 */
 	public function acquireAddressID( string $fullAddress, ?string $country ): int {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );

@@ -26,11 +26,6 @@ class UserLinker {
 	private IMessageFormatterFactory $messageFormatterFactory;
 	private LinkBatchFactory $linkBatchFactory;
 
-	/**
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param LinkBatchFactory $linkBatchFactory
-	 */
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
 		IMessageFormatterFactory $messageFormatterFactory,

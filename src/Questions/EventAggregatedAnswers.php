@@ -11,11 +11,6 @@ class EventAggregatedAnswers {
 	/** @var array<int,array<int,int>> */
 	private array $data = [];
 
-	/**
-	 * @param int $questionID
-	 * @param int $optionID
-	 * @param int $amount
-	 */
 	public function addEntry( int $questionID, int $optionID, int $amount ) {
 		if ( !isset( $this->data[ $questionID ] ) ) {
 			$this->data[ $questionID ] = [];

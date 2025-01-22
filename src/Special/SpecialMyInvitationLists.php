@@ -20,11 +20,6 @@ class SpecialMyInvitationLists extends SpecialPage {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private CampaignsDatabaseHelper $databaseHelper;
 
-	/**
-	 * @param PermissionChecker $permissionChecker
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param CampaignsDatabaseHelper $databaseHelper
-	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
