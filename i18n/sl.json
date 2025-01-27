@@ -139,6 +139,7 @@
 	"campaignevents-eventpage-header-type-online": "Spletni dogodek",
 	"campaignevents-eventpage-header-type-in-person": "Dogodek v živo",
 	"campaignevents-eventpage-header-type-online-and-in-person": "Dogodek na spletu in v živo",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-dates-label": "Začetni in končni čas",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|udeleženec|udeleženca|udeleženci|udeležencev}}",
 	"campaignevents-eventpage-header-participants-label": "Število udeležencev",

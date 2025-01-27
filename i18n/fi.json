@@ -16,6 +16,7 @@
 	"campaignevents-error-invalid-id": "Tapahtumatunnisteen on oltava positiivinen kokonaisluku.",
 	"campaignevents-error-empty-title": "Anna tapahtumasivun otsikko.",
 	"campaignevents-error-invalid-title": "Tapahtumasivun otsikko on virheellinen: $1",
+	"campaignevents-error-page-not-found": "Tämän nimistä tapahtumaa ei ole olemassa.",
 	"campaignevents-error-page-not-event-namespace": "Tapahtumasivun tulee olla {{ns:event}}-nimiavaruudessa.",
 	"campaignevents-error-invalid-status": "Ilmoita, onko tapahtuma avoin vai suljettu.",
 	"campaignevents-error-empty-start": "Valitse alkamisajankohta.",

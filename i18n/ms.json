@@ -10,5 +10,13 @@
 	"action-campaignevents-enable-registration": "dayakan pendaftaran acara",
 	"right-campaignevents-enable-registration": "Dayakan pendaftaran acara",
 	"action-campaignevents-delete-registration": "Padamkan pendaftaran acara",
-	"right-campaignevents-delete-registration": "Padamkan pendaftaran acara"
+	"right-campaignevents-delete-registration": "Padamkan pendaftaran acara",
+	"campaignevents-error-invalid-id": "ID acara mesti dalam bentuk angka bulat positif.",
+	"campaignevents-error-empty-title": "Masukkan tajuk laman acara.",
+	"campaignevents-error-invalid-title": "Tajuk laman acara tidak sah: $1.",
+	"campaignevents-error-invalid-title-interwiki": "Tentukan laman acara pada wiki tempatan.",
+	"campaignevents-error-page-not-found": "Tiada laman acara dengan nama ini.",
+	"campaignevents-error-page-not-event-namespace": "Laman acara mestilah dalam ruang nama {{ns:event}}.",
+	"campaignevents-error-page-with-section": "Laman acara tidak boleh mengandungi nama bahagian.",
+	"campaignevents-error-invalid-chat-url": "Masukkan URL sembang yang sah."
 }
