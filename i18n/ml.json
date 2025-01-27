@@ -48,7 +48,6 @@
 	"campaignevents-enable-registration-form-submit": "രജിസ്ട്രേഷൻ പ്രവർത്തനക്ഷമമാക്കുക",
 	"campaignevents-edit-form-submit": "രജിസ്ട്രേഷൻ എഡിറ്റ് ചെയ്യുക",
 	"campaignevents-edit-invalid-id": "സാധുവായ ഒരു ഇവന്റ് ഐഡി നൽകുക.",
-	"campaignevents-edit-no-event-id-provided": "ഒരു ഇവന്റ് ഐഡി നൽകുക.",
 	"registerforevent": "ഒരു പരിപാടിക്ക് രജിസ്റ്റർ ചെയ്യുക",
 	"campaignevents-register-confirmation-top": "രജിസ്ട്രേഷൻ സ്ഥിരീകരിക്കുക",
 	"campaignevents-register-edit-legend": "രജിസ്ട്രേഷൻ എഡിറ്റ് ചെയ്യുക",

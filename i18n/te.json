@@ -22,7 +22,6 @@
 	"campaignevents-edit-field-chat-url-help": "ఈ ఈవెంట్ లో పాల్గొనేవారి కొరకు మీకు ఆన్ లైన్ చాట్ గ్రూపు ఉన్నట్లయితే, మీరు ఇక్కడ ఆహ్వాన లింక్ ని జోడించవచ్చు. రిజిస్టర్ చేసుకున్న తరువాత పాల్గొనేవారికి ఆహ్వానం లింక్ పంపబడుతుంది.",
 	"campaignevents-edit-form-submit": "నమోదును సవరించండి",
 	"registerforevent": "కార్యక్రమం కోసం నమోదు చేసుకోండి",
-	"campaignevents-register-error-no-event": "ప్రత్యేకించి ఏ కార్యక్రమం నిర్దేశించలేదు",
 	"campaignevents-unregister-success": "మీరు ఈ కార్యక్రమానికి నమోదు చేసుకోలేదు",
 	"campaignevents-role-creator": "రూపొందించిన వారు",
 	"campaignevents-role-organizer": "నిర్వాహకుడు",

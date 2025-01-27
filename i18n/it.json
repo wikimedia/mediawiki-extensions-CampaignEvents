@@ -80,7 +80,6 @@
 	"campaignevents-edit-form-submit": "Modifica registrazione",
 	"campaignevents-edit-form-notice": "Durante la registrazione verranno raccolti solo i nomi utente dei partecipanti. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Approfondisci].",
 	"campaignevents-edit-invalid-id": "Fornisci un ID evento valido.",
-	"campaignevents-edit-no-event-id-provided": "Fornisci un ID evento.",
 	"campaignevents-edit-event-notfound": "Non ci sono eventi con questo ID.",
 	"campaignevents-edit-page-nonlocal": "'''[$1 Modifica la tua registrazione all'evento su $2]''', il wiki dove è stato creato l'evento.",
 	"campaignevents-edit-error-deleted": "La registrazione a questo evento è stata cancellata.",

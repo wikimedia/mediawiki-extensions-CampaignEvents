@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Saraiki"
+			"Saraiki",
+			"Umar Shahid"
 		]
 	},
 	"nstab-event": "ایونٹ",
@@ -41,8 +42,8 @@
 	"campaignevents-enable-registration-form-submit": "رجسٹریشن فعال کرو",
 	"campaignevents-edit-form-submit": "رجسٹریشن وچ تبدیلی کرو",
 	"campaignevents-edit-invalid-id": "ٹھیک تقریب آئی ڈی مہیا کرو۔",
-	"campaignevents-edit-no-event-id-provided": "تقریب آئی ڈی مہیا کرو۔",
 	"campaignevents-edit-invalid-username": "\"$1\" ٹھیک ورتݨ ناں کائنی۔",
+	"campaignevents-register-error-no-event-id": "ایں پیج کنیں کوئی درست آئی ڈی کائنی۔ ہک درست ایونٹ آئی ڈی پاؤ یا کلیبوریشن لسٹ وچ یکیاں آئی ڈیاں ݙیکھو۔",
 	"campaignevents-register-confirmation-top": "رجسٹریشن دی تصدیق کرو",
 	"campaignevents-register-edit-legend": "رجسٹریشن وچ تبدیلی کرو",
 	"campaignevents-register-confirmation-btn": "رجسٹر",

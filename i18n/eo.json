@@ -52,6 +52,5 @@
 	"campaignevents-enable-registration-form-submit": "Ebligi registriĝon",
 	"campaignevents-edit-form-submit": "Redakti registriĝon",
 	"campaignevents-edit-invalid-id": "Provizu validan eventan ID-n.",
-	"campaignevents-edit-no-event-id-provided": "Provizu eventan ID-n.",
 	"campaignevents-edit-event-notfound": "Estas neniu evento kun ĉi tiu ID."
 }

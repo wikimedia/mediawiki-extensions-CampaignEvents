@@ -44,7 +44,6 @@
 	"campaignevents-edit-page-nonlocal": "Пожалуйста, [$1 завершите регистрацию на мероприятии на $2], вики, где оно было создано.",
 	"campaignevents-edit-too-many-organizers": "Вы не можете добавить более $1 {{PLURAL:$1| организатор|организаторов}}.",
 	"registerforevent": "Зарегистрироваться на мероприятие",
-	"campaignevents-register-error-no-event": "Нет указанного мероприятия.",
 	"campaignevents-register-error-event-not-found": "Не найдено мероприятий с этим ID.",
 	"campaignevents-register-confirmation-top": "Подтвердить регистрацию",
 	"campaignevents-register-edit-btn": "Сохранить изменения",
@@ -150,5 +149,6 @@
 	"campaignevents-invitation-list-error-not-organizer": "Откройте страницу мероприятия, на которой вы указаны в качестве организатора.",
 	"campaignevents-worklist-error-empty": "Введите хотя бы одно название статьи.",
 	"campaignevents-allevents-placeholder-add-wikis": "Добавить вики...",
-	"campaignevents-eventslist-wiki-label": "Вики"
+	"campaignevents-eventslist-wiki-label": "Вики",
+	"campaignevents-eventpage-dialog-topics-label": "Темы"
 }

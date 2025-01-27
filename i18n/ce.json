@@ -45,7 +45,6 @@
 	"campaignevents-edit-error-deleted": "ХӀокху мероприяте регистраци дӀайаьккхина.",
 	"campaignevents-edit-too-many-organizers": "$1 сов тӀетоха мегар дац {{PLURAL:$1|вовшахтохархо}}.",
 	"registerforevent": "ДӀайазло мероприяте",
-	"campaignevents-register-error-no-event": "Билгалйина мероприяти йац.",
 	"campaignevents-register-error-event-not-found": "Цхьа а мероприяти ца карийна оцу ID-ца.",
 	"campaignevents-register-confirmation-top": "Регистраци тӀечӀагӀйе",
 	"campaignevents-register-edit-legend": "Регистраци хийца",

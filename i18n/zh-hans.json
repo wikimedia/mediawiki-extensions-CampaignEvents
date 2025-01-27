@@ -88,7 +88,6 @@
 	"campaignevents-edit-error-deleted": "该活动注册已被删除。",
 	"campaignevents-edit-invalid-username": "“$1”不是有效的用户名。",
 	"registerforevent": "报名活动",
-	"campaignevents-register-error-no-event": "未指定活动。",
 	"campaignevents-register-confirmation-top": "确认报名",
 	"campaignevents-register-edit-legend": "编辑注册",
 	"campaignevents-register-confirmation-btn": "注册",

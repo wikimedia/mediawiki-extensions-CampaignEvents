@@ -45,7 +45,6 @@
 	"campaignevents-edit-form-submit": "Umeldung änneren",
 	"campaignevents-edit-invalid-username": "\"$1\" ass kee valabele Benotzernumm.",
 	"registerforevent": "Fir een Evenement umellen",
-	"campaignevents-register-error-no-event": "Keen Evenement uginn.",
 	"campaignevents-register-error-event-not-found": "Et gëtt keen Evenement mat dëser ID.",
 	"campaignevents-register-success": "Dir sidd elo fir dëst Evenement ugemellt.",
 	"campaignevents-register-success-edit": "Är Umeldungsinformatioune goufen aktualiséiert.",
