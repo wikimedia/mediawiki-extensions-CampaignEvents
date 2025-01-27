@@ -33,8 +33,8 @@ use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use stdClass;
 use UnexpectedValueException;
+use Wikimedia\Assert\Assert;
 use Wikimedia\Rdbms\IResultWrapper;
-use Wikimedia\Timestamp\TimestampException;
 
 class EventsListPager extends ReverseChronologicalPager {
 	use EventPagerTrait {
@@ -61,8 +61,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $filterWiki;
 	/** @var string[] */
 	private array $filterTopics;
-	private string $startDate;
-	private string $endDate;
+	private ?string $startDate;
+	private ?string $endDate;
 	private bool $showOngoing;
 
 	private string $lastHeaderTimestamp;
@@ -80,6 +80,9 @@ class EventsListPager extends ReverseChronologicalPager {
 	/** @var array<int,string[]> Maps event ID to all topics assigned to the event. */
 	private array $eventTopics = [];
 
+	/**
+	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
+	 */
 	public function __construct(
 		UserLinker $userLinker,
 		CampaignsPageFactory $pageFactory,
@@ -95,8 +98,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		EventTopicsStore $eventTopicsStore,
 		string $search,
 		?int $meetingType,
-		string $startDate,
-		string $endDate,
+		?string $startDate,
+		?string $endDate,
 		bool $showOngoing,
 		array $filterWiki,
 		array $filterTopics
@@ -119,7 +122,17 @@ class EventsListPager extends ReverseChronologicalPager {
 
 		$this->search = $search;
 		$this->meetingType = $meetingType;
+		Assert::parameter(
+			$startDate === null || ( $startDate !== '' && MWTimestamp::convert( TS_UNIX, $startDate ) !== false ),
+			'$startDate',
+			'Must be a valid timestamp or null'
+		);
 		$this->startDate = $startDate;
+		Assert::parameter(
+			$endDate === null || ( $endDate !== '' && MWTimestamp::convert( TS_UNIX, $endDate ) !== false ),
+			'$endDate',
+			'Must be a valid timestamp or null'
+		);
 		$this->endDate = $endDate;
 		$this->showOngoing = $showOngoing;
 
@@ -458,59 +471,51 @@ class EventsListPager extends ReverseChronologicalPager {
 	public function buildQueryInfo( $offset, $limit, $order ): array {
 		[ $tables, $fields, $conds, $fname, $options, $join_conds ] = parent::buildQueryInfo( $offset, $limit, $order );
 		// this is required to set the offsets correctly
-		$offsets = $this->getDateRangeCond( $this->startDate, $this->endDate );
-		if ( $offsets ) {
-			[ $startOffset, $endOffset ] = $offsets;
-
-			if ( $this->showOngoing ) {
-				if ( $startOffset ) {
-					$conds[] = $this->mDb->expr( 'event_end_utc', '>=', $startOffset );
-				}
-				if ( $endOffset ) {
-					$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
-				}
-			} else {
-				if ( $startOffset ) {
-					$conds[] = $this->mDb->expr( 'event_start_utc', '>=', $startOffset );
-				}
-				if ( $endOffset ) {
-					$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
-				}
+		[ $startOffset, $endOffset ] = $this->getDateRangeCond( $this->startDate, $this->endDate );
+		if ( $this->showOngoing ) {
+			if ( $startOffset ) {
+				$conds[] = $this->mDb->expr( 'event_end_utc', '>=', $startOffset );
+			}
+			if ( $endOffset ) {
+				$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
+			}
+		} else {
+			if ( $startOffset ) {
+				$conds[] = $this->mDb->expr( 'event_start_utc', '>=', $startOffset );
+			}
+			if ( $endOffset ) {
+				$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
 			}
 		}
 		return [ $tables, $fields, $conds, $fname, $options, $join_conds ];
 	}
 
 	/**
-	 * @param string $startDate
-	 * @param string $endDate
-	 * @return array|null
+	 * @param string|null $startDate
+	 * @param string|null $endDate
+	 * @return array<string|null>
 	 */
-	private function getDateRangeCond( string $startDate, string $endDate ): ?array {
-		try {
-			$startOffset = null;
-			if ( $startDate !== '' ) {
-				$startTimestamp = MWTimestamp::getInstance( $startDate );
-				$startOffset = $this->mDb->timestamp( $startTimestamp->getTimestamp() );
-			}
-
-			if ( $endDate !== '' ) {
-				$endTimestamp = MWTimestamp::getInstance( $endDate );
-				// Turned to use '<' for consistency with the parent class,
-				// add one second for compatibility with existing use cases
-				$endTimestamp->timestamp = $endTimestamp->timestamp->modify( '+1 second' );
-				$this->endOffset = $this->mDb->timestamp( $endTimestamp->getTimestamp() );
-
-				// populate existing variables for compatibility with parent
-				$this->mYear = (int)$endTimestamp->format( 'Y' );
-				$this->mMonth = (int)$endTimestamp->format( 'm' );
-				$this->mDay = (int)$endTimestamp->format( 'd' );
-			}
-
-			return [ $startOffset, $this->endOffset ];
-		} catch ( TimestampException $ex ) {
-			return null;
+	private function getDateRangeCond( ?string $startDate, ?string $endDate ): array {
+		$startOffset = null;
+		if ( $startDate !== null ) {
+			$startTimestamp = MWTimestamp::getInstance( $startDate );
+			$startOffset = $this->mDb->timestamp( $startTimestamp->getTimestamp() );
 		}
+
+		if ( $endDate !== null ) {
+			$endTimestamp = MWTimestamp::getInstance( $endDate );
+			// Turned to use '<' for consistency with the parent class,
+			// add one second for compatibility with existing use cases
+			$endTimestamp->timestamp = $endTimestamp->timestamp->modify( '+1 second' );
+			$this->endOffset = $this->mDb->timestamp( $endTimestamp->getTimestamp() );
+
+			// populate existing variables for compatibility with parent
+			$this->mYear = (int)$endTimestamp->format( 'Y' );
+			$this->mMonth = (int)$endTimestamp->format( 'm' );
+			$this->mDay = (int)$endTimestamp->format( 'd' );
+		}
+
+		return [ $startOffset, $this->endOffset ];
 	}
 
 	private function getWikiList( string $eventID ): TextWithIconWidget {

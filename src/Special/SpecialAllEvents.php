@@ -66,9 +66,9 @@ class SpecialAllEvents extends SpecialPage {
 		$filterTopics = $request->getArray( 'wpFilterTopics', [] );
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
 		$rawStartTime = $request->getVal( 'wpStartDate', (string)time() );
-		$startTime = $rawStartTime === '' ? '' : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
+		$startTime = $rawStartTime === '' ? null : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
 		$rawEndTime = $request->getVal( 'wpEndDate', '' );
-		$endTime = $rawEndTime === '' ? '' : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
+		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 
 		$showOngoing = true;
 		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
@@ -116,7 +116,7 @@ class SpecialAllEvents extends SpecialPage {
 				'label-message' => 'campaignevents-allevents-label-start-date',
 				'icon' => 'calendar',
 				'cssclass' => 'ext-campaignevents-allevents-calendar-start-field mw-htmlform-autoinfuse-lazy',
-				'default' => $this->formatDate( $startTime, 'Y-m-d\TH:i:s.000\Z' ),
+				'default' => $startTime !== null ? $this->formatDate( $startTime, 'Y-m-d\TH:i:s.000\Z' ) : '',
 			],
 			'EndDate' => [
 				'type' => 'datetime',
@@ -186,12 +186,11 @@ class SpecialAllEvents extends SpecialPage {
 		return 'campaignevents';
 	}
 
-	private function formatDate( string $date, string $format = 'Y-m-d' ): string {
+	private function formatDate( string $date, string $format ): ?string {
 		try {
-			$date = ( new ConvertibleTimestamp( $date ) )->format( $format );
+			return ( new ConvertibleTimestamp( $date ) )->format( $format );
 		} catch ( TimestampException $exception ) {
-			return '';
+			return null;
 		}
-		return $date;
 	}
 }

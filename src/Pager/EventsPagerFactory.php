@@ -95,8 +95,8 @@ class EventsPagerFactory {
 	public function newListPager(
 		string $search,
 		?int $meetingType,
-		string $startDate,
-		string $endDate,
+		?string $startDate,
+		?string $endDate,
 		bool $showOngoing,
 		array $filterWiki,
 		array $filterTopics
