@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Assert\ParameterAssertionException;
 
 /**
  * @group Test
@@ -15,7 +16,7 @@ use MediaWikiIntegrationTestCase;
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Pager\EventsListPager
  * @covers ::__construct()
  */
-class EventListPagerTest extends MediaWikiIntegrationTestCase {
+class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 	private const EVENT_START = 1600000000;
 	private const EVENT_END = 1700000000;
 
@@ -72,8 +73,8 @@ class EventListPagerTest extends MediaWikiIntegrationTestCase {
 		bool $showOngoing,
 		bool $expectsFound
 	): void {
-		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : '';
-		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : '';
+		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : null;
+		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : null;
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
 			'',
 			null,
@@ -181,6 +182,47 @@ class EventListPagerTest extends MediaWikiIntegrationTestCase {
 			self::EVENT_END + $delta,
 			false,
 			false
+		];
+	}
+
+	/**
+	 * @dataProvider provideInvalidTimestamps
+	 */
+	public function testConstruct__invalidStartDate( string $timestamp ) {
+		$this->expectException( ParameterAssertionException::class );
+		$this->expectExceptionMessage( '$startDate' );
+		CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			'',
+			null,
+			$timestamp,
+			null,
+			true,
+			[],
+			[]
+		);
+	}
+
+	/**
+	 * @dataProvider provideInvalidTimestamps
+	 */
+	public function testConstruct__invalidEndDate( string $timestamp ) {
+		$this->expectException( ParameterAssertionException::class );
+		$this->expectExceptionMessage( '$endDate' );
+		CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			'',
+			null,
+			null,
+			$timestamp,
+			true,
+			[],
+			[]
+		);
+	}
+
+	public static function provideInvalidTimestamps(): array {
+		return [
+			'Random string' => [ 'not a valid timestamp 123456' ],
+			'Empty string' => [ '' ],
 		];
 	}
 }
