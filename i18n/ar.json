@@ -10,6 +10,7 @@
 			"Mohanad",
 			"Mohanad Kh",
 			"Sandra Hanbo",
+			"XIDME",
 			"أيوب",
 			"محمد أحمد عبد الفتاح"
 		]
@@ -220,7 +221,7 @@
 	"campaignevents-eventpage-btn-manage-registration": "أدر التسجيل",
 	"campaignevents-eventpage-btn-register": "التسجيل في الفعالية",
 	"campaignevents-eventpage-btn-edit": "عدل التسجيل",
-	"campaignevents-eventpage-btn-cancel": "ألغ التسجيل",
+	"campaignevents-eventpage-btn-cancel": "إلغاء التسجيل",
 	"campaignevents-eventpage-btn-registration-closed": "التسجيل مغلق",
 	"campaignevents-eventpage-btn-event-ended": "الفعالية منتهية",
 	"campaignevents-eventpage-dialog-title": "تفاصيل الفعالية",
