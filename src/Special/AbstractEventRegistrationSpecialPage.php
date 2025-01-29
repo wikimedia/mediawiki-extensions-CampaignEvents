@@ -308,55 +308,53 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
-			$eventWikis = $this->event ? $this->event->getWikis() : [];
-			if ( $eventWikis === [] ) {
-				$defaultWikiType = self::WIKI_TYPE_NONE;
-			} elseif ( $eventWikis === EventRegistration::ALL_WIKIS ) {
-				$defaultWikiType = self::WIKI_TYPE_ALL;
-			} else {
-				$defaultWikiType = self::WIKI_TYPE_SPECIFIC;
-			}
-			$formFields['WikiType'] = [
-				'type' => 'radio',
-				'label-message' => 'campaignevents-edit-field-wiki-type',
-				'options-messages' => [
-					'campaignevents-edit-field-wiki-type-none' => self::WIKI_TYPE_NONE,
-					'campaignevents-edit-field-wiki-type-all' => self::WIKI_TYPE_ALL,
-					'campaignevents-edit-field-wiki-type-specific' => self::WIKI_TYPE_SPECIFIC,
-				],
-				'default' => $defaultWikiType,
-				'required' => true,
-				'section' => self::DETAILS_SECTION,
-			];
-			$formFields['Wikis'] = [
+		$eventWikis = $this->event ? $this->event->getWikis() : [];
+		if ( $eventWikis === [] ) {
+			$defaultWikiType = self::WIKI_TYPE_NONE;
+		} elseif ( $eventWikis === EventRegistration::ALL_WIKIS ) {
+			$defaultWikiType = self::WIKI_TYPE_ALL;
+		} else {
+			$defaultWikiType = self::WIKI_TYPE_SPECIFIC;
+		}
+		$formFields['WikiType'] = [
+			'type' => 'radio',
+			'label-message' => 'campaignevents-edit-field-wiki-type',
+			'options-messages' => [
+				'campaignevents-edit-field-wiki-type-none' => self::WIKI_TYPE_NONE,
+				'campaignevents-edit-field-wiki-type-all' => self::WIKI_TYPE_ALL,
+				'campaignevents-edit-field-wiki-type-specific' => self::WIKI_TYPE_SPECIFIC,
+			],
+			'default' => $defaultWikiType,
+			'required' => true,
+			'section' => self::DETAILS_SECTION,
+		];
+		$formFields['Wikis'] = [
+			'type' => 'multiselect',
+			'dropdown' => true,
+			'label-message' => 'campaignevents-edit-field-wikis-label',
+			'default' => is_array( $eventWikis ) ? $eventWikis : [],
+			'options' => $this->wikiLookup->getListForSelect(),
+			'max' => EventFactory::MAX_WIKIS,
+			'placeholder-message' => 'campaignevents-edit-field-wikis-placeholder',
+			'help-message' => 'campaignevents-edit-field-wikis-help',
+			'hide-if' => [ '!==', 'WikiType', (string)self::WIKI_TYPE_SPECIFIC ],
+			'cssclass' => 'ext-campaignevents-edit-wikis-input',
+			'section' => self::DETAILS_SECTION,
+		];
+		$availableTopics = $this->topicRegistry->getTopicsForSelect();
+		if ( $availableTopics ) {
+			$formFields['Topics'] = [
 				'type' => 'multiselect',
 				'dropdown' => true,
-				'label-message' => 'campaignevents-edit-field-wikis-label',
-				'default' => is_array( $eventWikis ) ? $eventWikis : [],
-				'options' => $this->wikiLookup->getListForSelect(),
-				'max' => EventFactory::MAX_WIKIS,
-				'placeholder-message' => 'campaignevents-edit-field-wikis-placeholder',
-				'help-message' => 'campaignevents-edit-field-wikis-help',
-				'hide-if' => [ '!==', 'WikiType', (string)self::WIKI_TYPE_SPECIFIC ],
-				'cssclass' => 'ext-campaignevents-edit-wikis-input',
+				'label-message' => 'campaignevents-edit-field-topics-label',
+				'default' => $this->event ? $this->event->getTopics() : [],
+				'options-messages' => $availableTopics,
+				'placeholder-message' => 'campaignevents-edit-field-topics-placeholder',
+				'help-message' => 'campaignevents-edit-field-topics-help',
+				'cssclass' => 'ext-campaignevents-edit-topics-input',
 				'section' => self::DETAILS_SECTION,
+				'max' => EventFactory::MAX_TOPICS
 			];
-			$availableTopics = $this->topicRegistry->getTopicsForSelect();
-			if ( $availableTopics && $this->getConfig()->get( 'CampaignEventsEnableEventTopics' ) ) {
-				$formFields['Topics'] = [
-					'type' => 'multiselect',
-					'dropdown' => true,
-					'label-message' => 'campaignevents-edit-field-topics-label',
-					'default' => $this->event ? $this->event->getTopics() : [],
-					'options-messages' => $availableTopics,
-					'placeholder-message' => 'campaignevents-edit-field-topics-placeholder',
-					'help-message' => 'campaignevents-edit-field-topics-help',
-					'cssclass' => 'ext-campaignevents-edit-topics-input',
-					'section' => self::DETAILS_SECTION,
-					'max' => EventFactory::MAX_TOPICS
-				];
-			}
 		}
 
 		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
@@ -652,23 +650,16 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			}
 		}
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
-			$wikiType = (int)$data['WikiType'];
-			if ( $wikiType === self::WIKI_TYPE_ALL ) {
-				$wikis = EventRegistration::ALL_WIKIS;
-			} elseif ( $wikiType === self::WIKI_TYPE_NONE ) {
-				$wikis = [];
-			} else {
-				$wikis = $data['Wikis'];
-			}
-		} else {
+		$wikiType = (int)$data['WikiType'];
+		if ( $wikiType === self::WIKI_TYPE_ALL ) {
+			$wikis = EventRegistration::ALL_WIKIS;
+		} elseif ( $wikiType === self::WIKI_TYPE_NONE ) {
 			$wikis = [];
+		} else {
+			$wikis = $data['Wikis'];
 		}
+
 		$testEvent = $data['TestEvent'] === "1";
-		$topics = [];
-		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
-			$topics = $data['Topics'] ?? [];
-		}
 
 		try {
 			$event = $this->eventFactory->newEvent(
@@ -676,7 +667,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
 				$data['EventChatURL'],
 				$wikis,
-				$topics,
+				$data['Topics'] ?? [],
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,

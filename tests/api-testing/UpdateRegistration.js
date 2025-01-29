@@ -50,6 +50,7 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 			// TODO: Add this when the feature is implemented
 			// type: 'generic',
 			status: 'open',
+			wikis: [],
 			online_meeting: true,
 			token: token
 		};

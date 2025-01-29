@@ -163,12 +163,9 @@ class EventDetailsModule {
 			$isLocalWiki
 		);
 
-		// TDB remove the feature flag after it passes QA
-		if ( $out->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
-			$eventWikis = $this->getEventWikisSection( $out );
-			if ( $eventWikis !== null ) {
-				$organizersColumn->appendContent( $eventWikis );
-			}
+		$eventWikis = $this->getEventWikisSection( $out );
+		if ( $eventWikis !== null ) {
+			$organizersColumn->appendContent( $eventWikis );
 		}
 
 		$footer = $this->getFooter();

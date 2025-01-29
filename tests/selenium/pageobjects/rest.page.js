@@ -29,6 +29,7 @@ module.exports = {
 			end_time: '29990515170000',
 			// TODO: Add this when the feature is implemented
 			// type: 'generic',
+			wikis: [],
 			online_meeting: true,
 			timezone: 'EST'
 		} );

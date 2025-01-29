@@ -46,11 +46,6 @@ class EventWikisStoreTest extends MediaWikiIntegrationTestCase {
 			->execute();
 	}
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsEnableEventWikis', true );
-	}
-
 	/**
 	 * Tests retrieving wikis for a specific event.
 	 * @param int $eventID

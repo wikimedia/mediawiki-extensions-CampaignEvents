@@ -23,6 +23,7 @@ module.exports = {
 			end_time: '30200220200222',
 			// TODO: Add this when the feature is implemented
 			// type: 'generic',
+			wikis: [],
 			online_meeting: true,
 			token: await rootUser.token()
 		};

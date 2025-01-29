@@ -14,14 +14,11 @@ class EventTopicsStore {
 	public const SERVICE_NAME = 'CampaignEventsEventTopicsStore';
 
 	private CampaignsDatabaseHelper $dbHelper;
-	private bool $featureEnabled;
 
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper,
-		bool $featureEnabled
+		CampaignsDatabaseHelper $dbHelper
 	) {
 		$this->dbHelper = $dbHelper;
-		$this->featureEnabled = $featureEnabled;
 	}
 
 	/**
@@ -42,9 +39,6 @@ class EventTopicsStore {
 	 */
 	public function getEventTopicsMulti( array $eventIDs ): array {
 		$topicsByEvent = array_fill_keys( $eventIDs, [] );
-		if ( !$this->featureEnabled ) {
-			return $topicsByEvent;
-		}
 
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$queryBuilder = $dbr->newSelectQueryBuilder();
@@ -67,9 +61,6 @@ class EventTopicsStore {
 	 * @param string[] $eventTopics An array of topic IDs to add
 	 */
 	public function addOrUpdateEventTopics( int $eventID, array $eventTopics ): void {
-		if ( !$this->featureEnabled ) {
-			return;
-		}
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();

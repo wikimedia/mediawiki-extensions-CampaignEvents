@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -41,8 +40,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected EventQuestionsRegistry $eventQuestionsRegistry;
 	protected WikiLookup $wikiLookup;
 	protected ITopicRegistry $topicRegistry;
-	protected bool $eventWikisEnabled;
-	protected bool $eventTopicsEnabled;
 
 	public function __construct(
 		EventFactory $eventFactory,
@@ -52,8 +49,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		Config $config
+		ITopicRegistry $topicRegistry
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
@@ -63,8 +59,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
-		$this->eventWikisEnabled = $config->get( 'CampaignEventsEnableEventWikis' );
-		$this->eventTopicsEnabled = $config->get( 'CampaignEventsEnableEventTopics' );
 	}
 
 	/**
@@ -131,7 +125,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @return array
 	 */
 	public function getBodyParamSettings(): array {
-		$params = [
+		return [
 			'event_page' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'title',
@@ -173,6 +167,20 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			*/
+			'wikis' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),
+				ParamValidator::PARAM_ISMULTI => true,
+				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_WIKIS,
+				ParamValidator::PARAM_ALL => true,
+				ParamValidator::PARAM_REQUIRED => true,
+			],
+			'topics' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => $this->topicRegistry->getAllTopics(),
+				ParamValidator::PARAM_ISMULTI => true,
+				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TOPICS,
+			],
 			'online_meeting' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
@@ -201,27 +209,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_DEFAULT => false,
 			],
 		] + $this->getTokenParamDefinition();
-
-		if ( $this->eventWikisEnabled ) {
-			$params['wikis'] = [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),
-				ParamValidator::PARAM_ISMULTI => true,
-				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_WIKIS,
-				ParamValidator::PARAM_ALL => true,
-				ParamValidator::PARAM_REQUIRED => true,
-			];
-		}
-		if ( $this->eventTopicsEnabled ) {
-			$params['topics'] = [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => $this->topicRegistry->getAllTopics(),
-				ParamValidator::PARAM_ISMULTI => true,
-				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TOPICS,
-			];
-		}
-
-		return $params;
 	}
 
 	/**
