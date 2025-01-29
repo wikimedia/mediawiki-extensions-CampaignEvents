@@ -1,52 +1,17 @@
 {{{noUsersWarning}}}
 
-{{#if highlyRecommended}}
-<details class="cdx-accordion" open>
-	<summary>
-		<h3 class="cdx-accordion__header">
-			<span class="cdx-accordion__header__title">{{highlyRecommendedLabel}}</span>
-			<span class="cdx-accordion__header__description">{{highlyRecommendedDesc}}</span>
-		</h3>
-	</summary>
-	<div class="cdx-accordion__content">
-		<ul style="overflow-wrap: anywhere; list-style: none; margin: 0">
-			{{#highlyRecommended}}
-				<li>{{{.}}}</li>
-			{{/highlyRecommended}}
-		</ul>
-	</div>
-</details>
-{{/if}}
+{{#highlyRecommendedAccordion.content}}
+	{{#highlyRecommendedAccordion}}
+		{{> Accordion}}
+	{{/highlyRecommendedAccordion}}
+{{/highlyRecommendedAccordion.content}}
 
-{{#if recommended}}
-<details class="cdx-accordion" {{#unless highlyRecommended}}open{{/unless}}>
-	<summary>
-		<h3 class="cdx-accordion__header">
-			<span class="cdx-accordion__header__title">{{recommendedLabel}}</span>
-			<span class="cdx-accordion__header__description">{{recommendedDesc}}</span>
-		</h3>
-	</summary>
-	<div class="cdx-accordion__content">
-		<ul style="overflow-wrap: anywhere; list-style: none; margin: 0">
-			{{#recommended}}
-				<li>{{{.}}}</li>
-			{{/recommended}}
-		</ul>
-	</div>
-</details>
-{{/if}}
+{{#recommendedAccordion.content}}
+	{{#recommendedAccordion}}
+		{{> Accordion}}
+	{{/recommendedAccordion}}
+{{/recommendedAccordion.content}}
 
-<details class="cdx-accordion">
-	<summary>
-		<h3 class="cdx-accordion__header">
-			<span class="cdx-accordion__header__title">{{worklistLabel}}</span>
-		</h3>
-	</summary>
-	<div class="cdx-accordion__content">
-		<ul style="overflow-wrap: anywhere; list-style: none; margin: 0">
-			{{#worklist}}
-				<li>{{{.}}}</li>
-			{{/worklist}}
-		</ul>
-	</div>
-</details>
+{{#worklistAccordion}}
+	{{> Accordion}}
+{{/worklistAccordion}}
