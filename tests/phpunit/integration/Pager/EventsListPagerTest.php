@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Pager;
 
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\Assert\ParameterAssertionException;
@@ -17,17 +19,19 @@ use Wikimedia\Assert\ParameterAssertionException;
  * @covers ::__construct()
  */
 class EventsListPagerTest extends MediaWikiIntegrationTestCase {
+	private const EVENT_NAME = 'Test event dQw4w9WgXcQ';
 	private const EVENT_START = 1600000000;
 	private const EVENT_END = 1700000000;
+	private const EVENT_TOPIC = 'some-topic';
 
 	public function addDBDataOnce(): void {
 		$dbw = $this->getDb();
 		$curTS = $dbw->timestamp();
 		$row = [
-			'event_name' => __METHOD__,
+			'event_name' => self::EVENT_NAME,
 			'event_page_namespace' => 1728,
-			'event_page_title' => __METHOD__,
-			'event_page_prefixedtext' => __METHOD__,
+			'event_page_title' => self::EVENT_NAME,
+			'event_page_prefixedtext' => 'Event:' . self::EVENT_NAME,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'event_chat_url' => '',
 			'event_status' => 1,
@@ -60,6 +64,24 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$dbw->newInsertQueryBuilder()
 			->insertInto( 'ce_organizers' )
 			->row( $organizerRow )
+			->caller( __METHOD__ )
+			->execute();
+
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_event_wikis' )
+			->row( [
+				'ceew_event_id' => 1,
+				'ceew_wiki' => EventWikisStore::ALL_WIKIS_DB_VALUE,
+			] )
+			->caller( __METHOD__ )
+			->execute();
+
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_event_topics' )
+			->row( [
+				'ceet_event_id' => 1,
+				'ceet_topic' => self::EVENT_TOPIC,
+			] )
 			->caller( __METHOD__ )
 			->execute();
 	}
@@ -224,5 +246,18 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			'Random string' => [ 'not a valid timestamp 123456' ],
 			'Empty string' => [ '' ],
 		];
+	}
+
+	public function testCanUseFilters() {
+		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			self::EVENT_NAME,
+			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			'19120623000000',
+			'29120623000000',
+			true,
+			[ 'any_wiki_name' ],
+			[ self::EVENT_TOPIC ]
+		);
+		$this->assertSame( 1, $pager->getNumRows() );
 	}
 }
