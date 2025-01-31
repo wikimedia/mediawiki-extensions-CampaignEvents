@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -19,18 +18,13 @@ class GetEventRegistrationHandler extends SimpleHandler {
 
 	private IEventLookup $eventLookup;
 	private TrackingToolRegistry $trackingToolRegistry;
-	private bool $eventWikisEnabled;
-	private bool $eventTopicsEnabled;
 
 	public function __construct(
 		IEventLookup $eventLookup,
-		TrackingToolRegistry $trackingToolRegistry,
-		Config $config
+		TrackingToolRegistry $trackingToolRegistry
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->trackingToolRegistry = $trackingToolRegistry;
-		$this->eventWikisEnabled = $config->get( 'CampaignEventsEnableEventWikis' );
-		$this->eventTopicsEnabled = $config->get( 'CampaignEventsEnableEventTopics' );
 	}
 
 	protected function run( int $eventID ): Response {
@@ -53,6 +47,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			];
 		}
 
+		$wikis = $registration->getWikis();
 		$respVal = [
 			'id' => $registration->getID(),
 			'name' => $registration->getName(),
@@ -73,16 +68,10 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'meeting_address' => $registration->getMeetingAddress(),
 			'questions' => $registration->getParticipantQuestions(),
 			'is_test_event' => $registration->getIsTestEvent(),
+			// Use the same format as the write endpoints, which rely on ParamValidator::PARAM_ALL.
+			'wikis' => $wikis === EventRegistration::ALL_WIKIS ? [ '*' ] : $wikis,
+			'topics' => $registration->getTopics(),
 		];
-
-		if ( $this->eventWikisEnabled ) {
-			$wikis = $registration->getWikis();
-			// Use the same format as the write endpoint, which rely on ParamValidator::PARAM_ALL.
-			$respVal['wikis'] = $wikis === EventRegistration::ALL_WIKIS ? [ '*' ] : $wikis;
-		}
-		if ( $this->eventTopicsEnabled ) {
-			$respVal['topics'] = $registration->getTopics();
-		}
 
 		return $this->getResponseFactory()->createJson( $respVal );
 	}

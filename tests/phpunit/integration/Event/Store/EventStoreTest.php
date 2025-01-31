@@ -25,12 +25,6 @@ use RuntimeException;
  * @covers ::__construct()
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsEnableEventWikis', true );
-		$this->overrideConfigValue( 'CampaignEventsEnableEventTopics', true );
-	}
-
 	/**
 	 * @return EventRegistration
 	 */

@@ -16,14 +16,11 @@ class EventWikisStore {
 	public const ALL_WIKIS_DB_VALUE = '*all*';
 
 	private CampaignsDatabaseHelper $dbHelper;
-	private bool $featureEnabled;
 
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper,
-		bool $featureEnabled
+		CampaignsDatabaseHelper $dbHelper
 	) {
 		$this->dbHelper = $dbHelper;
-		$this->featureEnabled = $featureEnabled;
 	}
 
 	/**
@@ -44,9 +41,6 @@ class EventWikisStore {
 	 */
 	public function getEventWikisMulti( array $eventIDs ): array {
 		$wikisByEvent = array_fill_keys( $eventIDs, [] );
-		if ( !$this->featureEnabled ) {
-			return $wikisByEvent;
-		}
 
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$queryBuilder = $dbr->newSelectQueryBuilder();
@@ -75,9 +69,6 @@ class EventWikisStore {
 	 * @param string[]|true $eventWikis An array of wiki IDs to add, or {@see EventRegistration::ALL_WIKIS}
 	 */
 	public function addOrUpdateEventWikis( int $eventID, $eventWikis ): void {
-		if ( !$this->featureEnabled ) {
-			return;
-		}
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();

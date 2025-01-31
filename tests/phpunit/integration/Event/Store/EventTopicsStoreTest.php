@@ -40,11 +40,6 @@ class EventTopicsStoreTest extends MediaWikiIntegrationTestCase {
 			->execute();
 	}
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsEnableEventTopics', true );
-	}
-
 	/**
 	 * Tests retrieving topics for a specific event.
 	 * @param int $eventID

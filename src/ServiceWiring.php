@@ -399,8 +399,7 @@ return [
 	},
 	EventWikisStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventWikisStore {
 		return new EventWikisStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->getMainConfig()->get( 'CampaignEventsEnableEventWikis' )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
 	ITopicRegistry::SERVICE_NAME => static function (): ITopicRegistry {
@@ -411,8 +410,7 @@ return [
 	},
 	EventTopicsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTopicsStore {
 		return new EventTopicsStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->getMainConfig()->get( 'CampaignEventsEnableEventTopics' )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
 ];

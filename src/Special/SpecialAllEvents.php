@@ -140,9 +140,7 @@ class SpecialAllEvents extends SpecialPage {
 				'options' => $pager->getLimitSelectList(),
 				'cssclass' => 'ext-campaignevents-allevents-filter-field'
 			],
-		];
-		if ( $this->getConfig()->get( 'CampaignEventsEnableEventWikis' ) ) {
-			$formDescriptor['FilterWikis'] = [
+			'FilterWikis' => [
 				'type' => 'multiselect',
 				'dropdown' => true,
 				'label-message' => 'campaignevents-allevents-label-filter-wikis',
@@ -150,10 +148,10 @@ class SpecialAllEvents extends SpecialPage {
 				'placeholder-message' => 'campaignevents-allevents-placeholder-add-wikis',
 				'max' => 10,
 				'cssclass' => 'ext-campaignevents-allevents-wikis-field',
-			];
-		}
+			],
+		];
 		$availableTopics = $this->topicRegistry->getTopicsForSelect();
-		if ( $availableTopics && $this->getConfig()->get( 'CampaignEventsEnableEventTopics' ) ) {
+		if ( $availableTopics ) {
 			$formDescriptor['FilterTopics'] = [
 				'type' => 'multiselect',
 				'dropdown' => true,

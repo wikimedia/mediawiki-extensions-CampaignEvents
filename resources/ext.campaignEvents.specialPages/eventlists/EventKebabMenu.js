@@ -203,6 +203,7 @@
 							timezone: data.timezone,
 							start_time: data.start_time,
 							end_time: data.end_time,
+							wikis: data.wikis,
 							online_meeting: data.online_meeting,
 							inperson_meeting: data.inperson_meeting,
 							meeting_url: data.meeting_url,
