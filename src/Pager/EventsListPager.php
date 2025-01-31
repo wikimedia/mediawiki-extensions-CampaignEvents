@@ -433,7 +433,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		}
 		if ( $this->filterTopics && $this->getConfig()->get( 'CampaignEventsEnableEventTopics' ) ) {
 			$query['tables'][] = 'ce_event_topics';
-			array_push( $query['fields'], 'ceet_topic', 'ceet_event_id' );
 			$query['join_conds']['ce_event_topics'] = [
 				'JOIN',
 				[
