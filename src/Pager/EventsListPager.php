@@ -54,6 +54,9 @@ class EventsListPager extends ReverseChronologicalPager {
 	private ITopicRegistry $topicRegistry;
 	private EventTopicsStore $eventTopicsStore;
 
+	/** @var bool Reverse parent ordering, so events are ordered from oldest to newest. */
+	public $mDefaultDirection = IndexPager::DIR_ASCENDING;
+
 	private string $search;
 	/** One of the EventRegistration::MEETING_TYPE_* constants */
 	private ?int $meetingType;
@@ -61,8 +64,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $filterWiki;
 	/** @var string[] */
 	private array $filterTopics;
-	private ?string $startDate;
-	private ?string $endDate;
+	protected ?string $startDate;
+	protected ?string $endDate;
 	private bool $showOngoing;
 
 	private string $lastHeaderTimestamp;
@@ -137,7 +140,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->showOngoing = $showOngoing;
 
 		$this->getDateRangeCond( $startDate, $endDate );
-		$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
 		$this->lastHeaderTimestamp = '';
 		$this->filterWiki = $filterWiki;
 		$this->filterTopics = $filterTopics;
@@ -477,7 +479,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @param string|null $endDate
 	 * @return array<string|null>
 	 */
-	private function getDateRangeCond( ?string $startDate, ?string $endDate ): array {
+	protected function getDateRangeCond( ?string $startDate, ?string $endDate ): array {
 		$startOffset = null;
 		if ( $startDate !== null ) {
 			$startTimestamp = MWTimestamp::getInstance( $startDate );

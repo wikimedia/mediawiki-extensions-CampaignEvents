@@ -123,4 +123,32 @@ class EventsPagerFactory {
 			$filterTopics
 		);
 	}
+
+	public function newOngoingListPager(
+		string $search,
+		?int $meetingType,
+		string $startDate,
+		array $filterWiki,
+		array $filterTopics
+	): OngoingEventsListPager {
+		return new OngoingEventsListPager(
+			$this->userLinker,
+			$this->campaignsPageFactory,
+			$this->pageURLResolver,
+			$this->organiserStore,
+			$this->linkBatchFactory,
+			$this->userOptionsLookup,
+			$this->databaseHelper,
+			$this->centralUserLookup,
+			$this->wikiLookup,
+			$this->eventWikisStore,
+			$this->topicRegistry,
+			$this->eventTopicsStore,
+			$search,
+			$meetingType,
+			$startDate,
+			$filterWiki,
+			$filterTopics
+		);
+	}
 }
