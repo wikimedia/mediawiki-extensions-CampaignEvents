@@ -32,12 +32,6 @@ class PageEventLookup {
 	private TitleFactory $titleFactory;
 	private bool $isTranslateExtensionInstalled;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param CampaignsPageFactory $campaignsPageFactory
-	 * @param TitleFactory $titleFactory
-	 * @param bool $isTranslateExtensionInstalled
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsPageFactory $campaignsPageFactory,

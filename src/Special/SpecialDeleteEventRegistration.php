@@ -30,11 +30,6 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 
 	private ?ExistingEventRegistration $event;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param DeleteEventCommand $deleteEventCommand
-	 * @param PermissionChecker $permissionChecker
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		DeleteEventCommand $deleteEventCommand,

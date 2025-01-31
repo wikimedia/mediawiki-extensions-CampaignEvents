@@ -23,11 +23,6 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	protected CampaignsCentralUserLookup $centralUserLookup;
 	protected ?ExistingEventRegistration $event = null;
 
-	/**
-	 * @param string $name
-	 * @param IEventLookup $eventLookup
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 */
 	public function __construct(
 		string $name,
 		IEventLookup $eventLookup,
@@ -140,10 +135,6 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 		return '';
 	}
 
-	/**
-	 * @param string|null $par
-	 * @return bool
-	 */
 	protected function checkEventExists( ?string $par ): bool {
 		if ( $par === null ) {
 			$this->setHeaders();

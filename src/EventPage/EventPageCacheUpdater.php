@@ -20,17 +20,10 @@ class EventPageCacheUpdater {
 
 	private HTMLCacheUpdater $htmlCacheUpdater;
 
-	/**
-	 * @param HTMLCacheUpdater $htmlCacheUpdater
-	 */
 	public function __construct( HTMLCacheUpdater $htmlCacheUpdater ) {
 		$this->htmlCacheUpdater = $htmlCacheUpdater;
 	}
 
-	/**
-	 * @param OutputPage $out
-	 * @param ExistingEventRegistration $registration
-	 */
 	public function adjustCacheForPageWithRegistration(
 		OutputPage $out,
 		ExistingEventRegistration $registration
@@ -47,10 +40,6 @@ class EventPageCacheUpdater {
 		$out->lowerCdnMaxage( $secondsToEventEnd );
 	}
 
-	/**
-	 * @param EventRegistration $registration
-	 * @return void
-	 */
 	public function purgeEventPageCache( EventRegistration $registration ): void {
 		$eventPage = $registration->getPage();
 		if ( !$eventPage instanceof MWPageProxy ) {

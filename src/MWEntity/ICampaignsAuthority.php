@@ -10,10 +10,6 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
  * and should not be used for users other than the one performing the action.
  */
 interface ICampaignsAuthority {
-	/**
-	 * @param string $right
-	 * @return bool
-	 */
 	public function hasRight( string $right ): bool;
 
 	/**
@@ -21,18 +17,9 @@ interface ICampaignsAuthority {
 	 */
 	public function isSitewideBlocked(): bool;
 
-	/**
-	 * @return bool
-	 */
 	public function isNamed(): bool;
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string;
 
-	/**
-	 * @return int
-	 */
 	public function getLocalUserID(): int;
 }

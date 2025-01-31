@@ -17,11 +17,6 @@ use OOUI\MessageWidget;
  * @method void requireNamedUser($reasonMsg = '', $titleMsg = '', $alwaysRedirectToLoginPage = true)
  */
 trait InvitationFeatureAccessTrait {
-	/**
-	 * @param OutputPage $out
-	 * @param ICampaignsAuthority $mwAuthority
-	 * @return bool
-	 */
 	public function checkInvitationFeatureAccess( OutputPage $out, ICampaignsAuthority $mwAuthority ): bool {
 		if ( !$this->getConfig()->get( 'CampaignEventsEnableEventInvitation' ) ) {
 			$out->enableOOUI();

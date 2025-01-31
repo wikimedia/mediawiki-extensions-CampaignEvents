@@ -15,24 +15,14 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 class CentralUser {
 	private int $centralID;
 
-	/**
-	 * @param int $centralID
-	 */
 	public function __construct( int $centralID ) {
 		$this->centralID = $centralID;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getCentralID(): int {
 		return $this->centralID;
 	}
 
-	/**
-	 * @param CentralUser $other
-	 * @return bool
-	 */
 	public function equals( self $other ): bool {
 		return $this->centralID === $other->centralID;
 	}

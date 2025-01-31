@@ -27,10 +27,6 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 	private IEventLookup $eventLookup;
 	private UnregisterParticipantCommand $unregisterParticipantCommand;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param UnregisterParticipantCommand $unregisterParticipantCommand
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		UnregisterParticipantCommand $unregisterParticipantCommand
@@ -47,10 +43,6 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		$this->validateToken();
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$body = $this->getValidatedBody() ?? [];
 
@@ -116,9 +108,6 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		] + $this->getTokenParamDefinition();
 	}
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 */
 	private function validateEventWiki( ExistingEventRegistration $event ): void {
 		$wikiID = $event->getPage()->getWikiId();
 		if ( $wikiID !== WikiAwareEntity::LOCAL ) {

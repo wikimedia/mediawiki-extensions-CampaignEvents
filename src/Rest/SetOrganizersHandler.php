@@ -27,10 +27,6 @@ class SetOrganizersHandler extends SimpleHandler {
 	private IEventLookup $eventLookup;
 	private EditEventCommand $editEventCommand;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param EditEventCommand $editEventCommand
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		EditEventCommand $editEventCommand
@@ -47,9 +43,6 @@ class SetOrganizersHandler extends SimpleHandler {
 		$this->validateToken();
 	}
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 */
 	private function validateEventWiki( ExistingEventRegistration $event ): void {
 		$wikiID = $event->getPage()->getWikiId();
 		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
@@ -61,10 +54,6 @@ class SetOrganizersHandler extends SimpleHandler {
 		}
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Response
-	 */
 	protected function run( int $eventID ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		$this->validateEventWiki( $event );

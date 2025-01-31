@@ -28,12 +28,6 @@ class EmailUsersHandler extends SimpleHandler {
 	private ParticipantsStore $participantsStore;
 	private IEventLookup $eventLookup;
 
-	/**
-	 * @param PermissionChecker $permissionChecker
-	 * @param CampaignsUserMailer $userMailer
-	 * @param ParticipantsStore $participantsStore
-	 * @param IEventLookup $eventLookup
-	 */
 	public function __construct(
 		PermissionChecker $permissionChecker,
 		CampaignsUserMailer $userMailer,
@@ -46,10 +40,6 @@ class EmailUsersHandler extends SimpleHandler {
 		$this->eventLookup = $eventLookup;
 	}
 
-	/**
-	 * @param int $eventId
-	 * @return Response
-	 */
 	public function run( int $eventId ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventId );
 		$performer = new MWAuthorityProxy( $this->getAuthority() );

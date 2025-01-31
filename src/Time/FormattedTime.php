@@ -13,11 +13,6 @@ class FormattedTime {
 	private string $date;
 	private string $timeAndDate;
 
-	/**
-	 * @param string $time
-	 * @param string $date
-	 * @param string $timeAndDate
-	 */
 	public function __construct(
 		string $time,
 		string $date,
@@ -28,23 +23,14 @@ class FormattedTime {
 		$this->timeAndDate = $timeAndDate;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getTime(): string {
 		return $this->time;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getDate(): string {
 		return $this->date;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getTimeAndDate(): string {
 		return $this->timeAndDate;
 	}

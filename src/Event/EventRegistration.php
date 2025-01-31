@@ -155,30 +155,18 @@ class EventRegistration {
 		$this->topics = $topics;
 	}
 
-	/**
-	 * @return int|null
-	 */
 	public function getID(): ?int {
 		return $this->id;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->name;
 	}
 
-	/**
-	 * @return ICampaignsPage
-	 */
 	public function getPage(): ICampaignsPage {
 		return $this->page;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getChatURL(): ?string {
 		return $this->chatURL;
 	}
@@ -205,16 +193,10 @@ class EventRegistration {
 		return $this->trackingTools;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getStatus(): string {
 		return $this->status;
 	}
 
-	/**
-	 * @return DateTimeZone
-	 */
 	public function getTimezone(): DateTimeZone {
 		return $this->timezone;
 	}
@@ -251,44 +233,26 @@ class EventRegistration {
 		return wfTimestamp( TS_MW, $utcEndTime );
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isPast(): bool {
 		return wfTimestamp( TS_UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getType(): string {
 		return $this->type;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getMeetingType(): int {
 		return $this->meetingType;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getMeetingURL(): ?string {
 		return $this->meetingURL;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getMeetingCountry(): ?string {
 		return $this->meetingCountry;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getMeetingAddress(): ?string {
 		return $this->meetingAddress;
 	}
@@ -300,37 +264,22 @@ class EventRegistration {
 		return $this->participantQuestions;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getCreationTimestamp(): ?string {
 		return $this->creationTimestamp;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getLastEditTimestamp(): ?string {
 		return $this->lastEditTimestamp;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getDeletionTimestamp(): ?string {
 		return $this->deletionTimestamp;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function getIsTestEvent(): bool {
 		return $this->isTestEvent;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isOnLocalWiki(): bool {
 		$eventPage = $this->getPage();
 		$wikiID = $eventPage->getWikiId();

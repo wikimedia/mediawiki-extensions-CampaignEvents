@@ -20,10 +20,6 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	// TODO: Implement proper pagination (T305389)
 	protected const RES_LIMIT = 50;
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param CampaignsCentralUserLookup $userLookup
-	 */
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $userLookup

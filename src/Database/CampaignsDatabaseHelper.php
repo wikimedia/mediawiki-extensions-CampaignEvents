@@ -14,9 +14,6 @@ class CampaignsDatabaseHelper {
 
 	private LBFactory $lbFactory;
 
-	/**
-	 * @param LBFactory $lbFactory
-	 */
 	public function __construct( LBFactory $lbFactory ) {
 		$this->lbFactory = $lbFactory;
 	}

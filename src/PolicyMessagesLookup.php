@@ -11,9 +11,6 @@ class PolicyMessagesLookup {
 
 	private CampaignEventsHookRunner $hookRunner;
 
-	/**
-	 * @param CampaignEventsHookRunner $hookRunner
-	 */
 	public function __construct( CampaignEventsHookRunner $hookRunner ) {
 		$this->hookRunner = $hookRunner;
 	}

@@ -55,11 +55,6 @@ class DeleteEventCommand {
 		return $this->deleteUnsafe( $registration );
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param ICampaignsAuthority $performer
-	 * @return PermissionStatus
-	 */
 	private function authorizeDeletion(
 		ExistingEventRegistration $registration,
 		ICampaignsAuthority $performer

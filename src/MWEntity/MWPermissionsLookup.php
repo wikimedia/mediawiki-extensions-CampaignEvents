@@ -16,10 +16,6 @@ class MWPermissionsLookup implements IPermissionsLookup {
 	private UserFactory $userFactory;
 	private UserNameUtils $userNameUtils;
 
-	/**
-	 * @param UserFactory $userFactory
-	 * @param UserNameUtils $userNameUtils
-	 */
 	public function __construct(
 		UserFactory $userFactory,
 		UserNameUtils $userNameUtils
@@ -50,10 +46,6 @@ class MWPermissionsLookup implements IPermissionsLookup {
 		return $this->getUser( $username )->isNamed();
 	}
 
-	/**
-	 * @param string $username
-	 * @return User
-	 */
 	private function getUser( string $username ): User {
 		if ( $this->userNameUtils->isIP( $username ) ) {
 			return $this->userFactory->newAnonymous( $username );

@@ -133,10 +133,6 @@ class InvitationsListPager extends ReverseChronologicalPager {
 		return parent::getStartBody();
 	}
 
-	/**
-	 * @param stdClass $row
-	 * @return string
-	 */
 	private function getInfoChip( stdClass $row ): string {
 		if ( (int)$row->ceil_status === InvitationList::STATUS_PENDING ) {
 			$data = [

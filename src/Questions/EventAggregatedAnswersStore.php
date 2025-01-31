@@ -16,19 +16,10 @@ class EventAggregatedAnswersStore {
 
 	private CampaignsDatabaseHelper $dbHelper;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 */
 	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
 		$this->dbHelper = $dbHelper;
 	}
 
-	/**
-	 * Returns the aggregated data.
-	 *
-	 * @param int $eventID
-	 * @return EventAggregatedAnswers
-	 */
 	public function getEventAggregatedAnswers( int $eventID ): EventAggregatedAnswers {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$res = $dbr->newSelectQueryBuilder()
@@ -52,10 +43,6 @@ class EventAggregatedAnswersStore {
 		return $eventAggregatedAnswers;
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return bool
-	 */
 	public function eventHasAggregates( int $eventID ): bool {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$res = $dbr->newSelectQueryBuilder()
