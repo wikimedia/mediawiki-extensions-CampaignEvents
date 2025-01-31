@@ -27,6 +27,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		bool $showOngoing,
 		bool $expectsFound
 	): void {
+		$this->overrideConfigValue( 'CampaignEventsSeparateOngoingEvents', false );
 		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : null;
 		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : null;
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
@@ -35,6 +36,29 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			$searchStartStr,
 			$searchToStr,
 			$showOngoing,
+			[],
+			[]
+		);
+		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
+	}
+
+	/**
+	 * @dataProvider provideUpcomingDateFilters
+	 */
+	public function testDateFilters(
+		?int $searchStart,
+		?int $searchTo,
+		bool $expectsFound
+	): void {
+		$this->overrideConfigValue( 'CampaignEventsSeparateOngoingEvents', true );
+		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : null;
+		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : null;
+		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			'',
+			null,
+			$searchStartStr,
+			$searchToStr,
+			false,
 			[],
 			[]
 		);

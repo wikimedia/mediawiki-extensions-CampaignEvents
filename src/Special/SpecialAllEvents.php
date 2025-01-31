@@ -70,15 +70,20 @@ class SpecialAllEvents extends SpecialPage {
 		$rawEndTime = $request->getVal( 'wpEndDate', '' );
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 
-		$showOngoing = true;
-		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
-		// distinguish between form not submitted and form submitted but checkbox unchecked. This is important because
-		// the checkbox is checked by default.
-		// Note that we can't do all this in a submit callback because the pager needs to be instantiated before the
-		// HTMLForm, due to the "limit" field.
-		$formIdentifier = 'campaignevents-allevents';
-		if ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
-			$showOngoing = $request->getCheck( 'wpShowOngoing' );
+		$separateOngoingEvents = $this->getConfig()->get( 'CampaignEventsSeparateOngoingEvents' );
+		if ( $separateOngoingEvents ) {
+			$showOngoing = false;
+		} else {
+			$showOngoing = true;
+			// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
+			// distinguish between form not submitted and form submitted but checkbox unchecked. This is important
+			// because the checkbox is checked by default.
+			// Note that we can't do all this in a submit callback because the pager needs to be instantiated before the
+			// HTMLForm, due to the "limit" field.
+			$formIdentifier = 'campaignevents-allevents';
+			if ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
+				$showOngoing = $request->getCheck( 'wpShowOngoing' );
+			}
 		}
 
 		$pager = $this->eventsPagerFactory->newListPager(
@@ -150,6 +155,9 @@ class SpecialAllEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-wikis-field',
 			],
 		];
+		if ( $separateOngoingEvents ) {
+			unset( $formDescriptor['ShowOngoing'] );
+		}
 		$availableTopics = $this->topicRegistry->getTopicsForSelect();
 		if ( $availableTopics ) {
 			$formDescriptor['FilterTopics'] = [
@@ -166,9 +174,11 @@ class SpecialAllEvents extends SpecialPage {
 			->setSubmitTextMsg( 'campaignevents-allevents-label-submit' )
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
-			->setSubmitCallback( static fn () => true )
-			->setFormIdentifier( $formIdentifier, true )
-			->prepareForm();
+			->setSubmitCallback( static fn () => true );
+		if ( !$separateOngoingEvents && isset( $formIdentifier ) ) {
+			$form->setFormIdentifier( $formIdentifier, true );
+		}
+		$form->prepareForm();
 
 		$navigation = $pager->getNavigationBar();
 

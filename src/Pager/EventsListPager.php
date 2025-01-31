@@ -456,7 +456,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		[ $tables, $fields, $conds, $fname, $options, $join_conds ] = parent::buildQueryInfo( $offset, $limit, $order );
 		// this is required to set the offsets correctly
 		[ $startOffset, $endOffset ] = $this->getDateRangeCond( $this->startDate, $this->endDate );
-		if ( $this->showOngoing ) {
+		if ( !$this->getConfig()->get( 'CampaignEventsSeparateOngoingEvents' ) && $this->showOngoing ) {
 			if ( $startOffset ) {
 				$conds[] = $this->mDb->expr( 'event_end_utc', '>=', $startOffset );
 			}
