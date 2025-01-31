@@ -2,7 +2,7 @@
 
 const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
 	EventPage = require( '../pageobjects/event.page' ),
-	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
+	EventUtils = require( '../EventUtils.js' ),
 	Util = require( 'wdio-mediawiki/Util' ),
 	eventName = Util.getTestString( 'Test EnableEventRegistration' ),
 	eventTitle = 'Event:' + eventName;
@@ -10,7 +10,7 @@ const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' )
 describe( 'Enable Event Registration @daily', () => {
 
 	before( async () => {
-		await LoginPage.loginAdmin();
+		await EventUtils.loginAsOrganizer();
 	} );
 
 	it( 'is configured correctly', async () => {
@@ -26,7 +26,7 @@ describe( 'Enable Event Registration @daily', () => {
 	} );
 
 	it( 'can be enabled', async () => {
-		await EventRegistrationPage.createEventPage( eventTitle );
+		await EventUtils.createEventPage( eventTitle );
 		await EventRegistrationPage.enableEvent( eventTitle );
 
 		await expect( await EventPage.eventName ).toHaveText( eventName );

@@ -1,18 +1,16 @@
 'use strict';
 
-const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
-	EventPage = require( '../pageobjects/event.page' ),
+const EventPage = require( '../pageobjects/event.page' ),
 	Api = require( 'wdio-mediawiki/Api' ),
 	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
-	Rest = require( '../pageobjects/rest.page' ),
+	EventUtils = require( '../EventUtils.js' ),
 	Util = require( 'wdio-mediawiki/Util' ),
 	event = Util.getTestString( 'Event:Test event page' );
 
 describe( 'Event page', () => {
 	before( async () => {
-		await LoginPage.loginAdmin();
-		await EventRegistrationPage.createEventPage( event );
-		await Rest.enableEvent( event );
+		await EventUtils.loginAsOrganizer();
+		await EventUtils.createEvent( event );
 	} );
 
 	async function loginWithNewAccount( userName ) {
