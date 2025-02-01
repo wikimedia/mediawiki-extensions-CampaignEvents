@@ -65,7 +65,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 				'type' => 'text',
 				'label-message' => 'campaignevents-generateinvitationlist-name-field-label',
 				'placeholder-message' => 'campaignevents-generateinvitationlist-name-field-placeholder',
-				'filter-callback' => fn ( $name ) => trim( (string)$name ),
+				'filter-callback' => static fn ( $name ) => trim( (string)$name ),
 				'required' => true
 			],
 			'EventPage' => [

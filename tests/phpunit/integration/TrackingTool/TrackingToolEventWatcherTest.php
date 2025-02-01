@@ -197,7 +197,7 @@ class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 		 */
 		$getRegistryMock = function ( array $toolMap ): TrackingToolRegistry {
 			$ret = $this->createMock( TrackingToolRegistry::class );
-			$ret->method( 'newFromDBID' )->willReturnCallback( fn ( int $toolID ) => $toolMap[$toolID] );
+			$ret->method( 'newFromDBID' )->willReturnCallback( static fn ( int $toolID ) => $toolMap[$toolID] );
 			return $ret;
 		};
 
@@ -346,7 +346,7 @@ class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 		 */
 		$getRegistryMock = function ( array $toolMap ): TrackingToolRegistry {
 			$ret = $this->createMock( TrackingToolRegistry::class );
-			$ret->method( 'newFromDBID' )->willReturnCallback( fn ( int $toolID ) => $toolMap[$toolID] );
+			$ret->method( 'newFromDBID' )->willReturnCallback( static fn ( int $toolID ) => $toolMap[$toolID] );
 			return $ret;
 		};
 

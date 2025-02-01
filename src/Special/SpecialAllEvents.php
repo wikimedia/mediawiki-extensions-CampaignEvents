@@ -166,7 +166,7 @@ class SpecialAllEvents extends SpecialPage {
 			->setSubmitTextMsg( 'campaignevents-allevents-label-submit' )
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
-			->setSubmitCallback( fn () => true )
+			->setSubmitCallback( static fn () => true )
 			->setFormIdentifier( $formIdentifier, true )
 			->prepareForm();
 
