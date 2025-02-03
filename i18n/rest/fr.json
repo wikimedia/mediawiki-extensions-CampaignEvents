@@ -3,6 +3,7 @@
 		"authors": [
 			"Alien333",
 			"Gomoko",
+			"Goombiis",
 			"Pols12",
 			"SleaY",
 			"Verdy p"
@@ -15,14 +16,14 @@
 	"campaignevents-rest-user-not-found": "Il n’y a aucun utilisateur avec cet identifiant central.",
 	"campaignevents-rest-get-registration-deleted": "Les inscriptions à cet événement ont été supprimées.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Le paramètre « user_ids » doit être un tableau d’identifiants d’utilisateur, ou bien null (pour retirer tous les utilisateurs)",
-	"campaignevents-rest-remove-participants-nonlocal-error-message": "Veuillez supprimer les participants sur $1 , le wiki sur lequel l'événement a été créé.",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Veuillez supprimer les participants sur $1, le wiki sur lequel l'événement a été créé.",
 	"campaignevents-rest-list-participants-empty-filter": "Le filtre de nom d’utilisateur, s’il est spécifié, doit être une chaîne non vide.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Vous n’avez pas le droit de voir les participants qui se sont inscrits en privé pour cet événement.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> doit être un tableau de noms d’utilisateur et ne peut pas être vide",
-	"campaignevents-rest-set-organizers-nonlocal-error-message": "Veuillez définir les organisateurs sur $1 , le wiki sur lequel l'événement a été créé.",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Veuillez définir les organisateurs sur $1, le wiki sur lequel l'événement a été créé.",
 	"campaignevents-rest-get-registration-info-notparticipant": "Vous ne participez pas à cet événement.",
 	"campaignevents-rest-register-invalid-answer": "Réponse non valide à la question $1",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "Veuillez compléter votre inscription à l'événement sur $1 , le wiki où l'événement a été créé.",
-	"campaignevents-rest-delete-event-nonlocal-error-message": "Veuillez supprimer votre inscription à l'événement sur $1 , le wiki où l'événement a été créé.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Veuillez contacter les participants sur $1 , le wiki sur lequel l'événement a été créé."
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Veuillez compléter votre inscription à l'événement sur $1, le wiki où l'événement a été créé.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Veuillez supprimer votre inscription à l'événement sur $1, le wiki où l'événement a été créé.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Veuillez contacter les participants sur $1, le wiki sur lequel l'événement a été créé."
 }
