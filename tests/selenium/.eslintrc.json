@@ -1,5 +1,8 @@
 {
 	"root": true,
+	"globals": {
+		"mw": "readonly"
+	},
 	"extends": [
 		"wikimedia/selenium"
 	]
