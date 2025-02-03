@@ -1,7 +1,6 @@
 'use strict';
 
-const Page = require( 'wdio-mediawiki/Page' ),
-	Api = require( 'wdio-mediawiki/Api' );
+const Page = require( 'wdio-mediawiki/Page' );
 
 class EventRegistrationPage extends Page {
 
@@ -71,11 +70,6 @@ class EventRegistrationPage extends Page {
 		return this.body.click();
 	}
 
-	async createEventPage( event ) {
-		const bot = await Api.bot();
-		await bot.edit( event, '', '' );
-	}
-
 	async selectMeetingType( meetingType ) {
 		if ( meetingType === 'online' ) {
 			await this.meetingTypeSelector.$( 'label:nth-of-type(1)' ).click();
@@ -121,16 +115,13 @@ class EventRegistrationPage extends Page {
 	 *
 	 * Pass in an an event, start date and end date, and an event will be created
 	 *
-	 * @param {string} event a namespaced string beginning with 'Event:'
-	 * example: 'Event:Test'
-	 * @param {Object} start the day and year to start the event
-	 * example: {day: 15, year: 2023}
-	 * @param {Object} end the day and year to end the event
-	 * example: {day: 15, year: 2024}
+	 * @param {string} eventPage Prefixed title of the event page, such as 'Event:Test'
+	 * @param {Object} start the day and year to start the event, e.g. {day: 15, year: 2023}
+	 * @param {Object} end the day and year to end the event, e.g. {day: 15, year: 2024}
 	 */
-	async enableEvent( event, start = this.startDefault, end = this.endDefault ) {
+	async enableEvent( eventPage, start = this.startDefault, end = this.endDefault ) {
 		await this.open();
-		await this.eventPage.setValue( event );
+		await this.eventPage.setValue( eventPage );
 		await this.setStartDate( start );
 		await this.setEndDate( end );
 		await this.enableRegistration.click();
@@ -142,19 +133,15 @@ class EventRegistrationPage extends Page {
 	 * Pass in an an event, start date and end date, and an event will be created
 	 *
 	 * @param {number} id id of the event to be edited
-	 * example: 22
-	 * @param {string} event a namespaced string beginning with 'Event:'
-	 * example: 'Event:Test'
-	 * @param {Object} start the day and year to start the event
-	 * example: {day: 15, year: 2023}
-	 * @param {Object} end the day and year to end the event
-	 * example: {day: 15, year: 2024}
+	 * @param {string} eventPage Prefixed title of the event page, such as 'Event:Test'
+	 * @param {Object} start the day and year to start the event, e.g. {day: 15, year: 2023}
+	 * @param {Object} end the day and year to end the event, e.g. {day: 15, year: 2024}
 	 * @param {string} meetingType choose from 'inperson', 'hybrid', or 'online'
-	 * example: 'inperson'
+	 * @param {string} organizer Username of a user to add as organizer
 	 */
 	async editEvent( {
 		id,
-		event,
+		eventPage,
 		start,
 		end,
 		meetingType,
@@ -162,8 +149,8 @@ class EventRegistrationPage extends Page {
 	} ) {
 		await super.openTitle( `Special:EditEventRegistration/${ id }` );
 
-		if ( event ) {
-			await this.eventPage.setValue( event );
+		if ( eventPage ) {
+			await this.eventPage.setValue( eventPage );
 		}
 		if ( start ) {
 			await this.setStartDate( start );

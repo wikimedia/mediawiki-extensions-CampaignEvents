@@ -3,29 +3,26 @@
 const Api = require( 'wdio-mediawiki/Api' ),
 	EventPage = require( '../pageobjects/event.page' ),
 	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
-	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
-	Rest = require( '../pageobjects/rest.page' ),
+	EventUtils = require( '../EventUtils.js' ),
 	Util = require( 'wdio-mediawiki/Util' ),
 	userName = Util.getTestString();
 
-let event,
-	id;
+let id;
 
 describe( 'Edit Event Registration', () => {
 
 	beforeEach( async () => {
-		event = Util.getTestString( 'Event:Test EditEventRegistration' );
-		await LoginPage.loginAdmin();
-		await EventRegistrationPage.createEventPage( event );
-		id = await Rest.enableEvent( event );
+		const eventPage = Util.getTestString( 'Event:Test EditEventRegistration' );
+		await EventUtils.loginAsOrganizer();
+		id = await EventUtils.createEvent( eventPage );
 	} );
 
-	it( 'can allow organizer to update event data', async () => {
+	it( 'can allow organizer to update event page and dates', async () => {
 		const updatedEventPage = Util.getTestString( 'Event:New page for EditEventRegistration' );
-		await EventRegistrationPage.createEventPage( updatedEventPage );
+		await EventUtils.createEventPage( updatedEventPage );
 
 		await EventRegistrationPage.editEvent( {
-			event: updatedEventPage,
+			eventPage: updatedEventPage,
 			id,
 			start: { year: 2099, day: 12 },
 			end: { year: 2100, day: 14 }

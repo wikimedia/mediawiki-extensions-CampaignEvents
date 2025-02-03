@@ -1,9 +1,7 @@
 'use strict';
 
-const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
-	MyEventsPage = require( '../pageobjects/myEvents.page' ),
-	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
-	Rest = require( '../pageobjects/rest.page' ),
+const MyEventsPage = require( '../pageobjects/myEvents.page' ),
+	EventUtils = require( '../EventUtils.js' ),
 	Util = require( 'wdio-mediawiki/Util' ),
 	eventName = Util.getTestString( 'Test MyEvents' ),
 	eventTitle = 'Event:' + eventName;
@@ -11,9 +9,8 @@ const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' )
 describe( 'MyEvents', () => {
 
 	before( async () => {
-		await LoginPage.loginAdmin();
-		await EventRegistrationPage.createEventPage( eventTitle );
-		await Rest.enableEvent( eventTitle );
+		await EventUtils.loginAsOrganizer();
+		await EventUtils.createEvent( eventTitle );
 	} );
 
 	beforeEach( async () => {
