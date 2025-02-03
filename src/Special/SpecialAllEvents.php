@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\SpecialPage;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
@@ -21,6 +22,7 @@ class SpecialAllEvents extends SpecialPage {
 	private CampaignEventsHookRunner $hookRunner;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private TemplateParser $templateParser;
 
 	public function __construct(
 		EventsPagerFactory $eventsPagerFactory,
@@ -33,6 +35,7 @@ class SpecialAllEvents extends SpecialPage {
 		$this->hookRunner = $hookRunner;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 
 	/**
@@ -49,6 +52,7 @@ class SpecialAllEvents extends SpecialPage {
 			'oojs-ui.styles.icons-user',
 			'oojs-ui.styles.icons-editing-advanced',
 			'oojs-ui.styles.icons-content',
+			'codex-styles',
 		] );
 		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
 		$eventsContent = $this->getFormAndEvents();
@@ -159,7 +163,7 @@ class SpecialAllEvents extends SpecialPage {
 		}
 		$result = $form->prepareForm()->tryAuthorizedSubmit();
 
-		$pager = $this->eventsPagerFactory->newListPager(
+		$upcomingPager = $this->eventsPagerFactory->newListPager(
 			$searchedVal,
 			$meetingType,
 			$startTime,
@@ -168,9 +172,41 @@ class SpecialAllEvents extends SpecialPage {
 			$filterWiki,
 			$filterTopics
 		);
-		$navigation = $pager->getNavigationBar();
+		$upcomingEventsNavigation = $upcomingPager->getNavigationBar();
 
-		return $form->getHTML( $result ) . $navigation . $pager->getBody() . $navigation;
+		$template = '';
+		if ( $separateOngoingEvents && $startTime != null ) {
+			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
+				$searchedVal,
+				$meetingType,
+				$startTime,
+				$filterWiki,
+				$filterTopics
+			);
+			$ongoingEventsNavigation = $ongoingPager->getNavigationBar();
+			$ongoingData = [
+				'title' => $this->msg( 'campaignevents-allevents-label-ongoing-events-title' )->text(),
+				'description' => $this->msg( 'campaignevents-allevents-label-ongoing-events-description' )->text(),
+				'content' => $ongoingPager->getBody() . $ongoingEventsNavigation,
+				'isopen' => false,
+				'cssclass' => 'ext-campaignevents-allevents-ongoing-events',
+			];
+			$template .= $this->templateParser->processTemplate( 'Accordion', $ongoingData );
+
+			$data = [
+				'title' => $this->msg( 'campaignevents-allevents-label-upcoming-events-title' )->text(),
+				'description' => $this->msg( 'campaignevents-allevents-label-upcoming-events-description' )->text(),
+				'content' => $upcomingPager->getBody() . $upcomingEventsNavigation,
+				'isopen' => true,
+				'cssclass' => 'ext-campaignevents-allevents-upcoming-events',
+			];
+			$template .= $this->templateParser->processTemplate( 'Accordion', $data );
+			return $form->getHTML( $result ) . $template;
+		}
+		return $form->getHTML( $result )
+			. $upcomingEventsNavigation
+			. $upcomingPager->getBody()
+			. $upcomingEventsNavigation;
 	}
 
 	/**
