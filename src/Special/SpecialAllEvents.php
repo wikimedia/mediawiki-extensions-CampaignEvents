@@ -166,7 +166,7 @@ class SpecialAllEvents extends SpecialPage {
 				'label-message' => 'campaignevents-allevents-label-filter-topics',
 				'options-messages' => $availableTopics,
 				'placeholder-message' => 'campaignevents-allevents-placeholder-topics',
-				'max' => 5,
+				'max' => 20,
 			];
 		}
 		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
