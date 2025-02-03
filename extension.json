@@ -43,6 +43,10 @@
 		"CampaignEventsEnableEventInvitation": {
 			"description": "Flag to enable event invitation feature on a wiki",
 			"value": false
+		},
+		"CampaignEventsSeparateOngoingEvents": {
+			"description": "Temporary flag to separate ongoing and upcoming events on Special:AllEvents.",
+			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
