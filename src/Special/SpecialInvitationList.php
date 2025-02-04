@@ -22,6 +22,7 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
+use OOUI\Tag;
 
 class SpecialInvitationList extends SpecialPage {
 	use InvitationFeatureAccessTrait;
@@ -151,17 +152,26 @@ class SpecialInvitationList extends SpecialPage {
 				'label' => new HtmlSnippet( $this->msg( 'campaignevents-invitationlist-no-editors' )->parse() ),
 			] );
 		}
-
+		$highlyRecommendedLinks = $this->getUserLinks( $highlyRecommended );
+		$highlyRecommendedLinksList = $this->formatAsList( $highlyRecommendedLinks );
 		$data = [
 			'noUsersWarning' => $noUsersWarning,
-			'highlyRecommendedLabel' => $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text(),
-			'highlyRecommendedDesc' => $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text(),
-			'highlyRecommended' => $this->getUserLinks( $highlyRecommended ),
-			'recommendedLabel' => $this->msg( 'campaignevents-invitationlist-recommended' )->text(),
-			'recommendedDesc' => $this->msg( 'campaignevents-invitationlist-recommended-info' )->text(),
-			'recommended' => $this->getUserLinks( $recommended ),
-			'worklistLabel' => $this->msg( 'campaignevents-invitationlist-worklist-label' )->text(),
-			'worklist' => $this->getWorklistLinks( $list->getListID() )
+			'highlyRecommendedAccordion' => [
+				'title' => $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text(),
+				'description' => $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text(),
+				'content' => $highlyRecommendedLinksList,
+				'isopen' => (bool)$highlyRecommendedLinks
+			],
+			'recommendedAccordion' => [
+				'title' => $this->msg( 'campaignevents-invitationlist-recommended' )->text(),
+				'description' => $this->msg( 'campaignevents-invitationlist-recommended-info' )->text(),
+				'content' => $this->formatAsList( $this->getUserLinks( $recommended ) ),
+				'isopen' => !$highlyRecommendedLinks
+			],
+			'worklistAccordion' => [
+				'title' => $this->msg( 'campaignevents-invitationlist-worklist-label' )->text(),
+				'content' => $this->formatAsList( $this->getWorklistLinks( $list->getListID() ) )
+			]
 		];
 
 		$template = $this->templateParser->processTemplate( 'InvitationList', $data );
@@ -215,5 +225,22 @@ class SpecialInvitationList extends SpecialPage {
 			}
 		}
 		return $links;
+	}
+
+	private function formatAsList( array $links ): ?Tag {
+		if ( !$links ) {
+			return null;
+		}
+		$list = ( new Tag( 'ul' ) )->setAttributes( [
+			'style' => 'overflow-wrap: anywhere; list-style: none; margin: 0'
+		] );
+		foreach ( $links as $link ) {
+			$list->appendContent(
+				( new Tag( 'li' ) )->appendContent(
+				new HtmlSnippet( $link )
+				)
+			);
+		}
+		return $list;
 	}
 }
