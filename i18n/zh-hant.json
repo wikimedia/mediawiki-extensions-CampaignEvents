@@ -8,12 +8,14 @@
 			"WiiUf",
 			"Willy1018",
 			"Winston Sung",
+			"ZhaoFJx",
 			"列维劳德",
 			"沈澄心"
 		]
 	},
 	"campaignevents-desc": "為活動籌辦人員和參與者提供功能。",
 	"nstab-event": "活動",
+	"group-event-organizer": "活動組織者",
 	"action-campaignevents-enable-registration": "啟用活動報名",
 	"right-campaignevents-enable-registration": "啟用活動報名",
 	"action-campaignevents-delete-registration": "刪除活動報名",

@@ -6,6 +6,9 @@
 		]
 	},
 	"nstab-event": "Evenement",
+	"group-event-organizer": "Organisateure vum Evenement",
+	"group-event-organizer-member": "{{GENDER:$1|Organisateur|Organisatrice}} vum Evenement",
+	"grouppage-event-organizer": "{{ns:project}}:Organisateure vum Evenement",
 	"action-campaignevents-organize-events": "Evenementer ze organiséieren",
 	"right-campaignevents-organize-events": "Evenementer organiséieren",
 	"action-campaignevents-email-participants": "E-Mailen u Participantë vum Evenement ze schécken",

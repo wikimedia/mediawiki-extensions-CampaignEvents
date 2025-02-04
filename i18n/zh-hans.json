@@ -15,6 +15,7 @@
 	},
 	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
 	"nstab-event": "活动",
+	"group-event-organizer": "活动组织者",
 	"action-campaignevents-enable-registration": "启用活动注册",
 	"right-campaignevents-enable-registration": "启用活动注册",
 	"action-campaignevents-delete-registration": "删除活动注册",
