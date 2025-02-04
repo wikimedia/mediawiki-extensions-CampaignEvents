@@ -61,8 +61,29 @@ class ExistingEventRegistration extends EventRegistration {
 		?string $deletionTimestamp,
 		bool $isTestEvent
 	) {
-		// @phan-suppress-next-line PhanParamTooFewUnpack
-		parent::__construct( ...func_get_args() );
+		parent::__construct(
+			$id,
+			$name,
+			$page,
+			$chatURL,
+			$wikis,
+			$topics,
+			$trackingTools,
+			$status,
+			$timezone,
+			$startLocalTimestamp,
+			$endLocalTimestamp,
+			$type,
+			$meetingType,
+			$meetingURL,
+			$meetingCountry,
+			$meetingAddress,
+			$participantQuestions,
+			$creationTimestamp,
+			$lastEditTimestamp,
+			$deletionTimestamp,
+			$isTestEvent
+		);
 	}
 
 	/**
