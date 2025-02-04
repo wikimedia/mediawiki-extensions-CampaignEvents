@@ -137,7 +137,7 @@
 	"campaignevents-eventpage-btn-manage": "Керувати подією",
 	"campaignevents-eventpage-btn-register": "Зареєструватися на подію",
 	"campaignevents-eventpage-dialog-title": "Деталі події",
-	"campaignevents-eventpage-dialog-organizers": "Організатор: $1",
+	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|Організатор|Організатори}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Переглянути всіх організаторів",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|користувач|користувачі|користувачів}}",
 	"campaignevents-eventpage-dialog-participants-view-list": "Переглянути всіх",
