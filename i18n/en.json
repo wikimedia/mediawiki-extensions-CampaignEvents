@@ -7,7 +7,7 @@
 	"campaignevents-desc": "Provides features for campaign organizers and participants.",
 	"nstab-event": "Event",
 	"group-event-organizer": "Event organizers",
-	"group-event-organizer-member": "event organizer",
+	"group-event-organizer-member": "{{GENDER:$1|event organizer}}",
 	"grouppage-event-organizer": "{{ns:project}}:Event organizers",
 	"action-campaignevents-enable-registration": "enable event registrations",
 	"right-campaignevents-enable-registration": "Enable event registrations",
