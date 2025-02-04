@@ -7,11 +7,14 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
+use MediaWiki\Extension\CampaignEvents\Pager\EventsListPager;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\SpecialPage;
+use Wikimedia\Message\MessageSpecifier;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 use Wikimedia\Timestamp\TimestampException;
 
@@ -174,8 +177,7 @@ class SpecialAllEvents extends SpecialPage {
 		);
 		$upcomingEventsNavigation = $upcomingPager->getNavigationBar();
 
-		$template = '';
-		if ( $separateOngoingEvents && $startTime != null ) {
+		if ( $separateOngoingEvents && $startTime !== null ) {
 			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
 				$searchedVal,
 				$meetingType,
@@ -183,30 +185,48 @@ class SpecialAllEvents extends SpecialPage {
 				$filterWiki,
 				$filterTopics
 			);
-			$ongoingEventsNavigation = $ongoingPager->getNavigationBar();
-			$ongoingData = [
-				'title' => $this->msg( 'campaignevents-allevents-label-ongoing-events-title' )->text(),
-				'description' => $this->msg( 'campaignevents-allevents-label-ongoing-events-description' )->text(),
-				'content' => $ongoingPager->getBody() . $ongoingEventsNavigation,
-				'isopen' => false,
-				'cssclass' => 'ext-campaignevents-allevents-ongoing-events',
-			];
-			$template .= $this->templateParser->processTemplate( 'Accordion', $ongoingData );
+			// TODO: Remove this awful hack when we find a way to have separate paging (T386019).
+			$ongoingPager->mLimit = 5000;
+			$content = $this->getAccordionTemplate(
+				$ongoingPager,
+				new MessageValue( 'campaignevents-allevents-label-ongoing-events-title' ),
+				new MessageValue( 'campaignevents-allevents-label-ongoing-events-description' ),
+				'ext-campaignevents-allevents-ongoing-events',
+				false
+			);
+			$content .= $this->getAccordionTemplate(
+				$upcomingPager,
+				new MessageValue( 'campaignevents-allevents-label-upcoming-events-title' ),
+				new MessageValue( 'campaignevents-allevents-label-upcoming-events-description' ),
+				'ext-campaignevents-allevents-upcoming-events',
+				true
+			);
 
-			$data = [
-				'title' => $this->msg( 'campaignevents-allevents-label-upcoming-events-title' )->text(),
-				'description' => $this->msg( 'campaignevents-allevents-label-upcoming-events-description' )->text(),
-				'content' => $upcomingPager->getBody() . $upcomingEventsNavigation,
-				'isopen' => true,
-				'cssclass' => 'ext-campaignevents-allevents-upcoming-events',
-			];
-			$template .= $this->templateParser->processTemplate( 'Accordion', $data );
-			return $form->getHTML( $result ) . $template;
+			return $form->getHTML( $result ) . $content;
 		}
 		return $form->getHTML( $result )
 			. $upcomingEventsNavigation
 			. $upcomingPager->getBody()
 			. $upcomingEventsNavigation;
+	}
+
+	public function getAccordionTemplate(
+		EventsListPager $pager,
+		MessageSpecifier $title,
+		MessageSpecifier $description,
+		string $cssClass,
+		bool $isOpen
+	): string {
+		$navigation = $pager->getNavigationBar();
+		$data = [
+			'title' => $this->msg( $title )->text(),
+			'description' => $this->msg( $description )->text(),
+			'content' => $pager->getBody() . $navigation,
+			'isopen' => $isOpen,
+			'cssclass' => $cssClass,
+		];
+
+		return $this->templateParser->processTemplate( 'Accordion', $data );
 	}
 
 	/**
