@@ -43,21 +43,31 @@ class WikiLookup {
 	 */
 	public function getListForSelect(): array {
 		return $this->cache->getWithSetCallback(
-			$this->cache->makeGlobalKey( 'CampaignEvents-WikiList', $this->languageCode ),
+			$this->cache->makeGlobalKey( 'CampaignEvents-SelectWikiList', $this->languageCode ),
 			WANObjectCache::TTL_HOUR,
 			fn () => $this->computeListForSelect()
 		);
 	}
 
 	private function computeListForSelect(): array {
-		return array_flip( $this->getLocalizedNames( $this->getAllWikis() ) );
+		$rawMap = array_flip( $this->getLocalizedNames( $this->getAllWikis() ) );
+		$ret = [];
+		foreach ( $rawMap as $name => $value ) {
+			$ret[ htmlspecialchars( $name ) ] = $value;
+		}
+		return $ret;
 	}
 
+	/**
+	 * @param string[] $wikiIDs
+	 * @return array<string,string> Raw names, needs escaping before use in HTML.
+	 */
 	public function getLocalizedNames( array $wikiIDs ): array {
 		$ret = [];
 		foreach ( $wikiIDs as $dbname ) {
 			// Do not check the database, or this would become really expensive when done for many wikis.
 			// The `project-localized-name-*` messages are defined in the WikimediaMessages extension for WMF wikis.
+			// See T378611 for having this in core.
 			$localizedNameMsg = $this->messageLocalizer->msg( 'project-localized-name-' . $dbname )
 				->useDatabase( false );
 			$ret[$dbname] = $localizedNameMsg->exists() ? $localizedNameMsg->text() : $dbname;
