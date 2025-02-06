@@ -7,7 +7,7 @@
 	"campaignevents-desc": "Tədbir təşkilatçıları və iştirakçıları üçün funksiyalar təqdim edir.",
 	"nstab-event": "Tədbir",
 	"group-event-organizer": "Tədbir təşkilatçıları",
-	"group-event-organizer-member": "tədbir təşkilatçısı",
+	"group-event-organizer-member": "{{GENDER:$1|tədbir təşkilatçısı}}",
 	"grouppage-event-organizer": "{{ns:project}}:Tədbir təşkilatçıları",
 	"action-campaignevents-enable-registration": "tədbir qeydiyyatını aktivləşdirmək",
 	"right-campaignevents-enable-registration": "Tədbir qeydiyyatını aktivləşdirmək",

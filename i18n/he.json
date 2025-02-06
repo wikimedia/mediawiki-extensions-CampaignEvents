@@ -8,7 +8,7 @@
 	"campaignevents-desc": "אפשרויות למארגנים ולמשתתפים של אירועים.",
 	"nstab-event": "אירוע",
 	"group-event-organizer": "מארגני אירועים",
-	"group-event-organizer-member": "מארגן אירועים",
+	"group-event-organizer-member": "{{GENDER:$1|מארגן|מארגנת}} אירועים",
 	"grouppage-event-organizer": "{{ns:project}}:מארגני אירועים",
 	"action-campaignevents-enable-registration": "להפעיל הרשמות לאירועים",
 	"right-campaignevents-enable-registration": "הפעלת הרשמות לאירועים",

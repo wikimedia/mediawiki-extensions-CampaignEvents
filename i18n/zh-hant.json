@@ -16,7 +16,7 @@
 	"campaignevents-desc": "為活動籌辦人員和參與者提供功能。",
 	"nstab-event": "活動",
 	"group-event-organizer": "活動籌辦人員",
-	"group-event-organizer-member": "活動籌辦人員",
+	"group-event-organizer-member": "{{GENDER:$1|活動籌辦人員}}",
 	"grouppage-event-organizer": "{{ns:project}}:活動籌辦人員",
 	"action-campaignevents-enable-registration": "啟用活動報名",
 	"right-campaignevents-enable-registration": "啟用活動報名",
