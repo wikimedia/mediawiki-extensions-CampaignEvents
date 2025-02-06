@@ -350,7 +350,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'default' => $this->event ? $this->event->getTopics() : [],
 				'options-messages' => $availableTopics,
 				'placeholder-message' => 'campaignevents-edit-field-topics-placeholder',
-				'help-message' => 'campaignevents-edit-field-topics-help',
+				'help' => $this->msg( 'campaignevents-edit-field-topics-help' )
+					->numParams( EventFactory::MAX_TOPICS )->escaped(),
 				'cssclass' => 'ext-campaignevents-edit-topics-input',
 				'section' => self::DETAILS_SECTION,
 				'max' => EventFactory::MAX_TOPICS
