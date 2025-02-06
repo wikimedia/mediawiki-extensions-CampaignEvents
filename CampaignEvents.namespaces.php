@@ -32,6 +32,11 @@ $namespaceNames['az'] = [
 	NS_EVENT_TALK => 'Tədbir_müzakirəsi'
 ];
 
+$namespaceNames['es'] = [
+	NS_EVENT => 'Evento',
+	NS_EVENT_TALK => 'Evento_discusión',
+];
+
 $namespaceNames['he'] = [
 	NS_EVENT => 'אירוע',
 	NS_EVENT_TALK => 'שיחת_אירוע',
