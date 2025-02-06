@@ -78,23 +78,11 @@ class SpecialAllEvents extends SpecialPage {
 			// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
 			// distinguish between form not submitted and form submitted but checkbox unchecked. This is important
 			// because the checkbox is checked by default.
-			// Note that we can't do all this in a submit callback because the pager needs to be instantiated before the
-			// HTMLForm, due to the "limit" field.
 			$formIdentifier = 'campaignevents-allevents';
 			if ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
 				$showOngoing = $request->getCheck( 'wpShowOngoing' );
 			}
 		}
-
-		$pager = $this->eventsPagerFactory->newListPager(
-			$searchedVal,
-			$meetingType,
-			$startTime,
-			$endTime,
-			$showOngoing,
-			$filterWiki,
-			$filterTopics
-		);
 
 		$formDescriptor = [
 			'Search' => [
@@ -136,15 +124,6 @@ class SpecialAllEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-show-ongoing-field',
 				'default' => true,
 			],
-			'Limit' => [
-				// NOTE: This has to be called 'limit' because the pager expects that name.
-				'name' => 'limit',
-				'type' => 'select',
-				'label-message' => 'campaignevents-allevents-label-events-per-page',
-				'default' => $pager->getLimit(),
-				'options' => $pager->getLimitSelectList(),
-				'cssclass' => 'ext-campaignevents-allevents-filter-field'
-			],
 			'FilterWikis' => [
 				'type' => 'multiselect',
 				'dropdown' => true,
@@ -178,11 +157,18 @@ class SpecialAllEvents extends SpecialPage {
 		if ( !$separateOngoingEvents && isset( $formIdentifier ) ) {
 			$form->setFormIdentifier( $formIdentifier, true );
 		}
-		$form->prepareForm();
+		$result = $form->prepareForm()->tryAuthorizedSubmit();
 
+		$pager = $this->eventsPagerFactory->newListPager(
+			$searchedVal,
+			$meetingType,
+			$startTime,
+			$endTime,
+			$showOngoing,
+			$filterWiki,
+			$filterTopics
+		);
 		$navigation = $pager->getNavigationBar();
-
-		$result = $form->tryAuthorizedSubmit();
 
 		return $form->getHTML( $result ) . $navigation . $pager->getBody() . $navigation;
 	}

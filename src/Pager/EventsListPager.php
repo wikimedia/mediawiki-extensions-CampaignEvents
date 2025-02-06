@@ -203,36 +203,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		return $s;
 	}
 
-	/**
-	 * Copied from {@see TablePager::getLimitSelectList()}.
-	 * XXX This should probably live elsewhere in core and be easier to reuse.
-	 *
-	 * @return array
-	 */
-	public function getLimitSelectList() {
-		# Add the current limit from the query string
-		# to avoid that the limit is lost after clicking Go next time
-		if ( !in_array( $this->mLimit, $this->mLimitsShown, true ) ) {
-			$this->mLimitsShown[] = $this->mLimit;
-			sort( $this->mLimitsShown );
-		}
-		$ret = [];
-		foreach ( $this->mLimitsShown as $key => $value ) {
-			# The pair is either $index => $limit, in which case the $value
-			# will be numeric, or $limit => $text, in which case the $value
-			# will be a string.
-			if ( is_int( $value ) ) {
-				$limit = $value;
-				$text = $this->getLanguage()->formatNum( $limit );
-			} else {
-				$limit = $key;
-				$text = $value;
-			}
-			$ret[$text] = $limit;
-		}
-		return $ret;
-	}
-
 	protected function isHeaderRowNeeded( string $date ): bool {
 		if ( !$this->lastHeaderTimestamp ) {
 			return true;
