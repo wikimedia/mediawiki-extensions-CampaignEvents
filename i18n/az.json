@@ -514,5 +514,6 @@
 	"campaignevents-register-event-id": "Tədbir nömrəsi",
 	"campaignevents-eventslist-topics-label": "Mövzular",
 	"campaignevents-event-details-topics-header": "Mövzular",
-	"campaignevents-eventpage-dialog-topics-label": "Mövzular"
+	"campaignevents-eventpage-dialog-topics-label": "Mövzular",
+	"campaignevents-edit-field-topics-help": "Maksimum {{PLURAL:$1|1 mövzu|$1 mövzu}} əlavə edə bilərsiniz."
 }

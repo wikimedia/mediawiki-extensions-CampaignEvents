@@ -8,7 +8,7 @@
 	"campaignevents-desc": "Дава функции за приредувачите на походи и учесниците во истите.",
 	"nstab-event": "Настан",
 	"group-event-organizer": "Приредувачи на настани",
-	"group-event-organizer-member": "приредувач на настани",
+	"group-event-organizer-member": "{{GENDER:$1|приредувач на настани}}",
 	"grouppage-event-organizer": "{{ns:project}}:Приредувачи на настани",
 	"action-campaignevents-enable-registration": "овозможување на пријавување за настани",
 	"right-campaignevents-enable-registration": "Овозможување на пријавување за настани",
@@ -515,5 +515,6 @@
 	"campaignevents-register-event-id": "Назнака на настан",
 	"campaignevents-eventslist-topics-label": "Теми",
 	"campaignevents-event-details-topics-header": "Теми",
-	"campaignevents-eventpage-dialog-topics-label": "Теми"
+	"campaignevents-eventpage-dialog-topics-label": "Теми",
+	"campaignevents-edit-field-topics-help": "Можете да додадете највеќе {{PLURAL:$1|една тема|$1 теми}}."
 }
