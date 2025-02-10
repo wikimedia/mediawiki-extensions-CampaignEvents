@@ -515,5 +515,6 @@
 	"campaignevents-register-event-id": "מזהה אירוע",
 	"campaignevents-eventslist-topics-label": "נושאים",
 	"campaignevents-event-details-topics-header": "נושאים",
-	"campaignevents-eventpage-dialog-topics-label": "נושאים"
+	"campaignevents-eventpage-dialog-topics-label": "נושאים",
+	"campaignevents-edit-field-topics-help": "אפשר להוסיף {{PLURAL:$1|נושא אחד|$1 נושאים}} לכל היותר."
 }

@@ -514,5 +514,6 @@
 	"campaignevents-register-event-id": "ID de evento",
 	"campaignevents-eventslist-topics-label": "Topicos",
 	"campaignevents-event-details-topics-header": "Topicos",
-	"campaignevents-eventpage-dialog-topics-label": "Topicos"
+	"campaignevents-eventpage-dialog-topics-label": "Topicos",
+	"campaignevents-edit-field-topics-help": "Tu pote adder un maximo de {{PLURAL:$1|un topico|$1 topicos}}."
 }

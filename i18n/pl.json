@@ -8,6 +8,9 @@
 	},
 	"campaignevents-desc": "Dostarcza narzędzia dla organizatorów i uczestników kampanii.",
 	"nstab-event": "Wydarzenie",
+	"group-event-organizer": "Organizatorzy wydarzeń",
+	"group-event-organizer-member": "{{GENDER:$1|organizator|organizatorka|organizator(-ka)}} wydarzeń",
+	"grouppage-event-organizer": "{{ns:project}}:Organizatorzy wydarzeń",
 	"action-campaignevents-enable-registration": "włączania rejestracji na wydarzenia",
 	"right-campaignevents-enable-registration": "Włączanie rejestracji na wydarzenia",
 	"action-campaignevents-delete-registration": "usuwania rejestracji na wydarzenia",
@@ -86,6 +89,9 @@
 	"campaignevents-edit-field-address": "Adres",
 	"campaignevents-edit-field-chat-url": "Zaproszenie do czatu grupowego",
 	"campaignevents-edit-field-chat-url-help": "Jeśli masz grupę czatu online dla uczestników tego wydarzenia, możesz dodać link z zaproszeniem tutaj. Uczestnicy będą mogli wyświetlić link z zaproszeniem po zarejestrowaniu się.",
+	"campaignevents-edit-field-event-is-test": "Czy to wydarzenie jest na żywo czy testowe?",
+	"campaignevents-edit-field-status-live": "Wydarzenie na żywo",
+	"campaignevents-edit-field-status-test": "Wydarzenie testowe",
 	"campaignevents-edit-field-topics-label": "Tematy wydarzenia",
 	"campaignevents-edit-field-topics-placeholder": "Dodaj tematy",
 	"campaignevents-edit-form-questions-label": "Pytania do uczestników",
@@ -506,5 +512,7 @@
 	"campaignevents-eventpage-dialog-wikis-label": "Wiki",
 	"campaignevents-eventslist-wiki-label": "Wiki",
 	"campaignevents-eventslist-topics-label": "Tematy",
-	"campaignevents-event-details-topics-header": "Tematy"
+	"campaignevents-event-details-topics-header": "Tematy",
+	"campaignevents-eventpage-dialog-topics-label": "Tematyka",
+	"campaignevents-edit-field-topics-help": "Możesz dodać maksymalnie {{PLURAL:$1|jeden temat|$1 tematy|$1 tematów}}."
 }

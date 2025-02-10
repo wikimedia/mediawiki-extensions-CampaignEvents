@@ -3,6 +3,7 @@
 		"authors": [
 			"Alshamiri1",
 			"Asma",
+			"BAB ZAA",
 			"Bachounda",
 			"Daimona Eaytoy",
 			"Hhaboh162002",
@@ -17,6 +18,9 @@
 	},
 	"campaignevents-desc": "يوفّر ميزات لمنظمي الحملة والمشاركين فيها.",
 	"nstab-event": "فعالية",
+	"group-event-organizer": "منظمو فعاليات",
+	"group-event-organizer-member": "{{GENDER:$1|مُنظِّم فعاليات|مُنظِّمة فعاليات}}",
+	"grouppage-event-organizer": "{{ns:project}}:منظمو فعاليات",
 	"action-campaignevents-enable-registration": "تفعيل تسجيل الفعاليات",
 	"right-campaignevents-enable-registration": "تفعيل تسجيل الفعاليات",
 	"action-campaignevents-delete-registration": "حذف تسجيلات في الفعالية",
@@ -225,7 +229,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "التسجيل مغلق",
 	"campaignevents-eventpage-btn-event-ended": "الفعالية منتهية",
 	"campaignevents-eventpage-dialog-title": "تفاصيل الفعالية",
-	"campaignevents-eventpage-dialog-organizers": "منظّمة{{PLURAL:$2|من}}: $1",
+	"campaignevents-eventpage-dialog-organizers": "منظّمة {{PLURAL:$2|من}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "عرض كافة المنظمين",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|مشارك}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1| مشارك }} مسجّل تحت الخصوصية.",
@@ -524,5 +528,6 @@
 	"campaignevents-register-event-id": "معرف الفعالية",
 	"campaignevents-eventslist-topics-label": "المواضيع",
 	"campaignevents-event-details-topics-header": "المواضيع",
-	"campaignevents-eventpage-dialog-topics-label": "المواضيع"
+	"campaignevents-eventpage-dialog-topics-label": "المواضيع",
+	"campaignevents-edit-field-topics-help": "يمكنك إضافة {{PLURAL:$1|موضوع واحد|$1 موضوعات كحد أقصى}}."
 }
