@@ -98,6 +98,7 @@
 	"campaignevents-edit-field-status-test": "Message used on [[Special:EditEventRegistration]] and [[Special:EnableEventRegistration]] to describe the \"Test\" marker of a registration. \"Test\" is an adjective here.",
 	"campaignevents-edit-field-topics-label": "Label of a field in [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]] where users can enter the topics that an event is about.",
 	"campaignevents-edit-field-topics-placeholder": "Placeholder for the {{msg-mw|campaignevents-edit-field-topics-label}} field in [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]].",
+	"campaignevents-edit-field-topics-help": "Help text used on [[Special:EnableEventRegistration]] and [Special:EditEventRegistration]] to inform organizers of the maximum number of topics they can enter. Parameters:\n*$1 - Maximum number of topics.",
 	"campaignevents-edit-form-questions-label": "Title of a section of the form on [[Special:EnableEventRegistration]]. The section contains information about the questions that will be asked to participants when they register for the event.",
 	"campaignevents-edit-form-questions-intro": "Text shown in the form on [[Special:EnableEventRegistration]] to introduce the {{msg-mw|campaignevents-edit-form-questions-label}} section.",
 	"campaignevents-edit-form-questions-explanation": "Text shown in the form on [[Special:EnableEventRegistration]], in the {{msg-mw|campaignevents-edit-form-questions-label}} section, to explain how participant questions work.",
@@ -529,6 +530,5 @@
 	"campaignevents-register-event-id": "Label shown on event special pages when an id is not provided",
 	"campaignevents-eventslist-topics-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen topics for the event.",
 	"campaignevents-event-details-topics-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of topics",
-	"campaignevents-eventpage-dialog-topics-label": "Label used in the registration popup on event pages. This label introduces a section that lists topics that the event focuses on.",
-	"campaignevents-edit-field-topics-help": "Help text used on [[Special:EnableEventRegistration]] and [Special:EditEventRegistration]] to inform organizers of the maximum number of topics they can enter. Parameters:\n*$1 - Maximum number of topics."
+	"campaignevents-eventpage-dialog-topics-label": "Label used in the registration popup on event pages. This label introduces a section that lists topics that the event focuses on."
 }
