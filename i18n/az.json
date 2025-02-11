@@ -92,6 +92,7 @@
 	"campaignevents-edit-field-status-test": "Sınaq tədbiri",
 	"campaignevents-edit-field-topics-label": "Tədbir mövzuları",
 	"campaignevents-edit-field-topics-placeholder": "Mövzular əlavə et",
+	"campaignevents-edit-field-topics-help": "Maksimum {{PLURAL:$1|1 mövzu|$1 mövzu}} əlavə edə bilərsiniz.",
 	"campaignevents-edit-form-questions-label": "İştirakçılar üçün suallar",
 	"campaignevents-edit-form-questions-intro": "Tədbirdə qeydiyyatdan keçərkən iştirakçıların cavablandırması üçün aşağıdakı suallardan hər hansı birini seçin.",
 	"campaignevents-edit-form-questions-explanation": "Tədbir zamanı siz fərdi iştirakçıların Şəxsi Müəyyənləşdirilə bilən Məlumatı (PII) daxil olmayan suallara verdiyi cavablara daxil ola bilərsiniz. Tədbir başa çatdıqdan sonra bütün suallara cavablar mövcud olacaq (yalnız ümumi formada) və fərdi cavablar silinəcək.",
@@ -514,6 +515,5 @@
 	"campaignevents-register-event-id": "Tədbir nömrəsi",
 	"campaignevents-eventslist-topics-label": "Mövzular",
 	"campaignevents-event-details-topics-header": "Mövzular",
-	"campaignevents-eventpage-dialog-topics-label": "Mövzular",
-	"campaignevents-edit-field-topics-help": "Maksimum {{PLURAL:$1|1 mövzu|$1 mövzu}} əlavə edə bilərsiniz."
+	"campaignevents-eventpage-dialog-topics-label": "Mövzular"
 }

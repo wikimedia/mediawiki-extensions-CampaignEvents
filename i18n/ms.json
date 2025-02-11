@@ -75,6 +75,8 @@
 	"campaignevents-edit-field-wiki-type-specific": "Ya, wiki tertentu",
 	"campaignevents-edit-field-wikis-label": "Wiki sasaran",
 	"campaignevents-edit-field-wikis-placeholder": "Tambah wiki tertentu",
+	"campaignevents-edit-field-wikis-help": "Jika acara anda berlangsung di wiki tertentu, sila senaraikannya di sini. Hal ini membantu orang ramai memutuskan acara yang akan dihadiri, dan ia juga membantu untuk tujuan analitik.",
+	"campaignevents-edit-field-tracking-tools": "Pautan Papan Pemuka Program & Acara",
 	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi.",
 	"campaignevents-event-details-organizers-header": "Penganjur",
 	"echo-category-title-campaign-events-notification-registration": "Pendaftaran acara",

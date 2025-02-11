@@ -92,6 +92,7 @@
 	"campaignevents-edit-field-status-test": "Evento de test",
 	"campaignevents-edit-field-topics-label": "Topicos del evento",
 	"campaignevents-edit-field-topics-placeholder": "Adder topicos",
+	"campaignevents-edit-field-topics-help": "Tu pote adder un maximo de {{PLURAL:$1|un topico|$1 topicos}}.",
 	"campaignevents-edit-form-questions-label": "Questiones pro participantes",
 	"campaignevents-edit-form-questions-intro": "Selige qualcunque del sequente questiones que le participantes debe responder durante le inscription al evento.",
 	"campaignevents-edit-form-questions-explanation": "Durante le evento, tu pote acceder al responsas de participantes individual pro le questiones que non include alcun information retraciabile al persona (PII). Post le fin del evento, le responsas a tote le questiones essera disponibile (in forma aggregate solmente) e le responsas individual essera delite.",
@@ -514,6 +515,5 @@
 	"campaignevents-register-event-id": "ID de evento",
 	"campaignevents-eventslist-topics-label": "Topicos",
 	"campaignevents-event-details-topics-header": "Topicos",
-	"campaignevents-eventpage-dialog-topics-label": "Topicos",
-	"campaignevents-edit-field-topics-help": "Tu pote adder un maximo de {{PLURAL:$1|un topico|$1 topicos}}."
+	"campaignevents-eventpage-dialog-topics-label": "Topicos"
 }

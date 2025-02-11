@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Ajiniyaz",
+			"Cabadeck",
 			"Deltaspace",
 			"Dirruw'o",
 			"Kareyac",
@@ -39,6 +40,7 @@
 	"campaignevents-edit-field-meeting-url": "URL-адрес встречи",
 	"campaignevents-edit-field-country": "Страна",
 	"campaignevents-edit-field-address": "Адрес",
+	"campaignevents-edit-field-topics-help": "Вы можете добавить максимум {{PLURAL:$1| одну тему| $1 темы}}.",
 	"campaignevents-enable-registration-form-submit": "Включить регистрацию",
 	"campaignevents-edit-form-submit": "Изменить форму регистрации",
 	"campaignevents-edit-page-nonlocal": "Пожалуйста, [$1 завершите регистрацию на мероприятии на $2], вики, где оно было создано.",

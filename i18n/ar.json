@@ -104,6 +104,7 @@
 	"campaignevents-edit-field-status-test": "فعالية تجريبية",
 	"campaignevents-edit-field-topics-label": "مواضيع الفعالية",
 	"campaignevents-edit-field-topics-placeholder": "إضافة المواضيع",
+	"campaignevents-edit-field-topics-help": "يمكنك إضافة {{PLURAL:$1|موضوع واحد|$1 موضوعات كحد أقصى}}.",
 	"campaignevents-edit-form-questions-label": "أسئلة للمشاركين",
 	"campaignevents-edit-form-questions-intro": "اختر أياً من الأسئلة التالية ليجيب عليها المشاركون\n أثناء التسجيل في الفعالية.",
 	"campaignevents-edit-form-questions-explanation": "خلال الفعالية، يمكنك الوصول إلى ردود المشاركين الفرديين على الأسئلة التي لا تتضمن معلومات التعريف الشخصية (PII). بعد انتهاء الفعالية، ستكون الإجابات على جميع الأسئلة متاحة (في شكل مجمع فقط) مع حذف الإجابات الفردية.",
@@ -528,6 +529,5 @@
 	"campaignevents-register-event-id": "معرف الفعالية",
 	"campaignevents-eventslist-topics-label": "المواضيع",
 	"campaignevents-event-details-topics-header": "المواضيع",
-	"campaignevents-eventpage-dialog-topics-label": "المواضيع",
-	"campaignevents-edit-field-topics-help": "يمكنك إضافة {{PLURAL:$1|موضوع واحد|$1 موضوعات كحد أقصى}}."
+	"campaignevents-eventpage-dialog-topics-label": "المواضيع"
 }

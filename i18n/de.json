@@ -92,6 +92,7 @@
 	"campaignevents-edit-field-status-test": "Testveranstaltung",
 	"campaignevents-edit-field-topics-label": "Veranstaltungsthemen",
 	"campaignevents-edit-field-topics-placeholder": "Thema hinzufügen",
+	"campaignevents-edit-field-topics-help": "Du kannst maximal {{PLURAL:$1|ein Thema|$1 Themen}} hinzufügen.",
 	"campaignevents-edit-form-questions-label": "Fragen an die Teilnehmer",
 	"campaignevents-edit-form-questions-intro": "Wähle eine der folgenden Fragen aus, die die Teilnehmern bei der Registrierung für die Veranstaltung beantworten sollen.",
 	"campaignevents-edit-form-questions-explanation": "Während der Veranstaltung kannst du auf die Antworten einzelner Teilnehmer auf Fragen zugreifen, die keine personenbezogenen Daten (PII) enthalten. Nach Ende der Veranstaltung sind Antworten auf alle Fragen verfügbar (nur in zusammengefasster Form) und einzelne Antworten werden gelöscht.",
@@ -514,6 +515,5 @@
 	"campaignevents-register-event-id": "Veranstaltungs-ID",
 	"campaignevents-eventslist-topics-label": "Themen",
 	"campaignevents-event-details-topics-header": "Themen",
-	"campaignevents-eventpage-dialog-topics-label": "Themen",
-	"campaignevents-edit-field-topics-help": "Du kannst maximal {{PLURAL:$1|ein Thema|$1 Themen}} hinzufügen."
+	"campaignevents-eventpage-dialog-topics-label": "Themen"
 }

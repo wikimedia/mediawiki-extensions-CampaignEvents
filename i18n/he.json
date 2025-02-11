@@ -93,6 +93,7 @@
 	"campaignevents-edit-field-status-test": "אירוע בדיקה",
 	"campaignevents-edit-field-topics-label": "נושאי האירוע",
 	"campaignevents-edit-field-topics-placeholder": "הוספת נושאים",
+	"campaignevents-edit-field-topics-help": "אפשר להוסיף {{PLURAL:$1|נושא אחד|$1 נושאים}} לכל היותר.",
 	"campaignevents-edit-form-questions-label": "שאלות למשתתפים",
 	"campaignevents-edit-form-questions-intro": "נא לבחור אחת מהשאלות הבאות שהמשתתפים יענו עליהן בזמן ההרשמה לאירוע.",
 	"campaignevents-edit-form-questions-explanation": "במהלך האירוע, באפשרותך לגשת לתגובות של משתתפים בודדים לשאלות שאינן כוללות מידע אישי מזהה (PII). לאחר סיום האירוע, תגובות לכל השאלות יהיו זמינות (בצורה מצטברת בלבד) ותגובות בודדות יימחקו.",
@@ -515,6 +516,5 @@
 	"campaignevents-register-event-id": "מזהה אירוע",
 	"campaignevents-eventslist-topics-label": "נושאים",
 	"campaignevents-event-details-topics-header": "נושאים",
-	"campaignevents-eventpage-dialog-topics-label": "נושאים",
-	"campaignevents-edit-field-topics-help": "אפשר להוסיף {{PLURAL:$1|נושא אחד|$1 נושאים}} לכל היותר."
+	"campaignevents-eventpage-dialog-topics-label": "נושאים"
 }

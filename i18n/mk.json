@@ -93,6 +93,7 @@
 	"campaignevents-edit-field-status-test": "Пробен настан",
 	"campaignevents-edit-field-topics-label": "Теми на настанот",
 	"campaignevents-edit-field-topics-placeholder": "Додај теми",
+	"campaignevents-edit-field-topics-help": "Можете да додадете највеќе {{PLURAL:$1|една тема|$1 теми}}.",
 	"campaignevents-edit-form-questions-label": "Прашања за учесниците",
 	"campaignevents-edit-form-questions-intro": "Изберете било кое од следниве прашања за учесниците кога се пријавуваат за настанот.",
 	"campaignevents-edit-form-questions-explanation": "За време на настанот можете да ги гледате одговорите на поединечните учесници за прашања кои не содржат лично препознатливи информации (ЛИП). По завршувањето на настанот одговорите на сите прашања ќе бидат достапни (само во збирен облик), а поединечните одговори ќе бидат избришани.",
@@ -515,6 +516,5 @@
 	"campaignevents-register-event-id": "Назнака на настан",
 	"campaignevents-eventslist-topics-label": "Теми",
 	"campaignevents-event-details-topics-header": "Теми",
-	"campaignevents-eventpage-dialog-topics-label": "Теми",
-	"campaignevents-edit-field-topics-help": "Можете да додадете највеќе {{PLURAL:$1|една тема|$1 теми}}."
+	"campaignevents-eventpage-dialog-topics-label": "Теми"
 }
