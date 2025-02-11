@@ -12,7 +12,8 @@
 			"Sandra Hanbo",
 			"أيوب",
 			"محمد أحمد عبد الفتاح",
-			"XIDME"
+			"XIDME",
+			"BAB ZAA"
 		]
 	},
 	"campaignevents-desc": "يوفّر ميزات لمنظمي الحملة والمشاركين فيها.",
@@ -211,7 +212,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "التسجيل مغلق",
 	"campaignevents-eventpage-btn-event-ended": "الفعالية منتهية",
 	"campaignevents-eventpage-dialog-title": "تفاصيل الفعالية",
-	"campaignevents-eventpage-dialog-organizers": "منظّمة{{PLURAL:$2|من}}: $1",
+	"campaignevents-eventpage-dialog-organizers": "منظّمة {{PLURAL:$2|من}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "عرض كافة المنظمين",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|مشارك}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1| مشارك }} مسجّل تحت الخصوصية.",
