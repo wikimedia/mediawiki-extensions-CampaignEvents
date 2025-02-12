@@ -105,6 +105,7 @@
 	"campaignevents-edit-form-submit": "Edytuj rejestrację",
 	"campaignevents-edit-form-notice": "Podczas rejestracji od uczestników będą zbierane tylko nazwy użytkowników. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Dowiedz się więcej].",
 	"campaignevents-edit-invalid-id": "Podaj prawidłowy identyfikator wydarzenia.",
+	"campaignevents-edit-no-event-id": "Ta strona nie ma prawidłowego identyfikatora wydarzenia. Wprowadź prawidłowy identyfikator wydarzenia lub zobacz wszystkie wydarzenia na [[Special:AllEvents|Liście współpracy]].",
 	"campaignevents-edit-event-notfound": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-edit-page-nonlocal": "'''[$1 Edytuj swoją rejestrację na wydarzenie]''' na $2, czyli wiki, na której to wydarzenie zostało utworzone.",
 	"campaignevents-edit-error-deleted": "Zapis na to wydarzenie został usunięty.",
@@ -121,6 +122,7 @@
 	"campaignevents-edit-not-allowed-registration": "Nie masz uprawnień do edycji tej rejestracji na wydarzenie.",
 	"campaignevents-enable-registration-not-allowed-page": "Nie masz uprawnień, aby włączyć rejestrację na wydarzenie dla danej strony wydarzenia.",
 	"registerforevent": "Zarejestruj się na wydarzenie",
+	"campaignevents-register-error-no-event-id": "Ta strona nie ma prawidłowego identyfikatora wydarzenia. Wprowadź prawidłowy identyfikator wydarzenia lub zobacz wszystkie wydarzenia na Liście współpracy.",
 	"campaignevents-register-error-event-not-found": "Nie ma wydarzenia o tym identyfikatorze.",
 	"campaignevents-register-success": "Zostałeś właśnie zarejestrowany na to wydarzenie.",
 	"campaignevents-register-success-edit": "Twoje informacje o rejestracji zostały zaktualizowane.",
@@ -512,6 +514,7 @@
 	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|więcej}}",
 	"campaignevents-eventpage-dialog-wikis-label": "Wiki",
 	"campaignevents-eventslist-wiki-label": "Wiki",
+	"campaignevents-register-event-id": "Identyfikator wydarzenia",
 	"campaignevents-eventslist-topics-label": "Tematy",
 	"campaignevents-event-details-topics-header": "Tematy",
 	"campaignevents-eventpage-dialog-topics-label": "Tematyka"
