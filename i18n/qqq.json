@@ -530,5 +530,9 @@
 	"campaignevents-register-event-id": "Label shown on event special pages when an id is not provided",
 	"campaignevents-eventslist-topics-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen topics for the event.",
 	"campaignevents-event-details-topics-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of topics",
-	"campaignevents-eventpage-dialog-topics-label": "Label used in the registration popup on event pages. This label introduces a section that lists topics that the event focuses on."
+	"campaignevents-eventpage-dialog-topics-label": "Label used in the registration popup on event pages. This label introduces a section that lists topics that the event focuses on.",
+	"campaignevents-allevents-label-upcoming-events-title": "Section label used on [[Special:AllEvents]] to introduce the list of filtered events. See {{msg-mw|campaignevents-allevents-label-upcoming-events-description}}.",
+	"campaignevents-allevents-label-upcoming-events-description": "Informational text used on [[Special:AllEvents]] to provide more information about the {{msg-mw|campaignevents-allevents-label-upcoming-events-title}} section.",
+	"campaignevents-allevents-label-ongoing-events-title": "Section label used on [[Special:AllEvents]] to introduce the list of ongoing filtered events. See {{msg-mw|campaignevents-allevents-label-ongoing-events-description}}.",
+	"campaignevents-allevents-label-ongoing-events-description": "Informational text used on [[Special:AllEvents]] to provide more information about the {{msg-mw|campaignevents-allevents-label-ongoing-events-title}} section."
 }

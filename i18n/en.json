@@ -524,5 +524,9 @@
 	"campaignevents-register-event-id": "Event Id",
 	"campaignevents-eventslist-topics-label": "Topics",
 	"campaignevents-event-details-topics-header": "Topics",
-	"campaignevents-eventpage-dialog-topics-label": "Topics"
+	"campaignevents-eventpage-dialog-topics-label": "Topics",
+	"campaignevents-allevents-label-upcoming-events-title": "Upcoming events",
+	"campaignevents-allevents-label-upcoming-events-description": "Upcoming events: Events that start within the selected dates",
+	"campaignevents-allevents-label-ongoing-events-title": "Ongoing events",
+	"campaignevents-allevents-label-ongoing-events-description": "Ongoing events: Events that start before but continue within the selected dates"
 }
