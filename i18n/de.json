@@ -515,5 +515,9 @@
 	"campaignevents-register-event-id": "Veranstaltungs-ID",
 	"campaignevents-eventslist-topics-label": "Themen",
 	"campaignevents-event-details-topics-header": "Themen",
-	"campaignevents-eventpage-dialog-topics-label": "Themen"
+	"campaignevents-eventpage-dialog-topics-label": "Themen",
+	"campaignevents-allevents-label-upcoming-events-title": "Kommende Veranstaltungen",
+	"campaignevents-allevents-label-upcoming-events-description": "Bevorstehende Veranstaltungen: Veranstaltungen, die innerhalb der ausgewählten Daten beginnen",
+	"campaignevents-allevents-label-ongoing-events-title": "Laufende Veranstaltungen",
+	"campaignevents-allevents-label-ongoing-events-description": "Laufende Veranstaltungen: Veranstaltungen, die vor Beginn der Veranstaltung stattfinden, aber innerhalb der gewählten Termine fortfahren"
 }

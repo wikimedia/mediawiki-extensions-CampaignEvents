@@ -7,7 +7,7 @@
 		]
 	},
 	"nstab-event": "Evento",
-	"group-event-organizer-member": "{{GENDER:$1|organizzatore|organizzatrice|organizzatore/trice}} di evento",
+	"group-event-organizer-member": "{{GENDER:$1|organizzatore|organizzatrice|organizzatore/trice}} di eventi",
 	"action-campaignevents-enable-registration": "abilita le registrazioni all'evento",
 	"right-campaignevents-enable-registration": "Abilita le registrazioni all'evento",
 	"action-campaignevents-delete-registration": "cancella le registrazioni all'evento",

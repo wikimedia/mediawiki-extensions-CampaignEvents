@@ -515,5 +515,9 @@
 	"campaignevents-register-event-id": "Tədbir nömrəsi",
 	"campaignevents-eventslist-topics-label": "Mövzular",
 	"campaignevents-event-details-topics-header": "Mövzular",
-	"campaignevents-eventpage-dialog-topics-label": "Mövzular"
+	"campaignevents-eventpage-dialog-topics-label": "Mövzular",
+	"campaignevents-allevents-label-upcoming-events-title": "Qarşıdan gələn tədbirlər",
+	"campaignevents-allevents-label-upcoming-events-description": "Qarşıdan gələn tədbirlər: Seçilmiş tarixlərdə başlayan tədbirlər",
+	"campaignevents-allevents-label-ongoing-events-title": "Davam edən tədbirlər",
+	"campaignevents-allevents-label-ongoing-events-description": "Davam edən tədbirlər: Daha əvvəl başlayan, lakin seçilmiş tarixlər ərzində davam edən tədbirlər"
 }

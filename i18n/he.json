@@ -516,5 +516,9 @@
 	"campaignevents-register-event-id": "מזהה אירוע",
 	"campaignevents-eventslist-topics-label": "נושאים",
 	"campaignevents-event-details-topics-header": "נושאים",
-	"campaignevents-eventpage-dialog-topics-label": "נושאים"
+	"campaignevents-eventpage-dialog-topics-label": "נושאים",
+	"campaignevents-allevents-label-upcoming-events-title": "אירועים קרובים",
+	"campaignevents-allevents-label-upcoming-events-description": "אירועים קרובים: אירועים שמתחילים בתוך התאריכים שנבחרו",
+	"campaignevents-allevents-label-ongoing-events-title": "אירועים בזמן הזה",
+	"campaignevents-allevents-label-ongoing-events-description": "אירועים בזמן הזה: אירועים שמתחילים לפני התאריכים שנבחרו ונמשכים לתוכם"
 }
