@@ -4,6 +4,7 @@
 	var FilterEventsWidget = require( './FilterEventsWidget.js' ),
 		EventKebabMenu = require( './EventKebabMenu.js' ),
 		DateTimeWidgetsEnhancer = require( './DateTimeWidgetsEnhancer.js' ),
+		EventAccordionWatcher = require( './EventAccordionWatcher.js' ),
 		deletedEventParam = 'deletedEvent';
 	mw.loader.using( [ 'mediawiki.widgets.datetime' ], function () {
 		mw.hook( 'htmlform.enhance' ).add( function ( $root ) {
@@ -65,5 +66,7 @@
 			} );
 			$btn.replaceWith( menu.$element );
 		} );
+
+		EventAccordionWatcher.setup();
 	} );
 }() );

@@ -21,6 +21,9 @@ use Wikimedia\Timestamp\TimestampException;
 class SpecialAllEvents extends SpecialPage {
 	public const PAGE_NAME = 'AllEvents';
 
+	private const ONGOING_SECTION = 'ongoing';
+	private const UPCOMING_SECTION = 'upcoming';
+
 	private EventsPagerFactory $eventsPagerFactory;
 	private CampaignEventsHookRunner $hookRunner;
 	private WikiLookup $wikiLookup;
@@ -76,6 +79,7 @@ class SpecialAllEvents extends SpecialPage {
 		$startTime = $rawStartTime === '' ? null : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
 		$rawEndTime = $request->getVal( 'wpEndDate', '' );
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
+		$openSectionsStr = $request->getVal( 'wpOpenSections', self::UPCOMING_SECTION );
 
 		$separateOngoingEvents = $this->getConfig()->get( 'CampaignEventsSeparateOngoingEvents' );
 		if ( $separateOngoingEvents ) {
@@ -140,6 +144,10 @@ class SpecialAllEvents extends SpecialPage {
 				'max' => 10,
 				'cssclass' => 'ext-campaignevents-allevents-wikis-field',
 			],
+			'OpenSections' => [
+				'type' => 'hidden',
+				'default' => $openSectionsStr,
+			],
 		];
 		if ( $separateOngoingEvents ) {
 			unset( $formDescriptor['ShowOngoing'] );
@@ -178,6 +186,7 @@ class SpecialAllEvents extends SpecialPage {
 		$upcomingEventsNavigation = $upcomingPager->getNavigationBar();
 
 		if ( $separateOngoingEvents && $startTime !== null ) {
+			$openSections = explode( ',', $openSectionsStr );
 			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
 				$searchedVal,
 				$meetingType,
@@ -192,14 +201,14 @@ class SpecialAllEvents extends SpecialPage {
 				new MessageValue( 'campaignevents-allevents-label-ongoing-events-title' ),
 				new MessageValue( 'campaignevents-allevents-label-ongoing-events-description' ),
 				'ext-campaignevents-allevents-ongoing-events',
-				false
+				in_array( self::ONGOING_SECTION, $openSections, true )
 			);
 			$content .= $this->getAccordionTemplate(
 				$upcomingPager,
 				new MessageValue( 'campaignevents-allevents-label-upcoming-events-title' ),
 				new MessageValue( 'campaignevents-allevents-label-upcoming-events-description' ),
 				'ext-campaignevents-allevents-upcoming-events',
-				true
+				in_array( self::UPCOMING_SECTION, $openSections, true )
 			);
 
 			return $form->getHTML( $result ) . $content;

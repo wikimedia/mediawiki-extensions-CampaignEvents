@@ -188,6 +188,7 @@
 				"ext.campaignEvents.specialPages/eventlists/FilterEventsWidget.js",
 				"ext.campaignEvents.specialPages/eventlists/EventKebabMenu.js",
 				"ext.campaignEvents.specialPages/eventlists/DateTimeWidgetsEnhancer.js",
+				"ext.campaignEvents.specialPages/eventlists/EventAccordionWatcher.js",
 				"TimeZoneConverter.js"
 			],
 			"dependencies": [
