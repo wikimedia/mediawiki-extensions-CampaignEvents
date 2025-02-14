@@ -214,11 +214,14 @@
 				data.userID = parseInt( participantCheckbox.getValue() );
 				return data;
 			} );
+
+		const fullListLoaded = this.participantCheckboxes.length === this.participantsTotal;
 		this.emit(
 			'change',
 			userData,
 			this.selectedParticipantIDs,
-			this.isSelectionInverted
+			this.isSelectionInverted,
+			fullListLoaded
 		);
 	};
 
@@ -483,6 +486,7 @@
 				thisClass.toggleCurUserRow();
 				if ( data.length ) {
 					thisClass.addParticipantsToList( data );
+					this.afterSelectionChange();
 				}
 			} )
 			.fail( ( _err, errData ) => {
