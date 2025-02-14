@@ -117,6 +117,7 @@ return [
 			$services->getMessageFormatterFactory()->getTextFormatter( $services->getContentLanguage()->getCode() ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->getEmailUserFactory(),
+			RequestContext::getMain()
 		);
 	},
 	EventFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFactory {
