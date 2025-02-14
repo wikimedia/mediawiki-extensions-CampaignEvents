@@ -515,5 +515,9 @@
 	"campaignevents-register-event-id": "ID de evento",
 	"campaignevents-eventslist-topics-label": "Topicos",
 	"campaignevents-event-details-topics-header": "Topicos",
-	"campaignevents-eventpage-dialog-topics-label": "Topicos"
+	"campaignevents-eventpage-dialog-topics-label": "Topicos",
+	"campaignevents-allevents-label-upcoming-events-title": "Eventos a venir",
+	"campaignevents-allevents-label-upcoming-events-description": "Eventos a venir: Eventos que comencia intra le datas seligite",
+	"campaignevents-allevents-label-ongoing-events-title": "Eventos in curso",
+	"campaignevents-allevents-label-ongoing-events-description": "Eventos in curso: Eventos que comencia ante ma continua intra le datas seligite"
 }
