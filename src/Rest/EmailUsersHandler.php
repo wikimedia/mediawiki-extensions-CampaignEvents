@@ -77,7 +77,7 @@ class EmailUsersHandler extends SimpleHandler {
 			$participants,
 			$params['subject'],
 			$params['message'],
-			false,
+			$params['ccme'],
 			$event
 		);
 
@@ -129,7 +129,12 @@ class EmailUsersHandler extends SimpleHandler {
 					static::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_REQUIRED => true,
-				]
+				],
+				'ccme' => [
+					static::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_TYPE => 'boolean',
+					ParamValidator::PARAM_DEFAULT => false,
+				],
 			] + $this->getTokenParamDefinition();
 	}
 }

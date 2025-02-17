@@ -7,6 +7,7 @@
 		/* eslint-disable no-jquery/no-global-selector */
 		this.message = OO.ui.infuse( $( '.ext-campaignevents-details-email-message' ) );
 		this.subject = OO.ui.infuse( $( '.ext-campaignevents-details-email-subject' ) );
+		this.CCMe = OO.ui.infuse( $( '.ext-campaignevents-details-email-ccme' ) );
 		this.button = OO.ui.infuse( $( '.ext-campaignevents-details-email-button' ) );
 		this.recipientsLink = OO.ui.infuse( $( '.ext-campaignevents-details-email-recipients-link' ) );
 		this.resultMessageField = OO.ui.infuse( $( '.ext-campaignevents-details-email-notification' ) );
@@ -59,6 +60,7 @@
 		this.message.value = '';
 		this.message.setValue( '' );
 		this.subject.setValue( '' );
+		this.CCMe.setSelected( false );
 		this.button.setDisabled( true );
 	};
 
@@ -72,6 +74,7 @@
 			);
 			this.subject.setDisabled( true );
 			this.message.setDisabled( true );
+			this.CCMe.setDisabled( true );
 		}
 		participantsManager.on( 'change', this.onRecipientsUpdate.bind( this ) );
 
@@ -206,7 +209,8 @@
 				// eslint-disable-next-line camelcase
 				invert_users: participantsManager.isSelectionInverted,
 				message: this.message.getValue(),
-				subject: this.subject.getValue()
+				subject: this.subject.getValue(),
+				ccme: this.CCMe.isSelected()
 			}
 		)
 			.done( function ( result ) {

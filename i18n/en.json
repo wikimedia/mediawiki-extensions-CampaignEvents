@@ -356,6 +356,7 @@
 	"campaignevents-event-details-email-subject-placeholder": "The subject of your email message",
 	"campaignevents-event-details-email-message-label": "Message",
 	"campaignevents-event-details-email-message-placeholder": "The plaintext content of your email message, this must be at least 10 characters",
+	"campaignevents-event-details-email-ccme-label": "Email me a copy of my message",
 	"campaignevents-event-details-email-recipients-button-text": "Send email",
 	"campaignevents-event-details-participants-deselect": "Deselect",
 	"campaignevents-email-participants-label": "Compose email",

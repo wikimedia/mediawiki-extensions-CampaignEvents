@@ -362,6 +362,7 @@
 	"campaignevents-event-details-email-subject-placeholder": "Placeholder text for Subject field on the email form",
 	"campaignevents-event-details-email-message-label": "Label text for Message field on the email form",
 	"campaignevents-event-details-email-message-placeholder": "Placeholder text for Subject field on the email form",
+	"campaignevents-event-details-email-ccme-label": "Label of a checkbox on Special:EventDetails. If checked, the user will receive a copy of the email they're about to send participants. This functionality is similar to {{msg-mw|emailccme}}.",
 	"campaignevents-event-details-email-recipients-button-text": "Button text for submit button on the email form",
 	"campaignevents-event-details-participants-deselect": "Title for button to deselect participants, \"deselect\" is present tense, directed to the user (and not infinitive)",
 	"campaignevents-email-participants-label": "Label text for participants field on the email form",
