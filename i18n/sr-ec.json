@@ -63,6 +63,7 @@
 	"campaignevents-eventpage-enable-registration-dialog-dismiss": "Одбаци",
 	"campaignevents-event-details-label": "Детаљи догађаја",
 	"campaignevents-event-details-edit-button": "Уреди",
+	"campaignevents-event-details-dates": "$1 до $4",
 	"campaignevents-event-details-in-person-event-label": "Догађај уживо",
 	"campaignevents-event-details-online-label": "Онлајн догађај",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи",
