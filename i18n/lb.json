@@ -284,5 +284,7 @@
 	"campaignevents-eventpage-all-wikis": "Dëst Evenement ass oppe fir all Wikien.",
 	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1|méi}}",
 	"campaignevents-eventpage-dialog-wikis-label": "Wikien",
-	"campaignevents-eventslist-wiki-label": "Wikien"
+	"campaignevents-eventslist-wiki-label": "Wikien",
+	"campaignevents-allevents-label-upcoming-events-title": "Zukünfteg Evenementer",
+	"campaignevents-allevents-label-ongoing-events-title": "Lafend Evenementer"
 }

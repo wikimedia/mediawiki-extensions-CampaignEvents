@@ -529,5 +529,9 @@
 	"campaignevents-register-event-id": "معرف الفعالية",
 	"campaignevents-eventslist-topics-label": "المواضيع",
 	"campaignevents-event-details-topics-header": "المواضيع",
-	"campaignevents-eventpage-dialog-topics-label": "المواضيع"
+	"campaignevents-eventpage-dialog-topics-label": "المواضيع",
+	"campaignevents-allevents-label-upcoming-events-title": "الأحداث القادمة",
+	"campaignevents-allevents-label-upcoming-events-description": "الأحداث القادمة: الأحداث التي تبدأ في التواريخ المحددة",
+	"campaignevents-allevents-label-ongoing-events-title": "الأحداث الجارية",
+	"campaignevents-allevents-label-ongoing-events-description": "الأحداث الجارية: الأحداث التي تبدأ قبل التواريخ المحددة ولكنها تستمر خلال هذه التواريخ"
 }

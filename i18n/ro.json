@@ -4,7 +4,8 @@
 			"Alesaru",
 			"NGC 54",
 			"Paloi Sciurala",
-			"Strainu"
+			"Strainu",
+			"Trotinel Iftode"
 		]
 	},
 	"campaignevents-eventpage-dialog-participants-view-list": "Vezi tot",
@@ -29,5 +30,9 @@
 	"campaignevents-register-questions-label-subtitle": "Puteți modifica sau elimina răspunsurile înainte, în timpul și după eveniment.",
 	"campaignevents-eventpage-register-dialog-questions-title": "Informații pentru organizatori",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Toate întrebările sunt opționale",
-	"campaignevents-register-question-organizing-partner-details-placeholder": "Vă rugăm să precizați"
+	"campaignevents-register-question-organizing-partner-details-placeholder": "Vă rugăm să precizați",
+	"campaignevents-allevents-label-upcoming-events-title": "Evenimente viitoare",
+	"campaignevents-allevents-label-upcoming-events-description": "Evenimente viitoare: evenimente care încep în datele selectate",
+	"campaignevents-allevents-label-ongoing-events-title": "Evenimente în derulare",
+	"campaignevents-allevents-label-ongoing-events-description": "Evenimente în curs: evenimente care încep înainte, dar continuă în intervalul datelor selectate"
 }
