@@ -62,6 +62,7 @@
 	"campaignevents-edit-field-organizers-placeholder": "Tambah nama pengguna",
 	"campaignevents-edit-field-organizers-creator-title": "Pengguna ini merupakan pencipta acara, maka penganjur lain tidak boleh mengalih keluar pengguna ini.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Pengguna}} ini tidak dibenarkan menganjur acara.",
+	"campaignevents-edit-field-tracking-tools": "Pautan Papan Pemuka Program & Acara",
 	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi.",
 	"campaignevents-event-details-organizers-header": "Penganjur",
 	"echo-category-title-campaign-events-notification-registration": "Pendaftaran acara",
