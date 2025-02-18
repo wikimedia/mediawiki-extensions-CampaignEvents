@@ -3,6 +3,7 @@
 		"authors": [
 			"Alien333",
 			"BlueCamille",
+			"Eihel",
 			"Gomoko",
 			"Goombiis",
 			"Graineahumus",
@@ -25,6 +26,8 @@
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
 	"nstab-event": "Événement",
+	"group-event-organizer": "Organisateurs d’événements",
+	"grouppage-event-organizer": "{{ns:project}}:Organisateurs d'événements",
 	"action-campaignevents-enable-registration": "activer les inscriptions aux événements",
 	"right-campaignevents-enable-registration": "Activer les inscriptions aux événements",
 	"action-campaignevents-delete-registration": "supprimer les inscriptions aux événements",
