@@ -516,5 +516,9 @@
 	"campaignevents-register-event-id": "Назнака на настан",
 	"campaignevents-eventslist-topics-label": "Теми",
 	"campaignevents-event-details-topics-header": "Теми",
-	"campaignevents-eventpage-dialog-topics-label": "Теми"
+	"campaignevents-eventpage-dialog-topics-label": "Теми",
+	"campaignevents-allevents-label-upcoming-events-title": "Претстојни настани",
+	"campaignevents-allevents-label-upcoming-events-description": "Претстојни настани: Настани кои почнуваат во рамките на избраните датуми",
+	"campaignevents-allevents-label-ongoing-events-title": "Тековни настани",
+	"campaignevents-allevents-label-ongoing-events-description": "Тековни настани: Настани кои почнуваат пред, но продолжуваат во рамките на избраните датуми"
 }

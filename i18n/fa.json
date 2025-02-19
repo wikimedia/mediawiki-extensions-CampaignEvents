@@ -90,5 +90,9 @@
 	"campaignevents-event-details-search-participants-placeholder": "جستجوی شرکت‌کنندگان",
 	"campaignevents-registration-confirmation-toggle-public": "ثبت نام عمومی",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|مورد بیشتر}}",
-	"campaignevents-edit-field-clickwrap-form-continue": "مشاهدهٔ پاسخ‌ها"
+	"campaignevents-edit-field-clickwrap-form-continue": "مشاهدهٔ پاسخ‌ها",
+	"campaignevents-allevents-label-upcoming-events-title": "رویدادهای پیش رو",
+	"campaignevents-allevents-label-upcoming-events-description": "رویدادهای پیش رو: رویدادهایی که بین تاریخ‌های انتخاب‌شده آغاز خواهند شد",
+	"campaignevents-allevents-label-ongoing-events-title": "رویدادهای در جریان",
+	"campaignevents-allevents-label-ongoing-events-description": "رویدادهای در جریان: رویدادهایی که پیش از تاریخ انتخاب‌شده آغاز می‌شوند، اما همچنان در این بازهٔ تاریخی ادامه می‌یابند"
 }
