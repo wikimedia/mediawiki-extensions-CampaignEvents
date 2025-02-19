@@ -96,7 +96,7 @@ class UserLinker {
 	 * @param CentralUser $centralUser
 	 * @return string[]
 	 * NOTE: Make sure that the user is not hidden before calling this method, or it will throw an exception.
-	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::userLink
+	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::userLink (T386821)
 	 */
 	public function getUserPagePath( CentralUser $centralUser ): array {
 		$html = $this->generateUserLink( $centralUser );
