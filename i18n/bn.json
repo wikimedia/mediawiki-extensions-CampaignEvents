@@ -181,5 +181,6 @@
 	"campaignevents-myinvitationslist-new-button": "নতুন",
 	"campaignevents-allevents-placeholder-add-wikis": "উইকি যোগ করুন...",
 	"campaignevents-allevents-placeholder-topics": "বিষয় যোগ করুন...",
-	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|আরও}} $1টি"
+	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|আরও}} $1টি",
+	"campaignevents-allevents-label-ongoing-events-title": "চলমান ইভেন্টগুলি"
 }
