@@ -335,6 +335,7 @@
 	"campaignevents-myinvitationslist-new-button": "Uusi",
 	"invitationlist": "Kutsulista",
 	"campaignevents-invitationlist-event": "$1: Kutsulista",
+	"campaignevents-invitationlist-preference": "Salli käyttäjien lisätä minut tapahtumien [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists kutsulistoille].",
 	"prefs-campaignevents-invitations": "Kutsulistat",
 	"campaignevents-eventpage-btn-collaboration-list": "Löydä lisää tapahtumia",
 	"campaignevents-allevents-label-filter-wikis": "Wikit",
