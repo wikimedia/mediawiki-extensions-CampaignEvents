@@ -41,5 +41,14 @@
 	"campaignevents-edit-field-status-open": "Terbuka",
 	"campaignevents-edit-field-status-closed": "Tertutup",
 	"campaignevents-edit-field-start": "Masa mula",
-	"campaignevents-edit-field-end": "Masa tamat"
+	"campaignevents-edit-field-end": "Masa tamat",
+	"campaignevents-edit-field-meeting-type": "Jenis pertemuan acara",
+	"campaignevents-edit-field-type-online": "Acara dalam talian",
+	"campaignevents-edit-field-type-in-person": "Acara secara bersemuka",
+	"campaignevents-edit-field-type-online-and-in-person": "Acara dalam talian dan bersemuka",
+	"campaignevents-edit-field-meeting-url": "URL pertemuan",
+	"campaignevents-edit-field-country": "Negara",
+	"campaignevents-edit-field-address": "Alamat",
+	"campaignevents-edit-field-chat-url": "Jemputan sembang kumpulan",
+	"campaignevents-edit-field-chat-url-help": "Jika anda mempunyai kumpulan sembang dalam talian untuk para peserta acara ini, anda boleh menambah pautan jemputan di sini. Peserta akan dapat melihat pautan jemputan selepas mendaftar."
 }
