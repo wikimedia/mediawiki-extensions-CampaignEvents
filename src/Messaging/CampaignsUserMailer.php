@@ -21,6 +21,7 @@ use MediaWiki\User\CentralId\CentralIdLookup;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
+use MessageLocalizer;
 use StatusValue;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
@@ -49,18 +50,8 @@ class CampaignsUserMailer {
 	private ITextFormatter $contLangMsgFormatter;
 	private PageURLResolver $pageURLResolver;
 	private EmailUserFactory $emailUserFactory;
+	private MessageLocalizer $msgLocalizer;
 
-	/**
-	 * @param UserFactory $userFactory
-	 * @param JobQueueGroup $jobQueueGroup
-	 * @param ServiceOptions $options
-	 * @param CentralIdLookup $centralIdLookup
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UserOptionsLookup $userOptionsLookup
-	 * @param ITextFormatter $contLangMsgFormatter
-	 * @param PageURLResolver $pageURLResolver
-	 * @param EmailUserFactory $emailUserFactory
-	 */
 	public function __construct(
 		UserFactory $userFactory,
 		JobQueueGroup $jobQueueGroup,
@@ -70,7 +61,8 @@ class CampaignsUserMailer {
 		UserOptionsLookup $userOptionsLookup,
 		ITextFormatter $contLangMsgFormatter,
 		PageURLResolver $pageURLResolver,
-		EmailUserFactory $emailUserFactory
+		EmailUserFactory $emailUserFactory,
+		MessageLocalizer $msgLocalizer
 	) {
 		$this->userFactory = $userFactory;
 		$this->jobQueueGroup = $jobQueueGroup;
@@ -82,6 +74,7 @@ class CampaignsUserMailer {
 		$this->contLangMsgFormatter = $contLangMsgFormatter;
 		$this->pageURLResolver = $pageURLResolver;
 		$this->emailUserFactory = $emailUserFactory;
+		$this->msgLocalizer = $msgLocalizer;
 	}
 
 	/**
@@ -89,6 +82,7 @@ class CampaignsUserMailer {
 	 * @param Participant[] $participants
 	 * @param string $subject
 	 * @param string $message
+	 * @param bool $CCMe Whether to send a copy of the message to $performer
 	 * @param ExistingEventRegistration $event
 	 * @return StatusValue
 	 */
@@ -97,6 +91,7 @@ class CampaignsUserMailer {
 		array $participants,
 		string $subject,
 		string $message,
+		bool $CCMe,
 		ExistingEventRegistration $event
 	): StatusValue {
 		$centralIdsMap = [];
@@ -112,22 +107,48 @@ class CampaignsUserMailer {
 		if ( !$status->isGood() ) {
 			return $status;
 		}
+
+		$performerAddress = MailAddress::newFromUser( $performerUser );
 		$jobs = [];
+		$selfEmailJob = null;
 		foreach ( $recipients as $recipientName ) {
 			$recipientUser = $this->userFactory->newFromName( $recipientName );
 			if ( $recipientUser === null ) {
 				continue;
 			}
 			$validTarget = $this->validateTarget( $recipientUser, $performerUser );
-			if ( $validTarget === null ) {
+			if ( $validTarget !== null ) {
+				continue;
+			}
+
+			$recipientAddress = MailAddress::newFromUser( $recipientUser );
+			$curMessage = $this->getMessageWithFooter( $message, $performerAddress, $recipientAddress, $event );
+			// @phan-suppress-next-line SecurityCheck-XSS Gets confused by HTML and text body being passed together
+			$curEmailJob = $this->createEmailJob( $recipientAddress, $subject, $curMessage, $performerAddress );
+
+			if ( $recipientUser->equals( $performerUser ) ) {
+				// If they're sending themself an email, leave it aside until every other recipient has been processed,
+				// so we can decide whether to send it as a copy (if CCMe was chosen and there's at least one other
+				// valid recipient) or not.
+				$selfEmailJob = $curEmailJob;
+			} else {
 				$validSend++;
-				$recipientAddress = MailAddress::newFromUser( $recipientUser );
-				$performerAddress = MailAddress::newFromUser( $performerUser );
-				$curMessage = $this->getMessageWithFooter( $message, $performerAddress, $recipientAddress, $event );
-				// @phan-suppress-next-line SecurityCheck-XSS Gets confused by HTML and text body being passed together
-				$jobs[] = $this->createEmailJob( $recipientAddress, $subject, $curMessage, $performerAddress );
+				$jobs[] = $curEmailJob;
 			}
 		}
+
+		if ( $selfEmailJob && ( $validSend === 0 || !$CCMe ) ) {
+			$jobs[] = $selfEmailJob;
+			$validSend++;
+		} elseif ( $CCMe && $validSend > 0 ) {
+			$selfSubject = $this->msgLocalizer->msg( 'campaignevents-email-self-subject' )
+				->params( $event->getName() )
+				->text();
+			$selfMessage = $this->getMessageWithFooter( $message, $performerAddress, $performerAddress, $event );
+			// @phan-suppress-next-line SecurityCheck-XSS As above
+			$jobs[] = $this->createEmailJob( $performerAddress, $selfSubject, $selfMessage, $performerAddress );
+		}
+
 		$this->jobQueueGroup->push( $jobs );
 
 		return StatusValue::newGood( $validSend );

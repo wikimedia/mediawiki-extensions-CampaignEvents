@@ -77,6 +77,7 @@ class EmailUsersHandler extends SimpleHandler {
 			$participants,
 			$params['subject'],
 			$params['message'],
+			false,
 			$event
 		);
 
