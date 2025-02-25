@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use MediaWiki\Language\Language;
 use OOUI\ButtonWidget;
+use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
 use OOUI\FieldsetLayout;
 use OOUI\MessageWidget;
@@ -137,6 +138,19 @@ class EmailParticipantsModule {
 					MessageValue::new( 'campaignevents-event-details-email-message-label' )
 				),
 				'align' => 'top',
+			]
+		);
+
+		$fields[] = new FieldLayout(
+			new CheckboxInputWidget( [
+				'infusable' => true,
+				'classes' => [ 'ext-campaignevents-details-email-ccme' ],
+			] ),
+			[
+				'align' => 'inline',
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-email-ccme-label' )
+				),
 			]
 		);
 
