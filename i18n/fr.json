@@ -27,6 +27,7 @@
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
 	"nstab-event": "Événement",
 	"group-event-organizer": "Organisateurs d’événements",
+	"group-event-organizer-member": "{{GENDER:$1|Organisateur|Organisatrice|Organisateur}} d'événements",
 	"grouppage-event-organizer": "{{ns:project}}:Organisateurs d'événements",
 	"action-campaignevents-enable-registration": "activer les inscriptions aux événements",
 	"right-campaignevents-enable-registration": "Activer les inscriptions aux événements",
