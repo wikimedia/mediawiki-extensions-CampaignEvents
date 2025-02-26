@@ -535,6 +535,7 @@
 	"campaignevents-allevents-label-upcoming-events-description": "Upcoming events: Events that start within the selected dates",
 	"campaignevents-allevents-label-ongoing-events-title": "Ongoing events",
 	"campaignevents-allevents-label-ongoing-events-description": "Ongoing events: Events that start before but continue within the selected dates",
+	"campaignevents-allevents-transclusion-more-link": "Explore more events and communities",
 	"communityconfiguration-campaignevents-title": "CampaignEvents",
 	"communityconfiguration-campaignevents-description": "Configuration options for the CampaignEvents extension",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Valid event namespaces"

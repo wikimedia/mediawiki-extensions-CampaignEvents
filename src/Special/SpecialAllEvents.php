@@ -12,13 +12,13 @@ use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\HTMLForm\HTMLForm;
-use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\SpecialPage\IncludableSpecialPage;
 use Wikimedia\Message\MessageSpecifier;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 use Wikimedia\Timestamp\TimestampException;
 
-class SpecialAllEvents extends SpecialPage {
+class SpecialAllEvents extends IncludableSpecialPage {
 	public const PAGE_NAME = 'AllEvents';
 
 	private const ONGOING_SECTION = 'ongoing';
@@ -56,15 +56,26 @@ class SpecialAllEvents extends SpecialPage {
 		] );
 		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
 		$eventsContent = $this->getFormAndEvents();
-		$this->hookRunner->onCampaignEventsGetAllEventsContent(
-			$this->getOutput(),
-			$eventsContent
-		);
+		// don't add community tab to transcluded content
+		if ( !$this->including() ) {
+			$this->hookRunner->onCampaignEventsGetAllEventsContent(
+				$this->getOutput(),
+				$eventsContent
+			);
+		} else {
+			$eventsContent .= $this->getLinkRenderer()->makeKnownLink(
+				$this->getPageTitle(),
+				$this->msg( 'campaignevents-allevents-transclusion-more-link' ),
+				[],
+				$this->getRequest()->getQueryValues()
+			);
+		}
 		$this->getOutput()->addHTML( $eventsContent );
 	}
 
 	public function getFormAndEvents(): string {
 		$request = $this->getRequest();
+		$showForm = !$this->including();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
 		$filterWiki = $request->getArray( 'wpFilterWikis', [] );
 		$filterTopics = $request->getArray( 'wpFilterTopics', [] );
@@ -74,16 +85,82 @@ class SpecialAllEvents extends SpecialPage {
 		$rawEndTime = $request->getVal( 'wpEndDate', '' );
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 		$openSectionsStr = $request->getVal( 'wpOpenSections', self::UPCOMING_SECTION );
-
 		$includeAllWikis = true;
 		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
 		// distinguish between form not submitted and form submitted but checkbox unchecked. This is important
 		// because the checkbox is checked by default.
 		$formIdentifier = 'campaignevents-allevents';
-		if ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
+		if ( $this->including() ) {
+			$includeAllWikis = $request->getBool( 'wpIncludeAllWikis', true );
+		} elseif ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
 			$includeAllWikis = $request->getCheck( 'wpIncludeAllWikis' );
 		}
 
+		$content = '';
+		if ( $showForm ) {
+			$form = $this->getHTMLForm(
+				$searchedVal,
+				$meetingType,
+				$startTime,
+				$openSectionsStr,
+				$formIdentifier
+			);
+			$result = $form->prepareForm()->tryAuthorizedSubmit();
+			$content = $form->getHTML( $result );
+		}
+		$upcomingPager = $this->eventsPagerFactory->newListPager(
+			$this->getContext(),
+			$searchedVal,
+			$meetingType,
+			$startTime,
+			$endTime,
+			$filterWiki,
+			$includeAllWikis,
+			$filterTopics
+		);
+		if ( $startTime !== null ) {
+			$openSections = explode( ',', $openSectionsStr );
+			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
+				$this->getContext(),
+				$searchedVal,
+				$meetingType,
+				$startTime,
+				$filterWiki,
+				$includeAllWikis,
+				$filterTopics
+			);
+			// TODO: Remove this awful hack when we find a way to have separate paging (T386019).
+			$ongoingPager->mLimit = 5000;
+			$content .= $this->getAccordionTemplate(
+				$ongoingPager,
+				new MessageValue( 'campaignevents-allevents-label-ongoing-events-title' ),
+				new MessageValue( 'campaignevents-allevents-label-ongoing-events-description' ),
+				'ext-campaignevents-allevents-ongoing-events',
+				in_array( self::ONGOING_SECTION, $openSections, true )
+			);
+			$content .= $this->getAccordionTemplate(
+				$upcomingPager,
+				new MessageValue( 'campaignevents-allevents-label-upcoming-events-title' ),
+				new MessageValue( 'campaignevents-allevents-label-upcoming-events-description' ),
+				'ext-campaignevents-allevents-upcoming-events',
+				in_array( self::UPCOMING_SECTION, $openSections, true )
+			);
+			return $content;
+		}
+		$upcomingEventsNavigation = $this->including() ? '' : $upcomingPager->getNavigationBar();
+		return $content
+			. $upcomingEventsNavigation
+			. $upcomingPager->getBody()
+			. $upcomingEventsNavigation;
+	}
+
+	public function getHTMLForm(
+		?string $searchedVal,
+		?int $meetingType,
+		?string $startTime,
+		string $openSectionsStr,
+		string $formIdentifier
+	): HTMLForm {
 		$formDescriptor = [
 			'Search' => [
 				'type' => 'text',
@@ -152,61 +229,13 @@ class SpecialAllEvents extends SpecialPage {
 			],
 		] );
 
-		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
+		return HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
 			->setWrapperLegendMsg( 'campaignevents-allevents-filter-legend' )
 			->setSubmitTextMsg( 'campaignevents-allevents-label-submit' )
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
 			->setFormIdentifier( $formIdentifier, true )
 			->setSubmitCallback( static fn () => true );
-		$result = $form->prepareForm()->tryAuthorizedSubmit();
-
-		$upcomingPager = $this->eventsPagerFactory->newListPager(
-			$this->getContext(),
-			$searchedVal,
-			$meetingType,
-			$startTime,
-			$endTime,
-			$filterWiki,
-			$includeAllWikis,
-			$filterTopics
-		);
-		$upcomingEventsNavigation = $upcomingPager->getNavigationBar();
-
-		if ( $startTime !== null ) {
-			$openSections = explode( ',', $openSectionsStr );
-			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
-				$this->getContext(),
-				$searchedVal,
-				$meetingType,
-				$startTime,
-				$filterWiki,
-				$includeAllWikis,
-				$filterTopics
-			);
-			// TODO: Remove this awful hack when we find a way to have separate paging (T386019).
-			$ongoingPager->mLimit = 5000;
-			$content = $this->getAccordionTemplate(
-				$ongoingPager,
-				new MessageValue( 'campaignevents-allevents-label-ongoing-events-title' ),
-				new MessageValue( 'campaignevents-allevents-label-ongoing-events-description' ),
-				'ext-campaignevents-allevents-ongoing-events',
-				in_array( self::ONGOING_SECTION, $openSections, true )
-			);
-			$content .= $this->getAccordionTemplate(
-				$upcomingPager,
-				new MessageValue( 'campaignevents-allevents-label-upcoming-events-title' ),
-				new MessageValue( 'campaignevents-allevents-label-upcoming-events-description' ),
-				'ext-campaignevents-allevents-upcoming-events',
-				in_array( self::UPCOMING_SECTION, $openSections, true )
-			);
-
-			return $form->getHTML( $result ) . $content;
-		}
-		return $form->getHTML( $result )
-			. $upcomingEventsNavigation
-			. $upcomingPager->getBody()
-			. $upcomingEventsNavigation;
 	}
 
 	public function getAccordionTemplate(
@@ -216,7 +245,7 @@ class SpecialAllEvents extends SpecialPage {
 		string $cssClass,
 		bool $isOpen
 	): string {
-		$navigation = $pager->getNavigationBar();
+		$navigation = $this->including() ? '' : $pager->getNavigationBar();
 		$data = [
 			'title' => $this->msg( $title )->text(),
 			'description' => $this->msg( $description )->text(),
