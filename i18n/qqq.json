@@ -508,6 +508,7 @@
 	"campaignevents-invitation-list-invalid-id": "Error message shown on [[Special:InvitationList]] when the ID that the user provided is not valid (e.g., if it's not a number).",
 	"campaignevents-invitation-list-does-not-exist": "Error message shown on [[Special:InvitationList]] when the requested invitation list does not exist.",
 	"campaignevents-invitation-list-not-creator": "Error message shown on [[Special:InvitationList]] when the user is attempting to view an invitation list that was not created by them.",
+	"campaignevents-invitation-list-nonlocal": "Notice shown on [[Special:InvitationList]] when trying to view an invitation list generated on another wiki.\nParameters:\n*$1 - Link to [[Special:InvitationList]] on the other wiki.\n*$2 - The name of the wiki where the invitation list was generated.",
 	"campaignevents-invitation-list-intro": "Introductory text shown on [[Special:InvitationList]] to describe the content of the page. Parameters:\n* $1 - Number of potentially interested editors found.",
 	"campaignevents-invitationlist-no-editors": "Message shown on [[Special:InvitationList]] when no potentially interested editors were found.",
 	"campaignevents-invitationlist-highly-recommended": "Section label used on [[Special:InvitationList]] to introduce a list of users who are more likely to be interested in joining the organizer's activity. See {{msg-mw|campaignevents-invitationlist-highly-recommended-info}}.",

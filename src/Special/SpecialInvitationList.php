@@ -20,6 +20,7 @@ use MediaWiki\Html\TemplateParser;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
 use OOUI\Tag;
@@ -99,6 +100,29 @@ class SpecialInvitationList extends SpecialPage {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-invitation-list-not-creator' )->parseAsBlock()
 			) );
+			return;
+		}
+
+		$invitationListWiki = $invitationList->getWiki();
+		if ( $invitationListWiki !== WikiMap::getCurrentWikiId() ) {
+			$foreignListURL = WikiMap::getForeignURL(
+				$invitationListWiki,
+				'Special:' . self::PAGE_NAME . "/$listID"
+			);
+
+			$this->setHeaders();
+			$this->getOutput()->enableOOUI();
+
+			$messageWidget = new MessageWidget( [
+				'type' => 'notice',
+				'label' => new HtmlSnippet(
+					$this->msg( 'campaignevents-invitation-list-nonlocal' )
+						->params( [ $foreignListURL, WikiMap::getWikiName( $invitationListWiki ) ] )
+						->parse()
+				)
+			] );
+
+			$this->getOutput()->addHTML( $messageWidget );
 			return;
 		}
 
