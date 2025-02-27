@@ -4,6 +4,13 @@
 	var RemoveParticipantDialog = require( './RemoveParticipantDialog.js' ),
 		ScrollDownObserver = require( './ScrollDownObserver.js' );
 	function ParticipantsManager() {
+		this.init();
+		OO.EventEmitter.call( this );
+	}
+
+	OO.mixinClass( ParticipantsManager, OO.EventEmitter );
+
+	ParticipantsManager.prototype.init = function () {
 		this.registrationID = mw.config.get( 'wgCampaignEventsEventID' );
 		this.showParticipantCheckboxes = mw.config.get( 'wgCampaignEventsShowParticipantCheckboxes' );
 		this.showPrivateParticipants = mw.config.get( 'wgCampaignEventsShowPrivateParticipants' );
@@ -57,11 +64,7 @@
 
 		this.installEventListeners();
 		this.replaceQuestionsHelp();
-
-		OO.EventEmitter.call( this );
-	}
-
-	OO.mixinClass( ParticipantsManager, OO.EventEmitter );
+	};
 
 	ParticipantsManager.prototype.replaceQuestionsHelp = function () {
 		// eslint-disable-next-line no-jquery/no-global-selector
