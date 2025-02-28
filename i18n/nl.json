@@ -11,6 +11,7 @@
 	},
 	"campaignevents-desc": "Biedt functies voor organisatoren van en deelnemers aan campagnes.",
 	"nstab-event": "Evenement",
+	"group-event-organizer": "Organisatoren van evenementen",
 	"action-campaignevents-enable-registration": "evenementregistraties in te schakelen",
 	"right-campaignevents-enable-registration": "Evenementregistraties inschakelen",
 	"action-campaignevents-delete-registration": "evenementregistraties te verwijderen",
