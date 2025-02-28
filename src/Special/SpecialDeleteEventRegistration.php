@@ -46,6 +46,10 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	 */
 	public function execute( $par ): void {
 		$this->addHelpLink( 'Extension:CampaignEvents' );
+		// For styling Html::errorBox and Html::successBox
+		$this->getOutput()->addModuleStyles( [
+			'mediawiki.codex.messagebox.styles',
+		] );
 		if ( $par === null ) {
 			$this->setHeaders();
 			$this->getOutput()->addHTML( Html::errorBox(

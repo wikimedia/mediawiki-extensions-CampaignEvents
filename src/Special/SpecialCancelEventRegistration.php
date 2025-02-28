@@ -84,6 +84,9 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	 * @inheritDoc
 	 */
 	public function onSuccess(): void {
+		$this->getOutput()->addModuleStyles( [
+			'mediawiki.codex.messagebox.styles',
+		] );
 		$this->getOutput()->addHTML( Html::successBox(
 			$this->msg( 'campaignevents-unregister-success' )->escaped()
 		) );
