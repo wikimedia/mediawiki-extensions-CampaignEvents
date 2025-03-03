@@ -50,5 +50,9 @@
 	"campaignevents-edit-field-country": "Negara",
 	"campaignevents-edit-field-address": "Alamat",
 	"campaignevents-edit-field-chat-url": "Jemputan sembang kumpulan",
-	"campaignevents-edit-field-chat-url-help": "Jika anda mempunyai kumpulan sembang dalam talian untuk para peserta acara ini, anda boleh menambah pautan jemputan di sini. Peserta akan dapat melihat pautan jemputan selepas mendaftar."
+	"campaignevents-edit-field-chat-url-help": "Jika anda mempunyai kumpulan sembang dalam talian untuk para peserta acara ini, anda boleh menambah pautan jemputan di sini. Peserta akan dapat melihat pautan jemputan selepas mendaftar.",
+	"campaignevents-enable-registration-form-submit": "Dayakan pendaftaran",
+	"campaignevents-edit-form-submit": "Sunting pendaftaran",
+	"campaignevents-edit-invalid-id": "Berikan ID acara yang sah.",
+	"campaignevents-myevents-need-central-account": "Anda memerlukan akaun pengguna pusat untuk melihat senarai acara anda."
 }
