@@ -43,6 +43,10 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 		if ( !$eventExists ) {
 			return;
 		}
+		// For styling Html::errorBox
+		$this->getOutput()->addModuleStyles( [
+			'mediawiki.codex.messagebox.styles',
+		] );
 		$validationResult = $this->checkEventIsValid();
 		if ( !$validationResult->isGood() ) {
 			$this->setHeaders();

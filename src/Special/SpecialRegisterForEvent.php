@@ -262,6 +262,9 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		$successMsg = $this->curParticipantData
 			? 'campaignevents-register-success-edit'
 			: 'campaignevents-register-success';
+		$this->getOutput()->addModuleStyles( [
+			'mediawiki.codex.messagebox.styles',
+		] );
 		$this->getOutput()->prependHTML( Html::successBox(
 			$this->msg( $successMsg )->escaped()
 		) );

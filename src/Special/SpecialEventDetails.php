@@ -257,6 +257,9 @@ class SpecialEventDetails extends SpecialPage {
 	 * @return void
 	 */
 	protected function outputErrorBox( string $errorMsg, ...$msgParams ): void {
+		$this->getOutput()->addModuleStyles( [
+			'mediawiki.codex.messagebox.styles',
+		] );
 		$this->getOutput()->addHTML( Html::errorBox(
 			$this->msg( $errorMsg )->params( ...$msgParams )->parseAsBlock()
 		) );

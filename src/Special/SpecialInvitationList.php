@@ -79,6 +79,10 @@ class SpecialInvitationList extends SpecialPage {
 		}
 
 		$listID = (int)$par;
+		// For styling Html::errorBox
+		$this->getOutput()->addModuleStyles( [
+			'mediawiki.codex.messagebox.styles',
+		] );
 		if ( (string)$listID !== $par ) {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-invitation-list-invalid-id' )->parseAsBlock()
