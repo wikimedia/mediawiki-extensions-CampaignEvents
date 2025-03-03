@@ -12,6 +12,8 @@
 	"campaignevents-desc": "Biedt functies voor organisatoren van en deelnemers aan campagnes.",
 	"nstab-event": "Evenement",
 	"group-event-organizer": "Organisatoren van evenementen",
+	"group-event-organizer-member": "{{GENDER:$1|evenementorganisator}}",
+	"grouppage-event-organizer": "{{ns:project}}:Evenementorganisatoren",
 	"action-campaignevents-enable-registration": "evenementregistraties in te schakelen",
 	"right-campaignevents-enable-registration": "Evenementregistraties inschakelen",
 	"action-campaignevents-delete-registration": "evenementregistraties te verwijderen",
@@ -95,6 +97,7 @@
 	"campaignevents-edit-field-status-test": "Testevenement",
 	"campaignevents-edit-field-topics-label": "Onderwerpen van het evenement",
 	"campaignevents-edit-field-topics-placeholder": "Onderwerpen toevoegen",
+	"campaignevents-edit-field-topics-help": "U kunt maximaal {{PLURAL:$1|één onderwerp|$1 onderwerpen}} toevoegen.",
 	"campaignevents-edit-form-questions-label": "Vragen voor deelnemers",
 	"campaignevents-edit-form-questions-intro": "Selecteer een van de volgende vragen die deelnemers moeten beantwoorden tijdens de registratie voor het evenement.",
 	"campaignevents-edit-form-questions-explanation": "Tijdens het evenement kunt u toegang krijgen tot de antwoorden van individuele deelnemers op vragen die geen persoonlijk identificeerbare informatie (PII) bevatten. Na het einde van het evenement blijven de antwoorden op alle vragen beschikbaar (alleen in geaggregeerde vorm) en zullen de individuele antwoorden worden verwijderd.",
@@ -356,6 +359,7 @@
 	"campaignevents-event-details-email-subject-placeholder": "Het onderwerp van uw e-mailbericht",
 	"campaignevents-event-details-email-message-label": "Bericht",
 	"campaignevents-event-details-email-message-placeholder": "De tekstinhoud van uw e-mailbericht. Moet minstens 10 tekens lang zijn",
+	"campaignevents-event-details-email-ccme-label": "Een kopie van dit bericht naar mijn e-mailadres zenden",
 	"campaignevents-event-details-email-recipients-button-text": "E-mail verzenden",
 	"campaignevents-event-details-participants-deselect": "Selectie opheffen",
 	"campaignevents-email-participants-label": "Email opstellen",
@@ -371,6 +375,7 @@
 	"campaignevents-email-participants-no": "Nee",
 	"campaignevents-email-footer": "Deze e-mail is {{GENDER:$1|verzonden}} door $1 naar {{GENDER:$2|$2 }}, een geregistreerde deelnemer aan het volgende evenement: $3. Als {{GENDER:$2|u}} deze e-mail beantwoordt, wordt {{GENDER:$2|uw}} e-mail rechtstreeks naar de {{GENDER:$1|oorspronkelijke afzender}} gestuurd, waardoor {{GENDER:$2|uw}} e-mailadres aan {{GENDER:$1|hen}} bekend wordt gemaakt.",
 	"campaignevents-email-footer-collaboration-list-link": "Zie de samenwerkingslijst voor meer evenementen en gemeenschappen op de wiki‘s: $1",
+	"campaignevents-email-self-subject": "Kopie van uw bericht aan de deelnemers van $1",
 	"campaignevents-event-details-time-registered": "Tijd registratie",
 	"campaignevents-event-details-can-receive-email": "Kan e-mail ontvangen",
 	"campaignevents-register-questions-label-title": "Uw gegevens",
@@ -517,5 +522,9 @@
 	"campaignevents-register-event-id": "Evenement-ID",
 	"campaignevents-eventslist-topics-label": "Onderwerpen",
 	"campaignevents-event-details-topics-header": "Onderwerpen",
-	"campaignevents-eventpage-dialog-topics-label": "Onderwerpen"
+	"campaignevents-eventpage-dialog-topics-label": "Onderwerpen",
+	"campaignevents-allevents-label-upcoming-events-title": "Aankomende evenementen",
+	"campaignevents-allevents-label-upcoming-events-description": "Aankomende evenementen: Evenementen die binnen de geselecteerde data beginnen",
+	"campaignevents-allevents-label-ongoing-events-title": "Lopende evenementen",
+	"campaignevents-allevents-label-ongoing-events-description": "Lopende evenementen: Evenementen die beginnen vóór, maar doorgaan binnen de geselecteerde data"
 }
