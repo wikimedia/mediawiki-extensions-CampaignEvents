@@ -39,6 +39,11 @@
 		this.resultMessageField.toggle( true );
 	};
 
+	EmailManager.prototype.clearMessage = function () {
+		this.resultMessage.setLabel( null );
+		this.resultMessageField.toggle( false );
+	};
+
 	/**
 	 * @param {string} type
 	 * @param {string} message
@@ -123,11 +128,10 @@
 				participantsManager.selectedParticipantsAmount ===
 				participantsManager.participantsTotal;
 
+		this.clearMessage();
 		if ( this.recipientsList.some( isInvalidRecipient ) ) {
 			this.setWarning( mw.message( 'campaignevents-email-participants-missing-address' )
 				.text() );
-		} else {
-			this.resultMessageField.toggle( false );
 		}
 
 		if ( allSelected ) {

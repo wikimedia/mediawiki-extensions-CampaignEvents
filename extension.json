@@ -146,8 +146,10 @@
 		"packageFiles": [
 			"tests/qunit/index.js",
 			"tests/qunit/ext.campaignEvents.TimeZoneConverter.test.js",
+			"tests/qunit/ext.campaignEvents.specialPages/eventdetails/EmailManager.test.js",
 			"tests/qunit/ext.campaignEvents.specialPages/eventdetails/ParticipantsManager.test.js",
 			"resources/TimeZoneConverter.js",
+			"resources/ext.campaignEvents.specialPages/eventdetails/EmailManager.js",
 			"resources/ext.campaignEvents.specialPages/eventdetails/ParticipantsManager.js",
 			"resources/ext.campaignEvents.specialPages/eventdetails/RemoveParticipantDialog.js",
 			"resources/ext.campaignEvents.specialPages/eventdetails/ScrollDownObserver.js"
