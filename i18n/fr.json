@@ -7,6 +7,7 @@
 			"Gomoko",
 			"Goombiis",
 			"Graineahumus",
+			"JLTRY",
 			"LD",
 			"MacOS Weed",
 			"Mahabarata",
@@ -112,6 +113,7 @@
 	"campaignevents-edit-field-status-test": "Événement test",
 	"campaignevents-edit-field-topics-label": "Sujets de l’événement",
 	"campaignevents-edit-field-topics-placeholder": "Ajouter des sujets",
+	"campaignevents-edit-field-topics-help": "Saisir au maximum {{PLURAL:$1|un sujet|$1 sujets}}.",
 	"campaignevents-edit-form-questions-label": "Questions aux participants",
 	"campaignevents-edit-form-questions-intro": "Parmi les questions suivantes, choisissez celles qui seront posées aux participants lors de leur inscription à l’évènement.",
 	"campaignevents-edit-form-questions-explanation": "Pendant l’événement, vous pouvez accéder aux réponses individuelles des participants pour des questions qui n’incluent pas d’informations d’identification personnelle (PII). Une fois l’événement terminé, les réponses à toutes les questions seront disponibles (seulement sous forme agrégée), et les réponses individuelles seront supprimées.",
@@ -375,6 +377,7 @@
 	"campaignevents-event-details-email-subject-placeholder": "Le sujet de votre message par courriel",
 	"campaignevents-event-details-email-message-label": "Message",
 	"campaignevents-event-details-email-message-placeholder": "Le contenu en texte brut de votre message par courriel ; il doit comporter au moins 10 caractères",
+	"campaignevents-event-details-email-ccme-label": "M’envoyer par courriel une copie de mon message",
 	"campaignevents-event-details-email-recipients-button-text": "Envoyer le courriel",
 	"campaignevents-event-details-participants-deselect": "Désélectionner",
 	"campaignevents-email-participants-label": "Composer le courriel",
@@ -390,6 +393,7 @@
 	"campaignevents-email-participants-no": "Non",
 	"campaignevents-email-footer": "Ce courriel a été {{GENDER:$1|envoyé}} par $1 à {{GENDER:$2|$2}}, un participant inscrit à l'événement suivant : $3. Si {{GENDER:$2|vous}} répondez à ce courriel, {{GENDER:$2|votre}} courriel sera envoyé directement à {{GENDER:$1|l'expéditeur original|l'expéditrice originale}}, lui révélant {{GENDER:$2|votre}} adresse de courriel.",
 	"campaignevents-email-footer-collaboration-list-link": "Visitez la liste de collaboration pour trouver plus d'événements et de communautés sur les wikis : $1",
+	"campaignevents-email-self-subject": "Une copie de votre message aux participants de $1",
 	"campaignevents-event-details-time-registered": "Horodatage d’inscription",
 	"campaignevents-event-details-can-receive-email": "Peut recevoir des courriels",
 	"campaignevents-register-questions-label-title": "Vos informations",
@@ -543,5 +547,9 @@
 	"campaignevents-register-event-id": "ID de l'événement",
 	"campaignevents-eventslist-topics-label": "Sujets",
 	"campaignevents-event-details-topics-header": "Sujets",
-	"campaignevents-eventpage-dialog-topics-label": "Sujets"
+	"campaignevents-eventpage-dialog-topics-label": "Sujets",
+	"campaignevents-allevents-label-upcoming-events-title": "Prochains événements",
+	"campaignevents-allevents-label-upcoming-events-description": "Événements à venir : événements qui commencent dans les dates sélectionnées",
+	"campaignevents-allevents-label-ongoing-events-title": "Événements en cours",
+	"campaignevents-allevents-label-ongoing-events-description": "Événements en cours: événements qui commencent avant mais se poursuivent dans les dates sélectionnées"
 }
