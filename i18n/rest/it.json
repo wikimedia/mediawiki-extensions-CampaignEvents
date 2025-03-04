@@ -12,6 +12,8 @@
 	"campaignevents-rest-user-not-found": "Non esiste alcun utente con questo ID centrale.",
 	"campaignevents-rest-get-registration-deleted": "La registrazione a questo evento è stata cancellata.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Il parametro 'user_ids' deve essere un insieme di ID utenti o deve essere nullo (per rimuovere tutti gli utenti)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Rimuovi partecipanti su $1, il wiki dove l'evento è stato creato.",
+	"campaignevents-rest-list-participants-empty-filter": "Il filtro dei nomi utente, se specificato, deve essere una stringa non vuota.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Non sei autorizzato a visualizzare i partecipanti che si sono registrati privatamente a questo evento.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> deve essere un array di nomi utente e non può essere vuoto",
 	"campaignevents-rest-set-organizers-nonlocal-error-message": "Imposta gli organizzatori su $1, il wiki dove l'evento è stato creato.",
