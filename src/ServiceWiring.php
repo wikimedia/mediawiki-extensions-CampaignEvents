@@ -114,7 +114,9 @@ return [
 			$services->getCentralIdLookup(),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->getUserOptionsLookup(),
-			$services->getMessageFormatterFactory()->getTextFormatter( $services->getContentLanguage()->getCode() ),
+			$services->getMessageFormatterFactory()->getTextFormatter(
+				$services->getContentLanguageCode()->toString()
+			),
 			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->getEmailUserFactory(),
 			RequestContext::getMain()
