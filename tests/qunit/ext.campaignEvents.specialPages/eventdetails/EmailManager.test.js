@@ -251,7 +251,8 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, null );
+					// TODO: This should not warn.
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 			}
 		);
@@ -307,8 +308,8 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					// TODO: This should warn (soft version).
-					assertWarning( assert, null );
+					// TODO: This should use the soft warning.
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 			}
 		);
@@ -364,7 +365,8 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, null );
+					// TODO: This should not warn.
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 			}
 		);
@@ -382,8 +384,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except', 'User-1' );
-					// TODO: This should warn (hard version).
-					assertWarning( assert, null );
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 				QUnit.test( 'Deselect 2 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -393,8 +394,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					// TODO: This should warn (hard version).
-					assertWarning( assert, null );
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 				QUnit.test( 'Deselect 3 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -404,8 +404,8 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					// TODO: This should warn (soft version).
-					assertWarning( assert, null );
+					// TODO: This should use the soft warning.
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 
 				QUnit.test( 'Deselect 1 valid', async ( assert ) => {
@@ -537,8 +537,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except', 'User-1' );
-					// TODO: This should warn (hard version).
-					assertWarning( assert, null );
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 				QUnit.test( 'Deselect 2 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -548,8 +547,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					// TODO: This should warn (hard version).
-					assertWarning( assert, null );
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 				QUnit.test( 'Deselect 3 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -559,7 +557,8 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, null );
+					// TODO: This should not warn.
+					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
 				} );
 
 				QUnit.test( 'Deselect 1 valid', async ( assert ) => {
