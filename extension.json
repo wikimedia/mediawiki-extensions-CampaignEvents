@@ -29,7 +29,7 @@
 	],
 	"config": {
 		"CampaignEventsProgramsAndEventsDashboardInstance": {
-			"description": "Determines which instance of the P&E Dashboard should be used, if any. Supported values are 'production', 'staging', or null to not use the dashboard.",
+			"description": "Determines which instance of the P&E Dashboard should be used, if any. Supported values are 'production', 'staging', or null to not use the dashboard. Note that this setting should use the same value for all wikis sharing the same central database for events: otherwise, the application might crash or show inconsistent data when viewing an event created on another wiki.",
 			"value": null
 		},
 		"CampaignEventsProgramsAndEventsDashboardAPISecret": {
