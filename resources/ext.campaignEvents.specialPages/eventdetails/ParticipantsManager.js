@@ -207,6 +207,21 @@
 		}
 	};
 
+	ParticipantsManager.prototype.afterSelectionChange = function () {
+		var userData = this.participantCheckboxes
+			.map( function ( participantCheckbox ) {
+				var data = participantCheckbox.getData();
+				data.userID = parseInt( participantCheckbox.getValue() );
+				return data;
+			} );
+		this.emit(
+			'change',
+			userData,
+			this.selectedParticipantIDs,
+			this.isSelectionInverted
+		);
+	};
+
 	ParticipantsManager.prototype.onSelectAll = function () {
 		this.selectedParticipantIDs = null;
 		this.isSelectionInverted = false;
@@ -214,7 +229,7 @@
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.removeClass( 'ext-campaignevents-eventdetails-hide-element' );
 		}
-		this.emit( 'change' );
+		this.afterSelectionChange();
 	};
 
 	ParticipantsManager.prototype.onDeselectAll = function () {
@@ -224,7 +239,7 @@
 		if ( this.removeParticipantsButton ) {
 			this.removeParticipantsButton.$element.addClass( 'ext-campaignevents-eventdetails-hide-element' );
 		}
-		this.emit( 'change' );
+		this.afterSelectionChange();
 	};
 
 	ParticipantsManager.prototype.updateSelectedLabel = function () {
@@ -258,7 +273,7 @@
 			this.onDeselectParticipant( el );
 		}
 		this.updateSelectedLabel();
-		this.emit( 'change' );
+		this.afterSelectionChange();
 	};
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {

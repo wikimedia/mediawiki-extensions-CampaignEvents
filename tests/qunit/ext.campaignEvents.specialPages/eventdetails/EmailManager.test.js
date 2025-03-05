@@ -124,7 +124,7 @@ QUnit.module(
 				participantsManager.selectedParticipantsAmount = selectedIDs === null ? totalParticipants : selectedIDs.length;
 			}
 			participantsManager.isSelectionInverted = isInverted;
-			participantsManager.emit( 'change' );
+			participantsManager.afterSelectionChange();
 		};
 
 		const assertRecipientsMsg = ( assert, msg, ...params ) => {
