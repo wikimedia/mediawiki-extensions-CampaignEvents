@@ -75,8 +75,15 @@
 	"campaignevents-edit-field-chat-url-help": "Jika anda mempunyai kumpulan sembang dalam talian untuk para peserta acara ini, anda boleh menambah pautan jemputan di sini. Peserta akan dapat melihat pautan jemputan selepas mendaftar.",
 	"campaignevents-edit-form-questions-label": "Soalan untuk peserta",
 	"campaignevents-edit-form-questions-explanation": "Semasa acara berlangsung, anda boleh mengakses jawapan peserta individu untuk soalan yang tidak terkandungnya Maklumat Pengenalan Peribadi (PII). Selepas acara tamat, jawapan kepada semua soalan akan tersedia (dalam bentuk agregat sahaja) dan respons individu akan dipadamkan.",
+	"campaignevents-enable-registration-form-submit": "Dayakan pendaftaran",
+	"campaignevents-edit-form-submit": "Sunting pendaftaran",
+	"campaignevents-edit-form-notice": "Hanya nama pengguna akan dikumpul daripada peserta semasa pendaftaran. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Ketahui lebih lanjut].",
+	"campaignevents-edit-invalid-id": "Berikan ID acara yang sah.",
 	"campaignevents-edit-no-organizers": "Acara perlu mempunyai sekurang-kurangnya seorang penganjur. Sila tambah penganjur atau padam acara jika ia tidak diperlukan lagi.",
+	"campaignevents-myevents-need-central-account": "Anda memerlukan akaun pengguna pusat untuk melihat senarai acara anda.",
+	"campaignevents-eventpage-dialog-participants-view-list": "Lihat semua",
 	"campaignevents-event-details-organizers-header": "Penganjur",
+	"campaignevents-event-details-organizers-noscript": "Anda perlu mendayakan JavaScript untuk melihat senarai penuh penganjur.",
 	"echo-category-title-campaign-events-notification-registration": "Pendaftaran acara",
 	"campaignevents-notification-registration-details-organizers-header": "Penganjur acara"
 }
