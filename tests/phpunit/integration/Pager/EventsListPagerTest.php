@@ -19,30 +19,6 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 	use ListPagersTestHelperTrait;
 
 	/**
-	 * @dataProvider provideLegacyDateFilters
-	 */
-	public function testDateFilters__legacy(
-		?int $searchStart,
-		?int $searchTo,
-		bool $showOngoing,
-		bool $expectsFound
-	): void {
-		$this->overrideConfigValue( 'CampaignEventsSeparateOngoingEvents', false );
-		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : null;
-		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : null;
-		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
-			'',
-			null,
-			$searchStartStr,
-			$searchToStr,
-			$showOngoing,
-			[],
-			[]
-		);
-		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
-	}
-
-	/**
 	 * @dataProvider provideUpcomingDateFilters
 	 */
 	public function testDateFilters(
@@ -50,7 +26,6 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		?int $searchTo,
 		bool $expectsFound
 	): void {
-		$this->overrideConfigValue( 'CampaignEventsSeparateOngoingEvents', true );
 		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : null;
 		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : null;
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
@@ -58,7 +33,6 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			null,
 			$searchStartStr,
 			$searchToStr,
-			false,
 			[],
 			[]
 		);
@@ -76,7 +50,6 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			null,
 			$timestamp,
 			null,
-			true,
 			[],
 			[]
 		);
@@ -93,7 +66,6 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			null,
 			null,
 			$timestamp,
-			true,
 			[],
 			[]
 		);
@@ -112,7 +84,6 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'19120623000000',
 			'29120623000000',
-			true,
 			[ 'any_wiki_name' ],
 			[ self::$EVENT_TOPIC ]
 		);

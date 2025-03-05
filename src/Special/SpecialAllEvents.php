@@ -81,20 +81,6 @@ class SpecialAllEvents extends SpecialPage {
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 		$openSectionsStr = $request->getVal( 'wpOpenSections', self::UPCOMING_SECTION );
 
-		$separateOngoingEvents = $this->getConfig()->get( 'CampaignEventsSeparateOngoingEvents' );
-		if ( $separateOngoingEvents ) {
-			$showOngoing = false;
-		} else {
-			$showOngoing = true;
-			// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
-			// distinguish between form not submitted and form submitted but checkbox unchecked. This is important
-			// because the checkbox is checked by default.
-			$formIdentifier = 'campaignevents-allevents';
-			if ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
-				$showOngoing = $request->getCheck( 'wpShowOngoing' );
-			}
-		}
-
 		$formDescriptor = [
 			'Search' => [
 				'type' => 'text',
@@ -129,12 +115,6 @@ class SpecialAllEvents extends SpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-calendar-end-field mw-htmlform-autoinfuse-lazy',
 				'default' => '',
 			],
-			'ShowOngoing' => [
-				'type' => 'toggle',
-				'label-message' => 'campaignevents-allevents-label-show-ongoing',
-				'cssclass' => 'ext-campaignevents-allevents-show-ongoing-field',
-				'default' => true,
-			],
 			'FilterWikis' => [
 				'type' => 'multiselect',
 				'dropdown' => true,
@@ -149,9 +129,6 @@ class SpecialAllEvents extends SpecialPage {
 				'default' => $openSectionsStr,
 			],
 		];
-		if ( $separateOngoingEvents ) {
-			unset( $formDescriptor['ShowOngoing'] );
-		}
 		$availableTopics = $this->topicRegistry->getTopicsForSelect();
 		if ( $availableTopics ) {
 			$formDescriptor['FilterTopics'] = [
@@ -169,9 +146,6 @@ class SpecialAllEvents extends SpecialPage {
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
 			->setSubmitCallback( static fn () => true );
-		if ( !$separateOngoingEvents && isset( $formIdentifier ) ) {
-			$form->setFormIdentifier( $formIdentifier, true );
-		}
 		$result = $form->prepareForm()->tryAuthorizedSubmit();
 
 		$upcomingPager = $this->eventsPagerFactory->newListPager(
@@ -179,13 +153,12 @@ class SpecialAllEvents extends SpecialPage {
 			$meetingType,
 			$startTime,
 			$endTime,
-			$showOngoing,
 			$filterWiki,
 			$filterTopics
 		);
 		$upcomingEventsNavigation = $upcomingPager->getNavigationBar();
 
-		if ( $separateOngoingEvents && $startTime !== null ) {
+		if ( $startTime !== null ) {
 			$openSections = explode( ',', $openSectionsStr );
 			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
 				$searchedVal,
