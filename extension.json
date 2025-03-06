@@ -25,7 +25,8 @@
 		"campaignevents-enable-registration",
 		"campaignevents-delete-registration",
 		"campaignevents-organize-events",
-		"campaignevents-email-participants"
+		"campaignevents-email-participants",
+		"campaignevents-view-private-participants"
 	],
 	"config": {
 		"CampaignEventsProgramsAndEventsDashboardInstance": {
@@ -328,7 +329,8 @@
 				"campaignevents-eventpage-enable-registration-dialog-dismiss",
 				"campaignevents-eventpage-enable-registration-dialog-confirm",
 				"campaignevents-registration-confirmation-helptext-public",
-				"campaignevents-registration-confirmation-helptext-private",
+				"campaignevents-registration-confirmation-helptext-private-with-groups",
+				"campaignevents-registration-confirmation-helptext-private-no-groups",
 				"campaignevents-registration-confirmation-toggle-private",
 				"campaignevents-registration-confirmation-toggle-public",
 				"campaignevents-eventpage-register-dialog-title",

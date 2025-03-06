@@ -42,7 +42,9 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Permissions\GroupPermissionsLookup;
 use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\User\UserGroupMembership;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
 use OOUI\Element;
@@ -89,6 +91,7 @@ class EventPageDecorator {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private GroupPermissionsLookup $groupPermissionsLookup;
 
 	private Language $language;
 	private ICampaignsAuthority $authority;
@@ -117,6 +120,7 @@ class EventPageDecorator {
 	 * @param EventQuestionsRegistry $eventQuestionsRegistry
 	 * @param WikiLookup $wikiLookup
 	 * @param ITopicRegistry $topicRegistry
+	 * @param GroupPermissionsLookup $groupPermissionsLookup
 	 * @param Language $language
 	 * @param Authority $viewingAuthority
 	 * @param OutputPage $out
@@ -136,6 +140,7 @@ class EventPageDecorator {
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
+		GroupPermissionsLookup $groupPermissionsLookup,
 		Language $language,
 		Authority $viewingAuthority,
 		OutputPage $out
@@ -153,6 +158,7 @@ class EventPageDecorator {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->groupPermissionsLookup = $groupPermissionsLookup;
 
 		$this->language = $language;
 		$this->authority = new MWAuthorityProxy( $viewingAuthority );
@@ -318,6 +324,24 @@ class EventPageDecorator {
 			$session->remove( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_SESSION_KEY );
 			$session->remove( AbstractEventRegistrationSpecialPage::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY );
 		}
+		$privateAccessGroups = [];
+		foreach (
+			$this->groupPermissionsLookup->getGroupsWithPermission(
+				PermissionChecker::VIEW_PRIVATE_PARTICIPANTS_RIGHT
+			) as $group
+		) {
+			$privateAccessGroups[] = UserGroupMembership::getLinkWiki( $group, $this->out->getContext() );
+		}
+		$privateAccessGroupsText = $this->language->listToText( $privateAccessGroups );
+		if ( $privateAccessGroups ) {
+			$privateAccessMessage = $this->out
+				->msg( 'campaignevents-registration-confirmation-helptext-private-with-groups' )
+				->params( $privateAccessGroupsText )
+				->numParams( count( $privateAccessGroups ) );
+		} else {
+			$privateAccessMessage = $this->out
+				->msg( 'campaignevents-registration-confirmation-helptext-private-no-groups' );
+		}
 
 		$this->out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $registration->getID(),
@@ -329,6 +353,7 @@ class EventPageDecorator {
 			'wgCampaignEventsIsNewRegistration' => $isNewRegistration,
 			'wgCampaignEventsRegistrationUpdatedWarnings' => $registrationUpdatedWarnings,
 			'wgCampaignEventsIsTestRegistration' => $registration->getIsTestEvent(),
+			'wgCampaignEventsPrivateAccessMessage' => $privateAccessMessage->parse(),
 		] );
 	}
 

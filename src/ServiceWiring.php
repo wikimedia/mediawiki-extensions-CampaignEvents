@@ -233,7 +233,8 @@ return [
 				$services->get( EventPageCacheUpdater::SERVICE_NAME ),
 				$services->get( EventQuestionsRegistry::SERVICE_NAME ),
 				$services->get( WikiLookup::SERVICE_NAME ),
-				$services->get( ITopicRegistry::SERVICE_NAME )
+				$services->get( ITopicRegistry::SERVICE_NAME ),
+				$services->getGroupPermissionsLookup()
 			);
 		},
 	CampaignEventsHookRunner::SERVICE_NAME =>

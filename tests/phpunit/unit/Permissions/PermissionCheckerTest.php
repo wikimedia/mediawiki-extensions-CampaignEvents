@@ -338,7 +338,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			self::LOGGED_IN,
 			self::NAMED,
 			self::NOT_BLOCKED,
-			[ 'campaignevents-enable-registration' ],
+			[ PermissionChecker::ENABLE_REGISTRATIONS_RIGHT ],
 			self::LOCAL_EVENT,
 			true,
 		];
@@ -348,7 +348,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			self::LOGGED_IN,
 			self::NAMED,
 			self::NOT_BLOCKED,
-			[ 'campaignevents-organize-events' ],
+			[ PermissionChecker::ORGANIZE_EVENTS_RIGHT ],
 			self::LOCAL_EVENT,
 			true,
 		];
@@ -359,8 +359,8 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			self::NAMED,
 			self::NOT_BLOCKED,
 			[
-				'campaignevents-enable-registration',
-				'campaignevents-organize-events'
+				PermissionChecker::ENABLE_REGISTRATIONS_RIGHT,
+				PermissionChecker::ORGANIZE_EVENTS_RIGHT
 			],
 			self::LOCAL_EVENT,
 			true,
@@ -595,7 +595,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @covers ::userCanViewPrivateParticipants
-	 * @dataProvider provideGenericEditPermissions
+	 * @dataProvider provideCanViewPrivateParticipants
 	 */
 	public function testUserCanViewPrivateParticipants(
 		bool $expected,
@@ -828,5 +828,65 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$mock->method( 'isOnLocalWiki' )->willReturn( $isLocal );
 		$mock->method( 'getID' )->willReturn( 42 );
 		return $mock;
+	}
+
+	public function provideHasViewPrivateParticipantsRights(): Generator {
+		yield 'Can view private participants with explicit right' =>
+		[
+			true,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[ PermissionChecker::VIEW_PRIVATE_PARTICIPANTS_RIGHT ],
+			self::LOCAL_EVENT,
+		];
+		yield 'Can view private participants with explicit right and organiser' =>
+		[
+			true,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[
+				PermissionChecker::VIEW_PRIVATE_PARTICIPANTS_RIGHT,
+				PermissionChecker::ORGANIZE_EVENTS_RIGHT
+			],
+			self::LOCAL_EVENT,
+		];
+		yield 'Can view private participants with explicit right and enable' =>
+		[
+			true,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[
+				PermissionChecker::VIEW_PRIVATE_PARTICIPANTS_RIGHT,
+				PermissionChecker::ENABLE_REGISTRATIONS_RIGHT,
+			],
+			self::LOCAL_EVENT,
+		];
+		yield 'blocked despited explicit right' =>
+		[
+			false,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::BLOCKED,
+			[
+				PermissionChecker::VIEW_PRIVATE_PARTICIPANTS_RIGHT
+			],
+			self::LOCAL_EVENT,
+		];
+		yield 'Cannot view private participants for foreign event despite explicit right' => [
+			false,
+			self::LOGGED_IN,
+			self::NAMED,
+			self::NOT_BLOCKED,
+			[ PermissionChecker::VIEW_PRIVATE_PARTICIPANTS_RIGHT ],
+			self::FOREIGN_EVENT,
+		];
+	}
+
+	public function provideCanViewPrivateParticipants(): Generator {
+		yield from self::provideGenericEditPermissions();
+		yield from self::provideHasViewPrivateParticipantsRights();
 	}
 }

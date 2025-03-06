@@ -19,6 +19,7 @@ use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Permissions\GroupPermissionsLookup;
 use Wikimedia\Message\IMessageFormatterFactory;
 
 class EventPageDecoratorFactory {
@@ -38,6 +39,7 @@ class EventPageDecoratorFactory {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private GroupPermissionsLookup $groupPermissionsLookup;
 
 	public function __construct(
 		PageEventLookup $pageEventLookup,
@@ -53,7 +55,8 @@ class EventPageDecoratorFactory {
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry
+		ITopicRegistry $topicRegistry,
+		GroupPermissionsLookup $groupPermissionsLookup
 	) {
 		$this->pageEventLookup = $pageEventLookup;
 		$this->participantsStore = $participantsStore;
@@ -69,6 +72,7 @@ class EventPageDecoratorFactory {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->groupPermissionsLookup = $groupPermissionsLookup;
 	}
 
 	public function newDecorator(
@@ -91,6 +95,7 @@ class EventPageDecoratorFactory {
 			$this->eventQuestionsRegistry,
 			$this->wikiLookup,
 			$this->topicRegistry,
+			$this->groupPermissionsLookup,
 			$language,
 			$viewingAuthority,
 			$out

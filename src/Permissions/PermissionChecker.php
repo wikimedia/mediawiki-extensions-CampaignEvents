@@ -19,6 +19,8 @@ class PermissionChecker {
 	public const ENABLE_REGISTRATIONS_RIGHT = 'campaignevents-enable-registration';
 	public const ORGANIZE_EVENTS_RIGHT = 'campaignevents-organize-events';
 	public const SEND_EVENTS_EMAIL_RIGHT = 'campaignevents-email-participants';
+	public const VIEW_PRIVATE_PARTICIPANTS_RIGHT = 'campaignevents-view-private-participants';
+	public const DELETE_REGISTRATION_RIGHT = 'campaignevents-delete-registration';
 
 	private OrganizersStore $organizersStore;
 	private PageAuthorLookup $pageAuthorLookup;
@@ -136,7 +138,7 @@ class PermissionChecker {
 	 */
 	public function userCanDeleteRegistrations( ICampaignsAuthority $performer ): bool {
 		return $performer->isNamed() &&
-			$performer->hasRight( 'campaignevents-delete-registration' ) &&
+			$performer->hasRight( self::DELETE_REGISTRATION_RIGHT ) &&
 			!$performer->isSitewideBlocked();
 	}
 
@@ -183,7 +185,11 @@ class PermissionChecker {
 		ICampaignsAuthority $performer,
 		ExistingEventRegistration $event
 	): bool {
-		return $this->userCanEditRegistration( $performer, $event );
+		return $this->userCanEditRegistration( $performer, $event ) ||
+			( $event->isOnLocalWiki()
+				&& $performer->isNamed()
+				&& $performer->hasRight( self::VIEW_PRIVATE_PARTICIPANTS_RIGHT )
+				&& !$performer->isSitewideBlocked() );
 	}
 
 	/**

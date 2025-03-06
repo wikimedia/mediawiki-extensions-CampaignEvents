@@ -18,6 +18,8 @@
 	 * @param {boolean} [config.answersAggregated] Whether the user's answers have already
 	 *   been aggregated.
 	 * @param {Object} [config.eventQuestions] EventQuestions object
+	 * @param {Object} [config.groupsCanViewPrivateMessage] pre-parsed helptext for private
+	 * registration
 	 */
 	function ParticipantRegistrationDialog( config ) {
 		ParticipantRegistrationDialog.super.call( this, config );
@@ -34,6 +36,7 @@
 		}
 		this.answersAggregated = config.answersAggregated;
 		this.eventQuestions = config.eventQuestions;
+		this.groupsCanViewPrivateMessage = config.groupsCanViewPrivateMessage;
 	}
 
 	OO.inheritClass( ParticipantRegistrationDialog, OO.ui.ProcessDialog );
@@ -143,7 +146,7 @@
 		var publicIcon = new OO.ui.IconWidget( { icon: 'globe' } ),
 			privateIcon = new OO.ui.IconWidget( { icon: 'lock' } );
 		var $publicHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-public' ).parseDom(),
-			$privateHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-private' ).parseDom();
+			$privateHelpText = this.groupsCanViewPrivateMessage;
 		var $publicLabel = $( '<div>' )
 			.addClass( 'ext-campaignevents-registration-visibility-label' )
 			.append( publicIcon.$element, $( '<span>' ).append( $publicHelpText ) );

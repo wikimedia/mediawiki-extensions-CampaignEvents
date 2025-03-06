@@ -1,5 +1,6 @@
 /* eslint-disable no-jquery/no-global-selector */
 // # sourceURL=index.js
+
 ( function () {
 	'use strict';
 
@@ -149,7 +150,8 @@
 					policyMsg: msg,
 					curParticipantData: curParticipantData,
 					answersAggregated: answersAlreadyAggregated,
-					eventQuestions: eventQuestions
+					eventQuestions: eventQuestions,
+					groupsCanViewPrivateMessage: mw.config.get( 'wgCampaignEventsPrivateAccessMessage' )
 				} );
 			windowManager.addWindows( [ participantRegistrationDialog ] );
 		}
