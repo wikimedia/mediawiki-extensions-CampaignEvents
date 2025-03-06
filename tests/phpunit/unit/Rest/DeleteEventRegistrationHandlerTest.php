@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
-use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
@@ -33,11 +32,6 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		'pathParams' => [ 'id' => 42 ],
 	];
 
-	/**
-	 * @param IEventLookup|null $eventLookup
-	 * @param DeleteEventCommand|null $deleteEventCommand
-	 * @return DeleteEventRegistrationHandler
-	 */
 	private function newHandler(
 		?IEventLookup $eventLookup = null,
 		?DeleteEventCommand $deleteEventCommand = null,
@@ -81,13 +75,7 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 204, $response->getStatusCode() );
 	}
 
-	/**
-	 * @param string $expectedMsgKey
-	 * @param int $expectedCode
-	 * @param IEventLookup|null $eventLookup
-	 * @dataProvider provideErrorData
-	 */
-	public function testExecute__error(
+	public function doTestExecuteExpectingError(
 		string $expectedMsgKey,
 		int $expectedCode,
 		?IEventLookup $eventLookup = null,
@@ -106,29 +94,33 @@ class DeleteEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideErrorData(): Generator {
+	public function testExecute__eventNotFound() {
 		$lookupNotFound = $this->createMock( IEventLookup::class );
 		$lookupNotFound->method( 'getEventById' )
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
-		yield 'Event not found' => [ 'campaignevents-rest-event-not-found', 404, $lookupNotFound ];
+		$this->doTestExecuteExpectingError( 'campaignevents-rest-event-not-found', 404, $lookupNotFound );
+	}
 
+	public function testExecute__eventAlreadyDeleted() {
 		$deletedRegistration = $this->createMock( ExistingEventRegistration::class );
 		$deletedRegistration->expects( $this->atLeastOnce() )
 			->method( 'getDeletionTimestamp' )
 			->willReturn( '12345678' );
 		$lookupDeleted = $this->createMock( IEventLookup::class );
 		$lookupDeleted->expects( $this->once() )->method( 'getEventById' )->willReturn( $deletedRegistration );
-		yield 'Event already deleted' => [ 'campaignevents-rest-delete-already-deleted', 404, $lookupDeleted ];
+		$this->doTestExecuteExpectingError( 'campaignevents-rest-delete-already-deleted', 404, $lookupDeleted );
+	}
 
+	public function testExecute__nonLocalEvent() {
 		$page = $this->createMock( MWPageProxy::class );
 		$page->method( 'getWikiId' )->willReturn( 'anotherwiki' );
 		$nonLocalErrorMessage = 'campaignevents-rest-delete-event-nonlocal-error-message';
-		yield 'Non local event' => [
+		$this->doTestExecuteExpectingError(
 			$nonLocalErrorMessage,
 			400,
 			null,
 			$page
-		];
+		);
 	}
 
 	/**

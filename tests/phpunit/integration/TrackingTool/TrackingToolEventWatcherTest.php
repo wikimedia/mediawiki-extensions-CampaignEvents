@@ -42,7 +42,7 @@ class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
-	private function getAssoc( int $toolID, string $toolEventID = 'foobar' ): TrackingToolAssociation {
+	private static function getAssoc( int $toolID, string $toolEventID = 'foobar' ): TrackingToolAssociation {
 		return new TrackingToolAssociation( $toolID, $toolEventID, TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null );
 	}
 
@@ -54,301 +54,311 @@ class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 		return $logger;
 	}
 
+	/** @covers ::validateEventCreation */
+	public function testValidateEventCreation__noTool() {
+		$eventWithoutTools = $this->createMock( EventRegistration::class );
+		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
+		$status = $this->getWatcher()->validateEventCreation( $eventWithoutTools, [] );
+		$this->assertStatusGood( $status );
+	}
+
 	/**
 	 * @covers ::validateEventCreation
 	 * @dataProvider provideValidateEventCreation
 	 */
-	public function testValidateEventCreation(
-		?TrackingToolRegistry $registry,
-		EventRegistration $event,
-		StatusValue $expected
-	) {
-		$this->assertEquals(
-			$expected,
-			$this->getWatcher( $registry )->validateEventCreation( $event, [] )
-		);
+	public function testValidateEventCreation( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( EventRegistration::class );
+		$event->method( 'getTrackingTools' )->willReturn( [ self::getAssoc( $toolID ) ] );
+
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		if ( $shouldFail ) {
+			$toolError = 'some-error';
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateToolAddition' )
+				->willReturn( StatusValue::newFatal( $toolError ) );
+			$status = $this->getWatcher( $registry )->validateEventCreation( $event, [] );
+			$this->assertStatusError( $toolError, $status );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateToolAddition' )
+				->willReturn( StatusValue::newGood() );
+			$status = $this->getWatcher( $registry )->validateEventCreation( $event, [] );
+			$this->assertStatusGood( $status );
+		}
 	}
 
-	public function provideValidateEventCreation(): Generator {
+	public static function provideValidateEventCreation(): Generator {
+		yield 'Add tool, error' => [ true ];
+		yield 'Add tool, successful' => [ false ];
+	}
+
+	/** @covers ::onEventCreated */
+	public function testOnEventCreated__noTool() {
 		$eventWithoutTools = $this->createMock( EventRegistration::class );
 		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [ null, $eventWithoutTools, StatusValue::newGood() ];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( EventRegistration::class );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $toolID ) ] );
-
-		$toolError = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'validateToolAddition' )
-			->willReturn( $toolError );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		yield 'Add tool, error' => [ $toolWithErrorRegistry, $eventWithTool, $toolError ];
-
-		$toolSuccessStatus = StatusValue::newGood();
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'validateToolAddition' )
-			->willReturn( $toolSuccessStatus );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		yield 'Add tool, successful' => [ $successfulToolRegistry, $eventWithTool, $toolSuccessStatus ];
+		$status = $this->getWatcher( null, $this->getLoggerSpy( false ) )
+			->onEventCreated( 1, $eventWithoutTools, [] );
+		$this->assertStatusGood( $status );
+		$this->assertStatusValue( [], $status );
 	}
 
 	/**
 	 * @covers ::onEventCreated
 	 * @dataProvider provideOnEventCreated
 	 */
-	public function testOnEventCreated(
-		?TrackingToolRegistry $registry,
-		LoggerInterface $logger,
-		EventRegistration $event,
-		StatusValue $expected
-	) {
-		$this->assertEquals(
-			$expected,
-			$this->getWatcher( $registry, $logger )->onEventCreated( 1, $event, [] )
-		);
+	public function testOnEventCreated( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( EventRegistration::class );
+		$toolAssoc = self::getAssoc( $toolID );
+		$event->method( 'getTrackingTools' )->willReturn( [ $toolAssoc ] );
+
+		$logger = $this->getLoggerSpy( $shouldFail );
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		if ( $shouldFail ) {
+			$toolError = 'some-error';
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'addToNewEvent' )
+				->willReturn( StatusValue::newFatal( $toolError ) );
+			$status = $this->getWatcher( $registry, $logger )->onEventCreated( 1, $event, [] );
+			$this->assertStatusValue( [], $status );
+			$this->assertStatusError( $toolError, $status );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'addToNewEvent' )
+				->willReturn( StatusValue::newGood() );
+			$expectedAssoc = $toolAssoc->asUpdatedWith(
+				TrackingToolAssociation::SYNC_STATUS_SYNCED,
+				self::FAKE_TIME
+			);
+			$status = $this->getWatcher( $registry, $logger )->onEventCreated( 1, $event, [] );
+			$this->assertStatusGood( $status );
+			$this->assertStatusValue( [ $expectedAssoc ], $status );
+		}
 	}
 
-	public function provideOnEventCreated(): Generator {
-		$eventWithoutTools = $this->createMock( EventRegistration::class );
-		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [ null, $this->getLoggerSpy( false ), $eventWithoutTools, StatusValue::newGood( [] ) ];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( EventRegistration::class );
-		$toolAssoc = $this->getAssoc( $toolID );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $toolAssoc ] );
-
-		$toolErrorStatus = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'addToNewEvent' )
-			->willReturn( $toolErrorStatus );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		$expectedErrorStatus = StatusValue::newGood( [] )->merge( $toolErrorStatus );
-		yield 'Add tool, error' => [
-			$toolWithErrorRegistry,
-			$this->getLoggerSpy( true ),
-			$eventWithTool,
-			$expectedErrorStatus
-		];
-
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'addToNewEvent' )
-			->willReturn( StatusValue::newGood() );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		$expectedAssoc = $toolAssoc->asUpdatedWith(
-			TrackingToolAssociation::SYNC_STATUS_SYNCED,
-			self::FAKE_TIME
-		);
-		yield 'Add tool, successful' => [
-			$successfulToolRegistry,
-			$this->getLoggerSpy( false ),
-			$eventWithTool,
-			StatusValue::newGood( [ $expectedAssoc ] )
-		];
+	public static function provideOnEventCreated(): Generator {
+		yield 'Add tool, error' => [ true ];
+		yield 'Add tool, successful' => [ false ];
 	}
 
 	/**
+	 * @param array<int,array<string,?string>> $toolErrorMap Map of tool ID to an array with optional keys "add" and
+	 * "remove", whose values can be null for success, or the error to be returned when validating addition/removal.
 	 * @covers ::validateEventUpdate
 	 * @covers ::splitToolsForEventUpdate
 	 * @dataProvider provideValidateEventUpdate
 	 */
 	public function testValidateEventUpdate(
-		?TrackingToolRegistry $registry,
-		ExistingEventRegistration $oldEvent,
-		EventRegistration $newEvent,
-		StatusValue $expected
+		array $toolErrorMap,
+		array $oldEventAssociations,
+		array $newEventAssociations,
+		?string $expectedError
 	) {
-		$this->assertEquals(
-			$expected,
-			$this->getWatcher( $registry )->validateEventUpdate( $oldEvent, $newEvent, [] )
-		);
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->willReturnCallback( function ( int $toolID ) use ( $toolErrorMap ) {
+			$tool = $this->createMock( TrackingTool::class );
+
+			$wantedAddError = $toolErrorMap[$toolID]['add'] ?? null;
+			if ( $wantedAddError !== null ) {
+				$tool->method( 'validateToolAddition' )->willReturn( StatusValue::newFatal( $wantedAddError ) );
+			} else {
+				$tool->method( 'validateToolAddition' )->willReturn( StatusValue::newGood() );
+			}
+
+			$wantedRemoveError = $toolErrorMap[$toolID]['remove'] ?? null;
+			if ( $wantedRemoveError !== null ) {
+				$tool->method( 'validateToolRemoval' )->willReturn( StatusValue::newFatal( $wantedRemoveError ) );
+			} else {
+				$tool->method( 'validateToolRemoval' )->willReturn( StatusValue::newGood() );
+			}
+			return $tool;
+		} );
+
+		$oldEvent = $this->createMock( ExistingEventRegistration::class );
+		$oldEvent->method( 'getTrackingTools' )->willReturn( $oldEventAssociations );
+		$newEvent = $this->createMock( ExistingEventRegistration::class );
+		$newEvent->method( 'getTrackingTools' )->willReturn( $newEventAssociations );
+
+		$status = $this->getWatcher( $registry )->validateEventUpdate( $oldEvent, $newEvent, [] );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $status );
+		} else {
+			$this->assertStatusError( $expectedError, $status );
+		}
 	}
 
-	public function provideValidateEventUpdate(): Generator {
-		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
-		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
+	public static function provideValidateEventUpdate(): Generator {
 		yield 'No tool before, no tool after' => [
-			null,
-			$eventWithoutTools,
-			$eventWithoutTools,
-			StatusValue::newGood()
+			[],
+			[],
+			[],
+			null
 		];
 
 		$tool1ID = 1;
 		$eventWithTool1ToolEventID = 'something';
-		$eventWithTool1 = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool1->method( 'getTrackingTools' )
-			->willReturn( [ $this->getAssoc( $tool1ID, $eventWithTool1ToolEventID ) ] );
+		$eventWithTool1 = [ self::getAssoc( $tool1ID, $eventWithTool1ToolEventID ) ];
+
 		$tool2ID = 2;
-		$eventWithTool2 = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool2->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $tool2ID ) ] );
+		$eventWithTool2 = [ self::getAssoc( $tool2ID ) ];
 
-		/**
-		 * @param array<int,TrackingTool> $toolMap Map of tool ID to TrackingTool object to return for that ID.
-		 */
-		$getRegistryMock = function ( array $toolMap ): TrackingToolRegistry {
-			$ret = $this->createMock( TrackingToolRegistry::class );
-			$ret->method( 'newFromDBID' )->willReturnCallback( static fn ( int $toolID ) => $toolMap[$toolID] );
-			return $ret;
-		};
-
-		$toolAdditionError = StatusValue::newFatal( 'some-error-for-tool-addition' );
-		$toolWithErrorOnAddition = $this->createMock( TrackingTool::class );
-		$toolWithErrorOnAddition->method( 'validateToolAddition' )->willReturn( $toolAdditionError );
-
-		$successfulAdditionStatus = StatusValue::newGood();
-		$toolWithSuccessfulAddition = $this->createMock( TrackingTool::class );
-		$toolWithSuccessfulAddition->method( 'validateToolAddition' )->willReturn( $successfulAdditionStatus );
+		$toolAdditionError = 'some-error-for-tool-addition';
+		$toolWithErrorOnAddition = [ 'add' => $toolAdditionError ];
+		$toolWithSuccessfulAddition = [ 'add' => null ];
 
 		yield 'Had no tools, adding one, error' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnAddition ] ),
-			$eventWithoutTools,
+			[ $tool1ID => $toolWithErrorOnAddition ],
+			[],
 			$eventWithTool1,
 			$toolAdditionError
 		];
 		yield 'Had no tools, adding one, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulAddition ] ),
-			$eventWithoutTools,
+			[ $tool1ID => $toolWithSuccessfulAddition ],
+			[],
 			$eventWithTool1,
-			$successfulAdditionStatus
+			null
 		];
 
-		$toolRemovalError = StatusValue::newFatal( 'some-error-for-tool-addition' );
-		$toolWithErrorOnRemoval = $this->createMock( TrackingTool::class );
-		$toolWithErrorOnRemoval->method( 'validateToolRemoval' )->willReturn( $toolRemovalError );
-
-		$successfulRemovalStatus = StatusValue::newGood();
-		$toolWithSuccessfulRemoval = $this->createMock( TrackingTool::class );
-		$toolWithSuccessfulRemoval->method( 'validateToolRemoval' )->willReturn( $successfulRemovalStatus );
+		$toolRemovalError = 'some-error-for-tool-removal';
+		$toolWithErrorOnRemoval = [ 'remove' => $toolRemovalError ];
+		$toolWithSuccessfulRemoval = [ 'remove' => null ];
 
 		yield 'Had a tool, removing it without replacement, error' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval ] ),
+			[ $tool1ID => $toolWithErrorOnRemoval ],
 			$eventWithTool1,
-			$eventWithoutTools,
+			[],
 			$toolRemovalError
 		];
 		yield 'Had a tool, removing it without replacement, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval ] ),
+			[ $tool1ID => $toolWithSuccessfulRemoval ],
 			$eventWithTool1,
-			$eventWithoutTools,
-			$successfulRemovalStatus
+			[],
+			null
 		];
 
 		yield 'Replacing a tool with another, cannot remove' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval, $tool2ID => $toolWithSuccessfulAddition ] ),
+			[ $tool1ID => $toolWithErrorOnRemoval, $tool2ID => $toolWithSuccessfulAddition ],
 			$eventWithTool1,
 			$eventWithTool2,
 			$toolRemovalError
 		];
 		yield 'Replacing a tool with another, can remove but cannot add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithErrorOnAddition ] ),
+			[ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithErrorOnAddition ],
 			$eventWithTool1,
 			$eventWithTool2,
 			$toolAdditionError
 		];
 		yield 'Replacing a tool with another, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithSuccessfulAddition ] ),
+			[ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithSuccessfulAddition ],
 			$eventWithTool1,
 			$eventWithTool2,
-			$successfulAdditionStatus
+			null
 		];
 
-		$tool1ID = 1;
-		$eventWithTool1AndDifferentToolEventID = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool1AndDifferentToolEventID->method( 'getTrackingTools' )
-			->willReturn( [ $this->getAssoc( $tool1ID, $eventWithTool1ToolEventID . '-foo' ) ] );
-
-		$toolWithSuccessfulRemovalAndErrorOnAddition = clone $toolWithSuccessfulRemoval;
-		$toolWithSuccessfulRemovalAndErrorOnAddition->method( 'validateToolAddition' )
-			->willReturn( $toolAdditionError );
-
-		$toolWithSuccessfulRemovalAndAddition = clone $toolWithSuccessfulRemoval;
-		$toolWithSuccessfulRemovalAndAddition->method( 'validateToolAddition' )
-			->willReturn( $successfulAdditionStatus );
+		$eventWithTool1AndDifferentToolEventID = [ self::getAssoc( $tool1ID, $eventWithTool1ToolEventID . '-foo' ) ];
+		$toolWithSuccessfulRemovalAndErrorOnAddition = $toolWithSuccessfulRemoval + [ 'add' => $toolAdditionError ];
+		$toolWithSuccessfulRemovalAndAddition = $toolWithSuccessfulRemoval + [ 'add' => null ];
 
 		yield 'Same tool, changing event in the tool, cannot remove' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval ] ),
+			[ $tool1ID => $toolWithErrorOnRemoval ],
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
 			$toolRemovalError
 		];
 		yield 'Same tool, changing event in the tool, can remove but cannot add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemovalAndErrorOnAddition ] ),
+			[ $tool1ID => $toolWithSuccessfulRemovalAndErrorOnAddition ],
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
 			$toolAdditionError
 		];
 		yield 'Same tool, changing event in the tool, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemovalAndAddition ] ),
+			[ $tool1ID => $toolWithSuccessfulRemovalAndAddition ],
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
-			$successfulAdditionStatus
+			null
 		];
 		yield 'Same tool, same event in the tool' => [
-			null,
+			[],
 			$eventWithTool1,
 			$eventWithTool1,
-			StatusValue::newGood()
+			null
 		];
 	}
 
 	/**
+	 * @param array<int,array<string,?string>> $toolErrorMap Map of tool ID to an array with optional keys "add" and
+	 * "remove", whose values can be null for success, or the error to be returned when adding/removing the tool.
 	 * @covers ::onEventUpdated
 	 * @covers ::splitToolsForEventUpdate
 	 * @dataProvider provideOnEventUpdated
 	 */
 	public function testOnEventUpdated(
-		?TrackingToolRegistry $registry,
-		LoggerInterface $logger,
-		ExistingEventRegistration $oldEvent,
-		EventRegistration $newEvent,
-		StatusValue $expected
+		array $toolErrorMap,
+		bool $expectsError,
+		array $oldEventAssociations,
+		array $newEventAssociations,
+		?string $expectedError,
+		?array $expectedStatusValue
 	) {
-		$this->assertEquals(
-			$expected,
-			$this->getWatcher( $registry, $logger )->onEventUpdated( $oldEvent, $newEvent, [] )
-		);
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->willReturnCallback( function ( int $toolID ) use ( $toolErrorMap ) {
+			$tool = $this->createMock( TrackingTool::class );
+
+			$wantedAddError = $toolErrorMap[$toolID]['add'] ?? null;
+			if ( $wantedAddError !== null ) {
+				$tool->method( 'addToExistingEvent' )->willReturn( StatusValue::newFatal( $wantedAddError ) );
+			} else {
+				$tool->method( 'addToExistingEvent' )->willReturn( StatusValue::newGood() );
+			}
+
+			$wantedRemoveError = $toolErrorMap[$toolID]['remove'] ?? null;
+			if ( $wantedRemoveError !== null ) {
+				$tool->method( 'removeFromEvent' )->willReturn( StatusValue::newFatal( $wantedRemoveError ) );
+			} else {
+				$tool->method( 'removeFromEvent' )->willReturn( StatusValue::newGood() );
+			}
+			return $tool;
+		} );
+
+		$oldEvent = $this->createMock( ExistingEventRegistration::class );
+		$oldEvent->method( 'getTrackingTools' )->willReturn( $oldEventAssociations );
+		$newEvent = $this->createMock( ExistingEventRegistration::class );
+		$newEvent->method( 'getTrackingTools' )->willReturn( $newEventAssociations );
+
+		$logger = $this->getLoggerSpy( $expectsError );
+
+		$status = $this->getWatcher( $registry, $logger )->onEventUpdated( $oldEvent, $newEvent, [] );
+		if ( $expectedError === null ) {
+			$this->assertStatusGood( $status );
+		} else {
+			$this->assertStatusError( $expectedError, $status );
+		}
+		$this->assertStatusValue( $expectedStatusValue, $status );
 	}
 
-	public function provideOnEventUpdated(): Generator {
-		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
-		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
+	public static function provideOnEventUpdated(): Generator {
 		yield 'No tool before, no tool after' => [
+			[],
+			false,
+			[],
+			[],
 			null,
-			$this->getLoggerSpy( false ),
-			$eventWithoutTools,
-			$eventWithoutTools,
-			StatusValue::newGood( [] )
+			[]
 		];
 
 		$tool1ID = 1;
 		$eventWithTool1ToolEventID = 'something';
-		$tool1Assoc = $this->getAssoc( $tool1ID, $eventWithTool1ToolEventID );
-		$eventWithTool1 = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool1->method( 'getTrackingTools' )
-			->willReturn( [ $tool1Assoc ] );
-		$tool2ID = 2;
-		$tool2Assoc = $this->getAssoc( $tool2ID );
-		$eventWithTool2 = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool2->method( 'getTrackingTools' )->willReturn( [ $tool2Assoc ] );
+		$tool1Assoc = self::getAssoc( $tool1ID, $eventWithTool1ToolEventID );
+		$eventWithTool1 = [ $tool1Assoc ];
 
-		/**
-		 * @param array<int,TrackingTool> $toolMap Map of tool ID to TrackingTool object to return for that ID.
-		 */
-		$getRegistryMock = function ( array $toolMap ): TrackingToolRegistry {
-			$ret = $this->createMock( TrackingToolRegistry::class );
-			$ret->method( 'newFromDBID' )->willReturnCallback( static fn ( int $toolID ) => $toolMap[$toolID] );
-			return $ret;
-		};
+		$tool2ID = 2;
+		$tool2Assoc = self::getAssoc( $tool2ID );
+		$eventWithTool2 = [ $tool2Assoc ];
 
 		$getSyncedAssoc = static function ( TrackingToolAssociation $oldAssoc ): TrackingToolAssociation {
 			return $oldAssoc->asUpdatedWith(
@@ -357,295 +367,312 @@ class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 			);
 		};
 
-		$toolAdditionError = StatusValue::newFatal( 'some-error-for-tool-addition' );
-		$toolWithErrorOnAddition = $this->createMock( TrackingTool::class );
-		$toolWithErrorOnAddition->method( 'addToExistingEvent' )->willReturn( $toolAdditionError );
-
-		$successfulAdditionStatus = StatusValue::newGood();
-		$toolWithSuccessfulAddition = $this->createMock( TrackingTool::class );
-		$toolWithSuccessfulAddition->method( 'addToExistingEvent' )->willReturn( $successfulAdditionStatus );
+		$toolAdditionError = 'some-error-for-tool-addition';
+		$toolWithErrorOnAddition = [ 'add' => $toolAdditionError ];
+		$toolWithSuccessfulAddition = [ 'add' => null ];
 
 		yield 'Had no tools, adding one, error' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnAddition ] ),
-			$this->getLoggerSpy( true ),
-			$eventWithoutTools,
+			[ $tool1ID => $toolWithErrorOnAddition ],
+			true,
+			[],
 			$eventWithTool1,
-			StatusValue::newGood( [] )->merge( $toolAdditionError )
+			$toolAdditionError,
+			[]
 		];
 		yield 'Had no tools, adding one, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulAddition ] ),
-			$this->getLoggerSpy( false ),
-			$eventWithoutTools,
+			[ $tool1ID => $toolWithSuccessfulAddition ],
+			false,
+			[],
 			$eventWithTool1,
-			StatusValue::newGood( [ $getSyncedAssoc( $tool1Assoc ) ] )
+			null,
+			[ $getSyncedAssoc( $tool1Assoc ) ]
 		];
 
-		$toolRemovalError = StatusValue::newFatal( 'some-error-for-tool-addition' );
-		$toolWithErrorOnRemoval = $this->createMock( TrackingTool::class );
-		$toolWithErrorOnRemoval->method( 'removeFromEvent' )->willReturn( $toolRemovalError );
-
-		$successfulRemovalStatus = StatusValue::newGood();
-		$toolWithSuccessfulRemoval = $this->createMock( TrackingTool::class );
-		$toolWithSuccessfulRemoval->method( 'removeFromEvent' )->willReturn( $successfulRemovalStatus );
+		$toolRemovalError = 'some-error-for-tool-removal';
+		$toolWithErrorOnRemoval = [ 'remove' => $toolRemovalError ];
+		$toolWithSuccessfulRemoval = [ 'remove' => null ];
 
 		yield 'Had a tool, removing it without replacement, error' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval ] ),
-			$this->getLoggerSpy( true ),
+			[ $tool1ID => $toolWithErrorOnRemoval ],
+			true,
 			$eventWithTool1,
-			$eventWithoutTools,
-			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
+			[],
+			$toolRemovalError,
+			$eventWithTool1
 		];
 		yield 'Had a tool, removing it without replacement, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval ] ),
-			$this->getLoggerSpy( false ),
+			[ $tool1ID => $toolWithSuccessfulRemoval ],
+			false,
 			$eventWithTool1,
-			$eventWithoutTools,
-			StatusValue::newGood( [] )
+			[],
+			null,
+			[]
 		];
 
 		yield 'Replacing a tool with another, cannot remove, cannot add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval, $tool2ID => $toolWithSuccessfulAddition ] ),
-			$this->getLoggerSpy( true ),
+			[ $tool1ID => $toolWithErrorOnRemoval, $tool2ID => $toolWithSuccessfulAddition ],
+			true,
 			$eventWithTool1,
 			$eventWithTool2,
-			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
+			$toolRemovalError,
+			$eventWithTool1
 		];
 		yield 'Replacing a tool with another, cannot remove, can add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval, $tool2ID => $toolWithSuccessfulAddition ] ),
-			$this->getLoggerSpy( true ),
+			[ $tool1ID => $toolWithErrorOnRemoval, $tool2ID => $toolWithSuccessfulAddition ],
+			true,
 			$eventWithTool1,
 			$eventWithTool2,
+			$toolRemovalError,
 			// NOTE: This will also include `$getSyncedAssoc( $tool2Assoc )` once we support multiple tracking tools.
-			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
+			$eventWithTool1
 		];
 		yield 'Replacing a tool with another, can remove but cannot add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithErrorOnAddition ] ),
-			$this->getLoggerSpy( true ),
+			[ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithErrorOnAddition ],
+			true,
 			$eventWithTool1,
 			$eventWithTool2,
-			StatusValue::newGood( [] )->merge( $toolAdditionError )
+			$toolAdditionError,
+			[]
 		];
 		yield 'Replacing a tool with another, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithSuccessfulAddition ] ),
-			$this->getLoggerSpy( false ),
+			[ $tool1ID => $toolWithSuccessfulRemoval, $tool2ID => $toolWithSuccessfulAddition ],
+			false,
 			$eventWithTool1,
 			$eventWithTool2,
-			StatusValue::newGood( [ $getSyncedAssoc( $tool2Assoc ) ] )
+			null,
+			[ $getSyncedAssoc( $tool2Assoc ) ]
 		];
 
-		$tool1ID = 1;
-		$tool1DifferentAssoc = $this->getAssoc( $tool1ID, $eventWithTool1ToolEventID . '-foo' );
-		$eventWithTool1AndDifferentToolEventID = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool1AndDifferentToolEventID->method( 'getTrackingTools' )
-			->willReturn( [ $tool1DifferentAssoc ] );
+		$tool1DifferentAssoc = self::getAssoc( $tool1ID, $eventWithTool1ToolEventID . '-foo' );
+		$eventWithTool1AndDifferentToolEventID = [ $tool1DifferentAssoc ];
 
-		$toolWithSuccessfulRemovalAndErrorOnAddition = clone $toolWithSuccessfulRemoval;
-		$toolWithSuccessfulRemovalAndErrorOnAddition->method( 'addToExistingEvent' )
-			->willReturn( $toolAdditionError );
-
-		$toolWithSuccessfulRemovalAndAddition = clone $toolWithSuccessfulRemoval;
-		$toolWithSuccessfulRemovalAndAddition->method( 'addToExistingEvent' )
-			->willReturn( $successfulAdditionStatus );
+		$toolWithSuccessfulRemovalAndErrorOnAddition = $toolWithSuccessfulRemoval + [ 'add' => $toolAdditionError ];
+		$toolWithSuccessfulRemovalAndAddition = $toolWithSuccessfulRemoval + [ 'add' => null ];
 
 		yield 'Same tool, changing event in the tool, cannot remove, cannot add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval ] ),
-			$this->getLoggerSpy( true ),
+			[ $tool1ID => $toolWithErrorOnRemoval ],
+			true,
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
-			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
+			$toolRemovalError,
+			$eventWithTool1
 		];
 		yield 'Same tool, changing event in the tool, cannot remove, can add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithErrorOnRemoval ] ),
-			$this->getLoggerSpy( true ),
+			[ $tool1ID => $toolWithErrorOnRemoval ],
+			true,
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
+			$toolRemovalError,
 			// NOTE: This will also include `$getSyncedAssoc( $tool1DifferentAssoc )` once we support
 			// multiple tracking tools.
-			StatusValue::newGood( [ $tool1Assoc ] )->merge( $toolRemovalError )
+			$eventWithTool1
 		];
 		yield 'Same tool, changing event in the tool, can remove but cannot add' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemovalAndErrorOnAddition ] ),
-			$this->getLoggerSpy( true ),
+			[ $tool1ID => $toolWithSuccessfulRemovalAndErrorOnAddition ],
+			true,
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
-			StatusValue::newGood( [] )->merge( $toolAdditionError )
+			$toolAdditionError,
+			[]
 		];
 		yield 'Same tool, changing event in the tool, success' => [
-			$getRegistryMock( [ $tool1ID => $toolWithSuccessfulRemovalAndAddition ] ),
-			$this->getLoggerSpy( false ),
+			[ $tool1ID => $toolWithSuccessfulRemovalAndAddition ],
+			false,
 			$eventWithTool1,
 			$eventWithTool1AndDifferentToolEventID,
-			StatusValue::newGood( [ $getSyncedAssoc( $tool1DifferentAssoc ) ] )
+			null,
+			[ $getSyncedAssoc( $tool1DifferentAssoc ) ]
 		];
 		yield 'Same tool, same event in the tool (no change)' => [
+			[],
+			false,
+			$eventWithTool1,
+			$eventWithTool1,
 			null,
-			$this->getLoggerSpy( false ),
-			$eventWithTool1,
-			$eventWithTool1,
-			StatusValue::newGood( [ $tool1Assoc ] )
+			$eventWithTool1
 		];
+	}
+
+	/** @covers ::validateEventDeletion */
+	public function testValidateEventDeletion__noTool() {
+		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
+		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
+		$status = $this->getWatcher()->validateEventDeletion( $eventWithoutTools );
+		$this->assertStatusGood( $status );
 	}
 
 	/**
 	 * @covers ::validateEventDeletion
 	 * @dataProvider provideValidateEventDeletion
 	 */
-	public function testValidateEventDeletion(
-		?TrackingToolRegistry $registry,
-		ExistingEventRegistration $event,
-		StatusValue $expected
-	) {
-		$this->assertEquals(
-			$expected,
-			$this->getWatcher( $registry )->validateEventDeletion( $event )
-		);
+	public function testValidateEventDeletion( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getTrackingTools' )->willReturn( [ self::getAssoc( $toolID ) ] );
+
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		if ( $shouldFail ) {
+			$toolError = 'some-error';
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateEventDeletion' )
+				->willReturn( StatusValue::newFatal( $toolError ) );
+			$status = $this->getWatcher( $registry )->validateEventDeletion( $event );
+			$this->assertStatusError( $toolError, $status );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateEventDeletion' )
+				->willReturn( StatusValue::newGood() );
+			$status = $this->getWatcher( $registry )->validateEventDeletion( $event );
+			$this->assertStatusGood( $status );
+		}
 	}
 
-	public function provideValidateEventDeletion(): Generator {
+	public static function provideValidateEventDeletion(): Generator {
+		yield 'Tool attached, error' => [ true ];
+		yield 'Tool attached, successful' => [ false ];
+	}
+
+	/** @covers ::onEventDeleted */
+	public function testOnEventDeleted__noTool() {
 		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
 		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [ null, $eventWithoutTools, StatusValue::newGood() ];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $toolID ) ] );
-
-		$toolError = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'validateEventDeletion' )
-			->willReturn( $toolError );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		yield 'Tool attached, error' => [ $toolWithErrorRegistry, $eventWithTool, $toolError ];
-
-		$toolSuccessStatus = StatusValue::newGood();
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'validateEventDeletion' )
-			->willReturn( $toolSuccessStatus );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		yield 'Tool attached, successful' => [ $successfulToolRegistry, $eventWithTool, $toolSuccessStatus ];
+		$updater = $this->createNoOpMock( TrackingToolUpdater::class );
+		$this->getWatcher( null, $this->getLoggerSpy( false ), $updater )->onEventDeleted( $eventWithoutTools );
+		// The test uses soft assertions
+		$this->addToAssertionCount( 1 );
 	}
 
 	/**
 	 * @covers ::onEventDeleted
 	 * @dataProvider provideOnEventDeleted
 	 */
-	public function testOnEventDeleted(
-		?TrackingToolRegistry $registry,
-		LoggerInterface $logger,
-		TrackingToolUpdater $updater,
-		ExistingEventRegistration $event
-	) {
-		$this->getWatcher( $registry, $logger, $updater )->onEventDeleted( $event );
+	public function testOnEventDeleted( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getTrackingTools' )->willReturn( [ self::getAssoc( $toolID ) ] );
+
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		if ( $shouldFail ) {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'onEventDeleted' )
+				->willReturn( StatusValue::newFatal( 'some-error' ) );
+			$updater = $this->createNoOpMock( TrackingToolUpdater::class );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'onEventDeleted' )
+				->willReturn( StatusValue::newGood() );
+			$updater = $this->createMock( TrackingToolUpdater::class );
+			$updater->expects( $this->once() )
+				->method( 'updateToolSyncStatus' )
+				->with( $event->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_UNKNOWN );
+		}
+
+		$this->getWatcher( $registry, $this->getLoggerSpy( $shouldFail ), $updater )->onEventDeleted( $event );
 		// The test uses soft assertions
 		$this->addToAssertionCount( 1 );
 	}
 
-	public function provideOnEventDeleted(): Generator {
+	public static function provideOnEventDeleted(): Generator {
+		yield 'Tool attached, error' => [ true ];
+		yield 'Tool attached, successful' => [ false ];
+	}
+
+	/** @covers ::validateParticipantAdded */
+	public function testValidateParticipantAdded__noTool() {
 		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
 		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [
-			null,
-			$this->getLoggerSpy( false ),
-			$this->createNoOpMock( TrackingToolUpdater::class ),
-			$eventWithoutTools
-		];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $toolID ) ] );
-
-		$toolError = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'onEventDeleted' )
-			->willReturn( $toolError );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		yield 'Tool attached, error' => [
-			$toolWithErrorRegistry,
-			$this->getLoggerSpy( true ),
-			$this->createNoOpMock( TrackingToolUpdater::class ),
-			$eventWithTool
-		];
-
-		$toolSuccessStatus = StatusValue::newGood();
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'onEventDeleted' )
-			->willReturn( $toolSuccessStatus );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		$successUpdater = $this->createMock( TrackingToolUpdater::class );
-		$successUpdater->expects( $this->once() )
-			->method( 'updateToolSyncStatus' )
-			->with( $eventWithTool->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_UNKNOWN );
-		yield 'Tool attached, successful' => [
-			$successfulToolRegistry,
-			$this->getLoggerSpy( false ),
-			$successUpdater,
-			$eventWithTool
-		];
+		$status = $this->getWatcher()->validateParticipantAdded(
+			$eventWithoutTools,
+			$this->createMock( CentralUser::class ),
+			false
+		);
+		$this->assertStatusGood( $status );
 	}
 
 	/**
 	 * @covers ::validateParticipantAdded
 	 * @dataProvider provideValidateParticipantAdded
 	 */
-	public function testValidateParticipantAdded(
-		?TrackingToolRegistry $registry,
-		ExistingEventRegistration $event,
-		StatusValue $expected
-	) {
-		$actual = $this->getWatcher( $registry )->validateParticipantAdded(
-			$event,
+	public function testValidateParticipantAdded( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getTrackingTools' )->willReturn( [ self::getAssoc( $toolID ) ] );
+		$participant = $this->createMock( CentralUser::class );
+
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		if ( $shouldFail ) {
+			$toolError = 'some-error';
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateParticipantAdded' )
+				->willReturn( StatusValue::newFatal( $toolError ) );
+			$status = $this->getWatcher( $registry )->validateParticipantAdded( $event, $participant, false );
+			$this->assertStatusError( $toolError, $status );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateParticipantAdded' )
+				->willReturn( StatusValue::newGood() );
+			$status = $this->getWatcher( $registry )->validateParticipantAdded( $event, $participant, false );
+			$this->assertStatusGood( $status );
+		}
+	}
+
+	public static function provideValidateParticipantAdded(): Generator {
+		yield 'Tool attached, error' => [ true ];
+		yield 'Tool attached, successful' => [ false ];
+	}
+
+	/** @covers ::onParticipantAdded */
+	public function testOnParticipantAdded__noTool() {
+		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
+		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
+		$logger = $this->getLoggerSpy( false );
+		$updater = $this->createNoOpMock( TrackingToolUpdater::class );
+		$this->getWatcher( null, $logger, $updater )->onParticipantAdded(
+			$eventWithoutTools,
 			$this->createMock( CentralUser::class ),
 			false
 		);
-		$this->assertEquals( $expected, $actual );
-	}
-
-	public function provideValidateParticipantAdded(): Generator {
-		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
-		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [ null, $eventWithoutTools, StatusValue::newGood() ];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $toolID ) ] );
-
-		$toolError = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'validateParticipantAdded' )
-			->willReturn( $toolError );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		yield 'Tool attached, error' => [ $toolWithErrorRegistry, $eventWithTool, $toolError ];
-
-		$toolSuccessStatus = StatusValue::newGood();
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'validateParticipantAdded' )
-			->willReturn( $toolSuccessStatus );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		yield 'Tool attached, successful' => [ $successfulToolRegistry, $eventWithTool, $toolSuccessStatus ];
+		// The test uses soft assertions
+		$this->addToAssertionCount( 1 );
 	}
 
 	/**
 	 * @covers ::onParticipantAdded
 	 * @dataProvider provideOnParticipantAdded
 	 */
-	public function testOnParticipantAdded(
-		?TrackingToolRegistry $registry,
-		LoggerInterface $logger,
-		?TrackingToolUpdater $updater,
-		ExistingEventRegistration $event
-	) {
+	public function testOnParticipantAdded( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getTrackingTools' )->willReturn( [ self::getAssoc( $toolID ) ] );
+		$eventID = $event->getID();
+
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		$updater = $this->createMock( TrackingToolUpdater::class );
+		if ( $shouldFail ) {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'addParticipant' )
+				->willReturn( StatusValue::newFatal( 'some-error' ) );
+			$updater->expects( $this->once() )
+				->method( 'updateToolSyncStatus' )
+				->with( $eventID, $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_FAILED );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'addParticipant' )
+				->willReturn( StatusValue::newGood() );
+			$updater->expects( $this->once() )
+				->method( 'updateToolSyncStatus' )
+				->with( $eventID, $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_SYNCED );
+		}
+
+		$logger = $this->getLoggerSpy( $shouldFail );
 		$this->getWatcher( $registry, $logger, $updater )->onParticipantAdded(
 			$event,
 			$this->createMock( CentralUser::class ),
@@ -655,163 +682,101 @@ class TrackingToolEventWatcherTest extends MediaWikiIntegrationTestCase {
 		$this->addToAssertionCount( 1 );
 	}
 
-	public function provideOnParticipantAdded(): Generator {
+	public static function provideOnParticipantAdded(): Generator {
+		yield 'Tool attached, error' => [ true ];
+		yield 'Tool attached, successful' => [ false ];
+	}
+
+	/** @covers ::validateParticipantsRemoved */
+	public function testValidateParticipantsRemoved__noTool() {
 		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
 		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [
-			null,
-			$this->getLoggerSpy( false ),
-			$this->createNoOpMock( TrackingToolUpdater::class ),
-			$eventWithoutTools
-		];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $toolID ) ] );
-
-		$toolError = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'addParticipant' )
-			->willReturn( $toolError );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		$errorUpdater = $this->createMock( TrackingToolUpdater::class );
-		$errorUpdater->expects( $this->once() )
-			->method( 'updateToolSyncStatus' )
-			->with( $eventWithTool->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_FAILED );
-		yield 'Tool attached, error' => [
-			$toolWithErrorRegistry,
-			$this->getLoggerSpy( true ),
-			$errorUpdater,
-			$eventWithTool
-		];
-
-		$toolSuccessStatus = StatusValue::newGood();
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'addParticipant' )
-			->willReturn( $toolSuccessStatus );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		$successUpdater = $this->createMock( TrackingToolUpdater::class );
-		$successUpdater->expects( $this->once() )
-			->method( 'updateToolSyncStatus' )
-			->with( $eventWithTool->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_SYNCED );
-		yield 'Tool attached, successful' => [
-			$successfulToolRegistry,
-			$this->getLoggerSpy( false ),
-			$successUpdater,
-			$eventWithTool
-		];
+		$status = $this->getWatcher()->validateParticipantsRemoved( $eventWithoutTools, null, false );
+		$this->assertStatusGood( $status );
 	}
 
 	/**
 	 * @covers ::validateParticipantsRemoved
 	 * @dataProvider provideValidateParticipantsRemoved
 	 */
-	public function testValidateParticipantsRemoved(
-		?TrackingToolRegistry $registry,
-		ExistingEventRegistration $event,
-		StatusValue $expected
-	) {
-		$this->assertEquals(
-			$expected,
-			$this->getWatcher( $registry )->validateParticipantsRemoved( $event, null, false )
-		);
+	public function testValidateParticipantsRemoved( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getTrackingTools' )->willReturn( [ self::getAssoc( $toolID ) ] );
+
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		if ( $shouldFail ) {
+			$toolError = 'some-error';
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateParticipantsRemoved' )
+				->willReturn( StatusValue::newFatal( $toolError ) );
+			$status = $this->getWatcher( $registry )->validateParticipantsRemoved( $event, null, false );
+			$this->assertStatusError( $toolError, $status );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'validateParticipantsRemoved' )
+				->willReturn( StatusValue::newGood() );
+			$status = $this->getWatcher( $registry )->validateParticipantsRemoved( $event, null, false );
+			$this->assertStatusGood( $status );
+		}
 	}
 
-	public function provideValidateParticipantsRemoved(): Generator {
+	public static function provideValidateParticipantsRemoved(): Generator {
+		yield 'Tool attached, error' => [ true ];
+		yield 'Tool attached, successful' => [ false ];
+	}
+
+	/** @covers ::onParticipantsRemoved */
+	public function testOnParticipantsRemoved__noTool() {
 		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
 		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [ null, $eventWithoutTools, StatusValue::newGood() ];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $toolID ) ] );
-
-		$toolError = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'validateParticipantsRemoved' )
-			->willReturn( $toolError );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		yield 'Tool attached, error' => [ $toolWithErrorRegistry, $eventWithTool, $toolError ];
-
-		$toolSuccessStatus = StatusValue::newGood();
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'validateParticipantsRemoved' )
-			->willReturn( $toolSuccessStatus );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		yield 'Tool attached, successful' => [ $successfulToolRegistry, $eventWithTool, $toolSuccessStatus ];
+		$logger = $this->getLoggerSpy( false );
+		$updater = $this->createNoOpMock( TrackingToolUpdater::class );
+		$this->getWatcher( null, $logger, $updater )->onParticipantsRemoved( $eventWithoutTools, null, false );
+		// The test uses soft assertions
+		$this->addToAssertionCount( 1 );
 	}
 
 	/**
 	 * @covers ::onParticipantsRemoved
 	 * @dataProvider provideOnParticipantsRemoved
 	 */
-	public function testOnParticipantsRemoved(
-		?TrackingToolRegistry $registry,
-		LoggerInterface $logger,
-		?TrackingToolUpdater $updater,
-		ExistingEventRegistration $event
-	) {
+	public function testOnParticipantsRemoved( bool $shouldFail ) {
+		$toolID = 1;
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getTrackingTools' )->willReturn( [ self::getAssoc( $toolID ) ] );
+
+		$tool = $this->createMock( TrackingTool::class );
+		$registry = $this->createMock( TrackingToolRegistry::class );
+		$registry->method( 'newFromDBID' )->with( $toolID )->willReturn( $tool );
+		$updater = $this->createMock( TrackingToolUpdater::class );
+		if ( $shouldFail ) {
+			$toolError = 'some-error';
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'removeParticipants' )
+				->willReturn( StatusValue::newFatal( $toolError ) );
+			$updater->expects( $this->once() )
+				->method( 'updateToolSyncStatus' )
+				->with( $event->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_FAILED );
+		} else {
+			$tool->expects( $this->atLeastOnce() )
+				->method( 'removeParticipants' )
+				->willReturn( StatusValue::newGood() );
+			$updater->expects( $this->once() )
+				->method( 'updateToolSyncStatus' )
+				->with( $event->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_SYNCED );
+		}
+
+		$logger = $this->getLoggerSpy( $shouldFail );
 		$this->getWatcher( $registry, $logger, $updater )->onParticipantsRemoved( $event, null, false );
 		// The test uses soft assertions
 		$this->addToAssertionCount( 1 );
 	}
 
-	public function provideOnParticipantsRemoved(): Generator {
-		$eventWithoutTools = $this->createMock( ExistingEventRegistration::class );
-		$eventWithoutTools->method( 'getTrackingTools' )->willReturn( [] );
-		yield 'No tool' => [
-			null,
-			$this->getLoggerSpy( false ),
-			$this->createNoOpMock( TrackingToolUpdater::class ),
-			$eventWithoutTools
-		];
-
-		$toolID = 1;
-		$eventWithTool = $this->createMock( ExistingEventRegistration::class );
-		$eventWithTool->method( 'getTrackingTools' )->willReturn( [ $this->getAssoc( $toolID ) ] );
-
-		$toolError = StatusValue::newFatal( 'some-error' );
-		$toolWithError = $this->createMock( TrackingTool::class );
-		$toolWithError->expects( $this->atLeastOnce() )
-			->method( 'removeParticipants' )
-			->willReturn( $toolError );
-		$toolWithErrorRegistry = $this->createMock( TrackingToolRegistry::class );
-		$toolWithErrorRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $toolWithError );
-		$errorUpdater = $this->createMock( TrackingToolUpdater::class );
-		$errorUpdater->expects( $this->once() )
-			->method( 'updateToolSyncStatus' )
-			->with( $eventWithTool->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_FAILED );
-		yield 'Tool attached, error' => [
-			$toolWithErrorRegistry,
-			$this->getLoggerSpy( true ),
-			$errorUpdater,
-			$eventWithTool
-		];
-
-		$toolSuccessStatus = StatusValue::newGood();
-		$successfulTool = $this->createMock( TrackingTool::class );
-		$successfulTool->expects( $this->atLeastOnce() )
-			->method( 'removeParticipants' )
-			->willReturn( $toolSuccessStatus );
-		$successfulToolRegistry = $this->createMock( TrackingToolRegistry::class );
-		$successfulToolRegistry->method( 'newFromDBID' )->with( $toolID )->willReturn( $successfulTool );
-		$successUpdater = $this->createMock( TrackingToolUpdater::class );
-		$successUpdater->expects( $this->once() )
-			->method( 'updateToolSyncStatus' )
-			->with( $eventWithTool->getID(), $toolID, $this->anything(), TrackingToolAssociation::SYNC_STATUS_SYNCED );
-		yield 'Tool attached, successful' => [
-			$successfulToolRegistry,
-			$this->getLoggerSpy( false ),
-			$successUpdater,
-			$eventWithTool
-		];
+	public static function provideOnParticipantsRemoved(): Generator {
+		yield 'Tool attached, error' => [ true ];
+		yield 'Tool attached, successful' => [ false ];
 	}
 }
