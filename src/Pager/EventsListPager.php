@@ -66,7 +66,6 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $filterTopics;
 	protected ?string $startDate;
 	protected ?string $endDate;
-	private bool $showOngoing;
 
 	private string $lastHeaderTimestamp;
 	/** @var array<int,Organizer|null> Maps event ID to the event creator, if available, else to null. */
@@ -103,7 +102,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		?int $meetingType,
 		?string $startDate,
 		?string $endDate,
-		bool $showOngoing,
 		array $filterWiki,
 		array $filterTopics
 	) {
@@ -137,7 +135,6 @@ class EventsListPager extends ReverseChronologicalPager {
 			'Must be a valid timestamp or null'
 		);
 		$this->endDate = $endDate;
-		$this->showOngoing = $showOngoing;
 
 		$this->getDateRangeCond( $startDate, $endDate );
 		$this->lastHeaderTimestamp = '';
@@ -426,20 +423,11 @@ class EventsListPager extends ReverseChronologicalPager {
 		[ $tables, $fields, $conds, $fname, $options, $join_conds ] = parent::buildQueryInfo( $offset, $limit, $order );
 		// this is required to set the offsets correctly
 		[ $startOffset, $endOffset ] = $this->getDateRangeCond( $this->startDate, $this->endDate );
-		if ( !$this->getConfig()->get( 'CampaignEventsSeparateOngoingEvents' ) && $this->showOngoing ) {
-			if ( $startOffset ) {
-				$conds[] = $this->mDb->expr( 'event_end_utc', '>=', $startOffset );
-			}
-			if ( $endOffset ) {
-				$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
-			}
-		} else {
-			if ( $startOffset ) {
-				$conds[] = $this->mDb->expr( 'event_start_utc', '>=', $startOffset );
-			}
-			if ( $endOffset ) {
-				$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
-			}
+		if ( $startOffset ) {
+			$conds[] = $this->mDb->expr( 'event_start_utc', '>=', $startOffset );
+		}
+		if ( $endOffset ) {
+			$conds[] = $this->mDb->expr( 'event_start_utc', '<=', $endOffset );
 		}
 		return [ $tables, $fields, $conds, $fname, $options, $join_conds ];
 	}

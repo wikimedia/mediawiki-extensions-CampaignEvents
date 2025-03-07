@@ -23,7 +23,7 @@ class OngoingEventsListPager extends EventsListPager {
 	/** @var bool Restore grandparent ordering, so events are ordered from newest to oldest. */
 	public $mDefaultDirection = IndexPager::DIR_DESCENDING;
 
-	/** Same as parent constructor, but start date is required and there are no end date and showOngoing. */
+	/** Same as parent constructor, but start date is required and there is no end date. */
 	public function __construct(
 		UserLinker $userLinker,
 		CampaignsPageFactory $pageFactory,
@@ -60,7 +60,6 @@ class OngoingEventsListPager extends EventsListPager {
 			$meetingType,
 			$startDate,
 			null,
-			false,
 			$filterWiki,
 			$filterTopics
 		);

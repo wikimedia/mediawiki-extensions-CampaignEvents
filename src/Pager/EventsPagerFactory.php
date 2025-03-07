@@ -97,7 +97,6 @@ class EventsPagerFactory {
 		?int $meetingType,
 		?string $startDate,
 		?string $endDate,
-		bool $showOngoing,
 		array $filterWiki,
 		array $filterTopics
 	): EventsListPager {
@@ -118,7 +117,6 @@ class EventsPagerFactory {
 			$meetingType,
 			$startDate,
 			$endDate,
-			$showOngoing,
 			$filterWiki,
 			$filterTopics
 		);
