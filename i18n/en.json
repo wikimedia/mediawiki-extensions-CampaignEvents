@@ -501,6 +501,7 @@
 	"campaignevents-invitation-list-invalid-id": "Provide a valid invitation list ID. [[Special:MyInvitationLists|View your invitation lists]].",
 	"campaignevents-invitation-list-does-not-exist": "This invitation list does not exist. [[Special:MyInvitationLists|View your invitation lists]].",
 	"campaignevents-invitation-list-not-creator": "You don't have permission to view this invitation list because you didn't create it. [[Special:MyInvitationLists|View your invitation lists]].",
+	"campaignevents-invitation-list-nonlocal": "Please '''[$1 view this invitation list on $2]''', the wiki where it was generated.",
 	"campaignevents-invitation-list-intro": "$1 {{PLURAL:$1|editor|editors}} found, based on the following criteria: the bytes they contributed to the articles, the number of edits they made to the articles, their overall edit count on the wikis, and how recently they have edited the wikis.",
 	"campaignevents-invitationlist-no-editors": "<strong>No editors meet the [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation list criteria] from your article list.</strong> You can [[Special:GenerateInvitationList|create a new invitation list]] with a new article list.",
 	"campaignevents-invitationlist-highly-recommended": "Highly recommended to invite",
