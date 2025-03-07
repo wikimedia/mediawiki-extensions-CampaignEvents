@@ -153,7 +153,7 @@ class ListParticipantsHandler extends SimpleHandler {
 				$respDataByCentralID[$centralID]['not_found'] = true;
 			} else {
 				$genderUsername = $usernameOrError;
-				$user = $usersByName[$usernameOrError];
+				$user = $usersByName[$usernameOrError] ?? null;
 				$respDataByCentralID[$centralID] += [
 					'user_name' => $usernameOrError,
 					'user_page' => $this->userLinker->getUserPagePath( new CentralUser( $centralID ) ),
@@ -187,7 +187,7 @@ class ListParticipantsHandler extends SimpleHandler {
 	 *
 	 * @param int[] $centralIDs
 	 * @return array
-	 * @phan-return array{0:array<int,string>,1:array<string,\MediaWiki\User\User|null>}
+	 * @phan-return array{0:array<int,string>,1:array<string,\MediaWiki\User\User>}
 	 */
 	private function getUserBatch( array $centralIDs ): array {
 		$centralIDsMap = array_fill_keys( $centralIDs, null );
