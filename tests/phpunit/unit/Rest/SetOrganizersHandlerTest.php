@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
-use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -117,17 +116,13 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	/**
-	 * @param EditEventCommand $editEventCommand
-	 * @param string $expectedErrorMsg
-	 * @param int $expectedCode
-	 * @dataProvider provideCommandErrors
-	 */
-	public function testRun__commandError(
-		EditEventCommand $editEventCommand,
+	public function doTestRunCommandError(
+		StatusValue $commandStatus,
 		string $expectedErrorMsg,
 		int $expectedCode
 	) {
+		$editEventCommand = $this->createMock( EditEventCommand::class );
+		$editEventCommand->method( 'doEditIfAllowed' )->willReturn( $commandStatus );
 		$handler = $this->newHandler( null, $editEventCommand );
 		$performer = $this->mockRegisteredUltimateAuthority();
 		$request = new RequestData( $this->getRequestData( [ 'foo' ] ) );
@@ -141,16 +136,16 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideCommandErrors(): Generator {
+	public function testRun__genericCommandError() {
 		$validationError = 'some-command-error';
-		$failValidationCmd = $this->createMock( EditEventCommand::class );
-		$failValidationCmd->method( 'doEditIfAllowed' )->willReturn( StatusValue::newFatal( $validationError ) );
-		yield 'Invalid data' => [ $failValidationCmd, $validationError, 400 ];
+		$commandStatus = StatusValue::newFatal( $validationError );
+		$this->doTestRunCommandError( $commandStatus, $validationError, 400 );
+	}
 
+	public function testRun__permissionError() {
 		$permissionError = 'some-permission-error';
-		$notAuthorizedCmd = $this->createMock( EditEventCommand::class );
-		$notAuthorizedCmd->method( 'doEditIfAllowed' )->willReturn( PermissionStatus::newFatal( $permissionError ) );
-		yield 'Permission error' => [ $notAuthorizedCmd, $permissionError, 403 ];
+		$commandStatus = PermissionStatus::newFatal( $permissionError );
+		$this->doTestRunCommandError( $commandStatus, $permissionError, 403 );
 	}
 
 	public function testRun__successful() {

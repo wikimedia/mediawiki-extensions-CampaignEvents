@@ -115,30 +115,18 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param string $expectedMsg
-	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
 	 * @covers ::deleteUnsafe
-	 * @dataProvider provideDeleteUnsafeErrors
 	 */
-	public function testDeleteUnsafe__error(
-		string $expectedMsg,
-		TrackingToolEventWatcher $trackingToolEventWatcher
-	) {
+	public function testDeleteUnsafe__trackingToolError() {
+		$trackingToolError = 'some-tracking-tool-error';
+		$trackingToolEventWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$trackingToolEventWatcher->expects( $this->atLeastOnce() )
+			->method( 'validateEventDeletion' )
+			->willReturn( StatusValue::newFatal( $trackingToolError ) );
+
 		$cmd = $this->getCommand( null, null, $trackingToolEventWatcher );
 		$status = $cmd->deleteUnsafe( $this->createMock( ExistingEventRegistration::class ) );
 		$this->assertStatusNotGood( $status );
-		$this->assertStatusMessage( $expectedMsg, $status );
-	}
-
-	public function provideDeleteUnsafeErrors(): Generator {
-		$trackingToolError = 'some-tracking-tool-error';
-		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$trackingToolWatcher->expects( $this->atLeastOnce() )
-			->method( 'validateEventDeletion' )
-			->willReturn( StatusValue::newFatal( $trackingToolError ) );
-		yield 'Fails tracking tool validation' => [
-			$trackingToolError,
-			$trackingToolWatcher
-		];
+		$this->assertStatusMessage( $trackingToolError, $status );
 	}
 }

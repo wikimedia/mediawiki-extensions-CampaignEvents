@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
-use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -49,24 +48,16 @@ class ListEventsByOrganizerHandlerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	/**
-	 * @param IEventLookup $eventLookup
-	 * @param array $expected
-	 * @dataProvider provideExecuteDataForEventListingTest
-	 */
-	public function testExecute( IEventLookup $eventLookup, array $expected ) {
-		$handler = $this->newHandler( $eventLookup );
+	public function testExecute__noEvents() {
+		$noEventsLookup = $this->createMock( IEventLookup::class );
+		$noEventsLookup->method( 'getEventsByOrganizer' )->willReturn( [] );
 
-		$request = new RequestData( self::DEFAULT_REQ_DATA );
-		$respData = $this->executeHandlerAndGetBodyData( $handler, $request );
-		$this->assertSame( $expected, $respData );
+		$handler = $this->newHandler( $noEventsLookup );
+		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::DEFAULT_REQ_DATA ) );
+		$this->assertSame( [], $respData );
 	}
 
-	public function provideExecuteDataForEventListingTest(): Generator {
-		$firstEventLookup = $this->createMock( IEventLookup::class );
-		$firstEventLookup->method( 'getEventsByOrganizer' )->willReturn( [] );
-		yield 'No events' => [ $firstEventLookup, [] ];
-
+	public function testExecute__hasEvents() {
 		$firstEvent = $this->createMock( ExistingEventRegistration::class );
 		$firstEvent->method( "getID" )->willReturn( 2 );
 		$firstEvent->method( "getName" )->willReturn( "Test Editathon Event 1" );
@@ -79,8 +70,11 @@ class ListEventsByOrganizerHandlerTest extends MediaWikiUnitTestCase {
 			$firstEvent,
 			$secondEvent
 		];
-		$secondEventLookup = $this->createMock( IEventLookup::class );
-		$secondEventLookup->method( 'getEventsByOrganizer' )->willReturn( $eventsList );
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->method( 'getEventsByOrganizer' )->willReturn( $eventsList );
+
+		$handler = $this->newHandler( $eventLookup );
+		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::DEFAULT_REQ_DATA ) );
 
 		$expectedEvents = [
 			[
@@ -92,8 +86,10 @@ class ListEventsByOrganizerHandlerTest extends MediaWikiUnitTestCase {
 				"event_name" => $secondEvent->getName()
 			]
 		];
-		yield 'Return events' => [ $secondEventLookup, $expectedEvents ];
+		$this->assertSame( $expectedEvents, $respData );
+	}
 
+	public function testExecute__deletedEvent() {
 		$deletedEvent = $this->createMock( ExistingEventRegistration::class );
 		$deletedEvent->method( "getID" )->willReturn( 123 );
 		$deletedEvent->method( "getName" )->willReturn( "Deleted event" );
@@ -102,14 +98,17 @@ class ListEventsByOrganizerHandlerTest extends MediaWikiUnitTestCase {
 		$delEventLookup = $this->createMock( IEventLookup::class );
 		$delEventLookup->method( 'getEventsByOrganizer' )->willReturn( [ $deletedEvent ] );
 
-		$expectedDeleted = [
+		$handler = $this->newHandler( $delEventLookup );
+		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::DEFAULT_REQ_DATA ) );
+
+		$expected = [
 			[
 				"event_id" => $deletedEvent->getID(),
 				"event_name" => $deletedEvent->getName(),
 				'event_deleted' => true
 			]
 		];
-		yield 'Deleted event' => [ $delEventLookup, $expectedDeleted ];
+		$this->assertSame( $expected, $respData );
 	}
 
 	public function testExecute__userNotFound() {

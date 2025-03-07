@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\TrackingTool;
 
-use Generator;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -129,18 +128,14 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	/**
 	 * @covers ::newFromDBID
 	 * @covers ::newFromRegistryEntry
-	 * @dataProvider provideDBIDs
 	 */
-	public function testNewFromDBID( int $dbID, string $expectedClass ) {
-		$tool = $this->getRegistry()->newFromDBID( $dbID );
-		$this->assertInstanceOf( $expectedClass, $tool );
-		$this->assertSame( $dbID, $tool->getDBID() );
-	}
-
-	public function provideDBIDs(): Generator {
-		$internalRegistry = $this->getRegistry()->getRegistryForTesting();
-		foreach ( $internalRegistry as $toolName => $data ) {
-			yield $toolName => [ $data['db-id'], $data['class'] ];
+	public function testNewFromDBID() {
+		$registry = $this->getRegistry();
+		$internalRegistry = $registry->getRegistryForTesting();
+		foreach ( $internalRegistry as $toolName => [ 'db-id' => $dbID, 'class' => $expectedClass ] ) {
+			$tool = $registry->newFromDBID( $dbID );
+			$this->assertInstanceOf( $expectedClass, $tool, "Tool: $toolName" );
+			$this->assertSame( $dbID, $tool->getDBID(), "Tool: $toolName" );
 		}
 	}
 
@@ -169,17 +164,13 @@ class TrackingToolRegistryTest extends MediaWikiUnitTestCase {
 	/**
 	 * @covers ::newFromUserIdentifier
 	 * @covers ::newFromRegistryEntry
-	 * @dataProvider provideUserIdentifiers
 	 */
-	public function testNewFromUserIdentifier( string $userID, string $expectedClass ) {
-		$tool = $this->getRegistry()->newFromUserIdentifier( $userID );
-		$this->assertInstanceOf( $expectedClass, $tool );
-	}
-
-	public function provideUserIdentifiers(): Generator {
-		$internalRegistry = $this->getRegistry()->getRegistryForTesting();
-		foreach ( $internalRegistry as $toolName => $data ) {
-			yield $toolName => [ $data['user-id'], $data['class'] ];
+	public function testNewFromUserIdentifier() {
+		$registry = $this->getRegistry();
+		$internalRegistry = $registry->getRegistryForTesting();
+		foreach ( $internalRegistry as $toolName => [ 'user-id' => $userID, 'class' => $expectedClass ] ) {
+			$tool = $this->getRegistry()->newFromUserIdentifier( $userID );
+			$this->assertInstanceOf( $expectedClass, $tool, "Tool: $toolName" );
 		}
 	}
 

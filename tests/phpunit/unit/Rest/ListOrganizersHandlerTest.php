@@ -54,7 +54,12 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @dataProvider provideRunData
 	 */
-	public function testRun( array $expectedResp, OrganizersStore $organizersStore ) {
+	public function testRun( array $expectedResp, array $storedOrganizers ) {
+		$organizersStore = $this->createMock( OrganizersStore::class );
+		$organizersStore->expects( $this->atLeastOnce() )
+			->method( 'getEventOrganizers' )
+			->willReturn( $storedOrganizers );
+
 		$userLink = $this->createMock( UserLinker::class );
 		$userLink->method( 'getUserPagePath' )->willReturn( [
 			'path' => '',
@@ -67,14 +72,10 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedResp, $respData );
 	}
 
-	public function provideRunData(): Generator {
-		yield 'No organizers' => [ [], $this->createMock( OrganizersStore::class ) ];
+	public static function provideRunData(): Generator {
+		yield 'No organizers' => [ [], [] ];
 
 		$user1 = new CentralUser( 1 );
-		$singleCreatorStore = $this->createMock( OrganizersStore::class );
-		$singleCreatorStore->expects( $this->atLeastOnce() )
-			->method( 'getEventOrganizers' )
-			->willReturn( [ new Organizer( $user1, [ Roles::ROLE_CREATOR ], 1, false ) ] );
 		yield 'Single organizer, creator only' => [
 			[
 				[
@@ -89,17 +90,10 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 					],
 				],
 			],
-			$singleCreatorStore
+			[ new Organizer( $user1, [ Roles::ROLE_CREATOR ], 1, false ) ]
 		];
 
 		$user2 = new CentralUser( 2 );
-		$multiCreatorStore = $this->createMock( OrganizersStore::class );
-		$multiCreatorStore->expects( $this->atLeastOnce() )
-			->method( 'getEventOrganizers' )
-			->willReturn( [
-				new Organizer( $user1, [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ], 2, false ),
-				new Organizer( $user2, [ Roles::ROLE_ORGANIZER ], 3, false ),
-			] );
 		yield 'Multiple organizers, multiple roles' => [
 			[
 				[
@@ -125,7 +119,10 @@ class ListOrganizersHandlerTest extends MediaWikiUnitTestCase {
 					],
 				],
 			],
-			$multiCreatorStore
+			[
+				new Organizer( $user1, [ Roles::ROLE_CREATOR, Roles::ROLE_ORGANIZER ], 2, false ),
+				new Organizer( $user2, [ Roles::ROLE_ORGANIZER ], 3, false ),
+			]
 		];
 	}
 

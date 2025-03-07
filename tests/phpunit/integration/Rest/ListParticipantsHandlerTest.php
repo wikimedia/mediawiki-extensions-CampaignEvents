@@ -83,9 +83,17 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testRun(
 		array $expectedResp,
-		ParticipantsStore $participantsStore,
-		?CampaignsCentralUserLookup $centralUserLookup = null
+		array $storedParticipants,
+		array $usernamesMap
 	) {
+		$participantsStore = $this->createMock( ParticipantsStore::class );
+		$participantsStore->expects( $this->atLeastOnce() )
+			->method( 'getEventParticipants' )
+			->willReturn( $storedParticipants );
+
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->method( 'getNamesIncludingDeletedAndSuppressed' )->willReturn( $usernamesMap );
+
 		$userLink = $this->createMock( UserLinker::class );
 		$userLink->method( 'getUserPagePath' )->willReturn( [
 			'path' => '',
@@ -97,11 +105,8 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$this->assertArrayEquals( $expectedResp, $respData );
 	}
 
-	public function provideRunData(): Generator {
-		yield 'No participants' => [
-			[],
-			$this->createMock( ParticipantsStore::class )
-		];
+	public static function provideRunData(): Generator {
+		yield 'No participants' => [ [], [], [] ];
 
 		$participants = [];
 		$expected = [];
@@ -109,17 +114,13 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		for ( $i = 1; $i < 4; $i++ ) {
 			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i, false, [], null, null );
 			$usernames[$i] = "Test user $i";
-			$expected[] = $this->getExpectedParticipantsData( $i, $i, false );
+			$expected[] = self::getExpectedParticipantsData( $i, $i, false );
 		}
 
-		$partStore = $this->createMock( ParticipantsStore::class );
-		$partStore->expects( $this->atLeastOnce() )->method( 'getEventParticipants' )->willReturn( $participants );
-		$userLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$userLookup->method( 'getNamesIncludingDeletedAndSuppressed' )->willReturn( $usernames );
 		yield 'Has participants' => [
 			$expected,
-			$partStore,
-			$userLookup,
+			$participants,
+			$usernames,
 		];
 
 		$deletedUserID = 1;
@@ -142,14 +143,11 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 				'private' => false,
 			]
 		];
-		$delPartStore = $this->createMock( ParticipantsStore::class );
-		$delPartStore->expects( $this->atLeastOnce() )
-			->method( 'getEventParticipants' )
-			->willReturn( [ $deletedParticipant ] );
-		$delUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-		$delUserLookup->method( 'getNamesIncludingDeletedAndSuppressed' )
-			->willReturn( [ $deletedUserID => CampaignsCentralUserLookup::USER_HIDDEN ] );
-		yield 'Deleted user' => [ $deletedUserExpected, $delPartStore, $delUserLookup ];
+		yield 'Deleted user' => [
+			$deletedUserExpected,
+			[ $deletedParticipant ],
+			[ $deletedUserID => CampaignsCentralUserLookup::USER_HIDDEN ]
+		];
 	}
 
 	/**
@@ -177,7 +175,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 				new CentralUser( $i ), '20220315120000', $i, false, $answers, null, $participantAnswersAggregatedDate
 			);
 			$usernames[$i] = "Test user $i";
-			$expectedResp[] = $this->getExpectedParticipantsData( $i, $i, null, $nonPiiAnswers, $aggregatedMessage );
+			$expectedResp[] = self::getExpectedParticipantsData( $i, $i, null, $nonPiiAnswers, $aggregatedMessage );
 		}
 
 		$partStore = $this->createMock( ParticipantsStore::class );
@@ -253,22 +251,13 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		yield 'Past event' => [ true, true ];
 	}
 
-	/**
-	 * @param int $participantID
-	 * @param int $userID
-	 * @param bool|null $isValidRecipient
-	 * @param array|null $nonPiiAnswers
-	 * @param string|null $aggregatedAnswersMessage
-	 *
-	 * @return array
-	 */
-	private function getExpectedParticipantsData(
+	private static function getExpectedParticipantsData(
 		int $participantID,
 		int $userID,
 		?bool $isValidRecipient = null,
 		?array $nonPiiAnswers = null,
 		?string $aggregatedAnswersMessage = null
-	) {
+	): array {
 		$participantData = [
 			'participant_id' => $participantID,
 			'user_id' => $userID,
@@ -294,10 +283,13 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		return $participantData;
 	}
 
-	/**
-	 * @dataProvider provideRunErrors
-	 */
-	public function testRun__invalid(
+	private static function getDataWithParams( array $params ): array {
+		$ret = self::REQ_DATA;
+		$ret['queryParams'] = $params + $ret['queryParams'];
+		return $ret;
+	}
+
+	public function doTestRunExpectingError(
 		string $expectedMsg,
 		int $expectedCode,
 		array $reqData,
@@ -315,39 +307,43 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public function provideRunErrors(): Generator {
+	public function testRun__eventDoesNotExist() {
 		$eventNotFoundLookup = $this->createMock( IEventLookup::class );
 		$eventNotFoundLookup->expects( $this->once() )
 			->method( 'getEventByID' )
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
-		yield 'Event not found' => [
+		$this->doTestRunExpectingError(
 			'campaignevents-rest-event-not-found',
 			404,
 			self::REQ_DATA,
 			null,
 			$eventNotFoundLookup
-		];
+		);
+	}
 
-		$getDataWithParams = static function ( array $params ): array {
-			$ret = self::REQ_DATA;
-			$ret['queryParams'] = $params + $ret['queryParams'];
-			return $ret;
-		};
-		yield 'Empty username filter' => [
-			'campaignevents-rest-list-participants-empty-filter',
-			400,
-			$getDataWithParams( [ 'username_filter' => '' ] )
-		];
-
+	public function testRun__cannotSeePrivateParticipants() {
 		$unauthorizedPermChecker = $this->createMock( PermissionChecker::class );
 		$unauthorizedPermChecker->expects( $this->atLeastOnce() )
 			->method( 'userCanViewPrivateParticipants' )
 			->willReturn( false );
-		yield 'Cannot see private participants' => [
+		$this->doTestRunExpectingError(
 			'campaignevents-rest-list-participants-cannot-see-private',
 			403,
-			$getDataWithParams( [ 'include_private' => true ] ),
+			self::getDataWithParams( [ 'include_private' => true ] ),
 			$unauthorizedPermChecker
+		);
+	}
+
+	/** @dataProvider provideRunInvalidData */
+	public function testRun__invalidData( string $expectedError, int $expectedCode, array $data ) {
+		$this->doTestRunExpectingError( $expectedError, $expectedCode, $data );
+	}
+
+	public static function provideRunInvalidData(): Generator {
+		yield 'Empty username filter' => [
+			'campaignevents-rest-list-participants-empty-filter',
+			400,
+			self::getDataWithParams( [ 'username_filter' => '' ] )
 		];
 	}
 }

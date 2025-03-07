@@ -159,11 +159,13 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param EventFactory $eventFactory
-	 * @param string $expectedMsgKey
 	 * @dataProvider provideExecuteDataForValidationTest
 	 */
-	public function testExecute__validation( EventFactory $eventFactory, string $expectedMsgKey ) {
+	public function testExecute__validation( StatusValue $errorStatus, string $expectedMsgKey ) {
+		$eventFactory = $this->createMock( EventFactory::class );
+		$eventFactory->method( 'newEvent' )
+			->willThrowException( new InvalidEventDataException( $errorStatus ) );
+
 		$handler = $this->newHandler( $eventFactory );
 
 		$request = new RequestData( $this->getRequestData() );
@@ -185,23 +187,16 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideExecuteDataForValidationTest(): Generator {
+	public static function provideExecuteDataForValidationTest(): Generator {
 		$singleErrorMsgKey = 'some-error-key';
-		$singleErrorStatus = StatusValue::newFatal( $singleErrorMsgKey );
-		$singleErrorEventFactory = $this->createMock( EventFactory::class );
-		$singleErrorEventFactory->method( 'newEvent' )
-			->willThrowException( new InvalidEventDataException( $singleErrorStatus ) );
-		yield 'Single error' => [ $singleErrorEventFactory, $singleErrorMsgKey ];
+		yield 'Single error' => [ StatusValue::newFatal( $singleErrorMsgKey ), $singleErrorMsgKey ];
 
 		$twoErrorKeys = [ 'first-error-key', 'second-error-key' ];
 		$twoErrorsStatus = StatusValue::newGood();
 		foreach ( $twoErrorKeys as $errKey ) {
 			$twoErrorsStatus->fatal( $errKey );
 		}
-		$twoErrorsEventFactory = $this->createMock( EventFactory::class );
-		$twoErrorsEventFactory->method( 'newEvent' )
-			->willThrowException( new InvalidEventDataException( $twoErrorsStatus ) );
-		yield 'Two errors' => [ $twoErrorsEventFactory, reset( $twoErrorKeys ) ];
+		yield 'Two errors' => [ $twoErrorsStatus, reset( $twoErrorKeys ) ];
 	}
 
 	public function testExecute__foreignPage(): void {

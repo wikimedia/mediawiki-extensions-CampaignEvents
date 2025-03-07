@@ -58,14 +58,7 @@ class CancelEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	/**
-	 * @param int $expectedStatusCode
-	 * @param string $expectedErrorKey
-	 * @param UnregisterParticipantCommand|null $unregisterParticipantCommand
-	 * @param IEventLookup|null $eventLookup
-	 * @dataProvider provideRequestDataWithErrors
-	 */
-	public function testRun__error(
+	public function doTestRunExpectingError(
 		int $expectedStatusCode,
 		string $expectedErrorKey,
 		?UnregisterParticipantCommand $unregisterParticipantCommand = null,
@@ -82,41 +75,42 @@ class CancelEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	/**
-	 * @return Generator
-	 */
-	public function provideRequestDataWithErrors(): Generator {
+	public function testRun__eventDoesNotExist() {
 		$eventDoesNotExistLookup = $this->createMock( IEventLookup::class );
 		$eventDoesNotExistLookup->method( 'getEventByID' )
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
-		yield 'Event does not exist' => [
+		$this->doTestRunExpectingError(
 			404,
 			'campaignevents-rest-event-not-found',
 			null,
 			$eventDoesNotExistLookup
-		];
+		);
+	}
 
+	public function testRun__userCannotUnregister() {
 		$permError = 'some-permission-error';
 		$commandWithPermError = $this->createMock( UnregisterParticipantCommand::class );
 		$commandWithPermError->expects( $this->atLeastOnce() )
 			->method( 'unregisterIfAllowed' )
 			->willReturn( PermissionStatus::newFatal( $permError ) );
-		yield 'User cannot unregister' => [
+		$this->doTestRunExpectingError(
 			403,
 			$permError,
 			$commandWithPermError
-		];
+		);
+	}
 
+	public function testRun__commandError() {
 		$commandError = 'some-error-from-command';
 		$commandWithError = $this->createMock( UnregisterParticipantCommand::class );
 		$commandWithError->expects( $this->atLeastOnce() )
 			->method( 'unregisterIfAllowed' )
 			->willReturn( StatusValue::newFatal( $commandError ) );
-		yield 'Command error' => [
+		$this->doTestRunExpectingError(
 			400,
 			$commandError,
 			$commandWithError
-		];
+		);
 	}
 
 	/**

@@ -87,15 +87,7 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	/**
-	 * @param int $expectedStatusCode
-	 * @param string|null $expectedErrorKey
-	 * @param RegisterParticipantCommand|null $registerParticipantCommand
-	 * @param IEventLookup|null $eventLookup
-	 * @param EventQuestionsRegistry|null $eventQuestionsRegistry
-	 * @dataProvider provideRequestDataWithErrors
-	 */
-	public function testRun__error(
+	private function doTestRunExpectingError(
 		int $expectedStatusCode,
 		?string $expectedErrorKey,
 		?RegisterParticipantCommand $registerParticipantCommand = null,
@@ -119,66 +111,69 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	/**
-	 * @return Generator
-	 */
-	public function provideRequestDataWithErrors(): Generator {
+	public function testRun__eventDoesNotExist() {
 		$eventDoesNotExistLookup = $this->createMock( IEventLookup::class );
 		$eventDoesNotExistLookup->method( 'getEventByID' )
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
-		yield 'Event does not exist' => [
+		$this->doTestRunExpectingError(
 			404,
 			'campaignevents-rest-event-not-found',
 			null,
 			$eventDoesNotExistLookup
-		];
+		);
+	}
 
+	public function testRun__nonLocalEvent() {
 		$page = $this->createMock( MWPageProxy::class );
 		$page->method( 'getWikiId' )->willReturn( 'anotherwiki' );
-		$nonLocalErrorMessage = 'campaignevents-rest-register-for-event-nonlocal-error-message';
-		yield 'Non local event' => [
+		$this->doTestRunExpectingError(
 			400,
-			$nonLocalErrorMessage,
+			'campaignevents-rest-register-for-event-nonlocal-error-message',
 			null,
 			null,
 			null,
 			$page
-		];
+		);
+	}
 
-		$invalidAnsError = 'campaignevents-rest-register-invalid-answer';
+	public function testRun__invalidParticipantAnswers() {
 		$invalidQuestRegistry = $this->createMock( EventQuestionsRegistry::class );
 		$invalidQuestRegistry->expects( $this->atLeastOnce() )
 			->method( 'extractUserAnswersAPI' )
 			->willThrowException( $this->createMock( InvalidAnswerDataException::class ) );
-		yield 'Invalid participant answers' => [
+		$this->doTestRunExpectingError(
 			400,
-			$invalidAnsError,
+			'campaignevents-rest-register-invalid-answer',
 			null,
 			null,
 			$invalidQuestRegistry
-		];
+		);
+	}
 
+	public function testRun__permissionError() {
 		$permError = 'some-permission-error';
 		$commandWithPermError = $this->createMock( RegisterParticipantCommand::class );
 		$commandWithPermError->expects( $this->atLeastOnce() )
 			->method( 'registerIfAllowed' )
 			->willReturn( PermissionStatus::newFatal( $permError ) );
-		yield 'User cannot register' => [
+		$this->doTestRunExpectingError(
 			403,
 			$permError,
 			$commandWithPermError
-		];
+		);
+	}
 
+	public function testRun__commandError() {
 		$commandError = 'some-error-from-command';
 		$commandWithError = $this->createMock( RegisterParticipantCommand::class );
 		$commandWithError->expects( $this->atLeastOnce() )
 			->method( 'registerIfAllowed' )
 			->willReturn( StatusValue::newFatal( $commandError ) );
-		yield 'Command error' => [
+		$this->doTestRunExpectingError(
 			400,
 			$commandError,
 			$commandWithError
-		];
+		);
 	}
 
 	/**
