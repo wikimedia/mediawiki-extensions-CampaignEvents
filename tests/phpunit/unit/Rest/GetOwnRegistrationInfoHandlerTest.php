@@ -54,16 +54,19 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @dataProvider provideRunData
 	 */
-	public function testRun( array $expectedResp, ParticipantsStore $participantsStore ) {
+	public function testRun( array $expectedResp, Participant $storedParticipant ) {
+		$participantsStore = $this->createMock( ParticipantsStore::class );
+		$participantsStore->method( 'getEventParticipant' )
+			->willReturn( $storedParticipant );
+
 		$handler = $this->newHandler( null, $participantsStore );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 		$this->assertSame( $expectedResp, $respData );
 	}
 
-	public function provideRunData(): Generator {
+	public static function provideRunData(): Generator {
 		$user = new CentralUser( 1 );
 		$timestamp = '1688000000';
-
 		$publicNoAnswersParticipant = new Participant(
 			$user,
 			$timestamp,
@@ -73,15 +76,12 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 			null,
 			null
 		);
-		$publicNoAnswersStore = $this->createMock( ParticipantsStore::class );
-		$publicNoAnswersStore->method( 'getEventParticipant' )
-			->willReturn( $publicNoAnswersParticipant );
 		yield 'Public, no answers' => [
 			[
 				'private' => false,
 				'answers' => [],
 			],
-			$publicNoAnswersStore
+			$publicNoAnswersParticipant
 		];
 
 		$privateWithAnswersParticipant = new Participant(
@@ -96,9 +96,6 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 			$timestamp,
 			null
 		);
-		$privateWithAnswersStore = $this->createMock( ParticipantsStore::class );
-		$privateWithAnswersStore->method( 'getEventParticipant' )
-			->willReturn( $privateWithAnswersParticipant );
 		yield 'Private with answers' => [
 			[
 				'private' => true,
@@ -107,14 +104,11 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 					'affiliate' => [ 'value' => 3, 'other' => 'foo' ],
 				],
 			],
-			$privateWithAnswersStore
+			$privateWithAnswersParticipant
 		];
 	}
 
-	/**
-	 * @dataProvider provideRunErrors
-	 */
-	public function testRun__errors(
+	public function doTestRunExpectingError(
 		string $expectedMsg,
 		int $expectedCode,
 		?IEventLookup $eventLookup = null,
@@ -131,35 +125,39 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 		}
 	}
 
-	public function provideRunErrors(): Generator {
+	public function testRun__eventDoesNotExist() {
 		$nonExistingEventLookup = $this->createMock( IEventLookup::class );
 		$nonExistingEventLookup->expects( $this->once() )
 			->method( 'getEventByID' )
 			->willThrowException( $this->createMock( EventNotFoundException::class ) );
-		yield 'Event does not exist' => [
+		$this->doTestRunExpectingError(
 			'campaignevents-rest-event-not-found',
 			404,
 			$nonExistingEventLookup
-		];
+		);
+	}
 
+	public function testRun__userIsNotGlobal() {
 		$notGlobalUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$notGlobalUserLookup->method( 'newFromAuthority' )
 			->willThrowException( $this->createMock( UserNotGlobalException::class ) );
-		yield 'User not global' => [
+		$this->doTestRunExpectingError(
 			'campaignevents-register-not-allowed',
 			403,
 			null,
 			$notGlobalUserLookup
-		];
+		);
+	}
 
+	public function testRun__notAParticipant() {
 		$notParticipantStore = $this->createMock( ParticipantsStore::class );
 		$notParticipantStore->method( 'getEventParticipant' )->willReturn( null );
-		yield 'Not a participant' => [
+		$this->doTestRunExpectingError(
 			'campaignevents-rest-get-registration-info-notparticipant',
 			404,
 			null,
 			null,
 			$notParticipantStore
-		];
+		);
 	}
 }

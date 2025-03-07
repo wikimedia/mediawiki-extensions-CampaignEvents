@@ -25,8 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use StatusValue;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand
- * @covers ::__construct
+ * @covers \MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand
  */
 class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	/**
@@ -70,10 +69,6 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		return $registration;
 	}
 
-	/**
-	 * @covers ::registerIfAllowed
-	 * @covers ::authorizeRegistration
-	 */
 	public function testRegisterIfAllowed__permissionError() {
 		$permChecker = $this->createMock( PermissionChecker::class );
 		$permChecker->expects( $this->once() )->method( 'userCanRegisterForEvent' )->willReturn( false );
@@ -89,17 +84,18 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param string $errMsg
-	 * @covers ::registerIfAllowed
-	 * @covers ::checkIsRegistrationAllowed
-	 * @covers ::registerUnsafe
 	 * @dataProvider provideInvalidRegistrationsAndErrors
 	 */
 	public function testRegisterIfAllowed__error(
-		ExistingEventRegistration $registration,
-		string $errMsg
+		string $errMsg,
+		bool $isPast,
+		string $status,
+		?string $deletionTimestamp = null
 	) {
+		$registration = $this->createMock( ExistingEventRegistration::class );
+		$registration->method( 'isPast' )->willReturn( $isPast );
+		$registration->method( 'getStatus' )->willReturn( $status );
+		$registration->method( 'getDeletionTimestamp' )->willReturn( $deletionTimestamp );
 		$status = $this->getCommand()->registerIfAllowed(
 			$registration,
 			$this->createMock( ICampaignsAuthority::class ),
@@ -111,37 +107,30 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusMessage( $errMsg, $status );
 	}
 
-	public function provideInvalidRegistrationsAndErrors(): Generator {
-		$finishedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$finishedRegistration->method( 'isPast' )->willReturn( true );
-		$finishedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_OPEN );
-		yield 'Already finished' => [ $finishedRegistration, 'campaignevents-register-event-past' ];
-
-		$closedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$closedRegistration->method( 'isPast' )->willReturn( false );
-		$closedRegistration->method( 'getStatus' )->willReturn( EventRegistration::STATUS_CLOSED );
-		yield 'Not open' => [ $closedRegistration, 'campaignevents-register-event-not-open' ];
-
-		$deletedRegistration = $this->getValidRegistration();
-		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
-		yield 'Deleted' => [ $deletedRegistration, 'campaignevents-register-registration-deleted' ];
+	public static function provideInvalidRegistrationsAndErrors(): Generator {
+		yield 'Already finished' => [ 'campaignevents-register-event-past', true, EventRegistration::STATUS_OPEN ];
+		yield 'Not open' => [ 'campaignevents-register-event-not-open', false, EventRegistration::STATUS_CLOSED ];
+		yield 'Deleted' => [
+			'campaignevents-register-registration-deleted',
+			false,
+			EventRegistration::STATUS_OPEN,
+			'1654000000'
+		];
 	}
 
 	/**
-	 * @param ParticipantsStore $store
-	 * @param bool $isPrivate
-	 * @param bool $expectedModified
-	 * @covers ::registerIfAllowed
-	 * @covers ::authorizeRegistration
-	 * @covers ::checkIsRegistrationAllowed
-	 * @covers ::registerUnsafe
-	 * @dataProvider provideStoreAndModified
+	 * @dataProvider provideModifiedAndPrivate
 	 */
 	public function testRegisterIfAllowed__successful(
-		ParticipantsStore $store,
+		int $modified,
 		bool $isPrivate,
 		bool $expectedModified
 	) {
+		$store = $this->createMock( ParticipantsStore::class );
+		$store->method( 'addParticipantToEvent' )->willReturn( $modified );
+		$store->expects( $this->once() )
+			->method( 'addParticipantToEvent' )
+			->with( $this->anything(), $this->anything(), $isPrivate );
 		$status = $this->getCommand( $store )->registerIfAllowed(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class ),
@@ -155,17 +144,19 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param ParticipantsStore $store
-	 * @param bool $isPrivate
-	 * @param bool $expectedModified
-	 * @covers ::registerUnsafe
-	 * @dataProvider provideStoreAndModified
+	 * @dataProvider provideModifiedAndPrivate
 	 */
 	public function testRegisterUnsafe__successful(
-		ParticipantsStore $store,
+		int $modified,
 		bool $isPrivate,
 		bool $expectedModified
 	) {
+		$store = $this->createMock( ParticipantsStore::class );
+		$store->method( 'addParticipantToEvent' )->willReturn( $modified );
+		$store->expects( $this->once() )
+			->method( 'addParticipantToEvent' )
+			->with( $this->anything(), $this->anything(), $isPrivate );
+
 		$status = $this->getCommand( $store )->registerUnsafe(
 			$this->getValidRegistration(),
 			$this->createMock( ICampaignsAuthority::class ),
@@ -178,37 +169,17 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusValue( $expectedModified, $status );
 	}
 
-	public function provideStoreAndModified(): Generator {
+	public static function provideModifiedAndPrivate(): Generator {
 		foreach ( [ true, false ] as $isPrivate ) {
 			$testDescription = $isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC;
-			$modifiedStore = $this->createMock( ParticipantsStore::class );
-			$modifiedStore->method( 'addParticipantToEvent' )->willReturn( ParticipantsStore::MODIFIED_REGISTRATION );
-			$modifiedStore->expects( $this->once() )
-				->method( 'addParticipantToEvent' )
-				->with( $this->anything(), $this->anything(), $isPrivate );
-			yield "Modified, $testDescription" => [ $modifiedStore, $isPrivate, true ];
-
-			$notModifiedStore = $this->createMock( ParticipantsStore::class );
-			$notModifiedStore->method( 'addParticipantToEvent' )->willReturn( ParticipantsStore::MODIFIED_NOTHING );
-			$notModifiedStore->expects( $this->once() )
-				->method( 'addParticipantToEvent' )
-				->with( $this->anything(), $this->anything(), $isPrivate );
-			yield "Not modified, $testDescription" => [ $notModifiedStore, $isPrivate, false ];
+			yield "Modified, $testDescription" => [ ParticipantsStore::MODIFIED_REGISTRATION, $isPrivate, true ];
+			yield "Not modified, $testDescription" => [ ParticipantsStore::MODIFIED_NOTHING, $isPrivate, false ];
 		}
 	}
 
-	/**
-	 * @param string $expectedMsg
-	 * @param CampaignsCentralUserLookup|null $centralUserLookup
-	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
-	 * @param ParticipantsStore|null $participantsStore
-	 * @param array $answers
-	 * @covers ::registerUnsafe
-	 * @dataProvider provideRegisterUnsafeErrors
-	 */
-	public function testRegisterUnsafe__error(
+	private function doTestRegisterUnsafeExpectingError(
 		string $expectedMsg,
 		?CampaignsCentralUserLookup $centralUserLookup = null,
 		?TrackingToolEventWatcher $trackingToolEventWatcher = null,
@@ -226,15 +197,31 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusMessage( $expectedMsg, $status );
 	}
 
-	public function provideRegisterUnsafeErrors(): Generator {
+	public function testRegisterUnsafe__userNotGlobal() {
 		$notGlobalLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$notGlobalLookup->method( 'newFromAuthority' )
 			->willThrowException( $this->createMock( UserNotGlobalException::class ) );
-		yield 'User not global' => [
+		$this->doTestRegisterUnsafeExpectingError(
 			'campaignevents-register-need-central-account',
 			$notGlobalLookup
-		];
+		);
+	}
 
+	/** @dataProvider provideRegisterUnsafe__answersAlreadyAggregated */
+	public function testRegisterUnsafe__answersAlreadyAggregated( ?Participant $storedParticipant ) {
+		$participantStore = $this->createMock( ParticipantsStore::class );
+		$participantStore->method( 'getEventParticipant' )->willReturn( $storedParticipant );
+		$participantStore->method( 'userHasAggregatedAnswers' )->willReturn( true );
+		$this->doTestRegisterUnsafeExpectingError(
+			'campaignevents-register-answers-aggregated-error',
+			null,
+			null,
+			$participantStore,
+			[ new Answer( 1, 1, null ) ]
+		);
+	}
+
+	public static function provideRegisterUnsafe__answersAlreadyAggregated() {
 		$participant = new Participant(
 			new CentralUser( 1 ),
 			'20200220202020',
@@ -244,43 +231,25 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			'20200220202020',
 			'20200220202021',
 		);
-		$participantStore = $this->createMock( ParticipantsStore::class );
-		$participantStore->method( 'getEventParticipant' )->willReturn( $participant );
-		$participantStore->method( 'userHasAggregatedAnswers' )->willReturn( true );
-		yield 'Active participant with already aggregated answers' => [
-			'campaignevents-register-answers-aggregated-error',
-			null,
-			null,
-			$participantStore,
-			[ new Answer( 1, 1, null ) ]
-		];
+		yield 'Active participant with already aggregated answers' => [ $participant ];
+		yield 'Previous participant with already aggregated answers' => [ null ];
+	}
 
-		$participantStore = $this->createMock( ParticipantsStore::class );
-		$participantStore->method( 'getEventParticipant' )->willReturn( null );
-		$participantStore->method( 'userHasAggregatedAnswers' )->willReturn( true );
-		yield 'Previous participant with already aggregated answers' => [
-			'campaignevents-register-answers-aggregated-error',
-			null,
-			null,
-			$participantStore,
-			[ new Answer( 1, 1, null ) ]
-		];
-
+	public function testRegisterUnsafe__invalidTrackingTools() {
 		$trackingToolError = 'some-tracking-tool-error';
 		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
 		$trackingToolWatcher->expects( $this->atLeastOnce() )
 			->method( 'validateParticipantAdded' )
 			->willReturn( StatusValue::newFatal( $trackingToolError ) );
-		yield 'Fails tracking tool validation' => [
+		$this->doTestRegisterUnsafeExpectingError(
 			$trackingToolError,
 			null,
 			$trackingToolWatcher
-		];
+		);
 	}
 
 	/**
 	 * @dataProvider provideCheckIsRegistrationAllowed
-	 * @covers ::checkIsRegistrationAllowed
 	 */
 	public function testCheckIsRegistrationAllowed(
 		?string $deletionTS,

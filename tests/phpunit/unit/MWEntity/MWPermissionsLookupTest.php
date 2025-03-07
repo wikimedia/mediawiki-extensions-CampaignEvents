@@ -36,24 +36,25 @@ class MWPermissionsLookupTest extends MediaWikiUnitTestCase {
 	 * @covers ::userHasRight
 	 * @dataProvider provideUserHasRight
 	 */
-	public function testUserHasRight( UserFactory $userFactory, string $right, bool $expected ) {
-		$this->assertSame( $expected, $this->getLookup( $userFactory )->userHasRight( 'Foo', $right ) );
-	}
-
-	public function provideUserHasRight(): Generator {
-		$allowedRight = 'some-right-1';
-		$notAllowedRight = 'some-right-2';
+	public function testUserHasRight( array $isAllowedMap, string $right, bool $expected ) {
 		$user = $this->createMock( User::class );
-		$user->method( 'isAllowed' )
-			->willReturnMap( [
-				[ $allowedRight, null, true ],
-				[ $notAllowedRight, null, false ]
-			] );
+		$user->method( 'isAllowed' )->willReturnMap( $isAllowedMap );
 		$userFactory = $this->createMock( UserFactory::class );
 		$userFactory->method( 'newFromName' )->willReturn( $user );
 
-		yield 'Has right' => [ $userFactory, $allowedRight, true ];
-		yield 'Does not have right' => [ $userFactory, $notAllowedRight, false ];
+		$this->assertSame( $expected, $this->getLookup( $userFactory )->userHasRight( 'Foo', $right ) );
+	}
+
+	public static function provideUserHasRight(): Generator {
+		$allowedRight = 'some-right-1';
+		$notAllowedRight = 'some-right-2';
+		$isAllowedMap = [
+			[ $allowedRight, null, true ],
+			[ $notAllowedRight, null, false ]
+		];
+
+		yield 'Has right' => [ $isAllowedMap, $allowedRight, true ];
+		yield 'Does not have right' => [ $isAllowedMap, $notAllowedRight, false ];
 	}
 
 	/**
@@ -69,32 +70,24 @@ class MWPermissionsLookupTest extends MediaWikiUnitTestCase {
 	 * @covers ::userIsSitewideBlocked
 	 * @dataProvider provideUserIsSitewideBlocked
 	 */
-	public function testUserIsSitewideBlocked( UserFactory $userFactory, bool $expected ) {
+	public function testUserIsSitewideBlocked( bool $isBlocked, bool $blockIsSitewide, bool $expected ) {
+		if ( $isBlocked ) {
+			$block = $this->createMock( AbstractBlock::class );
+			$block->method( 'isSitewide' )->willReturn( $blockIsSitewide );
+		} else {
+			$block = null;
+		}
+		$user = $this->createMock( User::class );
+		$user->method( 'getBlock' )->willReturn( $block );
+		$userFactory = $this->createMock( UserFactory::class );
+		$userFactory->method( 'newFromName' )->willReturn( $user );
 		$this->assertSame( $expected, $this->getLookup( $userFactory )->userIsSitewideBlocked( 'Foo' ) );
 	}
 
-	public function provideUserIsSitewideBlocked(): Generator {
-		$notBlockedUser = $this->createMock( User::class );
-		$notBlockedUser->method( 'getBlock' )->willReturn( null );
-		$notBlockedUserFactory = $this->createMock( UserFactory::class );
-		$notBlockedUserFactory->method( 'newFromName' )->willReturn( $notBlockedUser );
-		yield 'Not blocked' => [ $notBlockedUserFactory, false ];
-
-		$notSitewideBlock = $this->createMock( AbstractBlock::class );
-		$notSitewideBlock->method( 'isSitewide' )->willReturn( false );
-		$notSitewideUser = $this->createMock( User::class );
-		$notSitewideUser->method( 'getBlock' )->willReturn( $notSitewideBlock );
-		$notSitewideUserFactory = $this->createMock( UserFactory::class );
-		$notSitewideUserFactory->method( 'newFromName' )->willReturn( $notSitewideUser );
-		yield 'Block not sitewide' => [ $notSitewideUserFactory, false ];
-
-		$sitewideBlock = $this->createMock( AbstractBlock::class );
-		$sitewideBlock->method( 'isSitewide' )->willReturn( true );
-		$sitewideUser = $this->createMock( User::class );
-		$sitewideUser->method( 'getBlock' )->willReturn( $sitewideBlock );
-		$sitewideUserFactory = $this->createMock( UserFactory::class );
-		$sitewideUserFactory->method( 'newFromName' )->willReturn( $sitewideUser );
-		yield 'Sitewide blocked' => [ $sitewideUserFactory, true ];
+	public static function provideUserIsSitewideBlocked(): Generator {
+		yield 'Not blocked' => [ false, false, false ];
+		yield 'Block not sitewide' => [ true, false, false ];
+		yield 'Sitewide blocked' => [ true, true, true ];
 	}
 
 	/**
@@ -110,22 +103,18 @@ class MWPermissionsLookupTest extends MediaWikiUnitTestCase {
 	 * @covers ::userIsNamed
 	 * @dataProvider provideUserIsNamed
 	 */
-	public function testUserIsNamed( UserFactory $userFactory, bool $expected ) {
-		$this->assertSame( $expected, $this->getLookup( $userFactory )->userIsNamed( 'Foo' ) );
+	public function testUserIsNamed( bool $isNamed ) {
+		$user = $this->createMock( User::class );
+		$user->method( 'isNamed' )->willReturn( $isNamed );
+		$userFactory = $this->createMock( UserFactory::class );
+		$userFactory->method( 'newFromName' )->willReturn( $user );
+
+		$this->assertSame( $isNamed, $this->getLookup( $userFactory )->userIsNamed( 'Foo' ) );
 	}
 
-	public function provideUserIsNamed(): Generator {
-		$notNamedUser = $this->createMock( User::class );
-		$notNamedUser->method( 'isNamed' )->willReturn( false );
-		$notNamedUserFactory = $this->createMock( UserFactory::class );
-		$notNamedUserFactory->method( 'newFromName' )->willReturn( $notNamedUser );
-		yield 'Not named' => [ $notNamedUserFactory, false ];
-
-		$namedUser = $this->createMock( User::class );
-		$namedUser->method( 'isNamed' )->willReturn( true );
-		$namedUserFactory = $this->createMock( UserFactory::class );
-		$namedUserFactory->method( 'newFromName' )->willReturn( $namedUser );
-		yield 'Named' => [ $namedUserFactory, true ];
+	public static function provideUserIsNamed(): Generator {
+		yield 'Not named' => [ false ];
+		yield 'Named' => [ true ];
 	}
 
 	/**
