@@ -3,9 +3,11 @@
 		"authors": [
 			"Beta16",
 			"Daimona Eaytoy",
-			"Yiyi"
+			"Yiyi",
+			"Civvì"
 		]
 	},
+	"campaignevents-desc": "Fornisce strumenti per gli organizzatori e i partecipanti di eventi.",
 	"nstab-event": "Evento",
 	"action-campaignevents-enable-registration": "abilita le registrazioni all'evento",
 	"right-campaignevents-enable-registration": "Abilita le registrazioni all'evento",
@@ -18,6 +20,7 @@
 	"campaignevents-error-page-not-found": "Non ci sono pagine evento con questo nome.",
 	"campaignevents-error-page-not-event-namespace": "La pagina dell'evento deve essere nel namespace {{ns:event}}.",
 	"campaignevents-error-page-with-section": "La pagina evento non deve contenere il nome di una sezione.",
+	"campaignevents-error-invalid-chat-url": "Inserisci un URL valido per la chat.",
 	"campaignevents-error-invalid-status": "Indica se l'evento è aperto o chiuso.",
 	"campaignevents-error-empty-start": "Scegli un orario di inizio.",
 	"campaignevents-error-invalid-start": "L'ora di inizio dell'evento non è valida.",
@@ -27,6 +30,7 @@
 	"campaignevents-error-start-after-end": "Inserisci una data di fine successiva alla data di inizio.",
 	"campaignevents-error-invalid-type": "Inserisci un tipo di evento valido.",
 	"campaignevents-error-meeting-url-not-online": "L'URL della riunione non deve essere indicato se l'evento non è online.",
+	"campaignevents-error-countryoraddress-not-in-person": "Il Paese e l'indirizzo non devono essere specificati per gli eventi che non si tengono in presenza.",
 	"campaignevents-error-invalid-country": "Inserisci un Paese valido.",
 	"campaignevents-error-invalid-address": "Inserisci un indirizzo valido.",
 	"enableeventregistration": "Abilita le registrazioni all'evento",
@@ -108,6 +112,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Annulla",
 	"campaignevents-eventslist-delete-dialog-delete": "Cancella",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> cancellato.",
+	"deleteeventregistration": "Cancella la pagina di registrazione all'evento",
 	"campaignevents-delete-error-no-event": "Nessun evento specificato.",
 	"campaignevents-delete-error-event-not-found": "Non ci sono eventi con questo identificativo.",
 	"campaignevents-delete-submit-btn": "Cancella",
