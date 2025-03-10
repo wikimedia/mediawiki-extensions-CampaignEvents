@@ -524,129 +524,9 @@
 	 * @param {Object} apiResponse Response of the "list participants" API endpoint
 	 */
 	ParticipantsManager.prototype.addParticipantsToList = function ( apiResponse ) {
-		var thisClass = this;
 		this.lastParticipantID = apiResponse[ apiResponse.length - 1 ].participant_id;
 		for ( var i = 0; i < apiResponse.length; i++ ) {
-			var curParticipantData = apiResponse[ i ],
-				items = [];
-
-			var $usernameElement;
-			if ( curParticipantData.user_name ) {
-				$usernameElement = thisClass.makeUserLink(
-					curParticipantData.user_name,
-					curParticipantData.user_page
-				);
-			} else {
-				$usernameElement = thisClass.getDeletedOrNotFoundParticipantElement(
-					curParticipantData
-				);
-			}
-
-			if ( this.showParticipantCheckboxes ) {
-				var loadAsSelected = this.loadParticipantAsSelected( curParticipantData.user_id ),
-					canReceiveEmail = curParticipantData.user_is_valid_recipient || false,
-					newParticipantCheckbox =
-						new OO.ui.CheckboxInputWidget( {
-							selected: loadAsSelected,
-							name: 'event-details-participants-checkboxes',
-							value: String( curParticipantData.user_id ),
-							classes: [
-								'ext-campaignevents-event-details-participants-checkboxes'
-							],
-							data: {
-								canReceiveEmail: canReceiveEmail,
-								username: curParticipantData.user_name,
-								userPageLink: curParticipantData.user_page
-							}
-						} ),
-					checkboxField = new OO.ui.FieldLayout(
-						newParticipantCheckbox,
-						{
-							label: $usernameElement.text(),
-							invisibleLabel: true
-						}
-					),
-					checkboxCell = new OO.ui.Element( {
-						$element: $( '<td>' ),
-						content: [ checkboxField ],
-						classes: [ 'ext-campaignevents-eventdetails-user-row-checkbox' ]
-					} );
-				newParticipantCheckbox.on( 'change', function ( selected ) {
-					thisClass.onParticipantCheckboxChange( selected, this );
-				}, [], newParticipantCheckbox );
-
-				this.participantCheckboxes.push( newParticipantCheckbox );
-				items.push( checkboxCell );
-			}
-
-			var usernameCell = new OO.ui.Element( {
-				$element: $( '<td>' ),
-				$content: $usernameElement
-			} );
-
-			if ( curParticipantData.private ) {
-				// TODO: Implement gender correctly
-				var privateLabel = mw.message(
-					'campaignevents-event-details-private-participant-label',
-					'unknown'
-				).text();
-				usernameCell.$element.append(
-					new OO.ui.IconWidget( {
-						icon: 'lock',
-						label: privateLabel,
-						title: privateLabel,
-						classes: [ 'ext-campaignevents-eventdetails-participants-private-icon' ]
-					} ).$element
-				);
-			}
-
-			items.push( usernameCell );
-
-			items.push(
-				new OO.ui.Element( {
-					$element: $( '<td>' ),
-					text: curParticipantData.user_registered_at_formatted
-				} )
-			);
-
-			if ( this.canEmailParticipants ) {
-				items.push(
-					new OO.ui.Element( {
-						$element: $( '<td>' ),
-						text: thisClass.getValidRecipientLabel(
-							curParticipantData.user_is_valid_recipient
-						)
-					} )
-				);
-			}
-
-			if ( this.nonPIIQuestionIDs.length ) {
-				if ( typeof curParticipantData.non_pii_answers === 'object' ) {
-					// TO DO - This is implicitly relying on the answers returned by the API
-					// being in the same ordered, improve this code to make it knows what
-					// each column is for
-					for ( var j = 0; j < curParticipantData.non_pii_answers.length; j++ ) {
-						items.push(
-							new OO.ui.Element( {
-								$element: $( '<td>' ),
-								text: curParticipantData.non_pii_answers[ j ].message
-							} )
-						);
-					}
-				} else if ( typeof curParticipantData.non_pii_answers === 'string' ) {
-					var $tableCell = $( '<td>' ).attr( 'colspan', this.nonPIIQuestionIDs.length )
-						.addClass( 'ext-campaignevents-eventdetails-participants-responses-aggregated-notice' )
-						.text( curParticipantData.non_pii_answers );
-					items.push( new OO.ui.Element( { $element: $tableCell } ) );
-				}
-			}
-
-			var row = new OO.ui.Element( {
-				$element: $( '<tr>' ),
-				classes: [ 'ext-campaignevents-details-user-row' ],
-				content: items
-			} );
-
+			var row = this.makeParticipantTableRow( apiResponse[ i ] );
 			this.$participantsTable.append( row.$element );
 		}
 
@@ -654,6 +534,151 @@
 		// Fire the wikipage.content hook for checkboxShift to work on dynamically added
 		// checkboxes (T318261)
 		mw.hook( 'wikipage.content' ).fire( this.$participantsTable );
+	};
+
+	/**
+	 * @param {Object} participantData
+	 * @return {OO.ui.Element}
+	 */
+	ParticipantsManager.prototype.makeParticipantTableRow = function ( participantData ) {
+		var username = participantData.user_name,
+			canReceiveEmail = participantData.user_is_valid_recipient || false,
+			cells = [];
+
+		var $usernameElement;
+		if ( username ) {
+			$usernameElement = this.makeUserLink( username, participantData.user_page );
+		} else {
+			$usernameElement = this.getDeletedOrNotFoundParticipantElement( participantData );
+		}
+
+		if ( this.showParticipantCheckboxes ) {
+			var loadAsSelected = this.loadParticipantAsSelected( participantData.user_id ),
+				newParticipantCheckbox = this.makeUserCheckbox(
+					loadAsSelected,
+					participantData.user_id,
+					canReceiveEmail,
+					username,
+					participantData.user_page
+				),
+				checkboxField = new OO.ui.FieldLayout(
+					newParticipantCheckbox,
+					{
+						label: $usernameElement.text(),
+						invisibleLabel: true
+					}
+				),
+				checkboxCell = new OO.ui.Element( {
+					$element: $( '<td>' ),
+					content: [ checkboxField ],
+					classes: [ 'ext-campaignevents-eventdetails-user-row-checkbox' ]
+				} );
+			var that = this;
+			newParticipantCheckbox.on( 'change', function ( selected ) {
+				that.onParticipantCheckboxChange( selected, this );
+			}, [], newParticipantCheckbox );
+
+			this.participantCheckboxes.push( newParticipantCheckbox );
+			cells.push( checkboxCell );
+		}
+
+		var usernameCell = new OO.ui.Element( {
+			$element: $( '<td>' ),
+			$content: $usernameElement
+		} );
+
+		if ( participantData.private ) {
+			// TODO: Implement gender correctly
+			var privateLabel = mw.message(
+				'campaignevents-event-details-private-participant-label',
+				'unknown'
+			).text();
+			usernameCell.$element.append(
+				new OO.ui.IconWidget( {
+					icon: 'lock',
+					label: privateLabel,
+					title: privateLabel,
+					classes: [ 'ext-campaignevents-eventdetails-participants-private-icon' ]
+				} ).$element
+			);
+		}
+
+		cells.push( usernameCell );
+
+		cells.push(
+			new OO.ui.Element( {
+				$element: $( '<td>' ),
+				text: participantData.user_registered_at_formatted
+			} )
+		);
+
+		if ( this.canEmailParticipants ) {
+			cells.push(
+				new OO.ui.Element( {
+					$element: $( '<td>' ),
+					text: this.getValidRecipientLabel( canReceiveEmail )
+				} )
+			);
+		}
+
+		if ( this.nonPIIQuestionIDs.length ) {
+			var nonPIIAnswers = participantData.non_pii_answers;
+
+			if ( typeof nonPIIAnswers === 'object' ) {
+				// TODO - This is implicitly relying on the answers returned by the API
+				// being in the same ordered, improve this code to make it knows what
+				// each column is for
+				for ( var j = 0; j < nonPIIAnswers.length; j++ ) {
+					cells.push(
+						new OO.ui.Element( {
+							$element: $( '<td>' ),
+							text: nonPIIAnswers[ j ].message
+						} )
+					);
+				}
+			} else if ( typeof nonPIIAnswers === 'string' ) {
+				var $tableCell = $( '<td>' ).attr( 'colspan', this.nonPIIQuestionIDs.length )
+					.addClass( 'ext-campaignevents-eventdetails-participants-responses-aggregated-notice' )
+					.text( nonPIIAnswers );
+				cells.push( new OO.ui.Element( { $element: $tableCell } ) );
+			}
+		}
+
+		return new OO.ui.Element( {
+			$element: $( '<tr>' ),
+			classes: [ 'ext-campaignevents-details-user-row' ],
+			content: cells
+		} );
+	};
+
+	/**
+	 * @param {boolean} checked
+	 * @param {number} userID
+	 * @param {boolean} canReceiveEmail
+	 * @param {string} username
+	 * @param {Object} userPageLink
+	 * @return {OO.ui.CheckboxInputWidget}
+	 */
+	ParticipantsManager.prototype.makeUserCheckbox = function (
+		checked,
+		userID,
+		canReceiveEmail,
+		username,
+		userPageLink
+	) {
+		return new OO.ui.CheckboxInputWidget( {
+			selected: checked,
+			name: 'event-details-participants-checkboxes',
+			value: String( userID ),
+			classes: [
+				'ext-campaignevents-event-details-participants-checkboxes'
+			],
+			data: {
+				canReceiveEmail: canReceiveEmail,
+				username: username,
+				userPageLink: userPageLink
+			}
+		} );
 	};
 
 	/**
