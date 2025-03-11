@@ -539,5 +539,8 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Section label used on [[Special:AllEvents]] to introduce the list of filtered events. See {{msg-mw|campaignevents-allevents-label-upcoming-events-description}}.",
 	"campaignevents-allevents-label-upcoming-events-description": "Informational text used on [[Special:AllEvents]] to provide more information about the {{msg-mw|campaignevents-allevents-label-upcoming-events-title}} section.",
 	"campaignevents-allevents-label-ongoing-events-title": "Section label used on [[Special:AllEvents]] to introduce the list of ongoing filtered events. See {{msg-mw|campaignevents-allevents-label-ongoing-events-description}}.",
-	"campaignevents-allevents-label-ongoing-events-description": "Informational text used on [[Special:AllEvents]] to provide more information about the {{msg-mw|campaignevents-allevents-label-ongoing-events-title}} section."
+	"campaignevents-allevents-label-ongoing-events-description": "Informational text used on [[Special:AllEvents]] to provide more information about the {{msg-mw|campaignevents-allevents-label-ongoing-events-title}} section.",
+	"communityconfiguration-campaignevents-title": "Title of the Community Configuration provider. Shown at Special:CommunityConfiguration.",
+	"communityconfiguration-campaignevents-description": "Description of the Community Configuration provider. Shown at Special:CommunityConfiguration.",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Label for the community configuration namespace field. Shown at Special:CommunityConfiguration/CampaignEvents."
 }

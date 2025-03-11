@@ -10,6 +10,7 @@ $cfg['directory_list'] = array_merge(
 		'../../extensions/Echo',
 		'../../extensions/Translate',
 		'../../extensions/WikimediaMessages',
+		'../../extensions/CommunityConfiguration',
 	]
 );
 
@@ -19,6 +20,7 @@ $cfg['exclude_analysis_directory_list'] = array_merge(
 		'../../extensions/Echo',
 		'../../extensions/Translate',
 		'../../extensions/WikimediaMessages',
+		'../../extensions/CommunityConfiguration',
 	]
 );
 
@@ -40,5 +42,4 @@ $cfg['plugins'] = array_merge( $cfg['plugins'], [
 	'StrictComparisonPlugin',
 	'StrictLiteralComparisonPlugin',
 ] );
-
 return $cfg;

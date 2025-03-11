@@ -15,6 +15,25 @@
 			"AvailableNamespaces": {
 				"Event": true
 			}
+		},
+		"CommunityConfiguration": {
+			"Providers": {
+				"CampaignEvents": {
+					"store": {
+						"type": "wikipage",
+						"args": [
+							"MediaWiki:CampaignEventsConfig.json"
+						]
+					},
+					"validator": {
+						"type": "jsonschema",
+						"args": [
+							"MediaWiki\\Extension\\CampaignEvents\\Config\\CommunityConfiguration\\Schemas\\CampaignEventsSchema"
+						]
+					},
+					"type": "mw-config"
+				}
+			}
 		}
 	},
 	"AutoloadNamespaces": {

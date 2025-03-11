@@ -425,6 +425,10 @@ return [
 		);
 	},
 	CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION => static function ( MediaWikiServices $services ): Config{
-		return $services->getMainConfig();
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'CommunityConfiguration' ) ) {
+			 return $services->getService( 'CommunityConfiguration.MediaWikiConfigReader' );
+		} else {
+			return $services->getMainConfig();
+		}
 	}
 ];
