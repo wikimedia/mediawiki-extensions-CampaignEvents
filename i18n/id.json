@@ -496,6 +496,7 @@
 	"campaignevents-invitation-list-invalid-id": "Berikan ID daftar undangan yang sah. [[Special:MyInvitationLists|Lihat daftar undangan Anda]].",
 	"campaignevents-invitation-list-does-not-exist": "Daftar undangan ini tidak ada. [[Special:MyInvitationLists|Lihat daftar undangan Anda]].",
 	"campaignevents-invitation-list-not-creator": "Anda tidak memiliki izin untuk melihat daftar undangan ini karena Anda tidak membuatnya. [[Special:MyInvitationLists|Lihat daftar undangan Anda]].",
+	"campaignevents-invitation-list-nonlocal": "Silakan '''[$1 melihat daftar undangan ini di $2]''', proyek wiki di mana undangan tersebut dibuat.",
 	"campaignevents-invitation-list-intro": "$1 {{PLURAL:$1|kontributor}} ditemukan berdasarkan kriteria berikut: jumlah bita yang mereka buat dalam artikel itu, jumlah suntingan yang mereka buat dalam artikelnya, jumlah suntingan keseluruhan mereka di wiki tersebut, dan seberapa baru mereka menyunting wiki itu.",
 	"campaignevents-invitationlist-no-editors": "<strong>Tidak ada editor yang memenuhi [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists kriteria daftar undangan] dari daftar artikel Anda.</strong> Anda dapat [[Special:GenerateInvitationList|membuat daftar undangan baru]] dengan daftar artikel baru.",
 	"campaignevents-invitationlist-highly-recommended": "Sangat direkomendasikan untuk mengundang",
