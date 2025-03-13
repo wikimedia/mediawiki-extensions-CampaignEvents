@@ -435,7 +435,7 @@
 	"campaignevents-generateinvitationlist-name-field-label": "Nome della lista degli invitati",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "Lista degli invitati all'editathon",
 	"campaignevents-generateinvitationlist-event-page-field-label": "Nome della pagina dell'evento",
-	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Evento}}:Il mio evento",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:Il mio evento",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Elenco di voci/articoli",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sole\nLuna\nCasa",
 	"campaignevents-generateinvitationlist-article-list-field-help": "Inserisci fino a $1 {{PLURAL:$1|voce|voci}} relative al tema del tuo evento, una voce per riga. Verrà così generato un elenco di contributori in base alle voci che hai inserito.",
