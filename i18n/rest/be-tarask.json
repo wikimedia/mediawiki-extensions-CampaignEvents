@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Renessaince"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Не існуе падзеі з такім ідэнтыфікатарам.",
+	"campaignevents-rest-enable-registration-permission-denied": "Вы ня маеце дазволу на ўключэньне рэгістрацыі падзеяў."
+}
