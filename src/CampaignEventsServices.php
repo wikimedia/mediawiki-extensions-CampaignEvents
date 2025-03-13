@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
@@ -55,6 +56,8 @@ use Psr\Container\ContainerInterface;
  * Global service locator for CampaignEvents services. Should only be used where DI is not possible.
  */
 class CampaignEventsServices {
+	public const CAMPAIGN_EVENTS_CONFIGURATION = 'CampaignEventsWikiConfiguration';
+
 	public static function getDatabaseHelper( ?ContainerInterface $services = null ): CampaignsDatabaseHelper {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( CampaignsDatabaseHelper::SERVICE_NAME );
 	}
@@ -243,5 +246,9 @@ class CampaignEventsServices {
 
 	public static function getEventTopicsStore( ?ContainerInterface $services = null ): EventTopicsStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventTopicsStore::SERVICE_NAME );
+	}
+
+	public static function getWikiConfiguration( ?ContainerInterface $services = null ): Config {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( self::CAMPAIGN_EVENTS_CONFIGURATION );
 	}
 }

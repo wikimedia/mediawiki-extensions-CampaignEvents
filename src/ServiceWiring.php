@@ -2,9 +2,11 @@
 
 declare( strict_types=1 );
 
+use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
+use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
@@ -416,4 +418,7 @@ return [
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
 		);
 	},
+	CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION => static function ( MediaWikiServices $services ): Config{
+		return $services->getMainConfig();
+	}
 ];

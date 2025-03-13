@@ -43,6 +43,10 @@
 		"CampaignEventsEnableEventInvitation": {
 			"description": "Flag to enable event invitation feature on a wiki",
 			"value": false
+		},
+		"CampaignEventsEventNamespaces": {
+			"description": "List of permitted namespaces for event registration",
+			"value": [ 1728 ]
 		}
 	},
 	"DatabaseVirtualDomains": [
