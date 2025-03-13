@@ -6,3 +6,4 @@
 .idea/
 /.api-testing.config.json
 tests/selenium/log
+/.stylelintcache
