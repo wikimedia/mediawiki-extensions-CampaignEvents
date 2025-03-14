@@ -105,26 +105,6 @@ class EventPageDecorator {
 	 */
 	private ?bool $participantIsPublic = null;
 
-	/**
-	 * @param PageEventLookup $pageEventLookup
-	 * @param ParticipantsStore $participantsStore
-	 * @param OrganizersStore $organizersStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param LinkRenderer $linkRenderer
-	 * @param CampaignsPageFactory $campaignsPageFactory
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UserLinker $userLinker
-	 * @param EventTimeFormatter $eventTimeFormatter
-	 * @param EventPageCacheUpdater $eventPageCacheUpdater
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param WikiLookup $wikiLookup
-	 * @param ITopicRegistry $topicRegistry
-	 * @param GroupPermissionsLookup $groupPermissionsLookup
-	 * @param Language $language
-	 * @param Authority $viewingAuthority
-	 * @param OutputPage $out
-	 */
 	public function __construct(
 		PageEventLookup $pageEventLookup,
 		ParticipantsStore $participantsStore,
@@ -170,8 +150,6 @@ class EventPageDecorator {
 	/**
 	 * This is the main entry point for this class. It adds all the necessary HTML (registration header, popup etc.)
 	 * to the given OutputPage, as well as loading some JS/CSS resources.
-	 *
-	 * @param ProperPageIdentity $page
 	 */
 	public function decoratePage( ProperPageIdentity $page ): void {
 		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $page );
@@ -189,9 +167,6 @@ class EventPageDecorator {
 		}
 	}
 
-	/**
-	 * @param ICampaignsPage $eventPage
-	 */
 	private function maybeAddEnableRegistrationHeader( ICampaignsPage $eventPage ): void {
 		if ( !$this->permissionChecker->userCanEnableRegistration( $this->authority, $eventPage ) ) {
 			return;
@@ -212,10 +187,6 @@ class EventPageDecorator {
 		$this->out->addHTML( $this->getEnableRegistrationHeader( $enableRegistrationURL ) );
 	}
 
-	/**
-	 * @param string $enableRegistrationURL
-	 * @return Tag
-	 */
 	private function getEnableRegistrationHeader( string $enableRegistrationURL ): Tag {
 		$organizerText = ( new Tag( 'div' ) )->appendContent(
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-enableheader-organizer' ) )
@@ -259,7 +230,7 @@ class EventPageDecorator {
 	}
 
 	private function addRegistrationHeader( ProperPageIdentity $page, ExistingEventRegistration $registration ): void {
-		$this->out->setPreventClickjacking( true );
+		$this->out->getMetadata()->setPreventClickjacking( true );
 		$this->out->enableOOUI();
 		$this->out->addModuleStyles( array_merge(
 			[
@@ -465,11 +436,6 @@ class EventPageDecorator {
 		] );
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param int $userStatus
-	 * @return Tag
-	 */
 	private function getEventInfoHeaderRow(
 		ExistingEventRegistration $registration,
 		int $userStatus
@@ -636,11 +602,6 @@ class EventPageDecorator {
 		);
 	}
 
-	/**
-	 * @param int $eventID
-	 * @param int $organizersCount
-	 * @return string
-	 */
 	private function getDetailsDialogOrganizers(
 		int $eventID,
 		int $organizersCount
@@ -711,10 +672,6 @@ class EventPageDecorator {
 		);
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @return string
-	 */
 	private function getDetailsDialogDates( ExistingEventRegistration $registration ): string {
 		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $this->language, $this->viewingUser );
 		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $this->language, $this->viewingUser );
@@ -884,12 +841,6 @@ class EventPageDecorator {
 		return '';
 	}
 
-	/**
-	 * @param int $eventID
-	 * @param Participant|null $participant
-	 * @param ExistingEventRegistration $registration
-	 * @return string
-	 */
 	private function getDetailsDialogParticipants(
 		int $eventID,
 		?Participant $participant,
@@ -911,9 +862,8 @@ class EventPageDecorator {
 			$participantsFooter = $this->getParticipantFooter( $eventID );
 		}
 
-		$privateCountFooter = '';
+		$privateCountFooter = new Tag();
 		if ( $privateCount > 0 ) {
-			$privateCountFooter = new Tag();
 			$privateCountFooter->addClasses( [
 				'ext-campaignevents-detailsdialog-private-participants-footer'
 			] );
@@ -943,20 +893,11 @@ class EventPageDecorator {
 		);
 	}
 
-	/**
-	 * @param int $eventID
-	 * @param Participant|null $curUserParticipant
-	 * @param bool $showPrivateParticipants
-	 *
-	 * @return Tag|null
-	 */
 	private function getParticipantRows(
 		int $eventID,
 		?Participant $curUserParticipant,
 		bool $showPrivateParticipants
 	): ?Tag {
-		$participantsList = ( new Tag( 'ul' ) )
-			->addClasses( [ 'ext-campaignevents-detailsdialog-participants-list' ] );
 		$partialParticipants = $this->participantsStore->getEventParticipants(
 			$eventID,
 			$curUserParticipant ?
@@ -969,19 +910,16 @@ class EventPageDecorator {
 			$curUserParticipant ? [ $curUserParticipant->getUser()->getCentralID() ] : null
 		);
 
-		if ( !$curUserParticipant && !$partialParticipants ) {
+		$orderedParticipants = $curUserParticipant ? [ $curUserParticipant ] : [];
+		$orderedParticipants = array_merge( $orderedParticipants, $partialParticipants );
+		if ( !$orderedParticipants ) {
 			return null;
 		}
 
-		if ( $curUserParticipant ) {
-			$participantsList->appendContent(
-				$this->getParticipantRow( $curUserParticipant )
-			);
-		}
-		foreach ( $partialParticipants as $participant ) {
-			$participantsList->appendContent(
-				$this->getParticipantRow( $participant )
-			);
+		$participantsList = ( new Tag( 'ul' ) )
+			->addClasses( [ 'ext-campaignevents-detailsdialog-participants-list' ] );
+		foreach ( $orderedParticipants as $participant ) {
+			$participantsList->appendContent( $this->getParticipantRow( $participant ) );
 		}
 		return $participantsList;
 	}
@@ -990,10 +928,6 @@ class EventPageDecorator {
 	 * Returns the "action" element for the header (that are also cloned into the popup). This can be a button for
 	 * managing the event, or one to register for it. Or it can be a widget informing the user that they are already
 	 * registered, with a button to unregister. There can also be no element if the user is not allowed to register.
-	 *
-	 * @param int $eventID
-	 * @param int $userStatus
-	 * @return Element|null
 	 */
 	private function getActionElement( int $eventID, int $userStatus ): ?Element {
 		if ( $userStatus === self::USER_STATUS_BLOCKED ) {
@@ -1134,10 +1068,6 @@ class EventPageDecorator {
 		}
 	}
 
-	/**
-	 * @param int $eventID
-	 * @return Tag
-	 */
 	private function getParticipantFooter( int $eventID ): Tag {
 		$viewParticipantsURL = SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID )
 			->getLocalURL( [ 'tab' => SpecialEventDetails::PARTICIPANTS_PANEL ] );
@@ -1151,10 +1081,6 @@ class EventPageDecorator {
 		] );
 	}
 
-	/**
-	 * @param Participant $participant
-	 * @return Tag
-	 */
 	private function getParticipantRow( Participant $participant ): Tag {
 		$usernameElement = new HtmlSnippet(
 			$this->userLinker->generateUserLinkWithFallback(
@@ -1167,23 +1093,7 @@ class EventPageDecorator {
 			->appendContent( $usernameElement );
 
 		if ( $participant->isPrivateRegistration() ) {
-			try {
-				$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
-				// Hack: use an invalid username to force unspecified gender
-				$userName = '@';
-			}
-			$labelText = $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-private-registration-label' )
-					->params( $userName )
-			);
-			$tag->appendContent( new IconWidget( [
-					'icon' => 'lock',
-					'title' => $labelText,
-					'label' => $labelText,
-					'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
-				] )
-			);
+			$this->addPrivateParticipantNotice( $participant, $tag );
 		}
 
 		return $tag;
@@ -1220,10 +1130,6 @@ class EventPageDecorator {
 			->appendContent( $header, $contentTag, $footer );
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @return string
-	 */
 	private function getDetailsDialogWikis( ExistingEventRegistration $registration ): string {
 		$content = EventFormatter::formatWikis(
 			$registration,
@@ -1264,5 +1170,23 @@ class EventPageDecorator {
 				MessageValue::new( 'campaignevents-eventpage-dialog-topics-label' )
 			)
 		);
+	}
+
+	private function addPrivateParticipantNotice( Participant $participant, Tag $tag ): void {
+		try {
+			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			// Hack: use an invalid username to force unspecified gender
+			$userName = '@';
+		}
+		$labelText = $this->msgFormatter->format(
+			MessageValue::new( 'campaignevents-eventpage-dialog-private-registration-label' )->params( $userName )
+		);
+		$tag->appendContent( new IconWidget( [
+			'icon' => 'lock',
+			'title' => $labelText,
+			'label' => $labelText,
+			'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
+		] ) );
 	}
 }
