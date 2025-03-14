@@ -99,3 +99,23 @@ QUnit.test( 'Succeeds when given the necessary data', async function ( assert ) 
 	await TimeZoneConverter.convert( $target, 'some-message' );
 	assert.strictEqual( $target.text(), `(some-message: 1, 2, 3, 4, 5, 6)${ localTimezone }` );
 } );
+
+QUnit.test( 'Formats local timestamps as TS_MW', ( assert ) => {
+	const testCases = [
+		[ '2025-01-02T03:04:05Z', 'Europe/Paris', '20250102040405' ],
+		[ '2025-01-02T03:04:05Z', 'America/New_York', '20250101220405' ],
+		[ '2025-01-02T03:04:05Z', 'Asia/Kolkata', '20250102083405' ],
+		[ '2025-03-14T11:22:33Z', 'America/Los_Angeles', '20250314042233' ],
+		[ '2025-03-14T11:22:33Z', 'Europe/Rome', '20250314122233' ],
+		[ '2025-03-14T11:22:33Z', 'Australia/Adelaide', '20250314215233' ]
+	];
+
+	for ( const testCase of testCases ) {
+		const [ ts, tz, expected ] = testCase;
+		assert.strictEqual(
+			TimeZoneConverter.formatMwTimestamp( ts, tz ),
+			expected,
+			`Format ${ ts } ${ tz }`
+		);
+	}
+} );

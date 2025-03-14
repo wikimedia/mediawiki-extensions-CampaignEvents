@@ -210,8 +210,7 @@
 				"mediawiki.jqueryMsg",
 				"mediawiki.widgets.datetime",
 				"mediawiki.widgets.UsersMultiselectWidget",
-				"jquery.makeCollapsible",
-				"moment"
+				"jquery.makeCollapsible"
 			],
 			"messages": [
 				"campaignevents-edit-organizers-not-allowed",
@@ -358,8 +357,7 @@
 				"mediawiki.util",
 				"oojs-ui-core",
 				"oojs-ui-windows",
-				"oojs-ui-widgets",
-				"moment"
+				"oojs-ui-widgets"
 			]
 		}
 	},
