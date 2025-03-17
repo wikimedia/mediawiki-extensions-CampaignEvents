@@ -34,6 +34,11 @@ class EventFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventFactory';
 	public const VALIDATE_ALL = 0;
 	public const VALIDATE_SKIP_DATES_PAST = 1 << 0;
+	/**
+	 * @var int Skips validation of the event page namespace, as long as the requested event page matches the
+	 * $previousPage passed to self::newEvent.
+	 */
+	public const VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE = 1 << 1;
 
 	public const MAX_WIKIS = 100;
 
@@ -97,6 +102,9 @@ class EventFactory {
 	 * @param string|null $deletionTimestamp In the TS_MW format
 	 * @param bool $isTestEvent
 	 * @param int $validationFlags
+	 * @param ICampaignsPage|null $previousPage Used together with the validation flag
+	 *   {@link self::VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE}. If the requested event page is the same as
+	 *   this page, validation of the namespace is skipped.
 	 *
 	 * @return EventRegistration
 	 * @throws InvalidEventDataException
@@ -123,7 +131,8 @@ class EventFactory {
 		?string $lastEditTimestamp,
 		?string $deletionTimestamp,
 		bool $isTestEvent,
-		int $validationFlags = self::VALIDATE_ALL
+		int $validationFlags = self::VALIDATE_ALL,
+		?ICampaignsPage $previousPage = null
 	): EventRegistration {
 		$res = StatusValue::newGood();
 
@@ -131,7 +140,7 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-id' );
 		}
 
-		$pageStatus = $this->validatePage( $pageTitleStr );
+		$pageStatus = $this->validatePage( $pageTitleStr, $validationFlags, $previousPage );
 		$res->merge( $pageStatus );
 		$campaignsPage = $pageStatus->getValue();
 
@@ -246,9 +255,15 @@ class EventFactory {
 	 * Validates the page title provided as a string.
 	 *
 	 * @param string $pageTitleStr
+	 * @param int $validationFlags Combination of self::VALIDATE_* constants.
+	 * @param ICampaignsPage|null $previousPage
 	 * @return StatusValue Fatal if invalid, good otherwise and with an ICampaignsPage as value.
 	 */
-	private function validatePage( string $pageTitleStr ): StatusValue {
+	private function validatePage(
+		string $pageTitleStr,
+		int $validationFlags,
+		?ICampaignsPage $previousPage
+	): StatusValue {
 		$pageTitleStr = trim( $pageTitleStr );
 		if ( $pageTitleStr === '' ) {
 			return StatusValue::newFatal( 'campaignevents-error-empty-title' );
@@ -271,7 +286,11 @@ class EventFactory {
 			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );
 		}
 
-		if ( !in_array( $campaignsPage->getNamespace(), $this->allowedEventNamespaces, true ) ) {
+		$skipSamePageNsValidation = ( $validationFlags & self::VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE ) !== 0;
+		if (
+			!( $skipSamePageNsValidation && $previousPage && $campaignsPage->equals( $previousPage ) ) &&
+			!in_array( $campaignsPage->getNamespace(), $this->allowedEventNamespaces, true )
+		) {
 			return StatusValue::newFatal( 'campaignevents-error-page-namespace-not-allowed' );
 		}
 
