@@ -493,6 +493,7 @@
 	"campaignevents-invitation-list-invalid-id": "Укажете важечка назнака на список со покани. [[Special:MyInvitationLists | Погледајте ги вашите списоци со покани]].",
 	"campaignevents-invitation-list-does-not-exist": "Овој список со покани не постои. [[Special:MyInvitationLists|Погледајте ги вашите списоци со покани]].",
 	"campaignevents-invitation-list-not-creator": "Немате дозвола да го гледате овој список со покани бидејќи вие не сте го создале. [[Special:MyInvitationLists|Погледајте ги вашите списоци со покани]].",
+	"campaignevents-invitation-list-nonlocal": "'''[$1 Погледајте го списокот на покани на $2]''', викито каде тој е создаден.",
 	"campaignevents-invitation-list-intro": "{{PLURAL:$1|Најден $1 уредник|Најдени $1 уредници}} врз основа на следниве критериуми: придонес во статиите во бајти, број на уредувања во статии, севкупен број уредувања на викијата и колку неодамна уредувале на викијата.",
 	"campaignevents-invitationlist-no-editors": "<strong>Ниеден уредник не ги задоволува [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists критериумите за покана] од вашиот список на статии.</strong> Можете да [[Special:GenerateInvitationList|создадете нов список со покани]] со нов список на статии.",
 	"campaignevents-invitationlist-highly-recommended": "Високопрепорачани за канење",
