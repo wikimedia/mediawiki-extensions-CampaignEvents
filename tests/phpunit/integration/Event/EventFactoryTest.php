@@ -92,7 +92,8 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function getEventFactory(
-		?CampaignsPageFactory $campaignsPageFactory = null
+		?CampaignsPageFactory $campaignsPageFactory = null,
+		?array $allowedNamespaces = null
 	): EventFactory {
 		if ( !$campaignsPageFactory ) {
 			$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
@@ -119,7 +120,8 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			$trackingToolRegistry,
 			$questionsRegistry,
 			$wikiLookup,
-			$topicLookup
+			$topicLookup,
+			$allowedNamespaces ?? [ NS_EVENT ]
 		);
 	}
 
@@ -129,14 +131,16 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @param array $factoryArgs
 	 * @param array|null $expectedErrors Array of expected error keys, or null to expect success.
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
+	 * @param int[]|null $allowedNamespaces
 	 * @return EventRegistration The newly created object when successful, else null.
 	 */
 	private function doTestWithArgs(
 		array $factoryArgs,
 		?array $expectedErrors,
-		?CampaignsPageFactory $campaignsPageFactory = null
+		?CampaignsPageFactory $campaignsPageFactory = null,
+		?array $allowedNamespaces = null
 	): ?EventRegistration {
-		$factory = $this->getEventFactory( $campaignsPageFactory );
+		$factory = $this->getEventFactory( $campaignsPageFactory, $allowedNamespaces );
 		$ex = null;
 
 		try {
@@ -223,20 +227,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			$nonExistingCampaignsPageFactory
 		];
 
-		$nonEventPageStr = 'This page is not in the event namespace';
-		$nonEventPageObj = $this->createMock( ICampaignsPage::class );
-		$nonEventPageObj->method( 'getNamespace' )->willReturn( NS_MAIN );
-		$nonEventCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
-		$nonEventCampaignsPageFactory->expects( $this->atLeastOnce() )
-			->method( 'newLocalExistingPageFromString' )
-			->with( $nonEventPageStr )
-			->willReturn( $nonEventPageObj );
-		yield 'Page not in the event namespace' => [
-			'campaignevents-error-page-not-event-namespace',
-			self::getTestDataWithDefault( [ 'page' => $nonEventPageStr ] ),
-			$nonEventCampaignsPageFactory
-		];
-
 		$specialPageStr = 'Special:SomeSpecialPage';
 		$specialCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
 		$specialCampaignsPageFactory->expects( $this->atLeastOnce() )
@@ -244,7 +234,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			->with( $specialPageStr )
 			->willThrowException( $this->createMock( UnexpectedVirtualNamespaceException::class ) );
 		yield 'Page in a virtual namespace' => [
-			'campaignevents-error-page-not-event-namespace',
+			'campaignevents-error-page-namespace-not-allowed',
 			self::getTestDataWithDefault( [ 'page' => $specialPageStr ] ),
 			$specialCampaignsPageFactory
 		];
@@ -411,6 +401,29 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 				'questions' => [ 'this-name-definitely-does-not-exist' ]
 			] )
 		];
+	}
+
+	/**
+	 * @covers ::newEvent
+	 * @covers ::validatePage
+	 */
+	public function testNewEvent__namespaceNotallowed() {
+		$allowedNamespaces = [ NS_PROJECT ];
+		$disallowedNamespacePageStr = 'This page is not in the allowed project namespace';
+		$disallowedNamespacePageObj = $this->createMock( ICampaignsPage::class );
+		$disallowedNamespacePageObj->method( 'getNamespace' )->willReturn( NS_MAIN );
+		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
+		$campaignsPageFactory->expects( $this->atLeastOnce() )
+			->method( 'newLocalExistingPageFromString' )
+			->with( $disallowedNamespacePageStr )
+			->willReturn( $disallowedNamespacePageObj );
+		$factoryArgs = self::getTestDataWithDefault( [ 'page' => $disallowedNamespacePageStr ] );
+		$this->doTestWithArgs(
+			$factoryArgs,
+			[ 'campaignevents-error-page-namespace-not-allowed' ],
+			$campaignsPageFactory,
+			$allowedNamespaces
+		);
 	}
 
 	/**

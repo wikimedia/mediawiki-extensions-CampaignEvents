@@ -23,7 +23,7 @@
 	"campaignevents-error-invalid-title": "The event page title is invalid: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Specify an event page on the local wiki.",
 	"campaignevents-error-page-not-found": "There is no event page with this name.",
-	"campaignevents-error-page-not-event-namespace": "The event page must be in the {{ns:event}} namespace.",
+	"campaignevents-error-page-namespace-not-allowed": "The event page must be in one of the permitted namespaces",
 	"campaignevents-error-page-with-section": "The event page must not contain a section name.",
 	"campaignevents-error-too-many-wikis": "Enter a maximum of {{PLURAL:$1|one wiki|$1 wikis}}.",
 	"campaignevents-error-invalid-wikis": "The following wiki IDs are not recognized: $1.",

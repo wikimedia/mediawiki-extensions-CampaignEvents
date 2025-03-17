@@ -132,6 +132,8 @@ return [
 			$services->get( EventQuestionsRegistry::SERVICE_NAME ),
 			$services->get( WikiLookup::SERVICE_NAME ),
 			$services->get( ITopicRegistry::SERVICE_NAME ),
+			$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION )
+				->get( 'CampaignEventsEventNamespaces' )
 		);
 	},
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {

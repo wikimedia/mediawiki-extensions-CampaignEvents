@@ -8,6 +8,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use LogicException;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -72,6 +73,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private PageURLResolver $pageUrlResolver;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private Config $wikiConfig;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -105,7 +107,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		CampaignEventsHookRunner $hookRunner,
 		PageURLResolver $pageURLResolver,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry
+		ITopicRegistry $topicRegistry,
+		Config $wikiConfig
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -121,6 +124,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->pageUrlResolver = $pageURLResolver;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->wikiConfig = $wikiConfig;
 
 		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->formMessages = $this->getFormMessages();
@@ -210,17 +214,23 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		$formFields = [];
-		$formFields[self::PAGE_FIELD_NAME_HTMLFORM] = [
+
+		$pageFieldSpecs = [
 			'type' => 'title',
 			'label-message' => 'campaignevents-edit-field-page',
 			'exists' => true,
-			'namespace' => NS_EVENT,
 			'default' => $eventPageDefault,
 			'help-message' => 'campaignevents-edit-field-page-help',
 			'help-inline' => false,
 			'required' => true,
 			'section' => self::DETAILS_SECTION,
 		];
+		$allowedEventNamespaces = $this->wikiConfig->get( 'CampaignEventsEventNamespaces' );
+		if ( count( $allowedEventNamespaces ) === 1 ) {
+			// T389078: can't filter by multiple namespaces.
+			$pageFieldSpecs['namespace'] = $allowedEventNamespaces[0];
+		}
+		$formFields[self::PAGE_FIELD_NAME_HTMLFORM] = $pageFieldSpecs;
 
 		if ( $this->event ) {
 			$formFields['EventStatus'] = [

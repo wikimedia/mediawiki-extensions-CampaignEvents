@@ -52,6 +52,7 @@ class EventFactory {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private array $allowedEventNamespaces;
 
 	public function __construct(
 		CampaignsPageFactory $campaignsPageFactory,
@@ -59,7 +60,8 @@ class EventFactory {
 		TrackingToolRegistry $trackingToolRegistry,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry
+		ITopicRegistry $topicRegistry,
+		array $allowedEventNamespaces
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
@@ -67,6 +69,7 @@ class EventFactory {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->allowedEventNamespaces = $allowedEventNamespaces;
 	}
 
 	/**
@@ -261,15 +264,15 @@ class EventFactory {
 		} catch ( UnexpectedInterwikiException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );
 		} catch ( UnexpectedVirtualNamespaceException $_ ) {
-			return StatusValue::newFatal( 'campaignevents-error-page-not-event-namespace' );
+			return StatusValue::newFatal( 'campaignevents-error-page-namespace-not-allowed' );
 		} catch ( UnexpectedSectionAnchorException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-with-section' );
 		} catch ( PageNotFoundException $_ ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );
 		}
 
-		if ( $campaignsPage->getNamespace() !== NS_EVENT ) {
-			return StatusValue::newFatal( 'campaignevents-error-page-not-event-namespace' );
+		if ( !in_array( $campaignsPage->getNamespace(), $this->allowedEventNamespaces, true ) ) {
+			return StatusValue::newFatal( 'campaignevents-error-page-namespace-not-allowed' );
 		}
 
 		return StatusValue::newGood( $campaignsPage );
