@@ -271,4 +271,9 @@ class SpecialInvitationList extends SpecialPage {
 		}
 		return $list;
 	}
+
+	/** @inheritDoc */
+	protected function getGroupName(): string {
+		return 'campaignevents';
+	}
 }
