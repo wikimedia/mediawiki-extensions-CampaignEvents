@@ -54,10 +54,10 @@
 			throw new Error( 'No timestamp(s) provided' );
 		}
 
-		// Use moment to get an intermediate standard representation that can be passed to the
-		// server for the final formatting pass.
-		var convertedStart = moment.utc( startUTC ).local().format( 'YYYYMMDDHHmmss' ),
-			convertedEnd = moment.utc( endUTC ).local().format( 'YYYYMMDDHHmmss' );
+		// First, convert the time to the local timezone, but format it in the machine-readable
+		// TS_MW format. This will then be passed to the server for the final formatting pass.
+		var convertedStart = this.formatMwTimestamp( startUTC, newTimezone ),
+			convertedEnd = this.formatMwTimestamp( endUTC, newTimezone );
 
 		// Note, failures are ignored as we're already displaying the time.
 		return this.rest.get(
@@ -77,6 +77,33 @@
 			$rangeElement.text( formattedRange );
 			$timezoneElement.text( newTimezone );
 		} );
+	};
+
+	/**
+	 * @param {string} ts A UTC timestamp in the ISO 8601 format
+	 * @param {string} timezone IANA timezone
+	 * @return {string} The timestamp converted to the given timezone and formatted as TS_MW
+	 */
+	TimeZoneConverter.prototype.formatMwTimestamp = function ( ts, timezone ) {
+		var date = Date.parse( ts );
+		var intlOptions = {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hour12: false,
+			timeZone: timezone
+		};
+		var datePartsList = new Intl.DateTimeFormat( 'en', intlOptions ).formatToParts( date ),
+			dateParts = {};
+		datePartsList.forEach( function ( el ) {
+			// 'literal' and other unused types are harmless.
+			dateParts[ el.type ] = el.value;
+		} );
+		return dateParts.year + dateParts.month + dateParts.day +
+			dateParts.hour + dateParts.minute + dateParts.second;
 	};
 
 	module.exports = new TimeZoneConverter();
