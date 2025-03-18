@@ -11,8 +11,8 @@
 	 * @constructor
 	 */
 	function ManageRegistrationWidget( eventID, config ) {
-		var getLinkWithLeftClickDisabled = function ( href ) {
-			return $( '<a>' ).attr( 'href', href ).on( 'click', function ( e ) {
+		const getLinkWithLeftClickDisabled = function ( href ) {
+			return $( '<a>' ).attr( 'href', href ).on( 'click', ( e ) => {
 				if ( e.button === 0 ) {
 					return false;
 				}
@@ -54,7 +54,7 @@
 	OO.inheritClass( ManageRegistrationWidget, OO.ui.ButtonMenuSelectWidget );
 
 	ManageRegistrationWidget.prototype.onChooseOption = function ( option ) {
-		var data = option.getData();
+		const data = option.getData();
 
 		if ( data === 'edit' ) {
 			this.emit( 'editregistration' );

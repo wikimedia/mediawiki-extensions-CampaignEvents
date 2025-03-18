@@ -1,7 +1,7 @@
 ( function () {
 	'use strict';
 
-	var ConfirmEventDeletionDialog = require( './ConfirmEventDeletionDialog.js' );
+	const ConfirmEventDeletionDialog = require( './ConfirmEventDeletionDialog.js' );
 
 	/**
 	 * Widgets for the kebab menu used in EventsTablePager.
@@ -23,13 +23,13 @@
 		this.windowManager = config.windowManager;
 		this.isLocalWiki = config.isLocalWiki;
 
-		var editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID ),
+		const editHref = mw.util.getUrl( 'Special:EditEventRegistration/' + this.eventID ),
 			deleteHref = mw.util.getUrl( 'Special:DeleteEventRegistration/' + this.eventID );
 
 		// Note: all options are actually <a> elements, so that it's possible to middle- or
 		// right-click them and copy the link or open it in a new tab.
-		var getLinkWithLeftClickDisabled = function ( href ) {
-			return $( '<a>' ).attr( 'href', href ).on( 'click', function ( e ) {
+		const getLinkWithLeftClickDisabled = function ( href ) {
+			return $( '<a>' ).attr( 'href', href ).on( 'click', ( e ) => {
 				if ( e.button === 0 ) {
 					return false;
 				}
@@ -103,7 +103,7 @@
 	OO.inheritClass( EventKebabMenu, OO.ui.ButtonMenuSelectWidget );
 
 	EventKebabMenu.prototype.onChooseOption = function ( item ) {
-		var data = item.getData(),
+		const data = item.getData(),
 			that = this;
 		switch ( data.name ) {
 			case 'edit':
@@ -112,7 +112,7 @@
 				break;
 			case 'close':
 				this.changeRegistrationStatus( 'closed' )
-					.done( function () {
+					.done( () => {
 						mw.notify(
 							mw.message( 'campaignevents-eventslist-menu-close-success', that.eventName ),
 							{ type: 'success' }
@@ -124,14 +124,14 @@
 								that.openAndCloseOptionIndex
 							);
 					} )
-					.fail( function () {
+					.fail( () => {
 						// Fall back to the special page.
 						window.location.assign( data.href );
 					} );
 				break;
 			case 'open':
 				this.changeRegistrationStatus( 'open' )
-					.done( function () {
+					.done( () => {
 						mw.notify(
 							mw.message( 'campaignevents-eventslist-menu-open-success', that.eventName ),
 							{ type: 'success' }
@@ -143,7 +143,7 @@
 								that.openAndCloseOptionIndex
 							);
 					} )
-					.fail( function () {
+					.fail( () => {
 						// Fall back to the special page.
 						window.location.assign( data.href );
 					} );
@@ -154,12 +154,12 @@
 					break;
 				}
 				this.maybeDeleteRegistration()
-					.done( function ( deleteData ) {
+					.done( ( deleteData ) => {
 						if ( deleteData && deleteData.deleted ) {
 							that.emit( 'deleted', that.eventName );
 						}
 					} )
-					.fail( function () {
+					.fail( () => {
 						// Fall back to the special page.
 						window.location.assign( data.href );
 					} );
@@ -172,18 +172,18 @@
 	 * @return {jQuery.Promise}
 	 */
 	EventKebabMenu.prototype.changeRegistrationStatus = function ( status ) {
-		var eventID = this.eventID;
+		const eventID = this.eventID;
 		return new mw.Rest().get( '/campaignevents/v0/event_registration/' + eventID )
 			.then(
-				function ( data ) {
-					var eventPageWiki = data.event_page_wiki;
+				( data ) => {
+					const eventPageWiki = data.event_page_wiki;
 					if ( eventPageWiki !== mw.config.get( 'wgWikiID' ) ) {
 						// Can't edit registrations whose event page is on another wiki, see T311582
 						// TODO Remove this limitation
 						return $.Deferred().reject();
 					}
 
-					var trackingToolID, trackingToolEventID = null;
+					let trackingToolID, trackingToolEventID = null;
 					if ( data.tracking_tools.length === 1 ) {
 						trackingToolID = data.tracking_tools[ 0 ].tool_id;
 						trackingToolEventID = data.tracking_tools[ 0 ].tool_event_id;
@@ -212,11 +212,11 @@
 							/* eslint-enable camelcase */
 						}
 					)
-						.fail( function ( _errCode, errData ) {
+						.fail( ( _errCode, errData ) => {
 							mw.log.error( errData.xhr.responseText );
 						} );
 				},
-				function ( _errCode, errData ) {
+				( _errCode, errData ) => {
 					mw.log.error( errData.xhr.responseText );
 				}
 			);
@@ -226,20 +226,18 @@
 	 * @return {jQuery.Promise} Resolved with { deleted: true } as value if the event was deleted.
 	 */
 	EventKebabMenu.prototype.maybeDeleteRegistration = function () {
-		var confirmDelDialog = new ConfirmEventDeletionDialog( { eventName: this.eventName } ),
+		const confirmDelDialog = new ConfirmEventDeletionDialog( { eventName: this.eventName } ),
 			eventID = this.eventID;
 
 		this.windowManager.addWindows( [ confirmDelDialog ] );
-		return this.windowManager.openWindow( confirmDelDialog ).closed.then( function ( data ) {
+		return this.windowManager.openWindow( confirmDelDialog ).closed.then( ( data ) => {
 			if ( data && data.action === 'confirm' ) {
 				return new mw.Rest().delete(
 					'/campaignevents/v0/event_registration/' + eventID,
 					{ token: mw.user.tokens.get( 'csrfToken' ) }
 				)
-					.then( function () {
-						return $.Deferred().resolve( { deleted: true } );
-					} )
-					.fail( function ( _errCode, errData ) {
+					.then( () => $.Deferred().resolve( { deleted: true } ) )
+					.fail( ( _errCode, errData ) => {
 						mw.log.error( errData.xhr.responseText );
 					} );
 			}

@@ -4,15 +4,13 @@
 ( function () {
 	'use strict';
 
-	var EventDetailsDialog = require( './EventDetailsDialog.js' ),
+	const EventDetailsDialog = require( './EventDetailsDialog.js' ),
 		ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
 		ParticipantRegistrationDialog = require( './ParticipantRegistrationDialog.js' ),
 		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
 		ManageRegistrationWidget = require( './ManageRegistrationWidget.js' ),
 		EventQuestions = require( './EventQuestions.js' ),
 		timeZoneConverter = require( '../TimeZoneConverter.js' ),
-		confirmUnregistrationDialog,
-		participantRegistrationDialog,
 		eventID = mw.config.get( 'wgCampaignEventsEventID' ),
 		eventQuestionsData = mw.config.get( 'wgCampaignEventsEventQuestions' ),
 		configData = require( './data.json' ),
@@ -26,6 +24,8 @@
 		registrationUpdatedWarnings = mw.config.get( 'wgCampaignEventsRegistrationUpdatedWarnings' ),
 		windowManager = new OO.ui.WindowManager(),
 		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
+	let confirmUnregistrationDialog,
+		participantRegistrationDialog;
 
 	windowManager.addWindows( [ detailsDialog ] );
 	detailsDialog
@@ -33,7 +33,7 @@
 		.on( 'cancelregistration', handleCancelRegistration );
 
 	function redirectToLogin() {
-		var currentQuery = new URL( window.location.href ).searchParams;
+		const currentQuery = new URL( window.location.href ).searchParams;
 		// Prevent duplicate "title" param
 		currentQuery.delete( 'title' );
 		// TODO Should we also add a parameter to show a modal right after the user comes back?
@@ -48,7 +48,7 @@
 	}
 
 	function logRequestError( errData ) {
-		var errorText;
+		let errorText;
 		if ( errData.xhr ) {
 			errorText = errData.xhr.responseText || 'Unknown error';
 		} else {
@@ -57,8 +57,8 @@
 		mw.log.error( errorText );
 	}
 
-	var SUCCESS_NOTIFICATION_COOKIE = 'showsuccessnotif';
-	var SUCCESS_COOKIE_NEW_REGISTRATION = 'new',
+	const SUCCESS_NOTIFICATION_COOKIE = 'showsuccessnotif';
+	const SUCCESS_COOKIE_NEW_REGISTRATION = 'new',
 		SUCCESS_COOKIE_REGISTRATION_UPDATED = 'update';
 	/**
 	 * Checks whether the user just registered for this event, and thus a succes
@@ -66,10 +66,10 @@
 	 * removed immediately on page refresh.
 	 */
 	function maybeShowRegistrationSuccessNotification() {
-		var cookieVal = mw.cookie.get( SUCCESS_NOTIFICATION_COOKIE );
+		const cookieVal = mw.cookie.get( SUCCESS_NOTIFICATION_COOKIE );
 		if ( cookieVal ) {
 			mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, 0, { expires: 1 } );
-			var $msg;
+			let $msg;
 			if ( cookieVal === SUCCESS_COOKIE_NEW_REGISTRATION ) {
 				$msg = $( '<p>' ).append(
 					mw.message(
@@ -96,7 +96,7 @@
 	 * @return {jQuery.Promise}
 	 */
 	function registerUser( privateRegistration, answers ) {
-		var reqParams = {
+		const reqParams = {
 			token: mw.user.tokens.get( 'csrfToken' ),
 			// eslint-disable-next-line camelcase
 			is_private: privateRegistration,
@@ -106,8 +106,8 @@
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			reqParams
 		)
-			.done( function () {
-				var cookieVal = userIsParticipant ?
+			.done( () => {
+				const cookieVal = userIsParticipant ?
 					SUCCESS_COOKIE_REGISTRATION_UPDATED :
 					SUCCESS_COOKIE_NEW_REGISTRATION;
 				mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, cookieVal, { expires: 30 } );
@@ -115,7 +115,7 @@
 				// TODO This should be improved at some point, see T312646#8105313
 				window.location.reload();
 			} )
-			.fail( function ( _err, errData ) {
+			.fail( ( _err, errData ) => {
 				logRequestError( errData );
 			} );
 	}
@@ -128,17 +128,17 @@
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			{ token: mw.user.tokens.get( 'csrfToken' ) }
 		)
-			.done( function () {
+			.done( () => {
 				window.location.reload();
 			} )
-			.fail( function ( _err, errData ) {
+			.fail( ( _err, errData ) => {
 				logRequestError( errData );
 			} );
 	}
 
 	function getParticipantRegistrationDialog( msg, eventQuestions ) {
 		if ( !participantRegistrationDialog ) {
-			var curParticipantData;
+			let curParticipantData;
 			if ( userIsParticipant ) {
 				curParticipantData = {
 					public: userIsRegisteredPublicly,
@@ -185,10 +185,10 @@
 			redirectToLogin();
 			return;
 		}
-		showParticipantRegistrationDialog().then( function ( data ) {
+		showParticipantRegistrationDialog().then( ( data ) => {
 			if ( data && data.action === 'confirm' ) {
 				registerUser( data.isPrivate, data.answers )
-					.fail( function () {
+					.fail( () => {
 						// Fall back to the special page
 						// TODO We could also show an error here once T269492 and T311423
 						//  are resolved
@@ -202,12 +202,12 @@
 	 * Handles the user cancelling their registration for this event.
 	 */
 	function handleCancelRegistration() {
-		var confirmDialog = getConfirmUnregistrationDialog();
+		const confirmDialog = getConfirmUnregistrationDialog();
 		windowManager.closeWindow( windowManager.getCurrentWindow() );
-		windowManager.openWindow( confirmDialog ).closed.then( function ( data ) {
+		windowManager.openWindow( confirmDialog ).closed.then( ( data ) => {
 			if ( data && data.action === 'confirm' ) {
 				unregisterUser()
-					.fail( function () {
+					.fail( () => {
 						// Fall back to the special page
 						// TODO We could also show an error here once T269492 and T311423
 						//  are resolved
@@ -218,17 +218,17 @@
 	}
 
 	function showEnableRegistrationDialogOnPageCreation() {
-		var enableRegistrationURL = mw.config.get( 'wgCampaignEventsEnableRegistrationURL' );
+		const enableRegistrationURL = mw.config.get( 'wgCampaignEventsEnableRegistrationURL' );
 		if ( !enableRegistrationURL ) {
 			return;
 		}
-		mw.hook( 'postEdit' ).add( function () {
-			var action = mw.config.get( 'wgPostEdit' );
+		mw.hook( 'postEdit' ).add( () => {
+			const action = mw.config.get( 'wgPostEdit' );
 			if ( action === 'created' ) {
-				var enableRegistrationDialog = new EnableRegistrationDialog( {} );
+				const enableRegistrationDialog = new EnableRegistrationDialog( {} );
 				windowManager.addWindows( [ enableRegistrationDialog ] );
 				windowManager.openWindow( enableRegistrationDialog ).closed.then(
-					function ( data ) {
+					( data ) => {
 						if ( data && data.action === 'confirm' ) {
 							window.location.assign( enableRegistrationURL );
 						}
@@ -243,7 +243,7 @@
 	 * if the wiki timezone was used.
 	 */
 	function setupTimeConversion() {
-		var $headerTime = $( '.ext-campaignevents-eventpage-header-time' ),
+		const $headerTime = $( '.ext-campaignevents-eventpage-header-time' ),
 			$dialogTime = $( '.ext-campaignevents-eventpage-detailsdialog-time' );
 		if ( $headerTime.length ) {
 			timeZoneConverter.convert(
@@ -263,12 +263,12 @@
 	 * Replace the "manage registration" layout of two buttons with a single menu, if present.
 	 */
 	function replaceManageRegistrationLayout() {
-		var $layout = $( '.ext-campaignevents-eventpage-manage-registration-layout' );
+		const $layout = $( '.ext-campaignevents-eventpage-manage-registration-layout' );
 		if ( !$layout.length ) {
 			return;
 		}
 
-		var menu = new ManageRegistrationWidget( eventID, {} );
+		const menu = new ManageRegistrationWidget( eventID, {} );
 
 		menu
 			.on( 'editregistration', handleRegistrationOrEdit )
@@ -286,10 +286,10 @@
 			return;
 		}
 
-		var baseMsg = isNewRegistration ?
+		const baseMsg = isNewRegistration ?
 			mw.message( 'campaignevents-eventpage-registration-enabled-notification' ) :
 			mw.message( 'campaignevents-eventpage-registration-edit-notification' );
-		var $msg = baseMsg;
+		let $msg = baseMsg;
 		if ( !isTestRegistration ) {
 			$msg = $( '<p>' ).append( baseMsg.parseDom() ).add(
 				$( '<p>' ).append(
@@ -302,12 +302,12 @@
 			$msg,
 			{ type: 'success', classes: [ 'ext-campaignevents-eventpage-registration-success-notif' ] }
 		);
-		registrationUpdatedWarnings.forEach( function ( warning ) {
+		registrationUpdatedWarnings.forEach( ( warning ) => {
 			mw.notify( warning, { type: 'warn' } );
 		} );
 	}
 
-	$( function () {
+	$( () => {
 		$( document.body ).append( windowManager.$element );
 		replaceManageRegistrationLayout();
 		detailsDialog.populateFooter();
@@ -315,11 +315,11 @@
 		maybeShowRegistrationSuccessNotification();
 		setupTimeConversion();
 
-		$( '.ext-campaignevents-eventpage-register-btn' ).on( 'click', function ( e ) {
+		$( '.ext-campaignevents-eventpage-register-btn' ).on( 'click', ( e ) => {
 			e.preventDefault();
 			handleRegistrationOrEdit();
 		} );
-		$( '.ext-campaignevents-eventpage-details-btn' ).on( 'click', function ( e ) {
+		$( '.ext-campaignevents-eventpage-details-btn' ).on( 'click', ( e ) => {
 			e.preventDefault();
 			windowManager.openWindow( detailsDialog );
 		} );

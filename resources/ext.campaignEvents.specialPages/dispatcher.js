@@ -1,5 +1,5 @@
 ( function () {
-	var pageName = mw.config.get( 'wgCanonicalSpecialPageName' );
+	const pageName = mw.config.get( 'wgCanonicalSpecialPageName' );
 	switch ( pageName ) {
 		case 'EditEventRegistration':
 		case 'EnableEventRegistration':

@@ -32,7 +32,7 @@
 	 * @param {jQuery} $formRoot
 	 */
 	TimeFieldsEnhancer.prototype.init = function ( $formRoot ) {
-		var tzInput = $formRoot.find( '.ext-campaignevents-timezone-input' ).get( 0 );
+		const tzInput = $formRoot.find( '.ext-campaignevents-timezone-input' ).get( 0 );
 		if ( !tzInput ) {
 			return;
 		}
@@ -43,7 +43,7 @@
 		// XXX This is quite hacky, shamelessly messing up with the DateTimeInputWidget internals.
 		// The proper solution would be for the widget to natively support customizing the
 		// timezone (T315874).
-		for ( var dateWidgetKey in this.dateWidgets ) {
+		for ( const dateWidgetKey in this.dateWidgets ) {
 			this.dateWidgets[ dateWidgetKey ] = this.getInfusedFieldWidget(
 				$formRoot.find( this.dateWidgets[ dateWidgetKey ] )
 			);
@@ -83,11 +83,12 @@
 	 * @param {string} dateWidgetKey
 	 */
 	TimeFieldsEnhancer.prototype.updateWidgetOnTimezoneChange = function ( dateWidgetKey ) {
-		var offset,
-			tz = this.tzInputWidget.getValue();
+		const tz = this.tzInputWidget.getValue();
+
+		let offset;
 		if ( tz.indexOf( '|' ) > -1 ) {
 			// Preset value
-			var tzParts = tz.split( '|' );
+			const tzParts = tz.split( '|' );
 			if ( tzParts.length <= 1 || isNaN( tzParts[ 1 ] ) ) {
 				// Unexpected.
 				return;
@@ -121,7 +122,7 @@
 	// Dynamically update the minimum end date to match the current value of
 	// the start date.
 	TimeFieldsEnhancer.prototype.updateEndDate = function () {
-		var newMin = this.dateWidgets.start.fieldWidget.getValueAsDate();
+		const newMin = this.dateWidgets.start.fieldWidget.getValueAsDate();
 		this.dateWidgets.end.fieldWidget.min.setTime( newMin );
 		if ( newMin > this.dateWidgets.end.fieldWidget.formatter.defaultDate ) {
 			this.dateWidgets.end.fieldWidget.formatter.defaultDate = newMin;
@@ -139,11 +140,11 @@
 	 * @return {number}
 	 */
 	TimeFieldsEnhancer.prototype.hoursToMinutes = function ( hour ) {
-		var arr = hour.split( ':' );
+		const arr = hour.split( ':' );
 
 		arr[ 0 ] = parseInt( arr[ 0 ], 10 );
 
-		var minutes;
+		let minutes;
 		if ( arr.length === 1 ) {
 			// Specification is of the form [-]XX
 			minutes = arr[ 0 ] * 60;
@@ -180,7 +181,7 @@
 	};
 
 	TimeFieldsEnhancer.prototype.checkDateIsPast = function ( date ) {
-		var selectedDate = new Date( date ),
+		const selectedDate = new Date( date ),
 			currentTimestamp = Math.floor( Date.now() / 1000 ),
 			selectedTimestamp = Math.floor( selectedDate.getTime() / 1000 ),
 			timezoneAdjustedCurrentTimestamp = currentTimestamp + this.lastOffset * 60;

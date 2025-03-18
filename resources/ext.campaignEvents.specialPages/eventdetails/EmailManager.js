@@ -1,6 +1,6 @@
 ( function () {
 	'use strict';
-	var participantsManager = require( './ParticipantsManager.js' );
+	const participantsManager = require( './ParticipantsManager.js' );
 
 	function EmailManager() {
 		this.registrationID = mw.config.get( 'wgCampaignEventsEventID' );
@@ -71,7 +71,7 @@
 	};
 
 	EmailManager.prototype.installEventListeners = function () {
-		var self = this;
+		const self = this;
 		if ( !participantsManager.viewerHasEmail ) {
 			this.setWarning(
 				new OO.ui.HtmlSnippet(
@@ -86,12 +86,12 @@
 
 		this.button.on( 'click', this.emailUsers.bind( this ) );
 
-		this.recipientsLink.on( 'click', function () {
+		this.recipientsLink.on( 'click', () => {
 			self.tabLayout.setTabPanel( 'ParticipantsPanel' );
 		} );
 
-		this.message.on( 'change', function ( value ) {
-			var toggleButton = function ( enabled ) {
+		this.message.on( 'change', ( value ) => {
+			const toggleButton = function ( enabled ) {
 				return function () {
 					self.button.setDisabled( !enabled );
 				};
@@ -111,16 +111,10 @@
 		this.isSelectionInverted = isSelectionInverted;
 
 		userData = userData
-			.filter( function ( participantData ) {
-				return participantData.username !== undefined;
-			} );
-		var validRecipients = userData
-			.filter( function ( participantData ) {
-				return participantData.canReceiveEmail;
-			} )
-			.map( function ( participantData ) {
-				return participantData.userID;
-			} );
+			.filter( ( participantData ) => participantData.username !== undefined );
+		const validRecipients = userData
+			.filter( ( participantData ) => participantData.canReceiveEmail )
+			.map( ( participantData ) => participantData.userID );
 
 		this.$recipientsListElement.empty();
 		this.clearMessage();
@@ -131,23 +125,21 @@
 			return;
 		}
 
-		var hasInvalidRecipients;
+		let hasInvalidRecipients;
 		if ( isSelectionInverted ) {
 			hasInvalidRecipients = true;
 		} else {
-			var invalidRecipients = selectedIDs
-				.filter( function ( id ) {
-					return validRecipients.indexOf( id ) === -1;
-				} );
+			const invalidRecipients = selectedIDs
+				.filter( ( id ) => validRecipients.indexOf( id ) === -1 );
 			hasInvalidRecipients = invalidRecipients.length > 0;
 		}
 		if ( hasInvalidRecipients ) {
 			this.setWarning( mw.message( 'campaignevents-email-participants-missing-address' ).text() );
 		}
 
-		var selectionSize = selectedIDs.length;
+		const selectionSize = selectedIDs.length;
 		if ( selectionSize > 1 ) {
-			var msg = isSelectionInverted ?
+			const msg = isSelectionInverted ?
 				'campaignevents-email-participants-except-count' :
 				'campaignevents-email-participants-count';
 
@@ -158,19 +150,18 @@
 			return;
 		}
 
-		var selectionUserInfo = userData.filter( function ( data ) {
-			return selectedIDs.indexOf( data.userID ) > -1;
-		} );
-		var recipientsListItems = selectionUserInfo.map( function ( selectedUserData ) {
-			return new OO.ui.Element( {
+		const selectionUserInfo = userData
+			.filter( ( data ) => selectedIDs.indexOf( data.userID ) > -1 );
+		const recipientsListItems = selectionUserInfo.map(
+			( selectedUserData ) => new OO.ui.Element( {
 				$element: $( '<li>' ),
 				$content: participantsManager.makeUserLink(
 					selectedUserData.username,
 					selectedUserData.userPageLink ),
 				classes: [ 'ext-campaignevents-email-participant-username' ]
-			} ).$element;
-		} );
-		var $recipientsList = $( '<ul>' ).append( recipientsListItems );
+			} ).$element
+		);
+		let $recipientsList = $( '<ul>' ).append( recipientsListItems );
 		if ( isSelectionInverted ) {
 			$recipientsList = mw.message( 'campaignevents-email-participants-except', $recipientsList )
 				.parseDom();
@@ -179,13 +170,11 @@
 	};
 
 	EmailManager.prototype.addValidation = function () {
-		this.message.setValidation( function ( value ) {
-			return value.length >= 10;
-		} );
+		this.message.setValidation( ( value ) => value.length >= 10 );
 	};
 
 	EmailManager.prototype.showNoParticipantsError = function () {
-		var self = this;
+		const self = this;
 		self.setError(
 			mw.message(
 				'campaignevents-email-select-participant-notification'
@@ -197,7 +186,7 @@
 	 * @return {jQuery.Promise|null}
 	 */
 	EmailManager.prototype.emailUsers = function () {
-		var self = this;
+		const self = this;
 		if ( participantsManager.selectedParticipantsAmount === 0 ) {
 			self.showNoParticipantsError();
 			return null;
@@ -215,7 +204,7 @@
 				ccme: this.CCMe.isSelected()
 			}
 		)
-			.done( function ( result ) {
+			.done( ( result ) => {
 				if ( result.sent === 0 ) {
 					self.showNoParticipantsError();
 				} else {
@@ -227,7 +216,7 @@
 					);
 				}
 			} )
-			.fail( function ( _err, errData ) {
+			.fail( ( _err, errData ) => {
 				self.setError(
 					mw.message(
 						'campaignevents-email-error-notification'

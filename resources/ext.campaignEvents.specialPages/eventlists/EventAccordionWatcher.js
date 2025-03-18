@@ -14,7 +14,7 @@
 	}
 
 	EventAccordionWatcher.prototype.setup = function () {
-		var that = this;
+		const that = this;
 		// Note: `this.open` gives us the state of the accordion before the click; so, for example,
 		// it is true when the user closes the accordion.
 		this.$ongoingAccordion.on( 'click', function () {
@@ -26,7 +26,7 @@
 	};
 
 	EventAccordionWatcher.prototype.updateHiddenInput = function ( wasOpen, sectionName ) {
-		var curOpenSections = this.$hiddenInput.val().split( ',' ),
+		const curOpenSections = this.$hiddenInput.val().split( ',' ),
 			newOpenSections = curOpenSections,
 			sectionIdx = newOpenSections.indexOf( sectionName );
 

@@ -17,15 +17,15 @@
 	};
 
 	OrganizersLoader.prototype.loadMoreOrganizers = function () {
-		var that = this;
+		const that = this;
 		new mw.Rest().get(
 			'/campaignevents/v0/event_registration/' + this.eventID + '/organizers',
 			// eslint-disable-next-line camelcase
 			{ last_organizer_id: this.lastOrganizerID }
 		)
-			.done( function ( data ) {
-				for ( var i = 0; i < data.length && i < that.ORGANIZERS_BATCH_SIZE; i++ ) {
-					var $userLink = $( '<a>' )
+			.done( ( data ) => {
+				for ( let i = 0; i < data.length && i < that.ORGANIZERS_BATCH_SIZE; i++ ) {
+					const $userLink = $( '<a>' )
 						.attr( 'href', data[ i ].user_page.path )
 						.attr( 'title', data[ i ].user_page.title )
 						.text( data[ i ].user_name )
@@ -34,7 +34,7 @@
 						// * new
 						.attr( 'class', data[ i ].user_page.classes );
 
-					var $listElement = $( '<li>' ).append( $userLink );
+					const $listElement = $( '<li>' ).append( $userLink );
 					that.$organizersList.append( $listElement );
 					that.lastOrganizerID = data[ i ].organizer_id;
 				}
@@ -45,7 +45,7 @@
 					that.$loadOrganizersLink.hide();
 				}
 			} )
-			.fail( function ( _err, errData ) {
+			.fail( ( _err, errData ) => {
 				mw.log.error( errData.xhr.responseText || 'Unknown error' );
 			} );
 	};

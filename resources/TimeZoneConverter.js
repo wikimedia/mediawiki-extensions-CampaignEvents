@@ -28,14 +28,14 @@
 	 *   @return {jQuery.Promise}
 	 */
 	TimeZoneConverter.prototype.convert = function ( $element, message ) {
-		var timezonePref = mw.user.options.get( 'timecorrection' );
+		const timezonePref = mw.user.options.get( 'timecorrection' );
 
 		if ( timezonePref.lastIndexOf( 'System', 0 ) !== 0 ) {
 			// Timezone preference set explicitly, do not convert.
 			return $.when();
 		}
 
-		var newTimezone;
+		let newTimezone;
 		try {
 			newTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		} catch ( e ) {
@@ -43,10 +43,10 @@
 			return $.when();
 		}
 
-		var $rangeElement = $element.find( '.ext-campaignevents-time-range' ),
+		const $rangeElement = $element.find( '.ext-campaignevents-time-range' ),
 			$timezoneElement = $element.find( '.ext-campaignevents-timezone' );
 
-		var language = mw.config.get( 'wgUserLanguage' ),
+		const language = mw.config.get( 'wgUserLanguage' ),
 			startUTC = $rangeElement.data( 'mw-start' ),
 			endUTC = $rangeElement.data( 'mw-end' );
 
@@ -56,16 +56,16 @@
 
 		// First, convert the time to the local timezone, but format it in the machine-readable
 		// TS_MW format. This will then be passed to the server for the final formatting pass.
-		var convertedStart = this.formatMwTimestamp( startUTC, newTimezone ),
+		const convertedStart = this.formatMwTimestamp( startUTC, newTimezone ),
 			convertedEnd = this.formatMwTimestamp( endUTC, newTimezone );
 
 		// Note, failures are ignored as we're already displaying the time.
 		return this.rest.get(
 			'/campaignevents/v0/formatted_time/' + language + '/' + convertedStart + '/' + convertedEnd,
 			{}
-		).done( function ( resp ) {
+		).done( ( resp ) => {
 			// eslint-disable-next-line mediawiki/msg-doc
-			var formattedRange = mw.msg(
+			const formattedRange = mw.msg(
 				message,
 				resp.startDateTime,
 				resp.startDate,
@@ -85,8 +85,8 @@
 	 * @return {string} The timestamp converted to the given timezone and formatted as TS_MW
 	 */
 	TimeZoneConverter.prototype.formatMwTimestamp = function ( ts, timezone ) {
-		var date = Date.parse( ts );
-		var intlOptions = {
+		const date = Date.parse( ts );
+		const intlOptions = {
 			year: 'numeric',
 			month: '2-digit',
 			day: '2-digit',
@@ -96,9 +96,9 @@
 			hour12: false,
 			timeZone: timezone
 		};
-		var datePartsList = new Intl.DateTimeFormat( 'en', intlOptions ).formatToParts( date ),
+		const datePartsList = new Intl.DateTimeFormat( 'en', intlOptions ).formatToParts( date ),
 			dateParts = {};
-		datePartsList.forEach( function ( el ) {
+		datePartsList.forEach( ( el ) => {
 			// 'literal' and other unused types are harmless.
 			dateParts[ el.type ] = el.value;
 		} );

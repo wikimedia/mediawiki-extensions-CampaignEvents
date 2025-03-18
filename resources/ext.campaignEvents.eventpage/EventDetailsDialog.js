@@ -1,7 +1,7 @@
 ( function () {
 	'use strict';
 
-	var ManageRegistrationWidget = require( './ManageRegistrationWidget.js' );
+	const ManageRegistrationWidget = require( './ManageRegistrationWidget.js' );
 
 	/**
 	 * Dialog which shows additional information about an event
@@ -47,7 +47,7 @@
 	 * Populates the dialog footer with the relevant action elements.
 	 */
 	EventDetailsDialog.prototype.populateFooter = function () {
-		var collabButton = new OO.ui.ButtonWidget( {
+		const collabButton = new OO.ui.ButtonWidget( {
 			flags: [ 'quiet', 'progressive' ],
 			label: mw.msg( 'campaignevents-eventpage-btn-collaboration-list' ),
 			classes: [
@@ -62,19 +62,19 @@
 			// eslint-disable-next-line no-jquery/no-global-selector
 			this.$foot.append( $( '.ext-campaignevents-eventpage-participant-notice' ).clone( true ) );
 			// Use an overlay attached to the dialog, so that it can extend outside of it.
-			var $menuOverlay = $( '<div>' ).appendTo( this.$element );
-			var manageRegistrationMenu = new ManageRegistrationWidget(
+			const $menuOverlay = $( '<div>' ).appendTo( this.$element );
+			const manageRegistrationMenu = new ManageRegistrationWidget(
 				this.eventID,
 				{
 					$overlay: $menuOverlay
 				}
 			);
-			var that = this;
+			const that = this;
 			manageRegistrationMenu
-				.on( 'editregistration', function () {
+				.on( 'editregistration', () => {
 					that.emit( 'editregistration' );
 				} )
-				.on( 'cancelregistration', function () {
+				.on( 'cancelregistration', () => {
 					that.emit( 'cancelregistration' );
 				} );
 			this.$foot.append( manageRegistrationMenu.$element );
