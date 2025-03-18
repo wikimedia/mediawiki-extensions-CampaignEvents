@@ -338,7 +338,7 @@
 	"campaignevents-event-details-email-message-label": "Label text for Message field on the email form",
 	"campaignevents-event-details-email-message-placeholder": "Placeholder text for Subject field on the email form",
 	"campaignevents-event-details-email-recipients-button-text": "Button text for submit button on the email form",
-	"campaignevents-event-details-participants-deselect": "Title for button to deselect participants, \"deselect\" is present tense, directed to the user (and not infinitive)",
+	"campaignevents-event-details-participants-deselect": "Title for button to deselect participants.",
 	"campaignevents-email-participants-label": "Label text for participants field on the email form",
 	"campaignevents-email-success-notification": "Notification text displayed when emails are sent successfully",
 	"campaignevents-email-error-notification": "Error text displayed when emails are not sent successfully",

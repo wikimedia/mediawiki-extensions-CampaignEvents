@@ -406,7 +406,7 @@
 	"campaignevents-event-details-not-local-wiki-prompt": "Vedi su [$1 $2]",
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "La tua utenza è bloccata. Non hai accesso a queste informazioni.",
 	"campaignevents-generateinvitationlist-name-field-label": "Nome della lista degli invitati",
-	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Evento}}:Il mio evento",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:Il mio evento",
 	"campaignevents-generateinvitationlist-article-list-field-label": "Elenco di voci/articoli",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sole\nLuna\nCasa",
 	"campaignevents-generateinvitationlist-submit-button-text": "Genera",

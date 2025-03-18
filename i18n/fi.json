@@ -337,6 +337,8 @@
 	"campaignevents-register-question-age-organizer-label": "Minkä ikäinen olet?",
 	"campaignevents-register-question-profession-organizer-label": "Mikä on ammattisi?",
 	"campaignevents-register-retention-title": "Tietoja henkilötietojen säilytyksestä",
+	"campaignevents-eventpage-register-dialog-questions-title": "Omat tiedot",
+	"campaignevents-eventpage-register-dialog-questions-subtitle": "Nämä tiedot jaetaan vain tapahtuman järjestäjille.",
 	"campaignevents-eventpage-register-dialog-retention-title": "Tietoja henkilötietojen säilytyksestä",
 	"generateinvitationlist": "Luo kutsulista",
 	"campaignevents-invitation-list-not-allowed": "Sinulla ei ole oikeutta käyttää kutsulistoja.",
