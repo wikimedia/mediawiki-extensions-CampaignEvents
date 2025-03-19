@@ -8,8 +8,9 @@ use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\Html;
-use MediaWiki\Linker\Linker;
+use MediaWiki\Linker\UserLinkRenderer;
 use MediaWiki\Parser\Sanitizer;
+use MediaWiki\User\UserIdentityValue;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
@@ -27,15 +28,18 @@ class UserLinker {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private IMessageFormatterFactory $messageFormatterFactory;
 	private LinkBatchFactory $linkBatchFactory;
+	private UserLinkRenderer $userLinkRenderer;
 
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
 		IMessageFormatterFactory $messageFormatterFactory,
-		LinkBatchFactory $linkBatchFactory
+		LinkBatchFactory $linkBatchFactory,
+		UserLinkRenderer $userLinkRenderer
 	) {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->linkBatchFactory = $linkBatchFactory;
+		$this->userLinkRenderer = $userLinkRenderer;
 	}
 
 	/**
@@ -52,9 +56,10 @@ class UserLinker {
 		$name = $this->centralUserLookup->getUserName( $user );
 		// HACK: Linker::userLink does not really need the user ID (T308000), so don't bother looking it up, which
 		// would be too slow (T345250).
+		$userIdentity = new UserIdentityValue( 1, $name );
 		// TODO: Here we'll generate a red link if the account does not exist locally. Is that OK? Could we maybe
 		// link to Special:CentralAuth (if CA is installed)?
-		return Linker::userLink( 1, $name );
+		return $this->userLinkRenderer->userLink( $userIdentity, $context );
 	}
 
 	/**
