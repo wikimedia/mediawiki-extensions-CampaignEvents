@@ -149,6 +149,7 @@ class SpecialAllEvents extends SpecialPage {
 		$result = $form->prepareForm()->tryAuthorizedSubmit();
 
 		$upcomingPager = $this->eventsPagerFactory->newListPager(
+			$this->getContext(),
 			$searchedVal,
 			$meetingType,
 			$startTime,
@@ -161,6 +162,7 @@ class SpecialAllEvents extends SpecialPage {
 		if ( $startTime !== null ) {
 			$openSections = explode( ',', $openSectionsStr );
 			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
+				$this->getContext(),
 				$searchedVal,
 				$meetingType,
 				$startTime,

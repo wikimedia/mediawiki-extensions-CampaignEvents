@@ -93,6 +93,7 @@ class EventsPagerFactory {
 	}
 
 	public function newListPager(
+		IContextSource $context,
 		string $search,
 		?int $meetingType,
 		?string $startDate,
@@ -113,6 +114,7 @@ class EventsPagerFactory {
 			$this->eventWikisStore,
 			$this->topicRegistry,
 			$this->eventTopicsStore,
+			$context,
 			$search,
 			$meetingType,
 			$startDate,
@@ -123,6 +125,7 @@ class EventsPagerFactory {
 	}
 
 	public function newOngoingListPager(
+		IContextSource $context,
 		string $search,
 		?int $meetingType,
 		string $startDate,
@@ -142,6 +145,7 @@ class EventsPagerFactory {
 			$this->eventWikisStore,
 			$this->topicRegistry,
 			$this->eventTopicsStore,
+			$context,
 			$search,
 			$meetingType,
 			$startDate,

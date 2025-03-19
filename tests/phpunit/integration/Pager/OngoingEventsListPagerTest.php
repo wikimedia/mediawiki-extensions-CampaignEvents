@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Pager;
 
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWikiIntegrationTestCase;
@@ -25,6 +26,7 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 		bool $expectsFound
 	): void {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newOngoingListPager(
+			new RequestContext(),
 			'',
 			null,
 			wfTimestamp( TS_MW, $searchStart ),
@@ -36,6 +38,7 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 
 	public function testCanUseFilters() {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newOngoingListPager(
+			new RequestContext(),
 			self::$EVENT_NAME,
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			wfTimestamp( TS_MW, self::$EVENT_START + 1 ),
