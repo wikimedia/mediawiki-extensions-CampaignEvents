@@ -611,6 +611,7 @@ class EventPageDecorator {
 		$organizerElements = [];
 		foreach ( $partialOrganizers as $organizer ) {
 			$organizerElements[] = $this->userLinker->generateUserLinkWithFallback(
+				$this->out,
 				$organizer->getUser(),
 				$this->language->getCode()
 			);
@@ -1084,6 +1085,7 @@ class EventPageDecorator {
 	private function getParticipantRow( Participant $participant ): Tag {
 		$usernameElement = new HtmlSnippet(
 			$this->userLinker->generateUserLinkWithFallback(
+				$this->out,
 				$participant->getUser(),
 				$this->language->getCode()
 			)

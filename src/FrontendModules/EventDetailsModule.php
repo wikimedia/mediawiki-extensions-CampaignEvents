@@ -375,13 +375,14 @@ class EventDetailsModule {
 			$this->registration->getID(),
 			self::ORGANIZERS_LIMIT
 		);
+		$langCode = $this->language->getCode();
 		$organizerListItems = '';
 		$lastOrganizerID = null;
 		foreach ( $partialOrganizers as $organizer ) {
 			$organizerListItems .= Html::rawElement(
 				'li',
 				[],
-				$this->userLinker->generateUserLinkWithFallback( $organizer->getUser(), $this->language->getCode() )
+				$this->userLinker->generateUserLinkWithFallback( $out, $organizer->getUser(), $langCode )
 			);
 			$lastOrganizerID = $organizer->getOrganizerID();
 		}
