@@ -68,7 +68,8 @@
 			"campaignevents-email-participants": true
 		},
 		"sysop": {
-			"campaignevents-delete-registration": true
+			"campaignevents-delete-registration": true,
+			"campaignevents-view-private-participants": true
 		}
 	},
 	"AddGroups": {
