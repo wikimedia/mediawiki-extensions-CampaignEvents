@@ -8,7 +8,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "specialpage",
 	"requires": {
-		"MediaWiki": ">= 1.43"
+		"MediaWiki": ">= 1.44"
 	},
 	"attributes": {
 		"VisualEditor": {
@@ -47,7 +47,9 @@
 		},
 		"CampaignEventsEventNamespaces": {
 			"description": "List of permitted namespaces for event registration",
-			"value": [ 1728 ],
+			"value": [
+				1728
+			],
 			"merge_strategy": "provide_default"
 		}
 	},
