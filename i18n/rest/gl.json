@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Toliño"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Non existe ningún evento con ese identificador.",
+	"campaignevents-rest-enable-registration-permission-denied": "Non tes permiso para activar o rexistro de eventos.",
+	"campaignevents-rest-edit-page-nonlocal": "O rexistro deste evento activouse no seguinte wiki, así que hai que editalo alí: $1.",
+	"campaignevents-rest-delete-already-deleted": "O rexistro deste evento xa está borrado.",
+	"campaignevents-rest-user-not-found": "Non existe ningún usuario con este identificador central.",
+	"campaignevents-rest-get-registration-deleted": "Borrouse o rexistro deste evento.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "O parámetro \"user_ids\" debe ser unha matriz de identificadores de usuario ou un valor nulo (para borrar todos os usuarios)",
+	"campaignevents-rest-list-participants-empty-filter": "O filtro de nome de usuario, se se especifica, debe ser unha cadea de texto non baleira.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Non tes permiso para ver os participantes que se rexistraron de forma privada neste evento.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe ser unha matriz de nomes de usuario e non pode estar baleira",
+	"campaignevents-rest-get-registration-info-notparticipant": "Non participas neste evento.",
+	"campaignevents-rest-register-invalid-answer": "Resposta non válida á pregunta $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "O rexistro do teu evento tes que completalo en $1, o wiki onde se creou o evento.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "O rexistro do teu evento tes que borralo en $1, o wiki onde se creou o evento.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Os envíos de correo aos participantes hai que facelos en $1, o wiki onde se creou o evento."
+}
