@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Pager;
 
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWikiIntegrationTestCase;
@@ -29,6 +30,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : null;
 		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : null;
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			new RequestContext(),
 			'',
 			null,
 			$searchStartStr,
@@ -46,6 +48,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$this->expectException( ParameterAssertionException::class );
 		$this->expectExceptionMessage( '$startDate' );
 		CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			new RequestContext(),
 			'',
 			null,
 			$timestamp,
@@ -62,6 +65,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$this->expectException( ParameterAssertionException::class );
 		$this->expectExceptionMessage( '$endDate' );
 		CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			new RequestContext(),
 			'',
 			null,
 			null,
@@ -80,6 +84,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 
 	public function testCanUseFilters() {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			new RequestContext(),
 			self::$EVENT_NAME,
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'19120623000000',

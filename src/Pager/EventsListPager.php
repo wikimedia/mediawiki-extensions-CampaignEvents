@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
@@ -98,6 +99,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		EventWikisStore $eventWikisStore,
 		ITopicRegistry $topicRegistry,
 		EventTopicsStore $eventTopicsStore,
+		IContextSource $context,
 		string $search,
 		?int $meetingType,
 		?string $startDate,
@@ -107,7 +109,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
-		parent::__construct( $this->getContext(), $this->getLinkRenderer() );
+		parent::__construct( $context, $this->getLinkRenderer() );
 
 		$this->userLinker = $userLinker;
 		$this->campaignsPageFactory = $pageFactory;
