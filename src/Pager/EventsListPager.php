@@ -28,7 +28,6 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
-use OOUI\Exception;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use stdClass;
@@ -246,30 +245,30 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 		$detailContainer->appendContent( new HtmlSnippet( Html::rawElement( 'div', [], $datesText ) ) );
 		$detailContainer->appendContent(
-			new TextWithIconWidget( [
+			new HtmlSnippet( TextWithIconWidget::build( [
 				'icon' => 'mapPin',
 				'content' => $this->msg( $this->getMeetingTypeMsg( $row ) )->text(),
 				'label' => $this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
 				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
-			] )
+			] ) )
 		);
 		if ( $this->eventWikis[$row->event_id] ) {
 			$detailContainer->appendContent(
-				$this->getWikiList( $row->event_id )
+				new HtmlSnippet( $this->getWikiList( $row->event_id ) )
 			);
 		}
 		$eventTopics = $this->eventTopics[(int)$row->event_id];
 		if ( $eventTopics ) {
-			$detailContainer->appendContent( $this->getTopicList( $eventTopics ) );
+			$detailContainer->appendContent( new HtmlSnippet( $this->getTopicList( $eventTopics ) ) );
 		}
 		$detailContainer->appendContent(
-			new TextWithIconWidget( [
+			new HtmlSnippet( TextWithIconWidget::build( [
 				'icon' => 'userRights',
 				'content' => $this->getOrganizersText( $row ),
 				'label' => $this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
 				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
 				'classes' => [ 'ext-campaignevents-events-list-organizers' ],
-			] )
+			] ) )
 		);
 		return $htmlRow->appendContent( $detailContainer );
 	}
@@ -460,7 +459,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		return [ $startOffset, $this->endOffset ];
 	}
 
-	private function getWikiList( string $eventID ): TextWithIconWidget {
+	private function getWikiList( string $eventID ): string {
 		$eventWikis = $this->eventWikis[(int)$eventID];
 
 		if ( $eventWikis === EventRegistration::ALL_WIKIS ) {
@@ -479,10 +478,9 @@ class EventsListPager extends ReverseChronologicalPager {
 	/**
 	 * @param string $eventID
 	 * @param string[] $eventWikis
-	 * @return TextWithIconWidget
-	 * @throws Exception
+	 * @return string
 	 */
-	public function getWikiListWidget( string $eventID, array $eventWikis ): TextWithIconWidget {
+	public function getWikiListWidget( string $eventID, array $eventWikis ): string {
 		$language = $this->getLanguage();
 		$displayedWikiNames = $this->wikiLookup->getLocalizedNames(
 			array_slice( $eventWikis, 0, self::DISPLAYED_WIKI_COUNT )
@@ -501,7 +499,7 @@ class EventsListPager extends ReverseChronologicalPager {
 					->text()
 			);
 		}
-		return new TextWithIconWidget( [
+		return TextWithIconWidget::build( [
 			'icon' => $this->wikiLookup->getWikiIcon( $eventWikis ),
 			'content' => new HtmlSnippet( $language->listToText( $escapedWikiNames ) ),
 			'label' => $this->msg( 'campaignevents-eventslist-wiki-label' )->text(),
@@ -509,14 +507,14 @@ class EventsListPager extends ReverseChronologicalPager {
 		] );
 	}
 
-	private function getTopicList( array $topics ): TextWithIconWidget {
+	private function getTopicList( array $topics ): string {
 		$localizedTopicNames = array_map(
 			fn ( string $msgKey ) => $this->msg( $msgKey )->escaped(),
 			$this->topicRegistry->getTopicMessages( $topics )
 		);
 		sort( $localizedTopicNames );
 
-		return new TextWithIconWidget( [
+		return TextWithIconWidget::build( [
 			'icon' => 'tag',
 			'content' => new HtmlSnippet( $this->getLanguage()->commaList( $localizedTopicNames ) ),
 			'label' => $this->msg( 'campaignevents-eventslist-topics-label' )->text(),
