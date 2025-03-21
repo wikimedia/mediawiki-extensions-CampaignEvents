@@ -23,7 +23,7 @@ class TextWithIconWidget extends Widget {
 	 * @inheritDoc
 	 * CSS classes can be added to the icon via $config['icon_classes'].
 	 */
-	public function __construct( array $config = [] ) {
+	private function __construct( array $config = [] ) {
 		if ( !isset( $config['content'] ) || !isset( $config['label'] ) ) {
 			throw new InvalidArgumentException( 'Must specify content and label' );
 		}
@@ -46,5 +46,9 @@ class TextWithIconWidget extends Widget {
 		$this->addClasses( [ 'ext-campaignevents-textwithicon-widget' ] );
 		// Prepending because the parent constructor has already appended the content
 		$this->prependContent( [ $this->icon, $this->label ] );
+	}
+
+	public static function build( array $config ): string {
+		return ( new self( $config ) )->__toString();
 	}
 }
