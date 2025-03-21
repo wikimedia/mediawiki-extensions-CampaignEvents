@@ -30,7 +30,6 @@ use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
-use OOUI\Tag;
 use stdClass;
 use UnexpectedValueException;
 use Wikimedia\Assert\Assert;
@@ -216,26 +215,29 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @inheritDoc
 	 */
 	public function formatRow( $row ) {
-		$htmlRow = ( new Tag( 'li' ) )
-			->addClasses( [ 'ext-campaignevents-events-list-row' ] );
-		$page = $this->getEventPageFromRow( $row );
-		$pageUrlResolver = $this->pageURLResolver;
+		$rowContent = '';
+
 		$timestampField = $this->getTimestampField();
 		$timestamp = $row->$timestampField;
-		$htmlRow->appendContent( ( new Tag() )
-			->addClasses( [ 'ext-campaignevents-events-list-day' ] )
-			->appendContent( $this->getDayFromTimestamp( $timestamp ) ) );
-		$detailContainer = ( new Tag() )
-			->addClasses( [ 'ext-campaignevents-events-list-details' ] );
-		$eventPageLinkElement = ( new Tag( 'a' ) )
-			->setAttributes( [
-				"href" => $pageUrlResolver->getUrl( $page ),
-				"class" => 'ext-campaignevents-events-list-link'
-			] )
-			->appendContent( $row->event_name );
-		$detailContainer->appendContent(
-			( new Tag( 'h4' ) )->appendContent( $eventPageLinkElement )
+		$rowContent .= Html::element(
+			'div',
+			[ 'class' => 'ext-campaignevents-events-list-day' ],
+			$this->getDayFromTimestamp( $timestamp )
 		);
+
+		$detailsContent = '';
+
+		$page = $this->getEventPageFromRow( $row );
+		$eventPageLinkElement = Html::element(
+			'a',
+			[
+				"href" => $this->pageURLResolver->getUrl( $page ),
+				"class" => 'ext-campaignevents-events-list-link'
+			],
+			$row->event_name
+		);
+		$detailsContent .= Html::rawElement( 'h4', [], $eventPageLinkElement );
+
 		$datesText = Html::element(
 			'strong',
 			[],
@@ -245,34 +247,43 @@ class EventsListPager extends ReverseChronologicalPager {
 				$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() )
 			)->text()
 		);
-		$detailContainer->appendContent( new HtmlSnippet( Html::rawElement( 'div', [], $datesText ) ) );
-		$detailContainer->appendContent(
-			new HtmlSnippet( TextWithIconWidget::build( [
-				'icon' => 'mapPin',
-				'content' => $this->msg( $this->getMeetingTypeMsg( $row ) )->text(),
-				'label' => $this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
-				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
-			] ) )
-		);
+		$detailsContent .= Html::rawElement( 'div', [], $datesText );
+
+		$detailsContent .= TextWithIconWidget::build( [
+			'icon' => 'mapPin',
+			'content' => $this->msg( $this->getMeetingTypeMsg( $row ) )->text(),
+			'label' => $this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+		] );
+
 		if ( $this->eventWikis[$row->event_id] ) {
-			$detailContainer->appendContent(
-				new HtmlSnippet( $this->getWikiList( $row->event_id ) )
-			);
+			$detailsContent .= $this->getWikiList( $row->event_id );
 		}
+
 		$eventTopics = $this->eventTopics[(int)$row->event_id];
 		if ( $eventTopics ) {
-			$detailContainer->appendContent( new HtmlSnippet( $this->getTopicList( $eventTopics ) ) );
+			$detailsContent .= $this->getTopicList( $eventTopics );
 		}
-		$detailContainer->appendContent(
-			new HtmlSnippet( TextWithIconWidget::build( [
-				'icon' => 'userRights',
-				'content' => $this->getOrganizersText( $row ),
-				'label' => $this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
-				'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
-				'classes' => [ 'ext-campaignevents-events-list-organizers' ],
-			] ) )
+
+		$detailsContent .= TextWithIconWidget::build( [
+			'icon' => 'userRights',
+			'content' => $this->getOrganizersText( $row ),
+			'label' => $this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+			'classes' => [ 'ext-campaignevents-events-list-organizers' ],
+		] );
+
+		$rowContent .= Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-events-list-details' ],
+			$detailsContent
 		);
-		return $htmlRow->appendContent( $detailContainer );
+
+		return Html::rawElement(
+			'li',
+			[ 'class' => 'ext-campaignevents-events-list-row' ],
+			$rowContent
+		);
 	}
 
 	private function getOrganizersText( stdClass $row ): HtmlSnippet {
