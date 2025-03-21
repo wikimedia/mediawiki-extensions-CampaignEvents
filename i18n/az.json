@@ -322,7 +322,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "$1 kursu bu tədbir ilə əlaqəli deyil və buna görə də sinxronizasiya edilə bilməz.",
 	"campaignevents-userlink-suppressed-user": "istifadəçi adı gizlədilib",
 	"campaignevents-userlink-deleted-user": "silinmiş istifadəçi",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Gizli qeydiyyat:</strong> Yalnız tədbir təşkilatçıları istifadəçi adınızı iştirakçı siyahısında görə bilər. Tədbir zamanı verdiyiniz töhfələr təşkilatçılar tərəfindən [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Proqram & Tədbirlər Panelində] və ya statistika toplamaq üçün digər alətlər tərəfindən istifadə edilə bilər.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>İctimai qeydiyyat:</strong> İstifadəçi adınızı ictimai iştirakçı siyahısında göstərin. Tədbir zamanı verdiyiniz töhfələr təşkilatçılar tərəfindən [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Proqram & Tədbirlər Panelində] və ya statistika toplamaq üçün digər alətlər tərəfindən istifadə edilə bilər.",
 	"campaignevents-registration-confirmation-toggle-private": "Gizli qeydiyyat",
 	"campaignevents-registration-confirmation-toggle-public": "İctimai qeydiyyat",

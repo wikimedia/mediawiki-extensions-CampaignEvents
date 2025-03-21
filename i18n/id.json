@@ -326,7 +326,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "Kursus $1 tidak terhubung ke acara ini, dan oleh karena itu tidak dapat disinkronkan.",
 	"campaignevents-userlink-suppressed-user": "nama pengguna disembunyikan",
 	"campaignevents-userlink-deleted-user": "pengguna yang dihapus",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Pendaftaran pribadi:</strong> Hanya penyelenggara acara yang dapat melihat nama pengguna Anda di daftar peserta. Kontribusi Anda selama acara mungkin dikecualikan oleh penyelenggara di [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] atau alat lain untuk mengumpulkan statistik.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Pendaftaran publik:</strong> Tampilkan nama pengguna Anda pada daftar peserta publik. Kontribusi Anda selama acara mungkin disertakan oleh penyelenggara di [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] atau alat lain untuk mengumpulkan statistik.",
 	"campaignevents-registration-confirmation-toggle-private": "Pendaftaran pribadi",
 	"campaignevents-registration-confirmation-toggle-public": "Pendaftaran publik",

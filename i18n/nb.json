@@ -296,7 +296,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "Kurset $1 er ikke knyttet til dette arrangementet, og kan derfor ikke synkroniseres.",
 	"campaignevents-userlink-suppressed-user": "brukernavn dempet",
 	"campaignevents-userlink-deleted-user": "slettet bruker",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Privat påmelding:</strong> Kun arrangørene kan se brukernavnet ditt i deltakerlista. Bidragene dine under arrangementet kan ekskluderes av arrangørene i [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard program- og arrangementsdashbordet] eller andre statistikkinnsamlingsverktøy.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Offentlig påmelding:</strong> Vis brukernavnet ditt på den offentlige deltakerlista. Bidragene dine under dette arrangementet kan inkluderes av arrangørene i [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard program- og arrangementsdashbordet] eller andre statistikkinnsamlingsverktøy.",
 	"campaignevents-registration-confirmation-toggle-private": "Privat påmelding",
 	"campaignevents-registration-confirmation-toggle-public": "Offentlig påmelding",

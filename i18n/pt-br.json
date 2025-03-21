@@ -248,7 +248,6 @@
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Painel de controle de programas e eventos",
 	"campaignevents-userlink-suppressed-user": "nome de usuário suprimido",
 	"campaignevents-userlink-deleted-user": "usuário excluído",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscrição privada:</strong> Somente os organizadores do evento podem ver seu nome de usuário na lista de participantes. Suas contribuições durante o evento podem ser incluídas pelos organizadores no [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] ou outras ferramentas para coletar estatísticas",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscrição privada:</strong> Somente os organizadores do evento podem ver seu nome de usuário na lista de participantes. Suas contribuições durante o evento podem ser incluídas pelos organizadores no [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] ou outras ferramentas para coletar estatísticas",
 	"campaignevents-registration-confirmation-toggle-private": "Inscrição privada",
 	"campaignevents-registration-confirmation-toggle-public": "Inscrição pública",

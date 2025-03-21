@@ -336,7 +336,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "الدورة $1 ليست مرتبطة بهذه الفعالية، وبالتالي لا يمكن مزامنةها.",
 	"campaignevents-userlink-suppressed-user": "اسم المستخدم محذوف",
 	"campaignevents-userlink-deleted-user": "مستخدم محذوف",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>التسجيل الخاص</strong>: فقط المنظمين يمكنهم رؤية اسم المستخدم الخاص بكم في قائمة المشاركين. قد يتم عدم احتساب مساهماتكم خلال الفعالية من قبل المنظمين على [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard لوحة تحكم البرامج والفعاليات] أو أدوات أخرى لجمع الإحصاءات.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>التسجيل العام</strong>: إظهار اسم المستخدم الخاص بكم في قائمة المشاركين العامة. بالإمكان إحتساب مساهماتكم خلال الفعالية من قبل المنظمين على [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard لوحة تحكم البرامج والفعاليات] أو أدوات أخرى لجمع الإحصاءات.",
 	"campaignevents-registration-confirmation-toggle-private": "تسجيل خاص",
 	"campaignevents-registration-confirmation-toggle-public": "تسجيل عام",

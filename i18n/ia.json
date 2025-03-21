@@ -322,7 +322,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "Le curso $1 non es connectite a iste evento, dunque non pote esser synchronisate.",
 	"campaignevents-userlink-suppressed-user": "nomine de usator supprimite",
 	"campaignevents-userlink-deleted-user": "usator delite",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscription private:</strong> Solmente le organisatores del evento pote vider tu nomine de usator in le lista de participantes. Le organisatores pote excluder tu contributiones al evento del [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tabuliero de programmas e eventos] o de altere instrumentos pro colliger statisticas.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription public:</strong> Monstrar tu nomine de usator in un lista public de participantes. Tu contributiones durante le evento pote esser includite per le organisatores sur le [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tabuliero de programmas e eventos] o altere instrumentos pro colliger statisticas.",
 	"campaignevents-registration-confirmation-toggle-private": "Inscription private",
 	"campaignevents-registration-confirmation-toggle-public": "Inscription public",

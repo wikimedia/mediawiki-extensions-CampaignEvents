@@ -338,7 +338,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "El curso $1 no está conectado con este evento y por lo tanto no se puede sincronizar.",
 	"campaignevents-userlink-suppressed-user": "nombre de usuario/a suprimido",
 	"campaignevents-userlink-deleted-user": "nombre de usuario/a eliminado",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Incripción privada:</strong> solo las personas organizadoras del evento pueden ver tu nombre de usuario/a en la lista de participantes. Quienes organizan el evento pueden excluir tus contribuciones durante el mismo en el [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] u otras herramientas para recopilar estadísticas.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Registro público:</strong> muestra tu nombre de usuario/a en una lista pública de participantes. Las personas organizadoras pueden incluir tus contribuciones durante el evento en el [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] u otras herramientas para recopilar estadísticas.",
 	"campaignevents-registration-confirmation-toggle-private": "Registro privado",
 	"campaignevents-registration-confirmation-toggle-public": "Registro público",

@@ -327,7 +327,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "De cursus $1 is niet gekoppeld aan dit evenement en kan daarom niet worden gesynchroniseerd.",
 	"campaignevents-userlink-suppressed-user": "gebruikersnaam onderdrukt",
 	"campaignevents-userlink-deleted-user": "verwijderde gebruiker",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Privéregistratie:</strong> Alleen de organisatoren van het evenement kunnen uw gebruikersnaam zien in de deelnemerslijst. Uw bijdragen aan het evenement kunnen worden uitgesloten door de organisatoren op het [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs &; Events Dashboard] of andere hulpmiddelen om statistieken te verzamelen.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Openbare registratie:</strong> Uw gebruikersnaam verschijnt op een openbare deelnemerslijst.  Uw bijdragen aan het evenement kunnen worden toegevoegd door de organisatoren op het [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs &; Events Dashboard] of andere hulpmiddelen om statistieken te verzamelen.",
 	"campaignevents-registration-confirmation-toggle-private": "Privéregistratie",
 	"campaignevents-registration-confirmation-toggle-public": "Openbare registratie",

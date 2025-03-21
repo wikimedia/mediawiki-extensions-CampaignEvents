@@ -31,7 +31,6 @@
 	"campaignevents-event-details-organizers-noscript": "You need to enable JavaScript in order to see the full list of organisers.",
 	"campaignevents-tracking-tool-wikiedu-not-organizer-error": "None of the organiser of this event are facilitators of the course $1.",
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "The course $1 is not connected to this event, and therefore it cannot be synchronised.",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Private registration:</strong> Only the event organisers can see your username in the participant list. Your contributions during the event may be excluded by the organisers on the [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] or other tools to collect statistics.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Public registration:</strong> Show your username on a public participant list. Your contributions during the event may be included by the organisers on the [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboard] or other tools to collect statistics.",
 	"campaignevents-notification-registration-header-chat": "Join the $1 to connect with other participants and get additional updates from the organisers.",
 	"campaignevents-notification-registration-details-organizers-header": "Event organisers",

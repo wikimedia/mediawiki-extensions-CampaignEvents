@@ -323,7 +323,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "הקורס $1 אינו מחובר לאירוע הזה, ולכן לא ניתן לסנכרן אותו.",
 	"campaignevents-userlink-suppressed-user": "שם המשתמש הועלם",
 	"campaignevents-userlink-deleted-user": "חשבון משתמש מחוק",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>הרשמה פרטית:</strong> רק מארגני האירוע יכולים לראות את שם המשתמש שלך ברשימת המשתתפים. התרומות שלך במהלך האירוע עשויות לא להיכלל על־ידי המארגנים ב[https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard לוח תוכניות ואירועים] או בכלים אחרים לאיסוף נתונים סטטיסטיים.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>הרשמה פומבית:</strong> להציג את שם המשתמש שלך ברשימת משתתפים הפומבית. התרומות שלך במהלך האירוע עשויות להיכלל על־ידי המארגנים ב[https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard לוח תוכניות ואירועים] או בכלים אחרים לאיסוף נתונים סטטיסטיים.",
 	"campaignevents-registration-confirmation-toggle-private": "הרשמה פרטית",
 	"campaignevents-registration-confirmation-toggle-public": "הרשמה פומבית",

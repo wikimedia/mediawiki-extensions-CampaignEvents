@@ -324,7 +324,6 @@
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "Kurs $1 nie jest powiązany z tym wydarzeniem i dlatego nie można go zsynchronizować.",
 	"campaignevents-userlink-suppressed-user": "nazwa użytkownika usunięta",
 	"campaignevents-userlink-deleted-user": "usunięty użytkownik",
-	"campaignevents-registration-confirmation-helptext-private": "<strong>Rejestracja niejawna:</strong> Tylko organizatorzy wydarzenia mogą zobaczyć twoją nazwę użytkownika na liście uczestników. Twój wkład podczas wydarzenia może być wyłączony z [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Panelu programów i wydarzeń] oraz narzędzi do zbierania statystyk przez organizatorów.",
 	"campaignevents-registration-confirmation-helptext-public": "<strong>Rejestracja publiczna:</strong> Twoja nazwa użytkownika będzie widoczna na publicznej liście uczestników. Twój wkład podczas wydarzenia może być zawarty przez organizatorów w [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Panelu programów i wydarzeń] oraz w innych narzędziach do gromadzenia statystyk.",
 	"campaignevents-registration-confirmation-toggle-private": "Rejestracja niejawna",
 	"campaignevents-registration-confirmation-toggle-public": "Rejestracja publiczna",
