@@ -31,7 +31,7 @@
 	"campaignevents-error-invalid-title": "Error message used when the given event page title is invalid.\nParameters:\n* $1 - The reason why the title is not valid",
 	"campaignevents-error-invalid-title-interwiki": "Error message used when the given event page title has an interwiki prefix.",
 	"campaignevents-error-page-not-found": "Error message used when the given event page does not exist.",
-	"campaignevents-error-page-not-event-namespace": "Error message used when the given event page name does not exist in the “{{ns:event}}” namespace.",
+	"campaignevents-error-page-namespace-not-allowed": "Error message used when the given event page title is not in a namespace where event registration can be enabled.",
 	"campaignevents-error-page-with-section": "Error message used when the given event page contains a section name, like \"Event:Test#Section\".",
 	"campaignevents-error-too-many-wikis": "Error message used when the user entered too many target wikis for an event.\nParameters:\n*$1 - The maximum allowed number of wikis. This is guaranteed to be a large number (e.g., 100).",
 	"campaignevents-error-invalid-wikis": "Error message used when the user entered invalid target wikis for an event.\nParameters:\n*$1 - A comma-separated list of invalid wiki IDs.",

@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -41,7 +42,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		CampaignEventsHookRunner $hookRunner,
 		PageURLResolver $pageURLResolver,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry
+		ITopicRegistry $topicRegistry,
+		Config $wikiConfig
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -58,7 +60,8 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$hookRunner,
 			$pageURLResolver,
 			$wikiLookup,
-			$topicRegistry
+			$topicRegistry,
+			$wikiConfig
 		);
 	}
 
