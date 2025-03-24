@@ -16,7 +16,6 @@
 	"campaignevents-error-empty-title": "Rhowch deitl tudalen digwyddiad.",
 	"campaignevents-error-invalid-title-interwiki": "Nodwch dudalen digwyddiad ar y wici lleol.",
 	"campaignevents-error-page-not-found": "Nid oes tudalen ddigwyddiad gyda'r enw hwn.",
-	"campaignevents-error-page-not-event-namespace": "Rhaid i'r dudalen ddigwyddiad fod yn y parth {{ns:event}}.",
 	"campaignevents-error-invalid-chat-url": "Rhowch URL sgwrs dilys.",
 	"campaignevents-edit-field-status-open": "Agored",
 	"campaignevents-edit-field-start": "Amser dechrau",

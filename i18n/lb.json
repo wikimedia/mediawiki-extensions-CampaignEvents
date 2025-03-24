@@ -18,7 +18,6 @@
 	"campaignevents-error-invalid-title": "Den Titel vun der Säit vum Evenement ass ongülteg: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Gitt eng Säit vun engem Evenement op der lokaler Wiki un.",
 	"campaignevents-error-page-not-found": "Et gëtt keng Evenementssäit mat dësem Numm.",
-	"campaignevents-error-page-not-event-namespace": "D'Evenementssäit muss am {{ns:event}}-Nummraum leien.",
 	"campaignevents-error-too-many-wikis": "Gitt maximal {{PLURAL:$1|eng Wiki|$1 Wikien}} an.",
 	"campaignevents-error-invalid-wikis": "Déi follgend IDe goufen net erkannt: $1.",
 	"campaignevents-error-invalid-chat-url": "Gitt eng gülteg Chat-URL an.",

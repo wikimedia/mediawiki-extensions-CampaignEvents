@@ -33,7 +33,6 @@
 	"campaignevents-error-invalid-title": "活動頁面標題無效：$1。",
 	"campaignevents-error-invalid-title-interwiki": "指定本地wiki上的活動頁面。",
 	"campaignevents-error-page-not-found": "沒有具有此名稱的活動頁面。",
-	"campaignevents-error-page-not-event-namespace": "活動頁面必須位於{{ns:event}}命名空間。",
 	"campaignevents-error-page-with-section": "活動頁面不得包含章節名稱。",
 	"campaignevents-error-invalid-chat-url": "請輸入有效的聊天連結。",
 	"campaignevents-error-trackingtool-without-eventid": "請為指定追蹤工具提供活動識別碼",

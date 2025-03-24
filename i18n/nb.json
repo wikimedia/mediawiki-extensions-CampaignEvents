@@ -23,7 +23,6 @@
 	"campaignevents-error-invalid-title": "Tittelen til arrangementssiden er ugyldig: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Angi en arrangementsside på den lokale wikien.",
 	"campaignevents-error-page-not-found": "Det er ingen arrangementssider med dette navnet.",
-	"campaignevents-error-page-not-event-namespace": "Arrangementssiden må være i {{ns:event}}-navnerommet.",
 	"campaignevents-error-page-with-section": "Arrangementssiden må ikke inneholde et seksjonsnavn.",
 	"campaignevents-error-invalid-chat-url": "Skriv inn en gyldig chat-URL.",
 	"campaignevents-error-trackingtool-without-eventid": "Angi identifikatoren til arrangementet i det gitte sporingsverktøyet.",

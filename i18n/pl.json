@@ -25,7 +25,6 @@
 	"campaignevents-error-invalid-title": "Tytuł strony wydarzenia jest nieprawidłowy: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Określ stronę wydarzenia na lokalnej wiki.",
 	"campaignevents-error-page-not-found": "Nie ma strony wydarzenia o tej nazwie.",
-	"campaignevents-error-page-not-event-namespace": "Strona wydarzenia musi znajdować się w przestrzeni nazw {{ns:event}}.",
 	"campaignevents-error-page-with-section": "Strona wydarzenia nie może zawierać nazwy sekcji.",
 	"campaignevents-error-too-many-wikis": "Wprowadź maksymalnie {{PLURAL:$1|jedną wiki|$1 wiki}}.",
 	"campaignevents-error-invalid-wikis": "Następujące identyfikatory wiki nie zostały rozpoznane: $1.",

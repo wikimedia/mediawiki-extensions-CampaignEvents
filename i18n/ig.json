@@ -21,7 +21,6 @@
 	"campaignevents-error-invalid-title": "Aha peeji mmemme ahụ adịghị mma: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Ezipụta ibe mmemme na wiki mpaghara.",
 	"campaignevents-error-page-not-found": "Enweghị ibe mmemme nwere aha a.",
-	"campaignevents-error-page-not-event-namespace": "Ibe mmemme ga-abụrịrị na {{ns:event}} aha oghere.",
 	"campaignevents-error-page-with-section": "Ibe mmemme agaghị enwe aha ngalaba.",
 	"campaignevents-error-invalid-chat-url": "Tinye URL nkata ziri ezi.",
 	"campaignevents-error-trackingtool-without-eventid": "Nye njirimara nke ihe omume ahụ na ngwá ọrụ nlekota enyere.",

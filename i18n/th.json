@@ -16,7 +16,6 @@
 	"campaignevents-error-invalid-title": "ชื่อหน้ากิจกรรมไม่ถูกต้อง: $1",
 	"campaignevents-error-invalid-title-interwiki": "โปรดระบุหน้ากิจกรรมบนวิกิท้องถิ่น",
 	"campaignevents-error-page-not-found": "ไม่พบหน้ากิจกรรมชื่อนี้",
-	"campaignevents-error-page-not-event-namespace": "หน้ากิจกรรมต้องอยู่ในเนมเสปซ {{ns:event}}",
 	"campaignevents-error-invalid-chat-url": "โปรดใส่ยูอาร์แอลของแชตที่ถูกต้อง",
 	"campaignevents-error-invalid-status": "โปรดระบุว่ากิจกรรมนี้เปิดหรือปิดอยู่",
 	"campaignevents-error-empty-start": "โปรดเลือกเวลาเริ่มต้น",

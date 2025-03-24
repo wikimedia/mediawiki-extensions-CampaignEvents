@@ -21,7 +21,6 @@
 	"campaignevents-error-invalid-title": "Naslov strani dogodka je neveljaven: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Navedite stran dogodka v lokalnem vikiju.",
 	"campaignevents-error-page-not-found": "Stran dogodka s tem imenom ne obstaja.",
-	"campaignevents-error-page-not-event-namespace": "Stran dogodka mora biti v imenskem prostoru {{ns:event}}.",
 	"campaignevents-error-page-with-section": "Stran dogodka ne sme vsebovati imena razdelka.",
 	"campaignevents-error-too-many-wikis": "Vnesite največ {{PLURAL:$1|en viki|2 vikija|$1 vikije|$1 vikijev}}.",
 	"campaignevents-error-invalid-wikis": "Naslednji ID-ji vikijev niso prepoznani: $1.",

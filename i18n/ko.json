@@ -16,7 +16,6 @@
 	"campaignevents-error-invalid-title": "이벤트 페이지 제목이 유효하지 않습니다: $1.",
 	"campaignevents-error-invalid-title-interwiki": "로컬 위키의 이벤트 문서를 지정하십시오.",
 	"campaignevents-error-page-not-found": "이 이름에 해당하는 이벤트가 없습니다.",
-	"campaignevents-error-page-not-event-namespace": "이벤트 페이지는 {{ns:event}} 이름공간에 있어야 합니다.",
 	"campaignevents-error-page-with-section": "이벤트 페이지는 섹션 이름을 포함할 수 없습니다.",
 	"campaignevents-error-invalid-wikis": "다음 위키 ID가 인식되지 않습니다: $1.",
 	"campaignevents-error-invalid-chat-url": "유효한 채팅 URL을 입력하십시오.",

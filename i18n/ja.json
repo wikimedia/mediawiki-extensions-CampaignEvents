@@ -31,7 +31,6 @@
 	"campaignevents-error-invalid-title": "指定したページ名が無効です。$1",
 	"campaignevents-error-invalid-title-interwiki": "ローカルのウィキに、イベント特設ページを指定。",
 	"campaignevents-error-page-not-found": "この名前のイベントページはありません。",
-	"campaignevents-error-page-not-event-namespace": "イベント ページは {{ns:event}} 名前空間にあるはずです。",
 	"campaignevents-error-page-with-section": "イベント ページ名にセクション名を含めないでください。",
 	"campaignevents-error-invalid-chat-url": "有効なチャットURLを入力してください。",
 	"campaignevents-error-trackingtool-without-eventid": "特定の追跡ツールでイベントの識別子を提供します。",

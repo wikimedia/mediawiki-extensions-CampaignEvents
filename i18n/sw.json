@@ -25,7 +25,6 @@
 	"campaignevents-error-invalid-title": "Kichwa cha habari cha ukurasa wa tukio ni batili: $1 .",
 	"campaignevents-error-invalid-title-interwiki": "Bainisha ukurasa wa tukio kwenye wiki mahalia.",
 	"campaignevents-error-page-not-found": "Hakuna ukurasa wa tukio wenye jina hili.",
-	"campaignevents-error-page-not-event-namespace": "Ukurasa wa tukio lazima uwe katika eneo la wiki la {{ns:event}}.",
 	"campaignevents-error-page-with-section": "Ukurasa wa tukio lazima usiwe na jina la sehemu.",
 	"campaignevents-error-invalid-chat-url": "Weka URL halali ya gumzo.",
 	"campaignevents-error-trackingtool-without-eventid": "Toa kitambulisho cha tukio kwenye zana ya kufuatilia uliyopewa.",

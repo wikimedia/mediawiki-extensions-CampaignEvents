@@ -14,7 +14,6 @@
 	"campaignevents-error-invalid-title": "La titolpaĝo de la evento estas nevalida: $1 .",
 	"campaignevents-error-invalid-title-interwiki": "Specifas eventan paĝon sur la loka vikio.",
 	"campaignevents-error-page-not-found": "Estas neniu eventa paĝo kun ĉi tiu nomo.",
-	"campaignevents-error-page-not-event-namespace": "La eventa paĝo devas esti en la {{ns:evento}} nomspaco.",
 	"campaignevents-error-invalid-chat-url": "Enigu validan babilejan URL-n.",
 	"campaignevents-error-invalid-status": "Indiku ĉu la evento estas malfermita aŭ fermita.",
 	"campaignevents-error-empty-start": "Elektu komencan tempon.",

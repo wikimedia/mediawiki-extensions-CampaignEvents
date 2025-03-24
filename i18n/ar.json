@@ -35,7 +35,6 @@
 	"campaignevents-error-invalid-title": "عنوان صفحة الفعالية خاطئ: $1.",
 	"campaignevents-error-invalid-title-interwiki": "حدد إسم لصفحة فعالية على موقع ويكي محلي.",
 	"campaignevents-error-page-not-found": "لا توجد صفحة فعالية بهذا الاسم.",
-	"campaignevents-error-page-not-event-namespace": "يتعين أن تكون صفحة الفعالية في النطاق {{ns:event}}.",
 	"campaignevents-error-page-with-section": "يجب ألا تحتوي صفحة الفعالية على اسم قسم.",
 	"campaignevents-error-too-many-wikis": "أدخل الحد الأقصى {{PLURAL:$1| ويكي واحد| $1 ويكي}}.",
 	"campaignevents-error-invalid-wikis": "لم يتم التعرف على معرفات الويكي التالية: $1.",

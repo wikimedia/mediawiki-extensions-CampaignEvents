@@ -26,7 +26,6 @@
 	"campaignevents-error-invalid-title": "Etkinlik sayfası başlığı geçersiz: $1 .",
 	"campaignevents-error-invalid-title-interwiki": "Yerel viki'de bir etkinlik sayfası belirtin.",
 	"campaignevents-error-page-not-found": "Bu ada sahip bir etkinlik sayfası mevcut değil.",
-	"campaignevents-error-page-not-event-namespace": "Etkinlik sayfası {{ns:event}} ad alanında olmalıdır.",
 	"campaignevents-error-page-with-section": "Etkinlik sayfası bir bölüm adı içermemelidir.",
 	"campaignevents-error-invalid-chat-url": "Geçerli bir sohbet URL'si girin.",
 	"campaignevents-error-trackingtool-without-eventid": "Verilen izleme aracında etkinliğin tanımlayıcısını sağlayın.",

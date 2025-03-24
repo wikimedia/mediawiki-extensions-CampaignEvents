@@ -26,7 +26,6 @@
 	"campaignevents-error-invalid-title": "Il titolo della pagina dell'evento non è valido: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Specifica una pagina dell'evento sul wiki locale.",
 	"campaignevents-error-page-not-found": "Non ci sono pagine evento con questo nome.",
-	"campaignevents-error-page-not-event-namespace": "La pagina dell'evento deve essere nel namespace {{ns:event}}.",
 	"campaignevents-error-page-with-section": "La pagina evento non deve contenere il nome di una sezione.",
 	"campaignevents-error-too-many-wikis": "Inserisci un massimo di {{PLURAL:$1|un wiki|$1 wiki}}.",
 	"campaignevents-error-invalid-wikis": "I seguenti ID wiki non sono riconosciuti: $1.",

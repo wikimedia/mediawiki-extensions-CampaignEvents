@@ -23,7 +23,6 @@
 	"campaignevents-error-invalid-title": "O título da página do evento é inválido: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Especifique uma página para o evento na wiki local.",
 	"campaignevents-error-page-not-found": "Não há nenhuma página de evento com este nome.",
-	"campaignevents-error-page-not-event-namespace": "A página do evento tem de estar no espaço nominal {{ns:event}}.",
 	"campaignevents-error-page-with-section": "A página do evento não pode conter um nome de secção.",
 	"campaignevents-error-invalid-chat-url": "Introduza um URL de conversação válido.",
 	"campaignevents-error-trackingtool-without-eventid": "Forneça o identificador do evento na ferramenta de seguimento indicada.",

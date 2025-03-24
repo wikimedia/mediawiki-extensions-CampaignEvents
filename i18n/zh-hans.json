@@ -30,7 +30,6 @@
 	"campaignevents-error-invalid-title": "活动页面标题无效：$1。",
 	"campaignevents-error-invalid-title-interwiki": "指定本地wiki上的活动页面。",
 	"campaignevents-error-page-not-found": "没有具有该名称的活动页面。",
-	"campaignevents-error-page-not-event-namespace": "活动页面必须在{{ns:event}}命名空间下。",
 	"campaignevents-error-page-with-section": "活动页面不得包含章节链接。",
 	"campaignevents-error-invalid-chat-url": "请输入有效的聊天URL。",
 	"campaignevents-error-trackingtool-without-eventid": "请在跟踪工具上提供活动标识符。",

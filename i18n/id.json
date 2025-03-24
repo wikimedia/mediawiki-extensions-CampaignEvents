@@ -27,7 +27,6 @@
 	"campaignevents-error-invalid-title": "Judul halaman acara tidak sah: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Tentukan halaman acara di wiki lokal.",
 	"campaignevents-error-page-not-found": "Tidak ada halaman acara dengan nama ini.",
-	"campaignevents-error-page-not-event-namespace": "Halaman acara harus berada dalam ruang nama {{ns:event}}.",
 	"campaignevents-error-page-with-section": "Halaman acara tidak boleh berisi nama bagian halaman.",
 	"campaignevents-error-too-many-wikis": "Masukkan maksimal {{PLURAL:$1|satu proyek wiki|$1 proyek wiki}}.",
 	"campaignevents-error-invalid-wikis": "ID proyek wiki berikut tidak dikenali: $1.",

@@ -24,7 +24,6 @@
 	"campaignevents-error-invalid-title": "Tajuk laman acara tidak sah: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Tentukan laman acara pada wiki tempatan.",
 	"campaignevents-error-page-not-found": "Tiada laman acara dengan nama ini.",
-	"campaignevents-error-page-not-event-namespace": "Laman acara mestilah dalam ruang nama {{ns:event}}.",
 	"campaignevents-error-page-with-section": "Laman acara tidak boleh mengandungi nama bahagian.",
 	"campaignevents-error-too-many-wikis": "Masukkan maksimum {{PLURAL:$1|satu wiki| $1 wiki}}.",
 	"campaignevents-error-invalid-wikis": "ID wiki berikut tidak dapat dikecam: $1.",

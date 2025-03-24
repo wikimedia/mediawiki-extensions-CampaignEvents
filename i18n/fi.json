@@ -25,7 +25,6 @@
 	"campaignevents-error-empty-title": "Anna tapahtumasivun otsikko.",
 	"campaignevents-error-invalid-title": "Tapahtumasivun otsikko on virheellinen: $1",
 	"campaignevents-error-page-not-found": "Tämän nimistä tapahtumaa ei ole olemassa.",
-	"campaignevents-error-page-not-event-namespace": "Tapahtumasivun tulee olla {{ns:event}}-nimiavaruudessa.",
 	"campaignevents-error-too-many-wikis": "Anna enintään {{PLURAL:$1|yksi wiki|$1 wikiä}}.",
 	"campaignevents-error-invalid-chat-url": "Anna kelvollinen keskusteluryhmän URL-osoite.",
 	"campaignevents-error-invalid-status": "Ilmoita, onko tapahtuma avoin vai suljettu.",
@@ -279,7 +278,9 @@
 	"campaignevents-event-details-search-participants-placeholder": "Hae osallistujia",
 	"campaignevents-event-details-organizers-view-more": "Näytä lisää",
 	"campaignevents-userlink-deleted-user": "poistettu käyttäjä",
-	"campaignevents-registration-confirmation-helptext-public": "<strong>Julkinen rekisteröinti:</strong> Näytä käyttäjänimesi julkisessa osallistujaluettelossa.",
+	"campaignevents-registration-confirmation-helptext-private-with-groups": "<strong>Yksityinen ilmoittautuminen:</strong> Vain tapahtuman järjestäjät sekä {{PLURAL:$2|seuraavan ryhmän|seuraavien ryhmien}} jäsenet: $1 näkevät käyttäjänimesi osallistujaluettelossa. Järjestäjät voivat jättää tapahtuman aikana tekemäsi muokkaukset pois [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboardista] tai muista tilastointityökaluista.",
+	"campaignevents-registration-confirmation-helptext-private-no-groups": "<strong>Yksityinen ilmoittautuminen:</strong> Vain tapahtuman järjestäjät näkevät käyttäjänimesi osallistujaluettelossa. Järjestäjät voivat jättää tapahtuman aikana tekemäsi muokkaukset pois [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboardista] tai muista tilastointityökaluista.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Julkinen ilmoittautuminen:</strong> Käyttäjänimesi näytetään julkisessa osallistujaluettelossa. Järjestäjät voivat sisällyttää tapahtuman aikana tekemäsi muokkaukset [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboardiin] tai muihin työkaluihin tilastointia varten.",
 	"campaignevents-registration-confirmation-toggle-private": "Yksityinen ilmoittautuminen",
 	"campaignevents-registration-confirmation-toggle-public": "Julkinen ilmoittautuminen",
 	"campaignevents-register-confirmation-radio-private": "Yksityinen ilmoittautuminen",
@@ -359,6 +360,9 @@
 	"campaignevents-eventpage-register-dialog-questions-title": "Omat tiedot",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Nämä tiedot jaetaan vain tapahtuman järjestäjille.",
 	"campaignevents-eventpage-register-dialog-retention-title": "Tietoja henkilötietojen säilytyksestä",
+	"campaignevents-edit-field-clickwrap-form-continue": "Näytä vastaukset",
+	"campaignevents-participant-question-no-response": "Ei vastausta",
+	"campaignevents-event-register-for-event-title": "Ilmoittaudu tapahtumaan $1",
 	"generateinvitationlist": "Luo kutsulista",
 	"campaignevents-invitation-list-not-allowed": "Sinulla ei ole oikeutta käyttää kutsulistoja.",
 	"myinvitationlists": "Kutsulistasi",
@@ -386,5 +390,7 @@
 	"campaignevents-event-details-topics-header": "Aiheet",
 	"campaignevents-eventpage-dialog-topics-label": "Aiheet",
 	"campaignevents-allevents-label-upcoming-events-title": "Tulevat tapahtumat",
-	"campaignevents-allevents-label-ongoing-events-title": "Käynnissä olevat tapahtumat"
+	"campaignevents-allevents-label-upcoming-events-description": "Tulevat tapahtumat: Tapahtumat, jotka alkavat valitun ajanjakson sisällä",
+	"campaignevents-allevents-label-ongoing-events-title": "Käynnissä olevat tapahtumat",
+	"campaignevents-allevents-label-ongoing-events-description": "Käynnissä olevat tapahtumat: Tapahtumat, jotka alkavat ennen valittua ajanjaksoa, mutta jatkuvat sen aikana"
 }

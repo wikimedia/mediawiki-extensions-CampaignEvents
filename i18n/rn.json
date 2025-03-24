@@ -14,7 +14,6 @@
 	"campaignevents-error-invalid-title": "Ijambo ry'umutwe ry'urupapuro rw'igikorwa siryo: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Sigura urupapuro rw'igikorwa kuri ino Wiki.",
 	"campaignevents-error-page-not-found": "Nta rupapuro rw'igikorwa ruriho kuri iri zina.",
-	"campaignevents-error-page-not-event-namespace": "Urupapuro rw'igikorwa rutegerezwa kuba mubimenyetso {{ns:event}}.",
 	"campaignevents-error-invalid-chat-url": "Andika URL y'ikiyago itomoye.",
 	"campaignevents-error-invalid-status": "Menyesha nimba igikorwa cuguruye canke cugaye.",
 	"campaignevents-error-empty-start": "Cagura umwanya w'itango.",

@@ -19,7 +19,6 @@
 	"campaignevents-error-invalid-title": "Netinkamas įvykio puslapio pavadinimas: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Nurodykite įvykio puslapį vietiniame wiki.",
 	"campaignevents-error-page-not-found": "Nėra įvykio puslapio tokiu pavadinimu.",
-	"campaignevents-error-page-not-event-namespace": "Įvykio puslapis turi būti {{ns:event}} vardų srityje.",
 	"campaignevents-error-page-with-section": "Įvykio puslapyje neturi būti skyriaus pavadinimo.",
 	"campaignevents-error-invalid-chat-url": "Įveskite galiojantį pokalbio URL.",
 	"campaignevents-error-trackingtool-without-eventid": "Pateiktame stebėjimo įrankyje pateikite įvykio identifikatorių.",
