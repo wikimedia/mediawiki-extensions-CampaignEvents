@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsTablePager;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
+use MediaWiki\Parser\ParserOptions;
 use MediaWiki\SpecialPage\SpecialPage;
 
 class SpecialMyEvents extends SpecialPage {
@@ -102,7 +103,10 @@ class SpecialMyEvents extends SpecialPage {
 		}
 		$form->prepareForm()
 			->displayForm( false );
-		$this->getOutput()->addParserOutputContent( $pager->getFullOutput() );
+		$this->getOutput()->addParserOutputContent(
+			$pager->getFullOutput(),
+			ParserOptions::newFromContext( $this->getContext() )
+		);
 		$this->getOutput()->addModules( $pager->getModules() );
 	}
 
