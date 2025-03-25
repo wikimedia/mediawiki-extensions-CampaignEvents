@@ -26,6 +26,7 @@
 	"campaignevents-error-invalid-title": "Насловот на страницата за настанот е неважечки: $1.",
 	"campaignevents-error-invalid-title-interwiki": "Укажете на страницата за настанот на месното вики.",
 	"campaignevents-error-page-not-found": "Нема страница за настан со тоа име.",
+	"campaignevents-error-page-namespace-not-allowed": "Страницата за настанот мора да биде во еден од допуштените именски простори",
 	"campaignevents-error-page-with-section": "Страницата за настанот не треба да содржи има на оддел.",
 	"campaignevents-error-too-many-wikis": "Внесете највеќе {{PLURAL:$1|едно вики|$1 викија}}.",
 	"campaignevents-error-invalid-wikis": "Следниве викиназнаки не се препознаени: $1.",
