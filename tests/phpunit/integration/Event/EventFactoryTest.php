@@ -25,8 +25,7 @@ use MediaWiki\Utils\MWTimestamp;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventFactory
- * @covers ::__construct
+ * @covers \MediaWiki\Extension\CampaignEvents\Event\EventFactory
  * @todo Make this a unit test once it's possible to use namespace constants (T310375)
  */
 class EventFactoryTest extends MediaWikiIntegrationTestCase {
@@ -167,13 +166,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * @param string|null $expectedErrorKey
 	 * @param array $factoryArgs
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
-	 * @covers ::newEvent
-	 * @covers ::validatePage
-	 * @covers ::validateTrackingTool
-	 * @covers ::validateTimezone
-	 * @covers ::validateLocalDates
-	 * @covers ::isValidURL
-	 * @covers ::validateLocation
 	 * @dataProvider provideEventData
 	 */
 	public function testNewEvent(
@@ -404,10 +396,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
-	/**
-	 * @covers ::newEvent
-	 * @covers ::validatePage
-	 */
 	public function testNewEvent__namespaceNotallowed() {
 		$allowedNamespaces = [ NS_PROJECT ];
 		$disallowedNamespacePageStr = 'This page is not in the allowed project namespace';
@@ -428,7 +416,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers ::validatePage
 	 * @dataProvider provideNewEvent__skipNamespaceValidation
 	 */
 	public function testNewEvent__skipNamespaceValidation(
@@ -503,8 +490,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	 * This test is specifically about validating the timezone, to make sure that there are no weird bugs like
 	 * T315692#8306011.
 	 * @param string $timezone
-	 * @covers ::newEvent
-	 * @covers ::validateTimezone
 	 * @dataProvider provideInvalidTimezones
 	 */
 	public function testNewEvent__invalidTimezone( string $timezone ) {
@@ -534,7 +519,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @param array $factoryArgs
-	 * @covers ::newEvent
 	 * @dataProvider provideEventDataWithInvalidInternalTimestamps
 	 */
 	public function testNewEvent__invalidTimestampsInternal( array $factoryArgs ) {
@@ -553,8 +537,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @param string $url
 	 * @param bool $expectedValid
-	 * @covers ::newEvent
-	 * @covers ::isValidURL
 	 * @dataProvider provideURLs
 	 */
 	public function testURLValidation( string $url, bool $expectedValid ) {
@@ -579,7 +561,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers ::validateWikis
 	 * @dataProvider provideWikis
 	 */
 	public function testValidateWikis( $wikis, ?array $expectedErrors, $expectedWikis = null ) {
@@ -627,7 +608,6 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers ::validateTopics
 	 * @dataProvider provideTopics
 	 */
 	public function testValidateTopics( $topics, ?array $expectedErrors, $expectedTopics = null ) {
