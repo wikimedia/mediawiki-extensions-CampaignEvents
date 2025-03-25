@@ -25,4 +25,6 @@ interface ICampaignsPage {
 	 * @return string
 	 */
 	public function getPrefixedText(): string;
+
+	public function equals( self $other ): bool;
 }

@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
+use LogicException;
 use MediaWiki\Page\ProperPageIdentity;
 
 class MWPageProxy implements ICampaignsPage {
@@ -41,6 +42,14 @@ class MWPageProxy implements ICampaignsPage {
 	 */
 	public function getPrefixedText(): string {
 		return $this->prefixedText;
+	}
+
+	/** @inheritDoc */
+	public function equals( ICampaignsPage $other ): bool {
+		if ( !$other instanceof MWPageProxy ) {
+			throw new LogicException( 'Unexpected class' );
+		}
+		return $this->page->isSamePageAs( $other->getPageIdentity() );
 	}
 
 	public function getPageIdentity(): ProperPageIdentity {

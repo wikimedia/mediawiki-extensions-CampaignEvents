@@ -55,8 +55,9 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		'creation' => '20220308100000',
 		'lastedit' => '20220308100000',
 		'deletion' => null,
-		false,
-		'validationFlags' => EventFactory::VALIDATE_ALL
+		'istest' => false,
+		'validationFlags' => EventFactory::VALIDATE_ALL,
+		'previouspage' => null,
 	];
 
 	/**
@@ -424,6 +425,78 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			$campaignsPageFactory,
 			$allowedNamespaces
 		);
+	}
+
+	/**
+	 * @covers ::validatePage
+	 * @dataProvider provideNewEvent__skipNamespaceValidation
+	 */
+	public function testNewEvent__skipNamespaceValidation(
+		bool $pageUnchanged,
+		bool $passesFlag,
+		bool $passesPreviousPage,
+		bool $expectsSuccess
+	) {
+		$allowedNamespaces = [ NS_PROJECT ];
+
+		$previousPage = $this->createMock( ICampaignsPage::class );
+		$previousPage->method( 'getNamespace' )->willReturn( NS_MAIN );
+
+		if ( $pageUnchanged ) {
+			$newPage = clone $previousPage;
+			$newPage->method( 'equals' )->with( $previousPage )->willReturn( true );
+		} else {
+			$newPage = $this->createMock( ICampaignsPage::class );
+			$newPage->method( 'getNamespace' )->willReturn( NS_MAIN );
+			$newPage->method( 'equals' )->with( $previousPage )->willReturn( false );
+		}
+
+		$newPageStr = 'New title';
+		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
+		$campaignsPageFactory->expects( $this->atLeastOnce() )
+			->method( 'newLocalExistingPageFromString' )
+			->with( $newPageStr )
+			->willReturn( $newPage );
+
+		$factoryOverrides = [ 'page' => $newPageStr ];
+		if ( $passesFlag ) {
+			$factoryOverrides['validationFlags'] = EventFactory::VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE;
+		}
+		if ( $passesPreviousPage ) {
+			$factoryOverrides['previouspage'] = $previousPage;
+		}
+		$this->doTestWithArgs(
+			self::getTestDataWithDefault( $factoryOverrides ),
+			$expectsSuccess ? null : [ 'campaignevents-error-page-namespace-not-allowed' ],
+			$campaignsPageFactory,
+			$allowedNamespaces
+		);
+	}
+
+	public static function provideNewEvent__skipNamespaceValidation() {
+		[ $pageUnchanged, $pageChanged ] = [ true, false ];
+		[ $passesFlag, $doesNotPassFlag ] = [ true, false ];
+		[ $passesPreviousPage, $doesNotPassPreviousPage ] = [ true, false ];
+		[ $expectsSuccess, $expectsError ]  = [ true, false ];
+
+		return [
+			'Page unchanged, passes flag, passes previous page, allowed' =>
+				[ $pageUnchanged, $passesFlag, $passesPreviousPage, $expectsSuccess ],
+			'Page unchanged, passes flag, does not pass previous page, disallowed' =>
+				[ $pageUnchanged, $passesFlag, $doesNotPassPreviousPage, $expectsError ],
+			'Page unchanged, does not pass flag, passes previous page, disallowed' =>
+				[ $pageUnchanged, $doesNotPassFlag, $passesPreviousPage, $expectsError ],
+			'Page unchanged, does not pass flag, does not pass previous page, disallowed' =>
+				[ $pageUnchanged, $doesNotPassFlag, $doesNotPassPreviousPage, $expectsError ],
+			'Page changed, passes flag, passes previous page, disallowed' =>
+				[ $pageChanged, $passesFlag, $passesPreviousPage, $expectsError ],
+			'Page changed, passes flag, does not pass previous page, disallowed' =>
+				[ $pageChanged, $passesFlag, $doesNotPassPreviousPage, $expectsError ],
+			'Page changed, does not pass flag, passes previous page, disallowed' =>
+				[ $pageChanged, $doesNotPassFlag, $passesPreviousPage, $expectsError ],
+			'Page changed, does not pass flag, does not pass previous page, disallowed' =>
+				[ $pageChanged, $doesNotPassFlag, $doesNotPassPreviousPage, $expectsError ],
+		];
 	}
 
 	/**
