@@ -14,7 +14,7 @@
 	"right-campaignevents-enable-registration": "ইভেন্ট নিবন্ধন সক্রিয় করা",
 	"right-campaignevents-email-participants": "ইভেন্ট অংশগ্রহণকারীদের ইমেইল করুন",
 	"specialpages-group-campaignevents": "ইভেন্ট",
-	"campaignevents-error-page-namespace-not-allowed": "অনুষ্ঠানে অবশ্যই অনুমোদিত নেমস্পেসগুলির মধ্যে একটিতে থাকতে হবে।",
+	"campaignevents-error-page-namespace-not-allowed": "ইভেন্ট পাতাটি অবশ্যই অনুমোদিত নামস্থানের একটিতে থাকতে হবে",
 	"campaignevents-error-invalid-timezone": "একটি বৈধ সময় অঞ্চল লিখুন।",
 	"campaignevents-edit-field-event-status": "ইভেন্টের স্থিতি",
 	"campaignevents-edit-field-status-open": "উন্মুক্ত",
