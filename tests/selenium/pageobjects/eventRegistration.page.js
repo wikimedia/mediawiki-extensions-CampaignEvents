@@ -18,19 +18,19 @@ class EventRegistrationPage extends Page {
 	}
 
 	get editRegistration() {
-		return $( '[value="Edit registration"]' );
+		return $( '.mw-htmlform-submit-buttons button[value="Edit registration"]' );
 	}
 
 	get enableRegistration() {
-		return $( '[value="Enable registration"]' );
+		return $( '.mw-htmlform-submit-buttons button[value="Enable registration"]' );
 	}
 
 	get eventPage() {
-		return $( '[name="wpEventPage"]' );
+		return $( 'input[name="wpEventPage"]' );
 	}
 
 	get generalError() {
-		return $( '[role=alert]' );
+		return $( '.mw-htmlform-ooui-header-errors .oo-ui-messageWidget' );
 	}
 
 	get meetingTypeSelector() {
@@ -66,8 +66,8 @@ class EventRegistrationPage extends Page {
 		await super.openTitle( 'Special:EnableEventRegistration' );
 	}
 
-	loseFocus() {
-		return this.body.click();
+	async loseFocus() {
+		await this.body.click();
 	}
 
 	async selectMeetingType( meetingType ) {
@@ -107,6 +107,11 @@ class EventRegistrationPage extends Page {
 		await this.organizersInput.setValue( organizer );
 		const menuItem = await $( `.oo-ui-menuSelectWidget [id='${ organizer }']` );
 		await menuItem.waitForDisplayed();
+		await menuItem.moveTo();
+		await menuItem.waitUntil( async function () {
+			const classes = await this.getAttribute( 'class' );
+			return classes.includes( 'oo-ui-optionWidget-highlighted' );
+		} );
 		await menuItem.click();
 	}
 
