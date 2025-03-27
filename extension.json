@@ -103,7 +103,9 @@
 				"CampaignEventsEventStore",
 				"CampaignEventsDeleteEventCommand",
 				"TitleFormatter",
-				"CampaignEventsPageFactory"
+				"CampaignEventsPageFactory",
+				"CampaignEventsWikiConfiguration"
+
 			]
 		},
 		"EchoHooksHandler": {

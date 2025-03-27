@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
 use ManualLogEntry;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
@@ -33,6 +34,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	private DeleteEventCommand $deleteEventCommand;
 	private TitleFormatter $titleFormatter;
 	private CampaignsPageFactory $campaignsPageFactory;
+	private Config $config;
 
 	/**
 	 * @param PageEventLookup $pageEventLookup
@@ -40,19 +42,22 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	 * @param DeleteEventCommand $deleteEventCommand
 	 * @param TitleFormatter $titleFormatter
 	 * @param CampaignsPageFactory $campaignsPageFactory
+	 * @param Config $config
 	 */
 	public function __construct(
 		PageEventLookup $pageEventLookup,
 		IEventStore $eventStore,
 		DeleteEventCommand $deleteEventCommand,
 		TitleFormatter $titleFormatter,
-		CampaignsPageFactory $campaignsPageFactory
+		CampaignsPageFactory $campaignsPageFactory,
+		Config $config
 	) {
 		$this->pageEventLookup = $pageEventLookup;
 		$this->eventStore = $eventStore;
 		$this->deleteEventCommand = $deleteEventCommand;
 		$this->titleFormatter = $titleFormatter;
 		$this->campaignsPageFactory = $campaignsPageFactory;
+		$this->config = $config;
 	}
 
 	/**
@@ -93,8 +98,11 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $old, PageEventLookup::GET_DIRECT );
 		// Disallow moving event pages with registration enabled outside of the Event namespace, see T358704.
 		// This will change if we decide to allow event registration outside of the namespace (T318179).
-		if ( $registration && !$nt->inNamespace( NS_EVENT ) ) {
-			$status->fatal( 'campaignevents-error-move-eventpage-namespace' );
+		if (
+			$registration &&
+			!in_array( $nt->getNamespace(), $this->config->get( 'CampaignEventsEventNamespaces' ), true )
+		) {
+			$status->fatal( 'campaignevents-error-move-eventpage-namespace-disallowed' );
 			return false;
 		}
 		return true;
