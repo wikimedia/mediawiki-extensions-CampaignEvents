@@ -248,7 +248,7 @@
 	"campaignevents-event-details-organizers-view-more": "Näytä lisää",
 	"campaignevents-userlink-deleted-user": "poistettu käyttäjä",
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Yksityinen rekisteröinti:</strong> Vain tapahtuman järjestäjät näkevät käyttäjätunnuksesi osallistujaluettelossa.",
-	"campaignevents-registration-confirmation-helptext-public": "<strong>Julkinen rekisteröinti:</strong> Näytä käyttäjänimesi julkisessa osallistujaluettelossa.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Julkinen ilmoittautuminen:</strong> Käyttäjänimesi näytetään julkisessa osallistujaluettelossa. Järjestäjät voivat sisällyttää tapahtuman aikana tekemäsi muokkaukset [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Programs & Events Dashboardiin] tai muihin työkaluihin tilastointia varten.",
 	"campaignevents-registration-confirmation-toggle-private": "Yksityinen ilmoittautuminen",
 	"campaignevents-registration-confirmation-toggle-public": "Julkinen ilmoittautuminen",
 	"campaignevents-register-confirmation-radio-private": "Yksityinen ilmoittautuminen",
@@ -325,5 +325,8 @@
 	"campaignevents-register-retention-title": "Tietoja henkilötietojen säilytyksestä",
 	"campaignevents-eventpage-register-dialog-questions-title": "Omat tiedot",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Nämä tiedot jaetaan vain tapahtuman järjestäjille.",
-	"campaignevents-eventpage-register-dialog-retention-title": "Tietoja henkilötietojen säilytyksestä"
+	"campaignevents-eventpage-register-dialog-retention-title": "Tietoja henkilötietojen säilytyksestä",
+	"campaignevents-edit-field-clickwrap-form-continue": "Näytä vastaukset",
+	"campaignevents-participant-question-no-response": "Ei vastausta",
+	"campaignevents-event-register-for-event-title": "Ilmoittaudu tapahtumaan $1"
 }
