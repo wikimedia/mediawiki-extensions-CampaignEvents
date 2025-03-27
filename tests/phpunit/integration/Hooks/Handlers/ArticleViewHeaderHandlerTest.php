@@ -49,8 +49,8 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 		$exists = true;
 		$doesNotExist = false;
 
-		yield 'Mainspace article' => [ NS_MAIN, $exists, false ];
-		yield 'Project page' => [ NS_PROJECT, $exists, false ];
+		yield 'Mainspace article' => [ NS_MAIN, $exists, true ];
+		yield 'Project page' => [ NS_PROJECT, $exists, true ];
 		yield 'Event page, does not exist' => [ NS_EVENT, $doesNotExist, false ];
 		yield 'Event page, exists' => [ NS_EVENT, $exists, true ];
 	}

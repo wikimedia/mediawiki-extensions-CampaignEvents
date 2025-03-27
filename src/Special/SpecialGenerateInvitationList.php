@@ -71,7 +71,6 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 			'EventPage' => [
 				'type' => 'title',
 				'exists' => true,
-				'namespace' => NS_EVENT,
 				'label-message' => 'campaignevents-generateinvitationlist-event-page-field-label',
 				'placeholder-message' => 'campaignevents-generateinvitationlist-event-page-field-placeholder',
 				'required' => false,

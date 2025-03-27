@@ -60,10 +60,6 @@ class PageEventLookup {
 			$page = $this->getCanonicalPage( $page );
 		}
 
-		if ( $page->getNamespace() !== NS_EVENT ) {
-			return null;
-		}
-
 		$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
 		try {
 			return $this->eventLookup->getEventByPage( $campaignsPage, $readFlags );
@@ -92,10 +88,6 @@ class PageEventLookup {
 			if ( $canonicalPageIdentity !== $pageIdentity ) {
 				$page = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $canonicalPageIdentity );
 			}
-		}
-
-		if ( $page->getNamespace() !== NS_EVENT ) {
-			return null;
 		}
 
 		try {

@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
 use LogicException;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
@@ -92,6 +93,7 @@ class EventPageDecorator {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private GroupPermissionsLookup $groupPermissionsLookup;
+	private Config $config;
 
 	private Language $language;
 	private ICampaignsAuthority $authority;
@@ -121,6 +123,7 @@ class EventPageDecorator {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		GroupPermissionsLookup $groupPermissionsLookup,
+		Config $config,
 		Language $language,
 		Authority $viewingAuthority,
 		OutputPage $out
@@ -139,6 +142,7 @@ class EventPageDecorator {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
+		$this->config = $config;
 
 		$this->language = $language;
 		$this->authority = new MWAuthorityProxy( $viewingAuthority );
@@ -168,7 +172,11 @@ class EventPageDecorator {
 	}
 
 	private function maybeAddEnableRegistrationHeader( ICampaignsPage $eventPage ): void {
-		if ( !$this->permissionChecker->userCanEnableRegistration( $this->authority, $eventPage ) ) {
+		if (
+			$eventPage->getNamespace() !== NS_EVENT ||
+			!in_array( NS_EVENT, $this->config->get( 'CampaignEventsEventNamespaces' ), true ) ||
+			!$this->permissionChecker->userCanEnableRegistration( $this->authority, $eventPage )
+		) {
 			return;
 		}
 

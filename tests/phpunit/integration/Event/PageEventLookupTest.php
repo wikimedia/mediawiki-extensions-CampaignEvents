@@ -35,8 +35,8 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetRegistrationForLocalPage__notInEventNamespace() {
 		$page = new PageIdentityValue( 42, NS_PROJECT, 'Some_title', WikiAwareEntity::LOCAL );
-		$eventLookup = $this->createNoOpMock( IEventLookup::class );
-		$this->assertNull( $this->getLookup( $eventLookup )->getRegistrationForLocalPage( $page ) );
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$this->assertNotNull( $this->getLookup( $eventLookup )->getRegistrationForLocalPage( $page ) );
 	}
 
 	public function testGetRegistrationForLocalPage__translatablePage() {
@@ -58,8 +58,8 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 	public function testGetRegistrationForPage__notInEventNamespace() {
 		$page = new PageIdentityValue( 42, NS_PROJECT, 'Some_title', WikiAwareEntity::LOCAL );
 		$pageProxy = new MWPageProxy( $page, 'DoesNotMatter' );
-		$eventLookup = $this->createNoOpMock( IEventLookup::class );
-		$this->assertNull( $this->getLookup( $eventLookup )->getRegistrationForPage( $pageProxy ) );
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$this->assertNotNull( $this->getLookup( $eventLookup )->getRegistrationForPage( $pageProxy ) );
 	}
 
 	public function testGetRegistrationForPage__translatablePage() {
