@@ -8,6 +8,7 @@
 			"Glaucia Japui Gonçalves",
 			"Re demz",
 			"Stephanyb76",
+			"TheEduGobi",
 			"Tiagoquix",
 			"VasbXBR",
 			"YuriNikolai"
@@ -15,6 +16,7 @@
 	},
 	"campaignevents-desc": "Fornece recursos para organizadores e participantes da campanha.",
 	"nstab-event": "Evento",
+	"group-event-organizer": "Organizadores de eventos",
 	"action-campaignevents-enable-registration": "habilitar inscrições para o evento",
 	"right-campaignevents-enable-registration": "Ativar inscrições para o evento",
 	"action-campaignevents-delete-registration": "excluir inscrições do evento",

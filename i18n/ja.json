@@ -17,6 +17,8 @@
 	},
 	"campaignevents-desc": "キャンペーンの主催者用と参加者用の機能を提供。",
 	"nstab-event": "イベント",
+	"group-event-organizer": "イベント主催者",
+	"grouppage-event-organizer": "{{ns:project}}:イベント主催者",
 	"action-campaignevents-enable-registration": "イベント登録の有効化",
 	"right-campaignevents-enable-registration": "イベント登録を有効化",
 	"action-campaignevents-delete-registration": "イベント登録の削除",
