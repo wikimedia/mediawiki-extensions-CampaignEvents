@@ -305,6 +305,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$language = $this->getLanguage();
 		$organizerLinks = array_map(
 			fn ( Organizer $organizer ) => $this->userLinker->generateUserLinkWithFallback(
+				$this->getContext(),
 				$organizer->getUser(),
 				$language->getCode()
 			),

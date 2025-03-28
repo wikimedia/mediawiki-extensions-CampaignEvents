@@ -5,6 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\Context\IContextSource;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\Linker;
 use MediaWiki\Parser\Sanitizer;
@@ -39,13 +41,14 @@ class UserLinker {
 	/**
 	 * Generates a link to the given user, if it can be found and is visible, throwing an exception otherwise.
 	 *
+	 * @param IContextSource $context
 	 * @param CentralUser $user
 	 * @return string HTML
 	 * @throws CentralUserNotFoundException
 	 * @throws HiddenCentralUserException
 	 * @note When using this method, make sure to add self::MODULE_STYLES to the output.
 	 */
-	public function generateUserLink( CentralUser $user ): string {
+	public function generateUserLink( IContextSource $context, CentralUser $user ): string {
 		$name = $this->centralUserLookup->getUserName( $user );
 		// HACK: Linker::userLink does not really need the user ID (T308000), so don't bother looking it up, which
 		// would be too slow (T345250).
@@ -58,6 +61,7 @@ class UserLinker {
 	 * Like ::generateUserLink, but returns placeholders instead of throwing an exception for users that
 	 * cannot be found or are not visible.
 	 *
+	 * @param IContextSource $context
 	 * @param CentralUser $user
 	 * @param string $langCode Used for localizing placeholders.
 	 * @return string HTML
@@ -68,9 +72,13 @@ class UserLinker {
 	 * cannot be found it will consider it as being deleted.
 	 * @fixme This must be kept in sync with ParticipantsManager.getDeletedOrNotFoundParticipantElement in JS
 	 */
-	public function generateUserLinkWithFallback( CentralUser $user, string $langCode ): string {
+	public function generateUserLinkWithFallback(
+		IContextSource $context,
+		CentralUser $user,
+		string $langCode
+	): string {
 		try {
-			return $this->generateUserLink( $user );
+			return $this->generateUserLink( $context, $user );
 		} catch ( CentralUserNotFoundException $_ ) {
 			$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $langCode );
 			return Html::element(
@@ -99,7 +107,7 @@ class UserLinker {
 	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::userLink (T386821)
 	 */
 	public function getUserPagePath( CentralUser $centralUser ): array {
-		$html = $this->generateUserLink( $centralUser );
+		$html = $this->generateUserLink( RequestContext::getMain(), $centralUser );
 		$attribs = Sanitizer::decodeTagAttributes( $html );
 		return [
 			'path' => $attribs['href'] ?? '',

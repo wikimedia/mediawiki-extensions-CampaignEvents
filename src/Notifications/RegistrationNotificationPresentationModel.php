@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Notifications;
 
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -233,10 +234,11 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 			self::ORGANIZERS_LIMIT
 		);
 		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $this->eventRegistration->getID() );
+		$ctx = RequestContext::getMain();
 		$organizerLinks = [];
 		foreach ( $partialOrganizers as $organizer ) {
 			try {
-				$organizerLinks[] = $this->userLinker->generateUserLink( $organizer->getUser() );
+				$organizerLinks[] = $this->userLinker->generateUserLink( $ctx, $organizer->getUser() );
 			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				// Can't easily include CSS styles in the message, so skip.
 				continue;

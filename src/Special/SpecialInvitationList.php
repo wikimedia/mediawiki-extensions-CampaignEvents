@@ -247,7 +247,7 @@ class SpecialInvitationList extends SpecialPage {
 		$links = [];
 		foreach ( $userIDs as $userID ) {
 			try {
-				$links[] = $this->userLinker->generateUserLink( new CentralUser( $userID ) );
+				$links[] = $this->userLinker->generateUserLink( $this->getContext(), new CentralUser( $userID ) );
 			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				continue;
 			}

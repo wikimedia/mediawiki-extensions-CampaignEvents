@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -171,6 +172,7 @@ class EventDetailsParticipantsModule {
 		);
 		if ( $totalParticipants ) {
 			$items[] = $this->getParticipantsTable(
+				$out,
 				$viewingUser,
 				$canRemoveParticipants,
 				$canEmailParticipants,
@@ -273,6 +275,7 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
+	 * @param IContextSource $context
 	 * @param UserIdentity $viewingUser
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
@@ -285,6 +288,7 @@ class EventDetailsParticipantsModule {
 	 * @return Tag
 	 */
 	private function getParticipantsTable(
+		IContextSource $context,
 		UserIdentity $viewingUser,
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
@@ -311,6 +315,7 @@ class EventDetailsParticipantsModule {
 			)
 		);
 		$table->appendContent( $this->getParticipantRows(
+			$context,
 			$curUserParticipant,
 			$otherParticipants,
 			$canRemoveParticipants,
@@ -454,6 +459,7 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
+	 * @param IContextSource $context
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
 	 * @param bool $canRemoveParticipants
@@ -464,6 +470,7 @@ class EventDetailsParticipantsModule {
 	 * @return Tag
 	 */
 	private function getParticipantRows(
+		IContextSource $context,
 		?Participant $curUserParticipant,
 		array $otherParticipants,
 		bool $canRemoveParticipants,
@@ -475,6 +482,7 @@ class EventDetailsParticipantsModule {
 		$body = new Tag( 'tbody' );
 		if ( $curUserParticipant ) {
 			$body->appendContent( $this->getCurUserParticipantRow(
+				$context,
 				$curUserParticipant,
 				$canRemoveParticipants,
 				$canEmailParticipants,
@@ -487,6 +495,7 @@ class EventDetailsParticipantsModule {
 		foreach ( $otherParticipants as $participant ) {
 			$body->appendContent(
 				$this->getParticipantRow(
+					$context,
 					$participant,
 					$canRemoveParticipants,
 					$canEmailParticipants,
@@ -500,6 +509,7 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
+	 * @param IContextSource $context
 	 * @param Participant $participant
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
@@ -509,6 +519,7 @@ class EventDetailsParticipantsModule {
 	 * @return Tag
 	 */
 	private function getCurUserParticipantRow(
+		IContextSource $context,
 		Participant $participant,
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
@@ -517,6 +528,7 @@ class EventDetailsParticipantsModule {
 		bool $userCanViewNonPIIParticipantsData
 	): Tag {
 		$row = $this->getParticipantRow(
+			$context,
 			$participant,
 			$canRemoveParticipants,
 			$canEmailParticipants,
@@ -529,6 +541,7 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
+	 * @param IContextSource $context
 	 * @param Participant $participant
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
@@ -538,6 +551,7 @@ class EventDetailsParticipantsModule {
 	 * @return Tag
 	 */
 	private function getParticipantRow(
+		IContextSource $context,
 		Participant $participant,
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
@@ -560,6 +574,7 @@ class EventDetailsParticipantsModule {
 		$recipientIsValid = $user !== null && $canEmailParticipants &&
 			$this->userMailer->validateTarget( $user, $performer ) === null;
 		$userLink = $this->userLinker->generateUserLinkWithFallback(
+			$context,
 			$participant->getUser(),
 			$this->language->getCode()
 		);
