@@ -44,7 +44,7 @@
 	ParticipantRegistrationDialog.static.name = 'campaignEventsParticipantRegistrationDialog';
 
 	ParticipantRegistrationDialog.prototype.getSetupProcess = function ( data ) {
-		var title, submitMsg;
+		let title, submitMsg;
 		if ( this.isEdit ) {
 			title = mw.msg( 'campaignevents-eventpage-register-dialog-title-edit' );
 			submitMsg = mw.msg( 'campaignevents-eventpage-register-dialog-save' );
@@ -53,7 +53,7 @@
 			submitMsg = mw.msg( 'campaignevents-eventpage-register-dialog-register' );
 		}
 
-		var actions = [
+		const actions = [
 			{
 				flags: [ 'safe', 'close' ],
 				action: 'cancel'
@@ -83,15 +83,15 @@
 	ParticipantRegistrationDialog.prototype.initialize = function () {
 		ParticipantRegistrationDialog.super.prototype.initialize.apply( this );
 
-		var visibilityFields = this.getVisibilityFields();
-		var visibilityFieldset = new OO.ui.FieldsetLayout( {
+		const visibilityFields = this.getVisibilityFields();
+		const visibilityFieldset = new OO.ui.FieldsetLayout( {
 			items: visibilityFields,
 			label: mw.msg( 'campaignevents-eventpage-register-dialog-visibility-title' )
 		} );
 
-		var fieldsets = [ visibilityFieldset ];
+		const fieldsets = [ visibilityFieldset ];
 
-		var questionFields;
+		let questionFields;
 		if ( this.answersAggregated ) {
 			questionFields = [
 				new OO.ui.FieldLayout(
@@ -106,7 +106,7 @@
 			questionFields = this.eventQuestions.getQuestionFields();
 		}
 		if ( questionFields.length > 0 ) {
-			var questionsFieldset = new OO.ui.FieldsetLayout( {
+			const questionsFieldset = new OO.ui.FieldsetLayout( {
 				items: questionFields,
 				label: mw.msg( 'campaignevents-eventpage-register-dialog-questions-title' ),
 				help: mw.msg( 'campaignevents-eventpage-register-dialog-questions-subtitle' ),
@@ -117,7 +117,7 @@
 			fieldsets.push( this.getDataRetentionFieldset() );
 		}
 
-		var formPanel = new OO.ui.PanelLayout( {
+		const formPanel = new OO.ui.PanelLayout( {
 			content: fieldsets,
 			padded: true,
 			scrollable: false,
@@ -126,7 +126,7 @@
 		this.$body.append( formPanel.$element );
 
 		if ( this.policyMsg !== null ) {
-			var policyPanel = new OO.ui.PanelLayout( {
+			const policyPanel = new OO.ui.PanelLayout( {
 				$content: this.policyMsg,
 				padded: true,
 				scrollable: false,
@@ -143,33 +143,33 @@
 	 * @return {OO.ui.FieldLayout[]}
 	 */
 	ParticipantRegistrationDialog.prototype.getVisibilityFields = function () {
-		var publicIcon = new OO.ui.IconWidget( { icon: 'globe' } ),
+		const publicIcon = new OO.ui.IconWidget( { icon: 'globe' } ),
 			privateIcon = new OO.ui.IconWidget( { icon: 'lock' } );
-		var $publicHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-public' ).parseDom(),
+		const $publicHelpText = mw.message( 'campaignevents-registration-confirmation-helptext-public' ).parseDom(),
 			$privateHelpText = this.groupsCanViewPrivateMessage;
-		var $publicLabel = $( '<div>' )
+		const $publicLabel = $( '<div>' )
 			.addClass( 'ext-campaignevents-registration-visibility-label' )
 			.append( publicIcon.$element, $( '<span>' ).append( $publicHelpText ) );
-		var $privateLabel = $( '<div>' )
+		const $privateLabel = $( '<div>' )
 			.addClass( 'ext-campaignevents-registration-visibility-label' )
 			.append( privateIcon.$element, $( '<span>' ).append( $privateHelpText ) );
 
-		var visibilityHelpLabel = new OO.ui.LabelWidget( {
+		const visibilityHelpLabel = new OO.ui.LabelWidget( {
 				label: this.publicRegistration ? $publicLabel : $privateLabel
 			} ),
 			visibilityHelpField = new OO.ui.FieldLayout( visibilityHelpLabel );
 
-		var visibilityToggle = new OO.ui.ToggleSwitchWidget( {
+		const visibilityToggle = new OO.ui.ToggleSwitchWidget( {
 			value: this.publicRegistration
 		} );
-		var self = this;
-		visibilityToggle.on( 'change', function ( value ) {
+		const self = this;
+		visibilityToggle.on( 'change', ( value ) => {
 			self.publicRegistration = value;
 			visibilityHelpLabel.setLabel( self.publicRegistration ? $publicLabel : $privateLabel );
 			self.updateSize();
 		} );
 
-		var visibilityField = new OO.ui.FieldLayout(
+		const visibilityField = new OO.ui.FieldLayout(
 			visibilityToggle,
 			{
 				classes: [ 'ext-campaignevents-registration-visibility-toggle-field' ],
@@ -186,22 +186,23 @@
 	 * @return {OO.ui.FieldsetLayout}
 	 */
 	ParticipantRegistrationDialog.prototype.getDataRetentionFieldset = function () {
-		var retentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-base' ).escaped();
+		let retentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-base' ).escaped();
 		if ( this.aggregationTimestamp !== null ) {
-			var additionalRetentionMsg,
-				curTimestamp = Math.floor( Date.now() / 1000 ),
+			const curTimestamp = Math.floor( Date.now() / 1000 ),
 				timeRemaining = parseInt( this.aggregationTimestamp ) - curTimestamp;
+
+			let additionalRetentionMsg;
 			if ( timeRemaining < 60 * 60 * 24 ) {
 				additionalRetentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-hours' ).parse();
 			} else {
-				var remainingDays = Math.floor( timeRemaining / ( 60 * 60 * 24 ) );
+				const remainingDays = Math.floor( timeRemaining / ( 60 * 60 * 24 ) );
 				additionalRetentionMsg = mw.message( 'campaignevents-eventpage-register-dialog-retention-days' )
 					.params( [ mw.language.convertNumber( remainingDays ) ] )
 					.parse();
 			}
 			retentionMsg += mw.message( 'word-separator' ).escaped() + additionalRetentionMsg;
 		}
-		var retentionInfoField = new OO.ui.FieldLayout(
+		const retentionInfoField = new OO.ui.FieldLayout(
 			new OO.ui.LabelWidget( {
 				label: new OO.ui.HtmlSnippet( retentionMsg ),
 				classes: [ 'ext-campaignevents-registration-retention-label' ]

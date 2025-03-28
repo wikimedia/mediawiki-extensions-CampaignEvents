@@ -1,7 +1,7 @@
 ( function () {
 	'use strict';
 
-	var RemoveParticipantDialog = require( './RemoveParticipantDialog.js' ),
+	const RemoveParticipantDialog = require( './RemoveParticipantDialog.js' ),
 		ScrollDownObserver = require( './ScrollDownObserver.js' );
 	function ParticipantsManager() {
 		this.init();
@@ -19,7 +19,7 @@
 		this.viewerHasEmail = mw.config.get( 'wgCampaignEventsViewerHasEmail' );
 		this.nonPIIQuestionIDs = mw.config.get( 'wgCampaignEventsNonPIIQuestionIDs' );
 		/* eslint-disable no-jquery/no-global-selector */
-		var $selectAllParticipantsField = $(
+		const $selectAllParticipantsField = $(
 			'.ext-campaignevents-event-details-select-all-participant-checkbox-field'
 		);
 		this.$participantCountLabel = $( '.ext-campaignevents-eventdetails-participants-count-button' );
@@ -68,9 +68,9 @@
 
 	ParticipantsManager.prototype.replaceQuestionsHelp = function () {
 		// eslint-disable-next-line no-jquery/no-global-selector
-		var $nojsButton = $( '.ext-campaignevents-eventdetails-participants-header-questions-help' ),
+		const $nojsButton = $( '.ext-campaignevents-eventdetails-participants-header-questions-help' ),
 			helpText = $nojsButton.find( '.oo-ui-buttonElement-button' ).attr( 'title' );
-		var helpButton = new OO.ui.PopupButtonWidget( {
+		const helpButton = new OO.ui.PopupButtonWidget( {
 			icon: 'info',
 			framed: false,
 			label: mw.msg( 'campaignevents-event-details-header-questions-help-label' ),
@@ -84,7 +84,7 @@
 	};
 
 	ParticipantsManager.prototype.toggleSelectAll = function ( selected ) {
-		for ( var i = 0; i < this.participantCheckboxes.length; i++ ) {
+		for ( let i = 0; i < this.participantCheckboxes.length; i++ ) {
 			this.participantCheckboxes[ i ].setSelected( selected, true );
 		}
 		this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
@@ -97,12 +97,12 @@
 	};
 
 	ParticipantsManager.prototype.installEventListeners = function () {
-		var thisClass = this;
+		const thisClass = this;
 		if ( this.$participantCountLabel.length ) {
 			this.participantCountLabel = OO.ui.ButtonWidget.static.infuse(
 				this.$participantCountLabel
 			);
-			this.participantCountLabel.on( 'click', function () {
+			this.participantCountLabel.on( 'click', () => {
 				thisClass.toggleSelectAll( false );
 				thisClass.updateSelectedLabel();
 			} );
@@ -113,7 +113,7 @@
 			);
 		}
 		if ( thisClass.selectAllParticipantsCheckbox ) {
-			thisClass.selectAllParticipantsCheckbox.on( 'change', function ( selected ) {
+			thisClass.selectAllParticipantsCheckbox.on( 'change', ( selected ) => {
 				thisClass.toggleSelectAll( selected );
 				thisClass.updateSelectedLabel();
 			} );
@@ -124,14 +124,14 @@
 				this.messageParticipantsButton = OO.ui.ButtonWidget.static.infuse(
 					this.$messageParticipantsButton
 				);
-				this.messageParticipantsButton.on( 'click', function () {
+				this.messageParticipantsButton.on( 'click', () => {
 					if ( thisClass.selectedParticipantsAmount === 0 ) {
 						thisClass.selectAllParticipantsCheckbox.setSelected( true );
 					}
 					thisClass.tabPanel.setTabPanel( 'EmailPanel' );
 				} );
 			} else {
-				var popup = {
+				const popup = {
 					$content: $( '<p>' ).append(
 						mw.message( 'campaignevents-event-details-no-organizer-email' ).parse() ),
 					padded: true,
@@ -150,10 +150,10 @@
 		}
 
 		// eslint-disable-next-line no-jquery/no-global-selector
-		var $participantCheckboxes = $( '.ext-campaignevents-event-details-participants-checkboxes' );
+		const $participantCheckboxes = $( '.ext-campaignevents-event-details-participants-checkboxes' );
 		if ( $participantCheckboxes.length ) {
 			$participantCheckboxes.each( function () {
-				var infusedCheckbox = OO.ui.CheckboxInputWidget.static.infuse( $( this ) );
+				const infusedCheckbox = OO.ui.CheckboxInputWidget.static.infuse( $( this ) );
 				infusedCheckbox.on( 'change', function ( selected ) {
 					thisClass.onParticipantCheckboxChange( selected, this );
 				}, [], infusedCheckbox );
@@ -168,11 +168,11 @@
 			this.removeParticipantsButton = OO.ui.ButtonWidget.static.infuse(
 				this.$removeParticipantsButton
 			);
-			this.removeParticipantsButton.on( 'click', function () {
+			this.removeParticipantsButton.on( 'click', () => {
 				thisClass.windowManager.openWindow(
 					thisClass.removeParticipantDialog,
 					{ selectedParticipantsAmount: thisClass.selectedParticipantsAmount }
-				).closed.then( function ( data ) {
+				).closed.then( ( data ) => {
 					if ( data && data.action === 'remove' ) {
 						thisClass.onConfirmRemoval();
 					}
@@ -185,12 +185,12 @@
 
 		this.scrollDownObserver = new ScrollDownObserver(
 			this.$participantsContainer[ 0 ],
-			function () {
+			( () => {
 				// eslint-disable-next-line no-jquery/no-global-selector
 				if ( thisClass.participantsTotal > $( '.ext-campaignevents-details-user-row' ).length ) {
 					thisClass.loadMoreParticipants();
 				}
-			}
+			} )
 		);
 
 		if ( this.$searchParticipantsElement.length ) {
@@ -199,7 +199,7 @@
 			);
 			thisClass.searchParticipantsWidget.on(
 				'change',
-				mw.util.debounce( function ( inputVal ) {
+				mw.util.debounce( ( inputVal ) => {
 					thisClass.usernameFilter = inputVal === '' ? null : inputVal;
 					thisClass.rebuildList();
 				}, 500 )
@@ -208,9 +208,9 @@
 	};
 
 	ParticipantsManager.prototype.afterSelectionChange = function () {
-		var userData = this.participantCheckboxes
-			.map( function ( participantCheckbox ) {
-				var data = participantCheckbox.getData();
+		const userData = this.participantCheckboxes
+			.map( ( participantCheckbox ) => {
+				const data = participantCheckbox.getData();
 				data.userID = parseInt( participantCheckbox.getValue() );
 				return data;
 			} );
@@ -278,7 +278,7 @@
 
 	ParticipantsManager.prototype.onSelectParticipant = function ( checkbox ) {
 		this.selectedParticipantsAmount++;
-		var checkboxValue = parseInt( checkbox.getValue() );
+		const checkboxValue = parseInt( checkbox.getValue() );
 		if ( this.selectedParticipantsAmount === this.participantsTotal ) {
 			this.selectAllParticipantsCheckbox.setSelected( true, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
@@ -298,7 +298,7 @@
 
 	ParticipantsManager.prototype.onDeselectParticipant = function ( checkbox ) {
 		this.selectedParticipantsAmount--;
-		var checkboxValue = parseInt( checkbox.getValue() );
+		const checkboxValue = parseInt( checkbox.getValue() );
 		if ( this.selectedParticipantsAmount === 0 ) {
 			this.selectAllParticipantsCheckbox.setSelected( false, true );
 			this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
@@ -341,7 +341,7 @@
 	};
 
 	ParticipantsManager.prototype.onConfirmRemoval = function () {
-		var thisClass = this;
+		const thisClass = this;
 		new mw.Rest().delete(
 			'/campaignevents/v0/event_registration/' + this.registrationID + '/participants',
 			{
@@ -352,12 +352,12 @@
 				invert_users: this.isSelectionInverted
 			}
 		)
-			.done( function ( response ) {
-				var removedPublic = response.public,
+			.done( ( response ) => {
+				const removedPublic = response.public,
 					removedPrivate = response.private,
 					removedTotal = removedPublic + removedPrivate;
 				thisClass.participantCheckboxes =
-					thisClass.participantCheckboxes.filter( function ( el ) {
+					thisClass.participantCheckboxes.filter( ( el ) => {
 						if ( el.isSelected() ) {
 							el.$element
 								.closest( '.ext-campaignevents-details-user-row' )
@@ -372,7 +372,7 @@
 				thisClass.selectAllParticipantsCheckbox.setIndeterminate( false, true );
 				thisClass.onDeselectAll();
 				thisClass.updateSelectedLabel();
-				var successMsg;
+				let successMsg;
 				thisClass.participantsTotal = thisClass.participantsTotal - removedTotal;
 				if ( thisClass.participantsTotal === 0 ) {
 					successMsg = mw.message(
@@ -412,8 +412,8 @@
 				thisClass.scrollDownObserver.reset();
 				thisClass.showNotification( 'success', successMsg );
 			} )
-			.fail( function ( _err, errData ) {
-				var errorMsg;
+			.fail( ( _err, errData ) => {
+				let errorMsg;
 
 				if ( errData.xhr.responseJSON.messageTranslations ) {
 					errorMsg = errData.xhr.responseJSON.messageTranslations.en;
@@ -450,18 +450,18 @@
 		this.lastParticipantID = null;
 		// Note that the selected participants should persist and are not reset here.
 		this.loadMoreParticipants();
-		var that = this;
+		const that = this;
 		// Unpause the scrolldown observer once everything's settled.
-		setTimeout( function () {
+		setTimeout( () => {
 			that.scrollDownObserver.unpause();
 		}, 0 );
 	};
 
 	ParticipantsManager.prototype.loadMoreParticipants = function () {
-		var thisClass = this;
+		const thisClass = this;
 
 		/* eslint-disable camelcase */
-		var params = {
+		const params = {
 			include_private: this.showPrivateParticipants
 		};
 		if ( thisClass.curUserCentralID !== null ) {
@@ -479,13 +479,13 @@
 			'/campaignevents/v0/event_registration/' + thisClass.registrationID + '/participants',
 			params
 		)
-			.done( function ( data ) {
+			.done( ( data ) => {
 				thisClass.toggleCurUserRow();
 				if ( data.length ) {
 					thisClass.addParticipantsToList( data );
 				}
 			} )
-			.fail( function ( _err, errData ) {
+			.fail( ( _err, errData ) => {
 				mw.log.error( errData.xhr.responseText || 'Unknown error' );
 			} );
 	};
@@ -525,8 +525,8 @@
 	 */
 	ParticipantsManager.prototype.addParticipantsToList = function ( apiResponse ) {
 		this.lastParticipantID = apiResponse[ apiResponse.length - 1 ].participant_id;
-		for ( var i = 0; i < apiResponse.length; i++ ) {
-			var row = this.makeParticipantTableRow( apiResponse[ i ] );
+		for ( let i = 0; i < apiResponse.length; i++ ) {
+			const row = this.makeParticipantTableRow( apiResponse[ i ] );
 			this.$participantsTable.append( row.$element );
 		}
 
@@ -541,11 +541,11 @@
 	 * @return {OO.ui.Element}
 	 */
 	ParticipantsManager.prototype.makeParticipantTableRow = function ( participantData ) {
-		var username = participantData.user_name,
+		const username = participantData.user_name,
 			canReceiveEmail = participantData.user_is_valid_recipient || false,
 			cells = [];
 
-		var $usernameElement;
+		let $usernameElement;
 		if ( username ) {
 			$usernameElement = this.makeUserLink( username, participantData.user_page );
 		} else {
@@ -553,7 +553,7 @@
 		}
 
 		if ( this.showParticipantCheckboxes ) {
-			var loadAsSelected = this.loadParticipantAsSelected( participantData.user_id ),
+			const loadAsSelected = this.loadParticipantAsSelected( participantData.user_id ),
 				newParticipantCheckbox = this.makeUserCheckbox(
 					loadAsSelected,
 					participantData.user_id,
@@ -573,7 +573,7 @@
 					content: [ checkboxField ],
 					classes: [ 'ext-campaignevents-eventdetails-user-row-checkbox' ]
 				} );
-			var that = this;
+			const that = this;
 			newParticipantCheckbox.on( 'change', function ( selected ) {
 				that.onParticipantCheckboxChange( selected, this );
 			}, [], newParticipantCheckbox );
@@ -582,14 +582,14 @@
 			cells.push( checkboxCell );
 		}
 
-		var usernameCell = new OO.ui.Element( {
+		const usernameCell = new OO.ui.Element( {
 			$element: $( '<td>' ),
 			$content: $usernameElement
 		} );
 
 		if ( participantData.private ) {
 			// TODO: Implement gender correctly
-			var privateLabel = mw.message(
+			const privateLabel = mw.message(
 				'campaignevents-event-details-private-participant-label',
 				'unknown'
 			).text();
@@ -622,13 +622,13 @@
 		}
 
 		if ( this.nonPIIQuestionIDs.length ) {
-			var nonPIIAnswers = participantData.non_pii_answers;
+			const nonPIIAnswers = participantData.non_pii_answers;
 
 			if ( typeof nonPIIAnswers === 'object' ) {
 				// TODO - This is implicitly relying on the answers returned by the API
 				// being in the same ordered, improve this code to make it knows what
 				// each column is for
-				for ( var j = 0; j < nonPIIAnswers.length; j++ ) {
+				for ( let j = 0; j < nonPIIAnswers.length; j++ ) {
 					cells.push(
 						new OO.ui.Element( {
 							$element: $( '<td>' ),
@@ -637,7 +637,7 @@
 					);
 				}
 			} else if ( typeof nonPIIAnswers === 'string' ) {
-				var $tableCell = $( '<td>' ).attr( 'colspan', this.nonPIIQuestionIDs.length )
+				const $tableCell = $( '<td>' ).attr( 'colspan', this.nonPIIQuestionIDs.length )
 					.addClass( 'ext-campaignevents-eventdetails-participants-responses-aggregated-notice' )
 					.text( nonPIIAnswers );
 				cells.push( new OO.ui.Element( { $element: $tableCell } ) );
@@ -725,7 +725,7 @@
 	 * @return {jQuery}
 	 */
 	ParticipantsManager.prototype.getDeletedOrNotFoundParticipantElement = function ( userData ) {
-		var $el = $( '<span>' );
+		const $el = $( '<span>' );
 		if ( userData.hidden ) {
 			$el.addClass( 'ext-campaignevents-userlink-hidden' )
 				.text( mw.msg( 'campaignevents-userlink-suppressed-user' ) );

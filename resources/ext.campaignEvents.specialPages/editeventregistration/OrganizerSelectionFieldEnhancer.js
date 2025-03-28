@@ -16,7 +16,8 @@
 
 		this.organizersField.on( 'change', this.setInvalidOrganizers.bind( this ) );
 		if ( ( !this.isEventCreator || !this.eventID ) && this.eventCreatorUsername !== null ) {
-			var organizerItem = this.organizersField.findItemFromData( this.eventCreatorUsername );
+			const organizerItem = this.organizersField
+				.findItemFromData( this.eventCreatorUsername );
 			if ( organizerItem ) {
 				// XXX The card can still be removed by using the menu (i.e., highlight the entry
 				// and hit enter), see T331421.
@@ -30,7 +31,7 @@
 	};
 
 	OrganizerSelectionFieldEnhancer.prototype.setInvalidOrganizers = function () {
-		var organizers = this.organizersField.getValue();
+		const organizers = this.organizersField.getValue();
 		if ( !organizers.length ) {
 			this.usersMultiselectFieldLayout.setErrors( [
 				mw.msg( 'campaignevents-edit-no-organizers' )
@@ -47,7 +48,7 @@
 		} )
 			.done( this.setInvalidOrganizersFromResponse.bind( this ) )
 			.fail(
-				function ( _err, errData ) {
+				( _err, errData ) => {
 					if ( errData.xhr.status === 0 && errData.textStatus === 'abort' ) {
 						// Aborted due to updated input, ignore.
 						return;
@@ -58,9 +59,9 @@
 	};
 
 	OrganizerSelectionFieldEnhancer.prototype.setInvalidOrganizersFromResponse = function ( resp ) {
-		var that = this;
-		var invalidOrganizers = [];
-		resp.query.users.forEach( function ( user ) {
+		const that = this;
+		const invalidOrganizers = [];
+		resp.query.users.forEach( ( user ) => {
 			// Note: the backend will perform a more thorough check than just user rights. A user
 			// might be/ considered valid here, but invalid in the backend (e.g., if they're
 			// blocked). We try to mitigate this by having the server generate a list of known
@@ -77,7 +78,7 @@
 
 		this.usersMultiselectFieldLayout.setErrors( [] );
 		if ( invalidOrganizers.length ) {
-			this.organizersField.items.forEach( function ( item ) {
+			this.organizersField.items.forEach( ( item ) => {
 				if ( invalidOrganizers.indexOf( item.data ) > -1 ) {
 					// TODO This is a bit hacky because the widget is not configured
 					// to display invalid tags. Ideally we would use toggleValid, but

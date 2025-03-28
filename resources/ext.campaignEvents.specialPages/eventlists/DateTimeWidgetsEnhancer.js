@@ -28,8 +28,8 @@
 	 * @param {jQuery} $formRoot
 	 */
 	DateTimeWidgetsEnhancer.prototype.init = function ( $formRoot ) {
-		var self = this;
-		for ( var dateWidgetKey in this.dateWidgets ) {
+		const self = this;
+		for ( const dateWidgetKey in this.dateWidgets ) {
 			this.dateWidgets[ dateWidgetKey ] = this.getInfusedFieldWidget(
 				$formRoot.find( this.dateWidgets[ dateWidgetKey ] )
 			);
@@ -45,7 +45,7 @@
 	};
 
 	DateTimeWidgetsEnhancer.prototype.updateEndDate = function () {
-		var newMin = this.dateWidgets.start.fieldWidget.getValueAsDate();
+		const newMin = this.dateWidgets.start.fieldWidget.getValueAsDate();
 		this.dateWidgets.end.fieldWidget.min.setTime( newMin );
 		if ( newMin > this.dateWidgets.end.fieldWidget.formatter.defaultDate ) {
 			this.dateWidgets.end.fieldWidget.formatter.defaultDate = newMin;

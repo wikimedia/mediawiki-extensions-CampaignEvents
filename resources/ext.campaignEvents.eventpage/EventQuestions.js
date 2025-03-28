@@ -18,22 +18,22 @@
 	};
 
 	EventQuestions.prototype.addQuestions = function () {
-		for ( var questionName in this.questionList ) {
-			var questionData = this.questionList[ questionName ],
+		for ( const questionName in this.questionList ) {
+			const questionData = this.questionList[ questionName ],
 				prevAnswerData = this.prevAnswers[ questionName ],
 				prevAnswer = typeof prevAnswerData !== 'undefined' ? prevAnswerData.value : null;
 
-			var field = this.getQuestionField( questionData, prevAnswer ),
+			const field = this.getQuestionField( questionData, prevAnswer ),
 				curFieldsData = { main: field, other: {} };
 
 			if ( questionData[ 'other-options' ] ) {
-				for ( var showIfVal in questionData[ 'other-options' ] ) {
-					var otherOptionData = questionData[ 'other-options' ][ showIfVal ],
+				for ( const showIfVal in questionData[ 'other-options' ] ) {
+					const otherOptionData = questionData[ 'other-options' ][ showIfVal ],
 						prevOtherAns = String( showIfVal ) === String( prevAnswer ) ?
 							prevAnswerData.other :
 							null;
 
-					var otherOptionField = this.getQuestionField( otherOptionData, prevOtherAns );
+					const otherOptionField = this.getQuestionField( otherOptionData, prevOtherAns );
 					otherOptionField.$element.addClass( 'ext-campaignevents-question-other-option' );
 					this.makeFieldConditionallyVisible( otherOptionField, field, showIfVal );
 					curFieldsData.other[ showIfVal ] = otherOptionField;
@@ -45,12 +45,12 @@
 	};
 
 	EventQuestions.prototype.getQuestionFields = function () {
-		var fields = [];
-		for ( var questionName in this.questionFields ) {
-			var fieldData = this.questionFields[ questionName ];
+		const fields = [];
+		for ( const questionName in this.questionFields ) {
+			const fieldData = this.questionFields[ questionName ];
 			fields.push( fieldData.main );
 			if ( fieldData.other ) {
-				for ( var otherKey in fieldData.other ) {
+				for ( const otherKey in fieldData.other ) {
 					fields.push( fieldData.other[ otherKey ] );
 				}
 			}
@@ -59,11 +59,11 @@
 	};
 
 	EventQuestions.prototype.getParticipantAnswers = function () {
-		var answers = {};
-		for ( var questionName in this.questionFields ) {
-			var fieldData = this.questionFields[ questionName ],
-				questionField = fieldData.main.getField(),
-				ansVal = questionField.getValue();
+		const answers = {};
+		for ( const questionName in this.questionFields ) {
+			const fieldData = this.questionFields[ questionName ],
+				questionField = fieldData.main.getField();
+			let ansVal = questionField.getValue();
 
 			if (
 				questionField instanceof OO.ui.RadioSelectInputWidget ||
@@ -73,7 +73,7 @@
 				ansVal = parseInt( ansVal );
 			}
 
-			var curAnswer = { value: ansVal };
+			const curAnswer = { value: ansVal };
 			if ( fieldData.other && fieldData.other[ ansVal ] ) {
 				curAnswer.other = fieldData.other[ ansVal ].getField().getValue();
 			}
@@ -84,15 +84,15 @@
 	};
 
 	EventQuestions.prototype.resetToDefault = function () {
-		for ( var questionName in this.questionFields ) {
-			var questionSpec = this.questionList[ questionName ],
+		for ( const questionName in this.questionFields ) {
+			const questionSpec = this.questionList[ questionName ],
 				fieldData = this.questionFields[ questionName ],
 				questionField = fieldData.main.getField();
 
 			questionField.setValue( this.emptyDefaultsByType[ questionSpec.type ] );
 			if ( fieldData.other ) {
-				for ( var otherKey in fieldData.other ) {
-					var otherType = questionSpec[ 'other-options' ][ otherKey ].type;
+				for ( const otherKey in fieldData.other ) {
+					const otherType = questionSpec[ 'other-options' ][ otherKey ].type;
 					fieldData.other[ otherKey ].getField().setValue(
 						this.emptyDefaultsByType[ otherType ]
 					);
@@ -125,8 +125,8 @@
 	 * @return {OO.ui.FieldLayout}
 	 */
 	EventQuestions.prototype.getRadioField = function ( questionData, defaultValue ) {
-		var options = [];
-		for ( var optionMessage in questionData.options ) {
+		const options = [];
+		for ( const optionMessage in questionData.options ) {
 			options.push(
 				{
 					data: questionData.options[ optionMessage ].value,
@@ -154,9 +154,9 @@
 	 * @return {OO.ui.FieldLayout}
 	 */
 	EventQuestions.prototype.getSelectField = function ( questionData, defaultValue ) {
-		var options = [];
+		const options = [];
 
-		for ( var optionMessage in questionData.options ) {
+		for ( const optionMessage in questionData.options ) {
 			options.push(
 				{
 					data: questionData.options[ optionMessage ].value,
@@ -206,9 +206,9 @@
 		parentField,
 		showIfVal
 	) {
-		var parentWidget = parentField.getField();
+		const parentWidget = parentField.getField();
 		function visibilityUpdater( val ) {
-			var shouldBeShown = String( val ) === String( showIfVal );
+			const shouldBeShown = String( val ) === String( showIfVal );
 			field.toggle( shouldBeShown );
 		}
 		parentWidget.on( 'change', visibilityUpdater );

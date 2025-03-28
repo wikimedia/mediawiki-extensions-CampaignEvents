@@ -13,8 +13,8 @@
 		this.preloadFromBottom = 50;
 		this.lastTop = 0;
 		this.scrollingEnd = false;
-		var that = this;
-		$( observedElement ).on( 'scroll', function () {
+		const that = this;
+		$( observedElement ).on( 'scroll', () => {
 			if ( !that.paused && that.scrolledToBottom() ) {
 				onScrolledToBottom();
 			}
