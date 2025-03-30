@@ -39,90 +39,94 @@ class CampaignsPageFactoryTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	/**
-	 * @param string $titleString
-	 * @param string|null $expectedExcepClass
-	 * @param TitleParser|null $titleParser
-	 * @param PageStoreFactory|null $pageStoreFactory
-	 * @dataProvider provideTitleStrings
-	 * @covers ::newLocalExistingPageFromString
-	 */
-	public function testNewLocalExistingPageFromString(
-		string $titleString,
-		?string $expectedExcepClass,
-		?TitleParser $titleParser = null,
-		?PageStoreFactory $pageStoreFactory = null
-	) {
-		$factory = $this->getFactory( $titleParser, $pageStoreFactory );
-		if ( $expectedExcepClass !== null ) {
-			$this->expectException( $expectedExcepClass );
-		}
-		$factory->newLocalExistingPageFromString( $titleString );
-		if ( $expectedExcepClass === null ) {
-			$this->addToAssertionCount( 1 );
-		}
+	/** @todo Replace with just `createMock` when TitleParser::parseTitle will be return-typehinted */
+	private function getValidTitleParser(): TitleParser {
+		$titleParser = $this->createMock( TitleParser::class );
+		$titleParser->method( 'parseTitle' )->willReturn( $this->createMock( TitleValue::class ) );
+		return $titleParser;
 	}
 
-	public function provideTitleStrings(): Generator {
-		$validTitleParser = $this->createMock( TitleParser::class );
-		// TODO: Remove this line when TitleParser::parseTitle will be return-typehinted
-		$validTitleParser->method( 'parseTitle' )->willReturn( $this->createMock( TitleValue::class ) );
+	public function testNewLocalExistingPageFromString__valid() {
+		$titleParser = $this->getValidTitleParser();
 		$existingPageStore = $this->createMock( PageStore::class );
 		$existingPageStore->method( 'getPageByName' )->willReturn( $this->createMock( ExistingPageRecord::class ) );
-		$existingPageStoreFactory = $this->createMock( PageStoreFactory::class );
-		$existingPageStoreFactory->method( 'getPageStore' )->willReturn( $existingPageStore );
-		yield 'Valid' => [ 'Foobar', null, $validTitleParser, $existingPageStoreFactory ];
+		$pageStoreFactory = $this->createMock( PageStoreFactory::class );
+		$pageStoreFactory->method( 'getPageStore' )->willReturn( $existingPageStore );
 
-		$malformedStr = 'Foo|bar';
+		$factory = $this->getFactory( $titleParser, $pageStoreFactory );
+		$factory->newLocalExistingPageFromString( 'Foobar' );
+		// Implicit assertion that no exception is thrown.
+		$this->addToAssertionCount( 1 );
+	}
+
+	public function testNewLocalExistingPageFromString__pageNotFound() {
+		$titleParser = $this->getValidTitleParser();
+		$factory = $this->getFactory( $titleParser );
+		$this->expectException( PageNotFoundException::class );
+		$factory->newLocalExistingPageFromString( 'Foobar' );
+	}
+
+	public function testNewLocalExistingPageFromString__malformedTitleString() {
+		$titleString = 'Foo|bar';
 		// TODO: Remove mocking of the exception methods once they'll be return-typehinted.
 		// Also, we can't instantiate it directly due to T287405
 		$malformedTitleExcep = $this->createMock( MalformedTitleException::class );
 		$malformedTitleExcep->method( 'getErrorMessage' )->willReturn( 'Foo' );
 		$malformedTitleExcep->method( 'getErrorMessageParameters' )->willReturn( [] );
-		$malformedTitleParser = $this->createMock( TitleParser::class );
-		$malformedTitleParser->expects( $this->atLeastOnce() )
+		$titleParser = $this->createMock( TitleParser::class );
+		$titleParser->expects( $this->atLeastOnce() )
 			->method( 'parseTitle' )
-			->with( $malformedStr )
+			->with( $titleString )
 			->willThrowException( $malformedTitleExcep );
-		yield 'Malformed' => [ $malformedStr, InvalidTitleStringException::class, $malformedTitleParser ];
 
+		$factory = $this->getFactory( $titleParser );
+		$this->expectException( InvalidTitleStringException::class );
+		$factory->newLocalExistingPageFromString( $titleString );
+	}
+
+	/**
+	 * @dataProvider provideInvalidTitles
+	 * @covers ::newLocalExistingPageFromString
+	 */
+	public function testNewLocalExistingPageFromString__invalidTitle(
+		string $titleString,
+		string $expectedExcepClass,
+		TitleValue $parsedTitle,
+		?PageStoreFactory $pageStoreFactory = null
+	) {
+		$titleParser = $this->createMock( TitleParser::class );
+		$titleParser->expects( $this->atLeastOnce() )
+			->method( 'parseTitle' )
+			->with( $titleString )
+			->willReturn( $parsedTitle );
+
+		$factory = $this->getFactory( $titleParser, $pageStoreFactory );
+		$this->expectException( $expectedExcepClass );
+		$factory->newLocalExistingPageFromString( $titleString );
+	}
+
+	public static function provideInvalidTitles(): Generator {
 		$interwikiPrefix = 'en';
 		$interwikiStr = "$interwikiPrefix:Something";
-		$interwikiTitleParser = $this->createMock( TitleParser::class );
-		$interwikiTitleParser->expects( $this->atLeastOnce() )
-			->method( 'parseTitle' )
-			->with( $interwikiStr )
-			->willReturn( new TitleValue( NS_MAIN, 'Something', '', $interwikiPrefix ) );
 		yield 'Unexpected interwiki' => [
 			$interwikiStr,
 			UnexpectedInterwikiException::class,
-			$interwikiTitleParser
+			new TitleValue( NS_MAIN, 'Something', '', $interwikiPrefix )
 		];
 
 		$section = 'SomeSection';
 		$sectionStr = "Something#$section";
-		$sectionTitleParser = $this->createMock( TitleParser::class );
-		$sectionTitleParser->expects( $this->atLeastOnce() )
-			->method( 'parseTitle' )
-			->with( $sectionStr )
-			->willReturn( new TitleValue( NS_MAIN, 'Something', $section ) );
 		yield 'Unexpected section anchor' => [
 			$sectionStr,
 			UnexpectedSectionAnchorException::class,
-			$sectionTitleParser
+			new TitleValue( NS_MAIN, 'Something', $section )
 		];
 
 		$specialStr = 'Special:Foobar';
-		$specialTitle = $this->createMock( TitleValue::class );
-		$specialTitle->method( 'getNamespace' )->willReturn( NS_SPECIAL );
-		$specialTitleParser = $this->createMock( TitleParser::class );
-		$specialTitleParser->method( 'parseTitle' )->willReturn( $specialTitle );
 		yield 'In the Special: namespace' => [
 			$specialStr,
 			UnexpectedVirtualNamespaceException::class,
-			$specialTitleParser
+			new TitleValue( NS_SPECIAL, $specialStr )
 		];
-
-		yield 'Not found' => [ 'Foobar', PageNotFoundException::class, $validTitleParser ];
 	}
 }

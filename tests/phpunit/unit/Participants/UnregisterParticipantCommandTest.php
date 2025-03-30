@@ -141,14 +141,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		yield 'Not modified' => [ false ];
 	}
 
-	/**
-	 * @param string $expectedMsg
-	 * @param CampaignsCentralUserLookup|null $centralUserLookup
-	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
-	 * @covers ::unregisterUnsafe
-	 * @dataProvider provideUnregisterUnsafeErrors
-	 */
-	public function testUnregisterUnsafe__error(
+	private function doTestUnregisterUnsafeExpectingError(
 		string $expectedMsg,
 		?CampaignsCentralUserLookup $centralUserLookup = null,
 		?TrackingToolEventWatcher $trackingToolEventWatcher = null
@@ -161,25 +154,29 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusMessage( $expectedMsg, $status );
 	}
 
-	public function provideUnregisterUnsafeErrors(): Generator {
+	/** @covers ::unregisterUnsafe */
+	public function testUnregisterUnsafe__userNotGlobal() {
 		$notGlobalLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$notGlobalLookup->method( 'newFromAuthority' )
 			->willThrowException( $this->createMock( UserNotGlobalException::class ) );
-		yield 'User not global' => [
+		$this->doTestUnregisterUnsafeExpectingError(
 			'campaignevents-unregister-need-central-account',
 			$notGlobalLookup
-		];
+		);
+	}
 
+	/** @covers ::unregisterUnsafe */
+	public function testUnregisterUnsafe__invalidTrackingTools() {
 		$trackingToolError = 'some-tracking-tool-error';
 		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
 		$trackingToolWatcher->expects( $this->atLeastOnce() )
 			->method( 'validateParticipantsRemoved' )
 			->willReturn( StatusValue::newFatal( $trackingToolError ) );
-		yield 'Fails tracking tool validation' => [
+		$this->doTestUnregisterUnsafeExpectingError(
 			$trackingToolError,
 			null,
 			$trackingToolWatcher
-		];
+		);
 	}
 
 	/**
@@ -281,34 +278,22 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param string $expectedMsg
-	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @covers ::removeParticipantsUnsafe
-	 * @dataProvider provideRemoveParticipantsUnsafeErrors
 	 */
-	public function testRemoveParticipantsUnsafe__error(
-		string $expectedMsg,
-		?TrackingToolEventWatcher $trackingToolEventWatcher = null
-	) {
-		$cmd = $this->getCommand( null, null, null, $trackingToolEventWatcher );
+	public function testRemoveParticipantsUnsafe__invalidTrackingTools() {
+		$trackingToolError = 'some-tracking-tool-error';
+		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
+		$trackingToolWatcher->expects( $this->atLeastOnce() )
+			->method( 'validateParticipantsRemoved' )
+			->willReturn( StatusValue::newFatal( $trackingToolError ) );
+
+		$cmd = $this->getCommand( null, null, null, $trackingToolWatcher );
 		$status = $cmd->removeParticipantsUnsafe(
 			$this->getValidRegistration(),
 			[],
 			UnregisterParticipantCommand::DO_NOT_INVERT_USERS
 		);
 		$this->assertStatusNotGood( $status );
-		$this->assertStatusMessage( $expectedMsg, $status );
-	}
-
-	public function provideRemoveParticipantsUnsafeErrors(): Generator {
-		$trackingToolError = 'some-tracking-tool-error';
-		$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$trackingToolWatcher->expects( $this->atLeastOnce() )
-			->method( 'validateParticipantsRemoved' )
-			->willReturn( StatusValue::newFatal( $trackingToolError ) );
-		yield 'Fails tracking tool validation' => [
-			$trackingToolError,
-			$trackingToolWatcher
-		];
+		$this->assertStatusMessage( $trackingToolError, $status );
 	}
 }
