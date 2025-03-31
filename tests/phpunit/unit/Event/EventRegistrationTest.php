@@ -23,9 +23,8 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'id' => null,
 			'name' => 'Name',
 			'page' => new MWPageProxy(
-				// XXX: use NS_EVENT when T310375 is resolved
-				new PageIdentityValue( 42, 1728, 'Name', PageIdentityValue::LOCAL ),
-				'Event:Name'
+				new PageIdentityValue( 42, NS_PROJECT, 'Name', PageIdentityValue::LOCAL ),
+				'Project:Name'
 			),
 			'chat' => 'https://chat.example.org',
 			'wikis' => [ 'awiki', 'bwiki' ],

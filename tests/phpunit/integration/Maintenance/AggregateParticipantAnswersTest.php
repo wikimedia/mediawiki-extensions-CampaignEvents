@@ -305,7 +305,7 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 			$randomTS = $dbw->timestamp( '20230101000000' );
 			$baseData = [
 				'event_name' => $eventName,
-				'event_page_namespace' => 1728,
+				'event_page_namespace' => NS_EVENT,
 				'event_page_title' => $eventName,
 				'event_page_prefixedtext' => $eventName,
 				'event_page_wiki' => 'local_wiki',

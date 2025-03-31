@@ -50,10 +50,9 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testRun() {
-		$eventPageStr = 'Event:Foo bar';
-		// NOTE: We can't use the NS_EVENT constant in unit tests
+		$eventPageStr = 'Project:Foo bar';
 		$eventPage = new MWPageProxy(
-			new PageIdentityValue( 1, 1728, 'Foo_bar', WikiAwareEntity::LOCAL ),
+			new PageIdentityValue( 1, NS_PROJECT, 'Foo_bar', WikiAwareEntity::LOCAL ),
 			$eventPageStr
 		);
 		$timezoneName = 'UTC';

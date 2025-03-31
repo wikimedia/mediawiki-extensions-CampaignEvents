@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Event;
+namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
 use Generator;
 use InvalidArgumentException;
@@ -22,20 +22,19 @@ use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Utils\MWTimestamp;
-use MediaWikiIntegrationTestCase;
+use MediaWikiUnitTestCase;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Event\EventFactory
- * @todo Make this a unit test once it's possible to use namespace constants (T310375)
  */
-class EventFactoryTest extends MediaWikiIntegrationTestCase {
+class EventFactoryTest extends MediaWikiUnitTestCase {
 
 	// Feb 27, 2022
 	private const TEST_TIME = 1646000000;
 	private const VALID_TRACKING_TOOL = 'my-tracking-tool';
 	private const VALID_DEFAULT_DATA = [
 		'id' => 42,
-		'page' => 'Event:Some event page title',
+		'page' => 'Project:Some event page title',
 		'chat' => 'https://chaturl.example.org',
 		'wikis' => [ 'aawiki' ],
 		'topics' => [ 'atopic', 'btopic' ],
@@ -98,7 +97,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 		if ( !$campaignsPageFactory ) {
 			$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
 			$page = $this->createMock( ICampaignsPage::class );
-			$page->method( 'getNamespace' )->willReturn( NS_EVENT );
+			$page->method( 'getNamespace' )->willReturn( NS_PROJECT );
 			$campaignsPageFactory->method( 'newLocalExistingPageFromString' )->willReturn( $page );
 		}
 		$trackingToolRegistry = $this->createMock( TrackingToolRegistry::class );
@@ -121,7 +120,7 @@ class EventFactoryTest extends MediaWikiIntegrationTestCase {
 			$questionsRegistry,
 			$wikiLookup,
 			$topicLookup,
-			$allowedNamespaces ?? [ NS_EVENT ]
+			$allowedNamespaces ?? [ NS_PROJECT ]
 		);
 	}
 

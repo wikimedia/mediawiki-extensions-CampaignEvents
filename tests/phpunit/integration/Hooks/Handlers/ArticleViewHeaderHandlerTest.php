@@ -49,10 +49,12 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 		$exists = true;
 		$doesNotExist = false;
 
-		yield 'Mainspace article' => [ NS_MAIN, $exists, true ];
-		yield 'Project page' => [ NS_PROJECT, $exists, true ];
-		yield 'Event page, does not exist' => [ NS_EVENT, $doesNotExist, false ];
-		yield 'Event page, exists' => [ NS_EVENT, $exists, true ];
+		yield 'Mainspace, does not exist' => [ NS_MAIN, $doesNotExist, false ];
+		yield 'Mainspace, exists' => [ NS_MAIN, $exists, true ];
+		yield 'Project namespace, does not exist' => [ NS_PROJECT, $doesNotExist, false ];
+		yield 'Project namespace, exists' => [ NS_PROJECT, $exists, true ];
+		yield 'Event namespace, does not exist' => [ NS_EVENT, $doesNotExist, false ];
+		yield 'Event namespace, exists' => [ NS_EVENT, $exists, true ];
 	}
 
 	private function getMockArticle( int $ns, bool $exists ): Article {

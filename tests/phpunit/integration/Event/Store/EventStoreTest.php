@@ -193,7 +193,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	public function testEventWithMoreThanOneAddress() {
 		$eventData = [
 			'event_name' => 'test multiple address',
-			'event_page_namespace' => 1728,
+			'event_page_namespace' => NS_PROJECT,
 			'event_page_title' => 'test',
 			'event_page_prefixedtext' => 'test',
 			'event_page_wiki' => 'local_wiki',

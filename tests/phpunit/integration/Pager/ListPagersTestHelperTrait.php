@@ -24,7 +24,7 @@ trait ListPagersTestHelperTrait {
 		$curTS = $dbw->timestamp();
 		$row = [
 			'event_name' => self::$EVENT_NAME,
-			'event_page_namespace' => 1728,
+			'event_page_namespace' => NS_EVENT,
 			'event_page_title' => self::$EVENT_NAME,
 			'event_page_prefixedtext' => 'Event:' . self::$EVENT_NAME,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
