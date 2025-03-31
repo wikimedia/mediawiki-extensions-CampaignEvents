@@ -13,11 +13,11 @@ class MyEventsPage extends Page {
 	}
 
 	get closeRegistrationButton() {
-		return $( '.ext-campaignevents-events-table-cell-manage' ).$( '*=Close' );
+		return this.manageEventMenuButton.$( '*=Close registration' );
 	}
 
 	get deleteRegistrationButton() {
-		return $( '.ext-campaignevents-events-table-cell-manage' ).$( '*=Delete' );
+		return this.manageEventMenuButton.$( '*=Delete event' );
 	}
 
 	get notification() {
