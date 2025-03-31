@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Lydie maliki"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Evenement moko te na ID oyo",
+	"campaignevents-rest-enable-registration-permission-denied": "Ozali na ndingisa te ya ko activer ba inscriptions ya événement.",
+	"campaignevents-rest-edit-page-nonlocal": "Bokomisi likambo oyo efungolamaki na wiki oyo elandi mpe esengeli kobongisama kuna: $1.",
+	"campaignevents-rest-delete-already-deleted": "Enregistrement ya événement oyo esi elongolami",
+	"campaignevents-rest-user-not-found": "Mosaleli moko te oyo azali na ID central oyo.",
+	"campaignevents-rest-get-registration-deleted": "Enregistrement ya événement oyo elongolamaki.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Paramètre 'user_ids' esengeli kozala ensemble ya ba ids ya mosaleli, to null (mpo na kolongola basaleli nionso) .",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Svp bolongola ba participants na $1, wiki esika événement esalemaki.",
+	"campaignevents-rest-list-participants-empty-filter": "The username filter, if specified, must be a non-empty string.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Ozali na ndingisa te ya kotala bato oyo bakomisaki nkombo na bango moko mpo na molulu oyo.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> esengeli kozala ensemble ya ba kombo ya basaleli mpe ekoki kozala pamba te",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Svp botia babongisi na $1, wiki esika molulu esalemaki.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Ozali kosangana na molulu oyo te.",
+	"campaignevents-rest-register-invalid-answer": "Eyano ya mabe na motuna $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Tosengi osilisa bokomisi nkombo na yo ya molulu na $1, wiki esika molulu yango esalemaki.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Svp bolongola bokomisi bokomisi na bino ya molulu na $1, wiki esika molulu esalemaki.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Svp email na ba participants na $1, wiki esika événement esalemaki."
+}

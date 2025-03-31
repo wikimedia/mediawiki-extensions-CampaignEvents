@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Andikan Efiok Eduok",
+			"Orokbest1"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Adinam adiehe ID ami ibagha",
+	"campaignevents-rest-enable-registration-permission-denied": "Owo uyiaha nyaha yak afo adie unen aditongho registrations adinam mi",
+	"campaignevents-rest-edit-page-nonlocal": "Ema etongo adikene ñwana adinam ami ke ikpeghe ake wiki dien owo ekeme adi wed mkpó ke esit:$1",
+	"campaignevents-rest-delete-already-deleted": "Ema esioho  adinam registration ami esio",
+	"campaignevents-rest-user-not-found": "Owo adiehe ID ami ibagha",
+	"campaignevents-rest-get-registration-deleted": "Ema esioho usin anyịn̄ andinam ami esio",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "mme mkpo nse owondiehe ID ana ana asangha ukemukemye owo adiehe ID ado ididoho ntro añye na nkagha (ekeme uked owo esio):",
+	"campaignevents-rest-get-registration-info-notparticipant": "Afo uwanake  ke adinam ami"
+}

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Alien333",
+			"Antimuonium",
 			"BlueCamille",
 			"Eihel",
 			"Escargot bleu",
@@ -350,7 +351,7 @@
 	"campaignevents-userlink-deleted-user": "utilisateur supprimé",
 	"campaignevents-registration-confirmation-helptext-private-with-groups": "<strong>Inscription privée :</strong> Votre nom d'utilisateur dans la liste des participants n'est visible que par les organisateurs de l'événement et les membres {{PLURAL:$2|du groupe|des groupes}} d'utilisateurs : $1 . Vos contributions pendant l'événement peuvent être exclues par les organisateurs du [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tableau de bord des programmes et événements] ou d'autres outils de collecte de statistiques.",
 	"campaignevents-registration-confirmation-helptext-private-no-groups": "<strong>Inscription privée :</strong> seuls les organisateurs de l’événement peuvent voir votre nom d’utilisateur dans la liste des participants. Vos contributions lors de l’événement peuvent être exclues par les organisateurs au [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tableau de bord des programmes et événements] ou à d’autres outils pour collecter des statistiques.",
-	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription publique :</strong> afficher votre nom d’utilisateur dans la liste publique des participants. Vos contributions lors de l’événement peuvent être incluses par les organisateurs au [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tablea e bord Programmes et événements] ou à d’autres outils pour collecter des statistiques.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription publique :</strong> afficher votre nom d’utilisateur dans la liste publique des participants. Vos contributions lors de l’événement peuvent être incluses par les organisateurs au [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tableau de bord Programmes et événements] ou à d’autres outils pour collecter des statistiques.",
 	"campaignevents-registration-confirmation-toggle-private": "Inscription privée",
 	"campaignevents-registration-confirmation-toggle-public": "Inscription publique",
 	"campaignevents-register-confirmation-radio-private": "Inscription privée",
@@ -555,5 +556,5 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Prochains événements",
 	"campaignevents-allevents-label-upcoming-events-description": "Événements à venir : événements qui commencent dans les dates sélectionnées",
 	"campaignevents-allevents-label-ongoing-events-title": "Événements en cours",
-	"campaignevents-allevents-label-ongoing-events-description": "Événements en cours: événements qui commencent avant mais se poursuivent dans les dates sélectionnées"
+	"campaignevents-allevents-label-ongoing-events-description": "Événements en cours : événements qui commencent avant mais se poursuivent dans les dates sélectionnées"
 }
