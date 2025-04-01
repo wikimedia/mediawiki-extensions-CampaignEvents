@@ -4,51 +4,53 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Widget;
 
-use InvalidArgumentException;
-use OOUI\IconElement;
-use OOUI\LabelElement;
-use OOUI\Tag;
-use OOUI\Widget;
+use MediaWiki\Html\Html;
 
 /**
  * A widget combining an icon and some labelled information. The label is invisible and used as `title`
- * of the icon. Somewhat similar to MessageWidget, but with different semantics.
- * @note When using this widget, you should load the `ext.campaignEvents.TextWithIconWidget.less` stylesheet.
+ * of the icon. The icon itself gets the "subtle" aspect (gray-ish).
+ * Somewhat similar to MessageWidget, but with different semantics.
+ * @note When using this widget, you should load the `ext.campaignEvents.TextWithIconWidget.less` stylesheet. If you
+ * intend to use an icon that isn't already used somewhere, you need to add an explicit class definition to the
+ * stylesheet, due to T388458. Icon names should follow the canonical Codex names.
  */
-class TextWithIconWidget extends Widget {
-	use IconElement;
-	use LabelElement;
+class TextWithIconWidget {
+	/** @param-taint $rawContent exec_html */
+	public static function build(
+		string $icon,
+		string $label,
+		string $rawContent,
+		array $extraClasses = []
+	): string {
+		$contentElement = Html::rawElement(
+			'span',
+			[ 'class' => 'ext-campaignevents-textwithicon-widget-content' ],
+			$rawContent
+		);
 
-	/**
-	 * @inheritDoc
-	 * CSS classes can be added to the icon via $config['icon_classes'].
-	 */
-	private function __construct( array $config = [] ) {
-		if ( !isset( $config['content'] ) || !isset( $config['label'] ) ) {
-			throw new InvalidArgumentException( 'Must specify content and label' );
-		}
-		$content = new Tag( 'span' );
-		$content->appendContent( $config['content'] );
-		$content->addClasses( [ 'ext-campaignevents-textwithicon-widget-content' ] );
-		$config['content'] = $content;
+		// XXX: Codex's CSS-only icons have quite limited capabilities. Ideally, the label would be specified as part
+		// of the element, and we wouldn't have to define all the icon classes. See T388458.
+		$labelElement = Html::element(
+			'span',
+			[ 'class' => 'ext-campaignevents-textwithicon-widget-label' ],
+			$label
+		);
 
-		$config['invisibleLabel'] = true;
+		$iconElement = Html::element(
+			'span',
+			[
+				'class' => [
+					"ext-campaignevents-textwithicon-widget-icon-$icon",
+					'ext-campaignevents-textwithicon-widget-icon-subtle'
+				],
+				'title' => $label
+			]
+		);
 
-		parent::__construct( $config );
-
-		$this->initializeLabelElement( $config );
-		$this->initializeIconElement( $config );
-
-		$this->getIconElement()->setAttributes( [
-			'title' => $config['label'],
-		] )->addClasses( $config['icon_classes'] ?? [] );
-
-		$this->addClasses( [ 'ext-campaignevents-textwithicon-widget' ] );
-		// Prepending because the parent constructor has already appended the content
-		$this->prependContent( [ $this->icon, $this->label ] );
-	}
-
-	public static function build( array $config ): string {
-		return ( new self( $config ) )->__toString();
+		return Html::rawElement(
+			'div',
+			[ 'class' => [ 'ext-campaignevents-textwithicon-widget', ...$extraClasses ] ],
+			$iconElement . $labelElement . $contentElement
+		);
 	}
 }

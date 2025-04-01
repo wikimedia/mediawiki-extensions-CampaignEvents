@@ -1,13 +1,84 @@
+@import 'mediawiki.skin.variables.less';
+@import 'mediawiki.mixins.less';
+
 .ext-campaignevents-textwithicon-widget {
-	position: relative; /* This helps with the positioning of icons, which use absolute positioning */
-
-	.oo-ui-iconElement-icon {
-		// Align icons to the start of the text.
-		background-position-y: top;
+	/* Start list of icon classes. Ideally we shouldn't need to do this. T388458 */
+	/* stylelint-disable rule-empty-line-before */
+	&-icon-map-pin {
+		.cdx-mixin-css-icon( @cdx-icon-map-pin );
 	}
-}
+	&-icon-clock {
+		.cdx-mixin-css-icon( @cdx-icon-clock );
+	}
+	&-icon-user-group {
+		.cdx-mixin-css-icon( @cdx-icon-user-group );
+	}
+	&-icon-user-rights {
+		.cdx-mixin-css-icon( @cdx-icon-user-rights );
+	}
+	&-icon-tag {
+		.cdx-mixin-css-icon( @cdx-icon-tag );
+	}
+	&-icon-logo-wikimedia-commons {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikimedia-commons );
+	}
+	&-icon-logo-meta-wiki {
+		.cdx-mixin-css-icon( @cdx-icon-logo-meta-wiki );
+	}
+	&-icon-logo-wikibooks {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikibooks );
+	}
+	&-icon-logo-wikidata {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikidata );
+	}
+	&-icon-logo-wikifunctions {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikifunctions );
+	}
+	&-icon-logo-wikinews {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikinews );
+	}
+	&-icon-logo-wikiquote {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikiquote );
+	}
+	&-icon-logo-wikisource {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikisource );
+	}
+	&-icon-logo-wikispecies {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikispecies );
+	}
+	&-icon-logo-wikiversity {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikiversity );
+	}
+	&-icon-logo-wikivoyage {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikivoyage );
+	}
+	&-icon-logo-wiktionary {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wiktionary );
+	}
+	&-icon-logo-wikimedia {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikimedia );
+	}
+	&-icon-logo-media-wiki {
+		.cdx-mixin-css-icon( @cdx-icon-logo-media-wiki );
+	}
+	&-icon-logo-wikipedia {
+		.cdx-mixin-css-icon( @cdx-icon-logo-wikipedia );
+	}
+	/* End list of icon classes */
+	/* stylelint-enable rule-empty-line-before */
 
-.ext-campaignevents-textwithicon-widget-content {
-	margin-left: 2em;
-	display: block;
+	&-icon-subtle {
+		opacity: @opacity-icon-subtle;
+	}
+
+	&-label {
+		// XXX: Ideally the CSS-only Icon component would support this natively. T388458
+		.mixin-screen-reader-text();
+	}
+
+	&-content {
+		display: inline-block;
+		vertical-align: top;
+		margin-left: @spacing-50;
+	}
 }

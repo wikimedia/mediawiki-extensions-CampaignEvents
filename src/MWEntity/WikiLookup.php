@@ -82,27 +82,27 @@ class WikiLookup {
 	 * @return string
 	 */
 	public function getWikiIcon( $wikiIDs ): string {
-		$defaultIcon = 'logoWikimedia';
+		$defaultIcon = 'logo-wikimedia';
 		if ( $wikiIDs === EventRegistration::ALL_WIKIS ) {
 			return $defaultIcon;
 		}
 		// The 'wiki' is order sensitive as it is a final fall-through case
 		$wikiIcons = [
-			'commonswiki' => 'logoWikimediaCommons',
-			'metawiki' => 'logoMetaWiki',
-			'wikibooks' => 'logoWikibooks',
-			'wikidatawiki' => 'logoWikidata',
-			'wikifunctionswiki' => 'logoWikifunctions',
-			'wikinews' => 'logoWikinews',
-			'wikiquote' => 'logoWikiquote',
-			'wikisource' => 'logoWikisource',
-			'specieswiki' => 'logoWikispecies',
-			'wikiversity' => 'logoWikiversity',
-			'wikivoyage' => 'logoWikivoyage',
-			'wiktionary' => 'logoWiktionary',
-			'officewiki' => 'logoWikimedia',
-			'mediawikiwiki' => 'logoMediaWiki',
-			'wiki' => 'logoWikipedia',
+			'commonswiki' => 'logo-wikimedia-commons',
+			'metawiki' => 'logo-meta-wiki',
+			'wikibooks' => 'logo-wikibooks',
+			'wikidatawiki' => 'logo-wikidata',
+			'wikifunctionswiki' => 'logo-wikifunctions',
+			'wikinews' => 'logo-wikinews',
+			'wikiquote' => 'logo-wikiquote',
+			'wikisource' => 'logo-wikisource',
+			'specieswiki' => 'logo-wikispecies',
+			'wikiversity' => 'logo-wikiversity',
+			'wikivoyage' => 'logo-wikivoyage',
+			'wiktionary' => 'logo-wiktionary',
+			'officewiki' => 'logo-wikimedia',
+			'mediawikiwiki' => 'logo-media-wiki',
+			'wiki' => 'logo-wikipedia',
 		];
 		$matchedSuffixes = [];
 		foreach ( $wikiIDs as $dbname ) {
