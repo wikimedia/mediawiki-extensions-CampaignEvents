@@ -2,6 +2,11 @@
 @import 'mediawiki.mixins.less';
 
 .ext-campaignevents-textwithicon-widget {
+	// Specify position for the accessibility label to work properly, as it uses absolute positioning. Not doing this
+	// would result in content overflow bugs when trying to set a maximum height on the Special:AllEvents content, for
+	// example when the page is transcluded.
+	position: relative;
+
 	/* Start list of icon classes. Ideally we shouldn't need to do this. T388458 */
 	/* stylelint-disable rule-empty-line-before */
 	&-icon-map-pin {
