@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -25,19 +25,13 @@ class PermissionChecker {
 	private OrganizersStore $organizersStore;
 	private PageAuthorLookup $pageAuthorLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
-	private IPermissionsLookup $permissionsLookup;
+	private MWPermissionsLookup $permissionsLookup;
 
-	/**
-	 * @param OrganizersStore $organizersStore
-	 * @param PageAuthorLookup $pageAuthorLookup
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param IPermissionsLookup $permissionsLookup
-	 */
 	public function __construct(
 		OrganizersStore $organizersStore,
 		PageAuthorLookup $pageAuthorLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
-		IPermissionsLookup $permissionsLookup
+		MWPermissionsLookup $permissionsLookup
 	) {
 		$this->organizersStore = $organizersStore;
 		$this->pageAuthorLookup = $pageAuthorLookup;

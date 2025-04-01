@@ -9,9 +9,9 @@ use MediaWiki\Block\Block;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -37,22 +37,16 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	private const LOCAL_EVENT = true;
 	private const FOREIGN_EVENT = false;
 
-	/**
-	 * @param OrganizersStore|null $organizersStore
-	 * @param PageAuthorLookup|null $pageAuthorLookup
-	 * @param IPermissionsLookup|null $permissionsLookup
-	 * @return PermissionChecker
-	 */
 	private function getPermissionChecker(
 		?OrganizersStore $organizersStore = null,
 		?PageAuthorLookup $pageAuthorLookup = null,
-		?IPermissionsLookup $permissionsLookup = null
+		?MWPermissionsLookup $permissionsLookup = null
 	): PermissionChecker {
 		return new PermissionChecker(
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
 			$pageAuthorLookup ?? $this->createMock( PageAuthorLookup::class ),
 			$this->createMock( CampaignsCentralUserLookup::class ),
-			$permissionsLookup ?? $this->createMock( IPermissionsLookup::class )
+			$permissionsLookup ?? $this->createMock( MWPermissionsLookup::class )
 		);
 	}
 
@@ -95,8 +89,8 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		bool $isNamed,
 		$userRights,
 		bool $isSitewideBlocked
-	): IPermissionsLookup {
-		$lookup = $this->createMock( IPermissionsLookup::class );
+	): MWPermissionsLookup {
+		$lookup = $this->createMock( MWPermissionsLookup::class );
 		$lookup->method( 'userIsNamed' )->willReturn( $isNamed );
 		$lookup->method( 'userHasRight' )
 			->willReturnCallback( static fn ( $user, $right ) =>
@@ -177,7 +171,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$userRights = null,
 		?bool $isBlocked = null
 	) {
-		$permissionsLookup = $this->createMock( IPermissionsLookup::class );
+		$permissionsLookup = $this->createMock( MWPermissionsLookup::class );
 		if ( $isNamed !== null ) {
 			$permissionsLookup->expects( $this->atLeastOnce() )->method( 'userIsNamed' )->willReturn( $isNamed );
 		}
@@ -379,7 +373,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$userRights,
 		bool $eventIsLocal,
 		?bool $isStoredOrganizer = null,
-		?IPermissionsLookup $permissionsLookup = null
+		?MWPermissionsLookup $permissionsLookup = null
 	) {
 		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
 		$event = $this->mockExistingEventRegistration( $eventIsLocal );

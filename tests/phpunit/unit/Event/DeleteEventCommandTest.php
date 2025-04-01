@@ -10,8 +10,8 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -48,7 +48,7 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 				$this->createMock( OrganizersStore::class ),
 				$this->createMock( PageAuthorLookup::class ),
 				$this->createMock( CampaignsCentralUserLookup::class ),
-				$this->createMock( IPermissionsLookup::class )
+				$this->createMock( MWPermissionsLookup::class )
 			),
 			$trackingToolEventWatcher,
 			$this->createMock( EventPageCacheUpdater::class )
