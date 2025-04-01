@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jessephu"
+		]
+	},
+	"campaignevents-rest-event-not-found": "\nKo si iṣẹlẹ pẹlu ID yii.",
+	"campaignevents-rest-enable-registration-permission-denied": "A o gba o laye lati wonu eventi lai towobowe",
+	"campaignevents-rest-edit-page-nonlocal": "Iforukọsilẹ iṣẹlẹ yii ṣiṣẹ lori wiki atẹle ati pe o yẹ ki o ṣatunkọ nibẹ: $1 .",
+	"campaignevents-rest-delete-already-deleted": "Ìforúkosílè ètò yìí ti paare",
+	"campaignevents-rest-user-not-found": "Ko si olumulo ID aarin yii.",
+	"campaignevents-rest-get-registration-deleted": "Iforukọsilẹ eto yii ti paarẹ.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Paramita 'user_ids' gbọdọ jẹ titobi ti ids olumulo, tabi asan (lati yọ gbogbo awọn olumulo kuro)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Jọwọ yọ awọn olukopa kuro lori $1 , wiki nibiti iṣẹlẹ ti ṣẹda.",
+	"campaignevents-rest-list-participants-empty-filter": " orukọ olumulo, ti o ba jẹ pato, ko gbọdọ ṣofo.",
+	"campaignevents-rest-list-participants-cannot-see-private": "A ko fun ọ ni aye lati wo awọn olukopa ti o forukọsilẹ ni ikọkọ fun ito yii.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> gbọdọ jẹ akojọpọ awọn orukọ olumulo ati pe ko le jẹ ofo",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Jọwọ yọ awọn olukopa kuro lori $1 , wiki nibitk eto ti ṣẹda.",
+	"campaignevents-rest-get-registration-info-notparticipant": "O ko kopa ninu eto yii.",
+	"campaignevents-rest-register-invalid-answer": "Idahun aiṣedeede si ibeere $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Jọwọ pari iforukọsilẹ eto rẹ lori $1 , wiki nibiti eto naa ti ṣẹda.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Jọwọ pa iforukọsilẹ eto rẹ lori $1 , wiki nibiti eto naa ti ṣẹda.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Jọwọ meli awọn olukopa lori $1 , wiki nibiti eto ti ṣẹda."
+}

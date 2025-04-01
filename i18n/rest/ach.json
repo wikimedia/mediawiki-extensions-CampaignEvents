@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Emma Oruk"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Pe tye yub mo ki ID eni",
+	"campaignevents-rest-enable-registration-permission-denied": "Pe ki yee ni iwek coyo nying i yub ni.",
+	"campaignevents-rest-edit-page-nonlocal": "Coyo nying pi yub man ki yabo i wiki ma lubo ni ki omyera ki lok iye: $1 .",
+	"campaignevents-rest-delete-already-deleted": "Coyo nying i yub man dong ki kwanyo woko."
+}

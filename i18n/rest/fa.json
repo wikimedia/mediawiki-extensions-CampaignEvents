@@ -5,6 +5,21 @@
 			"کهربا"
 		]
 	},
+	"campaignevents-rest-event-not-found": "رویدادی با این شناسه وجود ندارد.",
+	"campaignevents-rest-enable-registration-permission-denied": "شما مجاز به فعال‌سازی ثبت نام رویداد نیستید.",
+	"campaignevents-rest-edit-page-nonlocal": "این ثبت نام رویداد در ویکی زیر فعال شده است و باید در همان‌جا ویرایش شود: $1.",
+	"campaignevents-rest-delete-already-deleted": "این ثبت نام رویداد از پیش حذف شده است.",
 	"campaignevents-rest-user-not-found": "کاربر $1 موجود نیست.",
-	"campaignevents-rest-delete-event-nonlocal-error-message": "Please delete your event registration on $1, the wiki where the event was created.\nلطفا ثبت رویداد خود را در ویکی حذف کنید"
+	"campaignevents-rest-get-registration-deleted": "این ثبت نام رویداد حذف شده است.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "پارامتر «user_ids» باید آرایه‌ای از شناسهٔ کاربران یا null (برای حذف تمام کاربران) باشد",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "لطفاً شرکت‌کنندگان را در $1، در ویکی‌ای که رویداد در آن ایجاد شده است، حذف کنید.",
+	"campaignevents-rest-list-participants-empty-filter": "پالایهٔ نام کاربری، در صورت وارد شدن، باید یک رشتهٔ غیر خالی باشد.",
+	"campaignevents-rest-list-participants-cannot-see-private": "شما مجاز به مشاهدهٔ شرکت‌کنندگانی که به‌صورت خصوصی در این رویداد ثبت نام کرده‌اند، نیستید.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> باید آرایه‌ای از نام‌های کاربری باشد و نمی‌تواند خالی باشد",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "لطفاً برگزارکنندگان را در $1، ویکی‌ای که رویداد در آن ایجاد شده است، تنظیم کنید.",
+	"campaignevents-rest-get-registration-info-notparticipant": "شما در این رویداد شرکت نکرده‌اید.",
+	"campaignevents-rest-register-invalid-answer": "پاسخ نامعتبر به پرسش $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "لطفاً ثبت نام خود در رویداد را در $1، ویکی‌ای که رویداد در آن ایجاد شده است، کامل کنید.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Please delete your event registration on $1, the wiki where the event was created.\nلطفا ثبت رویداد خود را در ویکی حذف کنید",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "لطفاً در $1، ویکی‌ای که رویداد در آن ایجاد شده است، به شرکت‌کنندگان ایمیل بفرستید."
 }

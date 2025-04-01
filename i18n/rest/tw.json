@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kojo Owusu 2020",
+			"Peacesyk"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Adeyɛ biara nni hɔ a ɛwɔ saa ID yi.",
+	"campaignevents-rest-enable-registration-permission-denied": "Wɔmma wo kwan sɛ wobɛma dwumadi ntwerɛ din ayɛ adwuma.",
+	"campaignevents-rest-edit-page-nonlocal": "Saa dwumadi yi dintwerɛ ɛyɛ adwuma wɔ wiki a edidi so yi na yɛ nsakraɛ nso wɔ hɔ:$1",
+	"campaignevents-rest-delete-already-deleted": "Wɔapopa dwumadi yi ho dintwerɛ dedaw.",
+	"campaignevents-rest-user-not-found": "Obiara nni hɔ a ɔwɔ ahyɛnsodi yi a ɛdi akotene.",
+	"campaignevents-rest-get-registration-deleted": "Woapopa saa dwumadi dintwerɛ yi.",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "\"Mepa wo kyɛw, yi wɔn a wɔkyerɛw wɔn ho fi $1, wiki a wɔbɔɔ ɛyɛ no ho.\"",
+	"campaignevents-rest-list-participants-empty-filter": "\"Deɛ wɔde yɛɛ username hwehwɛbea no, sɛ wɔkyerɛ no a, ɛsɛ sɛ ɛyɛ nsɛmma a ɛnnyɛ dane.\"",
+	"campaignevents-rest-list-participants-cannot-see-private": "\"Wo nni ho abodin sɛ wobehu wɔn a wɔkyerɛw wɔn ho prɛvate ama saa ɛyɛ yi.\"",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "\"Mepa wo kyɛw, fa akyɛdeɛfo hyɛ $1, wiki a wɔbɔɔ ɛyɛ no ho.\"",
+	"campaignevents-rest-get-registration-info-notparticipant": "Wo mmfa wo ho nka saa asɛm yi.",
+	"campaignevents-rest-register-invalid-answer": "Mmuaeɛ a ɛmfata a wɔde ma asɛmbisa $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "\"Mepa wo kyɛw, wie w'abakɔsɛm akyerɛwtohɔ wɔ $1, wiki a wɔbɔɔ abakɔsɛm no so.\"",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "\"Mepa wo kyɛw, yi w’abakɔsɛm akyerɛwtohɔ afi $1, wiki a wɔbɔɔ abakɔsɛm no so.\"",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "\n\n\"Mepa wo kyɛw, fa email soma kɔma wɔn a wɔkyerɛw wɔn ho wɔ $1, wiki a wɔbɔɔ ɛyɛ no ho.\""
+}
