@@ -20,18 +20,16 @@ use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\User\User;
-use MediaWikiIntegrationTestCase;
+use MediaWikiUnitTestCase;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PageMoveAndDeleteHandler
- * @covers ::__construct
- * @todo Make this a unit test once it's possible to use namespace constants (T310375)
+ * @covers \MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PageMoveAndDeleteHandler
  */
-class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
+class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 	public function getHandler(
 		?PageEventLookup $pageEventLookup = null,
 		?DeleteEventCommand $deleteEventCommand = null,
-		array $allowedNamespaces = [ NS_EVENT ]
+		array $allowedNamespaces = [ NS_PROJECT ]
 	): PageMoveAndDeleteHandler {
 		return new PageMoveAndDeleteHandler(
 			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),
@@ -47,7 +45,6 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @dataProvider providePageDelete
-	 * @covers ::onPageDeleteComplete
 	 */
 	public function testOnPageDeleteComplete(
 		bool $expectsEventDeletion,
@@ -84,7 +81,6 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @dataProvider provideOnTitleMove
-	 * @covers ::onTitleMove
 	 */
 	public function testOnTitleMove(
 		bool $hasRegistration,
@@ -118,13 +114,13 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiIntegrationTestCase {
 
 	public static function provideOnTitleMove(): Generator {
 		yield 'No registration, to Permitted namespace' => [ false, NS_PROJECT, null, [ NS_PROJECT ] ];
-		yield 'No registration, to non-Permitted namespace' => [ false, NS_PROJECT, null, [ NS_EVENT ] ];
-		yield 'Has registration, to Permitted namespace' => [ true, NS_EVENT, null, [ NS_EVENT ] ];
+		yield 'No registration, to non-Permitted namespace' => [ false, NS_PROJECT, null, [ NS_MAIN ] ];
+		yield 'Has registration, to Permitted namespace' => [ true, NS_PROJECT, null, [ NS_PROJECT ] ];
 		yield 'Has registration, to non-Permitted namespace' => [
 			true,
-			NS_PROJECT,
+			NS_MAIN,
 			'campaignevents-error-move-eventpage-namespace-disallowed',
-			[ NS_EVENT ]
+			[ NS_PROJECT ]
 		];
 	}
 }
