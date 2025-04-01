@@ -15,8 +15,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -170,7 +170,7 @@ class EventPageDecorator {
 		}
 	}
 
-	private function maybeAddEnableRegistrationHeader( ICampaignsPage $eventPage ): void {
+	private function maybeAddEnableRegistrationHeader( MWPageProxy $eventPage ): void {
 		if (
 			$eventPage->getNamespace() !== NS_EVENT ||
 			!in_array( NS_EVENT, $this->config->get( 'CampaignEventsEventNamespaces' ), true ) ||

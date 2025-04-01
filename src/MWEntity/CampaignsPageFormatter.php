@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Title\TitleFormatter;
-use UnexpectedValueException;
 
 /**
  * This class formats a page, providing some string representation of it.
@@ -20,10 +19,7 @@ class CampaignsPageFormatter {
 		$this->titleFormatter = $titleFormatter;
 	}
 
-	public function getText( ICampaignsPage $page ): string {
-		if ( $page instanceof MWPageProxy ) {
-			return $this->titleFormatter->getText( $page->getPageIdentity() );
-		}
-		throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
+	public function getText( MWPageProxy $page ): string {
+		return $this->titleFormatter->getText( $page->getPageIdentity() );
 	}
 }

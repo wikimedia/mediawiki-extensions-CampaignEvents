@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\WikiMap\WikiMap;
 use stdClass;
 use Wikimedia\Rdbms\IExpression;
@@ -22,7 +22,7 @@ use Wikimedia\Rdbms\Subquery;
  * @property CampaignsPageFactory $campaignsPageFactory;
  */
 trait EventPagerTrait {
-	/** @var array<int,ICampaignsPage> Cache of event page objects, keyed by event ID */
+	/** @var array<int,MWPageProxy> Cache of event page objects, keyed by event ID */
 	private array $eventPageCache = [];
 
 	/**
@@ -156,7 +156,7 @@ trait EventPagerTrait {
 	private function doExtraPreprocessing( IResultWrapper $result ): void {
 	}
 
-	private function getEventPageFromRow( stdClass $eventRow ): ICampaignsPage {
+	private function getEventPageFromRow( stdClass $eventRow ): MWPageProxy {
 		$eventID = $eventRow->event_id;
 		$eventPageCache = $this->eventPageCache;
 		$campaignsPageFactory = $this->campaignsPageFactory;

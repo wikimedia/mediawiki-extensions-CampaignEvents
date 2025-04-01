@@ -10,8 +10,8 @@ use Exception;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedSectionAnchorException;
@@ -102,7 +102,7 @@ class EventFactory {
 	 * @param string|null $deletionTimestamp In the TS_MW format
 	 * @param bool $isTestEvent
 	 * @param int $validationFlags
-	 * @param ICampaignsPage|null $previousPage Used together with the validation flag
+	 * @param MWPageProxy|null $previousPage Used together with the validation flag
 	 *   {@link self::VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE}. If the requested event page is the same as
 	 *   this page, validation of the namespace is skipped.
 	 *
@@ -132,7 +132,7 @@ class EventFactory {
 		?string $deletionTimestamp,
 		bool $isTestEvent,
 		int $validationFlags = self::VALIDATE_ALL,
-		?ICampaignsPage $previousPage = null
+		?MWPageProxy $previousPage = null
 	): EventRegistration {
 		$res = StatusValue::newGood();
 
@@ -223,8 +223,8 @@ class EventFactory {
 			throw new InvalidEventDataException( $res );
 		}
 
-		/** @var ICampaignsPage $campaignsPage */
-		'@phan-var ICampaignsPage $campaignsPage';
+		/** @var MWPageProxy $campaignsPage */
+		'@phan-var MWPageProxy $campaignsPage';
 
 		return new EventRegistration(
 			$id,
@@ -256,13 +256,13 @@ class EventFactory {
 	 *
 	 * @param string $pageTitleStr
 	 * @param int $validationFlags Combination of self::VALIDATE_* constants.
-	 * @param ICampaignsPage|null $previousPage
-	 * @return StatusValue Fatal if invalid, good otherwise and with an ICampaignsPage as value.
+	 * @param MWPageProxy|null $previousPage
+	 * @return StatusValue Fatal if invalid, good otherwise and with an MWPageProxy as value.
 	 */
 	private function validatePage(
 		string $pageTitleStr,
 		int $validationFlags,
-		?ICampaignsPage $previousPage
+		?MWPageProxy $previousPage
 	): StatusValue {
 		$pageTitleStr = trim( $pageTitleStr );
 		if ( $pageTitleStr === '' ) {

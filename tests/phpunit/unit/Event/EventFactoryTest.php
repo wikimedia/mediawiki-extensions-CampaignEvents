@@ -11,8 +11,8 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedInterwikiException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UnexpectedVirtualNamespaceException;
@@ -96,7 +96,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	): EventFactory {
 		if ( !$campaignsPageFactory ) {
 			$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
-			$page = $this->createMock( ICampaignsPage::class );
+			$page = $this->createMock( MWPageProxy::class );
 			$page->method( 'getNamespace' )->willReturn( NS_PROJECT );
 			$campaignsPageFactory->method( 'newLocalExistingPageFromString' )->willReturn( $page );
 		}
@@ -398,7 +398,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	public function testNewEvent__namespaceNotallowed() {
 		$allowedNamespaces = [ NS_PROJECT ];
 		$disallowedNamespacePageStr = 'This page is not in the allowed project namespace';
-		$disallowedNamespacePageObj = $this->createMock( ICampaignsPage::class );
+		$disallowedNamespacePageObj = $this->createMock( MWPageProxy::class );
 		$disallowedNamespacePageObj->method( 'getNamespace' )->willReturn( NS_MAIN );
 		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
 		$campaignsPageFactory->expects( $this->atLeastOnce() )
@@ -425,14 +425,14 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	) {
 		$allowedNamespaces = [ NS_PROJECT ];
 
-		$previousPage = $this->createMock( ICampaignsPage::class );
+		$previousPage = $this->createMock( MWPageProxy::class );
 		$previousPage->method( 'getNamespace' )->willReturn( NS_MAIN );
 
 		if ( $pageUnchanged ) {
 			$newPage = clone $previousPage;
 			$newPage->method( 'equals' )->with( $previousPage )->willReturn( true );
 		} else {
-			$newPage = $this->createMock( ICampaignsPage::class );
+			$newPage = $this->createMock( MWPageProxy::class );
 			$newPage->method( 'getNamespace' )->willReturn( NS_MAIN );
 			$newPage->method( 'equals' )->with( $previousPage )->willReturn( false );
 		}

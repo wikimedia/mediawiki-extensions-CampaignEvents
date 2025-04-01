@@ -9,7 +9,6 @@ use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
-use UnexpectedValueException;
 
 class PageURLResolver {
 	public const SERVICE_NAME = 'CampaignEventsPageURLResolver';
@@ -31,10 +30,7 @@ class PageURLResolver {
 	 * Returns the URL of a page. This could be a local URL (for local pages) or a full URL (for
 	 * foreign wiki pages).
 	 */
-	public function getUrl( ICampaignsPage $page ): string {
-		if ( !$page instanceof MWPageProxy ) {
-			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
-		}
+	public function getUrl( MWPageProxy $page ): string {
 		$cacheKey = $this->getCacheKey( $page );
 		if ( !isset( $this->urlCache[$cacheKey] ) ) {
 			$wikiID = $page->getWikiId();
@@ -48,10 +44,7 @@ class PageURLResolver {
 	/**
 	 * Returns the full URL of a page. Unlike getUrl, this is guaranteed to be the full URL even for local pages.
 	 */
-	public function getFullUrl( ICampaignsPage $page ): string {
-		if ( !$page instanceof MWPageProxy ) {
-			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
-		}
+	public function getFullUrl( MWPageProxy $page ): string {
 		$cacheKey = $this->getCacheKey( $page );
 		if ( !isset( $this->fullUrlCache[$cacheKey] ) ) {
 			$wikiID = $page->getWikiId();
@@ -66,10 +59,7 @@ class PageURLResolver {
 	 * Returns the canonical URL of a page. This should be used for things like email notifications.
 	 * @see Title::getCanonicalURL()
 	 */
-	public function getCanonicalUrl( ICampaignsPage $page ): string {
-		if ( !$page instanceof MWPageProxy ) {
-			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
-		}
+	public function getCanonicalUrl( MWPageProxy $page ): string {
 		$cacheKey = $this->getCacheKey( $page );
 		if ( !isset( $this->canonicalUrlCache[$cacheKey] ) ) {
 			$wikiID = $page->getWikiId();
@@ -88,7 +78,7 @@ class PageURLResolver {
 		return $this->canonicalUrlCache[$cacheKey];
 	}
 
-	private function getCacheKey( ICampaignsPage $page ): string {
+	private function getCacheKey( MWPageProxy $page ): string {
 		// No need to actually convert it to the wiki ID if it's local.
 		$wikiIDStr = $page->getWikiId() === WikiAwareEntity::LOCAL ? '' : $page->getWikiId();
 		return $wikiIDStr . '|' . $page->getPrefixedText();
