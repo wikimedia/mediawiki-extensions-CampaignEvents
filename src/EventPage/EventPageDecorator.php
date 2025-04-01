@@ -15,7 +15,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
@@ -96,7 +95,7 @@ class EventPageDecorator {
 	private Config $config;
 
 	private Language $language;
-	private ICampaignsAuthority $authority;
+	private MWAuthorityProxy $authority;
 	private UserIdentity $viewingUser;
 	private OutputPage $out;
 	private ITextFormatter $msgFormatter;

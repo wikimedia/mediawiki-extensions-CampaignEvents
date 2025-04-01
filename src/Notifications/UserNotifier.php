@@ -6,7 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Notifications;
 use InvalidArgumentException;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\Notifications\Model\Event;
 use MediaWiki\Title\Title;
@@ -24,10 +24,10 @@ class UserNotifier {
 	}
 
 	/**
-	 * @param ICampaignsAuthority $performer
+	 * @param MWAuthorityProxy $performer
 	 * @param ExistingEventRegistration $event
 	 */
-	public function notifyRegistration( ICampaignsAuthority $performer, ExistingEventRegistration $event ): void {
+	public function notifyRegistration( MWAuthorityProxy $performer, ExistingEventRegistration $event ): void {
 		if ( $this->isEchoLoaded ) {
 			$eventPage = $event->getPage();
 			if ( !$eventPage instanceof MWPageProxy ) {

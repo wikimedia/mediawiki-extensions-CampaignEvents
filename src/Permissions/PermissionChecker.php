@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -48,21 +48,14 @@ class PermissionChecker {
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring named account,
 	 * unblock, and rights.
-	 * @param ICampaignsAuthority $performer
-	 * @return bool
 	 */
-	public function userCanEnableRegistrations( ICampaignsAuthority $performer ): bool {
+	public function userCanEnableRegistrations( MWAuthorityProxy $performer ): bool {
 		return $performer->isNamed()
 			&& $performer->hasRight( self::ENABLE_REGISTRATIONS_RIGHT )
 			&& !$performer->isSitewideBlocked();
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @param ICampaignsPage $eventPage
-	 * @return bool
-	 */
-	public function userCanEnableRegistration( ICampaignsAuthority $performer, ICampaignsPage $eventPage ): bool {
+	public function userCanEnableRegistration( MWAuthorityProxy $performer, ICampaignsPage $eventPage ): bool {
 		if ( !$this->userCanEnableRegistrations( $performer ) ) {
 			return false;
 		}
@@ -90,12 +83,7 @@ class PermissionChecker {
 			!$this->permissionsLookup->userIsSitewideBlocked( $username );
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @return bool
-	 */
-	public function userCanEditRegistration( ICampaignsAuthority $performer, ExistingEventRegistration $event ): bool {
+	public function userCanEditRegistration( MWAuthorityProxy $performer, ExistingEventRegistration $event ): bool {
 		if (
 			!$event->isOnLocalWiki() ||
 			(
@@ -117,13 +105,8 @@ class PermissionChecker {
 		return false;
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @return bool
-	 */
 	public function userCanDeleteRegistration(
-		ICampaignsAuthority $performer,
+		MWAuthorityProxy $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $event->isOnLocalWiki() && (
@@ -132,11 +115,7 @@ class PermissionChecker {
 			);
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @return bool
-	 */
-	public function userCanDeleteRegistrations( ICampaignsAuthority $performer ): bool {
+	public function userCanDeleteRegistrations( MWAuthorityProxy $performer ): bool {
 		return $performer->isNamed() &&
 			$performer->hasRight( self::DELETE_REGISTRATION_RIGHT ) &&
 			!$performer->isSitewideBlocked();
@@ -145,44 +124,29 @@ class PermissionChecker {
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring named account
 	 * and unblock.
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @return bool
 	 */
-	public function userCanRegisterForEvent( ICampaignsAuthority $performer, ExistingEventRegistration $event ): bool {
+	public function userCanRegisterForEvent( MWAuthorityProxy $performer, ExistingEventRegistration $event ): bool {
 		// TODO Do we need another user right for this?
 		return $event->isOnLocalWiki() && $performer->isNamed() && !$performer->isSitewideBlocked();
 	}
 
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own way of requiring a named account.
-	 * @param ICampaignsAuthority $performer
-	 * @return bool
 	 */
-	public function userCanCancelRegistration( ICampaignsAuthority $performer ): bool {
+	public function userCanCancelRegistration( MWAuthorityProxy $performer ): bool {
 		// Note that blocked users can cancel their own registration, see T322380.
 		return $performer->isNamed();
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @return bool
-	 */
 	public function userCanRemoveParticipants(
-		ICampaignsAuthority $performer,
+		MWAuthorityProxy $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $this->userCanEditRegistration( $performer, $event );
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @return bool
-	 */
 	public function userCanViewPrivateParticipants(
-		ICampaignsAuthority $performer,
+		MWAuthorityProxy $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $this->userCanEditRegistration( $performer, $event ) ||
@@ -192,37 +156,23 @@ class PermissionChecker {
 				&& !$performer->isSitewideBlocked() );
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @return bool
-	 */
-	public function userCanViewSensitiveEventData( ICampaignsAuthority $performer ): bool {
+	public function userCanViewSensitiveEventData( MWAuthorityProxy $performer ): bool {
 		return !$performer->isSitewideBlocked();
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @return bool
-	 */
 	public function userCanViewNonPIIParticipantsData(
-		ICampaignsAuthority $performer,
+		MWAuthorityProxy $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $this->userCanEditRegistration( $performer, $event );
 	}
 
-	/**
-	 * @param ICampaignsAuthority $performer
-	 * @param ExistingEventRegistration $event
-	 * @return bool
-	 */
-	public function userCanEmailParticipants( ICampaignsAuthority $performer, ExistingEventRegistration $event ): bool {
+	public function userCanEmailParticipants( MWAuthorityProxy $performer, ExistingEventRegistration $event ): bool {
 		return $this->userCanEditRegistration( $performer, $event )
 			&& $performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );
 	}
 
-	public function userCanUseInvitationLists( ICampaignsAuthority $performer ): bool {
+	public function userCanUseInvitationLists( MWAuthorityProxy $performer ): bool {
 		return $this->userCanOrganizeEvents( $performer->getName() ) ||
 			$this->userCanEnableRegistrations( $performer );
 	}

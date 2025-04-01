@@ -11,7 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
@@ -80,14 +80,14 @@ class EditEventCommand {
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsAuthority $performer
+	 * @param MWAuthorityProxy $performer
 	 * @param string[] $organizerUsernames These must be local usernames
 	 * @return StatusValue If good, the value shall be the ID of the event. Will be a PermissionStatus for
 	 *   permissions-related errors. This can be a fatal status, or a non-fatal status with warnings.
 	 */
 	public function doEditIfAllowed(
 		EventRegistration $registration,
-		ICampaignsAuthority $performer,
+		MWAuthorityProxy $performer,
 		array $organizerUsernames
 	): StatusValue {
 		$permStatus = $this->authorizeEdit( $registration, $performer );
@@ -99,7 +99,7 @@ class EditEventCommand {
 
 	private function authorizeEdit(
 		EventRegistration $registration,
-		ICampaignsAuthority $performer
+		MWAuthorityProxy $performer
 	): PermissionStatus {
 		$registrationID = $registration->getID();
 		$isCreation = $registrationID === null;
@@ -116,14 +116,14 @@ class EditEventCommand {
 
 	/**
 	 * @param EventRegistration $registration
-	 * @param ICampaignsAuthority $performer
+	 * @param MWAuthorityProxy $performer
 	 * @param string[] $organizerUsernames These must be local usernames
 	 * @return StatusValue If good, the value shall be the ID of the event. Else this can be a fatal status, or a
 	 *   non-fatal status with warnings.
 	 */
 	public function doEditUnsafe(
 		EventRegistration $registration,
-		ICampaignsAuthority $performer,
+		MWAuthorityProxy $performer,
 		array $organizerUsernames
 	): StatusValue {
 		$existingRegistrationForPage = $this->pageEventLookup->getRegistrationForPage( $registration->getPage() );

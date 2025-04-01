@@ -10,7 +10,6 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
@@ -105,13 +104,13 @@ class ListParticipantsHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @param ICampaignsAuthority $authority
+	 * @param MWAuthorityProxy $authority
 	 * @param ExistingEventRegistration $event
 	 * @param Participant[] $participants
 	 * @return array
 	 */
 	private function getResponseData(
-		ICampaignsAuthority $authority,
+		MWAuthorityProxy $authority,
 		ExistingEventRegistration $event,
 		array $participants
 	): array {
