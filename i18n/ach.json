@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"authors": [
+			"Emma Oruk"
+		]
+	},
+	"campaignevents-desc": "Miiyo jami bot luyub yub me bolo kwir ki jo ma tye ka nywako.",
+	"nstab-event": "Yuba",
+	"group-event-organizer": "Luyub yub",
+	"group-event-organizer-member": "{{GENDER:$1| layub yub}}",
+	"grouppage-event-organizer": "{{ns:project}}:Luyub yub",
+	"action-campaignevents-enable-registration": "Mi twero bot lucoo nying pi yub",
+	"right-campaignevents-enable-registration": "Mi twero bot lucoo nying pi yub ni",
+	"action-campaignevents-delete-registration": "kwany coyo nying pi yub ni",
+	"right-campaignevents-delete-registration": "Kwany coyo nying pi yub ni",
+	"action-campaignevents-organize-events": "yubu yub",
+	"action-campaignevents-view-private-participants": "nen dano ma tye ka nywako i yub ma pe ki ngeyo",
+	"right-campaignevents-view-private-participants": "Nen dano ma tye ka nywako i yub ma pe ki ngeyo",
+	"campaignevents-error-invalid-id": "Gin ma otimme ni omyera obed namba maber.",
+	"campaignevents-error-empty-title": "Co nying pot karatac me yub ni.",
+	"campaignevents-error-invalid-title": "Nying pot karatac me yub ni pi tye kakare: $1 .",
+	"campaignevents-error-invalid-title-interwiki": "Nyut pot karatac me yub i wiki me kabedo ni.",
+	"campaignevents-error-page-not-found": "Pe tye yub mo ki ID eni",
+	"campaignevents-error-page-namespace-not-allowed": "pot karatac me yub ni omyera obed i kin nying ma ki yer",
+	"campaignevents-error-page-with-section": "Pot karatac me yub ni omyera pe obed ki nying dul mo.",
+	"campaignevents-error-too-many-wikis": "Ket wel ma malo loyo {{PLURAL:$1| wiki acel| $1 wikis}}.",
+	"campaignevents-error-invalid-wikis": "Wiki ID ma lubo ni pe ki ngeyo: $1 .",
+	"campaignevents-error-too-many-topics": "Ket wel ma malo loyo {{PLURAL:$1| wi lok acel| $1 wi lok}}.",
+	"campaignevents-error-invalid-topics": "Wi lok ma lubo ni pe ki ngeyo: $1 .",
+	"campaignevents-error-invalid-chat-url": "Ket URL me lok ma tye kakare.",
+	"campaignevents-error-trackingtool-without-eventid": "Mii lanyut me gin ma otimme i kom gin ma ki miini me lubo."
+}
