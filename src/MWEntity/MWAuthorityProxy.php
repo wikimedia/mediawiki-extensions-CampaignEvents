@@ -6,7 +6,11 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Permissions\Authority;
 
-class MWAuthorityProxy implements ICampaignsAuthority {
+/**
+ * Wrapper around Authority. Note that the authority is associated to the current request context,
+ * and should not be used for users other than the one performing the action.
+ */
+class MWAuthorityProxy {
 	private Authority $authority;
 
 	public function __construct( Authority $authority ) {
@@ -17,9 +21,6 @@ class MWAuthorityProxy implements ICampaignsAuthority {
 		return $this->authority->isAllowed( $right );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function isSitewideBlocked(): bool {
 		$block = $this->authority->getBlock();
 		return $block && $block->isSitewide();

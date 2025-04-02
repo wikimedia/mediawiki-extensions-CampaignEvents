@@ -14,9 +14,9 @@ use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidEventPageException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Page\PageIdentityValue;
@@ -68,7 +68,7 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 		$permChecker->method( 'userCanUseInvitationLists' )->willReturn( $canUseInvitationLists );
 		$generator = $this->getGenerator( $permChecker );
 		$worklist = $this->createMock( Worklist::class );
-		$performer = $this->createMock( ICampaignsAuthority::class );
+		$performer = $this->createMock( MWAuthorityProxy::class );
 		$res = $generator->createIfAllowed( 'Name', null, $worklist, $performer );
 		if ( $expectedError ) {
 			$this->assertStatusNotGood( $res );
@@ -129,7 +129,7 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 				new PageIdentityValue( 42, NS_MAIN, 'Some_title', 'some_wiki' )
 			]
 		] );
-		$performer = $this->createMock( ICampaignsAuthority::class );
+		$performer = $this->createMock( MWAuthorityProxy::class );
 
 		$invitationListStore = $this->createMock( InvitationListStore::class );
 		$jobQueueGroup = $this->createMock( JobQueueGroup::class );

@@ -10,7 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
@@ -101,7 +101,7 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param ExistingEventRegistration $event
 	 * @param UserIdentity $viewingUser
-	 * @param ICampaignsAuthority $authority
+	 * @param MWAuthorityProxy $authority
 	 * @param bool $isOrganizer
 	 * @param bool $canEmailParticipants
 	 * @param bool $isLocalWiki
@@ -114,7 +114,7 @@ class EventDetailsParticipantsModule {
 	public function createContent(
 		ExistingEventRegistration $event,
 		UserIdentity $viewingUser,
-		ICampaignsAuthority $authority,
+		MWAuthorityProxy $authority,
 		bool $isOrganizer,
 		bool $canEmailParticipants,
 		bool $isLocalWiki,
@@ -282,7 +282,7 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canViewNonPIIParticipantsData
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
-	 * @param ICampaignsAuthority $authority
+	 * @param MWAuthorityProxy $authority
 	 * @param ExistingEventRegistration $event
 	 * @param int[] $nonPIIQuestionIDs
 	 * @return Tag
@@ -295,7 +295,7 @@ class EventDetailsParticipantsModule {
 		bool $canViewNonPIIParticipantsData,
 		?Participant $curUserParticipant,
 		array $otherParticipants,
-		ICampaignsAuthority $authority,
+		MWAuthorityProxy $authority,
 		ExistingEventRegistration $event,
 		array $nonPIIQuestionIDs
 	): Tag {
@@ -369,7 +369,7 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param ExistingEventRegistration $event
-	 * @param ICampaignsAuthority $authority
+	 * @param MWAuthorityProxy $authority
 	 * @param array $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
@@ -378,7 +378,7 @@ class EventDetailsParticipantsModule {
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
 		ExistingEventRegistration $event,
-		ICampaignsAuthority $authority,
+		MWAuthorityProxy $authority,
 		array $nonPIIQuestionIDs,
 		bool $userCanViewNonPIIParticipantsData
 	): Tag {

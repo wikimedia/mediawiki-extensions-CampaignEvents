@@ -9,7 +9,6 @@ use MediaWiki\Block\Block;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
@@ -62,14 +61,14 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param bool $isTemp
 	 * @param bool $isBlocked
 	 * @param array|string $userRights Array of rights, or self::ALL_RIGHTS to indicate all.
-	 * @return ICampaignsAuthority
+	 * @return MWAuthorityProxy
 	 */
 	private function makeAuthority(
 		bool $isLoggedIn,
 		bool $isTemp,
 		bool $isBlocked,
 		$userRights
-	): ICampaignsAuthority {
+	): MWAuthorityProxy {
 		if ( $isTemp ) {
 			$user = new UserIdentityValue( 42, '*Unregistered1' );
 		} elseif ( $isLoggedIn ) {

@@ -8,8 +8,8 @@ use JobQueueGroup;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidEventPageException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\PermissionStatus;
@@ -51,14 +51,14 @@ class InvitationListGenerator {
 	 * @param string $name
 	 * @param string|null $eventPage
 	 * @param Worklist $worklist
-	 * @param ICampaignsAuthority $performer
+	 * @param MWAuthorityProxy $performer
 	 * @return StatusValue If good, the value shall be the ID of the invitation list.
 	 */
 	public function createIfAllowed(
 		string $name,
 		?string $eventPage,
 		Worklist $worklist,
-		ICampaignsAuthority $performer
+		MWAuthorityProxy $performer
 	): StatusValue {
 		$permStatus = $this->authorizeCreation( $performer );
 		if ( !$permStatus->isGood() ) {
@@ -67,7 +67,7 @@ class InvitationListGenerator {
 		return $this->createUnsafe( $name, $eventPage, $worklist, $performer );
 	}
 
-	private function authorizeCreation( ICampaignsAuthority $performer ): PermissionStatus {
+	private function authorizeCreation( MWAuthorityProxy $performer ): PermissionStatus {
 		if ( !$this->permissionChecker->userCanUseInvitationLists( $performer ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-invitation-list-not-allowed' );
 		}
@@ -78,14 +78,14 @@ class InvitationListGenerator {
 	 * @param string $name
 	 * @param string|null $eventPage
 	 * @param Worklist $worklist
-	 * @param ICampaignsAuthority $performer
+	 * @param MWAuthorityProxy $performer
 	 * @return StatusValue If good, the value shall be the ID of the invitation list.
 	 */
 	public function createUnsafe(
 		string $name,
 		?string $eventPage,
 		Worklist $worklist,
-		ICampaignsAuthority $performer
+		MWAuthorityProxy $performer
 	): StatusValue {
 		if ( trim( $name ) === '' ) {
 			return StatusValue::newFatal( 'campaignevents-invitation-list-error-empty-name' );
@@ -115,10 +115,10 @@ class InvitationListGenerator {
 
 	/**
 	 * @param string $eventPage
-	 * @param ICampaignsAuthority $performer
+	 * @param MWAuthorityProxy $performer
 	 * @return StatusValue Can have fatal errors, or if good, the value shall be the event ID.
 	 */
-	public function validateEventPage( string $eventPage, ICampaignsAuthority $performer ): StatusValue {
+	public function validateEventPage( string $eventPage, MWAuthorityProxy $performer ): StatusValue {
 		try {
 			$page = $this->pageFactory->newLocalExistingPageFromString( $eventPage );
 		} catch ( InvalidEventPageException $_ ) {

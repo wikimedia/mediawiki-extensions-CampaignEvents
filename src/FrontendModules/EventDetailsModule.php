@@ -8,7 +8,7 @@ use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -112,7 +112,7 @@ class EventDetailsModule {
 
 	/**
 	 * @param UserIdentity $viewingUser
-	 * @param ICampaignsAuthority $authority
+	 * @param MWAuthorityProxy $authority
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param string|false $wikiID
@@ -125,7 +125,7 @@ class EventDetailsModule {
 	 */
 	public function createContent(
 		UserIdentity $viewingUser,
-		ICampaignsAuthority $authority,
+		MWAuthorityProxy $authority,
 		bool $isOrganizer,
 		bool $isParticipant,
 		$wikiID,
@@ -242,7 +242,7 @@ class EventDetailsModule {
 
 	/**
 	 * @param UserIdentity $viewingUser
-	 * @param ICampaignsAuthority $authority
+	 * @param MWAuthorityProxy $authority
 	 * @param OutputPage $out
 	 * @param LinkRenderer $linkRenderer
 	 * @param bool $isOrganizer
@@ -254,7 +254,7 @@ class EventDetailsModule {
 	 */
 	private function getInfoColumn(
 		UserIdentity $viewingUser,
-		ICampaignsAuthority $authority,
+		MWAuthorityProxy $authority,
 		OutputPage $out,
 		LinkRenderer $linkRenderer,
 		bool $isOrganizer,
@@ -498,7 +498,7 @@ class EventDetailsModule {
 	}
 
 	/**
-	 * @param ICampaignsAuthority $performer
+	 * @param MWAuthorityProxy $performer
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param bool $isLocalWiki
@@ -511,7 +511,7 @@ class EventDetailsModule {
 	 * @return Tag
 	 */
 	private function getLocationSection(
-		ICampaignsAuthority $performer,
+		MWAuthorityProxy $performer,
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,

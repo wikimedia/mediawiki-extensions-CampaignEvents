@@ -4,7 +4,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Message\Message;
 use MediaWiki\Output\OutputPage;
@@ -17,7 +17,7 @@ use OOUI\MessageWidget;
  * @method void requireNamedUser($reasonMsg = '', $titleMsg = '', $alwaysRedirectToLoginPage = true)
  */
 trait InvitationFeatureAccessTrait {
-	public function checkInvitationFeatureAccess( OutputPage $out, ICampaignsAuthority $mwAuthority ): bool {
+	public function checkInvitationFeatureAccess( OutputPage $out, MWAuthorityProxy $mwAuthority ): bool {
 		if ( !$this->getConfig()->get( 'CampaignEventsEnableEventInvitation' ) ) {
 			$out->enableOOUI();
 			$messageWidget = new MessageWidget( [

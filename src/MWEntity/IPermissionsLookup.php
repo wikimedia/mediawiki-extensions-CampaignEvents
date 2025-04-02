@@ -6,7 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 /**
  * This class can be used to perform permission checks on users other than the performer of the request (for that,
- * use ICampaignsAuthority). Methods in this class take bare usernames as to avoid creating a new abstraction to
+ * use MWAuthorityProxy). Methods in this class take bare usernames as to avoid creating a new abstraction to
  * represent local users.
  */
 interface IPermissionsLookup {

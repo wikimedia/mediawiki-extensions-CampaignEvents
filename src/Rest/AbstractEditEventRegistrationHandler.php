@@ -9,7 +9,6 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsAuthority;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -69,7 +68,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->validateToken();
 	}
 
-	abstract protected function checkPermissions( ICampaignsAuthority $performer ): void;
+	abstract protected function checkPermissions( MWAuthorityProxy $performer ): void;
 
 	/**
 	 * @inheritDoc
