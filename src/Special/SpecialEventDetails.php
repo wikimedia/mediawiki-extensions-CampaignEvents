@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsModule;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsParticipantsModule;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -120,7 +119,7 @@ class SpecialEventDetails extends SpecialPage {
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 
 		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
 			$organizer = $this->organizersStore->getEventOrganizer( $eventID, $centralUser );
 			$isParticipant = $this->participantsStore->userParticipatesInEvent( $eventID, $centralUser, true );
 		} catch ( UserNotGlobalException $_ ) {
@@ -133,7 +132,7 @@ class SpecialEventDetails extends SpecialPage {
 		$isLocalWiki = $wikiID === WikiAwareEntity::LOCAL;
 		if ( $isLocalWiki ) {
 			$userCanEmailParticipants = $this->permissionChecker->userCanEmailParticipants(
-				new MWAuthorityProxy( $this->getAuthority() ),
+				$this->getAuthority(),
 				$this->event
 			);
 		}
@@ -195,7 +194,7 @@ class SpecialEventDetails extends SpecialPage {
 			$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-event-details' ) ),
 			$eventDetailsModule->createContent(
 				$this->getUser(),
-				new MWAuthorityProxy( $this->getAuthority() ),
+				$this->getAuthority(),
 				$isOrganizer,
 				$isParticipant,
 				$wikiID,
@@ -213,7 +212,7 @@ class SpecialEventDetails extends SpecialPage {
 			$eventParticipantsModule->createContent(
 				$this->event,
 				$this->getUser(),
-				new MWAuthorityProxy( $this->getAuthority() ),
+				$this->getAuthority(),
 				$isOrganizer,
 				$userCanEmailParticipants,
 				$isLocalWiki,

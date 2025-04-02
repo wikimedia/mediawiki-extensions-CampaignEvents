@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Pager\InvitationsListPager;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -44,13 +43,13 @@ class SpecialMyInvitationLists extends SpecialPage {
 			'ext.campaignEvents.specialPages.styles',
 			'oojs-ui.styles.icons-alerts'
 		] );
-		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
+		$performer = $this->getAuthority();
 		$isEnabledAndPermitted = $this->checkInvitationFeatureAccess(
 			$this->getOutput(),
-			$mwAuthority
+			$performer
 		);
 		if ( $isEnabledAndPermitted ) {
-			$centralUser = $this->centralUserLookup->newFromAuthority( $mwAuthority );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
 			$pager = new InvitationsListPager(
 				$centralUser,
 				$this->databaseHelper,

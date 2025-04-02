@@ -11,7 +11,7 @@ use MediaWiki\User\UserNameUtils;
 
 /**
  * This class can be used to perform permission checks on users other than the performer of the request (for that,
- * use MWAuthorityProxy).
+ * use Authority).
  */
 class MWPermissionsLookup {
 

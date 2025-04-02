@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -240,7 +239,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
-			new MWAuthorityProxy( $this->getAuthority() ),
+			$this->getAuthority(),
 			$privateFlag,
 			$answers
 		);
@@ -283,7 +282,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	public function checkEventIsValid(): StatusValue {
 		try {
 			$this->centralUser = $this->centralUserLookup->newFromAuthority(
-				new MWAuthorityProxy( $this->getAuthority() )
+				$this->getAuthority()
 			);
 			$this->curParticipantData = $this->participantsStore->getEventParticipant(
 				$this->event->getID(),

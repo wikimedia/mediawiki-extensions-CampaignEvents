@@ -10,12 +10,12 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
 use StatusValue;
@@ -64,7 +64,7 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanDeleteRegistration' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->deleteIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -87,7 +87,7 @@ class DeleteEventCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanDeleteRegistration' )->willReturn( true );
 		$status = $this->getCommand( $store, $permChecker )->deleteIfAllowed(
 			$registration,
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedVal, $status );

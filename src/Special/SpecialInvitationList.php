@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\Html;
@@ -59,12 +58,11 @@ class SpecialInvitationList extends SpecialPage {
 	public function execute( $par ): void {
 		$this->setHeaders();
 		$this->outputHeader();
-		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
 		$out = $this->getOutput();
 		$out->enableOOUI();
 		$isEnabledAndPermitted = $this->checkInvitationFeatureAccess(
 			$this->getOutput(),
-			$mwAuthority
+			$this->getAuthority()
 		);
 		if ( $isEnabledAndPermitted ) {
 			$this->maybeDisplayList( $par );
@@ -99,7 +97,7 @@ class SpecialInvitationList extends SpecialPage {
 			return;
 		}
 
-		$user = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+		$user = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
 		if ( !$invitationList->getCreator()->equals( $user ) ) {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-invitation-list-not-creator' )->parseAsBlock()

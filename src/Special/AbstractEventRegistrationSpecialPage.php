@@ -18,7 +18,6 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -77,7 +76,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
-	protected MWAuthorityProxy $performer;
 
 	/**
 	 * @var MWPageProxy|null The event page, set upon form submission and guaranteed to be set on success.
@@ -126,7 +124,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->topicRegistry = $topicRegistry;
 		$this->wikiConfig = $wikiConfig;
 
-		$this->performer = new MWAuthorityProxy( $this->getAuthority() );
 		$this->formMessages = $this->getFormMessages();
 	}
 
@@ -156,11 +153,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
 				$eventCreatorUsername = null;
 			}
-			$performerUserName = $this->performer->getName();
+			$performerUserName = $this->getAuthority()->getUser()->getName();
 			$isEventCreator = $performerUserName === $eventCreatorUsername;
 		} else {
 			$isEventCreator = true;
-			$eventCreatorUsername = $this->performer->getName();
+			$eventCreatorUsername = $this->getAuthority()->getUser()->getName();
 		}
 
 		$this->getOutput()->addJsConfigVars( [
@@ -713,14 +710,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		$res = $this->editEventCommand->doEditIfAllowed(
 			$event,
-			$this->performer,
+			$this->getAuthority(),
 			$organizerUsernames
 		);
 		if ( $res->isOK() ) {
 			if ( !empty( $data[ 'ClickWrapCheckbox' ] ) ) {
 				$this->organizersStore->updateClickwrapAcceptance(
 					$res->getValue(),
-					$this->centralUserLookup->newFromAuthority( $this->performer )
+					$this->centralUserLookup->newFromAuthority( $this->getAuthority() )
 				);
 			}
 			$this->hookRunner->onCampaignEventsRegistrationFormSubmit( $data, $res->getValue() );
@@ -760,7 +757,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 */
 	private function getOrganizerUsernames(): array {
 		if ( !$this->eventID ) {
-			return [ $this->performer->getName() ];
+			return [ $this->getAuthority()->getUser()->getName() ];
 		}
 		$organizerUserNames = [];
 		$organizers = $this->organizersStore->getEventOrganizers(

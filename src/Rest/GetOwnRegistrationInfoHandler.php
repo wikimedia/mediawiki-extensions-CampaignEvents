@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
@@ -39,7 +38,7 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
 		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
 		} catch ( UserNotGlobalException $_ ) {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-register-not-allowed' ),

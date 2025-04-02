@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
 use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
@@ -46,10 +45,9 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 	public function execute( $par ): void {
 		$this->setHeaders();
 		$this->outputHeader();
-		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
 		$isEnabledAndPermitted = $this->checkInvitationFeatureAccess(
 			$this->getOutput(),
-			$mwAuthority
+			$this->getAuthority()
 		);
 		if ( $isEnabledAndPermitted ) {
 			parent::execute( $par );
@@ -80,7 +78,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 					}
 					return $this->invitationListGenerator->validateEventPage(
 						$eventPage,
-						new MWAuthorityProxy( $this->getAuthority() )
+						$this->getAuthority()
 					);
 				},
 			],
@@ -123,7 +121,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 			$data['InvitationListName'],
 			$eventPage,
 			$worklistStatus->getValue(),
-			new MWAuthorityProxy( $this->getAuthority() )
+			$this->getAuthority()
 		);
 		if ( $invitationListStatus->isGood() ) {
 			$this->listID = $invitationListStatus->getValue();

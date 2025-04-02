@@ -8,12 +8,12 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use StatusValue;
 
@@ -65,7 +65,7 @@ class RegisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param MWAuthorityProxy $performer
+	 * @param Authority $performer
 	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
 	 * @param Answer[] $answers
 	 * @return StatusValue Good if everything went fine, fatal with errors otherwise. If good, the value shall be
@@ -74,7 +74,7 @@ class RegisterParticipantCommand {
 	 */
 	public function registerIfAllowed(
 		ExistingEventRegistration $registration,
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		bool $isPrivate,
 		array $answers
 	): StatusValue {
@@ -86,7 +86,7 @@ class RegisterParticipantCommand {
 	}
 
 	private function authorizeRegistration(
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		ExistingEventRegistration $registration
 	): PermissionStatus {
 		if ( !$this->permissionChecker->userCanRegisterForEvent( $performer, $registration ) ) {
@@ -126,14 +126,14 @@ class RegisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param MWAuthorityProxy $performer
+	 * @param Authority $performer
 	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
 	 * @param Answer[] $answers
 	 * @return StatusValue
 	 */
 	public function registerUnsafe(
 		ExistingEventRegistration $registration,
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		bool $isPrivate,
 		array $answers
 	): StatusValue {

@@ -8,7 +8,6 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -66,7 +65,7 @@ class SetOrganizersHandler extends SimpleHandler {
 			);
 		}
 
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		$performer = $this->getAuthority();
 		$saveStatus = $this->editEventCommand->doEditIfAllowed( $event, $performer, $organizers );
 		// Note that no warnings (e.g., from tracking tools) are expected here
 		if ( !$saveStatus->isGood() ) {

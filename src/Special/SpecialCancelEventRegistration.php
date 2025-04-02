@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
@@ -37,7 +36,7 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	 */
 	protected function checkRegistrationPrecondition() {
 		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
 			$isParticipating = $this->participantsStore->userParticipatesInEvent(
 				$this->event->getID(),
 				$centralUser,
@@ -76,7 +75,7 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	public function onSubmit( array $data ) {
 		return Status::wrap( $this->unregisterParticipantCommand->unregisterIfAllowed(
 			$this->event,
-			new MWAuthorityProxy( $this->getAuthority() )
+			$this->getAuthority()
 		) );
 	}
 

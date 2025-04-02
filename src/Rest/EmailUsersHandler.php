@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -42,10 +41,9 @@ class EmailUsersHandler extends SimpleHandler {
 
 	public function run( int $eventId ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventId );
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
 		$params = $this->getValidatedBody() ?? [];
 
-		if ( !$this->permissionChecker->userCanEmailParticipants( $performer, $event ) ) {
+		if ( !$this->permissionChecker->userCanEmailParticipants( $this->getAuthority(), $event ) ) {
 			// todo add more details to error message
 			return $this->getResponseFactory()->createHttpError( 403 );
 		}
