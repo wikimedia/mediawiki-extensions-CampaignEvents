@@ -9,7 +9,11 @@ use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserNameUtils;
 
-class MWPermissionsLookup implements IPermissionsLookup {
+/**
+ * This class can be used to perform permission checks on users other than the performer of the request (for that,
+ * use MWAuthorityProxy).
+ */
+class MWPermissionsLookup {
 
 	public const SERVICE_NAME = 'CampaignEventsPermissionLookup';
 
@@ -25,14 +29,17 @@ class MWPermissionsLookup implements IPermissionsLookup {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param string $username Callers should make sure that the username is valid
+	 * @param string $right
+	 * @return bool
 	 */
 	public function userHasRight( string $username, string $right ): bool {
 		return $this->getUser( $username )->isAllowed( $right );
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param string $username Callers should make sure that the username is valid
+	 * @return bool
 	 */
 	public function userIsSitewideBlocked( string $username ): bool {
 		$block = $this->getUser( $username )->getBlock();
@@ -40,7 +47,8 @@ class MWPermissionsLookup implements IPermissionsLookup {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param string $username Callers should make sure that the username is valid
+	 * @return bool
 	 */
 	public function userIsNamed( string $username ): bool {
 		return $this->getUser( $username )->isNamed();
