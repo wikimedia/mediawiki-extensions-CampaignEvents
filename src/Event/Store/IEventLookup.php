@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 interface IEventLookup {
@@ -25,13 +25,13 @@ interface IEventLookup {
 	 * This method should not be used directly unless you want to avoid canonicalization (which you usually don't want
 	 * to avoid outside the storage layer).
 	 *
-	 * @param ICampaignsPage $page
+	 * @param MWPageProxy $page
 	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
 	 * @return ExistingEventRegistration
 	 * @throws EventNotFoundException
 	 */
 	public function getEventByPage(
-		ICampaignsPage $page,
+		MWPageProxy $page,
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ExistingEventRegistration;
 

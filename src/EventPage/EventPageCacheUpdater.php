@@ -7,10 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\EventPage;
 use MediaWiki\Cache\HTMLCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Utils\MWTimestamp;
-use RuntimeException;
 
 /**
  * This class is responsible of managing the cache of event pages, to avoid issues like T326593.
@@ -41,12 +39,8 @@ class EventPageCacheUpdater {
 	}
 
 	public function purgeEventPageCache( EventRegistration $registration ): void {
-		$eventPage = $registration->getPage();
-		if ( !$eventPage instanceof MWPageProxy ) {
-			throw new RuntimeException( 'Unexpected ICampaignsPage implementation.' );
-		}
 		$this->htmlCacheUpdater->purgeTitleUrls(
-			[ $eventPage->getPageIdentity() ],
+			[ $registration->getPage()->getPageIdentity() ],
 			HTMLCacheUpdater::PURGE_INTENT_TXROUND_REFLECTED
 		);
 	}

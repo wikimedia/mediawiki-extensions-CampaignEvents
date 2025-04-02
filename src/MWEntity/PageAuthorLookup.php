@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStoreFactory;
-use UnexpectedValueException;
 
 /**
  * This service can be used to find the global user who created a given page.
@@ -26,15 +25,12 @@ class PageAuthorLookup {
 	}
 
 	/**
-	 * @param ICampaignsPage $page
+	 * @param MWPageProxy $page
 	 * @return CentralUser|null Null if the author is not available for some reason, e.g. because
 	 * the account does not exist globally.
 	 * @warning This method bypasses visibility checks on the author's name.
 	 */
-	public function getAuthor( ICampaignsPage $page ): ?CentralUser {
-		if ( !$page instanceof MWPageProxy ) {
-			throw new UnexpectedValueException( 'Unknown campaigns page implementation: ' . get_class( $page ) );
-		}
+	public function getAuthor( MWPageProxy $page ): ?CentralUser {
 		$revStore = $this->revisionStoreFactory->getRevisionStore( $page->getWikiId() );
 		$firstRev = $revStore->getFirstRevision( $page->getPageIdentity() );
 		if ( !$firstRev ) {

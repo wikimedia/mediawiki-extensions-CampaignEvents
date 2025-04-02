@@ -5,7 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use DateTimeZone;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 
 /**
@@ -17,7 +17,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 *
 	 * @param int $id
 	 * @param string $name
-	 * @param ICampaignsPage $page
+	 * @param MWPageProxy $page
 	 * @param string|null $chatURL
 	 * @param string[]|true $wikis
 	 * @param string[] $topics
@@ -41,7 +41,7 @@ class ExistingEventRegistration extends EventRegistration {
 	public function __construct(
 		int $id,
 		string $name,
-		ICampaignsPage $page,
+		MWPageProxy $page,
 		?string $chatURL,
 		$wikis,
 		array $topics,

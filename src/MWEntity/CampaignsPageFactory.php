@@ -38,9 +38,9 @@ class CampaignsPageFactory {
 	 * @param string $dbKey
 	 * @param string $prefixedText
 	 * @param string|false $wikiID
-	 * @return ICampaignsPage
+	 * @return MWPageProxy
 	 */
-	public function newPageFromDB( int $namespace, string $dbKey, string $prefixedText, $wikiID ): ICampaignsPage {
+	public function newPageFromDB( int $namespace, string $dbKey, string $prefixedText, $wikiID ): MWPageProxy {
 		// Event pages stored in the database always have a string wiki ID, so we need to check if they're
 		// actually local.
 		$adjustedWikiID = WikiMap::isCurrentWikiId( $wikiID ) ? WikiAwareEntity::LOCAL : $wikiID;
@@ -55,14 +55,14 @@ class CampaignsPageFactory {
 
 	/**
 	 * @param string $titleStr
-	 * @return ICampaignsPage
+	 * @return MWPageProxy
 	 * @throws InvalidTitleStringException
 	 * @throws UnexpectedInterwikiException If the page title has an interwiki prefix
 	 * @throws UnexpectedVirtualNamespaceException
 	 * @throws UnexpectedSectionAnchorException
 	 * @throws PageNotFoundException If the page does not exist
 	 */
-	public function newLocalExistingPageFromString( string $titleStr ): ICampaignsPage {
+	public function newLocalExistingPageFromString( string $titleStr ): MWPageProxy {
 		// This is similar to PageStore::getPageByText, but with better error handling
 		// and it also requires that the page exists.
 		try {
@@ -93,13 +93,13 @@ class CampaignsPageFactory {
 	}
 
 	/**
-	 * Convert a MW page interface (LinkTarget or ProperPageIdentity) into an ICampaignsPage, without
+	 * Convert a MW page interface (LinkTarget or ProperPageIdentity) into an MWPageProxy, without
 	 * further checks (e.g. existence).
 	 *
 	 * @param PageIdentity|LinkTarget $page Must be a page in the local wiki
-	 * @return ICampaignsPage
+	 * @return MWPageProxy
 	 */
-	public function newFromLocalMediaWikiPage( $page ): ICampaignsPage {
+	public function newFromLocalMediaWikiPage( $page ): MWPageProxy {
 		$page->assertWiki( WikiAwareEntity::LOCAL );
 		if ( $page instanceof LinkTarget ) {
 			$page = $this->pageStoreFactory->getPageStore()->getPageForLink( $page );

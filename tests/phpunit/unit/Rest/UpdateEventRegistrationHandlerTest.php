@@ -14,8 +14,8 @@ use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -71,7 +71,7 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		if ( !$eventLookup ) {
 			// Ensure that the wiki ID of the event page is not null, otherwise it will be passed to
 			// MessageValue::param and will fail the type assertion in ScalarParam.
-			$eventPage = $this->createMock( ICampaignsPage::class );
+			$eventPage = $this->createMock( MWPageProxy::class );
 			$eventPage->method( 'getWikiId' )->willReturn( WikiAwareEntity::LOCAL );
 			$event = $this->createMock( ExistingEventRegistration::class );
 			$event->method( 'getPage' )->willReturn( $eventPage );
@@ -200,7 +200,7 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testExecute__foreignPage(): void {
-		$eventPage = $this->createMock( ICampaignsPage::class );
+		$eventPage = $this->createMock( MWPageProxy::class );
 		$eventPage->method( 'getWikiId' )->willReturn( 'some_other_wiki' );
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getPage' )->willReturn( $eventPage );

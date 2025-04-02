@@ -8,13 +8,11 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\TitleFactory;
-use RuntimeException;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
@@ -69,19 +67,15 @@ class PageEventLookup {
 	}
 
 	/**
-	 * @param ICampaignsPage $page
+	 * @param MWPageProxy $page
 	 * @param string $canonicalize self::GET_CANONICALIZE to canonicalize the given page, or self::GET_DIRECT to
 	 * avoid canonicalization.
 	 * @return ExistingEventRegistration|null
 	 */
 	public function getRegistrationForPage(
-		ICampaignsPage $page,
+		MWPageProxy $page,
 		string $canonicalize = self::GET_CANONICALIZE
 	): ?ExistingEventRegistration {
-		if ( !$page instanceof MWPageProxy ) {
-			throw new RuntimeException( 'Unexpected ICampaignsPage implementation.' );
-		}
-
 		if ( $canonicalize === self::GET_CANONICALIZE ) {
 			$pageIdentity = $page->getPageIdentity();
 			$canonicalPageIdentity = $this->getCanonicalPage( $pageIdentity );

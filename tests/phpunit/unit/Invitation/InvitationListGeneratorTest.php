@@ -14,9 +14,9 @@ use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidEventPageException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Page\PageIdentityValue;
@@ -101,7 +101,7 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 		bool $eventIsPast,
 		bool $isOrganizer
 	) {
-		$eventPage = $this->createMock( ICampaignsPage::class );
+		$eventPage = $this->createMock( MWPageProxy::class );
 		$pageFactory = $this->createMock( CampaignsPageFactory::class );
 		if ( $eventPageIsValid ) {
 			$pageFactory->method( 'newLocalExistingPageFromString' )

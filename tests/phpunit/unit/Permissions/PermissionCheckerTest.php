@@ -9,9 +9,9 @@ use MediaWiki\Block\Block;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -221,7 +221,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$performer = new MWAuthorityProxy( $this->mockRegisteredNullAuthority() );
 		}
 
-		$page = $this->createMock( ICampaignsPage::class );
+		$page = $this->createMock( MWPageProxy::class );
 
 		if ( $isPageAuthor !== null ) {
 			$pageAuthorLookup = $this->createMock( PageAuthorLookup::class );

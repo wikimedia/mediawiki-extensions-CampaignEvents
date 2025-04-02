@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\IPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -55,7 +55,7 @@ class PermissionChecker {
 			&& !$performer->isSitewideBlocked();
 	}
 
-	public function userCanEnableRegistration( MWAuthorityProxy $performer, ICampaignsPage $eventPage ): bool {
+	public function userCanEnableRegistration( MWAuthorityProxy $performer, MWPageProxy $eventPage ): bool {
 		if ( !$this->userCanEnableRegistrations( $performer ) ) {
 			return false;
 		}

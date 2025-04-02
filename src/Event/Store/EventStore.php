@@ -12,7 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
@@ -106,7 +106,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function getEventByPage(
-		ICampaignsPage $page,
+		MWPageProxy $page,
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ExistingEventRegistration {
 		if ( ( $readFlags & IDBAccessObject::READ_LATEST ) === IDBAccessObject::READ_LATEST ) {

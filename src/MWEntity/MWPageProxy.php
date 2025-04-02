@@ -4,10 +4,12 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
-use LogicException;
 use MediaWiki\Page\ProperPageIdentity;
 
-class MWPageProxy implements ICampaignsPage {
+/**
+ * Wrapper around MediaWiki page objects, representing an event page. Note that this can represent foreign titles.
+ */
+class MWPageProxy {
 	private ProperPageIdentity $page;
 	private string $prefixedText;
 
@@ -17,38 +19,28 @@ class MWPageProxy implements ICampaignsPage {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @return string|false
 	 */
 	public function getWikiId() {
 		return $this->page->getWikiId();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getDBkey(): string {
 		return $this->page->getDBkey();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getNamespace(): int {
 		return $this->page->getNamespace();
 	}
 
 	/**
-	 * @inheritDoc
+	 * This is here because the page could belong to another wiki, and the prefixedtext is injected. See T307358
 	 */
 	public function getPrefixedText(): string {
 		return $this->prefixedText;
 	}
 
-	/** @inheritDoc */
-	public function equals( ICampaignsPage $other ): bool {
-		if ( !$other instanceof MWPageProxy ) {
-			throw new LogicException( 'Unexpected class' );
-		}
+	public function equals( self $other ): bool {
 		return $this->page->isSamePageAs( $other->getPageIdentity() );
 	}
 

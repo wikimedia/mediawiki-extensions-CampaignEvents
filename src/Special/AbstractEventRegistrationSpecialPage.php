@@ -18,8 +18,8 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -80,9 +80,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	protected MWAuthorityProxy $performer;
 
 	/**
-	 * @var ICampaignsPage|null The event page, set upon form submission and guaranteed to be set on success.
+	 * @var MWPageProxy|null The event page, set upon form submission and guaranteed to be set on success.
 	 */
-	protected ?ICampaignsPage $eventPage = null;
+	protected ?MWPageProxy $eventPage = null;
 	/**
 	 * @var string[] Usernames of invalid organizers, used for live validation in JavaScript.
 	 */

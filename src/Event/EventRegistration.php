@@ -7,7 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 use DateTime;
 use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
-use MediaWiki\Extension\CampaignEvents\MWEntity\ICampaignsPage;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\Assert\Assert;
@@ -40,7 +40,7 @@ class EventRegistration {
 	 * @todo Is this necessary?
 	 */
 	private string $name;
-	private ICampaignsPage $page;
+	private MWPageProxy $page;
 	private ?string $chatURL;
 	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
 	private $wikis;
@@ -73,7 +73,7 @@ class EventRegistration {
 	/**
 	 * @param int|null $id
 	 * @param string $name
-	 * @param ICampaignsPage $page
+	 * @param MWPageProxy $page
 	 * @param string|null $chatURL
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param string[] $topics
@@ -97,7 +97,7 @@ class EventRegistration {
 	public function __construct(
 		?int $id,
 		string $name,
-		ICampaignsPage $page,
+		MWPageProxy $page,
 		?string $chatURL,
 		$wikis,
 		array $topics,
@@ -163,7 +163,7 @@ class EventRegistration {
 		return $this->name;
 	}
 
-	public function getPage(): ICampaignsPage {
+	public function getPage(): MWPageProxy {
 		return $this->page;
 	}
 
