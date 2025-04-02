@@ -226,6 +226,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 		$allowedEventNamespaces = $this->wikiConfig->get( 'CampaignEventsEventNamespaces' );
+		if ( $this->event ) {
+			// Consider the namespace of the current event page as valid, see T387967#10704403. This way we can allow
+			// edits that don't change the event page.
+			$allowedEventNamespaces = array_unique( [
+				...$allowedEventNamespaces,
+				$this->event->getPage()->getNamespace()
+			] );
+		}
 		if ( count( $allowedEventNamespaces ) === 1 ) {
 			// T389078: can't filter by multiple namespaces.
 			$pageFieldSpecs['namespace'] = $allowedEventNamespaces[0];
