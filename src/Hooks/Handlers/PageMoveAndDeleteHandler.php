@@ -96,8 +96,8 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	 */
 	public function onTitleMove( Title $old, Title $nt, User $user, $reason, Status &$status ) {
 		$registration = $this->pageEventLookup->getRegistrationForLocalPage( $old, PageEventLookup::GET_DIRECT );
-		// Disallow moving event pages with registration enabled outside of the Event namespace, see T358704.
-		// This will change if we decide to allow event registration outside of the namespace (T318179).
+		// Disallow moving event pages with registration enabled outside of allowed namespaces. Otherwise, the namespace
+		// restriction could easily be circumvented by creating a page in a permitted namespace and then moving it.
 		if (
 			$registration &&
 			!in_array( $nt->getNamespace(), $this->config->get( 'CampaignEventsEventNamespaces' ), true )
