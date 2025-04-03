@@ -45,7 +45,6 @@
 	"campaignevents-error-invalid-country": "Angi et gyldig landnavn.",
 	"campaignevents-error-invalid-address": "Angi en gyldig adresse.",
 	"campaignevents-error-invalid-question-names": "Følgende spørsmål ble ikke gjenkjent: $1",
-	"campaignevents-error-move-eventpage-namespace": "Denne arrangementssiden kan ikke flyttes ut av {{ns:event}}-navnerommet, fordi den nå eller tidligere har hatt arrangementspåmelding aktivert.",
 	"enableeventregistration": "Aktiver arrangementsregistrering",
 	"editeventregistration": "Rediger arrangementsregistrering",
 	"campaignevents-edit-form-details-label": "Arrangementsdetaljer",

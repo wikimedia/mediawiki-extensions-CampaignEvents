@@ -52,7 +52,7 @@
 	"campaignevents-error-invalid-country": "Insere un nomine de pais valide.",
 	"campaignevents-error-invalid-address": "Insere un adresse valide.",
 	"campaignevents-error-invalid-question-names": "Le sequente questiones non ha essite recognoscite: $1",
-	"campaignevents-error-move-eventpage-namespace": "Iste pagina de evento non pote esser displaciate foras le spatio de nomines {{ns:event}} perque le inscription al evento es, o esseva, activate pro illo.",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "Le inscription a eventos non es permittite in iste spatio de nomines.",
 	"enableeventregistration": "Activar inscriptiones pro eventos",
 	"editeventregistration": "Modificar inscriptiones pro eventos",
 	"campaignevents-edit-form-details-label": "Detalios del evento",

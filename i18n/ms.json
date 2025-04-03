@@ -50,7 +50,6 @@
 	"campaignevents-error-invalid-country": "Masukkan nama negara yang sah.",
 	"campaignevents-error-invalid-address": "Masukkan alamat yang sah.",
 	"campaignevents-error-invalid-question-names": "Soalan berikut tidak dapat dikenal pasti: $1",
-	"campaignevents-error-move-eventpage-namespace": "Laman acara ini tidak boleh dialihkan ke luar ruang nama {{ns:event}} kerana ciri pendaftaran acara sudah atau pernah didayakan.",
 	"enableeventregistration": "Dayakan pendaftaran acara",
 	"editeventregistration": "Sunting pendaftaran acara",
 	"campaignevents-edit-form-details-label": "Butiran acara",

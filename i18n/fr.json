@@ -75,7 +75,7 @@
 	"campaignevents-error-invalid-country": "Saisissez un nom de pays valide.",
 	"campaignevents-error-invalid-address": "Saisissez une adresse valide.",
 	"campaignevents-error-invalid-question-names": "Les questions suivantes n’ont pas été reconnues : $1",
-	"campaignevents-error-move-eventpage-namespace": "Cette page d’événement ne peut pas être déplacée en dehors de l’espace de noms {{ns:event}}, car la fonctionnalité d’inscription est activée dessus, ou l’a été précédemment.",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "L'enregistrement d'événements n'est pas autorisé dans cet espace de noms.",
 	"enableeventregistration": "Activer les inscriptions à un événement",
 	"editeventregistration": "Modifier l’inscription à un événement",
 	"campaignevents-edit-form-details-label": "Détails de l’événement",

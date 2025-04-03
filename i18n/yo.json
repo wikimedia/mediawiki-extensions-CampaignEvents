@@ -85,5 +85,12 @@
 	"campaignevents-edit-field-event-is-test": "Ṣé àpéjọ àyẹ̀wò ni àbí àpéjọ ìṣe?",
 	"campaignevents-edit-field-status-live": "Ìṣẹ̀lẹ̀ àkànṣe",
 	"campaignevents-edit-field-status-test": "Ìṣẹ̀lẹ̀ ìdánwò",
-	"campaignevents-edit-field-topics-label": "Àwọn àkòrí ìṣẹ̀lẹ̀"
+	"campaignevents-edit-field-topics-label": "Àwọn àkòrí ìṣẹ̀lẹ̀",
+	"campaignevents-edit-field-topics-placeholder": "Àfikún orí-ọ̀rọ̀",
+	"campaignevents-edit-form-questions-label": "Awọn ibeere fun awọn olukopa",
+	"campaignevents-edit-form-questions-non-pii-label": "Awọn ibeere Alaye ti kii ṣe Ti ara ẹni (ti kii ṣe PII).",
+	"campaignevents-edit-form-questions-pii-label": "Awọn ibeere Alaye Idanimọ Tikalararẹ (PII).",
+	"campaignevents-enable-registration-form-submit": "Ase titeto ìforúkọsílẹ",
+	"campaignevents-edit-form-submit": "Iforukọsilẹ Ṣatunkọ",
+	"campaignevents-edit-invalid-id": "Pese ID iṣẹlẹ to wulo."
 }

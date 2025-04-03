@@ -52,7 +52,7 @@
 	"campaignevents-error-invalid-country": "Etibarlı ölkə adı daxil edin.",
 	"campaignevents-error-invalid-address": "Etibarlı ünvan daxil edin.",
 	"campaignevents-error-invalid-question-names": "Aşağıdakı suallar tanınmadı: $1",
-	"campaignevents-error-move-eventpage-namespace": "Bu tədbir səhifəsi {{ns:event}} ad fəzasından kənara köçürülə bilməz, çünki o, tədbir qeydiyyatını aktivləşdirib.",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "Bu ad fəzasında tədbir qeydiyyatına icazə verilmir.",
 	"enableeventregistration": "Tədbirin qeydiyyatını aktivləşdir",
 	"editeventregistration": "Tədbirin qeydiyyatını redaktə et",
 	"campaignevents-edit-form-details-label": "Tədbir detalları",

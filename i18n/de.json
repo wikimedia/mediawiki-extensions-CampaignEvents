@@ -52,7 +52,7 @@
 	"campaignevents-error-invalid-country": "Gib einen gültigen Ländernamen ein.",
 	"campaignevents-error-invalid-address": "Gib eine gültige Adresse ein.",
 	"campaignevents-error-invalid-question-names": "Folgende Fragen wurden nicht berücksichtigt: $1",
-	"campaignevents-error-move-eventpage-namespace": "Diese Veranstaltungsseite kann nicht aus dem Namensraum {{ns:event}} verschoben werden, da die Veranstaltungsregistrierung aktiviert ist oder war.",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "Die Veranstaltungsregistrierung ist in diesem Namensraum nicht erlaubt.",
 	"enableeventregistration": "Aktiviere die Registrierung von Veranstaltungen",
 	"editeventregistration": "Veranstaltungsanmeldung bearbeiten",
 	"campaignevents-edit-form-details-label": "Veranstaltungsdetails",

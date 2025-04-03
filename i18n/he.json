@@ -53,7 +53,7 @@
 	"campaignevents-error-invalid-country": "יש להזין שם מדינה תקין.",
 	"campaignevents-error-invalid-address": "יש להזין כתובת תקינה.",
 	"campaignevents-error-invalid-question-names": "השאלות הבאות לא מוכרות: $1",
-	"campaignevents-error-move-eventpage-namespace": "לא ניתן להזיז את דף האירוע הזה אל מחוץ למרחב השם {{ns:event}} כי מופעל בו עכשיו, או הופעל בו בעבר רישום לאירוע.",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "הרשמה לאירועים אינה מותרת במרחב השם הזה.",
 	"enableeventregistration": "הפעלת הרשמה לאירוע",
 	"editeventregistration": "עריכת הרשמה לאירוע",
 	"campaignevents-edit-form-details-label": "פרטי האירוע",

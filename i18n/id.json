@@ -53,7 +53,6 @@
 	"campaignevents-error-invalid-country": "Masukkan nama negara yang sesuai.",
 	"campaignevents-error-invalid-address": "Masukkan alamat yang sesuai.",
 	"campaignevents-error-invalid-question-names": "Pertanyaan berikut tidak dikenali: $1",
-	"campaignevents-error-move-eventpage-namespace": "Halaman acara ini tidak dapat dipindahkan ke luar ruang nama {{ns:event}} karena halaman ini memiliki, atau telah mengaktifkan pendaftaran acara.",
 	"enableeventregistration": "Aktifkan pendaftaran acara",
 	"editeventregistration": "Ubah pendaftaran acara",
 	"campaignevents-edit-form-details-label": "Detail acara",

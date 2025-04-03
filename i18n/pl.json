@@ -51,7 +51,6 @@
 	"campaignevents-error-invalid-country": "Wpisz prawidłową nazwę kraju.",
 	"campaignevents-error-invalid-address": "Wpisz poprawny adres.",
 	"campaignevents-error-invalid-question-names": "Następujące pytania nie zostały rozpoznane: $1",
-	"campaignevents-error-move-eventpage-namespace": "Ta strona wydarzenia nie może zostać przeniesiona poza przestrzeń nazw {{ns:event}}, ponieważ ma lub miało włączone zapisy na wydarzenie.",
 	"enableeventregistration": "Włącz rejestrację na wydarzenie",
 	"editeventregistration": "Edytuj rejestrację na wydarzenie",
 	"campaignevents-edit-form-details-label": "Szczegóły wydarzenia",

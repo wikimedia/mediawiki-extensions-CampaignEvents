@@ -45,7 +45,6 @@
 	"campaignevents-error-invalid-country": "Vnesite veljavno ime države.",
 	"campaignevents-error-invalid-address": "Vnesite veljaven naslov.",
 	"campaignevents-error-invalid-question-names": "Naslednja vprašanja niso bila prepoznana: $1",
-	"campaignevents-error-move-eventpage-namespace": "Te strani dogodka ni mogoče premakniti izven imenskega prostora {{ns:event}}, ker ima ali je imela omogočeno registracijo dogodka.",
 	"enableeventregistration": "Omogoči prijavo na dogodek",
 	"editeventregistration": "Uredi prijavo na dogodek",
 	"campaignevents-edit-form-details-label": "Podrobnosti dogodka",

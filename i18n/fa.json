@@ -53,7 +53,6 @@
 	"campaignevents-error-invalid-country": "یک نام کشور معتبر وارد کنید.",
 	"campaignevents-error-invalid-address": "یک نشانی معتبر وارد کنید.",
 	"campaignevents-error-invalid-question-names": "این پرسش‌ها شناسایی نشدند: $1",
-	"campaignevents-error-move-eventpage-namespace": "این صفحهٔ رویداد را نمی‌توان به خارج از فضای نام {{ns:event}} منتقل کرد، زیرا اکنون یا در گذشته ثبت نام در آن فعال بوده است.",
 	"enableeventregistration": "فعال‌سازی ثبت نام رویداد",
 	"editeventregistration": "ویرایش ثبت نام رویداد",
 	"campaignevents-edit-form-details-label": "جزئیات رویداد",

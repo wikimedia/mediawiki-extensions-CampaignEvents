@@ -60,7 +60,7 @@
 	"campaignevents-error-invalid-country": "Tinye aha mba ziri ezi.",
 	"campaignevents-error-invalid-address": "Tinye adreesị ziri ezi.",
 	"campaignevents-error-invalid-question-names": "Achọpụtaghị ajụjụ ndị a: $1",
-	"campaignevents-error-move-eventpage-namespace": "Enweghị ike ibugharị ibe mmemme a na mpụga {{ns:event}} namespace n'ihi na ọ nwere, ma ọ bụ nwee, ndebanye aha mmemme.",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "Anaghị anabata ndebanye aha mmemme na oghere aha a.",
 	"enableeventregistration": "mee ka ndebanye aha ihe omume",
 	"editeventregistration": "mee ka ndebanye aha ihe omume",
 	"campaignevents-edit-form-details-label": "Nkọwa nke ihe omume",

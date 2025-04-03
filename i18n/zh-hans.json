@@ -51,7 +51,6 @@
 	"campaignevents-error-invalid-country": "请输入有效的国家名称。",
 	"campaignevents-error-invalid-address": "请输入有效地址。",
 	"campaignevents-error-invalid-question-names": "以下问题无法被识别：$1",
-	"campaignevents-error-move-eventpage-namespace": "该活动页面无法移动到{{ns:event}}命名空间以外，这是因为该页面已启用或曾启用过活动注册。",
 	"enableeventregistration": "启用活动注册",
 	"editeventregistration": "编辑活动注册",
 	"campaignevents-edit-form-details-label": "活动详情",

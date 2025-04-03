@@ -43,7 +43,6 @@
 	"campaignevents-error-invalid-country": "Anna kelvollinen maan nimi.",
 	"campaignevents-error-invalid-address": "Anna kelvollinen osoite.",
 	"campaignevents-error-invalid-question-names": "Seuraavia kysymyksiä ei tunnistettu: $1",
-	"campaignevents-error-move-eventpage-namespace": "Tätä tapahtumasivua ei voi siirtää nimiavaruuden {{ns:event}} ulkopuolelle, koska siinä on tai oli avoin tapahtumailmoittautuminen.",
 	"enableeventregistration": "Avaa tapahtumailmoittautuminen",
 	"editeventregistration": "Muokkaa tapahtumailmoittautumista",
 	"campaignevents-edit-form-details-label": "Tapahtuman tiedot",
