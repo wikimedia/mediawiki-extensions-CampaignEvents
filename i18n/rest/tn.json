@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kolobetsoo"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Ga go na tiragalo e e nang le sesupo se.",
+	"campaignevents-rest-enable-registration-permission-denied": "Ga o letlelelwe go dira gore ikwadiso ya ditiragalo e kgonege.",
+	"campaignevents-rest-edit-page-nonlocal": "Ikwadiso e ya ditiragalo e simolotse go bereka mo tsebeng ee ya wiki ka jalo e tshwanetse ya rulaganyediwa mo go yone:$1.",
+	"campaignevents-rest-delete-already-deleted": "Ikwadiso e ya tiragalo e setse e phimotswe.",
+	"campaignevents-rest-user-not-found": "Ga go na modirisi wa itshupo ee.",
+	"campaignevents-rest-get-registration-deleted": "Ikwadiso ee ya ditiragalo e setse phimotswe.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Ditsetlana tsa ditshupo tsa badirisi 'user_ids' e tshwanetse go rulaganya ditshupo tsa modirisi, kgotsa lefela (go tlosa badirisi botlhe)",
+	"campaignevents-rest-list-participants-empty-filter": "Setlhotlhi sa leinatiriso, fa se tlhalosiwa, e tshwanetse go nna mogala o o senang sepe.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Ga o na tetla ya go leba batsayakarolo ba ba ikwadisitseng ka sephiri mo tiragalong eno.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>maina_ a barulaganyi</var> a tshwanetse go nna thulaganyo ya maina mme ga e a tshwanela go nna lolea",
+	"campaignevents-rest-get-registration-info-notparticipant": "Ga o tseye karolo mo tiragalong e.",
+	"campaignevents-rest-register-invalid-answer": "Karabo e e sa siamang mo potso $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Tsweetswee tlatsa ikwadiso ya gago ya tiragalo mo go $1 , wiki e tiragalo e tlhamilweng mo go yone.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Tsweetswee phimola ikwadiso ya tiragalo ya gago mo go $1, wiki e tiragalo e tlhamilweng mo go yone.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Tsweetswee romelela batsayakarolo molaetsa ka Email mo go $1 , wiki e tiragalo e tlhamilweng mo go yone."
+}

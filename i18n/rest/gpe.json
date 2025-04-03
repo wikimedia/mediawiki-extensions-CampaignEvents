@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Yaw tuba"
+		]
+	},
+	"campaignevents-rest-event-not-found": "No event dey plus dis ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "You no get permission say you go enable event registrations.",
+	"campaignevents-rest-edit-page-nonlocal": "Dem enable dis event registration for de following wiki top wey dem for edit am der: $1.",
+	"campaignevents-rest-delete-already-deleted": "Dem already delete de event registration.",
+	"campaignevents-rest-user-not-found": "No user dey plus dis central ID.",
+	"campaignevents-rest-get-registration-deleted": "Dem delete dis event registration.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' for be array of user ids, anaa null ( so say ego comot all users)",
+	"campaignevents-rest-list-participants-empty-filter": "De username filter, if dem specify, efor be non-empty string.",
+	"campaignevents-rest-list-participants-cannot-see-private": "You no be authorized say you go view participants wey register privately give dis event.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> for be sam array of usernames wey eno go fi be empty",
+	"campaignevents-rest-get-registration-info-notparticipant": "You no dey participate insyd dis event.",
+	"campaignevents-rest-register-invalid-answer": "Invalid answer give de question $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Abeg make you plete your event registration for $1 top, de wiki wer dem create de event.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Abeg delete your event registration for $1 top, de wiki wer dem create de event.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Abeg email participants for $1 top, de wiki wer dem create de event."
+}

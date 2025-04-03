@@ -20,7 +20,11 @@
 			"Graineahumus",
 			"Mahabarata",
 			"Méthodes Bulebe Hangi",
-			"SleaY"
+			"SleaY",
+			"Antimuonium",
+			"Eihel",
+			"Escargot bleu",
+			"JLTRY"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -306,7 +310,7 @@
 	"campaignevents-userlink-suppressed-user": "nom d’utilisateur supprimé",
 	"campaignevents-userlink-deleted-user": "utilisateur supprimé",
 	"campaignevents-registration-confirmation-helptext-private": "<strong>Inscription privée :</strong> seuls les organisateurs de l’événement peuvent voir votre nom d’utilisateur dans la liste des participants. Vos contributions lors de l’événement peuvent être exclues par les organisateurs au [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tableau de bord Programmes et événements] ou à d’autres outils pour récolter des statistiques.",
-	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription publique :</strong> afficher votre nom d’utilisateur dans la liste publique des participants. Vos contributions lors de l’événement peuvent être incluses par les organisateurs au [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tablea e bord Programmes et événements] ou à d’autres outils pour collecter des statistiques.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Inscription publique :</strong> afficher votre nom d’utilisateur dans la liste publique des participants. Vos contributions lors de l’événement peuvent être incluses par les organisateurs au [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Tableau de bord Programmes et événements] ou à d’autres outils pour collecter des statistiques.",
 	"campaignevents-registration-confirmation-toggle-private": "Inscription privée",
 	"campaignevents-registration-confirmation-toggle-public": "Inscription publique",
 	"campaignevents-register-confirmation-radio-private": "Inscription privée",

@@ -1,7 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Udehb"
+			"Udehb",
+			"Ebubechukwu1",
+			"Vivian1234"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Enweghị mmemme nwere ID a.",
@@ -13,5 +15,10 @@
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameter 'user_ids' ga-abụrịrị usoro ID onye ọrụ, ma ọ bụ null (iji wepụ ndị ọrụ niile)",
 	"campaignevents-rest-list-participants-empty-filter": "Ihe nzacha aha njirimara, ọ bụrụ na e kwupụtara ya, ga-abụ eriri na-adịghị efu.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Ịnweghị ikike ịhụ ndị sonyere debanye aha na nzuzo maka mmemme a.",
-	"campaignevents-rest-set-organizers-empty-list": "<var>aha ndị nhazi mmemme a</var> ga-abụrịrị usoro aha njirimara ma enweghị ike ịdị efu"
+	"campaignevents-rest-set-organizers-empty-list": "<var>aha ndị nhazi mmemme a</var> ga-abụrịrị usoro aha njirimara ma enweghị ike ịdị efu",
+	"campaignevents-rest-get-registration-info-notparticipant": "Ị naghị esonye na mmemme a.",
+	"campaignevents-rest-register-invalid-answer": "Azịza na-ezighi ezi nye ajụjụ $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Biko debanye aha mmemme gị na $1, wiki ebe emepụtara mmemme ahụ.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Biko hichapụ ndebanye mmemme gị na $1, wiki ebe emepụtara mmemme ahụ.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Biko zite ndị sonyere na $1, wiki ebe emere mmemme ahụ."
 }

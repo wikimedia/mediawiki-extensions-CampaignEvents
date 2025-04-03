@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Emma Oruk"
+		]
+	},
+	"campaignevents-desc": "Miiyo jami bot luyub yub me bolo kwir ki jo ma tye ka nywako.",
+	"nstab-event": "Yuba",
+	"action-campaignevents-enable-registration": "Mi twero bot lucoo nying pi yub",
+	"right-campaignevents-enable-registration": "Mi twero bot lucoo nying pi yub ni",
+	"action-campaignevents-delete-registration": "kwany coyo nying pi yub ni",
+	"right-campaignevents-delete-registration": "Kwany coyo nying pi yub ni",
+	"action-campaignevents-organize-events": "yubu yub",
+	"campaignevents-error-invalid-id": "Gin ma otimme ni omyera obed namba maber.",
+	"campaignevents-error-empty-title": "Co nying pot karatac me yub ni.",
+	"campaignevents-error-invalid-title": "Nying pot karatac me yub ni pi tye kakare: $1 .",
+	"campaignevents-error-invalid-title-interwiki": "Nyut pot karatac me yub i wiki me kabedo ni.",
+	"campaignevents-error-page-not-found": "Pe tye yub mo ki ID eni",
+	"campaignevents-error-page-with-section": "Pot karatac me yub ni omyera pe obed ki nying dul mo.",
+	"campaignevents-error-invalid-chat-url": "Ket URL me lok ma tye kakare.",
+	"campaignevents-error-trackingtool-without-eventid": "Mii lanyut me gin ma otimme i kom gin ma ki miini me lubo."
+}

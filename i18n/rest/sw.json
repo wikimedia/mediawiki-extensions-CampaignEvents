@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"AMtavangu (WMF)",
-			"Jadnapac"
+			"Jadnapac",
+			"Pellagia Njau"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Hakuna tukio lenye kitambulisho hiki.",
@@ -16,5 +17,8 @@
 	"campaignevents-rest-list-participants-cannot-see-private": "Hujaidhinishwa kutazama washiriki waliojiandikisha kwa faragha kwa tukio hili.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> lazima iwe safu ya majina ya watumiaji na haiwezi kuwa tupu.",
 	"campaignevents-rest-get-registration-info-notparticipant": "Haushiriki katika tukio hili.",
-	"campaignevents-rest-register-invalid-answer": "Jibu batili kwa swali $1"
+	"campaignevents-rest-register-invalid-answer": "Jibu batili kwa swali $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Tafadhali kamilisha usajili wako wa tukio kwenye $1, wiki ambapo tukio liliundwa.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Tafadhalifuta usajili wako wa tukio kwenye $1, wiki ambapo tukio lilifanywa.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Tafadhali tuma barua pepe kwa washiriki kwenye $1 , wiki ambapo tukio liliundwa."
 }
