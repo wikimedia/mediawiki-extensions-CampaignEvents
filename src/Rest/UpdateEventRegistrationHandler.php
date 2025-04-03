@@ -12,13 +12,13 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Questions\UnknownQuestionException;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use StatusValue;
@@ -110,7 +110,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	/**
 	 * @inheritDoc
 	 */
-	protected function checkPermissions( MWAuthorityProxy $performer ): void {
+	protected function checkPermissions( Authority $performer ): void {
 		// Nothing to check now. Deeper check will happen in EditEventCommand.
 	}
 

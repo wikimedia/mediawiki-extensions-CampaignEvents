@@ -10,6 +10,7 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\User\UserTimeCorrection;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
@@ -101,5 +102,14 @@ class Utils {
 		$participantAggregationTS = (int)$firstAnswerTime + EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
 		$eventAggregationTS = (int)MWTimestamp::convert( TS_UNIX, $event->getEndUTCTimestamp() );
 		return (string)min( $participantAggregationTS, $eventAggregationTS );
+	}
+
+	/**
+	 * Shortcut to check if the given performer is blocked and the block is sitewide. Could be inlined with a
+	 * nullsafe call once we drop support for PHP 7.4.
+	 */
+	public static function isSitewideBlocked( Authority $performer ): bool {
+		$block = $performer->getBlock();
+		return $block && $block->isSitewide();
 	}
 }

@@ -9,13 +9,13 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\Response;
@@ -68,7 +68,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->validateToken();
 	}
 
-	abstract protected function checkPermissions( MWAuthorityProxy $performer ): void;
+	abstract protected function checkPermissions( Authority $performer ): void;
 
 	/**
 	 * @inheritDoc
@@ -76,7 +76,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	public function execute() {
 		$body = $this->getValidatedBody();
 
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		$performer = $this->getAuthority();
 		$this->checkPermissions( $performer );
 
 		try {

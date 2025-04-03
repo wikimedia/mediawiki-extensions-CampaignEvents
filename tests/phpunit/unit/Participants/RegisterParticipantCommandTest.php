@@ -10,7 +10,6 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
@@ -19,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -74,7 +74,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanRegisterForEvent' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->registerIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC,
 			[]
 		);
@@ -98,7 +98,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$registration->method( 'getDeletionTimestamp' )->willReturn( $deletionTimestamp );
 		$status = $this->getCommand()->registerIfAllowed(
 			$registration,
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC,
 			[]
 		);
@@ -133,7 +133,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			->with( $this->anything(), $this->anything(), $isPrivate );
 		$status = $this->getCommand( $store )->registerIfAllowed(
 			$this->getValidRegistration(),
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC,
@@ -159,7 +159,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 
 		$status = $this->getCommand( $store )->registerUnsafe(
 			$this->getValidRegistration(),
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC,
@@ -189,7 +189,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$cmd = $this->getCommand( $participantsStore, null, $centralUserLookup, $trackingToolEventWatcher );
 		$status = $cmd->registerUnsafe(
 			$this->getValidRegistration(),
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC,
 			$answers
 		);

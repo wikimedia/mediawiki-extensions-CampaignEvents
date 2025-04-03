@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Language\Language;
@@ -94,7 +93,7 @@ class ClickwrapFormModule {
 	 */
 	public function processInput( array $data ): bool {
 		if ( $data['Acceptance'] ) {
-			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->authority ) );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $this->authority );
 			$this->organiserStore->updateClickwrapAcceptance( $this->event->getID(), $centralUser );
 			return true;
 		} else {

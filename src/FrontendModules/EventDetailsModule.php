@@ -8,7 +8,6 @@ use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -27,6 +26,7 @@ use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\WikiMap\WikiMap;
@@ -112,7 +112,7 @@ class EventDetailsModule {
 
 	/**
 	 * @param UserIdentity $viewingUser
-	 * @param MWAuthorityProxy $authority
+	 * @param Authority $authority
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param string|false $wikiID
@@ -125,7 +125,7 @@ class EventDetailsModule {
 	 */
 	public function createContent(
 		UserIdentity $viewingUser,
-		MWAuthorityProxy $authority,
+		Authority $authority,
 		bool $isOrganizer,
 		bool $isParticipant,
 		$wikiID,
@@ -242,7 +242,7 @@ class EventDetailsModule {
 
 	/**
 	 * @param UserIdentity $viewingUser
-	 * @param MWAuthorityProxy $authority
+	 * @param Authority $authority
 	 * @param OutputPage $out
 	 * @param LinkRenderer $linkRenderer
 	 * @param bool $isOrganizer
@@ -254,7 +254,7 @@ class EventDetailsModule {
 	 */
 	private function getInfoColumn(
 		UserIdentity $viewingUser,
-		MWAuthorityProxy $authority,
+		Authority $authority,
 		OutputPage $out,
 		LinkRenderer $linkRenderer,
 		bool $isOrganizer,
@@ -330,7 +330,7 @@ class EventDetailsModule {
 			} else {
 				$chatSectionContent = null;
 			}
-		} elseif ( !$userCanViewSensitiveEventData && $chatURL && $authority->isSitewideBlocked() ) {
+		} elseif ( !$userCanViewSensitiveEventData && $chatURL && Utils::isSitewideBlocked( $authority ) ) {
 			$chatSectionContent = $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
 			);
@@ -498,7 +498,7 @@ class EventDetailsModule {
 	}
 
 	/**
-	 * @param MWAuthorityProxy $performer
+	 * @param Authority $performer
 	 * @param bool $isOrganizer
 	 * @param bool $isParticipant
 	 * @param bool $isLocalWiki
@@ -511,7 +511,7 @@ class EventDetailsModule {
 	 * @return Tag
 	 */
 	private function getLocationSection(
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,
@@ -567,7 +567,7 @@ class EventDetailsModule {
 				} elseif ( $canRegister ) {
 					$items[] = $this->getNeedsToRegisterMsg();
 				}
-			} elseif ( !$userCanViewSensitiveEventData && $meetingURL && $performer->isSitewideBlocked() ) {
+			} elseif ( !$userCanViewSensitiveEventData && $meetingURL && Utils::isSitewideBlocked( $performer ) ) {
 				$items[] = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
 				);

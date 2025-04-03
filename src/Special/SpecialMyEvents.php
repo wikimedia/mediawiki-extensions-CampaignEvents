@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsTablePager;
@@ -51,7 +50,7 @@ class SpecialMyEvents extends SpecialPage {
 		$status = $request->getVal( 'wpStatus', EventsTablePager::STATUS_ANY );
 
 		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( new MWAuthorityProxy( $this->getAuthority() ) );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
 		} catch ( UserNotGlobalException $_ ) {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-myevents-need-central-account' )->escaped()

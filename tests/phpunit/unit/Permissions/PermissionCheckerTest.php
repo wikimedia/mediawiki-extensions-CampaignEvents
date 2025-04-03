@@ -9,12 +9,12 @@ use MediaWiki\Block\Block;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
@@ -55,14 +55,14 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @param bool $isTemp
 	 * @param bool $isBlocked
 	 * @param array|string $userRights Array of rights, or self::ALL_RIGHTS to indicate all.
-	 * @return MWAuthorityProxy
+	 * @return Authority
 	 */
 	private function makeAuthority(
 		bool $isLoggedIn,
 		bool $isTemp,
 		bool $isBlocked,
 		$userRights
-	): MWAuthorityProxy {
+	): Authority {
 		if ( $isTemp ) {
 			$user = new UserIdentityValue( 42, '*Unregistered1' );
 		} elseif ( $isLoggedIn ) {
@@ -76,13 +76,12 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		} else {
 			$block = null;
 		}
-		$authority = $this->mockAuthority(
+		return $this->mockAuthority(
 			$user,
 			static fn ( $right ) => $userRights === self::ALL_RIGHTS || in_array( $right, $userRights, true ),
 			$block,
 			$isTemp
 		);
-		return new MWAuthorityProxy( $authority );
 	}
 
 	private function makePermLookup(
@@ -208,11 +207,9 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		?bool $isPageAuthor
 	) {
 		if ( $isAuthorized ) {
-			$performer = new MWAuthorityProxy(
-				$this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] )
-			);
+			$performer = $this->mockRegisteredAuthorityWithPermissions( [ 'campaignevents-enable-registration' ] );
 		} else {
-			$performer = new MWAuthorityProxy( $this->mockRegisteredNullAuthority() );
+			$performer = $this->mockRegisteredNullAuthority();
 		}
 
 		$page = $this->createMock( MWPageProxy::class );

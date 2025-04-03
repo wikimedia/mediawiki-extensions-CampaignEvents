@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use InvalidArgumentException;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\User\CentralId\CentralIdLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
@@ -66,12 +67,10 @@ class CampaignsCentralUserLookup {
 	/**
 	 * Returns the central user corresponding to the given authority, if it exists. NOTE: Make sure to handle
 	 * the exception, if the user is not guaranteed to have a global account.
-	 * @param MWAuthorityProxy $authority
-	 * @return CentralUser
 	 * @throws UserNotGlobalException
 	 */
-	public function newFromAuthority( MWAuthorityProxy $authority ): CentralUser {
-		$mwUser = $this->userFactory->newFromId( $authority->getLocalUserID() );
+	public function newFromAuthority( Authority $authority ): CentralUser {
+		$mwUser = $this->userFactory->newFromAuthority( $authority );
 		return $this->newFromUserIdentity( $mwUser );
 	}
 

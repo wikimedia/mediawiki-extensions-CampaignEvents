@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\Response;
@@ -39,8 +38,7 @@ class CancelEventRegistrationHandler extends SimpleHandler {
 
 	protected function run( int $eventID ): Response {
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		$status = $this->unregisterParticipantCommand->unregisterIfAllowed( $eventRegistration, $performer );
+		$status = $this->unregisterParticipantCommand->unregisterIfAllowed( $eventRegistration, $this->getAuthority() );
 		if ( !$status->isGood() ) {
 			$httptStatus = $status instanceof PermissionStatus ? 403 : 400;
 			$this->exitWithStatus( $status, $httptStatus );

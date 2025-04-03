@@ -10,13 +10,13 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
@@ -78,7 +78,7 @@ class ListParticipantsHandler extends SimpleHandler {
 		}
 
 		$includePrivate = $params['include_private'];
-		$authority = new MWAuthorityProxy( $this->getAuthority() );
+		$authority = $this->getAuthority();
 		if (
 			$includePrivate &&
 			!$this->permissionChecker->userCanViewPrivateParticipants( $authority, $event )
@@ -104,13 +104,13 @@ class ListParticipantsHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @param MWAuthorityProxy $authority
+	 * @param Authority $authority
 	 * @param ExistingEventRegistration $event
 	 * @param Participant[] $participants
 	 * @return array
 	 */
 	private function getResponseData(
-		MWAuthorityProxy $authority,
+		Authority $authority,
 		ExistingEventRegistration $event,
 		array $participants
 	): array {

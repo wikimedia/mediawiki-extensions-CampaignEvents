@@ -6,12 +6,12 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Permissions\Authority;
 
 class PermissionChecker {
@@ -44,13 +44,13 @@ class PermissionChecker {
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring named account,
 	 * unblock, and rights.
 	 */
-	public function userCanEnableRegistrations( MWAuthorityProxy $performer ): bool {
+	public function userCanEnableRegistrations( Authority $performer ): bool {
 		return $performer->isNamed()
-			&& $performer->hasRight( self::ENABLE_REGISTRATIONS_RIGHT )
-			&& !$performer->isSitewideBlocked();
+			&& $performer->isAllowed( self::ENABLE_REGISTRATIONS_RIGHT )
+			&& !Utils::isSitewideBlocked( $performer );
 	}
 
-	public function userCanEnableRegistration( MWAuthorityProxy $performer, MWPageProxy $eventPage ): bool {
+	public function userCanEnableRegistration( Authority $performer, MWPageProxy $eventPage ): bool {
 		if ( !$this->userCanEnableRegistrations( $performer ) ) {
 			return false;
 		}
@@ -78,16 +78,12 @@ class PermissionChecker {
 			!$this->permissionsLookup->userIsSitewideBlocked( $username );
 	}
 
-	// phpcs:ignore
-	public function userCanEditRegistration( $performer, ExistingEventRegistration $event ): bool {
-		if ( $performer instanceof Authority ) {
-			$performer = new MWAuthorityProxy( $performer );
-		}
+	public function userCanEditRegistration( Authority $performer, ExistingEventRegistration $event ): bool {
 		if (
 			!$event->isOnLocalWiki() ||
 			(
 				!$this->userCanEnableRegistrations( $performer ) &&
-				!$this->userCanOrganizeEvents( $performer->getName() )
+				!$this->userCanOrganizeEvents( $performer->getUser()->getName() )
 			)
 		) {
 			return false;
@@ -105,7 +101,7 @@ class PermissionChecker {
 	}
 
 	public function userCanDeleteRegistration(
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $event->isOnLocalWiki() && (
@@ -114,65 +110,65 @@ class PermissionChecker {
 			);
 	}
 
-	public function userCanDeleteRegistrations( MWAuthorityProxy $performer ): bool {
+	public function userCanDeleteRegistrations( Authority $performer ): bool {
 		return $performer->isNamed() &&
-			$performer->hasRight( self::DELETE_REGISTRATION_RIGHT ) &&
-			!$performer->isSitewideBlocked();
+			$performer->isAllowed( self::DELETE_REGISTRATION_RIGHT ) &&
+			!Utils::isSitewideBlocked( $performer );
 	}
 
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own ways of requiring named account
 	 * and unblock.
 	 */
-	public function userCanRegisterForEvent( MWAuthorityProxy $performer, ExistingEventRegistration $event ): bool {
+	public function userCanRegisterForEvent( Authority $performer, ExistingEventRegistration $event ): bool {
 		// TODO Do we need another user right for this?
-		return $event->isOnLocalWiki() && $performer->isNamed() && !$performer->isSitewideBlocked();
+		return $event->isOnLocalWiki() && $performer->isNamed() && !Utils::isSitewideBlocked( $performer );
 	}
 
 	/**
 	 * NOTE: This should be kept in sync with the special page, which has its own way of requiring a named account.
 	 */
-	public function userCanCancelRegistration( MWAuthorityProxy $performer ): bool {
+	public function userCanCancelRegistration( Authority $performer ): bool {
 		// Note that blocked users can cancel their own registration, see T322380.
 		return $performer->isNamed();
 	}
 
 	public function userCanRemoveParticipants(
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $this->userCanEditRegistration( $performer, $event );
 	}
 
 	public function userCanViewPrivateParticipants(
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $this->userCanEditRegistration( $performer, $event ) ||
 			( $event->isOnLocalWiki()
 				&& $performer->isNamed()
-				&& $performer->hasRight( self::VIEW_PRIVATE_PARTICIPANTS_RIGHT )
-				&& !$performer->isSitewideBlocked() );
+				&& $performer->isAllowed( self::VIEW_PRIVATE_PARTICIPANTS_RIGHT )
+				&& !Utils::isSitewideBlocked( $performer ) );
 	}
 
-	public function userCanViewSensitiveEventData( MWAuthorityProxy $performer ): bool {
-		return !$performer->isSitewideBlocked();
+	public function userCanViewSensitiveEventData( Authority $performer ): bool {
+		return !Utils::isSitewideBlocked( $performer );
 	}
 
 	public function userCanViewNonPIIParticipantsData(
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		ExistingEventRegistration $event
 	): bool {
 		return $this->userCanEditRegistration( $performer, $event );
 	}
 
-	public function userCanEmailParticipants( MWAuthorityProxy $performer, ExistingEventRegistration $event ): bool {
+	public function userCanEmailParticipants( Authority $performer, ExistingEventRegistration $event ): bool {
 		return $this->userCanEditRegistration( $performer, $event )
-			&& $performer->hasRight( self::SEND_EVENTS_EMAIL_RIGHT );
+			&& $performer->isAllowed( self::SEND_EVENTS_EMAIL_RIGHT );
 	}
 
-	public function userCanUseInvitationLists( MWAuthorityProxy $performer ): bool {
-		return $this->userCanOrganizeEvents( $performer->getName() ) ||
+	public function userCanUseInvitationLists( Authority $performer ): bool {
+		return $this->userCanOrganizeEvents( $performer->getUser()->getName() ) ||
 			$this->userCanEnableRegistrations( $performer );
 	}
 }

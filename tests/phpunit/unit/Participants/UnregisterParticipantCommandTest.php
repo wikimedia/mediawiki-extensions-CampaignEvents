@@ -9,12 +9,12 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWikiUnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -79,7 +79,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$permChecker->expects( $this->once() )->method( 'userCanCancelRegistration' )->willReturn( false );
 		$status = $this->getCommand( null, $permChecker )->unregisterIfAllowed(
 			$this->createMock( ExistingEventRegistration::class ),
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -96,7 +96,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1654000000' );
 		$status = $this->getCommand()->unregisterIfAllowed(
 			$deletedRegistration,
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -115,7 +115,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$store->method( 'removeParticipantFromEvent' )->willReturn( $modified );
 		$status = $this->getCommand( $store )->unregisterIfAllowed(
 			$this->getValidRegistration(),
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $modified, $status );
@@ -130,7 +130,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$store->method( 'removeParticipantFromEvent' )->willReturn( $modified );
 		$status = $this->getCommand( $store )->unregisterUnsafe(
 			$this->getValidRegistration(),
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $modified, $status );
@@ -148,7 +148,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	) {
 		$status = $this->getCommand( null, null, $centralUserLookup, $trackingToolEventWatcher )->unregisterUnsafe(
 			$this->getValidRegistration(),
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( $expectedMsg, $status );
@@ -188,7 +188,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$closedEvent->method( 'isPast' )->willReturn( false );
 		$status = $this->getCommand()->unregisterUnsafe(
 			$closedEvent,
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertStatusGood( $status );
 	}
@@ -201,7 +201,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$finishedEvent->method( 'isPast' )->willReturn( true );
 		$status = $this->getCommand()->unregisterUnsafe(
 			$finishedEvent,
-			$this->createMock( MWAuthorityProxy::class )
+			$this->createMock( Authority::class )
 		);
 		$this->assertStatusGood( $status );
 	}
@@ -217,7 +217,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand( null, $permChecker )->removeParticipantsIfAllowed(
 			$this->getValidRegistration(),
 			[],
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			UnregisterParticipantCommand::INVERT_USERS
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
@@ -236,7 +236,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand()->removeParticipantsIfAllowed(
 			$deletedRegistration,
 			[],
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			UnregisterParticipantCommand::INVERT_USERS
 		);
 
@@ -256,7 +256,7 @@ class UnregisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		$status = $this->getCommand()->removeParticipantsIfAllowed(
 			$this->getValidRegistration(),
 			[],
-			$this->createMock( MWAuthorityProxy::class ),
+			$this->createMock( Authority::class ),
 			$invertUsers
 		);
 

@@ -9,7 +9,6 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
@@ -106,8 +105,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function userCanExecute( User $user ): bool {
-		$mwAuthority = new MWAuthorityProxy( $this->getAuthority() );
-		return $this->permissionChecker->userCanDeleteRegistration( $mwAuthority, $this->event );
+		return $this->permissionChecker->userCanDeleteRegistration( $this->getAuthority(), $this->event );
 	}
 
 	/**
@@ -134,8 +132,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ): Status {
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		return Status::wrap( $this->deleteEventCommand->deleteIfAllowed( $this->event, $performer ) );
+		return Status::wrap( $this->deleteEventCommand->deleteIfAllowed( $this->event, $this->getAuthority() ) );
 	}
 
 	/**

@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -58,8 +57,7 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 			);
 		}
 
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
-		$status = $this->deleteEventCommand->deleteIfAllowed( $registration, $performer );
+		$status = $this->deleteEventCommand->deleteIfAllowed( $registration, $this->getAuthority() );
 		if ( !$status->isGood() ) {
 			$httptStatus = $status instanceof PermissionStatus ? 403 : 400;
 			$this->exitWithStatus( $status, $httptStatus );

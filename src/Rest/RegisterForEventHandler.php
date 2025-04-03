@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -57,7 +56,7 @@ class RegisterForEventHandler extends SimpleHandler {
 
 	protected function run( int $eventID ): Response {
 		$body = $this->getValidatedBody() ?? [];
-		$performer = new MWAuthorityProxy( $this->getAuthority() );
+		$performer = $this->getAuthority();
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );

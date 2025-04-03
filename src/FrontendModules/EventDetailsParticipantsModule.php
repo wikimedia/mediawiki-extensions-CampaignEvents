@@ -10,7 +10,6 @@ use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
@@ -22,6 +21,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Language\Language;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Parser\Sanitizer;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonGroupWidget;
@@ -101,7 +101,7 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param ExistingEventRegistration $event
 	 * @param UserIdentity $viewingUser
-	 * @param MWAuthorityProxy $authority
+	 * @param Authority $authority
 	 * @param bool $isOrganizer
 	 * @param bool $canEmailParticipants
 	 * @param bool $isLocalWiki
@@ -114,7 +114,7 @@ class EventDetailsParticipantsModule {
 	public function createContent(
 		ExistingEventRegistration $event,
 		UserIdentity $viewingUser,
-		MWAuthorityProxy $authority,
+		Authority $authority,
 		bool $isOrganizer,
 		bool $canEmailParticipants,
 		bool $isLocalWiki,
@@ -179,8 +179,6 @@ class EventDetailsParticipantsModule {
 				$canViewNonPIIParticipantsData,
 				$curUserParticipant,
 				$otherParticipants,
-				$authority,
-				$event,
 				$nonPIIQuestionIDs
 			);
 		}
@@ -282,8 +280,6 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canViewNonPIIParticipantsData
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
-	 * @param MWAuthorityProxy $authority
-	 * @param ExistingEventRegistration $event
 	 * @param int[] $nonPIIQuestionIDs
 	 * @return Tag
 	 */
@@ -295,8 +291,6 @@ class EventDetailsParticipantsModule {
 		bool $canViewNonPIIParticipantsData,
 		?Participant $curUserParticipant,
 		array $otherParticipants,
-		MWAuthorityProxy $authority,
-		ExistingEventRegistration $event,
 		array $nonPIIQuestionIDs
 	): Tag {
 		// Use an outer container for the infinite scrolling
@@ -308,8 +302,6 @@ class EventDetailsParticipantsModule {
 		$table->appendContent( $this->getTableHeaders(
 				$canRemoveParticipants,
 				$canEmailParticipants,
-				$event,
-				$authority,
 				$nonPIIQuestionIDs,
 				$canViewNonPIIParticipantsData
 			)
@@ -368,8 +360,6 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
-	 * @param ExistingEventRegistration $event
-	 * @param MWAuthorityProxy $authority
 	 * @param array $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
@@ -377,8 +367,6 @@ class EventDetailsParticipantsModule {
 	private function getTableHeaders(
 		bool $canRemoveParticipants,
 		bool $canEmailParticipants,
-		ExistingEventRegistration $event,
-		MWAuthorityProxy $authority,
 		array $nonPIIQuestionIDs,
 		bool $userCanViewNonPIIParticipantsData
 	): Tag {

@@ -8,10 +8,10 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use StatusValue;
 
@@ -52,14 +52,14 @@ class UnregisterParticipantCommand {
 
 	/**
 	 * @param ExistingEventRegistration $registration
-	 * @param MWAuthorityProxy $performer
+	 * @param Authority $performer
 	 * @return StatusValue Good if everything went fine, fatal with errors otherwise. If good, the value shall be
 	 *   true if the user was actively registered, and false if they unregistered or had never registered.
 	 *   Will be a PermissionStatus for permissions-related errors.
 	 */
 	public function unregisterIfAllowed(
 		ExistingEventRegistration $registration,
-		MWAuthorityProxy $performer
+		Authority $performer
 	): StatusValue {
 		$permStatus = $this->authorizeUnregistration( $performer );
 		if ( !$permStatus->isGood() ) {
@@ -68,7 +68,7 @@ class UnregisterParticipantCommand {
 		return $this->unregisterUnsafe( $registration, $performer );
 	}
 
-	private function authorizeUnregistration( MWAuthorityProxy $performer ): PermissionStatus {
+	private function authorizeUnregistration( Authority $performer ): PermissionStatus {
 		if ( !$this->permissionChecker->userCanCancelRegistration( $performer ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-unregister-not-allowed' );
 		}
@@ -93,7 +93,7 @@ class UnregisterParticipantCommand {
 
 	public function unregisterUnsafe(
 		ExistingEventRegistration $registration,
-		MWAuthorityProxy $performer
+		Authority $performer
 	): StatusValue {
 		$unregistrationAllowedVal = self::checkIsUnregistrationAllowed( $registration );
 		if ( !$unregistrationAllowedVal->isGood() ) {
@@ -132,7 +132,7 @@ class UnregisterParticipantCommand {
 	/**
 	 * @param ExistingEventRegistration $registration
 	 * @param CentralUser[]|null $users Array of users, if null remove all
-	 * @param MWAuthorityProxy $performer
+	 * @param Authority $performer
 	 * @param bool $invertUsers self::DO_NOT_INVERT_USERS or self::INVERT_USERS
 	 * @return StatusValue The StatusValue's "value" property is an array with two keys, `public` and `private`, that
 	 * respectively contain the number of public and private participants removed.
@@ -140,7 +140,7 @@ class UnregisterParticipantCommand {
 	public function removeParticipantsIfAllowed(
 		ExistingEventRegistration $registration,
 		?array $users,
-		MWAuthorityProxy $performer,
+		Authority $performer,
 		bool $invertUsers
 	): StatusValue {
 		$permStatus = $this->authorizeRemoveParticipants( $registration, $performer );
@@ -153,7 +153,7 @@ class UnregisterParticipantCommand {
 
 	private function authorizeRemoveParticipants(
 		ExistingEventRegistration $registration,
-		MWAuthorityProxy $performer
+		Authority $performer
 	): PermissionStatus {
 		if ( !$this->permissionChecker->userCanRemoveParticipants( $performer, $registration ) ) {
 			return PermissionStatus::newFatal( 'campaignevents-unregister-participants-permission-denied' );

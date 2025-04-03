@@ -8,7 +8,6 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -68,7 +67,7 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		$status = $this->unregisterParticipantCommand->removeParticipantsIfAllowed(
 			$eventRegistration,
 			$usersToRemove,
-			new MWAuthorityProxy( $this->getAuthority() ),
+			$this->getAuthority(),
 			$body['invert_users'] ? UnregisterParticipantCommand::INVERT_USERS :
 				UnregisterParticipantCommand::DO_NOT_INVERT_USERS
 		);

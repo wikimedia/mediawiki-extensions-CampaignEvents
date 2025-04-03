@@ -15,7 +15,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWAuthorityProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -95,7 +94,7 @@ class EventPageDecorator {
 	private Config $config;
 
 	private Language $language;
-	private MWAuthorityProxy $authority;
+	private Authority $authority;
 	private UserIdentity $viewingUser;
 	private OutputPage $out;
 	private ITextFormatter $msgFormatter;
@@ -144,7 +143,7 @@ class EventPageDecorator {
 		$this->config = $config;
 
 		$this->language = $language;
-		$this->authority = new MWAuthorityProxy( $viewingAuthority );
+		$this->authority = $viewingAuthority;
 		$this->viewingUser = $viewingAuthority->getUser();
 		$this->out = $out;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
@@ -1029,7 +1028,7 @@ class EventPageDecorator {
 		// same (cached) version of the page to everyone. Also, even if the IP is blocked, the user might have an
 		// account that they can log into, so showing the button is fine.
 		if ( $centralUser ) {
-			if ( $this->authority->isSitewideBlocked() ) {
+			if ( Utils::isSitewideBlocked( $this->authority ) ) {
 				return self::USER_STATUS_BLOCKED;
 			}
 
