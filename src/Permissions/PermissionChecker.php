@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Permissions\Authority;
 
 class PermissionChecker {
 	public const SERVICE_NAME = 'CampaignEventsPermissionChecker';
@@ -77,7 +78,11 @@ class PermissionChecker {
 			!$this->permissionsLookup->userIsSitewideBlocked( $username );
 	}
 
-	public function userCanEditRegistration( MWAuthorityProxy $performer, ExistingEventRegistration $event ): bool {
+	// phpcs:ignore
+	public function userCanEditRegistration( $performer, ExistingEventRegistration $event ): bool {
+		if ( $performer instanceof Authority ) {
+			$performer = new MWAuthorityProxy( $performer );
+		}
 		if (
 			!$event->isOnLocalWiki() ||
 			(
