@@ -43,6 +43,7 @@ class OngoingEventsListPager extends EventsListPager {
 		?int $meetingType,
 		string $startDate,
 		array $filterWiki,
+		bool $includeAllWikis,
 		array $filterTopics
 	) {
 		parent::__construct(
@@ -64,6 +65,7 @@ class OngoingEventsListPager extends EventsListPager {
 			$startDate,
 			null,
 			$filterWiki,
+			$includeAllWikis,
 			$filterTopics
 		);
 	}

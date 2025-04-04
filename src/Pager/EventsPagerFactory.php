@@ -99,6 +99,7 @@ class EventsPagerFactory {
 		?string $startDate,
 		?string $endDate,
 		array $filterWiki,
+		bool $includeAllWikis,
 		array $filterTopics
 	): EventsListPager {
 		return new EventsListPager(
@@ -120,6 +121,7 @@ class EventsPagerFactory {
 			$startDate,
 			$endDate,
 			$filterWiki,
+			$includeAllWikis,
 			$filterTopics
 		);
 	}
@@ -130,6 +132,7 @@ class EventsPagerFactory {
 		?int $meetingType,
 		string $startDate,
 		array $filterWiki,
+		bool $includeAllWikis,
 		array $filterTopics
 	): OngoingEventsListPager {
 		return new OngoingEventsListPager(
@@ -150,6 +153,7 @@ class EventsPagerFactory {
 			$meetingType,
 			$startDate,
 			$filterWiki,
+			$includeAllWikis,
 			$filterTopics
 		);
 	}
