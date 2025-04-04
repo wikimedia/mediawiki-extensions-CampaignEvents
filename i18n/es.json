@@ -66,6 +66,7 @@
 	"campaignevents-error-invalid-country": "Introduce un nombre de país válido.",
 	"campaignevents-error-invalid-address": "Introduce una dirección válida.",
 	"campaignevents-error-invalid-question-names": "No se reconocen las siguientes preguntas: $1",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "Registro en eventos no está habilitado en este espacio de nombres.",
 	"enableeventregistration": "Activar inscripciones para evento",
 	"editeventregistration": "Editar inscripciones de evento",
 	"campaignevents-edit-form-details-label": "Detalles del evento",

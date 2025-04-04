@@ -9,6 +9,7 @@
 	"campaignevents-rest-edit-page-nonlocal": "Coyo nying pi yub man ki yabo i wiki ma lubo ni ki omyera ki lok iye: $1 .",
 	"campaignevents-rest-delete-already-deleted": "Coyo nying i yub man dong ki kwanyo woko.",
 	"campaignevents-rest-user-not-found": "Pe tye ngat mo ma tye ki ID man.",
+	"campaignevents-rest-get-registration-deleted": "Coyo nying i yub man dong ki kwanyo woko.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Gin ma ki lwongo ni'user_ids'omyero obed dul pa user ids, onyo null (me kwanyo lutic weng)",
 	"campaignevents-rest-remove-participants-nonlocal-error-message": "Kwany dano ma tye i $1, wiki ma ki yubu iye yub ni.",
 	"campaignevents-rest-list-participants-empty-filter": "Gin ma ki lwongo ni user filter, ka ki waco, myero obed gin ma pe odong.",
