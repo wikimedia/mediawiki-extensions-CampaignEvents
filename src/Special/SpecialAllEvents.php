@@ -23,6 +23,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 
 	private const ONGOING_SECTION = 'ongoing';
 	private const UPCOMING_SECTION = 'upcoming';
+	private const TAB_ID_PREFIX = 'ext-campaignevents-allevents-tab-';
 
 	private EventsPagerFactory $eventsPagerFactory;
 	private CampaignEventsHookRunner $hookRunner;
@@ -54,26 +55,45 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			'ext.campaignEvents.specialPages.styles',
 			'codex-styles',
 		] );
+
 		if ( !$this->including() ) {
 			// Not needed when transcluding, so skip it for performance. See also T392856.
 			$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
 		}
-		$eventsContent = $this->getFormAndEvents();
-		// don't add community tab to transcluded content
-		if ( !$this->including() ) {
-			$this->hookRunner->onCampaignEventsGetAllEventsContent(
-				$this->getOutput(),
-				$eventsContent
-			);
+
+		$pageTabs = [
+			'events' => [
+				'content' => $this->getFormAndEvents(),
+				'label' => $this->getOutput()->msg(
+					'wikimediacampaignevents-collaboration-list-events-tab-heading'
+				)->text()
+			],
+		];
+		$submittedTab = $this->getOutput()->getRequest()->getRawVal( 'tab' );
+		$activeTab = $submittedTab ? str_replace( self::TAB_ID_PREFIX, '', $submittedTab ) : 'events';
+		$this->hookRunner->onCampaignEventsGetAllEventsTabs(
+			$this->getOutput(),
+			$pageTabs,
+			$activeTab
+		);
+
+		if ( count( $pageTabs ) > 1 ) {
+			$pageContent = $this->getLayout( $pageTabs, $activeTab );
 		} else {
-			$eventsContent .= $this->getLinkRenderer()->makeKnownLink(
+			$pageContent = $pageTabs['events']['content'];
+		}
+
+		// don't add community tab to transcluded content
+		if ( $this->including() ) {
+			$pageContent = $pageTabs['events']['content'];
+			$pageContent .= $this->getLinkRenderer()->makeKnownLink(
 				$this->getPageTitle(),
 				$this->msg( 'campaignevents-allevents-transclusion-more-link' ),
 				[],
 				$this->getRequest()->getQueryValues()
 			);
 		}
-		$this->getOutput()->addHTML( $eventsContent );
+		$this->getOutput()->addHTML( $pageContent );
 	}
 
 	public function getFormAndEvents(): string {
@@ -292,5 +312,24 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		} catch ( TimestampException $exception ) {
 			return null;
 		}
+	}
+
+	private function getLayout( array $tabs, string $activeTab ): string {
+		$data = [
+			'url' => $this->getPageTitle()->getLocalURL(),
+		];
+		foreach ( $tabs as $tabName => $tab ) {
+			$active = $activeTab === $tabName;
+			$data['tabs'][] =
+				[
+					'id' => 'ext-campaignevents-allevents-tab-' . $tabName,
+					'content' => $tab['content'],
+					'label' => $tab['label'],
+					'active' => wfBoolToStr( $active ),
+					'hidden' => wfBoolToStr( !$active ),
+				];
+
+		}
+		return $this->templateParser->processTemplate( 'TabLayout', $data );
 	}
 }
