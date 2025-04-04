@@ -81,6 +81,15 @@ class SpecialAllEvents extends SpecialPage {
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 		$openSectionsStr = $request->getVal( 'wpOpenSections', self::UPCOMING_SECTION );
 
+		$includeAllWikis = true;
+		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
+		// distinguish between form not submitted and form submitted but checkbox unchecked. This is important
+		// because the checkbox is checked by default.
+		$formIdentifier = 'campaignevents-allevents';
+		if ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
+			$includeAllWikis = $request->getCheck( 'wpIncludeAllWikis' );
+		}
+
 		$formDescriptor = [
 			'Search' => [
 				'type' => 'text',
@@ -124,10 +133,6 @@ class SpecialAllEvents extends SpecialPage {
 				'max' => 10,
 				'cssclass' => 'ext-campaignevents-allevents-wikis-field',
 			],
-			'OpenSections' => [
-				'type' => 'hidden',
-				'default' => $openSectionsStr,
-			],
 		];
 		$availableTopics = $this->topicRegistry->getTopicsForSelect();
 		if ( $availableTopics ) {
@@ -140,11 +145,25 @@ class SpecialAllEvents extends SpecialPage {
 				'max' => 20,
 			];
 		}
+		// TODO: Use array unpacking when we drop support for PHP 7.4
+		$formDescriptor = array_merge( $formDescriptor, [
+			'IncludeAllWikis' => [
+				'type' => 'toggle',
+				'label-message' => 'campaignevents-allevents-label-include-all-wikis',
+				'default' => true,
+			],
+			'OpenSections' => [
+				'type' => 'hidden',
+				'default' => $openSectionsStr,
+			],
+		] );
+
 		$form = HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
 			->setWrapperLegendMsg( 'campaignevents-allevents-filter-legend' )
 			->setSubmitTextMsg( 'campaignevents-allevents-label-submit' )
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
+			->setFormIdentifier( $formIdentifier, true )
 			->setSubmitCallback( static fn () => true );
 		$result = $form->prepareForm()->tryAuthorizedSubmit();
 
@@ -155,7 +174,7 @@ class SpecialAllEvents extends SpecialPage {
 			$startTime,
 			$endTime,
 			$filterWiki,
-			true,
+			$includeAllWikis,
 			$filterTopics
 		);
 		$upcomingEventsNavigation = $upcomingPager->getNavigationBar();
@@ -168,7 +187,7 @@ class SpecialAllEvents extends SpecialPage {
 				$meetingType,
 				$startTime,
 				$filterWiki,
-				true,
+				$includeAllWikis,
 				$filterTopics
 			);
 			// TODO: Remove this awful hack when we find a way to have separate paging (T386019).
