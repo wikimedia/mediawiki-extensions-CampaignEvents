@@ -53,6 +53,7 @@
 	"campaignevents-error-invalid-country": "Внесете важечко име на земја.",
 	"campaignevents-error-invalid-address": "Внесете важечка адреса.",
 	"campaignevents-error-invalid-question-names": "Не ги препознав следниве прашања: $1",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "Пријавувањето на настани не е дозволено во овој именски простор.",
 	"enableeventregistration": "Овозможи пријавување за настан",
 	"editeventregistration": "Измени пријава за настан",
 	"campaignevents-edit-form-details-label": "Поединости за настанот",
