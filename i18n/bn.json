@@ -12,6 +12,8 @@
 	"nstab-event": "ইভেন্ট",
 	"action-campaignevents-enable-registration": "ইভেন্ট নিবন্ধন সক্রিয় করার",
 	"right-campaignevents-enable-registration": "ইভেন্ট নিবন্ধন সক্রিয় করা",
+	"campaignevents-error-invalid-country": "একটি বৈধ দেশের নাম লিখুন।",
+	"campaignevents-error-invalid-address": "একটি বৈধ ঠিকানা লিখুন।",
 	"campaignevents-edit-field-event-status": "ইভেন্টের স্থিতি",
 	"campaignevents-edit-field-status-open": "উন্মুক্ত",
 	"campaignevents-edit-field-status-closed": "বন্ধ হয়ে গেছে",
@@ -20,6 +22,9 @@
 	"campaignevents-edit-field-type-online": "অনলাইন ইভেন্ট",
 	"campaignevents-edit-field-country": "দেশ",
 	"campaignevents-edit-field-address": "ঠিকানা",
+	"campaignevents-enable-registration-form-submit": "নিবন্ধন সক্রিয় করুন",
+	"campaignevents-edit-form-submit": "নিবন্ধন সম্পাদনা করুন",
+	"campaignevents-edit-invalid-id": "একটি বৈধ ইভেন্ট আইডি প্রদান করুন।",
 	"campaignevents-edit-need-central-account": "ইভেন্ট নিবন্ধন সক্রিয় বা সম্পাদনা করতে হলে আপনার একটি কেন্দ্রীয় ব্যবহারকারীর অ্যাকাউন্ট থাকতে হবে৷",
 	"registerforevent": "একটি ইভেন্টের জন্য নিবন্ধন করুন",
 	"campaignevents-register-confirmation-btn": "নিবন্ধন করুন",
@@ -55,6 +60,7 @@
 	"campaignevents-eventpage-btn-register": "ইভেন্টের জন্য নিবন্ধন করুন",
 	"campaignevents-eventpage-btn-event-ended": "ইভেন্ট সমাপ্ত হয়েছে",
 	"campaignevents-eventpage-dialog-organizers": "আয়োজক: $1",
+	"campaignevents-eventpage-dialog-organizers-view-all": "সকল আয়োজকদের দেখুন",
 	"campaignevents-eventpage-dialog-participants": "$1 জন {{PLURAL:$1|অংশগ্রহণকারী}}",
 	"campaignevents-eventpage-dialog-dates-label": "শুরু ও সমাপ্তির সময়",
 	"campaignevents-eventpage-dialog-dates": "$1 থেকে $4 পর্যন্ত",
@@ -64,6 +70,7 @@
 	"campaignevents-eventpage-dialog-action-close": "বন্ধ",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "হ্যাঁ",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "না",
+	"campaignevents-eventpage-enableheader-organizer": "আপনি একজন আয়োজক",
 	"eventdetails": "অনুষ্ঠানের বিবরণ",
 	"campaignevents-event-details-label": "অনুষ্ঠানের বিবরণ",
 	"campaignevents-event-details-edit-button": "সম্পাদনা",
@@ -84,5 +91,5 @@
 	"campaignevents-event-details-remove-all-participant-notification": "সব অংশগ্রহণকারী অপসারিত",
 	"campaignevents-unregister-participants-permission-denied": "আপনি অংশগ্রহণকারীদের অপসারণ করার জন্য অনুমতি  প্রাপ্ত নন",
 	"campaignevents-event-details-remove-participant-notification-error": "{{PLURAL:$1|অংশগ্রহণকারী|অংশগ্রহণকারীদের}} অপসারণ করার সময় একটি ত্রুটি দেখা দিয়েছে",
-	"campaignevents-event-details-search-participants-placeholder": "অংশগ্রহণকারীদের জন্য অনুসন্ধান করুন"
+	"campaignevents-event-details-search-participants-placeholder": "অংশগ্রহণকারীদের অনুসন্ধান করুন"
 }

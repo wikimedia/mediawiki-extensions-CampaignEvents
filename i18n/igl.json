@@ -1,7 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Beracy"
+			"Beracy",
+			"Ramzyshelby"
 		]
-	}
+	},
+	"action-campaignevents-enable-registration": "Ejewón elegislation ujór",
+	"right-campaignevents-enable-registration": "Ejewón elegislation ujór",
+	"action-campaignevents-delete-registration": "Emi elegislation ujór le du guo",
+	"right-campaignevents-delete-registration": "Emi elegislation ujór le du guo",
+	"campaignevents-error-empty-title": "Doji apà ujór le toh",
+	"campaignevents-error-invalid-title": "Oji ke du toh lé joh: $1."
 }
