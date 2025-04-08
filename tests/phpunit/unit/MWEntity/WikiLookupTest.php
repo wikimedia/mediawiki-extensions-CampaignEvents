@@ -105,25 +105,25 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 		return [
 			'Mixed wikis' => [
 				[ 'acommonswiki', 'anothercommonswiki', 'awikidatawiki' ],
-				'logo-wikimedia'
+				'logoWikimedia'
 			],
 			'All wikis' => [
 				EventRegistration::ALL_WIKIS,
-				'logo-wikimedia'
+				'logoWikimedia'
 			],
 			'Single wikiGroup' => [
 				[ 'acommonswiki', 'anothercommonswiki', 'adifferentcommonswiki' ],
-				'logo-wikimedia-commons'
+				'logoWikimediaCommons'
 			],
 			'Wikipedia family' => [
 				[ 'enwiki', 'frwiki', 'eswiki' ],
-				'logo-wikipedia'
+				'logoWikipedia'
 			],
 			'Unknown wikis' => [
 				[ 'foo', 'bar', 'baz' ],
-				'logo-wikimedia'
+				'logoWikimedia'
 			],
-			'No wikis' => [ [], 'logo-wikimedia' ],
+			'No wikis' => [ [], 'logoWikimedia' ],
 		];
 	}
 }

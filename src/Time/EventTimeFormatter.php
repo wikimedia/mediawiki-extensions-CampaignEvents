@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Time;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Utils;
-use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\UserIdentity;
@@ -95,16 +94,14 @@ class EventTimeFormatter {
 	 * Wrap a time range in an HTML structure that can be read by the TimeZoneConverter JavaScript utility.
 	 * The timezone must also be wrapped, using {@see self::wrapTimeZoneForConversion}.
 	 */
-	public static function wrapRangeForConversion( EventRegistration $event, string $range ): string {
-		return Html::element(
-			'span',
-			[
-				'class' => [ 'ext-campaignevents-time-range' ],
+	public static function wrapRangeForConversion( EventRegistration $event, string $range ): Tag {
+		return ( new Tag( 'span' ) )
+			->addClasses( [ 'ext-campaignevents-time-range' ] )
+			->setAttributes( [
 				'data-mw-start' => ConvertibleTimestamp::convert( TS_ISO_8601, $event->getStartUTCTimestamp() ),
 				'data-mw-end' => ConvertibleTimestamp::convert( TS_ISO_8601, $event->getEndUTCTimestamp() ),
-			],
-			$range
-		);
+			] )
+			->appendContent( $range );
 	}
 
 	/**

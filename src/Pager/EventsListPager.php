@@ -29,6 +29,7 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
+use OOUI\HtmlSnippet;
 use stdClass;
 use UnexpectedValueException;
 use Wikimedia\Assert\Assert;
@@ -248,11 +249,12 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 		$detailsContent .= Html::rawElement( 'div', [], $datesText );
 
-		$detailsContent .= TextWithIconWidget::build(
-			'map-pin',
-			$this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
-			$this->msg( $this->getMeetingTypeMsg( $row ) )->escaped()
-		);
+		$detailsContent .= TextWithIconWidget::build( [
+			'icon' => 'mapPin',
+			'content' => $this->msg( $this->getMeetingTypeMsg( $row ) )->text(),
+			'label' => $this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+		] );
 
 		if ( $this->eventWikis[$row->event_id] ) {
 			$detailsContent .= $this->getWikiList( $row->event_id );
@@ -263,12 +265,13 @@ class EventsListPager extends ReverseChronologicalPager {
 			$detailsContent .= $this->getTopicList( $eventTopics );
 		}
 
-		$detailsContent .= TextWithIconWidget::build(
-			'user-rights',
-			$this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
-			$this->getOrganizersText( $row ),
-			[ 'ext-campaignevents-events-list-organizers' ]
-		);
+		$detailsContent .= TextWithIconWidget::build( [
+			'icon' => 'userRights',
+			'content' => $this->getOrganizersText( $row ),
+			'label' => $this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+			'classes' => [ 'ext-campaignevents-events-list-organizers' ],
+		] );
 
 		$rowContent .= Html::rawElement(
 			'div',
@@ -283,7 +286,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 	}
 
-	private function getOrganizersText( stdClass $row ): string {
+	private function getOrganizersText( stdClass $row ): HtmlSnippet {
 		$eventID = (int)$row->event_id;
 		$organizersToShow = [];
 		$creator = $this->creators[$eventID];
@@ -319,7 +322,7 @@ class EventsListPager extends ReverseChronologicalPager {
 			);
 		}
 
-		return $language->listToText( $organizerLinks );
+		return new HtmlSnippet( $language->listToText( $organizerLinks ) );
 	}
 
 	/**
@@ -510,11 +513,12 @@ class EventsListPager extends ReverseChronologicalPager {
 					->text()
 			);
 		}
-		return TextWithIconWidget::build(
-			$this->wikiLookup->getWikiIcon( $eventWikis ),
-			$this->msg( 'campaignevents-eventslist-wiki-label' )->text(),
-			$language->listToText( $escapedWikiNames )
-		);
+		return TextWithIconWidget::build( [
+			'icon' => $this->wikiLookup->getWikiIcon( $eventWikis ),
+			'content' => new HtmlSnippet( $language->listToText( $escapedWikiNames ) ),
+			'label' => $this->msg( 'campaignevents-eventslist-wiki-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+		] );
 	}
 
 	private function getTopicList( array $topics ): string {
@@ -524,10 +528,11 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 		sort( $localizedTopicNames );
 
-		return TextWithIconWidget::build(
-			'tag',
-			$this->msg( 'campaignevents-eventslist-topics-label' )->text(),
-			$this->getLanguage()->commaList( $localizedTopicNames )
-		);
+		return TextWithIconWidget::build( [
+			'icon' => 'tag',
+			'content' => new HtmlSnippet( $this->getLanguage()->commaList( $localizedTopicNames ) ),
+			'label' => $this->msg( 'campaignevents-eventslist-topics-label' )->text(),
+			'icon_classes' => [ 'ext-campaignevents-events-list-icon' ],
+		] );
 	}
 }
