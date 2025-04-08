@@ -65,5 +65,11 @@
 	"campaignevents-edit-field-meeting-url": "URL Ìpàdé",
 	"campaignevents-edit-field-country": "Orile Ede",
 	"campaignevents-edit-field-address": "Adirẹsi",
-	"campaignevents-edit-field-chat-url": "Ìkésíni ìjíròrò àwùjọ"
+	"campaignevents-edit-field-chat-url": "Ìkésíni ìjíròrò àwùjọ",
+	"campaignevents-edit-form-questions-label": "Awọn ibeere fun awọn olukopa",
+	"campaignevents-edit-form-questions-non-pii-label": "Awọn ibeere Alaye ti kii ṣe Ti ara ẹni (ti kii ṣe PII).",
+	"campaignevents-edit-form-questions-pii-label": "Awọn ibeere Alaye Idanimọ Tikalararẹ (PII).",
+	"campaignevents-enable-registration-form-submit": "Ase titeto ìforúkọsílẹ",
+	"campaignevents-edit-form-submit": "Iforukọsilẹ Ṣatunkọ",
+	"campaignevents-edit-invalid-id": "Pese ID iṣẹlẹ to wulo."
 }
