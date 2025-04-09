@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Lydie maliki"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Evenement moko te na ID oyo",
+	"campaignevents-rest-enable-registration-permission-denied": "Ozali na ndingisa te ya ko activer ba inscriptions ya événement.",
+	"campaignevents-rest-edit-page-nonlocal": "Bokomisi likambo oyo efungolamaki na wiki oyo elandi mpe esengeli kobongisama kuna: $1.",
+	"campaignevents-rest-delete-already-deleted": "Enregistrement ya événement oyo esi elongolami",
+	"campaignevents-rest-user-not-found": "Mosaleli moko te oyo azali na ID central oyo.",
+	"campaignevents-rest-get-registration-deleted": "Enregistrement ya événement oyo elongolamaki.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Paramètre 'user_ids' esengeli kozala ensemble ya ba ids ya mosaleli, to null (mpo na kolongola basaleli nionso) .",
+	"campaignevents-rest-list-participants-empty-filter": "The username filter, if specified, must be a non-empty string.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Ozali na ndingisa te ya kotala bato oyo bakomisaki nkombo na bango moko mpo na molulu oyo.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> esengeli kozala ensemble ya ba kombo ya basaleli mpe ekoki kozala pamba te",
+	"campaignevents-rest-get-registration-info-notparticipant": "Ozali kosangana na molulu oyo te.",
+	"campaignevents-rest-register-invalid-answer": "Eyano ya mabe na motuna $1"
+}
