@@ -52,6 +52,12 @@ class SpecialAllEvents extends SpecialPage {
 		$this->addHelpLink( 'Extension:CampaignEvents' );
 		$this->getOutput()->addModuleStyles( [
 			'ext.campaignEvents.specialPages.styles',
+			'oojs-ui.styles.icons-location',
+			'oojs-ui.styles.icons-interactions',
+			'oojs-ui.styles.icons-wikimedia',
+			'oojs-ui.styles.icons-user',
+			'oojs-ui.styles.icons-editing-advanced',
+			'oojs-ui.styles.icons-content',
 			'codex-styles',
 		] );
 		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
