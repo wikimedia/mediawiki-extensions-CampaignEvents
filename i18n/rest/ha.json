@@ -2,15 +2,23 @@
 	"@metadata": {
 		"authors": [
 			"Ezeone10",
-			"Rejoicedaniel"
+			"Rejoicedaniel",
+			"Yaw tuba"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Babu wani abu da ya faru tare da wannan ID ɗin.",
 	"campaignevents-rest-enable-registration-permission-denied": "Ba a ba ku izinin yin rajista na taron ba.",
+	"campaignevents-rest-edit-page-nonlocal": "An kunna wannan rajistar taron akan wiki mai zuwa kuma yakamata a gyara shi a can: $1 .",
 	"campaignevents-rest-delete-already-deleted": "An riga an goge wannan rajistar taron.",
 	"campaignevents-rest-user-not-found": "Babu wani mai amfani da wannan ID na tsakiya.",
 	"campaignevents-rest-get-registration-deleted": "An goge wannan rajistar taron.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Siga 'user_ids' dole ne ya zama tsararrun ids na mai amfani, ko mara amfani (don cire duk masu amfani)",
 	"campaignevents-rest-list-participants-empty-filter": "Matattarar sunan mai amfani, idan an ƙayyade, dole ne ya zama kirtani mara fanko.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Ba ku da izinin duba mahalarta waɗanda suka yi rajista a keɓe don wannan taron.",
-	"campaignevents-rest-get-registration-info-notparticipant": "Ba ku shiga cikin wannan taron."
+	"campaignevents-rest-set-organizers-empty-list": "<var>organisation_usernames</var> dole ne su zama jerin sunayen masu amfani kuma ba za su iya zama fanko ba",
+	"campaignevents-rest-get-registration-info-notparticipant": "Ba ku shiga cikin wannan taron.",
+	"campaignevents-rest-register-invalid-answer": "Amsa mara inganci ga tambayar $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Da fatan za a kammala rajistar taron ku akan $1, wiki inda aka ƙirƙiri taron.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Da fatan za a share rajistar taron ku akan $1, wiki inda aka ƙirƙiri taron.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Da fatan za a cire mahalarta akan $1, wiki inda aka ƙirƙiri taron."
 }
