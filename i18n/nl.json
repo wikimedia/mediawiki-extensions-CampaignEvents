@@ -57,6 +57,7 @@
 	"campaignevents-error-invalid-country": "Voer een geldige landnaam in.",
 	"campaignevents-error-invalid-address": "Voer een geldig adres in.",
 	"campaignevents-error-invalid-question-names": "De volgende vragen zijn niet herkend: $1",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "In deze naamruimte is het inschrijven op evenementen niet toegestaan.",
 	"enableeventregistration": "Evenementregistratie inschakelen",
 	"editeventregistration": "Evenementregistratie bewerken",
 	"campaignevents-edit-form-details-label": "Evenementgegevens",
