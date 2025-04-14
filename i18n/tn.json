@@ -73,6 +73,7 @@
 	"campaignevents-role-creator": "{{GENDER:$1| motlhami}}",
 	"campaignevents-role-organizer": "{{Bong:$1| morulaganyi wa tiragalo}}",
 	"campaignevents-register-not-allowed": "Ga o letlelelwe go ikwadisetsa ditiragalo.",
+	"campaignevents-register-event-past": "Paka eno ya ikwadiso ya tiragalo e setse e fedile.",
 	"campaignevents-register-event-not-open": "Ikwadiso ya tiragalo eno e tswaletswe.",
 	"campaignevents-register-need-central-account": "O tlhokana le akhaonto e kgolo ya modirisi gore o kgone go ikwadisetsa ditiragalo",
 	"campaignevents-unregister-not-allowed": "Ga o letlelelwe go phimola ikwadiso ya gago.",
