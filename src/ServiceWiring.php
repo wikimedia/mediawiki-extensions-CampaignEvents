@@ -55,7 +55,6 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Logger\LoggerFactory;
-use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Registration\ExtensionRegistry;
 
@@ -373,7 +372,6 @@ return [
 			$services->getRevisionStoreFactory(),
 			$services->getConnectionProvider(),
 			$services->getNameTableStoreFactory(),
-			$services->getMainConfig()->get( MainConfigNames::BlockTargetMigrationStage ),
 			$services->getUserOptionsLookup()
 		);
 	},
