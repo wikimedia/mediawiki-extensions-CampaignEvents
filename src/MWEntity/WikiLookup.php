@@ -15,6 +15,8 @@ use Wikimedia\ObjectCache\WANObjectCache;
  */
 class WikiLookup {
 	public const SERVICE_NAME = 'CampaignEventsWikiLookup';
+	public const OOUI = 'ooui';
+	public const CODEX = 'codex';
 
 	private SiteConfiguration $siteConfig;
 	private WANObjectCache $cache;
@@ -78,16 +80,44 @@ class WikiLookup {
 	/**
 	 * This code will not behave as expected outside of production, if we require something more
 	 * robust, we can steal the sitematrix implementation which uses values from $wgConf
+	 *
 	 * @param string[]|true $wikiIDs
+	 * @param string $renderer must be one of Wikilookup::OOUI or Wikilookup::CODEX
+	 *
 	 * @return string
 	 */
-	public function getWikiIcon( $wikiIDs ): string {
-		$defaultIcon = 'logoWikimedia';
+	public function getWikiIcon( $wikiIDs, string $renderer = self::OOUI ): string {
+		$defaultIcon = $renderer === self::OOUI ?
+			'logoWikimedia' :
+			'logo-wikimedia';
 		if ( $wikiIDs === EventRegistration::ALL_WIKIS ) {
 			return $defaultIcon;
 		}
 		// The 'wiki' is order sensitive as it is a final fall-through case
-		$wikiIcons = [
+		$wikiIcons = $renderer === self::OOUI ?
+			$this->getOouiIcons() :
+			$this->getCodexIcons();
+		$matchedSuffixes = [];
+		foreach ( $wikiIDs as $dbname ) {
+			foreach ( array_keys( $wikiIcons ) as $suffix ) {
+				if ( str_ends_with( $dbname, $suffix ) ) {
+					$matchedSuffixes[$suffix] = true;
+					break;
+				}
+			}
+		}
+		if ( count( $matchedSuffixes ) !== 1 ) {
+			return $defaultIcon;
+		}
+		$foundSuffix = key( $matchedSuffixes );
+		return $wikiIcons[$foundSuffix];
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getOouiIcons(): array {
+		return [
 			'commonswiki' => 'logoWikimediaCommons',
 			'metawiki' => 'logoMetaWiki',
 			'wikibooks' => 'logoWikibooks',
@@ -104,19 +134,25 @@ class WikiLookup {
 			'mediawikiwiki' => 'logoMediaWiki',
 			'wiki' => 'logoWikipedia',
 		];
-		$matchedSuffixes = [];
-		foreach ( $wikiIDs as $dbname ) {
-			foreach ( array_keys( $wikiIcons ) as $suffix ) {
-				if ( str_ends_with( $dbname, $suffix ) ) {
-					$matchedSuffixes[$suffix] = true;
-					break;
-				}
-			}
-		}
-		if ( count( $matchedSuffixes ) !== 1 ) {
-			return $defaultIcon;
-		}
-		$foundSuffix = key( $matchedSuffixes );
-		return $wikiIcons[$foundSuffix];
+	}
+
+	private function getCodexIcons(): array {
+		return [
+			'commonswiki' => 'logo-wikimedia-commons',
+			'metawiki' => 'logo-meta-wiki',
+			'wikibooks' => 'logo-wikibooks',
+			'wikidatawiki' => 'logo-wikidata',
+			'wikifunctionswiki' => 'logo-wikifunctions',
+			'wikinews' => 'logo-wikinews',
+			'wikiquote' => 'logo-wikiquote',
+			'wikisource' => 'logo-wikisource',
+			'specieswiki' => 'logo-wikispecies',
+			'wikiversity' => 'logo-wikiversity',
+			'wikivoyage' => 'logo-wikivoyage',
+			'wiktionary' => 'logo-wiktionary',
+			'officewiki' => 'logo-wikimedia',
+			'mediawikiwiki' => 'logo-media-wiki',
+			'wiki' => 'logo-wikipedia',
+		];
 	}
 }
