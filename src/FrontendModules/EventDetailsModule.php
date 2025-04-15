@@ -285,7 +285,7 @@ class EventDetailsModule {
 		$items[] = self::makeSection(
 			'clock',
 			[
-				EventTimeFormatter::wrapRangeForConversion( $this->registration, $datesMsg ),
+				new HtmlSnippet( EventTimeFormatter::wrapRangeForConversion( $this->registration, $datesMsg ) ),
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-dates-label' ) ),

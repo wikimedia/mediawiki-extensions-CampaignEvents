@@ -451,39 +451,38 @@ class EventPageDecorator {
 
 		$meetingType = $registration->getMeetingType();
 		if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON ) {
-			$locationContent = $this->msgFormatter->format(
+			$locationContent = $this->out->msg(
 				MessageValue::new( 'campaignevents-eventpage-header-type-online-and-in-person' )
-			);
+			)->escaped();
 		} elseif ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) {
-			$locationContent = $this->msgFormatter->format(
+			$locationContent = $this->out->msg(
 				MessageValue::new( 'campaignevents-eventpage-header-type-online' )
-			);
+			)->escaped();
 		} else {
 			// In-person event
 			$address = $registration->getMeetingAddress();
 			if ( $address !== null ) {
-				$locationContent = new Tag( 'div' );
-				$locationContent->setAttributes( [
-					'dir' => Utils::guessStringDirection( $address )
-				] );
-				$locationContent->addClasses( [ 'ext-campaignevents-eventpage-header-address' ] );
-				$locationContent->appendContent(
+				$locationContent = Html::element(
+					'div',
+					[
+						'dir' => Utils::guessStringDirection( $address ),
+						'class' => [ 'ext-campaignevents-eventpage-header-address' ]
+					],
 					$this->language->truncateForVisual( $address, self::ADDRESS_MAX_LENGTH )
 				);
 			} else {
-				$locationContent = $this->msgFormatter->format(
+				$locationContent = $this->out->msg(
 					MessageValue::new( 'campaignevents-eventpage-header-type-in-person' )
-				);
+				)->escaped();
 			}
 		}
-		$items[] = new HtmlSnippet( TextWithIconWidget::build( [
-			'icon' => 'mapPin',
-			'content' => $locationContent,
-			'label' => $this->msgFormatter->format(
+		$items[] = new HtmlSnippet( TextWithIconWidget::build(
+			'map-pin',
+			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-location-label' )
 			),
-			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
-		] ) );
+			$locationContent
+		) );
 
 		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $this->language, $this->viewingUser );
 		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $this->language, $this->viewingUser );
@@ -504,30 +503,26 @@ class EventPageDecorator {
 		$timezoneMsg = $this->out->msg( 'campaignevents-eventpage-header-timezone' )
 			->params( $formattedTimezone )
 			->parse();
-		$items[] = new HtmlSnippet( TextWithIconWidget::build( [
-			'icon' => 'clock',
-			'content' => [
-				EventTimeFormatter::wrapRangeForConversion( $registration, $datesMsg ),
-				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
-			],
-			'label' => $this->msgFormatter->format(
+		$items[] = new HtmlSnippet( TextWithIconWidget::build(
+			'clock',
+			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-dates-label' )
 			),
-			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
-			'classes' => [ 'ext-campaignevents-eventpage-header-time' ],
-		] ) );
+			EventTimeFormatter::wrapRangeForConversion( $registration, $datesMsg ) .
+				Html::rawElement( 'div', [], $timezoneMsg ),
+			[ 'ext-campaignevents-eventpage-header-time' ]
+		) );
 
-		$items[] = new HtmlSnippet( TextWithIconWidget::build( [
-			'icon' => 'userGroup',
-			'content' => $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-header-participants' )
-					->numParams( $this->participantsStore->getFullParticipantCountForEvent( $eventID ) )
-			),
-			'label' => $this->msgFormatter->format(
+		$items[] = new HtmlSnippet( TextWithIconWidget::build(
+			'user-group',
+			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-participants-label' )
 			),
-			'icon_classes' => [ 'ext-campaignevents-eventpage-icon' ],
-		] ) );
+			$this->out->msg(
+				MessageValue::new( 'campaignevents-eventpage-header-participants' )
+					->numParams( $this->participantsStore->getFullParticipantCountForEvent( $eventID ) )
+			)->escaped()
+		) );
 
 		$btnContainer = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-eventpage-header-buttons' ] );
@@ -702,7 +697,7 @@ class EventPageDecorator {
 		return $this->makeDetailsDialogSection(
 			'clock',
 			[
-				EventTimeFormatter::wrapRangeForConversion( $registration, $datesMsg ),
+				new HtmlSnippet( EventTimeFormatter::wrapRangeForConversion( $registration, $datesMsg ) ),
 				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
 			],
 			$this->msgFormatter->format(
