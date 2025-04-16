@@ -524,5 +524,8 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Kommende Veranstaltungen",
 	"campaignevents-allevents-label-upcoming-events-description": "Bevorstehende Veranstaltungen: Veranstaltungen, die innerhalb der ausgewählten Daten beginnen",
 	"campaignevents-allevents-label-ongoing-events-title": "Laufende Veranstaltungen",
-	"campaignevents-allevents-label-ongoing-events-description": "Laufende Veranstaltungen: Veranstaltungen, die vor Beginn der Veranstaltung stattfinden, aber innerhalb der gewählten Termine fortfahren"
+	"campaignevents-allevents-label-ongoing-events-description": "Laufende Veranstaltungen: Veranstaltungen, die vor Beginn der Veranstaltung stattfinden, aber innerhalb der gewählten Termine fortfahren",
+	"communityconfiguration-campaignevents-title": "Kampagnen-Veranstaltungen",
+	"communityconfiguration-campaignevents-description": "Konfigurationsoptionen für die CampaignEvents-Erweiterung",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Gültige Veranstaltungsnamensräume"
 }
