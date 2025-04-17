@@ -38,7 +38,6 @@ class PotentialInviteesFinder {
 	private RevisionStoreFactory $revisionStoreFactory;
 	private IConnectionProvider $dbProvider;
 	private NameTableStoreFactory $nameTableStoreFactory;
-	private int $blockTargetMigrationStage;
 	/**
 	 * @var callable
 	 * @phan-var callable(string $msg):void
@@ -50,13 +49,11 @@ class PotentialInviteesFinder {
 		RevisionStoreFactory $revisionStoreFactory,
 		IConnectionProvider $dbProvider,
 		NameTableStoreFactory $nameTableStoreFactory,
-		int $blockTargetMigrationStage,
 		UserOptionsLookup $userOptionsLookup
 	) {
 		$this->revisionStoreFactory = $revisionStoreFactory;
 		$this->dbProvider = $dbProvider;
 		$this->nameTableStoreFactory = $nameTableStoreFactory;
-		$this->blockTargetMigrationStage = $blockTargetMigrationStage;
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->debugLogger = static function ( string $msg ): void {
 		};
@@ -260,29 +257,16 @@ class PotentialInviteesFinder {
 		}
 
 		// Exclude users who have a sitewide infinite block.
-		$readOldBlockSchema = (bool)( $this->blockTargetMigrationStage & SCHEMA_COMPAT_READ_OLD );
-		if ( $readOldBlockSchema ) {
-			$blocksSubquery = $dbr->newSelectQueryBuilder()
-				->select( '1' )
-				->from( 'ipblocks' )
-				->where( [
-					$dbr->expr( 'ipb_user', '!=', 0 ),
-					'actor_rev_user.actor_user = ipb_user',
-					'ipb_expiry' => $dbr->getInfinity(),
-					'ipb_sitewide' => 1,
-				] );
-		} else {
-			$blocksSubquery = $dbr->newSelectQueryBuilder()
-				->select( '1' )
-				->from( 'block' )
-				->join( 'block_target', null, 'bt_id=bl_target' )
-				->where( [
-					$dbr->expr( 'bt_user', '!=', null ),
-					'actor_rev_user.actor_user = bt_user',
-					'bl_expiry' => $dbr->getInfinity(),
-					'bl_sitewide' => 1,
-				] );
-		}
+		$blocksSubquery = $dbr->newSelectQueryBuilder()
+			->select( '1' )
+			->from( 'block' )
+			->join( 'block_target', null, 'bt_id=bl_target' )
+			->where( [
+				$dbr->expr( 'bt_user', '!=', null ),
+				'actor_rev_user.actor_user = bt_user',
+				'bl_expiry' => $dbr->getInfinity(),
+				'bl_sitewide' => 1,
+			] );
 		$filterConditions[] = 'NOT EXISTS(' . $blocksSubquery->getSQL() . ')';
 
 		// Exclude bots. Note, this only checks whether a user is *currently* a bot, not whether
