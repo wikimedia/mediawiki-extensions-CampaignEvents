@@ -31,6 +31,7 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 			null,
 			wfTimestamp( TS_MW, $searchStart ),
 			[],
+			true,
 			[]
 		);
 		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
@@ -43,6 +44,7 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			wfTimestamp( TS_MW, self::$EVENT_START + 1 ),
 			[ 'any_wiki_name' ],
+			true,
 			[ self::$EVENT_TOPIC ]
 		);
 		$this->assertSame( 1, $pager->getNumRows() );

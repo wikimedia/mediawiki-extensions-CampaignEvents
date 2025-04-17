@@ -60,6 +60,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	private ?int $meetingType;
 	/** dbnames of the wikis chosen */
 	private array $filterWiki;
+	private bool $includeAllWikis;
 	/** @var string[] */
 	private array $filterTopics;
 	protected ?string $startDate;
@@ -102,6 +103,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		?string $startDate,
 		?string $endDate,
 		array $filterWiki,
+		bool $includeAllWikis,
 		array $filterTopics
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
@@ -138,6 +140,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->getDateRangeCond( $startDate, $endDate );
 		$this->lastHeaderTimestamp = '';
 		$this->filterWiki = $filterWiki;
+		$this->includeAllWikis = $includeAllWikis;
 		$this->filterTopics = $filterTopics;
 	}
 
@@ -400,15 +403,19 @@ class EventsListPager extends ReverseChronologicalPager {
 			$query['conds']['event_meeting_type'] = EventStore::meetingTypeToDBVal( $this->meetingType );
 		}
 		$query['conds']['event_is_test_event'] = false;
-		if ( $this->filterWiki ) {
+		if ( $this->filterWiki || !$this->includeAllWikis ) {
 			$query['tables'][] = 'ce_event_wikis';
-			$query['join_conds']['ce_event_wikis'] = [
-				'JOIN',
-				[
-					'event_id=ceew_event_id',
-					'ceew_wiki' => [ ...$this->filterWiki, EventWikisStore::ALL_WIKIS_DB_VALUE ]
-				]
-			];
+			$wikiJoinConds = [ 'event_id=ceew_event_id' ];
+			if ( $this->filterWiki ) {
+				$searchWikis = $this->filterWiki;
+				if ( $this->includeAllWikis ) {
+					$searchWikis[] = EventWikisStore::ALL_WIKIS_DB_VALUE;
+				}
+				$wikiJoinConds['ceew_wiki'] = $searchWikis;
+			} else {
+				$wikiJoinConds[] = $this->mDb->expr( 'ceew_wiki', '!=', EventWikisStore::ALL_WIKIS_DB_VALUE );
+			}
+			$query['join_conds']['ce_event_wikis'] = [ 'JOIN', $wikiJoinConds ];
 		}
 		if ( $this->filterTopics ) {
 			$query['tables'][] = 'ce_event_topics';

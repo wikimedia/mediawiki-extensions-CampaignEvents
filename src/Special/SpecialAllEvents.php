@@ -149,6 +149,7 @@ class SpecialAllEvents extends SpecialPage {
 			$startTime,
 			$endTime,
 			$filterWiki,
+			true,
 			$filterTopics
 		);
 		$upcomingEventsNavigation = $upcomingPager->getNavigationBar();
@@ -161,6 +162,7 @@ class SpecialAllEvents extends SpecialPage {
 				$meetingType,
 				$startTime,
 				$filterWiki,
+				true,
 				$filterTopics
 			);
 			// TODO: Remove this awful hack when we find a way to have separate paging (T386019).
