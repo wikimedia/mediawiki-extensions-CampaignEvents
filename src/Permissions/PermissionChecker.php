@@ -162,6 +162,13 @@ class PermissionChecker {
 		return $this->userCanEditRegistration( $performer, $event );
 	}
 
+	public function userCanViewAggregatedAnswers(
+		Authority $performer,
+		ExistingEventRegistration $event
+	): bool {
+		return $this->userCanEditRegistration( $performer, $event );
+	}
+
 	public function userCanEmailParticipants( Authority $performer, ExistingEventRegistration $event ): bool {
 		return $this->userCanEditRegistration( $performer, $event )
 			&& $performer->isAllowed( self::SEND_EVENTS_EMAIL_RIGHT );
