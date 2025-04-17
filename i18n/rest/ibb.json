@@ -12,6 +12,10 @@
 	"campaignevents-rest-user-not-found": "Owo adiehe ID ami ibagha",
 	"campaignevents-rest-get-registration-deleted": "Ema esioho usin anyịn̄ andinam ami esio",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "mme mkpo nse owondiehe ID ana ana asangha ukemukemye owo adiehe ID ado ididoho ntro añye na nkagha (ekeme uked owo esio):",
+	"campaignevents-rest-list-participants-empty-filter": "Ayin filter owo, ididoho asangha,ana ado ikpuikpu - string",
 	"campaignevents-rest-list-participants-cannot-see-private": "Afo udiehe unen adi ese mme adiwana ema sin ayin ke debè ke adinam ami",
-	"campaignevents-rest-get-registration-info-notparticipant": "Afo uwanake  ke adinam ami"
+	"campaignevents-rest-set-organizers-empty-list": "<var>atumkpo _mme ayin</var> ana ado array ke ayin nko ikemeke adinam nkanga",
+	"campaignevents-rest-get-registration-info-notparticipant": "Afo uwanake  ke adinam ami",
+	"campaignevents-rest-register-invalid-answer": "Iborọ mbume ake $1 idoho inennen",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Mbok nam usin ayin mfo ma ke $1 ado ekeboto adinam wiki."
 }

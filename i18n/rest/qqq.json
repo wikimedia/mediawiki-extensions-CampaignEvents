@@ -4,7 +4,8 @@
 			"Ajeje Brazorf",
 			"Amire80",
 			"Daimona Eaytoy",
-			"Verdy p"
+			"Verdy p",
+			"Orokbest1"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Error message used when the event ID provided by the user does not correspond to an existing event.",
@@ -19,7 +20,7 @@
 	"campaignevents-rest-set-organizers-empty-list": "{{doc-important|Do not translate <code>organizer_usernames</code>.}}\nError message returned by the API if the <code>organizer_usernames</code> field is empty.",
 	"campaignevents-rest-get-registration-info-notparticipant": "Error message used by the API endpoint for obtaining your registration information when you're not a participant.",
 	"campaignevents-rest-register-invalid-answer": "Error messaged used by the API when registering for an event if the given participant questions are not valid, for instance if an option doesn't exist or the given value has the wrong type.\nParameters:\n* $1 - Name of the question for which an invalid answer was provided.",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "Error message shown on RegisterForEvent rest api when trying to register for an event that was enabled on another wiki, and thus should register there.\nParameters:\n*$1 - The ID of the wiki where the event was created",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Error message shown on RegisterForEvent rest api when trying to register for an event that was enabled on another wiki, and thus should register there.\nParameters:\n*$1-The ID of the wiki where the event was created",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Error message shown on DeleteEventRegistration rest api when trying to delete an event that was enabled on another wiki, and thus should be deleted there.\nParameters:\n*$1 - The ID of the wiki where the event was created",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "Error message shown on EmailUsers rest api when trying to email participants for an event that was enabled on another wiki, and thus should send the emails there.\nParameters:\n*$1 - The ID of the wiki where the event was created"
 }
