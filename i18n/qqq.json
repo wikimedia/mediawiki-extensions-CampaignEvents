@@ -526,6 +526,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Placeholder message for the wiki filter field on [[Special:AllEvents]]",
 	"campaignevents-allevents-label-filter-topics": "Label for a form field on [[Special:AllEvents]] that can be used to filter events by topic.",
 	"campaignevents-allevents-placeholder-topics": "Placeholder for the {{msg-mw|campaignevents-allevents-label-filter-topics}} field on [[Special:AllEvents]].",
+	"campaignevents-allevents-label-include-all-wikis": "Label for a checkbox on [[Special:AllEvents]].",
 	"campaignevents-eventslist-all-wikis": "Message shown in [[Special:AllEvents]] instead of a list of wikis, to indicate that the event is relevant to all wikis",
 	"campaignevents-eventslist-wikis-more": "Message shown in [[Special:AllEvents]] at the end of a list of wikis, to indicate that there are more wikis that are not shown. The text is hyperlinked to [[Special:EventDetails]]. Parameters:\n* $1 - Number of additional wikis.",
 	"campaignevents-eventpage-all-wikis": "Message shown in [[Special:AllEvents]] instead of a list of wikis, to indicate that the event is relevant to all wikis",
