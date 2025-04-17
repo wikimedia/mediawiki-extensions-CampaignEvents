@@ -526,5 +526,8 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Makambo oyo ekosalema",
 	"campaignevents-allevents-label-upcoming-events-description": "Makambo oyo ekosalema: Makambo oyo ebandi na mikolo oyo oponi",
 	"campaignevents-allevents-label-ongoing-events-title": "Makambo oyo ezali kosalema",
-	"campaignevents-allevents-label-ongoing-events-description": "Makambo oyo ezali kokoba: Makambo oyo ebandi liboso kasi ekokoba na kati ya mikolo oyo baponi"
+	"campaignevents-allevents-label-ongoing-events-description": "Makambo oyo ezali kokoba: Makambo oyo ebandi liboso kasi ekokoba na kati ya mikolo oyo baponi",
+	"communityconfiguration-campaignevents-title": "Makambo ya Campagne",
+	"communityconfiguration-campaignevents-description": "Ba options ya configuration pona extension ya CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Ba espaces ya kombo ya événement ya valide"
 }

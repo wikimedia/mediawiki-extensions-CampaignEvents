@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Gadir",
 			"Nemoralis"
 		]
 	},
 	"campaignevents-desc": "Tədbir təşkilatçıları və iştirakçıları üçün funksiyalar təqdim edir.",
-	"nstab-event": "Tədbir",
+	"nstab-event": "Tədbir səhifəsi",
 	"group-event-organizer": "Tədbir təşkilatçıları",
 	"group-event-organizer-member": "{{GENDER:$1|tədbir təşkilatçısı}}",
 	"grouppage-event-organizer": "{{ns:project}}:Tədbir təşkilatçıları",
@@ -524,5 +525,8 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Qarşıdan gələn tədbirlər",
 	"campaignevents-allevents-label-upcoming-events-description": "Qarşıdan gələn tədbirlər: Seçilmiş tarixlərdə başlayan tədbirlər",
 	"campaignevents-allevents-label-ongoing-events-title": "Davam edən tədbirlər",
-	"campaignevents-allevents-label-ongoing-events-description": "Davam edən tədbirlər: Daha əvvəl başlayan, lakin seçilmiş tarixlər ərzində davam edən tədbirlər"
+	"campaignevents-allevents-label-ongoing-events-description": "Davam edən tədbirlər: Daha əvvəl başlayan, lakin seçilmiş tarixlər ərzində davam edən tədbirlər",
+	"communityconfiguration-campaignevents-title": "Tədbirlər",
+	"communityconfiguration-campaignevents-description": "CampaignEvents uzantısı üçün konfiqurasiya seçimləri",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Etibarlı tədbir ad fəzası"
 }

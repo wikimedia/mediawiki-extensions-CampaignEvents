@@ -5,6 +5,7 @@
 			"Antimuonium",
 			"BlueCamille",
 			"Eihel",
+			"EmDashUser002",
 			"Escargot bleu",
 			"Gomoko",
 			"Goombiis",
@@ -556,5 +557,8 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Prochains événements",
 	"campaignevents-allevents-label-upcoming-events-description": "Événements à venir : événements qui commencent dans les dates sélectionnées",
 	"campaignevents-allevents-label-ongoing-events-title": "Événements en cours",
-	"campaignevents-allevents-label-ongoing-events-description": "Événements en cours : événements qui commencent avant mais se poursuivent dans les dates sélectionnées"
+	"campaignevents-allevents-label-ongoing-events-description": "Événements en cours : événements qui commencent avant mais se poursuivent dans les dates sélectionnées",
+	"communityconfiguration-campaignevents-title": "CampaignEvents (une extension pour MediaWiki)",
+	"communityconfiguration-campaignevents-description": "Options de configuration pour l'extension CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Espaces de noms d'événements valides"
 }
