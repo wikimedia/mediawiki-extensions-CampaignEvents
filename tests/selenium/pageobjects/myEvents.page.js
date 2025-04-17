@@ -12,10 +12,6 @@ class MyEventsPage extends Page {
 		return $( '.TablePager_col_event_name' );
 	}
 
-	get closeRegistrationButton() {
-		return this.manageEventMenuButton.$( '*=Close registration' );
-	}
-
 	get deleteRegistrationButton() {
 		return this.manageEventMenuButton.$( '*=Delete event' );
 	}
@@ -66,11 +62,6 @@ class MyEventsPage extends Page {
 	async filterByName( name ) {
 		await this.eventNameFilter.setValue( name );
 		await this.filtersSubmitButton.click();
-	}
-
-	async closeFirstRegistration() {
-		await this.manageEventMenuButton.click();
-		await this.closeRegistrationButton.click();
 	}
 
 	async deleteFirstRegistration() {
