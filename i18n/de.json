@@ -511,6 +511,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Wikis hinzufügen …",
 	"campaignevents-allevents-label-filter-topics": "Themen",
 	"campaignevents-allevents-placeholder-topics": "Themen hinzufügen...",
+	"campaignevents-allevents-label-include-all-wikis": "Veranstaltungen einbeziehen, die für alle Wikis offen sind",
 	"campaignevents-eventslist-all-wikis": "Diese Veranstaltung ist für alle Wikis offen.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|mehr}}",
 	"campaignevents-eventpage-all-wikis": "Diese Veranstaltung ist für alle Wikis offen.",
@@ -525,6 +526,7 @@
 	"campaignevents-allevents-label-upcoming-events-description": "Bevorstehende Veranstaltungen: Veranstaltungen, die innerhalb der ausgewählten Daten beginnen",
 	"campaignevents-allevents-label-ongoing-events-title": "Laufende Veranstaltungen",
 	"campaignevents-allevents-label-ongoing-events-description": "Laufende Veranstaltungen: Veranstaltungen, die vor Beginn der Veranstaltung stattfinden, aber innerhalb der gewählten Termine fortfahren",
+	"campaignevents-allevents-transclusion-more-link": "Weitere Veranstaltungen und Communities entdecken",
 	"communityconfiguration-campaignevents-title": "Kampagnen-Veranstaltungen",
 	"communityconfiguration-campaignevents-description": "Konfigurationsoptionen für die CampaignEvents-Erweiterung",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Gültige Veranstaltungsnamensräume"

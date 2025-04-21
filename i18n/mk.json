@@ -512,6 +512,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Додајте викија...",
 	"campaignevents-allevents-label-filter-topics": "Теми",
 	"campaignevents-allevents-placeholder-topics": "Додај теми...",
+	"campaignevents-allevents-label-include-all-wikis": "Вклучи настани отворени за сите викија",
 	"campaignevents-eventslist-all-wikis": "Овој настан е отворен за сите викија.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|уште}} $1",
 	"campaignevents-eventpage-all-wikis": "Овој настан е отворен за сите викија.",
@@ -525,5 +526,9 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Претстојни настани",
 	"campaignevents-allevents-label-upcoming-events-description": "Претстојни настани: Настани кои почнуваат во рамките на избраните датуми",
 	"campaignevents-allevents-label-ongoing-events-title": "Тековни настани",
-	"campaignevents-allevents-label-ongoing-events-description": "Тековни настани: Настани кои почнуваат пред, но продолжуваат во рамките на избраните датуми"
+	"campaignevents-allevents-label-ongoing-events-description": "Тековни настани: Настани кои почнуваат пред, но продолжуваат во рамките на избраните датуми",
+	"campaignevents-allevents-transclusion-more-link": "Истражете повеќе настани и заедници",
+	"communityconfiguration-campaignevents-title": "Походни настани",
+	"communityconfiguration-campaignevents-description": "Можности за нагодување на додатокот Походни настани",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Важечки именски простори за настани"
 }

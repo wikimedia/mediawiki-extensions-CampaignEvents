@@ -512,6 +512,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Viki əlavə et...",
 	"campaignevents-allevents-label-filter-topics": "Mövzular",
 	"campaignevents-allevents-placeholder-topics": "Mövzular əlavə et...",
+	"campaignevents-allevents-label-include-all-wikis": "Bütün vikilərə açıq olan tədbirləri daxil et",
 	"campaignevents-eventslist-all-wikis": "Bu tədbir bütün vikilərə açıqdır.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|daha çox}}",
 	"campaignevents-eventpage-all-wikis": "Bu tədbir bütün vikilərə açıqdır.",
@@ -526,6 +527,7 @@
 	"campaignevents-allevents-label-upcoming-events-description": "Qarşıdan gələn tədbirlər: Seçilmiş tarixlərdə başlayan tədbirlər",
 	"campaignevents-allevents-label-ongoing-events-title": "Davam edən tədbirlər",
 	"campaignevents-allevents-label-ongoing-events-description": "Davam edən tədbirlər: Daha əvvəl başlayan, lakin seçilmiş tarixlər ərzində davam edən tədbirlər",
+	"campaignevents-allevents-transclusion-more-link": "Daha çox tədbir və icma kəşf edin",
 	"communityconfiguration-campaignevents-title": "Tədbirlər",
 	"communityconfiguration-campaignevents-description": "CampaignEvents uzantısı üçün konfiqurasiya seçimləri",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Etibarlı tədbir ad fəzası"
