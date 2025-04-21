@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Nemoralis"
+			"Nemoralis",
+			"Gadir"
 		]
 	},
 	"campaignevents-desc": "Tədbir təşkilatçıları və iştirakçıları üçün funksiyalar təqdim edir.",
-	"nstab-event": "Tədbir",
+	"nstab-event": "Tədbir səhifəsi",
 	"action-campaignevents-enable-registration": "tədbir qeydiyyatını aktivləşdirmək",
 	"right-campaignevents-enable-registration": "Tədbir qeydiyyatını aktivləşdirmək",
 	"action-campaignevents-delete-registration": "tədbir qeydiyyatını silmək",
