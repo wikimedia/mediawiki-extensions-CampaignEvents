@@ -3,7 +3,8 @@
 		"authors": [
 			"BOKOBA VEROLY",
 			"Lydie maliki",
-			"Yaw tuba"
+			"Yaw tuba",
+			"Eruedin"
 		]
 	},
 	"campaignevents-desc": "Epesaka makambo mpo na babongisi ya kampanye mpe bato oyo bakosangana na yango.",
@@ -447,7 +448,7 @@
 	"campaignevents-invitation-list-error-not-organizer": "Tyá lokasa ya likambo oyo ekotánga yo lokola mobongisi.",
 	"campaignevents-worklist-error-empty": "Tyá ata motó ya likambo moko ya lisolo moko.",
 	"campaignevents-worklist-error-too-large": "Okotisi $1 {{PLURAL:$1| article|masolo}}. Svp kotisa kati ya 1 na $2 {{PLURAL:$2| masolo}}.",
-	"campaignevents-worklist-error-invalid-titles": "Oyo elandi {{PLURAL:$1| article ezali na titre ya mabe|ba articles ezali na ba titres ya mabe}}. Svp bobongisa {{PLURAL:$1| yango|ba titre}} pe meka lisusu.\n $2",
+	"campaignevents-worklist-error-invalid-titles": "Óyo elandi {{PLURAL:$1| likáni ezalí na litɛ́mɛ lya mabé| makáni ezalí na matɛ́mɛ ma mabé}}. Palado, bobɔngisa {{PLURAL:$1| yangó|matɛ́mɛ}} mpé meka lisúsu.\n $2",
 	"campaignevents-worklist-error-nonexistent-titles": "Oyo elandi {{PLURAL:$1| article ezalaki|masolo ezalaki}} ezwami te. Svp bo vérifier {{PLURAL:$1| titre|titles}} pe meka lisusu.\n $2",
 	"campaignevents-worklist-error-titles-not-mainspace": "Oyo elandi {{PLURAL:$1| article ezali|masolo ezali}} na esika ya kombo ya monene te. Svp kotisa ba articles na espace principal ya kombo kaka.\n $2",
 	"invitationlist": "Liste ya ba invitations",
