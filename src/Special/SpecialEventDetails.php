@@ -127,11 +127,15 @@ class SpecialEventDetails extends SpecialPage {
 			$isParticipant = false;
 		}
 		$isOrganizer = $organizer !== null;
-		$userCanEmailParticipants = false;
+		$userCanEmailParticipants = $userCanViewAggregatedAnswers = false;
 		$wikiID = $this->event->getPage()->getWikiId();
 		$isLocalWiki = $wikiID === WikiAwareEntity::LOCAL;
 		if ( $isLocalWiki ) {
 			$userCanEmailParticipants = $this->permissionChecker->userCanEmailParticipants(
+				$this->getAuthority(),
+				$this->event
+			);
+			$userCanViewAggregatedAnswers = $this->permissionChecker->userCanViewAggregatedAnswers(
 				$this->getAuthority(),
 				$this->event
 			);
@@ -228,7 +232,12 @@ class SpecialEventDetails extends SpecialPage {
 			);
 		}
 
-		if ( $organizer && $isLocalWiki && $this->event->isPast() && $this->event->getParticipantQuestions() ) {
+		if (
+			$organizer &&
+			$userCanViewAggregatedAnswers &&
+			$this->event->isPast() &&
+			$this->event->getParticipantQuestions()
+		) {
 			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
 			$pageURL = $this->getPageTitle( (string)$this->event->getID() )
 				->getLocalURL( [ 'tab' => $this::STATS_PANEL ] );

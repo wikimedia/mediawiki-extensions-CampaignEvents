@@ -642,6 +642,35 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::userCanViewAggregatedAnswers
+	 * @dataProvider provideGenericEditPermissions
+	 */
+	public function testUserCanViewAggregatedAnswers(
+		bool $expected,
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null
+	) {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
+		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
+		$this->assertSame(
+			$expected,
+			$checker->userCanViewAggregatedAnswers( $performer, $event )
+		);
+	}
+
+	/**
 	 * @covers ::userCanEmailParticipants
 	 * @dataProvider provideUserCanEmailParticipants
 	 */
