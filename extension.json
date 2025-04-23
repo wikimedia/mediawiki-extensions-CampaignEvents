@@ -87,6 +87,9 @@
 			"campaignevents-email-participants": true
 		},
 		"sysop": {
+			"campaignevents-enable-registration": true,
+			"campaignevents-organize-events": true,
+			"campaignevents-email-participants": true,
 			"campaignevents-delete-registration": true,
 			"campaignevents-view-private-participants": true
 		}
