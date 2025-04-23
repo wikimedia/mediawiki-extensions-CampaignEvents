@@ -12,14 +12,12 @@
 	 * @param {Object} [config] Configuration options
 	 * @param {number} [config.eventID] ID of the event that the menu is used for.
 	 * @param {string} [config.eventName] Name of the event that the menu is used for.
-	 * @param {boolean} [config.isEventClosed] Whether the event is closed.
 	 * @param {string} [config.eventPageURL] URL of the event page (could be on another wiki).
 	 * @param {Object} [config.windowManager] WindowManager object shared by all menus.
 	 */
 	function EventKebabMenu( config ) {
 		this.eventID = config.eventID;
 		this.eventName = config.eventName;
-		this.isClosed = config.isEventClosed;
 		this.windowManager = config.windowManager;
 		this.isLocalWiki = config.isLocalWiki;
 
@@ -35,23 +33,6 @@
 				}
 			} );
 		};
-		this.openAndCloseOptionIndex = 2;
-		this.closeRegistrationOption = new OO.ui.MenuOptionWidget( {
-			$element: getLinkWithLeftClickDisabled( editHref ),
-			data: {
-				name: 'close',
-				href: editHref
-			},
-			label: mw.msg( 'campaignevents-eventslist-menu-close' )
-		} );
-		this.openRegistrationOption = new OO.ui.MenuOptionWidget( {
-			$element: getLinkWithLeftClickDisabled( editHref ),
-			data: {
-				name: 'open',
-				href: editHref
-			},
-			label: mw.msg( 'campaignevents-eventslist-menu-open' )
-		} );
 
 		config = $.extend(
 			{
@@ -79,9 +60,6 @@
 							},
 							label: mw.msg( 'campaignevents-eventslist-menu-view-eventpage' )
 						} ),
-						// Temp hide open/close kebabe menu option T360051
-						// this.isClosed ? this.openRegistrationOption :
-						// this.closeRegistrationOption,
 						new OO.ui.MenuOptionWidget( {
 							$element: getLinkWithLeftClickDisabled( deleteHref ),
 							data: {
@@ -110,44 +88,6 @@
 			case 'eventpage':
 				window.location.assign( data.href );
 				break;
-			case 'close':
-				this.changeRegistrationStatus( 'closed' )
-					.done( () => {
-						mw.notify(
-							mw.message( 'campaignevents-eventslist-menu-close-success', that.eventName ),
-							{ type: 'success' }
-						);
-						that.getMenu()
-							.removeItems( [ that.closeRegistrationOption ] )
-							.addItems(
-								[ that.openRegistrationOption ],
-								that.openAndCloseOptionIndex
-							);
-					} )
-					.fail( () => {
-						// Fall back to the special page.
-						window.location.assign( data.href );
-					} );
-				break;
-			case 'open':
-				this.changeRegistrationStatus( 'open' )
-					.done( () => {
-						mw.notify(
-							mw.message( 'campaignevents-eventslist-menu-open-success', that.eventName ),
-							{ type: 'success' }
-						);
-						that.getMenu()
-							.removeItems( [ that.openRegistrationOption ] )
-							.addItems(
-								[ that.closeRegistrationOption ],
-								that.openAndCloseOptionIndex
-							);
-					} )
-					.fail( () => {
-						// Fall back to the special page.
-						window.location.assign( data.href );
-					} );
-				break;
 			case 'delete':
 				if ( !this.isLocalWiki ) {
 					window.location.assign( data.href );
@@ -165,61 +105,6 @@
 					} );
 				break;
 		}
-	};
-
-	/**
-	 * @param {string} status 'open' or 'closed'
-	 * @return {jQuery.Promise}
-	 */
-	EventKebabMenu.prototype.changeRegistrationStatus = function ( status ) {
-		const eventID = this.eventID;
-		return new mw.Rest().get( '/campaignevents/v0/event_registration/' + eventID )
-			.then(
-				( data ) => {
-					const eventPageWiki = data.event_page_wiki;
-					if ( eventPageWiki !== mw.config.get( 'wgWikiID' ) ) {
-						// Can't edit registrations whose event page is on another wiki, see T311582
-						// TODO Remove this limitation
-						return $.Deferred().reject();
-					}
-
-					let trackingToolID, trackingToolEventID = null;
-					if ( data.tracking_tools.length === 1 ) {
-						trackingToolID = data.tracking_tools[ 0 ].tool_id;
-						trackingToolEventID = data.tracking_tools[ 0 ].tool_event_id;
-					} else if ( data.tracking_tools.length > 1 ) {
-						throw new Error( 'Expecting at most one tracking tool' );
-					}
-					return new mw.Rest().put(
-						'/campaignevents/v0/event_registration/' + eventID,
-						{
-							/* eslint-disable camelcase */
-							token: mw.user.tokens.get( 'csrfToken' ),
-							event_page: data.event_page,
-							status: status,
-							chat_url: data.chat_url,
-							tracking_tool_id: trackingToolID,
-							tracking_tool_event_id: trackingToolEventID,
-							timezone: data.timezone,
-							start_time: data.start_time,
-							end_time: data.end_time,
-							wikis: data.wikis,
-							online_meeting: data.online_meeting,
-							inperson_meeting: data.inperson_meeting,
-							meeting_url: data.meeting_url,
-							meeting_country: data.meeting_country,
-							meeting_address: data.meeting_address
-							/* eslint-enable camelcase */
-						}
-					)
-						.fail( ( _errCode, errData ) => {
-							mw.log.error( errData.xhr.responseText );
-						} );
-				},
-				( _errCode, errData ) => {
-					mw.log.error( errData.xhr.responseText );
-				}
-			);
 	};
 
 	/**

@@ -45,7 +45,6 @@
 					invisibleLabel: true,
 					eventID: $btn.data( 'mw-event-id' ),
 					eventName: $btn.data( 'mw-event-name' ),
-					isEventClosed: $btn.data( 'mw-is-closed' ),
 					eventPageURL: $btn.data( 'mw-event-page-url' ),
 					isLocalWiki: $btn.data( 'mw-is-local-wiki' ),
 					windowManager: windowManager

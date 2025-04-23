@@ -388,7 +388,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$wikis,
 			$topics,
 			$trackingTools,
-			array_search( (int)$row->event_status, self::EVENT_STATUS_MAP, true ),
+			self::getEventStatusFromDBVal( $row->event_status ),
 			new DateTimeZone( $row->event_timezone ),
 			wfTimestamp( TS_MW, $row->event_start_local ),
 			wfTimestamp( TS_MW, $row->event_end_local ),

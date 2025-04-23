@@ -125,12 +125,10 @@ class EventsTablePager extends TablePager {
 					)->getLocalURL(),
 					'classes' => [ 'ext-campaignevents-eventspager-manage-btn' ],
 				] );
-				$eventStatus = EventStore::getEventStatusFromDBVal( $this->mCurrentRow->event_status );
 				$eventPage = $this->getEventPageFromRow( $this->mCurrentRow );
 				$btn->setAttributes( [
 					'data-mw-event-id' => $eventID,
 					'data-mw-event-name' => $this->mCurrentRow->event_name,
-					'data-mw-is-closed' => $eventStatus === EventRegistration::STATUS_CLOSED ? 1 : 0,
 					'data-mw-event-page-url' => $this->pageURLResolver->getUrl( $eventPage ),
 					'data-mw-label' => $btnLabel,
 					'data-mw-is-local-wiki' => $eventPage->getWikiId() === WikiAwareEntity::LOCAL,
