@@ -116,6 +116,20 @@ class EventRegistrationPage extends Page {
 	}
 
 	/**
+	 * Wait until the OOUI form has been infused, to make sure we interact with JS widgets only.
+	 *
+	 * @return {Promise<void>}
+	 */
+	async waitForFormInfusion() {
+		await browser.waitUntil(
+			// Infusion empties the data-ooui attribute, so wait until the attribute becomes empty
+			// on all elements with auto-infusion.
+			() => browser.execute( () => $( '.mw-htmlform-autoinfuse[data-ooui!=""]' ).length === 0 ),
+			{ timeoutMsg: 'Form fields weren\'t infused' }
+		);
+	}
+
+	/**
 	 * Enable an event.
 	 *
 	 * Pass in an an event, start date and end date, and an event will be created
@@ -126,6 +140,7 @@ class EventRegistrationPage extends Page {
 	 */
 	async enableEvent( eventPage, start = this.startDefault, end = this.endDefault ) {
 		await this.open();
+		await this.waitForFormInfusion();
 		await this.eventPage.setValue( eventPage );
 		await this.setStartDate( start );
 		await this.setEndDate( end );
@@ -153,6 +168,7 @@ class EventRegistrationPage extends Page {
 		organizer
 	} ) {
 		await super.openTitle( `Special:EditEventRegistration/${ id }` );
+		await this.waitForFormInfusion();
 
 		if ( eventPage ) {
 			await this.eventPage.setValue( eventPage );
