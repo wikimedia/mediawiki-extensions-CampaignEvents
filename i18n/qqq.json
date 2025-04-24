@@ -163,7 +163,7 @@
 	"campaignevents-myevents-field-status-closed": "Option used in a select field on [[Special:MyEvents]]. By selecting this options, only closed events will be shown. See {{msg-mw|campaignevents-myevents-label-status}} for the field label.",
 	"campaignevents-myevents-label-events-per-page": "Label for a field on [[Special:MyEvents]] that lets the user select how many events they want to see on each page.",
 	"campaignevents-myevents-filter-btn-label": "Label of a button on [[Special:MyEvents]] that opens a popup that can be used to apply filters to the event list.",
-	"wikimediacampaignevents-collaboration-list-events-tab-heading": "Events tab label used on [[Special:AllEvents]].",
+	"campaignevents-allevents-tab-events-heading": "Events tab label used on [[Special:AllEvents]].",
 	"campaignevents-allevents-filter-legend": "Legend for the search/filter form on [[Special:AllEvents]].",
 	"campaignevents-allevents-label-submit": "Label for the submit button on [[Special:AllEvents]].",
 	"campaignevents-allevents-label-search": "Label for the search field on [[Special:AllEvents]].",

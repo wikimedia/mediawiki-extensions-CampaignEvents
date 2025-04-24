@@ -65,7 +65,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			'events' => [
 				'content' => $this->getFormAndEvents(),
 				'label' => $this->getOutput()->msg(
-					'wikimediacampaignevents-collaboration-list-events-tab-heading'
+					'campaignevents-allevents-tab-events-heading'
 				)->text()
 			],
 		];
