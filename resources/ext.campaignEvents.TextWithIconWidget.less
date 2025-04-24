@@ -6,6 +6,9 @@
 	// would result in content overflow bugs when trying to set a maximum height on the Special:AllEvents content, for
 	// example when the page is transcluded.
 	position: relative;
+	// Prevent wrapping by default, so that the icon and the text will be on the same line. The content (text) itself
+	// is allowed to wrap below. See T392618.
+	white-space: nowrap;
 
 	/* Start list of icon classes. Ideally we shouldn't need to do this. T388458 */
 	/* stylelint-disable rule-empty-line-before */
@@ -85,5 +88,7 @@
 		display: inline-block;
 		vertical-align: top;
 		margin-left: @spacing-50;
+		// Undo the `nowrap` set on the container.
+		white-space: wrap;
 	}
 }
