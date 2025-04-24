@@ -182,10 +182,6 @@
 	"campaignevents-eventslist-manage-btn-info": "Evenement beheren",
 	"campaignevents-eventslist-menu-edit": "Evenement bewerken",
 	"campaignevents-eventslist-menu-view-eventpage": "Evenementpagina bekijken",
-	"campaignevents-eventslist-menu-close": "Registratie sluiten",
-	"campaignevents-eventslist-menu-close-success": "De registratie voor <bdi>$1</bdi> is gesloten.",
-	"campaignevents-eventslist-menu-open": "Inschrijvingen openen",
-	"campaignevents-eventslist-menu-open-success": "De registratie voor <bdi>$1</bdi> is geopend.",
 	"campaignevents-eventslist-menu-delete": "Evenement verwijderen",
 	"campaignevents-eventslist-delete-dialog-title": "<bdi> $1</bdi> verwijderen",
 	"campaignevents-eventslist-delete-dialog-body": "U verliest alle registratiegegevens, maar de evenementpagina wordt niet verwijderd.",
@@ -516,6 +512,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Wiki’s toevoegen…",
 	"campaignevents-allevents-label-filter-topics": "Onderwerpen",
 	"campaignevents-allevents-placeholder-topics": "Onderwerpen toevoegen…",
+	"campaignevents-allevents-label-include-all-wikis": "Evenementen opnemen die voor alle wiki’s open staan",
 	"campaignevents-eventslist-all-wikis": "Dit evenement staat open voor alle wiki’s.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|}}nog $1",
 	"campaignevents-eventpage-all-wikis": "Dit evenement staat open voor alle wiki’s.",
@@ -529,5 +526,6 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Aankomende evenementen",
 	"campaignevents-allevents-label-upcoming-events-description": "Aankomende evenementen: Evenementen die binnen de geselecteerde data beginnen",
 	"campaignevents-allevents-label-ongoing-events-title": "Lopende evenementen",
-	"campaignevents-allevents-label-ongoing-events-description": "Lopende evenementen: Evenementen die beginnen vóór, maar doorgaan binnen de geselecteerde data"
+	"campaignevents-allevents-label-ongoing-events-description": "Lopende evenementen: Evenementen die beginnen vóór, maar doorgaan binnen de geselecteerde data",
+	"campaignevents-allevents-transclusion-more-link": "Meer evenementen en gemeenschappen ontdekken"
 }
