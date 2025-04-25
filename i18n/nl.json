@@ -527,5 +527,8 @@
 	"campaignevents-allevents-label-upcoming-events-description": "Aankomende evenementen: Evenementen die binnen de geselecteerde data beginnen",
 	"campaignevents-allevents-label-ongoing-events-title": "Lopende evenementen",
 	"campaignevents-allevents-label-ongoing-events-description": "Lopende evenementen: Evenementen die beginnen vóór, maar doorgaan binnen de geselecteerde data",
-	"campaignevents-allevents-transclusion-more-link": "Meer evenementen en gemeenschappen ontdekken"
+	"campaignevents-allevents-transclusion-more-link": "Meer evenementen en gemeenschappen ontdekken",
+	"communityconfiguration-campaignevents-title": "Campagne-evenementen",
+	"communityconfiguration-campaignevents-description": "Configuratieopties voor de uitbreiding Campagne-evenementen",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Voor evenementen geldige naamruimten"
 }
