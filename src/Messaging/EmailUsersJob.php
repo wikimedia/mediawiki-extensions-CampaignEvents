@@ -3,8 +3,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Messaging;
 
 use InvalidArgumentException;
-use Job;
 use MailAddress;
+use MediaWiki\JobQueue\Job;
 use UserMailer;
 
 class EmailUsersJob extends Job {

@@ -11,7 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
-use Status;
+use MediaWiki\Status\Status;
 use StatusValue;
 
 class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {

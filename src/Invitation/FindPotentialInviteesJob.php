@@ -4,10 +4,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Invitation;
 
-use GenericParameterJob;
 use InvalidArgumentException;
-use Job;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\JobQueue\GenericParameterJob;
+use MediaWiki\JobQueue\Job;
 
 class FindPotentialInviteesJob extends Job implements GenericParameterJob {
 	private int $listID;

@@ -2,7 +2,6 @@
 declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Messaging;
 
-use JobQueueGroup;
 use MailAddress;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
@@ -12,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialAllEvents;
+use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Mail\EmailUserFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\Authority;

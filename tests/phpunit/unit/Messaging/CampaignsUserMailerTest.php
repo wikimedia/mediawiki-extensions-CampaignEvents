@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Messaging;
 
 use Generator;
-use JobQueueGroup;
 use MailAddress;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -15,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
+use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Mail\EmailUser;
 use MediaWiki\Mail\EmailUserFactory;
 use MediaWiki\MainConfigNames;

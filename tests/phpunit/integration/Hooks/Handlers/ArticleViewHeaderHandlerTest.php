@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 
-use Article;
 use Generator;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
@@ -12,9 +11,10 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\ArticleViewHeaderHandler;
 use MediaWiki\Language\Language;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Page\Article;
+use MediaWiki\Page\WikiPage;
 use MediaWiki\User\User;
 use MediaWikiIntegrationTestCase;
-use WikiPage;
 
 /**
  * @group Test

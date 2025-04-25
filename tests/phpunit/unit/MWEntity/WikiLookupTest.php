@@ -4,13 +4,13 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MWEntity;
 
-use BagOStuff;
 use MediaWiki\Config\SiteConfiguration;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWikiUnitTestCase;
 use MessageLocalizer;
+use Wikimedia\ObjectCache\BagOStuff;
 use Wikimedia\ObjectCache\EmptyBagOStuff;
 use Wikimedia\ObjectCache\HashBagOStuff;
 use Wikimedia\ObjectCache\WANObjectCache;
