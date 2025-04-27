@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
+use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\ProperPageIdentity;
 
 /**
@@ -46,5 +47,27 @@ class MWPageProxy {
 
 	public function getPageIdentity(): ProperPageIdentity {
 		return $this->page;
+	}
+
+	public function __serialize(): array {
+		return [
+			'page' => [
+				'id' => $this->page->getId( $this->page->getWikiId() ),
+				'namespace' => $this->page->getNamespace(),
+				'dbKey' => $this->page->getDBkey(),
+				'wikiId' => $this->page->getWikiId(),
+			],
+			'prefixedText' => $this->prefixedText,
+		];
+	}
+
+	public function __unserialize( array $data ): void {
+		$this->page = new PageIdentityValue(
+			$data['page']['id'],
+			$data['page']['namespace'],
+			$data['page']['dbKey'],
+			$data['page']['wikiId']
+		);
+		$this->prefixedText = $data['prefixedText'];
 	}
 }

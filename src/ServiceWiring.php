@@ -92,6 +92,7 @@ return [
 			$services->get( EventQuestionsStore::SERVICE_NAME ),
 			$services->get( EventWikisStore::SERVICE_NAME ),
 			$services->get( EventTopicsStore::SERVICE_NAME ),
+			$services->getMainWANObjectCache()
 		);
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {

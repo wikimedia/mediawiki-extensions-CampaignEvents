@@ -19,6 +19,8 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use RuntimeException;
 use stdClass;
+use Wikimedia\ObjectCache\WANObjectCache;
+use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
 
@@ -48,6 +50,9 @@ class EventStore implements IEventStore, IEventLookup {
 	private EventQuestionsStore $eventQuestionsStore;
 	private EventWikisStore $eventWikisStore;
 	private EventTopicsStore $eventTopicsStore;
+	private WANObjectCache $wanCache;
+
+	private const PAGE_EVENT_CACHE_TTL = 1 * WANObjectCache::TTL_WEEK;
 
 	/**
 	 * @var array<int,ExistingEventRegistration> Cache of stored registrations, keyed by ID.
@@ -61,7 +66,8 @@ class EventStore implements IEventStore, IEventLookup {
 		TrackingToolUpdater $trackingToolUpdater,
 		EventQuestionsStore $eventQuestionsStore,
 		EventWikisStore $eventWikisStore,
-		EventTopicsStore $eventTopicsStore
+		EventTopicsStore $eventTopicsStore,
+		WANObjectCache $wanCache
 	) {
 		$this->dbHelper = $dbHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -70,6 +76,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->eventQuestionsStore = $eventQuestionsStore;
 		$this->eventWikisStore = $eventWikisStore;
 		$this->eventTopicsStore = $eventTopicsStore;
+		$this->wanCache = $wanCache;
 	}
 
 	/**
@@ -110,6 +117,47 @@ class EventStore implements IEventStore, IEventLookup {
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ExistingEventRegistration {
 		if ( ( $readFlags & IDBAccessObject::READ_LATEST ) === IDBAccessObject::READ_LATEST ) {
+			return $this->loadEventFromDB( $page, $readFlags );
+		}
+
+		$cachedEvent = $this->wanCache->getWithSetCallback(
+			$this->makePageEventCacheKey( $page ),
+			self::PAGE_EVENT_CACHE_TTL,
+			function ( $oldValue, &$ttl, array &$setOpts ) use ( $page, $readFlags ): ?ExistingEventRegistration {
+				$db = $this->dbHelper->getDBConnection( DB_REPLICA );
+
+				$setOpts += Database::getCacheSetOptions( $db );
+
+				try {
+					$event = $this->loadEventFromDB( $page, $readFlags );
+					$lastMod = max( $event->getLastEditTimestamp(), $event->getDeletionTimestamp() );
+					$ttl = $this->wanCache->adaptiveTTL( $lastMod, self::PAGE_EVENT_CACHE_TTL );
+					return $event;
+				} catch ( EventNotFoundException $e ) {
+					return null;
+				}
+			}
+		);
+
+		if ( $cachedEvent === null ) {
+			throw new EventNotFoundException(
+				"No event found for the given page (ns={$page->getNamespace()}, " .
+				"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()})"
+			);
+		}
+
+		return $cachedEvent;
+	}
+
+	/**
+	 * Load the event associated with the given page from the database.
+	 * @param MWPageProxy $page
+	 * @param int $readFlags
+	 * @return ExistingEventRegistration
+	 * @throws EventNotFoundException If no event is associated with this page
+	 */
+	private function loadEventFromDB( MWPageProxy $page, int $readFlags ): ExistingEventRegistration {
+		if ( ( $readFlags & IDBAccessObject::READ_LATEST ) === IDBAccessObject::READ_LATEST ) {
 			$db = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		} else {
 			$db = $this->dbHelper->getDBConnection( DB_REPLICA );
@@ -141,6 +189,16 @@ class EventStore implements IEventStore, IEventLookup {
 			$this->eventWikisStore->getEventWikis( $eventID ),
 			$this->eventTopicsStore->getEventTopics( $eventID ),
 			$this->eventQuestionsStore->getEventQuestions( $eventID )
+		);
+	}
+
+	private function makePageEventCacheKey( MWPageProxy $page ): string {
+		return $this->wanCache->makeKey(
+			'CampaignEvents',
+			'EventStore',
+			$page->getNamespace(),
+			$page->getDBkey(),
+			$page->getWikiId()
 		);
 	}
 
@@ -464,6 +522,11 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->eventWikisStore->addOrUpdateEventWikis( $eventID, $event->getWikis() );
 		$this->eventTopicsStore->addOrUpdateEventTopics( $eventID, $event->getTopics() );
 
+		$dbw->onTransactionCommitOrIdle(
+			fn () => $this->wanCache->delete( $this->makePageEventCacheKey( $event->getPage() ) ),
+			__METHOD__
+		);
+
 		$dbw->endAtomic( __METHOD__ );
 
 		unset( $this->cache[$eventID] );
@@ -528,6 +591,12 @@ class EventStore implements IEventStore, IEventLookup {
 			->caller( __METHOD__ )
 			->execute();
 		unset( $this->cache[$registration->getID()] );
+
+		$dbw->onTransactionCommitOrIdle(
+			fn () => $this->wanCache->delete( $this->makePageEventCacheKey( $registration->getPage() ) ),
+			__METHOD__
+		);
+
 		return $dbw->affectedRows() > 0;
 	}
 
