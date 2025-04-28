@@ -85,7 +85,6 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$rawEndTime = $request->getVal( 'wpEndDate', '' );
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 		$openSectionsStr = $request->getVal( 'wpOpenSections', self::UPCOMING_SECTION );
-		$includeAllWikis = true;
 		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
 		// distinguish between form not submitted and form submitted but checkbox unchecked. This is important
 		// because the checkbox is checked by default.
@@ -94,6 +93,9 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$includeAllWikis = $request->getBool( 'wpIncludeAllWikis', true );
 		} elseif ( $request->getVal( 'wpFormIdentifier' ) === $formIdentifier ) {
 			$includeAllWikis = $request->getCheck( 'wpIncludeAllWikis' );
+		} else {
+			// Form wasn't submitted, use default value of true.
+			$includeAllWikis = true;
 		}
 
 		$content = '';
