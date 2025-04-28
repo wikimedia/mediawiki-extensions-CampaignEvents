@@ -273,6 +273,7 @@ return [
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->getMessageFormatterFactory(),
 			$services->getLinkBatchFactory(),
+			$services->getLinkRenderer(),
 			$services->getUserLinkRenderer()
 		);
 	},
