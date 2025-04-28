@@ -35,6 +35,7 @@
 	"campaignevents-edit-form-notice": "पंजीकरण के समय हिस्सेदारों से सिर्फ सदस्यनाम प्राप्त किया जाएगा। [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration अधिक जानें]।",
 	"campaignevents-edit-invalid-id": "एक मान्य कार्यक्रम आईडी प्रदान करें।",
 	"campaignevents-edit-event-notfound": "इस आईडी के साथ कोई कार्यक्रम नहीं है।",
+	"wikimediacampaignevents-collaboration-list-events-tab-heading": "आयोजन",
 	"campaignevents-eventpage-dialog-chat-register": "चैट समूह कड़ी देखने के लिए पंजीकृत करें।",
 	"campaignevents-eventpage-register-dialog-save": "सहेजें",
 	"campaignevents-event-details-location-header": "स्थान",
