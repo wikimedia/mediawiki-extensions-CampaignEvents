@@ -80,9 +80,18 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$filterWiki = $request->getArray( 'wpFilterWikis', [] );
 		$filterTopics = $request->getArray( 'wpFilterTopics', [] );
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
-		$rawStartTime = $request->getVal( 'wpStartDate', (string)time() );
+		$rawStartTime = $request->getRawVal( 'wpStartDate' ) ?? (string)time();
+		if ( $this->including() && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $rawStartTime ) ) {
+			// Special case: allow specifying just the date when transcluding. Ideally we'd also use just the date
+			// in the page itself, but for the time being we need a datetime field to manipulate min/max. T392850
+			$rawStartTime .= 'T00:00:00Z';
+		}
 		$startTime = $rawStartTime === '' ? null : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
-		$rawEndTime = $request->getVal( 'wpEndDate', '' );
+		$rawEndTime = $request->getRawVal( 'wpEndDate' ) ?? '';
+		if ( $this->including() && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $rawEndTime ) ) {
+			// As above.
+			$rawEndTime .= 'T23:59:59Z';
+		}
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
 		$openSectionsStr = $request->getVal( 'wpOpenSections', self::UPCOMING_SECTION );
 		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
