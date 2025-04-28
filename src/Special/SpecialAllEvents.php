@@ -77,8 +77,16 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$request = $this->getRequest();
 		$showForm = !$this->including();
 		$searchedVal = $request->getVal( 'wpSearch', '' );
-		$filterWiki = $request->getArray( 'wpFilterWikis', [] );
-		$filterTopics = $request->getArray( 'wpFilterTopics', [] );
+		if ( $this->including() ) {
+			// Uses a comma-separated list to support multivalued parameters (T388385#10773882)
+			$rawFilterWiki = $request->getRawVal( 'wpFilterWikis' ) ?? '';
+			$filterWiki = $rawFilterWiki ? array_map( 'trim', explode( ',', $rawFilterWiki ) ) : [];
+			$rawFilterTopic = $request->getRawVal( 'wpFilterTopics' ) ?? '';
+			$filterTopics = $rawFilterTopic ? array_map( 'trim', explode( ',', $rawFilterTopic ) ) : [];
+		} else {
+			$filterWiki = $request->getArray( 'wpFilterWikis' ) ?? [];
+			$filterTopics = $request->getArray( 'wpFilterTopics' ) ?? [];
+		}
 		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
 		$rawStartTime = $request->getVal( 'wpStartDate', (string)time() );
 		$startTime = $rawStartTime === '' ? null : $this->formatDate( $rawStartTime, 'Y-m-d 00:00:00' );
