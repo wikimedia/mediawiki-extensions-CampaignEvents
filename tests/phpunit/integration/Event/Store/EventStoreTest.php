@@ -9,6 +9,7 @@ use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
@@ -28,11 +29,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @return EventRegistration
 	 */
-	private function getTestEvent(): EventRegistration {
+	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
 		return new EventRegistration(
 			null,
 			'Some name',
-			new MWPageProxy(
+			$page ?? new MWPageProxy(
 				new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
 				'Event page'
 			),
@@ -146,6 +147,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getEventByPage
 	 * @covers ::getEventAddressRow
 	 * @covers ::getEventTrackingToolRow
+	 * @covers ::loadEventFromDB
 	 * @covers ::newEventFromDBRow
 	 * @covers ::saveRegistration
 	 */
@@ -155,6 +157,85 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $event->getPage() );
 		$this->assertEventsEqual( $event, $storedEvent );
 		$this->assertStoredEvent( $savedID, $storedEvent );
+	}
+
+	/**
+	 * @covers ::getEventByPage
+	 * @covers ::loadEventFromDB
+	 */
+	public function testMissingEvent(): void {
+		$page = new MWPageProxy(
+			new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
+			'Event page'
+		);
+
+		$this->expectException( EventNotFoundException::class );
+		$this->expectExceptionMessage( "No event found for the given page (ns={$page->getNamespace()}, " .
+			"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()})" );
+
+		CampaignEventsServices::getEventLookup()->getEventByPage( $page );
+	}
+
+	/**
+	 * @covers ::getEventByPage
+	 * @covers ::saveRegistration
+	 * @covers ::deleteRegistration
+	 * @covers ::loadEventFromDB
+	 */
+	public function testEventCaching(): void {
+		// Create two events for different pages, look them up, and delete one of them.
+		$page = new MWPageProxy(
+			new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
+			'Event page'
+		);
+		$otherPage = new MWPageProxy(
+			new PageIdentityValue( 53, 0, 'Other_page', PageIdentityValue::LOCAL ),
+			'Other page'
+		);
+
+		$storedEvent = $this->getTestEvent( $page );
+		$otherStoredEvent = $this->getTestEvent( $otherPage );
+
+		$cache = $this->getServiceContainer()->getMainWANObjectCache();
+
+		CampaignEventsServices::getEventStore()->saveRegistration( $storedEvent );
+		CampaignEventsServices::getEventStore()->saveRegistration( $otherStoredEvent );
+
+		$event = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
+		$cachedEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
+		$otherEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $otherPage );
+
+		$mockTime = wfTimestamp();
+		$cache->setMockTime( $mockTime );
+
+		CampaignEventsServices::getEventStore()->deleteRegistration( $event );
+
+		// Ensure the purge tombstone set on deletion takes effect.
+		$mockTime += 1;
+		$this->getServiceContainer()
+			->getMainWANObjectCache()
+			->setMockTime( $mockTime );
+
+		$postDeleteEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
+
+		$this->assertSame( $event, $cachedEvent, 'Events should be cached per page' );
+		$this->assertTrue(
+			$event->getPage()->equals( $storedEvent->getPage() ),
+			'Returned event should have correct page for the first page'
+		);
+		$this->assertNull(
+			$event->getDeletionTimestamp(),
+			'Event should not be marked as deleted'
+		);
+
+		$this->assertTrue(
+			$otherEvent->getPage()->equals( $otherStoredEvent->getPage() ),
+			'Returned event should have correct page for the other page'
+		);
+		$this->assertNotNull(
+			$postDeleteEvent->getDeletionTimestamp(),
+			'Event cache should be purged after marking an event as deleted'
+		);
 	}
 
 	/**
