@@ -54,7 +54,10 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			'ext.campaignEvents.specialPages.styles',
 			'codex-styles',
 		] );
-		$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
+		if ( !$this->including() ) {
+			// Not needed when transcluding, so skip it for performance. See also T392856.
+			$this->getOutput()->addModules( [ 'ext.campaignEvents.specialPages' ] );
+		}
 		$eventsContent = $this->getFormAndEvents();
 		// don't add community tab to transcluded content
 		if ( !$this->including() ) {
