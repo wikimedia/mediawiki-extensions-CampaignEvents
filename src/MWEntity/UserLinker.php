@@ -8,6 +8,7 @@ use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\Html;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\UserLinkRenderer;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\User\UserIdentityValue;
@@ -16,6 +17,7 @@ use Wikimedia\Message\MessageValue;
 
 /**
  * This class generates links to (global) user accounts.
+ * @phan-file-suppress PhanTypeMismatchArgument,PhanTypeMismatchArgumentReal
  */
 class UserLinker {
 	public const SERVICE_NAME = 'CampaignEventsUserLinker';
@@ -28,17 +30,20 @@ class UserLinker {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private IMessageFormatterFactory $messageFormatterFactory;
 	private LinkBatchFactory $linkBatchFactory;
+	private LinkRenderer $linkRenderer;
 	private UserLinkRenderer $userLinkRenderer;
 
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
 		IMessageFormatterFactory $messageFormatterFactory,
 		LinkBatchFactory $linkBatchFactory,
+		LinkRenderer $linkRenderer,
 		UserLinkRenderer $userLinkRenderer
 	) {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->linkBatchFactory = $linkBatchFactory;
+		$this->linkRenderer = $linkRenderer;
 		$this->userLinkRenderer = $userLinkRenderer;
 	}
 
@@ -59,7 +64,13 @@ class UserLinker {
 		$userIdentity = new UserIdentityValue( 1, $name );
 		// TODO: Here we'll generate a red link if the account does not exist locally. Is that OK? Could we maybe
 		// link to Special:CentralAuth (if CA is installed)?
-		return $this->userLinkRenderer->userLink( $userIdentity, $context );
+		if ( method_exists( $this->userLinkRenderer, 'getLinkClasses' ) ) {
+			// New method parameters
+			return $this->userLinkRenderer->userLink( $this->linkRenderer, $userIdentity, $context );
+		} else {
+			// Legacy compatibility
+			return $this->userLinkRenderer->userLink( $userIdentity, $context );
+		}
 	}
 
 	/**
