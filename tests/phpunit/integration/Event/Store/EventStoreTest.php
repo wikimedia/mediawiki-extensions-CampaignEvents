@@ -198,23 +198,28 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 		$cache = $this->getServiceContainer()->getMainWANObjectCache();
 
+		// Ensure the tombstones set by the purges triggered by saveRegistration() are expired.
+		// We do this by ensuring the purges occur in the simulated past, rather than making the purges
+		// occur in the present and the fetches occur in the simulated future, because moving time forward
+		// would confuse getWithSetCallback() into thinking there is high transaction lag,
+		// rejecting any returned value.
+		$mockTime = wfTimestamp() - 60;
+		$cache->setMockTime( $mockTime );
+
 		CampaignEventsServices::getEventStore()->saveRegistration( $storedEvent );
 		CampaignEventsServices::getEventStore()->saveRegistration( $otherStoredEvent );
+
+		$mockTime += 30;
 
 		$event = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
 		$cachedEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
 		$otherEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $otherPage );
 
-		$mockTime = wfTimestamp();
-		$cache->setMockTime( $mockTime );
-
 		CampaignEventsServices::getEventStore()->deleteRegistration( $event );
 
-		// Ensure the purge tombstone set on deletion takes effect.
-		$mockTime += 1;
-		$this->getServiceContainer()
-			->getMainWANObjectCache()
-			->setMockTime( $mockTime );
+		// Move the simulated time forward once again to ensure tombstones set by deleteRegistration()
+		// are expired, effectively arriving back into the present.
+		$mockTime += 30;
 
 		$postDeleteEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
 
