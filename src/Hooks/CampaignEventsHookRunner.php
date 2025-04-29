@@ -14,7 +14,6 @@ class CampaignEventsHookRunner implements
 	CampaignEventsRegistrationFormLoadHook,
 	CampaignEventsRegistrationFormSubmitHook,
 	CampaignEventsGetEventDetailsHook,
-	CampaignEventsGetAllEventsContentHook,
 	CampaignEventsGetAllEventsTabsHook
 {
 	public const SERVICE_NAME = 'CampaignEventsHookRunner';
@@ -84,17 +83,6 @@ class CampaignEventsHookRunner implements
 		$this->hookContainer->run(
 			'CampaignEventsGetEventDetails',
 			[ $infoColumn, $organizersColumn, $eventID, $isOrganizer, $outputPage, $isLocalWiki ],
-			[ 'abortable' => false ]
-		);
-	}
-
-	public function onCampaignEventsGetAllEventsContent(
-		OutputPage $outputPage,
-		string &$eventsContent
-	): void {
-		$this->hookContainer->run(
-			'CampaignEventsGetAllEventsContent',
-			[ $outputPage, &$eventsContent ],
 			[ 'abortable' => false ]
 		);
 	}
