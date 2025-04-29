@@ -509,6 +509,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "נא להוסיף אתרי ויקי...",
 	"campaignevents-allevents-label-filter-topics": "נושאים",
 	"campaignevents-allevents-placeholder-topics": "הוספת נושאים...",
+	"campaignevents-allevents-label-include-all-wikis": "לכלול אירועים שפתוחים לכל אתרי הוויקי",
 	"campaignevents-eventslist-all-wikis": "האירוע הזה פתוח לכל אתרי הוויקי.",
 	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|עוד}} $1",
 	"campaignevents-eventpage-all-wikis": "האירוע הזה פתוח לכל אתרי הוויקי.",
@@ -522,5 +523,9 @@
 	"campaignevents-allevents-label-upcoming-events-title": "אירועים קרובים",
 	"campaignevents-allevents-label-upcoming-events-description": "אירועים קרובים: אירועים שמתחילים בתוך התאריכים שנבחרו",
 	"campaignevents-allevents-label-ongoing-events-title": "אירועים בזמן הזה",
-	"campaignevents-allevents-label-ongoing-events-description": "אירועים בזמן הזה: אירועים שמתחילים לפני התאריכים שנבחרו ונמשכים לתוכם"
+	"campaignevents-allevents-label-ongoing-events-description": "אירועים בזמן הזה: אירועים שמתחילים לפני התאריכים שנבחרו ונמשכים לתוכם",
+	"campaignevents-allevents-transclusion-more-link": "לחקור עוד אירועים וקהילות",
+	"communityconfiguration-campaignevents-title": "אירועים",
+	"communityconfiguration-campaignevents-description": "אפשרויות תצורה עבור ההרחבה CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "מרחבי שם תקינים של אירועים"
 }
