@@ -17,7 +17,7 @@ use Wikimedia\Message\MessageValue;
 
 /**
  * This class generates links to (global) user accounts.
- * @phan-file-suppress PhanTypeMismatchArgument,PhanTypeMismatchArgumentReal
+ * @phan-file-suppress PhanUndeclaredMethod,UnusedPluginFileSuppression
  */
 class UserLinker {
 	public const SERVICE_NAME = 'CampaignEventsUserLinker';
@@ -64,9 +64,9 @@ class UserLinker {
 		$userIdentity = new UserIdentityValue( 1, $name );
 		// TODO: Here we'll generate a red link if the account does not exist locally. Is that OK? Could we maybe
 		// link to Special:CentralAuth (if CA is installed)?
-		if ( method_exists( $this->userLinkRenderer, 'getLinkClasses' ) ) {
+		if ( method_exists( $this->linkRenderer, 'makeUserLink' ) ) {
 			// New method parameters
-			return $this->userLinkRenderer->userLink( $this->linkRenderer, $userIdentity, $context );
+			return $this->linkRenderer->makeUserLink( $userIdentity, $context );
 		} else {
 			// Legacy compatibility
 			return $this->userLinkRenderer->userLink( $userIdentity, $context );
