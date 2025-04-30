@@ -82,10 +82,8 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		} else {
 			$pageContent = $pageTabs['events']['content'];
 		}
-
-		// don't add community tab to transcluded content
 		if ( $this->including() ) {
-			$pageContent = $pageTabs['events']['content'];
+			$pageContent = $pageTabs[$activeTab]['content'] ?? $pageTabs['events']['content'];
 			$pageContent .= $this->getLinkRenderer()->makeKnownLink(
 				$this->getPageTitle(),
 				$this->msg( 'campaignevents-allevents-transclusion-more-link' ),
