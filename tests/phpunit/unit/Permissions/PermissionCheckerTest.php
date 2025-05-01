@@ -849,7 +849,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		return $mock;
 	}
 
-	public function provideHasViewPrivateParticipantsRights(): Generator {
+	public static function provideHasViewPrivateParticipantsRights(): Generator {
 		yield 'Can view private participants with explicit right' =>
 		[
 			true,
@@ -904,7 +904,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		];
 	}
 
-	public function provideCanViewPrivateParticipants(): Generator {
+	public static function provideCanViewPrivateParticipants(): Generator {
 		yield from self::provideGenericEditPermissions();
 		yield from self::provideHasViewPrivateParticipantsRights();
 	}
