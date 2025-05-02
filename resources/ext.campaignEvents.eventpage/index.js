@@ -106,18 +106,20 @@
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			reqParams
 		)
-			.done( () => {
-				const cookieVal = userIsParticipant ?
-					SUCCESS_COOKIE_REGISTRATION_UPDATED :
-					SUCCESS_COOKIE_NEW_REGISTRATION;
-				mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, cookieVal, { expires: 30 } );
-				// Reload the page so that the number and list of participants are updated.
-				// TODO This should be improved at some point, see T312646#8105313
-				window.location.reload();
-			} )
-			.fail( ( _err, errData ) => {
-				logRequestError( errData );
-			} );
+			.then(
+				() => {
+					const cookieVal = userIsParticipant ?
+						SUCCESS_COOKIE_REGISTRATION_UPDATED :
+						SUCCESS_COOKIE_NEW_REGISTRATION;
+					mw.cookie.set( SUCCESS_NOTIFICATION_COOKIE, cookieVal, { expires: 30 } );
+					// Reload the page so that the number and list of participants are updated.
+					// TODO This should be improved at some point, see T312646#8105313
+					window.location.reload();
+				},
+				( _err, errData ) => {
+					logRequestError( errData );
+				}
+			);
 	}
 
 	/**
@@ -128,12 +130,14 @@
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
 			{ token: mw.user.tokens.get( 'csrfToken' ) }
 		)
-			.done( () => {
-				window.location.reload();
-			} )
-			.fail( ( _err, errData ) => {
-				logRequestError( errData );
-			} );
+			.then(
+				() => {
+					window.location.reload();
+				},
+				( _err, errData ) => {
+					logRequestError( errData );
+				}
+			);
 	}
 
 	function getParticipantRegistrationDialog( msg, eventQuestions ) {
@@ -188,12 +192,14 @@
 		showParticipantRegistrationDialog().then( ( data ) => {
 			if ( data && data.action === 'confirm' ) {
 				registerUser( data.isPrivate, data.answers )
-					.fail( () => {
-						// Fall back to the special page
-						// TODO We could also show an error here once T269492 and T311423
-						//  are resolved
-						window.location.assign( mw.util.getUrl( 'Special:RegisterForEvent/' + eventID ) );
-					} );
+					.catch(
+						() => {
+							// Fall back to the special page
+							// TODO We could also show an error here once T269492 and T311423
+							//  are resolved
+							window.location.assign( mw.util.getUrl( 'Special:RegisterForEvent/' + eventID ) );
+						}
+					);
 			}
 		} );
 	}
@@ -207,7 +213,7 @@
 		windowManager.openWindow( confirmDialog ).closed.then( ( data ) => {
 			if ( data && data.action === 'confirm' ) {
 				unregisterUser()
-					.fail( () => {
+					.catch( () => {
 						// Fall back to the special page
 						// TODO We could also show an error here once T269492 and T311423
 						//  are resolved
