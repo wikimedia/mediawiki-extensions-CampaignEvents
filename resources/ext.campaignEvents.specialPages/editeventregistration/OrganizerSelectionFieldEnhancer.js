@@ -69,8 +69,8 @@
 			// extra source of information. This is also necessary to handle the case where
 			// server and frontend disagree (see T327470#8742742).
 			if (
-				user.rights.indexOf( 'campaignevents-organize-events' ) < 0 ||
-				that.knownInvalidOrganizers.indexOf( user.name ) > -1
+				!user.rights.includes( 'campaignevents-organize-events' ) ||
+				that.knownInvalidOrganizers.includes( user.name )
 			) {
 				invalidOrganizers.push( user.name );
 			}
@@ -79,7 +79,7 @@
 		this.usersMultiselectFieldLayout.setErrors( [] );
 		if ( invalidOrganizers.length ) {
 			this.organizersField.items.forEach( ( item ) => {
-				if ( invalidOrganizers.indexOf( item.data ) > -1 ) {
+				if ( invalidOrganizers.includes( item.data ) ) {
 					// TODO This is a bit hacky because the widget is not configured
 					// to display invalid tags. Ideally we would use toggleValid, but
 					// then invalid cards would be lost.

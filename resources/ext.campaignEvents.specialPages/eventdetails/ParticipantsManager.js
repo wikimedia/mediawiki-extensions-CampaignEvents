@@ -503,7 +503,7 @@
 
 		if (
 			this.usernameFilter === null ||
-			this.curUserName.toLowerCase().indexOf( this.usernameFilter.toLowerCase() ) > -1
+			this.curUserName.toLowerCase().includes( this.usernameFilter.toLowerCase() )
 		) {
 			this.$curUserRow.show();
 		} else {
@@ -692,8 +692,8 @@
 		}
 
 		return this.isSelectionInverted ?
-			this.selectedParticipantIDs.indexOf( userID ) === -1 :
-			this.selectedParticipantIDs.indexOf( userID ) > -1;
+			!this.selectedParticipantIDs.includes( userID ) :
+			this.selectedParticipantIDs.includes( userID );
 	};
 
 	/**

@@ -86,7 +86,7 @@
 		const tz = this.tzInputWidget.getValue();
 
 		let offset;
-		if ( tz.indexOf( '|' ) > -1 ) {
+		if ( tz.includes( '|' ) ) {
 			// Preset value
 			const tzParts = tz.split( '|' );
 			if ( tzParts.length <= 1 || isNaN( tzParts[ 1 ] ) ) {

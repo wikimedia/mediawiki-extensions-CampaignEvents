@@ -130,7 +130,7 @@
 			hasInvalidRecipients = true;
 		} else {
 			const invalidRecipients = selectedIDs
-				.filter( ( id ) => validRecipients.indexOf( id ) === -1 );
+				.filter( ( id ) => !validRecipients.includes( id ) );
 			hasInvalidRecipients = invalidRecipients.length > 0;
 		}
 		if ( hasInvalidRecipients ) {
@@ -151,7 +151,7 @@
 		}
 
 		const selectionUserInfo = userData
-			.filter( ( data ) => selectedIDs.indexOf( data.userID ) > -1 );
+			.filter( ( data ) => selectedIDs.includes( data.userID ) );
 		const recipientsListItems = selectionUserInfo.map(
 			( selectedUserData ) => new OO.ui.Element( {
 				$element: $( '<li>' ),
