@@ -19,7 +19,7 @@
 			} );
 		};
 
-		config = $.extend(
+		config = Object.assign(
 			{
 				label: mw.msg( 'campaignevents-eventpage-btn-manage-registration' ),
 				indicator: 'down',
