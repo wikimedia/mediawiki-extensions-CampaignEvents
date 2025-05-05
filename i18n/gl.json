@@ -5,6 +5,7 @@
 			"Toliño"
 		]
 	},
+	"campaignevents-register-confirmation-top": "Confirmar a inscrición",
 	"campaignevents-allevents-tab-events-heading": "Eventos",
 	"campaignevents-eventpage-header-timezone": "<strong>Fuso horario:</strong> $1",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Fuso horario:</strong> $1",
