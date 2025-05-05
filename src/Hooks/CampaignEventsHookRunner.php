@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Hooks;
 
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\SpecialPage\SpecialPage;
 use OOUI\Tag;
 
 class CampaignEventsHookRunner implements
@@ -88,13 +89,13 @@ class CampaignEventsHookRunner implements
 	}
 
 	public function onCampaignEventsGetAllEventsTabs(
-		OutputPage $outputPage,
+		SpecialPage $specialPage,
 		array &$pageTabs,
 		string $activeTab
 	): void {
 		$this->hookContainer->run(
 			'CampaignEventsGetAllEventsTabs',
-			[ $outputPage, &$pageTabs, $activeTab ],
+			[ $specialPage, &$pageTabs, $activeTab ],
 			[ 'abortable' => false ]
 		);
 	}

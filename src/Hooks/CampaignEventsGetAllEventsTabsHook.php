@@ -2,14 +2,14 @@
 declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks;
 
-use MediaWiki\Output\OutputPage;
+use MediaWiki\SpecialPage\SpecialPage;
 
 /**
  * @internal
  */
 interface CampaignEventsGetAllEventsTabsHook {
 	public function onCampaignEventsGetAllEventsTabs(
-		OutputPage $outputPage,
+		SpecialPage $specialPage,
 		array &$pageTabs,
 		string $activeTab
 	): void;
