@@ -90,10 +90,22 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				$this->getPageTitle(),
 				$this->msg( 'campaignevents-allevents-transclusion-more-link' ),
 				[],
-				$this->getRequest()->getQueryValues()
+				$this->getQueryParametersForTransclusionLink()
 			);
 		}
 		$this->getOutput()->addHTML( $pageContent );
+	}
+
+	private function getQueryParametersForTransclusionLink(): array {
+		$values = $this->getRequest()->getQueryValues();
+		// Convert multivalued parameters back to arrays.
+		if ( ( $values['wpFilterWikis'] ?? '' ) !== '' ) {
+			$values['wpFilterWikis'] = array_map( 'trim', explode( ',', $values['wpFilterWikis'] ) );
+		}
+		if ( ( $values['wpFilterTopics'] ?? '' ) !== '' ) {
+			$values['wpFilterTopics'] = array_map( 'trim', explode( ',', $values['wpFilterTopics'] ) );
+		}
+		return $values;
 	}
 
 	public function getFormAndEvents(): string {
