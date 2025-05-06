@@ -31,6 +31,6 @@ module.exports = {
 	},
 
 	async getOrganizerUser() {
-		return action.user( 'Organizer', [ 'event-organizer' ] );
+		return action.root();
 	}
 };
