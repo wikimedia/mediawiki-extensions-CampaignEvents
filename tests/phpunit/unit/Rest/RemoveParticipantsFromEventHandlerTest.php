@@ -103,8 +103,7 @@ class RemoveParticipantsFromEventHandlerTest extends MediaWikiUnitTestCase {
 		$handler = $this->newHandler( $eventLookup, $unregisterParticipantCommand, $page );
 
 		try {
-			$this->executeHandler( $handler, new RequestData( $requestData ?? self::getRequestData(
-			)
+			$this->executeHandler( $handler, new RequestData( $requestData ?? self::getRequestData()
 			) );
 			$this->fail( 'No exception thrown' );
 		} catch ( LocalizedHttpException $e ) {
