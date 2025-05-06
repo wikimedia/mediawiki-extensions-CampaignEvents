@@ -72,7 +72,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$submittedTab = $this->getOutput()->getRequest()->getRawVal( 'tab' );
 		$activeTab = $submittedTab ? str_replace( self::TAB_ID_PREFIX, '', $submittedTab ) : 'events';
 		$this->hookRunner->onCampaignEventsGetAllEventsTabs(
-			$this->getOutput(),
+			$this,
 			$pageTabs,
 			$activeTab
 		);
