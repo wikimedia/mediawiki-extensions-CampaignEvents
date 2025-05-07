@@ -16,7 +16,7 @@ CREATE TABLE campaign_events (
   event_start_utc TIMESTAMPTZ NOT NULL,
   event_end_local TEXT NOT NULL,
   event_end_utc TIMESTAMPTZ NOT NULL,
-  event_type TEXT NOT NULL,
+  event_types INT DEFAULT 0 NOT NULL,
   event_meeting_type INT NOT NULL,
   event_meeting_url TEXT NOT NULL,
   event_created_at TIMESTAMPTZ NOT NULL,

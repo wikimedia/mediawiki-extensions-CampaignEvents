@@ -49,8 +49,7 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 			$curID = $lastID++;
 			return [
 				'event_page_title' => "Test $curID",
-				'event_page_prefixedtext' => "Event:Test $curID",
-					'event_type' => "generic"
+				'event_page_prefixedtext' => "Event:Test $curID"
 			] + $timeFields + $baseRow;
 		};
 

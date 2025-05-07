@@ -35,7 +35,6 @@ trait ListPagersTestHelperTrait {
 			'event_start_utc' => $dbw->timestamp( self::$EVENT_START ),
 			'event_end_local' => $dbw->timestamp( self::$EVENT_END ),
 			'event_end_utc' => $dbw->timestamp( self::$EVENT_END ),
-			'event_type' => "generic",
 			'event_meeting_type' => 3,
 			'event_meeting_url' => '',
 			'event_created_at' => $curTS,
