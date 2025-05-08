@@ -542,5 +542,17 @@
 	"communityconfiguration-campaignevents-title": "{{optional}}\nTitle of the Community Configuration provider. Shown at Special:CommunityConfiguration.",
 	"communityconfiguration-campaignevents-description": "Description of the Community Configuration provider. Shown at Special:CommunityConfiguration.",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Label for the community configuration namespace field. Shown at Special:CommunityConfiguration/CampaignEvents.",
-	"campaignevents-email-participants-missing-address-uncertain": "Warning text displayed when potentially invalid recipients are selected"
+	"campaignevents-email-participants-missing-address-uncertain": "Warning text displayed when potentially invalid recipients are selected",
+	"campaignevents-eventtype-editing-event": "Event type label for editing events, which focus on editing wiki content.",
+	"campaignevents-eventtype-media-upload-event": "Event type label for media upload events, where participants contribute media such as images or videos.",
+	"campaignevents-eventtype-backlog-drive": "Event type label for backlog drive events, intended to reduce maintenance or content backlogs.",
+	"campaignevents-eventtype-contest": "Event type label for contests, which are competitive events often with rules and/or prizes.",
+	"campaignevents-eventtype-workshop": "Event type label for workshops, where participants receive guided instruction or practical training.",
+	"campaignevents-eventtype-training": "Event type label for training or seminar events, typically involving educational presentations or lectures.",
+	"campaignevents-eventtype-meetup": "Event type label for meetups, which are informal gatherings of contributors or community members.",
+	"campaignevents-eventtype-hackathon": "Event type label for hackathons, which are collaborative coding or development events.",
+	"campaignevents-eventtype-conference": "Event type label for conferences, which are larger, formal events often involving multiple sessions or tracks.",
+	"campaignevents-eventtype-other": "Event type label for 'other' events that do not fit any of the predefined categories.",
+	"campaignevents-eventtypegroup-contributions": "Event type group label for the Contributions event type",
+	"campaignevents-eventtypegroup-community": "Event type group label for the Community event type"
 }
