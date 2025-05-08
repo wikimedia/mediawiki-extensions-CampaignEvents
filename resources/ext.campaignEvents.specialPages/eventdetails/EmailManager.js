@@ -105,41 +105,64 @@
 	EmailManager.prototype.onRecipientsUpdate = function (
 		userData,
 		selectedIDs,
-		isSelectionInverted
+		isSelectionInverted,
+		fullListLoaded
 	) {
 		this.recipientIDs = selectedIDs;
 		this.isSelectionInverted = isSelectionInverted;
 
-		userData = userData
-			.filter( ( participantData ) => participantData.username !== undefined );
-		const validRecipients = userData
-			.filter( ( participantData ) => participantData.canReceiveEmail )
-			.map( ( participantData ) => participantData.userID );
+		userData = this.filterOutUsersWithoutUsername( userData );
 
 		this.$recipientsListElement.empty();
 		this.clearMessage();
 
-		if ( selectedIDs === null ) {
-			this.$recipientsListElement.text( mw.message( 'campaignevents-email-participants-all' ).text() );
-			this.setWarning( mw.message( 'campaignevents-email-participants-missing-address' ).text() );
-			return;
-		}
+		this.setRecipientsMessage( selectedIDs, userData );
+		this.setWarningMessage( selectedIDs, userData, fullListLoaded );
+	};
 
-		let hasInvalidRecipients;
-		if ( isSelectionInverted ) {
-			hasInvalidRecipients = true;
+	EmailManager.prototype.filterOutUsersWithoutUsername = function ( userData ) {
+		return userData
+			.filter( ( participantData ) => participantData.username !== undefined );
+	};
+
+	EmailManager.prototype.extractValidRecipients = function ( userData ) {
+		return userData
+			.filter( ( participantData ) => participantData.canReceiveEmail )
+			.map( ( participantData ) => participantData.userID );
+	};
+
+	EmailManager.prototype.hasInvalidRecipients = function (
+		userData,
+		selectedIDs
+	) {
+		let selectedParticipants = [];
+		if ( selectedIDs === null ) {
+			selectedParticipants = userData;
 		} else {
-			const invalidRecipients = selectedIDs
-				.filter( ( id ) => !validRecipients.includes( id ) );
-			hasInvalidRecipients = invalidRecipients.length > 0;
+			selectedParticipants = this.isSelectionInverted ?
+				userData.filter( ( p ) => !selectedIDs.includes( p.userID ) ) :
+				userData.filter( ( p ) => selectedIDs.includes( p.userID ) );
 		}
-		if ( hasInvalidRecipients ) {
-			this.setWarning( mw.message( 'campaignevents-email-participants-missing-address' ).text() );
+		const selectedRecipientIDs = selectedParticipants.map( ( p ) => p.userID );
+
+		const validRecipients = this.extractValidRecipients( userData );
+		return selectedRecipientIDs.some( ( id ) => !validRecipients.includes( id ) );
+	};
+
+	EmailManager.prototype.setRecipientsMessage = function (
+		selectedIDs,
+		userData
+	) {
+		if ( selectedIDs === null ) {
+			this.$recipientsListElement.text(
+				mw.message( 'campaignevents-email-participants-all' ).text()
+			);
+			return;
 		}
 
 		const selectionSize = selectedIDs.length;
 		if ( selectionSize > 1 ) {
-			const msg = isSelectionInverted ?
+			const msg = this.isSelectionInverted ?
 				'campaignevents-email-participants-except-count' :
 				'campaignevents-email-participants-count';
 
@@ -162,11 +185,29 @@
 			} ).$element
 		);
 		let $recipientsList = $( '<ul>' ).append( recipientsListItems );
-		if ( isSelectionInverted ) {
+		if ( this.isSelectionInverted ) {
 			$recipientsList = mw.message( 'campaignevents-email-participants-except', $recipientsList )
 				.parseDom();
 		}
 		this.$recipientsListElement.append( $recipientsList );
+	};
+
+	EmailManager.prototype.setWarningMessage = function (
+		selectedIDs,
+		userData,
+		fullListLoaded
+	) {
+		if ( this.hasInvalidRecipients( userData, selectedIDs ) ) {
+			this.setWarning(
+				mw.message( 'campaignevents-email-participants-missing-address' ).text()
+			);
+		} else if ( ( selectedIDs === null || this.isSelectionInverted ) && !fullListLoaded ) {
+			this.setWarning(
+				mw.message(
+					'campaignevents-email-participants-missing-address-uncertain'
+				).text()
+			);
+		}
 	};
 
 	EmailManager.prototype.addValidation = function () {
@@ -227,6 +268,4 @@
 	};
 
 	module.exports = new EmailManager();
-
-}()
-);
+}() );
