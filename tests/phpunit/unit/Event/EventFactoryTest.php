@@ -44,7 +44,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'timezone' => 'UTC',
 		'start' => '20220308120000',
 		'end' => '20220308150000',
-		'type' => EventRegistration::TYPE_GENERIC,
 		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',
@@ -300,10 +299,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'Start after end' => [
 			'campaignevents-error-start-after-end',
 			self::getTestDataWithDefault( [ 'start' => '20220308160000', 'end' => '20220308120000' ] )
-		];
-		yield 'Invalid type' => [
-			'campaignevents-error-invalid-type',
-			self::getTestDataWithDefault( [ 'type' => 'Some invalid type' ] )
 		];
 		yield 'No meeting type' => [
 			'campaignevents-error-no-meeting-type',

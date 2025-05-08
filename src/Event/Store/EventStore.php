@@ -34,10 +34,6 @@ class EventStore implements IEventStore, IEventLookup {
 		EventRegistration::STATUS_CLOSED => 2,
 	];
 
-	private const EVENT_TYPE_MAP = [
-		EventRegistration::TYPE_GENERIC => 'generic',
-	];
-
 	private const EVENT_MEETING_TYPE_MAP = [
 		EventRegistration::MEETING_TYPE_IN_PERSON => 1,
 		EventRegistration::MEETING_TYPE_ONLINE => 2,
@@ -450,7 +446,6 @@ class EventStore implements IEventStore, IEventLookup {
 			new DateTimeZone( $row->event_timezone ),
 			wfTimestamp( TS_MW, $row->event_start_local ),
 			wfTimestamp( TS_MW, $row->event_end_local ),
-			array_search( $row->event_type, self::EVENT_TYPE_MAP, true ),
 			$meetingType,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
 			$country,
@@ -489,7 +484,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_start_utc' => $dbw->timestamp( $event->getStartUTCTimestamp() ),
 			'event_end_local' => $localEndDB,
 			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
-			'event_type' => self::EVENT_TYPE_MAP[$event->getType()],
+			'event_type' => EventRegistration::TYPE_GENERIC,
 			'event_meeting_type' => self::meetingTypeToDBVal( $event->getMeetingType() ),
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,

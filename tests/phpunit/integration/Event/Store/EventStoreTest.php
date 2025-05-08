@@ -52,7 +52,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			new DateTimeZone( 'UTC' ),
 			'20220810000000',
 			'20220810000001',
-			EventRegistration::TYPE_GENERIC,
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'Country',
@@ -79,7 +78,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getStartUTCTimestamp(), $actual->getStartUTCTimestamp(), 'UTC start' );
 		$this->assertSame( $expected->getEndLocalTimestamp(), $actual->getEndLocalTimestamp(), 'local end' );
 		$this->assertSame( $expected->getEndUTCTimestamp(), $actual->getEndUTCTimestamp(), 'UTC end' );
-		$this->assertSame( $expected->getType(), $actual->getType(), 'type' );
 		$this->assertSame( $expected->getMeetingType(), $actual->getMeetingType(), 'meeting type' );
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
 		$this->assertSame( $expected->getMeetingCountry(), $actual->getMeetingCountry(), 'country' );
@@ -290,7 +288,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'event_start_utc' => '20220811142657',
 			'event_end_local' => '20220811142657',
 			'event_end_utc' => '20220811142657',
-			'event_type' => 'generic',
+			'event_type' => "generic",
 			'event_meeting_type' => 3,
 			'event_meeting_url' => '',
 			'event_created_at' => '20220811142657',
@@ -356,7 +354,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			new DateTimeZone( 'UTC' ),
 			'20220731080000',
 			'20220731160000',
-			EventRegistration::TYPE_GENERIC,
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'Country' => 'Country',

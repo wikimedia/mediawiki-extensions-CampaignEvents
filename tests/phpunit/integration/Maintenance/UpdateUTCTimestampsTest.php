@@ -37,7 +37,6 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'event_chat_url' => '',
 			'event_status' => 1,
-			'event_type' => 'generic',
 			'event_meeting_type' => 2,
 			'event_meeting_url' => '',
 			'event_created_at' => $dbw->timestamp(),
@@ -51,6 +50,7 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 			return [
 				'event_page_title' => "Test $curID",
 				'event_page_prefixedtext' => "Event:Test $curID",
+					'event_type' => "generic"
 			] + $timeFields + $baseRow;
 		};
 

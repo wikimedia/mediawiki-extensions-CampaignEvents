@@ -71,8 +71,6 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
-			// TODO MVP Get this from the request body
-			EventRegistration::TYPE_GENERIC,
 			$meetingType,
 			$body['meeting_url'],
 			$body['meeting_country'],

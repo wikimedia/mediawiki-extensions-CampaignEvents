@@ -91,7 +91,6 @@ class EventFactory {
 	 * @param string $timezone Can be in any format accepted by DateTimeZone
 	 * @param string $startLocalTimestamp In the TS_MW format
 	 * @param string $endLocalTimestamp In the TS_MW format
-	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
@@ -121,7 +120,6 @@ class EventFactory {
 		string $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
-		string $type,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
@@ -192,10 +190,6 @@ class EventFactory {
 			$res->merge( $datesStatus );
 		}
 
-		if ( !in_array( $type, EventRegistration::VALID_TYPES, true ) ) {
-			$res->error( 'campaignevents-error-invalid-type' );
-		}
-
 		$res->merge( $this->validateMeetingInfo( $meetingType, $meetingURL, $meetingCountry, $meetingAddress ) );
 
 		$questionsStatus = $this->validateParticipantQuestions( $participantQuestionNames );
@@ -238,7 +232,6 @@ class EventFactory {
 			$timezoneObj,
 			$startLocalTimestamp,
 			$endLocalTimestamp,
-			$type,
 			$meetingType,
 			$meetingURL,
 			$meetingCountry,

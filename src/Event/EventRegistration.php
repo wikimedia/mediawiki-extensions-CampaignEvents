@@ -20,10 +20,9 @@ class EventRegistration {
 	public const STATUS_CLOSED = 'closed';
 	public const VALID_STATUSES = [ self::STATUS_OPEN, self::STATUS_CLOSED ];
 
-	public const TYPE_GENERIC = 'generic';
-	public const VALID_TYPES = [ self::TYPE_GENERIC ];
-
 	public const ALL_WIKIS = true;
+
+	public const TYPE_GENERIC = 'generic';
 
 	public const MEETING_TYPE_ONLINE = 1 << 0;
 	public const MEETING_TYPE_IN_PERSON = 1 << 1;
@@ -56,8 +55,6 @@ class EventRegistration {
 	private DateTimeZone $timezone;
 	private string $startLocalTimestamp;
 	private string $endLocalTimestamp;
-	/** @var string One of the TYPE_* constants */
-	private string $type;
 	/** @var int One of the MEETING_TYPE_* constants */
 	private int $meetingType;
 	private ?string $meetingURL;
@@ -83,7 +80,6 @@ class EventRegistration {
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
-	 * @param string $type
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
@@ -106,7 +102,6 @@ class EventRegistration {
 		DateTimeZone $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
-		string $type,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
@@ -142,7 +137,6 @@ class EventRegistration {
 		$this->timezone = $timezone;
 		$this->startLocalTimestamp = $startLocalTimestamp;
 		$this->endLocalTimestamp = $endLocalTimestamp;
-		$this->type = $type;
 		$this->meetingType = $meetingType;
 		$this->meetingURL = $meetingURL;
 		$this->meetingCountry = $meetingCountry;
@@ -235,10 +229,6 @@ class EventRegistration {
 
 	public function isPast(): bool {
 		return wfTimestamp( TS_UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
-	}
-
-	public function getType(): string {
-		return $this->type;
 	}
 
 	public function getMeetingType(): int {
