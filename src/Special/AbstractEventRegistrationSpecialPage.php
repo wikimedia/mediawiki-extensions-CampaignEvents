@@ -694,7 +694,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
-				EventRegistration::TYPE_GENERIC,
 				$meetingType,
 				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,

@@ -41,7 +41,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'timezone' => new DateTimeZone( 'UTC' ),
 			'start' => '20220815120000',
 			'end' => '20220815120001',
-			'type' => EventRegistration::TYPE_GENERIC,
 			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'country' => 'Some country',
@@ -67,7 +66,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @covers ::getTimezone
 	 * @covers ::getStartLocalTimestamp
 	 * @covers ::getEndLocalTimestamp
-	 * @covers ::getType
 	 * @covers ::getMeetingType
 	 * @covers ::getMeetingURL
 	 * @covers ::getMeetingCountry
@@ -90,7 +88,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['timezone']->getName(), $registration->getTimezone()->getName(), 'timezone' );
 		$this->assertSame( $data['start'], $registration->getStartLocalTimestamp(), 'start' );
 		$this->assertSame( $data['end'], $registration->getEndLocalTimestamp(), 'end' );
-		$this->assertSame( $data['type'], $registration->getType(), 'type' );
 		$this->assertSame( $data['meeting_type'], $registration->getMeetingType(), 'meeting_type' );
 		$this->assertSame( $data['meeting_url'], $registration->getMeetingURL(), 'meeting_url' );
 		$this->assertSame( $data['country'], $registration->getMeetingCountry(), 'country' );
