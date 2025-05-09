@@ -527,5 +527,6 @@
 	"campaignevents-allevents-transclusion-more-link": "Кхин а хиламаш а, йукъараллаш а йовза",
 	"communityconfiguration-campaignevents-title": "КампаниХиламаш",
 	"communityconfiguration-campaignevents-description": "Конфигурацин параметраш CampaignEvents шуьйрачу агӀонан",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Магийна хиламийн цӀерийн меттигаш"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Магийна хиламийн цӀерийн меттигаш",
+	"campaignevents-email-participants-missing-address-uncertain": "Цхьаболчу хаьржинчу декъашхойн шайн аккаунтехь электронан поштан адрес ца хила а тарло, хьан электронан пошта дӀакхочур йац."
 }

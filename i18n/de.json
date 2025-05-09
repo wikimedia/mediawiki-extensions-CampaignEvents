@@ -526,5 +526,6 @@
 	"campaignevents-allevents-transclusion-more-link": "Weitere Veranstaltungen und Communities entdecken",
 	"communityconfiguration-campaignevents-title": "Kampagnen-Veranstaltungen",
 	"communityconfiguration-campaignevents-description": "Konfigurationsoptionen für die CampaignEvents-Erweiterung",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Gültige Veranstaltungsnamensräume"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Gültige Veranstaltungsnamensräume",
+	"campaignevents-email-participants-missing-address-uncertain": "Einige der ausgewählten Teilnehmer haben keine E-Mail-Adresse in ihrem Konto und werden deine E-Mail nicht erhalten."
 }
