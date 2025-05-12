@@ -41,7 +41,7 @@ class EventTypesRegistry {
 	];
 
 	// Bitwise map (OTHER is 0 and exclusive)
-	private const EVENT_TYPES_MAP = [
+	public const EVENT_TYPES_MAP = [
 		self::EVENT_TYPE_OTHER              => 0,
 		self::EVENT_TYPE_EDITING_EVENT      => 1,
 		self::EVENT_TYPE_MEDIA_UPLOAD_EVENT => 1 << 1,

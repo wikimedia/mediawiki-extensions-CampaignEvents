@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use DateTimeZone;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Page\PageIdentityValue;
@@ -41,6 +42,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'timezone' => new DateTimeZone( 'UTC' ),
 			'start' => '20220815120000',
 			'end' => '20220815120001',
+			'event_types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'country' => 'Some country',
