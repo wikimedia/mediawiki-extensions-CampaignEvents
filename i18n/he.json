@@ -527,5 +527,6 @@
 	"campaignevents-allevents-transclusion-more-link": "לחקור עוד אירועים וקהילות",
 	"communityconfiguration-campaignevents-title": "אירועים",
 	"communityconfiguration-campaignevents-description": "אפשרויות תצורה עבור ההרחבה CampaignEvents",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "מרחבי שם תקינים של אירועים"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "מרחבי שם תקינים של אירועים",
+	"campaignevents-email-participants-missing-address-uncertain": "ייתכן שלחלק מהמשתתפים שנבחרו אין כתובת דוא\"ל בחשבון שלהם והם לא יקבלו את הדוא\"ל שלך."
 }

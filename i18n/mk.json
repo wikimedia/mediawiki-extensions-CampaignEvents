@@ -527,5 +527,6 @@
 	"campaignevents-allevents-transclusion-more-link": "Истражете повеќе настани и заедници",
 	"communityconfiguration-campaignevents-title": "Походни настани",
 	"communityconfiguration-campaignevents-description": "Можности за нагодување на додатокот Походни настани",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Важечки именски простори за настани"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Важечки именски простори за настани",
+	"campaignevents-email-participants-missing-address-uncertain": "Некои од избраните учесници може да немаат внесено е-пошта на нивната сметка и нема да можат да ја добијат вашата порака."
 }

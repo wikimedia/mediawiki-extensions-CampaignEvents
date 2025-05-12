@@ -526,5 +526,6 @@
 	"campaignevents-allevents-transclusion-more-link": "Explorar plus eventos e communitates",
 	"communityconfiguration-campaignevents-title": "Eventos de campania",
 	"communityconfiguration-campaignevents-description": "Optiones de configuration pro le extension CampaignEvents",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Spatio de nomines valide pro eventos"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Spatio de nomines valide pro eventos",
+	"campaignevents-email-participants-missing-address-uncertain": "Alcunes del participantes seligite non ha un adresse de e-mail definite in lor conto e non recipera tu message."
 }

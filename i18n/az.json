@@ -527,5 +527,6 @@
 	"campaignevents-allevents-transclusion-more-link": "Daha çox tədbir və icma kəşf edin",
 	"communityconfiguration-campaignevents-title": "Tədbirlər",
 	"communityconfiguration-campaignevents-description": "CampaignEvents uzantısı üçün konfiqurasiya seçimləri",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Etibarlı tədbir ad fəzası"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Etibarlı tədbir ad fəzası",
+	"campaignevents-email-participants-missing-address-uncertain": "Seçilmiş iştirakçılardan bəzilərinin hesabında e-poçt ünvanı olmaya bilər və e-poçtunuzu qəbul etməyəcəklər."
 }
