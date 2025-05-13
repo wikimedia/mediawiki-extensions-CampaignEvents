@@ -535,5 +535,6 @@
 	"campaignevents-allevents-label-ongoing-events-description": "Поточні події: Події, що починаються раніше, але тривають у межах вибраних дат",
 	"campaignevents-allevents-transclusion-more-link": "Дізнайтеся більше про події та спільноти",
 	"communityconfiguration-campaignevents-description": "Параметри конфігурації для розширення CampaignEvents",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Дійсні простори назв для подій"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Дійсні простори назв для подій",
+	"campaignevents-email-participants-missing-address-uncertain": "Деякі з вибраних учасників можуть не мати адреси електронної пошти у своєму обліковому записі та не отримають вашого електронного листа."
 }
