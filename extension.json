@@ -70,6 +70,10 @@
 				1728
 			],
 			"merge_strategy": "provide_default"
+		},
+		"CampaignEventsEnableEventTypes": {
+			"description": "Flag to enable event types feature on a wiki",
+			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
