@@ -113,9 +113,9 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		if ( $this->including() ) {
 			// Uses a comma-separated list to support multivalued parameters (T388385#10773882)
 			$rawFilterWiki = $request->getRawVal( 'wpFilterWikis' ) ?? '';
-			$filterWiki = $rawFilterWiki ? array_map( 'trim', explode( ',', $rawFilterWiki ) ) : [];
+			$filterWiki = $this->normalizeFilterValues( $rawFilterWiki );
 			$rawFilterTopic = $request->getRawVal( 'wpFilterTopics' ) ?? '';
-			$filterTopics = $rawFilterTopic ? array_map( 'trim', explode( ',', $rawFilterTopic ) ) : [];
+			$filterTopics = $this->normalizeFilterValues( $rawFilterTopic );
 		} else {
 			$filterWiki = $request->getArray( 'wpFilterWikis' ) ?? [];
 			$filterTopics = $request->getArray( 'wpFilterTopics' ) ?? [];
@@ -341,5 +341,20 @@ class SpecialAllEvents extends IncludableSpecialPage {
 
 		}
 		return $this->templateParser->processTemplate( 'TabLayout', $data );
+	}
+
+	/**
+	 * Normalize a comma-separated string of values into an array of trimmed, lowercase strings.
+	 * This allows editors using transclusion to use case-insensitive filters
+	 * @param string $value
+	 * @return array
+	 */
+	private function normalizeFilterValues( string $value ): array {
+		if ( $value === '' ) {
+			return [];
+		}
+		return array_map( static function ( $item ) {
+			return strtolower( trim( $item ) );
+		}, explode( ',', $value ) );
 	}
 }
