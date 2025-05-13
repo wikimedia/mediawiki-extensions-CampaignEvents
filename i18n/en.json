@@ -548,5 +548,10 @@
 	"campaignevents-eventtype-conference": "Conference",
 	"campaignevents-eventtype-other": "Other",
 	"campaignevents-eventtypegroup-contributions": "Contributions",
-	"campaignevents-eventtypegroup-community": "Community"
+	"campaignevents-eventtypegroup-community": "Community",
+	"campaignevents-edit-field-eventtypes-other-section-header": "Other",
+	"campaignevents-edit-field-eventtypes-placeholder": "Select event types...",
+	"campaignevents-edit-field-eventtypes-other-help": "Selecting 'Other' will disable and deselect all other event types.",
+	"campaignevents-edit-field-eventtypes-label": "Event types",
+	"campaignevents-error-invalid-other-selection": "You cannot select 'Other' along with other event types. Please select only 'Other' or remove it to choose other options."
 }
