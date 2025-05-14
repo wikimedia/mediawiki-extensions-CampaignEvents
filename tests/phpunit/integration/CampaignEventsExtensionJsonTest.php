@@ -13,10 +13,10 @@ use MediaWiki\Tests\ExtensionJsonTestBase;
  */
 class CampaignEventsExtensionJsonTest extends ExtensionJsonTestBase {
 	/** @inheritDoc */
-	protected string $extensionJsonPath = __DIR__ . '/../../../extension.json';
+	protected static string $extensionJsonPath = __DIR__ . '/../../../extension.json';
 
-	public function provideHookHandlerNames(): iterable {
-		foreach ( $this->getExtensionJson()['HookHandlers'] ?? [] as $hookHandlerName => $_ ) {
+	public static function provideHookHandlerNames(): iterable {
+		foreach ( self::getExtensionJson()['HookHandlers'] ?? [] as $hookHandlerName => $_ ) {
 			if ( $hookHandlerName === 'EchoHooksHandler' && !ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) ) {
 				continue;
 			}
