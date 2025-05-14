@@ -332,7 +332,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$active = $activeTab === $tabName;
 			$data['tabs'][] =
 				[
-					'id' => 'ext-campaignevents-allevents-tab-' . $tabName,
+					'id' => self::TAB_ID_PREFIX . $tabName,
 					'content' => $tab['content'],
 					'label' => $tab['label'],
 					'active' => wfBoolToStr( $active ),
