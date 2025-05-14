@@ -70,7 +70,7 @@
 				action: 'clear'
 			} );
 		}
-		data = $.extend(
+		data = Object.assign(
 			{
 				title: title,
 				actions: actions

@@ -33,7 +33,7 @@
 	];
 
 	ConfirmEventDeletionDialog.prototype.getSetupProcess = function ( data ) {
-		data = $.extend(
+		data = Object.assign(
 			{ title: mw.message( 'campaignevents-eventslist-delete-dialog-title', this.eventName ).parseDom() },
 			data
 		);

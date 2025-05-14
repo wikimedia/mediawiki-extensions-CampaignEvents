@@ -29,7 +29,7 @@
 	];
 
 	RemoveParticipantDialog.prototype.getSetupProcess = function ( data ) {
-		data = $.extend(
+		data = Object.assign(
 			{
 				title: mw.message(
 					'campaignevents-event-details-remove-participant-confirmation-title',

@@ -34,7 +34,7 @@
 			} );
 		};
 
-		config = $.extend(
+		config = Object.assign(
 			{
 				icon: 'ellipsis',
 				framed: false,
