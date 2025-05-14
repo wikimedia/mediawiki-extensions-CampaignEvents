@@ -21,6 +21,8 @@ use StatusValue;
 class InvitationListGenerator {
 	public const SERVICE_NAME = 'CampaignEventsInvitationListGenerator';
 
+	public const INVITATION_LIST_NAME_MAXLENGTH_BYTES = 255;
+
 	private PermissionChecker $permissionChecker;
 	private CampaignsPageFactory $pageFactory;
 	private PageEventLookup $pageEventLookup;
@@ -89,6 +91,10 @@ class InvitationListGenerator {
 	): StatusValue {
 		if ( trim( $name ) === '' ) {
 			return StatusValue::newFatal( 'campaignevents-invitation-list-error-empty-name' );
+		}
+
+		if ( strlen( $name ) > self::INVITATION_LIST_NAME_MAXLENGTH_BYTES ) {
+			return StatusValue::newFatal( 'campaignevents-generateinvitationlist-name-too-long' );
 		}
 
 		$eventID = null;

@@ -498,6 +498,7 @@
 	"campaignevents-myinvitationslist-generate-button": "Button label text shown on [[Special:MyInvitationLists]], this button navigates to [[Special:GenerateInvitationList]]",
 	"campaignevents-myinvitationslist-new-button": "Button label text shown on [[Special:MyInvitationLists]]. This button navigates to [[Special:GenerateInvitationList]], where the user can create a new invitation list.",
 	"campaignevents-invitation-list-error-empty-name": "Error message shown on [[Special:GenerateInvitationList]] when the user does not enter a name for the invitation list.",
+	"campaignevents-generateinvitationlist-name-too-long": "Message to inform that the event list name is too long on [[Special:GenerateInvitationList]], Note: The limit is 255 bytes, but this does not mean 255 characters. Some characters may use more than 1 byte per character in languages like Hindi, Chinese, and others.",
 	"campaignevents-invitation-list-error-invalid-page": "Error message shown on [[Special:GenerateInvitationList]] when the user enters an invalid event page (for example, a page that is not in the Event: namespace, or an event page that does not use Event Registration).",
 	"campaignevents-invitation-list-error-event-ended": "Error message shown on [[Special:GenerateInvitationList]] when the user enters the name of an event which has already ended.",
 	"campaignevents-invitation-list-error-not-organizer": "Error message shown on [[Special:GenerateInvitationList]] when the user enters the name of an event for which they are not listed as an organizer.",

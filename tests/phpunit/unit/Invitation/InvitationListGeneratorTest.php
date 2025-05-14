@@ -238,5 +238,15 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 			self::EVENT_HAS_NOT_ENDED,
 			self::IS_ORGANIZER
 		];
+
+		yield 'Name exceeds max length' => [
+			'campaignevents-generateinvitationlist-name-too-long',
+			str_repeat( 'a', InvitationListGenerator::INVITATION_LIST_NAME_MAXLENGTH_BYTES + 1 ),
+			null,
+			self::VALID_EVENT_PAGE,
+			self::USES_REGISTRATION,
+			self::EVENT_HAS_NOT_ENDED,
+			self::IS_ORGANIZER
+		];
 	}
 }
