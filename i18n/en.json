@@ -536,5 +536,17 @@
 	"communityconfiguration-campaignevents-title": "CampaignEvents",
 	"communityconfiguration-campaignevents-description": "Configuration options for the CampaignEvents extension",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Valid event namespaces",
-	"campaignevents-email-participants-missing-address-uncertain": "Some of the selected participants may not have an email address on their account and won't receive your email."
+	"campaignevents-email-participants-missing-address-uncertain": "Some of the selected participants may not have an email address on their account and won't receive your email.",
+	"campaignevents-eventtype-editing-event": "Editing event",
+	"campaignevents-eventtype-media-upload-event": "Media upload event",
+	"campaignevents-eventtype-backlog-drive": "Backlog drive",
+	"campaignevents-eventtype-contest": "Contest",
+	"campaignevents-eventtype-workshop": "Workshop",
+	"campaignevents-eventtype-training": "Training / seminar",
+	"campaignevents-eventtype-meetup": "Meetup",
+	"campaignevents-eventtype-hackathon": "Hackathon",
+	"campaignevents-eventtype-conference": "Conference",
+	"campaignevents-eventtype-other": "Other",
+	"campaignevents-eventtypegroup-contributions": "Contributions",
+	"campaignevents-eventtypegroup-community": "Community"
 }
