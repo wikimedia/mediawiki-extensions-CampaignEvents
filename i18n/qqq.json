@@ -564,5 +564,6 @@
 	"campaignevents-edit-field-eventtypes-placeholder": "Placeholder text shown in the event types multiselect dropdown when no options are selected.",
 	"campaignevents-edit-field-eventtypes-other-help": "Help text explaining that selecting the 'Other' option will disable and deselect all other event types in the multiselect dropdown. \"Other\" is {{msg-mw|Campaignevents-edit-field-eventtypes-other-section-header}}",
 	"campaignevents-edit-field-eventtypes-label": "Label for the field where users can select one or more event types in a multiselect dropdown.",
-	"campaignevents-event-details-event-types-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of Event types"
+	"campaignevents-event-details-event-types-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of Event types",
+	"campaignevents-eventpage-dialog-event-types-label": "Heading used on Event Details modal for a section that contains the list of Event types"
 }

@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -40,6 +41,7 @@ class EventPageDecoratorFactory {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private EventTypesRegistry $eventTypesRegistry;
 	private GroupPermissionsLookup $groupPermissionsLookup;
 	private Config $config;
 
@@ -58,6 +60,7 @@ class EventPageDecoratorFactory {
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
+		EventTypesRegistry $eventTypesRegistry,
 		GroupPermissionsLookup $groupPermissionsLookup,
 		Config $config
 	) {
@@ -75,6 +78,7 @@ class EventPageDecoratorFactory {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->config = $config;
 	}
@@ -99,6 +103,7 @@ class EventPageDecoratorFactory {
 			$this->eventQuestionsRegistry,
 			$this->wikiLookup,
 			$this->topicRegistry,
+			$this->eventTypesRegistry,
 			$this->groupPermissionsLookup,
 			$this->config,
 			$language,

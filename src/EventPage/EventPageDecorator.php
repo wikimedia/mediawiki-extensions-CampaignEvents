@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\EventPage;
 use LogicException;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -90,6 +91,7 @@ class EventPageDecorator {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private EventTypesRegistry $eventTypesRegistry;
 	private GroupPermissionsLookup $groupPermissionsLookup;
 	private Config $config;
 
@@ -120,6 +122,7 @@ class EventPageDecorator {
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
+		EventTypesRegistry $eventTypesRegistry,
 		GroupPermissionsLookup $groupPermissionsLookup,
 		Config $config,
 		Language $language,
@@ -139,6 +142,7 @@ class EventPageDecorator {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->config = $config;
 
@@ -652,6 +656,9 @@ class EventPageDecorator {
 			$organizersCount,
 			$userStatus
 		);
+		if ( $this->out->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
+			$eventInfo .= $this->getDetailsDialogEventTypes( $registration->getTypes() );
+		}
 		if ( $registration->getWikis() ) {
 			$eventInfo .= $this->getDetailsDialogWikis( $registration );
 		}
@@ -1166,6 +1173,27 @@ class EventPageDecorator {
 			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-topics-label' )
 			)
+		);
+	}
+
+	/**
+	 * @phan-param list<string> $eventTypes
+	 * @return string
+	 */
+	private function getDetailsDialogEventTypes( array $eventTypes ): string {
+		$messageKeys = $this->eventTypesRegistry->getTypeMessages( $eventTypes );
+		$localizedEventTypeNames = array_map(
+			fn ( string $msgKey ): string => $this->out->msg( $msgKey )->escaped(),
+			$messageKeys
+		);
+
+		sort( $localizedEventTypeNames );
+		$content = new HtmlSnippet( $this->language->commaList( $localizedEventTypeNames ) );
+
+		return $this->makeDetailsDialogSection(
+			'folderPlaceholder',
+			$content,
+			$this->out->msg( 'campaignevents-eventpage-dialog-event-types-label' )->text()
 		);
 	}
 

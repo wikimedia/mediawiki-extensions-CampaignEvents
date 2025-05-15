@@ -238,6 +238,7 @@ return [
 				$services->get( EventQuestionsRegistry::SERVICE_NAME ),
 				$services->get( WikiLookup::SERVICE_NAME ),
 				$services->get( ITopicRegistry::SERVICE_NAME ),
+				$services->get( EventTypesRegistry::SERVICE_NAME ),
 				$services->getGroupPermissionsLookup(),
 				// Pass whole config so the value is lazy loaded when needed for performance
 				$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION )

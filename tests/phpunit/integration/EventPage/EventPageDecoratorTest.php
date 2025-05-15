@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\EventPage;
 use Generator;
 use LogicException;
 use MediaWiki\Config\HashConfig;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -83,6 +84,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$this->createMock( EventQuestionsRegistry::class ),
 			$this->createMock( WikiLookup::class ),
 			$this->createMock( ITopicRegistry::class ),
+			$this->createMock( EventTypesRegistry::class ),
 			$this->createMock( GroupPermissionsLookup::class ),
 			new HashConfig( [
 				'CampaignEventsEventNamespaces' => $allowedNamespaces
@@ -96,6 +98,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 	/** @return OutputPage&MockObject */
 	private function getMockOutputPage(): OutputPage {
 		$out = $this->createMock( OutputPage::class );
+		$out->method( 'getConfig' )->willReturn( new HashConfig( [ 'CampaignEventsEnableEventTypes' => true ] ) );
 		$out->method( 'enableOOUI' )->willReturnCallback( static function () {
 			// Make sure the call sets the OOUI theme singleton, to avoid uncaught exceptions.
 			OutputPage::setupOOUI();
@@ -103,6 +106,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 		// Needed becase these methods do not have return type declarations.
 		$out->method( 'msg' )->willReturn( $this->getMockMessage() );
 		$out->method( 'getRequest' )->willReturn( $this->createMock( WebRequest::class ) );
+
 		return $out;
 	}
 
