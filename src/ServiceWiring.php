@@ -298,7 +298,8 @@ return [
 			$services->get( EventQuestionsRegistry::SERVICE_NAME ),
 			$services->get( CampaignEventsHookRunner::SERVICE_NAME ),
 			$services->get( WikiLookup::SERVICE_NAME ),
-			$services->get( ITopicRegistry::SERVICE_NAME )
+			$services->get( ITopicRegistry::SERVICE_NAME ),
+			$services->get( EventTypesRegistry::SERVICE_NAME )
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

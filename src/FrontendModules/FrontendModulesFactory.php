@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -44,6 +45,7 @@ class FrontendModulesFactory {
 	private CampaignEventsHookRunner $hookRunner;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private EventTypesRegistry $eventTypesRegistry;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -63,6 +65,7 @@ class FrontendModulesFactory {
 	 * @param CampaignEventsHookRunner $hookRunner
 	 * @param WikiLookup $wikiLookup
 	 * @param ITopicRegistry $topicRegistry
+	 * @param EventTypesRegistry $eventTypesRegistry
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -81,7 +84,8 @@ class FrontendModulesFactory {
 		EventQuestionsRegistry $questionsRegistry,
 		CampaignEventsHookRunner $hookRunner,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry
+		ITopicRegistry $topicRegistry,
+		EventTypesRegistry $eventTypesRegistry
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -100,6 +104,7 @@ class FrontendModulesFactory {
 		$this->hookRunner = $hookRunner;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 	}
 
 	public function newEventDetailsModule(
@@ -117,6 +122,7 @@ class FrontendModulesFactory {
 			$this->permissionChecker,
 			$this->wikiLookup,
 			$this->topicRegistry,
+			$this->eventTypesRegistry,
 			$registration,
 			$language
 		);
