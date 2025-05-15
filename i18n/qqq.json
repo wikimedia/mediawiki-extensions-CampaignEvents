@@ -328,7 +328,7 @@
 	"campaignevents-email-success-notification": "Notification text displayed when emails are sent successfully",
 	"campaignevents-email-error-notification": "Error text displayed when emails are not sent successfully",
 	"campaignevents-email-select-participant-notification": "Warning text displayed when no valid recipients are selected",
-	"campaignevents-email-participants-missing-address": "Warning text displayed when a potentially invalid recipient is selected",
+	"campaignevents-email-participants-missing-address": "Warning text displayed when all of the selected recipients are invalid.",
 	"campaignevents-email-participants-all": "Label text that indicates all participants are selected",
 	"campaignevents-email-participants-except": "Label text that indicates all participants are selected with an exception.\nParameters:\n* $1 - The username of a single participant which is not selected",
 	"campaignevents-email-participants-except-count": "Label text that indicates all participants are selected with some exception.\nParameters:\n* $1 - a count of participants which are not selected",
