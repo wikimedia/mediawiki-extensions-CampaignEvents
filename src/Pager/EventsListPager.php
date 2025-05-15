@@ -8,6 +8,7 @@ use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
@@ -33,6 +34,7 @@ use stdClass;
 use UnexpectedValueException;
 use Wikimedia\Assert\Assert;
 use Wikimedia\Rdbms\IResultWrapper;
+use Wikimedia\Rdbms\RawSQLExpression;
 
 class EventsListPager extends ReverseChronologicalPager {
 	use EventPagerTrait {
@@ -65,6 +67,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $filterTopics;
 	protected ?string $startDate;
 	protected ?string $endDate;
+	private array $filterEventTypes = [];
 
 	private string $lastHeaderTimestamp;
 	/** @var array<int,Organizer|null> Maps event ID to the event creator, if available, else to null. */
@@ -85,6 +88,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
+	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function __construct(
 		UserLinker $userLinker,
@@ -106,7 +110,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		?string $endDate,
 		array $filterWiki,
 		bool $includeAllWikis,
-		array $filterTopics
+		array $filterTopics,
+		array $filterEventTypes
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
@@ -144,6 +149,40 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->filterWiki = $filterWiki;
 		$this->includeAllWikis = $includeAllWikis;
 		$this->filterTopics = $filterTopics;
+		$this->filterEventTypes = $filterEventTypes;
+	}
+
+	/**
+	 * @param array<string,mixed> $query
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function getEventTypesFilter( array $query ): array {
+		if ( $this->filterEventTypes === [] ) {
+			return $query;
+		}
+
+		$nonOtherEventTypes = array_diff( $this->filterEventTypes, [ EventTypesRegistry::EVENT_TYPE_OTHER ] );
+		$eventTypeConditions = [];
+
+		if ( $nonOtherEventTypes !== [] ) {
+			$bitwiseExpr = $this->getDatabase()->bitAnd(
+				'event_types',
+				EventTypesRegistry::eventTypesToDBVal( $nonOtherEventTypes )
+			);
+			$eventTypeConditions[] = new RawSQLExpression( "$bitwiseExpr != 0" );
+		}
+
+		$hasOtherFilter = $nonOtherEventTypes !== $this->filterEventTypes;
+		if ( $hasOtherFilter ) {
+			$eventTypeConditions['event_types'] = 0;
+		}
+
+		if ( $eventTypeConditions !== [] ) {
+			$query['conds'][] = $this->getDatabase()->orExpr( $eventTypeConditions );
+		}
+
+		return $query;
 	}
 
 	/**
@@ -403,6 +442,8 @@ class EventsListPager extends ReverseChronologicalPager {
 				$this->participationOptions
 			);
 		}
+		$query = $this->getEventTypesFilter( $query );
+
 		$query['conds']['event_is_test_event'] = false;
 		if ( $this->filterWiki || !$this->includeAllWikis ) {
 			$query['tables'][] = 'ce_event_wikis';

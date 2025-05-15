@@ -37,6 +37,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			$searchToStr,
 			[],
 			true,
+			[],
 			[]
 		);
 		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
@@ -56,6 +57,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			null,
 			[],
 			true,
+			[],
 			[]
 		);
 	}
@@ -74,6 +76,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			$timestamp,
 			[],
 			true,
+			[],
 			[]
 		);
 	}
@@ -94,7 +97,8 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			'29120623000000',
 			[ 'any_wiki_name' ],
 			true,
-			[ self::$EVENT_TOPIC ]
+			[ self::$EVENT_TOPIC ],
+			[]
 		);
 		$this->assertSame( 1, $pager->getNumRows() );
 	}

@@ -558,5 +558,7 @@
 	"campaignevents-edit-field-eventtypes-other-help": "Selecting 'Other' will disable and deselect all other event types.",
 	"campaignevents-edit-field-eventtypes-label": "Event types",
 	"campaignevents-event-details-event-types-header": "Event types",
+	"campaignevents-allevents-label-filter-event-types": "Event types",
+	"campaignevents-allevents-placeholder-add-event-types": "Add event types...",
 	"campaignevents-eventpage-dialog-event-types-label": "Event types"
 }

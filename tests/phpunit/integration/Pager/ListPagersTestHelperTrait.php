@@ -40,6 +40,7 @@ trait ListPagersTestHelperTrait {
 			'event_created_at' => $curTS,
 			'event_last_edit' => $curTS,
 			'event_deleted_at' => null,
+			'event_types' => 0
 		];
 		$dbw->newInsertQueryBuilder()
 			->insertInto( 'campaign_events' )

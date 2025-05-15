@@ -26,8 +26,10 @@ class OngoingEventsListPager extends EventsListPager {
 
 	/**
 	 * Same as parent constructor, but start date is required and there is no end date.
+	 *
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
+	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function __construct(
 		UserLinker $userLinker,
@@ -48,7 +50,8 @@ class OngoingEventsListPager extends EventsListPager {
 		string $startDate,
 		array $filterWiki,
 		bool $includeAllWikis,
-		array $filterTopics
+		array $filterTopics,
+		array $filterEventTypes
 	) {
 		parent::__construct(
 			$userLinker,
@@ -70,7 +73,8 @@ class OngoingEventsListPager extends EventsListPager {
 			null,
 			$filterWiki,
 			$includeAllWikis,
-			$filterTopics
+			$filterTopics,
+			$filterEventTypes
 		);
 	}
 

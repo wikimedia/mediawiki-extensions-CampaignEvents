@@ -157,7 +157,7 @@ class EventTypesRegistry {
 	/**
 	 * Converts a list of human-readable event type identifiers (NOT localized) to a combination of numeric constants
 	 * that can be stored into the DB.
-	 * @param list<string> $types
+	 * @param array<string> $types
 	 * @return int
 	 */
 	public static function eventTypesToDBVal( array $types ): int {

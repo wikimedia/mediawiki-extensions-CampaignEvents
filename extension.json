@@ -660,7 +660,8 @@
 				"CampaignEventsEventsPagerFactory",
 				"CampaignEventsHookRunner",
 				"CampaignEventsWikiLookup",
-				"CampaignEventsTopicRegistry"
+				"CampaignEventsTopicRegistry",
+				"CampaignEventsEventTypesRegistry"
 			]
 		},
 		"EventDetails": {

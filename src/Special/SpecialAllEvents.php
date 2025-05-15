@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsListPager;
@@ -30,12 +31,14 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private TemplateParser $templateParser;
+	private EventTypesRegistry $eventTypesRegistry;
 
 	public function __construct(
 		EventsPagerFactory $eventsPagerFactory,
 		CampaignEventsHookRunner $hookRunner,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry
+		ITopicRegistry $topicRegistry,
+		EventTypesRegistry $eventTypesRegistry
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventsPagerFactory = $eventsPagerFactory;
@@ -43,6 +46,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
+		$this->eventTypesRegistry = $eventTypesRegistry;
 	}
 
 	/**
@@ -104,6 +108,9 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		if ( ( $values['wpFilterTopics'] ?? '' ) !== '' ) {
 			$values['wpFilterTopics'] = array_map( 'trim', explode( ',', $values['wpFilterTopics'] ) );
 		}
+		if ( ( $values['wpFilterEventTypes'] ?? '' ) !== '' ) {
+			$values['wpFilterEventTypes'] = array_map( 'trim', explode( ',', $values['wpFilterEventTypes'] ) );
+		}
 		return $values;
 	}
 
@@ -117,9 +124,12 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$filterWiki = $this->normalizeFilterValues( $rawFilterWiki );
 			$rawFilterTopic = $request->getRawVal( 'wpFilterTopics' ) ?? '';
 			$filterTopics = $this->normalizeFilterValues( $rawFilterTopic );
+			$rawFilterEventTypes = $request->getRawVal( 'wpFilterEventTypes' ) ?? '';
+			$filterEventTypes = $this->normalizeFilterValues( $rawFilterEventTypes );
 		} else {
 			$filterWiki = $request->getArray( 'wpFilterWikis' ) ?? [];
 			$filterTopics = $request->getArray( 'wpFilterTopics' ) ?? [];
+			$filterEventTypes = $request->getArray( 'wpFilterEventTypes' ) ?? [];
 		}
 		$participationOptions = $request->getIntOrNull( 'wpParticipationOptions' );
 		$rawStartTime = $request->getRawVal( 'wpStartDate' ) ?? (string)time();
@@ -169,7 +179,8 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$endTime,
 			$filterWiki,
 			$includeAllWikis,
-			$filterTopics
+			$filterTopics,
+			$filterEventTypes
 		);
 		if ( $startTime !== null ) {
 			$openSections = explode( ',', $openSectionsStr );
@@ -180,7 +191,8 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				$startTime,
 				$filterWiki,
 				$includeAllWikis,
-				$filterTopics
+				$filterTopics,
+				$filterEventTypes
 			);
 			// TODO: Remove this awful hack when we find a way to have separate paging (T386019).
 			$ongoingPager->mLimit = 5000;
@@ -214,13 +226,31 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		string $openSectionsStr,
 		string $formIdentifier
 	): HTMLForm {
+		$formDescriptor = [];
+		$eventTypesEnabled = $this->getConfig()->get( 'CampaignEventsEnableEventTypes' );
+		$searchClass = $eventTypesEnabled ?
+			'ext-campaignevents-allevents-search-field-full-width' :
+			'ext-campaignevents-allevents-search-field';
 		$formDescriptor = [
 			'Search' => [
 				'type' => 'text',
 				'label-message' => 'campaignevents-allevents-label-search',
 				'default' => $searchedVal,
-				'cssclass' => 'ext-campaignevents-allevents-search-field'
+				'cssclass' => $searchClass,
 			],
+		];
+		if ( $eventTypesEnabled ) {
+			$formDescriptor['FilterEventTypes'] = [
+				'type' => 'multiselect',
+				'dropdown' => true,
+				'label-message' => 'campaignevents-allevents-label-filter-event-types',
+				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
+				'placeholder-message' => 'campaignevents-allevents-placeholder-add-event-types',
+				'max' => 20,
+			];
+		}
+		$formDescriptor = [
+			...$formDescriptor,
 			'ParticipationOptions' => [
 				'type' => 'select',
 				'label-message' => 'campaignevents-allevents-label-participation-options',

@@ -95,6 +95,7 @@ class EventsPagerFactory {
 	/**
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
+	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function newListPager(
 		IContextSource $context,
@@ -104,7 +105,8 @@ class EventsPagerFactory {
 		?string $endDate,
 		array $filterWiki,
 		bool $includeAllWikis,
-		array $filterTopics
+		array $filterTopics,
+		array $filterEventTypes
 	): EventsListPager {
 		return new EventsListPager(
 			$this->userLinker,
@@ -126,13 +128,15 @@ class EventsPagerFactory {
 			$endDate,
 			$filterWiki,
 			$includeAllWikis,
-			$filterTopics
+			$filterTopics,
+			$filterEventTypes,
 		);
 	}
 
 	/**
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
+	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function newOngoingListPager(
 		IContextSource $context,
@@ -141,7 +145,8 @@ class EventsPagerFactory {
 		string $startDate,
 		array $filterWiki,
 		bool $includeAllWikis,
-		array $filterTopics
+		array $filterTopics,
+		array $filterEventTypes
 	): OngoingEventsListPager {
 		return new OngoingEventsListPager(
 			$this->userLinker,
@@ -162,7 +167,8 @@ class EventsPagerFactory {
 			$startDate,
 			$filterWiki,
 			$includeAllWikis,
-			$filterTopics
+			$filterTopics,
+			$filterEventTypes,
 		);
 	}
 }

@@ -45,6 +45,7 @@ trait EventPagerTrait {
 				'event_start_utc',
 				'event_end_utc',
 				'event_meeting_type',
+				'event_types'
 			] ];
 		$join_conds = [
 			'ce_participants' => [
@@ -75,6 +76,7 @@ trait EventPagerTrait {
 				'event_start_utc',
 				'event_end_utc',
 				'event_meeting_type',
+				'event_types',
 				'num_participants' => 'COUNT(cep_id)'
 			],
 			'conds' => [
@@ -103,7 +105,6 @@ trait EventPagerTrait {
 			$conds[] = $this->mDb->expr( 'event_name', IExpression::LIKE,
 				new LikeValue( $this->mDb->anyString(), $this->search, $this->mDb->anyString() ) );
 		}
-
 		return [
 			'tables' => [ 'tmp' => new Subquery( $subquery->getSQL() ) ],
 			'fields' => [
