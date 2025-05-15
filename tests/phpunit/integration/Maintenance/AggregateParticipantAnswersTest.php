@@ -315,7 +315,6 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 				'event_start_local' => $randomTS,
 				'event_start_utc' => $randomTS,
 				'event_end_local' => $randomTS,
-				'event_type' => "generic",
 				'event_meeting_type' => 3,
 				'event_meeting_url' => '',
 				'event_created_at' => $randomTS,

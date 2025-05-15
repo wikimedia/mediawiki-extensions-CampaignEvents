@@ -117,11 +117,11 @@
 				}
 			},
 			{
-				"name": "event_type",
-				"type": "binary",
+				"name": "event_types",
+				"type": "integer",
 				"options": {
 					"notnull": true,
-					"length": 255
+					"default": 0
 				}
 			},
 			{

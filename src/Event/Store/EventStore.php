@@ -484,7 +484,6 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_start_utc' => $dbw->timestamp( $event->getStartUTCTimestamp() ),
 			'event_end_local' => $localEndDB,
 			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
-			'event_type' => EventRegistration::TYPE_GENERIC,
 			'event_meeting_type' => self::meetingTypeToDBVal( $event->getMeetingType() ),
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,

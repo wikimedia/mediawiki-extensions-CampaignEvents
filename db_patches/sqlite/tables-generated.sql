@@ -10,7 +10,7 @@ CREATE TABLE /*_*/campaign_events (
   event_chat_url BLOB NOT NULL, event_status INTEGER NOT NULL,
   event_timezone BLOB NOT NULL, event_start_local BLOB NOT NULL,
   event_start_utc BLOB NOT NULL, event_end_local BLOB NOT NULL,
-  event_end_utc BLOB NOT NULL, event_type BLOB NOT NULL,
+  event_end_utc BLOB NOT NULL, event_types INTEGER DEFAULT 0 NOT NULL,
   event_meeting_type INTEGER NOT NULL,
   event_meeting_url BLOB NOT NULL, event_created_at BLOB NOT NULL,
   event_last_edit BLOB NOT NULL, event_deleted_at BLOB DEFAULT NULL,

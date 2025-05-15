@@ -22,8 +22,6 @@ class EventRegistration {
 
 	public const ALL_WIKIS = true;
 
-	public const TYPE_GENERIC = 'generic';
-
 	public const MEETING_TYPE_ONLINE = 1 << 0;
 	public const MEETING_TYPE_IN_PERSON = 1 << 1;
 	public const MEETING_TYPE_ONLINE_AND_IN_PERSON = self::MEETING_TYPE_ONLINE | self::MEETING_TYPE_IN_PERSON;

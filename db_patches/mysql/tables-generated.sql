@@ -16,7 +16,7 @@ CREATE TABLE /*_*/campaign_events (
   event_start_utc BINARY(14) NOT NULL,
   event_end_local BINARY(14) NOT NULL,
   event_end_utc BINARY(14) NOT NULL,
-  event_type VARBINARY(255) NOT NULL,
+  event_types INT DEFAULT 0 NOT NULL,
   event_meeting_type INT NOT NULL,
   event_meeting_url BLOB NOT NULL,
   event_created_at BINARY(14) NOT NULL,

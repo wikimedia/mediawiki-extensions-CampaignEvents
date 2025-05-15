@@ -288,7 +288,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'event_start_utc' => '20220811142657',
 			'event_end_local' => '20220811142657',
 			'event_end_utc' => '20220811142657',
-			'event_type' => "generic",
 			'event_meeting_type' => 3,
 			'event_meeting_url' => '',
 			'event_created_at' => '20220811142657',

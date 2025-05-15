@@ -1,0 +1,387 @@
+{
+	"before": {
+		"name": "campaign_events",
+		"comment": "Stores all the event information",
+		"columns": [
+			{
+				"name": "event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "event_name",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_page_namespace",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "event_page_title",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_page_wiki",
+				"comment": "The Wiki ID the page is stored.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "event_page_prefixedtext",
+				"comment": "The full prefixedtext of the event page. This is needed for the crosswikiness, see T307358.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
+				"name": "event_chat_url",
+				"comment": "The link of the chat tool the organizers use to communicate.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_status",
+				"comment": "Status of the event. 1: Open. 2: Closed. 3: Draft. 4: Canceled.",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_timezone",
+				"comment": "Timezone of the event, used with event_start_local and event_end_local.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "event_start_local",
+				"comment": "Start time of the event, in the local timezone (stored in event_timezone), in the TS_MW format. This does not use mwtimestamp because that is only intended for UTC time.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 14,
+					"fixed": true
+				}
+			},
+			{
+				"name": "event_start_utc",
+				"comment": "Start time of the event, in UTC. This value is derived from event_start_local, and is used for sorting.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_end_local",
+				"comment": "End time of the event, in the local timezone (stored in event_timezone), in the TS_MW format. This does not use mwtimestamp because that is only intended for UTC time.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 14,
+					"fixed": true
+				}
+			},
+			{
+				"name": "event_end_utc",
+				"comment": "End time of the event, in UTC. This value is derived from event_end_local, and is used for sorting.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_type",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_meeting_type",
+				"comment": "The type of the meeting. 1: In person. 2: Online. 3: Both",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_meeting_url",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_created_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_last_edit",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_deleted_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			},
+			{
+				"name": "event_is_test_event",
+				"type": "mwtinyint",
+				"options": {
+					"length": 1,
+					"default": 0
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "event_page",
+				"columns": [ "event_page_wiki", "event_page_namespace", "event_page_title" ],
+				"unique": true,
+				"comment": "Used when querying events by pages. The index is currently unique, but this may change in the future."
+			},
+			{
+				"name": "event_id_deleted",
+				"unique": false,
+				"columns": [ "event_id", "event_deleted_at" ]
+			},
+			{
+				"name": "event_timezone_id",
+				"unique": false,
+				"columns": [ "event_timezone", "event_id" ],
+				"comment": "Used when updating UTC timestamps, filtering by timezone and batching by primary key."
+			}
+		],
+		"pk": [ "event_id" ]
+	},
+	"after": {
+		"name": "campaign_events",
+		"comment": "Stores all the event information",
+		"columns": [
+			{
+				"name": "event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "event_name",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_page_namespace",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "event_page_title",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "event_page_wiki",
+				"comment": "The Wiki ID the page is stored.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "event_page_prefixedtext",
+				"comment": "The full prefixedtext of the event page. This is needed for the crosswikiness, see T307358.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
+				"name": "event_chat_url",
+				"comment": "The link of the chat tool the organizers use to communicate.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_status",
+				"comment": "Status of the event. 1: Open. 2: Closed. 3: Draft. 4: Canceled.",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_timezone",
+				"comment": "Timezone of the event, used with event_start_local and event_end_local.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "event_start_local",
+				"comment": "Start time of the event, in the local timezone (stored in event_timezone), in the TS_MW format. This does not use mwtimestamp because that is only intended for UTC time.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 14,
+					"fixed": true
+				}
+			},
+			{
+				"name": "event_start_utc",
+				"comment": "Start time of the event, in UTC. This value is derived from event_start_local, and is used for sorting.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_end_local",
+				"comment": "End time of the event, in the local timezone (stored in event_timezone), in the TS_MW format. This does not use mwtimestamp because that is only intended for UTC time.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 14,
+					"fixed": true
+				}
+			},
+			{
+				"name": "event_end_utc",
+				"comment": "End time of the event, in UTC. This value is derived from event_end_local, and is used for sorting.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_types",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"length": 255,
+					"default": 0
+				}
+			},
+			{
+				"name": "event_meeting_type",
+				"comment": "The type of the meeting. 1: In person. 2: Online. 3: Both",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_meeting_url",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "event_created_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_last_edit",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "event_deleted_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			},
+			{
+				"name": "event_is_test_event",
+				"type": "mwtinyint",
+				"options": {
+					"length": 1,
+					"default": 0
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "event_page",
+				"columns": [ "event_page_wiki", "event_page_namespace", "event_page_title" ],
+				"unique": true,
+				"comment": "Used when querying events by pages. The index is currently unique, but this may change in the future."
+			},
+			{
+				"name": "event_id_deleted",
+				"unique": false,
+				"columns": [ "event_id", "event_deleted_at" ]
+			},
+			{
+				"name": "event_timezone_id",
+				"unique": false,
+				"columns": [ "event_timezone", "event_id" ],
+				"comment": "Used when updating UTC timestamps, filtering by timezone and batching by primary key."
+			}
+		],
+		"pk": [ "event_id" ]
+	}
+}
