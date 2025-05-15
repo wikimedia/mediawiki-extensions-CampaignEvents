@@ -64,6 +64,7 @@ class EventRegistration {
 	private ?string $lastEditTimestamp;
 	private ?string $deletionTimestamp;
 	private bool $isTestEvent;
+	private array $eventTypes;
 
 	/**
 	 * @param int|null $id
@@ -78,6 +79,7 @@ class EventRegistration {
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
+	 * @param array $eventTypes
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
@@ -100,6 +102,7 @@ class EventRegistration {
 		DateTimeZone $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
+		array $eventTypes,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
@@ -135,6 +138,7 @@ class EventRegistration {
 		$this->timezone = $timezone;
 		$this->startLocalTimestamp = $startLocalTimestamp;
 		$this->endLocalTimestamp = $endLocalTimestamp;
+		$this->eventTypes = $eventTypes;
 		$this->meetingType = $meetingType;
 		$this->meetingURL = $meetingURL;
 		$this->meetingCountry = $meetingCountry;
@@ -231,6 +235,10 @@ class EventRegistration {
 
 	public function getMeetingType(): int {
 		return $this->meetingType;
+	}
+
+	public function getEventTypes(): array {
+		return $this->eventTypes;
 	}
 
 	public function getMeetingURL(): ?string {

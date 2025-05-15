@@ -108,6 +108,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			new DateTimeZone( 'UTC' ),
 			'20240229120000',
 			'20240301120000',
+			[],
 			EventRegistration::MEETING_TYPE_ONLINE,
 			null,
 			null,

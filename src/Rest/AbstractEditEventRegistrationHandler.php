@@ -152,13 +152,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS_MW,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			/* TODO MVP: Re-add this
-			'type' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => EventRegistration::VALID_TYPES,
-				ParamValidator::PARAM_REQUIRED => true,
-			],
-			*/
 			'wikis' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),

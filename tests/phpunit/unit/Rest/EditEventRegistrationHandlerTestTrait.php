@@ -20,8 +20,6 @@ trait EditEventRegistrationHandlerTestTrait {
 		'timezone' => 'UTC',
 		'start_time' => '20220308120000',
 		'end_time' => '20220308150000',
-		// TODO: Add this when the feature is implemented
-		// 'type' => EventRegistration::TYPE_GENERIC,
 		'online_meeting' => true,
 		'inperson_meeting' => true,
 		'meeting_url' => 'https://meetingurl.example.org',

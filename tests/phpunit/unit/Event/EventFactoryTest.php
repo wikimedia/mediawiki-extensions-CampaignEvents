@@ -8,6 +8,7 @@ use Generator;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
@@ -44,6 +45,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'timezone' => 'UTC',
 		'start' => '20220308120000',
 		'end' => '20220308150000',
+		'eventtypes' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',

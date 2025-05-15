@@ -156,6 +156,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
+			[],
 			$meetingType,
 			$body['meeting_url'],
 			$body['meeting_country'],
