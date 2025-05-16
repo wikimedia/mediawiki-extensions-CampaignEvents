@@ -100,4 +100,29 @@ class EventTypesFormatter {
 		}
 		return self::DEBUG_EVENT_GROUP_TYPE_NAMES_MAP[$eventGroupType];
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getAllOptionMessages() {
+		$optionsMessages = [];
+		foreach ( EventTypesRegistry::EVENT_TYPE_GROUPS as $groupType => $eventTypes ) {
+			$groupLabelMsgKey = self::EVENT_GROUP_TYPE_MSG_MAP[$groupType];
+			$optionsMessages[$groupLabelMsgKey] = [];
+
+			foreach ( $eventTypes as $eventType ) {
+				$eventTypeMsgKey = self::EVENT_TYPE_MSG_MAP[$eventType];
+				$optionsMessages[$groupLabelMsgKey][$eventTypeMsgKey] = $eventType;
+			}
+		}
+		$otherSectionLabelMsgKey = 'campaignevents-edit-field-eventtypes-other-section-header';
+		$otherType = EventTypesRegistry::EVENT_TYPE_OTHER;
+		$otherTypeMsgKey = self::EVENT_TYPE_MSG_MAP[$otherType];
+
+		$optionsMessages[$otherSectionLabelMsgKey] = [
+			$otherTypeMsgKey => $otherType,
+		];
+
+		return $optionsMessages;
+	}
 }
