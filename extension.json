@@ -588,7 +588,9 @@
 				"CampaignEventsPageURLResolver",
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
-				"CampaignEventsWikiConfiguration"
+				"CampaignEventsWikiConfiguration",
+				"CampaignEventsEventTypesFormatter",
+				"CampaignEventsEventTypesRegistry"
 			]
 		},
 		"EditEventRegistration": {
@@ -607,7 +609,9 @@
 				"CampaignEventsPageURLResolver",
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
-				"CampaignEventsWikiConfiguration"
+				"CampaignEventsWikiConfiguration",
+				"CampaignEventsEventTypesFormatter",
+				"CampaignEventsEventTypesRegistry"
 			]
 		},
 		"DeleteEventRegistration": {

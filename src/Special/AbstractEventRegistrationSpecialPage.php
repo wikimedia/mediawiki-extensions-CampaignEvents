@@ -12,6 +12,8 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesFormatter;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
@@ -73,6 +75,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private Config $wikiConfig;
+	private EventTypesFormatter $eventTypesFormatter;
+	private EventTypesRegistry $eventTypesRegistry;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -106,7 +110,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		PageURLResolver $pageURLResolver,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
-		Config $wikiConfig
+		Config $wikiConfig,
+		EventTypesFormatter $eventTypesFormatter,
+		EventTypesRegistry $eventTypesRegistry
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -123,6 +129,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->wikiConfig = $wikiConfig;
+		$this->eventTypesFormatter = $eventTypesFormatter;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 
 		$this->formMessages = $this->getFormMessages();
 	}
@@ -359,6 +367,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'cssclass' => 'ext-campaignevents-edit-wikis-input',
 			'section' => self::DETAILS_SECTION,
 		];
+
 		$availableTopics = $this->topicRegistry->getTopicsForSelect();
 		if ( $availableTopics ) {
 			$formFields['Topics'] = [
@@ -373,6 +382,28 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'cssclass' => 'ext-campaignevents-edit-topics-input',
 				'section' => self::DETAILS_SECTION,
 				'max' => EventFactory::MAX_TOPICS
+			];
+		}
+
+		if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
+			$formFields['EventTypes'] = [
+				'type' => 'multiselect',
+				'dropdown' => true,
+				'label-message' => 'campaignevents-edit-field-eventtypes-label',
+				'default' => $this->event ? $this->event->getEventTypes() : [],
+				'options-messages' => $this->eventTypesFormatter->getAllOptionMessages(),
+				'placeholder-message' => 'campaignevents-edit-field-eventtypes-placeholder',
+				'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
+				'cssclass' => 'ext-campaignevents-edit-eventtypes-input',
+				'section' => self::DETAILS_SECTION,
+				'max' => 5,
+				'validation-callback' => function ( $value ) {
+					if ( count( $value ) > 1 && in_array( EventTypesRegistry::EVENT_TYPE_OTHER, $value, true ) ) {
+						return $this->msg( 'campaignevents-error-invalid-other-selection' )
+							->text();
+					}
+					return true;
+				},
 			];
 		}
 
@@ -456,6 +487,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
 			'section' => self::DETAILS_SECTION,
 		];
+
 		// For country and address, note that we're using length limit in bytes for `maxlength`, which uses UTF-16
 		// codepoints. Could be fixed up via jquery.lengthLimit, but it isn't worthwhile given how high
 		// these limits are.
@@ -681,6 +713,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$testEvent = $data['TestEvent'] === "1";
 
 		try {
+			$eventTypes = [];
+			if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
+				$eventTypes = $data['EventTypes'];
+			}
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
@@ -694,7 +730,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
-				[],
+				$eventTypes,
 				$meetingType,
 				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,
