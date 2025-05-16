@@ -482,5 +482,10 @@
 	"campaignevents-allevents-label-upcoming-events-description": "Prossimi eventi: Eventi che inizieranno entro le date selezionate",
 	"campaignevents-allevents-label-ongoing-events-title": "Eventi in corso",
 	"campaignevents-allevents-label-ongoing-events-description": "Eventi in corso: Eventi che iniziano prima e continuano entro le date selezionate",
-	"campaignevents-email-participants-missing-address-uncertain": "Alcuni dei partecipanti selezionati potrebbero non avere un indirizzo email associato alla propria utenza e non riceveranno la tua email."
+	"campaignevents-email-participants-missing-address-uncertain": "Alcuni dei partecipanti selezionati potrebbero non avere un indirizzo email associato alla propria utenza e non riceveranno la tua email.",
+	"campaignevents-eventtype-contest": "Concorso",
+	"campaignevents-eventtype-conference": "Conferenza",
+	"campaignevents-eventtype-other": "Altro",
+	"campaignevents-eventtypegroup-contributions": "Contributi",
+	"campaignevents-eventtypegroup-community": "Comunità"
 }

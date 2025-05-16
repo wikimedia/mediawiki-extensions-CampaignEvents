@@ -439,5 +439,16 @@
 	"campaignevents-allevents-label-ongoing-events-description": "Käynnissä olevat tapahtumat: Tapahtumat, jotka alkavat ennen valittua ajanjaksoa, mutta jatkuvat sen aikana",
 	"communityconfiguration-campaignevents-title": "Kampanjatapahtumat",
 	"communityconfiguration-campaignevents-description": "Mukauta CampaignEvents-laajennusta",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Kelvolliset tapahtumanimiavaruudet"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Kelvolliset tapahtumanimiavaruudet",
+	"campaignevents-eventtype-editing-event": "Muokkaustapahtuma",
+	"campaignevents-eventtype-media-upload-event": "Median lataustapahtuma",
+	"campaignevents-eventtype-contest": "Kilpailu",
+	"campaignevents-eventtype-workshop": "Työpaja",
+	"campaignevents-eventtype-training": "Koulutus / seminaari",
+	"campaignevents-eventtype-meetup": "Tapaaminen",
+	"campaignevents-eventtype-hackathon": "Hackathon",
+	"campaignevents-eventtype-conference": "Konferenssi",
+	"campaignevents-eventtype-other": "Muu",
+	"campaignevents-eventtypegroup-contributions": "Muokkaukset",
+	"campaignevents-eventtypegroup-community": "Yhteisö"
 }

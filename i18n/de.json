@@ -527,5 +527,13 @@
 	"communityconfiguration-campaignevents-title": "Kampagnen-Veranstaltungen",
 	"communityconfiguration-campaignevents-description": "Konfigurationsoptionen für die CampaignEvents-Erweiterung",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Gültige Veranstaltungsnamensräume",
-	"campaignevents-email-participants-missing-address-uncertain": "Einige der ausgewählten Teilnehmer haben keine E-Mail-Adresse in ihrem Konto und werden deine E-Mail nicht erhalten."
+	"campaignevents-email-participants-missing-address-uncertain": "Einige der ausgewählten Teilnehmer haben keine E-Mail-Adresse in ihrem Konto und werden deine E-Mail nicht erhalten.",
+	"campaignevents-eventtype-workshop": "Workshop",
+	"campaignevents-eventtype-training": "Schulung / Seminar",
+	"campaignevents-eventtype-meetup": "Treffen",
+	"campaignevents-eventtype-hackathon": "Hackathon",
+	"campaignevents-eventtype-conference": "Konferenz",
+	"campaignevents-eventtype-other": "Andere",
+	"campaignevents-eventtypegroup-contributions": "Beiträge",
+	"campaignevents-eventtypegroup-community": "Gemeinschaft"
 }
