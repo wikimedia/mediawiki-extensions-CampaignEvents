@@ -14,7 +14,6 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\EmailUsersHandler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
-use MediaWiki\Session\Session;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWikiUnitTestCase;
 
@@ -76,7 +75,8 @@ class EmailUsersHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @dataProvider provideBadTokenSessions
 	 */
-	public function testExecute__badToken( Session $session, string $exceptionMsg, ?string $token ) {
+	public function testExecute__badToken( callable $session, string $exceptionMsg, ?string $token ) {
+		$session = $session( $this );
 		$this->assertCorrectBadTokenBehaviour(
 			$this->newHandler(),
 			$this->getRequestData( self::REQ_DATA ),

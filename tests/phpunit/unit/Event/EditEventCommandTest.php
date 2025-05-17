@@ -119,12 +119,12 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param EventRegistration $registration
 	 * @covers ::doEditIfAllowed
 	 * @covers ::authorizeEdit
 	 * @dataProvider provideEventRegistrations
 	 */
-	public function testDoEditIfAllowed__permissionError( EventRegistration $registration ) {
+	public function testDoEditIfAllowed__permissionError( callable $registration ) {
+		$registration = $registration( $this );
 		$isCreation = $registration->getID() === null;
 		$permChecker = $this->createMock( PermissionChecker::class );
 		$permMethod = $isCreation ? 'userCanEnableRegistration' : 'userCanEditRegistration';
@@ -150,10 +150,11 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @dataProvider providePageWithRegistrationAlreadyEnabled
 	 */
 	public function testDoEditIfAllowed__pageAlreadyHasRegistration(
-		PageEventLookup $pageEventLookup,
+		callable $pageEventLookup,
 		int $existingRegistrationID,
 		string $expectedMsg
 	) {
+		$pageEventLookup = $pageEventLookup( $this );
 		$newRegistration = $this->createMock( EventRegistration::class );
 		$newRegistration->method( 'getID' )->willReturn( $existingRegistrationID + 1 );
 
@@ -167,30 +168,34 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusMessage( $expectedMsg, $status );
 	}
 
-	public function providePageWithRegistrationAlreadyEnabled(): Generator {
+	public static function providePageWithRegistrationAlreadyEnabled(): Generator {
 		$existingRegistrationsID = 1;
 
-		$nonDeletedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$nonDeletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
-		$nonDeletedEventLookup = $this->createMock( PageEventLookup::class );
-		$nonDeletedEventLookup->expects( $this->once() )
-			->method( 'getRegistrationForPage' )
-			->willReturn( $nonDeletedRegistration );
 		yield 'Already has non-deleted registration' => [
-			$nonDeletedEventLookup,
+			static function ( $testCase ) use ( $existingRegistrationsID ) {
+				$nonDeletedRegistration = $testCase->createMock( ExistingEventRegistration::class );
+				$nonDeletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
+				$nonDeletedEventLookup = $testCase->createMock( PageEventLookup::class );
+				$nonDeletedEventLookup->expects( $testCase->once() )
+					->method( 'getRegistrationForPage' )
+					->willReturn( $nonDeletedRegistration );
+				return $nonDeletedEventLookup;
+			},
 			$existingRegistrationsID,
 			'campaignevents-error-page-already-registered'
 		];
 
-		$deletedRegistration = $this->createMock( ExistingEventRegistration::class );
-		$deletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
-		$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1646000000' );
-		$deletedEventLookup = $this->createMock( PageEventLookup::class );
-		$deletedEventLookup->expects( $this->once() )
-			->method( 'getRegistrationForPage' )
-			->willReturn( $deletedRegistration );
 		yield 'Already has a deleted registration' => [
-			$deletedEventLookup,
+			static function ( $testCase ) use ( $existingRegistrationsID ) {
+				$deletedRegistration = $testCase->createMock( ExistingEventRegistration::class );
+				$deletedRegistration->method( 'getID' )->willReturn( $existingRegistrationsID );
+				$deletedRegistration->method( 'getDeletionTimestamp' )->willReturn( '1646000000' );
+				$deletedEventLookup = $testCase->createMock( PageEventLookup::class );
+					$deletedEventLookup->expects( $testCase->once() )
+					->method( 'getRegistrationForPage' )
+					->willReturn( $deletedRegistration );
+				return $deletedEventLookup;
+			},
 			$existingRegistrationsID,
 			'campaignevents-error-page-already-registered-deleted'
 		];
@@ -221,12 +226,12 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param EventRegistration $registration
 	 * @covers ::doEditIfAllowed
 	 * @covers ::authorizeEdit
 	 * @dataProvider provideEventRegistrations
 	 */
-	public function testDoEditIfAllowed__successful( EventRegistration $registration ) {
+	public function testDoEditIfAllowed__successful( callable $registration ) {
+		$registration = $registration( $this );
 		$id = 42;
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );
@@ -240,13 +245,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param EventRegistration $registration
-	 * @param string|null $expectedMsg
-	 * @param array|null $organizers
-	 * @param PermissionChecker|null $permChecker
-	 * @param CampaignsCentralUserLookup|null $centralUserLookup
-	 * @param OrganizersStore|null $organizersStore
-	 * @param TrackingToolEventWatcher|null $trackingToolEventWatcher
 	 * @covers ::doEditUnsafe
 	 * @covers ::validateOrganizers
 	 * @covers ::organizerNamesToCentralIDs
@@ -254,14 +252,20 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideEditUnsafeErrors
 	 */
 	public function testDoEditUnsafe__error(
-		EventRegistration $registration,
-		string $expectedMsg,
+		callable $registration,
+		$expectedMsg,
 		array $organizers,
-		?PermissionChecker $permChecker = null,
-		?CampaignsCentralUserLookup $centralUserLookup = null,
-		?OrganizersStore $organizersStore = null,
-		?TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?callable $permChecker = null,
+		?callable $centralUserLookup = null,
+		?callable $organizersStore = null,
+		?callable $trackingToolEventWatcher = null
 	) {
+		$registration = $registration( $this );
+		$expectedMsg = is_callable( $expectedMsg ) ? $expectedMsg( $this ) : $expectedMsg;
+		$permChecker = $permChecker !== null ? $permChecker( $this ) : null;
+		$centralUserLookup = $centralUserLookup !== null ? $centralUserLookup( $this ) : null;
+		$organizersStore = $organizersStore !== null ? $organizersStore( $this ) : null;
+		$trackingToolEventWatcher = $trackingToolEventWatcher !== null ? $trackingToolEventWatcher( $this ) : null;
 		$command = $this->getCommand(
 			null,
 			$permChecker,
@@ -279,18 +283,20 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusMessage( $expectedMsg, $status );
 	}
 
-	public function provideEditUnsafeErrors(): Generator {
-		$registrations = $this->provideEventRegistrations();
+	public static function provideEditUnsafeErrors(): Generator {
+		$registrations = self::provideEventRegistrations();
 		foreach ( $registrations as $testName => [ $registration ] ) {
-			$notGlobalLookup = $this->createMock( CampaignsCentralUserLookup::class );
-			$notGlobalLookup->method( 'newFromAuthority' )
-				->willThrowException( $this->createMock( UserNotGlobalException::class ) );
 			yield "$testName, user not global" => [
 				$registration,
 				'campaignevents-edit-need-central-account',
 				self::ORGANIZER_USERNAMES,
 				null,
-				$notGlobalLookup
+				static function ( $testCase ) {
+					$notGlobalLookup = $testCase->createMock( CampaignsCentralUserLookup::class );
+					$notGlobalLookup->method( 'newFromAuthority' )
+						->willThrowException( $testCase->createMock( UserNotGlobalException::class ) );
+					return $notGlobalLookup;
+				},
 			];
 			yield "$testName, empty list of organizers" => [
 				$registration,
@@ -306,73 +312,78 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				'campaignevents-edit-too-many-organizers',
 				$organizers
 			];
-			$disallowedPermChecker = $this->createMock( PermissionChecker::class );
-			$disallowedPermChecker->method( 'userCanOrganizeEvents' )->willReturn( false );
 			yield "$testName, organizers do not have the organizer right" => [
 				$registration,
 				'campaignevents-edit-organizers-not-allowed',
 				self::ORGANIZER_USERNAMES,
-				$disallowedPermChecker
+				static function ( $testCase ) {
+					$disallowedPermChecker = $testCase->createMock( PermissionChecker::class );
+					$disallowedPermChecker->method( 'userCanOrganizeEvents' )->willReturn( false );
+					return $disallowedPermChecker;
+				},
 			];
 
-			$usersNotGlobalCentralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-			$usersNotGlobalCentralUserLookup->method( 'newFromLocalUsername' )
-				->willThrowException( $this->createMock( UserNotGlobalException::class ) );
-			$usersNotGlobalCentralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
 			yield "$testName, organizers need central account" => [
 				$registration,
 				'campaignevents-edit-organizer-need-central-account',
 				self::ORGANIZER_USERNAMES,
 				null,
-				$usersNotGlobalCentralUserLookup
+				static function ( $testCase ) {
+					$usersNotGlobalCentralUserLookup = $testCase->createMock( CampaignsCentralUserLookup::class );
+					$usersNotGlobalCentralUserLookup->method( 'newFromLocalUsername' )
+						->willThrowException( $testCase->createMock( UserNotGlobalException::class ) );
+					$usersNotGlobalCentralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
+					return $usersNotGlobalCentralUserLookup;
+				},
 			];
 
 			$creatorID = 1;
-			$creatorUser = $this->createMock( CentralUser::class );
-			$creatorUser->method( 'getCentralID' )->willReturn( $creatorID );
-			$creatorOrganizer = $this->createMock( Organizer::class );
-			$creatorOrganizer->method( 'getUser' )->willReturn( $creatorUser );
-
-			$organizersStore = $this->createMock( OrganizersStore::class );
-			$organizersStore->method( 'getEventCreator' )->willReturn( $creatorOrganizer );
-
 			$notCreatorUsername = 'Not the event creator';
-			$notCreatorUser = $this->createMock( CentralUser::class );
-			$notCreatorUser->method( 'getCentralID' )->willReturn( $creatorID + 1 );
-			$returnNotCreatorCentralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-			$returnNotCreatorCentralUserLookup->method( 'newFromLocalUsername' )
-				->with( $notCreatorUsername )->willReturn( $notCreatorUser );
-			$returnNotCreatorCentralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
-			$returnNotCreatorCentralUserLookup->method( 'existsAndIsVisible' )->willReturn( true );
-
-			$noCreatorMsg = $registration->getID()
-				? 'campaignevents-edit-removed-creator'
-				: 'campaignevents-edit-no-creator';
 			yield "$testName, event creator not included" => [
 				$registration,
-				$noCreatorMsg,
+				static function ( $testCase ) use ( $registration ) {
+					$noCreatorMsg = $registration( $testCase )->getID()
+						? 'campaignevents-edit-removed-creator'
+						: 'campaignevents-edit-no-creator';
+					return $noCreatorMsg;
+				},
 				[ $notCreatorUsername ],
 				null,
-				$returnNotCreatorCentralUserLookup,
-				$organizersStore
+				static function ( $testCase ) use ( $creatorID, $notCreatorUsername ) {
+					$notCreatorUser = $testCase->createMock( CentralUser::class );
+					$notCreatorUser->method( 'getCentralID' )->willReturn( $creatorID + 1 );
+					$returnNotCreatorCentralUserLookup = $testCase->createMock( CampaignsCentralUserLookup::class );
+					$returnNotCreatorCentralUserLookup->method( 'newFromLocalUsername' )
+						->with( $notCreatorUsername )->willReturn( $notCreatorUser );
+					$returnNotCreatorCentralUserLookup->method( 'isValidLocalUsername' )->willReturn( true );
+					$returnNotCreatorCentralUserLookup->method( 'existsAndIsVisible' )->willReturn( true );
+					return $returnNotCreatorCentralUserLookup;
+				},
+				static function ( $testCase ) use ( $creatorID ) {
+					$creatorUser = $testCase->createMock( CentralUser::class );
+					$creatorUser->method( 'getCentralID' )->willReturn( $creatorID );
+					$creatorOrganizer = $testCase->createMock( Organizer::class );
+					$creatorOrganizer->method( 'getUser' )->willReturn( $creatorUser );
+
+					$organizersStore = $testCase->createMock( OrganizersStore::class );
+					$organizersStore->method( 'getEventCreator' )->willReturn( $creatorOrganizer );
+					return $organizersStore;
+				},
 			];
 
-			$invalidUsernameCentralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
-			$invalidUsernameCentralUserLookup->method( 'isValidLocalUsername' )->willReturn( false );
 			yield "$testName, invalid username" => [
 				$registration,
 				'campaignevents-edit-invalid-username',
 				[ 'invalid-username|<>' ],
 				null,
-				$invalidUsernameCentralUserLookup
+				static function ( $testCase ) {
+					$invalidUsernameCentralUserLookup = $testCase->createMock( CampaignsCentralUserLookup::class );
+					$invalidUsernameCentralUserLookup->method( 'isValidLocalUsername' )->willReturn( false );
+					return $invalidUsernameCentralUserLookup;
+				}
 			];
 
 			$trackingToolError = 'some-tracking-tool-error';
-			$trackingToolWatcher = $this->createMock( TrackingToolEventWatcher::class );
-			$methodName = $registration->getID() ? 'validateEventUpdate' : 'validateEventCreation';
-			$trackingToolWatcher->expects( $this->atLeastOnce() )
-				->method( $methodName )
-				->willReturn( StatusValue::newFatal( $trackingToolError ) );
 			yield "$testName, fails tracking tool validation" => [
 				$registration,
 				$trackingToolError,
@@ -380,17 +391,24 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				null,
 				null,
 				null,
-				$trackingToolWatcher
+				static function ( $testCase ) use ( $registration, $trackingToolError ) {
+					$methodName = $registration( $testCase )->getID() ? 'validateEventUpdate' : 'validateEventCreation';
+					$trackingToolWatcher = $testCase->createMock( TrackingToolEventWatcher::class );
+					$trackingToolWatcher->expects( $testCase->atLeastOnce() )
+						->method( $methodName )
+						->willReturn( StatusValue::newFatal( $trackingToolError ) );
+					return $trackingToolWatcher;
+				}
 			];
 		}
 	}
 
 	/**
-	 * @param EventRegistration $registration
 	 * @covers ::doEditUnsafe
 	 * @dataProvider provideEventRegistrations
 	 */
-	public function testDoEditUnsafe__successful( EventRegistration $registration ) {
+	public function testDoEditUnsafe__successful( callable $registration ) {
+		$registration = $registration( $this );
 		$id = 42;
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );
@@ -407,7 +425,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @covers ::addOrganizers
 	 * @dataProvider provideEventRegistrations
 	 */
-	public function testAddOrganizers( EventRegistration $registration ) {
+	public function testAddOrganizers( callable $registration ) {
+		$registration = $registration( $this );
 		$creatorID = 1;
 		$organizerIDsMap = [
 			'Creator' => $creatorID,
@@ -471,28 +490,34 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusGood( $status );
 	}
 
-	public function provideEventRegistrations(): Generator {
-		yield 'New (creation)' => [ $this->createMock( EventRegistration::class ) ];
-		$existing = $this->createMock( EventRegistration::class );
-		$existing->method( 'getID' )->willReturn( 1 );
-		yield 'Existing (update)' => [ $existing ];
+	public static function provideEventRegistrations(): Generator {
+		yield 'New (creation)' => [ static function ( $testCase ) {
+			return $testCase->createMock( EventRegistration::class );
+		} ];
+		yield 'Existing (update)' => [ static function ( $testCase ) {
+			$existing = $testCase->createMock( EventRegistration::class );
+			$existing->method( 'getID' )->willReturn( 1 );
+			return $existing;
+		} ];
 	}
 
 	/**
-	 * @param EventRegistration $registration
-	 * @param TrackingToolEventWatcher $watcher
-	 * @param TrackingToolUpdater $updater
-	 * @param StatusValue $expectedStatus
 	 * @covers ::updateTrackingTools
 	 * @dataProvider provideUpdateTrackingTools
 	 * @note That tracking tool validation is tested in testDoEditUnsafe__error
 	 */
 	public function testUpdateTrackingTools(
-		EventRegistration $registration,
-		TrackingToolEventWatcher $watcher,
-		TrackingToolUpdater $updater,
-		StatusValue $expectedStatus
+		string $registrationSpec,
+		callable $getMocks
 	) {
+		if ( $registrationSpec === 'existing' ) {
+			$registration = $this->createMock( ExistingEventRegistration::class );
+			$registration->method( 'getID' )->willReturn( 1 );
+		} else {
+			$registration = $this->createMock( EventRegistration::class );
+		}
+		[ $watcher, $updater, $expectedStatus ] = $getMocks( $this );
+
 		$cmd = $this->getCommand( null, null, null, null, null, $watcher, $updater );
 		$status = $cmd->doEditUnsafe(
 			$registration,
@@ -502,13 +527,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$this->assertEquals( $expectedStatus, $status );
 	}
 
-	public function provideUpdateTrackingTools(): Generator {
-		$newTools = [ $this->createMock( TrackingToolAssociation::class ) ];
-
-		$existingEvent = $this->createMock( ExistingEventRegistration::class );
-		$existingEvent->method( 'getID' )->willReturn( 1 );
-		$newEvent = $this->createMock( EventRegistration::class );
-
+	public static function provideUpdateTrackingTools(): Generator {
 		$changStatusErrorsToWarnings = static function ( StatusValue $status ): StatusValue {
 			$ret = StatusValue::newGood();
 			foreach ( $status->getMessages() as $msg ) {
@@ -517,64 +536,68 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			return $ret;
 		};
 
-		$successUpdateWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$successUpdateWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
-		$successUpdateWatcher->method( 'onEventUpdated' )->willReturn( StatusValue::newGood( $newTools ) );
-		$successUpdateUpdater = $this->createMock( TrackingToolUpdater::class );
-		$successUpdateUpdater->expects( $this->once() )
-			->method( 'replaceEventTools' )
-			->with( $this->anything(), $newTools );
 		yield 'Existing event, success' => [
-			$existingEvent,
-			$successUpdateWatcher,
-			$successUpdateUpdater,
-			StatusValue::newGood()
+			'existing',
+			static function ( $testCase ) {
+				$newTools = [ $testCase->createMock( TrackingToolAssociation::class ) ];
+				$watcher = $testCase->createMock( TrackingToolEventWatcher::class );
+				$watcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
+				$watcher->method( 'onEventUpdated' )->willReturn( StatusValue::newGood( $newTools ) );
+				$updater = $testCase->createMock( TrackingToolUpdater::class );
+				$updater->expects( $testCase->once() )
+					->method( 'replaceEventTools' )
+					->with( $testCase->anything(), $newTools );
+				return [ $watcher, $updater, StatusValue::newGood() ];
+			},
 		];
 
-		$errorUpdateWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$errorUpdateWatcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
-		$updateError = StatusValue::newFatal( 'some-tool-update-error' );
-		$errorUpdateWatcher->method( 'onEventUpdated' )
-			->willReturn( StatusValue::newGood( $newTools )->merge( $updateError ) );
-		$errorUpdateUpdater = $this->createMock( TrackingToolUpdater::class );
-		$errorUpdateUpdater->expects( $this->once() )
-			->method( 'replaceEventTools' )
-			->with( $this->anything(), $newTools );
 		yield 'Existing event, error' => [
-			$existingEvent,
-			$errorUpdateWatcher,
-			$errorUpdateUpdater,
-			$changStatusErrorsToWarnings( $updateError )
+			'existing',
+			static function ( $testCase ) use ( $changStatusErrorsToWarnings ) {
+				$newTools = [ $testCase->createMock( TrackingToolAssociation::class ) ];
+				$watcher = $testCase->createMock( TrackingToolEventWatcher::class );
+				$watcher->method( 'validateEventUpdate' )->willReturn( StatusValue::newGood() );
+				$updateError = StatusValue::newFatal( 'some-tool-update-error' );
+				$watcher->method( 'onEventUpdated' )
+					->willReturn( StatusValue::newGood( $newTools )->merge( $updateError ) );
+				$updater = $testCase->createMock( TrackingToolUpdater::class );
+				$updater->expects( $testCase->once() )
+					->method( 'replaceEventTools' )
+					->with( $testCase->anything(), $newTools );
+				return [ $watcher, $updater, $changStatusErrorsToWarnings( $updateError ) ];
+			},
 		];
 
-		$successCreationWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$successCreationWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
-		$successCreationWatcher->method( 'onEventCreated' )->willReturn( StatusValue::newGood( $newTools ) );
-		$successCreationUpdater = $this->createMock( TrackingToolUpdater::class );
-		$successCreationUpdater->expects( $this->once() )
-			->method( 'replaceEventTools' )
-			->with( $this->anything(), $newTools );
 		yield 'New event, success' => [
-			$newEvent,
-			$successCreationWatcher,
-			$successCreationUpdater,
-			StatusValue::newGood()
+			'new',
+			static function ( $testCase ) {
+				$newTools = [ $testCase->createMock( TrackingToolAssociation::class ) ];
+				$watcher = $testCase->createMock( TrackingToolEventWatcher::class );
+				$watcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
+				$watcher->method( 'onEventCreated' )->willReturn( StatusValue::newGood( $newTools ) );
+				$updater = $testCase->createMock( TrackingToolUpdater::class );
+				$updater->expects( $testCase->once() )
+					->method( 'replaceEventTools' )
+					->with( $testCase->anything(), $newTools );
+				return [ $watcher, $updater, StatusValue::newGood() ];
+			},
 		];
 
-		$errorCreationWatcher = $this->createMock( TrackingToolEventWatcher::class );
-		$errorCreationWatcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
-		$creationError = StatusValue::newFatal( 'some-tool-update-error' );
-		$errorCreationWatcher->method( 'onEventCreated' )
-			->willReturn( StatusValue::newGood( $newTools )->merge( $creationError ) );
-		$errorCreationUpdater = $this->createMock( TrackingToolUpdater::class );
-		$errorCreationUpdater->expects( $this->once() )
-			->method( 'replaceEventTools' )
-			->with( $this->anything(), $newTools );
 		yield 'New event, error' => [
-			$newEvent,
-			$errorCreationWatcher,
-			$errorCreationUpdater,
-			$changStatusErrorsToWarnings( $creationError )
+			'new',
+			static function ( $testCase ) use ( $changStatusErrorsToWarnings ) {
+				$newTools = [ $testCase->createMock( TrackingToolAssociation::class ) ];
+				$watcher = $testCase->createMock( TrackingToolEventWatcher::class );
+				$watcher->method( 'validateEventCreation' )->willReturn( StatusValue::newGood() );
+				$creationError = StatusValue::newFatal( 'some-tool-update-error' );
+				$watcher->method( 'onEventCreated' )
+					->willReturn( StatusValue::newGood( $newTools )->merge( $creationError ) );
+				$updater = $testCase->createMock( TrackingToolUpdater::class );
+				$updater->expects( $testCase->once() )
+					->method( 'replaceEventTools' )
+					->with( $testCase->anything(), $newTools );
+				return [ $watcher, $updater, $changStatusErrorsToWarnings( $creationError ) ];
+			},
 		];
 	}
 

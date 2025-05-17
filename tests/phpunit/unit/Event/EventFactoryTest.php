@@ -171,13 +171,16 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	public function testNewEvent(
 		?string $expectedErrorKey,
 		array $factoryArgs,
-		?CampaignsPageFactory $campaignsPageFactory = null
+		?callable $campaignsPageFactory = null
 	) {
+		if ( $campaignsPageFactory !== null ) {
+			$campaignsPageFactory = $campaignsPageFactory( $this );
+		}
 		$expectedErrors = $expectedErrorKey ? [ $expectedErrorKey ] : null;
 		$this->doTestWithArgs( $factoryArgs, $expectedErrors, $campaignsPageFactory );
 	}
 
-	public function provideEventData(): Generator {
+	public static function provideEventData(): Generator {
 		yield 'Successful' => [ null, self::getTestDataWithDefault() ];
 		yield 'Negative ID' => [ 'campaignevents-error-invalid-id', self::getTestDataWithDefault( [ 'id' => -2 ] ) ];
 
@@ -185,51 +188,59 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			[ 'campaignevents-error-empty-title', self::getTestDataWithDefault( [ 'page' => '' ] ) ];
 
 		$invalidTitleStr = 'a|b';
-		$invalidTitlePageFactory = $this->createMock( CampaignsPageFactory::class );
-		$invalidTitlePageFactory->expects( $this->atLeastOnce() )
-			->method( 'newLocalExistingPageFromString' )
-			->with( $invalidTitleStr )
-			->willThrowException( $this->createMock( InvalidTitleStringException::class ) );
 		yield 'Invalid title string' => [
 			'campaignevents-error-invalid-title',
 			self::getTestDataWithDefault( [ 'page' => $invalidTitleStr ] ),
-			$invalidTitlePageFactory
+			static function ( $testCase ) use ( $invalidTitleStr ) {
+				$invalidTitlePageFactory = $testCase->createMock( CampaignsPageFactory::class );
+				$invalidTitlePageFactory->expects( $testCase->atLeastOnce() )
+					->method( 'newLocalExistingPageFromString' )
+					->with( $invalidTitleStr )
+					->willThrowException( $testCase->createMock( InvalidTitleStringException::class ) );
+				return $invalidTitlePageFactory;
+			},
 		];
 
 		$interwikiStr = 'nonexistinginterwiki:Interwiki page';
-		$interwikiPageFactory = $this->createMock( CampaignsPageFactory::class );
-		$interwikiPageFactory->expects( $this->atLeastOnce() )
-			->method( 'newLocalExistingPageFromString' )
-			->with( $interwikiStr )
-			->willThrowException( $this->createMock( UnexpectedInterwikiException::class ) );
 		yield 'Invalid title interwiki' => [
 			'campaignevents-error-invalid-title-interwiki',
 			self::getTestDataWithDefault( [ 'page' => $interwikiStr ] ),
-			$interwikiPageFactory
+			static function ( $testCase ) use ( $interwikiStr ) {
+				$interwikiPageFactory = $testCase->createMock( CampaignsPageFactory::class );
+				$interwikiPageFactory->expects( $testCase->atLeastOnce() )
+					->method( 'newLocalExistingPageFromString' )
+					->with( $interwikiStr )
+					->willThrowException( $testCase->createMock( UnexpectedInterwikiException::class ) );
+				return $interwikiPageFactory;
+			},
 		];
 
 		$nonExistingPageStr = 'This page does not exist';
-		$nonExistingCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
-		$nonExistingCampaignsPageFactory->expects( $this->atLeastOnce() )
-			->method( 'newLocalExistingPageFromString' )
-			->with( $nonExistingPageStr )
-			->willThrowException( $this->createMock( PageNotFoundException::class ) );
 		yield 'Non-existing page' => [
 			'campaignevents-error-page-not-found',
 			self::getTestDataWithDefault( [ 'page' => $nonExistingPageStr ] ),
-			$nonExistingCampaignsPageFactory
+			static function ( $testCase ) use ( $nonExistingPageStr ) {
+				$nonExistingCampaignsPageFactory = $testCase->createMock( CampaignsPageFactory::class );
+				$nonExistingCampaignsPageFactory->expects( $testCase->atLeastOnce() )
+					->method( 'newLocalExistingPageFromString' )
+					->with( $nonExistingPageStr )
+					->willThrowException( $testCase->createMock( PageNotFoundException::class ) );
+				return $nonExistingCampaignsPageFactory;
+			},
 		];
 
 		$specialPageStr = 'Special:SomeSpecialPage';
-		$specialCampaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
-		$specialCampaignsPageFactory->expects( $this->atLeastOnce() )
-			->method( 'newLocalExistingPageFromString' )
-			->with( $specialPageStr )
-			->willThrowException( $this->createMock( UnexpectedVirtualNamespaceException::class ) );
 		yield 'Page in a virtual namespace' => [
 			'campaignevents-error-page-namespace-not-allowed',
 			self::getTestDataWithDefault( [ 'page' => $specialPageStr ] ),
-			$specialCampaignsPageFactory
+			static function ( $testCase ) use ( $specialPageStr ) {
+				$specialCampaignsPageFactory = $testCase->createMock( CampaignsPageFactory::class );
+				$specialCampaignsPageFactory->expects( $testCase->atLeastOnce() )
+					->method( 'newLocalExistingPageFromString' )
+					->with( $specialPageStr )
+					->willThrowException( $testCase->createMock( UnexpectedVirtualNamespaceException::class ) );
+				return $specialCampaignsPageFactory;
+			},
 		];
 
 		yield 'Invalid chat URL' => [
