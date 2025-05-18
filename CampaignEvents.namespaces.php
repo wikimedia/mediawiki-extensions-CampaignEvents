@@ -50,6 +50,11 @@ $namespaceNames['id'] = [
 	NS_EVENT => 'Acara',
 ];
 
+$namespaceNames['ms'] = [
+	NS_EVENT => 'Acara',
+	NS_EVENT_TALK => 'Perbincangan_acara',
+];
+
 $namespaceNames['nb'] = [
 	NS_EVENT => 'Arrangement',
 	NS_EVENT_TALK => 'Arrangementsdiskusjon',
