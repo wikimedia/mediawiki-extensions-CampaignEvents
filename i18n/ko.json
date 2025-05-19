@@ -1,9 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ykhwong"
+			"Ykhwong",
+			"YeBoy371"
 		]
 	},
+	"campaignevents-desc": "캠페인 조직자와 참가자를 위한 기능들을 제공합니다.",
+	"nstab-event": "이벤트",
 	"action-campaignevents-enable-registration": "이벤트 등록을 활성화할",
 	"right-campaignevents-enable-registration": "이벤트 등록 활성화",
 	"action-campaignevents-delete-registration": "이벤트 등록을 삭제할",
@@ -33,9 +36,16 @@
 	"campaignevents-rest-event-not-found": "이 ID에 해당하는 이벤트가 없습니다.",
 	"campaignevents-rest-enable-registration-permission-denied": "이벤트 등록을 활성화할 권한이 없습니다.",
 	"enableeventregistration": "이벤트 등록 활성화",
+	"editeventregistration": "이벤트 등록 편집",
+	"campaignevents-edit-field-page": "이벤트 문서",
 	"campaignevents-edit-field-event-status": "이벤트 상태",
+	"campaignevents-edit-field-status-open": "열기",
+	"campaignevents-edit-field-status-closed": "닫기",
+	"campaignevents-edit-field-start": "시작 시간",
+	"campaignevents-edit-field-end": "종료 시간",
 	"campaignevents-edit-field-type-in-person": "대면 이벤트",
 	"campaignevents-edit-field-type-online-and-in-person": "온라인 및 대면 이벤트",
+	"campaignevents-edit-field-country": "국가",
 	"campaignevents-edit-field-address": "주소",
 	"campaignevents-edit-success-msg": "등록이 편집되었습니다. [[$1|이벤트 페이지]]를 참고하십시오.",
 	"campaignevents-edit-invalid-id": "유효한 이벤트 ID를 지정하십시오.",
@@ -46,6 +56,7 @@
 	"campaignevents-error-page-already-registered": "지정된 이벤트 문서에 이미 연결된 등록이 있습니다.",
 	"campaignevents-edit-not-allowed-registration": "이 이벤트 등록을 편집할 권한이 없습니다.",
 	"campaignevents-enable-registration-not-allowed-page": "지정된 이벤트 페이지에 대해 이벤트 등록을 활성화할 권한이 없습니다.",
+	"registerforevent": "이벤트 등록",
 	"campaignevents-register-error-no-event": "지정된 이벤트가 없습니다.",
 	"campaignevents-register-error-event-not-found": "이 ID에 해당하는 이벤트가 없습니다.",
 	"campaignevents-register-success": "당신은 지금 이 이벤트에 등록되었습니다.",
@@ -70,6 +81,7 @@
 	"campaignevents-myevents-label-search": "검색",
 	"campaignevents-myevents-label-status": "상태",
 	"campaignevents-myevents-field-status-any": "모두",
+	"campaignevents-myevents-field-status-open": "오픈 이벤트",
 	"campaignevents-myevents-field-status-closed": "마감된 이벤트",
 	"campaignevents-myevents-label-events-per-page": "문서별 이벤트",
 	"campaignevents-myevents-filter-btn-label": "이벤트 필터링",
