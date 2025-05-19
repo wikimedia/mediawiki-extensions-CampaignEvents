@@ -528,5 +528,22 @@
 	"communityconfiguration-campaignevents-title": "Tədbirlər",
 	"communityconfiguration-campaignevents-description": "CampaignEvents uzantısı üçün konfiqurasiya seçimləri",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Etibarlı tədbir ad fəzası",
-	"campaignevents-email-participants-missing-address-uncertain": "Seçilmiş iştirakçılardan bəzilərinin hesabında e-poçt ünvanı olmaya bilər və e-poçtunuzu qəbul etməyəcəklər."
+	"campaignevents-email-participants-missing-address-uncertain": "Seçilmiş iştirakçılardan bəzilərinin hesabında e-poçt ünvanı olmaya bilər və e-poçtunuzu qəbul etməyəcəklər.",
+	"campaignevents-eventtype-editing-event": "Redaktə tədbiri",
+	"campaignevents-eventtype-media-upload-event": "Media yükləmə tədbiri",
+	"campaignevents-eventtype-backlog-drive": "Növbənin təmizlənməsi",
+	"campaignevents-eventtype-contest": "Müsabiqə",
+	"campaignevents-eventtype-workshop": "Emalatxana",
+	"campaignevents-eventtype-training": "Təlim / seminar",
+	"campaignevents-eventtype-meetup": "Görüş",
+	"campaignevents-eventtype-hackathon": "Hakaton",
+	"campaignevents-eventtype-conference": "Konfrans",
+	"campaignevents-eventtype-other": "Digər",
+	"campaignevents-eventtypegroup-contributions": "Töhfələr",
+	"campaignevents-eventtypegroup-community": "İcma",
+	"campaignevents-edit-field-eventtypes-other-section-header": "Digər",
+	"campaignevents-edit-field-eventtypes-placeholder": "Tədbir növlərini seçin...",
+	"campaignevents-edit-field-eventtypes-other-help": "\"Digər\" seçimi bütün digər tədbir növlərini deaktiv edəcək və seçimi ləğv edəcək.",
+	"campaignevents-edit-field-eventtypes-label": "Tədbir növləri",
+	"campaignevents-error-invalid-other-selection": "Siz digər tədbir növləri ilə birlikdə \"Digər\"i seçə bilməzsiniz. Zəhmət olmasa, yalnız \"Digər\"i seçin və ya digər variantları seçmək üçün onu silin."
 }

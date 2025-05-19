@@ -527,5 +527,22 @@
 	"communityconfiguration-campaignevents-title": "Eventos de campania",
 	"communityconfiguration-campaignevents-description": "Optiones de configuration pro le extension CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Spatio de nomines valide pro eventos",
-	"campaignevents-email-participants-missing-address-uncertain": "Alcunes del participantes seligite non ha un adresse de e-mail definite in lor conto e non recipera tu message."
+	"campaignevents-email-participants-missing-address-uncertain": "Alcunes del participantes seligite non ha un adresse de e-mail definite in lor conto e non recipera tu message.",
+	"campaignevents-eventtype-editing-event": "Modification de evento",
+	"campaignevents-eventtype-media-upload-event": "Evento de incargamento multimedial",
+	"campaignevents-eventtype-backlog-drive": "Reattrappar travalio pendente",
+	"campaignevents-eventtype-contest": "Concurso",
+	"campaignevents-eventtype-workshop": "Workshop",
+	"campaignevents-eventtype-training": "Education / seminario",
+	"campaignevents-eventtype-meetup": "Incontro",
+	"campaignevents-eventtype-hackathon": "Hackathon",
+	"campaignevents-eventtype-conference": "Conferentia",
+	"campaignevents-eventtype-other": "Altere",
+	"campaignevents-eventtypegroup-contributions": "Contributiones",
+	"campaignevents-eventtypegroup-community": "Communitate",
+	"campaignevents-edit-field-eventtypes-other-section-header": "Altere",
+	"campaignevents-edit-field-eventtypes-placeholder": "Selige typos de evento…",
+	"campaignevents-edit-field-eventtypes-other-help": "Le selection de ‘Altere’ disactiva e deselectiona tote le altere typos de evento.",
+	"campaignevents-edit-field-eventtypes-label": "Typos de evento",
+	"campaignevents-error-invalid-other-selection": "Non es possibile seliger ‘Altere’ in conjunction con altere typos de evento. Per favor selige solmente ‘Altere’ o remove lo pro eliger altere optiones."
 }

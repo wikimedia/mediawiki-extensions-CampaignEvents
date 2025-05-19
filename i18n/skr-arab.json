@@ -188,5 +188,10 @@
 	"campaignevents-myinvitationslist-new-button": "نواں",
 	"campaignevents-allevents-label-filter-wikis": "وکیاں",
 	"campaignevents-eventpage-dialog-wikis-label": "وکیاں",
-	"campaignevents-eventslist-wiki-label": "وکیاں"
+	"campaignevents-eventslist-wiki-label": "وکیاں",
+	"campaignevents-eventtype-conference": "کانفرنس",
+	"campaignevents-eventtype-other": "ٻیا",
+	"campaignevents-eventtypegroup-contributions": "ونگاراں",
+	"campaignevents-eventtypegroup-community": "برادری",
+	"campaignevents-edit-field-eventtypes-other-section-header": "ٻیا"
 }
