@@ -15,7 +15,7 @@ class CampaignEventsSchema extends JsonSchema {
 		self::ITEMS => [
 			self::TYPE => self::TYPE_INTEGER,
 		],
-		self::DEFAULT => [ NS_EVENT ],
+		self::DEFAULT => [ NS_EVENT, NS_PROJECT ],
 		self::CONTROL => NamespacesControl::class
 	];
 }

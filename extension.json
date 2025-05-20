@@ -67,7 +67,8 @@
 		"CampaignEventsEventNamespaces": {
 			"description": "List of permitted namespaces for event registration",
 			"value": [
-				1728
+				1728,
+				4
 			],
 			"merge_strategy": "provide_default"
 		},
