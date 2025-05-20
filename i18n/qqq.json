@@ -545,7 +545,7 @@
 	"campaignevents-email-participants-missing-address-uncertain": "Warning text displayed when potentially invalid recipients are selected",
 	"campaignevents-eventtype-editing-event": "Event type label for editing events, which focus on editing wiki content.",
 	"campaignevents-eventtype-media-upload-event": "Event type label for media upload events, where participants contribute media such as images or videos.",
-	"campaignevents-eventtype-backlog-drive": "Event type label for backlog drive events, intended to reduce maintenance or content backlogs.",
+	"campaignevents-eventtype-backlog-drive": "Event type label for backlog drive events, intended to reduce maintenance or content backlogs. A [[:w:en:Wikipedia:Backlog|backlog]] is a list of tasks of a certain kind that should be completed.",
 	"campaignevents-eventtype-contest": "Event type label for contests, which are competitive events often with rules and/or prizes.",
 	"campaignevents-eventtype-workshop": "Event type label for workshops, where participants receive guided instruction or practical training.",
 	"campaignevents-eventtype-training": "Event type label for training or seminar events, typically involving educational presentations or lectures.",
@@ -557,7 +557,7 @@
 	"campaignevents-eventtypegroup-community": "Event type group label for the Community event type",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Label for the section or option named 'Other' in the event types multiselect dropdown.",
 	"campaignevents-edit-field-eventtypes-placeholder": "Placeholder text shown in the event types multiselect dropdown when no options are selected.",
-	"campaignevents-edit-field-eventtypes-other-help": "Help text explaining that selecting the 'Other' option will disable and deselect all other event types in the multiselect dropdown.",
+	"campaignevents-edit-field-eventtypes-other-help": "Help text explaining that selecting the 'Other' option will disable and deselect all other event types in the multiselect dropdown. \"Other\" is {{msg-mw|Campaignevents-edit-field-eventtypes-other-section-header}}",
 	"campaignevents-edit-field-eventtypes-label": "Label for the field where users can select one or more event types in a multiselect dropdown.",
-	"campaignevents-error-invalid-other-selection": "Error message shown on both [[Special:EnablingEventRegistration]] and [[Special:EditEventRegistration]] forms when the user selects 'Other' along with one or more other event types. The 'Other' option is meant to be exclusive."
+	"campaignevents-error-invalid-other-selection": "Error message shown on both [[Special:EnablingEventRegistration]] and [[Special:EditEventRegistration]] forms when the user selects \"Other\" along with one or more other event types. The \"Other\" option is meant to be exclusive. \"Other\" is {{msg-mw|Campaignevents-edit-field-eventtypes-other-section-header}}"
 }

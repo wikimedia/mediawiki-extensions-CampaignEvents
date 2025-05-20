@@ -196,5 +196,6 @@
 	"campaignevents-eventpage-dialog-topics-label": "Теме",
 	"campaignevents-eventtype-other": "Друго",
 	"campaignevents-eventtypegroup-contributions": "Доприноси",
-	"campaignevents-eventtypegroup-community": "Заједница"
+	"campaignevents-eventtypegroup-community": "Заједница",
+	"campaignevents-edit-field-eventtypes-other-section-header": "Друго"
 }
