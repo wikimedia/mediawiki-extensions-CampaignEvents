@@ -9,10 +9,12 @@
 	"campaignevents-myevents-label-search": "ਖੋਜੋ",
 	"campaignevents-myevents-field-status-any": "ਕੋਈ ਵੀ।",
 	"campaignevents-allevents-tab-events-heading": "ਸਮਾਗਮ",
+	"campaignevents-eventslist-delete-dialog-cancel": "ਰੱਦ ਕਰੋ",
 	"campaignevents-eventpage-register-dialog-register": "ਇੰਦਰਾਜ ਕਰਾਓ",
 	"campaignevents-eventpage-register-dialog-visibility-title": "ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਗੋਪਨੀਯਤਾ",
 	"campaignevents-event-details-wikis-header": "ਵਿਕੀਆਂ",
 	"campaignevents-event-details-wikis-all": "ਇਹ ਸਮਾਗਮ ਸਾਰੇ ਵਿਕੀਆਂ ਲਈ ਖੁੱਲ੍ਹਾ ਹੈ।",
+	"campaignevents-event-details-remove-participant-cancel-btn": "ਰੱਦ ਕਰੋ",
 	"campaignevents-eventpage-register-dialog-questions-title": "ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "ਇਹ ਜਾਣਕਾਰੀ ਸਿਰਫ਼ ਪ੍ਰੋਗਰਾਮ ਦੇ ਪ੍ਰਬੰਧਕਾਂ ਨਾਲ ਸਾਂਝੀ ਕੀਤੀ ਜਾਵੇਗੀ।",
 	"campaignevents-myinvitationslist-new-button": "ਨਵਾਂ",
@@ -21,5 +23,11 @@
 	"campaignevents-allevents-placeholder-add-wikis": "ਵਿਕੀਆਂ ਜੋੜੋ...",
 	"campaignevents-eventpage-all-wikis": "ਇਹ ਸਮਾਗਮ ਸਾਰੇ ਵਿਕੀਆਂ ਲਈ ਖੁੱਲ੍ਹਾ ਹੈ।",
 	"campaignevents-eventpage-wikis-more": "$1 {{PLURAL:$1| ਹੋਰ}}",
-	"campaignevents-eventpage-dialog-wikis-label": "ਵਿਕੀਆਂ"
+	"campaignevents-eventpage-dialog-wikis-label": "ਵਿਕੀਆਂ",
+	"campaignevents-eventtype-contest": "ਮੁਕਾਬਲਾ",
+	"campaignevents-eventtype-meetup": "ਮੁਲਾਕਾਤ (Meetup)",
+	"campaignevents-eventtype-other": "ਹੋਰ",
+	"campaignevents-eventtypegroup-contributions": "ਯੋਗਦਾਨ",
+	"campaignevents-eventtypegroup-community": "ਭਾਈਚਾਰਾ",
+	"campaignevents-edit-field-eventtypes-other-section-header": "ਹੋਰ"
 }
