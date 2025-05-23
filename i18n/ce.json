@@ -528,5 +528,22 @@
 	"communityconfiguration-campaignevents-title": "КампаниХиламаш",
 	"communityconfiguration-campaignevents-description": "Конфигурацин параметраш CampaignEvents шуьйрачу агӀонан",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Магийна хиламийн цӀерийн меттигаш",
-	"campaignevents-email-participants-missing-address-uncertain": "Цхьаболчу хаьржинчу декъашхойн шайн аккаунтехь электронан поштан адрес ца хила а тарло, хьан электронан пошта дӀакхочур йац."
+	"campaignevents-email-participants-missing-address-uncertain": "Цхьаболчу хаьржинчу декъашхойн шайн аккаунтехь электронан поштан адрес ца хила а тарло, хьан электронан пошта дӀакхочур йац.",
+	"campaignevents-eventtype-editing-event": "Хилам хийца",
+	"campaignevents-eventtype-media-upload-event": "Медиа чуйоккхуш хилам",
+	"campaignevents-eventtype-backlog-drive": "Бэклог драйв",
+	"campaignevents-eventtype-contest": "Конкурс",
+	"campaignevents-eventtype-workshop": "ПхьалгӀа",
+	"campaignevents-eventtype-training": "Ӏамор / семинар",
+	"campaignevents-eventtype-meetup": "Цхьаьнакхетар",
+	"campaignevents-eventtype-hackathon": "Хакатон",
+	"campaignevents-eventtype-conference": "Конференци",
+	"campaignevents-eventtype-other": "Кхийерг",
+	"campaignevents-eventtypegroup-contributions": "Къинхьегам",
+	"campaignevents-eventtypegroup-community": "Йукъаралла",
+	"campaignevents-edit-field-eventtypes-other-section-header": "Кхийерг",
+	"campaignevents-edit-field-eventtypes-placeholder": "Хиламийн тайпанаш харжа...",
+	"campaignevents-edit-field-eventtypes-other-help": "'Кхин' харжаро дӀадоккхур а, хуьйцур а ду массо а кхин хиламан тайпанаш.",
+	"campaignevents-edit-field-eventtypes-label": "Хиламийн тайпанаш",
+	"campaignevents-error-invalid-other-selection": "Кхечу хиламийн тайпанашца цхьаьна 'Кхин' хьажа йиш йац хьан. Дехар до, 'Кхин' бен ца хьажа, йа дӀайаккха иза, кхин варианташ харжа."
 }
