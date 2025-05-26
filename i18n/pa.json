@@ -7,5 +7,7 @@
 	},
 	"campaignevents-register-confirmation-btn": "ਇੰਦਰਾਜ ਕਰਾਓ",
 	"campaignevents-myevents-label-search": "ਖੋਜੋ",
-	"campaignevents-myevents-field-status-any": "ਕੋਈ ਵੀ।"
+	"campaignevents-myevents-field-status-any": "ਕੋਈ ਵੀ।",
+	"campaignevents-eventslist-delete-dialog-cancel": "ਰੱਦ ਕਰੋ",
+	"campaignevents-event-details-remove-participant-cancel-btn": "ਰੱਦ ਕਰੋ"
 }
