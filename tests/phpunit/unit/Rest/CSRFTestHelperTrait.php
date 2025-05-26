@@ -69,28 +69,39 @@ trait CSRFTestHelperTrait {
 	 * the handler; the second argument is the expected exception message; the third argument is the token to add to
 	 * the request body.
 	 */
-	public function provideBadTokenSessions(): Generator {
-		$anonUser = $this->createMock( User::class );
-		$anonUser->method( 'isAnon' )->willReturn( true );
-		$anonSessionProvider = $this->createMock( SessionProviderInterface::class );
-		$anonSessionProvider->method( 'safeAgainstCsrf' )->willReturn( false );
+	public static function provideBadTokenSessions(): Generator {
+		yield 'Anon' => [ static function ( $testCase ) {
+			$anonUser = $testCase->createMock( User::class );
+			$anonUser->method( 'isAnon' )->willReturn( true );
+			$anonSessionProvider = $testCase->createMock( SessionProviderInterface::class );
+			$anonSessionProvider->method( 'safeAgainstCsrf' )->willReturn( false );
 
-		$anonSession = $this->createMock( Session::class );
-		$anonSession->method( 'getSessionId' )->willReturn( new SessionId( 'test' ) );
-		$anonSession->method( 'getProvider' )->willReturn( $anonSessionProvider );
-		$anonSession->expects( $this->atLeastOnce() )->method( 'getUser' )->willReturn( $anonUser );
-		$anonSession->expects( $this->atLeastOnce() )->method( 'isPersistent' )->willReturn( false );
-		yield 'Anon' => [ $anonSession, 'rest-badtoken-nosession', 'some-token' ];
+			$anonSession = $testCase->createMock( Session::class );
+			$anonSession->method( 'getSessionId' )->willReturn( new SessionId( 'test' ) );
+			$anonSession->method( 'getProvider' )->willReturn( $anonSessionProvider );
+			$anonSession->expects( $testCase->atLeastOnce() )->method( 'getUser' )->willReturn( $anonUser );
+			$anonSession->expects( $testCase->atLeastOnce() )->method( 'isPersistent' )->willReturn( false );
+			return $anonSession;
+		}, 'rest-badtoken-nosession', 'some-token' ];
 
-		$loggedInUser = $this->createMock( User::class );
-		$loggedInUser->method( 'isAnon' )->willReturn( false );
+		yield 'Missing token' => [ static function ( $testCase ) {
+			$loggedInUser = $testCase->createMock( User::class );
+			$loggedInUser->method( 'isAnon' )->willReturn( false );
 
-		$missingTokenSession = $this->getSession( false );
-		$missingTokenSession->expects( $this->atLeastOnce() )->method( 'getUser' )->willReturn( $loggedInUser );
-		yield 'Missing token' => [ $missingTokenSession, 'rest-badtoken-missing', null ];
+			$missingTokenSession = $testCase->getSession( false );
+			$missingTokenSession->expects( $testCase->atLeastOnce() )
+				->method( 'getUser' )->willReturn( $loggedInUser );
+			return $missingTokenSession;
+		}, 'rest-badtoken-missing', null ];
 
-		$mismatchingTokenSession = $this->getSession( false );
-		$mismatchingTokenSession->expects( $this->atLeastOnce() )->method( 'getUser' )->willReturn( $loggedInUser );
-		yield 'Mismatching token' => [ $mismatchingTokenSession, 'rest-badtoken', 'some-token' ];
+		yield 'Mismatching token' => [ static function ( $testCase ) {
+			$loggedInUser = $testCase->createMock( User::class );
+			$loggedInUser->method( 'isAnon' )->willReturn( false );
+
+			$mismatchingTokenSession = $testCase->getSession( false );
+			$mismatchingTokenSession->expects( $testCase->atLeastOnce() )
+				->method( 'getUser' )->willReturn( $loggedInUser );
+			return $mismatchingTokenSession;
+		}, 'rest-badtoken', 'some-token' ];
 	}
 }

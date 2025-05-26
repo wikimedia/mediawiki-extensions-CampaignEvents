@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\Rest\SetOrganizersHandler;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
-use MediaWiki\Session\Session;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserIdentityLookup;
@@ -93,7 +92,8 @@ class SetOrganizersHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @dataProvider provideBadTokenSessions
 	 */
-	public function testExecute__badToken( Session $session, string $excepMsg, ?string $token ) {
+	public function testExecute__badToken( callable $session, string $excepMsg, ?string $token ) {
+		$session = $session( $this );
 		$this->assertCorrectBadTokenBehaviour(
 			$this->newHandler(),
 			$this->getRequestData( [ 'foo' ] ),
