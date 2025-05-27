@@ -3,13 +3,14 @@
 		"authors": [
 			"MagicAho",
 			"MathXplore",
-			"Omotecho"
+			"Omotecho",
+			"Shirayuki"
 		]
 	},
 	"campaignevents-rest-event-not-found": "このIDを持つイベントは存在しません",
 	"campaignevents-rest-enable-registration-permission-denied": "イベント登録を有効にする権限がありません。",
 	"campaignevents-rest-edit-page-nonlocal": "このイベントの登録は次のウィキで受け付けているため、そちらを編集してください:$1。",
-	"campaignevents-rest-delete-already-deleted": "このイベント登録はすでに削除されています。",
+	"campaignevents-rest-delete-already-deleted": "このイベント登録は既に削除されています。",
 	"campaignevents-rest-get-registration-deleted": "このイベント登録は削除されました。",
 	"campaignevents-rest-register-invalid-answer": "質問に対する無効な答え$1"
 }
