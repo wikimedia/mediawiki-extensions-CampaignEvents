@@ -8,7 +8,6 @@ use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesFormatter;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -45,7 +44,6 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		Config $wikiConfig,
-		EventTypesFormatter $eventTypesFormatter,
 		EventTypesRegistry $eventTypesRegistry
 	) {
 		parent::__construct(
@@ -65,7 +63,6 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$wikiLookup,
 			$topicRegistry,
 			$wikiConfig,
-			$eventTypesFormatter,
 			$eventTypesRegistry
 		);
 	}

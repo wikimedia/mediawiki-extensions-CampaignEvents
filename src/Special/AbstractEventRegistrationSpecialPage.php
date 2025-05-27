@@ -12,7 +12,6 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesFormatter;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -75,7 +74,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private Config $wikiConfig;
-	private EventTypesFormatter $eventTypesFormatter;
 	private EventTypesRegistry $eventTypesRegistry;
 
 	protected ?int $eventID = null;
@@ -111,7 +109,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		Config $wikiConfig,
-		EventTypesFormatter $eventTypesFormatter,
 		EventTypesRegistry $eventTypesRegistry
 	) {
 		parent::__construct( $name, $restriction );
@@ -129,7 +126,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->wikiConfig = $wikiConfig;
-		$this->eventTypesFormatter = $eventTypesFormatter;
 		$this->eventTypesRegistry = $eventTypesRegistry;
 
 		$this->formMessages = $this->getFormMessages();
@@ -391,7 +387,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'dropdown' => true,
 				'label-message' => 'campaignevents-edit-field-eventtypes-label',
 				'default' => $this->event ? $this->event->getEventTypes() : [],
-				'options-messages' => $this->eventTypesFormatter->getAllOptionMessages(),
+				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
 				'placeholder-message' => 'campaignevents-edit-field-eventtypes-placeholder',
 				'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
 				'cssclass' => 'ext-campaignevents-edit-eventtypes-input',

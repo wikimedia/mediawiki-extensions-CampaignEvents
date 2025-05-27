@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesFormatter;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
@@ -39,7 +38,6 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		Config $wikiConfig,
-		EventTypesFormatter $eventTypesFormatter,
 		EventTypesRegistry $eventTypesRegistry
 	) {
 		parent::__construct(
@@ -59,7 +57,6 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 			$wikiLookup,
 			$topicRegistry,
 			$wikiConfig,
-			$eventTypesFormatter,
 			$eventTypesRegistry
 		);
 	}

@@ -590,7 +590,6 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsWikiConfiguration",
-				"CampaignEventsEventTypesFormatter",
 				"CampaignEventsEventTypesRegistry"
 			]
 		},
@@ -611,7 +610,6 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsWikiConfiguration",
-				"CampaignEventsEventTypesFormatter",
 				"CampaignEventsEventTypesRegistry"
 			]
 		},
