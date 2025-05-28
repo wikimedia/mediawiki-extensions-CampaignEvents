@@ -53,6 +53,8 @@ class EventRegistration {
 	private DateTimeZone $timezone;
 	private string $startLocalTimestamp;
 	private string $endLocalTimestamp;
+	/** @var list<string> Event type names */
+	private array $types;
 	/** @var int One of the MEETING_TYPE_* constants */
 	private int $meetingType;
 	private ?string $meetingURL;
@@ -64,7 +66,6 @@ class EventRegistration {
 	private ?string $lastEditTimestamp;
 	private ?string $deletionTimestamp;
 	private bool $isTestEvent;
-	private array $eventTypes;
 
 	/**
 	 * @param int|null $id
@@ -79,7 +80,7 @@ class EventRegistration {
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
-	 * @param array $eventTypes
+	 * @param list<string> $types
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
@@ -102,7 +103,7 @@ class EventRegistration {
 		DateTimeZone $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
-		array $eventTypes,
+		array $types,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
@@ -138,7 +139,7 @@ class EventRegistration {
 		$this->timezone = $timezone;
 		$this->startLocalTimestamp = $startLocalTimestamp;
 		$this->endLocalTimestamp = $endLocalTimestamp;
-		$this->eventTypes = $eventTypes;
+		$this->types = $types;
 		$this->meetingType = $meetingType;
 		$this->meetingURL = $meetingURL;
 		$this->meetingCountry = $meetingCountry;
@@ -233,12 +234,12 @@ class EventRegistration {
 		return wfTimestamp( TS_UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 	}
 
-	public function getMeetingType(): int {
-		return $this->meetingType;
+	public function getTypes(): array {
+		return $this->types;
 	}
 
-	public function getEventTypes(): array {
-		return $this->eventTypes;
+	public function getMeetingType(): int {
+		return $this->meetingType;
 	}
 
 	public function getMeetingURL(): ?string {

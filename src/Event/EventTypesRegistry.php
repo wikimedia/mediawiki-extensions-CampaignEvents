@@ -138,11 +138,11 @@ class EventTypesRegistry {
 
 	/**
 	 * Converts event types as stored in the DB into a list of human-readable type identifiers (NOT localized).
-	 * @param string $rawDBEventType
+	 * @param string $rawDBTypes
 	 * @return list<string>
 	 */
-	public static function getEventTypesFromDBVal( string $rawDBEventType ): array {
-		$dbEventType = (int)$rawDBEventType;
+	public static function getEventTypesFromDBVal( string $rawDBTypes ): array {
+		$dbEventType = (int)$rawDBTypes;
 		$result = [];
 		foreach ( self::EVENT_TYPES as $group ) {
 			foreach ( $group['types'] as $typeInfo ) {
@@ -161,14 +161,14 @@ class EventTypesRegistry {
 	/**
 	 * Converts a list of human-readable event type identifiers (NOT localized) to a combination of numeric constants
 	 * that can be stored into the DB.
-	 * @param list<string> $eventTypes
+	 * @param list<string> $types
 	 * @return int
 	 */
-	public static function eventTypesToDBVal( array $eventTypes ): int {
+	public static function eventTypesToDBVal( array $types ): int {
 		$dbEventType = 0;
 		foreach ( self::EVENT_TYPES as $group ) {
 			foreach ( $group['types'] as $typeInfo ) {
-				if ( in_array( $typeInfo['type'], $eventTypes, true ) ) {
+				if ( in_array( $typeInfo['type'], $types, true ) ) {
 					$dbEventType |= $typeInfo['dbValue'];
 				}
 			}

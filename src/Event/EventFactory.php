@@ -91,7 +91,7 @@ class EventFactory {
 	 * @param string $timezone Can be in any format accepted by DateTimeZone
 	 * @param string $startLocalTimestamp In the TS_MW format
 	 * @param string $endLocalTimestamp In the TS_MW format
-	 * @param array $eventTypes
+	 * @param list<string> $types
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
@@ -121,7 +121,7 @@ class EventFactory {
 		string $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
-		array $eventTypes,
+		array $types,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
@@ -234,7 +234,7 @@ class EventFactory {
 			$timezoneObj,
 			$startLocalTimestamp,
 			$endLocalTimestamp,
-			$eventTypes,
+			$types,
 			$meetingType,
 			$meetingURL,
 			$meetingCountry,

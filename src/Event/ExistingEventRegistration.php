@@ -27,7 +27,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
-	 * @param array $eventTypes
+	 * @param list<string> $types
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
@@ -50,7 +50,7 @@ class ExistingEventRegistration extends EventRegistration {
 		DateTimeZone $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
-		array $eventTypes,
+		array $types,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
@@ -73,7 +73,7 @@ class ExistingEventRegistration extends EventRegistration {
 			$timezone,
 			$startLocalTimestamp,
 			$endLocalTimestamp,
-			$eventTypes,
+			$types,
 			$meetingType,
 			$meetingURL,
 			$meetingCountry,

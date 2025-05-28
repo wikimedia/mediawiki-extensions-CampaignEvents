@@ -45,7 +45,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'timezone' => 'UTC',
 		'start' => '20220308120000',
 		'end' => '20220308150000',
-		'eventtypes' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+		'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',

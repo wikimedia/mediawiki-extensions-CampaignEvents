@@ -42,7 +42,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'timezone' => new DateTimeZone( 'UTC' ),
 			'start' => '20220815120000',
 			'end' => '20220815120001',
-			'event_types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'country' => 'Some country',

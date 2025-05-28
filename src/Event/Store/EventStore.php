@@ -411,7 +411,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_page_prefixedtext,
 			$row->event_page_wiki
 		);
-		$eventTypes = EventTypesRegistry::getEventTypesFromDBVal( $row->event_types );
+		$types = EventTypesRegistry::getEventTypesFromDBVal( $row->event_types );
 		$meetingType = self::getMeetingTypeFromDBVal( $row->event_meeting_type );
 
 		$address = null;
@@ -448,7 +448,7 @@ class EventStore implements IEventStore, IEventLookup {
 			new DateTimeZone( $row->event_timezone ),
 			wfTimestamp( TS_MW, $row->event_start_local ),
 			wfTimestamp( TS_MW, $row->event_end_local ),
-			$eventTypes,
+			$types,
 			$meetingType,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
 			$country,
@@ -487,7 +487,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_start_utc' => $dbw->timestamp( $event->getStartUTCTimestamp() ),
 			'event_end_local' => $localEndDB,
 			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
-			'event_types' => EventTypesRegistry::eventTypesToDBVal( $event->getEventTypes() ),
+			'event_types' => EventTypesRegistry::eventTypesToDBVal( $event->getTypes() ),
 			'event_meeting_type' => self::meetingTypeToDBVal( $event->getMeetingType() ),
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
