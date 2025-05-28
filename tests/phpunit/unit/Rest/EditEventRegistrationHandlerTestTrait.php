@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use StatusValue;
 
@@ -17,6 +18,7 @@ trait EditEventRegistrationHandlerTestTrait {
 		'timezone' => 'UTC',
 		'start_time' => '20220308120000',
 		'end_time' => '20220308150000',
+		'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 		'wikis' => [ '*' ],
 		'topics' => [],
 		'online_meeting' => true,

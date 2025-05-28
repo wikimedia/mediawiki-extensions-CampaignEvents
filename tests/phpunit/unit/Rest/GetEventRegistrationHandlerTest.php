@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -46,7 +47,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			->willReturn( [ 'user-id' => self::TRACKING_TOOL_USER_ID ] );
 		return new GetEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
-			$trackingToolRegistry
+			$trackingToolRegistry,
+			new HashConfig( [ 'CampaignEventsEnableEventTypes' => true ] )
 		);
 	}
 
@@ -66,6 +68,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'timezone' => new DateTimeZone( $timezoneName ),
 			'start_time' => '20220220200220',
 			'end_time' => '20220220200222',
+			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
 			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
@@ -89,7 +92,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['timezone'],
 			wfTimestamp( TS_MW, $eventData['start_time'] ),
 			wfTimestamp( TS_MW, $eventData['end_time'] ),
-			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			$eventData['types'],
 			$eventData['wikis'],
 			$eventData['topics'],
 			[
@@ -134,7 +137,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 
 		ksort( $respData );
 		ksort( $expected );
-		$this->assertEquals( $expected, $respData );
+		$this->assertSame( $expected, $respData );
 	}
 
 	public function testRun__invalidEvent() {

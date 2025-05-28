@@ -5,10 +5,12 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
@@ -29,6 +31,7 @@ use MediaWiki\Rest\RequestData;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use StatusValue;
+use Wikimedia\Message\IMessageFormatterFactory;
 
 /**
  * @group Test
@@ -91,6 +94,8 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->createMock( EventQuestionsRegistry::class ),
 			$wikiLookup ?? $this->createMock( WikiLookup::class ),
 			$this->createMock( ITopicRegistry::class ),
+			new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) ),
+			new HashConfig( [ 'CampaignEventsEnableEventTypes' => true ] ),
 			$eventLookup
 		);
 	}

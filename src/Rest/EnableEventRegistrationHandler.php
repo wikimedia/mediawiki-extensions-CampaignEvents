@@ -64,7 +64,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
-			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			$this->eventTypesEnabled ? $body['types'] : [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			$wikis,
 			$body['topics'] ?? [],
 			$body['tracking_tool_id'],

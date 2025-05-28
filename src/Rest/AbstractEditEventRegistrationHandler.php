@@ -4,9 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -39,6 +41,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected EventQuestionsRegistry $eventQuestionsRegistry;
 	protected WikiLookup $wikiLookup;
 	protected ITopicRegistry $topicRegistry;
+	private EventTypesRegistry $eventTypesRegistry;
+	protected bool $eventTypesEnabled;
 
 	public function __construct(
 		EventFactory $eventFactory,
@@ -48,7 +52,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry
+		ITopicRegistry $topicRegistry,
+		EventTypesRegistry $eventTypesRegistry,
+		Config $config
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
@@ -58,6 +64,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->eventTypesEnabled = $config->get( 'CampaignEventsEnableEventTypes' );
 	}
 
 	/**
@@ -117,7 +125,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @return array
 	 */
 	public function getBodyParamSettings(): array {
-		return [
+		$params = [
 			'event_page' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'title',
@@ -194,6 +202,18 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_DEFAULT => false,
 			],
 		] + $this->getTokenParamDefinition();
+
+		if ( $this->eventTypesEnabled ) {
+			$params['types'] = [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => $this->eventTypesRegistry->getAllTypes(),
+				ParamValidator::PARAM_ISMULTI => true,
+				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TYPES,
+				ParamValidator::PARAM_REQUIRED => true,
+			];
+		}
+
+		return $params;
 	}
 
 	/**
