@@ -341,14 +341,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
 				'cssclass' => 'ext-campaignevents-edit-eventtypes-input',
 				'section' => self::DETAILS_SECTION,
-				'max' => 5,
-				'validation-callback' => function ( $value ) {
-					if ( count( $value ) > 1 && in_array( EventTypesRegistry::EVENT_TYPE_OTHER, $value, true ) ) {
-						return $this->msg( 'campaignevents-error-invalid-other-selection' )
-							->text();
-					}
-					return true;
-				},
+				'required' => true,
+				'max' => EventFactory::MAX_TYPES,
 			];
 		}
 
@@ -709,7 +703,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$testEvent = $data['TestEvent'] === "1";
 
 		try {
-			$types = [];
+			$types = [ EventTypesRegistry::EVENT_TYPE_OTHER ];
 			if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
 				$types = $data['EventTypes'];
 			}

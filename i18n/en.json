@@ -35,7 +35,10 @@
 	"campaignevents-error-empty-end": "Enter an end time.",
 	"campaignevents-error-invalid-end": "The event end time is invalid.",
 	"campaignevents-error-start-after-end": "Enter an end date that comes after the start date.",
-	"campaignevents-error-invalid-type": "Enter a valid event type.",
+	"campaignevents-error-no-types": "Enter at least one type",
+	"campaignevents-error-too-many-types": "Enter a maximum of $1 event {{PLURAL:$1|type|types}}.",
+	"campaignevents-error-invalid-types": "The following event types are not recognized: $1.",
+	"campaignevents-error-invalid-other-selection": "You cannot choose '{{int:campaignevents-eventtype-other}}' along with other event types. Please choose only '{{int:campaignevents-eventtype-other}}' or remove it to choose other options.",
 	"campaignevents-error-too-many-wikis": "Enter a maximum of {{PLURAL:$1|one wiki|$1 wikis}}.",
 	"campaignevents-error-invalid-wikis": "The following wiki IDs are not recognized: $1.",
 	"campaignevents-error-too-many-topics": "Enter a maximum of {{PLURAL:$1|one topic|$1 topics}}.",
@@ -552,6 +555,5 @@
 	"campaignevents-edit-field-eventtypes-other-section-header": "Other",
 	"campaignevents-edit-field-eventtypes-placeholder": "Select event types...",
 	"campaignevents-edit-field-eventtypes-other-help": "Selecting 'Other' will disable and deselect all other event types.",
-	"campaignevents-edit-field-eventtypes-label": "Event types",
-	"campaignevents-error-invalid-other-selection": "You cannot select 'Other' along with other event types. Please select only 'Other' or remove it to choose other options."
+	"campaignevents-edit-field-eventtypes-label": "Event types"
 }

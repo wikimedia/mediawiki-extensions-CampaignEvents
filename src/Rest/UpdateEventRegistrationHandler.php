@@ -9,6 +9,7 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -145,7 +146,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
-			[],
+			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			$wikis,
 			$body['topics'] ?? [],
 			$body['tracking_tool_id'],

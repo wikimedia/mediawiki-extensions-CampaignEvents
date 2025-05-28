@@ -40,6 +40,8 @@ class EventFactory {
 	 */
 	public const VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE = 1 << 1;
 
+	public const MAX_TYPES = 2;
+
 	public const MAX_WIKIS = 100;
 
 	/**
@@ -57,6 +59,7 @@ class EventFactory {
 	private EventQuestionsRegistry $eventQuestionsRegistry;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private EventTypesRegistry $eventTypesRegistry;
 	private array $allowedEventNamespaces;
 
 	public function __construct(
@@ -66,6 +69,7 @@ class EventFactory {
 		EventQuestionsRegistry $eventQuestionsRegistry,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
+		EventTypesRegistry $eventTypesRegistry,
 		array $allowedEventNamespaces
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -74,6 +78,7 @@ class EventFactory {
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->allowedEventNamespaces = $allowedEventNamespaces;
 	}
 
@@ -160,6 +165,10 @@ class EventFactory {
 			);
 			$res->merge( $datesStatus );
 		}
+
+		$typesStatus = $this->validateTypes( $types );
+		$res->merge( $typesStatus );
+		$types = $typesStatus->getValue();
 
 		$wikisStatus = $this->validateWikis( $wikis );
 		$res->merge( $wikisStatus );
@@ -291,6 +300,33 @@ class EventFactory {
 		}
 
 		return StatusValue::newGood( $campaignsPage );
+	}
+
+	private function validateTypes( array $types ): StatusValue {
+		$types = array_unique( $types );
+		$ret = StatusValue::newGood( $types );
+
+		if ( !$types ) {
+			$ret->error( 'campaignevents-error-no-types' );
+		}
+
+		if ( count( $types ) > self::MAX_TYPES ) {
+			$ret->error( 'campaignevents-error-too-many-types', Message::numParam( self::MAX_TYPES ) );
+		}
+
+		$invalidTypes = array_diff( $types, $this->eventTypesRegistry->getAllTypes() );
+		if ( $invalidTypes ) {
+			$ret->error(
+				'campaignevents-error-invalid-types',
+				Message::listParam( $invalidTypes, ListType::COMMA )
+			);
+		}
+
+		if ( count( $types ) > 1 && in_array( EventTypesRegistry::EVENT_TYPE_OTHER, $types, true ) ) {
+			$ret->error( 'campaignevents-error-invalid-other-selection' );
+		}
+
+		return $ret;
 	}
 
 	/**

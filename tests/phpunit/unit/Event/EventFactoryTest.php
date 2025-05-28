@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
+use Error;
 use Generator;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -24,6 +25,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
+use Wikimedia\Message\IMessageFormatterFactory;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Event\EventFactory
@@ -114,6 +116,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$topicLookup = $this->createMock( ITopicRegistry::class );
 		$topicLookup->method( 'getAllTopics' )->willReturn( self::getValidTopics() );
 
+		$typesRegistry = new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) );
+
 		return new EventFactory(
 			$campaignsPageFactory,
 			$this->createMock( CampaignsPageFormatter::class ),
@@ -121,6 +125,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			$questionsRegistry,
 			$wikiLookup,
 			$topicLookup,
+			$typesRegistry,
 			$allowedNamespaces ?? [ NS_PROJECT ]
 		);
 	}
@@ -563,6 +568,67 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'Valid, HTTPS' => [ "https://example.org", true ],
 			'Valid, relative protocol' => [ "//example.org", true ],
 			'Valid, diacritics url ' => [ "https://testchat.com/Iñtërnâtiônàlizætiønمثال字ッ", true ],
+		];
+	}
+
+	/** @dataProvider provideValidateTypes */
+	public function testValidateTypes( $types, ?array $expectedErrors, $expectedTypes = null ) {
+		$args = self::getTestDataWithDefault( [ 'types' => $types ] );
+		$event = $this->doTestWithArgs( $args, $expectedErrors );
+		if ( $event ) {
+			$this->assertSame( $expectedTypes, $event->getTypes() );
+		}
+	}
+
+	public static function provideValidateTypes(): Generator {
+		yield 'No types' => [ [], [ 'campaignevents-error-no-types' ] ];
+		yield 'One type, valid' => [ [ 'meetup' ], null, [ 'meetup' ] ];
+		yield '"Other" type (valid)' => [
+			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			null,
+			[ EventTypesRegistry::EVENT_TYPE_OTHER ]
+		];
+		yield 'Multiple unique types, valid' => [ [ 'meetup', 'editing-event' ], null, [ 'meetup', 'editing-event' ] ];
+		yield 'Multiple types with duplicates, valid' => [
+			[ 'meetup', 'editing-event', 'meetup', 'editing-event' ],
+			null,
+			[ 'meetup', 'editing-event' ]
+		];
+		yield 'Duplicates are only counted once' => [
+			array_fill( 0, EventFactory::MAX_TYPES * 2, 'meetup' ),
+			null,
+			[ 'meetup' ]
+		];
+
+		$tooManyTypes = [ 'editing-event', 'meetup', 'workshop', 'training' ];
+		if ( count( $tooManyTypes ) <= EventFactory::MAX_TYPES ) {
+			throw new Error( 'Test case needs update, maximum number of allowed topics has changed' );
+		}
+		yield 'Too many types' => [
+			$tooManyTypes,
+			[ 'campaignevents-error-too-many-types' ]
+		];
+
+		yield 'Valid and invalid types' => [
+			[ 'meetup', 'doesnotexistype' ],
+			[ 'campaignevents-error-invalid-types' ]
+		];
+		yield 'Valid and invalid types with duplicates' => [
+			[ 'meetup', 'doesnotexistype', 'meetup', 'doesnotexistype' ],
+			[ 'campaignevents-error-invalid-types' ]
+		];
+		yield 'Only invalid types' => [
+			[ 'doesnotexistype', 'alsodoesnotexisttype' ],
+			[ 'campaignevents-error-invalid-types' ]
+		];
+		yield 'Invalid and too many types' => [
+			[ 'doesnotexisttype', ...$tooManyTypes ],
+			[ 'campaignevents-error-too-many-types', 'campaignevents-error-invalid-types' ]
+		];
+
+		yield '"Other" together with another type' => [
+			[ 'meetup', EventTypesRegistry::EVENT_TYPE_OTHER ],
+			[ 'campaignevents-error-invalid-other-selection' ]
 		];
 	}
 

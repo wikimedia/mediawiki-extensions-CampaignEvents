@@ -41,7 +41,10 @@
 	"campaignevents-error-empty-end": "Error message used when the given event end date is empty.",
 	"campaignevents-error-invalid-end": "Error message used when the given event end date is invalid.",
 	"campaignevents-error-start-after-end": "Error message used when the start date of an event is after the end date.",
-	"campaignevents-error-invalid-type": "Error message used when the given event type is invalid.",
+	"campaignevents-error-no-types": "Error message used when the user did not enter any types for an event.",
+	"campaignevents-error-too-many-types": "Error message used when the user entered too many types for an event.\nParameters:\n*$1 - The maximum allowed number of types.",
+	"campaignevents-error-invalid-types": "Error message used when the user entered invalid types for an event.\nParameters:\n*$1 - A comma-separated list of invalid types.",
+	"campaignevents-error-invalid-other-selection": "Error message shown on both [[Special:EnablingEventRegistration]] and [[Special:EditEventRegistration]] forms when the user selects \"Other\" along with one or more other event types. The \"Other\" option is meant to be exclusive.",
 	"campaignevents-error-too-many-wikis": "Error message used when the user entered too many target wikis for an event.\nParameters:\n*$1 - The maximum allowed number of wikis. This is guaranteed to be a large number (e.g., 100).",
 	"campaignevents-error-invalid-wikis": "Error message used when the user entered invalid target wikis for an event.\nParameters:\n*$1 - A comma-separated list of invalid wiki IDs.",
 	"campaignevents-error-too-many-topics": "Error message used when the user entered too many topics for an event.\nParameters:\n*$1 - The maximum allowed number of topics.",
@@ -558,6 +561,5 @@
 	"campaignevents-edit-field-eventtypes-other-section-header": "Label for the section or option named 'Other' in the event types multiselect dropdown.",
 	"campaignevents-edit-field-eventtypes-placeholder": "Placeholder text shown in the event types multiselect dropdown when no options are selected.",
 	"campaignevents-edit-field-eventtypes-other-help": "Help text explaining that selecting the 'Other' option will disable and deselect all other event types in the multiselect dropdown. \"Other\" is {{msg-mw|Campaignevents-edit-field-eventtypes-other-section-header}}",
-	"campaignevents-edit-field-eventtypes-label": "Label for the field where users can select one or more event types in a multiselect dropdown.",
-	"campaignevents-error-invalid-other-selection": "Error message shown on both [[Special:EnablingEventRegistration]] and [[Special:EditEventRegistration]] forms when the user selects \"Other\" along with one or more other event types. The \"Other\" option is meant to be exclusive. \"Other\" is {{msg-mw|Campaignevents-edit-field-eventtypes-other-section-header}}"
+	"campaignevents-edit-field-eventtypes-label": "Label for the field where users can select one or more event types in a multiselect dropdown."
 }

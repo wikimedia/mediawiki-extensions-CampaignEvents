@@ -43,7 +43,7 @@ class EventRegistration {
 	private DateTimeZone $timezone;
 	private string $startLocalTimestamp;
 	private string $endLocalTimestamp;
-	/** @var list<string> Event type names */
+	/** @var non-empty-list<string> Event type names */
 	private array $types;
 	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
 	private $wikis;
@@ -75,7 +75,7 @@ class EventRegistration {
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
-	 * @param list<string> $types
+	 * @param non-empty-list<string> $types
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param string[] $topics
 	 * @param TrackingToolAssociation[] $trackingTools
@@ -123,6 +123,11 @@ class EventRegistration {
 			MWTimestamp::convert( TS_MW, $endLocalTimestamp ) === $endLocalTimestamp,
 			'$endLocalTimestamp',
 			'Should be in TS_MW format.'
+		);
+		Assert::parameter(
+			count( $types ) >= 1,
+			'$types',
+			'Must have at least one type'
 		);
 		Assert::parameter(
 			count( $trackingTools ) <= 1,
@@ -208,6 +213,7 @@ class EventRegistration {
 		return wfTimestamp( TS_UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 	}
 
+	/** @return non-empty-list<string> */
 	public function getTypes(): array {
 		return $this->types;
 	}

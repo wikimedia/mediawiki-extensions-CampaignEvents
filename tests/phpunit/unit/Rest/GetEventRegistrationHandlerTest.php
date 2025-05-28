@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -88,7 +89,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['timezone'],
 			wfTimestamp( TS_MW, $eventData['start_time'] ),
 			wfTimestamp( TS_MW, $eventData['end_time'] ),
-			[],
+			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			$eventData['wikis'],
 			$eventData['topics'],
 			[

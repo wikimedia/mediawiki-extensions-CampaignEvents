@@ -8,6 +8,7 @@ use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -104,7 +105,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			new DateTimeZone( 'UTC' ),
 			'20240229120000',
 			'20240301120000',
-			[],
+			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			[],
 			[],
 			[],

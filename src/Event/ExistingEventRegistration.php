@@ -22,7 +22,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
-	 * @param list<string> $types
+	 * @param non-empty-list<string> $types
 	 * @param string[]|true $wikis
 	 * @param string[] $topics
 	 * @param TrackingToolAssociation[] $trackingTools
