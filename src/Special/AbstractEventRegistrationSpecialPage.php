@@ -33,6 +33,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
+use MediaWiki\Message\Message;
 use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\User\UserTimeCorrection;
@@ -383,6 +384,17 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'placeholder-message' => 'campaignevents-edit-field-wikis-placeholder',
 			'help-message' => 'campaignevents-edit-field-wikis-help',
 			'hide-if' => [ '!==', 'WikiType', (string)self::WIKI_TYPE_SPECIFIC ],
+			/**
+			 * @param mixed $value
+			 * @param array<string,mixed> $alldata
+			 * @return Message|true
+			 */
+			'validation-callback' => function ( $value, array $alldata ) {
+				if ( $value === [] && $alldata['WikiType'] === (string)self::WIKI_TYPE_SPECIFIC ) {
+					return $this->msg( 'campaignevents-edit-field-wikis-empty-specific' );
+				}
+				return true;
+			},
 			'cssclass' => 'ext-campaignevents-edit-wikis-input',
 			'section' => self::DETAILS_SECTION,
 		];

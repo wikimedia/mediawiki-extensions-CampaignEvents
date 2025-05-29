@@ -80,6 +80,7 @@
 	"campaignevents-edit-field-wikis-label": "Target wikis",
 	"campaignevents-edit-field-wikis-placeholder": "Add specific wikis",
 	"campaignevents-edit-field-wikis-help": "If your event is taking place on specific wikis, please list them here. This helps people decide which events to attend, and it also helps with analytics.",
+	"campaignevents-edit-field-wikis-empty-specific": "Enter at least one wiki",
 	"campaignevents-edit-field-tracking-tools": "Programs & Events Dashboard link",
 	"campaignevents-edit-field-tracking-tools-help": "Usernames of publicly registered participants will be automatically sent to the Dashboard. This tool helps you monitor participant contributions and measure the impact of your campaign event. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Learn more].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Enter the Programs & Events Dashboard URL for your event",
