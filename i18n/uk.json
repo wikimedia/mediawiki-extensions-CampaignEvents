@@ -536,5 +536,22 @@
 	"campaignevents-allevents-transclusion-more-link": "Дізнайтеся більше про події та спільноти",
 	"communityconfiguration-campaignevents-description": "Параметри конфігурації для розширення CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Дійсні простори назв для подій",
-	"campaignevents-email-participants-missing-address-uncertain": "Деякі з вибраних учасників можуть не мати адреси електронної пошти у своєму обліковому записі та не отримають вашого електронного листа."
+	"campaignevents-email-participants-missing-address-uncertain": "Деякі з вибраних учасників можуть не мати адреси електронної пошти у своєму обліковому записі та не отримають вашого електронного листа.",
+	"campaignevents-eventtype-editing-event": "Захід з редагування",
+	"campaignevents-eventtype-media-upload-event": "Захід із завантаження медіафайлів",
+	"campaignevents-eventtype-backlog-drive": "Виконання накопичених завдань",
+	"campaignevents-eventtype-contest": "Конкурс",
+	"campaignevents-eventtype-workshop": "Воркшоп",
+	"campaignevents-eventtype-training": "Тренінг / семінар",
+	"campaignevents-eventtype-meetup": "Зустріч",
+	"campaignevents-eventtype-hackathon": "Хакатон",
+	"campaignevents-eventtype-conference": "Конференція",
+	"campaignevents-eventtype-other": "Інше",
+	"campaignevents-eventtypegroup-contributions": "Внесок",
+	"campaignevents-eventtypegroup-community": "Спільнота",
+	"campaignevents-edit-field-eventtypes-other-section-header": "Інше",
+	"campaignevents-edit-field-eventtypes-placeholder": "Виберіть типи подій…",
+	"campaignevents-edit-field-eventtypes-other-help": "Вибір опції «Інше» вимкне та скасує вибір усіх інших типів подій.",
+	"campaignevents-edit-field-eventtypes-label": "Типи події",
+	"campaignevents-error-invalid-other-selection": "Ви не можете вибрати «Інше» разом з іншими типами подій. Виберіть лише «Інше» або видаліть його, щоб вибрати інші опції."
 }
