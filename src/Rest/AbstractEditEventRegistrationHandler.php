@@ -123,18 +123,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'title',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'chat_url' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-			],
-			'tracking_tool_id' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-			],
-			'tracking_tool_event_id' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-			],
 			'timezone' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
@@ -166,6 +154,14 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TOPICS,
 			],
+			'tracking_tool_id' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'string',
+			],
+			'tracking_tool_event_id' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'string',
+			],
 			'online_meeting' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
@@ -187,6 +183,10 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 				StringDef::PARAM_MAX_BYTES => EventFactory::ADDRESS_MAXLENGTH_BYTES,
+			],
+			'chat_url' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'string',
 			],
 			'is_test_event' => [
 				static::PARAM_SOURCE => 'body',

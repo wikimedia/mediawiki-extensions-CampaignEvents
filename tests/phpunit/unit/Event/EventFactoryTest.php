@@ -36,25 +36,25 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	private const VALID_DEFAULT_DATA = [
 		'id' => 42,
 		'page' => 'Project:Some event page title',
-		'chat' => 'https://chaturl.example.org',
-		'wikis' => [ 'aawiki' ],
-		'topics' => [ 'atopic', 'btopic' ],
-		'trackingid' => null,
-		'trackingeventid' => null,
 		'status' => EventRegistration::STATUS_OPEN,
 		'timezone' => 'UTC',
 		'start' => '20220308120000',
 		'end' => '20220308150000',
 		'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+		'wikis' => [ 'aawiki' ],
+		'topics' => [ 'atopic', 'btopic' ],
+		'trackingid' => null,
+		'trackingeventid' => null,
 		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',
 		'address' => 'Address',
+		'chat' => 'https://chaturl.example.org',
+		'istest' => false,
 		'questions' => [ 'age' ],
 		'creation' => '20220308100000',
 		'lastedit' => '20220308100000',
 		'deletion' => null,
-		'istest' => false,
 		'validationFlags' => EventFactory::VALIDATE_ALL,
 		'previouspage' => null,
 	];
@@ -243,24 +243,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			},
 		];
 
-		yield 'Invalid chat URL' => [
-			'campaignevents-error-invalid-chat-url',
-			self::getTestDataWithDefault( [ 'chat' => 'not-an-url' ] )
-		];
-
-		yield 'Tracking tool without its event ID' => [
-			'campaignevents-error-trackingtool-without-eventid',
-			self::getTestDataWithDefault( [ 'trackingid' => self::VALID_TRACKING_TOOL, 'trackingeventid' => null ] )
-		];
-		yield 'Tracking tool event ID without tracking tool' => [
-			'campaignevents-error-trackingtool-eventid-without-toolid',
-			self::getTestDataWithDefault( [ 'trackingid' => null, 'trackingeventid' => 'foo' ] )
-		];
-		yield 'Invalid tracking tool ID' => [
-			'campaignevents-error-invalid-trackingtool',
-			self::getTestDataWithDefault( [ 'trackingid' => 'invalid-tracking-tool', 'trackingeventid' => 'foo' ] )
-		];
-
 		yield 'Invalid status' => [
 			'campaignevents-error-invalid-status',
 			self::getTestDataWithDefault( [ 'status' => 'Some invalid status' ] )
@@ -271,6 +253,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-invalid-timezone',
 			self::getTestDataWithDefault( [ 'timezone' => 'Some invalid timezone' ] )
 		];
+
 		yield 'Empty start timestamp' => [
 			'campaignevents-error-empty-start',
 			self::getTestDataWithDefault( [ 'start' => '' ] )
@@ -313,6 +296,20 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-start-after-end',
 			self::getTestDataWithDefault( [ 'start' => '20220308160000', 'end' => '20220308120000' ] )
 		];
+
+		yield 'Tracking tool without its event ID' => [
+			'campaignevents-error-trackingtool-without-eventid',
+			self::getTestDataWithDefault( [ 'trackingid' => self::VALID_TRACKING_TOOL, 'trackingeventid' => null ] )
+		];
+		yield 'Tracking tool event ID without tracking tool' => [
+			'campaignevents-error-trackingtool-eventid-without-toolid',
+			self::getTestDataWithDefault( [ 'trackingid' => null, 'trackingeventid' => 'foo' ] )
+		];
+		yield 'Invalid tracking tool ID' => [
+			'campaignevents-error-invalid-trackingtool',
+			self::getTestDataWithDefault( [ 'trackingid' => 'invalid-tracking-tool', 'trackingeventid' => 'foo' ] )
+		];
+
 		yield 'No meeting type' => [
 			'campaignevents-error-no-meeting-type',
 			self::getTestDataWithDefault( [ 'meetingtype' => 0 ] )
@@ -393,6 +390,11 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
 				'meetingurl' => 'https://explicitly-set.example.org',
 			] )
+		];
+
+		yield 'Invalid chat URL' => [
+			'campaignevents-error-invalid-chat-url',
+			self::getTestDataWithDefault( [ 'chat' => 'not-an-url' ] )
 		];
 
 		yield 'Invalid participant question' => [

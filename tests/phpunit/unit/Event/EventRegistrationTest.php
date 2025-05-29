@@ -27,7 +27,11 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 				new PageIdentityValue( 42, NS_PROJECT, 'Name', PageIdentityValue::LOCAL ),
 				'Project:Name'
 			),
-			'chat' => 'https://chat.example.org',
+			'status' => EventRegistration::STATUS_OPEN,
+			'timezone' => new DateTimeZone( 'UTC' ),
+			'start' => '20220815120000',
+			'end' => '20220815120001',
+			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
 			'tracking_tools' => [
@@ -38,20 +42,16 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 					null
 				)
 			],
-			'status' => EventRegistration::STATUS_OPEN,
-			'timezone' => new DateTimeZone( 'UTC' ),
-			'start' => '20220815120000',
-			'end' => '20220815120001',
-			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'country' => 'Some country',
 			'address' => 'Some address',
+			'chat' => 'https://chat.example.org',
+			'is_test_event' => false,
 			'questions' => [],
 			'creation' => '1650000000',
 			'last_edit' => '1651000000',
 			'deletion' => null,
-			'is_test_event' => false
 		];
 	}
 
@@ -82,23 +82,23 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['id'], $registration->getID(), 'id' );
 		$this->assertSame( $data['name'], $registration->getName(), 'name' );
 		$this->assertSame( $data['page'], $registration->getPage(), 'page' );
-		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
-		$this->assertSame( $data['wikis'], $registration->getWikis(), 'wikis' );
-		$this->assertSame( $data['topics'], $registration->getTopics(), 'topics' );
-		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
 		$this->assertSame( $data['status'], $registration->getStatus(), 'status' );
 		$this->assertSame( $data['timezone']->getName(), $registration->getTimezone()->getName(), 'timezone' );
 		$this->assertSame( $data['start'], $registration->getStartLocalTimestamp(), 'start' );
 		$this->assertSame( $data['end'], $registration->getEndLocalTimestamp(), 'end' );
+		$this->assertSame( $data['wikis'], $registration->getWikis(), 'wikis' );
+		$this->assertSame( $data['topics'], $registration->getTopics(), 'topics' );
+		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
 		$this->assertSame( $data['meeting_type'], $registration->getMeetingType(), 'meeting_type' );
 		$this->assertSame( $data['meeting_url'], $registration->getMeetingURL(), 'meeting_url' );
 		$this->assertSame( $data['country'], $registration->getMeetingCountry(), 'country' );
 		$this->assertSame( $data['address'], $registration->getMeetingAddress(), 'address' );
+		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
+		$this->assertSame( $data['is_test_event'], $registration->getIsTestEvent(), 'is_test_event' );
 		$this->assertSame( $data['questions'], $registration->getParticipantQuestions(), 'questions' );
 		$this->assertSame( $data['creation'], $registration->getCreationTimestamp(), 'creation' );
 		$this->assertSame( $data['last_edit'], $registration->getLastEditTimestamp(), 'last_edit' );
 		$this->assertSame( $data['deletion'], $registration->getDeletionTimestamp(), 'deletion' );
-		$this->assertSame( $data['is_test_event'], $registration->getIsTestEvent(), 'is_test_event' );
 	}
 
 	/**

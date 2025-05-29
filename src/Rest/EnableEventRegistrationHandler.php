@@ -62,25 +62,25 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		return $this->eventFactory->newEvent(
 			null,
 			$body['event_page'],
-			$body['chat_url'],
-			$wikis,
-			$body['topics'] ?? [],
-			$body['tracking_tool_id'],
-			$body['tracking_tool_event_id'],
 			EventRegistration::STATUS_OPEN,
 			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
 			[],
+			$wikis,
+			$body['topics'] ?? [],
+			$body['tracking_tool_id'],
+			$body['tracking_tool_event_id'],
 			$meetingType,
 			$body['meeting_url'],
 			$body['meeting_country'],
 			$body['meeting_address'],
+			$body['chat_url'],
+			$body['is_test_event'],
 			$participantQuestionNames,
 			null,
 			null,
-			null,
-			$body['is_test_event']
+			null
 		);
 	}
 }

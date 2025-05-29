@@ -32,7 +32,6 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 	function getBody( token ) {
 		return {
 			event_page: eventPage,
-			chat_url: 'https://example.org',
 			timezone: 'UTC',
 			start_time: '30200220200220',
 			end_time: '30200220200222',
@@ -40,6 +39,7 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 			// type: 'generic',
 			wikis: [],
 			online_meeting: true,
+			chat_url: 'https://example.org',
 			token: token
 		};
 	}

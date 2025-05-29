@@ -440,24 +440,24 @@ class EventStore implements IEventStore, IEventLookup {
 			(int)$row->event_id,
 			$row->event_name,
 			$eventPage,
-			$row->event_chat_url !== '' ? $row->event_chat_url : null,
-			$wikis,
-			$topics,
-			$trackingTools,
 			self::getEventStatusFromDBVal( $row->event_status ),
 			new DateTimeZone( $row->event_timezone ),
 			wfTimestamp( TS_MW, $row->event_start_local ),
 			wfTimestamp( TS_MW, $row->event_end_local ),
 			$types,
+			$wikis,
+			$topics,
+			$trackingTools,
 			$meetingType,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
 			$country,
 			$address,
+			$row->event_chat_url !== '' ? $row->event_chat_url : null,
+			(bool)$row->event_is_test_event,
 			$questionIDs,
 			wfTimestamp( TS_UNIX, $row->event_created_at ),
 			wfTimestamp( TS_UNIX, $row->event_last_edit ),
-			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at ),
-			(bool)$row->event_is_test_event
+			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at )
 		);
 	}
 

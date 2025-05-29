@@ -100,24 +100,24 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			null,
 			$page->getTitle()->getText(),
 			new MWPageProxy( $page, $page->getTitle()->getPrefixedText() ),
-			null,
-			[],
-			[],
-			[],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20240229120000',
 			'20240301120000',
 			[],
+			[],
+			[],
+			[],
 			EventRegistration::MEETING_TYPE_ONLINE,
 			null,
 			null,
 			null,
+			null,
+			false,
 			[],
 			null,
 			null,
-			null,
-			false
+			null
 		);
 		$eventID = CampaignEventsServices::getEventStore()->saveRegistration( $event );
 

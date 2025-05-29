@@ -18,71 +18,71 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param int $id
 	 * @param string $name
 	 * @param MWPageProxy $page
-	 * @param string|null $chatURL
-	 * @param string[]|true $wikis
-	 * @param string[] $topics
-	 * @param TrackingToolAssociation[] $trackingTools
-	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string $status
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param list<string> $types
+	 * @param string[]|true $wikis
+	 * @param string[] $topics
+	 * @param TrackingToolAssociation[] $trackingTools
+	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
+	 * @param string|null $chatURL
+	 * @param bool $isTestEvent
 	 * @param int[] $participantQuestions
 	 * @param string $creationTimestamp UNIX timestamp
 	 * @param string $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
-	 * @param bool $isTestEvent
 	 */
 	public function __construct(
 		int $id,
 		string $name,
 		MWPageProxy $page,
-		?string $chatURL,
-		$wikis,
-		array $topics,
-		array $trackingTools,
 		string $status,
 		DateTimeZone $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
+		$wikis,
+		array $topics,
+		array $trackingTools,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
+		?string $chatURL,
+		bool $isTestEvent,
 		array $participantQuestions,
 		string $creationTimestamp,
 		string $lastEditTimestamp,
-		?string $deletionTimestamp,
-		bool $isTestEvent
+		?string $deletionTimestamp
 	) {
 		parent::__construct(
 			$id,
 			$name,
 			$page,
-			$chatURL,
-			$wikis,
-			$topics,
-			$trackingTools,
 			$status,
 			$timezone,
 			$startLocalTimestamp,
 			$endLocalTimestamp,
 			$types,
+			$wikis,
+			$topics,
+			$trackingTools,
 			$meetingType,
 			$meetingURL,
 			$meetingCountry,
 			$meetingAddress,
+			$chatURL,
+			$isTestEvent,
 			$participantQuestions,
 			$creationTimestamp,
 			$lastEditTimestamp,
-			$deletionTimestamp,
-			$isTestEvent
+			$deletionTimestamp
 		);
 	}
 

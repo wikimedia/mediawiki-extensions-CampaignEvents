@@ -38,7 +38,13 @@ class EventRegistration {
 	 */
 	private string $name;
 	private MWPageProxy $page;
-	private ?string $chatURL;
+	/** @var string One of the STATUS_* constants */
+	private string $status;
+	private DateTimeZone $timezone;
+	private string $startLocalTimestamp;
+	private string $endLocalTimestamp;
+	/** @var list<string> Event type names */
+	private array $types;
 	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
 	private $wikis;
 	/** @var string[] */
@@ -48,71 +54,65 @@ class EventRegistration {
 	 * @phan-var list<TrackingToolAssociation>
 	 */
 	private array $trackingTools;
-	/** @var string One of the STATUS_* constants */
-	private string $status;
-	private DateTimeZone $timezone;
-	private string $startLocalTimestamp;
-	private string $endLocalTimestamp;
-	/** @var list<string> Event type names */
-	private array $types;
 	/** @var int One of the MEETING_TYPE_* constants */
 	private int $meetingType;
 	private ?string $meetingURL;
 	private ?string $meetingCountry;
 	private ?string $meetingAddress;
+	private ?string $chatURL;
+	private bool $isTestEvent;
 	/** @var int[] Array of database IDs */
 	private array $participantQuestions;
 	private ?string $creationTimestamp;
 	private ?string $lastEditTimestamp;
 	private ?string $deletionTimestamp;
-	private bool $isTestEvent;
 
 	/**
 	 * @param int|null $id
 	 * @param string $name
 	 * @param MWPageProxy $page
-	 * @param string|null $chatURL
-	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
-	 * @param string[] $topics
-	 * @param TrackingToolAssociation[] $trackingTools
-	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string $status
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param list<string> $types
+	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
+	 * @param string[] $topics
+	 * @param TrackingToolAssociation[] $trackingTools
+	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
+	 * @param string|null $chatURL
+	 * @param bool $isTestEvent
 	 * @param array $participantQuestions
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
-	 * @param bool $isTestEvent
 	 */
 	public function __construct(
 		?int $id,
 		string $name,
 		MWPageProxy $page,
-		?string $chatURL,
-		$wikis,
-		array $topics,
-		array $trackingTools,
 		string $status,
 		DateTimeZone $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
+		$wikis,
+		array $topics,
+		array $trackingTools,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
+		?string $chatURL,
+		bool $isTestEvent,
 		array $participantQuestions,
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
-		?string $deletionTimestamp,
-		bool $isTestEvent
+		?string $deletionTimestamp
 	) {
 		Assert::parameter(
 			MWTimestamp::convert( TS_MW, $startLocalTimestamp ) === $startLocalTimestamp,
@@ -132,24 +132,24 @@ class EventRegistration {
 		$this->id = $id;
 		$this->name = $name;
 		$this->page = $page;
-		$this->chatURL = $chatURL;
-		$this->wikis = $wikis;
-		$this->trackingTools = $trackingTools;
 		$this->status = $status;
 		$this->timezone = $timezone;
 		$this->startLocalTimestamp = $startLocalTimestamp;
 		$this->endLocalTimestamp = $endLocalTimestamp;
 		$this->types = $types;
+		$this->wikis = $wikis;
+		$this->topics = $topics;
+		$this->trackingTools = $trackingTools;
 		$this->meetingType = $meetingType;
 		$this->meetingURL = $meetingURL;
 		$this->meetingCountry = $meetingCountry;
 		$this->meetingAddress = $meetingAddress;
+		$this->chatURL = $chatURL;
+		$this->isTestEvent = $isTestEvent;
 		$this->participantQuestions = $participantQuestions;
 		$this->creationTimestamp = $creationTimestamp;
 		$this->lastEditTimestamp = $lastEditTimestamp;
 		$this->deletionTimestamp = $deletionTimestamp;
-		$this->isTestEvent = $isTestEvent;
-		$this->topics = $topics;
 	}
 
 	public function getID(): ?int {
@@ -162,32 +162,6 @@ class EventRegistration {
 
 	public function getPage(): MWPageProxy {
 		return $this->page;
-	}
-
-	public function getChatURL(): ?string {
-		return $this->chatURL;
-	}
-
-	/**
-	 * @return string[]|true A list of wiki IDs, or {@see self::ALL_WIKIS}.
-	 */
-	public function getWikis() {
-		return $this->wikis;
-	}
-
-	/**
-	 * @return string[] A list of topics.
-	 */
-	public function getTopics(): array {
-		return $this->topics;
-	}
-
-	/**
-	 * @return TrackingToolAssociation[]
-	 * @phan-return list<TrackingToolAssociation>
-	 */
-	public function getTrackingTools(): array {
-		return $this->trackingTools;
 	}
 
 	public function getStatus(): string {
@@ -238,6 +212,28 @@ class EventRegistration {
 		return $this->types;
 	}
 
+	/**
+	 * @return string[]|true A list of wiki IDs, or {@see self::ALL_WIKIS}.
+	 */
+	public function getWikis() {
+		return $this->wikis;
+	}
+
+	/**
+	 * @return string[] A list of topics.
+	 */
+	public function getTopics(): array {
+		return $this->topics;
+	}
+
+	/**
+	 * @return TrackingToolAssociation[]
+	 * @phan-return list<TrackingToolAssociation>
+	 */
+	public function getTrackingTools(): array {
+		return $this->trackingTools;
+	}
+
 	public function getMeetingType(): int {
 		return $this->meetingType;
 	}
@@ -252,6 +248,14 @@ class EventRegistration {
 
 	public function getMeetingAddress(): ?string {
 		return $this->meetingAddress;
+	}
+
+	public function getChatURL(): ?string {
+		return $this->chatURL;
+	}
+
+	public function getIsTestEvent(): bool {
+		return $this->isTestEvent;
 	}
 
 	/**
@@ -271,10 +275,6 @@ class EventRegistration {
 
 	public function getDeletionTimestamp(): ?string {
 		return $this->deletionTimestamp;
-	}
-
-	public function getIsTestEvent(): bool {
-		return $this->isTestEvent;
 	}
 
 	public function isOnLocalWiki(): bool {

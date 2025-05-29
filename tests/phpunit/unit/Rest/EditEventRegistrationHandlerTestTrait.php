@@ -14,17 +14,17 @@ trait EditEventRegistrationHandlerTestTrait {
 
 	private static array $defaultEventParams = [
 		'event_page' => 'Some event page title',
-		'chat_url' => 'https://chaturl.example.org',
-		'wikis' => [ '*' ],
-		'topics' => [],
 		'timezone' => 'UTC',
 		'start_time' => '20220308120000',
 		'end_time' => '20220308150000',
+		'wikis' => [ '*' ],
+		'topics' => [],
 		'online_meeting' => true,
 		'inperson_meeting' => true,
 		'meeting_url' => 'https://meetingurl.example.org',
 		'meeting_country' => 'Country',
 		'meeting_address' => 'Address',
+		'chat_url' => 'https://chaturl.example.org',
 		'is_test_event' => false,
 	];
 

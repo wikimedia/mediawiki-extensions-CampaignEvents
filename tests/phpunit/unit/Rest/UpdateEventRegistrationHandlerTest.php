@@ -242,7 +242,7 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 
 		$eventFactory = $this->createMock( EventFactory::class );
 		$eventFactory->expects( $this->once() )->method( 'newEvent' )
-			->willReturnCallback( function ( $id, $page, $url, $wikis ) {
+			->willReturnCallback( function ( $id, $page, $status, $tz, $start, $end, $types, $wikis ) {
 				$this->assertSame( EventRegistration::ALL_WIKIS, $wikis );
 				return $this->createMock( EventRegistration::class );
 			} );

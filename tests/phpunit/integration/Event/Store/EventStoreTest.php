@@ -37,7 +37,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
 				'Event page'
 			),
-			'Chat URL',
+			EventRegistration::STATUS_OPEN,
+			new DateTimeZone( 'UTC' ),
+			'20220810000000',
+			'20220810000001',
+			[],
 			[ 'awiki', 'bwiki' ],
 			[ 'atopic', 'btopic' ],
 			[
@@ -48,20 +52,16 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 					null
 				)
 			],
-			EventRegistration::STATUS_OPEN,
-			new DateTimeZone( 'UTC' ),
-			'20220810000000',
-			'20220810000001',
-			[],
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'Country',
 			'Address',
+			'Chat URL',
+			false,
 			[],
 			null,
 			null,
-			null,
-			false
+			null
 		);
 	}
 
@@ -70,15 +70,15 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getPage()->getNamespace(), $actual->getPage()->getNamespace(), 'Page ns' );
 		$this->assertSame( $expected->getPage()->getDBkey(), $actual->getPage()->getDBkey(), 'Page dbkey' );
 		$this->assertSame( $expected->getPage()->getWikiId(), $actual->getPage()->getWikiId(), 'Page wiki ID' );
-		$this->assertSame( $expected->getWikis(), $actual->getWikis(), 'wikis' );
-		$this->assertSame( $expected->getTopics(), $actual->getTopics(), 'topics' );
-		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
 		$this->assertSame( $expected->getStatus(), $actual->getStatus(), 'status' );
 		$this->assertSame( $expected->getTimezone()->getName(), $actual->getTimezone()->getName(), 'timezone' );
 		$this->assertSame( $expected->getStartLocalTimestamp(), $actual->getStartLocalTimestamp(), 'local start' );
 		$this->assertSame( $expected->getStartUTCTimestamp(), $actual->getStartUTCTimestamp(), 'UTC start' );
 		$this->assertSame( $expected->getEndLocalTimestamp(), $actual->getEndLocalTimestamp(), 'local end' );
 		$this->assertSame( $expected->getEndUTCTimestamp(), $actual->getEndUTCTimestamp(), 'UTC end' );
+		$this->assertSame( $expected->getWikis(), $actual->getWikis(), 'wikis' );
+		$this->assertSame( $expected->getTopics(), $actual->getTopics(), 'topics' );
+		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
 		$this->assertSame( $expected->getMeetingType(), $actual->getMeetingType(), 'meeting type' );
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
 		$this->assertSame( $expected->getMeetingCountry(), $actual->getMeetingCountry(), 'country' );
@@ -346,24 +346,24 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
 				'Event page'
 			),
-			'Chat URL',
-			[ 'awiki', 'bwiki', 'cwiki' ],
-			[ 'atopic', 'btopic' ],
-			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
 			'20220731080000',
 			'20220731160000',
 			[],
+			[ 'awiki', 'bwiki', 'cwiki' ],
+			[ 'atopic', 'btopic' ],
+			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'Country' => 'Country',
 			'Address' => 'Address',
+			'Chat URL',
+			false,
 			[],
 			null,
 			null,
 			'del' => null,
-			false
 		];
 	}
 

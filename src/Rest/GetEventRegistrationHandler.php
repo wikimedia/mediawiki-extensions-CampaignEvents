@@ -53,24 +53,24 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'name' => $registration->getName(),
 			'event_page' => $page->getPrefixedText(),
 			'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
-			'chat_url' => $registration->getChatURL(),
-			'tracking_tools' => $trackingToolsData,
 			'status' => $registration->getStatus(),
 			'timezone' => $registration->getTimezone()->getName(),
 			'start_time' => wfTimestamp( TS_MW, $registration->getStartLocalTimestamp() ),
 			'end_time' => wfTimestamp( TS_MW, $registration->getEndLocalTimestamp() ),
 			// TODO MVP: Re-add this
 			// 'type' => $registration->getType(),
+			// Use the same format as the write endpoints, which rely on ParamValidator::PARAM_ALL.
+			'wikis' => $wikis === EventRegistration::ALL_WIKIS ? [ '*' ] : $wikis,
+			'topics' => $registration->getTopics(),
+			'tracking_tools' => $trackingToolsData,
 			'online_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) !== 0,
 			'inperson_meeting' => ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_IN_PERSON ) !== 0,
 			'meeting_url' => $registration->getMeetingURL(),
 			'meeting_country' => $registration->getMeetingCountry(),
 			'meeting_address' => $registration->getMeetingAddress(),
-			'questions' => $registration->getParticipantQuestions(),
+			'chat_url' => $registration->getChatURL(),
 			'is_test_event' => $registration->getIsTestEvent(),
-			// Use the same format as the write endpoints, which rely on ParamValidator::PARAM_ALL.
-			'wikis' => $wikis === EventRegistration::ALL_WIKIS ? [ '*' ] : $wikis,
-			'topics' => $registration->getTopics(),
+			'questions' => $registration->getParticipantQuestions(),
 		];
 
 		return $this->getResponseFactory()->createJson( $respVal );

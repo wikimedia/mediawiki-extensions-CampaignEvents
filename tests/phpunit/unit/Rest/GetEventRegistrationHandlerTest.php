@@ -61,22 +61,22 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'name' => 'Some name',
 			'event_page' => $eventPageStr,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
-			'chat_url' => 'https://some-chat.example.org',
-			'wikis' => [ 'awiki', 'bwiki' ],
-			'topics' => [ 'atopic', 'btopic' ],
-			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
-			'tracking_tool_event_id' => 'bar',
 			'status' => EventRegistration::STATUS_OPEN,
 			'timezone' => new DateTimeZone( $timezoneName ),
 			'start_time' => '20220220200220',
 			'end_time' => '20220220200222',
+			'wikis' => [ 'awiki', 'bwiki' ],
+			'topics' => [ 'atopic', 'btopic' ],
+			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
+			'tracking_tool_event_id' => 'bar',
 			'online_meeting' => true,
 			'inperson_meeting' => true,
 			'meeting_url' => 'https://meeting-url.example.org',
 			'meeting_country' => 'My country',
 			'meeting_address' => 'My address 123',
+			'chat_url' => 'https://some-chat.example.org',
+			'is_test_event' => false,
 			'questions' => [],
-			'is_test_event' => false
 		];
 		$meetingType = ( $eventData['online_meeting'] ? EventRegistration::MEETING_TYPE_ONLINE : 0 )
 			| ( $eventData['inperson_meeting'] ? EventRegistration::MEETING_TYPE_IN_PERSON : 0 );
@@ -84,7 +84,11 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['id'],
 			$eventData['name'],
 			$eventPage,
-			$eventData['chat_url'],
+			$eventData['status'],
+			$eventData['timezone'],
+			wfTimestamp( TS_MW, $eventData['start_time'] ),
+			wfTimestamp( TS_MW, $eventData['end_time'] ),
+			[],
 			$eventData['wikis'],
 			$eventData['topics'],
 			[
@@ -95,20 +99,16 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 					null
 				)
 			],
-			$eventData['status'],
-			$eventData['timezone'],
-			wfTimestamp( TS_MW, $eventData['start_time'] ),
-			wfTimestamp( TS_MW, $eventData['end_time'] ),
-			[],
 			$meetingType,
 			$eventData['meeting_url'],
 			$eventData['meeting_country'],
 			$eventData['meeting_address'],
+			$eventData['chat_url'],
+			$eventData['is_test_event'],
 			$eventData['questions'],
 			'1646000000',
 			'1646000000',
-			null,
-			$eventData['is_test_event']
+			null
 		);
 		$eventLookup = $this->createMock( IEventLookup::class );
 		$eventLookup->expects( $this->once() )

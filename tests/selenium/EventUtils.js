@@ -65,11 +65,11 @@ module.exports = {
 		/* eslint-disable camelcase */
 		const data = {
 			event_page: eventPage,
+			timezone: 'EST',
 			start_time: '29990414160000',
 			end_time: '29990515170000',
 			wikis: [],
-			online_meeting: true,
-			timezone: 'EST'
+			online_meeting: true
 		};
 		/* eslint-enable camelcase */
 

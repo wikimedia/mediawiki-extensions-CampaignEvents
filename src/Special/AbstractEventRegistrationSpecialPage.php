@@ -330,6 +330,28 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
+		if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
+			$formFields['EventTypes'] = [
+				'type' => 'multiselect',
+				'dropdown' => true,
+				'label-message' => 'campaignevents-edit-field-eventtypes-label',
+				'default' => $this->event ? $this->event->getTypes() : [],
+				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
+				'placeholder-message' => 'campaignevents-edit-field-eventtypes-placeholder',
+				'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
+				'cssclass' => 'ext-campaignevents-edit-eventtypes-input',
+				'section' => self::DETAILS_SECTION,
+				'max' => 5,
+				'validation-callback' => function ( $value ) {
+					if ( count( $value ) > 1 && in_array( EventTypesRegistry::EVENT_TYPE_OTHER, $value, true ) ) {
+						return $this->msg( 'campaignevents-error-invalid-other-selection' )
+							->text();
+					}
+					return true;
+				},
+			];
+		}
+
 		$eventWikis = $this->event ? $this->event->getWikis() : [];
 		if ( $eventWikis === [] ) {
 			$defaultWikiType = self::WIKI_TYPE_NONE;
@@ -378,28 +400,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'cssclass' => 'ext-campaignevents-edit-topics-input',
 				'section' => self::DETAILS_SECTION,
 				'max' => EventFactory::MAX_TOPICS
-			];
-		}
-
-		if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
-			$formFields['EventTypes'] = [
-				'type' => 'multiselect',
-				'dropdown' => true,
-				'label-message' => 'campaignevents-edit-field-eventtypes-label',
-				'default' => $this->event ? $this->event->getTypes() : [],
-				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
-				'placeholder-message' => 'campaignevents-edit-field-eventtypes-placeholder',
-				'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
-				'cssclass' => 'ext-campaignevents-edit-eventtypes-input',
-				'section' => self::DETAILS_SECTION,
-				'max' => 5,
-				'validation-callback' => function ( $value ) {
-					if ( count( $value ) > 1 && in_array( EventTypesRegistry::EVENT_TYPE_OTHER, $value, true ) ) {
-						return $this->msg( 'campaignevents-error-invalid-other-selection' )
-							->text();
-					}
-					return true;
-				},
 			];
 		}
 
@@ -716,26 +716,26 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
-				$data['EventChatURL'],
-				$wikis,
-				$data['Topics'] ?? [],
-				$trackingToolUserID,
-				$trackingToolEventID,
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
 				$this->parseSubmittedTimezone( $data['TimeZone'] ),
 				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
 				$types,
+				$wikis,
+				$data['Topics'] ?? [],
+				$trackingToolUserID,
+				$trackingToolEventID,
 				$meetingType,
 				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingAddress'] : null,
+				$data['EventChatURL'],
+				$testEvent,
 				$participantQuestionNames,
 				$this->event ? $this->event->getCreationTimestamp() : null,
 				$this->event ? $this->event->getLastEditTimestamp() : null,
 				$this->event ? $this->event->getDeletionTimestamp() : null,
-				$testEvent,
 				$this->getValidationFlags(),
 				$this->event ? $this->event->getPage() : null
 			);

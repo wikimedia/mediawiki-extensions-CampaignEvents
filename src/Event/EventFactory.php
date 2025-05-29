@@ -82,25 +82,25 @@ class EventFactory {
 	 *
 	 * @param int|null $id
 	 * @param string $pageTitleStr
-	 * @param string|null $chatURL
-	 * @param string[]|true $wikis List of wiki IDs, or {@see EventRegistration::ALL_WIKIS}
-	 * @param string[] $topics
-	 * @param string|null $trackingToolUserID User identifier of a tracking tool
-	 * @param string|null $trackingToolEventID
 	 * @param string $status
 	 * @param string $timezone Can be in any format accepted by DateTimeZone
 	 * @param string $startLocalTimestamp In the TS_MW format
 	 * @param string $endLocalTimestamp In the TS_MW format
 	 * @param list<string> $types
+	 * @param string[]|true $wikis List of wiki IDs, or {@see EventRegistration::ALL_WIKIS}
+	 * @param string[] $topics
+	 * @param string|null $trackingToolUserID User identifier of a tracking tool
+	 * @param string|null $trackingToolEventID
 	 * @param int $meetingType
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
+	 * @param string|null $chatURL
+	 * @param bool $isTestEvent
 	 * @param string[] $participantQuestionNames
 	 * @param string|null $creationTimestamp In the TS_MW format
 	 * @param string|null $lastEditTimestamp In the TS_MW format
 	 * @param string|null $deletionTimestamp In the TS_MW format
-	 * @param bool $isTestEvent
 	 * @param int $validationFlags
 	 * @param MWPageProxy|null $previousPage Used together with the validation flag
 	 *   {@link self::VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE}. If the requested event page is the same as
@@ -112,25 +112,25 @@ class EventFactory {
 	public function newEvent(
 		?int $id,
 		string $pageTitleStr,
-		?string $chatURL,
-		$wikis,
-		array $topics,
-		?string $trackingToolUserID,
-		?string $trackingToolEventID,
 		string $status,
 		string $timezone,
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
+		$wikis,
+		array $topics,
+		?string $trackingToolUserID,
+		?string $trackingToolEventID,
 		int $meetingType,
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
+		?string $chatURL,
+		bool $isTestEvent,
 		array $participantQuestionNames,
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
 		?string $deletionTimestamp,
-		bool $isTestEvent,
 		int $validationFlags = self::VALIDATE_ALL,
 		?MWPageProxy $previousPage = null
 	): EventRegistration {
@@ -144,11 +144,21 @@ class EventFactory {
 		$res->merge( $pageStatus );
 		$campaignsPage = $pageStatus->getValue();
 
-		if ( $chatURL !== null ) {
-			$chatURL = trim( $chatURL );
-			if ( !$this->isValidURL( $chatURL ) ) {
-				$res->error( 'campaignevents-error-invalid-chat-url' );
-			}
+		if ( !in_array( $status, EventRegistration::VALID_STATUSES, true ) ) {
+			$res->error( 'campaignevents-error-invalid-status' );
+		}
+
+		$timezoneStatus = $this->validateTimezone( $timezone );
+		$res->merge( $timezoneStatus );
+		$timezoneObj = $timezoneStatus->isGood() ? $timezoneStatus->getValue() : null;
+		if ( $timezoneObj ) {
+			$datesStatus = $this->validateLocalDates(
+				$validationFlags,
+				$timezoneObj,
+				$startLocalTimestamp,
+				$endLocalTimestamp
+			);
+			$res->merge( $datesStatus );
 		}
 
 		$wikisStatus = $this->validateWikis( $wikis );
@@ -175,24 +185,14 @@ class EventFactory {
 			$trackingTools = [];
 		}
 
-		if ( !in_array( $status, EventRegistration::VALID_STATUSES, true ) ) {
-			$res->error( 'campaignevents-error-invalid-status' );
-		}
-
-		$timezoneStatus = $this->validateTimezone( $timezone );
-		$res->merge( $timezoneStatus );
-		$timezoneObj = $timezoneStatus->isGood() ? $timezoneStatus->getValue() : null;
-		if ( $timezoneObj ) {
-			$datesStatus = $this->validateLocalDates(
-				$validationFlags,
-				$timezoneObj,
-				$startLocalTimestamp,
-				$endLocalTimestamp
-			);
-			$res->merge( $datesStatus );
-		}
-
 		$res->merge( $this->validateMeetingInfo( $meetingType, $meetingURL, $meetingCountry, $meetingAddress ) );
+
+		if ( $chatURL !== null ) {
+			$chatURL = trim( $chatURL );
+			if ( !$this->isValidURL( $chatURL ) ) {
+				$res->error( 'campaignevents-error-invalid-chat-url' );
+			}
+		}
 
 		$questionsStatus = $this->validateParticipantQuestions( $participantQuestionNames );
 		$res->merge( $questionsStatus );
@@ -226,24 +226,24 @@ class EventFactory {
 			$id,
 			$this->campaignsPageFormatter->getText( $campaignsPage ),
 			$campaignsPage,
-			$chatURL,
-			$wikis,
-			$topics,
-			$trackingTools,
 			$status,
 			$timezoneObj,
 			$startLocalTimestamp,
 			$endLocalTimestamp,
 			$types,
+			$wikis,
+			$topics,
+			$trackingTools,
 			$meetingType,
 			$meetingURL,
 			$meetingCountry,
 			$meetingAddress,
+			$chatURL,
+			$isTestEvent,
 			$questionIDs,
 			$creationTSUnix,
 			$lastEditTSUnix,
-			$deletionTSUnix,
-			$isTestEvent
+			$deletionTSUnix
 		);
 	}
 

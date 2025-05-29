@@ -127,24 +127,24 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 			$registration->getID(),
 			$this->titleFormatter->getText( $new ),
 			$newEventPage,
-			$registration->getChatURL(),
-			$registration->getWikis(),
-			$registration->getTopics(),
-			$registration->getTrackingTools(),
 			$registration->getStatus(),
 			$registration->getTimezone(),
 			$registration->getStartLocalTimestamp(),
 			$registration->getEndLocalTimestamp(),
 			$registration->getTypes(),
+			$registration->getWikis(),
+			$registration->getTopics(),
+			$registration->getTrackingTools(),
 			$registration->getMeetingType(),
 			$registration->getMeetingURL(),
 			$registration->getMeetingCountry(),
 			$registration->getMeetingAddress(),
+			$registration->getChatURL(),
+			$registration->getIsTestEvent(),
 			$registration->getParticipantQuestions(),
 			$registration->getCreationTimestamp(),
 			$registration->getLastEditTimestamp(),
-			$registration->getDeletionTimestamp(),
-			$registration->getIsTestEvent()
+			$registration->getDeletionTimestamp()
 		);
 
 		$this->eventStore->saveRegistration( $newRegistration );
