@@ -386,7 +386,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'type' => 'multiselect',
 				'dropdown' => true,
 				'label-message' => 'campaignevents-edit-field-eventtypes-label',
-				'default' => $this->event ? $this->event->getEventTypes() : [],
+				'default' => $this->event ? $this->event->getTypes() : [],
 				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
 				'placeholder-message' => 'campaignevents-edit-field-eventtypes-placeholder',
 				'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
@@ -709,9 +709,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$testEvent = $data['TestEvent'] === "1";
 
 		try {
-			$eventTypes = [];
+			$types = [];
 			if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
-				$eventTypes = $data['EventTypes'];
+				$types = $data['EventTypes'];
 			}
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
@@ -726,7 +726,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
-				$eventTypes,
+				$types,
 				$meetingType,
 				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,
 				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,
