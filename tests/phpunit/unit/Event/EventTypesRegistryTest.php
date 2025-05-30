@@ -7,16 +7,14 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWikiUnitTestCase;
-use Wikimedia\Message\IMessageFormatterFactory;
-use Wikimedia\Message\ITextFormatter;
 
 /**
  * @group Test
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry
- * @covers ::__construct
  */
 class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 
+	/** @coversNothing */
 	public function testRegistryIsWellFormed() {
 		$seenGroupNames = [];
 		$seenGroupMessages = [];
@@ -61,7 +59,7 @@ class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 
 	/** @covers ::getAllTypes */
 	public function testGetAllTypes() {
-		$registry = new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) );
+		$registry = new EventTypesRegistry();
 		$expectedTypes = [
 			EventTypesRegistry::EVENT_TYPE_OTHER,
 			'editing-event', 'media-upload-event', 'backlog-drive', 'contest', 'workshop',
@@ -74,47 +72,23 @@ class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::getLocalizedEventTypeName
+	 * @covers ::getTypeMessages
 	 */
 	public function testGetLocalizedEventTypeName() {
-		$enMsg = 'Editing event (EN)';
-		$frMsg = 'Événement d\'édition (FR)';
-
-		$enFormatter = $this->createMock( ITextFormatter::class );
-		$enFormatter->method( 'format' )->willReturn( $enMsg );
-
-		$frFormatter = $this->createMock( ITextFormatter::class );
-		$frFormatter->method( 'format' )->willReturn( $frMsg );
-
-		$msgFormatterFactory = $this->createMock( IMessageFormatterFactory::class );
-		$msgFormatterFactory->expects( $this->atLeastOnce() )
-			->method( 'getTextFormatter' )
-			->willReturnMap( [
-				[ 'en', $enFormatter ],
-				[ 'fr', $frFormatter ],
-			] );
-
-		$registry = new EventTypesRegistry( $msgFormatterFactory );
-
-		$this->assertSame(
-			$enMsg,
-			$registry->getLocalizedEventTypeName( 'editing-event', 'en' )
-		);
-		$this->assertSame(
-			$frMsg,
-			$registry->getLocalizedEventTypeName( 'editing-event', 'fr' )
-		);
+		$expected = [
+			'editing-event' => 'campaignevents-eventtype-editing-event',
+			EventTypesRegistry::EVENT_TYPE_OTHER => 'campaignevents-eventtype-other'
+		];
+		$this->assertSame( $expected, ( new EventTypesRegistry() )->getTypeMessages( array_keys( $expected ) ) );
 	}
 
 	/**
-	 * @covers ::getLocalizedEventTypeName
+	 * @covers ::getTypeMessages
 	 */
 	public function testGetLocalizedEventTypeName__invalid() {
-		$registry = new EventTypesRegistry(
-			$this->createMock( IMessageFormatterFactory::class )
-		);
+		$registry = new EventTypesRegistry();
 		$this->expectException( InvalidArgumentException::class );
-		$registry->getLocalizedEventTypeName( 'invalid-event-type', 'en' );
+		$registry->getTypeMessages( [ 'meetup', 'invalid-event-type' ] );
 	}
 
 	/**

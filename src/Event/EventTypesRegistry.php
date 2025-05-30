@@ -5,8 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use InvalidArgumentException;
-use Wikimedia\Message\IMessageFormatterFactory;
-use Wikimedia\Message\MessageValue;
 
 class EventTypesRegistry {
 
@@ -85,12 +83,6 @@ class EventTypesRegistry {
 		],
 	];
 
-	private IMessageFormatterFactory $messageFormatterFactory;
-
-	public function __construct( IMessageFormatterFactory $messageFormatterFactory ) {
-		$this->messageFormatterFactory = $messageFormatterFactory;
-	}
-
 	/** @return list<string> */
 	public function getAllTypes(): array {
 		$types = [];
@@ -101,20 +93,24 @@ class EventTypesRegistry {
 	}
 
 	/**
-	 * @param string $eventType One of the self::EVENT_TYPE_* constants
-	 * @param string $languageCode
-	 * @return string
+	 * @param list<string> $typeNames Event type names
+	 * @return array<string,string> Maps the provided names to message keys
 	 */
-	public function getLocalizedEventTypeName( string $eventType, string $languageCode ): string {
+	public function getTypeMessages( array $typeNames ): array {
+		$ret = array_fill_keys( $typeNames, null );
 		foreach ( self::EVENT_TYPES as $group ) {
 			foreach ( $group['types'] as $typeInfo ) {
-				if ( $typeInfo['type'] === $eventType ) {
-					$formatter = $this->messageFormatterFactory->getTextFormatter( $languageCode );
-					return $formatter->format( MessageValue::new( $typeInfo['msgKey'] ) );
+				$typeName = $typeInfo['type'];
+				if ( array_key_exists( $typeName, $ret ) ) {
+					$ret[$typeName] = $typeInfo['msgKey'];
 				}
 			}
 		}
-		throw new InvalidArgumentException( "Invalid event type: $eventType" );
+		if ( in_array( null, $ret, true ) ) {
+			$invalidTypes = array_keys( array_filter( $ret, static fn ( $t ) => $t === null ) );
+			throw new InvalidArgumentException( "Invalid types: " . implode( ', ', $invalidTypes ) );
+		}
+		return $ret;
 	}
 
 	/**

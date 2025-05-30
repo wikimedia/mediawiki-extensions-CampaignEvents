@@ -433,8 +433,6 @@ return [
 		}
 	},
 	EventTypesRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTypesRegistry {
-		return new EventTypesRegistry(
-			$services->getMessageFormatterFactory()
-		);
+		return new EventTypesRegistry();
 	},
 ];
