@@ -38,9 +38,7 @@ class ClickwrapFormModule {
 	}
 
 	/**
-	 * @param IContextSource $context
-	 * @return array
-	 * @phan-return array{isSubmitted:bool,content:string}
+	 * @return array{isSubmitted:bool,content:string}
 	 */
 	public function createContent( IContextSource $context, string $action ): array {
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $this->language->getCode() );

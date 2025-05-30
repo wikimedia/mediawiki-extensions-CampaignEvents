@@ -12,7 +12,6 @@ use MediaWiki\Tests\ExtensionServicesTestBase;
  * @covers \MediaWiki\Extension\CampaignEvents\CampaignEventsServices
  */
 class CampaignEventsServicesTest extends ExtensionServicesTestBase {
-	/** @inheritDoc */
 	protected static string $className = CampaignEventsServices::class;
 	/** @inheritDoc */
 	protected string $serviceNamePrefix = 'CampaignEvents';

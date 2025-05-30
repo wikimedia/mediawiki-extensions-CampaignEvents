@@ -27,9 +27,6 @@ use RuntimeException;
  * @covers ::__construct()
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {
-	/**
-	 * @return EventRegistration
-	 */
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
 		return new EventRegistration(
 			null,

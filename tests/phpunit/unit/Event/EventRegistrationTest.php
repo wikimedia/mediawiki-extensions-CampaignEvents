@@ -16,7 +16,7 @@ use MediaWikiUnitTestCase;
 use Wikimedia\Assert\ParameterAssertionException;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventRegistration
+ * @covers \MediaWiki\Extension\CampaignEvents\Event\EventRegistration
  */
 class EventRegistrationTest extends MediaWikiUnitTestCase {
 	private static function getValidConstructorArgs(): array {
@@ -55,27 +55,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		];
 	}
 
-	/**
-	 * @covers ::__construct
-	 * @covers ::getID
-	 * @covers ::getName
-	 * @covers ::getPage
-	 * @covers ::getChatURL
-	 * @covers ::getWikis
-	 * @covers ::getTopics
-	 * @covers ::getTrackingTools
-	 * @covers ::getStatus
-	 * @covers ::getTimezone
-	 * @covers ::getStartLocalTimestamp
-	 * @covers ::getEndLocalTimestamp
-	 * @covers ::getMeetingType
-	 * @covers ::getMeetingURL
-	 * @covers ::getMeetingCountry
-	 * @covers ::getMeetingAddress
-	 * @covers ::getCreationTimestamp
-	 * @covers ::getLastEditTimestamp
-	 * @covers ::getDeletionTimestamp
-	 */
 	public function testConstructAndGetters() {
 		$data = self::getValidConstructorArgs();
 		$registration = new EventRegistration( ...array_values( $data ) );
@@ -106,7 +85,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * @param array $constructorArgs
 	 * @param string $expectedWrongParam
 	 * @dataProvider provideInvalidTimestampFormat
-	 * @covers ::__construct
 	 */
 	public function testInvalidTimestampFormat( array $constructorArgs, string $expectedWrongParam ) {
 		$this->expectException( ParameterAssertionException::class );
@@ -126,8 +104,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::getStartUTCTimestamp
-	 * @covers ::getEndUTCTimestamp
 	 * @dataProvider provideEventsForUTCConversion
 	 */
 	public function testUTCConversion( EventRegistration $event, string $expectedStartUTC, string $expectedEndUTC ) {
@@ -210,8 +186,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	 * Test what happens when the user provides a local time that happens to coincide with a DST change, meaning the
 	 * provided time was skipped or happened twice.
 	 *
-	 * @covers ::getStartUTCTimestamp
-	 * @covers ::getEndUTCTimestamp
 	 * @dataProvider provideAmbiguousLocalTimes
 	 */
 	public function testAmbiguousLocalTimes( EventRegistration $event, string $expectedLocal, string $expectedUTC ) {
@@ -258,7 +232,6 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::isPast
 	 * @dataProvider provideIsPast
 	 */
 	public function testIsPast( EventRegistration $event, bool $expected ) {

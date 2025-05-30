@@ -74,9 +74,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		] + parent::getBodyParamSettings();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	protected function getSuccessResponse( StatusValue $saveStatus ): Response {
 		$warnings = $saveStatus->getMessages( 'warning' );
 		if ( !$warnings ) {
@@ -107,9 +104,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		return $registration;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	protected function checkPermissions( Authority $performer ): void {
 		// Nothing to check now. Deeper check will happen in EditEventCommand.
 	}

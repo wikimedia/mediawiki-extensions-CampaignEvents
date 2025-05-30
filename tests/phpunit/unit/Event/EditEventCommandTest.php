@@ -143,9 +143,6 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param PageEventLookup $pageEventLookup
-	 * @param int $existingRegistrationID
-	 * @param string $expectedMsg
 	 * @covers ::doEditIfAllowed
 	 * @dataProvider providePageWithRegistrationAlreadyEnabled
 	 */

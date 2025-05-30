@@ -163,9 +163,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param string|null $expectedErrorKey
-	 * @param array $factoryArgs
-	 * @param CampaignsPageFactory|null $campaignsPageFactory
 	 * @dataProvider provideEventData
 	 */
 	public function testNewEvent(

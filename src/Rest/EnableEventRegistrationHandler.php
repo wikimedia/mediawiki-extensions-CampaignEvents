@@ -28,9 +28,6 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		return $resp;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	protected function checkPermissions( Authority $performer ): void {
 		if ( !$this->permissionChecker->userCanEnableRegistrations( $performer ) ) {
 			throw new LocalizedHttpException(

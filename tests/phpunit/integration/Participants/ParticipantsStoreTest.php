@@ -500,9 +500,6 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @param int $eventID
-	 * @param array|null $userIDs
-	 * @param int $expected
 	 * @covers ::removeParticipantsFromEvent
 	 * @dataProvider provideParticipantsToRemoveFromEvent
 	 */

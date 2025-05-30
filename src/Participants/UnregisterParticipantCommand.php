@@ -76,12 +76,12 @@ class UnregisterParticipantCommand {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
 	 * @return StatusValue Statusvalue where value is self::CAN_UNREGISTER or self::CANNOT_UNREGISTER_DELETED constant.
 	 */
 	public static function checkIsUnregistrationAllowed(
 		ExistingEventRegistration $registration,
-		bool $userIsSelf = true ): StatusValue {
+		bool $userIsSelf = true
+	): StatusValue {
 		if ( $registration->getDeletionTimestamp() !== null ) {
 			$msg = $userIsSelf
 				? 'campaignevents-unregister-registration-deleted'
