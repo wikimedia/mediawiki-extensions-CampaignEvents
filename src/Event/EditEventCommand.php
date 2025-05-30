@@ -226,7 +226,7 @@ class EditEventCommand {
 		// Use a RAII callback to log failures at this stage that could leave the database in an inconsistent state
 		// but could not be logged elsewhere, e.g. due to timeouts.
 		// @codeCoverageIgnoreStart - testing code run in __destruct is hard and unreliable.
-		$failureLogger = new ScopedCallback( function () use ( $eventID ) {
+		$failureLogger = new ScopedCallback( function () use ( $eventID ): void {
 			$this->logger->error(
 				'Post-sync update failed for tracking tools, event {event_id}.',
 				[

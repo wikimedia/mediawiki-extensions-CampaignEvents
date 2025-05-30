@@ -683,11 +683,7 @@ class EventDetailsParticipantsModule {
 		return $row;
 	}
 
-	/**
-	 * @param Answer $answer
-	 * @return string
-	 */
-	private function getQuestionAnswer( Answer $answer ) {
+	private function getQuestionAnswer( Answer $answer ): string {
 		$option = $answer->getOption();
 		if ( $option === null ) {
 			return $this->msgFormatter->format(

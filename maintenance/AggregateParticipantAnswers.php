@@ -109,7 +109,7 @@ class AggregateParticipantAnswers extends Maintenance {
 		// possible, especially those that could inadvertently leak PII.
 		$transactionName = __METHOD__;
 		$this->beginTransaction( $this->dbw, $transactionName );
-		$this->rollbackTransactionFn = function () use ( $transactionName ) {
+		$this->rollbackTransactionFn = function () use ( $transactionName ): void {
 			$this->rollbackTransaction( $this->dbw, $transactionName );
 		};
 		$prevID = $minRowID - 1;
