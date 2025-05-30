@@ -330,7 +330,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
 			$formFields['EventTypes'] = [
 				'type' => 'multiselect',
 				'dropdown' => true,
@@ -704,7 +704,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		try {
 			$types = [ EventTypesRegistry::EVENT_TYPE_OTHER ];
-			if ( $this->wikiConfig->get( 'CampaignEventsEnableEventTypes' ) ) {
+			if ( $this->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
 				$types = $data['EventTypes'];
 			}
 			$event = $this->eventFactory->newEvent(
