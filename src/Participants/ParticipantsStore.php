@@ -409,18 +409,10 @@ class ParticipantsStore {
 		return (int)$ret;
 	}
 
-	/**
-	 * @param int $eventId
-	 * @return int
-	 */
 	public function getFullParticipantCountForEvent( int $eventId ): int {
 		return $this->getParticipantCountForEvent( $eventId, true );
 	}
 
-	/**
-	 * @param int $eventId
-	 * @return int
-	 */
 	public function getPrivateParticipantCountForEvent( int $eventId ): int {
 		return $this->getParticipantCountForEvent( $eventId, false );
 	}
@@ -428,10 +420,6 @@ class ParticipantsStore {
 	/**
 	 * Returns whether the given user participates in the event. Note that this returns false if the user was
 	 * participating but then unregistered.
-	 * @param int $eventID
-	 * @param CentralUser $user
-	 * @param bool $showPrivate
-	 * @return bool
 	 */
 	public function userParticipatesInEvent( int $eventID, CentralUser $user, bool $showPrivate ): bool {
 		return $this->getEventParticipant( $eventID, $user, $showPrivate ) !== null;

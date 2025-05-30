@@ -37,23 +37,14 @@ class TrackingToolAssociation {
 		$this->lastSyncTimestamp = $lastSyncTimestamp;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getToolID(): int {
 		return $this->toolID;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getToolEventID(): string {
 		return $this->toolEventID;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getSyncStatus(): int {
 		return $this->syncStatus;
 	}

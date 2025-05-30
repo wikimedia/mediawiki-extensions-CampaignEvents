@@ -20,9 +20,6 @@ class InvalidTitleStringException extends InvalidEventPageException {
 		$this->errorMsgParams = $errorMsgParams;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getErrorMsgKey(): string {
 		return $this->errorMsgKey;
 	}

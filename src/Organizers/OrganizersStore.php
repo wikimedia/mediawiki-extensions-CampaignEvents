@@ -157,10 +157,6 @@ class OrganizersStore {
 		return $creators;
 	}
 
-	/**
-	 * @param stdClass $row
-	 * @return Organizer
-	 */
 	private function rowToOrganizerObject( stdClass $row ): Organizer {
 		$dbRoles = (int)$row->ceo_roles;
 		$roles = [];
@@ -177,11 +173,6 @@ class OrganizersStore {
 			$row->ceo_agreement_timestamp !== null );
 	}
 
-	/**
-	 * @param int $eventID
-	 * @param CentralUser $user
-	 * @return bool
-	 */
 	public function isEventOrganizer( int $eventID, CentralUser $user ): bool {
 		return $this->getEventOrganizer( $eventID, $user ) !== null;
 	}

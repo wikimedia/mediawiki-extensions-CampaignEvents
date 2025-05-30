@@ -64,10 +64,6 @@ class ClickwrapFormModule {
 		];
 	}
 
-	/**
-	 * @param IContextSource $context
-	 * @return HTMLForm
-	 */
 	private function createForm( IContextSource $context ): HTMLForm {
 		$this->authority = $context->getAuthority();
 		$formDescriptor = [

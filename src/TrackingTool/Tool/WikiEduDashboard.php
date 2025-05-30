@@ -226,12 +226,6 @@ class WikiEduDashboard extends TrackingTool {
 		return $this->syncParticipants( $event, $toolEventID, false );
 	}
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param string $toolEventID
-	 * @param bool $dryRun
-	 * @return StatusValue
-	 */
 	private function syncParticipants(
 		ExistingEventRegistration $event,
 		string $toolEventID,

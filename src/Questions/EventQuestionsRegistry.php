@@ -555,11 +555,6 @@ class EventQuestionsRegistry {
 		throw new UnknownQuestionException( "Unknown question with ID $questionID" );
 	}
 
-	/**
-	 * @param int $questionID
-	 * @param int $optionID
-	 * @return string
-	 */
 	public function getQuestionOptionMessageByID( int $questionID, int $optionID ): string {
 		foreach ( $this->getQuestions() as $question ) {
 			if ( $question['db-id'] === $questionID ) {

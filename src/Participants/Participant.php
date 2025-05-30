@@ -44,9 +44,6 @@ class Participant {
 		$this->aggregationTimestamp = $aggregationTimestamp;
 	}
 
-	/**
-	 * @return CentralUser
-	 */
 	public function getUser(): CentralUser {
 		return $this->user;
 	}

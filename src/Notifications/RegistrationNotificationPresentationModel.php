@@ -139,9 +139,6 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		return new RawMessage( '$1', [ Message::rawParam( $body ) ] );
 	}
 
-	/**
-	 * @return string
-	 */
 	private function getDatesBodySection(): string {
 		$ret = Html::element(
 			'h2',
@@ -178,9 +175,6 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		return $ret;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function getTypeBodySection(): string {
 		$ret = Html::element(
 			'h2',

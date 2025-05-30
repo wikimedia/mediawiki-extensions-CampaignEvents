@@ -221,10 +221,6 @@ class TrackingToolEventWatcher {
 		return [ $removedTools, $addedTools, $unchangedTools ];
 	}
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @return StatusValue
-	 */
 	public function validateEventDeletion( ExistingEventRegistration $event ): StatusValue {
 		foreach ( $event->getTrackingTools() as $toolAssociation ) {
 			$tool = $this->trackingToolRegistry->newFromDBID( $toolAssociation->getToolID() );
@@ -262,12 +258,6 @@ class TrackingToolEventWatcher {
 		} );
 	}
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param CentralUser $participant
-	 * @param bool $private
-	 * @return StatusValue
-	 */
 	public function validateParticipantAdded(
 		ExistingEventRegistration $event,
 		CentralUser $participant,

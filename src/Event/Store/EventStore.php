@@ -203,11 +203,6 @@ class EventStore implements IEventStore, IEventLookup {
 		);
 	}
 
-	/**
-	 * @param IDatabase $db
-	 * @param int $eventID
-	 * @return stdClass|null
-	 */
 	private function getEventAddressRow( IDatabase $db, int $eventID ): ?stdClass {
 		$addressRows = $db->newSelectQueryBuilder()
 			->select( '*' )
@@ -229,11 +224,6 @@ class EventStore implements IEventStore, IEventLookup {
 		return $addressRow;
 	}
 
-	/**
-	 * @param IDatabase $db
-	 * @param int $eventID
-	 * @return stdClass|null
-	 */
 	private function getEventTrackingToolRow( IDatabase $db, int $eventID ): ?stdClass {
 		$trackingToolsRows = $db->newSelectQueryBuilder()
 			->select( '*' )
@@ -536,13 +526,6 @@ class EventStore implements IEventStore, IEventLookup {
 		return $eventID;
 	}
 
-	/**
-	 * @param IDatabase $dbw
-	 * @param string|null $meetingAddress
-	 * @param string|null $meetingCountry
-	 * @param int $eventID
-	 * @return void
-	 */
 	private function updateStoredAddresses(
 		IDatabase $dbw,
 		?string $meetingAddress,

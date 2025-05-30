@@ -109,33 +109,16 @@ abstract class TrackingTool {
 		string $toolEventID
 	): StatusValue;
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param string $toolEventID
-	 * @return StatusValue
-	 */
 	abstract public function validateEventDeletion(
 		ExistingEventRegistration $event,
 		string $toolEventID
 	): StatusValue;
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param string $toolEventID
-	 * @return StatusValue
-	 */
 	abstract public function onEventDeleted(
 		ExistingEventRegistration $event,
 		string $toolEventID
 	): StatusValue;
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param string $toolEventID
-	 * @param CentralUser $participant
-	 * @param bool $private
-	 * @return StatusValue
-	 */
 	abstract public function validateParticipantAdded(
 		ExistingEventRegistration $event,
 		string $toolEventID,
@@ -143,13 +126,6 @@ abstract class TrackingTool {
 		bool $private
 	): StatusValue;
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param string $toolEventID
-	 * @param CentralUser $participant
-	 * @param bool $private
-	 * @return StatusValue
-	 */
 	abstract public function addParticipant(
 		ExistingEventRegistration $event,
 		string $toolEventID,

@@ -68,10 +68,6 @@ class PermissionChecker {
 		return $pageAuthor->equals( $centralUser );
 	}
 
-	/**
-	 * @param string $username
-	 * @return bool
-	 */
 	public function userCanOrganizeEvents( string $username ): bool {
 		return $this->permissionsLookup->userIsNamed( $username ) &&
 			$this->permissionsLookup->userHasRight( $username, self::ORGANIZE_EVENTS_RIGHT ) &&

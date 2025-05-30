@@ -218,9 +218,6 @@ class AggregateParticipantAnswers extends Maintenance {
 	 *  - The end time of each event
 	 *  - The time of first answer of each participant in the batch
 	 *  - Participants whose answers have already been aggregated
-	 *
-	 * @param iterable $res
-	 * @return void
 	 */
 	private function loadDataForBatch( iterable $res ): void {
 		// Use maps to discard duplicates.

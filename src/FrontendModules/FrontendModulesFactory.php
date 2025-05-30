@@ -102,11 +102,6 @@ class FrontendModulesFactory {
 		$this->topicRegistry = $topicRegistry;
 	}
 
-	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param Language $language
-	 * @return EventDetailsModule
-	 */
 	public function newEventDetailsModule(
 		ExistingEventRegistration $registration,
 		Language $language
@@ -127,11 +122,6 @@ class FrontendModulesFactory {
 		);
 	}
 
-	/**
-	 * @param Language $language
-	 * @param string $statisticsTabUrl
-	 * @return EventDetailsParticipantsModule
-	 */
 	public function newEventDetailsParticipantsModule(
 		Language $language,
 		string $statisticsTabUrl
@@ -172,11 +162,6 @@ class FrontendModulesFactory {
 		);
 	}
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param Language $language
-	 * @return ClickwrapFormModule
-	 */
 	public function newClickwrapFormModule(
 		ExistingEventRegistration $event,
 		Language $language

@@ -179,11 +179,6 @@ class EventDetailsModule {
 		] );
 	}
 
-	/**
-	 * @param bool $isOrganizer
-	 * @param bool $isLocalWiki
-	 * @return Tag
-	 */
 	private function getHeader( bool $isOrganizer, bool $isLocalWiki ): Tag {
 		$headerItems = [];
 		$headerItems[] = ( new Tag( 'h2' ) )->appendContent(
@@ -363,11 +358,6 @@ class EventDetailsModule {
 		);
 	}
 
-	/**
-	 * @param OutputPage $out
-	 * @param int $organizersCount
-	 * @return Tag
-	 */
 	private function getOrganizersColumn( OutputPage $out, int $organizersCount ): Tag {
 		$ret = [];
 
@@ -423,10 +413,6 @@ class EventDetailsModule {
 		return ( new Tag( 'div' ) )->appendContent( $organizersSection );
 	}
 
-	/**
-	 * @param OutputPage $out
-	 * @return ?Tag
-	 */
 	private function getEventWikisSection( OutputPage $out ): ?Tag {
 		$eventWikis = $this->registration->getWikis();
 

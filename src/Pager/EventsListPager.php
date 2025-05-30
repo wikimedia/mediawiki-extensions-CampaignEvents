@@ -369,10 +369,6 @@ class EventsListPager extends ReverseChronologicalPager {
 		}
 	}
 
-	/**
-	 * @param string $timestamp
-	 * @return string
-	 */
 	private function getYearFromTimestamp( string $timestamp ): string {
 		$timestamp = $this->offsetTimestamp( $timestamp );
 		return $this->getLanguage()->sprintfDate( 'Y', $timestamp );

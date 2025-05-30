@@ -86,25 +86,16 @@ class ExistingEventRegistration extends EventRegistration {
 		);
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getID(): int {
 		// @phan-suppress-next-line PhanTypeMismatchReturnNullable
 		return parent::getID();
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getCreationTimestamp(): string {
 		// @phan-suppress-next-line PhanTypeMismatchReturnNullable
 		return parent::getCreationTimestamp();
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getLastEditTimestamp(): string {
 		// @phan-suppress-next-line PhanTypeMismatchReturnNullable
 		return parent::getLastEditTimestamp();

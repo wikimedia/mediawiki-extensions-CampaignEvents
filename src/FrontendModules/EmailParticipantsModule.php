@@ -64,10 +64,6 @@ class EmailParticipantsModule {
 			->appendContent( $layout );
 	}
 
-	/**
-	 * @param ITextFormatter $msgFormatter
-	 * @return FieldsetLayout
-	 */
 	private function getEmailForm( ITextFormatter $msgFormatter ): FieldsetLayout {
 		$fields = [];
 
