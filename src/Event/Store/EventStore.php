@@ -411,7 +411,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_page_prefixedtext,
 			$row->event_page_wiki
 		);
-		$eventTypes = self::getEventTypesFromDBVal( $row->event_types );
+		$eventTypes = EventTypesRegistry::getEventTypesFromDBVal( $row->event_types );
 		$meetingType = self::getMeetingTypeFromDBVal( $row->event_meeting_type );
 
 		$address = null;
@@ -487,7 +487,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_start_utc' => $dbw->timestamp( $event->getStartUTCTimestamp() ),
 			'event_end_local' => $localEndDB,
 			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
-			'event_types' => self::eventTypesToDBVal( $event->getEventTypes() ),
+			'event_types' => EventTypesRegistry::eventTypesToDBVal( $event->getEventTypes() ),
 			'event_meeting_type' => self::meetingTypeToDBVal( $event->getMeetingType() ),
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
@@ -599,24 +599,6 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * Converts event types as stored in the DB into a combination of EventType constants
-	 * @param string $dbEventType
-	 * @return array
-	 */
-	public static function getEventTypesFromDBVal( string $dbEventType ): array {
-		if ( (int)$dbEventType === 0 ) {
-			return [ EventTypesRegistry::EVENT_TYPE_OTHER ];
-		}
-		$result = [];
-		foreach ( EventTypesRegistry::EVENT_TYPES_MAP as $type => $mask ) {
-			if ( $mask !== 0 && ( (int)$dbEventType & $mask ) === $mask ) {
-				$result[] = $type;
-			}
-		}
-		return $result;
-	}
-
-	/**
 	 * Converts a meeting type as stored in the DB into a combination of the EventRegistration::MEETING_TYPE_* constants
 	 * @param string $dbMeetingType
 	 * @return int
@@ -645,22 +627,6 @@ class EventStore implements IEventStore, IEventLookup {
 			}
 		}
 		return $dbMeetingType;
-	}
-
-	/**
-	 * Converts EventTypesRegistry::EVENT_TYPES constants to the corresponding value used in the database.
-	 * @param array $eventTypes
-	 * @return int
-	 */
-	public static function eventTypesToDBVal( array $eventTypes ): int {
-		$dbEventType = 0;
-
-		foreach ( $eventTypes as $eventType ) {
-			if ( isset( EventTypesRegistry::EVENT_TYPES_MAP[$eventType] ) ) {
-				$dbEventType |= EventTypesRegistry::EVENT_TYPES_MAP[$eventType];
-			}
-		}
-		return $dbEventType;
 	}
 
 	/**

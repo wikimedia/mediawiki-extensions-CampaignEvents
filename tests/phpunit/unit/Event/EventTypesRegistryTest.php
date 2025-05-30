@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWikiUnitTestCase;
-use ReflectionClass;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 
@@ -18,25 +17,60 @@ use Wikimedia\Message\ITextFormatter;
  */
 class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 
-	/**
-	 * @coversNothing
-	 * @dataProvider provideConstants
-	 */
-	public function testConstantMapsAllEventTypes( string $constName ) {
-		$registry = new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) );
-		$allTypes = $registry->getAllTypes();
+	public function testRegistryIsWellFormed() {
+		$seenGroupNames = [];
+		$seenGroupMessages = [];
+		$seenTypeNames = [];
+		$seenTypeMessages = [];
+		$seenTypeDBValues = [];
+		foreach ( EventTypesRegistry::EVENT_TYPES as $group ) {
+			$this->assertArrayHasKey( 'group', $group );
+			$this->assertIsString( $group['group'], 'Group name' );
+			$seenGroupNames[] = $group['group'];
 
-		$registryRefl = new ReflectionClass( EventTypesRegistry::class );
-		$actualMap = $registryRefl->getConstant( $constName );
+			$this->assertArrayHasKey( 'msgKey', $group );
+			$this->assertIsString( $group['msgKey'], 'Group message key' );
+			$seenGroupMessages[] = $group['msgKey'];
 
-		$this->assertEqualsCanonicalizing( $allTypes, array_keys( $actualMap ) );
+			$this->assertArrayHasKey( 'types', $group );
+			$this->assertIsArray( $group['types'], 'Group types' );
+
+			foreach ( $group['types'] as $type ) {
+				$this->assertIsArray( $type, 'Individual type' );
+
+				$this->assertArrayHasKey( 'type', $type );
+				$this->assertIsString( $type['type'], 'Type name' );
+				$seenTypeNames[] = $type['type'];
+
+				$this->assertArrayHasKey( 'msgKey', $type );
+				$this->assertIsString( $type['msgKey'], 'Type message key' );
+				$seenTypeMessages[] = $type['msgKey'];
+
+				$this->assertArrayHasKey( 'dbValue', $type );
+				$this->assertIsInt( $type['dbValue'], 'Type DB value' );
+				$seenTypeDBValues[] = $type['dbValue'];
+			}
+		}
+
+		$this->assertSame( array_unique( $seenGroupNames ), $seenGroupNames, 'Group names should be unique' );
+		$this->assertSame( array_unique( $seenGroupMessages ), $seenGroupMessages, 'Group messages should be unique' );
+		$this->assertSame( array_unique( $seenTypeNames ), $seenTypeNames, 'Type names should be unique' );
+		$this->assertSame( array_unique( $seenTypeMessages ), $seenTypeMessages, 'Type messages should be unique' );
+		$this->assertSame( array_unique( $seenTypeDBValues ), $seenTypeDBValues, 'Type DB values should be unique' );
 	}
 
-	public static function provideConstants(): array {
-		return [
-			[ 'EVENT_TYPE_MSG_MAP' ],
-			[ 'DEBUG_NAMES_MAP' ],
+	/** @covers ::getAllTypes */
+	public function testGetAllTypes() {
+		$registry = new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) );
+		$expectedTypes = [
+			EventTypesRegistry::EVENT_TYPE_OTHER,
+			'editing-event', 'media-upload-event', 'backlog-drive', 'contest', 'workshop',
+			'training', 'meetup', 'hackathon', 'conference',
 		];
+		$actualTypes = $registry->getAllTypes();
+		sort( $expectedTypes );
+		sort( $actualTypes );
+		$this->assertSame( $expectedTypes, $actualTypes );
 	}
 
 	/**
@@ -64,11 +98,11 @@ class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 
 		$this->assertSame(
 			$enMsg,
-			$registry->getLocalizedEventTypeName( EventTypesRegistry::EVENT_TYPE_EDITING_EVENT, 'en' )
+			$registry->getLocalizedEventTypeName( 'editing-event', 'en' )
 		);
 		$this->assertSame(
 			$frMsg,
-			$registry->getLocalizedEventTypeName( EventTypesRegistry::EVENT_TYPE_EDITING_EVENT, 'fr' )
+			$registry->getLocalizedEventTypeName( 'editing-event', 'fr' )
 		);
 	}
 
@@ -84,80 +118,34 @@ class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::getEventTypeDebugName
+	 * @dataProvider provideGetEventTypesFromDBVal
+	 * @covers ::getEventTypesFromDBVal
 	 */
-	public function testGetEventTypeDebugName() {
-		$registry = new EventTypesRegistry(
-			$this->createMock( IMessageFormatterFactory::class )
-		);
-		$this->assertIsString(
-			$registry->getEventTypeDebugName( EventTypesRegistry::EVENT_TYPE_CONFERENCE )
-		);
+	public function testGetEventTypesFromDBVal( string $dbVal, array $expected ) {
+		$this->assertSame( $expected, EventTypesRegistry::getEventTypesFromDBVal( $dbVal ) );
+	}
+
+	public static function provideGetEventTypesFromDBVal(): array {
+		return [
+			'Other' => [ '0', [ 'other' ] ],
+			'Single type' => [ (string)( 1 << 3 ), [ 'contest' ] ],
+			'Combination of types' => [ (string)( 1 << 3 | 1 << 6 ), [ 'contest', 'meetup' ] ],
+		];
 	}
 
 	/**
-	 * @covers ::getEventTypeDebugName
+	 * @dataProvider provideEventTypesToDBVal
+	 * @covers ::eventTypesToDBVal
 	 */
-	public function testGetEventTypeDebugName__invalid() {
-		$registry = new EventTypesRegistry(
-			$this->createMock( IMessageFormatterFactory::class )
-		);
-		$this->expectException( InvalidArgumentException::class );
-		$registry->getEventTypeDebugName( 'not_a_type' );
+	public function testEventTypesToDBVal( array $types, int $expected ) {
+		$this->assertSame( $expected, EventTypesRegistry::eventTypesToDBVal( $types ) );
 	}
 
-	/**
-	 * @covers ::getLocalizedGroupTypeName
-	 */
-	public function testGetLocalizedGroupTypeName() {
-		$enMsg = 'Contributions (EN)';
-		$formatter = $this->createMock( ITextFormatter::class );
-		$formatter->method( 'format' )->willReturn( $enMsg );
-
-		$factory = $this->createMock( IMessageFormatterFactory::class );
-		$factory->method( 'getTextFormatter' )->willReturn( $formatter );
-
-		$registry = new EventTypesRegistry( $factory );
-
-		$this->assertSame(
-			$enMsg,
-			$registry->getLocalizedGroupTypeName( 'contributions', 'en' )
-		);
-	}
-
-	/**
-	 * @covers ::getLocalizedGroupTypeName
-	 */
-	public function testGetLocalizedGroupTypeName__invalid() {
-		$registry = new EventTypesRegistry(
-			$this->createMock( IMessageFormatterFactory::class )
-		);
-		$this->expectException( InvalidArgumentException::class );
-		$registry->getLocalizedGroupTypeName( 'invalid_group', 'en' );
-	}
-
-	/**
-	 * @covers ::getEventTypeGroupsDebugName
-	 */
-	public function testGetEventTypeGroupsDebugName() {
-		$registry = new EventTypesRegistry(
-			$this->createMock( IMessageFormatterFactory::class )
-		);
-
-		$this->assertSame(
-			'community',
-			$registry->getEventTypeGroupsDebugName( 'community' )
-		);
-	}
-
-	/**
-	 * @covers ::getEventTypeGroupsDebugName
-	 */
-	public function testGetEventTypeGroupsDebugName__invalid() {
-		$registry = new EventTypesRegistry(
-			$this->createMock( IMessageFormatterFactory::class )
-		);
-		$this->expectException( InvalidArgumentException::class );
-		$registry->getEventTypeGroupsDebugName( 'invalid_group' );
+	public static function provideEventTypesToDBVal(): array {
+		return [
+			'Other' => [ [ 'other' ], 0 ],
+			'Single type' => [ [ 'contest' ], 1 << 3 ],
+			'Combination of types' => [ [ 'contest', 'meetup' ], 1 << 3 | 1 << 6 ],
+		];
 	}
 }
