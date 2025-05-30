@@ -33,8 +33,8 @@ class EventRegistrationPage extends Page {
 		return $( '.mw-htmlform-ooui-header-errors .oo-ui-messageWidget' );
 	}
 
-	get meetingTypeSelector() {
-		return $( '#mw-input-wpEventMeetingType div[role="radiogroup"]' );
+	get participationOptionsSelector() {
+		return $( '#mw-input-wpParticipationOptions div[role="radiogroup"]' );
 	}
 
 	get startDateInput() {
@@ -70,13 +70,13 @@ class EventRegistrationPage extends Page {
 		await this.body.click();
 	}
 
-	async selectParticipationOptions( meetingType ) {
-		if ( meetingType === 'online' ) {
-			await this.meetingTypeSelector.$( 'label:nth-of-type(1)' ).click();
-		} else if ( meetingType === 'inperson' ) {
-			await this.meetingTypeSelector.$( 'label:nth-of-type(2)' ).click();
-		} else if ( meetingType === 'hybrid' ) {
-			await this.meetingTypeSelector.$( 'label:nth-of-type(3)' ).click();
+	async selectParticipationOptions( participationOptions ) {
+		if ( participationOptions === 'online' ) {
+			await this.participationOptionsSelector.$( 'label:nth-of-type(1)' ).click();
+		} else if ( participationOptions === 'inperson' ) {
+			await this.participationOptionsSelector.$( 'label:nth-of-type(2)' ).click();
+		} else if ( participationOptions === 'hybrid' ) {
+			await this.participationOptionsSelector.$( 'label:nth-of-type(3)' ).click();
 		}
 	}
 

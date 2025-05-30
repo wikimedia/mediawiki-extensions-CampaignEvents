@@ -120,7 +120,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$filterWiki = $request->getArray( 'wpFilterWikis' ) ?? [];
 			$filterTopics = $request->getArray( 'wpFilterTopics' ) ?? [];
 		}
-		$participationOptions = $request->getIntOrNull( 'wpMeetingType' );
+		$participationOptions = $request->getIntOrNull( 'wpParticipationOptions' );
 		$rawStartTime = $request->getRawVal( 'wpStartDate' ) ?? (string)time();
 		if ( $this->including() && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $rawStartTime ) ) {
 			// Special case: allow specifying just the date when transcluding. Ideally we'd also use just the date
@@ -220,7 +220,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'default' => $searchedVal,
 				'cssclass' => 'ext-campaignevents-allevents-search-field'
 			],
-			'MeetingType' => [
+			'ParticipationOptions' => [
 				'type' => 'select',
 				'label-message' => 'campaignevents-allevents-label-participation-options',
 				'options-messages' => [
@@ -231,7 +231,6 @@ class SpecialAllEvents extends IncludableSpecialPage {
 						EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
 				],
 				'default' => $participationOptions,
-				'cssclass' => 'ext-campaignevents-allevents-meetingtype-field'
 			],
 			'StartDate' => [
 				'type' => 'datetime',
