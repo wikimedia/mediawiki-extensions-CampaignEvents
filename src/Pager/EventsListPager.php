@@ -253,7 +253,7 @@ class EventsListPager extends ReverseChronologicalPager {
 
 		$detailsContent .= TextWithIconWidget::build(
 			'map-pin',
-			$this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
+			$this->msg( 'campaignevents-eventslist-participation-options-label' )->text(),
 			$this->msg( $this->getParticipationOptionsMsg( $row ) )->escaped()
 		);
 

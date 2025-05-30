@@ -491,7 +491,7 @@ class EventFactory {
 		$res = StatusValue::newGood();
 
 		if ( !in_array( $participationOptions, EventRegistration::VALID_PARTICIPATION_OPTIONS, true ) ) {
-			$res->error( 'campaignevents-error-no-meeting-type' );
+			$res->error( 'campaignevents-error-no-participation-options' );
 			// Don't bother checking the rest.
 			return $res;
 		}
