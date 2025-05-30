@@ -22,13 +22,14 @@ class EventRegistration {
 
 	public const ALL_WIKIS = true;
 
-	public const MEETING_TYPE_ONLINE = 1 << 0;
-	public const MEETING_TYPE_IN_PERSON = 1 << 1;
-	public const MEETING_TYPE_ONLINE_AND_IN_PERSON = self::MEETING_TYPE_ONLINE | self::MEETING_TYPE_IN_PERSON;
-	public const VALID_MEETING_TYPES = [
-		self::MEETING_TYPE_ONLINE,
-		self::MEETING_TYPE_IN_PERSON,
-		self::MEETING_TYPE_ONLINE_AND_IN_PERSON
+	public const PARTICIPATION_OPTION_ONLINE = 1 << 0;
+	public const PARTICIPATION_OPTION_IN_PERSON = 1 << 1;
+	public const PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON =
+		self::PARTICIPATION_OPTION_ONLINE | self::PARTICIPATION_OPTION_IN_PERSON;
+	public const VALID_PARTICIPATION_OPTIONS = [
+		self::PARTICIPATION_OPTION_ONLINE,
+		self::PARTICIPATION_OPTION_IN_PERSON,
+		self::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
 	];
 
 	private ?int $id;
@@ -54,8 +55,8 @@ class EventRegistration {
 	 * @phan-var list<TrackingToolAssociation>
 	 */
 	private array $trackingTools;
-	/** @var int One of the MEETING_TYPE_* constants */
-	private int $meetingType;
+	/** @var int One of the PARTICIPATION_OPTION_* constants */
+	private int $participationOptions;
 	private ?string $meetingURL;
 	private ?string $meetingCountry;
 	private ?string $meetingAddress;
@@ -80,7 +81,7 @@ class EventRegistration {
 	 * @param string[] $topics
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
-	 * @param int $meetingType
+	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
@@ -103,7 +104,7 @@ class EventRegistration {
 		$wikis,
 		array $topics,
 		array $trackingTools,
-		int $meetingType,
+		int $participationOptions,
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
@@ -140,7 +141,7 @@ class EventRegistration {
 		$this->wikis = $wikis;
 		$this->topics = $topics;
 		$this->trackingTools = $trackingTools;
-		$this->meetingType = $meetingType;
+		$this->participationOptions = $participationOptions;
 		$this->meetingURL = $meetingURL;
 		$this->meetingCountry = $meetingCountry;
 		$this->meetingAddress = $meetingAddress;
@@ -234,8 +235,8 @@ class EventRegistration {
 		return $this->trackingTools;
 	}
 
-	public function getMeetingType(): int {
-		return $this->meetingType;
+	public function getParticipationOptions(): int {
+		return $this->participationOptions;
 	}
 
 	public function getMeetingURL(): ?string {

@@ -27,7 +27,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string[] $topics
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
-	 * @param int $meetingType
+	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
@@ -50,7 +50,7 @@ class ExistingEventRegistration extends EventRegistration {
 		$wikis,
 		array $topics,
 		array $trackingTools,
-		int $meetingType,
+		int $participationOptions,
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
@@ -73,7 +73,7 @@ class ExistingEventRegistration extends EventRegistration {
 			$wikis,
 			$topics,
 			$trackingTools,
-			$meetingType,
+			$participationOptions,
 			$meetingURL,
 			$meetingCountry,
 			$meetingAddress,

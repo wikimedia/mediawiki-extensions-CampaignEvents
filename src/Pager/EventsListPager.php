@@ -56,8 +56,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	public $mDefaultDirection = IndexPager::DIR_ASCENDING;
 
 	private string $search;
-	/** One of the EventRegistration::MEETING_TYPE_* constants */
-	private ?int $meetingType;
+	/** One of the EventRegistration::PARTICIPATION_OPTION_* constants */
+	private ?int $participationOptions;
 	/** dbnames of the wikis chosen */
 	private array $filterWiki;
 	private bool $includeAllWikis;
@@ -99,7 +99,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		EventTopicsStore $eventTopicsStore,
 		IContextSource $context,
 		string $search,
-		?int $meetingType,
+		?int $participationOptions,
 		?string $startDate,
 		?string $endDate,
 		array $filterWiki,
@@ -123,7 +123,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->eventTopicsStore = $eventTopicsStore;
 
 		$this->search = $search;
-		$this->meetingType = $meetingType;
+		$this->participationOptions = $participationOptions;
 		Assert::parameter(
 			$startDate === null || ( $startDate !== '' && MWTimestamp::convert( TS_UNIX, $startDate ) !== false ),
 			'$startDate',
@@ -254,7 +254,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$detailsContent .= TextWithIconWidget::build(
 			'map-pin',
 			$this->msg( 'campaignevents-eventslist-meeting-type-label' )->text(),
-			$this->msg( $this->getMeetingTypeMsg( $row ) )->escaped()
+			$this->msg( $this->getParticipationOptionsMsg( $row ) )->escaped()
 		);
 
 		if ( $this->eventWikis[$row->event_id] ) {
@@ -352,17 +352,17 @@ class EventsListPager extends ReverseChronologicalPager {
 		return $this->mNavigationBar;
 	}
 
-	private function getMeetingTypeMsg( stdClass $row ): string {
-		$meetingType = EventStore::getMeetingTypeFromDBVal( $row->event_meeting_type );
-		switch ( $meetingType ) {
-			case EventRegistration::MEETING_TYPE_IN_PERSON:
+	private function getParticipationOptionsMsg( stdClass $row ): string {
+		$participationOptions = EventStore::getParticipationOptionsFromDBVal( $row->event_meeting_type );
+		switch ( $participationOptions ) {
+			case EventRegistration::PARTICIPATION_OPTION_IN_PERSON:
 				return 'campaignevents-eventslist-location-in-person';
-			case EventRegistration::MEETING_TYPE_ONLINE:
+			case EventRegistration::PARTICIPATION_OPTION_ONLINE:
 				return 'campaignevents-eventslist-location-online';
-			case EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON:
+			case EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON:
 				return 'campaignevents-eventslist-location-online-and-in-person';
 			default:
-				throw new UnexpectedValueException( "Unexpected meeting type $meetingType" );
+				throw new UnexpectedValueException( "Unexpected participation options $participationOptions" );
 		}
 	}
 
@@ -399,8 +399,10 @@ class EventsListPager extends ReverseChronologicalPager {
 	 */
 	public function getSubqueryInfo(): array {
 		$query = $this->getDefaultSubqueryInfo();
-		if ( $this->meetingType !== null ) {
-			$query['conds']['event_meeting_type'] = EventStore::meetingTypeToDBVal( $this->meetingType );
+		if ( $this->participationOptions !== null ) {
+			$query['conds']['event_meeting_type'] = EventStore::participationOptionsToDBVal(
+				$this->participationOptions
+			);
 		}
 		$query['conds']['event_is_test_event'] = false;
 		if ( $this->filterWiki || !$this->includeAllWikis ) {

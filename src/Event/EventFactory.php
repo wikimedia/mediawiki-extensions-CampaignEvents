@@ -91,7 +91,7 @@ class EventFactory {
 	 * @param string[] $topics
 	 * @param string|null $trackingToolUserID User identifier of a tracking tool
 	 * @param string|null $trackingToolEventID
-	 * @param int $meetingType
+	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingAddress
@@ -121,7 +121,7 @@ class EventFactory {
 		array $topics,
 		?string $trackingToolUserID,
 		?string $trackingToolEventID,
-		int $meetingType,
+		int $participationOptions,
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingAddress,
@@ -185,7 +185,9 @@ class EventFactory {
 			$trackingTools = [];
 		}
 
-		$res->merge( $this->validateMeetingInfo( $meetingType, $meetingURL, $meetingCountry, $meetingAddress ) );
+		$res->merge(
+			$this->validateMeetingInfo( $participationOptions, $meetingURL, $meetingCountry, $meetingAddress )
+		);
 
 		if ( $chatURL !== null ) {
 			$chatURL = trim( $chatURL );
@@ -234,7 +236,7 @@ class EventFactory {
 			$wikis,
 			$topics,
 			$trackingTools,
-			$meetingType,
+			$participationOptions,
 			$meetingURL,
 			$meetingCountry,
 			$meetingAddress,
@@ -445,20 +447,20 @@ class EventFactory {
 	}
 
 	private function validateMeetingInfo(
-		int $meetingType,
+		int $participationOptions,
 		?string &$meetingURL,
 		?string &$meetingCountry,
 		?string &$meetingAddress
 	): StatusValue {
 		$res = StatusValue::newGood();
 
-		if ( !in_array( $meetingType, EventRegistration::VALID_MEETING_TYPES, true ) ) {
+		if ( !in_array( $participationOptions, EventRegistration::VALID_PARTICIPATION_OPTIONS, true ) ) {
 			$res->error( 'campaignevents-error-no-meeting-type' );
 			// Don't bother checking the rest.
 			return $res;
 		}
 
-		if ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) {
+		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
 			if ( $meetingURL !== null ) {
 				$meetingURL = trim( $meetingURL );
 				if ( !$this->isValidURL( $meetingURL ) ) {
@@ -469,7 +471,7 @@ class EventFactory {
 			$res->error( 'campaignevents-error-meeting-url-not-online' );
 		}
 
-		if ( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) {
+		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			if ( $meetingCountry !== null ) {
 				$meetingCountry = mb_strcut( trim( $meetingCountry ), 0, self::COUNTRY_MAXLENGTH_BYTES );
 			}

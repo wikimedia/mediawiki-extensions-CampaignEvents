@@ -78,8 +78,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'is_test_event' => false,
 			'questions' => [],
 		];
-		$meetingType = ( $eventData['online_meeting'] ? EventRegistration::MEETING_TYPE_ONLINE : 0 )
-			| ( $eventData['inperson_meeting'] ? EventRegistration::MEETING_TYPE_IN_PERSON : 0 );
+		$participationOptions = ( $eventData['online_meeting'] ? EventRegistration::PARTICIPATION_OPTION_ONLINE : 0 )
+			| ( $eventData['inperson_meeting'] ? EventRegistration::PARTICIPATION_OPTION_IN_PERSON : 0 );
 		$registration = new ExistingEventRegistration(
 			$eventData['id'],
 			$eventData['name'],
@@ -99,7 +99,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 					null
 				)
 			],
-			$meetingType,
+			$participationOptions,
 			$eventData['meeting_url'],
 			$eventData['meeting_country'],
 			$eventData['meeting_address'],

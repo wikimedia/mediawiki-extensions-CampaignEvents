@@ -188,9 +188,9 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 			$this->msg( 'campaignevents-notification-registration-details-type-header' )->text()
 		);
 
-		$meetingType = $this->eventRegistration->getMeetingType();
+		$participationOptions = $this->eventRegistration->getParticipationOptions();
 
-		if ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) {
+		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
 			$ret .= Html::element(
 				'h3',
 				[],
@@ -202,7 +202,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 				$ret .= Html::rawElement( 'p', [], $meetingLink );
 			}
 		}
-		if ( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) {
+		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			$ret .= Html::element(
 				'h3',
 				[],

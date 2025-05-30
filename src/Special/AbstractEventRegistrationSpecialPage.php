@@ -461,17 +461,17 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		// TODO: Maybe consider dropping the default when switching to Codex, if that allows indeterminate radios.
-		$defaultMeetingType = EventRegistration::MEETING_TYPE_ONLINE;
+		$defaultParticipationOptions = EventRegistration::PARTICIPATION_OPTION_ONLINE;
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
 			'label-message' => 'campaignevents-edit-field-meeting-type',
 			'options-messages' => [
-				'campaignevents-edit-field-type-online' => EventRegistration::MEETING_TYPE_ONLINE,
-				'campaignevents-edit-field-type-in-person' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'campaignevents-edit-field-type-online' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+				'campaignevents-edit-field-type-in-person' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'campaignevents-edit-field-type-online-and-in-person' =>
-					EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON
+					EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
 			],
-			'default' => $this->event ? $this->event->getMeetingType() : $defaultMeetingType,
+			'default' => $this->event ? $this->event->getParticipationOptions() : $defaultParticipationOptions,
 			'required' => true,
 			'section' => self::DETAILS_SECTION,
 		];
@@ -479,7 +479,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventMeetingURL'] = [
 			'type' => 'url',
 			'label-message' => 'campaignevents-edit-field-meeting-url',
-			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_IN_PERSON ],
+			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::PARTICIPATION_OPTION_IN_PERSON ],
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
 			'section' => self::DETAILS_SECTION,
 		];
@@ -490,7 +490,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventMeetingCountry'] = [
 			'type' => 'text',
 			'label-message' => 'campaignevents-edit-field-country',
-			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
+			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingCountry() : '',
 			'maxlength' => EventFactory::COUNTRY_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
@@ -499,7 +499,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'type' => 'textarea',
 			'rows' => 5,
 			'label-message' => 'campaignevents-edit-field-address',
-			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::MEETING_TYPE_ONLINE ],
+			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingAddress() : '',
 			'maxlength' => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
@@ -655,7 +655,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
-		$meetingType = (int)$data['EventMeetingType'];
+		$participationOptions = (int)$data['EventMeetingType'];
 		// The value for these fields is the empty string if the field was not filled, but EventFactory distinguishes
 		// empty string (= the value was explicitly specified as an empty string) vs null (=value not specified).
 		// That's mostly intended for API consumers, and here for the UI we can just assume that
@@ -706,6 +706,18 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$wikis = $data['Wikis'];
 		}
 
+		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
+			$meetingURL = $data['EventMeetingURL'];
+		} else {
+			$meetingURL = null;
+		}
+		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
+			$meetingCountry = $data['EventMeetingCountry'];
+			$meetingAddress = $data['EventMeetingAddress'];
+		} else {
+			$meetingCountry = $meetingAddress = null;
+		}
+
 		$testEvent = $data['TestEvent'] === "1";
 
 		try {
@@ -726,10 +738,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['Topics'] ?? [],
 				$trackingToolUserID,
 				$trackingToolEventID,
-				$meetingType,
-				( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) ? $data['EventMeetingURL'] : null,
-				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingCountry'] : null,
-				( $meetingType & EventRegistration::MEETING_TYPE_IN_PERSON ) ? $data['EventMeetingAddress'] : null,
+				$participationOptions,
+				$meetingURL,
+				$meetingCountry,
+				$meetingAddress,
 				$data['EventChatURL'],
 				$testEvent,
 				$participantQuestionNames,

@@ -70,7 +70,7 @@ class EventRegistrationPage extends Page {
 		await this.body.click();
 	}
 
-	async selectMeetingType( meetingType ) {
+	async selectParticipationOptions( meetingType ) {
 		if ( meetingType === 'online' ) {
 			await this.meetingTypeSelector.$( 'label:nth-of-type(1)' ).click();
 		} else if ( meetingType === 'inperson' ) {
@@ -156,7 +156,7 @@ class EventRegistrationPage extends Page {
 	 * @param {string} eventPage Prefixed title of the event page, such as 'Event:Test'
 	 * @param {Object} start the day and year to start the event, e.g. {day: 15, year: 2023}
 	 * @param {Object} end the day and year to end the event, e.g. {day: 15, year: 2024}
-	 * @param {string} meetingType choose from 'inperson', 'hybrid', or 'online'
+	 * @param {string} participationOptions choose from 'inperson', 'hybrid', or 'online'
 	 * @param {string} organizer Username of a user to add as organizer
 	 */
 	async editEvent( {
@@ -164,7 +164,7 @@ class EventRegistrationPage extends Page {
 		eventPage,
 		start,
 		end,
-		meetingType,
+		participationOptions,
 		organizer
 	} ) {
 		await super.openTitle( `Special:EditEventRegistration/${ id }` );
@@ -179,8 +179,8 @@ class EventRegistrationPage extends Page {
 		if ( end ) {
 			await this.setEndDate( end );
 		}
-		if ( meetingType ) {
-			await this.selectMeetingType( meetingType );
+		if ( participationOptions ) {
+			await this.selectParticipationOptions( participationOptions );
 		}
 		if ( organizer ) {
 			await this.addOrganizer( organizer );

@@ -108,7 +108,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			[],
 			[],
 			[],
-			EventRegistration::MEETING_TYPE_ONLINE,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE,
 			null,
 			null,
 			null,

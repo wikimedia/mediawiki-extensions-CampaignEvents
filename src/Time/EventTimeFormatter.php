@@ -84,7 +84,7 @@ class EventTimeFormatter {
 	 * see T316688.
 	 */
 	private function getTimeCorrection( EventRegistration $event, UserIdentity $user ): UserTimeCorrection {
-		if ( $event->getMeetingType() === EventRegistration::MEETING_TYPE_IN_PERSON ) {
+		if ( $event->getParticipationOptions() === EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			return Utils::timezoneToUserTimeCorrection( $event->getTimezone() );
 		}
 		$timeCorrectionPref = $this->userOptionsLookup->getOption( $user, 'timecorrection' ) ?? '';

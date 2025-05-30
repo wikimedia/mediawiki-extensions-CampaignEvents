@@ -50,7 +50,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 					null
 				)
 			],
-			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'Country',
 			'Address',
@@ -78,7 +78,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getWikis(), $actual->getWikis(), 'wikis' );
 		$this->assertSame( $expected->getTopics(), $actual->getTopics(), 'topics' );
 		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
-		$this->assertSame( $expected->getMeetingType(), $actual->getMeetingType(), 'meeting type' );
+		$this->assertSame(
+			$expected->getParticipationOptions(),
+			$actual->getParticipationOptions(),
+			'participation options'
+		);
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
 		$this->assertSame( $expected->getMeetingCountry(), $actual->getMeetingCountry(), 'country' );
 		$this->assertSame( $expected->getMeetingAddress(), $actual->getMeetingAddress(), 'address' );
@@ -356,7 +360,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ 'awiki', 'bwiki', 'cwiki' ],
 			[ 'atopic', 'btopic' ],
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
-			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'Country' => 'Country',
 			'Address' => 'Address',

@@ -32,7 +32,7 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 
 	private function doTestFormat(
 		bool $isStart,
-		int $meetingType,
+		int $participationOptions,
 		string $expectedTimeCorrection,
 		DateTimeZone $eventTimezone,
 		?string $userPrefTimeCorrection
@@ -45,7 +45,7 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 		$event = $this->createMock( EventRegistration::class );
 		$event->method( 'getStartUTCTimestamp' )->willReturn( $utcTimestamp );
 		$event->method( 'getEndUTCTimestamp' )->willReturn( $utcTimestamp );
-		$event->method( 'getMeetingType' )->willReturn( $meetingType );
+		$event->method( 'getParticipationOptions' )->willReturn( $participationOptions );
 		$event->method( 'getTimezone' )->willReturn( $eventTimezone );
 
 		$user = $this->createMock( UserIdentity::class );
@@ -89,14 +89,14 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 	 * @covers ::getTimeCorrection
 	 */
 	public function testFormatStart(
-		int $meetingType,
+		int $participationOptions,
 		string $expectedTimeCorrection,
 		DateTimeZone $eventTimezone,
 		?string $userPrefTimeCorrection
 	) {
 		$this->doTestFormat(
 			true,
-			$meetingType,
+			$participationOptions,
 			$expectedTimeCorrection,
 			$eventTimezone,
 			$userPrefTimeCorrection
@@ -110,14 +110,14 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 	 * @covers ::getTimeCorrection
 	 */
 	public function testFormatEnd(
-		int $meetingType,
+		int $participationOptions,
 		string $expectedTimeCorrection,
 		DateTimeZone $eventTimezone,
 		?string $userPrefTimeCorrection
 	) {
 		$this->doTestFormat(
 			false,
-			$meetingType,
+			$participationOptions,
 			$expectedTimeCorrection,
 			$eventTimezone,
 			$userPrefTimeCorrection
@@ -130,21 +130,21 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 		$eventTimeCorrection = 'Offset|120';
 
 		yield 'Online event' => [
-			EventRegistration::MEETING_TYPE_ONLINE,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE,
 			$userTimeCorrectionPref,
 			$eventTimezone,
 			$userTimeCorrectionPref,
 		];
 
 		yield 'In-person event' => [
-			EventRegistration::MEETING_TYPE_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 			$eventTimeCorrection,
 			$eventTimezone,
 			null,
 		];
 
 		yield 'Hybrid event' => [
-			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			$userTimeCorrectionPref,
 			$eventTimezone,
 			$userTimeCorrectionPref,
@@ -157,13 +157,13 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 	 * @covers ::getTimeCorrection
 	 */
 	public function testFormatTimezone(
-		int $meetingType,
+		int $participationOptions,
 		?string $timeZone,
 		?string $expectedTimeCorrection,
 		string $expected
 	) {
 		$event = $this->createMock( EventRegistration::class );
-		$event->method( 'getMeetingType' )->willReturn( $meetingType );
+		$event->method( 'getParticipationOptions' )->willReturn( $participationOptions );
 		if ( $timeZone !== null ) {
 			$event->method( 'getTimezone' )->willReturn( new DateTimeZone( $timeZone ) );
 		} else {
@@ -193,19 +193,19 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 		$geographicalTimeCorrection = "ZoneInfo|0|$geographicalZone";
 
 		yield 'Online event, geographical' => [
-			EventRegistration::MEETING_TYPE_ONLINE,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE,
 			null,
 			$geographicalTimeCorrection,
 			$geographicalZone
 		];
 		yield 'In-person event, geographical' => [
-			EventRegistration::MEETING_TYPE_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 			$geographicalZone,
 			null,
 			$geographicalZone
 		];
 		yield 'Hybrid event, geographical' => [
-			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			null,
 			$geographicalTimeCorrection,
 			$geographicalZone
@@ -215,19 +215,19 @@ class EventTimeFormatterTest extends MediaWikiUnitTestCase {
 		$offsetTimeCorrection = "Offset|120";
 
 		yield 'Online event, offset' => [
-			EventRegistration::MEETING_TYPE_ONLINE,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE,
 			null,
 			$offsetTimeCorrection,
 			$offset
 		];
 		yield 'In-person event, offset' => [
-			EventRegistration::MEETING_TYPE_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 			$offset,
 			null,
 			$offset
 		];
 		yield 'Hybrid event, offset' => [
-			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			null,
 			$offsetTimeCorrection,
 			$offset
