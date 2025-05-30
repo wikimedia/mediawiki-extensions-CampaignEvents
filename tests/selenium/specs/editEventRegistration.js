@@ -36,7 +36,7 @@ describe( 'Edit Event Registration', () => {
 	it( 'can allow organizer to change the event to be in person', async () => {
 		await EventRegistrationPage.editEvent( {
 			id,
-			meetingType: 'inperson'
+			participationOptions: 'inperson'
 		} );
 
 		await expect( await EventPage.eventType ).toHaveText( 'In-person event' );
@@ -45,7 +45,7 @@ describe( 'Edit Event Registration', () => {
 	it( 'can allow organizer to change the event to be online and in-person', async () => {
 		await EventRegistrationPage.editEvent( {
 			id,
-			meetingType: 'hybrid'
+			participationOptions: 'hybrid'
 		} );
 
 		await expect( await EventPage.eventType ).toHaveText( 'Online and in-person event' );

@@ -41,7 +41,7 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newOngoingListPager(
 			new RequestContext(),
 			self::$EVENT_NAME,
-			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			wfTimestamp( TS_MW, self::$EVENT_START + 1 ),
 			[ 'any_wiki_name' ],
 			true,

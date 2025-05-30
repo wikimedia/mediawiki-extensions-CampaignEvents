@@ -449,12 +449,12 @@ class EventPageDecorator {
 		$eventID = $registration->getID();
 		$items = [];
 
-		$meetingType = $registration->getMeetingType();
-		if ( $meetingType === EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON ) {
+		$participationOptions = $registration->getParticipationOptions();
+		if ( $participationOptions === EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON ) {
 			$locationContent = $this->out->msg(
 				MessageValue::new( 'campaignevents-eventpage-header-type-online-and-in-person' )
 			)->escaped();
-		} elseif ( $meetingType & EventRegistration::MEETING_TYPE_ONLINE ) {
+		} elseif ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
 			$locationContent = $this->out->msg(
 				MessageValue::new( 'campaignevents-eventpage-header-type-online' )
 			)->escaped();
@@ -716,7 +716,7 @@ class EventPageDecorator {
 	): string {
 		$locationElements = [];
 		$onlineLocationElements = [];
-		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_ONLINE ) {
+		if ( $registration->getParticipationOptions() & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
 			$onlineLocationElements[] = ( new Tag( 'h4' ) )
 				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-location-header' ] )
 				->appendContent(
@@ -754,7 +754,7 @@ class EventPageDecorator {
 			}
 			$onlineLocationElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
 		}
-		if ( $registration->getMeetingType() & EventRegistration::MEETING_TYPE_IN_PERSON ) {
+		if ( $registration->getParticipationOptions() & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			$rawAddress = $registration->getMeetingAddress();
 			$rawCountry = $registration->getMeetingCountry();
 			$addressElement = new Tag( 'p' );

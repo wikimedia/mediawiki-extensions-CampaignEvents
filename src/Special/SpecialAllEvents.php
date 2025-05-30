@@ -120,7 +120,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$filterWiki = $request->getArray( 'wpFilterWikis' ) ?? [];
 			$filterTopics = $request->getArray( 'wpFilterTopics' ) ?? [];
 		}
-		$meetingType = $request->getIntOrNull( 'wpMeetingType' );
+		$participationOptions = $request->getIntOrNull( 'wpMeetingType' );
 		$rawStartTime = $request->getRawVal( 'wpStartDate' ) ?? (string)time();
 		if ( $this->including() && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $rawStartTime ) ) {
 			// Special case: allow specifying just the date when transcluding. Ideally we'd also use just the date
@@ -152,7 +152,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		if ( $showForm ) {
 			$form = $this->getHTMLForm(
 				$searchedVal,
-				$meetingType,
+				$participationOptions,
 				$startTime,
 				$openSectionsStr,
 				$formIdentifier
@@ -163,7 +163,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$upcomingPager = $this->eventsPagerFactory->newListPager(
 			$this->getContext(),
 			$searchedVal,
-			$meetingType,
+			$participationOptions,
 			$startTime,
 			$endTime,
 			$filterWiki,
@@ -175,7 +175,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
 				$this->getContext(),
 				$searchedVal,
-				$meetingType,
+				$participationOptions,
 				$startTime,
 				$filterWiki,
 				$includeAllWikis,
@@ -208,7 +208,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 
 	public function getHTMLForm(
 		?string $searchedVal,
-		?int $meetingType,
+		?int $participationOptions,
 		?string $startTime,
 		string $openSectionsStr,
 		string $formIdentifier
@@ -225,12 +225,12 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'label-message' => 'campaignevents-allevents-label-meeting-type',
 				'options-messages' => [
 					'campaignevents-eventslist-location-all-events' => null,
-					'campaignevents-eventslist-location-online' => EventRegistration::MEETING_TYPE_ONLINE,
-					'campaignevents-eventslist-location-in-person' => EventRegistration::MEETING_TYPE_IN_PERSON,
+					'campaignevents-eventslist-location-online' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+					'campaignevents-eventslist-location-in-person' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 					'campaignevents-eventslist-location-online-and-in-person' =>
-						EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON
+						EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
 				],
-				'default' => $meetingType,
+				'default' => $participationOptions,
 				'cssclass' => 'ext-campaignevents-allevents-meetingtype-field'
 			],
 			'StartDate' => [

@@ -35,9 +35,9 @@ class EventStore implements IEventStore, IEventLookup {
 		EventRegistration::STATUS_CLOSED => 2,
 	];
 
-	private const EVENT_MEETING_TYPE_MAP = [
-		EventRegistration::MEETING_TYPE_IN_PERSON => 1,
-		EventRegistration::MEETING_TYPE_ONLINE => 2,
+	private const PARTICIPATION_OPTION_MAP = [
+		EventRegistration::PARTICIPATION_OPTION_IN_PERSON => 1,
+		EventRegistration::PARTICIPATION_OPTION_ONLINE => 2,
 	];
 
 	private CampaignsDatabaseHelper $dbHelper;
@@ -412,7 +412,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_page_wiki
 		);
 		$types = EventTypesRegistry::getEventTypesFromDBVal( $row->event_types );
-		$meetingType = self::getMeetingTypeFromDBVal( $row->event_meeting_type );
+		$participationOptions = self::getParticipationOptionsFromDBVal( $row->event_meeting_type );
 
 		$address = null;
 		$country = null;
@@ -448,7 +448,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$wikis,
 			$topics,
 			$trackingTools,
-			$meetingType,
+			$participationOptions,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
 			$country,
 			$address,
@@ -488,7 +488,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_end_local' => $localEndDB,
 			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
 			'event_types' => EventTypesRegistry::eventTypesToDBVal( $event->getTypes() ),
-			'event_meeting_type' => self::meetingTypeToDBVal( $event->getMeetingType() ),
+			'event_meeting_type' => self::participationOptionsToDBVal( $event->getParticipationOptions() ),
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
 			'event_last_edit' => $curDBTimestamp,
@@ -599,15 +599,16 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * Converts a meeting type as stored in the DB into a combination of the EventRegistration::MEETING_TYPE_* constants
-	 * @param string $dbMeetingType
+	 * Converts participation options as stored in the DB into a combination of the
+	 * EventRegistration::PARTICIPATION_OPTION_* constants.
+	 * @param string $dbParticipationOptions
 	 * @return int
 	 */
-	public static function getMeetingTypeFromDBVal( string $dbMeetingType ): int {
+	public static function getParticipationOptionsFromDBVal( string $dbParticipationOptions ): int {
 		$ret = 0;
-		$dbMeetingTypeNum = (int)$dbMeetingType;
-		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
-			if ( $dbMeetingTypeNum & $dbVal ) {
+		$dbParticipationOptionsNum = (int)$dbParticipationOptions;
+		foreach ( self::PARTICIPATION_OPTION_MAP as $eventVal => $dbVal ) {
+			if ( $dbParticipationOptionsNum & $dbVal ) {
 				$ret |= $eventVal;
 			}
 		}
@@ -615,18 +616,18 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * Converts an EventRegistration::MEETING_TYPE_* constant to the corresponding value used in the database.
-	 * @param int $meetingType
+	 * Converts an EventRegistration::PARTICIPATION_OPTION_* constant to the corresponding value used in the database.
+	 * @param int $participationOptions
 	 * @return int
 	 */
-	public static function meetingTypeToDBVal( int $meetingType ): int {
-		$dbMeetingType = 0;
-		foreach ( self::EVENT_MEETING_TYPE_MAP as $eventVal => $dbVal ) {
-			if ( $meetingType & $eventVal ) {
-				$dbMeetingType |= $dbVal;
+	public static function participationOptionsToDBVal( int $participationOptions ): int {
+		$dbParticipationOptions = 0;
+		foreach ( self::PARTICIPATION_OPTION_MAP as $eventVal => $dbVal ) {
+			if ( $participationOptions & $eventVal ) {
+				$dbParticipationOptions |= $dbVal;
 			}
 		}
-		return $dbMeetingType;
+		return $dbParticipationOptions;
 	}
 
 	/**

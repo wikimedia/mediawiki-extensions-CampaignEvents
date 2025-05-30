@@ -42,7 +42,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 					null
 				)
 			],
-			'meeting_type' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'country' => 'Some country',
 			'address' => 'Some address',
@@ -69,7 +69,11 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['wikis'], $registration->getWikis(), 'wikis' );
 		$this->assertSame( $data['topics'], $registration->getTopics(), 'topics' );
 		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
-		$this->assertSame( $data['meeting_type'], $registration->getMeetingType(), 'meeting_type' );
+		$this->assertSame(
+			$data['participation_options'],
+			$registration->getParticipationOptions(),
+			'participation_options'
+		);
 		$this->assertSame( $data['meeting_url'], $registration->getMeetingURL(), 'meeting_url' );
 		$this->assertSame( $data['country'], $registration->getMeetingCountry(), 'country' );
 		$this->assertSame( $data['address'], $registration->getMeetingAddress(), 'address' );

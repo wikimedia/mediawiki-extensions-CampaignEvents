@@ -522,9 +522,9 @@ class EventDetailsModule {
 		OutputPage $out,
 		LinkRenderer $linkRenderer
 	): Tag {
-		$meetingType = $this->registration->getMeetingType();
+		$participationOptions = $this->registration->getParticipationOptions();
 		$items = [];
-		if ( $meetingType & ExistingEventRegistration::MEETING_TYPE_IN_PERSON ) {
+		if ( $participationOptions & ExistingEventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			$items[] = ( new Tag( 'h4' ) )
 				->appendContent( $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-in-person-event-label' )
@@ -550,7 +550,7 @@ class EventDetailsModule {
 			}
 		}
 
-		if ( $meetingType & ExistingEventRegistration::MEETING_TYPE_ONLINE ) {
+		if ( $participationOptions & ExistingEventRegistration::PARTICIPATION_OPTION_ONLINE ) {
 			$items[] = ( new Tag( 'h4' ) )
 				->appendContent( $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-online-label' )

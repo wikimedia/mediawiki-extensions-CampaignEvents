@@ -47,7 +47,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'topics' => [ 'atopic', 'btopic' ],
 		'trackingid' => null,
 		'trackingeventid' => null,
-		'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+		'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
 		'country' => 'Country',
 		'address' => 'Address',
@@ -312,18 +312,18 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			self::getTestDataWithDefault( [ 'trackingid' => 'invalid-tracking-tool', 'trackingeventid' => 'foo' ] )
 		];
 
-		yield 'No meeting type' => [
+		yield 'No participation options' => [
 			'campaignevents-error-no-meeting-type',
-			self::getTestDataWithDefault( [ 'meetingtype' => 0 ] )
+			self::getTestDataWithDefault( [ 'participationOptions' => 0 ] )
 		];
-		yield 'Invalid meeting type' => [
+		yield 'Invalid participation options' => [
 			'campaignevents-error-no-meeting-type',
-			self::getTestDataWithDefault( [ 'meetingtype' => 123 ] )
+			self::getTestDataWithDefault( [ 'participationOptions' => 123 ] )
 		];
 		yield 'Online meeting without URL, successful' => [
 			null,
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'meetingurl' => null,
 				'country' => null,
 				'address' => null,
@@ -332,7 +332,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'Online meeting with invalid URL' => [
 			'campaignevents-error-invalid-meeting-url',
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'meetingurl' => 'Not a URL',
 				'country' => null,
 				'address' => null,
@@ -341,7 +341,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'In person meeting without country, successful' => [
 			null,
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'country' => null,
 				'meetingurl' => null,
 			] )
@@ -349,7 +349,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'In person meeting without address, successful' => [
 			null,
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'address' => null,
 				'meetingurl' => null,
 			] )
@@ -357,7 +357,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'In person meeting with invalid country' => [
 			'campaignevents-error-invalid-country',
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'country' => '',
 				'meetingurl' => null,
 			] )
@@ -365,7 +365,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'In person meeting with invalid address' => [
 			'campaignevents-error-invalid-address',
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'address' => '',
 				'meetingurl' => null,
 			] )
@@ -373,7 +373,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'Online meeting with country' => [
 			'campaignevents-error-countryoraddress-not-in-person',
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => 'Explicitly set',
 				'country' => null,
 			] )
@@ -381,7 +381,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'Online meeting with address' => [
 			'campaignevents-error-countryoraddress-not-in-person',
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_ONLINE,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
 				'country' => 'Explicitly set',
 			] )
@@ -389,7 +389,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		yield 'In-person meeting with meeting URL' => [
 			'campaignevents-error-meeting-url-not-online',
 			self::getTestDataWithDefault( [
-				'meetingtype' => EventRegistration::MEETING_TYPE_IN_PERSON,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'meetingurl' => 'https://explicitly-set.example.org',
 			] )
 		];

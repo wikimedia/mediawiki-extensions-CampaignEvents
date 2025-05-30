@@ -89,7 +89,7 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
 			new RequestContext(),
 			self::$EVENT_NAME,
-			EventRegistration::MEETING_TYPE_ONLINE_AND_IN_PERSON,
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'19120623000000',
 			'29120623000000',
 			[ 'any_wiki_name' ],

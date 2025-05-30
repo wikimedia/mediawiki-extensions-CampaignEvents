@@ -119,12 +119,12 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 */
 	protected function createEventObject( array $body ): EventRegistration {
 		$existingEvent = $this->getExistingEvent();
-		$meetingType = 0;
+		$participationOptions = 0;
 		if ( $body['online_meeting'] ) {
-			$meetingType |= EventRegistration::MEETING_TYPE_ONLINE;
+			$participationOptions |= EventRegistration::PARTICIPATION_OPTION_ONLINE;
 		}
 		if ( $body['inperson_meeting'] ) {
-			$meetingType |= EventRegistration::MEETING_TYPE_IN_PERSON;
+			$participationOptions |= EventRegistration::PARTICIPATION_OPTION_IN_PERSON;
 		}
 
 		$participantQuestionNames = [];
@@ -156,7 +156,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['topics'] ?? [],
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
-			$meetingType,
+			$participationOptions,
 			$body['meeting_url'],
 			$body['meeting_country'],
 			$body['meeting_address'],
