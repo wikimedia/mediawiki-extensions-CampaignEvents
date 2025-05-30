@@ -9,6 +9,7 @@ use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
@@ -41,7 +42,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			new DateTimeZone( 'UTC' ),
 			'20220810000000',
 			'20220810000001',
-			[],
+			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			[ 'awiki', 'bwiki' ],
 			[ 'atopic', 'btopic' ],
 			[
@@ -76,6 +77,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getStartUTCTimestamp(), $actual->getStartUTCTimestamp(), 'UTC start' );
 		$this->assertSame( $expected->getEndLocalTimestamp(), $actual->getEndLocalTimestamp(), 'local end' );
 		$this->assertSame( $expected->getEndUTCTimestamp(), $actual->getEndUTCTimestamp(), 'UTC end' );
+		$this->assertSame( $expected->getTypes(), $actual->getTypes(), 'Types' );
 		$this->assertSame( $expected->getWikis(), $actual->getWikis(), 'wikis' );
 		$this->assertSame( $expected->getTopics(), $actual->getTopics(), 'topics' );
 		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
@@ -83,6 +85,9 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
 		$this->assertSame( $expected->getMeetingCountry(), $actual->getMeetingCountry(), 'country' );
 		$this->assertSame( $expected->getMeetingAddress(), $actual->getMeetingAddress(), 'address' );
+		$this->assertSame( $expected->getChatURL(), $actual->getChatURL(), 'chat' );
+		$this->assertSame( $expected->getIsTestEvent(), $actual->getIsTestEvent(), 'is test' );
+		$this->assertSame( $expected->getParticipantQuestions(), $actual->getParticipantQuestions(), 'questions' );
 	}
 
 	private function assertStoredEvent( int $insertID, EventRegistration $storedEvent ) {
@@ -350,7 +355,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			new DateTimeZone( 'UTC' ),
 			'20220731080000',
 			'20220731160000',
-			[],
+			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			[ 'awiki', 'bwiki', 'cwiki' ],
 			[ 'atopic', 'btopic' ],
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],

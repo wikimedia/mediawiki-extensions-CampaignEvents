@@ -86,6 +86,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['timezone']->getName(), $registration->getTimezone()->getName(), 'timezone' );
 		$this->assertSame( $data['start'], $registration->getStartLocalTimestamp(), 'start' );
 		$this->assertSame( $data['end'], $registration->getEndLocalTimestamp(), 'end' );
+		$this->assertSame( $data['types'], $registration->getTypes(), 'types' );
 		$this->assertSame( $data['wikis'], $registration->getWikis(), 'wikis' );
 		$this->assertSame( $data['topics'], $registration->getTopics(), 'topics' );
 		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
