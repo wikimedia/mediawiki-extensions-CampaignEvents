@@ -92,6 +92,10 @@ class EventsPagerFactory {
 		);
 	}
 
+	/**
+	 * @phan-param list<string> $filterWiki
+	 * @phan-param list<string> $filterTopics
+	 */
 	public function newListPager(
 		IContextSource $context,
 		string $search,
@@ -126,6 +130,10 @@ class EventsPagerFactory {
 		);
 	}
 
+	/**
+	 * @phan-param list<string> $filterWiki
+	 * @phan-param list<string> $filterTopics
+	 */
 	public function newOngoingListPager(
 		IContextSource $context,
 		string $search,

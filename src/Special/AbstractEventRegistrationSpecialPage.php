@@ -41,6 +41,7 @@ use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
 use RuntimeException;
 use StatusValue;
+use Wikimedia\Message\MessageSpecifier;
 use Wikimedia\RequestTimeout\TimeoutException;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
@@ -186,7 +187,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	/**
 	 * @param string $errorMsg
 	 * @param mixed ...$msgParams
-	 * @return void
+	 * @suppress PhanPluginUnknownArrayMethodParamType,UnusedSuppression https://github.com/phan/phan/issues/4927
 	 */
 	protected function outputErrorBox( string $errorMsg, ...$msgParams ): void {
 		$this->setHeaders();
@@ -207,6 +208,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,array<string,mixed>>
 	 */
 	protected function getFormFields(): array {
 		$eventPageDefault = null;
@@ -311,6 +313,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'min' => 1,
 			'cssclass' => 'ext-campaignevents-organizers-multiselect-input',
 			'placeholder-message' => 'campaignevents-edit-field-organizers-placeholder',
+			/**
+			 * @param mixed $value
+			 * @param array<string,mixed> $alldata
+			 * @return string|true
+			 */
 			'validation-callback' => function ( $value, $alldata ) {
 				$organizers = $alldata['EventOrganizerUsernames'] !== ''
 					? explode( "\n", $alldata['EventOrganizerUsernames'] )
@@ -436,6 +443,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				'default' => $defaultDashboardURL,
 				'help-message' => 'campaignevents-edit-field-tracking-tools-help',
 				'placeholder-message' => 'campaignevents-edit-field-tracking-tools-placeholder',
+				/**
+				 * @param mixed $value
+				 * @param array<string,mixed> $allData
+				 * @return string|true
+				 */
 				'validation-callback' => function ( $value, $allData ) {
 					if ( $value === '' ) {
 						return true;
@@ -527,7 +539,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	/**
 	 * Return the form fields for the participant questions section.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	private function getParticipantQuestionsFields(): array {
 		$fields = [];
@@ -647,6 +659,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 	/**
 	 * @inheritDoc
+	 * @param array<string,mixed> $data
 	 */
 	public function onSubmit( array $data ) {
 		$participationOptions = (int)$data['EventMeetingType'];
@@ -799,7 +812,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	}
 
 	/**
-	 * @return array of usernames
+	 * @return list<string>
 	 */
 	private function getOrganizerUsernames(): array {
 		if ( !$this->eventID ) {
@@ -838,7 +851,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$warningMessages = $this->saveWarningsStatus->getMessages();
 		if ( $warningMessages ) {
 			$warningMessagesText = array_map(
-				fn ( $msg ) => $this->msg( $msg )->text(),
+				fn ( MessageSpecifier $msg ): string => $this->msg( $msg )->text(),
 				$warningMessages
 			);
 			$session->set( self::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY, $warningMessagesText );

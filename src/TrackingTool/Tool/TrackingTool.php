@@ -36,7 +36,7 @@ abstract class TrackingTool {
 	/**
 	 * @param int $dbID ID that identifies this specific tracking tool in the DB
 	 * @param string $baseURL Base URL of this instance
-	 * @param array $extra Any additional information needed by this instance.
+	 * @param array<string,mixed> $extra Any additional information needed by this instance.
 	 */
 	public function __construct( int $dbID, string $baseURL, array $extra ) {
 		$this->dbID = $dbID;

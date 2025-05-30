@@ -53,6 +53,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,mixed>
 	 */
 	public function getQueryInfo() {
 		return [

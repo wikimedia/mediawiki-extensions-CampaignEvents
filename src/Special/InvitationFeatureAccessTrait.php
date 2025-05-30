@@ -10,11 +10,15 @@ use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use OOUI\MessageWidget;
 
+// https://github.com/phan/phan/issues/4927 plus phan refusing to suppress unused suppressions...
+// @phan-file-suppress UnusedPluginSuppression,UnusedSuppression,UnusedPluginFileSuppression
+
 /**
  * @property PermissionChecker $permissionChecker
  * @method Config getConfig()
- * @method Message msg($key, ...$params)
- * @method void requireNamedUser($reasonMsg = '', $titleMsg = '', $alwaysRedirectToLoginPage = true)
+ * @phan-suppress-next-line PhanPluginUnknownArrayMethodParamType
+ * @method Message msg(mixed $key, mixed ...$params)
+ * @method void requireNamedUser(string $reasonMsg = '', string $titleMsg = '', bool $alwaysRedirectToLoginPage = true)
  */
 trait InvitationFeatureAccessTrait {
 	public function checkInvitationFeatureAccess( OutputPage $out, Authority $performer ): bool {

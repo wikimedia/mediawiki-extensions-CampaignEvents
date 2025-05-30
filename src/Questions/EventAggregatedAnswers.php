@@ -11,7 +11,7 @@ class EventAggregatedAnswers {
 	/** @var array<int,array<int,int>> */
 	private array $data = [];
 
-	public function addEntry( int $questionID, int $optionID, int $amount ) {
+	public function addEntry( int $questionID, int $optionID, int $amount ): void {
 		if ( !isset( $this->data[ $questionID ] ) ) {
 			$this->data[ $questionID ] = [];
 		}
@@ -30,9 +30,9 @@ class EventAggregatedAnswers {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int,array<int,int>>
 	 */
-	public function getData() {
+	public function getData(): array {
 		return $this->data;
 	}
 }

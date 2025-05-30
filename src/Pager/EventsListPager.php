@@ -58,7 +58,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	private string $search;
 	/** One of the EventRegistration::PARTICIPATION_OPTION_* constants */
 	private ?int $participationOptions;
-	/** dbnames of the wikis chosen */
+	/** @var list<string> dbnames of the wikis chosen */
 	private array $filterWiki;
 	private bool $includeAllWikis;
 	/** @var string[] */
@@ -83,6 +83,8 @@ class EventsListPager extends ReverseChronologicalPager {
 
 	/**
 	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
+	 * @phan-param list<string> $filterWiki
+	 * @phan-param list<string> $filterTopics
 	 */
 	public function __construct(
 		UserLinker $userLinker,
@@ -183,6 +185,7 @@ class EventsListPager extends ReverseChronologicalPager {
 
 	/**
 	 * @inheritDoc
+	 * @param stdClass $row
 	 */
 	public function getRow( $row ): string {
 		$s = '';
@@ -304,7 +307,7 @@ class EventsListPager extends ReverseChronologicalPager {
 
 		$language = $this->getLanguage();
 		$organizerLinks = array_map(
-			fn ( Organizer $organizer ) => $this->userLinker->generateUserLinkWithFallback(
+			fn ( Organizer $organizer ): string => $this->userLinker->generateUserLinkWithFallback(
 				$this->getContext(),
 				$organizer->getUser(),
 				$language->getCode()
@@ -395,7 +398,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function getSubqueryInfo(): array {
 		$query = $this->getDefaultSubqueryInfo();
@@ -436,7 +439,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @param int|null|string $offset
 	 * @param int $limit
 	 * @param bool $order
-	 * @return array
+	 * @return list<mixed>
 	 */
 	public function buildQueryInfo( $offset, $limit, $order ): array {
 		[ $tables, $fields, $conds, $fname, $options, $join_conds ] = parent::buildQueryInfo( $offset, $limit, $order );
@@ -526,9 +529,10 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 	}
 
+	/** @param list<string> $topics */
 	private function getTopicList( array $topics ): string {
 		$localizedTopicNames = array_map(
-			fn ( string $msgKey ) => $this->msg( $msgKey )->escaped(),
+			fn ( string $msgKey ): string => $this->msg( $msgKey )->escaped(),
 			$this->topicRegistry->getTopicMessages( $topics )
 		);
 		sort( $localizedTopicNames );

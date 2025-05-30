@@ -15,7 +15,10 @@ use MediaWiki\Html\Html;
  * stylesheet, due to T388458. Icon names should follow the canonical Codex names.
  */
 class TextWithIconWidget {
-	/** @param-taint $rawContent exec_html */
+	/**
+	 * @param-taint $rawContent exec_html
+	 * @phan-param list<string> $extraClasses
+	 */
 	public static function build(
 		string $icon,
 		string $label,

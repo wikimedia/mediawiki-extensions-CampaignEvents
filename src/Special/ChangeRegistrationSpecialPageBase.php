@@ -178,6 +178,9 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 			->show();
 	}
 
+	/**
+	 * @param array<string,mixed> $formData
+	 */
 	public function onFormSubmit( array $formData ): void {
 		$eventId = $formData['eventId'];
 		$title = $this->getPageTitle( $eventId ?: null );

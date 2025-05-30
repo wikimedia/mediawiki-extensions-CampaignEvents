@@ -118,7 +118,7 @@ class RegisterForEventHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function getBodyParamSettings(): array {
 		return [

@@ -29,7 +29,7 @@ class TrackingToolRegistry {
 	private ObjectFactory $objectFactory;
 	private ServiceOptions $options;
 
-	/** @var array|null Mock registry that can be set in tests. */
+	/** @var array<string,array<string,mixed>>|null Mock registry that can be set in tests. */
 	private ?array $registryForTests = null;
 
 	/**
@@ -128,7 +128,7 @@ class TrackingToolRegistry {
 
 	/**
 	 * Allows changing the internal registry in tests
-	 * @param array $registry
+	 * @param array<string,array<string,mixed>> $registry
 	 * @codeCoverageIgnore
 	 */
 	public function setRegistryForTesting( array $registry ): void {

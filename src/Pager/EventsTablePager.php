@@ -143,6 +143,7 @@ class EventsTablePager extends TablePager {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,string>
 	 */
 	protected function getFieldNames(): array {
 		return [
@@ -157,6 +158,7 @@ class EventsTablePager extends TablePager {
 	/**
 	 * Overridden to provide additional columns to order by, since most columns are not unique.
 	 * @inheritDoc
+	 * @return list<list<string>>
 	 */
 	public function getIndexField(): array {
 		// XXX Work around T308697: TablePager and IndexPager seem to be incompatible and the correct
@@ -173,6 +175,7 @@ class EventsTablePager extends TablePager {
 
 	/**
 	 * @inheritDoc
+	 * @param string $field
 	 */
 	protected function isFieldSortable( $field ): bool {
 		return array_key_exists( $field, self::SORT_INDEXES );
@@ -181,14 +184,17 @@ class EventsTablePager extends TablePager {
 	/**
 	 * @inheritDoc
 	 */
-	protected function getTableClass() {
+	protected function getTableClass(): string {
 		return parent::getTableClass() . ' ext-campaignevents-events-table';
 	}
 
 	/**
 	 * @inheritDoc
+	 * @param string $field
+	 * @param string $value
+	 * @return array<string,mixed>
 	 */
-	protected function getCellAttrs( $field, $value ) {
+	protected function getCellAttrs( $field, $value ): array {
 		$ret = parent::getCellAttrs( $field, $value );
 		$addClass = null;
 		if ( $field === 'manage_event' ) {
@@ -202,6 +208,7 @@ class EventsTablePager extends TablePager {
 
 	/**
 	 * @inheritDoc
+	 * @return list<string>
 	 */
 	public function getModuleStyles() {
 		return array_merge(
@@ -222,6 +229,7 @@ class EventsTablePager extends TablePager {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,mixed>
 	 */
 	public function getSubqueryInfo(): array {
 		$query = $this->getDefaultSubqueryInfo();

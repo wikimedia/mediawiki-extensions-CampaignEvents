@@ -49,7 +49,7 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 
 	/**
 	 * @param ExistingEventRegistration[] $events
-	 * @return array
+	 * @return list<array<string,mixed>>
 	 */
 	protected function buildResultStructure( array $events ): array {
 		$filter = [];
@@ -71,7 +71,7 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	/**
 	 * @param CentralUser $user
 	 * @param int $resultLimit
-	 * @return array
+	 * @return list<array<string,mixed>>
 	 */
 	abstract protected function getEventsByUser( CentralUser $user, int $resultLimit ): array;
 

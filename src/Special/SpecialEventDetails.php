@@ -74,8 +74,9 @@ class SpecialEventDetails extends SpecialPage {
 
 	/**
 	 * @inheritDoc
+	 * @param string|null $par
 	 */
-	public function execute( $par ) {
+	public function execute( $par ): void {
 		$this->setHeaders();
 		if ( $par === null ) {
 			$this->outputErrorBox( 'campaignevents-event-details-no-event-id-provided' );
@@ -262,9 +263,10 @@ class SpecialEventDetails extends SpecialPage {
 	/**
 	 * @param string $errorMsg
 	 * @param mixed ...$msgParams
-	 * @return void
+	 * @suppress PhanPluginUnknownArrayMethodParamType,UnusedSuppression https://github.com/phan/phan/issues/4927
 	 */
 	protected function outputErrorBox( string $errorMsg, ...$msgParams ): void {
+		// phan-suppress-previous-line PhanPluginUnknownArrayMethodParamType
 		$this->getOutput()->addModuleStyles( [
 			'mediawiki.codex.messagebox.styles',
 		] );

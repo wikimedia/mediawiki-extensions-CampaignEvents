@@ -309,6 +309,7 @@ class EventFactory {
 		return StatusValue::newGood( $campaignsPage );
 	}
 
+	/** @param list<string> $types */
 	private function validateTypes( array $types ): StatusValue {
 		$types = array_unique( $types );
 		$ret = StatusValue::newGood( $types );
