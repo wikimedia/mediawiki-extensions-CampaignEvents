@@ -464,7 +464,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$defaultParticipationOptions = EventRegistration::PARTICIPATION_OPTION_ONLINE;
 		$formFields['EventMeetingType'] = [
 			'type' => 'radio',
-			'label-message' => 'campaignevents-edit-field-meeting-type',
+			'label-message' => 'campaignevents-edit-field-participation-options',
 			'options-messages' => [
 				'campaignevents-edit-field-type-online' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'campaignevents-edit-field-type-in-person' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,

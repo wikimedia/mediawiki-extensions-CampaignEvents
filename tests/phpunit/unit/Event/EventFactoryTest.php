@@ -308,11 +308,11 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		];
 
 		yield 'No participation options' => [
-			'campaignevents-error-no-meeting-type',
+			'campaignevents-error-no-participation-options',
 			self::getTestDataWithDefault( [ 'participationOptions' => 0 ] )
 		];
 		yield 'Invalid participation options' => [
-			'campaignevents-error-no-meeting-type',
+			'campaignevents-error-no-participation-options',
 			self::getTestDataWithDefault( [ 'participationOptions' => 123 ] )
 		];
 		yield 'Online meeting without URL, successful' => [

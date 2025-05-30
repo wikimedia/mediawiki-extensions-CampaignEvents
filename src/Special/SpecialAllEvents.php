@@ -222,7 +222,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			],
 			'MeetingType' => [
 				'type' => 'select',
-				'label-message' => 'campaignevents-allevents-label-meeting-type',
+				'label-message' => 'campaignevents-allevents-label-participation-options',
 				'options-messages' => [
 					'campaignevents-eventslist-location-all-events' => null,
 					'campaignevents-eventslist-location-online' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
