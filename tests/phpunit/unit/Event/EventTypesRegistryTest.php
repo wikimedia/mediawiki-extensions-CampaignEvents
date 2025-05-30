@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
 use InvalidArgumentException;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesFormatter;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWikiUnitTestCase;
 use ReflectionClass;
@@ -14,21 +13,21 @@ use Wikimedia\Message\ITextFormatter;
 
 /**
  * @group Test
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventTypesFormatter
- * @covers ::__construct()
+ * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry
+ * @covers ::__construct
  */
-class EventTypesFormatterTest extends MediaWikiUnitTestCase {
+class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @coversNothing
 	 * @dataProvider provideConstants
 	 */
 	public function testConstantMapsAllEventTypes( string $constName ) {
-		$registry = new EventTypesRegistry();
+		$registry = new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) );
 		$allTypes = $registry->getAllTypes();
 
-		$formatterRefl = new ReflectionClass( EventTypesFormatter::class );
-		$actualMap = $formatterRefl->getConstant( $constName );
+		$registryRefl = new ReflectionClass( EventTypesRegistry::class );
+		$actualMap = $registryRefl->getConstant( $constName );
 
 		$this->assertEqualsCanonicalizing( $allTypes, array_keys( $actualMap ) );
 	}
@@ -61,15 +60,15 @@ class EventTypesFormatterTest extends MediaWikiUnitTestCase {
 				[ 'fr', $frFormatter ],
 			] );
 
-		$formatter = new EventTypesFormatter( $msgFormatterFactory );
+		$registry = new EventTypesRegistry( $msgFormatterFactory );
 
 		$this->assertSame(
 			$enMsg,
-			$formatter->getLocalizedEventTypeName( EventTypesRegistry::EVENT_TYPE_EDITING_EVENT, 'en' )
+			$registry->getLocalizedEventTypeName( EventTypesRegistry::EVENT_TYPE_EDITING_EVENT, 'en' )
 		);
 		$this->assertSame(
 			$frMsg,
-			$formatter->getLocalizedEventTypeName( EventTypesRegistry::EVENT_TYPE_EDITING_EVENT, 'fr' )
+			$registry->getLocalizedEventTypeName( EventTypesRegistry::EVENT_TYPE_EDITING_EVENT, 'fr' )
 		);
 	}
 
@@ -77,22 +76,22 @@ class EventTypesFormatterTest extends MediaWikiUnitTestCase {
 	 * @covers ::getLocalizedEventTypeName
 	 */
 	public function testGetLocalizedEventTypeName__invalid() {
-		$formatter = new EventTypesFormatter(
+		$registry = new EventTypesRegistry(
 			$this->createMock( IMessageFormatterFactory::class )
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$formatter->getLocalizedEventTypeName( 'invalid-event-type', 'en' );
+		$registry->getLocalizedEventTypeName( 'invalid-event-type', 'en' );
 	}
 
 	/**
 	 * @covers ::getEventTypeDebugName
 	 */
 	public function testGetEventTypeDebugName() {
-		$formatter = new EventTypesFormatter(
+		$registry = new EventTypesRegistry(
 			$this->createMock( IMessageFormatterFactory::class )
 		);
 		$this->assertIsString(
-			$formatter->getEventTypeDebugName( EventTypesRegistry::EVENT_TYPE_CONFERENCE )
+			$registry->getEventTypeDebugName( EventTypesRegistry::EVENT_TYPE_CONFERENCE )
 		);
 	}
 
@@ -100,11 +99,11 @@ class EventTypesFormatterTest extends MediaWikiUnitTestCase {
 	 * @covers ::getEventTypeDebugName
 	 */
 	public function testGetEventTypeDebugName__invalid() {
-		$formatter = new EventTypesFormatter(
+		$registry = new EventTypesRegistry(
 			$this->createMock( IMessageFormatterFactory::class )
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$formatter->getEventTypeDebugName( 'not_a_type' );
+		$registry->getEventTypeDebugName( 'not_a_type' );
 	}
 
 	/**
@@ -118,11 +117,11 @@ class EventTypesFormatterTest extends MediaWikiUnitTestCase {
 		$factory = $this->createMock( IMessageFormatterFactory::class );
 		$factory->method( 'getTextFormatter' )->willReturn( $formatter );
 
-		$instance = new EventTypesFormatter( $factory );
+		$registry = new EventTypesRegistry( $factory );
 
 		$this->assertSame(
 			$enMsg,
-			$instance->getLocalizedGroupTypeName( 'contributions', 'en' )
+			$registry->getLocalizedGroupTypeName( 'contributions', 'en' )
 		);
 	}
 
@@ -130,24 +129,24 @@ class EventTypesFormatterTest extends MediaWikiUnitTestCase {
 	 * @covers ::getLocalizedGroupTypeName
 	 */
 	public function testGetLocalizedGroupTypeName__invalid() {
-		$formatter = new EventTypesFormatter(
+		$registry = new EventTypesRegistry(
 			$this->createMock( IMessageFormatterFactory::class )
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$formatter->getLocalizedGroupTypeName( 'invalid_group', 'en' );
+		$registry->getLocalizedGroupTypeName( 'invalid_group', 'en' );
 	}
 
 	/**
 	 * @covers ::getEventTypeGroupsDebugName
 	 */
 	public function testGetEventTypeGroupsDebugName() {
-		$formatter = new EventTypesFormatter(
+		$registry = new EventTypesRegistry(
 			$this->createMock( IMessageFormatterFactory::class )
 		);
 
 		$this->assertSame(
 			'community',
-			$formatter->getEventTypeGroupsDebugName( 'community' )
+			$registry->getEventTypeGroupsDebugName( 'community' )
 		);
 	}
 
@@ -155,10 +154,10 @@ class EventTypesFormatterTest extends MediaWikiUnitTestCase {
 	 * @covers ::getEventTypeGroupsDebugName
 	 */
 	public function testGetEventTypeGroupsDebugName__invalid() {
-		$formatter = new EventTypesFormatter(
+		$registry = new EventTypesRegistry(
 			$this->createMock( IMessageFormatterFactory::class )
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$formatter->getEventTypeGroupsDebugName( 'invalid_group' );
+		$registry->getEventTypeGroupsDebugName( 'invalid_group' );
 	}
 }

@@ -11,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesFormatter;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
@@ -433,12 +432,9 @@ return [
 			return $services->getMainConfig();
 		}
 	},
-	EventTypesFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTypesFormatter {
-		return new EventTypesFormatter(
+	EventTypesRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTypesRegistry {
+		return new EventTypesRegistry(
 			$services->getMessageFormatterFactory()
 		);
-	},
-	EventTypesRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTypesRegistry {
-		return new EventTypesRegistry();
 	},
 ];
