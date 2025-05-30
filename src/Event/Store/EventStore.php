@@ -120,7 +120,11 @@ class EventStore implements IEventStore, IEventLookup {
 		$cachedEvent = $this->wanCache->getWithSetCallback(
 			$this->makePageEventCacheKey( $page ),
 			self::PAGE_EVENT_CACHE_TTL,
-			function ( $oldValue, &$ttl, array &$setOpts ) use ( $page, $readFlags ): ?ExistingEventRegistration {
+			/**
+			 * @param ExistingEventRegistration|false $oldValue
+			 * @param array<string,mixed> &$setOpts
+			 */
+			function ( $oldValue, int &$ttl, array &$setOpts ) use ( $page, $readFlags ): ?ExistingEventRegistration {
 				$db = $this->dbHelper->getDBConnection( DB_REPLICA );
 
 				$setOpts += Database::getCacheSetOptions( $db );
@@ -521,7 +525,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->eventTopicsStore->addOrUpdateEventTopics( $eventID, $event->getTopics() );
 
 		$dbw->onTransactionCommitOrIdle(
-			fn () => $this->wanCache->delete( $this->makePageEventCacheKey( $event->getPage() ) ),
+			fn (): bool => $this->wanCache->delete( $this->makePageEventCacheKey( $event->getPage() ) ),
 			__METHOD__
 		);
 
@@ -591,7 +595,7 @@ class EventStore implements IEventStore, IEventLookup {
 		unset( $this->cache[$registration->getID()] );
 
 		$dbw->onTransactionCommitOrIdle(
-			fn () => $this->wanCache->delete( $this->makePageEventCacheKey( $registration->getPage() ) ),
+			fn (): bool => $this->wanCache->delete( $this->makePageEventCacheKey( $registration->getPage() ) ),
 			__METHOD__
 		);
 

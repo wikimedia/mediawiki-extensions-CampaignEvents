@@ -9,11 +9,11 @@ interface CampaignEventsRegistrationFormSubmitHook {
 	 * This hook is fired when the event registration form is submitted on Special:EnableEventRegistration and
 	 * on Special:EditEventRegistration
 	 *
-	 * @param array $formFields
+	 * @param array<string,mixed> $data
 	 * @param int $eventID
 	 */
 	public function onCampaignEventsRegistrationFormSubmit(
-		array $formFields,
+		array $data,
 		int $eventID
 	): void;
 }

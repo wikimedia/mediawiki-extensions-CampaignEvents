@@ -6,12 +6,13 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 class InvalidTitleStringException extends InvalidEventPageException {
 	private string $errorMsgKey;
+	/** @var list<mixed> */
 	private array $errorMsgParams;
 
 	/**
 	 * @param string $titleString
 	 * @param string $errorMsgKey
-	 * @param array $errorMsgParams
+	 * @param list<mixed> $errorMsgParams
 	 */
 	public function __construct( string $titleString, string $errorMsgKey, array $errorMsgParams ) {
 		parent::__construct( "Invalid title string: `$titleString`. Details msg key: $errorMsgKey" );
@@ -27,7 +28,7 @@ class InvalidTitleStringException extends InvalidEventPageException {
 	}
 
 	/**
-	 * @return array
+	 * @return list<mixed>
 	 */
 	public function getErrorMsgParams(): array {
 		return $this->errorMsgParams;

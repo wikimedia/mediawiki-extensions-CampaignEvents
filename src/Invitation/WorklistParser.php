@@ -118,7 +118,7 @@ class WorklistParser {
 	private static function pagesToBulletList( array $pageTitles ): string {
 		// Don't call wfEscapeWikiText in unit tests since it uses global state.
 		$pageEscaper = defined( 'MW_PHPUNIT_TEST' )
-			? static fn ( $x ) => $x
+			? static fn ( string $x ): string => $x
 			: 'wfEscapeWikiText';
 		return "<ul>\n<li>" .
 			implode( "</li>\n<li>", array_map( $pageEscaper, $pageTitles ) ) .

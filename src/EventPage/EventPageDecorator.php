@@ -1153,12 +1153,12 @@ class EventPageDecorator {
 	}
 
 	/**
-	 * @param array $eventTopics
+	 * @param list<string> $eventTopics
 	 * @return string
 	 */
 	private function getDetailsDialogTopics( array $eventTopics ): string {
 		$localizedTopicNames = array_map(
-			fn ( string $msgKey ) => $this->msgFormatter->format(
+			fn ( string $msgKey ): string => $this->msgFormatter->format(
 				MessageValue::new( $msgKey )
 			),
 			$this->topicRegistry->getTopicMessages( $eventTopics )

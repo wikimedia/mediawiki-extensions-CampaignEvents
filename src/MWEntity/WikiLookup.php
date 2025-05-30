@@ -35,6 +35,7 @@ class WikiLookup {
 		$this->languageCode = $languageCode;
 	}
 
+	/** @return list<string> */
 	public function getAllWikis(): array {
 		return array_values( array_unique( $this->siteConfig->getLocalDatabases() ) );
 	}
@@ -47,10 +48,12 @@ class WikiLookup {
 		return $this->cache->getWithSetCallback(
 			$this->cache->makeGlobalKey( 'CampaignEvents-SelectWikiList', $this->languageCode ),
 			WANObjectCache::TTL_HOUR,
-			fn () => $this->computeListForSelect()
+			/** @return array<string,string> */
+			fn (): array => $this->computeListForSelect()
 		);
 	}
 
+	/** @return array<string,string> */
 	private function computeListForSelect(): array {
 		$rawMap = array_flip( $this->getLocalizedNames( $this->getAllWikis() ) );
 		$ret = [];
@@ -136,6 +139,7 @@ class WikiLookup {
 		];
 	}
 
+	/** @return array<string,string> */
 	private function getCodexIcons(): array {
 		return [
 			'commonswiki' => 'logo-wikimedia-commons',

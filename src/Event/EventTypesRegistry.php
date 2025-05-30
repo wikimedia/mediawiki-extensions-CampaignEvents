@@ -107,7 +107,7 @@ class EventTypesRegistry {
 			}
 		}
 		if ( in_array( null, $ret, true ) ) {
-			$invalidTypes = array_keys( array_filter( $ret, static fn ( $t ) => $t === null ) );
+			$invalidTypes = array_keys( array_filter( $ret, static fn ( ?string $t ): bool => $t === null ) );
 			throw new InvalidArgumentException( "Invalid types: " . implode( ', ', $invalidTypes ) );
 		}
 		return $ret;

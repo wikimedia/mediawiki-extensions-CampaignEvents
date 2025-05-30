@@ -9,7 +9,7 @@ interface CampaignEventsRegistrationFormLoadHook {
 	 * This hook is fired when the event registration form is loaded on Special:EnableEventRegistration and
 	 * on Special:EditEventRegistration
 	 *
-	 * @param array &$formFields
+	 * @param array<string,array<string,mixed>> &$formFields
 	 * @param int|null $eventID
 	 */
 	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID ): void;

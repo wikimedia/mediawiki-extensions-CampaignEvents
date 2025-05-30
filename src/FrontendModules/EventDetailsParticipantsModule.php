@@ -360,7 +360,7 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
-	 * @param array $nonPIIQuestionIDs
+	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
@@ -453,7 +453,7 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
-	 * @param array $nonPIIQuestionIDs
+	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
@@ -502,7 +502,7 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
-	 * @param array $nonPIIQuestionIDs
+	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
@@ -534,7 +534,7 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canRemoveParticipants
 	 * @param bool $canEmailParticipants
 	 * @param UserIdentity $viewingUser
-	 * @param array $nonPIIQuestionIDs
+	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
 	 * @return Tag
 	 */
@@ -639,7 +639,7 @@ class EventDetailsParticipantsModule {
 	/**
 	 * @param Tag $row
 	 * @param Participant $participant
-	 * @param array $nonPIIQuestionIDs
+	 * @param list<int> $nonPIIQuestionIDs
 	 * @param string $genderUserName
 	 * @return Tag
 	 */

@@ -81,7 +81,7 @@ class FindPotentialInvitees extends Maintenance {
 			$this->fatalError( "Cannot read list of articles" );
 		}
 
-		$listLines = array_filter( explode( "\n", $rawList ), static fn ( string $line ) => $line !== '' );
+		$listLines = array_filter( explode( "\n", $rawList ), static fn ( string $line ): bool => $line !== '' );
 
 		$curWikiID = WikiMap::getCurrentWikiId();
 		$pageNamesByWiki = [];

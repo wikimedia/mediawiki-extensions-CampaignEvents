@@ -87,7 +87,7 @@ class EventRegistration {
 	 * @param string|null $meetingAddress
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
-	 * @param array $participantQuestions
+	 * @param list<int> $participantQuestions
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
