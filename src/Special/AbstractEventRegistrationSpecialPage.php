@@ -462,7 +462,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		// TODO: Maybe consider dropping the default when switching to Codex, if that allows indeterminate radios.
 		$defaultParticipationOptions = EventRegistration::PARTICIPATION_OPTION_ONLINE;
-		$formFields['EventMeetingType'] = [
+		$formFields['ParticipationOptions'] = [
 			'type' => 'radio',
 			'label-message' => 'campaignevents-edit-field-participation-options',
 			'options-messages' => [
@@ -479,7 +479,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventMeetingURL'] = [
 			'type' => 'url',
 			'label-message' => 'campaignevents-edit-field-meeting-url',
-			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::PARTICIPATION_OPTION_IN_PERSON ],
+			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_IN_PERSON ],
 			'default' => $this->event ? $this->event->getMeetingURL() : '',
 			'section' => self::DETAILS_SECTION,
 		];
@@ -490,7 +490,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$formFields['EventMeetingCountry'] = [
 			'type' => 'text',
 			'label-message' => 'campaignevents-edit-field-country',
-			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
+			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingCountry() : '',
 			'maxlength' => EventFactory::COUNTRY_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
@@ -499,7 +499,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'type' => 'textarea',
 			'rows' => 5,
 			'label-message' => 'campaignevents-edit-field-address',
-			'hide-if' => [ '===', 'EventMeetingType', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
+			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
 			'default' => $this->event ? $this->event->getMeetingAddress() : '',
 			'maxlength' => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
@@ -655,7 +655,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @inheritDoc
 	 */
 	public function onSubmit( array $data ) {
-		$participationOptions = (int)$data['EventMeetingType'];
+		$participationOptions = (int)$data['ParticipationOptions'];
 		// The value for these fields is the empty string if the field was not filled, but EventFactory distinguishes
 		// empty string (= the value was explicitly specified as an empty string) vs null (=value not specified).
 		// That's mostly intended for API consumers, and here for the UI we can just assume that
