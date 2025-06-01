@@ -82,15 +82,15 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @return string[] A list of wiki IDs that are considered valid within this test class. This is guaranteed to be
-	 * a list of all possible "XYwiki" combinations, and is provided for convenience.
+	 * @return string[] A list of topic IDs that are considered valid within this test class. This is guaranteed to be
+	 * a list of all possible "XYtopic" combinations, and is provided for convenience.
 	 */
 	private static function getValidTopics(): array {
-		$validWikis = [];
+		$validTopics = [];
 		for ( $prefix = 'a'; $prefix !== 'aa'; $prefix++ ) {
-			$validWikis[] = $prefix . 'topic';
+			$validTopics[] = $prefix . 'topic';
 		}
-		return $validWikis;
+		return $validTopics;
 	}
 
 	private function getEventFactory(
@@ -686,7 +686,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$args = self::getTestDataWithDefault( [ 'topics' => $topics ] );
 		$event = $this->doTestWithArgs( $args, $expectedErrors );
 		if ( $event ) {
-			$this->assertSame( $expectedTopics, $event->gettopics() );
+			$this->assertSame( $expectedTopics, $event->getTopics() );
 		}
 	}
 
@@ -704,7 +704,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			[ 'atopic' ]
 		];
 		yield 'Too many topics' => [
-			self::getValidtopics(),
+			self::getValidTopics(),
 			[ 'campaignevents-error-too-many-topics' ]
 		];
 		yield 'Valid and invalid topics' => [
@@ -720,7 +720,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			[ 'campaignevents-error-invalid-topics' ]
 		];
 		yield 'Invalid and too many topics' => [
-			[ 'doesnotexisttopic', ...self::getValidtopics() ],
+			[ 'doesnotexisttopic', ...self::getValidTopics() ],
 			[ 'campaignevents-error-too-many-topics', 'campaignevents-error-invalid-topics' ]
 		];
 	}
