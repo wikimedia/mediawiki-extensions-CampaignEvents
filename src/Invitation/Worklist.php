@@ -54,7 +54,7 @@ class Worklist {
 
 	/**
 	 * Converts this object into an array of native types, suitable for JSON serialization.
-	 * @return array
+	 * @return array<string,list<array{0:int,1:int,2:string,3:string|false}>>
 	 */
 	public function toPlainArray(): array {
 		$ret = [];

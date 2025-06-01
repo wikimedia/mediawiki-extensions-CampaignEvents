@@ -221,7 +221,7 @@ class PotentialInviteesFinder {
 	 *
 	 * @param string|false $wikiID
 	 * @param IReadableDatabase $dbr
-	 * @return array
+	 * @return array<string|int,mixed>
 	 */
 	private function getRevisionFilterConditions( $wikiID, IReadableDatabase $dbr ): array {
 		$filterConditions = [];
@@ -344,7 +344,7 @@ class PotentialInviteesFinder {
 			// moved a section of the article to a separate page. In general, the byte count itself is far from being
 			// perfect as a metric. For now, we're excluding negative deltas because some of the formulas below expect
 			// the total delta to be positive.
-			$positiveDeltas = array_filter( $userDeltas, static fn ( $x ) => $x > 0 );
+			$positiveDeltas = array_filter( $userDeltas, static fn ( int $x ): bool => $x > 0 );
 			if ( $positiveDeltas ) {
 				$deltas[$user] = array_values( $positiveDeltas );
 			}
@@ -573,12 +573,14 @@ class PotentialInviteesFinder {
 	}
 
 	/**
-	 * @param array $revisionsByWiki
-	 * @return array
+	 * @param array<string,list<array{username:string,userID:int,actorID:int,page:string,delta:int}>> $revisionsByWiki
+	 * @return array<string,list<array{username:string,userID:int,actorID:int,page:string,delta:int}>>
 	 */
 	private function filterUsersByPreference( array $revisionsByWiki ): array {
-		array_walk( $revisionsByWiki, function ( &$subArray ) {
-			$subArray = array_filter( $subArray, function ( $item ) {
+		/** @param list<array{username:string,userID:int,actorID:int,page:string,delta:int}> &$subArray */
+		array_walk( $revisionsByWiki, function ( array &$subArray ): void {
+			/** @param array{username:string,userID:int,actorID:int,page:string,delta:int} $item */
+			$subArray = array_filter( $subArray, function ( array $item ): bool {
 				$user = UserIdentityValue::newRegistered( (int)$item['userID'], $item['username'] );
 				return $this->userOptionsLookup->getBoolOption(
 					$user,

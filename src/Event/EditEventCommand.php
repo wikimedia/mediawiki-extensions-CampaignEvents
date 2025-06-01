@@ -268,7 +268,7 @@ class EditEventCommand {
 	/**
 	 * @param bool $isCreation
 	 * @param int $eventID
-	 * @param array $organizerCentralIDs
+	 * @param list<int> $organizerCentralIDs
 	 * @param CentralUser $performer
 	 */
 	private function addOrganizers(

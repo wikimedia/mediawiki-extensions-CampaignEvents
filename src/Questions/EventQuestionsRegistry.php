@@ -614,8 +614,8 @@ class EventQuestionsRegistry {
 	/**
 	 * Returns non PII questions labels.
 	 *
-	 * @param array $eventQuestions
-	 * @return array
+	 * @param list<int> $eventQuestions
+	 * @return list<string>
 	 */
 	public function getNonPIIQuestionLabels( array $eventQuestions ): array {
 		$nonPIIquestionLabels = [];

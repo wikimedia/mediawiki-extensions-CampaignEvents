@@ -60,8 +60,12 @@ class EventFactory {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
+	/** @var list<int> */
 	private array $allowedEventNamespaces;
 
+	/**
+	 * @phan-param list<int> $allowedEventNamespaces
+	 */
 	public function __construct(
 		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsPageFormatter $campaignsPageFormatter,
@@ -216,6 +220,7 @@ class EventFactory {
 		// user setting them.
 		$invalidTimestamps = array_filter(
 			[ 'creation' => $creationTSUnix, 'lastedit' => $lastEditTSUnix, 'deletion' => $deletionTSUnix ],
+			/** @param string|false|null $ts */
 			static function ( $ts ): bool {
 				return $ts === false;
 			}

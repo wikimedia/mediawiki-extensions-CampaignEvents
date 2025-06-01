@@ -109,7 +109,7 @@ class ResponseStatisticsModule {
 		$eventQuestions = $this->event->getParticipantQuestions();
 
 		$nonPIIQuestions = $this->questionsRegistry->getNonPIIQuestionIDs( $eventQuestions );
-		$piiQuestions = array_diff( $eventQuestions, $nonPIIQuestions );
+		$piiQuestions = array_values( array_diff( $eventQuestions, $nonPIIQuestions ) );
 
 		$content = new Tag( 'div' );
 		if ( $nonPIIQuestions ) {
@@ -152,6 +152,7 @@ class ResponseStatisticsModule {
 		return $section->appendContent( $header );
 	}
 
+	/** @param list<int> $questionIDs */
 	private function makeQuestionCategorySection(
 		array $questionIDs,
 		EventAggregatedAnswers $aggregates,

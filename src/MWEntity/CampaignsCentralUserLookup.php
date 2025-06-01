@@ -146,7 +146,7 @@ class CampaignsCentralUserLookup {
 		$allNames = $this->getNamesIncludingDeletedAndSuppressed( $centralIDsMap );
 		return array_filter(
 			$allNames,
-			static fn ( $name ) => $name !== self::USER_HIDDEN && $name !== self::USER_NOT_FOUND
+			static fn ( string $name ): bool => $name !== self::USER_HIDDEN && $name !== self::USER_NOT_FOUND
 		);
 	}
 

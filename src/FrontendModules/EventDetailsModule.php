@@ -470,12 +470,12 @@ class EventDetailsModule {
 
 	/**
 	 * @param OutputPage $out
-	 * @param array $eventTopics
+	 * @param list<string> $eventTopics
 	 * @return ?Tag
 	 */
 	private function getEventTopicsSection( OutputPage $out, array $eventTopics ): ?Tag {
 		$localizedTopicNames = array_map(
-			static fn ( string $msgKey ) => $out->msg( $msgKey )->text(),
+			static fn ( string $msgKey ): string => $out->msg( $msgKey )->text(),
 			$this->topicRegistry->getTopicMessages( $eventTopics )
 		);
 		sort( $localizedTopicNames );

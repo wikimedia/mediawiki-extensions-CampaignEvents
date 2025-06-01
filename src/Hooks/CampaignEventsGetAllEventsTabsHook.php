@@ -8,6 +8,11 @@ use MediaWiki\SpecialPage\SpecialPage;
  * @internal
  */
 interface CampaignEventsGetAllEventsTabsHook {
+	/**
+	 * @param SpecialPage $specialPage
+	 * @param array<string,array<string,mixed>> &$pageTabs
+	 * @param string $activeTab
+	 */
 	public function onCampaignEventsGetAllEventsTabs(
 		SpecialPage $specialPage,
 		array &$pageTabs,

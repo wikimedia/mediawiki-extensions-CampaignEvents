@@ -49,6 +49,7 @@ class MWPageProxy {
 		return $this->page;
 	}
 
+	/** @return array{page:array<string,mixed>,prefixedText:string} */
 	public function __serialize(): array {
 		return [
 			'page' => [
@@ -61,6 +62,7 @@ class MWPageProxy {
 		];
 	}
 
+	/** @param array{page:array<string,mixed>,prefixedText:string} $data */
 	public function __unserialize( array $data ): void {
 		$this->page = new PageIdentityValue(
 			$data['page']['id'],

@@ -40,7 +40,7 @@ class FindPotentialInviteesJob extends Job implements GenericParameterJob {
 		// really happen in practice though.
 		$nameToIDMap = array_filter(
 			$centralUserLookup->getIDs( $usernameMap ),
-			static fn ( $id ) => $id !== null
+			static fn ( ?int $id ): bool => $id !== null
 		);
 		$centralInviteesByName = array_intersect_key( $inviteesByName, $nameToIDMap );
 		$inviteesByID = [];

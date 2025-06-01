@@ -29,7 +29,7 @@ trait EventPagerTrait {
 	 * @todo The joins and grouping below are not used by EventsListPager (which wouldn't even need a subquery), and
 	 * they just slow the query down. We should either implement those features in the list pager, or move the
 	 * complexity to EventsTablePager.
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function getSubqueryInfo(): array {
 		$options = [
@@ -87,8 +87,9 @@ trait EventPagerTrait {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,mixed>
 	 */
-	public function getQueryInfo() {
+	public function getQueryInfo(): array {
 		// Use a subquery and a temporary table to work around IndexPager not using HAVING for aggregates (T308694)
 		// and to support postgres (which doesn't allow aliases in HAVING).
 		$subqueryInfo = $this->getSubqueryInfo();

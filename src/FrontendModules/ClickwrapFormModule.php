@@ -86,7 +86,7 @@ class ClickwrapFormModule {
 	}
 
 	/**
-	 * @param array $data
+	 * @param array<string,mixed> $data
 	 * @return bool
 	 */
 	public function processInput( array $data ): bool {

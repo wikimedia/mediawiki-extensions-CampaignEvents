@@ -14,9 +14,9 @@ class EchoHooksHandler implements BeforeCreateEchoEventHook {
 	private const REGISTRATION_NOTIFICATION_CATEGORY = 'campaign-events-notification-registration';
 
 	/**
-	 * @param array &$notifications
-	 * @param array &$notificationCategories
-	 * @param array &$icons
+	 * @param array<string,array<string,mixed>> &$notifications
+	 * @param array<string,array<string,mixed>> &$notificationCategories
+	 * @param array<string,array<string,mixed>> &$icons
 	 */
 	public function onBeforeCreateEchoEvent(
 		array &$notifications,

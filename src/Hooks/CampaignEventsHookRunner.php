@@ -46,7 +46,8 @@ class CampaignEventsHookRunner implements
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param array<string,array<string,mixed>> &$formFields
+	 * @param int|null $eventID
 	 */
 	public function onCampaignEventsRegistrationFormLoad( array &$formFields, ?int $eventID ): void {
 		$this->hookContainer->run(
@@ -57,7 +58,8 @@ class CampaignEventsHookRunner implements
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param array<string,mixed> $data
+	 * @param int $eventID
 	 */
 	public function onCampaignEventsRegistrationFormSubmit(
 		array $data,
