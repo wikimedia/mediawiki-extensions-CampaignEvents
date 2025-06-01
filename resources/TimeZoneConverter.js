@@ -63,7 +63,7 @@
 		return this.rest.get(
 			'/campaignevents/v0/formatted_time/' + language + '/' + convertedStart + '/' + convertedEnd,
 			{}
-		).done( ( resp ) => {
+		).then( ( resp ) => {
 			// eslint-disable-next-line mediawiki/msg-doc
 			const formattedRange = mw.msg(
 				message,

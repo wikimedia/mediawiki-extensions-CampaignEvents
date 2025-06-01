@@ -100,6 +100,9 @@ QUnit.module(
 		};
 		const triggerParticipantLoad = async () => {
 			$( '.ext-campaignevents-eventdetails-participants-container' ).trigger( 'scroll' );
+			// First wait for the `scroll` event listener to run
+			await waitForEventPropagation();
+			// Then wait for the `.then()` callback attached to the API request to run
 			await waitForEventPropagation();
 		};
 		const countCheckedVisibleUsers = () => $( 'input[name="event-details-participants-checkboxes"]:checked' ).length;

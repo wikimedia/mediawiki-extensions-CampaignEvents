@@ -94,15 +94,17 @@
 					break;
 				}
 				this.maybeDeleteRegistration()
-					.done( ( deleteData ) => {
-						if ( deleteData && deleteData.deleted ) {
-							that.emit( 'deleted', that.eventName );
+					.then(
+						( deleteData ) => {
+							if ( deleteData && deleteData.deleted ) {
+								that.emit( 'deleted', that.eventName );
+							}
+						},
+						() => {
+							// Fall back to the special page.
+							window.location.assign( data.href );
 						}
-					} )
-					.fail( () => {
-						// Fall back to the special page.
-						window.location.assign( data.href );
-					} );
+					);
 				break;
 		}
 	};
@@ -121,10 +123,12 @@
 					'/campaignevents/v0/event_registration/' + eventID,
 					{ token: mw.user.tokens.get( 'csrfToken' ) }
 				)
-					.then( () => $.Deferred().resolve( { deleted: true } ) )
-					.fail( ( _errCode, errData ) => {
-						mw.log.error( errData.xhr.responseText );
-					} );
+					.then(
+						() => $.Deferred().resolve( { deleted: true } ),
+						( _errCode, errData ) => {
+							mw.log.error( errData.xhr.responseText );
+						}
+					);
 			}
 		} );
 	};

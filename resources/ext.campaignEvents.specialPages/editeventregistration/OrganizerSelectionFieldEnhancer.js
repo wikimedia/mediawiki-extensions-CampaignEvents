@@ -46,8 +46,8 @@
 			ususers: organizers,
 			usprop: 'rights'
 		} )
-			.done( this.setInvalidOrganizersFromResponse.bind( this ) )
-			.fail(
+			.then(
+				this.setInvalidOrganizersFromResponse.bind( this ),
 				( _err, errData ) => {
 					if ( errData.xhr.status === 0 && errData.textStatus === 'abort' ) {
 						// Aborted due to updated input, ignore.

@@ -97,8 +97,10 @@
 				};
 			};
 			self.message.getValidity( value )
-				.done( toggleButton( true ) )
-				.fail( toggleButton( false ) );
+				.then(
+					toggleButton( true ),
+					toggleButton( false )
+				);
 		} );
 	};
 
@@ -245,26 +247,28 @@
 				ccme: this.CCMe.isSelected()
 			}
 		)
-			.done( ( result ) => {
-				if ( result.sent === 0 ) {
-					self.showNoParticipantsError();
-				} else {
-					self.resetFields();
-					self.setSuccess(
+			.then(
+				( result ) => {
+					if ( result.sent === 0 ) {
+						self.showNoParticipantsError();
+					} else {
+						self.resetFields();
+						self.setSuccess(
+							mw.message(
+								'campaignevents-email-success-notification'
+							).text()
+						);
+					}
+				},
+				( _err, errData ) => {
+					self.setError(
 						mw.message(
-							'campaignevents-email-success-notification'
+							'campaignevents-email-error-notification'
 						).text()
 					);
+					mw.log.error( errData.xhr.responseText || 'Unknown error' );
 				}
-			} )
-			.fail( ( _err, errData ) => {
-				self.setError(
-					mw.message(
-						'campaignevents-email-error-notification'
-					).text()
-				);
-				mw.log.error( errData.xhr.responseText || 'Unknown error' );
-			} );
+			);
 	};
 
 	module.exports = new EmailManager();

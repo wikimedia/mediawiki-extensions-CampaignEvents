@@ -355,79 +355,88 @@
 				invert_users: this.isSelectionInverted
 			}
 		)
-			.done( ( response ) => {
-				const removedPublic = response.public,
-					removedPrivate = response.private,
-					removedTotal = removedPublic + removedPrivate;
-				thisClass.participantCheckboxes =
-					thisClass.participantCheckboxes.filter( ( el ) => {
-						if ( el.isSelected() ) {
-							el.$element
-								.closest( '.ext-campaignevents-details-user-row' )
-								.remove();
-							return false;
-						} else {
-							return el;
-						}
-					} );
+			.then(
+				( response ) => {
+					thisClass.onParticipantsRemoved( response );
+				},
+				( _err, errData ) => {
+					let errorMsg;
 
-				thisClass.selectAllParticipantsCheckbox.setSelected( false, true );
-				thisClass.selectAllParticipantsCheckbox.setIndeterminate( false, true );
-				thisClass.onDeselectAll();
-				thisClass.updateSelectedLabel();
-				let successMsg;
-				thisClass.participantsTotal = thisClass.participantsTotal - removedTotal;
-				if ( thisClass.participantsTotal === 0 ) {
-					successMsg = mw.message(
-						'campaignevents-event-details-remove-all-participant-notification'
-					).text();
-					thisClass.$noParticipantsStateElement.removeClass( 'ext-campaignevents-eventdetails-hide-element' );
-					thisClass.searchParticipantsWidget.$element.hide();
-					thisClass.messageParticipantsButton.$element.hide();
-					thisClass.$participantsContainer.hide();
-				} else {
-					successMsg = mw.message(
-						'campaignevents-event-details-remove-participant-notification',
-						mw.language.convertNumber( removedTotal )
-					).text();
-					thisClass.loadMoreParticipants();
+					if ( errData.xhr.responseJSON.messageTranslations ) {
+						errorMsg = errData.xhr.responseJSON.messageTranslations.en;
+					} else {
+						errorMsg = mw.message(
+							'campaignevents-event-details-remove-participant-notification-error',
+							mw.language.convertNumber( thisClass.selectedParticipantsAmount )
+						).text();
+					}
+					thisClass.showNotification( 'error', errorMsg );
 				}
+			);
+	};
 
-				thisClass.$participantsCountTitle.text(
+	/**
+	 * @param {Object} response From the "remove participants" API endpoint
+	 */
+	ParticipantsManager.prototype.onParticipantsRemoved = function ( response ) {
+		const removedPublic = response.public,
+			removedPrivate = response.private,
+			removedTotal = removedPublic + removedPrivate;
+		this.participantCheckboxes =
+			this.participantCheckboxes.filter( ( el ) => {
+				if ( el.isSelected() ) {
+					el.$element
+						.closest( '.ext-campaignevents-details-user-row' )
+						.remove();
+					return false;
+				} else {
+					return el;
+				}
+			} );
+
+		this.selectAllParticipantsCheckbox.setSelected( false, true );
+		this.selectAllParticipantsCheckbox.setIndeterminate( false, true );
+		this.onDeselectAll();
+		this.updateSelectedLabel();
+		let successMsg;
+		this.participantsTotal = this.participantsTotal - removedTotal;
+		if ( this.participantsTotal === 0 ) {
+			successMsg = mw.message(
+				'campaignevents-event-details-remove-all-participant-notification'
+			).text();
+			this.$noParticipantsStateElement.removeClass( 'ext-campaignevents-eventdetails-hide-element' );
+			this.searchParticipantsWidget.$element.hide();
+			this.messageParticipantsButton.$element.hide();
+			this.$participantsContainer.hide();
+		} else {
+			successMsg = mw.message(
+				'campaignevents-event-details-remove-participant-notification',
+				mw.language.convertNumber( removedTotal )
+			).text();
+			this.loadMoreParticipants();
+		}
+
+		this.$participantsCountTitle.text(
+			mw.message(
+				'campaignevents-event-details-header-participants',
+				mw.language.convertNumber( this.participantsTotal )
+			)
+		);
+		if ( removedPrivate > 0 ) {
+			this.privateParticipantsTotal -= removedPrivate;
+			if ( this.privateParticipantsTotal > 0 ) {
+				this.$privateParticipantsMsg.text(
 					mw.message(
-						'campaignevents-event-details-header-participants',
-						mw.language.convertNumber( thisClass.participantsTotal )
+						'campaignevents-event-details-participants-private',
+						mw.language.convertNumber( this.privateParticipantsTotal )
 					)
 				);
-				if ( removedPrivate > 0 ) {
-					thisClass.privateParticipantsTotal -= removedPrivate;
-					if ( thisClass.privateParticipantsTotal > 0 ) {
-						thisClass.$privateParticipantsMsg.text(
-							mw.message(
-								'campaignevents-event-details-participants-private',
-								mw.language.convertNumber( thisClass.privateParticipantsTotal )
-							)
-						);
-					} else {
-						thisClass.$privateParticipantsFooter.remove();
-					}
-				}
-				thisClass.scrollDownObserver.reset();
-				thisClass.showNotification( 'success', successMsg );
-			} )
-			.fail( ( _err, errData ) => {
-				let errorMsg;
-
-				if ( errData.xhr.responseJSON.messageTranslations ) {
-					errorMsg = errData.xhr.responseJSON.messageTranslations.en;
-				} else {
-					errorMsg = mw.message(
-						'campaignevents-event-details-remove-participant-notification-error',
-						mw.language.convertNumber( thisClass.selectedParticipantsAmount )
-					).text();
-				}
-				thisClass.showNotification( 'error', errorMsg );
-			} );
+			} else {
+				this.$privateParticipantsFooter.remove();
+			}
+		}
+		this.scrollDownObserver.reset();
+		this.showNotification( 'success', successMsg );
 	};
 
 	/**
@@ -482,16 +491,18 @@
 			'/campaignevents/v0/event_registration/' + thisClass.registrationID + '/participants',
 			params
 		)
-			.done( ( data ) => {
-				thisClass.toggleCurUserRow();
-				if ( data.length ) {
-					thisClass.addParticipantsToList( data );
-					this.afterSelectionChange();
+			.then(
+				( data ) => {
+					thisClass.toggleCurUserRow();
+					if ( data.length ) {
+						thisClass.addParticipantsToList( data );
+						this.afterSelectionChange();
+					}
+				},
+				( _err, errData ) => {
+					mw.log.error( errData.xhr.responseText || 'Unknown error' );
 				}
-			} )
-			.fail( ( _err, errData ) => {
-				mw.log.error( errData.xhr.responseText || 'Unknown error' );
-			} );
+			);
 	};
 
 	/**
