@@ -79,7 +79,7 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 			PageEventLookup::GET_DIRECT,
 			IDBAccessObject::READ_LATEST
 		);
-		if ( !$registration ) {
+		if ( !$registration || $registration->getDeletionTimestamp() !== null ) {
 			return;
 		}
 		$this->deleteEventCommand->deleteUnsafe(

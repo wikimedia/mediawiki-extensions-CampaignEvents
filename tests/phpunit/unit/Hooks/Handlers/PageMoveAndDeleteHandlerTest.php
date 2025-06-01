@@ -48,9 +48,16 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 	 */
 	public function testOnPageDeleteComplete(
 		bool $expectsEventDeletion,
-		bool $pageHasRegistration
+		bool $pageHasRegistration,
+		bool $registrationIsDeleted
 	) {
-		$registration = $pageHasRegistration ? $this->createMock( ExistingEventRegistration::class ) : null;
+		$registration = null;
+		if ( $pageHasRegistration ) {
+			$registration = $this->createMock( ExistingEventRegistration::class );
+			$registration->method( 'getDeletionTimestamp' )
+				->willReturn( $registrationIsDeleted ? '1700000000' : null );
+		}
+
 		$pageEventLookup = $this->createMock( PageEventLookup::class );
 		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturn( $registration );
 
@@ -75,8 +82,9 @@ class PageMoveAndDeleteHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	public static function providePageDelete(): Generator {
-		yield 'No registration for page' => [ false, false ];
-		yield 'Page has event registration' => [ true, true ];
+		yield 'No registration for page' => [ false, false, false ];
+		yield 'Page has deleted event registration' => [ false, true, true ];
+		yield 'Page has active event registration' => [ true, true, false ];
 	}
 
 	/**
