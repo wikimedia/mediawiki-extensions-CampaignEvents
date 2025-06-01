@@ -26,7 +26,7 @@ class EventQuestionsRegistry {
 	 */
 	private bool $wikimediaQuestionsEnabled;
 
-	/** @var array|null Question overrides used in test. Null means no override. */
+	/** @var array[]|null Question overrides used in test. Null means no override. */
 	private ?array $testOverrides = null;
 
 	/**
@@ -187,6 +187,7 @@ class EventQuestionsRegistry {
 
 		return array_filter(
 			$questions,
+			/** @param array<string,mixed> $question */
 			fn ( array $question ): bool => !$question['wikimedia'] || $this->wikimediaQuestionsEnabled
 		);
 	}
@@ -266,7 +267,7 @@ class EventQuestionsRegistry {
 	 * Parses an array of form field values from an HTMLForm that was built using getQuestionsForHTMLForm(),
 	 * and returns an array of answers to store.
 	 *
-	 * @param array $formData As given by HTMLForm
+	 * @param array<string,mixed> $formData As given by HTMLForm
 	 * @param int[] $enabledQuestionIDs Enabled question for the event, should match the value passed to
 	 *   getQuestionsForHTMLForm().
 	 * @return Answer[]
@@ -287,8 +288,8 @@ class EventQuestionsRegistry {
 	}
 
 	/**
-	 * @param array $questionSpec Must be an entry in the registry
-	 * @param array $formData
+	 * @param array<string,mixed> $questionSpec Must be an entry in the registry
+	 * @param array<string,mixed> $formData
 	 * @return Answer|null
 	 * @throws InvalidAnswerDataException
 	 */
@@ -459,9 +460,9 @@ class EventQuestionsRegistry {
 	}
 
 	/**
-	 * @param array $questionSpec Must be an entry in the registry
+	 * @param array<string,mixed> $questionSpec Must be an entry in the registry
 	 * @param string $questionName
-	 * @param array $answerData
+	 * @param array<string,mixed> $answerData
 	 * @return Answer|null
 	 * @throws InvalidAnswerDataException If an answer's value is malformed
 	 */
@@ -630,8 +631,8 @@ class EventQuestionsRegistry {
 	/**
 	 * Returns non PII questions IDs.
 	 *
-	 * @param array $eventQuestions
-	 * @return array
+	 * @param list<int> $eventQuestions
+	 * @return list<int>
 	 */
 	public function getNonPIIQuestionIDs( array $eventQuestions ): array {
 		$nonPIIquestionIDs = [];
@@ -653,7 +654,7 @@ class EventQuestionsRegistry {
 	 * @return int[]
 	 */
 	public static function getParticipantQuestionsToShow( array $enabledQuestions, array $userAnswers ): array {
-		$answeredQuestionIDs = array_map( static fn ( Answer $a ) => $a->getQuestionDBID(), $userAnswers );
+		$answeredQuestionIDs = array_map( static fn ( Answer $a ): int => $a->getQuestionDBID(), $userAnswers );
 		$allQuestions = array_unique( array_merge( $enabledQuestions, $answeredQuestionIDs ) );
 		// Sorting not strictly necessary, just for debugging etc.
 		sort( $allQuestions );

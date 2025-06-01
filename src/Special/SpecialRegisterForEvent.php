@@ -48,7 +48,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	private ?bool $modifiedData;
 	/** @var bool|null Whether the user is editing their registration, as opposed to registering for the first time */
 	private ?bool $isEdit;
-	/** @var array|null IDs of participant questions to show in the form */
+	/** @var list<int>|null IDs of participant questions to show in the form */
 	private ?array $participantQuestionsToShow;
 	private ?CentralUser $centralUser;
 
@@ -99,6 +99,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,array<string,mixed>>
 	 */
 	protected function getFormFields(): array {
 		$publicIcon =
@@ -139,6 +140,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		return $fields;
 	}
 
+	/** @param array<string,array<string,mixed>> &$fields */
 	private function addParticipantQuestionFields( array &$fields ): void {
 		if ( $this->hasAggregatedAnswers ) {
 			$fields['AnswersAggregated'] = [
@@ -165,7 +167,11 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			// possible to submit a different value. This seems non-trivial to fix because this code runs before
 			// onSubmit(), i.e. before we know what the updated user answers will be after form submission.
 			$questionFields = array_map(
-				static fn ( $fieldDescriptor ) =>
+				/**
+				 * @param array<string,mixed> $fieldDescriptor
+				 * @return array<string,mixed>
+				 */
+				static fn ( array $fieldDescriptor ): array =>
 					[ 'section' => self::QUESTIONS_SECTION_NAME ] + $fieldDescriptor,
 				$questionFields
 			);
@@ -221,6 +227,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 	/**
 	 * @inheritDoc
+	 * @param array<string,mixed> $data
 	 */
 	public function onSubmit( array $data ) {
 		$privateFlag = $data['IsPrivate'] ?

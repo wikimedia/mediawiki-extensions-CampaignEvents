@@ -10,7 +10,7 @@ class ListEventsByParticipantHandler extends AbstractListEventsByUserHandler {
 	/**
 	 * @param CentralUser $user
 	 * @param int $resultLimit
-	 * @return array
+	 * @return list<array<string,mixed>>
 	 */
 	protected function getEventsByUser( CentralUser $user, int $resultLimit ): array {
 		return $this->buildResultStructure(

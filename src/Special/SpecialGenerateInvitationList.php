@@ -56,6 +56,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,array<string,mixed>>
 	 */
 	protected function getFormFields(): array {
 		return [
@@ -63,7 +64,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 				'type' => 'text',
 				'label-message' => 'campaignevents-generateinvitationlist-name-field-label',
 				'placeholder-message' => 'campaignevents-generateinvitationlist-name-field-placeholder',
-				'filter-callback' => static fn ( $name ) => trim( (string)$name ),
+				'filter-callback' => static fn ( string $name ): string => trim( $name ),
 				'required' => true
 			],
 			'EventPage' => [
@@ -92,7 +93,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 				],
 				'rows' => 10,
 				'required' => true,
-				'validation-callback' => function ( $worklist ): StatusValue {
+				'validation-callback' => function ( string $worklist ): StatusValue {
 					return $this->worklistParser->parseWorklist( self::makePageMapFromInput( $worklist ) );
 				}
 			]
@@ -108,6 +109,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 
 	/**
 	 * @inheritDoc
+	 * @param array<string,mixed> $data
 	 */
 	public function onSubmit( array $data ) {
 		$eventPage = $data['EventPage'] !== '' ? $data['EventPage'] : null;
@@ -147,7 +149,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 	private static function makePageMapFromInput( string $rawWorklist ): array {
 		$pageList = array_filter(
 			array_map( 'trim', explode( "\n", $rawWorklist ) ),
-			static fn ( $line ) => $line !== ''
+			static fn ( string $line ): bool => $line !== ''
 		);
 		return [ WikiMap::getCurrentWikiId() => $pageList ];
 	}

@@ -32,9 +32,7 @@ class WikiEduDashboard extends TrackingTool {
 	private string $apiSecret;
 	private ?string $apiProxy;
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @phan-param array<string,mixed> $extra */
 	public function __construct(
 		HttpRequestFactory $httpRequestFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
@@ -107,7 +105,7 @@ class WikiEduDashboard extends TrackingTool {
 	): StatusValue {
 		Assert::precondition( $eventID !== null || $dryRun, 'Cannot sync tools with events without ID' );
 		$organizerIDsMap = array_fill_keys(
-			array_map( static fn ( CentralUser $u ) => $u->getCentralID(), $organizers ),
+			array_map( static fn ( CentralUser $u ): int => $u->getCentralID(), $organizers ),
 			null
 		);
 		$organizerNames = array_values( $this->centralUserLookup->getNames( $organizerIDsMap ) );
@@ -251,7 +249,7 @@ class WikiEduDashboard extends TrackingTool {
 			IDBAccessObject::READ_LATEST
 		);
 		$participantIDsMap = array_fill_keys(
-			array_map( static fn ( Participant $p ) => $p->getUser()->getCentralID(), $latestParticipants ),
+			array_map( static fn ( Participant $p ): int => $p->getUser()->getCentralID(), $latestParticipants ),
 			null
 		);
 		$participantNames = array_values( $this->centralUserLookup->getNames( $participantIDsMap ) );
@@ -271,7 +269,7 @@ class WikiEduDashboard extends TrackingTool {
 	 * @param int|null $eventID
 	 * @param string $courseID
 	 * @param bool $dryRun
-	 * @param array $extraParams
+	 * @param array<string,mixed> $extraParams
 	 * @return StatusValue
 	 */
 	private function makePostRequest(
@@ -316,6 +314,7 @@ class WikiEduDashboard extends TrackingTool {
 		return $this->makeErrorStatus( $respObj, $courseID );
 	}
 
+	/** @return array<string,mixed>|null */
 	private function parseResponseJSON( MWHttpRequest $request ): ?array {
 		$contentTypeHeader = $request->getResponseHeader( 'Content-Type' );
 		if ( !$contentTypeHeader ) {
@@ -336,7 +335,7 @@ class WikiEduDashboard extends TrackingTool {
 	}
 
 	/**
-	 * @param array $response
+	 * @param array<string,mixed> $response
 	 * @param string $courseID
 	 * @return StatusValue
 	 */

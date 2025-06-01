@@ -12,6 +12,10 @@ class EmptyTopicRegistry implements ITopicRegistry {
 		return [];
 	}
 
+	/**
+	 * @param string[] $topicIDs
+	 * @return array<string,string>
+	 */
 	public function getTopicMessages( array $topicIDs ): array {
 		return [];
 	}

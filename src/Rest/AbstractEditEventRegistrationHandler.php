@@ -122,7 +122,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	abstract protected function getSuccessResponse( StatusValue $saveStatus ): Response;
 
 	/**
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function getBodyParamSettings(): array {
 		$params = [
@@ -220,7 +220,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * Creates an EventRegistration object with the data from the request body, with
 	 * appropriate validation.
 	 *
-	 * @param array $body Request body data
+	 * @param array<string,mixed> $body Request body data
 	 * @return EventRegistration
 	 * @throws InvalidEventDataException
 	 */

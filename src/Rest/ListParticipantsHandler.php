@@ -107,7 +107,7 @@ class ListParticipantsHandler extends SimpleHandler {
 	 * @param Authority $authority
 	 * @param ExistingEventRegistration $event
 	 * @param Participant[] $participants
-	 * @return array
+	 * @return list<array<string,mixed>>
 	 */
 	private function getResponseData(
 		Authority $authority,
@@ -125,7 +125,7 @@ class ListParticipantsHandler extends SimpleHandler {
 		);
 		$includeNonPIIData = !$event->isPast() && $userCanViewNonPIIParticipantData;
 
-		$centralIDs = array_map( static fn ( Participant $p ) => $p->getUser()->getCentralID(), $participants );
+		$centralIDs = array_map( static fn ( Participant $p ): int => $p->getUser()->getCentralID(), $participants );
 		[ $usernamesMap, $usersByName ] = $this->getUserBatch( $centralIDs );
 
 		$respDataByCentralID = [];
@@ -193,7 +193,7 @@ class ListParticipantsHandler extends SimpleHandler {
 		$usernamesMap = $this->centralUserLookup->getNamesIncludingDeletedAndSuppressed( $centralIDsMap );
 		$usernamesToPreload = array_filter(
 			$usernamesMap,
-			static function ( $name ) {
+			static function ( string $name ): bool {
 				return $name !== CampaignsCentralUserLookup::USER_HIDDEN &&
 					$name !== CampaignsCentralUserLookup::USER_NOT_FOUND;
 			}
@@ -221,7 +221,7 @@ class ListParticipantsHandler extends SimpleHandler {
 	 * @param Participant $participant
 	 * @param ExistingEventRegistration $event
 	 * @param ITextFormatter $msgFormatter
-	 * @return array
+	 * @return list<array<string,mixed>>
 	 */
 	private function getParticipantNonPIIAnswers(
 		Participant $participant,
@@ -255,7 +255,7 @@ class ListParticipantsHandler extends SimpleHandler {
 	/**
 	 * @param Answer $answer
 	 * @param ITextFormatter $msgFormatter
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	private function getQuestionAnswer( Answer $answer, ITextFormatter $msgFormatter ): array {
 		$questionAnswer = [

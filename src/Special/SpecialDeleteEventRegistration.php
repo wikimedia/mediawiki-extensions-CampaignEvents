@@ -110,6 +110,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,array<string,mixed>>
 	 */
 	protected function getFormFields(): array {
 		return [
@@ -130,6 +131,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 
 	/**
 	 * @inheritDoc
+	 * @param array<string,mixed> $data
 	 */
 	public function onSubmit( array $data ): Status {
 		return Status::wrap( $this->deleteEventCommand->deleteIfAllowed( $this->event, $this->getAuthority() ) );

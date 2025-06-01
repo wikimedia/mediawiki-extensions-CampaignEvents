@@ -156,7 +156,7 @@ class ParticipantAnswersStore {
 		if ( !$participants ) {
 			return [];
 		}
-		$participantIDs = array_map( static fn ( CentralUser $u ) => $u->getCentralID(), $participants );
+		$participantIDs = array_map( static fn ( CentralUser $u ): int => $u->getCentralID(), $participants );
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 		$res = $dbr->newSelectQueryBuilder()
 			->select( '*' )

@@ -41,5 +41,6 @@ $cfg['exclude_file_list'] = array_merge(
 $cfg['plugins'] = array_merge( $cfg['plugins'], [
 	'StrictComparisonPlugin',
 	'StrictLiteralComparisonPlugin',
+	'UnknownElementTypePlugin',
 ] );
 return $cfg;

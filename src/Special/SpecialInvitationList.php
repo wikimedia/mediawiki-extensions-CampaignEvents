@@ -166,7 +166,7 @@ class SpecialInvitationList extends SpecialPage {
 			// But preload links only for those who actually exist.
 			$usernamesToPreload = array_filter(
 				$allUsernames,
-				static function ( $name ) {
+				static function ( string $name ): bool {
 					return $name !== CampaignsCentralUserLookup::USER_HIDDEN &&
 						$name !== CampaignsCentralUserLookup::USER_NOT_FOUND;
 				}
@@ -204,6 +204,7 @@ class SpecialInvitationList extends SpecialPage {
 		$out->addHTML( $template );
 	}
 
+	/** @return list<string> */
 	private function getWorklistLinks( int $invitationListID ): array {
 		$worklist = $this->invitationListStore->getWorklist( $invitationListID );
 		$pagesByWiki = $worklist->getPagesByWiki();
@@ -212,7 +213,7 @@ class SpecialInvitationList extends SpecialPage {
 		}
 		$localPages = reset( $pagesByWiki );
 		$linkRenderer = $this->getLinkRenderer();
-		return array_map( static fn ( PageIdentity $page ) => $linkRenderer->makeLink( $page ), $localPages );
+		return array_map( static fn ( PageIdentity $page ): string => $linkRenderer->makeLink( $page ), $localPages );
 	}
 
 	/**
@@ -253,6 +254,7 @@ class SpecialInvitationList extends SpecialPage {
 		return $links;
 	}
 
+	/** @param list<string> $links */
 	private function formatAsList( array $links ): ?Tag {
 		if ( !$links ) {
 			return null;

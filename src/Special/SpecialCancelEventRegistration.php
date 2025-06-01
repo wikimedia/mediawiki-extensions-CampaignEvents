@@ -51,6 +51,7 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 
 	/**
 	 * @inheritDoc
+	 * @return array<string,array<string,mixed>>
 	 */
 	protected function getFormFields(): array {
 		return [
@@ -71,6 +72,7 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 
 	/**
 	 * @inheritDoc
+	 * @param array<string,mixed> $data
 	 */
 	public function onSubmit( array $data ) {
 		return Status::wrap( $this->unregisterParticipantCommand->unregisterIfAllowed(

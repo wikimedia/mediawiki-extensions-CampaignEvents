@@ -94,6 +94,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$this->getOutput()->addHTML( $pageContent );
 	}
 
+	/** @return array<string,mixed> */
 	private function getQueryParametersForTransclusionLink(): array {
 		$values = $this->getRequest()->getQueryValues();
 		// Convert multivalued parameters back to arrays.
@@ -286,7 +287,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			->setMethod( 'get' )
 			->setId( 'ext-campaignevents-allevents-form' )
 			->setFormIdentifier( $formIdentifier, true )
-			->setSubmitCallback( static fn () => true );
+			->setSubmitCallback( static fn (): bool => true );
 	}
 
 	public function getAccordionTemplate(
@@ -323,6 +324,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		}
 	}
 
+	/** @param array<string,array<string,mixed>> $tabs */
 	private function getLayout( array $tabs, string $activeTab ): string {
 		$data = [
 			'url' => $this->getPageTitle()->getLocalURL(),
@@ -346,13 +348,13 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	 * Normalize a comma-separated string of values into an array of trimmed, lowercase strings.
 	 * This allows editors using transclusion to use case-insensitive filters
 	 * @param string $value
-	 * @return array
+	 * @return list<string>
 	 */
 	private function normalizeFilterValues( string $value ): array {
 		if ( $value === '' ) {
 			return [];
 		}
-		return array_map( static function ( $item ) {
+		return array_map( static function ( string $item ): string {
 			return strtolower( trim( $item ) );
 		}, explode( ',', $value ) );
 	}
