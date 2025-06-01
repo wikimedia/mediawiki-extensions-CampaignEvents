@@ -423,10 +423,6 @@ class EventPageDecorator {
 		return $layout;
 	}
 
-	/**
-	 * @param int $userStatus
-	 * @return Tag|null
-	 */
 	private function getParticipantNoticeRow( int $userStatus ): ?Tag {
 		if ( $userStatus !== self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER ) {
 			return null;

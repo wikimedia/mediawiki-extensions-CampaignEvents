@@ -40,9 +40,13 @@ $cfg['exclude_file_list'] = array_merge(
 
 $cfg['plugins'] = array_merge( $cfg['plugins'], [
 	'AlwaysReturnPlugin',
+	'PHPDocRedundantPlugin',
 	'PHPDocToRealTypesPlugin',
 	'StrictComparisonPlugin',
 	'StrictLiteralComparisonPlugin',
 	'UnknownElementTypePlugin',
 ] );
+
+$cfg['suppress_issue_types'][] = 'PhanPluginRedundantReturnComment';
+
 return $cfg;

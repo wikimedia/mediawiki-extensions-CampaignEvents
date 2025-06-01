@@ -884,8 +884,5 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		return '';
 	}
 
-	/**
-	 * @return int
-	 */
 	abstract protected function getValidationFlags(): int;
 }

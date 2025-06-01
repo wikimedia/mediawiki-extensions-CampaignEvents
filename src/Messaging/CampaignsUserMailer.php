@@ -204,13 +204,6 @@ class CampaignsUserMailer {
 		return $body;
 	}
 
-	/**
-	 * @param MailAddress $to
-	 * @param string $subject
-	 * @param string $message
-	 * @param MailAddress $from
-	 * @return EmailUsersJob
-	 */
 	private function createEmailJob(
 		MailAddress $to,
 		string $subject,

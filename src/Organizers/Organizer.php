@@ -26,9 +26,6 @@ class Organizer {
 		$this->clickwrapAcceptance = $clickwrapAcceptance;
 	}
 
-	/**
-	 * @return CentralUser
-	 */
 	public function getUser(): CentralUser {
 		return $this->user;
 	}
@@ -44,16 +41,10 @@ class Organizer {
 		return in_array( $role, $this->roles, true );
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getOrganizerID(): int {
 		return $this->organizerID;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function getClickwrapAcceptance(): bool {
 		return $this->clickwrapAcceptance;
 	}

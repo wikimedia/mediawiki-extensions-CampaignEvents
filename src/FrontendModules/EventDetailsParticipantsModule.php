@@ -215,14 +215,6 @@ class EventDetailsParticipantsModule {
 		return $content;
 	}
 
-	/**
-	 * @param ExistingEventRegistration $event
-	 * @param int $totalParticipants
-	 * @param bool $canRemoveParticipants
-	 * @param bool $canEmailParticipants
-	 * @param bool $canViewNonPIIParticipantsData
-	 * @return Tag
-	 */
 	private function getPrimaryHeader(
 		ExistingEventRegistration $event,
 		int $totalParticipants,
@@ -320,10 +312,6 @@ class EventDetailsParticipantsModule {
 		return $container;
 	}
 
-	/**
-	 * @param int $totalParticipants
-	 * @return Tag
-	 */
 	private function getEmptyStateElement( int $totalParticipants ): Tag {
 		$noParticipantsIcon = new IconWidget( [
 			'icon' => 'userGroup',
@@ -344,9 +332,6 @@ class EventDetailsParticipantsModule {
 		)->addClasses( $noParticipantsClasses );
 	}
 
-	/**
-	 * @return Tag
-	 */
 	private function getSearchBar(): Tag {
 			return new SearchInputWidget( [
 				'placeholder' => $this->msgFormatter->format(
@@ -703,13 +688,6 @@ class EventDetailsParticipantsModule {
 		return $participantAnswer;
 	}
 
-	/**
-	 * @param int $eventID
-	 * @param bool $userCanViewNonPIIParticipantsData
-	 * @param ExistingEventRegistration $event
-	 * @param OutputPage $out
-	 * @return Tag|null
-	 */
 	private function getFooter(
 		int $eventID,
 		bool $userCanViewNonPIIParticipantsData,
@@ -757,11 +735,6 @@ class EventDetailsParticipantsModule {
 		return $footer;
 	}
 
-	/**
-	 * @param bool $viewerCanRemoveParticipants
-	 * @param bool $viewerCanEmailParticipants
-	 * @return Tag
-	 */
 	private function getHeaderControls(
 		bool $viewerCanRemoveParticipants,
 		bool $viewerCanEmailParticipants
