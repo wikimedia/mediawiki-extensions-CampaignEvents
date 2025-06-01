@@ -23,7 +23,7 @@ class UserNotifier {
 
 	public function notifyRegistration( Authority $performer, ExistingEventRegistration $event ): void {
 		if ( $this->isEchoLoaded ) {
-			DeferredUpdates::addCallableUpdate( static function () use ( $performer, $event ) {
+			DeferredUpdates::addCallableUpdate( static function () use ( $performer, $event ): void {
 				Event::create( [
 					'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
 					'title' => Title::castFromPageIdentity( $event->getPage()->getPageIdentity() ),

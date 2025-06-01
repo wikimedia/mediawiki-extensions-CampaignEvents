@@ -39,6 +39,8 @@ $cfg['exclude_file_list'] = array_merge(
 );
 
 $cfg['plugins'] = array_merge( $cfg['plugins'], [
+	'AlwaysReturnPlugin',
+	'PHPDocToRealTypesPlugin',
 	'StrictComparisonPlugin',
 	'StrictLiteralComparisonPlugin',
 	'UnknownElementTypePlugin',

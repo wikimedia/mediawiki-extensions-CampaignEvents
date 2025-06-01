@@ -238,12 +238,7 @@ class OrganizersStore {
 		return $counts;
 	}
 
-	/**
-	 * @param int $eventID
-	 * @param CentralUser $organizer
-	 * @return void
-	 */
-	public function updateClickwrapAcceptance( int $eventID, CentralUser $organizer ) {
+	public function updateClickwrapAcceptance( int $eventID, CentralUser $organizer ): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		$dbw->newUpdateQueryBuilder()
 			->update( 'ce_organizers' )

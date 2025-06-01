@@ -129,6 +129,7 @@ trait EventPagerTrait {
 	 * Add event pages to a LinkBatch to improve performance and not make one query per page.
 	 * This code was stolen from AbuseFilter's pager et al.
 	 * @param IResultWrapper $result
+	 * @suppress PhanPluginCanUseParamType The method is inherited from IndexPager
 	 */
 	protected function preprocessResults( $result ): void {
 		// Error suppressed, method is declared in inheritor

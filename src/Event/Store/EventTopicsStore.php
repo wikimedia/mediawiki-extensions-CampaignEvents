@@ -27,7 +27,7 @@ class EventTopicsStore {
 	 * @param int $eventID
 	 * @return string[] List of topics IDs
 	 */
-	public function getEventTopics( int $eventID ) {
+	public function getEventTopics( int $eventID ): array {
 		return $this->getEventTopicsMulti( [ $eventID ] )[$eventID];
 	}
 

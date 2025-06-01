@@ -242,7 +242,7 @@ class TrackingToolEventWatcher {
 	 * @note This method is also responsible for updating the database.
 	 */
 	public function onEventDeleted( ExistingEventRegistration $event ): void {
-		DeferredUpdates::addCallableUpdate( function () use ( $event ) {
+		DeferredUpdates::addCallableUpdate( function () use ( $event ): void {
 			foreach ( $event->getTrackingTools() as $toolAssociation ) {
 				$toolID = $toolAssociation->getToolID();
 				$toolEventID = $toolAssociation->getToolEventID();
@@ -300,7 +300,7 @@ class TrackingToolEventWatcher {
 		CentralUser $participant,
 		bool $private
 	): void {
-		DeferredUpdates::addCallableUpdate( function () use ( $event, $participant, $private ) {
+		DeferredUpdates::addCallableUpdate( function () use ( $event, $participant, $private ): void {
 			foreach ( $event->getTrackingTools() as $toolAssociation ) {
 				$toolID = $toolAssociation->getToolID();
 				$toolEventID = $toolAssociation->getToolEventID();
@@ -362,7 +362,7 @@ class TrackingToolEventWatcher {
 		?array $participants,
 		bool $invertSelection
 	): void {
-		DeferredUpdates::addCallableUpdate( function () use ( $event, $participants, $invertSelection ) {
+		DeferredUpdates::addCallableUpdate( function () use ( $event, $participants, $invertSelection ): void {
 			foreach ( $event->getTrackingTools() as $toolAssociation ) {
 				$toolID = $toolAssociation->getToolID();
 				$toolEventID = $toolAssociation->getToolEventID();

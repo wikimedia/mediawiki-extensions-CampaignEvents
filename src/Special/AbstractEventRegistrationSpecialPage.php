@@ -318,7 +318,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			 * @param array<string,mixed> $alldata
 			 * @return string|true
 			 */
-			'validation-callback' => function ( $value, $alldata ) {
+			'validation-callback' => function ( $value, array $alldata ) {
 				$organizers = $alldata['EventOrganizerUsernames'] !== ''
 					? explode( "\n", $alldata['EventOrganizerUsernames'] )
 					: [];
@@ -448,7 +448,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				 * @param array<string,mixed> $allData
 				 * @return string|true
 				 */
-				'validation-callback' => function ( $value, $allData ) {
+				'validation-callback' => function ( $value, array $allData ) {
 					if ( $value === '' ) {
 						return true;
 					}
@@ -785,10 +785,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		return Status::wrap( $errorsStatus );
 	}
 
-	/**
-	 * @return DateTimeZone
-	 */
-	private function getTimezone() {
+	private function getTimezone(): DateTimeZone {
 		// HACK: If the form has been submitted, adjust the minimum allowed dates according to the selected
 		// time zone, or the validation will be off (T348579). The proper solution would be for time fields to
 		// accept a timezone parameter (T315874).
