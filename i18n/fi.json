@@ -138,7 +138,7 @@
 	"campaignevents-eventpage-btn-manage": "Hallitse tapahtumaa",
 	"campaignevents-eventpage-btn-register": "Ilmoittaudu tapahtumaan",
 	"campaignevents-eventpage-btn-registration-closed": "Ilmoittautuminen on päättynyt",
-	"campaignevents-eventpage-btn-event-ended": "Tapahtuma on päättynyt",
+	"campaignevents-eventpage-btn-event-ended": "Tapahtuma päättynyt",
 	"campaignevents-eventpage-dialog-title": "Tapahtuman tiedot",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Näytä kaikki järjestäjät",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|osallistuja|osallistujaa}}",
