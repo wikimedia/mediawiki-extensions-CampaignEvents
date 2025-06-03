@@ -1154,9 +1154,7 @@ class EventPageDecorator {
 	 */
 	private function getDetailsDialogTopics( array $eventTopics ): string {
 		$localizedTopicNames = array_map(
-			fn ( string $msgKey ): string => $this->msgFormatter->format(
-				MessageValue::new( $msgKey )
-			),
+			fn ( string $msgKey ): string => $this->out->msg( $msgKey )->escaped(),
 			$this->topicRegistry->getTopicMessages( $eventTopics )
 		);
 		sort( $localizedTopicNames );
@@ -1164,7 +1162,7 @@ class EventPageDecorator {
 
 		return $this->makeDetailsDialogSection(
 			'tag',
-			$content,
+			new HtmlSnippet( $content ),
 			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-topics-label' )
 			)
