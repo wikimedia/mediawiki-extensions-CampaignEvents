@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 
 use Generator;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
@@ -27,7 +28,12 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideArticle
 	 * @covers ::onArticleViewHeader
 	 */
-	public function testOnArticleViewHeader( int $ns, bool $exists, bool $expectedDecorates ) {
+	public function testOnArticleViewHeader(
+		int $ns,
+		array $allowedNamespaces,
+		bool $exists,
+		bool $expectedDecorates
+	) {
 		$decorator = $this->createMock( EventPageDecorator::class );
 		if ( $expectedDecorates ) {
 			$decorator->expects( $this->once() )->method( 'decoratePage' );
@@ -36,7 +42,10 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 		}
 		$decoratorFactory = $this->createMock( EventPageDecoratorFactory::class );
 		$decoratorFactory->method( 'newDecorator' )->willReturn( $decorator );
-		$handler = new ArticleViewHeaderHandler( $decoratorFactory );
+		$handler = new ArticleViewHeaderHandler(
+			$decoratorFactory,
+			new HashConfig( [ 'CampaignEventsEventNamespaces' => $allowedNamespaces ] )
+		);
 		$outputDone = true;
 		$pcache = true;
 		$article = $this->getMockArticle( $ns, $exists );
@@ -49,12 +58,15 @@ class ArticleViewHeaderHandlerTest extends MediaWikiIntegrationTestCase {
 		$exists = true;
 		$doesNotExist = false;
 
-		yield 'Mainspace, does not exist' => [ NS_MAIN, $doesNotExist, false ];
-		yield 'Mainspace, exists' => [ NS_MAIN, $exists, true ];
-		yield 'Project namespace, does not exist' => [ NS_PROJECT, $doesNotExist, false ];
-		yield 'Project namespace, exists' => [ NS_PROJECT, $exists, true ];
-		yield 'Event namespace, does not exist' => [ NS_EVENT, $doesNotExist, false ];
-		yield 'Event namespace, exists' => [ NS_EVENT, $exists, true ];
+		yield 'Project namespace, not allowed, does not exist' => [ NS_PROJECT, [], $doesNotExist, false ];
+		yield 'Project namespace, allowed, does not exist' => [ NS_PROJECT, [ NS_PROJECT ], $doesNotExist, false ];
+		yield 'Project namespace, not allowed, exists' => [ NS_PROJECT, [], $exists, false ];
+		yield 'Project namespace, allowed, exists' => [ NS_PROJECT, [ NS_PROJECT ], $exists, true ];
+
+		yield 'Event namespace, not allowed, does not exist' => [ NS_EVENT, [], $doesNotExist, false ];
+		yield 'Event namespace, allowed, does not exist' => [ NS_EVENT, [ NS_EVENT ], $doesNotExist, false ];
+		yield 'Event namespace, not allowed, exists' => [ NS_EVENT, [], $exists, false ];
+		yield 'Event namespace, allowed, exists' => [ NS_EVENT, [ NS_EVENT ], $exists, true ];
 	}
 
 	private function getMockArticle( int $ns, bool $exists ): Article {
