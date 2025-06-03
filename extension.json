@@ -120,7 +120,8 @@
 		"ArticleViewHeader": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\ArticleViewHeaderHandler",
 			"services": [
-				"CampaignEventsEventPageDecoratorFactory"
+				"CampaignEventsEventPageDecoratorFactory",
+				"CampaignEventsWikiConfiguration"
 			]
 		},
 		"PageMoveAndDeleteHandler": {
