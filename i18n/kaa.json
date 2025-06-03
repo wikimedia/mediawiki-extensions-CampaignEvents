@@ -5,10 +5,10 @@
 			"Ajiniyaz Nurniyazov"
 		]
 	},
+	"campaignevents-error-invalid-timezone": "Durıslı waqıt regionın kiritiń.",
 	"campaignevents-error-trackingtool-without-eventid": "Berilgen baqlaw quralında waqıya identifikatorın kórsetiń.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Baqlaw quralı identifikatorın kórsetiń",
 	"campaignevents-error-invalid-trackingtool": "Jaramlı baqlaw quralı identifikatorın kiritiń",
-	"campaignevents-error-invalid-timezone": "Durıslı waqıt regionın kiritiń.",
 	"campaignevents-edit-field-timezone": "Waqıt zonası",
 	"campaignevents-register-success-edit": "Siziń registraciya maǵlıwmatlarıńız jańalandı.",
 	"campaignevents-register-edit-legend": "Registraciyanı ózgertiw",

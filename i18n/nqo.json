@@ -23,8 +23,6 @@
 	"campaignevents-error-empty-end": "ߓߊ߲߫ ߕߎߡߊ ߘߏ߫ ߟߊߘߏ߲߬.",
 	"campaignevents-error-invalid-end": "ߖߊ߲߬ߖߏ߲ ߓߊ߲߫ ߕߎߡߊ ߓߍ߲߬ߣߍ߲߫ ߕߍ߫.",
 	"campaignevents-error-start-after-end": "ߓߊ߲߫ ߕߎߡߘߊ ߘߏ߫ ߟߊߘߏ߲߬ ߡߍ߲ ߣߊ߬ߕߐ߫ ߘߊߡߌߣߊ߫ ߕߎߡߊ ߞߐ߫.",
-	"campaignevents-error-invalid-type": "ߖߊ߲߬ߖߏ߲ ߛߎ߯ߦߊ߫ ߓߍ߲߬ߣߍ߲ ߠߊߘߏ߲߬.",
-	"campaignevents-error-no-meeting-type": "ߖߊ߲߬ߖߏ߲ ߛߎ߯ߦߊ ߘߏ߫ ߛߎߥߊ߲ߘߌ߫ ߤߊߟߌ߬ ߣߴߊ߬ ߞߍ߫ ߘߊ߫ ߟߊ߬ߘߍ߫ ߖߊ߲߬ߖߏ߲߬ߡߊ߫ ߞߋߟߋ߲߫ ߘߌ߫.",
 	"campaignevents-error-invalid-meeting-url": "ߟߊ߬ߘߍ߫ ߖߊ߲߬ߖߏ߲߬ߡߊ ߘߏ߫ URL ߓߍ߲߬ߣߍ߲ ߘߏ߫ ߟߊߘߏ߲߬.",
 	"campaignevents-error-meeting-url-not-online": "ߟߊ߬ߘߍ URL ߞߊߣߊ߬ ߞߍ߫ ߞߙߍߞߙߍߣߍ߲߫ ߘߌ߫ ߣߌ߫ ߖߊ߲߬ߖߏ߲ ߜߊ߲߬ߞߎ߲߬ߣߍ߲߫ ߕߍ߫.",
 	"campaignevents-error-countryoraddress-not-in-person": "ߟߊ߬ߘߍ ߖߡߊ߬ߣߊ ߣߴߊ߬ ߛߊ߲߬ߓߊ߬ߕߐ߮ ߞߊߣߊ߬ ߞߍ߫ ߞߙߍߞߙߍߣߍ߲߫ ߘߌ߫ ߣߌ߫ ߖߊ߲߬ߖߏ߲ ߡߊ߫ ߞߍ߫ ߢߣߊߓߊ߯ߦߕߊ ߘߌ߫.",

@@ -6,6 +6,7 @@
 			"Daimona Eaytoy",
 			"MarcoAurelio",
 			"McDutchie",
+			"Nemoralis",
 			"Tacsipacsi",
 			"Verdy p"
 		]
@@ -44,7 +45,7 @@
 	"campaignevents-error-no-types": "Error message used when the user did not enter any types for an event.",
 	"campaignevents-error-too-many-types": "Error message used when the user entered too many types for an event.\nParameters:\n*$1 - The maximum allowed number of types.",
 	"campaignevents-error-invalid-types": "Error message used when the user entered invalid types for an event.\nParameters:\n*$1 - A comma-separated list of invalid types.",
-	"campaignevents-error-invalid-other-selection": "Error message shown on both [[Special:EnablingEventRegistration]] and [[Special:EditEventRegistration]] forms when the user selects \"Other\" along with one or more other event types. The \"Other\" option is meant to be exclusive.",
+	"campaignevents-error-invalid-other-selection": "Error message shown on both [[Special:EnablingEventRegistration]] and [[Special:EditEventRegistration]] forms when the user selects \"Other\" along with one or more other event types. The \"Other\" option is meant to be exclusive.\n\nSee also:\n* {{msg-mw|campaignevents-eventtype-other}}",
 	"campaignevents-error-too-many-wikis": "Error message used when the user entered too many target wikis for an event.\nParameters:\n*$1 - The maximum allowed number of wikis. This is guaranteed to be a large number (e.g., 100).",
 	"campaignevents-error-invalid-wikis": "Error message used when the user entered invalid target wikis for an event.\nParameters:\n*$1 - A comma-separated list of invalid wiki IDs.",
 	"campaignevents-error-too-many-topics": "Error message used when the user entered too many topics for an event.\nParameters:\n*$1 - The maximum allowed number of topics.",
@@ -478,7 +479,7 @@
 	"campaignevents-delete-registration-page-nonlocal": "Notice message shown on [[Special:DeleteEventRegistration]] when trying to delete an event that was enabled on another wiki, and thus should be delete there.\nParameters:\n*$1 - Link to [[Special:DeleteEventRegistration]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
 	"campaignevents-event-details-page-nonlocal": "Notice message shown on [[Special:EventDetails]] when an organizer access the [[Special:EventDetails]] on another wiki.\nParameters:\n*$1 - Link to [[Special:EventDetails]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
 	"campaignevents-event-details-not-local-wiki-prompt": "Message used on [[Special:EventDetails]] to inform users that they need to be on the wiki where the event was created in order to see a piece of information.\nParameters:\n*$1 - Link to [[Special:EventDetails]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
-	"campaignevents-event-details-sensitive-data-message-blocked-user": "Message used on [[Special:EventDetails]] to inform users that they can't see sensitive information, for instance event meeting link and chat goup link, because their account is blocked",
+	"campaignevents-event-details-sensitive-data-message-blocked-user": "Message used on [[Special:EventDetails]] to inform users that they can't see sensitive information, for instance event meeting link and chat group link, because their account is blocked",
 	"generateinvitationlist": "Description of [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-name-field-label": "Label of the list name field on [[Special:GenerateInvitationList]]",
 	"campaignevents-generateinvitationlist-name-field-placeholder": "Placeholder message for the invitation list name field on [[Special:GenerateInvitationList]]",
