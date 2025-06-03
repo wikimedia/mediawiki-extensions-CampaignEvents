@@ -192,7 +192,7 @@
 	"campaignevents-eventpage-btn-edit": "Muokkaa ilmoittautumista",
 	"campaignevents-eventpage-btn-cancel": "Peruuta ilmoittautuminen",
 	"campaignevents-eventpage-btn-registration-closed": "Ilmoittautuminen on päättynyt",
-	"campaignevents-eventpage-btn-event-ended": "Tapahtuma on päättynyt",
+	"campaignevents-eventpage-btn-event-ended": "Tapahtuma päättynyt",
 	"campaignevents-eventpage-dialog-title": "Tapahtuman tiedot",
 	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|Järjestäjä|Järjestäjät}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Näytä kaikki järjestäjät",
