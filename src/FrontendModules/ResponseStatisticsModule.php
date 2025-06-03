@@ -4,11 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
-use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswers;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
@@ -30,28 +30,20 @@ class ResponseStatisticsModule {
 	private ParticipantAnswersStore $answersStore;
 	private EventAggregatedAnswersStore $aggregatedAnswersStore;
 	private EventQuestionsRegistry $questionsRegistry;
-	private ParticipantsStore $participantsStore;
 	private FrontendModulesFactory $frontendModulesFactory;
 
 	private Language $language;
 	private ExistingEventRegistration $event;
 
 	/**
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param ParticipantAnswersStore $answersStore
-	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
-	 * @param EventQuestionsRegistry $questionsRegistry
-	 * @param ParticipantsStore $participantsStore
-	 * @param FrontendModulesFactory $frontendModulesFactory
-	 * @param ExistingEventRegistration $event
-	 * @param Language $language
+	 * @note The caller is responsible for making sure that the event has ended, and that it has at least
+	 * one registered participant.
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		ParticipantAnswersStore $answersStore,
 		EventAggregatedAnswersStore $aggregatedAnswersStore,
 		EventQuestionsRegistry $questionsRegistry,
-		ParticipantsStore $participantsStore,
 		FrontendModulesFactory $frontendModulesFactory,
 		ExistingEventRegistration $event,
 		Language $language
@@ -60,15 +52,22 @@ class ResponseStatisticsModule {
 		$this->answersStore = $answersStore;
 		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
 		$this->questionsRegistry = $questionsRegistry;
-		$this->participantsStore = $participantsStore;
 		$this->frontendModulesFactory = $frontendModulesFactory;
 		$this->language = $language;
 		$this->event = $event;
 	}
 
-	public function createContent( Organizer $organizer, IContextSource $context, string $pageURL ): Tag {
+	public function createContent(
+		Organizer $organizer,
+		int $totalParticipants,
+		IContextSource $context,
+		string $pageURL
+	): Tag {
 		if ( !$this->event->isPast() ) {
 			throw new LogicException( __METHOD__ . ' called for event that has not ended' );
+		}
+		if ( $totalParticipants === 0 ) {
+			throw new InvalidArgumentException( 'The event must have participants' );
 		}
 
 		$eventID = $this->event->getID();
@@ -96,16 +95,16 @@ class ResponseStatisticsModule {
 			] );
 		}
 
-		return $this->makeContentWithAggregates( $organizer, $context, $pageURL );
+		return $this->makeContentWithAggregates( $organizer, $totalParticipants, $context, $pageURL );
 	}
 
 	private function makeContentWithAggregates(
 		Organizer $organizer,
+		int $totalParticipants,
 		IContextSource $context,
 		string $pageURL
 	): Tag {
 		$aggregates = $this->aggregatedAnswersStore->getEventAggregatedAnswers( $this->event->getID() );
-		$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $this->event->getID() );
 		$eventQuestions = $this->event->getParticipantQuestions();
 
 		$nonPIIQuestions = $this->questionsRegistry->getNonPIIQuestionIDs( $eventQuestions );
