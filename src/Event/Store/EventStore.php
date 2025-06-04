@@ -137,7 +137,8 @@ class EventStore implements IEventStore, IEventLookup {
 				} catch ( EventNotFoundException $e ) {
 					return null;
 				}
-			}
+			},
+			[ 'version' => 1 ]
 		);
 
 		if ( $cachedEvent === null ) {
