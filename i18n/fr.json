@@ -106,6 +106,7 @@
 	"campaignevents-edit-field-wikis-label": "Wikis cibles",
 	"campaignevents-edit-field-wikis-placeholder": "Ajouter des wikis spécifiques",
 	"campaignevents-edit-field-wikis-help": "Si votre événement se déroule sur des wikis spécifiques, veuillez les répertorier ici. Cela permet aux utilisateurs de décider à quels événements participer et facilite également les analyses.",
+	"campaignevents-edit-field-wikis-empty-specific": "Entrez au moins un wiki",
 	"campaignevents-edit-field-tracking-tools": "Lien du tableau de bord Programmes et Événements",
 	"campaignevents-edit-field-tracking-tools-help": "Les noms d’utilisateur des participants publiquement inscrits seront automatiquement envoyés au tableau de bord. Cet outil vous aide à suivre les contributions des participants et à mesurer l’impact de votre événement de campagne. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard En savoir plus].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Entrer l’URL du tableau de bord Programmes et événements pour votre événement",
