@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Noooote"
+		]
+	},
+	"campaignevents-rest-event-not-found": "No hay evento na este ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Hende tu puede hace abri el maga registracion de evento.",
+	"campaignevents-rest-edit-page-nonlocal": "Este registracion de evento ya hace abri na siguiente wiki y debe con este hace edit alla: $1.",
+	"campaignevents-rest-delete-already-deleted": "Este registracion de evento borrao ya.",
+	"campaignevents-rest-user-not-found": "No hay user na este central ID.",
+	"campaignevents-rest-get-registration-deleted": "Este registracion de evento borrao ya.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "El parametro 'user_ids' debe un array este de maga user id, o null (para hace quita todo'l users)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Por favor quita maga participante na $1, aquel wiki donde ya hace el evento.",
+	"campaignevents-rest-list-participants-empty-filter": "El username filter, si especificao, debe un non-empty string este.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Hende tu autorizao para mira con el maga participante quien registrao na privado para con este evento.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> debe un array de maga username este y no puede que no hay este laman",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Por favor hace set maga organizador na $1, aquel wiki donde ya hace el evento.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Hende tu ta participa na este evento.",
+	"campaignevents-rest-register-invalid-answer": "Invalido contestacion para na pregunta $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor completa con el registracion de evento na $1, aquel wiki donde ya hace el evento.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor borra con el de tuyo registracion de evento na $1, aquel wiki donde ya hace el evento.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Por favor man email con el maga participante na $1, aquel wiki donde ya hace el evento."
+}

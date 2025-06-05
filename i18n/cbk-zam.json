@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"Noooote"
+		]
+	},
+	"campaignevents-desc": "Ta dale maga features para na maga organizador de campaña y maga participante.",
+	"nstab-event": "Evento",
+	"group-event-organizer": "Maga organizador de evento",
+	"group-event-organizer-member": "{{GENDER:$1|organizador de evento}}",
+	"grouppage-event-organizer": "{{ns:project}}:Maga organizador de evento",
+	"action-campaignevents-enable-registration": "hace abri el maga registracion de evento",
+	"right-campaignevents-enable-registration": "Hace abri el registracion de evento",
+	"action-campaignevents-delete-registration": "hace borra el maga registracion",
+	"right-campaignevents-delete-registration": "Hace borra el maga registracion",
+	"action-campaignevents-organize-events": "hace organiza maga evento",
+	"right-campaignevents-organize-events": "Hace organiza maga evento",
+	"action-campaignevents-email-participants": "man email con el maga participante de evento",
+	"right-campaignevents-email-participants": "Man email con el maga participante de evento",
+	"action-campaignevents-view-private-participants": "mira con el maga privado participante de evento"
+}
