@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -66,6 +67,7 @@ class EventDetailsModule {
 	private PermissionChecker $permissionChecker;
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
+	private EventTypesRegistry $eventTypesRegistry;
 
 	/**
 	 * @param IMessageFormatterFactory $messageFormatterFactory
@@ -78,6 +80,7 @@ class EventDetailsModule {
 	 * @param PermissionChecker $permissionChecker
 	 * @param WikiLookup $wikiLookup
 	 * @param ITopicRegistry $topicRegistry
+	 * @param EventTypesRegistry $eventTypesRegistry
 	 * @param ExistingEventRegistration $registration
 	 * @param Language $language
 	 */
@@ -92,6 +95,7 @@ class EventDetailsModule {
 		PermissionChecker $permissionChecker,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
+		EventTypesRegistry $eventTypesRegistry,
 		ExistingEventRegistration $registration,
 		Language $language
 	) {
@@ -107,6 +111,7 @@ class EventDetailsModule {
 		$this->topicRegistry = $topicRegistry;
 		$this->registration = $registration;
 		$this->language = $language;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 	}
 
@@ -154,6 +159,12 @@ class EventDetailsModule {
 		);
 		// TDB Rename this column since it is not only the "organizer column"
 		$organizersColumn = $this->getOrganizersColumn( $out, $organizersCount );
+
+		if ( $out->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
+			$eventTypes = $this->registration->getTypes();
+			$organizersColumn->appendContent( $this->getEventTypesSection( $out, $eventTypes ) );
+		}
+
 		$this->hookRunner->onCampaignEventsGetEventDetails(
 			$infoColumn,
 			$organizersColumn,
@@ -481,6 +492,32 @@ class EventDetailsModule {
 		);
 
 		return $eventTopicsSection;
+	}
+
+	/**
+	 * Renders the section with the list of event types.
+	 *
+	 * @param OutputPage $out
+	 * @phan-param list<string> $eventTypes
+	 * @return Tag
+	 */
+	private function getEventTypesSection( OutputPage $out, array $eventTypes ): Tag {
+		$messageKeys = $this->eventTypesRegistry->getTypeMessages( $eventTypes );
+
+		$localizedEventTypeNames = array_map(
+			static fn ( string $msgKey ): string => $out->msg( $msgKey )->escaped(),
+			$messageKeys
+		);
+
+		sort( $localizedEventTypeNames );
+		$eventTypeContent = new HtmlSnippet( $this->language->commaList( $localizedEventTypeNames ) );
+		$eventTypesSection = self::makeSection(
+			'folderPlaceholder',
+			$eventTypeContent,
+			$out->msg( 'campaignevents-event-details-event-types-header' )->text()
+		);
+
+		return $eventTypesSection;
 	}
 
 	/**

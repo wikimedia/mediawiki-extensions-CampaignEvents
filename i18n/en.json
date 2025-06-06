@@ -556,5 +556,6 @@
 	"campaignevents-edit-field-eventtypes-other-section-header": "Other",
 	"campaignevents-edit-field-eventtypes-placeholder": "Select event types...",
 	"campaignevents-edit-field-eventtypes-other-help": "Selecting 'Other' will disable and deselect all other event types.",
-	"campaignevents-edit-field-eventtypes-label": "Event types"
+	"campaignevents-edit-field-eventtypes-label": "Event types",
+	"campaignevents-event-details-event-types-header": "Event types"
 }
