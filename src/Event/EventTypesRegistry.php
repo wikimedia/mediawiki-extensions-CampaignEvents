@@ -49,8 +49,8 @@ class EventTypesRegistry {
 					'dbValue' => 1 << 4,
 				],
 				[
-					'type' => 'training',
-					'msgKey'  => 'campaignevents-eventtype-training',
+					'type' => 'training-seminar',
+					'msgKey'  => 'campaignevents-eventtype-training-seminar',
 					'dbValue' => 1 << 5,
 				],
 				[

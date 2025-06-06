@@ -63,7 +63,7 @@ class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 		$expectedTypes = [
 			EventTypesRegistry::EVENT_TYPE_OTHER,
 			'editing-event', 'media-upload-event', 'backlog-drive', 'contest', 'workshop',
-			'training', 'meetup', 'hackathon', 'conference',
+			'training-seminar', 'meetup', 'hackathon', 'conference',
 		];
 		$actualTypes = $registry->getAllTypes();
 		sort( $expectedTypes );

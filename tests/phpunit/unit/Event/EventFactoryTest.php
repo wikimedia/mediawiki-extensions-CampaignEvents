@@ -600,7 +600,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			[ 'meetup' ]
 		];
 
-		$tooManyTypes = [ 'editing-event', 'meetup', 'workshop', 'training' ];
+		$tooManyTypes = [ 'editing-event', 'meetup', 'workshop', 'training-seminar' ];
 		if ( count( $tooManyTypes ) <= EventFactory::MAX_TYPES ) {
 			throw new Error( 'Test case needs update, maximum number of allowed topics has changed' );
 		}
