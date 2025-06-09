@@ -239,14 +239,17 @@ class SpecialEventDetails extends SpecialPage {
 			$this->event->isPast() &&
 			$this->event->getParticipantQuestions()
 		) {
-			$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
-			$pageURL = $this->getPageTitle( (string)$this->event->getID() )
-				->getLocalURL( [ 'tab' => $this::STATS_PANEL ] );
-			$tabs[] = $this->createTab(
-				self::STATS_PANEL,
-				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-stats' ) ),
-				$statsModule->createContent( $organizer, $this->getContext(), $pageURL )
-			);
+			$totalParticipants = $this->participantsStore->getFullParticipantCountForEvent( $this->event->getID() );
+			if ( $totalParticipants > 0 ) {
+				$statsModule = $this->frontendModulesFactory->newResponseStatisticsModule( $this->event, $language );
+				$pageURL = $this->getPageTitle( (string)$this->event->getID() )
+					->getLocalURL( [ 'tab' => $this::STATS_PANEL ] );
+				$tabs[] = $this->createTab(
+					self::STATS_PANEL,
+					$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-stats' ) ),
+					$statsModule->createContent( $organizer, $totalParticipants, $this->getContext(), $pageURL )
+				);
+			}
 		}
 
 		$main->addTabPanels( $tabs );
