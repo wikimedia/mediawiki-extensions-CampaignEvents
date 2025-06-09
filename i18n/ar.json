@@ -562,5 +562,6 @@
 	"campaignevents-edit-field-eventtypes-other-section-header": "آخر",
 	"campaignevents-edit-field-eventtypes-placeholder": "حدد أنواع الأحداث...",
 	"campaignevents-edit-field-eventtypes-other-help": "سيؤدي تحديد \"أخرى\" إلى تعطيل وإلغاء تحديد جميع أنواع الأحداث الأخرى.",
-	"campaignevents-edit-field-eventtypes-label": "أنواع الأحداث"
+	"campaignevents-edit-field-eventtypes-label": "أنواع الأحداث",
+	"campaignevents-event-details-event-types-header": "أنواع الفعاليات"
 }

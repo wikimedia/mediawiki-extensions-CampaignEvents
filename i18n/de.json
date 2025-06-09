@@ -547,5 +547,6 @@
 	"campaignevents-edit-field-eventtypes-other-section-header": "Andere",
 	"campaignevents-edit-field-eventtypes-placeholder": "Veranstaltungstypen auswählen …",
 	"campaignevents-edit-field-eventtypes-other-help": "Durch Auswahl von „Andere“ werden alle anderen Veranstaltungstypen deaktiviert und abgewählt.",
-	"campaignevents-edit-field-eventtypes-label": "Veranstaltungstypen"
+	"campaignevents-edit-field-eventtypes-label": "Veranstaltungstypen",
+	"campaignevents-event-details-event-types-header": "Veranstaltungstypen"
 }

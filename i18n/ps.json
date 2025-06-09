@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"campaignevents-error-no-types": "لږ تر لږه یو ډول دننه کړئ",
+	"campaignevents-error-no-participation-options": "لږ تر لږه د گډون يو خوښنه وټاکئ.",
+	"campaignevents-edit-field-wikis-empty-specific": "لږترلږه يو ويکي دننه کړئ",
+	"campaignevents-edit-field-participation-options": "د گډون خوښنې",
+	"campaignevents-allevents-label-participation-options": "د گډون خوښنې",
+	"campaignevents-eventslist-participation-options-label": "د گډون خوښنې",
+	"campaignevents-event-details-event-types-header": "پېښو ډولونه"
+}
