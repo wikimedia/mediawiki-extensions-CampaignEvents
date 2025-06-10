@@ -334,15 +334,11 @@ class EventQuestionsRegistry {
 	}
 
 	private function isPlaceholderValue( string $questionType, mixed $value ): bool {
-		switch ( $questionType ) {
-			case self::RADIO_BUTTON_QUESTION_TYPE:
-			case self::SELECT_QUESTION_TYPE:
-				return $value === 0 || $value === '0';
-			case self::FREE_TEXT_QUESTION_TYPE:
-				return $value === '';
-			default:
-				throw new LogicException( 'Unhandled question type' );
-		}
+		return match ( $questionType ) {
+			self::RADIO_BUTTON_QUESTION_TYPE, self::SELECT_QUESTION_TYPE => $value === 0 || $value === '0',
+			self::FREE_TEXT_QUESTION_TYPE => $value === '',
+			default => throw new LogicException( 'Unhandled question type' ),
+		};
 	}
 
 	/**

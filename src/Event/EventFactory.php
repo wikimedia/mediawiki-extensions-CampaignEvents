@@ -436,14 +436,14 @@ class EventFactory {
 		if ( preg_match( '/^[+-]/', $timezone ) ) {
 			$matches = [];
 			if ( !preg_match( '/^[+-](\d\d):(\d\d)$/', $timezone, $matches ) ) {
-				// Work around bug in PHP: strings starting with + and - do not throw an exception in PHP < 8,
-				// see https://3v4l.org/SE0oA. This also rejects offsets where the hours or the minutes have more
-				// than 3 digits, which PHP accepts but then does not handle properly; the exact meaning of "not handle
-				// properly" depends on the PHP version, see https://github.com/php/php-src/issues/9763#issue-1411450292
+				// Reject offsets where the hours or the minutes have more than 3 digits, which PHP accepts but then
+				// does not handle properly; the exact meaning of "not handle properly" depends on the PHP version,
+				// see https://github.com/php/php-src/issues/9763#issue-1411450292
 				return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
 			}
 			// Work around another PHP bug: if the hours are < 100 but hours + 60 * miutes >= 100*60, it will truncate
 			// the input and add a null byte that makes it unusable, see https://github.com/php/php-src/issues/9763
+			// This might be reconsidered when we require PHP >= 8.3.
 			if ( $matches[1] === '99' && (int)$matches[2] >= 60 ) {
 				return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
 			}

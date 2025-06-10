@@ -10,7 +10,6 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
-use MediaWiki\Permissions\Authority;
 use MediaWiki\User\UserTimeCorrection;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
@@ -51,7 +50,7 @@ class Utils {
 		// Also, 'UTC' is surprisingly categorized as a geographical zone, and getLocation() does not return false
 		// for it, but rather an array with incomplete data. PHP, WTF?!
 		$timezoneName = $tz->getName();
-		if ( strpos( $timezoneName, '/' ) !== false ) {
+		if ( str_contains( $timezoneName, '/' ) ) {
 			// Geographical format, convert to the format used by UserTimeCorrection.
 			$minDiff = floor( $tz->getOffset( new DateTime() ) / 60 );
 			return new UserTimeCorrection( "ZoneInfo|$minDiff|$timezoneName" );
@@ -65,7 +64,7 @@ class Utils {
 		// not depend on DST, because abbreviations already contain information about DST (e.g., "PST" vs "PDT").
 		// TODO This assumption may be false for some abbreviations, see T316688#8336443.
 
-		// Work around PHP bug: all versions of PHP up to 7.4.x, 8.0.20 and 8.1.7 do not parse DST correctly for
+		// Work around PHP bug: all versions of PHP up to 8.1.7 do not parse DST correctly for
 		// time zone abbreviations, and PHP assumes that *all* abbreviations correspond to time zones without DST.
 		// So we can't use DateTimeZone::getOffset(), and the timezone must also be specified inside the time string,
 		// and not as second argument to DateTime::__construct. See https://bugs.php.net/bug.php?id=74671
@@ -95,14 +94,5 @@ class Utils {
 		$participantAggregationTS = (int)$firstAnswerTime + EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
 		$eventAggregationTS = (int)MWTimestamp::convert( TS_UNIX, $event->getEndUTCTimestamp() );
 		return (string)min( $participantAggregationTS, $eventAggregationTS );
-	}
-
-	/**
-	 * Shortcut to check if the given performer is blocked and the block is sitewide. Could be inlined with a
-	 * nullsafe call once we drop support for PHP 7.4.
-	 */
-	public static function isSitewideBlocked( Authority $performer ): bool {
-		$block = $performer->getBlock();
-		return $block && $block->isSitewide();
 	}
 }

@@ -13,10 +13,7 @@ use Wikimedia\Message\MessageValue;
  * Helper to exit in case of a fatal StatusValue.
  */
 trait FailStatusUtilTrait {
-	/**
-	 * @return never
-	 */
-	private function exitWithStatus( StatusValue $status, int $statusCode = 400 ): void {
+	private function exitWithStatus( StatusValue $status, int $statusCode = 400 ): never {
 		$msgs = $status->getMessages();
 		if ( !$msgs ) {
 			throw new InvalidArgumentException( "Got status without errors" );

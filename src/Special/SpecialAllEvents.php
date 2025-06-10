@@ -322,8 +322,8 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'max' => 20,
 			];
 		}
-		// TODO: Use array unpacking when we drop support for PHP 7.4
-		$formDescriptor = array_merge( $formDescriptor, [
+		$formDescriptor = [
+			...$formDescriptor,
 			'IncludeAllWikis' => [
 				'type' => 'toggle',
 				'label-message' => 'campaignevents-allevents-label-include-all-wikis',
@@ -333,7 +333,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'type' => 'hidden',
 				'default' => $openSectionsStr,
 			],
-		] );
+		];
 
 		return HTMLForm::factory( 'ooui', $formDescriptor, $this->getContext() )
 			->setWrapperLegendMsg( 'campaignevents-allevents-filter-legend' )

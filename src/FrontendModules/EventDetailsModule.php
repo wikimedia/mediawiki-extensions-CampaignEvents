@@ -321,7 +321,7 @@ class EventDetailsModule {
 			} else {
 				$chatSectionContent = null;
 			}
-		} elseif ( !$userCanViewSensitiveEventData && $chatURL && Utils::isSitewideBlocked( $authority ) ) {
+		} elseif ( !$userCanViewSensitiveEventData && $chatURL && $authority->getBlock()?->isSitewide() ) {
 			$chatSectionContent = $this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
 			);
@@ -578,7 +578,7 @@ class EventDetailsModule {
 				} elseif ( $canRegister ) {
 					$items[] = $this->getNeedsToRegisterMsg();
 				}
-			} elseif ( !$userCanViewSensitiveEventData && $meetingURL && Utils::isSitewideBlocked( $performer ) ) {
+			} elseif ( !$userCanViewSensitiveEventData && $meetingURL && $performer->getBlock()?->isSitewide() ) {
 				$items[] = $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
 				);

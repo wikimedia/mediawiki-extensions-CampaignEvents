@@ -216,18 +216,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @return array<string,array<string,mixed>>
 	 */
 	protected function getFormFields(): array {
-		$eventPageDefault = null;
-		if ( $this->event ) {
-			$eventPageDefault = $this->event->getPage()->getPrefixedText();
-		}
-
 		$formFields = [];
 
 		$pageFieldSpecs = [
 			'type' => 'title',
 			'label-message' => 'campaignevents-edit-field-page',
 			'exists' => true,
-			'default' => $eventPageDefault,
+			'default' => $this->event?->getPage()->getPrefixedText(),
 			'help-message' => 'campaignevents-edit-field-page-help',
 			'help-inline' => false,
 			'required' => true,
@@ -502,7 +497,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		$address = $this->event ? $this->event->getAddress() : null;
+		$address = $this->event?->getAddress();
 		if (
 			$this->getOutput()->getConfig()->get( 'CampaignEventsCountrySchemaMigrationStage' ) &
 			SCHEMA_COMPAT_WRITE_NEW
@@ -791,11 +786,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventChatURL'],
 				$testEvent,
 				$participantQuestionNames,
-				$this->event ? $this->event->getCreationTimestamp() : null,
-				$this->event ? $this->event->getLastEditTimestamp() : null,
-				$this->event ? $this->event->getDeletionTimestamp() : null,
+				$this->event?->getCreationTimestamp(),
+				$this->event?->getLastEditTimestamp(),
+				$this->event?->getDeletionTimestamp(),
 				$this->getValidationFlags(),
-				$this->event ? $this->event->getPage() : null
+				$this->event?->getPage()
 			);
 		} catch ( InvalidEventDataException $e ) {
 			return Status::wrap( $e->getStatus() );

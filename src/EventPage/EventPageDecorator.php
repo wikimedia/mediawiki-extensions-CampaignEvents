@@ -1039,7 +1039,7 @@ class EventPageDecorator {
 		// same (cached) version of the page to everyone. Also, even if the IP is blocked, the user might have an
 		// account that they can log into, so showing the button is fine.
 		if ( $centralUser ) {
-			if ( Utils::isSitewideBlocked( $this->authority ) ) {
+			if ( $this->authority->getBlock()?->isSitewide() ) {
 				return self::USER_STATUS_BLOCKED;
 			}
 

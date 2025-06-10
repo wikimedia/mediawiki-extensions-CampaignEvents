@@ -171,7 +171,7 @@ class EventDetailsParticipantsModule {
 			'wgCampaignEventsShowPrivateParticipants' => $showPrivateParticipants,
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
 			'wgCampaignEventsLastParticipantID' => $lastParticipantID,
-			'wgCampaignEventsCurUserCentralID' => $centralUser ? $centralUser->getCentralID() : null,
+			'wgCampaignEventsCurUserCentralID' => $centralUser?->getCentralID(),
 			'wgCampaignEventsViewerHasEmail' =>
 				$this->userFactory->newFromUserIdentity( $viewingUser )->isEmailConfirmed(),
 			'wgCampaignEventsNonPIIQuestionIDs' => $nonPIIQuestionIDs,

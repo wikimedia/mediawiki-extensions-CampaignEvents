@@ -11,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
-use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Permissions\Authority;
 
 class PermissionChecker {
@@ -47,7 +46,7 @@ class PermissionChecker {
 	public function userCanEnableRegistrations( Authority $performer ): bool {
 		return $performer->isNamed()
 			&& $performer->isAllowed( self::ENABLE_REGISTRATIONS_RIGHT )
-			&& !Utils::isSitewideBlocked( $performer );
+			&& !$performer->getBlock()?->isSitewide();
 	}
 
 	public function userCanEnableRegistration( Authority $performer, MWPageProxy $eventPage ): bool {
@@ -109,7 +108,7 @@ class PermissionChecker {
 	public function userCanDeleteRegistrations( Authority $performer ): bool {
 		return $performer->isNamed() &&
 			$performer->isAllowed( self::DELETE_REGISTRATION_RIGHT ) &&
-			!Utils::isSitewideBlocked( $performer );
+			!$performer->getBlock()?->isSitewide();
 	}
 
 	/**
@@ -118,7 +117,7 @@ class PermissionChecker {
 	 */
 	public function userCanRegisterForEvent( Authority $performer, ExistingEventRegistration $event ): bool {
 		// TODO Do we need another user right for this?
-		return $event->isOnLocalWiki() && $performer->isNamed() && !Utils::isSitewideBlocked( $performer );
+		return $event->isOnLocalWiki() && $performer->isNamed() && !$performer->getBlock()?->isSitewide();
 	}
 
 	/**
@@ -144,11 +143,11 @@ class PermissionChecker {
 			( $event->isOnLocalWiki()
 				&& $performer->isNamed()
 				&& $performer->isAllowed( self::VIEW_PRIVATE_PARTICIPANTS_RIGHT )
-				&& !Utils::isSitewideBlocked( $performer ) );
+				&& !$performer->getBlock()?->isSitewide() );
 	}
 
 	public function userCanViewSensitiveEventData( Authority $performer ): bool {
-		return !Utils::isSitewideBlocked( $performer );
+		return !$performer->getBlock()?->isSitewide();
 	}
 
 	public function userCanViewNonPIIParticipantsData(

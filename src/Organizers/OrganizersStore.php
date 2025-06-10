@@ -243,7 +243,7 @@ class OrganizersStore {
 		$newRows = [];
 		$createdAt = $dbw->timestamp();
 		$eventCreator = $this->getEventCreator( $eventID, self::GET_CREATOR_INCLUDE_DELETED );
-		$eventCreatorID = $eventCreator ? $eventCreator->getUser()->getCentralID() : null;
+		$eventCreatorID = $eventCreator?->getUser()->getCentralID();
 		foreach ( $organizers as $userID => $roles ) {
 			$dbRoles = 0;
 			foreach ( $roles as $role ) {

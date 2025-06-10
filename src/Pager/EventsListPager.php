@@ -402,16 +402,15 @@ class EventsListPager extends ReverseChronologicalPager {
 
 	private function getParticipationOptionsMsg( EventRegistration $event ): string {
 		$participationOptions = $event->getParticipationOptions();
-		switch ( $participationOptions ) {
-			case EventRegistration::PARTICIPATION_OPTION_IN_PERSON:
-				return 'campaignevents-eventslist-participation-options-in-person';
-			case EventRegistration::PARTICIPATION_OPTION_ONLINE:
-				return 'campaignevents-eventslist-participation-options-online';
-			case EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON:
-				return 'campaignevents-eventslist-participation-options-online-and-in-person';
-			default:
-				throw new UnexpectedValueException( "Unexpected participation options $participationOptions" );
-		}
+		return match ( $participationOptions ) {
+			EventRegistration::PARTICIPATION_OPTION_IN_PERSON =>
+				'campaignevents-eventslist-participation-options-in-person',
+			EventRegistration::PARTICIPATION_OPTION_ONLINE =>
+				'campaignevents-eventslist-participation-options-online',
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON =>
+				'campaignevents-eventslist-participation-options-online-and-in-person',
+			default => throw new UnexpectedValueException( "Unexpected participation options $participationOptions" ),
+		};
 	}
 
 	private function getYearFromTimestamp( string $timestamp ): string {
