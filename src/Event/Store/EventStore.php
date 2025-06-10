@@ -196,8 +196,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 	private function makePageEventCacheKey( MWPageProxy $page ): string {
 		return $this->wanCache->makeKey(
-			'CampaignEvents',
-			'EventStore',
+			'CampaignEvents-EventStore',
 			$page->getNamespace(),
 			$page->getDBkey(),
 			$page->getWikiId()
