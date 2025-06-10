@@ -218,7 +218,8 @@ return [
 			$services->get( WikiLookup::SERVICE_NAME ),
 			$services->get( EventWikisStore::SERVICE_NAME ),
 			$services->get( ITopicRegistry::SERVICE_NAME ),
-			$services->get( EventTopicsStore::SERVICE_NAME )
+			$services->get( EventTopicsStore::SERVICE_NAME ),
+			$services->get( EventTypesRegistry::SERVICE_NAME ),
 		);
 	},
 	EventPageDecoratorFactory::SERVICE_NAME =>

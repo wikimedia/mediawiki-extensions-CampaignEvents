@@ -83,6 +83,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $eventWikis = [];
 	/** @var array<int,string[]> Maps event ID to all topics assigned to the event. */
 	private array $eventTopics = [];
+	private EventTypesRegistry $eventTypesRegistry;
 
 	/**
 	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
@@ -103,6 +104,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		EventWikisStore $eventWikisStore,
 		ITopicRegistry $topicRegistry,
 		EventTopicsStore $eventTopicsStore,
+		EventTypesRegistry $eventTypesRegistry,
 		IContextSource $context,
 		string $search,
 		?int $participationOptions,
@@ -128,6 +130,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->eventWikisStore = $eventWikisStore;
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTopicsStore = $eventTopicsStore;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 
 		$this->search = $search;
 		$this->participationOptions = $participationOptions;
@@ -298,7 +301,10 @@ class EventsListPager extends ReverseChronologicalPager {
 			$this->msg( 'campaignevents-eventslist-participation-options-label' )->text(),
 			$this->msg( $this->getParticipationOptionsMsg( $row ) )->escaped()
 		);
-
+		$eventTypes = $row->event_types;
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
+			$detailsContent .= $this->getTypesList( EventTypesRegistry::getEventTypesFromDBVal( $eventTypes ) );
+		}
 		if ( $this->eventWikis[$row->event_id] ) {
 			$detailsContent .= $this->getWikiList( $row->event_id );
 		}
@@ -578,6 +584,21 @@ class EventsListPager extends ReverseChronologicalPager {
 			'tag',
 			$this->msg( 'campaignevents-eventslist-topics-label' )->text(),
 			$this->getLanguage()->commaList( $localizedTopicNames )
+		);
+	}
+
+	/** @param list<string> $types */
+	private function getTypesList( array $types ): string {
+		$localizedTypeNames = array_map(
+			fn ( string $msgKey ): string => $this->msg( $msgKey )->escaped(),
+			$this->eventTypesRegistry->getTypeMessages( $types )
+		);
+		sort( $localizedTypeNames );
+
+		return TextWithIconWidget::build(
+			'folder-placeholder',
+			$this->msg( 'campaignevents-eventslist-types-label' )->text(),
+			$this->getLanguage()->commaList( $localizedTypeNames )
 		);
 	}
 }

@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -35,6 +36,7 @@ class EventsPagerFactory {
 	private EventWikisStore $eventWikisStore;
 	private ITopicRegistry $topicRegistry;
 	private EventTopicsStore $eventTopicsStore;
+	private EventTypesRegistry $eventTypesRegistry;
 
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
@@ -48,7 +50,8 @@ class EventsPagerFactory {
 		WikiLookup $wikiLookup,
 		EventWikisStore $eventWikisStore,
 		ITopicRegistry $topicRegistry,
-		EventTopicsStore $eventTopicsStore
+		EventTopicsStore $eventTopicsStore,
+		EventTypesRegistry $eventTypesRegistry
 	) {
 		$this->databaseHelper = $databaseHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -62,6 +65,7 @@ class EventsPagerFactory {
 		$this->eventWikisStore = $eventWikisStore;
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTopicsStore = $eventTopicsStore;
+		$this->eventTypesRegistry = $eventTypesRegistry;
 	}
 
 	/**
@@ -121,6 +125,7 @@ class EventsPagerFactory {
 			$this->eventWikisStore,
 			$this->topicRegistry,
 			$this->eventTopicsStore,
+			$this->eventTypesRegistry,
 			$context,
 			$search,
 			$participationOptions,
@@ -161,6 +166,7 @@ class EventsPagerFactory {
 			$this->eventWikisStore,
 			$this->topicRegistry,
 			$this->eventTopicsStore,
+			$this->eventTypesRegistry,
 			$context,
 			$search,
 			$participationOptions,

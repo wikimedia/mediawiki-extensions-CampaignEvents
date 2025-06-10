@@ -567,5 +567,6 @@
 	"campaignevents-event-details-event-types-header": "Heading used on [[Special:EventDetails]] for a section that contains the list of Event types",
 	"campaignevents-allevents-label-filter-event-types": "Label for a form field on [[Special:AllEvents]] that can be used to filter events by event type.",
 	"campaignevents-allevents-placeholder-add-event-types": "Placeholder for the {{msg-mw|campaignevents-allevents-label-filter-event-types}} field on [[Special:AllEvents]].",
-	"campaignevents-eventpage-dialog-event-types-label": "Heading used on Event Details modal for a section that contains the list of Event types"
+	"campaignevents-eventpage-dialog-event-types-label": "Heading used on Event Details modal for a section that contains the list of Event types",
+	"campaignevents-eventslist-types-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen event types for the event."
 }
