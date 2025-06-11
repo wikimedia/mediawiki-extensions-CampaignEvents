@@ -561,6 +561,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Event types",
 	"campaignevents-allevents-placeholder-add-event-types": "Add event types...",
 	"campaignevents-eventpage-dialog-event-types-label": "Event types",
+	"campaignevents-cancel-page-nonlocal": "Please '''[$1 cancel your event registration on $2]''', the wiki where the event was created.",
 	"campaignevents-email-error-notification-with-detail": "The email could not be sent, for the following reason: $1",
 	"campaignevents-eventslist-types-label": "Event types"
 }
