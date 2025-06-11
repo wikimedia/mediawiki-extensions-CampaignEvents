@@ -14,6 +14,8 @@
 	"right-campaignevents-enable-registration": "이벤트 등록 활성화",
 	"action-campaignevents-delete-registration": "이벤트 등록을 삭제할",
 	"right-campaignevents-delete-registration": "이벤트 등록 삭제",
+	"action-campaignevents-organize-events": "이벤트를 조직할",
+	"right-campaignevents-organize-events": "이벤트 조직",
 	"action-campaignevents-email-participants": "이메일 이벤트 참가자",
 	"right-campaignevents-email-participants": "이메일 이벤트 참가자",
 	"action-campaignevents-view-private-participants": "비공개 이벤트 참여자를 볼",
