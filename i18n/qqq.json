@@ -371,7 +371,6 @@
 	"campaignevents-event-details-participants-deselect": "Title for button to deselect participants.",
 	"campaignevents-email-participants-label": "Label text for participants field on the email form",
 	"campaignevents-email-success-notification": "Notification text displayed when emails are sent successfully",
-	"campaignevents-email-error-notification": "Error text displayed when emails are not sent successfully",
 	"campaignevents-email-select-participant-notification": "Warning text displayed when no valid recipients are selected",
 	"campaignevents-email-participants-missing-address": "Warning text displayed when all of the selected recipients are invalid.",
 	"campaignevents-email-participants-all": "Label text that indicates all participants are selected",
@@ -568,5 +567,6 @@
 	"campaignevents-allevents-label-filter-event-types": "Label for a form field on [[Special:AllEvents]] that can be used to filter events by event type.",
 	"campaignevents-allevents-placeholder-add-event-types": "Placeholder for the {{msg-mw|campaignevents-allevents-label-filter-event-types}} field on [[Special:AllEvents]].",
 	"campaignevents-eventpage-dialog-event-types-label": "Heading used on Event Details modal for a section that contains the list of Event types",
+	"campaignevents-email-error-notification-with-detail": "Error text displayed when emails are not sent successfully, with additional detail .\nParameters:\n* $1 - The reason why the email was not sent",
 	"campaignevents-eventslist-types-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen event types for the event."
 }

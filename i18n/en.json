@@ -364,7 +364,6 @@
 	"campaignevents-event-details-participants-deselect": "Deselect",
 	"campaignevents-email-participants-label": "Compose email",
 	"campaignevents-email-success-notification": "Message sent!",
-	"campaignevents-email-error-notification": "Message not sent!",
 	"campaignevents-email-select-participant-notification": "Please select valid email recipients",
 	"campaignevents-email-participants-missing-address": "Some of the selected participants do not have an email address on their account and won't receive your email. You can send them a message by clicking on their usernames and going to their user talk page.",
 	"campaignevents-email-participants-all": "All participants",
@@ -561,5 +560,6 @@
 	"campaignevents-allevents-label-filter-event-types": "Event types",
 	"campaignevents-allevents-placeholder-add-event-types": "Add event types...",
 	"campaignevents-eventpage-dialog-event-types-label": "Event types",
+	"campaignevents-email-error-notification-with-detail": "The email could not be sent, for the following reason: $1",
 	"campaignevents-eventslist-types-label": "Event types"
 }
