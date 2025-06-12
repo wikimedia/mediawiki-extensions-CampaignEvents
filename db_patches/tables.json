@@ -126,7 +126,7 @@
 			},
 			{
 				"name": "event_meeting_type",
-				"comment": "The type of the meeting. 1: In person. 2: Online. 3: Both",
+				"comment": "Participation options for the event. This was previously called \"meeting type\", which explains the column name. Possible values: 1 = in person, 2 = online, 3 = both.",
 				"type": "integer",
 				"options": {
 					"notnull": true
