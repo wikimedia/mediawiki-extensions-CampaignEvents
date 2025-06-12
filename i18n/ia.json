@@ -537,7 +537,7 @@
 	"campaignevents-eventtype-backlog-drive": "Reattrappar travalio pendente",
 	"campaignevents-eventtype-contest": "Concurso",
 	"campaignevents-eventtype-workshop": "Workshop",
-	"campaignevents-eventtype-training": "Education / seminario",
+	"campaignevents-eventtype-training-seminar": "Education / seminario",
 	"campaignevents-eventtype-meetup": "Incontro",
 	"campaignevents-eventtype-hackathon": "Hackathon",
 	"campaignevents-eventtype-conference": "Conferentia",
@@ -548,5 +548,6 @@
 	"campaignevents-edit-field-eventtypes-placeholder": "Selige typos de evento…",
 	"campaignevents-edit-field-eventtypes-other-help": "Le selection de ‘Altere’ disactiva e deselectiona tote le altere typos de evento.",
 	"campaignevents-edit-field-eventtypes-label": "Typos de evento",
-	"campaignevents-event-details-event-types-header": "Typos de evento"
+	"campaignevents-event-details-event-types-header": "Typos de evento",
+	"campaignevents-eventpage-dialog-event-types-label": "Typos de evento"
 }

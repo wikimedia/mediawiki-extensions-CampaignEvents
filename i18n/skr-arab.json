@@ -191,5 +191,7 @@
 	"campaignevents-eventtype-other": "ٻیا",
 	"campaignevents-eventtypegroup-contributions": "ونگاراں",
 	"campaignevents-eventtypegroup-community": "برادری",
-	"campaignevents-edit-field-eventtypes-other-section-header": "ٻیا"
+	"campaignevents-edit-field-eventtypes-other-section-header": "ٻیا",
+	"campaignevents-event-details-event-types-header": "ایونٹ قسماں",
+	"campaignevents-eventpage-dialog-event-types-label": "ایونٹ قسماں"
 }

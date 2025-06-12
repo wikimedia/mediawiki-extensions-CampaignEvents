@@ -292,5 +292,6 @@
 	"campaignevents-eventtype-conference": "Konferenz",
 	"campaignevents-eventtypegroup-contributions": "Kontributiounen",
 	"campaignevents-eventtypegroup-community": "Communautéit",
-	"campaignevents-event-details-event-types-header": "Typpe vun Evenementer"
+	"campaignevents-event-details-event-types-header": "Typpe vun Evenementer",
+	"campaignevents-eventpage-dialog-event-types-label": "Typpe vun Evenementer"
 }

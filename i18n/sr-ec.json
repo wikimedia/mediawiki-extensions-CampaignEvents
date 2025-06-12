@@ -197,5 +197,6 @@
 	"campaignevents-eventtype-other": "Друго",
 	"campaignevents-eventtypegroup-contributions": "Доприноси",
 	"campaignevents-eventtypegroup-community": "Заједница",
-	"campaignevents-edit-field-eventtypes-other-section-header": "Друго"
+	"campaignevents-edit-field-eventtypes-other-section-header": "Друго",
+	"campaignevents-eventpage-dialog-event-types-label": "Тип догађаја"
 }

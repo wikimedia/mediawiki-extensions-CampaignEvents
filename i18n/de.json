@@ -537,7 +537,7 @@
 	"campaignevents-eventtype-backlog-drive": "Abarbeiten von Rückständen",
 	"campaignevents-eventtype-contest": "Wettbewerb",
 	"campaignevents-eventtype-workshop": "Workshop",
-	"campaignevents-eventtype-training": "Schulung / Seminar",
+	"campaignevents-eventtype-training-seminar": "Schulung / Seminar",
 	"campaignevents-eventtype-meetup": "Treffen",
 	"campaignevents-eventtype-hackathon": "Hackathon",
 	"campaignevents-eventtype-conference": "Konferenz",
@@ -548,5 +548,9 @@
 	"campaignevents-edit-field-eventtypes-placeholder": "Veranstaltungstypen auswählen …",
 	"campaignevents-edit-field-eventtypes-other-help": "Durch Auswahl von „Andere“ werden alle anderen Veranstaltungstypen deaktiviert und abgewählt.",
 	"campaignevents-edit-field-eventtypes-label": "Veranstaltungstypen",
-	"campaignevents-event-details-event-types-header": "Veranstaltungstypen"
+	"campaignevents-event-details-event-types-header": "Veranstaltungstypen",
+	"campaignevents-allevents-label-filter-event-types": "Veranstaltungstypen",
+	"campaignevents-allevents-placeholder-add-event-types": "Veranstaltungstypen hinzufügen …",
+	"campaignevents-eventpage-dialog-event-types-label": "Veranstaltungstypen",
+	"campaignevents-eventslist-types-label": "Veranstaltungstypen"
 }

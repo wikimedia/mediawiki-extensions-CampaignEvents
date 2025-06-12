@@ -538,7 +538,7 @@
 	"campaignevents-eventtype-backlog-drive": "Növbənin təmizlənməsi",
 	"campaignevents-eventtype-contest": "Müsabiqə",
 	"campaignevents-eventtype-workshop": "Emalatxana",
-	"campaignevents-eventtype-training": "Təlim / seminar",
+	"campaignevents-eventtype-training-seminar": "Təlim / seminar",
 	"campaignevents-eventtype-meetup": "Görüş",
 	"campaignevents-eventtype-hackathon": "Hakaton",
 	"campaignevents-eventtype-conference": "Konfrans",
@@ -549,5 +549,6 @@
 	"campaignevents-edit-field-eventtypes-placeholder": "Tədbir növlərini seçin...",
 	"campaignevents-edit-field-eventtypes-other-help": "\"Digər\" seçimi bütün digər tədbir növlərini deaktiv edəcək və seçimi ləğv edəcək.",
 	"campaignevents-edit-field-eventtypes-label": "Tədbir növləri",
-	"campaignevents-event-details-event-types-header": "Tədbir növləri"
+	"campaignevents-event-details-event-types-header": "Tədbir növləri",
+	"campaignevents-eventpage-dialog-event-types-label": "Tədbir növləri"
 }

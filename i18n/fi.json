@@ -539,7 +539,7 @@
 	"campaignevents-eventtype-backlog-drive": "Tehtäväjonon purkukampanja",
 	"campaignevents-eventtype-contest": "Kilpailu",
 	"campaignevents-eventtype-workshop": "Työpaja",
-	"campaignevents-eventtype-training": "Koulutus / seminaari",
+	"campaignevents-eventtype-training-seminar": "Koulutus / seminaari",
 	"campaignevents-eventtype-meetup": "Tapaaminen",
 	"campaignevents-eventtype-hackathon": "Hackathon",
 	"campaignevents-eventtype-conference": "Konferenssi",
@@ -550,5 +550,9 @@
 	"campaignevents-edit-field-eventtypes-placeholder": "Valitse tapahtumatyypit...",
 	"campaignevents-edit-field-eventtypes-other-help": "”Muun” valitseminen poistaa käytöstä kaikki muut tapahtumatyypit.",
 	"campaignevents-edit-field-eventtypes-label": "Tapahtumatyypit",
-	"campaignevents-event-details-event-types-header": "Tapahtumatyypit"
+	"campaignevents-event-details-event-types-header": "Tapahtumatyypit",
+	"campaignevents-allevents-label-filter-event-types": "Tapahtumatyypit",
+	"campaignevents-allevents-placeholder-add-event-types": "Lisää tapahtumatyyppejä...",
+	"campaignevents-eventpage-dialog-event-types-label": "Tapahtumatyypit",
+	"campaignevents-eventslist-types-label": "Tapahtumatyypit"
 }
