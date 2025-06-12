@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samoasambia"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Tällä tunnisteella ei ole tapahtumaa.",
+	"campaignevents-rest-enable-registration-permission-denied": "Sinulla ei ole oikeutta avata tapahtumailmoittautumisia.",
+	"campaignevents-rest-edit-page-nonlocal": "Tämä tapahtumailmoittautuminen avattiin seuraavassa wikissä ja sitä tulee muokata siellä: $1",
+	"campaignevents-rest-delete-already-deleted": "Tämä tapahtumailmoittautuminen on jo poistettu.",
+	"campaignevents-rest-get-registration-deleted": "Tämä tapahtumailmoittautuminen on poistettu.",
+	"campaignevents-rest-list-participants-empty-filter": "Käyttäjänimisuodattimen on oltava ei-tyhjä merkkijono, jos se on määritelty.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Sinulla ei ole oikeutta katsoa tähän tapahtumaan yksityisesti ilmoittautuneita osallistujia.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Et ole osallistumassa tähän tapahtumaan.",
+	"campaignevents-rest-register-invalid-answer": "Virheellinen vastaus kysymykseen $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Viimeistele tapahtumailmoittautumisesi sivustolla $1, jossa tapahtuma on luotu.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Poista tapahtumailmoittautumisesi sivustolla $1, jossa tapahtuma on luotu.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Lähetä sähköpostia osallistujille sivustolla $1, jossa tapahtuma on luotu."
+}

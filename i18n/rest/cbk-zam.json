@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Noooote"
+		]
+	},
+	"campaignevents-rest-event-not-found": "No hay evento que ansina el ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Hende tu puede hace abri con el maga registracion del evento.",
+	"campaignevents-rest-edit-page-nonlocal": "Este registracion del evento ya hace abri na siguiente wiki y debe hace edit con aquel alla: $1.",
+	"campaignevents-rest-delete-already-deleted": "Este registracion del evento borrao ya.",
+	"campaignevents-rest-user-not-found": "No hay user que ansina el central ID.",
+	"campaignevents-rest-get-registration-deleted": "Este registracion del evento ya borra ya.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "El parametro 'user_ids' debe un array este del maga user id, o null (para quita todo'l users)",
+	"campaignevents-rest-list-participants-empty-filter": "El username filter, si especificao, debe un non-empty string este.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Hende tu autorizao para mira con el maga participante quien registrao na privado para con este evento.",
+	"campaignevents-rest-set-organizers-empty-list": "El <var>organizer_usernames</var> debe un array de maga username este y no puede que no hay este laman",
+	"campaignevents-rest-get-registration-info-notparticipant": "Hende tu ta participa na este evento.",
+	"campaignevents-rest-register-invalid-answer": "Invalido contestacion para na pregunta $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor completa con el registracion del evento na $1, aquel wiki donde ya hace el evento.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor borra con el de tuyo registracion del evento na $1, aquel wiki donde ya hace el evento.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Por favor man email con el maga participante na $1, aquel wiki donde ya hace el evento."
+}
