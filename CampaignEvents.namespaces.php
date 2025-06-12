@@ -34,6 +34,7 @@ $namespaceNames['az'] = [
 
 $namespaceNames['bew'] = [
 	NS_EVENT => 'Pegelaran',
+	NS_EVENT_TALK => 'Kongko_Pegelaran'
 ];
 
 $namespaceNames['es'] = [
@@ -48,6 +49,7 @@ $namespaceNames['he'] = [
 
 $namespaceNames['id'] = [
 	NS_EVENT => 'Acara',
+	NS_EVENT_TALK => 'Pembicaraan_Acara',
 ];
 
 $namespaceNames['ms'] = [
@@ -62,6 +64,7 @@ $namespaceNames['nb'] = [
 
 $namespaceNames['nia'] = [
 	NS_EVENT => 'Acara',
+	NS_EVENT_TALK => 'Huhuo_Acara',
 ];
 
 $namespaceNames['nn'] = [
