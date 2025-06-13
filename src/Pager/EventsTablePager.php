@@ -95,7 +95,7 @@ class EventsTablePager extends TablePager {
 					$value,
 					[ 'class' => 'ext-campaignevents-events-table-eventpage-link' ]
 				);
-			case 'event_location':
+			case 'event_participation_options':
 				$participationOptions = EventStore::getParticipationOptionsFromDBVal(
 					$this->mCurrentRow->event_meeting_type
 				);
@@ -149,7 +149,8 @@ class EventsTablePager extends TablePager {
 		return [
 			'event_start_utc' => $this->msg( 'campaignevents-eventslist-column-date' )->text(),
 			'event_name' => $this->msg( 'campaignevents-eventslist-column-name' )->text(),
-			'event_location' => $this->msg( 'campaignevents-eventslist-column-participation-options' )->text(),
+			'event_participation_options' =>
+				$this->msg( 'campaignevents-eventslist-column-participation-options' )->text(),
 			'num_participants' => $this->msg( 'campaignevents-eventslist-column-participants-number' )->text(),
 			'manage_event' => ''
 		];

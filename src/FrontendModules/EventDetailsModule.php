@@ -305,7 +305,7 @@ class EventDetailsModule {
 		$canRegister = $registrationAllowedVal->isGood();
 
 		$userCanViewSensitiveEventData = $this->permissionChecker->userCanViewSensitiveEventData( $authority );
-		$items[] = $this->getLocationSection(
+		$items[] = $this->getParticipationOptionsSection(
 			$authority,
 			$isOrganizer,
 			$isParticipant,
@@ -533,7 +533,7 @@ class EventDetailsModule {
 	 * @param LinkRenderer $linkRenderer
 	 * @return Tag
 	 */
-	private function getLocationSection(
+	private function getParticipationOptionsSection(
 		Authority $performer,
 		bool $isOrganizer,
 		bool $isParticipant,
