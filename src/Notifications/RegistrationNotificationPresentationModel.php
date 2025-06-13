@@ -179,7 +179,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		$ret = Html::element(
 			'h2',
 			[],
-			$this->msg( 'campaignevents-notification-registration-details-type-header' )->text()
+			$this->msg( 'campaignevents-notification-registration-details-participation-options-header' )->text()
 		);
 
 		$participationOptions = $this->eventRegistration->getParticipationOptions();
