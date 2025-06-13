@@ -556,7 +556,7 @@
 	"campaignevents-eventtypegroup-community": "Community",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Other",
 	"campaignevents-edit-field-eventtypes-placeholder": "Select event types...",
-	"campaignevents-edit-field-eventtypes-other-help": "Selecting 'Other' will disable and deselect all other event types.",
+	"campaignevents-edit-field-eventtypes-other-help": "Add up to two event types. If you choose “Other,” it must be the only selection.",
 	"campaignevents-edit-field-eventtypes-label": "Event types",
 	"campaignevents-event-details-event-types-header": "Event types",
 	"campaignevents-allevents-label-filter-event-types": "Event types",
