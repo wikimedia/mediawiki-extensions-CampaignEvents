@@ -452,11 +452,11 @@ class EventPageDecorator {
 		$participationOptions = $registration->getParticipationOptions();
 		if ( $participationOptions === EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON ) {
 			$locationContent = $this->out->msg(
-				MessageValue::new( 'campaignevents-eventpage-header-type-online-and-in-person' )
+				MessageValue::new( 'campaignevents-eventpage-header-participation-options-online-and-in-person' )
 			)->escaped();
 		} elseif ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
 			$locationContent = $this->out->msg(
-				MessageValue::new( 'campaignevents-eventpage-header-type-online' )
+				MessageValue::new( 'campaignevents-eventpage-header-participation-options-online' )
 			)->escaped();
 		} else {
 			// In-person event
@@ -472,14 +472,14 @@ class EventPageDecorator {
 				);
 			} else {
 				$locationContent = $this->out->msg(
-					MessageValue::new( 'campaignevents-eventpage-header-type-in-person' )
+					MessageValue::new( 'campaignevents-eventpage-header-participation-options-in-person' )
 				)->escaped();
 			}
 		}
 		$items[] = new HtmlSnippet( TextWithIconWidget::build(
 			'map-pin',
 			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-header-location-label' )
+				MessageValue::new( 'campaignevents-eventpage-header-participation-options-label' )
 			),
 			$locationContent
 		) );
@@ -793,7 +793,7 @@ class EventPageDecorator {
 			'mapPin',
 			$locationElements,
 			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-location-label' )
+				MessageValue::new( 'campaignevents-eventpage-dialog-participation-options-label' )
 			)
 		);
 	}

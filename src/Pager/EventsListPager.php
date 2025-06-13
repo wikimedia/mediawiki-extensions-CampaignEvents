@@ -404,11 +404,11 @@ class EventsListPager extends ReverseChronologicalPager {
 		$participationOptions = EventStore::getParticipationOptionsFromDBVal( $row->event_meeting_type );
 		switch ( $participationOptions ) {
 			case EventRegistration::PARTICIPATION_OPTION_IN_PERSON:
-				return 'campaignevents-eventslist-location-in-person';
+				return 'campaignevents-eventslist-participation-options-in-person';
 			case EventRegistration::PARTICIPATION_OPTION_ONLINE:
-				return 'campaignevents-eventslist-location-online';
+				return 'campaignevents-eventslist-participation-options-online';
 			case EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON:
-				return 'campaignevents-eventslist-location-online-and-in-person';
+				return 'campaignevents-eventslist-participation-options-online-and-in-person';
 			default:
 				throw new UnexpectedValueException( "Unexpected participation options $participationOptions" );
 		}
