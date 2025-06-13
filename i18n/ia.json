@@ -549,5 +549,8 @@
 	"campaignevents-edit-field-eventtypes-other-help": "Le selection de ‘Altere’ disactiva e deselectiona tote le altere typos de evento.",
 	"campaignevents-edit-field-eventtypes-label": "Typos de evento",
 	"campaignevents-event-details-event-types-header": "Typos de evento",
-	"campaignevents-eventpage-dialog-event-types-label": "Typos de evento"
+	"campaignevents-allevents-label-filter-event-types": "Typos de evento",
+	"campaignevents-allevents-placeholder-add-event-types": "Adder typos de evento…",
+	"campaignevents-eventpage-dialog-event-types-label": "Typos de evento",
+	"campaignevents-eventslist-types-label": "Typos de evento"
 }

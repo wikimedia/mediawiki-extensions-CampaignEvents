@@ -482,6 +482,7 @@
 	"campaignevents-myinvitationslist-generate-button": "Neue Einladungsliste erstellen",
 	"campaignevents-myinvitationslist-new-button": "Neu",
 	"campaignevents-invitation-list-error-empty-name": "Einen Namen für die Einladungsliste angeben.",
+	"campaignevents-generateinvitationlist-name-too-long": "Füge einen kürzeren Namen für die Einladungsliste hinzu (maximal 255 Bytes).",
 	"campaignevents-invitation-list-error-invalid-page": "Gib eine Veranstaltungsseite ein, die die Veranstaltungsanmeldung verwendet.",
 	"campaignevents-invitation-list-error-event-ended": "Diese Veranstaltung ist beendet. Gib eine aktive Veranstaltung ein.",
 	"campaignevents-invitation-list-error-not-organizer": "Ruf eine Veranstaltungenseite auf, auf der du als Veranstalter aufgeführt bist.",

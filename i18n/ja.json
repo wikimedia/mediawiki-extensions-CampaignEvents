@@ -508,5 +508,8 @@
 	"campaignevents-edit-field-eventtypes-other-help": "「その他」を選択すると、それ以外の種類はすべて無効になり、選択が解除されます。",
 	"campaignevents-edit-field-eventtypes-label": "イベントの種類",
 	"campaignevents-event-details-event-types-header": "イベントの種類",
-	"campaignevents-eventpage-dialog-event-types-label": "イベントの種類"
+	"campaignevents-allevents-label-filter-event-types": "イベントの種類",
+	"campaignevents-allevents-placeholder-add-event-types": "イベントの種類を追加…",
+	"campaignevents-eventpage-dialog-event-types-label": "イベントの種類",
+	"campaignevents-eventslist-types-label": "イベントの種類"
 }

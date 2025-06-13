@@ -550,5 +550,8 @@
 	"campaignevents-edit-field-eventtypes-other-help": "\"Digər\" seçimi bütün digər tədbir növlərini deaktiv edəcək və seçimi ləğv edəcək.",
 	"campaignevents-edit-field-eventtypes-label": "Tədbir növləri",
 	"campaignevents-event-details-event-types-header": "Tədbir növləri",
-	"campaignevents-eventpage-dialog-event-types-label": "Tədbir növləri"
+	"campaignevents-allevents-label-filter-event-types": "Tədbir növləri",
+	"campaignevents-allevents-placeholder-add-event-types": "Tədbir növləri əlavə et...",
+	"campaignevents-eventpage-dialog-event-types-label": "Tədbir növləri",
+	"campaignevents-eventslist-types-label": "Tədbir növləri"
 }

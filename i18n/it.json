@@ -486,5 +486,7 @@
 	"campaignevents-eventtype-conference": "Conferenza",
 	"campaignevents-eventtype-other": "Altro",
 	"campaignevents-eventtypegroup-contributions": "Contributi",
-	"campaignevents-eventtypegroup-community": "Comunità"
+	"campaignevents-eventtypegroup-community": "Comunità",
+	"campaignevents-allevents-label-filter-event-types": "Tipi di eventi",
+	"campaignevents-eventslist-types-label": "Tipi di eventi"
 }
