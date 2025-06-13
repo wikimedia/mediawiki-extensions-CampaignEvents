@@ -605,7 +605,9 @@ class EventDetailsModule {
 		return self::makeSection(
 			'mapPin',
 			$items,
-			$this->msgFormatter->format( MessageValue::new( 'campaignevents-event-details-location-header' ) )
+			$this->msgFormatter->format(
+				MessageValue::new( 'campaignevents-event-details-participation-options-header' )
+			)
 		);
 	}
 

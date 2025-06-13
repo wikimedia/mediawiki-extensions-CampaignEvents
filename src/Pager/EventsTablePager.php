@@ -100,11 +100,11 @@ class EventsTablePager extends TablePager {
 					$this->mCurrentRow->event_meeting_type
 				);
 				if ( $participationOptions === EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
-					$msgKey = 'campaignevents-eventslist-location-online';
+					$msgKey = 'campaignevents-eventslist-participation-options-online';
 				} elseif ( $participationOptions === EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
-					$msgKey = 'campaignevents-eventslist-location-in-person';
+					$msgKey = 'campaignevents-eventslist-participation-options-in-person';
 				} elseif ( $participationOptions === EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON ) {
-					$msgKey = 'campaignevents-eventslist-location-online-and-in-person';
+					$msgKey = 'campaignevents-eventslist-participation-options-online-and-in-person';
 				} else {
 					throw new LogicException( "Unexpected participation options: $participationOptions" );
 				}
@@ -149,7 +149,7 @@ class EventsTablePager extends TablePager {
 		return [
 			'event_start_utc' => $this->msg( 'campaignevents-eventslist-column-date' )->text(),
 			'event_name' => $this->msg( 'campaignevents-eventslist-column-name' )->text(),
-			'event_location' => $this->msg( 'campaignevents-eventslist-column-location' )->text(),
+			'event_location' => $this->msg( 'campaignevents-eventslist-column-participation-options' )->text(),
 			'num_participants' => $this->msg( 'campaignevents-eventslist-column-participants-number' )->text(),
 			'manage_event' => ''
 		];

@@ -255,10 +255,12 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'type' => 'select',
 				'label-message' => 'campaignevents-allevents-label-participation-options',
 				'options-messages' => [
-					'campaignevents-eventslist-location-all-events' => null,
-					'campaignevents-eventslist-location-online' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
-					'campaignevents-eventslist-location-in-person' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
-					'campaignevents-eventslist-location-online-and-in-person' =>
+					'campaignevents-eventslist-participation-options-all-events' => null,
+					'campaignevents-eventslist-participation-options-online' =>
+						EventRegistration::PARTICIPATION_OPTION_ONLINE,
+					'campaignevents-eventslist-participation-options-in-person' =>
+						EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
+					'campaignevents-eventslist-participation-options-online-and-in-person' =>
 						EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
 				],
 				'default' => $participationOptions,
