@@ -60,22 +60,27 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 
 		$eventPage = $this->event->getPage();
 		$wikiID = $eventPage->getWikiId();
+		$pageName = $this instanceof SpecialCancelEventRegistration ?
+			SpecialCancelEventRegistration::PAGE_NAME :
+			SpecialRegisterForEvent::PAGE_NAME;
 		if ( $wikiID !== WikiAwareEntity::LOCAL ) {
 			$foreignEditURL = WikiMap::getForeignURL(
-				$wikiID, 'Special:' . SpecialRegisterForEvent::PAGE_NAME . "/{$this->event->getID()}"
+				$wikiID, 'Special:' . $pageName . "/{$this->event->getID()}"
 			);
-
+			$message = $this instanceof SpecialCancelEventRegistration ?
+				'campaignevents-cancel-page-nonlocal' :
+				'campaignevents-register-page-nonlocal';
 			$this->setHeaders();
 			$messageWidget = new MessageWidget( [
 				'type' => 'notice',
 				'label' => new HtmlSnippet(
-					$this->msg( 'campaignevents-register-page-nonlocal' )
+					$this->msg( $message )
 						->params( [
 							$foreignEditURL, WikiMap::getWikiName( $wikiID )
 						] )->parse()
 				)
 			] );
-
+			$this->getOutput()->enableOOUI();
 			$this->getOutput()->addHTML( $messageWidget );
 			return;
 		}
