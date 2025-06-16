@@ -263,7 +263,8 @@
 				( _err, errData ) => {
 					self.setError(
 						mw.message(
-							'campaignevents-email-error-notification'
+							'campaignevents-email-error-notification-with-detail',
+							errData.xhr.responseJSON.messageTranslations[ mw.config.get( 'wgContentLanguage' ) ]
 						).text()
 					);
 					mw.log.error( errData.xhr.responseText || 'Unknown error' );

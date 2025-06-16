@@ -272,7 +272,7 @@
 				"campaignevents-userlink-deleted-user",
 				"campaignevents-email-select-participant-notification",
 				"campaignevents-email-success-notification",
-				"campaignevents-email-error-notification",
+				"campaignevents-email-error-notification-with-detail",
 				"campaignevents-email-participants-missing-address",
 				"campaignevents-email-participants-missing-address-uncertain",
 				"campaignevents-email-participants-all",
