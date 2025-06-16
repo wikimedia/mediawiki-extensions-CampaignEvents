@@ -4,9 +4,5 @@
 			"Rooiratel"
 		]
 	},
-	"campaignevents-eventslist-column-location": "Ligging",
-	"campaignevents-eventpage-header-location-label": "Ligging",
-	"campaignevents-eventpage-dialog-location-label": "Ligging",
-	"campaignevents-event-details-edit-button": "Wysig",
-	"campaignevents-event-details-location-header": "Ligging"
+	"campaignevents-event-details-edit-button": "Wysig"
 }

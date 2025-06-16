@@ -7,7 +7,7 @@
 			"Mormegil"
 		]
 	},
-	"campaignevents-eventpage-header-type-in-person": "Osobní akce",
+	"campaignevents-eventpage-header-participation-options-in-person": "Osobní akce",
 	"campaignevents-eventpage-dialog-venue-not-available": "Adresu místa konání zpřístupní {{PLURAL:$1| organizátor|organizátoři}}.",
 	"campaignevents-event-details-edit-button": "Upravit",
 	"campaignevents-event-details-select-all": "Vybrat vše",
