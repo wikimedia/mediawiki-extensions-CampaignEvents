@@ -451,18 +451,18 @@ class EventPageDecorator {
 
 		$participationOptions = $registration->getParticipationOptions();
 		if ( $participationOptions === EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON ) {
-			$locationContent = $this->out->msg(
+			$participationOptionsContent = $this->out->msg(
 				MessageValue::new( 'campaignevents-eventpage-header-participation-options-online-and-in-person' )
 			)->escaped();
 		} elseif ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
-			$locationContent = $this->out->msg(
+			$participationOptionsContent = $this->out->msg(
 				MessageValue::new( 'campaignevents-eventpage-header-participation-options-online' )
 			)->escaped();
 		} else {
 			// In-person event
 			$address = $registration->getMeetingAddress();
 			if ( $address !== null ) {
-				$locationContent = Html::element(
+				$participationOptionsContent = Html::element(
 					'div',
 					[
 						'dir' => Utils::guessStringDirection( $address ),
@@ -471,7 +471,7 @@ class EventPageDecorator {
 					$this->language->truncateForVisual( $address, self::ADDRESS_MAX_LENGTH )
 				);
 			} else {
-				$locationContent = $this->out->msg(
+				$participationOptionsContent = $this->out->msg(
 					MessageValue::new( 'campaignevents-eventpage-header-participation-options-in-person' )
 				)->escaped();
 			}
@@ -481,7 +481,7 @@ class EventPageDecorator {
 			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-header-participation-options-label' )
 			),
-			$locationContent
+			$participationOptionsContent
 		) );
 
 		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $this->language, $this->viewingUser );
@@ -650,7 +650,7 @@ class EventPageDecorator {
 		int $userStatus
 	): string {
 		$eventInfo = $this->getDetailsDialogDates( $registration );
-		$eventInfo .= $this->getDetailsDialogLocation(
+		$eventInfo .= $this->getDetailsDialogParticipationOptions(
 			$page,
 			$registration,
 			$organizersCount,
@@ -711,17 +711,17 @@ class EventPageDecorator {
 		);
 	}
 
-	private function getDetailsDialogLocation(
+	private function getDetailsDialogParticipationOptions(
 		ProperPageIdentity $page,
 		ExistingEventRegistration $registration,
 		int $organizersCount,
 		int $userStatus
 	): string {
-		$locationElements = [];
-		$onlineLocationElements = [];
+		$participationOptionsElements = [];
+		$onlineEventElements = [];
 		if ( $registration->getParticipationOptions() & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
-			$onlineLocationElements[] = ( new Tag( 'h4' ) )
-				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-location-header' ] )
+			$onlineEventElements[] = ( new Tag( 'h4' ) )
+				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-participation-option-header' ] )
 				->appendContent(
 					$this->msgFormatter->format(
 						MessageValue::new( 'campaignevents-eventpage-dialog-online-label' )
@@ -755,7 +755,7 @@ class EventPageDecorator {
 			} else {
 				throw new LogicException( "Unexpected user status $userStatus" );
 			}
-			$onlineLocationElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
+			$onlineEventElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
 		}
 		if ( $registration->getParticipationOptions() & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			$rawAddress = $registration->getMeetingAddress();
@@ -774,24 +774,24 @@ class EventPageDecorator {
 						->numParams( $organizersCount )
 				) );
 			}
-			if ( $onlineLocationElements ) {
+			if ( $onlineEventElements ) {
 				$inPersonLabel = ( new Tag( 'h4' ) )
-					->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-location-header' ] )
+					->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-participation-option-header' ] )
 					->appendContent( $this->msgFormatter->format(
 						MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
 					) );
-				$locationElements[] = $inPersonLabel;
-				$locationElements[] = $addressElement;
-				$locationElements = array_merge( $locationElements, $onlineLocationElements );
+				$participationOptionsElements[] = $inPersonLabel;
+				$participationOptionsElements[] = $addressElement;
+				$participationOptionsElements = array_merge( $participationOptionsElements, $onlineEventElements );
 			} else {
-				$locationElements[] = $addressElement;
+				$participationOptionsElements[] = $addressElement;
 			}
 		} else {
-			$locationElements = array_merge( $locationElements, $onlineLocationElements );
+			$participationOptionsElements = array_merge( $participationOptionsElements, $onlineEventElements );
 		}
 		return $this->makeDetailsDialogSection(
 			'mapPin',
-			$locationElements,
+			$participationOptionsElements,
 			$this->msgFormatter->format(
 				MessageValue::new( 'campaignevents-eventpage-dialog-participation-options-label' )
 			)
