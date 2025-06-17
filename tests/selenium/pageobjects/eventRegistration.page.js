@@ -58,6 +58,10 @@ class EventRegistrationPage extends Page {
 		return $( '.ext-campaignevents-organizers-multiselect-input .oo-ui-menuTagMultiselectWidget input' );
 	}
 
+	get typesInput() {
+		return $( '.ext-campaignevents-edit-eventtypes-input .oo-ui-tagMultiselectWidget-content input' );
+	}
+
 	get body() {
 		return $( 'body' );
 	}
@@ -100,12 +104,7 @@ class EventRegistrationPage extends Page {
 		await this.loseFocus();
 	}
 
-	/**
-	 * @param {string} organizer to be added to event
-	 */
-	async addOrganizer( organizer ) {
-		await this.organizersInput.setValue( organizer );
-		const menuItem = await $( `.oo-ui-menuSelectWidget [id='${ organizer }']` );
+	async chooseMenuOption( menuItem ) {
 		await menuItem.waitForDisplayed();
 		await menuItem.moveTo();
 		await menuItem.waitUntil( async function () {
@@ -113,6 +112,31 @@ class EventRegistrationPage extends Page {
 			return classes.includes( 'oo-ui-optionWidget-highlighted' );
 		} );
 		await menuItem.click();
+	}
+
+	/**
+	 * @param {string} organizer to be added to event
+	 */
+	async addOrganizer( organizer ) {
+		await this.organizersInput.setValue( organizer );
+		const menuItem = await $( `.oo-ui-menuSelectWidget [id='${ organizer }']` );
+		await this.chooseMenuOption( menuItem );
+	}
+
+	/**
+	 * @param {string[]} types
+	 */
+	async addTypes( types ) {
+		await this.typesInput.click();
+		for ( const type of types ) {
+			// Assumes English as interface language, as well as a correspondence between IDs and
+			// localized names that is not guaranteed to remain there.
+			const typeName = ( type.charAt( 0 ).toUpperCase() + type.slice( 1 ) ).replace( '-', ' ' );
+			// Brittle selector, but there isn't much we can do because the OOUI menu has no
+			// field-specific identifiers.
+			const menuItem = await $( `.oo-ui-menuOptionWidget=${ typeName }` );
+			await this.chooseMenuOption( menuItem );
+		}
 	}
 
 	/**
@@ -144,6 +168,7 @@ class EventRegistrationPage extends Page {
 		await this.eventPage.setValue( eventPage );
 		await this.setStartDate( start );
 		await this.setEndDate( end );
+		await this.addTypes( [ 'other' ] );
 		await this.enableRegistration.click();
 	}
 

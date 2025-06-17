@@ -21,8 +21,7 @@ module.exports = {
 			timezone: 'UTC',
 			start_time: '30200220200220',
 			end_time: '30200220200222',
-			// TODO: Add this when the feature is implemented
-			// type: 'generic',
+			types: [ 'other' ],
 			wikis: [],
 			online_meeting: true,
 			token: await organizerUser.token()

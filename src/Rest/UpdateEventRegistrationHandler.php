@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use LogicException;
-use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -42,7 +41,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
-		Config $config,
 		IEventLookup $eventLookup
 	) {
 		parent::__construct(
@@ -55,7 +53,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$wikiLookup,
 			$topicRegistry,
 			$eventTypesRegistry,
-			$config
 		);
 		$this->eventLookup = $eventLookup;
 	}
@@ -151,7 +148,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
-			$this->eventTypesEnabled ? $body['types'] : [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			$body['types'],
 			$wikis,
 			$body['topics'] ?? [],
 			$body['tracking_tool_id'],

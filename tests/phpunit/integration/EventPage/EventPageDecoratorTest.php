@@ -98,7 +98,6 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 	/** @return OutputPage&MockObject */
 	private function getMockOutputPage(): OutputPage {
 		$out = $this->createMock( OutputPage::class );
-		$out->method( 'getConfig' )->willReturn( new HashConfig( [ 'CampaignEventsEnableEventTypes' => true ] ) );
 		$out->method( 'enableOOUI' )->willReturnCallback( static function () {
 			// Make sure the call sets the OOUI theme singleton, to avoid uncaught exceptions.
 			OutputPage::setupOOUI();

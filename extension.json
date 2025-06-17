@@ -71,10 +71,6 @@
 				4
 			],
 			"merge_strategy": "provide_default"
-		},
-		"CampaignEventsEnableEventTypes": {
-			"description": "Flag to enable event types feature on a wiki",
-			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
@@ -408,8 +404,7 @@
 				"CampaignEventsEventQuestionsRegistry",
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
-				"CampaignEventsEventTypesRegistry",
-				"MainConfig"
+				"CampaignEventsEventTypesRegistry"
 			]
 		},
 		{
@@ -418,8 +413,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsTrackingToolRegistry",
-				"MainConfig"
+				"CampaignEventsTrackingToolRegistry"
 			]
 		},
 		{
@@ -477,7 +471,6 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
-				"MainConfig",
 				"CampaignEventsEventLookup"
 			]
 		},

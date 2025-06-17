@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -42,7 +41,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected WikiLookup $wikiLookup;
 	protected ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
-	protected bool $eventTypesEnabled;
 
 	public function __construct(
 		EventFactory $eventFactory,
@@ -54,7 +52,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
-		Config $config
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
@@ -65,7 +62,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->eventTypesEnabled = $config->get( 'CampaignEventsEnableEventTypes' );
 	}
 
 	/**
@@ -148,6 +144,13 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS_MW,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
+			'types' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => $this->eventTypesRegistry->getAllTypes(),
+				ParamValidator::PARAM_ISMULTI => true,
+				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TYPES,
+				ParamValidator::PARAM_REQUIRED => true,
+			],
 			'wikis' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),
@@ -202,16 +205,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_DEFAULT => false,
 			],
 		] + $this->getTokenParamDefinition();
-
-		if ( $this->eventTypesEnabled ) {
-			$params['types'] = [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => $this->eventTypesRegistry->getAllTypes(),
-				ParamValidator::PARAM_ISMULTI => true,
-				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TYPES,
-				ParamValidator::PARAM_REQUIRED => true,
-			];
-		}
 
 		return $params;
 	}
