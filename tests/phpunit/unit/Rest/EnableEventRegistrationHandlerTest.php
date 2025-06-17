@@ -24,7 +24,6 @@ use MediaWiki\Rest\RequestData;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use StatusValue;
-use Wikimedia\Message\IMessageFormatterFactory;
 
 /**
  * @group Test
@@ -72,7 +71,7 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->createMock( EventQuestionsRegistry::class ),
 			$wikiLookup ?? $this->createMock( WikiLookup::class ),
 			$this->createMock( ITopicRegistry::class ),
-			new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) ),
+			new EventTypesRegistry(),
 		);
 	}
 
