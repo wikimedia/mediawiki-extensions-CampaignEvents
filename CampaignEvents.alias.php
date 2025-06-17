@@ -48,6 +48,20 @@ $specialPageAliases['he'] = [
 	'EventDetails' => [ 'פרטי_האירוע' ],
 ];
 
+$specialPageAliases['ko'] = [
+	'EnableEventRegistration' => [ '행사등록활성화' ],
+	'DeleteEventRegistration' => [ '행사등록삭제' ],
+	'EditEventRegistration' => [ '행사등록수정' ],
+	'RegisterForEvent' => [ '행사등록' ],
+	'CancelEventRegistration' => [ '행사등록취소' ],
+	'MyEvents' => [ '나의행사' ],
+	'AllEvents' => [ '모든행사' ],
+	'EventDetails' => [ '행사상세정보' ],
+	'GenerateInvitationList' => [ '초대목록생성' ],
+	'MyInvitationLists' => [ '나의초대목록' ],
+	'InvitationList' => [ '초대목록' ],
+];
+
 $specialPageAliases['nb'] = [
 	'EnableEventRegistration' => [ 'Aktiver_arrangementspåmelding' ],
 	'DeleteEventRegistration' => [ 'Slett_arrangementspåmelding' ],
