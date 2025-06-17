@@ -123,7 +123,6 @@
 	"campaignevents-event-details-participants-deselect": "Poništi izbor",
 	"campaignevents-email-participants-label": "Napravi imejl",
 	"campaignevents-email-success-notification": "Poruka poslata!",
-	"campaignevents-email-error-notification": "Poruka nije poslata!",
 	"campaignevents-email-participants-all": "Svi učesnici",
 	"campaignevents-email-participants-except": "Sve osim $1",
 	"campaignevents-email-participants-except-count": "Sve osim $1",

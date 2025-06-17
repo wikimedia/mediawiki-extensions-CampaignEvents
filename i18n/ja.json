@@ -343,7 +343,6 @@
 	"campaignevents-event-details-email-recipients-button-text": "メールを送信",
 	"campaignevents-event-details-participants-deselect": "選択解除",
 	"campaignevents-email-success-notification": "メッセージを送信しました",
-	"campaignevents-email-error-notification": "メッセージの送信に失敗しました",
 	"campaignevents-email-select-participant-notification": "有効なメールの宛先を選択してください",
 	"campaignevents-email-participants-all": "すべての参加者",
 	"campaignevents-email-participants-except": "$1 以外の全員",

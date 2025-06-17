@@ -164,7 +164,6 @@
 	"campaignevents-event-details-email-message-label": "বার্তা",
 	"campaignevents-email-participants-label": "ইমেইল লিখুন",
 	"campaignevents-email-success-notification": "বার্তা পাঠানো হয়েছে!",
-	"campaignevents-email-error-notification": "বার্তা পাঠানো হয়নি!",
 	"campaignevents-email-select-participant-notification": "অনুগ্রহ করে বৈধ ইমেইল প্রাপক নির্বাচন করুন",
 	"campaignevents-email-participants-all": "সকল অংশগ্রহণকারী",
 	"campaignevents-email-participants-except": "$1 ছাড়া সকল",

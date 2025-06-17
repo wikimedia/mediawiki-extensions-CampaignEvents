@@ -363,7 +363,6 @@
 	"campaignevents-event-details-participants-deselect": "Poista valinta",
 	"campaignevents-email-participants-label": "Kokoa sähköposti",
 	"campaignevents-email-success-notification": "Viesti lähetetty!",
-	"campaignevents-email-error-notification": "Viestiä ei lähetetty!",
 	"campaignevents-email-select-participant-notification": "Valitse kelvollisia sähköpostivastaanottajia",
 	"campaignevents-email-participants-missing-address": "Jotkin valituista osallistujista eivät ole liittäneet sähköpostiosoitetta tunnuksiinsa eivätkä he pysty saamaan sähköpostiasi. Voit lähettää heille viestiä klikkaamalla heidän käyttäjänimiänsä ja siirtymällä heidän keskustelusivuillensa.",
 	"campaignevents-email-participants-all": "Kaikki osallistujat",

@@ -313,7 +313,6 @@
 	"campaignevents-event-details-participants-deselect": "Fjern valg",
 	"campaignevents-email-participants-label": "Skriv e-post",
 	"campaignevents-email-success-notification": "Melding sendt!",
-	"campaignevents-email-error-notification": "Melding ikke sendt!",
 	"campaignevents-email-select-participant-notification": "Velg gyldige e-postmottakere",
 	"campaignevents-email-participants-missing-address": "Noen av de valgte mottakerne har ikke lagt inn e-postadresse i kontoen sin, og vil derfor ikke motta e-posten. Du kan sende dem en melding ved å trykke på brukernavnene deres og skrive på brukerdiskusjonssidene.",
 	"campaignevents-email-participants-all": "Alle deltakere",

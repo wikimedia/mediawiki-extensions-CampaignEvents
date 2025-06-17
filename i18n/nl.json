@@ -353,7 +353,6 @@
 	"campaignevents-event-details-participants-deselect": "Selectie opheffen",
 	"campaignevents-email-participants-label": "Email opstellen",
 	"campaignevents-email-success-notification": "Bericht verzonden!",
-	"campaignevents-email-error-notification": "Bericht niet verzonden!",
 	"campaignevents-email-select-participant-notification": "Selecteer geldige e-mailontvangers",
 	"campaignevents-email-participants-missing-address": "Sommige van de geselecteerde deelnemers hebben geen e-mailadres op hun account en ontvangen uw e-mail niet. U kunt ze een bericht sturen door op hun gebruikersnamen te klikken en naar hun gebruikersoverlegpagina te gaan.",
 	"campaignevents-email-participants-all": "Alle deelnemers",

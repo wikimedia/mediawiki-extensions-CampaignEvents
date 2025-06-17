@@ -363,7 +363,6 @@
 	"campaignevents-event-details-participants-deselect": "Одизбери",
 	"campaignevents-email-participants-label": "Состави порака",
 	"campaignevents-email-success-notification": "Пораката е испратена!",
-	"campaignevents-email-error-notification": "Пораката не е испратена!",
 	"campaignevents-email-select-participant-notification": "Изберете важечки приматели",
 	"campaignevents-email-participants-missing-address": "Некои од избраните учесници немаат внесено е-пошта за нивните сметки и затоа нема да ја добијат вашата порека. Можете да им испратите порака стискајќи на нивните кориснички имиња, и потоа одејќи на нивните разговорни страници.",
 	"campaignevents-email-participants-all": "Сите учесници",

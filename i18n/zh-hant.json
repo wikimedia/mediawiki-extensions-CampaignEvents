@@ -283,7 +283,6 @@
 	"campaignevents-event-details-participants-deselect": "取消選取",
 	"campaignevents-email-participants-label": "撰寫電子郵件",
 	"campaignevents-email-success-notification": "已寄出電子郵件！",
-	"campaignevents-email-error-notification": "未寄出電子郵件！",
 	"campaignevents-email-select-participant-notification": "請選擇有效的電子郵件收件人",
 	"campaignevents-email-participants-all": "所有參與者",
 	"campaignevents-email-participants-except": "所有參與者，除了$1",

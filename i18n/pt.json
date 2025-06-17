@@ -316,7 +316,6 @@
 	"campaignevents-event-details-participants-deselect": "Desselecionar",
 	"campaignevents-email-participants-label": "Escrever mensagem",
 	"campaignevents-email-success-notification": "Mensagem enviada!",
-	"campaignevents-email-error-notification": "Mensagem não enviada!",
 	"campaignevents-email-select-participant-notification": "Selecione destinatários de correio eletrónico válidos, por favor",
 	"campaignevents-email-participants-missing-address": "Alguns dos participantes selecionados não têm um endereço de correio eletrónico na conta e não irão receber a sua mensagem de correio eletrónico. Pode enviar-lhes uma mensagem clicando nos nomes de utilizador e acedendo à respetiva página de discussão.",
 	"campaignevents-email-participants-all": "Todos os participantes",

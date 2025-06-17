@@ -345,7 +345,6 @@
 	"campaignevents-event-details-participants-deselect": "Batalkan pilihan",
 	"campaignevents-email-participants-label": "Tulis surel",
 	"campaignevents-email-success-notification": "Pesan terkirim.",
-	"campaignevents-email-error-notification": "Pesan tidak terkirim.",
 	"campaignevents-email-select-participant-notification": "Silakan pilih penerima surel yang valid",
 	"campaignevents-email-participants-missing-address": "Beberapa peserta terpilih tidak memiliki alamat surel di akunnya dan tidak akan menerima surel Anda. Anda dapat mengirimi mereka pesan dengan mengklik nama pengguna mereka dan membuka halaman pembicaraan pengguna mereka.",
 	"campaignevents-email-participants-all": "Semua peserta",

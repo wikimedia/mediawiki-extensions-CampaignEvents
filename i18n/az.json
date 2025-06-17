@@ -363,7 +363,6 @@
 	"campaignevents-event-details-participants-deselect": "Seçimi ləğv et",
 	"campaignevents-email-participants-label": "E-poçt yaz",
 	"campaignevents-email-success-notification": "Mesaj göndərildi",
-	"campaignevents-email-error-notification": "Mesaj göndərilmədi!",
 	"campaignevents-email-select-participant-notification": "Lütfən, etibarlı e-poçt alıcıları seçin",
 	"campaignevents-email-participants-missing-address": "Seçilmiş iştirakçıların bəzilərinin hesabında e-poçt ünvanı yoxdur və e-poçtunuzu qəbul etməyəcəklər. İstifadəçi adlarına klikləyərək və onların müzakirə səhifəsinə keçməklə onlara mesaj göndərə bilərsiniz.",
 	"campaignevents-email-participants-all": "Bütün iştirakçılar",

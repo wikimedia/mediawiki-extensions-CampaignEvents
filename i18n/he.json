@@ -357,7 +357,6 @@
 	"campaignevents-event-details-participants-deselect": "ביטול בחירה",
 	"campaignevents-email-participants-label": "כתיבת דואר אלקטרוני",
 	"campaignevents-email-success-notification": "ההודעה נשלחה!",
-	"campaignevents-email-error-notification": "ההודעה לא נשלחה",
 	"campaignevents-email-select-participant-notification": "נא לבחור נמעני דואר אלקטרוני תקינים",
 	"campaignevents-email-participants-missing-address": "לחלק מהמשתתפים שנבחרו אין כתובת דוא\"ל בחשבון שלהם והם לא יקבלו את הדוא\"ל שלך. באפשרותך לשלוח להם הודעה על־ידי לחיצה על שמות המשתמש שלהם ומעבר לדף שיחת המשתמש שלהם.",
 	"campaignevents-email-participants-all": "כל המשתתפים",

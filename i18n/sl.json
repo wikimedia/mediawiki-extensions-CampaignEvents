@@ -330,7 +330,6 @@
 	"campaignevents-event-details-participants-deselect": "Odizberi",
 	"campaignevents-email-participants-label": "Sestavi e-pošto",
 	"campaignevents-email-success-notification": "Sporočilo poslano!",
-	"campaignevents-email-error-notification": "Sporočilo ni poslano!",
 	"campaignevents-email-select-participant-notification": "Prosimo, izberite veljavne prejemnike e-pošte",
 	"campaignevents-email-participants-missing-address": "Nekateri od izbranih udeležencev v svojem računu nimajo navedenega e-poštnega naslova, zato ne bodo prejeli vašega e-poštnega sporočila. Sporočilo jim lahko pošljete tako, da kliknete njihova uporabniška imena in odprete njihovo uporabniško pogovorno stran.",
 	"campaignevents-email-participants-all": "Vsi udeleženci",

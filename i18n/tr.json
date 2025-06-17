@@ -284,7 +284,6 @@
 	"campaignevents-event-details-email-recipients-button-text": "E-posta gönder",
 	"campaignevents-email-participants-label": "E-posta yaz",
 	"campaignevents-email-success-notification": "İleti gönderildi!",
-	"campaignevents-email-error-notification": "İleti gönderilemedi!",
 	"campaignevents-email-select-participant-notification": "Lütfen geçerli e-posta alıcıları seçin",
 	"campaignevents-email-participants-missing-address": "Seçilen katılımcılardan bazılarının hesaplarında bir e-posta adresi yok ve e-postanızı alamayacaklar. Kullanıcı adlarına tıklayarak ve kullanıcı mesaj sayfalarına giderek onlara bir ileti gönderebilirsiniz.",
 	"campaignevents-email-participants-all": "Tüm katılımcılar",

@@ -276,7 +276,6 @@
 	"campaignevents-event-details-participants-deselect": "선택 해제",
 	"campaignevents-email-participants-label": "이메일 쓰기",
 	"campaignevents-email-success-notification": "메시지를 보냈습니다!",
-	"campaignevents-email-error-notification": "메시지를 보내지 못했습니다!",
 	"campaignevents-email-select-participant-notification": "유효한 이메일 받는이를 선택해 주십시오",
 	"campaignevents-email-participants-all": "모든 참가자",
 	"campaignevents-email-participants-except": "$1님을 제외한 모두",

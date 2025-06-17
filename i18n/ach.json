@@ -347,7 +347,6 @@
 	"campaignevents-event-details-participants-deselect": "Kwanyo yero",
 	"campaignevents-email-participants-label": "Co email",
 	"campaignevents-email-success-notification": "Lok ma ki cwalo!",
-	"campaignevents-email-error-notification": "Kwena pe ki cwalo!",
 	"campaignevents-email-select-participant-notification": "Walegi ni iyer dano ma ibi nongo email ma opore",
 	"campaignevents-email-participants-missing-address": "Dano mogo ma ki yero gi pe ki email i akaunti gi ki pe gubi nongo email ni. Itwero cwalo kwena bot gi kun i dii i kom nying gi ki cito i pot karatac gi me lok.",
 	"campaignevents-email-participants-all": "Dano weny ma gubedo tye",

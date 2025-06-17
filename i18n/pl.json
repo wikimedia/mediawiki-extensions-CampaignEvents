@@ -343,7 +343,6 @@
 	"campaignevents-event-details-participants-deselect": "Odznacz",
 	"campaignevents-email-participants-label": "Napisz e-mail",
 	"campaignevents-email-success-notification": "Wiadomość wysłana!",
-	"campaignevents-email-error-notification": "Wiadomość nie została wysłana!",
 	"campaignevents-email-select-participant-notification": "Proszę wybrać prawidłowych odbiorców wiadomości e-mail",
 	"campaignevents-email-participants-missing-address": "Niektórzy z wybranych uczestników nie mają adresu e-mail przypisanego do swojego konta i nie otrzymają Twojej wiadomości. Możesz do nich napisać, klikając na ich nazwy użytkowników i przechodząc na ich stronę dyskusji użytkownika.",
 	"campaignevents-email-participants-all": "Wszyscy uczestnicy",

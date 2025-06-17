@@ -131,7 +131,6 @@
 	"campaignevents-event-details-participants-deselect": "Поништи избор",
 	"campaignevents-email-participants-label": "Направи имејл",
 	"campaignevents-email-success-notification": "Порука послата!",
-	"campaignevents-email-error-notification": "Порука није послата!",
 	"campaignevents-email-participants-all": "Сви учесници",
 	"campaignevents-email-participants-except": "Све осим $1",
 	"campaignevents-email-participants-except-count": "Све осим $1",

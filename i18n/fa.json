@@ -347,7 +347,6 @@
 	"campaignevents-event-details-participants-deselect": "لغو انتخاب",
 	"campaignevents-email-participants-label": "نوشتن ایمیل",
 	"campaignevents-email-success-notification": "پیام فرستاده شد!",
-	"campaignevents-email-error-notification": "پیام فرستاده نشد!",
 	"campaignevents-email-select-participant-notification": "لطفاً دریافت‌کنندگان معتبری را برای ایمیل انتخاب کنید",
 	"campaignevents-email-participants-missing-address": "برخی از شرکت‌کنندگان انتخاب‌شده در حساب خود نشانی ایمیل ندارند و ایمیل شما را دریافت نخواهند کرد. با کلیک بر روی نام کاربری و رفتن به صفحهٔ بحث کاربری آنان می‌توانید پیامی برای آنان بفرستید.",
 	"campaignevents-email-participants-all": "تمام شرکت‌کنندگان",

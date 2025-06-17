@@ -134,7 +134,6 @@
 	"campaignevents-userlink-suppressed-user": "имя пользователя скрыто",
 	"campaignevents-event-details-email-message-label": "Сообщение",
 	"campaignevents-email-success-notification": "Сообщение отправлено!",
-	"campaignevents-email-error-notification": "Сообщение не отправлено!",
 	"campaignevents-email-participants-except": "Все, кроме $1",
 	"campaignevents-email-participants-yes": "Да",
 	"campaignevents-email-participants-no": "Нет",

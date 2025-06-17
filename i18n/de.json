@@ -362,7 +362,6 @@
 	"campaignevents-event-details-participants-deselect": "Auswahl aufheben",
 	"campaignevents-email-participants-label": "E-Mail verfassen",
 	"campaignevents-email-success-notification": "Nachricht gesendet!",
-	"campaignevents-email-error-notification": "Nachricht nicht gesendet!",
 	"campaignevents-email-select-participant-notification": "Bitte wähle gültige E-Mail-Empfänger aus",
 	"campaignevents-email-participants-missing-address": "Einige der ausgewählten Teilnehmer haben keine E-Mail-Adresse in ihrem Konto und erhalten deine E-Mail nicht. Du kannst ihnen eine Nachricht senden, indem du auf ihren Benutzernamen klickst und auf ihre Benutzerdiskussionsseite gehst.",
 	"campaignevents-email-participants-all": "Alle Teilnehmer",
@@ -553,5 +552,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Veranstaltungstypen",
 	"campaignevents-allevents-placeholder-add-event-types": "Veranstaltungstypen hinzufügen …",
 	"campaignevents-eventpage-dialog-event-types-label": "Veranstaltungstypen",
+	"campaignevents-cancel-page-nonlocal": "Bitte '''[$1 storniere deine Veranstaltungsanmeldung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
+	"campaignevents-email-error-notification-with-detail": "Die E-Mail konnte aus folgendem Grund nicht gesendet werden: $1",
 	"campaignevents-eventslist-types-label": "Veranstaltungstypen"
 }

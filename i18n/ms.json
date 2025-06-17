@@ -349,7 +349,6 @@
 	"campaignevents-event-details-participants-deselect": "Nyahpilih",
 	"campaignevents-email-participants-label": "Karang e-mel",
 	"campaignevents-email-success-notification": "Mesej dihantar!",
-	"campaignevents-email-error-notification": "Mesej tidak dihantar!",
 	"campaignevents-email-select-participant-notification": "Sila pilih penerima e-mel yang sah",
 	"campaignevents-email-participants-missing-address": "Sesetengah peserta yang dipilih tidak mempunyai alamat e-mel pada akaun mereka dan tidak akan menerima e-mel anda. Anda boleh menghantar mesej kepada mereka dengan mengklik pada nama pengguna mereka dan pergi ke laman perbincangan pengguna mereka.",
 	"campaignevents-email-participants-all": "Semua peserta",

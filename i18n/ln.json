@@ -350,7 +350,6 @@
 	"campaignevents-event-details-participants-deselect": "Kolongola kopona",
 	"campaignevents-email-participants-label": "Kosala email",
 	"campaignevents-email-success-notification": "Message etindami!",
-	"campaignevents-email-error-notification": "Message etindami te!",
 	"campaignevents-email-select-participant-notification": "Svp pona ba récipients ya email ya valide",
 	"campaignevents-email-participants-missing-address": "Ba participants mosusu oyo baponamaki bazali na adresse email te na compte na bango mpe bakozwa email na yo te. Okoki kotindela bango message na ko cliquer na ba kombo na bango ya usager pe kokende na page ya masolo ya usager na bango.",
 	"campaignevents-email-participants-all": "Ba participants nionso",
