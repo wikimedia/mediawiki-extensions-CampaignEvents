@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Noooote"
+			"Noooote",
+			"Aristorkle"
 		]
 	},
 	"campaignevents-desc": "Ta dale maga features para na maga organizador de campaña y maga participante.",
@@ -71,7 +72,7 @@
 	"campaignevents-edit-form-questions-label": "Maga pregunta para na maga participante",
 	"campaignevents-edit-form-questions-intro": "Escoge na maga siguiente pregunta para dale na maga participante para contesta mientras ta registra sila para na evento.",
 	"campaignevents-edit-form-questions-explanation": "Durante el evento, ta puede tu man access, ta puede tu man access con el maga contestacion del maga cada cual participate que hende ta inclui el de ila Personally Identifiable Information (PII). Despues acaba el evento, el maga contestacion na todo del maga pregunta el queda available (na forma de agregada lang) y maga cada cual contestacion el borra eventualmente.",
-	"campaignevents-edit-form-questions-non-pii-label": "Maga pregunta Non\n-Personally Identifiable Information (non-PII)",
+	"campaignevents-edit-form-questions-non-pii-label": "Maga pregunta Non-Personally Identifiable Information (non-PII)",
 	"campaignevents-edit-form-questions-pii-label": "Maga pregunta Personally\n Identifiable Information (PII)",
 	"campaignevents-edit-form-questions-pii-notice": "Para ver puede mira con el maga agregao contestacion del maga participante que ta contene informacion personal, tiene el manda contigo man handle con el informacion del maga participante, incluido el participant personally identifiable informacion, colectao durante el registracion del evento con cuidao.",
 	"campaignevents-enable-registration-form-submit": "Abri registracion",

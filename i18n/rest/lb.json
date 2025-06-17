@@ -4,5 +4,8 @@
 			"Volvox"
 		]
 	},
-	"campaignevents-rest-set-organizers-empty-list": "<var>organisator_usernames</var> muss en Array vu Benotzernimm sinn an däerf net eidel sinn"
+	"campaignevents-rest-event-not-found": "Et gëtt keen Evenement mat dëser ID.",
+	"campaignevents-rest-user-not-found": "Et gëtt kee Benotzer mat dëser zentraler ID.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organisator_usernames</var> muss en Array vu Benotzernimm sinn an däerf net eidel sinn",
+	"campaignevents-rest-register-invalid-answer": "Ongülteg Äntwert op d'Fro $1"
 }
