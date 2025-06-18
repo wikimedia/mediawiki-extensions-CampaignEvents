@@ -35,8 +35,7 @@ describe( 'POST /campaignevents/v0/event_registration', () => {
 			timezone: 'UTC',
 			start_time: '30200220200220',
 			end_time: '30200220200222',
-			// TODO: Add this when the feature is implemented
-			// type: 'generic',
+			types: [ 'other' ],
 			wikis: [],
 			online_meeting: true,
 			chat_url: 'https://example.org',

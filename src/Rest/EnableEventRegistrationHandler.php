@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -64,7 +63,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['timezone'],
 			$body['start_time'],
 			$body['end_time'],
-			$this->eventTypesEnabled ? $body['types'] : [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			$body['types'],
 			$wikis,
 			$body['topics'] ?? [],
 			$body['tracking_tool_id'],

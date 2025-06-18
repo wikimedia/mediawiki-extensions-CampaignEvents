@@ -301,10 +301,9 @@ class EventsListPager extends ReverseChronologicalPager {
 			$this->msg( 'campaignevents-eventslist-participation-options-label' )->text(),
 			$this->msg( $this->getParticipationOptionsMsg( $row ) )->escaped()
 		);
-		$eventTypes = $row->event_types;
-		if ( $this->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
-			$detailsContent .= $this->getTypesList( EventTypesRegistry::getEventTypesFromDBVal( $eventTypes ) );
-		}
+
+		$detailsContent .= $this->getTypesList( EventTypesRegistry::getEventTypesFromDBVal( $row->event_types ) );
+
 		if ( $this->eventWikis[$row->event_id] ) {
 			$detailsContent .= $this->getWikiList( $row->event_id );
 		}

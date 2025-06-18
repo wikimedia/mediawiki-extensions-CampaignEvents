@@ -160,10 +160,8 @@ class EventDetailsModule {
 		// TDB Rename this column since it is not only the "organizer column"
 		$organizersColumn = $this->getOrganizersColumn( $out, $organizersCount );
 
-		if ( $out->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
-			$eventTypes = $this->registration->getTypes();
-			$organizersColumn->appendContent( $this->getEventTypesSection( $out, $eventTypes ) );
-		}
+		$eventTypes = $this->registration->getTypes();
+		$organizersColumn->appendContent( $this->getEventTypesSection( $out, $eventTypes ) );
 
 		$this->hookRunner->onCampaignEventsGetEventDetails(
 			$infoColumn,

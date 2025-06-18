@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -74,7 +73,6 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$wikiLookup ?? $this->createMock( WikiLookup::class ),
 			$this->createMock( ITopicRegistry::class ),
 			new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) ),
-			new HashConfig( [ 'CampaignEventsEnableEventTypes' => true ] )
 		);
 	}
 

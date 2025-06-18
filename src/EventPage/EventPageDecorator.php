@@ -656,9 +656,9 @@ class EventPageDecorator {
 			$organizersCount,
 			$userStatus
 		);
-		if ( $this->out->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
-			$eventInfo .= $this->getDetailsDialogEventTypes( $registration->getTypes() );
-		}
+
+		$eventInfo .= $this->getDetailsDialogEventTypes( $registration->getTypes() );
+
 		if ( $registration->getWikis() ) {
 			$eventInfo .= $this->getDetailsDialogWikis( $registration );
 		}

@@ -226,31 +226,21 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		string $openSectionsStr,
 		string $formIdentifier
 	): HTMLForm {
-		$formDescriptor = [];
-		$eventTypesEnabled = $this->getConfig()->get( 'CampaignEventsEnableEventTypes' );
-		$searchClass = $eventTypesEnabled ?
-			'ext-campaignevents-allevents-search-field-full-width' :
-			'ext-campaignevents-allevents-search-field';
 		$formDescriptor = [
 			'Search' => [
 				'type' => 'text',
 				'label-message' => 'campaignevents-allevents-label-search',
 				'default' => $searchedVal,
-				'cssclass' => $searchClass,
+				'cssclass' => 'ext-campaignevents-allevents-search-field',
 			],
-		];
-		if ( $eventTypesEnabled ) {
-			$formDescriptor['FilterEventTypes'] = [
+			'FilterEventTypes' => [
 				'type' => 'multiselect',
 				'dropdown' => true,
 				'label-message' => 'campaignevents-allevents-label-filter-event-types',
 				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
 				'placeholder-message' => 'campaignevents-allevents-placeholder-add-event-types',
 				'max' => 20,
-			];
-		}
-		$formDescriptor = [
-			...$formDescriptor,
+			],
 			'ParticipationOptions' => [
 				'type' => 'select',
 				'label-message' => 'campaignevents-allevents-label-participation-options',

@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -48,7 +47,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		return new GetEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$trackingToolRegistry,
-			new HashConfig( [ 'CampaignEventsEnableEventTypes' => true ] )
 		);
 	}
 

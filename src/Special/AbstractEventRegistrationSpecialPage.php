@@ -338,21 +338,19 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
-			$formFields['EventTypes'] = [
-				'type' => 'multiselect',
-				'dropdown' => true,
-				'label-message' => 'campaignevents-edit-field-eventtypes-label',
-				'default' => $this->event ? $this->event->getTypes() : [],
-				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
-				'placeholder-message' => 'campaignevents-edit-field-eventtypes-placeholder',
-				'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
-				'cssclass' => 'ext-campaignevents-edit-eventtypes-input',
-				'section' => self::DETAILS_SECTION,
-				'required' => true,
-				'max' => EventFactory::MAX_TYPES,
-			];
-		}
+		$formFields['EventTypes'] = [
+			'type' => 'multiselect',
+			'dropdown' => true,
+			'label-message' => 'campaignevents-edit-field-eventtypes-label',
+			'default' => $this->event ? $this->event->getTypes() : [],
+			'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
+			'placeholder-message' => 'campaignevents-edit-field-eventtypes-placeholder',
+			'help' => $this->msg( 'campaignevents-edit-field-eventtypes-other-help' )->escaped(),
+			'cssclass' => 'ext-campaignevents-edit-eventtypes-input',
+			'section' => self::DETAILS_SECTION,
+			'required' => true,
+			'max' => EventFactory::MAX_TYPES,
+		];
 
 		$eventWikis = $this->event ? $this->event->getWikis() : [];
 		if ( $eventWikis === [] ) {
@@ -740,10 +738,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$testEvent = $data['TestEvent'] === "1";
 
 		try {
-			$types = [ EventTypesRegistry::EVENT_TYPE_OTHER ];
-			if ( $this->getConfig()->get( 'CampaignEventsEnableEventTypes' ) ) {
-				$types = $data['EventTypes'];
-			}
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
@@ -752,7 +746,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
 				wfTimestamp( TS_MW, $data['EventStart'] ),
 				wfTimestamp( TS_MW, $data['EventEnd'] ),
-				$types,
+				$data['EventTypes'],
 				$wikis,
 				$data['Topics'] ?? [],
 				$trackingToolUserID,
