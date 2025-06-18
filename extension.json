@@ -8,7 +8,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "specialpage",
 	"requires": {
-		"MediaWiki": ">= 1.44"
+		"MediaWiki": ">= 1.45"
 	},
 	"attributes": {
 		"VisualEditor": {
@@ -133,7 +133,6 @@
 				"TitleFormatter",
 				"CampaignEventsPageFactory",
 				"CampaignEventsWikiConfiguration"
-
 			]
 		},
 		"EchoHooksHandler": {
