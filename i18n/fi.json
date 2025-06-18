@@ -554,5 +554,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Tapahtumatyypit",
 	"campaignevents-allevents-placeholder-add-event-types": "Lisää tapahtumatyyppejä...",
 	"campaignevents-eventpage-dialog-event-types-label": "Tapahtumatyypit",
+	"campaignevents-cancel-page-nonlocal": "'''[$1 Peruuta tapahtumailmoittautumisesi sivustolla $2]''', jossa tapahtuma on luotu.",
+	"campaignevents-email-error-notification-with-detail": "Sähköpostia ei voitu lähettää seuraavasta syystä: $1",
 	"campaignevents-eventslist-types-label": "Tapahtumatyypit"
 }

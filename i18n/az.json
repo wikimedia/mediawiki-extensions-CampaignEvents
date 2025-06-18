@@ -553,5 +553,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Tədbir növləri",
 	"campaignevents-allevents-placeholder-add-event-types": "Tədbir növləri əlavə et...",
 	"campaignevents-eventpage-dialog-event-types-label": "Tədbir növləri",
+	"campaignevents-cancel-page-nonlocal": "Zəhmət olmasa, tədbirin yaradıldığı '''[$1 $2 vikisində qeydiyyatınızı ləğv edin]'''.",
+	"campaignevents-email-error-notification-with-detail": "Aşağıdakı səbəbdən e-poçt göndərilə bilmədi: $1",
 	"campaignevents-eventslist-types-label": "Tədbir növləri"
 }

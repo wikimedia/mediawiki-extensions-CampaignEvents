@@ -587,5 +587,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Types d’événements",
 	"campaignevents-allevents-placeholder-add-event-types": "Ajouter des types d'événements...",
 	"campaignevents-eventpage-dialog-event-types-label": "Types d’événements",
+	"campaignevents-cancel-page-nonlocal": "Veuillez '''[$1 annuler votre inscription à l’événement sur $2]''', le wiki où l’évènement a été créé.",
+	"campaignevents-email-error-notification-with-detail": "Le courriel n’a pas pu être envoyé pour la raison suivante : $1",
 	"campaignevents-eventslist-types-label": "Types d’événements"
 }
