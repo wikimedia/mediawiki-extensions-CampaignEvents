@@ -25,7 +25,6 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
-use Wikimedia\Message\IMessageFormatterFactory;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Event\EventFactory
@@ -116,7 +115,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$topicLookup = $this->createMock( ITopicRegistry::class );
 		$topicLookup->method( 'getAllTopics' )->willReturn( self::getValidTopics() );
 
-		$typesRegistry = new EventTypesRegistry( $this->createMock( IMessageFormatterFactory::class ) );
+		$typesRegistry = new EventTypesRegistry();
 
 		return new EventFactory(
 			$campaignsPageFactory,
