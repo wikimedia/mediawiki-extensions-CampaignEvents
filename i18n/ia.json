@@ -552,5 +552,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Typos de evento",
 	"campaignevents-allevents-placeholder-add-event-types": "Adder typos de evento…",
 	"campaignevents-eventpage-dialog-event-types-label": "Typos de evento",
+	"campaignevents-cancel-page-nonlocal": "Per favor '''[$1 cancella tu inscription al evento sur $2],''' le wiki ubi le evento ha essite create.",
+	"campaignevents-email-error-notification-with-detail": "Le message de e-mail non poteva esser inviate, pro le sequente ration: $1",
 	"campaignevents-eventslist-types-label": "Typos de evento"
 }
