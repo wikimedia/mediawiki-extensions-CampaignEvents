@@ -17,12 +17,6 @@ use MediaWiki\WikiMap\WikiMap;
  * are very much non-rigorous.
  */
 class FindPotentialInvitees extends Maintenance {
-	/**
-	 * How many days to look back into the past when scanning revisions.
-	 * TODO: Is 3 years OK?
-	 */
-	public const CUTOFF_DAYS = 3 * 365;
-
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription(
