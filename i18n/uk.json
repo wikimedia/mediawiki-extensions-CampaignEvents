@@ -561,5 +561,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Типи подій",
 	"campaignevents-allevents-placeholder-add-event-types": "Додати типи подій…",
 	"campaignevents-eventpage-dialog-event-types-label": "Типи події",
+	"campaignevents-cancel-page-nonlocal": "Будь ласка, '''[$1 скасовуйте свою реєстрацію на подію у {{GRAMMAR:locative|$2}}]''', тобто тій вікі, де її було створено.",
+	"campaignevents-email-error-notification-with-detail": "Електронний лист не вдалося надіслати з такої причини: $1",
 	"campaignevents-eventslist-types-label": "Типи подій"
 }
