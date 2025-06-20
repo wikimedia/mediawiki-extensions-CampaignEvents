@@ -185,11 +185,10 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		$participationOptions = $this->eventRegistration->getParticipationOptions();
 
 		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
-			$ret .= Html::element(
-				'h3',
-				[],
-				$this->msg( 'campaignevents-notification-registration-details-type-online-header' )->text()
-			);
+			$onlineEventHeader = $this->msg(
+				'campaignevents-notification-registration-details-participation-option-online-header'
+			)->text();
+			$ret .= Html::element( 'h3', [], $onlineEventHeader );
 			$meetingUrl = $this->eventRegistration->getMeetingURL();
 			if ( $meetingUrl !== null ) {
 				$meetingLink = $this->makeLink( $meetingUrl, $meetingUrl );
@@ -197,11 +196,10 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 			}
 		}
 		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
-			$ret .= Html::element(
-				'h3',
-				[],
-				$this->msg( 'campaignevents-notification-registration-details-type-in-person-header' )->text()
-			);
+			$inPersonEventHeader = $this->msg(
+				'campaignevents-notification-registration-details-participation-option-in-person-header'
+			)->text();
+			$ret .= Html::element( 'h3', [], $inPersonEventHeader );
 			$address = $this->eventRegistration->getMeetingAddress();
 			$country = $this->eventRegistration->getMeetingCountry();
 			if ( $address || $country ) {
