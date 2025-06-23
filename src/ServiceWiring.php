@@ -6,6 +6,7 @@ use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
@@ -437,5 +438,8 @@ return [
 	},
 	EventTypesRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): EventTypesRegistry {
 		return new EventTypesRegistry();
+	},
+	CountryProvider::SERVICE_NAME => static function ( MediaWikiServices $services ): CountryProvider {
+		return new CountryProvider();
 	},
 ];
