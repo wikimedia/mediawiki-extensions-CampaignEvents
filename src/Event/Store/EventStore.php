@@ -32,7 +32,7 @@ class EventStore implements IEventStore, IEventLookup {
 		EventRegistration::STATUS_CLOSED => 2,
 	];
 
-	private const PARTICIPATION_OPTION_MAP = [
+	public const PARTICIPATION_OPTION_MAP = [
 		EventRegistration::PARTICIPATION_OPTION_IN_PERSON => 1,
 		EventRegistration::PARTICIPATION_OPTION_ONLINE => 2,
 	];
