@@ -98,6 +98,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Label of the checkbox for online and in-person events on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-meeting-url": "Label of the event meeting URL field on [[Special:EnableEventRegistration]]. An example of meeting URL is the join link for a videocall.",
 	"campaignevents-edit-field-country": "Label of the event country field on [[Special:EnableEventRegistration]]",
+	"campaignevents-edit-field-country-placeholder": "Placeholder of the event country field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-address": "Label of the event address field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-chat-url": "Label of the event chat invite link field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-chat-url-help": "Content of the help tooltip for the event chat invite link field on [[Special:EnableEventRegistration]]",

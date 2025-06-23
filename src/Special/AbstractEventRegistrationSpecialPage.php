@@ -9,6 +9,7 @@ use DateTimeZone;
 use Exception;
 use LogicException;
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -77,6 +78,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private ITopicRegistry $topicRegistry;
 	private Config $wikiConfig;
 	private EventTypesRegistry $eventTypesRegistry;
+	private CountryProvider $countryProvider;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -111,7 +113,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		Config $wikiConfig,
-		EventTypesRegistry $eventTypesRegistry
+		EventTypesRegistry $eventTypesRegistry,
+		CountryProvider $countryProvider
 	) {
 		parent::__construct( $name, $restriction );
 		$this->eventLookup = $eventLookup;
@@ -129,6 +132,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->topicRegistry = $topicRegistry;
 		$this->wikiConfig = $wikiConfig;
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->countryProvider = $countryProvider;
 
 		$this->formMessages = $this->getFormMessages();
 	}
@@ -498,18 +502,48 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		// For country and address, note that we're using length limit in bytes for `maxlength`, which uses UTF-16
-		// codepoints. Could be fixed up via jquery.lengthLimit, but it isn't worthwhile given how high
-		// these limits are.
 		$address = $this->event ? $this->event->getAddress() : null;
-		$formFields['EventMeetingCountry'] = [
-			'type' => 'text',
-			'label-message' => 'campaignevents-edit-field-country',
-			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
-			'default' => $address ? $address->getCountry() : '',
-			'maxlength' => EventFactory::COUNTRY_MAXLENGTH_BYTES,
-			'section' => self::DETAILS_SECTION,
-		];
+		if (
+			$this->getOutput()->getConfig()->get( 'CampaignEventsCountrySchemaMigrationStage' ) &
+			SCHEMA_COMPAT_WRITE_NEW
+		) {
+			$languageCode = $this->getLanguage()->getCode();
+			$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
+			$countryOptions = [
+				$this->msg( 'campaignevents-edit-field-country-placeholder' )->text() => ''
+			];
+			$countryOptions += array_flip( $countryNames );
+			$formFields['EventMeetingCountryCode'] = [
+				'type' => 'select',
+				'label-message' => 'campaignevents-edit-field-country',
+				'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
+				// NOTE: If we have no country code (because the row is still in the old format, we will lose data here
+				// by forcing the default. However, the field is required, so the organizer will still need to choose a
+				// country code before saving, and they can match the existing free-text value. This is preferable to
+				// just preventing the edit until the row has been migrated, or to try and match the country in
+				// real-time as done in the migration script (which is potentially expensive).
+				'default' => $address ? $address->getCountryCode() : '',
+				'options' => $countryOptions,
+				'required' => true,
+				'section' => self::DETAILS_SECTION,
+			];
+		} else {
+			if ( $address && $address->getCountryCode() && !$address->getCountry() ) {
+				// Make sure we aren't losing information. Should never happen unless we revert the migration.
+				throw new RuntimeException( 'Got country code without country in WRITE_OLD' );
+			}
+			$formFields['EventMeetingCountry'] = [
+				'type' => 'text',
+				'label-message' => 'campaignevents-edit-field-country',
+				'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
+				'default' => $address ? $address->getCountry() : '',
+				'maxlength' => EventFactory::COUNTRY_MAXLENGTH_BYTES,
+				'section' => self::DETAILS_SECTION,
+			];
+		}
+
+		// Note that we're using length limit in bytes for `maxlength`, which uses UTF-16 codepoints. Could be fixed up
+		// via jquery.lengthLimit, but it isn't worthwhile given how high these limits are.
 		$formFields['EventMeetingAddress'] = [
 			'type' => 'textarea',
 			'rows' => 5,
@@ -728,10 +762,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$meetingURL = null;
 		}
 		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
-			$meetingCountry = $data['EventMeetingCountry'];
+			$meetingCountry = $data['EventMeetingCountry'] ?? null;
+			$meetingCountryCode = $data['EventMeetingCountryCode'] ?? null;
 			$meetingAddress = $data['EventMeetingAddress'];
 		} else {
-			$meetingCountry = $meetingAddress = null;
+			$meetingCountry = $meetingCountryCode = $meetingAddress = null;
 		}
 
 		$testEvent = $data['TestEvent'] === "1";
@@ -753,7 +788,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$participationOptions,
 				$meetingURL,
 				$meetingCountry,
-				null,
+				$meetingCountryCode,
 				$meetingAddress,
 				$data['EventChatURL'],
 				$testEvent,

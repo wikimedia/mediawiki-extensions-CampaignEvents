@@ -600,7 +600,8 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsWikiConfiguration",
-				"CampaignEventsEventTypesRegistry"
+				"CampaignEventsEventTypesRegistry",
+				"CampaignEventsCountryProvider"
 			]
 		},
 		"EditEventRegistration": {
@@ -620,7 +621,8 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsWikiConfiguration",
-				"CampaignEventsEventTypesRegistry"
+				"CampaignEventsEventTypesRegistry",
+				"CampaignEventsCountryProvider"
 			]
 		},
 		"DeleteEventRegistration": {

@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -38,7 +39,8 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		Config $wikiConfig,
-		EventTypesRegistry $eventTypesRegistry
+		EventTypesRegistry $eventTypesRegistry,
+		CountryProvider $countryProvider
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
@@ -57,7 +59,8 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 			$wikiLookup,
 			$topicRegistry,
 			$wikiConfig,
-			$eventTypesRegistry
+			$eventTypesRegistry,
+			$countryProvider
 		);
 	}
 

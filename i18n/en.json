@@ -91,6 +91,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Online and in-person event",
 	"campaignevents-edit-field-meeting-url": "Meeting URL",
 	"campaignevents-edit-field-country": "Country",
+	"campaignevents-edit-field-country-placeholder": "Select a country",
 	"campaignevents-edit-field-address": "Address",
 	"campaignevents-edit-field-chat-url": "Group chat invite",
 	"campaignevents-edit-field-chat-url-help": "If you have an online chat group for the participants of this event, you can add the invite link here. Participants will be able to view the invite link after registering.",
