@@ -547,11 +547,13 @@
 	"campaignevents-eventtypegroup-community": "Заедница",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Друго",
 	"campaignevents-edit-field-eventtypes-placeholder": "Изберете видови настани...",
-	"campaignevents-edit-field-eventtypes-other-help": "Ако изберете „Друго“ ќе се оневозможат и одизберат сите други видови настани.",
+	"campaignevents-edit-field-eventtypes-other-help": "Додајте до два вида настани. Ако изберете „Друго“, тоа ќе мора да биде единствениот избор.",
 	"campaignevents-edit-field-eventtypes-label": "Видови настани",
 	"campaignevents-event-details-event-types-header": "Видови настани",
 	"campaignevents-allevents-label-filter-event-types": "Видови настани",
 	"campaignevents-allevents-placeholder-add-event-types": "Додај видови настани...",
 	"campaignevents-eventpage-dialog-event-types-label": "Видови настани",
+	"campaignevents-cancel-page-nonlocal": "'''[$1 Откажете ја вашата пријава за настан на $2]''', викито на кое е создаден настанот.",
+	"campaignevents-email-error-notification-with-detail": "Не можев да ја испратам е-поштата од следнава причина: $1",
 	"campaignevents-eventslist-types-label": "Видови настани"
 }

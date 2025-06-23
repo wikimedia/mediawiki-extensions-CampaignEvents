@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
+			"Guycn2",
 			"Neriah"
 		]
 	},
@@ -81,6 +82,7 @@
 	"campaignevents-edit-field-wikis-label": "אתרי הוויקי המיועדים",
 	"campaignevents-edit-field-wikis-placeholder": "הוספת אתרי ויקי מסוימים",
 	"campaignevents-edit-field-wikis-help": "אם האירוע שלך נערך באתרי ויקי מסוימים, נא לרשום אותם כאן. זה עוזר לאנשים להחליט באילו אירועים להשתתף, וזה גם עוזר בניתוח.",
+	"campaignevents-edit-field-wikis-empty-specific": "יש להזין לפחות אתר ויקי אחד",
 	"campaignevents-edit-field-tracking-tools": "קישור ללוח הבקרה של תוכניות ואירועים",
 	"campaignevents-edit-field-tracking-tools-help": "שמות משתמש של משתתפים הרשומים באופן ציבורי יישלחו אוטומטית ללוח הבקרה. הכלי הזה עוזר לך לעקוב אחר התרומות המשתתפים ולמדוד את ההשפעה של האירוע שלך.  [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard למידע נוסף]",
 	"campaignevents-edit-field-tracking-tools-placeholder": "כניסה לכתובת ללוח הבקרה של תוכניות ואירועים עבור האירוע שלך",
@@ -173,6 +175,7 @@
 	"campaignevents-eventslist-organizer-label": "מארגנים",
 	"campaignevents-eventslist-column-date": "תאריך",
 	"campaignevents-eventslist-column-name": "שם אירוע",
+	"campaignevents-eventslist-column-participation-options": "אפשרויות השתתפות",
 	"campaignevents-eventslist-column-participants-number": "מספר משתתפים",
 	"campaignevents-eventslist-participation-options-online": "אירוע מקוון",
 	"campaignevents-eventslist-participation-options-in-person": "אירוע בחיים האמיתיים",
@@ -198,6 +201,7 @@
 	"campaignevents-edit-registration-deleted": "ההרשמה לאירוע הזה נמחקה.",
 	"campaignevents-register-registration-deleted": "אינך {{GENDER:|יכול|יכולה}} להירשם לאירוע הזה כי הוא נמחק.",
 	"campaignevents-unregister-registration-deleted": "אינך {{GENDER:|יכול|יכולה}} לבטל את הרשמתך לאירוע הזה כי הוא נמחק.",
+	"campaignevents-eventpage-header-participation-options-label": "אפשרויות השתתפות",
 	"campaignevents-eventpage-header-participation-options-online": "אירוע מקוון",
 	"campaignevents-eventpage-header-participation-options-in-person": "אירוע בחיים האמיתיים",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "אירוע מקוון ובחיים האמיתיים",
@@ -224,6 +228,7 @@
 	"campaignevents-eventpage-dialog-dates-label": "זמן התחלה וסיום",
 	"campaignevents-eventpage-dialog-dates": "$1 עד $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>אזור זמן:</strong> $1",
+	"campaignevents-eventpage-dialog-participation-options-label": "אפשרויות השתתפות",
 	"campaignevents-eventpage-dialog-online-label": "אירוע מקוון",
 	"campaignevents-eventpage-dialog-in-person-label": "אירוע בחיים האמיתיים",
 	"campaignevents-eventpage-dialog-link-not-available": "{{PLURAL:$1|מארגן|מארגנים}} יפרסמו את הקישור.",
@@ -266,6 +271,7 @@
 	"campaignevents-event-details-participants-private": "{{PLURAL:$1|משתתף אחד|$1 משתתפים}} נרשם באופן פרטי.",
 	"campaignevents-event-details-dates": "$1 עד $4",
 	"campaignevents-event-details-timezone": "<strong>אזור זמן:</strong> $1",
+	"campaignevents-event-details-participation-options-header": "אפשרויות השתתפות",
 	"campaignevents-event-details-in-person-event-label": "אירוע בחיים האמיתיים",
 	"campaignevents-event-details-online-label": "אירוע מקוון",
 	"campaignevents-event-details-tracking-tool-p&e-dashboard-synced": "שמות המשתמש של המשתתפים מעודכנים בלוח הבקרה",
@@ -339,6 +345,7 @@
 	"campaignevents-notification-registration-details-dates-header": "תאריך ושעה",
 	"campaignevents-notification-registration-details-dates": "$1 עד $4",
 	"campaignevents-notification-registration-details-dates-timezone": "<strong>אזור זמן:</strong> $1",
+	"campaignevents-notification-registration-details-participation-options-header": "אפשרויות השתתפות",
 	"campaignevents-notification-registration-details-participation-option-online-header": "אירוע מקוון",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "אירוע בחיים האמיתיים",
 	"campaignevents-notification-registration-details-organizers-header": "מארגני אירועים",
@@ -540,6 +547,13 @@
 	"campaignevents-eventtypegroup-community": "קהילה",
 	"campaignevents-edit-field-eventtypes-other-section-header": "אחר",
 	"campaignevents-edit-field-eventtypes-placeholder": "נא לבחור את סוגי האירוע...",
-	"campaignevents-edit-field-eventtypes-other-help": "בחירה באפשרות \"אחר\" תשבית ותבטל את הבחירה של כל סוגי האירועים האחרים.",
-	"campaignevents-edit-field-eventtypes-label": "סוגי אירוע"
+	"campaignevents-edit-field-eventtypes-other-help": "יש להוסיף עד שני סוגי אירועים. לא ניתן לבחור \"אחר\" בשילוב עם אפשרות אחרת.",
+	"campaignevents-edit-field-eventtypes-label": "סוגי אירוע",
+	"campaignevents-event-details-event-types-header": "סוגי אירועים",
+	"campaignevents-allevents-label-filter-event-types": "סוגי אירועים",
+	"campaignevents-allevents-placeholder-add-event-types": "הוספת סוגי אירועים...",
+	"campaignevents-eventpage-dialog-event-types-label": "סוגי אירועים",
+	"campaignevents-cancel-page-nonlocal": "נא '''[$1 לבטל את הרשמתך לאירוע באתר $2]''' – אתר הוויקי שבו האירוע נוצר.",
+	"campaignevents-email-error-notification-with-detail": "לא ניתן היה לשלוח את הדואר האלקטרוני, מהסיבה הבאה: $1",
+	"campaignevents-eventslist-types-label": "סוגי אירועים"
 }

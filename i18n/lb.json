@@ -287,5 +287,6 @@
 	"campaignevents-eventtypegroup-contributions": "Kontributiounen",
 	"campaignevents-eventtypegroup-community": "Communautéit",
 	"campaignevents-event-details-event-types-header": "Typpe vun Evenementer",
-	"campaignevents-eventpage-dialog-event-types-label": "Typpe vun Evenementer"
+	"campaignevents-eventpage-dialog-event-types-label": "Typpe vun Evenementer",
+	"campaignevents-email-error-notification-with-detail": "D'E-Mail konnt aus dem follgende Grond net geschéckt ginn: $1"
 }
