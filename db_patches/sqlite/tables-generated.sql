@@ -65,8 +65,11 @@ CREATE INDEX ceo_user_event ON /*_*/ce_organizers (ceo_user_id, ceo_event_id);
 
 CREATE TABLE /*_*/ce_address (
   cea_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  cea_full_address BLOB NOT NULL, cea_country BLOB DEFAULT NULL
+  cea_full_address BLOB NOT NULL, cea_country BLOB DEFAULT NULL,
+  cea_country_code BLOB DEFAULT NULL
 );
+
+CREATE INDEX cea_country_code ON /*_*/ce_address (cea_country_code);
 
 
 CREATE TABLE /*_*/ce_event_address (

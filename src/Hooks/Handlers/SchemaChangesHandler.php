@@ -80,5 +80,14 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-change_event_type.sql",
 			true
 		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addField',
+			'ce_address',
+			"cea_country_code",
+			"$dir/$dbType/patch-add-cea_country_code.sql",
+			true
+		] );
 	}
 }

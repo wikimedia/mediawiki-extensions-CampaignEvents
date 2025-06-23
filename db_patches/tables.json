@@ -394,9 +394,26 @@
 					"notnull": false,
 					"length": 255
 				}
+			},
+			{
+				"name": "cea_country_code",
+				"comment": "Country code (CLDR) for the event.",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"length": 2,
+					"default": null,
+					"fixed": true
+				}
 			}
 		],
 		"indexes": [
+			{
+				"name": "cea_country_code",
+				"columns": [ "cea_country_code" ],
+				"unique": false,
+				"comment": "Used when querying event country code."
+			}
 		],
 		"pk": [ "cea_id" ]
 	},

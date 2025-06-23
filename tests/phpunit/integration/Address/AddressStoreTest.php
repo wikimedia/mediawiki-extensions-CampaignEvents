@@ -27,6 +27,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		'cea_id' => self::STORED_ADDRESS_ID,
 		'cea_full_address' => self::STORED_FULL_ADDRESS,
 		'cea_country' => self::STORED_COUNTRY,
+		'cea_country_code' => null,
 	];
 	private const ADDRESS_ENTRY_COUNT = 2;
 
@@ -40,6 +41,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_id' => 2,
 				'cea_full_address' => "Address without country \n ",
 				'cea_country' => '',
+				'cea_country_code' => null,
 			],
 		];
 		if ( count( $addressRows ) !== self::ADDRESS_ENTRY_COUNT ) {
@@ -121,6 +123,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_id' => $nextAddressID,
 				'cea_full_address' => "$newTestAddress \n ",
 				'cea_country' => null,
+				'cea_country_code' => null,
 			]
 		];
 		yield 'No previous row, country, no address' => [
@@ -132,6 +135,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_id' => $nextAddressID,
 				'cea_full_address' => " \n $newTestCountry",
 				'cea_country' => $newTestCountry,
+				'cea_country_code' => null,
 			]
 		];
 		yield 'No previous row, address and country' => [
@@ -143,6 +147,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_id' => $nextAddressID,
 				'cea_full_address' => "$newTestAddress \n $newTestCountry",
 				'cea_country' => $newTestCountry,
+				'cea_country_code' => null,
 			]
 		];
 
@@ -162,6 +167,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_id' => $nextAddressID,
 				'cea_full_address' => "$newTestAddress \n ",
 				'cea_country' => null,
+				'cea_country_code' => null,
 			]
 		];
 		yield 'Replace previous row, country, no address' => [
@@ -173,6 +179,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_id' => $nextAddressID,
 				'cea_full_address' => " \n $newTestCountry",
 				'cea_country' => $newTestCountry,
+				'cea_country_code' => null,
 			]
 		];
 		yield 'Replace previous row, address and country' => [
@@ -184,6 +191,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_id' => $nextAddressID,
 				'cea_full_address' => "$newTestAddress \n $newTestCountry",
 				'cea_country' => $newTestCountry,
+				'cea_country_code' => null,
 			]
 		];
 
