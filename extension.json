@@ -130,14 +130,10 @@
 				"CampaignEventsWikiConfiguration"
 			]
 		},
-		"PageMoveAndDeleteHandler": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\PageMoveAndDeleteHandler",
+		"TitleMoveHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\TitleMoveHandler",
 			"services": [
 				"CampaignEventsPageEventLookup",
-				"CampaignEventsEventStore",
-				"CampaignEventsDeleteEventCommand",
-				"TitleFormatter",
-				"CampaignEventsPageFactory",
 				"CampaignEventsWikiConfiguration"
 			]
 		},
@@ -151,12 +147,23 @@
 	"Hooks": {
 		"LoadExtensionSchemaUpdates": "SchemaChanges",
 		"ArticleViewHeader": "ArticleViewHeader",
-		"PageMoveComplete": "PageMoveAndDeleteHandler",
-		"PageDeleteComplete": "PageMoveAndDeleteHandler",
-		"TitleMove": "PageMoveAndDeleteHandler",
+		"TitleMove": "TitleMoveHandler",
 		"BeforeCreateEchoEvent": "EchoHooksHandler",
 		"GetPreferences": "GetPreferencesHandler"
 	},
+	"DomainEventIngresses": [
+		{
+			"events": [ "PageDeleted", "PageMoved" ],
+			"class": "MediaWiki\\Extension\\CampaignEvents\\MediaWikiEventIngress\\PageEventIngress",
+			"services": [
+				"CampaignEventsPageFactory",
+				"CampaignEventsDeleteEventCommand",
+				"CampaignEventsEventStore",
+				"CampaignEventsPageEventLookup",
+				"TitleFormatter"
+			]
+		}
+	],
 	"JobClasses": {
 		"sendCampaignEmail": "MediaWiki\\Extension\\CampaignEvents\\Messaging\\EmailUsersJob",
 		"CampaignEventsFindPotentialInvitees": {
