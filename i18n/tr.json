@@ -7,7 +7,8 @@
 			"Khalvar",
 			"Rapsar",
 			"RuzDD",
-			"ToprakM"
+			"ToprakM",
+			"Leo"
 		]
 	},
 	"campaignevents-desc": "Kampanya düzenleyicileri ve katılımcıları için özellikler sağlar.",
@@ -119,6 +120,7 @@
 	"campaignevents-unregister-not-participant": "Bu etkinlik için kayıtlı değilsiniz.",
 	"campaignevents-unregister-need-central-account": "Etkinlik kaydınızı iptal etmek için merkezi bir kullanıcı hesabına ihtiyacınız var.",
 	"myevents": "Etkinlikleriniz",
+	"allevents": "Tüm etkinlikler",
 	"campaignevents-myevents-need-central-account": "Etkinliklerinizin listesini görebilmek için merkezi bir kullanıcı hesabına ihtiyacınız var.",
 	"campaignevents-myevents-filter-legend": "Etkinlikleri filtrele",
 	"campaignevents-myevents-label-search": "Ara",
@@ -364,5 +366,8 @@
 	"campaignevents-details-stats-header-number": "Sayı",
 	"campaignevents-details-stats-range-number": "$1 ile $2 arası",
 	"campaignevents-details-stats-range-percentage": "$1% ve $2% arası",
-	"campaignevents-details-stats-no-response": "Yanıt yok"
+	"campaignevents-details-stats-no-response": "Yanıt yok",
+	"generateinvitationlist": "Davetiye listesini oluştur",
+	"myinvitationlists": "Davet listeleriniz",
+	"invitationlist": "Davetiye listesi"
 }

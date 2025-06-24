@@ -10,7 +10,8 @@
 			"ZhaoFJx",
 			"沈澄心",
 			"Diskdance",
-			"Stang"
+			"Stang",
+			"人间百态"
 		]
 	},
 	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
@@ -155,7 +156,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "报名已截止",
 	"campaignevents-eventpage-btn-event-ended": "活动已结束",
 	"campaignevents-eventpage-dialog-title": "活动详情",
-	"campaignevents-eventpage-dialog-organizers": "筹办人员：$1",
+	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|筹办人员}}：$1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "查看所有筹办人员",
 	"campaignevents-eventpage-dialog-participants": "$1位{{PLURAL:$1|参与者}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1位{{PLURAL:$1|参与者}}未公开报名",

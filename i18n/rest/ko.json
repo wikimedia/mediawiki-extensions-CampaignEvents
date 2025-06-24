@@ -11,6 +11,7 @@
 	"campaignevents-rest-delete-already-deleted": "이 이벤트 등록은 이미 삭제되었습니다.",
 	"campaignevents-rest-user-not-found": "$1 사용자는 존재하지 않습니다.",
 	"campaignevents-rest-get-registration-deleted": "이 이벤트 등록이 삭제되었습니다.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' 변수는 사용자 ID 배열 또는 null(모든 사용자를 제거)이어야 합니다",
 	"campaignevents-rest-get-registration-info-notparticipant": "이 이벤트에 참가하고 있지 않습니다.",
 	"campaignevents-rest-register-invalid-answer": "질문 $1에 대한 유효하지 않은 답변"
 }
