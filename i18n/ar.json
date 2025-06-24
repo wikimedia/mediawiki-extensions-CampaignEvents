@@ -567,5 +567,7 @@
 	"campaignevents-allevents-label-filter-event-types": "أنواع الأحداث",
 	"campaignevents-allevents-placeholder-add-event-types": "إضافة أنواع الأحداث...",
 	"campaignevents-eventpage-dialog-event-types-label": "أنواع الأحداث",
+	"campaignevents-cancel-page-nonlocal": "من فضلك '''[$1 قم بإلغاء تسجيل الحدث الخاص بك على $2]'''، الويكي حيث تم إنشاء الحدث.",
+	"campaignevents-email-error-notification-with-detail": "لم يتم إرسال البريد الإلكتروني، للسبب التالي: $1",
 	"campaignevents-eventslist-types-label": "أنواع الأحداث"
 }
