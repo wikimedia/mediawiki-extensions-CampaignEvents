@@ -25,10 +25,6 @@ use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
 
-/**
- * @note Some pieces of code involving addresses may seem unnecessarily complex, but this is necessary because
- * we will add support for multiple addresses (T321811).
- */
 class EventStore implements IEventStore, IEventLookup {
 	private const EVENT_STATUS_MAP = [
 		EventRegistration::STATUS_OPEN => 1,
@@ -97,7 +93,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$this->cache[$eventID] = $this->newEventFromDBRow(
 			$eventRow,
-			$this->getEventAddressRow( $dbr, $eventID ),
+			$this->addressStore->getEventAddressRow( $dbr, $eventID ),
 			$this->getEventTrackingToolRow( $dbr, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
 			$this->eventTopicsStore->getEventTopics( $eventID ),
@@ -186,7 +182,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$eventID = (int)$eventRow->event_id;
 		return $this->newEventFromDBRow(
 			$eventRow,
-			$this->getEventAddressRow( $db, $eventID ),
+			$this->addressStore->getEventAddressRow( $db, $eventID ),
 			$this->getEventTrackingToolRow( $db, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
 			$this->eventTopicsStore->getEventTopics( $eventID ),
@@ -201,27 +197,6 @@ class EventStore implements IEventStore, IEventLookup {
 			$page->getDBkey(),
 			$page->getWikiId()
 		);
-	}
-
-	private function getEventAddressRow( IDatabase $db, int $eventID ): ?stdClass {
-		$addressRows = $db->newSelectQueryBuilder()
-			->select( '*' )
-			->from( 'ce_address' )
-			->join( 'ce_event_address', null, [ 'ceea_address=cea_id', 'ceea_event' => $eventID ] )
-			->caller( __METHOD__ )
-			->fetchResultSet();
-
-		// TODO Add support for multiple addresses per event
-		if ( count( $addressRows ) > 1 ) {
-			throw new RuntimeException( 'Events should have only one address.' );
-		}
-
-		$addressRow = null;
-		foreach ( $addressRows as $row ) {
-			$addressRow = $row;
-			break;
-		}
-		return $addressRow;
 	}
 
 	private function getEventTrackingToolRow( IDatabase $db, int $eventID ): ?stdClass {
@@ -308,7 +283,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$eventIDs[] = (int)$eventRow->event_id;
 		}
 
-		$addressRowsByEvent = $this->getAddressRowsForEvents( $db, $eventIDs );
+		$addressRowsByEvent = $this->addressStore->getAddressRowsForEvents( $db, $eventIDs );
 		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs );
 		$wikisByEvent = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
 		$topicsByEvent = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
@@ -327,31 +302,6 @@ class EventStore implements IEventStore, IEventLookup {
 			);
 		}
 		return $events;
-	}
-
-	/**
-	 * @param IDatabase $db
-	 * @param int[] $eventIDs
-	 * @return array<int,stdClass> Maps event IDs to the corresponding address row
-	 */
-	private function getAddressRowsForEvents( IDatabase $db, array $eventIDs ): array {
-		$addressRows = $db->newSelectQueryBuilder()
-			->select( '*' )
-			->from( 'ce_address' )
-			->join( 'ce_event_address', null, [ 'ceea_address=cea_id', 'ceea_event' => $eventIDs ] )
-			->caller( __METHOD__ )
-			->fetchResultSet();
-
-		$addressRowsByEvent = [];
-		foreach ( $addressRows as $addressRow ) {
-			$curEventID = (int)$addressRow->ceea_event;
-			if ( isset( $addressRowsByEvent[$curEventID] ) ) {
-				// TODO Add support for multiple addresses per event
-				throw new RuntimeException( "Event $curEventID should have only one address." );
-			}
-			$addressRowsByEvent[$curEventID] = $addressRow;
-		}
-		return $addressRowsByEvent;
 	}
 
 	/**
@@ -508,7 +458,7 @@ class EventStore implements IEventStore, IEventLookup {
 				->execute();
 		}
 
-		$this->updateStoredAddresses( $dbw, $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
+		$this->addressStore->updateAddresses( $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
 		$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
 		$this->eventQuestionsStore->replaceEventQuestions( $eventID, $event->getParticipantQuestions() );
 		$this->eventWikisStore->addOrUpdateEventWikis( $eventID, $event->getWikis() );
@@ -524,41 +474,6 @@ class EventStore implements IEventStore, IEventLookup {
 		unset( $this->cache[$eventID] );
 
 		return $eventID;
-	}
-
-	private function updateStoredAddresses(
-		IDatabase $dbw,
-		?string $meetingAddress,
-		?string $meetingCountry,
-		int $eventID
-	): void {
-		$where = [ 'ceea_event' => $eventID ];
-		if ( $meetingAddress || $meetingCountry ) {
-			$meetingAddress .= " \n " . $meetingCountry;
-			$where[] = $dbw->expr( 'cea_full_address', '!=', $meetingAddress );
-		}
-
-		$dbw->deleteJoin(
-			'ce_event_address',
-			'ce_address',
-			'ceea_address',
-			'cea_id',
-			$where,
-			__METHOD__
-		);
-
-		if ( $meetingAddress ) {
-			$addressID = $this->addressStore->acquireAddressID( $meetingAddress, $meetingCountry );
-			$dbw->newInsertQueryBuilder()
-				->insertInto( 'ce_event_address' )
-				->ignore()
-				->row( [
-					'ceea_event' => $eventID,
-					'ceea_address' => $addressID
-				] )
-				->caller( __METHOD__ )
-				->execute();
-		}
 	}
 
 	/**
