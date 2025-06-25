@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
 use DateTimeZone;
 use Generator;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
@@ -44,8 +45,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			],
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
-			'country' => 'Some country',
-			'address' => 'Some address',
+			'address' => new Address( 'Some address', 'Some country' ),
 			'chat' => 'https://chat.example.org',
 			'is_test_event' => false,
 			'questions' => [],
@@ -75,8 +75,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'participation_options'
 		);
 		$this->assertSame( $data['meeting_url'], $registration->getMeetingURL(), 'meeting_url' );
-		$this->assertSame( $data['country'], $registration->getMeetingCountry(), 'country' );
-		$this->assertSame( $data['address'], $registration->getMeetingAddress(), 'address' );
+		$this->assertSame( $data['address'], $registration->getAddress(), 'address' );
 		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
 		$this->assertSame( $data['is_test_event'], $registration->getIsTestEvent(), 'is_test_event' );
 		$this->assertSame( $data['questions'], $registration->getParticipantQuestions(), 'questions' );

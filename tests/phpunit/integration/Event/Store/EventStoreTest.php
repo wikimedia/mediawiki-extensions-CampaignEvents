@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Event\Store;
 use DateTimeZone;
 use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -51,8 +52,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			'Country',
-			'Address',
+			new Address( 'Address', 'Country' ),
 			'Chat URL',
 			false,
 			[],
@@ -83,8 +83,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'participation options'
 		);
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
-		$this->assertSame( $expected->getMeetingCountry(), $actual->getMeetingCountry(), 'country' );
-		$this->assertSame( $expected->getMeetingAddress(), $actual->getMeetingAddress(), 'address' );
+		$this->assertEquals( $expected->getAddress(), $actual->getAddress(), 'address' );
 		$this->assertSame( $expected->getChatURL(), $actual->getChatURL(), 'chat' );
 		$this->assertSame( $expected->getIsTestEvent(), $actual->getIsTestEvent(), 'is test' );
 		$this->assertSame( $expected->getParticipantQuestions(), $actual->getParticipantQuestions(), 'questions' );
@@ -139,7 +138,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Event with address and country' => [
 			new EventRegistration( ...array_values( $baseCtrArgs ) )
 		];
-		$eventWithOnlyAddress = array_replace( $baseCtrArgs, [ 'Country' => null ] );
+		$eventWithOnlyAddress = array_replace( $baseCtrArgs, [ 'Address' => new Address( 'Some address', null ) ] );
 		yield 'Event with only address' => [
 			new EventRegistration( ...array_values( $eventWithOnlyAddress ) ),
 		];
@@ -291,8 +290,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			'Country' => 'Country',
-			'Address' => 'Address',
+			'address' => new Address( 'Address', 'Country' ),
 			'Chat URL',
 			false,
 			[],
@@ -337,7 +335,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	public function testCacheCompatibility() {
 		$event = $this->getTestEvent();
 		$this->assertSame(
-			'3c947c00312fa53e14020bdc54896ab52a7e6180',
+			'1e1ff7a54cbaf8bfe83a479ca0cba94bccbb9e6d',
 			sha1( serialize( $event ) ),
 			'Event serialization changed! This will break values cached in getEventByPage. Please bump the ' .
 				'cache version in getEventByPage, then update the expected value here. (You can disregard this ' .

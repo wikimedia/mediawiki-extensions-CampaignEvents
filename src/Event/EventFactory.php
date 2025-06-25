@@ -8,6 +8,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
@@ -201,6 +202,11 @@ class EventFactory {
 		$res->merge(
 			$this->validateMeetingInfo( $participationOptions, $meetingURL, $meetingCountry, $meetingAddress )
 		);
+		if ( $meetingCountry !== null || $meetingAddress !== null ) {
+			$address = new Address( $meetingAddress, $meetingCountry );
+		} else {
+			$address = null;
+		}
 
 		if ( $chatURL !== null ) {
 			$chatURL = trim( $chatURL );
@@ -252,8 +258,7 @@ class EventFactory {
 			$trackingTools,
 			$participationOptions,
 			$meetingURL,
-			$meetingCountry,
-			$meetingAddress,
+			$address,
 			$chatURL,
 			$isTestEvent,
 			$questionIDs,

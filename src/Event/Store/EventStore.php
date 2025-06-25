@@ -135,7 +135,7 @@ class EventStore implements IEventStore, IEventLookup {
 					return null;
 				}
 			},
-			[ 'version' => 1 ]
+			[ 'version' => 2 ]
 		);
 
 		if ( $cachedEvent === null ) {
@@ -385,8 +385,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$trackingTools,
 			$participationOptions,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
-			$address ? $address->getCountry() : null,
-			$address ? $address->getAddressWithoutCountry() : null,
+			$address,
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			(bool)$row->event_is_test_event,
 			$questionIDs,

@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 use DateTime;
 use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Utils\MWTimestamp;
@@ -58,8 +59,7 @@ class EventRegistration {
 	/** @var int One of the PARTICIPATION_OPTION_* constants */
 	private int $participationOptions;
 	private ?string $meetingURL;
-	private ?string $meetingCountry;
-	private ?string $meetingAddress;
+	private ?Address $meetingAddress;
 	private ?string $chatURL;
 	private bool $isTestEvent;
 	/** @var int[] Array of database IDs */
@@ -83,8 +83,7 @@ class EventRegistration {
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
-	 * @param string|null $meetingCountry
-	 * @param string|null $meetingAddress
+	 * @param Address|null $meetingAddress
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param list<int> $participantQuestions
@@ -106,8 +105,7 @@ class EventRegistration {
 		array $trackingTools,
 		int $participationOptions,
 		?string $meetingURL,
-		?string $meetingCountry,
-		?string $meetingAddress,
+		?Address $meetingAddress,
 		?string $chatURL,
 		bool $isTestEvent,
 		array $participantQuestions,
@@ -148,7 +146,6 @@ class EventRegistration {
 		$this->trackingTools = $trackingTools;
 		$this->participationOptions = $participationOptions;
 		$this->meetingURL = $meetingURL;
-		$this->meetingCountry = $meetingCountry;
 		$this->meetingAddress = $meetingAddress;
 		$this->chatURL = $chatURL;
 		$this->isTestEvent = $isTestEvent;
@@ -249,12 +246,16 @@ class EventRegistration {
 		return $this->meetingURL;
 	}
 
+	public function getAddress(): ?Address {
+		return $this->meetingAddress;
+	}
+
 	public function getMeetingCountry(): ?string {
-		return $this->meetingCountry;
+		return $this->meetingAddress ? $this->meetingAddress->getCountry() : null;
 	}
 
 	public function getMeetingAddress(): ?string {
-		return $this->meetingAddress;
+		return $this->meetingAddress ? $this->meetingAddress->getAddressWithoutCountry() : null;
 	}
 
 	public function getChatURL(): ?string {
