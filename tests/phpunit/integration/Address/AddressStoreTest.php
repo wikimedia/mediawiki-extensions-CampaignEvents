@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Address;
 
 use Generator;
 use LogicException;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWikiIntegrationTestCase;
 use RuntimeException;
@@ -212,23 +213,21 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'New address' => [ "This is a new address! \n Country", 'Country', 3 ];
 	}
 
-	/** @dataProvider provideGetEventAddressRow */
-	public function testGetEventAddressRow( int $eventID, ?stdClass $expected ) {
+	/** @dataProvider provideGetEventAddress */
+	public function testGetEventAddress( int $eventID, ?Address $expected ) {
 		$this->assertEquals(
 			$expected,
-			CampaignEventsServices::getAddressStore()->getEventAddressRow( $this->getDb(), $eventID )
+			CampaignEventsServices::getAddressStore()->getEventAddress( $this->getDb(), $eventID )
 		);
 	}
 
-	public static function provideGetEventAddressRow() {
+	public static function provideGetEventAddress() {
 		yield 'Has address' => [
 			self::EVENT_WITH_ADDRESS,
-			(object)[
-				...self::STORED_ADDRESS_ROW,
-				'ceea_id' => 1,
-				'ceea_event' => self::EVENT_WITH_ADDRESS,
-				'ceea_address' => self::STORED_ADDRESS_ID,
-			],
+			new Address(
+				self::STORED_ADDRESS,
+				self::STORED_COUNTRY,
+			),
 		];
 		yield 'Does not have an address' => [ 99999999, null ];
 	}
@@ -271,36 +270,34 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			->execute();
 	}
 
-	public function testGetEventAddressRow__eventWithMoreThanOneAddress() {
+	public function testGetEventAddress__eventWithMoreThanOneAddress() {
 		$eventID = 6001;
 		$this->insertMultipleAddressesForEvent( $eventID );
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Events should have only one address' );
-		CampaignEventsServices::getAddressStore()->getEventAddressRow( $this->getDb(), $eventID );
+		CampaignEventsServices::getAddressStore()->getEventAddress( $this->getDb(), $eventID );
 	}
 
-	public function testGetAddressRowsForEvents() {
+	public function testGetAddressesForEvents() {
 		$expected = [
-			self::EVENT_WITH_ADDRESS => (object)[
-				...self::STORED_ADDRESS_ROW,
-				'ceea_id' => 1,
-				'ceea_event' => self::EVENT_WITH_ADDRESS,
-				'ceea_address' => self::STORED_ADDRESS_ID,
-			],
+			self::EVENT_WITH_ADDRESS => new Address(
+				self::STORED_ADDRESS,
+				self::STORED_COUNTRY
+			),
 		];
 		$actual = CampaignEventsServices::getAddressStore()
-			->getAddressRowsForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, 99999999 ] );
+			->getAddressesForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, 99999999 ] );
 		$this->assertEquals( $expected, $actual );
 	}
 
-	public function testGetAddressRowsForEvents__eventWithMoreThanOneAddress() {
+	public function testGetAddressesForEvents__eventWithMoreThanOneAddress() {
 		$eventID = 6001;
 		$this->insertMultipleAddressesForEvent( $eventID );
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( "Event $eventID should have only one address" );
 		CampaignEventsServices::getAddressStore()
-			->getAddressRowsForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, $eventID ] );
+			->getAddressesForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, $eventID ] );
 	}
 }
