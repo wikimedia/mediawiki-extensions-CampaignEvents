@@ -503,11 +503,12 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		// For country and address, note that we're using length limit in bytes for `maxlength`, which uses UTF-16
 		// codepoints. Could be fixed up via jquery.lengthLimit, but it isn't worthwhile given how high
 		// these limits are.
+		$address = $this->event ? $this->event->getAddress() : null;
 		$formFields['EventMeetingCountry'] = [
 			'type' => 'text',
 			'label-message' => 'campaignevents-edit-field-country',
 			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
-			'default' => $this->event ? $this->event->getMeetingCountry() : '',
+			'default' => $address ? $address->getCountry() : '',
 			'maxlength' => EventFactory::COUNTRY_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
 		];
@@ -516,7 +517,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'rows' => 5,
 			'label-message' => 'campaignevents-edit-field-address',
 			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
-			'default' => $this->event ? $this->event->getMeetingAddress() : '',
+			'default' => $address ? $address->getAddressWithoutCountry() : '',
 			'maxlength' => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
 		];

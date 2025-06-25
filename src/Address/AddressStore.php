@@ -25,16 +25,19 @@ class AddressStore {
 	}
 
 	public function updateAddresses(
-		?string $meetingAddress,
-		?string $meetingCountry,
+		?Address $address,
 		int $eventID
 	): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$where = [ 'ceea_event' => $eventID ];
-		if ( $meetingAddress || $meetingCountry ) {
-			$meetingAddress .= " \n " . $meetingCountry;
-			$where[] = $dbw->expr( 'cea_full_address', '!=', $meetingAddress );
+		$addressWithoutCountry = $address ? $address->getAddressWithoutCountry() : null;
+		$country = $address ? $address->getCountry() : null;
+		if ( $addressWithoutCountry || $country ) {
+			$fullAddress = $addressWithoutCountry . " \n " . $country;
+			$where[] = $dbw->expr( 'cea_full_address', '!=', $fullAddress );
+		} else {
+			$fullAddress = null;
 		}
 
 		$dbw->deleteJoin(
@@ -46,8 +49,8 @@ class AddressStore {
 			__METHOD__
 		);
 
-		if ( $meetingAddress ) {
-			$addressID = $this->acquireAddressID( $meetingAddress, $meetingCountry );
+		if ( $fullAddress ) {
+			$addressID = $this->acquireAddressID( $fullAddress, $country );
 			$dbw->newInsertQueryBuilder()
 				->insertInto( 'ce_event_address' )
 				->ignore()

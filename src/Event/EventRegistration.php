@@ -250,14 +250,6 @@ class EventRegistration {
 		return $this->meetingAddress;
 	}
 
-	public function getMeetingCountry(): ?string {
-		return $this->meetingAddress ? $this->meetingAddress->getCountry() : null;
-	}
-
-	public function getMeetingAddress(): ?string {
-		return $this->meetingAddress ? $this->meetingAddress->getAddressWithoutCountry() : null;
-	}
-
 	public function getChatURL(): ?string {
 		return $this->chatURL;
 	}

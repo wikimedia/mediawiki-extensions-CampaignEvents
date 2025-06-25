@@ -460,15 +460,14 @@ class EventPageDecorator {
 			)->escaped();
 		} else {
 			// In-person event
-			$address = $registration->getMeetingAddress();
-			$country = $registration->getMeetingCountry();
-			if ( $address || $country ) {
+			$address = $registration->getAddress();
+			if ( $address ) {
 				// XXX: Newlines aren't actually preserved in the output.
-				$fullAddress = $address . "\n" . $country;
+				$fullAddress = $address->getAddressWithoutCountry() . "\n" . $address->getCountry();
 				$participationOptionsContent = Html::element(
 					'div',
 					[
-						'dir' => Utils::guessStringDirection( $address ?? '' ),
+						'dir' => Utils::guessStringDirection( $address->getAddressWithoutCountry() ?? '' ),
 						'class' => [ 'ext-campaignevents-eventpage-header-address' ]
 					],
 					$this->language->truncateForVisual( $fullAddress, self::ADDRESS_MAX_LENGTH )
@@ -761,16 +760,15 @@ class EventPageDecorator {
 			$onlineEventElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
 		}
 		if ( $registration->getParticipationOptions() & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
-			$rawAddress = $registration->getMeetingAddress();
-			$rawCountry = $registration->getMeetingCountry();
+			$meetingAddress = $registration->getAddress();
 			$addressElement = new Tag( 'p' );
 			$addressElement->addClasses( [ 'ext-campaignevents-eventpage-details-address' ] );
-			if ( $rawAddress || $rawCountry ) {
-				$address = $rawAddress . "\n" . $rawCountry;
+			if ( $meetingAddress ) {
+				$fullAddress = $meetingAddress->getAddressWithoutCountry() . "\n" . $meetingAddress->getCountry();
 				$addressElement->setAttributes( [
-					'dir' => Utils::guessStringDirection( $rawAddress ?? '' )
+					'dir' => Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' )
 				] );
-				$addressElement->appendContent( $address );
+				$addressElement->appendContent( $fullAddress );
 			} else {
 				$addressElement->appendContent( $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-venue-not-available' )

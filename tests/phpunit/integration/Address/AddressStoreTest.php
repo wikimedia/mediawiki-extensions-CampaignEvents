@@ -73,7 +73,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		?stdClass $expectedAddressRow
 	) {
 		$store = CampaignEventsServices::getAddressStore();
-		$store->updateAddresses( $meetingAddress, $meetingCountry, $eventID );
+		$store->updateAddresses( new Address( $meetingAddress, $meetingCountry ), $eventID );
 
 		$addressRowIDs = $this->getDb()->selectFieldValues(
 			'ce_event_address',

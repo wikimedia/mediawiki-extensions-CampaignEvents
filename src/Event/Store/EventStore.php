@@ -448,7 +448,7 @@ class EventStore implements IEventStore, IEventLookup {
 				->execute();
 		}
 
-		$this->addressStore->updateAddresses( $event->getMeetingAddress(), $event->getMeetingCountry(), $eventID );
+		$this->addressStore->updateAddresses( $event->getAddress(), $eventID );
 		$this->trackingToolUpdater->replaceEventTools( $eventID, $event->getTrackingTools(), $dbw );
 		$this->eventQuestionsStore->replaceEventQuestions( $eventID, $event->getParticipantQuestions() );
 		$this->eventWikisStore->addOrUpdateEventWikis( $eventID, $event->getWikis() );
