@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"আজিজ"
+			"আজিজ",
+			"Aishik Rehman"
 		]
 	},
+	"campaignevents-rest-event-not-found": "এই আইডি দিয়ে কোনো ইভেন্ট নেই।",
+	"campaignevents-rest-enable-registration-permission-denied": "আপনার ইভেন্ট নিবন্ধন চালু করার অনুমতি নেই।",
 	"campaignevents-rest-user-not-found": "এই কেন্দ্রীয় আইডির সহ কোনও ব্যবহারকারী নেই।"
 }
