@@ -559,7 +559,7 @@ class EventDetailsModule {
 				$address = $rawAddress . "\n" . $rawCountry;
 				$items[] = ( new Tag( 'div' ) )
 					->appendContent( $address )
-					->setAttributes( [ 'dir' => Utils::guessStringDirection( $address ) ] );
+					->setAttributes( [ 'dir' => Utils::guessStringDirection( $rawAddress ?? '' ) ] );
 			} else {
 				$items[] = ( new Tag( 'div' ) )
 					->appendContent(
