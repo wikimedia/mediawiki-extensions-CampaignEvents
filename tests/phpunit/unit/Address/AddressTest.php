@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Address;
 
+use Generator;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWikiUnitTestCase;
 
@@ -18,5 +19,19 @@ class AddressTest extends MediaWikiUnitTestCase {
 
 		$this->assertSame( $addressWithoutCountry, $obj->getAddressWithoutCountry(), 'Address without country' );
 		$this->assertSame( $country, $obj->getCountry(), 'Country' );
+	}
+
+	/** @dataProvider provideToString */
+	public function testToString( Address $address, string $expected ) {
+		$this->assertSame( $expected, $address->toString() );
+	}
+
+	public static function provideToString(): Generator {
+		$address = 'Some address';
+		$country = 'Country';
+
+		yield 'Address but no country' => [ new Address( $address, null ), "$address\n" ];
+		yield 'Country but no address' => [ new Address( null, $country ), "\n$country" ];
+		yield 'Address and country' => [ new Address( $address, $country ), "$address\n$country" ];
 	}
 }

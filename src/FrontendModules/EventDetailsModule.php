@@ -553,12 +553,9 @@ class EventDetailsModule {
 
 			$meetingAddress = $this->registration->getAddress();
 			if ( $meetingAddress ) {
-				// NOTE: This is not pretty if exactly one of address and country is specified, but
-				// that's going to be fixed when we switch to using an actual geocoding service (T309325)
-				$fullAddress = $meetingAddress->getAddressWithoutCountry() . "\n" . $meetingAddress->getCountry();
 				$stringDir = Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' );
 				$items[] = ( new Tag( 'div' ) )
-					->appendContent( $fullAddress )
+					->appendContent( $meetingAddress->toString() )
 					->setAttributes( [ 'dir' => $stringDir ] );
 			} else {
 				$items[] = ( new Tag( 'div' ) )

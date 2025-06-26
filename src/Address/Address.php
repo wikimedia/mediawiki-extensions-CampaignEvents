@@ -26,4 +26,10 @@ class Address {
 	public function getCountry(): ?string {
 		return $this->country;
 	}
+
+	public function toString(): string {
+		// This is quite ugly, but we can't do much better without geocoding and letting the user enter
+		// the full address (T309325).
+		return $this->addressWithoutCountry . "\n" . $this->country;
+	}
 }

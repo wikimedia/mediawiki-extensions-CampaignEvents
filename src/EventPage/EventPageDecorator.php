@@ -462,15 +462,14 @@ class EventPageDecorator {
 			// In-person event
 			$address = $registration->getAddress();
 			if ( $address ) {
-				// XXX: Newlines aren't actually preserved in the output.
-				$fullAddress = $address->getAddressWithoutCountry() . "\n" . $address->getCountry();
 				$participationOptionsContent = Html::element(
 					'div',
 					[
 						'dir' => Utils::guessStringDirection( $address->getAddressWithoutCountry() ?? '' ),
 						'class' => [ 'ext-campaignevents-eventpage-header-address' ]
 					],
-					$this->language->truncateForVisual( $fullAddress, self::ADDRESS_MAX_LENGTH )
+					// XXX: Newlines aren't actually preserved in the output.
+					$this->language->truncateForVisual( $address->toString(), self::ADDRESS_MAX_LENGTH )
 				);
 			} else {
 				$participationOptionsContent = $this->out->msg(
@@ -764,11 +763,10 @@ class EventPageDecorator {
 			$addressElement = new Tag( 'p' );
 			$addressElement->addClasses( [ 'ext-campaignevents-eventpage-details-address' ] );
 			if ( $meetingAddress ) {
-				$fullAddress = $meetingAddress->getAddressWithoutCountry() . "\n" . $meetingAddress->getCountry();
 				$addressElement->setAttributes( [
 					'dir' => Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' )
 				] );
-				$addressElement->appendContent( $fullAddress );
+				$addressElement->appendContent( $meetingAddress->toString() );
 			} else {
 				$addressElement->appendContent( $this->msgFormatter->format(
 					MessageValue::new( 'campaignevents-eventpage-dialog-venue-not-available' )

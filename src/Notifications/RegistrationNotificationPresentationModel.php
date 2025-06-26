@@ -205,7 +205,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 				$ret .= Html::element(
 					'p',
 					[ 'style' => 'white-space: pre-wrap' ],
-					$address->getAddressWithoutCountry() . "\n" . $address->getCountry()
+					$address->toString()
 				);
 			}
 		}
