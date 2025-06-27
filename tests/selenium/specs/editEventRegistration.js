@@ -9,9 +9,12 @@ let id;
 
 describe( 'Edit Event Registration', () => {
 
+	before( async () => {
+		await EventUtils.loginAsOrganizer();
+	} );
+
 	beforeEach( async () => {
 		const eventPage = Util.getTestString( 'Event:Test EditEventRegistration' );
-		await EventUtils.loginAsOrganizer();
 		id = await EventUtils.createEvent( eventPage );
 	} );
 
@@ -28,9 +31,9 @@ describe( 'Edit Event Registration', () => {
 
 		const registrationUpdatedNotification = await EventPage.registrationUpdatedNotification;
 		await expect( registrationUpdatedNotification )
-			.toHaveTextContaining( 'The registration information has been updated.' );
+			.toHaveText( expect.stringContaining( 'The registration information has been updated.' ) );
 		await expect( registrationUpdatedNotification )
-			.toHaveTextContaining( 'This event is included in the Collaboration list.' );
+			.toHaveText( expect.stringContaining( 'This event is included in the Collaboration list.' ) );
 	} );
 
 	it( 'can allow organizer to change the event to be in person', async () => {
@@ -60,7 +63,8 @@ describe( 'Edit Event Registration', () => {
 		} );
 
 		await EventPage.openMoreDetailsDialog();
-		await expect( await EventPage.eventOrganizers ).toHaveTextContaining( otherOrganizerName );
+		await expect( await EventPage.eventOrganizers )
+			.toHaveText( await expect.stringContaining( otherOrganizerName ) );
 	} );
 
 } );
