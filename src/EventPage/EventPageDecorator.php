@@ -774,17 +774,17 @@ class EventPageDecorator {
 						->numParams( $organizersCount )
 				) );
 			}
+
+			$inPersonLabel = ( new Tag( 'h4' ) )
+				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-participation-option-header' ] )
+				->appendContent( $this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
+				) );
+			$participationOptionsElements[] = $inPersonLabel;
+			$participationOptionsElements[] = $addressElement;
+
 			if ( $onlineEventElements ) {
-				$inPersonLabel = ( new Tag( 'h4' ) )
-					->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-participation-option-header' ] )
-					->appendContent( $this->msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
-					) );
-				$participationOptionsElements[] = $inPersonLabel;
-				$participationOptionsElements[] = $addressElement;
 				$participationOptionsElements = array_merge( $participationOptionsElements, $onlineEventElements );
-			} else {
-				$participationOptionsElements[] = $addressElement;
 			}
 		} else {
 			$participationOptionsElements = array_merge( $participationOptionsElements, $onlineEventElements );
