@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -103,8 +104,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			],
 			$participationOptions,
 			$eventData['meeting_url'],
-			$eventData['meeting_country'],
-			$eventData['meeting_address'],
+			new Address( $eventData['meeting_address'], $eventData['meeting_country'] ),
 			$eventData['chat_url'],
 			$eventData['is_test_event'],
 			$eventData['questions'],
