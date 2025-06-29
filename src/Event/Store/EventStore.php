@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 use DateTimeZone;
 use InvalidArgumentException;
 use LogicException;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -93,7 +94,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$this->cache[$eventID] = $this->newEventFromDBRow(
 			$eventRow,
-			$this->addressStore->getEventAddressRow( $dbr, $eventID ),
+			$this->addressStore->getEventAddress( $dbr, $eventID ),
 			$this->getEventTrackingToolRow( $dbr, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
 			$this->eventTopicsStore->getEventTopics( $eventID ),
@@ -182,7 +183,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$eventID = (int)$eventRow->event_id;
 		return $this->newEventFromDBRow(
 			$eventRow,
-			$this->addressStore->getEventAddressRow( $db, $eventID ),
+			$this->addressStore->getEventAddress( $db, $eventID ),
 			$this->getEventTrackingToolRow( $db, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
 			$this->eventTopicsStore->getEventTopics( $eventID ),
@@ -283,7 +284,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$eventIDs[] = (int)$eventRow->event_id;
 		}
 
-		$addressRowsByEvent = $this->addressStore->getAddressRowsForEvents( $db, $eventIDs );
+		$addressRowsByEvent = $this->addressStore->getAddressesForEvents( $db, $eventIDs );
 		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs );
 		$wikisByEvent = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
 		$topicsByEvent = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
@@ -334,7 +335,7 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * @param stdClass $row
-	 * @param stdClass|null $addressRow
+	 * @param Address|null $address
 	 * @param stdClass|null $trackingToolRow
 	 * @param string[]|true $wikis List of wiki IDs or {@see EventRegistration::ALL_WIKIS}
 	 * @param string[] $topics
@@ -343,7 +344,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 */
 	private function newEventFromDBRow(
 		stdClass $row,
-		?stdClass $addressRow,
+		?Address $address,
 		?stdClass $trackingToolRow,
 		$wikis,
 		array $topics,
@@ -357,16 +358,6 @@ class EventStore implements IEventStore, IEventLookup {
 		);
 		$types = EventTypesRegistry::getEventTypesFromDBVal( $row->event_types );
 		$participationOptions = self::getParticipationOptionsFromDBVal( $row->event_meeting_type );
-
-		$address = null;
-		$country = null;
-		if ( $addressRow ) {
-			// TODO this is ugly and should be removed as soon as we remove the country on the front end
-			$address = explode( " \n ", $addressRow->cea_full_address );
-			array_pop( $address );
-			$address = implode( " \n ", $address );
-			$country = $addressRow->cea_country;
-		}
 
 		if ( $trackingToolRow ) {
 			$trackingTools = [
@@ -394,8 +385,8 @@ class EventStore implements IEventStore, IEventLookup {
 			$trackingTools,
 			$participationOptions,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
-			$country,
-			$address,
+			$address ? $address->getCountry() : null,
+			$address ? $address->getAddressWithoutCountry() : null,
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			(bool)$row->event_is_test_event,
 			$questionIDs,

@@ -90,7 +90,7 @@ class AddressStore {
 		return $addressID;
 	}
 
-	public function getEventAddressRow( IDatabase $db, int $eventID ): ?stdClass {
+	public function getEventAddress( IDatabase $db, int $eventID ): ?Address {
 		$addressRows = $db->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_address' )
@@ -103,20 +103,20 @@ class AddressStore {
 			throw new RuntimeException( 'Events should have only one address.' );
 		}
 
-		$addressRow = null;
+		$address = null;
 		foreach ( $addressRows as $row ) {
-			$addressRow = $row;
+			$address = $this->addressFromRow( $row );
 			break;
 		}
-		return $addressRow;
+		return $address;
 	}
 
 	/**
 	 * @param IDatabase $db
 	 * @param int[] $eventIDs
-	 * @return array<int,stdClass> Maps event IDs to the corresponding address row
+	 * @return array<int,Address> Maps event IDs to the corresponding address
 	 */
-	public function getAddressRowsForEvents( IDatabase $db, array $eventIDs ): array {
+	public function getAddressesForEvents( IDatabase $db, array $eventIDs ): array {
 		$addressRows = $db->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_address' )
@@ -131,8 +131,20 @@ class AddressStore {
 				// TODO Add support for multiple addresses per event
 				throw new RuntimeException( "Event $curEventID should have only one address." );
 			}
-			$addressRowsByEvent[$curEventID] = $addressRow;
+			$addressRowsByEvent[$curEventID] = $this->addressFromRow( $addressRow );
 		}
 		return $addressRowsByEvent;
+	}
+
+	private function addressFromRow( stdClass $row ): Address {
+		// Remove the country from the address, making sure to preserve other newlines in the address.
+		$addressParts = explode( " \n ", $row->cea_full_address );
+		array_pop( $addressParts );
+		$addressWithoutCountry = implode( " \n ", $addressParts );
+
+		return new Address(
+			$addressWithoutCountry,
+			$row->cea_country,
+		);
 	}
 }
