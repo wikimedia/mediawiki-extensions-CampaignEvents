@@ -461,14 +461,17 @@ class EventPageDecorator {
 		} else {
 			// In-person event
 			$address = $registration->getMeetingAddress();
-			if ( $address !== null ) {
+			$country = $registration->getMeetingCountry();
+			if ( $address || $country ) {
+				// XXX: Newlines aren't actually preserved in the output.
+				$fullAddress = $address . "\n" . $country;
 				$participationOptionsContent = Html::element(
 					'div',
 					[
-						'dir' => Utils::guessStringDirection( $address ),
+						'dir' => Utils::guessStringDirection( $address ?? '' ),
 						'class' => [ 'ext-campaignevents-eventpage-header-address' ]
 					],
-					$this->language->truncateForVisual( $address, self::ADDRESS_MAX_LENGTH )
+					$this->language->truncateForVisual( $fullAddress, self::ADDRESS_MAX_LENGTH )
 				);
 			} else {
 				$participationOptionsContent = $this->out->msg(
