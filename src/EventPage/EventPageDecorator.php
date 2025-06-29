@@ -765,7 +765,7 @@ class EventPageDecorator {
 			if ( $rawAddress || $rawCountry ) {
 				$address = $rawAddress . "\n" . $rawCountry;
 				$addressElement->setAttributes( [
-					'dir' => Utils::guessStringDirection( $address )
+					'dir' => Utils::guessStringDirection( $rawAddress ?? '' )
 				] );
 				$addressElement->appendContent( $address );
 			} else {
