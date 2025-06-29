@@ -141,6 +141,9 @@ class AddressStore {
 		$addressParts = explode( " \n ", $row->cea_full_address );
 		array_pop( $addressParts );
 		$addressWithoutCountry = implode( " \n ", $addressParts );
+		if ( $addressWithoutCountry === '' ) {
+			$addressWithoutCountry = null;
+		}
 
 		return new Address(
 			$addressWithoutCountry,
