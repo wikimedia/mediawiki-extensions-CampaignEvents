@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Address;
 use Generator;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
+use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWikiIntegrationTestCase;
 use RuntimeException;
@@ -21,26 +22,42 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	private const EVENT_WITH_ADDRESS = 5001;
 	private const STORED_ADDRESS_ID = 1;
 	private const STORED_ADDRESS = 'Test address';
-	private const STORED_COUNTRY = 'Test country';
-	private const STORED_FULL_ADDRESS = self::STORED_ADDRESS . " \n " . self::STORED_COUNTRY;
-	private const STORED_ADDRESS_ROW = [
-		'cea_id' => self::STORED_ADDRESS_ID,
-		'cea_full_address' => self::STORED_FULL_ADDRESS,
-		'cea_country' => self::STORED_COUNTRY,
-		'cea_country_code' => null,
-	];
-	private const ADDRESS_ENTRY_COUNT = 2;
+	private const STORED_COUNTRY = 'France';
+
+	private const STORED_ADDRESS_WITHOUT_COUNTRY = 'Address without country';
+	private const STORED_ADDRESS_WITHOUT_COUNTRY_ID = 2;
+
+	private const STORED_COUNTRY_WITHOUT_ADDRESS = 'Australia';
+	private const STORED_COUNTRY_WITHOUT_ADDRESS_ID = 3;
+
+	private const ADDRESS_ENTRY_COUNT = 3;
+	private const NEXT_ADDRESS_ID = self::ADDRESS_ENTRY_COUNT + 1;
+
+	private static function getStoredAddressRow(): array {
+		return [
+			'cea_id' => self::STORED_ADDRESS_ID,
+			'cea_full_address' => self::STORED_ADDRESS . " \n " . self::STORED_COUNTRY,
+			'cea_country' => self::STORED_COUNTRY,
+			'cea_country_code' => null,
+		];
+	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function addDBData(): void {
 		$addressRows = [
-			self::STORED_ADDRESS_ROW,
+			self::getStoredAddressRow(),
 			[
-				'cea_id' => 2,
-				'cea_full_address' => "Address without country \n ",
+				'cea_id' => self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
+				'cea_full_address' => self::STORED_ADDRESS_WITHOUT_COUNTRY . " \n ",
 				'cea_country' => '',
+				'cea_country_code' => null,
+			],
+			[
+				'cea_id' => self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
+				'cea_full_address' => " \n " . self::STORED_COUNTRY_WITHOUT_ADDRESS,
+				'cea_country' => self::STORED_COUNTRY_WITHOUT_ADDRESS,
 				'cea_country_code' => null,
 			],
 		];
@@ -66,6 +83,12 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			->execute();
 	}
 
+	private function getAddressStore(): AddressStore {
+		return new AddressStore(
+			CampaignEventsServices::getDatabaseHelper(),
+		);
+	}
+
 	/** @dataProvider provideUpdateAddresses */
 	public function testUpdateAddresses(
 		int $eventID,
@@ -73,7 +96,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		int $expectsJoinRow,
 		?stdClass $expectedAddressRow
 	) {
-		$store = CampaignEventsServices::getAddressStore();
+		$store = $this->getAddressStore();
 		$store->updateAddresses( $address, $eventID );
 
 		$addressRowIDs = $this->getDb()->selectFieldValues(
@@ -103,8 +126,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	public static function provideUpdateAddresses() {
 		$eventWithoutAddress = 42;
 		$newTestAddress = 'Some NEW address';
-		$newTestCountry = 'Some NEW country';
-		$nextAddressID = self::ADDRESS_ENTRY_COUNT + 1;
+		$newTestCountry = 'Egypt';
 
 		yield 'No previous row, no address' => [
 			$eventWithoutAddress,
@@ -117,7 +139,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( $newTestAddress, null ),
 			1,
 			(object)[
-				'cea_id' => $nextAddressID,
+				'cea_id' => self::NEXT_ADDRESS_ID,
 				'cea_full_address' => "$newTestAddress \n ",
 				'cea_country' => null,
 				'cea_country_code' => null,
@@ -128,7 +150,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( null, $newTestCountry ),
 			1,
 			(object)[
-				'cea_id' => $nextAddressID,
+				'cea_id' => self::NEXT_ADDRESS_ID,
 				'cea_full_address' => " \n $newTestCountry",
 				'cea_country' => $newTestCountry,
 				'cea_country_code' => null,
@@ -139,7 +161,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( $newTestAddress, $newTestCountry ),
 			1,
 			(object)[
-				'cea_id' => $nextAddressID,
+				'cea_id' => self::NEXT_ADDRESS_ID,
 				'cea_full_address' => "$newTestAddress \n $newTestCountry",
 				'cea_country' => $newTestCountry,
 				'cea_country_code' => null,
@@ -157,7 +179,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( $newTestAddress, null ),
 			1,
 			(object)[
-				'cea_id' => $nextAddressID,
+				'cea_id' => self::NEXT_ADDRESS_ID,
 				'cea_full_address' => "$newTestAddress \n ",
 				'cea_country' => null,
 				'cea_country_code' => null,
@@ -168,7 +190,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( null, $newTestCountry ),
 			1,
 			(object)[
-				'cea_id' => $nextAddressID,
+				'cea_id' => self::NEXT_ADDRESS_ID,
 				'cea_full_address' => " \n $newTestCountry",
 				'cea_country' => $newTestCountry,
 				'cea_country_code' => null,
@@ -179,7 +201,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( $newTestAddress, $newTestCountry ),
 			1,
 			(object)[
-				'cea_id' => $nextAddressID,
+				'cea_id' => self::NEXT_ADDRESS_ID,
 				'cea_full_address' => "$newTestAddress \n $newTestCountry",
 				'cea_country' => $newTestCountry,
 				'cea_country_code' => null,
@@ -190,7 +212,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			self::EVENT_WITH_ADDRESS,
 			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY ),
 			1,
-			(object)self::STORED_ADDRESS_ROW
+			(object)self::getStoredAddressRow()
 		];
 	}
 
@@ -198,30 +220,34 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideAcquireAddressID
 	 */
 	public function testAcquireAddressID( Address $address, int $expected ) {
-		$store = CampaignEventsServices::getAddressStore();
+		$store = $this->getAddressStore();
 		$this->assertSame( $expected, $store->acquireAddressID( $address ) );
 	}
 
 	public static function provideAcquireAddressID(): Generator {
 		yield 'Existing address' => [
 			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY ),
-			1
+			self::STORED_ADDRESS_ID
 		];
 		yield 'Existing address without country' => [
-			new Address( 'Address without country', null ),
-			2
+			new Address( self::STORED_ADDRESS_WITHOUT_COUNTRY, null ),
+			self::STORED_ADDRESS_WITHOUT_COUNTRY_ID
 		];
 		yield 'Existing address but with different country' => [
-			new Address( self::STORED_ADDRESS, 'A different country' ),
-			3
+			new Address( self::STORED_ADDRESS, 'Egypt' ),
+			self::NEXT_ADDRESS_ID
+		];
+		yield 'Existing country without address' => [
+			new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS ),
+			self::STORED_COUNTRY_WITHOUT_ADDRESS_ID
 		];
 		yield 'Existing country but with a different address' => [
 			new Address( 'A new address', self::STORED_COUNTRY ),
-			3
+			self::NEXT_ADDRESS_ID
 		];
 		yield 'New address' => [
-			new Address( 'This is a new address!', 'A new country' ),
-			3
+			new Address( 'This is a new address!', 'Egypt' ),
+			self::NEXT_ADDRESS_ID
 		];
 	}
 
@@ -229,7 +255,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	public function testGetEventAddress( int $eventID, ?Address $expected ) {
 		$this->assertEquals(
 			$expected,
-			CampaignEventsServices::getAddressStore()->getEventAddress( $this->getDb(), $eventID )
+			$this->getAddressStore()->getEventAddress( $this->getDb(), $eventID )
 		);
 	}
 
@@ -250,13 +276,13 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		$addresses = [
 			[
 				'cea_id' => 101,
-				'cea_full_address' => 'Full address 1',
-				'cea_country' => 'Country 1',
+				'cea_full_address' => "Full address 1 \n France",
+				'cea_country' => 'France',
 			],
 			[
 				'cea_id' => 102,
-				'cea_full_address' => 'Full address 2',
-				'cea_country' => 'Country 2',
+				'cea_full_address' => "Full address 2 \n Egypt",
+				'cea_country' => 'Egypt',
 			]
 		];
 		$db->newInsertQueryBuilder()
@@ -288,7 +314,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Events should have only one address' );
-		CampaignEventsServices::getAddressStore()->getEventAddress( $this->getDb(), $eventID );
+		$this->getAddressStore()->getEventAddress( $this->getDb(), $eventID );
 	}
 
 	public function testGetAddressesForEvents() {
@@ -298,7 +324,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				self::STORED_COUNTRY
 			),
 		];
-		$actual = CampaignEventsServices::getAddressStore()
+		$actual = $this->getAddressStore()
 			->getAddressesForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, 99999999 ] );
 		$this->assertEquals( $expected, $actual );
 	}
@@ -309,7 +335,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( "Event $eventID should have only one address" );
-		CampaignEventsServices::getAddressStore()
+		$this->getAddressStore()
 			->getAddressesForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, $eventID ] );
 	}
 }
