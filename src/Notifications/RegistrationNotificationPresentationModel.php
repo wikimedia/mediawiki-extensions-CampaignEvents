@@ -200,13 +200,12 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 				'campaignevents-notification-registration-details-participation-option-in-person-header'
 			)->text();
 			$ret .= Html::element( 'h3', [], $inPersonEventHeader );
-			$address = $this->eventRegistration->getMeetingAddress();
-			$country = $this->eventRegistration->getMeetingCountry();
-			if ( $address || $country ) {
+			$address = $this->eventRegistration->getAddress();
+			if ( $address ) {
 				$ret .= Html::element(
 					'p',
 					[ 'style' => 'white-space: pre-wrap' ],
-					$address . "\n" . $country
+					$address->getAddressWithoutCountry() . "\n" . $address->getCountry()
 				);
 			}
 		}

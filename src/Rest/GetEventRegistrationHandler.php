@@ -49,6 +49,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 
 		$wikis = $registration->getWikis();
 		$participationOptions = $registration->getParticipationOptions();
+		$address = $registration->getAddress();
 		$respVal = [
 			'id' => $registration->getID(),
 			'name' => $registration->getName(),
@@ -66,8 +67,8 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'online_meeting' => ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) !== 0,
 			'inperson_meeting' => ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) !== 0,
 			'meeting_url' => $registration->getMeetingURL(),
-			'meeting_country' => $registration->getMeetingCountry(),
-			'meeting_address' => $registration->getMeetingAddress(),
+			'meeting_country' => $address ? $address->getCountry() : null,
+			'meeting_address' => $address ? $address->getAddressWithoutCountry() : null,
 			'chat_url' => $registration->getChatURL(),
 			'is_test_event' => $registration->getIsTestEvent(),
 			'questions' => $registration->getParticipantQuestions(),
