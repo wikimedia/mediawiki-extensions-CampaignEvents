@@ -34,10 +34,7 @@ class AddressStore {
 		$addressWithoutCountry = $address ? $address->getAddressWithoutCountry() : null;
 		$country = $address ? $address->getCountry() : null;
 		if ( $addressWithoutCountry || $country ) {
-			$fullAddress = $addressWithoutCountry . " \n " . $country;
-			$where[] = $dbw->expr( 'cea_full_address', '!=', $fullAddress );
-		} else {
-			$fullAddress = null;
+			$where[] = $dbw->expr( 'cea_full_address', '!=', $addressWithoutCountry . " \n " . $country );
 		}
 
 		$dbw->deleteJoin(
@@ -49,8 +46,8 @@ class AddressStore {
 			__METHOD__
 		);
 
-		if ( $fullAddress ) {
-			$addressID = $this->acquireAddressID( $fullAddress, $country );
+		if ( $address ) {
+			$addressID = $this->acquireAddressID( $address );
 			$dbw->newInsertQueryBuilder()
 				->insertInto( 'ce_event_address' )
 				->ignore()
@@ -67,10 +64,11 @@ class AddressStore {
 	 * Returns the ID that identifies the given address in the database. This may return the ID of an existing entry,
 	 * or insert a new entry.
 	 */
-	public function acquireAddressID( string $fullAddress, ?string $country ): int {
+	public function acquireAddressID( Address $address ): int {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 		// TODO This query is not indexed; for the future we will need to use some indexed field (like unique
 		// address identifiers) instead of the full address.
+		$fullAddress = $address->getAddressWithoutCountry() . " \n " . $address->getCountry();
 		$addressID = $dbw->newSelectQueryBuilder()
 			->select( 'cea_id' )
 			->from( 'ce_address' )
@@ -84,7 +82,7 @@ class AddressStore {
 				->insertInto( 'ce_address' )
 				->row( [
 					'cea_full_address' => $fullAddress,
-					'cea_country' => $country
+					'cea_country' => $address->getCountry()
 				] )
 				->caller( __METHOD__ )
 				->execute();

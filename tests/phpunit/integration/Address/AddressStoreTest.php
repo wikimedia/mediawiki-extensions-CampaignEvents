@@ -69,13 +69,12 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	/** @dataProvider provideUpdateAddresses */
 	public function testUpdateAddresses(
 		int $eventID,
-		?string $meetingAddress,
-		?string $meetingCountry,
+		?Address $address,
 		int $expectsJoinRow,
 		?stdClass $expectedAddressRow
 	) {
 		$store = CampaignEventsServices::getAddressStore();
-		$store->updateAddresses( new Address( $meetingAddress, $meetingCountry ), $eventID );
+		$store->updateAddresses( $address, $eventID );
 
 		$addressRowIDs = $this->getDb()->selectFieldValues(
 			'ce_event_address',
@@ -107,17 +106,15 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		$newTestCountry = 'Some NEW country';
 		$nextAddressID = self::ADDRESS_ENTRY_COUNT + 1;
 
-		yield 'No previous row, no address, no country' => [
+		yield 'No previous row, no address' => [
 			$eventWithoutAddress,
-			null,
 			null,
 			0,
 			null
 		];
 		yield 'No previous row, address, no country' => [
 			$eventWithoutAddress,
-			$newTestAddress,
-			null,
+			new Address( $newTestAddress, null ),
 			1,
 			(object)[
 				'cea_id' => $nextAddressID,
@@ -128,8 +125,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'No previous row, country, no address' => [
 			$eventWithoutAddress,
-			null,
-			$newTestCountry,
+			new Address( null, $newTestCountry ),
 			1,
 			(object)[
 				'cea_id' => $nextAddressID,
@@ -140,8 +136,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'No previous row, address and country' => [
 			$eventWithoutAddress,
-			$newTestAddress,
-			$newTestCountry,
+			new Address( $newTestAddress, $newTestCountry ),
 			1,
 			(object)[
 				'cea_id' => $nextAddressID,
@@ -151,17 +146,15 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			]
 		];
 
-		yield 'Replace previous row, no address, no country' => [
+		yield 'Replace previous row, no address' => [
 			self::EVENT_WITH_ADDRESS,
-			null,
 			null,
 			0,
 			null
 		];
 		yield 'Replace previous row, address, no country' => [
 			self::EVENT_WITH_ADDRESS,
-			$newTestAddress,
-			null,
+			new Address( $newTestAddress, null ),
 			1,
 			(object)[
 				'cea_id' => $nextAddressID,
@@ -172,8 +165,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'Replace previous row, country, no address' => [
 			self::EVENT_WITH_ADDRESS,
-			null,
-			$newTestCountry,
+			new Address( null, $newTestCountry ),
 			1,
 			(object)[
 				'cea_id' => $nextAddressID,
@@ -184,8 +176,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		];
 		yield 'Replace previous row, address and country' => [
 			self::EVENT_WITH_ADDRESS,
-			$newTestAddress,
-			$newTestCountry,
+			new Address( $newTestAddress, $newTestCountry ),
 			1,
 			(object)[
 				'cea_id' => $nextAddressID,
@@ -197,28 +188,41 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 		yield 'Same as previous row' => [
 			self::EVENT_WITH_ADDRESS,
-			self::STORED_ADDRESS,
-			self::STORED_COUNTRY,
+			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY ),
 			1,
 			(object)self::STORED_ADDRESS_ROW
 		];
 	}
 
 	/**
-	 * @param string $fullAddress
-	 * @param string|null $country
-	 * @param int $expected
 	 * @dataProvider provideAcquireAddressID
 	 */
-	public function testAcquireAddressID( string $fullAddress, ?string $country, int $expected ) {
+	public function testAcquireAddressID( Address $address, int $expected ) {
 		$store = CampaignEventsServices::getAddressStore();
-		$this->assertSame( $expected, $store->acquireAddressID( $fullAddress, $country ) );
+		$this->assertSame( $expected, $store->acquireAddressID( $address ) );
 	}
 
 	public static function provideAcquireAddressID(): Generator {
-		yield 'Existing address' => [ self::STORED_FULL_ADDRESS, 'Country', 1 ];
-		yield 'Existing address without country' => [ "Address without country \n ", null, 2 ];
-		yield 'New address' => [ "This is a new address! \n Country", 'Country', 3 ];
+		yield 'Existing address' => [
+			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY ),
+			1
+		];
+		yield 'Existing address without country' => [
+			new Address( 'Address without country', null ),
+			2
+		];
+		yield 'Existing address but with different country' => [
+			new Address( self::STORED_ADDRESS, 'A different country' ),
+			3
+		];
+		yield 'Existing country but with a different address' => [
+			new Address( 'A new address', self::STORED_COUNTRY ),
+			3
+		];
+		yield 'New address' => [
+			new Address( 'This is a new address!', 'A new country' ),
+			3
+		];
 	}
 
 	/** @dataProvider provideGetEventAddress */

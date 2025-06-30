@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Address;
 
 use Generator;
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWikiUnitTestCase;
 
@@ -19,6 +20,12 @@ class AddressTest extends MediaWikiUnitTestCase {
 
 		$this->assertSame( $addressWithoutCountry, $obj->getAddressWithoutCountry(), 'Address without country' );
 		$this->assertSame( $country, $obj->getCountry(), 'Country' );
+	}
+
+	public function testConstruct__bothNull() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( '$addressWithoutCountry and $country cannot be both null' );
+		new Address( null, null );
 	}
 
 	/** @dataProvider provideToString */
