@@ -49,6 +49,7 @@
 	"campaignevents-error-empty-end": "Introduce una fecha de finalización.",
 	"campaignevents-error-invalid-end": "La fecha de finalización no es válida.",
 	"campaignevents-error-start-after-end": "La fecha de finalización debe ser posterior a la fecha de inicio.",
+	"campaignevents-error-no-types": "Introduce al menos un tipo",
 	"campaignevents-error-too-many-wikis": "Introducir máximo {{PLURAL:$1|una wiki|$1 wikis}}.",
 	"campaignevents-error-invalid-wikis": "Los siguientes identificadores wikis no son reconocidos: $1.",
 	"campaignevents-error-too-many-topics": "Introducir máximo {{PLURAL:$1|tema|$1 temas}}.",
