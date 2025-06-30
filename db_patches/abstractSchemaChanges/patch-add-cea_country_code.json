@@ -1,0 +1,90 @@
+{
+	"before": {
+		"name": "ce_address",
+		"comment": "Stores known event addresses.",
+		"columns": [
+			{
+				"name": "cea_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cea_full_address",
+				"comment": "Full address of the event.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "cea_country",
+				"comment": "Event country.",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"length": 255
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [ "cea_id" ]
+	},
+	"after": {
+		"name": "ce_address",
+		"comment": "Stores known event addresses.",
+		"columns": [
+			{
+				"name": "cea_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cea_full_address",
+				"comment": "Full address of the event.",
+				"type": "blob",
+				"options": {
+					"notnull": true,
+					"length": 65530
+				}
+			},
+			{
+				"name": "cea_country",
+				"comment": "Event country.",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"length": 255
+				}
+			},
+			{
+				"name": "cea_country_code",
+				"comment": "Country code (CLDR) for the event.",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"length": 2,
+					"default": null,
+					"fixed": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "cea_country_code",
+				"columns": [ "cea_country_code" ],
+				"unique": false,
+				"comment": "Used when querying event country code."
+			}
+		],
+		"pk": [ "cea_id" ]
+	}
+}

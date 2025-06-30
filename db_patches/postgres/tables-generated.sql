@@ -80,8 +80,11 @@ CREATE TABLE ce_address (
   cea_id BIGSERIAL NOT NULL,
   cea_full_address TEXT NOT NULL,
   cea_country TEXT DEFAULT NULL,
+  cea_country_code TEXT DEFAULT NULL,
   PRIMARY KEY(cea_id)
 );
+
+CREATE INDEX cea_country_code ON ce_address (cea_country_code);
 
 
 CREATE TABLE ce_event_address (
