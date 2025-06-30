@@ -78,7 +78,7 @@
 	"campaignevents-edit-need-central-account": "イベント登録を有効にする、もしくは編集するには、利用者アカウントの統合が必要です。",
 	"campaignevents-error-page-already-registered": "指定されたイベントページには、既に他の登録が関連付けられています。",
 	"campaignevents-edit-not-allowed-registration": "あなたはこのイベント登録の編集を許可されていません。",
-	"campaignevents-enable-registration-not-allowed-page": "指定されたイベントページにおいて、イベント登録を有効化することができません。",
+	"campaignevents-enable-registration-not-allowed-page": "指定されたイベントページでは、イベント登録を有効化することは許可されていません。",
 	"registerforevent": "イベントに登録する",
 	"campaignevents-register-error-no-event": "イベントが指定されていません。",
 	"campaignevents-register-error-event-not-found": "このIDを持つイベントは存在しません",
