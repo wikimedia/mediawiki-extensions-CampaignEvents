@@ -17,11 +17,14 @@ class AddressStore {
 	public const SERVICE_NAME = 'CampaignEventsAddressStore';
 
 	private CampaignsDatabaseHelper $dbHelper;
+	private int $countrySchemaMigrationStage;
 
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper
+		CampaignsDatabaseHelper $dbHelper,
+		int $countrySchemaMigrationStage
 	) {
 		$this->dbHelper = $dbHelper;
+		$this->countrySchemaMigrationStage = $countrySchemaMigrationStage;
 	}
 
 	public function updateAddresses(
@@ -34,7 +37,12 @@ class AddressStore {
 		$addressWithoutCountry = $address ? $address->getAddressWithoutCountry() : null;
 		$country = $address ? $address->getCountry() : null;
 		if ( $addressWithoutCountry || $country ) {
-			$where[] = $dbw->expr( 'cea_full_address', '!=', $addressWithoutCountry . " \n " . $country );
+			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) {
+				$where[] = $dbw->expr( 'cea_full_address', '!=', $addressWithoutCountry . " \n " . $country );
+			}
+			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_NEW ) {
+				throw new RuntimeException( 'To be implemented' );
+			}
 		}
 
 		$dbw->deleteJoin(
@@ -65,25 +73,43 @@ class AddressStore {
 	 * or insert a new entry.
 	 */
 	public function acquireAddressID( Address $address ): int {
+		$fullAddressWithCountry = $address->getAddressWithoutCountry() . " \n " . $address->getCountry();
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+
+		$where = [];
+		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) {
+			$where[] = $dbw->andExpr( [
+				'cea_full_address' => $fullAddressWithCountry,
+				'cea_country_code' => null,
+			] );
+		}
+		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_NEW ) {
+			throw new RuntimeException( 'To be implemented' );
+		}
+
 		// TODO This query is not indexed; for the future we will need to use some indexed field (like unique
 		// address identifiers) instead of the full address.
-		$fullAddress = $address->getAddressWithoutCountry() . " \n " . $address->getCountry();
 		$addressID = $dbw->newSelectQueryBuilder()
 			->select( 'cea_id' )
 			->from( 'ce_address' )
-			->where( [ 'cea_full_address' => $fullAddress ] )
+			->where( $dbw->orExpr( $where ) )
 			->caller( __METHOD__ )
 			->fetchField();
+
 		if ( $addressID !== false ) {
 			$addressID = (int)$addressID;
 		} else {
+			$newRow = [];
+			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_OLD ) {
+				$newRow['cea_full_address'] = $fullAddressWithCountry;
+				$newRow['cea_country'] = $address->getCountry();
+			}
+			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW ) {
+				throw new RuntimeException( 'To be implemented' );
+			}
 			$dbw->newInsertQueryBuilder()
 				->insertInto( 'ce_address' )
-				->row( [
-					'cea_full_address' => $fullAddress,
-					'cea_country' => $address->getCountry()
-				] )
+				->row( $newRow )
 				->caller( __METHOD__ )
 				->execute();
 			$addressID = $dbw->insertId();
@@ -138,17 +164,24 @@ class AddressStore {
 	}
 
 	private function addressFromRow( stdClass $row ): Address {
-		// Remove the country from the address, making sure to preserve other newlines in the address.
-		$addressParts = explode( " \n ", $row->cea_full_address );
-		array_pop( $addressParts );
-		$addressWithoutCountry = implode( " \n ", $addressParts );
-		if ( $addressWithoutCountry === '' ) {
-			$addressWithoutCountry = null;
+		$addressWithoutCountry = $country = null;
+		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_NEW ) {
+			throw new RuntimeException( 'To be implemented' );
+		}
+		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) {
+			// Remove the country from the address, making sure to preserve other newlines in the address.
+			$addressParts = explode( " \n ", $row->cea_full_address );
+			array_pop( $addressParts );
+			$addressWithoutCountry = implode( " \n ", $addressParts );
+			if ( $addressWithoutCountry === '' ) {
+				$addressWithoutCountry = null;
+			}
+			$country = $row->cea_country;
 		}
 
 		return new Address(
 			$addressWithoutCountry,
-			$row->cea_country,
+			$country,
 		);
 	}
 }

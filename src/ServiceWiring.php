@@ -306,7 +306,8 @@ return [
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
 		return new AddressStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getMainConfig()->get( 'CampaignEventsCountrySchemaMigrationStage' )
 		);
 	},
 	TrackingToolRegistry::SERVICE_NAME => static function ( MediaWikiServices $services ): TrackingToolRegistry {
