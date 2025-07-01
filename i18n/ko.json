@@ -378,5 +378,7 @@
 	"campaignevents-worklist-error-empty": "최소한 하나의 문서 제목을 입력하세요.",
 	"invitationlist": "초대 목록",
 	"campaignevents-invitationlist-event": "$1: 초대 목록",
+	"campaignevents-invitationlist-highly-recommended": "초대를 강력히 권장함",
+	"campaignevents-invitationlist-recommended": "초대를 권장함",
 	"campaignevents-invitationlist-worklist-label": "문서 목록 보기"
 }
