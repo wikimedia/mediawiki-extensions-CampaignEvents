@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"YoaR"
+		]
+	},
+	"myevents": "Los mios eventos",
+	"allevents": "Tolos eventos",
+	"campaignevents-eventslist-column-name": "Nome del eventu",
+	"campaignevents-eventslist-column-participants-number": "Númberu de participantes",
+	"campaignevents-eventslist-participation-options-all-events": "Tolos eventos",
+	"campaignevents-generateinvitationlist-event-page-field-label": "Nome de la páxina del eventu",
+	"myinvitationlists": "Les tos llistes d'invitación",
+	"invitationlist": "Llista d'invitación"
+}

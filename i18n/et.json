@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Pikne"
+		]
+	},
+	"group-event-organizer": "Ürituste korraldajad",
+	"group-event-organizer-member": "{{GENDER:$1|ürituste korraldaja}}",
+	"grouppage-event-organizer": "{{ns:project}}:Ürituste korraldajad",
+	"action-campaignevents-enable-registration": "avada üritustele registreerumist",
+	"right-campaignevents-enable-registration": "Avada üritustele registreerumine",
+	"action-campaignevents-delete-registration": "kustutada üritusele registreerumist",
+	"right-campaignevents-delete-registration": "Kustutada üritustele registreerumisi",
+	"action-campaignevents-organize-events": "üritusi korraldada",
+	"right-campaignevents-organize-events": "Korraldada üritusi",
+	"action-campaignevents-email-participants": "saata e-kirja üritusel osalejatele",
+	"right-campaignevents-email-participants": "Saata e-kiri üritusel osalejatele",
+	"action-campaignevents-view-private-participants": "vaadata ürituse privaatseid osalejaid",
+	"right-campaignevents-view-private-participants": "Vaadata ürituse privaatseid osalejaid",
+	"specialpages-group-campaignevents": "Üritused",
+	"enableeventregistration": "Üritusele registreerumise avamine",
+	"editeventregistration": "Üritusele registreerumise muutmine",
+	"registerforevent": "Üritusele registreerumine",
+	"canceleventregistration": "Üritusele registreerumise tühistamine",
+	"myevents": "Sinu üritused",
+	"allevents": "Kõik üritused",
+	"deleteeventregistration": "Üritusele registreerumise kustutamine",
+	"eventdetails": "Ürituse üksikasjad",
+	"echo-category-title-campaign-events-notification-registration": "Üritusele registreerumine",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Teavita mind, kui registreerun üritusele, mis kasutab üritusele registreerumise tööriista.",
+	"generateinvitationlist": "Kutsutute loendi koostamine",
+	"myinvitationlists": "Sinu kutsutute loendid",
+	"invitationlist": "Kutsutute loend",
+	"campaignevents-invitationlist-preference": "Arva mind [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists kutsutute loenditesse]",
+	"prefs-campaignevents-invitations": "Kutsutute loendid"
+}
