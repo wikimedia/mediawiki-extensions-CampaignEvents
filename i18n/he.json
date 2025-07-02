@@ -483,6 +483,7 @@
 	"campaignevents-myinvitationslist-generate-button": "יצירת רשימת הזמנות חדשה",
 	"campaignevents-myinvitationslist-new-button": "חדשה",
 	"campaignevents-invitation-list-error-empty-name": "נא לתת שם לרשימת ההזמנות.",
+	"campaignevents-generateinvitationlist-name-too-long": "יש להוסיף שם קצר יותר לרשימת ההזמנות (255 בתים לכל היותר).",
 	"campaignevents-invitation-list-error-invalid-page": "יש להיכנס לדף אירוע המשתמש ברישום אירועים.",
 	"campaignevents-invitation-list-error-event-ended": "האירוע הזה הסתיים. יש להזין אירוע פעיל.",
 	"campaignevents-invitation-list-error-not-organizer": "יש להיכנס לדף אירוע {{GENDER:|שאתה כלול בו כמארגן|שאת כלולה בו כמארגנת}}.",
@@ -553,7 +554,7 @@
 	"campaignevents-allevents-label-filter-event-types": "סוגי אירועים",
 	"campaignevents-allevents-placeholder-add-event-types": "הוספת סוגי אירועים...",
 	"campaignevents-eventpage-dialog-event-types-label": "סוגי אירועים",
-	"campaignevents-cancel-page-nonlocal": "נא '''[$1 לבטל את הרשמתך לאירוע באתר $2]''' – אתר הוויקי שבו האירוע נוצר.",
-	"campaignevents-email-error-notification-with-detail": "לא ניתן היה לשלוח את הדואר האלקטרוני, מהסיבה הבאה: $1",
+	"campaignevents-cancel-page-nonlocal": "נא '''[$1 לבטל את הרשמתך לאירוע באתר $2]''', הוויקי שהאירוע נוצר בו.",
+	"campaignevents-email-error-notification-with-detail": "לא היה אפשר לשלוח את הדואר האלקטרוני, מהסיבה הבאה: $1",
 	"campaignevents-eventslist-types-label": "סוגי אירועים"
 }
