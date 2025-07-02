@@ -335,7 +335,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	public function testCacheCompatibility() {
 		$event = $this->getTestEvent();
 		$this->assertSame(
-			'1e1ff7a54cbaf8bfe83a479ca0cba94bccbb9e6d',
+			'0d1c9bc64d3d3d0ad152d8f35dfd7f03969a8589',
 			sha1( serialize( $event ) ),
 			'Event serialization changed! This will break values cached in getEventByPage. Please bump the ' .
 				'cache version in getEventByPage, then update the expected value here. (You can disregard this ' .
