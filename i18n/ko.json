@@ -408,6 +408,8 @@
 	"campaignevents-worklist-error-empty": "최소한 하나의 문서 제목을 입력하세요.",
 	"invitationlist": "초대 목록",
 	"campaignevents-invitationlist-event": "$1: 초대 목록",
+	"campaignevents-invitationlist-highly-recommended": "초대를 강력히 권장함",
+	"campaignevents-invitationlist-recommended": "초대를 권장함",
 	"campaignevents-invitationlist-worklist-label": "문서 목록 보기",
 	"campaignevents-event-details-footer": "더 많은 이벤트와 커뮤니티를 찾으려면 <strong>[[Special:AllEvents|협업 목록]]</strong>을 방문하세요.",
 	"prefs-campaignevents-invitations": "초대 목록",
@@ -431,6 +433,7 @@
 	"campaignevents-allevents-label-upcoming-events-description": "예정된 이벤트: 선택한 날짜 내에 시작되는 이벤트",
 	"campaignevents-allevents-label-ongoing-events-title": "진행 중인 이벤트",
 	"campaignevents-allevents-label-ongoing-events-description": "진행 중인 이벤트: 이전에 시작하지만 선택한 날짜 내에 계속되는 이벤트",
+	"campaignevents-allevents-transclusion-more-link": "더 많은 이벤트 및 커뮤니티 찾기",
 	"communityconfiguration-campaignevents-title": "캠페인이벤트",
 	"communityconfiguration-campaignevents-description": "캠페인이벤트 확장 기능의 구성 옵션",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "유효한 이벤트 이름공간"
