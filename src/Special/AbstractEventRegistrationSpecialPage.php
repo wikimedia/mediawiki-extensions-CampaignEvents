@@ -292,7 +292,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 						$this->invalidOrganizerNames = $validationStatus->getValue();
 					}
 					$msg = $validationStatus->getMessages()[0];
-					return $this->msg( $msg )->text();
+					return $this->msg( $msg );
 				}
 
 				return true;
@@ -348,9 +348,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 						return true;
 					} catch ( InvalidToolURLException $e ) {
 						$baseURL = rtrim( $e->getExpectedBaseURL(), '/' ) . '/courses';
-						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )
-							->params( $baseURL )
-							->text();
+						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )->params( $baseURL );
 					}
 				},
 				'section' => self::DETAILS_SECTION,
