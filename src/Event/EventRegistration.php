@@ -59,7 +59,7 @@ class EventRegistration {
 	/** @var int One of the PARTICIPATION_OPTION_* constants */
 	private int $participationOptions;
 	private ?string $meetingURL;
-	private ?Address $meetingAddress;
+	private ?Address $address;
 	private ?string $chatURL;
 	private bool $isTestEvent;
 	/** @var int[] Array of database IDs */
@@ -83,7 +83,7 @@ class EventRegistration {
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
-	 * @param Address|null $meetingAddress
+	 * @param Address|null $address
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param list<int> $participantQuestions
@@ -105,7 +105,7 @@ class EventRegistration {
 		array $trackingTools,
 		int $participationOptions,
 		?string $meetingURL,
-		?Address $meetingAddress,
+		?Address $address,
 		?string $chatURL,
 		bool $isTestEvent,
 		array $participantQuestions,
@@ -146,7 +146,7 @@ class EventRegistration {
 		$this->trackingTools = $trackingTools;
 		$this->participationOptions = $participationOptions;
 		$this->meetingURL = $meetingURL;
-		$this->meetingAddress = $meetingAddress;
+		$this->address = $address;
 		$this->chatURL = $chatURL;
 		$this->isTestEvent = $isTestEvent;
 		$this->participantQuestions = $participantQuestions;
@@ -247,7 +247,7 @@ class EventRegistration {
 	}
 
 	public function getAddress(): ?Address {
-		return $this->meetingAddress;
+		return $this->address;
 	}
 
 	public function getChatURL(): ?string {
