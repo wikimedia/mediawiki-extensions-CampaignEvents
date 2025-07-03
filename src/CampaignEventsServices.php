@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
@@ -255,5 +256,9 @@ class CampaignEventsServices {
 
 	public static function getEventTypesRegistry( ?ContainerInterface $services = null ): Config {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventTypesRegistry::SERVICE_NAME );
+	}
+
+	public static function getCountryProvider( ?ContainerInterface $services = null ): Config {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( CountryProvider::SERVICE_NAME );
 	}
 }

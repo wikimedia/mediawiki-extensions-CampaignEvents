@@ -11,6 +11,7 @@ $cfg['directory_list'] = array_merge(
 		'../../extensions/Translate',
 		'../../extensions/WikimediaMessages',
 		'../../extensions/CommunityConfiguration',
+		'../../extensions/cldr',
 	]
 );
 
@@ -21,6 +22,7 @@ $cfg['exclude_analysis_directory_list'] = array_merge(
 		'../../extensions/Translate',
 		'../../extensions/WikimediaMessages',
 		'../../extensions/CommunityConfiguration',
+		'../../extensions/cldr',
 	]
 );
 
