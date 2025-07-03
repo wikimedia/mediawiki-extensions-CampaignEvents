@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
+use Throwable;
 
 /**
  * @group Test
@@ -333,13 +334,25 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testCacheCompatibility() {
+		$serializedEvent = file_get_contents( __DIR__ . '/EventRegistration.ser' );
+		try {
+			$unserialized = unserialize( $serializedEvent );
+		} catch ( Throwable $e ) {
+			$this->fail(
+				'Event serialization changed! This will break values cached in getEventByPage. Because of the error ' .
+				'below, bumping the cache version is not sufficient. Please change the EventRegistration class ' .
+				'definition to avoid the fatal error, then bump the cache version in getEventByPage and update the ' .
+				"serialized object here.\nError:\n" . $e->getMessage()
+			);
+		}
 		$event = $this->getTestEvent();
 		$this->assertSame(
-			'0d1c9bc64d3d3d0ad152d8f35dfd7f03969a8589',
-			sha1( serialize( $event ) ),
+			serialize( $event ),
+			$serializedEvent,
 			'Event serialization changed! This will break values cached in getEventByPage. Please bump the ' .
-				'cache version in getEventByPage, then update the expected value here. (You can disregard this ' .
+				'cache version in getEventByPage, then update the serialized object here. (You can disregard this ' .
 				'message if you changed values, but not format, for the test event above only)'
 		);
+		$this->assertEquals( $event, $unserialized, 'Unserialized events should be equal' );
 	}
 }
