@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Address;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\CLDR\CountryNames;
 
 class CountryProvider {
@@ -56,5 +57,16 @@ class CountryProvider {
 		// MediaWiki loads all fallback languages when CLDR country data is accessed,
 		// and 'en' is always part of the fallback chain, so this does not cause extra I/O.
 		return array_key_exists( $code, $this->getAvailableCountries( 'en' ) );
+	}
+
+	/**
+	 * The caller must make sure that both the given codes are valid.
+	 */
+	public function getCountryName( string $countryCode, string $languageCode ): string {
+		$allNames = CountryNames::getNames( $languageCode );
+		if ( !array_key_exists( $countryCode, $allNames ) ) {
+			throw new InvalidArgumentException( "Invalid country code: $countryCode" );
+		}
+		return $allNames[$countryCode];
 	}
 }

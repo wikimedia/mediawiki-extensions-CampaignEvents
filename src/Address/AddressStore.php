@@ -31,12 +31,13 @@ class AddressStore {
 		?Address $address,
 		int $eventID
 	): void {
+		$this->checkAddressForWrite( $address );
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$where = [ 'ceea_event' => $eventID ];
-		$addressWithoutCountry = $address ? $address->getAddressWithoutCountry() : null;
-		$country = $address ? $address->getCountry() : null;
-		if ( $addressWithoutCountry || $country ) {
+		if ( $address ) {
+			$addressWithoutCountry = $address->getAddressWithoutCountry();
+			$country = $address->getCountry();
 			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) {
 				$where[] = $dbw->expr( 'cea_full_address', '!=', $addressWithoutCountry . " \n " . $country );
 			}
@@ -73,6 +74,7 @@ class AddressStore {
 	 * or insert a new entry.
 	 */
 	public function acquireAddressID( Address $address ): int {
+		$this->checkAddressForWrite( $address );
 		$fullAddressWithCountry = $address->getAddressWithoutCountry() . " \n " . $address->getCountry();
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
@@ -115,6 +117,19 @@ class AddressStore {
 			$addressID = $dbw->insertId();
 		}
 		return $addressID;
+	}
+
+	private function checkAddressForWrite( ?Address $address ): void {
+		if ( !$address ) {
+			return;
+		}
+		$hasWriteNew = (bool)( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW );
+		if ( $hasWriteNew && $address->getCountryCode() === null ) {
+			throw new RuntimeException( 'Need the country code for WRITE_NEW' );
+		}
+		if ( !$hasWriteNew && $address->getCountryCode() !== null ) {
+			throw new RuntimeException( 'Cannot handle country code without WRITE_NEW' );
+		}
 	}
 
 	public function getEventAddress( IDatabase $db, int $eventID ): ?Address {
@@ -182,6 +197,7 @@ class AddressStore {
 		return new Address(
 			$addressWithoutCountry,
 			$country,
+			null
 		);
 	}
 }

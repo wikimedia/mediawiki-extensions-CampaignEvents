@@ -26,9 +26,11 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	private const STORED_COUNTRY = 'France';
 	private const STORED_COUNTRY_CODE = 'FR';
 
+	private const EVENT_WITH_ADDRESS_WITHOUT_COUNTRY = 5002;
 	private const STORED_ADDRESS_WITHOUT_COUNTRY = 'Address without country';
 	private const STORED_ADDRESS_WITHOUT_COUNTRY_ID = 2;
 
+	private const EVENT_WITH_ADDRESS_WITHOUT_ADDRESS = 5003;
 	private const STORED_COUNTRY_WITHOUT_ADDRESS = 'Australia';
 	private const STORED_COUNTRY_CODE_WITHOUT_ADDRESS = 'AU';
 	private const STORED_COUNTRY_WITHOUT_ADDRESS_ID = 3;
@@ -77,30 +79,17 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		};
 	}
 
-	/** @todo Switch back to `addDBData` once we no longer need the stage */
-	public function addDBDataTemp( string $storedFormat ): void {
-		$rowWithoutCountry = match ( $storedFormat ) {
-			self::STORED_FORMAT_OLD => [
-				'cea_id' => self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
-				'cea_full_address' => self::STORED_ADDRESS_WITHOUT_COUNTRY . " \n ",
-				'cea_country' => null,
-				'cea_country_code' => null,
-			],
-			self::STORED_FORMAT_BOTH => [
-				'cea_id' => self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
-				'cea_full_address' => self::STORED_ADDRESS_WITHOUT_COUNTRY,
-				'cea_country' => null,
-				'cea_country_code' => null,
-			],
-			self::STORED_FORMAT_NEW => [
-				'cea_id' => self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
-				'cea_full_address' => self::STORED_ADDRESS_WITHOUT_COUNTRY,
-				'cea_country' => null,
-				'cea_country_code' => null,
-			],
-			default => throw new InvalidArgumentException( "Invalid format $storedFormat" )
-		};
-		$rowWithoutAddress = match ( $storedFormat ) {
+	private static function getStoredRowWithoutCountryOldFormat(): array {
+		return [
+			'cea_id' => self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
+			'cea_full_address' => self::STORED_ADDRESS_WITHOUT_COUNTRY . " \n ",
+			'cea_country' => null,
+			'cea_country_code' => null,
+		];
+	}
+
+	private static function getStoredRowWithoutAddress( string $storedFormat ): array {
+		return match ( $storedFormat ) {
 			self::STORED_FORMAT_OLD => [
 				'cea_id' => self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
 				'cea_full_address' => " \n " . self::STORED_COUNTRY_WITHOUT_ADDRESS,
@@ -121,11 +110,25 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			default => throw new InvalidArgumentException( "Invalid format $storedFormat" )
 		};
+	}
 
+	/** @todo Switch back to `addDBData` once we no longer need the stage */
+	public function addDBDataTemp( string $storedFormat ): void {
+		if ( $storedFormat === self::STORED_FORMAT_OLD ) {
+			$middleRow = self::getStoredRowWithoutCountryOldFormat();
+		} else {
+			// Insert a random row so that IDs remain the same
+			$middleRow = [
+				'cea_id' => self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
+				'cea_full_address' => 'This address should never be used',
+				'cea_country' => null,
+				'cea_country_code' => 'XX',
+			];
+		}
 		$addressRows = [
 			self::getStoredAddressRow( $storedFormat ),
-			$rowWithoutCountry,
-			$rowWithoutAddress,
+			$middleRow,
+			self::getStoredRowWithoutAddress( $storedFormat ),
 		];
 		if ( count( $addressRows ) !== self::ADDRESS_ENTRY_COUNT ) {
 			throw new LogicException( 'Should update number of stored address entries' );
@@ -140,7 +143,15 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			[
 				'ceea_event' => self::EVENT_WITH_ADDRESS,
 				'ceea_address' => self::STORED_ADDRESS_ID,
-			]
+			],
+			[
+				'ceea_event' => self::EVENT_WITH_ADDRESS_WITHOUT_COUNTRY,
+				'ceea_address' => self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
+			],
+			[
+				'ceea_event' => self::EVENT_WITH_ADDRESS_WITHOUT_ADDRESS,
+				'ceea_address' => self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
+			],
 		];
 		$this->getDb()->newInsertQueryBuilder()
 			->insertInto( 'ce_event_address' )
@@ -163,11 +174,22 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		int $expectsJoinRow,
 		?stdClass $expectedAddressRow,
 		int $migrationStage,
-		string $storedFormat = self::STORED_FORMAT_OLD
+		?string $storedFormat = null,
+		?string $expectedException = null
 	) {
+		$storedFormat ??= self::STORED_FORMAT_OLD;
 		$this->addDBDataTemp( $storedFormat );
 		$store = $this->getAddressStore( $migrationStage );
+
+		if ( $expectedException !== null ) {
+			$this->expectException( RuntimeException::class );
+			$this->expectExceptionMessage( $expectedException );
+		}
 		$store->updateAddresses( $address, $eventID );
+		if ( $expectedException !== null ) {
+			// Let PHPUnit fail if no exception was thrown
+			return;
+		}
 
 		$addressRowIDs = $this->getDb()->selectFieldValues(
 			'ce_event_address',
@@ -197,8 +219,11 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		$eventWithoutAddress = 42;
 		$newTestAddress = 'Some NEW address';
 		$newTestCountry = 'Egypt';
+		$newTestCountryCode = 'EG';
 
 		foreach ( self::MIGRATION_STAGES as $stageName => $stageValue ) {
+			$hasWriteNew = (bool)( $stageValue & SCHEMA_COMPAT_WRITE_NEW );
+
 			yield "$stageName - No previous row, no address" => [
 				$eventWithoutAddress,
 				null,
@@ -206,9 +231,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				null,
 				$stageValue,
 			];
-			yield "$stageName - No previous row, address, no country" => [
+			yield "$stageName - No previous row, address, no country, no country code" => [
 				$eventWithoutAddress,
-				new Address( $newTestAddress, null ),
+				new Address( $newTestAddress, null, null ),
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
@@ -217,10 +242,12 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 					'cea_country_code' => null,
 				],
 				$stageValue,
+				null,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
 			];
-			yield "$stageName - No previous row, country, no address" => [
+			yield "$stageName - No previous row, country, no country code, no address" => [
 				$eventWithoutAddress,
-				new Address( null, $newTestCountry ),
+				new Address( null, $newTestCountry, null ),
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
@@ -229,10 +256,26 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 					'cea_country_code' => null,
 				],
 				$stageValue,
+				null,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
 			];
-			yield "$stageName - No previous row, address and country" => [
+			yield "$stageName - No previous row, country code, no country, no address" => [
 				$eventWithoutAddress,
-				new Address( $newTestAddress, $newTestCountry ),
+				new Address( null, null, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => " \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stageValue,
+				null,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$stageName - No previous row, address and country, no country code" => [
+				$eventWithoutAddress,
+				new Address( $newTestAddress, $newTestCountry, null ),
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
@@ -241,10 +284,56 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 					'cea_country_code' => null,
 				],
 				$stageValue,
+				null,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$stageName - No previous row, address and country code, no country" => [
+				$eventWithoutAddress,
+				new Address( $newTestAddress, null, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => "$newTestAddress \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stageValue,
+				null,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$stageName - No previous row, country and country code, no address" => [
+				$eventWithoutAddress,
+				new Address( null, $newTestCountry, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => "$newTestAddress \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stageValue,
+				null,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$stageName - No previous row, address, country, and country code" => [
+				$eventWithoutAddress,
+				new Address( $newTestAddress, $newTestCountry, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => "$newTestAddress \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stageValue,
+				null,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
 		}
 
 		foreach ( self::provideMigrationStagesAndStoredFormats() as $desc => [ $stage, $storedFormat ] ) {
+			$hasWriteNew = (bool)( $stage & SCHEMA_COMPAT_WRITE_NEW );
+
 			yield "$desc - Replace previous row, no address" => [
 				self::EVENT_WITH_ADDRESS,
 				null,
@@ -253,9 +342,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				$stage,
 				$storedFormat,
 			];
-			yield "$desc - Replace previous row, address, no country" => [
+			yield "$desc - Replace previous row, address, no country, no country code" => [
 				self::EVENT_WITH_ADDRESS,
-				new Address( $newTestAddress, null ),
+				new Address( $newTestAddress, null, null ),
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
@@ -265,10 +354,11 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				],
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
 			];
-			yield "$desc - Replace previous row, country, no address" => [
+			yield "$desc - Replace previous row, country, no country code, no address" => [
 				self::EVENT_WITH_ADDRESS,
-				new Address( null, $newTestCountry ),
+				new Address( null, $newTestCountry, null ),
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
@@ -278,10 +368,25 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				],
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
 			];
-			yield "$desc - Replace previous row, address and country" => [
+			yield "$desc - Replace previous row, country code, no country, no address" => [
 				self::EVENT_WITH_ADDRESS,
-				new Address( $newTestAddress, $newTestCountry ),
+				new Address( null, null, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => " \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$desc - Replace previous row, address and country, no country code" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( $newTestAddress, $newTestCountry, null ),
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
@@ -291,15 +396,121 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				],
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$desc - Replace previous row, address and country code, no country" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( $newTestAddress, null, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => "$newTestAddress \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$desc - Replace previous row, country and country code, no address" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( null, $newTestCountry, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => "$newTestAddress \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$desc - Replace previous row, address, country and country code" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( $newTestAddress, $newTestCountry, $newTestCountryCode ),
+				1,
+				(object)[
+					'cea_id' => self::NEXT_ADDRESS_ID,
+					'cea_full_address' => "$newTestAddress \n $newTestCountry",
+					'cea_country' => $newTestCountry,
+					'cea_country_code' => null,
+				],
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
 
-			yield "$desc - Same as previous row" => [
+			yield "$desc - Same as previous row with address and country, pass country but not code" => [
 				self::EVENT_WITH_ADDRESS,
-				new Address( self::STORED_ADDRESS, self::STORED_COUNTRY ),
+				new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, null ),
 				1,
 				(object)self::getStoredAddressRow( $storedFormat ),
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$desc - Same as previous row with address and country, pass country code but not country" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( self::STORED_ADDRESS, null, self::STORED_COUNTRY_CODE ),
+				1,
+				(object)self::getStoredAddressRow( $storedFormat ),
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$desc - Same as previous row with address and country, pass country and country code" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, self::STORED_COUNTRY_CODE ),
+				1,
+				(object)self::getStoredAddressRow( $storedFormat ),
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+
+			if ( $storedFormat === self::STORED_FORMAT_OLD ) {
+				yield "$desc - Same as previous row without country" => [
+					self::EVENT_WITH_ADDRESS,
+					new Address( self::STORED_ADDRESS_WITHOUT_COUNTRY, null, null ),
+					1,
+					(object)self::getStoredRowWithoutCountryOldFormat(),
+					$stage,
+					$storedFormat,
+					$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+				];
+			}
+
+			yield "$desc - Same as previous row without address, pass country but not code" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS, null ),
+				1,
+				(object)self::getStoredRowWithoutAddress( $storedFormat ),
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$desc - Same as previous row without address, pass country code but not country" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address( null, null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
+				1,
+				(object)self::getStoredRowWithoutAddress( $storedFormat ),
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$desc - Same as previous row without address, pass country and country code" => [
+				self::EVENT_WITH_ADDRESS,
+				new Address(
+					null,
+					self::STORED_COUNTRY_WITHOUT_ADDRESS,
+					self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS
+				),
+				1,
+				(object)self::getStoredRowWithoutAddress( $storedFormat ),
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
 		}
 	}
@@ -307,49 +518,149 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @dataProvider provideAcquireAddressID
 	 */
-	public function testAcquireAddressID( Address $address, int $expected, int $migrationStage, string $storedFormat ) {
+	public function testAcquireAddressID(
+		Address $address,
+		int $expected,
+		int $migrationStage,
+		string $storedFormat,
+		?string $expectedException = null
+	) {
 		$this->addDBDataTemp( $storedFormat );
 		$store = $this->getAddressStore( $migrationStage );
+
+		if ( $expectedException !== null ) {
+			$this->expectException( RuntimeException::class );
+			$this->expectExceptionMessage( $expectedException );
+		}
 		$this->assertSame( $expected, $store->acquireAddressID( $address ) );
 	}
 
 	public static function provideAcquireAddressID(): Generator {
 		foreach ( self::provideMigrationStagesAndStoredFormats() as $desc => [ $stage, $storedFormat ] ) {
-			yield "$desc - Existing address" => [
-				new Address( self::STORED_ADDRESS, self::STORED_COUNTRY ),
+			$hasWriteNew = (bool)( $stage & SCHEMA_COMPAT_WRITE_NEW );
+
+			yield "$desc - Existing full address, pass country and country code" => [
+				new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, self::STORED_COUNTRY_CODE ),
 				self::STORED_ADDRESS_ID,
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
-			yield "$desc - Existing address without country" => [
-				new Address( self::STORED_ADDRESS_WITHOUT_COUNTRY, null ),
-				self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
+			yield "$desc - Existing full address, pass country but no country code" => [
+				new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, null ),
+				self::STORED_ADDRESS_ID,
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
 			];
-			yield "$desc - Existing address but with different country" => [
-				new Address( self::STORED_ADDRESS, 'Egypt' ),
+			yield "$desc - Existing full address, pass country code but no country" => [
+				new Address( self::STORED_ADDRESS, null, self::STORED_COUNTRY_CODE ),
+				self::STORED_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+
+			if ( $storedFormat === self::STORED_FORMAT_OLD ) {
+				yield "$desc - Existing address without country" => [
+					new Address( self::STORED_ADDRESS_WITHOUT_COUNTRY, null, null ),
+					self::STORED_ADDRESS_WITHOUT_COUNTRY_ID,
+					$stage,
+					$storedFormat,
+					$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+				];
+			}
+
+			yield "$desc - Existing address but with different country, pass country and country code" => [
+				new Address( self::STORED_ADDRESS, 'Egypt', 'EG' ),
 				self::NEXT_ADDRESS_ID,
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
-			yield "$desc - Existing country without address" => [
-				new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS ),
+			yield "$desc - Existing address but with different country, pass country but no country code" => [
+				new Address( self::STORED_ADDRESS, 'Egypt', null ),
+				self::NEXT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$desc - Existing address but with different country, pass country code but no country" => [
+				new Address( self::STORED_ADDRESS, null, 'EG' ),
+				self::NEXT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+
+			yield "$desc - Existing country without address, pass country and country code" => [
+				new Address(
+					null,
+					self::STORED_COUNTRY_WITHOUT_ADDRESS,
+					self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS
+				),
 				self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
-			yield "$desc - Existing country but with a different address" => [
-				new Address( 'A new address', self::STORED_COUNTRY ),
+			yield "$desc - Existing country without address, pass country but no country code" => [
+				new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS, null ),
+				self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$desc - Existing country without address, pass country code but no country" => [
+				new Address( null, null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
+				self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+
+			yield "$desc - Existing country but with a different address, pass country and country code" => [
+				new Address( 'A new address', self::STORED_COUNTRY, self::STORED_COUNTRY_CODE ),
 				self::NEXT_ADDRESS_ID,
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
-			yield "$desc - New address" => [
-				new Address( 'This is a new address!', 'Egypt' ),
+			yield "$desc - Existing country but with a different address, pass country but no country code" => [
+				new Address( 'A new address', self::STORED_COUNTRY, null ),
 				self::NEXT_ADDRESS_ID,
 				$stage,
 				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$desc - Existing country but with a different address, pass country code but no country" => [
+				new Address( 'A new address', null, self::STORED_COUNTRY_CODE ),
+				self::NEXT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+
+			yield "$desc - New address, pass country and country code" => [
+				new Address( 'This is a new address!', 'Egypt', 'EG' ),
+				self::NEXT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
+			];
+			yield "$desc - New address, pass country but no country code" => [
+				new Address( 'This is a new address!', 'Egypt', null ),
+				self::NEXT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? 'Need the country code for WRITE_NEW' : null,
+			];
+			yield "$desc - New address, pass country code but no country" => [
+				new Address( 'This is a new address!', null, 'EG' ),
+				self::NEXT_ADDRESS_ID,
+				$stage,
+				$storedFormat,
+				$hasWriteNew ? null : 'Cannot handle country code without WRITE_NEW',
 			];
 		}
 	}
@@ -365,15 +676,49 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 	public static function provideGetEventAddress() {
 		foreach ( self::provideMigrationStagesAndStoredFormats() as $desc => [ $stage, $storedFormat ] ) {
-			yield "$desc - Has address" => [
-				self::EVENT_WITH_ADDRESS,
-				new Address(
+			if ( $stage & SCHEMA_COMPAT_READ_NEW ) {
+				$expectedFullAddress = new Address(
 					self::STORED_ADDRESS,
 					self::STORED_COUNTRY,
-				),
+					self::STORED_COUNTRY_CODE
+				);
+			} else {
+				$expectedFullAddress = new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, null );
+			}
+			yield "$desc - Has full address" => [
+				self::EVENT_WITH_ADDRESS,
+				$expectedFullAddress,
 				$stage,
 				$storedFormat,
 			];
+
+			yield "$desc - Has address without country" => [
+				self::EVENT_WITH_ADDRESS_WITHOUT_COUNTRY,
+				new Address( self::STORED_ADDRESS_WITHOUT_COUNTRY, null, null ),
+				$stage,
+				$storedFormat,
+			];
+
+			if ( $stage & SCHEMA_COMPAT_READ_NEW ) {
+				$expectedAddressWithoutAddress = new Address(
+					null,
+					self::STORED_COUNTRY_WITHOUT_ADDRESS,
+					self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS
+				);
+			} else {
+				$expectedAddressWithoutAddress = new Address(
+					null,
+					self::STORED_COUNTRY_WITHOUT_ADDRESS,
+					null
+				);
+			}
+			yield "$desc - Has address without address" => [
+				self::EVENT_WITH_ADDRESS_WITHOUT_ADDRESS,
+				$expectedAddressWithoutAddress,
+				$stage,
+				$storedFormat,
+			];
+
 			yield "$desc - Does not have an address" => [
 				99999999,
 				null,
@@ -466,11 +811,21 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	/** @dataProvider provideMigrationStagesAndStoredFormats */
 	public function testGetAddressesForEvents( int $migrationStage, string $storedFormat ) {
 		$this->addDBDataTemp( $storedFormat );
-		$expected = [
-			self::EVENT_WITH_ADDRESS => new Address(
+		if ( $migrationStage & SCHEMA_COMPAT_READ_NEW ) {
+			$expectedAddress = new Address(
 				self::STORED_ADDRESS,
-				self::STORED_COUNTRY
-			),
+				self::STORED_COUNTRY,
+				self::STORED_COUNTRY_CODE
+			);
+		} else {
+			$expectedAddress = new Address(
+				self::STORED_ADDRESS,
+				self::STORED_COUNTRY,
+				null
+			);
+		}
+		$expected = [
+			self::EVENT_WITH_ADDRESS => $expectedAddress,
 		];
 		$actual = $this->getAddressStore( $migrationStage )
 			->getAddressesForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, 99999999 ] );
@@ -494,9 +849,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	public static function provideMigrationStagesAndStoredFormats(): Generator {
 		$allowedFormats = [
 			MIGRATION_OLD => [ self::STORED_FORMAT_OLD ],
-			MIGRATION_WRITE_BOTH => [ self::STORED_FORMAT_OLD, self::STORED_FORMAT_BOTH, self::STORED_FORMAT_NEW ],
+			MIGRATION_WRITE_BOTH => [ self::STORED_FORMAT_OLD, self::STORED_FORMAT_BOTH ],
 			MIGRATION_WRITE_NEW => [ self::STORED_FORMAT_OLD, self::STORED_FORMAT_BOTH, self::STORED_FORMAT_NEW ],
-			MIGRATION_NEW => [ self::STORED_FORMAT_OLD, self::STORED_FORMAT_BOTH, self::STORED_FORMAT_NEW ],
+			MIGRATION_NEW => [ self::STORED_FORMAT_BOTH, self::STORED_FORMAT_NEW ],
 		];
 		foreach ( self::MIGRATION_STAGES as $stageName => $stageValue ) {
 			foreach ( array_intersect( self::STORED_FORMATS, $allowedFormats[$stageValue] ) as $storedFormat ) {

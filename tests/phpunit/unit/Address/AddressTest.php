@@ -14,16 +14,18 @@ use MediaWikiUnitTestCase;
 class AddressTest extends MediaWikiUnitTestCase {
 	public function testConstructAndGetters() {
 		$addressWithoutCountry = 'Some address';
-		$country = 'Some country';
-		$obj = new Address( $addressWithoutCountry, $country );
+		$country = 'France';
+		$countryCode = 'FR';
+		$obj = new Address( $addressWithoutCountry, $country, $countryCode );
 
 		$this->assertSame( $addressWithoutCountry, $obj->getAddressWithoutCountry(), 'Address without country' );
 		$this->assertSame( $country, $obj->getCountry(), 'Country' );
+		$this->assertSame( $countryCode, $obj->getCountryCode(), 'Country code' );
 	}
 
 	public function testConstruct__bothNull() {
 		$this->expectException( InvalidArgumentException::class );
-		$this->expectExceptionMessage( '$addressWithoutCountry and $country cannot be both null' );
-		new Address( null, null );
+		$this->expectExceptionMessage( 'Need at least one of address and country' );
+		new Address( null, null, null );
 	}
 }

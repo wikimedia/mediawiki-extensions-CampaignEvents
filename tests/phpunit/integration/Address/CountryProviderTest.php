@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Address;
 
+use Generator;
+use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWikiIntegrationTestCase;
 
@@ -71,5 +73,29 @@ class CountryProviderTest extends MediaWikiIntegrationTestCase {
 			'empty string' => [ '', false ],
 			'null value' => [ null, false ],
 		];
+	}
+
+	/**
+	 * @covers ::getCountryName
+	 * @dataProvider provideGetCountryName
+	 */
+	public function testGetCountryName( string $lang, string $countryCode, string $expected ) {
+		$this->assertSame( $expected, $this->countryProvider->getCountryName( $countryCode, $lang ) );
+	}
+
+	public static function provideGetCountryName(): Generator {
+		yield 'English' => [ 'en', 'DE', 'Germany' ];
+		yield 'French' => [ 'fr', 'DE', 'Allemagne' ];
+		yield 'Ligurian' => [ 'lij', 'GS', 'Geòrgia do Sud e Isoe Sandwich do Sud' ];
+	}
+
+	/**
+	 * @covers ::getCountryName
+	 */
+	public function testGetCountryName__invalidCountry() {
+		$invalidCode = 'some-invalid-code';
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( "Invalid country code: $invalidCode" );
+		$this->countryProvider->getCountryName( $invalidCode, 'en' );
 	}
 }

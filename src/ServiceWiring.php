@@ -448,6 +448,8 @@ return [
 		return new CountryProvider();
 	},
 	EventFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFormatter {
-		return new EventFormatter();
+		return new EventFormatter(
+			$services->get( CountryProvider::SERVICE_NAME ),
+		);
 	},
 ];

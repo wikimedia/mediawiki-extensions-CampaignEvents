@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Formatters;
 
 use MediaWiki\Extension\CampaignEvents\Address\Address;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
@@ -24,6 +25,14 @@ class EventFormatter {
 	public const SERVICE_NAME = 'CampaignEventsEventFormatter';
 
 	public const DISPLAYED_WIKI_COUNT = 3;
+
+	private CountryProvider $countryProvider;
+
+	public function __construct(
+		CountryProvider $countryProvider
+	) {
+		$this->countryProvider = $countryProvider;
+	}
 
 	/**
 	 * @param EventRegistration $event
@@ -74,8 +83,14 @@ class EventFormatter {
 	}
 
 	public function formatAddress( Address $address, string $languageCode ): string {
+		$countryCode = $address->getCountryCode();
+		if ( $countryCode ) {
+			$countryString = $this->countryProvider->getCountryName( $countryCode, $languageCode );
+		} else {
+			$countryString = $address->getCountry();
+		}
 		// This is quite ugly, but we can't do much better without geocoding and letting the user enter
 		// the full address (T309325).
-		return $address->getAddressWithoutCountry() . "\n" . $address->getCountry();
+		return $address->getAddressWithoutCountry() . "\n" . $countryString;
 	}
 }

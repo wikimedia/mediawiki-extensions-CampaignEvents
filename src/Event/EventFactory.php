@@ -203,7 +203,7 @@ class EventFactory {
 			$this->validateMeetingInfo( $participationOptions, $meetingURL, $meetingCountry, $meetingAddress )
 		);
 		if ( $meetingCountry !== null || $meetingAddress !== null ) {
-			$address = new Address( $meetingAddress, $meetingCountry );
+			$address = new Address( $meetingAddress, $meetingCountry, null );
 		} else {
 			$address = null;
 		}

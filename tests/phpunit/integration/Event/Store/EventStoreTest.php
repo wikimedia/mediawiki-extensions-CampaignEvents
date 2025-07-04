@@ -53,7 +53,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			new Address( 'Address', 'Country' ),
+			new Address( 'Address', 'France', null ),
 			'Chat URL',
 			false,
 			[],
@@ -139,9 +139,19 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Event with address and country' => [
 			new EventRegistration( ...array_values( $baseCtrArgs ) )
 		];
-		$eventWithOnlyAddress = array_replace( $baseCtrArgs, [ 'Address' => new Address( 'Some address', null ) ] );
+		$eventWithOnlyAddress = array_replace(
+			$baseCtrArgs,
+			[ 'Address' => new Address( 'Some address', null, null ) ]
+		);
 		yield 'Event with only address' => [
 			new EventRegistration( ...array_values( $eventWithOnlyAddress ) ),
+		];
+		$eventWithOnlyCountry = array_replace(
+			$baseCtrArgs,
+			[ 'Address' => new Address( null, 'France', null ) ]
+		);
+		yield 'Event with only country' => [
+			new EventRegistration( ...array_values( $eventWithOnlyCountry ) ),
 		];
 	}
 
@@ -291,7 +301,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			'address' => new Address( 'Address', 'Country' ),
+			'address' => new Address( 'Address', 'France', null ),
 			'Chat URL',
 			false,
 			[],

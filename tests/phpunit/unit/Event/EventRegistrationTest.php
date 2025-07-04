@@ -45,7 +45,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			],
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
-			'address' => new Address( 'Some address', 'Some country' ),
+			'address' => new Address( 'Some address', 'France', null ),
 			'chat' => 'https://chat.example.org',
 			'is_test_event' => false,
 			'questions' => [],
