@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -46,27 +47,8 @@ class FrontendModulesFactory {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
+	private EventFormatter $eventFormatter;
 
-	/**
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param OrganizersStore $organizersStore
-	 * @param ParticipantsStore $participantsStore
-	 * @param PageURLResolver $pageURLResolver
-	 * @param UserLinker $userLinker
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param PermissionChecker $permissionChecker
-	 * @param EventTimeFormatter $eventTimeFormatter
-	 * @param UserFactory $userFactory
-	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param CampaignsUserMailer $userMailer
-	 * @param ParticipantAnswersStore $answersStore
-	 * @param EventAggregatedAnswersStore $aggregatedAnswersStore
-	 * @param EventQuestionsRegistry $questionsRegistry
-	 * @param CampaignEventsHookRunner $hookRunner
-	 * @param WikiLookup $wikiLookup
-	 * @param ITopicRegistry $topicRegistry
-	 * @param EventTypesRegistry $eventTypesRegistry
-	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		OrganizersStore $organizersStore,
@@ -85,7 +67,8 @@ class FrontendModulesFactory {
 		CampaignEventsHookRunner $hookRunner,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry
+		EventTypesRegistry $eventTypesRegistry,
+		EventFormatter $eventFormatter,
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
@@ -105,6 +88,7 @@ class FrontendModulesFactory {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->eventFormatter = $eventFormatter;
 	}
 
 	public function newEventDetailsModule(
@@ -123,6 +107,7 @@ class FrontendModulesFactory {
 			$this->wikiLookup,
 			$this->topicRegistry,
 			$this->eventTypesRegistry,
+			$this->eventFormatter,
 			$registration,
 			$language
 		);

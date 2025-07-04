@@ -7,6 +7,7 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -34,6 +35,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 	private EventTimeFormatter $eventTimeFormatter;
 	private OrganizersStore $organizersStore;
 	private UserLinker $userLinker;
+	private EventFormatter $eventFormatter;
 
 	/**
 	 * @param Event $event
@@ -55,6 +57,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		$this->eventTimeFormatter = CampaignEventsServices::getEventTimeFormatter();
 		$this->organizersStore = CampaignEventsServices::getOrganizersStore();
 		$this->userLinker = CampaignEventsServices::getUserLinker();
+		$this->eventFormatter = CampaignEventsServices::getEventFormatter();
 	}
 
 	/**
@@ -205,7 +208,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 				$ret .= Html::element(
 					'p',
 					[ 'style' => 'white-space: pre-wrap' ],
-					$address->toString()
+					$this->eventFormatter->formatAddress( $address, $this->language->getCode() )
 				);
 			}
 		}

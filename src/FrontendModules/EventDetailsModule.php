@@ -8,6 +8,7 @@ use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
@@ -68,22 +69,8 @@ class EventDetailsModule {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
+	private EventFormatter $eventFormatter;
 
-	/**
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param OrganizersStore $organizersStore
-	 * @param PageURLResolver $pageURLResolver
-	 * @param UserLinker $userLinker
-	 * @param EventTimeFormatter $eventTimeFormatter
-	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param CampaignEventsHookRunner $hookRunner
-	 * @param PermissionChecker $permissionChecker
-	 * @param WikiLookup $wikiLookup
-	 * @param ITopicRegistry $topicRegistry
-	 * @param EventTypesRegistry $eventTypesRegistry
-	 * @param ExistingEventRegistration $registration
-	 * @param Language $language
-	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		OrganizersStore $organizersStore,
@@ -96,6 +83,7 @@ class EventDetailsModule {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
+		EventFormatter $eventFormatter,
 		ExistingEventRegistration $registration,
 		Language $language
 	) {
@@ -112,6 +100,7 @@ class EventDetailsModule {
 		$this->registration = $registration;
 		$this->language = $language;
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->eventFormatter = $eventFormatter;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 	}
 
@@ -554,8 +543,12 @@ class EventDetailsModule {
 			$meetingAddress = $this->registration->getAddress();
 			if ( $meetingAddress ) {
 				$stringDir = Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' );
+				$formattedAddress = $this->eventFormatter->formatAddress(
+					$meetingAddress,
+					$out->getLanguage()->getCode()
+				);
 				$items[] = ( new Tag( 'div' ) )
-					->appendContent( $meetingAddress->toString() )
+					->appendContent( $formattedAddress )
 					->setAttributes( [ 'dir' => $stringDir ] );
 			} else {
 				$items[] = ( new Tag( 'div' ) )

@@ -3,6 +3,7 @@
 declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Formatters;
 
+use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
@@ -70,5 +71,11 @@ class EventFormatter {
 			);
 		}
 		return new HtmlSnippet( $language->listToText( $escapedWikiNames ) );
+	}
+
+	public function formatAddress( Address $address, string $languageCode ): string {
+		// This is quite ugly, but we can't do much better without geocoding and letting the user enter
+		// the full address (T309325).
+		return $address->getAddressWithoutCountry() . "\n" . $address->getCountry();
 	}
 }
