@@ -2,9 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"Ajiniyaz",
-			"Ajiniyaz Nurniyazov"
+			"Ajiniyaz Nurniyazov",
+			"Janabaevazizbek"
 		]
 	},
+	"group-event-organizer-member": "{{GENDER:$1|ilaj shólkemlestiriwshisi}}",
 	"campaignevents-error-invalid-timezone": "Durıslı waqıt regionın kiritiń.",
 	"campaignevents-error-trackingtool-without-eventid": "Berilgen baqlaw quralında waqıya identifikatorın kórsetiń.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Baqlaw quralı identifikatorın kórsetiń",
