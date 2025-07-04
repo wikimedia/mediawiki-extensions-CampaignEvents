@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Address;
 
+use InvalidArgumentException;
+
 /**
  * Value object that represents an address.
  */
@@ -15,6 +17,9 @@ class Address {
 		?string $addressWithoutCountry,
 		?string $country
 	) {
+		if ( $addressWithoutCountry === null && $country === null ) {
+			throw new InvalidArgumentException( '$addressWithoutCountry and $country cannot be both null' );
+		}
 		$this->addressWithoutCountry = $addressWithoutCountry;
 		$this->country = $country;
 	}
