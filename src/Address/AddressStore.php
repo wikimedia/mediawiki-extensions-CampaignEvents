@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Address;
 
+use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use RuntimeException;
 use stdClass;
@@ -31,7 +32,7 @@ class AddressStore {
 		?Address $address,
 		int $eventID
 	): void {
-		$this->checkAddressForWrite( $address );
+		$address = $this->adjustAddressForWrite( $address );
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$where = [ 'ceea_event' => $eventID ];
@@ -42,7 +43,10 @@ class AddressStore {
 				$where[] = $dbw->expr( 'cea_full_address', '!=', $addressWithoutCountry . " \n " . $country );
 			}
 			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_NEW ) {
-				throw new RuntimeException( 'To be implemented' );
+				$where[] = $dbw->orExpr( [
+					$dbw->expr( 'cea_full_address', '!=', $addressWithoutCountry ?? '' ),
+					$dbw->expr( 'cea_country_code', '!=', $address->getCountryCode() ),
+				] );
 			}
 		}
 
@@ -74,11 +78,16 @@ class AddressStore {
 	 * or insert a new entry.
 	 */
 	public function acquireAddressID( Address $address ): int {
-		$this->checkAddressForWrite( $address );
+		$address = $this->adjustAddressForWrite( $address );
 		$fullAddressWithCountry = $address->getAddressWithoutCountry() . " \n " . $address->getCountry();
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$where = [];
+		// NOTE: The WHERE clause will fail to find an existing row if:
+		// - The row is still in the old format (has a country but no country code)
+		// - The original Address object (before adjustAddressForWrite) contains a country code, but no country
+		// - The stored country is not in English (as that's what adjustAddressForWrite uses)
+		// This is fine though, as it will eventually be cleaned up by the migration script.
 		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) {
 			$where[] = $dbw->andExpr( [
 				'cea_full_address' => $fullAddressWithCountry,
@@ -86,7 +95,10 @@ class AddressStore {
 			] );
 		}
 		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_NEW ) {
-			throw new RuntimeException( 'To be implemented' );
+			$where[] = $dbw->andExpr( [
+				'cea_full_address' => $address->getAddressWithoutCountry() ?? '',
+				'cea_country_code' => $address->getCountryCode(),
+			] );
 		}
 
 		// TODO This query is not indexed; for the future we will need to use some indexed field (like unique
@@ -105,9 +117,12 @@ class AddressStore {
 			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_OLD ) {
 				$newRow['cea_full_address'] = $fullAddressWithCountry;
 				$newRow['cea_country'] = $address->getCountry();
+			} else {
+				$newRow['cea_country'] = null;
 			}
 			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW ) {
-				throw new RuntimeException( 'To be implemented' );
+				$newRow['cea_full_address'] = $address->getAddressWithoutCountry() ?? '';
+				$newRow['cea_country_code'] = $address->getCountryCode();
 			}
 			$dbw->newInsertQueryBuilder()
 				->insertInto( 'ce_address' )
@@ -119,17 +134,41 @@ class AddressStore {
 		return $addressID;
 	}
 
-	private function checkAddressForWrite( ?Address $address ): void {
+	private function adjustAddressForWrite( ?Address $address ): ?Address {
 		if ( !$address ) {
-			return;
+			return null;
 		}
+
 		$hasWriteNew = (bool)( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW );
-		if ( $hasWriteNew && $address->getCountryCode() === null ) {
+		$countryCode = $address->getCountryCode();
+
+		if ( $hasWriteNew && $countryCode === null ) {
+			// Note, this could happen in practice for page moves and setting organizers via the API. Both should be
+			// rare occurrences, so much so if we can quickly run the migration script and advance the migration
+			// stage. For APIs and special pages, this should be prevented by EventFactory. See T397476#10980178.
 			throw new RuntimeException( 'Need the country code for WRITE_NEW' );
 		}
-		if ( !$hasWriteNew && $address->getCountryCode() !== null ) {
+		if ( !$hasWriteNew && $countryCode !== null ) {
+			// We could hardcode a country here, but instead we throw an exception because this
+			// is not supposed to happen in practice.
 			throw new RuntimeException( 'Cannot handle country code without WRITE_NEW' );
 		}
+		if (
+			( $this->countrySchemaMigrationStage & ( SCHEMA_COMPAT_READ_OLD | SCHEMA_COMPAT_WRITE_OLD ) ) &&
+			$countryCode !== null &&
+			$address->getCountry() === null
+		) {
+			// If we need to write to or read from the old schema, add a free-text country to maximize
+			// cross-compatibility. This will also allow us to detect a pre-existing row, but only if the row itself
+			// also uses English. These values, as well as duplicates, will be cleaned up by the migration script.
+			$englishCountries = CampaignEventsServices::getCountryProvider()->getAvailableCountries( 'en' );
+			return new Address(
+				$address->getAddressWithoutCountry(),
+				$englishCountries[$countryCode],
+				$countryCode
+			);
+		}
+		return $address;
 	}
 
 	public function getEventAddress( IDatabase $db, int $eventID ): ?Address {
@@ -179,11 +218,13 @@ class AddressStore {
 	}
 
 	private function addressFromRow( stdClass $row ): Address {
-		$addressWithoutCountry = $country = null;
+		$addressWithoutCountry = $country = $countryCode = null;
 		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_NEW ) {
-			throw new RuntimeException( 'To be implemented' );
+			$addressWithoutCountry = $row->cea_full_address;
+			$country = $row->cea_country;
+			$countryCode = $row->cea_country_code;
 		}
-		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) {
+		if ( $countryCode === null && ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) ) {
 			// Remove the country from the address, making sure to preserve other newlines in the address.
 			$addressParts = explode( " \n ", $row->cea_full_address );
 			array_pop( $addressParts );
@@ -197,7 +238,7 @@ class AddressStore {
 		return new Address(
 			$addressWithoutCountry,
 			$country,
-			null
+			$countryCode
 		);
 	}
 }

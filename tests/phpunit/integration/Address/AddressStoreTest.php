@@ -40,10 +40,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 	private const MIGRATION_STAGES = [
 		'MIGRATION_OLD' => MIGRATION_OLD,
-		// TODO: Test all stages once the logic for them exists.
-		// 'MIGRATION_WRITE_BOTH' => MIGRATION_WRITE_BOTH,
-		// 'MIGRATION_WRITE_NEW' => MIGRATION_WRITE_NEW,
-		// 'MIGRATION_NEW' => MIGRATION_NEW,
+		'MIGRATION_WRITE_BOTH' => MIGRATION_WRITE_BOTH,
+		'MIGRATION_WRITE_NEW' => MIGRATION_WRITE_NEW,
+		'MIGRATION_NEW' => MIGRATION_NEW,
 	];
 
 	/**
@@ -222,6 +221,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		$newTestCountryCode = 'EG';
 
 		foreach ( self::MIGRATION_STAGES as $stageName => $stageValue ) {
+			$hasWriteOld = (bool)( $stageValue & SCHEMA_COMPAT_WRITE_OLD );
 			$hasWriteNew = (bool)( $stageValue & SCHEMA_COMPAT_WRITE_NEW );
 
 			yield "$stageName - No previous row, no address" => [
@@ -265,9 +265,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => " \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? '' : " \n $newTestCountry",
+					// This works because we hardcode the English name.
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $newTestCountryCode,
 				],
 				$stageValue,
 				null,
@@ -293,9 +294,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => "$newTestAddress \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? $newTestAddress : "$newTestAddress \n $newTestCountry",
+					// This works because we hardcode the English name.
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $hasWriteNew ? $newTestCountryCode : null,
 				],
 				$stageValue,
 				null,
@@ -307,9 +309,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => "$newTestAddress \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? '' : " \n $newTestCountry",
+					// This is taken from the Address object, so it would work in any language
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $hasWriteNew ? $newTestCountryCode : null,
 				],
 				$stageValue,
 				null,
@@ -321,9 +324,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => "$newTestAddress \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? $newTestAddress : "$newTestAddress \n $newTestCountry",
+					// This is taken from the Address object, so it would work in any language
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $hasWriteNew ? $newTestCountryCode : null,
 				],
 				$stageValue,
 				null,
@@ -332,6 +336,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		}
 
 		foreach ( self::provideMigrationStagesAndStoredFormats() as $desc => [ $stage, $storedFormat ] ) {
+			$hasWriteOld = (bool)( $stage & SCHEMA_COMPAT_WRITE_OLD );
 			$hasWriteNew = (bool)( $stage & SCHEMA_COMPAT_WRITE_NEW );
 
 			yield "$desc - Replace previous row, no address" => [
@@ -376,9 +381,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => " \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? '' : " \n $newTestCountry",
+					// This works because we hardcode the English name.
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $hasWriteNew ? $newTestCountryCode : null,
 				],
 				$stage,
 				$storedFormat,
@@ -404,9 +410,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => "$newTestAddress \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? $newTestAddress : "$newTestAddress \n $newTestCountry",
+					// This works because we hardcode the English name.
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $hasWriteNew ? $newTestCountryCode : null,
 				],
 				$stage,
 				$storedFormat,
@@ -418,9 +425,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => "$newTestAddress \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? '' : " \n $newTestCountry",
+					// This is taken from the Address object, so it would work in any language
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $hasWriteNew ? $newTestCountryCode : null,
 				],
 				$stage,
 				$storedFormat,
@@ -432,9 +440,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				1,
 				(object)[
 					'cea_id' => self::NEXT_ADDRESS_ID,
-					'cea_full_address' => "$newTestAddress \n $newTestCountry",
-					'cea_country' => $newTestCountry,
-					'cea_country_code' => null,
+					'cea_full_address' => $hasWriteNew ? $newTestAddress : "$newTestAddress \n $newTestCountry",
+					// This is taken from the Address object, so it would work in any language
+					'cea_country' => $hasWriteOld ? $newTestCountry : null,
+					'cea_country_code' => $hasWriteNew ? $newTestCountryCode : null,
 				],
 				$stage,
 				$storedFormat,
@@ -494,6 +503,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				self::EVENT_WITH_ADDRESS,
 				new Address( null, null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
 				1,
+				// This works because we hardcode the English name.
 				(object)self::getStoredRowWithoutAddress( $storedFormat ),
 				$stage,
 				$storedFormat,
@@ -613,6 +623,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			];
 			yield "$desc - Existing country without address, pass country code but no country" => [
 				new Address( null, null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
+				// This works because we hardcode the English name.
 				self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
 				$stage,
 				$storedFormat,
@@ -676,10 +687,12 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 	public static function provideGetEventAddress() {
 		foreach ( self::provideMigrationStagesAndStoredFormats() as $desc => [ $stage, $storedFormat ] ) {
-			if ( $stage & SCHEMA_COMPAT_READ_NEW ) {
+			$hasReadNew = (bool)( $stage & SCHEMA_COMPAT_READ_NEW );
+
+			if ( $hasReadNew && $storedFormat !== self::STORED_FORMAT_OLD ) {
 				$expectedFullAddress = new Address(
 					self::STORED_ADDRESS,
-					self::STORED_COUNTRY,
+					$storedFormat === self::STORED_FORMAT_BOTH ? self::STORED_COUNTRY : null,
 					self::STORED_COUNTRY_CODE
 				);
 			} else {
@@ -692,17 +705,19 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				$storedFormat,
 			];
 
-			yield "$desc - Has address without country" => [
-				self::EVENT_WITH_ADDRESS_WITHOUT_COUNTRY,
-				new Address( self::STORED_ADDRESS_WITHOUT_COUNTRY, null, null ),
-				$stage,
-				$storedFormat,
-			];
+			if ( $storedFormat === self::STORED_FORMAT_OLD ) {
+				yield "$desc - Has address without country" => [
+					self::EVENT_WITH_ADDRESS_WITHOUT_COUNTRY,
+					new Address( self::STORED_ADDRESS_WITHOUT_COUNTRY, null, null ),
+					$stage,
+					$storedFormat,
+				];
+			}
 
-			if ( $stage & SCHEMA_COMPAT_READ_NEW ) {
+			if ( $hasReadNew && $storedFormat !== self::STORED_FORMAT_OLD ) {
 				$expectedAddressWithoutAddress = new Address(
 					null,
-					self::STORED_COUNTRY_WITHOUT_ADDRESS,
+					$storedFormat === self::STORED_FORMAT_BOTH ? self::STORED_COUNTRY_WITHOUT_ADDRESS : null,
 					self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS
 				);
 			} else {
@@ -811,10 +826,10 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	/** @dataProvider provideMigrationStagesAndStoredFormats */
 	public function testGetAddressesForEvents( int $migrationStage, string $storedFormat ) {
 		$this->addDBDataTemp( $storedFormat );
-		if ( $migrationStage & SCHEMA_COMPAT_READ_NEW ) {
+		if ( ( $migrationStage & SCHEMA_COMPAT_READ_NEW ) && $storedFormat !== self::STORED_FORMAT_OLD ) {
 			$expectedAddress = new Address(
 				self::STORED_ADDRESS,
-				self::STORED_COUNTRY,
+				$storedFormat === self::STORED_FORMAT_BOTH ? self::STORED_COUNTRY : null,
 				self::STORED_COUNTRY_CODE
 			);
 		} else {
