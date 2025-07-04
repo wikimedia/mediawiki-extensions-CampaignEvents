@@ -136,8 +136,10 @@ return [
 			$services->get( WikiLookup::SERVICE_NAME ),
 			$services->get( ITopicRegistry::SERVICE_NAME ),
 			$services->get( EventTypesRegistry::SERVICE_NAME ),
+			$services->get( CountryProvider::SERVICE_NAME ),
 			$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION )
-				->get( 'CampaignEventsEventNamespaces' )
+				->get( 'CampaignEventsEventNamespaces' ),
+			$services->getMainConfig()->get( 'CampaignEventsCountrySchemaMigrationStage' )
 		);
 	},
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {

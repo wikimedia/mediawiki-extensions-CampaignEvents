@@ -753,6 +753,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$participationOptions,
 				$meetingURL,
 				$meetingCountry,
+				null,
 				$meetingAddress,
 				$data['EventChatURL'],
 				$testEvent,

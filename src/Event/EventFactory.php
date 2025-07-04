@@ -9,6 +9,7 @@ use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
@@ -24,6 +25,7 @@ use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\Language\RawMessage;
 use MediaWiki\Message\Message;
 use MediaWiki\Utils\MWTimestamp;
 use StatusValue;
@@ -61,8 +63,10 @@ class EventFactory {
 	private WikiLookup $wikiLookup;
 	private ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
+	private CountryProvider $countryProvider;
 	/** @var list<int> */
 	private array $allowedEventNamespaces;
+	private int $countrySchemaMigrationStage;
 
 	/**
 	 * @phan-param list<int> $allowedEventNamespaces
@@ -75,7 +79,9 @@ class EventFactory {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
-		array $allowedEventNamespaces
+		CountryProvider $countryProvider,
+		array $allowedEventNamespaces,
+		int $countrySchemaMigrationStage
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
@@ -84,7 +90,9 @@ class EventFactory {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->countryProvider = $countryProvider;
 		$this->allowedEventNamespaces = $allowedEventNamespaces;
+		$this->countrySchemaMigrationStage = $countrySchemaMigrationStage;
 	}
 
 	/**
@@ -104,6 +112,7 @@ class EventFactory {
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
+	 * @param string|null $meetingCountryCode
 	 * @param string|null $meetingAddress
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
@@ -134,6 +143,7 @@ class EventFactory {
 		int $participationOptions,
 		?string $meetingURL,
 		?string $meetingCountry,
+		?string $meetingCountryCode,
 		?string $meetingAddress,
 		?string $chatURL,
 		bool $isTestEvent,
@@ -200,10 +210,16 @@ class EventFactory {
 		}
 
 		$res->merge(
-			$this->validateMeetingInfo( $participationOptions, $meetingURL, $meetingCountry, $meetingAddress )
+			$this->validateMeetingInfo(
+				$participationOptions,
+				$meetingURL,
+				$meetingCountry,
+				$meetingCountryCode,
+				$meetingAddress
+			)
 		);
 		if ( $meetingCountry !== null || $meetingAddress !== null ) {
-			$address = new Address( $meetingAddress, $meetingCountry, null );
+			$address = new Address( $meetingAddress, $meetingCountry, $meetingCountryCode );
 		} else {
 			$address = null;
 		}
@@ -497,6 +513,7 @@ class EventFactory {
 		int $participationOptions,
 		?string &$meetingURL,
 		?string &$meetingCountry,
+		?string &$meetingCountryCode,
 		?string &$meetingAddress
 	): StatusValue {
 		$res = StatusValue::newGood();
@@ -525,10 +542,8 @@ class EventFactory {
 			if ( $meetingAddress !== null ) {
 				$meetingAddress = mb_strcut( trim( $meetingAddress ), 0, self::ADDRESS_MAXLENGTH_BYTES );
 			}
-			if ( $meetingCountry !== null && $meetingAddress !== null ) {
-				$res->merge( $this->validateLocation( $meetingCountry, $meetingAddress ) );
-			}
-		} elseif ( $meetingCountry !== null || $meetingAddress !== null ) {
+			$res->merge( $this->validateLocation( $meetingCountry, $meetingCountryCode, $meetingAddress ) );
+		} elseif ( $meetingCountry !== null || $meetingCountryCode !== null || $meetingAddress !== null ) {
 			$res->error( 'campaignevents-error-countryoraddress-not-in-person' );
 		}
 		return $res;
@@ -573,10 +588,21 @@ class EventFactory {
 		return filter_var( $urlToCheckASCII, FILTER_VALIDATE_URL ) !== false;
 	}
 
-	private function validateLocation( string $country, string $address ): StatusValue {
+	private function validateLocation(
+		?string $country,
+		?string $countryCode,
+		?string $address
+	): StatusValue {
 		$res = StatusValue::newGood();
 		if ( $country === '' ) {
 			$res->error( 'campaignevents-error-invalid-country' );
+		}
+		if ( $countryCode !== null && !$this->countryProvider->isValidCountryCode( $countryCode ) ) {
+			$res->error( 'campaignevents-error-invalid-country-code' );
+		}
+		if ( $countryCode === null && ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW ) ) {
+			// Temporary error message.
+			$res->error( new RawMessage( 'The country code is required.' ) );
 		}
 		if ( $address === '' ) {
 			$res->error( 'campaignevents-error-invalid-address' );

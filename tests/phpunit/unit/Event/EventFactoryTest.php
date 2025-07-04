@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use Error;
 use Generator;
 use InvalidArgumentException;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -34,6 +35,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	// Feb 27, 2022
 	private const TEST_TIME = 1646000000;
 	private const VALID_TRACKING_TOOL = 'my-tracking-tool';
+	private const VALID_COUNTRY_CODE = 'FR';
 	private const VALID_DEFAULT_DATA = [
 		'id' => 42,
 		'page' => 'Project:Some event page title',
@@ -48,7 +50,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'trackingeventid' => null,
 		'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
-		'country' => 'Country',
+		'country' => 'France',
+		'countrycode' => null,
 		'address' => 'Address',
 		'chat' => 'https://chaturl.example.org',
 		'istest' => false,
@@ -94,7 +97,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 
 	private function getEventFactory(
 		?CampaignsPageFactory $campaignsPageFactory = null,
-		?array $allowedNamespaces = null
+		?array $allowedNamespaces = null,
+		int $countryMigrationStage = MIGRATION_OLD
 	): EventFactory {
 		if ( !$campaignsPageFactory ) {
 			$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
@@ -117,6 +121,12 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 
 		$typesRegistry = new EventTypesRegistry();
 
+		$countryProvider = $this->createMock( CountryProvider::class );
+		$countryProvider->method( 'isValidCountryCode' )
+			->willReturnCallback(
+				static fn ( ?string $countryCode ): bool => $countryCode === self::VALID_COUNTRY_CODE
+			);
+
 		return new EventFactory(
 			$campaignsPageFactory,
 			$this->createMock( CampaignsPageFormatter::class ),
@@ -125,7 +135,9 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			$wikiLookup,
 			$topicLookup,
 			$typesRegistry,
-			$allowedNamespaces ?? [ NS_PROJECT ]
+			$countryProvider,
+			$allowedNamespaces ?? [ NS_PROJECT ],
+			$countryMigrationStage
 		);
 	}
 
@@ -142,9 +154,10 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		array $factoryArgs,
 		?array $expectedErrors,
 		?CampaignsPageFactory $campaignsPageFactory = null,
-		?array $allowedNamespaces = null
+		?array $allowedNamespaces = null,
+		int $countryMigrationStage = MIGRATION_OLD,
 	): ?EventRegistration {
-		$factory = $this->getEventFactory( $campaignsPageFactory, $allowedNamespaces );
+		$factory = $this->getEventFactory( $campaignsPageFactory, $allowedNamespaces, $countryMigrationStage );
 		$ex = null;
 
 		try {
@@ -325,6 +338,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'meetingurl' => null,
 				'country' => null,
+				'countrycode' => null,
 				'address' => null,
 			] )
 		];
@@ -334,14 +348,34 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'meetingurl' => 'Not a URL',
 				'country' => null,
+				'countrycode' => null,
 				'address' => null,
 			] )
 		];
-		yield 'In person meeting without country, successful' => [
+		yield 'In person meeting without country text and code, successful' => [
 			null,
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'country' => null,
+				'countrycode' => null,
+				'meetingurl' => null,
+			] )
+		];
+		yield 'In person meeting without country text but with country code, successful' => [
+			null,
+			self::getTestDataWithDefault( [
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
+				'country' => null,
+				'countrycode' => self::VALID_COUNTRY_CODE,
+				'meetingurl' => null,
+			] )
+		];
+		yield 'In person meeting without country code but with country text, successful' => [
+			null,
+			self::getTestDataWithDefault( [
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
+				'country' => 'France',
+				'countrycode' => null,
 				'meetingurl' => null,
 			] )
 		];
@@ -353,11 +387,28 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'meetingurl' => null,
 			] )
 		];
-		yield 'In person meeting with invalid country' => [
+		yield 'In person meeting with empty country text' => [
 			'campaignevents-error-invalid-country',
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'country' => '',
+				'countrycode' => null,
+				'meetingurl' => null,
+			] )
+		];
+		yield 'In person meeting with empty country code' => [
+			'campaignevents-error-invalid-country-code',
+			self::getTestDataWithDefault( [
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
+				'countrycode' => '',
+				'meetingurl' => null,
+			] )
+		];
+		yield 'In person meeting with invalid country country code' => [
+			'campaignevents-error-invalid-country-code',
+			self::getTestDataWithDefault( [
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
+				'countrycode' => 'some-invalid-code',
 				'meetingurl' => null,
 			] )
 		];
@@ -369,20 +420,31 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'meetingurl' => null,
 			] )
 		];
-		yield 'Online meeting with country' => [
+		yield 'Online meeting with address' => [
 			'campaignevents-error-countryoraddress-not-in-person',
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => 'Explicitly set',
 				'country' => null,
+				'countrycode' => null,
 			] )
 		];
-		yield 'Online meeting with address' => [
+		yield 'Online meeting with country text' => [
 			'campaignevents-error-countryoraddress-not-in-person',
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
 				'country' => 'Explicitly set',
+				'countrycode' => null,
+			] )
+		];
+		yield 'Online meeting with country code' => [
+			'campaignevents-error-countryoraddress-not-in-person',
+			self::getTestDataWithDefault( [
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+				'address' => null,
+				'country' => null,
+				'countrycode' => self::VALID_COUNTRY_CODE,
 			] )
 		];
 		yield 'In-person meeting with meeting URL' => [
@@ -726,5 +788,16 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 
 	private static function getTestDataWithDefault( array $specificData = [] ): array {
 		return array_values( array_replace( self::VALID_DEFAULT_DATA, $specificData ) );
+	}
+
+	public function testCountryCodeMigration() {
+		$args = self::getTestDataWithDefault( [ 'countrycode' => null ] );
+		$this->doTestWithArgs(
+			$args,
+			[ 'rawmessage' ],
+			null,
+			null,
+			MIGRATION_WRITE_NEW
+		);
 	}
 }

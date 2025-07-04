@@ -156,6 +156,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$participationOptions,
 			$body['meeting_url'],
 			$body['meeting_country'],
+			null,
 			$body['meeting_address'],
 			$body['chat_url'],
 			$body['is_test_event'],

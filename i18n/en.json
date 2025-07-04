@@ -52,6 +52,7 @@
 	"campaignevents-error-meeting-url-not-online": "The meeting URL must not be specified if the event is not online.",
 	"campaignevents-error-countryoraddress-not-in-person": "The meeting country and address must not be specified if the event is not in-person.",
 	"campaignevents-error-invalid-country": "Enter a valid country name.",
+	"campaignevents-error-invalid-country-code": "Enter a valid country code.",
 	"campaignevents-error-invalid-address": "Enter a valid address.",
 	"campaignevents-error-invalid-chat-url": "Enter a valid chat URL.",
 	"campaignevents-error-invalid-question-names": "The following questions were not recognized: $1",
