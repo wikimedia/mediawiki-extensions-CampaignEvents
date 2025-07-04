@@ -94,6 +94,7 @@ class EventPageDecorator {
 	private EventTypesRegistry $eventTypesRegistry;
 	private GroupPermissionsLookup $groupPermissionsLookup;
 	private Config $config;
+	private EventFormatter $eventFormatter;
 
 	private Language $language;
 	private Authority $authority;
@@ -125,6 +126,7 @@ class EventPageDecorator {
 		EventTypesRegistry $eventTypesRegistry,
 		GroupPermissionsLookup $groupPermissionsLookup,
 		Config $config,
+		EventFormatter $eventFormatter,
 		Language $language,
 		Authority $viewingAuthority,
 		OutputPage $out
@@ -145,6 +147,7 @@ class EventPageDecorator {
 		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->config = $config;
+		$this->eventFormatter = $eventFormatter;
 
 		$this->language = $language;
 		$this->authority = $viewingAuthority;
@@ -1136,7 +1139,7 @@ class EventPageDecorator {
 	}
 
 	private function getDetailsDialogWikis( ExistingEventRegistration $registration ): string {
-		$content = EventFormatter::formatWikis(
+		$content = $this->eventFormatter->formatWikis(
 			$registration,
 			$this->msgFormatter,
 			$this->wikiLookup,

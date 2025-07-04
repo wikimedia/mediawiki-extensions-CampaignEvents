@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
+use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
@@ -254,11 +255,15 @@ class CampaignEventsServices {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( self::CAMPAIGN_EVENTS_CONFIGURATION );
 	}
 
-	public static function getEventTypesRegistry( ?ContainerInterface $services = null ): Config {
+	public static function getEventTypesRegistry( ?ContainerInterface $services = null ): EventTypesRegistry {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventTypesRegistry::SERVICE_NAME );
 	}
 
-	public static function getCountryProvider( ?ContainerInterface $services = null ): Config {
+	public static function getCountryProvider( ?ContainerInterface $services = null ): CountryProvider {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( CountryProvider::SERVICE_NAME );
+	}
+
+	public static function getEventFormatter( ?ContainerInterface $services = null ): EventFormatter {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventFormatter::SERVICE_NAME );
 	}
 }

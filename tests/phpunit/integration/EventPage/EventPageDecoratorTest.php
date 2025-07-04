@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
+use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
@@ -89,6 +90,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			new HashConfig( [
 				'CampaignEventsEventNamespaces' => $allowedNamespaces
 			] ),
+			$this->createMock( EventFormatter::class ),
 			$this->createMock( Language::class ),
 			$performer,
 			$out

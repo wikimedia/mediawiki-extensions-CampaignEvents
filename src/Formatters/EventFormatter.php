@@ -18,9 +18,10 @@ use Wikimedia\Message\MessageValue;
  * To make UI code more DRY, all display formatting logic will be moved to this class.
  * For this patch, only wiki display code has been implemented here, but this will change in future patches.
  * TODO: Add formatting logic for Organizers, Timezones, Participants etc
- * TODO: Make this a service
  */
 class EventFormatter {
+	public const SERVICE_NAME = 'CampaignEventsEventFormatter';
+
 	public const DISPLAYED_WIKI_COUNT = 3;
 
 	/**
@@ -33,7 +34,7 @@ class EventFormatter {
 	 * @param string $moreWikisMessage
 	 * @return HtmlSnippet|string
 	 */
-	public static function formatWikis(
+	public function formatWikis(
 		EventRegistration $event,
 		ITextFormatter $messageFormatter,
 		WikiLookup $wikiLookup,

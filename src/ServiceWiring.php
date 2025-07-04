@@ -21,6 +21,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
+use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
@@ -243,7 +244,8 @@ return [
 				$services->get( EventTypesRegistry::SERVICE_NAME ),
 				$services->getGroupPermissionsLookup(),
 				// Pass whole config so the value is lazy loaded when needed for performance
-				$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION )
+				$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION ),
+				$services->get( EventFormatter::SERVICE_NAME ),
 			);
 		},
 	CampaignEventsHookRunner::SERVICE_NAME =>
@@ -442,5 +444,8 @@ return [
 	},
 	CountryProvider::SERVICE_NAME => static function ( MediaWikiServices $services ): CountryProvider {
 		return new CountryProvider();
+	},
+	EventFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): EventFormatter {
+		return new EventFormatter();
 	},
 ];
