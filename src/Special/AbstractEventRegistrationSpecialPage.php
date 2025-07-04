@@ -290,7 +290,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 					}
 					$error = $validationStatus->getErrors()[0];
 					$errorApiMsg = ApiMessage::create( $error );
-					return $this->msg( $errorApiMsg->getKey(), ...$errorApiMsg->getParams() )->text();
+					return $this->msg( $errorApiMsg->getKey(), ...$errorApiMsg->getParams() );
 				}
 
 				return true;
@@ -346,9 +346,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 						return true;
 					} catch ( InvalidToolURLException $e ) {
 						$baseURL = rtrim( $e->getExpectedBaseURL(), '/' ) . '/courses';
-						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )
-							->params( $baseURL )
-							->text();
+						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )->params( $baseURL );
 					}
 				},
 				'section' => self::DETAILS_SECTION,
