@@ -5,6 +5,26 @@
 			"Toliño"
 		]
 	},
+	"campaignevents-desc": "Ofrece funcionalidades para os organizadores e participantes da campaña.",
+	"nstab-event": "Evento",
+	"action-campaignevents-enable-registration": "activar inscricións a eventos",
+	"right-campaignevents-enable-registration": "Activar inscricións a eventos",
+	"action-campaignevents-delete-registration": "eliminar inscricións a eventos",
+	"right-campaignevents-delete-registration": "Eliminar inscricións a eventos",
+	"campaignevents-error-invalid-id": "O identificador do evento debe ser un número enteiro positivo.",
+	"campaignevents-error-empty-title": "Introduce un título para a páxina do evento.",
+	"campaignevents-error-invalid-title": "O título da páxina do evento non é válido: $1.",
+	"campaignevents-error-invalid-title-interwiki": "Especifica unha páxina de evento no wiki local.",
+	"campaignevents-error-page-not-found": "Non existe ningunha páxina de evento con ese nome.",
+	"campaignevents-error-page-with-section": "A páxina do evento non pode conter un nome de sección.",
+	"campaignevents-error-invalid-status": "Indica se o evento é aberto ou pechado.",
+	"campaignevents-error-empty-start": "Escolle unha hora de inicio.",
+	"campaignevents-error-invalid-start": "A hora de inicio do evento non é válida.",
+	"campaignevents-error-start-past": "Introduce unha hora de inicio no futuro.",
+	"campaignevents-error-empty-end": "Introduce unha hora de finalización.",
+	"campaignevents-error-invalid-end": "A hora de finalización do evento non é válida.",
+	"campaignevents-error-start-after-end": "Introduce unha data de finalización que sexa posterior á data de inicio.",
 	"campaignevents-register-confirmation-top": "Confirmar a inscrición",
+	"campaignevents-eventpage-header-dates-label": "Hora de inicio e finalización",
 	"campaignevents-event-details-edit-button": "Editar"
 }

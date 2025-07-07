@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Pikne"
+		]
+	},
+	"action-campaignevents-enable-registration": "avada üritustele registreerumist",
+	"right-campaignevents-enable-registration": "Avada üritustele registreerumine",
+	"action-campaignevents-delete-registration": "kustutada üritusele registreerumist",
+	"right-campaignevents-delete-registration": "Kustutada üritustele registreerumisi",
+	"enableeventregistration": "Üritusele registreerumise avamine",
+	"editeventregistration": "Üritusele registreerumise muutmine",
+	"registerforevent": "Üritusele registreerumine",
+	"canceleventregistration": "Üritusele registreerumise tühistamine",
+	"myevents": "Sinu üritused",
+	"deleteeventregistration": "Üritusele registreerumise kustutamine",
+	"eventdetails": "Ürituse üksikasjad"
+}
