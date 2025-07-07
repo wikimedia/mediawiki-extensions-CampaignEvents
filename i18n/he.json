@@ -554,7 +554,7 @@
 	"campaignevents-allevents-label-filter-event-types": "סוגי אירועים",
 	"campaignevents-allevents-placeholder-add-event-types": "הוספת סוגי אירועים...",
 	"campaignevents-eventpage-dialog-event-types-label": "סוגי אירועים",
-	"campaignevents-cancel-page-nonlocal": "נא '''[$1 לבטל את הרשמתך לאירוע באתר $2]''', הוויקי שהאירוע נוצר בו.",
-	"campaignevents-email-error-notification-with-detail": "לא היה אפשר לשלוח את הדואר האלקטרוני, מהסיבה הבאה: $1",
+	"campaignevents-cancel-page-nonlocal": "נא '''[$1 לבטל את הרשמתך לאירוע באתר $2]''' – אתר הוויקי שבו האירוע נוצר.",
+	"campaignevents-email-error-notification-with-detail": "לא ניתן היה לשלוח את הדואר האלקטרוני, מהסיבה הבאה: $1",
 	"campaignevents-eventslist-types-label": "סוגי אירועים"
 }
