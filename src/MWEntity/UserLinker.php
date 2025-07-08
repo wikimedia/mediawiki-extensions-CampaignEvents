@@ -11,7 +11,6 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\Linker\UserLinkRenderer;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\User\UserIdentityValue;
 use Wikimedia\Message\IMessageFormatterFactory;
@@ -32,20 +31,17 @@ class UserLinker {
 	private IMessageFormatterFactory $messageFormatterFactory;
 	private LinkBatchFactory $linkBatchFactory;
 	private LinkRenderer $linkRenderer;
-	private UserLinkRenderer $userLinkRenderer;
 
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
 		IMessageFormatterFactory $messageFormatterFactory,
 		LinkBatchFactory $linkBatchFactory,
-		LinkRenderer $linkRenderer,
-		UserLinkRenderer $userLinkRenderer
+		LinkRenderer $linkRenderer
 	) {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->linkBatchFactory = $linkBatchFactory;
 		$this->linkRenderer = $linkRenderer;
-		$this->userLinkRenderer = $userLinkRenderer;
 	}
 
 	/**
@@ -63,13 +59,7 @@ class UserLinker {
 		$userIdentity = new UserIdentityValue( 1, $name );
 		// TODO: Here we'll generate a red link if the account does not exist locally. Is that OK? Could we maybe
 		// link to Special:CentralAuth (if CA is installed)?
-		if ( method_exists( $this->linkRenderer, 'makeUserLink' ) ) {
-			// New method parameters
-			return $this->linkRenderer->makeUserLink( $userIdentity, $context );
-		} else {
-			// Legacy compatibility
-			return $this->userLinkRenderer->userLink( $userIdentity, $context );
-		}
+		return $this->linkRenderer->makeUserLink( $userIdentity, $context );
 	}
 
 	/**
