@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Brettchenweber"
+			"Brettchenweber",
+			"Inkowik"
 		]
 	},
 	"campaignevents-desc": "Stellt Funktionen für Organisatoren und Teilnehmer von Veranstaltungen bereit.",
@@ -169,7 +170,7 @@
 	"campaignevents-eventslist-delete-dialog-delete": "Löschen",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> gelöscht.",
 	"campaignevents-eventslist-organizers-more": "$1 {{PLURAL:$1|weiterer|weitere}}",
-	"deleteeventregistration": "Veranstaltungsanmeldungen löschen",
+	"deleteeventregistration": "Veranstaltungsanmeldung löschen",
 	"campaignevents-delete-error-no-event": "Keine Veranstaltung angegeben.",
 	"campaignevents-delete-error-event-not-found": "Es gibt keine Veranstaltung mit dieser ID.",
 	"campaignevents-delete-error-already-deleted": "Diese Veranstaltungsregistrierung wurde bereits gelöscht.",
@@ -444,7 +445,7 @@
 	"campaignevents-generateinvitationlist-submit-button-text": "Erzeugen",
 	"campaignevents-invitation-list-disabled": "In diesem Wiki sind keine Einladungslisten aktiviert.",
 	"campaignevents-invitation-list-not-allowed": "Die Nutzung von Einladungslisten ist nicht gestattet.",
-	"myinvitationlists": "{{#FORMAL|Deine|Ihre}} Einladungslisten",
+	"myinvitationlists": "Meine Einladungslisten",
 	"campaignevents-invitations-pager-status-editors": "$1 {{PLURAL:$1|Benutzer}} gefunden",
 	"campaignevents-invitations-pager-status-processing": "Verarbeite …",
 	"campaignevents-myinvitationslist-empty-text": "Entdecke neue Teilnehmer für dein Projekt oder deine Veranstaltung. Stelle eine Liste mit Artikeln bereit, die die Themen deiner Aktivitäten abdecken. Anschließend erhältst du eine Einladungsliste mit Benutzern, die möglicherweise an der Teilnahme an deinem Projekt oder deiner Veranstaltung interessiert sind.",
