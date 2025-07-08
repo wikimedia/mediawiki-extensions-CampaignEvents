@@ -281,7 +281,8 @@ return [
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->getMessageFormatterFactory(),
 			$services->getLinkBatchFactory(),
-			$services->getLinkRenderer()
+			$services->getLinkRenderer(),
+			$services->getUserLinkRenderer()
 		);
 	},
 	FrontendModulesFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): FrontendModulesFactory {
