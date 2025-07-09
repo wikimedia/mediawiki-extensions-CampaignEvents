@@ -51,7 +51,7 @@
 	"campaignevents-edit-field-timezone": "وخت‌سيمه",
 	"campaignevents-edit-field-start": "پيل وخت",
 	"campaignevents-edit-field-end": "پای وخت",
-	"campaignevents-edit-field-organizers": "په لار اچوونکي",
+	"campaignevents-edit-field-organizers": "مهاروونکي",
 	"campaignevents-edit-field-organizers-help": "د نورو په لار اچوونکو کارن‌نوم ورگډول؛ ترڅو دوی ته د دې پېښې د مهارولو اجازه ورکړي.",
 	"campaignevents-edit-field-organizers-placeholder": "کارن‌نوم ورگډول",
 	"campaignevents-edit-field-organizers-creator-title": "دا دې پېښې جوړوونکی دی، نور مهاروونکي دا کارن نشي لرې کولی.",
@@ -87,6 +87,8 @@
 	"registerforevent": "په يوه پېښه کې نوم‌ليکنه کول",
 	"campaignevents-allevents-label-participation-options": "د گډون خوښنې",
 	"campaignevents-eventslist-participation-options-label": "د گډون خوښنې",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>ټولگړې نوم‌ليکنه:</strong> خپل کارن‌نوم د ټولگړو گډونوالو لړليک کې ښودل. د پېښې پرمهال ستاسو ونډې شايد د مهاروونکو له خوا په [https://meta\n.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboardپروگرامونو او پېښو ليددړه] يا نور توکي چې شمارنې راټولوي، راونغاړي شي.",
+	"echo-category-title-campaign-events-notification-registration": "پېښې نوم‌ليکنه",
 	"myinvitationlists": "ستاسو د بلنې لړليکونه",
 	"campaignevents-invitationlist-preference": "د [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists بلنې لړليکونو] کې مې راونغاړئ.",
 	"campaignevents-event-details-event-types-header": "پېښو ډولونه"
