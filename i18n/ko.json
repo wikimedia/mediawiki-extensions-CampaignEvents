@@ -412,6 +412,7 @@
 	"campaignevents-invitationlist-recommended": "초대를 권장함",
 	"campaignevents-invitationlist-worklist-label": "문서 목록 보기",
 	"campaignevents-event-details-footer": "더 많은 이벤트와 커뮤니티를 찾으려면 <strong>[[Special:AllEvents|협업 목록]]</strong>을 방문하세요.",
+	"campaignevents-invitationlist-preference": "[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 초대 목록]에 나를 포함합니다.",
 	"prefs-campaignevents-invitations": "초대 목록",
 	"campaignevents-eventpage-btn-collaboration-list": "더 많은 이벤트 찾기",
 	"campaignevents-allevents-label-filter-wikis": "위키",

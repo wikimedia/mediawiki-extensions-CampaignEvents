@@ -4,7 +4,8 @@
 			"Duke of Wikipädia",
 			"Fúlvio",
 			"Tiagoquix",
-			"Vanished 345490135"
+			"Vanished 345490135",
+			"Eduardoaddad"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Não há nenhum evento com este ID.",
@@ -14,6 +15,14 @@
 	"campaignevents-rest-user-not-found": "Não há nenhum usuário com este ID central.",
 	"campaignevents-rest-get-registration-deleted": "Esta inscrição do evento foi eliminada.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "O parâmetro 'user_ids' deve ser uma matriz de IDs de usuário ou null (para remover todos os usuários)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Remova os participantes em $1, a wiki onde o evento foi criado.",
 	"campaignevents-rest-list-participants-empty-filter": "O filtro de nome de usuário, se especificado, deve ser uma string não vazia.",
-	"campaignevents-rest-list-participants-cannot-see-private": "Você não está autorizado a ver os participantes que se inscreveram de forma privada para este evento."
+	"campaignevents-rest-list-participants-cannot-see-private": "Você não está autorizado a ver os participantes que se inscreveram de forma privada para este evento.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> tem de ser uma matriz de nomes de usuário e não pode estar vazia",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Defina os organizadores como $1, a wiki onde o evento foi criado.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Você não está participando deste evento.",
+	"campaignevents-rest-register-invalid-answer": "Resposta inválida para a pergunta $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor, complete o registro do seu evento em $1, a wiki onde o evento foi criado.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor, exclua sua inscrição no evento em $1, a wiki onde o evento foi criado.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Envie um e-mail aos participantes sobre o $1, a wiki onde o evento foi criado."
 }

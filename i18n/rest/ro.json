@@ -1,8 +1,25 @@
 {
 	"@metadata": {
 		"authors": [
-			"Alesaru"
+			"Alesaru",
+			"Andrei Stroe"
 		]
 	},
-	"campaignevents-rest-register-invalid-answer": "Răspuns nevalid la întrebarea $1"
+	"campaignevents-rest-event-not-found": "Nu există niciun eveniment cu acest ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Nu aveți permisiuni de a activa înscrierile la evenimente.",
+	"campaignevents-rest-edit-page-nonlocal": "Înscrierea la acest eveniment a fost activată pe următorul wiki și va trebui editată acolo: $1.",
+	"campaignevents-rest-delete-already-deleted": "Înscrierea la acest eveniment a fost deja ștearsă.",
+	"campaignevents-rest-user-not-found": "Nu există utilizator cu acest ID central.",
+	"campaignevents-rest-get-registration-deleted": "Înscrierea la acest eveniment a fost ștearsă.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Parametrul 'user_ids' trebuie să fie un tablou de ID-uri de utilizatori, sau null (pentru a șterge toți utilizatorii)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Vă rugăm să ștergeți participanții pe $1, wikiul unde a fost creat evenimentul.",
+	"campaignevents-rest-list-participants-empty-filter": "Dacă este specificat, filtrul după numele de utilizator  trebuie să fie un șir de caractere nevid.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Nu sunteți autorizat să vedeți participanții care s-au înscris în privat la acest eveniment.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> trebuie să fie o listă de nume de utilizatori și nu poate fi vid",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Vă rugăm să precizați organizatorii pe $1, wikiul unde a fost creat evenimentul.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Nu sunteți participant la acest eveniment.",
+	"campaignevents-rest-register-invalid-answer": "Răspuns invalid la întrebarea $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Vă rugăm să vă completați înscrierea la eveniment pe $1, wikiul unde a fost creat evenimentul.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Vă rugăm să vă ștergeți înscrierea la eveniment pe $1, wikiul unde a fost creat evenimentul.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Vă rugăm să redactați emailuri adresate participanților pe $1, wikiul unde a fost creat evenimentul."
 }
