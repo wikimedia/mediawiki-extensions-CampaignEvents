@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Maintenance;
 
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Maintenance\Maintenance;
 use MediaWiki\MediaWikiServices;
 use Wikimedia\Rdbms\IDatabase;
@@ -33,6 +35,10 @@ class UpdateCountriesColumn extends Maintenance {
 	 */
 	private array $countryListExceptions = [];
 	private int $maxRowID;
+	/**
+	 * @var array<int,string>
+	 */
+	private array $purgedValues = [];
 
 	public function __construct() {
 		parent::__construct();
@@ -57,6 +63,14 @@ class UpdateCountriesColumn extends Maintenance {
 	 * @inheritDoc
 	 */
 	public function execute() {
+		$migrationStage = MediaWikiServices::getInstance()
+			->getMainConfig()
+			->get( 'CampaignEventsCountrySchemaMigrationStage' );
+
+		if ( !( $migrationStage & SCHEMA_COMPAT_WRITE_NEW ) && $this->getOption( 'commit' ) ) {
+			$this->output( "Migration stage is not WRITE_NEW!" );
+			return false;
+		}
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
 		$this->countryProvider = CampaignEventsServices::getCountryProvider();
 		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );
@@ -73,7 +87,8 @@ class UpdateCountriesColumn extends Maintenance {
 
 		$this->loadCountryMap();
 		$this->maybeLoadExceptions();
-		$this->maybeDoPurge();
+		$this->doPurge();
+		$this->handleEventsWithNoAddress();
 
 		$unmatchedRows = [];
 		do {
@@ -93,14 +108,9 @@ class UpdateCountriesColumn extends Maintenance {
 				->where( $where )
 				->caller( __METHOD__ )
 				->fetchResultSet();
-			if ( count( $freetextCountryResults ) === 0 ) {
-				break;
-			}
 			foreach ( $freetextCountryResults as $dbRow ) {
 				$dbId = $dbRow->cea_id;
 				$dbCountry = $dbRow->cea_country;
-
-				$this->output( "Processing ID: {$dbId} - {$dbCountry}" . PHP_EOL );
 
 				if ( $dbCountry === null ) {
 					$batchUnmatchedRows[$dbId] = null;
@@ -124,9 +134,9 @@ class UpdateCountriesColumn extends Maintenance {
 			$matchedRows += $batchMatchedRows;
 		} while ( $batchEnd < $this->maxRowID );
 
-		if ( !$this->getOption( 'commit' ) ) {
-			$this->showOutput( $matchedRows, $unmatchedRows );
-		}
+		$this->showOutput( $matchedRows, $unmatchedRows );
+
+		return true;
 	}
 
 	/**
@@ -191,18 +201,19 @@ class UpdateCountriesColumn extends Maintenance {
 	public function showOutput( array $matchedRows, array $unmatchedRows ): void {
 		$matchedCount = count( $matchedRows );
 		$unmatchedCount = count( $unmatchedRows );
-		$this->output( "========= Purged rows =========" . PHP_EOL );
-		foreach ( $this->idsToPurge as $purgedId ) {
-			$this->output( "{$purgedId}" . PHP_EOL );
+		$purgedCount = count( $this->purgedValues );
+		$this->output( "========= {$purgedCount} Purged rows =========" . PHP_EOL );
+		foreach ( $this->purgedValues as $purgedId => $purgedCountry ) {
+			$this->output( "{$purgedId} - \"{$purgedCountry}\"" . PHP_EOL );
 		}
 		$this->output( "========= {$matchedCount} Matches ========" . PHP_EOL );
 		foreach ( $matchedRows as $dbID => [ $dbCountry, $dbConversion, $matchedName ] ) {
-			$this->output( "{$dbID} - {$dbCountry} matched {$dbConversion} - {$matchedName}" . PHP_EOL );
+			$this->output( "{$dbID} - \"{$dbCountry}\" matched {$dbConversion} - ({$matchedName})" . PHP_EOL );
 		}
 
 		$this->output( "========= {$unmatchedCount} Unmatched ========" . PHP_EOL );
 		foreach ( $unmatchedRows as $dbId => $dbCountry ) {
-			$this->output( "{$dbId} - {$dbCountry}" . PHP_EOL );
+			$this->output( "{$dbId} - \"{$dbCountry}\"" . PHP_EOL );
 		}
 	}
 
@@ -218,51 +229,73 @@ class UpdateCountriesColumn extends Maintenance {
 		array $unmatchedRows,
 		array $addresses
 	): void {
-		foreach ( $matchedRows as $dbID => [ $dbCountry, $dbConversion, $matchedName ] ) {
-			$this->dbw->newUpdateQueryBuilder()
-				->update( 'ce_address' )
+		$rowsToUpdate = [];
+
+		foreach ( $matchedRows as $dbID => [ $dbCountry, $countryCode, $matchedName ] ) {
+			$fullAddress = $addresses[$dbID];
+			$addressWithoutCountry = $this->getAddressWithoutCountry( $fullAddress );
+
+			$rowsToUpdate[] = [
+				'cea_id' => (int)$dbID,
+				'cea_country_code' => $countryCode,
+				'cea_country' => null,
+				'cea_full_address' => $addressWithoutCountry,
+			];
+		}
+
+		if ( $rowsToUpdate ) {
+			$this->dbw->newInsertQueryBuilder()
+				->insertInto( 'ce_address' )
+				->rows( $rowsToUpdate )
+				->onDuplicateKeyUpdate()
+				->uniqueIndexFields( [ 'cea_id' ] )
 				->set( [
-					'cea_country_code' => $dbConversion,
-					'cea_country' => null,
+					'cea_country_code =' . $this->dbw->buildExcludedValue( 'cea_country_code' ),
+					'cea_country =' . $this->dbw->buildExcludedValue( 'cea_country' ),
+					'cea_full_address =' . $this->dbw->buildExcludedValue( 'cea_full_address' ),
 				] )
-				->where( [ 'cea_id' => $dbID ] )
 				->execute();
 			$this->waitForReplication();
 		}
-		foreach ( $unmatchedRows as $dbID => $dbCountry ) {
-			$this->dbw->newUpdateQueryBuilder()
-				->update( 'ce_address' )
-				->set( [ 'cea_country_code' => 'VA' ] )
-				->where( [ 'cea_id' => $dbID ] )
-				->execute();
-			$this->waitForReplication();
-		}
-		foreach ( $addresses as $dbID => $fullAddress ) {
-			$addressParts = explode( " \n ", $fullAddress );
-			array_pop( $addressParts );
-			$addressWithoutCountry = implode( " \n ", $addressParts );
-			$where = [ 'cea_id' => $dbID ];
-			if ( $this->idsToPurge ) {
-				$where[] = $this->dbr->expr( 'cea_id', "!=", $this->idsToPurge );
-			}
-			$this->dbw->newUpdateQueryBuilder()
-				->update( 'ce_address' )
-				->set( [
-					'cea_full_address' => $addressWithoutCountry,
-				] )
-				->where( $where )
-				->execute();
-			$this->waitForReplication();
-		}
+		$eventsToOnline = $this->dbw->newSelectQueryBuilder()
+			->select( 'ceea_event' )
+			->from( 'ce_event_address' )
+			->where( [ 'ceea_address' => array_keys( $unmatchedRows ) ] )
+			->fetchFieldValues();
+
+		$this->dbw->newUpdateQueryBuilder()
+			->update( 'campaign_events' )
+			->set( [ 'event_meeting_type' =>
+				EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE]
+			] )
+			->where( [ 'event_id' => $eventsToOnline ] )
+			->execute();
+
+		$this->dbw->newDeleteQueryBuilder()
+			->deleteFrom( 'ce_address' )
+			->where( [ 'cea_id' => array_keys( $unmatchedRows ) ] )
+			->execute();
+		$this->waitForReplication();
+
+		$this->dbw->newDeleteQueryBuilder()
+			->deleteFrom( 'ce_event_address' )
+			->where(
+				$this->dbw->orExpr(
+					[ 'ceea_address' => array_keys( $unmatchedRows ) ]
+				)
+			)
+			->execute();
+		$this->waitForReplication();
 	}
 
-	public function maybeDoPurge(): void {
+	public function doPurge(): void {
 		$batchSize = $this->getBatchSize();
 		$purgeBatchStart = 0;
 		do {
+			$idsToPurge = [];
 			$batchEnd = $purgeBatchStart + $batchSize;
-			$purgeIds = $this->dbr->newSelectQueryBuilder()
-				->select( 'cea_id' )
+			$purgeRows = $this->dbr->newSelectQueryBuilder()
+				->select( 'cea_id, cea_country' )
 				->from( 'ce_address' )
 				->leftJoin(
 					'ce_event_address', null, [ 'ceea_address=cea_id' ]
@@ -270,15 +303,19 @@ class UpdateCountriesColumn extends Maintenance {
 					$this->dbr->expr( 'cea_id', '>', $purgeBatchStart ),
 					$this->dbr->expr( 'cea_id', '<=', $batchEnd ),
 					'ceea_event' => null,
-				] )->fetchFieldValues();
-			if ( $purgeIds && $this->getOption( 'commit' ) ) {
+				] )->fetchResultSet();
+			foreach ( $purgeRows as $purgeRow ) {
+				$idsToPurge[] = $purgeRow->cea_id;
+				$this->purgedValues[ $purgeRow->cea_id ] = $purgeRow->cea_country;
+			}
+			$this->idsToPurge = array_merge( $this->idsToPurge, $idsToPurge );
+			if ( $idsToPurge && $this->getOption( 'commit' ) ) {
 				$this->dbw->newDeleteQueryBuilder()
 					->deleteFrom( 'ce_address' )
-					->where( [ 'cea_id' => $purgeIds ] )
+					->where( [ 'cea_id' => $idsToPurge ] )
 					->execute();
 				$this->waitForReplication();
 			}
-			$this->idsToPurge = array_merge( $this->idsToPurge, $purgeIds );
 			$purgeBatchStart += $batchSize;
 		} while ( $batchEnd < $this->maxRowID );
 	}
@@ -304,6 +341,65 @@ class UpdateCountriesColumn extends Maintenance {
 				fclose( $handle );
 			}
 		}
+	}
+
+	public function getAddressWithoutCountry( string $fullAddress ): string {
+		$addressParts = explode( " \n ", $fullAddress );
+		array_pop( $addressParts );
+
+		return implode( " \n ", $addressParts );
+	}
+
+	private function handleEventsWithNoAddress(): void {
+		$batchSize = $this->getBatchSize();
+		$batchStart = 0;
+
+			$maxRows = $this->dbw->newSelectQueryBuilder()
+				->select( 'MAX(event_id)' )
+				->from( 'campaign_events' )
+				->leftJoin( 'ce_event_address', null, 'ceea_event = event_id' )
+				->where( [
+					'event_meeting_type != ' .
+					EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE],
+					'ceea_event IS NULL',
+				] )
+				->caller( __METHOD__ )
+				->fetchField();
+		$eventsWithNoAddress = [];
+		do {
+			$batchEnd = $batchStart + $batchSize;
+			$batchEventsWithNoAddress = $this->dbw->newSelectQueryBuilder()
+				->select( 'event_id' )
+				->from( 'campaign_events' )
+				->leftJoin( 'ce_event_address', null, 'ceea_event = event_id' )
+				->where( [
+					$this->dbw->expr(
+						'event_meeting_type',
+						'!=',
+						EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE]
+					),
+					'ceea_event' => null,
+					$this->dbw->expr( 'event_id', '>', $batchStart ),
+					$this->dbw->expr( 'event_id', '<=', $batchEnd ),
+				] )
+				->caller( __METHOD__ )
+				->fetchFieldValues();
+			$eventsWithNoAddress = array_merge( $eventsWithNoAddress, $batchEventsWithNoAddress );
+			$batchStart = $batchEnd;
+
+			if ( $this->getOption( 'commit' ) ) {
+				$this->dbw->newUpdateQueryBuilder()
+					->update( 'campaign_events' )
+					->set( [ 'event_meeting_type' =>
+						EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE]
+					] )
+					->where( [ 'event_id' => $batchEventsWithNoAddress ] )
+					->execute();
+			}
+		} while ( $batchEnd < $maxRows );
+		$count = count( $eventsWithNoAddress );
+		$this->output( "========= {$count} Events made online =========" );
+		$this->output( "\n" . implode( "\n", $eventsWithNoAddress ) . "\n" );
 	}
 }
 
