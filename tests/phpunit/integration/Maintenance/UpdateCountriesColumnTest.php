@@ -5,6 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Maintenance;
 
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
 use MediaWiki\Extension\CampaignEvents\Maintenance\UpdateCountriesColumn;
 use MediaWiki\Tests\Maintenance\MaintenanceBaseTestCase;
 use MediaWiki\WikiMap\WikiMap;
@@ -21,10 +23,11 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 
 	public function addDBData(): void {
 		$dbw = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_PRIMARY );
-		foreach ( range( 1, 3 ) as $id ) {
+		foreach ( range( 1, 20 ) as $id ) {
 			$dbw->newInsertQueryBuilder()->insertInto( 'campaign_events' )->row( [
 					'event_id' => $id,
-					'event_meeting_type' => 2,
+					'event_meeting_type' =>
+						EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_IN_PERSON],
 					'event_name' => "Test Event $id",
 					'event_page_namespace' => NS_EVENT,
 					'event_page_title' => "Test_Event_$id",
@@ -46,205 +49,237 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 
 		// Insert corresponding addresses
 		$dbw->newInsertQueryBuilder()->insertInto( 'ce_address' )->rows( [
+			// valid
 				[
 					'cea_id' => 101,
 					'cea_country' => 'Germany',
 					'cea_country_code' => null,
 					'cea_full_address' => "123 Main St \n Berlin \n Germany",
 				],
+			// invalid (no country)
 				[
 					'cea_id' => 102,
 					'cea_country' => null,
 					'cea_country_code' => null,
 					'cea_full_address' => "Unknown \n Planet Earth",
 				],
+			// no event
 				[
 					'cea_id' => 103,
 					'cea_country' => 'France',
 					'cea_country_code' => null,
 					'cea_full_address' => "123 Champs-Élysées \n Paris \n France",
 				],
+			// misspelling
 				[
 					'cea_id' => 104,
 					'cea_country' => 'Germani',
 					'cea_country_code' => null,
 					'cea_full_address' => "123 Main St \n Berlin \n Germani",
 				],
+			// case insensitive
 				[
 					'cea_id' => 105,
 					'cea_country' => 'GeRmAnY',
 					'cea_country_code' => null,
 					'cea_full_address' => "123 Main St \n Berlin \n GeRmAnY",
 				],
+			// non-english, valid
 				[
 					'cea_id' => 106,
 					'cea_country' => 'Allemagne',
 					'cea_country_code' => null,
 					'cea_full_address' => "123 Main St \n Berlin \n Allemagne",
 				],
+			// rtl language, valid
 				[
 					'cea_id' => 107,
 					'cea_country' => 'فرنسا',
 					'cea_country_code' => null,
-					'cea_full_address' => "123 الشانزليزيه\n باريس،\n فرنسا",
+					'cea_full_address' => "123 الشانزليزيه \n  باريس، \n فرنسا",
 				],
+			// exception, valid
 				[
-				'cea_id' => 108,
-				'cea_country' => 'DR Congo, Congo, Angola',
-				'cea_country_code' => null,
-				'cea_full_address' => 'JC39+GR5 \n Katako-Kombe \n DR Congo, Congo, Angola',
+					'cea_id' => 108,
+					'cea_country' => 'DR Congo, Congo, Angola',
+					'cea_country_code' => null,
+					'cea_full_address' => "JC39+GR5 \n Katako-Kombe \n DR Congo, Congo, Angola",
+				],
+			// No address
+				[
+					'cea_id' => 109,
+					'cea_country' => 'France',
+					'cea_country_code' => null,
+					'cea_full_address' => " \n France",
+				],
+			// Row already updated
+				[
+					'cea_id' => 110,
+					'cea_country' => 'France',
+					'cea_country_code' => 'FR',
+					'cea_full_address' => 'No country here',
 				],
 			] )->execute();
 
 		// Link each event to exactly one address
 		$dbw->newInsertQueryBuilder()->insertInto( 'ce_event_address' )->rows( [
-				[
-					'ceea_event' => 1,
-					'ceea_address' => 101
-				],
-				[
-					'ceea_event' => 2,
-					'ceea_address' => 102
-				],
-				[
-					'ceea_event' => 3,
-					'ceea_address' => 104
-				],
-				[
-					'ceea_event' => 4,
-					'ceea_address' => 105
-				],
-				[
-					'ceea_event' => 5,
-					'ceea_address' => 106
-				],
-				[
-					'ceea_event' => 6,
-					'ceea_address' => 107
-				],
-				[
-					'ceea_event' => 7,
-					'ceea_address' => 108
-				],
+				[ 'ceea_event' => 1, 'ceea_address' => 101 ],
+				[ 'ceea_event' => 2, 'ceea_address' => 102 ],
+				[ 'ceea_event' => 3, 'ceea_address' => 104 ],
+				[ 'ceea_event' => 4, 'ceea_address' => 105 ],
+				[ 'ceea_event' => 5, 'ceea_address' => 106 ],
+				[ 'ceea_event' => 6, 'ceea_address' => 107 ],
+				[ 'ceea_event' => 7, 'ceea_address' => 108 ],
+				[ 'ceea_event' => 8, 'ceea_address' => 109 ],
+				[ 'ceea_event' => 9, 'ceea_address' => 110 ],
 			] )->execute();
 	}
 
 	public function testExecuteWithCommit(): void {
 		$this->maintenance->loadWithArgv( [ '--commit' ] );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', SCHEMA_COMPAT_WRITE_NEW );
 		$this->maintenance->execute();
 
-		$dbr = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_REPLICA );
-		$results = $dbr->newSelectQueryBuilder()->select(
+		$this->assertSelect(
+			'ce_address', [
+				'cea_id',
+				'cea_country',
+				'cea_country_code',
+				'cea_full_address',
+			], '*',
+			[
 				[
-					'cea_id',
-					'cea_country',
-					'cea_country_code',
-					'cea_full_address'
-				]
-			)->from( 'ce_address' )->orderBy( 'cea_id' )->caller( __METHOD__ )->fetchResultSet();
+					'0' => '101',
+					'1' => null,
+					'2' => 'DE',
+					'3' => "123 Main St \n Berlin"
+				],
+				[
+					'0' => '104',
+					'1' => null,
+					'2' => 'DE',
+					'3' => "123 Main St \n Berlin"
+				],
+				[
+					'0' => '105',
+					'1' => null,
+					'2' => 'DE',
+					'3' => "123 Main St \n Berlin"
+				],
+				[
+					'0' => '106',
+					'1' => null,
+					'2' => 'DE',
+					'3' => "123 Main St \n Berlin"
+				],
+				[
+					'0' => '107',
+					'1' => null,
+					'2' => 'FR',
+					'3' => "123 الشانزليزيه \n  باريس،",
+				],
+				[
+					'0' => '109',
+					'1' => null,
+					'2' => 'FR',
+					'3' => ""
+				],
+				[
+					'0' => '110',
+					'1' => "France",
+					'2' => 'FR',
+					'3' => "No country here"
+				],
+			], [ 'ORDER BY' => 'cea_id' ]
+		);
+		// Purge check
+		$this->assertSelect(
+			'ce_event_address',
+			[ 'ceea_address' ],
+			'*',
+			[
+				[ '101' ],
+				[ '104' ],
+				[ '105' ],
+				[ '106' ],
+				[ '107' ],
+				[ '109' ],
+				[ '110' ],
+			],
+			[ 'ORDER BY' => 'ceea_address' ]
+		);
 
-		$rows = iterator_to_array( $results );
-
-		// check orphaned address was purged
-		$this->assertCount( 7, $rows, 'One orphaned address should have been purged' );
-		$remainingIds = array_map( static fn ( $row ) => (int)$row->cea_id, $rows );
-		$this->assertNotContains( 103, $remainingIds, 'Address 103 should be purged' );
-
-		// check valid address (Germany) was updated correctly
-		$this->assertSame( 101, (int)$rows[0]->cea_id );
-		$this->assertSame( 'DE', $rows[0]->cea_country_code );
-		$this->assertNull( $rows[0]->cea_country );
-		$this->assertStringNotContainsString( 'Germany', $rows[0]->cea_full_address );
-
-		// check invalid address (null country) was assigned VA
-		$this->assertSame( 102, (int)$rows[1]->cea_id );
-		$this->assertSame( 'VA', $rows[1]->cea_country_code );
-
-		// check valid address with misspelling (Germani) was updated correctly
-		$this->assertSame( 104, (int)$rows[2]->cea_id );
-		$this->assertSame( 'DE', $rows[2]->cea_country_code );
-		$this->assertNull( $rows[2]->cea_country );
-		$this->assertStringNotContainsString( 'Germani', $rows[2]->cea_full_address );
-
-		// check valid address (GeRmAnY) was updated correctly (case-insensitive)
-		$this->assertSame( 105, (int)$rows[3]->cea_id );
-		$this->assertSame( 'DE', $rows[3]->cea_country_code );
-		$this->assertNull( $rows[3]->cea_country );
-		$this->assertStringNotContainsString( 'GeRmAnY', $rows[3]->cea_full_address );
-
-		// check valid non-english address (Allemagne) was updated correctly
-		$this->assertSame( 106, (int)$rows[4]->cea_id );
-		$this->assertSame( 'DE', $rows[4]->cea_country_code );
-		$this->assertNull( $rows[4]->cea_country );
-		$this->assertStringNotContainsString( 'Allemagne', $rows[4]->cea_full_address );
-
-		// check valid non-english RTL address (فرنسا) was updated correctly
-		$this->assertSame( 107, (int)$rows[5]->cea_id );
-		$this->assertSame( 'FR', $rows[5]->cea_country_code );
-		$this->assertNull( $rows[5]->cea_country );
-		$this->assertStringNotContainsString( 'فرنسا', $rows[5]->cea_full_address );
-
-		// check exception (DR Congo, Congo, Angola) was updated with default, country left unchanged
-		$this->assertSame( 108, (int)$rows[6]->cea_id );
-		$this->assertSame( 'VA', $rows[6]->cea_country_code );
-		$this->assertSame( 'DR Congo, Congo, Angola', $rows[6]->cea_country );
-		$this->assertStringNotContainsString( 'DR Congo, Congo, Angola', $rows[6]->cea_full_address );
+		// Verify that invalid events are now ONLINE (value = 1)
+		$this->assertSelect(
+			'campaign_events',
+			[ 'event_id' ],
+			[ 'event_meeting_type' => EventStore::PARTICIPATION_OPTION_MAP[
+			EventRegistration::PARTICIPATION_OPTION_ONLINE
+			] ],
+			[
+				[ '2' ],
+				[ '7' ],
+				[ '10' ],
+				[ '11' ],
+				[ '12' ],
+				[ '13' ],
+				[ '14' ],
+				[ '15' ],
+				[ '16' ],
+				[ '17' ],
+				[ '18' ],
+				[ '19' ],
+				[ '20' ],
+			]
+		);
 	}
 
 	public function testExecuteDryRun(): void {
 		$this->maintenance->execute();
 
-		$dbr = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_REPLICA );
-		$results = $dbr->newSelectQueryBuilder()->select(
-				[
-					'cea_id',
-					'cea_country',
-					'cea_country_code',
-					'cea_full_address'
-				]
-			)->from( 'ce_address' )->orderBy( 'cea_id' )->caller( __METHOD__ )->fetchResultSet();
+		$this->assertSelect(
+			'ce_address',
+			[ 'cea_id', 'cea_country', 'cea_country_code' ],
+			'*',
+			[
+				[ '0' => '101', '1' => 'Germany', '2' => null ],
+				[ '0' => '102', '1' => null, '2' => null ],
+				[ '0' => '103', '1' => 'France', '2' => null ],
+				[ '0' => '104', '1' => 'Germani', '2' => null ],
+				[ '0' => '105', '1' => 'GeRmAnY', '2' => null ],
+				[ '0' => '106', '1' => 'Allemagne', '2' => null ],
+				[ '0' => '107', '1' => 'فرنسا', '2' => null ],
+				[ '0' => '108', '1' => 'DR Congo, Congo, Angola', '2' => null ],
+				[ '0' => '109', '1' => 'France', '2' => null ],
+				[ '0' => '110', '1' => 'France', '2' => 'FR' ],
+			],
+			[ 'ORDER BY' => 'cea_id' ]
+		);
+		$output = $this->getActualOutput();
 
-		$rows = iterator_to_array( $results );
+		$this->assertStringContainsString(
+			'1 Purged rows',
+			$output,
+			'Should display purged rows section in dry run'
+		);
 
-		// check orphaned address was not purged
-		$this->assertCount( 8, $rows, 'One orphaned address should not have been purged' );
-		$remainingIds = array_map( static fn ( $row ) => (int)$row->cea_id, $rows );
-		$this->assertContains( 103, $remainingIds, 'Address 103 should not be purged' );
+		$this->assertStringContainsString(
+			'11 Events made online',
+			$output,
+			'Should display Events to online section in dry run'
+		);
 
-		// check valid address (Germany) was not updated
-		$this->assertSame( 101, (int)$rows[0]->cea_id );
-		$this->assertSame( null, $rows[0]->cea_country_code );
-		$this->assertSame( "Germany", $rows[0]->cea_country );
-		$this->assertStringContainsString( 'Germany', $rows[0]->cea_full_address );
+		$this->assertStringContainsString(
+			'6 Matches',
+			$output,
+			'Should display correct number of matched country conversions'
+		);
 
-		// check invalid address (null country) was not updated
-		$this->assertSame( 102, (int)$rows[1]->cea_id );
-		$this->assertNull( $rows[1]->cea_country );
-		$this->assertNull( $rows[1]->cea_country_code );
-
-		// check valid address with misspelling (Germani) was not updated
-		$this->assertSame( 104, (int)$rows[3]->cea_id );
-		$this->assertNull( $rows[2]->cea_country_code );
-		$this->assertSame( "Germani", $rows[3]->cea_country );
-		$this->assertStringContainsString( 'Germani', $rows[3]->cea_full_address );
-
-		// check valid address (GeRmAnY) not updated (case-insensitive)
-		$this->assertSame( 105, (int)$rows[4]->cea_id );
-		$this->assertNull( $rows[3]->cea_country_code );
-		$this->assertSame( "GeRmAnY", $rows[4]->cea_country );
-		$this->assertStringContainsString( 'GeRmAnY', $rows[4]->cea_full_address );
-
-		// check valid non-english address (Allemagne) was not updated
-		$this->assertSame( 106, (int)$rows[5]->cea_id );
-		$this->assertNull( $rows[5]->cea_country_code );
-		$this->assertSame( "Allemagne", $rows[5]->cea_country );
-		$this->assertStringContainsString( 'Allemagne', $rows[5]->cea_full_address );
-
-		// check valid non-english RTL address (فرنسا) was not updated
-		$this->assertSame( 107, (int)$rows[6]->cea_id );
-		$this->assertNull( $rows[6]->cea_country_code );
-		$this->assertSame( "فرنسا", $rows[6]->cea_country );
-		$this->assertStringContainsString( 'فرنسا', $rows[6]->cea_full_address );
+		$this->assertStringContainsString(
+			'2 Unmatched',
+			$output,
+			'Should display correct number of unmatched rows'
+		);
 	}
 
 	public function testExecuteWithExceptions(): void {
@@ -253,24 +288,16 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 			'extensions/CampaignEvents/maintenance/countryExceptionMappings.csv',
 			'--commit'
 		] );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', SCHEMA_COMPAT_WRITE_NEW );
 		$this->maintenance->execute();
 
-		$dbr = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_REPLICA );
-		$results = $dbr->newSelectQueryBuilder()->select(
+		$this->assertSelect(
+			'ce_address',
+			[ 'cea_id', 'cea_country', 'cea_country_code', 'cea_full_address' ],
+			[ 'cea_id' => 108 ],
 			[
-				'cea_id',
-				'cea_country',
-				'cea_country_code',
-				'cea_full_address'
+				[ '0' => '108', '1' => null, '2' => 'CD', '3' => "JC39+GR5 \n Katako-Kombe" ]
 			]
-		)->from( 'ce_address' )->orderBy( 'cea_id' )->caller( __METHOD__ )->fetchResultSet();
-
-		$rows = iterator_to_array( $results );
-
-		// check valid exception (DR Congo, Congo, Angola) was updated correctly
-		$this->assertSame( 108, (int)$rows[6]->cea_id );
-		$this->assertSame( 'CD', $rows[6]->cea_country_code );
-		$this->assertNull( $rows[6]->cea_country );
-		$this->assertStringNotContainsString( 'DR Congo, Congo, Angola', $rows[6]->cea_full_address );
+		);
 	}
 }
