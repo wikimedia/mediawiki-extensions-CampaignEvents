@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Aoum",
 			"Diskdance",
 			"GuoPC",
 			"Kishinsagi",
@@ -336,6 +337,7 @@
 	"campaignevents-eventtype-workshop": "工作坊",
 	"campaignevents-eventtype-hackathon": "黑客松",
 	"campaignevents-eventtype-other": "其他",
+	"campaignevents-edit-field-eventtypes-placeholder": "添加事件类型...",
 	"campaignevents-edit-field-eventtypes-label": "活动类型",
 	"campaignevents-event-details-event-types-header": "活动类型",
 	"campaignevents-allevents-label-filter-event-types": "活动类型",

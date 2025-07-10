@@ -547,7 +547,7 @@
 	"campaignevents-eventtypegroup-contributions": "Muokkaukset",
 	"campaignevents-eventtypegroup-community": "Yhteisö",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Muu",
-	"campaignevents-edit-field-eventtypes-placeholder": "Valitse tapahtumatyypit...",
+	"campaignevents-edit-field-eventtypes-placeholder": "Lisää tapahtumatyyppejä...",
 	"campaignevents-edit-field-eventtypes-other-help": "Valitse enintään kaksi tapahtumatyyppiä. Jos valitset ”Muu”, sen on oltava ainoa valinta.",
 	"campaignevents-edit-field-eventtypes-label": "Tapahtumatyypit",
 	"campaignevents-event-details-event-types-header": "Tapahtumatyypit",

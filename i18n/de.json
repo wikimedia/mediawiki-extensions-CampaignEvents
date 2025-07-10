@@ -546,7 +546,7 @@
 	"campaignevents-eventtypegroup-contributions": "Beiträge",
 	"campaignevents-eventtypegroup-community": "Gemeinschaft",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Andere",
-	"campaignevents-edit-field-eventtypes-placeholder": "Veranstaltungstypen auswählen …",
+	"campaignevents-edit-field-eventtypes-placeholder": "Veranstaltungstypen hinzufügen …",
 	"campaignevents-edit-field-eventtypes-other-help": "Füge bis zu zwei Veranstaltungstypen hinzu. Wenn du „Sonstige“ wählst, muss dies die einzige Auswahl sein.",
 	"campaignevents-edit-field-eventtypes-label": "Veranstaltungstypen",
 	"campaignevents-event-details-event-types-header": "Veranstaltungstypen",
