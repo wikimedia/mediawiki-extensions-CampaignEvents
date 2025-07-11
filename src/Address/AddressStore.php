@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Address;
 
+use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use RuntimeException;
@@ -50,14 +51,39 @@ class AddressStore {
 			}
 		}
 
-		$dbw->deleteJoin(
-			'ce_event_address',
-			'ce_address',
-			'ceea_address',
-			'cea_id',
-			$where,
-			__METHOD__
-		);
+		$oldRow = $dbw->newSelectQueryBuilder()
+			->select( [ 'ceea_id', 'ceea_address' ] )
+			->from( 'ce_event_address' )
+			->join( 'ce_address', null, 'cea_id=ceea_address' )
+			->where( $where )
+			->caller( __METHOD__ )
+			// Note: this relies on the fact that events can currently have a single address
+			->fetchRow();
+
+		if ( $oldRow ) {
+			$fname = __METHOD__;
+			// First, dissociate the event and address
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_event_address' )
+				->where( [ 'ceea_id' => $oldRow->ceea_id ] )
+				->caller( $fname )
+				->execute();
+			// Then delete the address itself, if this was the only usage.
+			DeferredUpdates::addCallableUpdate( static function () use ( $dbw, $oldRow, $fname ): void {
+				$usagesSubquery = $dbw->newSelectQueryBuilder()
+					->select( '1' )
+					->from( 'ce_event_address' )
+					->where( [ 'ceea_address' => $oldRow->ceea_address ] );
+				$dbw->newDeleteQueryBuilder()
+					->deleteFrom( 'ce_address' )
+					->where( [
+						'cea_id' => $oldRow->ceea_address,
+						'NOT EXISTS(' . $usagesSubquery->getSQL() . ')'
+					] )
+					->caller( $fname )
+					->execute();
+			} );
+		}
 
 		if ( $address ) {
 			$addressID = $this->acquireAddressID( $address );

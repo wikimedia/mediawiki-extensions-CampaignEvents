@@ -874,4 +874,199 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			}
 		}
 	}
+
+	/** @dataProvider provideAddressRowsArePurged */
+	public function testAddressRowsArePurged(
+		?Address $newAddress,
+		int $eventID,
+		array $initialAddressRows,
+		array $initialJoinRows,
+		array $expectedAddressRows,
+		array $expectedJoinRows,
+		int $migrationStage
+	) {
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_address' )
+			->rows( $initialAddressRows )
+			->caller( __METHOD__ )
+			->execute();
+
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_event_address' )
+			->rows( $initialJoinRows )
+			->caller( __METHOD__ )
+			->execute();
+
+		$this->getAddressStore( $migrationStage )->updateAddresses( $newAddress, $eventID );
+
+		$joinRows = $this->getDb()->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_event_address' )
+			->orderBy( 'ceea_id' )
+			->fetchResultSet();
+		$this->assertEquals( $expectedJoinRows, iterator_to_array( $joinRows ) );
+
+		$addressRows = $this->getDb()->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_address' )
+			->orderBy( 'cea_id' )
+			->fetchResultSet();
+		$this->assertEquals( $expectedAddressRows, iterator_to_array( $addressRows ) );
+	}
+
+	public static function provideAddressRowsArePurged(): Generator {
+		foreach ( self::provideMigrationStagesAndStoredFormats() as $desc => [ $stage, $storedFormat ] ) {
+			$addressRows = [
+				[
+					'cea_id' => 1,
+					'cea_full_address' => $storedFormat === self::STORED_FORMAT_OLD ? "Reused \n France" : 'Reused',
+					'cea_country' => $storedFormat === self::STORED_FORMAT_NEW ? null : 'France',
+					'cea_country_code' => $storedFormat === self::STORED_FORMAT_OLD ? null : 'FR',
+				],
+				[
+					'cea_id' => 2,
+					'cea_full_address' => $storedFormat === self::STORED_FORMAT_OLD ? "Unique \n Egypt" : 'Unique',
+					'cea_country' => $storedFormat === self::STORED_FORMAT_NEW ? null : 'Egypt',
+					'cea_country_code' => $storedFormat === self::STORED_FORMAT_OLD ? null : 'EG',
+				],
+			];
+			$makeExpectedAddressRowsWithoutIDs = static function ( int ...$ids ) use ( $addressRows ) {
+				$ret = [];
+				foreach ( $addressRows as $row ) {
+					if ( !in_array( $row['cea_id'], $ids, true ) ) {
+						$ret[] = (object)$row;
+					}
+				}
+				return $ret;
+			};
+			$joinRows = [
+				[
+					'ceea_id' => 1,
+					'ceea_event' => 10,
+					'ceea_address' => 1,
+				],
+				[
+					'ceea_id' => 2,
+					'ceea_event' => 20,
+					'ceea_address' => 1,
+				],
+				[
+					'ceea_id' => 3,
+					'ceea_event' => 50,
+					'ceea_address' => 2,
+				],
+			];
+			$makeExpectedJoinRowsWithoutIDs = static function ( int ...$ids ) use ( $joinRows ) {
+				$ret = [];
+				foreach ( $joinRows as $row ) {
+					if ( !in_array( $row['ceea_id'], $ids, true ) ) {
+						$ret[] = (object)$row;
+					}
+				}
+				return $ret;
+			};
+
+			$reusedAddress = new Address(
+				'Reused',
+				'France',
+				( $stage & SCHEMA_COMPAT_WRITE_NEW ) ? 'FR' : null
+			);
+			$uniqueAddress = new Address(
+				'Unique',
+				'Egypt',
+				( $stage & SCHEMA_COMPAT_WRITE_NEW ) ? 'EG' : null
+			);
+			$newAddress = new Address(
+				'Address999',
+				'Australia',
+				( $stage & SCHEMA_COMPAT_WRITE_NEW ) ? 'AU' : null
+			);
+
+			$newAddressExpectedRow = (object)[
+				'cea_id' => 3,
+				'cea_full_address' => ( $stage & SCHEMA_COMPAT_WRITE_NEW ) ? 'Address999' : "Address999 \n Australia",
+				'cea_country' => ( $stage & SCHEMA_COMPAT_WRITE_OLD ) ? 'Australia' : null,
+				'cea_country_code' => ( $stage & SCHEMA_COMPAT_WRITE_NEW ) ? 'AU' : null,
+			];
+			$makeExpectedJoinRow = static fn ( int $event, int $address ) => (object)[
+				'ceea_id' => 4,
+				'ceea_event' => $event,
+				'ceea_address' => $address,
+			];
+
+			yield "$desc - Has address (only use), set same" => [
+				$uniqueAddress,
+				50,
+				$addressRows,
+				$joinRows,
+				$makeExpectedAddressRowsWithoutIDs(),
+				$makeExpectedJoinRowsWithoutIDs(),
+				$stage,
+			];
+			yield "$desc - Has address (used elsewhere), set same" => [
+				$reusedAddress,
+				10,
+				$addressRows,
+				$joinRows,
+				$makeExpectedAddressRowsWithoutIDs(),
+				$makeExpectedJoinRowsWithoutIDs(),
+				$stage,
+			];
+			yield "$desc - Has address (only use), set different" => [
+				$newAddress,
+				50,
+				$addressRows,
+				$joinRows,
+				[ ...$makeExpectedAddressRowsWithoutIDs( 2 ), $newAddressExpectedRow ],
+				[ ...$makeExpectedJoinRowsWithoutIDs( 3 ), $makeExpectedJoinRow( 50, 3 ) ],
+				$stage,
+			];
+			yield "$desc - Has address (used elsewhere), set different" => [
+				$newAddress,
+				10,
+				$addressRows,
+				$joinRows,
+				[ ...$makeExpectedAddressRowsWithoutIDs(), $newAddressExpectedRow ],
+				[ ...$makeExpectedJoinRowsWithoutIDs( 1 ), $makeExpectedJoinRow( 10, 3 ) ],
+				$stage,
+			];
+			yield "$desc - Has address (only use), remove" => [
+				null,
+				50,
+				$addressRows,
+				$joinRows,
+				$makeExpectedAddressRowsWithoutIDs( 2 ),
+				$makeExpectedJoinRowsWithoutIDs( 3 ),
+				$stage,
+			];
+			yield "$desc - Has address (used elsewhere), remove" => [
+				null,
+				10,
+				$addressRows,
+				$joinRows,
+				$makeExpectedAddressRowsWithoutIDs(),
+				$makeExpectedJoinRowsWithoutIDs( 1 ),
+				$stage,
+			];
+
+			yield "$desc - Does not have address, set one" => [
+				$newAddress,
+				100,
+				$addressRows,
+				$joinRows,
+				[ ...$makeExpectedAddressRowsWithoutIDs(), $newAddressExpectedRow ],
+				[ ...$makeExpectedJoinRowsWithoutIDs(), $makeExpectedJoinRow( 100, 3 ) ],
+				$stage,
+			];
+			yield "$desc - Does not have address, do not set one" => [
+				null,
+				100,
+				$addressRows,
+				$joinRows,
+				$makeExpectedAddressRowsWithoutIDs(),
+				$makeExpectedJoinRowsWithoutIDs(),
+				$stage,
+			];
+		}
+	}
 }
