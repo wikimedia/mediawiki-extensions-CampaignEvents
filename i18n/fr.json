@@ -580,7 +580,7 @@
 	"campaignevents-eventtypegroup-contributions": "Contributions",
 	"campaignevents-eventtypegroup-community": "Communauté",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Autre",
-	"campaignevents-edit-field-eventtypes-placeholder": "Sélectionnez les types d’événements…",
+	"campaignevents-edit-field-eventtypes-placeholder": "Ajoutez des types d’événements…",
 	"campaignevents-edit-field-eventtypes-other-help": "Ajouter jusqu’à deux types d’événement. Si vous choisissez « Autre », il doit être le seul élément sélectionné.",
 	"campaignevents-edit-field-eventtypes-label": "Types d’événements",
 	"campaignevents-event-details-event-types-header": "Types d’événements",

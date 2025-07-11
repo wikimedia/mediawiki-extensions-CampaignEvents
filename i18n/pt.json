@@ -4,6 +4,7 @@
 			"Albertoleoncio",
 			"B3rnas",
 			"Hamilton Abreu",
+			"Mansil alfalb",
 			"Mbs262"
 		]
 	},
@@ -421,5 +422,6 @@
 	"campaignevents-myinvitationslist-new-button": "Novo",
 	"campaignevents-invitation-list-error-empty-name": "Forneça um nome para a lista de convidados.",
 	"prefs-campaignevents-invitations": "Listas de convidados",
-	"campaignevents-eventpage-btn-collaboration-list": "Encontre mais eventos"
+	"campaignevents-eventpage-btn-collaboration-list": "Encontre mais eventos",
+	"campaignevents-edit-field-eventtypes-placeholder": "Adicionar tipos de eventos..."
 }

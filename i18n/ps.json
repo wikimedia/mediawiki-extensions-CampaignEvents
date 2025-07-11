@@ -91,6 +91,14 @@
 	"campaignevents-edit-invalid-id": "د پېښې يو باوري پېژند چمتو کول.",
 	"campaignevents-edit-event-notfound": "په دې پېژند دلته هېڅ پېښه نشته.",
 	"registerforevent": "په يوه پېښه کې نوم‌ليکنه کول",
+	"campaignevents-register-confirmation-top": "نوم‌ليکنه تاييدول",
+	"campaignevents-register-edit-legend": "نوم‌ليکنه سمول",
+	"campaignevents-register-confirmation-btn": "نوم‌ليکنه",
+	"campaignevents-register-edit-btn": "بدلونونه خوندي‌کول",
+	"canceleventregistration": "د يوې پېښې لپاره خپله نوم‌ليکنه ناگارل",
+	"campaignevents-unregister-success": "تاسو د خپلې پېښې نوم‌ليکنه ناگارلې ده.",
+	"campaignevents-unregister-confirmation-top": "نه نوم‌ليکنه ناييدول",
+	"campaignevents-unregister-confirmation-btn": "نوم‌ليکنه ناگارل",
 	"myevents": "ستاسو پېښې",
 	"allevents": "ټولې پېښې",
 	"campaignevents-myevents-need-central-account": "د خپلو پېښو لړليک کتلو لپاره تاسو يو مرکزي کارن گڼون ته اړتيا لرئ.",
@@ -167,5 +175,6 @@
 	"echo-pref-tooltip-campaign-events-notification-registration": "کله چې زه د یوې پېښې لپاره نوم‌لیکنه کوم چې د پېښې نوم‌ليکلو توکی کاروي؛ نو ما ته خبر راکړئ.",
 	"myinvitationlists": "ستاسو د بلنې لړليکونه",
 	"campaignevents-invitationlist-preference": "د [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists بلنې لړليکونو] کې مې راونغاړئ.",
+	"prefs-campaignevents-invitations": "د بلنې لړليکونه",
 	"campaignevents-event-details-event-types-header": "پېښو ډولونه"
 }
