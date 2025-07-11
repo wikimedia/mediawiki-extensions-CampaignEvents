@@ -94,7 +94,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$pageContent = $pageTabs[$activeTab]['content'] ?? $pageTabs['events']['content'];
 			$pageContent .= $this->getLinkRenderer()->makeKnownLink(
 				$this->getPageTitle(),
-				$this->msg( 'campaignevents-allevents-transclusion-more-link' ),
+				$this->msg( 'campaignevents-allevents-transclusion-more-link' )->text(),
 				[],
 				$this->getQueryParametersForTransclusionLink()
 			);
@@ -373,7 +373,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	private function formatDate( string $date, string $format ): ?string {
 		try {
 			return ( new ConvertibleTimestamp( $date ) )->format( $format );
-		} catch ( TimestampException $exception ) {
+		} catch ( TimestampException ) {
 			return null;
 		}
 	}

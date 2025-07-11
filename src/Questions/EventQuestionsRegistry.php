@@ -517,6 +517,7 @@ class EventQuestionsRegistry {
 	 * Returns the key of a message to be used when introducing stats for the given question.
 	 *
 	 * @return string
+	 * @throws UnknownQuestionException
 	 */
 	public function getQuestionLabelForStats( int $questionID ): string {
 		foreach ( $this->getQuestions() as $question ) {
@@ -529,6 +530,7 @@ class EventQuestionsRegistry {
 
 	/**
 	 * @return array<int,string> Map of [ answer ID => message key ]
+	 * @throws UnknownQuestionException
 	 */
 	public function getQuestionOptionsForStats( int $questionID ): array {
 		foreach ( $this->getQuestions() as $question ) {
@@ -545,6 +547,10 @@ class EventQuestionsRegistry {
 		throw new UnknownQuestionException( "Unknown question with ID $questionID" );
 	}
 
+	/**
+	 * @throws UnknownQuestionException
+	 * @throws UnknownQuestionOptionException
+	 */
 	public function getQuestionOptionMessageByID( int $questionID, int $optionID ): string {
 		foreach ( $this->getQuestions() as $question ) {
 			if ( $question['db-id'] === $questionID ) {

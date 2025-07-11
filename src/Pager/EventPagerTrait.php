@@ -148,7 +148,7 @@ trait EventPagerTrait {
 	/**
 	 * Override this method to run extra preprocessing steps on the result set.
 	 */
-	private function doExtraPreprocessing( IResultWrapper $result ): void {
+	protected function doExtraPreprocessing( IResultWrapper $result ): void {
 	}
 
 	private function getEventPageFromRow( stdClass $eventRow ): MWPageProxy {

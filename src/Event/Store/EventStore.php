@@ -133,7 +133,7 @@ class EventStore implements IEventStore, IEventLookup {
 					$lastMod = max( $event->getLastEditTimestamp(), $event->getDeletionTimestamp() );
 					$ttl = $this->wanCache->adaptiveTTL( $lastMod, self::PAGE_EVENT_CACHE_TTL );
 					return $event;
-				} catch ( EventNotFoundException $e ) {
+				} catch ( EventNotFoundException ) {
 					return null;
 				}
 			},

@@ -243,7 +243,7 @@ class PotentialInviteesFinder {
 		foreach ( [ ...ChangeTags::REVERT_TAGS, ChangeTags::TAG_REVERTED ] as $tagName ) {
 			try {
 				$revertTagIDs[] = $changeTagDefStore->getId( $tagName );
-			} catch ( NameTableAccessException $e ) {
+			} catch ( NameTableAccessException ) {
 				// There's no tag ID if no revisions have ever been tagged with this tag.
 			}
 		}

@@ -179,8 +179,8 @@ class UpdateCountriesColumn extends Maintenance {
 		string $input,
 		string $countryName,
 		float &$highestSimilarity,
-		string &$bestMatchName ): ?float {
-		// @phan-suppress-next-line PhanPluginUseReturnValueInternalKnown
+		string &$bestMatchName
+	): ?float {
 		similar_text( strtolower( $countryName ), $input, $similarity );
 
 		if ( $similarity > $highestSimilarity ) {

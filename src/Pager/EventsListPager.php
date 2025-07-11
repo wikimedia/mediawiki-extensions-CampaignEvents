@@ -195,7 +195,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	/**
 	 * @see EventPagerTrait::doExtraPreprocessing
 	 */
-	private function doExtraPreprocessing( IResultWrapper $result ): void {
+	protected function doExtraPreprocessing( IResultWrapper $result ): void {
 		$eventIDs = [];
 		foreach ( $result as $row ) {
 			$eventIDs[] = (int)$row->event_id;

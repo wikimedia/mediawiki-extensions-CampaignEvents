@@ -453,8 +453,8 @@ class EventFactory {
 			return StatusValue::newGood( new DateTimeZone( $timezone ) );
 		} catch ( TimeoutException $e ) {
 			throw $e;
-		} catch ( Exception $e ) {
-			// PHP throws a generic Exception, but we don't want to catch excimer timeouts.
+		} catch ( Exception ) {
+			// PHP < 8.3 throws a generic Exception, but we don't want to catch excimer timeouts.
 			// Again, thanks PHP for making error handling so convoluted here.
 			// See https://github.com/php/php-src/issues/9784
 			return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
