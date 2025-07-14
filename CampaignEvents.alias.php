@@ -109,3 +109,45 @@ $specialPageAliases['pt'] = [
 	'MyInvitationLists' => [ 'Minhas_listas_de_convites' ],
 	'InvitationList' => [ 'Lista_de_convites' ],
 ];
+
+$specialPageAliases['zh'] = [
+	'EnableEventRegistration' => [ 'EnableEventRegistration' ],
+	'DeleteEventRegistration' => [ 'DeleteEventRegistration' ],
+	'EditEventRegistration' => [ 'EditEventRegistration' ],
+	'RegisterForEvent' => [ 'RegisterForEvent' ],
+	'CancelEventRegistration' => [ 'CancelEventRegistration' ],
+	'MyEvents' => [ 'MyEvents' ],
+	'AllEvents' => [ 'AllEvents' ],
+	'EventDetails' => [ 'EventDetails' ],
+	'GenerateInvitationList' => [ 'GenerateInvitationList' ],
+	'MyInvitationLists' => [ 'MyInvitationLists' ],
+	'InvitationList' => [ 'InvitationList' ],
+];
+
+$specialPageAliases['zh-hans'] = [
+	'EnableEventRegistration' => [ '启用活动报名' ],
+	'DeleteEventRegistration' => [ '删除活动报名' ],
+	'EditEventRegistration' => [ '编辑活动报名' ],
+	'RegisterForEvent' => [ '报名活动' ],
+	'CancelEventRegistration' => [ '取消活动报名' ],
+	'MyEvents' => [ '我的活动' ],
+	'AllEvents' => [ '所有活动' ],
+	'EventDetails' => [ '活动详情' ],
+	'GenerateInvitationList' => [ '生成邀请列表' ],
+	'MyInvitationLists' => [ '我的邀请列表' ],
+	'InvitationList' => [ '邀请列表' ],
+];
+
+$specialPageAliases['zh-hant'] = [
+	'EnableEventRegistration' => [ '啟用活動報名' ],
+	'DeleteEventRegistration' => [ '刪除活動報名' ],
+	'EditEventRegistration' => [ '編輯活動報名' ],
+	'RegisterForEvent' => [ '報名活動' ],
+	'CancelEventRegistration' => [ '取消活動報名' ],
+	'MyEvents' => [ '我的活動' ],
+	'AllEvents' => [ '所有活動' ],
+	'EventDetails' => [ '活動詳情' ],
+	'GenerateInvitationList' => [ '產生邀請列表' ],
+	'MyInvitationLists' => [ '我的邀請列表' ],
+	'InvitationList' => [ '邀請列表' ],
+];
