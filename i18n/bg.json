@@ -5,5 +5,7 @@
 			"StanProg"
 		]
 	},
-	"campaignevents-myevents-label-search": "Търсене"
+	"enableeventregistration": "Активиране на регистрацията за събития",
+	"campaignevents-myevents-label-search": "Търсене",
+	"campaignevents-eventpage-enable-registration-dialog-title": "Активиране на регистрацията за събития"
 }

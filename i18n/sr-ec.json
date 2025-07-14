@@ -41,6 +41,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Откажи",
 	"campaignevents-eventslist-delete-dialog-delete": "Обриши",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> обрисан.",
+	"campaignevents-delete-error-no-event": "Није наведен догађај.",
 	"campaignevents-delete-submit-btn": "Обриши",
 	"campaignevents-eventpage-header-location-label": "Локација",
 	"campaignevents-eventpage-header-type-online": "Онлајн догађај",
@@ -67,5 +68,6 @@
 	"campaignevents-event-details-in-person-event-label": "Догађај уживо",
 	"campaignevents-event-details-online-label": "Онлајн догађај",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи",
-	"campaignevents-event-details-event": "Детаљи догађаја: $1"
+	"campaignevents-event-details-event": "Детаљи догађаја: $1",
+	"campaignevents-event-details-dates-label": "Почетак и крај"
 }
