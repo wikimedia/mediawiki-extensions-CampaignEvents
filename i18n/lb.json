@@ -46,6 +46,7 @@
 	"campaignevents-error-invalid-topics": "Déi follgend Theeme ginn net erkannt: $1.",
 	"campaignevents-error-no-participation-options": "Wielt op d'mannst eng Participatiounsoptioun.",
 	"campaignevents-error-invalid-country": "Gitt ee gültegen Lännernumm an.",
+	"campaignevents-error-invalid-country-code": "Gitt e gültege Lännercode an.",
 	"campaignevents-error-invalid-address": "Gitt eng gülteg Adress an.",
 	"campaignevents-error-invalid-chat-url": "Gitt eng gülteg Chat-URL an.",
 	"campaignevents-error-invalid-question-names": "Déi follgend Froe goufen net erkannt: $1",

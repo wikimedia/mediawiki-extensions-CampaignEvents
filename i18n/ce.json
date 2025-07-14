@@ -230,7 +230,7 @@
 	"campaignevents-eventpage-dialog-venue-not-available": "ДӀахьур йолчу меттиган адрес довзуьйтур ду {{PLURAL:$1|организаторо|организаторша}}.",
 	"campaignevents-eventpage-dialog-chat-label": "ДӀакхета мероприятин чат тобане",
 	"campaignevents-eventpage-dialog-chat-not-available": "Цхьа а чат йац хӀокху хиламна.",
-	"campaignevents-eventpage-dialog-chat-register": "Тобан чат тӀе хьажорг хьажа дӀайазло.",
+	"campaignevents-eventpage-dialog-chat-register": "Тобанан чат тӀе хьажорг хьажа дӀайазло.",
 	"campaignevents-eventpage-dialog-action-close": "ДӀачӀагӀа",
 	"campaignevents-eventpage-register-notification": "Ахьа регистраци йина $1.",
 	"campaignevents-eventpage-register-notification-more": "Кхин а хиламаш а, йукъараллаш а лахархьама <strong>[[Special:AllEvents|Цхьаьнаболхбаран могӀаме]]</strong> хьажа.",
@@ -540,11 +540,12 @@
 	"campaignevents-eventtypegroup-contributions": "Къинхьегам",
 	"campaignevents-eventtypegroup-community": "Йукъаралла",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Кхийерг",
-	"campaignevents-edit-field-eventtypes-placeholder": "Хиламийн тайпанаш харжа...",
+	"campaignevents-edit-field-eventtypes-placeholder": "Хиламийн тайпанаш тӀетоха...",
 	"campaignevents-edit-field-eventtypes-other-help": "'Кхин' харжаро дӀадоккхур а, хуьйцур а ду массо а кхин хиламан тайпанаш.",
 	"campaignevents-edit-field-eventtypes-label": "Хиламийн тайпанаш",
 	"campaignevents-event-details-event-types-header": "Хиламийн тайпанаш",
 	"campaignevents-allevents-label-filter-event-types": "Хиламийн тайпанаш",
+	"campaignevents-allevents-placeholder-add-event-types": "Хиламийн тайпанаш тӀетоха...",
 	"campaignevents-eventpage-dialog-event-types-label": "Хиламийн тайпанаш",
 	"campaignevents-eventslist-types-label": "Хиламийн тайпанаш"
 }

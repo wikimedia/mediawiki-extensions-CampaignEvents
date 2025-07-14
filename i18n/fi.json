@@ -54,6 +54,7 @@
 	"campaignevents-error-meeting-url-not-online": "Kokouksen URL-osoitetta ei tule antaa, jos kyseessä ei ole online-tapahtuma.",
 	"campaignevents-error-countryoraddress-not-in-person": "Tapahtuman maata ja osoitetta ei tule antaa, jos kyseessä on online-tapahtuma.",
 	"campaignevents-error-invalid-country": "Anna kelvollinen maan nimi.",
+	"campaignevents-error-invalid-country-code": "Anna kelvollinen maakoodi.",
 	"campaignevents-error-invalid-address": "Anna kelvollinen osoite.",
 	"campaignevents-error-invalid-chat-url": "Anna kelvollinen keskusteluryhmän URL-osoite.",
 	"campaignevents-error-invalid-question-names": "Seuraavia kysymyksiä ei tunnistettu: $1",

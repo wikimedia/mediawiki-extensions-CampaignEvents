@@ -53,6 +53,7 @@
 	"campaignevents-error-meeting-url-not-online": "Tədbir onlayn deyilsə, görüş URL-i göstərilməməlidir.",
 	"campaignevents-error-countryoraddress-not-in-person": "Tədbir oflayn deyilsə, görüş ölkəsi və ünvanı göstərilməməlidir.",
 	"campaignevents-error-invalid-country": "Etibarlı ölkə adı daxil edin.",
+	"campaignevents-error-invalid-country-code": "Etibarlı ölkə adı daxil et.",
 	"campaignevents-error-invalid-address": "Etibarlı ünvan daxil edin.",
 	"campaignevents-error-invalid-chat-url": "Etibarlı söhbət URL-i daxil edin.",
 	"campaignevents-error-invalid-question-names": "Aşağıdakı suallar tanınmadı: $1",

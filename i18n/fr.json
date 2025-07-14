@@ -78,6 +78,7 @@
 	"campaignevents-error-meeting-url-not-online": "L’URL de la réunion ne doit pas être spécifiée si l’événement n’est pas en ligne.",
 	"campaignevents-error-countryoraddress-not-in-person": "Le pays ou l’adresse de la réunion ne doivent pas être spécifiés si l’événement n’est pas en présentiel.",
 	"campaignevents-error-invalid-country": "Saisissez un nom de pays valide.",
+	"campaignevents-error-invalid-country-code": "Entrez un code de pays valide.",
 	"campaignevents-error-invalid-address": "Saisissez une adresse valide.",
 	"campaignevents-error-invalid-chat-url": "Saisissez une URL de discussion en direct valide.",
 	"campaignevents-error-invalid-question-names": "Les questions suivantes n’ont pas été reconnues : $1",

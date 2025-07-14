@@ -53,6 +53,7 @@
 	"campaignevents-error-meeting-url-not-online": "Die URL der Besprechung muss nicht angegeben werden, wenn die Veranstaltung nicht online ist.",
 	"campaignevents-error-countryoraddress-not-in-person": "Das Land und die Adresse des Treffens dürfen nicht angegeben werden, wenn es sich nicht um eine Präsenzveranstaltung handelt.",
 	"campaignevents-error-invalid-country": "Gib einen gültigen Ländernamen ein.",
+	"campaignevents-error-invalid-country-code": "Gib einen gültigen Ländercode ein.",
 	"campaignevents-error-invalid-address": "Gib eine gültige Adresse ein.",
 	"campaignevents-error-invalid-chat-url": "Gib eine gültige Chat-URL ein.",
 	"campaignevents-error-invalid-question-names": "Folgende Fragen wurden nicht berücksichtigt: $1",
