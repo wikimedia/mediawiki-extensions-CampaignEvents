@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Config\Config;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -41,6 +43,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected WikiLookup $wikiLookup;
 	protected ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
+	protected bool $hasWriteNew;
+	private CountryProvider $countryProvider;
 
 	public function __construct(
 		EventFactory $eventFactory,
@@ -52,6 +56,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
+		Config $config,
+		CountryProvider $countryProvider,
 	) {
 		$this->eventFactory = $eventFactory;
 		$this->permissionChecker = $permissionChecker;
@@ -62,6 +68,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->wikiLookup = $wikiLookup;
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->countryProvider = $countryProvider;
+		$countrySchemaMigrationStage = $config->get( 'CampaignEventsCountrySchemaMigrationStage' );
+		$this->hasWriteNew = (bool)( $countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW );
 	}
 
 	/**
@@ -205,6 +214,15 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_DEFAULT => false,
 			],
 		] + $this->getTokenParamDefinition();
+
+		if ( $this->hasWriteNew ) {
+			unset( $params[ 'meeting_country' ] );
+			$params = array_merge( $params, [ 'meeting_country_code' => [
+					static::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_TYPE => $this->countryProvider->getValidCountryCodes()
+				],
+			] );
+		}
 
 		return $params;
 	}

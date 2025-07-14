@@ -43,6 +43,15 @@ class CountryProvider {
 	}
 
 	/**
+	 * Returns the list of valid country codes.
+	 *
+	 * @return array<string> ISO country code
+	 */
+	public function getValidCountryCodes(): array {
+		return array_keys( $this->getAvailableCountries( 'en' ) );
+	}
+
+	/**
 	 * Validates whether the provided country code is available for selection.
 	 *
 	 * @param string|null $code ISO 3166 country code

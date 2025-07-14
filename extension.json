@@ -410,7 +410,9 @@
 				"CampaignEventsEventQuestionsRegistry",
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
-				"CampaignEventsEventTypesRegistry"
+				"CampaignEventsEventTypesRegistry",
+				"MainConfig",
+				"CampaignEventsCountryProvider"
 			]
 		},
 		{
@@ -477,7 +479,9 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
-				"CampaignEventsEventLookup"
+				"CampaignEventsEventLookup",
+				"MainConfig",
+				"CampaignEventsCountryProvider"
 			]
 		},
 		{

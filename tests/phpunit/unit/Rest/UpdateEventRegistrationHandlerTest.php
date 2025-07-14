@@ -5,7 +5,9 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -93,7 +95,9 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$wikiLookup ?? $this->createMock( WikiLookup::class ),
 			$this->createMock( ITopicRegistry::class ),
 			new EventTypesRegistry(),
-			$eventLookup
+			$eventLookup,
+			new HashConfig( [ 'CampaignEventsCountrySchemaMigrationStage' => MIGRATION_OLD ] ),
+			$this->createMock( CountryProvider::class ),
 		);
 	}
 

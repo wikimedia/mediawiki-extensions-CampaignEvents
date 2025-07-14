@@ -68,6 +68,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'inperson_meeting' => ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) !== 0,
 			'meeting_url' => $registration->getMeetingURL(),
 			'meeting_country' => $address ? $address->getCountry() : null,
+			'meeting_country_code' => $address !== null ? $address->getCountryCode() : null,
 			'meeting_address' => $address ? $address->getAddressWithoutCountry() : null,
 			'chat_url' => $registration->getChatURL(),
 			'is_test_event' => $registration->getIsTestEvent(),

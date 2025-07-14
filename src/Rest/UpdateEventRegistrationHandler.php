@@ -5,7 +5,9 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use LogicException;
+use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -41,7 +43,9 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
-		IEventLookup $eventLookup
+		IEventLookup $eventLookup,
+		Config $config,
+		CountryProvider $countryProvider,
 	) {
 		parent::__construct(
 			$eventFactory,
@@ -53,6 +57,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$wikiLookup,
 			$topicRegistry,
 			$eventTypesRegistry,
+			$config,
+			$countryProvider,
 		);
 		$this->eventLookup = $eventLookup;
 	}
@@ -155,8 +161,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['tracking_tool_event_id'],
 			$participationOptions,
 			$body['meeting_url'],
-			$body['meeting_country'],
-			null,
+			$this->hasWriteNew ? null : $body['meeting_country'],
+			$this->hasWriteNew ? $body['meeting_country_code'] : null,
 			$body['meeting_address'],
 			$body['chat_url'],
 			$body['is_test_event'],
