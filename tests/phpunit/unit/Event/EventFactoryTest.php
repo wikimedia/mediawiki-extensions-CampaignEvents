@@ -148,7 +148,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	 * @param array|null $expectedErrors Array of expected error keys, or null to expect success.
 	 * @param CampaignsPageFactory|null $campaignsPageFactory
 	 * @param int[]|null $allowedNamespaces
-	 * @return EventRegistration The newly created object when successful, else null.
+	 * @return EventRegistration|null The newly created object when successful, else null.
 	 */
 	private function doTestWithArgs(
 		array $factoryArgs,
@@ -790,7 +790,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		return array_values( array_replace( self::VALID_DEFAULT_DATA, $specificData ) );
 	}
 
-	public function testCountryCodeMigration() {
+	public function testCountryCodeMigration__writeNewWithoutCountryCode() {
 		$args = self::getTestDataWithDefault( [ 'countrycode' => null ] );
 		$this->doTestWithArgs(
 			$args,
@@ -799,5 +799,18 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			null,
 			MIGRATION_WRITE_NEW
 		);
+	}
+
+	public function testCountryCodeMigration__countryCodeOnly() {
+		$args = self::getTestDataWithDefault( [ 'countrycode' => 'FR', 'country' => null, 'address' => null ] );
+		$event = $this->doTestWithArgs(
+			$args,
+			null,
+			null,
+			null,
+			MIGRATION_WRITE_NEW
+		);
+		$this->assertNotNull( $event->getAddress(), 'Should have address' );
+		$this->assertSame( 'FR', $event->getAddress()->getCountryCode(), 'Country code' );
 	}
 }
