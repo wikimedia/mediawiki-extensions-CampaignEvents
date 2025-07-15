@@ -4,6 +4,17 @@
 			"Joao Xavier"
 		]
 	},
+	"action-campaignevents-enable-registration": "kapabligar registro di eventi",
+	"right-campaignevents-enable-registration": "Kapabligo di registro di eventi",
+	"action-campaignevents-delete-registration": "efacar registri di evento",
+	"right-campaignevents-delete-registration": "Efacar registri di eventi",
+	"enableeventregistration": "Kapabligar registro di eventi",
+	"editeventregistration": "Redaktar registro di evento",
+	"registerforevent": "Enrejistrar por ul evento",
 	"campaignevents-eventslist-delete-dialog-cancel": "Anular",
-	"campaignevents-event-details-remove-participant-cancel-btn": "Anular"
+	"deleteeventregistration": "Efacar registro di evento",
+	"campaignevents-event-details-in-person-event-label": "Evento por direta partopreno",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Anular",
+	"campaignevents-event-details-tab-event-details": "Detali pri evento",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Informez me kande me facos registrago por ul evento qua uzas utensilo Event Registration."
 }

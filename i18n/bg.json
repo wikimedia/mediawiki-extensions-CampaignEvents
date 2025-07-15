@@ -5,6 +5,11 @@
 			"StanProg"
 		]
 	},
+	"specialpages-group-campaignevents": "Събития",
+	"enableeventregistration": "Активиране на регистрацията за събития",
 	"campaignevents-myevents-label-search": "Търсене",
-	"campaignevents-event-details-organizers-header": "Организатори"
+	"campaignevents-eventpage-enable-registration-dialog-title": "Активиране на регистрацията за събития",
+	"campaignevents-event-details-organizers-header": "Организатори",
+	"echo-category-title-campaign-events-notification-registration": "Регистрация за събитие",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Известяване, когато се регистрирам за събитие, което използва инструмента за регистрация на събития."
 }
