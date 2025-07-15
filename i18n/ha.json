@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Ezeone10",
+			"Gwanki",
 			"Rejoicedaniel",
 			"Yaw tuba"
 		]
@@ -49,6 +50,7 @@
 	"campaignevents-error-meeting-url-not-online": "Ba dole ba ne a bayyana URL ɗin taron idan ba a kan layi ba ne.",
 	"campaignevents-error-countryoraddress-not-in-person": "Ba dole ba ne a bayyana ƙasar taron da adireshin idan ba a cikin mutum ba ne.",
 	"campaignevents-error-invalid-country": "Shigar da ingantaccen sunan ƙasa.",
+	"campaignevents-error-invalid-country-code": "Shigar da ingantacciyar lambar ƙasa.",
 	"campaignevents-error-invalid-address": "Shigar da ingantaccen adireshin.",
 	"campaignevents-error-invalid-chat-url": "Shigar da ingantaccen URL ɗin tattaunawa.",
 	"campaignevents-error-invalid-question-names": "Ba a gane waɗannan tambayoyin ba: $1",
@@ -512,5 +514,6 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Abubuwan da ke zuwa",
 	"campaignevents-allevents-label-upcoming-events-description": "Abubuwan da ke tafe: Abubuwan da ke farawa a cikin zaɓaɓɓun kwanakin",
 	"campaignevents-allevents-label-ongoing-events-title": "Abubuwan da ke gudana",
-	"campaignevents-allevents-label-ongoing-events-description": "Abubuwan da ke gudana: Abubuwan da suka fara kafin amma sun ci gaba a cikin kwanakin da aka zaɓa"
+	"campaignevents-allevents-label-ongoing-events-description": "Abubuwan da ke gudana: Abubuwan da suka fara kafin amma sun ci gaba a cikin kwanakin da aka zaɓa",
+	"campaignevents-edit-field-eventtypes-placeholder": "Ƙara nau'ikan taron..."
 }

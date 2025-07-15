@@ -52,6 +52,7 @@
 	"campaignevents-error-meeting-url-not-online": "Le adresse URL del reunion non debe esser specificate si le evento non es in linea.",
 	"campaignevents-error-countryoraddress-not-in-person": "Le pais e adresse del reunion non debe esser specificate si le evento non es in persona.",
 	"campaignevents-error-invalid-country": "Insere un nomine de pais valide.",
+	"campaignevents-error-invalid-country-code": "Insere un codice de pais valide.",
 	"campaignevents-error-invalid-address": "Insere un adresse valide.",
 	"campaignevents-error-invalid-chat-url": "Insere un URL de chat valide.",
 	"campaignevents-error-invalid-question-names": "Le sequente questiones non ha essite recognoscite: $1",

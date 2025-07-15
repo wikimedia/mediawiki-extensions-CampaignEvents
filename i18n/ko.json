@@ -300,6 +300,7 @@
 	"campaignevents-register-confirmation-radio-public": "공개 등록",
 	"echo-category-title-campaign-events-notification-registration": "이벤트 등록",
 	"campaignevents-eventpage-dialog-private-registration-label": "{{GENDER:$1|참가자가 비공개로 등록됨}}",
+	"echo-pref-tooltip-campaign-events-notification-registration": "이벤트 등록 도구를 사용하는 이벤트에 등록할 때 내게 알립니다.",
 	"campaignevents-notification-registration-header-intro": "$1에 등록해 주셔서 고맙습니다.",
 	"campaignevents-notification-registration-header-chat-label": "이벤트 그룹 채팅",
 	"campaignevents-notification-registration-details-header": "이벤트 상세 정보",
