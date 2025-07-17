@@ -27,6 +27,8 @@
 	"right-campaignevents-organize-events": "籌辦活動",
 	"action-campaignevents-email-participants": "傳送電子郵件給活動參與者",
 	"right-campaignevents-email-participants": "傳送電子郵件給活動參與者",
+	"action-campaignevents-view-private-participants": "檢視活動的非公開參與者",
+	"right-campaignevents-view-private-participants": "檢視活動的非公開參與者",
 	"specialpages-group-campaignevents": "活動",
 	"campaignevents-error-invalid-id": "活動ID必須是正整數。",
 	"campaignevents-error-empty-title": "請輸入活動頁面標題。",
