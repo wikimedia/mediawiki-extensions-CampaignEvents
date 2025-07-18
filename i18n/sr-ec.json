@@ -197,6 +197,7 @@
 	"campaignevents-invitations-pager-status-processing": "Обрађујем...",
 	"campaignevents-myinvitationslist-new-button": "Ново",
 	"campaignevents-worklist-error-empty": "Наведите бар један чланак.",
+	"prefs-campaignevents-invitations": "Позивнице",
 	"campaignevents-allevents-label-filter-wikis": "Викији",
 	"campaignevents-allevents-placeholder-add-wikis": "Додај викије...",
 	"campaignevents-allevents-label-filter-topics": "Теме",
@@ -223,6 +224,8 @@
 	"campaignevents-eventtypegroup-contributions": "Доприноси",
 	"campaignevents-eventtypegroup-community": "Заједница",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Друго",
+	"campaignevents-allevents-label-filter-event-types": "Врсте догађаја",
+	"campaignevents-allevents-placeholder-add-event-types": "Додај врсте догађаја...",
 	"campaignevents-eventpage-dialog-event-types-label": "Тип догађаја",
 	"campaignevents-email-error-notification-with-detail": "Имејл није послат из следећег разлога: $1",
 	"campaignevents-eventslist-types-label": "Типови догађаја"
