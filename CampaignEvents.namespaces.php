@@ -96,3 +96,8 @@ $namespaceNames['pt'] = [
 	NS_EVENT => 'Evento',
 	NS_EVENT_TALK => 'Evento_Discussão',
 ];
+
+$namespaceNames['uk'] = [
+	NS_EVENT => 'Подія',
+	NS_EVENT_TALK => 'Обговорення_події',
+];
