@@ -2,10 +2,17 @@
 	"@metadata": {
 		"authors": [
 			"Kareyac",
-			"StanProg"
+			"StanProg",
+			"Ted Masters"
 		]
 	},
 	"enableeventregistration": "Активиране на регистрацията за събития",
+	"editeventregistration": "Редактиране на регистрация за събитие",
+	"registerforevent": "Регистрация за събитие",
+	"canceleventregistration": "Отказ от Ваша регистрация за събитие",
+	"myevents": "Ваши събития",
 	"campaignevents-myevents-label-search": "Търсене",
-	"campaignevents-eventpage-enable-registration-dialog-title": "Активиране на регистрацията за събития"
+	"deleteeventregistration": "Изтриване на регистрация за събитие",
+	"campaignevents-eventpage-enable-registration-dialog-title": "Активиране на регистрацията за събития",
+	"eventdetails": "Детайли на събитието"
 }

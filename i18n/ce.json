@@ -146,7 +146,7 @@
 	"campaignevents-eventpage-dialog-venue-not-available": "ДӀахьур йолчу меттиган адрес довзуьйтур ду {{PLURAL:$1|организаторо|организаторша}}.",
 	"campaignevents-eventpage-dialog-chat-label": "ДӀакхета мероприятин чат тобане",
 	"campaignevents-eventpage-dialog-chat-not-available": "Цхьа а чат йац хӀокху хиламна.",
-	"campaignevents-eventpage-dialog-chat-register": "Тобан чат тӀе хьажорг хьажа дӀайазло.",
+	"campaignevents-eventpage-dialog-chat-register": "Тобанан чат тӀе хьажорг хьажа дӀайазло.",
 	"campaignevents-eventpage-dialog-action-close": "ДӀачӀагӀа",
 	"campaignevents-eventpage-register-notification": "Ахьа регистраци йина $1.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Регистраци йухайаккха",
