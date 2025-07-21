@@ -1,10 +1,9 @@
-'use strict';
+import EventRegistrationPage from '../pageobjects/eventRegistration.page.js';
+import EventPage from '../pageobjects/event.page.js';
+import EventUtils from '../EventUtils.js';
+import * as Util from 'wdio-mediawiki/Util';
 
-const EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
-	EventPage = require( '../pageobjects/event.page' ),
-	EventUtils = require( '../EventUtils.js' ),
-	Util = require( 'wdio-mediawiki/Util' ),
-	eventName = Util.getTestString( 'Test EnableEventRegistration' ),
+const eventName = Util.getTestString( 'Test EnableEventRegistration' ),
 	eventTitle = 'Event:' + eventName;
 
 describe( 'Enable Event Registration @daily', () => {

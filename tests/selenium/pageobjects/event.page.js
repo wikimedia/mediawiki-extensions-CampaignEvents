@@ -1,7 +1,5 @@
-'use strict';
-
-const Page = require( 'wdio-mediawiki/Page' ),
-	Util = require( 'wdio-mediawiki/Util' );
+import Page from 'wdio-mediawiki/Page';
+import * as Util from 'wdio-mediawiki/Util';
 
 class EventPage extends Page {
 
@@ -135,4 +133,4 @@ class EventPage extends Page {
 	}
 }
 
-module.exports = new EventPage();
+export default new EventPage();

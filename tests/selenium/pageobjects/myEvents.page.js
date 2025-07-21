@@ -1,6 +1,4 @@
-'use strict';
-
-const Page = require( 'wdio-mediawiki/Page' );
+import Page from 'wdio-mediawiki/Page';
 
 class MyEventsPage extends Page {
 
@@ -79,4 +77,4 @@ class MyEventsPage extends Page {
 	}
 }
 
-module.exports = new MyEventsPage();
+export default new MyEventsPage();

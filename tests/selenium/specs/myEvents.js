@@ -1,9 +1,8 @@
-'use strict';
+import MyEventsPage from '../pageobjects/myEvents.page.js';
+import EventUtils from '../EventUtils.js';
+import * as Util from 'wdio-mediawiki/Util';
 
-const MyEventsPage = require( '../pageobjects/myEvents.page' ),
-	EventUtils = require( '../EventUtils.js' ),
-	Util = require( 'wdio-mediawiki/Util' ),
-	eventName = Util.getTestString( 'Test MyEvents' ),
+const eventName = Util.getTestString( 'Test MyEvents' ),
 	eventTitle = 'Event:' + eventName;
 
 describe( 'MyEvents', () => {

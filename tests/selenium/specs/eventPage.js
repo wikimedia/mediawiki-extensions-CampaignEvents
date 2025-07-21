@@ -1,11 +1,10 @@
-'use strict';
+import LoginPage from 'wdio-mediawiki/LoginPage';
+import { mwbot, createAccount } from 'wdio-mediawiki/Api';
+import * as Util from 'wdio-mediawiki/Util';
+import EventPage from '../pageobjects/event.page.js';
+import EventUtils from '../EventUtils.js';
 
-const EventPage = require( '../pageobjects/event.page' ),
-	Api = require( 'wdio-mediawiki/Api' ),
-	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
-	EventUtils = require( '../EventUtils.js' ),
-	Util = require( 'wdio-mediawiki/Util' ),
-	event = Util.getTestString( 'Event:Test event page' );
+const event = Util.getTestString( 'Event:Test event page' );
 
 describe( 'Event page', () => {
 	before( async () => {
@@ -15,8 +14,8 @@ describe( 'Event page', () => {
 
 	async function loginWithNewAccount( userName ) {
 		const password = 'aaaaaaaaa!';
-		const bot = await Api.bot();
-		await Api.createAccount( bot, userName, password );
+		const bot = await mwbot();
+		await createAccount( bot, userName, password );
 		await LoginPage.login( userName, password );
 	}
 

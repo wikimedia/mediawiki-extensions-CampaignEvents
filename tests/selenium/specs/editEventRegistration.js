@@ -1,9 +1,7 @@
-'use strict';
-
-const EventPage = require( '../pageobjects/event.page' ),
-	EventRegistrationPage = require( '../pageobjects/eventRegistration.page' ),
-	EventUtils = require( '../EventUtils.js' ),
-	Util = require( 'wdio-mediawiki/Util' );
+import EventPage from '../pageobjects/event.page.js';
+import EventRegistrationPage from '../pageobjects/eventRegistration.page.js';
+import EventUtils from '../EventUtils.js';
+import * as Util from 'wdio-mediawiki/Util';
 
 let id;
 

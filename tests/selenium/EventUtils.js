@@ -1,10 +1,8 @@
-'use strict';
+import * as Util from 'wdio-mediawiki/Util';
+import LoginPage from 'wdio-mediawiki/LoginPage';
+import * as Api from 'wdio-mediawiki/Api';
 
-const Util = require( 'wdio-mediawiki/Util' ),
-	LoginPage = require( 'wdio-mediawiki/LoginPage' ),
-	Api = require( 'wdio-mediawiki/Api' );
-
-module.exports = {
+const EventUtils = {
 	/** Credentials for the default organizer account */
 	organizerName: Util.getTestString( 'Event organizer' ),
 	organizerPassword: 'correct horse battery staple',
@@ -25,7 +23,7 @@ module.exports = {
 	 * @param {string} password
 	 */
 	async createOrganizerAccount( username, password = this.organizerPassword ) {
-		const adminBot = await Api.bot();
+		const adminBot = await Api.mwbot();
 		await Api.createAccount( adminBot, username, password );
 		await Api.addUserToGroup( adminBot, username, 'event-organizer' );
 	},
@@ -47,7 +45,7 @@ module.exports = {
 	 * @param {string} title
 	 */
 	async createEventPage( title ) {
-		const bot = await Api.bot( this.organizerName, this.organizerPassword );
+		const bot = await Api.mwbot( this.organizerName, this.organizerPassword );
 		await bot.edit(
 			title,
 			'Selenium test page (createEventPage)',
@@ -91,3 +89,5 @@ module.exports = {
 		}, data );
 	}
 };
+
+export default EventUtils;
