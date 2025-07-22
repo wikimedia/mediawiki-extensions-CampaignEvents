@@ -25,8 +25,8 @@ trait ListPagersTestHelperTrait {
 		$row = [
 			'event_name' => self::$EVENT_NAME,
 			'event_page_namespace' => NS_EVENT,
-			'event_page_title' => self::$EVENT_NAME,
-			'event_page_prefixedtext' => 'Event:' . self::$EVENT_NAME,
+			'event_page_title' => strtr( self::$EVENT_NAME, ' ', '_' ),
+			'event_page_prefixedtext' => 'Event:' . strtr( self::$EVENT_NAME, ' ', '_' ),
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
 			'event_chat_url' => '',
 			'event_status' => 1,

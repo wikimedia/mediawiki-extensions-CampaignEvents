@@ -212,6 +212,7 @@ return [
 	EventsPagerFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): EventsPagerFactory {
 		return new EventsPagerFactory(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->get( EventStore::LOOKUP_SERVICE_NAME ),
 			$services->get( CampaignsPageFactory::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->getLinkBatchFactory(),
@@ -220,12 +221,9 @@ return [
 			$services->getUserOptionsLookup(),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( WikiLookup::SERVICE_NAME ),
-			$services->get( EventWikisStore::SERVICE_NAME ),
 			$services->get( ITopicRegistry::SERVICE_NAME ),
-			$services->get( EventTopicsStore::SERVICE_NAME ),
 			$services->get( EventTypesRegistry::SERVICE_NAME ),
 			$services->get( CountryProvider::SERVICE_NAME ),
-			$services->get( AddressStore::SERVICE_NAME ),
 		);
 	},
 	EventPageDecoratorFactory::SERVICE_NAME =>

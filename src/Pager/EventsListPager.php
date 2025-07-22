@@ -6,15 +6,14 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Extension\CampaignEvents\Address\Address;
-use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -45,6 +44,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	}
 
 	private const DISPLAYED_WIKI_COUNT = 3;
+
+	private IEventLookup $eventLookup;
 	private UserLinker $userLinker;
 	private CampaignsPageFactory $campaignsPageFactory;
 	private PageURLResolver $pageURLResolver;
@@ -53,11 +54,9 @@ class EventsListPager extends ReverseChronologicalPager {
 	private UserOptionsLookup $userOptionsLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private WikiLookup $wikiLookup;
-	private EventWikisStore $eventWikisStore;
 	private ITopicRegistry $topicRegistry;
-	private EventTopicsStore $eventTopicsStore;
-
-	private AddressStore $addressStore;
+	private EventTypesRegistry $eventTypesRegistry;
+	private CountryProvider $countryProvider;
 
 	/** @var bool Reverse parent ordering, so events are ordered from oldest to newest. */
 	public $mDefaultDirection = IndexPager::DIR_ASCENDING;
@@ -74,6 +73,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	protected ?string $endDate;
 	private array $filterEventTypes = [];
 
+	/** @var array<int,ExistingEventRegistration> Maps event IDs in the current page to event objects */
+	private array $eventObjects = [];
 	private string $lastHeaderTimestamp;
 	/** @var array<int,Organizer|null> Maps event ID to the event creator, if available, else to null. */
 	private array $creators = [];
@@ -84,16 +85,6 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $extraOrganizers = [];
 	/** @var array<int,int> Maps event ID to the total number of organizers of that event. */
 	private array $organizerCounts = [];
-	/** @var array<int,string[]|true> Maps event ID to all wikis assigned to the event. */
-	private array $eventWikis = [];
-	/** @var array<int,string[]> Maps event ID to all topics assigned to the event. */
-	private array $eventTopics = [];
-	private EventTypesRegistry $eventTypesRegistry;
-	private CountryProvider $countryProvider;
-	/**
-	 * @var array<int,Address>
-	 */
-	private array $eventAddresses;
 
 	/**
 	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
@@ -102,6 +93,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function __construct(
+		IEventLookup $eventLookup,
 		UserLinker $userLinker,
 		CampaignsPageFactory $pageFactory,
 		PageURLResolver $pageURLResolver,
@@ -111,13 +103,10 @@ class EventsListPager extends ReverseChronologicalPager {
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsCentralUserLookup $centralUserLookup,
 		WikiLookup $wikiLookup,
-		EventWikisStore $eventWikisStore,
 		ITopicRegistry $topicRegistry,
-		EventTopicsStore $eventTopicsStore,
 		EventTypesRegistry $eventTypesRegistry,
 		IContextSource $context,
 		CountryProvider $countryProvider,
-		AddressStore $addressStore,
 		string $search,
 		?int $participationOptions,
 		?string $startDate,
@@ -131,6 +120,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
 		parent::__construct( $context, $this->getLinkRenderer() );
 
+		$this->eventLookup = $eventLookup;
 		$this->userLinker = $userLinker;
 		$this->campaignsPageFactory = $pageFactory;
 		$this->pageURLResolver = $pageURLResolver;
@@ -139,12 +129,9 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->wikiLookup = $wikiLookup;
-		$this->eventWikisStore = $eventWikisStore;
 		$this->topicRegistry = $topicRegistry;
-		$this->eventTopicsStore = $eventTopicsStore;
 		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->countryProvider = $countryProvider;
-		$this->addressStore = $addressStore;
 
 		$this->search = $search;
 		$this->participationOptions = $participationOptions;
@@ -210,11 +197,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		foreach ( $result as $row ) {
 			$eventIDs[] = (int)$row->event_id;
 		}
+		$this->eventObjects = $this->eventLookup->newEventsFromDBRows( $this->mDb, $result );
 		$result->seek( 0 );
-
-		$this->eventWikis = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
-		$this->eventTopics = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
-		$this->eventAddresses = $this->addressStore->getAddressesForEvents( $this->mDb, $eventIDs );
 
 		$this->creators = $this->organizerStore->getEventCreators(
 			$eventIDs,
@@ -277,26 +261,23 @@ class EventsListPager extends ReverseChronologicalPager {
 	 * @inheritDoc
 	 */
 	public function formatRow( $row ) {
-		$rowContent = '';
+		$event = $this->eventObjects[$row->event_id];
 
-		$timestampField = $this->getTimestampField();
-		$timestamp = $row->$timestampField;
-		$rowContent .= Html::element(
+		$rowContent = Html::element(
 			'div',
 			[ 'class' => 'ext-campaignevents-events-list-day' ],
-			$this->getDayFromTimestamp( $timestamp )
+			$this->getDayFromTimestamp( $event->getStartUTCTimestamp() )
 		);
 
 		$detailsContent = '';
 
-		$page = $this->getEventPageFromRow( $row );
 		$eventPageLinkElement = Html::element(
 			'a',
 			[
-				"href" => $this->pageURLResolver->getUrl( $page ),
+				"href" => $this->pageURLResolver->getUrl( $event->getPage() ),
 				"class" => 'ext-campaignevents-events-list-link'
 			],
-			$row->event_name
+			$event->getName()
 		);
 		$detailsContent .= Html::rawElement( 'h4', [], $eventPageLinkElement );
 
@@ -305,19 +286,20 @@ class EventsListPager extends ReverseChronologicalPager {
 			[],
 			$this->msg(
 				'campaignevents-eventslist-date-separator',
-				$this->getLanguage()->userDate( $row->event_start_utc, $this->getUser() ),
-				$this->getLanguage()->userDate( $row->event_end_utc, $this->getUser() )
+				$this->getLanguage()->userDate( $event->getStartUTCTimestamp(), $this->getUser() ),
+				$this->getLanguage()->userDate( $event->getEndUTCTimestamp(), $this->getUser() )
 			)->text()
 		);
+
 		$detailsContent .= Html::rawElement( 'div', [], $datesText );
 
 		$detailsContent .= TextWithIconWidget::build(
 			'map-pin',
 			$this->msg( 'campaignevents-eventslist-participation-options-label' )->text(),
-			$this->msg( $this->getParticipationOptionsMsg( $row ) )->escaped()
+			$this->msg( $this->getParticipationOptionsMsg( $event ) )->escaped()
 		);
 
-		$countryName = $this->getCountryName( $row );
+		$countryName = $this->getCountryName( $event );
 		if ( $countryName ) {
 			$detailsContent .= TextWithIconWidget::build(
 				'globe',
@@ -326,21 +308,14 @@ class EventsListPager extends ReverseChronologicalPager {
 			);
 		}
 
-		$detailsContent .= $this->getTypesList( EventTypesRegistry::getEventTypesFromDBVal( $row->event_types ) );
-
-		if ( $this->eventWikis[$row->event_id] ) {
-			$detailsContent .= $this->getWikiList( $row->event_id );
-		}
-
-		$eventTopics = $this->eventTopics[(int)$row->event_id];
-		if ( $eventTopics ) {
-			$detailsContent .= $this->getTopicList( $eventTopics );
-		}
+		$detailsContent .= $this->getTypesList( $event->getTypes() );
+		$detailsContent .= $this->getWikiList( $event );
+		$detailsContent .= $this->getTopicList( $event );
 
 		$detailsContent .= TextWithIconWidget::build(
 			'user-rights',
 			$this->msg( 'campaignevents-eventslist-organizer-label' )->text(),
-			$this->getOrganizersText( $row ),
+			$this->getOrganizersText( $event->getID() ),
 			[ 'ext-campaignevents-events-list-organizers' ]
 		);
 
@@ -357,8 +332,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 	}
 
-	private function getOrganizersText( stdClass $row ): string {
-		$eventID = (int)$row->event_id;
+	private function getOrganizersText( int $eventID ): string {
 		$organizersToShow = [];
 		$creator = $this->creators[$eventID];
 		if ( $creator ) {
@@ -423,8 +397,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		return $this->mNavigationBar;
 	}
 
-	private function getParticipationOptionsMsg( stdClass $row ): string {
-		$participationOptions = EventStore::getParticipationOptionsFromDBVal( $row->event_meeting_type );
+	private function getParticipationOptionsMsg( EventRegistration $event ): string {
+		$participationOptions = $event->getParticipationOptions();
 		switch ( $participationOptions ) {
 			case EventRegistration::PARTICIPATION_OPTION_IN_PERSON:
 				return 'campaignevents-eventslist-participation-options-in-person';
@@ -548,12 +522,15 @@ class EventsListPager extends ReverseChronologicalPager {
 		return [ $startOffset, $this->endOffset ];
 	}
 
-	private function getWikiList( string $eventID ): string {
-		$eventWikis = $this->eventWikis[(int)$eventID];
+	private function getWikiList( ExistingEventRegistration $event ): string {
+		$eventWikis = $event->getWikis();
+		if ( !$eventWikis ) {
+			return '';
+		}
 
 		if ( $eventWikis === EventRegistration::ALL_WIKIS ) {
 			$wikiName = [ $this->msg( 'campaignevents-eventslist-all-wikis' )->text() ];
-			return $this->getWikiListWidget( $eventID, $wikiName );
+			return $this->getWikiListWidget( $event->getID(), $wikiName );
 		}
 		$currentWikiId = WikiMap::getCurrentWikiId();
 		$curWikiKey = array_search( $currentWikiId, $eventWikis, true );
@@ -561,15 +538,15 @@ class EventsListPager extends ReverseChronologicalPager {
 			unset( $eventWikis[$curWikiKey] );
 			array_unshift( $eventWikis, $currentWikiId );
 		}
-		return $this->getWikiListWidget( $eventID, $eventWikis );
+		return $this->getWikiListWidget( $event->getID(), $eventWikis );
 	}
 
 	/**
-	 * @param string $eventID
+	 * @param int $eventID
 	 * @param string[] $eventWikis
 	 * @return string
 	 */
-	public function getWikiListWidget( string $eventID, array $eventWikis ): string {
+	public function getWikiListWidget( int $eventID, array $eventWikis ): string {
 		$language = $this->getLanguage();
 		$displayedWikiNames = $this->wikiLookup->getLocalizedNames(
 			array_slice( $eventWikis, 0, self::DISPLAYED_WIKI_COUNT )
@@ -582,7 +559,7 @@ class EventsListPager extends ReverseChronologicalPager {
 
 		if ( $wikiCount > self::DISPLAYED_WIKI_COUNT ) {
 			$escapedWikiNames[] = $this->getLinkRenderer()->makeKnownLink(
-				SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, $eventID ),
+				SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
 				$this->msg( 'campaignevents-eventslist-wikis-more' )
 					->numParams( $wikiCount - self::DISPLAYED_WIKI_COUNT )
 					->text()
@@ -595,8 +572,12 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 	}
 
-	/** @param list<string> $topics */
-	private function getTopicList( array $topics ): string {
+	private function getTopicList( EventRegistration $event ): string {
+		$topics = $event->getTopics();
+		if ( !$topics ) {
+			return '';
+		}
+
 		$localizedTopicNames = array_map(
 			fn ( string $msgKey ): string => $this->msg( $msgKey )->escaped(),
 			$this->topicRegistry->getTopicMessages( $topics )
@@ -625,9 +606,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		);
 	}
 
-	private function getCountryName( stdClass $row ): ?string {
-		$address = array_key_exists( $row->event_id, $this->eventAddresses ) ?
-			$this->eventAddresses[ $row->event_id ] : null;
+	private function getCountryName( ExistingEventRegistration $event ): ?string {
+		$address = $event->getAddress();
 		if ( !$address ) {
 			return null;
 		}

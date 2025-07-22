@@ -5,12 +5,10 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -35,6 +33,7 @@ class OngoingEventsListPager extends EventsListPager {
 	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function __construct(
+		IEventLookup $eventLookup,
 		UserLinker $userLinker,
 		CampaignsPageFactory $pageFactory,
 		PageURLResolver $pageURLResolver,
@@ -44,13 +43,10 @@ class OngoingEventsListPager extends EventsListPager {
 		CampaignsDatabaseHelper $databaseHelper,
 		CampaignsCentralUserLookup $centralUserLookup,
 		WikiLookup $wikiLookup,
-		EventWikisStore $eventWikisStore,
 		ITopicRegistry $topicRegistry,
-		EventTopicsStore $eventTopicsStore,
 		EventTypesRegistry $eventTypesRegistry,
 		IContextSource $context,
 		CountryProvider $countryProvider,
-		AddressStore $addressStore,
 		string $search,
 		?int $participationOptions,
 		string $startDate,
@@ -60,6 +56,7 @@ class OngoingEventsListPager extends EventsListPager {
 		array $filterEventTypes
 	) {
 		parent::__construct(
+			$eventLookup,
 			$userLinker,
 			$pageFactory,
 			$pageURLResolver,
@@ -69,13 +66,10 @@ class OngoingEventsListPager extends EventsListPager {
 			$databaseHelper,
 			$centralUserLookup,
 			$wikiLookup,
-			$eventWikisStore,
 			$topicRegistry,
-			$eventTopicsStore,
 			$eventTypesRegistry,
 			$context,
 			$countryProvider,
-			$addressStore,
 			$search,
 			$participationOptions,
 			$startDate,

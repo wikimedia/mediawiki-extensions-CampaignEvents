@@ -6,12 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
+use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -27,6 +25,7 @@ class EventsPagerFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventsPagerFactory';
 
 	private CampaignsDatabaseHelper $databaseHelper;
+	private IEventLookup $eventLookup;
 	private CampaignsPageFactory $campaignsPageFactory;
 	private PageURLResolver $pageURLResolver;
 	private LinkBatchFactory $linkBatchFactory;
@@ -35,15 +34,13 @@ class EventsPagerFactory {
 	private UserOptionsLookup $userOptionsLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private WikiLookup $wikiLookup;
-	private EventWikisStore $eventWikisStore;
 	private ITopicRegistry $topicRegistry;
-	private EventTopicsStore $eventTopicsStore;
 	private EventTypesRegistry $eventTypesRegistry;
 	private CountryProvider $countryProvider;
-	private AddressStore $addressStore;
 
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
+		IEventLookup $eventLookup,
 		CampaignsPageFactory $campaignsPageFactory,
 		PageURLResolver $pageURLResolver,
 		LinkBatchFactory $linkBatchFactory,
@@ -52,14 +49,12 @@ class EventsPagerFactory {
 		UserOptionsLookup $userOptionsLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
 		WikiLookup $wikiLookup,
-		EventWikisStore $eventWikisStore,
 		ITopicRegistry $topicRegistry,
-		EventTopicsStore $eventTopicsStore,
 		EventTypesRegistry $eventTypesRegistry,
 		CountryProvider $countryProvider,
-		AddressStore $addressStore
 	) {
 		$this->databaseHelper = $databaseHelper;
+		$this->eventLookup = $eventLookup;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->pageURLResolver = $pageURLResolver;
 		$this->linkBatchFactory = $linkBatchFactory;
@@ -68,12 +63,9 @@ class EventsPagerFactory {
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->wikiLookup = $wikiLookup;
-		$this->eventWikisStore = $eventWikisStore;
 		$this->topicRegistry = $topicRegistry;
-		$this->eventTopicsStore = $eventTopicsStore;
 		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->countryProvider = $countryProvider;
-		$this->addressStore = $addressStore;
 	}
 
 	/**
@@ -121,6 +113,7 @@ class EventsPagerFactory {
 		array $filterEventTypes
 	): EventsListPager {
 		return new EventsListPager(
+			$this->eventLookup,
 			$this->userLinker,
 			$this->campaignsPageFactory,
 			$this->pageURLResolver,
@@ -130,13 +123,10 @@ class EventsPagerFactory {
 			$this->databaseHelper,
 			$this->centralUserLookup,
 			$this->wikiLookup,
-			$this->eventWikisStore,
 			$this->topicRegistry,
-			$this->eventTopicsStore,
 			$this->eventTypesRegistry,
 			$context,
 			$this->countryProvider,
-			$this->addressStore,
 			$search,
 			$participationOptions,
 			$startDate,
@@ -164,6 +154,7 @@ class EventsPagerFactory {
 		array $filterEventTypes
 	): OngoingEventsListPager {
 		return new OngoingEventsListPager(
+			$this->eventLookup,
 			$this->userLinker,
 			$this->campaignsPageFactory,
 			$this->pageURLResolver,
@@ -173,13 +164,10 @@ class EventsPagerFactory {
 			$this->databaseHelper,
 			$this->centralUserLookup,
 			$this->wikiLookup,
-			$this->eventWikisStore,
 			$this->topicRegistry,
-			$this->eventTopicsStore,
 			$this->eventTypesRegistry,
 			$context,
 			$this->countryProvider,
-			$this->addressStore,
 			$search,
 			$participationOptions,
 			$startDate,
