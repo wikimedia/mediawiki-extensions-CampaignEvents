@@ -315,32 +315,52 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getEventsByOrganizer
 	 * @covers ::getTrackingToolsRowsForEvents
 	 * @covers ::newEventsFromDBRows
+	 * @dataProvider provideEventsByOrganizer
 	 */
-	public function testGetEventsByOrganizer() {
-		$event = $this->getTestEvent();
-		$savedID = $this->storeEvent( $event );
-		$orgStore = CampaignEventsServices::getOrganizersStore();
+	public function testGetEventsByOrganizer( bool $hasEvent ) {
 		$organizerID = 42;
-		$orgStore->addOrganizerToEvent( $savedID, $organizerID, [ Roles::ROLE_CREATOR ] );
+		if ( $hasEvent ) {
+			$event = $this->getTestEvent();
+			$savedID = $this->storeEvent( $event );
+			$orgStore = CampaignEventsServices::getOrganizersStore();
+			$orgStore->addOrganizerToEvent( $savedID, $organizerID, [ Roles::ROLE_CREATOR ] );
+		}
 		$eventsByOrganizer = CampaignEventsServices::getEventLookup()->getEventsByOrganizer( $organizerID, 5 );
-		$this->assertCount( 1, $eventsByOrganizer, 'Should be only one event' );
-		$this->assertEventsEqual( $event, $eventsByOrganizer[0] );
+		$this->assertCount( $hasEvent ? 1 : 0, $eventsByOrganizer, 'Number of events' );
+		if ( $hasEvent ) {
+			$this->assertEventsEqual( $event, $eventsByOrganizer[0] );
+		}
+	}
+
+	public static function provideEventsByOrganizer() {
+		yield 'Has one event' => [ true ];
+		yield 'Has no events' => [ false ];
 	}
 
 	/**
 	 * @covers ::getEventsByParticipant
 	 * @covers ::getTrackingToolsRowsForEvents
 	 * @covers ::newEventsFromDBRows
+	 * @dataProvider provideEventsByParticipant
 	 */
-	public function testGetEventsByParticipant() {
-		$event = $this->getTestEvent();
-		$savedID = $this->storeEvent( $event );
-		$partStore = CampaignEventsServices::getParticipantsStore();
+	public function testGetEventsByParticipant( bool $hasEvent ) {
 		$participantID = 42;
-		$partStore->addParticipantToEvent( $savedID, new CentralUser( $participantID ), false, [] );
+		if ( $hasEvent ) {
+			$event = $this->getTestEvent();
+			$savedID = $this->storeEvent( $event );
+			$partStore = CampaignEventsServices::getParticipantsStore();
+			$partStore->addParticipantToEvent( $savedID, new CentralUser( $participantID ), false, [] );
+		}
 		$eventsByParticipant = CampaignEventsServices::getEventLookup()->getEventsByParticipant( $participantID, 5 );
-		$this->assertCount( 1, $eventsByParticipant, 'Should be only one event' );
-		$this->assertEventsEqual( $event, $eventsByParticipant[0] );
+		$this->assertCount( $hasEvent ? 1 : 0, $eventsByParticipant, 'Number of events' );
+		if ( $hasEvent ) {
+			$this->assertEventsEqual( $event, $eventsByParticipant[0] );
+		}
+	}
+
+	public static function provideEventsByParticipant() {
+		yield 'Has one event' => [ true ];
+		yield 'Has no events' => [ false ];
 	}
 
 	public function testCacheCompatibility() {

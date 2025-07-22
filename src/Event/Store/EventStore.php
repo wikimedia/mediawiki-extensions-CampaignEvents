@@ -284,6 +284,10 @@ class EventStore implements IEventStore, IEventLookup {
 			$eventIDs[] = (int)$eventRow->event_id;
 		}
 
+		if ( !$eventIDs ) {
+			return [];
+		}
+
 		$addressRowsByEvent = $this->addressStore->getAddressesForEvents( $db, $eventIDs );
 		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs );
 		$wikisByEvent = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
