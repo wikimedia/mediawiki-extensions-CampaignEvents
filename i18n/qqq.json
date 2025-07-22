@@ -571,5 +571,6 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Heading used on Event Details modal for a section that contains the list of Event types",
 	"campaignevents-cancel-page-nonlocal": "Notice message shown on [[Special:CancelEventRegistration]] when trying to cancel registration for an event that was enabled on another wiki, and thus should cancel registration there.\nParameters:\n*$1 - Link to [[Special:CancelEventRegistration]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
 	"campaignevents-email-error-notification-with-detail": "Error text displayed when emails are not sent successfully, with additional detail .\nParameters:\n* $1 - The reason why the email was not sent",
-	"campaignevents-eventslist-types-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen event types for the event."
+	"campaignevents-eventslist-types-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen event types for the event.",
+	"campaignevents-eventslist-country-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen country for the event."
 }

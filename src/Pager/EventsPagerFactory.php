@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
@@ -37,6 +39,8 @@ class EventsPagerFactory {
 	private ITopicRegistry $topicRegistry;
 	private EventTopicsStore $eventTopicsStore;
 	private EventTypesRegistry $eventTypesRegistry;
+	private CountryProvider $countryProvider;
+	private AddressStore $addressStore;
 
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
@@ -51,7 +55,9 @@ class EventsPagerFactory {
 		EventWikisStore $eventWikisStore,
 		ITopicRegistry $topicRegistry,
 		EventTopicsStore $eventTopicsStore,
-		EventTypesRegistry $eventTypesRegistry
+		EventTypesRegistry $eventTypesRegistry,
+		CountryProvider $countryProvider,
+		AddressStore $addressStore
 	) {
 		$this->databaseHelper = $databaseHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -66,6 +72,8 @@ class EventsPagerFactory {
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTopicsStore = $eventTopicsStore;
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->countryProvider = $countryProvider;
+		$this->addressStore = $addressStore;
 	}
 
 	/**
@@ -127,6 +135,8 @@ class EventsPagerFactory {
 			$this->eventTopicsStore,
 			$this->eventTypesRegistry,
 			$context,
+			$this->countryProvider,
+			$this->addressStore,
 			$search,
 			$participationOptions,
 			$startDate,
@@ -168,6 +178,8 @@ class EventsPagerFactory {
 			$this->eventTopicsStore,
 			$this->eventTypesRegistry,
 			$context,
+			$this->countryProvider,
+			$this->addressStore,
 			$search,
 			$participationOptions,
 			$startDate,

@@ -5,6 +5,8 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
@@ -47,6 +49,8 @@ class OngoingEventsListPager extends EventsListPager {
 		EventTopicsStore $eventTopicsStore,
 		EventTypesRegistry $eventTypesRegistry,
 		IContextSource $context,
+		CountryProvider $countryProvider,
+		AddressStore $addressStore,
 		string $search,
 		?int $participationOptions,
 		string $startDate,
@@ -70,6 +74,8 @@ class OngoingEventsListPager extends EventsListPager {
 			$eventTopicsStore,
 			$eventTypesRegistry,
 			$context,
+			$countryProvider,
+			$addressStore,
 			$search,
 			$participationOptions,
 			$startDate,

@@ -6,6 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\CampaignEvents\Address\Address;
+use MediaWiki\Extension\CampaignEvents\Address\AddressStore;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -54,6 +57,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	private ITopicRegistry $topicRegistry;
 	private EventTopicsStore $eventTopicsStore;
 
+	private AddressStore $addressStore;
+
 	/** @var bool Reverse parent ordering, so events are ordered from oldest to newest. */
 	public $mDefaultDirection = IndexPager::DIR_ASCENDING;
 
@@ -84,6 +89,11 @@ class EventsListPager extends ReverseChronologicalPager {
 	/** @var array<int,string[]> Maps event ID to all topics assigned to the event. */
 	private array $eventTopics = [];
 	private EventTypesRegistry $eventTypesRegistry;
+	private CountryProvider $countryProvider;
+	/**
+	 * @var array<int,Address>
+	 */
+	private array $eventAddresses;
 
 	/**
 	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
@@ -106,6 +116,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		EventTopicsStore $eventTopicsStore,
 		EventTypesRegistry $eventTypesRegistry,
 		IContextSource $context,
+		CountryProvider $countryProvider,
+		AddressStore $addressStore,
 		string $search,
 		?int $participationOptions,
 		?string $startDate,
@@ -131,6 +143,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTopicsStore = $eventTopicsStore;
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->countryProvider = $countryProvider;
+		$this->addressStore = $addressStore;
 
 		$this->search = $search;
 		$this->participationOptions = $participationOptions;
@@ -200,6 +214,7 @@ class EventsListPager extends ReverseChronologicalPager {
 
 		$this->eventWikis = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
 		$this->eventTopics = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
+		$this->eventAddresses = $this->addressStore->getAddressesForEvents( $this->mDb, $eventIDs );
 
 		$this->creators = $this->organizerStore->getEventCreators(
 			$eventIDs,
@@ -301,6 +316,15 @@ class EventsListPager extends ReverseChronologicalPager {
 			$this->msg( 'campaignevents-eventslist-participation-options-label' )->text(),
 			$this->msg( $this->getParticipationOptionsMsg( $row ) )->escaped()
 		);
+
+		$countryName = $this->getCountryName( $row );
+		if ( $countryName ) {
+			$detailsContent .= TextWithIconWidget::build(
+				'globe',
+				$this->msg( 'campaignevents-eventslist-country-label' )->text(),
+				$countryName
+			);
+		}
 
 		$detailsContent .= $this->getTypesList( EventTypesRegistry::getEventTypesFromDBVal( $row->event_types ) );
 
@@ -599,5 +623,22 @@ class EventsListPager extends ReverseChronologicalPager {
 			$this->msg( 'campaignevents-eventslist-types-label' )->text(),
 			$this->getLanguage()->commaList( $localizedTypeNames )
 		);
+	}
+
+	private function getCountryName( stdClass $row ): ?string {
+		$address = array_key_exists( $row->event_id, $this->eventAddresses ) ?
+			$this->eventAddresses[ $row->event_id ] : null;
+		if ( !$address ) {
+			return null;
+		}
+		$countryCode = $address->getCountryCode();
+		if ( $countryCode ) {
+			$countryString = $this->countryProvider->getCountryName(
+				$countryCode, $this->getLanguage()->getCode()
+			);
+		} else {
+			$countryString = $address->getCountry();
+		}
+		return $countryString;
 	}
 }

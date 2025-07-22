@@ -224,6 +224,8 @@ return [
 			$services->get( ITopicRegistry::SERVICE_NAME ),
 			$services->get( EventTopicsStore::SERVICE_NAME ),
 			$services->get( EventTypesRegistry::SERVICE_NAME ),
+			$services->get( CountryProvider::SERVICE_NAME ),
+			$services->get( AddressStore::SERVICE_NAME ),
 		);
 	},
 	EventPageDecoratorFactory::SERVICE_NAME =>
