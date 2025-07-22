@@ -254,38 +254,44 @@ class UpdateCountriesColumn extends Maintenance {
 					'cea_country =' . $this->dbw->buildExcludedValue( 'cea_country' ),
 					'cea_full_address =' . $this->dbw->buildExcludedValue( 'cea_full_address' ),
 				] )
+				->caller( __METHOD__ )
 				->execute();
 			$this->waitForReplication();
 		}
-		$eventsToOnline = $this->dbw->newSelectQueryBuilder()
-			->select( 'ceea_event' )
-			->from( 'ce_event_address' )
-			->where( [ 'ceea_address' => array_keys( $unmatchedRows ) ] )
-			->fetchFieldValues();
 
-		$this->dbw->newUpdateQueryBuilder()
-			->update( 'campaign_events' )
-			->set( [ 'event_meeting_type' =>
-				EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE]
-			] )
-			->where( [ 'event_id' => $eventsToOnline ] )
-			->execute();
+		if ( $unmatchedRows ) {
+			// This is guaranteed to be non-empty because we've already purged unused addresses.
+			$eventsToOnline = $this->dbw->newSelectQueryBuilder()
+				->select( 'ceea_event' )
+				->from( 'ce_event_address' )
+				->where( [ 'ceea_address' => array_keys( $unmatchedRows ) ] )
+				->caller( __METHOD__ )
+				->fetchFieldValues();
 
-		$this->dbw->newDeleteQueryBuilder()
-			->deleteFrom( 'ce_address' )
-			->where( [ 'cea_id' => array_keys( $unmatchedRows ) ] )
-			->execute();
-		$this->waitForReplication();
+			$this->dbw->newUpdateQueryBuilder()
+				->update( 'campaign_events' )
+				->set( [
+					'event_meeting_type' =>
+						EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE]
+				] )
+				->where( [ 'event_id' => $eventsToOnline ] )
+				->caller( __METHOD__ )
+				->execute();
 
-		$this->dbw->newDeleteQueryBuilder()
-			->deleteFrom( 'ce_event_address' )
-			->where(
-				$this->dbw->orExpr(
-					[ 'ceea_address' => array_keys( $unmatchedRows ) ]
-				)
-			)
-			->execute();
-		$this->waitForReplication();
+			$this->dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_address' )
+				->where( [ 'cea_id' => array_keys( $unmatchedRows ) ] )
+				->caller( __METHOD__ )
+				->execute();
+			$this->waitForReplication();
+
+			$this->dbw->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_event_address' )
+				->where( [ 'ceea_address' => array_keys( $unmatchedRows ) ] )
+				->caller( __METHOD__ )
+				->execute();
+			$this->waitForReplication();
+		}
 	}
 
 	public function doPurge(): void {
@@ -295,7 +301,7 @@ class UpdateCountriesColumn extends Maintenance {
 			$idsToPurge = [];
 			$batchEnd = $purgeBatchStart + $batchSize;
 			$purgeRows = $this->dbr->newSelectQueryBuilder()
-				->select( 'cea_id, cea_country' )
+				->select( [ 'cea_id', 'cea_country' ] )
 				->from( 'ce_address' )
 				->leftJoin(
 					'ce_event_address', null, [ 'ceea_address=cea_id' ]
@@ -313,6 +319,7 @@ class UpdateCountriesColumn extends Maintenance {
 				$this->dbw->newDeleteQueryBuilder()
 					->deleteFrom( 'ce_address' )
 					->where( [ 'cea_id' => $idsToPurge ] )
+					->caller( __METHOD__ )
 					->execute();
 				$this->waitForReplication();
 			}
@@ -387,13 +394,14 @@ class UpdateCountriesColumn extends Maintenance {
 			$eventsWithNoAddress = array_merge( $eventsWithNoAddress, $batchEventsWithNoAddress );
 			$batchStart = $batchEnd;
 
-			if ( $this->getOption( 'commit' ) ) {
+			if ( $batchEventsWithNoAddress && $this->getOption( 'commit' ) ) {
 				$this->dbw->newUpdateQueryBuilder()
 					->update( 'campaign_events' )
 					->set( [ 'event_meeting_type' =>
 						EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE]
 					] )
 					->where( [ 'event_id' => $batchEventsWithNoAddress ] )
+					->caller( __METHOD__ )
 					->execute();
 			}
 		} while ( $batchEnd < $maxRows );
