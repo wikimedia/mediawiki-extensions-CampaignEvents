@@ -36,7 +36,10 @@ class GetFormattedTimeHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function newHandler(): GetFormattedTimeHandler {
-		return new GetFormattedTimeHandler( $this->getServiceContainer()->getLanguageFactory() );
+		return new GetFormattedTimeHandler(
+			$this->getServiceContainer()->getLanguageFactory(),
+			$this->getServiceContainer()->getLanguageNameUtils()
+		);
 	}
 
 	/**

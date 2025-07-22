@@ -570,7 +570,8 @@
 			"method": "GET",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetFormattedTimeHandler",
 			"services": [
-				"LanguageFactory"
+				"LanguageFactory",
+				"LanguageNameUtils"
 			]
 		}
 	],

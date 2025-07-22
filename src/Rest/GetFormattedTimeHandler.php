@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use Exception;
+use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Languages\LanguageFactory;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;
@@ -20,9 +21,11 @@ use Wikimedia\ParamValidator\ParamValidator;
  */
 class GetFormattedTimeHandler extends SimpleHandler {
 	private LanguageFactory $languageFactory;
+	private LanguageNameUtils $languageNameUtils;
 
-	public function __construct( LanguageFactory $languageFactory ) {
+	public function __construct( LanguageFactory $languageFactory, LanguageNameUtils $languageNameUtils ) {
 		$this->languageFactory = $languageFactory;
+		$this->languageNameUtils = $languageNameUtils;
 	}
 
 	protected function run( string $languageCode, string $startTS, string $endTS ): Response {
@@ -58,7 +61,7 @@ class GetFormattedTimeHandler extends SimpleHandler {
 		return [
 			'languageCode' => [
 				Handler::PARAM_SOURCE => 'path',
-				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_TYPE => array_keys( $this->languageNameUtils->getLanguageNames() ),
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'start' => [
