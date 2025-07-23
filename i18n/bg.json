@@ -2,17 +2,28 @@
 	"@metadata": {
 		"authors": [
 			"Kareyac",
-			"StanProg"
+			"StanProg",
+			"Ted Masters"
 		]
 	},
 	"specialpages-group-campaignevents": "Събития",
 	"enableeventregistration": "Активиране на регистрацията за събития",
+	"editeventregistration": "Редактиране на регистрация за събитие",
+	"registerforevent": "Регистрация за събитие",
+	"canceleventregistration": "Отказ от Ваша регистрация за събитие",
+	"myevents": "Ваши събития",
+	"allevents": "Всички събития",
 	"campaignevents-myevents-label-search": "Търсене",
 	"campaignevents-allevents-tab-events-heading": "Събития",
+	"deleteeventregistration": "Изтриване на регистрация за събитие",
 	"campaignevents-eventpage-enable-registration-dialog-title": "Активиране на регистрацията за събития",
+	"eventdetails": "Детайли на събитието",
 	"campaignevents-event-details-organizers-header": "Организатори",
 	"echo-category-title-campaign-events-notification-registration": "Регистрация за събитие",
 	"echo-pref-tooltip-campaign-events-notification-registration": "Известяване, когато се регистрирам за събитие, което използва инструмента за регистрация на събития.",
+	"generateinvitationlist": "Създаване на списък с покани",
+	"myinvitationlists": "Вашите списъци с покани",
+	"invitationlist": "Списък с покани",
 	"campaignevents-invitationlist-preference": "Включване в [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списъци с покани].",
 	"prefs-campaignevents-invitations": "Списъци с покани"
 }
