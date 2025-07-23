@@ -506,7 +506,7 @@
 	"campaignevents-invitation-list-does-not-exist": "Esta lista de invitacións non existe. [[Special:MyInvitationLists|Consulta as túas listas de invitacións]].",
 	"campaignevents-invitation-list-not-creator": "Non tes permiso para ver esta lista de invitacións porque non a creaches ti. [[Special:MyInvitationLists|Consulta as túas listas de invitacións]].",
 	"campaignevents-invitation-list-nonlocal": "'''[$1 Consulta esta lista de invitacións en $2]''', o wiki onde se xerou.",
-	"campaignevents-invitation-list-intro": "{{PLURAL:$1|Atopouse $1 editor|Atopáronse $1 editores}}, segundo os seguintes criterios: os bytes cos que contribuíron aos artigos, o número de edicións que fixeron nos artigos, o reconto total de edicións nos wikis e a data da súa última edición nos wikis.",
+	"campaignevents-invitation-list-intro": "{{PLURAL:$1|Atopouse $1 editor|Atopáronse $1 editores}}, segundo os seguintes criterios: os bytes cos que contribuíron aos artigos, o número de edicións que fixeron nos artigos, o total de edicións nos wikis e a data da súa última edición nos wikis.",
 	"campaignevents-invitationlist-no-editors": "<strong>Ningún editor cumpre os [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists criterios da lista de invitacións] da túa lista de artigos.</strong> Podes [[Special:GenerateInvitationList|crear unha nova lista de invitacións]] cunha nova lista de artigos.",
 	"campaignevents-invitationlist-highly-recommended": "Moi recomendable convidar",
 	"campaignevents-invitationlist-highly-recommended-info": "Estes editores recibiron unha clasificación alta na lista de invitacións, polo que é máis probable que teñan interese en unirse á túa actividade.",
