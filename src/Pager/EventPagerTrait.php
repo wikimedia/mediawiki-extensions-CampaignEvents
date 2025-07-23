@@ -32,58 +32,53 @@ trait EventPagerTrait {
 	 * @return array<string,mixed>
 	 */
 	public function getSubqueryInfo(): array {
-		$options = [
-			'GROUP BY' => [
-				'cep_event_id',
-				'event_id',
-				'event_name',
-				'event_page_namespace',
-				'event_page_title',
-				'event_page_prefixedtext',
-				'event_page_wiki',
-				'event_status',
-				'event_start_utc',
-				'event_end_utc',
-				'event_meeting_type',
-				'event_types'
-			] ];
-		$join_conds = [
-			'ce_participants' => [
-				'LEFT JOIN',
-				[
-					'event_id=cep_event_id',
-					'cep_unregistered_at' => null,
-				]
-			],
-			'ce_organizers' => [
-				'JOIN',
-				[
-					'event_id=ceo_event_id',
-					'ceo_deleted_at' => null,
-				]
-			],
+		$eventFields = [
+			'event_id',
+			'event_name',
+			'event_page_namespace',
+			'event_page_title',
+			'event_page_prefixedtext',
+			'event_page_wiki',
+			'event_status',
+			'event_start_utc',
+			'event_end_utc',
+			'event_meeting_type',
+			'event_types',
 		];
 		return [
 			'tables' => [ 'campaign_events', 'ce_participants', 'ce_organizers' ],
 			'fields' => [
-				'event_id',
-				'event_name',
-				'event_page_namespace',
-				'event_page_title',
-				'event_page_prefixedtext',
-				'event_page_wiki',
-				'event_status',
-				'event_start_utc',
-				'event_end_utc',
-				'event_meeting_type',
-				'event_types',
+				...$eventFields,
 				'num_participants' => 'COUNT(cep_id)'
 			],
 			'conds' => [
 					'event_deleted_at' => null,
 			],
-			'options' => $options,
-			'join_conds' => $join_conds
+			'options' => [
+				'GROUP BY' => [
+					'cep_event_id',
+					// We need to GROUP BY all fields to pass ONLY_FULL_GROUP_BY in MariaDB: even though
+					// `cep_event_id` uniquely determines a row, MariaDB does not detect functional dependencies:
+					// https://jira.mariadb.org/browse/MDEV-11588
+					...$eventFields,
+				]
+			],
+			'join_conds' => [
+				'ce_participants' => [
+					'LEFT JOIN',
+					[
+						'event_id=cep_event_id',
+						'cep_unregistered_at' => null,
+					]
+				],
+				'ce_organizers' => [
+					'JOIN',
+					[
+						'event_id=ceo_event_id',
+						'ceo_deleted_at' => null,
+					]
+				],
+			],
 		];
 	}
 
@@ -107,20 +102,7 @@ trait EventPagerTrait {
 		}
 		return [
 			'tables' => [ 'tmp' => new Subquery( $subquery->getSQL() ) ],
-			'fields' => [
-				'event_id',
-				'event_name',
-				'event_page_namespace',
-				'event_page_title',
-				'event_page_prefixedtext',
-				'event_page_wiki',
-				'event_status',
-				'event_start_utc',
-				'event_end_utc',
-				'event_meeting_type',
-				'event_types',
-				'num_participants'
-			],
+			'fields' => '*',
 			'conds' => $conds,
 			'options' => [],
 			'join_conds' => []
