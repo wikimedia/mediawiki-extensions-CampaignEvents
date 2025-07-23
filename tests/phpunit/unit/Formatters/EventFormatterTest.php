@@ -15,6 +15,7 @@ use MediaWikiUnitTestCase;
  * @covers \MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter
  */
 class EventFormatterTest extends MediaWikiUnitTestCase {
+	private const NO_ADDRESS_MESSAGE_KEY = 'campaignevents-event-details-venue-not-available';
 	private const TEST_COUNTRY_NAMES = [
 		'en' => [
 			'FR' => 'France',
@@ -35,9 +36,21 @@ class EventFormatterTest extends MediaWikiUnitTestCase {
 	}
 
 	/** @dataProvider provideFormatAddress */
-	public function testFormatAddress( Address $address, string $expected, string $languageCode = 'en' ) {
+	public function testFormatAddress(
+		Address $address,
+		string $expected,
+		?string $messageKey = null,
+		string $languageCode = 'en',
+	) {
 		$formatter = $this->getFormatter();
-		$this->assertSame( $expected, $formatter->formatAddress( $address, $languageCode ) );
+		$this->assertSame(
+			$expected,
+			$formatter->formatAddress(
+				$address,
+				$languageCode,
+				$messageKey
+			)
+		);
 	}
 
 	public static function provideFormatAddress(): Generator {
@@ -45,6 +58,7 @@ class EventFormatterTest extends MediaWikiUnitTestCase {
 		$countryCode = 'FR';
 		$countryEnglish = self::TEST_COUNTRY_NAMES['en'][$countryCode];
 		$countryItalian = self::TEST_COUNTRY_NAMES['it'][$countryCode];
+		$noAddressMessageKey = self::NO_ADDRESS_MESSAGE_KEY;
 
 		yield 'Address, no country, no country code' => [
 			new Address( $address, null, null ),
@@ -52,15 +66,18 @@ class EventFormatterTest extends MediaWikiUnitTestCase {
 		];
 		yield 'Country, no address, no country code' => [
 			new Address( null, $countryEnglish, null ),
-			"\n$countryEnglish",
+			"$countryEnglish\n$noAddressMessageKey",
+			$noAddressMessageKey
 		];
 		yield 'Country code, no address, no country' => [
 			new Address( null, null, $countryCode ),
-			"\n$countryEnglish",
+			"$countryEnglish\n$noAddressMessageKey",
+			$noAddressMessageKey
 		];
 		yield 'Country and country code but no address' => [
 			new Address( null, $countryEnglish, null ),
-			"\n$countryEnglish",
+			"$countryEnglish\n$noAddressMessageKey",
+			$noAddressMessageKey
 		];
 		yield 'Address and country, no country code' => [
 			new Address( $address, $countryEnglish, null ),
@@ -78,7 +95,21 @@ class EventFormatterTest extends MediaWikiUnitTestCase {
 		yield 'Full address, different language' => [
 			new Address( $address, $countryItalian, $countryCode ),
 			"$address\n$countryItalian",
+			$noAddressMessageKey,
 			'it',
+		];
+
+		yield 'Country, no address, no country code, no fallback' => [
+			new Address( null, $countryEnglish, null ),
+			"$countryEnglish",
+		];
+		yield 'Country code, no address, no country, no fallback' => [
+			new Address( null, null, $countryCode ),
+			"$countryEnglish",
+		];
+		yield 'Country and country code but no address, no fallback' => [
+			new Address( null, $countryEnglish, null ),
+			"$countryEnglish",
 		];
 	}
 }

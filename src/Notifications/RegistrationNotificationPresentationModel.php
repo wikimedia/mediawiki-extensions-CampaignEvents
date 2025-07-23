@@ -204,12 +204,18 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 			)->text();
 			$ret .= Html::element( 'h3', [], $inPersonEventHeader );
 			$address = $this->eventRegistration->getAddress();
+			$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $this->eventRegistration->getID() );
 			if ( $address ) {
 				$ret .= Html::element(
 					'p',
 					[ 'style' => 'white-space: pre-wrap' ],
-					$this->eventFormatter->formatAddress( $address, $this->language->getCode() )
-				);
+					$this->eventFormatter->formatAddress(
+						$address,
+						$this->language->getCode(),
+						$this->msg( 'campaignevents-email-venue-not-available' )
+								->numParams( $organizersCount )
+						)
+					);
 			}
 		}
 

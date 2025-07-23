@@ -545,7 +545,12 @@ class EventDetailsModule {
 				$stringDir = Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' );
 				$formattedAddress = $this->eventFormatter->formatAddress(
 					$meetingAddress,
-					$out->getLanguage()->getCode()
+					$this->language->getCode(),
+					$this->msgFormatter->format(
+						MessageValue::new( 'campaignevents-event-details-venue-not-available' )->numParams(
+							$organizersCount
+						)
+					)
 				);
 				$items[] = ( new Tag( 'div' ) )
 					->appendContent( $formattedAddress )

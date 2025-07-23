@@ -771,7 +771,14 @@ class EventPageDecorator {
 					'dir' => Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' )
 				] );
 				$addressElement->appendContent(
-					$this->eventFormatter->formatAddress( $meetingAddress, $this->language->getCode() )
+					$this->eventFormatter->formatAddress(
+						$meetingAddress,
+						$this->language->getCode(),
+						$this->msgFormatter->format(
+							MessageValue::new( 'campaignevents-eventpage-dialog-venue-not-available' )
+								->numParams( $organizersCount )
+						),
+					)
 				);
 			} else {
 				$addressElement->appendContent( $this->msgFormatter->format(

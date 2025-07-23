@@ -234,7 +234,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "In-person event",
 	"campaignevents-eventpage-dialog-link-not-available": "The link will be made available by the {{PLURAL:$1|organizer|organizers}}.",
 	"campaignevents-eventpage-dialog-link-register": "Register to view the event link.",
-	"campaignevents-eventpage-dialog-venue-not-available": "The venue address will be made available by the {{PLURAL:$1|organizer|organizers}}.",
+	"campaignevents-eventpage-dialog-venue-not-available": "The venue location has not yet been shared by the {{PLURAL:$1|organizer|organizers}}.",
 	"campaignevents-eventpage-dialog-chat-label": "Join event chat group",
 	"campaignevents-eventpage-dialog-chat-not-available": "No chat group is available for this event.",
 	"campaignevents-eventpage-dialog-chat-register": "Register to view the chat group link.",
@@ -304,8 +304,8 @@
 	"campaignevents-event-details-event": "Event details: $1",
 	"campaignevents-event-details-not-found": "There is no event with this ID.",
 	"campaignevents-event-details-online-link-not-available": "The link will be made available by the {{PLURAL:$1|organizer|organizers}}.",
-	"campaignevents-event-details-venue-not-available": "The venue address will be made available by the {{PLURAL:$1|organizer|organizers}}.",
 	"campaignevents-event-details-dates-label": "Start and end time",
+	"campaignevents-event-details-venue-not-available": "The venue location has not yet been shared by the {{PLURAL:$1|organizer|organizers}}.",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Participant|Participants}} removed",
 	"campaignevents-event-details-remove-all-participant-notification": "All participants removed",
 	"campaignevents-unregister-participants-permission-denied": "You are not allowed to remove participants",
@@ -565,5 +565,6 @@
 	"campaignevents-cancel-page-nonlocal": "Please '''[$1 cancel your event registration on $2]''', the wiki where the event was created.",
 	"campaignevents-email-error-notification-with-detail": "The email could not be sent, for the following reason: $1",
 	"campaignevents-eventslist-types-label": "Event types",
-	"campaignevents-eventslist-country-label": "Country"
+	"campaignevents-eventslist-country-label": "Country",
+	"campaignevents-notification-registration-venue-not-available": "The venue location has not yet been shared by the {{PLURAL:$1|organizer|organizers}}."
 }

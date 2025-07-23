@@ -82,15 +82,28 @@ class EventFormatter {
 		return new HtmlSnippet( $language->listToText( $escapedWikiNames ) );
 	}
 
-	public function formatAddress( Address $address, string $languageCode ): string {
+	public function formatAddress(
+		Address $address,
+		string $languageCode,
+		?string $noAddressMsg = null
+	): string {
 		$countryCode = $address->getCountryCode();
 		if ( $countryCode ) {
 			$countryString = $this->countryProvider->getCountryName( $countryCode, $languageCode );
 		} else {
 			$countryString = $address->getCountry();
 		}
-		// This is quite ugly, but we can't do much better without geocoding and letting the user enter
-		// the full address (T309325).
-		return $address->getAddressWithoutCountry() . "\n" . $countryString;
+		$addressWithoutCountry = $address->getAddressWithoutCountry();
+		if ( $addressWithoutCountry === null || $addressWithoutCountry === '' ) {
+			$output = $countryString;
+			if ( $noAddressMsg ) {
+				$output .= "\n" . $noAddressMsg;
+			}
+		} else {
+			// This is quite ugly, but we can't do much better without geocoding and letting the user enter
+			// the full address (T309325).
+			return $address->getAddressWithoutCountry() . "\n" . $countryString;
+		}
+		return $output ?? "";
 	}
 }
