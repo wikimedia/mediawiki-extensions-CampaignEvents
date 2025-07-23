@@ -278,9 +278,12 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @param iterable<stdClass> $eventRows
 	 * @return ExistingEventRegistration[]
 	 */
-	private function newEventsFromDBRows( IDatabase $db, iterable $eventRows ): array {
+	public function newEventsFromDBRows( IDatabase $db, iterable $eventRows ): array {
 		$eventIDs = [];
 		foreach ( $eventRows as $eventRow ) {
+			if ( !property_exists( $eventRow, 'event_id' ) ) {
+				throw new InvalidArgumentException( "Got row without event ID: " . var_export( $eventRow, true ) );
+			}
 			$eventIDs[] = (int)$eventRow->event_id;
 		}
 
@@ -297,7 +300,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$events = [];
 		foreach ( $eventRows as $row ) {
 			$curEventID = (int)$row->event_id;
-			$events[] = $this->newEventFromDBRow(
+			$events[$curEventID] = $this->newEventFromDBRow(
 				$row,
 				$addressRowsByEvent[$curEventID] ?? null,
 				$trackingToolRowsByEvent[$curEventID] ?? null,
@@ -354,6 +357,8 @@ class EventStore implements IEventStore, IEventLookup {
 		array $topics,
 		array $questionIDs
 	): ExistingEventRegistration {
+		self::assertValidRow( $row );
+
 		$eventPage = $this->campaignsPageFactory->newPageFromDB(
 			(int)$row->event_page_namespace,
 			$row->event_page_title,
@@ -397,6 +402,38 @@ class EventStore implements IEventStore, IEventLookup {
 			wfTimestamp( TS_UNIX, $row->event_last_edit ),
 			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at )
 		);
+	}
+
+	private static function assertValidRow( stdClass $row ): void {
+		$requiredProperties = [
+			'event_id',
+			'event_name',
+			'event_page_namespace',
+			'event_page_title',
+			'event_page_wiki',
+			'event_page_prefixedtext',
+			'event_chat_url',
+			'event_status',
+			'event_timezone',
+			'event_start_local',
+			// event_start_utc not required
+			'event_end_local',
+			// event_end_utc not required
+			'event_types',
+			'event_meeting_type',
+			'event_meeting_url',
+			'event_created_at',
+			'event_last_edit',
+			'event_deleted_at',
+			'event_is_test_event',
+		];
+		foreach ( $requiredProperties as $property ) {
+			if ( !property_exists( $row, $property ) ) {
+				throw new InvalidArgumentException(
+					"Event row lacks required prop '$property': " . var_export( $row, true )
+				);
+			}
+		}
 	}
 
 	/**

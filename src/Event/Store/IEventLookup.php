@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use stdClass;
+use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 interface IEventLookup {
@@ -48,4 +50,14 @@ interface IEventLookup {
 	 * @return ExistingEventRegistration[]
 	 */
 	public function getEventsByParticipant( int $participantID, int $limit ): array;
+
+	/**
+	 * Given a result set containing full rows from the campaign_events table, constructs EventRegistration objects
+	 * for those rows, looking up the required additional information.
+	 *
+	 * @param IDatabase $db
+	 * @param iterable<stdClass> $eventRows
+	 * @return array<int,ExistingEventRegistration> Mapping event ID to the corresponding object.
+	 */
+	public function newEventsFromDBRows( IDatabase $db, iterable $eventRows ): array;
 }

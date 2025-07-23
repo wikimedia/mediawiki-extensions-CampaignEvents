@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Event\Store;
 
 use DateTimeZone;
 use Generator;
+use InvalidArgumentException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
@@ -328,7 +329,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$eventsByOrganizer = CampaignEventsServices::getEventLookup()->getEventsByOrganizer( $organizerID, 5 );
 		$this->assertCount( $hasEvent ? 1 : 0, $eventsByOrganizer, 'Number of events' );
 		if ( $hasEvent ) {
-			$this->assertEventsEqual( $event, $eventsByOrganizer[0] );
+			$this->assertEventsEqual( $event, reset( $eventsByOrganizer ) );
 		}
 	}
 
@@ -354,7 +355,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$eventsByParticipant = CampaignEventsServices::getEventLookup()->getEventsByParticipant( $participantID, 5 );
 		$this->assertCount( $hasEvent ? 1 : 0, $eventsByParticipant, 'Number of events' );
 		if ( $hasEvent ) {
-			$this->assertEventsEqual( $event, $eventsByParticipant[0] );
+			$this->assertEventsEqual( $event, reset( $eventsByParticipant ) );
 		}
 	}
 
@@ -384,5 +385,19 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				'message if you changed values, but not format, for the test event above only)'
 		);
 		$this->assertEquals( $event, $unserialized, 'Unserialized events should be equal' );
+	}
+
+	public function testNewEventsFromDBRows__rowWithoutID() {
+		$rowWithoutID = (object)[];
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Got row without event ID' );
+		CampaignEventsServices::getEventLookup()->newEventsFromDBRows( $this->getDb(), [ $rowWithoutID ] );
+	}
+
+	public function testNewEventsFromDBRows__incompleteRow() {
+		$incompleteRow = (object)[ 'event_id' => 42 ];
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Event row lacks required prop' );
+		CampaignEventsServices::getEventLookup()->newEventsFromDBRows( $this->getDb(), [ $incompleteRow ] );
 	}
 }
