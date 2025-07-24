@@ -85,6 +85,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $extraOrganizers = [];
 	/** @var array<int,int> Maps event ID to the total number of organizers of that event. */
 	private array $organizerCounts = [];
+	private ?string $country;
 
 	/**
 	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
@@ -109,6 +110,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		CountryProvider $countryProvider,
 		string $search,
 		?int $participationOptions,
+		?string $country,
 		?string $startDate,
 		?string $endDate,
 		array $filterWiki,
@@ -154,6 +156,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->includeAllWikis = $includeAllWikis;
 		$this->filterTopics = $filterTopics;
 		$this->filterEventTypes = $filterEventTypes;
+		$this->country  = $country;
 	}
 
 	/**
@@ -469,6 +472,26 @@ class EventsListPager extends ReverseChronologicalPager {
 				[
 					'event_id=ceet_event_id',
 					'ceet_topic' => $this->filterTopics,
+				]
+			];
+		}
+		if ( $this->country &&
+			$this->participationOptions !== EventRegistration::PARTICIPATION_OPTION_ONLINE &&
+			$this->countryProvider->isValidCountryCode( $this->country )
+		) {
+			$query['tables'][] = 'ce_event_address';
+			$query['tables'][] = 'ce_address';
+			$query['join_conds']['ce_event_address'] = [
+				'JOIN',
+				[
+					'event_id=ceea_event'
+				]
+			];
+			$query['join_conds']['ce_address'] = [
+				'JOIN',
+				[
+					'cea_id=ceea_address',
+					'cea_country_code' => $this->country,
 				]
 			];
 		}

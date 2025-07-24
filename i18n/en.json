@@ -170,6 +170,8 @@
 	"campaignevents-allevents-label-events-per-page": "Events per page",
 	"campaignevents-allevents-label-start-date": "From",
 	"campaignevents-allevents-label-end-date": "To",
+	"campaignevents-allevents-label-country": "Country",
+	"campaignevents-allevents-country-all": "All countries",
 	"campaignevents-eventslist-date-separator": "$1 – $2",
 	"campaignevents-eventslist-participation-options-label": "Participation options",
 	"campaignevents-eventslist-organizer-label": "Organizers",

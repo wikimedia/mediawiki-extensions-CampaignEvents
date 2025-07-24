@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
@@ -32,13 +33,15 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	private ITopicRegistry $topicRegistry;
 	private TemplateParser $templateParser;
 	private EventTypesRegistry $eventTypesRegistry;
+	private CountryProvider $countryProvider;
 
 	public function __construct(
 		EventsPagerFactory $eventsPagerFactory,
 		CampaignEventsHookRunner $hookRunner,
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry
+		EventTypesRegistry $eventTypesRegistry,
+		CountryProvider $countryProvider
 	) {
 		parent::__construct( self::PAGE_NAME );
 		$this->eventsPagerFactory = $eventsPagerFactory;
@@ -47,6 +50,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$this->topicRegistry = $topicRegistry;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		$this->eventTypesRegistry = $eventTypesRegistry;
+		$this->countryProvider = $countryProvider;
 	}
 
 	/**
@@ -132,6 +136,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$filterEventTypes = $request->getArray( 'wpFilterEventTypes' ) ?? [];
 		}
 		$participationOptions = $request->getIntOrNull( 'wpParticipationOptions' );
+		$country = $request->getRawVal( 'wpCountry' );
 		$rawStartTime = $request->getRawVal( 'wpStartDate' ) ?? (string)time();
 		if ( $this->including() && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $rawStartTime ) ) {
 			// Special case: allow specifying just the date when transcluding. Ideally we'd also use just the date
@@ -164,6 +169,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$form = $this->getHTMLForm(
 				$searchedVal,
 				$participationOptions,
+				$country,
 				$startTime,
 				$openSectionsStr,
 				$formIdentifier
@@ -175,6 +181,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$this->getContext(),
 			$searchedVal,
 			$participationOptions,
+			$country,
 			$startTime,
 			$endTime,
 			$filterWiki,
@@ -188,6 +195,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				$this->getContext(),
 				$searchedVal,
 				$participationOptions,
+				$country,
 				$startTime,
 				$filterWiki,
 				$includeAllWikis,
@@ -222,16 +230,20 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	public function getHTMLForm(
 		?string $searchedVal,
 		?int $participationOptions,
+		?string $country,
 		?string $startTime,
 		string $openSectionsStr,
 		string $formIdentifier
 	): HTMLForm {
+		$migrationStage = $this->getConfig()->get( "CampaignEventsCountrySchemaMigrationStage" );
+		$readNew = $migrationStage & SCHEMA_COMPAT_READ_NEW;
 		$formDescriptor = [
 			'Search' => [
 				'type' => 'text',
 				'label-message' => 'campaignevents-allevents-label-search',
 				'default' => $searchedVal,
-				'cssclass' => 'ext-campaignevents-allevents-search-field',
+				'cssclass' => 'ext-campaignevents-allevents-search-field' .
+					( $readNew ? '' : ' ext-campaignevents-allevents-search-field-full' )
 			],
 			'FilterEventTypes' => [
 				'type' => 'multiselect',
@@ -240,20 +252,6 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'options-messages' => $this->eventTypesRegistry->getAllOptionMessages(),
 				'placeholder-message' => 'campaignevents-allevents-placeholder-add-event-types',
 				'max' => 20,
-			],
-			'ParticipationOptions' => [
-				'type' => 'select',
-				'label-message' => 'campaignevents-allevents-label-participation-options',
-				'options-messages' => [
-					'campaignevents-eventslist-participation-options-all-events' => null,
-					'campaignevents-eventslist-participation-options-online' =>
-						EventRegistration::PARTICIPATION_OPTION_ONLINE,
-					'campaignevents-eventslist-participation-options-in-person' =>
-						EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
-					'campaignevents-eventslist-participation-options-online-and-in-person' =>
-						EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
-				],
-				'default' => $participationOptions,
 			],
 			'StartDate' => [
 				'type' => 'datetime',
@@ -269,15 +267,43 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'cssclass' => 'ext-campaignevents-allevents-calendar-end-field mw-htmlform-autoinfuse-lazy',
 				'default' => '',
 			],
-			'FilterWikis' => [
-				'type' => 'multiselect',
-				'dropdown' => true,
-				'label-message' => 'campaignevents-allevents-label-filter-wikis',
-				'options' => $this->wikiLookup->getListForSelect(),
-				'placeholder-message' => 'campaignevents-allevents-placeholder-add-wikis',
-				'max' => 10,
-				'cssclass' => 'ext-campaignevents-allevents-wikis-field',
+			'ParticipationOptions' => [
+				'type' => 'select',
+				'label-message' => 'campaignevents-allevents-label-participation-options',
+				'options-messages' => [
+					'campaignevents-eventslist-participation-options-all-events' => null,
+					'campaignevents-eventslist-participation-options-online' =>
+						EventRegistration::PARTICIPATION_OPTION_ONLINE,
+					'campaignevents-eventslist-participation-options-in-person' =>
+						EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
+					'campaignevents-eventslist-participation-options-online-and-in-person' =>
+						EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
+				],
+				'default' => $participationOptions,
 			],
+		];
+		if ( $readNew ) {
+			$languageCode = $this->getLanguage()->getCode();
+			$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
+			$countryOptions = [
+				$this->msg( 'campaignevents-allevents-country-all' )->text() => ''
+			];
+			$countryOptions += array_flip( $countryNames );
+			$formDescriptor['Country'] = [
+				'type' => 'select',
+				'label-message' => 'campaignevents-allevents-label-country',
+				'options' => $countryOptions,
+				'default' => $country
+			];
+		}
+		$formDescriptor['FilterWikis'] = [
+			'type' => 'multiselect',
+			'dropdown' => true,
+			'label-message' => 'campaignevents-allevents-label-filter-wikis',
+			'options' => $this->wikiLookup->getListForSelect(),
+			'placeholder-message' => 'campaignevents-allevents-placeholder-add-wikis',
+			'max' => 10,
+			'cssclass' => 'ext-campaignevents-allevents-wikis-field',
 		];
 		$availableTopics = $this->topicRegistry->getTopicsForSelect();
 		if ( $availableTopics ) {

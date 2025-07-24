@@ -661,7 +661,8 @@
 				"CampaignEventsHookRunner",
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
-				"CampaignEventsEventTypesRegistry"
+				"CampaignEventsEventTypesRegistry",
+				"CampaignEventsCountryProvider"
 			]
 		},
 		"EventDetails": {
