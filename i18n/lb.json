@@ -538,5 +538,6 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Evenementstyppen",
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Annuléiert wgl. Är Evenementsumeldung op $2]''', der Wiki, op där d'Evenement ugeluecht gouf.",
 	"campaignevents-email-error-notification-with-detail": "D'E-Mail konnt aus dem follgende Grond net geschéckt ginn: $1",
-	"campaignevents-eventslist-types-label": "Evenementstyppen"
+	"campaignevents-eventslist-types-label": "Evenementstyppen",
+	"campaignevents-eventslist-country-label": "Land"
 }

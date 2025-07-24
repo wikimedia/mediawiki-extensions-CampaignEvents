@@ -561,5 +561,6 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Soort evenement",
 	"campaignevents-cancel-page-nonlocal": "'''[ $1 Annuleer uw evenementregistratie op $2]''', de wiki waar het evenement is aangemaakt.",
 	"campaignevents-email-error-notification-with-detail": "De e-mail kon niet worden verzonden om de volgende reden: $1",
-	"campaignevents-eventslist-types-label": "Soort evenementen"
+	"campaignevents-eventslist-types-label": "Soort evenementen",
+	"campaignevents-eventslist-country-label": "Land"
 }

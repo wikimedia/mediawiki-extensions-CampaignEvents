@@ -556,5 +556,6 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Veranstaltungstypen",
 	"campaignevents-cancel-page-nonlocal": "Bitte '''[$1 storniere deine Veranstaltungsanmeldung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-email-error-notification-with-detail": "Die E-Mail konnte aus folgendem Grund nicht gesendet werden: $1",
-	"campaignevents-eventslist-types-label": "Veranstaltungstypen"
+	"campaignevents-eventslist-types-label": "Veranstaltungstypen",
+	"campaignevents-eventslist-country-label": "Staat"
 }

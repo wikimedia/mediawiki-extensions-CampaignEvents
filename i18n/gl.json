@@ -563,5 +563,6 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Tipos de eventos",
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Cancela a túa inscrición ao evento en $2]''', o wiki onde se creou o evento.",
 	"campaignevents-email-error-notification-with-detail": "Non se puido enviar o correo electrónico polo seguinte motivo: $1",
-	"campaignevents-eventslist-types-label": "Tipos de eventos"
+	"campaignevents-eventslist-types-label": "Tipos de eventos",
+	"campaignevents-eventslist-country-label": "País"
 }
