@@ -28,13 +28,13 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newOngoingListPager(
 			new RequestContext(),
 			'',
-			null,
-			null,
+			[],
 			wfTimestamp( TS_MW, $searchStart ),
+			null,
+			null,
 			[],
-			true,
 			[],
-			[]
+			true
 		);
 		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
 	}
@@ -43,13 +43,13 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newOngoingListPager(
 			new RequestContext(),
 			self::$EVENT_NAME,
+			[],
+			wfTimestamp( TS_MW, self::$EVENT_START + 1 ),
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			null,
-			wfTimestamp( TS_MW, self::$EVENT_START + 1 ),
 			[ 'any_wiki_name' ],
-			true,
 			[ self::$EVENT_TOPIC ],
-			[]
+			true
 		);
 		$this->assertSame( 1, $pager->getNumRows() );
 	}

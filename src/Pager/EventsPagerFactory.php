@@ -97,21 +97,22 @@ class EventsPagerFactory {
 	}
 
 	/**
+	 * @phan-param list<string> $filterEventTypes
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
-	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function newListPager(
 		IContextSource $context,
 		string $search,
-		?int $participationOptions,
-		?string $country,
+		array $filterEventTypes,
 		?string $startDate,
 		?string $endDate,
+		?int $participationOptions,
+		?string $country,
 		array $filterWiki,
-		bool $includeAllWikis,
 		array $filterTopics,
-		array $filterEventTypes
+		bool $includeAllWikis
+
 	): EventsListPager {
 		return new EventsListPager(
 			$this->eventLookup,
@@ -129,32 +130,32 @@ class EventsPagerFactory {
 			$context,
 			$this->countryProvider,
 			$search,
-			$participationOptions,
-			$country,
+			$filterEventTypes,
 			$startDate,
 			$endDate,
+			$participationOptions,
+			$country,
 			$filterWiki,
-			$includeAllWikis,
 			$filterTopics,
-			$filterEventTypes,
+			$includeAllWikis,
 		);
 	}
 
 	/**
+	 * @phan-param list<string> $filterEventTypes
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
-	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function newOngoingListPager(
 		IContextSource $context,
 		string $search,
+		array $filterEventTypes,
+		string $startDate,
 		?int $participationOptions,
 		?string $country,
-		string $startDate,
 		array $filterWiki,
-		bool $includeAllWikis,
 		array $filterTopics,
-		array $filterEventTypes
+		bool $includeAllWikis
 	): OngoingEventsListPager {
 		return new OngoingEventsListPager(
 			$this->eventLookup,
@@ -172,13 +173,13 @@ class EventsPagerFactory {
 			$context,
 			$this->countryProvider,
 			$search,
+			$filterEventTypes,
+			$startDate,
 			$participationOptions,
 			$country,
-			$startDate,
 			$filterWiki,
-			$includeAllWikis,
 			$filterTopics,
-			$filterEventTypes,
+			$includeAllWikis
 		);
 	}
 }

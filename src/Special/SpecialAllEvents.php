@@ -124,19 +124,17 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$searchedVal = $request->getVal( 'wpSearch', '' );
 		if ( $this->including() ) {
 			// Uses a comma-separated list to support multivalued parameters (T388385#10773882)
+			$rawFilterEventTypes = $request->getRawVal( 'wpFilterEventTypes' ) ?? '';
+			$filterEventTypes = $this->normalizeFilterValues( $rawFilterEventTypes );
 			$rawFilterWiki = $request->getRawVal( 'wpFilterWikis' ) ?? '';
 			$filterWiki = $this->normalizeFilterValues( $rawFilterWiki );
 			$rawFilterTopic = $request->getRawVal( 'wpFilterTopics' ) ?? '';
 			$filterTopics = $this->normalizeFilterValues( $rawFilterTopic );
-			$rawFilterEventTypes = $request->getRawVal( 'wpFilterEventTypes' ) ?? '';
-			$filterEventTypes = $this->normalizeFilterValues( $rawFilterEventTypes );
 		} else {
+			$filterEventTypes = $request->getArray( 'wpFilterEventTypes' ) ?? [];
 			$filterWiki = $request->getArray( 'wpFilterWikis' ) ?? [];
 			$filterTopics = $request->getArray( 'wpFilterTopics' ) ?? [];
-			$filterEventTypes = $request->getArray( 'wpFilterEventTypes' ) ?? [];
 		}
-		$participationOptions = $request->getIntOrNull( 'wpParticipationOptions' );
-		$country = $request->getRawVal( 'wpCountry' );
 		$rawStartTime = $request->getRawVal( 'wpStartDate' ) ?? (string)time();
 		if ( $this->including() && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $rawStartTime ) ) {
 			// Special case: allow specifying just the date when transcluding. Ideally we'd also use just the date
@@ -150,6 +148,8 @@ class SpecialAllEvents extends IncludableSpecialPage {
 			$rawEndTime .= 'T23:59:59Z';
 		}
 		$endTime = $rawEndTime === '' ? null : $this->formatDate( $rawEndTime, 'Y-m-d 23:59:59' );
+		$participationOptions = $request->getIntOrNull( 'wpParticipationOptions' );
+		$country = $request->getRawVal( 'wpCountry' );
 		$openSectionsStr = $request->getVal( 'wpOpenSections', self::UPCOMING_SECTION );
 		// Use a form identifier to tell whether the form has already been submitted or not, otherwise we can't
 		// distinguish between form not submitted and form submitted but checkbox unchecked. This is important
@@ -168,9 +168,9 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		if ( $showForm ) {
 			$form = $this->getHTMLForm(
 				$searchedVal,
+				$startTime,
 				$participationOptions,
 				$country,
-				$startTime,
 				$openSectionsStr,
 				$formIdentifier
 			);
@@ -180,27 +180,28 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		$upcomingPager = $this->eventsPagerFactory->newListPager(
 			$this->getContext(),
 			$searchedVal,
-			$participationOptions,
-			$country,
+			$filterEventTypes,
 			$startTime,
 			$endTime,
+			$participationOptions,
+			$country,
 			$filterWiki,
-			$includeAllWikis,
 			$filterTopics,
-			$filterEventTypes
+			$includeAllWikis
 		);
 		if ( $startTime !== null ) {
 			$openSections = explode( ',', $openSectionsStr );
 			$ongoingPager = $this->eventsPagerFactory->newOngoingListPager(
 				$this->getContext(),
 				$searchedVal,
+				$filterEventTypes,
+				$startTime,
 				$participationOptions,
 				$country,
-				$startTime,
 				$filterWiki,
-				$includeAllWikis,
 				$filterTopics,
-				$filterEventTypes
+				$includeAllWikis
+
 			);
 			// TODO: Remove this awful hack when we find a way to have separate paging (T386019).
 			$ongoingPager->mLimit = 5000;
@@ -229,9 +230,9 @@ class SpecialAllEvents extends IncludableSpecialPage {
 
 	public function getHTMLForm(
 		?string $searchedVal,
+		?string $startTime,
 		?int $participationOptions,
 		?string $country,
-		?string $startTime,
 		string $openSectionsStr,
 		string $formIdentifier
 	): HTMLForm {

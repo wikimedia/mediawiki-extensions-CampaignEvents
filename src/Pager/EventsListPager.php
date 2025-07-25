@@ -62,16 +62,17 @@ class EventsListPager extends ReverseChronologicalPager {
 	public $mDefaultDirection = IndexPager::DIR_ASCENDING;
 
 	private string $search;
-	/** One of the EventRegistration::PARTICIPATION_OPTION_* constants */
-	private ?int $participationOptions;
-	/** @var list<string> dbnames of the wikis chosen */
-	private array $filterWiki;
-	private bool $includeAllWikis;
-	/** @var string[] */
-	private array $filterTopics;
+	private array $filterEventTypes = [];
 	protected ?string $startDate;
 	protected ?string $endDate;
-	private array $filterEventTypes = [];
+	/** One of the EventRegistration::PARTICIPATION_OPTION_* constants */
+	private ?int $participationOptions;
+	private ?string $country;
+	/** @var list<string> dbnames of the wikis chosen */
+	private array $filterWiki;
+	/** @var string[] */
+	private array $filterTopics;
+	private bool $includeAllWikis;
 
 	/** @var array<int,ExistingEventRegistration> Maps event IDs in the current page to event objects */
 	private array $eventObjects = [];
@@ -85,13 +86,12 @@ class EventsListPager extends ReverseChronologicalPager {
 	private array $extraOrganizers = [];
 	/** @var array<int,int> Maps event ID to the total number of organizers of that event. */
 	private array $organizerCounts = [];
-	private ?string $country;
 
 	/**
 	 * @note Callers are responsible for verifying that $startDate and $endDate are valid timestamps (or null).
+	 * @phan-param list<string> $filterEventTypes
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
-	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -109,14 +109,14 @@ class EventsListPager extends ReverseChronologicalPager {
 		IContextSource $context,
 		CountryProvider $countryProvider,
 		string $search,
-		?int $participationOptions,
-		?string $country,
+		array $filterEventTypes,
 		?string $startDate,
 		?string $endDate,
+		?int $participationOptions,
+		?string $country,
 		array $filterWiki,
-		bool $includeAllWikis,
 		array $filterTopics,
-		array $filterEventTypes
+		bool $includeAllWikis
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
@@ -136,7 +136,7 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->countryProvider = $countryProvider;
 
 		$this->search = $search;
-		$this->participationOptions = $participationOptions;
+		$this->filterEventTypes = $filterEventTypes;
 		Assert::parameter(
 			$startDate === null || ( $startDate !== '' && MWTimestamp::convert( TS_UNIX, $startDate ) !== false ),
 			'$startDate',
@@ -152,11 +152,11 @@ class EventsListPager extends ReverseChronologicalPager {
 
 		$this->getDateRangeCond( $startDate, $endDate );
 		$this->lastHeaderTimestamp = '';
-		$this->filterWiki = $filterWiki;
-		$this->includeAllWikis = $includeAllWikis;
-		$this->filterTopics = $filterTopics;
-		$this->filterEventTypes = $filterEventTypes;
+		$this->participationOptions = $participationOptions;
 		$this->country  = $country;
+		$this->filterWiki = $filterWiki;
+		$this->filterTopics = $filterTopics;
+		$this->includeAllWikis = $includeAllWikis;
 	}
 
 	/**

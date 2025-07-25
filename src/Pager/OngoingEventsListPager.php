@@ -28,9 +28,9 @@ class OngoingEventsListPager extends EventsListPager {
 	/**
 	 * Same as parent constructor, but start date is required and there is no end date.
 	 *
+	 * @phan-param list<string> $filterEventTypes
 	 * @phan-param list<string> $filterWiki
 	 * @phan-param list<string> $filterTopics
-	 * @phan-param list<string> $filterEventTypes
 	 */
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -48,13 +48,14 @@ class OngoingEventsListPager extends EventsListPager {
 		IContextSource $context,
 		CountryProvider $countryProvider,
 		string $search,
+		array $filterEventTypes,
+		string $startDate,
 		?int $participationOptions,
 		?string $country,
-		string $startDate,
 		array $filterWiki,
-		bool $includeAllWikis,
 		array $filterTopics,
-		array $filterEventTypes
+		bool $includeAllWikis,
+
 	) {
 		parent::__construct(
 			$eventLookup,
@@ -72,14 +73,14 @@ class OngoingEventsListPager extends EventsListPager {
 			$context,
 			$countryProvider,
 			$search,
-			$participationOptions,
-			$country,
+			$filterEventTypes,
 			$startDate,
 			null,
+			$participationOptions,
+			$country,
 			$filterWiki,
-			$includeAllWikis,
 			$filterTopics,
-			$filterEventTypes
+			$includeAllWikis,
 		);
 	}
 

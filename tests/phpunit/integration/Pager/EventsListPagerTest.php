@@ -32,14 +32,14 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
 			new RequestContext(),
 			'',
-			null,
-			null,
+			[],
 			$searchStartStr,
 			$searchToStr,
+			null,
+			null,
 			[],
-			true,
 			[],
-			[]
+			true
 		);
 		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
 	}
@@ -53,14 +53,14 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		CampaignEventsServices::getEventsPagerFactory()->newListPager(
 			new RequestContext(),
 			'',
-			null,
-			null,
+			[],
 			$timestamp,
 			null,
+			null,
+			null,
 			[],
-			true,
 			[],
-			[]
+			true
 		);
 	}
 
@@ -73,14 +73,14 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		CampaignEventsServices::getEventsPagerFactory()->newListPager(
 			new RequestContext(),
 			'',
-			null,
-			null,
+			[],
 			null,
 			$timestamp,
+			null,
+			null,
 			[],
-			true,
 			[],
-			[]
+			true
 		);
 	}
 
@@ -95,14 +95,14 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
 			new RequestContext(),
 			self::$EVENT_NAME,
-			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
-			null,
+			[],
 			'19120623000000',
 			'29120623000000',
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
+			null,
 			[ 'any_wiki_name' ],
-			true,
 			[ self::$EVENT_TOPIC ],
-			[]
+			true
 		);
 		$this->assertSame( 1, $pager->getNumRows() );
 	}
