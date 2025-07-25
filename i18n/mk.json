@@ -556,5 +556,6 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Видови настани",
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Откажете ја вашата пријава за настан на $2]''', викито на кое е создаден настанот.",
 	"campaignevents-email-error-notification-with-detail": "Не можев да ја испратам е-поштата од следнава причина: $1",
-	"campaignevents-eventslist-types-label": "Видови настани"
+	"campaignevents-eventslist-types-label": "Видови настани",
+	"campaignevents-eventslist-country-label": "Земја"
 }

@@ -276,5 +276,6 @@
 	"campaignevents-allevents-label-filter-event-types": "ইভেন্টের ধরন",
 	"campaignevents-allevents-placeholder-add-event-types": "ইভেন্টের ধরণ যোগ করুন...",
 	"campaignevents-eventpage-dialog-event-types-label": "ইভেন্টের ধরন",
-	"campaignevents-eventslist-types-label": "ইভেন্টের ধরন"
+	"campaignevents-eventslist-types-label": "ইভেন্টের ধরন",
+	"campaignevents-eventslist-country-label": "দেশ"
 }
