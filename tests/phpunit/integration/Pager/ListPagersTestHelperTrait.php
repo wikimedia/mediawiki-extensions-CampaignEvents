@@ -79,6 +79,25 @@ trait ListPagersTestHelperTrait {
 			] )
 			->caller( __METHOD__ )
 			->execute();
+
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_event_address' )
+			->row( [
+				'ceea_event' => 1,
+				'ceea_address' => 1,
+			] )
+			->caller( __METHOD__ )
+			->execute();
+
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_address' )
+			->row( [
+				'cea_id' => 1,
+				'cea_full_address' => "Someplace\nin\nHaiti",
+				'cea_country_code' => 'HT',
+			] )
+			->caller( __METHOD__ )
+			->execute();
 	}
 
 	private static function getBaseTestCases(): array {
