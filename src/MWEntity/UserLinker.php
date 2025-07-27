@@ -2,6 +2,8 @@
 
 declare( strict_types=1 );
 
+// @phan-file-suppress PhanUndeclaredMethod,UnusedPluginFileSuppression
+
 namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Cache\LinkBatchFactory;
@@ -17,7 +19,6 @@ use Wikimedia\Message\MessageValue;
 
 /**
  * This class generates links to (global) user accounts.
- * @phan-file-suppress PhanUndeclaredMethod,UnusedPluginFileSuppression
  */
 class UserLinker {
 	public const SERVICE_NAME = 'CampaignEventsUserLinker';
