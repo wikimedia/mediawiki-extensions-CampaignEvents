@@ -5,6 +5,7 @@
 			"Cabadeck",
 			"Deltaspace",
 			"Dirruw'o",
+			"Elzav",
 			"Kareyac",
 			"Mitte27",
 			"Okras",
@@ -129,6 +130,7 @@
 	"campaignevents-eventpage-dialog-dates": "С $1 до $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Часовой пояс:</strong> $1",
 	"campaignevents-eventpage-dialog-online-label": "Онлайн-мероприятие",
+	"campaignevents-eventpage-dialog-venue-not-available": "Место проведения мероприятия еще не было оглашено {{PLURAL:$1| организатором|организаторами}}.",
 	"campaignevents-eventpage-dialog-chat-label": "Присоединяйтесь к чат-группе мероприятия",
 	"campaignevents-eventpage-dialog-chat-not-available": "Для этого события нет чата.",
 	"campaignevents-eventpage-dialog-chat-register": "Зарегистрируйтесь, чтобы увидеть ссылку на чат группы.",
@@ -145,6 +147,7 @@
 	"campaignevents-event-details-organizers-header": "Организаторы",
 	"campaignevents-event-details-remove-participant-remove-btn": "Удалить",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Отмена",
+	"campaignevents-event-details-venue-not-available": "Место проведения мероприятия еще не было оглашено {{PLURAL:$1| организатором|организаторами}}.",
 	"campaignevents-event-details-tab-email": "Сообщение",
 	"campaignevents-event-details-organizers-view-more": "Показать больше",
 	"campaignevents-event-details-organizers-noscript": "Вам необходимо включить JavaScript, чтобы увидеть полный список организаторов.",
@@ -190,5 +193,6 @@
 	"campaignevents-worklist-error-empty": "Введите хотя бы одно название статьи.",
 	"campaignevents-allevents-placeholder-add-wikis": "Добавить вики...",
 	"campaignevents-eventslist-wiki-label": "Вики",
-	"campaignevents-eventpage-dialog-topics-label": "Темы"
+	"campaignevents-eventpage-dialog-topics-label": "Темы",
+	"campaignevents-notification-registration-venue-not-available": "Место проведения мероприятия еще не было объявлено {{PLURAL:$1| организатором|организаторами}}."
 }

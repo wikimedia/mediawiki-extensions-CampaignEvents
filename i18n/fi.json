@@ -234,7 +234,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "Tapahtuma paikan päällä",
 	"campaignevents-eventpage-dialog-link-not-available": "{{PLURAL:$1|Järjestäjä tulee|Järjestäjät tulevat}} antamaan tapahtumalinkin.",
 	"campaignevents-eventpage-dialog-link-register": "Ilmoittaudu nähdäksesi tapahtumalinkin.",
-	"campaignevents-eventpage-dialog-venue-not-available": "{{PLURAL:$1|Järjestäjä tulee|Järjestäjät tulevat}} antamaan tapahtumapaikan osoitteen.",
+	"campaignevents-eventpage-dialog-venue-not-available": "{{PLURAL:$1|Järjestäjä ei|Järjestäjät eivät}} ole vielä {{PLURAL:$1|jakanut|jakaneet}} tapahtumapaikan sijaintia.",
 	"campaignevents-eventpage-dialog-chat-label": "Liity tapahtuman keskusteluryhmään",
 	"campaignevents-eventpage-dialog-chat-not-available": "Ei keskusteluryhmää saatavilla tälle tapahtumalle.",
 	"campaignevents-eventpage-dialog-chat-register": "Ilmoittaudu nähdäksesi keskusteluryhmälinkin.",
@@ -304,8 +304,8 @@
 	"campaignevents-event-details-event": "Tapahtuman tiedot: $1",
 	"campaignevents-event-details-not-found": "Tällä tunnisteella ei ole tapahtumaa.",
 	"campaignevents-event-details-online-link-not-available": "{{PLURAL:$1|Järjestäjä tulee|Järjestäjät tulevat}} antamaan tapahtumalinkin.",
-	"campaignevents-event-details-venue-not-available": "{{PLURAL:$1|Järjestäjä tulee|Järjestäjät tulevat}} antamaan tapahtumapaikan osoitteen.",
 	"campaignevents-event-details-dates-label": "Aloitus- ja lopetusaika",
+	"campaignevents-event-details-venue-not-available": "{{PLURAL:$1|Järjestäjä ei|Järjestäjät eivät}} ole vielä {{PLURAL:$1|jakanut|jakaneet}} tapahtumapaikan sijaintia.",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Osallistuja|Osallistujia}} poistettu",
 	"campaignevents-event-details-remove-all-participant-notification": "Kaikki osallistujat poistettu",
 	"campaignevents-unregister-participants-permission-denied": "Sinulla ei ole oikeutta poistaa osallistujia",
@@ -558,5 +558,6 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Peruuta tapahtumailmoittautumisesi sivustolla $2]''', jossa tapahtuma on luotu.",
 	"campaignevents-email-error-notification-with-detail": "Sähköpostia ei voitu lähettää seuraavasta syystä: $1",
 	"campaignevents-eventslist-types-label": "Tapahtumatyypit",
-	"campaignevents-eventslist-country-label": "Maa"
+	"campaignevents-eventslist-country-label": "Maa",
+	"campaignevents-notification-registration-venue-not-available": "{{PLURAL:$1|Järjestäjä ei|Järjestäjät eivät}} ole vielä {{PLURAL:$1|jakanut|jakaneet}} tapahtumapaikan sijaintia."
 }

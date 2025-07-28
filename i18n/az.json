@@ -233,7 +233,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "Oflayn tədbir",
 	"campaignevents-eventpage-dialog-link-not-available": "Link {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən təmin ediləcək.",
 	"campaignevents-eventpage-dialog-link-register": "Tədbirin linkinə baxmaq üçün qeydiyyatdan keç.",
-	"campaignevents-eventpage-dialog-venue-not-available": "Məkan {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən açıqlanacaq.",
+	"campaignevents-eventpage-dialog-venue-not-available": "Məkan  hələ {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən paylaşılmayıb.",
 	"campaignevents-eventpage-dialog-chat-label": "Tədbirin söhbət qrupuna qoşul",
 	"campaignevents-eventpage-dialog-chat-not-available": "Bu tədbir üçün heç bir söhbət qrupu mövcud deyil.",
 	"campaignevents-eventpage-dialog-chat-register": "Söhbət qrupu linkinə baxmaq üçün qeydiyyatdan keçin.",
@@ -303,8 +303,8 @@
 	"campaignevents-event-details-event": "Tədbir detalları: $1",
 	"campaignevents-event-details-not-found": "Bu ID ilə heç bir tədbir yoxdur.",
 	"campaignevents-event-details-online-link-not-available": "Link {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən təmin ediləcək.",
-	"campaignevents-event-details-venue-not-available": "Məkan {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən açıqlanacaq.",
 	"campaignevents-event-details-dates-label": "Başlama və bitmə vaxtı",
+	"campaignevents-event-details-venue-not-available": "Məkan  hələ {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən paylaşılmayıb.",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|İştirakçı|İştirakçılar}} silindi",
 	"campaignevents-event-details-remove-all-participant-notification": "Bütün iştirakçılar silindi",
 	"campaignevents-unregister-participants-permission-denied": "İştirakçıları silmək icazəniz yoxdur",
@@ -557,5 +557,6 @@
 	"campaignevents-cancel-page-nonlocal": "Zəhmət olmasa, tədbirin yaradıldığı '''[$1 $2 vikisində qeydiyyatınızı ləğv edin]'''.",
 	"campaignevents-email-error-notification-with-detail": "Aşağıdakı səbəbdən e-poçt göndərilə bilmədi: $1",
 	"campaignevents-eventslist-types-label": "Tədbir növləri",
-	"campaignevents-eventslist-country-label": "Ölkə"
+	"campaignevents-eventslist-country-label": "Ölkə",
+	"campaignevents-notification-registration-venue-not-available": "Məkan  hələ {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən paylaşılmayıb."
 }

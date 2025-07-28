@@ -233,7 +233,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "Присуствен настан",
 	"campaignevents-eventpage-dialog-link-not-available": "Врската ќе ја {{PLURAL:$1|добави приредувачот|добават приредувачите}}.",
 	"campaignevents-eventpage-dialog-link-register": "Пријавте се за да ја видите врската за настанот.",
-	"campaignevents-eventpage-dialog-venue-not-available": "Адресата на одржувалиштето ќе ја {{PLURAL:$1|соопшти организаторот|соопштат организаторите}}.",
+	"campaignevents-eventpage-dialog-venue-not-available": "{{PLURAL:$1|Организаторот|Организаторите}} сè уште не го {{PLURAL:$1|соопштил|соопштиле}} одржувалиштето.",
 	"campaignevents-eventpage-dialog-chat-label": "Придружете се во разговорна група за настани",
 	"campaignevents-eventpage-dialog-chat-not-available": "Нема развогорна група за овој настан.",
 	"campaignevents-eventpage-dialog-chat-register": "Пријавете се за да ја видите врската за разговорната група.",
@@ -303,8 +303,8 @@
 	"campaignevents-event-details-event": "Поединости за настанот: $1",
 	"campaignevents-event-details-not-found": "Нема настан со таа назнака.",
 	"campaignevents-event-details-online-link-not-available": "Врската ќе ја {{PLURAL:$1|добави приредувачот|добават приредувачите}}.",
-	"campaignevents-event-details-venue-not-available": "Адресата на одржувалиштето ќе ја {{PLURAL:$1|соопшти организаторот|соопштат организаторите}}.",
 	"campaignevents-event-details-dates-label": "Почетно и завршно време",
+	"campaignevents-event-details-venue-not-available": "{{PLURAL:$1|Организаторот|Организаторите}} сè уште не го {{PLURAL:$1|соопштил|соопштиле}} одржувалиштето.",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Отстранет учесник|Отстранети учесници}}",
 	"campaignevents-event-details-remove-all-participant-notification": "Сите учесници се отстранети",
 	"campaignevents-unregister-participants-permission-denied": "Не ви е дозволено да остранувате учесници",
@@ -557,5 +557,6 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Откажете ја вашата пријава за настан на $2]''', викито на кое е создаден настанот.",
 	"campaignevents-email-error-notification-with-detail": "Не можев да ја испратам е-поштата од следнава причина: $1",
 	"campaignevents-eventslist-types-label": "Видови настани",
-	"campaignevents-eventslist-country-label": "Земја"
+	"campaignevents-eventslist-country-label": "Земја",
+	"campaignevents-notification-registration-venue-not-available": "{{PLURAL:$1|Организаторот|Организаторите}} сè уште не го {{PLURAL:$1|соопштил|соопштиле}} одржувалиштето."
 }

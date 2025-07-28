@@ -239,7 +239,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "Evenement op locatie",
 	"campaignevents-eventpage-dialog-link-not-available": "De link wordt beschikbaar gesteld door de {{PLURAL:$1| organisator|organisatoren}}.",
 	"campaignevents-eventpage-dialog-link-register": "Registreer om de evenementlink te bekijken.",
-	"campaignevents-eventpage-dialog-venue-not-available": "Het adres van de locatie wordt nog beschikbaar gesteld door de organisator{{PLURAL:$1||en}}.",
+	"campaignevents-eventpage-dialog-venue-not-available": "Het adres van de locatie is nog niet bekendgemaakt door de organisator{{PLURAL:$1||en}}.",
 	"campaignevents-eventpage-dialog-chat-label": "Aansluiten bij een chatgroep over het evenement",
 	"campaignevents-eventpage-dialog-chat-not-available": "Er is geen chatgroep beschikbaar voor dit evenement.",
 	"campaignevents-eventpage-dialog-chat-register": "Schrijf u in om de koppeling naar de chatgroep te zien.",
@@ -309,8 +309,8 @@
 	"campaignevents-event-details-event": "Evenementgegevens: $1",
 	"campaignevents-event-details-not-found": "Er is geen evenement met dit ID.",
 	"campaignevents-event-details-online-link-not-available": "De link wordt beschikbaar gesteld door de {{PLURAL:$1| organisator|organisatoren}}.",
-	"campaignevents-event-details-venue-not-available": "Het adres van de locatie wordt nog beschikbaar gesteld door de organisator{{PLURAL:$1||en}}.",
 	"campaignevents-event-details-dates-label": "Begin- en eindtijd",
+	"campaignevents-event-details-venue-not-available": "Het adres van de locatie is nog niet bekendgemaakt door de organisator{{PLURAL:$1||en}}.",
 	"campaignevents-event-details-remove-participant-notification": "Deelnemer{{PLURAL:$1||s}} verwijderd",
 	"campaignevents-event-details-remove-all-participant-notification": "Alle deelnemers verwijderd",
 	"campaignevents-unregister-participants-permission-denied": "U mag geen deelnemers verwijderen",
@@ -563,5 +563,6 @@
 	"campaignevents-cancel-page-nonlocal": "'''[ $1 Annuleer uw evenementregistratie op $2]''', de wiki waar het evenement is aangemaakt.",
 	"campaignevents-email-error-notification-with-detail": "De e-mail kon niet worden verzonden om de volgende reden: $1",
 	"campaignevents-eventslist-types-label": "Soort evenementen",
-	"campaignevents-eventslist-country-label": "Land"
+	"campaignevents-eventslist-country-label": "Land",
+	"campaignevents-notification-registration-venue-not-available": "Het adres van de locatie is nog niet bekendgemaakt door de organisator{{PLURAL:$1||en}}."
 }

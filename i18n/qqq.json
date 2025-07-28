@@ -311,8 +311,8 @@
 	"campaignevents-event-details-event": "Description of [[Special:EventDetails]] used when viewing a specific event.\nParameters:\n* $1 - Name of the event",
 	"campaignevents-event-details-not-found": "Error message on [[Special:EventDetails]], used when the event ID provided by the user does not correspond to an existing event.",
 	"campaignevents-event-details-online-link-not-available": "Message used on [[Special:EventDetails]] when the event is online and there is no meeting link. Parameters:\n* $1 - The number of organizers, for PLURAL support.",
-	"campaignevents-event-details-venue-not-available": "Message used on [[Special:EventDetails]] when the event is in-person and there is no address. Parameters:\n* $1 - The number of organizers, for PLURAL support.",
 	"campaignevents-event-details-dates-label": "Label used on [[Special:EventDetails]]. This label describes the start and end time of the event, and is also used for the \"title\" attribute of the field icon.",
+	"campaignevents-event-details-venue-not-available": "Message used on [[Special:EventDetails]] when the event is in-person and there is no address. Parameters:\n* $1 - The number of organizers, for PLURAL support.",
 	"campaignevents-event-details-remove-participant-notification": "A notification shown on [[Special:EventDetails]] after removing participants. Parameters:\n* $1 - The number of removed participants, for PLURAL support.",
 	"campaignevents-event-details-remove-all-participant-notification": "A notification on [[Special:EventDetails]] when the organizer remove all participants",
 	"campaignevents-unregister-participants-permission-denied": "Message in case the user is not allowed to remove participants",
@@ -361,7 +361,6 @@
 	"campaignevents-notification-registration-event-page-link": "Primary link of the email notification sent to confirm that the user registered for an event. By clicking the link, the user can visit the event page.",
 	"campaignevents-notification-registration-chat-link": "Secondary link of the email notification sent to confirm that the user registered for an event. By clicking the link, the user can join the group chat of event participants and organizers.",
 	"campaignevents-notification-registration-collaboration-list-link": "Link on the email notification sent to confirm that the user registered for an event, to guide them to [[Special:AllEvents]]",
-	"campaignevents-notification-registration-venue-not-available": "\"Message used on on the email notification sent to confirm that the user registered for an event when the event is in-person and there is no address. Parameters:\\n* $1 - The number of organizers, for PLURAL support.\",",
 	"campaignevents-event-details-email-recipients-label": "Label text for Recipients field on the email form",
 	"campaignevents-event-details-email-recipients-link-text": "Button text for the Add recipients link on the email form",
 	"campaignevents-event-details-email-subject-label": "Label text for Subject field on the email form",
@@ -573,5 +572,6 @@
 	"campaignevents-cancel-page-nonlocal": "Notice message shown on [[Special:CancelEventRegistration]] when trying to cancel registration for an event that was enabled on another wiki, and thus should cancel registration there.\nParameters:\n*$1 - Link to [[Special:CancelEventRegistration]] on the other wiki.\n*$2 - The ID of the wiki where the event was created",
 	"campaignevents-email-error-notification-with-detail": "Error text displayed when emails are not sent successfully, with additional detail .\nParameters:\n* $1 - The reason why the email was not sent",
 	"campaignevents-eventslist-types-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen event types for the event.",
-	"campaignevents-eventslist-country-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen country for the event."
+	"campaignevents-eventslist-country-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen country for the event.",
+	"campaignevents-notification-registration-venue-not-available": "\"Message used on on the email notification sent to confirm that the user registered for an event when the event is in-person and there is no address. Parameters:\\n* $1 - The number of organizers, for PLURAL support.\","
 }

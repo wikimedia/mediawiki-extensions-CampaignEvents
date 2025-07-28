@@ -233,7 +233,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "Präsenzveranstaltung",
 	"campaignevents-eventpage-dialog-link-not-available": "Der Link wird von {{PLURAL:$1|dem Organisator|den Organisatoren}} zur Verfügung gestellt.",
 	"campaignevents-eventpage-dialog-link-register": "Registriere dich, um den Veranstaltungslink zu sehen.",
-	"campaignevents-eventpage-dialog-venue-not-available": "Die Adresse des Veranstaltungsortes wird {{PLURAL:$1|vom Organisator|von den Organisatoren}} zur Verfügung gestellt.",
+	"campaignevents-eventpage-dialog-venue-not-available": "Der Veranstaltungsort wurde {{PLURAL:$1|vom Veranstalter|von den Veranstaltern}} noch nicht bekannt gegeben.",
 	"campaignevents-eventpage-dialog-chat-label": "Veranstaltungs-Chat-Gruppe beitreten",
 	"campaignevents-eventpage-dialog-chat-not-available": "Für diese Veranstaltung ist keine Chat-Gruppe verfügbar.",
 	"campaignevents-eventpage-dialog-chat-register": "Registriere dich, um den Chat-Gruppen-Link anzuzeigen.",
@@ -303,8 +303,8 @@
 	"campaignevents-event-details-event": "Veranstaltungsdetails: $1",
 	"campaignevents-event-details-not-found": "Es gibt keine Veranstaltung mit dieser ID.",
 	"campaignevents-event-details-online-link-not-available": "Der Link wird von {{PLURAL:$1|dem Organisator|den Organisatoren}} zur Verfügung gestellt.",
-	"campaignevents-event-details-venue-not-available": "Die Adresse des Veranstaltungsortes wird {{PLURAL:$1|vom Organisator|von den Organisatoren}} zur Verfügung gestellt.",
 	"campaignevents-event-details-dates-label": "Startdatum und -zeit",
+	"campaignevents-event-details-venue-not-available": "Der Veranstaltungsort wurde {{PLURAL:$1|vom Veranstalter|von den Veranstaltern}} noch nicht bekannt gegeben.",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Teilnehmer}} entfernt",
 	"campaignevents-event-details-remove-all-participant-notification": "Alle Teilnehmer entfernt",
 	"campaignevents-unregister-participants-permission-denied": "Du bist nicht dazu berechtigt, Teilnehmer zu entfernen.",
@@ -557,5 +557,6 @@
 	"campaignevents-cancel-page-nonlocal": "Bitte '''[$1 storniere deine Veranstaltungsanmeldung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-email-error-notification-with-detail": "Die E-Mail konnte aus folgendem Grund nicht gesendet werden: $1",
 	"campaignevents-eventslist-types-label": "Veranstaltungstypen",
-	"campaignevents-eventslist-country-label": "Staat"
+	"campaignevents-eventslist-country-label": "Staat",
+	"campaignevents-notification-registration-venue-not-available": "Der Veranstaltungsort wurde {{PLURAL:$1|vom Veranstalter|von den Veranstaltern}} noch nicht bekannt gegeben."
 }
