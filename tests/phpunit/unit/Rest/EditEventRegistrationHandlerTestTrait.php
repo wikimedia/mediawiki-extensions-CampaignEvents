@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
@@ -24,7 +25,7 @@ trait EditEventRegistrationHandlerTestTrait {
 		'online_meeting' => true,
 		'inperson_meeting' => true,
 		'meeting_url' => 'https://meetingurl.example.org',
-		'meeting_country' => 'Country',
+		'meeting_country_code' => 'PT',
 		'meeting_address' => 'Address',
 		'chat_url' => 'https://chaturl.example.org',
 		'is_test_event' => false,
@@ -37,5 +38,11 @@ trait EditEventRegistrationHandlerTestTrait {
 		$editEventCmd = $this->createMock( EditEventCommand::class );
 		$editEventCmd->method( 'doEditIfAllowed' )->willReturn( StatusValue::newGood( 42 ) );
 		return $editEventCmd;
+	}
+
+	private function getCountryProvider( array $allowedCountries = [ 'PT' ] ): CountryProvider {
+		$countryProvider = $this->createMock( CountryProvider::class );
+		$countryProvider->method( 'getValidCountryCodes' )->willReturn( $allowedCountries );
+		return $countryProvider;
 	}
 }
