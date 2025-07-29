@@ -76,6 +76,7 @@
 	"campaignevents-edit-field-type-in-person": "Evento in presenza",
 	"campaignevents-edit-field-type-online-and-in-person": "Evento online e in presenza",
 	"campaignevents-edit-field-country": "Nazione",
+	"campaignevents-edit-field-country-placeholder": "Seleziona la nazione",
 	"campaignevents-edit-field-address": "Indirizzo",
 	"campaignevents-edit-field-chat-url": "Invito alla chat di gruppo",
 	"campaignevents-edit-field-event-is-test": "Si tratta di un evento reale o di un evento di prova?",
@@ -206,7 +207,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "Evento in presenza",
 	"campaignevents-eventpage-dialog-link-not-available": "Il link sarà fornito {{PLURAL:$1|dall'organizzatore|dagli organizzatori}}.",
 	"campaignevents-eventpage-dialog-link-register": "Registrati per vedere il link dell'evento.",
-	"campaignevents-eventpage-dialog-venue-not-available": "L'indirizzo della sede dell'evento sarà fornito {{PLURAL:$1|dall'organizzatore|dagli organizzatori}}.",
+	"campaignevents-eventpage-dialog-venue-not-available": "La posizione della sede dell'evento non è ancora stata condivisa {{PLURAL:$1|dall'organizzatore|dagli organizzatori}}.",
 	"campaignevents-eventpage-dialog-chat-label": "Unisciti alla chat di gruppo dell'evento",
 	"campaignevents-eventpage-dialog-chat-not-available": "Nessuna chat di gruppo è disponibile per questo evento.",
 	"campaignevents-eventpage-dialog-chat-register": "Registrati per vedere il link alla chat dell'evento.",
@@ -490,5 +491,6 @@
 	"campaignevents-edit-field-eventtypes-other-help": "Aggiungi fino a due tipi di evento. Se scegli \"Altro\", deve essere l'unica selezione.",
 	"campaignevents-allevents-label-filter-event-types": "Tipi di eventi",
 	"campaignevents-eventslist-types-label": "Tipi di eventi",
-	"campaignevents-eventslist-country-label": "Nazione"
+	"campaignevents-eventslist-country-label": "Nazione",
+	"campaignevents-notification-registration-venue-not-available": "La posizione della sede dell'evento non è ancora stata condivisa {{PLURAL:$1|dall'organizzatore|dagli organizzatori}}."
 }

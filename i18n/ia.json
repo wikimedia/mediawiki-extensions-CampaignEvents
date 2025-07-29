@@ -555,5 +555,7 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Typos de evento",
 	"campaignevents-cancel-page-nonlocal": "Per favor '''[$1 cancella tu inscription al evento sur $2],''' le wiki ubi le evento ha essite create.",
 	"campaignevents-email-error-notification-with-detail": "Le message de e-mail non poteva esser inviate, pro le sequente ration: $1",
-	"campaignevents-eventslist-types-label": "Typos de evento"
+	"campaignevents-eventslist-types-label": "Typos de evento",
+	"campaignevents-eventslist-country-label": "Pais",
+	"campaignevents-notification-registration-venue-not-available": "Le loco del evento non ha ancora essite annunciate per le organisator{{PLURAL:$1||es}}."
 }

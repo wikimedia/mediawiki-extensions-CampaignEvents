@@ -177,6 +177,8 @@
 	"campaignevents-allevents-label-events-per-page": "Evenementen per pagina",
 	"campaignevents-allevents-label-start-date": "Van",
 	"campaignevents-allevents-label-end-date": "Tot",
+	"campaignevents-allevents-label-country": "Land",
+	"campaignevents-allevents-country-all": "Alle landen",
 	"campaignevents-eventslist-participation-options-label": "Deelnamemogelijkheden",
 	"campaignevents-eventslist-organizer-label": "Organisatoren",
 	"campaignevents-eventslist-column-date": "Datum",

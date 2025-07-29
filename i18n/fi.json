@@ -172,6 +172,8 @@
 	"campaignevents-allevents-label-events-per-page": "Tapahtumia per sivu",
 	"campaignevents-allevents-label-start-date": "Aloituspäivä",
 	"campaignevents-allevents-label-end-date": "Päättymispäivä",
+	"campaignevents-allevents-label-country": "Maa",
+	"campaignevents-allevents-country-all": "Kaikki maat",
 	"campaignevents-eventslist-participation-options-label": "Osallistumisvaihtoehdot",
 	"campaignevents-eventslist-organizer-label": "Järjestäjät",
 	"campaignevents-eventslist-column-date": "Päivämäärä",
