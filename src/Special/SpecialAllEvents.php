@@ -294,7 +294,11 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'type' => 'select',
 				'label-message' => 'campaignevents-allevents-label-country',
 				'options' => $countryOptions,
-				'default' => $country
+				'default' => $country,
+				'disable-if' => [
+					'===',
+					'ParticipationOptions',
+					(string)EventRegistration::PARTICIPATION_OPTION_ONLINE ]
 			];
 		}
 		$formDescriptor['FilterWikis'] = [
