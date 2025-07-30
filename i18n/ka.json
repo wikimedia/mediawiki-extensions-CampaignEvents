@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mehman97"
+		]
+	},
+	"group-event-organizer": "ღონისძიების ორგანიზატორები",
+	"group-event-organizer-member": "{{GENDER:$1|ღონისძიების ორგანიზატორი}}"
+}
