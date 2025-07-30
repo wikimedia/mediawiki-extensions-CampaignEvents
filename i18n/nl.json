@@ -98,6 +98,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Evenement online en op locatie",
 	"campaignevents-edit-field-meeting-url": "URL voor bijeenkomst",
 	"campaignevents-edit-field-country": "Land",
+	"campaignevents-edit-field-country-placeholder": "Selecteer land",
 	"campaignevents-edit-field-address": "Adres",
 	"campaignevents-edit-field-chat-url": "Groepschat-uitnodiging",
 	"campaignevents-edit-field-chat-url-help": "Als u een online chatgroep hebt voor de deelnemers van dit evenement, kunt u hier de uitnodigingslink toevoegen. Deelnemers kunnen na registratie de uitnodigingslink bekijken.",

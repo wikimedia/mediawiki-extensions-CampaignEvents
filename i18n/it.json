@@ -152,6 +152,8 @@
 	"campaignevents-allevents-label-events-per-page": "Eventi per pagina",
 	"campaignevents-allevents-label-start-date": "Da",
 	"campaignevents-allevents-label-end-date": "A",
+	"campaignevents-allevents-label-country": "Nazione",
+	"campaignevents-allevents-country-all": "Tutti i paesi",
 	"campaignevents-eventslist-organizer-label": "Organizzatori",
 	"campaignevents-eventslist-column-date": "Data",
 	"campaignevents-eventslist-column-name": "Nome dell'evento",

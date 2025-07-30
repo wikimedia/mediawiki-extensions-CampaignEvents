@@ -93,6 +93,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Tapahtuma paikan päällä ja online",
 	"campaignevents-edit-field-meeting-url": "Kokouksen verkko-osoite",
 	"campaignevents-edit-field-country": "Maa",
+	"campaignevents-edit-field-country-placeholder": "Valitse maa",
 	"campaignevents-edit-field-address": "Osoite",
 	"campaignevents-edit-field-chat-url": "Ryhmäkeskustelukutsu",
 	"campaignevents-edit-field-chat-url-help": "Jos sinulla on online-keskusteluryhmä tämän tapahtuman osallistujille, voit lisätä ryhmän kutsulinkin tähän. Osallistujat näkevät kutsulinkin ilmoittautumisen jälkeen.",
