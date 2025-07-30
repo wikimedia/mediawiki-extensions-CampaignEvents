@@ -8,23 +8,26 @@ SELECT
   cea_full_address,
   cea_country
 FROM /*_*/ce_address;
+
 DROP TABLE /*_*/ce_address;
 
 
 CREATE TABLE /*_*/ce_address (
-    cea_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    cea_full_address BLOB NOT NULL, cea_country BLOB DEFAULT NULL,
-    cea_country_code BLOB DEFAULT NULL
-  );
+  cea_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  cea_full_address BLOB NOT NULL, cea_country BLOB DEFAULT NULL,
+  cea_country_code BLOB DEFAULT NULL
+);
+
 INSERT INTO /*_*/ce_address (
-    cea_id, cea_full_address, cea_country
-  )
+  cea_id, cea_full_address, cea_country
+)
 SELECT
   cea_id,
   cea_full_address,
   cea_country
 FROM
   /*_*/__temp__ce_address;
+
 DROP TABLE /*_*/__temp__ce_address;
 
 CREATE INDEX cea_country_code ON /*_*/ce_address (cea_country_code);

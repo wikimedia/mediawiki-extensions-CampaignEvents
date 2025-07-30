@@ -4,5 +4,6 @@
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
 ALTER TABLE campaign_events
   ADD event_types INT DEFAULT 0 NOT NULL;
+
 ALTER TABLE campaign_events
   DROP event_type;
