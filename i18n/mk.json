@@ -92,6 +92,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Семрежен и присуствен настан",
 	"campaignevents-edit-field-meeting-url": "URL за средбата",
 	"campaignevents-edit-field-country": "Земја",
+	"campaignevents-edit-field-country-placeholder": "Изберете земја",
 	"campaignevents-edit-field-address": "Адреса",
 	"campaignevents-edit-field-chat-url": "Покана за групен разговор",
 	"campaignevents-edit-field-chat-url-help": "Ако имате група за семрежни разговори наманета за учесниците на овој настан, тука ставете ја врската за покана. Учесниците ќе можат да ја видат врската со покана откако ќе се пријават за настанот.",
