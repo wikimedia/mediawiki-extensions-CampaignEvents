@@ -212,10 +212,11 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 					$this->eventFormatter->formatAddress(
 						$address,
 						$this->language->getCode(),
-						$this->msg( 'campaignevents-email-venue-not-available' )
-								->numParams( $organizersCount )
-						)
-					);
+						$this->msg( 'campaignevents-notification-registration-venue-not-available' )
+							->numParams( $organizersCount )
+							->text()
+					)
+				);
 			}
 		}
 
