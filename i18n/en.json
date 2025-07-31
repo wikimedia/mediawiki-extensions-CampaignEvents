@@ -352,6 +352,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Participation options",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Online event",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "In-person event",
+	"campaignevents-notification-registration-details-venue-not-available": "The venue location has not yet been shared by the {{PLURAL:$1|organizer|organizers}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Event organizers",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|more}}",
 	"campaignevents-notification-registration-event-page-link": "View event page",
@@ -568,6 +569,5 @@
 	"campaignevents-cancel-page-nonlocal": "Please '''[$1 cancel your event registration on $2]''', the wiki where the event was created.",
 	"campaignevents-email-error-notification-with-detail": "The email could not be sent, for the following reason: $1",
 	"campaignevents-eventslist-types-label": "Event types",
-	"campaignevents-eventslist-country-label": "Country",
-	"campaignevents-notification-registration-venue-not-available": "The venue location has not yet been shared by the {{PLURAL:$1|organizer|organizers}}."
+	"campaignevents-eventslist-country-label": "Country"
 }

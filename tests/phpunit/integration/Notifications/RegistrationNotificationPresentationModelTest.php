@@ -106,7 +106,7 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 		$model = $this->makeNotificationModel( $eventID );
 
 		$this->assertStringContainsString(
-			'campaignevents-notification-registration-venue-not-available',
+			'campaignevents-notification-registration-details-venue-not-available',
 			$model->getBodyMessage()->text()
 		);
 	}
