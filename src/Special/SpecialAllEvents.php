@@ -286,6 +286,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		if ( $readNew ) {
 			$languageCode = $this->getLanguage()->getCode();
 			$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
+			asort( $countryNames );
 			$countryOptions = [
 				$this->msg( 'campaignevents-allevents-country-all' )->text() => ''
 			];
