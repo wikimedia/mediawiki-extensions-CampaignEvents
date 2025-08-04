@@ -137,7 +137,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 
 	public function testExecuteWithCommit(): void {
 		$this->maintenance->loadWithArgv( [ '--commit' ] );
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_BOTH );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
 		$this->maintenance->execute();
 
 		$this->assertSelect(
@@ -288,7 +288,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 			'extensions/CampaignEvents/maintenance/countryExceptionMappings.csv',
 			'--commit'
 		] );
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_BOTH );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
 		$this->maintenance->execute();
 
 		$this->assertSelect(
