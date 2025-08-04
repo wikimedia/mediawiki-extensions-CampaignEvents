@@ -157,6 +157,8 @@
 	"campaignevents-allevents-label-events-per-page": "Evenementer pro Säit",
 	"campaignevents-allevents-label-start-date": "Vum",
 	"campaignevents-allevents-label-end-date": "Bis",
+	"campaignevents-allevents-label-country": "Land",
+	"campaignevents-allevents-country-all": "All d'Länner",
 	"campaignevents-eventslist-participation-options-label": "Participatiounsoptiounen",
 	"campaignevents-eventslist-organizer-label": "Organisateuren",
 	"campaignevents-eventslist-column-date": "Datum",
@@ -220,7 +222,7 @@
 	"campaignevents-eventpage-dialog-in-person-label": "Presenzevenement",
 	"campaignevents-eventpage-dialog-link-not-available": "De Link wäert {{PLURAL:$1|vum Organisateur|vun den Organisateuren}} zur Verfügung gestallt ginn.",
 	"campaignevents-eventpage-dialog-link-register": "Mellt Iech u fir den Link vum Evenement ze gesinn.",
-	"campaignevents-eventpage-dialog-venue-not-available": "D'Plaz vun der Lokalitéit wäert {{PLURAL:$1|vum Organisateur|vun den Organisateuren}} zur Verfügung gestallt ginn.",
+	"campaignevents-eventpage-dialog-venue-not-available": "D'Plaz vum Evenement gouf nach net {{PLURAL:$1|vum Organisateur|vun den Organisateure}} gedeelt.",
 	"campaignevents-eventpage-dialog-chat-label": "Der Chatgrupp vum Evenement bäitrieden",
 	"campaignevents-eventpage-dialog-chat-not-available": "Et gëtt keng Chatgrupp fir dëst Evenement.",
 	"campaignevents-eventpage-dialog-chat-register": "Mellt Iech u fir den Chatgruppelink ze gesinn.",
@@ -291,7 +293,7 @@
 	"campaignevents-event-details-not-found": "Et gëtt keen Evenement mat dëser ID.",
 	"campaignevents-event-details-online-link-not-available": "De Link wäert {{PLURAL:$1|vum Organisateur|vun den Organisateuren}} zur Verfügung gestallt ginn.",
 	"campaignevents-event-details-dates-label": "Start- an Endzäit",
-	"campaignevents-event-details-venue-not-available": "D'Plaz vun der Lokalitéit wäert {{PLURAL:$1|vum Organisateur|vun den Organisateuren}} zur Verfügung gestallt ginn.",
+	"campaignevents-event-details-venue-not-available": "D'Plaz vum Evenement gouf nach net {{PLURAL:$1|vum Organisateur|vun den Organisateure}} gedeelt.",
 	"campaignevents-event-details-remove-participant-notification": "{{PLURAL:$1|Participant|Participanten}} ewechgeholl",
 	"campaignevents-event-details-remove-all-participant-notification": "All Participanten ewechgeholl",
 	"campaignevents-unregister-participants-permission-denied": "Dir sidd net berechtegt Participanten ewechzehuelen",
@@ -539,5 +541,6 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Annuléiert wgl. Är Evenementsumeldung op $2]''', der Wiki, op där d'Evenement ugeluecht gouf.",
 	"campaignevents-email-error-notification-with-detail": "D'E-Mail konnt aus dem follgende Grond net geschéckt ginn: $1",
 	"campaignevents-eventslist-types-label": "Evenementstyppen",
-	"campaignevents-eventslist-country-label": "Land"
+	"campaignevents-eventslist-country-label": "Land",
+	"campaignevents-notification-registration-venue-not-available": "D'Plaz vum Evenement gouf nach net {{PLURAL:$1|vum Organisateur|vun den Organisateure}} gedeelt."
 }
