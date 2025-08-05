@@ -1,9 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"JeffreyKim"
+			"JeffreyKim",
+			"Ktchankt"
 		]
 	},
+	"nstab-event": "活動",
+	"specialpages-group-campaignevents": "活動",
+	"campaignevents-allevents-tab-events-heading": "活動",
 	"campaignevents-eventpage-dialog-venue-not-available": "場地位置仲未有{{PLURAL:$1|organizer|主辦單位}}嘅分享。",
 	"campaignevents-event-details-venue-not-available": "場地位置仲未由{{PLURAL:$1|organizer|主辦單位}}嘅分享。",
 	"campaignevents-notification-registration-venue-not-available": "場地位置仲未有{{PLURAL:$1|organizer|主辦單位}}嘅分享。"

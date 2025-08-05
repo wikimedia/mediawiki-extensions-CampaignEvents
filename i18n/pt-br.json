@@ -95,6 +95,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Evento online e presencial",
 	"campaignevents-edit-field-meeting-url": "URL da reunião",
 	"campaignevents-edit-field-country": "País",
+	"campaignevents-edit-field-country-placeholder": "Escolha o país",
 	"campaignevents-edit-field-address": "Endereço",
 	"campaignevents-edit-field-chat-url": "Convite para bate-papo em grupo",
 	"campaignevents-edit-field-chat-url-help": "Se você tiver um grupo de bate-papo online para os participantes deste evento, poderá adicionar o link do convite aqui. Os participantes poderão visualizar o link do convite após o registro.",
@@ -513,5 +514,6 @@
 	"campaignevents-allevents-label-filter-event-types": "Tipos de eventos",
 	"campaignevents-allevents-placeholder-add-event-types": "Adicionar tipos de eventos...",
 	"campaignevents-eventpage-dialog-event-types-label": "Tipos de eventos",
-	"campaignevents-eventslist-types-label": "Tipos de eventos"
+	"campaignevents-eventslist-types-label": "Tipos de eventos",
+	"campaignevents-eventslist-country-label": "País"
 }
