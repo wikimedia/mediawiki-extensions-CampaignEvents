@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Nokeoo",
-			"Pavel1513"
+			"Pavel1513",
+			"Tomasdd"
 		]
 	},
 	"campaignevents-desc": "Suteikia funkcijų kampanijos organizatoriams ir dalyviams.",
@@ -166,7 +167,7 @@
 	"campaignevents-eventpage-dialog-organizers-view-all": "Žiūrėti visus organizatorius",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|dalyvis|dalyviai}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|dalyvis|dalyviai}} užsiregistravo privačiai",
-	"campaignevents-eventpage-dialog-participants-view-list": "Žiūrėti pilną sąrašą",
+	"campaignevents-eventpage-dialog-participants-view-list": "Rodyti visus",
 	"campaignevents-eventpage-dialog-dates-label": "Pradžios ir pabaigos laikas",
 	"campaignevents-eventpage-dialog-dates": "$1 iki $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Laiko juosta:</strong> $1",
@@ -207,7 +208,7 @@
 	"campaignevents-event-details-organizers-header": "Orgainzatoriai",
 	"campaignevents-event-details-register-prompt": "Norėdami pamatyti šią informaciją, turite užsiregistruoti",
 	"campaignevents-event-details-view-event-page": "Žiūrėti įvykio puslapį",
-	"campaignevents-event-details-select-all": "Pasirinkti viską",
+	"campaignevents-event-details-select-all": "Pasirinkti visus dalyvius",
 	"campaignevents-event-details-participants-checkboxes-selected": "{{PLURAL:$1|pasirinktas|pasirinkti}} $1 iš $2",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Pašalinti {{PLURAL:$1|dalyvį|dalyvius}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Ar tikrai norite pašalinti {{PLURAL:$1|pasirinktą dalyvį|pasirinktus dalyvius}}?",
