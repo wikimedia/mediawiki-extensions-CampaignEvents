@@ -76,8 +76,8 @@
 			"merge_strategy": "provide_default"
 		},
 		"CampaignEventsCountrySchemaMigrationStage": {
-			"description": "Flag to control the migration to the new country schema T397476, 3 is MIGRATION_OLD see https://github.com/wikimedia/mediawiki/blob/555fbd0f752bfe8d36de1de97b024e42bc03c84b/includes/Defines.php#L288-L350",
-			"value": 3
+			"description": "Flag to control the migration to the new country schema (T397476). Value must be one of the MIGRATION_* constants (https://github.com/wikimedia/mediawiki/blob/555fbd0f752bfe8d36de1de97b024e42bc03c84b/includes/Defines.php#L288-L350).",
+			"value": 268436227
 		}
 	},
 	"DatabaseVirtualDomains": [

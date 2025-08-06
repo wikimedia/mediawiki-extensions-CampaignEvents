@@ -39,8 +39,8 @@ class EventPage extends Page {
 		return $( '.ext-campaignevents-eventpage-participant-notice' );
 	}
 
-	get eventType() {
-		return $( '.ext-campaignevents-textwithicon-widget-content' );
+	get headerParticipationOptions() {
+		return $( '.ext-campaignevents-textwithicon-widget-icon-map-pin ~ .ext-campaignevents-textwithicon-widget-content' );
 	}
 
 	get eventOrganizers() {

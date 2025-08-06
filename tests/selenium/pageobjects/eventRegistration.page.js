@@ -60,6 +60,14 @@ class EventRegistrationPage extends Page {
 		return $( '.ext-campaignevents-edit-eventtypes-input .oo-ui-tagMultiselectWidget-content input' );
 	}
 
+	get countrySelector() {
+		return $( '#mw-input-wpEventMeetingCountryCode' );
+	}
+
+	get hiddenCountrySelector() {
+		return $( 'select[name="wpEventMeetingCountryCode"]' );
+	}
+
 	get body() {
 		return $( 'body' );
 	}
@@ -72,14 +80,26 @@ class EventRegistrationPage extends Page {
 		await this.body.click();
 	}
 
-	async selectParticipationOptions( participationOptions ) {
+	async selectCountry( countryCode ) {
+		await this.countrySelector.click();
+		const countryText = await this.hiddenCountrySelector.$( `option[value="${ countryCode }` )
+			.getHTML( { includeSelectorTag: false } );
+		const menuItem = await $( `.oo-ui-menuOptionWidget=${ countryText }` );
+		await this.chooseMenuOption( menuItem );
+	}
+
+	async selectParticipationOptions( participationOptions, countryCode ) {
 		if ( participationOptions === 'online' ) {
 			await this.participationOptionsSelector.$( 'label:nth-of-type(1)' ).click();
-		} else if ( participationOptions === 'inperson' ) {
-			await this.participationOptionsSelector.$( 'label:nth-of-type(2)' ).click();
-		} else if ( participationOptions === 'hybrid' ) {
-			await this.participationOptionsSelector.$( 'label:nth-of-type(3)' ).click();
+			return;
 		}
+
+		if ( !countryCode ) {
+			throw new Error( `Country code is required for participation option ${ participationOptions }` );
+		}
+		const optionIdx = participationOptions === 'inperson' ? 2 : 3;
+		await this.participationOptionsSelector.$( `label:nth-of-type(${ optionIdx })` ).click();
+		await this.selectCountry( countryCode );
 	}
 
 	/**
@@ -180,6 +200,7 @@ class EventRegistrationPage extends Page {
 	 * @param {Object} start the day and year to start the event, e.g. {day: 15, year: 2023}
 	 * @param {Object} end the day and year to end the event, e.g. {day: 15, year: 2024}
 	 * @param {string} participationOptions choose from 'inperson', 'hybrid', or 'online'
+	 * @param {string} countryCode
 	 * @param {string} organizer Username of a user to add as organizer
 	 */
 	async editEvent( {
@@ -188,6 +209,7 @@ class EventRegistrationPage extends Page {
 		start,
 		end,
 		participationOptions,
+		countryCode,
 		organizer
 	} ) {
 		await super.openTitle( `Special:EditEventRegistration/${ id }` );
@@ -203,7 +225,7 @@ class EventRegistrationPage extends Page {
 			await this.setEndDate( end );
 		}
 		if ( participationOptions ) {
-			await this.selectParticipationOptions( participationOptions );
+			await this.selectParticipationOptions( participationOptions, countryCode );
 		}
 		if ( organizer ) {
 			await this.addOrganizer( organizer );

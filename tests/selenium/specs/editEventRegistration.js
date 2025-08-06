@@ -37,19 +37,21 @@ describe( 'Edit Event Registration', () => {
 	it( 'can allow organizer to change the event to be in person', async () => {
 		await EventRegistrationPage.editEvent( {
 			id,
-			participationOptions: 'inperson'
+			participationOptions: 'inperson',
+			countryCode: 'BS'
 		} );
 
-		await expect( await EventPage.eventType ).toHaveText( 'In-person event' );
+		await expect( await EventPage.headerParticipationOptions ).toHaveText( 'Bahamas' );
 	} );
 
 	it( 'can allow organizer to change the event to be online and in-person', async () => {
 		await EventRegistrationPage.editEvent( {
 			id,
-			participationOptions: 'hybrid'
+			participationOptions: 'hybrid',
+			countryCode: 'BS'
 		} );
 
-		await expect( await EventPage.eventType ).toHaveText( 'Online and in-person event' );
+		await expect( await EventPage.headerParticipationOptions ).toHaveText( 'Online and in-person event' );
 	} );
 
 	it( 'can allow organizer to add an additional organizer', async () => {
