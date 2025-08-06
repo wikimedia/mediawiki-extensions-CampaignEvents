@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"JeffreyKim"
+			"JeffreyKim",
+			"Ktchankt"
 		]
-	}
+	},
+	"nstab-event": "活動",
+	"specialpages-group-campaignevents": "活動",
+	"campaignevents-allevents-tab-events-heading": "活動"
 }

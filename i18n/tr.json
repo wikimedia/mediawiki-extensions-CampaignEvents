@@ -80,6 +80,7 @@
 	"campaignevents-edit-form-submit": "Kaydı düzenle",
 	"campaignevents-edit-form-notice": "Kayıt sırasında katılımcılardan sadece kullanıcı adları alınacaktır. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Daha fazla bilgi edinin].",
 	"campaignevents-edit-invalid-id": "Geçerli bir etkinlik kimliği sağlayın.",
+	"campaignevents-edit-no-event-id": "Bu sayfada geçerli bir etkinlik kimliği yok. Geçerli bir etkinlik kimliği girin veya [[Special:AllEvents|İş birliği listesindeki]] tüm etkinlikleri görüntüleyin.",
 	"campaignevents-edit-event-notfound": "Bu kimliğe sahip bir etkinlik yok.",
 	"campaignevents-edit-page-nonlocal": "Lütfen etkinleştirildiği viki'de [$1 bu kaydı düzenleyin]: $2.",
 	"campaignevents-edit-error-deleted": "Bu etkinlik kaydı silindi.",
@@ -93,6 +94,7 @@
 	"campaignevents-edit-not-allowed-registration": "Bu etkinlik kaydını düzenleme izniniz yok.",
 	"campaignevents-enable-registration-not-allowed-page": "Belirtilen etkinlik sayfası için etkinlik kaydını etkinleştirmenize izin verilmiyor.",
 	"registerforevent": "Bir etkinlik için kayıt olun",
+	"campaignevents-register-error-no-event-id": "Bu sayfada geçerli bir etkinlik kimliği yok. Geçerli bir etkinlik kimliği girin veya İş birliği listesindeki tüm etkinlikleri görüntüleyin.",
 	"campaignevents-register-error-event-not-found": "Bu kimliğe sahip bir etkinlik yok.",
 	"campaignevents-register-success": "Bu etkinliğe kayıt oldunuz.",
 	"campaignevents-register-success-edit": "Kayıt bilgileriniz güncellendi.",
@@ -362,5 +364,6 @@
 	"campaignevents-details-stats-no-response": "Yanıt yok",
 	"generateinvitationlist": "Davetiye listesini oluştur",
 	"myinvitationlists": "Davet listeleriniz",
-	"invitationlist": "Davetiye listesi"
+	"invitationlist": "Davetiye listesi",
+	"campaignevents-register-event-id": "Etkinlik Kimliği"
 }

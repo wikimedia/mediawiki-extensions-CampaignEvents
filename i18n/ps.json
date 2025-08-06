@@ -40,7 +40,7 @@
 	"campaignevents-error-invalid-address": "یو باوري پته دننه کړئ.",
 	"campaignevents-error-invalid-question-names": "لاندې پوښتنې ونه پېژندل شوې: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "په دې نوم‌تشيال کې د پېښې نوم‌ليکنې اجازه نشته.",
-	"enableeventregistration": "پېښې نوم‌ليکنه چارنوال",
+	"enableeventregistration": "پېښې نوم‌ليکنه چارنول",
 	"editeventregistration": "پېښې نوم‌ليکنه سمول",
 	"campaignevents-edit-form-details-label": "پېښې سپيناوی",
 	"campaignevents-edit-form-details-subtitle": "د هغه پېښې په اړه ټوليز مالومات چمتو کوي چې تاسو يې مهاروئ",

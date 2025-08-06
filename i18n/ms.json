@@ -509,6 +509,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Tambahkan projek wiki...",
 	"campaignevents-allevents-label-filter-topics": "Topik",
 	"campaignevents-allevents-placeholder-topics": "Tambah topik...",
+	"campaignevents-allevents-label-include-all-wikis": "Sertakan acara terbuka kepada semua wiki",
 	"campaignevents-eventslist-all-wikis": "Acara ini terbuka kepada semua wiki.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|lagi}}",
 	"campaignevents-eventpage-all-wikis": "Acara ini terbuka kepada semua wiki.",
@@ -522,5 +523,9 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Acara akan datang",
 	"campaignevents-allevents-label-upcoming-events-description": "Acara akan datang: Acara yang bermula dalam tarikh yang dipilih",
 	"campaignevents-allevents-label-ongoing-events-title": "Acara berlangsung",
-	"campaignevents-allevents-label-ongoing-events-description": "Acara berlangsung: Acara yang bermula sebelum tetapi berterusan dalam tarikh yang dipilih"
+	"campaignevents-allevents-label-ongoing-events-description": "Acara berlangsung: Acara yang bermula sebelum tetapi berterusan dalam tarikh yang dipilih",
+	"campaignevents-allevents-transclusion-more-link": "Terokai lebih banyak acara dan komuniti",
+	"communityconfiguration-campaignevents-title": "CampaignEvents",
+	"communityconfiguration-campaignevents-description": "Pilihan konfigurasi untuk sambungan CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Ruang nama acara yang sah"
 }
