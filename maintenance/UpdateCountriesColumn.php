@@ -8,7 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventStore;
-use MediaWiki\Maintenance\Maintenance;
+use MediaWiki\Maintenance\LoggedUpdateMaintenance;
 use MediaWiki\MediaWikiServices;
 use Wikimedia\Rdbms\IDatabase;
 
@@ -18,7 +18,7 @@ use Wikimedia\Rdbms\IDatabase;
  *
  */
 
-class UpdateCountriesColumn extends Maintenance {
+class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 	private ?IDatabase $dbw;
 	private ?IDatabase $dbr;
 	/**
@@ -40,6 +40,8 @@ class UpdateCountriesColumn extends Maintenance {
 	 */
 	private array $purgedValues = [];
 
+	private bool $countdownShown = false;
+
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription(
@@ -54,21 +56,24 @@ class UpdateCountriesColumn extends Maintenance {
 			true
 		);
 		$this->addOption(
-			'commit',
-			'Boolean value, if false will output results without committing to database, default false',
+			'dry-run',
+			'Boolean value, if true will output results without committing to database, default false',
 		);
+		$this->addOption( 'nowarn', 'Suppresses the countdown warning' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function execute() {
+	public function doDBUpdates(): bool {
+		$this->output( "Updating event country schema...\n" );
+
 		$migrationStage = MediaWikiServices::getInstance()
 			->getMainConfig()
 			->get( 'CampaignEventsCountrySchemaMigrationStage' );
 
-		if ( !( $migrationStage & SCHEMA_COMPAT_WRITE_NEW ) && $this->getOption( 'commit' ) ) {
-			$this->output( "Migration stage is not WRITE_NEW!" );
+		if ( !( $migrationStage & SCHEMA_COMPAT_WRITE_NEW ) && !$this->getOption( 'dry-run' ) ) {
+			$this->output( "Cannot update countries because migration stage does not include WRITE_NEW!\n" );
 			return false;
 		}
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
@@ -91,6 +96,7 @@ class UpdateCountriesColumn extends Maintenance {
 		$this->handleEventsWithNoAddress();
 
 		$unmatchedRows = [];
+		$eventsToOnline = [];
 		do {
 			$batchEnd = $mainBatchStart + $batchSize;
 			$batchMatchedRows = [];
@@ -126,17 +132,18 @@ class UpdateCountriesColumn extends Maintenance {
 				}
 				$batchAddresses[$dbId] = $dbRow->cea_full_address;
 			}
+
+			$batchEventsToOnline = $this->maybeWriteResults( $batchMatchedRows, $batchUnmatchedRows, $batchAddresses );
+
 			$mainBatchStart += $batchSize;
-			if ( $this->getOption( 'commit' ) ) {
-				$this->writeResults( $batchMatchedRows, $batchUnmatchedRows, $batchAddresses );
-			}
+			$eventsToOnline = array_merge( $eventsToOnline, $batchEventsToOnline );
 			$unmatchedRows += $batchUnmatchedRows;
 			$matchedRows += $batchMatchedRows;
 		} while ( $batchEnd < $this->maxRowID );
 
-		$this->showOutput( $matchedRows, $unmatchedRows );
+		$this->showOutput( $matchedRows, $unmatchedRows, $eventsToOnline );
 
-		return true;
+		return !$this->hasOption( 'dry-run' );
 	}
 
 	/**
@@ -194,36 +201,42 @@ class UpdateCountriesColumn extends Maintenance {
 	/**
 	 * @param array<string, mixed> $matchedRows
 	 * @param array<string, string> $unmatchedRows
+	 * @param int[] $eventsToOnline
 	 */
-	public function showOutput( array $matchedRows, array $unmatchedRows ): void {
+	public function showOutput( array $matchedRows, array $unmatchedRows, array $eventsToOnline ): void {
 		$matchedCount = count( $matchedRows );
 		$unmatchedCount = count( $unmatchedRows );
 		$purgedCount = count( $this->purgedValues );
-		$this->output( "========= {$purgedCount} Purged rows =========" . PHP_EOL );
+		$this->output( "========= {$purgedCount} purged address rows (unused) =========" . PHP_EOL );
 		foreach ( $this->purgedValues as $purgedId => $purgedCountry ) {
 			$this->output( "{$purgedId} - \"{$purgedCountry}\"" . PHP_EOL );
 		}
-		$this->output( "========= {$matchedCount} Matches ========" . PHP_EOL );
+		$this->output( "========= {$matchedCount} address rows updated ========" . PHP_EOL );
 		foreach ( $matchedRows as $dbID => [ $dbCountry, $dbConversion, $matchedName ] ) {
-			$this->output( "{$dbID} - \"{$dbCountry}\" matched {$dbConversion} - ({$matchedName})" . PHP_EOL );
+			$this->output( "{$dbID} - \"{$dbCountry}\" matched {$dbConversion} ({$matchedName})" . PHP_EOL );
 		}
 
-		$this->output( "========= {$unmatchedCount} Unmatched ========" . PHP_EOL );
+		$this->output( "========= {$unmatchedCount} unmatched address rows ========" . PHP_EOL );
 		foreach ( $unmatchedRows as $dbId => $dbCountry ) {
 			$this->output( "{$dbId} - \"{$dbCountry}\"" . PHP_EOL );
 		}
+
+		$onlineCount = count( $eventsToOnline );
+		$this->output( "========= $onlineCount events without country made online =========" );
+		$this->printEventList( $eventsToOnline );
 	}
 
 	/**
 	 * @param array<string, mixed> $matchedRows
 	 * @param array<string, string> $unmatchedRows
 	 * @param array<string, string> $addresses
+	 * @return int[] IDs of events that have been made online
 	 */
-	private function writeResults(
+	private function maybeWriteResults(
 		array $matchedRows,
 		array $unmatchedRows,
 		array $addresses
-	): void {
+	): array {
 		$rowsToUpdate = [];
 
 		foreach ( $matchedRows as $dbID => [ $dbCountry, $countryCode, $matchedName ] ) {
@@ -238,7 +251,7 @@ class UpdateCountriesColumn extends Maintenance {
 			];
 		}
 
-		if ( $rowsToUpdate ) {
+		if ( $rowsToUpdate && $this->checkShouldMakeWrites() ) {
 			$this->dbw->newInsertQueryBuilder()
 				->insertInto( 'ce_address' )
 				->rows( $rowsToUpdate )
@@ -254,15 +267,18 @@ class UpdateCountriesColumn extends Maintenance {
 			$this->waitForReplication();
 		}
 
-		if ( $unmatchedRows ) {
-			// This is guaranteed to be non-empty because we've already purged unused addresses.
-			$eventsToOnline = $this->dbw->newSelectQueryBuilder()
-				->select( 'ceea_event' )
-				->from( 'ce_event_address' )
-				->where( [ 'ceea_address' => array_keys( $unmatchedRows ) ] )
-				->caller( __METHOD__ )
-				->fetchFieldValues();
+		if ( !$unmatchedRows ) {
+			return [];
+		}
+		// This is guaranteed to be non-empty because we've already purged unused addresses.
+		$eventsToOnline = $this->dbw->newSelectQueryBuilder()
+			->select( 'ceea_event' )
+			->from( 'ce_event_address' )
+			->where( [ 'ceea_address' => array_keys( $unmatchedRows ) ] )
+			->caller( __METHOD__ )
+			->fetchFieldValues();
 
+		if ( $this->checkShouldMakeWrites() ) {
 			$this->dbw->newUpdateQueryBuilder()
 				->update( 'campaign_events' )
 				->set( [
@@ -287,6 +303,8 @@ class UpdateCountriesColumn extends Maintenance {
 				->execute();
 			$this->waitForReplication();
 		}
+
+		return $eventsToOnline;
 	}
 
 	public function doPurge(): void {
@@ -310,7 +328,7 @@ class UpdateCountriesColumn extends Maintenance {
 				$this->purgedValues[ $purgeRow->cea_id ] = $purgeRow->cea_country;
 			}
 			$this->idsToPurge = array_merge( $this->idsToPurge, $idsToPurge );
-			if ( $idsToPurge && $this->getOption( 'commit' ) ) {
+			if ( $idsToPurge && $this->checkShouldMakeWrites() ) {
 				$this->dbw->newDeleteQueryBuilder()
 					->deleteFrom( 'ce_address' )
 					->where( [ 'cea_id' => $idsToPurge ] )
@@ -330,19 +348,25 @@ class UpdateCountriesColumn extends Maintenance {
 	}
 
 	public function maybeLoadExceptions(): void {
-		if ( $this->hasOption( 'exceptions' ) ) {
-			$filename = $this->getOption( 'exceptions' );
-			$handle = fopen( $filename, 'r' );
-			if ( $handle !== false ) {
-				// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-				while ( ( $data = fgetcsv( $handle, 1000 ) ) !== false ) {
-					if ( count( $data ) === 2 && is_string( $data[0] ) && is_string( $data[1] ) ) {
-						$this->countryListExceptions[$data[1]] = $data[0];
-					}
-				}
-				fclose( $handle );
+		$filename = $this->hasOption( 'exceptions' )
+			? $this->getOption( 'exceptions' )
+			: __DIR__ . '/countryExceptionMappings.csv';
+
+		if ( !$filename ) {
+			return;
+		}
+
+		$handle = fopen( $filename, 'r' );
+		if ( $handle === false ) {
+			$this->fatalError( 'Failed to open exception file: ' . $filename );
+		}
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+		while ( ( $data = fgetcsv( $handle, 1000 ) ) !== false ) {
+			if ( count( $data ) === 2 && is_string( $data[0] ) && is_string( $data[1] ) ) {
+				$this->countryListExceptions[$data[1]] = $data[0];
 			}
 		}
+		fclose( $handle );
 	}
 
 	public function getAddressWithoutCountry( string $fullAddress ): string {
@@ -356,17 +380,17 @@ class UpdateCountriesColumn extends Maintenance {
 		$batchSize = $this->getBatchSize();
 		$batchStart = 0;
 
-			$maxRows = $this->dbw->newSelectQueryBuilder()
-				->select( 'MAX(event_id)' )
-				->from( 'campaign_events' )
-				->leftJoin( 'ce_event_address', null, 'ceea_event = event_id' )
-				->where( [
-					'event_meeting_type != ' .
-					EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE],
-					'ceea_event IS NULL',
-				] )
-				->caller( __METHOD__ )
-				->fetchField();
+		$maxRows = $this->dbw->newSelectQueryBuilder()
+			->select( 'MAX(event_id)' )
+			->from( 'campaign_events' )
+			->leftJoin( 'ce_event_address', null, 'ceea_event = event_id' )
+			->where( [
+				'event_meeting_type != ' .
+				EventStore::PARTICIPATION_OPTION_MAP[EventRegistration::PARTICIPATION_OPTION_ONLINE],
+				'ceea_event IS NULL',
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
 		$eventsWithNoAddress = [];
 		do {
 			$batchEnd = $batchStart + $batchSize;
@@ -389,7 +413,7 @@ class UpdateCountriesColumn extends Maintenance {
 			$eventsWithNoAddress = array_merge( $eventsWithNoAddress, $batchEventsWithNoAddress );
 			$batchStart = $batchEnd;
 
-			if ( $batchEventsWithNoAddress && $this->getOption( 'commit' ) ) {
+			if ( $batchEventsWithNoAddress && $this->checkShouldMakeWrites() ) {
 				$this->dbw->newUpdateQueryBuilder()
 					->update( 'campaign_events' )
 					->set( [ 'event_meeting_type' =>
@@ -401,8 +425,56 @@ class UpdateCountriesColumn extends Maintenance {
 			}
 		} while ( $batchEnd < $maxRows );
 		$count = count( $eventsWithNoAddress );
-		$this->output( "========= {$count} Events made online =========" );
-		$this->output( "\n" . implode( "\n", $eventsWithNoAddress ) . "\n" );
+		$this->output( "========= {$count} events without address made online =========" );
+		$this->printEventList( $eventsWithNoAddress );
+	}
+
+	/**
+	 * Checks whether we should make writes, and display a warning and countdown if needed. This is done here, as
+	 * opposed as the beginning of the script, to avoid the annoying countdown when there's nothing to update (e.g.,
+	 * if the wiki was just created like in CI, or if there are no events, or if the script was already run from a
+	 * different wiki and is not in the updatelog table for this wiki).
+	 */
+	private function checkShouldMakeWrites(): bool {
+		if ( $this->getOption( 'dry-run' ) ) {
+			return false;
+		}
+		if ( !$this->countdownShown && !$this->getOption( 'nowarn' ) ) {
+			$this->output(
+				'The UpdateCountriesColumn script is about to update stored countries for all events. This is ' .
+				'potentially DESTRUCTIVE, because countries that can\'t be mapped to a valid country code will be ' .
+				'deleted, and the respective events will be changed to online. If you wish to take a closer look, ' .
+				'abort with control-c in the next 15 seconds and run the script manually. (skip this countdown ' .
+				'with --nowarn) ... '
+			);
+			$this->countDown( 15 );
+			$this->countdownShown = true;
+		}
+		return true;
+	}
+
+	/**
+	 * @param int[] $eventIDs
+	 */
+	private function printEventList( array $eventIDs ): void {
+		if ( !$eventIDs ) {
+			$this->output( "\n" );
+			return;
+		}
+		$eventIDRows = array_map(
+			/** @param int[] $curEvents */
+			static fn ( array $curEvents ): string => implode( ', ', $curEvents ) . ',',
+			array_chunk( $eventIDs, 15 )
+		);
+		$this->output( "\n" . implode( "\n", $eventIDRows ) . "\n" );
+	}
+
+	/**
+	 * @inheritDoc
+	 * @codeCoverageIgnore
+	 */
+	protected function getUpdateKey(): string {
+		return __CLASS__;
 	}
 }
 

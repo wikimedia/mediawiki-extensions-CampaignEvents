@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
+use MediaWiki\Extension\CampaignEvents\Maintenance\UpdateCountriesColumn;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Installer\DatabaseUpdater;
 use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
@@ -89,5 +90,7 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-add-cea_country_code.sql",
 			true
 		] );
+
+		$updater->addPostDatabaseUpdateMaintenance( UpdateCountriesColumn::class );
 	}
 }

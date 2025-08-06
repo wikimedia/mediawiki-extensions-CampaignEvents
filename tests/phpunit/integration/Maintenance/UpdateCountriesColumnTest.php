@@ -136,7 +136,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 	}
 
 	public function testExecuteWithCommit(): void {
-		$this->maintenance->loadWithArgv( [ '--commit' ] );
+		$this->maintenance->loadWithArgv( [ '--nowarn', '--exceptions', '' ] );
 		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
 		$this->maintenance->execute();
 
@@ -235,6 +235,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 	}
 
 	public function testExecuteDryRun(): void {
+		$this->maintenance->loadWithArgv( [ '--dry-run', '--exceptions', '' ] );
 		$this->maintenance->execute();
 
 		$this->assertSelect(
@@ -258,36 +259,38 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 		$output = $this->getActualOutput();
 
 		$this->assertStringContainsString(
-			'1 Purged rows',
+			'= 1 purged address rows',
 			$output,
 			'Should display purged rows section in dry run'
 		);
 
 		$this->assertStringContainsString(
-			'11 Events made online',
+			'= 11 events without address made online',
 			$output,
 			'Should display Events to online section in dry run'
 		);
 
 		$this->assertStringContainsString(
-			'6 Matches',
+			'= 6 address rows updated',
 			$output,
 			'Should display correct number of matched country conversions'
 		);
 
 		$this->assertStringContainsString(
-			'2 Unmatched',
+			'= 2 unmatched address rows',
 			$output,
 			'Should display correct number of unmatched rows'
+		);
+
+		$this->assertStringContainsString(
+			'= 2 events without country made online',
+			$output,
+			'Should display correct number of events made online'
 		);
 	}
 
 	public function testExecuteWithExceptions(): void {
-		$this->maintenance->loadWithArgv( [
-			'--exceptions',
-			'extensions/CampaignEvents/maintenance/countryExceptionMappings.csv',
-			'--commit'
-		] );
+		$this->maintenance->loadWithArgv( [ '--nowarn' ] );
 		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
 		$this->maintenance->execute();
 
