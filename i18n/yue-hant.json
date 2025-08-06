@@ -10,5 +10,10 @@
 	"campaignevents-allevents-tab-events-heading": "活動",
 	"campaignevents-eventpage-dialog-venue-not-available": "場地位置仲未有{{PLURAL:$1|organizer|主辦單位}}嘅分享。",
 	"campaignevents-event-details-venue-not-available": "場地位置仲未由{{PLURAL:$1|organizer|主辦單位}}嘅分享。",
+	"echo-category-title-campaign-events-notification-registration": "活動登記",
+	"echo-pref-tooltip-campaign-events-notification-registration": "我登記咗個用咗活動登記架撐嘅活動，話我知。",
+	"myinvitationlists": "你嘅邀請清單",
+	"campaignevents-invitationlist-preference": "摻埋我落[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請清單]。",
+	"prefs-campaignevents-invitations": "邀請清單",
 	"campaignevents-notification-registration-venue-not-available": "場地位置仲未有{{PLURAL:$1|organizer|主辦單位}}嘅分享。"
 }

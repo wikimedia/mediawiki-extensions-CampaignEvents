@@ -4,6 +4,7 @@
 			"Caden99",
 			"Hide on Rosé",
 			"Minh Nguyen",
+			"Nvdtn19",
 			"Pisceskaze",
 			"SongNgu.xyz"
 		]
@@ -71,5 +72,9 @@
 	"campaignevents-edit-field-organizers-placeholder": "Thêm tên người dùng",
 	"campaignevents-edit-field-organizers-creator-title": "Đây là người tạo ra sự kiện, những người tổ chức khác không thể xóa thành viên này.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Thành viên}} này không được phép tổ chức sự kiện.",
-	"campaignevents-eventpage-register-dialog-clear": "Làm lại"
+	"campaignevents-eventpage-register-dialog-clear": "Làm lại",
+	"echo-category-title-campaign-events-notification-registration": "Đăng ký sự kiện",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Thông báo cho tôi khi tôi đăng ký sự kiện sử dụng công cụ Đăng ký sự kiện.",
+	"campaignevents-invitationlist-preference": "Hiển thị tôi trong [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists danh sách mời].",
+	"prefs-campaignevents-invitations": "Danh sách mời"
 }
