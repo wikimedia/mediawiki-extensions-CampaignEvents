@@ -92,5 +92,13 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 		] );
 
 		$updater->addPostDatabaseUpdateMaintenance( UpdateCountriesColumn::class );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_event_contributions',
+			"$dir/$dbType/patch-add-ce_event_contributions.sql",
+			true
+		] );
 	}
 }

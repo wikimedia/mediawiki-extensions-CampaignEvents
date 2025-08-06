@@ -958,5 +958,128 @@
 			}
 		],
 		"pk": [ "ceet_id" ]
+	},
+	{
+		"name": "ce_event_contributions",
+		"comment": "Stores contributions associated to events.",
+		"columns": [
+			{
+				"name": "cec_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cec_event_id",
+				"comment": "Foreign key to campaign_events.event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cec_user_id",
+				"comment": "User ID, will be a central ID if a central provider is available, like for the other tables.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cec_wiki",
+				"type": "string",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "cec_page_id",
+				"comment": "The ID of the target page. This is used in lookups for page moves and page/revision deletion.",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "cec_page_prefixedtext",
+				"comment": "The full prefixedtext of the target page. We need to store the whole thing because namespace IDs cannot be resolved cross-wiki, see T226667.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
+				"name": "cec_revision_id",
+				"comment": "Foreign key to revision.rev_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cec_edit_flags",
+				"type": "integer",
+				"comment": "Bit field with additional flags for the edit. 1=page creation",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cec_bytes_delta",
+				"comment": "Byte difference between this and the previous revision. This uses an integer like revision.rev_len, but this is signed, so there is a remote chance that extremely large diffs won't fit.",
+				"type": "integer",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cec_links_delta",
+				"comment": "Difference in the number of internal links between the previous and this revision. Smallint gives us an upper bound of 32767, which is somewhat arbitrary.",
+				"type": "smallint",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cec_timestamp",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cec_deleted",
+				"comment": "Whether the edit has been deleted (page or revision deletion), see T403200 (pseudo-boolean).",
+				"type": "mwtinyint",
+				"options": {
+					"length": 1,
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "cec_wiki_page_id",
+				"comment": "Locate all records for a given page, used for UPDATE queries in case of page move and deletion.",
+				"columns": [ "cec_wiki", "cec_page_id" ],
+				"unique": false
+			},
+			{
+				"name": "cec_event_user",
+				"comment": "Filter edits for a given event, with a JOIN on ce_participants.",
+				"columns": [ "cec_event_id", "cec_user_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "cec_id" ]
 	}
 ]

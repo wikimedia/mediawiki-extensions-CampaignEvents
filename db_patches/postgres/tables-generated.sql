@@ -212,3 +212,24 @@ CREATE TABLE ce_event_topics (
 );
 
 CREATE UNIQUE INDEX ce_event_topics_event_id_topic ON ce_event_topics (ceet_event_id, ceet_topic);
+
+
+CREATE TABLE ce_event_contributions (
+  cec_id BIGSERIAL NOT NULL,
+  cec_event_id BIGINT NOT NULL,
+  cec_user_id BIGINT NOT NULL,
+  cec_wiki VARCHAR(64) NOT NULL,
+  cec_page_id INT NOT NULL,
+  cec_page_prefixedtext TEXT NOT NULL,
+  cec_revision_id BIGINT NOT NULL,
+  cec_edit_flags INT NOT NULL,
+  cec_bytes_delta INT NOT NULL,
+  cec_links_delta SMALLINT NOT NULL,
+  cec_timestamp TIMESTAMPTZ NOT NULL,
+  cec_deleted SMALLINT NOT NULL,
+  PRIMARY KEY(cec_id)
+);
+
+CREATE INDEX cec_wiki_page_id ON ce_event_contributions (cec_wiki, cec_page_id);
+
+CREATE INDEX cec_event_user ON ce_event_contributions (cec_event_id, cec_user_id);

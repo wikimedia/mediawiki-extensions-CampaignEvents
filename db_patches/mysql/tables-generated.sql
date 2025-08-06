@@ -190,3 +190,22 @@ CREATE TABLE /*_*/ce_event_topics (
   UNIQUE INDEX ce_event_topics_event_id_topic (ceet_event_id, ceet_topic),
   PRIMARY KEY(ceet_id)
 ) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_event_contributions (
+  cec_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  cec_event_id BIGINT UNSIGNED NOT NULL,
+  cec_user_id BIGINT UNSIGNED NOT NULL,
+  cec_wiki VARCHAR(64) NOT NULL,
+  cec_page_id INT UNSIGNED NOT NULL,
+  cec_page_prefixedtext VARBINARY(512) NOT NULL,
+  cec_revision_id BIGINT UNSIGNED NOT NULL,
+  cec_edit_flags INT NOT NULL,
+  cec_bytes_delta INT NOT NULL,
+  cec_links_delta SMALLINT NOT NULL,
+  cec_timestamp BINARY(14) NOT NULL,
+  cec_deleted TINYINT(1) NOT NULL,
+  INDEX cec_wiki_page_id (cec_wiki, cec_page_id),
+  INDEX cec_event_user (cec_event_id, cec_user_id),
+  PRIMARY KEY(cec_id)
+) /*$wgDBTableOptions*/;
