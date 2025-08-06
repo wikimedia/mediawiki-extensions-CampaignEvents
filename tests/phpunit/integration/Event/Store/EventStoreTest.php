@@ -29,6 +29,11 @@ use Throwable;
  * @covers ::__construct()
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {
+	protected function setUp(): void {
+		parent::setUp();
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
+	}
+
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
 		return new EventRegistration(
 			null,
@@ -54,7 +59,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			new Address( 'Address', 'France', null ),
+			new Address( 'Address', null, 'FR' ),
 			'Chat URL',
 			false,
 			[],
@@ -302,7 +307,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			'address' => new Address( 'Address', 'France', null ),
+			'address' => new Address( 'Address', null, 'FR' ),
 			'Chat URL',
 			false,
 			[],
