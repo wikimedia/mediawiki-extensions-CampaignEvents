@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
 use stdClass;
 use Wikimedia\ObjectCache\WANObjectCache;
@@ -260,6 +261,37 @@ class EventStore implements IEventStore, IEventLookup {
 			->where( [
 				'cep_user_id' => $participantID,
 				'cep_unregistered_at' => null,
+			] )
+			->orderBy( 'event_id' )
+			->limit( $limit )
+			->caller( __METHOD__ )
+			->fetchResultSet();
+
+		return $this->newEventsFromDBRows( $dbr, $eventRows );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getEventsForContributionAssociationByParticipant( int $participantID, int $limit ): array {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$currentTime = $dbr->timestamp();
+
+		$eventRows = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'campaign_events' )
+			->join( 'ce_participants', null, [
+				'event_id=cep_event_id',
+				'cep_user_id' => $participantID,
+				'cep_unregistered_at' => null,
+			] )
+			->join( 'ce_event_wikis', null, 'event_id=ceew_event_id' )
+			->where( [
+				'event_deleted_at' => null,
+				'event_track_contributions' => true,
+				'ceew_wiki' => [ EventWikisStore::ALL_WIKIS_DB_VALUE, WikiMap::getCurrentWikiId() ],
+				$dbr->expr( 'event_start_utc', '<=', $currentTime ),
+				$dbr->expr( 'event_end_utc', '>=', $currentTime )
 			] )
 			->orderBy( 'event_id' )
 			->limit( $limit )

@@ -39,6 +39,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
+		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
 	}
 
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
@@ -320,22 +321,22 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	private static function getBaseCtrArgs(): array {
 		return [
 			null,
-			'Some name',
-			new MWPageProxy(
+			'name' => 'Some name',
+			'page' => new MWPageProxy(
 				new PageIdentityValue( 42, 0, 'Event_page', PageIdentityValue::LOCAL ),
 				'Event page'
 			),
 			EventRegistration::STATUS_OPEN,
 			new DateTimeZone( 'UTC' ),
-			'20220731080000',
-			'20220731160000',
+			'start' => '20220731080000',
+			'end' => '20220731160000',
 			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			'wikis' => [ 'awiki', 'bwiki', 'cwiki' ],
 			[ 'atopic', 'btopic' ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'address' => new Address( 'Address', null, 'FR' ),
-			false,
+			'hasContributionTracking' => false,
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			'Chat URL',
 			false,
@@ -433,5 +434,375 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Event row lacks required prop' );
 		CampaignEventsServices::getEventLookup()->newEventsFromDBRows( $this->getDb(), [ $incompleteRow ] );
+	}
+
+	/**
+	 * @covers ::getEventsForContributionAssociationByParticipant
+	 * @dataProvider provideEventsForContributionAssociationByParticipant
+	 */
+	public function testGetEventsForContributionAssociationByParticipant(
+		int $participantID,
+		int $limit,
+		array $eventConfigs,
+		array $expectedEventNames
+	) {
+		// Create events based on configuration
+		$participantsStore = CampaignEventsServices::getParticipantsStore();
+		foreach ( $eventConfigs as $config ) {
+			// Create event directly with all parameters from EventRegistration
+			$event = $this->makeEventWithArgs( $config[ 'event' ] );
+
+			$eventID = $this->storeEvent( $event );
+			// Add participant if specified
+			if ( $config[ 'addParticipant' ] ) {
+				$participantsStore->addParticipantToEvent(
+					$eventID,
+					new CentralUser( $participantID ),
+					$config[ 'privateRegistration' ] ?? false,
+					[]
+				);
+			}
+		}
+
+		$events = CampaignEventsServices::getEventLookup()->getEventsForContributionAssociationByParticipant(
+			$participantID,
+			$limit
+		);
+
+		$actualEventNames = array_values( array_map( static fn ( $event ) => $event->getName(), $events ) );
+		$this->assertEquals( $expectedEventNames, $actualEventNames );
+
+		// Verify all returned events meet the criteria
+		$currentTime = wfTimestamp( TS_MW );
+		foreach ( $events as $event ) {
+			$this->assertNull( $event->getDeletionTimestamp(), 'Event should not be deleted' );
+			$this->assertLessThanOrEqual( $currentTime, $event->getStartUTCTimestamp(), 'Event should have started' );
+			$this->assertGreaterThanOrEqual(
+				$currentTime,
+				$event->getEndUTCTimestamp(),
+				'Event should not have ended'
+			);
+		}
+	}
+
+	public static function provideEventsForContributionAssociationByParticipant(): Generator {
+		$currentTime = wfTimestamp( TS_MW );
+		$currentUnix = wfTimestamp( TS_UNIX, $currentTime );
+		// 1 day ago
+		$pastTime = wfTimestamp( TS_MW, $currentUnix - 86400 );
+		// 1 day from now
+		$futureTime = wfTimestamp( TS_MW, $currentUnix + 86400 );
+		// 2 days from now
+		$farFutureTime = wfTimestamp( TS_MW, $currentUnix + 172800 );
+
+		$baseCtrArgs = self::getBaseCtrArgs();
+
+		$buildCtrArgs = static function ( array $overrides = [] ) use ( $baseCtrArgs ): array {
+			$ctrArgs = array_replace(
+				$baseCtrArgs,
+				$overrides
+			);
+			static $pageId = 12345;
+			$ctrArgs['page'] = new MWPageProxy(
+				new PageIdentityValue( $pageId++, 0, $ctrArgs['name'], PageIdentityValue::LOCAL ),
+				$ctrArgs['name']
+			);
+			return $ctrArgs;
+		};
+
+		// Scenarios that return 0 events (expectedCount = 0)
+		yield 'Participant not registered to ongoing events' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => false
+				]
+			],
+			[]
+		];
+
+		yield 'Ongoing event with track contributions disabled' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event No Track',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => false,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		yield 'Ongoing event targeting different wiki' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event Different Wiki',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ 'differentwiki' ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		yield 'Ongoing event targeting all wikis but track contributions disabled' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event All Wikis No Track',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => false,
+						'wikis' => EventRegistration::ALL_WIKIS
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		yield 'Ongoing event targeting current wiki but track contributions disabled' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event Current Wiki No Track',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => false,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		yield 'Ongoing event targeting different wiki and track contributions disabled' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event Different Wiki No Track',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => false,
+						'wikis' => [ 'differentwiki' ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		yield 'Event not yet started' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Future Event',
+						'start' => $futureTime,
+						'end' => $farFutureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		yield 'Event already ended' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Past Event',
+						'start' => $pastTime,
+						'end' => $pastTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		yield 'Ongoing event deleted' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event Deleted',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ],
+						'del' => $currentTime
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[]
+		];
+
+		// Scenarios that return events (expectedCount > 0)
+		yield 'Ongoing event targeting current wiki' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event Current Wiki',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[ 'Ongoing Event Current Wiki' ]
+		];
+
+		yield 'Ongoing event targeting all wikis' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event All Wikis',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => EventRegistration::ALL_WIKIS
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[ 'Ongoing Event All Wikis' ]
+		];
+		yield 'Ongoing event with private registration' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event Private',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true,
+					'privateRegistration' => true
+				]
+			],
+			[ 'Ongoing Event Private' ]
+		];
+
+		yield 'Multiple ongoing events with limit' => [
+			42,
+			2,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event 1',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				],
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event 2',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				],
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Ongoing Event 3',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[ 'Ongoing Event 1', 'Ongoing Event 2' ]
+		];
+
+		yield 'Mixed ongoing events valid and invalid' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Valid Ongoing Event',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				],
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Invalid Ongoing Event - No Track',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => false,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				],
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Future Event',
+						'start' => $futureTime,
+						'end' => $farFutureTime,
+						'hasContributionTracking' => true,
+						'wikis' => [ self::CURWIKIID_PLACEHOLDER ]
+					] ),
+					'addParticipant' => true
+				]
+			],
+			[ 'Valid Ongoing Event' ]
+		];
 	}
 }

@@ -45,6 +45,20 @@ interface IEventLookup {
 	public function getEventsByParticipant( int $participantID, int $limit ): array;
 
 	/**
+	 * Returns a list of events that can be associated with an edit. These events must:
+	 *  - Have track contributions enabled
+	 *  - Target the current wiki
+	 *  - Be ongoing
+	 *  - Not be deleted
+	 *  This includes events for which the user has registered privately
+	 *
+	 * @param int $participantID The user ID of the participant
+	 * @param int $limit Maximum number of events to return
+	 * @return ExistingEventRegistration[]
+	 */
+	public function getEventsForContributionAssociationByParticipant( int $participantID, int $limit ): array;
+
+	/**
 	 * Given a result set containing full rows from the campaign_events table, constructs EventRegistration objects
 	 * for those rows, looking up the required additional information.
 	 *
