@@ -76,7 +76,6 @@ class Worklist {
 	 * Creates a new instance from the given array (created through {@see self::toPlainArray}
 	 * @param array $array
 	 * @phan-param array<string|false,array<array{0:int,1:int,2:string,3:string|false}>> $array
-	 * @return Worklist
 	 */
 	public static function fromPlainArray( array $array ): Worklist {
 		$pagesByWiki = [];

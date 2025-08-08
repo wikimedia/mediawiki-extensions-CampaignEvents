@@ -23,7 +23,6 @@ class Utils {
 
 	/**
 	 * @param string|false $wikiID
-	 * @return string
 	 */
 	public static function getWikiIDString( string|bool $wikiID ): string {
 		return $wikiID !== WikiAwareEntity::LOCAL ? $wikiID : WikiMap::getCurrentWikiId();
@@ -44,8 +43,6 @@ class Utils {
 	 * @internal
 	 * Converts a DateTimeZone object into a UserTimeCorrection object.
 	 * This logic could perhaps be moved to UserTimeCorrection in the future.
-	 *
-	 * @return UserTimeCorrection
 	 */
 	public static function timezoneToUserTimeCorrection( DateTimeZone $tz ): UserTimeCorrection {
 		// Timezones in PHP can be either a geographical zone ("Europe/Rome"), an offset ("+01:00"), or

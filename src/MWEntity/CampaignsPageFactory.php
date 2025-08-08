@@ -38,7 +38,6 @@ class CampaignsPageFactory {
 	 * @param string $dbKey
 	 * @param string $prefixedText
 	 * @param string|false $wikiID
-	 * @return MWPageProxy
 	 */
 	public function newPageFromDB(
 		int $namespace,
@@ -59,7 +58,6 @@ class CampaignsPageFactory {
 	}
 
 	/**
-	 * @return MWPageProxy
 	 * @throws InvalidTitleStringException
 	 * @throws UnexpectedInterwikiException If the page title has an interwiki prefix
 	 * @throws UnexpectedVirtualNamespaceException
@@ -101,7 +99,6 @@ class CampaignsPageFactory {
 	 * further checks (e.g. existence).
 	 *
 	 * @param PageIdentity|LinkTarget $page Must be a page in the local wiki
-	 * @return MWPageProxy
 	 */
 	public function newFromLocalMediaWikiPage( LinkTarget|PageIdentity $page ): MWPageProxy {
 		$page->assertWiki( WikiAwareEntity::LOCAL );

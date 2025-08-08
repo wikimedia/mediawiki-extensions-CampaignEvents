@@ -102,7 +102,6 @@ class ParticipantAnswersStore {
 	 * @param CentralUser[]|null $participants Must never be empty, pass null to remove answers for all participants.
 	 * @param bool $invertSelection Whether the selection of $participants should be inverted, i.e., only answers
 	 *  of users not in $participants will be removed. If true, $participants must not be null.
-	 * @return void
 	 */
 	public function deleteAllAnswers( int $eventID, ?array $participants, bool $invertSelection = false ): void {
 		if ( $participants === null && $invertSelection ) {
@@ -176,8 +175,6 @@ class ParticipantAnswersStore {
 
 	/**
 	 * Returns whether the given event has any answers.
-	 *
-	 * @return bool
 	 */
 	public function eventHasAnswers( int $eventID ): bool {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );

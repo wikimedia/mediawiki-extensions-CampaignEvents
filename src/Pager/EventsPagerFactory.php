@@ -74,7 +74,6 @@ class EventsPagerFactory {
 	 * @param string $search
 	 * @param string|null $status One of the EventsTablePager::STATUS_* constants
 	 * @param CentralUser $user
-	 * @return EventsTablePager
 	 */
 	public function newTablePager(
 		IContextSource $context,

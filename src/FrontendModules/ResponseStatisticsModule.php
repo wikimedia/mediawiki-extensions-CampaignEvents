@@ -218,7 +218,6 @@ class ResponseStatisticsModule {
 	 * @param int $questionID
 	 * @param array<int,int> $questionAggregates
 	 * @param int $totalParticipants
-	 * @return Tag
 	 */
 	private function makeAnswerTable(
 		int $questionID,

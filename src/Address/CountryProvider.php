@@ -54,7 +54,6 @@ class CountryProvider {
 	 * Validates whether the provided country code is available for selection.
 	 *
 	 * @param string|null $code ISO 3166 country code
-	 * @return bool
 	 */
 	public function isValidCountryCode( ?string $code ): bool {
 		if ( !$code ) {

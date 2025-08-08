@@ -86,8 +86,6 @@ class WikiLookup {
 	 *
 	 * @param string[]|true $wikiIDs
 	 * @param string $renderer must be one of Wikilookup::OOUI or Wikilookup::CODEX
-	 *
-	 * @return string
 	 */
 	public function getWikiIcon( array|bool $wikiIDs, string $renderer = self::OOUI ): string {
 		$defaultIcon = $renderer === self::OOUI ?

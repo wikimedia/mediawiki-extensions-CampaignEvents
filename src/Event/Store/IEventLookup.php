@@ -14,7 +14,6 @@ interface IEventLookup {
 	public const LOOKUP_SERVICE_NAME = 'CampaignEventsEventLookup';
 
 	/**
-	 * @return ExistingEventRegistration
 	 * @throws EventNotFoundException
 	 */
 	public function getEventByID( int $eventID ): ExistingEventRegistration;
@@ -28,7 +27,6 @@ interface IEventLookup {
 	 *
 	 * @param MWPageProxy $page
 	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
-	 * @return ExistingEventRegistration
 	 * @throws EventNotFoundException
 	 */
 	public function getEventByPage(

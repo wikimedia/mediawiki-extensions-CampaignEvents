@@ -152,7 +152,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Load the event associated with the given page from the database.
-	 * @return ExistingEventRegistration
 	 * @throws EventNotFoundException If no event is associated with this page
 	 */
 	private function loadEventFromDB( MWPageProxy $page, int $readFlags ): ExistingEventRegistration {
@@ -347,7 +346,6 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @param string[]|true $wikis List of wiki IDs or {@see EventRegistration::ALL_WIKIS}
 	 * @param string[] $topics
 	 * @param int[] $questionIDs
-	 * @return ExistingEventRegistration
 	 */
 	private function newEventFromDBRow(
 		stdClass $row,
@@ -534,7 +532,6 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * Converts participation options as stored in the DB into a combination of the
 	 * EventRegistration::PARTICIPATION_OPTION_* constants.
-	 * @return int
 	 */
 	public static function getParticipationOptionsFromDBVal( string $dbParticipationOptions ): int {
 		$ret = 0;
@@ -549,7 +546,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Converts an EventRegistration::PARTICIPATION_OPTION_* constant to the corresponding value used in the database.
-	 * @return int
 	 */
 	public static function participationOptionsToDBVal( int $participationOptions ): int {
 		$dbParticipationOptions = 0;
@@ -563,7 +559,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Converts an EventRegistration::STATUS_* constant into the respective DB value.
-	 * @return int
 	 */
 	public static function getEventStatusDBVal( string $eventStatus ): int {
 		if ( isset( self::EVENT_STATUS_MAP[$eventStatus] ) ) {
@@ -574,7 +569,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Converts an event status as stored in the database to an EventRegistration::STATUS_* constant
-	 * @return string
 	 */
 	public static function getEventStatusFromDBVal( string $eventStatus ): string {
 		$val = array_search( (int)$eventStatus, self::EVENT_STATUS_MAP, true );

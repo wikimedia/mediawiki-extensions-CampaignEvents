@@ -137,7 +137,6 @@ class TrackingToolRegistry {
 	/**
 	 * Returns a TrackingTool subclass for a tool specified by its DB ID.
 	 *
-	 * @return TrackingTool
 	 * @throws ToolNotFoundException
 	 */
 	public function newFromDBID( int $dbID ): TrackingTool {
@@ -168,7 +167,6 @@ class TrackingToolRegistry {
 	/**
 	 * Returns a TrackingTool subclass for a tool specified by its user identifier.
 	 *
-	 * @return TrackingTool
 	 * @throws ToolNotFoundException
 	 */
 	public function newFromUserIdentifier( string $userIdentifier ): TrackingTool {
@@ -184,7 +182,6 @@ class TrackingToolRegistry {
 	 * @param array $entry
 	 * @phpcs:ignore Generic.Files.LineLength
 	 * @phan-param array{display-name-msg:string,base-url:string,class:class-string,db-id:int,user-id:string,extra:array} $entry
-	 * @return TrackingTool
 	 * @suppress PhanTypeInvalidCallableArraySize https://github.com/phan/phan/issues/1648
 	 */
 	private function newFromRegistryEntry( array $entry ): TrackingTool {
@@ -221,7 +218,6 @@ class TrackingToolRegistry {
 	}
 
 	/**
-	 * @return string
 	 * @throws InvalidToolURLException
 	 */
 	public function getToolEventIDFromURL( string $userID, string $toolEventURL ): string {

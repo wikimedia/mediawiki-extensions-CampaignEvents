@@ -382,7 +382,6 @@ class PotentialInviteesFinder {
 	 * @param int[] $byteDeltas
 	 * @param int[][] $userDataByWiki Map of [ wiki => [ userID: int, actorID: int ] ]
 	 * @phan-param array<string,array{userID:int,actorID:int}> $userDataByWiki
-	 * @return int
 	 */
 	private function getUserScore( string $username, array $byteDeltas, array $userDataByWiki ): int {
 		// Idea: Maybe check how many edits each user has for each page, and handle each edit separately.
@@ -419,7 +418,6 @@ class PotentialInviteesFinder {
 	 *
 	 * @param string $username
 	 * @param int[] $deltas
-	 * @return float
 	 */
 	private function getOverallBytesScore( string $username, array $deltas ): float {
 		// This function computed a (0, 1) score for each page. Then, we get the maximum of those scores and "boost"
@@ -462,8 +460,6 @@ class PotentialInviteesFinder {
 
 	/**
 	 * Returns a (0, 1) score based on the contributions made to a single page.
-	 *
-	 * @return float
 	 */
 	private function getBytesScoreForPage( int $delta ): float {
 		// Because we use bytes as the main metric in determining the overall score, it's important that the score
@@ -484,7 +480,6 @@ class PotentialInviteesFinder {
 	 * @param string $username
 	 * @param int[][] $userDataByWiki Map of [ wiki => [ userID: int, actorID: int ] ]
 	 * @phan-param array<string,array{userID:int,actorID:int}> $userDataByWiki
-	 * @return float
 	 */
 	private function getEditCountScore( string $username, array $userDataByWiki ): float {
 		$editCount = $this->getEditCount( $userDataByWiki );
@@ -499,7 +494,6 @@ class PotentialInviteesFinder {
 	/**
 	 * @param int[][] $userDataByWiki Map of [ wiki => [ userID: int, actorID: int ] ]
 	 * @phan-param array<string,array{userID:int,actorID:int}> $userDataByWiki
-	 * @return int
 	 */
 	private function getEditCount( array $userDataByWiki ): int {
 		// XXX: UserEditTracker is only available for the local wiki, and the global edit count is a CentralAuth thing
@@ -525,7 +519,6 @@ class PotentialInviteesFinder {
 	 * @param string $username
 	 * @param int[][] $userDataByWiki Map of [ wiki => [ userID: int, actorID: int ] ]
 	 * @phan-param array<string,array{userID:int,actorID:int}> $userDataByWiki
-	 * @return float
 	 */
 	private function getRecentActivityScore( string $username, array $userDataByWiki ): float {
 		// This uses a rational function, so that it does not decay exponentially over time. See
@@ -546,7 +539,6 @@ class PotentialInviteesFinder {
 	/**
 	 * @param int[][] $userDataByWiki Map of [ wiki => [ userID: int, actorID: int ] ]
 	 * @phan-param array<string,array{userID:int,actorID:int}> $userDataByWiki
-	 * @return float
 	 */
 	private function getDaysSinceLastEdit( array $userDataByWiki ): float {
 		// XXX: UserEditTracker is only available for the local wiki, so just use its query directly.

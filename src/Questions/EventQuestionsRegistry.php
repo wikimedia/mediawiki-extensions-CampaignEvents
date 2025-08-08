@@ -287,7 +287,6 @@ class EventQuestionsRegistry {
 	/**
 	 * @param array<string,mixed> $questionSpec Must be an entry in the registry
 	 * @param array<string,mixed> $formData
-	 * @return Answer|null
 	 * @throws InvalidAnswerDataException
 	 */
 	private function newAnswerFromHTMLForm( array $questionSpec, array $formData ): ?Answer {
@@ -455,7 +454,6 @@ class EventQuestionsRegistry {
 	 * @param array<string,mixed> $questionSpec Must be an entry in the registry
 	 * @param string $questionName
 	 * @param array<string,mixed> $answerData
-	 * @return Answer|null
 	 * @throws InvalidAnswerDataException If an answer's value is malformed
 	 */
 	private function newAnswerFromAPI( array $questionSpec, string $questionName, array $answerData ): ?Answer {
@@ -516,7 +514,6 @@ class EventQuestionsRegistry {
 	/**
 	 * Returns the key of a message to be used when introducing stats for the given question.
 	 *
-	 * @return string
 	 * @throws UnknownQuestionException
 	 */
 	public function getQuestionLabelForStats( int $questionID ): string {
@@ -574,7 +571,6 @@ class EventQuestionsRegistry {
 	/**
 	 * Given a question name, returns the corresponding database ID.
 	 *
-	 * @return int
 	 * @throws UnknownQuestionException
 	 */
 	public function nameToDBID( string $name ): int {
@@ -589,7 +585,6 @@ class EventQuestionsRegistry {
 	/**
 	 * Given a question database ID, returns its name.
 	 *
-	 * @return string
 	 * @throws UnknownQuestionException
 	 */
 	public function dbIDToName( int $dbID ): string {

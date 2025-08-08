@@ -33,7 +33,6 @@ trait EventIDParamTrait {
 	/**
 	 * Returns a registration with the given ID, ensuring that it exists and throwing an HttpException otherwise.
 	 *
-	 * @return ExistingEventRegistration
 	 * @throws HttpException
 	 */
 	protected function getRegistrationOrThrow( IEventLookup $eventLookup, int $id ): ExistingEventRegistration {

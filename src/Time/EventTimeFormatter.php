@@ -52,7 +52,6 @@ class EventTimeFormatter {
 	 * @param EventRegistration $event
 	 * @param Language $language
 	 * @param UserIdentity $user
-	 * @return FormattedTime
 	 */
 	private function formatTimeInternal(
 		string $type,

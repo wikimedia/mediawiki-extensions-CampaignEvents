@@ -45,7 +45,6 @@ abstract class TrackingTool {
 
 	/**
 	 * Returns the ID that should be used to store this specific tracking tool into the database.
-	 * @return int
 	 */
 	public function getDBID(): int {
 		return $this->dbID;
@@ -55,7 +54,6 @@ abstract class TrackingTool {
 	 * @param EventRegistration $event That the tool will be added to
 	 * @param CentralUser[] $organizers
 	 * @param string $toolEventID
-	 * @return StatusValue
 	 */
 	abstract public function validateToolAddition(
 		EventRegistration $event,
@@ -68,7 +66,6 @@ abstract class TrackingTool {
 	 * @param EventRegistration $event That the tool will be added to
 	 * @param CentralUser[] $organizers
 	 * @param string $toolEventID
-	 * @return StatusValue
 	 */
 	abstract public function addToNewEvent(
 		int $eventID,
@@ -81,7 +78,6 @@ abstract class TrackingTool {
 	 * @param ExistingEventRegistration $event That the tool will be added to
 	 * @param CentralUser[] $organizers
 	 * @param string $toolEventID
-	 * @return StatusValue
 	 */
 	abstract public function addToExistingEvent(
 		ExistingEventRegistration $event,
@@ -92,7 +88,6 @@ abstract class TrackingTool {
 	/**
 	 * @param ExistingEventRegistration $event That the tool will be removed from
 	 * @param string $toolEventID
-	 * @return StatusValue
 	 */
 	abstract public function validateToolRemoval(
 		ExistingEventRegistration $event,
@@ -102,7 +97,6 @@ abstract class TrackingTool {
 	/**
 	 * @param ExistingEventRegistration $event That the tool will be removed from
 	 * @param string $toolEventID
-	 * @return StatusValue
 	 */
 	abstract public function removeFromEvent(
 		ExistingEventRegistration $event,
@@ -140,7 +134,6 @@ abstract class TrackingTool {
 	 * or array of participants to keep if $invertSelection is true. Null means remove everyone, regardless of
 	 * $invertSelection.
 	 * @param bool $invertSelection
-	 * @return StatusValue
 	 */
 	abstract public function validateParticipantsRemoved(
 		ExistingEventRegistration $event,
@@ -156,7 +149,6 @@ abstract class TrackingTool {
 	 * or array of participants to keep if $invertSelection is true. Null means remove everyone, regardless of
 	 * $invertSelection.
 	 * @param bool $invertSelection
-	 * @return StatusValue
 	 */
 	abstract public function removeParticipants(
 		ExistingEventRegistration $event,
@@ -168,15 +160,12 @@ abstract class TrackingTool {
 	/**
 	 * Given the ID of an event in this tool, return the URL of the resource corresponding to the event on the tool
 	 * itself.
-	 *
-	 * @return string
 	 */
 	abstract public static function buildToolEventURL( string $baseURL, string $toolEventID ): string;
 
 	/**
 	 * Given the URL of an event in this tool, return the corresponding event ID in the tool.
 	 *
-	 * @return string
 	 * @throws InvalidToolURLException
 	 */
 	abstract public static function extractEventIDFromURL( string $baseURL, string $url ): string;

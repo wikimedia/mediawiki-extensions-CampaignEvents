@@ -232,7 +232,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * appropriate validation.
 	 *
 	 * @param array<string,mixed> $body Request body data
-	 * @return EventRegistration
 	 * @throws InvalidEventDataException
 	 */
 	abstract protected function createEventObject( array $body ): EventRegistration;

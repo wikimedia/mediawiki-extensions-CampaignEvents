@@ -215,7 +215,6 @@ class EditEventCommand {
 	 * @param ExistingEventRegistration|null $previousVersion
 	 * @param EventRegistration $newVersion
 	 * @param CentralUser[] $organizers
-	 * @return StatusValue
 	 */
 	private function updateTrackingTools(
 		int $eventID,
@@ -382,7 +381,6 @@ class EditEventCommand {
 	 * @param int[] $organizerCentralUserIDs
 	 * @param int $eventID
 	 * @param CentralUser $performer
-	 * @return StatusValue
 	 */
 	private function checkOrganizerNotRemovingTheCreator(
 		array $organizerCentralUserIDs,

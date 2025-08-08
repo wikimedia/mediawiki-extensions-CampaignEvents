@@ -83,7 +83,6 @@ class ClickwrapFormModule {
 
 	/**
 	 * @param array<string,mixed> $data
-	 * @return bool
 	 */
 	public function processInput( array $data ): bool {
 		if ( $data['Acceptance'] ) {

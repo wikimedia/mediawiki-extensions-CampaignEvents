@@ -49,6 +49,4 @@ $cfg['plugins'] = array_merge( $cfg['plugins'], [
 	'UnknownElementTypePlugin',
 ] );
 
-$cfg['suppress_issue_types'][] = 'PhanPluginRedundantReturnComment';
-
 return $cfg;

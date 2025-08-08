@@ -34,7 +34,6 @@ class RoleFormatter {
 	 * @param string $role A valid Roles::ROLE_* constant
 	 * @param string $userName Of the user that the role refers to.
 	 * @param string $languageCode
-	 * @return string
 	 */
 	public function getLocalizedName( string $role, string $userName, string $languageCode ): string {
 		if ( !isset( self::ROLES_MSG_MAP[$role] ) ) {
@@ -46,7 +45,6 @@ class RoleFormatter {
 
 	/**
 	 * @param string $role A valid Roles::ROLE_* constant
-	 * @return string
 	 */
 	public function getDebugName( string $role ): string {
 		if ( !isset( self::DEBUG_NAMES_MAP[$role] ) ) {

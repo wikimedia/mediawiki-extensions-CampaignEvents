@@ -84,7 +84,6 @@ class CampaignsUserMailer {
 	 * @param string $message
 	 * @param bool $CCMe Whether to send a copy of the message to $performer
 	 * @param ExistingEventRegistration $event
-	 * @return StatusValue
 	 */
 	public function sendEmail(
 		Authority $performer,
@@ -158,8 +157,6 @@ class CampaignsUserMailer {
 	 * Add a predefined footer to the email body, similar to EmailUser::sendEmailUnsafe().
 	 * @todo It might make sense to move this to the job, for performance. However, it should wait until
 	 * T339821 is ready, as that will give us a better holistic view of how to refactor this code.
-	 *
-	 * @return string
 	 */
 	private function getMessageWithFooter(
 		string $body,

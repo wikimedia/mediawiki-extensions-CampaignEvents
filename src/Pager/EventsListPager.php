@@ -565,7 +565,6 @@ class EventsListPager extends ReverseChronologicalPager {
 	/**
 	 * @param int $eventID
 	 * @param string[] $eventWikis
-	 * @return string
 	 */
 	public function getWikiListWidget( int $eventID, array $eventWikis ): string {
 		$language = $this->getLanguage();

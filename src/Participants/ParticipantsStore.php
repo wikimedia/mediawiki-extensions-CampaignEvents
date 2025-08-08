@@ -315,7 +315,6 @@ class ParticipantsStore {
 	/**
 	 * Returns a Participant object for the given user and event, if the user is a participant (and has not
 	 * unregistered), or null otherwise.
-	 * @return Participant|null
 	 */
 	public function getEventParticipant(
 		int $eventID,
@@ -374,7 +373,6 @@ class ParticipantsStore {
 
 	/**
 	 * Returns the count of participants to an event.
-	 * @return int
 	 */
 	private function getParticipantCountForEvent( int $eventID, bool $public ): int {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );

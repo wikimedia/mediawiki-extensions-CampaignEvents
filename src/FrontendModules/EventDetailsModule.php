@@ -209,7 +209,6 @@ class EventDetailsModule {
 	 *
 	 * @param string|false $wikiID
 	 * @param OutputPage $out
-	 * @return HtmlSnippet
 	 */
 	private function getNonLocalWikiMessage( string|bool $wikiID, OutputPage $out ): HtmlSnippet {
 		static $message = null;
@@ -243,7 +242,6 @@ class EventDetailsModule {
 	 * @param bool $isLocalWiki
 	 * @param string|false $wikiID
 	 * @param int $organizersCount
-	 * @return Tag
 	 */
 	private function getInfoColumn(
 		UserIdentity $viewingUser,
@@ -455,7 +453,6 @@ class EventDetailsModule {
 	/**
 	 * @param OutputPage $out
 	 * @param list<string> $eventTopics
-	 * @return ?Tag
 	 */
 	private function getEventTopicsSection( OutputPage $out, array $eventTopics ): ?Tag {
 		$localizedTopicNames = array_map(
@@ -486,7 +483,6 @@ class EventDetailsModule {
 	 *
 	 * @param OutputPage $out
 	 * @phan-param list<string> $eventTypes
-	 * @return Tag
 	 */
 	private function getEventTypesSection( OutputPage $out, array $eventTypes ): Tag {
 		$messageKeys = $this->eventTypesRegistry->getTypeMessages( $eventTypes );
@@ -518,7 +514,6 @@ class EventDetailsModule {
 	 * @param bool $userCanViewSensitiveEventData
 	 * @param OutputPage $out
 	 * @param LinkRenderer $linkRenderer
-	 * @return Tag
 	 */
 	private function getParticipationOptionsSection(
 		Authority $performer,
@@ -700,7 +695,6 @@ class EventDetailsModule {
 	 * @param string|Tag|array|HtmlSnippet $content
 	 * @param string $label
 	 * @param string[] $classes
-	 * @return Tag
 	 */
 	public static function makeSection(
 		string $icon,

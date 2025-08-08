@@ -31,7 +31,6 @@ class MWPermissionsLookup {
 	/**
 	 * @param string $username Callers should make sure that the username is valid
 	 * @param string $right
-	 * @return bool
 	 */
 	public function userHasRight( string $username, string $right ): bool {
 		return $this->getUser( $username )->isAllowed( $right );
@@ -39,7 +38,6 @@ class MWPermissionsLookup {
 
 	/**
 	 * @param string $username Callers should make sure that the username is valid
-	 * @return bool
 	 */
 	public function userIsSitewideBlocked( string $username ): bool {
 		$block = $this->getUser( $username )->getBlock();
@@ -48,7 +46,6 @@ class MWPermissionsLookup {
 
 	/**
 	 * @param string $username Callers should make sure that the username is valid
-	 * @return bool
 	 */
 	public function userIsNamed( string $username ): bool {
 		return $this->getUser( $username )->isNamed();

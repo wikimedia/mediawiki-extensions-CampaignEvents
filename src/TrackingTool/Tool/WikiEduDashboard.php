@@ -95,7 +95,6 @@ class WikiEduDashboard extends TrackingTool {
 	 * @param CentralUser[] $organizers
 	 * @param string $toolEventID
 	 * @param bool $dryRun
-	 * @return StatusValue
 	 */
 	private function makeNewEventRequest(
 		?int $eventID,
@@ -264,7 +263,6 @@ class WikiEduDashboard extends TrackingTool {
 	 * @param string $courseID
 	 * @param bool $dryRun
 	 * @param array<string,mixed> $extraParams
-	 * @return StatusValue
 	 */
 	private function makePostRequest(
 		string $endpoint,
@@ -331,7 +329,6 @@ class WikiEduDashboard extends TrackingTool {
 	/**
 	 * @param array<string,mixed> $response
 	 * @param string $courseID
-	 * @return StatusValue
 	 */
 	private function makeErrorStatus( array $response, string $courseID ): StatusValue {
 		if ( !isset( $response['error_code'] ) ) {

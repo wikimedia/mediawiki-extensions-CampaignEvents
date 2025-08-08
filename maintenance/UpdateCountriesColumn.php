@@ -194,8 +194,6 @@ class UpdateCountriesColumn extends Maintenance {
 	/**
 	 * @param array<string, mixed> $matchedRows
 	 * @param array<string, string> $unmatchedRows
-	 *
-	 * @return void
 	 */
 	public function showOutput( array $matchedRows, array $unmatchedRows ): void {
 		$matchedCount = count( $matchedRows );
@@ -220,8 +218,6 @@ class UpdateCountriesColumn extends Maintenance {
 	 * @param array<string, mixed> $matchedRows
 	 * @param array<string, string> $unmatchedRows
 	 * @param array<string, string> $addresses
-	 *
-	 * @return void
 	 */
 	private function writeResults(
 		array $matchedRows,

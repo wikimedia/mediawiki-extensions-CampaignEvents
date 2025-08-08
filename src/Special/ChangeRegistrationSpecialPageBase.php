@@ -109,8 +109,6 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	/**
 	 * Checks whether the event is in a state which can currently accept registrations. Specifically, that it
 	 * is not over, deleted or closed.
-	 *
-	 * @return StatusValue
 	 */
 	protected function checkEventIsValid(): StatusValue {
 		return StatusValue::newGood();

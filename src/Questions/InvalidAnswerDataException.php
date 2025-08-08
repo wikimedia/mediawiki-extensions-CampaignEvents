@@ -17,8 +17,6 @@ class InvalidAnswerDataException extends Exception {
 	/**
 	 * Returns the name of the question corresponding to an invalid answer. This might be an HTMLForm `name` attribute,
 	 * or some other kind of name, depending on the context.
-	 *
-	 * @return string
 	 */
 	public function getQuestionName(): string {
 		return $this->questionName;

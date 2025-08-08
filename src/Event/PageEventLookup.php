@@ -47,7 +47,6 @@ class PageEventLookup {
 	 * @param string $canonicalize self::GET_CANONICALIZE to canonicalize the given page, or self::GET_DIRECT to
 	 * avoid canonicalization.
 	 * @param int $readFlags One of the IDBAccessObject::READ_* constants
-	 * @return ExistingEventRegistration|null
 	 */
 	public function getRegistrationForLocalPage(
 		LinkTarget|PageIdentity $page,
@@ -70,7 +69,6 @@ class PageEventLookup {
 	 * @param MWPageProxy $page
 	 * @param string $canonicalize self::GET_CANONICALIZE to canonicalize the given page, or self::GET_DIRECT to
 	 * avoid canonicalization.
-	 * @return ExistingEventRegistration|null
 	 */
 	public function getRegistrationForPage(
 		MWPageProxy $page,

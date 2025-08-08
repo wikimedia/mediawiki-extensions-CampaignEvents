@@ -294,7 +294,6 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 	/**
 	 * @param string $url
 	 * @param string $label Raw label, must not be escaped beforehand
-	 * @return string
 	 */
 	private function makeLink( string $url, string $label ): string {
 		return Html::element(

@@ -50,7 +50,6 @@ class TrackingToolEventWatcher {
 	/**
 	 * @param EventRegistration $event
 	 * @param CentralUser[] $organizers
-	 * @return StatusValue
 	 */
 	public function validateEventCreation( EventRegistration $event, array $organizers ): StatusValue {
 		foreach ( $event->getTrackingTools() as $toolAssociation ) {
@@ -98,7 +97,6 @@ class TrackingToolEventWatcher {
 	 * @param ExistingEventRegistration $oldVersion
 	 * @param EventRegistration $newVersion
 	 * @param CentralUser[] $organizers
-	 * @return StatusValue
 	 */
 	public function validateEventUpdate(
 		ExistingEventRegistration $oldVersion,
@@ -311,7 +309,6 @@ class TrackingToolEventWatcher {
 	 * or array of participants to keep if $invertSelection is true. Null means remove everyone, regardless of
 	 * $invertSelection.
 	 * @param bool $invertSelection
-	 * @return StatusValue
 	 */
 	public function validateParticipantsRemoved(
 		ExistingEventRegistration $event,
@@ -369,8 +366,6 @@ class TrackingToolEventWatcher {
 
 	/**
 	 * Logs a tracking tool failure in the MW log, so that failures can be monitored and possibly acted upon.
-	 *
-	 * @return void
 	 */
 	private function logToolFailure(
 		string $operation,

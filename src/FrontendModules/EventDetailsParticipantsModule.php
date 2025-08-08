@@ -254,7 +254,6 @@ class EventDetailsParticipantsModule {
 	 * @param Participant|null $curUserParticipant
 	 * @param Participant[] $otherParticipants
 	 * @param int[] $nonPIIQuestionIDs
-	 * @return Tag
 	 */
 	private function getParticipantsTable(
 		IContextSource $context,
@@ -328,7 +327,6 @@ class EventDetailsParticipantsModule {
 	 * @param bool $canEmailParticipants
 	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
-	 * @return Tag
 	 */
 	private function getTableHeaders(
 		bool $canRemoveParticipants,
@@ -421,7 +419,6 @@ class EventDetailsParticipantsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
-	 * @return Tag
 	 */
 	private function getParticipantRows(
 		IContextSource $context,
@@ -470,7 +467,6 @@ class EventDetailsParticipantsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
-	 * @return Tag
 	 */
 	private function getCurUserParticipantRow(
 		IContextSource $context,
@@ -502,7 +498,6 @@ class EventDetailsParticipantsModule {
 	 * @param UserIdentity $viewingUser
 	 * @param list<int> $nonPIIQuestionIDs
 	 * @param bool $userCanViewNonPIIParticipantsData
-	 * @return Tag
 	 */
 	private function getParticipantRow(
 		IContextSource $context,
@@ -607,7 +602,6 @@ class EventDetailsParticipantsModule {
 	 * @param Participant $participant
 	 * @param list<int> $nonPIIQuestionIDs
 	 * @param string $genderUserName
-	 * @return Tag
 	 */
 	private function addNonPIIParticipantAnswers(
 		Tag $row,

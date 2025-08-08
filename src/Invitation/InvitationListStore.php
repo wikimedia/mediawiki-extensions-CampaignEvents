@@ -109,7 +109,6 @@ class InvitationListStore {
 	}
 
 	/**
-	 * @return InvitationList
 	 * @throws InvitationListNotFoundException
 	 */
 	public function getInvitationList( int $listID ): InvitationList {

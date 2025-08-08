@@ -113,7 +113,6 @@ class WorklistParser {
 	/**
 	 * Given a list of page titles, return a bullet list with those titles.
 	 * @param string[] $pageTitles
-	 * @return string
 	 */
 	private static function pagesToBulletList( array $pageTitles ): string {
 		// Don't call wfEscapeWikiText in unit tests since it uses global state.

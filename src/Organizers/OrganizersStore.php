@@ -192,7 +192,6 @@ class OrganizersStore {
 
 	/**
 	 * Returns the number of organizers of an event
-	 * @return int
 	 */
 	public function getOrganizerCountForEvent( int $eventID ): int {
 		return $this->getOrganizerCountForEvents( [ $eventID ] )[ $eventID ];

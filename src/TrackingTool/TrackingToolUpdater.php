@@ -29,7 +29,6 @@ class TrackingToolUpdater {
 
 	/**
 	 * Converts a TrackingToolAssociation::SYNC_STATUS_* constant to the respective DB value
-	 * @return int
 	 */
 	public static function syncStatusToDB( int $status ): int {
 		if ( !isset( self::SYNC_STATUS_TO_DB_MAP[$status] ) ) {
@@ -41,7 +40,6 @@ class TrackingToolUpdater {
 	/**
 	 * Converts a DB value for ce_tracking_tools.cett_sync_status to the respective
 	 * TrackingToolAssociation::SYNC_STATUS_* constant.
-	 * @return int
 	 */
 	public static function dbSyncStatusToConst( int $dbVal ): int {
 		$const = array_search( $dbVal, self::SYNC_STATUS_TO_DB_MAP, true );
@@ -58,7 +56,6 @@ class TrackingToolUpdater {
 	 * @param TrackingToolAssociation[] $tools
 	 * @param IDatabase|null $dbw Optional, in case the caller opened an atomic section and wants to make sure
 	 * that writes are done on the same DB handle.
-	 * @return void
 	 */
 	public function replaceEventTools( int $eventID, array $tools, ?IDatabase $dbw = null ): void {
 		$dbw ??= $this->dbHelper->getDBConnection( DB_PRIMARY );

@@ -121,7 +121,6 @@ class RegisterParticipantCommand {
 	 * @param Authority $performer
 	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
 	 * @param Answer[] $answers
-	 * @return StatusValue
 	 */
 	public function registerUnsafe(
 		ExistingEventRegistration $registration,

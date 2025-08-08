@@ -395,7 +395,6 @@ class EventPageDecorator {
 	 *
 	 * @param ExistingEventRegistration $registration
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
-	 * @return Tag
 	 */
 	private function getHeaderElement(
 		ExistingEventRegistration $registration,
@@ -561,7 +560,6 @@ class EventPageDecorator {
 	 * @param ExistingEventRegistration $registration
 	 * @param int $userStatus One of the self::USER_STATUS_* constants
 	 * @param Participant|null $participant
-	 * @return string
 	 */
 	private function getDetailsDialogContent(
 		ProperPageIdentity $page,
@@ -1121,7 +1119,6 @@ class EventPageDecorator {
 	 * @param string $label
 	 * @param string|Tag|array $footer
 	 * @param string[] $classes
-	 * @return string
 	 */
 	private function makeDetailsDialogSection(
 		string $icon,
@@ -1167,7 +1164,6 @@ class EventPageDecorator {
 
 	/**
 	 * @param list<string> $eventTopics
-	 * @return string
 	 */
 	private function getDetailsDialogTopics( array $eventTopics ): string {
 		$localizedTopicNames = array_map(
@@ -1188,7 +1184,6 @@ class EventPageDecorator {
 
 	/**
 	 * @phan-param list<string> $eventTypes
-	 * @return string
 	 */
 	private function getDetailsDialogEventTypes( array $eventTypes ): string {
 		$messageKeys = $this->eventTypesRegistry->getTypeMessages( $eventTypes );

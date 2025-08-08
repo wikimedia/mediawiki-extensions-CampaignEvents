@@ -125,7 +125,6 @@ class EventFactory {
 	 *   {@link self::VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE}. If the requested event page is the same as
 	 *   this page, validation of the namespace is skipped.
 	 *
-	 * @return EventRegistration
 	 * @throws InvalidEventDataException
 	 */
 	public function newEvent(
