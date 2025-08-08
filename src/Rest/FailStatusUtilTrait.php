@@ -14,8 +14,6 @@ use Wikimedia\Message\MessageValue;
  */
 trait FailStatusUtilTrait {
 	/**
-	 * @param StatusValue $status
-	 * @param int $statusCode
 	 * @return never
 	 */
 	private function exitWithStatus( StatusValue $status, int $statusCode = 400 ): void {

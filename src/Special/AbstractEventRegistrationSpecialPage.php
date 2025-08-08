@@ -640,7 +640,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @internal
 	 * Converts a DateTimeZone object to a string that can be used as (default) value of the timezone input.
 	 *
-	 * @param DateTimeZone $tz
 	 * @return string
 	 */
 	public static function convertTimezoneForForm( DateTimeZone $tz ): string {

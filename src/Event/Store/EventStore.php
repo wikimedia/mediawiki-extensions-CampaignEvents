@@ -150,8 +150,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Load the event associated with the given page from the database.
-	 * @param MWPageProxy $page
-	 * @param int $readFlags
 	 * @return ExistingEventRegistration
 	 * @throws EventNotFoundException If no event is associated with this page
 	 */
@@ -534,7 +532,6 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * Converts participation options as stored in the DB into a combination of the
 	 * EventRegistration::PARTICIPATION_OPTION_* constants.
-	 * @param string $dbParticipationOptions
 	 * @return int
 	 */
 	public static function getParticipationOptionsFromDBVal( string $dbParticipationOptions ): int {
@@ -550,7 +547,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Converts an EventRegistration::PARTICIPATION_OPTION_* constant to the corresponding value used in the database.
-	 * @param int $participationOptions
 	 * @return int
 	 */
 	public static function participationOptionsToDBVal( int $participationOptions ): int {
@@ -565,7 +561,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Converts an EventRegistration::STATUS_* constant into the respective DB value.
-	 * @param string $eventStatus
 	 * @return int
 	 */
 	public static function getEventStatusDBVal( string $eventStatus ): int {
@@ -577,7 +572,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 	/**
 	 * Converts an event status as stored in the database to an EventRegistration::STATUS_* constant
-	 * @param string $eventStatus
 	 * @return string
 	 */
 	public static function getEventStatusFromDBVal( string $eventStatus ): string {

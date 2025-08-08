@@ -25,7 +25,6 @@ class PageAuthorLookup {
 	}
 
 	/**
-	 * @param MWPageProxy $page
 	 * @return CentralUser|null Null if the author is not available for some reason, e.g. because
 	 * the account does not exist globally.
 	 * @warning This method bypasses visibility checks on the author's name.

@@ -26,7 +26,6 @@ class EventWikisStore {
 	/**
 	 * Retrieves all wikis (ceew_wiki) associated with a specific event ID.
 	 *
-	 * @param int $eventID
 	 * @return string[]|true List of wiki IDs or {@see EventRegistration::ALL_WIKIS}
 	 */
 	public function getEventWikis( int $eventID ) {

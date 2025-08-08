@@ -32,10 +32,6 @@ class TrackingToolRegistry {
 	/** @var array<string,array<string,mixed>>|null Mock registry that can be set in tests. */
 	private ?array $registryForTests = null;
 
-	/**
-	 * @param ObjectFactory $objectFactory
-	 * @param ServiceOptions $options
-	 */
 	public function __construct( ObjectFactory $objectFactory, ServiceOptions $options ) {
 		$this->objectFactory = $objectFactory;
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -141,7 +137,6 @@ class TrackingToolRegistry {
 	/**
 	 * Returns a TrackingTool subclass for a tool specified by its DB ID.
 	 *
-	 * @param int $dbID
 	 * @return TrackingTool
 	 * @throws ToolNotFoundException
 	 */
@@ -173,7 +168,6 @@ class TrackingToolRegistry {
 	/**
 	 * Returns a TrackingTool subclass for a tool specified by its user identifier.
 	 *
-	 * @param string $userIdentifier
 	 * @return TrackingTool
 	 * @throws ToolNotFoundException
 	 */
@@ -205,8 +199,6 @@ class TrackingToolRegistry {
 	/**
 	 * Returns information about a tracking tool association that may be used for presentational purposes.
 	 *
-	 * @param int $dbID
-	 * @param string $toolEventID
 	 * @return array
 	 * @phan-return array{user-id:string,display-name-msg:string,tool-event-url:string}
 	 */
@@ -229,8 +221,6 @@ class TrackingToolRegistry {
 	}
 
 	/**
-	 * @param string $userID
-	 * @param string $toolEventURL
 	 * @return string
 	 * @throws InvalidToolURLException
 	 */

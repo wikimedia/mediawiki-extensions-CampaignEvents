@@ -32,7 +32,6 @@ class CountryProvider {
 	/**
 	 * Returns the list of country names for a given language code.
 	 *
-	 * @param string $languageCode
 	 * @return array<string, string> ISO country code => localized name
 	 */
 	public function getAvailableCountries( string $languageCode ): array {

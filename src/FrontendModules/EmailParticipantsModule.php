@@ -23,9 +23,6 @@ class EmailParticipantsModule {
 
 	private IMessageFormatterFactory $messageFormatterFactory;
 
-	/**
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory
 	) {
@@ -33,7 +30,6 @@ class EmailParticipantsModule {
 	}
 
 	/**
-	 * @param Language $language
 	 * @return Tag
 	 *
 	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and

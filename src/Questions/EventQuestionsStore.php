@@ -11,9 +11,6 @@ class EventQuestionsStore {
 
 	private CampaignsDatabaseHelper $dbHelper;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 */
 	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
 		$this->dbHelper = $dbHelper;
 	}
@@ -94,7 +91,6 @@ class EventQuestionsStore {
 	}
 
 	/**
-	 * @param int $eventID
 	 * @return int[]
 	 */
 	public function getEventQuestions( int $eventID ): array {

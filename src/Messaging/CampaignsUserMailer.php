@@ -159,10 +159,6 @@ class CampaignsUserMailer {
 	 * @todo It might make sense to move this to the job, for performance. However, it should wait until
 	 * T339821 is ready, as that will give us a better holistic view of how to refactor this code.
 	 *
-	 * @param string $body
-	 * @param MailAddress $from
-	 * @param MailAddress $to
-	 * @param ExistingEventRegistration $event
 	 * @return string
 	 */
 	private function getMessageWithFooter(
@@ -287,7 +283,6 @@ class CampaignsUserMailer {
 
 	/**
 	 * Check whether a user is allowed to send email
-	 * @param User $user
 	 * @return StatusValue status indicating whether the user can send an email or not
 	 */
 	private function validateSender( User $user ): StatusValue {
@@ -308,7 +303,6 @@ class CampaignsUserMailer {
 	}
 
 	/**
-	 * @param MailAddress $fromAddress
 	 * @return array<MailAddress|null>
 	 * @phan-return array{0:MailAddress,1:?MailAddress}
 	 */

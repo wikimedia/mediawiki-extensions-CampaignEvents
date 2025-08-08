@@ -408,8 +408,6 @@ class EventFactory {
 	}
 
 	/**
-	 * @param string|null $trackingToolUserID
-	 * @param string|null $trackingToolEventID
 	 * @return StatusValue If good, has the tracking tool DB ID as value, or null if no tool was specified.
 	 */
 	private function validateTrackingTool( ?string $trackingToolUserID, ?string $trackingToolEventID ): StatusValue {
@@ -433,7 +431,6 @@ class EventFactory {
 	}
 
 	/**
-	 * @param string $timezone
 	 * @return StatusValue If good, has the corresponding DateTimeZone object as value.
 	 */
 	private function validateTimezone( string $timezone ): StatusValue {

@@ -144,7 +144,6 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 	}
 
 	/**
-	 * @param string $rawWorklist
 	 * @return array<string,string[]> Maps wiki ID to a list of page titles.
 	 */
 	private static function makePageMapFromInput( string $rawWorklist ): array {

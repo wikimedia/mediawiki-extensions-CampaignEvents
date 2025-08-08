@@ -51,8 +51,6 @@ class UserLinker {
 	/**
 	 * Generates a link to the given user, if it can be found and is visible, throwing an exception otherwise.
 	 *
-	 * @param IContextSource $context
-	 * @param CentralUser $user
 	 * @return string HTML
 	 * @throws CentralUserNotFoundException
 	 * @throws HiddenCentralUserException
@@ -118,7 +116,6 @@ class UserLinker {
 	}
 
 	/**
-	 * @param CentralUser $centralUser
 	 * @return string[]
 	 * NOTE: Make sure that the user is not hidden before calling this method, or it will throw an exception.
 	 * TODO: Remove this hack and replace with a proper javascript implementation of Linker::userLink (T386821)

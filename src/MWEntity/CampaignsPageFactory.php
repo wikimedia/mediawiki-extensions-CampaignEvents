@@ -54,7 +54,6 @@ class CampaignsPageFactory {
 	}
 
 	/**
-	 * @param string $titleStr
 	 * @return MWPageProxy
 	 * @throws InvalidTitleStringException
 	 * @throws UnexpectedInterwikiException If the page title has an interwiki prefix

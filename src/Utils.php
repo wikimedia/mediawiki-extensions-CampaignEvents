@@ -32,7 +32,6 @@ class Utils {
 	/**
 	 * Guesses the direction of a string, e.g. an address, for use in the "dir" attribute.
 	 *
-	 * @param string $address
 	 * @return string Either 'ltr' or 'rtl'
 	 */
 	public static function guessStringDirection( string $address ): string {
@@ -46,7 +45,6 @@ class Utils {
 	 * Converts a DateTimeZone object into a UserTimeCorrection object.
 	 * This logic could perhaps be moved to UserTimeCorrection in the future.
 	 *
-	 * @param DateTimeZone $tz
 	 * @return UserTimeCorrection
 	 */
 	public static function timezoneToUserTimeCorrection( DateTimeZone $tz ): UserTimeCorrection {
@@ -87,8 +85,6 @@ class Utils {
 	 * aggregated, the aggregation timestamp is ignored. This is motivated by the current UI, where participant whose
 	 * answers have been aggregated are treated the same as those who never answered any question.
 	 *
-	 * @param Participant $participant
-	 * @param ExistingEventRegistration $event
 	 * @return string|null Timestamp in TS_UNIX format
 	 */
 	public static function getAnswerAggregationTimestamp(

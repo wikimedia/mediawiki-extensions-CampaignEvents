@@ -35,13 +35,6 @@ class EventFormatter {
 	}
 
 	/**
-	 * @param EventRegistration $event
-	 * @param ITextFormatter $messageFormatter
-	 * @param WikiLookup $wikiLookup
-	 * @param Language $language
-	 * @param LinkRenderer $linkRenderer
-	 * @param string $allWikisMessage
-	 * @param string $moreWikisMessage
 	 * @return HtmlSnippet|string
 	 */
 	public function formatWikis(

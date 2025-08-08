@@ -109,7 +109,6 @@ class InvitationListStore {
 	}
 
 	/**
-	 * @param int $listID
 	 * @return InvitationList
 	 * @throws InvitationListNotFoundException
 	 */
@@ -158,8 +157,6 @@ class InvitationListStore {
 	}
 
 	/**
-	 * @param IResultWrapper $rows
-	 * @param string $invitationListWiki
 	 * @return PageIdentity[]
 	 */
 	private function loadPagesFromDB( IResultWrapper $rows, string $invitationListWiki ): array {
@@ -191,7 +188,6 @@ class InvitationListStore {
 	}
 
 	/**
-	 * @param int $invitationListID
 	 * @return array<int,int> [ user => score ] A maximum of 200 users is returned, ordered by score (high to low)
 	 */
 	public function getInvitationListUsers( int $invitationListID ): array {

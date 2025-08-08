@@ -13,9 +13,6 @@ class ParticipantAnswersStore {
 
 	private CampaignsDatabaseHelper $dbHelper;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 */
 	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
 		$this->dbHelper = $dbHelper;
 	}
@@ -135,8 +132,6 @@ class ParticipantAnswersStore {
 	}
 
 	/**
-	 * @param int $eventID
-	 * @param CentralUser $participant
 	 * @return Answer[]
 	 */
 	public function getParticipantAnswers( int $eventID, CentralUser $participant ): array {
@@ -182,7 +177,6 @@ class ParticipantAnswersStore {
 	/**
 	 * Returns whether the given event has any answers.
 	 *
-	 * @param int $eventID
 	 * @return bool
 	 */
 	public function eventHasAnswers( int $eventID ): bool {

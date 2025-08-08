@@ -50,10 +50,6 @@ class InvitationListGenerator {
 	}
 
 	/**
-	 * @param string $name
-	 * @param string|null $eventPage
-	 * @param Worklist $worklist
-	 * @param Authority $performer
 	 * @return StatusValue If good, the value shall be the ID of the invitation list.
 	 */
 	public function createIfAllowed(
@@ -77,10 +73,6 @@ class InvitationListGenerator {
 	}
 
 	/**
-	 * @param string $name
-	 * @param string|null $eventPage
-	 * @param Worklist $worklist
-	 * @param Authority $performer
 	 * @return StatusValue If good, the value shall be the ID of the invitation list.
 	 */
 	public function createUnsafe(
@@ -120,8 +112,6 @@ class InvitationListGenerator {
 	}
 
 	/**
-	 * @param string $eventPage
-	 * @param Authority $performer
 	 * @return StatusValue Can have fatal errors, or if good, the value shall be the event ID.
 	 */
 	public function validateEventPage( string $eventPage, Authority $performer ): StatusValue {

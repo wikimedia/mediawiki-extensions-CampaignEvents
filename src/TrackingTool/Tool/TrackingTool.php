@@ -169,8 +169,6 @@ abstract class TrackingTool {
 	 * Given the ID of an event in this tool, return the URL of the resource corresponding to the event on the tool
 	 * itself.
 	 *
-	 * @param string $baseURL
-	 * @param string $toolEventID
 	 * @return string
 	 */
 	abstract public static function buildToolEventURL( string $baseURL, string $toolEventID ): string;
@@ -178,8 +176,6 @@ abstract class TrackingTool {
 	/**
 	 * Given the URL of an event in this tool, return the corresponding event ID in the tool.
 	 *
-	 * @param string $baseURL
-	 * @param string $url
 	 * @return string
 	 * @throws InvalidToolURLException
 	 */

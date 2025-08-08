@@ -10,8 +10,6 @@ use MediaWiki\ResourceLoader\Context;
 
 class ResourceLoaderCallbacks {
 	/**
-	 * @param Context $context
-	 * @param Config $config
 	 * @return array<string,string>
 	 */
 	public static function getEventPageData( Context $context, Config $config ): array {

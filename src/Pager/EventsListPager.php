@@ -518,8 +518,6 @@ class EventsListPager extends ReverseChronologicalPager {
 	}
 
 	/**
-	 * @param string|null $startDate
-	 * @param string|null $endDate
 	 * @return array<string|null>
 	 */
 	protected function getDateRangeCond( ?string $startDate, ?string $endDate ): array {

@@ -15,13 +15,11 @@ interface IEventStore {
 	public const STORE_SERVICE_NAME = 'CampaignEventsEventStore';
 
 	/**
-	 * @param EventRegistration $event
 	 * @return int ID of the saved event. If $event has a non-null ID, then that value is returned.
 	 */
 	public function saveRegistration( EventRegistration $event ): int;
 
 	/**
-	 * @param ExistingEventRegistration $registration
 	 * @return bool True if the event was just deleted, false if it was already deleted
 	 */
 	public function deleteRegistration( ExistingEventRegistration $registration ): bool;

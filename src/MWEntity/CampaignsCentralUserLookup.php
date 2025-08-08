@@ -31,11 +31,6 @@ class CampaignsCentralUserLookup {
 	 */
 	private array $nameByIDCache = [];
 
-	/**
-	 * @param CentralIdLookup $centralIdLookup
-	 * @param UserFactory $userFactory
-	 * @param UserNameUtils $userNameUtils
-	 */
 	public function __construct(
 		CentralIdLookup $centralIdLookup,
 		UserFactory $userFactory,
@@ -49,7 +44,6 @@ class CampaignsCentralUserLookup {
 	/**
 	 * Returns the central user corresponding to the given local user, if it exists. This method should be
 	 * avoided if possible, because we should only work with (the current) Authority and CentralUser.
-	 * @param UserIdentity $userIdentity
 	 * @return CentralUser
 	 * @throws UserNotGlobalException
 	 */
@@ -78,7 +72,6 @@ class CampaignsCentralUserLookup {
 	 * Returns the central user corresponding to the given username, if it exists. NOTE: Make sure to handle
 	 * the exception, if the user is not guaranteed to have a global account.
 	 * Callers must ensure that the username is valid
-	 * @param string $userName
 	 * @return CentralUser
 	 * @throws UserNotGlobalException
 	 */
@@ -93,7 +86,6 @@ class CampaignsCentralUserLookup {
 	}
 
 	/**
-	 * @param CentralUser $user
 	 * @return string
 	 * @throws CentralUserNotFoundException
 	 * @throws HiddenCentralUserException
@@ -112,7 +104,6 @@ class CampaignsCentralUserLookup {
 
 	/**
 	 * Checks whether the given CentralUser actually exists and is visible.
-	 * @param CentralUser $user
 	 * @return bool
 	 */
 	public function existsAndIsVisible( CentralUser $user ): bool {
@@ -126,7 +117,6 @@ class CampaignsCentralUserLookup {
 
 	/**
 	 * Checks whether the given central user is attached, i.e. it exists on the current wiki.
-	 * @param CentralUser $user
 	 * @return bool
 	 */
 	public function existsLocally( CentralUser $user ): bool {
@@ -190,7 +180,6 @@ class CampaignsCentralUserLookup {
 	}
 
 	/**
-	 * @param string $userName
 	 * @return bool
 	 * @todo This method should possibly be moved to a separate service in the future.
 	 */

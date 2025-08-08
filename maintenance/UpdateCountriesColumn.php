@@ -140,7 +140,6 @@ class UpdateCountriesColumn extends Maintenance {
 	}
 
 	/**
-	 * @param string $freetextValue
 	 * @return array<string>
 	 */
 	public function convertCountryToCountryCode( string $freetextValue ): array {

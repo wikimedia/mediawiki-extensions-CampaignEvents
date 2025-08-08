@@ -23,16 +23,12 @@ class TrackingToolUpdater {
 
 	private CampaignsDatabaseHelper $dbHelper;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 */
 	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
 		$this->dbHelper = $dbHelper;
 	}
 
 	/**
 	 * Converts a TrackingToolAssociation::SYNC_STATUS_* constant to the respective DB value
-	 * @param int $status
 	 * @return int
 	 */
 	public static function syncStatusToDB( int $status ): int {
@@ -45,7 +41,6 @@ class TrackingToolUpdater {
 	/**
 	 * Converts a DB value for ce_tracking_tools.cett_sync_status to the respective
 	 * TrackingToolAssociation::SYNC_STATUS_* constant.
-	 * @param int $dbVal
 	 * @return int
 	 */
 	public static function dbSyncStatusToConst( int $dbVal ): int {

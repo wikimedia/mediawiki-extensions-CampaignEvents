@@ -39,14 +39,6 @@ class RegisterParticipantCommand {
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private TrackingToolEventWatcher $trackingToolEventWatcher;
 
-	/**
-	 * @param ParticipantsStore $participantsStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param UserNotifier $userNotifier
-	 * @param EventPageCacheUpdater $eventPageCacheUpdater
-	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
-	 */
 	public function __construct(
 		ParticipantsStore $participantsStore,
 		PermissionChecker $permissionChecker,

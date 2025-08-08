@@ -39,8 +39,6 @@ class DeleteEventCommand {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param Authority $performer
 	 * @return StatusValue If good, the value is true if the registration was deleted, false if it was already deleted.
 	 *   Will be a PermissionStatus for permissions-related errors.
 	 */

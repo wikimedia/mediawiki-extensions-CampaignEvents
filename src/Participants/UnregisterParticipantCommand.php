@@ -29,13 +29,6 @@ class UnregisterParticipantCommand {
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private TrackingToolEventWatcher $trackingToolEventWatcher;
 
-	/**
-	 * @param ParticipantsStore $participantsStore
-	 * @param PermissionChecker $permissionChecker
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param EventPageCacheUpdater $eventPageCacheUpdater
-	 * @param TrackingToolEventWatcher $trackingToolEventWatcher
-	 */
 	public function __construct(
 		ParticipantsStore $participantsStore,
 		PermissionChecker $permissionChecker,
@@ -51,8 +44,6 @@ class UnregisterParticipantCommand {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param Authority $performer
 	 * @return StatusValue Good if everything went fine, fatal with errors otherwise. If good, the value shall be
 	 *   true if the user was actively registered, and false if they unregistered or had never registered.
 	 *   Will be a PermissionStatus for permissions-related errors.

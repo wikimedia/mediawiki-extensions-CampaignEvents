@@ -14,9 +14,6 @@ class UserNotifier {
 
 	private bool $isEchoLoaded;
 
-	/**
-	 * @param bool $isEchoLoaded
-	 */
 	public function __construct( bool $isEchoLoaded ) {
 		$this->isEchoLoaded = $isEchoLoaded;
 	}

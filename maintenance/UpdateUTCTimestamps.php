@@ -163,7 +163,6 @@ class UpdateUTCTimestamps extends Maintenance {
 	 * Returns an SQL fragment that conditionally updates the given field if the other fields haven't changed
 	 * since we read the row.
 	 *
-	 * @param string $fieldName
 	 * @return string SQL
 	 */
 	private function getUpdateTimeConditional( string $fieldName ): string {

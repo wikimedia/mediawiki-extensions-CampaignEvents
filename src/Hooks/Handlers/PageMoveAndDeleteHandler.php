@@ -36,14 +36,6 @@ class PageMoveAndDeleteHandler implements PageMoveCompleteHook, PageDeleteComple
 	private CampaignsPageFactory $campaignsPageFactory;
 	private Config $config;
 
-	/**
-	 * @param PageEventLookup $pageEventLookup
-	 * @param IEventStore $eventStore
-	 * @param DeleteEventCommand $deleteEventCommand
-	 * @param TitleFormatter $titleFormatter
-	 * @param CampaignsPageFactory $campaignsPageFactory
-	 * @param Config $config
-	 */
 	public function __construct(
 		PageEventLookup $pageEventLookup,
 		IEventStore $eventStore,

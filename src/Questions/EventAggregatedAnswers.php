@@ -22,7 +22,6 @@ class EventAggregatedAnswers {
 	/**
 	 * Returns the raw data for a given question.
 	 *
-	 * @param int $questionID
 	 * @return array<int,int> Map of [ answer ID => number of answers ]
 	 */
 	public function getQuestionData( int $questionID ): array {

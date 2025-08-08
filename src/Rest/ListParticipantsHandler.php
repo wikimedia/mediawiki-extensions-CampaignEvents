@@ -218,9 +218,6 @@ class ListParticipantsHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @param Participant $participant
-	 * @param ExistingEventRegistration $event
-	 * @param ITextFormatter $msgFormatter
 	 * @return list<array<string,mixed>>
 	 */
 	private function getParticipantNonPIIAnswers(
@@ -253,8 +250,6 @@ class ListParticipantsHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @param Answer $answer
-	 * @param ITextFormatter $msgFormatter
 	 * @return array<string,mixed>
 	 */
 	private function getQuestionAnswer( Answer $answer, ITextFormatter $msgFormatter ): array {

@@ -60,18 +60,6 @@ class EventDetailsParticipantsModule {
 	private string $statisticsTabUrl;
 	private bool $isPastEvent;
 
-	/**
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 * @param UserLinker $userLinker
-	 * @param ParticipantsStore $participantsStore
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param PermissionChecker $permissionChecker
-	 * @param UserFactory $userFactory
-	 * @param CampaignsUserMailer $userMailer
-	 * @param EventQuestionsRegistry $eventQuestionsRegistry
-	 * @param Language $language
-	 * @param string $statisticsTabUrl
-	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		UserLinker $userLinker,
@@ -99,13 +87,6 @@ class EventDetailsParticipantsModule {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $event
-	 * @param UserIdentity $viewingUser
-	 * @param Authority $authority
-	 * @param bool $isOrganizer
-	 * @param bool $canEmailParticipants
-	 * @param bool $isLocalWiki
-	 * @param OutputPage $out
 	 * @return Tag
 	 *
 	 * @note Ideally, this wouldn't use MW-specific classes for l10n, but it's hard-ish to avoid and

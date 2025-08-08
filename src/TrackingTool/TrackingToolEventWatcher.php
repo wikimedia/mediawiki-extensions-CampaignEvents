@@ -37,11 +37,6 @@ class TrackingToolEventWatcher {
 	private TrackingToolUpdater $trackingToolUpdater;
 	private LoggerInterface $logger;
 
-	/**
-	 * @param TrackingToolRegistry $trackingToolRegistry
-	 * @param TrackingToolUpdater $trackingToolUpdater
-	 * @param LoggerInterface $logger
-	 */
 	public function __construct(
 		TrackingToolRegistry $trackingToolRegistry,
 		TrackingToolUpdater $trackingToolUpdater,
@@ -191,8 +186,6 @@ class TrackingToolEventWatcher {
 	 * Given two version of an event registration, returns an array with tools that were, respectively, removed,
 	 * added, and unchanged between the two version.
 	 *
-	 * @param ExistingEventRegistration $oldVersion
-	 * @param EventRegistration $newVersion
 	 * @return TrackingToolAssociation[][]
 	 * @phan-return array{0:TrackingToolAssociation[],1:TrackingToolAssociation[],2:TrackingToolAssociation[]}
 	 */
@@ -377,10 +370,6 @@ class TrackingToolEventWatcher {
 	/**
 	 * Logs a tracking tool failure in the MW log, so that failures can be monitored and possibly acted upon.
 	 *
-	 * @param string $operation
-	 * @param EventRegistration $event
-	 * @param TrackingToolAssociation $toolAssoc
-	 * @param StatusValue $status
 	 * @return void
 	 */
 	private function logToolFailure(

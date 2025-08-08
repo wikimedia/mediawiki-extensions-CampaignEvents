@@ -24,7 +24,6 @@ class EventTopicsStore {
 	/**
 	 * Retrieves all topics (ceet_topics) associated with a specific event ID.
 	 *
-	 * @param int $eventID
 	 * @return string[] List of topics IDs
 	 */
 	public function getEventTopics( int $eventID ): array {

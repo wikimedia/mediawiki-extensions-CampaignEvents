@@ -69,8 +69,6 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 	}
 
 	/**
-	 * @param CentralUser $user
-	 * @param int $resultLimit
 	 * @return list<array<string,mixed>>
 	 */
 	abstract protected function getEventsByUser( CentralUser $user, int $resultLimit ): array;

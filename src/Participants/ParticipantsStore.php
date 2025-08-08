@@ -33,11 +33,6 @@ class ParticipantsStore {
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private ParticipantAnswersStore $answersStore;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 * @param CampaignsCentralUserLookup $centralUserLookup
-	 * @param ParticipantAnswersStore $answersStore
-	 */
 	public function __construct(
 		CampaignsDatabaseHelper $dbHelper,
 		CampaignsCentralUserLookup $centralUserLookup,
@@ -147,8 +142,6 @@ class ParticipantsStore {
 	}
 
 	/**
-	 * @param int $eventID
-	 * @param CentralUser $participant
 	 * @return bool True if the participant was removed, false if they never registered or
 	 * they registered but then unregistered.
 	 */
@@ -322,9 +315,6 @@ class ParticipantsStore {
 	/**
 	 * Returns a Participant object for the given user and event, if the user is a participant (and has not
 	 * unregistered), or null otherwise.
-	 * @param int $eventID
-	 * @param CentralUser $user
-	 * @param bool $showPrivate
 	 * @return Participant|null
 	 */
 	public function getEventParticipant(
@@ -365,8 +355,6 @@ class ParticipantsStore {
 	}
 
 	/**
-	 * @param int $eventID
-	 * @param CentralUser $user
 	 * @return bool Whether the given user has any aggregated answers for the given event. This can be true even if the
 	 * user is not a participant (if they cancelled their registration after their answers had been aggregated).
 	 */
@@ -386,8 +374,6 @@ class ParticipantsStore {
 
 	/**
 	 * Returns the count of participants to an event.
-	 * @param int $eventID
-	 * @param bool $public
 	 * @return int
 	 */
 	private function getParticipantCountForEvent( int $eventID, bool $public ): int {

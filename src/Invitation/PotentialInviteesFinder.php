@@ -68,7 +68,6 @@ class PotentialInviteesFinder {
 	}
 
 	/**
-	 * @param Worklist $worklist
 	 * @return array<string,int>
 	 */
 	public function generate( Worklist $worklist ): array {
@@ -464,7 +463,6 @@ class PotentialInviteesFinder {
 	/**
 	 * Returns a (0, 1) score based on the contributions made to a single page.
 	 *
-	 * @param int $delta
 	 * @return float
 	 */
 	private function getBytesScoreForPage( int $delta ): float {

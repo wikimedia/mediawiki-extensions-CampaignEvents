@@ -59,8 +59,6 @@ class TrackingToolAssociation {
 	/**
 	 * Returns a copy of $this updated with the given sync status and TS.
 	 *
-	 * @param int $newStatus
-	 * @param string|null $newTS
 	 * @return self
 	 */
 	public function asUpdatedWith( int $newStatus, ?string $newTS ): self {

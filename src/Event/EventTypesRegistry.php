@@ -134,7 +134,6 @@ class EventTypesRegistry {
 
 	/**
 	 * Converts event types as stored in the DB into a list of human-readable type identifiers (NOT localized).
-	 * @param string $rawDBTypes
 	 * @return list<string>
 	 */
 	public static function getEventTypesFromDBVal( string $rawDBTypes ): array {

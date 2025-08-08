@@ -401,7 +401,6 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	/**
 	 * Normalize a comma-separated string of values into an array of trimmed, lowercase strings.
 	 * This allows editors using transclusion to use case-insensitive filters
-	 * @param string $value
 	 * @return list<string>
 	 */
 	private function normalizeFilterValues( string $value ): array {

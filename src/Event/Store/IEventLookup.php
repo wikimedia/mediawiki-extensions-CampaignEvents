@@ -14,7 +14,6 @@ interface IEventLookup {
 	public const LOOKUP_SERVICE_NAME = 'CampaignEventsEventLookup';
 
 	/**
-	 * @param int $eventID
 	 * @return ExistingEventRegistration
 	 * @throws EventNotFoundException
 	 */
@@ -38,15 +37,11 @@ interface IEventLookup {
 	): ExistingEventRegistration;
 
 	/**
-	 * @param int $organizerID
-	 * @param int $limit
 	 * @return ExistingEventRegistration[]
 	 */
 	public function getEventsByOrganizer( int $organizerID, int $limit ): array;
 
 	/**
-	 * @param int $participantID
-	 * @param int $limit
 	 * @return ExistingEventRegistration[]
 	 */
 	public function getEventsByParticipant( int $participantID, int $limit ): array;

@@ -23,17 +23,11 @@ class OrganizersStore {
 
 	private CampaignsDatabaseHelper $dbHelper;
 
-	/**
-	 * @param CampaignsDatabaseHelper $dbHelper
-	 */
 	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
 		$this->dbHelper = $dbHelper;
 	}
 
 	/**
-	 * @param int $eventID
-	 * @param int|null $limit
-	 * @param int|null $lastOrganizerId
 	 * @return Organizer[]
 	 */
 	public function getEventOrganizers( int $eventID, ?int $limit = null, ?int $lastOrganizerId = null ): array {
@@ -198,7 +192,6 @@ class OrganizersStore {
 
 	/**
 	 * Returns the number of organizers of an event
-	 * @param int $eventID
 	 * @return int
 	 */
 	public function getOrganizerCountForEvent( int $eventID ): int {

@@ -342,8 +342,6 @@ class EventPageDecorator {
 	}
 
 	/**
-	 * @param ExistingEventRegistration $registration
-	 * @param Participant|null $participant
 	 * @return array[]
 	 */
 	private function getEventQuestionsData(

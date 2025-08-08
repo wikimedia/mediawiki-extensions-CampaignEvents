@@ -29,9 +29,6 @@ class EventQuestionsRegistry {
 	/** @var array[]|null Question overrides used in test. Null means no override. */
 	private ?array $testOverrides = null;
 
-	/**
-	 * @param bool $wikimediaQuestionsEnabled
-	 */
 	public function __construct( bool $wikimediaQuestionsEnabled ) {
 		$this->wikimediaQuestionsEnabled = $wikimediaQuestionsEnabled;
 	}
@@ -524,7 +521,6 @@ class EventQuestionsRegistry {
 	/**
 	 * Returns the key of a message to be used when introducing stats for the given question.
 	 *
-	 * @param int $questionID
 	 * @return string
 	 */
 	public function getQuestionLabelForStats( int $questionID ): string {
@@ -537,7 +533,6 @@ class EventQuestionsRegistry {
 	}
 
 	/**
-	 * @param int $questionID
 	 * @return array<int,string> Map of [ answer ID => message key ]
 	 */
 	public function getQuestionOptionsForStats( int $questionID ): array {
@@ -578,7 +573,6 @@ class EventQuestionsRegistry {
 	/**
 	 * Given a question name, returns the corresponding database ID.
 	 *
-	 * @param string $name
 	 * @return int
 	 * @throws UnknownQuestionException
 	 */
@@ -594,7 +588,6 @@ class EventQuestionsRegistry {
 	/**
 	 * Given a question database ID, returns its name.
 	 *
-	 * @param int $dbID
 	 * @return string
 	 * @throws UnknownQuestionException
 	 */

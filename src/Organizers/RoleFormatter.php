@@ -26,9 +26,6 @@ class RoleFormatter {
 
 	private IMessageFormatterFactory $messageFormatterFactory;
 
-	/**
-	 * @param IMessageFormatterFactory $messageFormatterFactory
-	 */
 	public function __construct( IMessageFormatterFactory $messageFormatterFactory ) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 	}
