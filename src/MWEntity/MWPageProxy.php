@@ -22,7 +22,7 @@ class MWPageProxy {
 	/**
 	 * @return string|false
 	 */
-	public function getWikiId() {
+	public function getWikiId(): string|bool {
 		return $this->page->getWikiId();
 	}
 

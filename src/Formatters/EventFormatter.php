@@ -34,9 +34,6 @@ class EventFormatter {
 		$this->countryProvider = $countryProvider;
 	}
 
-	/**
-	 * @return HtmlSnippet|string
-	 */
 	public function formatWikis(
 		EventRegistration $event,
 		ITextFormatter $messageFormatter,
@@ -45,7 +42,7 @@ class EventFormatter {
 		LinkRenderer $linkRenderer,
 		string $allWikisMessage,
 		string $moreWikisMessage
-	) {
+	): HtmlSnippet|string {
 		$wikis = $event->getWikis();
 		if ( $wikis === EventRegistration::ALL_WIKIS ) {
 			return $messageFormatter->format( MessageValue::new( $allWikisMessage ) );

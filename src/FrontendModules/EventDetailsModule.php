@@ -122,7 +122,7 @@ class EventDetailsModule {
 		Authority $authority,
 		bool $isOrganizer,
 		bool $isParticipant,
-		$wikiID,
+		string|bool $wikiID,
 		OutputPage $out,
 		LinkRenderer $linkRenderer
 	): PanelLayout {
@@ -211,7 +211,7 @@ class EventDetailsModule {
 	 * @param OutputPage $out
 	 * @return HtmlSnippet
 	 */
-	private function getNonLocalWikiMessage( $wikiID, OutputPage $out ): HtmlSnippet {
+	private function getNonLocalWikiMessage( string|bool $wikiID, OutputPage $out ): HtmlSnippet {
 		static $message = null;
 
 		if ( $wikiID === WikiAwareEntity::LOCAL ) {
@@ -253,7 +253,7 @@ class EventDetailsModule {
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,
-		$wikiID,
+		string|bool $wikiID,
 		int $organizersCount
 	): Tag {
 		$items = [];
@@ -525,7 +525,7 @@ class EventDetailsModule {
 		bool $isOrganizer,
 		bool $isParticipant,
 		bool $isLocalWiki,
-		$wikiID,
+		string|bool $wikiID,
 		int $organizersCount,
 		bool $canRegister,
 		bool $userCanViewSensitiveEventData,
@@ -702,7 +702,12 @@ class EventDetailsModule {
 	 * @param string[] $classes
 	 * @return Tag
 	 */
-	public static function makeSection( string $icon, $content, string $label, array $classes = [] ): Tag {
+	public static function makeSection(
+		string $icon,
+		HtmlSnippet|Tag|array|string $content,
+		string $label,
+		array $classes = []
+	): Tag {
 		$iconWidget = new IconWidget( [
 			'icon' => $icon,
 			'classes' => [ 'ext-campaignevents-eventdetails-icon' ]

@@ -1125,9 +1125,9 @@ class EventPageDecorator {
 	 */
 	private function makeDetailsDialogSection(
 		string $icon,
-		$content,
+		HtmlSnippet|Tag|array|string $content,
 		string $label,
-		$footer = '',
+		Tag|array|string $footer = '',
 		array $classes = []
 	): string {
 		$iconWidget = new IconWidget( [

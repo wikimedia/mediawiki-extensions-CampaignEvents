@@ -89,7 +89,7 @@ class WikiLookup {
 	 *
 	 * @return string
 	 */
-	public function getWikiIcon( $wikiIDs, string $renderer = self::OOUI ): string {
+	public function getWikiIcon( array|bool $wikiIDs, string $renderer = self::OOUI ): string {
 		$defaultIcon = $renderer === self::OOUI ?
 			'logoWikimedia' :
 			'logo-wikimedia';

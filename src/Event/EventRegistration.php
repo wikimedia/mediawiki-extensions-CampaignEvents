@@ -219,7 +219,7 @@ class EventRegistration {
 	/**
 	 * @return string[]|true A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 */
-	public function getWikis() {
+	public function getWikis(): array|bool {
 		return $this->wikis;
 	}
 

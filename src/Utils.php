@@ -25,7 +25,7 @@ class Utils {
 	 * @param string|false $wikiID
 	 * @return string
 	 */
-	public static function getWikiIDString( $wikiID ): string {
+	public static function getWikiIDString( string|bool $wikiID ): string {
 		return $wikiID !== WikiAwareEntity::LOCAL ? $wikiID : WikiMap::getCurrentWikiId();
 	}
 

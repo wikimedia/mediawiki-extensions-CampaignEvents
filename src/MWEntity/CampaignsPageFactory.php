@@ -40,7 +40,12 @@ class CampaignsPageFactory {
 	 * @param string|false $wikiID
 	 * @return MWPageProxy
 	 */
-	public function newPageFromDB( int $namespace, string $dbKey, string $prefixedText, $wikiID ): MWPageProxy {
+	public function newPageFromDB(
+		int $namespace,
+		string $dbKey,
+		string $prefixedText,
+		string|bool $wikiID
+	): MWPageProxy {
 		// Event pages stored in the database always have a string wiki ID, so we need to check if they're
 		// actually local.
 		$adjustedWikiID = WikiMap::isCurrentWikiId( $wikiID ) ? WikiAwareEntity::LOCAL : $wikiID;
@@ -98,7 +103,7 @@ class CampaignsPageFactory {
 	 * @param PageIdentity|LinkTarget $page Must be a page in the local wiki
 	 * @return MWPageProxy
 	 */
-	public function newFromLocalMediaWikiPage( $page ): MWPageProxy {
+	public function newFromLocalMediaWikiPage( LinkTarget|PageIdentity $page ): MWPageProxy {
 		$page->assertWiki( WikiAwareEntity::LOCAL );
 		if ( $page instanceof LinkTarget ) {
 			$page = $this->pageStoreFactory->getPageStore()->getPageForLink( $page );

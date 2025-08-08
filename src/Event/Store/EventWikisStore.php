@@ -28,7 +28,7 @@ class EventWikisStore {
 	 *
 	 * @return string[]|true List of wiki IDs or {@see EventRegistration::ALL_WIKIS}
 	 */
-	public function getEventWikis( int $eventID ) {
+	public function getEventWikis( int $eventID ): array|bool {
 		return $this->getEventWikisMulti( [ $eventID ] )[$eventID];
 	}
 
@@ -67,7 +67,7 @@ class EventWikisStore {
 	 * @param int $eventID The event ID to associate these wikis with.
 	 * @param string[]|true $eventWikis An array of wiki IDs to add, or {@see EventRegistration::ALL_WIKIS}
 	 */
-	public function addOrUpdateEventWikis( int $eventID, $eventWikis ): void {
+	public function addOrUpdateEventWikis( int $eventID, array|bool $eventWikis ): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();

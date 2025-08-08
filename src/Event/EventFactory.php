@@ -136,7 +136,7 @@ class EventFactory {
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
-		$wikis,
+		array|bool $wikis,
 		array $topics,
 		?string $trackingToolUserID,
 		?string $trackingToolEventID,
@@ -243,7 +243,7 @@ class EventFactory {
 		$invalidTimestamps = array_filter(
 			[ 'creation' => $creationTSUnix, 'lastedit' => $lastEditTSUnix, 'deletion' => $deletionTSUnix ],
 			/** @param string|false|null $ts */
-			static function ( $ts ): bool {
+			static function ( string|bool|null $ts ): bool {
 				return $ts === false;
 			}
 		);
@@ -362,7 +362,7 @@ class EventFactory {
 	 * @param string[]|true $wikis
 	 * @return StatusValue Having a canonicalized list of wiki IDs as value.
 	 */
-	private function validateWikis( $wikis ): StatusValue {
+	private function validateWikis( array|bool $wikis ): StatusValue {
 		if ( $wikis === EventRegistration::ALL_WIKIS ) {
 			return StatusValue::newGood( $wikis );
 		}

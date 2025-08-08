@@ -121,7 +121,9 @@ class EventStore implements IEventStore, IEventLookup {
 			 * @param ExistingEventRegistration|false $oldValue
 			 * @param array<string,mixed> &$setOpts
 			 */
-			function ( $oldValue, int &$ttl, array &$setOpts ) use ( $page, $readFlags ): ?ExistingEventRegistration {
+			function ( ExistingEventRegistration|bool $oldValue, int &$ttl, array &$setOpts )
+				use ( $page, $readFlags ): ?ExistingEventRegistration
+			{
 				$db = $this->dbHelper->getDBConnection( DB_REPLICA );
 
 				$setOpts += Database::getCacheSetOptions( $db );
@@ -351,7 +353,7 @@ class EventStore implements IEventStore, IEventLookup {
 		stdClass $row,
 		?Address $address,
 		?stdClass $trackingToolRow,
-		$wikis,
+		array|bool $wikis,
 		array $topics,
 		array $questionIDs
 	): ExistingEventRegistration {

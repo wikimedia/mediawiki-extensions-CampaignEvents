@@ -50,7 +50,7 @@ class PageEventLookup {
 	 * @return ExistingEventRegistration|null
 	 */
 	public function getRegistrationForLocalPage(
-		$page,
+		LinkTarget|PageIdentity $page,
 		string $canonicalize = self::GET_CANONICALIZE,
 		int $readFlags = IDBAccessObject::READ_NORMAL
 	): ?ExistingEventRegistration {
@@ -91,11 +91,7 @@ class PageEventLookup {
 		}
 	}
 
-	/**
-	 * @param PageIdentity|LinkTarget $page
-	 * @return PageIdentity
-	 */
-	private function getCanonicalPage( $page ): PageIdentity {
+	private function getCanonicalPage( LinkTarget|PageIdentity $page ): PageIdentity {
 		// XXX: Can't canonicalize foreign pages.
 		if ( $this->isTranslateExtensionInstalled && $page->getWikiId() === WikiAwareEntity::LOCAL ) {
 			$title = $page instanceof PageIdentity

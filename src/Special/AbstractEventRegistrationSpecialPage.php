@@ -321,9 +321,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			/**
 			 * @param mixed $value
 			 * @param array<string,mixed> $alldata
-			 * @return string|true
+			 * @return Message|true
 			 */
-			'validation-callback' => function ( $value, array $alldata ) {
+			'validation-callback' => function ( $value, array $alldata ): Message|bool {
 				$organizers = $alldata['EventOrganizerUsernames'] !== ''
 					? explode( "\n", $alldata['EventOrganizerUsernames'] )
 					: [];
@@ -391,7 +391,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			 * @param array<string,mixed> $alldata
 			 * @return Message|true
 			 */
-			'validation-callback' => function ( $value, array $alldata ) {
+			'validation-callback' => function ( $value, array $alldata ): Message|bool {
 				if ( $value === [] && $alldata['WikiType'] === (string)self::WIKI_TYPE_SPECIFIC ) {
 					return $this->msg( 'campaignevents-edit-field-wikis-empty-specific' );
 				}
@@ -460,9 +460,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				/**
 				 * @param mixed $value
 				 * @param array<string,mixed> $allData
-				 * @return string|true
+				 * @return Message|true
 				 */
-				'validation-callback' => function ( $value, array $allData ) {
+				'validation-callback' => function ( $value, array $allData ): Message|bool {
 					if ( $value === '' ) {
 						return true;
 					}

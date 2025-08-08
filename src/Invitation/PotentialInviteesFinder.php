@@ -222,7 +222,7 @@ class PotentialInviteesFinder {
 	 * @param IReadableDatabase $dbr
 	 * @return array<string|int,mixed>
 	 */
-	private function getRevisionFilterConditions( $wikiID, IReadableDatabase $dbr ): array {
+	private function getRevisionFilterConditions( string|bool $wikiID, IReadableDatabase $dbr ): array {
 		$filterConditions = [];
 
 		// Exclude all sorts of deleted revisions to avoid any chance of data leaks.

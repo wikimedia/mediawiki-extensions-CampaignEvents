@@ -50,5 +50,6 @@ $cfg['plugins'] = array_merge( $cfg['plugins'], [
 ] );
 
 $cfg['suppress_issue_types'][] = 'PhanPluginRedundantReturnComment';
+$cfg['minimum_target_php_version'] = '8.1';
 
 return $cfg;
