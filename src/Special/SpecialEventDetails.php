@@ -268,7 +268,7 @@ class SpecialEventDetails extends SpecialPage {
 	 * @param mixed ...$msgParams
 	 * @suppress PhanPluginUnknownArrayMethodParamType,UnusedSuppression https://github.com/phan/phan/issues/4927
 	 */
-	protected function outputErrorBox( string $errorMsg, ...$msgParams ): void {
+	protected function outputErrorBox( string $errorMsg, mixed ...$msgParams ): void {
 		// phan-suppress-previous-line PhanPluginUnknownArrayMethodParamType
 		$this->getOutput()->addModuleStyles( [
 			'mediawiki.codex.messagebox.styles',

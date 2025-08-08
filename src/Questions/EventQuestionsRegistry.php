@@ -334,12 +334,7 @@ class EventQuestionsRegistry {
 		return new Answer( $questionSpec['db-id'], $ansOption, $ansText );
 	}
 
-	/**
-	 * @param string $questionType
-	 * @param mixed $value
-	 * @return bool
-	 */
-	private function isPlaceholderValue( string $questionType, $value ): bool {
+	private function isPlaceholderValue( string $questionType, mixed $value ): bool {
 		switch ( $questionType ) {
 			case self::RADIO_BUTTON_QUESTION_TYPE:
 			case self::SELECT_QUESTION_TYPE:

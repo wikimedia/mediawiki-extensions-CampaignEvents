@@ -194,7 +194,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @param mixed ...$msgParams
 	 * @suppress PhanPluginUnknownArrayMethodParamType,UnusedSuppression https://github.com/phan/phan/issues/4927
 	 */
-	protected function outputErrorBox( string $errorMsg, ...$msgParams ): void {
+	protected function outputErrorBox( string $errorMsg, mixed ...$msgParams ): void {
 		$this->setHeaders();
 		$this->getOutput()->addModuleStyles( [
 			'mediawiki.codex.messagebox.styles',
@@ -323,7 +323,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			 * @param array<string,mixed> $alldata
 			 * @return Message|true
 			 */
-			'validation-callback' => function ( $value, array $alldata ): Message|bool {
+			'validation-callback' => function ( mixed $value, array $alldata ): Message|bool {
 				$organizers = $alldata['EventOrganizerUsernames'] !== ''
 					? explode( "\n", $alldata['EventOrganizerUsernames'] )
 					: [];
@@ -391,7 +391,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			 * @param array<string,mixed> $alldata
 			 * @return Message|true
 			 */
-			'validation-callback' => function ( $value, array $alldata ): Message|bool {
+			'validation-callback' => function ( mixed $value, array $alldata ): Message|bool {
 				if ( $value === [] && $alldata['WikiType'] === (string)self::WIKI_TYPE_SPECIFIC ) {
 					return $this->msg( 'campaignevents-edit-field-wikis-empty-specific' );
 				}
@@ -462,7 +462,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				 * @param array<string,mixed> $allData
 				 * @return Message|true
 				 */
-				'validation-callback' => function ( $value, array $allData ): Message|bool {
+				'validation-callback' => function ( mixed $value, array $allData ): Message|bool {
 					if ( $value === '' ) {
 						return true;
 					}
