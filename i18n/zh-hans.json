@@ -336,6 +336,8 @@
 	"campaignevents-eventslist-topics-label": "主题",
 	"campaignevents-event-details-topics-header": "主题",
 	"campaignevents-eventpage-dialog-topics-label": "主题",
+	"communityconfiguration-campaignevents-description": "CampaignEvents扩展的配置选项",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "有效的活动命名空间",
 	"campaignevents-eventtype-contest": "竞赛",
 	"campaignevents-eventtype-workshop": "工作坊",
 	"campaignevents-eventtype-hackathon": "黑客松",
