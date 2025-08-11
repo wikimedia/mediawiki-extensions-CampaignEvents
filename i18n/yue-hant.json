@@ -1,7 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"JeffreyKim"
+			"JeffreyKim",
+			"Ktchankt"
 		]
-	}
+	},
+	"nstab-event": "活動"
 }

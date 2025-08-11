@@ -13,7 +13,8 @@
 			"Stang",
 			"人间百态",
 			"Aoum",
-			"Anterdc99"
+			"Anterdc99",
+			"優枰"
 		]
 	},
 	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
@@ -105,6 +106,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "取消",
 	"campaignevents-eventslist-delete-dialog-delete": "删除",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi>已删除。",
+	"deleteeventregistration": "删除活动报名",
 	"campaignevents-delete-error-no-event": "未指定活动。",
 	"campaignevents-delete-submit-btn": "删除",
 	"campaignevents-eventpage-header-location-label": "位置",
