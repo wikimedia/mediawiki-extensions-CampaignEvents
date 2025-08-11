@@ -5,10 +5,10 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Html\Html;
 use MediaWiki\Message\Message;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
-use OOUI\MessageWidget;
 
 // https://github.com/phan/phan/issues/4927 plus phan refusing to suppress unused suppressions...
 // @phan-file-suppress UnusedPluginSuppression,UnusedSuppression,UnusedPluginFileSuppression
@@ -23,22 +23,14 @@ use OOUI\MessageWidget;
 trait InvitationFeatureAccessTrait {
 	public function checkInvitationFeatureAccess( OutputPage $out, Authority $performer ): bool {
 		if ( !$this->getConfig()->get( 'CampaignEventsEnableEventInvitation' ) ) {
-			$out->enableOOUI();
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => $this->msg( 'campaignevents-invitation-list-disabled' )->text()
-			] );
-			$out->addHTML( $messageWidget );
+			$out->addModuleStyles( 'mediawiki.codex.messagebox.styles' );
+			$out->addHTML( Html::noticeBox( $this->msg( 'campaignevents-invitation-list-disabled' )->escaped() ) );
 			return false;
 		}
 		$this->requireNamedUser();
 		if ( !$this->permissionChecker->userCanUseInvitationLists( $performer ) ) {
-			$out->enableOOUI();
-			$messageWidget = new MessageWidget( [
-				'type' => 'error',
-				'label' => $this->msg( 'campaignevents-invitation-list-not-allowed' )->text()
-			] );
-			$out->addHTML( $messageWidget );
+			$out->addModuleStyles( 'mediawiki.codex.messagebox.styles' );
+			$out->addHTML( Html::errorBox( $this->msg( 'campaignevents-invitation-list-not-allowed' )->escaped() ) );
 			return false;
 		}
 		return true;

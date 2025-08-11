@@ -13,8 +13,6 @@ use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\WikiMap\WikiMap;
-use OOUI\HtmlSnippet;
-use OOUI\MessageWidget;
 use StatusValue;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
@@ -43,7 +41,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 		if ( !$eventExists ) {
 			return;
 		}
-		// For styling Html::errorBox
+		// For styling Html::errorBox and Html::noticeBox
 		$this->getOutput()->addModuleStyles( [
 			'mediawiki.codex.messagebox.styles',
 		] );
@@ -71,17 +69,13 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 				'campaignevents-cancel-page-nonlocal' :
 				'campaignevents-register-page-nonlocal';
 			$this->setHeaders();
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => new HtmlSnippet(
-					$this->msg( $message )
-						->params( [
-							$foreignEditURL, WikiMap::getWikiName( $wikiID )
-						] )->parse()
-				)
-			] );
-			$this->getOutput()->enableOOUI();
-			$this->getOutput()->addHTML( $messageWidget );
+			$nonLocalEventNotice = Html::noticeBox(
+				$this->msg( $message )
+					->params( [
+						$foreignEditURL, WikiMap::getWikiName( $wikiID )
+					] )->parse()
+			);
+			$this->getOutput()->addHTML( $nonLocalEventNotice );
 			return;
 		}
 

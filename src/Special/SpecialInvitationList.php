@@ -21,7 +21,6 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
-use OOUI\MessageWidget;
 use OOUI\Tag;
 
 class SpecialInvitationList extends SpecialPage {
@@ -78,7 +77,7 @@ class SpecialInvitationList extends SpecialPage {
 		}
 
 		$listID = (int)$par;
-		// For styling Html::errorBox
+		// For styling Html::errorBox, Html::warningBox, and Html::noticeBox
 		$this->getOutput()->addModuleStyles( [
 			'mediawiki.codex.messagebox.styles',
 		] );
@@ -113,18 +112,15 @@ class SpecialInvitationList extends SpecialPage {
 			);
 
 			$this->setHeaders();
-			$this->getOutput()->enableOOUI();
+			$this->getOutput()->addModuleStyles( 'mediawiki.codex.messagebox.styles' );
 
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => new HtmlSnippet(
-					$this->msg( 'campaignevents-invitation-list-nonlocal' )
-						->params( [ $foreignListURL, WikiMap::getWikiName( $invitationListWiki ) ] )
-						->parse()
-				)
-			] );
+			$nonLocalListNotice = Html::noticeBox(
+				$this->msg( 'campaignevents-invitation-list-nonlocal' )
+					->params( [ $foreignListURL, WikiMap::getWikiName( $invitationListWiki ) ] )
+					->parse()
+			);
 
-			$this->getOutput()->addHTML( $messageWidget );
+			$this->getOutput()->addHTML( $nonLocalListNotice );
 			return;
 		}
 
@@ -138,11 +134,7 @@ class SpecialInvitationList extends SpecialPage {
 		);
 
 		if ( $list->getStatus() === InvitationList::STATUS_PENDING ) {
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => new HtmlSnippet( $this->msg( 'campaignevents-invitation-list-processing' )->parse() )
-			] );
-			$out->addHTML( $messageWidget );
+			$out->addHTML( Html::noticeBox( $this->msg( 'campaignevents-invitation-list-processing' )->parse() ) );
 			return;
 		}
 
@@ -173,10 +165,7 @@ class SpecialInvitationList extends SpecialPage {
 			);
 			$this->userLinker->preloadUserLinks( $usernamesToPreload );
 		} else {
-			$noUsersWarning = new MessageWidget( [
-				'type' => 'warning',
-				'label' => new HtmlSnippet( $this->msg( 'campaignevents-invitationlist-no-editors' )->parse() ),
-			] );
+			$noUsersWarning = Html::warningBox( $this->msg( 'campaignevents-invitationlist-no-editors' )->parse() );
 		}
 		$highlyRecommendedLinks = $this->getUserLinks( $highlyRecommended );
 		$highlyRecommendedLinksList = $this->formatAsList( $highlyRecommendedLinks );

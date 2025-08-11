@@ -22,10 +22,9 @@ use MediaWiki\Extension\CampaignEvents\PolicyMessagesLookup;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\WikiMap\WikiMap;
-use OOUI\HtmlSnippet;
-use OOUI\MessageWidget;
 
 class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage {
 	public const PAGE_NAME = 'EditEventRegistration';
@@ -112,19 +111,16 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			$foreignEditURL = WikiMap::getForeignURL( $wikiID, 'Special:' . self::PAGE_NAME . "/{$this->eventID}" );
 
 			$this->setHeaders();
-			$this->getOutput()->enableOOUI();
 
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => new HtmlSnippet(
-					$this->msg( 'campaignevents-edit-page-nonlocal' )
-						->params( [
-							$foreignEditURL, WikiMap::getWikiName( $wikiID )
-						] )->parse()
-				)
-			] );
+			$nonLocalEventNotice = Html::noticeBox(
+				$this->msg( 'campaignevents-edit-page-nonlocal' )
+					->params( [
+						$foreignEditURL, WikiMap::getWikiName( $wikiID )
+					] )->parse()
+			);
 
-			$this->getOutput()->addHTML( $messageWidget );
+			$this->getOutput()->addModuleStyles( 'mediawiki.codex.messagebox.styles' );
+			$this->getOutput()->addHTML( $nonLocalEventNotice );
 			return;
 		}
 

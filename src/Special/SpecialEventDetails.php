@@ -24,7 +24,6 @@ use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
 use OOUI\HtmlSnippet;
 use OOUI\IndexLayout;
-use OOUI\MessageWidget;
 use OOUI\TabPanelLayout;
 use OOUI\Tag;
 use Wikimedia\Message\IMessageFormatterFactory;
@@ -171,17 +170,15 @@ class SpecialEventDetails extends SpecialPage {
 				$wikiID, 'Special:' . self::PAGE_NAME . "/$eventID"
 			);
 
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => new HtmlSnippet(
-					$this->msg( 'campaignevents-event-details-page-nonlocal' )
-						->params( [
-							$foreignDetailsURL,
-							WikiMap::getWikiName( Utils::getWikiIDString( $wikiID ) )
-						] )->parse()
-				)
-			] );
-			$out->addHTML( $messageWidget );
+			$nonLocalEventNotice = Html::noticeBox(
+				$this->msg( 'campaignevents-event-details-page-nonlocal' )
+					->params( [
+						$foreignDetailsURL,
+						WikiMap::getWikiName( Utils::getWikiIDString( $wikiID ) )
+					] )->parse()
+			);
+			$out->addModuleStyles( 'mediawiki.codex.messagebox.styles' );
+			$out->addHTML( $nonLocalEventNotice );
 		}
 
 		$main = new IndexLayout( [

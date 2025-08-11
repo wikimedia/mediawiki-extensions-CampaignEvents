@@ -16,8 +16,6 @@ use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\User\User;
 use MediaWiki\WikiMap\WikiMap;
-use OOUI\HtmlSnippet;
-use OOUI\MessageWidget;
 
 class SpecialDeleteEventRegistration extends FormSpecialPage {
 
@@ -45,7 +43,7 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 	 */
 	public function execute( $par ): void {
 		$this->addHelpLink( 'Extension:CampaignEvents' );
-		// For styling Html::errorBox and Html::successBox
+		// For styling Html::errorBox, Html::successBox, and Html::noticeBox
 		$this->getOutput()->addModuleStyles( [
 			'mediawiki.codex.messagebox.styles',
 		] );
@@ -83,18 +81,13 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 			);
 
 			$this->setHeaders();
-			$this->getOutput()->enableOOUI();
-			$messageWidget = new MessageWidget( [
-				'type' => 'notice',
-				'label' => new HtmlSnippet(
-					$this->msg( 'campaignevents-delete-registration-page-nonlocal' )
-						->params( [
-							$foreignDeleteURL, WikiMap::getWikiName( $wikiID )
-						] )->parse()
-				)
-			] );
+			$nonLocalEventNotice = Html::noticeBox(
+				$this->msg( 'campaignevents-delete-registration-page-nonlocal' )
+					->params( [ $foreignDeleteURL, WikiMap::getWikiName( $wikiID ) ] )
+					->parse()
+			);
 
-			$this->getOutput()->addHTML( $messageWidget );
+			$this->getOutput()->addHTML( $nonLocalEventNotice );
 			return;
 		}
 
