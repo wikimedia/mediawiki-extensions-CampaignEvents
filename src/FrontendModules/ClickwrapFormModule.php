@@ -7,11 +7,11 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Language\Language;
 use MediaWiki\Permissions\Authority;
 use OOUI\HtmlSnippet;
-use OOUI\Tag;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
@@ -42,19 +42,16 @@ class ClickwrapFormModule {
 	 */
 	public function createContent( IContextSource $context, string $action ): array {
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $this->language->getCode() );
-		$container = new Tag();
-		$label = new Tag( 'p' );
-		$label->appendContent(
-			$msgFormatter->format(
-				MessageValue::new( 'campaignevents-edit-field-clickwrap-checkbox-pretext' )
-			)
+		$formIntro = Html::element(
+			'p',
+			[],
+			$msgFormatter->format( MessageValue::new( 'campaignevents-edit-field-clickwrap-checkbox-pretext' ) )
 		);
-		$container->appendContent( $label );
 		$form = $this->createForm( $context )
 			->setAction( $action )
 			->setSubmitCallback( [ $this, 'processInput' ] )
 			->suppressDefaultSubmit()
-			->setPreHtml( $container )
+			->setPreHtml( $formIntro )
 			->prepareForm();
 		$isFormSubmitted = $form->tryAuthorizedSubmit();
 

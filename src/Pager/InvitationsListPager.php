@@ -9,14 +9,13 @@ use MediaWiki\Extension\CampaignEvents\Invitation\InvitationList;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialGenerateInvitationList;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialInvitationList;
+use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Pager\ReverseChronologicalPager;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
-use OOUI\HtmlSnippet;
-use OOUI\Tag;
 use stdClass;
 
 class InvitationsListPager extends ReverseChronologicalPager {
@@ -39,16 +38,19 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	 * @inheritDoc
 	 */
 	public function formatRow( $row ) {
-		$container = ( new Tag() )->addClasses( [ 'ext-campaignevents-invitations-pager-row' ] );
-		$linkWrapper = ( new Tag() )->appendContent(
-			new HtmlSnippet(
+		$linkWrapper = Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-invitations-pager-link' ],
 			$this->getLinkRenderer()->makeKnownLink(
 				SpecialPage::getTitleFor( SpecialInvitationList::PAGE_NAME, (string)$row->ceil_id ),
 				$row->ceil_name
-			) )
-		)->addClasses( [ 'ext-campaignevents-invitations-pager-link' ] );
-		$chip = new HtmlSnippet( $this->getInfoChip( $row ) );
-		return $container->appendContent( [ $linkWrapper, $chip ] );
+			)
+		);
+		return Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-invitations-pager-row' ],
+			$linkWrapper . $this->getInfoChip( $row )
+		);
 	}
 
 	/**
@@ -106,12 +108,10 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	 * @inheritDoc
 	 */
 	public function getEmptyBody() {
-		$container = ( new Tag() );
-		$text = new Tag( 'p' );
-		$text->appendContent(
-			$this->msg(
-				'campaignevents-myinvitationslist-empty-text'
-			)->text()
+		$text = Html::element(
+			'p',
+			[],
+			$this->msg( 'campaignevents-myinvitationslist-empty-text' )->text()
 		);
 		$button = new ButtonWidget(
 			[
@@ -120,8 +120,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 				'flags' => [ 'primary', 'progressive' ]
 			]
 		);
-		$textContainer = ( new Tag() )->appendContent( [ $text, $button ] );
-		return $container->appendContent( [ $textContainer ] );
+		return $text . $button;
 	}
 
 	/**

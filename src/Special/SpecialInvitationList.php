@@ -20,8 +20,6 @@ use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
-use OOUI\HtmlSnippet;
-use OOUI\Tag;
 
 class SpecialInvitationList extends SpecialPage {
 	use InvitationFeatureAccessTrait;
@@ -244,21 +242,24 @@ class SpecialInvitationList extends SpecialPage {
 	}
 
 	/** @param list<string> $links */
-	private function formatAsList( array $links ): ?Tag {
+	private function formatAsList( array $links ): string {
 		if ( !$links ) {
-			return null;
+			return '';
 		}
-		$list = ( new Tag( 'ul' ) )->setAttributes( [
-			'style' => 'overflow-wrap: anywhere; list-style: none; margin: 0'
-		] );
+
+		$listContent = '';
 		foreach ( $links as $link ) {
-			$list->appendContent(
-				( new Tag( 'li' ) )->appendContent(
-				new HtmlSnippet( $link )
-				)
-			);
+			$listContent .= Html::rawElement( 'li', [], $link );
 		}
-		return $list;
+
+		return Html::rawElement(
+			'ul',
+			[
+				// TODO: Replace with a proper stylesheet
+				'style' => 'overflow-wrap: anywhere; list-style: none; margin: 0'
+			],
+			$listContent
+		);
 	}
 
 	/** @inheritDoc */

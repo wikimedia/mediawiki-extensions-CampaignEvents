@@ -22,7 +22,6 @@ use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
-use OOUI\HtmlSnippet;
 use OOUI\IndexLayout;
 use OOUI\TabPanelLayout;
 use OOUI\Tag;
@@ -252,12 +251,13 @@ class SpecialEventDetails extends SpecialPage {
 		$main->addTabPanels( $tabs );
 		$selectedTab = $this->getRequest()->getRawVal( 'tab' ) ?? self::EVENT_DETAILS_PANEL;
 		$main->setTabPanel( $selectedTab );
-		$footer = ( new Tag() )->addClasses( [ 'ext-campaignevents-eventdetails-footer' ] )->appendContent(
-			new HtmlSnippet( $this->msg( 'campaignevents-event-details-footer' )->parse() )
+		$footer = Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-eventdetails-footer' ],
+			$this->msg( 'campaignevents-event-details-footer' )->parse()
 		);
 
-		$out->addHTML( $main );
-		$out->addHTML( $footer );
+		$out->addHTML( $main . $footer );
 	}
 
 	/**
