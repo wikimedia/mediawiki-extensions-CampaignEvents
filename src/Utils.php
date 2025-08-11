@@ -64,12 +64,8 @@ class Utils {
 		// not depend on DST, because abbreviations already contain information about DST (e.g., "PST" vs "PDT").
 		// TODO This assumption may be false for some abbreviations, see T316688#8336443.
 
-		// Work around PHP bug: all versions of PHP up to 8.1.7 do not parse DST correctly for
-		// time zone abbreviations, and PHP assumes that *all* abbreviations correspond to time zones without DST.
-		// So we can't use DateTimeZone::getOffset(), and the timezone must also be specified inside the time string,
-		// and not as second argument to DateTime::__construct. See https://bugs.php.net/bug.php?id=74671
-		$randomTime = '2022-10-20 18:00:00 ' . $timezoneName;
-		$offset = ( new DateTime( $randomTime ) )->format( 'P' );
+		// Date does not matter for time zone abbreviations.
+		$offset = ( new DateTime( 'now', $tz ) )->format( 'P' );
 		return new UserTimeCorrection( $offset );
 	}
 
