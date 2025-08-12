@@ -36,24 +36,24 @@ class EventRegistrationPage extends Page {
 	}
 
 	get startDateInput() {
-		return $( '#mw-input-wpEventStart' ).$( '[size="2"]' );
+		return $( '#mw-input-wpEventStart.ext-campaignevents-time-input-enhanced' ).$( '[size="2"]' );
 	}
 
 	get startYearInput() {
-		return $( '#mw-input-wpEventStart' ).$( '[size="4"]' );
+		return $( '#mw-input-wpEventStart.ext-campaignevents-time-input-enhanced' ).$( '[size="4"]' );
 	}
 
 	get endDateInput() {
-		return $( '#mw-input-wpEventEnd' ).$( '[size="2"]' );
+		return $( '#mw-input-wpEventEnd.ext-campaignevents-time-input-enhanced' ).$( '[size="2"]' );
 	}
 
 	get endYearInput() {
-		return $( '#mw-input-wpEventEnd' ).$( '[size="4"]' );
+		return $( '#mw-input-wpEventEnd.ext-campaignevents-time-input-enhanced' ).$( '[size="4"]' );
 	}
 
 	get organizersInput() {
-		// Note, this needs to target the <input> inside the infused version of the field.
-		return $( '.ext-campaignevents-organizers-multiselect-input .oo-ui-menuTagMultiselectWidget input' );
+		// Target the <input> inside the infused AND enhanced version of the field.
+		return $( '.ext-campaignevents-organizers-input-enhanced .oo-ui-menuTagMultiselectWidget input' );
 	}
 
 	get typesInput() {

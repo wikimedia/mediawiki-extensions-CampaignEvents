@@ -28,6 +28,9 @@
 				);
 			}
 		}
+
+		// Add a class to the field to signal that we're done, for use in browser tests.
+		this.usersMultiselectFieldLayout.$element.addClass( 'ext-campaignevents-organizers-input-enhanced' );
 	};
 
 	OrganizerSelectionFieldEnhancer.prototype.setInvalidOrganizers = function () {

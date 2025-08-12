@@ -6,6 +6,7 @@
 			start: '.ext-campaignevents-time-input-event-start',
 			end: '.ext-campaignevents-time-input-event-end'
 		};
+		this.isEnablingRegistration = mw.config.get( 'wgCampaignEventsEventID' ) === null;
 		this.isPastEvent = mw.config.get( 'wgCampaignEventsIsPastEvent' );
 		this.eventHasAnswers = mw.config.get( 'wgCampaignEventsEventHasAnswers' );
 		// Same as '@default' but without the timezone and seconds (T317542)
@@ -29,10 +30,10 @@
 	};
 
 	/**
-	 * @param {jQuery} $formRoot
+	 * @param {jQuery} $root
 	 */
-	TimeFieldsEnhancer.prototype.init = function ( $formRoot ) {
-		const tzInput = $formRoot.find( '.ext-campaignevents-timezone-input' ).get( 0 );
+	TimeFieldsEnhancer.prototype.init = function ( $root ) {
+		const tzInput = $root.find( '.ext-campaignevents-timezone-input' ).get( 0 );
 		if ( !tzInput ) {
 			return;
 		}
@@ -45,20 +46,16 @@
 		// timezone (T315874).
 		for ( const dateWidgetKey in this.dateWidgets ) {
 			this.dateWidgets[ dateWidgetKey ] = this.getInfusedFieldWidget(
-				$formRoot.find( this.dateWidgets[ dateWidgetKey ] )
+				$root.find( this.dateWidgets[ dateWidgetKey ] )
 			);
+			const curWidget = this.dateWidgets[ dateWidgetKey ].fieldWidget;
 			// Dates selected through the widget should always have seconds set to 00.
 			// Round up the minutes if necessary to ensure that the initial value is valid.
-			if (
-				this.dateWidgets[ dateWidgetKey ].fieldWidget
-					.formatter.defaultDate.getSeconds() !== 0
-			) {
-				this.dateWidgets[ dateWidgetKey ].fieldWidget
-					.formatter.defaultDate.setSeconds( 0 );
+			if ( curWidget.formatter.defaultDate.getSeconds() !== 0 ) {
+				curWidget.formatter.defaultDate.setSeconds( 0 );
 				// Note that this will also increase the hour, day etc if needed.
-				this.dateWidgets[ dateWidgetKey ].fieldWidget.formatter.defaultDate.setMinutes(
-					this.dateWidgets[ dateWidgetKey ].fieldWidget
-						.formatter.defaultDate.getMinutes() + 1
+				curWidget.formatter.defaultDate.setMinutes(
+					curWidget.formatter.defaultDate.getMinutes() + 1
 				);
 			}
 
@@ -70,10 +67,14 @@
 		}
 		this.dateWidgets.start.fieldWidget.on( 'change', this.updateEndDate.bind( this ) );
 		this.dateWidgets.end.fieldWidget.on(
-			'change', this.checkNewSelectedEndDateIsPast.bind( this )
+			'change', this.maybeShowAggregationWarning.bind( this )
 		);
 		this.updateEndDate();
-		this.checkNewSelectedEndDateIsPast();
+		this.maybeShowAggregationWarning();
+
+		// Add a class to the fields to signal that we're done, for use in browser tests.
+		this.dateWidgets.start.fieldWidget.$element.addClass( 'ext-campaignevents-time-input-enhanced' );
+		this.dateWidgets.end.fieldWidget.$element.addClass( 'ext-campaignevents-time-input-enhanced' );
 	};
 
 	/**
@@ -99,23 +100,21 @@
 			offset = this.hoursToMinutes( tz );
 		}
 
+		const widget = this.dateWidgets[ dateWidgetKey ].fieldWidget;
 		// Update default date (used when the widget is empty), min and max
-		this.dateWidgets[ dateWidgetKey ].fieldWidget.formatter.defaultDate.setTime(
-			this.dateWidgets[ dateWidgetKey ].fieldWidget.formatter.defaultDate.getTime() +
-				( offset - this.lastOffset ) * 60 * 1000
+		widget.formatter.defaultDate.setTime(
+			widget.formatter.defaultDate.getTime() + ( offset - this.lastOffset ) * 60 * 1000
 		);
-		this.dateWidgets[ dateWidgetKey ].fieldWidget.min.setTime(
-			this.dateWidgets[ dateWidgetKey ].fieldWidget.min.getTime() +
-				( offset - this.lastOffset ) * 60 * 1000
+		widget.min.setTime(
+			widget.min.getTime() + ( offset - this.lastOffset ) * 60 * 1000
 		);
-		this.dateWidgets[ dateWidgetKey ].fieldWidget.max.setTime(
-			this.dateWidgets[ dateWidgetKey ].fieldWidget.max.getTime() +
-				( offset - this.lastOffset ) * 60 * 1000
+		widget.max.setTime(
+			widget.max.getTime() + ( offset - this.lastOffset ) * 60 * 1000
 		);
 
 		// Let the widget update its fields to recompute validity of the data
 		// XXX We're calling a @private method here...
-		this.dateWidgets[ dateWidgetKey ].fieldWidget.updateFieldsFromValue();
+		widget.updateFieldsFromValue();
 		this.lastOffset = offset;
 	};
 
@@ -163,7 +162,11 @@
 		}
 	};
 
-	TimeFieldsEnhancer.prototype.checkNewSelectedEndDateIsPast = function () {
+	TimeFieldsEnhancer.prototype.maybeShowAggregationWarning = function () {
+		if ( this.isEnablingRegistration ) {
+			return;
+		}
+
 		if ( this.isPastEvent && this.eventHasAnswers ) {
 			this.dateWidgets.end.setNotices( [
 				mw.msg( 'campaignevents-event-dates-cannot-be-changed' )
@@ -172,6 +175,9 @@
 			!this.isPastEvent &&
 			this.checkDateIsPast( this.dateWidgets.end.fieldWidget.getValue() )
 		) {
+			// Note, this is intentionally shown even if the event has no answers: someone might
+			// have registered in the meantime, so we prefer informing the organizer; changing
+			// the dates to the past should be rare in practice anyway. (T339979#9211735)
 			this.dateWidgets.end.setWarnings( [
 				mw.msg( 'campaignevents-warning-change-event-end-date-past' )
 			] );
