@@ -32,7 +32,7 @@
 	"campaignevents-register-edit-legend": "Уреди регистрацију",
 	"campaignevents-register-confirmation-btn": "Региструј ме",
 	"campaignevents-register-edit-btn": "Сачувај измене",
-	"canceleventregistration": "Откажи своју пријаву на догађај",
+	"canceleventregistration": "Откажи пријаву на догађај",
 	"campaignevents-unregister-success": "Откажали сте своју пријаву на догађај",
 	"campaignevents-unregister-confirmation-btn": "Откажи регистрацију",
 	"campaignevents-role-creator": "{{GENDER:$1|творац}}",
