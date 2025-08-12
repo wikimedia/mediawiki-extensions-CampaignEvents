@@ -23,9 +23,32 @@ const EventUtils = {
 	 * @param {string} password
 	 */
 	async createOrganizerAccount( username, password = this.organizerPassword ) {
-		const adminBot = await Api.mwbot();
-		await Api.createAccount( adminBot, username, password );
-		await Api.addUserToGroup( adminBot, username, 'event-organizer' );
+		try {
+			const adminBot = await Api.mwbot();
+			await Api.createAccount( adminBot, username, password );
+			await Api.addUserToGroup( adminBot, username, 'event-organizer' );
+		} catch ( error ) {
+			console.error( 'Full error:', error );
+
+			// Logging everything I can get from https://github.com/gesinn-it-pub/mwbot/blob/master/src/index.js#L254-L271
+			if ( error.code ) {
+				console.error( 'Error Code:', error.code );
+			}
+			if ( error.info ) {
+				console.error( 'Error Info:', error.info );
+			}
+			if ( error.response ) {
+				console.error( 'Response:', error.response );
+			}
+			if ( error.request ) {
+				console.error( 'Request:', error.request );
+			}
+			if ( error.errorResponse ) {
+				console.error( 'Is API Error Response:', error.errorResponse );
+			}
+
+			throw error;
+		}
 	},
 
 	/**
