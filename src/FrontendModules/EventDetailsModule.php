@@ -165,12 +165,22 @@ class EventDetailsModule {
 		if ( $eventWikis !== null ) {
 			$organizersColumn->appendContent( $eventWikis );
 		}
+		$contentWrapper->appendContent( $infoColumn, $organizersColumn );
 
 		$footer = $this->getFooter();
-		$contentWrapper->appendContent( $infoColumn, $organizersColumn, $footer );
+
+		// Create a single unified panel with all content
+		$allContent = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-eventdetails-content' ] )
+			->appendContent( $header, $contentWrapper );
+
+		$footerWrapper = ( new Tag( 'div' ) )
+			->addClasses( [ 'ext-campaignevents-eventdetails-tab-footer' ] )
+			->appendContent( $footer );
+
 		return new PanelLayout( [
-			'content' => [ $header, $contentWrapper ],
-			'padded' => true,
+			'content' => [ $allContent, $footerWrapper ],
+			'padded' => false,
 			'framed' => true,
 			'expanded' => false,
 			'classes' => [ 'ext-campaignevents-eventdetails-panel' ],

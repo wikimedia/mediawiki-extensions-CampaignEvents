@@ -36,11 +36,10 @@
 	}
 }
 
-@media ( min-width: @min-width-breakpoint-tablet ) {
-	.mw-body .ext-campaignevents-eventdetails-panel {
-		max-height: 42em;
-		overflow-y: auto;
-	}
+.ext-campaignevents-eventdetails-content {
+	padding: 1em;
+	max-height: 45em;
+	overflow-y: auto;
 }
 
 // Increase specificity to enforce the margin.
@@ -83,18 +82,6 @@ span.ext-campaignevents-eventdetails-participants-private-icon {
 		flex-grow: 1;
 		// But make sure that the columns have a sensible minimum width of about half the total width
 		flex-basis: 28em;
-	}
-}
-
-.ext-campaignevents-eventdetails-view-event-page-button.oo-ui-buttonElement {
-	display: block;
-	margin-top: 1em;
-}
-
-@media ( min-width: @min-width-breakpoint-tablet ) {
-	.ext-campaignevents-eventdetails-view-event-page-button.oo-ui-buttonElement {
-		position: sticky;
-		bottom: 0;
 	}
 }
 
@@ -446,4 +433,10 @@ fieldset.ext-campaignevents-eventdetails-email-form {
 	.mw-diff-bytes::after {
 		content: '';
 	}
+}
+
+// Footer with separator line
+.ext-campaignevents-eventdetails-tab-footer {
+	border-top: @border-subtle;
+	padding: 1em;
 }
