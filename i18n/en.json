@@ -498,6 +498,7 @@
 	"campaignevents-invitation-list-error-empty-name": "Provide a name for the invitation list.",
 	"campaignevents-generateinvitationlist-name-too-long": "Add a shorter invitation list name (maximum 255 bytes).",
 	"campaignevents-invitation-list-error-invalid-page": "Enter an event page that uses Event Registration.",
+	"campaignevents-invitation-list-error-event-deleted": "The event associated with this page has been deleted and cannot be used for invitation lists.",
 	"campaignevents-invitation-list-error-event-ended": "This event has ended. Enter an active event.",
 	"campaignevents-invitation-list-error-not-organizer": "Enter an event page that lists you as an organizer.",
 	"campaignevents-worklist-error-empty": "Enter at least one article title.",

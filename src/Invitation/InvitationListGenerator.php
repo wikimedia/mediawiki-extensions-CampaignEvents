@@ -125,6 +125,11 @@ class InvitationListGenerator {
 		if ( !$event ) {
 			return StatusValue::newFatal( 'campaignevents-invitation-list-error-invalid-page' );
 		}
+
+		if ( $event->getDeletionTimestamp() !== null ) {
+			return StatusValue::newFatal( 'campaignevents-invitation-list-error-event-deleted' );
+		}
+
 		if ( $event->isPast() ) {
 			return StatusValue::newFatal( 'campaignevents-invitation-list-error-event-ended' );
 		}
