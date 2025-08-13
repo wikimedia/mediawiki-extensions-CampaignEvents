@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Ainali",
+			"Belteshassar",
 			"Bengtsson96",
 			"Sabelöga"
 		]
@@ -348,6 +349,7 @@
 	"campaignevents-invitations-pager-status-processing": "Bearbetar...",
 	"campaignevents-myinvitationslist-empty-text": "Hitta nya deltagare för ditt projekt eller evenemang. Ge en lista med artiklar som täcker ämnena för din aktivitet. Sedan får du en inbjudningslista med användare som möjligen är intresserade av att delta i ditt projekt eller evenemang.",
 	"campaignevents-myinvitationslist-new-button": "Ny",
+	"campaignevents-invitationlist-preference": "Inkludera mig i [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists inbjudningslistor].",
 	"campaignevents-eventpage-btn-collaboration-list": "Hitta fler evenemang",
 	"campaignevents-allevents-label-filter-wikis": "Wikier",
 	"campaignevents-allevents-placeholder-add-wikis": "Lägg till wikier...",
