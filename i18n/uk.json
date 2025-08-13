@@ -534,6 +534,7 @@
 	"campaignevents-allevents-label-ongoing-events-title": "Поточні події",
 	"campaignevents-allevents-label-ongoing-events-description": "Поточні події: Події, що починаються раніше, але тривають у межах вибраних дат",
 	"campaignevents-allevents-transclusion-more-link": "Дізнайтеся більше про події та спільноти",
+	"communityconfiguration-campaignevents-title": "Події кампаній",
 	"communityconfiguration-campaignevents-description": "Параметри конфігурації для розширення CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Дійсні простори назв для подій"
 }

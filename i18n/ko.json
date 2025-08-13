@@ -185,7 +185,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "등록이 마감되었습니다",
 	"campaignevents-eventpage-btn-event-ended": "이벤트가 끝났습니다",
 	"campaignevents-eventpage-dialog-title": "이벤트 상세 정보",
-	"campaignevents-eventpage-dialog-organizers": "주최자: $1",
+	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|주최자}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "모든 주최자 보기",
 	"campaignevents-eventpage-dialog-participants": "{{PLURAL:$1|참가자}} $1명",
 	"campaignevents-eventpage-dialog-participants-view-list": "모두 보기",

@@ -559,7 +559,7 @@
 	"campaignevents-allevents-label-ongoing-events-title": "Événements en cours",
 	"campaignevents-allevents-label-ongoing-events-description": "Événements en cours : événements qui commencent avant mais se poursuivent dans les dates sélectionnées",
 	"campaignevents-allevents-transclusion-more-link": "Explorer plus d'évènements et de communautés",
-	"communityconfiguration-campaignevents-title": "CampaignEvents (une extension pour MediaWiki)",
+	"communityconfiguration-campaignevents-title": "CampaignEvents",
 	"communityconfiguration-campaignevents-description": "Options de configuration pour l'extension CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Espaces de noms d'événements valides"
 }

@@ -2,10 +2,36 @@
 	"@metadata": {
 		"authors": [
 			"JeffreyKim",
-			"Ktchankt"
+			"Ktchankt",
+			"Yueman"
 		]
 	},
 	"nstab-event": "活動",
+	"action-campaignevents-delete-registration": "刪除活動登記",
+	"right-campaignevents-delete-registration": "刪除活動登記",
 	"specialpages-group-campaignevents": "活動",
-	"campaignevents-allevents-tab-events-heading": "活動"
+	"editeventregistration": "編輯活動登記",
+	"campaignevents-edit-form-details-label": "活動詳情",
+	"registerforevent": "報名活動",
+	"canceleventregistration": "取消你嘅活動報名",
+	"myevents": "你嘅活動",
+	"allevents": "所有活動",
+	"campaignevents-allevents-tab-events-heading": "活動",
+	"campaignevents-eventslist-delete-dialog-cancel": "取消",
+	"deleteeventregistration": "刪除活動登記",
+	"campaignevents-eventpage-dialog-title": "活動詳情",
+	"eventdetails": "活動詳情",
+	"campaignevents-event-details-label": "活動詳情",
+	"campaignevents-event-details-remove-participant-cancel-btn": "取消",
+	"campaignevents-event-details-event": "活動詳情：$1",
+	"campaignevents-event-details-tab-event-details": "活動詳情",
+	"echo-category-title-campaign-events-notification-registration": "活動登記",
+	"echo-pref-tooltip-campaign-events-notification-registration": "我登記咗個用咗活動登記架撐嘅活動，話我知。",
+	"campaignevents-notification-registration-details-header": "活動詳情",
+	"generateinvitationlist": "產生邀請名單",
+	"myinvitationlists": "你嘅邀請清單",
+	"invitationlist": "邀請名單",
+	"campaignevents-invitationlist-event": "$1：邀請名單",
+	"campaignevents-invitationlist-preference": "摻埋我落[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請清單]。",
+	"prefs-campaignevents-invitations": "邀請清單"
 }

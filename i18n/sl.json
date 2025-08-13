@@ -491,5 +491,8 @@
 	"campaignevents-eventpage-all-wikis": "Ta dogodek je odprt za vse vikije.",
 	"campaignevents-eventpage-wikis-more": "še $1 {{PLURAL:$1|drugi|druga|drugi|drugih}}",
 	"campaignevents-eventpage-dialog-wikis-label": "Vikiji",
-	"campaignevents-eventslist-wiki-label": "Vikiji"
+	"campaignevents-eventslist-wiki-label": "Vikiji",
+	"communityconfiguration-campaignevents-title": "CampaignEvents",
+	"communityconfiguration-campaignevents-description": "Konfiguracijske možnosti za razširitev CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Veljavni imenski prostori dogodkov"
 }
