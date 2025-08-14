@@ -49,6 +49,7 @@
 	"campaignevents-error-meeting-url-not-online": "Цхьаьнакхетаран URL билгалйаккха ца деза, нагахь санна мероприяти онлайнехь йацахь.",
 	"campaignevents-error-countryoraddress-not-in-person": "Цхьаьнакхетар хир долу пачхьалкх а, адрес а гойтуш дац, нагахь санна и хилам шен хьалха ца хилча.",
 	"campaignevents-error-invalid-country": "Нийса пачхьалкхан цӀе йазйе.",
+	"campaignevents-error-invalid-country-code": "Нийса пачхьалкхан код йазйе.",
 	"campaignevents-error-invalid-address": "Нийса адрес йазде.",
 	"campaignevents-error-invalid-chat-url": "Чатан нийса URL-адрес йазде.",
 	"campaignevents-error-invalid-question-names": "РогӀера хаттарш девзаш дац: $1",
@@ -77,6 +78,7 @@
 	"campaignevents-edit-field-wikis-label": "Ӏалашонан вики",
 	"campaignevents-edit-field-wikis-placeholder": "Къаьсттина викеш тӀетоха",
 	"campaignevents-edit-field-wikis-help": "Нагахь санна хьан хилам билггалчу викишкахь дӀахьош белахь, уьш кхузахь дӀайазбе. Цу гӀуллакхо гӀо до нахана муьлхачу барамашкахь дакъалаца деза къасто, ткъа иштта аналитикаца а гӀо до.",
+	"campaignevents-edit-field-wikis-empty-specific": "Цхьа вики мукъане а йазйе",
 	"campaignevents-edit-field-tracking-tools": "Программашна а, хиламашна а урхалла долу панель",
 	"campaignevents-edit-field-tracking-tools-help": "Йукъараллина дӀайазбинчу декъашхойн лелоран цӀераш авто дӀахьажор йу урхаллин панеле. ХӀокху гӀирсо гӀо до хьуна декъашхойн къинхьегамна тӀехь терго латто а, хьан кампанин мероприятино бина тӀеӀаткъаман мах хадо а. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Кхин дӀа а довза].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Хьайн хиламна лерина программийн а, мероприятин а панелан URL йазйе",
@@ -86,6 +88,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Онлайн а, бӀаьрахьалха а мероприяти",
 	"campaignevents-edit-field-meeting-url": "Цхьаьнакхетаран URL-адрес",
 	"campaignevents-edit-field-country": "Пачхьалкх",
+	"campaignevents-edit-field-country-placeholder": "Пачхьалкх харжар",
 	"campaignevents-edit-field-address": "Адрес",
 	"campaignevents-edit-field-chat-url": "Тобанан чат чу кхайкха",
 	"campaignevents-edit-field-chat-url-help": "Нагахь санна хьан хӀокху мероприятин декъашхошна лерина онлайн-чат тоба йелахь, кхузахь кхайкхаран хьажорг тӀетоха йиш йу хьан. Декъашхойн аьтто хир бу регистраци йиначул тӀаьхьа кхайкхаран хьажорге хьажа.",
@@ -165,6 +168,8 @@
 	"campaignevents-allevents-label-events-per-page": "АгӀонан тӀехь бу хиламаш",
 	"campaignevents-allevents-label-start-date": "ТӀера",
 	"campaignevents-allevents-label-end-date": "Хьаьнга",
+	"campaignevents-allevents-label-country": "Пачхьалкх",
+	"campaignevents-allevents-country-all": "Йерриге пачхьалкхаш",
 	"campaignevents-eventslist-participation-options-label": "Дакъалацаран варианташ",
 	"campaignevents-eventslist-organizer-label": "Вовшахтохархой",
 	"campaignevents-eventslist-column-date": "Терахь",
@@ -547,5 +552,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Хиламийн тайпанаш",
 	"campaignevents-allevents-placeholder-add-event-types": "Хиламийн тайпанаш тӀетоха...",
 	"campaignevents-eventpage-dialog-event-types-label": "Хиламийн тайпанаш",
-	"campaignevents-eventslist-types-label": "Хиламийн тайпанаш"
+	"campaignevents-eventslist-types-label": "Хиламийн тайпанаш",
+	"campaignevents-eventslist-country-label": "Пачхьалкх",
+	"campaignevents-notification-registration-venue-not-available": "Мероприятин меттиг цкъачунна йовзийтина йац {{PLURAL:$1|организаторо|организаторша}}."
 }

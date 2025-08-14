@@ -3,7 +3,8 @@
 		"authors": [
 			"Amire80",
 			"Guycn2",
-			"Neriah"
+			"Neriah",
+			"YaronSh"
 		]
 	},
 	"campaignevents-desc": "אפשרויות למארגנים ולמשתתפים של אירועים.",
@@ -171,6 +172,8 @@
 	"campaignevents-allevents-label-events-per-page": "אירועים לכל דף",
 	"campaignevents-allevents-label-start-date": "מאז",
 	"campaignevents-allevents-label-end-date": "עד",
+	"campaignevents-allevents-label-country": "מדינה",
+	"campaignevents-allevents-country-all": "כל המדינות",
 	"campaignevents-eventslist-participation-options-label": "אפשרויות השתתפות",
 	"campaignevents-eventslist-organizer-label": "מארגנים",
 	"campaignevents-eventslist-column-date": "תאריך",
