@@ -21,6 +21,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -473,5 +474,15 @@ return [
 			$services->getTitleFormatter()
 		);
 	},
-
+	EventContributionValidator::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): EventContributionValidator {
+		return new EventContributionValidator(
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( ParticipantsStore::SERVICE_NAME ),
+			$services->getJobQueueGroup(),
+			$services->getRevisionStoreFactory(),
+			new ServiceOptions( [ 'CampaignEventsEnableContributionTracking' ], $services->getMainConfig() )
+		);
+	},
 ];

@@ -575,5 +575,13 @@
 	"campaignevents-cancel-page-nonlocal": "Please '''[$1 cancel your event registration on $2]''', the wiki where the event was created.",
 	"campaignevents-email-error-notification-with-detail": "The email could not be sent, for the following reason: $1",
 	"campaignevents-eventslist-types-label": "Event types",
-	"campaignevents-eventslist-country-label": "Country"
+	"campaignevents-eventslist-country-label": "Country",
+	"campaignevents-event-contribution-event-ended": "Event has ended and is no longer accepting edit associations",
+	"campaignevents-event-contribution-not-participant": "User is not a participant in this event",
+	"campaignevents-event-contribution-user-not-global": "User is not a global user",
+	"campaignevents-event-contribution-timestamp-too-old": "Edit timestamp is too old (maximum 24 hours)",
+	"campaignevents-event-contribution-revision-not-found": "Revision not found",
+	"campaignevents-event-contribution-not-owner": "You can only associate your own edits to events",
+	"campaignevents-event-contribution-tracking-disabled": "Contribution tracking is not enabled for this event",
+	"campaignevents-event-contribution-event-deleted": "Event has been deleted"
 }
