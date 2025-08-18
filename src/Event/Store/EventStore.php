@@ -118,10 +118,10 @@ class EventStore implements IEventStore, IEventLookup {
 			$this->makePageEventCacheKey( $page ),
 			self::PAGE_EVENT_CACHE_TTL,
 			/**
-			 * @param ExistingEventRegistration|false $oldValue
+			 * @param ExistingEventRegistration|false|null $oldValue
 			 * @param array<string,mixed> &$setOpts
 			 */
-			function ( ExistingEventRegistration|bool $oldValue, int &$ttl, array &$setOpts )
+			function ( ExistingEventRegistration|bool|null $oldValue, int &$ttl, array &$setOpts )
 				use ( $page, $readFlags ): ?ExistingEventRegistration
 			{
 				$db = $this->dbHelper->getDBConnection( DB_REPLICA );
