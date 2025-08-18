@@ -36,6 +36,7 @@
 	"campaignevents-error-empty-end": "Чекхйаларан хан йазйе.",
 	"campaignevents-error-invalid-end": "Хилам чекхбаларан хан нийса йац.",
 	"campaignevents-error-start-after-end": "ДӀадоладеллачу денна тӀаьхьа догӀу чаккхенан де йазде.",
+	"campaignevents-error-no-types": "Цхьа тайпа мукъане а йазде",
 	"campaignevents-error-invalid-other-selection": "Кхечу хиламийн тайпанашца цхьаьна 'Кхин' хьажа йиш йац хьан. Дехар до, 'Кхин' бен ца хьажа, йа дӀайаккха иза, кхин варианташ харжа.",
 	"campaignevents-error-too-many-wikis": "Максимум {{PLURAL:$1|цхьа вики|$1 вики}} йазйе.",
 	"campaignevents-error-invalid-wikis": "ХӀара вики-идентификаторш йевзаш йац: $1.",
@@ -552,6 +553,7 @@
 	"campaignevents-allevents-label-filter-event-types": "Хиламийн тайпанаш",
 	"campaignevents-allevents-placeholder-add-event-types": "Хиламийн тайпанаш тӀетоха...",
 	"campaignevents-eventpage-dialog-event-types-label": "Хиламийн тайпанаш",
+	"campaignevents-email-error-notification-with-detail": "Электронан хаам дӀабахьийта аьтто ца баьлла, хӀокху бахьанца: $1",
 	"campaignevents-eventslist-types-label": "Хиламийн тайпанаш",
 	"campaignevents-eventslist-country-label": "Пачхьалкх",
 	"campaignevents-notification-registration-venue-not-available": "Мероприятин меттиг цкъачунна йовзийтина йац {{PLURAL:$1|организаторо|организаторша}}."
