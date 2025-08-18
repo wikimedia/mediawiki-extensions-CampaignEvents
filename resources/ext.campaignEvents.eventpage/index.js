@@ -116,8 +116,9 @@
 					// TODO This should be improved at some point, see T312646#8105313
 					window.location.reload();
 				},
-				( _err, errData ) => {
+				( err, errData ) => {
 					logRequestError( errData );
+					throw err;
 				}
 			);
 	}
@@ -134,8 +135,9 @@
 				() => {
 					window.location.reload();
 				},
-				( _err, errData ) => {
+				( err, errData ) => {
 					logRequestError( errData );
+					throw err;
 				}
 			);
 	}

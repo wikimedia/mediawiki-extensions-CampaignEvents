@@ -125,8 +125,9 @@
 				)
 					.then(
 						() => $.Deferred().resolve( { deleted: true } ),
-						( _errCode, errData ) => {
+						( errCode, errData ) => {
 							mw.log.error( errData.xhr.responseText );
+							throw errCode;
 						}
 					);
 			}
