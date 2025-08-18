@@ -2,8 +2,24 @@
 	"@metadata": {
 		"authors": [
 			"JeffreyKim",
-			"Ktchankt"
+			"Ktchankt",
+			"Yueman"
 		]
 	},
-	"nstab-event": "活動"
+	"nstab-event": "活動",
+	"action-campaignevents-delete-registration": "刪除活動登記",
+	"right-campaignevents-delete-registration": "刪除活動登記",
+	"editeventregistration": "編輯活動登記",
+	"registerforevent": "報名活動",
+	"canceleventregistration": "取消你嘅活動報名",
+	"myevents": "你嘅活動",
+	"campaignevents-eventslist-delete-dialog-cancel": "取消",
+	"deleteeventregistration": "刪除活動登記",
+	"campaignevents-eventpage-dialog-title": "活動詳情",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "係",
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "唔係",
+	"eventdetails": "活動詳情",
+	"campaignevents-event-details-label": "活動詳情",
+	"campaignevents-event-details-remove-participant-cancel-btn": "取消",
+	"campaignevents-event-details-event": "活動詳情：$1"
 }
