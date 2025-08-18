@@ -320,13 +320,13 @@ class EventFactory {
 				'campaignevents-error-invalid-title',
 				new MessageValue( $e->getErrorMsgKey(), $e->getErrorMsgParams() )
 			);
-		} catch ( UnexpectedInterwikiException $_ ) {
+		} catch ( UnexpectedInterwikiException ) {
 			return StatusValue::newFatal( 'campaignevents-error-invalid-title-interwiki' );
-		} catch ( UnexpectedVirtualNamespaceException $_ ) {
+		} catch ( UnexpectedVirtualNamespaceException ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-namespace-not-allowed' );
-		} catch ( UnexpectedSectionAnchorException $_ ) {
+		} catch ( UnexpectedSectionAnchorException ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-with-section' );
-		} catch ( PageNotFoundException $_ ) {
+		} catch ( PageNotFoundException ) {
 			return StatusValue::newFatal( 'campaignevents-error-page-not-found' );
 		}
 
@@ -436,7 +436,7 @@ class EventFactory {
 			return StatusValue::newGood(
 				$this->trackingToolRegistry->newFromUserIdentifier( $trackingToolUserID )->getDBID()
 			);
-		} catch ( ToolNotFoundException $_ ) {
+		} catch ( ToolNotFoundException ) {
 			return StatusValue::newFatal( 'campaignevents-error-invalid-trackingtool' );
 		}
 	}
@@ -656,7 +656,7 @@ class EventFactory {
 		foreach ( $questionNames as $name ) {
 			try {
 				$questionIDs[] = $this->eventQuestionsRegistry->nameToDBID( $name );
-			} catch ( UnknownQuestionException $_ ) {
+			} catch ( UnknownQuestionException ) {
 				$invalidNames[] = $name;
 			}
 		}

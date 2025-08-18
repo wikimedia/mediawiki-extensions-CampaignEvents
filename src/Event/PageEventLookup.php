@@ -60,7 +60,7 @@ class PageEventLookup {
 		$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
 		try {
 			return $this->eventLookup->getEventByPage( $campaignsPage, $readFlags );
-		} catch ( EventNotFoundException $_ ) {
+		} catch ( EventNotFoundException ) {
 			return null;
 		}
 	}
@@ -84,7 +84,7 @@ class PageEventLookup {
 
 		try {
 			return $this->eventLookup->getEventByPage( $page );
-		} catch ( EventNotFoundException $_ ) {
+		} catch ( EventNotFoundException ) {
 			return null;
 		}
 	}

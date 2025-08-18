@@ -38,7 +38,7 @@ trait EventIDParamTrait {
 	protected function getRegistrationOrThrow( IEventLookup $eventLookup, int $id ): ExistingEventRegistration {
 		try {
 			return $eventLookup->getEventByID( $id );
-		} catch ( EventNotFoundException $_ ) {
+		} catch ( EventNotFoundException ) {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-rest-event-not-found' ),
 				404

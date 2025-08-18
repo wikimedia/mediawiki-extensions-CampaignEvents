@@ -62,7 +62,7 @@ class RegisterForEventHandler extends SimpleHandler {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
 			$curParticipantData = $this->participantsStore->getEventParticipant( $eventID, $centralUser );
 			$curAnswers = $curParticipantData ? $curParticipantData->getAnswers() : [];
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			// Silently ignore it for now, it's going to be thrown when attempting to register
 			$curAnswers = [];
 		}

@@ -272,7 +272,7 @@ class EventPageDecorator {
 				$registration->getID(),
 				$centralUser
 			);
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			$centralUser = null;
 			$curParticipant = null;
 			$hasAggregatedAnswers = false;
@@ -1205,7 +1205,7 @@ class EventPageDecorator {
 	private function addPrivateParticipantNotice( Participant $participant, Tag $tag ): void {
 		try {
 			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
-		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 			// Hack: use an invalid username to force unspecified gender
 			$userName = '@';
 		}

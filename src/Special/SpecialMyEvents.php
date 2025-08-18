@@ -51,7 +51,7 @@ class SpecialMyEvents extends SpecialPage {
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-myevents-need-central-account' )->escaped()
 			) );

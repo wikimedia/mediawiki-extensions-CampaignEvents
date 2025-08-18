@@ -110,7 +110,7 @@ class EventDetailsParticipantsModule {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
 			$curUserParticipant = $this->participantsStore->getEventParticipant( $eventID, $centralUser, true );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 		}
 
 		$showPrivateParticipants = $isLocalWiki &&
@@ -515,7 +515,7 @@ class EventDetailsParticipantsModule {
 			$genderUserName = $userName;
 			$user = $this->userFactory->newFromName( $userName );
 			$userLinkComponents = $this->userLinker->getUserPagePath( $participant->getUser() );
-		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 			$user = null;
 			$userName = null;
 			$genderUserName = '@';

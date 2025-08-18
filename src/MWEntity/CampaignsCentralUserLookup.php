@@ -106,7 +106,7 @@ class CampaignsCentralUserLookup {
 		try {
 			$this->getUserName( $user );
 			return true;
-		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 			return false;
 		}
 	}

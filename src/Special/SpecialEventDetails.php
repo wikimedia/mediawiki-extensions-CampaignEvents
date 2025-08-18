@@ -88,7 +88,7 @@ class SpecialEventDetails extends SpecialPage {
 		}
 		try {
 			$this->event = $this->eventLookup->getEventByID( $eventID );
-		} catch ( EventNotFoundException $_ ) {
+		} catch ( EventNotFoundException ) {
 			$this->outputErrorBox( 'campaignevents-event-details-not-found' );
 			return;
 		}
@@ -122,7 +122,7 @@ class SpecialEventDetails extends SpecialPage {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
 			$organizer = $this->organizersStore->getEventOrganizer( $eventID, $centralUser );
 			$isParticipant = $this->participantsStore->userParticipatesInEvent( $eventID, $centralUser, true );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			$organizer = null;
 			$isParticipant = false;
 		}

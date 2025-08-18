@@ -149,7 +149,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 		$eventID = (int)$par;
 		try {
 			$this->event = $this->eventLookup->getEventByID( $eventID );
-		} catch ( EventNotFoundException $_ ) {
+		} catch ( EventNotFoundException ) {
 			$this->setHeaders();
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-register-error-event-not-found' )->escaped()

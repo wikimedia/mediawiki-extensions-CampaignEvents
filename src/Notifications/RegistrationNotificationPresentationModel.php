@@ -240,7 +240,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 		foreach ( $partialOrganizers as $organizer ) {
 			try {
 				$organizerLinks[] = $this->userLinker->generateUserLink( $ctx, $organizer->getUser() );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 				// Can't easily include CSS styles in the message, so skip.
 				continue;
 			}

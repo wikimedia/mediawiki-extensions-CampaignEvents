@@ -41,7 +41,7 @@ class PageAuthorLookup {
 		}
 		try {
 			return $this->centralUserLookup->newFromUserIdentity( $userIdentity );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			return null;
 		}
 	}

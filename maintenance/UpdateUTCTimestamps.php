@@ -90,7 +90,7 @@ class UpdateUTCTimestamps extends Maintenance {
 				try {
 					// @phan-suppress-next-line PhanNoopNew
 					new DateTimeZone( $tz );
-				} catch ( Exception $_ ) {
+				} catch ( Exception ) {
 					$this->fatalError( "'$tz' is not a valid time zone.\n" );
 				}
 			}

@@ -141,7 +141,7 @@ class EditEventCommand {
 
 		try {
 			$performerCentralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			return StatusValue::newFatal( 'campaignevents-edit-need-central-account' );
 		}
 
@@ -362,7 +362,7 @@ class EditEventCommand {
 			try {
 				$organizerCentralUserIDs[] = $this->centralUserLookup
 					->newFromLocalUsername( $organizerUserName )->getCentralID();
-			} catch ( UserNotGlobalException $_ ) {
+			} catch ( UserNotGlobalException ) {
 				$organizersWithoutGlobalAccount[] = $organizerUserName;
 			}
 		}
@@ -399,7 +399,7 @@ class EditEventCommand {
 
 		try {
 			$eventCreatorUsername = $this->centralUserLookup->getUserName( $eventCreator->getUser() );
-		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 			// Allow the removal of deleted/suppressed organizers, since they're not shown in the editing interface
 			return StatusValue::newGood();
 		}

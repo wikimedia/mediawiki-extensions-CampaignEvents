@@ -93,7 +93,7 @@ class UnregisterParticipantCommand {
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			return StatusValue::newFatal( 'campaignevents-unregister-need-central-account' );
 		}
 

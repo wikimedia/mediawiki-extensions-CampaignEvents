@@ -61,7 +61,7 @@ class PermissionChecker {
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			return false;
 		}
 		return $pageAuthor->equals( $centralUser );
@@ -85,7 +85,7 @@ class PermissionChecker {
 		}
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			return false;
 		}
 		$eventID = $event->getID();

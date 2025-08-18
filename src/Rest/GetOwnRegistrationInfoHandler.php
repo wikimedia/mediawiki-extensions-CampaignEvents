@@ -39,7 +39,7 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			throw new LocalizedHttpException(
 				new MessageValue( 'campaignevents-register-not-allowed' ),
 				403

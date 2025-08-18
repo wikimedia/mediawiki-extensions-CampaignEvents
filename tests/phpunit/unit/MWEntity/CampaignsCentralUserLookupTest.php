@@ -136,7 +136,7 @@ class CampaignsCentralUserLookupTest extends MediaWikiUnitTestCase {
 		// Test that we only get cache hits.
 		try {
 			$lookup->getUserName( $centralUser );
-		} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 		}
 		$lookup->getNames( [ $userID => null ] );
 		$lookup->getNamesIncludingDeletedAndSuppressed( [ $userID => null ] );
@@ -154,7 +154,7 @@ class CampaignsCentralUserLookupTest extends MediaWikiUnitTestCase {
 			static function ( CampaignsCentralUserLookup $lookup, CentralUser $user ): void {
 				try {
 					$lookup->getUserName( $user );
-				} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+				} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 				}
 			}
 		);

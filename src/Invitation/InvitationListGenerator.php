@@ -117,7 +117,7 @@ class InvitationListGenerator {
 	public function validateEventPage( string $eventPage, Authority $performer ): StatusValue {
 		try {
 			$page = $this->pageFactory->newLocalExistingPageFromString( $eventPage );
-		} catch ( InvalidEventPageException $_ ) {
+		} catch ( InvalidEventPageException ) {
 			return StatusValue::newFatal( 'campaignevents-invitation-list-error-invalid-page' );
 		}
 

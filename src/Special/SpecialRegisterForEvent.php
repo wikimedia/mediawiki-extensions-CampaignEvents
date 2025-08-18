@@ -296,7 +296,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				$this->centralUser,
 				true
 			);
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			$this->centralUser = null;
 			$this->curParticipantData = null;
 			$this->hasAggregatedAnswers = false;

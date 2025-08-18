@@ -108,7 +108,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				$user = $organizer->getUser();
 				try {
 					$organizerNames[] = $this->centralUserLookup->getUserName( $user );
-				} catch ( UserNotGlobalException $_ ) {
+				} catch ( UserNotGlobalException ) {
 					// Should never happen.
 					throw new RuntimeException( "Organizer in the database has no central account." );
 				}

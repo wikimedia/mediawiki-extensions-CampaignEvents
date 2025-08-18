@@ -42,7 +42,7 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 				$centralUser,
 				true
 			);
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			$isParticipating = false;
 		}
 

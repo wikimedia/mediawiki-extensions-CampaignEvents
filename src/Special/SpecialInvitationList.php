@@ -87,7 +87,7 @@ class SpecialInvitationList extends SpecialPage {
 		}
 		try {
 			$invitationList = $this->invitationListStore->getInvitationList( $listID );
-		} catch ( InvitationListNotFoundException $_ ) {
+		} catch ( InvitationListNotFoundException ) {
 			$this->getOutput()->addHTML( Html::errorBox(
 				$this->msg( 'campaignevents-invitation-list-does-not-exist' )->parseAsBlock()
 			) );
@@ -234,7 +234,7 @@ class SpecialInvitationList extends SpecialPage {
 		foreach ( $userIDs as $userID ) {
 			try {
 				$links[] = $this->userLinker->generateUserLink( $this->getContext(), new CentralUser( $userID ) );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 				continue;
 			}
 		}

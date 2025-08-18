@@ -160,7 +160,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			}
 			try {
 				$eventCreatorUsername = $this->centralUserLookup->getUserName( $eventCreator->getUser() );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 				$eventCreatorUsername = null;
 			}
 			$performerUserName = $this->getAuthority()->getUser()->getName();
@@ -716,7 +716,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 					$trackingToolUserID,
 					$data['EventDashboardURL']
 				);
-			} catch ( InvalidToolURLException $_ ) {
+			} catch ( InvalidToolURLException ) {
 				throw new LogicException( 'This should have been caught by validation-callback' );
 			}
 		} else {
@@ -840,7 +840,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				return new DateTimeZone( $tzString );
 			} catch ( TimeoutException $e ) {
 				throw $e;
-			} catch ( Exception $_ ) {
+			} catch ( Exception ) {
 				return new DateTimeZone( 'UTC' );
 			}
 		}
@@ -864,7 +864,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$user = $organizer->getUser();
 			try {
 				$organizerUserNames[] = $this->centralUserLookup->getUserName( $user );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 				// If this happens we just don't display the user name
 			}
 		}

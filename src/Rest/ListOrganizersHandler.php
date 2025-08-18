@@ -55,7 +55,7 @@ class ListOrganizersHandler extends SimpleHandler {
 			$user = $organizer->getUser();
 			try {
 				$userName = $this->centralUserLookup->getUserName( $user );
-			} catch ( CentralUserNotFoundException | HiddenCentralUserException $_ ) {
+			} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 				continue;
 			}
 			$respVal[] = [

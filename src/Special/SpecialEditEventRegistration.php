@@ -95,7 +95,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 		}
 		try {
 			$this->event = $this->eventLookup->getEventByID( $this->eventID );
-		} catch ( EventNotFoundException $_ ) {
+		} catch ( EventNotFoundException ) {
 			$this->outputErrorBox( 'campaignevents-edit-event-notfound' );
 			return;
 		}

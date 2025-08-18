@@ -130,7 +130,7 @@ class RegisterParticipantCommand {
 	): StatusValue {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
-		} catch ( UserNotGlobalException $_ ) {
+		} catch ( UserNotGlobalException ) {
 			return StatusValue::newFatal( 'campaignevents-register-need-central-account' );
 		}
 

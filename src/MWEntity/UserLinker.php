@@ -94,7 +94,7 @@ class UserLinker {
 	): string {
 		try {
 			return $this->generateUserLink( $context, $user );
-		} catch ( CentralUserNotFoundException $_ ) {
+		} catch ( CentralUserNotFoundException ) {
 			$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $langCode );
 			return Html::element(
 				'span',
@@ -103,7 +103,7 @@ class UserLinker {
 					MessageValue::new( 'campaignevents-userlink-deleted-user' )
 				)
 			);
-		} catch ( HiddenCentralUserException $_ ) {
+		} catch ( HiddenCentralUserException ) {
 			$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $langCode );
 			return Html::element(
 				'span',
