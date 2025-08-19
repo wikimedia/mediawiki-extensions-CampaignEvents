@@ -350,6 +350,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Optiones de participation",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Evento in linea",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Evento in persona",
+	"campaignevents-notification-registration-details-venue-not-available": "Le loco del evento non ha ancora essite annunciate per le organisator{{PLURAL:$1||es}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Organisatores de eventos",
 	"campaignevents-notification-registration-details-organizers-more": "$1 altere{{PLURAL:$1||s}}",
 	"campaignevents-notification-registration-event-page-link": "Visitar le pagina del evento",
@@ -559,6 +560,5 @@
 	"campaignevents-cancel-page-nonlocal": "Per favor '''[$1 cancella tu inscription al evento sur $2],''' le wiki ubi le evento ha essite create.",
 	"campaignevents-email-error-notification-with-detail": "Le message de e-mail non poteva esser inviate, pro le sequente ration: $1",
 	"campaignevents-eventslist-types-label": "Typos de evento",
-	"campaignevents-eventslist-country-label": "Pais",
-	"campaignevents-notification-registration-venue-not-available": "Le loco del evento non ha ancora essite annunciate per le organisator{{PLURAL:$1||es}}."
+	"campaignevents-eventslist-country-label": "Pais"
 }

@@ -353,6 +353,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "אפשרויות השתתפות",
 	"campaignevents-notification-registration-details-participation-option-online-header": "אירוע מקוון",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "אירוע בחיים האמיתיים",
+	"campaignevents-notification-registration-details-venue-not-available": "{{PLURAL:$1|המארגן|המארגנים}} ישתפו את מיקום האירוע.",
 	"campaignevents-notification-registration-details-organizers-header": "מארגני אירועים",
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|ועוד}} $1",
 	"campaignevents-notification-registration-event-page-link": "צפייה בדף האירוע",
@@ -562,6 +563,5 @@
 	"campaignevents-cancel-page-nonlocal": "נא '''[$1 לבטל את הרשמתך לאירוע באתר $2]''' – אתר הוויקי שבו האירוע נוצר.",
 	"campaignevents-email-error-notification-with-detail": "לא ניתן היה לשלוח את הדואר האלקטרוני, מהסיבה הבאה: $1",
 	"campaignevents-eventslist-types-label": "סוגי אירועים",
-	"campaignevents-eventslist-country-label": "ארץ",
-	"campaignevents-notification-registration-venue-not-available": "{{PLURAL:$1|המארגן|המארגנים}} ישתפו את מיקום האירוע."
+	"campaignevents-eventslist-country-label": "ארץ"
 }

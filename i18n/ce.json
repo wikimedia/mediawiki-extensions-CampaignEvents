@@ -348,6 +348,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Дакъалацаран варианташ",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Онлайн-мероприяти",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "БӀаьрахьалха мероприяти",
+	"campaignevents-notification-registration-details-venue-not-available": "Мероприятин меттиг цкъачунна йовзийтина йац {{PLURAL:$1|организаторо|организаторша}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Мероприятин организаторш",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|кхин а}}",
 	"campaignevents-notification-registration-event-page-link": "Мероприятин агӀо хьажа",
@@ -555,6 +556,5 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Хиламийн тайпанаш",
 	"campaignevents-email-error-notification-with-detail": "Электронан хаам дӀабахьийта аьтто ца баьлла, хӀокху бахьанца: $1",
 	"campaignevents-eventslist-types-label": "Хиламийн тайпанаш",
-	"campaignevents-eventslist-country-label": "Пачхьалкх",
-	"campaignevents-notification-registration-venue-not-available": "Мероприятин меттиг цкъачунна йовзийтина йац {{PLURAL:$1|организаторо|организаторша}}."
+	"campaignevents-eventslist-country-label": "Пачхьалкх"
 }

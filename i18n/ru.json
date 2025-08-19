@@ -157,6 +157,7 @@
 	"campaignevents-register-confirmation-radio-public": "Публичная регистрация",
 	"campaignevents-notification-registration-header-intro": "Спасибо за регистрацию на $1 .",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Онлайн-мероприятие",
+	"campaignevents-notification-registration-details-venue-not-available": "Место проведения мероприятия еще не было объявлено {{PLURAL:$1| организатором|организаторами}}.",
 	"campaignevents-event-details-email-message-label": "Сообщение",
 	"campaignevents-email-success-notification": "Сообщение отправлено!",
 	"campaignevents-email-participants-except": "Все, кроме $1",
@@ -193,6 +194,5 @@
 	"campaignevents-worklist-error-empty": "Введите хотя бы одно название статьи.",
 	"campaignevents-allevents-placeholder-add-wikis": "Добавить вики...",
 	"campaignevents-eventslist-wiki-label": "Вики",
-	"campaignevents-eventpage-dialog-topics-label": "Темы",
-	"campaignevents-notification-registration-venue-not-available": "Место проведения мероприятия еще не было объявлено {{PLURAL:$1| организатором|организаторами}}."
+	"campaignevents-eventpage-dialog-topics-label": "Темы"
 }

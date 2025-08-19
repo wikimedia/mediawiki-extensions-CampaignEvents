@@ -365,6 +365,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "خيارات المشاركة",
 	"campaignevents-notification-registration-details-participation-option-online-header": "فعاليات عن بعد",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "فعاليات حضورية",
+	"campaignevents-notification-registration-details-venue-not-available": "لم يتم مشاركة مكان الحدث بعد من قبل {{PLURAL:$1|المنظم|المنظمين}}.",
 	"campaignevents-notification-registration-details-organizers-header": "منظمو الفعالية",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1| أكثر}}",
 	"campaignevents-notification-registration-event-page-link": "عرض صفحة الفعالية",
@@ -574,6 +575,5 @@
 	"campaignevents-cancel-page-nonlocal": "من فضلك '''[$1 قم بإلغاء تسجيل الحدث الخاص بك على $2]'''، الويكي حيث تم إنشاء الحدث.",
 	"campaignevents-email-error-notification-with-detail": "لم يتم إرسال البريد الإلكتروني، للسبب التالي: $1",
 	"campaignevents-eventslist-types-label": "أنواع الأحداث",
-	"campaignevents-eventslist-country-label": "دولة",
-	"campaignevents-notification-registration-venue-not-available": "لم يتم مشاركة مكان الحدث بعد من قبل {{PLURAL:$1|المنظم|المنظمين}}."
+	"campaignevents-eventslist-country-label": "دولة"
 }

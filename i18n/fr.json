@@ -378,6 +378,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Options de participation",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Événement en ligne",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Événement en présentiel",
+	"campaignevents-notification-registration-details-venue-not-available": "Le lieu de l’événement n’a pas encore été partagé par {{PLURAL:$1|l’organisateur|les organisateurs}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Organisateurs d’événements",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|autre|autres}}",
 	"campaignevents-notification-registration-event-page-link": "Voir la page de l’événement",
@@ -594,6 +595,5 @@
 	"campaignevents-cancel-page-nonlocal": "Veuillez '''[$1 annuler votre inscription à l’événement sur $2]''', le wiki où l’évènement a été créé.",
 	"campaignevents-email-error-notification-with-detail": "Le courriel n’a pas pu être envoyé pour la raison suivante : $1",
 	"campaignevents-eventslist-types-label": "Types d’événements",
-	"campaignevents-eventslist-country-label": "Pays",
-	"campaignevents-notification-registration-venue-not-available": "Le lieu de l’événement n’a pas encore été partagé par {{PLURAL:$1|l’organisateur|les organisateurs}}."
+	"campaignevents-eventslist-country-label": "Pays"
 }

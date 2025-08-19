@@ -351,6 +351,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Можности за учество",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Семрежен настан",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Присуствен настан",
+	"campaignevents-notification-registration-details-venue-not-available": "{{PLURAL:$1|Организаторот|Организаторите}} сè уште не го {{PLURAL:$1|соопштил|соопштиле}} одржувалиштето.",
 	"campaignevents-notification-registration-details-organizers-header": "Приредувачи на настанот",
 	"campaignevents-notification-registration-details-organizers-more": "и {{PLURAL:$1|уште}} $1",
 	"campaignevents-notification-registration-event-page-link": "Погл. страница за настанот",
@@ -560,6 +561,5 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Откажете ја вашата пријава за настан на $2]''', викито на кое е создаден настанот.",
 	"campaignevents-email-error-notification-with-detail": "Не можев да ја испратам е-поштата од следнава причина: $1",
 	"campaignevents-eventslist-types-label": "Видови настани",
-	"campaignevents-eventslist-country-label": "Земја",
-	"campaignevents-notification-registration-venue-not-available": "{{PLURAL:$1|Организаторот|Организаторите}} сè уште не го {{PLURAL:$1|соопштил|соопштиле}} одржувалиштето."
+	"campaignevents-eventslist-country-label": "Земја"
 }

@@ -353,6 +353,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Варіанти участі",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Онлайн-подія",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Очна подія",
+	"campaignevents-notification-registration-details-venue-not-available": "Адресу місця проведення {{PLURAL:$1|організатори ще не додали}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Організатори подій",
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|Ще}} $1",
 	"campaignevents-notification-registration-event-page-link": "Переглянути сторінку події",
@@ -569,6 +570,5 @@
 	"campaignevents-cancel-page-nonlocal": "Будь ласка, '''[$1 скасовуйте свою реєстрацію на подію у {{GRAMMAR:locative|$2}}]''', тобто тій вікі, де її було створено.",
 	"campaignevents-email-error-notification-with-detail": "Електронний лист не вдалося надіслати з такої причини: $1",
 	"campaignevents-eventslist-types-label": "Типи подій",
-	"campaignevents-eventslist-country-label": "Країна",
-	"campaignevents-notification-registration-venue-not-available": "Адресу місця проведення {{PLURAL:$1|організатори ще не додали}}."
+	"campaignevents-eventslist-country-label": "Країна"
 }

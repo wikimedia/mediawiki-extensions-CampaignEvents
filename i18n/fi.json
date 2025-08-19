@@ -351,6 +351,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Osallistumisvaihtoehdot",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Online-tapahtuma",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Tapahtuma paikan päällä",
+	"campaignevents-notification-registration-details-venue-not-available": "{{PLURAL:$1|Järjestäjä ei|Järjestäjät eivät}} ole vielä {{PLURAL:$1|jakanut|jakaneet}} tapahtumapaikan sijaintia.",
 	"campaignevents-notification-registration-details-organizers-header": "Tapahtuman järjestäjät",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|muu|muuta}}",
 	"campaignevents-notification-registration-event-page-link": "Näytä tapahtumasivu",
@@ -561,6 +562,5 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Peruuta tapahtumailmoittautumisesi sivustolla $2]''', jossa tapahtuma on luotu.",
 	"campaignevents-email-error-notification-with-detail": "Sähköpostia ei voitu lähettää seuraavasta syystä: $1",
 	"campaignevents-eventslist-types-label": "Tapahtumatyypit",
-	"campaignevents-eventslist-country-label": "Maa",
-	"campaignevents-notification-registration-venue-not-available": "{{PLURAL:$1|Järjestäjä ei|Järjestäjät eivät}} ole vielä {{PLURAL:$1|jakanut|jakaneet}} tapahtumapaikan sijaintia."
+	"campaignevents-eventslist-country-label": "Maa"
 }

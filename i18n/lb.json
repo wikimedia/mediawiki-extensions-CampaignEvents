@@ -326,6 +326,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Participatiounsoptiounen",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Online-Evenement",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Presenzevenement",
+	"campaignevents-notification-registration-details-venue-not-available": "D'Plaz vum Evenement gouf nach net {{PLURAL:$1|vum Organisateur|vun den Organisateure}} gedeelt.",
 	"campaignevents-notification-registration-details-organizers-header": "Organisateure vum Evenement",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|méi}}",
 	"campaignevents-notification-registration-event-page-link": "Säit vum Evenement weisen",
@@ -541,6 +542,5 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Annuléiert wgl. Är Evenementsumeldung op $2]''', der Wiki, op där d'Evenement ugeluecht gouf.",
 	"campaignevents-email-error-notification-with-detail": "D'E-Mail konnt aus dem follgende Grond net geschéckt ginn: $1",
 	"campaignevents-eventslist-types-label": "Evenementstyppen",
-	"campaignevents-eventslist-country-label": "Land",
-	"campaignevents-notification-registration-venue-not-available": "D'Plaz vum Evenement gouf nach net {{PLURAL:$1|vum Organisateur|vun den Organisateure}} gedeelt."
+	"campaignevents-eventslist-country-label": "Land"
 }

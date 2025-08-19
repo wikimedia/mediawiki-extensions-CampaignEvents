@@ -35,6 +35,7 @@
 	"echo-category-title-campaign-events-notification-registration": "活動登記",
 	"echo-pref-tooltip-campaign-events-notification-registration": "我登記咗個用咗活動登記架撐嘅活動，話我知。",
 	"campaignevents-notification-registration-details-header": "活動詳情",
+	"campaignevents-notification-registration-details-venue-not-available": "場地位置仲未有{{PLURAL:$1|organizer}}分享。",
 	"campaignevents-email-participants-yes": "係",
 	"campaignevents-email-participants-no": "唔係",
 	"campaignevents-register-question-affiliate-option-none": "唔係",
@@ -44,6 +45,5 @@
 	"invitationlist": "邀請名單",
 	"campaignevents-invitationlist-event": "$1：邀請名單",
 	"campaignevents-invitationlist-preference": "摻埋我落[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請清單]。",
-	"prefs-campaignevents-invitations": "邀請清單",
-	"campaignevents-notification-registration-venue-not-available": "場地位置仲未有{{PLURAL:$1|organizer}}分享。"
+	"prefs-campaignevents-invitations": "邀請清單"
 }

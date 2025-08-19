@@ -26,14 +26,17 @@
 	"campaignevents-error-invalid-id": "Identifikátor události musí být kladné celé číslo.",
 	"enableeventregistration": "Povolit registraci na událost",
 	"campaignevents-eventpage-header-participation-options-in-person": "Osobní akce",
-	"campaignevents-eventpage-dialog-venue-not-available": "Adresu místa konání zpřístupní {{PLURAL:$1| organizátor|organizátoři}}.",
+	"campaignevents-eventpage-dialog-venue-not-available": "Adresa místa konání dosud nebyla {{PLURAL:$1|organizátorem|organizátory}} zveřejněna.",
 	"campaignevents-event-details-edit-button": "Upravit",
-	"campaignevents-event-details-select-all": "Vybrat vše",
-	"campaignevents-event-details-remove-participant-remove-btn": "Odebrat",
+	"campaignevents-event-details-select-all": "Vybrat všechny účastníky",
+	"campaignevents-event-details-remove-participant-remove-btn": "Smazat",
 	"campaignevents-event-details-dates-label": "Čas začátku a konce",
-	"campaignevents-event-details-venue-not-available": "Adresu místa konání zpřístupní {{PLURAL:$1| organizátor|organizátoři}}.",
+	"campaignevents-event-details-venue-not-available": "Adresa místa konání dosud nebyla {{PLURAL:$1|organizátorem|organizátory}} zveřejněna.",
 	"campaignevents-event-details-remove-all-participant-notification": "Všichni účastníci odstraněni",
 	"campaignevents-unregister-participants-permission-denied": "Nemáte dovoleno odstranit účastníky",
 	"campaignevents-event-details-remove-participant-notification-error": "Při pokusu o odstranění {{PLURAL:$1|účastníka|účastníků}} došlo k chybě.",
-	"campaignevents-invitationlist-preference": "Zahrňte mě do [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists pozvánkových seznamů]."
+	"echo-category-title-campaign-events-notification-registration": "registraci na událost",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Upozorněte mě, když se zaregistruji na událost používající nástroj Registrace na události.",
+	"campaignevents-invitationlist-preference": "Zahrňte mě do [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists pozvánkových seznamů].",
+	"prefs-campaignevents-invitations": "Pozvánkové seznamy"
 }

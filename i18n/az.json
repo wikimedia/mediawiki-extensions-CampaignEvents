@@ -351,6 +351,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "İştirak seçimləri",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Onlayn tədbir",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Oflayn tədbir",
+	"campaignevents-notification-registration-details-venue-not-available": "Məkan  hələ {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən paylaşılmayıb.",
 	"campaignevents-notification-registration-details-organizers-header": "Tədbir təşkilatçıları",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|daha çox}}",
 	"campaignevents-notification-registration-event-page-link": "Tədbir səhifəsinə bax",
@@ -560,6 +561,5 @@
 	"campaignevents-cancel-page-nonlocal": "Zəhmət olmasa, tədbirin yaradıldığı '''[$1 $2 vikisində qeydiyyatınızı ləğv edin]'''.",
 	"campaignevents-email-error-notification-with-detail": "Aşağıdakı səbəbdən e-poçt göndərilə bilmədi: $1",
 	"campaignevents-eventslist-types-label": "Tədbir növləri",
-	"campaignevents-eventslist-country-label": "Ölkə",
-	"campaignevents-notification-registration-venue-not-available": "Məkan  hələ {{PLURAL:$1|təşkilatçı|təşkilatçılar}} tərəfindən paylaşılmayıb."
+	"campaignevents-eventslist-country-label": "Ölkə"
 }

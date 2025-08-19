@@ -319,6 +319,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Opzioni di partecipazione",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Evento online",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Evento in presenza",
+	"campaignevents-notification-registration-details-venue-not-available": "La posizione della sede dell'evento non è ancora stata condivisa {{PLURAL:$1|dall'organizzatore|dagli organizzatori}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Organizzatori dell'evento",
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|un altro|altri $1}}",
 	"campaignevents-notification-registration-event-page-link": "Vedi pagina dell'evento",
@@ -493,6 +494,5 @@
 	"campaignevents-edit-field-eventtypes-other-help": "Aggiungi fino a due tipi di evento. Se scegli \"Altro\", deve essere l'unica selezione.",
 	"campaignevents-allevents-label-filter-event-types": "Tipi di eventi",
 	"campaignevents-eventslist-types-label": "Tipi di eventi",
-	"campaignevents-eventslist-country-label": "Nazione",
-	"campaignevents-notification-registration-venue-not-available": "La posizione della sede dell'evento non è ancora stata condivisa {{PLURAL:$1|dall'organizzatore|dagli organizzatori}}."
+	"campaignevents-eventslist-country-label": "Nazione"
 }

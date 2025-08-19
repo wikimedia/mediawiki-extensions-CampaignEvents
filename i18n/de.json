@@ -351,6 +351,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Teilnahmemöglichkeiten",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Online-Veranstaltung",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Präsenzveranstaltung",
+	"campaignevents-notification-registration-details-venue-not-available": "Der Veranstaltungsort wurde {{PLURAL:$1|vom Veranstalter|von den Veranstaltern}} noch nicht bekannt gegeben.",
 	"campaignevents-notification-registration-details-organizers-header": "Veranstalter",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|mehr}}",
 	"campaignevents-notification-registration-event-page-link": "Veranstaltungsseite ansehen",
@@ -560,6 +561,5 @@
 	"campaignevents-cancel-page-nonlocal": "Bitte '''[$1 storniere deine Veranstaltungsanmeldung auf $2]''', dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-email-error-notification-with-detail": "Die E-Mail konnte aus folgendem Grund nicht gesendet werden: $1",
 	"campaignevents-eventslist-types-label": "Veranstaltungstypen",
-	"campaignevents-eventslist-country-label": "Staat",
-	"campaignevents-notification-registration-venue-not-available": "Der Veranstaltungsort wurde {{PLURAL:$1|vom Veranstalter|von den Veranstaltern}} noch nicht bekannt gegeben."
+	"campaignevents-eventslist-country-label": "Staat"
 }

@@ -357,6 +357,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Deelnamemogelijkheden",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Online evenement",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Evenement op locatie",
+	"campaignevents-notification-registration-details-venue-not-available": "Het adres van de locatie is nog niet bekendgemaakt door de organisator{{PLURAL:$1||en}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Organisatoren van evenementen",
 	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|}}nog $1",
 	"campaignevents-notification-registration-event-page-link": "Bekijk evenementpagina",
@@ -566,6 +567,5 @@
 	"campaignevents-cancel-page-nonlocal": "'''[ $1 Annuleer uw evenementregistratie op $2]''', de wiki waar het evenement is aangemaakt.",
 	"campaignevents-email-error-notification-with-detail": "De e-mail kon niet worden verzonden om de volgende reden: $1",
 	"campaignevents-eventslist-types-label": "Soort evenementen",
-	"campaignevents-eventslist-country-label": "Land",
-	"campaignevents-notification-registration-venue-not-available": "Het adres van de locatie is nog niet bekendgemaakt door de organisator{{PLURAL:$1||en}}."
+	"campaignevents-eventslist-country-label": "Land"
 }

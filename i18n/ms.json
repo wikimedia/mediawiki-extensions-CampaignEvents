@@ -351,6 +351,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Pilihan penyertaan",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Acara dalam talian",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Acara secara bersemuka",
+	"campaignevents-notification-registration-details-venue-not-available": "Lokasi tempat belum lagi dikongsi oleh {{PLURAL:$1|penganjur}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Penganjur acara",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|lagi}}",
 	"campaignevents-notification-registration-event-page-link": "Lihat laman acara",
@@ -560,6 +561,5 @@
 	"campaignevents-cancel-page-nonlocal": "Sila '''[$1 batalkan pendaftaran acara anda pada $2]''', yakni wiki acara itu dicipta.",
 	"campaignevents-email-error-notification-with-detail": "E-mel tidak dapat dihantar, atas sebab berikut: $1",
 	"campaignevents-eventslist-types-label": "Jenis acara",
-	"campaignevents-eventslist-country-label": "Negara",
-	"campaignevents-notification-registration-venue-not-available": "Lokasi tempat belum lagi dikongsi oleh {{PLURAL:$1|penganjur}}."
+	"campaignevents-eventslist-country-label": "Negara"
 }

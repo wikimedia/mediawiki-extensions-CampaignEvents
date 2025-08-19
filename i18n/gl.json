@@ -351,6 +351,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "Opcións de participación",
 	"campaignevents-notification-registration-details-participation-option-online-header": "Evento en liña",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "Evento presencial",
+	"campaignevents-notification-registration-details-venue-not-available": "{{PLURAL:$1|O organizador|Os organizadores}} aínda non {{PLURAL:$1|facilitou|facilitaron}} o lugar do evento.",
 	"campaignevents-notification-registration-details-organizers-header": "Organizadores de eventos",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|máis}}",
 	"campaignevents-notification-registration-event-page-link": "Ver a páxina do evento",
@@ -567,6 +568,5 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Cancela a túa inscrición ao evento en $2]''', o wiki onde se creou o evento.",
 	"campaignevents-email-error-notification-with-detail": "Non se puido enviar o correo electrónico polo seguinte motivo: $1",
 	"campaignevents-eventslist-types-label": "Tipos de eventos",
-	"campaignevents-eventslist-country-label": "País",
-	"campaignevents-notification-registration-venue-not-available": "{{PLURAL:$1|O organizador|Os organizadores}} aínda non {{PLURAL:$1|facilitou|facilitaron}} o lugar do evento."
+	"campaignevents-eventslist-country-label": "País"
 }

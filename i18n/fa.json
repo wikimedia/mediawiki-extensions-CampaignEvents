@@ -354,6 +354,7 @@
 	"campaignevents-notification-registration-details-participation-options-header": "گزینه‌های مشارکت",
 	"campaignevents-notification-registration-details-participation-option-online-header": "رویداد برخط",
 	"campaignevents-notification-registration-details-participation-option-in-person-header": "رویداد شخصی",
+	"campaignevents-notification-registration-details-venue-not-available": "مکان برگزاری هنوز از سوی {{PLURAL:$1|برگزارکننده|برگزارکنندگان}} اعلام نشده است.",
 	"campaignevents-notification-registration-details-organizers-header": "برگزارکنندگان رویداد",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|مورد بیشتر}}",
 	"campaignevents-notification-registration-event-page-link": "مشاهدهٔ صفحهٔ رویداد",
@@ -570,6 +571,5 @@
 	"campaignevents-cancel-page-nonlocal": "لطفاً '''[$1 ثبت‌نام رویداد خود را در $2 لغو کنید]'''، ویکی‌ای که رویداد در آن ایجاد شده است.",
 	"campaignevents-email-error-notification-with-detail": "ایمیل به دلیل زیر ارسال نشد: $1",
 	"campaignevents-eventslist-types-label": "انواع رویداد",
-	"campaignevents-eventslist-country-label": "کشور",
-	"campaignevents-notification-registration-venue-not-available": "مکان برگزاری هنوز از سوی {{PLURAL:$1|برگزارکننده|برگزارکنندگان}} اعلام نشده است."
+	"campaignevents-eventslist-country-label": "کشور"
 }

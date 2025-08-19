@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ideophagous"
+		]
+	},
+	"campaignevents-edit-organizers-not-allowed": "$2 {{PLURAL:$1|ماعندوش|ماعندهاش}} الصلاحيات لمطلوبة باش {{PLURAL:$1|يكون منظيم|تكون منظيمة}}.",
+	"campaignevents-register-question-gender": "شنو لهوية الجنسية ديالك؟ (ختياري)",
+	"campaignevents-register-question-gender-stats-label": "شنو لهوية الجنسية ديالك؟",
+	"campaignevents-register-question-gender-organizer-label": "شنو لهوية الجنسية ديالك؟"
+}
