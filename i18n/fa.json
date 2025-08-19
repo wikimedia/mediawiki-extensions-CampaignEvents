@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Havadar-hvac",
-			"Jeeputer"
+			"Jeeputer",
+			"Darafsh"
 		]
 	},
 	"campaignevents-desc": "ویژگی‌هایی را در اختیار برگزارکنندگان و شرکت‌کنندگان کارزار قرار می‌دهد.",
@@ -139,6 +140,7 @@
 	"campaignevents-allevents-label-events-per-page": "رویدادها در هر صفحه",
 	"campaignevents-allevents-label-start-date": "از",
 	"campaignevents-allevents-label-end-date": "تا",
+	"campaignevents-eventslist-date-separator": "$1 – $2",
 	"campaignevents-eventslist-meeting-type-label": "نوع نشست",
 	"campaignevents-eventslist-organizer-label": "برگزارکنندگان",
 	"campaignevents-eventslist-column-date": "تاریخ",
@@ -177,6 +179,7 @@
 	"campaignevents-eventpage-header-type-online": "رویداد برخط",
 	"campaignevents-eventpage-header-type-in-person": "رویداد حضوری",
 	"campaignevents-eventpage-header-type-online-and-in-person": "رویداد برخط یا شخصی",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>منطقهٔ زمانی:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "زمان آغاز و پایان",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|شرکت‌کننده}}",
