@@ -73,23 +73,23 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 			// misspelling
 				[
 					'cea_id' => 104,
-					'cea_country' => 'Germani',
+					'cea_country' => 'Unaited Chingdom',
 					'cea_country_code' => null,
-					'cea_full_address' => "123 Main St \n Berlin \n Germani",
+					'cea_full_address' => "3 Savile Row\nLondon \n Unaited Chingdom",
 				],
 			// case insensitive
 				[
 					'cea_id' => 105,
-					'cea_country' => 'GeRmAnY',
+					'cea_country' => 'AuStrIa',
 					'cea_country_code' => null,
-					'cea_full_address' => "123 Main St \n Berlin \n GeRmAnY",
+					'cea_full_address' => "Josefstädter Straße 43-45\nVienna \n AuStrIa",
 				],
 			// non-english, valid
 				[
 					'cea_id' => 106,
-					'cea_country' => 'Allemagne',
+					'cea_country' => 'Italia',
 					'cea_country_code' => null,
-					'cea_full_address' => "123 Main St \n Berlin \n Allemagne",
+					'cea_full_address' => "Piazzale degli Uffizi 6\nFirenze \n Italia",
 				],
 			// rtl language, valid
 				[
@@ -119,6 +119,13 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 					'cea_country_code' => 'FR',
 					'cea_full_address' => 'No country here',
 				],
+				// Will duplicate row 101
+				[
+					'cea_id' => 111,
+					'cea_country' => 'Allemagne',
+					'cea_country_code' => null,
+					'cea_full_address' => "123 Main St \n Berlin \n Allemagne",
+				]
 			] )->execute();
 
 		// Link each event to exactly one address
@@ -132,6 +139,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 				[ 'ceea_event' => 7, 'ceea_address' => 108 ],
 				[ 'ceea_event' => 8, 'ceea_address' => 109 ],
 				[ 'ceea_event' => 9, 'ceea_address' => 110 ],
+				[ 'ceea_event' => 10, 'ceea_address' => 111 ],
 			] )->execute();
 	}
 
@@ -139,6 +147,13 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 		$this->maintenance->loadWithArgv( [ '--nowarn', '--exceptions', '' ] );
 		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
 		$this->maintenance->execute();
+
+		$output = $this->getActualOutput();
+		$this->assertStringContainsString(
+			'= Dropped 1 duplicated rows',
+			$output,
+			'Number of duplicated rows'
+		);
 
 		$this->assertSelect(
 			'ce_address', [
@@ -157,20 +172,20 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 				[
 					'0' => '104',
 					'1' => null,
-					'2' => 'DE',
-					'3' => "123 Main St \n Berlin"
+					'2' => 'GB',
+					'3' => "3 Savile Row\nLondon"
 				],
 				[
 					'0' => '105',
 					'1' => null,
-					'2' => 'DE',
-					'3' => "123 Main St \n Berlin"
+					'2' => 'AT',
+					'3' => "Josefstädter Straße 43-45\nVienna"
 				],
 				[
 					'0' => '106',
 					'1' => null,
-					'2' => 'DE',
-					'3' => "123 Main St \n Berlin"
+					'2' => 'IT',
+					'3' => "Piazzale degli Uffizi 6\nFirenze"
 				],
 				[
 					'0' => '107',
@@ -206,7 +221,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 				[ '109' ],
 				[ '110' ],
 			],
-			[ 'ORDER BY' => 'ceea_address' ]
+			[ 'DISTINCT', 'ORDER BY' => 'ceea_address' ]
 		);
 
 		// Verify that invalid events are now ONLINE (value = 1)
@@ -219,7 +234,6 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 			[
 				[ '2' ],
 				[ '7' ],
-				[ '10' ],
 				[ '11' ],
 				[ '12' ],
 				[ '13' ],
@@ -246,13 +260,14 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 				[ '0' => '101', '1' => 'Germany', '2' => null ],
 				[ '0' => '102', '1' => null, '2' => null ],
 				[ '0' => '103', '1' => 'France', '2' => null ],
-				[ '0' => '104', '1' => 'Germani', '2' => null ],
-				[ '0' => '105', '1' => 'GeRmAnY', '2' => null ],
-				[ '0' => '106', '1' => 'Allemagne', '2' => null ],
+				[ '0' => '104', '1' => 'Unaited Chingdom', '2' => null ],
+				[ '0' => '105', '1' => 'AuStrIa', '2' => null ],
+				[ '0' => '106', '1' => 'Italia', '2' => null ],
 				[ '0' => '107', '1' => 'فرنسا', '2' => null ],
 				[ '0' => '108', '1' => 'DR Congo, Congo, Angola', '2' => null ],
 				[ '0' => '109', '1' => 'France', '2' => null ],
 				[ '0' => '110', '1' => 'France', '2' => 'FR' ],
+				[ '0' => '111', '1' => 'Allemagne', '2' => null ],
 			],
 			[ 'ORDER BY' => 'cea_id' ]
 		);
@@ -265,13 +280,13 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 		);
 
 		$this->assertStringContainsString(
-			'= 11 events without address made online',
+			'= 10 events without address made online',
 			$output,
 			'Should display Events to online section in dry run'
 		);
 
 		$this->assertStringContainsString(
-			'= 6 address rows updated',
+			'= 7 address rows updated',
 			$output,
 			'Should display correct number of matched country conversions'
 		);

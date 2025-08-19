@@ -128,7 +128,8 @@ class AddressStore {
 		}
 
 		// TODO This query is not indexed; for the future we will need to use some indexed field (like unique
-		// address identifiers) instead of the full address.
+		// address identifiers) instead of the full address. In the interim, it is important that whatever this
+		// method uses is also a unique identifier.
 		$addressID = $dbw->newSelectQueryBuilder()
 			->select( 'cea_id' )
 			->from( 'ce_address' )

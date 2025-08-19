@@ -80,21 +80,31 @@ class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 		$this->countryProvider = CampaignEventsServices::getCountryProvider();
 		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );
 		$this->dbw = $dbHelper->getDBConnection( DB_PRIMARY );
-		$batchSize = $this->getBatchSize();
+
 		$this->maxRowID = (int)$this->dbr->newSelectQueryBuilder()
 			->select( 'MAX(cea_id)' )
 			->from( 'ce_address' )
 			->caller( __METHOD__ )
 			->fetchField();
 
-		$mainBatchStart = 0;
-		$matchedRows = [];
-
 		$this->loadCountryMap();
 		$this->maybeLoadExceptions();
+
 		$this->doPurge();
 		$this->handleEventsWithNoAddress();
+		$this->convertCountriesToCountryCodes();
+		$this->cleanupDuplicateAddresses();
 
+		return !$this->hasOption( 'dry-run' );
+	}
+
+	/**
+	 * Converts free-text countries to country codes
+	 */
+	private function convertCountriesToCountryCodes(): void {
+		$batchSize = $this->getBatchSize();
+		$mainBatchStart = 0;
+		$matchedRows = [];
 		$unmatchedRows = [];
 		$eventsToOnline = [];
 		do {
@@ -142,8 +152,6 @@ class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 		} while ( $batchEnd < $this->maxRowID );
 
 		$this->showOutput( $matchedRows, $unmatchedRows, $eventsToOnline );
-
-		return !$this->hasOption( 'dry-run' );
 	}
 
 	/**
@@ -427,6 +435,87 @@ class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 		$count = count( $eventsWithNoAddress );
 		$this->output( "========= {$count} events without address made online =========" );
 		$this->printEventList( $eventsWithNoAddress );
+	}
+
+	/**
+	 * Deduplicates address rows representing the same address (common for rows that used different forms for the
+	 * same country in free text, e.g. "Algeria" and "Algérie").
+	 */
+	private function cleanupDuplicateAddresses(): void {
+		$batchSize = $this->getBatchSize();
+		$batchStart = 0;
+		$debugLines = [];
+		do {
+			$batchEnd = $batchStart + $batchSize;
+			$res = $this->dbr->newSelectQueryBuilder()
+				->select( [
+					'first_id' => 'ce_address_1.cea_id',
+					'second_id' => 'ce_address_2.cea_id',
+					'address' => 'ce_address_1.cea_full_address',
+					'country' => 'ce_address_1.cea_country_code',
+				] )
+				->from( 'ce_address', 'ce_address_1' )
+				->join(
+					'ce_address',
+					'ce_address_2',
+					[
+						'ce_address_1.cea_full_address = ce_address_2.cea_full_address',
+						'ce_address_1.cea_country_code = ce_address_2.cea_country_code',
+						'ce_address_1.cea_id < ce_address_2.cea_id',
+					]
+				)
+				->where( [
+					$this->dbr->expr( 'ce_address_1.cea_id', '>', $batchStart ),
+					$this->dbr->expr( 'ce_address_1.cea_id', '<=', $batchEnd ),
+				] )
+				->caller( __METHOD__ )
+				->fetchResultSet();
+
+			$duplicates = [];
+			foreach ( $res as $row ) {
+				$duplicates[$row->first_id] ??= [
+					'address' => $row->address,
+					'country' => $row->country,
+					'copies' => [],
+				];
+				$duplicates[$row->first_id]['copies'][] = $row->second_id;
+			}
+
+			foreach ( $duplicates as $origID => $data ) {
+				$desc = "{$data['address']} // {$data['country']} // {$origID}";
+				$debugLines[] = "$origID ($desc) has " . count( $data['copies'] ) . 'copies: ' .
+					implode( ', ', $data['copies'] );
+
+				$this->dbw->newUpdateQueryBuilder()
+					->update( 'ce_event_address' )
+					->set( [ 'ceea_address' => $origID ] )
+					->where( [ 'ceea_address' => $data['copies'] ] )
+					->caller( __METHOD__ )
+					->execute();
+			}
+
+			$idsToDelete = array_merge( ...array_column( $duplicates, 'copies' ) );
+			if ( $idsToDelete && $this->checkShouldMakeWrites() ) {
+				$this->dbw->newDeleteQueryBuilder()
+					->deleteFrom( 'ce_address' )
+					->where( [ 'cea_id' => $idsToDelete ] )
+					->caller( __METHOD__ )
+					->execute();
+				$this->waitForReplication();
+			}
+			$batchStart += $batchSize;
+		} while ( $batchEnd < $this->maxRowID );
+
+		$dupeCount = count( $debugLines );
+		if ( $this->checkShouldMakeWrites() ) {
+			$this->output( "========= Dropped $dupeCount duplicated rows =========\n" );
+		} else {
+			$this->output(
+				"========= Found $dupeCount duplicated rows =========\n" .
+				"NOTE: more could be found when running the script without --dry-run!"
+			);
+		}
+		$this->output( implode( "\n", $debugLines ) . "\n" );
 	}
 
 	/**
