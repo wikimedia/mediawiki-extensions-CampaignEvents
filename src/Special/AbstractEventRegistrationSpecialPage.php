@@ -703,7 +703,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		// empty string (= the value was explicitly specified as an empty string) vs null (=value not specified).
 		// That's mostly intended for API consumers, and here for the UI we can just assume that
 		// empty string === not specified.
-		$nullableFields = [ 'EventMeetingURL', 'EventMeetingCountry', 'EventMeetingAddress', 'EventChatURL' ];
+		$nullableFields = [ 'EventMeetingURL', 'EventMeetingAddress', 'EventChatURL' ];
 		foreach ( $nullableFields as $fieldName ) {
 			$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
 		}
@@ -756,6 +756,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			$meetingCountry = $data['EventMeetingCountry'] ?? null;
+			if ( $meetingCountry === '' ) {
+				// Same adjustment as $nullableFields above.
+				$meetingCountry = null;
+			}
 			$meetingCountryCode = $data['EventMeetingCountryCode'] ?? null;
 			$meetingAddress = $data['EventMeetingAddress'];
 		} else {
