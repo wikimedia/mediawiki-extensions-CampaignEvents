@@ -35,7 +35,7 @@
 	"campaignevents-error-start-past": "Gitt eng Startzäit an der Zukunft an.",
 	"campaignevents-error-empty-end": "Gitt eng Endzäit an.",
 	"campaignevents-error-invalid-end": "D'Schlusszäit vum Evenement ass ongülteg.",
-	"campaignevents-error-start-after-end": "Gitt eng Schlusszäit an, déi no der Startzäit kënnt.",
+	"campaignevents-error-start-after-end": "Gitt e Schlussdatum an, deen nom Ufanksdatum kënnt.",
 	"campaignevents-error-no-types": "Gitt op d'mannst een Typ an",
 	"campaignevents-error-too-many-types": "Gitt maximal $1 {{PLURAL:$1|Evenementstyp|Evenementstyppen}} an.",
 	"campaignevents-error-invalid-types": "Déi follgend Evenementstyppe ginn net erkannt: $1.",
