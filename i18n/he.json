@@ -3,7 +3,8 @@
 		"authors": [
 			"Amire80",
 			"Neriah",
-			"Guycn2"
+			"Guycn2",
+			"YaronSh"
 		]
 	},
 	"campaignevents-desc": "אפשרויות למארגנים ולמשתתפים של אירועים.",
@@ -490,7 +491,7 @@
 	"campaignevents-worklist-error-titles-not-mainspace": "{{PLURAL:$1|הערך הבא|הערכים הבאים}} לא נמצאים במרחב השם הראשי. נא להזין ערכים במרחב השם הראשי בלבד.\n$2",
 	"invitationlist": "רשימת הזמנות",
 	"campaignevents-invitationlist-event": "$1: רשימת הזמנות",
-	"campaignevents-invitation-list-processing": "<strong>רשימת העורכים המוזמנים שלך נוצרת.</strong> יש לרענן את הדף תוך 5-10 דקות כדי להציג את רשימת ההזמנות שלך.",
+	"campaignevents-invitation-list-processing": "<strong>רשימת העורכים המוזמנים שלך נוצרת.</strong> יש לרענן את הדף בעוד 5–10 דקות כדי להציג את רשימת ההזמנות שלך.",
 	"campaignevents-invitation-list-invalid-id": "יש ספק מזהה רשימת הזמנות תקין. [[Special:MyInvitationLists|צפייה ברשימות ההזמנות שלך]].",
 	"campaignevents-invitation-list-does-not-exist": "רשימת ההזמנות הזאת אינה קיימת. [[Special:MyInvitationLists|צפייה ברשימות ההזמנות שלך]].",
 	"campaignevents-invitation-list-not-creator": "אין לך הרשאה להציג את רשימת ההזמנות הזאת כי לא יצרת אותה. [[Special:MyInvitationLists|צפייה ברשימות ההזמנות שלך]].",

@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Havadar-hvac",
-			"Jeeputer"
+			"Jeeputer",
+			"Darafsh"
 		]
 	},
 	"campaignevents-desc": "ویژگی‌هایی را در اختیار برگزارکنندگان و شرکت‌کنندگان کارزار قرار می‌دهد.",
@@ -53,6 +54,7 @@
 	"campaignevents-error-invalid-country": "یک نام کشور معتبر وارد کنید.",
 	"campaignevents-error-invalid-address": "یک نشانی معتبر وارد کنید.",
 	"campaignevents-error-invalid-question-names": "این پرسش‌ها شناسایی نشدند: $1",
+	"campaignevents-error-move-eventpage-namespace-disallowed": "ثبت‌نام رویداد در این فضای نام مجاز نیست.",
 	"enableeventregistration": "فعال‌سازی ثبت نام رویداد",
 	"editeventregistration": "ویرایش ثبت نام رویداد",
 	"campaignevents-edit-form-details-label": "جزئیات رویداد",
@@ -157,6 +159,7 @@
 	"campaignevents-myevents-field-status-closed": "رویدادهای بسته‌شده",
 	"campaignevents-myevents-label-events-per-page": "رویدادها به‌ازای هر صفحه",
 	"campaignevents-myevents-filter-btn-label": "پالایش رویدادها",
+	"campaignevents-allevents-tab-events-heading": "رویدادها",
 	"campaignevents-allevents-filter-legend": "پالایش رویدادها",
 	"campaignevents-allevents-label-submit": "اعمال پالایه‌ها",
 	"campaignevents-allevents-label-search": "کلیدواژهٔ جستجو",
@@ -164,6 +167,7 @@
 	"campaignevents-allevents-label-events-per-page": "رویدادها در هر صفحه",
 	"campaignevents-allevents-label-start-date": "از",
 	"campaignevents-allevents-label-end-date": "تا",
+	"campaignevents-eventslist-date-separator": "$1 – $2",
 	"campaignevents-eventslist-meeting-type-label": "نوع نشست",
 	"campaignevents-eventslist-organizer-label": "برگزارکنندگان",
 	"campaignevents-eventslist-column-date": "تاریخ",
@@ -198,6 +202,7 @@
 	"campaignevents-eventpage-header-type-online": "رویداد برخط",
 	"campaignevents-eventpage-header-type-in-person": "رویداد حضوری",
 	"campaignevents-eventpage-header-type-online-and-in-person": "رویداد برخط یا شخصی",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>منطقهٔ زمانی:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "زمان آغاز و پایان",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|شرکت‌کننده}}",
@@ -514,6 +519,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "افزودن ویکی...",
 	"campaignevents-allevents-label-filter-topics": "موضوعات",
 	"campaignevents-allevents-placeholder-topics": "افزودن موضوع...",
+	"campaignevents-allevents-label-include-all-wikis": "رویدادهای باز برای همهٔ ویکی‌ها را شامل شود",
 	"campaignevents-eventslist-all-wikis": "این رویداد برای تمام ویکی‌ها باز است.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|مورد بیشتر}}",
 	"campaignevents-eventpage-all-wikis": "این رویداد برای تمام ویکی‌ها باز است.",
@@ -527,5 +533,9 @@
 	"campaignevents-allevents-label-upcoming-events-title": "رویدادهای پیش رو",
 	"campaignevents-allevents-label-upcoming-events-description": "رویدادهای پیش رو: رویدادهایی که بین تاریخ‌های انتخاب‌شده آغاز خواهند شد",
 	"campaignevents-allevents-label-ongoing-events-title": "رویدادهای در جریان",
-	"campaignevents-allevents-label-ongoing-events-description": "رویدادهای در جریان: رویدادهایی که پیش از تاریخ انتخاب‌شده آغاز می‌شوند، اما همچنان در این بازهٔ تاریخی ادامه می‌یابند"
+	"campaignevents-allevents-label-ongoing-events-description": "رویدادهای در جریان: رویدادهایی که پیش از تاریخ انتخاب‌شده آغاز می‌شوند، اما همچنان در این بازهٔ تاریخی ادامه می‌یابند",
+	"campaignevents-allevents-transclusion-more-link": "رویدادها و اجتماع‌های بیشتری را کاوش کنید.",
+	"communityconfiguration-campaignevents-title": "CampaignEvents",
+	"communityconfiguration-campaignevents-description": "گزینه‌های پیکربندی برای افزونهٔ CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "فضاهای نام معتبر رویداد"
 }
