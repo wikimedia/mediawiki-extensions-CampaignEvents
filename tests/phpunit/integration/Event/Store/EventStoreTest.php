@@ -31,7 +31,7 @@ use Throwable;
 class EventStoreTest extends MediaWikiIntegrationTestCase {
 	protected function setUp(): void {
 		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
 	}
 
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {

@@ -28,7 +28,7 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 	protected function setUp(): void {
 		parent::setUp();
 		$this->markTestSkippedIfExtensionNotLoaded( 'Echo' );
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
 	}
 
 	private function makeNotificationModel( int $eventID ): EchoEventPresentationModel {

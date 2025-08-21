@@ -797,7 +797,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			[ 'rawmessage' ],
 			null,
 			null,
-			MIGRATION_WRITE_NEW
+			MIGRATION_NEW
 		);
 	}
 
@@ -808,7 +808,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			null,
 			null,
 			null,
-			MIGRATION_WRITE_NEW
+			MIGRATION_NEW
 		);
 		$this->assertNotNull( $event->getAddress(), 'Should have address' );
 		$this->assertSame( 'FR', $event->getAddress()->getCountryCode(), 'Country code' );

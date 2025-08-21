@@ -95,7 +95,7 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->createMock( ITopicRegistry::class ),
 			new EventTypesRegistry(),
 			$eventLookup,
-			new HashConfig( [ 'CampaignEventsCountrySchemaMigrationStage' => MIGRATION_WRITE_NEW ] ),
+			new HashConfig( [ 'CampaignEventsCountrySchemaMigrationStage' => MIGRATION_NEW ] ),
 			$this->getCountryProvider(),
 		);
 	}

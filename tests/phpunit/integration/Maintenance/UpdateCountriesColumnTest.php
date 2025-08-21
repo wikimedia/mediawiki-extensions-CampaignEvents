@@ -145,7 +145,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 
 	public function testExecuteWithCommit(): void {
 		$this->maintenance->loadWithArgv( [ '--nowarn', '--exceptions', '' ] );
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
 		$this->maintenance->execute();
 
 		$output = $this->getActualOutput();
@@ -306,7 +306,7 @@ class UpdateCountriesColumnTest extends MaintenanceBaseTestCase {
 
 	public function testExecuteWithExceptions(): void {
 		$this->maintenance->loadWithArgv( [ '--nowarn' ] );
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_WRITE_NEW );
+		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
 		$this->maintenance->execute();
 
 		$this->assertSelect(
