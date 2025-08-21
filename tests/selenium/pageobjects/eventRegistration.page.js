@@ -68,8 +68,8 @@ class EventRegistrationPage extends Page {
 		return $( 'select[name="wpEventMeetingCountryCode"]' );
 	}
 
-	get body() {
-		return $( 'body' );
+	get header() {
+		return $( 'h1' );
 	}
 
 	async open() {
@@ -77,7 +77,7 @@ class EventRegistrationPage extends Page {
 	}
 
 	async loseFocus() {
-		await this.body.click();
+		await this.header.click();
 	}
 
 	async selectCountry( countryCode ) {
@@ -107,7 +107,6 @@ class EventRegistrationPage extends Page {
 	 */
 	async setStartDate( date ) {
 		await this.startYearInput.setValue( ( date.year ).toString() );
-		await this.loseFocus();
 		await this.startDateInput.setValue( ( date.day ).toString() );
 		await this.loseFocus();
 	}
@@ -117,13 +116,13 @@ class EventRegistrationPage extends Page {
 	 */
 	async setEndDate( date ) {
 		await this.endYearInput.setValue( ( date.year ).toString() );
-		await this.loseFocus();
 		await this.endDateInput.setValue( ( date.day ).toString() );
 		await this.loseFocus();
 	}
 
 	async chooseMenuOption( menuItem ) {
 		await menuItem.waitForDisplayed();
+		await menuItem.waitForClickable();
 		await menuItem.moveTo();
 		await menuItem.waitUntil( async function () {
 			const classes = await this.getAttribute( 'class' );

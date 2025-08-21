@@ -28,6 +28,7 @@ describe( 'Enable Event Registration @daily', () => {
 		await EventUtils.createEventPage( eventTitle );
 		await EventRegistrationPage.enableEvent( eventTitle );
 
+		await EventPage.eventName.waitForDisplayed();
 		await expect( await EventPage.eventName ).toHaveText( eventName );
 		const registrationUpdatedNotification = await EventPage.registrationUpdatedNotification;
 		await expect( registrationUpdatedNotification )

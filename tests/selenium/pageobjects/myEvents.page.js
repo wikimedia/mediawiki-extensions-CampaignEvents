@@ -74,6 +74,7 @@ class MyEventsPage extends Page {
 			{ timeoutMsg: 'Dialog is not ready' }
 		);
 		await this.deleteConfirmationButton.click();
+		await this.notification.waitForDisplayed();
 	}
 }
 
