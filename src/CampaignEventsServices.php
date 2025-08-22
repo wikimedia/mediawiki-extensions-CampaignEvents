@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -249,6 +250,12 @@ class CampaignEventsServices {
 
 	public static function getEventTopicsStore( ?ContainerInterface $services = null ): EventTopicsStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventTopicsStore::SERVICE_NAME );
+	}
+
+	public static function getEventContributionStore(
+		?ContainerInterface $services = null
+	): EventContributionStore {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventContributionStore::SERVICE_NAME );
 	}
 
 	public static function getWikiConfiguration( ?ContainerInterface $services = null ): Config {
