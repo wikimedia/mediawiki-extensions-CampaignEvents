@@ -177,7 +177,8 @@
 		"CampaignEventsFindPotentialInvitees": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Invitation\\FindPotentialInviteesJob",
 			"needsPage": false
-		}
+		},
+		"CampaignEventsComputeEventContribution": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\EventContributionJob"
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [

@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
@@ -464,4 +465,13 @@ return [
 			$services->get( CountryProvider::SERVICE_NAME ),
 		);
 	},
+	EventContributionComputeMetrics::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): EventContributionComputeMetrics {
+		return new EventContributionComputeMetrics(
+			$services->getRevisionStoreFactory(),
+			$services->getTitleFormatter()
+		);
+	},
+
 ];

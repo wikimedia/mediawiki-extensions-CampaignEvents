@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\EventTopicsStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventWikisStore;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
@@ -272,5 +273,11 @@ class CampaignEventsServices {
 
 	public static function getEventFormatter( ?ContainerInterface $services = null ): EventFormatter {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventFormatter::SERVICE_NAME );
+	}
+
+	public static function getEventContributionComputeMetrics(
+		?ContainerInterface $services = null
+	): EventContributionComputeMetrics {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventContributionComputeMetrics::SERVICE_NAME );
 	}
 }
