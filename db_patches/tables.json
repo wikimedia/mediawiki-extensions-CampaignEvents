@@ -125,6 +125,15 @@
 				}
 			},
 			{
+				"name": "event_track_contributions",
+				"comment": "Whether contribution tracking is enabled for this event.",
+				"type": "mwtinyint",
+				"options": {
+					"length": 1,
+					"default": 0
+				}
+			},
+			{
 				"name": "event_meeting_type",
 				"comment": "Participation options for the event. This was previously called \"meeting type\", which explains the column name. Possible values: 1 = in person, 2 = online, 3 = both.",
 				"type": "integer",
