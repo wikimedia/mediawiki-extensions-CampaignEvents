@@ -31,7 +31,7 @@
 	"campaignevents-error-start-past": "Gitt eng Startzäit an der Zukunft an.",
 	"campaignevents-error-empty-end": "Gitt eng Endzäit an.",
 	"campaignevents-error-invalid-end": "D'Schlusszäit vum Evenement ass ongülteg.",
-	"campaignevents-error-start-after-end": "Gitt eng Schlusszäit an, déi no der Startzäit kënnt.",
+	"campaignevents-error-start-after-end": "Gitt e Schlussdatum an, deen nom Ufanksdatum kënnt.",
 	"campaignevents-error-invalid-country": "Gitt ee gültegen Lännernumm an.",
 	"campaignevents-error-invalid-address": "Gitt eng gülteg Adress an.",
 	"campaignevents-error-invalid-question-names": "Déi follgend Froe goufen net erkannt: $1",
