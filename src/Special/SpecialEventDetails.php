@@ -41,6 +41,7 @@ class SpecialEventDetails extends SpecialPage {
 	public const PARTICIPANTS_PANEL = 'ParticipantsPanel';
 	public const EMAIL_PANEL = 'EmailPanel';
 	public const STATS_PANEL = 'StatsPanel';
+	public const CONTRIBUTIONS_PANEL = 'ContributionsPanel';
 
 	protected IEventLookup $eventLookup;
 	protected ?ExistingEventRegistration $event = null;
@@ -220,6 +221,14 @@ class SpecialEventDetails extends SpecialPage {
 				$out
 			)
 		);
+		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
+			$eventContributionsModule = $this->frontendModulesFactory->newEventContributionsModule();
+			$tabs[] = $this->createTab(
+				self::CONTRIBUTIONS_PANEL,
+				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-contributions' ) ),
+				$eventContributionsModule->createContent()
+			);
+		}
 		if ( $userCanEmailParticipants ) {
 			$emailModule = $this->frontendModulesFactory->newEmailParticipantsModule();
 			$tabs[] = $this->createTab(

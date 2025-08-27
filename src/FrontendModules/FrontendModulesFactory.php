@@ -164,4 +164,8 @@ class FrontendModulesFactory {
 			$this->centralUserLookup
 		);
 	}
+
+	public function newEventContributionsModule(): EventContributionsModule {
+		return new EventContributionsModule();
+	}
 }

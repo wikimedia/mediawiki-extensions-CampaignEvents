@@ -325,6 +325,7 @@
 	"campaignevents-event-details-tab-email": "Tab label used on [[Special:EventDetails]]. '''\"Message\" is a verb.''' Since this message is used in a tabbed layout, the translation should be as concise as possible.",
 	"campaignevents-event-details-tab-event-details": "Event details tab label used on [[Special:EventDetails]]",
 	"campaignevents-event-details-tab-stats": "Tab label used on [[Special:EventDetails]]. This tab contains statistics about the participants' responses to the questions they can answer when registering for an event.",
+	"campaignevents-event-details-tab-contributions": "Tab label used on [[Special:EventDetails]]. This tab contains statistics about the participants' contributions",
 	"campaignevents-event-details-search-participants-placeholder": "A placeholder message for the search participants input on [[Special:EventDetails]]",
 	"campaignevents-event-details-organizers-view-more": "Label of a link on [[Special:EventDetails]] that, if clicked, will load more organizers to display.",
 	"campaignevents-event-details-organizers-noscript": "Message used on [[Special:EventDetails]] to let the user know that they have to enable JavaScript in order to be able to load and view more participants.",
