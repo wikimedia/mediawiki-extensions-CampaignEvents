@@ -583,5 +583,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Revision not found",
 	"campaignevents-event-contribution-not-owner": "You can only associate your own edits to events",
 	"campaignevents-event-contribution-tracking-disabled": "Contribution tracking is not enabled for this event",
-	"campaignevents-event-contribution-event-deleted": "Event has been deleted"
+	"campaignevents-event-contribution-event-deleted": "Event has been deleted",
+	"campaignevents-postedit-dialog-title-single": "Associate this edit with $1?",
+	"campaignevents-postedit-dialog-title-multiple": "Associate this edit with an event?",
+	"campaignevents-postedit-dialog-intro-single": "You are registered for an event that is active now. Is this edit for $1?",
+	"campaignevents-postedit-dialog-intro-multiple": "You are registered for multiple events that are active now. Is this edit for one of the events? If yes, please select which one.",
+	"campaignevents-postedit-dialog-select-placeholder": "Select event",
+	"campaignevents-postedit-dialog-action-no": "No, thanks",
+	"campaignevents-postedit-dialog-action-yes": "Yes"
 }

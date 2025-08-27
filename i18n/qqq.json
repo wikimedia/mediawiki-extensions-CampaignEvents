@@ -590,5 +590,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Error message shown when the specified revision ID does not exist in the event contribution API",
 	"campaignevents-event-contribution-not-owner": "Error message shown when trying to associate an edit that was not made by the current user",
 	"campaignevents-event-contribution-tracking-disabled": "Error message shown when trying to associate an edit with an event that has contribution tracking disabled",
-	"campaignevents-event-contribution-event-deleted": "Error message shown when the specified event was deleted, in the event contribution API"
+	"campaignevents-event-contribution-event-deleted": "Error message shown when the specified event was deleted, in the event contribution API",
+	"campaignevents-postedit-dialog-title-single": "Title of a dialog shown after making an edit, where the user can choose to associate the edit with an event they're participating in, when there is only one such event.\nParameters:\n* $1 - Name of the event",
+	"campaignevents-postedit-dialog-title-multiple": "Title of a dialog shown after making an edit, where the user can choose to associate the edit with an event they're participating in.",
+	"campaignevents-postedit-dialog-intro-single": "Introductory paragraph used in a dialog shown after making an edit, where the user can choose to associate the edit with an event they're participating in, when there is only one such event.\nParameters:\n* $1 - Name of the event",
+	"campaignevents-postedit-dialog-intro-multiple": "Introductory paragraph used in a dialog shown after making an edit, where the user can choose to associate the edit with an event they're participating in.",
+	"campaignevents-postedit-dialog-select-placeholder": "Placeholder of a selector used in a dialog shown after making an edit, where the user can choose an event to associate the edit.",
+	"campaignevents-postedit-dialog-action-no": "Label of a button in a dialog shown after making an edit, which asks the user whether they want to associate the edit with an event they're participating in.",
+	"campaignevents-postedit-dialog-action-yes": "Label of a button in a dialog shown after making an edit, which asks the user whether they want to associate the edit with an event they're participating in."
 }

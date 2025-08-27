@@ -17,7 +17,10 @@
 		"VisualEditor": {
 			"AvailableNamespaces": {
 				"Event": true
-			}
+			},
+			"PluginModules": [
+				"ext.campaignEvents.postEdit"
+			]
 		},
 		"CommunityConfiguration": {
 			"Providers": {
@@ -150,6 +153,13 @@
 		},
 		"GetPreferencesHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\GetPreferencesHandler"
+		},
+		"PostEditHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\PostEditHandler",
+			"services": [
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsEventLookup"
+			]
 		}
 	},
 	"Hooks": {
@@ -157,7 +167,8 @@
 		"ArticleViewHeader": "ArticleViewHeader",
 		"TitleMove": "TitleMoveHandler",
 		"BeforeCreateEchoEvent": "EchoHooksHandler",
-		"GetPreferences": "GetPreferencesHandler"
+		"GetPreferences": "GetPreferencesHandler",
+		"BeforePageDisplay": "PostEditHandler"
 	},
 	"DomainEventIngresses": [
 		{
@@ -412,6 +423,33 @@
 				"oojs-ui-core",
 				"oojs-ui-windows",
 				"oojs-ui-widgets"
+			]
+		},
+		"ext.campaignEvents.postEdit": {
+			"localBasePath": "resources/ext.campaignEvents.postEdit",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.postEdit",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxDialog",
+				"CdxSelect"
+			],
+			"dependencies": [
+				"mediawiki.api",
+				"mediawiki.user"
+			],
+			"packageFiles": [
+				"index.js",
+				"components/App.vue",
+				"components/EditAssociationDialog.vue"
+			],
+			"messages": [
+				"campaignevents-postedit-dialog-title-single",
+				"campaignevents-postedit-dialog-title-multiple",
+				"campaignevents-postedit-dialog-intro-single",
+				"campaignevents-postedit-dialog-intro-multiple",
+				"campaignevents-postedit-dialog-select-placeholder",
+				"campaignevents-postedit-dialog-action-no",
+				"campaignevents-postedit-dialog-action-yes"
 			]
 		}
 	},
