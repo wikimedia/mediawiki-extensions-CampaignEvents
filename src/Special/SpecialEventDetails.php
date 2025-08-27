@@ -34,7 +34,8 @@ class SpecialEventDetails extends SpecialPage {
 		'oojs-ui.styles.icons-movement',
 		'oojs-ui.styles.icons-wikimedia',
 		'ext.campaignEvents.specialPages.styles',
-		'oojs-ui-widgets.styles'
+		'oojs-ui-widgets.styles',
+		'mediawiki.special.changeslist'
 	];
 
 	public const EVENT_DETAILS_PANEL = 'EventDetailsPanel';
@@ -222,7 +223,13 @@ class SpecialEventDetails extends SpecialPage {
 			)
 		);
 		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
-			$eventContributionsModule = $this->frontendModulesFactory->newEventContributionsModule();
+			$eventContributionsModule = $this->frontendModulesFactory->newEventContributionsModule(
+				$this->event,
+				$this->permissionChecker,
+				$this->centralUserLookup,
+				$this->getLinkRenderer(),
+				$out
+			);
 			$tabs[] = $this->createTab(
 				self::CONTRIBUTIONS_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-contributions' ) ),

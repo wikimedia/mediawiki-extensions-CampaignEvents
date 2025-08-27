@@ -297,7 +297,6 @@ return [
 			$services->getMessageFormatterFactory(),
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( ParticipantsStore::SERVICE_NAME ),
-			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->get( UserLinker::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
@@ -313,6 +312,11 @@ return [
 			$services->get( ITopicRegistry::SERVICE_NAME ),
 			$services->get( EventTypesRegistry::SERVICE_NAME ),
 			$services->get( EventFormatter::SERVICE_NAME ),
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getTitleFactory(),
+			$services->get( EventContributionStore::SERVICE_NAME ),
+			$services->get( PageURLResolver::SERVICE_NAME ),
+			$services->getLinkBatchFactory(),
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

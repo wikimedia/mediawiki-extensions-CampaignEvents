@@ -415,3 +415,13 @@ fieldset.ext-campaignevents-eventdetails-email-form {
 .ext-campaignevents-eventdetails-footer {
 	padding-left: 20px;
 }
+
+.ext-campaignevents-contributions-table .mw-userlink {
+	overflow-wrap: anywhere;
+}
+
+/* Remove parentheses added by mediawiki.special.changeslist around byte deltas */
+.ext-campaignevents-contributions-table .mw-diff-bytes::before,
+.ext-campaignevents-contributions-table .mw-diff-bytes::after {
+	content: '';
+}

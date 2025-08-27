@@ -4,8 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
+use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -23,6 +26,9 @@ use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Language\Language;
+use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\UserFactory;
 use Wikimedia\Message\IMessageFormatterFactory;
 
@@ -32,7 +38,6 @@ class FrontendModulesFactory {
 	private IMessageFormatterFactory $messageFormatterFactory;
 	private OrganizersStore $organizersStore;
 	private ParticipantsStore $participantsStore;
-	private PageURLResolver $pageURLResolver;
 	private UserLinker $userLinker;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private PermissionChecker $permissionChecker;
@@ -48,12 +53,16 @@ class FrontendModulesFactory {
 	private ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
 	private EventFormatter $eventFormatter;
+	private CampaignsDatabaseHelper $databaseHelper;
+	private TitleFactory $titleFactory;
+	private EventContributionStore $eventContributionStore;
+	private PageURLResolver $pageURLResolver;
+	private LinkBatchFactory $linkBatchFactory;
 
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
 		OrganizersStore $organizersStore,
 		ParticipantsStore $participantsStore,
-		PageURLResolver $pageURLResolver,
 		UserLinker $userLinker,
 		CampaignsCentralUserLookup $centralUserLookup,
 		PermissionChecker $permissionChecker,
@@ -69,11 +78,15 @@ class FrontendModulesFactory {
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
 		EventFormatter $eventFormatter,
+		CampaignsDatabaseHelper $databaseHelper,
+		TitleFactory $titleFactory,
+		EventContributionStore $eventContributionStore,
+		PageURLResolver $pageURLResolver,
+		LinkBatchFactory $linkBatchFactory,
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->organizersStore = $organizersStore;
 		$this->participantsStore = $participantsStore;
-		$this->pageURLResolver = $pageURLResolver;
 		$this->userLinker = $userLinker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->permissionChecker = $permissionChecker;
@@ -89,6 +102,11 @@ class FrontendModulesFactory {
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->eventFormatter = $eventFormatter;
+		$this->databaseHelper = $databaseHelper;
+		$this->titleFactory = $titleFactory;
+		$this->eventContributionStore = $eventContributionStore;
+		$this->pageURLResolver = $pageURLResolver;
+		$this->linkBatchFactory = $linkBatchFactory;
 	}
 
 	public function newEventDetailsModule(
@@ -165,7 +183,24 @@ class FrontendModulesFactory {
 		);
 	}
 
-	public function newEventContributionsModule(): EventContributionsModule {
-		return new EventContributionsModule();
+	public function newEventContributionsModule(
+		ExistingEventRegistration $event,
+		PermissionChecker $permissionChecker,
+		CampaignsCentralUserLookup $centralUserLookup,
+		LinkRenderer $linkRenderer,
+		OutputPage $output
+	): EventContributionsModule {
+		return new EventContributionsModule(
+			$event,
+			$permissionChecker,
+			$centralUserLookup,
+			$linkRenderer,
+			$this->userLinker,
+			$this->databaseHelper,
+			$this->titleFactory,
+			$this->eventContributionStore,
+			$output,
+			$this->linkBatchFactory
+		);
 	}
 }
