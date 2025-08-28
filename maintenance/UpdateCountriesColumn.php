@@ -471,6 +471,10 @@ class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 				->caller( __METHOD__ )
 				->fetchResultSet();
 
+			// Note: a row that is considered as a copy (second_id) may later appear as canonical (first_id) within the
+			// same batch, or spanning multiple batches when using --dry-run. This should be harmless because we run the
+			// UPDATEs one at a time, so by the time we get to treating the copy as canonical, all of its usages have
+			// been updated already. So, it's not worthwhile fixing.
 			$duplicates = [];
 			foreach ( $res as $row ) {
 				$duplicates[$row->first_id] ??= [
@@ -482,16 +486,18 @@ class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 			}
 
 			foreach ( $duplicates as $origID => $data ) {
-				$desc = "{$data['address']} // {$data['country']} // {$origID}";
-				$debugLines[] = "$origID ($desc) has " . count( $data['copies'] ) . 'copies: ' .
-					implode( ', ', $data['copies'] );
+				$addressStr = $data['address'] !== '' ? $data['address'] : '[no address]';
+				$debugLines[] = "$origID ($addressStr // {$data['country']}) has " . count( $data['copies'] ) .
+					' copies: ' . implode( ', ', $data['copies'] );
 
-				$this->dbw->newUpdateQueryBuilder()
-					->update( 'ce_event_address' )
-					->set( [ 'ceea_address' => $origID ] )
-					->where( [ 'ceea_address' => $data['copies'] ] )
-					->caller( __METHOD__ )
-					->execute();
+				if ( $this->checkShouldMakeWrites() ) {
+					$this->dbw->newUpdateQueryBuilder()
+						->update( 'ce_event_address' )
+						->set( [ 'ceea_address' => $origID ] )
+						->where( [ 'ceea_address' => $data['copies'] ] )
+						->caller( __METHOD__ )
+						->execute();
+				}
 			}
 
 			$idsToDelete = array_merge( ...array_column( $duplicates, 'copies' ) );
@@ -512,7 +518,7 @@ class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 		} else {
 			$this->output(
 				"========= Found $dupeCount duplicated rows =========\n" .
-				"NOTE: more could be found when running the script without --dry-run!"
+				"NOTE: more could be found when running the script without --dry-run!\n"
 			);
 		}
 		$this->output( implode( "\n", $debugLines ) . "\n" );
