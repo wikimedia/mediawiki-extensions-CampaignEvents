@@ -82,6 +82,10 @@
 		"CampaignEventsEnableContributionTracking": {
 			"description": "Flag to enable contribution tracking feature for associating edits to events",
 			"value": false
+		},
+		"CampaignEventsContributionTrackingDisallowedCountries": {
+			"description": "Map of countries for which in-person or hybrid events cannot use contribution tracking (e.g. for legal reasons, see https://foundation.wikimedia.org/wiki/Legal:Wikimedia_Foundation_Country_and_Territory_Protection_List). This maps CLDR country codes to English country names, but only the former are used; the names are included for convenience, and are assumed to be correct.",
+			"value": {}
 		}
 	},
 	"DatabaseVirtualDomains": [

@@ -122,4 +122,12 @@ class EventTypesRegistryTest extends MediaWikiUnitTestCase {
 			'Combination of types' => [ [ 'contest', 'meetup' ], 1 << 3 | 1 << 6 ],
 		];
 	}
+
+	/** @covers ::getContributionTypes */
+	public function testGetContributionTypes() {
+		$this->assertSame(
+			[ 'editing-event', 'media-upload-event', 'backlog-drive', 'contest' ],
+			( new EventTypesRegistry() )->getContributionTypes()
+		);
+	}
 }

@@ -141,7 +141,8 @@ return [
 			$services->get( CountryProvider::SERVICE_NAME ),
 			$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION )
 				->get( 'CampaignEventsEventNamespaces' ),
-			$services->getMainConfig()->get( 'CampaignEventsCountrySchemaMigrationStage' )
+			$services->getMainConfig()->get( 'CampaignEventsCountrySchemaMigrationStage' ),
+			$services->getMainConfig()->get( 'CampaignEventsContributionTrackingDisallowedCountries' )
 		);
 	},
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {

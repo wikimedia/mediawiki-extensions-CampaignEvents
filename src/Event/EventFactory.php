@@ -67,9 +67,12 @@ class EventFactory {
 	/** @var list<int> */
 	private array $allowedEventNamespaces;
 	private int $countrySchemaMigrationStage;
+	/** @var list<string> */
+	private array $contributionTrackingDisallowedCountryCodes;
 
 	/**
 	 * @phan-param list<int> $allowedEventNamespaces
+	 * @phan-param list<string> $contributionTrackingDisallowedCountryCodes
 	 */
 	public function __construct(
 		CampaignsPageFactory $campaignsPageFactory,
@@ -81,7 +84,8 @@ class EventFactory {
 		EventTypesRegistry $eventTypesRegistry,
 		CountryProvider $countryProvider,
 		array $allowedEventNamespaces,
-		int $countrySchemaMigrationStage
+		int $countrySchemaMigrationStage,
+		array $contributionTrackingDisallowedCountryCodes,
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->campaignsPageFormatter = $campaignsPageFormatter;
@@ -93,6 +97,7 @@ class EventFactory {
 		$this->countryProvider = $countryProvider;
 		$this->allowedEventNamespaces = $allowedEventNamespaces;
 		$this->countrySchemaMigrationStage = $countrySchemaMigrationStage;
+		$this->contributionTrackingDisallowedCountryCodes = $contributionTrackingDisallowedCountryCodes;
 	}
 
 	/**
@@ -112,6 +117,7 @@ class EventFactory {
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingCountryCode
 	 * @param string|null $meetingAddress
+	 * @param bool $hasContributionTracking
 	 * @param string|null $trackingToolUserID User identifier of a tracking tool
 	 * @param string|null $trackingToolEventID
 	 * @param string|null $chatURL
@@ -142,6 +148,7 @@ class EventFactory {
 		?string $meetingCountry,
 		?string $meetingCountryCode,
 		?string $meetingAddress,
+		bool $hasContributionTracking,
 		?string $trackingToolUserID,
 		?string $trackingToolEventID,
 		?string $chatURL,
@@ -195,7 +202,7 @@ class EventFactory {
 		$res->merge(
 			$this->validateMeetingInfo(
 				$participationOptions,
-				$meetingURL,
+					$meetingURL,
 				$meetingCountry,
 				$meetingCountryCode,
 				$meetingAddress
@@ -205,6 +212,10 @@ class EventFactory {
 			$address = new Address( $meetingAddress, $meetingCountry, $meetingCountryCode );
 		} else {
 			$address = null;
+		}
+
+		if ( $hasContributionTracking ) {
+			$res->merge( $this->validateContributionsTracking( $types, $meetingCountryCode ) );
 		}
 
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
@@ -273,7 +284,7 @@ class EventFactory {
 			$participationOptions,
 			$meetingURL,
 			$address,
-			false,
+			$hasContributionTracking,
 			$trackingTools,
 			$chatURL,
 			$isTestEvent,
@@ -605,6 +616,34 @@ class EventFactory {
 			$res->error( 'campaignevents-error-invalid-address' );
 		}
 		return $res;
+	}
+
+	/**
+	 * Precondition: contribution tracking is being enabled. The passed event types and country code are not
+	 * necessarily valid.
+	 *
+	 * @param list<string> $eventTypes
+	 */
+	private function validateContributionsTracking( array $eventTypes, ?string $countryCode ): StatusValue {
+		if (
+			$countryCode !== null &&
+			in_array( $countryCode, $this->contributionTrackingDisallowedCountryCodes, true )
+		) {
+			return StatusValue::newFatal( 'campaignevents-error-contribs-tracking-disallowed-country' );
+		}
+
+		$contributionTypes = $this->eventTypesRegistry->getContributionTypes();
+		if ( !array_intersect( $eventTypes, $contributionTypes ) ) {
+			$contributionTypeMsgs = array_map(
+				static fn ( string $msgKey ): MessageValue => new MessageValue( $msgKey ),
+				$this->eventTypesRegistry->getTypeMessages( $contributionTypes )
+			);
+			return StatusValue::newFatal(
+				'campaignevents-error-contribs-tracking-invalid-type',
+				Message::listParam( $contributionTypeMsgs )
+			);
+		}
+		return StatusValue::newGood();
 	}
 
 	/**

@@ -54,6 +54,8 @@
 	"campaignevents-error-invalid-country": "Enter a valid country name.",
 	"campaignevents-error-invalid-country-code": "Enter a valid country code.",
 	"campaignevents-error-invalid-address": "Enter a valid address.",
+	"campaignevents-error-contribs-tracking-disallowed-country": "Contribution statistics cannot be enabled for the selected country.",
+	"campaignevents-error-contribs-tracking-invalid-type": "Contribution statistics can only be enabled for events with the following types: $1",
 	"campaignevents-error-invalid-chat-url": "Enter a valid chat URL.",
 	"campaignevents-error-invalid-question-names": "The following questions were not recognized: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Event registration is not permitted in this namespace.",

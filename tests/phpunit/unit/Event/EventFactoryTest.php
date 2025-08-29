@@ -36,6 +36,11 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	private const TEST_TIME = 1646000000;
 	private const VALID_TRACKING_TOOL = 'my-tracking-tool';
 	private const VALID_COUNTRY_CODE = 'FR';
+	private const COUNTRIES_DISALLOWED_TRACKING = [
+		'AC' => 'Ascension Island',
+		'DG' => 'Diego Garcia',
+		'US' => 'United States',
+	];
 	private const VALID_DEFAULT_DATA = [
 		'id' => 42,
 		'page' => 'Project:Some event page title',
@@ -51,6 +56,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'country' => 'France',
 		'countrycode' => null,
 		'address' => 'Address',
+		'tracksContributions' => false,
 		'trackingid' => null,
 		'trackingeventid' => null,
 		'chat' => 'https://chaturl.example.org',
@@ -124,7 +130,9 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		$countryProvider = $this->createMock( CountryProvider::class );
 		$countryProvider->method( 'isValidCountryCode' )
 			->willReturnCallback(
-				static fn ( ?string $countryCode ): bool => $countryCode === self::VALID_COUNTRY_CODE
+				static fn ( ?string $countryCode ): bool =>
+					$countryCode === self::VALID_COUNTRY_CODE ||
+					array_key_exists( $countryCode, self::COUNTRIES_DISALLOWED_TRACKING )
 			);
 
 		return new EventFactory(
@@ -137,7 +145,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			$typesRegistry,
 			$countryProvider,
 			$allowedNamespaces ?? [ NS_PROJECT ],
-			$countryMigrationStage
+			$countryMigrationStage,
+			array_keys( self::COUNTRIES_DISALLOWED_TRACKING )
 		);
 	}
 
@@ -452,6 +461,70 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'meetingurl' => 'https://explicitly-set.example.org',
+			] )
+		];
+
+		yield 'Contribution tracking for in-person event in forbidden country' => [
+			'campaignevents-error-contribs-tracking-disallowed-country',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
+				'meetingurl' => null,
+				'countrycode' => array_key_first( self::COUNTRIES_DISALLOWED_TRACKING ),
+				'types' => [ 'editing-event' ],
+			] )
+		];
+		yield 'Contribution tracking for an online event, successful' => [
+			null,
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+				'address' => null,
+				'country' => null,
+				'countrycode' => null,
+				'types' => [ 'editing-event' ],
+			] )
+		];
+		yield 'Contribution tracking for hybrid event in allowed country, successful' => [
+			null,
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
+				'countrycode' => self::VALID_COUNTRY_CODE,
+				'types' => [ 'editing-event' ],
+			] )
+		];
+		yield 'Contribution tracking for community (non-contribution) event' => [
+			'campaignevents-error-contribs-tracking-invalid-type',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+				'address' => null,
+				'country' => null,
+				'countrycode' => null,
+				'types' => [ 'conference' ],
+			] )
+		];
+		yield 'Contribution tracking for event of type "other"' => [
+			'campaignevents-error-contribs-tracking-invalid-type',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+				'address' => null,
+				'country' => null,
+				'countrycode' => null,
+				'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			] )
+		];
+		yield 'Contribution tracking for event with multiple types, successful' => [
+			null,
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+				'address' => null,
+				'country' => null,
+				'countrycode' => null,
+				'types' => [ 'conference', 'editing-event' ],
 			] )
 		];
 

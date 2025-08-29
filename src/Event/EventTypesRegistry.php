@@ -5,16 +5,19 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use InvalidArgumentException;
+use RuntimeException;
 
 class EventTypesRegistry {
 
 	public const SERVICE_NAME = 'CampaignEventsEventTypesRegistry';
 
+	private const GROUP_CONTRIBUTIONS = 'contributions';
+
 	public const EVENT_TYPE_OTHER = 'other';
 
 	public const EVENT_TYPES = [
 		[
-			'group' => 'contributions',
+			'group' => self::GROUP_CONTRIBUTIONS,
 			'msgKey' => 'campaignevents-eventtypegroup-contributions',
 			'types' => [
 				[
@@ -168,5 +171,17 @@ class EventTypesRegistry {
 			}
 		}
 		return $dbEventType;
+	}
+
+	/** @return list<string> */
+	public function getContributionTypes(): array {
+		foreach ( self::EVENT_TYPES as $group ) {
+			if ( $group['group'] === self::GROUP_CONTRIBUTIONS ) {
+				return array_column( $group['types'], 'type' );
+			}
+		}
+		// @codeCoverageIgnoreStart
+		throw new RuntimeException( 'Contribution group no longer exists?' );
+		// @codeCoverageIgnoreEnd
 	}
 }
