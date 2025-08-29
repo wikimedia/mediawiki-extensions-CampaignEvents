@@ -33,6 +33,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'start' => '20220815120000',
 			'end' => '20220815120001',
 			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			'tracks_contributions' => true,
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
@@ -66,6 +67,11 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['start'], $registration->getStartLocalTimestamp(), 'start' );
 		$this->assertSame( $data['end'], $registration->getEndLocalTimestamp(), 'end' );
 		$this->assertSame( $data['types'], $registration->getTypes(), 'types' );
+		$this->assertSame(
+			$data['tracks_contributions'],
+			$registration->hasContributionTracking(),
+			'contribution tracking'
+		);
 		$this->assertSame( $data['wikis'], $registration->getWikis(), 'wikis' );
 		$this->assertSame( $data['topics'], $registration->getTopics(), 'topics' );
 		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );

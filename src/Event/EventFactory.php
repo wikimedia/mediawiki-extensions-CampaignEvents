@@ -268,6 +268,7 @@ class EventFactory {
 			$startLocalTimestamp,
 			$endLocalTimestamp,
 			$types,
+			false,
 			$wikis,
 			$topics,
 			$participationOptions,

@@ -106,6 +106,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			'20240229120000',
 			'20240301120000',
 			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			false,
 			[],
 			[],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE,

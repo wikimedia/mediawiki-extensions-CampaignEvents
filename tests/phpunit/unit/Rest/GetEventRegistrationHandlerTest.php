@@ -93,6 +93,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			wfTimestamp( TS_MW, $eventData['start_time'] ),
 			wfTimestamp( TS_MW, $eventData['end_time'] ),
 			$eventData['types'],
+			false,
 			$eventData['wikis'],
 			$eventData['topics'],
 			$participationOptions,

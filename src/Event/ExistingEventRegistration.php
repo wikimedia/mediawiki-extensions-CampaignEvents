@@ -24,6 +24,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param non-empty-list<string> $types
+	 * @param bool $hasContributionTracking
 	 * @param string[]|true $wikis
 	 * @param string[] $topics
 	 * @param int $participationOptions
@@ -47,6 +48,7 @@ class ExistingEventRegistration extends EventRegistration {
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
+		bool $hasContributionTracking,
 		$wikis,
 		array $topics,
 		int $participationOptions,
@@ -69,6 +71,7 @@ class ExistingEventRegistration extends EventRegistration {
 			$startLocalTimestamp,
 			$endLocalTimestamp,
 			$types,
+			$hasContributionTracking,
 			$wikis,
 			$topics,
 			$participationOptions,

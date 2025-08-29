@@ -47,6 +47,7 @@ class EventRegistration {
 	private string $endLocalTimestamp;
 	/** @var non-empty-list<string> Event type names */
 	private array $types;
+	private bool $hasContributionTracking;
 	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
 	private $wikis;
 	/** @var string[] */
@@ -77,6 +78,7 @@ class EventRegistration {
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param non-empty-list<string> $types
+	 * @param bool $hasContributionTracking
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param string[] $topics
 	 * @param int $participationOptions
@@ -100,6 +102,7 @@ class EventRegistration {
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
+		bool $hasContributionTracking,
 		$wikis,
 		array $topics,
 		int $participationOptions,
@@ -141,6 +144,7 @@ class EventRegistration {
 		$this->startLocalTimestamp = $startLocalTimestamp;
 		$this->endLocalTimestamp = $endLocalTimestamp;
 		$this->types = $types;
+		$this->hasContributionTracking = $hasContributionTracking;
 		$this->wikis = $wikis;
 		$this->topics = $topics;
 		$this->participationOptions = $participationOptions;
@@ -214,6 +218,10 @@ class EventRegistration {
 	/** @return non-empty-list<string> */
 	public function getTypes(): array {
 		return $this->types;
+	}
+
+	public function hasContributionTracking(): bool {
+		return $this->hasContributionTracking;
 	}
 
 	/**

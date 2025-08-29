@@ -60,6 +60,7 @@ class PageEventIngress extends DomainEventIngress implements
 			$registration->getStartLocalTimestamp(),
 			$registration->getEndLocalTimestamp(),
 			$registration->getTypes(),
+			$registration->hasContributionTracking(),
 			$registration->getWikis(),
 			$registration->getTopics(),
 			$registration->getParticipationOptions(),

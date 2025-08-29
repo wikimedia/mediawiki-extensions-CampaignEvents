@@ -61,7 +61,8 @@ class EventStore implements IEventStore, IEventLookup {
 		EventQuestionsStore $eventQuestionsStore,
 		EventWikisStore $eventWikisStore,
 		EventTopicsStore $eventTopicsStore,
-		WANObjectCache $wanCache
+		WANObjectCache $wanCache,
+		private readonly bool $contributionTrackingEnabled
 	) {
 		$this->dbHelper = $dbHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -137,7 +138,7 @@ class EventStore implements IEventStore, IEventLookup {
 					return null;
 				}
 			},
-			[ 'version' => 4 ]
+			[ 'version' => 5 ]
 		);
 
 		if ( $cachedEvent === null ) {
@@ -364,6 +365,10 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_page_wiki
 		);
 		$types = EventTypesRegistry::getEventTypesFromDBVal( $row->event_types );
+		$tracksContributions = false;
+		if ( $this->contributionTrackingEnabled ) {
+			$tracksContributions = (bool)$row->event_track_contributions;
+		}
 		$participationOptions = self::getParticipationOptionsFromDBVal( $row->event_meeting_type );
 
 		if ( $trackingToolRow ) {
@@ -387,6 +392,7 @@ class EventStore implements IEventStore, IEventLookup {
 			wfTimestamp( TS_MW, $row->event_start_local ),
 			wfTimestamp( TS_MW, $row->event_end_local ),
 			$types,
+			$tracksContributions,
 			$wikis,
 			$topics,
 			$participationOptions,
@@ -402,7 +408,7 @@ class EventStore implements IEventStore, IEventLookup {
 		);
 	}
 
-	private static function assertValidRow( stdClass $row ): void {
+	private function assertValidRow( stdClass $row ): void {
 		$requiredProperties = [
 			'event_id',
 			'event_name',
@@ -418,6 +424,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_end_local',
 			// event_end_utc not required
 			'event_types',
+			// event_track_contributions conditionally checked below
 			'event_meeting_type',
 			'event_meeting_url',
 			'event_created_at',
@@ -425,6 +432,9 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_deleted_at',
 			'event_is_test_event',
 		];
+		if ( $this->contributionTrackingEnabled ) {
+			$requiredProperties[] = 'event_track_contributions';
+		}
 		foreach ( $requiredProperties as $property ) {
 			if ( !property_exists( $row, $property ) ) {
 				throw new InvalidArgumentException(
@@ -468,6 +478,9 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
 			'event_is_test_event' => $event->getIsTestEvent()
 		];
+		if ( $this->contributionTrackingEnabled ) {
+			$newRow['event_track_contributions'] = $event->hasContributionTracking();
+		}
 
 		$eventID = $event->getID();
 		$dbw->startAtomic( __METHOD__ );

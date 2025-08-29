@@ -67,6 +67,7 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 			'start' => '20250815120000',
 			'end' => '20250815120001',
 			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			'tracks_contributions' => false,
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,

@@ -95,7 +95,8 @@ return [
 			$services->get( EventQuestionsStore::SERVICE_NAME ),
 			$services->get( EventWikisStore::SERVICE_NAME ),
 			$services->get( EventTopicsStore::SERVICE_NAME ),
-			$services->getMainWANObjectCache()
+			$services->getMainWANObjectCache(),
+			$services->getMainConfig()->get( 'CampaignEventsEnableContributionTracking' )
 		);
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {
