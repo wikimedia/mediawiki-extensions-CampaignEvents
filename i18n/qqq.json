@@ -83,6 +83,8 @@
 	"campaignevents-edit-field-organizers-placeholder": "Placeholder text for the organizer field on [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]].",
 	"campaignevents-edit-field-organizers-creator-title": "Explanatory text shown when hovering with the mouse over the name of the event creator on [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]].",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Error message shown on [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]] when selecting a user who is not allowed to be an organizer. Parameters:\n*$1 - Username, for GENDER support.",
+	"campaignevents-edit-field-contribution-stats-label": "Label of a field in [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]]. If selected, participants will be able to associate their contributions with this event, and see a list of all contributions made as part of the event.",
+	"campaignevents-edit-field-contribution-stats-help": "Help text for the {{msg-mw|campaignevents-edit-field-contribution-stats-label}} field in [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]].",
 	"campaignevents-edit-field-wiki-type": "Label of a field in [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]].",
 	"campaignevents-edit-field-wiki-type-none": "Option for the {{msg-mw|campaignevents-edit-field-wiki-type}} field in [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]].",
 	"campaignevents-edit-field-wiki-type-all": "Option for the {{msg-mw|campaignevents-edit-field-wiki-type}} field in [[Special:EnableEventRegistration]] and [[Special:EditEventRegistration]].",

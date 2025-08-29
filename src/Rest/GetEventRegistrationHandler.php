@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -18,13 +19,16 @@ class GetEventRegistrationHandler extends SimpleHandler {
 
 	private IEventLookup $eventLookup;
 	private TrackingToolRegistry $trackingToolRegistry;
+	private bool $contributionTrackingEnabled;
 
 	public function __construct(
 		IEventLookup $eventLookup,
 		TrackingToolRegistry $trackingToolRegistry,
+		Config $mainConfig
 	) {
 		$this->eventLookup = $eventLookup;
 		$this->trackingToolRegistry = $trackingToolRegistry;
+		$this->contributionTrackingEnabled = $mainConfig->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	protected function run( int $eventID ): Response {
@@ -74,6 +78,9 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'is_test_event' => $registration->getIsTestEvent(),
 			'questions' => $registration->getParticipantQuestions(),
 		];
+		if ( $this->contributionTrackingEnabled ) {
+			$respVal['tracks_contributions'] = $registration->hasContributionTracking();
+		}
 
 		return $this->getResponseFactory()->createJson( $respVal );
 	}

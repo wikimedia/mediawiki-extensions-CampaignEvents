@@ -45,6 +45,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	private EventTypesRegistry $eventTypesRegistry;
 	protected bool $hasWriteNew;
 	private CountryProvider $countryProvider;
+	private bool $contributionTrackingEnabled;
 
 	public function __construct(
 		EventFactory $eventFactory,
@@ -71,6 +72,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->countryProvider = $countryProvider;
 		$countrySchemaMigrationStage = $config->get( 'CampaignEventsCountrySchemaMigrationStage' );
 		$this->hasWriteNew = (bool)( $countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW );
+		$this->contributionTrackingEnabled = $config->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	/**
@@ -222,6 +224,13 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 					ParamValidator::PARAM_TYPE => $this->countryProvider->getValidCountryCodes()
 				],
 			] );
+		}
+		if ( $this->contributionTrackingEnabled ) {
+			$params['tracks_contributions'] = [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_DEFAULT => true,
+			];
 		}
 
 		return $params;

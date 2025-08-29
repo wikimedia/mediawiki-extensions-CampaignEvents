@@ -33,6 +33,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Html\Html;
+use MediaWiki\HTMLForm\Field\HTMLToggleSwitchField;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
 use MediaWiki\SpecialPage\FormSpecialPage;
@@ -490,6 +491,16 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
+		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
+			$formFields['ContributionStats'] = [
+				'class' => HTMLToggleSwitchField::class,
+				'label-message' => 'campaignevents-edit-field-contribution-stats-label',
+				'default' => $this->event ? $this->event->hasContributionTracking() : true,
+				'help' => $this->msg( 'campaignevents-edit-field-contribution-stats-help' )->escaped(),
+				'section' => self::DETAILS_SECTION,
+			];
+		}
+
 		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
 		if ( $availableTrackingTools ) {
 			if (
@@ -767,6 +778,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$meetingCountry = $meetingCountryCode = $meetingAddress = null;
 		}
 
+		$tracksContributions = false;
+		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
+			$tracksContributions = $data['ContributionStats'];
+		}
+
 		$testEvent = $data['TestEvent'] === "1";
 
 		try {
@@ -786,7 +802,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$meetingCountry,
 				$meetingCountryCode,
 				$meetingAddress,
-				false,
+				$tracksContributions,
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$data['EventChatURL'],

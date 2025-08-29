@@ -71,7 +71,8 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$this->hasWriteNew ? null : $body['meeting_country'],
 			$this->hasWriteNew ? $body['meeting_country_code'] : null,
 			$body['meeting_address'],
-			false,
+			// Remove coalesce when dropping feature flag CampaignEventsEnableContributionTracking
+			$body['tracks_contributions'] ?? false,
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$body['chat_url'],

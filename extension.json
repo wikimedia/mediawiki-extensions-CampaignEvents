@@ -439,7 +439,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsTrackingToolRegistry"
+				"CampaignEventsTrackingToolRegistry",
+				"MainConfig"
 			]
 		},
 		{

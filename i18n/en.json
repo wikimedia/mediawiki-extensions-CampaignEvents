@@ -76,6 +76,8 @@
 	"campaignevents-edit-field-organizers-placeholder": "Add username",
 	"campaignevents-edit-field-organizers-creator-title": "This is the creator of the event, other organizers can not remove this user.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "This {{GENDER:$1|user}} is not allowed to organize events.",
+	"campaignevents-edit-field-contribution-stats-label": "Show contribution statistics",
+	"campaignevents-edit-field-contribution-stats-help": "Enable contribution statistics, so that you can share and understand the impact of the event. A summary and full list of edits is provided.",
 	"campaignevents-edit-field-wiki-type": "Does this event focus on specific wikis?",
 	"campaignevents-edit-field-wiki-type-none": "No specific wikis",
 	"campaignevents-edit-field-wiki-type-all": "Yes (open to all wikis)",

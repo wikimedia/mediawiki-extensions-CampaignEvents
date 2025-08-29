@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -48,6 +49,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		return new GetEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$trackingToolRegistry,
+			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 	}
 
@@ -68,6 +70,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'start_time' => '20220220200220',
 			'end_time' => '20220220200222',
 			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+			'tracks_contributions' => true,
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
 			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
@@ -100,7 +103,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			new Address(
 				$eventData['meeting_address'], $eventData['meeting_country'], $eventData['meeting_country_code']
 			),
-			false,
+			$eventData['tracks_contributions'],
 			[
 				new TrackingToolAssociation(
 					self::TRACKING_TOOL_DB_ID,
