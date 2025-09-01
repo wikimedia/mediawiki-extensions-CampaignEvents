@@ -1,8 +1,25 @@
 {
 	"@metadata": {
 		"authors": [
+			"Saurmandal",
 			"Suyash.dwivedi"
 		]
 	},
-	"campaignevents-rest-edit-page-nonlocal": "यह घटना पंजीकरण निम्नलिखित विकी पर सक्षम किया गया था और इसे वहाँ संपादित किया जाना चाहिए: $1 ।"
+	"campaignevents-rest-event-not-found": "इस ID से कोई भी कार्यक्रम नहीं है।",
+	"campaignevents-rest-enable-registration-permission-denied": "आपको कार्यक्रम पंजीकरण सक्षम करने की अनुमति नहीं है।",
+	"campaignevents-rest-edit-page-nonlocal": "यह कार्यक्रम पंजीकरण निम्न विकि पर सक्षम किया गया था और वहीं पर सम्पादित किया जाना चाहिए: $1।",
+	"campaignevents-rest-delete-already-deleted": "यह कार्यक्रम पंजीकरण पहले ही हटा दिया गया है।",
+	"campaignevents-rest-user-not-found": "इस केंद्रीय ID से कोई भी सदस्य नहीं है।",
+	"campaignevents-rest-get-registration-deleted": "यह कार्यक्रम पंजीकरण हटा दिया गया है।",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "पैरामीटर 'user_ids' को सदस्य ID-ओं का एक ऐरे या फिर null (सभी सदस्यों को हटाने के लिए) होना होगा",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर प्रतिभागी हटाएँ",
+	"campaignevents-rest-list-participants-empty-filter": "सदस्यनाम फ़िल्टर, अगर निर्दिष्ट हो, को एक गैर-रिक्त स्ट्रिंग होना होगा।",
+	"campaignevents-rest-list-participants-cannot-see-private": "आपको इस कार्यक्रम के लिए गोपनीय रूप से पंजीकृत प्रतिभागी देखने की अनुमति नहीं है।",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> को सदस्यनामों का एक ऐरे होना होगा और यह खाली नहीं हो सकता।",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "कृपया $1, जिस विकि पर यह कार्यक्रम बनाया गया था, पर आयोजक सेट करें।",
+	"campaignevents-rest-get-registration-info-notparticipant": "आप इस कार्यक्रम में भाग नहीं ले रहे हैं।",
+	"campaignevents-rest-register-invalid-answer": "$1 प्रश्न का अमान्य उत्तर",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर अपना कार्यक्रम पंजीकरण पूरा करें।",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर अपना कार्यक्रम पंजीकरण हटाएँ।",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर प्रतिभागियों को ईमेल करें।"
 }
