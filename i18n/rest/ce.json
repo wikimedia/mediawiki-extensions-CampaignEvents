@@ -4,5 +4,8 @@
 			"Умар"
 		]
 	},
+	"campaignevents-rest-event-not-found": "Цхьа а мероприяти ца карийна оцу ID-ца.",
+	"campaignevents-rest-delete-already-deleted": "ХӀокху мероприяте регистраци хӀинцале дӀайаьккхина.",
+	"campaignevents-rest-get-registration-deleted": "ХӀокху мероприяте регистраци дӀайаьккхина.",
 	"campaignevents-rest-register-invalid-answer": "Хаттарна нийса доцу жоп $1"
 }
