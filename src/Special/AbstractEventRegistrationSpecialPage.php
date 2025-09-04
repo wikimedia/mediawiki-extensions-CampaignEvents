@@ -413,66 +413,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			];
 		}
 
-		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
-		if ( $availableTrackingTools ) {
-			if (
-				count( $availableTrackingTools ) > 1 ||
-				$availableTrackingTools[0]['user-id'] !== 'wikimedia-pe-dashboard'
-			) {
-				throw new LogicException( "Only the P&E Dashboard should be available as a tool for now" );
-			}
-			$formFields['EventTrackingToolID'] = [
-				'type' => 'hidden',
-				'default' => 'wikimedia-pe-dashboard',
-				'section' => self::DETAILS_SECTION,
-			];
-			if ( $this->event ) {
-				$curTrackingTools = $this->event->getTrackingTools();
-				if ( $curTrackingTools ) {
-					if (
-						count( $curTrackingTools ) > 1 ||
-						$curTrackingTools[0]->getToolID() !== 1
-					) {
-						throw new LogicException( "Only the P&E Dashboard should be available as a tool for now" );
-					}
-					$userInfo = $this->trackingToolRegistry->getUserInfo(
-						$curTrackingTools[0]->getToolID(),
-						$curTrackingTools[0]->getToolEventID()
-					);
-					$defaultDashboardURL = $userInfo['tool-event-url'];
-				} else {
-					$defaultDashboardURL = '';
-				}
-			} else {
-				$defaultDashboardURL = '';
-			}
-			$formFields['EventDashboardURL'] = [
-				'type' => 'url',
-				'label-message' => 'campaignevents-edit-field-tracking-tools',
-				'default' => $defaultDashboardURL,
-				'help-message' => 'campaignevents-edit-field-tracking-tools-help',
-				'placeholder-message' => 'campaignevents-edit-field-tracking-tools-placeholder',
-				/**
-				 * @param mixed $value
-				 * @param array<string,mixed> $allData
-				 * @return Message|true
-				 */
-				'validation-callback' => function ( mixed $value, array $allData ): Message|bool {
-					if ( $value === '' ) {
-						return true;
-					}
-					try {
-						$this->trackingToolRegistry->getToolEventIDFromURL( $allData['EventTrackingToolID'], $value );
-						return true;
-					} catch ( InvalidToolURLException $e ) {
-						$baseURL = rtrim( $e->getExpectedBaseURL(), '/' ) . '/courses';
-						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )->params( $baseURL );
-					}
-				},
-				'section' => self::DETAILS_SECTION,
-			];
-		}
-
 		// TODO: Maybe consider dropping the default when switching to Codex, if that allows indeterminate radios.
 		$defaultParticipationOptions = EventRegistration::PARTICIPATION_OPTION_ONLINE;
 		$formFields['ParticipationOptions'] = [
@@ -549,6 +489,67 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'maxlength' => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			'section' => self::DETAILS_SECTION,
 		];
+
+		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
+		if ( $availableTrackingTools ) {
+			if (
+				count( $availableTrackingTools ) > 1 ||
+				$availableTrackingTools[0]['user-id'] !== 'wikimedia-pe-dashboard'
+			) {
+				throw new LogicException( "Only the P&E Dashboard should be available as a tool for now" );
+			}
+			$formFields['EventTrackingToolID'] = [
+				'type' => 'hidden',
+				'default' => 'wikimedia-pe-dashboard',
+				'section' => self::DETAILS_SECTION,
+			];
+			if ( $this->event ) {
+				$curTrackingTools = $this->event->getTrackingTools();
+				if ( $curTrackingTools ) {
+					if (
+						count( $curTrackingTools ) > 1 ||
+						$curTrackingTools[0]->getToolID() !== 1
+					) {
+						throw new LogicException( "Only the P&E Dashboard should be available as a tool for now" );
+					}
+					$userInfo = $this->trackingToolRegistry->getUserInfo(
+						$curTrackingTools[0]->getToolID(),
+						$curTrackingTools[0]->getToolEventID()
+					);
+					$defaultDashboardURL = $userInfo['tool-event-url'];
+				} else {
+					$defaultDashboardURL = '';
+				}
+			} else {
+				$defaultDashboardURL = '';
+			}
+			$formFields['EventDashboardURL'] = [
+				'type' => 'url',
+				'label-message' => 'campaignevents-edit-field-tracking-tools',
+				'default' => $defaultDashboardURL,
+				'help-message' => 'campaignevents-edit-field-tracking-tools-help',
+				'placeholder-message' => 'campaignevents-edit-field-tracking-tools-placeholder',
+				/**
+				 * @param mixed $value
+				 * @param array<string,mixed> $allData
+				 * @return Message|true
+				 */
+				'validation-callback' => function ( mixed $value, array $allData ): Message|bool {
+					if ( $value === '' ) {
+						return true;
+					}
+					try {
+						$this->trackingToolRegistry->getToolEventIDFromURL( $allData['EventTrackingToolID'], $value );
+						return true;
+					} catch ( InvalidToolURLException $e ) {
+						$baseURL = rtrim( $e->getExpectedBaseURL(), '/' ) . '/courses';
+						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )->params( $baseURL );
+					}
+				},
+				'section' => self::DETAILS_SECTION,
+			];
+		}
+
 		$formFields['EventChatURL'] = [
 			'type' => 'url',
 			'label-message' => 'campaignevents-edit-field-chat-url',
@@ -780,13 +781,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventTypes'],
 				$wikis,
 				$data['Topics'] ?? [],
-				$trackingToolUserID,
-				$trackingToolEventID,
 				$participationOptions,
 				$meetingURL,
 				$meetingCountry,
 				$meetingCountryCode,
 				$meetingAddress,
+				$trackingToolUserID,
+				$trackingToolEventID,
 				$data['EventChatURL'],
 				$testEvent,
 				$participantQuestionNames,

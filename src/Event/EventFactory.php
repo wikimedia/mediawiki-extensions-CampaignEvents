@@ -107,13 +107,13 @@ class EventFactory {
 	 * @param list<string> $types
 	 * @param string[]|true $wikis List of wiki IDs, or {@see EventRegistration::ALL_WIKIS}
 	 * @param string[] $topics
-	 * @param string|null $trackingToolUserID User identifier of a tracking tool
-	 * @param string|null $trackingToolEventID
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountry
 	 * @param string|null $meetingCountryCode
 	 * @param string|null $meetingAddress
+	 * @param string|null $trackingToolUserID User identifier of a tracking tool
+	 * @param string|null $trackingToolEventID
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param string[] $participantQuestionNames
@@ -137,13 +137,13 @@ class EventFactory {
 		array $types,
 		array|bool $wikis,
 		array $topics,
-		?string $trackingToolUserID,
-		?string $trackingToolEventID,
 		int $participationOptions,
 		?string $meetingURL,
 		?string $meetingCountry,
 		?string $meetingCountryCode,
 		?string $meetingAddress,
+		?string $trackingToolUserID,
+		?string $trackingToolEventID,
 		?string $chatURL,
 		bool $isTestEvent,
 		array $participantQuestionNames,
@@ -192,6 +192,21 @@ class EventFactory {
 		$res->merge( $topicsStatus );
 		$topics = $topicsStatus->getValue();
 
+		$res->merge(
+			$this->validateMeetingInfo(
+				$participationOptions,
+				$meetingURL,
+				$meetingCountry,
+				$meetingCountryCode,
+				$meetingAddress
+			)
+		);
+		if ( $meetingCountry !== null || $meetingAddress !== null || $meetingCountryCode !== null ) {
+			$address = new Address( $meetingAddress, $meetingCountry, $meetingCountryCode );
+		} else {
+			$address = null;
+		}
+
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
 		$res->merge( $trackingToolStatus );
 		$trackingToolDBID = $trackingToolStatus->getValue();
@@ -206,21 +221,6 @@ class EventFactory {
 			];
 		} else {
 			$trackingTools = [];
-		}
-
-		$res->merge(
-			$this->validateMeetingInfo(
-				$participationOptions,
-				$meetingURL,
-				$meetingCountry,
-				$meetingCountryCode,
-				$meetingAddress
-			)
-		);
-		if ( $meetingCountry !== null || $meetingAddress !== null || $meetingCountryCode !== null ) {
-			$address = new Address( $meetingAddress, $meetingCountry, $meetingCountryCode );
-		} else {
-			$address = null;
 		}
 
 		if ( $chatURL !== null ) {
@@ -270,10 +270,10 @@ class EventFactory {
 			$types,
 			$wikis,
 			$topics,
-			$trackingTools,
 			$participationOptions,
 			$meetingURL,
 			$address,
+			$trackingTools,
 			$chatURL,
 			$isTestEvent,
 			$questionIDs,

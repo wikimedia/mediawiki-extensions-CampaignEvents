@@ -95,6 +95,11 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['types'],
 			$eventData['wikis'],
 			$eventData['topics'],
+			$participationOptions,
+			$eventData['meeting_url'],
+			new Address(
+				$eventData['meeting_address'], $eventData['meeting_country'], $eventData['meeting_country_code']
+			),
 			[
 				new TrackingToolAssociation(
 					self::TRACKING_TOOL_DB_ID,
@@ -103,11 +108,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 					null
 				)
 			],
-			$participationOptions,
-			$eventData['meeting_url'],
-			new Address(
-				$eventData['meeting_address'], $eventData['meeting_country'], $eventData['meeting_country_code']
-			),
 			$eventData['chat_url'],
 			$eventData['is_test_event'],
 			$eventData['questions'],

@@ -49,6 +49,9 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			[ 'awiki', 'bwiki' ],
 			[ 'atopic', 'btopic' ],
+			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
+			'Meeting URL',
+			new Address( 'Address', null, 'FR' ),
 			[
 				new TrackingToolAssociation(
 					1,
@@ -57,9 +60,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 					null
 				)
 			],
-			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
-			'Meeting URL',
-			new Address( 'Address', null, 'FR' ),
 			'Chat URL',
 			false,
 			[],
@@ -304,10 +304,10 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			[ 'awiki', 'bwiki', 'cwiki' ],
 			[ 'atopic', 'btopic' ],
-			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'address' => new Address( 'Address', null, 'FR' ),
+			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			'Chat URL',
 			false,
 			[],

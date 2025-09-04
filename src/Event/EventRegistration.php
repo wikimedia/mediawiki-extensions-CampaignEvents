@@ -51,15 +51,15 @@ class EventRegistration {
 	private $wikis;
 	/** @var string[] */
 	private array $topics;
+	/** @var int One of the PARTICIPATION_OPTION_* constants */
+	private int $participationOptions;
+	private ?string $meetingURL;
+	private ?Address $address;
 	/**
 	 * @var TrackingToolAssociation[]
 	 * @phan-var list<TrackingToolAssociation>
 	 */
 	private array $trackingTools;
-	/** @var int One of the PARTICIPATION_OPTION_* constants */
-	private int $participationOptions;
-	private ?string $meetingURL;
-	private ?Address $address;
 	private ?string $chatURL;
 	private bool $isTestEvent;
 	/** @var int[] Array of database IDs */
@@ -79,11 +79,11 @@ class EventRegistration {
 	 * @param non-empty-list<string> $types
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param string[] $topics
-	 * @param TrackingToolAssociation[] $trackingTools
-	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param Address|null $address
+	 * @param TrackingToolAssociation[] $trackingTools
+	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param list<int> $participantQuestions
@@ -102,10 +102,10 @@ class EventRegistration {
 		array $types,
 		$wikis,
 		array $topics,
-		array $trackingTools,
 		int $participationOptions,
 		?string $meetingURL,
 		?Address $address,
+		array $trackingTools,
 		?string $chatURL,
 		bool $isTestEvent,
 		array $participantQuestions,
@@ -143,10 +143,10 @@ class EventRegistration {
 		$this->types = $types;
 		$this->wikis = $wikis;
 		$this->topics = $topics;
-		$this->trackingTools = $trackingTools;
 		$this->participationOptions = $participationOptions;
 		$this->meetingURL = $meetingURL;
 		$this->address = $address;
+		$this->trackingTools = $trackingTools;
 		$this->chatURL = $chatURL;
 		$this->isTestEvent = $isTestEvent;
 		$this->participantQuestions = $participantQuestions;
@@ -230,14 +230,6 @@ class EventRegistration {
 		return $this->topics;
 	}
 
-	/**
-	 * @return TrackingToolAssociation[]
-	 * @phan-return list<TrackingToolAssociation>
-	 */
-	public function getTrackingTools(): array {
-		return $this->trackingTools;
-	}
-
 	public function getParticipationOptions(): int {
 		return $this->participationOptions;
 	}
@@ -248,6 +240,14 @@ class EventRegistration {
 
 	public function getAddress(): ?Address {
 		return $this->address;
+	}
+
+	/**
+	 * @return TrackingToolAssociation[]
+	 * @phan-return list<TrackingToolAssociation>
+	 */
+	public function getTrackingTools(): array {
+		return $this->trackingTools;
 	}
 
 	public function getChatURL(): ?string {

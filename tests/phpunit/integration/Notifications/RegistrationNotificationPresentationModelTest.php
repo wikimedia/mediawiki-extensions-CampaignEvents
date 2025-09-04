@@ -69,6 +69,9 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
+			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
+			'meeting_url' => 'https://meet.example.org',
+			'address' => new Address( 'Some address', 'France', null ),
 			'tracking_tools' => [
 				new TrackingToolAssociation(
 					1,
@@ -77,9 +80,6 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 					null
 				)
 			],
-			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
-			'meeting_url' => 'https://meet.example.org',
-			'address' => new Address( 'Some address', 'France', null ),
 			'chat' => 'https://chat.example.org',
 			'is_test_event' => false,
 			'questions' => [],
