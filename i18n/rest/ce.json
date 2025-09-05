@@ -5,7 +5,20 @@
 		]
 	},
 	"campaignevents-rest-event-not-found": "Цхьа а мероприяти ца карийна оцу ID-ца.",
+	"campaignevents-rest-enable-registration-permission-denied": "Хьуна бакъо ца йелла хиламашна регистрацин йукъатоха.",
+	"campaignevents-rest-edit-page-nonlocal": "ХӀара хилам дӀайазбар дӀахӀоттийна хӀокху вики тӀехь, цигахь хийца деза: $1.",
 	"campaignevents-rest-delete-already-deleted": "ХӀокху мероприяте регистраци хӀинцале дӀайаьккхина.",
+	"campaignevents-rest-user-not-found": "Иштта центран идентификатор йолуш цхьа а декъашхо вац(йац).",
 	"campaignevents-rest-get-registration-deleted": "ХӀокху мероприяте регистраци дӀайаьккхина.",
-	"campaignevents-rest-register-invalid-answer": "Хаттарна нийса доцу жоп $1"
+	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' параметр декъашхойн идентификаторийн массив хила йеза, йа null (берриге а декъашхой дӀабахархьама)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Дехар до, дӀабаха декъашхой $1 тӀехь, хилам кхоьллинчу вики тӀехь.",
+	"campaignevents-rest-list-participants-empty-filter": "Декъашхочун цӀеран фильтр, нагахь санна билгалйаьккхина йелахь, баьсса боцу могӀа хила беза.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Хьан бакъо йац оцу барамехь къайлаха дӀайазбеллачу декъашхошка хьажа.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> декъашхойн цӀерийн массив хила йеза, йаьсса хила йиш йац",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Дехар до, организаторш $1 тӀехь хӀиттабе, хилам кхоьллинчу вики тӀехь.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Ахь дакъалоцуш дац хӀокху мероприятехь.",
+	"campaignevents-rest-register-invalid-answer": "Хаттарна нийса доцу жоп $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Дехар до, хьайн хиламна регистраци чекхйаккха $1 тӀехь, хилам кхоьллинчу вики тӀехь.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Дехар до, хьайн хиламийн регистраци дӀайаккха $1 тӀехь, хилам кхоьллинчу вики тӀехь.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Дехар до, декъашхошка электронан пошта йазйе $1, хилам кхоьллинчу вики тӀе."
 }
