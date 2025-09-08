@@ -299,7 +299,6 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	 * @covers ::extractUserAnswersHTMLForm
 	 * @covers ::newAnswerFromHTMLForm
 	 * @dataProvider provideExtractUserAnswersHTMLForm__error
-	 *
 	 */
 	public function testExtractUserAnswersHTMLForm__error( array $formData ) {
 		$this->expectException( InvalidAnswerDataException::class );
@@ -429,7 +428,6 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	 * @covers ::extractUserAnswersAPI
 	 * @covers ::newAnswerFromAPI
 	 * @dataProvider provideExtractUserQuestionsAPI
-	 *
 	 */
 	public function testExtractUserQuestionsAPI( array $data, array $enabledQuestions, array $expected ) {
 		$this->assertEquals(
@@ -504,7 +502,6 @@ class EventQuestionsRegistryTest extends MediaWikiUnitTestCase {
 	 * @covers ::extractUserAnswersAPI
 	 * @covers ::newAnswerFromAPI
 	 * @dataProvider provideExtractUserQuestionsAPI__error
-	 *
 	 */
 	public function testExtractUserQuestionsAPI__error( array $data ) {
 		$this->expectException( InvalidAnswerDataException::class );

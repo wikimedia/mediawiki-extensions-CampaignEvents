@@ -14,10 +14,7 @@ use Wikimedia\Rdbms\IDatabase;
 
 /**
  * This script takes existing values from the cea_countries column and attempts to match then with a country code
- *
- *
  */
-
 class UpdateCountriesColumn extends LoggedUpdateMaintenance {
 	private ?IDatabase $dbw;
 	private ?IDatabase $dbr;
