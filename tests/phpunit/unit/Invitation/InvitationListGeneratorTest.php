@@ -36,6 +36,7 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 	private const DOES_NOT_USE_REGISTRATION = false;
 	private const EVENT_HAS_NOT_ENDED = false;
 	private const IS_NOT_ORGANIZER = false;
+	private const EVENT_DELETED = true;
 
 	private function getGenerator(
 		?PermissionChecker $permissionChecker = null,
@@ -99,7 +100,8 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 		bool $eventPageIsValid,
 		bool $pageUsesRegistration,
 		bool $eventIsPast,
-		bool $isOrganizer
+		bool $isOrganizer,
+		bool $eventDeleted = false
 	) {
 		$eventPage = $this->createMock( MWPageProxy::class );
 		$pageFactory = $this->createMock( CampaignsPageFactory::class );
@@ -115,6 +117,7 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'isPast' )->willReturn( $eventIsPast );
+		$event->method( 'getDeletionTimestamp' )->willReturn( $eventDeleted ? '20200101120000' : null );
 		$pageEventLookup = $this->createMock( PageEventLookup::class );
 		$pageEventLookup->method( 'getRegistrationForPage' )
 			->with( $eventPage )
@@ -138,7 +141,6 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 			$invitationListStore->expects( $this->once() )
 				->method( 'createInvitationList' )
 				->willReturn( $listID );
-			$serializedWorkList = [ 'some_wiki' => [ [ 42, NS_MAIN, 'Some_title', 'some_wiki' ] ] ];
 			$jobQueueGroup->expects( $this->once() )
 				->method( 'push' )
 				->willReturnCallback( function ( $job ) use ( $listID, $worklist ) {
@@ -200,6 +202,16 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 			self::DOES_NOT_USE_REGISTRATION,
 			self::EVENT_HAS_NOT_ENDED,
 			self::IS_NOT_ORGANIZER
+		];
+		yield 'Event deleted' => [
+			'campaignevents-invitation-list-error-event-deleted',
+			'Name',
+			'Event:My event',
+			self::VALID_EVENT_PAGE,
+			self::USES_REGISTRATION,
+			self::EVENT_HAS_NOT_ENDED,
+			self::IS_ORGANIZER,
+			self::EVENT_DELETED,
 		];
 		yield 'Event has ended' => [
 			'campaignevents-invitation-list-error-event-ended',
