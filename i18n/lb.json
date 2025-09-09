@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Robby",
-			"Volvox"
+			"Volvox",
+			"GilPe"
 		]
 	},
 	"campaignevents-desc": "Bitt Funktioune fir Organisateuren a Participantë vu Campagnen.",
@@ -392,7 +393,7 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "Äntwerte weisen",
 	"campaignevents-participant-question-have-been-aggregated": "D'Äntwerte vun {{GENDER:$1|dësem Participant|dëser Participante}} goufen agregéiert a geläscht",
 	"campaignevents-participant-question-no-response": "Keng Äntwert",
-	"campaignevents-warning-change-event-end-date-past": "Wann Dir den Enddatum op ee vergaangenen Datum setzt, da gëtt d'Evenement zougemaach an Dir kritt e Resumé vun den Äntwerte vun de Participanten. Dës Aktioun kann net réckgängeg gemaach ginn. Dat applizéiert nëmme fir de Fall, wou Participanten Äntwerten op d'Froe fir Participantë ginn hunn.",
+	"campaignevents-warning-change-event-end-date-past": "Wann Dir den Enddatum op ee vergaangenen Datum setzt, da gëtt d'Evenement zougemaach an Dir kritt e Resümmee vun den Äntwerte vun de Participanten. Dës Aktioun kann net réckgängeg gemaach ginn. Dat applizéiert nëmme fir de Fall, wou Participanten Äntwerten op d'Froe fir Participantë ginn hunn.",
 	"campaignevents-event-details-participants-individual-data-deleted": "D'Äntwerte vun den eenzele Participantë goufe geläscht an déi agregéiert Äntwerte sinn ënner [$1 {{int:campaignevents-event-details-tab-stats}}] disponibel.",
 	"campaignevents-event-register-for-event-title": "Umelle fir $1",
 	"campaignevents-register-page-nonlocal": "'''[$1 Finaliséiert wgl. Är Evenementsumeldung op $2]''', der Wiki, op där d'Evenement ugeluecht gouf.",
