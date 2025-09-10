@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\WikiMap\WikiMap;
@@ -20,6 +21,7 @@ use Wikimedia\Rdbms\Subquery;
  * @property IReadableDatabase $mDb;
  * @property LinkBatchFactory $linkBatchFactory;
  * @property CampaignsPageFactory $campaignsPageFactory;
+ * @method Config getConfig()
  */
 trait EventPagerTrait {
 	/** @var array<int,MWPageProxy> Cache of event page objects, keyed by event ID */
@@ -54,6 +56,9 @@ trait EventPagerTrait {
 			'event_deleted_at',
 			'event_is_test_event',
 		];
+		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
+			$eventFields[] = 'event_track_contributions';
+		}
 		return [
 			'tables' => [ 'campaign_events', 'ce_participants', 'ce_organizers' ],
 			'fields' => [
