@@ -200,7 +200,7 @@
 	"campaignevents-eventslist-delete-success": "جرى حذف <bdi>$1</bdi>.",
 	"campaignevents-eventslist-organizers-more": "$1 {{PLURAL:$1| أكثر}}",
 	"deleteeventregistration": "حذف التسجيل في الفعالية",
-	"campaignevents-delete-error-no-event": "لم يتم تحديد فعالية.",
+	"campaignevents-delete-error-no-event": "لم تُحدد فعالية.",
 	"campaignevents-delete-error-event-not-found": "لا توجد فعالية مقترنة بهذا المعرّف.",
 	"campaignevents-delete-error-already-deleted": "التسجيل في الفعالية هذه محذوف.",
 	"campaignevents-delete-confirmation-text": "أكّد حذف التسجيل في هذه الفعالية بالضغط على زر «{{int:campaignevents-delete-submit-btn}}». هذه العملية لا يمكن التراجع عنها.",
