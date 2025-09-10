@@ -224,10 +224,10 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEventsByOrganizer( int $organizerID, ?int $limit = null ): array {
+	public function getEventsByOrganizer( int $organizerID, int $limit ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
-		$queryBuilder = $dbr->newSelectQueryBuilder()
+		$eventRows = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'campaign_events' )
 			->join( 'ce_organizers', null, [
@@ -236,11 +236,9 @@ class EventStore implements IEventStore, IEventLookup {
 			] )
 			->where( [ 'ceo_user_id' => $organizerID ] )
 			->orderBy( 'event_id' )
-			->caller( __METHOD__ );
-		if ( $limit !== null ) {
-			$queryBuilder->limit( $limit );
-		}
-		$eventRows = $queryBuilder->fetchResultSet();
+			->limit( $limit )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		return $this->newEventsFromDBRows( $dbr, $eventRows );
 	}
@@ -248,10 +246,10 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEventsByParticipant( int $participantID, ?int $limit = null ): array {
+	public function getEventsByParticipant( int $participantID, int $limit ): array {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
-		$queryBuilder = $dbr->newSelectQueryBuilder()
+		$eventRows = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'campaign_events' )
 			->join( 'ce_participants', null, [
@@ -264,11 +262,9 @@ class EventStore implements IEventStore, IEventLookup {
 				'cep_unregistered_at' => null,
 			] )
 			->orderBy( 'event_id' )
-			->caller( __METHOD__ );
-		if ( $limit !== null ) {
-			$queryBuilder->limit( $limit );
-		}
-		$eventRows = $queryBuilder->fetchResultSet();
+			->limit( $limit )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		return $this->newEventsFromDBRows( $dbr, $eventRows );
 	}
