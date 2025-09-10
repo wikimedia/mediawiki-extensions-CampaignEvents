@@ -78,12 +78,12 @@ class EventRegistration {
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param non-empty-list<string> $types
-	 * @param bool $hasContributionTracking
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param string[] $topics
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param Address|null $address
+	 * @param bool $hasContributionTracking
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string|null $chatURL
@@ -102,12 +102,12 @@ class EventRegistration {
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
-		bool $hasContributionTracking,
 		$wikis,
 		array $topics,
 		int $participationOptions,
 		?string $meetingURL,
 		?Address $address,
+		bool $hasContributionTracking,
 		array $trackingTools,
 		?string $chatURL,
 		bool $isTestEvent,
@@ -144,12 +144,12 @@ class EventRegistration {
 		$this->startLocalTimestamp = $startLocalTimestamp;
 		$this->endLocalTimestamp = $endLocalTimestamp;
 		$this->types = $types;
-		$this->hasContributionTracking = $hasContributionTracking;
 		$this->wikis = $wikis;
 		$this->topics = $topics;
 		$this->participationOptions = $participationOptions;
 		$this->meetingURL = $meetingURL;
 		$this->address = $address;
+		$this->hasContributionTracking = $hasContributionTracking;
 		$this->trackingTools = $trackingTools;
 		$this->chatURL = $chatURL;
 		$this->isTestEvent = $isTestEvent;
@@ -220,10 +220,6 @@ class EventRegistration {
 		return $this->types;
 	}
 
-	public function hasContributionTracking(): bool {
-		return $this->hasContributionTracking;
-	}
-
 	/**
 	 * @return string[]|true A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 */
@@ -248,6 +244,10 @@ class EventRegistration {
 
 	public function getAddress(): ?Address {
 		return $this->address;
+	}
+
+	public function hasContributionTracking(): bool {
+		return $this->hasContributionTracking;
 	}
 
 	/**

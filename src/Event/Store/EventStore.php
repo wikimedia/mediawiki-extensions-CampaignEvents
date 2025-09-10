@@ -365,11 +365,13 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_page_wiki
 		);
 		$types = EventTypesRegistry::getEventTypesFromDBVal( $row->event_types );
+
+		$participationOptions = self::getParticipationOptionsFromDBVal( $row->event_meeting_type );
+
 		$tracksContributions = false;
 		if ( $this->contributionTrackingEnabled ) {
 			$tracksContributions = (bool)$row->event_track_contributions;
 		}
-		$participationOptions = self::getParticipationOptionsFromDBVal( $row->event_meeting_type );
 
 		if ( $trackingToolRow ) {
 			$trackingTools = [
@@ -392,12 +394,12 @@ class EventStore implements IEventStore, IEventLookup {
 			wfTimestamp( TS_MW, $row->event_start_local ),
 			wfTimestamp( TS_MW, $row->event_end_local ),
 			$types,
-			$tracksContributions,
 			$wikis,
 			$topics,
 			$participationOptions,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
 			$address,
+			$tracksContributions,
 			$trackingTools,
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			(bool)$row->event_is_test_event,

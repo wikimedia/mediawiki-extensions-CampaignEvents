@@ -93,7 +93,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			wfTimestamp( TS_MW, $eventData['start_time'] ),
 			wfTimestamp( TS_MW, $eventData['end_time'] ),
 			$eventData['types'],
-			false,
 			$eventData['wikis'],
 			$eventData['topics'],
 			$participationOptions,
@@ -101,6 +100,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			new Address(
 				$eventData['meeting_address'], $eventData['meeting_country'], $eventData['meeting_country_code']
 			),
+			false,
 			[
 				new TrackingToolAssociation(
 					self::TRACKING_TOOL_DB_ID,

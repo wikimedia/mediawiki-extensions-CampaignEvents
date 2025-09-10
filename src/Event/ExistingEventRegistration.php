@@ -24,12 +24,12 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
 	 * @param non-empty-list<string> $types
-	 * @param bool $hasContributionTracking
 	 * @param string[]|true $wikis
 	 * @param string[] $topics
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param Address|null $address
+	 * @param bool $hasContributionTracking
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string|null $chatURL
@@ -48,12 +48,12 @@ class ExistingEventRegistration extends EventRegistration {
 		string $startLocalTimestamp,
 		string $endLocalTimestamp,
 		array $types,
-		bool $hasContributionTracking,
 		$wikis,
 		array $topics,
 		int $participationOptions,
 		?string $meetingURL,
 		?Address $address,
+		bool $hasContributionTracking,
 		array $trackingTools,
 		?string $chatURL,
 		bool $isTestEvent,
@@ -71,12 +71,12 @@ class ExistingEventRegistration extends EventRegistration {
 			$startLocalTimestamp,
 			$endLocalTimestamp,
 			$types,
-			$hasContributionTracking,
 			$wikis,
 			$topics,
 			$participationOptions,
 			$meetingURL,
 			$address,
+			$hasContributionTracking,
 			$trackingTools,
 			$chatURL,
 			$isTestEvent,
