@@ -55,6 +55,8 @@
 	"campaignevents-error-invalid-country": "Gib einen gültigen Ländernamen ein.",
 	"campaignevents-error-invalid-country-code": "Gib einen gültigen Ländercode ein.",
 	"campaignevents-error-invalid-address": "Gib eine gültige Adresse ein.",
+	"campaignevents-error-contribs-tracking-disallowed-country": "Für das ausgewählte Land kann keine Beitragsstatistik aktiviert werden.",
+	"campaignevents-error-contribs-tracking-invalid-type": "Beitragsstatistiken können nur für Ereignisse mit den folgenden Typen aktiviert werden: $1",
 	"campaignevents-error-invalid-chat-url": "Gib eine gültige Chat-URL ein.",
 	"campaignevents-error-invalid-question-names": "Folgende Fragen wurden nicht berücksichtigt: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Die Veranstaltungsregistrierung ist in diesem Namensraum nicht erlaubt.",
