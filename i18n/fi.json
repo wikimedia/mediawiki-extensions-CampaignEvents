@@ -76,6 +76,7 @@
 	"campaignevents-edit-field-organizers-placeholder": "Lisää käyttäjänimi",
 	"campaignevents-edit-field-organizers-creator-title": "Tämä on tapahtuman luoja, muut järjestäjät eivät voi poistaa tätä käyttäjää.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Tällä {{GENDER:$1|käyttäjällä}} ei ole oikeutta järjestää tapahtumia.",
+	"campaignevents-edit-field-contribution-stats-label": "Näytä muokkaustilastot",
 	"campaignevents-edit-field-wiki-type": "Kohdistuuko tämä tapahtuma tiettyihin wikeihin?",
 	"campaignevents-edit-field-wiki-type-none": "Ei tiettyjä kohdewikejä",
 	"campaignevents-edit-field-wiki-type-all": "Kyllä (avoin kaikille wikeille)",

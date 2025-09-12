@@ -57,6 +57,8 @@
 	"campaignevents-error-invalid-country": "יש להזין שם מדינה תקין.",
 	"campaignevents-error-invalid-country-code": "יש להזין קוד מדינה תקין.",
 	"campaignevents-error-invalid-address": "יש להזין כתובת תקינה.",
+	"campaignevents-error-contribs-tracking-disallowed-country": "לא ניתן להפעיל סטטיסטיקה על תרומות תוכן עבור המדינה שנבחרה.",
+	"campaignevents-error-contribs-tracking-invalid-type": "ניתן להפעיל סטטיסטיקה על תרומות תוכן רק על אירועים בסוגים הבאים: $1",
 	"campaignevents-error-invalid-chat-url": "נא להזין URL תקין לצ'אט.",
 	"campaignevents-error-invalid-question-names": "השאלות הבאות לא מוכרות: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "הרשמה לאירועים אינה מותרת במרחב השם הזה.",

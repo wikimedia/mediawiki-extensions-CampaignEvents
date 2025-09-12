@@ -80,6 +80,8 @@
 	"campaignevents-error-invalid-country": "Saisissez un nom de pays valide.",
 	"campaignevents-error-invalid-country-code": "Entrez un code de pays valide.",
 	"campaignevents-error-invalid-address": "Saisissez une adresse valide.",
+	"campaignevents-error-contribs-tracking-disallowed-country": "Les statistiques de contribution ne peuvent pas être activées pour le pays sélectionné.",
+	"campaignevents-error-contribs-tracking-invalid-type": "Les statistiques de contribution ne peuvent être activées que pour les événements avec les types suivants : $1",
 	"campaignevents-error-invalid-chat-url": "Saisissez une URL de discussion en direct valide.",
 	"campaignevents-error-invalid-question-names": "Les questions suivantes n’ont pas été reconnues : $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "L'enregistrement d'événements n'est pas autorisé dans cet espace de noms.",
