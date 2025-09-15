@@ -1,7 +1,6 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80",
 			"Bachounda",
 			"Hhaboh162002",
 			"Mohanad Kh",
@@ -11,7 +10,11 @@
 			"Alshamiri1",
 			"Asma",
 			"Daimona Eaytoy",
-			"أيوب"
+			"أيوب",
+			"BAB ZAA",
+			"Mohammed Qays",
+			"Mohanad",
+			"XIDME"
 		]
 	},
 	"campaignevents-desc": "يوفّر ميزات لمنظمي الحملة والمشاركين فيها.",
@@ -135,7 +138,7 @@
 	"campaignevents-eventslist-delete-dialog-delete": "حذف",
 	"campaignevents-eventslist-delete-success": "جرى حذف <bdi>$1</bdi>.",
 	"deleteeventregistration": "حذف التسجيل في الفعالية",
-	"campaignevents-delete-error-no-event": "لم يتم تحديد فعالية.",
+	"campaignevents-delete-error-no-event": "لم تُحدد فعالية.",
 	"campaignevents-delete-error-event-not-found": "لا توجد فعالية مقترنة بهذا المعرّف.",
 	"campaignevents-delete-error-already-deleted": "التسجيل في الفعالية هذه محذوف.",
 	"campaignevents-delete-confirmation-text": "أكّد حذف التسجيل في هذه الفعالية بالضغط على زر «{{int:campaignevents-delete-submit-btn}}». هذه العملية لا يمكن التراجع عنها.",
