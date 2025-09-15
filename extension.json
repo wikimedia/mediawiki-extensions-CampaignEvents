@@ -9,6 +9,9 @@
 	"type": "specialpage",
 	"requires": {
 		"MediaWiki": ">= 1.45",
+		"extensions": {
+			"cldr": "*"
+		},
 		"platform": {
 			"php": ">8.1.7"
 		}
@@ -127,9 +130,6 @@
 		"CampaignEventsAliases": "CampaignEvents.alias.php",
 		"CampaignEventsNamespaces": "CampaignEvents.namespaces.php"
 	},
-	"ExtensionFunctions": [
-		"MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\ExtensionFunctionHandler::checkCLDRIsInstalled"
-	],
 	"HookHandlers": {
 		"SchemaChanges": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\SchemaChangesHandler"
