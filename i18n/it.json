@@ -63,6 +63,7 @@
 	"campaignevents-edit-field-organizers-placeholder": "Aggiungi nome utente",
 	"campaignevents-edit-field-organizers-creator-title": "Questo è il creatore dell'evento, gli altri organizzatori non possono rimuovere questo utente.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Questo|Questa}} utente non è {{GENDER:$1|autorizzato|autorizzata}} a organizzare eventi.",
+	"campaignevents-edit-field-contribution-stats-label": "Mostra le statistiche dei contributi",
 	"campaignevents-edit-field-wiki-type": "Questo evento si concentra su wiki specifici?",
 	"campaignevents-edit-field-wiki-type-none": "Nessun wiki specifico",
 	"campaignevents-edit-field-wiki-type-all": "Sì (aperto a tutti i wiki)",

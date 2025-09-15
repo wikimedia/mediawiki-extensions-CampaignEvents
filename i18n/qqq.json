@@ -61,7 +61,7 @@
 	"campaignevents-error-invalid-country": "Error message used when the given event country is invalid.",
 	"campaignevents-error-invalid-country-code": "Error message used when the given event country code is invalid.",
 	"campaignevents-error-invalid-address": "Error message used when the given event address URL is invalid.",
-	"campaignevents-error-contribs-tracking-disallowed-country": "Error message used when trying to enable contribution statistics for an in-person event in a country where contribution tracking isn't alloewd.",
+	"campaignevents-error-contribs-tracking-disallowed-country": "Error message used when trying to enable contribution statistics for an in-person event in a country where contribution tracking isn't allowed.",
 	"campaignevents-error-contribs-tracking-invalid-type": "Error message used when trying to enable contribution statistics for an event whose type is not contribution-related.\nParameters:\n* $1 - List of types that are considered contribution-related",
 	"campaignevents-error-invalid-chat-url": "Error message used when the given chat URL is invalid.",
 	"campaignevents-error-invalid-question-names": "Error message used when the user provided unrecognized identifiers for participant questions.\nParameters:\n* $1 - List of unrecognized question names",

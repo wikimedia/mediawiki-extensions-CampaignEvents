@@ -77,6 +77,8 @@
 	"campaignevents-edit-field-organizers-placeholder": "Benutzernamen hinzufügen",
 	"campaignevents-edit-field-organizers-creator-title": "Dies ist der Ersteller der Veranstaltung, andere Organisatoren können diesen Benutzer nicht entfernen.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Dieser Benutzer|Diese Benutzerin}} darf keine Veranstaltungen organisieren.",
+	"campaignevents-edit-field-contribution-stats-label": "Zeige Beiträgestatistiken",
+	"campaignevents-edit-field-contribution-stats-help": "Aktiviere Beitragsstatistiken, damit du die Auswirkungen der Veranstaltung teilen und verstehen kannst. Eine Zusammenfassung und eine vollständige Liste der Bearbeitungen werden bereitgestellt.",
 	"campaignevents-edit-field-wiki-type": "Konzentriert sich diese Veranstaltung auf bestimmte Wikis?",
 	"campaignevents-edit-field-wiki-type-none": "Keine spezifischen Wikis",
 	"campaignevents-edit-field-wiki-type-all": "Ja (offen für alle Wikis)",

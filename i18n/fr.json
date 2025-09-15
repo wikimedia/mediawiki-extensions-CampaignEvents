@@ -102,6 +102,8 @@
 	"campaignevents-edit-field-organizers-placeholder": "Ajouter un nom d’utilisateur",
 	"campaignevents-edit-field-organizers-creator-title": "Il s’agit du créateur de l’événement, les autres organisateurs ne peuvent pas supprimer cet utilisateur.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Cet utilisateur|Cette utilisatrice}} n'est pas {{GENDER:$1|autorisé|autorisée}} à organiser des événements.",
+	"campaignevents-edit-field-contribution-stats-label": "Afficher les statistiques de contribution",
+	"campaignevents-edit-field-contribution-stats-help": "Activez les statistiques de contribution pour pouvoir partager et comprendre l'impact de l'événement. Un résumé et la liste complète des modifications sont fournis.",
 	"campaignevents-edit-field-wiki-type": "Cet événement porte-t-il sur des wikis spécifiques ?",
 	"campaignevents-edit-field-wiki-type-none": "Pas de wikis spécifiques",
 	"campaignevents-edit-field-wiki-type-all": "Oui (ouvert à tous les wikis)",

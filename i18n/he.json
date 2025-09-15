@@ -79,6 +79,8 @@
 	"campaignevents-edit-field-organizers-placeholder": "הוספת שם משתמש",
 	"campaignevents-edit-field-organizers-creator-title": "זה היוצר של האירוע, מארגנים אחרים לא יכולים להסיר את המשתמש הזה.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|המשתמש הזה אינו רשאי|המשתמשת הזאת אינה רשאית}} לארגן אירועים.",
+	"campaignevents-edit-field-contribution-stats-label": "הצגת סטטיסטיקות תרומה",
+	"campaignevents-edit-field-contribution-stats-help": "הפעלת סטטיסטיקות תרומה, כדי {{GENDER:|שתוכל|שתוכלי}} לשתף ולהבין את השפעת האירוע. יסופקו לך סיכום ורשימה מלאה של עריכות.",
 	"campaignevents-edit-field-wiki-type": "האם האירוע הזה מתמקד באתרי ויקי מסוימים?",
 	"campaignevents-edit-field-wiki-type-none": "לא באתרי ויקי מסוימים",
 	"campaignevents-edit-field-wiki-type-all": "כן (פתוח לכל האתרי הוויקי)",

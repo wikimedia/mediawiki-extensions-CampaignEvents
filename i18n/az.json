@@ -77,6 +77,8 @@
 	"campaignevents-edit-field-organizers-placeholder": "İstifadəçi adı əlavə et",
 	"campaignevents-edit-field-organizers-creator-title": "Bu istifadəçi tədbirin yaradıcısıdır, digər təşkilatçılar bu istifadəçini silə bilməz.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Bu {{GENDER:$1|istifadəçinin}} tədbir təşkil etməsinə icazə verilmir.",
+	"campaignevents-edit-field-contribution-stats-label": "Töhfə statistikasını göstər",
+	"campaignevents-edit-field-contribution-stats-help": "Tədbirin təsirini paylaşa və başa düşə bilmək üçün töhfə statistikasını aktivləşdirin. Xülasə və redaktələrin tam siyahısı verilir.",
 	"campaignevents-edit-field-wiki-type": "Bu tədbir spesifik vikilərə fokuslanıb?",
 	"campaignevents-edit-field-wiki-type-none": "Spesifik viki yoxdur",
 	"campaignevents-edit-field-wiki-type-all": "Bəli (bütün vikilərə açıqdır)",
