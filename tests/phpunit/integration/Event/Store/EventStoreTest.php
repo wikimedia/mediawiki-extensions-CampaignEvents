@@ -19,6 +19,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Title\Title;
+use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use Throwable;
 
@@ -29,6 +30,12 @@ use Throwable;
  * @covers ::__construct()
  */
 class EventStoreTest extends MediaWikiIntegrationTestCase {
+	/**
+	 * Placeholder for the current wiki ID that can be referenced from data providers, and will be replaced with the
+	 * actual current wiki ID in makeEventWithArgs(). (See T312849)
+	 */
+	private const CURWIKIID_PLACEHOLDER = '*curwiki*';
+
 	protected function setUp(): void {
 		parent::setUp();
 		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
@@ -68,6 +75,22 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			null,
 			null
 		);
+	}
+
+	/**
+	 * @param array $args Must have string keys as returned by `getBaseCtrArgs`. This method must NOT be called from
+	 * data providers
+	 */
+	private function makeEventWithArgs( array $args ): EventRegistration {
+		if ( is_array( $args['wikis'] ) ) {
+			// Replace placeholder for current wiki ID (T312849)
+			$curWikiPlaceholderKey = array_search( self::CURWIKIID_PLACEHOLDER, $args['wikis'], true );
+			if ( $curWikiPlaceholderKey !== false ) {
+				$args['wikis'][$curWikiPlaceholderKey] = WikiMap::getCurrentWikiId();
+			}
+		}
+		// Replace placeholder for current wiki ID.
+		return new EventRegistration( ...array_values( $args ) );
 	}
 
 	private function assertEventsEqual( EventRegistration $expected, EventRegistration $actual ): void {
@@ -134,7 +157,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::saveRegistration
 	 * @dataProvider provideRoundtripByID
 	 */
-	public function testRoundtripByID( $event ) {
+	public function testRoundtripByID( array $ctrArgs ) {
+		$event = $this->makeEventWithArgs( $ctrArgs );
 		$savedID = $this->storeEvent( $event );
 		$storedEvent = CampaignEventsServices::getEventLookup()->getEventByID( $savedID );
 		$this->assertEventsEqual( $event, $storedEvent );
@@ -143,22 +167,23 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	public static function provideRoundtripByID(): Generator {
 		$baseCtrArgs = self::getBaseCtrArgs();
+
 		yield 'Event with address and country' => [
-			new EventRegistration( ...array_values( $baseCtrArgs ) )
+			$baseCtrArgs
 		];
-		$eventWithOnlyAddress = array_replace(
-			$baseCtrArgs,
-			[ 'Address' => new Address( 'Some address', null, null ) ]
-		);
+
 		yield 'Event with only address' => [
-			new EventRegistration( ...array_values( $eventWithOnlyAddress ) ),
+			array_replace(
+				$baseCtrArgs,
+				[ 'Address' => new Address( 'Some address', null, null ) ]
+			),
 		];
-		$eventWithOnlyCountry = array_replace(
-			$baseCtrArgs,
-			[ 'Address' => new Address( null, 'France', null ) ]
-		);
+
 		yield 'Event with only country' => [
-			new EventRegistration( ...array_values( $eventWithOnlyCountry ) ),
+			array_replace(
+				$baseCtrArgs,
+				[ 'Address' => new Address( null, 'France', null ) ]
+			),
 		];
 	}
 
@@ -267,8 +292,9 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::deleteRegistration
 	 * @dataProvider provideEventsToDelete
 	 */
-	public function testDeletion( EventRegistration $registration, bool $expected ) {
-		$id = $this->storeEvent( $registration );
+	public function testDeletion( array $ctrArgs, bool $expected ) {
+		$event = $this->makeEventWithArgs( $ctrArgs );
+		$id = $this->storeEvent( $event );
 		$eventLookup = CampaignEventsServices::getEventLookup();
 		$storedEventBeforeDeletion = $eventLookup->getEventByID( $id );
 		$store = CampaignEventsServices::getEventStore();
@@ -279,13 +305,14 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	public static function provideEventsToDelete(): Generator {
 		$baseCtrArgs = self::getBaseCtrArgs();
+
 		yield 'Not deleted' => [
-			new EventRegistration( ...array_values( $baseCtrArgs ) ),
+			$baseCtrArgs,
 			true
 		];
-		$deletedEventCtrArgs = array_replace( $baseCtrArgs, [ 'del' => '1234500000' ] );
+
 		yield 'Already deleted' => [
-			new EventRegistration( ...array_values( $deletedEventCtrArgs ) ),
+			array_replace( $baseCtrArgs, [ 'del' => '1234500000' ] ),
 			false
 		];
 	}
@@ -303,7 +330,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'20220731080000',
 			'20220731160000',
 			[ EventTypesRegistry::EVENT_TYPE_OTHER ],
-			[ 'awiki', 'bwiki', 'cwiki' ],
+			'wikis' => [ 'awiki', 'bwiki', 'cwiki' ],
 			[ 'atopic', 'btopic' ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
