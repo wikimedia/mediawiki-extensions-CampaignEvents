@@ -201,7 +201,8 @@ class FrontendModulesFactory {
 			$this->titleFactory,
 			$this->eventContributionStore,
 			$output,
-			$this->linkBatchFactory
+			$this->linkBatchFactory,
+			$this->participantsStore
 		);
 	}
 }

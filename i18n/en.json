@@ -585,6 +585,8 @@
 	"campaignevents-email-error-notification-with-detail": "The email could not be sent, for the following reason: $1",
 	"campaignevents-eventslist-types-label": "Event types",
 	"campaignevents-eventslist-country-label": "Country",
+	"campaignevents-contributions-notice-private-participants-excluded": "The statistics and contributions listed on this page do not include data from private participants.",
+	"campaignevents-contributions-notice-other-private-participants-excluded": "The statistics and contributions listed on this page do not include data from other private participants.",
 	"campaignevents-event-contribution-event-ended": "Event has ended and is no longer accepting edit associations",
 	"campaignevents-event-contribution-not-participant": "User is not a participant in this event",
 	"campaignevents-event-contribution-user-not-global": "User is not a global user",

@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPager;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
@@ -37,6 +38,7 @@ class EventContributionsModule {
 	private TitleFactory $titleFactory;
 	private EventContributionStore $eventContributionStore;
 	private LinkBatchFactory $linkBatchFactory;
+	private ParticipantsStore $participantsStore;
 
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -49,7 +51,8 @@ class EventContributionsModule {
 		TitleFactory $titleFactory,
 		EventContributionStore $eventContributionStore,
 		OutputPage $output,
-		LinkBatchFactory $linkBatchFactory
+		LinkBatchFactory $linkBatchFactory,
+		ParticipantsStore $participantsStore,
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
@@ -63,6 +66,7 @@ class EventContributionsModule {
 		$this->eventContributionStore = $eventContributionStore;
 		$this->output = $output;
 		$this->linkBatchFactory = $linkBatchFactory;
+		$this->participantsStore = $participantsStore;
 	}
 
 	public function createContent(): Tag {
@@ -80,10 +84,13 @@ class EventContributionsModule {
 				$currentUser,
 				$this->event
 			);
+			$participantIsPrivate =
+				$this->participantsStore->getEventParticipant( $eventId, $centralUser, true )?->isPrivateRegistration();
 		} catch ( UserNotGlobalException ) {
 			// User is not logged in or doesn't have a global account
 			$centralUserId = 0;
 			$includePrivateParticipants = false;
+			$participantIsPrivate = false;
 		}
 
 		$summaryData = $this->eventContributionStore->getEventSummaryData(
@@ -132,6 +139,23 @@ class EventContributionsModule {
 			],
 		];
 
+		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventId );
+		$showMessage = ( !$participantIsPrivate && $privateCount > 0 )
+			|| ( $participantIsPrivate && $privateCount > 1 );
+		if ( !$includePrivateParticipants && $showMessage ) {
+			$messageKey = $participantIsPrivate
+			 ?
+				'campaignevents-contributions-notice-other-private-participants-excluded'
+				: 'campaignevents-contributions-notice-private-participants-excluded';
+			$notice = [
+				'status' => 'notice',
+				'message' => $msgFormatter->format(
+					MessageValue::new( $messageKey )
+				)
+			];
+			$renderedNotice = $this->templateParser->processTemplate( 'Message', $notice );
+			$container->appendContent( new HtmlSnippet( $renderedNotice ) );
+		}
 		$renderedSummaryHtml = $this->templateParser->processTemplate( 'EventContributionsSummary', $templateData );
 		$container->appendContent( new HtmlSnippet( $renderedSummaryHtml ) );
 
