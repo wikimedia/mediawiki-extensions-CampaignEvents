@@ -8,6 +8,7 @@ use MediaWiki\Config\SiteConfiguration;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
+use MediaWiki\WikiMap\WikiMap;
 use MediaWikiUnitTestCase;
 use MessageLocalizer;
 use Wikimedia\ObjectCache\BagOStuff;
@@ -45,6 +46,11 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 		$localWikis = [ 'foowiki', 'foowiki', 'barwiki' ];
 		$lookup = $this->getLookup( $localWikis );
 		$this->assertSame( [ 'foowiki', 'barwiki' ], $lookup->getAllWikis() );
+	}
+
+	public function testGetAllWikis__noWgConf() {
+		$lookup = $this->getLookup( [] );
+		$this->assertSame( [ WikiMap::getCurrentWikiId() ], $lookup->getAllWikis() );
 	}
 
 	public function testGetListForSelect() {

@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Config\SiteConfiguration;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\WikiMap\WikiMap;
 use MessageLocalizer;
 use Wikimedia\ObjectCache\WANObjectCache;
 
@@ -37,7 +38,12 @@ class WikiLookup {
 
 	/** @return list<string> */
 	public function getAllWikis(): array {
-		return array_values( array_unique( $this->siteConfig->getLocalDatabases() ) );
+		$localDatabases = $this->siteConfig->getLocalDatabases();
+		if ( !$localDatabases ) {
+			// A wiki not using $wgConf. Pretty same to assume it's all alone (T405034).
+			return [ WikiMap::getCurrentWikiId() ];
+		}
+		return array_values( array_unique( $localDatabases ) );
 	}
 
 	/**
