@@ -559,6 +559,15 @@
 			]
 		},
 		{
+			"path": "/campaignevents/v0/participant/self/events_for_edit",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListOwnEventsForEditHandler",
+			"services": [
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsEventLookup"
+			]
+		},
+		{
 			"path": "/campaignevents/v0/event_registration/{id}/participants",
 			"method": "DELETE",
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RemoveParticipantsFromEventHandler",
