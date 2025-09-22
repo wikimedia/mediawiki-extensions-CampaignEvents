@@ -120,5 +120,7 @@
 	"campaignevents-event-details-edit-button": "سمول",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|گډنوال}}",
 	"campaignevents-event-details-in-person-event-label": "ځاني پېښه",
-	"campaignevents-event-details-online-label": "پرليکه پېښه"
+	"campaignevents-event-details-online-label": "پرليکه پېښه",
+	"campaignevents-event-details-no-event-id-provided": "د پېښې پېژند چمتو‌کول",
+	"campaignevents-event-details-invalid-id": "د پېښې يو باوري پېژند چمتو کول."
 }
