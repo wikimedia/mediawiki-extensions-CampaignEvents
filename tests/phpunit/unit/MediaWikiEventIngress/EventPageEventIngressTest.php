@@ -9,7 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\DeleteEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
-use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\PageEventIngress;
+use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\EventPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Page\Event\PageDeletedEvent;
@@ -21,17 +21,17 @@ use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\PageEventIngress
+ * @covers \MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\EventPageEventIngress
  */
-class PageEventIngressTest extends MediaWikiUnitTestCase {
-	public function getPageEventIngress(
+class EventPageEventIngressTest extends MediaWikiUnitTestCase {
+	public function getEventIngress(
 		CampaignsPageFactory $campaignsPageFactory,
 		IEventStore $iEventStore,
 		PageEventLookup $pageEventLookup,
 		DeleteEventCommand $deleteEventCommand,
 		TitleFormatter $titleFormatter
-	): PageEventIngress {
-		return new PageEventIngress(
+	): EventPageEventIngress {
+		return new EventPageEventIngress(
 			$campaignsPageFactory,
 			$deleteEventCommand,
 			$iEventStore,
@@ -68,7 +68,7 @@ class PageEventIngressTest extends MediaWikiUnitTestCase {
 		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
 		$iEventStore = $this->createMock( IEventStore::class );
 		$titleFormatter = $this->createMock( TitleFormatter::class );
-		$pageEventIngress = $this->getPageEventIngress(
+		$eventIngress = $this->getEventIngress(
 			$campaignsPageFactory, $iEventStore,
 			$pageEventLookup, $deleteEventCommand, $titleFormatter
 		);
@@ -83,7 +83,7 @@ class PageEventIngressTest extends MediaWikiUnitTestCase {
 			$user,
 			[], [], "", "", 1
 		);
-		$pageEventIngress->handlePageDeletedEvent( $event );
+		$eventIngress->handlePageDeletedEvent( $event );
 		// We use soft assertions above
 		$this->addToAssertionCount( 1 );
 	}
@@ -115,12 +115,11 @@ class PageEventIngressTest extends MediaWikiUnitTestCase {
 		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturn( $registration );
 		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
 		$iEventStore = $this->createMock( IEventStore::class );
-		$iEventStore->method( 'saveRegistration' )->willReturn( 1 );
 		$deleteEventCommand = $this->createMock( DeleteEventCommand::class );
 		$titleFormatter = $this->createMock( TitleFormatter::class );
 		$titleFormatter->method( 'getText' )->willReturn( "Title" );
 
-		$pageEventIngress = $this->getPageEventIngress(
+		$eventIngress = $this->getEventIngress(
 			$campaignsPageFactory, $iEventStore,
 			$pageEventLookup, $deleteEventCommand, $titleFormatter
 		);
@@ -133,18 +132,15 @@ class PageEventIngressTest extends MediaWikiUnitTestCase {
 			$pageRecordBeforeAndAfter,
 			$user, ""
 		);
-		if ( $hasRegistration ) {
-			$campaignsPageFactory->expects( $this->once() )
-				->method( 'newFromLocalMediaWikiPage' )
-				->with( $pageRecordBeforeAndAfter )
-				->willReturn( $this->createMock( MWPageProxy::class ) );
-			$iEventStore->expects( $this->once() )->method( 'saveRegistration' );
-		}
-		$res = $pageEventIngress->handlePageMovedEvent( $event );
 
-		if ( !$hasRegistration ) {
-			$this->assertNull( $res );
-		}
+		$campaignsPageFactory->expects( $hasRegistration ? $this->once() : $this->never() )
+			->method( 'newFromLocalMediaWikiPage' )
+			->with( $pageRecordBeforeAndAfter )
+			->willReturn( $this->createMock( MWPageProxy::class ) );
+		$iEventStore->expects( $hasRegistration ? $this->once() : $this->never() )
+			->method( 'saveRegistration' );
+
+		$eventIngress->handlePageMovedEvent( $event );
 	}
 
 	public static function provideOnPageMove(): Generator {

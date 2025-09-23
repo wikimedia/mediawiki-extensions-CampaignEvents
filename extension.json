@@ -173,7 +173,7 @@
 	"DomainEventIngresses": [
 		{
 			"events": [ "PageDeleted", "PageMoved" ],
-			"class": "MediaWiki\\Extension\\CampaignEvents\\MediaWikiEventIngress\\PageEventIngress",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\MediaWikiEventIngress\\EventPageEventIngress",
 			"services": [
 				"CampaignEventsPageFactory",
 				"CampaignEventsDeleteEventCommand",

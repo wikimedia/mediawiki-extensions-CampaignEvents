@@ -17,10 +17,10 @@ use MediaWiki\Page\Event\PageMovedListener;
 use MediaWiki\Title\TitleFormatter;
 use Wikimedia\Rdbms\IDBAccessObject;
 
-class PageEventIngress extends DomainEventIngress implements
+class EventPageEventIngress extends DomainEventIngress implements
 	PageDeletedListener,
 	PageMovedListener
-	{
+{
 	private CampaignsPageFactory $campaignsPageFactory;
 	private DeleteEventCommand $deleteEventCommand;
 	private IEventStore $eventStore;
@@ -28,11 +28,11 @@ class PageEventIngress extends DomainEventIngress implements
 	private TitleFormatter $titleFormatter;
 
 	public function __construct(
-			CampaignsPageFactory $campaignsPageFactory,
-			DeleteEventCommand $deleteEventCommand,
-			IEventStore $eventStore,
-			PageEventLookup $pageEventLookup,
-			TitleFormatter $titleFormatter,
+		CampaignsPageFactory $campaignsPageFactory,
+		DeleteEventCommand $deleteEventCommand,
+		IEventStore $eventStore,
+		PageEventLookup $pageEventLookup,
+		TitleFormatter $titleFormatter,
 	) {
 		$this->pageEventLookup = $pageEventLookup;
 		$this->campaignsPageFactory = $campaignsPageFactory;
