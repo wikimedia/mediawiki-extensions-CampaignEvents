@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Adriendelucca"
+			"Adriendelucca",
+			"Huñvreüs"
 		]
 	},
 	"allevents": "An holl zarvoudoù",
@@ -20,5 +21,9 @@
 	"campaignevents-email-participants-except": "An holl war bouez $1",
 	"campaignevents-email-participants-yes": "Ya",
 	"campaignevents-email-participants-no": "Ket",
-	"campaignevents-register-question-confidence-contributing-not-say": "Gwell eo ganin chom hep lâret"
+	"campaignevents-register-question-confidence-contributing-not-say": "Gwell eo ganin chom hep lâret",
+	"generateinvitationlist": "Krouiñ ur roll pediñ",
+	"campaignevents-generateinvitationlist-name-field-label": "Anv roll pediñ",
+	"invitationlist": "Roll pediñ",
+	"campaignevents-invitationlist-event": "$1 : Roll pediñ"
 }
