@@ -181,6 +181,15 @@
 				"CampaignEventsPageEventLookup",
 				"TitleFormatter"
 			]
+		},
+		{
+			"events": [ "PageDeleted", "PageCreated", "PageMoved", "PageHistoryVisibilityChanged" ],
+			"class": "MediaWiki\\Extension\\CampaignEvents\\MediaWikiEventIngress\\ContributionAssociationPageEventIngress",
+			"services": [
+				"CampaignEventsEventContributionStore",
+				"TitleFormatter",
+				"JobQueueGroup"
+			]
 		}
 	],
 	"JobClasses": {
@@ -189,7 +198,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Invitation\\FindPotentialInviteesJob",
 			"needsPage": false
 		},
-		"CampaignEventsComputeEventContribution": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\EventContributionJob"
+		"CampaignEventsComputeEventContribution": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\EventContributionJob",
+		"CampaignEventsUpdatePageContributionRecords": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\UpdateContributionRecordsJob"
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [

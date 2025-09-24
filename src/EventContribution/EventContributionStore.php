@@ -5,7 +5,11 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 
 use InvalidArgumentException;
+use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\Page\ProperPageIdentity;
+use Wikimedia\Rdbms\IDatabase;
 
 /**
  * Store for managing event contributions.
@@ -13,6 +17,8 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 class EventContributionStore {
 
 	public const SERVICE_NAME = 'CampaignEventsEventContributionStore';
+
+	private const UPDATES_BATCH_SIZE = 500;
 
 	private CampaignsDatabaseHelper $dbHelper;
 
@@ -86,6 +92,126 @@ class EventContributionStore {
 			if ( !isset( $row->$field ) ) {
 				throw new InvalidArgumentException( "Missing required field: $field" );
 			}
+		}
+	}
+
+	public function hasContributionsForPage( ProperPageIdentity $page ): bool {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$row = $dbr->newSelectQueryBuilder()
+			->select( '1' )
+			->from( 'ce_event_contributions' )
+			->where( [
+				'cec_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
+				'cec_page_id' => $page->getId( $page->getWikiId() )
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
+		return $row !== false;
+	}
+
+	/**
+	 * @phan-param mixed[] $where
+	 * @phan-param mixed[] $set
+	 */
+	private function doBatchedPageUpdate( IDatabase $dbw, array $where, array $set ): void {
+		$lastBatchIDs = [];
+		do {
+			$curBatchIDs = $dbw->newSelectQueryBuilder()
+				->select( 'cec_id' )
+				->from( 'ce_event_contributions' )
+				->where( $where )
+				->limit( self::UPDATES_BATCH_SIZE )
+				->caller( __METHOD__ )
+				->fetchFieldValues();
+
+			if ( !$curBatchIDs ) {
+				break;
+			}
+
+			if ( $curBatchIDs === $lastBatchIDs ) {
+				throw new LogicException(
+					'Infinite recursion detected! Make sure the WHERE conditions filter out already updated rows.'
+				);
+			}
+
+			$dbw->newUpdateQueryBuilder()
+				->update( 'ce_event_contributions' )
+				->set( $set )
+				->where( [ 'cec_id' => $curBatchIDs ] )
+				->caller( __METHOD__ )
+				->execute();
+
+			$lastBatchIDs = $curBatchIDs;
+		} while ( true );
+	}
+
+	public function updateTitle( string $wiki, int $pageID, string $newPrefixedText ): void {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$this->doBatchedPageUpdate(
+			$dbw,
+			[
+				'cec_wiki' => $wiki,
+				'cec_page_id' => $pageID,
+				$dbw->expr( 'cec_page_prefixedtext', '!=', $newPrefixedText ),
+			],
+			[ 'cec_page_prefixedtext' => $newPrefixedText ]
+		);
+	}
+
+	private function updateVisibilityForPage( string $wiki, int $pageID, bool $deleted ): void {
+		$this->doBatchedPageUpdate(
+			$this->dbHelper->getDBConnection( DB_PRIMARY ),
+			[
+				'cec_wiki' => $wiki,
+				'cec_page_id' => $pageID,
+				'cec_deleted' => (int)!$deleted,
+			],
+			[ 'cec_deleted' => (int)$deleted ]
+		);
+	}
+
+	public function updateForPageDeleted( string $wiki, int $pageID ): void {
+		$this->updateVisibilityForPage( $wiki, $pageID, true );
+	}
+
+	public function updateForPageRestored( string $wiki, int $pageID ): void {
+		$this->updateVisibilityForPage( $wiki, $pageID, false );
+	}
+
+	/**
+	 * @phan-param list<int> $deletedRevIDs
+	 * @phan-param list<int> $restoredRevIDs
+	 */
+	public function updateRevisionVisibility(
+		string $wiki,
+		int $pageID,
+		array $deletedRevIDs,
+		array $restoredRevIDs
+	): void {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$whereBase = [
+			'cec_wiki' => $wiki,
+			// The page ID is technically redundant, but is included here because cec_revision_id is not indexed, so
+			// the following queries can use the index on wiki+page instead, and then scan and filter the matches.
+			'cec_page_id' => $pageID,
+		];
+		foreach ( array_chunk( $deletedRevIDs, self::UPDATES_BATCH_SIZE ) as $deletedRevsBatch ) {
+			$dbw->newUpdateQueryBuilder()
+				->update( 'ce_event_contributions' )
+				->set( [ 'cec_deleted' => 1 ] )
+				->where( $whereBase )
+				->andWhere( [ 'cec_revision_id' => $deletedRevsBatch ] )
+				->caller( __METHOD__ )
+				->execute();
+		}
+		foreach ( array_chunk( $restoredRevIDs, self::UPDATES_BATCH_SIZE ) as $restoredRevsBatch ) {
+			$dbw->newUpdateQueryBuilder()
+				->update( 'ce_event_contributions' )
+				->set( [ 'cec_deleted' => 0 ] )
+				->where( $whereBase )
+				->andWhere( [ 'cec_revision_id' => $restoredRevsBatch ] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 	}
 }
