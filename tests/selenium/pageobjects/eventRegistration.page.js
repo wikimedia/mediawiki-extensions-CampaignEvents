@@ -185,7 +185,7 @@ class EventRegistrationPage extends Page {
 		await this.eventPage.setValue( eventPage );
 		await this.setStartDate( start );
 		await this.setEndDate( end );
-		await this.addTypes( [ 'other' ] );
+		await this.addTypes( [ 'editing-event' ] );
 		await this.enableRegistration.click();
 	}
 

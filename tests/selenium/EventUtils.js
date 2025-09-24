@@ -89,7 +89,7 @@ const EventUtils = {
 			timezone: 'EST',
 			start_time: '29990414160000',
 			end_time: '29990515170000',
-			types: [ 'other' ],
+			types: [ 'editing-event' ],
 			wikis: [],
 			online_meeting: true
 		};
