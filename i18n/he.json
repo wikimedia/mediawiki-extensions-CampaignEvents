@@ -569,5 +569,13 @@
 	"campaignevents-cancel-page-nonlocal": "נא '''[$1 לבטל את הרשמתך לאירוע באתר $2]''' – אתר הוויקי שבו האירוע נוצר.",
 	"campaignevents-email-error-notification-with-detail": "לא ניתן היה לשלוח את הדואר האלקטרוני, מהסיבה הבאה: $1",
 	"campaignevents-eventslist-types-label": "סוגי אירועים",
-	"campaignevents-eventslist-country-label": "ארץ"
+	"campaignevents-eventslist-country-label": "ארץ",
+	"campaignevents-event-contribution-event-ended": "האירוע הסתיים ואינו מקבל עוד שיוכי עריכה",
+	"campaignevents-event-contribution-not-participant": "המשתמש אינו משתתף באירוע הזה",
+	"campaignevents-event-contribution-user-not-global": "המשתמש אינו משתמש גלובלי",
+	"campaignevents-event-contribution-timestamp-too-old": "חותם־הזמן של העריכה ישן מדי (צריך להיות 24 שעות להל היותר)",
+	"campaignevents-event-contribution-revision-not-found": "הגרסה לא נמצאה",
+	"campaignevents-event-contribution-not-owner": "ניתן לשייך רק את העריכות של עצמך לאירועים",
+	"campaignevents-event-contribution-tracking-disabled": "מעקב אחרי תרומות אינו מופעל עבור אירוע הזה",
+	"campaignevents-event-contribution-event-deleted": "האירוע נמחק"
 }

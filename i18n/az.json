@@ -567,5 +567,13 @@
 	"campaignevents-cancel-page-nonlocal": "Zəhmət olmasa, tədbirin yaradıldığı '''[$1 $2 vikisində qeydiyyatınızı ləğv edin]'''.",
 	"campaignevents-email-error-notification-with-detail": "Aşağıdakı səbəbdən e-poçt göndərilə bilmədi: $1",
 	"campaignevents-eventslist-types-label": "Tədbir növləri",
-	"campaignevents-eventslist-country-label": "Ölkə"
+	"campaignevents-eventslist-country-label": "Ölkə",
+	"campaignevents-event-contribution-event-ended": "Tədbir başa çatıb və artıq redaktə əlaqələndirmələrini qəbul etmir",
+	"campaignevents-event-contribution-not-participant": "İstifadəçi bu tədbirin iştirakçısı deyil",
+	"campaignevents-event-contribution-user-not-global": "İstifadəçi qlobal istifadəçi deyil",
+	"campaignevents-event-contribution-timestamp-too-old": "Redaktə vaxt damğası çox köhnədir (maksimum 24 saat)",
+	"campaignevents-event-contribution-revision-not-found": "Versiya tapılmadı",
+	"campaignevents-event-contribution-not-owner": "Siz yalnız öz redaktələrinizi tədbirlər ilə əlaqələndirə bilərsiniz",
+	"campaignevents-event-contribution-tracking-disabled": "Bu tədbir üçün töhfələrin izlənməsi aktiv deyil",
+	"campaignevents-event-contribution-event-deleted": "Tədbir silindi"
 }

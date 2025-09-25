@@ -497,6 +497,8 @@
 	"campaignevents-allevents-label-filter-event-types": "Tipi di eventi",
 	"campaignevents-eventslist-types-label": "Tipi di eventi",
 	"campaignevents-eventslist-country-label": "Nazione",
+	"campaignevents-event-contribution-not-participant": "L'utente non è un partecipante a questo evento",
+	"campaignevents-event-contribution-user-not-global": "L'utente non è un utente globale",
 	"campaignevents-event-contribution-revision-not-found": "Versione non trovata",
 	"campaignevents-event-contribution-event-deleted": "L'evento è stato cancellato"
 }

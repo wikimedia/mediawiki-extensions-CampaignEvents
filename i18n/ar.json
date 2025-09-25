@@ -581,5 +581,13 @@
 	"campaignevents-cancel-page-nonlocal": "من فضلك '''[$1 قم بإلغاء تسجيل الحدث الخاص بك على $2]'''، الويكي حيث تم إنشاء الحدث.",
 	"campaignevents-email-error-notification-with-detail": "لم يتم إرسال البريد الإلكتروني، للسبب التالي: $1",
 	"campaignevents-eventslist-types-label": "أنواع الأحداث",
-	"campaignevents-eventslist-country-label": "دولة"
+	"campaignevents-eventslist-country-label": "دولة",
+	"campaignevents-event-contribution-event-ended": "انتهى الحدث ولم يعد يقبل تعديل الارتباطات",
+	"campaignevents-event-contribution-not-participant": "المستخدم ليس مشاركًا في هذا الحدث",
+	"campaignevents-event-contribution-user-not-global": "المستخدم ليس مستخدمًا عالميًا",
+	"campaignevents-event-contribution-timestamp-too-old": "تعديل الطابع الزمني قديم جدًا (الحد الأقصى 24 ساعة)",
+	"campaignevents-event-contribution-revision-not-found": "لم يتم العثور على المراجعة",
+	"campaignevents-event-contribution-not-owner": "يمكنك فقط ربط تعديلاتك الخاصة بالأحداث",
+	"campaignevents-event-contribution-tracking-disabled": "لم يتم تمكين تتبع المساهمة لهذا الحدث",
+	"campaignevents-event-contribution-event-deleted": "تم حذف الحدث"
 }

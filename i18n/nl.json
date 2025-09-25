@@ -573,5 +573,13 @@
 	"campaignevents-cancel-page-nonlocal": "'''[ $1 Annuleer uw evenementregistratie op $2]''', de wiki waar het evenement is aangemaakt.",
 	"campaignevents-email-error-notification-with-detail": "De e-mail kon niet worden verzonden om de volgende reden: $1",
 	"campaignevents-eventslist-types-label": "Soort evenementen",
-	"campaignevents-eventslist-country-label": "Land"
+	"campaignevents-eventslist-country-label": "Land",
+	"campaignevents-event-contribution-event-ended": "Het evenement is afgelopen en er kunnen geen bewerkingen meer aan worden gekoppeld",
+	"campaignevents-event-contribution-not-participant": "Gebruiker is geen deelnemer aan dit evenement",
+	"campaignevents-event-contribution-user-not-global": "Gebruiker is geen globale gebruiker",
+	"campaignevents-event-contribution-timestamp-too-old": "Bewerkingstijdstip is te lang geleden (maximaal 24 uur)",
+	"campaignevents-event-contribution-revision-not-found": "Versie niet gevonden",
+	"campaignevents-event-contribution-not-owner": "U kunt alleen uw eigen bewerkingen aan evenementen koppelen",
+	"campaignevents-event-contribution-tracking-disabled": "Het volgen van bijdragen is voor dit evenement niet ingeschakeld",
+	"campaignevents-event-contribution-event-deleted": "Het evenement is verwijderd"
 }

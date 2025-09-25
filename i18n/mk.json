@@ -567,5 +567,13 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Откажете ја вашата пријава за настан на $2]''', викито на кое е создаден настанот.",
 	"campaignevents-email-error-notification-with-detail": "Не можев да ја испратам е-поштата од следнава причина: $1",
 	"campaignevents-eventslist-types-label": "Видови настани",
-	"campaignevents-eventslist-country-label": "Земја"
+	"campaignevents-eventslist-country-label": "Земја",
+	"campaignevents-event-contribution-event-ended": "Настанот заврши и повеќе не прифаќа поврзувања на уредувања",
+	"campaignevents-event-contribution-not-participant": "КОрисникот не учествува во овој настан",
+	"campaignevents-event-contribution-user-not-global": "Корисникот не е глобален корисник",
+	"campaignevents-event-contribution-timestamp-too-old": "Датумот и времето на уредувањето се престари (највеќе 24 часа)",
+	"campaignevents-event-contribution-revision-not-found": "Преработката не е пронајдена",
+	"campaignevents-event-contribution-not-owner": "Можете да ги поврзувате само вашите уредувања со настани",
+	"campaignevents-event-contribution-tracking-disabled": "Следењето на придонеси не е овозможено за овој настан",
+	"campaignevents-event-contribution-event-deleted": "Настанот е избришан"
 }
