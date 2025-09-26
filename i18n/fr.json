@@ -601,5 +601,13 @@
 	"campaignevents-cancel-page-nonlocal": "Veuillez '''[$1 annuler votre inscription à l’événement sur $2]''', le wiki où l’évènement a été créé.",
 	"campaignevents-email-error-notification-with-detail": "Le courriel n’a pas pu être envoyé pour la raison suivante : $1",
 	"campaignevents-eventslist-types-label": "Types d’événements",
-	"campaignevents-eventslist-country-label": "Pays"
+	"campaignevents-eventslist-country-label": "Pays",
+	"campaignevents-event-contribution-event-ended": "L'événement est terminé et n'accepte plus qu'une modification y soit associé",
+	"campaignevents-event-contribution-not-participant": "L'utilisateur ne participe pas à cet événement",
+	"campaignevents-event-contribution-user-not-global": "L'utilisateur n'est pas un utilisateur global",
+	"campaignevents-event-contribution-timestamp-too-old": "L'horodatage de modification est trop ancien (maximum 24 heures)",
+	"campaignevents-event-contribution-revision-not-found": "Révision non trouvée",
+	"campaignevents-event-contribution-not-owner": "Vous ne pouvez associer que vos propres modifications aux événements",
+	"campaignevents-event-contribution-tracking-disabled": "Le suivi des contributions n'est pas activé pour cet événement",
+	"campaignevents-event-contribution-event-deleted": "L'événement a été supprimé"
 }

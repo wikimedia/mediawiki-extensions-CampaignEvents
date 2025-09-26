@@ -564,5 +564,10 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Peruuta tapahtumailmoittautumisesi sivustolla $2]''', jossa tapahtuma on luotu.",
 	"campaignevents-email-error-notification-with-detail": "Sähköpostia ei voitu lähettää seuraavasta syystä: $1",
 	"campaignevents-eventslist-types-label": "Tapahtumatyypit",
-	"campaignevents-eventslist-country-label": "Maa"
+	"campaignevents-eventslist-country-label": "Maa",
+	"campaignevents-event-contribution-not-participant": "Käyttäjä ei ole tämän tapahtuman osallistuja",
+	"campaignevents-event-contribution-user-not-global": "Käyttäjä ei ole järjestelmänlaajuinen käyttäjä",
+	"campaignevents-event-contribution-timestamp-too-old": "Muokkauksen aikaleima on liian vanha (enintään 24 tuntia)",
+	"campaignevents-event-contribution-revision-not-found": "Versiota ei löytynyt",
+	"campaignevents-event-contribution-event-deleted": "Tapahtuma on poistettu"
 }

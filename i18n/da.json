@@ -78,6 +78,8 @@
 	"campaignevents-edit-field-organizers-placeholder": "Tilføj brugernavn",
 	"campaignevents-edit-field-organizers-creator-title": "Dette er opretteren af begivenheden. Andre arrangører kan ikke fjerne denne bruger.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Denne {{GENDER:$1| bruger}} har ikke tilladelse til at organisere begivenheder.",
+	"campaignevents-edit-field-contribution-stats-label": "Vis bidragsstatistik",
+	"campaignevents-edit-field-contribution-stats-help": "Aktivér bidragsstatistik, så du kan dele og forstå begivenhedens indflydelse. Der gives et resumé og en komplet liste over ændringer.",
 	"campaignevents-edit-field-wiki-type": "Fokuserer denne begivenhed på specifikke wikier?",
 	"campaignevents-edit-field-wiki-type-none": "Ingen specifikke wikier",
 	"campaignevents-edit-field-wiki-type-all": "Ja (åben for alle wikier)",
@@ -566,5 +568,13 @@
 	"campaignevents-cancel-page-nonlocal": "Venligst '''[$1 annuller din begivenhedstilmelding på $2 ]''', den wiki hvor begivenheden blev oprettet.",
 	"campaignevents-email-error-notification-with-detail": "E-mailen kunne ikke sendes af følgende årsag: $1",
 	"campaignevents-eventslist-types-label": "Begivenhedstyper",
-	"campaignevents-eventslist-country-label": "Land"
+	"campaignevents-eventslist-country-label": "Land",
+	"campaignevents-event-contribution-event-ended": "Begivenheden er afsluttet og accepterer ikke længere redigeringstilknytninger",
+	"campaignevents-event-contribution-not-participant": "Brugeren deltager ikke i denne begivenhed",
+	"campaignevents-event-contribution-user-not-global": "Brugeren er ikke en global bruger",
+	"campaignevents-event-contribution-timestamp-too-old": "Redigeringstidsstemplet er for gammelt (maks. 24 timer)",
+	"campaignevents-event-contribution-revision-not-found": "Sideversion ikke fundet",
+	"campaignevents-event-contribution-not-owner": "Du kan kun knytte dine egne redigeringer til begivenheder",
+	"campaignevents-event-contribution-tracking-disabled": "Bidragssporing er ikke aktiveret for denne begivenhed",
+	"campaignevents-event-contribution-event-deleted": "Begivenheden er blevet slettet"
 }

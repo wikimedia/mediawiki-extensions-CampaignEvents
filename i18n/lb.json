@@ -544,5 +544,9 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Annuléiert wgl. Är Evenementsumeldung op $2]''', der Wiki, op där d'Evenement ugeluecht gouf.",
 	"campaignevents-email-error-notification-with-detail": "D'E-Mail konnt aus dem follgende Grond net geschéckt ginn: $1",
 	"campaignevents-eventslist-types-label": "Evenementstyppen",
-	"campaignevents-eventslist-country-label": "Land"
+	"campaignevents-eventslist-country-label": "Land",
+	"campaignevents-event-contribution-not-participant": "De Benotzer ass kee Participant vun dësem Evenement",
+	"campaignevents-event-contribution-user-not-global": "De Benotzer ass kee globale Benotzer",
+	"campaignevents-event-contribution-revision-not-found": "Versioun net fonnt",
+	"campaignevents-event-contribution-event-deleted": "D'Evenement gouf geläscht"
 }

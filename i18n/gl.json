@@ -574,5 +574,13 @@
 	"campaignevents-cancel-page-nonlocal": "'''[$1 Cancela a túa inscrición ao evento en $2]''', o wiki onde se creou o evento.",
 	"campaignevents-email-error-notification-with-detail": "Non se puido enviar o correo electrónico polo seguinte motivo: $1",
 	"campaignevents-eventslist-types-label": "Tipos de eventos",
-	"campaignevents-eventslist-country-label": "País"
+	"campaignevents-eventslist-country-label": "País",
+	"campaignevents-event-contribution-event-ended": "O evento rematou e xa non acepta máis modificacións asociadas a el",
+	"campaignevents-event-contribution-not-participant": "O usuario non participa neste evento",
+	"campaignevents-event-contribution-user-not-global": "O usuario non é un usuario global",
+	"campaignevents-event-contribution-timestamp-too-old": "A marca de tempo da modificación é demasiado antiga (o máximo son 24 horas)",
+	"campaignevents-event-contribution-revision-not-found": "Non se atopou a revisión",
+	"campaignevents-event-contribution-not-owner": "Só podes asociar as túas propias modificacións aos eventos",
+	"campaignevents-event-contribution-tracking-disabled": "O seguimento das contribucións non está activado para este evento",
+	"campaignevents-event-contribution-event-deleted": "Eliminouse o evento"
 }
