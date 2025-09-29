@@ -6,49 +6,60 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContribution
 
 use InvalidArgumentException;
 use MediaWiki\Content\Content;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\RevisionStoreFactory;
+use MediaWiki\Tests\MockWikiMapTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
+use MockHttpTrait;
+use MWHttpRequest;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
+ * This would ideally be a unit test, but can't due to some global state usages.
+ *
  * @group Test
  * @covers \MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics
  */
 class EventContributionComputeMetricsTest extends MediaWikiIntegrationTestCase {
-	private EventContributionComputeMetrics $computeMetrics;
-	private MockObject $revisionStore;
-	private MockObject $revisionStoreFactory;
-	private MockObject $titleFormatter;
+	use MockWikiMapTrait;
+	use MockHttpTrait;
 
-	protected function setUp(): void {
-		parent::setUp();
+	private function getComputeMetrics(
+		RevisionStore $revisionStore,
+		TitleFormatter $titleFormatter,
+		array $extraSites = [],
+		?MWHttpRequest $httpRequest = null,
+	): EventContributionComputeMetrics {
+		$revisionStoreFactory = $this->createMock( RevisionStoreFactory::class );
+		$revisionStoreFactory->method( 'getRevisionStore' )->willReturn( $revisionStore );
+		$this->setService( 'RevisionStoreFactory', $revisionStoreFactory );
 
-		$this->revisionStore = $this->createMock( RevisionStore::class );
-		$this->revisionStoreFactory = $this->createMock( RevisionStoreFactory::class );
-		$this->revisionStoreFactory->method( 'getRevisionStore' )->willReturn( $this->revisionStore );
+		$this->setService( 'TitleFormatter', $titleFormatter );
 
-		$this->titleFormatter = $this->createMock( TitleFormatter::class );
-		$this->titleFormatter->method( 'getPrefixedText' )->willReturn( 'TestPage' );
+		$this->mockWikiMap( 'https://example.com', $extraSites );
+
+		$this->installMockHttp( $httpRequest );
 
 		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$centralUserLookup->method( 'getUserName' )->willReturn( 'Test username' );
 
 		// Mock the services
-		$this->setService( 'RevisionStoreFactory', $this->revisionStoreFactory );
-		$this->setService( 'TitleFormatter', $this->titleFormatter );
+		$this->setService( 'RevisionStoreFactory', $revisionStoreFactory );
+		$this->setService( 'TitleFormatter', $titleFormatter );
 		$this->setService( CampaignsCentralUserLookup::SERVICE_NAME, $centralUserLookup );
 
-		// Get the service through the proper DI system
-		$this->computeMetrics = CampaignEventsServices::getEventContributionComputeMetrics();
+		return CampaignEventsServices::getEventContributionComputeMetrics();
 	}
 
 	/**
@@ -74,13 +85,14 @@ class EventContributionComputeMetricsTest extends MediaWikiIntegrationTestCase {
 		$revision = $this->createMockRevision( $revisionId, $revisionSize, $parentId );
 		$parentRevision = $parentSize !== null ? $this->createMockRevision( $parentId, $parentSize, null ) : null;
 
+		$revisionStore = $this->createMock( RevisionStore::class );
 		if ( $shouldThrow ) {
-			$this->revisionStore->expects( $this->once() )
+			$revisionStore->expects( $this->once() )
 				->method( 'getRevisionById' )
 				->with( $revisionId )
 				->willReturn( null );
 		} else {
-			$this->revisionStore->expects( $this->exactly( 2 ) )
+			$revisionStore->expects( $this->exactly( $parentRevision ? 2 : 1 ) )
 				->method( 'getRevisionById' )
 				->willReturnMap( [
 					[ $revisionId, 0, null, $revision ],
@@ -88,12 +100,15 @@ class EventContributionComputeMetricsTest extends MediaWikiIntegrationTestCase {
 				] );
 		}
 
-		$result = $this->computeMetrics->computeEventContribution(
+		$titleFormatter = $this->createMock( TitleFormatter::class );
+		// Mocking needed because there is no return type declaration on `getPrefixedText`.
+		$titleFormatter->method( 'getPrefixedText' )->willReturn( 'Some string' );
+		$computeMetrics = $this->getComputeMetrics( $revisionStore, $titleFormatter );
+		$result = $computeMetrics->computeEventContribution(
 			$revisionId,
 			123,
 			456,
-			WikiMap::getCurrentWikiId(),
-			'20240101120000'
+			WikiMap::getCurrentWikiId()
 		);
 
 		if ( !$shouldThrow ) {
@@ -188,7 +203,12 @@ class EventContributionComputeMetricsTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * Helper method to create a simple mock revision
 	 */
-	private function createMockRevision( int $id, int $size, ?int $parentId ): MockObject {
+	private function createMockRevision(
+		int $id,
+		int $size,
+		?int $parentId,
+		?PageIdentity $page = null
+	): MockObject&RevisionRecord {
 		$revision = $this->createMock( RevisionRecord::class );
 
 		$revision->method( 'getId' )->willReturn( $id );
@@ -201,12 +221,63 @@ class EventContributionComputeMetricsTest extends MediaWikiIntegrationTestCase {
 		$content->method( 'getSize' )->willReturn( $size );
 		$revision->method( 'getContent' )->willReturn( $content );
 
-		$page = $this->createMock( PageIdentity::class );
-		$page->method( 'getNamespace' )->willReturn( 0 );
-		$page->method( 'getDBkey' )->willReturn( 'TestPage' );
-		$page->method( 'getId' )->willReturn( 123 );
+		$page ??= new PageIdentityValue( 123, NS_MAIN, 'TestPage', WikiAwareEntity::LOCAL );
 		$revision->method( 'getPage' )->willReturn( $page );
 
 		return $revision;
+	}
+
+	public function testGetPagePrefixedText__local() {
+		$this->overrideConfigValue( MainConfigNames::LanguageCode, 'en' );
+		$revID = 987;
+		$localPage = new PageIdentityValue( 123, NS_HELP, 'I need somebody', WikiAwareEntity::LOCAL );
+		$prefixedText = 'Help:I need somebody';
+
+		$revisionStore = $this->createMock( RevisionStore::class );
+		$revisionStore->method( 'getRevisionById' )
+			->with( $revID )
+			->willReturn( $this->createMockRevision( $revID, 1000, null, $localPage ) );
+		$titleFormatter = $this->createMock( TitleFormatter::class );
+		$titleFormatter->expects( $this->atLeastOnce() )
+			->method( 'getPrefixedText' )
+			->with( $localPage )
+			->willReturn( $prefixedText );
+		$computeMetrics = $this->getComputeMetrics( $revisionStore, $titleFormatter );
+
+		$contrib = $computeMetrics->computeEventContribution( $revID, 456, 789, WikiMap::getCurrentWikiId() );
+		$this->assertSame( $prefixedText, $contrib->getPagePrefixedtext() );
+	}
+
+	public function testGetPagePrefixedText__foreign() {
+		$this->overrideConfigValue( MainConfigNames::LanguageCode, 'en' );
+		$revID = 987;
+		$otherWikiID = 'someotherwiki';
+		$foreignPage = new PageIdentityValue( 123, 999999, 'Foreign title', $otherWikiID );
+		$foreignPrefixedText = 'CustomNS:Foreign title';
+
+		$revisionStore = $this->createMock( RevisionStore::class );
+		$revisionStore->method( 'getRevisionById' )
+			->with( $revID )
+			->willReturn( $this->createMockRevision( $revID, 1000, null, $foreignPage ) );
+		// TitleFormatter shouldn't be used for foreign pages.
+		$titleFormatter = $this->createNoOpMock( TitleFormatter::class );
+		$httpResp = [
+			'query' => [
+				'pages' => [
+					[ 'title' => $foreignPrefixedText ]
+				],
+			]
+		];
+		$httpReq = $this->makeFakeHttpRequest( json_encode( $httpResp ) );
+
+		$computeMetrics = $this->getComputeMetrics(
+			$revisionStore,
+			$titleFormatter,
+			[ [ 'wikiId' => $otherWikiID, 'server' => 'https://whatever.example.com' ] ],
+			$httpReq
+		);
+
+		$contrib = $computeMetrics->computeEventContribution( $revID, 456, 789, $otherWikiID );
+		$this->assertSame( $foreignPrefixedText, $contrib->getPagePrefixedtext() );
 	}
 }

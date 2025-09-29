@@ -477,6 +477,9 @@ return [
 			$services->getRevisionStoreFactory(),
 			$services->getTitleFormatter(),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->getMainWANObjectCache(),
+			$services->getSiteLookup(),
+			$services->getHttpRequestFactory(),
 		);
 	},
 	EventContributionValidator::SERVICE_NAME => static function (
