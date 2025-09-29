@@ -500,5 +500,7 @@
 	"campaignevents-event-contribution-not-participant": "L'utente non è un partecipante a questo evento",
 	"campaignevents-event-contribution-user-not-global": "L'utente non è un utente globale",
 	"campaignevents-event-contribution-revision-not-found": "Versione non trovata",
-	"campaignevents-event-contribution-event-deleted": "L'evento è stato cancellato"
+	"campaignevents-event-contribution-event-deleted": "L'evento è stato cancellato",
+	"campaignevents-postedit-dialog-select-placeholder": "Seleziona evento",
+	"campaignevents-postedit-dialog-action-no": "No, grazie"
 }
