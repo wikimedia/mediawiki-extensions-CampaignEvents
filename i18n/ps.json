@@ -121,6 +121,10 @@
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|گډنوال}}",
 	"campaignevents-event-details-in-person-event-label": "ځاني پېښه",
 	"campaignevents-event-details-online-label": "پرليکه پېښه",
+	"campaignevents-event-details-register-prompt": "د دې مالوماتو ليدلو لپاره تاسو بايد نوم‌ليکنه وکړئ",
+	"campaignevents-event-details-view-event-page": "پېښې پاڼه کتل",
+	"campaignevents-event-details-remove-participant-cancel-btn": "ناگارل",
 	"campaignevents-event-details-no-event-id-provided": "د پېښې پېژند چمتو‌کول",
-	"campaignevents-event-details-invalid-id": "د پېښې يو باوري پېژند چمتو کول."
+	"campaignevents-event-details-invalid-id": "د پېښې يو باوري پېژند چمتو کول.",
+	"campaignevents-event-details-event": "پېښې سپيناوی: $1"
 }

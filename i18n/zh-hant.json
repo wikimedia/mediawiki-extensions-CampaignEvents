@@ -11,7 +11,8 @@
 			"沈澄心",
 			"Ericliu1912",
 			"ZhaoFJx",
-			"魔琴"
+			"魔琴",
+			"LowensteinYang"
 		]
 	},
 	"campaignevents-desc": "為活動籌辦人員和參與者提供功能。",
@@ -187,5 +188,6 @@
 	"campaignevents-event-details-remove-all-participant-notification": "已移除所有參與者",
 	"campaignevents-unregister-participants-permission-denied": "您無權移除參與者",
 	"campaignevents-unregister-participants-registration-deleted": "因活動已結束，您無權移除參與者。",
+	"campaignevents-event-details-remove-participant-notification-error": "嘗試移除 {{PLURAL:$1|參與者|參與者們}} 時發生錯誤",
 	"campaignevents-event-details-search-participants-placeholder": "搜尋參與者"
 }
