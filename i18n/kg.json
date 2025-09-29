@@ -3,7 +3,8 @@
 		"authors": [
 			"BOKOBA VEROLY",
 			"Bergerdias",
-			"Cgmbo"
+			"Cgmbo",
+			"Marphy 123"
 		]
 	},
 	"campaignevents-desc": "Yo ke pesaka mambu sambu na bantu yina ke yidikaka bakampanye mpi bantu yina ke vukana.",
@@ -242,5 +243,13 @@
 	"campaignevents-eventpage-unregister-confirmation-title": "Kukatula zina na yandi",
 	"campaignevents-eventpage-unregister-confirmation-body": "Keti nge ke ndima nde nge ke zola kusukisa kusonikisa na nge?",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ee",
-	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ve"
+	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ve",
+	"campaignevents-event-contribution-event-ended": "Yo me mana mpi yo ke ndima diaka ve kuvukana ya kutomisa",
+	"campaignevents-event-contribution-not-participant": "Muntu ya ke sadila yo ke vukana ve na diambu yai",
+	"campaignevents-event-contribution-user-not-global": "Muntu ya ke sadila yo kele ve muntu ya ke sadila na ntoto ya mvimba",
+	"campaignevents-event-contribution-timestamp-too-old": "Temps de rédaction kele ya ntama kibeni (na kiteso ya bangunga 24)",
+	"campaignevents-event-contribution-revision-not-found": "Bo me mona ve mbalula",
+	"campaignevents-event-contribution-not-owner": "Nge lenda vukisa kaka mambu ya nge mosi ti mambu ya nge ke yidika",
+	"campaignevents-event-contribution-tracking-disabled": "Yo kele ve na ndonga ya bantu yina ke pesaka makabu sambu na diambu yai",
+	"campaignevents-event-contribution-event-deleted": "Bo me katula diambu yango"
 }

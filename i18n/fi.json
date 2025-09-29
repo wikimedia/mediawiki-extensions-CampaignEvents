@@ -569,5 +569,13 @@
 	"campaignevents-event-contribution-user-not-global": "Käyttäjä ei ole järjestelmänlaajuinen käyttäjä",
 	"campaignevents-event-contribution-timestamp-too-old": "Muokkauksen aikaleima on liian vanha (enintään 24 tuntia)",
 	"campaignevents-event-contribution-revision-not-found": "Versiota ei löytynyt",
-	"campaignevents-event-contribution-event-deleted": "Tapahtuma on poistettu"
+	"campaignevents-event-contribution-not-owner": "Voit liittää vain omia muokkauksiasi tapahtumiin",
+	"campaignevents-event-contribution-event-deleted": "Tapahtuma on poistettu",
+	"campaignevents-postedit-dialog-title-single": "Liitä tämä muokkaus tapahtumaan $1?",
+	"campaignevents-postedit-dialog-title-multiple": "Liitämä tämä muokkaus tapahtumaan?",
+	"campaignevents-postedit-dialog-intro-single": "Olet ilmoittautunut tapahtumaan $1, joka on parhaillaan käynnissä. Liittyykö tämä muokkaus siihen tapahtumaan?",
+	"campaignevents-postedit-dialog-intro-multiple": "Olet ilmoittautunut useaan parhaillaan käynnissä olevaan tapahtumaan. Liittyykö tämä muokkaus johonkin niistä? Jos kyllä, valitse mikä.",
+	"campaignevents-postedit-dialog-select-placeholder": "Valitse tapahtuma",
+	"campaignevents-postedit-dialog-action-no": "Ei kiitos",
+	"campaignevents-postedit-dialog-action-yes": "Kyllä"
 }

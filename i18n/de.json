@@ -575,5 +575,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Version nicht gefunden",
 	"campaignevents-event-contribution-not-owner": "Du kannst deine eigenen Änderungen nur mit Veranstaltungen verknüpfen",
 	"campaignevents-event-contribution-tracking-disabled": "Die Beitragsverfolgung ist für diese Veranstaltung nicht aktiviert",
-	"campaignevents-event-contribution-event-deleted": "Die Veranstaltung wurde gelöscht"
+	"campaignevents-event-contribution-event-deleted": "Die Veranstaltung wurde gelöscht",
+	"campaignevents-postedit-dialog-title-single": "Diese Bearbeitung mit $1 verknüpfen?",
+	"campaignevents-postedit-dialog-title-multiple": "Diese Bearbeitung mit einer Veranstaltung verknüpfen?",
+	"campaignevents-postedit-dialog-intro-single": "Du bist für eine derzeit aktive Veranstaltung registriert. Ist diese Bearbeitung für $1?",
+	"campaignevents-postedit-dialog-intro-multiple": "Du bist für mehrere derzeit aktive Veranstaltungen angemeldet. Handelt es sich bei dieser Bearbeitung um eine der Veranstaltungen? Falls ja, wähle bitte die Veranstaltung aus.",
+	"campaignevents-postedit-dialog-select-placeholder": "Veranstaltung auswählen",
+	"campaignevents-postedit-dialog-action-no": "Nein danke",
+	"campaignevents-postedit-dialog-action-yes": "Ja"
 }

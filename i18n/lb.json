@@ -83,6 +83,7 @@
 	"campaignevents-edit-field-type-online-and-in-person": "Online- a Presenzevenement",
 	"campaignevents-edit-field-meeting-url": "URL vum Meeting",
 	"campaignevents-edit-field-country": "Land",
+	"campaignevents-edit-field-country-placeholder": "Sicht e Land eraus",
 	"campaignevents-edit-field-address": "Adress",
 	"campaignevents-edit-field-chat-url": "Invitatioun fir de Gruppenchat",
 	"campaignevents-edit-field-chat-url-help": "Wann Dir eng Onlinechatgrupp fir d'Participantë vun dësem Evenement hutt, kënnt Dir den Invitatiounslink hei derbäisetzen. Participantë gesinn den Invitatiounslink, nodeems se sech ugemellt hunn.",
@@ -548,5 +549,8 @@
 	"campaignevents-event-contribution-not-participant": "De Benotzer ass kee Participant vun dësem Evenement",
 	"campaignevents-event-contribution-user-not-global": "De Benotzer ass kee globale Benotzer",
 	"campaignevents-event-contribution-revision-not-found": "Versioun net fonnt",
-	"campaignevents-event-contribution-event-deleted": "D'Evenement gouf geläscht"
+	"campaignevents-event-contribution-event-deleted": "D'Evenement gouf geläscht",
+	"campaignevents-postedit-dialog-select-placeholder": "Evenement eraussichen",
+	"campaignevents-postedit-dialog-action-no": "Nee merci",
+	"campaignevents-postedit-dialog-action-yes": "Jo"
 }

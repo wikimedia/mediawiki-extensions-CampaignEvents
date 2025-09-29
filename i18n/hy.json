@@ -70,5 +70,7 @@
 	"campaignevents-register-question-affiliate-option-affiliate": "Այո",
 	"campaignevents-edit-field-clickwrap-form-continue": "Շարունակել",
 	"campaignevents-myinvitationslist-new-button": "Նոր",
-	"prefs-campaignevents-invitations": "Հրավերների ցանկեր"
+	"prefs-campaignevents-invitations": "Հրավերների ցանկեր",
+	"campaignevents-postedit-dialog-action-no": "Ոչ, շնորհակալություն",
+	"campaignevents-postedit-dialog-action-yes": "Այո"
 }

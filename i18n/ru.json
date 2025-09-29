@@ -194,5 +194,8 @@
 	"campaignevents-worklist-error-empty": "Введите хотя бы одно название статьи.",
 	"campaignevents-allevents-placeholder-add-wikis": "Добавить вики...",
 	"campaignevents-eventslist-wiki-label": "Вики",
-	"campaignevents-eventpage-dialog-topics-label": "Темы"
+	"campaignevents-eventpage-dialog-topics-label": "Темы",
+	"campaignevents-postedit-dialog-select-placeholder": "Выберите событие",
+	"campaignevents-postedit-dialog-action-no": "Нет, спасибо",
+	"campaignevents-postedit-dialog-action-yes": "Да"
 }

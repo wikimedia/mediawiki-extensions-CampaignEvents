@@ -582,5 +582,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Non se atopou a revisión",
 	"campaignevents-event-contribution-not-owner": "Só podes asociar as túas propias modificacións aos eventos",
 	"campaignevents-event-contribution-tracking-disabled": "O seguimento das contribucións non está activado para este evento",
-	"campaignevents-event-contribution-event-deleted": "Eliminouse o evento"
+	"campaignevents-event-contribution-event-deleted": "Eliminouse o evento",
+	"campaignevents-postedit-dialog-title-single": "Queres asociar esta edición con \"$1\"?",
+	"campaignevents-postedit-dialog-title-multiple": "Queres asociar esta edición cun evento?",
+	"campaignevents-postedit-dialog-intro-single": "Tes un rexistro nun evento que está activo nestes intres. Esta edición é para \"$1\"?",
+	"campaignevents-postedit-dialog-intro-multiple": "Tes rexistros en varios eventos que están activos nestes intres. Esta edición é para algún dos eventos? En caso afirmativo, selecciona cal.",
+	"campaignevents-postedit-dialog-select-placeholder": "Seleccionar un evento",
+	"campaignevents-postedit-dialog-action-no": "Non, grazas",
+	"campaignevents-postedit-dialog-action-yes": "Si"
 }

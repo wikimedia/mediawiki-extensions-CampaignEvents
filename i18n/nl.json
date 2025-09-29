@@ -581,5 +581,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Versie niet gevonden",
 	"campaignevents-event-contribution-not-owner": "U kunt alleen uw eigen bewerkingen aan evenementen koppelen",
 	"campaignevents-event-contribution-tracking-disabled": "Het volgen van bijdragen is voor dit evenement niet ingeschakeld",
-	"campaignevents-event-contribution-event-deleted": "Het evenement is verwijderd"
+	"campaignevents-event-contribution-event-deleted": "Het evenement is verwijderd",
+	"campaignevents-postedit-dialog-title-single": "Deze bewerking koppelen aan $1?",
+	"campaignevents-postedit-dialog-title-multiple": "Deze bewerking aan een evenement koppelen?",
+	"campaignevents-postedit-dialog-intro-single": "U bent ingeschreven voor een evenement dat nu actief is. Is deze bewerking voor $1?",
+	"campaignevents-postedit-dialog-intro-multiple": "U bent ingeschreven voor meerdere evenementen die nu actief zijn. Betreft deze bewerking één van de evenementen? Zo ja, selecteer dan dat evenement.",
+	"campaignevents-postedit-dialog-select-placeholder": "Selecteer evenement",
+	"campaignevents-postedit-dialog-action-no": "Nee, bedankt",
+	"campaignevents-postedit-dialog-action-yes": "Ja"
 }

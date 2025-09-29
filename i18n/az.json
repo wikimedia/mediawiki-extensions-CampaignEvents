@@ -575,5 +575,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Versiya tapılmadı",
 	"campaignevents-event-contribution-not-owner": "Siz yalnız öz redaktələrinizi tədbirlər ilə əlaqələndirə bilərsiniz",
 	"campaignevents-event-contribution-tracking-disabled": "Bu tədbir üçün töhfələrin izlənməsi aktiv deyil",
-	"campaignevents-event-contribution-event-deleted": "Tədbir silindi"
+	"campaignevents-event-contribution-event-deleted": "Tədbir silindi",
+	"campaignevents-postedit-dialog-title-single": "Bu redaktə $1 ilə əlaqələndirilsin?",
+	"campaignevents-postedit-dialog-title-multiple": "Bu redaktə tədbirlə əlaqələndirilsin?",
+	"campaignevents-postedit-dialog-intro-single": "Siz hazırda aktiv olan bir tədbir üçün qeydiyyatdan keçmisiniz. Bu redaktə $1 üçündür?",
+	"campaignevents-postedit-dialog-intro-multiple": "Siz hal-hazırda aktiv olan çoxsaylı tədbirlərdə qeydiyyatdan keçmisiniz. Bu redaktə tədbirlərdən biri üçündür? Əgər belədirsə, zəhmət olmasa həmin tədbiri seçin.",
+	"campaignevents-postedit-dialog-select-placeholder": "Tədbir seç",
+	"campaignevents-postedit-dialog-action-no": "Xeyr, təşəkkürlər",
+	"campaignevents-postedit-dialog-action-yes": "Bəli"
 }

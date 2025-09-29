@@ -4,6 +4,7 @@
 			"BOKOBA VEROLY",
 			"Eruedin",
 			"Lydie maliki",
+			"Marphy 123",
 			"Yaw tuba"
 		]
 	},
@@ -517,5 +518,13 @@
 	"campaignevents-allevents-transclusion-more-link": "Luká koyeba makambo mosusu mpe bituluku mosusu",
 	"communityconfiguration-campaignevents-title": "Makambo ya Campagne",
 	"communityconfiguration-campaignevents-description": "Ba options ya configuration pona extension ya CampaignEvents",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Ba espaces ya kombo ya événement ya valide"
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Ba espaces ya kombo ya événement ya valide",
+	"campaignevents-event-contribution-event-ended": "Evenement esili mpe ezali lisusu kondima ba associations ya édition te",
+	"campaignevents-event-contribution-not-participant": "Mosaleli azali mosangani na molulu oyo te",
+	"campaignevents-event-contribution-user-not-global": "Mosali azali mosali ya mokili mobimba te",
+	"campaignevents-event-contribution-timestamp-too-old": "Edit timestamp ezali ya kala mingi (maximum 24 heures)",
+	"campaignevents-event-contribution-revision-not-found": "Bozongeli ezwami te",
+	"campaignevents-event-contribution-not-owner": "Okoki kaka kosangisa ba éditions na yo moko na ba événements",
+	"campaignevents-event-contribution-tracking-disabled": "Bolandi ya makabo efungolami te mpo na likambo oyo",
+	"campaignevents-event-contribution-event-deleted": "Likambo yango elongolami"
 }

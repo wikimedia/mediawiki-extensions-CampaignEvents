@@ -534,5 +534,7 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Próximos eventos",
 	"campaignevents-allevents-label-upcoming-events-description": "Eventos futuros: eventos que comenzarán en las fechas seleccionadas",
 	"campaignevents-allevents-label-ongoing-events-title": "Eventos en curso",
-	"campaignevents-allevents-label-ongoing-events-description": "Eventos en curso: eventos ya iniciados pero que continúan activos en las fechas seleccionadas"
+	"campaignevents-allevents-label-ongoing-events-description": "Eventos en curso: eventos ya iniciados pero que continúan activos en las fechas seleccionadas",
+	"campaignevents-postedit-dialog-action-no": "No, gracias",
+	"campaignevents-postedit-dialog-action-yes": "Sí"
 }

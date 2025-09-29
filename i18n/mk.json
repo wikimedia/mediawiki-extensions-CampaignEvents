@@ -575,5 +575,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Преработката не е пронајдена",
 	"campaignevents-event-contribution-not-owner": "Можете да ги поврзувате само вашите уредувања со настани",
 	"campaignevents-event-contribution-tracking-disabled": "Следењето на придонеси не е овозможено за овој настан",
-	"campaignevents-event-contribution-event-deleted": "Настанот е избришан"
+	"campaignevents-event-contribution-event-deleted": "Настанот е избришан",
+	"campaignevents-postedit-dialog-title-single": "Да го поврзам уредувањево со $1?",
+	"campaignevents-postedit-dialog-title-multiple": "Да го поврзам уредувањево со настан?",
+	"campaignevents-postedit-dialog-intro-single": "Пријавени сте на настан кој е во тек. Дали ова е уредување за $1?",
+	"campaignevents-postedit-dialog-intro-multiple": "Пријавени сте за повеќе настани кои сега се во тек. Дали ова уредување е за некој од нив? Ако е, тогаш изберете за кој.",
+	"campaignevents-postedit-dialog-select-placeholder": "Избери настан",
+	"campaignevents-postedit-dialog-action-no": "Не, благодарам",
+	"campaignevents-postedit-dialog-action-yes": "Да"
 }

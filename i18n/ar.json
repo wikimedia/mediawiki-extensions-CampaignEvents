@@ -589,5 +589,12 @@
 	"campaignevents-event-contribution-revision-not-found": "لم يتم العثور على المراجعة",
 	"campaignevents-event-contribution-not-owner": "يمكنك فقط ربط تعديلاتك الخاصة بالأحداث",
 	"campaignevents-event-contribution-tracking-disabled": "لم يتم تمكين تتبع المساهمة لهذا الحدث",
-	"campaignevents-event-contribution-event-deleted": "تم حذف الحدث"
+	"campaignevents-event-contribution-event-deleted": "تم حذف الحدث",
+	"campaignevents-postedit-dialog-title-single": "ربط هذا التعديل بـ $1 ؟",
+	"campaignevents-postedit-dialog-title-multiple": "ربط هذا التعديل بحدث؟",
+	"campaignevents-postedit-dialog-intro-single": "أنت مسجل في حدث نشط حاليًا. هل هذا التعديل $1 ؟",
+	"campaignevents-postedit-dialog-intro-multiple": "أنت مسجل في عدة فعاليات نشطة حاليًا. هل هذا التعديل يخص إحدى الفعاليات؟ إذا كانت الإجابة بنعم، يُرجى تحديد أي منها.",
+	"campaignevents-postedit-dialog-select-placeholder": "حدد الحدث",
+	"campaignevents-postedit-dialog-action-no": "ًلا شكرا",
+	"campaignevents-postedit-dialog-action-yes": "نعم"
 }

@@ -576,5 +576,20 @@
 	"campaignevents-cancel-page-nonlocal": "Будь ласка, '''[$1 скасовуйте свою реєстрацію на подію у {{GRAMMAR:locative|$2}}]''', тобто тій вікі, де її було створено.",
 	"campaignevents-email-error-notification-with-detail": "Електронний лист не вдалося надіслати з такої причини: $1",
 	"campaignevents-eventslist-types-label": "Типи подій",
-	"campaignevents-eventslist-country-label": "Країна"
+	"campaignevents-eventslist-country-label": "Країна",
+	"campaignevents-event-contribution-event-ended": "Подія завершилася, і зазначити, що редагування робилося під час події, більше не можна",
+	"campaignevents-event-contribution-not-participant": "Користувач не є учасником цієї події",
+	"campaignevents-event-contribution-user-not-global": "Користувач не є глобальним користувачем",
+	"campaignevents-event-contribution-timestamp-too-old": "Часова мітка редагування занадто стара (максимум 24 години)",
+	"campaignevents-event-contribution-revision-not-found": "Версію не знайдено",
+	"campaignevents-event-contribution-not-owner": "Ви можете пов'язувати з подіями лише свої власні редагування",
+	"campaignevents-event-contribution-tracking-disabled": "Відстеження внеску не ввімкнено для цієї події",
+	"campaignevents-event-contribution-event-deleted": "Подія вилучена",
+	"campaignevents-postedit-dialog-title-single": "Пов'язати це редагування з $1?",
+	"campaignevents-postedit-dialog-title-multiple": "Пов'язати це редагування з подією?",
+	"campaignevents-postedit-dialog-intro-single": "Ви зареєстровані на подію, яка зараз активна. Це редагування пов'язане з $1?",
+	"campaignevents-postedit-dialog-intro-multiple": "Ви зареєстровані на кілька подій, які зараз активні. Це редагування стосується однієї з подій? Якщо так, будь ласка, виберіть, якої саме.",
+	"campaignevents-postedit-dialog-select-placeholder": "Вибрати подію",
+	"campaignevents-postedit-dialog-action-no": "Ні, дякую",
+	"campaignevents-postedit-dialog-action-yes": "Так"
 }

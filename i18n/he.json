@@ -577,5 +577,12 @@
 	"campaignevents-event-contribution-revision-not-found": "הגרסה לא נמצאה",
 	"campaignevents-event-contribution-not-owner": "ניתן לשייך רק את העריכות של עצמך לאירועים",
 	"campaignevents-event-contribution-tracking-disabled": "מעקב אחרי תרומות אינו מופעל עבור אירוע הזה",
-	"campaignevents-event-contribution-event-deleted": "האירוע נמחק"
+	"campaignevents-event-contribution-event-deleted": "האירוע נמחק",
+	"campaignevents-postedit-dialog-title-single": "לשייך את העריכה הזאת לאירוע $1?",
+	"campaignevents-postedit-dialog-title-multiple": "לשייך את העריכה הזאת לאירוע?",
+	"campaignevents-postedit-dialog-intro-single": "נרשמת לאירוע שפעית עכשיו. האם זאת עריכה בשביל $1?",
+	"campaignevents-postedit-dialog-intro-multiple": "נרשמת לאירוע שפעית עכשיו. האם זאת עריכה בשביל אחד מהאירועים? אם כן, נא לבחור איזה אחד.",
+	"campaignevents-postedit-dialog-select-placeholder": "נא לבחור אירוע",
+	"campaignevents-postedit-dialog-action-no": "לא, תודה",
+	"campaignevents-postedit-dialog-action-yes": "כֵּן"
 }

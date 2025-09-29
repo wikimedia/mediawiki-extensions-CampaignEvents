@@ -253,5 +253,6 @@
 	"campaignevents-eventpage-dialog-event-types-label": "Тип догађаја",
 	"campaignevents-email-error-notification-with-detail": "Имејл није послат из следећег разлога: $1",
 	"campaignevents-eventslist-types-label": "Врсте догађаја",
-	"campaignevents-eventslist-country-label": "Држава"
+	"campaignevents-eventslist-country-label": "Држава",
+	"campaignevents-event-contribution-revision-not-found": "Ревизија није пронађена"
 }
