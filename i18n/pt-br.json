@@ -78,6 +78,7 @@
 	"campaignevents-edit-field-organizers-placeholder": "Adicionar nome de usuário",
 	"campaignevents-edit-field-organizers-creator-title": "Este é o criador do evento, outros organizadores não podem remover este usuário.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "{{GENDER:$1|Este usuário|Esta usuária}} não tem permissão para organizar eventos.",
+	"campaignevents-edit-field-contribution-stats-label": "Mostrar estatísticas de contribuição",
 	"campaignevents-edit-field-wiki-type": "Este evento se concentra em wikis específicas?",
 	"campaignevents-edit-field-wiki-type-none": "Nenhuma wiki específica",
 	"campaignevents-edit-field-wiki-type-all": "Sim (aberto a todas as wikis)",
@@ -171,6 +172,8 @@
 	"campaignevents-allevents-label-events-per-page": "Eventos por página",
 	"campaignevents-allevents-label-start-date": "De:",
 	"campaignevents-allevents-label-end-date": "Para",
+	"campaignevents-allevents-label-country": "País",
+	"campaignevents-allevents-country-all": "Todos os países",
 	"campaignevents-eventslist-participation-options-label": "Opções de participação",
 	"campaignevents-eventslist-organizer-label": "Organizadores",
 	"campaignevents-eventslist-column-date": "Data",
@@ -308,6 +311,7 @@
 	"campaignevents-event-details-tab-email": "Mensagem",
 	"campaignevents-event-details-tab-event-details": "Detalhes do evento",
 	"campaignevents-event-details-tab-stats": "Estatísticas das respostas",
+	"campaignevents-event-details-tab-contributions": "Contribuições",
 	"campaignevents-event-details-search-participants-placeholder": "Pesquisar por participantes",
 	"campaignevents-event-details-organizers-view-more": "Ver mais",
 	"campaignevents-event-details-organizers-noscript": "Precisa de ativar o JavaScript para ver a lista completa de organizadores.",
@@ -515,5 +519,8 @@
 	"campaignevents-allevents-placeholder-add-event-types": "Adicionar tipos de eventos...",
 	"campaignevents-eventpage-dialog-event-types-label": "Tipos de eventos",
 	"campaignevents-eventslist-types-label": "Tipos de eventos",
-	"campaignevents-eventslist-country-label": "País"
+	"campaignevents-eventslist-country-label": "País",
+	"campaignevents-postedit-dialog-select-placeholder": "Selecionar evento",
+	"campaignevents-postedit-dialog-action-no": "Não, obrigado",
+	"campaignevents-postedit-dialog-action-yes": "Sim"
 }
