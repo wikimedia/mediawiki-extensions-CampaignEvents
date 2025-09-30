@@ -72,7 +72,7 @@
 	"campaignevents-edit-no-event-id-provided": "이벤트 ID를 지정하십시오.",
 	"campaignevents-edit-event-notfound": "이 ID에 해당하는 이벤트가 없습니다.",
 	"campaignevents-edit-error-deleted": "이 이벤트 등록이 삭제되었습니다.",
-	"campaignevents-edit-removed-creator": "이 사용자는 이벤트 생성자이기 때문에 $1 항목을 제거할 수 없습니다",
+	"campaignevents-edit-removed-creator": "이 {{GENDER:$1|사용자}}는 이벤트 생성자이기 때문에 $1 항목을 제거할 수 없습니다",
 	"campaignevents-edit-too-many-organizers": "{{PLURAL:$1|주최자}}를 $1명보다 더 많이 추가할 수 없습니다.",
 	"campaignevents-edit-invalid-username": "\"$1\" 사용자는 유효한 사용자 이름이 아닙니다.",
 	"campaignevents-error-page-already-registered": "지정된 이벤트 문서에 이미 연결된 등록이 있습니다.",
