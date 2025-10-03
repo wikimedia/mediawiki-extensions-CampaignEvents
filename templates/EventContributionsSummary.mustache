@@ -1,0 +1,22 @@
+<div class="ext-campaignevents-eventdetails-contributions-summary">
+	<div class="ext-campaignevents-eventdetails-contributions-summary__cards">
+		{{#participantsCard}}
+			{{> ContributionSummarySimpleCard}}
+		{{/participantsCard}}
+		{{#wikisEditedCard}}
+			{{> ContributionSummarySimpleCard}}
+		{{/wikisEditedCard}}
+		{{#articlesCreatedCard}}
+			{{> ContributionSummarySimpleCard}}
+		{{/articlesCreatedCard}}
+		{{#articlesEditedCard}}
+			{{> ContributionSummarySimpleCard}}
+		{{/articlesEditedCard}}
+		{{#bytesChangedCard}}
+			{{> ContributionSummaryDeltaCard}}
+		{{/bytesChangedCard}}
+		{{#linksChangedCard}}
+			{{> ContributionSummaryDeltaCard}}
+		{{/linksChangedCard}}
+	</div>
+</div>

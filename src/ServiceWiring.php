@@ -316,7 +316,7 @@ return [
 			$services->getTitleFactory(),
 			$services->get( EventContributionStore::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
-			$services->getLinkBatchFactory(),
+			$services->getLinkBatchFactory()
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {

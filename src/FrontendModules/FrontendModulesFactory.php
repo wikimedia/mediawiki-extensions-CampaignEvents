@@ -191,6 +191,7 @@ class FrontendModulesFactory {
 		OutputPage $output
 	): EventContributionsModule {
 		return new EventContributionsModule(
+			$this->messageFormatterFactory,
 			$event,
 			$permissionChecker,
 			$centralUserLookup,

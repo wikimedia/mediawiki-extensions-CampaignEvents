@@ -597,5 +597,12 @@
 	"campaignevents-postedit-dialog-intro-multiple": "You are registered for multiple events that are active now. Is this edit for one of the events? If yes, please select which one.",
 	"campaignevents-postedit-dialog-select-placeholder": "Select event",
 	"campaignevents-postedit-dialog-action-no": "No, thanks",
-	"campaignevents-postedit-dialog-action-yes": "Yes"
+	"campaignevents-postedit-dialog-action-yes": "Yes",
+	"campaignevents-contributions-summary-participants": "Participants",
+	"campaignevents-contributions-summary-wikis-edited": "Wikis edited",
+	"campaignevents-contributions-summary-articles-created": "Articles created",
+	"campaignevents-contributions-summary-articles-edited": "Articles edited",
+	"campaignevents-contributions-summary-bytes-changed": "Bytes changed",
+	"campaignevents-contributions-summary-links-changed": "Links changed",
+	"campaignevents-contributions-summary-delta-separator": "/"
 }

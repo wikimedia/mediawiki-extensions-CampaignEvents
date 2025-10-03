@@ -425,3 +425,80 @@ fieldset.ext-campaignevents-eventdetails-email-form {
 .ext-campaignevents-contributions-table .mw-diff-bytes::after {
 	content: '';
 }
+
+// contribution summary styles
+.ext-campaignevents-eventdetails-contributions-summary {
+	&__cards {
+		display: flex;
+		gap: 0.5em;
+		/* Mobile-first: horizontal scroll list */
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		margin: 1.25em 0;
+		width: 100%;
+		// Override parent width constraints for cards
+		max-width: none;
+
+		// Desktop: wrap and fill width
+		@media ( min-width: @min-width-breakpoint-tablet ) {
+			flex-wrap: wrap;
+			overflow-x: visible;
+		}
+	}
+
+	// Make Codex cards inside the container flex to fill the row
+	&__cards > .cdx-card {
+		/* Mobile-first: keep cards side-by-side and scrollable */
+		flex: 0 0 14rem;
+		min-width: 14rem;
+
+		// Desktop: grow to fill available space
+		@media ( min-width: @min-width-breakpoint-tablet ) {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+	}
+
+	&__value {
+		// Styles for positive/negative values
+		&.ext-campaignevents-eventdetails-contributions-summary__positive {
+			// Green for positive values
+			color: @color-success;
+		}
+
+		&.ext-campaignevents-eventdetails-contributions-summary__negative {
+			// Red for negative values
+			color: @color-error;
+		}
+	}
+
+	// Remove parentheses added by mediawiki.special.changeslist around byte/link deltas in summary cards
+	.mw-diff-bytes::before,
+	.mw-diff-bytes::after {
+		content: '';
+	}
+}
+
+// Force cards to take full width by overriding parent constraints
+.ext-campaignevents-contributions-container {
+	width: 100%;
+	max-width: none;
+}
+
+.ext-campaignevents-contributions-container .ext-campaignevents-eventdetails-contributions-summary {
+	width: 100%;
+	max-width: none;
+
+	&__cards {
+		width: 100%;
+		max-width: none;
+		display: flex;
+	}
+
+	&__card {
+		flex: 1 1 auto;
+		width: auto;
+		min-width: 0;
+	}
+}
