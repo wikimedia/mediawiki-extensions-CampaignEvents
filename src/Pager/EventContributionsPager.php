@@ -31,11 +31,11 @@ class EventContributionsPager extends CodexTablePager {
 	 * Unique sort fields per column, including stable tiebreaker by primary key
 	 */
 	private const INDEX_FIELDS = [
-		'article' => [ 'cec_page_prefixedtext', 'cec_wiki', 'cec_timestamp' ],
-		'wiki' => [ 'cec_wiki', 'cec_timestamp' ],
-		'username' => [ 'cec_user_id', 'cec_timestamp' ],
+		'article' => [ 'cec_page_prefixedtext', 'cec_wiki', 'cec_timestamp', 'cec_id' ],
+		'wiki' => [ 'cec_wiki', 'cec_timestamp', 'cec_id' ],
+		'username' => [ 'cec_user_id', 'cec_timestamp', 'cec_id' ],
 		'timestamp' => [ 'cec_timestamp', 'cec_id' ],
-		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp' ],
+		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp', 'cec_id' ],
 	];
 
 	private ExistingEventRegistration $event;
