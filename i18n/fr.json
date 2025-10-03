@@ -609,5 +609,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Révision non trouvée",
 	"campaignevents-event-contribution-not-owner": "Vous ne pouvez associer que vos propres modifications aux événements",
 	"campaignevents-event-contribution-tracking-disabled": "Le suivi des contributions n'est pas activé pour cet événement",
-	"campaignevents-event-contribution-event-deleted": "L'événement a été supprimé"
+	"campaignevents-event-contribution-event-deleted": "L'événement a été supprimé",
+	"campaignevents-postedit-dialog-title-single": "Associer cette modification à $1 ?",
+	"campaignevents-postedit-dialog-title-multiple": "Associer cette modification à un événement ?",
+	"campaignevents-postedit-dialog-intro-single": "Vous êtes inscrit à un événement qui est en cours. C'est une édition pour $1 ?",
+	"campaignevents-postedit-dialog-intro-multiple": "Vous êtes inscrit à plusieurs événements actuellement actifs. Cette modification concerne-t-elle l'un d'eux ? Si oui, veuillez sélectionner lequel.",
+	"campaignevents-postedit-dialog-select-placeholder": "Sélectionner l'événement",
+	"campaignevents-postedit-dialog-action-no": "Non merci",
+	"campaignevents-postedit-dialog-action-yes": "Oui"
 }
