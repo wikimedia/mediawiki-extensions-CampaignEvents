@@ -528,6 +528,19 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			] )
 		];
 
+		yield 'Contribution tracking for event with no wikis' => [
+			'campaignevents-error-contribs-tracking-no-wikis',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'wikis' => [],
+				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
+				'address' => null,
+				'country' => null,
+				'countrycode' => null,
+				'types' => [ 'conference', 'editing-event' ],
+			] )
+		];
+
 		yield 'Invalid chat URL' => [
 			'campaignevents-error-invalid-chat-url',
 			self::getTestDataWithDefault( [ 'chat' => 'not-an-url' ] )

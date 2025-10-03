@@ -215,7 +215,7 @@ class EventFactory {
 		}
 
 		if ( $hasContributionTracking ) {
-			$res->merge( $this->validateContributionsTracking( $types, $meetingCountryCode ) );
+			$res->merge( $this->validateContributionsTracking( $types, $meetingCountryCode, $wikis ) );
 		}
 
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
@@ -619,12 +619,18 @@ class EventFactory {
 	}
 
 	/**
-	 * Precondition: contribution tracking is being enabled. The passed event types and country code are not
+	 * Precondition: contribution tracking is being enabled. The passed event types, wikis and country code are not
 	 * necessarily valid.
 	 *
 	 * @param list<string> $eventTypes
+	 * @param string|null $countryCode
+	 * @param bool|string[] $wikis
 	 */
-	private function validateContributionsTracking( array $eventTypes, ?string $countryCode ): StatusValue {
+	private function validateContributionsTracking(
+		array $eventTypes,
+		?string $countryCode,
+		array|bool $wikis
+	): StatusValue {
 		if (
 			$countryCode !== null &&
 			in_array( $countryCode, $this->contributionTrackingDisallowedCountryCodes, true )
@@ -642,6 +648,9 @@ class EventFactory {
 				'campaignevents-error-contribs-tracking-invalid-type',
 				Message::listParam( $contributionTypeMsgs )
 			);
+		}
+		if ( $wikis === [] ) {
+			return StatusValue::newFatal( 'campaignevents-error-contribs-tracking-no-wikis' );
 		}
 		return StatusValue::newGood();
 	}

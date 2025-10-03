@@ -522,10 +522,12 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 					$countryCode
 				];
 			}
+			$hasNoWiki = [ '===', 'WikiType', (string)self::WIKI_TYPE_NONE ];
 			$disallowed = [ 'OR' ];
 			$disallowed[] = $hasNoPermittedEventTypes;
 			$participationOptions[] = $hasDisallowedCountryCodes;
 			$disallowed[] = $participationOptions;
+			$disallowed[] = $hasNoWiki;
 			$formFields['ContributionStats'] = [
 				'class' => HTMLCheckField::class,
 				'label-message' => 'campaignevents-edit-field-contribution-stats-label',
