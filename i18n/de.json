@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Brettchenweber",
-			"Inkowik"
+			"Inkowik",
+			"Johannnes89"
 		]
 	},
 	"campaignevents-desc": "Stellt Funktionen für Organisatoren und Teilnehmer von Veranstaltungen bereit.",
@@ -386,6 +387,13 @@
 	"campaignevents-email-self-subject": "Kopie deiner Nachricht an die Teilnehmenden von $1",
 	"campaignevents-event-details-time-registered": "Anmeldezeitpunkt",
 	"campaignevents-event-details-can-receive-email": "Kann E-Mails empfangen",
+	"campaignevents-event-details-contributions-table-caption": "Beiträge",
+	"campaignevents-event-details-contributions-article": "Artikel bearbeitet",
+	"campaignevents-event-details-contributions-wiki": "Wiki",
+	"campaignevents-event-details-contributions-username": "Benutzername",
+	"campaignevents-event-details-contributions-timestamp": "Zeitstempel",
+	"campaignevents-event-details-contributions-bytes": "Bytes",
+	"campaignevents-event-details-contributions-article-created-tooltip": "Dieser Artikel entstand im Rahmen der Veranstaltung",
 	"campaignevents-register-questions-label-title": "Deine Informationen",
 	"campaignevents-register-questions-label-subtitle": "Diese Informationen werden nur an die Veranstalter weitergegeben.",
 	"campaignevents-register-question-gender": "Was ist deine Geschlechtsidentität? (optional)",
@@ -429,7 +437,7 @@
 	"campaignevents-register-question-gender-organizer-label": "Was ist deine Geschlechtsidentität?",
 	"campaignevents-register-question-age-organizer-label": "Wie alt bist du?",
 	"campaignevents-register-question-profession-organizer-label": "Was ist dein Beruf?",
-	"campaignevents-register-question-confidence-organizer-label": "Wie sicher fühlst du dich, zu den Wikimedia-Projekten beizutragen, die an dieser Veranstaltung beteiligt sind?",
+	"campaignevents-register-question-confidence-organizer-label": "Wie vertraut bist du mit der Mitarbeit in den Wikimedia-Projekten, im Zusammenhang mit dieser Veranstaltung?",
 	"campaignevents-register-question-affiliate-organizer-label": "Gehörst du einer der Wikimedia-Mitgliedsorganisationen (Chapter,  Benutzergruppeen, thematische Organisationen) an?",
 	"campaignevents-register-answers-aggregated": "Deine Antworten wurden gemäß den Informationen zur Datenaufbewahrung aggregiert und gelöscht.",
 	"campaignevents-register-retention-title": "Informationen zur Datenaufbewahrung",

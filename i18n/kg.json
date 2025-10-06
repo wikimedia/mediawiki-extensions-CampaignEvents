@@ -251,12 +251,5 @@
 	"campaignevents-event-contribution-revision-not-found": "Bo me mona ve mbalula",
 	"campaignevents-event-contribution-not-owner": "Nge lenda vukisa kaka mambu ya nge mosi ti mambu ya nge ke yidika",
 	"campaignevents-event-contribution-tracking-disabled": "Yo kele ve na ndonga ya bantu yina ke pesaka makabu sambu na diambu yai",
-	"campaignevents-event-contribution-event-deleted": "Bo me katula diambu yango",
-	"campaignevents-postedit-dialog-title-single": "Keti beno fwanisa yo ti $1?",
-	"campaignevents-postedit-dialog-title-multiple": "Keti beno fwanisa nsoba yai ti diambu mosi?",
-	"campaignevents-postedit-dialog-intro-single": "Nge me sonika zina na nge sambu na diambu mosi yina ke salama ntangu yai. Keti yo kele sambu na $1?",
-	"campaignevents-postedit-dialog-intro-multiple": "Nge me sonika sambu na mambu mingi yina ke salama ntangu yai. Keti nsoba yai kele mosi na kati ya mambu yina salamaka? Kana ee, beno ke zola kupona nani.",
-	"campaignevents-postedit-dialog-select-placeholder": "Mambu ya nkaka ya bo me pona",
-	"campaignevents-postedit-dialog-action-no": "Ve, matondo",
-	"campaignevents-postedit-dialog-action-yes": "Ee"
+	"campaignevents-event-contribution-event-deleted": "Bo me katula diambu yango"
 }
