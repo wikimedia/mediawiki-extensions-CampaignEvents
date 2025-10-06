@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\RecentChanges\ChangesList;
 use MediaWiki\Title\TitleFactory;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
@@ -50,7 +51,6 @@ class EventContributionsModule {
 		OutputPage $output,
 		LinkBatchFactory $linkBatchFactory
 	) {
-		$this->eventContributionStore = $eventContributionStore;
 		$this->messageFormatterFactory = $messageFormatterFactory;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		$this->event = $event;
@@ -68,23 +68,22 @@ class EventContributionsModule {
 	public function createContent(): Tag {
 		$eventId = $this->event->getID();
 
+		$this->output->addModuleStyles( 'codex-styles' );
 		$container = new Tag( 'div' );
 		$container->addClasses( [ 'ext-campaignevents-contributions-container' ] );
 
-		$currentUser = $this->output->getUser();
-		$centralUserId = null;
-		$includePrivateParticipants = false;
+		$currentUser = $this->output->getAuthority();
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $currentUser );
 			$centralUserId = $centralUser->getCentralID();
-			// Check if current user is an organizer of this event
-			$includePrivateParticipants = $this->permissionChecker->userCanEditRegistration(
+			$includePrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants(
 				$currentUser,
 				$this->event
 			);
 		} catch ( UserNotGlobalException ) {
 			// User is not logged in or doesn't have a global account
 			$centralUserId = 0;
+			$includePrivateParticipants = false;
 		}
 
 		$summaryData = $this->eventContributionStore->getEventSummaryData(
@@ -120,21 +119,13 @@ class EventContributionsModule {
 				)
 			],
 			'bytesChangedCard' => [
-				'positiveValue' => $summaryData->getBytesAdded(),
-				'negativeValue' => $summaryData->getBytesRemoved(),
-				'separator' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-delta-separator' )
-				),
+				'value' => $this->formatDeltas( $summaryData->getBytesAdded(), $summaryData->getBytesRemoved() ),
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-contributions-summary-bytes-changed' )
 				)
 			],
 			'linksChangedCard' => [
-				'positiveValue' => $summaryData->getLinksAdded(),
-				'negativeValue' => $summaryData->getLinksRemoved(),
-				'separator' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-delta-separator' )
-				),
+				'value' => $this->formatDeltas( $summaryData->getLinksAdded(), $summaryData->getLinksRemoved() ),
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-contributions-summary-links-changed' )
 				)
@@ -145,8 +136,6 @@ class EventContributionsModule {
 		$container->appendContent( new HtmlSnippet( $renderedSummaryHtml ) );
 
 		// Add table section
-		$this->output->addModuleStyles( 'codex-styles' );
-
 		$pager = new EventContributionsPager(
 			$this->databaseHelper->getDBConnection( DB_REPLICA ),
 			$this->permissionChecker,
@@ -161,6 +150,8 @@ class EventContributionsModule {
 
 		// Ensure the pager gets the correct context with request parameters
 		$pager->setContext( $this->output->getContext() );
+		// Keep the Contributions tab active when interacting with the pager
+		$pager->setExtraQuery( [ 'tab' => 'ContributionsPanel' ] );
 
 		$tableContainer = new Tag( 'div' );
 		$tableContainer->addClasses( [ 'ext-campaignevents-contributions-table' ] );
@@ -171,5 +162,16 @@ class EventContributionsModule {
 		$container->appendContent( $tableContainer );
 
 		return $container;
+	}
+
+	/**
+	 * Formats a negative and a positive deltas for a summary card.
+	 */
+	private function formatDeltas( int $added, int $removed ): string {
+		// XXX: We are using `showCharacterDifference` even for things that aren't bytes/characters. That should be
+		// fine, hopefully.
+		return ChangesList::showCharacterDifference( 0, $added, $this->output->getContext() ) .
+			$this->output->msg( 'campaignevents-contributions-summary-delta-separator' )->escaped() .
+			ChangesList::showCharacterDifference( -$removed, 0, $this->output->getContext() );
 	}
 }

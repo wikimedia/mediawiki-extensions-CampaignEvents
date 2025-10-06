@@ -88,19 +88,21 @@ class EventContributionStore {
 	public function getEventSummaryData(
 		int $eventId,
 		int $currentUserId,
-		bool $includePrivateParticipants = false
+		bool $includePrivateParticipants
 	): EventContributionSummary {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
 
 		// Build visibility conditions for private participants
 		$visibilityConditions = [];
-		if ( !$includePrivateParticipants && $currentUserId ) {
-			// Only show current user's contributions and public contributions from others
-			$visibilityConditions[] = $dbr->expr( 'cec.cec_user_id', '=', $currentUserId )
-				->or( 'cep.cep_private', '=', 0 );
-		} elseif ( !$includePrivateParticipants && $currentUserId === 0 ) {
-			// Anonymous users can only see public contributions
-			$visibilityConditions['cep.cep_private'] = 0;
+		if ( !$includePrivateParticipants ) {
+			if ( $currentUserId ) {
+				// Only show current user's contributions and public contributions from others
+				$visibilityConditions[] = $dbr->expr( 'cec.cec_user_id', '=', $currentUserId )
+					->or( 'cep.cep_private', '=', 0 );
+			} else {
+				// Anonymous users can only see public contributions
+				$visibilityConditions['cep.cep_private'] = 0;
+			}
 		}
 
 		$row = $dbr->newSelectQueryBuilder()
@@ -109,10 +111,14 @@ class EventContributionStore {
 				'wikis_count' => 'COUNT(DISTINCT cec.cec_wiki)',
 				'articles_created_count' => 'SUM(' . $dbr->conditional(
 					$dbr->bitAnd( 'cec.cec_edit_flags', EventContribution::EDIT_FLAG_PAGE_CREATION ) . ' != 0',
-					1, 0 ) . ')',
+					1,
+					0
+					) . ')',
 				'articles_edited_count' => 'COUNT(DISTINCT ' . $dbr->conditional(
 					$dbr->bitAnd( 'cec.cec_edit_flags', EventContribution::EDIT_FLAG_PAGE_CREATION ) . ' = 0',
-					'cec.cec_page_id', 'NULL' ) . ')',
+					$dbr->buildConcat( [ 'cec.cec_wiki', $dbr->addQuotes( '|' ), 'cec.cec_page_id' ] ),
+					'NULL'
+					) . ')',
 				'bytes_added' => 'SUM(' . $dbr->conditional( 'cec.cec_bytes_delta > 0',
 					'cec.cec_bytes_delta', 0 ) . ')',
 				'bytes_removed' => 'SUM(' . $dbr->conditional( 'cec.cec_bytes_delta < 0',
@@ -123,12 +129,13 @@ class EventContributionStore {
 					'cec.cec_links_delta', 0 ) . ')'
 			] )
 			->from( 'ce_event_contributions', 'cec' )
-			->join( 'ce_participants', 'cep',
-				'cep.cep_event_id = cec.cec_event_id AND cep.cep_user_id = cec.cec_user_id' )
-			->where( array_merge(
-				[ 'cec.cec_event_id' => $eventId, 'cec.cec_deleted' => 0 ],
-				$visibilityConditions
-			) )
+			->join(
+				'ce_participants',
+				'cep',
+				[ 'cep.cep_event_id = cec.cec_event_id', 'cep.cep_user_id = cec.cec_user_id' ]
+			)
+			->where( [ 'cec.cec_event_id' => $eventId, 'cec.cec_deleted' => 0 ] )
+			->andWhere( $visibilityConditions )
 			->caller( __METHOD__ )
 			->fetchRow();
 

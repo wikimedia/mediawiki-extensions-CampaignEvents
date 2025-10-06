@@ -7,6 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContribution
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionSummary;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\WikiMap\WikiMap;
@@ -36,7 +38,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_revision_id' => 123,
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 100,
-				'cec_links_delta' => 5,
+				'cec_links_delta' => 1,
 				'cec_timestamp' => $db->timestamp( '20240101000000' ),
 				'cec_deleted' => 0,
 			],
@@ -113,6 +115,36 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_timestamp' => $db->timestamp( '20240101000000' ),
 				'cec_deleted' => 1,
 			],
+			// Negative deltas
+			[
+				'cec_id' => 7,
+				'cec_event_id' => 1,
+				'cec_user_id' => 101,
+				'cec_wiki' => 'enwiki',
+				'cec_page_id' => 1,
+				'cec_page_prefixedtext' => 'Test_Page_1',
+				'cec_revision_id' => 127,
+				'cec_edit_flags' => 0,
+				'cec_bytes_delta' => -7,
+				'cec_links_delta' => -3,
+				'cec_timestamp' => $db->timestamp( '20240101000005' ),
+				'cec_deleted' => 0,
+			],
+			// Private participant contribution on another wiki
+			[
+				'cec_id' => 8,
+				'cec_event_id' => 1,
+				'cec_user_id' => 109,
+				'cec_wiki' => 'zzwiki',
+				'cec_page_id' => 1,
+				'cec_page_prefixedtext' => 'Secret page',
+				'cec_revision_id' => 120,
+				'cec_edit_flags' => 0,
+				'cec_bytes_delta' => -13,
+				'cec_links_delta' => 0,
+				'cec_timestamp' => $db->timestamp( '20240101000006' ),
+				'cec_deleted' => 0,
+			],
 		];
 
 		$db->newInsertQueryBuilder()
@@ -120,6 +152,12 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			->rows( $rows )
 			->caller( __METHOD__ )
 			->execute();
+
+		// Add some participants for visibility checks (don't need to add all of them)
+		$participantStore = CampaignEventsServices::getParticipantsStore();
+		$participantStore->addParticipantToEvent( 1, new CentralUser( 101 ), false, [] );
+		$participantStore->addParticipantToEvent( 1, new CentralUser( 102 ), true, [] );
+		$participantStore->addParticipantToEvent( 1, new CentralUser( 109 ), true, [] );
 	}
 
 	/**
@@ -177,6 +215,63 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'New contribution' => [ 3, 104, 'frwiki', 'Page_Française', 4, 126, 0, 75, 2, '20240101000003' ];
 		yield 'Page creation contribution' => [
 			4, 105, 'dewiki', 'Deutsche_Seite', 5, 127, 1, 150, 8, '20240101000004'
+		];
+	}
+
+	/** @dataProvider provideGetEventSummaryData */
+	public function testGetEventSummaryData(
+		int $eventID,
+		int $userID,
+		bool $canSeePrivate,
+		EventContributionSummary $expected
+	) {
+		$store = CampaignEventsServices::getEventContributionStore();
+		$actual = $store->getEventSummaryData( $eventID, $userID, $canSeePrivate );
+		$this->assertEquals( $expected, $actual );
+	}
+
+	public static function provideGetEventSummaryData(): Generator {
+		yield 'Event with no contributions' => [
+			99999,
+			1234,
+			true,
+			new EventContributionSummary( 0, 0, 0, 0, 0, 0, 0, 0 )
+		];
+		yield 'Can see private, not a participant' => [
+			1,
+			888888,
+			true,
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3 )
+		];
+		yield 'Can see private, public participant' => [
+			1,
+			101,
+			true,
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3 )
+		];
+		yield 'Can see private, private participant' => [
+			1,
+			102,
+			true,
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3 )
+		];
+		yield 'Cannot see private, not a participant' => [
+			1,
+			888888,
+			false,
+			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3 )
+		];
+		yield 'Cannot see private, public participant' => [
+			1,
+			101,
+			false,
+			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3 )
+		];
+		yield 'Cannot see private, private participant' => [
+			1,
+			102,
+			false,
+			new EventContributionSummary( 2, 2, 1, 2, 400, -7, 16, -3 )
 		];
 	}
 
@@ -263,6 +358,16 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 					'cec_page_id' => 1,
 					'cec_page_prefixedtext' => 'Test_Page_1',
 				],
+				(object)[
+					'cec_id' => 7,
+					'cec_page_id' => 1,
+					'cec_page_prefixedtext' => $newPrefixedText,
+				],
+				(object)[
+					'cec_id' => 8,
+					'cec_page_id' => 1,
+					'cec_page_prefixedtext' => 'Secret page',
+				],
 			],
 			iterator_to_array( $newData )
 		);
@@ -313,18 +418,30 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_page_id' => 1,
 				'cec_deleted' => 1,
 			],
+			7 => (object)[
+				'cec_id' => 7,
+				'cec_page_id' => 1,
+				'cec_deleted' => 0,
+			],
+			8 => (object)[
+				'cec_id' => 8,
+				'cec_page_id' => 1,
+				'cec_deleted' => 0,
+			],
 		];
 
-		$makeDataWithIDDeleted = static function ( int $id ) use ( $startingData ): array {
+		$makeDataWithIDsDeleted = static function ( int ...$ids ) use ( $startingData ): array {
 			$ret = unserialize( serialize( $startingData ) );
-			$ret[$id]->cec_deleted = 1;
+			foreach ( $ids as $id ) {
+				$ret[$id]->cec_deleted = 1;
+			}
 			return array_values( $ret );
 		};
 
 		yield 'Normal deletion' => [
 			'enwiki',
 			1,
-			$makeDataWithIDDeleted( 1 ),
+			$makeDataWithIDsDeleted( 1, 7 ),
 		];
 		yield 'Already deleted' => [
 			'enwiki',
@@ -334,7 +451,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Homonym, one already deleted' => [
 			'ptwiki',
 			1,
-			$makeDataWithIDDeleted( 5 ),
+			$makeDataWithIDsDeleted( 5 ),
 		];
 	}
 
@@ -382,6 +499,16 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_id' => 6,
 				'cec_page_id' => 1,
 				'cec_deleted' => 1,
+			],
+			7 => (object)[
+				'cec_id' => 7,
+				'cec_page_id' => 1,
+				'cec_deleted' => 0,
+			],
+			8 => (object)[
+				'cec_id' => 8,
+				'cec_page_id' => 1,
+				'cec_deleted' => 0,
 			],
 		];
 
@@ -458,6 +585,16 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_id' => 6,
 				'cec_revision_id' => 987,
 				'cec_deleted' => 1,
+			],
+			7 => (object)[
+				'cec_id' => 7,
+				'cec_revision_id' => 127,
+				'cec_deleted' => 0,
+			],
+			8 => (object)[
+				'cec_id' => 8,
+				'cec_revision_id' => 120,
+				'cec_deleted' => 0,
 			],
 		];
 

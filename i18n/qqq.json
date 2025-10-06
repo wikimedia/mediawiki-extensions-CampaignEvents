@@ -605,11 +605,11 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Placeholder of a selector used in a dialog shown after making an edit, where the user can choose an event to associate the edit.",
 	"campaignevents-postedit-dialog-action-no": "Label of a button in a dialog shown after making an edit, which asks the user whether they want to associate the edit with an event they're participating in.",
 	"campaignevents-postedit-dialog-action-yes": "Label of a button in a dialog shown after making an edit, which asks the user whether they want to associate the edit with an event they're participating in.",
-	"campaignevents-contributions-summary-participants": "Label for the participants count card in the contributions summary",
-	"campaignevents-contributions-summary-wikis-edited": "Label for the wikis edited count card in the contributions summary",
-	"campaignevents-contributions-summary-articles-created": "Label for the articles created count card in the contributions summary",
-	"campaignevents-contributions-summary-articles-edited": "Label for the articles edited count card in the contributions summary",
-	"campaignevents-contributions-summary-bytes-changed": "Label for the bytes changed card in the contributions summary",
-	"campaignevents-contributions-summary-links-changed": "Label for the links changed card in the contributions summary",
-	"campaignevents-contributions-summary-delta-separator": "Separator character used between positive and negative values in contribution summary cards (e.g., +91/-124). Default is forward slash."
+	"campaignevents-contributions-summary-participants": "Label for the participants count card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-contributions-summary-wikis-edited": "Label for the wikis edited count card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-contributions-summary-articles-created": "Label for the articles created count card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-contributions-summary-articles-edited": "Label for the articles edited count card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-contributions-summary-bytes-changed": "Label for the bytes changed card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-contributions-summary-links-changed": "Label for the links changed card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-contributions-summary-delta-separator": "{{Optional}}\nSeparator character used between positive and negative values for bytes and links changed (e.g., +91/-124) in summary cards in the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]]."
 }
