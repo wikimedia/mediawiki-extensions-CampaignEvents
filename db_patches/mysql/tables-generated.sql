@@ -197,6 +197,7 @@ CREATE TABLE /*_*/ce_event_contributions (
   cec_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
   cec_event_id BIGINT UNSIGNED NOT NULL,
   cec_user_id BIGINT UNSIGNED NOT NULL,
+  cec_user_name VARBINARY(255) DEFAULT NULL,
   cec_wiki VARCHAR(64) NOT NULL,
   cec_page_id INT UNSIGNED NOT NULL,
   cec_page_prefixedtext VARBINARY(512) NOT NULL,
@@ -208,5 +209,6 @@ CREATE TABLE /*_*/ce_event_contributions (
   cec_deleted TINYINT(1) NOT NULL,
   INDEX cec_wiki_page_id (cec_wiki, cec_page_id),
   INDEX cec_event_user (cec_event_id, cec_user_id),
+  INDEX cec_user_id_name (cec_user_id, cec_user_name),
   PRIMARY KEY(cec_id)
 ) /*$wgDBTableOptions*/;

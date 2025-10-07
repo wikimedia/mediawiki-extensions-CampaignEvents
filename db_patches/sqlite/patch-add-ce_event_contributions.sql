@@ -6,6 +6,7 @@ CREATE TABLE /*_*/ce_event_contributions (
   cec_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   cec_event_id BIGINT UNSIGNED NOT NULL,
   cec_user_id BIGINT UNSIGNED NOT NULL,
+  cec_user_name BLOB DEFAULT NULL,
   cec_wiki VARCHAR(64) NOT NULL,
   cec_page_id INTEGER UNSIGNED NOT NULL,
   cec_page_prefixedtext BLOB NOT NULL,
@@ -20,3 +21,5 @@ CREATE TABLE /*_*/ce_event_contributions (
 CREATE INDEX cec_wiki_page_id ON /*_*/ce_event_contributions (cec_wiki, cec_page_id);
 
 CREATE INDEX cec_event_user ON /*_*/ce_event_contributions (cec_event_id, cec_user_id);
+
+CREATE INDEX cec_user_id_name ON /*_*/ce_event_contributions (cec_user_id, cec_user_name);

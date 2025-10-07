@@ -39,6 +39,7 @@ class EventContributionStore {
 			->row( [
 				'cec_event_id' => $editObject->getEventId(),
 				'cec_user_id' => $editObject->getUserId(),
+				'cec_user_name' => '',
 				'cec_wiki' => $editObject->getWiki(),
 				'cec_page_id' => $editObject->getPageId(),
 				'cec_page_prefixedtext' => $editObject->getPagePrefixedtext(),
@@ -158,12 +159,12 @@ class EventContributionStore {
 	 */
 	private function assertValidRow( \stdClass $row ): void {
 		$requiredFields = [
-			'cec_event_id', 'cec_user_id', 'cec_wiki', 'cec_page_id', 'cec_page_prefixedtext',
+			'cec_event_id', 'cec_user_id', 'cec_user_name', 'cec_wiki', 'cec_page_id', 'cec_page_prefixedtext',
 			'cec_revision_id', 'cec_edit_flags', 'cec_bytes_delta', 'cec_links_delta', 'cec_timestamp', 'cec_deleted'
 		];
 
 		foreach ( $requiredFields as $field ) {
-			if ( !isset( $row->$field ) ) {
+			if ( !property_exists( $row, $field ) ) {
 				throw new InvalidArgumentException( "Missing required field: $field" );
 			}
 		}

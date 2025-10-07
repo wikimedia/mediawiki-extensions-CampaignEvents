@@ -1000,6 +1000,15 @@
 				}
 			},
 			{
+				"name": "cec_user_name",
+				"comment": "Username, used for sorting. Nullable to support user suppression and deletion.",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"length": 255
+				}
+			},
+			{
 				"name": "cec_wiki",
 				"type": "string",
 				"options": {
@@ -1086,6 +1095,12 @@
 				"name": "cec_event_user",
 				"comment": "Filter edits for a given event, with a JOIN on ce_participants.",
 				"columns": [ "cec_event_id", "cec_user_id" ],
+				"unique": false
+			},
+			{
+				"name": "cec_user_id_name",
+				"comment": "Used to handle user renames and suppressions/deletions.",
+				"columns": [ "cec_user_id", "cec_user_name" ],
 				"unique": false
 			}
 		],

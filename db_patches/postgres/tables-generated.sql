@@ -219,6 +219,7 @@ CREATE TABLE ce_event_contributions (
   cec_id BIGSERIAL NOT NULL,
   cec_event_id BIGINT NOT NULL,
   cec_user_id BIGINT NOT NULL,
+  cec_user_name TEXT DEFAULT NULL,
   cec_wiki VARCHAR(64) NOT NULL,
   cec_page_id INT NOT NULL,
   cec_page_prefixedtext TEXT NOT NULL,
@@ -234,3 +235,5 @@ CREATE TABLE ce_event_contributions (
 CREATE INDEX cec_wiki_page_id ON ce_event_contributions (cec_wiki, cec_page_id);
 
 CREATE INDEX cec_event_user ON ce_event_contributions (cec_event_id, cec_user_id);
+
+CREATE INDEX cec_user_id_name ON ce_event_contributions (cec_user_id, cec_user_name);
