@@ -174,6 +174,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 	public function testSaveEventContribution(
 		int $eventId,
 		int $userId,
+		string $userName,
 		string $wiki,
 		string $pagePrefixedtext,
 		int $pageId,
@@ -187,6 +188,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		$contribution = new EventContribution(
 			$eventId,
 			$userId,
+			$userName,
 			$wiki,
 			$pagePrefixedtext,
 			$pageId,
@@ -211,6 +213,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			] )
 			->fetchRow();
 		$this->assertNotNull( $insertedRow, 'Record should have been inserted' );
+		$this->assertSame( $userName, $insertedRow->cec_user_name );
 		$this->assertSame( $wiki, $insertedRow->cec_wiki );
 		$this->assertSame( $pagePrefixedtext, $insertedRow->cec_page_prefixedtext );
 		$this->assertSame( $pageId, (int)$insertedRow->cec_page_id );
@@ -220,9 +223,11 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public static function provideSaveEventContribution(): Generator {
-		yield 'New contribution' => [ 3, 104, 'frwiki', 'Page_Française', 4, 126, 0, 75, 2, '20240101000003' ];
+		yield 'New contribution' => [
+			3, 104, 'User 104', 'frwiki', 'Page_Française', 4, 126, 0, 75, 2, '20240101000003'
+		];
 		yield 'Page creation contribution' => [
-			4, 105, 'dewiki', 'Deutsche_Seite', 5, 127, 1, 150, 8, '20240101000004'
+			4, 105, 'User 105', 'dewiki', 'Deutsche_Seite', 5, 127, 1, 150, 8, '20240101000004'
 		];
 	}
 
@@ -309,6 +314,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		$localContribution = new EventContribution(
 			123,
 			456,
+			'User 456',
 			WikiMap::getCurrentWikiId(),
 			__METHOD__,
 			$pageID,

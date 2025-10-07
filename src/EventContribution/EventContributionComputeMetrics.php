@@ -6,6 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 
 use InvalidArgumentException;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Parser\ParserOutputLinkTypes;
@@ -25,18 +29,25 @@ class EventContributionComputeMetrics {
 	private RevisionStoreFactory $revisionStoreFactory;
 	/** @var TitleFormatter */
 	private TitleFormatter $titleFormatter;
+	private CampaignsCentralUserLookup $centralUserLookup;
 
-	public function __construct( RevisionStoreFactory $revisionStoreFactory, TitleFormatter $titleFormatter ) {
+	public function __construct(
+		RevisionStoreFactory $revisionStoreFactory,
+		TitleFormatter $titleFormatter,
+		CampaignsCentralUserLookup $centralUserLookup
+	) {
 		$this->revisionStoreFactory = $revisionStoreFactory;
 		$this->titleFormatter = $titleFormatter;
+		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
-	 * Compute edit metrics for a revision and return a EventContribution object
+	 * Compute edit metrics for a revision and return a EventContribution object. The caller is responsible of
+	 * validating all the IDs provided.
 	 *
-	 * @param int $revisionID The revision ID to compute metrics for
-	 * @param int $eventID The event ID to associate with
-	 * @param int $userID The user ID who made the edit
+	 * @param int $revisionID The revision ID to compute metrics for. Must be a valid revision ID.
+	 * @param int $eventID The event ID to associate with. Must be a valid event ID.
+	 * @param int $userID The user ID who made the edit. Must be a valid user ID and the user must not be deleted.
 	 * @param string $fullWikiID The wiki where the edit was made
 	 * @return EventContribution Complete contribution object
 	 */
@@ -51,6 +62,13 @@ class EventContributionComputeMetrics {
 			$wiki = WikiAwareEntity::LOCAL;
 		} else {
 			$wiki = $fullWikiID;
+		}
+
+		try {
+			$userName = $this->centralUserLookup->getUserName( new CentralUser( $userID ) );
+		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
+			// XXX: Should this be an error instead?
+			$userName = null;
 		}
 
 		$revisionStore = $this->revisionStoreFactory->getRevisionStore( $wiki );
@@ -86,6 +104,7 @@ class EventContributionComputeMetrics {
 		return new EventContribution(
 			$eventID,
 			$userID,
+			$userName,
 			$fullWikiID,
 			$pagePrefixedtext,
 			$pageID,

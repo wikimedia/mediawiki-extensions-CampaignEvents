@@ -16,6 +16,7 @@ class EventContribution {
 
 	/** @var int */
 	private int $userId;
+	private ?string $userName;
 
 	/** @var string */
 	private string $wiki;
@@ -50,6 +51,7 @@ class EventContribution {
 	public function __construct(
 		int $eventId,
 		int $userId,
+		?string $userName,
 		string $wiki,
 		string $pagePrefixedtext,
 		int $pageId,
@@ -62,6 +64,7 @@ class EventContribution {
 	) {
 		$this->eventId = $eventId;
 		$this->userId = $userId;
+		$this->userName = $userName;
 		$this->wiki = $wiki;
 		$this->pagePrefixedtext = $pagePrefixedtext;
 		$this->pageId = $pageId;
@@ -79,6 +82,10 @@ class EventContribution {
 
 	public function getUserId(): int {
 		return $this->userId;
+	}
+
+	public function getUserName(): ?string {
+		return $this->userName;
 	}
 
 	public function getWiki(): string {

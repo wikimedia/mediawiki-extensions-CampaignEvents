@@ -475,7 +475,8 @@ return [
 	): EventContributionComputeMetrics {
 		return new EventContributionComputeMetrics(
 			$services->getRevisionStoreFactory(),
-			$services->getTitleFormatter()
+			$services->getTitleFormatter(),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 		);
 	},
 	EventContributionValidator::SERVICE_NAME => static function (

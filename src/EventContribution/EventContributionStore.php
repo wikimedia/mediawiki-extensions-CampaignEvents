@@ -39,7 +39,7 @@ class EventContributionStore {
 			->row( [
 				'cec_event_id' => $editObject->getEventId(),
 				'cec_user_id' => $editObject->getUserId(),
-				'cec_user_name' => '',
+				'cec_user_name' => $editObject->getUserName(),
 				'cec_wiki' => $editObject->getWiki(),
 				'cec_page_id' => $editObject->getPageId(),
 				'cec_page_prefixedtext' => $editObject->getPagePrefixedtext(),
@@ -66,6 +66,7 @@ class EventContributionStore {
 		return new EventContribution(
 			(int)$row->cec_event_id,
 			(int)$row->cec_user_id,
+			$row->cec_user_name,
 			$row->cec_wiki,
 			$row->cec_page_prefixedtext,
 			(int)$row->cec_page_id,

@@ -23,6 +23,7 @@ class EventContributionTest extends MediaWikiUnitTestCase {
 		$contribution = new EventContribution(
 			1,
 			101,
+			'User 101',
 			'enwiki',
 			'Test_Page',
 			1,

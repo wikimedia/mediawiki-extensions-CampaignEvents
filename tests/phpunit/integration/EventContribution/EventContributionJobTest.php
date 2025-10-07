@@ -108,23 +108,16 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 	public function testRun( array $params, array $expectedMetrics ) {
 		$job = new EventContributionJob( $params );
 
-		// Create mocks locally
-		$computeMetrics = $this->createMock( EventContributionComputeMetrics::class );
-		$store = $this->createMock( EventContributionStore::class );
-
-		// Set up service mocks
-		$this->setService( EventContributionComputeMetrics::SERVICE_NAME, $computeMetrics );
-		$this->setService( EventContributionStore::SERVICE_NAME, $store );
-
 		$timestamp = '20240101120000';
 		$pageID = 123456;
-		// Create a real EventContribution object with expected values
+		$pagePrefixedText = 'Test page';
+		$userName = 'Some user';
 		$expectedContribution = new EventContribution(
 			$params['eventId'],
 			$params['userId'],
+			$userName,
 			$params['wiki'],
-			// pagePrefixedtext
-			'TestPage',
+			$pagePrefixedText,
 			$pageID,
 			$params['revisionId'],
 			$expectedMetrics['editedType'],
@@ -134,6 +127,7 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 			false
 		);
 
+		$computeMetrics = $this->createMock( EventContributionComputeMetrics::class );
 		$computeMetrics->expects( $this->once() )
 			->method( 'computeEventContribution' )
 			->with(
@@ -143,7 +137,9 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 				$params['wiki']
 			)
 			->willReturn( $expectedContribution );
+		$this->setService( EventContributionComputeMetrics::SERVICE_NAME, $computeMetrics );
 
+		$store = $this->createMock( EventContributionStore::class );
 		// Capture what's actually saved to the database
 		$savedContribution = null;
 		$store->expects( $this->once() )
@@ -151,6 +147,7 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 			->willReturnCallback( static function ( EventContribution $contribution ) use ( &$savedContribution ) {
 				$savedContribution = $contribution;
 			} );
+		$this->setService( EventContributionStore::SERVICE_NAME, $store );
 
 		$result = $job->run();
 
@@ -159,14 +156,12 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 
 		// Verify what was actually saved to the database
 		$this->assertNotNull( $savedContribution, 'EventContribution should have been saved' );
-		$this->assertInstanceOf( EventContribution::class, $savedContribution );
-
-		// Type assertion for static analysis
-		/** @var EventContribution $savedContribution */
 		$this->assertEquals( $params['eventId'], $savedContribution->getEventId() );
 		$this->assertEquals( $params['userId'], $savedContribution->getUserId() );
+		$this->assertEquals( $userName, $savedContribution->getUserName() );
 		$this->assertEquals( $params['wiki'], $savedContribution->getWiki() );
 		$this->assertEquals( $pageID, $savedContribution->getPageId() );
+		$this->assertEquals( $pagePrefixedText, $savedContribution->getPagePrefixedtext() );
 		$this->assertEquals( $params['revisionId'], $savedContribution->getRevisionId() );
 		$this->assertEquals( $expectedMetrics['editedType'], $savedContribution->getEditFlags() );
 		$this->assertEquals( $expectedMetrics['bytesDelta'], $savedContribution->getBytesDelta() );
@@ -191,7 +186,7 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 
 		$creationMetrics = [
 			'bytesDelta' => 500,
-			'editedType' => 1,
+			'editedType' => EventContribution::EDIT_FLAG_PAGE_CREATION,
 			'linksDelta' => 5
 		];
 

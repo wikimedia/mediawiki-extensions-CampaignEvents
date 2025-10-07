@@ -26,6 +26,7 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiIntegrationTe
 		return new EventContribution(
 			123,
 			456,
+			'User 456',
 			WikiMap::getCurrentWikiId(),
 			$page->getDBkey(),
 			$page->getId( $page->getWikiId() ),

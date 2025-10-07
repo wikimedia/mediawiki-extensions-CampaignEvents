@@ -9,6 +9,7 @@ use MediaWiki\Content\Content;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
@@ -38,9 +39,13 @@ class EventContributionComputeMetricsTest extends MediaWikiIntegrationTestCase {
 		$this->titleFormatter = $this->createMock( TitleFormatter::class );
 		$this->titleFormatter->method( 'getPrefixedText' )->willReturn( 'TestPage' );
 
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->method( 'getUserName' )->willReturn( 'Test username' );
+
 		// Mock the services
 		$this->setService( 'RevisionStoreFactory', $this->revisionStoreFactory );
 		$this->setService( 'TitleFormatter', $this->titleFormatter );
+		$this->setService( CampaignsCentralUserLookup::SERVICE_NAME, $centralUserLookup );
 
 		// Get the service through the proper DI system
 		$this->computeMetrics = CampaignEventsServices::getEventContributionComputeMetrics();
