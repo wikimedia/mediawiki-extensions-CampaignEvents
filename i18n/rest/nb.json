@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jon Harald Søby"
+			"Jon Harald Søby",
+			"EdoAug"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Det er ingen arrangementer med denne ID-en.",
@@ -11,9 +12,14 @@
 	"campaignevents-rest-user-not-found": "Det er ingen bruker med denne sentral-ID-en.",
 	"campaignevents-rest-get-registration-deleted": "Denne arrangementsregistreringen ble slettet.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "Parameteren «user_ids» må være ei liste over bruker-ID-er eller null (for å fjerne alle brukere)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Fjern deltakere på $1, wikien arrangementet ble opprettet på.",
 	"campaignevents-rest-list-participants-empty-filter": "Brukernavnfilteret, hvis det er angitt, må være en ikke-tom streng.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Du har ikke autorisasjon til å se deltakere som har registrert seg privat på dette arrangementet.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> må være ei liste over brukernavn, og kan ikke være tom.",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Angi arrangører på $1, wikien arrangementet ble opprettet på.",
 	"campaignevents-rest-get-registration-info-notparticipant": "Du deltar ikke i dette arrangementet.",
-	"campaignevents-rest-register-invalid-answer": "Ugyldig svar på spørsmålet $1"
+	"campaignevents-rest-register-invalid-answer": "Ugyldig svar på spørsmålet $1",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Fullfør påmeldingen på $1, wikien der arrangementet ble opprettet.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Slett påmeldingen din på $1, wikien der arrangementet ble opprettet.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Send e-post til deltakere på $1, wikien der arrangementet ble opprettet."
 }

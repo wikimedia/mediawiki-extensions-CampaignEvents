@@ -199,7 +199,7 @@
 	"campaignevents-eventpage-btn-registration-closed": "Påmelding stengt",
 	"campaignevents-eventpage-btn-event-ended": "Arrangementet er over",
 	"campaignevents-eventpage-dialog-title": "Arrangementsdetaljer",
-	"campaignevents-eventpage-dialog-organizers": "Organisert av: $1",
+	"campaignevents-eventpage-dialog-organizers": "Organisert {{PLURAL:$2|av}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Vis alle organisatorer",
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|deltaker|deltakere}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|deltaker|deltakere}} registrerte seg privat",
@@ -432,5 +432,9 @@
 	"campaignevents-register-page-nonlocal": "'''[$1 Fullfør påmeldingen på $2]''', som er wikien der arrangementet ble opprettet.",
 	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Slett påmeldingen din på $2]''', som er wikien der arrangementet ble opprettet.",
 	"campaignevents-event-details-page-nonlocal": "Du ser for tiden en begrenset versjon av denne siden. <b>[$1 Besøk siden på $2]</b>, som er wikien der arrangementet ble opprettet, for å få tilgang til alle arrangementsdetaljene og annen funksjonalitet.",
-	"campaignevents-event-details-not-local-wiki-prompt": "Vis på [$1 $2]"
+	"campaignevents-event-details-not-local-wiki-prompt": "Vis på [$1 $2]",
+	"campaignevents-generateinvitationlist-event-page-field-placeholder": "{{ns:Event}}:Mitt arrangement",
+	"campaignevents-generateinvitationlist-article-list-field-label": "Artikkelliste",
+	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sol\nMåne\nHus",
+	"campaignevents-invitations-pager-status-editors": "$1 {{PLURAL:$1|bidragsyter|bidragsytere}} funnet"
 }
