@@ -591,5 +591,11 @@
 	"campaignevents-postedit-dialog-intro-multiple": "נרשמת לאירוע שפעית עכשיו. האם זאת עריכה בשביל אחד מהאירועים? אם כן, נא לבחור איזה אחד.",
 	"campaignevents-postedit-dialog-select-placeholder": "נא לבחור אירוע",
 	"campaignevents-postedit-dialog-action-no": "לא, תודה",
-	"campaignevents-postedit-dialog-action-yes": "כֵּן"
+	"campaignevents-postedit-dialog-action-yes": "כֵּן",
+	"campaignevents-contributions-summary-participants": "משתתפים",
+	"campaignevents-contributions-summary-wikis-edited": "אתרי הוויקי שנערכו",
+	"campaignevents-contributions-summary-articles-created": "ערכים שנוצרו",
+	"campaignevents-contributions-summary-articles-edited": "ערכים שנערכו",
+	"campaignevents-contributions-summary-bytes-changed": "בתים ששונו",
+	"campaignevents-contributions-summary-links-changed": "קישורים ששונו"
 }

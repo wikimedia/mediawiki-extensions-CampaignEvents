@@ -413,6 +413,13 @@
 	"campaignevents-email-self-subject": "Une copie de votre message aux participants de $1",
 	"campaignevents-event-details-time-registered": "Horodatage d’inscription",
 	"campaignevents-event-details-can-receive-email": "Peut recevoir des courriels",
+	"campaignevents-event-details-contributions-table-caption": "Contributions",
+	"campaignevents-event-details-contributions-article": "Article édité",
+	"campaignevents-event-details-contributions-wiki": "Wiki",
+	"campaignevents-event-details-contributions-username": "Nom d’utilisateur",
+	"campaignevents-event-details-contributions-timestamp": "Horodatage",
+	"campaignevents-event-details-contributions-bytes": "Octets",
+	"campaignevents-event-details-contributions-article-created-tooltip": "Cet article a été créé lors de l'événement",
 	"campaignevents-register-questions-label-title": "Vos informations",
 	"campaignevents-register-questions-label-subtitle": "Cette information sera partagée uniquement avec les organisateurs de l’événement.",
 	"campaignevents-register-question-gender": "Quelle est votre identité de genre ? (facultatif)",
@@ -616,5 +623,9 @@
 	"campaignevents-postedit-dialog-intro-multiple": "Vous êtes inscrit à plusieurs événements actuellement actifs. Cette modification concerne-t-elle l'un d'eux ? Si oui, veuillez sélectionner lequel.",
 	"campaignevents-postedit-dialog-select-placeholder": "Sélectionner l'événement",
 	"campaignevents-postedit-dialog-action-no": "Non merci",
-	"campaignevents-postedit-dialog-action-yes": "Oui"
+	"campaignevents-postedit-dialog-action-yes": "Oui",
+	"campaignevents-contributions-summary-participants": "Participants",
+	"campaignevents-contributions-summary-articles-created": "Articles créés",
+	"campaignevents-contributions-summary-bytes-changed": "Octets modifiés",
+	"campaignevents-contributions-summary-links-changed": "Liens modifiés"
 }

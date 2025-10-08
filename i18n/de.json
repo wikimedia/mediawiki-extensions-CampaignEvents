@@ -590,5 +590,11 @@
 	"campaignevents-postedit-dialog-intro-multiple": "Du bist für mehrere derzeit aktive Veranstaltungen angemeldet. Handelt es sich bei dieser Bearbeitung um eine der Veranstaltungen? Falls ja, wähle bitte die Veranstaltung aus.",
 	"campaignevents-postedit-dialog-select-placeholder": "Veranstaltung auswählen",
 	"campaignevents-postedit-dialog-action-no": "Nein danke",
-	"campaignevents-postedit-dialog-action-yes": "Ja"
+	"campaignevents-postedit-dialog-action-yes": "Ja",
+	"campaignevents-contributions-summary-participants": "Teilnehmer",
+	"campaignevents-contributions-summary-wikis-edited": "Wikis bearbeitet",
+	"campaignevents-contributions-summary-articles-created": "Erstellte Artikel",
+	"campaignevents-contributions-summary-articles-edited": "Artikel bearbeitet",
+	"campaignevents-contributions-summary-bytes-changed": "Geänderte Bytes",
+	"campaignevents-contributions-summary-links-changed": "Links geändert"
 }

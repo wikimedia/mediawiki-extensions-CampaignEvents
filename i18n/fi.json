@@ -3,6 +3,7 @@
 		"authors": [
 			"Kyykaarme",
 			"MITO",
+			"Minilammas",
 			"Pyscowicz",
 			"Samoasambia"
 		]
@@ -586,5 +587,7 @@
 	"campaignevents-postedit-dialog-intro-multiple": "Olet ilmoittautunut useaan parhaillaan käynnissä olevaan tapahtumaan. Liittyykö tämä muokkaus johonkin niistä? Jos kyllä, valitse mikä.",
 	"campaignevents-postedit-dialog-select-placeholder": "Valitse tapahtuma",
 	"campaignevents-postedit-dialog-action-no": "Ei kiitos",
-	"campaignevents-postedit-dialog-action-yes": "Kyllä"
+	"campaignevents-postedit-dialog-action-yes": "Kyllä",
+	"campaignevents-contributions-summary-participants": "Osallistujat",
+	"campaignevents-contributions-summary-wikis-edited": "Muokatut wikit"
 }

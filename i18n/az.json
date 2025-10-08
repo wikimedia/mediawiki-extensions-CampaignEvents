@@ -386,6 +386,13 @@
 	"campaignevents-email-self-subject": "$1 iştirakçılarına olan mesajınızın nüsxəsi",
 	"campaignevents-event-details-time-registered": "Qeydiyyat vaxtı",
 	"campaignevents-event-details-can-receive-email": "E-poçt qəbul edə bilər?",
+	"campaignevents-event-details-contributions-table-caption": "Töhfələr",
+	"campaignevents-event-details-contributions-article": "Redaktə edilən məqalə",
+	"campaignevents-event-details-contributions-wiki": "Viki",
+	"campaignevents-event-details-contributions-username": "İstifadəçi adı",
+	"campaignevents-event-details-contributions-timestamp": "Vaxt",
+	"campaignevents-event-details-contributions-bytes": "Bayt",
+	"campaignevents-event-details-contributions-article-created-tooltip": "Bu məqalə tədbir zamanı yaradılıb",
 	"campaignevents-register-questions-label-title": "Məlumatlarınız",
 	"campaignevents-register-questions-label-subtitle": "Bu məlumat yalnız tədbir təşkilatçıları ilə paylaşılacaq.",
 	"campaignevents-register-question-gender": "Sizin cinsi kimliyiniz nədir? (məcburi deyil)",
@@ -582,5 +589,11 @@
 	"campaignevents-postedit-dialog-intro-multiple": "Siz hal-hazırda aktiv olan çoxsaylı tədbirlərdə qeydiyyatdan keçmisiniz. Bu redaktə tədbirlərdən biri üçündür? Əgər belədirsə, zəhmət olmasa həmin tədbiri seçin.",
 	"campaignevents-postedit-dialog-select-placeholder": "Tədbir seç",
 	"campaignevents-postedit-dialog-action-no": "Xeyr, təşəkkürlər",
-	"campaignevents-postedit-dialog-action-yes": "Bəli"
+	"campaignevents-postedit-dialog-action-yes": "Bəli",
+	"campaignevents-contributions-summary-participants": "iştirakçı",
+	"campaignevents-contributions-summary-wikis-edited": "redaktə edilmiş viki",
+	"campaignevents-contributions-summary-articles-created": "yaradılmış məqalə",
+	"campaignevents-contributions-summary-articles-edited": "redaktə edilmiş məqalə",
+	"campaignevents-contributions-summary-bytes-changed": "bayt dəyişikliyi",
+	"campaignevents-contributions-summary-links-changed": "link dəyişikliyi"
 }

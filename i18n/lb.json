@@ -558,5 +558,11 @@
 	"campaignevents-event-contribution-event-deleted": "D'Evenement gouf geläscht",
 	"campaignevents-postedit-dialog-select-placeholder": "Evenement eraussichen",
 	"campaignevents-postedit-dialog-action-no": "Nee merci",
-	"campaignevents-postedit-dialog-action-yes": "Jo"
+	"campaignevents-postedit-dialog-action-yes": "Jo",
+	"campaignevents-contributions-summary-participants": "Participanten",
+	"campaignevents-contributions-summary-wikis-edited": "Geännert Wikien",
+	"campaignevents-contributions-summary-articles-created": "Artikelen ugeluecht",
+	"campaignevents-contributions-summary-articles-edited": "Geännert Artikelen",
+	"campaignevents-contributions-summary-bytes-changed": "Byte geännert",
+	"campaignevents-contributions-summary-links-changed": "Geännert Linken"
 }

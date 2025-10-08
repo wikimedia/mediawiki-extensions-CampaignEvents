@@ -400,6 +400,13 @@
 	"campaignevents-email-self-subject": "نسخة من رسالتك للمشاركين بقيمة $1",
 	"campaignevents-event-details-time-registered": "وقت التسجيل",
 	"campaignevents-event-details-can-receive-email": "يتلقى البريد الإلكتروني",
+	"campaignevents-event-details-contributions-table-caption": "مساهمات",
+	"campaignevents-event-details-contributions-article": "المقالة المحررة",
+	"campaignevents-event-details-contributions-wiki": "ويكي",
+	"campaignevents-event-details-contributions-username": "اسم المستخدم",
+	"campaignevents-event-details-contributions-timestamp": "الطابع الزمني",
+	"campaignevents-event-details-contributions-bytes": "بايت",
+	"campaignevents-event-details-contributions-article-created-tooltip": "أُنشئت هذه المقالة خلال الفعالية",
 	"campaignevents-register-questions-label-title": "معلوماتكم",
 	"campaignevents-register-questions-label-subtitle": "ستشارك هذه المعلومات فقط مع منظمي الفعالية.",
 	"campaignevents-register-question-gender": "ما هي هويتك الجنسية؟ (خياري)",
@@ -596,5 +603,12 @@
 	"campaignevents-postedit-dialog-intro-multiple": "أنت مسجل في عدة فعاليات نشطة حاليًا. هل هذا التعديل يخص إحدى الفعاليات؟ إذا كانت الإجابة بنعم، يُرجى تحديد أي منها.",
 	"campaignevents-postedit-dialog-select-placeholder": "حدد الحدث",
 	"campaignevents-postedit-dialog-action-no": "ًلا شكرا",
-	"campaignevents-postedit-dialog-action-yes": "نعم"
+	"campaignevents-postedit-dialog-action-yes": "نعم",
+	"campaignevents-contributions-summary-participants": "المشاركون",
+	"campaignevents-contributions-summary-wikis-edited": "الويكيات المحررة",
+	"campaignevents-contributions-summary-articles-created": "المقالات المنشأة",
+	"campaignevents-contributions-summary-articles-edited": "المقالات المحررة",
+	"campaignevents-contributions-summary-bytes-changed": "البايتات المتغيرة",
+	"campaignevents-contributions-summary-links-changed": "الروابط المُغيَّرة",
+	"campaignevents-contributions-summary-delta-separator": "/"
 }
