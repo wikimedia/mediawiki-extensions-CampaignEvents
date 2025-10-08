@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 
 use InvalidArgumentException;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Parser\ParserOutputLinkTypes;
@@ -12,6 +13,7 @@ use MediaWiki\Revision\RevisionAccessException;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStoreFactory;
 use MediaWiki\Title\TitleFormatter;
+use MediaWiki\WikiMap\WikiMap;
 
 /**
  * Computes edit metrics for associating edits with events
@@ -35,15 +37,22 @@ class EventContributionComputeMetrics {
 	 * @param int $revisionID The revision ID to compute metrics for
 	 * @param int $eventID The event ID to associate with
 	 * @param int $userID The user ID who made the edit
-	 * @param string $wiki The wiki where the edit was made
+	 * @param string $fullWikiID The wiki where the edit was made
 	 * @return EventContribution Complete contribution object
 	 */
 	public function computeEventContribution(
 		int $revisionID,
 		int $eventID,
 		int $userID,
-		string $wiki
+		string $fullWikiID
 	): EventContribution {
+		if ( $fullWikiID === WikiMap::getCurrentWikiId() ) {
+			// Normalize to avoid T406777 and similar issues.
+			$wiki = WikiAwareEntity::LOCAL;
+		} else {
+			$wiki = $fullWikiID;
+		}
+
 		$revisionStore = $this->revisionStoreFactory->getRevisionStore( $wiki );
 		$currentRevision = $revisionStore->getRevisionById( $revisionID );
 		if ( !$currentRevision ) {
@@ -77,7 +86,7 @@ class EventContributionComputeMetrics {
 		return new EventContribution(
 			$eventID,
 			$userID,
-			$wiki,
+			$fullWikiID,
 			$pagePrefixedtext,
 			$pageID,
 			$revisionID,
