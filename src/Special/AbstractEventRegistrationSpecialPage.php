@@ -33,7 +33,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Html\Html;
-use MediaWiki\HTMLForm\Field\HTMLToggleSwitchField;
+use MediaWiki\HTMLForm\Field\HTMLCheckField;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
 use MediaWiki\SpecialPage\FormSpecialPage;
@@ -80,6 +80,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private Config $wikiConfig;
 	private EventTypesRegistry $eventTypesRegistry;
 	private CountryProvider $countryProvider;
+	/** @var non-empty-list<string> Event type names */
+	private array $disallowedCountryCodes;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -136,6 +138,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$this->countryProvider = $countryProvider;
 
 		$this->formMessages = $this->getFormMessages();
+		$this->disallowedCountryCodes = array_keys(
+			$this->getConfig()->get( 'CampaignEventsContributionTrackingDisallowedCountries' )
+		);
 	}
 
 	/**
@@ -217,6 +222,13 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	 * @return array<string,array<string,mixed>>
 	 */
 	protected function getFormFields(): array {
+		$request = $this->getRequest();
+		if ( $request->wasPosted() ) {
+			$wpContributionStats = $request->getCheck( 'wpContributionStats' );
+		} else {
+			// Form wasn't submitted, use default value.
+			$wpContributionStats = !$this->event || $this->event->hasContributionTracking();
+		}
 		$formFields = [];
 
 		$pageFieldSpecs = [
@@ -492,12 +504,35 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		];
 
 		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
+			$hasNoPermittedEventTypes = [ 'NOR' ];
+			foreach ( $this->eventTypesRegistry->getContributionTypes() as $contributionType ) {
+				$hasNoPermittedEventTypes[] =
+					[ 'CONTAINS', 'EventTypes', $contributionType ];
+			}
+			$participationOptions = [
+				'AND',
+				[ '!==', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ]
+			];
+
+			$hasDisallowedCountryCodes = [ 'OR' ];
+			foreach ( $this->disallowedCountryCodes as $countryCode ) {
+				$hasDisallowedCountryCodes[] = [
+					'===',
+					'EventMeetingCountryCode',
+					$countryCode
+				];
+			}
+			$disallowed = [ 'OR' ];
+			$disallowed[] = $hasNoPermittedEventTypes;
+			$participationOptions[] = $hasDisallowedCountryCodes;
+			$disallowed[] = $participationOptions;
 			$formFields['ContributionStats'] = [
-				'class' => HTMLToggleSwitchField::class,
+				'class' => HTMLCheckField::class,
 				'label-message' => 'campaignevents-edit-field-contribution-stats-label',
-				'default' => $this->event ? $this->event->hasContributionTracking() : true,
+				'default' => $wpContributionStats,
 				'help' => $this->msg( 'campaignevents-edit-field-contribution-stats-help' )->escaped(),
 				'section' => self::DETAILS_SECTION,
+				'disable-if' => $disallowed,
 			];
 		}
 
@@ -784,7 +819,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		$testEvent = $data['TestEvent'] === "1";
-
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
