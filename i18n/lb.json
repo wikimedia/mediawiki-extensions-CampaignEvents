@@ -9,7 +9,7 @@
 	"campaignevents-desc": "Bitt Funktioune fir Organisateuren a Participantë vu Campagnen.",
 	"nstab-event": "Evenement",
 	"group-event-organizer": "Organisateure vum Evenement",
-	"group-event-organizer-member": "{{GENDER:$1|Organisateur|Organisatrice}} vum Evenement",
+	"group-event-organizer-member": "{{GENDER:$1|Organisateur|Organisatrice}} vun Evenementer",
 	"grouppage-event-organizer": "{{ns:project}}:Organisateure vum Evenement",
 	"action-campaignevents-enable-registration": "Evenementumeldungen z'aktivéieren",
 	"right-campaignevents-enable-registration": "Evenementumeldungen aktivéieren",
