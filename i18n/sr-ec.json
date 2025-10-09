@@ -262,5 +262,8 @@
 	"campaignevents-email-error-notification-with-detail": "Имејл није послат из следећег разлога: $1",
 	"campaignevents-eventslist-types-label": "Врсте догађаја",
 	"campaignevents-eventslist-country-label": "Држава",
-	"campaignevents-event-contribution-revision-not-found": "Ревизија није пронађена"
+	"campaignevents-event-contribution-revision-not-found": "Ревизија није пронађена",
+	"campaignevents-postedit-dialog-action-no": "Не, хвала",
+	"campaignevents-postedit-dialog-action-yes": "Да",
+	"campaignevents-contributions-summary-articles-created": "Направљених чланака"
 }

@@ -589,5 +589,12 @@
 	"campaignevents-postedit-dialog-intro-multiple": "Пријавени сте за повеќе настани кои сега се во тек. Дали ова уредување е за некој од нив? Ако е, тогаш изберете за кој.",
 	"campaignevents-postedit-dialog-select-placeholder": "Избери настан",
 	"campaignevents-postedit-dialog-action-no": "Не, благодарам",
-	"campaignevents-postedit-dialog-action-yes": "Да"
+	"campaignevents-postedit-dialog-action-yes": "Да",
+	"campaignevents-contributions-summary-participants": "Учесници",
+	"campaignevents-contributions-summary-wikis-edited": "Уредувани викија",
+	"campaignevents-contributions-summary-articles-created": "Создадени статии",
+	"campaignevents-contributions-summary-articles-edited": "Уредени статии",
+	"campaignevents-contributions-summary-bytes-changed": "Изменети бајти",
+	"campaignevents-contributions-summary-links-changed": "Изменети врски",
+	"campaignevents-contributions-summary-delta-separator": "/"
 }

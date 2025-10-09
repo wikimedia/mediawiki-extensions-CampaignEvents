@@ -596,5 +596,12 @@
 	"campaignevents-postedit-dialog-intro-multiple": "Tes rexistros en varios eventos que están activos nestes intres. Esta edición é para algún dos eventos? En caso afirmativo, selecciona cal.",
 	"campaignevents-postedit-dialog-select-placeholder": "Seleccionar un evento",
 	"campaignevents-postedit-dialog-action-no": "Non, grazas",
-	"campaignevents-postedit-dialog-action-yes": "Si"
+	"campaignevents-postedit-dialog-action-yes": "Si",
+	"campaignevents-contributions-summary-participants": "Participantes",
+	"campaignevents-contributions-summary-wikis-edited": "Wikis editados",
+	"campaignevents-contributions-summary-articles-created": "Artigos creados",
+	"campaignevents-contributions-summary-articles-edited": "Artigos editados",
+	"campaignevents-contributions-summary-bytes-changed": "Bytes modificados",
+	"campaignevents-contributions-summary-links-changed": "Ligazóns modificadas",
+	"campaignevents-contributions-summary-delta-separator": "/"
 }

@@ -595,5 +595,11 @@
 	"campaignevents-postedit-dialog-intro-multiple": "U bent ingeschreven voor meerdere evenementen die nu actief zijn. Betreft deze bewerking één van de evenementen? Zo ja, selecteer dan dat evenement.",
 	"campaignevents-postedit-dialog-select-placeholder": "Selecteer evenement",
 	"campaignevents-postedit-dialog-action-no": "Nee, bedankt",
-	"campaignevents-postedit-dialog-action-yes": "Ja"
+	"campaignevents-postedit-dialog-action-yes": "Ja",
+	"campaignevents-contributions-summary-participants": "Deelnemers",
+	"campaignevents-contributions-summary-wikis-edited": "Bewerkte wiki’s",
+	"campaignevents-contributions-summary-articles-created": "Aangemaakte artikelen",
+	"campaignevents-contributions-summary-articles-edited": "Bewerkte artikelen",
+	"campaignevents-contributions-summary-bytes-changed": "Gewijzigde bytes",
+	"campaignevents-contributions-summary-links-changed": "Gewijzigde koppelingen"
 }

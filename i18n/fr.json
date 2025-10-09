@@ -9,6 +9,7 @@
 			"Eihel",
 			"EmDashUser002",
 			"Escargot bleu",
+			"Geugeor",
 			"Gomoko",
 			"Goombiis",
 			"Graineahumus",
@@ -625,7 +626,10 @@
 	"campaignevents-postedit-dialog-action-no": "Non merci",
 	"campaignevents-postedit-dialog-action-yes": "Oui",
 	"campaignevents-contributions-summary-participants": "Participants",
+	"campaignevents-contributions-summary-wikis-edited": "Wikis modifiés",
 	"campaignevents-contributions-summary-articles-created": "Articles créés",
+	"campaignevents-contributions-summary-articles-edited": "Articles modifiés",
 	"campaignevents-contributions-summary-bytes-changed": "Octets modifiés",
-	"campaignevents-contributions-summary-links-changed": "Liens modifiés"
+	"campaignevents-contributions-summary-links-changed": "Liens modifiés",
+	"campaignevents-contributions-summary-delta-separator": "/"
 }
