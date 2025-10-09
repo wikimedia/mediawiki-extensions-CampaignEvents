@@ -808,8 +808,8 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			self::BLOCKED,
 			self::ALL_RIGHTS,
 		];
-		yield 'Can be organizer but not enable registration' => [
-			true,
+		yield 'Can organize events but not generate invitation lists' => [
+			false,
 			self::LOGGED_IN,
 			self::NAMED,
 			self::NOT_BLOCKED,
@@ -817,23 +817,13 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 				PermissionChecker::ORGANIZE_EVENTS_RIGHT
 			],
 		];
-		yield 'Can enable registration but not be organizer' => [
+		yield 'Can generate invitation lists' => [
 			true,
 			self::LOGGED_IN,
 			self::NAMED,
 			self::NOT_BLOCKED,
 			[
-				PermissionChecker::ENABLE_REGISTRATIONS_RIGHT
-			],
-		];
-		yield 'Can be organizer and enable registration' => [
-			true,
-			self::LOGGED_IN,
-			self::NAMED,
-			self::NOT_BLOCKED,
-			[
-				PermissionChecker::ORGANIZE_EVENTS_RIGHT,
-				PermissionChecker::ENABLE_REGISTRATIONS_RIGHT
+				PermissionChecker::GENERATE_INVITATION_LISTS_RIGHT
 			],
 		];
 	}

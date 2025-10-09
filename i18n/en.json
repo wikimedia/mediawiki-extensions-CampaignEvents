@@ -19,6 +19,8 @@
 	"right-campaignevents-email-participants": "Email event participants",
 	"action-campaignevents-view-private-participants": "view private event participants",
 	"right-campaignevents-view-private-participants": "View private event participants",
+	"action-campaignevents-generate-invitation-lists": "generate invitation lists",
+	"right-campaignevents-generate-invitation-lists": "Generate invitation lists",
 	"specialpages-group-campaignevents": "Events",
 	"campaignevents-error-invalid-id": "The event ID must be a positive integer.",
 	"campaignevents-error-empty-title": "Enter an event page title.",
