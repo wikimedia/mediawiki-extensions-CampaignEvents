@@ -21,6 +21,7 @@ class PermissionChecker {
 	public const SEND_EVENTS_EMAIL_RIGHT = 'campaignevents-email-participants';
 	public const VIEW_PRIVATE_PARTICIPANTS_RIGHT = 'campaignevents-view-private-participants';
 	public const DELETE_REGISTRATION_RIGHT = 'campaignevents-delete-registration';
+	public const GENERATE_INVITATION_LISTS_RIGHT = 'campaignevents-generate-invitation-lists';
 
 	private OrganizersStore $organizersStore;
 	private PageAuthorLookup $pageAuthorLookup;
@@ -170,7 +171,8 @@ class PermissionChecker {
 	}
 
 	public function userCanUseInvitationLists( Authority $performer ): bool {
-		return $this->userCanOrganizeEvents( $performer->getUser()->getName() ) ||
-			$this->userCanEnableRegistrations( $performer );
+		return $performer->isNamed()
+			&& $performer->isAllowed( self::GENERATE_INVITATION_LISTS_RIGHT )
+			&& !$performer->getBlock()?->isSitewide();
 	}
 }

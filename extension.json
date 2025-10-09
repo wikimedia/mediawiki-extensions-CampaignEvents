@@ -54,7 +54,8 @@
 		"campaignevents-delete-registration",
 		"campaignevents-organize-events",
 		"campaignevents-email-participants",
-		"campaignevents-view-private-participants"
+		"campaignevents-view-private-participants",
+		"campaignevents-generate-invitation-lists"
 	],
 	"config": {
 		"CampaignEventsProgramsAndEventsDashboardInstance": {
@@ -106,14 +107,16 @@
 		"event-organizer": {
 			"campaignevents-enable-registration": true,
 			"campaignevents-organize-events": true,
-			"campaignevents-email-participants": true
+			"campaignevents-email-participants": true,
+			"campaignevents-generate-invitation-lists": true
 		},
 		"sysop": {
 			"campaignevents-enable-registration": true,
 			"campaignevents-organize-events": true,
 			"campaignevents-email-participants": true,
 			"campaignevents-delete-registration": true,
-			"campaignevents-view-private-participants": true
+			"campaignevents-view-private-participants": true,
+			"campaignevents-generate-invitation-lists": true
 		}
 	},
 	"AddGroups": {

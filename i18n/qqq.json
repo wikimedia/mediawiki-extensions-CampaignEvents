@@ -26,6 +26,8 @@
 	"right-campaignevents-email-participants": "{{doc-right|campaignevents-email-participants}}",
 	"action-campaignevents-view-private-participants": "{{doc-action|campaignevents-view-private-participants}}",
 	"right-campaignevents-view-private-participants": "{{doc-right|campaignevents-view-private-participants}}",
+	"action-campaignevents-generate-invitation-lists": "{{doc-action|campaignevents-generate-invitation-lists}}",
+	"right-campaignevents-generate-invitation-lists": "{{doc-right|campaignevents-generate-invitation-lists}}",
 	"specialpages-group-campaignevents": "{{doc-special-group|that=are related to the CampaignEvents extension}}",
 	"campaignevents-error-invalid-id": "Error message used when the given event ID is not valid.",
 	"campaignevents-error-empty-title": "Error message used when the given event page title is an empty string.",
