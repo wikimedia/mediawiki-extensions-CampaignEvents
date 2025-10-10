@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\Authority;
@@ -40,12 +41,13 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	private function getPermissionChecker(
 		?OrganizersStore $organizersStore = null,
 		?PageAuthorLookup $pageAuthorLookup = null,
-		?MWPermissionsLookup $permissionsLookup = null
+		?MWPermissionsLookup $permissionsLookup = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null
 	): PermissionChecker {
 		return new PermissionChecker(
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
 			$pageAuthorLookup ?? $this->createMock( PageAuthorLookup::class ),
-			$this->createMock( CampaignsCentralUserLookup::class ),
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$permissionsLookup ?? $this->createMock( MWPermissionsLookup::class )
 		);
 	}
@@ -837,6 +839,95 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		$mock->method( 'isOnLocalWiki' )->willReturn( $isLocal );
 		$mock->method( 'getID' )->willReturn( 42 );
 		return $mock;
+	}
+
+	/**
+	 * @covers ::userCanDeleteContribution
+	 * @dataProvider provideCanDeleteContribution
+	 */
+	public function testUserCanDeleteContribution(
+		bool $expected,
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		bool $isAuthor,
+		?bool $isStoredOrganizer = null
+	): void {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+
+		// Mock organizers store for userCanEditRegistration
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+
+		// Mock central user lookup for author check
+		$centralLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		if ( $isLoggedIn && !$isTemp ) {
+			$centralUser = $this->createMock( CentralUser::class );
+			$centralUser->method( 'getCentralID' )->willReturn( $isAuthor ? 123 : 555 );
+			$centralLookup->method( 'newFromAuthority' )->willReturn( $centralUser );
+		} else {
+			$centralLookup->method( 'newFromAuthority' )
+				->willThrowException( new UserNotGlobalException( 123 ) );
+		}
+
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
+		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup, $centralLookup );
+
+		$this->assertSame(
+			$expected,
+			$checker->userCanDeleteContribution( $performer, $event, 123 )
+		);
+	}
+
+	public static function provideCanDeleteContribution(): Generator {
+		// Base cases from provideGenericEditPermissions, with author check variations
+		foreach ( self::provideGenericEditPermissions() as $name => $case ) {
+			[
+				$baseExpected,
+				$isLoggedIn,
+				$isTemp,
+				$isBlocked,
+				$userRights,
+				$eventIsLocal,
+				$isStoredOrganizer
+			] = $case;
+
+			// Case 1: User is NOT the author of the contribution
+			// Result should be same as userCanEditRegistration
+			yield $name . ' (not author)' => [
+				$baseExpected,
+				$isLoggedIn,
+				$isTemp,
+				$isBlocked,
+				$userRights,
+				$eventIsLocal,
+				// isAuthor
+				false,
+				$isStoredOrganizer
+			];
+
+			// Case 2: User IS the author of the contribution (if possible)
+			if ( $isLoggedIn && !$isTemp ) {
+				yield $name . ' (is author)' => [
+					true,
+					$isLoggedIn,
+					$isTemp,
+					$isBlocked,
+					$userRights,
+					$eventIsLocal,
+					// isAuthor
+					true,
+					$isStoredOrganizer
+				];
+			}
+		}
 	}
 
 	public static function provideHasViewPrivateParticipantsRights(): Generator {

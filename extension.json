@@ -669,6 +669,18 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsEventLookup"
 			]
+		},
+		{
+			"path": "/campaignevents/v0/event_contributions/{id}",
+			"method": "DELETE",
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\DeleteEventContributionHandler",
+			"services": [
+				"CampaignEventsEventContributionStore",
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsEventLookup",
+				"CampaignEventsCentralUserLookup",
+				"MainConfig"
+			]
 		}
 	],
 	"ServiceWiringFiles": [

@@ -106,6 +106,28 @@ class PermissionChecker {
 			);
 	}
 
+	/**
+	 * Returns whether the performer can delete a single contribution record for the given event.
+	 *
+	 * A user can delete a contribution if either:
+	 * - is an organizer of the event, or
+	 * - is the author of the contribution.
+	 */
+	public function userCanDeleteContribution(
+		Authority $performer,
+		ExistingEventRegistration $event,
+		int $contributionAuthorCentralId
+	): bool {
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+		} catch ( UserNotGlobalException ) {
+			return false;
+		}
+
+		return $this->userCanEditRegistration( $performer, $event ) ||
+			( $centralUser->getCentralID() === $contributionAuthorCentralId );
+	}
+
 	public function userCanDeleteRegistrations( Authority $performer ): bool {
 		return $performer->isNamed() &&
 			$performer->isAllowed( self::DELETE_REGISTRATION_RIGHT ) &&
