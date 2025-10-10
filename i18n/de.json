@@ -21,6 +21,8 @@
 	"right-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer",
 	"action-campaignevents-view-private-participants": "Teilnehmer privater Veranstaltungen anzuzeigen",
 	"right-campaignevents-view-private-participants": "Teilnehmer privater Veranstaltungen anzeigen",
+	"action-campaignevents-generate-invitation-lists": "Einladungslisten zu erstellen",
+	"right-campaignevents-generate-invitation-lists": "Einladungslisten erstellen",
 	"specialpages-group-campaignevents": "Ereignisse",
 	"campaignevents-error-invalid-id": "Die Veranstaltungs-ID muss eine positive ganze Zahl sein.",
 	"campaignevents-error-empty-title": "Gib einen Titel für die Veranstaltungsseite ein.",

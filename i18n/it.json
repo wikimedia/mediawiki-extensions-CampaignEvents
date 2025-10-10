@@ -20,6 +20,8 @@
 	"right-campaignevents-organize-events": "Organizza eventi",
 	"action-campaignevents-email-participants": "inviare email ai partecipanti all'evento",
 	"right-campaignevents-email-participants": "Invia email ai partecipanti all'evento",
+	"action-campaignevents-generate-invitation-lists": "generare elenchi di inviti",
+	"right-campaignevents-generate-invitation-lists": "Genera elenchi di inviti",
 	"specialpages-group-campaignevents": "Eventi",
 	"campaignevents-error-invalid-id": "L'ID dell'evento deve essere un intero positivo.",
 	"campaignevents-error-empty-title": "Inserisci un titolo per la pagina evento.",

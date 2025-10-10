@@ -20,6 +20,8 @@
 	"right-campaignevents-email-participants": "Испраќање е-пошта на учесници на настани",
 	"action-campaignevents-view-private-participants": "гледање на учесници на приватен настан",
 	"right-campaignevents-view-private-participants": "Гледање на учесници на приватен настан",
+	"action-campaignevents-generate-invitation-lists": "создавање на списоци со покани",
+	"right-campaignevents-generate-invitation-lists": "Создавање на списоци со покани",
 	"specialpages-group-campaignevents": "Настани",
 	"campaignevents-error-invalid-id": "Назнаката на настанот мора да биде позитивен цел број.",
 	"campaignevents-error-empty-title": "Насловот на страницата за настанот не може да стои празна.",
