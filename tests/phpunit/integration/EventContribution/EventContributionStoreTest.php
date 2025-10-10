@@ -658,4 +658,59 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			$updateDataWithDeletedMap( [ 5 => 1, 6 => 0 ] ),
 		];
 	}
+
+	public function testGetByID_returnsRowOrNull(): void {
+		$store = CampaignEventsServices::getEventContributionStore();
+		// Existing ID from addDBData
+		$existing = $store->getByID( 1 );
+		$this->assertInstanceOf( EventContribution::class, $existing );
+		$this->assertSame( 1, $existing->getEventId() );
+		// Non-existing ID
+		$this->assertNull( $store->getByID( 999999 ) );
+	}
+
+	public function testDeleteByID_deletesOneRow(): void {
+		$db = $this->getDb();
+		$store = CampaignEventsServices::getEventContributionStore();
+		// Sanity: row with cec_id=2 exists
+		$before = $db->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_event_contributions' )
+			->where( [ 'cec_id' => 2 ] )
+			->fetchField();
+		$this->assertSame( 1, (int)$before );
+		// Delete and verify removed
+		$store->deleteByID( 2 );
+		$after = $db->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_event_contributions' )
+			->where( [ 'cec_id' => 2 ] )
+			->fetchField();
+		$this->assertSame( 0, (int)$after );
+		// Ensure another row remains unaffected
+		$stillThere = $db->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_event_contributions' )
+			->where( [ 'cec_id' => 3 ] )
+			->fetchField();
+		$this->assertSame( 1, (int)$stillThere );
+	}
+
+	public function testDeleteByID_idempotentOnMissing(): void {
+		$db = $this->getDb();
+		$store = CampaignEventsServices::getEventContributionStore();
+		// Count total rows before
+		$totalBefore = $db->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_event_contributions' )
+			->fetchField();
+		// Delete non-existent
+		$store->deleteByID( 999999 );
+		// Count should remain the same
+		$totalAfter = $db->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_event_contributions' )
+			->fetchField();
+		$this->assertSame( (int)$totalBefore, (int)$totalAfter );
+	}
 }

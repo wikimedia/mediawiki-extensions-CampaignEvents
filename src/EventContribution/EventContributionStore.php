@@ -184,6 +184,40 @@ class EventContributionStore {
 	}
 
 	/**
+	 * Fetch a single contribution by its primary key.
+	 *
+	 * @param int $contribID The cec_id
+	 * @return EventContribution|null The contribution object, or null if not found
+	 */
+	public function getByID( int $contribID ): ?EventContribution {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$row = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_event_contributions' )
+			->where( [ 'cec_id' => $contribID ] )
+			->caller( __METHOD__ )
+			->fetchRow();
+		if ( !$row ) {
+			return null;
+		}
+		return $this->newFromRow( $row );
+	}
+
+	/**
+	 * Permanently delete a contribution by its primary key.
+	 *
+	 * @param int $contribID The cec_id to delete
+	 */
+	public function deleteByID( int $contribID ): void {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw->newDeleteQueryBuilder()
+			->deleteFrom( 'ce_event_contributions' )
+			->where( [ 'cec_id' => $contribID ] )
+			->caller( __METHOD__ )
+			->execute();
+	}
+
+	/**
 	 * @phan-param mixed[] $where
 	 * @phan-param mixed[] $set
 	 */
