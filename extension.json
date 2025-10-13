@@ -163,6 +163,32 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventLookup"
 			]
+		},
+		"CentralAuthContributionUserChangesHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\CentralAuthContributionUserChangesHandler",
+			"services": [
+				"CampaignEventsEventContributionStore",
+				"JobQueueGroup",
+				"MainConfig"
+			]
+		},
+		"UserMergeContributionUserChangesHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\UserMergeContributionUserChangesHandler",
+			"services": [
+				"CampaignEventsEventContributionStore",
+				"JobQueueGroup",
+				"MainConfig"
+			]
+		},
+		"ContributionUserChangesHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\ContributionUserChangesHandler",
+			"services": [
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsEventContributionStore",
+				"JobQueueGroup",
+				"MainWANObjectCache",
+				"MainConfig"
+			]
 		}
 	},
 	"Hooks": {
@@ -171,7 +197,14 @@
 		"TitleMove": "TitleMoveHandler",
 		"BeforeCreateEchoEvent": "EchoHooksHandler",
 		"GetPreferences": "GetPreferencesHandler",
-		"BeforePageDisplay": "PostEditHandler"
+		"BeforePageDisplay": "PostEditHandler",
+		"DeleteAccount": "UserMergeContributionUserChangesHandler",
+		"UserMergeAccountFields": "UserMergeContributionUserChangesHandler",
+		"CentralAuthAccountDeleted": "CentralAuthContributionUserChangesHandler",
+		"CentralAuthUserVisibilityChanged": "CentralAuthContributionUserChangesHandler",
+		"BlockIpComplete": "ContributionUserChangesHandler",
+		"UnblockUserComplete": "ContributionUserChangesHandler",
+		"RenameUserComplete": "ContributionUserChangesHandler"
 	},
 	"DomainEventIngresses": [
 		{

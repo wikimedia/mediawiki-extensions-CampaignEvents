@@ -12,12 +12,19 @@ use MediaWiki\Tests\ExtensionJsonTestBase;
  * @coversNothing
  */
 class CampaignEventsExtensionJsonTest extends ExtensionJsonTestBase {
+	private const HOOK_HANDLERS_BY_EXTENSION_DEPENDENCY = [
+		'EchoHooksHandler' => 'EchoHooksHandler',
+		'CentralAuthContributionUserChangesHandler' => 'CentralAuth',
+		'UserMergeContributionUserChangesHandler' => 'UserMerge',
+	];
+
 	/** @inheritDoc */
 	protected static string $extensionJsonPath = __DIR__ . '/../../../extension.json';
 
 	public static function provideHookHandlerNames(): iterable {
 		foreach ( self::getExtensionJson()['HookHandlers'] ?? [] as $hookHandlerName => $_ ) {
-			if ( $hookHandlerName === 'EchoHooksHandler' && !ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) ) {
+			$extensionDep = self::HOOK_HANDLERS_BY_EXTENSION_DEPENDENCY[$hookHandlerName] ?? null;
+			if ( $extensionDep && !ExtensionRegistry::getInstance()->isLoaded( $extensionDep ) ) {
 				continue;
 			}
 			yield [ $hookHandlerName ];

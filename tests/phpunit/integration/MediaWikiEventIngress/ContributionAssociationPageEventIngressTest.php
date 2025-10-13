@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\MediaWikiEventIng
 
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
+use MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContributionUpdateTestHelperTrait;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\WikiMap\WikiMap;
@@ -17,6 +18,8 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @covers \MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\ContributionAssociationPageEventIngress
  */
 class ContributionAssociationPageEventIngressTest extends MediaWikiIntegrationTestCase {
+	use EventContributionUpdateTestHelperTrait;
+
 	protected function setUp(): void {
 		parent::setUp();
 		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
@@ -37,15 +40,6 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiIntegrationTe
 			ConvertibleTimestamp::now(),
 			false
 		);
-	}
-
-	private function getStoredContrib(): EventContribution {
-		$row = $this->getDb()->newSelectQueryBuilder()
-			->select( '*' )
-			->from( 'ce_event_contributions' )
-			->fetchRow();
-		$store = CampaignEventsServices::getEventContributionStore();
-		return $store->newFromRow( $row );
 	}
 
 	private function runUpdateJob(): void {
