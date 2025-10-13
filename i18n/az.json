@@ -20,6 +20,8 @@
 	"right-campaignevents-email-participants": "Tədbir iştirakçılarına e-poçt göndərmək",
 	"action-campaignevents-view-private-participants": "gizli tədbir iştirakçılarına baxmaq",
 	"right-campaignevents-view-private-participants": "Gizli tədbir iştirakçılarına baxmaq",
+	"action-campaignevents-generate-invitation-lists": "dəvət siyahıları yaratmaq",
+	"right-campaignevents-generate-invitation-lists": "Dəvət siyahıları yaratmaq",
 	"specialpages-group-campaignevents": "Tədbirlər",
 	"campaignevents-error-invalid-id": "Tədbir identifikatoru müsbət tam ədəd olmalıdır.",
 	"campaignevents-error-empty-title": "Tədbir səhifəsinin başlığını daxil edin.",

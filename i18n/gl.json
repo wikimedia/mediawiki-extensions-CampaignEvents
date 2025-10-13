@@ -20,6 +20,8 @@
 	"right-campaignevents-email-participants": "Enviar correos electrónicos aos participantes de eventos",
 	"action-campaignevents-view-private-participants": "ver os participantes de eventos privados",
 	"right-campaignevents-view-private-participants": "Ver os participantes de eventos privados",
+	"action-campaignevents-generate-invitation-lists": "xerar listas de invitacións",
+	"right-campaignevents-generate-invitation-lists": "Xerar listas de invitacións",
 	"specialpages-group-campaignevents": "Eventos",
 	"campaignevents-error-invalid-id": "O identificador do evento debe ser un número enteiro positivo.",
 	"campaignevents-error-empty-title": "Introduce un título para a páxina do evento.",

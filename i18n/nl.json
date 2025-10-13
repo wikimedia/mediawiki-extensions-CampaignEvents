@@ -26,6 +26,8 @@
 	"right-campaignevents-email-participants": "Deelnemers aan evenementen e-mailen",
 	"action-campaignevents-view-private-participants": "deelnemers aan privé-evenementen bekijken",
 	"right-campaignevents-view-private-participants": "Deelnemers aan privé-evenementen bekijken",
+	"action-campaignevents-generate-invitation-lists": "uitnodigingslijsten te genereren",
+	"right-campaignevents-generate-invitation-lists": "Uitnodigingslijsten genereren",
 	"specialpages-group-campaignevents": "Evenementen",
 	"campaignevents-error-invalid-id": "Het evenement-ID moet een positief geheel getal zijn.",
 	"campaignevents-error-empty-title": "Voer de titel van een evenementpagina in.",

@@ -21,6 +21,8 @@
 	"right-campaignevents-email-participants": "E-Mailen u Participantë vun Evenementer schécken",
 	"action-campaignevents-view-private-participants": "Participantë vu privaten Evenementer ze gesinn",
 	"right-campaignevents-view-private-participants": "Participantë vu privaten Evenementer gesinn",
+	"action-campaignevents-generate-invitation-lists": "Invitatiounslëschten unzeleeën",
+	"right-campaignevents-generate-invitation-lists": "Invitatiounslëschten uleeën",
 	"specialpages-group-campaignevents": "Evenementer",
 	"campaignevents-error-invalid-id": "D'Evenement-ID muss eng positiv ganz Zuel sinn.",
 	"campaignevents-error-empty-title": "Gitt en Titel fir d'Säit vum Evenement an.",

@@ -19,6 +19,8 @@
 	"right-campaignevents-email-participants": "Inviar e-mail al participantes de un evento",
 	"action-campaignevents-view-private-participants": "vider participantes de eventos private",
 	"right-campaignevents-view-private-participants": "Vider participantes de eventos private",
+	"action-campaignevents-generate-invitation-lists": "generar listas de invitationes",
+	"right-campaignevents-generate-invitation-lists": "Generar listas de invitationes",
 	"specialpages-group-campaignevents": "Eventos",
 	"campaignevents-error-invalid-id": "Le ID del evento debe esser un numero integre positive.",
 	"campaignevents-error-empty-title": "Insere un titulo pro le pagina del evento.",

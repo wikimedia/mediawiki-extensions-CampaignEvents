@@ -22,6 +22,8 @@
 	"right-campaignevents-email-participants": "שליחת דואר אלקטרוני למשתתפי האירוע",
 	"action-campaignevents-view-private-participants": "לצפות במשתתפים של אירוע פרטי",
 	"right-campaignevents-view-private-participants": "צפייה במשתתפים של אירוע פרטי",
+	"action-campaignevents-generate-invitation-lists": "ליצור רשימות הזמנה",
+	"right-campaignevents-generate-invitation-lists": "יצירת רשימות הזמנה",
 	"specialpages-group-campaignevents": "אירועים",
 	"campaignevents-error-invalid-id": "מזהה האירוע חייב להיות מספר שלם חיובי.",
 	"campaignevents-error-empty-title": "נא להזין כותרת דף לאירוע.",

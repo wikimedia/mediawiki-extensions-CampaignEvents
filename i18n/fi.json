@@ -23,6 +23,8 @@
 	"right-campaignevents-email-participants": "Lähettää sähköpostia tapahtumaosallistujille",
 	"action-campaignevents-view-private-participants": "tarkastella yksityisiä tapahtumaosallistujia",
 	"right-campaignevents-view-private-participants": "Tarkastella yksityisiä tapahtumaosallistujia",
+	"action-campaignevents-generate-invitation-lists": "luoda kutsulistoja",
+	"right-campaignevents-generate-invitation-lists": "Luoda kutsulistoja",
 	"specialpages-group-campaignevents": "Tapahtumat",
 	"campaignevents-error-invalid-id": "Tapahtumatunnisteen on oltava positiivinen kokonaisluku.",
 	"campaignevents-error-empty-title": "Anna tapahtumasivun otsikko.",
@@ -589,5 +591,9 @@
 	"campaignevents-postedit-dialog-action-no": "Ei kiitos",
 	"campaignevents-postedit-dialog-action-yes": "Kyllä",
 	"campaignevents-contributions-summary-participants": "Osallistujat",
-	"campaignevents-contributions-summary-wikis-edited": "Muokatut wikit"
+	"campaignevents-contributions-summary-wikis-edited": "Muokatut wikit",
+	"campaignevents-contributions-summary-articles-created": "Luotuja artikkeleita",
+	"campaignevents-contributions-summary-articles-edited": "Muokattuja artikkeleita",
+	"campaignevents-contributions-summary-bytes-changed": "Tavumuutos",
+	"campaignevents-contributions-summary-links-changed": "Muutettuja linkkejä"
 }

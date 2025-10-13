@@ -32,6 +32,8 @@
 	"right-campaignevents-email-participants": "إرسال بريد إلكتروني للمشاركين في الفعالية",
 	"action-campaignevents-view-private-participants": "عرض المشاركين في الفعالية الخاص",
 	"right-campaignevents-view-private-participants": "عرض المشاركين في الفعاليات الخاصة",
+	"action-campaignevents-generate-invitation-lists": "إنشاء قوائم الدعوة",
+	"right-campaignevents-generate-invitation-lists": "إنشاء قوائم الدعوة",
 	"specialpages-group-campaignevents": "الفعاليات",
 	"campaignevents-error-invalid-id": "معرِّف الفعالية يجب أن يكون عددًا صحيحًا موجبًا.",
 	"campaignevents-error-empty-title": "أدخل عنوان صفحة الفعالية.",
