@@ -16,7 +16,7 @@ use MediaWiki\JobQueue\Job;
  * revision is updated multiple times within a short timeframe in conflicting ways (e.g., a revision is deleted by
  * mistake and immediately restored).
  */
-class UpdateContributionRecordsJob extends Job implements GenericParameterJob {
+class UpdatePageContributionRecordsJob extends Job implements GenericParameterJob {
 	public const TYPE_MOVE = 'move';
 	public const TYPE_DELETE = 'delete';
 	public const TYPE_RESTORE = 'restore';

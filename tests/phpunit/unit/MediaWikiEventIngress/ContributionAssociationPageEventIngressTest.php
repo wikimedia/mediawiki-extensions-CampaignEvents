@@ -7,7 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MediaWikiEventIngress;
 use Generator;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
-use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateContributionRecordsJob;
+use MediaWiki\Extension\CampaignEvents\EventContribution\UpdatePageContributionRecordsJob;
 use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\ContributionAssociationPageEventIngress;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Page\Event\PageCreatedEvent;
@@ -47,8 +47,8 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiUnitTestCase 
 		$jobQueueGroup->expects( $hasContributions ? $this->once() : $this->never() )
 			->method( 'push' )
 			->willReturnCallback( function ( $job ) {
-				$this->assertInstanceOf( UpdateContributionRecordsJob::class, $job );
-				$this->assertSame( UpdateContributionRecordsJob::TYPE_DELETE, $job->getParams()['type'] );
+				$this->assertInstanceOf( UpdatePageContributionRecordsJob::class, $job );
+				$this->assertSame( UpdatePageContributionRecordsJob::TYPE_DELETE, $job->getParams()['type'] );
 			} );
 		$eventIngress = $this->getEventIngress( $eventContributionsStore, $jobQueueGroup );
 
@@ -76,8 +76,8 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiUnitTestCase 
 		$jobQueueGroup->expects( $expectsJob ? $this->once() : $this->never() )
 			->method( 'push' )
 			->willReturnCallback( function ( $job ) {
-				$this->assertInstanceOf( UpdateContributionRecordsJob::class, $job );
-				$this->assertSame( UpdateContributionRecordsJob::TYPE_RESTORE, $job->getParams()['type'] );
+				$this->assertInstanceOf( UpdatePageContributionRecordsJob::class, $job );
+				$this->assertSame( UpdatePageContributionRecordsJob::TYPE_RESTORE, $job->getParams()['type'] );
 			} );
 		$eventIngress = $this->getEventIngress( $eventContributionsStore, $jobQueueGroup );
 
@@ -111,8 +111,8 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiUnitTestCase 
 		$jobQueueGroup->expects( $hasContributions ? $this->once() : $this->never() )
 			->method( 'push' )
 			->willReturnCallback( function ( $job ) use ( $newPrefixedText ) {
-				$this->assertInstanceOf( UpdateContributionRecordsJob::class, $job );
-				$this->assertSame( UpdateContributionRecordsJob::TYPE_MOVE, $job->getParams()['type'] );
+				$this->assertInstanceOf( UpdatePageContributionRecordsJob::class, $job );
+				$this->assertSame( UpdatePageContributionRecordsJob::TYPE_MOVE, $job->getParams()['type'] );
 				$this->assertSame( $newPrefixedText, $job->getParams()['newPrefixedText'] );
 			} );
 
@@ -146,8 +146,8 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiUnitTestCase 
 		$jobQueueGroup->expects( $expectsJob ? $this->once() : $this->never() )
 			->method( 'push' )
 			->willReturnCallback( function ( $job ) use ( $expectedDeleted, $expectedRestored ) {
-				$this->assertInstanceOf( UpdateContributionRecordsJob::class, $job );
-				$this->assertSame( UpdateContributionRecordsJob::TYPE_REV_DELETE, $job->getParams()['type'] );
+				$this->assertInstanceOf( UpdatePageContributionRecordsJob::class, $job );
+				$this->assertSame( UpdatePageContributionRecordsJob::TYPE_REV_DELETE, $job->getParams()['type'] );
 				$this->assertSame( $expectedDeleted, $job->getParams()['deletedRevIDs'] );
 				$this->assertSame( $expectedRestored, $job->getParams()['restoredRevIDs'] );
 			} );

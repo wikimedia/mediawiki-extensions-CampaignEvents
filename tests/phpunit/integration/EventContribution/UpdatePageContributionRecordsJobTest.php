@@ -7,14 +7,14 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContribution
 use Generator;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
-use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateContributionRecordsJob;
+use MediaWiki\Extension\CampaignEvents\EventContribution\UpdatePageContributionRecordsJob;
 use MediaWikiIntegrationTestCase;
 
 /**
  * @group Test
- * @covers \MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionJob
+ * @covers \MediaWiki\Extension\CampaignEvents\EventContribution\UpdatePageContributionRecordsJob
  */
-class UpdateContributionRecordsJobTest extends MediaWikiIntegrationTestCase {
+class UpdatePageContributionRecordsJobTest extends MediaWikiIntegrationTestCase {
 
 	/** @dataProvider provideConstructor */
 	public function testConstructor( array $params, ?string $expectedExceptionMessage ) {
@@ -22,7 +22,7 @@ class UpdateContributionRecordsJobTest extends MediaWikiIntegrationTestCase {
 			$this->expectException( InvalidArgumentException::class );
 			$this->expectExceptionMessage( $expectedExceptionMessage );
 		}
-		new UpdateContributionRecordsJob( $params );
+		new UpdatePageContributionRecordsJob( $params );
 		if ( $expectedExceptionMessage === null ) {
 			$this->addToAssertionCount( 1 );
 		}
@@ -34,12 +34,12 @@ class UpdateContributionRecordsJobTest extends MediaWikiIntegrationTestCase {
 			'Invalid type "doesnotexist"'
 		];
 		yield 'Move, missing params' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_MOVE ],
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_MOVE ],
 			'Missing parameters: wiki, pageID, newPrefixedText'
 		];
 		yield 'Move, valid' => [
 			[
-				'type' => UpdateContributionRecordsJob::TYPE_MOVE,
+				'type' => UpdatePageContributionRecordsJob::TYPE_MOVE,
 				'wiki' => 'awiki',
 				'pageID' => 42,
 				'newPrefixedText' => 'Foo'
@@ -47,28 +47,28 @@ class UpdateContributionRecordsJobTest extends MediaWikiIntegrationTestCase {
 			null
 		];
 		yield 'Delete, missing params' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_DELETE ],
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_DELETE ],
 			'Missing parameters: wiki, pageID'
 		];
 		yield 'Delete, valid' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_DELETE, 'wiki' => 'awiki', 'pageID' => 42 ],
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_DELETE, 'wiki' => 'awiki', 'pageID' => 42 ],
 			null
 		];
 		yield 'Restore, missing params' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_RESTORE ],
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_RESTORE ],
 			'Missing parameters: wiki, pageID'
 		];
 		yield 'Restore, valid' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_RESTORE, 'wiki' => 'awiki', 'pageID' => 42 ],
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_RESTORE, 'wiki' => 'awiki', 'pageID' => 42 ],
 			null
 		];
 		yield 'Revdel, missing params' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_REV_DELETE ],
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_REV_DELETE ],
 			'Missing parameters: wiki, pageID, deletedRevIDs, restoredRevIDs'
 		];
 		yield 'Revdel, valid' => [
 			[
-				'type' => UpdateContributionRecordsJob::TYPE_REV_DELETE,
+				'type' => UpdatePageContributionRecordsJob::TYPE_REV_DELETE,
 				'wiki' => 'awiki',
 				'pageID' => 1000,
 				'deletedRevIDs' => [ 123 ],
@@ -84,7 +84,7 @@ class UpdateContributionRecordsJobTest extends MediaWikiIntegrationTestCase {
 		$store->expects( $this->once() )->method( $expectedMethod );
 		$this->setService( EventContributionStore::SERVICE_NAME, $store );
 
-		$job = new UpdateContributionRecordsJob( $params );
+		$job = new UpdatePageContributionRecordsJob( $params );
 		$job->run();
 	}
 
@@ -95,20 +95,20 @@ class UpdateContributionRecordsJobTest extends MediaWikiIntegrationTestCase {
 		];
 
 		yield 'Move' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_MOVE, 'newPrefixedText' => 'Foo' ] + $basePageParams,
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_MOVE, 'newPrefixedText' => 'Foo' ] + $basePageParams,
 			'updateTitle'
 		];
 		yield 'Delete' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_DELETE ] + $basePageParams,
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_DELETE ] + $basePageParams,
 			'updateForPageDeleted'
 		];
 		yield 'Restore' => [
-			[ 'type' => UpdateContributionRecordsJob::TYPE_RESTORE ] + $basePageParams,
+			[ 'type' => UpdatePageContributionRecordsJob::TYPE_RESTORE ] + $basePageParams,
 			'updateForPageRestored'
 		];
 		yield 'Revdel' => [
 			[
-				'type' => UpdateContributionRecordsJob::TYPE_REV_DELETE,
+				'type' => UpdatePageContributionRecordsJob::TYPE_REV_DELETE,
 				'wiki' => 'awiki',
 				'pageID' => 999,
 				'deletedRevIDs' => [ 123 ],

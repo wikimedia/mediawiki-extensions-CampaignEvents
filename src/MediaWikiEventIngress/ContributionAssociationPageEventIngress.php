@@ -7,7 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress;
 use MediaWiki\Config\Config;
 use MediaWiki\DomainEvent\DomainEventIngress;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
-use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateContributionRecordsJob;
+use MediaWiki\Extension\CampaignEvents\EventContribution\UpdatePageContributionRecordsJob;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Page\Event\PageCreatedEvent;
 use MediaWiki\Page\Event\PageCreatedListener;
@@ -57,8 +57,8 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 		if ( !$this->eventContributionStore->hasContributionsForPage( $page ) ) {
 			return;
 		}
-		$job = new UpdateContributionRecordsJob( [
-			'type' => UpdateContributionRecordsJob::TYPE_DELETE,
+		$job = new UpdatePageContributionRecordsJob( [
+			'type' => UpdatePageContributionRecordsJob::TYPE_DELETE,
 			'wiki' => WikiMap::getCurrentWikiId(),
 			'pageID' => $page->getID( $page->getWikiId() ),
 		] );
@@ -77,8 +77,8 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 		if ( !$this->eventContributionStore->hasContributionsForPage( $page ) ) {
 			return;
 		}
-		$job = new UpdateContributionRecordsJob( [
-			'type' => UpdateContributionRecordsJob::TYPE_RESTORE,
+		$job = new UpdatePageContributionRecordsJob( [
+			'type' => UpdatePageContributionRecordsJob::TYPE_RESTORE,
 			'wiki' => WikiMap::getCurrentWikiId(),
 			'pageID' => $page->getID( $page->getWikiId() ),
 		] );
@@ -93,8 +93,8 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 		if ( !$this->eventContributionStore->hasContributionsForPage( $page ) ) {
 			return;
 		}
-		$job = new UpdateContributionRecordsJob( [
-			'type' => UpdateContributionRecordsJob::TYPE_MOVE,
+		$job = new UpdatePageContributionRecordsJob( [
+			'type' => UpdatePageContributionRecordsJob::TYPE_MOVE,
 			'wiki' => WikiMap::getCurrentWikiId(),
 			'pageID' => $page->getID( $page->getWikiId() ),
 			'newPrefixedText' => $this->titleFormatter->getPrefixedText( $event->getPageRecordAfter() )
@@ -127,8 +127,8 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 			return;
 		}
 
-		$job = new UpdateContributionRecordsJob( [
-			'type' => UpdateContributionRecordsJob::TYPE_REV_DELETE,
+		$job = new UpdatePageContributionRecordsJob( [
+			'type' => UpdatePageContributionRecordsJob::TYPE_REV_DELETE,
 			'wiki' => WikiMap::getCurrentWikiId(),
 			'pageID' => $page->getID( $page->getWikiId() ),
 			'deletedRevIDs' => $newlyDeleted,
