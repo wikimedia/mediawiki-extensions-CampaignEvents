@@ -32,7 +32,8 @@ module.exports = {
 	// A map from regular expressions to module names or to arrays of module
 	// names that allow to stub out resources with a single module
 	moduleNameMapper: {
-		'codex.js': '@wikimedia/codex'
+		'codex.js': '@wikimedia/codex',
+		'icons.json': '@wikimedia/codex-icons'
 	},
 
 	setupFiles: [

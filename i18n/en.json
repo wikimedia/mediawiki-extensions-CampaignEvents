@@ -612,5 +612,14 @@
 	"campaignevents-contributions-summary-links-changed": "Links changed",
 	"campaignevents-contributions-summary-delta-separator": "/",
 	"campaignevents-contributions-summary-edit-count": "Edit count",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "Participant registered privately"
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Participant registered privately",
+	"campaignevents-event-details-contributions-actions": "Actions",
+	"campaignevents-event-details-contributions-delete-tooltip": "Remove contribution",
+	"campaignevents-event-details-contributions-delete-success": "The edit was removed from the event.",
+	"campaignevents-event-details-contributions-delete-error": "Error removing contribution.",
+	"campaignevents-event-details-contributions-delete-title": "Remove this edit from $1",
+	"campaignevents-event-details-contributions-delete-subtitle": "Are you sure you want to remove this edit from the event?",
+	"campaignevents-event-details-contributions-delete-note": "It won't be deleted, but it will no longer be associated with the event.",
+	"campaignevents-event-details-contributions-delete-cancel": "Cancel",
+	"campaignevents-event-details-contributions-delete-confirm": "Remove"
 }

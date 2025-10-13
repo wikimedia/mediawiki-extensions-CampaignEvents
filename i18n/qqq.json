@@ -619,5 +619,14 @@
 	"campaignevents-contributions-summary-links-changed": "Label for the links changed card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
 	"campaignevents-contributions-summary-delta-separator": "{{Optional}}\nSeparator character used between positive and negative values for bytes and links changed (e.g., +91/-124) in summary cards in the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
 	"campaignevents-contributions-summary-edit-count": "Label for a card shown in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]] containing the total number of edits associated with the event.",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "Accessibility label added to lock icons on the contributions tab of [[Special:EventDetails]] to indicate that a participant registered privately."
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Accessibility label added to lock icons on the contributions tab of [[Special:EventDetails]] to indicate that a participant registered privately.",
+	"campaignevents-event-details-contributions-actions": "Header for the actions column in the contributions table in the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-event-details-contributions-delete-tooltip": "Tooltip text for the delete button in the actions column of the contributions table.",
+	"campaignevents-event-details-contributions-delete-success": "Success message shown after successfully removing an edit from an event.",
+	"campaignevents-event-details-contributions-delete-error": "Error message shown when deleting a contribution fails.",
+	"campaignevents-event-details-contributions-delete-title": "Title of the Codex confirmation dialog shown when removing the association of an edit (contribution) from an event. $1 is the event name.",
+	"campaignevents-event-details-contributions-delete-subtitle": "Subtitle/question text displayed in the confirmation dialog asking the user to confirm removal of the edit from the event.",
+	"campaignevents-event-details-contributions-delete-note": "Informational note in the dialog clarifying that the edit itself is not deleted, only its association with the event.",
+	"campaignevents-event-details-contributions-delete-cancel": "Label for the safe action button that closes the dialog without removing the association.",
+	"campaignevents-event-details-contributions-delete-confirm": "Label for the destructive action button that confirms removing the edit's association from the event."
 }

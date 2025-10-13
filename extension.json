@@ -271,7 +271,8 @@
 			"resources/ext.campaignEvents.specialPages/eventdetails/EmailManager.js",
 			"resources/ext.campaignEvents.specialPages/eventdetails/ParticipantsManager.js",
 			"resources/ext.campaignEvents.specialPages/eventdetails/RemoveParticipantDialog.js",
-			"resources/ext.campaignEvents.specialPages/eventdetails/ScrollDownObserver.js"
+			"resources/ext.campaignEvents.specialPages/eventdetails/ScrollDownObserver.js",
+			"resources/ext.campaignEvents.specialPages/eventdetails/EventContributions.js"
 		],
 		"dependencies": [
 			"ext.campaignEvents.eventpage",
@@ -294,6 +295,10 @@
 		"ext.campaignEvents.specialPages": {
 			"localBasePath": "resources",
 			"remoteExtPath": "CampaignEvents/resources",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxDialog"
+			],
 			"packageFiles": [
 				"ext.campaignEvents.specialPages/dispatcher.js",
 				"ext.campaignEvents.specialPages/editeventregistration/index.js",
@@ -305,6 +310,9 @@
 				"ext.campaignEvents.specialPages/eventdetails/EmailManager.js",
 				"ext.campaignEvents.specialPages/eventdetails/RemoveParticipantDialog.js",
 				"ext.campaignEvents.specialPages/eventdetails/ScrollDownObserver.js",
+				"ext.campaignEvents.specialPages/eventdetails/EventContributions.js",
+				"ext.campaignEvents.specialPages/eventdetails/components/ContributionsActionsApp.vue",
+				"ext.campaignEvents.specialPages/eventdetails/components/DeleteContributionDialog.vue",
 				"ext.campaignEvents.specialPages/eventlists/index.js",
 				"ext.campaignEvents.specialPages/eventlists/ConfirmEventDeletionDialog.js",
 				"ext.campaignEvents.specialPages/eventlists/FilterEventsWidget.js",
@@ -372,7 +380,15 @@
 				"campaignevents-eventslist-delete-dialog-body",
 				"campaignevents-eventslist-delete-dialog-cancel",
 				"campaignevents-eventslist-delete-dialog-delete",
-				"campaignevents-eventslist-delete-success"
+				"campaignevents-eventslist-delete-success",
+				"campaignevents-event-details-contributions-delete-tooltip",
+				"campaignevents-event-details-contributions-delete-success",
+				"campaignevents-event-details-contributions-delete-error",
+				"campaignevents-event-details-contributions-delete-title",
+				"campaignevents-event-details-contributions-delete-subtitle",
+				"campaignevents-event-details-contributions-delete-note",
+				"campaignevents-event-details-contributions-delete-cancel",
+				"campaignevents-event-details-contributions-delete-confirm"
 			]
 		},
 		"ext.campaignEvents.specialPages.styles": {

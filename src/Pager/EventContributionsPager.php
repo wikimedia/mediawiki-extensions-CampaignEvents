@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Pager\CodexTablePager;
 use MediaWiki\RecentChanges\ChangesList;
@@ -47,6 +48,7 @@ class EventContributionsPager extends CodexTablePager {
 	private UserLinker $userLinker;
 	private TitleFactory $titleFactory;
 	private EventContributionStore $eventContributionStore;
+	private TemplateParser $templateParser;
 	/** @var array<int,EventContribution> */
 	private array $contribObjects = [];
 	/** @var array<string,mixed> */
@@ -72,6 +74,7 @@ class EventContributionsPager extends CodexTablePager {
 		$this->titleFactory = $titleFactory;
 		$this->eventContributionStore = $eventContributionStore;
 		$this->mDb = $db;
+		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 
 		parent::__construct(
 			$this->msg( 'campaignevents-event-details-contributions-table-caption' )->text()
@@ -249,6 +252,8 @@ class EventContributionsPager extends CodexTablePager {
 				return $this->formatTimestamp( $row );
 			case 'bytes':
 				return $this->formatBytes( $row );
+			case 'actions':
+				return $this->formatActions( $row );
 		}
 	}
 
@@ -256,13 +261,20 @@ class EventContributionsPager extends CodexTablePager {
 	 * @inheritDoc
 	 */
 	protected function getFieldNames(): array {
-		return [
+		$fields = [
 			'article' => $this->msg( 'campaignevents-event-details-contributions-article' )->text(),
 			'wiki' => $this->msg( 'campaignevents-event-details-contributions-wiki' )->text(),
 			'username' => $this->msg( 'campaignevents-event-details-contributions-username' )->text(),
 			'timestamp' => $this->msg( 'campaignevents-event-details-contributions-timestamp' )->text(),
 			'bytes' => $this->msg( 'campaignevents-event-details-contributions-bytes' )->text(),
 		];
+
+		// Add actions column if user is named
+		if ( $this->getUser()->isNamed() ) {
+			$fields['actions'] = $this->msg( 'campaignevents-event-details-contributions-actions' )->text();
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -362,6 +374,33 @@ class EventContributionsPager extends CodexTablePager {
 		$contrib = $this->contribObjects[ $row->cec_id ];
 		$bytes = $contrib->getBytesDelta();
 		return ChangesList::showCharacterDifference( 0, $bytes, $this->getContext() );
+	}
+
+	/**
+	 * Format actions column with delete button
+	 */
+	private function formatActions( stdClass $row ): string {
+		$contrib = $this->contribObjects[ $row->cec_id ];
+		$contribID = $row->cec_id;
+
+		// Check if user can delete this contribution
+		if (
+			!$this->permissionChecker->userCanDeleteContribution(
+				$this->getUser(),
+				$this->event, $contrib->getUserID()
+			)
+		) {
+			return '';
+		}
+
+		// Render Codex CSS-only delete button via mustache template
+		return $this->templateParser->processTemplate(
+			'DeleteContributionButton',
+			[
+				'contribId' => $contribID,
+				'tooltip' => $this->msg( 'campaignevents-event-details-contributions-delete-tooltip' )->text(),
+			]
+		);
 	}
 
 	/**

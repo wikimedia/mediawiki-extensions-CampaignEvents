@@ -118,6 +118,11 @@ class PermissionChecker {
 		ExistingEventRegistration $event,
 		int $contributionAuthorCentralId
 	): bool {
+		// Check if user is named first
+		if ( !$performer->isNamed() ) {
+			return false;
+		}
+
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
 		} catch ( UserNotGlobalException ) {

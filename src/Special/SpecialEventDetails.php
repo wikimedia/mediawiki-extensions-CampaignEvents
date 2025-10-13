@@ -144,6 +144,11 @@ class SpecialEventDetails extends SpecialPage {
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
 			'wgCampaignEventsShowEmailTab' => $userCanEmailParticipants,
+			// Expose event name for frontend dialogs (e.g., delete contribution)
+			'wgCampaignEventsEventName' => $this->event->getName(),
+			'wgCampaignEventsEnableContributionTracking' => $this->getConfig()->get(
+				'CampaignEventsEnableContributionTracking'
+			),
 		] );
 		$out->setPageTitle(
 			$msgFormatter->format(

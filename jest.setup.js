@@ -5,12 +5,15 @@ const { config } = require( '@vue/test-utils' );
 
 // Mock Vue plugins in test suites
 config.global.mocks = {
-	$i18n: ( str ) => ( {
-		text: () => str,
-		parse: () => str,
-		toString: () => str,
-		escaped: () => str
-	} )
+	$i18n: ( str, ...params ) => {
+		const message = params.length > 0 ? `${ str } (${ params.join( ', ' ) })` : str;
+		return {
+			text: () => message,
+			parse: () => message,
+			toString: () => message,
+			escaped: () => message
+		};
+	}
 };
 
 config.global.directives = {
@@ -21,11 +24,16 @@ config.global.directives = {
 
 // Stub the mw global object.
 global.mw = {
+	config: {
+		get: jest.fn()
+	},
 	user: {
 		tokens: {
 			get: jest.fn()
 		}
 	},
+	notify: jest.fn(),
+	Rest: jest.fn(),
 	// As seen in CheckUser's jest.setup
 	msg: jest.fn( ( ...messageKeyAndParams ) => `(${ messageKeyAndParams.join( ', ' ) })` ),
 	// As seen in CodeMirror's jest.setup
