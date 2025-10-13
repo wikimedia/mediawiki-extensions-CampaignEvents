@@ -191,7 +191,8 @@
 			"services": [
 				"CampaignEventsEventContributionStore",
 				"TitleFormatter",
-				"JobQueueGroup"
+				"JobQueueGroup",
+				"MainConfig"
 			]
 		}
 	],

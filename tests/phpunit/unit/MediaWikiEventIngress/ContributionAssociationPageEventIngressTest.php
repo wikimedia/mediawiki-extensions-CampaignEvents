@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MediaWikiEventIngress;
 
 use Generator;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateContributionRecordsJob;
 use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\ContributionAssociationPageEventIngress;
@@ -31,6 +32,7 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiUnitTestCase 
 			$eventContributionStore,
 			$titleFormatter ?? $this->createMock( TitleFormatter::class ),
 			$jobQueueGroup,
+			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 	}
 

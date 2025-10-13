@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress;
 
+use MediaWiki\Config\Config;
 use MediaWiki\DomainEvent\DomainEventIngress;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateContributionRecordsJob;
@@ -34,18 +35,24 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 	private EventContributionStore $eventContributionStore;
 	private TitleFormatter $titleFormatter;
 	private JobQueueGroup $jobQueueGroup;
+	private bool $isFeatureEnabled;
 
 	public function __construct(
 		EventContributionStore $eventContributionStore,
 		TitleFormatter $titleFormatter,
 		JobQueueGroup $jobQueueGroup,
+		Config $config,
 	) {
 		$this->eventContributionStore = $eventContributionStore;
 		$this->titleFormatter = $titleFormatter;
 		$this->jobQueueGroup = $jobQueueGroup;
+		$this->isFeatureEnabled = $config->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	public function handlePageDeletedEvent( PageDeletedEvent $event ): void {
+		if ( !$this->isFeatureEnabled ) {
+			return;
+		}
 		$page = $event->getDeletedPage();
 		if ( !$this->eventContributionStore->hasContributionsForPage( $page ) ) {
 			return;
@@ -59,6 +66,9 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 	}
 
 	public function handlePageCreatedEvent( PageCreatedEvent $event ): void {
+		if ( !$this->isFeatureEnabled ) {
+			return;
+		}
 		if ( !$event->hasCause( PageUpdateCauses::CAUSE_UNDELETE ) ) {
 			return;
 		}
@@ -76,6 +86,9 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 	}
 
 	public function handlePageMovedEvent( PageMovedEvent $event ): void {
+		if ( !$this->isFeatureEnabled ) {
+			return;
+		}
 		$page = $event->getPageRecordBefore();
 		if ( !$this->eventContributionStore->hasContributionsForPage( $page ) ) {
 			return;
@@ -90,6 +103,9 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 	}
 
 	public function handlePageHistoryVisibilityChangedEvent( PageHistoryVisibilityChangedEvent $event ): void {
+		if ( !$this->isFeatureEnabled ) {
+			return;
+		}
 		$revIDs = $event->getAffectedRevisionIDs();
 		$newlyDeleted = $newlyRestored = [];
 		foreach ( $revIDs as $revID ) {
