@@ -203,7 +203,8 @@
 			"needsPage": false
 		},
 		"CampaignEventsComputeEventContribution": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\EventContributionJob",
-		"CampaignEventsUpdatePageContributionRecords": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\UpdatePageContributionRecordsJob"
+		"CampaignEventsUpdatePageContributionRecords": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\UpdatePageContributionRecordsJob",
+		"CampaignEventsUpdateUserContributionRecords": "MediaWiki\\Extension\\CampaignEvents\\EventContribution\\UpdateUserContributionRecordsJob"
 	},
 	"MessagesDirs": {
 		"CampaignEvents": [

@@ -4,9 +4,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 
+use BadMethodCallException;
 use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Page\ProperPageIdentity;
 use Wikimedia\Rdbms\IDatabase;
@@ -241,7 +243,7 @@ class EventContributionStore {
 	 * @phan-param mixed[] $where
 	 * @phan-param mixed[] $set
 	 */
-	private function doBatchedPageUpdate( IDatabase $dbw, array $where, array $set ): void {
+	private function doBatchedUpdate( IDatabase $dbw, array $where, array $set ): void {
 		$lastBatchIDs = [];
 		do {
 			$curBatchIDs = $dbw->newSelectQueryBuilder()
@@ -275,7 +277,7 @@ class EventContributionStore {
 
 	public function updateTitle( string $wiki, int $pageID, string $newPrefixedText ): void {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
-		$this->doBatchedPageUpdate(
+		$this->doBatchedUpdate(
 			$dbw,
 			[
 				'cec_wiki' => $wiki,
@@ -287,7 +289,7 @@ class EventContributionStore {
 	}
 
 	private function updateVisibilityForPage( string $wiki, int $pageID, bool $deleted ): void {
-		$this->doBatchedPageUpdate(
+		$this->doBatchedUpdate(
 			$this->dbHelper->getDBConnection( DB_PRIMARY ),
 			[
 				'cec_wiki' => $wiki,
@@ -341,5 +343,56 @@ class EventContributionStore {
 				->caller( __METHOD__ )
 				->execute();
 		}
+	}
+
+	public function hasContributionsFromUser( CentralUser $user ): bool {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$res = $dbr->newSelectQueryBuilder()
+			->select( '1' )
+			->from( 'ce_event_contributions' )
+			->where( [
+				'cec_user_id' => $user->getCentralID()
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
+		return $res !== false;
+	}
+
+	public function updateUserName( CentralUser $user, string $newUserName ): void {
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$this->doBatchedUpdate(
+			$dbw,
+			[
+				'cec_user_id' => $user->getCentralID(),
+				$dbw->expr( 'cec_user_name', '!=', $newUserName ),
+			],
+			[ 'cec_user_name' => $newUserName ]
+		);
+	}
+
+	/**
+	 * Updates a user's visibility. The username needs to be passed in if and only if $isHidden is false.
+	 * A null cec_user_name is used to indicate a deleted/hidden user; in particular, cec_deleted is unaffected.
+	 */
+	public function updateUserVisibility( CentralUser $user, bool $isHidden, ?string $userName = null ): void {
+		if ( !$isHidden && !$userName ) {
+			throw new BadMethodCallException( 'Missing required $userName for user unhide.' );
+		}
+		$newDBName = $isHidden ? null : $userName;
+		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$whereInequality = $dbw->expr( 'cec_user_name', '!=', $newDBName );
+		if ( $newDBName !== null ) {
+			// The column is nullable, so when the RHS is a string `cec_user_name != 'literal'` will fail for null
+			// values. So, compare with null explicitly.
+			$whereInequality = $whereInequality->or( 'cec_user_name', '=', null );
+		}
+		$this->doBatchedUpdate(
+			$dbw,
+			[
+				'cec_user_id' => $user->getCentralID(),
+				$whereInequality,
+			],
+			[ 'cec_user_name' => $newDBName ]
+		);
 	}
 }

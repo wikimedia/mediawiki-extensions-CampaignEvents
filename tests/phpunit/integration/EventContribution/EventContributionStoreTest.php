@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContribution;
 
+use BadMethodCallException;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
@@ -151,6 +152,22 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_bytes_delta' => -13,
 				'cec_links_delta' => 0,
 				'cec_timestamp' => $db->timestamp( '20240101000006' ),
+				'cec_deleted' => 0,
+			],
+			// Hidden/deleted user
+			[
+				'cec_id' => 9,
+				'cec_event_id' => 10,
+				'cec_user_id' => 987654321,
+				'cec_user_name' => null,
+				'cec_wiki' => 'enwiki',
+				'cec_page_id' => 99,
+				'cec_page_prefixedtext' => 'Page 99',
+				'cec_revision_id' => 1234,
+				'cec_edit_flags' => 0,
+				'cec_bytes_delta' => 88,
+				'cec_links_delta' => -3,
+				'cec_timestamp' => $db->timestamp( '20250101000006' ),
 				'cec_deleted' => 0,
 			],
 		];
@@ -384,6 +401,11 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 					'cec_page_id' => 1,
 					'cec_page_prefixedtext' => 'Secret page',
 				],
+				(object)[
+					'cec_id' => 9,
+					'cec_page_id' => 99,
+					'cec_page_prefixedtext' => 'Page 99',
+				],
 			],
 			iterator_to_array( $newData )
 		);
@@ -442,6 +464,11 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			8 => (object)[
 				'cec_id' => 8,
 				'cec_page_id' => 1,
+				'cec_deleted' => 0,
+			],
+			9 => (object)[
+				'cec_id' => 9,
+				'cec_page_id' => 99,
 				'cec_deleted' => 0,
 			],
 		];
@@ -524,6 +551,11 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			8 => (object)[
 				'cec_id' => 8,
 				'cec_page_id' => 1,
+				'cec_deleted' => 0,
+			],
+			9 => (object)[
+				'cec_id' => 9,
+				'cec_page_id' => 99,
 				'cec_deleted' => 0,
 			],
 		];
@@ -610,6 +642,11 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			8 => (object)[
 				'cec_id' => 8,
 				'cec_revision_id' => 120,
+				'cec_deleted' => 0,
+			],
+			9 => (object)[
+				'cec_id' => 9,
+				'cec_revision_id' => 1234,
 				'cec_deleted' => 0,
 			],
 		];
@@ -740,5 +777,211 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Associated' => [ 'enwiki', 123, 1 ];
 		yield 'Not associated' => [ 'enwiki', 192837, null ];
 		yield 'Associated with revision of same ID but different wiki' => [ 'ptwiki', 777, null ];
+	}
+
+	/** @dataProvider provideHasContributionsFromUser */
+	public function testHasContributionsFromUser( int $userID, bool $expected ) {
+		$store = CampaignEventsServices::getEventContributionStore();
+		$this->assertSame( $expected, $store->hasContributionsFromUser( new CentralUser( $userID ) ) );
+	}
+
+	public static function provideHasContributionsFromUser() {
+		yield 'Yes' => [ 101, true ];
+		yield 'No' => [ 7654567, false ];
+		yield 'Deleted contributions only' => [ 999, true ];
+		yield 'Deleted username' => [ 987654321, true ];
+	}
+
+	public function testUpdateUserName() {
+		$store = CampaignEventsServices::getEventContributionStore();
+		$newUserName = 'A new username 1234';
+		$store->updateUserName( new CentralUser( 101 ), $newUserName );
+
+		$newData = $this->getDb()->newSelectQueryBuilder()
+			->select( [ 'cec_id', 'cec_user_id', 'cec_user_name' ] )
+			->from( 'ce_event_contributions' )
+			->orderBy( 'cec_id' )
+			->fetchResultSet();
+
+		$this->assertEquals(
+			[
+				(object)[
+					'cec_id' => 1,
+					'cec_user_id' => 101,
+					'cec_user_name' => $newUserName,
+				],
+				(object)[
+					'cec_id' => 2,
+					'cec_user_id' => 102,
+					'cec_user_name' => 'User 102',
+				],
+				(object)[
+					'cec_id' => 3,
+					'cec_user_id' => 103,
+					'cec_user_name' => 'User 103',
+				],
+				(object)[
+					'cec_id' => 4,
+					'cec_user_id' => 999,
+					'cec_user_name' => 'User 999',
+				],
+				(object)[
+					'cec_id' => 5,
+					'cec_user_id' => 101,
+					'cec_user_name' => $newUserName,
+				],
+				(object)[
+					'cec_id' => 6,
+					'cec_user_id' => 101,
+					'cec_user_name' => $newUserName,
+				],
+				(object)[
+					'cec_id' => 7,
+					'cec_user_id' => 101,
+					'cec_user_name' => $newUserName,
+				],
+				(object)[
+					'cec_id' => 8,
+					'cec_user_id' => 109,
+					'cec_user_name' => 'User 109',
+				],
+				(object)[
+					'cec_id' => 9,
+					'cec_user_id' => 987654321,
+					'cec_user_name' => null,
+				],
+			],
+			iterator_to_array( $newData )
+		);
+	}
+
+	public function testUpdateUserVisibility__throwsWhenVisibleAndNoName() {
+		$store = CampaignEventsServices::getEventContributionStore();
+		$this->expectException( BadMethodCallException::class );
+		$this->expectExceptionMessage( 'Missing required $userName' );
+		$store->updateUserVisibility( new CentralUser( 101 ), false );
+	}
+
+	/** @dataProvider provideUpdateUserVisibility */
+	public function testUpdateUserVisibility(
+		int $userID,
+		bool $isHidden,
+		?string $userName,
+		array $expectedRows
+	) {
+		$store = CampaignEventsServices::getEventContributionStore();
+		$store->updateUserVisibility( new CentralUser( $userID ), $isHidden, $userName );
+
+		$newData = $this->getDb()->newSelectQueryBuilder()
+			// Includes cec_deleted to verify that it remains unchanged
+			->select( [ 'cec_id', 'cec_user_id', 'cec_user_name', 'cec_deleted' ] )
+			->from( 'ce_event_contributions' )
+			->fetchResultSet();
+
+		$this->assertEquals( $expectedRows, iterator_to_array( $newData ) );
+	}
+
+	public static function provideUpdateUserVisibility(): Generator {
+		$startingData = [
+			1 => (object)[
+				'cec_id' => 1,
+				'cec_user_id' => 101,
+				'cec_user_name' => 'User 101',
+				'cec_deleted' => 0,
+			],
+			2 => (object)[
+				'cec_id' => 2,
+				'cec_user_id' => 102,
+				'cec_user_name' => 'User 102',
+				'cec_deleted' => 0,
+			],
+			3 => (object)[
+				'cec_id' => 3,
+				'cec_user_id' => 103,
+				'cec_user_name' => 'User 103',
+				'cec_deleted' => 0,
+			],
+			4 => (object)[
+				'cec_id' => 4,
+				'cec_user_id' => 999,
+				'cec_user_name' => 'User 999',
+				'cec_deleted' => 1,
+			],
+			5 => (object)[
+				'cec_id' => 5,
+				'cec_user_id' => 101,
+				'cec_user_name' => 'User 101',
+				'cec_deleted' => 0,
+			],
+			6 => (object)[
+				'cec_id' => 6,
+				'cec_user_id' => 101,
+				'cec_user_name' => 'User 101',
+				'cec_deleted' => 1,
+			],
+			7 => (object)[
+				'cec_id' => 7,
+				'cec_user_id' => 101,
+				'cec_user_name' => 'User 101',
+				'cec_deleted' => 0,
+			],
+			8 => (object)[
+				'cec_id' => 8,
+				'cec_user_id' => 109,
+				'cec_user_name' => 'User 109',
+				'cec_deleted' => 0,
+			],
+			9 => (object)[
+				'cec_id' => 9,
+				'cec_user_id' => 987654321,
+				'cec_user_name' => null,
+				'cec_deleted' => 0,
+			],
+		];
+
+		$user101HiddenData = [];
+		foreach ( $startingData as $row ) {
+			$addRow = clone $row;
+			if ( $addRow->cec_user_id === 101 ) {
+				$addRow->cec_user_name = null;
+			}
+			$user101HiddenData[] = $addRow;
+		}
+		yield 'Hide' => [
+			101,
+			true,
+			null,
+			$user101HiddenData,
+		];
+		yield 'Hide, already hidden' => [
+			987654321,
+			true,
+			null,
+			array_values( $startingData ),
+		];
+
+		$dataWithUnhiddenUser = array_replace(
+			$startingData,
+			[
+				9 => (object)[
+					'cec_id' => 9,
+					'cec_user_id' => 987654321,
+					'cec_user_name' => 'User 987654321',
+					'cec_deleted' => 0,
+				],
+			]
+		);
+		yield 'Unhide' => [
+			987654321,
+			false,
+			'User 987654321',
+			array_values( $dataWithUnhiddenUser ),
+		];
+		yield 'Unhide, already visible' => [
+			101,
+			false,
+			'User 101',
+			array_values( $startingData ),
+		];
 	}
 }
