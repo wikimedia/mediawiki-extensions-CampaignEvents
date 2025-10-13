@@ -92,6 +92,11 @@ $namespaceNames['pl'] = [
 	NS_EVENT_TALK => 'Dyskusja_wydarzenia',
 ];
 
+$namespaceNames['ps'] = [
+	NS_EVENT => 'پېښه',
+	NS_EVENT_TALK => 'د_پېښې_خبرې_اترې',
+];
+
 $namespaceNames['pt'] = [
 	NS_EVENT => 'Evento',
 	NS_EVENT_TALK => 'Evento_Discussão',
