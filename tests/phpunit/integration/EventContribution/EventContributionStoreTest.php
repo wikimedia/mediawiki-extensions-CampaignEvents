@@ -276,9 +276,9 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/** @dataProvider provideHasContributionsForPage */
-	public function testHasContributionsForPage( ProperPageIdentity $page, bool $exoected ) {
+	public function testHasContributionsForPage( ProperPageIdentity $page, bool $expected ) {
 		$store = CampaignEventsServices::getEventContributionStore();
-		$this->assertSame( $exoected, $store->hasContributionsForPage( $page ) );
+		$this->assertSame( $expected, $store->hasContributionsForPage( $page ) );
 	}
 
 	public static function provideHasContributionsForPage() {
