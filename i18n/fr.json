@@ -46,6 +46,8 @@
 	"right-campaignevents-email-participants": "Envoyer des courriels aux participants à un événement",
 	"action-campaignevents-view-private-participants": "voir les participants à l'événement privé",
 	"right-campaignevents-view-private-participants": "Afficher les participants à l'événement privé",
+	"action-campaignevents-generate-invitation-lists": "Générer une liste d'invitations",
+	"right-campaignevents-generate-invitation-lists": "Générer une liste d'invitations",
 	"specialpages-group-campaignevents": "Événements",
 	"campaignevents-error-invalid-id": "L’identifiant de l’événement doit être un entier positif.",
 	"campaignevents-error-empty-title": "Entrez un titre de page d’événement.",
