@@ -33,7 +33,7 @@ class EventContributionsPager extends CodexTablePager {
 	private const INDEX_FIELDS = [
 		'article' => [ 'cec_page_prefixedtext', 'cec_wiki', 'cec_timestamp', 'cec_id' ],
 		'wiki' => [ 'cec_wiki', 'cec_timestamp', 'cec_id' ],
-		'username' => [ 'cec_user_id', 'cec_timestamp', 'cec_id' ],
+		'username' => [ 'cec_user_name', 'cec_timestamp', 'cec_id' ],
 		'timestamp' => [ 'cec_timestamp', 'cec_id' ],
 		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp', 'cec_id' ],
 	];
@@ -192,12 +192,21 @@ class EventContributionsPager extends CodexTablePager {
 	 * @param mixed $result The database result set to preprocess
 	 */
 	protected function preprocessResults( $result ): void {
-		$userIdsMap = [];
+		$userNamesMap = [];
+		$nonVisibleUserIDsMap = [];
 		$linkBatch = $this->linkBatchFactory->newLinkBatch();
 		$linkBatch->setCaller( __METHOD__ );
 
 		foreach ( $result as $row ) {
-			$userIdsMap[ $row->cec_user_id ] = null;
+			// For visible names (the vast majority of them), we add them to the cache now so they're not looked up
+			// again later. Deleted/hidden names are not cached because we can't tell which case it is (we use null for
+			// both). But they are also rare enough that we can just look them up separately if needed.
+			if ( $row->cec_user_name !== null ) {
+				$userNamesMap[$row->cec_user_id] = $row->cec_user_name;
+				$this->centralUserLookup->addNameToCache( (int)$row->cec_user_id, $row->cec_user_name );
+			} else {
+				$nonVisibleUserIDsMap[ $row->cec_user_id ] = null;
+			}
 			$this->contribObjects[ $row->cec_id ] = $this->eventContributionStore->newFromRow( $row );
 
 			if ( WikiMap::isCurrentWikiId( $row->cec_wiki ) ) {
@@ -212,9 +221,13 @@ class EventContributionsPager extends CodexTablePager {
 		// Reset the result pointer for subsequent processing
 		$result->seek( 0 );
 
-		if ( $userIdsMap ) {
-			$names = $this->centralUserLookup->getNamesIncludingDeletedAndSuppressed( $userIdsMap );
-			$this->userLinker->preloadUserLinks( $names );
+		if ( $nonVisibleUserIDsMap ) {
+			// Do a batch lookup for all deleted/hidden and let it be cached.
+			$this->centralUserLookup->getNamesIncludingDeletedAndSuppressed( $nonVisibleUserIDsMap );
+		}
+
+		if ( $userNamesMap ) {
+			$this->userLinker->preloadUserLinks( $userNamesMap );
 		}
 	}
 

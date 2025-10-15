@@ -180,4 +180,8 @@ class CampaignsCentralUserLookup {
 	public function isValidLocalUsername( string $userName ): bool {
 		return $this->userNameUtils->getCanonical( $userName ) !== false;
 	}
+
+	public function addNameToCache( int $userID, string $userName ): void {
+		$this->nameByIDCache[$userID] = $userName;
+	}
 }

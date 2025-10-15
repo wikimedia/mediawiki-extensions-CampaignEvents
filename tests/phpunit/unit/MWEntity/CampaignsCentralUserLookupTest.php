@@ -189,4 +189,14 @@ class CampaignsCentralUserLookupTest extends MediaWikiUnitTestCase {
 			}
 		);
 	}
+
+	public function testAddNameToCache() {
+		$userID = 12345;
+		$userName = __METHOD__;
+		// Assert that no methods are called on the CentralIdLookup
+		$centralIDLookup = $this->createNoOpMock( CentralIdLookup::class );
+		$lookup = $this->getLookup( $centralIDLookup );
+		$lookup->addNameToCache( $userID, $userName );
+		$this->assertSame( $userName, $lookup->getUserName( new CentralUser( $userID ) ) );
+	}
 }
