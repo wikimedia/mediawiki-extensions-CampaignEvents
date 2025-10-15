@@ -11,69 +11,23 @@ class EventContribution {
 	/** @var int Edit flag for page creation */
 	public const EDIT_FLAG_PAGE_CREATION = 1;
 
-	/** @var int */
-	private int $eventId;
-
-	/** @var int */
-	private int $userId;
-	private ?string $userName;
-
-	/** @var string */
-	private string $wiki;
-
-	/** @var string */
-	private string $pagePrefixedtext;
-
-	/** @var int */
-	private int $pageId;
-
-	/** @var int */
-	private int $revisionId;
-
-	/** @var int */
-	private int $editFlags;
-
-	/** @var int */
-	private int $bytesDelta;
-
-	/** @var int */
-	private int $linksDelta;
-
-	/** @var string */
-	private string $timestamp;
-
-	/** @var bool */
-	private bool $deleted;
-
 	/**
 	 * Create a new edit contribution object
 	 */
 	public function __construct(
-		int $eventId,
-		int $userId,
-		?string $userName,
-		string $wiki,
-		string $pagePrefixedtext,
-		int $pageId,
-		int $revisionId,
-		int $editFlags,
-		int $bytesDelta,
-		int $linksDelta,
-		string $timestamp,
-		bool $deleted
+		private readonly int $eventId,
+		private readonly int $userId,
+		private readonly ?string $userName,
+		private readonly string $wiki,
+		private readonly string $pagePrefixedtext,
+		private readonly int $pageId,
+		private readonly int $revisionId,
+		private readonly int $editFlags,
+		private readonly int $bytesDelta,
+		private readonly int $linksDelta,
+		private readonly string $timestamp,
+		private readonly bool $deleted
 	) {
-		$this->eventId = $eventId;
-		$this->userId = $userId;
-		$this->userName = $userName;
-		$this->wiki = $wiki;
-		$this->pagePrefixedtext = $pagePrefixedtext;
-		$this->pageId = $pageId;
-		$this->revisionId = $revisionId;
-		$this->editFlags = $editFlags;
-		$this->bytesDelta = $bytesDelta;
-		$this->linksDelta = $linksDelta;
-		$this->timestamp = $timestamp;
-		$this->deleted = $deleted;
 	}
 
 	public function getEventId(): int {

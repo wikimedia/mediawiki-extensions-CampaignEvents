@@ -9,18 +9,11 @@ namespace MediaWiki\Extension\CampaignEvents\Time;
  * and timezone.
  */
 class FormattedTime {
-	private string $time;
-	private string $date;
-	private string $timeAndDate;
-
 	public function __construct(
-		string $time,
-		string $date,
-		string $timeAndDate
+		private readonly string $time,
+		private readonly string $date,
+		private readonly string $timeAndDate
 	) {
-		$this->time = $time;
-		$this->date = $date;
-		$this->timeAndDate = $timeAndDate;
 	}
 
 	public function getTime(): string {

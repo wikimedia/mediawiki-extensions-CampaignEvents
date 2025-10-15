@@ -8,14 +8,11 @@ namespace MediaWiki\Extension\CampaignEvents\Questions;
  * Value object represting an answer to a participant question.
  */
 class Answer {
-	private int $questionDBID;
-	private ?int $option;
-	private ?string $text;
-
-	public function __construct( int $questionDBID, ?int $option, ?string $text ) {
-		$this->questionDBID = $questionDBID;
-		$this->option = $option;
-		$this->text = $text;
+	public function __construct(
+		private readonly int $questionDBID,
+		private readonly ?int $option,
+		private readonly ?string $text
+	) {
 	}
 
 	public function getQuestionDBID(): int {
