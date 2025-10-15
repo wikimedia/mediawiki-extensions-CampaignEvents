@@ -31,7 +31,8 @@ class EventContributionTest extends MediaWikiUnitTestCase {
 			$editFlags,
 			100,
 			5,
-			'20240101000000'
+			'20240101000000',
+			false
 		);
 
 		$this->assertSame( $expected, $contribution->isPageCreation() );

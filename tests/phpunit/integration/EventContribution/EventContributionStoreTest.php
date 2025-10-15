@@ -196,7 +196,8 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			$editFlags,
 			$bytesDelta,
 			$linksDelta,
-			$timestamp
+			$timestamp,
+			false
 		);
 
 		$store->saveEventContribution( $contribution );
@@ -322,7 +323,8 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			0,
 			0,
 			0,
-			ConvertibleTimestamp::now()
+			ConvertibleTimestamp::now(),
+			false
 		);
 		$store = CampaignEventsServices::getEventContributionStore();
 		$store->saveEventContribution( $localContribution );

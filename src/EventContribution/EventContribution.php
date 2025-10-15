@@ -60,7 +60,7 @@ class EventContribution {
 		int $bytesDelta,
 		int $linksDelta,
 		string $timestamp,
-		bool $deleted = false
+		bool $deleted
 	) {
 		$this->eventId = $eventId;
 		$this->userId = $userId;
