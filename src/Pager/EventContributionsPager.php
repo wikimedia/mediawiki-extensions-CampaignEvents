@@ -171,6 +171,11 @@ class EventContributionsPager extends CodexTablePager {
 		return 'timestamp';
 	}
 
+	/** @inheritDoc */
+	protected function getDefaultDirections(): bool {
+		return $this->mSort === 'timestamp' ? self::DIR_DESCENDING : self::DIR_ASCENDING;
+	}
+
 	/**
 	 * @inheritDoc
 	 * @return array<int,array<int,string>>
