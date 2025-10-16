@@ -33,6 +33,10 @@ class PostEditHandler implements BeforePageDisplayHook {
 		if ( !$out->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
 			return;
 		}
+		if ( $out->getTitle()->inNamespace( NS_EVENT ) ) {
+			// Don't show the dialog in the Event: namespace, T406672
+			return;
+		}
 
 		if ( !self::isPostEditReload( $out ) ) {
 			return;

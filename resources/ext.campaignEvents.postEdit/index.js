@@ -22,7 +22,11 @@
 		mountApp();
 	} else {
 		// Module loaded as a VE plugin (or potentially manually). Mount the app after the
-		// actual edit, lazy-loading the list of events.
+		// actual edit, lazy-loading the list of events...
+		// Not in the NS_EVENT namespace, though (T406672)
+		if ( mw.config.get( 'wgNamespaceNumber' ) === 1728 ) {
+			return;
+		}
 		const lazyMount = async () => {
 			const userEvents = await new mw.Rest().get( '/campaignevents/v0/participant/self/events_for_edit' );
 			mw.config.set( 'wgCampaignEventsEventsForAssociation', userEvents );
