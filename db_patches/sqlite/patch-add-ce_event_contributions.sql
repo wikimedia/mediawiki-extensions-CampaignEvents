@@ -20,6 +20,8 @@ CREATE TABLE /*_*/ce_event_contributions (
 
 CREATE INDEX cec_wiki_page_id ON /*_*/ce_event_contributions (cec_wiki, cec_page_id);
 
+CREATE UNIQUE INDEX cec_wiki_revision ON /*_*/ce_event_contributions (cec_wiki, cec_revision_id);
+
 CREATE INDEX cec_event_user ON /*_*/ce_event_contributions (cec_event_id, cec_user_id);
 
 CREATE INDEX cec_user_id_name ON /*_*/ce_event_contributions (cec_user_id, cec_user_name);

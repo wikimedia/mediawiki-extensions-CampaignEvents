@@ -26,6 +26,7 @@ class EventContributionValidator {
 	private ParticipantsStore $participantsStore;
 	private JobQueueGroup $jobQueueGroup;
 	private RevisionStoreFactory $revisionStoreFactory;
+	private EventContributionStore $eventContributionStore;
 	private ServiceOptions $options;
 
 	public function __construct(
@@ -33,12 +34,14 @@ class EventContributionValidator {
 		ParticipantsStore $participantsStore,
 		JobQueueGroup $jobQueueGroup,
 		RevisionStoreFactory $revisionStoreFactory,
+		EventContributionStore $eventContributionStore,
 		ServiceOptions $options
 	) {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->participantsStore = $participantsStore;
 		$this->jobQueueGroup = $jobQueueGroup;
 		$this->revisionStoreFactory = $revisionStoreFactory;
+		$this->eventContributionStore = $eventContributionStore;
 		$this->options = $options;
 		$this->options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
@@ -73,6 +76,17 @@ class EventContributionValidator {
 			throw new LocalizedHttpException(
 				MessageValue::new( 'campaignevents-event-contribution-user-not-global' ),
 				403
+			);
+		}
+
+		$previousEventID = $this->eventContributionStore->getEventIDForRevision( $wikiID, $revisionID );
+		if ( $previousEventID === $event->getID() ) {
+			// Already associated with this event, nothing to do, a successful response is still valid.
+			return;
+		} elseif ( $previousEventID !== null ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-event-contribution-already-associated' ),
+				400
 			);
 		}
 

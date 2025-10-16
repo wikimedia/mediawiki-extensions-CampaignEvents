@@ -486,6 +486,7 @@ return [
 			$services->get( ParticipantsStore::SERVICE_NAME ),
 			$services->getJobQueueGroup(),
 			$services->getRevisionStoreFactory(),
+			$services->get( EventContributionStore::SERVICE_NAME ),
 			new ServiceOptions( [ 'CampaignEventsEnableContributionTracking' ], $services->getMainConfig() )
 		);
 	},

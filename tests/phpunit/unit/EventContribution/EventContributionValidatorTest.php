@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\EventContribution;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -35,6 +36,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	private ParticipantsStore $participantsStore;
 	private JobQueueGroup $jobQueueGroup;
 	private RevisionStoreFactory $revisionStoreFactory;
+	private EventContributionStore $eventContributionStore;
 	private ServiceOptions $options;
 	private Authority $performer;
 
@@ -45,6 +47,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->participantsStore = $this->createMock( ParticipantsStore::class );
 		$this->jobQueueGroup = $this->createMock( JobQueueGroup::class );
 		$this->revisionStoreFactory = $this->createMock( RevisionStoreFactory::class );
+		$this->eventContributionStore = $this->createMock( EventContributionStore::class );
 		$this->options = $this->createMock( ServiceOptions::class );
 		$this->performer = $this->createMock( Authority::class );
 
@@ -53,6 +56,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			$this->participantsStore,
 			$this->jobQueueGroup,
 			$this->revisionStoreFactory,
+			$this->eventContributionStore,
 			$this->options
 		);
 	}
@@ -93,6 +97,50 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->expectExceptionMessage( 'campaignevents-event-contribution-user-not-global' );
 
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
+	}
+
+	public function testValidateAndSchedule__alreadyAssociatedSameEvent(): void {
+		$eventID = 12345;
+		$wikiID = 'awiki';
+		$revID = 54321;
+
+		$this->options->method( 'get' )
+			->with( 'CampaignEventsEnableContributionTracking' )
+			->willReturn( true );
+
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getID' )->willReturn( $eventID );
+
+		$this->eventContributionStore->expects( $this->atLeastOnce() )
+			->method( 'getEventIDForRevision' )
+			->with( $wikiID, $revID )
+			->willReturn( $eventID );
+
+		$this->validator->validateAndSchedule( $event, $revID, $wikiID, $this->performer );
+		// Assert no exception thrown.
+		$this->addToAssertionCount( 1 );
+	}
+
+	public function testValidateAndSchedule__alreadyAssociatedDifferentEvent(): void {
+		$eventID = 12345;
+		$wikiID = 'awiki';
+		$revID = 54321;
+
+		$this->options->method( 'get' )
+			->with( 'CampaignEventsEnableContributionTracking' )
+			->willReturn( true );
+
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getID' )->willReturn( $eventID );
+
+		$this->eventContributionStore->expects( $this->atLeastOnce() )
+			->method( 'getEventIDForRevision' )
+			->with( $wikiID, $revID )
+			->willReturn( $eventID + 1 );
+
+		$this->expectException( LocalizedHttpException::class );
+		$this->expectExceptionMessage( 'campaignevents-event-contribution-already-associated' );
+		$this->validator->validateAndSchedule( $event, $revID, $wikiID, $this->performer );
 	}
 
 	public function testValidateAndScheduleContributionTrackingDisabled(): void {

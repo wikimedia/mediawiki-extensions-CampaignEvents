@@ -124,6 +124,12 @@
 				"unique": false
 			},
 			{
+				"name": "cec_wiki_revision",
+				"comment": "Uniqueness constraint, also used for user-facing validation.",
+				"columns": [ "cec_wiki", "cec_revision_id" ],
+				"unique": true
+			},
+			{
 				"name": "cec_event_user",
 				"comment": "Filter edits for a given event, with a JOIN on ce_participants.",
 				"columns": [ "cec_event_id", "cec_user_id" ],

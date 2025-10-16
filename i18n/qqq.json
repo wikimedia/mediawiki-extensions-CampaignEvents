@@ -595,6 +595,7 @@
 	"campaignevents-event-contribution-event-ended": "Error message shown when trying to associate an edit with an event that has already ended",
 	"campaignevents-event-contribution-not-participant": "Error message shown when a user tries to associate an edit with an event they are not participating in",
 	"campaignevents-event-contribution-user-not-global": "Error message shown when a user is not a global user in the event contribution API",
+	"campaignevents-event-contribution-already-associated": "Error message shown when the user tries to associate an edit with an event, but that edit is already associated with a different event",
 	"campaignevents-event-contribution-timestamp-too-old": "Error message shown when the edit timestamp is too old (more than 24 hours) in the event contribution API",
 	"campaignevents-event-contribution-revision-not-found": "Error message shown when the specified revision ID does not exist in the event contribution API",
 	"campaignevents-event-contribution-not-owner": "Error message shown when trying to associate an edit that was not made by the current user",

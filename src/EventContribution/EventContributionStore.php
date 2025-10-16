@@ -219,6 +219,24 @@ class EventContributionStore {
 	}
 
 	/**
+	 * Returns the ID of the event with which the given revision is associated, or null if it's not
+	 * associated with any events.
+	 */
+	public function getEventIDForRevision( string $wikiID, int $revisionID ): ?int {
+		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$eventID = $dbr->newSelectQueryBuilder()
+			->select( 'cec_event_id' )
+			->from( 'ce_event_contributions' )
+			->where( [
+				'cec_wiki' => $wikiID,
+				'cec_revision_id' => $revisionID,
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
+		return $eventID !== false ? (int)$eventID : null;
+	}
+
+	/**
 	 * @phan-param mixed[] $where
 	 * @phan-param mixed[] $set
 	 */

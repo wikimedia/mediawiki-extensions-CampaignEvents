@@ -17,6 +17,7 @@ CREATE TABLE /*_*/ce_event_contributions (
   cec_timestamp BINARY(14) NOT NULL,
   cec_deleted TINYINT(1) NOT NULL,
   INDEX cec_wiki_page_id (cec_wiki, cec_page_id),
+  UNIQUE INDEX cec_wiki_revision (cec_wiki, cec_revision_id),
   INDEX cec_event_user (cec_event_id, cec_user_id),
   INDEX cec_user_id_name (cec_user_id, cec_user_name),
   PRIMARY KEY(cec_id)

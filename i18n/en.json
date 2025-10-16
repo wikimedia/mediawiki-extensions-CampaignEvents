@@ -588,6 +588,7 @@
 	"campaignevents-event-contribution-event-ended": "Event has ended and is no longer accepting edit associations",
 	"campaignevents-event-contribution-not-participant": "User is not a participant in this event",
 	"campaignevents-event-contribution-user-not-global": "User is not a global user",
+	"campaignevents-event-contribution-already-associated": "An edit can only be associated with one event.",
 	"campaignevents-event-contribution-timestamp-too-old": "Edit timestamp is too old (maximum 24 hours)",
 	"campaignevents-event-contribution-revision-not-found": "Revision not found",
 	"campaignevents-event-contribution-not-owner": "You can only associate your own edits to events",

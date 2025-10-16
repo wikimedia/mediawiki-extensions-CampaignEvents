@@ -721,4 +721,16 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			->fetchField();
 		$this->assertSame( (int)$totalBefore, (int)$totalAfter );
 	}
+
+	/** @dataProvider provideGetEventIDForRevision */
+	public function testGetEventIDForRevision( string $wikiID, int $revisionID, ?int $expected ): void {
+		$store = CampaignEventsServices::getEventContributionStore();
+		$this->assertSame( $expected, $store->getEventIDForRevision( $wikiID, $revisionID ) );
+	}
+
+	public static function provideGetEventIDForRevision(): Generator {
+		yield 'Associated' => [ 'enwiki', 123, 1 ];
+		yield 'Not associated' => [ 'enwiki', 192837, null ];
+		yield 'Associated with revision of same ID but different wiki' => [ 'ptwiki', 777, null ];
+	}
 }
