@@ -581,6 +581,7 @@
 	"campaignevents-event-contribution-event-ended": "Die Veranstaltung ist beendet und akzeptiert keine Bearbeitungszuordnungen mehr.",
 	"campaignevents-event-contribution-not-participant": "Der Benutzer ist kein Teilnehmer dieser Veranstaltung",
 	"campaignevents-event-contribution-user-not-global": "Der Benutzer ist kein globaler Benutzer",
+	"campaignevents-event-contribution-already-associated": "Eine Bearbeitung kann nur mit einer Veranstaltung verknüpft werden.",
 	"campaignevents-event-contribution-timestamp-too-old": "Der Bearbeitungszeitstempel ist zu alt (maximal 24 Stunden)",
 	"campaignevents-event-contribution-revision-not-found": "Version nicht gefunden",
 	"campaignevents-event-contribution-not-owner": "Du kannst deine eigenen Änderungen nur mit Veranstaltungen verknüpfen",
