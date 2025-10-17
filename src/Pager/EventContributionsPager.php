@@ -109,6 +109,7 @@ class EventContributionsPager extends CodexTablePager {
 				'cec_page_prefixedtext',
 				'cec_wiki',
 				'cec_user_id',
+				'cec_user_name',
 				'cec_timestamp',
 				'cec_bytes_delta',
 				'cec_links_delta',
