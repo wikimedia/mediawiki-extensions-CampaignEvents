@@ -37,45 +37,20 @@ class EditEventCommand {
 
 	public const MAX_ORGANIZERS_PER_EVENT = 10;
 
-	private IEventStore $eventStore;
-	private IEventLookup $eventLookup;
-	private OrganizersStore $organizerStore;
-	private PermissionChecker $permissionChecker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private EventPageCacheUpdater $eventPageCacheUpdater;
-	private TrackingToolEventWatcher $trackingToolEventWatcher;
-	private TrackingToolUpdater $trackingToolUpdater;
-	private LoggerInterface $logger;
-	private ParticipantAnswersStore $answersStore;
-	private EventAggregatedAnswersStore $aggregatedAnswersStore;
-	private PageEventLookup $pageEventLookup;
-
 	public function __construct(
-		IEventStore $eventStore,
-		IEventLookup $eventLookup,
-		OrganizersStore $organizersStore,
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		EventPageCacheUpdater $eventPageCacheUpdater,
-		TrackingToolEventWatcher $trackingToolEventWatcher,
-		TrackingToolUpdater $trackingToolUpdater,
-		LoggerInterface $logger,
-		ParticipantAnswersStore $answersStore,
-		EventAggregatedAnswersStore $aggregatedAnswersStore,
-		PageEventLookup $pageEventLookup
+		private readonly IEventStore $eventStore,
+		private readonly IEventLookup $eventLookup,
+		private readonly OrganizersStore $organizersStore,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly EventPageCacheUpdater $eventPageCacheUpdater,
+		private readonly TrackingToolEventWatcher $trackingToolEventWatcher,
+		private readonly TrackingToolUpdater $trackingToolUpdater,
+		private readonly LoggerInterface $logger,
+		private readonly ParticipantAnswersStore $answersStore,
+		private readonly EventAggregatedAnswersStore $aggregatedAnswersStore,
+		private readonly PageEventLookup $pageEventLookup,
 	) {
-		$this->eventStore = $eventStore;
-		$this->eventLookup = $eventLookup;
-		$this->organizerStore = $organizersStore;
-		$this->permissionChecker = $permissionChecker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
-		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
-		$this->trackingToolUpdater = $trackingToolUpdater;
-		$this->logger = $logger;
-		$this->answersStore = $answersStore;
-		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
-		$this->pageEventLookup = $pageEventLookup;
 	}
 
 	/**
@@ -277,7 +252,7 @@ class EditEventCommand {
 		CentralUser $performer
 	): void {
 		if ( !$isCreation ) {
-			$eventCreator = $this->organizerStore->getEventCreator(
+			$eventCreator = $this->organizersStore->getEventCreator(
 				$eventID,
 				OrganizersStore::GET_CREATOR_INCLUDE_DELETED
 			);
@@ -295,9 +270,9 @@ class EditEventCommand {
 				: [ Roles::ROLE_ORGANIZER ];
 		}
 		if ( !$isCreation ) {
-			$this->organizerStore->removeOrganizersFromEventExcept( $eventID, $organizerCentralIDs );
+			$this->organizersStore->removeOrganizersFromEventExcept( $eventID, $organizerCentralIDs );
 		}
-		$this->organizerStore->addOrganizersToEvent( $eventID, $organizersAndRoles );
+		$this->organizersStore->addOrganizersToEvent( $eventID, $organizersAndRoles );
 	}
 
 	/**
@@ -387,7 +362,7 @@ class EditEventCommand {
 		int $eventID,
 		CentralUser $performer
 	): StatusValue {
-		$eventCreator = $this->organizerStore->getEventCreator(
+		$eventCreator = $this->organizersStore->getEventCreator(
 			$eventID,
 			OrganizersStore::GET_CREATOR_EXCLUDE_DELETED
 		);

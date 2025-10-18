@@ -31,18 +31,11 @@ class ContributionAssociationPageEventIngress extends DomainEventIngress impleme
 	PageMovedListener,
 	PageHistoryVisibilityChangedListener
 {
-	private EventContributionStore $eventContributionStore;
-	private TitleFormatter $titleFormatter;
-	private JobQueueGroup $jobQueueGroup;
-
 	public function __construct(
-		EventContributionStore $eventContributionStore,
-		TitleFormatter $titleFormatter,
-		JobQueueGroup $jobQueueGroup,
+		private readonly EventContributionStore $eventContributionStore,
+		private readonly TitleFormatter $titleFormatter,
+		private readonly JobQueueGroup $jobQueueGroup,
 	) {
-		$this->eventContributionStore = $eventContributionStore;
-		$this->titleFormatter = $titleFormatter;
-		$this->jobQueueGroup = $jobQueueGroup;
 	}
 
 	public function handlePageDeletedEvent( PageDeletedEvent $event ): void {

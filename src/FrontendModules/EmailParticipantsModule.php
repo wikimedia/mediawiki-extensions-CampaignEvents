@@ -21,12 +21,9 @@ use Wikimedia\Message\MessageValue;
 
 class EmailParticipantsModule {
 
-	private IMessageFormatterFactory $messageFormatterFactory;
-
 	public function __construct(
-		IMessageFormatterFactory $messageFormatterFactory
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
 	) {
-		$this->messageFormatterFactory = $messageFormatterFactory;
 	}
 
 	/**

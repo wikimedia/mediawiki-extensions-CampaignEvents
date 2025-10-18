@@ -8,11 +8,10 @@ use InvalidArgumentException;
 use StatusValue;
 
 class InvalidEventDataException extends InvalidArgumentException {
-	private StatusValue $status;
-
-	public function __construct( StatusValue $status ) {
+	public function __construct(
+		private readonly StatusValue $status,
+	) {
 		parent::__construct( 'Invalid event data' );
-		$this->status = $status;
 	}
 
 	public function getStatus(): StatusValue {

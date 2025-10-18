@@ -15,17 +15,13 @@ use Wikimedia\Assert\Assert;
  */
 class Worklist {
 	/**
-	 * @var PageIdentity[][]
-	 * @phan-var non-empty-array<string,non-empty-list<PageIdentity>>
-	 */
-	private array $pagesByWiki;
-
-	/**
 	 * @param array<string,PageIdentity[]> $pagesByWiki Must have been validated by WorklistParser if it comes from
 	 * the user.
 	 * @phan-param non-empty-array<string,non-empty-list<PageIdentity>> $pagesByWiki
 	 */
-	public function __construct( array $pagesByWiki ) {
+	public function __construct(
+		private readonly array $pagesByWiki,
+	) {
 		Assert::parameterElementType( 'array', $pagesByWiki, '$pagesByWiki' );
 		Assert::parameterKeyType( 'string', $pagesByWiki, '$pagesByWiki' );
 		$curWikiID = WikiMap::getCurrentWikiId();
@@ -41,7 +37,6 @@ class Worklist {
 				// No existence and namespace check, they might fail for stored worklists.
 			}
 		}
-		$this->pagesByWiki = $pagesByWiki;
 	}
 
 	/**

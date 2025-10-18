@@ -25,21 +25,12 @@ class PageEventLookup {
 	public const GET_CANONICALIZE = 'canonicalize';
 	public const GET_DIRECT = 'direct';
 
-	private IEventLookup $eventLookup;
-	private CampaignsPageFactory $campaignsPageFactory;
-	private TitleFactory $titleFactory;
-	private bool $isTranslateExtensionInstalled;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		CampaignsPageFactory $campaignsPageFactory,
-		TitleFactory $titleFactory,
-		bool $isTranslateExtensionInstalled
+		private readonly IEventLookup $eventLookup,
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly TitleFactory $titleFactory,
+		private readonly bool $isTranslateExtensionInstalled,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->titleFactory = $titleFactory;
-		$this->isTranslateExtensionInstalled = $isTranslateExtensionInstalled;
 	}
 
 	/**

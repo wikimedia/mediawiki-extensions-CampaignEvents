@@ -54,45 +54,22 @@ class EventFactory {
 	public const ADDRESS_MAXLENGTH_BYTES = 8192;
 	public const MAX_TOPICS = 5;
 
-	private CampaignsPageFactory $campaignsPageFactory;
-	private CampaignsPageFormatter $campaignsPageFormatter;
-	private TrackingToolRegistry $trackingToolRegistry;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private EventTypesRegistry $eventTypesRegistry;
-	private CountryProvider $countryProvider;
-	/** @var list<int> */
-	private array $allowedEventNamespaces;
-	/** @var list<string> */
-	private array $contributionTrackingDisallowedCountryCodes;
-
 	/**
 	 * @phan-param list<int> $allowedEventNamespaces
 	 * @phan-param list<string> $contributionTrackingDisallowedCountryCodes
 	 */
 	public function __construct(
-		CampaignsPageFactory $campaignsPageFactory,
-		CampaignsPageFormatter $campaignsPageFormatter,
-		TrackingToolRegistry $trackingToolRegistry,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
-		CountryProvider $countryProvider,
-		array $allowedEventNamespaces,
-		array $contributionTrackingDisallowedCountryCodes,
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly CampaignsPageFormatter $campaignsPageFormatter,
+		private readonly TrackingToolRegistry $trackingToolRegistry,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		private readonly WikiLookup $wikiLookup,
+		private readonly ITopicRegistry $topicRegistry,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly CountryProvider $countryProvider,
+		private readonly array $allowedEventNamespaces,
+		private readonly array $contributionTrackingDisallowedCountryCodes,
 	) {
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->campaignsPageFormatter = $campaignsPageFormatter;
-		$this->trackingToolRegistry = $trackingToolRegistry;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->countryProvider = $countryProvider;
-		$this->allowedEventNamespaces = $allowedEventNamespaces;
-		$this->contributionTrackingDisallowedCountryCodes = $contributionTrackingDisallowedCountryCodes;
 	}
 
 	/**

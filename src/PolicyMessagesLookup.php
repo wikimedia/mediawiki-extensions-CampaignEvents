@@ -9,10 +9,9 @@ use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 class PolicyMessagesLookup {
 	public const SERVICE_NAME = 'CampaignEventsPolicyMessagesLookup';
 
-	private CampaignEventsHookRunner $hookRunner;
-
-	public function __construct( CampaignEventsHookRunner $hookRunner ) {
-		$this->hookRunner = $hookRunner;
+	public function __construct(
+		private readonly CampaignEventsHookRunner $hookRunner,
+	) {
 	}
 
 	/**

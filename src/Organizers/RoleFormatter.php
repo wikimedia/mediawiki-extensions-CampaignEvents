@@ -24,10 +24,9 @@ class RoleFormatter {
 		Roles::ROLE_ORGANIZER => 'organizer',
 	];
 
-	private IMessageFormatterFactory $messageFormatterFactory;
-
-	public function __construct( IMessageFormatterFactory $messageFormatterFactory ) {
-		$this->messageFormatterFactory = $messageFormatterFactory;
+	public function __construct(
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
+	) {
 	}
 
 	/**

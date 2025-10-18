@@ -21,21 +21,12 @@ class DeleteEventCommand {
 	public const VALIDATE_TRACKING_TOOLS = true;
 	public const SKIP_TRACKING_TOOL_VALIDATION = false;
 
-	private IEventStore $eventStore;
-	private PermissionChecker $permissionChecker;
-	private TrackingToolEventWatcher $trackingToolEventWatcher;
-	private EventPageCacheUpdater $eventPageCacheUpdater;
-
 	public function __construct(
-		IEventStore $eventStore,
-		PermissionChecker $permissionChecker,
-		TrackingToolEventWatcher $trackingToolEventWatcher,
-		EventPageCacheUpdater $eventPageCacheUpdater
+		private readonly IEventStore $eventStore,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly TrackingToolEventWatcher $trackingToolEventWatcher,
+		private readonly EventPageCacheUpdater $eventPageCacheUpdater,
 	) {
-		$this->eventStore = $eventStore;
-		$this->permissionChecker = $permissionChecker;
-		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
-		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 	}
 
 	/**

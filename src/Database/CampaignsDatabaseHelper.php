@@ -12,10 +12,9 @@ use Wikimedia\Rdbms\LBFactory;
 class CampaignsDatabaseHelper {
 	public const SERVICE_NAME = 'CampaignEventsDatabaseHelper';
 
-	private LBFactory $lbFactory;
-
-	public function __construct( LBFactory $lbFactory ) {
-		$this->lbFactory = $lbFactory;
+	public function __construct(
+		private LBFactory $lbFactory,
+	) {
 	}
 
 	/**

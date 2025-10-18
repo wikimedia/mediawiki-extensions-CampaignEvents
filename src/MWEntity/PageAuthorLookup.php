@@ -13,15 +13,10 @@ use MediaWiki\Revision\RevisionStoreFactory;
 class PageAuthorLookup {
 	public const SERVICE_NAME = 'CampaignEventsPageAuthorLookup';
 
-	private RevisionStoreFactory $revisionStoreFactory;
-	private CampaignsCentralUserLookup $centralUserLookup;
-
 	public function __construct(
-		RevisionStoreFactory $revisionStoreFactory,
-		CampaignsCentralUserLookup $centralUserLookup
+		private readonly RevisionStoreFactory $revisionStoreFactory,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
 	) {
-		$this->revisionStoreFactory = $revisionStoreFactory;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**

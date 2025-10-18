@@ -26,24 +26,13 @@ class PermissionChecker {
 	public const DELETE_REGISTRATION_RIGHT = 'campaignevents-delete-registration';
 	public const GENERATE_INVITATION_LISTS_RIGHT = 'campaignevents-generate-invitation-lists';
 
-	private OrganizersStore $organizersStore;
-	private PageAuthorLookup $pageAuthorLookup;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private MWPermissionsLookup $permissionsLookup;
-	private ParticipantsStore $participantsStore;
-
 	public function __construct(
-		OrganizersStore $organizersStore,
-		PageAuthorLookup $pageAuthorLookup,
-		CampaignsCentralUserLookup $centralUserLookup,
-		MWPermissionsLookup $permissionsLookup,
-		ParticipantsStore $participantsStore
+		private readonly OrganizersStore $organizersStore,
+		private readonly PageAuthorLookup $pageAuthorLookup,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly MWPermissionsLookup $permissionsLookup,
+		private readonly ParticipantsStore $participantsStore,
 	) {
-		$this->organizersStore = $organizersStore;
-		$this->pageAuthorLookup = $pageAuthorLookup;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->permissionsLookup = $permissionsLookup;
-		$this->participantsStore = $participantsStore;
 	}
 
 	/**

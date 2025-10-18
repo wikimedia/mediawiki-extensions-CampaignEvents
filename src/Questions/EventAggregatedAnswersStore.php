@@ -14,10 +14,9 @@ class EventAggregatedAnswersStore {
 	 */
 	public const ANSWERS_TTL_SEC = 90 * 24 * 60 * 60;
 
-	private CampaignsDatabaseHelper $dbHelper;
-
-	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
-		$this->dbHelper = $dbHelper;
+	public function __construct(
+		private readonly CampaignsDatabaseHelper $dbHelper,
+	) {
 	}
 
 	public function getEventAggregatedAnswers( int $eventID ): EventAggregatedAnswers {

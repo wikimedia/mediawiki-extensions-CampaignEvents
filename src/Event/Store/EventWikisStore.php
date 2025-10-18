@@ -15,12 +15,9 @@ class EventWikisStore {
 	public const SERVICE_NAME = 'CampaignEventsEventWikisStore';
 	public const ALL_WIKIS_DB_VALUE = '*all*';
 
-	private CampaignsDatabaseHelper $dbHelper;
-
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper
+		private readonly CampaignsDatabaseHelper $dbHelper,
 	) {
-		$this->dbHelper = $dbHelper;
 	}
 
 	/**

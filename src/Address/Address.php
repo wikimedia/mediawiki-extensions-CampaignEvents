@@ -13,15 +13,10 @@ use Wikimedia\JsonCodec\JsonCodecableTrait;
 class Address implements JsonCodecable {
 	use JsonCodecableTrait;
 
-	private ?string $addressWithoutCountry;
-	private string $countryCode;
-
 	public function __construct(
-		?string $addressWithoutCountry,
-		string $countryCode,
+		private readonly ?string $addressWithoutCountry,
+		private readonly string $countryCode,
 	) {
-		$this->addressWithoutCountry = $addressWithoutCountry;
-		$this->countryCode = $countryCode;
 	}
 
 	public function getAddressWithoutCountry(): ?string {

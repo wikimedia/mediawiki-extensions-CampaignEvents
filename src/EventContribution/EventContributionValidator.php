@@ -22,24 +22,13 @@ class EventContributionValidator {
 
 	public const SERVICE_NAME = 'CampaignEventsEventContributionValidator';
 
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private JobQueueGroup $jobQueueGroup;
-	private RevisionStoreFactory $revisionStoreFactory;
-	private EventContributionStore $eventContributionStore;
-	private PermissionChecker $permissionChecker;
-
 	public function __construct(
-		CampaignsCentralUserLookup $centralUserLookup,
-		JobQueueGroup $jobQueueGroup,
-		RevisionStoreFactory $revisionStoreFactory,
-		EventContributionStore $eventContributionStore,
-		PermissionChecker $permissionChecker
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly JobQueueGroup $jobQueueGroup,
+		private readonly RevisionStoreFactory $revisionStoreFactory,
+		private readonly EventContributionStore $eventContributionStore,
+		private readonly PermissionChecker $permissionChecker,
 	) {
-		$this->centralUserLookup = $centralUserLookup;
-		$this->jobQueueGroup = $jobQueueGroup;
-		$this->revisionStoreFactory = $revisionStoreFactory;
-		$this->eventContributionStore = $eventContributionStore;
-		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**

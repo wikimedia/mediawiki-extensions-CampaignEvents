@@ -17,12 +17,9 @@ use Wikimedia\Rdbms\IDatabase;
 class AddressStore {
 	public const SERVICE_NAME = 'CampaignEventsAddressStore';
 
-	private CampaignsDatabaseHelper $dbHelper;
-
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper,
+		private readonly CampaignsDatabaseHelper $dbHelper,
 	) {
-		$this->dbHelper = $dbHelper;
 	}
 
 	public function updateAddresses(

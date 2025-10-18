@@ -26,18 +26,11 @@ class ParticipantsStore {
 	public const MODIFIED_INFO = 2;
 	public const MODIFIED_REGISTRATION = 3;
 
-	private CampaignsDatabaseHelper $dbHelper;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private ParticipantAnswersStore $answersStore;
-
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper,
-		CampaignsCentralUserLookup $centralUserLookup,
-		ParticipantAnswersStore $answersStore
+		private readonly CampaignsDatabaseHelper $dbHelper,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly ParticipantAnswersStore $answersStore,
 	) {
-		$this->dbHelper = $dbHelper;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->answersStore = $answersStore;
 	}
 
 	/**

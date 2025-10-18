@@ -20,17 +20,16 @@ class EventQuestionsRegistry {
 		self::SELECT_QUESTION_TYPE
 	];
 
-	/**
-	 * @var bool Determines whether Wikimedia-specific questions should be shown. In the future, this might be
-	 * replaced with a hook for adding custom questions.
-	 */
-	private bool $wikimediaQuestionsEnabled;
-
 	/** @var array[]|null Question overrides used in test. Null means no override. */
 	private ?array $testOverrides = null;
 
-	public function __construct( bool $wikimediaQuestionsEnabled ) {
-		$this->wikimediaQuestionsEnabled = $wikimediaQuestionsEnabled;
+	/**
+	 * @param bool $wikimediaQuestionsEnabled Determines whether Wikimedia-specific questions should be shown.
+	 * In the future, this might be replaced with a hook for adding custom questions.
+	 */
+	public function __construct(
+		private readonly bool $wikimediaQuestionsEnabled,
+	) {
 	}
 
 	/**

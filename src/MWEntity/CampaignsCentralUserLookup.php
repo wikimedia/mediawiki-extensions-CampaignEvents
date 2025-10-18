@@ -21,10 +21,6 @@ class CampaignsCentralUserLookup {
 	public const USER_NOT_FOUND = '[not found]';
 	public const USER_HIDDEN = '[hidden]';
 
-	private CentralIdLookup $centralIDLookup;
-	private UserFactory $userFactory;
-	private UserNameUtils $userNameUtils;
-
 	/**
 	 * @var array<int,string> Cache of usernames by central user ID. Values can be either usernames, or the special
 	 * values self::USER_NOT_FOUND and self::USER_HIDDEN.
@@ -32,13 +28,10 @@ class CampaignsCentralUserLookup {
 	private array $nameByIDCache = [];
 
 	public function __construct(
-		CentralIdLookup $centralIdLookup,
-		UserFactory $userFactory,
-		UserNameUtils $userNameUtils
+		private readonly CentralIdLookup $centralIdLookup,
+		private readonly UserFactory $userFactory,
+		private readonly UserNameUtils $userNameUtils,
 	) {
-		$this->centralIDLookup = $centralIdLookup;
-		$this->userFactory = $userFactory;
-		$this->userNameUtils = $userNameUtils;
 	}
 
 	/**
@@ -50,7 +43,7 @@ class CampaignsCentralUserLookup {
 		// @note This does not check if the user is deleted. This seems easier, and
 		// the CentralAuth provider ignored $audience anyway.
 		// TODO This should be improved somehow (T312821)
-		$centralID = $this->centralIDLookup->centralIdFromLocalUser( $userIdentity, CentralIdLookup::AUDIENCE_RAW );
+		$centralID = $this->centralIdLookup->centralIdFromLocalUser( $userIdentity, CentralIdLookup::AUDIENCE_RAW );
 		if ( $centralID === 0 ) {
 			throw new UserNotGlobalException( $userIdentity->getId() );
 		}
@@ -117,7 +110,7 @@ class CampaignsCentralUserLookup {
 	public function existsLocally( CentralUser $user ): bool {
 		// NOTE: we can't really use isAttached here, because that takes a (local) UserIdentity, and the purpose
 		// of this method is to tell us if a local user exists at all.
-		return $this->centralIDLookup->localUserFromCentralId( $user->getCentralID() ) !== null;
+		return $this->centralIdLookup->localUserFromCentralId( $user->getCentralID() ) !== null;
 	}
 
 	/**
@@ -144,7 +137,7 @@ class CampaignsCentralUserLookup {
 	 * @return array<string,mixed>
 	 */
 	public function getIDs( array $localNamesMap ): array {
-		return $this->centralIDLookup->lookupUserNames( $localNamesMap );
+		return $this->centralIdLookup->lookupUserNames( $localNamesMap );
 	}
 
 	/**
@@ -160,7 +153,7 @@ class CampaignsCentralUserLookup {
 		if ( !$remainingIDsMap ) {
 			return $ret;
 		}
-		$remainingNames = $this->centralIDLookup->lookupCentralIds( $remainingIDsMap );
+		$remainingNames = $this->centralIdLookup->lookupCentralIds( $remainingIDsMap );
 		foreach ( $remainingNames as $id => $name ) {
 			if ( $name === null ) {
 				$ret[$id] = self::USER_NOT_FOUND;

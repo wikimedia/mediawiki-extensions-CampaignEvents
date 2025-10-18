@@ -33,27 +33,14 @@ use Wikimedia\ObjectCache\WANObjectCache;
 class EventContributionComputeMetrics {
 	public const SERVICE_NAME = 'CampaignEventsEventContributionComputeMetrics';
 
-	private RevisionStoreFactory $revisionStoreFactory;
-	private TitleFormatter $titleFormatter;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private WANObjectCache $wanCache;
-	private SiteLookup $siteLookup;
-	private HttpRequestFactory $httpRequestFactory;
-
 	public function __construct(
-		RevisionStoreFactory $revisionStoreFactory,
-		TitleFormatter $titleFormatter,
-		CampaignsCentralUserLookup $centralUserLookup,
-		WANObjectCache $wanCache,
-		SiteLookup $siteLookup,
-		HttpRequestFactory $httpRequestFactory
+		private readonly RevisionStoreFactory $revisionStoreFactory,
+		private readonly TitleFormatter $titleFormatter,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly WANObjectCache $wanCache,
+		private readonly SiteLookup $siteLookup,
+		private readonly HttpRequestFactory $httpRequestFactory,
 	) {
-		$this->revisionStoreFactory = $revisionStoreFactory;
-		$this->titleFormatter = $titleFormatter;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->wanCache = $wanCache;
-		$this->siteLookup = $siteLookup;
-		$this->httpRequestFactory = $httpRequestFactory;
 	}
 
 	/**

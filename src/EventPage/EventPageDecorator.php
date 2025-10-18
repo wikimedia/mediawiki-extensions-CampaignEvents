@@ -70,23 +70,7 @@ class EventPageDecorator {
 	private const USER_STATUS_CANNOT_REGISTER_ENDED = 5;
 	private const USER_STATUS_CANNOT_REGISTER_CLOSED = 6;
 
-	private PageEventLookup $pageEventLookup;
-	private ParticipantsStore $participantsStore;
-	private OrganizersStore $organizersStore;
-	private PermissionChecker $permissionChecker;
-	private CampaignsPageFactory $campaignsPageFactory;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private EventTimeFormatter $eventTimeFormatter;
-	private EventPageCacheUpdater $eventPageCacheUpdater;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private GroupPermissionsLookup $groupPermissionsLookup;
-	private Config $config;
-	private CountryProvider $countryProvider;
-
-	private Language $language;
-	private Authority $authority;
 	private UserIdentity $viewingUser;
-	private OutputPage $out;
 	private ITextFormatter $msgFormatter;
 
 	/**
@@ -96,40 +80,24 @@ class EventPageDecorator {
 	private ?bool $participantIsPublic = null;
 
 	public function __construct(
-		PageEventLookup $pageEventLookup,
-		ParticipantsStore $participantsStore,
-		OrganizersStore $organizersStore,
-		PermissionChecker $permissionChecker,
+		private readonly PageEventLookup $pageEventLookup,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly OrganizersStore $organizersStore,
+		private readonly PermissionChecker $permissionChecker,
 		IMessageFormatterFactory $messageFormatterFactory,
-		CampaignsPageFactory $campaignsPageFactory,
-		CampaignsCentralUserLookup $centralUserLookup,
-		EventTimeFormatter $eventTimeFormatter,
-		EventPageCacheUpdater $eventPageCacheUpdater,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		GroupPermissionsLookup $groupPermissionsLookup,
-		Config $config,
-		CountryProvider $countryProvider,
-		Language $language,
-		Authority $viewingAuthority,
-		OutputPage $out
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly EventTimeFormatter $eventTimeFormatter,
+		private readonly EventPageCacheUpdater $eventPageCacheUpdater,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		private readonly GroupPermissionsLookup $groupPermissionsLookup,
+		private readonly Config $config,
+		private readonly CountryProvider $countryProvider,
+		private readonly Language $language,
+		private readonly Authority $authority,
+		private readonly OutputPage $out,
 	) {
-		$this->pageEventLookup = $pageEventLookup;
-		$this->participantsStore = $participantsStore;
-		$this->organizersStore = $organizersStore;
-		$this->permissionChecker = $permissionChecker;
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventTimeFormatter = $eventTimeFormatter;
-		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->groupPermissionsLookup = $groupPermissionsLookup;
-		$this->config = $config;
-		$this->countryProvider = $countryProvider;
-
-		$this->language = $language;
-		$this->authority = $viewingAuthority;
-		$this->viewingUser = $viewingAuthority->getUser();
-		$this->out = $out;
+		$this->viewingUser = $authority->getUser();
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 	}
 

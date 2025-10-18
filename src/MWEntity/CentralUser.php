@@ -13,10 +13,9 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
  * is unnecessarily expensive.
  */
 class CentralUser {
-	private int $centralID;
-
-	public function __construct( int $centralID ) {
-		$this->centralID = $centralID;
+	public function __construct(
+		private readonly int $centralID,
+	) {
 	}
 
 	public function getCentralID(): int {

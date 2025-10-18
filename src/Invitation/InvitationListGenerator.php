@@ -23,30 +23,15 @@ class InvitationListGenerator {
 
 	public const INVITATION_LIST_NAME_MAXLENGTH_BYTES = 255;
 
-	private PermissionChecker $permissionChecker;
-	private CampaignsPageFactory $pageFactory;
-	private PageEventLookup $pageEventLookup;
-	private OrganizersStore $organizersStore;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private InvitationListStore $invitationListStore;
-	private JobQueueGroup $jobQueueGroup;
-
 	public function __construct(
-		PermissionChecker $permissionChecker,
-		CampaignsPageFactory $pageFactory,
-		PageEventLookup $pageEventLookup,
-		OrganizersStore $organizersStore,
-		CampaignsCentralUserLookup $centralUserLookup,
-		InvitationListStore $invitationListStore,
-		JobQueueGroup $jobQueueGroup
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsPageFactory $pageFactory,
+		private readonly PageEventLookup $pageEventLookup,
+		private readonly OrganizersStore $organizersStore,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly InvitationListStore $invitationListStore,
+		private readonly JobQueueGroup $jobQueueGroup,
 	) {
-		$this->permissionChecker = $permissionChecker;
-		$this->pageFactory = $pageFactory;
-		$this->pageEventLookup = $pageEventLookup;
-		$this->organizersStore = $organizersStore;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->invitationListStore = $invitationListStore;
-		$this->jobQueueGroup = $jobQueueGroup;
 	}
 
 	/**

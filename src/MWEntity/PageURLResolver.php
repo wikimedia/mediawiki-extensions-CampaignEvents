@@ -13,8 +13,6 @@ use RuntimeException;
 class PageURLResolver {
 	public const SERVICE_NAME = 'CampaignEventsPageURLResolver';
 
-	private TitleFactory $titleFactory;
-
 	/** @var string[] Cached results of getUrl() */
 	private array $urlCache = [];
 	/** @var string[] Cached results of getFullUrl() */
@@ -24,8 +22,9 @@ class PageURLResolver {
 	/** @var string[] Cached results of getUrlFromPrefixedText() */
 	private array $prefixedUrlCache = [];
 
-	public function __construct( TitleFactory $titleFactory ) {
-		$this->titleFactory = $titleFactory;
+	public function __construct(
+		private readonly TitleFactory $titleFactory,
+	) {
 	}
 
 	/**

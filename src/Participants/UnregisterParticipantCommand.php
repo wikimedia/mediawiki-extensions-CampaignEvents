@@ -23,24 +23,13 @@ class UnregisterParticipantCommand {
 	public const DO_NOT_INVERT_USERS = false;
 	public const INVERT_USERS = true;
 
-	private ParticipantsStore $participantsStore;
-	private PermissionChecker $permissionChecker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private EventPageCacheUpdater $eventPageCacheUpdater;
-	private TrackingToolEventWatcher $trackingToolEventWatcher;
-
 	public function __construct(
-		ParticipantsStore $participantsStore,
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		EventPageCacheUpdater $eventPageCacheUpdater,
-		TrackingToolEventWatcher $trackingToolEventWatcher
+		private readonly ParticipantsStore $participantsStore,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly EventPageCacheUpdater $eventPageCacheUpdater,
+		private readonly TrackingToolEventWatcher $trackingToolEventWatcher,
 	) {
-		$this->participantsStore = $participantsStore;
-		$this->permissionChecker = $permissionChecker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
-		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
 	}
 
 	/**

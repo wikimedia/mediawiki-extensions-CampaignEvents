@@ -15,15 +15,10 @@ use MediaWiki\User\User;
  * This handler is used before moving an article (title).
  */
 class TitleMoveHandler implements TitleMoveHook {
-	private PageEventLookup $pageEventLookup;
-	private Config $config;
-
 	public function __construct(
-		PageEventLookup $pageEventLookup,
-		Config $config
+		private readonly PageEventLookup $pageEventLookup,
+		private readonly Config $config,
 	) {
-		$this->pageEventLookup = $pageEventLookup;
-		$this->config = $config;
 	}
 
 	/**

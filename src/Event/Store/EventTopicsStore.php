@@ -13,12 +13,9 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 class EventTopicsStore {
 	public const SERVICE_NAME = 'CampaignEventsEventTopicsStore';
 
-	private CampaignsDatabaseHelper $dbHelper;
-
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper
+		private readonly CampaignsDatabaseHelper $dbHelper,
 	) {
-		$this->dbHelper = $dbHelper;
 	}
 
 	/**

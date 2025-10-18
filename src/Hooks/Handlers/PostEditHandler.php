@@ -15,15 +15,10 @@ use MediaWiki\Output\OutputPage;
  * their edit with an event.
  */
 class PostEditHandler implements BeforePageDisplayHook {
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private IEventLookup $eventLookup;
-
 	public function __construct(
-		CampaignsCentralUserLookup $centralUserLookup,
-		IEventLookup $eventLookup
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly IEventLookup $eventLookup,
 	) {
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventLookup = $eventLookup;
 	}
 
 	/**

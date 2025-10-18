@@ -12,10 +12,9 @@ use MediaWiki\Title\Title;
 class UserNotifier {
 	public const SERVICE_NAME = 'CampaignEventsUserNotifier';
 
-	private bool $isEchoLoaded;
-
-	public function __construct( bool $isEchoLoaded ) {
-		$this->isEchoLoaded = $isEchoLoaded;
+	public function __construct(
+		private readonly bool $isEchoLoaded,
+	) {
 	}
 
 	public function notifyRegistration( Authority $performer, ExistingEventRegistration $event ): void {

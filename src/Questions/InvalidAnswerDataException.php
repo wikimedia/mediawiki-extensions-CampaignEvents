@@ -7,11 +7,10 @@ namespace MediaWiki\Extension\CampaignEvents\Questions;
 use Exception;
 
 class InvalidAnswerDataException extends Exception {
-	private string $questionName;
-
-	public function __construct( string $questionName ) {
+	public function __construct(
+		private readonly string $questionName,
+	) {
 		parent::__construct( "Invalid answer for question $questionName" );
-		$this->questionName = $questionName;
 	}
 
 	/**

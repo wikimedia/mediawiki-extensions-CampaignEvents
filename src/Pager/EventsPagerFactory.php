@@ -24,48 +24,21 @@ use MediaWiki\User\Options\UserOptionsLookup;
 class EventsPagerFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventsPagerFactory';
 
-	private CampaignsDatabaseHelper $databaseHelper;
-	private IEventLookup $eventLookup;
-	private CampaignsPageFactory $campaignsPageFactory;
-	private PageURLResolver $pageURLResolver;
-	private LinkBatchFactory $linkBatchFactory;
-	private UserLinker $userLinker;
-	private OrganizersStore $organiserStore;
-	private UserOptionsLookup $userOptionsLookup;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private EventTypesRegistry $eventTypesRegistry;
-	private CountryProvider $countryProvider;
-
 	public function __construct(
-		CampaignsDatabaseHelper $databaseHelper,
-		IEventLookup $eventLookup,
-		CampaignsPageFactory $campaignsPageFactory,
-		PageURLResolver $pageURLResolver,
-		LinkBatchFactory $linkBatchFactory,
-		UserLinker $userLinker,
-		OrganizersStore $organiserStore,
-		UserOptionsLookup $userOptionsLookup,
-		CampaignsCentralUserLookup $centralUserLookup,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
-		CountryProvider $countryProvider,
+		private readonly CampaignsDatabaseHelper $databaseHelper,
+		private readonly IEventLookup $eventLookup,
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly PageURLResolver $pageURLResolver,
+		private readonly LinkBatchFactory $linkBatchFactory,
+		private readonly UserLinker $userLinker,
+		private readonly OrganizersStore $organiserStore,
+		private readonly UserOptionsLookup $userOptionsLookup,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly WikiLookup $wikiLookup,
+		private readonly ITopicRegistry $topicRegistry,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly CountryProvider $countryProvider,
 	) {
-		$this->databaseHelper = $databaseHelper;
-		$this->eventLookup = $eventLookup;
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->pageURLResolver = $pageURLResolver;
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->userLinker = $userLinker;
-		$this->organiserStore = $organiserStore;
-		$this->userOptionsLookup = $userOptionsLookup;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->countryProvider = $countryProvider;
 	}
 
 	/**

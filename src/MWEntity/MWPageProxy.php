@@ -11,12 +11,10 @@ use MediaWiki\Page\ProperPageIdentity;
  * Wrapper around MediaWiki page objects, representing an event page. Note that this can represent foreign titles.
  */
 class MWPageProxy {
-	private ProperPageIdentity $page;
-	private string $prefixedText;
-
-	public function __construct( ProperPageIdentity $page, string $prefixedText ) {
-		$this->page = $page;
-		$this->prefixedText = $prefixedText;
+	public function __construct(
+		private ProperPageIdentity $page,
+		private string $prefixedText,
+	) {
 	}
 
 	/**

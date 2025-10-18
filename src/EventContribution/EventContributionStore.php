@@ -22,10 +22,9 @@ class EventContributionStore {
 
 	private const UPDATES_BATCH_SIZE = 500;
 
-	private CampaignsDatabaseHelper $dbHelper;
-
-	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
-		$this->dbHelper = $dbHelper;
+	public function __construct(
+		private readonly CampaignsDatabaseHelper $dbHelper,
+	) {
 	}
 
 	/**

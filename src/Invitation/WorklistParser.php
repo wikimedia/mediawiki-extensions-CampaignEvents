@@ -16,12 +16,9 @@ class WorklistParser {
 
 	public const ARTICLES_LIMIT = 300;
 
-	private PageStoreFactory $pageStoreFactory;
-
 	public function __construct(
-		PageStoreFactory $pageStoreFactory
+		private readonly PageStoreFactory $pageStoreFactory,
 	) {
-		$this->pageStoreFactory = $pageStoreFactory;
 	}
 
 	/**

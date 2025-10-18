@@ -19,16 +19,14 @@ use OOUI\ButtonWidget;
 use stdClass;
 
 class InvitationsListPager extends ReverseChronologicalPager {
-	private CentralUser $centralUser;
 	private TemplateParser $templateParser;
 
 	public function __construct(
-		CentralUser $user,
+		private readonly CentralUser $centralUser,
 		CampaignsDatabaseHelper $databaseHelper,
 		IContextSource $context,
 		LinkRenderer $linkRenderer
 	) {
-		$this->centralUser = $user;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
 		parent::__construct( $context, $linkRenderer );

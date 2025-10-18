@@ -27,21 +27,12 @@ class ContributionUserChangesHandler implements
 	UnblockUserCompleteHook,
 	RenameUserCompleteHook
 {
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private EventContributionStore $eventContributionStore;
-	private JobQueueGroup $jobQueueGroup;
-	private WANObjectCache $wanCache;
-
 	public function __construct(
-		CampaignsCentralUserLookup $centralUserLookup,
-		EventContributionStore $eventContributionStore,
-		JobQueueGroup $jobQueueGroup,
-		WANObjectCache $wanCache,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly EventContributionStore $eventContributionStore,
+		private readonly JobQueueGroup $jobQueueGroup,
+		private readonly WANObjectCache $wanCache,
 	) {
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventContributionStore = $eventContributionStore;
-		$this->jobQueueGroup = $jobQueueGroup;
-		$this->wanCache = $wanCache;
 	}
 
 	/**

@@ -17,7 +17,7 @@ class EventContributionSummary {
 		private readonly int $bytesRemoved,
 		private readonly int $linksAdded,
 		private readonly int $linksRemoved,
-		private readonly int $editCount
+		private readonly int $editCount,
 	) {
 	}
 

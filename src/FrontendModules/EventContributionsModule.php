@@ -26,50 +26,24 @@ use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
 class EventContributionsModule {
-	private IMessageFormatterFactory $messageFormatterFactory;
-	private PermissionChecker $permissionChecker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private LinkRenderer $linkRenderer;
-	private UserLinker $userLinker;
-	private CampaignsDatabaseHelper $databaseHelper;
-	private TitleFactory $titleFactory;
-	private EventContributionStore $eventContributionStore;
-	private LinkBatchFactory $linkBatchFactory;
-	private ParticipantsStore $participantsStore;
-	private WikiLookup $wikiLookup;
 	private TemplateParser $templateParser;
-	private OutputPage $output;
-	private ExistingEventRegistration $event;
 
 	public function __construct(
-		IMessageFormatterFactory $messageFormatterFactory,
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		LinkRenderer $linkRenderer,
-		UserLinker $userLinker,
-		CampaignsDatabaseHelper $databaseHelper,
-		TitleFactory $titleFactory,
-		EventContributionStore $eventContributionStore,
-		LinkBatchFactory $linkBatchFactory,
-		ParticipantsStore $participantsStore,
-		WikiLookup $wikiLookup,
-		OutputPage $output,
-		ExistingEventRegistration $event,
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly LinkRenderer $linkRenderer,
+		private readonly UserLinker $userLinker,
+		private readonly CampaignsDatabaseHelper $databaseHelper,
+		private readonly TitleFactory $titleFactory,
+		private readonly EventContributionStore $eventContributionStore,
+		private readonly LinkBatchFactory $linkBatchFactory,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly WikiLookup $wikiLookup,
+		private readonly OutputPage $output,
+		private readonly ExistingEventRegistration $event,
 	) {
-		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->permissionChecker = $permissionChecker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->linkRenderer = $linkRenderer;
-		$this->userLinker = $userLinker;
-		$this->databaseHelper = $databaseHelper;
-		$this->titleFactory = $titleFactory;
-		$this->eventContributionStore = $eventContributionStore;
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->participantsStore = $participantsStore;
-		$this->wikiLookup = $wikiLookup;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
-		$this->output = $output;
-		$this->event = $event;
 	}
 
 	public function createContent(): Tag {

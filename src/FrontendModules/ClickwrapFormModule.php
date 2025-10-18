@@ -16,25 +16,15 @@ use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
 class ClickwrapFormModule {
-	private ExistingEventRegistration $event;
-	private OrganizersStore $organiserStore;
-	private IMessageFormatterFactory $messageFormatterFactory;
-	private Language $language;
-	private CampaignsCentralUserLookup $centralUserLookup;
 	private Authority $authority;
 
 	public function __construct(
-		ExistingEventRegistration $event,
-		OrganizersStore $organizersStore,
-		IMessageFormatterFactory $messageFormatterFactory,
-		Language $language,
-		CampaignsCentralUserLookup $centralUserLookup
+		private readonly ExistingEventRegistration $event,
+		private readonly OrganizersStore $organizersStore,
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
+		private readonly Language $language,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
 	) {
-		$this->event = $event;
-		$this->organiserStore = $organizersStore;
-		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->language = $language;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**
@@ -84,7 +74,7 @@ class ClickwrapFormModule {
 	public function processInput( array $data ): bool {
 		if ( $data['Acceptance'] ) {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $this->authority );
-			$this->organiserStore->updateClickwrapAcceptance( $this->event->getID(), $centralUser );
+			$this->organizersStore->updateClickwrapAcceptance( $this->event->getID(), $centralUser );
 			return true;
 		} else {
 			return false;

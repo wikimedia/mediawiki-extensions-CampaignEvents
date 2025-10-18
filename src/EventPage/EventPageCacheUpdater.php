@@ -16,10 +16,9 @@ use MediaWiki\Utils\MWTimestamp;
 class EventPageCacheUpdater {
 	public const SERVICE_NAME = 'CampaignEventsEventPageCacheUpdater';
 
-	private HTMLCacheUpdater $htmlCacheUpdater;
-
-	public function __construct( HTMLCacheUpdater $htmlCacheUpdater ) {
-		$this->htmlCacheUpdater = $htmlCacheUpdater;
+	public function __construct(
+		private readonly HTMLCacheUpdater $htmlCacheUpdater,
+	) {
 	}
 
 	public function adjustCacheForPageWithRegistration(

@@ -21,15 +21,10 @@ class CentralAuthContributionUserChangesHandler implements
 	CentralAuthAccountDeletedHook,
 	CentralAuthUserVisibilityChangedHook
 {
-	private EventContributionStore $eventContributionStore;
-	private JobQueueGroup $jobQueueGroup;
-
 	public function __construct(
-		EventContributionStore $eventContributionStore,
-		JobQueueGroup $jobQueueGroup,
+		private readonly EventContributionStore $eventContributionStore,
+		private readonly JobQueueGroup $jobQueueGroup,
 	) {
-		$this->eventContributionStore = $eventContributionStore;
-		$this->jobQueueGroup = $jobQueueGroup;
 	}
 
 	public function onCentralAuthAccountDeleted( int $userID, string $userName ): void {

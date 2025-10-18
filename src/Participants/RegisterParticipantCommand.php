@@ -32,27 +32,14 @@ class RegisterParticipantCommand {
 	public const REGISTRATION_NEW = 'new';
 	public const REGISTRATION_EDIT = 'edit';
 
-	private ParticipantsStore $participantsStore;
-	private PermissionChecker $permissionChecker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private UserNotifier $userNotifier;
-	private EventPageCacheUpdater $eventPageCacheUpdater;
-	private TrackingToolEventWatcher $trackingToolEventWatcher;
-
 	public function __construct(
-		ParticipantsStore $participantsStore,
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		UserNotifier $userNotifier,
-		EventPageCacheUpdater $eventPageCacheUpdater,
-		TrackingToolEventWatcher $trackingToolEventWatcher
+		private readonly ParticipantsStore $participantsStore,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly UserNotifier $userNotifier,
+		private readonly EventPageCacheUpdater $eventPageCacheUpdater,
+		private readonly TrackingToolEventWatcher $trackingToolEventWatcher,
 	) {
-		$this->participantsStore = $participantsStore;
-		$this->permissionChecker = $permissionChecker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->userNotifier = $userNotifier;
-		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
-		$this->trackingToolEventWatcher = $trackingToolEventWatcher;
 	}
 
 	/**

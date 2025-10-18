@@ -39,16 +39,6 @@ class EventStore implements IEventStore, IEventLookup {
 		EventRegistration::PARTICIPATION_OPTION_ONLINE => 2,
 	];
 
-	private CampaignsDatabaseHelper $dbHelper;
-	private CampaignsPageFactory $campaignsPageFactory;
-	private AddressStore $addressStore;
-	private TrackingToolUpdater $trackingToolUpdater;
-	private EventQuestionsStore $eventQuestionsStore;
-	private EventWikisStore $eventWikisStore;
-	private EventTopicsStore $eventTopicsStore;
-	private WANObjectCache $wanCache;
-	private JsonCodec $jsonCodec;
-
 	private const PAGE_EVENT_CACHE_TTL = 1 * WANObjectCache::TTL_WEEK;
 
 	/**
@@ -57,25 +47,16 @@ class EventStore implements IEventStore, IEventLookup {
 	private array $cache = [];
 
 	public function __construct(
-		CampaignsDatabaseHelper $dbHelper,
-		CampaignsPageFactory $campaignsPageFactory,
-		AddressStore $addressStore,
-		TrackingToolUpdater $trackingToolUpdater,
-		EventQuestionsStore $eventQuestionsStore,
-		EventWikisStore $eventWikisStore,
-		EventTopicsStore $eventTopicsStore,
-		WANObjectCache $wanCache,
-		JsonCodec $jsonCodec,
+		private readonly CampaignsDatabaseHelper $dbHelper,
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly AddressStore $addressStore,
+		private readonly TrackingToolUpdater $trackingToolUpdater,
+		private readonly EventQuestionsStore $eventQuestionsStore,
+		private readonly EventWikisStore $eventWikisStore,
+		private readonly EventTopicsStore $eventTopicsStore,
+		private readonly WANObjectCache $wanCache,
+		private readonly JsonCodec $jsonCodec,
 	) {
-		$this->dbHelper = $dbHelper;
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->addressStore = $addressStore;
-		$this->trackingToolUpdater = $trackingToolUpdater;
-		$this->eventQuestionsStore = $eventQuestionsStore;
-		$this->eventWikisStore = $eventWikisStore;
-		$this->eventTopicsStore = $eventTopicsStore;
-		$this->wanCache = $wanCache;
-		$this->jsonCodec = $jsonCodec;
 	}
 
 	/**

@@ -9,15 +9,10 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Page\Hook\ArticleViewHeaderHook;
 
 class ArticleViewHeaderHandler implements ArticleViewHeaderHook {
-	private EventPageDecoratorFactory $eventPageDecoratorFactory;
-	private Config $wikiConfig;
-
 	public function __construct(
-		EventPageDecoratorFactory $eventPageDecoratorFactory,
-		Config $wikiConfig
+		private readonly EventPageDecoratorFactory $eventPageDecoratorFactory,
+		private readonly Config $wikiConfig,
 	) {
-		$this->eventPageDecoratorFactory = $eventPageDecoratorFactory;
-		$this->wikiConfig = $wikiConfig;
 	}
 
 	/**

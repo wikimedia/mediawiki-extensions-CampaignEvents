@@ -21,24 +21,13 @@ class EventPageEventIngress extends DomainEventIngress implements
 	PageDeletedListener,
 	PageMovedListener
 {
-	private CampaignsPageFactory $campaignsPageFactory;
-	private DeleteEventCommand $deleteEventCommand;
-	private IEventStore $eventStore;
-	private PageEventLookup $pageEventLookup;
-	private TitleFormatter $titleFormatter;
-
 	public function __construct(
-		CampaignsPageFactory $campaignsPageFactory,
-		DeleteEventCommand $deleteEventCommand,
-		IEventStore $eventStore,
-		PageEventLookup $pageEventLookup,
-		TitleFormatter $titleFormatter,
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly DeleteEventCommand $deleteEventCommand,
+		private readonly IEventStore $eventStore,
+		private readonly PageEventLookup $pageEventLookup,
+		private readonly TitleFormatter $titleFormatter,
 	) {
-		$this->pageEventLookup = $pageEventLookup;
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->titleFormatter = $titleFormatter;
-		$this->eventStore = $eventStore;
-		$this->deleteEventCommand = $deleteEventCommand;
 	}
 
 	public function handlePageMovedEvent( PageMovedEvent $event ): void {

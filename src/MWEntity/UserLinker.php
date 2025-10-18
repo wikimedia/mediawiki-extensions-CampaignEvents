@@ -27,21 +27,12 @@ class UserLinker {
 		'mediawiki.interface.helpers.styles',
 	];
 
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private IMessageFormatterFactory $messageFormatterFactory;
-	private LinkBatchFactory $linkBatchFactory;
-	private LinkRenderer $linkRenderer;
-
 	public function __construct(
-		CampaignsCentralUserLookup $centralUserLookup,
-		IMessageFormatterFactory $messageFormatterFactory,
-		LinkBatchFactory $linkBatchFactory,
-		LinkRenderer $linkRenderer
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
+		private readonly LinkBatchFactory $linkBatchFactory,
+		private readonly LinkRenderer $linkRenderer,
 	) {
-		$this->centralUserLookup = $centralUserLookup;
-		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->linkRenderer = $linkRenderer;
 	}
 
 	/**

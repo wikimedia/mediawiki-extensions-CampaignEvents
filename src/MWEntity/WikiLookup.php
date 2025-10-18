@@ -19,21 +19,12 @@ class WikiLookup {
 	public const OOUI = 'ooui';
 	public const CODEX = 'codex';
 
-	private SiteConfiguration $siteConfig;
-	private WANObjectCache $cache;
-	private MessageLocalizer $messageLocalizer;
-	private string $languageCode;
-
 	public function __construct(
-		SiteConfiguration $siteConfig,
-		WANObjectCache $cache,
-		MessageLocalizer $messageLocalizer,
-		string $languageCode
+		private readonly SiteConfiguration $siteConfig,
+		private readonly WANObjectCache $cache,
+		private readonly MessageLocalizer $messageLocalizer,
+		private readonly string $languageCode,
 	) {
-		$this->siteConfig = $siteConfig;
-		$this->cache = $cache;
-		$this->messageLocalizer = $messageLocalizer;
-		$this->languageCode = $languageCode;
 	}
 
 	/** @return list<string> */

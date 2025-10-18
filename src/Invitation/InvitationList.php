@@ -10,30 +10,15 @@ class InvitationList {
 	public const STATUS_PENDING = 1;
 	public const STATUS_READY = 2;
 
-	private int $listID;
-	private string $name;
-	private ?int $eventID;
-	private int $status;
-	private CentralUser $creator;
-	private string $wiki;
-	private string $creationTime;
-
 	public function __construct(
-		int $listID,
-		string $name,
-		?int $eventID,
-		int $status,
-		CentralUser $creator,
-		string $wiki,
-		string $creationTime
+		private readonly int $listID,
+		private readonly string $name,
+		private readonly ?int $eventID,
+		private readonly int $status,
+		private readonly CentralUser $creator,
+		private readonly string $wiki,
+		private readonly string $creationTime,
 	) {
-		$this->listID = $listID;
-		$this->name = $name;
-		$this->eventID = $eventID;
-		$this->status = $status;
-		$this->creator = $creator;
-		$this->wiki = $wiki;
-		$this->creationTime = $creationTime;
 	}
 
 	public function getListID(): int {

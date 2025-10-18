@@ -21,10 +21,9 @@ class OrganizersStore {
 		Roles::ROLE_TEST => 1 << 2,
 	];
 
-	private CampaignsDatabaseHelper $dbHelper;
-
-	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
-		$this->dbHelper = $dbHelper;
+	public function __construct(
+		private readonly CampaignsDatabaseHelper $dbHelper,
+	) {
 	}
 
 	/**

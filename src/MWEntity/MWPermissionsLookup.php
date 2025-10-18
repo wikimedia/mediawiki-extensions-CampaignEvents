@@ -17,15 +17,10 @@ class MWPermissionsLookup {
 
 	public const SERVICE_NAME = 'CampaignEventsPermissionLookup';
 
-	private UserFactory $userFactory;
-	private UserNameUtils $userNameUtils;
-
 	public function __construct(
-		UserFactory $userFactory,
-		UserNameUtils $userNameUtils
+		private readonly UserFactory $userFactory,
+		private readonly UserNameUtils $userNameUtils,
 	) {
-		$this->userFactory = $userFactory;
-		$this->userNameUtils = $userNameUtils;
 	}
 
 	/**

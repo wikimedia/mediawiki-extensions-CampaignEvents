@@ -40,15 +40,6 @@ class EventsTablePager extends TablePager {
 		'num_participants' => [ 'num_participants', 'event_start_utc', 'event_id' ],
 	];
 
-	private CampaignsPageFactory $campaignsPageFactory;
-	private PageURLResolver $pageURLResolver;
-	private LinkBatchFactory $linkBatchFactory;
-
-	private CentralUser $centralUser;
-
-	private string $search;
-	private string $status;
-
 	/**
 	 * @param IContextSource $context
 	 * @param LinkRenderer $linkRenderer
@@ -58,28 +49,22 @@ class EventsTablePager extends TablePager {
 	 * @param LinkBatchFactory $linkBatchFactory
 	 * @param string $search
 	 * @param string $status One of the self::STATUS_* constants
-	 * @param CentralUser $user
+	 * @param CentralUser $centralUser
 	 */
 	public function __construct(
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
 		CampaignsDatabaseHelper $databaseHelper,
-		CampaignsPageFactory $campaignsPageFactory,
-		PageURLResolver $pageURLResolver,
-		LinkBatchFactory $linkBatchFactory,
-		string $search,
-		string $status,
-		CentralUser $user
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly PageURLResolver $pageURLResolver,
+		private readonly LinkBatchFactory $linkBatchFactory,
+		private readonly string $search,
+		private readonly string $status,
+		private readonly CentralUser $centralUser,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
 		parent::__construct( $context, $linkRenderer );
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->pageURLResolver = $pageURLResolver;
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->centralUser = $user;
-		$this->search = $search;
-		$this->status = $status;
 	}
 
 	/**

@@ -35,26 +35,18 @@ class PotentialInviteesFinder {
 	private const REVISIONS_PER_PAGE_LIMIT = 5_000;
 	private const MIN_SCORE = 5;
 
-	private RevisionStoreFactory $revisionStoreFactory;
-	private IConnectionProvider $dbProvider;
-	private NameTableStoreFactory $nameTableStoreFactory;
 	/**
 	 * @var callable
 	 * @phan-var callable(string $msg):void
 	 */
 	private $debugLogger;
-	private UserOptionsLookup $userOptionsLookup;
 
 	public function __construct(
-		RevisionStoreFactory $revisionStoreFactory,
-		IConnectionProvider $dbProvider,
-		NameTableStoreFactory $nameTableStoreFactory,
-		UserOptionsLookup $userOptionsLookup
+		private readonly RevisionStoreFactory $revisionStoreFactory,
+		private readonly IConnectionProvider $dbProvider,
+		private readonly NameTableStoreFactory $nameTableStoreFactory,
+		private readonly UserOptionsLookup $userOptionsLookup,
 	) {
-		$this->revisionStoreFactory = $revisionStoreFactory;
-		$this->dbProvider = $dbProvider;
-		$this->nameTableStoreFactory = $nameTableStoreFactory;
-		$this->userOptionsLookup = $userOptionsLookup;
 		$this->debugLogger = static function ( string $msg ): void {
 		};
 	}

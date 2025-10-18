@@ -13,10 +13,9 @@ use MediaWiki\Title\TitleFormatter;
 class CampaignsPageFormatter {
 	public const SERVICE_NAME = 'CampaignEventsCampaignsPageFormatter';
 
-	private TitleFormatter $titleFormatter;
-
-	public function __construct( TitleFormatter $titleFormatter ) {
-		$this->titleFormatter = $titleFormatter;
+	public function __construct(
+		private readonly TitleFormatter $titleFormatter,
+	) {
 	}
 
 	public function getText( MWPageProxy $page ): string {

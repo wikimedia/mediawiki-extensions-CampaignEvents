@@ -39,54 +39,18 @@ class EventRegistration implements JsonCodecable {
 		self::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON
 	];
 
-	private ?int $id;
-	/**
-	 * @var string
-	 * @todo Is this necessary?
-	 */
-	private string $name;
-	private MWPageProxy $page;
-	/** @var string One of the STATUS_* constants */
-	private string $status;
-	private DateTimeZone $timezone;
-	private string $startLocalTimestamp;
-	private string $endLocalTimestamp;
-	/** @var non-empty-list<string> Event type names */
-	private array $types;
-	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
-	private $wikis;
-	/** @var string[] */
-	private array $topics;
-	/** @var int One of the PARTICIPATION_OPTION_* constants */
-	private int $participationOptions;
-	private ?string $meetingURL;
-	private ?Address $address;
-	private bool $hasContributionTracking;
-	/**
-	 * @var TrackingToolAssociation[]
-	 * @phan-var list<TrackingToolAssociation>
-	 */
-	private array $trackingTools;
-	private ?string $chatURL;
-	private bool $isTestEvent;
-	/** @var int[] Array of database IDs */
-	private array $participantQuestions;
-	private ?string $creationTimestamp;
-	private ?string $lastEditTimestamp;
-	private ?string $deletionTimestamp;
-
 	/**
 	 * @param int|null $id
-	 * @param string $name
+	 * @param string $name @todo Is this necessary?
 	 * @param MWPageProxy $page
-	 * @param string $status
+	 * @param string $status One of the STATUS_* constants
 	 * @param DateTimeZone $timezone
 	 * @param string $startLocalTimestamp TS_MW timestamp
 	 * @param string $endLocalTimestamp TS_MW timestamp
-	 * @param non-empty-list<string> $types
+	 * @param non-empty-list<string> $types Event type names
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param string[] $topics
-	 * @param int $participationOptions
+	 * @param int $participationOptions One of the PARTICIPATION_OPTION_* constants
 	 * @param string|null $meetingURL
 	 * @param Address|null $address Required when $participationOptions contains self::PARTICIPATION_OPTION_IN_PERSON
 	 * @param bool $hasContributionTracking
@@ -94,33 +58,33 @@ class EventRegistration implements JsonCodecable {
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
-	 * @param list<int> $participantQuestions
+	 * @param list<int> $participantQuestions Array of database IDs
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
 	 * @param string|null $deletionTimestamp UNIX timestamp
 	 */
 	public function __construct(
-		?int $id,
-		string $name,
-		MWPageProxy $page,
-		string $status,
-		DateTimeZone $timezone,
-		string $startLocalTimestamp,
-		string $endLocalTimestamp,
-		array $types,
-		$wikis,
-		array $topics,
-		int $participationOptions,
-		?string $meetingURL,
-		?Address $address,
-		bool $hasContributionTracking,
-		array $trackingTools,
-		?string $chatURL,
-		bool $isTestEvent,
-		array $participantQuestions,
-		?string $creationTimestamp,
-		?string $lastEditTimestamp,
-		?string $deletionTimestamp
+		private readonly ?int $id,
+		private readonly string $name,
+		private readonly MWPageProxy $page,
+		private readonly string $status,
+		private readonly DateTimeZone $timezone,
+		private readonly string $startLocalTimestamp,
+		private readonly string $endLocalTimestamp,
+		private readonly array $types,
+		private readonly array|bool $wikis,
+		private readonly array $topics,
+		private readonly int $participationOptions,
+		private readonly ?string $meetingURL,
+		private readonly ?Address $address,
+		private readonly bool $hasContributionTracking,
+		private readonly array $trackingTools,
+		private readonly ?string $chatURL,
+		private readonly bool $isTestEvent,
+		private readonly array $participantQuestions,
+		private readonly ?string $creationTimestamp,
+		private readonly ?string $lastEditTimestamp,
+		private readonly ?string $deletionTimestamp,
 	) {
 		Assert::parameter(
 			MWTimestamp::convert( TS_MW, $startLocalTimestamp ) === $startLocalTimestamp,
@@ -145,27 +109,6 @@ class EventRegistration implements JsonCodecable {
 		if ( $participationOptions & self::PARTICIPATION_OPTION_IN_PERSON ) {
 			Assert::parameter( $address !== null, '$address', 'In-person and hybrid events must have an Address' );
 		}
-		$this->id = $id;
-		$this->name = $name;
-		$this->page = $page;
-		$this->status = $status;
-		$this->timezone = $timezone;
-		$this->startLocalTimestamp = $startLocalTimestamp;
-		$this->endLocalTimestamp = $endLocalTimestamp;
-		$this->types = $types;
-		$this->wikis = $wikis;
-		$this->topics = $topics;
-		$this->participationOptions = $participationOptions;
-		$this->meetingURL = $meetingURL;
-		$this->address = $address;
-		$this->hasContributionTracking = $hasContributionTracking;
-		$this->trackingTools = $trackingTools;
-		$this->chatURL = $chatURL;
-		$this->isTestEvent = $isTestEvent;
-		$this->participantQuestions = $participantQuestions;
-		$this->creationTimestamp = $creationTimestamp;
-		$this->lastEditTimestamp = $lastEditTimestamp;
-		$this->deletionTimestamp = $deletionTimestamp;
 	}
 
 	public function getID(): ?int {

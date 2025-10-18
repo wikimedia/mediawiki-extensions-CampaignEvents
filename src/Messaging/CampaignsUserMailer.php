@@ -41,40 +41,19 @@ class CampaignsUserMailer {
 		MainConfigNames::EnableSpecialMute,
 	];
 
-	private UserFactory $userFactory;
-	private JobQueueGroup $jobQueueGroup;
-	private ServiceOptions $options;
-	private CentralIdLookup $centralIdLookup;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private UserOptionsLookup $userOptionsLookup;
-	private ITextFormatter $contLangMsgFormatter;
-	private PageURLResolver $pageURLResolver;
-	private EmailUserFactory $emailUserFactory;
-	private MessageLocalizer $msgLocalizer;
-
 	public function __construct(
-		UserFactory $userFactory,
-		JobQueueGroup $jobQueueGroup,
-		ServiceOptions $options,
-		CentralIdLookup $centralIdLookup,
-		CampaignsCentralUserLookup $centralUserLookup,
-		UserOptionsLookup $userOptionsLookup,
-		ITextFormatter $contLangMsgFormatter,
-		PageURLResolver $pageURLResolver,
-		EmailUserFactory $emailUserFactory,
-		MessageLocalizer $msgLocalizer
+		private readonly UserFactory $userFactory,
+		private readonly JobQueueGroup $jobQueueGroup,
+		private readonly ServiceOptions $options,
+		private readonly CentralIdLookup $centralIdLookup,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly UserOptionsLookup $userOptionsLookup,
+		private readonly ITextFormatter $contLangMsgFormatter,
+		private readonly PageURLResolver $pageURLResolver,
+		private readonly EmailUserFactory $emailUserFactory,
+		private readonly MessageLocalizer $msgLocalizer,
 	) {
-		$this->userFactory = $userFactory;
-		$this->jobQueueGroup = $jobQueueGroup;
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
-		$this->options = $options;
-		$this->centralIdLookup = $centralIdLookup;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->userOptionsLookup = $userOptionsLookup;
-		$this->contLangMsgFormatter = $contLangMsgFormatter;
-		$this->pageURLResolver = $pageURLResolver;
-		$this->emailUserFactory = $emailUserFactory;
-		$this->msgLocalizer = $msgLocalizer;
 	}
 
 	/**

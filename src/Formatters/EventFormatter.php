@@ -26,12 +26,9 @@ class EventFormatter {
 
 	public const DISPLAYED_WIKI_COUNT = 3;
 
-	private CountryProvider $countryProvider;
-
 	public function __construct(
-		CountryProvider $countryProvider
+		private readonly CountryProvider $countryProvider,
 	) {
-		$this->countryProvider = $countryProvider;
 	}
 
 	public function formatWikis(

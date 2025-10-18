@@ -17,18 +17,11 @@ use MediaWiki\WikiMap\WikiMap;
 class CampaignsPageFactory {
 	public const SERVICE_NAME = 'CampaignEventsPageFactory';
 
-	private PageStoreFactory $pageStoreFactory;
-	private TitleParser $titleParser;
-	private TitleFormatter $titleFormatter;
-
 	public function __construct(
-		PageStoreFactory $pageStoreFactory,
-		TitleParser $titleParser,
-		TitleFormatter $titleFormatter
+		private readonly PageStoreFactory $pageStoreFactory,
+		private readonly TitleParser $titleParser,
+		private readonly TitleFormatter $titleFormatter,
 	) {
-		$this->pageStoreFactory = $pageStoreFactory;
-		$this->titleParser = $titleParser;
-		$this->titleFormatter = $titleFormatter;
 	}
 
 	/**

@@ -18,15 +18,10 @@ use Wikimedia\Rdbms\SelectQueryBuilder;
 class InvitationListStore {
 	public const SERVICE_NAME = 'CampaignEventsInvitationListStore';
 
-	private CampaignsDatabaseHelper $databaseHelper;
-	private PageStoreFactory $pageStoreFactory;
-
 	public function __construct(
-		CampaignsDatabaseHelper $databaseHelper,
-		PageStoreFactory $pageStoreFactory
+		private readonly CampaignsDatabaseHelper $databaseHelper,
+		private readonly PageStoreFactory $pageStoreFactory,
 	) {
-		$this->databaseHelper = $databaseHelper;
-		$this->pageStoreFactory = $pageStoreFactory;
 	}
 
 	public function createInvitationList(

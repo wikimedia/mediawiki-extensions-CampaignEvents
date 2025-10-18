@@ -8,15 +8,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 
 class Participant {
-	private CentralUser $user;
-	private string $registeredAt;
-	private int $participantID;
-	private bool $privateRegistration;
-	/** @var Answer[] */
-	private array $answers;
-	private ?string $firstAnswerTimestamp;
-	private ?string $aggregationTimestamp;
-
 	/**
 	 * @param CentralUser $user
 	 * @param string $registeredAt Timestamp in the TS_UNIX format
@@ -27,21 +18,14 @@ class Participant {
 	 * @param string|null $aggregationTimestamp Timestamp in the TS_UNIX format
 	 */
 	public function __construct(
-		CentralUser $user,
-		string $registeredAt,
-		int $participantID,
-		bool $privateRegistration,
-		array $answers,
-		?string $firstAnswerTimestamp,
-		?string $aggregationTimestamp
+		private readonly CentralUser $user,
+		private readonly string $registeredAt,
+		private readonly int $participantID,
+		private readonly bool $privateRegistration,
+		private readonly array $answers,
+		private readonly ?string $firstAnswerTimestamp,
+		private readonly ?string $aggregationTimestamp
 	) {
-		$this->user = $user;
-		$this->registeredAt = $registeredAt;
-		$this->participantID = $participantID;
-		$this->privateRegistration = $privateRegistration;
-		$this->answers = $answers;
-		$this->firstAnswerTimestamp = $firstAnswerTimestamp;
-		$this->aggregationTimestamp = $aggregationTimestamp;
 	}
 
 	public function getUser(): CentralUser {
