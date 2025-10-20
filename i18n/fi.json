@@ -59,6 +59,8 @@
 	"campaignevents-error-invalid-country": "Anna kelvollinen maan nimi.",
 	"campaignevents-error-invalid-country-code": "Anna kelvollinen maakoodi.",
 	"campaignevents-error-invalid-address": "Anna kelvollinen osoite.",
+	"campaignevents-error-contribs-tracking-disallowed-country": "Muokkaustilastoja ei voida ottaa käyttöön valitussa maassa.",
+	"campaignevents-error-contribs-tracking-invalid-type": "Muokkaustilastot voi ottaa käyttöön vain seuraavan tyyppisissä tapahtumissa: $1",
 	"campaignevents-error-invalid-chat-url": "Anna kelvollinen keskusteluryhmän URL-osoite.",
 	"campaignevents-error-invalid-question-names": "Seuraavia kysymyksiä ei tunnistettu: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Tapahtumailmoittautuminen ei ole sallittua tässä nimiavaruudesa.",

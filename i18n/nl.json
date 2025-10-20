@@ -586,6 +586,7 @@
 	"campaignevents-event-contribution-event-ended": "Het evenement is afgelopen en er kunnen geen bewerkingen meer aan worden gekoppeld",
 	"campaignevents-event-contribution-not-participant": "Gebruiker is geen deelnemer aan dit evenement",
 	"campaignevents-event-contribution-user-not-global": "Gebruiker is geen globale gebruiker",
+	"campaignevents-event-contribution-already-associated": "Een bewerking kan slechts aan één evenement worden gekoppeld.",
 	"campaignevents-event-contribution-timestamp-too-old": "Bewerkingstijdstip is te lang geleden (maximaal 24 uur)",
 	"campaignevents-event-contribution-revision-not-found": "Versie niet gevonden",
 	"campaignevents-event-contribution-not-owner": "U kunt alleen uw eigen bewerkingen aan evenementen koppelen",

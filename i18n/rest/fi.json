@@ -17,5 +17,6 @@
 	"campaignevents-rest-register-invalid-answer": "Virheellinen vastaus kysymykseen $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Viimeistele tapahtumailmoittautumisesi sivustolla $1, jossa tapahtuma on luotu.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Poista tapahtumailmoittautumisesi sivustolla $1, jossa tapahtuma on luotu.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Lähetä sähköpostia osallistujille sivustolla $1, jossa tapahtuma on luotu."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Lähetä sähköpostia osallistujille sivustolla $1, jossa tapahtuma on luotu.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Sinulla ei ole oikeutta poistaa tätä muokkausta."
 }

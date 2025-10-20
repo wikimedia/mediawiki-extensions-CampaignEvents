@@ -571,5 +571,6 @@
 	"campaignevents-cancel-page-nonlocal": "لطفاً '''[$1 ثبت‌نام رویداد خود را در $2 لغو کنید]'''، ویکی‌ای که رویداد در آن ایجاد شده است.",
 	"campaignevents-email-error-notification-with-detail": "ایمیل به دلیل زیر ارسال نشد: $1",
 	"campaignevents-eventslist-types-label": "انواع رویداد",
-	"campaignevents-eventslist-country-label": "کشور"
+	"campaignevents-eventslist-country-label": "کشور",
+	"campaignevents-event-contribution-already-associated": "هر ویرایش تنها می‌تواند به یک رویداد مرتبط باشد."
 }

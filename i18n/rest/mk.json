@@ -20,5 +20,7 @@
 	"campaignevents-rest-register-invalid-answer": "Неважечки одговор на прашањето $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Пополнете ја пријавата за вашиот настан на $1, викито на кое е создаден настанот.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Избришете ја пријавата за вашиот настан на $1, викито на кое е создаден настанот.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Пишете им на учесниците на $1, викито на кое е создаден настанот."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Пишете им на учесниците на $1, викито на кое е создаден настанот.",
+	"campaignevents-rest-contribution-not-found": "Нема придонес со таква назнака.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Не ви е дозволено да го избришете овој придонес."
 }

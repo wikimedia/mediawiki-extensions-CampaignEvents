@@ -580,6 +580,7 @@
 	"campaignevents-event-contribution-event-ended": "Настанот заврши и повеќе не прифаќа поврзувања на уредувања",
 	"campaignevents-event-contribution-not-participant": "КОрисникот не учествува во овој настан",
 	"campaignevents-event-contribution-user-not-global": "Корисникот не е глобален корисник",
+	"campaignevents-event-contribution-already-associated": "Едно уредување може да се поврзе само со еден настан.",
 	"campaignevents-event-contribution-timestamp-too-old": "Датумот и времето на уредувањето се престари (највеќе 24 часа)",
 	"campaignevents-event-contribution-revision-not-found": "Преработката не е пронајдена",
 	"campaignevents-event-contribution-not-owner": "Можете да ги поврзувате само вашите уредувања со настани",

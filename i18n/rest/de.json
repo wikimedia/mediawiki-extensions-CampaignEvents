@@ -20,5 +20,7 @@
 	"campaignevents-rest-register-invalid-answer": "Ungültige Antwort auf die Frage $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Bitte vervollständige deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Bitte lösche deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Bitte sende den Teilnehmenden eine E-Mail auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Bitte sende den Teilnehmenden eine E-Mail auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
+	"campaignevents-rest-contribution-not-found": "Es gibt keinen Beitrag mit dieser ID.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Du bist nicht berechtigt, diesen Beitrag zu löschen."
 }

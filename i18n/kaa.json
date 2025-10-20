@@ -6,6 +6,7 @@
 			"Janabaevazizbek"
 		]
 	},
+	"group-event-organizer": "Ilaj shólkemlestiriwshileri",
 	"group-event-organizer-member": "{{GENDER:$1|ilaj shólkemlestiriwshisi}}",
 	"campaignevents-error-invalid-timezone": "Durıslı waqıt regionın kiritiń.",
 	"campaignevents-error-trackingtool-without-eventid": "Berilgen baqlaw quralında waqıya identifikatorın kórsetiń.",

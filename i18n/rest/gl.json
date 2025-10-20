@@ -20,5 +20,7 @@
 	"campaignevents-rest-register-invalid-answer": "Resposta non válida á pregunta $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "A inscrición ao evento tes que completala en $1, o wiki onde se creou o evento.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "A inscrición ao evento tes que borrala en $1, o wiki onde se creou o evento.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Os envíos de correo aos participantes hai que facelos en $1, o wiki onde se creou o evento."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Os envíos de correo aos participantes hai que facelos en $1, o wiki onde se creou o evento.",
+	"campaignevents-rest-contribution-not-found": "Non hai ningunha contribución con ese identificador.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Non tes permiso para eliminar esta contribución."
 }

@@ -562,6 +562,7 @@
 	"campaignevents-eventslist-country-label": "Land",
 	"campaignevents-event-contribution-not-participant": "De Benotzer ass kee Participant vun dësem Evenement",
 	"campaignevents-event-contribution-user-not-global": "De Benotzer ass kee globale Benotzer",
+	"campaignevents-event-contribution-already-associated": "Eng Ännerung ka just mat engem Evenement associéiert sinn.",
 	"campaignevents-event-contribution-revision-not-found": "Versioun net fonnt",
 	"campaignevents-event-contribution-event-deleted": "D'Evenement gouf geläscht",
 	"campaignevents-postedit-dialog-select-placeholder": "Evenement eraussichen",

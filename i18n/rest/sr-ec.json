@@ -4,5 +4,7 @@
 			"Milicevic01"
 		]
 	},
-	"campaignevents-rest-register-invalid-answer": "Одоговор на питање $1 није ваљан"
+	"campaignevents-rest-register-invalid-answer": "Одоговор на питање $1 није ваљан",
+	"campaignevents-rest-contribution-not-found": "Нема доприноса са овим ID-ем.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Није Вам дозвољено да обришете овај допринос."
 }

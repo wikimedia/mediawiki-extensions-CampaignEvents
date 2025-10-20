@@ -582,6 +582,7 @@
 	"campaignevents-event-contribution-event-ended": "האירוע הסתיים ואינו מקבל עוד שיוכי עריכה",
 	"campaignevents-event-contribution-not-participant": "המשתמש אינו משתתף באירוע הזה",
 	"campaignevents-event-contribution-user-not-global": "המשתמש אינו משתמש גלובלי",
+	"campaignevents-event-contribution-already-associated": "עריכה יכולה להיות משויכת לאירוע אחד בלבד.",
 	"campaignevents-event-contribution-timestamp-too-old": "חותם־הזמן של העריכה ישן מדי (צריך להיות 24 שעות להל היותר)",
 	"campaignevents-event-contribution-revision-not-found": "הגרסה לא נמצאה",
 	"campaignevents-event-contribution-not-owner": "ניתן לשייך רק את העריכות של עצמך לאירועים",

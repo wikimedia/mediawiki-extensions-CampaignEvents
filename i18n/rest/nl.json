@@ -22,5 +22,7 @@
 	"campaignevents-rest-register-invalid-answer": "Ongeldig antwoord op de vraag $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Voltooi uw inschrijving voor het evenement op $1, de wiki waar het evenement is aangemaakt.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Verwijder uw inschrijving voor het evenement op $1, de wiki waar het evenement is aangemaakt.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Stuur de deelnemers een e-mail op $1, de wiki waar het evenement is aangemaakt."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Stuur de deelnemers een e-mail op $1, de wiki waar het evenement is aangemaakt.",
+	"campaignevents-rest-contribution-not-found": "Er is geen bijdrage met deze ID.",
+	"campaignevents-rest-delete-contribution-permission-denied": "U mag deze bijdrage niet verwijderen."
 }
