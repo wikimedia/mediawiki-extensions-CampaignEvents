@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -46,6 +47,7 @@ class EventPageDecoratorFactory {
 	private GroupPermissionsLookup $groupPermissionsLookup;
 	private Config $config;
 	private EventFormatter $eventFormatter;
+	private CountryProvider $countryProvider;
 
 	public function __construct(
 		PageEventLookup $pageEventLookup,
@@ -66,6 +68,7 @@ class EventPageDecoratorFactory {
 		GroupPermissionsLookup $groupPermissionsLookup,
 		Config $config,
 		EventFormatter $eventFormatter,
+		CountryProvider $countryProvider,
 	) {
 		$this->pageEventLookup = $pageEventLookup;
 		$this->participantsStore = $participantsStore;
@@ -85,6 +88,7 @@ class EventPageDecoratorFactory {
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->config = $config;
 		$this->eventFormatter = $eventFormatter;
+		$this->countryProvider = $countryProvider;
 	}
 
 	public function newDecorator(
@@ -111,6 +115,7 @@ class EventPageDecoratorFactory {
 			$this->groupPermissionsLookup,
 			$this->config,
 			$this->eventFormatter,
+			$this->countryProvider,
 			$language,
 			$viewingAuthority,
 			$out

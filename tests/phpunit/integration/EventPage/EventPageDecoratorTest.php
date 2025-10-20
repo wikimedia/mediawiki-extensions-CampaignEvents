@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\EventPage;
 use Generator;
 use LogicException;
 use MediaWiki\Config\HashConfig;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
@@ -91,6 +92,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 				'CampaignEventsEventNamespaces' => $allowedNamespaces
 			] ),
 			$this->createMock( EventFormatter::class ),
+			$this->createMock( CountryProvider::class ),
 			$this->createMock( Language::class ),
 			$performer,
 			$out

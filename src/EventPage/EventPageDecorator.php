@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
 use LogicException;
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -95,6 +96,7 @@ class EventPageDecorator {
 	private GroupPermissionsLookup $groupPermissionsLookup;
 	private Config $config;
 	private EventFormatter $eventFormatter;
+	private CountryProvider $countryProvider;
 
 	private Language $language;
 	private Authority $authority;
@@ -127,6 +129,7 @@ class EventPageDecorator {
 		GroupPermissionsLookup $groupPermissionsLookup,
 		Config $config,
 		EventFormatter $eventFormatter,
+		CountryProvider $countryProvider,
 		Language $language,
 		Authority $viewingAuthority,
 		OutputPage $out
@@ -148,6 +151,7 @@ class EventPageDecorator {
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->config = $config;
 		$this->eventFormatter = $eventFormatter;
+		$this->countryProvider = $countryProvider;
 
 		$this->language = $language;
 		$this->authority = $viewingAuthority;
@@ -462,16 +466,29 @@ class EventPageDecorator {
 			// In-person event
 			$address = $registration->getAddress();
 			if ( $address ) {
-				// XXX: Newlines aren't actually preserved in the output.
-				$formattedAddress = $this->eventFormatter->formatAddress( $address, $this->language->getCode() );
-				$participationOptionsContent = Html::element(
-					'div',
-					[
-						'dir' => Utils::guessStringDirection( $address->getAddressWithoutCountry() ?? '' ),
-						'class' => [ 'ext-campaignevents-eventpage-header-address' ]
-					],
-					$this->language->truncateForVisual( $formattedAddress, self::ADDRESS_MAX_LENGTH )
-				);
+				// Unlike other places, here we want the address without country to be on a single line, and truncate it
+				// if necessary; and then a separate line for the country.
+				$participationOptionsContent = '';
+				$addressWithoutCountry = $address->getAddressWithoutCountry();
+				if ( $addressWithoutCountry ) {
+					$oneLinedAddress = strtr( $addressWithoutCountry, "\n", ' ' );
+					$participationOptionsContent .= Html::element(
+						'div',
+						[
+							'dir' => Utils::guessStringDirection( $addressWithoutCountry ),
+							'class' => [ 'ext-campaignevents-eventpage-header-address' ]
+						],
+						$this->language->truncateForVisual( $oneLinedAddress, self::ADDRESS_MAX_LENGTH )
+					);
+				}
+
+				$countryCode = $address->getCountryCode();
+				if ( $countryCode || $address->getCountry() ) {
+					$formattedCountry = $countryCode
+						? $this->countryProvider->getCountryName( $countryCode, $this->language->getCode() )
+						: $address->getCountry();
+					$participationOptionsContent .= Html::element( 'div', [], $formattedCountry );
+				}
 			} else {
 				$participationOptionsContent = $this->out->msg(
 					MessageValue::new( 'campaignevents-eventpage-header-participation-options-in-person' )
