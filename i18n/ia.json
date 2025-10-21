@@ -579,6 +579,7 @@
 	"campaignevents-event-contribution-event-ended": "Le evento ha terminate; non es plus possibile associar modificationes a illo",
 	"campaignevents-event-contribution-not-participant": "Le usator non es un participante a iste evento",
 	"campaignevents-event-contribution-user-not-global": "Le usator non es un usator global",
+	"campaignevents-event-contribution-already-associated": "Un modification pote solmente esser associate a un evento.",
 	"campaignevents-event-contribution-timestamp-too-old": "Le modification es troppo ancian (le etate maxime es 24 horas)",
 	"campaignevents-event-contribution-revision-not-found": "Version non trovate",
 	"campaignevents-event-contribution-not-owner": "Tu pote solmente associar tu proprie modificationes a eventos",

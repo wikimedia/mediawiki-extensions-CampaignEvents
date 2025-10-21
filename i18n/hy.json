@@ -60,6 +60,9 @@
 	"campaignevents-email-participants-count": "$1 {{PLURAL:$1| մասնակից|մասնակիցներ}}",
 	"campaignevents-email-participants-yes": "Այո",
 	"campaignevents-email-participants-no": "Ոչ",
+	"campaignevents-event-details-contributions-table-caption": "Ներդրումներ",
+	"campaignevents-event-details-contributions-wiki": "Վիքի",
+	"campaignevents-event-details-contributions-username": "Մասնակցային անուն",
 	"campaignevents-register-questions-label-title": "Ձեր տվյալները",
 	"campaignevents-register-question-profession-option-librarian": "Գրադարանավար",
 	"campaignevents-register-question-profession-option-researcher": "Հետազոտող",
@@ -72,5 +75,6 @@
 	"campaignevents-myinvitationslist-new-button": "Նոր",
 	"prefs-campaignevents-invitations": "Հրավերների ցանկեր",
 	"campaignevents-postedit-dialog-action-no": "Ոչ, շնորհակալություն",
-	"campaignevents-postedit-dialog-action-yes": "Այո"
+	"campaignevents-postedit-dialog-action-yes": "Այո",
+	"campaignevents-contributions-summary-participants": "Մասնակիցներ"
 }

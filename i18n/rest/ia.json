@@ -20,5 +20,7 @@
 	"campaignevents-rest-register-invalid-answer": "Responsa non valide al question $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Per favor completa tu inscription al evento sur $1, le wiki ubi le evento ha essite create.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Per favor retira tu inscription al evento sur $1, le wiki ubi le evento ha essite create.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Per favor invia e-mail al participante sur $1, le wiki ubi le evento ha essite create."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Per favor invia e-mail al participante sur $1, le wiki ubi le evento ha essite create.",
+	"campaignevents-rest-contribution-not-found": "Non existe un contribution con iste ID.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Tu non ha le permission de deler iste contribution."
 }
