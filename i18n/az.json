@@ -204,7 +204,7 @@
 	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|iştirakçı}}",
 	"campaignevents-eventpage-dialog-participants-private": "$1 {{PLURAL:$1|iştirakçı}} gizli qeydiyyatdan keçib",
 	"campaignevents-eventpage-dialog-participants-view-list": "Hamısına bax",
-	"campaignevents-eventpage-dialog-dates-label": "Başlama və bitmə vaxtı",
+	"campaignevents-eventpage-dialog-dates-label": "Başlama və bitmə tarixi",
 	"campaignevents-eventpage-dialog-dates": "$1 - $4",
 	"campaignevents-eventpage-dialog-timezone": "<strong>Saat qurşağı:</strong> $1",
 	"campaignevents-eventpage-dialog-location-label": "Məkan",
