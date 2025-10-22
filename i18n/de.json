@@ -578,6 +578,8 @@
 	"campaignevents-email-error-notification-with-detail": "Die E-Mail konnte aus folgendem Grund nicht gesendet werden: $1",
 	"campaignevents-eventslist-types-label": "Veranstaltungstypen",
 	"campaignevents-eventslist-country-label": "Staat",
+	"campaignevents-contributions-notice-private-participants-excluded": "Die auf dieser Seite aufgeführten Statistiken und Beiträge enthalten keine Daten von privaten Teilnehmern.",
+	"campaignevents-contributions-notice-other-private-participants-excluded": "Die auf dieser Seite aufgeführten Statistiken und Beiträge enthalten keine Daten anderer privater Teilnehmer.",
 	"campaignevents-event-contribution-event-ended": "Die Veranstaltung ist beendet und akzeptiert keine Bearbeitungszuordnungen mehr.",
 	"campaignevents-event-contribution-not-participant": "Der Benutzer ist kein Teilnehmer dieser Veranstaltung",
 	"campaignevents-event-contribution-user-not-global": "Der Benutzer ist kein globaler Benutzer",

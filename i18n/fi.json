@@ -580,6 +580,7 @@
 	"campaignevents-event-contribution-event-ended": "Tapahtuma on päättynyt eikä se enää hyväksy muokkausten liittämistä.",
 	"campaignevents-event-contribution-not-participant": "Käyttäjä ei ole tämän tapahtuman osallistuja",
 	"campaignevents-event-contribution-user-not-global": "Käyttäjä ei ole järjestelmänlaajuinen käyttäjä",
+	"campaignevents-event-contribution-already-associated": "Muokkaus voidaan liittää vain yhteen tapahtumaan.",
 	"campaignevents-event-contribution-timestamp-too-old": "Muokkauksen aikaleima on liian vanha (enintään 24 tuntia)",
 	"campaignevents-event-contribution-revision-not-found": "Versiota ei löytynyt",
 	"campaignevents-event-contribution-not-owner": "Voit liittää vain omia muokkauksiasi tapahtumiin",
