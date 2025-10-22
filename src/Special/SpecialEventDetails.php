@@ -222,7 +222,7 @@ class SpecialEventDetails extends SpecialPage {
 				$out
 			)
 		);
-		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
+		if ( $this->event->hasContributionTracking() ) {
 			$eventContributionsModule = $this->frontendModulesFactory->newEventContributionsModule(
 				$this->event,
 				$this->permissionChecker,
