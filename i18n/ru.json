@@ -13,7 +13,8 @@
 			"UniCollab",
 			"Yurina Tatiana",
 			"Vlad5250",
-			"Elzav"
+			"Elzav",
+			"Kaganer"
 		]
 	},
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
@@ -100,6 +101,7 @@
 	"campaignevents-eventslist-delete-dialog-cancel": "Отмена",
 	"campaignevents-eventslist-delete-dialog-delete": "Удалить",
 	"campaignevents-eventslist-delete-success": "<bdi>$1</bdi> удалено.",
+	"campaignevents-eventslist-organizers-more": "{{PLURAL:$1|ещё}} $1",
 	"deleteeventregistration": "Удалить регистрацию на мероприятие",
 	"campaignevents-delete-submit-btn": "Удалить",
 	"campaignevents-delete-success": "Регистрация на мероприятие была удалена.",
@@ -159,6 +161,7 @@
 	"campaignevents-register-confirmation-radio-private": "Приватная регистрация",
 	"campaignevents-register-confirmation-radio-public": "Публичная регистрация",
 	"campaignevents-notification-registration-header-intro": "Спасибо за регистрацию на $1 .",
+	"campaignevents-notification-registration-details-organizers-more": "{{PLURAL:$1|ещё}} $1",
 	"campaignevents-event-details-email-message-label": "Сообщение",
 	"campaignevents-email-success-notification": "Сообщение отправлено!",
 	"campaignevents-email-error-notification": "Сообщение не отправлено!",
@@ -194,7 +197,11 @@
 	"campaignevents-invitation-list-error-invalid-page": "Откройте страницу мероприятия, на которой используется регистрация событий.",
 	"campaignevents-invitation-list-error-not-organizer": "Откройте страницу мероприятия, на которой вы указаны в качестве организатора.",
 	"campaignevents-worklist-error-empty": "Введите хотя бы одно название статьи.",
+	"campaignevents-eventpage-btn-collaboration-list": "Найти больше мероприятий",
 	"campaignevents-allevents-placeholder-add-wikis": "Добавить вики...",
+	"campaignevents-eventslist-wikis-more": "{{PLURAL:$1|ещё}} $1",
+	"campaignevents-eventpage-wikis-more": "{{PLURAL:$1|ещё}} $1",
 	"campaignevents-eventslist-wiki-label": "Вики",
-	"campaignevents-eventpage-dialog-topics-label": "Темы"
+	"campaignevents-eventpage-dialog-topics-label": "Темы",
+	"campaignevents-allevents-transclusion-more-link": "Узнайте больше о мероприятиях и сообществах"
 }

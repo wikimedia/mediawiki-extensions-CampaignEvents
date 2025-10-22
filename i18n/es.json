@@ -15,7 +15,8 @@
 			"Rajadinho",
 			"SpikeShroom",
 			"Whovian Biologist",
-			"Zapipedia (WMF)"
+			"Zapipedia (WMF)",
+			"Dgstranz"
 		]
 	},
 	"campaignevents-desc": "Proporciona funcionalidades para las personas que organizan y/o participan en campañas.",
@@ -531,6 +532,7 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Añadir wikis...",
 	"campaignevents-allevents-label-filter-topics": "Temas",
 	"campaignevents-allevents-placeholder-topics": "Añadir wikis...",
+	"campaignevents-allevents-label-include-all-wikis": "Incluir eventos abiertos a todos los wikis",
 	"campaignevents-eventslist-all-wikis": "Este evento está abierto a todas las wikis.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1|más}}",
 	"campaignevents-eventpage-all-wikis": "Este evento está abierto a todas las wikis.",
@@ -544,5 +546,9 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Próximos eventos",
 	"campaignevents-allevents-label-upcoming-events-description": "Eventos futuros: eventos que comenzarán en las fechas seleccionadas",
 	"campaignevents-allevents-label-ongoing-events-title": "Eventos en curso",
-	"campaignevents-allevents-label-ongoing-events-description": "Eventos en curso: eventos ya iniciados pero que continúan activos en las fechas seleccionadas"
+	"campaignevents-allevents-label-ongoing-events-description": "Eventos en curso: eventos ya iniciados pero que continúan activos en las fechas seleccionadas",
+	"campaignevents-allevents-transclusion-more-link": "Explorar más eventos y comunidades",
+	"communityconfiguration-campaignevents-title": "CampaignEvents",
+	"communityconfiguration-campaignevents-description": "Opciones de configuración para la extensión CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Espacios de nombres válidos para eventos"
 }

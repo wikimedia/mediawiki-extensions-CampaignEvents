@@ -6,6 +6,7 @@
 			"Janabaevazizbek"
 		]
 	},
+	"group-event-organizer": "Ilaj shólkemlestiriwshileri",
 	"group-event-organizer-member": "{{GENDER:$1|ilaj shólkemlestiriwshisi}}",
 	"campaignevents-error-trackingtool-without-eventid": "Berilgen baqlaw quralında waqıya identifikatorın kórsetiń.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Baqlaw quralı identifikatorın kórsetiń",
