@@ -106,8 +106,10 @@ class EventRegistrationPage extends Page {
 	 * @param {Object} date With 'year' and 'day' as properties
 	 */
 	async setStartDate( date ) {
-		await this.startYearInput.setValue( ( date.year ).toString() );
-		await this.startDateInput.setValue( ( date.day ).toString() );
+		await this.startYearInput.click();
+		await browser.keys( date.year.toString() );
+		await this.startDateInput.click();
+		await browser.keys( date.day.toString() );
 		await this.loseFocus();
 	}
 
@@ -115,8 +117,10 @@ class EventRegistrationPage extends Page {
 	 * @param {Object} date With 'year' and 'day' as properties
 	 */
 	async setEndDate( date ) {
-		await this.endYearInput.setValue( ( date.year ).toString() );
-		await this.endDateInput.setValue( ( date.day ).toString() );
+		await this.endYearInput.click();
+		await browser.keys( date.year.toString() );
+		await this.endDateInput.click();
+		await browser.keys( date.day.toString() );
 		await this.loseFocus();
 	}
 
