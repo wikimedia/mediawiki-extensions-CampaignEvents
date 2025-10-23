@@ -576,6 +576,8 @@
 	"campaignevents-email-error-notification-with-detail": "Le message de e-mail non poteva esser inviate, pro le sequente ration: $1",
 	"campaignevents-eventslist-types-label": "Typos de evento",
 	"campaignevents-eventslist-country-label": "Pais",
+	"campaignevents-contributions-notice-private-participants-excluded": "Le statisticas e contributiones listate sur iste pagina non include le datos de participantes private.",
+	"campaignevents-contributions-notice-other-private-participants-excluded": "Le statisticas e contributiones listate sur iste pagina non include le datos de altere participantes private.",
 	"campaignevents-event-contribution-event-ended": "Le evento ha terminate; non es plus possibile associar modificationes a illo",
 	"campaignevents-event-contribution-not-participant": "Le usator non es un participante a iste evento",
 	"campaignevents-event-contribution-user-not-global": "Le usator non es un usator global",

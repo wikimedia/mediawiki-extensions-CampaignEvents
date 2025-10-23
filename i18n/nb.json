@@ -432,5 +432,7 @@
 	"campaignevents-generateinvitationlist-article-list-field-label": "Artikkelliste",
 	"campaignevents-generateinvitationlist-article-list-field-placeholder": "Sol\nMåne\nHus",
 	"campaignevents-invitations-pager-status-editors": "$1 {{PLURAL:$1|bidragsyter|bidragsytere}} funnet",
+	"campaignevents-invitationlist-preference": "Inkluder meg i [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitasjonslister].",
+	"prefs-campaignevents-invitations": "Invitasjonslister",
 	"campaignevents-eventslist-country-label": "Land"
 }

@@ -577,6 +577,8 @@
 	"campaignevents-email-error-notification-with-detail": "Aşağıdakı səbəbdən e-poçt göndərilə bilmədi: $1",
 	"campaignevents-eventslist-types-label": "Tədbir növləri",
 	"campaignevents-eventslist-country-label": "Ölkə",
+	"campaignevents-contributions-notice-private-participants-excluded": "Bu səhifədə qeyd olunan statistika və töhfələrə gizli iştirakçıların məlumatları daxil deyil.",
+	"campaignevents-contributions-notice-other-private-participants-excluded": "Bu səhifədə qeyd olunan statistika və töhfələrə digər gizli iştirakçıların məlumatları daxil deyil.",
 	"campaignevents-event-contribution-event-ended": "Tədbir başa çatıb və artıq redaktə əlaqələndirmələrini qəbul etmir",
 	"campaignevents-event-contribution-not-participant": "İstifadəçi bu tədbirin iştirakçısı deyil",
 	"campaignevents-event-contribution-user-not-global": "İstifadəçi qlobal istifadəçi deyil",

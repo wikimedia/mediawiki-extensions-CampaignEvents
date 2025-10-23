@@ -21,5 +21,7 @@
 	"campaignevents-rest-register-invalid-answer": "Ugyldig svar på spørsmålet $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Fullfør påmeldingen på $1, wikien der arrangementet ble opprettet.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Slett påmeldingen din på $1, wikien der arrangementet ble opprettet.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Send e-post til deltakere på $1, wikien der arrangementet ble opprettet."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Send e-post til deltakere på $1, wikien der arrangementet ble opprettet.",
+	"campaignevents-rest-contribution-not-found": "Det er ingen bidrag med denne ID-en.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Du har ikke tillatelse til å slette dette bidraget."
 }

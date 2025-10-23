@@ -584,6 +584,8 @@
 	"campaignevents-email-error-notification-with-detail": "Non se puido enviar o correo electrónico polo seguinte motivo: $1",
 	"campaignevents-eventslist-types-label": "Tipos de eventos",
 	"campaignevents-eventslist-country-label": "País",
+	"campaignevents-contributions-notice-private-participants-excluded": "As estatísticas e mais as contribucións que aparecen nesta páxina non inclúen datos de participantes privados.",
+	"campaignevents-contributions-notice-other-private-participants-excluded": "As estatísticas e mais as contribucións que aparecen nesta páxina non inclúen datos doutros participantes privados.",
 	"campaignevents-event-contribution-event-ended": "O evento rematou e xa non acepta máis modificacións asociadas a el",
 	"campaignevents-event-contribution-not-participant": "O usuario non participa neste evento",
 	"campaignevents-event-contribution-user-not-global": "O usuario non é un usuario global",
