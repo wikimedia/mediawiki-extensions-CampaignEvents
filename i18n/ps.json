@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"SaldırganSincap",
 			"شاه زمان پټان"
 		]
 	},
@@ -193,7 +194,7 @@
 	"campaignevents-eventpage-dialog-chat-register": "د بنډار ډلې وېبتړ کتلو لپاره نوم‌ليکنه وکړئ.",
 	"campaignevents-eventpage-dialog-action-close": "تړل",
 	"campaignevents-eventpage-register-notification": "اوس تاسو د $1 لپاره نوم‌ليکنه وکړه.",
-	"campaignevents-eventpage-register-notification-more": "د نورو پېښو او ټولنو موندلو لپاره له [[Special:AllEvents|همکارۍ لړليک]]</strong> نه ليدنه وکړئ.",
+	"campaignevents-eventpage-register-notification-more": "د نورو پېښو او ټولنو موندلو لپاره له <strong>[[Special:AllEvents|همکارۍ لړليک]]</strong> نه ليدنه وکړئ.",
 	"campaignevents-eventpage-register-notification-edit": "ستاسو د نوم‌‌ليکنې مالومات هم‌مهاله شوي دي.",
 	"campaignevents-eventpage-unregister-confirmation-title": "نوم‌ليکنه ناگارل",
 	"campaignevents-eventpage-unregister-confirmation-body": "ايا تاسو ډاډه ياست چې خپله نوم‌ليکنه ناگاره کړئ؟",
@@ -206,7 +207,7 @@
 	"campaignevents-eventpage-register-dialog-title-edit": "نوم‌ليکنه سمول",
 	"campaignevents-eventpage-register-dialog-visibility-title": "د نوم‌ليکنې پټنتيا",
 	"campaignevents-eventpage-registration-enabled-notification": " نوم ليکنه چارن ده. گډونوال کولی شي چې ستاسو د پېښې مخ کې اوس نوم‌ليکنه وکړي.",
-	"campaignevents-eventpage-registration-updated-notification-list": "دا پېښه د strong>[[Special:AllEvents|همکارۍ لړليک]]</strong> کې رانغاړل شوې ده.",
+	"campaignevents-eventpage-registration-updated-notification-list": "دا پېښه د <strong>[[Special:AllEvents|همکارۍ لړليک]]</strong> کې رانغاړل شوې ده.",
 	"campaignevents-eventpage-enableheader-organizer": "تاسو يو مهاروونکی ياست",
 	"campaignevents-eventpage-enableheader-button-label": "نوم‌ليکنه چارنول",
 	"campaignevents-eventpage-enable-registration-dialog-title": "پېښې نوم‌ليکنه چارنول",
@@ -265,7 +266,7 @@
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|نور}}",
 	"campaignevents-notification-registration-event-page-link": "پېښې مخ کتل",
 	"campaignevents-notification-registration-chat-link": "ډله‌ييز بنډار سره يوځای کېدل",
-	"campaignevents-notification-registration-collaboration-list-link": "په ويکي‌گانو کې د نورو پېښو او ټولنو موندلو لپاره له [[Special:AllEvents|همکارۍ لړليک]]</strong> نه ليدنه وکړئ.",
+	"campaignevents-notification-registration-collaboration-list-link": "په ويکي‌گانو کې د نورو پېښو او ټولنو موندلو لپاره له <strong>[[Special:AllEvents|همکارۍ لړليک]]</strong> نه ليدنه وکړئ.",
 	"campaignevents-event-details-email-recipients-label": "ترلاسه‌کوونکي",
 	"campaignevents-event-details-email-recipients-link-text": "ترلاسه‌کوونکی ورگډول",
 	"campaignevents-event-details-email-subject-label": "سکالو",
@@ -333,7 +334,7 @@
 	"campaignevents-invitationlist-event": "$1: بلنې لړليک",
 	"campaignevents-invitationlist-no-editors": "<strong>هېڅ سمونگر ستاسو د ليکنې لړليک څخه د [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists بلنې لړليک منښتونه] نه پوره کوي.</strong> تاسو کولی شئ د ليکنې نوي لړليک سره [[Special:GenerateInvitationList|د بلنې يو نوی لړليک]] جوړ کړئ.",
 	"campaignevents-invitationlist-worklist-label": "ليکنې لړليک کتل",
-	"campaignevents-event-details-footer": "د نورو پېښو او ټولنو موندلو لپاره له [[Special:AllEvents|همکارۍ لړليک]]</strong> نه ليدنه وکړئ.",
+	"campaignevents-event-details-footer": "د نورو پېښو او ټولنو موندلو لپاره له <strong>[[Special:AllEvents|همکارۍ لړليک]]</strong> نه ليدنه وکړئ.",
 	"campaignevents-invitationlist-preference": "د [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists بلنې لړليکونو] کې مې راونغاړئ.",
 	"prefs-campaignevents-invitations": "د بلنې لړليکونه",
 	"campaignevents-eventpage-btn-collaboration-list": "نورې پېښې موندل",

@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"B3rnas",
-			"Hamilton Abreu"
+			"Hamilton Abreu",
+			"Mansil alfalb"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Não há nenhum evento com este identificador.",
@@ -17,5 +18,7 @@
 	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> tem de ser uma matriz de nomes de utilizador e não pode estar vazia",
 	"campaignevents-rest-get-registration-info-notparticipant": "Não está a participar neste evento.",
 	"campaignevents-rest-register-invalid-answer": "Resposta inválida à pergunta $1",
-	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor, complete o registro do seu evento em $1, a wiki onde o evento foi criado."
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor, complete o registro do seu evento em $1, a wiki onde o evento foi criado.",
+	"campaignevents-rest-contribution-not-found": "Não existe nenhuma contribuição com esta 'Identidade'.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Não tem permissão para eliminar esta contribuição."
 }
