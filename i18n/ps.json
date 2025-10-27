@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"شاه زمان پټان"
+			"شاه زمان پټان",
+			"SaldırganSincap"
 		]
 	},
 	"campaignevents-desc": "د ټاکنيزې‌سيالۍ په مهاروونکو او گډونوالو لپاره ځانگړنې چمتو کوي.",
@@ -126,5 +127,6 @@
 	"campaignevents-event-details-remove-participant-cancel-btn": "ناگارل",
 	"campaignevents-event-details-no-event-id-provided": "د پېښې پېژند چمتو‌کول",
 	"campaignevents-event-details-invalid-id": "د پېښې يو باوري پېژند چمتو کول.",
-	"campaignevents-event-details-event": "پېښې سپيناوی: $1"
+	"campaignevents-event-details-event": "پېښې سپيناوی: $1",
+	"campaignevents-event-details-search-participants-placeholder": "د گډونوالو پلټل"
 }

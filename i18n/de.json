@@ -96,7 +96,7 @@
 	"campaignevents-unregister-event-past": "Der Anmeldezeitraum für diese Veranstaltung ist bereits abgelaufen.",
 	"campaignevents-unregister-not-participant": "Du bist nicht für diese Veranstaltung angemeldet.",
 	"campaignevents-unregister-need-central-account": "Für die Stornierung deiner Veranstaltungsanmeldung benötigst du ein zentrales Benutzerkonto.",
-	"myevents": "Deine Veranstaltungen",
+	"myevents": "Meine Veranstaltungen",
 	"campaignevents-myevents-need-central-account": "Du benötigst ein zentrales Benutzerkonto, um die Liste deiner Veranstaltungen einsehen zu können.",
 	"campaignevents-myevents-filter-legend": "Ereignisse filtern",
 	"campaignevents-myevents-label-search": "Suchen",
