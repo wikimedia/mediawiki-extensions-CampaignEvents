@@ -6,12 +6,15 @@ namespace MediaWiki\Extension\CampaignEvents\Permissions;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Permissions\Authority;
+use StatusValue;
 
 class PermissionChecker {
 	public const SERVICE_NAME = 'CampaignEventsPermissionChecker';
@@ -27,17 +30,20 @@ class PermissionChecker {
 	private PageAuthorLookup $pageAuthorLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private MWPermissionsLookup $permissionsLookup;
+	private ParticipantsStore $participantsStore;
 
 	public function __construct(
 		OrganizersStore $organizersStore,
 		PageAuthorLookup $pageAuthorLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
-		MWPermissionsLookup $permissionsLookup
+		MWPermissionsLookup $permissionsLookup,
+		ParticipantsStore $participantsStore
 	) {
 		$this->organizersStore = $organizersStore;
 		$this->pageAuthorLookup = $pageAuthorLookup;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->permissionsLookup = $permissionsLookup;
+		$this->participantsStore = $participantsStore;
 	}
 
 	/**
@@ -213,5 +219,55 @@ class PermissionChecker {
 		return $performer->isNamed()
 			&& $performer->isAllowed( self::GENERATE_INVITATION_LISTS_RIGHT )
 			&& !$performer->getBlock()?->isSitewide();
+	}
+
+	/**
+	 * Returns whether the performer can add a single contribution record to the given event.
+	 *
+	 * A user can add a contribution if either:
+	 * - is an organizer of the event, or
+	 * - is the author of the contribution.
+	 */
+	public function userCanAddAnyValidContribution(
+		Authority $performer,
+		ExistingEventRegistration $event
+	): bool {
+		return $this->userCanEditRegistration( $performer, $event );
+	}
+
+	/**
+	 * Returns whether the performer can add a single contribution record to the given event.
+	 *
+	 * A user can add a contribution if either:
+	 * - is an organizer of the event, or
+	 * - is the author of the contribution.
+	 */
+	public function userCanAddContribution(
+		Authority $performer,
+		ExistingEventRegistration $event,
+		int $contributionAuthorCentralId
+	): StatusValue {
+		try {
+			$performerCentralUser = $this->centralUserLookup->newFromAuthority( $performer );
+			$authorCentralUser = new CentralUser( $contributionAuthorCentralId );
+		} catch ( UserNotGlobalException ) {
+			return StatusValue::newFatal( 'campaignevents-event-contribution-user-not-global' );
+		}
+		$authorIsParticipant = $this->participantsStore->userParticipatesInEvent(
+			$event->getID(),
+			$authorCentralUser,
+			true
+		);
+		if ( !$authorIsParticipant ) {
+			return StatusValue::newFatal( 'campaignevents-event-contribution-not-participant' );
+		}
+		if ( $performerCentralUser->getCentralID() === $contributionAuthorCentralId ) {
+			return StatusValue::newGood();
+		}
+
+		if ( $this->userCanAddAnyValidContribution( $performer, $event ) ) {
+			return StatusValue::newGood();
+		}
+		return StatusValue::newFatal( 'campaignevents-event-contribution-not-owner' );
 	}
 }

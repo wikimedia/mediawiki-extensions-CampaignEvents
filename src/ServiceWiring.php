@@ -109,7 +109,8 @@ return [
 			$services->get( OrganizersStore::SERVICE_NAME ),
 			$services->get( PageAuthorLookup::SERVICE_NAME ),
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-			$services->get( MWPermissionsLookup::SERVICE_NAME )
+			$services->get( MWPermissionsLookup::SERVICE_NAME ),
+			$services->get( ParticipantsStore::SERVICE_NAME )
 		);
 	},
 	CampaignsUserMailer::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsUserMailer {
@@ -479,10 +480,10 @@ return [
 	): EventContributionValidator {
 		return new EventContributionValidator(
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
-			$services->get( ParticipantsStore::SERVICE_NAME ),
 			$services->getJobQueueGroup(),
 			$services->getRevisionStoreFactory(),
 			$services->get( EventContributionStore::SERVICE_NAME ),
+			$services->get( PermissionChecker::SERVICE_NAME )
 		);
 	},
 ];

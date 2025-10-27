@@ -12,7 +12,9 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValida
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -23,6 +25,7 @@ use MediaWiki\Tests\Unit\DummyServicesTrait;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
+use StatusValue;
 
 /**
  * @group Test
@@ -38,6 +41,8 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	private RevisionStoreFactory $revisionStoreFactory;
 	private EventContributionStore $eventContributionStore;
 	private ServiceOptions $options;
+	private OrganizersStore $organizersStore;
+	private PermissionChecker $permissionChecker;
 	private Authority $performer;
 
 	protected function setUp(): void {
@@ -49,13 +54,15 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->revisionStoreFactory = $this->createMock( RevisionStoreFactory::class );
 		$this->eventContributionStore = $this->createMock( EventContributionStore::class );
 		$this->performer = $this->createMock( Authority::class );
+		$this->organizersStore = $this->createMock( OrganizersStore::class );
+		$this->permissionChecker = $this->createMock( PermissionChecker::class );
 
 		$this->validator = new EventContributionValidator(
 			$this->centralUserLookup,
-			$this->participantsStore,
 			$this->jobQueueGroup,
 			$this->revisionStoreFactory,
 			$this->eventContributionStore,
+			$this->permissionChecker
 		);
 	}
 
@@ -203,88 +210,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
 	}
 
-	public function testValidateAndScheduleRevisionTooOld(): void {
-		// Setup central user
-		$centralUser = $this->createMock( CentralUser::class );
-		$this->centralUserLookup->method( 'newFromAuthority' )
-			->with( $this->performer )
-			->willReturn( $centralUser );
-
-		// Create a mock event
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( 1 );
-		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isOngoing' )->willReturn( true );
-		$event->method( 'hasContributionTracking' )->willReturn( true );
-		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
-
-		// Setup revision with old timestamp
-		$revision = $this->createMock( RevisionRecord::class );
-		$revision->method( 'getTimestamp' )->willReturn( '20230101000000' );
-		$revision->method( 'getPageId' )->willReturn( 456 );
-		$revision->method( 'getUser' )->willReturn( $this->createMock( UserIdentity::class ) );
-
-		$revisionStore = $this->createMock( RevisionStore::class );
-		$revisionStore->method( 'getRevisionById' )
-			->with( 123 )
-			->willReturn( $revision );
-		$this->revisionStoreFactory->method( 'getRevisionStore' )
-			->with( 'testwiki' )
-			->willReturn( $revisionStore );
-
-		// Expect exception
-		$this->expectException( LocalizedHttpException::class );
-		$this->expectExceptionMessage( 'campaignevents-event-contribution-timestamp-too-old' );
-
-		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
-	}
-
-	public function testValidateAndScheduleNotOwner(): void {
-		// Setup central user
-		$centralUser = $this->createMock( CentralUser::class );
-		$centralUser->method( 'getCentralID' )->willReturn( 123 );
-		$this->centralUserLookup->method( 'newFromAuthority' )
-			->with( $this->performer )
-			->willReturn( $centralUser );
-
-		// Create a mock event
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( 1 );
-		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isOngoing' )->willReturn( true );
-		$event->method( 'hasContributionTracking' )->willReturn( true );
-		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
-
-		// Setup revision with different author
-		$revisionAuthor = $this->createMock( UserIdentity::class );
-		$revision = $this->createMock( RevisionRecord::class );
-		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS_MW ) );
-		$revision->method( 'getPageId' )->willReturn( 456 );
-		$revision->method( 'getUser' )->willReturn( $revisionAuthor );
-
-		$revisionStore = $this->createMock( RevisionStore::class );
-		$revisionStore->method( 'getRevisionById' )
-			->with( 123 )
-			->willReturn( $revision );
-		$this->revisionStoreFactory->method( 'getRevisionStore' )
-			->with( 'testwiki' )
-			->willReturn( $revisionStore );
-
-		// Setup different central user for revision author
-		$revisionAuthorCentralUser = $this->createMock( CentralUser::class );
-		$revisionAuthorCentralUser->method( 'getCentralID' )->willReturn( 456 );
-		$this->centralUserLookup->method( 'newFromUserIdentity' )
-			->with( $revisionAuthor )
-			->willReturn( $revisionAuthorCentralUser );
-
-		// Expect exception
-		$this->expectException( LocalizedHttpException::class );
-		$this->expectExceptionMessage( 'campaignevents-event-contribution-not-owner' );
-
-		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
-	}
-
-	public function testValidateAndScheduleNotParticipant(): void {
+	public function testValidateAndSchedulePermissionError(): void {
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$centralUser->method( 'getCentralID' )->willReturn( 123 );
@@ -327,9 +253,74 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			->with( 1, $centralUser, true )
 			->willReturn( false );
 
+		// setup permission checker
+		$this->permissionChecker->method( 'userCanAddContribution' )->willReturn(
+			StatusValue::newFatal( 'permission-error' )
+		);
+
 		// Expect exception
 		$this->expectException( LocalizedHttpException::class );
-		$this->expectExceptionMessage( 'campaignevents-event-contribution-not-participant' );
+		$this->expectExceptionMessage( 'permission-error' );
+
+		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
+	}
+
+	public function testValidateAndScheduleOrganizerNotAuthor(): void {
+		// Setup central user
+		$centralUser = $this->createMock( CentralUser::class );
+		$centralUser->method( 'getCentralID' )->willReturn( 123 );
+		$this->centralUserLookup->method( 'newFromAuthority' )
+			->with( $this->performer )
+			->willReturn( $centralUser );
+
+		// Create a mock event
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getID' )->willReturn( 1 );
+		$event->method( 'getDeletionTimestamp' )->willReturn( null );
+		$event->method( 'isOngoing' )->willReturn( true );
+		$event->method( 'hasContributionTracking' )->willReturn( true );
+		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+
+		// Setup revision
+		$revisionAuthor = $this->createMock( UserIdentity::class );
+		$revision = $this->createMock( RevisionRecord::class );
+		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS_MW ) );
+		$revision->method( 'getUser' )->willReturn( $revisionAuthor );
+		$revision->method( 'getPageId' )->willReturn( 456 );
+
+		$revisionStore = $this->createMock( RevisionStore::class );
+		$revisionStore->method( 'getRevisionById' )
+			->with( 123 )
+			->willReturn( $revision );
+		$this->revisionStoreFactory->method( 'getRevisionStore' )
+			->with( 'testwiki' )
+			->willReturn( $revisionStore );
+
+		// Setup same central user for revision author
+		$authorId = 234;
+		$revisionAuthorCentralUser = $this->createMock( CentralUser::class );
+		$revisionAuthorCentralUser->method( 'getCentralID' )->willReturn( $authorId );
+		$this->centralUserLookup->method( 'newFromUserIdentity' )
+			->with( $revisionAuthor )
+			->willReturn( $revisionAuthorCentralUser );
+
+		// Setup user not participating in event
+		$this->participantsStore->method( 'userParticipatesInEvent' )
+			->with( 1, $centralUser, true )
+			->willReturn( false );
+
+		// setup permission checker
+		$this->permissionChecker->method( 'userCanAddContribution' )->willReturn(
+			StatusValue::newGood()
+		);
+		// Expect job to be pushed
+		$this->jobQueueGroup->expects( $this->once() )
+			->method( 'push' )
+			->willReturnCallback(
+				function ( $job ) use ( $authorId ) {
+					$this->assertSame( $authorId, $job->params['userId'] );
+				}
+			);
 
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
 	}
@@ -382,6 +373,10 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			->with( 1, $centralUser, true )
 			->willReturn( true );
 
+		// setup permission checker
+		$this->permissionChecker->method( 'userCanAddContribution' )->willReturn(
+			StatusValue::newGood()
+		);
 		if ( $isGood ) {
 			// Expect job to be pushed
 			$this->jobQueueGroup->expects( $this->once() )
@@ -440,6 +435,11 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->centralUserLookup->method( 'newFromUserIdentity' )
 			->with( $revisionAuthor )
 			->willReturn( $revisionAuthorCentralUser );
+
+		// setup permission checker
+		$this->permissionChecker->method( 'userCanAddContribution' )->willReturn(
+			StatusValue::newGood()
+		);
 
 		// Setup user participating in event
 		$this->participantsStore->method( 'userParticipatesInEvent' )

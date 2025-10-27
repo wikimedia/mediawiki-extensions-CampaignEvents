@@ -286,7 +286,11 @@
 			"remoteExtPath": "CampaignEvents/resources",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
-				"CdxDialog"
+				"CdxDialog",
+				"CdxButton",
+				"CdxField",
+				"CdxTextInput",
+				"CdxMessage"
 			],
 			"packageFiles": [
 				"ext.campaignEvents.specialPages/dispatcher.js",
@@ -299,6 +303,7 @@
 				"ext.campaignEvents.specialPages/eventdetails/EmailManager.js",
 				"ext.campaignEvents.specialPages/eventdetails/RemoveParticipantDialog.js",
 				"ext.campaignEvents.specialPages/eventdetails/ScrollDownObserver.js",
+				"ext.campaignEvents.specialPages/eventdetails/components/AddContributionDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/EventContributions.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/ContributionsActionsApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/DeleteContributionDialog.vue",
@@ -370,6 +375,13 @@
 				"campaignevents-eventslist-delete-dialog-cancel",
 				"campaignevents-eventslist-delete-dialog-delete",
 				"campaignevents-eventslist-delete-success",
+				"campaignevents-event-details-contributions-add-dialog-cancel",
+				"campaignevents-event-details-contributions-add-dialog-submit",
+				"campaignevents-event-details-contributions-add-dialog-title",
+				"campaignevents-event-details-contributions-add-dialog-subtitle",
+				"campaignevents-event-details-contributions-add-dialog-footer",
+				"campaignevents-event-details-contributions-add-dialog-success",
+				"campaignevents-event-details-contributions-add-dialog-open-button",
 				"campaignevents-event-details-contributions-delete-tooltip",
 				"campaignevents-event-details-contributions-delete-success",
 				"campaignevents-event-details-contributions-delete-error",

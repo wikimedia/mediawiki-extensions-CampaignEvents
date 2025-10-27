@@ -8,37 +8,38 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
-use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Rest\FailStatusUtilTrait;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Revision\RevisionStoreFactory;
-use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\Message\MessageValue;
 
 class EventContributionValidator {
+	use FailStatusUtilTrait;
+
 	public const SERVICE_NAME = 'CampaignEventsEventContributionValidator';
-	private const MAX_REVISION_AGE = 24 * 60 * 60;
 
 	private CampaignsCentralUserLookup $centralUserLookup;
-	private ParticipantsStore $participantsStore;
 	private JobQueueGroup $jobQueueGroup;
 	private RevisionStoreFactory $revisionStoreFactory;
 	private EventContributionStore $eventContributionStore;
+	private PermissionChecker $permissionChecker;
 
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
-		ParticipantsStore $participantsStore,
 		JobQueueGroup $jobQueueGroup,
 		RevisionStoreFactory $revisionStoreFactory,
 		EventContributionStore $eventContributionStore,
+		PermissionChecker $permissionChecker
 	) {
 		$this->centralUserLookup = $centralUserLookup;
-		$this->participantsStore = $participantsStore;
 		$this->jobQueueGroup = $jobQueueGroup;
 		$this->revisionStoreFactory = $revisionStoreFactory;
 		$this->eventContributionStore = $eventContributionStore;
+		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**
@@ -123,49 +124,28 @@ class EventContributionValidator {
 			);
 		}
 
-		// Validate revision timestamp (within reasonable time window)
-		$editTime = $revision->getTimestamp();
-
-		// Convert timestamps to UNIX format for comparison
-		$editTimeUnix = (int)wfTimestamp( TS_UNIX, $editTime );
-		$currentTimeUnix = (int)MWTimestamp::now( TS_UNIX );
-
-		if ( $editTimeUnix < ( $currentTimeUnix - self::MAX_REVISION_AGE ) ) {
-			throw new LocalizedHttpException(
-				MessageValue::new( 'campaignevents-event-contribution-timestamp-too-old' ),
-				400
-			);
-		}
-
-		// Verify that the edit was made by the user making this API request
+		// Verify that the edit was made by the user making this API request, or the event organiser
 		$revisionAuthor = $revision->getUser();
 
 		// Get the central user ID for the revision author
 		$revisionAuthorCentralId = $this->centralUserLookup->newFromUserIdentity( $revisionAuthor )
 			->getCentralID();
 
-		// Verify that the edit was made by the user making this API request
-		if ( $revisionAuthorCentralId !== $centralUser->getCentralID() ) {
-			throw new LocalizedHttpException(
-				MessageValue::new( 'campaignevents-event-contribution-not-owner' ),
-				403
-			);
+		// Verify that the edit was made by the user making this API request, or an organizer
+		$userCanAddContribution = $this->permissionChecker->userCanAddContribution(
+			$performer,
+			$event,
+			$revisionAuthorCentralId
+		);
+		if ( !$userCanAddContribution->isOK() ) {
+			$this->exitWithStatus( $userCanAddContribution, 403 );
 		}
-
-		// Check if user participates in the event
-		if ( !$this->participantsStore->userParticipatesInEvent( $event->getID(), $centralUser, true ) ) {
-			throw new LocalizedHttpException(
-				MessageValue::new( 'campaignevents-event-contribution-not-participant' ),
-				403
-			);
-		}
-
 		// Create job message and push to queue
 		$jobParams = [
 			'revisionId' => $revisionID,
 			'wiki' => $wikiID,
 			'eventId' => $event->getID(),
-			'userId' => $centralUser->getCentralID(),
+			'userId' => $revisionAuthorCentralId,
 		];
 		$associateEditJob = new EventContributionJob( $jobParams );
 		$this->jobQueueGroup->push( $associateEditJob );

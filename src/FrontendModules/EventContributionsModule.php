@@ -83,18 +83,27 @@ class EventContributionsModule {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $currentUser );
 			$centralUserId = $centralUser->getCentralID();
+			$participant = $this->participantsStore->getEventParticipant( $eventId, $centralUser, true );
+			$userCanAddContributions = $this->permissionChecker->userCanAddAnyValidContribution(
+				$currentUser,
+				$this->event
+			) || $participant;
 			$includePrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants(
 				$currentUser,
 				$this->event
 			);
 			$participantIsPrivate =
-				$this->participantsStore->getEventParticipant( $eventId, $centralUser, true )?->isPrivateRegistration();
+				$participant?->isPrivateRegistration();
 		} catch ( UserNotGlobalException ) {
 			// User is not logged in or doesn't have a global account
 			$centralUserId = 0;
+			$centralUser = null;
 			$includePrivateParticipants = false;
 			$participantIsPrivate = false;
+			$userCanAddContributions = false;
 		}
+
+		$this->output->addJsConfigVars( [ 'wgCampaignEventsCanAddContributions' => $userCanAddContributions ] );
 
 		$summaryData = $this->eventContributionStore->getEventSummaryData(
 			$eventId,

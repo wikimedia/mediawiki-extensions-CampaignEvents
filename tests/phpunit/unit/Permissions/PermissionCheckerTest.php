@@ -14,6 +14,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
@@ -42,13 +43,15 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		?OrganizersStore $organizersStore = null,
 		?PageAuthorLookup $pageAuthorLookup = null,
 		?MWPermissionsLookup $permissionsLookup = null,
-		?CampaignsCentralUserLookup $centralUserLookup = null
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?ParticipantsStore $participantsStore = null,
 	): PermissionChecker {
 		return new PermissionChecker(
 			$organizersStore ?? $this->createMock( OrganizersStore::class ),
 			$pageAuthorLookup ?? $this->createMock( PageAuthorLookup::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
-			$permissionsLookup ?? $this->createMock( MWPermissionsLookup::class )
+			$permissionsLookup ?? $this->createMock( MWPermissionsLookup::class ),
+			$participantsStore ?? $this->createMock( ParticipantsStore::class ),
 		);
 	}
 
@@ -643,6 +646,11 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	public static function provideCanViewPrivateParticipants(): Generator {
+		yield from self::provideGenericEditPermissions();
+		yield from self::provideHasViewPrivateParticipantsRights();
+	}
+
 	/**
 	 * @covers ::userCanViewNonPIIParticipantsData
 	 * @dataProvider provideGenericEditPermissions
@@ -1014,8 +1022,143 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		];
 	}
 
-	public static function provideCanViewPrivateParticipants(): Generator {
-		yield from self::provideGenericEditPermissions();
-		yield from self::provideHasViewPrivateParticipantsRights();
+	/**
+	 * @covers ::userCanAddContribution
+	 * @dataProvider provideCanAddContribution
+	 */
+	public function testUserCanAddContribution(
+		?bool $isStoredOrganizer,
+		bool $isGood,
+		bool $isParticipant,
+		bool $isAuthor,
+		?string $error,
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal
+	): void {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( true );
+
+		// Mock organizers store for userCanEditRegistration
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->any() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		// Mock participant store
+		if ( $isParticipant && $isLoggedIn ) {
+			$participantsStore = $this->createMock( ParticipantsStore::class );
+			$participantsStore->expects( $this->once() )->method( 'userParticipatesInEvent' )->willReturn( true );
+		} else {
+			$participantsStore = null;
+		}
+
+		// Mock central user lookup for author check
+		$centralLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		if ( $isLoggedIn ) {
+			$centralUser = $this->createMock( CentralUser::class );
+			$centralUser->method( 'getCentralID' )->willReturn( $isAuthor ? 123 : 555 );
+			$centralLookup->method( 'newFromAuthority' )->willReturn( $centralUser );
+		} else {
+			$centralLookup->method( 'newFromAuthority' )
+				->willThrowException( new UserNotGlobalException( 123 ) );
+		}
+
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn, self::ALL_RIGHTS, false );
+		$checker = $this->getPermissionChecker(
+			$organizersStore,
+			null,
+			$permissionsLookup,
+			$centralLookup,
+			$participantsStore );
+		$actual = $checker->userCanAddContribution( $performer, $event, 123 );
+			$isGood ? $this->assertStatusGood( $actual ) : $this->assertStatusNotGood( $actual );
+		if ( !$isGood ) {
+			$this->assertStatusMessage( $error, $actual );
+		}
+	}
+
+	public static function provideCanAddContribution(): Generator {
+		foreach ( self::provideGenericEditPermissions() as $name => $case ) {
+			[
+				$baseExpected,
+				$isLoggedIn,
+				$isTemp,
+				$isBlocked,
+				$userRights,
+				$eventIsLocal,
+			] = $case;
+			$genericCase = $case;
+			array_shift( $genericCase );
+			$isStoredOrganizer = $case[6] ?? null;
+			yield $name . ', not author, not participant' => array_merge(
+				[
+					$isStoredOrganizer,
+					false,
+					false,
+					false,
+					$isLoggedIn ? 'campaignevents-event-contribution-not-participant'
+						: 'campaignevents-event-contribution-user-not-global'
+				], $genericCase );
+			yield $name . ', not author, is participant, ' => array_merge(
+				[
+					$isStoredOrganizer,
+					$baseExpected,
+					true,
+					false,
+					$isLoggedIn ? 'campaignevents-event-contribution-not-owner'
+						: 'campaignevents-event-contribution-user-not-global'
+				], $genericCase );
+			yield $name . ', is author, not participant' => array_merge(
+				[
+					$isStoredOrganizer,
+					false,
+					false,
+					true,
+					$isLoggedIn ? 'campaignevents-event-contribution-not-participant'
+						: 'campaignevents-event-contribution-user-not-global'
+				], $genericCase );
+			yield $name . ', is author, is participant' => array_merge(
+				[
+					$isStoredOrganizer,
+					$isLoggedIn,
+					true,
+					true,
+					$isLoggedIn ? null
+						: 'campaignevents-event-contribution-user-not-global'
+				], $genericCase );
+		}
+	}
+
+	/**
+	 * @covers ::userCanAddAnyValidContribution
+	 * @dataProvider provideGenericEditPermissions
+	 */
+	public function testUserCanAddAnyValidContribution(
+		bool $expected,
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null
+	) {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
+		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
+		$this->assertSame(
+			$expected,
+			$checker->userCanAddAnyValidContribution( $performer, $event )
+		);
 	}
 }
