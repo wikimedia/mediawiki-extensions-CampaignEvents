@@ -418,7 +418,6 @@
 				"ext.campaignEvents.eventpage/index.js",
 				"ext.campaignEvents.eventpage/ConfirmUnregistrationDialog.js",
 				"ext.campaignEvents.eventpage/EnableRegistrationDialog.js",
-				"ext.campaignEvents.eventpage/EventDetailsDialog.js",
 				"ext.campaignEvents.eventpage/ParticipantRegistrationDialog.js",
 				"ext.campaignEvents.eventpage/ManageRegistrationWidget.js",
 				"ext.campaignEvents.eventpage/EventQuestions.js",
@@ -429,13 +428,10 @@
 				}
 			],
 			"styles": [
-				"ext.campaignEvents.eventpage/EventDetailsDialog.less",
 				"ext.campaignEvents.eventpage/ParticipantRegistrationDialog.less"
 			],
 			"messages": [
 				"campaignevents-eventpage-btn-manage-registration",
-				"campaignevents-eventpage-dialog-title",
-				"campaignevents-eventpage-dialog-action-close",
 				"campaignevents-eventpage-register-notification",
 				"campaignevents-eventpage-register-notification-more",
 				"campaignevents-eventpage-register-notification-edit",
@@ -471,9 +467,7 @@
 				"campaignevents-eventpage-register-dialog-retention-hours",
 				"word-separator",
 				"campaignevents-eventpage-register-dialog-answers-aggregated",
-				"campaignevents-eventpage-btn-collaboration-list",
-				"campaignevents-eventpage-header-dates",
-				"campaignevents-eventpage-dialog-dates"
+				"campaignevents-eventpage-header-dates"
 			],
 			"dependencies": [
 				"mediawiki.api",

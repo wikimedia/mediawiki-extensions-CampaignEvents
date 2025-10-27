@@ -23,10 +23,6 @@ class EventPage extends Page {
 		return $( '.ext-campaignevents-eventpage-header-buttons .ext-campaignevents-eventpage-manage-registration-menu' );
 	}
 
-	get moreDetailsDialogButton() {
-		return $( '.ext-campaignevents-eventpage-details-btn' );
-	}
-
 	get cancelRegistrationButton() {
 		return this.manageRegistrationButton.$( '*=Cancel registration' );
 	}
@@ -41,10 +37,6 @@ class EventPage extends Page {
 
 	get headerParticipationOptions() {
 		return $( '.ext-campaignevents-textwithicon-widget-icon-map-pin ~ .ext-campaignevents-textwithicon-widget-content' );
-	}
-
-	get eventOrganizers() {
-		return $( '.ext-campaignevents-detailsdialog-organizers' );
 	}
 
 	get registrationUpdatedNotification() {
@@ -104,14 +96,6 @@ class EventPage extends Page {
 		await this.manageRegistrationButton.click();
 		await this.cancelRegistrationButton.click();
 		await this.confirmCancellation.click();
-	}
-
-	/**
-	 * Opens the more details dialog.
-	 */
-	async openMoreDetailsDialog() {
-		await this.waitForClickHandler( '.ext-campaignevents-eventpage-details-btn' );
-		await this.moreDetailsDialogButton.click();
 	}
 
 	/**

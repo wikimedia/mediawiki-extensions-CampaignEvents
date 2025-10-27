@@ -9,25 +9,19 @@ use LogicException;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
-use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
-use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
-use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Language\Language;
-use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
@@ -78,21 +72,15 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$this->createMock( OrganizersStore::class ),
 			$permissionChecker,
 			$this->createMock( IMessageFormatterFactory::class ),
-			$this->createMock( LinkRenderer::class ),
 			$campaignsPageFactory,
 			$this->createMock( CampaignsCentralUserLookup::class ),
-			$this->createMock( UserLinker::class ),
 			$this->createMock( EventTimeFormatter::class ),
 			$this->createMock( EventPageCacheUpdater::class ),
 			$this->createMock( EventQuestionsRegistry::class ),
-			$this->createMock( WikiLookup::class ),
-			$this->createMock( ITopicRegistry::class ),
-			$this->createMock( EventTypesRegistry::class ),
 			$this->createMock( GroupPermissionsLookup::class ),
 			new HashConfig( [
 				'CampaignEventsEventNamespaces' => $allowedNamespaces
 			] ),
-			$this->createMock( EventFormatter::class ),
 			$this->createMock( CountryProvider::class ),
 			$this->createMock( Language::class ),
 			$performer,

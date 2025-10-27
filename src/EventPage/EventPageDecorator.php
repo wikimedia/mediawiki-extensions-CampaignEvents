@@ -8,19 +8,14 @@ use LogicException;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
-use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -35,12 +30,10 @@ use MediaWiki\Extension\CampaignEvents\Special\SpecialEnableEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialRegisterForEvent;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
-use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
-use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
@@ -68,9 +61,6 @@ class EventPageDecorator {
 	public const SERVICE_NAME = 'CampaignEventsEventPageDecorator';
 
 	private const ADDRESS_MAX_LENGTH = 30;
-	// See T304719#7909758 for how these numbers were chosen
-	private const ORGANIZERS_LIMIT = 4;
-	private const PARTICIPANTS_LIMIT = 10;
 
 	// Constants for the different statuses of a user wrt a given event registration
 	private const USER_STATUS_BLOCKED = 1;
@@ -84,19 +74,13 @@ class EventPageDecorator {
 	private ParticipantsStore $participantsStore;
 	private OrganizersStore $organizersStore;
 	private PermissionChecker $permissionChecker;
-	private LinkRenderer $linkRenderer;
 	private CampaignsPageFactory $campaignsPageFactory;
 	private CampaignsCentralUserLookup $centralUserLookup;
-	private UserLinker $userLinker;
 	private EventTimeFormatter $eventTimeFormatter;
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private EventTypesRegistry $eventTypesRegistry;
 	private GroupPermissionsLookup $groupPermissionsLookup;
 	private Config $config;
-	private EventFormatter $eventFormatter;
 	private CountryProvider $countryProvider;
 
 	private Language $language;
@@ -117,19 +101,13 @@ class EventPageDecorator {
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
 		IMessageFormatterFactory $messageFormatterFactory,
-		LinkRenderer $linkRenderer,
 		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
 		GroupPermissionsLookup $groupPermissionsLookup,
 		Config $config,
-		EventFormatter $eventFormatter,
 		CountryProvider $countryProvider,
 		Language $language,
 		Authority $viewingAuthority,
@@ -139,19 +117,13 @@ class EventPageDecorator {
 		$this->participantsStore = $participantsStore;
 		$this->organizersStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
-		$this->linkRenderer = $linkRenderer;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->centralUserLookup = $centralUserLookup;
-		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->config = $config;
-		$this->eventFormatter = $eventFormatter;
 		$this->countryProvider = $countryProvider;
 
 		$this->language = $language;
@@ -173,7 +145,7 @@ class EventPageDecorator {
 		}
 
 		if ( $registration ) {
-			$this->addRegistrationHeader( $page, $registration );
+			$this->addRegistrationHeader( $registration );
 			$this->eventPageCacheUpdater->adjustCacheForPageWithRegistration( $this->out, $registration );
 		} else {
 			$campaignsPage = $this->campaignsPageFactory->newFromLocalMediaWikiPage( $page );
@@ -247,7 +219,7 @@ class EventPageDecorator {
 		return $layout;
 	}
 
-	private function addRegistrationHeader( ProperPageIdentity $page, ExistingEventRegistration $registration ): void {
+	private function addRegistrationHeader( ExistingEventRegistration $registration ): void {
 		$this->out->getMetadata()->setPreventClickjacking( true );
 		$this->out->enableOOUI();
 		$this->out->addModuleStyles( array_merge(
@@ -286,14 +258,6 @@ class EventPageDecorator {
 		$userStatus = $this->getUserStatus( $registration, $centralUser, $curParticipant );
 
 		$this->out->addHTML( $this->getHeaderElement( $registration, $userStatus ) );
-		$this->out->addHTML(
-			$this->getDetailsDialogContent(
-				$page,
-				$registration,
-				$userStatus,
-				$curParticipant
-			)
-		);
 
 		$aggregationTimestamp = $curParticipant
 			? Utils::getAnswerAggregationTimestamp( $curParticipant, $registration )
@@ -573,395 +537,6 @@ class EventPageDecorator {
 	}
 
 	/**
-	 * Returns the content of the "more details" dialog. Unfortunately, we have to build it here rather then on the
-	 * client side, for the following reasons:
-	 * - There's no way to format dates according to the user preferences (T21992)
-	 * - There's no easy way to get the directionality of a language (T181684)
-	 * - Other utilities are missing (e.g., generating user links)
-	 * - Secondarily, no need to make 3 API requests and worry about them failing.
-	 *
-	 * @param ProperPageIdentity $page
-	 * @param ExistingEventRegistration $registration
-	 * @param int $userStatus One of the self::USER_STATUS_* constants
-	 * @param Participant|null $participant
-	 */
-	private function getDetailsDialogContent(
-		ProperPageIdentity $page,
-		ExistingEventRegistration $registration,
-		int $userStatus,
-		?Participant $participant
-	): string {
-		$eventID = $registration->getID();
-		$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $eventID );
-
-		$eventInfoContainer = $this->getDetailsDialogEventInfo(
-			$page,
-			$registration,
-			$organizersCount,
-			$userStatus
-		);
-		$participantsContainer = $this->getDetailsDialogParticipants(
-			$eventID,
-			$participant,
-			$registration
-		);
-
-		$dialogContent = Html::element(
-			'h2',
-			[ 'class' => 'ext-campaignevents-detailsdialog-header' ],
-			$registration->getName()
-		);
-		$dialogContent .= $this->getDetailsDialogOrganizers(
-			$eventID,
-			$organizersCount
-		);
-		$dialogContent .= Html::rawElement(
-			'div',
-			[ 'class' => 'ext-campaignevents-detailsdialog-body-container' ],
-			$eventInfoContainer . $participantsContainer
-		);
-
-		return Html::rawElement(
-			'div',
-			[ 'id' => 'ext-campaignevents-eventpage-details-dialog-content' ],
-			$dialogContent
-		);
-	}
-
-	private function getDetailsDialogOrganizers(
-		int $eventID,
-		int $organizersCount
-	): string {
-		$partialOrganizers = $this->organizersStore->getEventOrganizers( $eventID, self::ORGANIZERS_LIMIT );
-
-		$organizerElements = [];
-		foreach ( $partialOrganizers as $organizer ) {
-			$organizerElements[] = $this->userLinker->generateUserLinkWithFallback(
-				$this->out,
-				$organizer->getUser(),
-				$this->language->getCode()
-			);
-		}
-		// XXX We need to use OutputPage here because there's no supported way to change the format of
-		// MessageFormatterFactory...
-		$organizersStr = $this->out->msg( 'campaignevents-eventpage-dialog-organizers' )
-			->rawParams( $this->language->commaList( $organizerElements ) )
-			->numParams( count( $organizerElements ) )
-			->escaped();
-		if ( count( $partialOrganizers ) < $organizersCount ) {
-			$organizersStr .= Html::rawElement(
-				'p',
-				[],
-				$this->linkRenderer->makeKnownLink(
-					SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID ),
-					$this->msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-dialog-organizers-view-all' )
-					)
-				)
-			);
-		}
-
-		return Html::rawElement(
-			'div',
-			[ 'class' => 'ext-campaignevents-detailsdialog-organizers' ],
-			$organizersStr
-		);
-	}
-
-	private function getDetailsDialogEventInfo(
-		ProperPageIdentity $page,
-		ExistingEventRegistration $registration,
-		int $organizersCount,
-		int $userStatus
-	): string {
-		$eventInfo = $this->getDetailsDialogDates( $registration );
-		$eventInfo .= $this->getDetailsDialogParticipationOptions(
-			$page,
-			$registration,
-			$organizersCount,
-			$userStatus
-		);
-
-		$eventInfo .= $this->getDetailsDialogEventTypes( $registration->getTypes() );
-
-		if ( $registration->getWikis() ) {
-			$eventInfo .= $this->getDetailsDialogWikis( $registration );
-		}
-
-		$eventTopics = $registration->getTopics();
-		if ( $eventTopics ) {
-			$eventInfo .= $this->getDetailsDialogTopics( $eventTopics );
-		}
-
-		$eventInfo .= $this->getDetailsDialogChat( $page, $registration, $userStatus );
-
-		return Html::rawElement(
-			'div',
-			[ 'class' => 'ext-campaignevents-detailsdialog-eventinfo-container' ],
-			$eventInfo
-		);
-	}
-
-	private function getDetailsDialogDates( ExistingEventRegistration $registration ): string {
-		$formattedStart = $this->eventTimeFormatter->formatStart( $registration, $this->language, $this->viewingUser );
-		$formattedEnd = $this->eventTimeFormatter->formatEnd( $registration, $this->language, $this->viewingUser );
-		$datesMsg = $this->msgFormatter->format(
-			MessageValue::new( 'campaignevents-eventpage-dialog-dates' )->params(
-				$formattedStart->getTimeAndDate(),
-				$formattedStart->getDate(),
-				$formattedStart->getTime(),
-				$formattedEnd->getTimeAndDate(),
-				$formattedEnd->getDate(),
-				$formattedEnd->getTime()
-			)
-		);
-		$formattedTimezone = EventTimeFormatter::wrapTimeZoneForConversion(
-			$this->eventTimeFormatter->formatTimezone( $registration, $this->viewingUser )
-		);
-		// XXX Can't use $msgFormatter due to parse()
-		$timezoneMsg = $this->out->msg( 'campaignevents-eventpage-dialog-timezone' )
-			->params( $formattedTimezone )
-			->parse();
-		return $this->makeDetailsDialogSection(
-			'clock',
-			[
-				new HtmlSnippet( EventTimeFormatter::wrapRangeForConversion( $registration, $datesMsg ) ),
-				( new Tag( 'div' ) )->appendContent( new HtmlSnippet( $timezoneMsg ) )
-			],
-			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-dates-label' )
-			),
-			'',
-			[ 'ext-campaignevents-eventpage-detailsdialog-time' ]
-		);
-	}
-
-	private function getDetailsDialogParticipationOptions(
-		ProperPageIdentity $page,
-		ExistingEventRegistration $registration,
-		int $organizersCount,
-		int $userStatus
-	): string {
-		$participationOptionsElements = [];
-		$onlineEventElements = [];
-		if ( $registration->getParticipationOptions() & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
-			$onlineEventElements[] = ( new Tag( 'h4' ) )
-				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-participation-option-header' ] )
-				->appendContent(
-					$this->msgFormatter->format(
-						MessageValue::new( 'campaignevents-eventpage-dialog-online-label' )
-					) );
-			$meetingURL = $registration->getMeetingURL();
-			if ( $meetingURL === null ) {
-				$linkContent = $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-link-not-available' )
-						->numParams( $organizersCount )
-				);
-			} elseif (
-				$userStatus === self::USER_STATUS_ORGANIZER ||
-				$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
-			) {
-				$linkContent = new HtmlSnippet(
-					$this->linkRenderer->makeExternalLink( $meetingURL, $meetingURL, $page )
-				);
-			} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
-				$linkContent = $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-link-register' )
-				);
-			} elseif ( $userStatus === self::USER_STATUS_BLOCKED ) {
-				$linkContent = $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
-				);
-			} elseif (
-				$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
-				$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
-			) {
-				$linkContent = '';
-			} else {
-				throw new LogicException( "Unexpected user status $userStatus" );
-			}
-			$onlineEventElements[] = ( new Tag( 'p' ) )->appendContent( $linkContent );
-		}
-		if ( $registration->getParticipationOptions() & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
-			$meetingAddress = $registration->getAddress();
-			$addressElement = new Tag( 'p' );
-			$addressElement->addClasses( [ 'ext-campaignevents-eventpage-details-address' ] );
-			if ( $meetingAddress ) {
-				$addressElement->setAttributes( [
-					'dir' => Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' )
-				] );
-				$addressElement->appendContent(
-					$this->eventFormatter->formatAddress(
-						$meetingAddress,
-						$this->language->getCode(),
-						$this->msgFormatter->format(
-							MessageValue::new( 'campaignevents-eventpage-dialog-venue-not-available' )
-								->numParams( $organizersCount )
-						),
-					)
-				);
-			} else {
-				$addressElement->appendContent( $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-venue-not-available' )
-						->numParams( $organizersCount )
-				) );
-			}
-
-			$inPersonLabel = ( new Tag( 'h4' ) )
-				->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-participation-option-header' ] )
-				->appendContent( $this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-in-person-label' )
-				) );
-			$participationOptionsElements[] = $inPersonLabel;
-			$participationOptionsElements[] = $addressElement;
-
-			if ( $onlineEventElements ) {
-				$participationOptionsElements = array_merge( $participationOptionsElements, $onlineEventElements );
-			}
-		} else {
-			$participationOptionsElements = array_merge( $participationOptionsElements, $onlineEventElements );
-		}
-		return $this->makeDetailsDialogSection(
-			'mapPin',
-			$participationOptionsElements,
-			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-participation-options-label' )
-			)
-		);
-	}
-
-	private function getDetailsDialogChat(
-		ProperPageIdentity $page,
-		ExistingEventRegistration $registration,
-		int $userStatus
-	): string {
-		$chatURL = $registration->getChatURL();
-		if ( $chatURL === null ) {
-			$chatURLContent = $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-chat-not-available' )
-			);
-		} elseif (
-			$userStatus === self::USER_STATUS_ORGANIZER ||
-			$userStatus === self::USER_STATUS_PARTICIPANT_CAN_UNREGISTER
-		) {
-			$chatURLContent = new HtmlSnippet(
-				$this->linkRenderer->makeExternalLink( $chatURL, $chatURL, $page )
-			);
-		} elseif ( $userStatus === self::USER_STATUS_CAN_REGISTER ) {
-			$chatURLContent = $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-chat-register' )
-			);
-		} elseif (
-			$userStatus === self::USER_STATUS_BLOCKED
-		) {
-			$chatURLContent = $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-event-details-sensitive-data-message-blocked-user' )
-			);
-		} elseif (
-			$userStatus === self::USER_STATUS_CANNOT_REGISTER_CLOSED ||
-			$userStatus === self::USER_STATUS_CANNOT_REGISTER_ENDED
-		) {
-			$chatURLContent = '';
-		} else {
-			throw new LogicException( "Unexpected user status $userStatus" );
-		}
-
-		if ( $chatURLContent ) {
-			return $this->makeDetailsDialogSection(
-				'speechBubbles',
-				$chatURLContent,
-				$this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-chat-label' )
-				)
-			);
-		}
-		return '';
-	}
-
-	private function getDetailsDialogParticipants(
-		int $eventID,
-		?Participant $participant,
-		ExistingEventRegistration $registration
-	): string {
-		$showPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants(
-			$this->authority,
-			$registration
-		);
-		$participantsCount = $this->participantsStore->getFullParticipantCountForEvent( $eventID );
-		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventID );
-		$participantsList = $this->getParticipantRows(
-			$eventID,
-			$participant,
-			$showPrivateParticipants
-		);
-		$participantsFooter = '';
-		if ( self::PARTICIPANTS_LIMIT < $participantsCount ) {
-			$participantsFooter = $this->getParticipantFooter( $eventID );
-		}
-
-		$privateCountFooter = new Tag();
-		if ( $privateCount > 0 ) {
-			$privateCountFooter->addClasses( [
-				'ext-campaignevents-detailsdialog-private-participants-footer'
-			] );
-			$privateCountIcon = new IconWidget( [
-				'icon' => 'lock'
-			] );
-			$privateCountText = ( new Tag( 'span' ) )
-				->addClasses( [ 'ext-campaignevents-detailsdialog-private-participants-footer-text' ] );
-			$privateCountText->appendContent(
-				$this->msgFormatter->format(
-					MessageValue::new( 'campaignevents-eventpage-dialog-participants-private' )
-						->numParams( $privateCount )
-				)
-			);
-
-			$privateCountFooter->appendContent( [ $privateCountIcon, $privateCountText ] );
-		}
-
-		return $this->makeDetailsDialogSection(
-			'userGroup',
-			[ $participantsList ?: '', $participantsFooter ],
-			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-participants' )
-					->numParams( $participantsCount )
-			),
-			$privateCountFooter
-		);
-	}
-
-	private function getParticipantRows(
-		int $eventID,
-		?Participant $curUserParticipant,
-		bool $showPrivateParticipants
-	): ?Tag {
-		$partialParticipants = $this->participantsStore->getEventParticipants(
-			$eventID,
-			$curUserParticipant ?
-				self::PARTICIPANTS_LIMIT - 1 :
-				self::PARTICIPANTS_LIMIT,
-			null,
-			null,
-			null,
-			$showPrivateParticipants,
-			$curUserParticipant ? [ $curUserParticipant->getUser()->getCentralID() ] : null
-		);
-
-		$orderedParticipants = $curUserParticipant ? [ $curUserParticipant ] : [];
-		$orderedParticipants = array_merge( $orderedParticipants, $partialParticipants );
-		if ( !$orderedParticipants ) {
-			return null;
-		}
-
-		$participantsList = ( new Tag( 'ul' ) )
-			->addClasses( [ 'ext-campaignevents-detailsdialog-participants-list' ] );
-		foreach ( $orderedParticipants as $participant ) {
-			$participantsList->appendContent( $this->getParticipantRow( $participant ) );
-		}
-		return $participantsList;
-	}
-
-	/**
 	 * Returns the "action" element for the header (that are also cloned into the popup). This can be a button for
 	 * managing the event, or one to register for it. Or it can be a widget informing the user that they are already
 	 * registered, with a button to unregister. There can also be no element if the user is not allowed to register.
@@ -1103,144 +678,5 @@ class EventPageDecorator {
 			default:
 				throw new UnexpectedValueException( "Unexpected value $checkRegistrationAllowedVal" );
 		}
-	}
-
-	private function getParticipantFooter( int $eventID ): Tag {
-		$viewParticipantsURL = SpecialPage::getTitleFor( SpecialEventDetails::PAGE_NAME, (string)$eventID )
-			->getLocalURL( [ 'tab' => SpecialEventDetails::PARTICIPANTS_PANEL ] );
-		return new ButtonWidget( [
-			'framed' => false,
-			'flags' => [ 'progressive' ],
-			'label' => $this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-participants-view-list' )
-			),
-			'href' => $viewParticipantsURL,
-		] );
-	}
-
-	private function getParticipantRow( Participant $participant ): Tag {
-		$usernameElement = new HtmlSnippet(
-			$this->userLinker->generateUserLinkWithFallback(
-				$this->out,
-				$participant->getUser(),
-				$this->language->getCode()
-			)
-		);
-
-		$tag = ( new Tag( 'li' ) )
-			->appendContent( $usernameElement );
-
-		if ( $participant->isPrivateRegistration() ) {
-			$this->addPrivateParticipantNotice( $participant, $tag );
-		}
-
-		return $tag;
-	}
-
-	/**
-	 * @param string $icon
-	 * @param string|Tag|array|HtmlSnippet $content
-	 * @param string $label
-	 * @param string|Tag|array $footer
-	 * @param string[] $classes
-	 */
-	private function makeDetailsDialogSection(
-		string $icon,
-		HtmlSnippet|Tag|array|string $content,
-		string $label,
-		Tag|array|string $footer = '',
-		array $classes = []
-	): string {
-		$iconWidget = new IconWidget( [
-			'icon' => $icon,
-			'classes' => [ 'ext-campaignevents-eventpage-detailsdialog-section-icon' ]
-		] );
-		$header = ( new Tag( 'h3' ) )
-			->appendContent( $iconWidget, ( new Tag( 'span' ) )->appendContent( $label ) )
-			->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-section-header' ] );
-
-		$contentTag = ( new Tag( 'div' ) )
-			->appendContent( $content )
-			->addClasses( [ 'ext-campaignevents-eventpage-detailsdialog-section-content', ...$classes ] );
-
-		return (string)( new Tag( 'div' ) )
-			->appendContent( $header, $contentTag, $footer );
-	}
-
-	private function getDetailsDialogWikis( ExistingEventRegistration $registration ): string {
-		$content = $this->eventFormatter->formatWikis(
-			$registration,
-			$this->msgFormatter,
-			$this->wikiLookup,
-			$this->language,
-			$this->linkRenderer,
-			'campaignevents-eventpage-all-wikis',
-			'campaignevents-eventpage-wikis-more',
-		);
-		return $this->makeDetailsDialogSection(
-			$this->wikiLookup->getWikiIcon( $registration->getWikis() ),
-			$content,
-			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-wikis-label' )
-			)
-		);
-	}
-
-	/**
-	 * @param list<string> $eventTopics
-	 */
-	private function getDetailsDialogTopics( array $eventTopics ): string {
-		$localizedTopicNames = array_map(
-			fn ( string $msgKey ): string => $this->out->msg( $msgKey )->escaped(),
-			$this->topicRegistry->getTopicMessages( $eventTopics )
-		);
-		sort( $localizedTopicNames );
-		$content = $this->language->commaList( $localizedTopicNames );
-
-		return $this->makeDetailsDialogSection(
-			'tag',
-			new HtmlSnippet( $content ),
-			$this->msgFormatter->format(
-				MessageValue::new( 'campaignevents-eventpage-dialog-topics-label' )
-			)
-		);
-	}
-
-	/**
-	 * @phan-param list<string> $eventTypes
-	 */
-	private function getDetailsDialogEventTypes( array $eventTypes ): string {
-		$messageKeys = $this->eventTypesRegistry->getTypeMessages( $eventTypes );
-		$localizedEventTypeNames = array_map(
-			fn ( string $msgKey ): string => $this->out->msg( $msgKey )->escaped(),
-			$messageKeys
-		);
-
-		sort( $localizedEventTypeNames );
-		$content = new HtmlSnippet( $this->language->commaList( $localizedEventTypeNames ) );
-
-		return $this->makeDetailsDialogSection(
-			'folderPlaceholder',
-			$content,
-			$this->out->msg( 'campaignevents-eventpage-dialog-event-types-label' )->text()
-		);
-	}
-
-	private function addPrivateParticipantNotice( Participant $participant, Tag $tag ): void {
-		try {
-			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
-		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
-			// Hack: use an invalid username to force unspecified gender
-			$userName = '@';
-		}
-		$labelText = $this->msgFormatter->format(
-			MessageValue::new( 'campaignevents-eventpage-dialog-private-registration-label' )->params( $userName )
-		);
-		$tag->appendContent( new IconWidget( [
-			'icon' => 'lock',
-			'title' => $labelText,
-			'label' => $labelText,
-			'classes' => [ 'ext-campaignevents-event-details-participants-private-icon' ]
-		] ) );
 	}
 }

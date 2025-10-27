@@ -6,21 +6,15 @@ namespace MediaWiki\Extension\CampaignEvents\EventPage;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
-use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
-use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsRegistry;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
-use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Language\Language;
-use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\GroupPermissionsLookup;
@@ -34,19 +28,13 @@ class EventPageDecoratorFactory {
 	private OrganizersStore $organizersStore;
 	private PermissionChecker $permissionChecker;
 	private IMessageFormatterFactory $messageFormatterFactory;
-	private LinkRenderer $linkRenderer;
 	private CampaignsPageFactory $campaignsPageFactory;
 	private CampaignsCentralUserLookup $centralUserLookup;
-	private UserLinker $userLinker;
 	private EventTimeFormatter $eventTimeFormatter;
 	private EventPageCacheUpdater $eventPageCacheUpdater;
 	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private EventTypesRegistry $eventTypesRegistry;
 	private GroupPermissionsLookup $groupPermissionsLookup;
 	private Config $config;
-	private EventFormatter $eventFormatter;
 	private CountryProvider $countryProvider;
 
 	public function __construct(
@@ -55,19 +43,13 @@ class EventPageDecoratorFactory {
 		OrganizersStore $organizersStore,
 		PermissionChecker $permissionChecker,
 		IMessageFormatterFactory $messageFormatterFactory,
-		LinkRenderer $linkRenderer,
 		CampaignsPageFactory $campaignsPageFactory,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker,
 		EventTimeFormatter $eventTimeFormatter,
 		EventPageCacheUpdater $eventPageCacheUpdater,
 		EventQuestionsRegistry $eventQuestionsRegistry,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
 		GroupPermissionsLookup $groupPermissionsLookup,
 		Config $config,
-		EventFormatter $eventFormatter,
 		CountryProvider $countryProvider,
 	) {
 		$this->pageEventLookup = $pageEventLookup;
@@ -75,19 +57,13 @@ class EventPageDecoratorFactory {
 		$this->organizersStore = $organizersStore;
 		$this->permissionChecker = $permissionChecker;
 		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->linkRenderer = $linkRenderer;
 		$this->campaignsPageFactory = $campaignsPageFactory;
 		$this->centralUserLookup = $centralUserLookup;
-		$this->userLinker = $userLinker;
 		$this->eventTimeFormatter = $eventTimeFormatter;
 		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
 		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->config = $config;
-		$this->eventFormatter = $eventFormatter;
 		$this->countryProvider = $countryProvider;
 	}
 
@@ -102,19 +78,13 @@ class EventPageDecoratorFactory {
 			$this->organizersStore,
 			$this->permissionChecker,
 			$this->messageFormatterFactory,
-			$this->linkRenderer,
 			$this->campaignsPageFactory,
 			$this->centralUserLookup,
-			$this->userLinker,
 			$this->eventTimeFormatter,
 			$this->eventPageCacheUpdater,
 			$this->eventQuestionsRegistry,
-			$this->wikiLookup,
-			$this->topicRegistry,
-			$this->eventTypesRegistry,
 			$this->groupPermissionsLookup,
 			$this->config,
-			$this->eventFormatter,
 			$this->countryProvider,
 			$language,
 			$viewingAuthority,

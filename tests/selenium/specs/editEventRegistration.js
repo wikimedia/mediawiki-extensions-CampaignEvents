@@ -2,6 +2,7 @@ import EventPage from '../pageobjects/event.page.js';
 import EventRegistrationPage from '../pageobjects/eventRegistration.page.js';
 import EventUtils from '../EventUtils.js';
 import * as Util from 'wdio-mediawiki/Util';
+import SpecialEventDetailsPage from '../pageobjects/SpecialEventDetails.page.js';
 
 let id;
 
@@ -63,8 +64,11 @@ describe( 'Edit Event Registration', () => {
 			organizer: otherOrganizerName
 		} );
 
-		await EventPage.openMoreDetailsDialog();
-		await expect( await EventPage.eventOrganizers )
+		// Wait for the save to finish before changing page.
+		await expect( await EventPage.registrationUpdatedNotification ).toBeDisplayed();
+
+		await SpecialEventDetailsPage.open( id );
+		await expect( await SpecialEventDetailsPage.organizersList )
 			.toHaveText( await expect.stringContaining( otherOrganizerName ) );
 	} );
 

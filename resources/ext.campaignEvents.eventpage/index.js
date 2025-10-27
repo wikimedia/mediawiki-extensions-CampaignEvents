@@ -4,8 +4,7 @@
 ( function () {
 	'use strict';
 
-	const EventDetailsDialog = require( './EventDetailsDialog.js' ),
-		ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
+	const ConfirmUnregistrationDialog = require( './ConfirmUnregistrationDialog.js' ),
 		ParticipantRegistrationDialog = require( './ParticipantRegistrationDialog.js' ),
 		EnableRegistrationDialog = require( './EnableRegistrationDialog.js' ),
 		ManageRegistrationWidget = require( './ManageRegistrationWidget.js' ),
@@ -22,15 +21,9 @@
 		isNewRegistration = mw.config.get( 'wgCampaignEventsIsNewRegistration' ),
 		isTestRegistration = mw.config.get( 'wgCampaignEventsIsTestRegistration' ),
 		registrationUpdatedWarnings = mw.config.get( 'wgCampaignEventsRegistrationUpdatedWarnings' ),
-		windowManager = new OO.ui.WindowManager(),
-		detailsDialog = new EventDetailsDialog( eventID, userIsParticipant );
+		windowManager = new OO.ui.WindowManager();
 	let confirmUnregistrationDialog,
 		participantRegistrationDialog;
-
-	windowManager.addWindows( [ detailsDialog ] );
-	detailsDialog
-		.on( 'editregistration', handleRegistrationOrEdit )
-		.on( 'cancelregistration', handleCancelRegistration );
 
 	function redirectToLogin() {
 		const currentQuery = new URL( window.location.href ).searchParams;
@@ -251,18 +244,11 @@
 	 * if the wiki timezone was used.
 	 */
 	function setupTimeConversion() {
-		const $headerTime = $( '.ext-campaignevents-eventpage-header-time' ),
-			$dialogTime = $( '.ext-campaignevents-eventpage-detailsdialog-time' );
+		const $headerTime = $( '.ext-campaignevents-eventpage-header-time' );
 		if ( $headerTime.length ) {
 			timeZoneConverter.convert(
 				$headerTime,
 				'campaignevents-eventpage-header-dates'
-			);
-		}
-		if ( $dialogTime.length ) {
-			timeZoneConverter.convert(
-				$dialogTime,
-				'campaignevents-eventpage-dialog-dates'
 			);
 		}
 	}
@@ -318,7 +304,6 @@
 	$( () => {
 		$( document.body ).append( windowManager.$element );
 		replaceManageRegistrationLayout();
-		detailsDialog.populateFooter();
 
 		maybeShowRegistrationSuccessNotification();
 		setupTimeConversion();
@@ -326,10 +311,6 @@
 		$( '.ext-campaignevents-eventpage-register-btn' ).on( 'click', ( e ) => {
 			e.preventDefault();
 			handleRegistrationOrEdit();
-		} );
-		$( '.ext-campaignevents-eventpage-details-btn' ).on( 'click', ( e ) => {
-			e.preventDefault();
-			windowManager.openWindow( detailsDialog );
 		} );
 
 		showEnableRegistrationDialogOnPageCreation();
