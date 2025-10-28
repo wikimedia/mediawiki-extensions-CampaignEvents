@@ -59,6 +59,7 @@
 	"campaignevents-error-invalid-address": "Introduce un enderezo válido.",
 	"campaignevents-error-contribs-tracking-disallowed-country": "Non se poden activar as estatísticas de contribución para o país seleccionado.",
 	"campaignevents-error-contribs-tracking-invalid-type": "As estatísticas de contribución só se poden activar para os eventos cos seguintes tipos: $1",
+	"campaignevents-error-contribs-tracking-no-wikis": "As estatísticas de contribución só se poden activar para os eventos con polo menos un wiki obxectivo.",
 	"campaignevents-error-invalid-chat-url": "Introduce un enderezo URL de conversa válido.",
 	"campaignevents-error-invalid-question-names": "Non se recoñeceron as seguintes preguntas: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Non se permite a inscrición de eventos neste espazo de nomes.",

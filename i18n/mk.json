@@ -59,6 +59,7 @@
 	"campaignevents-error-invalid-address": "Внесете важечка адреса.",
 	"campaignevents-error-contribs-tracking-disallowed-country": "Не можам да овозможам статистика за придонеси од избраната земја.",
 	"campaignevents-error-contribs-tracking-invalid-type": "Статистиката за придонеси може да се овозможи само за настани од следните видови: $1",
+	"campaignevents-error-contribs-tracking-no-wikis": "Статистиката за придонеси може да се овозможи за настани со барем едно целно вики.",
 	"campaignevents-error-invalid-chat-url": "Внесете важечка URL-адреса за разговорот.",
 	"campaignevents-error-invalid-question-names": "Не ги препознав следниве прашања: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Пријавувањето на настани не е дозволено во овој именски простор.",
