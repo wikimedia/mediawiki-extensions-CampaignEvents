@@ -896,8 +896,8 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 				$isBlocked,
 				$userRights,
 				$eventIsLocal,
-				$isStoredOrganizer
 			] = $case;
+			$isStoredOrganizer = $case[6] ?? null;
 
 			// Case 1: User is NOT the author of the contribution
 			// Result should be same as userCanEditRegistration
