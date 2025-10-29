@@ -8,7 +8,7 @@
 	},
 	"campaignevents-desc": "Stellt Funktionen für Organisatoren und Teilnehmer von Veranstaltungen bereit.",
 	"nstab-event": "Veranstaltung",
-	"group-event-organizer": "Veranstaltungsorganisatoren",
+	"group-event-organizer": "Veranstaltungs-Organisatoren",
 	"group-event-organizer-member": "{{GENDER:$1|Veranstaltungsorganisator|Veranstaltungsorganisatorin}}",
 	"grouppage-event-organizer": "{{ns:project}}:Veranstaltungsorganisatoren",
 	"action-campaignevents-enable-registration": "Veranstaltungsanmeldungen ermöglichen",
