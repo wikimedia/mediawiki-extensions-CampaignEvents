@@ -306,13 +306,28 @@ class EventContributionsPager extends CodexTablePager {
 	 */
 	private function formatUsername( stdClass $row ): string {
 		$contrib = $this->contribObjects[$row->cec_id];
+		$isPrivateParticipant = $row->cep_private;
 		$centralUserID = $contrib->getUserId();
 		$centralUser = new CentralUser( $centralUserID );
-		return $this->userLinker->generateUserLinkWithFallback(
+		$html = $this->userLinker->generateUserLinkWithFallback(
 			$this->getContext(),
 			$centralUser,
 			$this->getLanguage()->getCode()
 		);
+		if ( $isPrivateParticipant ) {
+			$icon = new IconWidget( [
+				'icon' => 'lock',
+				'classes' => [ 'ext-campaignevents-contributions-private-participant' ],
+				'title' => $this->msg(
+					'campaignevents-event-details-contributions-private-participant-tooltip'
+				)->text(),
+				'label' => $this->msg(
+					'campaignevents-event-details-contributions-private-participant-tooltip'
+				)->text()
+			] );
+			$html .= ' ' . $icon->toString();
+		}
+		return $html;
 	}
 
 	/**
