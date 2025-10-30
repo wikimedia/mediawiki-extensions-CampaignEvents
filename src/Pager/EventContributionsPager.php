@@ -287,7 +287,7 @@ class EventContributionsPager extends CodexTablePager {
 				'title' => $this->msg( 'campaignevents-event-details-contributions-article-created-tooltip' )->text(),
 				'label' => $this->msg( 'campaignevents-event-details-contributions-article-created-tooltip' )->text()
 			] );
-			$html .= ' ' . $icon->toString();
+			$html = $icon->toString() . ' ' . $html;
 		}
 
 		return $html;
