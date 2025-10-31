@@ -99,28 +99,29 @@ class EventContributionsModule {
 			$includePrivateParticipants
 		);
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $this->output->getLanguage()->getCode() );
+		$language = $this->output->getLanguage();
 
 		$templateData = [
 			'participantsCard' => [
-				'value' => $summaryData->getParticipantsCount(),
+				'value' => $language->formatNum( $summaryData->getParticipantsCount() ),
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-contributions-summary-participants' )
 				)
 			],
 			'wikisEditedCard' => [
-				'value' => $summaryData->getWikisEditedCount(),
+				'value' => $language->formatNum( $summaryData->getWikisEditedCount() ),
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-contributions-summary-wikis-edited' )
 				)
 			],
 			'articlesCreatedCard' => [
-				'value' => $summaryData->getArticlesCreatedCount(),
+				'value' => $language->formatNum( $summaryData->getArticlesCreatedCount() ),
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-contributions-summary-articles-created' )
 				)
 			],
 			'articlesEditedCard' => [
-				'value' => $summaryData->getArticlesEditedCount(),
+				'value' => $language->formatNum( $summaryData->getArticlesEditedCount() ),
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-contributions-summary-articles-edited' )
 				)
