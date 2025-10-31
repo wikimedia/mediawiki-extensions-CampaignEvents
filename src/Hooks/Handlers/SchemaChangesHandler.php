@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use MediaWiki\Extension\CampaignEvents\Maintenance\UpdateCountriesColumn;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Installer\DatabaseUpdater;
 use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
@@ -91,8 +90,6 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			true
 		] );
 
-		$updater->addPostDatabaseUpdateMaintenance( UpdateCountriesColumn::class );
-
 		$updater->addExtensionUpdateOnVirtualDomain( [
 			Utils::VIRTUAL_DB_DOMAIN,
 			'addTable',
@@ -107,6 +104,15 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			'campaign_events',
 			"event_track_contributions",
 			"$dir/$dbType/patch-add-event_track_contributions.sql",
+			true
+		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'dropField',
+			'ce_address',
+			"cea_country",
+			"$dir/$dbType/patch-cleanup-country.sql",
 			true
 		] );
 	}

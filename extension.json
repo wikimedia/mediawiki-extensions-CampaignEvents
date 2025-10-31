@@ -84,7 +84,7 @@
 		},
 		"CampaignEventsCountrySchemaMigrationStage": {
 			"description": "Flag to control the migration to the new country schema (T397476). Value must be one of the MIGRATION_* constants (https://github.com/wikimedia/mediawiki/blob/555fbd0f752bfe8d36de1de97b024e42bc03c84b/includes/Defines.php#L288-L350).",
-			"value": 268436227
+			"value": 805307136
 		},
 		"CampaignEventsEnableContributionTracking": {
 			"description": "Flag to enable contribution tracking feature for associating edits to events",

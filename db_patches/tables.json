@@ -396,22 +396,12 @@
 				}
 			},
 			{
-				"name": "cea_country",
-				"comment": "Event country.",
-				"type": "binary",
-				"options": {
-					"notnull": false,
-					"length": 255
-				}
-			},
-			{
 				"name": "cea_country_code",
 				"comment": "Country code (CLDR) for the event.",
 				"type": "binary",
 				"options": {
-					"notnull": false,
+					"notnull": true,
 					"length": 2,
-					"default": null,
 					"fixed": true
 				}
 			}

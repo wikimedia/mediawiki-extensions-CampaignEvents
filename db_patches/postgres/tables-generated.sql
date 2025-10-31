@@ -80,8 +80,7 @@ CREATE INDEX ceo_user_event ON ce_organizers (ceo_user_id, ceo_event_id);
 CREATE TABLE ce_address (
   cea_id BIGSERIAL NOT NULL,
   cea_full_address TEXT NOT NULL,
-  cea_country TEXT DEFAULT NULL,
-  cea_country_code TEXT DEFAULT NULL,
+  cea_country_code TEXT NOT NULL,
   PRIMARY KEY(cea_id)
 );
 

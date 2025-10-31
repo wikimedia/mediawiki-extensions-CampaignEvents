@@ -144,8 +144,6 @@ class AddressStore {
 			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_OLD ) {
 				$newRow['cea_full_address'] = $fullAddressWithCountry;
 				$newRow['cea_country'] = $address->getCountry();
-			} else {
-				$newRow['cea_country'] = null;
 			}
 			if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW ) {
 				$newRow['cea_full_address'] = $address->getAddressWithoutCountry() ?? '';
@@ -248,7 +246,6 @@ class AddressStore {
 		$addressWithoutCountry = $country = $countryCode = null;
 		if ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_NEW ) {
 			$addressWithoutCountry = $row->cea_full_address;
-			$country = $row->cea_country;
 			$countryCode = $row->cea_country_code;
 		}
 		if ( $countryCode === null && ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_READ_OLD ) ) {

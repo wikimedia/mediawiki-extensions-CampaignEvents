@@ -72,8 +72,7 @@ CREATE TABLE /*_*/ce_organizers (
 CREATE TABLE /*_*/ce_address (
   cea_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
   cea_full_address BLOB NOT NULL,
-  cea_country VARBINARY(255) DEFAULT NULL,
-  cea_country_code BINARY(2) DEFAULT NULL,
+  cea_country_code BINARY(2) NOT NULL,
   INDEX cea_country_code (cea_country_code),
   PRIMARY KEY(cea_id)
 ) /*$wgDBTableOptions*/;
