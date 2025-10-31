@@ -51,7 +51,8 @@ describe( 'Edit Event Registration', () => {
 			countryCode: 'BS'
 		} );
 
-		await expect( await EventPage.headerParticipationOptions ).toHaveText( 'Online and in-person event' );
+		await expect( await EventPage.headerParticipationOptions )
+			.toHaveText( 'Bahamas\nOnline and in-person event' );
 	} );
 
 	it( 'can allow organizer to add an additional organizer', async () => {

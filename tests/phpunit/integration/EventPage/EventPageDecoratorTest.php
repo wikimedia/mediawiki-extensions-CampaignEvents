@@ -8,6 +8,7 @@ use Generator;
 use LogicException;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
@@ -131,6 +132,8 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$registration = $this->createMock( ExistingEventRegistration::class );
 			$deletionTimestamp = $registrationIsDeleted ? '1600000000' : null;
 			$registration->method( 'getDeletionTimestamp' )->willReturn( $deletionTimestamp );
+			$registration->method( 'getParticipationOptions' )
+				->willReturn( EventRegistration::PARTICIPATION_OPTION_ONLINE );
 		} else {
 			$registration = null;
 		}

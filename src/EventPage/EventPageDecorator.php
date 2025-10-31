@@ -455,15 +455,7 @@ class EventPageDecorator {
 		$items = [];
 
 		$participationOptions = $registration->getParticipationOptions();
-		if ( $participationOptions === EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON ) {
-			$participationOptionsContent = $this->out->msg(
-				MessageValue::new( 'campaignevents-eventpage-header-participation-options-online-and-in-person' )
-			)->escaped();
-		} elseif ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
-			$participationOptionsContent = $this->out->msg(
-				MessageValue::new( 'campaignevents-eventpage-header-participation-options-online' )
-			)->escaped();
-		} else {
+		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			// In-person event
 			$address = $registration->getAddress();
 			if ( $address ) {
@@ -495,7 +487,21 @@ class EventPageDecorator {
 					MessageValue::new( 'campaignevents-eventpage-header-participation-options-in-person' )
 				)->escaped();
 			}
+
+			// Add a line about online participation for hybrid events.
+			if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
+				$participationOptionsContent .= $this->out->msg(
+					MessageValue::new( 'campaignevents-eventpage-header-participation-options-online-and-in-person' )
+				)->escaped();
+			}
+		} elseif ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
+			$participationOptionsContent = $this->out->msg(
+				MessageValue::new( 'campaignevents-eventpage-header-participation-options-online' )
+			)->escaped();
+		} else {
+			throw new LogicException( 'There must be at least one participation option' );
 		}
+
 		$items[] = new HtmlSnippet( TextWithIconWidget::build(
 			'map-pin',
 			$this->msgFormatter->format(
