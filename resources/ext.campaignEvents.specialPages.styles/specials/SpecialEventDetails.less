@@ -403,12 +403,11 @@ fieldset.ext-campaignevents-eventdetails-email-form {
 	padding-left: 20px;
 }
 
-.ext-campaignevents-contributions-table .mw-userlink {
-	overflow-wrap: anywhere;
-}
-
-.ext-campaignevents-contributions-table .cdx-table-pager__col--article {
-	overflow-wrap: anywhere;
+.ext-campaignevents-contributions-table {
+	.mw-userlink,
+	td.cdx-table-pager__col--article a {
+		overflow-wrap: anywhere;
+	}
 }
 
 /* Remove parentheses added by mediawiki.special.changeslist around byte deltas */
