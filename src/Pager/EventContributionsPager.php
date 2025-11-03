@@ -51,6 +51,12 @@ class EventContributionsPager extends CodexTablePager {
 	private TemplateParser $templateParser;
 	/** @var array<int,EventContribution> */
 	private array $contribObjects = [];
+	/** @var bool Whether performer can delete all contributions (organizer) */
+	private bool $canDeleteAll = false;
+	/** @var int|null Cached performer central user ID for per-row comparisons */
+	private ?int $performerCentralID = null;
+	/** @var bool Whether current page has at least one deletable contribution for performer */
+	private bool $resultHasDeletableContribution = false;
 	/** @var array<string,mixed> */
 	private array $extraQuery = [];
 
@@ -201,6 +207,22 @@ class EventContributionsPager extends CodexTablePager {
 		$linkBatch = $this->linkBatchFactory->newLinkBatch();
 		$linkBatch->setCaller( __METHOD__ );
 
+		// Prepare permission context once per page
+		// userCanDeleteAllContributions already checks if user is named internally
+		$this->canDeleteAll = $this->permissionChecker->userCanDeleteAllContributions(
+			$this->getAuthority(),
+			$this->event
+		);
+		if ( !$this->canDeleteAll ) {
+			try {
+				$this->performerCentralID = $this->centralUserLookup
+					->newFromAuthority( $this->getAuthority() )
+					->getCentralID();
+			} catch ( UserNotGlobalException ) {
+				$this->performerCentralID = null;
+			}
+		}
+
 		foreach ( $result as $row ) {
 			// For visible names (the vast majority of them), we add them to the cache now so they're not looked up
 			// again later. Deleted/hidden names are not cached because we can't tell which case it is (we use null for
@@ -216,6 +238,11 @@ class EventContributionsPager extends CodexTablePager {
 			if ( WikiMap::isCurrentWikiId( $row->cec_wiki ) ) {
 				$title = $this->titleFactory->newFromTextThrow( $row->cec_page_prefixedtext );
 				$linkBatch->addObj( $title );
+			}
+
+			// Mark if this page has at least one deletable contribution
+			if ( $this->canDeleteAll || ( (int)$row->cec_user_id === $this->performerCentralID ) ) {
+				$this->resultHasDeletableContribution = true;
 			}
 		}
 
@@ -269,8 +296,8 @@ class EventContributionsPager extends CodexTablePager {
 			'bytes' => $this->msg( 'campaignevents-event-details-contributions-bytes' )->text(),
 		];
 
-		// Add actions column if user is named
-		if ( $this->getUser()->isNamed() ) {
+		// Show actions column only if this page has at least one deletable contribution
+		if ( $this->resultHasDeletableContribution ) {
 			$fields['actions'] = $this->msg( 'campaignevents-event-details-contributions-actions' )->text();
 		}
 
@@ -384,13 +411,12 @@ class EventContributionsPager extends CodexTablePager {
 		$contribID = $row->cec_id;
 
 		// Check if user can delete this contribution
-		if (
-			!$this->permissionChecker->userCanDeleteContribution(
-				$this->getUser(),
-				$this->event, $contrib->getUserID()
-			)
-		) {
-			return '';
+		if ( !$this->canDeleteAll ) {
+			$targetUserID = $contrib->getUserID();
+			// Non-organizer can only delete their own contributions
+			if ( $this->performerCentralID === null || $targetUserID !== $this->performerCentralID ) {
+				return '';
+			}
 		}
 
 		// Render Codex CSS-only delete button via mustache template

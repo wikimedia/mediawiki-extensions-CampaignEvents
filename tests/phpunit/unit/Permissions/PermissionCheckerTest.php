@@ -200,6 +200,35 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::userCanDeleteAllContributions
+	 * @dataProvider provideGenericEditPermissions
+	 */
+	public function testUserCanDeleteAllContributions(
+		bool $expected,
+		bool $isLoggedIn,
+		bool $isTemp,
+		bool $isBlocked,
+		$userRights,
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null
+	): void {
+		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		if ( $isStoredOrganizer ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->expects( $this->once() )->method( 'isEventOrganizer' )->willReturn( true );
+		} else {
+			$organizersStore = null;
+		}
+		$permissionsLookup = $this->makePermLookup( $isLoggedIn && !$isTemp, $userRights, $isBlocked );
+		$checker = $this->getPermissionChecker( $organizersStore, null, $permissionsLookup );
+		$this->assertSame(
+			$expected,
+			$checker->userCanDeleteAllContributions( $performer, $event )
+		);
+	}
+
+	/**
 	 * @covers ::userCanEnableRegistration
 	 * @dataProvider provideCanEnableRegistration
 	 */

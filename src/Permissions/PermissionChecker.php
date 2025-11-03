@@ -107,10 +107,22 @@ class PermissionChecker {
 	}
 
 	/**
+	 * Returns whether the performer can delete all contributions for the given event.
+	 *
+	 * A user can delete all contributions if they are an organizer of the event.
+	 */
+	public function userCanDeleteAllContributions(
+		Authority $performer,
+		ExistingEventRegistration $event
+	): bool {
+		return $this->userCanEditRegistration( $performer, $event );
+	}
+
+	/**
 	 * Returns whether the performer can delete a single contribution record for the given event.
 	 *
 	 * A user can delete a contribution if either:
-	 * - is an organizer of the event, or
+	 * - is an organizer of the event (can delete all contributions), or
 	 * - is the author of the contribution.
 	 */
 	public function userCanDeleteContribution(
@@ -129,7 +141,7 @@ class PermissionChecker {
 			return false;
 		}
 
-		return $this->userCanEditRegistration( $performer, $event ) ||
+		return $this->userCanDeleteAllContributions( $performer, $event ) ||
 			( $centralUser->getCentralID() === $contributionAuthorCentralId );
 	}
 
