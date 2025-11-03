@@ -379,6 +379,7 @@
 			"localBasePath": "resources",
 			"remoteExtPath": "CampaignEvents/resources",
 			"styles": [
+				"ext.campaignEvents.specialPages.styles/pagers/EventContributionsPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventsListPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventsTablePager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/InvitationsListPager.less",

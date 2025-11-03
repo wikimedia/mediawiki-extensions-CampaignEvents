@@ -1,0 +1,36 @@
+@import 'mediawiki.skin.variables.less';
+
+.ext-campaignevents-contributions-table {
+	.mw-userlink,
+	td.cdx-table-pager__col--article a {
+		overflow-wrap: anywhere;
+	}
+}
+
+/* Remove parentheses added by mediawiki.special.changeslist around byte deltas */
+.ext-campaignevents-contributions-table .mw-diff-bytes::before,
+.ext-campaignevents-contributions-table .mw-diff-bytes::after {
+	content: '';
+}
+
+// contribution summary styles
+.ext-campaignevents-eventdetails-contributions-summary {
+	display: flex;
+	gap: @spacing-50;
+	margin: @spacing-100 0;
+	// Do not let cards wrap so they don't take up too much vertical space.
+	flex-wrap: nowrap;
+	white-space: nowrap;
+	overflow-x: auto;
+
+	// Make Codex cards inside the container flex to fill the row
+	> .cdx-card {
+		flex: 1 1 auto;
+	}
+
+	// Remove parentheses added by mediawiki.special.changeslist around byte/link deltas in summary cards
+	.mw-diff-bytes::before,
+	.mw-diff-bytes::after {
+		content: '';
+	}
+}
