@@ -11,6 +11,7 @@
 	"enableeventregistration": "Kapabligar registro di eventi",
 	"editeventregistration": "Redaktar registro di evento",
 	"registerforevent": "Enrejistrar por ul evento",
+	"campaignevents-eventslist-delete-dialog-body": "Vu perdos omna datumi pri la registrago, tamen la pagino dil evento ne efacesos.",
 	"campaignevents-eventslist-delete-dialog-cancel": "Anular",
 	"deleteeventregistration": "Efacar registro di evento",
 	"campaignevents-event-details-in-person-event-label": "Evento por direta partopreno",
