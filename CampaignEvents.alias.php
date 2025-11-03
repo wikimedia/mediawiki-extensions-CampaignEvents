@@ -124,6 +124,20 @@ $specialPageAliases['pt'] = [
 	'InvitationList' => [ 'Lista_de_convites' ],
 ];
 
+$specialPageAliases['sk'] = [
+	'EnableEventRegistration' => [ 'PovoliťRegistráciuNaPodujatie' ],
+	'DeleteEventRegistration' => [ 'OdstrániťRegistráciuNaPodujatie' ],
+	'EditEventRegistration' => [ 'UpraviťRegistráciuNaPodujatie' ],
+	'RegisterForEvent' => [ 'RegistrovaťSaNaPodujatie' ],
+	'CancelEventRegistration' => [ 'ZrušiťRegistráciuNaPodujatie' ],
+	'MyEvents' => [ 'MojePodujatia' ],
+	'AllEvents' => [ 'VšetkyPodujatia' ],
+	'EventDetails' => [ 'PodrobnostiPodujatia' ],
+	'GenerateInvitationList' => [ 'VygenerovaťZoznamPozvaných' ],
+	'MyInvitationLists' => [ 'MojeZoznamyPozvaných' ],
+	'InvitationList' => [ 'ZoznamPozvaných' ],
+];
+
 $specialPageAliases['zh'] = [
 	'EnableEventRegistration' => [ 'EnableEventRegistration' ],
 	'DeleteEventRegistration' => [ 'DeleteEventRegistration' ],
