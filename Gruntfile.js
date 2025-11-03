@@ -13,7 +13,10 @@ module.exports = function ( grunt ) {
 				fix: grunt.option( 'fix' ),
 				maxWarnings: 0
 			},
-			all: '.'
+			all: [
+				'**/*.{js,json,vue}',
+				'!{node_modules,vendor,coverage,tests/selenium/log}/**'
+			]
 		},
 		stylelint: {
 			options: {
@@ -21,8 +24,7 @@ module.exports = function ( grunt ) {
 			},
 			all: [
 				'**/*.{css,less}',
-				'!node_modules/**',
-				'!vendor/**'
+				'!{node_modules,vendor,coverage,tests/selenium/log}/**'
 			]
 		},
 		banana: conf.MessagesDirs
