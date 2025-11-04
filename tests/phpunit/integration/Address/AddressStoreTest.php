@@ -144,17 +144,6 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			0,
 			null,
 		];
-		yield "No previous row, address, no country code" => [
-			$eventWithoutAddress,
-			new Address( $newTestAddress, null ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => "$newTestAddress \n ",
-				'cea_country_code' => null,
-			],
-			'Need the country code',
-		];
 		yield "No previous row, country code, no address" => [
 			$eventWithoutAddress,
 			new Address( null, $newTestCountryCode ),
@@ -183,17 +172,6 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			null,
 			0,
 			null,
-		];
-		yield "Replace previous row, address, no country code" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( $newTestAddress, null ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => "$newTestAddress \n ",
-				'cea_country_code' => null,
-			],
-			'Need the country code',
 		];
 		yield "Replace previous row, country code, no address" => [
 			self::EVENT_WITH_ADDRESS,

@@ -60,10 +60,6 @@ class EventFormatterTest extends MediaWikiUnitTestCase {
 		$countryItalian = self::TEST_COUNTRY_NAMES['it'][$countryCode];
 		$noAddressMessageKey = self::NO_ADDRESS_MESSAGE_KEY;
 
-		yield 'Address, no country code' => [
-			new Address( $address, null ),
-			"$address\n",
-		];
 		yield 'Country code, no address' => [
 			new Address( null, $countryCode ),
 			"$countryEnglish\n$noAddressMessageKey",

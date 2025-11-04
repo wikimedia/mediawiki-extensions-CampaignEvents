@@ -439,12 +439,9 @@ class EventPageDecorator {
 					);
 				}
 
-				$countryCode = $address->getCountryCode();
-				if ( $countryCode ) {
-					$formattedCountry = $this->countryProvider
-						->getCountryName( $countryCode, $this->language->getCode() );
-					$participationOptionsContent .= Html::element( 'div', [], $formattedCountry );
-				}
+				$formattedCountry = $this->countryProvider
+					->getCountryName( $address->getCountryCode(), $this->language->getCode() );
+				$participationOptionsContent .= Html::element( 'div', [], $formattedCountry );
 			} else {
 				$participationOptionsContent = $this->out->msg(
 					MessageValue::new( 'campaignevents-eventpage-header-participation-options-in-person' )

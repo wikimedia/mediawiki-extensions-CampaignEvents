@@ -25,7 +25,6 @@ use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\ToolNotFoundException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
-use MediaWiki\Language\RawMessage;
 use MediaWiki\Message\Message;
 use MediaWiki\Utils\MWTimestamp;
 use StatusValue;
@@ -201,7 +200,7 @@ class EventFactory {
 				$meetingAddress
 			)
 		);
-		if ( $meetingAddress !== null || $meetingCountryCode !== null ) {
+		if ( $meetingCountryCode !== null ) {
 			$address = new Address( $meetingAddress, $meetingCountryCode );
 		} else {
 			$address = null;
@@ -590,12 +589,8 @@ class EventFactory {
 		?string $address
 	): StatusValue {
 		$res = StatusValue::newGood();
-		if ( $countryCode !== null && !$this->countryProvider->isValidCountryCode( $countryCode ) ) {
+		if ( $countryCode === null || !$this->countryProvider->isValidCountryCode( $countryCode ) ) {
 			$res->error( 'campaignevents-error-invalid-country-code' );
-		}
-		if ( $countryCode === null ) {
-			// Temporary error message.
-			$res->error( new RawMessage( 'The country code is required.' ) );
 		}
 		if ( $address === '' ) {
 			$res->error( 'campaignevents-error-invalid-address' );

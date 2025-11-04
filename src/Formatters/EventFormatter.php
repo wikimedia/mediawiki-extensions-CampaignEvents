@@ -77,12 +77,7 @@ class EventFormatter {
 		string $languageCode,
 		?string $noAddressMsg = null
 	): string {
-		$countryCode = $address->getCountryCode();
-		if ( $countryCode ) {
-			$countryString = $this->countryProvider->getCountryName( $countryCode, $languageCode );
-		} else {
-			$countryString = '';
-		}
+		$countryString = $this->countryProvider->getCountryName( $address->getCountryCode(), $languageCode );
 		$addressWithoutCountry = $address->getAddressWithoutCountry();
 		if ( $addressWithoutCountry === null || $addressWithoutCountry === '' ) {
 			$output = $countryString;

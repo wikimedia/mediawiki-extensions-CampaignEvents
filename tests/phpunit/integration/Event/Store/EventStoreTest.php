@@ -172,13 +172,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			$baseCtrArgs
 		];
 
-		yield 'Event with only address' => [
-			array_replace(
-				$baseCtrArgs,
-				[ 'Address' => new Address( 'Some address', null ) ]
-			),
-		];
-
 		yield 'Event with only country' => [
 			array_replace(
 				$baseCtrArgs,

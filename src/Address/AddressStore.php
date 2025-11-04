@@ -29,10 +29,6 @@ class AddressStore {
 		?Address $address,
 		int $eventID
 	): void {
-		if ( $address && $address->getCountryCode() === null ) {
-			// Temporary
-			throw new RuntimeException( 'Need the country code' );
-		}
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$where = [ 'ceea_event' => $eventID ];
@@ -97,10 +93,6 @@ class AddressStore {
 	 * or insert a new entry.
 	 */
 	public function acquireAddressID( Address $address ): int {
-		if ( $address->getCountryCode() === null ) {
-			// Temporary
-			throw new RuntimeException( 'Need the country code' );
-		}
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		// TODO This query is not indexed; for the future we will need to use some indexed field (like unique

@@ -356,7 +356,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			] )
 		];
 		yield 'In person meeting without country code' => [
-			'rawmessage',
+			'campaignevents-error-invalid-country-code',
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'countrycode' => null,

@@ -462,11 +462,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'type' => 'select',
 			'label-message' => 'campaignevents-edit-field-country',
 			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
-			// NOTE: If we have no country code (because the row is still in the old format, we will lose data here
-			// by forcing the default. However, the field is required, so the organizer will still need to choose a
-			// country code before saving, and they can match the existing free-text value. This is preferable to
-			// just preventing the edit until the row has been migrated, or to try and match the country in
-			// real-time as done in the migration script (which is potentially expensive).
 			'default' => $address ? $address->getCountryCode() : '',
 			'options' => $countryOptions,
 			'required' => true,
