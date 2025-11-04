@@ -53,7 +53,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'topics' => [ 'atopic', 'btopic' ],
 		'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 		'meetingurl' => 'https://meetingurl.example.org',
-		'country' => 'France',
 		'countrycode' => 'FR',
 		'address' => 'Address',
 		'tracksContributions' => false,
@@ -343,7 +342,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'meetingurl' => null,
-				'country' => null,
 				'countrycode' => null,
 				'address' => null,
 			] )
@@ -353,7 +351,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'meetingurl' => 'Not a URL',
-				'country' => null,
 				'countrycode' => null,
 				'address' => null,
 			] )
@@ -362,7 +359,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'rawmessage',
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
-				'country' => 'France',
 				'countrycode' => null,
 				'meetingurl' => null,
 			] )
@@ -372,15 +368,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
 				'address' => null,
-				'meetingurl' => null,
-			] )
-		];
-		yield 'In person meeting with empty country text' => [
-			'campaignevents-error-invalid-country',
-			self::getTestDataWithDefault( [
-				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_IN_PERSON,
-				'country' => '',
-				'countrycode' => 'FR',
 				'meetingurl' => null,
 			] )
 		];
@@ -413,16 +400,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => 'Explicitly set',
-				'country' => null,
-				'countrycode' => null,
-			] )
-		];
-		yield 'Online meeting with country text' => [
-			'campaignevents-error-countryoraddress-not-in-person',
-			self::getTestDataWithDefault( [
-				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
-				'address' => null,
-				'country' => 'Explicitly set',
 				'countrycode' => null,
 			] )
 		];
@@ -431,7 +408,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			self::getTestDataWithDefault( [
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
-				'country' => null,
 				'countrycode' => self::VALID_COUNTRY_CODE,
 			] )
 		];
@@ -459,7 +435,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'tracksContributions' => true,
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
-				'country' => null,
 				'countrycode' => null,
 				'types' => [ 'editing-event' ],
 			] )
@@ -479,7 +454,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'tracksContributions' => true,
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
-				'country' => null,
 				'countrycode' => null,
 				'types' => [ 'conference' ],
 			] )
@@ -490,7 +464,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'tracksContributions' => true,
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
-				'country' => null,
 				'countrycode' => null,
 				'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
 			] )
@@ -501,7 +474,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'tracksContributions' => true,
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
-				'country' => null,
 				'countrycode' => null,
 				'types' => [ 'conference', 'editing-event' ],
 			] )
@@ -514,7 +486,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'wikis' => [],
 				'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE,
 				'address' => null,
-				'country' => null,
 				'countrycode' => null,
 				'types' => [ 'conference', 'editing-event' ],
 			] )

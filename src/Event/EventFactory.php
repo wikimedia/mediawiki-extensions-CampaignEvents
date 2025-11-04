@@ -48,11 +48,10 @@ class EventFactory {
 	public const MAX_WIKIS = 100;
 
 	/**
-	 * Constants for limiting the length of country and address. These are intentionally quite high and shouldn't be
-	 * hit under normal circumstances. So, we just truncate the given strings instead of displaying an error. For the
-	 * same reason, we use bytes and not more sensible units like characters or graphemes.
+	 * Maximum length of addresses. This is intentionally quite high and shouldn't be hit under normal circumstances.
+	 * So, we just truncate the given strings instead of displaying an error. For the same reason, we use bytes and
+	 * not more sensible units like characters or graphemes.
 	 */
-	public const COUNTRY_MAXLENGTH_BYTES = 255;
 	public const ADDRESS_MAXLENGTH_BYTES = 8192;
 	public const MAX_TOPICS = 5;
 
@@ -111,7 +110,6 @@ class EventFactory {
 	 * @param string[] $topics
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
-	 * @param string|null $meetingCountry
 	 * @param string|null $meetingCountryCode
 	 * @param string|null $meetingAddress
 	 * @param bool $hasContributionTracking
@@ -142,7 +140,6 @@ class EventFactory {
 		array $topics,
 		int $participationOptions,
 		?string $meetingURL,
-		?string $meetingCountry,
 		?string $meetingCountryCode,
 		?string $meetingAddress,
 		bool $hasContributionTracking,
@@ -199,14 +196,13 @@ class EventFactory {
 		$res->merge(
 			$this->validateMeetingInfo(
 				$participationOptions,
-					$meetingURL,
-				$meetingCountry,
+				$meetingURL,
 				$meetingCountryCode,
 				$meetingAddress
 			)
 		);
-		if ( $meetingCountry !== null || $meetingAddress !== null || $meetingCountryCode !== null ) {
-			$address = new Address( $meetingAddress, $meetingCountry, $meetingCountryCode );
+		if ( $meetingAddress !== null || $meetingCountryCode !== null ) {
+			$address = new Address( $meetingAddress, null, $meetingCountryCode );
 		} else {
 			$address = null;
 		}
@@ -517,8 +513,7 @@ class EventFactory {
 	private function validateMeetingInfo(
 		int $participationOptions,
 		?string &$meetingURL,
-		?string &$meetingCountry,
-		?string &$meetingCountryCode,
+		?string $meetingCountryCode,
 		?string &$meetingAddress
 	): StatusValue {
 		$res = StatusValue::newGood();
@@ -541,14 +536,11 @@ class EventFactory {
 		}
 
 		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
-			if ( $meetingCountry !== null ) {
-				$meetingCountry = mb_strcut( trim( $meetingCountry ), 0, self::COUNTRY_MAXLENGTH_BYTES );
-			}
 			if ( $meetingAddress !== null ) {
 				$meetingAddress = mb_strcut( trim( $meetingAddress ), 0, self::ADDRESS_MAXLENGTH_BYTES );
 			}
-			$res->merge( $this->validateLocation( $meetingCountry, $meetingCountryCode, $meetingAddress ) );
-		} elseif ( $meetingCountry !== null || $meetingCountryCode !== null || $meetingAddress !== null ) {
+			$res->merge( $this->validateLocation( $meetingCountryCode, $meetingAddress ) );
+		} elseif ( $meetingCountryCode !== null || $meetingAddress !== null ) {
 			$res->error( 'campaignevents-error-countryoraddress-not-in-person' );
 		}
 		return $res;
@@ -594,14 +586,10 @@ class EventFactory {
 	}
 
 	private function validateLocation(
-		?string $country,
 		?string $countryCode,
 		?string $address
 	): StatusValue {
 		$res = StatusValue::newGood();
-		if ( $country === '' ) {
-			$res->error( 'campaignevents-error-invalid-country' );
-		}
 		if ( $countryCode !== null && !$this->countryProvider->isValidCountryCode( $countryCode ) ) {
 			$res->error( 'campaignevents-error-invalid-country-code' );
 		}

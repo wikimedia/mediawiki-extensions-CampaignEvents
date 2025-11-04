@@ -53,7 +53,6 @@
 	"campaignevents-error-invalid-meeting-url": "Enter a valid event meeting URL.",
 	"campaignevents-error-meeting-url-not-online": "The meeting URL must not be specified if the event is not online.",
 	"campaignevents-error-countryoraddress-not-in-person": "The meeting country and address must not be specified if the event is not in-person.",
-	"campaignevents-error-invalid-country": "Enter a valid country name.",
 	"campaignevents-error-invalid-country-code": "Enter a valid country code.",
 	"campaignevents-error-invalid-address": "Enter a valid address.",
 	"campaignevents-error-contribs-tracking-disallowed-country": "Contribution statistics cannot be enabled for the selected country.",

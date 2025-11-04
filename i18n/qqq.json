@@ -60,7 +60,6 @@
 	"campaignevents-error-invalid-meeting-url": "Error message used when the given event meeting URL is invalid.",
 	"campaignevents-error-meeting-url-not-online": "Error message used when an event meeting URL is provided but the event is not online.",
 	"campaignevents-error-countryoraddress-not-in-person": "Error message used when an event meeting country or address is provided but the event is not in-person.",
-	"campaignevents-error-invalid-country": "Error message used when the given event country is invalid.",
 	"campaignevents-error-invalid-country-code": "Error message used when the given event country code is invalid.",
 	"campaignevents-error-invalid-address": "Error message used when the given event address URL is invalid.",
 	"campaignevents-error-contribs-tracking-disallowed-country": "Error message used when trying to enable contribution statistics for an in-person event in a country where contribution tracking isn't allowed.",

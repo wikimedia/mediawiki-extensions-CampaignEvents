@@ -812,7 +812,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['Topics'] ?? [],
 				$participationOptions,
 				$meetingURL,
-				null,
 				$meetingCountryCode,
 				$meetingAddress,
 				$tracksContributions,
