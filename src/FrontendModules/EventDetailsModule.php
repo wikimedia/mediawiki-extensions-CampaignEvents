@@ -545,30 +545,20 @@ class EventDetailsModule {
 					MessageValue::new( 'campaignevents-event-details-in-person-event-label' )
 				) );
 
-			$meetingAddress = $this->registration->getAddress();
-			if ( $meetingAddress ) {
-				$stringDir = Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' );
-				$formattedAddress = $this->eventFormatter->formatAddress(
-					$meetingAddress,
-					$this->language->getCode(),
-					$this->msgFormatter->format(
-						MessageValue::new( 'campaignevents-event-details-venue-not-available' )->numParams(
-							$organizersCount
-						)
+			$meetingAddress = $this->registration->getAddressOrThrow();
+			$stringDir = Utils::guessStringDirection( $meetingAddress->getAddressWithoutCountry() ?? '' );
+			$formattedAddress = $this->eventFormatter->formatAddress(
+				$meetingAddress,
+				$this->language->getCode(),
+				$this->msgFormatter->format(
+					MessageValue::new( 'campaignevents-event-details-venue-not-available' )->numParams(
+						$organizersCount
 					)
-				);
-				$items[] = ( new Tag( 'div' ) )
-					->appendContent( $formattedAddress )
-					->setAttributes( [ 'dir' => $stringDir ] );
-			} else {
-				$items[] = ( new Tag( 'div' ) )
-					->appendContent(
-						$this->msgFormatter->format(
-							MessageValue::new( 'campaignevents-event-details-venue-not-available' )
-								->numParams( $organizersCount )
-						)
-					);
-			}
+				)
+			);
+			$items[] = ( new Tag( 'div' ) )
+				->appendContent( $formattedAddress )
+				->setAttributes( [ 'dir' => $stringDir ] );
 		}
 
 		if ( $participationOptions & ExistingEventRegistration::PARTICIPATION_OPTION_ONLINE ) {

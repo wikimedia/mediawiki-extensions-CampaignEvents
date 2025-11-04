@@ -28,7 +28,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string[] $topics
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
-	 * @param Address|null $address
+	 * @param Address|null $address Required when $participationOptions contains self::PARTICIPATION_OPTION_IN_PERSON
 	 * @param bool $hasContributionTracking
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools

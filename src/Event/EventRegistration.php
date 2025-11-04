@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use DateTime;
 use DateTimeZone;
+use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
@@ -82,7 +83,7 @@ class EventRegistration {
 	 * @param string[] $topics
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
-	 * @param Address|null $address
+	 * @param Address|null $address Required when $participationOptions contains self::PARTICIPATION_OPTION_IN_PERSON
 	 * @param bool $hasContributionTracking
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
@@ -136,6 +137,9 @@ class EventRegistration {
 			'$trackingTools',
 			'Should not have more than one tracking tool'
 		);
+		if ( $participationOptions & self::PARTICIPATION_OPTION_IN_PERSON ) {
+			Assert::parameter( $address !== null, '$address', 'In-person and hybrid events must have an Address' );
+		}
 		$this->id = $id;
 		$this->name = $name;
 		$this->page = $page;
@@ -251,6 +255,18 @@ class EventRegistration {
 	}
 
 	public function getAddress(): ?Address {
+		return $this->address;
+	}
+
+	/**
+	 * Returns the event address if there is one, throwing an exception otherwise. This is only meant to be used when
+	 * the caller has made sure that an address is set, for example by checking the participation options and verifying
+	 * that the self::PARTICIPATION_OPTION_IN_PERSON bit is set.
+	 */
+	public function getAddressOrThrow(): Address {
+		if ( !$this->address ) {
+			throw new LogicException( 'Called on event without address.' );
+		}
 		return $this->address;
 	}
 

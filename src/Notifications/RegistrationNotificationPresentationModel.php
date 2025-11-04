@@ -203,21 +203,19 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 				'campaignevents-notification-registration-details-participation-option-in-person-header'
 			)->text();
 			$ret .= Html::element( 'h3', [], $inPersonEventHeader );
-			$address = $this->eventRegistration->getAddress();
+			$address = $this->eventRegistration->getAddressOrThrow();
 			$organizersCount = $this->organizersStore->getOrganizerCountForEvent( $this->eventRegistration->getID() );
-			if ( $address ) {
-				$ret .= Html::element(
-					'p',
-					[ 'style' => 'white-space: pre-wrap' ],
-					$this->eventFormatter->formatAddress(
-						$address,
-						$this->language->getCode(),
-						$this->msg( 'campaignevents-notification-registration-details-venue-not-available' )
-							->numParams( $organizersCount )
-							->text()
-					)
-				);
-			}
+			$ret .= Html::element(
+				'p',
+				[ 'style' => 'white-space: pre-wrap' ],
+				$this->eventFormatter->formatAddress(
+					$address,
+					$this->language->getCode(),
+					$this->msg( 'campaignevents-notification-registration-details-venue-not-available' )
+						->numParams( $organizersCount )
+						->text()
+				)
+			);
 		}
 
 		return $ret;

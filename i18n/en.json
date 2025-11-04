@@ -212,7 +212,6 @@
 	"campaignevents-unregister-registration-deleted": "You cannot cancel your event registration because it was deleted.",
 	"campaignevents-eventpage-header-participation-options-label": "Participation options",
 	"campaignevents-eventpage-header-participation-options-online": "Online event",
-	"campaignevents-eventpage-header-participation-options-in-person": "In-person event",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Online and in-person event",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Timezone:</strong> $1",

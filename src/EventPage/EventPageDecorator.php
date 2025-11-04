@@ -421,32 +421,26 @@ class EventPageDecorator {
 		$participationOptions = $registration->getParticipationOptions();
 		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
 			// In-person event
-			$address = $registration->getAddress();
-			if ( $address ) {
-				// Unlike other places, here we want the address without country to be on a single line, and truncate it
-				// if necessary; and then a separate line for the country.
-				$participationOptionsContent = '';
-				$addressWithoutCountry = $address->getAddressWithoutCountry();
-				if ( $addressWithoutCountry ) {
-					$oneLinedAddress = strtr( $addressWithoutCountry, "\n", ' ' );
-					$participationOptionsContent .= Html::element(
-						'div',
-						[
-							'dir' => Utils::guessStringDirection( $addressWithoutCountry ),
-							'class' => [ 'ext-campaignevents-eventpage-header-address' ]
-						],
-						$this->language->truncateForVisual( $oneLinedAddress, self::ADDRESS_MAX_LENGTH )
-					);
-				}
-
-				$formattedCountry = $this->countryProvider
-					->getCountryName( $address->getCountryCode(), $this->language->getCode() );
-				$participationOptionsContent .= Html::element( 'div', [], $formattedCountry );
-			} else {
-				$participationOptionsContent = $this->out->msg(
-					MessageValue::new( 'campaignevents-eventpage-header-participation-options-in-person' )
-				)->escaped();
+			$address = $registration->getAddressOrThrow();
+			// Unlike other places, here we want the address without country to be on a single line, and truncate it
+			// if necessary; and then a separate line for the country.
+			$participationOptionsContent = '';
+			$addressWithoutCountry = $address->getAddressWithoutCountry();
+			if ( $addressWithoutCountry ) {
+				$oneLinedAddress = strtr( $addressWithoutCountry, "\n", ' ' );
+				$participationOptionsContent .= Html::element(
+					'div',
+					[
+						'dir' => Utils::guessStringDirection( $addressWithoutCountry ),
+						'class' => [ 'ext-campaignevents-eventpage-header-address' ]
+					],
+					$this->language->truncateForVisual( $oneLinedAddress, self::ADDRESS_MAX_LENGTH )
+				);
 			}
+
+			$formattedCountry = $this->countryProvider
+				->getCountryName( $address->getCountryCode(), $this->language->getCode() );
+			$participationOptionsContent .= Html::element( 'div', [], $formattedCountry );
 
 			// Add a line about online participation for hybrid events.
 			if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) {
