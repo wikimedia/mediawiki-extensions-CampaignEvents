@@ -144,9 +144,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			0,
 			null,
 		];
-		yield "No previous row, address, no country, no country code" => [
+		yield "No previous row, address, no country code" => [
 			$eventWithoutAddress,
-			new Address( $newTestAddress, null, null ),
+			new Address( $newTestAddress, null ),
 			1,
 			(object)[
 				'cea_id' => self::NEXT_ADDRESS_ID,
@@ -155,20 +155,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			'Need the country code',
 		];
-		yield "No previous row, country, no country code, no address" => [
+		yield "No previous row, country code, no address" => [
 			$eventWithoutAddress,
-			new Address( null, $newTestCountry, null ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => " \n $newTestCountry",
-				'cea_country_code' => null,
-			],
-			'Need the country code',
-		];
-		yield "No previous row, country code, no country, no address" => [
-			$eventWithoutAddress,
-			new Address( null, null, $newTestCountryCode ),
+			new Address( null, $newTestCountryCode ),
 			1,
 			(object)[
 				'cea_id' => self::NEXT_ADDRESS_ID,
@@ -177,42 +166,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			null,
 		];
-		yield "No previous row, address and country, no country code" => [
+		yield "No previous row, address and country code" => [
 			$eventWithoutAddress,
-			new Address( $newTestAddress, $newTestCountry, null ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => "$newTestAddress \n $newTestCountry",
-				'cea_country_code' => null,
-			],
-			'Need the country code',
-		];
-		yield "No previous row, address and country code, no country" => [
-			$eventWithoutAddress,
-			new Address( $newTestAddress, null, $newTestCountryCode ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => $newTestAddress,
-				'cea_country_code' => $newTestCountryCode,
-			],
-			null,
-		];
-		yield "No previous row, country and country code, no address" => [
-			$eventWithoutAddress,
-			new Address( null, $newTestCountry, $newTestCountryCode ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => '',
-				'cea_country_code' => $newTestCountryCode,
-			],
-			null,
-		];
-		yield "No previous row, address, country, and country code" => [
-			$eventWithoutAddress,
-			new Address( $newTestAddress, $newTestCountry, $newTestCountryCode ),
+			new Address( $newTestAddress, $newTestCountryCode ),
 			1,
 			(object)[
 				'cea_id' => self::NEXT_ADDRESS_ID,
@@ -228,9 +184,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			0,
 			null,
 		];
-		yield "Replace previous row, address, no country, no country code" => [
+		yield "Replace previous row, address, no country code" => [
 			self::EVENT_WITH_ADDRESS,
-			new Address( $newTestAddress, null, null ),
+			new Address( $newTestAddress, null ),
 			1,
 			(object)[
 				'cea_id' => self::NEXT_ADDRESS_ID,
@@ -239,20 +195,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			'Need the country code',
 		];
-		yield "Replace previous row, country, no country code, no address" => [
+		yield "Replace previous row, country code, no address" => [
 			self::EVENT_WITH_ADDRESS,
-			new Address( null, $newTestCountry, null ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => " \n $newTestCountry",
-				'cea_country_code' => null,
-			],
-			'Need the country code',
-		];
-		yield "Replace previous row, country code, no country, no address" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( null, null, $newTestCountryCode ),
+			new Address( null, $newTestCountryCode ),
 			1,
 			(object)[
 				'cea_id' => self::NEXT_ADDRESS_ID,
@@ -261,42 +206,9 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			null,
 		];
-		yield "Replace previous row, address and country, no country code" => [
+		yield "Replace previous row, address and country code" => [
 			self::EVENT_WITH_ADDRESS,
-			new Address( $newTestAddress, $newTestCountry, null ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => "$newTestAddress \n $newTestCountry",
-				'cea_country_code' => null,
-			],
-			'Need the country code',
-		];
-		yield "Replace previous row, address and country code, no country" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( $newTestAddress, null, $newTestCountryCode ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => $newTestAddress,
-				'cea_country_code' => $newTestCountryCode,
-			],
-			null,
-		];
-		yield "Replace previous row, country and country code, no address" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( null, $newTestCountry, $newTestCountryCode ),
-			1,
-			(object)[
-				'cea_id' => self::NEXT_ADDRESS_ID,
-				'cea_full_address' => '',
-				'cea_country_code' => $newTestCountryCode,
-			],
-			null,
-		];
-		yield "Replace previous row, address, country and country code" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( $newTestAddress, $newTestCountry, $newTestCountryCode ),
+			new Address( $newTestAddress, $newTestCountryCode ),
 			1,
 			(object)[
 				'cea_id' => self::NEXT_ADDRESS_ID,
@@ -306,50 +218,17 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			null,
 		];
 
-		yield "Same as previous row with address and country, pass country but not code" => [
+		yield "Same as previous row with address and country" => [
 			self::EVENT_WITH_ADDRESS,
-			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, null ),
-			1,
-			(object)self::getStoredAddressRow(),
-			'Need the country code',
-		];
-		yield "Same as previous row with address and country, pass country code but not country" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( self::STORED_ADDRESS, null, self::STORED_COUNTRY_CODE ),
-			1,
-			(object)self::getStoredAddressRow(),
-			null,
-		];
-		yield "Same as previous row with address and country, pass country and country code" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, self::STORED_COUNTRY_CODE ),
+			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY_CODE ),
 			1,
 			(object)self::getStoredAddressRow(),
 			null,
 		];
 
-		yield "Same as previous row without address, pass country but not code" => [
+		yield "Same as previous row without address" => [
 			self::EVENT_WITH_ADDRESS,
-			new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS, null ),
-			1,
-			(object)self::getStoredRowWithoutAddress(),
-			'Need the country code',
-		];
-		yield "Same as previous row without address, pass country code but not country" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address( null, null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
-			1,
-			// This works because we hardcode the English name.
-			(object)self::getStoredRowWithoutAddress(),
-			null,
-		];
-		yield "Same as previous row without address, pass country and country code" => [
-			self::EVENT_WITH_ADDRESS,
-			new Address(
-				null,
-				self::STORED_COUNTRY_WITHOUT_ADDRESS,
-				self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS
-			),
+			new Address( null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
 			1,
 			(object)self::getStoredRowWithoutAddress(),
 			null,
@@ -375,87 +254,32 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public static function provideAcquireAddressID(): Generator {
-		yield "Existing full address, pass country and country code" => [
-			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, self::STORED_COUNTRY_CODE ),
-			self::STORED_ADDRESS_ID,
-			null,
-		];
-		yield "Existing full address, pass country but no country code" => [
-			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, null ),
-			self::STORED_ADDRESS_ID,
-			'Need the country code',
-		];
-		yield "Existing full address, pass country code but no country" => [
-			new Address( self::STORED_ADDRESS, null, self::STORED_COUNTRY_CODE ),
+		yield "Existing full address" => [
+			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY_CODE ),
 			self::STORED_ADDRESS_ID,
 			null,
 		];
 
-		yield "Existing address but with different country, pass country and country code" => [
-			new Address( self::STORED_ADDRESS, 'Egypt', 'EG' ),
-			self::NEXT_ADDRESS_ID,
-			null,
-		];
-		yield "Existing address but with different country, pass country but no country code" => [
-			new Address( self::STORED_ADDRESS, 'Egypt', null ),
-			self::NEXT_ADDRESS_ID,
-			'Need the country code',
-		];
-		yield "Existing address but with different country, pass country code but no country" => [
-			new Address( self::STORED_ADDRESS, null, 'EG' ),
+		yield "Existing address but with different country" => [
+			new Address( self::STORED_ADDRESS, 'EG' ),
 			self::NEXT_ADDRESS_ID,
 			null,
 		];
 
-		yield "Existing country without address, pass country and country code" => [
-			new Address(
-				null,
-				self::STORED_COUNTRY_WITHOUT_ADDRESS,
-				self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS
-			),
-			self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
-			null,
-		];
-		yield "Existing country without address, pass country but no country code" => [
-			new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS, null ),
-			self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
-			'Need the country code',
-		];
-		yield "Existing country without address, pass country code but no country" => [
-			new Address( null, null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
-			// This works because we hardcode the English name.
+		yield "Existing country without address" => [
+			new Address( null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
 			self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
 			null,
 		];
 
-		yield "Existing country but with a different address, pass country and country code" => [
-			new Address( 'A new address', self::STORED_COUNTRY, self::STORED_COUNTRY_CODE ),
-			self::NEXT_ADDRESS_ID,
-			null,
-		];
-		yield "Existing country but with a different address, pass country but no country code" => [
-			new Address( 'A new address', self::STORED_COUNTRY, null ),
-			self::NEXT_ADDRESS_ID,
-			'Need the country code',
-		];
-		yield "Existing country but with a different address, pass country code but no country" => [
-			new Address( 'A new address', null, self::STORED_COUNTRY_CODE ),
+		yield "Existing country but with a different address" => [
+			new Address( 'A new address', self::STORED_COUNTRY_CODE ),
 			self::NEXT_ADDRESS_ID,
 			null,
 		];
 
-		yield "New address, pass country and country code" => [
-			new Address( 'This is a new address!', 'Egypt', 'EG' ),
-			self::NEXT_ADDRESS_ID,
-			null,
-		];
-		yield "New address, pass country but no country code" => [
-			new Address( 'This is a new address!', 'Egypt', null ),
-			self::NEXT_ADDRESS_ID,
-			'Need the country code',
-		];
-		yield "New address, pass country code but no country" => [
-			new Address( 'This is a new address!', null, 'EG' ),
+		yield "New address" => [
+			new Address( 'This is a new address!', 'EG' ),
 			self::NEXT_ADDRESS_ID,
 			null,
 		];
@@ -473,7 +297,6 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	public static function provideGetEventAddress() {
 		$expectedFullAddress = new Address(
 			self::STORED_ADDRESS,
-			null,
 			self::STORED_COUNTRY_CODE
 		);
 
@@ -483,7 +306,6 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		];
 
 		$expectedAddressWithoutAddress = new Address(
-			null,
 			null,
 			self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS
 		);
@@ -549,13 +371,11 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetAddressesForEvents() {
 		$this->insertDefaultDBData();
-		$expectedAddress = new Address(
-			self::STORED_ADDRESS,
-			null,
-			self::STORED_COUNTRY_CODE
-		);
 		$expected = [
-			self::EVENT_WITH_ADDRESS => $expectedAddress,
+			self::EVENT_WITH_ADDRESS => new Address(
+				self::STORED_ADDRESS,
+				self::STORED_COUNTRY_CODE
+			),
 		];
 		$actual = $this->getAddressStore()
 			->getAddressesForEvents( $this->getDb(), [ self::EVENT_WITH_ADDRESS, 99999999 ] );
@@ -661,17 +481,14 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 
 		$reusedAddress = new Address(
 			'Reused',
-			'France',
 			'FR'
 		);
 		$uniqueAddress = new Address(
 			'Unique',
-			'Egypt',
 			'EG'
 		);
 		$newAddress = new Address(
 			'Address999',
-			'Australia',
 			'AU'
 		);
 

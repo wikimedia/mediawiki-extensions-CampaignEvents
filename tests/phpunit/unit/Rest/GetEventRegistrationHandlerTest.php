@@ -78,7 +78,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'online_meeting' => true,
 			'inperson_meeting' => true,
 			'meeting_url' => 'https://meeting-url.example.org',
-			'meeting_country' => 'France',
 			'meeting_country_code' => 'FR',
 			'meeting_address' => 'My address 123',
 			'chat_url' => 'https://some-chat.example.org',
@@ -100,9 +99,7 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['topics'],
 			$participationOptions,
 			$eventData['meeting_url'],
-			new Address(
-				$eventData['meeting_address'], $eventData['meeting_country'], $eventData['meeting_country_code']
-			),
+			new Address( $eventData['meeting_address'], $eventData['meeting_country_code'] ),
 			$eventData['tracks_contributions'],
 			[
 				new TrackingToolAssociation(

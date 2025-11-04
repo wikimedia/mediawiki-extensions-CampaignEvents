@@ -70,7 +70,7 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 			'topics' => [ 'atopic', 'btopic' ],
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
-			'address' => new Address( 'Some address', 'France', null ),
+			'address' => new Address( 'Some address', 'FR' ),
 			'tracks_contributions' => false,
 			'tracking_tools' => [
 				new TrackingToolAssociation(
@@ -95,14 +95,14 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 
 	public function testNotificationContainsAddress() {
 		$address = 'Some place somewhere 123';
-		$eventID = $this->saveEventWithData( [ 'address' => new Address( $address, 'Australia', 'AU' ) ] );
+		$eventID = $this->saveEventWithData( [ 'address' => new Address( $address, 'AU' ) ] );
 		$model = $this->makeNotificationModel( $eventID );
 
 		$this->assertStringContainsString( $address, $model->getBodyMessage()->text() );
 	}
 
 	public function testNotificationContainsAddressNotAvailableMessage() {
-		$eventID = $this->saveEventWithData( [ 'address' => new Address( '', 'Australia', 'AU' ) ] );
+		$eventID = $this->saveEventWithData( [ 'address' => new Address( '', 'AU' ) ] );
 		$model = $this->makeNotificationModel( $eventID );
 
 		$this->assertStringContainsString(

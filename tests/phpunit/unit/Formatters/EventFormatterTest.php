@@ -60,55 +60,29 @@ class EventFormatterTest extends MediaWikiUnitTestCase {
 		$countryItalian = self::TEST_COUNTRY_NAMES['it'][$countryCode];
 		$noAddressMessageKey = self::NO_ADDRESS_MESSAGE_KEY;
 
-		yield 'Address, no country, no country code' => [
-			new Address( $address, null, null ),
+		yield 'Address, no country code' => [
+			new Address( $address, null ),
 			"$address\n",
 		];
-		yield 'Country, no address, no country code' => [
-			new Address( null, $countryEnglish, null ),
+		yield 'Country code, no address' => [
+			new Address( null, $countryCode ),
 			"$countryEnglish\n$noAddressMessageKey",
 			$noAddressMessageKey
 		];
-		yield 'Country code, no address, no country' => [
-			new Address( null, null, $countryCode ),
-			"$countryEnglish\n$noAddressMessageKey",
-			$noAddressMessageKey
-		];
-		yield 'Country and country code but no address' => [
-			new Address( null, $countryEnglish, null ),
-			"$countryEnglish\n$noAddressMessageKey",
-			$noAddressMessageKey
-		];
-		yield 'Address and country, no country code' => [
-			new Address( $address, $countryEnglish, null ),
-			"$address\n$countryEnglish",
-		];
-		yield 'Address and country code, no country' => [
-			new Address( $address, null, $countryCode ),
-			"$address\n$countryEnglish",
-		];
-		yield 'Address, country, and country code' => [
-			new Address( $address, $countryEnglish, $countryCode ),
+		yield 'Address and country code' => [
+			new Address( $address, $countryCode ),
 			"$address\n$countryEnglish",
 		];
 
 		yield 'Full address, different language' => [
-			new Address( $address, $countryItalian, $countryCode ),
+			new Address( $address, $countryCode ),
 			"$address\n$countryItalian",
 			$noAddressMessageKey,
 			'it',
 		];
 
-		yield 'Country, no address, no country code, no fallback' => [
-			new Address( null, $countryEnglish, null ),
-			"$countryEnglish",
-		];
-		yield 'Country code, no address, no country, no fallback' => [
-			new Address( null, null, $countryCode ),
-			"$countryEnglish",
-		];
-		yield 'Country and country code but no address, no fallback' => [
-			new Address( null, $countryEnglish, null ),
+		yield 'Country code, no address, no fallback' => [
+			new Address( null, $countryCode ),
 			"$countryEnglish",
 		];
 	}

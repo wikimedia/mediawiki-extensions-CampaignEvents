@@ -636,7 +636,7 @@ class EventsListPager extends ReverseChronologicalPager {
 				$countryCode, $this->getLanguage()->getCode()
 			);
 		} else {
-			$countryString = $address->getCountry();
+			$countryString = '';
 		}
 		return $countryString;
 	}

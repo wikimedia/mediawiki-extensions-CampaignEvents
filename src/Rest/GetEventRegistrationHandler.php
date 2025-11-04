@@ -70,7 +70,6 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'online_meeting' => ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_ONLINE ) !== 0,
 			'inperson_meeting' => ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) !== 0,
 			'meeting_url' => $registration->getMeetingURL(),
-			'meeting_country' => $address?->getCountry(),
 			'meeting_country_code' => $address?->getCountryCode(),
 			'meeting_address' => $address?->getAddressWithoutCountry(),
 			'tracking_tools' => $trackingToolsData,

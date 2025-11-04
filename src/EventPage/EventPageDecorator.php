@@ -440,10 +440,9 @@ class EventPageDecorator {
 				}
 
 				$countryCode = $address->getCountryCode();
-				if ( $countryCode || $address->getCountry() ) {
-					$formattedCountry = $countryCode
-						? $this->countryProvider->getCountryName( $countryCode, $this->language->getCode() )
-						: $address->getCountry();
+				if ( $countryCode ) {
+					$formattedCountry = $this->countryProvider
+						->getCountryName( $countryCode, $this->language->getCode() );
 					$participationOptionsContent .= Html::element( 'div', [], $formattedCountry );
 				}
 			} else {

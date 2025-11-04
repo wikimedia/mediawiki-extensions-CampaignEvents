@@ -37,7 +37,7 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 			'topics' => [ 'atopic', 'btopic' ],
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
-			'address' => new Address( 'Some address', 'France', null ),
+			'address' => new Address( 'Some address', 'FR' ),
 			'tracks_contributions' => true,
 			'tracking_tools' => [
 				new TrackingToolAssociation(

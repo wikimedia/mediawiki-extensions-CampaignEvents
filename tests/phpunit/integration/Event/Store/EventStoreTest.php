@@ -58,7 +58,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ 'atopic', 'btopic' ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			new Address( 'Address', null, 'FR' ),
+			new Address( 'Address', 'FR' ),
 			false,
 			[
 				new TrackingToolAssociation(
@@ -175,14 +175,14 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Event with only address' => [
 			array_replace(
 				$baseCtrArgs,
-				[ 'Address' => new Address( 'Some address', null, null ) ]
+				[ 'Address' => new Address( 'Some address', null ) ]
 			),
 		];
 
 		yield 'Event with only country' => [
 			array_replace(
 				$baseCtrArgs,
-				[ 'Address' => new Address( null, 'France', null ) ]
+				[ 'Address' => new Address( null, 'FR' ) ]
 			),
 		];
 	}
@@ -334,7 +334,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			[ 'atopic', 'btopic' ],
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
-			'address' => new Address( 'Address', null, 'FR' ),
+			'address' => new Address( 'Address', 'FR' ),
 			'hasContributionTracking' => false,
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			'Chat URL',
@@ -399,6 +399,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testCacheCompatibility() {
+		// To update test expectation (use carefully, after having fixed the underlying issue):
+		// file_put_contents( __DIR__ . '/EventRegistration.ser', serialize( $this->getTestEvent() ) );
 		$serializedEvent = file_get_contents( __DIR__ . '/EventRegistration.ser' );
 		try {
 			$unserialized = unserialize( $serializedEvent );

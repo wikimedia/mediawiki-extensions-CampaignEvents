@@ -182,7 +182,6 @@ class AddressStore {
 	private function addressFromRow( stdClass $row ): Address {
 		return new Address(
 			$row->cea_full_address,
-			null,
 			$row->cea_country_code
 		);
 	}

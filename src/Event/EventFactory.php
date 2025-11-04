@@ -202,7 +202,7 @@ class EventFactory {
 			)
 		);
 		if ( $meetingAddress !== null || $meetingCountryCode !== null ) {
-			$address = new Address( $meetingAddress, null, $meetingCountryCode );
+			$address = new Address( $meetingAddress, $meetingCountryCode );
 		} else {
 			$address = null;
 		}

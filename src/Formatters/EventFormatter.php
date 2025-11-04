@@ -81,7 +81,7 @@ class EventFormatter {
 		if ( $countryCode ) {
 			$countryString = $this->countryProvider->getCountryName( $countryCode, $languageCode );
 		} else {
-			$countryString = $address->getCountry();
+			$countryString = '';
 		}
 		$addressWithoutCountry = $address->getAddressWithoutCountry();
 		if ( $addressWithoutCountry === null || $addressWithoutCountry === '' ) {
@@ -94,6 +94,6 @@ class EventFormatter {
 			// the full address (T309325).
 			return $address->getAddressWithoutCountry() . "\n" . $countryString;
 		}
-		return $output ?? "";
+		return $output;
 	}
 }
