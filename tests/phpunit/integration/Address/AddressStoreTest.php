@@ -84,7 +84,6 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 	private function getAddressStore(): AddressStore {
 		return new AddressStore(
 			CampaignEventsServices::getDatabaseHelper(),
-			MIGRATION_NEW
 		);
 	}
 
@@ -154,7 +153,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_full_address' => "$newTestAddress \n ",
 				'cea_country_code' => null,
 			],
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "No previous row, country, no country code, no address" => [
 			$eventWithoutAddress,
@@ -165,7 +164,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_full_address' => " \n $newTestCountry",
 				'cea_country_code' => null,
 			],
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "No previous row, country code, no country, no address" => [
 			$eventWithoutAddress,
@@ -187,7 +186,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_full_address' => "$newTestAddress \n $newTestCountry",
 				'cea_country_code' => null,
 			],
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "No previous row, address and country code, no country" => [
 			$eventWithoutAddress,
@@ -238,7 +237,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_full_address' => "$newTestAddress \n ",
 				'cea_country_code' => null,
 			],
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Replace previous row, country, no country code, no address" => [
 			self::EVENT_WITH_ADDRESS,
@@ -249,7 +248,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_full_address' => " \n $newTestCountry",
 				'cea_country_code' => null,
 			],
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Replace previous row, country code, no country, no address" => [
 			self::EVENT_WITH_ADDRESS,
@@ -271,7 +270,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 				'cea_full_address' => "$newTestAddress \n $newTestCountry",
 				'cea_country_code' => null,
 			],
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Replace previous row, address and country code, no country" => [
 			self::EVENT_WITH_ADDRESS,
@@ -312,7 +311,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, null ),
 			1,
 			(object)self::getStoredAddressRow(),
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Same as previous row with address and country, pass country code but not country" => [
 			self::EVENT_WITH_ADDRESS,
@@ -334,7 +333,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 			new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS, null ),
 			1,
 			(object)self::getStoredRowWithoutAddress(),
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Same as previous row without address, pass country code but not country" => [
 			self::EVENT_WITH_ADDRESS,
@@ -384,7 +383,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		yield "Existing full address, pass country but no country code" => [
 			new Address( self::STORED_ADDRESS, self::STORED_COUNTRY, null ),
 			self::STORED_ADDRESS_ID,
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Existing full address, pass country code but no country" => [
 			new Address( self::STORED_ADDRESS, null, self::STORED_COUNTRY_CODE ),
@@ -400,7 +399,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		yield "Existing address but with different country, pass country but no country code" => [
 			new Address( self::STORED_ADDRESS, 'Egypt', null ),
 			self::NEXT_ADDRESS_ID,
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Existing address but with different country, pass country code but no country" => [
 			new Address( self::STORED_ADDRESS, null, 'EG' ),
@@ -420,7 +419,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		yield "Existing country without address, pass country but no country code" => [
 			new Address( null, self::STORED_COUNTRY_WITHOUT_ADDRESS, null ),
 			self::STORED_COUNTRY_WITHOUT_ADDRESS_ID,
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Existing country without address, pass country code but no country" => [
 			new Address( null, null, self::STORED_COUNTRY_CODE_WITHOUT_ADDRESS ),
@@ -437,7 +436,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		yield "Existing country but with a different address, pass country but no country code" => [
 			new Address( 'A new address', self::STORED_COUNTRY, null ),
 			self::NEXT_ADDRESS_ID,
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "Existing country but with a different address, pass country code but no country" => [
 			new Address( 'A new address', null, self::STORED_COUNTRY_CODE ),
@@ -453,7 +452,7 @@ class AddressStoreTest extends MediaWikiIntegrationTestCase {
 		yield "New address, pass country but no country code" => [
 			new Address( 'This is a new address!', 'Egypt', null ),
 			self::NEXT_ADDRESS_ID,
-			'Need the country code for WRITE_NEW',
+			'Need the country code',
 		];
 		yield "New address, pass country code but no country" => [
 			new Address( 'This is a new address!', null, 'EG' ),

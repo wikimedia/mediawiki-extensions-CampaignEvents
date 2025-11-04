@@ -96,7 +96,6 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			new EventTypesRegistry(),
 			$eventLookup,
 			new HashConfig( [
-				'CampaignEventsCountrySchemaMigrationStage' => MIGRATION_NEW,
 				'CampaignEventsEnableContributionTracking' => false,
 			] ),
 			$this->getCountryProvider(),

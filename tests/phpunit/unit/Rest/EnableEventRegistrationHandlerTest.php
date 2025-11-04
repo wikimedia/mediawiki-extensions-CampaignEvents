@@ -74,7 +74,6 @@ class EnableEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->createMock( ITopicRegistry::class ),
 			new EventTypesRegistry(),
 			new HashConfig( [
-				'CampaignEventsCountrySchemaMigrationStage' => MIGRATION_NEW,
 				'CampaignEventsEnableContributionTracking' => false,
 			] ),
 			$this->getCountryProvider(),

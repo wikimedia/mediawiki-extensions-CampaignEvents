@@ -43,7 +43,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected WikiLookup $wikiLookup;
 	protected ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
-	protected bool $hasWriteNew;
 	private CountryProvider $countryProvider;
 	private bool $contributionTrackingEnabled;
 
@@ -70,8 +69,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->countryProvider = $countryProvider;
-		$countrySchemaMigrationStage = $config->get( 'CampaignEventsCountrySchemaMigrationStage' );
-		$this->hasWriteNew = (bool)( $countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW );
 		$this->contributionTrackingEnabled = $config->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
@@ -188,10 +185,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-			'meeting_country' => [
+			'meeting_country_code' => [
 				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-				StringDef::PARAM_MAX_BYTES => EventFactory::COUNTRY_MAXLENGTH_BYTES,
+				ParamValidator::PARAM_TYPE => $this->countryProvider->getValidCountryCodes()
 			],
 			'meeting_address' => [
 				static::PARAM_SOURCE => 'body',
@@ -217,14 +213,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			],
 		] + $this->getTokenParamDefinition();
 
-		if ( $this->hasWriteNew ) {
-			unset( $params[ 'meeting_country' ] );
-			$params = array_merge( $params, [ 'meeting_country_code' => [
-					static::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_TYPE => $this->countryProvider->getValidCountryCodes()
-				],
-			] );
-		}
 		if ( $this->contributionTrackingEnabled ) {
 			$params['tracks_contributions'] = [
 				static::PARAM_SOURCE => 'body',

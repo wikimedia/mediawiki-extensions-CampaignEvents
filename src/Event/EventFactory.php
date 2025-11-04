@@ -66,7 +66,6 @@ class EventFactory {
 	private CountryProvider $countryProvider;
 	/** @var list<int> */
 	private array $allowedEventNamespaces;
-	private int $countrySchemaMigrationStage;
 	/** @var list<string> */
 	private array $contributionTrackingDisallowedCountryCodes;
 
@@ -84,7 +83,6 @@ class EventFactory {
 		EventTypesRegistry $eventTypesRegistry,
 		CountryProvider $countryProvider,
 		array $allowedEventNamespaces,
-		int $countrySchemaMigrationStage,
 		array $contributionTrackingDisallowedCountryCodes,
 	) {
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -96,7 +94,6 @@ class EventFactory {
 		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->countryProvider = $countryProvider;
 		$this->allowedEventNamespaces = $allowedEventNamespaces;
-		$this->countrySchemaMigrationStage = $countrySchemaMigrationStage;
 		$this->contributionTrackingDisallowedCountryCodes = $contributionTrackingDisallowedCountryCodes;
 	}
 
@@ -608,7 +605,7 @@ class EventFactory {
 		if ( $countryCode !== null && !$this->countryProvider->isValidCountryCode( $countryCode ) ) {
 			$res->error( 'campaignevents-error-invalid-country-code' );
 		}
-		if ( $countryCode === null && ( $this->countrySchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW ) ) {
+		if ( $countryCode === null ) {
 			// Temporary error message.
 			$res->error( new RawMessage( 'The country code is required.' ) );
 		}

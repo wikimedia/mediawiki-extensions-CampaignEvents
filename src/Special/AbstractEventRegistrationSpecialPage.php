@@ -451,45 +451,27 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		];
 
 		$address = $this->event?->getAddress();
-		if (
-			$this->getOutput()->getConfig()->get( 'CampaignEventsCountrySchemaMigrationStage' ) &
-			SCHEMA_COMPAT_WRITE_NEW
-		) {
-			$languageCode = $this->getLanguage()->getCode();
-			$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
-			asort( $countryNames );
-			$countryOptions = [
-				$this->msg( 'campaignevents-edit-field-country-placeholder' )->text() => ''
-			];
-			$countryOptions += array_flip( $countryNames );
-			$formFields['EventMeetingCountryCode'] = [
-				'type' => 'select',
-				'label-message' => 'campaignevents-edit-field-country',
-				'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
-				// NOTE: If we have no country code (because the row is still in the old format, we will lose data here
-				// by forcing the default. However, the field is required, so the organizer will still need to choose a
-				// country code before saving, and they can match the existing free-text value. This is preferable to
-				// just preventing the edit until the row has been migrated, or to try and match the country in
-				// real-time as done in the migration script (which is potentially expensive).
-				'default' => $address ? $address->getCountryCode() : '',
-				'options' => $countryOptions,
-				'required' => true,
-				'section' => self::DETAILS_SECTION,
-			];
-		} else {
-			if ( $address && $address->getCountryCode() && !$address->getCountry() ) {
-				// Make sure we aren't losing information. Should never happen unless we revert the migration.
-				throw new RuntimeException( 'Got country code without country in WRITE_OLD' );
-			}
-			$formFields['EventMeetingCountry'] = [
-				'type' => 'text',
-				'label-message' => 'campaignevents-edit-field-country',
-				'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
-				'default' => $address ? $address->getCountry() : '',
-				'maxlength' => EventFactory::COUNTRY_MAXLENGTH_BYTES,
-				'section' => self::DETAILS_SECTION,
-			];
-		}
+		$languageCode = $this->getLanguage()->getCode();
+		$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
+		asort( $countryNames );
+		$countryOptions = [
+			$this->msg( 'campaignevents-edit-field-country-placeholder' )->text() => ''
+		];
+		$countryOptions += array_flip( $countryNames );
+		$formFields['EventMeetingCountryCode'] = [
+			'type' => 'select',
+			'label-message' => 'campaignevents-edit-field-country',
+			'hide-if' => [ '===', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ],
+			// NOTE: If we have no country code (because the row is still in the old format, we will lose data here
+			// by forcing the default. However, the field is required, so the organizer will still need to choose a
+			// country code before saving, and they can match the existing free-text value. This is preferable to
+			// just preventing the edit until the row has been migrated, or to try and match the country in
+			// real-time as done in the migration script (which is potentially expensive).
+			'default' => $address ? $address->getCountryCode() : '',
+			'options' => $countryOptions,
+			'required' => true,
+			'section' => self::DETAILS_SECTION,
+		];
 
 		// Note that we're using length limit in bytes for `maxlength`, which uses UTF-16 codepoints. Could be fixed up
 		// via jquery.lengthLimit, but it isn't worthwhile given how high these limits are.
@@ -804,15 +786,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$meetingURL = null;
 		}
 		if ( $participationOptions & EventRegistration::PARTICIPATION_OPTION_IN_PERSON ) {
-			$meetingCountry = $data['EventMeetingCountry'] ?? null;
-			if ( $meetingCountry === '' ) {
-				// Same adjustment as $nullableFields above.
-				$meetingCountry = null;
-			}
 			$meetingCountryCode = $data['EventMeetingCountryCode'] ?? null;
 			$meetingAddress = $data['EventMeetingAddress'];
 		} else {
-			$meetingCountry = $meetingCountryCode = $meetingAddress = null;
+			$meetingCountryCode = $meetingAddress = null;
 		}
 
 		$tracksContributions = false;
@@ -835,7 +812,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['Topics'] ?? [],
 				$participationOptions,
 				$meetingURL,
-				$meetingCountry,
+				null,
 				$meetingCountryCode,
 				$meetingAddress,
 				$tracksContributions,

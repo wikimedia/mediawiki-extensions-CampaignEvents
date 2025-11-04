@@ -236,15 +236,12 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		string $openSectionsStr,
 		string $formIdentifier
 	): HTMLForm {
-		$migrationStage = $this->getConfig()->get( "CampaignEventsCountrySchemaMigrationStage" );
-		$readNew = $migrationStage & SCHEMA_COMPAT_READ_NEW;
 		$formDescriptor = [
 			'Search' => [
 				'type' => 'text',
 				'label-message' => 'campaignevents-allevents-label-search',
 				'default' => $searchedVal,
-				'cssclass' => 'ext-campaignevents-allevents-search-field' .
-					( $readNew ? '' : ' ext-campaignevents-allevents-search-field-full' )
+				'cssclass' => 'ext-campaignevents-allevents-search-field'
 			],
 			'FilterEventTypes' => [
 				'type' => 'multiselect',
@@ -283,25 +280,25 @@ class SpecialAllEvents extends IncludableSpecialPage {
 				'default' => $participationOptions,
 			],
 		];
-		if ( $readNew ) {
-			$languageCode = $this->getLanguage()->getCode();
-			$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
-			asort( $countryNames );
-			$countryOptions = [
-				$this->msg( 'campaignevents-allevents-country-all' )->text() => ''
-			];
-			$countryOptions += array_flip( $countryNames );
-			$formDescriptor['Country'] = [
-				'type' => 'select',
-				'label-message' => 'campaignevents-allevents-label-country',
-				'options' => $countryOptions,
-				'default' => $country,
-				'disable-if' => [
-					'===',
-					'ParticipationOptions',
-					(string)EventRegistration::PARTICIPATION_OPTION_ONLINE ]
-			];
-		}
+
+		$languageCode = $this->getLanguage()->getCode();
+		$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
+		asort( $countryNames );
+		$countryOptions = [
+			$this->msg( 'campaignevents-allevents-country-all' )->text() => ''
+		];
+		$countryOptions += array_flip( $countryNames );
+		$formDescriptor['Country'] = [
+			'type' => 'select',
+			'label-message' => 'campaignevents-allevents-label-country',
+			'options' => $countryOptions,
+			'default' => $country,
+			'disable-if' => [
+				'===',
+				'ParticipationOptions',
+				(string)EventRegistration::PARTICIPATION_OPTION_ONLINE ]
+		];
+
 		$formDescriptor['FilterWikis'] = [
 			'type' => 'multiselect',
 			'dropdown' => true,

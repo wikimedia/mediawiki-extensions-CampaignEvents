@@ -25,7 +25,6 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 		?int $searchTo,
 		bool $expectsFound
 	): void {
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newOngoingListPager(
 			new RequestContext(),
 			'',
@@ -41,7 +40,6 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testCanUseFilters() {
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newOngoingListPager(
 			new RequestContext(),
 			self::$EVENT_NAME,

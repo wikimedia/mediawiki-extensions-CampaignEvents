@@ -38,7 +38,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsCountrySchemaMigrationStage', MIGRATION_NEW );
 		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
 	}
 
