@@ -602,5 +602,6 @@
 	"campaignevents-contributions-summary-articles-created": "Erstellte Artikel",
 	"campaignevents-contributions-summary-articles-edited": "Artikel bearbeitet",
 	"campaignevents-contributions-summary-bytes-changed": "Geänderte Bytes",
-	"campaignevents-contributions-summary-links-changed": "Links geändert"
+	"campaignevents-contributions-summary-links-changed": "Links geändert",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Teilnehmer hat sich privat angemeldet"
 }
