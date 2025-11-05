@@ -511,7 +511,6 @@
 	"campaignevents-allevents-placeholder-add-wikis": "Bakisa ba wiki...",
 	"campaignevents-allevents-label-filter-topics": "Mitó ya makambo",
 	"campaignevents-allevents-placeholder-topics": "Bakisa ba sujets...",
-	"campaignevents-allevents-label-include-all-wikis": "Botia makambo oyo efungwami na ba wiki nionso",
 	"campaignevents-eventslist-all-wikis": "Molulu oyo ezali polele mpo na ba wiki nyonso.",
 	"campaignevents-eventslist-wikis-more": "$1 {{PLURAL:$1| lisusu}}",
 	"campaignevents-eventpage-all-wikis": "Molulu oyo ezali polele mpo na ba wiki nyonso.",
@@ -524,10 +523,5 @@
 	"campaignevents-eventpage-dialog-topics-label": "Mitó ya makambo",
 	"campaignevents-allevents-label-upcoming-events-title": "Makambo oyo ekosalema",
 	"campaignevents-allevents-label-upcoming-events-description": "Makambo oyo ekosalema: Makambo oyo ebandi na mikolo oyo oponi",
-	"campaignevents-allevents-label-ongoing-events-title": "Makambo oyo ezali kosalema",
-	"campaignevents-allevents-label-ongoing-events-description": "Makambo oyo ezali kokoba: Makambo oyo ebandi liboso kasi ekokoba na kati ya mikolo oyo baponi",
-	"campaignevents-allevents-transclusion-more-link": "Luká koyeba makambo mosusu mpe bituluku mosusu",
-	"communityconfiguration-campaignevents-title": "Makambo ya Campagne",
-	"communityconfiguration-campaignevents-description": "Ba options ya configuration pona extension ya CampaignEvents",
-	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Ba espaces ya kombo ya événement ya valide"
+	"campaignevents-allevents-label-ongoing-events-title": "Makambo oyo ezali kosalema"
 }
