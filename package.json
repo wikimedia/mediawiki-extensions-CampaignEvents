@@ -4,6 +4,7 @@
 	"scripts": {
 		"test": "grunt test && npm run test:unit",
 		"test:unit": "jest",
+		"coverage": "npm run test:unit",
 		"api-testing": "mocha tests/api-testing",
 		"selenium-daily": "npm run selenium-test -- --suite daily --mochaOpts.grep @daily",
 		"selenium-test": "wdio tests/selenium/wdio.conf.js"

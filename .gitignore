@@ -7,4 +7,4 @@
 /.api-testing.config.json
 tests/selenium/log
 /.stylelintcache
-/jest-coverage/
+/coverage
