@@ -106,10 +106,9 @@ class EventContributionValidator {
 			);
 		}
 
-		// Check if event is in the past
-		if ( $event->isPast() ) {
+		if ( !$event->isOngoing() ) {
 			throw new LocalizedHttpException(
-				MessageValue::new( 'campaignevents-event-contribution-event-ended' ),
+				MessageValue::new( 'campaignevents-event-contribution-event-not-active' ),
 				400
 			);
 		}

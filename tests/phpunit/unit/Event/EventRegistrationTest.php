@@ -240,6 +240,37 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 		];
 	}
 
+	private static function getPastOngoingAndFutureEvents(): array {
+		$now = (int)MWTimestamp::now( TS_UNIX );
+		$farPastTS = wfTimestamp( TS_MW, $now - 200000 );
+		$pastTS = wfTimestamp( TS_MW, $now - 100000 );
+		$futureTS = wfTimestamp( TS_MW, $now + 100000 );
+		$farFutureTS = wfTimestamp( TS_MW, $now + 200000 );
+
+		$pastEvent = new EventRegistration(
+			...array_values( array_replace(
+				self::getValidConstructorArgs(),
+				[ 'start' => $farPastTS, 'end' => $pastTS ]
+			) )
+		);
+
+		$ongoingEvent = new EventRegistration(
+			...array_values( array_replace(
+				self::getValidConstructorArgs(),
+				[ 'start' => $pastTS, 'end' => $futureTS ]
+			) )
+		);
+
+		$futureEvent = new EventRegistration(
+			...array_values( array_replace(
+				self::getValidConstructorArgs(),
+				[ 'start' => $futureTS, 'end' => $farFutureTS ]
+			) )
+		);
+
+		return [ 'past' => $pastEvent, 'ongoing' => $ongoingEvent, 'future' => $futureEvent ];
+	}
+
 	/**
 	 * @dataProvider provideIsPast
 	 */
@@ -248,18 +279,40 @@ class EventRegistrationTest extends MediaWikiUnitTestCase {
 	}
 
 	public static function provideIsPast(): Generator {
-		$now = (int)MWTimestamp::now( TS_UNIX );
+		$testEvents = self::getPastOngoingAndFutureEvents();
 
-		$pastTS = wfTimestamp( TS_MW, $now - 100000 );
-		$pastEvent = new EventRegistration(
-			...array_values( array_replace( self::getValidConstructorArgs(), [ 'end' => $pastTS ] ) )
-		);
-		yield 'past' => [ $pastEvent, true ];
+		yield 'past' => [ $testEvents['past'], true ];
+		yield 'ongoing' => [ $testEvents['ongoing'], false ];
+		yield 'future' => [ $testEvents['future'], false ];
+	}
 
-		$futureTS = wfTimestamp( TS_MW, $now + 100000 );
-		$futureEvent = new EventRegistration(
-			...array_values( array_replace( self::getValidConstructorArgs(), [ 'end' => $futureTS ] ) )
-		);
-		yield 'future' => [ $futureEvent, false ];
+	/**
+	 * @dataProvider provideIsFuture
+	 */
+	public function testIsFuture( EventRegistration $event, bool $expected ) {
+		$this->assertSame( $expected, $event->isFuture() );
+	}
+
+	public static function provideIsFuture(): Generator {
+		$testEvents = self::getPastOngoingAndFutureEvents();
+
+		yield 'past' => [ $testEvents['past'], false ];
+		yield 'ongoing' => [ $testEvents['ongoing'], false ];
+		yield 'future' => [ $testEvents['future'], true ];
+	}
+
+	/**
+	 * @dataProvider provideIsOngoing
+	 */
+	public function testIsOngoing( EventRegistration $event, bool $expected ) {
+		$this->assertSame( $expected, $event->isOngoing() );
+	}
+
+	public static function provideIsOngoing(): Generator {
+		$testEvents = self::getPastOngoingAndFutureEvents();
+
+		yield 'past' => [ $testEvents['past'], false ];
+		yield 'ongoing' => [ $testEvents['ongoing'], true ];
+		yield 'future' => [ $testEvents['future'], false ];
 	}
 }

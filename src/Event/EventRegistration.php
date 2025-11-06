@@ -215,6 +215,14 @@ class EventRegistration {
 		return wfTimestamp( TS_UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
 	}
 
+	public function isOngoing(): bool {
+		return !$this->isPast() && !$this->isFuture();
+	}
+
+	public function isFuture(): bool {
+		return wfTimestamp( TS_UNIX, $this->getStartUTCTimestamp() ) > MWTimestamp::now( TS_UNIX );
+	}
+
 	/** @return non-empty-list<string> */
 	public function getTypes(): array {
 		return $this->types;

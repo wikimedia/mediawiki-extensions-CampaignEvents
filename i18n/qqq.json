@@ -595,7 +595,7 @@
 	"campaignevents-eventslist-country-label": "Accessibility label on an icon on [[Special:AllEvents]] to indicate that the section displays the chosen country for the event.",
 	"campaignevents-contributions-notice-private-participants-excluded": "Notice message displayed at the top of the Contributions tab when the viewer does not have permission to view private participant data and there are private participants whose contributions are excluded from the statistics and table. This message informs users that some contribution data is hidden for privacy reasons.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "Notice message displayed at the top of the Contributions tab when the current viewer is a private participant but cannot see data from other private participants. This informs the user that while they can see their own contributions, other private participant data is hidden.",
-	"campaignevents-event-contribution-event-ended": "Error message shown when trying to associate an edit with an event that has already ended",
+	"campaignevents-event-contribution-event-not-active": "Error message shown when trying to associate an edit with an event that has already ended or has not started yet.",
 	"campaignevents-event-contribution-not-participant": "Error message shown when a user tries to associate an edit with an event they are not participating in",
 	"campaignevents-event-contribution-user-not-global": "Error message shown when a user is not a global user in the event contribution API",
 	"campaignevents-event-contribution-already-associated": "Error message shown when the user tries to associate an edit with an event, but that edit is already associated with a different event",

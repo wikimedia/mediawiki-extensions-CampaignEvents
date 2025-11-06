@@ -192,7 +192,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
 	}
 
-	public function testValidateAndScheduleEventPast(): void {
+	public function testValidateAndSchedule__eventNotOngoing(): void {
 		// Setup feature flag enabled
 		$this->options->method( 'get' )
 			->with( 'CampaignEventsEnableContributionTracking' )
@@ -208,12 +208,12 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( 1 );
 		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isPast' )->willReturn( true );
+		$event->method( 'isOngoing' )->willReturn( false );
 		$event->method( 'hasContributionTracking' )->willReturn( true );
 
 		// Expect exception
 		$this->expectException( LocalizedHttpException::class );
-		$this->expectExceptionMessage( 'campaignevents-event-contribution-event-ended' );
+		$this->expectExceptionMessage( 'campaignevents-event-contribution-event-not-active' );
 
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
 	}
@@ -234,7 +234,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( 1 );
 		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isPast' )->willReturn( false );
+		$event->method( 'isOngoing' )->willReturn( true );
 		$event->method( 'hasContributionTracking' )->willReturn( true );
 
 		// Setup revision store to return null (revision not found)
@@ -269,7 +269,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( 1 );
 		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isPast' )->willReturn( false );
+		$event->method( 'isOngoing' )->willReturn( true );
 		$event->method( 'hasContributionTracking' )->willReturn( true );
 
 		// Setup revision with old timestamp
@@ -310,7 +310,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( 1 );
 		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isPast' )->willReturn( false );
+		$event->method( 'isOngoing' )->willReturn( true );
 		$event->method( 'hasContributionTracking' )->willReturn( true );
 
 		// Setup revision with different author
@@ -359,7 +359,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( 1 );
 		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isPast' )->willReturn( false );
+		$event->method( 'isOngoing' )->willReturn( true );
 		$event->method( 'hasContributionTracking' )->willReturn( true );
 
 		// Setup revision
@@ -413,7 +413,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( 1 );
 		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isPast' )->willReturn( false );
+		$event->method( 'isOngoing' )->willReturn( true );
 		$event->method( 'hasContributionTracking' )->willReturn( true );
 
 		// Setup revision

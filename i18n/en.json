@@ -588,7 +588,7 @@
 	"campaignevents-eventslist-country-label": "Country",
 	"campaignevents-contributions-notice-private-participants-excluded": "The statistics and contributions listed on this page do not include data from private participants.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "The statistics and contributions listed on this page do not include data from other private participants.",
-	"campaignevents-event-contribution-event-ended": "Event has ended and is no longer accepting edit associations",
+	"campaignevents-event-contribution-event-not-active": "This event is not currently active, so you cannot associate this edit with it.",
 	"campaignevents-event-contribution-not-participant": "User is not a participant in this event",
 	"campaignevents-event-contribution-user-not-global": "User is not a global user",
 	"campaignevents-event-contribution-already-associated": "An edit can only be associated with one event.",
