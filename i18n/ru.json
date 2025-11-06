@@ -6,6 +6,7 @@
 			"Deltaspace",
 			"Dirruw'o",
 			"Elzav",
+			"EneshTranslates",
 			"Kaganer",
 			"Kareyac",
 			"Mitte27",
@@ -224,5 +225,6 @@
 	"campaignevents-eventslist-types-label": "Типы мероприятия",
 	"campaignevents-postedit-dialog-select-placeholder": "Выберите событие",
 	"campaignevents-postedit-dialog-action-no": "Нет, спасибо",
-	"campaignevents-postedit-dialog-action-yes": "Да"
+	"campaignevents-postedit-dialog-action-yes": "Да",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Участник зарегистрирован конфиденциально"
 }

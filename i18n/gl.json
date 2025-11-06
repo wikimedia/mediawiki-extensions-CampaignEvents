@@ -609,5 +609,6 @@
 	"campaignevents-contributions-summary-articles-edited": "Artigos editados",
 	"campaignevents-contributions-summary-bytes-changed": "Bytes modificados",
 	"campaignevents-contributions-summary-links-changed": "Ligazóns modificadas",
-	"campaignevents-contributions-summary-delta-separator": "/"
+	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Participante rexistrado de forma privada"
 }

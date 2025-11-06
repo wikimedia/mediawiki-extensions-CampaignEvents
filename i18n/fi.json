@@ -83,6 +83,7 @@
 	"campaignevents-edit-field-organizers-creator-title": "Tämä on tapahtuman luoja, muut järjestäjät eivät voi poistaa tätä käyttäjää.",
 	"campaignevents-edit-field-organizers-user-not-allowed": "Tällä {{GENDER:$1|käyttäjällä}} ei ole oikeutta järjestää tapahtumia.",
 	"campaignevents-edit-field-contribution-stats-label": "Näytä muokkaustilastot",
+	"campaignevents-edit-field-contribution-stats-help": "Ota käyttöön muokkaustilastot, jotta voit jakaa ja ymmärtää tapahtuman vaikutusta. Tilastot tarjoavat yhteenvedon ja täydellisen listan muokkauksista.",
 	"campaignevents-edit-field-wiki-type": "Kohdistuuko tämä tapahtuma tiettyihin wikeihin?",
 	"campaignevents-edit-field-wiki-type-none": "Ei tiettyjä kohdewikejä",
 	"campaignevents-edit-field-wiki-type-all": "Kyllä (avoin kaikille wikeille)",
@@ -602,5 +603,6 @@
 	"campaignevents-contributions-summary-articles-created": "Luotuja artikkeleita",
 	"campaignevents-contributions-summary-articles-edited": "Muokattuja artikkeleita",
 	"campaignevents-contributions-summary-bytes-changed": "Tavumuutos",
-	"campaignevents-contributions-summary-links-changed": "Muutettuja linkkejä"
+	"campaignevents-contributions-summary-links-changed": "Muutettuja linkkejä",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Osallistuja ilmoittautui yksityisesti"
 }

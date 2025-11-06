@@ -600,5 +600,6 @@
 	"campaignevents-contributions-summary-articles-created": "Articulos create",
 	"campaignevents-contributions-summary-articles-edited": "Articulos modificate",
 	"campaignevents-contributions-summary-bytes-changed": "Bytes cambiate",
-	"campaignevents-contributions-summary-links-changed": "Ligamines cambiate"
+	"campaignevents-contributions-summary-links-changed": "Ligamines cambiate",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Le participante se ha inscribite privatemente"
 }

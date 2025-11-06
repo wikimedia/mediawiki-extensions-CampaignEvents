@@ -603,5 +603,6 @@
 	"campaignevents-contributions-summary-articles-created": "ערכים שנוצרו",
 	"campaignevents-contributions-summary-articles-edited": "ערכים שנערכו",
 	"campaignevents-contributions-summary-bytes-changed": "בתים ששונו",
-	"campaignevents-contributions-summary-links-changed": "קישורים ששונו"
+	"campaignevents-contributions-summary-links-changed": "קישורים ששונו",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "משתתף שנרשם באופן פרטי"
 }

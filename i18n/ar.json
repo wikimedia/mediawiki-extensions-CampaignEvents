@@ -277,8 +277,8 @@
 	"campaignevents-eventpage-register-dialog-title-edit": "عدل التسجيل",
 	"campaignevents-eventpage-register-dialog-visibility-title": "خصوصية التسجيل",
 	"campaignevents-eventpage-registration-enabled-notification": "تم تفعيل التسجيل. يمكن للمشاركين الآن التسجيل على صفحة الفعالية الخاصة بك.",
-	"campaignevents-eventpage-registration-updated-notification-list": "تم تضمين هذه الفعالية في <strong>[[Special:AllEvents|قائمة التعاون]]</strong> .",
-	"campaignevents-eventpage-registration-edit-notification": "تم تحديث معلومات التسجيل.",
+	"campaignevents-eventpage-registration-updated-notification-list": "ضُمنت هذه الفعالية في <strong>[[Special:AllEvents|قائمة التعاون]]</strong> .",
+	"campaignevents-eventpage-registration-edit-notification": "حُدثَت معلومات التسجيل.",
 	"campaignevents-eventpage-enableheader-organizer": "{{GENDER:|أنت منظم|أنتي منظمة}} الآن",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>صفحة الفعالية</strong> : قم بتفعيل التسجيل حتى يتمكن المشاركون من التسجيل في الفعالية الخاصة بك مباشرة على الصفحة.",
 	"campaignevents-eventpage-enableheader-button-label": "تفعيل التسجيل",
@@ -617,5 +617,6 @@
 	"campaignevents-contributions-summary-articles-edited": "المقالات المحررة",
 	"campaignevents-contributions-summary-bytes-changed": "البايتات المتغيرة",
 	"campaignevents-contributions-summary-links-changed": "الروابط المُغيَّرة",
-	"campaignevents-contributions-summary-delta-separator": "/"
+	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "تم تسجيل المشارك بشكل خاص"
 }
