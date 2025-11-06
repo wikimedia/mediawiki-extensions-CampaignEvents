@@ -22,5 +22,7 @@
 	"campaignevents-rest-register-invalid-answer": "إجابة غير صحيحة على السؤال $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "يُرجى إكمال تسجيل الفعالية على $1، الويكي حيث تم إنشاء الفعالية فيه.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "يرجى حذف تسجيل الفعالية الخاصة بك على $1، الويكي حيث تم إنشاء الفعالية فيه.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "يُرجى إرسال بريد إلكتروني للمشاركين على $1، الويكي حيث تم إنشاء الفعالية."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "يُرجى إرسال بريد إلكتروني للمشاركين على $1، الويكي حيث تم إنشاء الفعالية.",
+	"campaignevents-rest-contribution-not-found": "لا يوجد أي مساهمة بهذا الهوية",
+	"campaignevents-rest-delete-contribution-permission-denied": "لا يُسمح لكِ بحذف هذه المساهمة."
 }

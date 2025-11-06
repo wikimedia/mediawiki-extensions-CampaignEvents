@@ -59,6 +59,7 @@
 	"campaignevents-error-invalid-address": "Etibarlı ünvan daxil edin.",
 	"campaignevents-error-contribs-tracking-disallowed-country": "Seçilmiş ölkə üçün töhfə statistikası aktiv edilə bilməz.",
 	"campaignevents-error-contribs-tracking-invalid-type": "Töhfə statistikası yalnız bu tədbirlər üçün aktiv edilə bilər: $1",
+	"campaignevents-error-contribs-tracking-no-wikis": "Töhfə statistikası yalnız ən azı bir hədəf vikisi olan tədbirlər üçün aktiv edilə bilər.",
 	"campaignevents-error-invalid-chat-url": "Etibarlı söhbət URL-i daxil edin.",
 	"campaignevents-error-invalid-question-names": "Aşağıdakı suallar tanınmadı: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Bu ad fəzasında tədbir qeydiyyatına icazə verilmir.",

@@ -58,6 +58,7 @@
 	"campaignevents-error-invalid-address": "Insere un adresse valide.",
 	"campaignevents-error-contribs-tracking-disallowed-country": "Le statisticas de contributiones non pote esser activate pro le pais seligite.",
 	"campaignevents-error-contribs-tracking-invalid-type": "Le statisticas de contributiones pote solmente esser activate pro eventos con le sequente typos: $1",
+	"campaignevents-error-contribs-tracking-no-wikis": "Le statisticas de contributiones pote solmente esser activate pro eventos con al minus un wiki de destination.",
 	"campaignevents-error-invalid-chat-url": "Insere un URL de chat valide.",
 	"campaignevents-error-invalid-question-names": "Le sequente questiones non ha essite recognoscite: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Le inscription a eventos non es permittite in iste spatio de nomines.",

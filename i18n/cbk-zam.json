@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Aristorkle",
-			"Noooote"
+			"Noooote",
+			"SaldırganSincap"
 		]
 	},
 	"campaignevents-desc": "Ta'n provide este maga feature para na maga organizador de campaña y participante.",
@@ -497,7 +498,7 @@
 	"campaignevents-invitation-list-invalid-id": "Dale un valido ID de listay invitacion. [[Special:MyInvitationLists|Mira con el maga listay invitacion de tuyo]].",
 	"campaignevents-invitation-list-does-not-exist": "Este listay invitacion hende ta existi.  [[Special:MyInvitationLists|Mira con el maga listay invitacion de tuyo]].",
 	"campaignevents-invitation-list-not-creator": "No hay tu permiso para mira con este listay invitacion kay no hay tu crea con este. [[Special:MyInvitationLists|Mira con el listay invitacion]].",
-	"campaignevents-invitation-list-nonlocal": "Por favor [$1 mira con este listay invitacion na $2]''', aquel wiki donde con este ya'n generate.",
+	"campaignevents-invitation-list-nonlocal": "Por favor '''[$1 mira con este listay invitacion na $2]''', aquel wiki donde con este ya'n generate.",
 	"campaignevents-invitation-list-intro": "$1 {{PLURAL:$1|editor|maga editor}} el ya encontra, base na siguiente criteria: el maga bytes ya contribui sila na maga articulo, el numero del maga edits sila ya habla na maga articulo, el de ila sumatotal numero de edit na maga wiki, y que laya de reciente sila ya hace edit con el maga wiki.",
 	"campaignevents-invitationlist-no-editors": "<strong>No hay editor el ya cumpli el [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists criteria del lista del invitacion] estaba na de tuyo lista de articulo.</strong> Puede tu [[Special:GenerateInvitationList|crea un nuevo listay invitacion]] junto el nuevo lista de articulo.",
 	"campaignevents-invitationlist-highly-recommended": "El de con todo recomendao para invita",
