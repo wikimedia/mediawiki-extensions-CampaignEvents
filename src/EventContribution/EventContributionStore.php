@@ -130,7 +130,8 @@ class EventContributionStore {
 				'links_added' => 'SUM(' . $dbr->conditional( 'cec.cec_links_delta > 0',
 					'cec.cec_links_delta', 0 ) . ')',
 				'links_removed' => 'SUM(' . $dbr->conditional( 'cec.cec_links_delta < 0',
-					'cec.cec_links_delta', 0 ) . ')'
+					'cec.cec_links_delta', 0 ) . ')',
+				'edit_count' => 'COUNT(*)',
 			] )
 			->from( 'ce_event_contributions', 'cec' )
 			->join(
@@ -151,7 +152,8 @@ class EventContributionStore {
 			(int)( $row->bytes_added ?? 0 ),
 			(int)( $row->bytes_removed ?? 0 ),
 			(int)( $row->links_added ?? 0 ),
-			(int)( $row->links_removed ?? 0 )
+			(int)( $row->links_removed ?? 0 ),
+			(int)( $row->edit_count ?? 0 )
 		);
 	}
 

@@ -266,43 +266,43 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			99999,
 			1234,
 			true,
-			new EventContributionSummary( 0, 0, 0, 0, 0, 0, 0, 0 )
+			new EventContributionSummary( 0, 0, 0, 0, 0, 0, 0, 0, 0 )
 		];
 		yield 'Can see private, not a participant' => [
 			1,
 			888888,
 			true,
-			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3 )
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5 )
 		];
 		yield 'Can see private, public participant' => [
 			1,
 			101,
 			true,
-			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3 )
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5 )
 		];
 		yield 'Can see private, private participant' => [
 			1,
 			102,
 			true,
-			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3 )
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5 )
 		];
 		yield 'Cannot see private, not a participant' => [
 			1,
 			888888,
 			false,
-			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3 )
+			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3, 3 )
 		];
 		yield 'Cannot see private, public participant' => [
 			1,
 			101,
 			false,
-			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3 )
+			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3, 3 )
 		];
 		yield 'Cannot see private, private participant' => [
 			1,
 			102,
 			false,
-			new EventContributionSummary( 2, 2, 1, 2, 400, -7, 16, -3 )
+			new EventContributionSummary( 2, 2, 1, 2, 400, -7, 16, -3, 4 )
 		];
 	}
 

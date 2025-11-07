@@ -16,7 +16,8 @@ class EventContributionSummary {
 		private readonly int $bytesAdded,
 		private readonly int $bytesRemoved,
 		private readonly int $linksAdded,
-		private readonly int $linksRemoved
+		private readonly int $linksRemoved,
+		private readonly int $editCount
 	) {
 	}
 
@@ -50,5 +51,9 @@ class EventContributionSummary {
 
 	public function getLinksRemoved(): int {
 		return $this->linksRemoved;
+	}
+
+	public function getEditCount(): int {
+		return $this->editCount;
 	}
 }

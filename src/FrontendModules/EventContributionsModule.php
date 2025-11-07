@@ -138,6 +138,12 @@ class EventContributionsModule {
 					MessageValue::new( 'campaignevents-contributions-summary-links-changed' )
 				)
 			],
+			'editCountCard' => [
+				'value' => $language->formatNum( $summaryData->getEditCount() ),
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-contributions-summary-edit-count' )
+				)
+			],
 		];
 
 		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventId );

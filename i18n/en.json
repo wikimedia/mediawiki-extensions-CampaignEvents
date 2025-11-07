@@ -611,5 +611,6 @@
 	"campaignevents-contributions-summary-bytes-changed": "Bytes changed",
 	"campaignevents-contributions-summary-links-changed": "Links changed",
 	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-contributions-summary-edit-count": "Edit count",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Participant registered privately"
 }

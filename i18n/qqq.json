@@ -618,5 +618,6 @@
 	"campaignevents-contributions-summary-bytes-changed": "Label for the bytes changed card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
 	"campaignevents-contributions-summary-links-changed": "Label for the links changed card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
 	"campaignevents-contributions-summary-delta-separator": "{{Optional}}\nSeparator character used between positive and negative values for bytes and links changed (e.g., +91/-124) in summary cards in the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
+	"campaignevents-contributions-summary-edit-count": "Label for a card shown in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]] containing the total number of edits associated with the event.",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Accessibility label added to lock icons on the contributions tab of [[Special:EventDetails]] to indicate that a participant registered privately."
 }
