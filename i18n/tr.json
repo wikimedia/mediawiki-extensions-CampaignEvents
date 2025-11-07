@@ -8,6 +8,7 @@
 			"Leo",
 			"Rapsar",
 			"RuzDD",
+			"Sakblue",
 			"ToprakM"
 		]
 	},
@@ -356,5 +357,6 @@
 	"generateinvitationlist": "Davetiye listesini oluştur",
 	"myinvitationlists": "Davet listeleriniz",
 	"invitationlist": "Davetiye listesi",
-	"campaignevents-register-event-id": "Etkinlik Kimliği"
+	"campaignevents-register-event-id": "Etkinlik Kimliği",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Katılımcı özel olarak kayıt yaptırdı"
 }

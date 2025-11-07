@@ -124,7 +124,7 @@
 	"campaignevents-myevents-label-search": "پلټل",
 	"campaignevents-myevents-label-status": "دريځ",
 	"campaignevents-myevents-field-status-any": "هر يو",
-	"campaignevents-myevents-field-status-open": "پرانيستې پېښې",
+	"campaignevents-myevents-field-status-open": "پرانېستې پېښې",
 	"campaignevents-myevents-field-status-closed": "تړل‌شوې پېښې",
 	"campaignevents-myevents-label-events-per-page": "په هر مخ کې پېښې",
 	"campaignevents-myevents-filter-btn-label": "پېښې چاڼول",
@@ -454,8 +454,12 @@
 	"campaignevents-allevents-label-filter-event-types": "پېښې ډولونه",
 	"campaignevents-allevents-placeholder-add-event-types": "پېښې ډولونه ورگډول...",
 	"campaignevents-eventpage-dialog-event-types-label": "پېښې ډولونه",
+	"campaignevents-email-error-notification-with-detail": "برېښليک د لاندې لاملونو له کبله نشي لېږل کېدای: $1",
 	"campaignevents-eventslist-types-label": "پېښې ډولونه",
 	"campaignevents-eventslist-country-label": "هېواد",
+	"campaignevents-contributions-notice-private-participants-excluded": "په دې مخ کې لړليک شوې شمارنې او ونډې د ځانواله گډونوالو اومتوکي نه لري.",
+	"campaignevents-contributions-notice-other-private-participants-excluded": "په دې مخ کې لړليک شوې شمارنې او ونډې نورو ځانواله گډونوالو اومتوکي نه لري.",
+	"campaignevents-event-contribution-event-ended": "پېښه پای ته رسېدلې ده او نور د سمون ټولنې نه مني",
 	"campaignevents-event-contribution-not-participant": "کارن د دې پېښې گډونوال نه دی",
 	"campaignevents-event-contribution-user-not-global": "کارن ټوليز کارن نه دی",
 	"campaignevents-event-contribution-already-associated": "يو سمون يوازې يوې پېښې سره تړاو لري.",
@@ -467,6 +471,7 @@
 	"campaignevents-postedit-dialog-title-single": "دا سمون له $1 سره تړاو لري؟",
 	"campaignevents-postedit-dialog-title-multiple": "دا سمون له کومې پېښې سره تړاو لري؟",
 	"campaignevents-postedit-dialog-intro-single": "تاسو د يوې چارن شوې پېښې لپاره نوم‌ليکنه کړې ده. ايا دا سمون د $1 لپاره دی؟",
+	"campaignevents-postedit-dialog-intro-multiple": "تاسو د څو کارنده پېښو لپاره نوم‌ليکنه کړې.\nايا دا سمون د يوې پېښې لپاره دی؟ که ځواب مو هو وي؛ نو مهرباني وکړئ څرگنده يې کړئ چې کومه يوه.",
 	"campaignevents-postedit-dialog-select-placeholder": "پېښه غوره‌کول",
 	"campaignevents-postedit-dialog-action-no": "نه، مننه",
 	"campaignevents-postedit-dialog-action-yes": "هو",
@@ -476,5 +481,6 @@
 	"campaignevents-contributions-summary-articles-edited": "ليکنې سمې شوې",
 	"campaignevents-contributions-summary-bytes-changed": "بايټونه بدل شول",
 	"campaignevents-contributions-summary-links-changed": "تړوني بدل شول",
-	"campaignevents-contributions-summary-delta-separator": "/"
+	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "گډونوال په ځانواله ډول نوم‌ليکنه کړې"
 }
