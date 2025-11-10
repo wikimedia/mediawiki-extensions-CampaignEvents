@@ -117,4 +117,30 @@ class UtilsTest extends MediaWikiUnitTestCase {
 				[ $oldAnswerTS, '111111111', $notEndedEventTS, null ],
 		];
 	}
+
+	/**
+	 * @covers ::diacriticInsensitiveSort
+	 * @dataProvider provideDiacriticInsensitiveSort
+	 */
+	public function testDiacriticInsensitiveSort(
+		array $input,
+		array $expected
+	) {
+		Utils::diacriticInsensitiveSort( $input );
+		$this->assertSame( $expected, $input );
+	}
+
+	public function provideDiacriticInsensitiveSort() {
+		return [
+			'no diacritics' => [
+				[ 'DE' => 'Germany', 'FR' => 'France', 'GB' => 'England' ],
+				[ 'GB' => 'England', 'FR' => 'France', 'DE' => 'Germany' ] ],
+			'diacritics' => [
+				[ 'DE' => 'Ǵermany', 'FR' => 'Ḟrance', 'GB' => 'Ĕngland' ],
+				[ 'GB' => 'Ĕngland', 'FR' => 'Ḟrance', 'DE' => 'Ǵermany' ] ],
+			'mixed' => [
+				[ 'C' => 'France', 'A' => 'England', 'D' => 'Ǵermany', 'B' => 'Éngland' ],
+				[ 'A' => 'England', 'B' => 'Éngland', 'C' => 'France', 'D' => 'Ǵermany' ], ],
+			];
+	}
 }

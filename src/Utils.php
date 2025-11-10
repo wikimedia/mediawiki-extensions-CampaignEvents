@@ -91,4 +91,22 @@ class Utils {
 		$eventAggregationTS = (int)MWTimestamp::convert( TS_UNIX, $event->getEndUTCTimestamp() );
 		return (string)min( $participantAggregationTS, $eventAggregationTS );
 	}
+
+	/**
+	 * @internal
+	 * Sorts an array of strings alphabetically in a manner where diacritics are
+	 * considered equivalent to their base forms
+	 *
+	 * @param array<string> &$arrayToSort
+	 */
+	public static function diacriticInsensitiveSort( array &$arrayToSort ): void {
+		uasort( $arrayToSort, static function ( string $a, string $b ): int {
+			$aNormalized = iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', $a );
+			$bNormalized = iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', $b );
+
+			$aNormalized = $aNormalized ?: $a;
+			$bNormalized = $bNormalized ?: $b;
+			return strcasecmp( $aNormalized, $bNormalized );
+		} );
+	}
 }

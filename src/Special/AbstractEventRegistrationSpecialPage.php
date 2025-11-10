@@ -453,7 +453,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$address = $this->event?->getAddress();
 		$languageCode = $this->getLanguage()->getCode();
 		$countryNames = $this->countryProvider->getAvailableCountries( $languageCode );
-		asort( $countryNames );
+		Utils::diacriticInsensitiveSort( $countryNames );
 		$countryOptions = [
 			$this->msg( 'campaignevents-edit-field-country-placeholder' )->text() => ''
 		];

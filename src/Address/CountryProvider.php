@@ -36,7 +36,6 @@ class CountryProvider {
 	 */
 	public function getAvailableCountries( string $languageCode ): array {
 		$all = CountryNames::getNames( $languageCode );
-
 		// Filter out excluded codes
 		return array_diff_key( $all, array_flip( self::EXCLUDED_COUNTRY_CODES ) );
 	}
