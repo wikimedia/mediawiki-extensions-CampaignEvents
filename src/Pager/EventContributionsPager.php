@@ -348,11 +348,7 @@ class EventContributionsPager extends CodexTablePager {
 		$isPrivateParticipant = $row->cep_private;
 		$centralUserID = $contrib->getUserId();
 		$centralUser = new CentralUser( $centralUserID );
-		$html = $this->userLinker->generateUserLinkWithFallback(
-			$this->getContext(),
-			$centralUser,
-			$this->getLanguage()->getCode()
-		);
+		$html = '';
 		if ( $isPrivateParticipant ) {
 			$icon = new IconWidget( [
 				'icon' => 'lock',
@@ -364,8 +360,13 @@ class EventContributionsPager extends CodexTablePager {
 					'campaignevents-event-details-contributions-private-participant-tooltip'
 				)->text()
 			] );
-			$html .= ' ' . $icon->toString();
+			$html .= $icon->toString() . ' ';
 		}
+		$html .= $this->userLinker->generateUserLinkWithFallback(
+			$this->getContext(),
+			$centralUser,
+			$this->getLanguage()->getCode()
+		);
 		return $html;
 	}
 
