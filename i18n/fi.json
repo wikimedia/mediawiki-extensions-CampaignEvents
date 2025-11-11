@@ -77,7 +77,7 @@
 	"campaignevents-edit-field-chat-url": "Ryhmäkeskustelukutsu",
 	"campaignevents-edit-field-chat-url-help": "Jos sinulla on online-keskusteluryhmä tämän tapahtuman osallistujille, voit lisätä ryhmän kutsulinkin tähän. Osallistujat näkevät kutsulinkin ilmoittautumisen jälkeen.",
 	"campaignevents-edit-form-questions-label": "Kysymykset osallistujille",
-	"campaignevents-edit-form-questions-intro": "Voit valita minkä tahansa seuraavista kysymyksistä osallistujille vastattavaksi tapahtuman ilmoittautumisen yhteydessä.",
+	"campaignevents-edit-form-questions-intro": "Voit valita mitkä tahansa seuraavista kysymyksistä osallistujille vastattavaksi tapahtuman ilmoittautumisen yhteydessä.",
 	"campaignevents-edit-form-questions-explanation": "Tapahtuman aikana voit tarkastella yksittäisten osallistujien vastauksia kysymyksiin, jotka eivät sisällä henkilötietoja, joista henkilön voisi tunnistaa. Tapahtuman päätyttyä kaikkien kysymysten vastaukset ovat saatavilla (vain yhteenkootussa muodossa) ja yksittäiset vastaukset poistetaan.",
 	"campaignevents-edit-form-questions-non-pii-label": "Ei-tunnistettavia henkilötietoja koskevat kysymykset",
 	"campaignevents-edit-form-questions-pii-label": "Tunnistettavia henkilötietoja koskevat kysymykset",
