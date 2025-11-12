@@ -604,5 +604,6 @@
 	"campaignevents-contributions-summary-articles-edited": "Muokattuja artikkeleita",
 	"campaignevents-contributions-summary-bytes-changed": "Tavumuutos",
 	"campaignevents-contributions-summary-links-changed": "Muutettuja linkkejä",
+	"campaignevents-contributions-summary-edit-count": "Muokkausmäärä",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Osallistuja ilmoittautui yksityisesti"
 }

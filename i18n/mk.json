@@ -603,5 +603,6 @@
 	"campaignevents-contributions-summary-bytes-changed": "Изменети бајти",
 	"campaignevents-contributions-summary-links-changed": "Изменети врски",
 	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-contributions-summary-edit-count": "Број на уредувања",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Учесникот се пријавил приватно"
 }

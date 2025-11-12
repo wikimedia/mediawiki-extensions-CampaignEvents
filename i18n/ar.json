@@ -618,5 +618,6 @@
 	"campaignevents-contributions-summary-bytes-changed": "البايتات المتغيرة",
 	"campaignevents-contributions-summary-links-changed": "الروابط المُغيَّرة",
 	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-contributions-summary-edit-count": "عدد التعديلات",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "تم تسجيل المشارك بشكل خاص"
 }

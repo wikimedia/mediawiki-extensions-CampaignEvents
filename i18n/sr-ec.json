@@ -282,5 +282,6 @@
 	"campaignevents-event-contribution-revision-not-found": "Ревизија није пронађена",
 	"campaignevents-postedit-dialog-action-no": "Не, хвала",
 	"campaignevents-postedit-dialog-action-yes": "Да",
-	"campaignevents-contributions-summary-articles-created": "Направљених чланака"
+	"campaignevents-contributions-summary-articles-created": "Направљених чланака",
+	"campaignevents-contributions-summary-edit-count": "Број измена"
 }

@@ -610,5 +610,6 @@
 	"campaignevents-contributions-summary-bytes-changed": "Bytes modificados",
 	"campaignevents-contributions-summary-links-changed": "Ligazóns modificadas",
 	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-contributions-summary-edit-count": "Total de edicións",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Participante rexistrado de forma privada"
 }

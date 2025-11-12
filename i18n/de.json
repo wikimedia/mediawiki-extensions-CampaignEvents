@@ -603,5 +603,6 @@
 	"campaignevents-contributions-summary-articles-edited": "Artikel bearbeitet",
 	"campaignevents-contributions-summary-bytes-changed": "Geänderte Bytes",
 	"campaignevents-contributions-summary-links-changed": "Links geändert",
+	"campaignevents-contributions-summary-edit-count": "Bearbeitungszähler",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Teilnehmer hat sich privat angemeldet"
 }

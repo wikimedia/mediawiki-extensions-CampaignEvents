@@ -608,5 +608,6 @@
 	"campaignevents-contributions-summary-articles-edited": "Bewerkte artikelen",
 	"campaignevents-contributions-summary-bytes-changed": "Gewijzigde bytes",
 	"campaignevents-contributions-summary-links-changed": "Gewijzigde koppelingen",
+	"campaignevents-contributions-summary-edit-count": "Aantal bewerkingen",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Deelnemer heeft zich privé ingeschreven"
 }
