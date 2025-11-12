@@ -5,11 +5,13 @@
 			"B3rnas",
 			"Hamilton Abreu",
 			"Mbs262",
-			"Mansil alfalb"
+			"Mansil alfalb",
+			"MrNinja"
 		]
 	},
 	"campaignevents-desc": "Fornece funcionalidades para organizadores e participantes de campanhas.",
 	"nstab-event": "Evento",
+	"grouppage-event-organizer": "Project:Organizadores de eventos",
 	"action-campaignevents-enable-registration": "permitir inscrições em eventos",
 	"right-campaignevents-enable-registration": "Permitir inscrições em eventos",
 	"action-campaignevents-delete-registration": "eliminar inscrições em eventos",
