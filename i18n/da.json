@@ -569,7 +569,6 @@
 	"campaignevents-email-error-notification-with-detail": "E-mailen kunne ikke sendes af følgende årsag: $1",
 	"campaignevents-eventslist-types-label": "Begivenhedstyper",
 	"campaignevents-eventslist-country-label": "Land",
-	"campaignevents-event-contribution-event-ended": "Begivenheden er afsluttet og accepterer ikke længere redigeringstilknytninger",
 	"campaignevents-event-contribution-not-participant": "Brugeren deltager ikke i denne begivenhed",
 	"campaignevents-event-contribution-user-not-global": "Brugeren er ikke en global bruger",
 	"campaignevents-event-contribution-timestamp-too-old": "Redigeringstidsstemplet er for gammelt (maks. 24 timer)",

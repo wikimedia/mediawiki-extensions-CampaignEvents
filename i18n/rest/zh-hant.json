@@ -21,5 +21,7 @@
 	"campaignevents-rest-register-invalid-answer": "問題$1的答案無效",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "請完成您在建立該活動的 wiki $1上的活動報名。",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "請刪除您在建立該活動的 wiki $1上的活動報名。",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "請發送電郵給建立該活動的 wiki $1上的參與者。"
+	"campaignevents-rest-email-participants-nonlocal-error-message": "請發送電郵給建立該活動的 wiki $1上的參與者。",
+	"campaignevents-rest-contribution-not-found": "此 ID 下沒有任何貢獻。",
+	"campaignevents-rest-delete-contribution-permission-denied": "您不被允許刪除此貢獻。"
 }

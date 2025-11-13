@@ -581,7 +581,7 @@
 	"campaignevents-eventslist-country-label": "Staat",
 	"campaignevents-contributions-notice-private-participants-excluded": "Die auf dieser Seite aufgeführten Statistiken und Beiträge enthalten keine Daten von privaten Teilnehmern.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "Die auf dieser Seite aufgeführten Statistiken und Beiträge enthalten keine Daten anderer privater Teilnehmer.",
-	"campaignevents-event-contribution-event-ended": "Die Veranstaltung ist beendet und akzeptiert keine Bearbeitungszuordnungen mehr.",
+	"campaignevents-event-contribution-event-not-active": "Diese Veranstaltung ist derzeit nicht aktiv, daher kannst du diese Bearbeitung nicht damit verknüpfen.",
 	"campaignevents-event-contribution-not-participant": "Der Benutzer ist kein Teilnehmer dieser Veranstaltung",
 	"campaignevents-event-contribution-user-not-global": "Der Benutzer ist kein globaler Benutzer",
 	"campaignevents-event-contribution-already-associated": "Eine Bearbeitung kann nur mit einer Veranstaltung verknüpft werden.",
@@ -604,5 +604,14 @@
 	"campaignevents-contributions-summary-bytes-changed": "Geänderte Bytes",
 	"campaignevents-contributions-summary-links-changed": "Links geändert",
 	"campaignevents-contributions-summary-edit-count": "Bearbeitungszähler",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "Teilnehmer hat sich privat angemeldet"
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Teilnehmer hat sich privat angemeldet",
+	"campaignevents-event-details-contributions-actions": "Aktionen",
+	"campaignevents-event-details-contributions-delete-tooltip": "Beitrag entfernen",
+	"campaignevents-event-details-contributions-delete-success": "Die Bearbeitung wurde aus der Veranstaltung entfernt.",
+	"campaignevents-event-details-contributions-delete-error": "Fehler beim Entfernen des Beitrags.",
+	"campaignevents-event-details-contributions-delete-title": "Diese Bearbeitung von $1 entfernen",
+	"campaignevents-event-details-contributions-delete-subtitle": "Möchtest du diese Bearbeitung wirklich aus der Veranstaltung entfernen?",
+	"campaignevents-event-details-contributions-delete-note": "Es wird nicht gelöscht, aber es wird nicht mehr mit der Veranstaltung verknüpft sein.",
+	"campaignevents-event-details-contributions-delete-cancel": "Abbrechen",
+	"campaignevents-event-details-contributions-delete-confirm": "Entfernen"
 }

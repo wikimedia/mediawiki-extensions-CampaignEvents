@@ -600,7 +600,6 @@
 	"campaignevents-email-error-notification-with-detail": "No se pudo enviar el mensaje de correo electrónico por el siguiente motivo: $1",
 	"campaignevents-eventslist-types-label": "Tipos de evento",
 	"campaignevents-eventslist-country-label": "País",
-	"campaignevents-event-contribution-event-ended": "El evento ha finalizado y ya no acepta asociaciones de edición",
 	"campaignevents-event-contribution-not-participant": "El usuario no participa en este evento",
 	"campaignevents-event-contribution-user-not-global": "El usuario no es un usuario global",
 	"campaignevents-event-contribution-already-associated": "Una edición solo se puede asociar a un evento.",

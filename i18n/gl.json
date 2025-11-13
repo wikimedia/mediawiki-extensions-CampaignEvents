@@ -587,7 +587,7 @@
 	"campaignevents-eventslist-country-label": "País",
 	"campaignevents-contributions-notice-private-participants-excluded": "As estatísticas e mais as contribucións que aparecen nesta páxina non inclúen datos de participantes privados.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "As estatísticas e mais as contribucións que aparecen nesta páxina non inclúen datos doutros participantes privados.",
-	"campaignevents-event-contribution-event-ended": "O evento rematou e xa non acepta máis modificacións asociadas a el",
+	"campaignevents-event-contribution-event-not-active": "Este evento non está activo nestes intres, polo que non podes asociarlle esta edición.",
 	"campaignevents-event-contribution-not-participant": "O usuario non participa neste evento",
 	"campaignevents-event-contribution-user-not-global": "O usuario non é un usuario global",
 	"campaignevents-event-contribution-already-associated": "Unha edición só pode estar asociada a un evento.",

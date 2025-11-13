@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Renessaince"
+			"Renessaince",
+			"Ucukor"
 		]
 	},
-	"campaignevents-allevents-label-upcoming-events-title": "Будучыя падзеі"
+	"campaignevents-allevents-label-upcoming-events-title": "Будучыя падзеі",
+	"campaignevents-event-details-contributions-delete-success": "Зьмена была выдалена з падзеі.",
+	"campaignevents-event-details-contributions-delete-title": "Выдаліць гэтую зьмену з $1"
 }

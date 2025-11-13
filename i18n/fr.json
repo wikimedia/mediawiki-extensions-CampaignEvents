@@ -615,7 +615,6 @@
 	"campaignevents-eventslist-types-label": "Types d’événements",
 	"campaignevents-eventslist-country-label": "Pays",
 	"campaignevents-contributions-notice-private-participants-excluded": "Les statistiques et les contributions listées sur cette page n'incluent pas les données des participants privés.",
-	"campaignevents-event-contribution-event-ended": "L'événement est terminé et n'accepte plus qu'une modification y soit associé",
 	"campaignevents-event-contribution-not-participant": "L'utilisateur ne participe pas à cet événement",
 	"campaignevents-event-contribution-user-not-global": "L'utilisateur n'est pas un utilisateur global",
 	"campaignevents-event-contribution-already-associated": "Une modification ne peut être associée qu'à un seul événement.",

@@ -586,7 +586,6 @@
 	"campaignevents-email-error-notification-with-detail": "Електронний лист не вдалося надіслати з такої причини: $1",
 	"campaignevents-eventslist-types-label": "Типи подій",
 	"campaignevents-eventslist-country-label": "Країна",
-	"campaignevents-event-contribution-event-ended": "Подія завершилася, і зазначити, що редагування робилося під час події, більше не можна",
 	"campaignevents-event-contribution-not-participant": "Користувач не є учасником цієї події",
 	"campaignevents-event-contribution-user-not-global": "Користувач не є глобальним користувачем",
 	"campaignevents-event-contribution-timestamp-too-old": "Часова мітка редагування занадто стара (максимум 24 години)",

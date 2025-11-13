@@ -568,7 +568,6 @@
 	"campaignevents-email-error-notification-with-detail": "Электронан хаам дӀабахьийта аьтто ца баьлла, хӀокху бахьанца: $1",
 	"campaignevents-eventslist-types-label": "Хиламийн тайпанаш",
 	"campaignevents-eventslist-country-label": "Пачхьалкх",
-	"campaignevents-event-contribution-event-ended": "Хиламаш чекхбаьлла, кхин тӀе ца оьцу хийцаран ассоциацеш",
 	"campaignevents-event-contribution-not-participant": "Декъашхо хӀокху хиламехь дакъалоцуш вац(йац)",
 	"campaignevents-event-contribution-user-not-global": "Декъашхо глобалан вац(йац)",
 	"campaignevents-event-contribution-timestamp-too-old": "Хийцамаш баран хенан билгало тӀех шира йу (максимум 24 сахьт)",

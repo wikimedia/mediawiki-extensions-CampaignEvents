@@ -462,5 +462,6 @@
 	"campaignevents-cancel-page-nonlocal": "कृपया '''[$1 अपना कार्यक्रम पंजीकरण $2 पर रद्द करें]''', जो कि वह विकि जहाँ पर कार्यक्रम बनाया गया था।",
 	"campaignevents-email-error-notification-with-detail": "ईमेल भेजा न जा सका, इस कारण से: $1",
 	"campaignevents-eventslist-types-label": "कार्यक्रम के प्रकार",
-	"campaignevents-eventslist-country-label": "देश"
+	"campaignevents-eventslist-country-label": "देश",
+	"campaignevents-contributions-summary-edit-count": "संपादन संख्या"
 }

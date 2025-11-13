@@ -589,7 +589,6 @@
 	"campaignevents-email-error-notification-with-detail": "Surel tidak dapat dikirim karena alasan berikut: $1",
 	"campaignevents-eventslist-types-label": "Jenis acara",
 	"campaignevents-eventslist-country-label": "Negara",
-	"campaignevents-event-contribution-event-ended": "Acara sudah berakhir dan tidak dapat menghubungkan suntingan",
 	"campaignevents-event-contribution-not-participant": "Pengguna bukan peserta dari acara ini",
 	"campaignevents-event-contribution-user-not-global": "Pengguna ini bukanlah pengguna global",
 	"campaignevents-event-contribution-timestamp-too-old": "Waktu penyuntingan terlalu lama (maksimal 24 jam)",

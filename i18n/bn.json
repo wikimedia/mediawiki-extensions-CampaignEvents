@@ -310,5 +310,6 @@
 	"campaignevents-allevents-placeholder-add-event-types": "ইভেন্টের ধরণ যোগ করুন...",
 	"campaignevents-eventpage-dialog-event-types-label": "ইভেন্টের ধরন",
 	"campaignevents-eventslist-types-label": "ইভেন্টের ধরন",
-	"campaignevents-eventslist-country-label": "দেশ"
+	"campaignevents-eventslist-country-label": "দেশ",
+	"campaignevents-contributions-summary-edit-count": "মোট সম্পাদনা"
 }

@@ -582,7 +582,7 @@
 	"campaignevents-eventslist-country-label": "ארץ",
 	"campaignevents-contributions-notice-private-participants-excluded": "הסטטיסטיקות והתרומות שמפורטות בדף הזה אינן כוללות נתונים ממשתתפים פרטיים.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "הסטטיסטיקות והתרומות שמפורטות בדף הזה אינן כוללות נתונים ממשתתפים פרטיים אחרים.",
-	"campaignevents-event-contribution-event-ended": "האירוע הסתיים ואינו מקבל עוד שיוכי עריכה",
+	"campaignevents-event-contribution-event-not-active": "האירוע הזה אינו פעיל כרגע, לכן אינך יכול לשייך אליו את העריכה הזאת.",
 	"campaignevents-event-contribution-not-participant": "המשתמש אינו משתתף באירוע הזה",
 	"campaignevents-event-contribution-user-not-global": "המשתמש אינו משתמש גלובלי",
 	"campaignevents-event-contribution-already-associated": "עריכה יכולה להיות משויכת לאירוע אחד בלבד.",
@@ -604,5 +604,15 @@
 	"campaignevents-contributions-summary-articles-edited": "ערכים שנערכו",
 	"campaignevents-contributions-summary-bytes-changed": "בתים ששונו",
 	"campaignevents-contributions-summary-links-changed": "קישורים ששונו",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "משתתף שנרשם באופן פרטי"
+	"campaignevents-contributions-summary-edit-count": "מונה עריכות",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "משתתף שנרשם באופן פרטי",
+	"campaignevents-event-details-contributions-actions": "פעולות",
+	"campaignevents-event-details-contributions-delete-tooltip": "הסרת תרומה",
+	"campaignevents-event-details-contributions-delete-success": "העריכה הוסרה מהאירוע.",
+	"campaignevents-event-details-contributions-delete-error": "שגיאה בהסרת תרומה.",
+	"campaignevents-event-details-contributions-delete-title": "הסרת העריכה הזאת מהאירוע $1",
+	"campaignevents-event-details-contributions-delete-subtitle": "האם ברצונך באמת להסיר את העריכה הזאת מהאירוע?",
+	"campaignevents-event-details-contributions-delete-note": "היא לא תימחק, אבל היא כבר לא תהיה משויכת לאירוע.",
+	"campaignevents-event-details-contributions-delete-cancel": "ביטול",
+	"campaignevents-event-details-contributions-delete-confirm": "הסרה"
 }

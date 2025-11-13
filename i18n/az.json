@@ -580,7 +580,7 @@
 	"campaignevents-eventslist-country-label": "Ölkə",
 	"campaignevents-contributions-notice-private-participants-excluded": "Bu səhifədə qeyd olunan statistika və töhfələrə gizli iştirakçıların məlumatları daxil deyil.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "Bu səhifədə qeyd olunan statistika və töhfələrə digər gizli iştirakçıların məlumatları daxil deyil.",
-	"campaignevents-event-contribution-event-ended": "Tədbir başa çatıb və artıq redaktə əlaqələndirmələrini qəbul etmir",
+	"campaignevents-event-contribution-event-not-active": "Bu tədbir hal-hazırda aktiv deyil, ona görə də bu redaktəni onunla əlaqələndirə bilməzsiniz.",
 	"campaignevents-event-contribution-not-participant": "İstifadəçi bu tədbirin iştirakçısı deyil",
 	"campaignevents-event-contribution-user-not-global": "İstifadəçi qlobal istifadəçi deyil",
 	"campaignevents-event-contribution-already-associated": "Redaktə yalnız bir tədbir ilə əlaqələndirilə bilər.",

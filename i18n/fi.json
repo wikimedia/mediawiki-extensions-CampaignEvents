@@ -582,7 +582,7 @@
 	"campaignevents-eventslist-country-label": "Maa",
 	"campaignevents-contributions-notice-private-participants-excluded": "Tällä sivulla listatut tilastot ja muokkaukset eivät sisällä tietoja yksityisiltä osallistujilta.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "Tällä sivulla listatut tilastot ja muokkaukset eivät sisällä tietoja muilta yksityisiltä osallistujilta.",
-	"campaignevents-event-contribution-event-ended": "Tapahtuma on päättynyt eikä se enää hyväksy muokkausten liittämistä.",
+	"campaignevents-event-contribution-event-not-active": "Tämä tapahtuma ei ole käynnissä tällä hetkellä, joten et voi liittää tätä muokkausta tähän tapahtumaan.",
 	"campaignevents-event-contribution-not-participant": "Käyttäjä ei ole tämän tapahtuman osallistuja",
 	"campaignevents-event-contribution-user-not-global": "Käyttäjä ei ole järjestelmänlaajuinen käyttäjä",
 	"campaignevents-event-contribution-already-associated": "Muokkaus voidaan liittää vain yhteen tapahtumaan.",
@@ -605,5 +605,14 @@
 	"campaignevents-contributions-summary-bytes-changed": "Tavumuutos",
 	"campaignevents-contributions-summary-links-changed": "Muutettuja linkkejä",
 	"campaignevents-contributions-summary-edit-count": "Muokkausmäärä",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "Osallistuja ilmoittautui yksityisesti"
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Osallistuja ilmoittautui yksityisesti",
+	"campaignevents-event-details-contributions-actions": "Toiminnot",
+	"campaignevents-event-details-contributions-delete-tooltip": "Poista muokkaus",
+	"campaignevents-event-details-contributions-delete-success": "Muokkaus poistettiin tapahtumasta.",
+	"campaignevents-event-details-contributions-delete-error": "Virhe poistettaessa muokkausta.",
+	"campaignevents-event-details-contributions-delete-title": "Poista tämä muokkaus tapahtumasta $1",
+	"campaignevents-event-details-contributions-delete-subtitle": "Haluatko varmasti poistaa tämän muokkauksen tapahtumasta?",
+	"campaignevents-event-details-contributions-delete-note": "Sitä ei poisteta, mutta sitä ei enää liitetä tapahtumaan.",
+	"campaignevents-event-details-contributions-delete-cancel": "Peruuta",
+	"campaignevents-event-details-contributions-delete-confirm": "Poista"
 }
