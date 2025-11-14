@@ -126,6 +126,12 @@ class EventContributionsModule {
 					MessageValue::new( 'campaignevents-contributions-summary-articles-edited' )
 				)
 			],
+			'editCountCard' => [
+				'value' => $language->formatNum( $summaryData->getEditCount() ),
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-contributions-summary-edit-count' )
+				)
+			],
 			'bytesChangedCard' => [
 				'value' => $this->formatDeltas( $summaryData->getBytesAdded(), $summaryData->getBytesRemoved() ),
 				'label' => $msgFormatter->format(
@@ -136,12 +142,6 @@ class EventContributionsModule {
 				'value' => $this->formatDeltas( $summaryData->getLinksAdded(), $summaryData->getLinksRemoved() ),
 				'label' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-contributions-summary-links-changed' )
-				)
-			],
-			'editCountCard' => [
-				'value' => $language->formatNum( $summaryData->getEditCount() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-edit-count' )
 				)
 			],
 		];
