@@ -67,15 +67,6 @@
 	"campaignevents-eventpage-header-registered-privately": "Registrovali ste se privatno!",
 	"campaignevents-eventpage-btn-edit": "Uredi registraciju",
 	"campaignevents-eventpage-btn-cancel": "Otkaži registraciju",
-	"campaignevents-eventpage-dialog-title": "Detalji događaja",
-	"campaignevents-eventpage-dialog-organizers": "Organizovano od {{PLURAL:$2|strane}}: $1",
-	"campaignevents-eventpage-dialog-participants-view-list": "Prikaži sve",
-	"campaignevents-eventpage-dialog-dates-label": "Početak i kraj",
-	"campaignevents-eventpage-dialog-dates": "$1 do $4",
-	"campaignevents-eventpage-dialog-timezone": "<strong>Vremenska zona:</strong> $1",
-	"campaignevents-eventpage-dialog-online-label": "Onlajn događaj",
-	"campaignevents-eventpage-dialog-in-person-label": "Događaj uživo",
-	"campaignevents-eventpage-dialog-action-close": "Zatvori",
 	"campaignevents-eventpage-unregister-confirmation-title": "Otkaži registraciju",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Da",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Ne",
@@ -180,9 +171,6 @@
 	"campaignevents-invitations-pager-status-processing": "Obrađujem...",
 	"campaignevents-myinvitationslist-new-button": "Novo",
 	"campaignevents-worklist-error-empty": "Navedite bar jedan članak.",
-	"campaignevents-eventpage-wikis-more": "{{PLURAL:$1|još}} $1",
-	"campaignevents-eventpage-dialog-wikis-label": "Vikiji",
 	"campaignevents-eventslist-wiki-label": "Vikiji",
-	"campaignevents-event-details-topics-header": "Teme",
-	"campaignevents-eventpage-dialog-topics-label": "Teme"
+	"campaignevents-event-details-topics-header": "Teme"
 }

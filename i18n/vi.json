@@ -51,7 +51,6 @@
 	"campaignevents-error-invalid-meeting-url": "Nhập URL cuộc họp hợp lệ.",
 	"campaignevents-error-meeting-url-not-online": "Không được điền URL cuộc họp nếu sự kiện không trực tuyến.",
 	"campaignevents-error-countryoraddress-not-in-person": "Không được nêu rõ quốc gia và địa chỉ cuộc họp nếu sự kiện không diễn ra trực tiếp.",
-	"campaignevents-error-invalid-country": "Nhập tên quốc gia hợp lệ.",
 	"campaignevents-error-invalid-address": "Nhập địa chỉ hợp lệ.",
 	"campaignevents-error-invalid-chat-url": "Nhập URL trò chuyện hợp lệ.",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Không được phép đăng ký sự kiện trong không gian tên này.",

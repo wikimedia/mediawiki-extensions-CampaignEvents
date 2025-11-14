@@ -14,7 +14,6 @@
 	"campaignevents-eventslist-delete-dialog-delete": "Jaukkâd",
 	"campaignevents-delete-submit-btn": "Jaukkâd",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
-	"campaignevents-eventpage-dialog-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",
 	"campaignevents-eventpage-register-dialog-save": "Ruõkk",
 	"campaignevents-event-details-edit-button": "Muuʹtt",
 	"campaignevents-event-details-header-participants": "$1 {{PLURAL:$1|vuässõõtti|vuässõõtti|vuässõõttjed}}",

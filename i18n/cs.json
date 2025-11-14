@@ -26,7 +26,6 @@
 	"campaignevents-error-invalid-id": "Identifikátor události musí být kladné celé číslo.",
 	"enableeventregistration": "Povolit registraci na událost",
 	"campaignevents-eventpage-header-participation-options-in-person": "Osobní akce",
-	"campaignevents-eventpage-dialog-venue-not-available": "Adresa místa konání dosud nebyla {{PLURAL:$1|organizátorem|organizátory}} zveřejněna.",
 	"campaignevents-event-details-edit-button": "Upravit",
 	"campaignevents-event-details-select-all": "Vybrat všechny účastníky",
 	"campaignevents-event-details-remove-participant-remove-btn": "Smazat",
