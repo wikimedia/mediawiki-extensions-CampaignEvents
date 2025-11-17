@@ -73,5 +73,8 @@
 	"prefs-campaignevents-invitations": "Հրավերների ցանկեր",
 	"campaignevents-postedit-dialog-action-no": "Ոչ, շնորհակալություն",
 	"campaignevents-postedit-dialog-action-yes": "Այո",
-	"campaignevents-contributions-summary-participants": "Մասնակիցներ"
+	"campaignevents-contributions-summary-participants": "Մասնակիցներ",
+	"campaignevents-event-details-contributions-actions": "Գործողություններ",
+	"campaignevents-event-details-contributions-delete-cancel": "Չեղարկել",
+	"campaignevents-event-details-contributions-delete-confirm": "Հեռացնել"
 }

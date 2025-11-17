@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Sveinn í Felli"
+		]
+	},
+	"campaignevents-rest-delete-already-deleted": "Þessari skráningu á viðburð var þegar eytt.",
+	"campaignevents-rest-get-registration-deleted": "Þessari skráningu á viðburð var eytt."
+}

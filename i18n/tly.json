@@ -18,5 +18,8 @@
 	"campaignevents-register-question-age-option-under-25": "Bə 25",
 	"campaignevents-register-question-affiliate-option-none": "Ne",
 	"campaignevents-register-question-affiliate-option-affiliate": "Ha",
-	"campaignevents-eventpage-register-dialog-questions-title": "Šymə məlumot"
+	"campaignevents-eventpage-register-dialog-questions-title": "Šymə məlumot",
+	"campaignevents-event-details-contributions-actions": "Hərəkəton",
+	"campaignevents-event-details-contributions-delete-cancel": "Ohaštej",
+	"campaignevents-event-details-contributions-delete-confirm": "Mole"
 }

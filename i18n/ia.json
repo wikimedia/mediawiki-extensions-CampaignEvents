@@ -552,6 +552,7 @@
 	"campaignevents-eventslist-country-label": "Pais",
 	"campaignevents-contributions-notice-private-participants-excluded": "Le statisticas e contributiones listate sur iste pagina non include le datos de participantes private.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "Le statisticas e contributiones listate sur iste pagina non include le datos de altere participantes private.",
+	"campaignevents-event-contribution-event-not-active": "Iste evento non es actualmente active, dunque tu non pote associar iste modification con illo.",
 	"campaignevents-event-contribution-not-participant": "Le usator non es un participante a iste evento",
 	"campaignevents-event-contribution-user-not-global": "Le usator non es un usator global",
 	"campaignevents-event-contribution-already-associated": "Un modification pote solmente esser associate a un evento.",
@@ -573,5 +574,15 @@
 	"campaignevents-contributions-summary-articles-edited": "Articulos modificate",
 	"campaignevents-contributions-summary-bytes-changed": "Bytes cambiate",
 	"campaignevents-contributions-summary-links-changed": "Ligamines cambiate",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "Le participante se ha inscribite privatemente"
+	"campaignevents-contributions-summary-edit-count": "Numero de modificationes",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Le participante se ha inscribite privatemente",
+	"campaignevents-event-details-contributions-actions": "Actiones",
+	"campaignevents-event-details-contributions-delete-tooltip": "Remover contribution",
+	"campaignevents-event-details-contributions-delete-success": "Le modification ha essite removite del evento.",
+	"campaignevents-event-details-contributions-delete-error": "Error durante le remotion del contribution.",
+	"campaignevents-event-details-contributions-delete-title": "Remover iste modification de $1",
+	"campaignevents-event-details-contributions-delete-subtitle": "Es tu secur de voler remover iste modification del evento?",
+	"campaignevents-event-details-contributions-delete-note": "Illo non essera delite, ma non plus essera associate al evento.",
+	"campaignevents-event-details-contributions-delete-cancel": "Cancellar",
+	"campaignevents-event-details-contributions-delete-confirm": "Remover"
 }
