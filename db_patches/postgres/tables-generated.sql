@@ -46,6 +46,7 @@ CREATE TABLE ce_participants (
   cep_unregistered_at TIMESTAMPTZ DEFAULT NULL,
   cep_first_answer_timestamp TIMESTAMPTZ DEFAULT NULL,
   cep_aggregation_timestamp TIMESTAMPTZ DEFAULT NULL,
+  cep_hide_contribution_association_prompt SMALLINT DEFAULT 0 NOT NULL,
   PRIMARY KEY(cep_id)
 );
 

@@ -35,7 +35,8 @@ CREATE TABLE /*_*/ce_participants (
   cep_private BOOLEAN NOT NULL, cep_registered_at BLOB NOT NULL,
   cep_unregistered_at BLOB DEFAULT NULL,
   cep_first_answer_timestamp BLOB DEFAULT NULL,
-  cep_aggregation_timestamp BLOB DEFAULT NULL
+  cep_aggregation_timestamp BLOB DEFAULT NULL,
+  cep_hide_contribution_association_prompt SMALLINT DEFAULT 0 NOT NULL
 );
 
 CREATE UNIQUE INDEX cep_event_participant ON /*_*/ce_participants (cep_event_id, cep_user_id);

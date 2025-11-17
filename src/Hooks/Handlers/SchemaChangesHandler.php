@@ -115,5 +115,14 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-cleanup-country.sql",
 			true
 		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addField',
+			'ce_participants',
+			"cep_hide_contribution_association_prompt",
+			"$dir/$dbType/patch-add-cep_hide_contribution_association_prompt.sql",
+			true
+		] );
 	}
 }

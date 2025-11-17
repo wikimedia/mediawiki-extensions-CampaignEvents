@@ -1,0 +1,195 @@
+{
+	"before": {
+		"name": "ce_participants",
+		"comment": "Stores the participants of an event.",
+		"columns": [
+			{
+				"name": "cep_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_event_id",
+				"comment": "Gets the event id from campaign_events table.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_user_id",
+				"comment": "The Central ID.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_private",
+				"comment": "Whether the user registered privately for the event.",
+				"type": "boolean",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cep_registered_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cep_unregistered_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			},
+			{
+				"name": "cep_first_answer_timestamp",
+				"comment": "Timestamp of when the participant answered a question for the first time.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			},
+			{
+				"name": "cep_aggregation_timestamp",
+				"comment": "Timestamp of when this participant's answers were aggregated.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "cep_event_participant",
+				"columns": [ "cep_event_id", "cep_user_id" ],
+				"unique": true,
+				"comment": "Uniqueness constraint, used in queries where we need the event first."
+			},
+			{
+				"name": "cep_event_unregistered",
+				"columns": [ "cep_event_id", "cep_unregistered_at" ],
+				"unique": false,
+				"comment": "For COUNT measurements."
+			},
+			{
+				"name": "cep_user_unregistered_event",
+				"columns": [ "cep_user_id", "cep_unregistered_at", "cep_event_id" ],
+				"unique": false,
+				"comment": "For JOINs."
+			}
+		],
+		"pk": [ "cep_id" ]
+	},
+	"after": {
+		"name": "ce_participants",
+		"comment": "Stores the participants of an event.",
+		"columns": [
+			{
+				"name": "cep_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_event_id",
+				"comment": "Gets the event id from campaign_events table.",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_user_id",
+				"comment": "The Central ID.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cep_private",
+				"comment": "Whether the user registered privately for the event.",
+				"type": "boolean",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cep_registered_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cep_unregistered_at",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			},
+			{
+				"name": "cep_first_answer_timestamp",
+				"comment": "Timestamp of when the participant answered a question for the first time.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			},
+			{
+				"name": "cep_aggregation_timestamp",
+				"comment": "Timestamp of when this participant's answers were aggregated.",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": false
+				}
+			},
+			{
+				"name": "cep_hide_contribution_association_prompt",
+				"comment": "Whether this participant opted out of being asked whether the contribution they just made should be associated with the event.",
+				"type": "mwtinyint",
+				"options": {
+					"length": 1,
+					"default": 0
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "cep_event_participant",
+				"columns": [ "cep_event_id", "cep_user_id" ],
+				"unique": true,
+				"comment": "Uniqueness constraint, used in queries where we need the event first."
+			},
+			{
+				"name": "cep_event_unregistered",
+				"columns": [ "cep_event_id", "cep_unregistered_at" ],
+				"unique": false,
+				"comment": "For COUNT measurements."
+			},
+			{
+				"name": "cep_user_unregistered_event",
+				"columns": [ "cep_user_id", "cep_unregistered_at", "cep_event_id" ],
+				"unique": false,
+				"comment": "For JOINs."
+			}
+		],
+		"pk": [ "cep_id" ]
+	}
+}

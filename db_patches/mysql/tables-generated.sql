@@ -43,6 +43,7 @@ CREATE TABLE /*_*/ce_participants (
   cep_unregistered_at BINARY(14) DEFAULT NULL,
   cep_first_answer_timestamp BINARY(14) DEFAULT NULL,
   cep_aggregation_timestamp BINARY(14) DEFAULT NULL,
+  cep_hide_contribution_association_prompt TINYINT(1) DEFAULT 0 NOT NULL,
   UNIQUE INDEX cep_event_participant (cep_event_id, cep_user_id),
   INDEX cep_event_unregistered (
     cep_event_id, cep_unregistered_at
