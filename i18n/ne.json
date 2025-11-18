@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Bada Kaji",
+			"Nirajan pant",
 			"पर्वत सुबेदी",
 			"बडा काजी"
 		]
@@ -59,7 +60,7 @@
 	"campaignevents-event-details-dates": "$1 देखि $4",
 	"campaignevents-event-details-organizers-header": "आयोजकहरू",
 	"campaignevents-event-details-select-all": "सबै चयन गर्नुहोस्",
-	"campaignevents-event-details-remove-participant-remove-btn": "हटाउनुहोस्",
+	"campaignevents-event-details-remove-participant-remove-btn": "मेटाउनुहोस्",
 	"campaignevents-event-details-remove-participant-cancel-btn": "रद्द गर्नुहोस्",
 	"campaignevents-event-details-event": "कार्यक्रम विवरणहरू: $1",
 	"campaignevents-event-details-tab-event-details": "कार्यक्रम विवरणहरू",
