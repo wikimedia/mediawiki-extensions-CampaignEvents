@@ -184,25 +184,23 @@ class FrontendModulesFactory {
 	}
 
 	public function newEventContributionsModule(
-		ExistingEventRegistration $event,
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
 		LinkRenderer $linkRenderer,
-		OutputPage $output
+		OutputPage $output,
+		ExistingEventRegistration $event,
 	): EventContributionsModule {
 		return new EventContributionsModule(
 			$this->messageFormatterFactory,
-			$event,
-			$permissionChecker,
-			$centralUserLookup,
+			$this->permissionChecker,
+			$this->centralUserLookup,
 			$linkRenderer,
 			$this->userLinker,
 			$this->databaseHelper,
 			$this->titleFactory,
 			$this->eventContributionStore,
-			$output,
 			$this->linkBatchFactory,
-			$this->participantsStore
+			$this->participantsStore,
+			$output,
+			$event,
 		);
 	}
 }

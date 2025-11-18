@@ -229,11 +229,9 @@ class SpecialEventDetails extends SpecialPage {
 		);
 		if ( $this->event->hasContributionTracking() ) {
 			$eventContributionsModule = $this->frontendModulesFactory->newEventContributionsModule(
-				$this->event,
-				$this->permissionChecker,
-				$this->centralUserLookup,
 				$this->getLinkRenderer(),
-				$out
+				$out,
+				$this->event,
 			);
 			$tabs[] = $this->createTab(
 				self::CONTRIBUTIONS_PANEL,

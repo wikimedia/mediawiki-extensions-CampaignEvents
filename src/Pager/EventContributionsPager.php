@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
@@ -21,6 +22,7 @@ use MediaWiki\Title\TitleFactory;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\IconWidget;
 use stdClass;
+use UnexpectedValueException;
 use Wikimedia\Rdbms\IReadableDatabase;
 
 /**
@@ -39,16 +41,15 @@ class EventContributionsPager extends CodexTablePager {
 		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp', 'cec_id' ],
 	];
 
-	private ExistingEventRegistration $event;
 	private PermissionChecker $permissionChecker;
-	private LinkBatchFactory $linkBatchFactory;
-	private LinkRenderer $linkRenderer;
 	private CampaignsCentralUserLookup $centralUserLookup;
-
+	private LinkBatchFactory $linkBatchFactory;
 	private UserLinker $userLinker;
 	private TitleFactory $titleFactory;
 	private EventContributionStore $eventContributionStore;
+	private ExistingEventRegistration $event;
 	private TemplateParser $templateParser;
+
 	/** @var array<int,EventContribution> */
 	private array $contribObjects = [];
 	/** @var bool Whether performer can delete all contributions (organizer) */
@@ -69,22 +70,25 @@ class EventContributionsPager extends CodexTablePager {
 		UserLinker $userLinker,
 		TitleFactory $titleFactory,
 		EventContributionStore $eventContributionStore,
-		ExistingEventRegistration $event
+		ExistingEventRegistration $event,
+		IContextSource $context,
 	) {
-		$this->event = $event;
+		// Set the database before calling the parent constructor, otherwise it'll use the local one.
+		$this->mDb = $db;
+		parent::__construct(
+			$this->msg( 'campaignevents-event-details-contributions-table-caption' )->text(),
+			$context,
+			$linkRenderer
+		);
+
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->linkBatchFactory = $linkBatchFactory;
-		$this->linkRenderer = $linkRenderer;
 		$this->userLinker = $userLinker;
 		$this->titleFactory = $titleFactory;
 		$this->eventContributionStore = $eventContributionStore;
-		$this->mDb = $db;
+		$this->event = $event;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
-
-		parent::__construct(
-			$this->msg( 'campaignevents-event-details-contributions-table-caption' )->text()
-		);
 	}
 
 	/**
@@ -268,20 +272,15 @@ class EventContributionsPager extends CodexTablePager {
 	 */
 	public function formatValue( $name, $value ) {
 		$row = $this->mCurrentRow;
-		switch ( $name ) {
-			case 'article':
-				return $this->formatArticle( $row );
-			case 'wiki':
-				return $this->formatWiki( $row );
-			case 'username':
-				return $this->formatUsername( $row );
-			case 'timestamp':
-				return $this->formatTimestamp( $row );
-			case 'bytes':
-				return $this->formatBytes( $row );
-			case 'actions':
-				return $this->formatActions( $row );
-		}
+		return match ( $name ) {
+			'article' => $this->formatArticle( $row ),
+			'wiki' => $this->formatWiki( $row ),
+			'username' => $this->formatUsername( $row ),
+			'timestamp' => $this->formatTimestamp( $row ),
+			'bytes' => $this->formatBytes( $row ),
+			'actions' => $this->formatActions( $row ),
+			default => throw new UnexpectedValueException( 'Unexpected column: ' . $name ),
+		};
 	}
 
 	/**
@@ -312,10 +311,10 @@ class EventContributionsPager extends CodexTablePager {
 		$prefixedText = $contrib->getPagePrefixedtext();
 		if ( WikiMap::isCurrentWikiId( $contrib->getWiki() ) ) {
 			$title = $this->titleFactory->newFromTextThrow( $prefixedText );
-			$link = $this->linkRenderer->makeKnownLink( $title, $prefixedText );
+			$link = $this->getLinkRenderer()->makeKnownLink( $title, $prefixedText );
 		} else {
 			$url = WikiMap::getForeignURL( $contrib->getWiki(), $prefixedText );
-			$link = $this->linkRenderer->makeExternalLink( $url, $prefixedText, $this->getTitle() );
+			$link = $this->getLinkRenderer()->makeExternalLink( $url, $prefixedText, $this->getTitle() );
 		}
 		$html = $link;
 
@@ -385,11 +384,11 @@ class EventContributionsPager extends CodexTablePager {
 		];
 		if ( WikiMap::isCurrentWikiId( $contrib->getWiki() ) ) {
 			$title = $this->titleFactory->newFromTextThrow( $prefixedText );
-			$link = $this->linkRenderer->makeKnownLink( $title, $formattedTime, [], $diffParams );
+			$link = $this->getLinkRenderer()->makeKnownLink( $title, $formattedTime, [], $diffParams );
 		} else {
 			$url = WikiMap::getForeignURL( $contrib->getWiki(), $prefixedText );
 			$diffUrl = wfAppendQuery( $url, $diffParams );
-			$link = $this->linkRenderer->makeExternalLink( $diffUrl, $formattedTime, $this->getTitle() );
+			$link = $this->getLinkRenderer()->makeExternalLink( $diffUrl, $formattedTime, $this->getTitle() );
 		}
 
 		return $link;

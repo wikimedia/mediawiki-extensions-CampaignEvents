@@ -25,24 +25,22 @@ use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
 class EventContributionsModule {
-
-	private TemplateParser $templateParser;
 	private IMessageFormatterFactory $messageFormatterFactory;
-	private ExistingEventRegistration $event;
 	private PermissionChecker $permissionChecker;
-	private LinkRenderer $linkRenderer;
-	private CampaignsDatabaseHelper $databaseHelper;
 	private CampaignsCentralUserLookup $centralUserLookup;
-	private OutputPage $output;
+	private LinkRenderer $linkRenderer;
 	private UserLinker $userLinker;
+	private CampaignsDatabaseHelper $databaseHelper;
 	private TitleFactory $titleFactory;
 	private EventContributionStore $eventContributionStore;
 	private LinkBatchFactory $linkBatchFactory;
 	private ParticipantsStore $participantsStore;
+	private TemplateParser $templateParser;
+	private OutputPage $output;
+	private ExistingEventRegistration $event;
 
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
-		ExistingEventRegistration $event,
 		PermissionChecker $permissionChecker,
 		CampaignsCentralUserLookup $centralUserLookup,
 		LinkRenderer $linkRenderer,
@@ -50,13 +48,12 @@ class EventContributionsModule {
 		CampaignsDatabaseHelper $databaseHelper,
 		TitleFactory $titleFactory,
 		EventContributionStore $eventContributionStore,
-		OutputPage $output,
 		LinkBatchFactory $linkBatchFactory,
 		ParticipantsStore $participantsStore,
+		OutputPage $output,
+		ExistingEventRegistration $event,
 	) {
 		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
-		$this->event = $event;
 		$this->permissionChecker = $permissionChecker;
 		$this->centralUserLookup = $centralUserLookup;
 		$this->linkRenderer = $linkRenderer;
@@ -64,9 +61,11 @@ class EventContributionsModule {
 		$this->databaseHelper = $databaseHelper;
 		$this->titleFactory = $titleFactory;
 		$this->eventContributionStore = $eventContributionStore;
-		$this->output = $output;
 		$this->linkBatchFactory = $linkBatchFactory;
 		$this->participantsStore = $participantsStore;
+		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
+		$this->output = $output;
+		$this->event = $event;
 	}
 
 	public function createContent(): Tag {
@@ -176,11 +175,10 @@ class EventContributionsModule {
 			$this->userLinker,
 			$this->titleFactory,
 			$this->eventContributionStore,
-			$this->event
+			$this->event,
+			$this->output->getContext()
 		);
 
-		// Ensure the pager gets the correct context with request parameters
-		$pager->setContext( $this->output->getContext() );
 		// Keep the Contributions tab active when interacting with the pager
 		$pager->setExtraQuery( [ 'tab' => 'ContributionsPanel' ] );
 
