@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Pager\CodexTablePager;
@@ -354,7 +355,12 @@ class EventContributionsPager extends CodexTablePager {
 			$centralUser,
 			$this->getLanguage()->getCode()
 		);
-		return $html;
+
+		return Html::rawElement(
+			'span',
+			[ 'class' => 'campaignevents-event-details-contributions-username-wrapper' ],
+			$html
+		);
 	}
 
 	/**
