@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
@@ -47,6 +48,7 @@ class EventContributionsPager extends CodexTablePager {
 	private UserLinker $userLinker;
 	private TitleFactory $titleFactory;
 	private EventContributionStore $eventContributionStore;
+	private WikiLookup $wikiLookup;
 	private ExistingEventRegistration $event;
 	private TemplateParser $templateParser;
 
@@ -70,6 +72,7 @@ class EventContributionsPager extends CodexTablePager {
 		UserLinker $userLinker,
 		TitleFactory $titleFactory,
 		EventContributionStore $eventContributionStore,
+		WikiLookup $wikiLookup,
 		ExistingEventRegistration $event,
 		IContextSource $context,
 	) {
@@ -87,6 +90,7 @@ class EventContributionsPager extends CodexTablePager {
 		$this->userLinker = $userLinker;
 		$this->titleFactory = $titleFactory;
 		$this->eventContributionStore = $eventContributionStore;
+		$this->wikiLookup = $wikiLookup;
 		$this->event = $event;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
@@ -332,11 +336,11 @@ class EventContributionsPager extends CodexTablePager {
 		return $html;
 	}
 
-	/**
-	 * Format wiki column
-	 */
 	private function formatWiki( stdClass $row ): string {
-		return WikiMap::getWikiName( $row->cec_wiki );
+		static $wikiNameCache = [];
+		$wikiID = $row->cec_wiki;
+		$wikiNameCache[$wikiID] ??= $this->wikiLookup->getLocalizedNames( [ $wikiID ] )[$wikiID];
+		return $wikiNameCache[$wikiID];
 	}
 
 	/**

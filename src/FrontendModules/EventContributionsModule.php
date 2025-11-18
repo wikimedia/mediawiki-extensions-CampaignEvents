@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPager;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -35,6 +36,7 @@ class EventContributionsModule {
 	private EventContributionStore $eventContributionStore;
 	private LinkBatchFactory $linkBatchFactory;
 	private ParticipantsStore $participantsStore;
+	private WikiLookup $wikiLookup;
 	private TemplateParser $templateParser;
 	private OutputPage $output;
 	private ExistingEventRegistration $event;
@@ -50,6 +52,7 @@ class EventContributionsModule {
 		EventContributionStore $eventContributionStore,
 		LinkBatchFactory $linkBatchFactory,
 		ParticipantsStore $participantsStore,
+		WikiLookup $wikiLookup,
 		OutputPage $output,
 		ExistingEventRegistration $event,
 	) {
@@ -63,6 +66,7 @@ class EventContributionsModule {
 		$this->eventContributionStore = $eventContributionStore;
 		$this->linkBatchFactory = $linkBatchFactory;
 		$this->participantsStore = $participantsStore;
+		$this->wikiLookup = $wikiLookup;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		$this->output = $output;
 		$this->event = $event;
@@ -175,6 +179,7 @@ class EventContributionsModule {
 			$this->userLinker,
 			$this->titleFactory,
 			$this->eventContributionStore,
+			$this->wikiLookup,
 			$this->event,
 			$this->output->getContext()
 		);

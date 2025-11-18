@@ -199,6 +199,7 @@ class FrontendModulesFactory {
 			$this->eventContributionStore,
 			$this->linkBatchFactory,
 			$this->participantsStore,
+			$this->wikiLookup,
 			$output,
 			$event,
 		);
