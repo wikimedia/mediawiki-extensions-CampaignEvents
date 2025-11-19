@@ -182,7 +182,6 @@
 	"campaignevents-unregister-registration-deleted": "Du kan inte avbryta din evenemangsregistrering eftersom den har raderats.",
 	"campaignevents-eventpage-header-participation-options-label": "Deltagandemöjligheter",
 	"campaignevents-eventpage-header-participation-options-online": "Onlineevenemang",
-	"campaignevents-eventpage-header-participation-options-in-person": "Evenemang på plats",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Onlineevenemang och på plats",
 	"campaignevents-eventpage-header-timezone": "<strong>Tidszon</strong>: $1",
 	"campaignevents-eventpage-header-dates-label": "Start- och sluttid",

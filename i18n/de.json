@@ -213,7 +213,6 @@
 	"campaignevents-unregister-registration-deleted": "Du kannst deine Anmeldung für diese Veranstaltung nicht stornieren, da sie gelöscht wurde.",
 	"campaignevents-eventpage-header-participation-options-label": "Teilnahmemöglichkeiten",
 	"campaignevents-eventpage-header-participation-options-online": "Online-Veranstaltung",
-	"campaignevents-eventpage-header-participation-options-in-person": "Präsenzveranstaltung",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Online- und Präsenzveranstaltung",
 	"campaignevents-eventpage-header-timezone": "<strong>Zeitzone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Start- und Endzeit",

@@ -188,7 +188,6 @@
 	"campaignevents-register-registration-deleted": "You no go fi register for dis event secof edelete.",
 	"campaignevents-unregister-registration-deleted": "You no go fi cancel your event registration secof edelete.",
 	"campaignevents-eventpage-header-participation-options-online": "Online event",
-	"campaignevents-eventpage-header-participation-options-in-person": "In-person event",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Online den in-person event",
 	"campaignevents-eventpage-header-timezone": "<strong>Tymzone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Start den end tym",

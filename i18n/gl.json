@@ -212,7 +212,6 @@
 	"campaignevents-unregister-registration-deleted": "Non podes cancelar a túa inscrición ao evento porque foi eliminado.",
 	"campaignevents-eventpage-header-participation-options-label": "Opcións de participación",
 	"campaignevents-eventpage-header-participation-options-online": "Evento en liña",
-	"campaignevents-eventpage-header-participation-options-in-person": "Evento presencial",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Evento en liña e presencial",
 	"campaignevents-eventpage-header-timezone": "<strong>Fuso horario:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Hora de inicio e finalización",

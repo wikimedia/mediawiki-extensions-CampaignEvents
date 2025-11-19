@@ -212,7 +212,6 @@
 	"campaignevents-unregister-registration-deleted": "Ви не можете скасувати реєстрацію на подію, оскільки її було вилучено.",
 	"campaignevents-eventpage-header-participation-options-label": "Варіанти участі",
 	"campaignevents-eventpage-header-participation-options-online": "Онлайн-подія",
-	"campaignevents-eventpage-header-participation-options-in-person": "Очна подія",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Онлайн та очна подія",
 	"campaignevents-eventpage-header-dates": "$1 — $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Часовий пояс:</strong> $1",

@@ -199,7 +199,6 @@
 	"campaignevents-unregister-registration-deleted": "आप अपना कार्यक्रम पंजीकरण रद्द नहीं कर सकते क्योंकि इसे हटा दिया गया है।",
 	"campaignevents-eventpage-header-participation-options-label": "भाग लेने के विकल्प",
 	"campaignevents-eventpage-header-participation-options-online": "ऑनलाइन कार्यक्रम",
-	"campaignevents-eventpage-header-participation-options-in-person": "वैयक्तिक कार्यक्रम",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "ऑनलाइन और वैयक्तिक कार्यक्रम",
 	"campaignevents-eventpage-header-timezone": "<strong>समय मंडल:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "आरंभ और समाप्ति का समय",

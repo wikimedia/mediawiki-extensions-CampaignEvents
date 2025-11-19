@@ -187,7 +187,6 @@
 	"campaignevents-register-registration-deleted": "Nie możesz zarejestrować się na to wydarzenie, ponieważ zostało usunięte.",
 	"campaignevents-unregister-registration-deleted": "Nie możesz anulować swojej rejestracji na wydarzenie, bo została już usunięta.",
 	"campaignevents-eventpage-header-participation-options-online": "Wydarzenie online",
-	"campaignevents-eventpage-header-participation-options-in-person": "Wydarzenie na żywo",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Wydarzenie online i osobiście",
 	"campaignevents-eventpage-header-timezone": "<strong>Strefa czasowa:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Czas rozpoczęcia i zakończenia",

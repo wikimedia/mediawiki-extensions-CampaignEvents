@@ -173,7 +173,6 @@
 	"campaignevents-register-registration-deleted": "Na ta dogodek se ne morete prijaviti, ker je bil izbrisan.",
 	"campaignevents-unregister-registration-deleted": "Prijave na ta dogodek ne morete preklicati, ker je bil izbrisan.",
 	"campaignevents-eventpage-header-participation-options-online": "Spletni dogodek",
-	"campaignevents-eventpage-header-participation-options-in-person": "Dogodek v živo",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Dogodek na spletu in v živo",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Časovni pas:</strong> $1",

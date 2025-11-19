@@ -206,7 +206,6 @@
 	"campaignevents-unregister-registration-deleted": "Você não pode cancelar a sua inscrição no evento porque ele foi eliminado.",
 	"campaignevents-eventpage-header-participation-options-label": "Opções de participação",
 	"campaignevents-eventpage-header-participation-options-online": "Evento on-line",
-	"campaignevents-eventpage-header-participation-options-in-person": "Evento presencial",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Evento on-line e presencial",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Fuso horário:</strong> $1",

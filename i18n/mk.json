@@ -212,7 +212,6 @@
 	"campaignevents-unregister-registration-deleted": "Не можете да откажете пријава за настанот бидејќи е избришан.",
 	"campaignevents-eventpage-header-participation-options-label": "Можности за учество",
 	"campaignevents-eventpage-header-participation-options-online": "Семрежен настан",
-	"campaignevents-eventpage-header-participation-options-in-person": "Присуствен настан",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Семрежен и присуствен настан",
 	"campaignevents-eventpage-header-timezone": "<strong>Часовен појас:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Почетно и завршно време",

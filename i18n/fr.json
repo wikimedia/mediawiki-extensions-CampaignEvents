@@ -240,7 +240,6 @@
 	"campaignevents-unregister-registration-deleted": "Vous ne pouvez pas annuler votre inscription à un événement car il a été supprimé.",
 	"campaignevents-eventpage-header-participation-options-label": "Options de participation",
 	"campaignevents-eventpage-header-participation-options-online": "Événement en ligne",
-	"campaignevents-eventpage-header-participation-options-in-person": "Événement en présentiel",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Événement en ligne et en présentiel",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Fuseau horaire :</strong> $1",

@@ -218,7 +218,6 @@
 	"campaignevents-unregister-registration-deleted": "U kunt uw evenementregistratie niet annuleren omdat deze is verwijderd.",
 	"campaignevents-eventpage-header-participation-options-label": "Deelnamemogelijkheden",
 	"campaignevents-eventpage-header-participation-options-online": "Online evenement",
-	"campaignevents-eventpage-header-participation-options-in-person": "Evenement op locatie",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Evenement online en op locatie",
 	"campaignevents-eventpage-header-timezone": "<strong>Tijdzone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Begin- en eindtijd",

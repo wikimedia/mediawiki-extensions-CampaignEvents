@@ -176,7 +176,6 @@
 	"campaignevents-register-registration-deleted": "Du kan ikke melde deg på dette arrangementet fordi det har blitt slettet.",
 	"campaignevents-unregister-registration-deleted": "Du kan ikke melde deg av dette arrengementet fordi det har blitt slettet.",
 	"campaignevents-eventpage-header-participation-options-online": "Online-arrangement",
-	"campaignevents-eventpage-header-participation-options-in-person": "Fysisk arrangement",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Online og fysisk arrangement",
 	"campaignevents-eventpage-header-timezone": "<strong>Tidssone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Start- og slutt-tid",

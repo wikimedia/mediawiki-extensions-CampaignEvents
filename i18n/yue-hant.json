@@ -115,7 +115,6 @@
 	"deleteeventregistration": "刪除活動登記",
 	"campaignevents-eventpage-header-participation-options-label": "參與選項",
 	"campaignevents-eventpage-header-participation-options-online": "網上活動",
-	"campaignevents-eventpage-header-participation-options-in-person": "線下活動",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "線上同線下活動",
 	"campaignevents-eventpage-header-timezone": "<strong>時區:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "開始同結束時間",

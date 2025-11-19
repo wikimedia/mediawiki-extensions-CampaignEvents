@@ -207,7 +207,6 @@
 	"campaignevents-unregister-registration-deleted": "شما نمی‌توانید ثبت نام خود در این رویداد را لغو کنید، زیرا این رویداد حذف شده است.",
 	"campaignevents-eventpage-header-participation-options-label": "گزینه‌های مشارکت",
 	"campaignevents-eventpage-header-participation-options-online": "رویداد برخط",
-	"campaignevents-eventpage-header-participation-options-in-person": "رویداد حضوری",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "رویداد برخط یا شخصی",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>منطقهٔ زمانی:</strong> $1",

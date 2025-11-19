@@ -101,7 +101,6 @@
 	"campaignevents-delete-error-no-event": "Üritus määramata.",
 	"campaignevents-eventpage-header-participation-options-label": "Osalemisvõimalused",
 	"campaignevents-eventpage-header-participation-options-online": "Veebiüritus",
-	"campaignevents-eventpage-header-participation-options-in-person": "Kohaletulemisega üritus",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Veebi- ja kohaletulemisega üritus",
 	"campaignevents-eventpage-header-timezone": "<strong>Ajavöönd:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Algus- ja lõppaeg",

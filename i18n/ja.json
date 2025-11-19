@@ -196,7 +196,6 @@
 	"campaignevents-delete-submit-btn": "削除",
 	"campaignevents-edit-registration-deleted": "このイベント登録は削除されました。",
 	"campaignevents-eventpage-header-participation-options-online": "オンラインイベント",
-	"campaignevents-eventpage-header-participation-options-in-person": "対面イベント",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "オンラインおよび対面イベント",
 	"campaignevents-eventpage-header-timezone": "<strong>タイムゾーン:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "開始時間と終了時間",

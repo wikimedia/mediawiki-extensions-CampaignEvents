@@ -212,7 +212,6 @@
 	"campaignevents-unregister-registration-deleted": "Anda tidak boleh membatalkan pendaftaran acara anda kerana ia telah dipadamkan.",
 	"campaignevents-eventpage-header-participation-options-label": "Pilihan penyertaan",
 	"campaignevents-eventpage-header-participation-options-online": "Acara dalam talian",
-	"campaignevents-eventpage-header-participation-options-in-person": "Acara secara bersemuka",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Acara dalam talian dan bersemuka",
 	"campaignevents-eventpage-header-timezone": "<strong>Zon waktu:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Masa mula dan tamat",

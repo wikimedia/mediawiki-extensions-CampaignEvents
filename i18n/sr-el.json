@@ -57,7 +57,6 @@
 	"campaignevents-eventslist-organizers-more": "$1 {{PLURAL:$1|više}}",
 	"campaignevents-delete-submit-btn": "Obriši",
 	"campaignevents-eventpage-header-participation-options-online": "Onlajn događaj",
-	"campaignevents-eventpage-header-participation-options-in-person": "Događaj uživo",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Onlajn i uživo",
 	"campaignevents-eventpage-header-timezone": "<strong>Vremenska zona:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Početak i kraj",

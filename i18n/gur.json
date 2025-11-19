@@ -63,7 +63,6 @@
 	"campaignevents-delete-error-already-deleted": "'Event registrations' wa pugum yese mɛ.",
 	"campaignevents-delete-submit-btn": "Saalum",
 	"campaignevents-eventpage-header-participation-options-online": "Baŋa zuo 'event'",
-	"campaignevents-eventpage-header-participation-options-in-person": "Fu mɛŋɛ bɔŋa 'event'",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Baŋa zuo le fu mɛŋɛ bɔŋa 'event'",
 	"campaignevents-eventpage-header-timezone": "<strong>Timezone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Pɔsega le ba'asegɔ saŋa",

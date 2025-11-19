@@ -226,7 +226,6 @@
 	"campaignevents-unregister-registration-deleted": "لا يمكنك إلغاء تسجيلك في هذه الفعالية لأنها حذفت.",
 	"campaignevents-eventpage-header-participation-options-label": "خيارات المشاركة",
 	"campaignevents-eventpage-header-participation-options-online": "فعاليات عن بعد",
-	"campaignevents-eventpage-header-participation-options-in-person": "فعالية حضورية",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "فعالية حضورية وعن بعد",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>المنطقة الزمنية:</strong> $1",
@@ -568,6 +567,7 @@
 	"campaignevents-eventslist-country-label": "دولة",
 	"campaignevents-contributions-notice-private-participants-excluded": "لا تتضمن الإحصاءات والمساهمات المدرجة على هذه الصفحة بيانات المشاركين الخاصين.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "لا تشمل الإحصاءات والمساهمات المدرجة على هذه الصفحة بيانات من المشاركين الخاصين الآخرين.",
+	"campaignevents-event-contribution-event-not-active": "هذا الحدث غير نشط حاليًا، لذا لا يمكنك ربط هذا التعديل به.",
 	"campaignevents-event-contribution-not-participant": "المستخدم ليس مشاركًا في هذه الفعالية",
 	"campaignevents-event-contribution-user-not-global": "المستخدم ليس مستخدمًا عالميًا",
 	"campaignevents-event-contribution-already-associated": "يمكن ربط التحرير مع حدث واحد فقط.",
@@ -591,5 +591,14 @@
 	"campaignevents-contributions-summary-links-changed": "الروابط المُغيَّرة",
 	"campaignevents-contributions-summary-delta-separator": "/",
 	"campaignevents-contributions-summary-edit-count": "عدد التعديلات",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "تم تسجيل المشارك بشكل خاص"
+	"campaignevents-event-details-contributions-private-participant-tooltip": "تم تسجيل المشارك بشكل خاص",
+	"campaignevents-event-details-contributions-actions": "الإجراءات",
+	"campaignevents-event-details-contributions-delete-tooltip": "إزالة المساهمة",
+	"campaignevents-event-details-contributions-delete-success": "تمت إزالة التعديل من الحدث.",
+	"campaignevents-event-details-contributions-delete-error": "حدث خطأ أثناء إزالة المساهمة.",
+	"campaignevents-event-details-contributions-delete-title": "إزالة هذا التعديل من $1",
+	"campaignevents-event-details-contributions-delete-subtitle": "هل أنت متأكد أنك تريد إزالة هذا التعديل من الحدث؟",
+	"campaignevents-event-details-contributions-delete-note": "لن يتم حذفه، لكنه لن يكون مرتبطًا بالحدث بعد الآن.",
+	"campaignevents-event-details-contributions-delete-cancel": "إلغاء",
+	"campaignevents-event-details-contributions-delete-confirm": "إزالة"
 }

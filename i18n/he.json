@@ -214,7 +214,6 @@
 	"campaignevents-unregister-registration-deleted": "אינך {{GENDER:|יכול|יכולה}} לבטל את הרשמתך לאירוע הזה כי הוא נמחק.",
 	"campaignevents-eventpage-header-participation-options-label": "אפשרויות השתתפות",
 	"campaignevents-eventpage-header-participation-options-online": "אירוע מקוון",
-	"campaignevents-eventpage-header-participation-options-in-person": "אירוע בחיים האמיתיים",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "אירוע מקוון ובחיים האמיתיים",
 	"campaignevents-eventpage-header-timezone": "<strong>אזור זמן:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "זמן התחלה וסיום",

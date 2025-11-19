@@ -202,7 +202,6 @@
 	"campaignevents-unregister-registration-deleted": "No puede tu cancela con el registracion del event de tuyo kay ya borra ya con este.",
 	"campaignevents-eventpage-header-participation-options-label": "Maga opcion del participacion",
 	"campaignevents-eventpage-header-participation-options-online": "Event online",
-	"campaignevents-eventpage-header-participation-options-in-person": "Event na personal",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Event online y na personal",
 	"campaignevents-eventpage-header-timezone": "<strong>Zona de hora:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Hora/tiempo de principiada y acabada",

@@ -103,7 +103,6 @@
 	"campaignevents-edit-registration-deleted": "Ez az eseményregisztráció törölve lett.",
 	"campaignevents-register-registration-deleted": "Nem tudsz regisztrálni erre az eseményre, mert törölték.",
 	"campaignevents-eventpage-header-participation-options-online": "Online esemény",
-	"campaignevents-eventpage-header-participation-options-in-person": "Személyes esemény",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Online és személyes esemény",
 	"campaignevents-eventpage-header-timezone": "<strong>Időzóna:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Kezdési és befejezési idő",

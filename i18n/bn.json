@@ -98,7 +98,6 @@
 	"campaignevents-register-registration-deleted": "আপনি এই ইভেন্টের জন্য নিবন্ধন করতে পারবেন না কারণ এটি মুছে ফেলা হয়েছে।",
 	"campaignevents-eventpage-header-participation-options-label": "অংশগ্রহণের বিকল্প",
 	"campaignevents-eventpage-header-participation-options-online": "অনলাইন ইভেন্ট",
-	"campaignevents-eventpage-header-participation-options-in-person": "ব্যক্তিগত অনুষ্ঠান",
 	"campaignevents-eventpage-header-timezone": "<strong>সময় অঞ্চল:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "শুরু ও সমাপ্তির সময়",
 	"campaignevents-eventpage-header-participants": "$1 জন {{PLURAL:$1|অংশগ্রহণকারী}}",

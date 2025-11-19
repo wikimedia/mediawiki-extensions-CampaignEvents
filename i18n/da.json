@@ -210,7 +210,6 @@
 	"campaignevents-unregister-registration-deleted": "Du kan ikke annullere din tilmelding til begivenheden, da den er blevet slettet.",
 	"campaignevents-eventpage-header-participation-options-label": "Deltagelsesmuligheder",
 	"campaignevents-eventpage-header-participation-options-online": "Onlinebegivenhed",
-	"campaignevents-eventpage-header-participation-options-in-person": "Fysisk begivenhed",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Online og fysisk begivenhed",
 	"campaignevents-eventpage-header-timezone": "<strong>Tidszone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Start- og sluttidspunkt",

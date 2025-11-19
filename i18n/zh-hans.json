@@ -144,7 +144,6 @@
 	"campaignevents-delete-error-no-event": "未指定活动。",
 	"campaignevents-delete-submit-btn": "删除",
 	"campaignevents-eventpage-header-participation-options-online": "线上活动",
-	"campaignevents-eventpage-header-participation-options-in-person": "现场活动",
 	"campaignevents-eventpage-header-timezone": "<strong>时区：</strong>$1",
 	"campaignevents-eventpage-header-dates-label": "开始和结束时间",
 	"campaignevents-eventpage-header-participants": "$1位{{PLURAL:$1|参与者}}",

@@ -212,7 +212,6 @@
 	"campaignevents-unregister-registration-deleted": "Tədbirin qeydiyyatı silindiyi üçün onu ləğv edə bilməzsiniz.",
 	"campaignevents-eventpage-header-participation-options-label": "İştirak seçimləri",
 	"campaignevents-eventpage-header-participation-options-online": "Onlayn tədbir",
-	"campaignevents-eventpage-header-participation-options-in-person": "Oflayn tədbir",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Onlayn və oflayn tədbir",
 	"campaignevents-eventpage-header-timezone": "<strong>Saat qurşağı:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Başlama və bitmə vaxtı",

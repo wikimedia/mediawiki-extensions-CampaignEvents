@@ -155,7 +155,6 @@
 	"campaignevents-register-registration-deleted": "Bu etkinlik silindiği için etkinliğe kaydolamazsınız.",
 	"campaignevents-unregister-registration-deleted": "Etkinlik kaydınızı silindiği için iptal edemezsiniz.",
 	"campaignevents-eventpage-header-participation-options-online": "Çevrimiçi etkinlik",
-	"campaignevents-eventpage-header-participation-options-in-person": "Yüz yüze etkinlik",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Çevrimiçi ve yüz yüze etkinlik",
 	"campaignevents-eventpage-header-timezone": "<strong>Saat dilimi:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Başlangıç ve bitiş zamanı",

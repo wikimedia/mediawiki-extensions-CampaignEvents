@@ -188,7 +188,6 @@
 	"campaignevents-register-registration-deleted": "Ga o ka ke wa ikwadisetsa tiragalo eno ka gore e phimotswe.",
 	"campaignevents-unregister-registration-deleted": "Ga o ka ke wa phimola go ikwadiso ya gago mo tiragalong ka gore e setse e phimotswe.",
 	"campaignevents-eventpage-header-participation-options-online": "Tiragalo ya mo maranyaneng",
-	"campaignevents-eventpage-header-participation-options-in-person": "Tiragalo ya bokopano ka namana",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Tiragalo ya mo maranyaneng le bokopano ka namana",
 	"campaignevents-eventpage-header-timezone": "<strong>Nako ya kgaolo:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Nako ya go simolola le ya go wetsa",

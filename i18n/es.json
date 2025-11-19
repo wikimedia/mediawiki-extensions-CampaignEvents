@@ -226,7 +226,6 @@
 	"campaignevents-unregister-registration-deleted": "No puedes cancelar tu inscripción para este evento porque ha sido borrado.",
 	"campaignevents-eventpage-header-participation-options-label": "Opciones de participación",
 	"campaignevents-eventpage-header-participation-options-online": "Evento en línea",
-	"campaignevents-eventpage-header-participation-options-in-person": "Evento presencial",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Evento mixto en línea y presencial",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Zona horaria:</strong> $1",

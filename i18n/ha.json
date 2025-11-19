@@ -193,7 +193,6 @@
 	"campaignevents-register-registration-deleted": "Ba za ka iya yin rajista don wannan taron ba saboda an goge shi.",
 	"campaignevents-unregister-registration-deleted": "Ba za ka iya soke rajistar taron ka ba saboda an goge shi.",
 	"campaignevents-eventpage-header-participation-options-online": "Taron kan layi",
-	"campaignevents-eventpage-header-participation-options-in-person": "Lamarin cikin-mutum",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Kan layi da taron cikin-mutum",
 	"campaignevents-eventpage-header-timezone": "<strong>Lokaci:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Lokacin farawa da ƙarewa",

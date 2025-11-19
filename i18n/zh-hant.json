@@ -161,7 +161,6 @@
 	"campaignevents-unregister-registration-deleted": "因活動已刪除，您無權取消註冊。",
 	"campaignevents-eventpage-header-participation-options-label": "參與的選項",
 	"campaignevents-eventpage-header-participation-options-online": "線上活動",
-	"campaignevents-eventpage-header-participation-options-in-person": "實體活動",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "線上和實體活動",
 	"campaignevents-eventpage-header-dates": "$1—$4",
 	"campaignevents-eventpage-header-timezone": "<strong>時區：</strong>$1",

@@ -115,7 +115,6 @@
 	"campaignevents-unregister-registration-deleted": "Вы не можете отменить регистрацию на мероприятие, поскольку она была удалена.",
 	"campaignevents-eventpage-header-participation-options-label": "Варианты участия",
 	"campaignevents-eventpage-header-participation-options-online": "Онлайн-мероприятие",
-	"campaignevents-eventpage-header-participation-options-in-person": "Очное мероприятие",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Онлайн и очное мероприятие",
 	"campaignevents-eventpage-header-timezone": "<strong>Часовой пояс:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Время начала и окончания",

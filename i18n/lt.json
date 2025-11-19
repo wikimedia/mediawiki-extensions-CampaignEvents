@@ -136,7 +136,6 @@
 	"campaignevents-register-registration-deleted": "Negalite registruotis į šį įvykį, nes jis buvo ištrintas.",
 	"campaignevents-unregister-registration-deleted": "Negalite atšaukti įvykio registracijos, nes ji buvo ištrinta.",
 	"campaignevents-eventpage-header-participation-options-online": "Internetu",
-	"campaignevents-eventpage-header-participation-options-in-person": "Gyvai",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Internetu ir gyvai",
 	"campaignevents-eventpage-header-timezone": "<strong>Laiko juosta:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Pradžios ir pabaigos laikas",

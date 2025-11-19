@@ -215,7 +215,6 @@
 	"campaignevents-unregister-registration-deleted": "Anda tidak dapat membatalkan pendaftaran acara tersebut karena telah dihapus.",
 	"campaignevents-eventpage-header-participation-options-label": "Pilihan partisipasi",
 	"campaignevents-eventpage-header-participation-options-online": "Acara daring",
-	"campaignevents-eventpage-header-participation-options-in-person": "Acara tatap muka",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Acara daring dan tatap muka",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Zona waktu:</strong> $1",

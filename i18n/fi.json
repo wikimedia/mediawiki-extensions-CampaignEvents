@@ -214,7 +214,6 @@
 	"campaignevents-unregister-registration-deleted": "Et voi peruuttaa tapahtumailmoittautumistasi, koska se on poistettu.",
 	"campaignevents-eventpage-header-participation-options-label": "Osallistumisvaihtoehdot",
 	"campaignevents-eventpage-header-participation-options-online": "Online-tapahtuma",
-	"campaignevents-eventpage-header-participation-options-in-person": "Tapahtuma paikan päällä",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Tapahtuma paikan päällä ja online",
 	"campaignevents-eventpage-header-timezone": "<strong>Aikavyöhyke:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Aloitus- ja lopetusaika",

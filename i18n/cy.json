@@ -55,7 +55,6 @@
 	"campaignevents-eventslist-organizers-more": "$1 {{PLURAL:$1|mwy}}",
 	"campaignevents-delete-submit-btn": "Dileu",
 	"campaignevents-eventpage-header-participation-options-online": "Digwyddiad ar-lein",
-	"campaignevents-eventpage-header-participation-options-in-person": "Digwyddiad wyneb-yn-wyneb",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Digwyddiad ar-lein ac wyneb yn wyneb",
 	"campaignevents-eventpage-header-timezone": "<strong>Cylchfa amser:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Amser dechrau a gorffen",

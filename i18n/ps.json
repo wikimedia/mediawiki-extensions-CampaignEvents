@@ -169,7 +169,6 @@
 	"campaignevents-unregister-registration-deleted": "تاسو د خپلې پېښې نوم‌‌ليکنه ناگارولی نشئ، ځکه چې دا ړنگه‌شوې.",
 	"campaignevents-eventpage-header-participation-options-label": "د گډون خوښنې",
 	"campaignevents-eventpage-header-participation-options-online": "پرليکه پېښه",
-	"campaignevents-eventpage-header-participation-options-in-person": "ځاني پېښه",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "پرليکه او ځاني پېښه",
 	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>وخت‌سيمه:</strong> $1",

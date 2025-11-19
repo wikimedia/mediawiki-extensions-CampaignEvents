@@ -196,7 +196,6 @@
 	"campaignevents-register-registration-deleted": "Huwezi kujiandikisha kwa tukio hili kwa sababu lilifutwa.",
 	"campaignevents-unregister-registration-deleted": "Huwezi kughairi usajili wako wa tukio kwa sababu ulifutwa.",
 	"campaignevents-eventpage-header-participation-options-online": "Tukio la mtandaoni",
-	"campaignevents-eventpage-header-participation-options-in-person": "Tukio la ana kwa ana",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Tukio la mtandaoni na la ana kwa ana",
 	"campaignevents-eventpage-header-timezone": "<strong>Saa za eneo:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Muda wa kuanza na kumaliza",

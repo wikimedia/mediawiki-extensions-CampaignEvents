@@ -99,7 +99,6 @@
 	"campaignevents-delete-submit-btn": "Обриши",
 	"campaignevents-eventpage-header-participation-options-label": "Опције за учествовање",
 	"campaignevents-eventpage-header-participation-options-online": "Онлајн догађај",
-	"campaignevents-eventpage-header-participation-options-in-person": "Догађај уживо",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Онлајн и уживо",
 	"campaignevents-eventpage-header-timezone": "<strong>Временска зона:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Почетак и крај",
