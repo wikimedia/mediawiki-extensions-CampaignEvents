@@ -13,13 +13,14 @@
 			"Tiagoquix",
 			"Vanished 345490135",
 			"VasbXBR",
-			"YuriNikolai"
+			"YuriNikolai",
+			"MrNinja"
 		]
 	},
 	"campaignevents-desc": "Fornece recursos para organizadores e participantes da campanha.",
 	"nstab-event": "Evento",
 	"group-event-organizer": "Organizadores de eventos",
-	"grouppage-event-organizer": "{{ns:project}}:Organizadores do evento",
+	"grouppage-event-organizer": "{{ns:project}}:Organizadores de eventos",
 	"action-campaignevents-enable-registration": "habilitar inscrições para o evento",
 	"right-campaignevents-enable-registration": "Ativar inscrições para o evento",
 	"action-campaignevents-delete-registration": "excluir inscrições do evento",

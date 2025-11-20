@@ -6,7 +6,8 @@
 			"MDShanks",
 			"Norhorn",
 			"Pablothecat",
-			"Spyridon Eftychios Kokotos"
+			"Spyridon Eftychios Kokotos",
+			"Jimkats"
 		]
 	},
 	"action-campaignevents-email-participants": "Στείλτε email στους συμμετέχοντες στην εκδήλωση",
@@ -29,7 +30,7 @@
 	"campaignevents-tracking-tool-wikiedu-already-in-use-error": "Το μάθημα $1 έχει ήδη συμμετέχοντες και επομένως δεν μπορεί να συνδεθεί με αυτό το συμβάν.",
 	"campaignevents-tracking-tool-wikiedu-already-connected-error": "Το μάθημα $1 είναι ήδη συνδεδεμένο με ένα συμβάν και δεν μπορεί να συνδεθεί ξανά.",
 	"campaignevents-tracking-tool-wikiedu-not-connected-error": "Το μάθημα $1 δεν είναι συνδεδεμένο με αυτό το συμβάν και επομένως δεν μπορεί να συγχρονιστεί.",
-	"campaignevents-register-questions-label-title": "Πληροφορίες για τους διοργανωτές",
+	"campaignevents-register-questions-label-title": "Οι πληροφορίες σας",
 	"campaignevents-register-questions-label-subtitle": "Μπορείτε να αλλάξετε ή να αφαιρέσετε τις απαντήσεις σας πριν, κατά τη διάρκεια και μετά το συμβάν.",
 	"campaignevents-register-question-gender": "Ποια είναι η ταυτότητα φύλου σας; (προαιρετικό)",
 	"campaignevents-register-question-gender-option-not-say": "Προτιμώ να μην πω",
