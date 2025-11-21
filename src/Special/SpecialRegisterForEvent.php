@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\InvalidAnswerDataException;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
+use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\Utils\MWTimestamp;
 use OOUI\IconWidget;
@@ -125,6 +126,23 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 				'section' => 'top',
 			]
 		];
+
+		// Add Contribution statistics section if event qualifies and participant is already registered.
+		if ( $this->curParticipantData && $this->event->hasContributionTracking() && !$this->event->isPast() ) {
+			$eventDetailsTitle = SpecialPage::getTitleFor(
+				SpecialEventDetails::PAGE_NAME,
+				(string)$this->event->getID()
+			);
+			$fields['ShowContributionAssociationPrompt'] = [
+				'type' => 'check',
+				'label-message' => 'campaignevents-register-contribstats-label',
+				'default' => $this->curParticipantData->shouldShowContributionAssociationPrompt(),
+				'section' => 'campaignevents-register-contribstats-title',
+				'help' => $this->msg( 'campaignevents-register-contribstats-help' )
+					->params( $eventDetailsTitle->getFullURL( [ 'tab' => SpecialEventDetails::CONTRIBUTIONS_PANEL ] ) )
+					->parse(),
+			];
+		}
 
 		$this->addParticipantQuestionFields( $fields );
 
@@ -244,12 +262,22 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			return Status::newFatal( 'campaignevents-register-invalid-answer', $e->getQuestionName() );
 		}
 
+		// Use the provided value if available, else keep whatever the user previously set (this can happen after an
+		// event has ended), else use a default (e.g. if the event does not have contribution tracking or the user is
+		// registering for the first time)
+		$showContribAssociation = $data['ShowContributionAssociationPrompt'] ??
+			$this->curParticipantData?->shouldShowContributionAssociationPrompt() ??
+			true;
+		$contributionAssociationMode = $showContribAssociation
+			? RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
+			: RegisterParticipantCommand::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;
+
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$this->event,
 			$this->getAuthority(),
 			$privateFlag,
 			$answers,
-			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
+			$contributionAssociationMode,
 		);
 		$this->modifiedData = $status->getValue();
 		return Status::wrap( $status );
