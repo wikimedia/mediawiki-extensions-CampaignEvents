@@ -48,7 +48,6 @@ class EventRegistration {
 	private string $endLocalTimestamp;
 	/** @var non-empty-list<string> Event type names */
 	private array $types;
-	private bool $hasContributionTracking;
 	/** @var string[]|true List of wikis, or self::ALL_WIKIS */
 	private $wikis;
 	/** @var string[] */
@@ -57,6 +56,7 @@ class EventRegistration {
 	private int $participationOptions;
 	private ?string $meetingURL;
 	private ?Address $address;
+	private bool $hasContributionTracking;
 	/**
 	 * @var TrackingToolAssociation[]
 	 * @phan-var list<TrackingToolAssociation>
