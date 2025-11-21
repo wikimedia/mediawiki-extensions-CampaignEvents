@@ -11,13 +11,18 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
+use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\Assert\Assert;
+use Wikimedia\JsonCodec\JsonCodecable;
+use Wikimedia\JsonCodec\JsonCodecableTrait;
 
 /**
  * Immutable value object that represents an abstract registration, i.e. one that may not exist in the database.
  */
-class EventRegistration {
+class EventRegistration implements JsonCodecable {
+	use JsonCodecableTrait;
+
 	public const STATUS_OPEN = 'open';
 	public const STATUS_CLOSED = 'closed';
 	public const VALID_STATUSES = [ self::STATUS_OPEN, self::STATUS_CLOSED ];
@@ -313,5 +318,83 @@ class EventRegistration {
 		$eventPage = $this->getPage();
 		$wikiID = $eventPage->getWikiId();
 		return $wikiID === WikiAwareEntity::LOCAL;
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string,mixed>
+	 */
+	public function toJsonArray(): array {
+		$pageIdentity = $this->page->getPageIdentity();
+		return [
+			'id' => $this->id,
+			'name' => $this->name,
+			'pageID' => $pageIdentity->getId( $pageIdentity->getWikiId() ),
+			'pageNamespace' => $pageIdentity->getNamespace(),
+			'pageDbKey' => $pageIdentity->getDBkey(),
+			'pageWikiID' => $pageIdentity->getWikiId(),
+			'prefixedText' => $this->page->getPrefixedText(),
+			'status' => $this->status,
+			// Note, this works for all timezone types, even those whose "name" is just an offset
+			'timezoneName' => $this->timezone->getName(),
+			'startLocalTimestamp' => $this->startLocalTimestamp,
+			'endLocalTimestamp' => $this->endLocalTimestamp,
+			'types' => $this->types,
+			'wikis' => $this->wikis,
+			'topics' => $this->topics,
+			'participationOptions' => $this->participationOptions,
+			'meetingURL' => $this->meetingURL,
+			'addressEncoded' => $this->address->toJsonArray(),
+			'hasContributionTracking' => $this->hasContributionTracking,
+			'trackingToolsEncoded' => array_map(
+				/** @return array<string,mixed> */
+				static fn ( TrackingToolAssociation $assoc ): array => $assoc->toJsonArray(),
+				$this->trackingTools
+			),
+			'chatURL' => $this->chatURL,
+			'isTestEvent' => $this->isTestEvent,
+			'participantQuestions' => $this->participantQuestions,
+			'creationTimestamp' => $this->creationTimestamp,
+			'lastEditTimestamp' => $this->lastEditTimestamp,
+			'deletionTimestamp' => $this->deletionTimestamp,
+		];
+	}
+
+	/**
+	 * @inheritDoc
+	 * @param array<string,mixed> $json
+	 */
+	public static function newFromJsonArray( array $json ): static {
+		return new static(
+			$json['id'],
+			$json['name'],
+			new MWPageProxy(
+				new PageIdentityValue(
+					$json['pageID'],
+					$json['pageNamespace'],
+					$json['pageDbKey'],
+					$json['pageWikiID']
+				),
+				$json['prefixedText']
+			),
+			$json['status'],
+			new DateTimeZone( $json['timezoneName'] ),
+			$json['startLocalTimestamp'],
+			$json['endLocalTimestamp'],
+			$json['types'],
+			$json['wikis'],
+			$json['topics'],
+			$json['participationOptions'],
+			$json['meetingURL'],
+			Address::newFromJsonArray( $json['addressEncoded'] ),
+			$json['hasContributionTracking'],
+			array_map( TrackingToolAssociation::newFromJsonArray( ... ), $json['trackingToolsEncoded'] ),
+			$json['chatURL'],
+			$json['isTestEvent'],
+			$json['participantQuestions'],
+			$json['creationTimestamp'],
+			$json['lastEditTimestamp'],
+			$json['deletionTimestamp'],
+		);
 	}
 }

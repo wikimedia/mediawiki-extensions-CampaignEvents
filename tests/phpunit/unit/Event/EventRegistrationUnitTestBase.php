@@ -314,4 +314,10 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 		yield 'ongoing' => [ $testEvents['ongoing'], true ];
 		yield 'future' => [ $testEvents['future'], false ];
 	}
+
+	public function testJSONSerialization() {
+		$event = static::makeEventFromArguments( ...array_values( static::getValidConstructorArgs() ) );
+		$res = $event::newFromJsonArray( $event->toJsonArray() );
+		$this->assertEquals( $event, $res );
+	}
 }

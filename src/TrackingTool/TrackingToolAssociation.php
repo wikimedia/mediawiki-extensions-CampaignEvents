@@ -4,10 +4,15 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 
+use Wikimedia\JsonCodec\JsonCodecable;
+use Wikimedia\JsonCodec\JsonCodecableTrait;
+
 /**
  * Value object that represent the association of a tracking tool to an event. This is tool-agnostic.
  */
-class TrackingToolAssociation {
+class TrackingToolAssociation implements JsonCodecable {
+	use JsonCodecableTrait;
+
 	/**
 	 * Constants that represent the status of this association:
 	 *  - UNKNOWN: unknown status, possibly because no attempts were already made to sync the tool, or the event was
@@ -65,6 +70,32 @@ class TrackingToolAssociation {
 			$this->toolEventID,
 			$newStatus,
 			$newTS
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string,mixed>
+	 */
+	public function toJsonArray(): array {
+		return [
+			'toolID' => $this->toolID,
+			'toolEventID' => $this->toolEventID,
+			'syncStatus' => $this->syncStatus,
+			'lastSyncTimestamp' => $this->lastSyncTimestamp,
+		];
+	}
+
+	/**
+	 * @inheritDoc
+	 * @param array<string,mixed> $json
+	 */
+	public static function newFromJsonArray( array $json ): self {
+		return new self(
+			$json['toolID'],
+			$json['toolEventID'],
+			$json['syncStatus'],
+			$json['lastSyncTimestamp'],
 		);
 	}
 }
