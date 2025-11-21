@@ -22,6 +22,7 @@ use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
 use stdClass;
+use Wikimedia\JsonCodec\JsonCodec;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDatabase;
@@ -46,6 +47,7 @@ class EventStore implements IEventStore, IEventLookup {
 	private EventWikisStore $eventWikisStore;
 	private EventTopicsStore $eventTopicsStore;
 	private WANObjectCache $wanCache;
+	private JsonCodec $jsonCodec;
 
 	private const PAGE_EVENT_CACHE_TTL = 1 * WANObjectCache::TTL_WEEK;
 
@@ -63,6 +65,7 @@ class EventStore implements IEventStore, IEventLookup {
 		EventWikisStore $eventWikisStore,
 		EventTopicsStore $eventTopicsStore,
 		WANObjectCache $wanCache,
+		JsonCodec $jsonCodec,
 		private readonly bool $contributionTrackingEnabled
 	) {
 		$this->dbHelper = $dbHelper;
@@ -73,6 +76,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->eventWikisStore = $eventWikisStore;
 		$this->eventTopicsStore = $eventTopicsStore;
 		$this->wanCache = $wanCache;
+		$this->jsonCodec = $jsonCodec;
 	}
 
 	/**
@@ -116,7 +120,7 @@ class EventStore implements IEventStore, IEventLookup {
 			return $this->loadEventFromDB( $page, $readFlags );
 		}
 
-		$cachedEvent = $this->wanCache->getWithSetCallback(
+		$cachedEventEncoded = $this->wanCache->getWithSetCallback(
 			$this->makePageEventCacheKey( $page ),
 			self::PAGE_EVENT_CACHE_TTL,
 			/**
@@ -124,7 +128,7 @@ class EventStore implements IEventStore, IEventLookup {
 			 * @param array<string,mixed> &$setOpts
 			 */
 			function ( ExistingEventRegistration|bool|null $oldValue, int &$ttl, array &$setOpts )
-				use ( $page, $readFlags ): ?ExistingEventRegistration
+				use ( $page, $readFlags ): ?string
 			{
 				$db = $this->dbHelper->getDBConnection( DB_REPLICA );
 
@@ -134,22 +138,22 @@ class EventStore implements IEventStore, IEventLookup {
 					$event = $this->loadEventFromDB( $page, $readFlags );
 					$lastMod = max( $event->getLastEditTimestamp(), $event->getDeletionTimestamp() );
 					$ttl = $this->wanCache->adaptiveTTL( $lastMod, self::PAGE_EVENT_CACHE_TTL );
-					return $event;
+					return $this->jsonCodec->toJsonString( $event );
 				} catch ( EventNotFoundException ) {
 					return null;
 				}
 			},
-			[ 'version' => 6 ]
+			[ 'version' => 7 ]
 		);
 
-		if ( $cachedEvent === null ) {
+		if ( $cachedEventEncoded === null ) {
 			throw new EventNotFoundException(
 				"No event found for the given page (ns={$page->getNamespace()}, " .
 				"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()})"
 			);
 		}
 
-		return $cachedEvent;
+		return $this->jsonCodec->newFromJsonString( $cachedEventEncoded );
 	}
 
 	/**

@@ -22,6 +22,10 @@ use MediaWiki\Title\Title;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use Throwable;
+use Wikimedia\JsonCodec\JsonCodec;
+use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\LBFactory;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @group Test
@@ -248,7 +252,21 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$mockTime += 30;
 
 		$event = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
+
+		// Temporarily disable the database layer to verify that the next call from the same page is served from cache.
+		// Note that some database methods will still be called, e.g. for cache options, so we can't just use a fully
+		// no-op mock. Also, note that we can't call setService or that will also reset the cache.
+		$mockDB = $this->createMock( IDatabase::class );
+		$mockDB->expects( $this->never() )->method( 'newSelectQueryBuilder' );
+		$mockDB->method( 'getSessionLagStatus' )->willReturn( [ 'lag' => 0, 'since' => 0 ] );
+		$mockLBFactory = $this->createMock( LBFactory::class );
+		$mockLBFactory->method( 'getReplicaDatabase' )->willReturn( $mockDB );
+		$dbHelperWrapper = TestingAccessWrapper::newFromObject( CampaignEventsServices::getDatabaseHelper() );
+		$dbHelperWrapper->lbFactory = $mockLBFactory;
 		$cachedEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
+		$this->assertEquals( $cachedEvent, $event );
+		$dbHelperWrapper->lbFactory = $this->getServiceContainer()->getDBLoadBalancerFactory();
+
 		$otherEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $otherPage );
 
 		CampaignEventsServices::getEventStore()->deleteRegistration( $event );
@@ -259,7 +277,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 
 		$postDeleteEvent = CampaignEventsServices::getEventLookup()->getEventByPage( $page );
 
-		$this->assertSame( $event, $cachedEvent, 'Events should be cached per page' );
 		$this->assertTrue(
 			$event->getPage()->equals( $storedEvent->getPage() ),
 			'Returned event should have correct page for the first page'
@@ -392,28 +409,21 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testCacheCompatibility() {
+		$codec = new JsonCodec();
+		$event = $this->getTestEvent();
 		// To update test expectation (use carefully, after having fixed the underlying issue):
-		// file_put_contents( __DIR__ . '/EventRegistration.ser', serialize( $this->getTestEvent() ) );
-		$serializedEvent = file_get_contents( __DIR__ . '/EventRegistration.ser' );
+		// file_put_contents( __DIR__ . '/EventRegistration.enc', $codec->toJsonString( $event ) );
+
+		$encodedEvent = file_get_contents( __DIR__ . '/EventRegistration.enc' );
 		try {
-			$unserialized = unserialize( $serializedEvent );
+			$res = $codec->newFromJsonString( $encodedEvent );
 		} catch ( Throwable $e ) {
 			$this->fail(
-				'Event serialization changed! This will break values cached in getEventByPage. Because of the error ' .
-				'below, bumping the cache version is not sufficient. Please change the EventRegistration class ' .
-				'definition to avoid the fatal error, then bump the cache version in getEventByPage and update the ' .
-				"serialized object here.\nError:\n" . $e->getMessage()
+				'Event JSON representation changed! This will break values cached in getEventByPage. Please bump ' .
+				"the cache version in getEventByPage, then update the encoded object here.\nError: $e"
 			);
 		}
-		$event = $this->getTestEvent();
-		$this->assertSame(
-			serialize( $event ),
-			$serializedEvent,
-			'Event serialization changed! This will break values cached in getEventByPage. Please bump the ' .
-				'cache version in getEventByPage, then update the serialized object here. (You can disregard this ' .
-				'message if you changed values, but not format, for the test event above only)'
-		);
-		$this->assertEquals( $event, $unserialized, 'Unserialized events should be equal' );
+		$this->assertEquals( $event, $res );
 	}
 
 	public function testNewEventsFromDBRows__rowWithoutID() {

@@ -344,7 +344,7 @@ class EventRegistration implements JsonCodecable {
 			'topics' => $this->topics,
 			'participationOptions' => $this->participationOptions,
 			'meetingURL' => $this->meetingURL,
-			'addressEncoded' => $this->address->toJsonArray(),
+			'addressEncoded' => $this->address?->toJsonArray(),
 			'hasContributionTracking' => $this->hasContributionTracking,
 			'trackingToolsEncoded' => array_map(
 				/** @return array<string,mixed> */
@@ -386,7 +386,7 @@ class EventRegistration implements JsonCodecable {
 			$json['topics'],
 			$json['participationOptions'],
 			$json['meetingURL'],
-			Address::newFromJsonArray( $json['addressEncoded'] ),
+			$json['addressEncoded'] ? Address::newFromJsonArray( $json['addressEncoded'] ) : null,
 			$json['hasContributionTracking'],
 			array_map( TrackingToolAssociation::newFromJsonArray( ... ), $json['trackingToolsEncoded'] ),
 			$json['chatURL'],
