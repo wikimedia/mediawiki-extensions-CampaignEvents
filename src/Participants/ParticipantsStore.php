@@ -38,13 +38,15 @@ class ParticipantsStore {
 	 * @param CentralUser $participant
 	 * @param bool $private
 	 * @param Answer[] $answers
+	 * @param bool $hideContributionAssociationPrompt
 	 * @return int One of the self::MODIFIED_* constants.
 	 */
 	public function addParticipantToEvent(
 		int $eventID,
 		CentralUser $participant,
 		bool $private,
-		array $answers
+		array $answers,
+		bool $hideContributionAssociationPrompt
 	): int {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
@@ -56,6 +58,7 @@ class ParticipantsStore {
 			'cep_user_id' => $userID,
 			'cep_private' => $private,
 			'cep_unregistered_at' => null,
+			'cep_hide_contribution_association_prompt' => $hideContributionAssociationPrompt,
 		];
 		$newRow = $commonRowUpdates + [
 			'cep_registered_at' => $curTimestamp,

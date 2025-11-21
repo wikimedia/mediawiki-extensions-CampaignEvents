@@ -28,6 +28,9 @@ class RegisterParticipantCommand {
 	public const REGISTRATION_PRIVATE = true;
 	public const REGISTRATION_PUBLIC = false;
 
+	public const HIDE_CONTRIBUTION_ASSOCIATION_PROMPT = 'hide';
+	public const SHOW_CONTRIBUTION_ASSOCIATION_PROMPT = 'show';
+
 	// Whether the user is registering for the first time, or updating their registration information.
 	public const REGISTRATION_NEW = 'new';
 	public const REGISTRATION_EDIT = 'edit';
@@ -47,6 +50,8 @@ class RegisterParticipantCommand {
 	 * @param Authority $performer
 	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
 	 * @param Answer[] $answers
+	 * @param string $contributionAssociationMode {@link self::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT} or
+	 *  {@link self::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT}.
 	 * @return StatusValue Good if everything went fine, fatal with errors otherwise. If good, the value shall be
 	 *   true if the user was not already registered (or they deleted their registration), and false if they were
 	 *   already actively registered. Will be a PermissionStatus for permissions-related errors.
@@ -55,13 +60,14 @@ class RegisterParticipantCommand {
 		ExistingEventRegistration $registration,
 		Authority $performer,
 		bool $isPrivate,
-		array $answers
+		array $answers,
+		string $contributionAssociationMode
 	): StatusValue {
 		$permStatus = $this->authorizeRegistration( $performer, $registration );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
 		}
-		return $this->registerUnsafe( $registration, $performer, $isPrivate, $answers );
+		return $this->registerUnsafe( $registration, $performer, $isPrivate, $answers, $contributionAssociationMode );
 	}
 
 	private function authorizeRegistration(
@@ -108,12 +114,15 @@ class RegisterParticipantCommand {
 	 * @param Authority $performer
 	 * @param bool $isPrivate self::REGISTRATION_PUBLIC or self::REGISTRATION_PRIVATE
 	 * @param Answer[] $answers
+	 * @param string $contributionAssociationMode {@link self::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT} or
+	 *  {@link self::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT}.
 	 */
 	public function registerUnsafe(
 		ExistingEventRegistration $registration,
 		Authority $performer,
 		bool $isPrivate,
-		array $answers
+		array $answers,
+		string $contributionAssociationMode
 	): StatusValue {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
@@ -145,11 +154,13 @@ class RegisterParticipantCommand {
 			return $trackingToolValidationStatus;
 		}
 
+		$hideContribAssociationPrompt = $contributionAssociationMode === self::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;
 		$modified = $this->participantsStore->addParticipantToEvent(
 			$registration->getID(),
 			$centralUser,
 			$isPrivate,
-			$answers
+			$answers,
+			$hideContribAssociationPrompt
 		);
 
 		if ( $modified !== ParticipantsStore::MODIFIED_NOTHING ) {

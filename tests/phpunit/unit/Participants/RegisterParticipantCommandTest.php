@@ -76,7 +76,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$this->createMock( ExistingEventRegistration::class ),
 			$this->createMock( Authority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC,
-			[]
+			[],
+			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 		);
 		$this->assertInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -100,7 +101,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$registration,
 			$this->createMock( Authority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC,
-			[]
+			[],
+			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 		);
 		$this->assertNotInstanceOf( PermissionStatus::class, $status );
 		$this->assertStatusNotGood( $status );
@@ -119,11 +121,12 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @dataProvider provideModifiedAndPrivate
+	 * @dataProvider provideSuccessfulCases
 	 */
 	public function testRegisterIfAllowed__successful(
 		int $modified,
 		bool $isPrivate,
+		string $contributionAssociationMode,
 		bool $expectedModified
 	) {
 		$store = $this->createMock( ParticipantsStore::class );
@@ -137,25 +140,27 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC,
-			[]
+			[],
+			$contributionAssociationMode
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );
 	}
 
 	/**
-	 * @dataProvider provideModifiedAndPrivate
+	 * @dataProvider provideSuccessfulCases
 	 */
 	public function testRegisterUnsafe__successful(
 		int $modified,
 		bool $isPrivate,
+		string $contributionAssociationMode,
 		bool $expectedModified
 	) {
 		$store = $this->createMock( ParticipantsStore::class );
-		$store->method( 'addParticipantToEvent' )->willReturn( $modified );
 		$store->expects( $this->once() )
 			->method( 'addParticipantToEvent' )
-			->with( $this->anything(), $this->anything(), $isPrivate );
+			->with( $this->anything(), $this->anything(), $isPrivate )
+			->willReturn( $modified );
 
 		$status = $this->getCommand( $store )->registerUnsafe(
 			$this->getValidRegistration(),
@@ -163,19 +168,35 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC,
-			[]
+			[],
+			$contributionAssociationMode
 		);
 		$this->assertStatusGood( $status );
 		$this->assertStatusValue( $expectedModified, $status );
 	}
 
-	public static function provideModifiedAndPrivate(): Generator {
+	public static function provideSuccessfulCases(): Generator {
+		$hidePrompt = RegisterParticipantCommand::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;
+		$showPrompt = RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT;
 		foreach ( [ true, false ] as $isPrivate ) {
-			$testDescription = $isPrivate ?
-				RegisterParticipantCommand::REGISTRATION_PRIVATE :
-				RegisterParticipantCommand::REGISTRATION_PUBLIC;
-			yield "Modified, $testDescription" => [ ParticipantsStore::MODIFIED_REGISTRATION, $isPrivate, true ];
-			yield "Not modified, $testDescription" => [ ParticipantsStore::MODIFIED_NOTHING, $isPrivate, false ];
+			foreach ( [ $showPrompt, $hidePrompt ] as $contributionAssociationMode ) {
+				$extraTestDescription = ( $isPrivate ? 'private' : 'public' ) . ', ';
+				$extraTestDescription .= $contributionAssociationMode === $hidePrompt
+					? 'hide contrib prompt'
+					: 'show contrib prompt';
+				yield "Modified, $extraTestDescription" => [
+					ParticipantsStore::MODIFIED_REGISTRATION,
+					$isPrivate,
+					$contributionAssociationMode,
+					true
+				];
+				yield "Not modified, $extraTestDescription" => [
+					ParticipantsStore::MODIFIED_NOTHING,
+					$isPrivate,
+					$contributionAssociationMode,
+					false
+				];
+			}
 		}
 	}
 
@@ -191,7 +212,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$this->getValidRegistration(),
 			$this->createMock( Authority::class ),
 			RegisterParticipantCommand::REGISTRATION_PUBLIC,
-			$answers
+			$answers,
+			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 		);
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( $expectedMsg, $status );
@@ -203,7 +225,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			->willThrowException( $this->createMock( UserNotGlobalException::class ) );
 		$this->doTestRegisterUnsafeExpectingError(
 			'campaignevents-register-need-central-account',
-			$notGlobalLookup
+			$notGlobalLookup,
 		);
 	}
 

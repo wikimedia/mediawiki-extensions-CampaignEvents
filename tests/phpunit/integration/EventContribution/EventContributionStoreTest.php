@@ -180,9 +180,9 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 
 		// Add some participants for visibility checks (don't need to add all of them)
 		$participantStore = CampaignEventsServices::getParticipantsStore();
-		$participantStore->addParticipantToEvent( 1, new CentralUser( 101 ), false, [] );
-		$participantStore->addParticipantToEvent( 1, new CentralUser( 102 ), true, [] );
-		$participantStore->addParticipantToEvent( 1, new CentralUser( 109 ), true, [] );
+		$participantStore->addParticipantToEvent( 1, new CentralUser( 101 ), false, [], false );
+		$participantStore->addParticipantToEvent( 1, new CentralUser( 102 ), true, [], false );
+		$participantStore->addParticipantToEvent( 1, new CentralUser( 109 ), true, [], false );
 	}
 
 	/**

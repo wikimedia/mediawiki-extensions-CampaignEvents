@@ -99,7 +99,8 @@ class RegisterForEventHandler extends SimpleHandler {
 			$eventRegistration,
 			$performer,
 			$privateFlag,
-			$answers
+			$answers,
+			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 		);
 		if ( !$status->isGood() ) {
 			$httpStatus = $status instanceof PermissionStatus ? 403 : 400;

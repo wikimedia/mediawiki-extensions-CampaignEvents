@@ -248,7 +248,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			$this->event,
 			$this->getAuthority(),
 			$privateFlag,
-			$answers
+			$answers,
+			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 		);
 		$this->modifiedData = $status->getValue();
 		return Status::wrap( $status );

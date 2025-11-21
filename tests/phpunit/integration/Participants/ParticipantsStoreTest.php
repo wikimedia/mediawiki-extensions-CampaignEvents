@@ -38,6 +38,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_unregistered_at' => null,
 						'cep_first_answer_timestamp' => null,
 						'cep_aggregation_timestamp' => null,
+						'cep_hide_contribution_association_prompt' => false,
 					],
 					[
 						'cep_event_id' => $eventID,
@@ -47,6 +48,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_unregistered_at' => $this->getDb()->timestamp( '20220324120000' ),
 						'cep_first_answer_timestamp' => null,
 						'cep_aggregation_timestamp' => null,
+						'cep_hide_contribution_association_prompt' => false,
 					],
 					[
 						'cep_event_id' => $eventID,
@@ -56,6 +58,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_unregistered_at' => null,
 						'cep_first_answer_timestamp' => null,
 						'cep_aggregation_timestamp' => null,
+						'cep_hide_contribution_association_prompt' => false,
 					],
 					[
 						'cep_event_id' => $eventID,
@@ -65,6 +68,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_unregistered_at' => null,
 						'cep_first_answer_timestamp' => $this->getDb()->timestamp( '20220316120000' ),
 						'cep_aggregation_timestamp' => $this->getDb()->timestamp( '20230316120000' ),
+						'cep_hide_contribution_association_prompt' => false,
 					],
 					[
 						'cep_event_id' => $eventID,
@@ -74,6 +78,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 						'cep_unregistered_at' => $this->getDb()->timestamp( '20220324120000' ),
 						'cep_first_answer_timestamp' => $this->getDb()->timestamp( '20220316120000' ),
 						'cep_aggregation_timestamp' => $this->getDb()->timestamp( '20230316120000' ),
+						'cep_hide_contribution_association_prompt' => true,
 					],
 				]
 			);
@@ -98,6 +103,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 	 * @param int $userID
 	 * @param bool $private
 	 * @param Answer[] $answers
+	 * @param bool $hidePrompt
 	 * @param int $expected
 	 * @covers ::addParticipantToEvent
 	 * @dataProvider provideParticipantsToStore
@@ -107,20 +113,32 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		int $userID,
 		bool $private,
 		array $answers,
+		bool $hidePrompt,
 		int $expected
 	) {
 		$user = new CentralUser( $userID );
-		$this->assertSame( $expected, $this->getStore()->addParticipantToEvent( $eventID, $user, $private, $answers ) );
+		$this->assertSame(
+			$expected,
+			$this->getStore()->addParticipantToEvent( $eventID, $user, $private, $answers, $hidePrompt )
+		);
 	}
 
 	public static function provideParticipantsToStore(): Generator {
-		yield 'First participant' => [ 10, 102, false, [], ParticipantsStore::MODIFIED_REGISTRATION ];
-		yield 'Add participant to existing event' => [ 1, 103, false, [], ParticipantsStore::MODIFIED_REGISTRATION ];
+		yield 'First participant' => [ 10, 102, false, [], true, ParticipantsStore::MODIFIED_REGISTRATION ];
+		yield 'Add participant to existing event' => [
+			1,
+			103,
+			false,
+			[],
+			false,
+			ParticipantsStore::MODIFIED_REGISTRATION
+		];
 		yield 'Add private participant to existing event' => [
 			3,
 			107,
 			true,
 			[],
+			false,
 			ParticipantsStore::MODIFIED_REGISTRATION
 		];
 		yield 'Changing a participant from private to public' => [
@@ -128,6 +146,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			106,
 			false,
 			[],
+			false,
 			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Changing a participant from public to private' => [
@@ -135,6 +154,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			101,
 			true,
 			[],
+			false,
 			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Setting to private a participant that is already private' => [
@@ -142,15 +162,17 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			106,
 			true,
 			[],
+			false,
 			ParticipantsStore::MODIFIED_NOTHING
 		];
-		yield 'Already an active participant' => [ 1, 101, false, [], ParticipantsStore::MODIFIED_NOTHING ];
-		yield 'Had unregistered' => [ 1, 102, false, [], ParticipantsStore::MODIFIED_REGISTRATION ];
+		yield 'Already an active participant' => [ 1, 101, false, [], false, ParticipantsStore::MODIFIED_NOTHING ];
+		yield 'Had unregistered' => [ 1, 102, false, [], false, ParticipantsStore::MODIFIED_REGISTRATION ];
 		yield 'Already a participant, add answers, visibility unchanged' => [
 			1,
 			101,
 			false,
 			[ new Answer( 1, 1, null ) ],
+			false,
 			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Already a participant, add answers, change visibility' => [
@@ -158,6 +180,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			101,
 			true,
 			[ new Answer( 1, 1, null ) ],
+			false,
 			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Add new participant with answers' => [
@@ -165,6 +188,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			103,
 			false,
 			[ new Answer( 1, 1, null ) ],
+			false,
 			ParticipantsStore::MODIFIED_REGISTRATION
 		];
 		yield 'Restore deleted participant, add answers' => [
@@ -172,6 +196,23 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			102,
 			false,
 			[ new Answer( 1, 1, null ) ],
+			false,
+			ParticipantsStore::MODIFIED_REGISTRATION
+		];
+		yield 'Change participant to hide contribtion association prompt' => [
+			1,
+			101,
+			false,
+			[],
+			true,
+			ParticipantsStore::MODIFIED_INFO
+		];
+		yield 'Restore deleted participant, show contribution association prompt' => [
+			1,
+			107,
+			false,
+			[],
+			false,
 			ParticipantsStore::MODIFIED_REGISTRATION
 		];
 	}
@@ -217,7 +258,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 		$ts1 = '20220227120001';
 		MWTimestamp::setFakeTime( $ts1 );
-		$store->addParticipantToEvent( $eventID, $user, false, [] );
+		$store->addParticipantToEvent( $eventID, $user, false, [], false );
 		$this->assertSame( $ts1, $getActualTS(), 'Registering for the first time' );
 
 		$ts2 = '20220227120002';
@@ -227,13 +268,18 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 
 		$ts3 = '20220227120003';
 		MWTimestamp::setFakeTime( $ts3 );
-		$store->addParticipantToEvent( $eventID, $user, false, [] );
+		$store->addParticipantToEvent( $eventID, $user, false, [], false );
 		$this->assertSame( $ts3, $getActualTS(), 'Registering after having unregistered resets the timestamp' );
 
 		$ts4 = '20220227120004';
 		MWTimestamp::setFakeTime( $ts4 );
-		$store->addParticipantToEvent( $eventID, $user, false, [] );
+		$store->addParticipantToEvent( $eventID, $user, false, [], false );
 		$this->assertSame( $ts3, $getActualTS(), 'Registering when already registered does not change the timestamp' );
+
+		$ts5 = '20220227120005';
+		MWTimestamp::setFakeTime( $ts5 );
+		$store->addParticipantToEvent( $eventID, $user, true, [ new Answer( 1, 1, null ) ], true );
+		$this->assertSame( $ts3, $getActualTS(), 'Timestamp does not change when registration information changes' );
 	}
 
 	/**
@@ -440,7 +486,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		$store = $this->getStore();
 		$eventID = 42;
 		$this->assertFalse( $store->userParticipatesInEvent( $eventID, $participant, true ), 'precondition' );
-		$store->addParticipantToEvent( $eventID, $participant, false, [] );
+		$store->addParticipantToEvent( $eventID, $participant, false, [], false );
 		$this->assertTrue( $store->userParticipatesInEvent( $eventID, $participant, true ) );
 	}
 

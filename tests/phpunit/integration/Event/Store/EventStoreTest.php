@@ -389,7 +389,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			$event = $this->getTestEvent();
 			$savedID = $this->storeEvent( $event );
 			$partStore = CampaignEventsServices::getParticipantsStore();
-			$partStore->addParticipantToEvent( $savedID, new CentralUser( $participantID ), false, [] );
+			$partStore->addParticipantToEvent( $savedID, new CentralUser( $participantID ), false, [], false );
 		}
 		$eventsByParticipant = CampaignEventsServices::getEventLookup()->getEventsByParticipant( $participantID, 5 );
 		$this->assertCount( $hasEvent ? 1 : 0, $eventsByParticipant, 'Number of events' );
@@ -458,7 +458,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 					$eventID,
 					new CentralUser( $participantID ),
 					$config[ 'privateRegistration' ] ?? false,
-					[]
+					[],
+					false
 				);
 			}
 		}

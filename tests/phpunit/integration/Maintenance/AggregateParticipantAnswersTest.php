@@ -219,6 +219,7 @@ class AggregateParticipantAnswersTest extends MaintenanceBaseTestCase {
 			'cep_registered_at' => $dbw->timestamp( '20220315120000' ),
 			'cep_unregistered_at' => null,
 			'cep_aggregation_timestamp' => null,
+			'cep_hide_contribution_association_prompt' => false,
 		];
 		$participantRows = [
 			// Event 1
