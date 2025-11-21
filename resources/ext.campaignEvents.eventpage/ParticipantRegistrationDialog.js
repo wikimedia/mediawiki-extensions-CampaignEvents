@@ -15,11 +15,16 @@
 	 *    - public (boolean): Whether the user is registered publicly
 	 *    - aggregationTimestamp (string|null): Planned timestamp of when the user's answers
 	 *       will be aggregated.
+	 *    - showContributionPrompt (boolean): Whether the user chose to see the contribution prompt
 	 * @param {boolean} [config.answersAggregated] Whether the user's answers have already
 	 *   been aggregated.
 	 * @param {Object} [config.eventQuestions] EventQuestions object
 	 * @param {Object} [config.groupsCanViewPrivateMessage] pre-parsed helptext for private
 	 * registration
+	 * @param {boolean} [config.showContributionStatsSection] Whether to show
+	 *  contribution statistics opt-out controls
+	 * @param {string} [config.contributionsTabURL] URL to the Contributions tab on
+	 *  Special:EventDetails
 	 */
 	function ParticipantRegistrationDialog( config ) {
 		ParticipantRegistrationDialog.super.call( this, config );
@@ -28,15 +33,19 @@
 		if ( typeof config.curParticipantData !== 'undefined' ) {
 			this.publicRegistration = config.curParticipantData.public;
 			this.aggregationTimestamp = config.curParticipantData.aggregationTimestamp;
+			this.showContributionPrompt = config.curParticipantData.showContributionPrompt;
 			this.isEdit = true;
 		} else {
 			this.publicRegistration = true;
 			this.aggregationTimestamp = null;
+			this.showContributionPrompt = true;
 			this.isEdit = false;
 		}
 		this.answersAggregated = config.answersAggregated;
 		this.eventQuestions = config.eventQuestions;
 		this.groupsCanViewPrivateMessage = config.groupsCanViewPrivateMessage;
+		this.showContributionStatsSection = config.showContributionStatsSection;
+		this.contributionsTabURL = config.contributionsTabURL;
 	}
 
 	OO.inheritClass( ParticipantRegistrationDialog, OO.ui.ProcessDialog );
@@ -90,6 +99,9 @@
 		} );
 
 		const fieldsets = [ visibilityFieldset ];
+		if ( this.showContributionStatsSection ) {
+			fieldsets.push( this.getContributionStatsFieldset() );
+		}
 
 		let questionFields;
 		if ( this.answersAggregated ) {
@@ -181,6 +193,36 @@
 	};
 
 	/**
+	 * Returns a fieldset with controls for contribution statistics preferences.
+	 *
+	 * @return {OO.ui.FieldsetLayout}
+	 */
+	ParticipantRegistrationDialog.prototype.getContributionStatsFieldset = function () {
+		const checkbox = new OO.ui.CheckboxInputWidget( {
+			selected: this.showContributionPrompt
+		} );
+		checkbox.on( 'change', ( selected ) => {
+			this.showContributionPrompt = selected;
+		} );
+
+		const helpMsg = mw.message( 'campaignevents-eventpage-register-dialog-contribstats-help' )
+			.params( [ this.contributionsTabURL ] )
+			.parse();
+
+		const field = new OO.ui.FieldLayout( checkbox, {
+			label: mw.msg( 'campaignevents-eventpage-register-dialog-contribstats-label' ),
+			align: 'inline',
+			help: new OO.ui.HtmlSnippet( helpMsg ),
+			helpInline: true
+		} );
+
+		return new OO.ui.FieldsetLayout( {
+			items: [ field ],
+			label: mw.msg( 'campaignevents-eventpage-register-dialog-contribstats-title' )
+		} );
+	};
+
+	/**
 	 * Returns a fieldset with information about the data retention policy.
 	 *
 	 * @return {OO.ui.FieldsetLayout}
@@ -224,7 +266,8 @@
 				this.close( {
 					action: action,
 					isPrivate: !this.publicRegistration,
-					answers: this.eventQuestions.getParticipantAnswers()
+					answers: this.eventQuestions.getParticipantAnswers(),
+					showContributionPrompt: this.showContributionPrompt
 				} );
 			}, this );
 		}

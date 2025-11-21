@@ -16,11 +16,13 @@
 		userIsParticipant = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ) !== null,
 		userIsRegisteredPublicly = mw.config.get( 'wgCampaignEventsParticipantIsPublic' ),
 		aggregationTimestamp = mw.config.get( 'wgCampaignEventsAggregationTimestamp' ),
+		userShouldSeeContributionPrompt = mw.config.get( 'wgCampaignEventsParticipantShowContributionPrompt' ),
 		answersAlreadyAggregated = mw.config.get( 'wgCampaignEventsAnswersAlreadyAggregated' ),
 		hasUpdatedRegistration = mw.config.get( 'wgCampaignEventsRegistrationUpdated' ),
 		isNewRegistration = mw.config.get( 'wgCampaignEventsIsNewRegistration' ),
 		isTestRegistration = mw.config.get( 'wgCampaignEventsIsTestRegistration' ),
 		registrationUpdatedWarnings = mw.config.get( 'wgCampaignEventsRegistrationUpdatedWarnings' ),
+		showContributionStatsSection = mw.config.get( 'wgCampaignEventsContributionsEnabled' ),
 		windowManager = new OO.ui.WindowManager();
 	let confirmUnregistrationDialog,
 		participantRegistrationDialog;
@@ -86,14 +88,15 @@
 	/**
 	 * @param {boolean} privateRegistration
 	 * @param {Object} answers
+	 * @param {boolean} showContributionPrompt
 	 * @return {jQuery.Promise}
 	 */
-	function registerUser( privateRegistration, answers ) {
+	function registerUser( privateRegistration, answers, showContributionPrompt ) {
 		const reqParams = {
 			token: mw.user.tokens.get( 'csrfToken' ),
 			/* eslint-disable camelcase */
 			is_private: privateRegistration,
-			show_contribution_association_prompt: true,
+			show_contribution_association_prompt: showContributionPrompt,
 			answers: answers
 			/* eslint-enable camelcase */
 		};
@@ -143,7 +146,8 @@
 			if ( userIsParticipant ) {
 				curParticipantData = {
 					public: userIsRegisteredPublicly,
-					aggregationTimestamp: aggregationTimestamp
+					aggregationTimestamp: aggregationTimestamp,
+					showContributionPrompt: userShouldSeeContributionPrompt
 				};
 			}
 			participantRegistrationDialog = new ParticipantRegistrationDialog(
@@ -152,7 +156,9 @@
 					curParticipantData: curParticipantData,
 					answersAggregated: answersAlreadyAggregated,
 					eventQuestions: eventQuestions,
-					groupsCanViewPrivateMessage: mw.config.get( 'wgCampaignEventsPrivateAccessMessage' )
+					groupsCanViewPrivateMessage: mw.config.get( 'wgCampaignEventsPrivateAccessMessage' ),
+					showContributionStatsSection: showContributionStatsSection,
+					contributionsTabURL: mw.config.get( 'wgCampaignEventsContributionsTabURL' )
 				} );
 			windowManager.addWindows( [ participantRegistrationDialog ] );
 		}
@@ -188,7 +194,7 @@
 		}
 		showParticipantRegistrationDialog().then( ( data ) => {
 			if ( data && data.action === 'confirm' ) {
-				registerUser( data.isPrivate, data.answers )
+				registerUser( data.isPrivate, data.answers, data.showContributionPrompt )
 					.catch(
 						() => {
 							// Fall back to the special page

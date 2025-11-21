@@ -227,9 +227,13 @@ class EventPageDecorator {
 
 		$this->out->addHTML( $this->getHeaderElement( $registration, $userStatus ) );
 
-		$aggregationTimestamp = $curParticipant
-			? Utils::getAnswerAggregationTimestamp( $curParticipant, $registration )
-			: null;
+		if ( $curParticipant ) {
+			$aggregationTimestamp = Utils::getAnswerAggregationTimestamp( $curParticipant, $registration );
+			$showContributionPrompt = $curParticipant->shouldShowContributionAssociationPrompt();
+		} else {
+			$aggregationTimestamp = null;
+			$showContributionPrompt = true;
+		}
 
 		$session = $this->out->getRequest()->getSession();
 		$registrationUpdatedVal = $session
@@ -264,17 +268,29 @@ class EventPageDecorator {
 				->msg( 'campaignevents-registration-confirmation-helptext-private-no-groups' );
 		}
 
+		$showContributionPromptSection = $curParticipant &&
+			$registration->hasContributionTracking() &&
+			!$registration->isPast();
+
+		$contributionsTabURL = SpecialPage::getTitleFor(
+			SpecialEventDetails::PAGE_NAME,
+			(string)$registration->getID()
+		)->getFullURL( [ 'tab' => SpecialEventDetails::CONTRIBUTIONS_PANEL ] );
+
 		$this->out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $registration->getID(),
 			'wgCampaignEventsParticipantIsPublic' => $this->participantIsPublic,
 			'wgCampaignEventsEventQuestions' => $this->getEventQuestionsData( $registration, $curParticipant ),
 			'wgCampaignEventsAnswersAlreadyAggregated' => $hasAggregatedAnswers,
 			'wgCampaignEventsAggregationTimestamp' => $aggregationTimestamp,
+			'wgCampaignEventsParticipantShowContributionPrompt' => $showContributionPrompt,
 			'wgCampaignEventsRegistrationUpdated' => (bool)$registrationUpdatedVal,
 			'wgCampaignEventsIsNewRegistration' => $isNewRegistration,
 			'wgCampaignEventsRegistrationUpdatedWarnings' => $registrationUpdatedWarnings,
 			'wgCampaignEventsIsTestRegistration' => $registration->getIsTestEvent(),
 			'wgCampaignEventsPrivateAccessMessage' => $privateAccessMessage->parse(),
+			'wgCampaignEventsContributionsEnabled' => $showContributionPromptSection,
+			'wgCampaignEventsContributionsTabURL' => $contributionsTabURL,
 		] );
 	}
 
