@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateUserContributionRecordsJob;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -24,23 +23,16 @@ class CentralAuthContributionUserChangesHandler implements
 {
 	private EventContributionStore $eventContributionStore;
 	private JobQueueGroup $jobQueueGroup;
-	private bool $isFeatureEnabled;
 
 	public function __construct(
 		EventContributionStore $eventContributionStore,
 		JobQueueGroup $jobQueueGroup,
-		Config $config,
 	) {
 		$this->eventContributionStore = $eventContributionStore;
 		$this->jobQueueGroup = $jobQueueGroup;
-		$this->isFeatureEnabled = $config->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	public function onCentralAuthAccountDeleted( int $userID, string $userName ): void {
-		if ( !$this->isFeatureEnabled ) {
-			return;
-		}
-
 		if ( !$this->eventContributionStore->hasContributionsFromUser( new CentralUser( $userID ) ) ) {
 			return;
 		}
@@ -52,10 +44,6 @@ class CentralAuthContributionUserChangesHandler implements
 	}
 
 	public function onCentralAuthUserVisibilityChanged( CentralAuthUser $centralAuthUser, int $newVisibility ): void {
-		if ( !$this->isFeatureEnabled ) {
-			return;
-		}
-
 		$user = new CentralUser( $centralAuthUser->getId() );
 		if ( !$this->eventContributionStore->hasContributionsFromUser( $user ) ) {
 			return;

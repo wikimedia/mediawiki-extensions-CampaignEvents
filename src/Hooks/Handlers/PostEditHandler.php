@@ -30,9 +30,6 @@ class PostEditHandler implements BeforePageDisplayHook {
 	 * @inheritDoc
 	 */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		if ( !$out->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
-			return;
-		}
 		if ( $out->getTitle()->inNamespace( NS_EVENT ) ) {
 			// Don't show the dialog in the Event: namespace, T406672
 			return;

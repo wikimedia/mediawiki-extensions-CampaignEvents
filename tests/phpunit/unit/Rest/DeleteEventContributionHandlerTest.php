@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
@@ -12,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\DeleteEventContributionHandler;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
@@ -40,15 +38,13 @@ class DeleteEventContributionHandlerTest extends MediaWikiUnitTestCase {
 		?PermissionChecker $perm = null,
 		?IEventLookup $lookup = null,
 		?CampaignsCentralUserLookup $central = null,
-		?HashConfig $config = null
 	): DeleteEventContributionHandler {
 		$store ??= $this->createMock( EventContributionStore::class );
 		$perm ??= $this->createMock( PermissionChecker::class );
 		$lookup ??= $this->createMock( IEventLookup::class );
 		$central ??= $this->createMock( CampaignsCentralUserLookup::class );
-		$config ??= new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] );
 
-		return new DeleteEventContributionHandler( $store, $perm, $lookup, $central, $config );
+		return new DeleteEventContributionHandler( $store, $perm, $lookup, $central );
 	}
 
 	/**
@@ -69,17 +65,6 @@ class DeleteEventContributionHandlerTest extends MediaWikiUnitTestCase {
 			$token,
 			$excepMsg
 		);
-	}
-
-	public function testFeatureDisabled_returns400() {
-		$config = new HashConfig( [ 'CampaignEventsEnableContributionTracking' => false ] );
-		$handler = $this->newHandler( config: $config );
-
-		$this->expectException( HttpException::class );
-		$this->expectExceptionMessage( 'This feature is not enabled on this wiki' );
-		$this->expectExceptionCode( 400 );
-
-		$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
 	}
 
 	public function testContributionNotFound_returns404() {

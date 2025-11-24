@@ -70,8 +70,7 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['meeting_url'],
 			$body['meeting_country_code'],
 			$body['meeting_address'],
-			// Remove coalesce when dropping feature flag CampaignEventsEnableContributionTracking
-			$body['tracks_contributions'] ?? false,
+			$body['tracks_contributions'],
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$body['chat_url'],

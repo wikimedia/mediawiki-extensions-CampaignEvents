@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateUserContributionRecordsJob;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -25,23 +24,16 @@ class UserMergeContributionUserChangesHandler implements
 {
 	private EventContributionStore $eventContributionStore;
 	private JobQueueGroup $jobQueueGroup;
-	private bool $isFeatureEnabled;
 
 	public function __construct(
 		EventContributionStore $eventContributionStore,
 		JobQueueGroup $jobQueueGroup,
-		Config $config,
 	) {
 		$this->eventContributionStore = $eventContributionStore;
 		$this->jobQueueGroup = $jobQueueGroup;
-		$this->isFeatureEnabled = $config->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	public function onDeleteAccount( User &$oldUser ): void {
-		if ( !$this->isFeatureEnabled ) {
-			return;
-		}
-
 		// UserMerge is not compatible with wikifarms, so we know the user's local ID is also their "central" ID.
 		$user = new CentralUser( $oldUser->getId() );
 		if ( !$this->eventContributionStore->hasContributionsFromUser( $user ) ) {
@@ -56,10 +48,6 @@ class UserMergeContributionUserChangesHandler implements
 
 	/** @param list<array<string|int,string|int>> &$updateFields */
 	public function onUserMergeAccountFields( array &$updateFields ): void {
-		if ( !$this->isFeatureEnabled ) {
-			return;
-		}
-
 		$updateFields[] = [
 			'ce_event_contributions',
 			'cec_user_id',

@@ -2,7 +2,7 @@
 	'use strict';
 
 	// Check if we should run at all
-	if ( !mw.config.get( 'wgCampaignEventsEnableContributionTracking' ) || !mw.user.isNamed() ) {
+	if ( !mw.user.isNamed() ) {
 		return;
 	}
 

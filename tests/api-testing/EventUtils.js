@@ -21,9 +21,10 @@ module.exports = {
 			timezone: 'UTC',
 			start_time: '30200220200220',
 			end_time: '30200220200222',
-			types: [ 'other' ],
-			wikis: [],
+			types: [ 'editing-event' ],
+			wikis: [ '*' ],
 			online_meeting: true,
+			tracks_contributions: true,
 			token: await organizerUser.token()
 		};
 		return this.enableRegistration( organizerUser, reqBody );

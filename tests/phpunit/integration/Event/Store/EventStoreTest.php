@@ -40,11 +40,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	private const CURWIKIID_PLACEHOLDER = '*curwiki*';
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
-	}
-
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
 		return new EventRegistration(
 			null,

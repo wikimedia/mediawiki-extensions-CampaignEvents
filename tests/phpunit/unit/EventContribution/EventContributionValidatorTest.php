@@ -15,7 +15,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Permissions\Authority;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
@@ -49,7 +48,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->jobQueueGroup = $this->createMock( JobQueueGroup::class );
 		$this->revisionStoreFactory = $this->createMock( RevisionStoreFactory::class );
 		$this->eventContributionStore = $this->createMock( EventContributionStore::class );
-		$this->options = $this->createMock( ServiceOptions::class );
 		$this->performer = $this->createMock( Authority::class );
 
 		$this->validator = new EventContributionValidator(
@@ -58,32 +56,10 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			$this->jobQueueGroup,
 			$this->revisionStoreFactory,
 			$this->eventContributionStore,
-			$this->options
 		);
 	}
 
-	public function testValidateAndScheduleFeatureFlagDisabled(): void {
-		// Setup feature flag disabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( false );
-
-		// Create a mock event
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( 1 );
-
-		$this->expectException( HttpException::class );
-		$this->expectExceptionMessage( 'This feature is not enabled on this wiki' );
-
-		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
-	}
-
 	public function testValidateAndScheduleUserNotGlobal(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup user not global
 		$this->centralUserLookup->method( 'newFromAuthority' )
 			->with( $this->performer )
@@ -105,10 +81,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$wikiID = 'awiki';
 		$revID = 54321;
 
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( $eventID );
 
@@ -127,10 +99,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$wikiID = 'awiki';
 		$revID = 54321;
 
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( $eventID );
 
@@ -145,11 +113,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndScheduleContributionTrackingDisabled(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$this->centralUserLookup->method( 'newFromAuthority' )
@@ -169,11 +132,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndScheduleEventDeleted(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$this->centralUserLookup->method( 'newFromAuthority' )
@@ -194,11 +152,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndSchedule__eventNotOngoing(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$this->centralUserLookup->method( 'newFromAuthority' )
@@ -220,11 +173,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndScheduleRevisionNotFound(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$this->centralUserLookup->method( 'newFromAuthority' )
@@ -256,11 +204,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndScheduleRevisionTooOld(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$this->centralUserLookup->method( 'newFromAuthority' )
@@ -297,11 +240,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndScheduleNotOwner(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$centralUser->method( 'getCentralID' )->willReturn( 123 );
@@ -347,11 +285,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndScheduleNotParticipant(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$centralUser->method( 'getCentralID' )->willReturn( 123 );
@@ -408,11 +341,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$isGood,
 		$targetWikis
 	): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$centralUser->method( 'getCentralID' )->willReturn( 123 );
@@ -476,11 +404,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testValidateAndScheduleSuccess(): void {
-		// Setup feature flag enabled
-		$this->options->method( 'get' )
-			->with( 'CampaignEventsEnableContributionTracking' )
-			->willReturn( true );
-
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
 		$centralUser->method( 'getCentralID' )->willReturn( 123 );

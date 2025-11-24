@@ -22,11 +22,6 @@ use MediaWikiIntegrationTestCase;
 class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 	use EventContributionUpdateTestHelperTrait;
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
-	}
-
 	private function getGlobalUser(): User {
 		$user = $this->getMutableTestUser()->getUser();
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'CentralAuth' ) ) {

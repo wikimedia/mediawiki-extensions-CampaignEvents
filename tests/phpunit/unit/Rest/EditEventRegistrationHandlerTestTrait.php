@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
-use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use StatusValue;
 
@@ -19,7 +18,7 @@ trait EditEventRegistrationHandlerTestTrait {
 		'timezone' => 'UTC',
 		'start_time' => '20220308120000',
 		'end_time' => '20220308150000',
-		'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+		'types' => [ 'editing-event' ],
 		'wikis' => [ '*' ],
 		'topics' => [],
 		'online_meeting' => true,
@@ -27,6 +26,7 @@ trait EditEventRegistrationHandlerTestTrait {
 		'meeting_url' => 'https://meetingurl.example.org',
 		'meeting_country_code' => 'PT',
 		'meeting_address' => 'Address',
+		'tracks_contributions' => true,
 		'chat_url' => 'https://chaturl.example.org',
 		'is_test_event' => false,
 	];

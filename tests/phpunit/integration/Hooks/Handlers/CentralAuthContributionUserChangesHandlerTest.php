@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\CentralAuthContributionUserChangesHandler;
@@ -23,7 +22,6 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 	protected function setUp(): void {
 		parent::setUp();
 		$this->markTestSkippedIfExtensionNotLoaded( 'CentralAuth' );
-		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
 	}
 
 	public function testOnCentralAuthAccountDeleted() {
@@ -47,16 +45,6 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 		$this->assertNull( $storedContrib->getUserName(), 'No username after deletion' );
 	}
 
-	public function testOnCentralAuthAccountDeleted__featureDisabled() {
-		$handler = new CentralAuthContributionUserChangesHandler(
-			$this->createNoOpMock( EventContributionStore::class ),
-			$this->createNoOpMock( JobQueueGroup::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => false ] )
-		);
-		$handler->onCentralAuthAccountDeleted( 1234, 'Some name' );
-		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
-	}
-
 	public function testOnCentralAuthAccountDeleted__noContributions() {
 		$contribsStore = $this->createMock( EventContributionStore::class );
 		$contribsStore->expects( $this->once() )
@@ -65,7 +53,6 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 		$handler = new CentralAuthContributionUserChangesHandler(
 			$contribsStore,
 			$this->createNoOpMock( JobQueueGroup::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onCentralAuthAccountDeleted( 42, 'Name' );
 		// Rely on the no-op JobQueueGroup mock to soft-assert that nothing was done.
@@ -113,19 +100,6 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 		);
 	}
 
-	public function testOnCentralAuthUserVisibilityChanged__featureDisabled() {
-		$handler = new CentralAuthContributionUserChangesHandler(
-			$this->createNoOpMock( EventContributionStore::class ),
-			$this->createNoOpMock( JobQueueGroup::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => false ] )
-		);
-		$handler->onCentralAuthUserVisibilityChanged(
-			$this->createNoOpMock( CentralAuthUser::class ),
-			CentralAuthUser::HIDDEN_LEVEL_SUPPRESSED
-		);
-		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
-	}
-
 	public function testOnCentralAuthUserVisibilityChanged__noContributions() {
 		$contribsStore = $this->createMock( EventContributionStore::class );
 		$contribsStore->expects( $this->once() )
@@ -134,7 +108,6 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 		$handler = new CentralAuthContributionUserChangesHandler(
 			$contribsStore,
 			$this->createNoOpMock( JobQueueGroup::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$centralUser = $this->createMock( CentralAuthUser::class );
 		$centralUser->method( 'getId' )->willReturn( 42 );

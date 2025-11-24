@@ -82,10 +82,7 @@
 			],
 			"merge_strategy": "provide_default"
 		},
-		"CampaignEventsEnableContributionTracking": {
-			"description": "Flag to enable contribution tracking feature for associating edits to events",
-			"value": false
-		},
+
 		"CampaignEventsContributionTrackingDisallowedCountries": {
 			"description": "Map of countries for which in-person or hybrid events cannot use contribution tracking (e.g. for legal reasons, see https://foundation.wikimedia.org/wiki/Legal:Wikimedia_Foundation_Country_and_Territory_Protection_List). This maps CLDR country codes to English country names, but only the former are used; the names are included for convenience, and are assumed to be correct.",
 			"value": {}
@@ -164,16 +161,14 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\CentralAuthContributionUserChangesHandler",
 			"services": [
 				"CampaignEventsEventContributionStore",
-				"JobQueueGroup",
-				"MainConfig"
+				"JobQueueGroup"
 			]
 		},
 		"UserMergeContributionUserChangesHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\UserMergeContributionUserChangesHandler",
 			"services": [
 				"CampaignEventsEventContributionStore",
-				"JobQueueGroup",
-				"MainConfig"
+				"JobQueueGroup"
 			]
 		},
 		"ContributionUserChangesHandler": {
@@ -182,8 +177,7 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventContributionStore",
 				"JobQueueGroup",
-				"MainWANObjectCache",
-				"MainConfig"
+				"MainWANObjectCache"
 			]
 		}
 	},
@@ -220,8 +214,7 @@
 			"services": [
 				"CampaignEventsEventContributionStore",
 				"TitleFormatter",
-				"JobQueueGroup",
-				"MainConfig"
+				"JobQueueGroup"
 			]
 		}
 	],
@@ -523,7 +516,6 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
-				"MainConfig",
 				"CampaignEventsCountryProvider"
 			]
 		},
@@ -533,8 +525,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
 			"services": [
 				"CampaignEventsEventLookup",
-				"CampaignEventsTrackingToolRegistry",
-				"MainConfig"
+				"CampaignEventsTrackingToolRegistry"
 			]
 		},
 		{
@@ -593,7 +584,6 @@
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
 				"CampaignEventsEventLookup",
-				"MainConfig",
 				"CampaignEventsCountryProvider"
 			]
 		},
@@ -718,8 +708,7 @@
 				"CampaignEventsEventContributionStore",
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsEventLookup",
-				"CampaignEventsCentralUserLookup",
-				"MainConfig"
+				"CampaignEventsCentralUserLookup"
 			]
 		}
 	],

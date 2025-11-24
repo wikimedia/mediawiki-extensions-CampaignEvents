@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -44,7 +43,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	protected ITopicRegistry $topicRegistry;
 	private EventTypesRegistry $eventTypesRegistry;
 	private CountryProvider $countryProvider;
-	private bool $contributionTrackingEnabled;
 
 	public function __construct(
 		EventFactory $eventFactory,
@@ -56,7 +54,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
-		Config $config,
 		CountryProvider $countryProvider,
 	) {
 		$this->eventFactory = $eventFactory;
@@ -69,7 +66,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		$this->topicRegistry = $topicRegistry;
 		$this->eventTypesRegistry = $eventTypesRegistry;
 		$this->countryProvider = $countryProvider;
-		$this->contributionTrackingEnabled = $config->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	/**
@@ -194,6 +190,11 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'string',
 				StringDef::PARAM_MAX_BYTES => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			],
+			'tracks_contributions' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
 			'tracking_tool_id' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
@@ -212,14 +213,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_DEFAULT => false,
 			],
 		] + $this->getTokenParamDefinition();
-
-		if ( $this->contributionTrackingEnabled ) {
-			$params['tracks_contributions'] = [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'boolean',
-				ParamValidator::PARAM_DEFAULT => true,
-			];
-		}
 
 		return $params;
 	}

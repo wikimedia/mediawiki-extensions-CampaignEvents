@@ -20,11 +20,6 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
 class ContributionAssociationPageEventIngressTest extends MediaWikiIntegrationTestCase {
 	use EventContributionUpdateTestHelperTrait;
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
-	}
-
 	private static function makeContribution( ProperPageIdentity $page, int $revID = 789 ): EventContribution {
 		return new EventContribution(
 			123,

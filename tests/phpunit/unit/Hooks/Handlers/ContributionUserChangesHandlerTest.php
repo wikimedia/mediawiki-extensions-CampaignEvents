@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Hooks\Handlers;
 
 use MediaWiki\Block\DatabaseBlock;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\ContributionUserChangesHandler;
@@ -27,13 +26,12 @@ use Wikimedia\ObjectCache\HashBagOStuff;
  */
 class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 	/** Returns an instance of the handler where all dependencies expect NOT to be used. */
-	private function getNoOpHandler( bool $featureEnabled = true ): ContributionUserChangesHandler {
+	private function getNoOpHandler(): ContributionUserChangesHandler {
 		return new ContributionUserChangesHandler(
 			$this->createNoOpMock( CampaignsCentralUserLookup::class ),
 			$this->createNoOpMock( EventContributionStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => $featureEnabled ] )
 		);
 	}
 
@@ -44,15 +42,6 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			->willReturn( $this->createMock( UserIdentity::class ) );
 		$block->expects( $this->atLeastOnce() )->method( 'getHideName' )->willReturn( true );
 		return $block;
-	}
-
-	public function testOnBlockIpComplete__featureDisabled() {
-		$this->getNoOpHandler( false )->onBlockIpComplete(
-			$this->createNoOpMock( DatabaseBlock::class ),
-			$this->createNoOpMock( User::class ),
-			null
-		);
-		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
 	}
 
 	public function testOnBlockIpComplete__noTarget() {
@@ -98,7 +87,6 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( EventContributionStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onBlockIpComplete(
 			$this->getValidBlock(),
@@ -118,20 +106,11 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			$contribsStore,
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onBlockIpComplete(
 			$this->getValidBlock(),
 			$this->createNoOpMock( User::class ),
 			null
-		);
-		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
-	}
-
-	public function testOnUnblockUserComplete__featureDisabled() {
-		$this->getNoOpHandler( false )->onUnblockUserComplete(
-			$this->createNoOpMock( DatabaseBlock::class ),
-			$this->createNoOpMock( User::class )
 		);
 		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
 	}
@@ -168,7 +147,6 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( EventContributionStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onUnblockUserComplete(
 			$this->getValidBlock(),
@@ -187,17 +165,11 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			$contribsStore,
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onUnblockUserComplete(
 			$this->getValidBlock(),
 			$this->createNoOpMock( User::class )
 		);
-		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
-	}
-
-	public function testOnRenameUserComplete__featureDisabled() {
-		$this->getNoOpHandler( false )->onRenameUserComplete( 1, 'Old', 'New' );
 		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
 	}
 
@@ -211,7 +183,6 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( EventContributionStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onRenameUserComplete( 1, 'Old', 'New' );
 		DeferredUpdates::doUpdates();
@@ -236,7 +207,6 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( EventContributionStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$wanCache,
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onRenameUserComplete( 1, 'Old', $newName );
 		DeferredUpdates::doUpdates();
@@ -253,7 +223,6 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 			$contribsStore,
 			$this->createNoOpMock( JobQueueGroup::class ),
 			new WANObjectCache( [ 'cache' => new EmptyBagOStuff() ] ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$handler->onRenameUserComplete( 1, 'Old', 'New' );
 		DeferredUpdates::doUpdates();

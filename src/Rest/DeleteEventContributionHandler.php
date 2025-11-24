@@ -4,12 +4,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
@@ -25,20 +23,17 @@ class DeleteEventContributionHandler extends SimpleHandler {
 	private PermissionChecker $permissionChecker;
 	private IEventLookup $eventLookup;
 	private CampaignsCentralUserLookup $centralUserLookup;
-	private bool $contributionTrackingEnabled;
 
 	public function __construct(
 		EventContributionStore $store,
 		PermissionChecker $permissionChecker,
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
-		Config $mainConfig
 	) {
 		$this->store = $store;
 		$this->permissionChecker = $permissionChecker;
 		$this->eventLookup = $eventLookup;
 		$this->centralUserLookup = $centralUserLookup;
-		$this->contributionTrackingEnabled = (bool)$mainConfig->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	/** @inheritDoc */
@@ -48,13 +43,6 @@ class DeleteEventContributionHandler extends SimpleHandler {
 	}
 
 	public function run( int $id ): Response {
-		if ( !$this->contributionTrackingEnabled ) {
-			throw new HttpException(
-				'This feature is not enabled on this wiki',
-				400
-			);
-		}
-
 		$contrib = $this->store->getByID( $id );
 		if ( $contrib === null ) {
 			throw new LocalizedHttpException( MessageValue::new( 'campaignevents-rest-contribution-not-found' ), 404 );

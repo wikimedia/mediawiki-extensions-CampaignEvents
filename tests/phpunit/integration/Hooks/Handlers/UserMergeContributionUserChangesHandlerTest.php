@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\UserMergeContributionUserChangesHandler;
@@ -26,7 +25,6 @@ class UserMergeContributionUserChangesHandlerTest extends MediaWikiIntegrationTe
 	protected function setUp(): void {
 		parent::setUp();
 		$this->markTestSkippedIfExtensionNotLoaded( 'UserMerge' );
-		$this->overrideConfigValue( 'CampaignEventsEnableContributionTracking', true );
 	}
 
 	public function testOnDeleteAccount() {
@@ -56,17 +54,6 @@ class UserMergeContributionUserChangesHandlerTest extends MediaWikiIntegrationTe
 		$this->assertNull( $storedContrib->getUserName(), 'No username after deletion' );
 	}
 
-	public function testOnDeleteAccount__featureDisabled() {
-		$handler = new UserMergeContributionUserChangesHandler(
-			$this->createNoOpMock( EventContributionStore::class ),
-			$this->createNoOpMock( JobQueueGroup::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => false ] )
-		);
-		$user = $this->createNoOpMock( User::class );
-		$handler->onDeleteAccount( $user );
-		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
-	}
-
 	public function testOnDeleteAccount__noContributions() {
 		$contribsStore = $this->createMock( EventContributionStore::class );
 		$contribsStore->expects( $this->once() )
@@ -75,7 +62,6 @@ class UserMergeContributionUserChangesHandlerTest extends MediaWikiIntegrationTe
 		$handler = new UserMergeContributionUserChangesHandler(
 			$contribsStore,
 			$this->createNoOpMock( JobQueueGroup::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => true ] )
 		);
 		$user = $this->createMock( User::class );
 		$handler->onDeleteAccount( $user );
@@ -103,17 +89,5 @@ class UserMergeContributionUserChangesHandlerTest extends MediaWikiIntegrationTe
 		$storedContrib = $this->getStoredContrib();
 		$this->assertSame( $mergeTo->getId(), $storedContrib->getUserId(), 'User ID after merge' );
 		$this->assertSame( $mergeTo->getName(), $storedContrib->getUserName(), 'Username after merge' );
-	}
-
-	public function testOnUserMergeAccountFields__featureDisabled() {
-		$handler = new UserMergeContributionUserChangesHandler(
-			$this->createNoOpMock( EventContributionStore::class ),
-			$this->createNoOpMock( JobQueueGroup::class ),
-			new HashConfig( [ 'CampaignEventsEnableContributionTracking' => false ] )
-		);
-
-		$fields = [];
-		$handler->onUserMergeAccountFields( $fields );
-		$this->assertSame( [], $fields, 'No fields should be added' );
 	}
 }

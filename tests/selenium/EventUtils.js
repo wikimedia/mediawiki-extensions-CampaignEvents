@@ -90,7 +90,8 @@ const EventUtils = {
 			start_time: '29990414160000',
 			end_time: '29990515170000',
 			types: [ 'editing-event' ],
-			wikis: [],
+			wikis: [ '*' ],
+			tracks_contributions: true,
 			online_meeting: true
 		};
 		/* eslint-enable camelcase */

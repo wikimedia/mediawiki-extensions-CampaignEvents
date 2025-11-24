@@ -49,6 +49,7 @@ trait EventPagerTrait {
 			'event_end_local',
 			'event_end_utc',
 			'event_types',
+			'event_track_contributions',
 			'event_meeting_type',
 			'event_meeting_url',
 			'event_created_at',
@@ -56,9 +57,6 @@ trait EventPagerTrait {
 			'event_deleted_at',
 			'event_is_test_event',
 		];
-		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
-			$eventFields[] = 'event_track_contributions';
-		}
 		return [
 			'tables' => [ 'campaign_events', 'ce_participants', 'ce_organizers' ],
 			'fields' => [

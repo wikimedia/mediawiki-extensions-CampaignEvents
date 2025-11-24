@@ -480,40 +480,38 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
-		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
-			$hasNoPermittedEventTypes = [ 'NOR' ];
-			foreach ( $this->eventTypesRegistry->getContributionTypes() as $contributionType ) {
-				$hasNoPermittedEventTypes[] =
-					[ 'CONTAINS', 'EventTypes', $contributionType ];
-			}
-			$participationOptions = [
-				'AND',
-				[ '!==', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ]
-			];
+		$hasNoPermittedEventTypes = [ 'NOR' ];
+		foreach ( $this->eventTypesRegistry->getContributionTypes() as $contributionType ) {
+			$hasNoPermittedEventTypes[] =
+				[ 'CONTAINS', 'EventTypes', $contributionType ];
+		}
+		$participationOptionsCond = [
+			'AND',
+			[ '!==', 'ParticipationOptions', (string)EventRegistration::PARTICIPATION_OPTION_ONLINE ]
+		];
 
-			$hasDisallowedCountryCodes = [ 'OR' ];
-			foreach ( $this->disallowedCountryCodes as $countryCode ) {
-				$hasDisallowedCountryCodes[] = [
-					'===',
-					'EventMeetingCountryCode',
-					$countryCode
-				];
-			}
-			$hasNoWiki = [ '===', 'WikiType', (string)self::WIKI_TYPE_NONE ];
-			$disallowed = [ 'OR' ];
-			$disallowed[] = $hasNoPermittedEventTypes;
-			$participationOptions[] = $hasDisallowedCountryCodes;
-			$disallowed[] = $participationOptions;
-			$disallowed[] = $hasNoWiki;
-			$formFields['ContributionStats'] = [
-				'class' => HTMLCheckField::class,
-				'label-message' => 'campaignevents-edit-field-contribution-stats-label',
-				'default' => $wpContributionStats,
-				'help' => $this->msg( 'campaignevents-edit-field-contribution-stats-help' )->escaped(),
-				'section' => self::DETAILS_SECTION,
-				'disable-if' => $disallowed,
+		$hasDisallowedCountryCodes = [ 'OR' ];
+		foreach ( $this->disallowedCountryCodes as $countryCode ) {
+			$hasDisallowedCountryCodes[] = [
+				'===',
+				'EventMeetingCountryCode',
+				$countryCode
 			];
 		}
+		$hasNoWiki = [ '===', 'WikiType', (string)self::WIKI_TYPE_NONE ];
+		$contributionStatsDisableCond = [ 'OR' ];
+		$contributionStatsDisableCond[] = $hasNoPermittedEventTypes;
+		$participationOptionsCond[] = $hasDisallowedCountryCodes;
+		$contributionStatsDisableCond[] = $participationOptionsCond;
+		$contributionStatsDisableCond[] = $hasNoWiki;
+		$formFields['ContributionStats'] = [
+			'class' => HTMLCheckField::class,
+			'label-message' => 'campaignevents-edit-field-contribution-stats-label',
+			'default' => $wpContributionStats,
+			'help' => $this->msg( 'campaignevents-edit-field-contribution-stats-help' )->escaped(),
+			'section' => self::DETAILS_SECTION,
+			'disable-if' => $contributionStatsDisableCond,
+		];
 
 		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
 		if ( $availableTrackingTools ) {
@@ -787,11 +785,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$meetingCountryCode = $meetingAddress = null;
 		}
 
-		$tracksContributions = false;
-		if ( $this->getConfig()->get( 'CampaignEventsEnableContributionTracking' ) ) {
-			$tracksContributions = $data['ContributionStats'];
-		}
-
 		$testEvent = $data['TestEvent'] === "1";
 		try {
 			$event = $this->eventFactory->newEvent(
@@ -809,7 +802,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$meetingURL,
 				$meetingCountryCode,
 				$meetingAddress,
-				$tracksContributions,
+				$data['ContributionStats'],
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$data['EventChatURL'],

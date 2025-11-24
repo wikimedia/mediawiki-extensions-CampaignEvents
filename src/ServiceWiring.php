@@ -99,7 +99,6 @@ return [
 			$services->get( EventTopicsStore::SERVICE_NAME ),
 			$services->getMainWANObjectCache(),
 			$services->getJsonCodec(),
-			$services->getMainConfig()->get( 'CampaignEventsEnableContributionTracking' )
 		);
 	},
 	IEventLookup::LOOKUP_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventLookup {
@@ -484,7 +483,6 @@ return [
 			$services->getJobQueueGroup(),
 			$services->getRevisionStoreFactory(),
 			$services->get( EventContributionStore::SERVICE_NAME ),
-			new ServiceOptions( [ 'CampaignEventsEnableContributionTracking' ], $services->getMainConfig() )
 		);
 	},
 ];

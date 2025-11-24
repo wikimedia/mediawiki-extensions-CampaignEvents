@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use Generator;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -95,9 +94,6 @@ class UpdateEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$this->createMock( ITopicRegistry::class ),
 			new EventTypesRegistry(),
 			$eventLookup,
-			new HashConfig( [
-				'CampaignEventsEnableContributionTracking' => false,
-			] ),
 			$this->getCountryProvider(),
 		);
 	}

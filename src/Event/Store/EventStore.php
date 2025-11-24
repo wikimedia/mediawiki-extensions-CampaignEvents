@@ -66,7 +66,6 @@ class EventStore implements IEventStore, IEventLookup {
 		EventTopicsStore $eventTopicsStore,
 		WANObjectCache $wanCache,
 		JsonCodec $jsonCodec,
-		private readonly bool $contributionTrackingEnabled
 	) {
 		$this->dbHelper = $dbHelper;
 		$this->campaignsPageFactory = $campaignsPageFactory;
@@ -400,11 +399,6 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$participationOptions = self::getParticipationOptionsFromDBVal( $row->event_meeting_type );
 
-		$tracksContributions = false;
-		if ( $this->contributionTrackingEnabled ) {
-			$tracksContributions = (bool)$row->event_track_contributions;
-		}
-
 		if ( $trackingToolRow ) {
 			$trackingTools = [
 				new TrackingToolAssociation(
@@ -431,7 +425,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$participationOptions,
 			$row->event_meeting_url !== '' ? $row->event_meeting_url : null,
 			$address,
-			$tracksContributions,
+			(bool)$row->event_track_contributions,
 			$trackingTools,
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			(bool)$row->event_is_test_event,
@@ -458,7 +452,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_end_local',
 			// event_end_utc not required
 			'event_types',
-			// event_track_contributions conditionally checked below
+			'event_track_contributions',
 			'event_meeting_type',
 			'event_meeting_url',
 			'event_created_at',
@@ -466,9 +460,6 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_deleted_at',
 			'event_is_test_event',
 		];
-		if ( $this->contributionTrackingEnabled ) {
-			$requiredProperties[] = 'event_track_contributions';
-		}
 		foreach ( $requiredProperties as $property ) {
 			if ( !property_exists( $row, $property ) ) {
 				throw new InvalidArgumentException(
@@ -505,6 +496,7 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_end_local' => $localEndDB,
 			'event_end_utc' => $dbw->timestamp( $event->getEndUTCTimestamp() ),
 			'event_types' => EventTypesRegistry::eventTypesToDBVal( $event->getTypes() ),
+			'event_track_contributions' => $event->hasContributionTracking(),
 			'event_meeting_type' => self::participationOptionsToDBVal( $event->getParticipationOptions() ),
 			'event_meeting_url' => $event->getMeetingURL() ?? '',
 			'event_created_at' => $curCreationTS ? $dbw->timestamp( $curCreationTS ) : $curDBTimestamp,
@@ -512,9 +504,6 @@ class EventStore implements IEventStore, IEventLookup {
 			'event_deleted_at' => $curDeletionTS ? $dbw->timestamp( $curDeletionTS ) : null,
 			'event_is_test_event' => $event->getIsTestEvent()
 		];
-		if ( $this->contributionTrackingEnabled ) {
-			$newRow['event_track_contributions'] = $event->hasContributionTracking();
-		}
 
 		$eventID = $event->getID();
 		$dbw->startAtomic( __METHOD__ );

@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 
-use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -21,14 +20,12 @@ use Wikimedia\Message\MessageValue;
 class EventContributionValidator {
 	public const SERVICE_NAME = 'CampaignEventsEventContributionValidator';
 	private const MAX_REVISION_AGE = 24 * 60 * 60;
-	private const CONSTRUCTOR_OPTIONS = [ 'CampaignEventsEnableContributionTracking' ];
 
 	private CampaignsCentralUserLookup $centralUserLookup;
 	private ParticipantsStore $participantsStore;
 	private JobQueueGroup $jobQueueGroup;
 	private RevisionStoreFactory $revisionStoreFactory;
 	private EventContributionStore $eventContributionStore;
-	private ServiceOptions $options;
 
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
@@ -36,15 +33,12 @@ class EventContributionValidator {
 		JobQueueGroup $jobQueueGroup,
 		RevisionStoreFactory $revisionStoreFactory,
 		EventContributionStore $eventContributionStore,
-		ServiceOptions $options
 	) {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->participantsStore = $participantsStore;
 		$this->jobQueueGroup = $jobQueueGroup;
 		$this->revisionStoreFactory = $revisionStoreFactory;
 		$this->eventContributionStore = $eventContributionStore;
-		$this->options = $options;
-		$this->options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	/**
@@ -62,14 +56,6 @@ class EventContributionValidator {
 		string $wikiID,
 		Authority $performer
 	): void {
-		// Check if contribution tracking is enabled
-		if ( !$this->options->get( 'CampaignEventsEnableContributionTracking' ) ) {
-			throw new HttpException(
-				'This feature is not enabled on this wiki',
-				400
-			);
-		}
-
 		// Get central user
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );

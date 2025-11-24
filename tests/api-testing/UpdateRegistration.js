@@ -47,9 +47,10 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}', () => {
 			timezone: 'UTC',
 			start_time: '30200220200220',
 			end_time: '30200220200222',
-			types: [ 'other' ],
-			wikis: [],
+			types: [ 'editing-event' ],
+			wikis: [ '*' ],
 			online_meeting: true,
+			tracks_contributions: true,
 			chat_url: 'https://example.org',
 			token: token
 		};

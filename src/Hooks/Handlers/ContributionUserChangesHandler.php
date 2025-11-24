@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
 use MediaWiki\Block\DatabaseBlock;
-use MediaWiki\Config\Config;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateUserContributionRecordsJob;
@@ -32,20 +31,17 @@ class ContributionUserChangesHandler implements
 	private EventContributionStore $eventContributionStore;
 	private JobQueueGroup $jobQueueGroup;
 	private WANObjectCache $wanCache;
-	private bool $isFeatureEnabled;
 
 	public function __construct(
 		CampaignsCentralUserLookup $centralUserLookup,
 		EventContributionStore $eventContributionStore,
 		JobQueueGroup $jobQueueGroup,
 		WANObjectCache $wanCache,
-		Config $config,
 	) {
 		$this->centralUserLookup = $centralUserLookup;
 		$this->eventContributionStore = $eventContributionStore;
 		$this->jobQueueGroup = $jobQueueGroup;
 		$this->wanCache = $wanCache;
-		$this->isFeatureEnabled = $config->get( 'CampaignEventsEnableContributionTracking' );
 	}
 
 	/**
@@ -54,10 +50,6 @@ class ContributionUserChangesHandler implements
 	 * @param ?DatabaseBlock $priorBlock
 	 */
 	public function onBlockIpComplete( $block, $user, $priorBlock ): void {
-		if ( !$this->isFeatureEnabled ) {
-			return;
-		}
-
 		$targetUser = $block->getTargetUserIdentity();
 		if ( !$targetUser ) {
 			// E.g., a range block.
@@ -98,10 +90,6 @@ class ContributionUserChangesHandler implements
 	 * @param User $user
 	 */
 	public function onUnblockUserComplete( $block, $user ): void {
-		if ( !$this->isFeatureEnabled ) {
-			return;
-		}
-
 		$targetUser = $block->getTargetUserIdentity();
 		if ( !$targetUser ) {
 			// E.g., a range block.
@@ -145,10 +133,6 @@ class ContributionUserChangesHandler implements
 	}
 
 	private function handleRenameUserComplete( string $new ): void {
-		if ( !$this->isFeatureEnabled ) {
-			return;
-		}
-
 		try {
 			// Note, when this runs the user has already been renamed, so we need to look up the new name.
 			$centralUser = $this->centralUserLookup->newFromLocalUsername( $new );

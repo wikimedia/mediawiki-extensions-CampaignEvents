@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use LogicException;
-use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
@@ -44,7 +43,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
 		IEventLookup $eventLookup,
-		Config $config,
 		CountryProvider $countryProvider,
 	) {
 		parent::__construct(
@@ -57,7 +55,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$wikiLookup,
 			$topicRegistry,
 			$eventTypesRegistry,
-			$config,
 			$countryProvider,
 		);
 		$this->eventLookup = $eventLookup;
@@ -161,8 +158,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['meeting_url'],
 			$body['meeting_country_code'],
 			$body['meeting_address'],
-			// Remove coalesce when dropping feature flag CampaignEventsEnableContributionTracking
-			$body['tracks_contributions'] ?? false,
+			$body['tracks_contributions'],
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$body['chat_url'],
