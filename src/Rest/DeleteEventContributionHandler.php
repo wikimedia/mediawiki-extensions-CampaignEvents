@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
@@ -22,18 +21,15 @@ class DeleteEventContributionHandler extends SimpleHandler {
 	private EventContributionStore $store;
 	private PermissionChecker $permissionChecker;
 	private IEventLookup $eventLookup;
-	private CampaignsCentralUserLookup $centralUserLookup;
 
 	public function __construct(
 		EventContributionStore $store,
 		PermissionChecker $permissionChecker,
 		IEventLookup $eventLookup,
-		CampaignsCentralUserLookup $centralUserLookup,
 	) {
 		$this->store = $store;
 		$this->permissionChecker = $permissionChecker;
 		$this->eventLookup = $eventLookup;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/** @inheritDoc */
