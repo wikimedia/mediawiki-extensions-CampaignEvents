@@ -548,5 +548,6 @@
 	"campaignevents-contributions-summary-links-changed": "Geännert Linken",
 	"campaignevents-contributions-summary-edit-count": "Zuel vun den Ännerungen",
 	"campaignevents-event-details-contributions-actions": "Aktiounen",
-	"campaignevents-event-details-contributions-delete-cancel": "Ofbriechen"
+	"campaignevents-event-details-contributions-delete-cancel": "Ofbriechen",
+	"campaignevents-event-details-contributions-delete-confirm": "Ewechhuelen"
 }

@@ -70,5 +70,10 @@
 	"campaignevents-notification-registration-details-header": "कार्यक्रम विवरणहरू",
 	"generateinvitationlist": "निमन्त्रणा सूची उत्पन्न गर्नुहोस्",
 	"campaignevents-generateinvitationlist-name-field-label": "निमन्त्रणा सूचीको नाम",
-	"myinvitationlists": "तपाईंको निमन्त्रणा सूचीहरू"
+	"myinvitationlists": "तपाईंको निमन्त्रणा सूचीहरू",
+	"campaignevents-event-details-contributions-actions": "कार्यहरू",
+	"campaignevents-event-details-contributions-delete-tooltip": "योगदान हटाउनुहोस्",
+	"campaignevents-event-details-contributions-delete-note": "यो मेटिने छैन, तर यो अब कार्यक्रमसँग सम्बन्धित हुनेछैन।",
+	"campaignevents-event-details-contributions-delete-cancel": "रद्द गर्नुहोस्",
+	"campaignevents-event-details-contributions-delete-confirm": "हटाउनुहोस्"
 }
