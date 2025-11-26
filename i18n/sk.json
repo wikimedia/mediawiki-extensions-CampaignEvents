@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Luky001"
+			"Luky001",
+			"Daimona Eaytoy"
 		]
 	},
 	"campaignevents-desc": "Poskytuje funkcie pre organizátorov a účastníkov podujatí.",
@@ -434,7 +435,7 @@
 	"campaignevents-event-details-participants-individual-data-deleted": "Odpovede jednotlivých účastníkov boli odstránené a súhrnné odpovede sú k dispozícii v sekcii [ $1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Zaregistrujte sa na podujatie $1",
 	"campaignevents-register-page-nonlocal": "Prosím, '''[ $1 dokončite registráciu na podujatie na wikiprojekte $2]''', kde bolo podujatie vytvorené.",
-	"campaignevents-delete-registration-page-nonlocal": "Prosím, '''[ $1 zrušte svoju registráciu na podujatie na wikiprojekte $2]''', kde bolo podujatie vytvorené.",
+	"campaignevents-delete-registration-page-nonlocal": "Prosím, '''[$1 zrušte svoju registráciu na podujatie na wikiprojekte $2]''', kde bolo podujatie vytvorené.",
 	"campaignevents-event-details-page-nonlocal": "Momentálne si prezeráte obmedzenú verziu tejto stránky. Pre prístup k úplným podrobnostiam o podujatí a ďalším funkciám <b>[$1 navštívte túto stránku na wikiprojekte $2]</b>, kde bolo podujatie vytvorená.",
 	"campaignevents-event-details-not-local-wiki-prompt": "Zobraziť na [$1 $2]",
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "Váš účet je zablokovaný. K tomuto nemáte prístup.",

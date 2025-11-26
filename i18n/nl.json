@@ -76,7 +76,7 @@
 	"campaignevents-edit-field-organizers-help": "Voeg de gebruikersnaam van andere organisatoren toe om hen toestemming te geven om dit evenement te beheren.",
 	"campaignevents-edit-field-organizers-placeholder": "Voeg gebruikersnaam toe",
 	"campaignevents-edit-field-organizers-creator-title": "Dit is de maker van het evenement. Andere organisatoren kunnen deze gebruiker niet verwijderen.",
-	"campaignevents-edit-field-organizers-user-not-allowed": "Deze gebruik{{GENDER:$1||st}}er mag geen evenementen organiseren.",
+	"campaignevents-edit-field-organizers-user-not-allowed": "Deze {{GENDER:$1|gebruiker|gebruikster}} mag geen evenementen organiseren.",
 	"campaignevents-edit-field-wiki-type": "Is dit evenement op bepaalde wiki’s gericht?",
 	"campaignevents-edit-field-wiki-type-none": "Geen bepaalde wiki’s",
 	"campaignevents-edit-field-wiki-type-all": "Ja (open voor alle wiki’s)",

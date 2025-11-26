@@ -10,7 +10,7 @@
 	"campaignevents-rest-delete-already-deleted": "A inscrición a este evento xa está borrada.",
 	"campaignevents-rest-user-not-found": "Non existe ningún usuario con este identificador central.",
 	"campaignevents-rest-get-registration-deleted": "Borrouse a inscrición a este evento.",
-	"campaignevents-rest-remove-participants-invalid-users-ids": "O parámetro \"user_ids\" debe ser unha matriz de identificadores de usuario ou un valor nulo (para borrar todos os usuarios)",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "O parámetro «user_ids» debe ser unha matriz de identificadores de usuario ou un valor nulo (para borrar todos os usuarios)",
 	"campaignevents-rest-remove-participants-nonlocal-error-message": "Os participantes hai que borralos en $1, o wiki onde se creou o evento.",
 	"campaignevents-rest-list-participants-empty-filter": "O filtro de nome de usuario, se se especifica, debe ser unha cadea de texto non baleira.",
 	"campaignevents-rest-list-participants-cannot-see-private": "Non tes permiso para ver os participantes que se inscribiron de forma privada a este evento.",
