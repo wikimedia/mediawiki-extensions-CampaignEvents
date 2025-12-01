@@ -301,7 +301,8 @@ class ParticipantsStore {
 				(bool)$row->cep_private,
 				$answersByUser[$centralID],
 				wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp ),
-				wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp )
+				wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp ),
+				(bool)$row->cep_hide_contribution_association_prompt
 			);
 			$num++;
 		}
@@ -346,7 +347,8 @@ class ParticipantsStore {
 			(bool)$row->cep_private,
 			$this->answersStore->getParticipantAnswers( $eventID, $user ),
 			wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp ),
-			wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp )
+			wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp ),
+			(bool)$row->cep_hide_contribution_association_prompt
 		);
 	}
 

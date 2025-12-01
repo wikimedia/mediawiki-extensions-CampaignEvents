@@ -252,6 +252,7 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			[],
 			'20200220202020',
 			'20200220202021',
+			false,
 		);
 		yield 'Active participant with already aggregated answers' => [ $participant ];
 		yield 'Previous participant with already aggregated answers' => [ null ];

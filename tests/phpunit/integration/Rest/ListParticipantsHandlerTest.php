@@ -112,7 +112,16 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$expected = [];
 		$usernames = [];
 		for ( $i = 1; $i < 4; $i++ ) {
-			$participants[] = new Participant( new CentralUser( $i ), '20220315120000', $i, false, [], null, null );
+			$participants[] = new Participant(
+				new CentralUser( $i ),
+				'20220315120000',
+				$i,
+				false,
+				[],
+				null,
+				null,
+				false,
+			);
 			$usernames[$i] = "Test user $i";
 			$expected[] = self::getExpectedParticipantsData( $i, $i, false );
 		}
@@ -131,7 +140,8 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 			false,
 			[],
 			null,
-			null
+			null,
+			false,
 		);
 		$deletedUserExpected = [
 			[
@@ -172,7 +182,14 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 		$usernames = [];
 		for ( $i = 1; $i < 4; $i++ ) {
 			$participants[] = new Participant(
-				new CentralUser( $i ), '20220315120000', $i, false, $answers, null, $participantAnswersAggregatedDate
+				new CentralUser( $i ),
+				'20220315120000',
+				$i,
+				false,
+				$answers,
+				null,
+				$participantAnswersAggregatedDate,
+				false,
 			);
 			$usernames[$i] = "Test user $i";
 			$expectedResp[] = self::getExpectedParticipantsData( $i, $i, null, $nonPiiAnswers, $aggregatedMessage );

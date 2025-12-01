@@ -74,7 +74,8 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 			false,
 			[],
 			null,
-			null
+			null,
+			false,
 		);
 		yield 'Public, no answers' => [
 			[
@@ -94,7 +95,8 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 				new Answer( 5, 3, 'foo' ),
 			],
 			$timestamp,
-			null
+			null,
+			false,
 		);
 		yield 'Private with answers' => [
 			[

@@ -16,6 +16,7 @@ class Participant {
 	 * @param Answer[] $answers
 	 * @param string|null $firstAnswerTimestamp Timestamp in the TS_UNIX format
 	 * @param string|null $aggregationTimestamp Timestamp in the TS_UNIX format
+	 * @param bool $hideContributionAssociationPrompt
 	 */
 	public function __construct(
 		private readonly CentralUser $user,
@@ -24,7 +25,8 @@ class Participant {
 		private readonly bool $privateRegistration,
 		private readonly array $answers,
 		private readonly ?string $firstAnswerTimestamp,
-		private readonly ?string $aggregationTimestamp
+		private readonly ?string $aggregationTimestamp,
+		private readonly bool $hideContributionAssociationPrompt,
 	) {
 	}
 
@@ -72,5 +74,13 @@ class Participant {
 	 */
 	public function getAggregationTimestamp(): ?string {
 		return $this->aggregationTimestamp;
+	}
+
+	public function shouldHideContributionAssociationPrompt(): bool {
+		return $this->hideContributionAssociationPrompt;
+	}
+
+	public function shouldShowContributionAssociationPrompt(): bool {
+		return !$this->hideContributionAssociationPrompt;
 	}
 }

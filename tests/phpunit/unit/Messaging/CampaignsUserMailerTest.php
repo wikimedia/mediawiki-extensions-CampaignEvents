@@ -117,7 +117,8 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 			false,
 			[],
 			null,
-			null
+			null,
+			false,
 		);
 	}
 
