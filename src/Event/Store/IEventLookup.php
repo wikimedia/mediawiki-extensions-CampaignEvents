@@ -45,12 +45,14 @@ interface IEventLookup {
 	public function getEventsByParticipant( int $participantID, int $limit ): array;
 
 	/**
-	 * Returns a list of events that can be associated with an edit. These events must:
+	 * Returns a list of events with which the user can be asked to associate an edit. These events must:
 	 *  - Have track contributions enabled
 	 *  - Target the current wiki
 	 *  - Be ongoing
 	 *  - Not be deleted
-	 *  This includes events for which the user has registered privately
+	 * Private registration does not affect the return value. However, it does not include events for which the user
+	 * opted out of seeing the association prompt (and therefore, association may be possible with some events not
+	 * listed here).
 	 *
 	 * @param int $participantID The user ID of the participant
 	 * @param int $limit Maximum number of events to return

@@ -268,6 +268,7 @@ class EventStore implements IEventStore, IEventLookup {
 				'event_id=cep_event_id',
 				'cep_user_id' => $participantID,
 				'cep_unregistered_at' => null,
+				'cep_hide_contribution_association_prompt' => false,
 			] )
 			->join( 'ce_event_wikis', null, 'event_id=ceew_event_id' )
 			->where( [

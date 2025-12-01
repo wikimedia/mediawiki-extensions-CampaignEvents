@@ -459,7 +459,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 					new CentralUser( $participantID ),
 					$config[ 'privateRegistration' ] ?? false,
 					[],
-					false
+					$config['hideAssociationPrompt'] ?? false
 				);
 			}
 		}
@@ -727,6 +727,24 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 				]
 			],
 			[ 'Ongoing Event Private' ]
+		];
+		yield 'Ongoing event, participant opted out of contribution association prompt' => [
+			42,
+			10,
+			[
+				[
+					'event' => $buildCtrArgs( [
+						'name' => 'Test hidden prompt',
+						'start' => $pastTime,
+						'end' => $futureTime,
+						'hasContributionTracking' => true,
+						'wikis' => EventRegistration::ALL_WIKIS,
+					] ),
+					'addParticipant' => true,
+					'hideAssociationPrompt' => true,
+				]
+			],
+			[]
 		];
 
 		yield 'Multiple ongoing events with limit' => [
