@@ -4,5 +4,10 @@
 			"Adriendelucca",
 			"Huñvreüs"
 		]
-	}
+	},
+	"nstab-event": "Darvoud",
+	"action-campaignevents-enable-registration": "gweredekaat enskrivadurioù d’an darvoudoù",
+	"right-campaignevents-enable-registration": "Gweredekaat enskrivadurioù d’an darvoudoù",
+	"action-campaignevents-delete-registration": "zilemel enskrivadurioù d’an darvoudoù",
+	"right-campaignevents-delete-registration": "Dilemel enskrivadurioù d’an darvoudoù"
 }
