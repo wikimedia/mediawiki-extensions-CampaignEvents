@@ -4,6 +4,7 @@
 			"Pikne"
 		]
 	},
+	"campaignevents-desc": "Lisab funktsioonid ürituste korraldajate ja osalejate jaoks.",
 	"nstab-event": "Üritus",
 	"group-event-organizer": "Ürituste korraldajad",
 	"group-event-organizer-member": "{{GENDER:$1|ürituste korraldaja}}",
@@ -18,6 +19,8 @@
 	"right-campaignevents-email-participants": "Saata e-kiri üritusel osalejatele",
 	"action-campaignevents-view-private-participants": "vaadata ürituse privaatseid osalejaid",
 	"right-campaignevents-view-private-participants": "Vaadata ürituse privaatseid osalejaid",
+	"action-campaignevents-generate-invitation-lists": "kutsutute loendeid koostada",
+	"right-campaignevents-generate-invitation-lists": "Koostada kutsutute loendeid",
 	"specialpages-group-campaignevents": "Üritused",
 	"enableeventregistration": "Üritusele registreerumise avamine",
 	"editeventregistration": "Üritusele registreerumise muutmine",
@@ -30,6 +33,8 @@
 	"campaignevents-edit-field-end": "Lõppaeg",
 	"campaignevents-edit-field-organizers": "Korraldajad",
 	"campaignevents-edit-field-organizers-help": "Lisa teiste korraldajate kasutajanimed, et anda neile õigus seda üritust hallata.",
+	"campaignevents-edit-field-contribution-stats-label": "Näita kaastöö arvandmeid",
+	"campaignevents-edit-field-contribution-stats-help": "Luba kaastöö statistika, et mõista ürituse mõju ja et jagada andmeid selle kohta. Lisatakse kokkuvõte ja täielik loetelu muudatustest.",
 	"campaignevents-edit-field-wiki-type": "Kas see üritus keskendub kindlatele vikidele?",
 	"campaignevents-edit-field-wiki-type-none": "Ei ole kindlaid vikisid",
 	"campaignevents-edit-field-wiki-type-all": "Jah (avatud kõigile vikidele)",
