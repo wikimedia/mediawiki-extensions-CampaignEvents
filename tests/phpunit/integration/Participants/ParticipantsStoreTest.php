@@ -128,14 +128,14 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			106,
 			false,
 			[],
-			ParticipantsStore::MODIFIED_VISIBILITY
+			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Changing a participant from public to private' => [
 			1,
 			101,
 			true,
 			[],
-			ParticipantsStore::MODIFIED_VISIBILITY
+			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Setting to private a participant that is already private' => [
 			1,
@@ -151,14 +151,14 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			101,
 			false,
 			[ new Answer( 1, 1, null ) ],
-			ParticipantsStore::MODIFIED_ANSWERS
+			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Already a participant, add answers, change visibility' => [
 			1,
 			101,
 			true,
 			[ new Answer( 1, 1, null ) ],
-			ParticipantsStore::MODIFIED_ANSWERS | ParticipantsStore::MODIFIED_VISIBILITY
+			ParticipantsStore::MODIFIED_INFO
 		];
 		yield 'Add new participant with answers' => [
 			1,

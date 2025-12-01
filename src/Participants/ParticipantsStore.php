@@ -17,17 +17,14 @@ class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
 
 	/**
-	 * Bit flags used to describe whether a registration attempt changed anything:
+	 * Constants used to describe whether a registration attempt changed anything:
 	 *  - NOTHING: no change to the existing information
-	 *  - VISIBILITY: the visibility was changed
-	 *  - ANSWERS: answers to the participant questions were changed
-	 *  - REGISTRATION: the participant was not registred, and they now are. When this flag is set, the
-	 *    other ones are irrelevant and may or may not be set; callers should not expect them to (not) be set.
+	 *  - INFO: specific registration information, like registration visibility or participant anwers, was changed
+	 *  - REGISTRATION: the participant was not registred, and they now are.
 	 */
-	public const MODIFIED_NOTHING = 0;
-	public const MODIFIED_VISIBILITY = 2 << 0;
-	public const MODIFIED_ANSWERS = 2 << 1;
-	public const MODIFIED_REGISTRATION = 2 << 10;
+	public const MODIFIED_NOTHING = 1;
+	public const MODIFIED_INFO = 2;
+	public const MODIFIED_REGISTRATION = 3;
 
 	private CampaignsDatabaseHelper $dbHelper;
 	private CampaignsCentralUserLookup $centralUserLookup;
@@ -48,7 +45,7 @@ class ParticipantsStore {
 	 * @param CentralUser $participant
 	 * @param bool $private
 	 * @param Answer[] $answers
-	 * @return int A combination of the self::MODIFIED_* constants.
+	 * @return int One of the self::MODIFIED_* constants.
 	 */
 	public function addParticipantToEvent(
 		int $eventID,
@@ -59,6 +56,20 @@ class ParticipantsStore {
 		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
 
 		$userID = $participant->getCentralID();
+		$curTimestamp = $dbw->timestamp();
+		$updatedFirstAnsTs = $answers ? $curTimestamp : null;
+		$commonRowUpdates = [
+			'cep_event_id' => $eventID,
+			'cep_user_id' => $userID,
+			'cep_private' => $private,
+			'cep_unregistered_at' => null,
+		];
+		$newRow = $commonRowUpdates + [
+			'cep_registered_at' => $curTimestamp,
+			'cep_first_answer_timestamp' => $updatedFirstAnsTs,
+			'cep_aggregation_timestamp' => null,
+		];
+
 		$dbw->startAtomic( __METHOD__ );
 		$previousRow = $dbw->newSelectQueryBuilder()
 			->select( '*' )
@@ -70,72 +81,62 @@ class ParticipantsStore {
 			->caller( __METHOD__ )
 			->fetchRow();
 
-		$curTimestamp = $dbw->timestamp();
-		$updatedFirstAnsTs = $answers ? $curTimestamp : null;
 		if ( !$previousRow ) {
 			// User never registered for this event, so we're just adding a new record.
 			$dbw->newInsertQueryBuilder()
 				->insertInto( 'ce_participants' )
-				->row( [
-					'cep_event_id' => $eventID,
-					'cep_user_id' => $userID,
-					'cep_private' => $private,
-					'cep_registered_at' => $curTimestamp,
-					'cep_unregistered_at' => null,
-					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
-					'cep_aggregation_timestamp' => null,
-				] )
+				->row( $newRow )
 				->caller( __METHOD__ )
 				->execute();
 			$modified = self::MODIFIED_REGISTRATION;
 		} elseif ( $previousRow->cep_unregistered_at !== null ) {
-			// User was registered, but then cancelled their registration. Update the visibility, reinstate the
-			// registration, and reset the registration time.
+			// User was registered, but then cancelled their registration. Reinstate it, update registration
+			// information, and reset registration and first answer timestamps.
 			$dbw->newUpdateQueryBuilder()
 				->update( 'ce_participants' )
-				->set( [
-					'cep_private' => $private,
-					'cep_unregistered_at' => null,
-					'cep_registered_at' => $curTimestamp,
-					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
-				] )
+				->set( $newRow )
 				->where( [ 'cep_id' => $previousRow->cep_id ] )
 				->caller( __METHOD__ )
 				->execute();
 			$modified = self::MODIFIED_REGISTRATION;
-		} elseif ( (bool)$previousRow->cep_private !== $private ) {
-			// User is already an active participant, but is changing their visibility. Update that, but not the
-			// registration time.
-			$dbw->newUpdateQueryBuilder()
-				->update( 'ce_participants' )
-				->set( [
-					'cep_private' => $private,
-					'cep_first_answer_timestamp' => $previousRow->cep_first_answer_timestamp ?? $updatedFirstAnsTs,
-				] )
-				->where( [ 'cep_id' => $previousRow->cep_id ] )
-				->caller( __METHOD__ )
-				->execute();
-			$modified = self::MODIFIED_VISIBILITY;
-		} elseif ( $previousRow->cep_first_answer_timestamp === null && $updatedFirstAnsTs !== null ) {
-			// Adding answers for the first time
-			$dbw->newUpdateQueryBuilder()
-				->update( 'ce_participants' )
-				->set( [
-					'cep_first_answer_timestamp' => $updatedFirstAnsTs,
-				] )
-				->where( [ 'cep_id' => $previousRow->cep_id ] )
-				->caller( __METHOD__ )
-				->execute();
-			$modified = self::MODIFIED_ANSWERS;
 		} else {
-			// User is already an active participant with the desired visibility and is not answering for the first
-			// time.
-			$modified = self::MODIFIED_NOTHING;
+			// User is already an active participant, and is possibly changing their registration information. Update
+			// those, but not the registration time.
+			$commonRowUpdates['cep_first_answer_timestamp'] = $previousRow->cep_first_answer_timestamp ??
+				$updatedFirstAnsTs;
+
+			// Check if anything actually changed, normalizing types to match dbms behaviour.
+			$overwrittenValues = array_intersect_key( get_object_vars( $previousRow ), $commonRowUpdates );
+			$newValuesForComparison = array_map(
+				static function ( string|int|bool|null $val ): string|int|null {
+					if ( is_int( $val ) ) {
+						return (string)$val;
+					}
+					if ( is_bool( $val ) ) {
+						return (string)(int)$val;
+					}
+					return $val;
+				},
+				$commonRowUpdates
+			);
+			ksort( $overwrittenValues );
+			ksort( $newValuesForComparison );
+			if ( $newValuesForComparison !== $overwrittenValues ) {
+				$dbw->newUpdateQueryBuilder()
+					->update( 'ce_participants' )
+					->set( $commonRowUpdates )
+					->where( [ 'cep_id' => $previousRow->cep_id ] )
+					->caller( __METHOD__ )
+					->execute();
+				$modified = self::MODIFIED_INFO;
+			} else {
+				$modified = self::MODIFIED_NOTHING;
+			}
 		}
 
 		$answersModified = $this->answersStore->replaceParticipantAnswers( $eventID, $participant, $answers );
-		if ( $modified !== self::MODIFIED_REGISTRATION && $answersModified ) {
-			$modified |= self::MODIFIED_ANSWERS;
+		if ( $modified === self::MODIFIED_NOTHING && $answersModified ) {
+			$modified = self::MODIFIED_INFO;
 		}
 		$dbw->endAtomic( __METHOD__ );
 		return $modified;

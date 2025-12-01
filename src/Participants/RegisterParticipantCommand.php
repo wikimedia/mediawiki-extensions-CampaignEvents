@@ -166,7 +166,7 @@ class RegisterParticipantCommand {
 		);
 
 		if ( $modified !== ParticipantsStore::MODIFIED_NOTHING ) {
-			if ( $modified & ParticipantsStore::MODIFIED_REGISTRATION ) {
+			if ( $modified === ParticipantsStore::MODIFIED_REGISTRATION ) {
 				$this->userNotifier->notifyRegistration( $performer, $registration );
 			}
 			$this->trackingToolEventWatcher->onParticipantAdded(
