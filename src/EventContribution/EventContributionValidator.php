@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -109,6 +110,17 @@ class EventContributionValidator {
 		if ( !$event->isOngoing() ) {
 			throw new LocalizedHttpException(
 				MessageValue::new( 'campaignevents-event-contribution-event-not-active' ),
+				400
+			);
+		}
+
+		// Check is wiki is a target for this event
+		$wikiIsTarget =
+			( is_array( $event->getWikis() ) && in_array( $wikiID, $event->getWikis(), true ) )
+			|| $event->getWikis() === EventRegistration::ALL_WIKIS;
+		if ( !$wikiIsTarget ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-event-contribution-not-target-wiki' ),
 				400
 			);
 		}

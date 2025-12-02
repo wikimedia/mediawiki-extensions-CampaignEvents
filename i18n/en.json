@@ -569,6 +569,7 @@
 	"campaignevents-event-contribution-not-owner": "You can only associate your own edits to events",
 	"campaignevents-event-contribution-tracking-disabled": "Contribution tracking is not enabled for this event",
 	"campaignevents-event-contribution-event-deleted": "Event has been deleted",
+	"campaignevents-event-contribution-not-target-wiki": "Add an edit on a target wiki of the event.",
 	"campaignevents-postedit-dialog-title-single": "Associate this edit with $1?",
 	"campaignevents-postedit-dialog-title-multiple": "Associate this edit with an event?",
 	"campaignevents-postedit-dialog-intro-single": "You are registered for an event that is active now. Is this edit for $1?",
