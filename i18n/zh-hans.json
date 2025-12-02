@@ -14,7 +14,8 @@
 			"人间百态",
 			"Anterdc99",
 			"Aoum",
-			"優枰"
+			"優枰",
+			"Peterxy12"
 		]
 	},
 	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
@@ -212,12 +213,18 @@
 	"campaignevents-event-details-tracking-tool-last-update": "最后更新：$1",
 	"campaignevents-event-details-chat-link": "聊天群邀请链接",
 	"campaignevents-event-details-organizers-header": "筹办人员",
+	"campaignevents-event-details-register-prompt": "您需要报名才能看到此信息",
 	"campaignevents-event-details-view-event-page": "查看活动页面",
 	"campaignevents-event-details-participants": "用户名",
 	"campaignevents-event-details-select-all": "选择所有参与者",
+	"campaignevents-event-details-message-all": "向所有参与者发送消息",
+	"campaignevents-event-details-message-participants": "向参与者传送信息",
 	"campaignevents-event-details-remove-participant-remove-btn": "删除",
 	"campaignevents-event-details-remove-participant-cancel-btn": "取消",
+	"campaignevents-event-details-invalid-id": "请提供有效的活动ID。",
 	"campaignevents-event-details-event": "活动详情：$1",
+	"campaignevents-event-details-not-found": "没有此ID的活动。",
+	"campaignevents-event-details-online-link-not-available": "链接将由{{PLURAL:$1|筹办人员}}提供。",
 	"campaignevents-event-details-dates-label": "开始和结束时间",
 	"campaignevents-event-details-remove-all-participant-notification": "已移除所有参与者",
 	"campaignevents-unregister-participants-permission-denied": "您无权移除参与者",
@@ -230,12 +237,16 @@
 	"campaignevents-event-details-search-participants-placeholder": "搜索参与者",
 	"campaignevents-event-details-organizers-view-more": "查看更多",
 	"campaignevents-event-details-organizers-noscript": "您需要启用JavaScript才能查看筹办人员的完整列表。",
+	"campaignevents-tracking-tool-p&e-dashboard-name": "计划与活动面板",
+	"campaignevents-tracking-tool-http-error": "处理跟踪工具时发生未知错误。",
+	"campaignevents-userlink-suppressed-user": "已隐藏用户名",
 	"campaignevents-userlink-deleted-user": "已删除用户",
 	"campaignevents-registration-confirmation-toggle-private": "不公开报名",
 	"campaignevents-registration-confirmation-toggle-public": "公开报名",
 	"campaignevents-register-confirmation-radio-private": "不公开报名",
 	"campaignevents-register-confirmation-radio-public": "公开报名",
 	"echo-category-title-campaign-events-notification-registration": "报名活动",
+	"campaignevents-notification-registration-subject": "已确认报名$1",
 	"campaignevents-notification-registration-header-intro": "感谢您报名$1。",
 	"campaignevents-notification-registration-header-chat-label": "活动聊天群组",
 	"campaignevents-notification-registration-details-header": "活动详情",
@@ -330,5 +341,6 @@
 	"campaignevents-invitations-pager-status-processing": "处理中……",
 	"campaignevents-myinvitationslist-generate-button": "创建新的邀请名单",
 	"invitationlist": "邀请名单",
-	"campaignevents-invitationlist-event": "$1：邀请名单"
+	"campaignevents-invitationlist-event": "$1：邀请名单",
+	"campaignevents-invitationlist-recommended": "推荐邀请"
 }

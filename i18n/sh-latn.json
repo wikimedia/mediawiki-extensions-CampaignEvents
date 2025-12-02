@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Winston Sung"
+			"Winston Sung",
+			"Aca"
 		]
 	},
 	"campaignevents-desc": "Pruža značajke za organizatore i sudionike kampanje.",
@@ -11,5 +12,7 @@
 	"campaignevents-edit-form-notice": "Prilikom registracije od sudionika će se prikupljati samo korisnička imena. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Saznajte više].",
 	"campaignevents-eventpage-dialog-chat-label": "Pridružite se chat grupi događaja",
 	"campaignevents-eventpage-dialog-chat-not-available": "Nije dostupna chat grupa za ovaj događaj.",
-	"campaignevents-eventpage-dialog-chat-register": "Registrirajte se za pregled poveznice grupe za chat."
+	"campaignevents-eventpage-dialog-chat-register": "Registrirajte se za pregled poveznice grupe za chat.",
+	"echo-category-title-campaign-events-notification-registration": "Prijava za događaj",
+	"echo-pref-tooltip-campaign-events-notification-registration": "Obavještava vas kad se prijavite za događaj koji koristi alatku za prijavljivanje."
 }

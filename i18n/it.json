@@ -401,7 +401,7 @@
 	"campaignevents-event-details-participants-individual-data-deleted": "Le risposte individuali dei partecipanti sono state eliminate e le risposte in forma aggregata sono disponibili su [$1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Registrati all'evento $1",
 	"campaignevents-register-page-nonlocal": "'''[$1 completa la tua registrazione all'evento su $2]''', il wiki dove l'evento è stato creato.",
-	"campaignevents-delete-registration-page-nonlocal": "'''[$1 cancella la tua registrazione all'evento su $2]''', il wiki dove l'evento è stato creato.",
+	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Cancella la tua registrazione all'evento su $2]''', il wiki dove l'evento è stato creato.",
 	"campaignevents-event-details-page-nonlocal": "Stai visualizzando una versione limitata di questa pagina. <b>[$1 visita questa pagina su $2]</b>, il wiki dove l'evento è stato creato, per visualizzare i dettagli completi dell'evento e accedere alle funzionalità aggiuntive.",
 	"campaignevents-event-details-not-local-wiki-prompt": "Vedi su [$1 $2]",
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "La tua utenza è bloccata. Non hai accesso a queste informazioni.",

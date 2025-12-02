@@ -67,7 +67,7 @@
 	"campaignevents-edit-field-organizers-help": "Voeg de gebruikersnaam van andere organisatoren toe om hen toestemming te geven om dit evenement te beheren.",
 	"campaignevents-edit-field-organizers-placeholder": "Voeg gebruikersnaam toe",
 	"campaignevents-edit-field-organizers-creator-title": "Dit is de maker van het evenement. Andere organisatoren kunnen deze gebruiker niet verwijderen.",
-	"campaignevents-edit-field-organizers-user-not-allowed": "Deze gebruik{{GENDER:$1||st}}er mag geen evenementen organiseren.",
+	"campaignevents-edit-field-organizers-user-not-allowed": "Deze {{GENDER:$1|gebruiker|gebruikster}} mag geen evenementen organiseren.",
 	"campaignevents-edit-field-tracking-tools": "Koppeling voor dashboard Programma's & Evenementen",
 	"campaignevents-edit-field-tracking-tools-help": "Gebruikersnamen van openbaar geregistreerde deelnemers worden automatisch naar het dashboard gestuurd. Met deze tool kunt u de bijdragen van deelnemers volgen en het effect van uw campagne-evenement meten. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Meer informatie].",
 	"campaignevents-edit-field-tracking-tools-placeholder": "Voer de dashboard-URL Programma's & Evenementen voor uw evenement in",
