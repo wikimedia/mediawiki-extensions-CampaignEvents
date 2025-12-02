@@ -95,12 +95,15 @@ class RegisterForEventHandler extends SimpleHandler {
 				400
 			);
 		}
+		$contributionAssociationMode = $body['show_contribution_association_prompt']
+			? RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
+			: RegisterParticipantCommand::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;
 		$status = $this->registerParticipantCommand->registerIfAllowed(
 			$eventRegistration,
 			$performer,
 			$privateFlag,
 			$answers,
-			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
+			$contributionAssociationMode,
 		);
 		if ( !$status->isGood() ) {
 			$httpStatus = $status instanceof PermissionStatus ? 403 : 400;
@@ -124,6 +127,13 @@ class RegisterForEventHandler extends SimpleHandler {
 	public function getBodyParamSettings(): array {
 		return [
 			'is_private' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
+			// Note: unlike Special:RegisterForEvent, this lets users change the value after an event has ended, and
+			// for events that do not track contributions. This should be harmless.
+			'show_contribution_association_prompt' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_REQUIRED => true,

@@ -56,6 +56,7 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 
 		$response = [
 			'private' => $participant->isPrivateRegistration(),
+			'show_contribution_association_prompt' => $participant->shouldShowContributionAssociationPrompt(),
 			'answers' => $this->eventQuestionsRegistry->formatAnswersForAPI(
 				$participant->getAnswers(),
 				$event->getParticipantQuestions()

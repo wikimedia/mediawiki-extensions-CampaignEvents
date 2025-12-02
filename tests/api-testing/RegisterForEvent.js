@@ -36,10 +36,11 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 		);
 	} );
 
-	function getBody( token, isPrivate = false ) {
+	function getBody( token, isPrivate = false, showContribPrompt = true ) {
 		return {
 			token: token,
-			is_private: isPrivate
+			is_private: isPrivate,
+			show_contribution_association_prompt: showContribPrompt
 		};
 	}
 
@@ -109,6 +110,16 @@ describe( 'PUT /campaignevents/v0/event_registration/{id}/participants/self', ()
 			assert.strictEqual( statusCode, 200, 'Got error: ' + sourceBody.errorKey );
 			assert.property( sourceBody, 'modified' );
 			assert.strictEqual( sourceBody.modified, false );
+		} );
+
+		it( 'authorized user can choose to hide contribution association prompt', async () => {
+			const { status: statusCode, body: sourceBody } = await participantClient.put(
+				getPathSuffix(),
+				getBody( participantToken, false, false )
+			);
+			assert.strictEqual( statusCode, 200, 'Got error: ' + sourceBody.errorKey );
+			assert.property( sourceBody, 'modified' );
+			assert.strictEqual( sourceBody.modified, true );
 		} );
 	} );
 } );

@@ -31,11 +31,14 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 	use HandlerTestTrait;
 	use CSRFTestHelperTrait;
 
-	private function getRequestData( bool $private = false ): array {
+	private function getRequestData( bool $private = false, bool $showAssocPrompt = true ): array {
 		return [
 			'method' => 'PUT',
 			'pathParams' => [ 'id' => 42 ],
-			'bodyContents' => json_encode( [ 'is_private' => $private ] ),
+			'bodyContents' => json_encode( [
+				'is_private' => $private,
+				'show_contribution_association_prompt' => $showAssocPrompt,
+			] ),
 			'headers' => [ 'Content-Type' => 'application/json' ],
 		];
 	}
@@ -216,6 +219,31 @@ class RegisterForEventHandlerTest extends MediaWikiUnitTestCase {
 		return [
 			'private' => [ true ],
 			'public' => [ false ],
+		];
+	}
+
+	/**
+	 * @dataProvider provideRunShowContributionAssociationPrompt
+	 */
+	public function testRun__showContributionAssociationPrompt( bool $showPrompt ) {
+		$registerParticipantCommand = $this->createMock( RegisterParticipantCommand::class );
+		$expectedCommandArg = $showPrompt ?
+			RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT :
+			RegisterParticipantCommand::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;
+
+		$registerParticipantCommand->expects( $this->once() )->method( 'registerIfAllowed' )
+			->with( $this->anything(), $this->anything(), $this->anything(), $this->anything(), $expectedCommandArg )
+			->willReturn( StatusValue::newGood( true ) );
+
+		$handler = $this->newHandler( $registerParticipantCommand );
+		$reqData = new RequestData( $this->getRequestData( showAssocPrompt: $showPrompt ) );
+		$this->executeHandlerAndGetBodyData( $handler, $reqData );
+	}
+
+	public static function provideRunShowContributionAssociationPrompt(): array {
+		return [
+			'Show prompt' => [ true ],
+			'Hide prompt' => [ false ],
 		];
 	}
 }

@@ -80,6 +80,7 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 		yield 'Public, no answers' => [
 			[
 				'private' => false,
+				'show_contribution_association_prompt' => true,
 				'answers' => [],
 			],
 			$publicNoAnswersParticipant
@@ -101,12 +102,31 @@ class GetOwnRegistrationInfoHandlerTest extends MediaWikiUnitTestCase {
 		yield 'Private with answers' => [
 			[
 				'private' => true,
+				'show_contribution_association_prompt' => true,
 				'answers' => [
 					'gender' => [ 'value' => 2 ],
 					'affiliate' => [ 'value' => 3, 'other' => 'foo' ],
 				],
 			],
 			$privateWithAnswersParticipant
+		];
+
+		yield 'Chose to hide contribution dialog' => [
+			[
+				'private' => false,
+				'show_contribution_association_prompt' => false,
+				'answers' => [],
+			],
+			new Participant(
+				$user,
+				$timestamp,
+				10,
+				false,
+				[],
+				null,
+				null,
+				true,
+			)
 		];
 	}
 

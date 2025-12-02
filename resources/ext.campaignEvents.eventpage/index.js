@@ -91,9 +91,11 @@
 	function registerUser( privateRegistration, answers ) {
 		const reqParams = {
 			token: mw.user.tokens.get( 'csrfToken' ),
-			// eslint-disable-next-line camelcase
+			/* eslint-disable camelcase */
 			is_private: privateRegistration,
+			show_contribution_association_prompt: true,
 			answers: answers
+			/* eslint-enable camelcase */
 		};
 		return new mw.Rest().put(
 			'/campaignevents/v0/event_registration/' + eventID + '/participants/self',
