@@ -4,6 +4,7 @@
 			"Pikne"
 		]
 	},
+	"campaignevents-desc": "Lisab funktsioonid ürituste korraldajate ja osalejate jaoks.",
 	"nstab-event": "Üritus",
 	"group-event-organizer": "Ürituste korraldajad",
 	"group-event-organizer-member": "{{GENDER:$1|ürituste korraldaja}}",

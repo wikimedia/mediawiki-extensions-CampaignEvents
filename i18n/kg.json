@@ -7,6 +7,15 @@
 			"Marphy 123"
 		]
 	},
+	"campaignevents-desc": "Yo ke pesaka mambu sambu na bantu yina ke yidikaka bakampanye mpi bantu yina ke vukana.",
+	"nstab-event": "Diambu ya nene",
+	"action-campaignevents-enable-registration": "Kupesa nzila na kusonikisa mambu",
+	"right-campaignevents-delete-registration": "Kupesa nzila na kusonikisa mambu",
+	"action-campaignevents-organize-events": "yidika mambu",
+	"right-campaignevents-organize-events": "Yidika mambu ya nene",
+	"action-campaignevents-email-participants": "Bantu ya ke vukana na mambu ya email",
+	"right-campaignevents-email-participants": "Bantu yina ke vukana na mambu ya email",
+	"campaignevents-error-invalid-status": "Songa kana diambu yango kele ya kukangula to ya kukanga.",
 	"campaignevents-allevents-label-submit": "Kusadila ba kiyungulu",
 	"campaignevents-allevents-label-search": "Sosa ngogo ya mfunu",
 	"campaignevents-allevents-label-meeting-type": "Mutindu ya lukutakanu",
