@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"JeffreyKim"
+		]
+	},
+	"campaignevents-rest-event-not-found": "呢個ID冇對應嘅活動。",
+	"campaignevents-rest-enable-registration-permission-denied": "你唔獲准啟用活動註冊。",
+	"campaignevents-rest-edit-page-nonlocal": "呢個活動註冊喺以下維基啟用，應該喺嗰度編輯：$1。"
+}

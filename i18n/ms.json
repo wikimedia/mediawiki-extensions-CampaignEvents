@@ -527,7 +527,7 @@
 	"communityconfiguration-campaignevents-description": "Pilihan konfigurasi untuk sambungan CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Ruang nama acara yang sah",
 	"campaignevents-email-participants-missing-address-uncertain": "Sesetengah peserta yang dipilih mungkin tidak mempunyai alamat e-mel pada akaun mereka dan tidak akan menerima e-mel anda.",
-	"campaignevents-eventtype-editing-event": "Menyunting acara",
+	"campaignevents-eventtype-editing-event": "Acara menyunting",
 	"campaignevents-eventtype-media-upload-event": "Acara muat naik media",
 	"campaignevents-eventtype-backlog-drive": "Pemacu tunggakan",
 	"campaignevents-eventtype-contest": "Peraduan",
@@ -552,6 +552,7 @@
 	"campaignevents-eventslist-country-label": "Negara",
 	"campaignevents-contributions-notice-private-participants-excluded": "Statistik dan sumbangan yang disenaraikan di laman ini tidak merangkumi data daripada peserta persendirian.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "Statistik dan sumbangan yang disenaraikan di laman ini tidak merangkumi data daripada peserta persendirian lain.",
+	"campaignevents-event-contribution-event-not-active": "Acara ini tidak aktif pada masa ini, jadi anda tidak boleh berkaitan dengan suntingan ini dengannya.",
 	"campaignevents-event-contribution-not-participant": "Pengguna tersebut bukan peserta dalam acara ini",
 	"campaignevents-event-contribution-user-not-global": "Pengguna tersebut bukan pengguna sejagat",
 	"campaignevents-event-contribution-already-associated": "Sebuah suntingan hanya boleh dikaitkan dengan satu acara.",
@@ -574,5 +575,14 @@
 	"campaignevents-contributions-summary-bytes-changed": "Bait berubah",
 	"campaignevents-contributions-summary-links-changed": "Pautan yang berubah",
 	"campaignevents-contributions-summary-edit-count": "Kiraan suntingan",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "Peserta mendaftar secara persendirian"
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Peserta mendaftar secara persendirian",
+	"campaignevents-event-details-contributions-actions": "Tindakan",
+	"campaignevents-event-details-contributions-delete-tooltip": "Buang sumbangan",
+	"campaignevents-event-details-contributions-delete-success": "Suntingan dibuang daripada acara.",
+	"campaignevents-event-details-contributions-delete-error": "Ralat membuang sumbangan.",
+	"campaignevents-event-details-contributions-delete-title": "Buang suntingan ini daripada $1",
+	"campaignevents-event-details-contributions-delete-subtitle": "Pastikah anda mahu membuang suntingan ini daripada acara?",
+	"campaignevents-event-details-contributions-delete-note": "Ia tidak akan dihapuskan tetapi ia tidak akan lagi dikaitkan dengan acara.",
+	"campaignevents-event-details-contributions-delete-cancel": "Batalkan",
+	"campaignevents-event-details-contributions-delete-confirm": "Buang"
 }
