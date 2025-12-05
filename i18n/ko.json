@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Revi",
 			"YeBoy371",
 			"Ykhwong"
 		]
@@ -16,10 +17,11 @@
 	"right-campaignevents-delete-registration": "이벤트 등록 삭제",
 	"action-campaignevents-organize-events": "이벤트를 조직할",
 	"right-campaignevents-organize-events": "이벤트 조직",
-	"action-campaignevents-email-participants": "이메일 이벤트 참가자",
-	"right-campaignevents-email-participants": "이메일 이벤트 참가자",
+	"action-campaignevents-email-participants": "이벤트 참가자에게 이메일을 보낼",
+	"right-campaignevents-email-participants": "이벤트 참가자에게 이메일 보내기",
 	"action-campaignevents-view-private-participants": "비공개 이벤트 참여자를 볼",
 	"right-campaignevents-view-private-participants": "비공개 이벤트 참여자 보기",
+	"right-campaignevents-generate-invitation-lists": "초대 목록 생성",
 	"specialpages-group-campaignevents": "이벤트",
 	"campaignevents-error-invalid-id": "이벤트 ID는 양의 정수여야 합니다.",
 	"campaignevents-error-empty-title": "이벤트 문서 제목을 입력하십시오.",
