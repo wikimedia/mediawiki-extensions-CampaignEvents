@@ -6,5 +6,10 @@
 			"BOKOBA VEROLY",
 			"Marphy 123"
 		]
-	}
+	},
+	"campaignevents-desc": "Yo ke pesaka mambu sambu na bantu yina ke yidikaka bakampanye mpi bantu yina ke vukana.",
+	"nstab-event": "Diambu ya nene",
+	"action-campaignevents-enable-registration": "Kupesa nzila na kusonikisa mambu",
+	"right-campaignevents-delete-registration": "Kupesa nzila na kusonikisa mambu",
+	"campaignevents-error-invalid-status": "Songa kana diambu yango kele ya kukangula to ya kukanga."
 }

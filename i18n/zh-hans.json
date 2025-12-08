@@ -14,7 +14,8 @@
 			"人间百态",
 			"Aoum",
 			"Anterdc99",
-			"優枰"
+			"優枰",
+			"Peterxy12"
 		]
 	},
 	"campaignevents-desc": "为活动筹办人员和参与者提供功能。",
@@ -156,11 +157,15 @@
 	"campaignevents-event-details-in-person-event-label": "现场活动",
 	"campaignevents-event-details-online-label": "线上活动",
 	"campaignevents-event-details-chat-link": "聊天群邀请链接",
+	"campaignevents-event-details-register-prompt": "您需要报名才能看到此信息",
 	"campaignevents-event-details-view-event-page": "查看活动页面",
 	"campaignevents-event-details-select-all": "全选",
 	"campaignevents-event-details-remove-participant-remove-btn": "移除",
 	"campaignevents-event-details-remove-participant-cancel-btn": "取消",
+	"campaignevents-event-details-invalid-id": "请提供有效的活动ID。",
 	"campaignevents-event-details-event": "活动详情：$1",
+	"campaignevents-event-details-not-found": "没有此ID的活动。",
+	"campaignevents-event-details-online-link-not-available": "链接将由{{PLURAL:$1|筹办人员}}提供。",
 	"campaignevents-event-details-dates-label": "开始和结束时间",
 	"campaignevents-event-details-remove-all-participant-notification": "已移除所有参与者",
 	"campaignevents-unregister-participants-permission-denied": "您无权移除参与者",
