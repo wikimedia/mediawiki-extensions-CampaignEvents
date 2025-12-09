@@ -563,6 +563,7 @@
 	"campaignevents-event-contribution-not-owner": "Voit liittää vain omia muokkauksiasi tapahtumiin",
 	"campaignevents-event-contribution-tracking-disabled": "Muokkausseuranta ei ole käytössä tässä tapahtumassa",
 	"campaignevents-event-contribution-event-deleted": "Tapahtuma on poistettu",
+	"campaignevents-event-contribution-not-target-wiki": "Lisää tapahtuman kohdewikissä tehty muokkaus.",
 	"campaignevents-postedit-dialog-title-single": "Liitä tämä muokkaus tapahtumaan $1?",
 	"campaignevents-postedit-dialog-title-multiple": "Liitämä tämä muokkaus tapahtumaan?",
 	"campaignevents-postedit-dialog-intro-single": "Olet ilmoittautunut tapahtumaan $1, joka on parhaillaan käynnissä. Liittyykö tämä muokkaus siihen tapahtumaan?",
