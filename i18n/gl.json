@@ -568,6 +568,7 @@
 	"campaignevents-event-contribution-not-owner": "Só podes asociar as túas propias modificacións aos eventos",
 	"campaignevents-event-contribution-tracking-disabled": "O seguimento das contribucións non está activado para este evento",
 	"campaignevents-event-contribution-event-deleted": "Eliminouse o evento",
+	"campaignevents-event-contribution-not-target-wiki": "Engade unha edición no wiki de destino do evento.",
 	"campaignevents-postedit-dialog-title-single": "Queres asociar esta edición a «$1»?",
 	"campaignevents-postedit-dialog-title-multiple": "Queres asociar esta edición a un evento?",
 	"campaignevents-postedit-dialog-intro-single": "Tes un rexistro nun evento que está activo nestes intres. Esta edición é para «$1»?",
