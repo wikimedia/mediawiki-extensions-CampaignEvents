@@ -108,9 +108,4 @@ describe( 'DeleteContributionDialog', () => {
 		const wrapper = mountDialog();
 		expect( wrapper.vm.$options.emits ).toEqual( [ 'confirm-delete', 'cancel' ] );
 	} );
-
-	it( 'handles open prop default value', () => {
-		const wrapper = mountDialog( { open: undefined } );
-		expect( wrapper.props( 'open' ) ).toBe( false );
-	} );
 } );

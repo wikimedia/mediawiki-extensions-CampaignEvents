@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<delete-contribution-dialog
-			:open="isDialogOpen"
+			v-model:open="isDialogOpen"
 			:event-name="eventName"
 			@confirm-delete="onConfirmDelete"
 			@cancel="onCancel"

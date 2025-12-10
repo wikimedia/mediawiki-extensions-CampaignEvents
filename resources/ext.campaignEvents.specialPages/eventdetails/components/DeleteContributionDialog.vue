@@ -1,6 +1,5 @@
 <template>
 	<cdx-dialog
-		:open="open"
 		:title="$i18n( 'campaignevents-event-details-contributions-delete-title',
 			eventName ).text()"
 		:subtitle="$i18n( 'campaignevents-event-details-contributions-delete-subtitle' ).text()"
@@ -22,10 +21,6 @@ module.exports = exports = defineComponent( {
 	name: 'DeleteContributionDialog',
 	components: { CdxDialog },
 	props: {
-		open: {
-			type: Boolean,
-			default: false
-		},
 		eventName: {
 			type: String,
 			required: true
