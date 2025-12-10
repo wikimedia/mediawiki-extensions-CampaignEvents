@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\EventContribution;
 
-use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
@@ -40,7 +39,6 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 	private JobQueueGroup $jobQueueGroup;
 	private RevisionStoreFactory $revisionStoreFactory;
 	private EventContributionStore $eventContributionStore;
-	private ServiceOptions $options;
 	private OrganizersStore $organizersStore;
 	private PermissionChecker $permissionChecker;
 	private Authority $performer;
