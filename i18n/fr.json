@@ -590,7 +590,6 @@
 	"campaignevents-event-contribution-not-participant": "L'utilisateur ne participe pas à cet événement",
 	"campaignevents-event-contribution-user-not-global": "L'utilisateur n'est pas un utilisateur global",
 	"campaignevents-event-contribution-already-associated": "Une modification ne peut être associée qu'à un seul événement.",
-	"campaignevents-event-contribution-timestamp-too-old": "L'horodatage de modification est trop ancien (maximum 24 heures)",
 	"campaignevents-event-contribution-revision-not-found": "Révision non trouvée",
 	"campaignevents-event-contribution-not-owner": "Vous ne pouvez associer que vos propres modifications aux événements",
 	"campaignevents-event-contribution-tracking-disabled": "Le suivi des contributions n'est pas activé pour cet événement",

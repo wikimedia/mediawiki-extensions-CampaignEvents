@@ -556,7 +556,6 @@
 	"campaignevents-event-contribution-not-participant": "Pengguna tersebut bukan peserta dalam acara ini",
 	"campaignevents-event-contribution-user-not-global": "Pengguna tersebut bukan pengguna sejagat",
 	"campaignevents-event-contribution-already-associated": "Sebuah suntingan hanya boleh dikaitkan dengan satu acara.",
-	"campaignevents-event-contribution-timestamp-too-old": "Cap masa penyuntingan terlalu lama (maksimum 24 jam)",
 	"campaignevents-event-contribution-revision-not-found": "Semakan tidak ditemui",
 	"campaignevents-event-contribution-not-owner": "Anda hanya boleh mengaitkan suntingan anda sendiri pada acara",
 	"campaignevents-event-contribution-tracking-disabled": "Penjejakan sumbangan tidak didayakan untuk acara ini",

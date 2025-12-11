@@ -554,7 +554,6 @@
 	"campaignevents-event-contribution-not-participant": "Používateľ nie je účastníkom tohto podujatia",
 	"campaignevents-event-contribution-user-not-global": "Používateľ nemá globálny účet",
 	"campaignevents-event-contribution-already-associated": "Úpravu je možné priradiť iba k jednému podujatiu.",
-	"campaignevents-event-contribution-timestamp-too-old": "Časová značka úpravy je príliš stará (môže byť najviac 24 hodín)",
 	"campaignevents-event-contribution-revision-not-found": "Revízia nenájdená",
 	"campaignevents-event-contribution-not-owner": "K podujatiam môžete priradiť len vlastné úpravy",
 	"campaignevents-event-contribution-tracking-disabled": "Sledovanie príspevkov nie je pre toto podujatie povolené",

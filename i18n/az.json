@@ -556,7 +556,6 @@
 	"campaignevents-event-contribution-not-participant": "İstifadəçi bu tədbirin iştirakçısı deyil",
 	"campaignevents-event-contribution-user-not-global": "İstifadəçi qlobal istifadəçi deyil",
 	"campaignevents-event-contribution-already-associated": "Redaktə yalnız bir tədbir ilə əlaqələndirilə bilər.",
-	"campaignevents-event-contribution-timestamp-too-old": "Redaktə vaxt damğası çox köhnədir (maksimum 24 saat)",
 	"campaignevents-event-contribution-revision-not-found": "Versiya tapılmadı",
 	"campaignevents-event-contribution-not-owner": "Siz yalnız öz redaktələrinizi tədbirlər ilə əlaqələndirə bilərsiniz",
 	"campaignevents-event-contribution-tracking-disabled": "Bu tədbir üçün töhfələrin izlənməsi aktiv deyil",

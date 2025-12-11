@@ -543,7 +543,6 @@
 	"campaignevents-eventslist-country-label": "Land",
 	"campaignevents-event-contribution-not-participant": "Brugeren deltager ikke i denne begivenhed",
 	"campaignevents-event-contribution-user-not-global": "Brugeren er ikke en global bruger",
-	"campaignevents-event-contribution-timestamp-too-old": "Redigeringstidsstemplet er for gammelt (maks. 24 timer)",
 	"campaignevents-event-contribution-revision-not-found": "Sideversion ikke fundet",
 	"campaignevents-event-contribution-not-owner": "Du kan kun knytte dine egne redigeringer til begivenheder",
 	"campaignevents-event-contribution-tracking-disabled": "Bidragssporing er ikke aktiveret for denne begivenhed",

@@ -390,7 +390,6 @@
 	"campaignevents-eventslist-country-label": "国家",
 	"campaignevents-event-contribution-user-not-global": "用户不是全域用户",
 	"campaignevents-event-contribution-already-associated": "一次编辑只能关联一个活动。",
-	"campaignevents-event-contribution-timestamp-too-old": "编辑时间戳过旧（最多24小时）",
 	"campaignevents-event-contribution-revision-not-found": "未找到修订",
 	"campaignevents-event-contribution-event-deleted": "活动已删除",
 	"campaignevents-postedit-dialog-select-placeholder": "选择活动",

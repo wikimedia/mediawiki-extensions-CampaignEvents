@@ -388,7 +388,6 @@
 	"campaignevents-allevents-placeholder-add-event-types": "加活動類型...",
 	"campaignevents-eventslist-types-label": "活動類型",
 	"campaignevents-eventslist-country-label": "國家",
-	"campaignevents-event-contribution-timestamp-too-old": "編輯時間戳太舊（最多 24 個鐘）",
 	"campaignevents-postedit-dialog-intro-multiple": "你而家註冊咗多個進行緊嘅活動。呢次編輯係咪為其中一個活動？如果係，請揀選係邊個。",
 	"campaignevents-postedit-dialog-select-placeholder": "揀活動",
 	"campaignevents-postedit-dialog-action-no": "唔使，多謝",

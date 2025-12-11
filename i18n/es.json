@@ -575,7 +575,6 @@
 	"campaignevents-event-contribution-not-participant": "El usuario no participa en este evento",
 	"campaignevents-event-contribution-user-not-global": "El usuario no es un usuario global",
 	"campaignevents-event-contribution-already-associated": "Una edición solo se puede asociar a un evento.",
-	"campaignevents-event-contribution-timestamp-too-old": "La marca de tiempo de edición es demasiado antigua (máximo 24 horas)",
 	"campaignevents-event-contribution-revision-not-found": "Revisión no encontrada",
 	"campaignevents-event-contribution-not-owner": "Solo puedes asociar tus propias ediciones a eventos",
 	"campaignevents-event-contribution-tracking-disabled": "El seguimiento de contribuciones no está habilitado para este evento",

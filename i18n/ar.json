@@ -571,7 +571,6 @@
 	"campaignevents-event-contribution-not-participant": "المستخدم ليس مشاركًا في هذه الفعالية",
 	"campaignevents-event-contribution-user-not-global": "المستخدم ليس مستخدمًا عالميًا",
 	"campaignevents-event-contribution-already-associated": "يمكن ربط التحرير مع حدث واحد فقط.",
-	"campaignevents-event-contribution-timestamp-too-old": "تعديل الطابع الزمني قديم جدًا (الحد الأقصى 24 ساعة)",
 	"campaignevents-event-contribution-revision-not-found": "لم يتم العثور على المراجعة",
 	"campaignevents-event-contribution-not-owner": "يمكنك فقط ربط تعديلاتك الخاصة بالفعالية",
 	"campaignevents-event-contribution-tracking-disabled": "لم يتم تمكين تتبع المساهمة لهذه الفعالية",

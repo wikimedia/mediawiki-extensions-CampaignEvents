@@ -563,7 +563,6 @@
 	"campaignevents-event-contribution-not-participant": "O usuario non participa neste evento",
 	"campaignevents-event-contribution-user-not-global": "O usuario non é un usuario global",
 	"campaignevents-event-contribution-already-associated": "Unha edición só pode estar asociada a un evento.",
-	"campaignevents-event-contribution-timestamp-too-old": "A marca de tempo da modificación é demasiado antiga (o máximo son 24 horas)",
 	"campaignevents-event-contribution-revision-not-found": "Non se atopou a revisión",
 	"campaignevents-event-contribution-not-owner": "Só podes asociar as túas propias modificacións aos eventos",
 	"campaignevents-event-contribution-tracking-disabled": "O seguimento das contribucións non está activado para este evento",

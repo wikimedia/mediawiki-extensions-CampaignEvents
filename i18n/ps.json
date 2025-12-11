@@ -435,7 +435,6 @@
 	"campaignevents-event-contribution-not-participant": "کارن د دې پېښې گډونوال نه دی",
 	"campaignevents-event-contribution-user-not-global": "کارن ټوليز کارن نه دی",
 	"campaignevents-event-contribution-already-associated": "يو سمون يوازې يوې پېښې سره تړاو لري.",
-	"campaignevents-event-contribution-timestamp-too-old": "د سمون مهالوېش ډېر زوړ دی (ډېر تر ډېره ۲۴ گړۍ)",
 	"campaignevents-event-contribution-revision-not-found": "بياليدنه ونه موندل شوه",
 	"campaignevents-event-contribution-not-owner": "تاسو کولی شئ يوازې خپلو سمونونو ته د پېښو سره تړاو ورکړئ",
 	"campaignevents-event-contribution-tracking-disabled": "د دې پېښې لپاره د ونډې څار چارن نه دی",

@@ -166,7 +166,6 @@
 	"campaignevents-event-contribution-not-participant": "მომხმარებელი ამ ღონისძიების მონაწილე არ არის",
 	"campaignevents-event-contribution-user-not-global": "მომხმარებელი არ არის გლობალური მომხმარებელი",
 	"campaignevents-event-contribution-already-associated": "რედაქტირება შეიძლება მხოლოდ ერთ ღონისძიებასთან იყოს დაკავშირებული.",
-	"campaignevents-event-contribution-timestamp-too-old": "რედაქტირების დრო ძალიან ძველია (მაქსიმუმ 24 საათი)",
 	"campaignevents-event-contribution-revision-not-found": "ვერსია ვერ მოიძებნა",
 	"campaignevents-postedit-dialog-select-placeholder": "აირჩიეთ ღონისძიება",
 	"campaignevents-postedit-dialog-action-no": "არა, გმადლობთ",

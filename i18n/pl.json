@@ -554,7 +554,6 @@
 	"campaignevents-event-contribution-not-participant": "Użytkownik nie bierze udziału w tym wydarzeniu",
 	"campaignevents-event-contribution-user-not-global": "Użytkownik nie jest użytkownikiem globalnym",
 	"campaignevents-event-contribution-already-associated": "Edycję można powiązać tylko z jednym wydarzeniem.",
-	"campaignevents-event-contribution-timestamp-too-old": "Czas edycji jest zbyt dawny (maksymalny odstęp może wynosić 24 godziny)",
 	"campaignevents-event-contribution-revision-not-found": "Nie znaleziono wersji",
 	"campaignevents-event-contribution-not-owner": "Możesz powiązać z wydarzeniami tylko własne edycje",
 	"campaignevents-event-contribution-tracking-disabled": "Śledzenie wkładu nie jest włączone dla tego wydarzenia",
