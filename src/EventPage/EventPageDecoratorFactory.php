@@ -23,48 +23,21 @@ use Wikimedia\Message\IMessageFormatterFactory;
 class EventPageDecoratorFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventPageDecoratorFactory';
 
-	private PageEventLookup $pageEventLookup;
-	private ParticipantsStore $participantsStore;
-	private OrganizersStore $organizersStore;
-	private PermissionChecker $permissionChecker;
-	private IMessageFormatterFactory $messageFormatterFactory;
-	private CampaignsPageFactory $campaignsPageFactory;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private EventTimeFormatter $eventTimeFormatter;
-	private EventPageCacheUpdater $eventPageCacheUpdater;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private GroupPermissionsLookup $groupPermissionsLookup;
-	private Config $config;
-	private CountryProvider $countryProvider;
-
 	public function __construct(
-		PageEventLookup $pageEventLookup,
-		ParticipantsStore $participantsStore,
-		OrganizersStore $organizersStore,
-		PermissionChecker $permissionChecker,
-		IMessageFormatterFactory $messageFormatterFactory,
-		CampaignsPageFactory $campaignsPageFactory,
-		CampaignsCentralUserLookup $centralUserLookup,
-		EventTimeFormatter $eventTimeFormatter,
-		EventPageCacheUpdater $eventPageCacheUpdater,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		GroupPermissionsLookup $groupPermissionsLookup,
-		Config $config,
-		CountryProvider $countryProvider,
+		private readonly PageEventLookup $pageEventLookup,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly OrganizersStore $organizersStore,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
+		private readonly CampaignsPageFactory $campaignsPageFactory,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly EventTimeFormatter $eventTimeFormatter,
+		private readonly EventPageCacheUpdater $eventPageCacheUpdater,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		private readonly GroupPermissionsLookup $groupPermissionsLookup,
+		private readonly Config $config,
+		private readonly CountryProvider $countryProvider,
 	) {
-		$this->pageEventLookup = $pageEventLookup;
-		$this->participantsStore = $participantsStore;
-		$this->organizersStore = $organizersStore;
-		$this->permissionChecker = $permissionChecker;
-		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->campaignsPageFactory = $campaignsPageFactory;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventTimeFormatter = $eventTimeFormatter;
-		$this->eventPageCacheUpdater = $eventPageCacheUpdater;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->groupPermissionsLookup = $groupPermissionsLookup;
-		$this->config = $config;
-		$this->countryProvider = $countryProvider;
 	}
 
 	public function newDecorator(

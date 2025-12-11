@@ -47,42 +47,22 @@ class EventDetailsParticipantsModule {
 		...UserLinker::MODULE_STYLES
 	];
 
-	private UserLinker $userLinker;
-	private ParticipantsStore $participantsStore;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private PermissionChecker $permissionChecker;
-	private UserFactory $userFactory;
-	private CampaignsUserMailer $userMailer;
-
-	private ITextFormatter $msgFormatter;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private Language $language;
-	private string $statisticsTabUrl;
+	private readonly ITextFormatter $msgFormatter;
 	private bool $isPastEvent;
 
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
-		UserLinker $userLinker,
-		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup,
-		PermissionChecker $permissionChecker,
-		UserFactory $userFactory,
-		CampaignsUserMailer $userMailer,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		Language $language,
-		string $statisticsTabUrl
+		private readonly UserLinker $userLinker,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly UserFactory $userFactory,
+		private readonly CampaignsUserMailer $userMailer,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		private readonly Language $language,
+		private readonly string $statisticsTabUrl,
 	) {
-		$this->userLinker = $userLinker;
-		$this->participantsStore = $participantsStore;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->permissionChecker = $permissionChecker;
-		$this->userFactory = $userFactory;
-		$this->userMailer = $userMailer;
-
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->language = $language;
-		$this->statisticsTabUrl = $statisticsTabUrl;
 		$this->isPastEvent = false;
 	}
 

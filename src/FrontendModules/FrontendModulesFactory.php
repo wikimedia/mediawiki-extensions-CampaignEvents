@@ -35,78 +35,31 @@ use Wikimedia\Message\IMessageFormatterFactory;
 class FrontendModulesFactory {
 	public const SERVICE_NAME = 'CampaignEventsFrontendModulesFactory';
 
-	private IMessageFormatterFactory $messageFormatterFactory;
-	private OrganizersStore $organizersStore;
-	private ParticipantsStore $participantsStore;
-	private UserLinker $userLinker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private PermissionChecker $permissionChecker;
-	private EventTimeFormatter $eventTimeFormatter;
-	private UserFactory $userFactory;
-	private TrackingToolRegistry $trackingToolRegistry;
-	private CampaignsUserMailer $userMailer;
-	private ParticipantAnswersStore $answersStore;
-	private EventAggregatedAnswersStore $aggregatedAnswersStore;
-	private EventQuestionsRegistry $questionsRegistry;
-	private CampaignEventsHookRunner $hookRunner;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private EventTypesRegistry $eventTypesRegistry;
-	private EventFormatter $eventFormatter;
-	private CampaignsDatabaseHelper $databaseHelper;
-	private TitleFactory $titleFactory;
-	private EventContributionStore $eventContributionStore;
-	private PageURLResolver $pageURLResolver;
-	private LinkBatchFactory $linkBatchFactory;
-
 	public function __construct(
-		IMessageFormatterFactory $messageFormatterFactory,
-		OrganizersStore $organizersStore,
-		ParticipantsStore $participantsStore,
-		UserLinker $userLinker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		PermissionChecker $permissionChecker,
-		EventTimeFormatter $eventTimeFormatter,
-		UserFactory $userFactory,
-		TrackingToolRegistry $trackingToolRegistry,
-		CampaignsUserMailer $userMailer,
-		ParticipantAnswersStore $answersStore,
-		EventAggregatedAnswersStore $aggregatedAnswersStore,
-		EventQuestionsRegistry $questionsRegistry,
-		CampaignEventsHookRunner $hookRunner,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
-		EventFormatter $eventFormatter,
-		CampaignsDatabaseHelper $databaseHelper,
-		TitleFactory $titleFactory,
-		EventContributionStore $eventContributionStore,
-		PageURLResolver $pageURLResolver,
-		LinkBatchFactory $linkBatchFactory,
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
+		private readonly OrganizersStore $organizersStore,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly UserLinker $userLinker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly EventTimeFormatter $eventTimeFormatter,
+		private readonly UserFactory $userFactory,
+		private readonly TrackingToolRegistry $trackingToolRegistry,
+		private readonly CampaignsUserMailer $userMailer,
+		private readonly ParticipantAnswersStore $answersStore,
+		private readonly EventAggregatedAnswersStore $aggregatedAnswersStore,
+		private readonly EventQuestionsRegistry $questionsRegistry,
+		private readonly CampaignEventsHookRunner $hookRunner,
+		private readonly WikiLookup $wikiLookup,
+		private readonly ITopicRegistry $topicRegistry,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly EventFormatter $eventFormatter,
+		private readonly CampaignsDatabaseHelper $databaseHelper,
+		private readonly TitleFactory $titleFactory,
+		private readonly EventContributionStore $eventContributionStore,
+		private readonly PageURLResolver $pageURLResolver,
+		private readonly LinkBatchFactory $linkBatchFactory,
 	) {
-		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->organizersStore = $organizersStore;
-		$this->participantsStore = $participantsStore;
-		$this->userLinker = $userLinker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->permissionChecker = $permissionChecker;
-		$this->eventTimeFormatter = $eventTimeFormatter;
-		$this->userFactory = $userFactory;
-		$this->trackingToolRegistry = $trackingToolRegistry;
-		$this->userMailer = $userMailer;
-		$this->answersStore = $answersStore;
-		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
-		$this->questionsRegistry = $questionsRegistry;
-		$this->hookRunner = $hookRunner;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->eventFormatter = $eventFormatter;
-		$this->databaseHelper = $databaseHelper;
-		$this->titleFactory = $titleFactory;
-		$this->eventContributionStore = $eventContributionStore;
-		$this->pageURLResolver = $pageURLResolver;
-		$this->linkBatchFactory = $linkBatchFactory;
 	}
 
 	public function newEventDetailsModule(

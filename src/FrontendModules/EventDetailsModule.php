@@ -55,52 +55,24 @@ class EventDetailsModule {
 		'oojs-ui.styles.icons-content',
 	];
 
-	private OrganizersStore $organizersStore;
-	private PageURLResolver $pageURLResolver;
-	private UserLinker $userLinker;
-	private EventTimeFormatter $eventTimeFormatter;
-	private TrackingToolRegistry $trackingToolRegistry;
-
-	private ExistingEventRegistration $registration;
-	private Language $language;
-	private ITextFormatter $msgFormatter;
-	private CampaignEventsHookRunner $hookRunner;
-	private PermissionChecker $permissionChecker;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private EventTypesRegistry $eventTypesRegistry;
-	private EventFormatter $eventFormatter;
+	private readonly ITextFormatter $msgFormatter;
 
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
-		OrganizersStore $organizersStore,
-		PageURLResolver $pageURLResolver,
-		UserLinker $userLinker,
-		EventTimeFormatter $eventTimeFormatter,
-		TrackingToolRegistry $trackingToolRegistry,
-		CampaignEventsHookRunner $hookRunner,
-		PermissionChecker $permissionChecker,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
-		EventFormatter $eventFormatter,
-		ExistingEventRegistration $registration,
-		Language $language
+		private readonly OrganizersStore $organizersStore,
+		private readonly PageURLResolver $pageURLResolver,
+		private readonly UserLinker $userLinker,
+		private readonly EventTimeFormatter $eventTimeFormatter,
+		private readonly TrackingToolRegistry $trackingToolRegistry,
+		private readonly CampaignEventsHookRunner $hookRunner,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly WikiLookup $wikiLookup,
+		private readonly ITopicRegistry $topicRegistry,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly EventFormatter $eventFormatter,
+		private readonly ExistingEventRegistration $registration,
+		private readonly Language $language,
 	) {
-		$this->organizersStore = $organizersStore;
-		$this->pageURLResolver = $pageURLResolver;
-		$this->userLinker = $userLinker;
-		$this->eventTimeFormatter = $eventTimeFormatter;
-		$this->trackingToolRegistry = $trackingToolRegistry;
-
-		$this->hookRunner = $hookRunner;
-		$this->permissionChecker = $permissionChecker;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->registration = $registration;
-		$this->language = $language;
-		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->eventFormatter = $eventFormatter;
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
 	}
 

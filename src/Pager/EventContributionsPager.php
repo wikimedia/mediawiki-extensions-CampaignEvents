@@ -42,15 +42,7 @@ class EventContributionsPager extends CodexTablePager {
 		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp', 'cec_id' ],
 	];
 
-	private PermissionChecker $permissionChecker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private LinkBatchFactory $linkBatchFactory;
-	private UserLinker $userLinker;
-	private TitleFactory $titleFactory;
-	private EventContributionStore $eventContributionStore;
-	private WikiLookup $wikiLookup;
-	private ExistingEventRegistration $event;
-	private TemplateParser $templateParser;
+	private readonly TemplateParser $templateParser;
 
 	/** @var array<int,EventContribution> */
 	private array $contribObjects = [];
@@ -65,15 +57,15 @@ class EventContributionsPager extends CodexTablePager {
 
 	public function __construct(
 		IReadableDatabase $db,
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		LinkBatchFactory $linkBatchFactory,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly LinkBatchFactory $linkBatchFactory,
 		LinkRenderer $linkRenderer,
-		UserLinker $userLinker,
-		TitleFactory $titleFactory,
-		EventContributionStore $eventContributionStore,
-		WikiLookup $wikiLookup,
-		ExistingEventRegistration $event,
+		private readonly UserLinker $userLinker,
+		private readonly TitleFactory $titleFactory,
+		private readonly EventContributionStore $eventContributionStore,
+		private readonly WikiLookup $wikiLookup,
+		private readonly ExistingEventRegistration $event,
 		IContextSource $context,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
@@ -84,14 +76,6 @@ class EventContributionsPager extends CodexTablePager {
 			$linkRenderer
 		);
 
-		$this->permissionChecker = $permissionChecker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->userLinker = $userLinker;
-		$this->titleFactory = $titleFactory;
-		$this->eventContributionStore = $eventContributionStore;
-		$this->wikiLookup = $wikiLookup;
-		$this->event = $event;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 

@@ -26,14 +26,7 @@ class ResponseStatisticsModule {
 	private const MIN_ANSWERS_PER_QUESTION = 10;
 	private const MIN_ANSWERS_PER_OPTION = 5;
 
-	private ITextFormatter $msgFormatter;
-	private ParticipantAnswersStore $answersStore;
-	private EventAggregatedAnswersStore $aggregatedAnswersStore;
-	private EventQuestionsRegistry $questionsRegistry;
-	private FrontendModulesFactory $frontendModulesFactory;
-
-	private Language $language;
-	private ExistingEventRegistration $event;
+	private readonly ITextFormatter $msgFormatter;
 
 	/**
 	 * @note The caller is responsible for making sure that the event has ended, and that it has at least
@@ -41,20 +34,14 @@ class ResponseStatisticsModule {
 	 */
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
-		ParticipantAnswersStore $answersStore,
-		EventAggregatedAnswersStore $aggregatedAnswersStore,
-		EventQuestionsRegistry $questionsRegistry,
-		FrontendModulesFactory $frontendModulesFactory,
-		ExistingEventRegistration $event,
-		Language $language
+		private readonly ParticipantAnswersStore $answersStore,
+		private readonly EventAggregatedAnswersStore $aggregatedAnswersStore,
+		private readonly EventQuestionsRegistry $questionsRegistry,
+		private readonly FrontendModulesFactory $frontendModulesFactory,
+		private readonly ExistingEventRegistration $event,
+		private readonly Language $language,
 	) {
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
-		$this->answersStore = $answersStore;
-		$this->aggregatedAnswersStore = $aggregatedAnswersStore;
-		$this->questionsRegistry = $questionsRegistry;
-		$this->frontendModulesFactory = $frontendModulesFactory;
-		$this->language = $language;
-		$this->event = $event;
 	}
 
 	public function createContent(
