@@ -7,7 +7,7 @@
 		]
 	},
 	"campaignevents-rest-event-not-found": "Tidak ada acara dengan ID ini.",
-	"campaignevents-rest-enable-registration-permission-denied": "Anda tidak diizinkan untuk mengaktifkan pendaftaran acara.",
+	"campaignevents-rest-enable-registration-permission-denied": "Anda tidak diizinkan untuk menyalakan pendaftaran acara.",
 	"campaignevents-rest-edit-page-nonlocal": "Pendaftaran acara ini diaktifkan di wiki berikut dan harus diubah di sana: $1.",
 	"campaignevents-rest-delete-already-deleted": "Pendaftaran acara ini sudah dihapus.",
 	"campaignevents-rest-user-not-found": "Tidak ada pengguna dengan ID pusat ini.",
