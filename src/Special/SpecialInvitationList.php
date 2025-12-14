@@ -26,26 +26,18 @@ class SpecialInvitationList extends SpecialPage {
 
 	public const PAGE_NAME = 'InvitationList';
 
-	private PermissionChecker $permissionChecker;
-	private InvitationListStore $invitationListStore;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private UserLinker $userLinker;
-	private TemplateParser $templateParser;
+	private readonly TemplateParser $templateParser;
 
 	private const HIGHLY_RECOMMENDED_MIN_SCORE = 70;
 	public const RECOMMENDED_MIN_SCORE = 25;
 
 	public function __construct(
-		PermissionChecker $permissionChecker,
-		InvitationListStore $invitationListStore,
-		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker
+		private readonly PermissionChecker $permissionChecker,
+		private readonly InvitationListStore $invitationListStore,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly UserLinker $userLinker,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->permissionChecker = $permissionChecker;
-		$this->invitationListStore = $invitationListStore;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->userLinker = $userLinker;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 

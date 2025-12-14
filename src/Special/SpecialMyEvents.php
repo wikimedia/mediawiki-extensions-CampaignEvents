@@ -16,16 +16,11 @@ use MediaWiki\SpecialPage\SpecialPage;
 class SpecialMyEvents extends SpecialPage {
 	public const PAGE_NAME = 'MyEvents';
 
-	private EventsPagerFactory $eventsPagerFactory;
-	private CampaignsCentralUserLookup $centralUserLookup;
-
 	public function __construct(
-		EventsPagerFactory $eventsPagerFactory,
-		CampaignsCentralUserLookup $centralUserLookup
+		private readonly EventsPagerFactory $eventsPagerFactory,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->eventsPagerFactory = $eventsPagerFactory;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**

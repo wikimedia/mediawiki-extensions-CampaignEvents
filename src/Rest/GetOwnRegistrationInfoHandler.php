@@ -17,21 +17,12 @@ use Wikimedia\Message\MessageValue;
 class GetOwnRegistrationInfoHandler extends SimpleHandler {
 	use EventIDParamTrait;
 
-	private IEventLookup $eventLookup;
-	private ParticipantsStore $participantsStore;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		private readonly IEventLookup $eventLookup,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->participantsStore = $participantsStore;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 	}
 
 	protected function run( int $eventID ): Response {

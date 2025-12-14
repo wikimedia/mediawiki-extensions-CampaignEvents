@@ -21,21 +21,14 @@ class SpecialDeleteEventRegistration extends FormSpecialPage {
 
 	public const PAGE_NAME = 'DeleteEventRegistration';
 
-	private IEventLookup $eventLookup;
-	private DeleteEventCommand $deleteEventCommand;
-	private PermissionChecker $permissionChecker;
-
 	private ?ExistingEventRegistration $event;
 
 	public function __construct(
-		IEventLookup $eventLookup,
-		DeleteEventCommand $deleteEventCommand,
-		PermissionChecker $permissionChecker
+		private readonly IEventLookup $eventLookup,
+		private readonly DeleteEventCommand $deleteEventCommand,
+		private readonly PermissionChecker $permissionChecker,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->eventLookup = $eventLookup;
-		$this->deleteEventCommand = $deleteEventCommand;
-		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**

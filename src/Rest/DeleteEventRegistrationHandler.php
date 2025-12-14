@@ -20,15 +20,10 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
 	use FailStatusUtilTrait;
 
-	private IEventLookup $eventLookup;
-	private DeleteEventCommand $deleteEventCommand;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		DeleteEventCommand $deleteEventCommand
+		private readonly IEventLookup $eventLookup,
+		private readonly DeleteEventCommand $deleteEventCommand,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->deleteEventCommand = $deleteEventCommand;
 	}
 
 	/**

@@ -16,15 +16,10 @@ use Wikimedia\Message\MessageValue;
 class GetEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
 
-	private IEventLookup $eventLookup;
-	private TrackingToolRegistry $trackingToolRegistry;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		TrackingToolRegistry $trackingToolRegistry,
+		private readonly IEventLookup $eventLookup,
+		private readonly TrackingToolRegistry $trackingToolRegistry,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->trackingToolRegistry = $trackingToolRegistry;
 	}
 
 	protected function run( int $eventID ): Response {

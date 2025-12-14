@@ -33,18 +33,11 @@ use StatusValue;
 class TrackingToolEventWatcher {
 	public const SERVICE_NAME = 'CampaignEventsTrackingToolEventWatcher';
 
-	private TrackingToolRegistry $trackingToolRegistry;
-	private TrackingToolUpdater $trackingToolUpdater;
-	private LoggerInterface $logger;
-
 	public function __construct(
-		TrackingToolRegistry $trackingToolRegistry,
-		TrackingToolUpdater $trackingToolUpdater,
-		LoggerInterface $logger
+		private readonly TrackingToolRegistry $trackingToolRegistry,
+		private readonly TrackingToolUpdater $trackingToolUpdater,
+		private readonly LoggerInterface $logger,
 	) {
-		$this->trackingToolRegistry = $trackingToolRegistry;
-		$this->trackingToolUpdater = $trackingToolUpdater;
-		$this->logger = $logger;
 	}
 
 	/**

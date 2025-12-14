@@ -28,11 +28,6 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 	private const QUESTIONS_SECTION_NAME = 'campaignevents-register-questions-label-title';
 
-	private RegisterParticipantCommand $registerParticipantCommand;
-	private ParticipantsStore $participantsStore;
-	private PolicyMessagesLookup $policyMessagesLookup;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-
 	/**
 	 * @var Participant|null If the user is already registered, this is their Participant record, containing
 	 * info about their current state.
@@ -56,16 +51,12 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
-		RegisterParticipantCommand $registerParticipantCommand,
-		ParticipantsStore $participantsStore,
-		PolicyMessagesLookup $policyMessagesLookup,
-		EventQuestionsRegistry $eventQuestionsRegistry
+		private readonly RegisterParticipantCommand $registerParticipantCommand,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly PolicyMessagesLookup $policyMessagesLookup,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
 	) {
 		parent::__construct( self::PAGE_NAME, $eventLookup, $centralUserLookup );
-		$this->registerParticipantCommand = $registerParticipantCommand;
-		$this->participantsStore = $participantsStore;
-		$this->policyMessagesLookup = $policyMessagesLookup;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
 		$this->getOutput()->enableOOUI();
 		$this->getOutput()->addModuleStyles( [
 			'ext.campaignEvents.specialPages.styles',

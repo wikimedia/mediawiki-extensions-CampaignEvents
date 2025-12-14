@@ -22,13 +22,12 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
 class EventTimeFormatter {
 	public const SERVICE_NAME = 'CampaignEventsEventTimeFormatter';
 
-	private UserOptionsLookup $userOptionsLookup;
-
 	private const FORMAT_START = 'start';
 	private const FORMAT_END = 'end';
 
-	public function __construct( UserOptionsLookup $userOptionsLookup ) {
-		$this->userOptionsLookup = $userOptionsLookup;
+	public function __construct(
+		private readonly UserOptionsLookup $userOptionsLookup,
+	) {
 	}
 
 	public function formatStart(

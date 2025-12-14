@@ -11,15 +11,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Rest\SimpleHandler;
 
 class ListOwnEventsForEditHandler extends SimpleHandler {
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private IEventLookup $eventLookup;
-
 	public function __construct(
-		CampaignsCentralUserLookup $centralUserLookup,
-		IEventLookup $eventLookup
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly IEventLookup $eventLookup,
 	) {
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventLookup = $eventLookup;
 	}
 
 	/** @phan-return list<array{id:int,name:string}> */

@@ -7,11 +7,11 @@ namespace MediaWiki\Extension\CampaignEvents\TrackingTool;
 use Exception;
 
 class InvalidToolURLException extends Exception {
-	private string $baseURL;
-
-	public function __construct( string $baseURL, string $message ) {
+	public function __construct(
+		private readonly string $baseURL,
+		string $message,
+	) {
 		parent::__construct( $message );
-		$this->baseURL = $baseURL;
 	}
 
 	public function getExpectedBaseURL(): string {

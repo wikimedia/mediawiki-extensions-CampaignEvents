@@ -21,24 +21,13 @@ class ListOrganizersHandler extends SimpleHandler {
 	// TODO: Implement proper pagination (T305389)
 	private const RES_LIMIT = 11;
 
-	private IEventLookup $eventLookup;
-	private OrganizersStore $organizersStore;
-	private RoleFormatter $roleFormatter;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private UserLinker $userLinker;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		OrganizersStore $organizersStore,
-		RoleFormatter $roleFormatter,
-		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker
+		private readonly IEventLookup $eventLookup,
+		private readonly OrganizersStore $organizersStore,
+		private readonly RoleFormatter $roleFormatter,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly UserLinker $userLinker,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->organizersStore = $organizersStore;
-		$this->roleFormatter = $roleFormatter;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->userLinker = $userLinker;
 	}
 
 	protected function run( int $eventID ): Response {

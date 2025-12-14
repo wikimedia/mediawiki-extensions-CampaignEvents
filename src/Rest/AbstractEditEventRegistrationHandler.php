@@ -33,39 +33,18 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	protected EventFactory $eventFactory;
-	protected PermissionChecker $permissionChecker;
-	protected EditEventCommand $editEventCommand;
-	private OrganizersStore $organizersStore;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	protected EventQuestionsRegistry $eventQuestionsRegistry;
-	protected WikiLookup $wikiLookup;
-	protected ITopicRegistry $topicRegistry;
-	private EventTypesRegistry $eventTypesRegistry;
-	private CountryProvider $countryProvider;
-
 	public function __construct(
-		EventFactory $eventFactory,
-		PermissionChecker $permissionChecker,
-		EditEventCommand $editEventCommand,
-		OrganizersStore $organizersStore,
-		CampaignsCentralUserLookup $centralUserLookup,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
-		CountryProvider $countryProvider,
+		protected readonly EventFactory $eventFactory,
+		protected readonly PermissionChecker $permissionChecker,
+		protected readonly EditEventCommand $editEventCommand,
+		private readonly OrganizersStore $organizersStore,
+		protected readonly CampaignsCentralUserLookup $centralUserLookup,
+		protected readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		protected readonly WikiLookup $wikiLookup,
+		protected readonly ITopicRegistry $topicRegistry,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly CountryProvider $countryProvider,
 	) {
-		$this->eventFactory = $eventFactory;
-		$this->permissionChecker = $permissionChecker;
-		$this->editEventCommand = $editEventCommand;
-		$this->organizersStore = $organizersStore;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->countryProvider = $countryProvider;
 	}
 
 	/**

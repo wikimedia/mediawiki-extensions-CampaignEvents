@@ -25,26 +25,19 @@ use Wikimedia\Rdbms\IDBAccessObject;
  * This class implements the WikiEduDashboard software as a tracking tool.
  */
 class WikiEduDashboard extends TrackingTool {
-	private HttpRequestFactory $httpRequestFactory;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private ParticipantsStore $participantsStore;
-
-	private string $apiSecret;
-	private ?string $apiProxy;
+	private readonly string $apiSecret;
+	private readonly ?string $apiProxy;
 
 	/** @phan-param array<string,mixed> $extra */
 	public function __construct(
-		HttpRequestFactory $httpRequestFactory,
-		CampaignsCentralUserLookup $centralUserLookup,
-		ParticipantsStore $participantsStore,
+		private readonly HttpRequestFactory $httpRequestFactory,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly ParticipantsStore $participantsStore,
 		int $dbID,
 		string $baseURL,
-		array $extra
+		array $extra,
 	) {
 		parent::__construct( $dbID, $baseURL, $extra );
-		$this->httpRequestFactory = $httpRequestFactory;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->participantsStore = $participantsStore;
 		$this->apiSecret = $extra['secret'];
 		$this->apiProxy = $extra['proxy'];
 	}

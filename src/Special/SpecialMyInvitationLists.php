@@ -15,19 +15,12 @@ class SpecialMyInvitationLists extends SpecialPage {
 
 	public const PAGE_NAME = 'MyInvitationLists';
 
-	private PermissionChecker $permissionChecker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private CampaignsDatabaseHelper $databaseHelper;
-
 	public function __construct(
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		CampaignsDatabaseHelper $databaseHelper
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly CampaignsDatabaseHelper $databaseHelper,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->permissionChecker = $permissionChecker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->databaseHelper = $databaseHelper;
 	}
 
 	/**

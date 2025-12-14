@@ -22,21 +22,12 @@ class EmailUsersHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	private CampaignsUserMailer $userMailer;
-	private PermissionChecker $permissionChecker;
-	private ParticipantsStore $participantsStore;
-	private IEventLookup $eventLookup;
-
 	public function __construct(
-		PermissionChecker $permissionChecker,
-		CampaignsUserMailer $userMailer,
-		ParticipantsStore $participantsStore,
-		IEventLookup $eventLookup
+		private readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsUserMailer $userMailer,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly IEventLookup $eventLookup,
 	) {
-		$this->permissionChecker = $permissionChecker;
-		$this->userMailer = $userMailer;
-		$this->participantsStore = $participantsStore;
-		$this->eventLookup = $eventLookup;
 	}
 
 	public function run( int $eventId ): Response {

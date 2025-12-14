@@ -18,18 +18,11 @@ class EventContributionsHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 	use EventIDParamTrait;
 
-	private EventContributionValidator $validator;
-	private WikiLookup $wikiLookup;
-	private IEventLookup $eventLookup;
-
 	public function __construct(
-		EventContributionValidator $validator,
-		WikiLookup $wikiLookup,
-		IEventLookup $eventLookup
+		private readonly EventContributionValidator $validator,
+		private readonly WikiLookup $wikiLookup,
+		private readonly IEventLookup $eventLookup,
 	) {
-		$this->validator = $validator;
-		$this->wikiLookup = $wikiLookup;
-		$this->eventLookup = $eventLookup;
 	}
 
 	public function validate( Validator $restValidator ): void {

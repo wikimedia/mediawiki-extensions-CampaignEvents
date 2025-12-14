@@ -63,25 +63,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const WIKI_TYPE_SPECIFIC = 3;
 
 	/** @var array<string,string> */
-	private array $formMessages;
-	protected IEventLookup $eventLookup;
-	private EventFactory $eventFactory;
-	private EditEventCommand $editEventCommand;
-	private PolicyMessagesLookup $policyMessagesLookup;
-	private OrganizersStore $organizersStore;
-	protected PermissionChecker $permissionChecker;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private TrackingToolRegistry $trackingToolRegistry;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private CampaignEventsHookRunner $hookRunner;
-	private PageURLResolver $pageUrlResolver;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private Config $wikiConfig;
-	private EventTypesRegistry $eventTypesRegistry;
-	private CountryProvider $countryProvider;
+	private readonly array $formMessages;
 	/** @var non-empty-list<string> Event type names */
-	private array $disallowedCountryCodes;
+	private readonly array $disallowedCountryCodes;
 
 	protected ?int $eventID = null;
 	protected ?EventRegistration $event = null;
@@ -102,41 +86,24 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	public function __construct(
 		string $name,
 		string $restriction,
-		IEventLookup $eventLookup,
-		EventFactory $eventFactory,
-		EditEventCommand $editEventCommand,
-		PolicyMessagesLookup $policyMessagesLookup,
-		OrganizersStore $organizersStore,
-		PermissionChecker $permissionChecker,
-		CampaignsCentralUserLookup $centralUserLookup,
-		TrackingToolRegistry $trackingToolRegistry,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		CampaignEventsHookRunner $hookRunner,
-		PageURLResolver $pageURLResolver,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		Config $wikiConfig,
-		EventTypesRegistry $eventTypesRegistry,
-		CountryProvider $countryProvider
+		protected readonly IEventLookup $eventLookup,
+		private readonly EventFactory $eventFactory,
+		private readonly EditEventCommand $editEventCommand,
+		private readonly PolicyMessagesLookup $policyMessagesLookup,
+		private readonly OrganizersStore $organizersStore,
+		protected readonly PermissionChecker $permissionChecker,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly TrackingToolRegistry $trackingToolRegistry,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		private readonly CampaignEventsHookRunner $hookRunner,
+		private readonly PageURLResolver $pageURLResolver,
+		private readonly WikiLookup $wikiLookup,
+		private readonly ITopicRegistry $topicRegistry,
+		private readonly Config $wikiConfig,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly CountryProvider $countryProvider,
 	) {
 		parent::__construct( $name, $restriction );
-		$this->eventLookup = $eventLookup;
-		$this->eventFactory = $eventFactory;
-		$this->editEventCommand = $editEventCommand;
-		$this->policyMessagesLookup = $policyMessagesLookup;
-		$this->organizersStore = $organizersStore;
-		$this->permissionChecker = $permissionChecker;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->trackingToolRegistry = $trackingToolRegistry;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->hookRunner = $hookRunner;
-		$this->pageUrlResolver = $pageURLResolver;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
-		$this->wikiConfig = $wikiConfig;
-		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->countryProvider = $countryProvider;
-
 		$this->formMessages = $this->getFormMessages();
 		$this->disallowedCountryCodes = array_keys(
 			$this->getConfig()->get( 'CampaignEventsContributionTrackingDisallowedCountries' )
@@ -909,7 +876,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			);
 			$session->set( self::REGISTRATION_UPDATED_WARNINGS_SESSION_KEY, $warningMessagesText );
 		}
-		$out->redirect( $this->pageUrlResolver->getUrl( $this->eventPage ) );
+		$out->redirect( $this->pageURLResolver->getUrl( $this->eventPage ) );
 	}
 
 	/**

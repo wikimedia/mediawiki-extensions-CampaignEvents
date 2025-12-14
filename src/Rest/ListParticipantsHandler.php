@@ -33,36 +33,17 @@ class ListParticipantsHandler extends SimpleHandler {
 	// TODO: Implement proper pagination (T305389)
 	private const RES_LIMIT = 20;
 
-	private PermissionChecker $permissionChecker;
-	private IEventLookup $eventLookup;
-	private ParticipantsStore $participantsStore;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private UserLinker $userLinker;
-	private UserFactory $userFactory;
-	private CampaignsUserMailer $campaignsUserMailer;
-	private EventQuestionsRegistry $questionsRegistry;
-	private IMessageFormatterFactory $messageFormatterFactory;
-
 	public function __construct(
-		PermissionChecker $permissionChecker,
-		IEventLookup $eventLookup,
-		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup,
-		UserLinker $userLinker,
-		UserFactory $userFactory,
-		CampaignsUserMailer $campaignsUserMailer,
-		EventQuestionsRegistry $questionsRegistry,
-		IMessageFormatterFactory $messageFormatterFactory
+		private readonly PermissionChecker $permissionChecker,
+		private readonly IEventLookup $eventLookup,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly UserLinker $userLinker,
+		private readonly UserFactory $userFactory,
+		private readonly CampaignsUserMailer $campaignsUserMailer,
+		private readonly EventQuestionsRegistry $questionsRegistry,
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
 	) {
-		$this->permissionChecker = $permissionChecker;
-		$this->eventLookup = $eventLookup;
-		$this->participantsStore = $participantsStore;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->userLinker = $userLinker;
-		$this->userFactory = $userFactory;
-		$this->campaignsUserMailer = $campaignsUserMailer;
-		$this->questionsRegistry = $questionsRegistry;
-		$this->messageFormatterFactory = $messageFormatterFactory;
 	}
 
 	protected function run( int $eventID ): Response {

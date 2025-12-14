@@ -18,18 +18,11 @@ use Wikimedia\ParamValidator\ParamValidator;
 class DeleteEventContributionHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 
-	private EventContributionStore $store;
-	private PermissionChecker $permissionChecker;
-	private IEventLookup $eventLookup;
-
 	public function __construct(
-		EventContributionStore $store,
-		PermissionChecker $permissionChecker,
-		IEventLookup $eventLookup,
+		private readonly EventContributionStore $store,
+		private readonly PermissionChecker $permissionChecker,
+		private readonly IEventLookup $eventLookup,
 	) {
-		$this->store = $store;
-		$this->permissionChecker = $permissionChecker;
-		$this->eventLookup = $eventLookup;
 	}
 
 	/** @inheritDoc */

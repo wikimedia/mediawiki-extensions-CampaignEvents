@@ -24,22 +24,18 @@ class TrackingToolAssociation implements JsonCodecable {
 	public const SYNC_STATUS_SYNCED = 1;
 	public const SYNC_STATUS_FAILED = 2;
 
-	private int $toolID;
-	private string $toolEventID;
-	private int $syncStatus;
-	private ?string $lastSyncTimestamp;
-
 	/**
 	 * @param int $toolID
 	 * @param string $toolEventID
 	 * @param int $syncStatus One of the self::SYNC_STATUS_* constants
 	 * @param string|null $lastSyncTimestamp UNIX timestamp
 	 */
-	public function __construct( int $toolID, string $toolEventID, int $syncStatus, ?string $lastSyncTimestamp ) {
-		$this->toolID = $toolID;
-		$this->toolEventID = $toolEventID;
-		$this->syncStatus = $syncStatus;
-		$this->lastSyncTimestamp = $lastSyncTimestamp;
+	public function __construct(
+		private readonly int $toolID,
+		private readonly string $toolEventID,
+		private readonly int $syncStatus,
+		private readonly ?string $lastSyncTimestamp,
+	) {
 	}
 
 	public function getToolID(): int {

@@ -16,19 +16,14 @@ use MediaWiki\WikiMap\WikiMap;
 use StatusValue;
 
 abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
-	private IEventLookup $eventLookup;
-
-	protected CampaignsCentralUserLookup $centralUserLookup;
 	protected ?ExistingEventRegistration $event = null;
 
 	public function __construct(
 		string $name,
-		IEventLookup $eventLookup,
-		CampaignsCentralUserLookup $centralUserLookup
+		private readonly IEventLookup $eventLookup,
+		protected readonly CampaignsCentralUserLookup $centralUserLookup
 	) {
 		parent::__construct( $name );
-		$this->eventLookup = $eventLookup;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**

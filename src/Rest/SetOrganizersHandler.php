@@ -23,15 +23,10 @@ class SetOrganizersHandler extends SimpleHandler {
 	use FailStatusUtilTrait;
 	use TokenAwareHandlerTrait;
 
-	private IEventLookup $eventLookup;
-	private EditEventCommand $editEventCommand;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		EditEventCommand $editEventCommand
+		private readonly IEventLookup $eventLookup,
+		private readonly EditEventCommand $editEventCommand,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->editEventCommand = $editEventCommand;
 	}
 
 	/**

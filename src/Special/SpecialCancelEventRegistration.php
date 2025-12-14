@@ -17,18 +17,13 @@ use StatusValue;
 class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	public const PAGE_NAME = 'CancelEventRegistration';
 
-	private UnregisterParticipantCommand $unregisterParticipantCommand;
-	private ParticipantsStore $participantsStore;
-
 	public function __construct(
 		IEventLookup $eventLookup,
 		CampaignsCentralUserLookup $centralUserLookup,
-		UnregisterParticipantCommand $unregisterParticipantCommand,
-		ParticipantsStore $participantsStore
+		private readonly UnregisterParticipantCommand $unregisterParticipantCommand,
+		private readonly ParticipantsStore $participantsStore,
 	) {
 		parent::__construct( self::PAGE_NAME, $eventLookup, $centralUserLookup );
-		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
-		$this->participantsStore = $participantsStore;
 	}
 
 	/**

@@ -21,10 +21,9 @@ class TrackingToolUpdater {
 		TrackingToolAssociation::SYNC_STATUS_FAILED => 3,
 	];
 
-	private CampaignsDatabaseHelper $dbHelper;
-
-	public function __construct( CampaignsDatabaseHelper $dbHelper ) {
-		$this->dbHelper = $dbHelper;
+	public function __construct(
+		private readonly CampaignsDatabaseHelper $dbHelper,
+	) {
 	}
 
 	/**

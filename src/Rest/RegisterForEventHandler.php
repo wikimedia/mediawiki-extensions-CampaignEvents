@@ -26,24 +26,13 @@ class RegisterForEventHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	private IEventLookup $eventLookup;
-	private RegisterParticipantCommand $registerParticipantCommand;
-	private EventQuestionsRegistry $eventQuestionsRegistry;
-	private ParticipantsStore $participantsStore;
-	private CampaignsCentralUserLookup $centralUserLookup;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		RegisterParticipantCommand $registerParticipantCommand,
-		EventQuestionsRegistry $eventQuestionsRegistry,
-		ParticipantsStore $participantsStore,
-		CampaignsCentralUserLookup $centralUserLookup
+		private readonly IEventLookup $eventLookup,
+		private readonly RegisterParticipantCommand $registerParticipantCommand,
+		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->registerParticipantCommand = $registerParticipantCommand;
-		$this->eventQuestionsRegistry = $eventQuestionsRegistry;
-		$this->participantsStore = $participantsStore;
-		$this->centralUserLookup = $centralUserLookup;
 	}
 
 	/**

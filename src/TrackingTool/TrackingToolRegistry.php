@@ -26,16 +26,14 @@ class TrackingToolRegistry {
 		MainConfigNames::CopyUploadProxy,
 	];
 
-	private ObjectFactory $objectFactory;
-	private ServiceOptions $options;
-
 	/** @var array<string,array<string,mixed>>|null Mock registry that can be set in tests. */
 	private ?array $registryForTests = null;
 
-	public function __construct( ObjectFactory $objectFactory, ServiceOptions $options ) {
-		$this->objectFactory = $objectFactory;
+	public function __construct(
+		private readonly ObjectFactory $objectFactory,
+		private readonly ServiceOptions $options,
+	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
-		$this->options = $options;
 	}
 
 	/**

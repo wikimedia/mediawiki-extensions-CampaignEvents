@@ -20,12 +20,10 @@ use Wikimedia\ParamValidator\ParamValidator;
  * @internal For use by this extension only.
  */
 class GetFormattedTimeHandler extends SimpleHandler {
-	private LanguageFactory $languageFactory;
-	private LanguageNameUtils $languageNameUtils;
-
-	public function __construct( LanguageFactory $languageFactory, LanguageNameUtils $languageNameUtils ) {
-		$this->languageFactory = $languageFactory;
-		$this->languageNameUtils = $languageNameUtils;
+	public function __construct(
+		private readonly LanguageFactory $languageFactory,
+		private readonly LanguageNameUtils $languageNameUtils,
+	) {
 	}
 
 	protected function run( string $languageCode, string $startTS, string $endTS ): Response {

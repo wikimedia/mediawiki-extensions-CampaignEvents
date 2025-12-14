@@ -30,17 +30,16 @@ use StatusValue;
  * depending on the capabilities of each tool.
  */
 abstract class TrackingTool {
-	private int $dbID;
-	protected string $baseURL;
-
 	/**
 	 * @param int $dbID ID that identifies this specific tracking tool in the DB
 	 * @param string $baseURL Base URL of this instance
 	 * @param array<string,mixed> $extra Any additional information needed by this instance.
 	 */
-	public function __construct( int $dbID, string $baseURL, array $extra ) {
-		$this->dbID = $dbID;
-		$this->baseURL = $baseURL;
+	public function __construct(
+		private readonly int $dbID,
+		protected readonly string $baseURL,
+		array $extra,
+	) {
 	}
 
 	/**

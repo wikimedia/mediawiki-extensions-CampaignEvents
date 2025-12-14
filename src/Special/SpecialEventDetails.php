@@ -44,32 +44,18 @@ class SpecialEventDetails extends SpecialPage {
 	public const STATS_PANEL = 'StatsPanel';
 	public const CONTRIBUTIONS_PANEL = 'ContributionsPanel';
 
-	protected IEventLookup $eventLookup;
 	protected ?ExistingEventRegistration $event = null;
-	private ParticipantsStore $participantsStore;
-	private OrganizersStore $organizersStore;
-	private IMessageFormatterFactory $messageFormatterFactory;
-	private CampaignsCentralUserLookup $centralUserLookup;
-	private FrontendModulesFactory $frontendModulesFactory;
-	private PermissionChecker $permissionChecker;
 
 	public function __construct(
-		IEventLookup $eventLookup,
-		ParticipantsStore $participantsStore,
-		OrganizersStore $organizersStore,
-		IMessageFormatterFactory $messageFormatterFactory,
-		CampaignsCentralUserLookup $centralUserLookup,
-		FrontendModulesFactory $frontendModulesFactory,
-		PermissionChecker $permissionChecker
+		protected readonly IEventLookup $eventLookup,
+		private readonly ParticipantsStore $participantsStore,
+		private readonly OrganizersStore $organizersStore,
+		private readonly IMessageFormatterFactory $messageFormatterFactory,
+		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly FrontendModulesFactory $frontendModulesFactory,
+		private readonly PermissionChecker $permissionChecker,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->eventLookup = $eventLookup;
-		$this->participantsStore = $participantsStore;
-		$this->organizersStore = $organizersStore;
-		$this->messageFormatterFactory = $messageFormatterFactory;
-		$this->centralUserLookup = $centralUserLookup;
-		$this->frontendModulesFactory = $frontendModulesFactory;
-		$this->permissionChecker = $permissionChecker;
 	}
 
 	/**

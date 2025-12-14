@@ -21,22 +21,15 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 
 	public const PAGE_NAME = 'GenerateInvitationList';
 
-	private PermissionChecker $permissionChecker;
-	private InvitationListGenerator $invitationListGenerator;
-	private WorklistParser $worklistParser;
-
 	/** @var int|null ID of the newly-generated list. Only set upon successful form submission. */
 	private ?int $listID = null;
 
 	public function __construct(
-		PermissionChecker $permissionChecker,
-		InvitationListGenerator $invitationListGenerator,
-		WorklistParser $worklistParser
+		private readonly PermissionChecker $permissionChecker,
+		private readonly InvitationListGenerator $invitationListGenerator,
+		private readonly WorklistParser $worklistParser,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->permissionChecker = $permissionChecker;
-		$this->invitationListGenerator = $invitationListGenerator;
-		$this->worklistParser = $worklistParser;
 	}
 
 	/**

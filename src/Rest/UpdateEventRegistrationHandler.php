@@ -30,8 +30,6 @@ use Wikimedia\ParamValidator\ParamValidator;
 class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
 	use EventIDParamTrait;
 
-	private IEventLookup $eventLookup;
-
 	public function __construct(
 		EventFactory $eventFactory,
 		PermissionChecker $permissionChecker,
@@ -42,7 +40,7 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		WikiLookup $wikiLookup,
 		ITopicRegistry $topicRegistry,
 		EventTypesRegistry $eventTypesRegistry,
-		IEventLookup $eventLookup,
+		private readonly IEventLookup $eventLookup,
 		CountryProvider $countryProvider,
 	) {
 		parent::__construct(
@@ -57,7 +55,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$eventTypesRegistry,
 			$countryProvider,
 		);
-		$this->eventLookup = $eventLookup;
 	}
 
 	/**

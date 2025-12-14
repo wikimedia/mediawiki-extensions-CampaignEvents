@@ -27,30 +27,18 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	private const UPCOMING_SECTION = 'upcoming';
 	private const TAB_ID_PREFIX = 'ext-campaignevents-allevents-tab-';
 
-	private EventsPagerFactory $eventsPagerFactory;
-	private CampaignEventsHookRunner $hookRunner;
-	private WikiLookup $wikiLookup;
-	private ITopicRegistry $topicRegistry;
-	private TemplateParser $templateParser;
-	private EventTypesRegistry $eventTypesRegistry;
-	private CountryProvider $countryProvider;
+	private readonly TemplateParser $templateParser;
 
 	public function __construct(
-		EventsPagerFactory $eventsPagerFactory,
-		CampaignEventsHookRunner $hookRunner,
-		WikiLookup $wikiLookup,
-		ITopicRegistry $topicRegistry,
-		EventTypesRegistry $eventTypesRegistry,
-		CountryProvider $countryProvider
+		private readonly EventsPagerFactory $eventsPagerFactory,
+		private readonly CampaignEventsHookRunner $hookRunner,
+		private readonly WikiLookup $wikiLookup,
+		private readonly ITopicRegistry $topicRegistry,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly CountryProvider $countryProvider,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->eventsPagerFactory = $eventsPagerFactory;
-		$this->hookRunner = $hookRunner;
-		$this->wikiLookup = $wikiLookup;
-		$this->topicRegistry = $topicRegistry;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
-		$this->eventTypesRegistry = $eventTypesRegistry;
-		$this->countryProvider = $countryProvider;
 	}
 
 	/**

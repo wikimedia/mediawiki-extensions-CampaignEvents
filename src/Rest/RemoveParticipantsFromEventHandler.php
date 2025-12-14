@@ -23,15 +23,10 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	private IEventLookup $eventLookup;
-	private UnregisterParticipantCommand $unregisterParticipantCommand;
-
 	public function __construct(
-		IEventLookup $eventLookup,
-		UnregisterParticipantCommand $unregisterParticipantCommand
+		private readonly IEventLookup $eventLookup,
+		private readonly UnregisterParticipantCommand $unregisterParticipantCommand,
 	) {
-		$this->eventLookup = $eventLookup;
-		$this->unregisterParticipantCommand = $unregisterParticipantCommand;
 	}
 
 	/**
