@@ -3,6 +3,7 @@
 		"authors": [
 			"Alien333",
 			"Antimuonium",
+			"Asteralee",
 			"Bananax47",
 			"BlueCamille",
 			"Derugon",
@@ -607,5 +608,7 @@
 	"campaignevents-contributions-summary-articles-edited": "Articles modifiés",
 	"campaignevents-contributions-summary-bytes-changed": "Octets modifiés",
 	"campaignevents-contributions-summary-links-changed": "Liens modifiés",
-	"campaignevents-contributions-summary-delta-separator": "/"
+	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-event-details-contributions-add-dialog-cancel": "Annuler",
+	"campaignevents-event-details-contributions-add-dialog-subtitle": "Ajouter une modification"
 }

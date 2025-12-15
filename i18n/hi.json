@@ -435,5 +435,6 @@
 	"campaignevents-email-error-notification-with-detail": "ईमेल भेजा न जा सका, इस कारण से: $1",
 	"campaignevents-eventslist-types-label": "कार्यक्रम के प्रकार",
 	"campaignevents-eventslist-country-label": "देश",
+	"campaignevents-event-details-contributions-add-dialog-cancel": "रद्द करें",
 	"campaignevents-contributions-summary-edit-count": "संपादन संख्या"
 }
