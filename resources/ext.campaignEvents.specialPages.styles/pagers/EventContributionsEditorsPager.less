@@ -1,0 +1,20 @@
+@import 'mediawiki.skin.variables.less';
+
+// Allow breaking long usernames and article titles, but don't break right after the icon
+.ext-campaignevents-editors-table {
+	td.cdx-table-pager__col--user_name {
+		white-space: nowrap;
+
+		a {
+			overflow-wrap: anywhere;
+			white-space: normal;
+		}
+	}
+
+	/* Remove parentheses added by mediawiki.special.changeslist around byte deltas */
+
+	.mw-diff-bytes::before,
+	.mw-diff-bytes::after {
+		content: '';
+	}
+}

@@ -140,12 +140,46 @@ class FrontendModulesFactory {
 		LinkRenderer $linkRenderer,
 		OutputPage $output,
 		ExistingEventRegistration $event,
-	): EventContributionsModule {
-		return new EventContributionsModule(
+	): EventContributionCombinedModule {
+		return new EventContributionCombinedModule(
+			$this->centralUserLookup,
+			$this->permissionChecker,
+			$this->eventContributionStore,
 			$this->messageFormatterFactory,
+			$this->participantsStore,
+			$event,
+			$output,
+			$this->newEventContributionsEditorModule( $linkRenderer, $output, $event ),
+			$this->newEventContributionsEditsModule( $linkRenderer, $output, $event )
+		);
+	}
+
+	public function newEventContributionsEditorModule(
+		LinkRenderer $linkRenderer,
+		OutputPage $output,
+		ExistingEventRegistration $event,
+	): EventContributionEditorsModule {
+		return new EventContributionEditorsModule(
+			$this->databaseHelper,
+			$output,
+			$event,
+			$this->userLinker,
 			$this->permissionChecker,
 			$this->centralUserLookup,
-			$linkRenderer,
+			$this->eventContributionStore,
+			$this->linkBatchFactory,
+			$linkRenderer
+		);
+	}
+
+	private function newEventContributionsEditsModule(
+		LinkRenderer $linkRenderer,
+		OutputPage $output,
+		ExistingEventRegistration $event
+	): EventContributionEditsModule {
+		return new EventContributionEditsModule(
+			$this->permissionChecker,
+			$this->centralUserLookup,
 			$this->userLinker,
 			$this->databaseHelper,
 			$this->titleFactory,
@@ -153,8 +187,9 @@ class FrontendModulesFactory {
 			$this->linkBatchFactory,
 			$this->participantsStore,
 			$this->wikiLookup,
+			$linkRenderer,
 			$output,
-			$event,
+			$event
 		);
 	}
 }

@@ -607,5 +607,11 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "Are you sure you want to remove this edit from the event?",
 	"campaignevents-event-details-contributions-delete-note": "It won't be deleted, but it will no longer be associated with the event.",
 	"campaignevents-event-details-contributions-delete-cancel": "Cancel",
-	"campaignevents-event-details-contributions-delete-confirm": "Remove"
+	"campaignevents-event-details-contributions-delete-confirm": "Remove",
+	"campaignevents-event-details-contributions-editors-username": "Username",
+	"campaignevents-event-details-contributions-editors-created": "Articles created",
+	"campaignevents-event-details-contributions-editors-edited": "Articles edited",
+	"campaignevents-event-details-contributions-editors-count": "Edit count",
+	"campaignevents-event-details-contributions-editors-bytes": "Bytes",
+	"campaignevents-event-details-contributions-editors-table-caption": "Editors"
 }

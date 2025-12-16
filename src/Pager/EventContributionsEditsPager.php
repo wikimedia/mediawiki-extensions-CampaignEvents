@@ -9,7 +9,6 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -19,17 +18,28 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Pager\CodexTablePager;
 use MediaWiki\RecentChanges\ChangesList;
+use MediaWiki\Title\MalformedTitleException;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\IconWidget;
 use stdClass;
 use UnexpectedValueException;
 use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Rdbms\IResultWrapper;
 
 /**
  * Pager for displaying event contributions in a table format
  */
-class EventContributionsPager extends CodexTablePager {
+class EventContributionsEditsPager extends CodexTablePager {
+
+	use EventContributionsPagerTrait;
+
+	/**
+	 * Stringified username to be used in the pager query to avoid wrong sorting with NULL values (see
+	 * T404995#11321541 and following comments). Note that this cannot be used with an alias as that won't
+	 * work in MySQL/MariaDB (T416569).
+	 */
+	private const QUERY_USERNAME_STR = 'COALESCE(cec_user_name, "")';
 
 	/**
 	 * Unique sort fields per column, including stable tiebreaker by primary key
@@ -37,7 +47,7 @@ class EventContributionsPager extends CodexTablePager {
 	private const INDEX_FIELDS = [
 		'article' => [ 'cec_page_prefixedtext', 'cec_wiki', 'cec_timestamp', 'cec_id' ],
 		'wiki' => [ 'cec_wiki', 'cec_timestamp', 'cec_id' ],
-		'username' => [ 'cec_user_name__str', 'cec_timestamp', 'cec_id' ],
+		'username' => [ self::QUERY_USERNAME_STR, 'cec_timestamp', 'cec_id' ],
 		'timestamp' => [ 'cec_timestamp', 'cec_id' ],
 		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp', 'cec_id' ],
 	];
@@ -94,11 +104,6 @@ class EventContributionsPager extends CodexTablePager {
 	 * @return array<string,mixed>
 	 */
 	public function getQueryInfo(): array {
-		$userCanViewPrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants(
-			$this->getAuthority(),
-			$this->event
-		);
-
 		$queryInfo = [
 			'tables' => [
 				'cec' => 'ce_event_contributions',
@@ -111,7 +116,7 @@ class EventContributionsPager extends CodexTablePager {
 				'cec_wiki',
 				'cec_user_id',
 				'cec_user_name',
-				'cec_user_name__str' => 'COALESCE(cec_user_name, "")',
+				self::QUERY_USERNAME_STR,
 				'cec_timestamp',
 				'cec_bytes_delta',
 				'cec_links_delta',
@@ -137,25 +142,7 @@ class EventContributionsPager extends CodexTablePager {
 			]
 		];
 
-		if ( !$userCanViewPrivateParticipants ) {
-			$orExpr = null;
-			try {
-				$centralId = $this->centralUserLookup
-					->newFromAuthority( $this->getAuthority() )
-					->getCentralID();
-				$orExpr = $this->getDatabase()->orExpr( [
-					'cep.cep_private' => 0,
-					'cec.cec_user_id' => $centralId
-				] );
-			} catch ( UserNotGlobalException ) {
-				// Keep default condition
-			}
-			if ( $orExpr ) {
-				$queryInfo['conds'][] = $orExpr;
-			} else {
-				$queryInfo['conds']['cep.cep_private'] = 0;
-			}
-		}
+		$this->addPrivateParticipantConds( $queryInfo );
 
 		return $queryInfo;
 	}
@@ -188,23 +175,23 @@ class EventContributionsPager extends CodexTablePager {
 	}
 
 	/**
-	 * Preload usernames and user page links for all rows in the current result set
-	 * to avoid per-row lookups.
-	 *
-	 * @param mixed $result The database result set to preprocess
+	 * @param IResultWrapper $result
 	 */
-	protected function preprocessResults( $result ): void {
-		$userNamesMap = [];
-		$nonVisibleUserIDsMap = [];
-		$linkBatch = $this->linkBatchFactory->newLinkBatch();
-		$linkBatch->setCaller( __METHOD__ );
+	public function preprocessResults( $result ): void {
+		$this->preloadUserData( $result );
+		$this->computeDeletePermissionState( $result );
+		$this->cacheTitlesAndContributions( $result );
+	}
 
-		// Prepare permission context once per page
-		// userCanDeleteAllContributions already checks if user is named internally
-		$this->canDeleteAll = $this->permissionChecker->userCanDeleteAllContributions(
-			$this->getAuthority(),
-			$this->event
-		);
+	private function computeDeletePermissionState(
+		IResultWrapper $result
+	): void {
+		$this->canDeleteAll = $this->permissionChecker
+			->userCanDeleteAllContributions(
+				$this->getAuthority(),
+				$this->event
+			);
+
 		if ( !$this->canDeleteAll ) {
 			try {
 				$this->performerCentralID = $this->centralUserLookup
@@ -216,42 +203,36 @@ class EventContributionsPager extends CodexTablePager {
 		}
 
 		foreach ( $result as $row ) {
-			// For visible names (the vast majority of them), we add them to the cache now so they're not looked up
-			// again later. Deleted/hidden names are not cached because we can't tell which case it is (we use null for
-			// both). But they are also rare enough that we can just look them up separately if needed.
-			if ( $row->cec_user_name !== null ) {
-				$userNamesMap[$row->cec_user_id] = $row->cec_user_name;
-				$this->centralUserLookup->addNameToCache( (int)$row->cec_user_id, $row->cec_user_name );
-			} else {
-				$nonVisibleUserIDsMap[ $row->cec_user_id ] = null;
+			if (
+				$this->canDeleteAll
+				|| ( (int)$row->cec_user_id === $this->performerCentralID )
+			) {
+				$this->resultHasDeletableContribution = true;
+				break;
 			}
-			$this->contribObjects[ $row->cec_id ] = $this->eventContributionStore->newFromRow( $row );
+		}
 
+		$result->seek( 0 );
+	}
+
+	/**
+	 * @throws MalformedTitleException
+	 */
+	public function cacheTitlesAndContributions( IResultWrapper $result ): void {
+		$linkBatch = $this->linkBatchFactory->newLinkBatch();
+		$linkBatch->setCaller( __METHOD__ );
+
+		foreach ( $result as $row ) {
+			// Create domain object once
+			$this->contribObjects[$row->cec_id] = $this->eventContributionStore->newFromRow( $row );
+			// Batch preload page titles for current wiki only
 			if ( WikiMap::isCurrentWikiId( $row->cec_wiki ) ) {
 				$title = $this->titleFactory->newFromTextThrow( $row->cec_page_prefixedtext );
 				$linkBatch->addObj( $title );
 			}
-
-			// Mark if this page has at least one deletable contribution
-			if ( $this->canDeleteAll || ( (int)$row->cec_user_id === $this->performerCentralID ) ) {
-				$this->resultHasDeletableContribution = true;
-			}
 		}
-
-		// Preload titles in one batch to avoid per-row queries
+		// Execute batched title lookup
 		$linkBatch->execute();
-
-		// Reset the result pointer for subsequent processing
-		$result->seek( 0 );
-
-		if ( $nonVisibleUserIDsMap ) {
-			// Do a batch lookup for all deleted/hidden and let it be cached.
-			$this->centralUserLookup->getNamesIncludingDeletedAndSuppressed( $nonVisibleUserIDsMap );
-		}
-
-		if ( $userNamesMap ) {
-			$this->userLinker->preloadUserLinks( $userNamesMap );
-		}
 	}
 
 	/**
@@ -324,37 +305,6 @@ class EventContributionsPager extends CodexTablePager {
 		$wikiID = $row->cec_wiki;
 		$wikiNameCache[$wikiID] ??= $this->wikiLookup->getLocalizedNames( [ $wikiID ] )[$wikiID];
 		return $wikiNameCache[$wikiID];
-	}
-
-	/**
-	 * Format username column with link
-	 */
-	private function formatUsername( stdClass $row ): string {
-		$contrib = $this->contribObjects[$row->cec_id];
-		$isPrivateParticipant = $row->cep_private;
-		$centralUserID = $contrib->getUserId();
-		$centralUser = new CentralUser( $centralUserID );
-		$html = '';
-		if ( $isPrivateParticipant ) {
-			$icon = new IconWidget( [
-				'icon' => 'lock',
-				'classes' => [ 'ext-campaignevents-contributions-private-participant' ],
-				'title' => $this->msg(
-					'campaignevents-event-details-contributions-private-participant-tooltip'
-				)->text(),
-				'label' => $this->msg(
-					'campaignevents-event-details-contributions-private-participant-tooltip'
-				)->text()
-			] );
-			$html .= $icon->toString() . ' ';
-		}
-		$html .= $this->userLinker->generateUserLinkWithFallback(
-			$this->getContext(),
-			$centralUser,
-			$this->getLanguage()->getCode()
-		);
-
-		return $html;
 	}
 
 	/**

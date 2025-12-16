@@ -1,82 +1,71 @@
 <?php
-
 declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
-use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
-use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
-use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPager;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\TemplateParser;
-use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
-use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\RecentChanges\ChangesList;
-use MediaWiki\Title\TitleFactory;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
-class EventContributionsModule {
-	private TemplateParser $templateParser;
+readonly class EventContributionCombinedModule {
 
 	public function __construct(
-		private readonly IMessageFormatterFactory $messageFormatterFactory,
-		private readonly PermissionChecker $permissionChecker,
-		private readonly CampaignsCentralUserLookup $centralUserLookup,
-		private readonly LinkRenderer $linkRenderer,
-		private readonly UserLinker $userLinker,
-		private readonly CampaignsDatabaseHelper $databaseHelper,
-		private readonly TitleFactory $titleFactory,
-		private readonly EventContributionStore $eventContributionStore,
-		private readonly LinkBatchFactory $linkBatchFactory,
-		private readonly ParticipantsStore $participantsStore,
-		private readonly WikiLookup $wikiLookup,
-		private readonly OutputPage $output,
-		private readonly ExistingEventRegistration $event,
+		private CampaignsCentralUserLookup $centralUserLookup,
+		private PermissionChecker $permissionChecker,
+		private EventContributionStore $eventContributionStore,
+		private IMessageFormatterFactory $messageFormatterFactory,
+		private ParticipantsStore $participantsStore,
+		private ExistingEventRegistration $event,
+		private OutputPage $output,
+		private EventContributionEditorsModule $editorsModule,
+		private EventContributionEditsModule $editsModule,
 	) {
-		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 
+	public const EDITORS_MODULE = 'editors';
+
 	public function createContent(): Tag {
+		$container = $this->getContributionsSummaryModule();
+		$module = $this->output->getRequest()->getRawVal( 'module' );
+
+		if ( $module === self::EDITORS_MODULE ) {
+			$container->appendContent( $this->editorsModule->createContent() );
+		} else {
+			$container->appendContent( $this->editsModule->createContent() );
+		}
+
+		return $container;
+	}
+
+	private function getContributionsSummaryModule(): Tag {
+		$container = new Tag();
 		$eventId = $this->event->getID();
-
-		$this->output->addModuleStyles( 'codex-styles' );
-		$container = new Tag( 'div' );
-		$container->addClasses( [ 'ext-campaignevents-contributions-container' ] );
-
 		$currentUser = $this->output->getAuthority();
+		$templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $currentUser );
 			$participant = $this->participantsStore->getEventParticipant( $eventId, $centralUser, true );
-			$userCanAddContributions = $this->permissionChecker->userCanAddAnyValidContribution(
-				$currentUser,
-				$this->event
-			) || $participant;
 			$includePrivateParticipants = $this->permissionChecker->userCanViewPrivateParticipants(
 				$currentUser,
 				$this->event
 			);
-			$participantIsPrivate =
-				$participant?->isPrivateRegistration();
+			$participantIsPrivate = $participant?->isPrivateRegistration();
 		} catch ( UserNotGlobalException ) {
 			// User is not logged in or doesn't have a global account
 			$centralUser = null;
 			$includePrivateParticipants = false;
 			$participantIsPrivate = false;
-			$userCanAddContributions = false;
 		}
-
-		$this->output->addJsConfigVars( [ 'wgCampaignEventsCanAddContributions' => $userCanAddContributions ] );
-
 		$summaryData = $this->eventContributionStore->getEventSummaryData(
 			$eventId,
 			$centralUser,
@@ -84,7 +73,6 @@ class EventContributionsModule {
 		);
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $this->output->getLanguage()->getCode() );
 		$language = $this->output->getLanguage();
-
 		$templateData = [
 			'participantsCard' => [
 				'value' => $language->formatNum( $summaryData->getParticipantsCount() ),
@@ -129,14 +117,12 @@ class EventContributionsModule {
 				)
 			],
 		];
-
 		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventId );
-		$showMessage = ( !$participantIsPrivate && $privateCount > 0 )
-			|| ( $participantIsPrivate && $privateCount > 1 );
+		$showMessage = ( !$participantIsPrivate && $privateCount > 0 ) ||
+			( $participantIsPrivate && $privateCount > 1 );
 		if ( !$includePrivateParticipants && $showMessage ) {
 			$messageKey = $participantIsPrivate
-			 ?
-				'campaignevents-contributions-notice-other-private-participants-excluded'
+				? 'campaignevents-contributions-notice-other-private-participants-excluded'
 				: 'campaignevents-contributions-notice-private-participants-excluded';
 			$notice = [
 				'status' => 'notice',
@@ -144,39 +130,11 @@ class EventContributionsModule {
 					MessageValue::new( $messageKey )
 				)
 			];
-			$renderedNotice = $this->templateParser->processTemplate( 'Message', $notice );
+			$renderedNotice = $templateParser->processTemplate( 'Message', $notice );
 			$container->appendContent( new HtmlSnippet( $renderedNotice ) );
 		}
-		$renderedSummaryHtml = $this->templateParser->processTemplate( 'EventContributionsSummary', $templateData );
-		$container->appendContent( new HtmlSnippet( $renderedSummaryHtml ) );
-
-		// Add table section
-		$pager = new EventContributionsPager(
-			$this->databaseHelper->getDBConnection( DB_REPLICA ),
-			$this->permissionChecker,
-			$this->centralUserLookup,
-			$this->linkBatchFactory,
-			$this->linkRenderer,
-			$this->userLinker,
-			$this->titleFactory,
-			$this->eventContributionStore,
-			$this->wikiLookup,
-			$this->event,
-			$this->output->getContext()
-		);
-
-		// Keep the Contributions tab active when interacting with the pager
-		$pager->setExtraQuery( [ 'tab' => 'ContributionsPanel' ] );
-
-		$tableContainer = new Tag( 'div' );
-		$tableContainer->addClasses( [ 'ext-campaignevents-contributions-table' ] );
-		$tableOutput = $pager->getFullOutput();
-		$tableHtml = $tableOutput->getContentHolderText();
-		$tableContainer->appendContent( new HtmlSnippet( $tableHtml ) );
-
-		$container->appendContent( $tableContainer );
-
-		return $container;
+		$renderedSummaryHtml = $templateParser->processTemplate( 'EventContributionsSummary', $templateData );
+		return $container->appendContent( new HtmlSnippet( $renderedSummaryHtml ) );
 	}
 
 	/**
