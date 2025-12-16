@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Ykhwong",
-			"YeBoy371"
+			"YeBoy371",
+			"Revi"
 		]
 	},
 	"campaignevents-desc": "캠페인 조직자와 참가자를 위한 기능들을 제공합니다.",
@@ -13,8 +14,8 @@
 	"right-campaignevents-delete-registration": "이벤트 등록 삭제",
 	"action-campaignevents-organize-events": "이벤트를 조직할",
 	"right-campaignevents-organize-events": "이벤트 조직",
-	"action-campaignevents-email-participants": "이메일 이벤트 참가자",
-	"right-campaignevents-email-participants": "이메일 이벤트 참가자",
+	"action-campaignevents-email-participants": "이벤트 참가자에게 이메일을 보낼",
+	"right-campaignevents-email-participants": "이벤트 참가자에게 이메일 보내기",
 	"specialpages-group-campaignevents": "이벤트",
 	"campaignevents-error-invalid-id": "이벤트 ID는 양의 정수여야 합니다.",
 	"campaignevents-error-empty-title": "이벤트 문서 제목을 입력하십시오.",
