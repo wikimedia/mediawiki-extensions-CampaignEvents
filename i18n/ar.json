@@ -15,7 +15,8 @@
 			"أيوب",
 			"محمد أحمد عبد الفتاح",
 			"Mohammed Qays",
-			"SaldırganSincap"
+			"SaldırganSincap",
+			"Dyolf77 (WMF)"
 		]
 	},
 	"campaignevents-desc": "يوفّر ميزات لمنظمي الحملة والمشاركين فيها.",
@@ -380,7 +381,7 @@
 	"campaignevents-email-participants-all": "كل المشاركين",
 	"campaignevents-email-participants-except": "جميعها باستثناء $1",
 	"campaignevents-email-participants-except-count": "جميعها باستثناء $1",
-	"campaignevents-email-participants-count": "$1 {{PLURAL:$1|مشارك|مشاركون}}",
+	"campaignevents-email-participants-count": "{{PLURAL:$1|$1|مشارك واحد|مشاركان|$1 مشاركين|$1 مشاركًا}}",
 	"campaignevents-email-participants-yes": "نعم",
 	"campaignevents-email-participants-no": "لا",
 	"campaignevents-email-footer": "هذا البريد الإلكتروني تم {{GENDER:$1|إرساله}} بواسطة $1 إلى {{GENDER:$2|$2}}، وهو مشارك مسجل في الفعالية التالية: $3. لو {{GENDER:$2|أنك}} رددت على هذا البريد الإلكتروني، فسيتم إرسال البريد الإلكتروني {{GENDER:$2|لديك}} مباشرة إلى {{GENDER:$1|المرسل الأصلي}}، كاشفاً عنوان البريد الإلكتروني {{GENDER:$2|الخاص بك }} إلى {{GENDER:$1|لديك}}.",
