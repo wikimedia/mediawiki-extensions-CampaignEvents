@@ -38,6 +38,20 @@ $specialPageAliases['az'] = [
 	'InvitationList' => [ 'DəvətSiyahısı' ],
 ];
 
+$specialPageAliases['de'] = [
+	'EnableEventRegistration' => [ 'Aktiviere_die_Registrierung_von_Veranstaltungen' ],
+	'DeleteEventRegistration' => [ 'Veranstaltungsanmeldung_löschen' ],
+	'EditEventRegistration' => [ 'Veranstaltungsanmeldung_bearbeiten' ],
+	'RegisterForEvent' => [ 'Veranstaltungsanmeldung' ],
+	'CancelEventRegistration' => [ 'Veranstaltungsanmeldung_stornieren' ],
+	'MyEvents' => [ 'Meine_Veranstaltungen' ],
+	'AllEvents' => [ 'Alle_Veranstaltungen' ],
+	'EventDetails' => [ 'Veranstaltungsdetails' ],
+	'GenerateInvitationList' => [ 'Einladungsliste_generieren' ],
+	'MyInvitationLists' => [ 'Meine_Einladungslisten' ],
+	'InvitationList' => [ 'Einladungsliste' ],
+];
+
 $specialPageAliases['et'] = [
 	'EnableEventRegistration' => [ 'Üritusele_registreerumise_avamine' ],
 	'DeleteEventRegistration' => [ 'Üritusele_registreerumise_kustutamine' ],

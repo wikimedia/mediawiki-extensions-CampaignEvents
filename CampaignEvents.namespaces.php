@@ -37,6 +37,11 @@ $namespaceNames['bew'] = [
 	NS_EVENT_TALK => 'Kongko_Pegelaran'
 ];
 
+$namespaceNames['de'] = [
+	NS_EVENT => 'Veranstaltung',
+	NS_EVENT_TALK => 'Veranstaltung_Diskussion',
+];
+
 $namespaceNames['es'] = [
 	NS_EVENT => 'Evento',
 	NS_EVENT_TALK => 'Evento_discusión',
