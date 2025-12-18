@@ -554,7 +554,7 @@
 	"communityconfiguration-campaignevents-description": "Pilihan konfigurasi untuk sambungan CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Ruang nama acara yang sah",
 	"campaignevents-email-participants-missing-address-uncertain": "Sesetengah peserta yang dipilih mungkin tidak mempunyai alamat e-mel pada akaun mereka dan tidak akan menerima e-mel anda.",
-	"campaignevents-eventtype-editing-event": "Menyunting acara",
+	"campaignevents-eventtype-editing-event": "Acara menyunting",
 	"campaignevents-eventtype-media-upload-event": "Acara muat naik media",
 	"campaignevents-eventtype-backlog-drive": "Pemacu tunggakan",
 	"campaignevents-eventtype-contest": "Peraduan",
