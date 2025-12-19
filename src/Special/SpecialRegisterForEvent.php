@@ -118,22 +118,27 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			]
 		];
 
-		// Add Contribution statistics section if event qualifies and participant is already registered.
-		if ( $this->curParticipantData && $this->event->hasContributionTracking() && !$this->event->isPast() ) {
-			$eventDetailsTitle = SpecialPage::getTitleFor(
-				SpecialEventDetails::PAGE_NAME,
-				(string)$this->event->getID()
-			);
-			$fields['ShowContributionAssociationPrompt'] = [
-				'type' => 'check',
-				'label-message' => 'campaignevents-register-contribstats-label',
-				'default' => $this->curParticipantData->shouldShowContributionAssociationPrompt(),
-				'section' => 'campaignevents-register-contribstats-title',
-				'help' => $this->msg( 'campaignevents-register-contribstats-help' )
-					->params( $eventDetailsTitle->getFullURL( [ 'tab' => SpecialEventDetails::CONTRIBUTIONS_PANEL ] ) )
-					->parse(),
-			];
+		// Turn this into a hidden field when it must not be shown, instead of omitting it altogether, to simplify
+		// submit handler (as it can always expect a value), and avoid ambiguity between explicit false and value not
+		// provided.
+		if ( $this->isEdit && $this->event->hasContributionTracking() && !$this->event->isPast() ) {
+			$contribOptOutFieldType = 'check';
+		} else {
+			$contribOptOutFieldType = 'hidden';
 		}
+		$eventDetailsTitle = SpecialPage::getTitleFor(
+			SpecialEventDetails::PAGE_NAME,
+			(string)$this->event->getID()
+		);
+		$fields['ShowContributionAssociationPrompt'] = [
+			'type' => $contribOptOutFieldType,
+			'label-message' => 'campaignevents-register-contribstats-label',
+			'default' => $this->curParticipantData?->shouldShowContributionAssociationPrompt() ?? true,
+			'section' => 'campaignevents-register-contribstats-title',
+			'help' => $this->msg( 'campaignevents-register-contribstats-help' )
+				->params( $eventDetailsTitle->getFullURL( [ 'tab' => SpecialEventDetails::CONTRIBUTIONS_PANEL ] ) )
+				->parse(),
+		];
 
 		$this->addParticipantQuestionFields( $fields );
 
@@ -253,13 +258,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			return Status::newFatal( 'campaignevents-register-invalid-answer', $e->getQuestionName() );
 		}
 
-		// Use the provided value if available, else keep whatever the user previously set (this can happen after an
-		// event has ended), else use a default (e.g. if the event does not have contribution tracking or the user is
-		// registering for the first time)
-		$showContribAssociation = $data['ShowContributionAssociationPrompt'] ??
-			$this->curParticipantData?->shouldShowContributionAssociationPrompt() ??
-			true;
-		$contributionAssociationMode = $showContribAssociation
+		$contributionAssociationMode = $data['ShowContributionAssociationPrompt']
 			? RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 			: RegisterParticipantCommand::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;
 
