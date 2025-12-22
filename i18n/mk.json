@@ -240,6 +240,7 @@
 	"campaignevents-eventpage-register-dialog-title": "Пријава за настан",
 	"campaignevents-eventpage-register-dialog-title-edit": "Измена на пријава",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Приватност на зачленувањето",
+	"campaignevents-eventpage-register-dialog-contribstats-title": "Статистика за придонеси",
 	"campaignevents-eventpage-registration-enabled-notification": "Пријавувањето е овозможено. Учесниците сега можат да се пријават на страницата на настанот.",
 	"campaignevents-eventpage-registration-updated-notification-list": "Овој настан е вклучен на <strong>[[Special:AllEvents|Списокот на соработки]]</strong>.",
 	"campaignevents-eventpage-registration-edit-notification": "Информациите за пријава се подновени.",
