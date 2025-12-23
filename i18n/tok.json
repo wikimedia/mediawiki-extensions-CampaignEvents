@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tamzin"
+		]
+	},
+	"right-campaignevents-enable-registration": "kama kulupu la ona li ken ken e toki kama",
+	"right-campaignevents-delete-registration": "kama kulupu la ona li ken weka e toki kama",
+	"right-campaignevents-organize-events": "ona li ken pali e kama kulupu",
+	"right-campaignevents-email-participants": "ona li ken toki Email tawa jan pi kama kulupu"
+}
