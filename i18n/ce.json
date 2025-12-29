@@ -364,6 +364,12 @@
 	"campaignevents-email-self-subject": "Хьан хаамийн копеш декъашхошна $1",
 	"campaignevents-event-details-time-registered": "ДӀайазйина хан",
 	"campaignevents-event-details-can-receive-email": "Электронан пошта схьаэца йиш йу",
+	"campaignevents-event-details-contributions-table-caption": "Къинхьегам",
+	"campaignevents-event-details-contributions-article": "Йаззамашна хийцамаш бина",
+	"campaignevents-event-details-contributions-wiki": "Вики",
+	"campaignevents-event-details-contributions-username": "Декъашхочун цӀе",
+	"campaignevents-event-details-contributions-timestamp": "Терахь/хан",
+	"campaignevents-event-details-contributions-bytes": "Байт",
 	"campaignevents-register-questions-label-title": "Хьан информаци",
 	"campaignevents-register-questions-label-subtitle": "ХӀара хаам мероприяти вовшахтоьхначаьрца бен дӀасабоькъур бац.",
 	"campaignevents-register-question-gender": "ХӀун гендеран тайпа ду хьан? (тӀехь доцу)",
@@ -545,5 +551,12 @@
 	"campaignevents-event-contribution-revision-not-found": "Ревизи ца карийна",
 	"campaignevents-event-contribution-not-owner": "Хьайн хийцамаш хиламашца бен уьйр латто йиш йац хьан",
 	"campaignevents-event-contribution-tracking-disabled": "ХӀокху хиламна лерина гӀодар лардар дӀахӀоттийна дац",
-	"campaignevents-event-contribution-event-deleted": "Хилам дӀабаьккхина"
+	"campaignevents-event-contribution-event-deleted": "Хилам дӀабаьккхина",
+	"campaignevents-postedit-dialog-action-no": "ХӀан-хӀа, баркалла",
+	"campaignevents-postedit-dialog-action-yes": "ХӀаъ",
+	"campaignevents-contributions-summary-participants": "Декъашхой",
+	"campaignevents-event-details-contributions-add-dialog-cancel": "Йухайаккхар",
+	"campaignevents-event-details-contributions-add-dialog-submit": "ТӀетоха хийцам",
+	"campaignevents-event-details-contributions-delete-cancel": "Йухайаккхар",
+	"campaignevents-event-details-contributions-delete-confirm": "ДӀайаккха"
 }

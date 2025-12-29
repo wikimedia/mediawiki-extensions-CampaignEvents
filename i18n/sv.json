@@ -4,7 +4,8 @@
 			"Ainali",
 			"Belteshassar",
 			"Bengtsson96",
-			"Sabelöga"
+			"Sabelöga",
+			"Stefan2255"
 		]
 	},
 	"campaignevents-desc": "Erbjuder funktioner för kampanjorganisatörer och -deltagare.",
@@ -209,6 +210,9 @@
 	"campaignevents-eventpage-register-dialog-clear": "Rensa formulär",
 	"campaignevents-eventpage-register-dialog-title": "Registrera dig för evenemang",
 	"campaignevents-eventpage-register-dialog-title-edit": "Redigera registrering",
+	"campaignevents-eventpage-register-dialog-contribstats-title": "Bidragsstatistik",
+	"campaignevents-eventpage-register-dialog-contribstats-label": "När jag publicerar en redigering, fråga mig om redigeringen gäller den här händelsen.",
+	"campaignevents-eventpage-register-dialog-contribstats-help": "Detta gör det enklare att se din inverkan och dela ditt arbete med andra. Om du väljer bort detta kan du fortfarande lägga till eller ta bort redigeringskopplingar i [$1 bidragslista].",
 	"campaignevents-eventpage-registration-edit-notification": "Din registreringsinformation uppdaterades.",
 	"campaignevents-eventpage-enableheader-organizer": "Du är en organisatör",
 	"campaignevents-eventpage-enableheader-eventpage-desc": "<strong>Evenemangssida</strong>: Aktivera registrering så deltagare kan registrera sig direkt på sidan för ditt evenemang.",
@@ -314,6 +318,9 @@
 	"campaignevents-register-question-affiliate-option-none": "Nej",
 	"campaignevents-register-question-affiliate-option-affiliate": "Ja",
 	"campaignevents-register-retention-title": "Information om datalagring",
+	"campaignevents-register-contribstats-title": "Bidragsstatistik",
+	"campaignevents-register-contribstats-label": "När jag publicerar en redigering, fråga mig om redigeringen gäller den här händelsen.",
+	"campaignevents-register-contribstats-help": "Detta gör det enklare att se din inverkan och dela ditt arbete med andra. Om du väljer bort detta kan du fortfarande lägga till eller ta bort redigeringskopplingar i [$1 bidragslista].",
 	"campaignevents-eventpage-register-dialog-questions-title": "Din information",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Den här informationen delas endast med arrangörerna.",
 	"campaignevents-eventpage-register-dialog-answers-aggregated": "Dina svar har aggregerats och raderats i enlighet med informationen om datalagring.",
