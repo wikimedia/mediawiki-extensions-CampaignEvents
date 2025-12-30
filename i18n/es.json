@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Angoca",
+			"Avengium",
 			"Balunhnoh",
 			"Daimona Eaytoy",
 			"DarkGames26",
@@ -255,6 +256,9 @@
 	"campaignevents-eventpage-register-dialog-title": "Inscribirse para un evento",
 	"campaignevents-eventpage-register-dialog-title-edit": "Editar inscripción",
 	"campaignevents-eventpage-register-dialog-visibility-title": "Privacidad de la inscripción",
+	"campaignevents-eventpage-register-dialog-contribstats-title": "Estadísticas de contribuciones",
+	"campaignevents-eventpage-register-dialog-contribstats-label": "Después de publicar una edición, pregúnteme si la edición es para este evento.",
+	"campaignevents-eventpage-register-dialog-contribstats-help": "Esto hace que sea más fácil ver su impacto y compartir su trabajo con otros. Si se excluye, todavía puede agregar o eliminar asociaciones de edición en la [lista de contribuciones de $1].",
 	"campaignevents-eventpage-registration-enabled-notification": "La inscripción está habilitada. Las personas participantes pueden registrarse en la página de tu evento.",
 	"campaignevents-eventpage-registration-updated-notification-list": "Este evento está incluido en la <strong>[[Special:AllEvents|Lista de Collaboración]]</strong>.",
 	"campaignevents-eventpage-registration-edit-notification": "La información de registro se ha actualizado.",
@@ -446,6 +450,9 @@
 	"campaignevents-register-retention-base": "Tus respuestas se agregan y luego se eliminan 90 días después del envío o al final del evento, lo que ocurra primero. Edita las respuestas en cualquier momento antes de esa fecha. Una vez eliminadas, no se pueden cambiar, volver a responder, ni recuperar.",
 	"campaignevents-register-retention-days": "El tiempo restante hasta que tus respuestas sean agregadas y eliminadas es: <strong>$1 {{PLURAL:$1| día|días}}</strong>.",
 	"campaignevents-register-retention-hours": "El tiempo restante hasta que se agreguen y eliminen tus respuestas es: <strong>menos de 24 horas</strong>.",
+	"campaignevents-register-contribstats-title": "Estadísticas de contribuciones",
+	"campaignevents-register-contribstats-label": "Después de publicar una edición, pregúnteme si la edición es para este evento.",
+	"campaignevents-register-contribstats-help": "Esto hace que sea más fácil ver su impacto y compartir su trabajo con otros. Si se excluye, todavía puede agregar o eliminar asociaciones de edición en la [lista de contribuciones de $1].",
 	"campaignevents-eventpage-register-dialog-questions-title": "Tu información",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "Esta información se compartirá únicamente con las personas que organizan el evento.",
 	"campaignevents-eventpage-register-dialog-answers-aggregated": "Sus respuestas se han agregado y eliminado según la información de retención de datos.",
