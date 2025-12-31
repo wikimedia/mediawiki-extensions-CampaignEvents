@@ -12,7 +12,8 @@
 			"列维劳德",
 			"沈澄心",
 			"魔琴",
-			"LowensteinYang"
+			"LowensteinYang",
+			"Peterxy12"
 		]
 	},
 	"campaignevents-desc": "為活動籌辦人員和參與者提供功能。",
@@ -240,6 +241,7 @@
 	"campaignevents-event-details-chat-link": "聊天群邀請連結",
 	"campaignevents-event-details-chat-link-not-available": "此活動沒有可用的聊天群組。",
 	"campaignevents-event-details-organizers-header": "籌辦人員",
+	"campaignevents-event-details-wikis-header": "Wiki",
 	"campaignevents-event-details-register-prompt": "您需要報名才能看到此資訊",
 	"campaignevents-event-details-view-event-page": "檢視活動頁面",
 	"campaignevents-event-details-participants": "使用者名稱",
