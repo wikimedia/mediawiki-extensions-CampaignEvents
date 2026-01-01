@@ -12,7 +12,8 @@
 			"ZhaoFJx",
 			"列维劳德",
 			"沈澄心",
-			"魔琴"
+			"魔琴",
+			"Peterxy12"
 		]
 	},
 	"campaignevents-desc": "為活動籌辦人員和參與者提供功能。",
@@ -233,6 +234,7 @@
 	"campaignevents-event-details-chat-link": "聊天群邀請連結",
 	"campaignevents-event-details-chat-link-not-available": "此活動沒有可用的聊天群組。",
 	"campaignevents-event-details-organizers-header": "籌辦人員",
+	"campaignevents-event-details-wikis-header": "Wiki",
 	"campaignevents-event-details-register-prompt": "您需要報名才能看到此資訊",
 	"campaignevents-event-details-view-event-page": "檢視活動頁面",
 	"campaignevents-event-details-participants": "使用者名稱",
@@ -263,6 +265,7 @@
 	"campaignevents-event-details-tab-email": "傳送訊息",
 	"campaignevents-event-details-tab-event-details": "活動詳情",
 	"campaignevents-event-details-tab-stats": "回覆統計",
+	"campaignevents-event-details-tab-contributions": "貢獻",
 	"campaignevents-event-details-search-participants-placeholder": "搜尋參與者",
 	"campaignevents-event-details-organizers-view-more": "檢視更多籌辦人員",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "計畫與活動面板",
@@ -310,6 +313,9 @@
 	"campaignevents-email-footer": "這封電子郵件由 $1 {{GENDER:$1|寄給}}以下活動的已報名參與者{{GENDER:$2|$2}}：$3。若{{GENDER:$2|您}}回覆此電子郵件，{{GENDER:$2|您的}}郵件將直接寄往{{GENDER:$1|原發件人}}，{{GENDER:$1|他}}將能夠看到{{GENDER:$2|您的}}電子郵件地址。",
 	"campaignevents-event-details-time-registered": "報名時間",
 	"campaignevents-event-details-can-receive-email": "可以接收電子郵件",
+	"campaignevents-event-details-contributions-username": "使用者名稱",
+	"campaignevents-event-details-contributions-timestamp": "時間戳",
+	"campaignevents-event-details-contributions-bytes": "位元組",
 	"campaignevents-register-questions-label-title": "您的資訊",
 	"campaignevents-register-questions-label-subtitle": "這些資訊僅會與活動籌辦人員分享。",
 	"campaignevents-register-question-gender": "您的性別認同（非必填）",

@@ -5,12 +5,27 @@
 			"Wzl19371",
 			"ZhaoFJx",
 			"七八年再来一次",
-			"沈澄心"
+			"沈澄心",
+			"Peterxy12"
 		]
 	},
 	"campaignevents-rest-event-not-found": "没有具有此ID的活动。",
 	"campaignevents-rest-enable-registration-permission-denied": "您不允许启用活动报名。",
+	"campaignevents-rest-edit-page-nonlocal": "此活动报名已在以下wiki上启用，应在那里进行编辑：$1。",
+	"campaignevents-rest-delete-already-deleted": "已经删除此活动报名。",
+	"campaignevents-rest-user-not-found": "没有此中央ID的用户。",
+	"campaignevents-rest-get-registration-deleted": "已删除此活动报名",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "参数“user_ids”必须是用户ID阵列，或为null（用于删除所有用户）",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "请移除创建该活动的wiki$1上的参与者。",
+	"campaignevents-rest-list-participants-empty-filter": "若有指定用户名筛选，必须是非空值的字符串。",
+	"campaignevents-rest-list-participants-cannot-see-private": "您无权查看私下报名参加此活动的参与者。",
+	"campaignevents-rest-set-organizers-empty-list": "<var>Organizer_usernames</var>必须是用户名阵列，且不能为空",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "请设置创建该活动的wiki$1上的组织。",
 	"campaignevents-rest-get-registration-info-notparticipant": "您未参加此活动。",
 	"campaignevents-rest-register-invalid-answer": "问题$1的答案无效",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "请完成您在创建该活动的wiki$1上的活动报名。",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "请删除您在创建该活动的wiki$1上的活动报名。",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "请发送电邮给创建该活动的wiki$1上的参与者。",
+	"campaignevents-rest-contribution-not-found": "此ID下没有任何贡献。",
 	"campaignevents-rest-delete-contribution-permission-denied": "您无权删除此贡献。"
 }
