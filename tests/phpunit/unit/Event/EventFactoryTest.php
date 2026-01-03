@@ -77,26 +77,36 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @return string[] A list of wiki IDs that are considered valid within this test class. This is guaranteed to be
-	 * a list of all possible "XYwiki" combinations, and is provided for convenience.
+	 * @return string[] A list of wiki IDs that are considered valid within this test class.
+	 * This is guaranteed to be a list of all possible "XYwiki" combinations, and is provided
+	 * for convenience.
 	 */
 	private static function getValidWikis(): array {
 		$validWikis = [];
-		for ( $prefix = 'aa'; $prefix !== 'aaa'; $prefix++ ) {
+		$prefix = 'aa';
+
+		while ( $prefix !== 'aaa' ) {
 			$validWikis[] = $prefix . 'wiki';
+			$prefix = str_increment( $prefix );
 		}
+
 		return $validWikis;
 	}
 
 	/**
-	 * @return string[] A list of topic IDs that are considered valid within this test class. This is guaranteed to be
-	 * a list of all possible "XYtopic" combinations, and is provided for convenience.
+	 * @return string[] A list of topic IDs that are considered valid within this test class.
+	 * This is guaranteed to be a list of all possible "XYtopic" combinations, and is provided
+	 * for convenience.
 	 */
 	private static function getValidTopics(): array {
 		$validTopics = [];
-		for ( $prefix = 'a'; $prefix !== 'aa'; $prefix++ ) {
+		$prefix = 'a';
+
+		while ( $prefix !== 'aa' ) {
 			$validTopics[] = $prefix . 'topic';
+			$prefix = str_increment( $prefix );
 		}
+
 		return $validTopics;
 	}
 
