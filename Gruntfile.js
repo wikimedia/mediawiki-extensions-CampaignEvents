@@ -23,7 +23,7 @@ module.exports = function ( grunt ) {
 				cache: true
 			},
 			all: [
-				'**/*.{css,less}',
+				'**/*.{css,less,vue}',
 				'!{node_modules,vendor,coverage,tests/selenium/log}/**'
 			]
 		},
