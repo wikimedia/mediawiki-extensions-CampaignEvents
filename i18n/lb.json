@@ -284,7 +284,7 @@
 	"campaignevents-notification-registration-details-dates-timezone": "<strong>Zäitzone:</strong> $1",
 	"campaignevents-notification-registration-details-type-header": "Typ vum Evenement",
 	"campaignevents-notification-registration-details-type-online-header": "Online-Evenement",
-	"campaignevents-notification-registration-details-organizers-header": "Organisateure vum Evenement",
+	"campaignevents-notification-registration-details-organizers-header": "Organisateure vun Evenementer",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|méi}}",
 	"campaignevents-notification-registration-event-page-link": "Säit vum Evenement weisen",
 	"campaignevents-notification-registration-chat-link": "Dem Gruppenchat bäitrieden",
