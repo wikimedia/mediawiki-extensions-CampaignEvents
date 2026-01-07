@@ -1027,8 +1027,6 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 	 * @dataProvider provideCanAddContribution
 	 */
 	public function testUserCanAddContribution(
-		?bool $isStoredOrganizer,
-		bool $isGood,
 		bool $isParticipant,
 		bool $isAuthor,
 		?string $error,
@@ -1036,10 +1034,12 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		bool $isTemp,
 		bool $isBlocked,
 		$userRights,
-		bool $eventIsLocal
+		bool $eventIsLocal,
+		?bool $isStoredOrganizer = null,
 	): void {
 		$performer = $this->makeAuthority( $isLoggedIn, $isTemp, $isBlocked, $userRights );
-		$event = $this->mockExistingEventRegistration( true );
+		$event = $this->mockExistingEventRegistration( $eventIsLocal );
+		$authorCentralID = 123;
 
 		// Mock organizers store for userCanEditRegistration
 		if ( $isStoredOrganizer ) {
@@ -1059,12 +1059,11 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 		// Mock central user lookup for author check
 		$centralLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		if ( $isLoggedIn ) {
-			$centralUser = $this->createMock( CentralUser::class );
-			$centralUser->method( 'getCentralID' )->willReturn( $isAuthor ? 123 : 555 );
-			$centralLookup->method( 'newFromAuthority' )->willReturn( $centralUser );
+			$centralLookup->method( 'newFromAuthority' )
+				->willReturn( new CentralUser( $isAuthor ? $authorCentralID : 555 ) );
 		} else {
 			$centralLookup->method( 'newFromAuthority' )
-				->willThrowException( new UserNotGlobalException( 123 ) );
+				->willThrowException( new UserNotGlobalException( $authorCentralID ) );
 		}
 
 		$permissionsLookup = $this->makePermLookup( $isLoggedIn, self::ALL_RIGHTS, false );
@@ -1074,62 +1073,47 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$permissionsLookup,
 			$centralLookup,
 			$participantsStore );
-		$actual = $checker->userCanAddContribution( $performer, $event, 123 );
-			$isGood ? $this->assertStatusGood( $actual ) : $this->assertStatusNotGood( $actual );
-		if ( !$isGood ) {
+		$actual = $checker->userCanAddContribution( $performer, $event, $authorCentralID );
+		if ( $error !== null ) {
+			$this->assertStatusNotGood( $actual );
 			$this->assertStatusMessage( $error, $actual );
+		} else {
+			$this->assertStatusGood( $actual );
 		}
 	}
 
 	public static function provideCanAddContribution(): Generator {
 		foreach ( self::provideGenericEditPermissions() as $name => $case ) {
-			[
-				$baseExpected,
-				$isLoggedIn,
-				$isTemp,
-				$isBlocked,
-				$userRights,
-				$eventIsLocal,
-			] = $case;
-			$genericCase = $case;
-			array_shift( $genericCase );
-			$isStoredOrganizer = $case[6] ?? null;
-			yield $name . ', not author, not participant' => array_merge(
-				[
-					$isStoredOrganizer,
-					false,
-					false,
-					false,
-					$isLoggedIn ? 'campaignevents-event-contribution-not-participant'
-						: 'campaignevents-event-contribution-user-not-global'
-				], $genericCase );
-			yield $name . ', not author, is participant, ' => array_merge(
-				[
-					$isStoredOrganizer,
-					$baseExpected,
-					true,
-					false,
-					$isLoggedIn ? 'campaignevents-event-contribution-not-owner'
-						: 'campaignevents-event-contribution-user-not-global'
-				], $genericCase );
-			yield $name . ', is author, not participant' => array_merge(
-				[
-					$isStoredOrganizer,
-					false,
-					false,
-					true,
-					$isLoggedIn ? 'campaignevents-event-contribution-not-participant'
-						: 'campaignevents-event-contribution-user-not-global'
-				], $genericCase );
-			yield $name . ', is author, is participant' => array_merge(
-				[
-					$isStoredOrganizer,
-					$isLoggedIn,
-					true,
-					true,
-					$isLoggedIn ? null
-						: 'campaignevents-event-contribution-user-not-global'
-				], $genericCase );
+			$baseExpected = array_shift( $case );
+			$isLoggedIn = $case[0];
+			// Override error messages when user is not logged-in due to the additional check at the start of the method
+			$getFailureMsg = static fn ( ?string $baseMsg ): ?string => $isLoggedIn
+				? $baseMsg
+				: 'campaignevents-event-contribution-user-not-global';
+			yield $name . ', not author, not participant' => [
+				false,
+				false,
+				$getFailureMsg( 'campaignevents-event-contribution-not-participant' ),
+				...$case
+			];
+			yield $name . ', not author, is participant' => [
+				true,
+				false,
+				$baseExpected ? null : $getFailureMsg( 'campaignevents-event-contribution-not-owner' ),
+				...$case
+			];
+			yield $name . ', is author, not participant' => [
+				false,
+				true,
+				$getFailureMsg( 'campaignevents-event-contribution-not-participant' ),
+				...$case
+			];
+			yield $name . ', is author, is participant' => [
+				true,
+				true,
+				$getFailureMsg( null ),
+				...$case
+			];
 		}
 	}
 
