@@ -125,14 +125,13 @@ class EventContributionValidator {
 		}
 
 		// Get the central user ID for the revision author
-		$revisionAuthorCentralId = $this->centralUserLookup->newFromUserIdentity( $revisionAuthor )
-			->getCentralID();
+		$revisionAuthorCentralUser = $this->centralUserLookup->newFromUserIdentity( $revisionAuthor );
 
 		// Verify that the edit was made by the user making this API request, or an organizer
 		$userCanAddContribution = $this->permissionChecker->userCanAddContribution(
 			$performer,
 			$event,
-			$revisionAuthorCentralId
+			$revisionAuthorCentralUser
 		);
 		if ( !$userCanAddContribution->isOK() ) {
 			$this->exitWithStatus( $userCanAddContribution, 403 );
@@ -142,7 +141,7 @@ class EventContributionValidator {
 			'revisionId' => $revisionID,
 			'wiki' => $wikiID,
 			'eventId' => $event->getID(),
-			'userId' => $revisionAuthorCentralId,
+			'userId' => $revisionAuthorCentralUser->getCentralID(),
 		];
 		$associateEditJob = new EventContributionJob( $jobParams );
 		$this->jobQueueGroup->push( $associateEditJob );

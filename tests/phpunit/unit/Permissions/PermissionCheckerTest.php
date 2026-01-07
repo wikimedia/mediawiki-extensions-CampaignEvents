@@ -1073,7 +1073,7 @@ class PermissionCheckerTest extends MediaWikiUnitTestCase {
 			$permissionsLookup,
 			$centralLookup,
 			$participantsStore );
-		$actual = $checker->userCanAddContribution( $performer, $event, $authorCentralID );
+		$actual = $checker->userCanAddContribution( $performer, $event, new CentralUser( $authorCentralID ) );
 		if ( $error !== null ) {
 			$this->assertStatusNotGood( $actual );
 			$this->assertStatusMessage( $error, $actual );

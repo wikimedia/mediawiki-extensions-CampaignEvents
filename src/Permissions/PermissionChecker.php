@@ -234,23 +234,22 @@ class PermissionChecker {
 	public function userCanAddContribution(
 		Authority $performer,
 		ExistingEventRegistration $event,
-		int $contributionAuthorCentralId
+		CentralUser $contributionAuthor
 	): StatusValue {
 		try {
 			$performerCentralUser = $this->centralUserLookup->newFromAuthority( $performer );
-			$authorCentralUser = new CentralUser( $contributionAuthorCentralId );
 		} catch ( UserNotGlobalException ) {
 			return StatusValue::newFatal( 'campaignevents-event-contribution-user-not-global' );
 		}
 		$authorIsParticipant = $this->participantsStore->userParticipatesInEvent(
 			$event->getID(),
-			$authorCentralUser,
+			$contributionAuthor,
 			true
 		);
 		if ( !$authorIsParticipant ) {
 			return StatusValue::newFatal( 'campaignevents-event-contribution-not-participant' );
 		}
-		if ( $performerCentralUser->getCentralID() === $contributionAuthorCentralId ) {
+		if ( $performerCentralUser->equals( $contributionAuthor ) ) {
 			return StatusValue::newGood();
 		}
 
