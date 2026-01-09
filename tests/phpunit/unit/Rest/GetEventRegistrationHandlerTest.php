@@ -145,10 +145,9 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$handler = $this->newHandler( $eventLookup );
 		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
 
-		// TODO Check the type when the endpoint will accept it
 		$expected = array_diff_key(
 			$eventData,
-			[ 'type' => 1, 'timezone' => 1, 'tracking_tool_id' => 1, 'tracking_tool_event_id' => 1 ],
+			[ 'timezone' => 1, 'tracking_tool_id' => 1, 'tracking_tool_event_id' => 1 ],
 		);
 		$expected['timezone'] = $timezoneName;
 		$expected['tracking_tools'] = [
