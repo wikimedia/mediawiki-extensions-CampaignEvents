@@ -125,7 +125,9 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		// TODO Check the type when the endpoint will accept it
 		$expected = array_diff_key(
 			$eventData,
-			[ 'type' => 1, 'timezone' => 1, 'tracking_tool_id' => 1, 'tracking_tool_event_id' => 1 ]
+			[ 'type' => 1, 'timezone' => 1, 'tracking_tool_id' => 1, 'tracking_tool_event_id' => 1 ],
+			// XXX T410560
+			[ 'meeting_url' => 1, 'chat_url' => 1 ],
 		);
 		$expected['timezone'] = $timezoneName;
 		$expected['tracking_tools'] = [
