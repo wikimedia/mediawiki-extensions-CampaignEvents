@@ -59,7 +59,6 @@ class CampaignsUserMailerTest extends MediaWikiUnitTestCase {
 				MainConfigNames::EnableEmail => true,
 				MainConfigNames::EnableUserEmail => true,
 				MainConfigNames::UserEmailUseReplyTo => false,
-				MainConfigNames::EnableSpecialMute => false,
 			]
 		);
 		return new CampaignsUserMailer(

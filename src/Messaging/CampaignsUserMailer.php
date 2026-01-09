@@ -38,7 +38,6 @@ class CampaignsUserMailer {
 		MainConfigNames::EnableEmail,
 		MainConfigNames::EnableUserEmail,
 		MainConfigNames::UserEmailUseReplyTo,
-		MainConfigNames::EnableSpecialMute,
 	];
 
 	public function __construct(
@@ -148,8 +147,11 @@ class CampaignsUserMailer {
 		$body .= $this->contLangMsgFormatter->format(
 			MessageValue::new( 'campaignevents-email-footer', [ $from->name, $to->name, $eventPageURL ] )
 		);
-		if ( $this->options->get( MainConfigNames::EnableSpecialMute ) ) {
-			$body .= "\n" . $this->contLangMsgFormatter->format(
+
+		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
+			$muteLink = '(Special:Mute link)';
+		} else {
+			$muteLink = "\n" . $this->contLangMsgFormatter->format(
 				MessageValue::new(
 					'specialmute-email-footer',
 					[
@@ -159,6 +161,8 @@ class CampaignsUserMailer {
 				)
 			);
 		}
+		$body .= $muteLink;
+
 		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
 			$collaborationListLink = '(Collaboration list link)';
 		} else {
