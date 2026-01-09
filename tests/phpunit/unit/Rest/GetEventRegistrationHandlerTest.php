@@ -12,7 +12,14 @@ use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Organizers\Organizer;
+use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
+use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\GetEventRegistrationHandler;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
@@ -39,15 +46,31 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 	private const TRACKING_TOOL_USER_ID = 'some-tool';
 
 	private function newHandler(
-		?IEventLookup $eventLookup = null
+		?IEventLookup $eventLookup = null,
+		?PermissionChecker $permissionChecker = null,
+		?CampaignsCentralUserLookup $centralUserLookup = null,
+		?OrganizersStore $organizersStore = null,
+		?ParticipantsStore $participantStore = null,
 	): GetEventRegistrationHandler {
 		$trackingToolRegistry = $this->createMock( TrackingToolRegistry::class );
 		$trackingToolRegistry->method( 'getUserInfo' )
 			->with( self::TRACKING_TOOL_DB_ID )
 			->willReturn( [ 'user-id' => self::TRACKING_TOOL_USER_ID ] );
+		if ( !$permissionChecker ) {
+			$permissionChecker = $this->createMock( PermissionChecker::class );
+			$permissionChecker->method( 'userCanViewSensitiveEventData' )->willReturn( true );
+		}
+		if ( !$organizersStore ) {
+			$organizersStore = $this->createMock( OrganizersStore::class );
+			$organizersStore->method( 'getEventOrganizer' )->willReturn( $this->createMock( Organizer::class ) );
+		}
 		return new GetEventRegistrationHandler(
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$trackingToolRegistry,
+			$permissionChecker,
+			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
+			$organizersStore,
+			$participantStore ?? $this->createMock( ParticipantsStore::class ),
 		);
 	}
 
@@ -126,8 +149,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 		$expected = array_diff_key(
 			$eventData,
 			[ 'type' => 1, 'timezone' => 1, 'tracking_tool_id' => 1, 'tracking_tool_event_id' => 1 ],
-			// XXX T410560
-			[ 'meeting_url' => 1, 'chat_url' => 1 ],
 		);
 		$expected['timezone'] = $timezoneName;
 		$expected['tracking_tools'] = [
@@ -176,5 +197,141 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			);
 			$this->assertSame( 404, $e->getCode() );
 		}
+	}
+
+	/** @dataProvider provideRunSensitiveData */
+	public function testRun__sensitiveData(
+		bool $eventIsLocal,
+		bool $canViewSensitiveData,
+		bool $hasGlobalAccount,
+		bool $isOrganizer,
+		bool $isParticipant,
+		?string $dataValue,
+		bool $expectsResponseField,
+	) {
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'isOnLocalWiki' )->willReturn( $eventIsLocal );
+		$event->method( 'getMeetingURL' )->willReturn( $dataValue );
+		$event->method( 'getChatURL' )->willReturn( $dataValue );
+		$eventLookup = $this->createMock( IEventLookup::class );
+		$eventLookup->expects( $this->atLeastOnce() )->method( 'getEventByID' )->willReturn( $event );
+
+		$permissionChecker = $this->createMock( PermissionChecker::class );
+		$permissionChecker->method( 'userCanViewSensitiveEventData' )->willReturn( $canViewSensitiveData );
+
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		if ( $hasGlobalAccount ) {
+			$centralUserLookup->method( 'newFromAuthority' )->willReturn( new CentralUser( 234 ) );
+		} else {
+			$centralUserLookup->method( 'newFromAuthority' )->willThrowException( new UserNotGlobalException( 234 ) );
+		}
+
+		$organizersStore = $this->createMock( OrganizersStore::class );
+		$organizersStore->method( 'getEventOrganizer' )
+			->willReturn( $isOrganizer ? $this->createMock( Organizer::class ) : null );
+
+		$participantsStore = $this->createMock( ParticipantsStore::class );
+		$participantsStore->method( 'userParticipatesInEvent' )->willReturn( $isParticipant );
+
+		$handler = $this->newHandler(
+			$eventLookup,
+			$permissionChecker,
+			$centralUserLookup,
+			$organizersStore,
+			$participantsStore
+		);
+		$respData = $this->executeHandlerAndGetBodyData( $handler, new RequestData( self::REQ_DATA ) );
+
+		if ( $expectsResponseField ) {
+			$this->assertArrayHasKey( 'meeting_url', $respData );
+			$this->assertSame( $dataValue, $respData['meeting_url'], 'Meeting URL' );
+			$this->assertArrayHasKey( 'chat_url', $respData );
+			$this->assertSame( $dataValue, $respData['chat_url'], 'Chat URL' );
+		} else {
+			$this->assertArrayNotHasKey( 'meeting_url', $respData );
+			$this->assertArrayNotHasKey( 'chat_url', $respData );
+		}
+	}
+
+	public static function provideRunSensitiveData() {
+		$localEvent = $canViewSensitiveData = $hasGlobalAccount = true;
+		$foreignEvent = $cannotViewSensitiveData = $doesNotHaveGlobalAccount = false;
+		$isOrganizer = $isParticipant = true;
+		$isNotOrganizer = $isNotParticipant = false;
+		$setValue = 'some-random-value';
+		$unsetValue = null;
+
+		yield 'Event not local' => [
+			$foreignEvent,
+			$canViewSensitiveData,
+			$hasGlobalAccount,
+			$isOrganizer,
+			$isParticipant,
+			$setValue,
+			false
+		];
+		yield 'User cannot view sensitive data' => [
+			$localEvent,
+			$cannotViewSensitiveData,
+			$hasGlobalAccount,
+			$isOrganizer,
+			$isParticipant,
+			$setValue,
+			false
+		];
+		yield 'User does not have global account' => [
+			$localEvent,
+			$canViewSensitiveData,
+			$doesNotHaveGlobalAccount,
+			$isOrganizer,
+			$isParticipant,
+			$setValue,
+			false
+		];
+		yield 'User is neither participant nor organizer' => [
+			$localEvent,
+			$canViewSensitiveData,
+			$hasGlobalAccount,
+			$isNotOrganizer,
+			$isNotParticipant,
+			$setValue,
+			false
+		];
+		yield 'User is participant but not organizer' => [
+			$localEvent,
+			$canViewSensitiveData,
+			$hasGlobalAccount,
+			$isNotOrganizer,
+			$isParticipant,
+			$setValue,
+			true
+		];
+		yield 'User is organizer but not participant' => [
+			$localEvent,
+			$canViewSensitiveData,
+			$hasGlobalAccount,
+			$isOrganizer,
+			$isNotParticipant,
+			$setValue,
+			true
+		];
+		yield 'User is participant and organizer' => [
+			$localEvent,
+			$canViewSensitiveData,
+			$hasGlobalAccount,
+			$isOrganizer,
+			$isParticipant,
+			$setValue,
+			true
+		];
+		yield 'User is participant and organizer, sensitive data not set' => [
+			$localEvent,
+			$canViewSensitiveData,
+			$hasGlobalAccount,
+			$isOrganizer,
+			$isParticipant,
+			$unsetValue,
+			true
+		];
 	}
 }
