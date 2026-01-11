@@ -3,7 +3,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
-use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
@@ -16,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
+use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Pager\IndexPager;
 use MediaWiki\Pager\ReverseChronologicalPager;
 use MediaWiki\User\Options\UserOptionsLookup;

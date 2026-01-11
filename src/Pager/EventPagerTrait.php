@@ -3,10 +3,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
-use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\WikiMap\WikiMap;
 use stdClass;
 use Wikimedia\Rdbms\IExpression;
