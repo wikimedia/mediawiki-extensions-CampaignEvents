@@ -1,8 +1,8 @@
 ( function () {
 	'use strict';
 
-	// Check if we should run at all
-	if ( !mw.user.isNamed() ) {
+	// eslint-disable-next-line no-jquery/no-global-selector
+	if ( !mw.user.isNamed() || !$( '.ext-campaignevents-contributions-table' ).length ) {
 		return;
 	}
 
