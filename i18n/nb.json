@@ -77,7 +77,7 @@
 	"campaignevents-edit-field-chat-url": "Invitasjon til gruppechat",
 	"campaignevents-edit-field-chat-url-help": "Hvis du har en chattegruppe for deltakerne i dette arrengementet kan du legge til en invitasjonslenke her. Deltakerne vil kunne se invitasjonslenka etter at de har registrert seg.",
 	"campaignevents-edit-form-questions-label": "Spørsmål til deltakerne",
-	"campaignevents-edit-form-questions-intro": "Velg om noen av følgende spørsmål skal stiles til deltakerne når de melder seg på arrangementet.",
+	"campaignevents-edit-form-questions-intro": "Velg om noen av følgende spørsmål skal stilles til deltakerne når de melder seg på arrangementet.",
 	"campaignevents-edit-form-questions-explanation": "I løpet av arrangementet kan du få tilgang til individuelle deltakeres spørsmål som ikke inkluderer identifiserbar informasjon. Etter at arrangementet er over vil svarene på alle spørsmålene (i aggregert form) være tilgjengelige, og individuelle svar blir slettet.",
 	"campaignevents-edit-form-questions-non-pii-label": "Spørsmål som ikke inneholder personlig identifiserbar informasjon",
 	"campaignevents-edit-form-questions-pii-label": "Spørsmål med personlig identifiserbar informasjon",
