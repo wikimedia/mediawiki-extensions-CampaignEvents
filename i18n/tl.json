@@ -1,0 +1,38 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chlod"
+		]
+	},
+	"campaignevents-desc": "Nagbibigay ng mga kagamitan para sa mga tagapag-organisa at kalahok ng kampanya.",
+	"nstab-event": "Kaganapan",
+	"group-event-organizer": "Mga tagapag-ayos ng kaganapan",
+	"group-event-organizer-member": "{{GENDER:$1|tagapag-ayos ng kaganapan}}",
+	"grouppage-event-organizer": "{{ns:project}}:Tagapag-ayos ng kaganapan",
+	"action-campaignevents-enable-registration": "paganahin ang pagpaparehistro ng mga kaganapan",
+	"right-campaignevents-enable-registration": "Paganahin ang pagpaparehistro ng mga kaganapan",
+	"action-campaignevents-delete-registration": "burahin ang rehistrasyon ng mga kaganapan",
+	"right-campaignevents-delete-registration": "Burahin ang rehistrasyon ng mga kaganapan",
+	"action-campaignevents-organize-events": "mag-organisa ng mga kaganapan",
+	"right-campaignevents-organize-events": "Mag-organisa ng mga kaganapan",
+	"action-campaignevents-email-participants": "magsulat ng email para sa mga kalahok ng kaganapan",
+	"right-campaignevents-email-participants": "Magsulat ng email para sa mga kalahok ng kaganapan",
+	"action-campaignevents-view-private-participants": "tignan ang mga pribadong kalahok ng kaganapan",
+	"right-campaignevents-view-private-participants": "Tignan ang mga pribadong kalahok ng kaganapan",
+	"specialpages-group-campaignevents": "Mga kaganapan",
+	"campaignevents-error-invalid-id": "Ang ID ng mga kaganapan ay dapat isang positibong integer.",
+	"campaignevents-error-empty-title": "Maglagay ng pamagat ng pahina ng kaganapan.",
+	"campaignevents-error-invalid-title": "Hindi ito tanggap na pamagat ng pahina ng kaganapan: $1",
+	"campaignevents-error-invalid-title-interwiki": "Tumukoy ng pahina ng kaganapan sa lokal na wiki.",
+	"campaignevents-error-page-not-found": "Walang pahina ng kaganapan ang may ganitong pamagat.",
+	"campaignevents-error-page-namespace-not-allowed": "Ang pahina ng kaganapan ay dapat nasa isa sa mga pinapayagang namespace",
+	"campaignevents-error-page-with-section": "Hindi dapat maglaman ng pangalan ng bahagi ang pahina ng kaganapan.",
+	"campaignevents-error-invalid-status": "Ipakita kung bukas o sarado and kaganapan.",
+	"campaignevents-error-invalid-timezone": "Maglagay ng wastong timezone.",
+	"campaignevents-error-empty-start": "Pumili ng oras ng pagsisimula.",
+	"campaignevents-error-invalid-start": "Hindi tanggap ang oras ng pagsisimula ng kaganapang ito.",
+	"campaignevents-error-start-past": "Maglagay ng oras ng pagsisimula na nasa hinaharap.",
+	"campaignevents-error-empty-end": "Maglagay ng oras ng pagtatapos.",
+	"campaignevents-error-invalid-end": "Hindi tanggap ang oras ng pagtatapos ng kaganapang ito.",
+	"campaignevents-error-start-after-end": "Maglagay ng petsa ng pagtatapos na kasunod ng petsa ng pagsisimula."
+}
