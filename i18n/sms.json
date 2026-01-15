@@ -21,7 +21,10 @@
 	"campaignevents-event-details-participants": "Õõʹnninõmm",
 	"campaignevents-event-details-remove-participant-remove-btn": "Jaukkâd",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Jõõsk",
+	"campaignevents-event-details-tab-contributions": "Muttâz",
 	"campaignevents-event-details-organizers-view-more": "Čuäʹjet lââʹzz",
 	"campaignevents-userlink-deleted-user": "jaukkuum õõʹnni",
-	"campaignevents-myinvitationslist-new-button": "Ođđ"
+	"campaignevents-event-details-contributions-table-caption": "Muttâz",
+	"campaignevents-myinvitationslist-new-button": "Ođđ",
+	"campaignevents-eventtypegroup-contributions": "Muttâz"
 }

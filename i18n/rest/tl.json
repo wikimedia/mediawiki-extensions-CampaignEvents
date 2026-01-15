@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chlod"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Walang kaganapan na gamit ang ID na ito.",
+	"campaignevents-rest-enable-registration-permission-denied": "Hindi ka pinapayagang paganahin ang pagpaparehistro ng mga kaganapan.",
+	"campaignevents-rest-edit-page-nonlocal": "Ang pagpaparehistro ng kaganapang ito ay pinagana sa sumusunod na wiki at dapat itong baguhin doon: $1 .",
+	"campaignevents-rest-delete-already-deleted": "Nabura na ang pagpaparehistro ng kaganapang ito.",
+	"campaignevents-rest-user-not-found": "Walang tagagamit na may ganitong sentral na ID.",
+	"campaignevents-rest-get-registration-deleted": "Binura na ang pagpaparehistro ng kaganapang ito."
+}

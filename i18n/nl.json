@@ -52,7 +52,7 @@
 	"campaignevents-error-invalid-wikis": "De volgende wiki-ID's worden niet herkend: $1.",
 	"campaignevents-error-too-many-topics": "Voer maximaal {{PLURAL:$1|één onderwerp|$1 onderwerpen}} in.",
 	"campaignevents-error-invalid-topics": "De volgende onderwerpen worden niet herkend: $1.",
-	"campaignevents-error-trackingtool-without-eventid": "Geef de ID van de gebeurtenis op de opgegeven trackingtool op.",
+	"campaignevents-error-trackingtool-without-eventid": "Geef de ID van het evenement op de opgegeven trackingtool op.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Geef de ID van de trackingtool op",
 	"campaignevents-error-invalid-trackingtool": "Geef een geldige trackingtool-ID op",
 	"campaignevents-error-invalid-dashboard-url": "De verstrekte dashboard-URL heeft niet de juiste indeling. De URL moet als volgt zijn ingedeeld: $1/[Naam instelling]/[Programmatitel]. Bijvoorbeeld: $1/Naam_voorbeeldorganisatie/Voorbeeldtitel_evenement.",
