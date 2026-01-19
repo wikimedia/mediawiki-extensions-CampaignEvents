@@ -16,18 +16,20 @@ module.exports = exports = defineComponent( {
 	components: { EditAssociationDialog },
 	setup() {
 		const isOpen = ref( true );
+		let revisionID = mw.config.get( 'wgRevisionId' );
 
 		mw.hook( 'postEdit' ).add( () => {
 			// Open the dialog after each edit (e.g., in case of consecutive
 			// VE edits without reloading the page)
 			isOpen.value = true;
+			// Refresh revision ID
+			revisionID = mw.config.get( 'wgRevisionId' );
 		} );
 
 		function onAssociateEdit( eventID ) {
-			const curWikiID = mw.config.get( 'wgDBname' ),
-				revID = mw.config.get( 'wgRevisionId' );
+			const curWikiID = mw.config.get( 'wgDBname' );
 			new mw.Rest().put(
-				`/campaignevents/v0/event_registration/${ eventID }/edits/${ curWikiID }/${ revID }`,
+				`/campaignevents/v0/event_registration/${ eventID }/edits/${ curWikiID }/${ revisionID }`,
 				{ token: mw.user.tokens.get( 'csrfToken' ) }
 			);
 			isOpen.value = false;
