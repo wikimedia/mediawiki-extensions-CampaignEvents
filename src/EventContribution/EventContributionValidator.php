@@ -116,6 +116,14 @@ class EventContributionValidator {
 		// Verify that the edit was made by the user making this API request, or the event organiser
 		$revisionAuthor = $revision->getUser();
 
+		if ( !$revisionAuthor ) {
+			// Deleted user, see T412063
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-event-contribution-edit-deleted' ),
+				404
+			);
+		}
+
 		// Get the central user ID for the revision author
 		$revisionAuthorCentralId = $this->centralUserLookup->newFromUserIdentity( $revisionAuthor )
 			->getCentralID();

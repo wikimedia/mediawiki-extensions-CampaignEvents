@@ -263,6 +263,30 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
 	}
 
+	public function testValidateAndSchedule__deletedAuthor(): void {
+		$eventID = 12345;
+		$wikiID = 'awiki';
+		$revID = 54321;
+
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getID' )->willReturn( $eventID );
+		$event->method( 'getDeletionTimestamp' )->willReturn( null );
+		$event->method( 'isOngoing' )->willReturn( true );
+		$event->method( 'hasContributionTracking' )->willReturn( true );
+		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+		$rev = $this->createMock( RevisionRecord::class );
+		$rev->expects( $this->atLeastOnce() )->method( 'getUser' )->willReturn( null );
+
+		$revisionStore = $this->createMock( RevisionStore::class );
+		$revisionStore->method( 'getRevisionById' )->with( $revID )->willReturn( $rev );
+		$this->revisionStoreFactory->method( 'getRevisionStore' )->willReturn( $revisionStore );
+
+		$this->expectException( LocalizedHttpException::class );
+		$this->expectExceptionMessage( 'campaignevents-event-contribution-edit-deleted' );
+
+		$this->validator->validateAndSchedule( $event, $revID, $wikiID, $this->performer );
+	}
+
 	public function testValidateAndScheduleOrganizerNotAuthor(): void {
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );

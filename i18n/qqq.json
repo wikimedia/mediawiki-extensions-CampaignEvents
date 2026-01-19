@@ -578,6 +578,7 @@
 	"campaignevents-event-contribution-user-not-global": "Error message shown when a user is not a global user in the event contribution API",
 	"campaignevents-event-contribution-already-associated": "Error message shown when the user tries to associate an edit with an event, but that edit is already associated with a different event",
 	"campaignevents-event-contribution-revision-not-found": "Error message shown when the specified revision ID does not exist in the event contribution API",
+	"campaignevents-event-contribution-edit-deleted": "This edit has been deleted and cannot be associated with the event.",
 	"campaignevents-event-contribution-not-owner": "Error message shown when trying to associate an edit that was not made by the current user",
 	"campaignevents-event-contribution-tracking-disabled": "Error message shown when trying to associate an edit with an event that has contribution tracking disabled",
 	"campaignevents-event-contribution-event-deleted": "Error message shown when the specified event was deleted, in the event contribution API",

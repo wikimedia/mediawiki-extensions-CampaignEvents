@@ -571,6 +571,7 @@
 	"campaignevents-event-contribution-user-not-global": "User is not a global user",
 	"campaignevents-event-contribution-already-associated": "An edit can only be associated with one event.",
 	"campaignevents-event-contribution-revision-not-found": "Revision not found",
+	"campaignevents-event-contribution-edit-deleted": "This edit has been deleted and cannot be associated with the event.",
 	"campaignevents-event-contribution-not-owner": "Add an edit that you did only.",
 	"campaignevents-event-contribution-tracking-disabled": "Contribution tracking is not enabled for this event",
 	"campaignevents-event-contribution-event-deleted": "Event has been deleted",
