@@ -26,6 +26,17 @@ module.exports = exports = defineComponent( {
 			revisionID = mw.config.get( 'wgRevisionId' );
 		} );
 
+		// Wikibase edits do not fire the postEdit hook, see T344984.
+		// So, implement partial handling here (T411829).
+		mw.hook( 'wikibase.statement.saved' ).add( ( entityID, guid, oldStatement, savedStatement, newRevID ) => {
+			isOpen.value = true;
+			revisionID = newRevID;
+		} );
+		mw.hook( 'wikibase.statement.removed' ).add( ( entityID, guid, newRevID ) => {
+			isOpen.value = true;
+			revisionID = newRevID;
+		} );
+
 		function onAssociateEdit( eventID ) {
 			const curWikiID = mw.config.get( 'wgDBname' );
 			new mw.Rest().put(

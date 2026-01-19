@@ -21,8 +21,8 @@
 		// guarantees that there is at least one event.
 		mountApp();
 	} else {
-		// Module loaded as a VE plugin (or potentially manually). Mount the app after the
-		// actual edit, lazy-loading the list of events...
+		// Module loaded as a VE plugin (or potentially manually, e.g. for Wikibase). Mount the app
+		// after the actual edit, lazy-loading the list of events...
 		// Not in the NS_EVENT namespace, though (T406672)
 		if ( mw.config.get( 'wgNamespaceNumber' ) === 1728 ) {
 			return;
@@ -35,7 +35,11 @@
 			}
 			// Remove the handler to make sure we only mount the app once.
 			mw.hook( 'postEdit' ).remove( lazyMount );
+			mw.hook( 'wikibase.statement.saved' ).remove( lazyMount );
+			mw.hook( 'wikibase.statement.removed' ).remove( lazyMount );
 		};
 		mw.hook( 'postEdit' ).add( lazyMount );
+		mw.hook( 'wikibase.statement.saved' ).add( lazyMount );
+		mw.hook( 'wikibase.statement.removed' ).add( lazyMount );
 	}
 }() );

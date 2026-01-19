@@ -14,6 +14,7 @@ $cfg['directory_list'] = array_merge(
 		'../../extensions/CommunityConfiguration',
 		'../../extensions/cldr',
 		'../../extensions/UserMerge',
+		'../../extensions/Wikibase',
 	]
 );
 
@@ -27,6 +28,7 @@ $cfg['exclude_analysis_directory_list'] = array_merge(
 		'../../extensions/CommunityConfiguration',
 		'../../extensions/cldr',
 		'../../extensions/UserMerge',
+		'../../extensions/Wikibase',
 	]
 );
 

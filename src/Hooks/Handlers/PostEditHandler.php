@@ -9,6 +9,8 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Registration\ExtensionRegistry;
+use Wikibase\Repo\WikibaseRepo;
 
 /**
  * Handler used to set up a JavaScript modal shown after edits, where users can choose to associate
@@ -31,6 +33,11 @@ class PostEditHandler implements BeforePageDisplayHook {
 		}
 
 		if ( !self::isPostEditReload( $out ) ) {
+			if ( self::isWikibaseEntityPage( $out ) ) {
+				// Load the module on page view, without including events for performance. Those will be
+				// lazy-loaded on the client side.
+				$out->addModules( 'ext.campaignEvents.postEdit' );
+			}
 			return;
 		}
 
@@ -74,5 +81,12 @@ class PostEditHandler implements BeforePageDisplayHook {
 
 		$request = $out->getRequest();
 		return $request->getCheck( 'venotify' ) || $request->getCheck( 'mfnotify' );
+	}
+
+	private static function isWikibaseEntityPage( OutputPage $out ): bool {
+		if ( !ExtensionRegistry::getInstance()->isLoaded( 'WikibaseRepository' ) ) {
+			return false;
+		}
+		return WikibaseRepo::getEntityNamespaceLookup()->isEntityNamespace( $out->getTitle()->getNamespace() );
 	}
 }
