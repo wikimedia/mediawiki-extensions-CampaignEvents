@@ -1,9 +1,15 @@
 @import 'mediawiki.skin.variables.less';
 
+// Allow breaking long usernames and article titles, but don't break right after the icon
 .ext-campaignevents-contributions-table {
-	.mw-userlink,
-	td.cdx-table-pager__col--article a {
-		overflow-wrap: anywhere;
+	td.cdx-table-pager__col--username,
+	td.cdx-table-pager__col--article {
+		white-space: nowrap;
+
+		a {
+			overflow-wrap: anywhere;
+			white-space: normal;
+		}
 	}
 }
 
@@ -47,14 +53,5 @@
 		.cdx-message {
 			padding-top: @spacing-75;
 		}
-	}
-}
-
-// added to prevent linebreak of the username and the icon
-.campaignevents-event-details-contributions-username-wrapper {
-	white-space: nowrap;
-
-	> a {
-		white-space: normal;
 	}
 }
