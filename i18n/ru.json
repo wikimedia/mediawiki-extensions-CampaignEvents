@@ -16,7 +16,8 @@
 			"Elzav",
 			"Kaganer",
 			"EneshTranslates",
-			"Putnik"
+			"Putnik",
+			"Shabe"
 		]
 	},
 	"campaignevents-desc": "Предоставляет функционал для организаторов кампаний и участников.",
@@ -410,6 +411,7 @@
 	"campaignevents-invitationlist-highly-recommended": "Настоятельно рекомендуется пригласить",
 	"campaignevents-invitationlist-recommended": "Рекомендуется пригласить",
 	"campaignevents-invitationlist-worklist-label": "Посмотреть список статей",
+	"campaignevents-invitationlist-preference": "Включать меня в [[mw:Help:Extension:CampaignEvents/Invitation_lists/ru|списки приглашённых]].",
 	"prefs-campaignevents-invitations": "Список приглашений",
 	"campaignevents-eventpage-btn-collaboration-list": "Найти больше мероприятий",
 	"campaignevents-allevents-label-filter-wikis": "Вики-сайты",
