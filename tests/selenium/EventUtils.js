@@ -24,9 +24,9 @@ const EventUtils = {
 	 */
 	async createOrganizerAccount( username, password = this.organizerPassword ) {
 		try {
-			const adminBot = await Api.mwbot();
-			await Api.createAccount( adminBot, username, password );
-			await Api.addUserToGroup( adminBot, username, 'event-organizer' );
+			const adminBot = await Api.createApiClient();
+			await adminBot.createAccount( username, password );
+			await adminBot.addUserToGroup( username, 'event-organizer' );
 		} catch ( error ) {
 			console.error( 'Full error:', error );
 
@@ -68,7 +68,10 @@ const EventUtils = {
 	 * @param {string} title
 	 */
 	async createEventPage( title ) {
-		const bot = await Api.mwbot( this.organizerName, this.organizerPassword );
+		const bot = await Api.createApiClient( {
+			username: this.organizerName,
+			password: this.organizerPassword
+		} );
 		await bot.edit(
 			title,
 			'Selenium test page (createEventPage)',

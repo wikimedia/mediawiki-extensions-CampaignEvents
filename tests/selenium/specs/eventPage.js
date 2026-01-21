@@ -1,5 +1,5 @@
 import LoginPage from 'wdio-mediawiki/LoginPage';
-import { mwbot, createAccount } from 'wdio-mediawiki/Api';
+import { createApiClient } from 'wdio-mediawiki/Api';
 import * as Util from 'wdio-mediawiki/Util';
 import EventPage from '../pageobjects/event.page.js';
 import EventUtils from '../EventUtils.js';
@@ -14,8 +14,8 @@ describe( 'Event page', () => {
 
 	async function loginWithNewAccount( userName ) {
 		const password = 'aaaaaaaaa!';
-		const bot = await mwbot();
-		await createAccount( bot, userName, password );
+		const bot = await createApiClient();
+		await bot.createAccount( userName, password );
 		await LoginPage.login( userName, password );
 	}
 
