@@ -11,9 +11,6 @@
 		"MediaWiki": ">= 1.46",
 		"extensions": {
 			"cldr": "*"
-		},
-		"platform": {
-			"php": ">8.1.7"
 		}
 	},
 	"attributes": {
