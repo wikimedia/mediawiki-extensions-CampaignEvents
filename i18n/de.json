@@ -286,7 +286,7 @@
 	"campaignevents-event-details-no-organizer-email": "Um Teilnehmern Nachrichten senden zu können, benötigst du eine E-Mail-Adresse in deinem Konto. [[Special:ChangeEmail|E-Mail-Adresse hinzufügen]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Entferne {{PLURAL:$1|Teilnehmer}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Bist du sicher, dass du {{PLURAL:$1|den ausgewählten Teilnehmer|die ausgewählten Teilnehmer}} entfernen möchtest?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Löschen",
+	"campaignevents-event-details-remove-participant-remove-btn": "Entfernen",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Abbrechen",
 	"campaignevents-event-details-private-participant-label": "{{GENDER:$1|Teilnehmer privat registriert|Teilnehmerin privat registriert}}",
 	"campaignevents-event-details-no-event-id-provided": "Gib eine Veranstaltungs-ID an",
