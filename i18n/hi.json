@@ -21,6 +21,8 @@
 	"right-campaignevents-email-participants": "कार्यक्रम के प्रतिभागियों को ईमेल भेजना",
 	"action-campaignevents-view-private-participants": "कार्यक्रम के गोपनीय प्रतिभागी देखने",
 	"right-campaignevents-view-private-participants": "कार्यक्रम के गोपनीय प्रतिभागी देखना",
+	"action-campaignevents-generate-invitation-lists": "आमंत्रण सूचियाँ उत्पन्न करने",
+	"right-campaignevents-generate-invitation-lists": "आमंत्रण सूचियाँ उत्पन्न करना",
 	"specialpages-group-campaignevents": "कार्यक्रम",
 	"campaignevents-error-invalid-id": "कार्यक्रम ID एक धनात्मक पूर्णांक होनी चाहिए।",
 	"campaignevents-error-empty-title": "कार्यक्रम के पृष्ठ का शीर्षक दर्ज करें।",

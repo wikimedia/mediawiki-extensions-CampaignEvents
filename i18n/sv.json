@@ -252,7 +252,7 @@
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 av $2 {{PLURAL:$1|vald|valda}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Ta bort {{PLURAL:$1|deltagare}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Är du säker på att du vill ta bort {{PLURAL:$1|den valda deltagaren|de valda deltagarna}}?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Radera",
+	"campaignevents-event-details-remove-participant-remove-btn": "Ta bort",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Avbryt",
 	"campaignevents-event-details-no-event-id-provided": "Erbjud ett evenemangs-ID",
 	"campaignevents-event-details-no-participants-state": "Deltagarnas användarnamn kommer visas här när de registrerat sig",

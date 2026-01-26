@@ -570,6 +570,7 @@
 	"campaignevents-event-contribution-user-not-global": "O usuario non é un usuario global",
 	"campaignevents-event-contribution-already-associated": "Unha edición só pode estar asociada a un evento.",
 	"campaignevents-event-contribution-revision-not-found": "Non se atopou a revisión",
+	"campaignevents-event-contribution-edit-deleted": "Esta edición foi eliminada e non se pode asociar ao evento.",
 	"campaignevents-event-contribution-not-owner": "Engade unha edición que fixeses ti.",
 	"campaignevents-event-contribution-tracking-disabled": "O seguimento das contribucións non está activado para este evento",
 	"campaignevents-event-contribution-event-deleted": "Eliminouse o evento",

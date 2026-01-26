@@ -132,7 +132,7 @@
 	"campaignevents-event-details-message-all": "Управљање учесницима",
 	"campaignevents-event-details-message-participants": "Порука учесницима",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 од $2 {{PLURAL:$1|изабрано}}",
-	"campaignevents-event-details-remove-participant-remove-btn": "Обриши",
+	"campaignevents-event-details-remove-participant-remove-btn": "Уклони",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Откажи",
 	"campaignevents-event-details-no-event-id-provided": "Није наведен ID догађаја",
 	"campaignevents-event-details-event": "Детаљи догађаја: $1",

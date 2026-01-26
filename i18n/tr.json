@@ -213,7 +213,7 @@
 	"campaignevents-event-details-participants-checkboxes-selected": "$2 katılımcıdan $1 tanesi {{PLURAL:$1|seçildi}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|Katılımcıyı|Katılımcıları}} kaldır",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Seçilen {{PLURAL:$1|katılımcıyı|katılımcıları}} kaldırmak istediğinizden emin misiniz?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Sil",
+	"campaignevents-event-details-remove-participant-remove-btn": "Kaldır",
 	"campaignevents-event-details-remove-participant-cancel-btn": "İptal",
 	"campaignevents-event-details-private-participant-label": "{{GENDER:$1|Katılımcı}} özel olarak kaydoldu",
 	"campaignevents-event-details-no-event-id-provided": "Bir etkinlik kimliği sağlayın",

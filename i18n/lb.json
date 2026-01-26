@@ -267,7 +267,7 @@
 	"campaignevents-event-details-no-organizer-email": "Fir e Message u Participanten ze schécke braucht Dir eng E-Mail-Adress an Ärem Kont. [[Special:ChangeEmail|E-Mail-Adress derbäisetzen]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|Participant|Participanten}} ewechhuelen",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Sidd Dir sécher, datt Dir {{PLURAL:$1|deen ausgewielte Participant|déi ausgewielte Participanten}} ewechhuele wëllt?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Läschen",
+	"campaignevents-event-details-remove-participant-remove-btn": "Ewechhuelen",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Ofbriechen",
 	"campaignevents-event-details-private-participant-label": "{{GENDER:$1|Participant|Participante}} privat ugemellt",
 	"campaignevents-event-details-no-event-id-provided": "Gitt eng Evenement-ID un",

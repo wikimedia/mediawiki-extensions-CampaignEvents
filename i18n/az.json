@@ -563,6 +563,7 @@
 	"campaignevents-event-contribution-user-not-global": "İstifadəçi qlobal istifadəçi deyil",
 	"campaignevents-event-contribution-already-associated": "Redaktə yalnız bir tədbir ilə əlaqələndirilə bilər.",
 	"campaignevents-event-contribution-revision-not-found": "Versiya tapılmadı",
+	"campaignevents-event-contribution-edit-deleted": "Bu redaktə silinib və tədbir ilə əlaqələndirilə bilməz.",
 	"campaignevents-event-contribution-not-owner": "Yalnız öz redaktənizi əlavə edin.",
 	"campaignevents-event-contribution-tracking-disabled": "Bu tədbir üçün töhfələrin izlənməsi aktiv deyil",
 	"campaignevents-event-contribution-event-deleted": "Tədbir silindi",

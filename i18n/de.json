@@ -564,6 +564,7 @@
 	"campaignevents-event-contribution-user-not-global": "Der Benutzer ist kein globaler Benutzer",
 	"campaignevents-event-contribution-already-associated": "Eine Bearbeitung kann nur mit einer Veranstaltung verknüpft werden.",
 	"campaignevents-event-contribution-revision-not-found": "Version nicht gefunden",
+	"campaignevents-event-contribution-edit-deleted": "Diese Bearbeitung wurde gelöscht und kann nicht mit der Veranstaltung in Verbindung gebracht werden.",
 	"campaignevents-event-contribution-not-owner": "Füge eine Bearbeitung hinzu, die nur du vorgenommen hast.",
 	"campaignevents-event-contribution-tracking-disabled": "Die Beitragsverfolgung ist für diese Veranstaltung nicht aktiviert",
 	"campaignevents-event-contribution-event-deleted": "Die Veranstaltung wurde gelöscht",

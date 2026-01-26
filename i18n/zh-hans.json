@@ -581,6 +581,7 @@
 	"campaignevents-event-contribution-user-not-global": "用户不是全域用户",
 	"campaignevents-event-contribution-already-associated": "一次编辑只能关联一个活动。",
 	"campaignevents-event-contribution-revision-not-found": "未找到修订",
+	"campaignevents-event-contribution-edit-deleted": "此编辑已被删除，无法与该活动关联。",
 	"campaignevents-event-contribution-not-owner": "添加一个仅由你进行的编辑。",
 	"campaignevents-event-contribution-tracking-disabled": "本次活动未启用捐款追踪功能",
 	"campaignevents-event-contribution-event-deleted": "活动已删除",
