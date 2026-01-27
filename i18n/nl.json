@@ -291,7 +291,7 @@
 	"campaignevents-event-details-no-organizer-email": "Om deelnemers een bericht te sturen hebt u een e-mailadres op uw account nodig. [[Special:ChangeEmail|E-mailadres toevoegen]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|Deelnemer|Deelnemers}} verwijderen",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Weet u zeker dat u de geselecteerde {{PLURAL:$1|deelnemer|deelnemers}} wilt verwijderen?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Verwijder",
+	"campaignevents-event-details-remove-participant-remove-btn": "Verwijderen",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Annuleer",
 	"campaignevents-event-details-private-participant-label": "{{GENDER:$1|}}Deelnemer privé geregistreerd",
 	"campaignevents-event-details-no-event-id-provided": "Geef een evenement-ID op",

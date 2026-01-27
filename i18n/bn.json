@@ -142,7 +142,7 @@
 	"campaignevents-event-details-message-participants": "অংশগ্রহণকারীদের বার্তা দিন",
 	"campaignevents-event-details-participants-checkboxes-selected": "$2টির মধ্যে $1টি {{PLURAL:$1|নির্বাচন করা হয়েছে}}",
 	"campaignevents-event-details-remove-participant-confirmation-title": "{{PLURAL:$1|অংশগ্রহণকারী}} সরান",
-	"campaignevents-event-details-remove-participant-remove-btn": "মুছুন",
+	"campaignevents-event-details-remove-participant-remove-btn": "সরান",
 	"campaignevents-event-details-remove-participant-cancel-btn": "বাতিল",
 	"campaignevents-event-details-private-participant-label": "{{GENDER:$1|অংশগ্রহণকারী}} ব্যক্তিগতভাবে নিবন্ধিত",
 	"campaignevents-event-details-dates-label": "শুরু ও সমাপ্তির সময়",
