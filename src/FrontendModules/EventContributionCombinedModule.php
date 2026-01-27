@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
+use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\RecentChanges\ChangesList;
@@ -18,6 +19,8 @@ use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
 readonly class EventContributionCombinedModule {
+
+	private TemplateParser $templateParser;
 
 	public function __construct(
 		private CampaignsCentralUserLookup $centralUserLookup,
@@ -30,13 +33,62 @@ readonly class EventContributionCombinedModule {
 		private ExistingEventRegistration $event,
 		private OutputPage $output,
 	) {
+		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 
 	public const EDITORS_MODULE = 'editors';
+	public const EDITS_MODULE = 'edits';
 
 	public function createContent(): Tag {
 		$container = $this->getContributionsSummaryModule();
+		$title = $this->output->getTitle();
+		$editorsLink = $title->getLinkURL(
+			[
+				'module' => self::EDITORS_MODULE,
+				'tab' => SpecialEventDetails::CONTRIBUTIONS_PANEL
+			]
+		);
+		$editsLink = $title->getLinkURL(
+			[
+				'module' => self::EDITS_MODULE,
+				'tab' => SpecialEventDetails::CONTRIBUTIONS_PANEL
+			]
+		);
 		$module = $this->output->getRequest()->getRawVal( 'module' );
+		$buttonContainer = ( new Tag() )->addClasses(
+			[ 'ext-campaignevents-eventdetails-contributions-button-container' ]
+		);
+		$editorsButton = $this->templateParser->processTemplate(
+			"FakeButton", [
+				"cssClass" => 'ext-campaignevents-eventdetails-contributions-editors-button ' .
+					'cdx-button--weight-primary' .
+					" " .
+					( $module === self::EDITORS_MODULE ? 'cdx-button--action-progressive'
+						: 'cdx-button--action-default' ),
+				"buttonText" => $this->output->msg(
+					'campaignevents-event-details-contribution-editors-button-label'
+				)->text(),
+				"href" => $editorsLink
+			]
+		);
+
+		$editsButton = $this->templateParser->processTemplate(
+			"FakeButton", [
+				"cssClass" => 'ext-campaignevents-eventdetails-contributions-edits-button cdx-button--weight-primary' .
+					" " .
+					( $module === self::EDITS_MODULE || $module === null ? 'cdx-button--action-progressive'
+						: 'cdx-button--action-default' ),
+				"buttonText" => $this->output->msg(
+					'campaignevents-event-details-contribution-edits-button-label'
+				)->text(),
+				"href" => $editsLink
+			]
+		);
+		$buttonContainer->appendContent( [
+			new HtmlSnippet( $editsButton ),
+			new HtmlSnippet( $editorsButton ),
+		] );
+		$container->appendContent( $buttonContainer );
 
 		if ( $module === self::EDITORS_MODULE ) {
 			$container->appendContent( $this->editorsModule->createContent() );
@@ -51,7 +103,6 @@ readonly class EventContributionCombinedModule {
 		$container = new Tag();
 		$eventId = $this->event->getID();
 		$currentUser = $this->output->getAuthority();
-		$templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $currentUser );
 			$participant = $this->participantsStore->getEventParticipant( $eventId, $centralUser, true );
@@ -130,10 +181,11 @@ readonly class EventContributionCombinedModule {
 					MessageValue::new( $messageKey )
 				)
 			];
-			$renderedNotice = $templateParser->processTemplate( 'Message', $notice );
+			$renderedNotice = $this->templateParser->processTemplate( 'Message', $notice );
 			$container->appendContent( new HtmlSnippet( $renderedNotice ) );
 		}
-		$renderedSummaryHtml = $templateParser->processTemplate( 'EventContributionsSummary', $templateData );
+		$renderedSummaryHtml = $this->templateParser->processTemplate( 'EventContributionsSummary', $templateData );
+
 		return $container->appendContent( new HtmlSnippet( $renderedSummaryHtml ) );
 	}
 
