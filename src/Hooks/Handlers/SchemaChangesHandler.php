@@ -124,5 +124,12 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-add-cep_hide_contribution_association_prompt.sql",
 			true
 		] );
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_event_goals',
+			"$dir/$dbType/patch-add-ce-event-goals.sql",
+			true
+		] );
 	}
 }

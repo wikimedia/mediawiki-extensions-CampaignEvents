@@ -1110,5 +1110,49 @@
 			}
 		],
 		"pk": [ "cec_id" ]
+	},
+	{
+		"name": "ce_event_goals",
+		"comment": "Stores goals associated with events.",
+		"columns": [
+			{
+				"name": "ceeg_id",
+				"type": "bigint",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"autoincrement": true
+				}
+			},
+			{
+				"name": "ceeg_event_id",
+				"comment": "Foreign key to campaign_events.event_id",
+				"type": "bigint",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "ceeg_goals",
+				"comment": "JSON blob containing multi-metric goals",
+				"type": "blob",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ceeg_event_id",
+				"columns": [
+					"ceeg_event_id"
+				],
+				"unique": false
+			}
+		],
+		"pk": [
+			"ceeg_id"
+		]
 	}
 ]

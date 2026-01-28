@@ -207,3 +207,12 @@ CREATE UNIQUE INDEX cec_wiki_revision ON /*_*/ce_event_contributions (cec_wiki, 
 CREATE INDEX cec_event_user ON /*_*/ce_event_contributions (cec_event_id, cec_user_id);
 
 CREATE INDEX cec_user_id_name ON /*_*/ce_event_contributions (cec_user_id, cec_user_name);
+
+
+CREATE TABLE /*_*/ce_event_goals (
+  ceeg_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceeg_event_id BIGINT UNSIGNED NOT NULL,
+  ceeg_goals BLOB NOT NULL
+);
+
+CREATE INDEX ceeg_event_id ON /*_*/ce_event_goals (ceeg_event_id);

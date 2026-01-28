@@ -213,3 +213,12 @@ CREATE TABLE /*_*/ce_event_contributions (
   INDEX cec_user_id_name (cec_user_id, cec_user_name),
   PRIMARY KEY(cec_id)
 ) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_event_goals (
+  ceeg_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceeg_event_id BIGINT UNSIGNED NOT NULL,
+  ceeg_goals LONGBLOB NOT NULL,
+  INDEX ceeg_event_id (ceeg_event_id),
+  PRIMARY KEY(ceeg_id)
+) /*$wgDBTableOptions*/;

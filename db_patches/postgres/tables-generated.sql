@@ -239,3 +239,13 @@ CREATE UNIQUE INDEX cec_wiki_revision ON ce_event_contributions (cec_wiki, cec_r
 CREATE INDEX cec_event_user ON ce_event_contributions (cec_event_id, cec_user_id);
 
 CREATE INDEX cec_user_id_name ON ce_event_contributions (cec_user_id, cec_user_name);
+
+
+CREATE TABLE ce_event_goals (
+  ceeg_id BIGSERIAL NOT NULL,
+  ceeg_event_id BIGINT NOT NULL,
+  ceeg_goals TEXT NOT NULL,
+  PRIMARY KEY(ceeg_id)
+);
+
+CREATE INDEX ceeg_event_id ON ce_event_goals (ceeg_event_id);

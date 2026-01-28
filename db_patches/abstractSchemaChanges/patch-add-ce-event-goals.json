@@ -1,0 +1,44 @@
+{
+	"before": {},
+	"after": {
+		"name": "ce_event_goals",
+		"columns": [
+			{
+				"name": "ceeg_id",
+				"type": "bigint",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"autoincrement": true
+				}
+			},
+			{
+				"name": "ceeg_event_id",
+				"type": "bigint",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "ceeg_goals",
+				"type": "blob",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ceeg_event_id",
+				"columns": [
+					"ceeg_event_id"
+				],
+				"unique": false
+			}
+		],
+		"pk": [
+			"ceeg_id"
+		]
+	}
+}
