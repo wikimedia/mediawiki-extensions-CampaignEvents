@@ -548,6 +548,7 @@
 	"campaignevents-allevents-label-upcoming-events-title": "Nadchodzące wydarzenia",
 	"campaignevents-allevents-label-upcoming-events-description": "Nadchodzące wydarzenia: Wydarzenia rozpoczynające się w wybranych datach",
 	"campaignevents-allevents-label-ongoing-events-title": "Wydarzenia trwające",
+	"campaignevents-allevents-label-ongoing-events-description": "Wydarzenia bieżące: Wydarzenia, które rozpoczynają się przed wybraną datą, ale trwają w czasie wybranego zakresu dat",
 	"campaignevents-allevents-transclusion-more-link": "Odkryj więcej wydarzeń i społeczności",
 	"communityconfiguration-campaignevents-description": "Opcje konfiguracji rozszerzenia CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Przestrzenie nazw gdzie można umieszczać strony wydarzeń",
