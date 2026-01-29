@@ -44,7 +44,19 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	private const CURWIKIID_PLACEHOLDER = '*curwiki*';
 
+	protected function setUp(): void {
+		parent::setUp();
+		$this->overrideConfigValue( 'CampaignEventsEnableEventGoals', true );
+	}
+
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
+		$goal = new EventGoal(
+			EventGoal::OPERATOR_AND,
+			[
+				new EventGoalMetric( EventGoalMetricType::TotalEdits, 100 ),
+				new EventGoalMetric( EventGoalMetricType::TotalBytesAdded, 5000 ),
+			]
+		);
 		return new EventRegistration(
 			null,
 			'Some name',
@@ -65,7 +77,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'Chat URL',
 			false,
 			false,
-			null,
+			$goal,
 			[
 				new TrackingToolAssociation(
 					1,
@@ -125,6 +137,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			$actual->hasContributionTracking(),
 			'Contribution tracking'
 		);
+		$this->assertEquals( $expected->getGoal(), $actual->getGoal(), 'goal' );
 		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
 		$this->assertSame( $expected->getParticipantQuestions(), $actual->getParticipantQuestions(), 'questions' );
 	}

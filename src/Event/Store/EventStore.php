@@ -13,6 +13,8 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
@@ -56,6 +58,7 @@ class EventStore implements IEventStore, IEventLookup {
 		private readonly EventQuestionsStore $eventQuestionsStore,
 		private readonly EventWikisStore $eventWikisStore,
 		private readonly EventTopicsStore $eventTopicsStore,
+		private readonly EventGoalStore $eventGoalStore,
 		private readonly WANObjectCache $wanCache,
 		private readonly JsonCodec $jsonCodec,
 	) {
@@ -86,7 +89,8 @@ class EventStore implements IEventStore, IEventLookup {
 			$this->getEventTrackingToolRow( $dbr, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
 			$this->eventTopicsStore->getEventTopics( $eventID ),
-			$this->eventQuestionsStore->getEventQuestions( $eventID )
+			$this->eventQuestionsStore->getEventQuestions( $eventID ),
+			$this->eventGoalStore->getGoal( $eventID )
 		);
 		return $this->cache[$eventID];
 	}
@@ -174,7 +178,8 @@ class EventStore implements IEventStore, IEventLookup {
 			$this->getEventTrackingToolRow( $db, $eventID ),
 			$this->eventWikisStore->getEventWikis( $eventID ),
 			$this->eventTopicsStore->getEventTopics( $eventID ),
-			$this->eventQuestionsStore->getEventQuestions( $eventID )
+			$this->eventQuestionsStore->getEventQuestions( $eventID ),
+			$this->eventGoalStore->getGoal( $eventID )
 		);
 	}
 
@@ -311,6 +316,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$wikisByEvent = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
 		$topicsByEvent = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
 		$questionsByEvent = $this->eventQuestionsStore->getEventQuestionsMulti( $eventIDs );
+		$goalsByEvent = $this->eventGoalStore->getGoalsMulti( $eventIDs );
 
 		$events = [];
 		foreach ( $eventRows as $row ) {
@@ -321,7 +327,8 @@ class EventStore implements IEventStore, IEventLookup {
 				$trackingToolRowsByEvent[$curEventID] ?? null,
 				$wikisByEvent[$curEventID],
 				$topicsByEvent[$curEventID],
-				$questionsByEvent[$curEventID]
+				$questionsByEvent[$curEventID],
+				$goalsByEvent[$curEventID] ?? null
 			);
 		}
 		return $events;
@@ -362,6 +369,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @param string[]|true $wikis List of wiki IDs or {@see EventRegistration::ALL_WIKIS}
 	 * @param string[] $topics
 	 * @param int[] $questionIDs
+	 * @param EventGoal|null $goal
 	 */
 	private function newEventFromDBRow(
 		stdClass $row,
@@ -369,7 +377,8 @@ class EventStore implements IEventStore, IEventLookup {
 		?stdClass $trackingToolRow,
 		array|bool $wikis,
 		array $topics,
-		array $questionIDs
+		array $questionIDs,
+		?EventGoal $goal
 	): ExistingEventRegistration {
 		$this->assertValidRow( $row );
 
@@ -412,7 +421,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			(bool)$row->event_is_test_event,
 			(bool)$row->event_track_contributions,
-			null,
+			$goal,
 			$trackingTools,
 			$questionIDs,
 			wfTimestamp( TS::UNIX, $row->event_created_at ),
@@ -513,6 +522,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->eventQuestionsStore->replaceEventQuestions( $eventID, $event->getParticipantQuestions() );
 		$this->eventWikisStore->addOrUpdateEventWikis( $eventID, $event->getWikis() );
 		$this->eventTopicsStore->addOrUpdateEventTopics( $eventID, $event->getTopics() );
+		$this->eventGoalStore->replaceEventGoal( $eventID, $event->getGoal() );
 
 		$dbw->onTransactionCommitOrIdle(
 			fn (): bool => $this->wanCache->delete( $this->makePageEventCacheKey( $event->getPage() ) ),

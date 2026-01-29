@@ -20,6 +20,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -82,6 +83,10 @@ class CampaignEventsServices {
 
 	public static function getEventLookup( ?ContainerInterface $services = null ): IEventLookup {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( IEventLookup::LOOKUP_SERVICE_NAME );
+	}
+
+	public static function getEventGoalStore( ?ContainerInterface $services = null ): EventGoalStore {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventGoalStore::SERVICE_NAME );
 	}
 
 	public static function getPermissionChecker( ?ContainerInterface $services = null ): PermissionChecker {

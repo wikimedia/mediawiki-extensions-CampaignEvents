@@ -22,6 +22,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -88,6 +89,12 @@ return [
 				$services->getUserNameUtils()
 			);
 		},
+	EventGoalStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventGoalStore {
+		return new EventGoalStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			(bool)$services->getMainConfig()->get( 'CampaignEventsEnableEventGoals' )
+		);
+	},
 	IEventStore::STORE_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventStore {
 		return new EventStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
@@ -97,6 +104,7 @@ return [
 			$services->get( EventQuestionsStore::SERVICE_NAME ),
 			$services->get( EventWikisStore::SERVICE_NAME ),
 			$services->get( EventTopicsStore::SERVICE_NAME ),
+			$services->get( EventGoalStore::SERVICE_NAME ),
 			$services->getMainWANObjectCache(),
 			$services->getJsonCodec(),
 		);
