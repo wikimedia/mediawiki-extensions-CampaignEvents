@@ -277,7 +277,8 @@ class EventsListPager extends ReverseChronologicalPager {
 		$eventPageLinkElement = Html::element(
 			'a',
 			[
-				"href" => $this->pageURLResolver->getUrl( $event->getPage() ),
+				// Use the full URL so that this works if the pager is transcluded in a global user page (T415934)
+				"href" => $this->pageURLResolver->getFullUrl( $event->getPage() ),
 				"class" => 'ext-campaignevents-events-list-link'
 			],
 			$event->getName()
