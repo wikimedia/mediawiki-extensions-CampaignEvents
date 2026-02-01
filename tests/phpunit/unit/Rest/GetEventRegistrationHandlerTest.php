@@ -12,6 +12,9 @@ use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetric;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
@@ -125,6 +128,10 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['chat_url'],
 			$eventData['is_test_event'],
 			$eventData['tracks_contributions'],
+			new EventGoal(
+				EventGoal::OPERATOR_AND,
+				[ new EventGoalMetric( EventGoalMetricType::TotalEdits, 500 ) ]
+			),
 			[
 				new TrackingToolAssociation(
 					self::TRACKING_TOOL_DB_ID,

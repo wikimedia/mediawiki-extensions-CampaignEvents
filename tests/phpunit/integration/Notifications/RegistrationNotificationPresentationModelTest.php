@@ -10,6 +10,9 @@ use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetric;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Notifications\RegistrationNotificationPresentationModel;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
@@ -74,6 +77,10 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 			'chat' => 'https://chat.example.org',
 			'is_test_event' => false,
 			'tracks_contributions' => false,
+			'goal' => new EventGoal(
+				EventGoal::OPERATOR_AND,
+				[ new EventGoalMetric( EventGoalMetricType::TotalArticlesEdited, 50 ) ]
+			),
 			'tracking_tools' => [
 				new TrackingToolAssociation(
 					1,

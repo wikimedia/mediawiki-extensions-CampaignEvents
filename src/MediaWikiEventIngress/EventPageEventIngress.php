@@ -57,6 +57,7 @@ class EventPageEventIngress extends DomainEventIngress implements
 			$registration->getChatURL(),
 			$registration->getIsTestEvent(),
 			$registration->hasContributionTracking(),
+			$registration->getGoal(),
 			$registration->getTrackingTools(),
 			$registration->getParticipantQuestions(),
 			$registration->getCreationTimestamp(),

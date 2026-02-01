@@ -257,6 +257,7 @@ class EventFactory {
 			$chatURL,
 			$isTestEvent,
 			$hasContributionTracking,
+			null,
 			$trackingTools,
 			$questionIDs,
 			$creationTSUnix,

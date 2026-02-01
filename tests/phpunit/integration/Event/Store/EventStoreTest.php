@@ -13,6 +13,9 @@ use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetric;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Organizers\Roles;
@@ -62,6 +65,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'Chat URL',
 			false,
 			false,
+			null,
 			[
 				new TrackingToolAssociation(
 					1,
@@ -180,7 +184,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Event with only country' => [
 			array_replace(
 				$baseCtrArgs,
-				[ 'Address' => new Address( null, 'FR' ) ]
+				[ 'address' => new Address( null, 'FR' ) ]
 			),
 		];
 	}
@@ -329,6 +333,10 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private static function getBaseCtrArgs(): array {
+		$goal = new EventGoal(
+			EventGoal::OPERATOR_AND,
+			[ new EventGoalMetric( EventGoalMetricType::TotalEdits, 1000 ) ]
+		);
 		return [
 			null,
 			'name' => 'Some name',
@@ -349,10 +357,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			'Chat URL',
 			false,
 			'hasContributionTracking' => false,
+			'goal' => $goal,
 			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			[],
-			null,
-			null,
+			'creation' => null,
+			'last_edit' => null,
 			'del' => null,
 		];
 	}
@@ -672,7 +681,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 						'end' => $futureTime,
 						'hasContributionTracking' => true,
 						'wikis' => [ self::CURWIKIID_PLACEHOLDER ],
-						'del' => $currentTime
+						'del' => $currentUnix
 					] ),
 					'addParticipant' => true
 				]

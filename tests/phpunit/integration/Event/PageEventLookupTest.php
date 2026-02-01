@@ -114,6 +114,7 @@ class PageEventLookupTest extends MediaWikiIntegrationTestCase {
 			null,
 			false,
 			false,
+			null,
 			[],
 			[],
 			null,

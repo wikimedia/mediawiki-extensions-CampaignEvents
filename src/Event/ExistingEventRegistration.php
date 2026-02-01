@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 
 use DateTimeZone;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 
@@ -32,6 +33,7 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param bool $hasContributionTracking
+	 * @param EventGoal|null $goal Event goal
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param int[] $participantQuestions
@@ -56,6 +58,7 @@ class ExistingEventRegistration extends EventRegistration {
 		?string $chatURL,
 		bool $isTestEvent,
 		bool $hasContributionTracking,
+		?EventGoal $goal,
 		array $trackingTools,
 		array $participantQuestions,
 		string $creationTimestamp,
@@ -79,6 +82,7 @@ class ExistingEventRegistration extends EventRegistration {
 			$chatURL,
 			$isTestEvent,
 			$hasContributionTracking,
+			$goal,
 			$trackingTools,
 			$participantQuestions,
 			$creationTimestamp,

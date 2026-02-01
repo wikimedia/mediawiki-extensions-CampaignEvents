@@ -308,8 +308,8 @@ class PotentialInviteesFinder {
 
 	/**
 	 * @param array[] $revisionsByWiki
-	 * * @phpcs:ignore Generic.Files.LineLength
-	 * * @phan-param array<string,list<array{username:string,userID:int,actorID:int,page:string,delta:int}>> $revisionsByWiki
+	 * @phpcs:ignore Generic.Files.LineLength
+	 * @phan-param array<string,list<array{username:string,userID:int,actorID:int,page:string,delta:int}>> $revisionsByWiki
 	 * @return array<string,int[]> For each user, this contains a list of deltas in bytes across all relevant pages.
 	 */
 	private function getDeltasByUser( array $revisionsByWiki ): array {

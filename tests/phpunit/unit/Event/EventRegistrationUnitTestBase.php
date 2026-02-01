@@ -9,6 +9,9 @@ use Generator;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetric;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Page\PageIdentityValue;
@@ -19,6 +22,15 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
 
 abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 	protected static function getValidConstructorArgs(): array {
+		$metric = new EventGoalMetric(
+			EventGoalMetricType::TotalEdits,
+			123
+		);
+		$goal = new EventGoal(
+			EventGoal::OPERATOR_AND,
+			[ $metric ]
+		);
+
 		return [
 			'id' => null,
 			'name' => 'Name',
@@ -39,6 +51,7 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 			'chat' => 'https://chat.example.org',
 			'is_test_event' => false,
 			'tracks_contributions' => true,
+			'goal' => $goal,
 			'tracking_tools' => [
 				new TrackingToolAssociation(
 					1,
@@ -83,6 +96,7 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 			$registration->hasContributionTracking(),
 			'contribution tracking'
 		);
+		$this->assertSame( $data['goal'], $registration->getGoal(), 'goal' );
 		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
 		$this->assertSame( $data['questions'], $registration->getParticipantQuestions(), 'questions' );
 		$this->assertSame( $data['creation'], $registration->getCreationTimestamp(), 'creation' );

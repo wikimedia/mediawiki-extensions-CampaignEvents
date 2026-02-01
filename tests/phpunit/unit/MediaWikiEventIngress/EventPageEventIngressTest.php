@@ -110,7 +110,7 @@ class EventPageEventIngressTest extends MediaWikiUnitTestCase {
 				->willReturn( [ 1 ] );
 			$registration->method( 'getTrackingTools' )
 				->willReturn( [ 1 ] );
-
+			$registration->method( 'hasContributionTracking' )->willReturn( false );
 		}
 		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturn( $registration );
 		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );

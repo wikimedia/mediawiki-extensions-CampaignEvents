@@ -125,7 +125,7 @@ class EventStore implements IEventStore, IEventLookup {
 					return null;
 				}
 			},
-			[ 'version' => 7 ]
+			[ 'version' => 8 ]
 		);
 
 		if ( $cachedEventEncoded === null ) {
@@ -412,6 +412,7 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			(bool)$row->event_is_test_event,
 			(bool)$row->event_track_contributions,
+			null,
 			$trackingTools,
 			$questionIDs,
 			wfTimestamp( TS::UNIX, $row->event_created_at ),

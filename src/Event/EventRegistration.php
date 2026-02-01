@@ -9,6 +9,7 @@ use DateTimeZone;
 use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Page\PageIdentityValue;
@@ -57,6 +58,7 @@ class EventRegistration implements JsonCodecable {
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param bool $hasContributionTracking
+	 * @param EventGoal|null $goal Event goal
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
 	 * @param list<int> $participantQuestions Array of database IDs
@@ -81,6 +83,7 @@ class EventRegistration implements JsonCodecable {
 		private readonly ?string $chatURL,
 		private readonly bool $isTestEvent,
 		private readonly bool $hasContributionTracking,
+		private readonly ?EventGoal $goal,
 		private readonly array $trackingTools,
 		private readonly array $participantQuestions,
 		private readonly ?string $creationTimestamp,
@@ -231,6 +234,10 @@ class EventRegistration implements JsonCodecable {
 		return $this->hasContributionTracking;
 	}
 
+	public function getGoal(): ?EventGoal {
+		return $this->goal;
+	}
+
 	/**
 	 * @return TrackingToolAssociation[]
 	 * @phan-return list<TrackingToolAssociation>
@@ -292,6 +299,7 @@ class EventRegistration implements JsonCodecable {
 			'chatURL' => $this->chatURL,
 			'isTestEvent' => $this->isTestEvent,
 			'hasContributionTracking' => $this->hasContributionTracking,
+			'goal' => $this->goal?->toArray(),
 			'trackingToolsEncoded' => array_map(
 				/** @return array<string,mixed> */
 				static fn ( TrackingToolAssociation $assoc ): array => $assoc->toJsonArray(),
@@ -334,6 +342,8 @@ class EventRegistration implements JsonCodecable {
 			$json['chatURL'],
 			$json['isTestEvent'],
 			$json['hasContributionTracking'],
+			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset goal always in toJsonArray() output
+			$json['goal'] !== null ? EventGoal::newFromArray( $json['goal'] ) : null,
 			array_map( TrackingToolAssociation::newFromJsonArray( ... ), $json['trackingToolsEncoded'] ),
 			$json['participantQuestions'],
 			$json['creationTimestamp'],
