@@ -88,7 +88,6 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 	public function __construct(
 		string $name,
-		string $restriction,
 		protected readonly IEventLookup $eventLookup,
 		private readonly EventFactory $eventFactory,
 		private readonly EditEventCommand $editEventCommand,
@@ -106,7 +105,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		private readonly EventTypesRegistry $eventTypesRegistry,
 		private readonly CountryProvider $countryProvider,
 	) {
-		parent::__construct( $name, $restriction );
+		parent::__construct( $name );
 		$this->formMessages = $this->getFormMessages();
 		$this->disallowedCountryCodes = array_keys(
 			$this->getConfig()->get( 'CampaignEventsContributionTrackingDisallowedCountries' )

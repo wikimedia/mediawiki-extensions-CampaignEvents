@@ -49,7 +49,6 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
-			'',
 			$eventLookup,
 			$eventFactory,
 			$editEventCommand,

@@ -44,7 +44,6 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 	) {
 		parent::__construct(
 			self::PAGE_NAME,
-			PermissionChecker::ENABLE_REGISTRATIONS_RIGHT,
 			$eventLookup,
 			$eventFactory,
 			$editEventCommand,
@@ -62,6 +61,10 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 			$eventTypesRegistry,
 			$countryProvider
 		);
+	}
+
+	public function getRestriction(): string {
+		return PermissionChecker::ENABLE_REGISTRATIONS_RIGHT;
 	}
 
 	/**
