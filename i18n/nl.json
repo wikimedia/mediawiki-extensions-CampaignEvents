@@ -569,6 +569,7 @@
 	"campaignevents-event-contribution-user-not-global": "Gebruiker is geen globale gebruiker",
 	"campaignevents-event-contribution-already-associated": "Een bewerking kan slechts aan één evenement worden gekoppeld.",
 	"campaignevents-event-contribution-revision-not-found": "Versie niet gevonden",
+	"campaignevents-event-contribution-edit-deleted": "Deze bewerking is verwijderd en kan niet aan het evenement worden gekoppeld.",
 	"campaignevents-event-contribution-not-owner": "U kunt alleen uw eigen bewerkingen toevoegen.",
 	"campaignevents-event-contribution-tracking-disabled": "Het volgen van bijdragen is voor dit evenement niet ingeschakeld",
 	"campaignevents-event-contribution-event-deleted": "Het evenement is verwijderd",

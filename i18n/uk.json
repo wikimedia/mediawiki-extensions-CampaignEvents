@@ -573,6 +573,7 @@
 	"campaignevents-event-contribution-user-not-global": "Користувач не є глобальним користувачем",
 	"campaignevents-event-contribution-already-associated": "Редагування може бути пов'язане лише з однією подією.",
 	"campaignevents-event-contribution-revision-not-found": "Версію не знайдено",
+	"campaignevents-event-contribution-edit-deleted": "Це редагування було вилучено і його не можна пов'язати з подією.",
 	"campaignevents-event-contribution-not-owner": "Додавайте лише редагування, яке внесли саме ви.",
 	"campaignevents-event-contribution-tracking-disabled": "Відстеження внеску не ввімкнено для цієї події",
 	"campaignevents-event-contribution-event-deleted": "Подія вилучена",
