@@ -315,7 +315,7 @@
 	"campaignevents-event-details-no-organizer-email": "Pour envoyer un message aux participants, vous aurez besoin d’une adresse de messagerie sur votre compte. [[Special:ChangeEmail|Ajouter un courriel]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "Retirer {{PLURAL:$1|un participant|des participants}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "Êtes-vous {{GENDER:|sûr|sûre}} de vouloir retirer {{PLURAL:$1|le participant sélectionné|les participants sélectionnés}} ?",
-	"campaignevents-event-details-remove-participant-remove-btn": "Supprimer",
+	"campaignevents-event-details-remove-participant-remove-btn": "Retirer",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Annuler",
 	"campaignevents-event-details-private-participant-label": "{{GENDER:$1|Participant inscrit|Participante inscrite}} de façon privée",
 	"campaignevents-event-details-no-event-id-provided": "Fournissez un identifiant d’événement.",
