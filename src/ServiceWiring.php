@@ -22,6 +22,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionCalculator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
@@ -505,6 +506,13 @@ return [
 			$services->getTitleFactory(),
 			$services->get( EventContributionStore::SERVICE_NAME ),
 			$services->get( WikiLookup::SERVICE_NAME ),
+		);
+	},
+	EventGoalCompletionCalculator::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): EventGoalCompletionCalculator {
+		return new EventGoalCompletionCalculator(
+			$services->get( EventContributionStore::SERVICE_NAME ),
 		);
 	}
 ];

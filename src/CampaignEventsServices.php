@@ -20,6 +20,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionCalculator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
@@ -298,5 +299,11 @@ class CampaignEventsServices {
 		?ContainerInterface $services = null
 	): EventContributionsPagerFactory {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventContributionsPagerFactory::SERVICE_NAME );
+	}
+
+	public static function getEventGoalCompletionCalculator(
+		?ContainerInterface $services = null
+	): EventGoalCompletionCalculator {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventGoalCompletionCalculator::SERVICE_NAME );
 	}
 }
