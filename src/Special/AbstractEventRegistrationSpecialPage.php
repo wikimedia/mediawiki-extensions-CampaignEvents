@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
@@ -504,6 +505,46 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'disable-if' => $contributionStatsDisableCond,
 		];
 
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventGoals' ) ) {
+			$goal = $this->event?->getGoal();
+			$metrics = $goal?->getMetrics();
+			$metric = $metrics[0] ?? null;
+			$defaultGoalType = $metric ? $metric->getMetric()->value : '';
+			$defaultGoalTarget = $metric?->getTarget();
+			$goalTypeOptionsMessages = [ 'campaignevents-edit-field-goal-type-placeholder' => '' ];
+			foreach ( EventGoalMetricType::cases() as $case ) {
+				$metricMsgKey = match ( $case ) {
+					EventGoalMetricType::TotalArticlesCreated =>
+					'campaignevents-edit-field-goal-type-total_articles_created',
+					EventGoalMetricType::TotalArticlesEdited =>
+					'campaignevents-edit-field-goal-type-total_articles_edited',
+					EventGoalMetricType::TotalEdits => 'campaignevents-edit-field-goal-type-total_edits',
+					EventGoalMetricType::TotalBytesAdded => 'campaignevents-edit-field-goal-type-total_bytes_added',
+					EventGoalMetricType::TotalBytesRemoved => 'campaignevents-edit-field-goal-type-total_bytes_removed',
+					EventGoalMetricType::TotalLinksAdded => 'campaignevents-edit-field-goal-type-total_links_added',
+					EventGoalMetricType::TotalLinksRemoved => 'campaignevents-edit-field-goal-type-total_links_removed',
+				};
+				$goalTypeOptionsMessages[$metricMsgKey] = $case->value;
+			}
+			$formFields['EventGoalType'] = [
+				'type' => 'select',
+				'label-message' => 'campaignevents-edit-field-goal-type-label',
+				'default' => $defaultGoalType,
+				'options-messages' => $goalTypeOptionsMessages,
+				'section' => self::IMPACT_STATISTICS_SECTION,
+			];
+			$formFields['EventGoalTarget'] = [
+				'type' => 'int',
+				'label-message' => 'campaignevents-edit-field-goal-target-label',
+				'default' => $defaultGoalTarget,
+				'min' => 1,
+				'placeholder-message' => 'campaignevents-edit-field-goal-target-placeholder',
+				'section' => self::IMPACT_STATISTICS_SECTION,
+				'disable-if' => [ '===', 'EventGoalType', '' ],
+				'required' => true,
+			];
+		}
+
 		$availableTrackingTools = $this->trackingToolRegistry->getDataForForm();
 		if ( $availableTrackingTools ) {
 			if (
@@ -564,9 +605,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			];
 		}
 
-		$formFields = array_merge( $formFields, $this->getParticipantQuestionsFields() );
-
-		return $formFields;
+		return array_merge( $formFields, $this->getParticipantQuestionsFields() );
 	}
 
 	/**
@@ -658,6 +697,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				->parseAsBlock(),
 			self::IMPACT_STATISTICS_SECTION
 		);
+		$form->addHeaderHtml(
+			$this->msg( 'campaignevents-edit-form-impact-statistics-goals-description' )
+			->parseAsBlock(),
+			self::IMPACT_STATISTICS_SECTION
+		);
 		$form->setSubmitTextMsg( $this->formMessages['submit'] );
 
 		$footerNotice = '';
@@ -710,9 +754,11 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		// empty string (= the value was explicitly specified as an empty string) vs null (=value not specified).
 		// That's mostly intended for API consumers, and here for the UI we can just assume that
 		// empty string === not specified.
-		$nullableFields = [ 'EventMeetingURL', 'EventMeetingAddress', 'EventChatURL' ];
+		$nullableFields = [ 'EventMeetingURL', 'EventMeetingAddress', 'EventChatURL', 'EventGoalType' ];
 		foreach ( $nullableFields as $fieldName ) {
-			$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
+			if ( array_key_exists( $fieldName, $data ) ) {
+				$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
+			}
 		}
 
 		if ( isset( $data['EventDashboardURL'] ) && $data['EventDashboardURL'] !== '' ) {
@@ -769,6 +815,15 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		$testEvent = $data['TestEvent'] === "1";
+
+		$goalType = null;
+		$goalTarget = null;
+		if ( $this->getConfig()->get( 'CampaignEventsEnableEventGoals' ) ) {
+			$goalType = $data['EventGoalType'];
+			$goalTargetRaw = $data['EventGoalTarget'] ?? null;
+			$goalTarget = $goalTargetRaw !== '' && $goalTargetRaw !== null ? (int)$goalTargetRaw : null;
+		}
+
 		try {
 			$event = $this->eventFactory->newEvent(
 				$this->eventID,
@@ -788,8 +843,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventChatURL'],
 				$testEvent,
 				$data['ContributionStats'],
-				null,
-				null,
+				$goalType,
+				$goalTarget,
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$participantQuestionNames,

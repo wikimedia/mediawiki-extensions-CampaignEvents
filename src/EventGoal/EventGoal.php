@@ -85,13 +85,13 @@ class EventGoal {
 	/**
 	 * Convert to array format (for JSON serialization).
 	 *
-	 * @return array{operator: string, metrics: non-empty-list<array{metric: string, target: int}>}
+	 * @return array{operator: string, metrics: non-empty-list<array{metric: string, target: positive-int}>}
 	 */
 	public function toArray(): array {
 		return [
 			'operator' => $this->operator,
 			'metrics' => array_map(
-				/** @return array{metric: string, target: int} */
+				/** @return array{metric: string, target: positive-int} */
 				static fn ( EventGoalMetric $metric ): array => $metric->toArray(),
 				$this->metrics
 			),
