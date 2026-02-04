@@ -17,16 +17,6 @@ class CampaignsDatabaseHelper {
 	) {
 	}
 
-	/**
-	 * @param int $type DB_PRIMARY or DB_REPLICA
-	 * @return IDatabase|IReadableDatabase
-	 */
-	public function getDBConnection( int $type ): IReadableDatabase {
-		return $type === DB_REPLICA
-			? $this->getReplicaConnection()
-			: $this->getPrimaryConnection();
-	}
-
 	public function getReplicaConnection(): IReadableDatabase {
 		return $this->lbFactory->getReplicaDatabase( Utils::VIRTUAL_DB_DOMAIN );
 	}
