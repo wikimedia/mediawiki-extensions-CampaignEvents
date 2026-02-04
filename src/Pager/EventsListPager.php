@@ -37,6 +37,7 @@ use UnexpectedValueException;
 use Wikimedia\Assert\Assert;
 use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\RawSQLExpression;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class EventsListPager extends ReverseChronologicalPager {
 	use EventPagerTrait {
@@ -139,13 +140,13 @@ class EventsListPager extends ReverseChronologicalPager {
 		$this->search = $search;
 		$this->filterEventTypes = $filterEventTypes;
 		Assert::parameter(
-			$startDate === null || ( $startDate !== '' && MWTimestamp::convert( TS_UNIX, $startDate ) !== false ),
+			$startDate === null || ( $startDate !== '' && MWTimestamp::convert( TS::UNIX, $startDate ) !== false ),
 			'$startDate',
 			'Must be a valid timestamp or null'
 		);
 		$this->startDate = $startDate;
 		Assert::parameter(
-			$endDate === null || ( $endDate !== '' && MWTimestamp::convert( TS_UNIX, $endDate ) !== false ),
+			$endDate === null || ( $endDate !== '' && MWTimestamp::convert( TS::UNIX, $endDate ) !== false ),
 			'$endDate',
 			'Must be a valid timestamp or null'
 		);

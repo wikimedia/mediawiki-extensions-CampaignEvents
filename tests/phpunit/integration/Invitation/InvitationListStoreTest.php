@@ -15,6 +15,7 @@ use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -44,7 +45,7 @@ class InvitationListStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( InvitationList::STATUS_PENDING, $storedList->getStatus() );
 		$this->assertSame( $userID, $storedList->getCreator()->getCentralID() );
 		$this->assertSame( WikiMap::getCurrentWikiId(), $storedList->getWiki() );
-		$this->assertSame( wfTimestamp( TS_MW, self::FAKE_TIME ), $storedList->getCreationTime() );
+		$this->assertSame( wfTimestamp( TS::MW, self::FAKE_TIME ), $storedList->getCreationTime() );
 	}
 
 	public static function provideInvitationListRoundtrip() {

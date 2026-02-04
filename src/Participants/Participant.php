@@ -10,12 +10,12 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 class Participant {
 	/**
 	 * @param CentralUser $user
-	 * @param string $registeredAt Timestamp in the TS_UNIX format
+	 * @param string $registeredAt Timestamp in the TS::UNIX format
 	 * @param int $participantID participant_id, ID generated when a participant register for an event
 	 * @param bool $privateRegistration
 	 * @param Answer[] $answers
-	 * @param string|null $firstAnswerTimestamp Timestamp in the TS_UNIX format
-	 * @param string|null $aggregationTimestamp Timestamp in the TS_UNIX format
+	 * @param string|null $firstAnswerTimestamp Timestamp in the TS::UNIX format
+	 * @param string|null $aggregationTimestamp Timestamp in the TS::UNIX format
 	 * @param bool $hideContributionAssociationPrompt
 	 */
 	public function __construct(
@@ -35,7 +35,7 @@ class Participant {
 	}
 
 	/**
-	 * @return string Timestamp in the TS_UNIX format
+	 * @return string Timestamp in the TS::UNIX format
 	 */
 	public function getRegisteredAt(): string {
 		return $this->registeredAt;
@@ -63,14 +63,14 @@ class Participant {
 	}
 
 	/**
-	 * @return string|null Timestamp in the TS_UNIX format, or null
+	 * @return string|null Timestamp in the TS::UNIX format, or null
 	 */
 	public function getFirstAnswerTimestamp(): ?string {
 		return $this->firstAnswerTimestamp;
 	}
 
 	/**
-	 * @return string|null Timestamp in the TS_UNIX format, or null
+	 * @return string|null Timestamp in the TS::UNIX format, or null
 	 */
 	public function getAggregationTimestamp(): ?string {
 		return $this->aggregationTimestamp;

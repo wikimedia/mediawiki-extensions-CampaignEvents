@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * This class updates the information about tracking tools stored in our database.
@@ -87,7 +88,7 @@ class TrackingToolUpdater {
 			if (
 				!isset( $toolsMap[$lookupKey] ) ||
 				$syncStatus !== $toolsMap[$lookupKey]->getSyncStatus() ||
-				wfTimestampOrNull( TS_UNIX, $curRow->cett_last_sync ) !== $toolsMap[$lookupKey]->getLastSyncTimestamp()
+				wfTimestampOrNull( TS::UNIX, $curRow->cett_last_sync ) !== $toolsMap[$lookupKey]->getLastSyncTimestamp()
 			) {
 				$deleteIDs[] = $curRow->cett_id;
 			}

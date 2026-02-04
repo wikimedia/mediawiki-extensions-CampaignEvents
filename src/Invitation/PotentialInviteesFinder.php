@@ -21,6 +21,7 @@ use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\SelectQueryBuilder;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * This class generates a list of potential event participants ("invitation list") by looking at who contributed
@@ -225,7 +226,7 @@ class PotentialInviteesFinder {
 		$filterConditions['user_is_temp'] = 0;
 
 		// Exclude anything too old.
-		$startTime = (int)ConvertibleTimestamp::now( TS_UNIX ) - self::CUTOFF_DAYS * 24 * 60 * 60;
+		$startTime = (int)ConvertibleTimestamp::now( TS::UNIX ) - self::CUTOFF_DAYS * 24 * 60 * 60;
 		$filterConditions[] = $dbr->expr( 'rev_timestamp', '>=', $dbr->timestamp( $startTime ) );
 
 		// Exclude both edits that have been reverted, and edits that revert other edits. Neither of these is relevant,
@@ -545,7 +546,7 @@ class PotentialInviteesFinder {
 				->caller( __METHOD__ )
 				->fetchField();
 			if ( $curWikiTS ) {
-				$lastEditTS = max( $lastEditTS, (int)MWTimestamp::convert( TS_UNIX, $curWikiTS ) );
+				$lastEditTS = max( $lastEditTS, (int)MWTimestamp::convert( TS::UNIX, $curWikiTS ) );
 			}
 		}
 		if ( $lastEditTS === 0 ) {

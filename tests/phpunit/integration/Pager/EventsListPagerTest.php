@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\Assert\ParameterAssertionException;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -27,8 +28,8 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 		?int $searchTo,
 		bool $expectsFound
 	): void {
-		$searchStartStr = $searchStart !== null ? wfTimestamp( TS_MW, $searchStart ) : null;
-		$searchToStr = $searchTo !== null ? wfTimestamp( TS_MW, $searchTo ) : null;
+		$searchStartStr = $searchStart !== null ? wfTimestamp( TS::MW, $searchStart ) : null;
+		$searchToStr = $searchTo !== null ? wfTimestamp( TS::MW, $searchTo ) : null;
 		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
 			new RequestContext(),
 			'',

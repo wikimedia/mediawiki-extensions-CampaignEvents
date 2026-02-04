@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use StatusValue;
 use Wikimedia\ScopedCallback;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * Command object used for creation and editing of event registrations.
@@ -397,8 +398,8 @@ class EditEventCommand {
 		EventRegistration $registration,
 		ExistingEventRegistration $previousVersion
 	): bool {
-		$givenUnixTimestamp = wfTimestamp( TS_UNIX, $registration->getEndUTCTimestamp() );
-		$currentUnixTimestamp = MWTimestamp::now( TS_UNIX );
+		$givenUnixTimestamp = wfTimestamp( TS::UNIX, $registration->getEndUTCTimestamp() );
+		$currentUnixTimestamp = MWTimestamp::now( TS::UNIX );
 		// if there are answers for this event and end date is past
 		// then the organizer can not edit the event dates and they should be disabled
 		if (

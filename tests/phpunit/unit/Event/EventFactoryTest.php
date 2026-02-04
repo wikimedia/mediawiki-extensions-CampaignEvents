@@ -291,7 +291,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-invalid-start',
 			self::getTestDataWithDefault( [ 'start' => 'Not a timestamp' ] )
 		];
-		yield 'Start timestamp not in TS_MW format' => [
+		yield 'Start timestamp not in TS::MW format' => [
 			'campaignevents-error-invalid-start',
 			self::getTestDataWithDefault( [ 'start' => '1661199533' ] )
 		];
@@ -317,7 +317,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			'campaignevents-error-invalid-end',
 			self::getTestDataWithDefault( [ 'end' => 'Not a timestamp' ] )
 		];
-		yield 'End timestamp not in TS_MW format' => [
+		yield 'End timestamp not in TS::MW format' => [
 			'campaignevents-error-invalid-end',
 			self::getTestDataWithDefault( [ 'end' => '1661199533' ] )
 		];

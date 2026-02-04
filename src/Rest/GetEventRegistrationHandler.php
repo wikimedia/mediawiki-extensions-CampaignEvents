@@ -18,6 +18,7 @@ use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use Wikimedia\Message\MessageValue;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class GetEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
@@ -62,8 +63,8 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			'event_page_wiki' => Utils::getWikiIDString( $page->getWikiId() ),
 			'status' => $registration->getStatus(),
 			'timezone' => $registration->getTimezone()->getName(),
-			'start_time' => wfTimestamp( TS_MW, $registration->getStartLocalTimestamp() ),
-			'end_time' => wfTimestamp( TS_MW, $registration->getEndLocalTimestamp() ),
+			'start_time' => wfTimestamp( TS::MW, $registration->getStartLocalTimestamp() ),
+			'end_time' => wfTimestamp( TS::MW, $registration->getEndLocalTimestamp() ),
 			'types' => $registration->getTypes(),
 			// Use the same format as the write endpoints, which rely on ParamValidator::PARAM_ALL.
 			'wikis' => $wikis === EventRegistration::ALL_WIKIS ? [ '*' ] : $wikis,

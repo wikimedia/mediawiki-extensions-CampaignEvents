@@ -8,6 +8,7 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -29,7 +30,7 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 			new RequestContext(),
 			'',
 			[],
-			wfTimestamp( TS_MW, $searchStart ),
+			wfTimestamp( TS::MW, $searchStart ),
 			null,
 			null,
 			[],
@@ -44,7 +45,7 @@ class OngoingEventsListPagerTest extends MediaWikiIntegrationTestCase {
 			new RequestContext(),
 			self::$EVENT_NAME,
 			[],
-			wfTimestamp( TS_MW, self::$EVENT_START + 1 ),
+			wfTimestamp( TS::MW, self::$EVENT_START + 1 ),
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'HT',
 			[ 'any_wiki_name' ],

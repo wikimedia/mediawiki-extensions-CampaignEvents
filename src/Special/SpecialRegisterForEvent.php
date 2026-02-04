@@ -22,6 +22,7 @@ use MediaWiki\Status\Status;
 use MediaWiki\Utils\MWTimestamp;
 use OOUI\IconWidget;
 use StatusValue;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	public const PAGE_NAME = 'RegisterForEvent';
@@ -196,7 +197,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		if ( $this->curParticipantData ) {
 			$plannedAggregationTS = Utils::getAnswerAggregationTimestamp( $this->curParticipantData, $this->event );
 			if ( $plannedAggregationTS !== null ) {
-				$timeRemaining = (int)$plannedAggregationTS - (int)MWTimestamp::now( TS_UNIX );
+				$timeRemaining = (int)$plannedAggregationTS - (int)MWTimestamp::now( TS::UNIX );
 				if ( $timeRemaining < 60 * 60 * 24 ) {
 					$additionalRetentionMsg = $this->msg( 'campaignevents-register-retention-hours' )->parse();
 				} else {

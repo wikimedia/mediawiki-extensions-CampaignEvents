@@ -10,6 +10,7 @@ use MediaWiki\Maintenance\Maintenance;
 use MediaWiki\Utils\MWTimestamp;
 use RuntimeException;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * Maintenance script that aggregates and deletes participant answers after a predefined amount of time.
@@ -79,7 +80,7 @@ class AggregateParticipantAnswers extends Maintenance {
 	private function aggregateAnswers(): void {
 		$this->output( "Aggregating old participant answers...\n" );
 
-		$this->curTimeUnix = (int)MWTimestamp::now( TS_UNIX );
+		$this->curTimeUnix = (int)MWTimestamp::now( TS::UNIX );
 		$this->cutoffTimeUnix = $this->curTimeUnix - EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
 		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );
@@ -244,7 +245,7 @@ class AggregateParticipantAnswers extends Maintenance {
 				->fetchResultSet();
 			foreach ( $eventRows as $row ) {
 				$eventID = (int)$row->event_id;
-				$this->eventEndTimes[$eventID] = (int)wfTimestamp( TS_UNIX, $row->event_end_utc );
+				$this->eventEndTimes[$eventID] = (int)wfTimestamp( TS::UNIX, $row->event_end_utc );
 			}
 		}
 
@@ -290,7 +291,7 @@ class AggregateParticipantAnswers extends Maintenance {
 				$this->usersToSkipPerEvent[$eventID][$userID] = true;
 				continue;
 			}
-			$firstAnswerTS = wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp );
+			$firstAnswerTS = wfTimestampOrNull( TS::UNIX, $row->cep_first_answer_timestamp );
 			if ( !is_string( $firstAnswerTS ) ) {
 				( $this->rollbackTransactionFn )();
 				throw new RuntimeException(

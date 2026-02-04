@@ -100,7 +100,7 @@ QUnit.test( 'Succeeds when given the necessary data', async function ( assert ) 
 	assert.strictEqual( $target.text(), `(some-message: 1, 2, 3, 4, 5, 6)${ localTimezone }` );
 } );
 
-QUnit.test( 'Formats local timestamps as TS_MW', ( assert ) => {
+QUnit.test( 'Formats local timestamps as TS::MW', ( assert ) => {
 	const testCases = [
 		[ '2025-01-02T03:04:05Z', 'Europe/Paris', '20250102040405' ],
 		[ '2025-01-02T03:04:05Z', 'America/New_York', '20250101220405' ],

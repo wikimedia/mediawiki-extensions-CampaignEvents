@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Invitation;
 
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class InvitationList {
 	public const STATUS_PENDING = 1;
@@ -49,6 +50,6 @@ class InvitationList {
 	 * @return string Creation timestamp in the MW format.
 	 */
 	public function getCreationTime(): string {
-		return wfTimestamp( TS_MW, $this->creationTime );
+		return wfTimestamp( TS::MW, $this->creationTime );
 	}
 }

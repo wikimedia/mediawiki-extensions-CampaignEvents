@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration;
 
 use MediaWiki\Extension\CampaignEvents\Invitation\PotentialInviteesFinder;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 trait InvitationListTestHelperTrait {
 	private function insertWorklistData() {
@@ -91,7 +92,7 @@ trait InvitationListTestHelperTrait {
 		$newRevTS = static fn () => $db->timestamp( random_int( $curTime - $revCutoff + 1000, $curTime ) );
 		$oldRevTS = static fn () => $db->timestamp(
 			random_int(
-				(int)ConvertibleTimestamp::convert( TS_UNIX, '20010115192713' ),
+				(int)ConvertibleTimestamp::convert( TS::UNIX, '20010115192713' ),
 				$curTime - $revCutoff - 1000
 			)
 		);

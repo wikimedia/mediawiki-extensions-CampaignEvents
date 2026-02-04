@@ -14,6 +14,7 @@ use MediaWiki\User\UserTimeCorrection;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * This service formats the time of an event according to the event type, in a given language and for a given user.
@@ -98,8 +99,8 @@ class EventTimeFormatter {
 			'span',
 			[
 				'class' => [ 'ext-campaignevents-time-range' ],
-				'data-mw-start' => ConvertibleTimestamp::convert( TS_ISO_8601, $event->getStartUTCTimestamp() ),
-				'data-mw-end' => ConvertibleTimestamp::convert( TS_ISO_8601, $event->getEndUTCTimestamp() ),
+				'data-mw-start' => ConvertibleTimestamp::convert( TS::ISO_8601, $event->getStartUTCTimestamp() ),
+				'data-mw-end' => ConvertibleTimestamp::convert( TS::ISO_8601, $event->getEndUTCTimestamp() ),
 			],
 			$range
 		);

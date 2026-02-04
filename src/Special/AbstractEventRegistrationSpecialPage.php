@@ -46,6 +46,7 @@ use RuntimeException;
 use StatusValue;
 use Wikimedia\Message\MessageSpecifier;
 use Wikimedia\RequestTimeout\TimeoutException;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
@@ -254,10 +255,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		$timezone = $this->getTimezone();
 		$curLocalTime = ( new DateTime( 'now', $timezone ) )->format( 'Y-m-d H:i:s' );
-		$minTime = $this->event ? '' : wfTimestamp( TS_MW, $curLocalTime );
+		$minTime = $this->event ? '' : wfTimestamp( TS::MW, $curLocalTime );
 		$maxTime = $this->eventID && $this->event->isPast() &&
 			$this->editEventCommand->eventHasAnswersOrAggregates( $this->eventID ) ?
-				wfTimestamp( TS_MW, $curLocalTime ) :
+				wfTimestamp( TS::MW, $curLocalTime ) :
 				'';
 
 		// Disable auto-infusion because we want to change the configuration.
@@ -267,7 +268,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-start',
 			'min' => $minTime,
 			'max' => $maxTime,
-			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getStartLocalTimestamp() ) : '',
+			'default' => $this->event ? wfTimestamp( TS::ISO_8601, $this->event->getStartLocalTimestamp() ) : '',
 			'required' => true,
 			'section' => self::DETAILS_SECTION,
 			'cssclass' => 'ext-campaignevents-time-input-event-start ' . $timeFieldClasses,
@@ -277,7 +278,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-end',
 			'min' => $minTime,
 			'max' => $maxTime,
-			'default' => $this->event ? wfTimestamp( TS_ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
+			'default' => $this->event ? wfTimestamp( TS::ISO_8601, $this->event->getEndLocalTimestamp() ) : '',
 			'required' => true,
 			'section' => self::DETAILS_SECTION,
 			'cssclass' => 'ext-campaignevents-time-input-event-end ' . $timeFieldClasses,
@@ -759,9 +760,9 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data[self::PAGE_FIELD_NAME_HTMLFORM],
 				$this->event ? $data['EventStatus'] : EventRegistration::STATUS_OPEN,
 				$this->parseSubmittedTimezone( $data['TimeZone'] ),
-				// Converting timestamps to TS_MW also gets rid of the UTC timezone indicator in them
-				wfTimestamp( TS_MW, $data['EventStart'] ),
-				wfTimestamp( TS_MW, $data['EventEnd'] ),
+				// Converting timestamps to TS::MW also gets rid of the UTC timezone indicator in them
+				wfTimestamp( TS::MW, $data['EventStart'] ),
+				wfTimestamp( TS::MW, $data['EventEnd'] ),
 				$data['EventTypes'],
 				$wikis,
 				$data['Topics'] ?? [],

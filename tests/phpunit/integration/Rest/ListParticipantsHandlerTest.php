@@ -26,6 +26,7 @@ use MediaWikiIntegrationTestCase;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -148,7 +149,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 				'participant_id' => 1,
 				'user_id' => $deletedUserID,
 				'hidden' => true,
-				'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
+				'user_registered_at' => wfTimestamp( TS::MW, '20220315120000' ),
 				'user_registered_at_formatted' => '12:00, 15 March 2022',
 				'private' => false,
 			]
@@ -284,7 +285,7 @@ class ListParticipantsHandlerTest extends MediaWikiIntegrationTestCase {
 				'title' => '',
 				'classes' => ''
 			],
-			'user_registered_at' => wfTimestamp( TS_MW, '20220315120000' ),
+			'user_registered_at' => wfTimestamp( TS::MW, '20220315120000' ),
 			'user_registered_at_formatted' => '12:00, 15 March 2022',
 			'private' => false,
 		];

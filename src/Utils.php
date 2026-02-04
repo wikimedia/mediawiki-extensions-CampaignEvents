@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\User\UserTimeCorrection;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * Simple utility methods.
@@ -77,7 +78,7 @@ class Utils {
 	 * aggregated, the aggregation timestamp is ignored. This is motivated by the current UI, where participant whose
 	 * answers have been aggregated are treated the same as those who never answered any question.
 	 *
-	 * @return string|null Timestamp in TS_UNIX format
+	 * @return string|null Timestamp in TS::UNIX format
 	 */
 	public static function getAnswerAggregationTimestamp(
 		Participant $participant,
@@ -88,7 +89,7 @@ class Utils {
 			return null;
 		}
 		$participantAggregationTS = (int)$firstAnswerTime + EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
-		$eventAggregationTS = (int)MWTimestamp::convert( TS_UNIX, $event->getEndUTCTimestamp() );
+		$eventAggregationTS = (int)MWTimestamp::convert( TS::UNIX, $event->getEndUTCTimestamp() );
 		return (string)min( $participantAggregationTS, $eventAggregationTS );
 	}
 

@@ -26,6 +26,7 @@ use Wikimedia\JsonCodec\JsonCodec;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\LBFactory;
 use Wikimedia\TestingAccessWrapper;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -473,7 +474,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $expectedEventNames, $actualEventNames );
 
 		// Verify all returned events meet the criteria
-		$currentTime = wfTimestamp( TS_MW );
+		$currentTime = wfTimestamp( TS::MW );
 		foreach ( $events as $event ) {
 			$this->assertNull( $event->getDeletionTimestamp(), 'Event should not be deleted' );
 			$this->assertLessThanOrEqual( $currentTime, $event->getStartUTCTimestamp(), 'Event should have started' );
@@ -486,14 +487,14 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public static function provideEventsForContributionAssociationByParticipant(): Generator {
-		$currentTime = wfTimestamp( TS_MW );
-		$currentUnix = wfTimestamp( TS_UNIX, $currentTime );
+		$currentTime = wfTimestamp( TS::MW );
+		$currentUnix = wfTimestamp( TS::UNIX, $currentTime );
 		// 1 day ago
-		$pastTime = wfTimestamp( TS_MW, $currentUnix - 86400 );
+		$pastTime = wfTimestamp( TS::MW, $currentUnix - 86400 );
 		// 1 day from now
-		$futureTime = wfTimestamp( TS_MW, $currentUnix + 86400 );
+		$futureTime = wfTimestamp( TS::MW, $currentUnix + 86400 );
 		// 2 days from now
-		$farFutureTime = wfTimestamp( TS_MW, $currentUnix + 172800 );
+		$farFutureTime = wfTimestamp( TS::MW, $currentUnix + 172800 );
 
 		$baseCtrArgs = self::getBaseCtrArgs();
 

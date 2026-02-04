@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -253,7 +254,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 			if ( $ts === false ) {
 				$this->fail( 'No actual timestamp' );
 			}
-			return wfTimestamp( TS_MW, $ts );
+			return wfTimestamp( TS::MW, $ts );
 		};
 
 		$ts1 = '20220227120001';
@@ -355,7 +356,7 @@ class ParticipantsStoreTest extends MediaWikiIntegrationTestCase {
 		foreach ( $actualUsers as $participant ) {
 			$participantID = $participant->getUser()->getCentralID();
 			$this->assertSame(
-				wfTimestamp( TS_UNIX, $expectedParticipants[$participantID]['registeredAt'] ),
+				wfTimestamp( TS::UNIX, $expectedParticipants[$participantID]['registeredAt'] ),
 				$participant->getRegisteredAt()
 			);
 		}

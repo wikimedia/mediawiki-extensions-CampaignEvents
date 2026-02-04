@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Utils\MWTimestamp;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * This class is responsible of managing the cache of event pages, to avoid issues like T326593.
@@ -25,8 +26,8 @@ class EventPageCacheUpdater {
 		OutputPage $out,
 		ExistingEventRegistration $registration
 	): void {
-		$endTSUnix = (int)wfTimestamp( TS_UNIX, $registration->getEndUTCTimestamp() );
-		$now = (int)MWTimestamp::now( TS_UNIX );
+		$endTSUnix = (int)wfTimestamp( TS::UNIX, $registration->getEndUTCTimestamp() );
+		$now = (int)MWTimestamp::now( TS::UNIX );
 		if ( $endTSUnix < $now ) {
 			// The event has ended, so it's presumably safe to allow normal caching.
 			return;

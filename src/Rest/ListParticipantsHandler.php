@@ -26,6 +26,7 @@ use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class ListParticipantsHandler extends SimpleHandler {
 	use EventIDParamTrait;
@@ -116,7 +117,7 @@ class ListParticipantsHandler extends SimpleHandler {
 			$respDataByCentralID[$centralID] = [
 				'participant_id' => $participant->getParticipantID(),
 				'user_id' => $centralID,
-				'user_registered_at' => wfTimestamp( TS_MW, $participant->getRegisteredAt() ),
+				'user_registered_at' => wfTimestamp( TS::MW, $participant->getRegisteredAt() ),
 				'user_registered_at_formatted' => $language->userTimeAndDate(
 					$participant->getRegisteredAt(),
 					$this->getAuthority()->getUser()

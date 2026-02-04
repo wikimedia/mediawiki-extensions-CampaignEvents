@@ -28,6 +28,7 @@ use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\StringDef;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 abstract class AbstractEditEventRegistrationHandler extends Handler {
 	use TokenAwareHandlerTrait;
@@ -118,13 +119,13 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			'start_time' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',
-				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS_MW,
+				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS::MW,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'end_time' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',
-				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS_MW,
+				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS::MW,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'types' => [

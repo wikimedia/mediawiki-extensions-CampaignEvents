@@ -16,6 +16,7 @@ use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\Assert\Assert;
 use Wikimedia\JsonCodec\JsonCodecable;
 use Wikimedia\JsonCodec\JsonCodecableTrait;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * Immutable value object that represents an abstract registration, i.e. one that may not exist in the database.
@@ -45,8 +46,8 @@ class EventRegistration implements JsonCodecable {
 	 * @param MWPageProxy $page
 	 * @param string $status One of the STATUS_* constants
 	 * @param DateTimeZone $timezone
-	 * @param string $startLocalTimestamp TS_MW timestamp
-	 * @param string $endLocalTimestamp TS_MW timestamp
+	 * @param string $startLocalTimestamp TS::MW timestamp
+	 * @param string $endLocalTimestamp TS::MW timestamp
 	 * @param non-empty-list<string> $types Event type names
 	 * @param string[]|true $wikis A list of wiki IDs, or {@see self::ALL_WIKIS}.
 	 * @param string[] $topics
@@ -87,14 +88,14 @@ class EventRegistration implements JsonCodecable {
 		private readonly ?string $deletionTimestamp,
 	) {
 		Assert::parameter(
-			MWTimestamp::convert( TS_MW, $startLocalTimestamp ) === $startLocalTimestamp,
+			MWTimestamp::convert( TS::MW, $startLocalTimestamp ) === $startLocalTimestamp,
 			'$startLocalTimestamp',
-			'Should be in TS_MW format.'
+			'Should be in TS::MW format.'
 		);
 		Assert::parameter(
-			MWTimestamp::convert( TS_MW, $endLocalTimestamp ) === $endLocalTimestamp,
+			MWTimestamp::convert( TS::MW, $endLocalTimestamp ) === $endLocalTimestamp,
 			'$endLocalTimestamp',
-			'Should be in TS_MW format.'
+			'Should be in TS::MW format.'
 		);
 		Assert::parameter(
 			count( $types ) >= 1,
@@ -132,39 +133,39 @@ class EventRegistration implements JsonCodecable {
 	}
 
 	/**
-	 * @return string Timestamp in the TS_MW format
+	 * @return string Timestamp in the TS::MW format
 	 */
 	public function getStartLocalTimestamp(): string {
 		return $this->startLocalTimestamp;
 	}
 
 	/**
-	 * @return string Timestamp in the TS_MW format
+	 * @return string Timestamp in the TS::MW format
 	 */
 	public function getStartUTCTimestamp(): string {
 		$localDateTime = new DateTime( $this->startLocalTimestamp, $this->timezone );
 		$utcStartTime = $localDateTime->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp();
-		return wfTimestamp( TS_MW, $utcStartTime );
+		return wfTimestamp( TS::MW, $utcStartTime );
 	}
 
 	/**
-	 * @return string Timestamp in TS_MW format
+	 * @return string Timestamp in TS::MW format
 	 */
 	public function getEndLocalTimestamp(): string {
 		return $this->endLocalTimestamp;
 	}
 
 	/**
-	 * @return string Timestamp in the TS_MW format
+	 * @return string Timestamp in the TS::MW format
 	 */
 	public function getEndUTCTimestamp(): string {
 		$localDateTime = new DateTime( $this->endLocalTimestamp, $this->timezone );
 		$utcEndTime = $localDateTime->setTimezone( new DateTimeZone( 'UTC' ) )->getTimestamp();
-		return wfTimestamp( TS_MW, $utcEndTime );
+		return wfTimestamp( TS::MW, $utcEndTime );
 	}
 
 	public function isPast(): bool {
-		return wfTimestamp( TS_UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS_UNIX );
+		return wfTimestamp( TS::UNIX, $this->getEndUTCTimestamp() ) < MWTimestamp::now( TS::UNIX );
 	}
 
 	public function isOngoing(): bool {
@@ -172,7 +173,7 @@ class EventRegistration implements JsonCodecable {
 	}
 
 	public function isFuture(): bool {
-		return wfTimestamp( TS_UNIX, $this->getStartUTCTimestamp() ) > MWTimestamp::now( TS_UNIX );
+		return wfTimestamp( TS::UNIX, $this->getStartUTCTimestamp() ) > MWTimestamp::now( TS::UNIX );
 	}
 
 	/** @return non-empty-list<string> */

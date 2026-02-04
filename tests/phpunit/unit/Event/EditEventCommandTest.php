@@ -30,6 +30,7 @@ use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use Psr\Log\NullLogger;
 use StatusValue;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Event\EditEventCommand
@@ -667,28 +668,28 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	public static function provideEventRegistrationsEditEventDates() {
 		return [
 			'There are answers, end date is past, and is changing the end date to future' => [
-				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
+				wfTimestamp( TS::MW, self::FAKE_TIME + 1 ),
 				true,
 				true,
 				false,
 				false
 			],
 			'There are aggregates, end date is past, and is changing the end date to future' => [
-				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
+				wfTimestamp( TS::MW, self::FAKE_TIME + 1 ),
 				true,
 				false,
 				true,
 				false
 			],
 			'There are no answers, and is changing the end date to future' => [
-				wfTimestamp( TS_MW, self::FAKE_TIME + 1 ),
+				wfTimestamp( TS::MW, self::FAKE_TIME + 1 ),
 				true,
 				false,
 				false,
 				true
 			],
 			'There are aggregates, but it is not changing event dates' => [
-				wfTimestamp( TS_MW, self::FAKE_TIME ),
+				wfTimestamp( TS::MW, self::FAKE_TIME ),
 				false,
 				false,
 				false,

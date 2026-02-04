@@ -31,6 +31,7 @@ use StatusValue;
 use Wikimedia\Message\ListType;
 use Wikimedia\Message\MessageValue;
 use Wikimedia\RequestTimeout\TimeoutException;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class EventFactory {
 	public const SERVICE_NAME = 'CampaignEventsEventFactory';
@@ -79,8 +80,8 @@ class EventFactory {
 	 * @param string $pageTitleStr
 	 * @param string $status
 	 * @param string $timezone Can be in any format accepted by DateTimeZone
-	 * @param string $startLocalTimestamp In the TS_MW format
-	 * @param string $endLocalTimestamp In the TS_MW format
+	 * @param string $startLocalTimestamp In the TS::MW format
+	 * @param string $endLocalTimestamp In the TS::MW format
 	 * @param list<string> $types
 	 * @param string[]|true $wikis List of wiki IDs, or {@see EventRegistration::ALL_WIKIS}
 	 * @param string[] $topics
@@ -94,9 +95,9 @@ class EventFactory {
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param string[] $participantQuestionNames
-	 * @param string|null $creationTimestamp In the TS_MW format
-	 * @param string|null $lastEditTimestamp In the TS_MW format
-	 * @param string|null $deletionTimestamp In the TS_MW format
+	 * @param string|null $creationTimestamp In the TS::MW format
+	 * @param string|null $lastEditTimestamp In the TS::MW format
+	 * @param string|null $deletionTimestamp In the TS::MW format
 	 * @param int $validationFlags
 	 * @param MWPageProxy|null $previousPage Used together with the validation flag
 	 *   {@link self::VALIDATE_SKIP_UNCHANGED_EVENT_PAGE_NAMESPACE}. If the requested event page is the same as
@@ -214,9 +215,9 @@ class EventFactory {
 		$res->merge( $questionsStatus );
 		$questionIDs = $questionsStatus->getValue();
 
-		$creationTSUnix = wfTimestampOrNull( TS_UNIX, $creationTimestamp );
-		$lastEditTSUnix = wfTimestampOrNull( TS_UNIX, $lastEditTimestamp );
-		$deletionTSUnix = wfTimestampOrNull( TS_UNIX, $deletionTimestamp );
+		$creationTSUnix = wfTimestampOrNull( TS::UNIX, $creationTimestamp );
+		$lastEditTSUnix = wfTimestampOrNull( TS::UNIX, $lastEditTimestamp );
+		$deletionTSUnix = wfTimestampOrNull( TS::UNIX, $deletionTimestamp );
 		// Creation, last edit, and deletion timestamp don't need user-facing validation since it's not the
 		// user setting them.
 		$invalidTimestamps = array_filter(
@@ -453,8 +454,8 @@ class EventFactory {
 		if ( $start === '' ) {
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-empty-start' );
-		} elseif ( MWTimestamp::convert( TS_MW, $start ) !== $start ) {
-			// This accounts for both the timestamp being invalid and it not being TS_MW.
+		} elseif ( MWTimestamp::convert( TS::MW, $start ) !== $start ) {
+			// This accounts for both the timestamp being invalid and it not being TS::MW.
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-invalid-start' );
 		} else {
@@ -469,8 +470,8 @@ class EventFactory {
 		if ( $end === '' ) {
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-empty-end' );
-		} elseif ( MWTimestamp::convert( TS_MW, $end ) !== $end ) {
-			// This accounts for both the timestamp being invalid and it not being TS_MW.
+		} elseif ( MWTimestamp::convert( TS::MW, $end ) !== $end ) {
+			// This accounts for both the timestamp being invalid and it not being TS::MW.
 			$startAndEndValid = false;
 			$res->error( 'campaignevents-error-invalid-end' );
 		} else {

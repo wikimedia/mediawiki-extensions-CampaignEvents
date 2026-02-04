@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use Wikimedia\Assert\Assert;
 use Wikimedia\Rdbms\IDBAccessObject;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class ParticipantsStore {
 	public const SERVICE_NAME = 'CampaignEventsParticipantsStore';
@@ -296,12 +297,12 @@ class ParticipantsStore {
 			}
 			$participants[] = new Participant(
 				$centralUsersByID[$centralID],
-				wfTimestamp( TS_UNIX, $row->cep_registered_at ),
+				wfTimestamp( TS::UNIX, $row->cep_registered_at ),
 				(int)$row->cep_id,
 				(bool)$row->cep_private,
 				$answersByUser[$centralID],
-				wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp ),
-				wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp ),
+				wfTimestampOrNull( TS::UNIX, $row->cep_first_answer_timestamp ),
+				wfTimestampOrNull( TS::UNIX, $row->cep_aggregation_timestamp ),
 				(bool)$row->cep_hide_contribution_association_prompt
 			);
 			$num++;
@@ -342,12 +343,12 @@ class ParticipantsStore {
 		$user = new CentralUser( (int)$row->cep_user_id );
 		return new Participant(
 			$user,
-			wfTimestamp( TS_UNIX, $row->cep_registered_at ),
+			wfTimestamp( TS::UNIX, $row->cep_registered_at ),
 			(int)$row->cep_id,
 			(bool)$row->cep_private,
 			$this->answersStore->getParticipantAnswers( $eventID, $user ),
-			wfTimestampOrNull( TS_UNIX, $row->cep_first_answer_timestamp ),
-			wfTimestampOrNull( TS_UNIX, $row->cep_aggregation_timestamp ),
+			wfTimestampOrNull( TS::UNIX, $row->cep_first_answer_timestamp ),
+			wfTimestampOrNull( TS::UNIX, $row->cep_aggregation_timestamp ),
 			(bool)$row->cep_hide_contribution_association_prompt
 		);
 	}

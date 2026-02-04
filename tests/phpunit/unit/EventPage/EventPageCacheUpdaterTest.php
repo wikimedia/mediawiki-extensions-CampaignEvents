@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater
@@ -38,7 +39,7 @@ class EventPageCacheUpdaterTest extends MediaWikiUnitTestCase {
 		$pastEvent = $this->createMock( ExistingEventRegistration::class );
 		$pastEvent->expects( $this->atLeastOnce() )
 			->method( 'getEndUTCTimestamp' )
-			->willReturn( wfTimestamp( TS_MW, self::FAKE_TIME - 1 ) );
+			->willReturn( wfTimestamp( TS::MW, self::FAKE_TIME - 1 ) );
 		$out = $this->createMock( OutputPage::class );
 		$out->expects( $this->never() )->method( 'lowerCdnMaxage' );
 
@@ -55,7 +56,7 @@ class EventPageCacheUpdaterTest extends MediaWikiUnitTestCase {
 		$futureEvent = $this->createMock( ExistingEventRegistration::class );
 		$futureEvent->expects( $this->atLeastOnce() )
 			->method( 'getEndUTCTimestamp' )
-			->willReturn( wfTimestamp( TS_MW, self::FAKE_TIME + $futureDiff ) );
+			->willReturn( wfTimestamp( TS::MW, self::FAKE_TIME + $futureDiff ) );
 		$out = $this->createMock( OutputPage::class );
 		$out->expects( $this->once() )
 			->method( 'lowerCdnMaxage' )

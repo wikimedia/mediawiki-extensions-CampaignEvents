@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater
@@ -111,7 +112,7 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 					42,
 					'bar',
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
-					wfTimestamp( TS_UNIX, '20230115000000' )
+					wfTimestamp( TS::UNIX, '20230115000000' )
 				),
 				new TrackingToolAssociation(
 					100,
@@ -158,7 +159,7 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 					42,
 					'bar',
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
-					wfTimestamp( TS_UNIX, '20230115000000' )
+					wfTimestamp( TS::UNIX, '20230115000000' )
 				),
 				new TrackingToolAssociation(
 					42,
@@ -204,13 +205,13 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 					42,
 					'foo',
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
-					wfTimestamp( TS_UNIX, '20200115000000' )
+					wfTimestamp( TS::UNIX, '20200115000000' )
 				),
 				new TrackingToolAssociation(
 					42,
 					'bar',
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
-					wfTimestamp( TS_UNIX, '20230115000000' )
+					wfTimestamp( TS::UNIX, '20230115000000' )
 				)
 			],
 			[
@@ -241,13 +242,13 @@ class TrackingToolUpdaterTest extends MediaWikiIntegrationTestCase {
 					42,
 					'updated foo',
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
-					wfTimestamp( TS_UNIX, '20300115000000' )
+					wfTimestamp( TS::UNIX, '20300115000000' )
 				),
 				new TrackingToolAssociation(
 					42,
 					'bar',
 					TrackingToolAssociation::SYNC_STATUS_SYNCED,
-					wfTimestamp( TS_UNIX, '20230115000000' )
+					wfTimestamp( TS::UNIX, '20230115000000' )
 				)
 			],
 			[

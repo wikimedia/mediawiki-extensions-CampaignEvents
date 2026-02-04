@@ -15,6 +15,7 @@ use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use Wikimedia\Assert\ParameterAssertionException;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 	protected static function getValidConstructorArgs(): array {
@@ -240,11 +241,11 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 	}
 
 	private static function getPastOngoingAndFutureEvents(): array {
-		$now = (int)MWTimestamp::now( TS_UNIX );
-		$farPastTS = wfTimestamp( TS_MW, $now - 200000 );
-		$pastTS = wfTimestamp( TS_MW, $now - 100000 );
-		$futureTS = wfTimestamp( TS_MW, $now + 100000 );
-		$farFutureTS = wfTimestamp( TS_MW, $now + 200000 );
+		$now = (int)MWTimestamp::now( TS::UNIX );
+		$farPastTS = wfTimestamp( TS::MW, $now - 200000 );
+		$pastTS = wfTimestamp( TS::MW, $now - 100000 );
+		$futureTS = wfTimestamp( TS::MW, $now + 100000 );
+		$farFutureTS = wfTimestamp( TS::MW, $now + 200000 );
 
 		$pastEvent = static::makeEventFromArguments(
 			...array_values( array_replace(

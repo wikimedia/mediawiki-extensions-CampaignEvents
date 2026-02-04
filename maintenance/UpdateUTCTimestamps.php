@@ -18,6 +18,7 @@ use Exception;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Maintenance\Maintenance;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * This script can be used to update UTC timestamps stored in the campaign_events table to make sure
@@ -122,10 +123,10 @@ class UpdateUTCTimestamps extends Maintenance {
 			$tz = new DateTimeZone( $row->event_timezone );
 			$localStartDateTime = new DateTime( $row->event_start_local, $tz );
 			$utcStartTime = $localStartDateTime->setTimezone( $this->utcTimezone )->getTimestamp();
-			$newStartTS = wfTimestamp( TS_MW, $utcStartTime );
+			$newStartTS = wfTimestamp( TS::MW, $utcStartTime );
 			$localEndDateTime = new DateTime( $row->event_end_local, $tz );
 			$utcEndTime = $localEndDateTime->setTimezone( $this->utcTimezone )->getTimestamp();
-			$newEndTS = wfTimestamp( TS_MW, $utcEndTime );
+			$newEndTS = wfTimestamp( TS::MW, $utcEndTime );
 
 			if ( $newStartTS !== $row->event_start_utc || $newEndTS !== $row->event_end_utc ) {
 				$newRows[] = [

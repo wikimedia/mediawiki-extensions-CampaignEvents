@@ -28,6 +28,7 @@ use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
 use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class EventStore implements IEventStore, IEventLookup {
 	private const EVENT_STATUS_MAP = [
@@ -388,7 +389,7 @@ class EventStore implements IEventStore, IEventLookup {
 					(int)$trackingToolRow->cett_tool_id,
 					$trackingToolRow->cett_tool_event_id,
 					TrackingToolUpdater::dbSyncStatusToConst( (int)$trackingToolRow->cett_sync_status ),
-					wfTimestampOrNull( TS_UNIX, $trackingToolRow->cett_last_sync )
+					wfTimestampOrNull( TS::UNIX, $trackingToolRow->cett_last_sync )
 				)
 			];
 		} else {
@@ -400,8 +401,8 @@ class EventStore implements IEventStore, IEventLookup {
 			$eventPage,
 			self::getEventStatusFromDBVal( $row->event_status ),
 			new DateTimeZone( $row->event_timezone ),
-			wfTimestamp( TS_MW, $row->event_start_local ),
-			wfTimestamp( TS_MW, $row->event_end_local ),
+			wfTimestamp( TS::MW, $row->event_start_local ),
+			wfTimestamp( TS::MW, $row->event_end_local ),
 			$types,
 			$wikis,
 			$topics,
@@ -413,9 +414,9 @@ class EventStore implements IEventStore, IEventLookup {
 			$row->event_chat_url !== '' ? $row->event_chat_url : null,
 			(bool)$row->event_is_test_event,
 			$questionIDs,
-			wfTimestamp( TS_UNIX, $row->event_created_at ),
-			wfTimestamp( TS_UNIX, $row->event_last_edit ),
-			wfTimestampOrNull( TS_UNIX, $row->event_deleted_at )
+			wfTimestamp( TS::UNIX, $row->event_created_at ),
+			wfTimestamp( TS::UNIX, $row->event_last_edit ),
+			wfTimestampOrNull( TS::UNIX, $row->event_deleted_at )
 		);
 	}
 
@@ -461,10 +462,10 @@ class EventStore implements IEventStore, IEventLookup {
 
 		$curCreationTS = $event->getCreationTimestamp();
 		$curDeletionTS = $event->getDeletionTimestamp();
-		// The local timestamps are already guaranteed to be in TS_MW format and the EventRegistration constructor
+		// The local timestamps are already guaranteed to be in TS::MW format and the EventRegistration constructor
 		// enforces that, but convert them again as an extra safeguard to avoid any chance of storing garbage.
-		$localStartDB = wfTimestamp( TS_MW, $event->getStartLocalTimestamp() );
-		$localEndDB = wfTimestamp( TS_MW, $event->getEndLocalTimestamp() );
+		$localStartDB = wfTimestamp( TS::MW, $event->getStartLocalTimestamp() );
+		$localEndDB = wfTimestamp( TS::MW, $event->getEndLocalTimestamp() );
 		$newRow = [
 			'event_name' => $event->getName(),
 			'event_page_namespace' => $event->getPage()->getNamespace(),

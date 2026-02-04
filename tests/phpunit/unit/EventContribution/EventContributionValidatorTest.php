@@ -25,6 +25,7 @@ use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use StatusValue;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -227,7 +228,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		// Setup revision
 		$revisionAuthor = $this->createMock( UserIdentity::class );
 		$revision = $this->createMock( RevisionRecord::class );
-		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS_MW ) );
+		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS::MW ) );
 		$revision->method( 'getUser' )->willReturn( $revisionAuthor );
 		$revision->method( 'getPageId' )->willReturn( 456 );
 
@@ -306,7 +307,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		// Setup revision
 		$revisionAuthor = $this->createMock( UserIdentity::class );
 		$revision = $this->createMock( RevisionRecord::class );
-		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS_MW ) );
+		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS::MW ) );
 		$revision->method( 'getUser' )->willReturn( $revisionAuthor );
 		$revision->method( 'getPageId' )->willReturn( 456 );
 
@@ -372,7 +373,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		// Setup revision
 		$revisionAuthor = $this->createMock( UserIdentity::class );
 		$revision = $this->createMock( RevisionRecord::class );
-		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS_MW ) );
+		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS::MW ) );
 		$revision->method( 'getUser' )->willReturn( $revisionAuthor );
 		$revision->method( 'getPageId' )->willReturn( 456 );
 
@@ -439,7 +440,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		// Setup revision
 		$revisionAuthor = $this->createMock( UserIdentity::class );
 		$revision = $this->createMock( RevisionRecord::class );
-		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS_MW ) );
+		$revision->method( 'getTimestamp' )->willReturn( MWTimestamp::now( TS::MW ) );
 		$revision->method( 'getPageId' )->willReturn( 456 );
 		$revision->method( 'getUser' )->willReturn( $revisionAuthor );
 

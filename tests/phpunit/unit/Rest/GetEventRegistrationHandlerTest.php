@@ -29,6 +29,7 @@ use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiUnitTestCase;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @group Test
@@ -113,8 +114,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventPage,
 			$eventData['status'],
 			$eventData['timezone'],
-			wfTimestamp( TS_MW, $eventData['start_time'] ),
-			wfTimestamp( TS_MW, $eventData['end_time'] ),
+			wfTimestamp( TS::MW, $eventData['start_time'] ),
+			wfTimestamp( TS::MW, $eventData['end_time'] ),
 			$eventData['types'],
 			$eventData['wikis'],
 			$eventData['topics'],

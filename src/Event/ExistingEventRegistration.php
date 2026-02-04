@@ -21,8 +21,8 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param MWPageProxy $page
 	 * @param string $status
 	 * @param DateTimeZone $timezone
-	 * @param string $startLocalTimestamp TS_MW timestamp
-	 * @param string $endLocalTimestamp TS_MW timestamp
+	 * @param string $startLocalTimestamp TS::MW timestamp
+	 * @param string $endLocalTimestamp TS::MW timestamp
 	 * @param non-empty-list<string> $types
 	 * @param string[]|true $wikis
 	 * @param string[] $topics
