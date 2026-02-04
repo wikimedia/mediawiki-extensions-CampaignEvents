@@ -36,6 +36,7 @@
 	"campaignevents-edit-field-meeting-url": "URL сусрета",
 	"campaignevents-edit-field-country": "Држава",
 	"campaignevents-edit-field-address": "Адреса",
+	"campaignevents-edit-field-event-is-test": "Уживо или тест догађај?",
 	"campaignevents-edit-field-status-live": "Уживо догађај",
 	"campaignevents-edit-field-status-test": "Тест догађај",
 	"campaignevents-edit-field-topics-label": "Теме догађаја",
