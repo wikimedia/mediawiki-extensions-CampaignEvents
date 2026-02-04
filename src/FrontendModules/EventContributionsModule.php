@@ -56,7 +56,6 @@ class EventContributionsModule {
 		$currentUser = $this->output->getAuthority();
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $currentUser );
-			$centralUserId = $centralUser->getCentralID();
 			$participant = $this->participantsStore->getEventParticipant( $eventId, $centralUser, true );
 			$userCanAddContributions = $this->permissionChecker->userCanAddAnyValidContribution(
 				$currentUser,
@@ -70,7 +69,6 @@ class EventContributionsModule {
 				$participant?->isPrivateRegistration();
 		} catch ( UserNotGlobalException ) {
 			// User is not logged in or doesn't have a global account
-			$centralUserId = 0;
 			$centralUser = null;
 			$includePrivateParticipants = false;
 			$participantIsPrivate = false;
@@ -81,7 +79,7 @@ class EventContributionsModule {
 
 		$summaryData = $this->eventContributionStore->getEventSummaryData(
 			$eventId,
-			$centralUserId,
+			$centralUser,
 			$includePrivateParticipants
 		);
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $this->output->getLanguage()->getCode() );

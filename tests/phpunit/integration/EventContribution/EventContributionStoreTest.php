@@ -257,7 +257,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		EventContributionSummary $expected
 	) {
 		$store = CampaignEventsServices::getEventContributionStore();
-		$actual = $store->getEventSummaryData( $eventID, $userID, $canSeePrivate );
+		$actual = $store->getEventSummaryData( $eventID, new CentralUser( $userID ), $canSeePrivate );
 		$this->assertEquals( $expected, $actual );
 	}
 

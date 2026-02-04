@@ -85,13 +85,14 @@ class EventContributionStore {
 	 * Get summary data for an event's contributions.
 	 *
 	 * @param int $eventId The event ID
-	 * @param int $currentUserId Current user ID for visibility checks (0 for anonymous users)
+	 * @param CentralUser|null $viewingUser Current user, for visibility checks (null for anonymous and non-global
+	 * users, will show public data).
 	 * @param bool $includePrivateParticipants Whether to include other users' private contributions
 	 * @return EventContributionSummary Summary data for the event
 	 */
 	public function getEventSummaryData(
 		int $eventId,
-		int $currentUserId,
+		?CentralUser $viewingUser,
 		bool $includePrivateParticipants
 	): EventContributionSummary {
 		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
@@ -99,9 +100,9 @@ class EventContributionStore {
 		// Build visibility conditions for private participants
 		$visibilityConditions = [];
 		if ( !$includePrivateParticipants ) {
-			if ( $currentUserId ) {
+			if ( $viewingUser ) {
 				// Only show current user's contributions and public contributions from others
-				$visibilityConditions[] = $dbr->expr( 'cec.cec_user_id', '=', $currentUserId )
+				$visibilityConditions[] = $dbr->expr( 'cec.cec_user_id', '=', $viewingUser->getCentralID() )
 					->or( 'cep.cep_private', '=', 0 );
 			} else {
 				// Anonymous users can only see public contributions
