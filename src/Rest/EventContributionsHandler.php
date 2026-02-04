@@ -30,9 +30,6 @@ class EventContributionsHandler extends SimpleHandler {
 		$this->validateToken();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	protected function run( int $eventID, string $wikiID, string $revisionID ): Response {
 		$performer = $this->getAuthority();
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );

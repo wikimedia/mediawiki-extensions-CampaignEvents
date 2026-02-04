@@ -7,17 +7,17 @@ namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 /**
  * Data transfer object for event contribution summary metrics.
  */
-class EventContributionSummary {
+readonly class EventContributionSummary {
 	public function __construct(
-		private readonly int $participantsCount,
-		private readonly int $wikisEditedCount,
-		private readonly int $articlesCreatedCount,
-		private readonly int $articlesEditedCount,
-		private readonly int $bytesAdded,
-		private readonly int $bytesRemoved,
-		private readonly int $linksAdded,
-		private readonly int $linksRemoved,
-		private readonly int $editCount,
+		private int $participantsCount,
+		private int $wikisEditedCount,
+		private int $articlesCreatedCount,
+		private int $articlesEditedCount,
+		private int $bytesAdded,
+		private int $bytesRemoved,
+		private int $linksAdded,
+		private int $linksRemoved,
+		private int $editCount,
 	) {
 	}
 

@@ -62,7 +62,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	public $mDefaultDirection = IndexPager::DIR_ASCENDING;
 
 	private string $search;
-	private array $filterEventTypes = [];
+	/** @var list<string> */
+	private array $filterEventTypes;
 	protected ?string $startDate;
 	protected ?string $endDate;
 	/** One of the EventRegistration::PARTICIPATION_OPTION_* constants */
@@ -263,7 +264,7 @@ class EventsListPager extends ReverseChronologicalPager {
 	/**
 	 * @inheritDoc
 	 */
-	public function formatRow( $row ) {
+	public function formatRow( $row ): string {
 		$event = $this->eventObjects[$row->event_id];
 
 		$rowContent = Html::element(
@@ -376,8 +377,9 @@ class EventsListPager extends ReverseChronologicalPager {
 
 	/**
 	 * @inheritDoc
+	 * @return string[][]
 	 */
-	public function getIndexField() {
+	public function getIndexField(): array {
 		return [ [ 'event_start_utc', 'event_id' ] ];
 	}
 

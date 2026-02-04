@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Page\ProperPageIdentity;
+use stdClass;
 use Wikimedia\Rdbms\IDatabase;
 
 /**
@@ -58,10 +59,10 @@ class EventContributionStore {
 	/**
 	 * Create a new EventContribution from a database row.
 	 *
-	 * @param \stdClass $row Database row object containing contribution data
+	 * @param stdClass $row Database row object containing contribution data
 	 * @return EventContribution New EventContribution instance
 	 */
-	public function newFromRow( \stdClass $row ): EventContribution {
+	public function newFromRow( stdClass $row ): EventContribution {
 		$this->assertValidRow( $row );
 
 		return new EventContribution(
@@ -159,9 +160,9 @@ class EventContributionStore {
 	/**
 	 * Assert that a database row has the required fields.
 	 *
-	 * @param \stdClass $row The row to validate
+	 * @param stdClass $row The row to validate
 	 */
-	private function assertValidRow( \stdClass $row ): void {
+	private function assertValidRow( stdClass $row ): void {
 		$requiredFields = [
 			'cec_event_id', 'cec_user_id', 'cec_user_name', 'cec_wiki', 'cec_page_id', 'cec_page_prefixedtext',
 			'cec_revision_id', 'cec_edit_flags', 'cec_bytes_delta', 'cec_links_delta', 'cec_timestamp', 'cec_deleted'

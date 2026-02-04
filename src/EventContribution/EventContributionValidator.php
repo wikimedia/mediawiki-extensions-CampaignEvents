@@ -46,9 +46,8 @@ class EventContributionValidator {
 		string $wikiID,
 		Authority $performer
 	): void {
-		// Get central user
 		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
+			$this->centralUserLookup->newFromAuthority( $performer );
 		} catch ( UserNotGlobalException ) {
 			throw new LocalizedHttpException(
 				MessageValue::new( 'campaignevents-event-contribution-user-not-global' ),

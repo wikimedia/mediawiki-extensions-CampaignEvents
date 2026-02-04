@@ -26,7 +26,7 @@ class SpecialMyInvitationLists extends SpecialPage {
 	/**
 	 * @inheritDoc
 	 */
-	public function execute( $par ): void {
+	public function execute( $subPage ): void {
 		$this->setHeaders();
 		$this->outputHeader();
 		$out = $this->getOutput();
@@ -53,7 +53,7 @@ class SpecialMyInvitationLists extends SpecialPage {
 				$pager->getBody() .
 				$pager->getNavigationBar()
 			);
-			parent::execute( $par );
+			parent::execute( $subPage );
 		}
 	}
 

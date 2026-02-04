@@ -154,23 +154,14 @@ class WikiEduDashboard extends TrackingTool {
 		return $status;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function validateEventDeletion( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
 		return $this->validateToolRemoval( $event, $toolEventID );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function onEventDeleted( ExistingEventRegistration $event, string $toolEventID ): StatusValue {
 		return $this->removeFromEvent( $event, $toolEventID );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function validateParticipantAdded(
 		ExistingEventRegistration $event,
 		string $toolEventID,
@@ -180,9 +171,6 @@ class WikiEduDashboard extends TrackingTool {
 		return $this->syncParticipants( $event, $toolEventID, true );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function addParticipant(
 		ExistingEventRegistration $event,
 		string $toolEventID,

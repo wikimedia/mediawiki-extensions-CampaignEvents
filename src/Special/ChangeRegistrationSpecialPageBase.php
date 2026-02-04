@@ -91,7 +91,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 	 *
 	 * @return string|true Error message key, or true if OK.
 	 */
-	protected function checkRegistrationPrecondition() {
+	protected function checkRegistrationPrecondition(): string|true {
 		return true;
 	}
 

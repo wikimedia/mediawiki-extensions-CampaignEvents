@@ -369,7 +369,7 @@ class EventStore implements IEventStore, IEventLookup {
 		array $topics,
 		array $questionIDs
 	): ExistingEventRegistration {
-		self::assertValidRow( $row );
+		$this->assertValidRow( $row );
 
 		$eventPage = $this->campaignsPageFactory->newPageFromDB(
 			(int)$row->event_page_namespace,

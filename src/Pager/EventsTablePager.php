@@ -196,7 +196,7 @@ class EventsTablePager extends TablePager {
 	 * @inheritDoc
 	 * @return list<string>
 	 */
-	public function getModuleStyles() {
+	public function getModuleStyles(): array {
 		return array_merge(
 			parent::getModuleStyles(),
 			[

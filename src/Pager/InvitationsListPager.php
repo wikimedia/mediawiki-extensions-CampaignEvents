@@ -35,7 +35,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	/**
 	 * @inheritDoc
 	 */
-	public function formatRow( $row ) {
+	public function formatRow( $row ): string {
 		$linkWrapper = Html::rawElement(
 			'div',
 			[ 'class' => 'ext-campaignevents-invitations-pager-link' ],
@@ -55,7 +55,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	 * @inheritDoc
 	 * @return array<string,mixed>
 	 */
-	public function getQueryInfo() {
+	public function getQueryInfo(): array {
 		$ceilFields = [
 			'ceil_id',
 			'ceil_name',
@@ -96,8 +96,9 @@ class InvitationsListPager extends ReverseChronologicalPager {
 
 	/**
 	 * @inheritDoc
+	 * @return string[][]
 	 */
-	public function getIndexField() {
+	public function getIndexField(): array {
 		// This index is not optimized
 		return [ [ 'ceil_created_at', 'ceil_id' ] ];
 	}
@@ -105,7 +106,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEmptyBody() {
+	public function getEmptyBody(): string {
 		$text = Html::element(
 			'p',
 			[],

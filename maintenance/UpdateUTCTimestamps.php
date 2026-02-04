@@ -49,7 +49,7 @@ class UpdateUTCTimestamps extends Maintenance {
 	/**
 	 * @inheritDoc
 	 */
-	public function execute() {
+	public function execute(): void {
 		$this->output( "Updating UTC timestamps in the campaign_events table...\n" );
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
 		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );

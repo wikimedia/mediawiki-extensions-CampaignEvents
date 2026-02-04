@@ -824,6 +824,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			} catch ( TimeoutException $e ) {
 				throw $e;
 			} catch ( Exception ) {
+				// PHP < 8.3 throws a generic Exception, but we don't want to catch excimer timeouts.
 				return new DateTimeZone( 'UTC' );
 			}
 		}

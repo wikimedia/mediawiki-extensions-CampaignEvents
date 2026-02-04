@@ -72,7 +72,7 @@ class Worklist {
 	 * @param array $array
 	 * @phan-param array<string|false,array<array{0:int,1:int,2:string,3:string|false}>> $array
 	 */
-	public static function fromPlainArray( array $array ): Worklist {
+	public static function fromPlainArray( array $array ): self {
 		$pagesByWiki = [];
 		foreach ( $array as $wiki => $wikiPageData ) {
 			$pagesByWiki[$wiki] = [];

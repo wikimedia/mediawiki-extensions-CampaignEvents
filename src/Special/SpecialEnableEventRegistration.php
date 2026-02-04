@@ -74,9 +74,6 @@ class SpecialEnableEventRegistration extends AbstractEventRegistrationSpecialPag
 		];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	protected function getValidationFlags(): int {
 		return EventFactory::VALIDATE_ALL;
 	}

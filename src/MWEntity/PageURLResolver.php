@@ -19,8 +19,6 @@ class PageURLResolver {
 	private array $fullUrlCache = [];
 	/** @var string[] Cached results of getCanonicalUrl() */
 	private array $canonicalUrlCache = [];
-	/** @var string[] Cached results of getUrlFromPrefixedText() */
-	private array $prefixedUrlCache = [];
 
 	public function __construct(
 		private readonly TitleFactory $titleFactory,

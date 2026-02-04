@@ -12,7 +12,7 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 	/**
 	 * @param DatabaseUpdater $updater
 	 */
-	public function onLoadExtensionSchemaUpdates( $updater ) {
+	public function onLoadExtensionSchemaUpdates( $updater ): void {
 		$dbType = $updater->getDB()->getType();
 		$dir = __DIR__ . "/../../../db_patches";
 

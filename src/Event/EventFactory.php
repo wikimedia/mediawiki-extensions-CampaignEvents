@@ -435,8 +435,6 @@ class EventFactory {
 			throw $e;
 		} catch ( Exception ) {
 			// PHP < 8.3 throws a generic Exception, but we don't want to catch excimer timeouts.
-			// Again, thanks PHP for making error handling so convoluted here.
-			// See https://github.com/php/php-src/issues/9784
 			return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
 		}
 	}
@@ -528,7 +526,7 @@ class EventFactory {
 		$allowedSchemes = [ 'http', 'https' ];
 
 		// Add the HTTPS protocol explicitly, since FILTER_VALIDATE_URL wants a scheme.
-		$urlToCheck = preg_match( '/^\/\/.*/', $data ) ? "https:$data" : $data;
+		$urlToCheck = preg_match( '/^\/\//', $data ) ? "https:$data" : $data;
 		$urlParts = parse_url( $urlToCheck );
 
 		// Validate scheme, host presence, and allowed schemes

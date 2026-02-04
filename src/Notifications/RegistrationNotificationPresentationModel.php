@@ -92,7 +92,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 	/**
 	 * @inheritDoc
 	 */
-	public function getHeaderMessage() {
+	public function getHeaderMessage(): Message {
 		$eventPageLink = $this->makeLink(
 			$this->pageUrlResolver->getFullUrl( $this->eventRegistration->getPage() ),
 			$this->eventRegistration->getName()
@@ -122,7 +122,7 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 	/**
 	 * @inheritDoc
 	 */
-	public function getBodyMessage() {
+	public function getBodyMessage(): Message {
 		$body = Html::element(
 			'h1',
 			[],
@@ -264,8 +264,9 @@ class RegistrationNotificationPresentationModel extends EchoEventPresentationMod
 
 	/**
 	 * @inheritDoc
+	 * @return array{url:string,label:string}
 	 */
-	public function getPrimaryLink() {
+	public function getPrimaryLink(): array {
 		return [
 			'url' => $this->pageUrlResolver->getFullUrl( $this->eventRegistration->getPage() ),
 			'label' => $this->msg( 'campaignevents-notification-registration-event-page-link' )->text(),

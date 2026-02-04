@@ -256,9 +256,8 @@ class EventContributionsPager extends CodexTablePager {
 
 	/**
 	 * @inheritDoc
-	 * @return string|null
 	 */
-	public function formatValue( $name, $value ) {
+	public function formatValue( $name, $value ): ?string {
 		$row = $this->mCurrentRow;
 		return match ( $name ) {
 			'article' => $this->formatArticle( $row ),

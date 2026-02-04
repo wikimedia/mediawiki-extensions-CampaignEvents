@@ -29,7 +29,7 @@ class SpecialCancelEventRegistration extends ChangeRegistrationSpecialPageBase {
 	/**
 	 * @inheritDoc
 	 */
-	protected function checkRegistrationPrecondition() {
+	protected function checkRegistrationPrecondition(): string|true {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $this->getAuthority() );
 			$isParticipating = $this->participantsStore->userParticipatesInEvent(

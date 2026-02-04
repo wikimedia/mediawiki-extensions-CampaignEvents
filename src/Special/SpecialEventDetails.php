@@ -60,16 +60,16 @@ class SpecialEventDetails extends SpecialPage {
 
 	/**
 	 * @inheritDoc
-	 * @param string|null $par
+	 * @param string|null $subPage
 	 */
-	public function execute( $par ): void {
+	public function execute( $subPage ): void {
 		$this->setHeaders();
-		if ( $par === null ) {
+		if ( $subPage === null ) {
 			$this->outputErrorBox( 'campaignevents-event-details-no-event-id-provided' );
 			return;
 		}
-		$eventID = (int)$par;
-		if ( (string)$eventID !== $par ) {
+		$eventID = (int)$subPage;
+		if ( (string)$eventID !== $subPage ) {
 			$this->outputErrorBox( 'campaignevents-event-details-invalid-id' );
 			return;
 		}

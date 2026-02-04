@@ -16,12 +16,12 @@ class EchoHooksHandler implements BeforeCreateEchoEventHook {
 	/**
 	 * @param array<string,array<string,mixed>> &$notifications
 	 * @param array<string,array<string,mixed>> &$notificationCategories
-	 * @param array<string,array<string,mixed>> &$icons
+	 * @param array<string,array<string,mixed>> &$notificationIcons
 	 */
 	public function onBeforeCreateEchoEvent(
 		array &$notifications,
 		array &$notificationCategories,
-		array &$icons
+		array &$notificationIcons
 	): void {
 		global $wgNotifyTypeAvailabilityByCategory;
 		$wgNotifyTypeAvailabilityByCategory[ self::REGISTRATION_NOTIFICATION_CATEGORY ] = [
@@ -47,7 +47,7 @@ class EchoHooksHandler implements BeforeCreateEchoEventHook {
 			],
 		];
 
-		$icons[RegistrationNotificationPresentationModel::ICON_NAME]['path'] =
+		$notificationIcons[RegistrationNotificationPresentationModel::ICON_NAME]['path'] =
 			'CampaignEvents/resources/icons/calendar.svg';
 	}
 }

@@ -44,7 +44,7 @@ class SpecialInvitationList extends SpecialPage {
 	/**
 	 * @inheritDoc
 	 */
-	public function execute( $par ): void {
+	public function execute( $subPage ): void {
 		$this->setHeaders();
 		$this->outputHeader();
 		$out = $this->getOutput();
@@ -54,7 +54,7 @@ class SpecialInvitationList extends SpecialPage {
 			$this->getAuthority()
 		);
 		if ( $isEnabledAndPermitted ) {
-			$this->maybeDisplayList( $par );
+			$this->maybeDisplayList( $subPage );
 		}
 	}
 
