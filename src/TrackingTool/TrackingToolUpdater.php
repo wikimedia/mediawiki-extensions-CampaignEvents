@@ -58,7 +58,7 @@ class TrackingToolUpdater {
 	 * that writes are done on the same DB handle.
 	 */
 	public function replaceEventTools( int $eventID, array $tools, ?IDatabase $dbw = null ): void {
-		$dbw ??= $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw ??= $this->dbHelper->getPrimaryConnection();
 
 		// Make a map of tools with faster lookup to compare existing values
 		$toolsMap = [];
@@ -136,7 +136,7 @@ class TrackingToolUpdater {
 	 * @param int $status One of the TrackingToolAssociation::SYNC_STATUS_* constants
 	 */
 	public function updateToolSyncStatus( int $eventID, int $toolID, string $toolEventID, int $status ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$setConds = [
 			'cett_sync_status' => self::syncStatusToDB( $status ),
 		];

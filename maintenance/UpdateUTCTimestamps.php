@@ -18,6 +18,7 @@ use Exception;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Maintenance\Maintenance;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
@@ -29,7 +30,7 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
  */
 class UpdateUTCTimestamps extends Maintenance {
 	private ?IDatabase $dbw;
-	private ?IDatabase $dbr;
+	private ?IReadableDatabase $dbr;
 	private ?DateTimeZone $utcTimezone;
 
 	public function __construct() {
@@ -53,8 +54,8 @@ class UpdateUTCTimestamps extends Maintenance {
 	public function execute(): void {
 		$this->output( "Updating UTC timestamps in the campaign_events table...\n" );
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
-		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );
-		$this->dbw = $dbHelper->getDBConnection( DB_PRIMARY );
+		$this->dbr = $dbHelper->getReplicaConnection();
+		$this->dbw = $dbHelper->getPrimaryConnection();
 		$batchSize = $this->getBatchSize();
 		$updateTimezones = $this->getOption( 'timezone' );
 		$this->validateTimezones( $updateTimezones );

@@ -8,7 +8,6 @@ use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use RuntimeException;
 use stdClass;
-use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
 
 /**
@@ -27,7 +26,7 @@ class AddressStore {
 		?Address $address,
 		int $eventID
 	): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		$where = [ 'ceea_event' => $eventID ];
 		if ( $address ) {
@@ -91,7 +90,7 @@ class AddressStore {
 	 * or insert a new entry.
 	 */
 	public function acquireAddressID( Address $address ): int {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		// TODO This query is not indexed; for the future we will need to use some indexed field (like unique
 		// address identifiers) instead of the full address. In the interim, it is important that whatever this
@@ -123,7 +122,7 @@ class AddressStore {
 		return $addressID;
 	}
 
-	public function getEventAddress( IDatabase $db, int $eventID ): ?Address {
+	public function getEventAddress( IReadableDatabase $db, int $eventID ): ?Address {
 		$addressRows = $db->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_address' )

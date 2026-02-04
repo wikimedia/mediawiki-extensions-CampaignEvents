@@ -46,7 +46,7 @@ class EventGoalStore {
 			return $result;
 		}
 
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$rows = $dbr->newSelectQueryBuilder()
 			->select( [ 'ceeg_event_id', 'ceeg_goals' ] )
 			->from( 'ce_event_goals' )
@@ -80,7 +80,7 @@ class EventGoalStore {
 			return;
 		}
 
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		// Always delete first to avoid duplicates on re-save.
 		$dbw->newDeleteQueryBuilder()

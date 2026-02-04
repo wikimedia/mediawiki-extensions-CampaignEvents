@@ -33,7 +33,7 @@ class OrganizersStoreTest extends MediaWikiUnitTestCase {
 		$db->method( 'newSelectQueryBuilder' )
 			->willReturn( $queryBuilder );
 		$dbHelper = $this->createMock( CampaignsDatabaseHelper::class );
-		$dbHelper->method( 'getDBConnection' )->willReturn( $db );
+		$dbHelper->method( 'getReplicaConnection' )->willReturn( $db );
 		return new OrganizersStore( $dbHelper );
 	}
 

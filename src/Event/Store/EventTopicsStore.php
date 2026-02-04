@@ -36,7 +36,7 @@ class EventTopicsStore {
 	public function getEventTopicsMulti( array $eventIDs ): array {
 		$topicsByEvent = array_fill_keys( $eventIDs, [] );
 
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$queryBuilder = $dbr->newSelectQueryBuilder();
 		$res = $queryBuilder->select( [ 'ceet_event_id', 'ceet_topic' ] )
 			->from( 'ce_event_topics' )
@@ -57,7 +57,7 @@ class EventTopicsStore {
 	 * @param string[] $eventTopics An array of topic IDs to add
 	 */
 	public function addOrUpdateEventTopics( int $eventID, array $eventTopics ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();
 		$currentTopicsRes = $queryBuilder->select( [ 'ceet_id', 'ceet_topic' ] )

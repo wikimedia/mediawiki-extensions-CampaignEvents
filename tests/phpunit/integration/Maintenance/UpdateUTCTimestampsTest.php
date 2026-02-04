@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Maintenance;
 
-use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Maintenance\UpdateUTCTimestamps;
 use MediaWiki\Tests\Maintenance\MaintenanceBaseTestCase;
 use MediaWiki\WikiMap\WikiMap;
@@ -30,7 +29,7 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 	 * @inheritDoc
 	 */
 	public function addDBData() {
-		$dbw = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_PRIMARY );
+		$dbw = $this->getDb();
 		$baseRow = [
 			'event_name' => 'Test',
 			'event_page_namespace' => NS_EVENT,
@@ -102,7 +101,7 @@ class UpdateUTCTimestampsTest extends MaintenanceBaseTestCase {
 		// Check estimate of affected rows.
 		$this->expectOutputRegex( '/~3 updated/' );
 		$this->maintenance->execute();
-		$dbr = CampaignEventsServices::getDatabaseHelper()->getDBConnection( DB_REPLICA );
+		$dbr = $this->getDb();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'campaign_events' )

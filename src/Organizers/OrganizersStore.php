@@ -30,7 +30,7 @@ class OrganizersStore {
 	 * @return Organizer[]
 	 */
 	public function getEventOrganizers( int $eventID, ?int $limit = null, ?int $lastOrganizerId = null ): array {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$where = [
 			'ceo_event_id' => $eventID,
 			'ceo_deleted_at' => null,
@@ -63,7 +63,7 @@ class OrganizersStore {
 	 * @return Organizer[][]
 	 */
 	public function getOrganizersForEvents( array $eventIDs, int $perEventLimit ): array {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		// This uses a self-join to let us count and limit the number of rows for each group (event).
 		// Rownumber/partition-based approaches would likely be cleaner, but it seems that we can't use those.
 		$res = $dbr->newSelectQueryBuilder()
@@ -123,7 +123,7 @@ class OrganizersStore {
 	 * and also if the event has never had a creator (e.g., if the event doesn't exist at all).
 	 */
 	public function getEventCreators( array $eventIDs, string $includeDeleted ): array {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$creatorRole = self::ROLES_MAP[Roles::ROLE_CREATOR];
 		$where = [
 			'ceo_event_id' => $eventIDs,
@@ -171,7 +171,7 @@ class OrganizersStore {
 	}
 
 	public function getEventOrganizer( int $eventID, CentralUser $user ): ?Organizer {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$row = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_organizers' )
@@ -202,7 +202,7 @@ class OrganizersStore {
 	 * @return array<int,int> Maps event ID to number of organizers
 	 */
 	public function getOrganizerCountForEvents( array $eventIDs ): array {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( [ 'num' => 'COUNT(*)', 'ceo_event_id' ] )
 			->from( 'ce_organizers' )
@@ -221,7 +221,7 @@ class OrganizersStore {
 	}
 
 	public function updateClickwrapAcceptance( int $eventID, CentralUser $organizer ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$dbw->newUpdateQueryBuilder()
 			->update( 'ce_organizers' )
 			->set( [ 'ceo_agreement_timestamp' => $dbw->timestamp() ] )
@@ -238,7 +238,7 @@ class OrganizersStore {
 	 * @param array<int,string[]> $organizers Map of [ user ID => roles[] ]
 	 */
 	public function addOrganizersToEvent( int $eventID, array $organizers ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$newRows = [];
 		$createdAt = $dbw->timestamp();
 		$eventCreator = $this->getEventCreator( $eventID, self::GET_CREATOR_INCLUDE_DELETED );
@@ -292,7 +292,7 @@ class OrganizersStore {
 	 * @param int[] $userIDsToNotRemove
 	 */
 	public function removeOrganizersFromEventExcept( int $eventID, array $userIDsToNotRemove ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		$dbw->newUpdateQueryBuilder()
 			->update( 'ce_organizers' )

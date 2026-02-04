@@ -29,7 +29,7 @@ class InvitationListStore {
 		?int $eventID,
 		CentralUser $creator
 	): int {
-		$dbw = $this->databaseHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->databaseHelper->getPrimaryConnection();
 		$dbw->newInsertQueryBuilder()
 			->insertInto( 'ce_invitation_lists' )
 			->row( [
@@ -60,7 +60,7 @@ class InvitationListStore {
 				'cewa_ceil_id' => $invitationListID,
 			];
 		}
-		$dbw = $this->databaseHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->databaseHelper->getPrimaryConnection();
 		$dbw->newInsertQueryBuilder()
 			->insertInto( 'ce_worklist_articles' )
 			->rows( $rows )
@@ -73,7 +73,7 @@ class InvitationListStore {
 	 * @param int $status One of the InvitationList::STATUS_* constants
 	 */
 	public function updateStatus( int $invitationList, int $status ): void {
-		$dbw = $this->databaseHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->databaseHelper->getPrimaryConnection();
 		$dbw->newUpdateQueryBuilder()
 			->update( 'ce_invitation_lists' )
 			->set( [ 'ceil_status' => $status ] )
@@ -95,7 +95,7 @@ class InvitationListStore {
 				'ceilu_score' => $score
 			];
 		}
-		$dbw = $this->databaseHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->databaseHelper->getPrimaryConnection();
 		$dbw->newInsertQueryBuilder()
 			->insertInto( 'ce_invitation_list_users' )
 			->rows( $rows )
@@ -107,7 +107,7 @@ class InvitationListStore {
 	 * @throws InvitationListNotFoundException
 	 */
 	public function getInvitationList( int $listID ): InvitationList {
-		$dbr = $this->databaseHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->databaseHelper->getReplicaConnection();
 		$row = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_invitation_lists' )
@@ -132,7 +132,7 @@ class InvitationListStore {
 	}
 
 	public function getWorklist( int $invitationListID ): Worklist {
-		$dbr = $this->databaseHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->databaseHelper->getReplicaConnection();
 		$invitationListWiki = $dbr->newSelectQueryBuilder()
 			->select( 'ceil_wiki' )
 			->from( 'ce_invitation_lists' )
@@ -185,7 +185,7 @@ class InvitationListStore {
 	 * @return array<int,int> [ user => score ] A maximum of 200 users is returned, ordered by score (high to low)
 	 */
 	public function getInvitationListUsers( int $invitationListID ): array {
-		$dbr = $this->databaseHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->databaseHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( [ 'ceilu_user_id', 'ceilu_score' ] )
 			->from( 'ce_invitation_list_users' )

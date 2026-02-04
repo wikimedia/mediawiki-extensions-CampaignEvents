@@ -21,7 +21,7 @@ class EventQuestionsStore {
 	 * @param int[] $questionIDs
 	 */
 	public function replaceEventQuestions( int $eventID, array $questionIDs ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$currentQuestions = $dbw->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_event_questions' )
@@ -74,7 +74,7 @@ class EventQuestionsStore {
 			return [];
 		}
 
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_event_questions' )

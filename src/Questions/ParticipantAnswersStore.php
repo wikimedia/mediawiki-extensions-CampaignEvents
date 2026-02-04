@@ -24,7 +24,7 @@ class ParticipantAnswersStore {
 	 */
 	public function replaceParticipantAnswers( int $eventID, CentralUser $participant, array $answers ): bool {
 		$userID = $participant->getCentralID();
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$currentAnswers = $dbw->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_question_answers' )
@@ -110,7 +110,7 @@ class ParticipantAnswersStore {
 			throw new InvalidArgumentException( '$participants cannot be the empty array' );
 		}
 
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$where = [
 			'ceqa_event_id' => $eventID,
 		];
@@ -150,7 +150,7 @@ class ParticipantAnswersStore {
 			return [];
 		}
 		$participantIDs = array_map( static fn ( CentralUser $u ): int => $u->getCentralID(), $participants );
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_question_answers' )
@@ -176,7 +176,7 @@ class ParticipantAnswersStore {
 	 * Returns whether the given event has any answers.
 	 */
 	public function eventHasAnswers( int $eventID ): bool {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( '1' )
 			->from( 'ce_question_answers' )

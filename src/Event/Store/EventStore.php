@@ -27,7 +27,6 @@ use stdClass;
 use Wikimedia\JsonCodec\JsonCodec;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\Database;
-use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Timestamp\TimestampFormat as TS;
@@ -72,7 +71,7 @@ class EventStore implements IEventStore, IEventLookup {
 			return $this->cache[$eventID];
 		}
 
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$eventRow = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'campaign_events' )
@@ -116,7 +115,7 @@ class EventStore implements IEventStore, IEventLookup {
 			function ( ExistingEventRegistration|bool|null $oldValue, int &$ttl, array &$setOpts )
 				use ( $page, $readFlags ): ?string
 			{
-				$db = $this->dbHelper->getDBConnection( DB_REPLICA );
+				$db = $this->dbHelper->getReplicaConnection();
 
 				$setOpts += Database::getCacheSetOptions( $db );
 
@@ -148,9 +147,9 @@ class EventStore implements IEventStore, IEventLookup {
 	 */
 	private function loadEventFromDB( MWPageProxy $page, int $readFlags ): ExistingEventRegistration {
 		if ( ( $readFlags & IDBAccessObject::READ_LATEST ) === IDBAccessObject::READ_LATEST ) {
-			$db = $this->dbHelper->getDBConnection( DB_PRIMARY );
+			$db = $this->dbHelper->getPrimaryConnection();
 		} else {
-			$db = $this->dbHelper->getDBConnection( DB_REPLICA );
+			$db = $this->dbHelper->getReplicaConnection();
 		}
 
 		$eventRow = $db->newSelectQueryBuilder()
@@ -192,7 +191,7 @@ class EventStore implements IEventStore, IEventLookup {
 		);
 	}
 
-	private function getEventTrackingToolRow( IDatabase $db, int $eventID ): ?stdClass {
+	private function getEventTrackingToolRow( IReadableDatabase $db, int $eventID ): ?stdClass {
 		$trackingToolsRows = $db->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_tracking_tools' )
@@ -217,7 +216,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function getEventsByOrganizer( int $organizerID, int $limit ): array {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 
 		$eventRows = $dbr->newSelectQueryBuilder()
 			->select( '*' )
@@ -239,7 +238,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function getEventsByParticipant( int $participantID, int $limit ): array {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 
 		$eventRows = $dbr->newSelectQueryBuilder()
 			->select( '*' )
@@ -265,7 +264,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function getEventsForContributionAssociationByParticipant( int $participantID, int $limit ): array {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$currentTime = $dbr->timestamp();
 
 		$eventRows = $dbr->newSelectQueryBuilder()
@@ -467,7 +466,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function saveRegistration( EventRegistration $event ): int {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$curDBTimestamp = $dbw->timestamp();
 
 		$curCreationTS = $event->getCreationTimestamp();
@@ -540,7 +539,7 @@ class EventStore implements IEventStore, IEventLookup {
 	 * @inheritDoc
 	 */
 	public function deleteRegistration( ExistingEventRegistration $registration ): bool {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$dbw->newUpdateQueryBuilder()
 			->update( 'campaign_events' )
 			->set( [ 'event_deleted_at' => $dbw->timestamp() ] )

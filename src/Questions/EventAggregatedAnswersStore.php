@@ -20,7 +20,7 @@ class EventAggregatedAnswersStore {
 	}
 
 	public function getEventAggregatedAnswers( int $eventID ): EventAggregatedAnswers {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( [ 'ceqag_question_id', 'ceqag_answer_option', 'ceqag_answers_amount' ] )
 			->from( 'ce_question_aggregation' )
@@ -43,7 +43,7 @@ class EventAggregatedAnswersStore {
 	}
 
 	public function eventHasAggregates( int $eventID ): bool {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( 'ceqag_id' )
 			->from( 'ce_question_aggregation' )

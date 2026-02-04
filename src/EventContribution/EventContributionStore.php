@@ -34,7 +34,7 @@ class EventContributionStore {
 	 * @param EventContribution $editObject The edit contribution to associate
 	 */
 	public function saveEventContribution( EventContribution $editObject ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		$dbw->newInsertQueryBuilder()
 			->insertInto( 'ce_event_contributions' )
@@ -95,7 +95,7 @@ class EventContributionStore {
 		?CentralUser $viewingUser,
 		bool $includePrivateParticipants
 	): EventContributionSummary {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 
 		// Build visibility conditions for private participants
 		$visibilityConditions = [];
@@ -177,7 +177,7 @@ class EventContributionStore {
 	}
 
 	public function hasContributionsForPage( ProperPageIdentity $page ): bool {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$row = $dbr->newSelectQueryBuilder()
 			->select( '1' )
 			->from( 'ce_event_contributions' )
@@ -197,7 +197,7 @@ class EventContributionStore {
 	 * @return EventContribution|null The contribution object, or null if not found
 	 */
 	public function getByID( int $contribID ): ?EventContribution {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$row = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_event_contributions' )
@@ -216,7 +216,7 @@ class EventContributionStore {
 	 * @param int $contribID The cec_id to delete
 	 */
 	public function deleteByID( int $contribID ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$dbw->newDeleteQueryBuilder()
 			->deleteFrom( 'ce_event_contributions' )
 			->where( [ 'cec_id' => $contribID ] )
@@ -229,7 +229,7 @@ class EventContributionStore {
 	 * associated with any events.
 	 */
 	public function getEventIDForRevision( string $wikiID, int $revisionID ): ?int {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$eventID = $dbr->newSelectQueryBuilder()
 			->select( 'cec_event_id' )
 			->from( 'ce_event_contributions' )
@@ -279,7 +279,7 @@ class EventContributionStore {
 	}
 
 	public function updateTitle( string $wiki, int $pageID, string $newPrefixedText ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$this->doBatchedUpdate(
 			$dbw,
 			[
@@ -293,7 +293,7 @@ class EventContributionStore {
 
 	private function updateVisibilityForPage( string $wiki, int $pageID, bool $deleted ): void {
 		$this->doBatchedUpdate(
-			$this->dbHelper->getDBConnection( DB_PRIMARY ),
+			$this->dbHelper->getPrimaryConnection(),
 			[
 				'cec_wiki' => $wiki,
 				'cec_page_id' => $pageID,
@@ -321,7 +321,7 @@ class EventContributionStore {
 		array $deletedRevIDs,
 		array $restoredRevIDs
 	): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$whereBase = [
 			'cec_wiki' => $wiki,
 			// The page ID is technically redundant, but is included here because cec_revision_id is not indexed, so
@@ -349,7 +349,7 @@ class EventContributionStore {
 	}
 
 	public function hasContributionsFromUser( CentralUser $user ): bool {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( '1' )
 			->from( 'ce_event_contributions' )
@@ -362,7 +362,7 @@ class EventContributionStore {
 	}
 
 	public function updateUserName( CentralUser $user, string $newUserName ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$this->doBatchedUpdate(
 			$dbw,
 			[
@@ -382,7 +382,7 @@ class EventContributionStore {
 			throw new BadMethodCallException( 'Missing required $userName for user unhide.' );
 		}
 		$newDBName = $isHidden ? null : $userName;
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 		$whereInequality = $dbw->expr( 'cec_user_name', '!=', $newDBName );
 		if ( $newDBName !== null ) {
 			// The column is nullable, so when the RHS is a string `cec_user_name != 'literal'` will fail for null

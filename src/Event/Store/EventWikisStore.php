@@ -38,7 +38,7 @@ class EventWikisStore {
 	public function getEventWikisMulti( array $eventIDs ): array {
 		$wikisByEvent = array_fill_keys( $eventIDs, [] );
 
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$queryBuilder = $dbr->newSelectQueryBuilder();
 		$res = $queryBuilder->select( [ 'ceew_event_id', 'ceew_wiki' ] )
 			->from( 'ce_event_wikis' )
@@ -65,7 +65,7 @@ class EventWikisStore {
 	 * @param string[]|true $eventWikis An array of wiki IDs to add, or {@see EventRegistration::ALL_WIKIS}
 	 */
 	public function addOrUpdateEventWikis( int $eventID, array|bool $eventWikis ): void {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		$queryBuilder = $dbw->newSelectQueryBuilder();
 		$currentWikisRes = $queryBuilder->select( [ 'ceew_id', 'ceew_wiki' ] )

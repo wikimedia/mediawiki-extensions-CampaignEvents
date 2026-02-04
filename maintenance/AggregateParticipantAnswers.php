@@ -10,6 +10,7 @@ use MediaWiki\Maintenance\Maintenance;
 use MediaWiki\Utils\MWTimestamp;
 use RuntimeException;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
@@ -17,7 +18,7 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
  */
 class AggregateParticipantAnswers extends Maintenance {
 	private ?IDatabase $dbw;
-	private ?IDatabase $dbr;
+	private ?IReadableDatabase $dbr;
 
 	private int $curTimeUnix;
 	private int $cutoffTimeUnix;
@@ -83,8 +84,8 @@ class AggregateParticipantAnswers extends Maintenance {
 		$this->curTimeUnix = (int)MWTimestamp::now( TS::UNIX );
 		$this->cutoffTimeUnix = $this->curTimeUnix - EventAggregatedAnswersStore::ANSWERS_TTL_SEC;
 		$dbHelper = CampaignEventsServices::getDatabaseHelper();
-		$this->dbr = $dbHelper->getDBConnection( DB_REPLICA );
-		$this->dbw = $dbHelper->getDBConnection( DB_PRIMARY );
+		$this->dbr = $dbHelper->getReplicaConnection();
+		$this->dbw = $dbHelper->getPrimaryConnection();
 		$batchSize = $this->getBatchSize();
 
 		$maxRowID = (int)$this->dbr->newSelectQueryBuilder()

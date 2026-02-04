@@ -49,7 +49,7 @@ class ParticipantsStore {
 		array $answers,
 		bool $hideContributionAssociationPrompt
 	): int {
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		$userID = $participant->getCentralID();
 		$curTimestamp = $dbw->timestamp();
@@ -171,7 +171,7 @@ class ParticipantsStore {
 			);
 		}
 
-		$dbw = $this->dbHelper->getDBConnection( DB_PRIMARY );
+		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		$where = [
 			'cep_event_id' => $eventID,
@@ -239,9 +239,9 @@ class ParticipantsStore {
 		}
 
 		if ( ( $readFlags & IDBAccessObject::READ_LATEST ) === IDBAccessObject::READ_LATEST ) {
-			$db = $this->dbHelper->getDBConnection( DB_PRIMARY );
+			$db = $this->dbHelper->getPrimaryConnection();
 		} else {
-			$db = $this->dbHelper->getDBConnection( DB_REPLICA );
+			$db = $this->dbHelper->getReplicaConnection();
 		}
 
 		$queryBuilder = $db->newSelectQueryBuilder()
@@ -320,7 +320,7 @@ class ParticipantsStore {
 		CentralUser $user,
 		bool $showPrivate = false
 	): ?Participant {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$conditions = [
 			'cep_event_id' => $eventID,
 			'cep_user_id' => $user->getCentralID(),
@@ -358,7 +358,7 @@ class ParticipantsStore {
 	 * user is not a participant (if they cancelled their registration after their answers had been aggregated).
 	 */
 	public function userHasAggregatedAnswers( int $eventID, CentralUser $user ): bool {
-		$aggregationTS = $this->dbHelper->getDBConnection( DB_REPLICA )
+		$aggregationTS = $this->dbHelper->getReplicaConnection()
 			->newSelectQueryBuilder()
 			->select( 'cep_aggregation_timestamp' )
 			->from( 'ce_participants' )
@@ -375,7 +375,7 @@ class ParticipantsStore {
 	 * Returns the count of participants to an event.
 	 */
 	private function getParticipantCountForEvent( int $eventID, bool $public ): int {
-		$dbr = $this->dbHelper->getDBConnection( DB_REPLICA );
+		$dbr = $this->dbHelper->getReplicaConnection();
 		$where = [
 			'cep_event_id' => $eventID,
 			'cep_unregistered_at' => null,

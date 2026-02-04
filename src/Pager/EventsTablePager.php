@@ -63,7 +63,7 @@ class EventsTablePager extends TablePager {
 		private readonly CentralUser $centralUser,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
-		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
+		$this->mDb = $databaseHelper->getReplicaConnection();
 		parent::__construct( $context, $linkRenderer );
 	}
 

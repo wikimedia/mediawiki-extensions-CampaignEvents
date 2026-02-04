@@ -28,7 +28,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 		LinkRenderer $linkRenderer
 	) {
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
-		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
+		$this->mDb = $databaseHelper->getReplicaConnection();
 		parent::__construct( $context, $linkRenderer );
 	}
 

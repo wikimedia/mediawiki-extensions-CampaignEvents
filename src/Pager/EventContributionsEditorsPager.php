@@ -67,7 +67,7 @@ class EventContributionsEditorsPager extends CodexTablePager {
 		protected readonly ExistingEventRegistration $event,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
-		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
+		$this->mDb = $databaseHelper->getReplicaConnection();
 		parent::__construct(
 			$this->msg( 'campaignevents-event-details-contributions-editors-table-caption' )->text(),
 			$context,
