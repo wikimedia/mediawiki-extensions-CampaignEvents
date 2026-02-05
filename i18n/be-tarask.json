@@ -6,7 +6,10 @@
 		]
 	},
 	"campaignevents-edit-field-timezone": "Часавы пояс",
+	"campaignevents-enable-registration-form-submit": "Увамкнуць рэґістрацыю",
 	"campaignevents-eventslist-delete-dialog-cancel": "Скасаваць",
+	"campaignevents-eventpage-enableheader-button-label": "Увамкнуць рэґістрацыю",
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "Увамкнуць рэґістрацыю",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Скасаваць",
 	"campaignevents-allevents-label-upcoming-events-title": "Будучыя падзеі",
 	"campaignevents-event-details-contributions-delete-success": "Зьмена была выдалена з падзеі.",
