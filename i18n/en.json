@@ -519,7 +519,7 @@
 	"campaignevents-invitationlist-recommended-info": "These editors received a mid-range invitation list ranking, but they still may be interested in joining your activity.",
 	"campaignevents-invitationlist-worklist-label": "View article list",
 	"campaignevents-event-details-footer": "Visit the <strong>[[Special:AllEvents|Collaboration list]]</strong> to find more events and communities.",
-	"campaignevents-invitationlist-preference": "Include me in [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation lists].",
+	"campaignevents-invitationlist-preference": "Include me in [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation lists]",
 	"prefs-campaignevents-invitations": "Invitation lists",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",
 	"campaignevents-allevents-placeholder-add-wikis": "Add wikis...",
