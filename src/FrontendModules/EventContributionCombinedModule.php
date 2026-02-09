@@ -25,10 +25,10 @@ readonly class EventContributionCombinedModule {
 		private EventContributionStore $eventContributionStore,
 		private IMessageFormatterFactory $messageFormatterFactory,
 		private ParticipantsStore $participantsStore,
-		private ExistingEventRegistration $event,
-		private OutputPage $output,
 		private EventContributionEditorsModule $editorsModule,
 		private EventContributionEditsModule $editsModule,
+		private ExistingEventRegistration $event,
+		private OutputPage $output,
 	) {
 	}
 

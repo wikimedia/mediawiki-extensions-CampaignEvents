@@ -44,6 +44,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
+use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -314,11 +315,9 @@ return [
 			$services->get( ITopicRegistry::SERVICE_NAME ),
 			$services->get( EventTypesRegistry::SERVICE_NAME ),
 			$services->get( EventFormatter::SERVICE_NAME ),
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			$services->getTitleFactory(),
 			$services->get( EventContributionStore::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
-			$services->getLinkBatchFactory()
+			$services->get( EventContributionsPagerFactory::SERVICE_NAME ),
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
@@ -494,4 +493,18 @@ return [
 			$services->get( PermissionChecker::SERVICE_NAME )
 		);
 	},
+	EventContributionsPagerFactory::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): EventContributionsPagerFactory {
+		return new EventContributionsPagerFactory(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->get( PermissionChecker::SERVICE_NAME ),
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->getLinkBatchFactory(),
+			$services->get( UserLinker::SERVICE_NAME ),
+			$services->getTitleFactory(),
+			$services->get( EventContributionStore::SERVICE_NAME ),
+			$services->get( WikiLookup::SERVICE_NAME ),
+		);
+	}
 ];

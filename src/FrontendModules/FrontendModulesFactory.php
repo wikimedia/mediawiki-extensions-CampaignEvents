@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
-use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
@@ -16,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
+use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
@@ -27,8 +27,6 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
-use MediaWiki\Page\LinkBatchFactory;
-use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\UserFactory;
 use Wikimedia\Message\IMessageFormatterFactory;
 
@@ -54,11 +52,9 @@ class FrontendModulesFactory {
 		private readonly ITopicRegistry $topicRegistry,
 		private readonly EventTypesRegistry $eventTypesRegistry,
 		private readonly EventFormatter $eventFormatter,
-		private readonly CampaignsDatabaseHelper $databaseHelper,
-		private readonly TitleFactory $titleFactory,
 		private readonly EventContributionStore $eventContributionStore,
 		private readonly PageURLResolver $pageURLResolver,
-		private readonly LinkBatchFactory $linkBatchFactory,
+		private readonly EventContributionsPagerFactory $eventContributionsPagerFactory,
 	) {
 	}
 
@@ -147,10 +143,10 @@ class FrontendModulesFactory {
 			$this->eventContributionStore,
 			$this->messageFormatterFactory,
 			$this->participantsStore,
+			$this->newEventContributionsEditorModule( $linkRenderer, $output, $event ),
+			$this->newEventContributionsEditsModule( $linkRenderer, $output, $event ),
 			$event,
 			$output,
-			$this->newEventContributionsEditorModule( $linkRenderer, $output, $event ),
-			$this->newEventContributionsEditsModule( $linkRenderer, $output, $event )
 		);
 	}
 
@@ -160,15 +156,10 @@ class FrontendModulesFactory {
 		ExistingEventRegistration $event,
 	): EventContributionEditorsModule {
 		return new EventContributionEditorsModule(
-			$this->databaseHelper,
+			$this->eventContributionsPagerFactory,
+			$linkRenderer,
 			$output,
 			$event,
-			$this->userLinker,
-			$this->permissionChecker,
-			$this->centralUserLookup,
-			$this->eventContributionStore,
-			$this->linkBatchFactory,
-			$linkRenderer
 		);
 	}
 
@@ -180,13 +171,8 @@ class FrontendModulesFactory {
 		return new EventContributionEditsModule(
 			$this->permissionChecker,
 			$this->centralUserLookup,
-			$this->userLinker,
-			$this->databaseHelper,
-			$this->titleFactory,
-			$this->eventContributionStore,
-			$this->linkBatchFactory,
 			$this->participantsStore,
-			$this->wikiLookup,
+			$this->eventContributionsPagerFactory,
 			$linkRenderer,
 			$output,
 			$event

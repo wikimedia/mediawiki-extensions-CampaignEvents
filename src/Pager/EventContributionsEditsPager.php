@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
@@ -24,7 +25,6 @@ use MediaWiki\WikiMap\WikiMap;
 use OOUI\IconWidget;
 use stdClass;
 use UnexpectedValueException;
-use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 
 /**
@@ -66,20 +66,20 @@ class EventContributionsEditsPager extends CodexTablePager {
 	private array $extraQuery = [];
 
 	public function __construct(
-		IReadableDatabase $db,
+		CampaignsDatabaseHelper $databaseHelper,
 		private readonly PermissionChecker $permissionChecker,
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly LinkBatchFactory $linkBatchFactory,
-		LinkRenderer $linkRenderer,
 		private readonly UserLinker $userLinker,
 		private readonly TitleFactory $titleFactory,
 		private readonly EventContributionStore $eventContributionStore,
 		private readonly WikiLookup $wikiLookup,
-		private readonly ExistingEventRegistration $event,
 		IContextSource $context,
+		LinkRenderer $linkRenderer,
+		private readonly ExistingEventRegistration $event,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
-		$this->mDb = $db;
+		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
 		parent::__construct(
 			$this->msg( 'campaignevents-event-details-contributions-table-caption' )->text(),
 			$context,

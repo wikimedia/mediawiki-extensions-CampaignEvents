@@ -42,6 +42,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
+use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
@@ -291,5 +292,11 @@ class CampaignEventsServices {
 		?ContainerInterface $services = null
 	): EventContributionValidator {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventContributionValidator::SERVICE_NAME );
+	}
+
+	public static function getEventContributionsPagerFactory(
+		?ContainerInterface $services = null
+	): EventContributionsPagerFactory {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( EventContributionsPagerFactory::SERVICE_NAME );
 	}
 }

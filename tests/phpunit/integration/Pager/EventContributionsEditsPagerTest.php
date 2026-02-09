@@ -38,18 +38,10 @@ class EventContributionsEditsPagerTest extends AbstractContributionsPagerTestBas
 		$context = $this->createContext( $requestValues );
 		$event = $this->createEventMock();
 
-		return new EventContributionsEditsPager(
-			$this->getDB(),
-			CampaignEventsServices::getPermissionChecker(),
-			CampaignEventsServices::getCentralUserLookup(),
-			MediaWikiServices::getInstance()->getLinkBatchFactory(),
+		return CampaignEventsServices::getEventContributionsPagerFactory()->newEditsPager(
+			$context,
 			MediaWikiServices::getInstance()->getLinkRenderer(),
-			CampaignEventsServices::getUserLinker(),
-			MediaWikiServices::getInstance()->getTitleFactory(),
-			CampaignEventsServices::getEventContributionStore(),
-			CampaignEventsServices::getWikiLookup(),
 			$event,
-			$context
 		);
 	}
 }

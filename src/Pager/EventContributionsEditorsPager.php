@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
@@ -16,7 +17,6 @@ use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Pager\CodexTablePager;
 use MediaWiki\RecentChanges\ChangesList;
 use UnexpectedValueException;
-use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 
 class EventContributionsEditorsPager extends CodexTablePager {
@@ -56,18 +56,18 @@ class EventContributionsEditorsPager extends CodexTablePager {
 	private array $extraQuery = [];
 
 	public function __construct(
-		protected readonly IReadableDatabase $db,
-		LinkRenderer $linkRenderer,
+		CampaignsDatabaseHelper $databaseHelper,
 		private readonly LinkBatchFactory $linkBatchFactory,
 		protected UserLinker $userLinker,
 		private readonly PermissionChecker $permissionChecker,
 		protected CampaignsCentralUserLookup $centralUserLookup,
-		protected readonly ExistingEventRegistration $event,
 		private readonly EventContributionStore $eventContributionStore,
-		IContextSource $context
+		IContextSource $context,
+		LinkRenderer $linkRenderer,
+		protected readonly ExistingEventRegistration $event,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
-		$this->mDb = $db;
+		$this->mDb = $databaseHelper->getDBConnection( DB_REPLICA );
 		parent::__construct(
 			$this->msg( 'campaignevents-event-details-contributions-editors-table-caption' )->text(),
 			$context,
@@ -131,14 +131,17 @@ class EventContributionsEditorsPager extends CodexTablePager {
 			],
 			'fields' => [
 				...$simpleFields,
-				'articles_added' => 'SUM(' . $this->db->conditional(
-						$this->db->bitAnd( 'cec.cec_edit_flags', EventContribution::EDIT_FLAG_PAGE_CREATION ) . ' != 0',
+				'articles_added' => 'SUM(' . $this->mDb->conditional(
+						$this->mDb->bitAnd(
+							'cec.cec_edit_flags',
+							EventContribution::EDIT_FLAG_PAGE_CREATION
+						) . ' != 0',
 						1,
 						0
 					) . ')',
-				'articles_edited' => 'COUNT(DISTINCT ' . $this->db->conditional(
-						$this->db->bitAnd( 'cec.cec_edit_flags', EventContribution::EDIT_FLAG_PAGE_CREATION ) . ' = 0',
-						$this->db->buildConcat( [ 'cec.cec_wiki', $this->db->addQuotes( '|' ), 'cec.cec_page_id' ] ),
+				'articles_edited' => 'COUNT(DISTINCT ' . $this->mDb->conditional(
+						$this->mDb->bitAnd( 'cec.cec_edit_flags', EventContribution::EDIT_FLAG_PAGE_CREATION ) . ' = 0',
+						$this->mDb->buildConcat( [ 'cec.cec_wiki', $this->mDb->addQuotes( '|' ), 'cec.cec_page_id' ] ),
 						'NULL'
 					) . ')',
 				'edit_count' => 'COUNT(*)',
