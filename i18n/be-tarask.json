@@ -5,5 +5,10 @@
 			"Ucukor"
 		]
 	},
-	"campaignevents-edit-field-timezone": "Часавы пояс"
+	"campaignevents-edit-field-timezone": "Часавы пояс",
+	"campaignevents-enable-registration-form-submit": "Увамкнуць рэґістрацыю",
+	"campaignevents-eventslist-delete-dialog-cancel": "Скасаваць",
+	"campaignevents-eventpage-enableheader-button-label": "Увамкнуць рэґістрацыю",
+	"campaignevents-eventpage-enable-registration-dialog-confirm": "Увамкнуць рэґістрацыю",
+	"campaignevents-event-details-remove-participant-cancel-btn": "Скасаваць"
 }
