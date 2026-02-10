@@ -512,7 +512,7 @@
 	"campaignevents-invitationlist-recommended-info": "Diese Benutzer haben einen mittleren Platz auf der Einladungsliste erhalten, könnten aber dennoch an einer Teilnahme an deiner Aktivität interessiert sein.",
 	"campaignevents-invitationlist-worklist-label": "Artikelliste anzeigen",
 	"campaignevents-event-details-footer": "Besuche die <strong>[[Special:AllEvents|Kollaborationsliste]],</strong> um weitere Veranstaltungen und Communitys zu finden.",
-	"campaignevents-invitationlist-preference": "Nimm mich in die [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists Einladungslisten] auf.",
+	"campaignevents-invitationlist-preference": "Nimm mich in die [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists Einladungslisten] auf",
 	"prefs-campaignevents-invitations": "Einladungslisten",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",
 	"campaignevents-allevents-placeholder-add-wikis": "Wikis hinzufügen …",

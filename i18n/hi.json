@@ -489,7 +489,7 @@
 	"campaignevents-invitationlist-recommended-info": "इन सम्पादकों को आमंत्रण सूची में एक मध्यम पद प्राप्त हुआ है, तो आपकी गतिविधि में शामिल होने में रुचि रखने की उनकी संभावना फिर भी हो सकती है।",
 	"campaignevents-invitationlist-worklist-label": "लेखों की सूची देखें",
 	"campaignevents-event-details-footer": "अधिक कार्यक्रम और समुदाय पाने के लिए <strong>[[Special:AllEvents|सहयोग सूची]]</strong> पर जाएँ।",
-	"campaignevents-invitationlist-preference": "मुझे [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists आमंत्रण सूचियों] में शामिल करें।",
+	"campaignevents-invitationlist-preference": "मुझे [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists आमंत्रण सूचियों] में शामिल करें",
 	"prefs-campaignevents-invitations": "आमंत्रण सूचियाँ",
 	"campaignevents-allevents-label-filter-wikis": "विकियाँ",
 	"campaignevents-allevents-placeholder-add-wikis": "विकियाँ जोड़ें...",
