@@ -512,7 +512,7 @@
 	"campaignevents-invitationlist-recommended-info": "Disse redaktører fik en rangering på invitationslisten i mellemklassen, men de er muligvis stadig interesserede i at deltage i din aktivitet.",
 	"campaignevents-invitationlist-worklist-label": "Se artikelliste",
 	"campaignevents-event-details-footer": "Besøg <strong>[[Special:AllEvents|Samarbejdslisten]]</strong> for at finde flere begivenheder og fællesskaber.",
-	"campaignevents-invitationlist-preference": "Inkluder mig på [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitationslister].",
+	"campaignevents-invitationlist-preference": "Inkluder mig på [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitationslister]",
 	"prefs-campaignevents-invitations": "Invitationslister",
 	"campaignevents-allevents-label-filter-wikis": "Wikier",
 	"campaignevents-allevents-placeholder-add-wikis": "Tilføj wikier...",
