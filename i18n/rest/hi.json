@@ -21,5 +21,7 @@
 	"campaignevents-rest-register-invalid-answer": "$1 प्रश्न का अमान्य उत्तर",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर अपना कार्यक्रम पंजीकरण पूरा करें।",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर अपना कार्यक्रम पंजीकरण हटाएँ।",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर प्रतिभागियों को ईमेल करें।"
+	"campaignevents-rest-email-participants-nonlocal-error-message": "कृपया $1, जिस विकि पर कार्यक्रम बनाया गया था, पर प्रतिभागियों को ईमेल करें।",
+	"campaignevents-rest-contribution-not-found": "इस ID वाला कोई भी योगदान नहीं है।",
+	"campaignevents-rest-delete-contribution-permission-denied": "आपको इस योगदान को हटाने की अनुमति नहीं है।"
 }
