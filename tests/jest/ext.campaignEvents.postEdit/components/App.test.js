@@ -15,6 +15,11 @@ const mountApp = ( configOverrides = {} ) => {
 	mw.config = {
 		get: ( key ) => config[ key ]
 	};
+	mw.message = jest.fn( ( key ) => ( {
+		key: key,
+		parse: jest.fn( () => `(${ key })` ),
+		text: jest.fn( () => `(${ key })` )
+	} ) );
 	return mount( App );
 };
 
@@ -60,10 +65,6 @@ describe( 'App', () => {
 		const restPut = jest.fn();
 		jest.spyOn( mw, 'Rest' ).mockImplementation( () => ( {
 			put: restPut
-		} ) );
-
-		mw.message = jest.fn( ( key ) => ( {
-			key: key
 		} ) );
 
 		const dialog = wrapper.getComponent( { name: 'EditAssociationDialog' } );

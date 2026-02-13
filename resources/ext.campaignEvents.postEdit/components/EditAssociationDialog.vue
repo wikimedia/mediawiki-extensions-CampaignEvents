@@ -17,6 +17,17 @@
 		<!-- eslint-disable-next-line vue/no-v-html To be replaced with a Vue component after T407638 -->
 		<div v-if="selectedEventGoalProgress" v-html="selectedEventGoalProgress">
 		</div>
+		<template #footer-text>
+			<span
+				v-if="footerMessageHTML"
+				v-i18n-html="footerMessageHTML"
+			></span>
+			<span v-else>{{
+				$i18n(
+					'campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select'
+				).text()
+			}}</span>
+		</template>
 	</cdx-dialog>
 </template>
 
@@ -108,6 +119,20 @@ module.exports = exports = defineComponent( {
 			const id = this.selectedEvent;
 			const event = this.events.find( ( e ) => e.id === id );
 			return event && event.goalProgress ? event.goalProgress : null;
+		},
+		/**
+		 * Message with wikitext link for v-i18n-html; null when plain text is shown in template.
+		 *
+		 * @return {mw.Message|null}
+		 */
+		footerMessageHTML() {
+			if ( this.events.length > 1 && this.selectedEvent === null ) {
+				return null;
+			}
+			return mw.message(
+				'campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences',
+				'Special:RegisterForEvent/' + this.selectedEvent
+			);
 		}
 	}
 } );

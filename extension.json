@@ -521,7 +521,9 @@
 				"campaignevents-postedit-dialog-action-no",
 				"campaignevents-postedit-dialog-action-yes",
 				"campaignevents-postedit-success-text",
-				"campaignevents-event-details-tab-contributions"
+				"campaignevents-event-details-tab-contributions",
+				"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences",
+				"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select"
 			]
 		}
 	},

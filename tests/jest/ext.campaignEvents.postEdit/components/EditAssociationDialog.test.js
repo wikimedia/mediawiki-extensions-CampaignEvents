@@ -11,12 +11,43 @@ const defaultConfig = {
 	]
 };
 
+/**
+ * Minimal v-i18n-html for Jest: production passes mw.Message; tests mock mw.message().parse().
+ */
+const i18nHtmlDirective = {
+	mounted( el, binding ) {
+		const value = binding.value;
+		if ( value && typeof value.parse === 'function' ) {
+			el.innerHTML = value.parse();
+		}
+	},
+	updated( el, binding ) {
+		const value = binding.value;
+		if ( value && typeof value.parse === 'function' ) {
+			el.innerHTML = value.parse();
+		} else {
+			el.innerHTML = '';
+		}
+	}
+};
+
 const mountDialog = ( configOverrides = {} ) => {
 	const config = Object.assign( {}, defaultConfig, configOverrides );
 	mw.config = {
 		get: ( key ) => config[ key ]
 	};
-	return mount( EditAssociationDialog, { props: { open: true } } );
+	mw.message = jest.fn( ( key, ...params ) => ( {
+		parse: jest.fn( () => params.length > 0 ? `(${ key }, ${ params.join( ', ' ) })` : `(${ key })` ),
+		text: jest.fn( () => `(${ key })` )
+	} ) );
+	return mount( EditAssociationDialog, {
+		props: { open: true },
+		global: {
+			directives: {
+				'i18n-html': i18nHtmlDirective
+			}
+		}
+	} );
 };
 
 describe( 'EditAssociationDialog', () => {
@@ -51,6 +82,14 @@ describe( 'EditAssociationDialog', () => {
 			expect( associationEvents ).toHaveLength( 1 );
 			expect( associationEvents[ 0 ] ).toEqual( [ defaultEventID, defaultEventTitle ] );
 		} );
+		it( 'shows the event preferences footer link', () => {
+			const wrapper = mountDialog();
+			const footer = wrapper.find( '.cdx-dialog__footer' );
+			expect( footer.html() ).toContain(
+				'campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences'
+			);
+			expect( footer.html() ).toContain( `Special:RegisterForEvent/${ defaultEventID }` );
+		} );
 	} );
 
 	describe( 'with multiple events', () => {
@@ -68,6 +107,41 @@ describe( 'EditAssociationDialog', () => {
 			wrapper = mountDialog( {
 				wgCampaignEventsEventsForAssociation: events
 			} );
+		} );
+
+		it( 'shows the before-select footer message until an event is selected', () => {
+			expect( wrapper.vm.selectedEvent ).toBe( null );
+			const footer = wrapper.find( '.cdx-dialog__footer' );
+			expect( footer.html() ).toContain(
+				'campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select'
+			);
+		} );
+
+		it( 'updates the footer after selecting an event', async () => {
+			const selector = wrapper.getComponent( { name: 'CdxSelect' } );
+			selector.vm.$emit( 'update:selected', chosenEventID );
+			await wrapper.vm.$nextTick();
+
+			const footer = wrapper.find( '.cdx-dialog__footer' );
+			expect( footer.html() ).toContain(
+				'campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences'
+			);
+			expect( footer.html() ).toContain( `Special:RegisterForEvent/${ chosenEventID }` );
+		} );
+
+		it( 'updates the footer message when changing the selected event', async () => {
+			const selector = wrapper.getComponent( { name: 'CdxSelect' } );
+			selector.vm.$emit( 'update:selected', chosenEventID );
+			await wrapper.vm.$nextTick();
+
+			const footerAfterFirst = wrapper.find( '.cdx-dialog__footer' );
+			expect( footerAfterFirst.html() ).toContain( `Special:RegisterForEvent/${ chosenEventID }` );
+
+			selector.vm.$emit( 'update:selected', 73 );
+			await wrapper.vm.$nextTick();
+
+			const footerAfterSecond = wrapper.find( '.cdx-dialog__footer' );
+			expect( footerAfterSecond.html() ).toContain( 'Special:RegisterForEvent/73' );
 		} );
 
 		it( 'has the correct title and introductory paragraph', () => {
