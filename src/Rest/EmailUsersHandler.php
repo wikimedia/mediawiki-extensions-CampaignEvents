@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -32,7 +33,7 @@ class EmailUsersHandler extends SimpleHandler {
 
 	public function run( int $eventId ): Response {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventId );
-		$params = $this->getValidatedBody() ?? [];
+		$params = $this->getValidatedBody() ?? throw new LogicException( 'T357909 - Body should be non-null' );
 
 		if ( !$this->permissionChecker->userCanEmailParticipants( $this->getAuthority(), $event ) ) {
 			// todo add more details to error message
@@ -54,8 +55,10 @@ class EmailUsersHandler extends SimpleHandler {
 			null,
 			null,
 			null,
+			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 			$params['invert_users'] ? null : $userIds,
 			true,
+			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 			$params['invert_users'] ? $userIds : null
 		);
 		if ( !$participants ) {

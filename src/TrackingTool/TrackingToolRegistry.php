@@ -180,7 +180,6 @@ class TrackingToolRegistry {
 	 * @param array $entry
 	 * @phpcs:ignore Generic.Files.LineLength
 	 * @phan-param array{display-name-msg:string,base-url:string,class:class-string,db-id:int,user-id:string,extra:array} $entry
-	 * @suppress PhanTypeInvalidCallableArraySize https://github.com/phan/phan/issues/1648
 	 */
 	private function newFromRegistryEntry( array $entry ): TrackingTool {
 		$class = $entry['class'];

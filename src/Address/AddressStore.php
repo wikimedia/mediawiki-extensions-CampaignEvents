@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use RuntimeException;
 use stdClass;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\IReadableDatabase;
 
 /**
  * This class abstracts access to the ce_address and ce_event_address DB tables. In the future, this might be expanded
@@ -144,12 +145,12 @@ class AddressStore {
 	}
 
 	/**
-	 * @param IDatabase $db
+	 * @param IReadableDatabase $dbr
 	 * @param int[] $eventIDs
 	 * @return array<int,Address> Maps event IDs to the corresponding address
 	 */
-	public function getAddressesForEvents( IDatabase $db, array $eventIDs ): array {
-		$addressRows = $db->newSelectQueryBuilder()
+	public function getAddressesForEvents( IReadableDatabase $dbr, array $eventIDs ): array {
+		$addressRows = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_address' )
 			->join( 'ce_event_address', null, [ 'ceea_address=cea_id', 'ceea_event' => $eventIDs ] )

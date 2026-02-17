@@ -27,6 +27,7 @@ use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
+use Wikimedia\Rdbms\IReadableDatabase;
 
 class EventStore implements IEventStore, IEventLookup {
 	private const EVENT_STATUS_MAP = [
@@ -287,11 +288,11 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param IDatabase $db
+	 * @param IReadableDatabase $dbr
 	 * @param iterable<stdClass> $eventRows
 	 * @return ExistingEventRegistration[]
 	 */
-	public function newEventsFromDBRows( IDatabase $db, iterable $eventRows ): array {
+	public function newEventsFromDBRows( IReadableDatabase $dbr, iterable $eventRows ): array {
 		$eventIDs = [];
 		foreach ( $eventRows as $eventRow ) {
 			if ( !property_exists( $eventRow, 'event_id' ) ) {
@@ -304,8 +305,8 @@ class EventStore implements IEventStore, IEventLookup {
 			return [];
 		}
 
-		$addressRowsByEvent = $this->addressStore->getAddressesForEvents( $db, $eventIDs );
-		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $db, $eventIDs );
+		$addressRowsByEvent = $this->addressStore->getAddressesForEvents( $dbr, $eventIDs );
+		$trackingToolRowsByEvent = $this->getTrackingToolsRowsForEvents( $dbr, $eventIDs );
 		$wikisByEvent = $this->eventWikisStore->getEventWikisMulti( $eventIDs );
 		$topicsByEvent = $this->eventTopicsStore->getEventTopicsMulti( $eventIDs );
 		$questionsByEvent = $this->eventQuestionsStore->getEventQuestionsMulti( $eventIDs );
@@ -326,15 +327,15 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
-	 * @param IDatabase $db
+	 * @param IReadableDatabase $dbr
 	 * @param int[] $eventIDs
 	 * @return array<int,stdClass> Maps event IDs to the corresponding tracking tool row
 	 */
 	private function getTrackingToolsRowsForEvents(
-		IDatabase $db,
+		IReadableDatabase $dbr,
 		array $eventIDs
 	): array {
-		$trackingToolsRows = $db->newSelectQueryBuilder()
+		$trackingToolsRows = $dbr->newSelectQueryBuilder()
 			->select( '*' )
 			->from( 'ce_tracking_tools' )
 			->where( [ 'cett_event' => $eventIDs ] )

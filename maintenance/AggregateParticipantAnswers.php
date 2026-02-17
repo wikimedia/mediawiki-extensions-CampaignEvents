@@ -108,9 +108,10 @@ class AggregateParticipantAnswers extends Maintenance {
 		// Because of the PII nature of participant answers, we want to try and avoid these edge cases as much as
 		// possible, especially those that could inadvertently leak PII.
 		$transactionName = __METHOD__;
-		$this->beginTransaction( $this->dbw, $transactionName );
-		$this->rollbackTransactionFn = function () use ( $transactionName ): void {
-			$this->rollbackTransaction( $this->dbw, $transactionName );
+		$dbw = $this->dbw;
+		$this->beginTransaction( $dbw, $transactionName );
+		$this->rollbackTransactionFn = function () use ( $dbw, $transactionName ): void {
+			$this->rollbackTransaction( $dbw, $transactionName );
 		};
 		$prevID = $minRowID - 1;
 		$curID = $prevID + $batchSize;

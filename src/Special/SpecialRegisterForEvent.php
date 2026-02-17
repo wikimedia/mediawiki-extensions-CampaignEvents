@@ -241,7 +241,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 
 	/**
 	 * @inheritDoc
-	 * @param array<string,mixed> $data
+	 * @param array{IsPrivate:bool,ShowContributionAssociationPrompt:bool} $data
 	 */
 	public function onSubmit( array $data ) {
 		$privateFlag = $data['IsPrivate'] ?

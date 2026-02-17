@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -38,7 +39,7 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 	}
 
 	protected function run( int $eventID ): Response {
-		$body = $this->getValidatedBody() ?? [];
+		$body = $this->getValidatedBody() ?? throw new LogicException( 'T357909 - Body should be non-null' );
 
 		if ( is_array( $body[ 'user_ids' ] ) && !$body[ 'user_ids' ] ) {
 			throw new LocalizedHttpException(
@@ -63,6 +64,7 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 			$eventRegistration,
 			$usersToRemove,
 			$this->getAuthority(),
+			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 			$body['invert_users'] ? UnregisterParticipantCommand::INVERT_USERS :
 				UnregisterParticipantCommand::DO_NOT_INVERT_USERS
 		);

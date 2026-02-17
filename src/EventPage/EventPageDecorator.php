@@ -145,7 +145,7 @@ class EventPageDecorator {
 		$this->out->addHTML( $this->getEnableRegistrationHeader( $enableRegistrationURL ) );
 	}
 
-	private function getEnableRegistrationHeader( string $enableRegistrationURL ): Tag {
+	private function getEnableRegistrationHeader( string $enableRegistrationURL ): string {
 		$organizerText = ( new Tag( 'div' ) )->appendContent(
 			$this->msgFormatter->format( MessageValue::new( 'campaignevents-eventpage-enableheader-organizer' ) )
 		)->setAttributes( [ 'class' => 'ext-campaignevents-eventpage-organizer-label' ] );
@@ -184,7 +184,7 @@ class EventPageDecorator {
 			'dir' => $this->language->getDir(),
 			'lang' => $this->language->getHtmlCode()
 		] );
-		return $layout;
+		return $layout->toString();
 	}
 
 	private function addRegistrationHeader( ExistingEventRegistration $registration ): void {
@@ -225,7 +225,7 @@ class EventPageDecorator {
 
 		$userStatus = $this->getUserStatus( $registration, $centralUser, $curParticipant );
 
-		$this->out->addHTML( $this->getHeaderElement( $registration, $userStatus ) );
+		$this->out->addHTML( $this->getHeaderElement( $registration, $userStatus )->toString() );
 
 		if ( $curParticipant ) {
 			$aggregationTimestamp = Utils::getAnswerAggregationTimestamp( $curParticipant, $registration );

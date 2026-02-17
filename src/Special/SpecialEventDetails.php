@@ -151,7 +151,7 @@ class SpecialEventDetails extends SpecialPage {
 				'classes' => [ 'ext-campaignevents-eventdetails-back-btn' ]
 			] );
 
-			$out->addHTML( $backLink );
+			$out->addHTML( $backLink->toString() );
 		}
 
 		if ( $isOrganizer && !$isLocalWiki ) {

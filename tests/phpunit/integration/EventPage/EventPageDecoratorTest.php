@@ -30,7 +30,6 @@ use MediaWiki\Permissions\GroupPermissionsLookup;
 use MediaWiki\Request\WebRequest;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWikiIntegrationTestCase;
-use OOUI\PanelLayout;
 use PHPUnit\Framework\MockObject\MockObject;
 use Wikimedia\Message\IMessageFormatterFactory;
 
@@ -137,14 +136,11 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$out->expects( $this->atLeastOnce() )
 				->method( 'addHTML' )
 				->willReturnCallback( static function ( $html ) use ( &$addedRegistrationHeader, &$addedCTAHeader ) {
-					if ( !$html instanceof PanelLayout ) {
-						return;
-					}
-					// Check the panel class to determine which header is being shown.
-					if ( $html->hasClass( 'ext-campaignevents-eventpage-header' ) ) {
+					// Check the container element class to determine which header is being shown.
+					if ( str_contains( $html, 'ext-campaignevents-eventpage-header' ) ) {
 						$addedRegistrationHeader = true;
 					}
-					if ( $html->hasClass( 'ext-campaignevents-eventpage-enableheader' ) ) {
+					if ( str_contains( $html, 'ext-campaignevents-eventpage-enableheader' ) ) {
 						$addedCTAHeader = true;
 					}
 				} );

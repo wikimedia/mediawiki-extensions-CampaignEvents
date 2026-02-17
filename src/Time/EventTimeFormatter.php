@@ -109,9 +109,10 @@ class EventTimeFormatter {
 	 * Wrap a timezone name in an HTML structure that can be read by the TimeZoneConverter JavaScript utility.
 	 * The time range must also be wrapped, using {@see self::wrapRangeForConversion}.
 	 */
-	public static function wrapTimeZoneForConversion( string $timezone ): Tag {
+	public static function wrapTimeZoneForConversion( string $timezone ): string {
 		return ( new Tag( 'span' ) )
 			->addClasses( [ 'ext-campaignevents-timezone' ] )
-			->appendContent( new HtmlSnippet( $timezone ) );
+			->appendContent( new HtmlSnippet( $timezone ) )
+			->toString();
 	}
 }

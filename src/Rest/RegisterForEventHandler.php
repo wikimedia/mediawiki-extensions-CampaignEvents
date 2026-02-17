@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -44,7 +45,7 @@ class RegisterForEventHandler extends SimpleHandler {
 	}
 
 	protected function run( int $eventID ): Response {
-		$body = $this->getValidatedBody() ?? [];
+		$body = $this->getValidatedBody() ?? throw new LogicException( 'T357909 - Body should be non-null' );
 		$performer = $this->getAuthority();
 		$eventRegistration = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 		try {
@@ -84,6 +85,7 @@ class RegisterForEventHandler extends SimpleHandler {
 				400
 			);
 		}
+		// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 		$contributionAssociationMode = $body['show_contribution_association_prompt']
 			? RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 			: RegisterParticipantCommand::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;

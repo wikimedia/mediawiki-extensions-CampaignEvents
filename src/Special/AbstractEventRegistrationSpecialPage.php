@@ -656,12 +656,12 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		}
 
 		if ( $footerNotice ) {
-			$form->addFooterHtml( new FieldLayout( new MessageWidget( [
+			$form->addFooterHtml( ( new FieldLayout( new MessageWidget( [
 				'type' => 'notice',
 				'inline' => true,
 				'label' => new HtmlSnippet( $footerNotice ),
 				'classes' => [ 'ext-campaignevents-eventregistration-notice-plain' ],
-			] ) ) );
+			] ) ) )->toString() );
 		}
 	}
 

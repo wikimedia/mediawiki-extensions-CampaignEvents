@@ -7,8 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use stdClass;
-use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
+use Wikimedia\Rdbms\IReadableDatabase;
 
 interface IEventLookup {
 	public const LOOKUP_SERVICE_NAME = 'CampaignEventsEventLookup';
@@ -64,9 +64,9 @@ interface IEventLookup {
 	 * Given a result set containing full rows from the campaign_events table, constructs EventRegistration objects
 	 * for those rows, looking up the required additional information.
 	 *
-	 * @param IDatabase $db
+	 * @param IReadableDatabase $dbr
 	 * @param iterable<stdClass> $eventRows
 	 * @return array<int,ExistingEventRegistration> Mapping event ID to the corresponding object.
 	 */
-	public function newEventsFromDBRows( IDatabase $db, iterable $eventRows ): array;
+	public function newEventsFromDBRows( IReadableDatabase $dbr, iterable $eventRows ): array;
 }
