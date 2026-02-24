@@ -301,10 +301,12 @@ class EventContributionsEditsPager extends CodexTablePager {
 	}
 
 	private function formatWiki( stdClass $row ): string {
-		static $wikiNameCache = [];
+		static $escapedNamesCache = [];
 		$wikiID = $row->cec_wiki;
-		$wikiNameCache[$wikiID] ??= $this->wikiLookup->getLocalizedNames( [ $wikiID ] )[$wikiID];
-		return $wikiNameCache[$wikiID];
+		$escapedNamesCache[$wikiID] ??= htmlspecialchars(
+			$this->wikiLookup->getLocalizedNames( [ $wikiID ] )[$wikiID]
+		);
+		return $escapedNamesCache[$wikiID];
 	}
 
 	/**
