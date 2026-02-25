@@ -29,7 +29,10 @@
 			"ߒߓߋ߫ ߝߏߝߣߊ߫",
 			"Derugon",
 			"Geugeor",
-			"SaldırganSincap"
+			"SaldırganSincap",
+			"Asteralee",
+			"Codeurluce",
+			"Framawiki"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -362,7 +365,7 @@
 	"campaignevents-eventpage-dialog-private-registration-label": "{{GENDER:$1|Participant inscrit|Participante inscrite}} en privé",
 	"echo-pref-tooltip-campaign-events-notification-registration": "M’avertir lorsque je m’inscris à un événement qui utilise l’outil d’inscription aux événements.",
 	"campaignevents-notification-registration-subject": "Inscription à $1 confirmée",
-	"campaignevents-notification-registration-header-intro": "Merci de vous être inscrit pour $1.",
+	"campaignevents-notification-registration-header-intro": "Merci de vous être inscrit à $1.",
 	"campaignevents-notification-registration-header-chat": "Rejoignez la $1 pour vous connecter avec d’autres participants et obtenir les mises à jour supplémentaires des organisateurs.",
 	"campaignevents-notification-registration-header-chat-label": "discussion en direct avec le groupe de l’événement",
 	"campaignevents-notification-registration-details-header": "Détails de l’événement",
@@ -372,7 +375,7 @@
 	"campaignevents-notification-registration-details-type-header": "Type d’événement",
 	"campaignevents-notification-registration-details-type-online-header": "Événement en ligne",
 	"campaignevents-notification-registration-details-type-in-person-header": "Événement en présentiel",
-	"campaignevents-notification-registration-details-organizers-header": "Organisateurs d’événements",
+	"campaignevents-notification-registration-details-organizers-header": "Organisateurs de l'événement",
 	"campaignevents-notification-registration-details-organizers-more": "$1 {{PLURAL:$1|autre|autres}}",
 	"campaignevents-notification-registration-event-page-link": "Voir la page de l’événement",
 	"campaignevents-notification-registration-chat-link": "Rejoindre la discussion en direct avec le groupe",
