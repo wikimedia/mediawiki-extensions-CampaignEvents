@@ -170,6 +170,15 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'string',
 				StringDef::PARAM_MAX_BYTES => EventFactory::ADDRESS_MAXLENGTH_BYTES,
 			],
+			'chat_url' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'string',
+			],
+			'is_test_event' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_DEFAULT => false,
+			],
 			'tracks_contributions' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
@@ -182,15 +191,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 			'tracking_tool_event_id' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
-			],
-			'chat_url' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'string',
-			],
-			'is_test_event' => [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'boolean',
-				ParamValidator::PARAM_DEFAULT => false,
 			],
 		] + $this->getTokenParamDefinition();
 

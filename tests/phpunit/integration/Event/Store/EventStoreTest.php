@@ -59,6 +59,8 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			new Address( 'Address', 'FR' ),
+			'Chat URL',
+			false,
 			false,
 			[
 				new TrackingToolAssociation(
@@ -68,8 +70,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 					null
 				)
 			],
-			'Chat URL',
-			false,
 			[],
 			null,
 			null,
@@ -107,7 +107,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $expected->getTypes(), $actual->getTypes(), 'Types' );
 		$this->assertSame( $expected->getWikis(), $actual->getWikis(), 'wikis' );
 		$this->assertSame( $expected->getTopics(), $actual->getTopics(), 'topics' );
-		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
 		$this->assertSame(
 			$expected->getParticipationOptions(),
 			$actual->getParticipationOptions(),
@@ -115,13 +114,14 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		);
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
 		$this->assertEquals( $expected->getAddress(), $actual->getAddress(), 'address' );
+		$this->assertSame( $expected->getChatURL(), $actual->getChatURL(), 'chat' );
+		$this->assertSame( $expected->getIsTestEvent(), $actual->getIsTestEvent(), 'is test' );
 		$this->assertSame(
 			$expected->hasContributionTracking(),
 			$actual->hasContributionTracking(),
 			'Contribution tracking'
 		);
-		$this->assertSame( $expected->getChatURL(), $actual->getChatURL(), 'chat' );
-		$this->assertSame( $expected->getIsTestEvent(), $actual->getIsTestEvent(), 'is test' );
+		$this->assertEquals( $expected->getTrackingTools(), $actual->getTrackingTools(), 'tracking tools' );
 		$this->assertSame( $expected->getParticipantQuestions(), $actual->getParticipantQuestions(), 'questions' );
 	}
 
@@ -346,10 +346,10 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'Meeting URL',
 			'address' => new Address( 'Address', 'FR' ),
-			'hasContributionTracking' => false,
-			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			'Chat URL',
 			false,
+			'hasContributionTracking' => false,
+			[ new TrackingToolAssociation( 42, 'some-event-id', TrackingToolAssociation::SYNC_STATUS_UNKNOWN, null ) ],
 			[],
 			null,
 			null,

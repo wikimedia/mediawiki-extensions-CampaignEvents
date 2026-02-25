@@ -92,11 +92,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'start_time' => '20220220200220',
 			'end_time' => '20220220200222',
 			'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
-			'tracks_contributions' => true,
 			'wikis' => [ 'awiki', 'bwiki' ],
 			'topics' => [ 'atopic', 'btopic' ],
-			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
-			'tracking_tool_event_id' => 'bar',
 			'online_meeting' => true,
 			'inperson_meeting' => true,
 			'meeting_url' => 'https://meeting-url.example.org',
@@ -104,6 +101,9 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'meeting_address' => 'My address 123',
 			'chat_url' => 'https://some-chat.example.org',
 			'is_test_event' => false,
+			'tracks_contributions' => true,
+			'tracking_tool_id' => self::TRACKING_TOOL_USER_ID,
+			'tracking_tool_event_id' => 'bar',
 			'questions' => [],
 		];
 		$participationOptions = ( $eventData['online_meeting'] ? EventRegistration::PARTICIPATION_OPTION_ONLINE : 0 )
@@ -122,6 +122,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$participationOptions,
 			$eventData['meeting_url'],
 			new Address( $eventData['meeting_address'], $eventData['meeting_country_code'] ),
+			$eventData['chat_url'],
+			$eventData['is_test_event'],
 			$eventData['tracks_contributions'],
 			[
 				new TrackingToolAssociation(
@@ -131,8 +133,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 					null
 				)
 			],
-			$eventData['chat_url'],
-			$eventData['is_test_event'],
 			$eventData['questions'],
 			'1646000000',
 			'1646000000',

@@ -36,6 +36,8 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'address' => new Address( 'Some address', 'FR' ),
+			'chat' => 'https://chat.example.org',
+			'is_test_event' => false,
 			'tracks_contributions' => true,
 			'tracking_tools' => [
 				new TrackingToolAssociation(
@@ -45,8 +47,6 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 					null
 				)
 			],
-			'chat' => 'https://chat.example.org',
-			'is_test_event' => false,
 			'questions' => [],
 			'creation' => '1650000000',
 			'last_edit' => '1651000000',
@@ -67,14 +67,8 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['start'], $registration->getStartLocalTimestamp(), 'start' );
 		$this->assertSame( $data['end'], $registration->getEndLocalTimestamp(), 'end' );
 		$this->assertSame( $data['types'], $registration->getTypes(), 'types' );
-		$this->assertSame(
-			$data['tracks_contributions'],
-			$registration->hasContributionTracking(),
-			'contribution tracking'
-		);
 		$this->assertSame( $data['wikis'], $registration->getWikis(), 'wikis' );
 		$this->assertSame( $data['topics'], $registration->getTopics(), 'topics' );
-		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
 		$this->assertSame(
 			$data['participation_options'],
 			$registration->getParticipationOptions(),
@@ -84,6 +78,12 @@ abstract class EventRegistrationUnitTestBase extends MediaWikiUnitTestCase {
 		$this->assertSame( $data['address'], $registration->getAddress(), 'address' );
 		$this->assertSame( $data['chat'], $registration->getChatURL(), 'chat' );
 		$this->assertSame( $data['is_test_event'], $registration->getIsTestEvent(), 'is_test_event' );
+		$this->assertSame(
+			$data['tracks_contributions'],
+			$registration->hasContributionTracking(),
+			'contribution tracking'
+		);
+		$this->assertSame( $data['tracking_tools'], $registration->getTrackingTools(), 'tracking_tools' );
 		$this->assertSame( $data['questions'], $registration->getParticipantQuestions(), 'questions' );
 		$this->assertSame( $data['creation'], $registration->getCreationTimestamp(), 'creation' );
 		$this->assertSame( $data['last_edit'], $registration->getLastEditTimestamp(), 'last_edit' );

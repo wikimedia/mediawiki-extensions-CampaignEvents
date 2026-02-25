@@ -74,10 +74,10 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			// meeting_url added conditionally
 			'meeting_country_code' => $address?->getCountryCode(),
 			'meeting_address' => $address?->getAddressWithoutCountry(),
-			'tracks_contributions' => $registration->hasContributionTracking(),
-			'tracking_tools' => $trackingToolsData,
 			// chat_url added conditionally
 			'is_test_event' => $registration->getIsTestEvent(),
+			'tracks_contributions' => $registration->hasContributionTracking(),
+			'tracking_tools' => $trackingToolsData,
 			'questions' => $registration->getParticipantQuestions(),
 		];
 		$this->maybeAddSensitiveDataToResponse( $respVal, $registration );

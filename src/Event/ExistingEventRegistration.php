@@ -29,11 +29,11 @@ class ExistingEventRegistration extends EventRegistration {
 	 * @param int $participationOptions
 	 * @param string|null $meetingURL
 	 * @param Address|null $address Required when $participationOptions contains self::PARTICIPATION_OPTION_IN_PERSON
+	 * @param string|null $chatURL
+	 * @param bool $isTestEvent
 	 * @param bool $hasContributionTracking
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
-	 * @param string|null $chatURL
-	 * @param bool $isTestEvent
 	 * @param int[] $participantQuestions
 	 * @param string $creationTimestamp UNIX timestamp
 	 * @param string $lastEditTimestamp UNIX timestamp
@@ -53,10 +53,10 @@ class ExistingEventRegistration extends EventRegistration {
 		int $participationOptions,
 		?string $meetingURL,
 		?Address $address,
-		bool $hasContributionTracking,
-		array $trackingTools,
 		?string $chatURL,
 		bool $isTestEvent,
+		bool $hasContributionTracking,
+		array $trackingTools,
 		array $participantQuestions,
 		string $creationTimestamp,
 		string $lastEditTimestamp,
@@ -76,10 +76,10 @@ class ExistingEventRegistration extends EventRegistration {
 			$participationOptions,
 			$meetingURL,
 			$address,
-			$hasContributionTracking,
-			$trackingTools,
 			$chatURL,
 			$isTestEvent,
+			$hasContributionTracking,
+			$trackingTools,
 			$participantQuestions,
 			$creationTimestamp,
 			$lastEditTimestamp,

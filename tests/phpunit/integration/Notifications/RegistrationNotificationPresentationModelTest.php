@@ -71,6 +71,8 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 			'participation_options' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
 			'meeting_url' => 'https://meet.example.org',
 			'address' => new Address( 'Some address', 'FR' ),
+			'chat' => 'https://chat.example.org',
+			'is_test_event' => false,
 			'tracks_contributions' => false,
 			'tracking_tools' => [
 				new TrackingToolAssociation(
@@ -80,8 +82,6 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 					null
 				)
 			],
-			'chat' => 'https://chat.example.org',
-			'is_test_event' => false,
 			'questions' => [],
 			'creation' => '1650000000',
 			'last_edit' => '1651000000',

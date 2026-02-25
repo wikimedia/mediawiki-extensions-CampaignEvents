@@ -89,11 +89,11 @@ class EventFactory {
 	 * @param string|null $meetingURL
 	 * @param string|null $meetingCountryCode
 	 * @param string|null $meetingAddress
+	 * @param string|null $chatURL
+	 * @param bool $isTestEvent
 	 * @param bool $hasContributionTracking
 	 * @param string|null $trackingToolUserID User identifier of a tracking tool
 	 * @param string|null $trackingToolEventID
-	 * @param string|null $chatURL
-	 * @param bool $isTestEvent
 	 * @param string[] $participantQuestionNames
 	 * @param string|null $creationTimestamp In the TS::MW format
 	 * @param string|null $lastEditTimestamp In the TS::MW format
@@ -119,11 +119,11 @@ class EventFactory {
 		?string $meetingURL,
 		?string $meetingCountryCode,
 		?string $meetingAddress,
+		?string $chatURL,
+		bool $isTestEvent,
 		bool $hasContributionTracking,
 		?string $trackingToolUserID,
 		?string $trackingToolEventID,
-		?string $chatURL,
-		bool $isTestEvent,
 		array $participantQuestionNames,
 		?string $creationTimestamp,
 		?string $lastEditTimestamp,
@@ -184,6 +184,13 @@ class EventFactory {
 			$address = null;
 		}
 
+		if ( $chatURL !== null ) {
+			$chatURL = trim( $chatURL );
+			if ( !$this->isValidURL( $chatURL ) ) {
+				$res->error( 'campaignevents-error-invalid-chat-url' );
+			}
+		}
+
 		if ( $hasContributionTracking ) {
 			$res->merge( $this->validateContributionsTracking( $types, $meetingCountryCode, $wikis ) );
 		}
@@ -202,13 +209,6 @@ class EventFactory {
 			];
 		} else {
 			$trackingTools = [];
-		}
-
-		if ( $chatURL !== null ) {
-			$chatURL = trim( $chatURL );
-			if ( !$this->isValidURL( $chatURL ) ) {
-				$res->error( 'campaignevents-error-invalid-chat-url' );
-			}
 		}
 
 		$questionsStatus = $this->validateParticipantQuestions( $participantQuestionNames );
@@ -254,10 +254,10 @@ class EventFactory {
 			$participationOptions,
 			$meetingURL,
 			$address,
-			$hasContributionTracking,
-			$trackingTools,
 			$chatURL,
 			$isTestEvent,
+			$hasContributionTracking,
+			$trackingTools,
 			$questionIDs,
 			$creationTSUnix,
 			$lastEditTSUnix,

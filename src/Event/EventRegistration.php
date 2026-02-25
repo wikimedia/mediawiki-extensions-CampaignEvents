@@ -54,11 +54,11 @@ class EventRegistration implements JsonCodecable {
 	 * @param int $participationOptions One of the PARTICIPATION_OPTION_* constants
 	 * @param string|null $meetingURL
 	 * @param Address|null $address Required when $participationOptions contains self::PARTICIPATION_OPTION_IN_PERSON
+	 * @param string|null $chatURL
+	 * @param bool $isTestEvent
 	 * @param bool $hasContributionTracking
 	 * @param TrackingToolAssociation[] $trackingTools
 	 * @phan-param list<TrackingToolAssociation> $trackingTools
-	 * @param string|null $chatURL
-	 * @param bool $isTestEvent
 	 * @param list<int> $participantQuestions Array of database IDs
 	 * @param string|null $creationTimestamp UNIX timestamp
 	 * @param string|null $lastEditTimestamp UNIX timestamp
@@ -78,10 +78,10 @@ class EventRegistration implements JsonCodecable {
 		private readonly int $participationOptions,
 		private readonly ?string $meetingURL,
 		private readonly ?Address $address,
-		private readonly bool $hasContributionTracking,
-		private readonly array $trackingTools,
 		private readonly ?string $chatURL,
 		private readonly bool $isTestEvent,
+		private readonly bool $hasContributionTracking,
+		private readonly array $trackingTools,
 		private readonly array $participantQuestions,
 		private readonly ?string $creationTimestamp,
 		private readonly ?string $lastEditTimestamp,
@@ -102,14 +102,14 @@ class EventRegistration implements JsonCodecable {
 			'$types',
 			'Must have at least one type'
 		);
+		if ( $participationOptions & self::PARTICIPATION_OPTION_IN_PERSON ) {
+			Assert::parameter( $address !== null, '$address', 'In-person and hybrid events must have an Address' );
+		}
 		Assert::parameter(
 			count( $trackingTools ) <= 1,
 			'$trackingTools',
 			'Should not have more than one tracking tool'
 		);
-		if ( $participationOptions & self::PARTICIPATION_OPTION_IN_PERSON ) {
-			Assert::parameter( $address !== null, '$address', 'In-person and hybrid events must have an Address' );
-		}
 	}
 
 	public function getID(): ?int {
@@ -219,6 +219,14 @@ class EventRegistration implements JsonCodecable {
 		return $this->address;
 	}
 
+	public function getChatURL(): ?string {
+		return $this->chatURL;
+	}
+
+	public function getIsTestEvent(): bool {
+		return $this->isTestEvent;
+	}
+
 	public function hasContributionTracking(): bool {
 		return $this->hasContributionTracking;
 	}
@@ -229,14 +237,6 @@ class EventRegistration implements JsonCodecable {
 	 */
 	public function getTrackingTools(): array {
 		return $this->trackingTools;
-	}
-
-	public function getChatURL(): ?string {
-		return $this->chatURL;
-	}
-
-	public function getIsTestEvent(): bool {
-		return $this->isTestEvent;
 	}
 
 	/**
@@ -289,14 +289,14 @@ class EventRegistration implements JsonCodecable {
 			'participationOptions' => $this->participationOptions,
 			'meetingURL' => $this->meetingURL,
 			'addressEncoded' => $this->address?->toJsonArray(),
+			'chatURL' => $this->chatURL,
+			'isTestEvent' => $this->isTestEvent,
 			'hasContributionTracking' => $this->hasContributionTracking,
 			'trackingToolsEncoded' => array_map(
 				/** @return array<string,mixed> */
 				static fn ( TrackingToolAssociation $assoc ): array => $assoc->toJsonArray(),
 				$this->trackingTools
 			),
-			'chatURL' => $this->chatURL,
-			'isTestEvent' => $this->isTestEvent,
 			'participantQuestions' => $this->participantQuestions,
 			'creationTimestamp' => $this->creationTimestamp,
 			'lastEditTimestamp' => $this->lastEditTimestamp,
@@ -331,10 +331,10 @@ class EventRegistration implements JsonCodecable {
 			$json['participationOptions'],
 			$json['meetingURL'],
 			$json['addressEncoded'] ? Address::newFromJsonArray( $json['addressEncoded'] ) : null,
-			$json['hasContributionTracking'],
-			array_map( TrackingToolAssociation::newFromJsonArray( ... ), $json['trackingToolsEncoded'] ),
 			$json['chatURL'],
 			$json['isTestEvent'],
+			$json['hasContributionTracking'],
+			array_map( TrackingToolAssociation::newFromJsonArray( ... ), $json['trackingToolsEncoded'] ),
 			$json['participantQuestions'],
 			$json['creationTimestamp'],
 			$json['lastEditTimestamp'],
