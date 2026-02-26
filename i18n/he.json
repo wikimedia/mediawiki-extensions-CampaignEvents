@@ -513,7 +513,7 @@
 	"campaignevents-invitationlist-recommended-info": "העורכים האלה קיבלו דירוג בינוני ברשימת ההזמנות, אבל בכל־זאת ייתכן שהם יהיו מעוניינים בהצטרפות לפעילות שלך.",
 	"campaignevents-invitationlist-worklist-label": "צפייה ברשימת ערכים",
 	"campaignevents-event-details-footer": "נא לבקר ב<strong>[[Special:AllEvents|רשימת העבודה המשותפת]]</strong> כדי למצוא עוד אירועים וקהילות.",
-	"campaignevents-invitationlist-preference": "לכלול אותי ב[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists רשימות הזמנות].",
+	"campaignevents-invitationlist-preference": "לכלול אותי ב[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists רשימות הזמנות]",
 	"prefs-campaignevents-invitations": "רשימות הזמנות",
 	"campaignevents-allevents-label-filter-wikis": "אתרי ויקי",
 	"campaignevents-allevents-placeholder-add-wikis": "נא להוסיף אתרי ויקי...",

@@ -9,7 +9,7 @@
 	"campaignevents-rest-event-not-found": "لا توجد فعالية مقترنة بهذا المعرّف.",
 	"campaignevents-rest-enable-registration-permission-denied": "غير مسموح لك بتفعيل التسجيلات في الفعالية.",
 	"campaignevents-rest-edit-page-nonlocal": "جرى تفعيل التسجيل في هذه الفعالية على موقع الويكي التالي ويجب تعديله هناك: $1.",
-	"campaignevents-rest-delete-already-deleted": "تسجيل الفعالية هذا محذوف بالفعل.",
+	"campaignevents-rest-delete-already-deleted": "تسجيل هذه الفعالية محذوف بالكامل.",
 	"campaignevents-rest-user-not-found": "لا يوجد مستخدم بهذا المعرف المركزي.",
 	"campaignevents-rest-get-registration-deleted": "تسجيل الفعالية حُذف.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "يجب أن تكون المعلمة 'User_ids' مصفوفة من معرّفات المستخدمين، أو فارغة (لإزالة جميع المستخدمين)",
@@ -23,6 +23,6 @@
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "يُرجى إكمال تسجيل الفعالية على $1، الويكي الذي أنشئت فيه الفعالية.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "يرجى حذف تسجيل الفعالية الخاصة بك على $1، الويكي الذي أنشئت فيه الفعالية.",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "يُرجى إرسال بريد إلكتروني للمشاركين على $1، الويكي الذي أنشئت فيه الفعالية.",
-	"campaignevents-rest-contribution-not-found": "لا يوجد أي مساهمة بهذا الهوية",
-	"campaignevents-rest-delete-contribution-permission-denied": "لا يُسمح لكِ بحذف هذه المساهمة."
+	"campaignevents-rest-contribution-not-found": "لا توجد مساهمة بهذا المعرف.",
+	"campaignevents-rest-delete-contribution-permission-denied": "لا يُسمح لك بحذف هذه المساهمة."
 }
