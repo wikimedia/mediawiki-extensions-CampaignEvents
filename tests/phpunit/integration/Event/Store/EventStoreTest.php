@@ -115,6 +115,11 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		);
 		$this->assertSame( $expected->getMeetingURL(), $actual->getMeetingURL(), 'meeting URL' );
 		$this->assertEquals( $expected->getAddress(), $actual->getAddress(), 'address' );
+		$this->assertSame(
+			$expected->hasContributionTracking(),
+			$actual->hasContributionTracking(),
+			'Contribution tracking'
+		);
 		$this->assertSame( $expected->getChatURL(), $actual->getChatURL(), 'chat' );
 		$this->assertSame( $expected->getIsTestEvent(), $actual->getIsTestEvent(), 'is test' );
 		$this->assertSame( $expected->getParticipantQuestions(), $actual->getParticipantQuestions(), 'questions' );
