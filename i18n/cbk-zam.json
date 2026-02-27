@@ -205,7 +205,7 @@
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Event online y na personal",
 	"campaignevents-eventpage-header-timezone": "<strong>Zona de hora:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Hora/tiempo de principiada y acabada",
-	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|participante|maganparticipante}}",
+	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|participante|maga participante}}",
 	"campaignevents-eventpage-header-participants-label": "Numero del maga participante",
 	"campaignevents-eventpage-header-details": "Mas del maga detalles",
 	"campaignevents-eventpage-header-registered-publicly": "Na publico ya el de tuyo registracion!",
