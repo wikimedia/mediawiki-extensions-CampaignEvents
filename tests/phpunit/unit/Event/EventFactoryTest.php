@@ -58,6 +58,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'chat' => 'https://chaturl.example.org',
 		'istest' => false,
 		'tracksContributions' => false,
+		'goalType' => null,
+		'goalTarget' => null,
 		'trackingid' => null,
 		'trackingeventid' => null,
 		'questions' => [ 'age' ],
@@ -153,7 +155,8 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			$typesRegistry,
 			$countryProvider,
 			$allowedNamespaces ?? [ NS_PROJECT ],
-			array_keys( self::COUNTRIES_DISALLOWED_TRACKING )
+			array_keys( self::COUNTRIES_DISALLOWED_TRACKING ),
+			true
 		);
 	}
 
@@ -498,6 +501,53 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 				'address' => null,
 				'countrycode' => null,
 				'types' => [ 'conference', 'editing-event' ],
+			] )
+		];
+
+		yield 'Goal target without type' => [
+			'campaignevents-error-goal-type-required',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'goalType' => null,
+				'goalTarget' => 100,
+				'types' => [ 'editing-event' ],
+			] )
+		];
+		yield 'Goal type without target' => [
+			'campaignevents-error-goal-target-required',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'goalType' => 'total_edits',
+				'goalTarget' => null,
+				'types' => [ 'editing-event' ],
+			] )
+		];
+		yield 'Goal type invalid' => [
+			'campaignevents-error-goal-type-invalid',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'goalType' => 'invalid_metric',
+				'goalTarget' => 5,
+				'types' => [ 'editing-event' ],
+			] )
+		];
+		yield 'Goal target invalid' => [
+			'campaignevents-error-goal-target-invalid',
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'goalType' => 'total_edits',
+				'goalTarget' => 0,
+				'types' => [ 'editing-event' ],
+			] )
+		];
+
+		yield 'Valid goal type and target' => [
+			null,
+			self::getTestDataWithDefault( [
+				'tracksContributions' => true,
+				'goalType' => 'total_edits',
+				'goalTarget' => 5,
+				'types' => [ 'editing-event' ],
 			] )
 		];
 

@@ -73,6 +73,8 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['chat_url'],
 			$body['is_test_event'],
 			$body['tracks_contributions'],
+			null,
+			null,
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$participantQuestionNames,

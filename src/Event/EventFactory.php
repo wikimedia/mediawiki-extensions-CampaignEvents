@@ -10,6 +10,8 @@ use Exception;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
@@ -70,6 +72,7 @@ class EventFactory {
 		private readonly CountryProvider $countryProvider,
 		private readonly array $allowedEventNamespaces,
 		private readonly array $contributionTrackingDisallowedCountryCodes,
+		private readonly bool $enableEventGoals,
 	) {
 	}
 
@@ -92,6 +95,8 @@ class EventFactory {
 	 * @param string|null $chatURL
 	 * @param bool $isTestEvent
 	 * @param bool $hasContributionTracking
+	 * @param string|null $goalType
+	 * @param int|null $goalTarget
 	 * @param string|null $trackingToolUserID User identifier of a tracking tool
 	 * @param string|null $trackingToolEventID
 	 * @param string[] $participantQuestionNames
@@ -122,6 +127,8 @@ class EventFactory {
 		?string $chatURL,
 		bool $isTestEvent,
 		bool $hasContributionTracking,
+		?string $goalType,
+		?int $goalTarget,
 		?string $trackingToolUserID,
 		?string $trackingToolEventID,
 		array $participantQuestionNames,
@@ -195,6 +202,19 @@ class EventFactory {
 			$res->merge( $this->validateContributionsTracking( $types, $meetingCountryCode, $wikis ) );
 		}
 
+		$goal = null;
+		if ( $this->enableEventGoals ) {
+			$goalStatus = $this->validateGoal( $goalType, $goalTarget );
+			$res->merge( $goalStatus );
+			if ( $goalStatus->isGood() ) {
+				$goal = $goalStatus->getValue();
+			}
+		}
+		if ( $goal !== null && !$hasContributionTracking ) {
+			$res->fatal( 'campaignevents-error-goal-requires-contribution-tracking' );
+			$goal = null;
+		}
+
 		$trackingToolStatus = $this->validateTrackingTool( $trackingToolUserID, $trackingToolEventID );
 		$res->merge( $trackingToolStatus );
 		$trackingToolDBID = $trackingToolStatus->getValue();
@@ -257,7 +277,7 @@ class EventFactory {
 			$chatURL,
 			$isTestEvent,
 			$hasContributionTracking,
-			null,
+			$goal,
 			$trackingTools,
 			$questionIDs,
 			$creationTSUnix,
@@ -613,6 +633,46 @@ class EventFactory {
 	}
 
 	/**
+	 * Validate a goal type/target pair and, if valid, build the corresponding EventGoal.
+	 *
+	 * @param string|null $type Goal metric type identifier, or null/empty when no goal is provided.
+	 * @param int|null $target Goal target value (must be a positive-int when provided), or null when no goal is
+	 *  provided.
+	 * @return StatusValue<EventGoal|null>
+	 */
+	private function validateGoal( ?string $type, ?int $target ): StatusValue {
+		$type = $type !== null ? trim( $type ) : null;
+
+		if ( $type === null && $target === null ) {
+			return StatusValue::newGood();
+		}
+
+		if ( $type === null && $target !== null ) {
+			return StatusValue::newFatal( 'campaignevents-error-goal-type-required' );
+		}
+
+		$metricType = $type !== null ? EventGoalMetricType::tryFrom( $type ) : null;
+		if ( $metricType === null ) {
+			return StatusValue::newFatal( 'campaignevents-error-goal-type-invalid' );
+		}
+
+		if ( $target === null ) {
+			return StatusValue::newFatal( 'campaignevents-error-goal-target-required' );
+		}
+
+		if ( $target < 1 ) {
+			return StatusValue::newFatal( 'campaignevents-error-goal-target-invalid' );
+		}
+
+		$goal = EventGoal::newFromArray( [
+			'operator' => EventGoal::OPERATOR_AND,
+			'metrics' => [ [ 'metric' => $metricType->value, 'target' => $target ] ],
+		] );
+
+		return StatusValue::newGood( $goal );
+	}
+
+	/**
 	 * @param string[] $questionNames
 	 * @return StatusValue Whose value is an array of the corresponding question DB IDs.
 	 */
@@ -632,5 +692,4 @@ class EventFactory {
 		}
 		return $ret;
 	}
-
 }

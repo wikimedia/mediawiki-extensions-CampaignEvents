@@ -788,6 +788,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 				$data['EventChatURL'],
 				$testEvent,
 				$data['ContributionStats'],
+				null,
+				null,
 				$trackingToolUserID,
 				$trackingToolEventID,
 				$participantQuestionNames,
