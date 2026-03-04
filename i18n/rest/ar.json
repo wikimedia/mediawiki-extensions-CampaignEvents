@@ -9,7 +9,7 @@
 	"campaignevents-rest-event-not-found": "لا توجد فعالية مقترنة بهذا المعرّف.",
 	"campaignevents-rest-enable-registration-permission-denied": "غير مسموح لك بتفعيل التسجيلات في الفعالية.",
 	"campaignevents-rest-edit-page-nonlocal": "جرى تفعيل التسجيل في هذه الفعالية على موقع الويكي التالي ويجب تعديله هناك: $1.",
-	"campaignevents-rest-delete-already-deleted": "تسجيل الفعالية هذا محذوف بالفعل.",
+	"campaignevents-rest-delete-already-deleted": "تسجيل هذه الفعالية محذوف بالكامل.",
 	"campaignevents-rest-user-not-found": "لا يوجد مستخدم بهذا المعرف المركزي.",
 	"campaignevents-rest-get-registration-deleted": "تسجيل الفعالية حُذف.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "يجب أن تكون المعلمة 'User_ids' مصفوفة من معرّفات المستخدمين، أو فارغة (لإزالة جميع المستخدمين)",

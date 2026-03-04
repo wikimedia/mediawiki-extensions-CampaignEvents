@@ -490,5 +490,7 @@
 	"campaignevents-allevents-label-upcoming-events-description": "Próximos eventos: Eventos que começam dentro das datas selecionadas",
 	"campaignevents-allevents-label-ongoing-events-title": "Eventos em andamento",
 	"campaignevents-allevents-label-ongoing-events-description": "Eventos em andamento: Eventos que começam antes, mas continuam dentro das datas selecionadas",
-	"campaignevents-allevents-transclusion-more-link": "Explore mais eventos e comunidades"
+	"campaignevents-allevents-transclusion-more-link": "Explore mais eventos e comunidades",
+	"communityconfiguration-campaignevents-description": "Opções de configuração para a extensão CampaignEvents",
+	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Espaços nominais de eventos válidos"
 }
