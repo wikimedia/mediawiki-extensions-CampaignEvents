@@ -5,7 +5,7 @@
 		:use-close-button="true"
 		:primary-action="primaryAction"
 		:default-action="defaultAction"
-		@primary="$emit( 'associate-edit', selectedEvent )"
+		@primary="onPrimary"
 	>
 		<p>{{ dialogIntro }}</p>
 		<cdx-select
@@ -25,7 +25,7 @@ module.exports = exports = defineComponent( {
 	name: 'EditAssociationDialog',
 	components: { CdxDialog, CdxSelect },
 	emits: [ 'associate-edit' ],
-	setup() {
+	setup( _, { emit } ) {
 		const events = mw.config.get( 'wgCampaignEventsEventsForAssociation' );
 
 		if ( !events.length ) {
@@ -67,6 +67,22 @@ module.exports = exports = defineComponent( {
 			label: mw.msg( 'campaignevents-postedit-dialog-action-no' )
 		};
 
+		function onPrimary() {
+			const selectedEventID = selectedEvent.value;
+			if ( selectedEventID === null ) {
+				// XXX: Prevent this (disable button) or show an error (T410099)
+				return;
+			}
+			let selectedEventName;
+			for ( const event of events ) {
+				if ( event.id === selectedEventID ) {
+					selectedEventName = event.name;
+					break;
+				}
+			}
+			emit( 'associate-edit', selectedEventID, selectedEventName );
+		}
+
 		return {
 			events,
 			dialogTitle,
@@ -74,7 +90,8 @@ module.exports = exports = defineComponent( {
 			selectOptions,
 			selectedEvent,
 			primaryAction,
-			defaultAction
+			defaultAction,
+			onPrimary
 		};
 	},
 	computed: {

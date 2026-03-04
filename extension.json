@@ -500,7 +500,9 @@
 			],
 			"dependencies": [
 				"mediawiki.api",
-				"mediawiki.user"
+				"mediawiki.jqueryMsg",
+				"mediawiki.user",
+				"mediawiki.util"
 			],
 			"packageFiles": [
 				"index.js",
@@ -514,7 +516,9 @@
 				"campaignevents-postedit-dialog-intro-multiple",
 				"campaignevents-postedit-dialog-select-placeholder",
 				"campaignevents-postedit-dialog-action-no",
-				"campaignevents-postedit-dialog-action-yes"
+				"campaignevents-postedit-dialog-action-yes",
+				"campaignevents-postedit-success-text",
+				"campaignevents-event-details-tab-contributions"
 			]
 		}
 	},

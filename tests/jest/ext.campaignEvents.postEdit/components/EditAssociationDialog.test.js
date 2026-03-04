@@ -47,19 +47,20 @@ describe( 'EditAssociationDialog', () => {
 				cdxDialog = wrapper.getComponent( { name: 'CdxDialog' } );
 			cdxDialog.vm.$emit( 'primary' );
 
-			const associationEvent = wrapper.emitted( 'associate-edit' );
-			expect( associationEvent ).toHaveLength( 1 );
-			expect( associationEvent[ 0 ] ).toEqual( [ defaultEventID ] );
+			const associationEvents = wrapper.emitted( 'associate-edit' );
+			expect( associationEvents ).toHaveLength( 1 );
+			expect( associationEvents[ 0 ] ).toEqual( [ defaultEventID, defaultEventTitle ] );
 		} );
 	} );
 
 	describe( 'with multiple events', () => {
 		let wrapper;
 		const chosenEventID = 42,
+			chosenEventName = 'Test event 42',
 			firstEventName = 'Test event 10';
 		const events = [
 			{ id: 10, name: firstEventName },
-			{ id: chosenEventID, name: 'Test event 42' },
+			{ id: chosenEventID, name: chosenEventName },
 			{ id: 73, name: 'Test event 73' }
 		];
 
@@ -89,9 +90,9 @@ describe( 'EditAssociationDialog', () => {
 			selector.vm.$emit( 'update:selected', chosenEventID );
 			cdxDialog.vm.$emit( 'primary' );
 
-			const associationEvent = wrapper.emitted( 'associate-edit' );
-			expect( associationEvent ).toHaveLength( 1 );
-			expect( associationEvent[ 0 ] ).toEqual( [ chosenEventID ] );
+			const associationEvents = wrapper.emitted( 'associate-edit' );
+			expect( associationEvents ).toHaveLength( 1 );
+			expect( associationEvents[ 0 ] ).toEqual( [ chosenEventID, chosenEventName ] );
 		} );
 	} );
 } );

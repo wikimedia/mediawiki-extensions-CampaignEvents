@@ -583,6 +583,7 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Select event",
 	"campaignevents-postedit-dialog-action-no": "No, thanks",
 	"campaignevents-postedit-dialog-action-yes": "Yes",
+	"campaignevents-postedit-success-text": "Your edit has been associated with $1. To see your contribution, navigate to the [$2 {{int:campaignevents-event-details-tab-contributions}} view of the event].",
 	"campaignevents-contributions-summary-participants": "Participants",
 	"campaignevents-contributions-summary-wikis-edited": "Wikis edited",
 	"campaignevents-contributions-summary-articles-created": "Articles created",

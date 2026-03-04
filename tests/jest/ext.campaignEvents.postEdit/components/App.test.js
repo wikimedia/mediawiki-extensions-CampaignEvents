@@ -38,7 +38,7 @@ describe( 'App', () => {
 		const wrapper = mountApp();
 		expect( wrapper.vm.isOpen ).toBe( true );
 	} );
-	it( 'makes a request to associate the edit and then closes', async () => {
+	it( 'makes a request to associate the edit, shows a notification, and closes', async () => {
 		const wiki = 'some_wiki',
 			revID = 987;
 		const wrapper = mountApp( {
@@ -62,6 +62,10 @@ describe( 'App', () => {
 			put: restPut
 		} ) );
 
+		mw.message = jest.fn( ( key ) => ( {
+			key: key
+		} ) );
+
 		const dialog = wrapper.getComponent( { name: 'EditAssociationDialog' } );
 
 		await nextTick();
@@ -72,6 +76,11 @@ describe( 'App', () => {
 		expect( restPut ).toHaveBeenCalledWith(
 			`/campaignevents/v0/event_registration/${ eventID }/edits/${ wiki }/${ revID }`,
 			{ token: csrfToken }
+		);
+		await nextTick();
+		expect( mw.notify ).toHaveBeenCalledWith(
+			expect.objectContaining( { key: 'campaignevents-postedit-success-text' } ),
+			expect.objectContaining( { type: 'success' } )
 		);
 		expect( wrapper.vm.isOpen ).toBe( false );
 	} );

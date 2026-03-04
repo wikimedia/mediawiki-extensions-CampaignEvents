@@ -37,13 +37,24 @@ module.exports = exports = defineComponent( {
 			revisionID = newRevID;
 		} );
 
-		function onAssociateEdit( eventID ) {
+		async function onAssociateEdit( eventID, eventName ) {
 			const curWikiID = mw.config.get( 'wgDBname' );
-			new mw.Rest().put(
+			await new mw.Rest().put(
 				`/campaignevents/v0/event_registration/${ eventID }/edits/${ curWikiID }/${ revisionID }`,
 				{ token: mw.user.tokens.get( 'csrfToken' ) }
 			);
 			isOpen.value = false;
+			mw.notify(
+				mw.message(
+					'campaignevents-postedit-success-text',
+					eventName,
+					mw.util.getUrl( `Special:EventDetails/${ eventID }`, { tab: 'ContributionsPanel' } )
+				),
+				{
+					type: 'success',
+					autoHideSeconds: 'long'
+				}
+			);
 		}
 
 		return {

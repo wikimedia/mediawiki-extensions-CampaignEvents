@@ -56,7 +56,10 @@ global.mw = {
 			}
 		} ),
 		deprecate: jest.fn()
-	} ) )
+	} ) ),
+	util: {
+		getUrl: jest.fn( ( pageName ) => '/wiki/' + pageName )
+	}
 };
 
 // Ignore all "teleport" behavior for the purpose of testing Dialog;

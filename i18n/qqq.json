@@ -590,6 +590,7 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Placeholder of a selector used in a dialog shown after making an edit, where the user can choose an event to associate the edit.",
 	"campaignevents-postedit-dialog-action-no": "Label of a button in a dialog shown after making an edit, which asks the user whether they want to associate the edit with an event they're participating in.",
 	"campaignevents-postedit-dialog-action-yes": "Label of a button in a dialog shown after making an edit, which asks the user whether they want to associate the edit with an event they're participating in.",
+	"campaignevents-postedit-success-text": "Text of a bubble notification shown after an edit that was just made was associated with an event. Parameters:\n* $1 - Name of the event.\n* $2 - URL of the contributions view for the event.",
 	"campaignevents-contributions-summary-participants": "Label for the participants count card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
 	"campaignevents-contributions-summary-wikis-edited": "Label for the wikis edited count card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
 	"campaignevents-contributions-summary-articles-created": "Label for the articles created count card in the summary at the top of the {{msg-mw|campaignevents-event-details-tab-contributions}} tab of [[Special:EventDetails]].",
