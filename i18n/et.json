@@ -164,6 +164,7 @@
 	"campaignevents-event-details-venue-not-available": "{{PLURAL:$1|Korraldaja|Korraldajad}} ei ole toimumiskohta veel avaldanud.",
 	"campaignevents-event-details-tab-participants": "Osalejad",
 	"campaignevents-event-details-tab-event-details": "Ürituse üksikasjad",
+	"campaignevents-event-details-tab-contributions": "Kaastööd",
 	"campaignevents-event-details-search-participants-placeholder": "Otsi osalejaid",
 	"campaignevents-tracking-tool-p&e-dashboard-name": "Programmide ja ürituste andmelaud",
 	"campaignevents-registration-confirmation-helptext-private-with-groups": "<strong>Privaatne registreerumine:</strong> Sinu kasutajanime näevad osalejate loendis ainult ürituse korraldajad ja {{PLURAL:$2|järgmise kasutajarühma|järgmiste kasutajarühmade}} liikmed: $1. Korraldajad ei pruugi lisada [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard programmide ja ürituste andmelauale] ega teistesse vahenditesse statistika kogumise eesmärgil sinu kaastööd, mida teed ürituse ajal.",
@@ -177,6 +178,12 @@
 	"echo-pref-tooltip-campaign-events-notification-registration": "Teavita mind, kui registreerun üritusele, mis kasutab üritusele registreerumise tööriista.",
 	"campaignevents-notification-registration-collaboration-list-link": "Külasta <strong>[[Special:AllEvents|osalemisloendit]]</strong>, et leida vikides rohkem üritusi ja kogukondi.",
 	"campaignevents-event-details-time-registered": "Registreerumisaeg",
+	"campaignevents-event-details-contributions-table-caption": "Kaastööd",
+	"campaignevents-event-details-contributions-article": "Muudetud artikkel",
+	"campaignevents-event-details-contributions-wiki": "Viki",
+	"campaignevents-event-details-contributions-username": "Kasutajanimi",
+	"campaignevents-event-details-contributions-timestamp": "Ajatempel",
+	"campaignevents-event-details-contributions-bytes": "Baidid",
 	"campaignevents-register-questions-label-title": "Sinu teave",
 	"campaignevents-register-questions-label-subtitle": "Seda teavet jagatakse ainult ürituse korraldajatega.",
 	"campaignevents-register-question-gender": "Mis on sinu sooidentiteet? (valikuline)",
@@ -281,5 +288,11 @@
 	"campaignevents-allevents-placeholder-add-event-types": "Lisa ürituste tüübid...",
 	"campaignevents-eventpage-dialog-event-types-label": "Ürituse tüübid",
 	"campaignevents-eventslist-types-label": "Ürituse tüübid",
-	"campaignevents-eventslist-country-label": "Maa"
+	"campaignevents-eventslist-country-label": "Maa",
+	"campaignevents-contributions-summary-participants": "Osalejaid",
+	"campaignevents-contributions-summary-wikis-edited": "Vikisid muudetud",
+	"campaignevents-contributions-summary-articles-created": "Artikleid loodud",
+	"campaignevents-contributions-summary-articles-edited": "Artikleid muudetud",
+	"campaignevents-contributions-summary-bytes-changed": "Muutus baitides",
+	"campaignevents-contributions-summary-links-changed": "Linke muudetud"
 }
