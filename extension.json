@@ -537,7 +537,8 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
-				"CampaignEventsCountryProvider"
+				"CampaignEventsCountryProvider",
+				"MainConfig"
 			]
 		},
 		{
@@ -550,7 +551,8 @@
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsOrganizersStore",
-				"CampaignEventsParticipantsStore"
+				"CampaignEventsParticipantsStore",
+				"MainConfig"
 			]
 		},
 		{
@@ -609,7 +611,8 @@
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
 				"CampaignEventsEventLookup",
-				"CampaignEventsCountryProvider"
+				"CampaignEventsCountryProvider",
+				"MainConfig"
 			]
 		},
 		{

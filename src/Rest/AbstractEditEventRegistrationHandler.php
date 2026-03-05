@@ -4,12 +4,14 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -26,6 +28,7 @@ use MediaWiki\Rest\Validator\Validator;
 use RuntimeException;
 use StatusValue;
 use Wikimedia\ParamValidator\ParamValidator;
+use Wikimedia\ParamValidator\TypeDef\IntegerDef;
 use Wikimedia\ParamValidator\TypeDef\StringDef;
 use Wikimedia\ParamValidator\TypeDef\TimestampDef;
 use Wikimedia\Timestamp\TimestampFormat as TS;
@@ -33,6 +36,8 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
 abstract class AbstractEditEventRegistrationHandler extends Handler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
+
+	private bool $enableEventGoals;
 
 	public function __construct(
 		protected readonly EventFactory $eventFactory,
@@ -45,7 +50,9 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		protected readonly ITopicRegistry $topicRegistry,
 		private readonly EventTypesRegistry $eventTypesRegistry,
 		private readonly CountryProvider $countryProvider,
+		private readonly Config $mainConfig
 	) {
+		$this->enableEventGoals = $mainConfig->get( 'CampaignEventsEnableEventGoals' );
 	}
 
 	/**
@@ -193,6 +200,17 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 		] + $this->getTokenParamDefinition();
+		if ( $this->enableEventGoals ) {
+			$params['goal_type'] = [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => array_column( EventGoalMetricType::cases(), 'value' ),
+			];
+			$params['goal_target'] = [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'integer',
+				IntegerDef::PARAM_MIN => 1,
+			];
+		}
 
 		return $params;
 	}
@@ -205,4 +223,8 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @throws InvalidEventDataException
 	 */
 	abstract protected function createEventObject( array $body ): EventRegistration;
+
+	protected function isEventGoalsEnabled(): bool {
+		return $this->enableEventGoals;
+	}
 }

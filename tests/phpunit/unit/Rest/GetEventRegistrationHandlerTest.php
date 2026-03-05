@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -75,6 +76,9 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$organizersStore,
 			$participantStore ?? $this->createMock( ParticipantsStore::class ),
+			new HashConfig( [
+				'CampaignEventsEnableEventGoals' => true,
+			] ),
 		);
 	}
 
@@ -90,6 +94,8 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			'name' => 'Some name',
 			'event_page' => $eventPageStr,
 			'event_page_wiki' => WikiMap::getCurrentWikiId(),
+			'goal_target' => 500,
+			'goal_type' => 'total_edits',
 			'status' => EventRegistration::STATUS_OPEN,
 			'timezone' => new DateTimeZone( $timezoneName ),
 			'start_time' => '20220220200220',
@@ -130,7 +136,11 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$eventData['tracks_contributions'],
 			new EventGoal(
 				EventGoal::OPERATOR_AND,
-				[ new EventGoalMetric( EventGoalMetricType::TotalEdits, 500 ) ]
+				[
+					new EventGoalMetric(
+						EventGoalMetricType::from( $eventData['goal_type'] ),
+						$eventData['goal_target'] )
+				]
 			),
 			[
 				new TrackingToolAssociation(
