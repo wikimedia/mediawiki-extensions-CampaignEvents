@@ -513,7 +513,7 @@
 	"campaignevents-invitationlist-recommended-info": "Nämä muokkaajat saivat keskinkertaisen kutsulistatuloksen, mutta he saattavat silti olla kiinnostuneita osallistumaan projektiisi tai tapahtumaasi.",
 	"campaignevents-invitationlist-worklist-label": "Näytä artikkelilista",
 	"campaignevents-event-details-footer": "<strong>[[Special:AllEvents|Yhteistyölistalta]]</strong> löydät lisää tapahtumia ja yhteisöjä.",
-	"campaignevents-invitationlist-preference": "Salli käyttäjien lisätä minut tapahtumien [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists kutsulistoille].",
+	"campaignevents-invitationlist-preference": "Salli käyttäjien lisätä minut tapahtumien [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists kutsulistoille]",
 	"prefs-campaignevents-invitations": "Kutsulistat",
 	"campaignevents-allevents-label-filter-wikis": "Wikit",
 	"campaignevents-allevents-placeholder-add-wikis": "Lisää wikejä...",
@@ -600,5 +600,13 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "Haluatko varmasti poistaa tämän muokkauksen tapahtumasta?",
 	"campaignevents-event-details-contributions-delete-note": "Sitä ei poisteta, mutta sitä ei enää liitetä tapahtumaan.",
 	"campaignevents-event-details-contributions-delete-cancel": "Peruuta",
-	"campaignevents-event-details-contributions-delete-confirm": "Poista"
+	"campaignevents-event-details-contributions-delete-confirm": "Poista",
+	"campaignevents-event-details-contributions-editors-username": "Käyttäjänimi",
+	"campaignevents-event-details-contributions-editors-created": "Luotuja artikkeleita",
+	"campaignevents-event-details-contributions-editors-edited": "Muokattuja artikkeleita",
+	"campaignevents-event-details-contributions-editors-count": "Muokkausmäärä",
+	"campaignevents-event-details-contributions-editors-bytes": "Tavua",
+	"campaignevents-event-details-contributions-edits-button-label": "Muokkaukset",
+	"campaignevents-event-details-contributions-editors-button-label": "Muokkaajat",
+	"campaignevents-event-details-contributions-editors-table-caption": "Muokkaajat"
 }

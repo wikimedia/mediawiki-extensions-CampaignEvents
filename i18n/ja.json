@@ -8,6 +8,7 @@
 			"MagicAho",
 			"MathXplore",
 			"Omotecho",
+			"RhAnish",
 			"Shirayuki",
 			"Shulmj",
 			"Sou0012",
@@ -478,5 +479,7 @@
 	"campaignevents-event-details-event-types-header": "イベントの種類",
 	"campaignevents-allevents-label-filter-event-types": "イベントの種類",
 	"campaignevents-allevents-placeholder-add-event-types": "イベントの種類を追加…",
-	"campaignevents-eventslist-types-label": "イベントの種類"
+	"campaignevents-eventslist-types-label": "イベントの種類",
+	"campaignevents-event-details-contributions-editors-username": "利用者名",
+	"campaignevents-event-details-contributions-editors-table-caption": "編集者"
 }

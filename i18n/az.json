@@ -598,5 +598,13 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "Bu redaktəni tədbirdən silmək istədiyinizə əminsiniz?",
 	"campaignevents-event-details-contributions-delete-note": "Redaktə tamamilə silinməyəcək, lakin artıq bu tədbirlə əlaqələndirilməyəcək.",
 	"campaignevents-event-details-contributions-delete-cancel": "İmtina",
-	"campaignevents-event-details-contributions-delete-confirm": "Sil"
+	"campaignevents-event-details-contributions-delete-confirm": "Sil",
+	"campaignevents-event-details-contributions-editors-username": "İstifadəçi adı",
+	"campaignevents-event-details-contributions-editors-created": "Yaradılmış məqalələr",
+	"campaignevents-event-details-contributions-editors-edited": "Redaktə edilmiş məqalələr",
+	"campaignevents-event-details-contributions-editors-count": "Redaktə sayı",
+	"campaignevents-event-details-contributions-editors-bytes": "Bayt",
+	"campaignevents-event-details-contributions-edits-button-label": "Redaktələr",
+	"campaignevents-event-details-contributions-editors-button-label": "Redaktorlar",
+	"campaignevents-event-details-contributions-editors-table-caption": "Redaktorlar"
 }

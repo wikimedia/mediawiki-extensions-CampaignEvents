@@ -554,5 +554,11 @@
 	"campaignevents-contributions-summary-edit-count": "Zuel vun den Ännerungen",
 	"campaignevents-event-details-contributions-actions": "Aktiounen",
 	"campaignevents-event-details-contributions-delete-cancel": "Ofbriechen",
-	"campaignevents-event-details-contributions-delete-confirm": "Ewechhuelen"
+	"campaignevents-event-details-contributions-delete-confirm": "Ewechhuelen",
+	"campaignevents-event-details-contributions-editors-username": "Benotzernumm",
+	"campaignevents-event-details-contributions-editors-created": "Artikelen ugeluecht",
+	"campaignevents-event-details-contributions-editors-edited": "Artikele geännert",
+	"campaignevents-event-details-contributions-editors-count": "Ännerungszuel",
+	"campaignevents-event-details-contributions-editors-bytes": "Byte",
+	"campaignevents-event-details-contributions-editors-table-caption": "Editeuren"
 }

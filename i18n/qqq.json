@@ -615,12 +615,12 @@
 	"campaignevents-event-details-contributions-delete-note": "Informational note in the dialog clarifying that the edit itself is not deleted, only its association with the event.",
 	"campaignevents-event-details-contributions-delete-cancel": "Label for the safe action button that closes the dialog without removing the association.",
 	"campaignevents-event-details-contributions-delete-confirm": "Label for the destructive action button that confirms removing the edit's association from the event.",
-	"campaignevents-event-details-contributions-edits-button-label": "Button label on the contributions tab of [[Special:EventDetails]]. The button navigates to the edits view",
-	"campaignevents-event-details-contributions-editors-button-label": "Button label on the contributions tab of [[Special:EventDetails]]. The button navigates to the editor view",
 	"campaignevents-event-details-contributions-editors-username": "Table column header for the contributions table while in editor view in [[Special:EventDetails]]. The column displays the username.",
 	"campaignevents-event-details-contributions-editors-created": "Table column header for the contributions table while in editor view in [[Special:EventDetails]]. The column displays the number of articles created by the user for this event.",
 	"campaignevents-event-details-contributions-editors-edited": "Table column header for the contributions table while in editor view in [[Special:EventDetails]]. The column displays the number of articles edited by the user for this event.",
 	"campaignevents-event-details-contributions-editors-count": "Table column header for the contributions table while in editor view in [[Special:EventDetails]]. The column displays the number of articles edited by the user for all time",
 	"campaignevents-event-details-contributions-editors-bytes": "Table column header for the contributions table while in editor view in [[Special:EventDetails]]. The column displays the byte delta for articles edited by the user for this event.",
+	"campaignevents-event-details-contributions-edits-button-label": "Button label on the contributions tab of [[Special:EventDetails]]. The button navigates to the edits view",
+	"campaignevents-event-details-contributions-editors-button-label": "Button label on the contributions tab of [[Special:EventDetails]]. The button navigates to the editor view",
 	"campaignevents-event-details-contributions-editors-table-caption": "Table caption for the contributions table in editor view on [[Special:EventDetails]]. Used for accessibility (screen readers)."
 }

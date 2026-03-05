@@ -503,5 +503,9 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "Sei sicuro di voler rimuovere questa modifica dall'evento?",
 	"campaignevents-event-details-contributions-delete-note": "Non sarà cancellato, ma non sarà più associato all'evento.",
 	"campaignevents-event-details-contributions-delete-cancel": "Annulla",
-	"campaignevents-event-details-contributions-delete-confirm": "Rimuovi"
+	"campaignevents-event-details-contributions-delete-confirm": "Rimuovi",
+	"campaignevents-event-details-contributions-editors-username": "Nome utente",
+	"campaignevents-event-details-contributions-editors-created": "Voci create",
+	"campaignevents-event-details-contributions-editors-edited": "Voci modificate",
+	"campaignevents-event-details-contributions-editors-bytes": "Byte"
 }

@@ -12,6 +12,7 @@
 			"IZapico (WMF)",
 			"JDíaz32",
 			"MarcoAurelio",
+			"Monicapozo03",
 			"No se",
 			"PoLuX124",
 			"Rajadinho",
@@ -599,5 +600,11 @@
 	"campaignevents-contributions-summary-articles-edited": "Artículos editados",
 	"campaignevents-contributions-summary-bytes-changed": "Bytes cambiados",
 	"campaignevents-contributions-summary-links-changed": "Enlaces cambiados",
-	"campaignevents-contributions-summary-delta-separator": "/"
+	"campaignevents-contributions-summary-delta-separator": "/",
+	"campaignevents-event-details-contributions-editors-username": "Nombre de usuario",
+	"campaignevents-event-details-contributions-editors-created": "Artículos creados",
+	"campaignevents-event-details-contributions-editors-edited": "Artículos editados",
+	"campaignevents-event-details-contributions-editors-count": "Recuento de ediciones",
+	"campaignevents-event-details-contributions-editors-bytes": "Bytes",
+	"campaignevents-event-details-contributions-editors-table-caption": "Editores"
 }
