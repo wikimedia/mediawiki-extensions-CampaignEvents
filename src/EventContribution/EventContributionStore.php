@@ -49,6 +49,7 @@ class EventContributionStore {
 				'cec_edit_flags' => $editObject->getEditFlags(),
 				'cec_bytes_delta' => $editObject->getBytesDelta(),
 				'cec_links_delta' => $editObject->getLinksDelta(),
+				'cec_references_delta' => $editObject->getReferencesDelta(),
 				'cec_timestamp' => $dbw->timestamp( $editObject->getTimestamp() ),
 				'cec_deleted' => $editObject->isDeleted() ? 1 : 0,
 			] )
@@ -76,6 +77,7 @@ class EventContributionStore {
 			(int)$row->cec_edit_flags,
 			(int)$row->cec_bytes_delta,
 			(int)$row->cec_links_delta,
+			(int)$row->cec_references_delta,
 			$row->cec_timestamp,
 			(bool)$row->cec_deleted
 		);
@@ -132,6 +134,10 @@ class EventContributionStore {
 					'cec.cec_links_delta', 0 ) . ')',
 				'links_removed' => 'SUM(' . $dbr->conditional( 'cec.cec_links_delta < 0',
 					'cec.cec_links_delta', 0 ) . ')',
+				'references_added' => 'SUM(' . $dbr->conditional( 'cec.cec_references_delta > 0',
+					'cec.cec_references_delta', 0 ) . ')',
+				'references_removed' => 'SUM(' . $dbr->conditional( 'cec.cec_references_delta < 0',
+					'cec.cec_references_delta', 0 ) . ')',
 				'edit_count' => 'COUNT(*)',
 			] )
 			->from( 'ce_event_contributions', 'cec' )
@@ -154,7 +160,9 @@ class EventContributionStore {
 			(int)( $row->bytes_removed ?? 0 ),
 			(int)( $row->links_added ?? 0 ),
 			(int)( $row->links_removed ?? 0 ),
-			(int)( $row->edit_count ?? 0 )
+			(int)( $row->edit_count ?? 0 ),
+			(int)( $row->references_added ?? 0 ),
+			(int)( $row->references_removed ?? 0 )
 		);
 	}
 
@@ -166,7 +174,8 @@ class EventContributionStore {
 	private function assertValidRow( stdClass $row ): void {
 		$requiredFields = [
 			'cec_event_id', 'cec_user_id', 'cec_user_name', 'cec_wiki', 'cec_page_id', 'cec_page_prefixedtext',
-			'cec_revision_id', 'cec_edit_flags', 'cec_bytes_delta', 'cec_links_delta', 'cec_timestamp', 'cec_deleted'
+			'cec_revision_id', 'cec_edit_flags', 'cec_bytes_delta', 'cec_links_delta', 'cec_references_delta',
+			'cec_timestamp', 'cec_deleted'
 		];
 
 		foreach ( $requiredFields as $field ) {

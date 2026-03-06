@@ -53,6 +53,7 @@ class EventContributionComputeMetricsDatabaseTest extends MediaWikiIntegrationTe
 				EventContribution::EDIT_FLAG_PAGE_CREATION,
 				$firstBytesDelta,
 				$firstLinksDelta,
+				0,
 				$timestamp,
 				false
 			),
@@ -78,6 +79,7 @@ class EventContributionComputeMetricsDatabaseTest extends MediaWikiIntegrationTe
 				0,
 				$secondBytesDelta,
 				$secondLinksDelta,
+				0,
 				$timestamp,
 				false
 			),

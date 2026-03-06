@@ -144,6 +144,8 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 			'linksAdded' => 0,
 			'linksRemoved' => 0,
 			'editCount' => 0,
+			'referencesAdded' => 0,
+			'referencesRemoved' => 0,
 		];
 
 		$data = array_replace( $defaults, $overrides );
@@ -157,7 +159,9 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 			bytesRemoved: $data['bytesRemoved'],
 			linksAdded: $data['linksAdded'],
 			linksRemoved: $data['linksRemoved'],
-			editCount: $data['editCount']
+			editCount: $data['editCount'],
+			referencesAdded: $data['referencesAdded'],
+			referencesRemoved: $data['referencesRemoved']
 		);
 	}
 }

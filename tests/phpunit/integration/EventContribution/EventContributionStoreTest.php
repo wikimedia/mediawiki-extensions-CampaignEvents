@@ -41,6 +41,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 100,
 				'cec_links_delta' => 1,
+				'cec_references_delta' => 3,
 				'cec_timestamp' => $db->timestamp( '20240101000000' ),
 				'cec_deleted' => 0,
 			],
@@ -56,6 +57,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => EventContribution::EDIT_FLAG_PAGE_CREATION,
 				'cec_bytes_delta' => 200,
 				'cec_links_delta' => 10,
+				'cec_references_delta' => 5,
 				'cec_timestamp' => $db->timestamp( '20240101000001' ),
 				'cec_deleted' => 0,
 			],
@@ -71,6 +73,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 50,
 				'cec_links_delta' => 2,
+				'cec_references_delta' => 2,
 				'cec_timestamp' => $db->timestamp( '20240101000002' ),
 				'cec_deleted' => 0,
 			],
@@ -87,6 +90,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 0,
 				'cec_links_delta' => 0,
+				'cec_references_delta' => 0,
 				'cec_timestamp' => $db->timestamp( '20240101112233' ),
 				'cec_deleted' => 1,
 			],
@@ -103,6 +107,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 100,
 				'cec_links_delta' => 5,
+				'cec_references_delta' => 4,
 				'cec_timestamp' => $db->timestamp( '20240101000000' ),
 				'cec_deleted' => 0,
 			],
@@ -119,6 +124,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 100,
 				'cec_links_delta' => 5,
+				'cec_references_delta' => 0,
 				'cec_timestamp' => $db->timestamp( '20240101000000' ),
 				'cec_deleted' => 1,
 			],
@@ -135,6 +141,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => -7,
 				'cec_links_delta' => -3,
+				'cec_references_delta' => -2,
 				'cec_timestamp' => $db->timestamp( '20240101000005' ),
 				'cec_deleted' => 0,
 			],
@@ -151,6 +158,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => -13,
 				'cec_links_delta' => 0,
+				'cec_references_delta' => -1,
 				'cec_timestamp' => $db->timestamp( '20240101000006' ),
 				'cec_deleted' => 0,
 			],
@@ -167,6 +175,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 88,
 				'cec_links_delta' => -3,
+				'cec_references_delta' => 0,
 				'cec_timestamp' => $db->timestamp( '20250101000006' ),
 				'cec_deleted' => 0,
 			],
@@ -213,6 +222,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			$editFlags,
 			$bytesDelta,
 			$linksDelta,
+			0,
 			$timestamp,
 			false
 		);
@@ -266,43 +276,43 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			99999,
 			1234,
 			true,
-			new EventContributionSummary( 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+			new EventContributionSummary( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
 		];
 		yield 'Can see private, not a participant' => [
 			1,
 			888888,
 			true,
-			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5 )
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5, 12, -3 )
 		];
 		yield 'Can see private, public participant' => [
 			1,
 			101,
 			true,
-			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5 )
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5, 12, -3 )
 		];
 		yield 'Can see private, private participant' => [
 			1,
 			102,
 			true,
-			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5 )
+			new EventContributionSummary( 3, 3, 1, 3, 400, -20, 16, -3, 5, 12, -3 )
 		];
 		yield 'Cannot see private, not a participant' => [
 			1,
 			888888,
 			false,
-			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3, 3 )
+			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3, 3, 7, -2 )
 		];
 		yield 'Cannot see private, public participant' => [
 			1,
 			101,
 			false,
-			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3, 3 )
+			new EventContributionSummary( 1, 2, 0, 2, 200, -7, 6, -3, 3, 7, -2 )
 		];
 		yield 'Cannot see private, private participant' => [
 			1,
 			102,
 			false,
-			new EventContributionSummary( 2, 2, 1, 2, 400, -7, 16, -3, 4 )
+			new EventContributionSummary( 2, 2, 1, 2, 400, -7, 16, -3, 4, 12, -2 )
 		];
 	}
 
@@ -337,6 +347,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 			__METHOD__,
 			$pageID,
 			123,
+			0,
 			0,
 			0,
 			0,

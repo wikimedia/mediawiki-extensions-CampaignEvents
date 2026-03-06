@@ -31,6 +31,7 @@ class EventContributionTest extends MediaWikiUnitTestCase {
 			$editFlags,
 			100,
 			5,
+			0,
 			'20240101000000',
 			false
 		);

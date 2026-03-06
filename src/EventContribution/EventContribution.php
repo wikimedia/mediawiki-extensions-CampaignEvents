@@ -25,6 +25,7 @@ class EventContribution {
 		private readonly int $editFlags,
 		private readonly int $bytesDelta,
 		private readonly int $linksDelta,
+		private readonly int $referencesDelta,
 		private readonly string $timestamp,
 		private readonly bool $deleted
 	) {
@@ -68,6 +69,10 @@ class EventContribution {
 
 	public function getLinksDelta(): int {
 		return $this->linksDelta;
+	}
+
+	public function getReferencesDelta(): int {
+		return $this->referencesDelta;
 	}
 
 	public function getTimestamp(): string {

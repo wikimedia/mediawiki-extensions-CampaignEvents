@@ -112,6 +112,7 @@ class EventContributionComputeMetrics {
 			$editedType,
 			$bytesDelta,
 			$linksDelta,
+			0,
 			$timestamp,
 			$currentRevision->getVisibility() !== 0
 		);

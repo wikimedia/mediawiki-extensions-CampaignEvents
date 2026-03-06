@@ -32,6 +32,7 @@ class ContributionAssociationPageEventIngressTest extends MediaWikiIntegrationTe
 			0,
 			111,
 			22,
+			0,
 			ConvertibleTimestamp::now(),
 			false
 		);

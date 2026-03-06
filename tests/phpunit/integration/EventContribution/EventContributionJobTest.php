@@ -123,6 +123,7 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 			$expectedMetrics['editedType'],
 			$expectedMetrics['bytesDelta'],
 			$expectedMetrics['linksDelta'],
+			0,
 			$timestamp,
 			false
 		);

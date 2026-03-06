@@ -120,6 +120,7 @@ class EventContributionsEditsPager extends CodexTablePager {
 				'cec_timestamp',
 				'cec_bytes_delta',
 				'cec_links_delta',
+				'cec_references_delta',
 				'cec_edit_flags',
 				'cec_revision_id',
 				'cec_page_id',
