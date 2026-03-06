@@ -572,5 +572,13 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "क्या आप वाकई में इस सम्पादन को कार्यक्रम से हटाना चाहते हैं?",
 	"campaignevents-event-details-contributions-delete-note": "यह पूरी तरह से हटाया नहीं जाएगा, मगर यह इस कार्यक्रम से संबद्ध नहीं होगा।",
 	"campaignevents-event-details-contributions-delete-cancel": "रद्द करें",
-	"campaignevents-event-details-contributions-delete-confirm": "हटाएँ"
+	"campaignevents-event-details-contributions-delete-confirm": "हटाएँ",
+	"campaignevents-event-details-contributions-editors-username": "सदस्यनाम",
+	"campaignevents-event-details-contributions-editors-created": "निर्मित लेख",
+	"campaignevents-event-details-contributions-editors-edited": "सम्पादित लेख",
+	"campaignevents-event-details-contributions-editors-count": "सम्पादन संख्या",
+	"campaignevents-event-details-contributions-editors-bytes": "बाइट्स",
+	"campaignevents-event-details-contributions-edits-button-label": "सम्पादन",
+	"campaignevents-event-details-contributions-editors-button-label": "सम्पादक",
+	"campaignevents-event-details-contributions-editors-table-caption": "सम्पादक"
 }

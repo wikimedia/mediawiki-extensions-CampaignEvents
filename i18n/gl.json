@@ -612,5 +612,7 @@
 	"campaignevents-event-details-contributions-editors-edited": "Artigos editados",
 	"campaignevents-event-details-contributions-editors-count": "Contador de edicións",
 	"campaignevents-event-details-contributions-editors-bytes": "Bytes",
+	"campaignevents-event-details-contributions-edits-button-label": "Edicións",
+	"campaignevents-event-details-contributions-editors-button-label": "Editores",
 	"campaignevents-event-details-contributions-editors-table-caption": "Editores"
 }

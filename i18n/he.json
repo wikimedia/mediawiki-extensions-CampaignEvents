@@ -600,5 +600,13 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "האם ברצונך באמת להסיר את העריכה הזאת מהאירוע?",
 	"campaignevents-event-details-contributions-delete-note": "היא לא תימחק, אבל היא כבר לא תהיה משויכת לאירוע.",
 	"campaignevents-event-details-contributions-delete-cancel": "ביטול",
-	"campaignevents-event-details-contributions-delete-confirm": "הסרה"
+	"campaignevents-event-details-contributions-delete-confirm": "הסרה",
+	"campaignevents-event-details-contributions-editors-username": "שם משתמש",
+	"campaignevents-event-details-contributions-editors-created": "ערכים שנוצרו",
+	"campaignevents-event-details-contributions-editors-edited": "ערכים שנערכו",
+	"campaignevents-event-details-contributions-editors-count": "מספר העריכות",
+	"campaignevents-event-details-contributions-editors-bytes": "בתים",
+	"campaignevents-event-details-contributions-edits-button-label": "עריכות",
+	"campaignevents-event-details-contributions-editors-button-label": "עורכים",
+	"campaignevents-event-details-contributions-editors-table-caption": "עורכים"
 }
