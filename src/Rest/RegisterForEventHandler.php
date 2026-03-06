@@ -85,7 +85,6 @@ class RegisterForEventHandler extends SimpleHandler {
 				400
 			);
 		}
-		// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 		$contributionAssociationMode = $body['show_contribution_association_prompt']
 			? RegisterParticipantCommand::SHOW_CONTRIBUTION_ASSOCIATION_PROMPT
 			: RegisterParticipantCommand::HIDE_CONTRIBUTION_ASSOCIATION_PROMPT;

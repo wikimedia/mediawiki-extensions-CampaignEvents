@@ -64,7 +64,6 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 			$eventRegistration,
 			$usersToRemove,
 			$this->getAuthority(),
-			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 			$body['invert_users'] ? UnregisterParticipantCommand::INVERT_USERS :
 				UnregisterParticipantCommand::DO_NOT_INVERT_USERS
 		);

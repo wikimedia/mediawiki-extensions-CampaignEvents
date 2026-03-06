@@ -342,7 +342,6 @@ class EventRegistration implements JsonCodecable {
 			$json['chatURL'],
 			$json['isTestEvent'],
 			$json['hasContributionTracking'],
-			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset goal always in toJsonArray() output
 			$json['goal'] !== null ? EventGoal::newFromArray( $json['goal'] ) : null,
 			array_map( TrackingToolAssociation::newFromJsonArray( ... ), $json['trackingToolsEncoded'] ),
 			$json['participantQuestions'],

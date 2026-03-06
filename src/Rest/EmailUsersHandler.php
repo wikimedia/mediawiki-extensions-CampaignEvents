@@ -55,10 +55,8 @@ class EmailUsersHandler extends SimpleHandler {
 			null,
 			null,
 			null,
-			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 			$params['invert_users'] ? null : $userIds,
 			true,
-			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset https://github.com/phan/phan/issues/5444
 			$params['invert_users'] ? $userIds : null
 		);
 		if ( !$participants ) {

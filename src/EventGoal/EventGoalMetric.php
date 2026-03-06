@@ -57,8 +57,6 @@ class EventGoalMetric {
 		$metric = EventGoalMetricType::from( $data['metric'] );
 		$target = (int)$data['target'];
 		Assert::parameter( $target > 0, '$data', 'Target must be positive integer' );
-		// Phan does not narrow int to positive-int after Assert::parameter; runtime guarantees target > 0
-		/** @phan-suppress-next-line PhanTypeMismatchArgument */
 		return new self( $metric, $target );
 	}
 
