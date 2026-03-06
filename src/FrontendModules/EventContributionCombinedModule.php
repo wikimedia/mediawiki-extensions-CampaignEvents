@@ -66,7 +66,7 @@ readonly class EventContributionCombinedModule {
 					( $module === self::EDITORS_MODULE ? 'cdx-button--action-progressive'
 						: 'cdx-button--action-default' ),
 				"buttonText" => $this->output->msg(
-					'campaignevents-event-details-contribution-editors-button-label'
+					'campaignevents-event-details-contributions-editors-button-label'
 				)->text(),
 				"href" => $editorsLink
 			]
@@ -79,7 +79,7 @@ readonly class EventContributionCombinedModule {
 					( $module === self::EDITS_MODULE || $module === null ? 'cdx-button--action-progressive'
 						: 'cdx-button--action-default' ),
 				"buttonText" => $this->output->msg(
-					'campaignevents-event-details-contribution-edits-button-label'
+					'campaignevents-event-details-contributions-edits-button-label'
 				)->text(),
 				"href" => $editsLink
 			]
