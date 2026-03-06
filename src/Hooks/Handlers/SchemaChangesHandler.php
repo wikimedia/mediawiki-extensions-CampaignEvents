@@ -131,5 +131,14 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-add-ce-event-goals.sql",
 			true
 		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addField',
+			'ce_event_contributions',
+			'cec_references_delta',
+			"$dir/$dbType/patch-add-cec_references_delta.sql",
+			true
+		] );
 	}
 }

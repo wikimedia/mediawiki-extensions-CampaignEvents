@@ -1067,6 +1067,15 @@
 				}
 			},
 			{
+				"name": "cec_references_delta",
+				"comment": "Difference in the number of references (cite tags) between the previous and this revision. Smallint gives us an upper bound of 32767, similar to cec_links_delta.",
+				"type": "smallint",
+				"options": {
+					"notnull": false,
+					"default": null
+				}
+			},
+			{
 				"name": "cec_timestamp",
 				"type": "mwtimestamp",
 				"options": {

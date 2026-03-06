@@ -227,6 +227,7 @@ CREATE TABLE ce_event_contributions (
   cec_edit_flags INT NOT NULL,
   cec_bytes_delta INT NOT NULL,
   cec_links_delta SMALLINT NOT NULL,
+  cec_references_delta SMALLINT DEFAULT NULL,
   cec_timestamp TIMESTAMPTZ NOT NULL,
   cec_deleted SMALLINT NOT NULL,
   PRIMARY KEY(cec_id)

@@ -196,6 +196,7 @@ CREATE TABLE /*_*/ce_event_contributions (
   cec_edit_flags INTEGER NOT NULL,
   cec_bytes_delta INTEGER NOT NULL,
   cec_links_delta SMALLINT NOT NULL,
+  cec_references_delta SMALLINT DEFAULT NULL,
   cec_timestamp BLOB NOT NULL,
   cec_deleted SMALLINT NOT NULL
 );
