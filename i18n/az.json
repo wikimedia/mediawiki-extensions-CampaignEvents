@@ -575,6 +575,7 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Tədbir seç",
 	"campaignevents-postedit-dialog-action-no": "Xeyr, təşəkkürlər",
 	"campaignevents-postedit-dialog-action-yes": "Bəli",
+	"campaignevents-postedit-success-text": "Redaktəniz $1 ilə əlaqələndirilib. Töhfənizi görmək üçün tədbirin [$2 {{int:campaignevents-event-details-tab-contributions}} səhifəsinə] keçin.",
 	"campaignevents-contributions-summary-participants": "iştirakçı",
 	"campaignevents-contributions-summary-wikis-edited": "redaktə edilmiş viki",
 	"campaignevents-contributions-summary-articles-created": "yaradılmış məqalə",

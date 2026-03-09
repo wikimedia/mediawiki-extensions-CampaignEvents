@@ -272,5 +272,7 @@
 	"campaignevents-contributions-summary-edit-count": "Број измена",
 	"campaignevents-event-details-contributions-actions": "Радње",
 	"campaignevents-event-details-contributions-delete-cancel": "Откажи",
-	"campaignevents-event-details-contributions-delete-confirm": "Уклони"
+	"campaignevents-event-details-contributions-delete-confirm": "Уклони",
+	"campaignevents-event-details-contributions-editors-username": "Корисничко име",
+	"campaignevents-event-details-contributions-editors-button-label": "Уредници"
 }

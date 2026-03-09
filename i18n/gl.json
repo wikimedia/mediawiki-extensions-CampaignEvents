@@ -582,6 +582,7 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Seleccionar un evento",
 	"campaignevents-postedit-dialog-action-no": "Non, grazas",
 	"campaignevents-postedit-dialog-action-yes": "Si",
+	"campaignevents-postedit-success-text": "A túa edición asociouse a «$1». Para ver a túa contribución, vai á [$2 vista «{{int:campaignevents-event-details-tab-contributions}}» do evento].",
 	"campaignevents-contributions-summary-participants": "Participantes",
 	"campaignevents-contributions-summary-wikis-edited": "Wikis editados",
 	"campaignevents-contributions-summary-articles-created": "Artigos creados",
