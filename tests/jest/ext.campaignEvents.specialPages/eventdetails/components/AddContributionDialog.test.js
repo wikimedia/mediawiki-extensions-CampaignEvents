@@ -47,11 +47,6 @@ describe( 'AddContributionDialog', () => {
 		expect( wrapper.html() ).toContain( 'Test Event' );
 	} );
 
-	it( 'has correct subtitle', () => {
-
-		expect( cdxDialog.props( 'subtitle' ) ).toBe( 'campaignevents-event-details-contributions-add-dialog-subtitle' );
-	} );
-
 	it( 'has correct primary action button', () => {
 
 		const primaryAction = cdxDialog.props( 'primaryAction' );

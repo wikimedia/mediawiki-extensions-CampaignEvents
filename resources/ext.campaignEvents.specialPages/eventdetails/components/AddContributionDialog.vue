@@ -11,14 +11,13 @@
 		class="ext-campaignevents-eventdetails-add-contribution-dialog"
 		:title="$i18n( 'campaignevents-event-details-contributions-add-dialog-title', eventName )
 			.text()"
-		:subtitle="$i18n( 'campaignevents-event-details-contributions-add-dialog-subtitle' ).text()"
 		:use-close-button="true"
 		:default-action="defaultAction"
 		:primary-action="primaryAction"
 		@default="open = false"
 		@primary="onSubmit"
 	>
-		<cdx-message v-show="hasMessage" :type="messageType">
+		<cdx-message v-if="hasMessage" :type="messageType">
 			{{ message }}
 		</cdx-message>
 		<cdx-field>
@@ -26,8 +25,15 @@
 				v-model="inputValue"
 				input-type="number"
 			></cdx-text-input>
+			<template #label>
+				{{ $i18n( 'campaignevents-event-details-contributions-add-dialog-revid-label' )
+					.text() }}
+			</template>
 			<template #help-text>
-				{{ $i18n( 'campaignevents-event-details-contributions-add-dialog-footer' ).text() }}
+				{{ $i18n(
+					'campaignevents-event-details-contributions-add-dialog-revid-help',
+					'oldid='
+				).text() }}
 			</template>
 		</cdx-field>
 	</cdx-dialog>
