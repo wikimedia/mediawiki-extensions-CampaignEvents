@@ -456,7 +456,7 @@
 	"campaignevents-invitation-list-error-empty-name": "Einen Namen für die Einladungsliste angeben.",
 	"campaignevents-invitation-list-error-invalid-page": "Gib eine Veranstaltungsseite ein, die die Veranstaltungsanmeldung verwendet.",
 	"campaignevents-invitation-list-error-event-ended": "Diese Veranstaltung ist beendet. Gib eine aktive Veranstaltung ein.",
-	"campaignevents-invitation-list-error-not-organizer": "Ruf eine Veranstaltungenseite auf, auf der du als Veranstaltungsorganisator aufgeführt bist.",
+	"campaignevents-invitation-list-error-not-organizer": "Rufe eine Veranstaltungsseite auf, auf der du als Veranstaltungsorganisator aufgeführt bist.",
 	"campaignevents-worklist-error-empty": "Gib mindestens einen Artikeltitel ein.",
 	"campaignevents-worklist-error-too-large": "Du hast $1 {{PLURAL:$1|Artikel}} eingegeben. Bitte gib zwischen 1 und $2 {{PLURAL:$2|Artikel}} ein.",
 	"campaignevents-worklist-error-invalid-titles": "{{PLURAL:$1|Der folgende Artikel hat einen ungültigen Titel|Die folgenden Artikel haben ungültige Titel}}. Bitte korrigiere {{PLURAL:$1|den|die}} Titel und versuchen Sie es erneut.\n$2",
