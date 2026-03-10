@@ -1,0 +1,44 @@
+@import 'mediawiki.skin.variables.less';
+
+.ext-campaignevents-goal-progress-card {
+	margin: @spacing-100 0;
+	padding: @spacing-100;
+	background-color: @background-color-neutral-subtle;
+
+	.ext-campaignevents-goal-progress {
+		display: flex;
+		flex-direction: column;
+		gap: @spacing-50;
+
+		.ext-campaignevents-goal-progress__heading {
+			margin: 0;
+			font-weight: @font-weight-bold;
+			color: @color-base;
+		}
+
+		.ext-campaignevents-goal-progress__description {
+			margin: 0;
+			color: @color-subtle;
+		}
+
+		.ext-campaignevents-goal-progress__bar {
+			// Use full width, thin bar
+			width: 100%;
+
+			// Disable Codex busy/indeterminate animation and transitions for this determinate bar.
+			&.cdx-progress-bar {
+				.cdx-progress-bar__bar {
+					animation: none;
+					transition: none;
+				}
+			}
+		}
+
+		.ext-campaignevents-goal-progress__numeric {
+			margin: 0;
+			text-align: right;
+			color: @color-base;
+			font-weight: @font-weight-normal;
+		}
+	}
+}

@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -26,6 +27,7 @@ readonly class EventContributionCombinedModule {
 		private CampaignsCentralUserLookup $centralUserLookup,
 		private PermissionChecker $permissionChecker,
 		private EventContributionStore $eventContributionStore,
+		private GoalProgressFormatter $goalProgressFormatter,
 		private IMessageFormatterFactory $messageFormatterFactory,
 		private ParticipantsStore $participantsStore,
 		private EventContributionEditorsModule $editorsModule,
@@ -40,7 +42,15 @@ readonly class EventContributionCombinedModule {
 	public const EDITS_MODULE = 'edits';
 
 	public function createContent(): Tag {
-		$container = $this->getContributionsSummaryModule();
+		$container = new Tag();
+
+		$goalProgressData = $this->getGoalProgressTemplateData();
+		if ( $goalProgressData ) {
+			$goalProgressHtml = $this->templateParser->processTemplate( 'GoalProgressBar', $goalProgressData );
+			$container->appendContent( new HtmlSnippet( $goalProgressHtml ) );
+		}
+
+		$container->appendContent( $this->getContributionsSummaryModule() );
 		$title = $this->output->getTitle();
 		$editorsLink = $title->getLinkURL(
 			[
@@ -97,6 +107,17 @@ readonly class EventContributionCombinedModule {
 		}
 
 		return $container;
+	}
+
+	/**
+	 * @return array<string,mixed>|null
+	 */
+	private function getGoalProgressTemplateData(): ?array {
+		return $this->goalProgressFormatter->getProgressData(
+			$this->event,
+			$this->output->getAuthority(),
+			$this->output->getLanguage()
+		);
 	}
 
 	private function getContributionsSummaryModule(): Tag {

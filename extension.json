@@ -404,6 +404,7 @@
 				"ext.campaignEvents.specialPages.styles/pagers/InvitationsListPager.less",
 				"ext.campaignEvents.specialPages.styles/specials/EventRegistrationSpecialPage.less",
 				"ext.campaignEvents.specialPages.styles/specials/SpecialAllEvents.less",
+				"ext.campaignEvents.specialPages.styles/GoalProgressBar.less",
 				"ext.campaignEvents.specialPages.styles/specials/SpecialEventDetails.less",
 				"ext.campaignEvents.specialPages.styles/specials/SpecialMyEvents.less",
 				"ext.campaignEvents.specialPages.styles/specials/SpecialRegisterForEvent.less",

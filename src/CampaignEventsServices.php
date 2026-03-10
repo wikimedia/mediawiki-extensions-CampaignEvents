@@ -22,6 +22,7 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionCalculator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -305,5 +306,11 @@ class CampaignEventsServices {
 		?ContainerInterface $services = null
 	): EventGoalCompletionCalculator {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventGoalCompletionCalculator::SERVICE_NAME );
+	}
+
+	public static function getGoalProgressFormatter(
+		?ContainerInterface $services = null
+	): GoalProgressFormatter {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( GoalProgressFormatter::SERVICE_NAME );
 	}
 }

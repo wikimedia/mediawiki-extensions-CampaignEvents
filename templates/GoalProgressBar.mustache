@@ -1,0 +1,23 @@
+<div class="ext-campaignevents-goal-progress-card">
+	<div class="ext-campaignevents-goal-progress">
+		<h3 class="ext-campaignevents-goal-progress__heading">
+			{{heading}}
+		</h3>
+		<p class="ext-campaignevents-goal-progress__description">
+			{{description}}
+		</p>
+		<div
+			class="cdx-progress-bar cdx-progress-bar--block ext-campaignevents-goal-progress-bar-determinate ext-campaignevents-goal-progress__bar"
+			role="progressbar"
+			aria-valuemin="0"
+			aria-valuemax="100"
+			aria-valuenow="{{percentComplete}}"
+		>
+			<div class="cdx-progress-bar__bar" style="width: {{percentComplete}}%;"></div>
+		</div>
+		<div class="ext-campaignevents-goal-progress__numeric">
+			{{numericText}}
+		</div>
+	</div>
+</div>
+

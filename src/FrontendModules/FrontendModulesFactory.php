@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -53,6 +54,7 @@ class FrontendModulesFactory {
 		private readonly EventTypesRegistry $eventTypesRegistry,
 		private readonly EventFormatter $eventFormatter,
 		private readonly EventContributionStore $eventContributionStore,
+		private readonly GoalProgressFormatter $goalProgressFormatter,
 		private readonly PageURLResolver $pageURLResolver,
 		private readonly EventContributionsPagerFactory $eventContributionsPagerFactory,
 	) {
@@ -141,6 +143,7 @@ class FrontendModulesFactory {
 			$this->centralUserLookup,
 			$this->permissionChecker,
 			$this->eventContributionStore,
+			$this->goalProgressFormatter,
 			$this->messageFormatterFactory,
 			$this->participantsStore,
 			$this->newEventContributionsEditorModule( $linkRenderer, $output, $event ),

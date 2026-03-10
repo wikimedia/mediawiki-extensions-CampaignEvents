@@ -635,5 +635,15 @@
 	"campaignevents-event-details-contributions-editors-bytes": "Bytes",
 	"campaignevents-event-details-contributions-edits-button-label": "Edits",
 	"campaignevents-event-details-contributions-editors-button-label": "Editors",
-	"campaignevents-event-details-contributions-editors-table-caption": "Editors"
+	"campaignevents-event-details-contributions-editors-table-caption": "Editors",
+	"campaignevents-goal-progress-heading": "Progress to goal",
+	"campaignevents-goal-progress-description": "This event has a goal of $1.",
+	"campaignevents-goal-progress-numeric": "$1/$2",
+	"campaignevents-goal-progress-metric-total_articles_created": "$1 {{PLURAL:$1|article|articles}} created",
+	"campaignevents-goal-progress-metric-total_articles_edited": "$1 {{PLURAL:$1|article|articles}} edited",
+	"campaignevents-goal-progress-metric-total_edits": "$1 {{PLURAL:$1|edit|edits}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1|byte|bytes}} added",
+	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 {{PLURAL:$1|byte|bytes}} removed",
+	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|link|links}} added",
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|link|links}} removed"
 }

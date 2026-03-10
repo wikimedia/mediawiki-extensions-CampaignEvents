@@ -24,6 +24,7 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionCalculator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
@@ -318,6 +319,7 @@ return [
 			$services->get( EventTypesRegistry::SERVICE_NAME ),
 			$services->get( EventFormatter::SERVICE_NAME ),
 			$services->get( EventContributionStore::SERVICE_NAME ),
+			$services->get( GoalProgressFormatter::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->get( EventContributionsPagerFactory::SERVICE_NAME ),
 		);
@@ -515,5 +517,16 @@ return [
 		return new EventGoalCompletionCalculator(
 			$services->get( EventContributionStore::SERVICE_NAME ),
 		);
-	}
+	},
+	GoalProgressFormatter::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): GoalProgressFormatter {
+		return new GoalProgressFormatter(
+			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
+			$services->get( PermissionChecker::SERVICE_NAME ),
+			$services->get( EventContributionStore::SERVICE_NAME ),
+			$services->get( EventGoalCompletionCalculator::SERVICE_NAME ),
+			$services->getMessageFormatterFactory(),
+		);
+	},
 ];

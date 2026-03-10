@@ -35,7 +35,8 @@ class SpecialEventDetails extends SpecialPage {
 		'oojs-ui.styles.icons-wikimedia',
 		'ext.campaignEvents.specialPages.styles',
 		'oojs-ui-widgets.styles',
-		'mediawiki.special.changeslist'
+		'mediawiki.special.changeslist',
+		'codex-styles',
 	];
 
 	public const EVENT_DETAILS_PANEL = 'EventDetailsPanel';

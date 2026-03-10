@@ -199,7 +199,7 @@ class EventPageDecorator {
 				'oojs-ui.styles.icons-user',
 				'oojs-ui.styles.icons-alerts',
 				'oojs-ui.styles.icons-wikimedia',
-				'oojs-ui.styles.icons-content'
+				'oojs-ui.styles.icons-content',
 			],
 			UserLinker::MODULE_STYLES
 		) );
