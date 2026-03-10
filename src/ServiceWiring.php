@@ -260,6 +260,7 @@ return [
 				// Pass whole config so the value is lazy loaded when needed for performance
 				$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION ),
 				$services->get( CountryProvider::SERVICE_NAME ),
+				$services->get( GoalProgressFormatter::SERVICE_NAME ),
 			);
 		},
 	CampaignEventsHookRunner::SERVICE_NAME =>

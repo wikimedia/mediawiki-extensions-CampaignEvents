@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -33,6 +34,7 @@ use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Widget\TextWithIconWidget;
 use MediaWiki\Html\Html;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Language\Language;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\ProperPageIdentity;
@@ -72,6 +74,7 @@ class EventPageDecorator {
 
 	private UserIdentity $viewingUser;
 	private ITextFormatter $msgFormatter;
+	private TemplateParser $templateParser;
 
 	/**
 	 * @var bool|null Whether the user is registered publicly or privately. This value is lazy-loaded iff the user
@@ -93,12 +96,14 @@ class EventPageDecorator {
 		private readonly GroupPermissionsLookup $groupPermissionsLookup,
 		private readonly Config $config,
 		private readonly CountryProvider $countryProvider,
+		private readonly GoalProgressFormatter $goalProgressFormatter,
 		private readonly Language $language,
 		private readonly Authority $authority,
 		private readonly OutputPage $out,
 	) {
 		$this->viewingUser = $authority->getUser();
 		$this->msgFormatter = $messageFormatterFactory->getTextFormatter( $language->getCode() );
+		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 
 	/**
@@ -226,6 +231,11 @@ class EventPageDecorator {
 		$userStatus = $this->getUserStatus( $registration, $centralUser, $curParticipant );
 
 		$this->out->addHTML( $this->getHeaderElement( $registration, $userStatus )->toString() );
+
+		$goalProgressSection = $this->getGoalProgressSection( $registration );
+		if ( $goalProgressSection ) {
+			$this->out->addHTML( $goalProgressSection );
+		}
 
 		if ( $curParticipant ) {
 			$aggregationTimestamp = Utils::getAnswerAggregationTimestamp( $curParticipant, $registration );
@@ -508,6 +518,35 @@ class EventPageDecorator {
 		return ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-eventpage-header-eventinfo' ] )
 			->appendContent( ...$items );
+	}
+
+	private function getGoalProgressSection( ExistingEventRegistration $registration ): ?string {
+		if ( !$this->authority->isRegistered() ) {
+			return null;
+		}
+
+		$progressData = $this->goalProgressFormatter->getProgressData(
+			$registration,
+			$this->authority,
+			$this->language
+		);
+		if ( $progressData === null ) {
+			return null;
+		}
+
+		$this->out->addModuleStyles( [
+			'codex-styles',
+		] );
+
+		return $this->templateParser->processTemplate(
+			'GoalProgressBar',
+			[
+				'heading' => $progressData['heading'],
+				'description' => $progressData['description'],
+				'percentComplete' => $progressData['percentComplete'],
+				'numericText' => $progressData['numericText'],
+			]
+		);
 	}
 
 	/**

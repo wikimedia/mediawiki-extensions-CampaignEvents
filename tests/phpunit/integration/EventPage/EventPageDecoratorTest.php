@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -26,12 +27,14 @@ use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\ProperPageIdentity;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\GroupPermissionsLookup;
 use MediaWiki\Request\WebRequest;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWikiIntegrationTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Wikimedia\Message\IMessageFormatterFactory;
+use Wikimedia\Message\ITextFormatter;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecorator
@@ -45,7 +48,9 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 		PageEventLookup $pageEventLookup,
 		array $allowedNamespaces,
 		bool $canEnableRegistration,
-		OutputPage $out
+		Authority $performer,
+		OutputPage $out,
+		?GoalProgressFormatter $goalProgressFormatter = null
 	): EventPageDecorator {
 		// Explicit mocking to make sure that information such as the page namespace is preserved.
 		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
@@ -59,10 +64,14 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 
 		$permissionChecker = $this->createMock( PermissionChecker::class );
 		$permissionChecker->method( 'userCanEnableRegistration' )->willReturn( $canEnableRegistration );
-		if ( $canEnableRegistration ) {
-			$performer = $this->mockRegisteredUltimateAuthority();
-		} else {
-			$performer = $this->mockAnonNullAuthority();
+
+		$textFormatter = $this->createMock( ITextFormatter::class );
+		$textFormatter->method( 'format' )->willReturn( '' );
+		$msgFormatterFactory = $this->createMock( IMessageFormatterFactory::class );
+		$msgFormatterFactory->method( 'getTextFormatter' )->willReturn( $textFormatter );
+
+		if ( $goalProgressFormatter === null ) {
+			$goalProgressFormatter = $this->createMock( GoalProgressFormatter::class );
 		}
 
 		return new EventPageDecorator(
@@ -70,7 +79,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$this->createMock( ParticipantsStore::class ),
 			$this->createMock( OrganizersStore::class ),
 			$permissionChecker,
-			$this->createMock( IMessageFormatterFactory::class ),
+			$msgFormatterFactory,
 			$campaignsPageFactory,
 			$this->createMock( CampaignsCentralUserLookup::class ),
 			$this->createMock( EventTimeFormatter::class ),
@@ -81,6 +90,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 				'CampaignEventsEventNamespaces' => $allowedNamespaces
 			] ),
 			$this->createMock( CountryProvider::class ),
+			$goalProgressFormatter,
 			$this->createMock( Language::class ),
 			$performer,
 			$out
@@ -148,7 +158,16 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$out = $this->createNoOpMock( OutputPage::class );
 		}
 
-		$decorator = $this->getDecorator( $pageEventLookup, $allowedNamespaces, $canEnableRegistration, $out );
+		$performer = $canEnableRegistration
+			? $this->mockRegisteredUltimateAuthority()
+			: $this->mockAnonNullAuthority();
+		$decorator = $this->getDecorator(
+			$pageEventLookup,
+			$allowedNamespaces,
+			$canEnableRegistration,
+			$performer,
+			$out
+		);
 		$decorator->decoratePage( $page );
 
 		$this->assertSame( $expectsRegistrationHeader, $addedRegistrationHeader, 'Registration header' );
@@ -320,6 +339,120 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$cannotEnableRegistration,
 			$doesNotExpectRegistrationHeader,
 			$doesNotExpectCTAHeader
+		];
+	}
+
+	/**
+	 * Builds a decorator suited for goal-progress tests.
+	 */
+	private function getDecoratorForGoalProgressTest(
+		Authority $authority,
+		GoalProgressFormatter $goalProgressFormatter,
+		PageEventLookup $pageEventLookup,
+		OutputPage $out
+	): EventPageDecorator {
+		return $this->getDecorator(
+			$pageEventLookup,
+			[ NS_EVENT ],
+			false,
+			$authority,
+			$out,
+			$goalProgressFormatter
+		);
+	}
+
+	/** @return ExistingEventRegistration&MockObject */
+	private function makeActiveRegistration(): ExistingEventRegistration {
+		$registration = $this->createMock( ExistingEventRegistration::class );
+		$registration->method( 'getDeletionTimestamp' )->willReturn( null );
+		$registration->method( 'getParticipationOptions' )
+			->willReturn( EventRegistration::PARTICIPATION_OPTION_ONLINE );
+		return $registration;
+	}
+
+	/**
+	 * @covers ::getGoalProgressSection
+	 */
+	public function testGoalProgressSectionNotShownForAnonymousUser(): void {
+		$registration = $this->makeActiveRegistration();
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturn( $registration );
+
+		$goalProgressFormatter = $this->createMock( GoalProgressFormatter::class );
+		$goalProgressFormatter->expects( $this->never() )->method( 'getProgressData' );
+
+		$out = $this->getMockOutputPage();
+		$addedGoalProgress = false;
+		$out->method( 'addHTML' )
+			->willReturnCallback( static function ( $html ) use ( &$addedGoalProgress ) {
+				if ( str_contains( $html, 'ext-campaignevents-goal-progress-card' ) ) {
+					$addedGoalProgress = true;
+				}
+			} );
+
+		$decorator = $this->getDecoratorForGoalProgressTest(
+			$this->mockAnonNullAuthority(),
+			$goalProgressFormatter,
+			$pageEventLookup,
+			$out
+		);
+		$decorator->decoratePage(
+			new PageIdentityValue( 42, NS_EVENT, 'Event:GoalProgressTest', PageIdentity::LOCAL )
+		);
+
+		$this->assertFalse( $addedGoalProgress, 'Goal progress section must not be shown for anonymous users' );
+	}
+
+	/**
+	 * @covers ::getGoalProgressSection
+	 * @dataProvider provideAddsGoalProgressSection
+	 */
+	public function testAddsGoalProgressSection(
+		?array $progressData,
+		bool $expectsGoalProgress
+	): void {
+		$registration = $this->makeActiveRegistration();
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturn( $registration );
+
+		$goalProgressFormatter = $this->createMock( GoalProgressFormatter::class );
+		$goalProgressFormatter->method( 'getProgressData' )->willReturn( $progressData );
+
+		$out = $this->getMockOutputPage();
+		$addedGoalProgress = false;
+		$out->method( 'addHTML' )
+			->willReturnCallback( static function ( $html ) use ( &$addedGoalProgress ) {
+				if ( str_contains( $html, 'ext-campaignevents-goal-progress-card' ) ) {
+					$addedGoalProgress = true;
+				}
+			} );
+
+		$decorator = $this->getDecoratorForGoalProgressTest(
+			$this->mockRegisteredUltimateAuthority(),
+			$goalProgressFormatter,
+			$pageEventLookup,
+			$out
+		);
+		$decorator->decoratePage(
+			new PageIdentityValue( 42, NS_EVENT, 'Event:GoalProgressTest', PageIdentity::LOCAL )
+		);
+
+		$this->assertSame( $expectsGoalProgress, $addedGoalProgress );
+	}
+
+	public static function provideAddsGoalProgressSection(): Generator {
+		yield 'getProgressData returns null — section not shown' => [
+			null,
+			false,
+		];
+		yield 'getProgressData returns valid data — section shown' => [
+			[
+				'heading' => 'Goal progress',
+				'description' => 'Target: 100 edits',
+				'percentComplete' => 42,
+				'numericText' => '42 / 100',
+			],
+			true,
 		];
 	}
 }

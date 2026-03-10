@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\EventPage;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
@@ -37,6 +38,7 @@ class EventPageDecoratorFactory {
 		private readonly GroupPermissionsLookup $groupPermissionsLookup,
 		private readonly Config $config,
 		private readonly CountryProvider $countryProvider,
+		private readonly GoalProgressFormatter $goalProgressFormatter,
 	) {
 	}
 
@@ -59,6 +61,7 @@ class EventPageDecoratorFactory {
 			$this->groupPermissionsLookup,
 			$this->config,
 			$this->countryProvider,
+			$this->goalProgressFormatter,
 			$language,
 			$viewingAuthority,
 			$out
