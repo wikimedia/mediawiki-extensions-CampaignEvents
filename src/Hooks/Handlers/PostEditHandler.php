@@ -5,8 +5,10 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -20,6 +22,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 	public function __construct(
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly IEventLookup $eventLookup,
+		private readonly GoalProgressFormatter $goalProgressFormatter,
 	) {
 	}
 
@@ -41,8 +44,9 @@ class PostEditHandler implements BeforePageDisplayHook {
 			return;
 		}
 
+		$authority = $out->getAuthority();
 		try {
-			$centralUser = $this->centralUserLookup->newFromAuthority( $out->getAuthority() );
+			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
 		} catch ( UserNotGlobalException ) {
 			// They can't be participating in any events without a global account.
 			return;
@@ -57,9 +61,20 @@ class PostEditHandler implements BeforePageDisplayHook {
 			return;
 		}
 
+		$language = $out->getLanguage();
+		$templateParser = new TemplateParser( __DIR__ . '/../../../templates' );
 		$eventData = [];
 		foreach ( $events as $event ) {
-			$eventData[] = [ 'id' => $event->getID(), 'name' => $event->getName() ];
+			$entry = [
+				'id' => $event->getID(),
+				'name' => $event->getName(),
+			];
+			$goalProgressData = $this->goalProgressFormatter->getProgressData( $event, $authority, $language );
+			if ( $goalProgressData !== null ) {
+				// TODO: Replace with a Vue version once that is available (T407638)
+				$entry['goalProgress'] = $templateParser->processTemplate( 'GoalProgressBar', $goalProgressData );
+			}
+			$eventData[] = $entry;
 		}
 
 		$out->addModules( 'ext.campaignEvents.postEdit' );

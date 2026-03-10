@@ -14,6 +14,9 @@
 			:menu-items="selectOptions"
 			:default-label="$i18n( 'campaignevents-postedit-dialog-select-placeholder' ).text()">
 		</cdx-select>
+		<!-- eslint-disable-next-line vue/no-v-html To be replaced with a Vue component after T407638 -->
+		<div v-if="selectedEventGoalProgress" v-html="selectedEventGoalProgress">
+		</div>
 	</cdx-dialog>
 </template>
 
@@ -100,6 +103,11 @@ module.exports = exports = defineComponent( {
 			// practice. This complements the error thrown above, which on its own does not
 			// prevent the component from being rendered.
 			return mw.config.get( 'wgCampaignEventsEventsForAssociation' ).length > 0;
+		},
+		selectedEventGoalProgress() {
+			const id = this.selectedEvent;
+			const event = this.events.find( ( e ) => e.id === id );
+			return event && event.goalProgress ? event.goalProgress : null;
 		}
 	}
 } );

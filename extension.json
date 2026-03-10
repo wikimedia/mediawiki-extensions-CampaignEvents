@@ -155,7 +155,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\PostEditHandler",
 			"services": [
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsEventLookup"
+				"CampaignEventsEventLookup",
+				"CampaignEventsGoalProgressFormatter"
 			]
 		},
 		"CentralAuthContributionUserChangesHandler": {
@@ -510,6 +511,9 @@
 				"index.js",
 				"components/App.vue",
 				"components/EditAssociationDialog.vue"
+			],
+			"styles": [
+				"GoalProgressBar.less"
 			],
 			"messages": [
 				"campaignevents-postedit-dialog-title-single",
