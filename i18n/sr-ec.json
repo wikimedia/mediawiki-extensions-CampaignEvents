@@ -274,5 +274,9 @@
 	"campaignevents-event-details-contributions-delete-cancel": "Откажи",
 	"campaignevents-event-details-contributions-delete-confirm": "Уклони",
 	"campaignevents-event-details-contributions-editors-username": "Корисничко име",
+	"campaignevents-event-details-contributions-editors-created": "Направљено чланака",
+	"campaignevents-event-details-contributions-editors-edited": "Уређено чланака",
+	"campaignevents-event-details-contributions-editors-count": "Број измена",
+	"campaignevents-event-details-contributions-editors-bytes": "Бајтова",
 	"campaignevents-event-details-contributions-editors-button-label": "Уредници"
 }
