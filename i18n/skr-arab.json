@@ -180,5 +180,9 @@
 	"campaignevents-edit-field-eventtypes-other-section-header": "ٻیا",
 	"campaignevents-event-details-event-types-header": "ایونٹ قسماں",
 	"campaignevents-postedit-dialog-action-yes": "جیا",
-	"campaignevents-event-details-contributions-editors-username": "ورتݨ ناں"
+	"campaignevents-event-details-contributions-editors-username": "ورتݨ ناں",
+	"campaignevents-event-details-contributions-editors-bytes": "بائٹس",
+	"campaignevents-event-details-contributions-edits-button-label": "تبدیلیاں",
+	"campaignevents-event-details-contributions-editors-button-label": "ایڈیٹر",
+	"campaignevents-event-details-contributions-editors-table-caption": "ایڈیٹر"
 }
