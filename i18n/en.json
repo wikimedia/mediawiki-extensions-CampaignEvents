@@ -618,6 +618,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "Revision ID",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Enter the revision ID. Open the page's revision history, click the date and time of the edit, and copy the number from the URL after \"$1\".",
 	"campaignevents-event-details-contributions-add-dialog-success": "Edit added. It will appear here soon.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "This edit has already been added to this event.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Add edit to this event",
 	"campaignevents-contributions-summary-edit-count": "Edit count",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Participant registered privately",

@@ -77,10 +77,19 @@ module.exports = exports = defineComponent( {
 			new mw.Rest().put(
 				`/campaignevents/v0/event_registration/${ eventID }/edits/${ curWikiID }/${ revId }`,
 				{ token: mw.user.tokens.get( 'csrfToken' ) }
-			).then( () => {
+			).then( ( resp ) => {
 				hasMessage.value = true;
-				messageType.value = 'success';
-				message.value = mw.msg( 'campaignevents-event-details-contributions-add-dialog-success' );
+				if ( resp.modified ) {
+					messageType.value = 'success';
+					message.value = mw.msg(
+						'campaignevents-event-details-contributions-add-dialog-success'
+					);
+				} else {
+					messageType.value = 'notice';
+					message.value = mw.msg(
+						'campaignevents-event-details-contributions-add-dialog-nochange'
+					);
+				}
 			}, ( err, errObj ) => {
 				let errMessage = errObj.xhr.responseText;
 				if ( errObj.xhr &&

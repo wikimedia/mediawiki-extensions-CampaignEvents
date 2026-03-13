@@ -83,8 +83,9 @@ describe( 'AddContributionDialog', () => {
 	it( 'opens dialog when button is clicked', async () => {
 		expect( wrapper.vm.open ).toBe( true );
 	} );
-	it( 'makes a request to add the contribution', async () => {
-		const restAdd = jest.fn().mockResolvedValue( {} );
+
+	it( 'shows success message when adding the contribution succeeds', async () => {
+		const restAdd = jest.fn().mockResolvedValue( { modified: true } );
 		mw.Rest.mockImplementation( () => ( {
 			put: restAdd
 		} ) );
@@ -102,6 +103,26 @@ describe( 'AddContributionDialog', () => {
 		expect( hasMessage ).toBe( true );
 		expect( messageType ).toBe( 'success' );
 		expect( message ).toBe( '(campaignevents-event-details-contributions-add-dialog-success)' );
+	} );
+	it( 'shows notice message when the contribution is already associated', async () => {
+		const restAdd = jest.fn().mockResolvedValue( { modified: false } );
+		mw.Rest.mockImplementation( () => ( {
+			put: restAdd
+		} ) );
+		wrapper.vm.inputValue = 789;
+		await wrapper.vm.onSubmit();
+
+		expect( userTokensSpy ).toHaveBeenCalledWith( 'csrfToken' );
+		expect( restAdd ).toHaveBeenCalledWith(
+			`/campaignevents/v0/event_registration/${ wgDbCampaignEventsEventID }/edits/${ wgDbName }/789`,
+			{ token: csrfToken }
+		);
+		const hasMessage = wrapper.vm.hasMessage,
+			messageType = wrapper.vm.messageType,
+			message = wrapper.vm.message;
+		expect( hasMessage ).toBe( true );
+		expect( messageType ).toBe( 'notice' );
+		expect( message ).toBe( '(campaignevents-event-details-contributions-add-dialog-nochange)' );
 	} );
 	it( 'displays an error on API failure', async () => {
 		const restAdd = jest.fn().mockImplementation( () => ( {
