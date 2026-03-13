@@ -40,7 +40,7 @@
 </template>
 
 <script>
-const { defineComponent, ref } = require( 'vue' );
+const { defineComponent, ref, watch } = require( 'vue' );
 const { CdxButton, CdxDialog, CdxField, CdxTextInput, CdxMessage } = require( '../../../codex.js' );
 
 module.exports = exports = defineComponent( {
@@ -102,6 +102,16 @@ module.exports = exports = defineComponent( {
 				message.value = errMessage;
 			} );
 		}
+
+		watch( open, ( newOpen ) => {
+			if ( !newOpen ) {
+				// Clear revision ID and message upon closing the dialog (T413411).
+				inputValue.value = '';
+				hasMessage.value = false;
+				messageType.value = '';
+				message.value = '';
+			}
+		} );
 
 		return {
 			open,
