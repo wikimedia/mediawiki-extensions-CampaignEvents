@@ -47,7 +47,9 @@ readonly class EventContributionEditsModule {
 			$userCanAddContributions = false;
 		}
 
-		$this->output->addJsConfigVars( [ 'wgCampaignEventsCanAddContributions' => $userCanAddContributions ] );
+		// Do not show the button if the edit isn't ongoing, T413391.
+		$canAddContributions = $userCanAddContributions && $this->event->isOngoing();
+		$this->output->addJsConfigVars( [ 'wgCampaignEventsCanAddContributions' => $canAddContributions ] );
 
 		$editsPager = $this->eventContributionsPagerFactory->newEditsPager(
 			$this->output->getContext(),
