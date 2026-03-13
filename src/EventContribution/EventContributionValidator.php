@@ -34,10 +34,6 @@ class EventContributionValidator {
 	/**
 	 * Validate and schedule event contribution
 	 *
-	 * @param ExistingEventRegistration $event
-	 * @param int $revisionID
-	 * @param string $wikiID
-	 * @param Authority $performer
 	 * @throws HttpException|LocalizedHttpException
 	 */
 	public function validateAndSchedule(
