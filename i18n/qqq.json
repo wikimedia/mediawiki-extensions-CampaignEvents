@@ -72,6 +72,8 @@
 	"editeventregistration": "Description of [[Special:EditEventRegistration]]",
 	"campaignevents-edit-form-details-label": "Title of a section of the form on [[Special:EnableEventRegistration]] where organizers can enter details about their event.",
 	"campaignevents-edit-form-details-subtitle": "Subtitle used in the form on [[Special:EnableEventRegistration]], within the section introduced by {{msg-mw|campaignevents-edit-form-details-label}}.",
+	"campaignevents-edit-form-impact-statistics-label": "Title of a section of the form on [[Special:EnableEventRegistration]] for tools that provide organizers with statistics to understand the impact of their event.",
+	"campaignevents-edit-form-impact-statistics-description": "Introductory text for the {{msg-mw|campaignevents-edit-form-impact-statistics-label}} section on [[Special:EnableEventRegistration]].",
 	"campaignevents-edit-field-page": "Label of the event page field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-page-help": "Content of the help tooltip for the event page field on [[Special:EnableEventRegistration]]",
 	"campaignevents-edit-field-event-status": "Event status text on [[Special:EditEventRegistration]]",

@@ -52,6 +52,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 	private const PAGE_FIELD_NAME_HTMLFORM = 'EventPage';
 	public const PAGE_FIELD_NAME = 'wp' . self::PAGE_FIELD_NAME_HTMLFORM;
 	public const DETAILS_SECTION = 'campaignevents-edit-form-details-label';
+	public const IMPACT_STATISTICS_SECTION = 'campaignevents-edit-form-impact-statistics-label';
 	private const PARTICIPANT_QUESTIONS_SECTION = 'campaignevents-edit-form-questions-label';
 
 	public const REGISTRATION_UPDATED_SESSION_KEY = 'campaignevents-registration-updated';
@@ -448,6 +449,28 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'section' => self::DETAILS_SECTION,
 		];
 
+		$formFields['EventChatURL'] = [
+			'type' => 'url',
+			'label-message' => 'campaignevents-edit-field-chat-url',
+			'default' => $this->event ? $this->event->getChatURL() : '',
+			'help-message' => 'campaignevents-edit-field-chat-url-help',
+			'help-inline' => false,
+			'section' => self::DETAILS_SECTION,
+		];
+
+		$this->hookRunner->onCampaignEventsRegistrationFormLoad( $formFields, $this->eventID );
+		$isTestEvent = $this->event && $this->event->getIsTestEvent();
+		$formFields['TestEvent'] = [
+			'type' => 'select',
+			'label-message' => 'campaignevents-edit-field-event-is-test',
+			'default' => $isTestEvent,
+			'options-messages' => [
+				'campaignevents-edit-field-status-live' => 0,
+				'campaignevents-edit-field-status-test' => 1,
+			],
+			'section' => self::DETAILS_SECTION,
+		];
+
 		$hasNoPermittedEventTypes = [ 'NOR' ];
 		foreach ( $this->eventTypesRegistry->getContributionTypes() as $contributionType ) {
 			$hasNoPermittedEventTypes[] =
@@ -477,7 +500,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'label-message' => 'campaignevents-edit-field-contribution-stats-label',
 			'default' => $wpContributionStats,
 			'help' => $this->msg( 'campaignevents-edit-field-contribution-stats-help' )->escaped(),
-			'section' => self::DETAILS_SECTION,
+			'section' => self::IMPACT_STATISTICS_SECTION,
 			'disable-if' => $contributionStatsDisableCond,
 		];
 
@@ -492,7 +515,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$formFields['EventTrackingToolID'] = [
 				'type' => 'hidden',
 				'default' => 'wikimedia-pe-dashboard',
-				'section' => self::DETAILS_SECTION,
+				'section' => self::IMPACT_STATISTICS_SECTION,
 			];
 			if ( $this->event ) {
 				$curTrackingTools = $this->event->getTrackingTools();
@@ -537,31 +560,10 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 						return $this->msg( 'campaignevents-error-invalid-dashboard-url' )->params( $baseURL );
 					}
 				},
-				'section' => self::DETAILS_SECTION,
+				'section' => self::IMPACT_STATISTICS_SECTION,
 			];
 		}
 
-		$formFields['EventChatURL'] = [
-			'type' => 'url',
-			'label-message' => 'campaignevents-edit-field-chat-url',
-			'default' => $this->event ? $this->event->getChatURL() : '',
-			'help-message' => 'campaignevents-edit-field-chat-url-help',
-			'help-inline' => false,
-			'section' => self::DETAILS_SECTION,
-		];
-
-		$this->hookRunner->onCampaignEventsRegistrationFormLoad( $formFields, $this->eventID );
-		$isTestEvent = $this->event && $this->event->getIsTestEvent();
-		$formFields['TestEvent'] = [
-			'type' => 'select',
-			'label-message' => 'campaignevents-edit-field-event-is-test',
-			'default' => $isTestEvent,
-			'options-messages' => [
-				'campaignevents-edit-field-status-live' => 0,
-				'campaignevents-edit-field-status-test' => 1,
-			],
-			'section' => self::DETAILS_SECTION,
-		];
 		$formFields = array_merge( $formFields, $this->getParticipantQuestionsFields() );
 
 		return $formFields;
@@ -642,6 +644,19 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		$form->addHeaderHtml(
 			$this->msg( $this->formMessages['details-section-subtitle'] )->parseAsBlock(),
 			self::DETAILS_SECTION
+		);
+		$helpUrl = 'https://www.mediawiki.org/wiki/'
+			. 'Special:MyLanguage/Help:Extension:CampaignEvents/Registration/'
+			. 'Collaborative_contributions#Organizers:_How_to_set_up_collaborative_contributions';
+		$dashboardUrl = 'https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_&_Events_Dashboard';
+		$form->addHeaderHtml(
+			$this->msg( 'campaignevents-edit-form-impact-statistics-description' )
+				->params(
+					$helpUrl,
+					$dashboardUrl
+				)
+				->parseAsBlock(),
+			self::IMPACT_STATISTICS_SECTION
 		);
 		$form->setSubmitTextMsg( $this->formMessages['submit'] );
 
