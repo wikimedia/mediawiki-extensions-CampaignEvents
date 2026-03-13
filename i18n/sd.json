@@ -7,5 +7,7 @@
 	"group-event-organizer": "تقريب جا منتظم",
 	"grouppage-event-organizer": "{{ns:project}}:تقريب جا منتظم",
 	"campaignevents-event-details-remove-participant-remove-btn": "هٽايو",
-	"campaignevents-notification-registration-details-organizers-header": "تقريب جا منتظم"
+	"campaignevents-notification-registration-details-organizers-header": "تقريب جا منتظم",
+	"campaignevents-event-details-contributions-bytes": "بائيٽون",
+	"campaignevents-event-details-contributions-editors-bytes": "بائيٽون"
 }
