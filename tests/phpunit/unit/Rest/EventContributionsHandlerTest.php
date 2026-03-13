@@ -122,7 +122,8 @@ class EventContributionsHandlerTest extends MediaWikiUnitTestCase {
 		$this->doTestRunExpectingError( 400, null, $validatorWithHttpError );
 	}
 
-	public function testRun__success() {
+	/** @dataProvider provideSuccessRuns */
+	public function testRun__success( bool $modified ) {
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( 42 );
 
@@ -133,15 +134,23 @@ class EventContributionsHandlerTest extends MediaWikiUnitTestCase {
 		$validator->expects( $this->once() )
 			->method( 'validateAndSchedule' )
 			->with( $event, 12345, 'enwiki', $this->anything() )
-			->willReturnCallback( static function () {
-				// void method
-			} );
+			->willReturn( $modified );
 
 		$handler = $this->newHandler( $validator, null, $eventLookup );
 		$reqData = new RequestData( $this->getRequestData() );
 		$response = $this->executeHandler( $handler, $reqData );
 
 		$this->assertSame( 202, $response->getStatusCode() );
-		$this->assertSame( '[]', $response->getBody()->getContents() );
+		$this->assertSame(
+			[ 'modified' => $modified ],
+			json_decode( $response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR )
+		);
+	}
+
+	public static function provideSuccessRuns(): array {
+		return [
+			'modified' => [ true ],
+			'not modified' => [ false ],
+		];
 	}
 }

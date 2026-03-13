@@ -34,9 +34,9 @@ class EventContributionsHandler extends SimpleHandler {
 		$performer = $this->getAuthority();
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
-		$this->validator->validateAndSchedule( $event, (int)$revisionID, $wikiID, $performer );
+		$modified = $this->validator->validateAndSchedule( $event, (int)$revisionID, $wikiID, $performer );
 
-		$response = $this->getResponseFactory()->createJson( [] );
+		$response = $this->getResponseFactory()->createJson( [ 'modified' => $modified ] );
 		$response->setStatus( 202 );
 		return $response;
 	}

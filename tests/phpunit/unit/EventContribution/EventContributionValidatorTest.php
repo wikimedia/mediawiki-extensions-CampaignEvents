@@ -95,9 +95,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			->with( $wikiID, $revID )
 			->willReturn( $eventID );
 
-		$this->validator->validateAndSchedule( $event, $revID, $wikiID, $this->performer );
-		// Assert no exception thrown.
-		$this->addToAssertionCount( 1 );
+		$this->assertFalse( $this->validator->validateAndSchedule( $event, $revID, $wikiID, $this->performer ) );
 	}
 
 	public function testValidateAndSchedule__alreadyAssociatedDifferentEvent(): void {
@@ -473,7 +471,8 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->jobQueueGroup->expects( $this->once() )
 			->method( 'push' );
 
-		// Should not throw exception
-		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
+		$this->assertTrue(
+			$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer )
+		);
 	}
 }

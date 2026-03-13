@@ -34,6 +34,8 @@ class EventContributionValidator {
 	/**
 	 * Validate and schedule event contribution
 	 *
+	 * @return bool False if the event was already associated with this event, true otherwise. Either way, the
+	 * association is valid. Validation errors are reported by throwing exceptions.
 	 * @throws HttpException|LocalizedHttpException
 	 */
 	public function validateAndSchedule(
@@ -41,7 +43,7 @@ class EventContributionValidator {
 		int $revisionID,
 		string $wikiID,
 		Authority $performer
-	): void {
+	): bool {
 		try {
 			$this->centralUserLookup->newFromAuthority( $performer );
 		} catch ( UserNotGlobalException ) {
@@ -53,8 +55,8 @@ class EventContributionValidator {
 
 		$previousEventID = $this->eventContributionStore->getEventIDForRevision( $wikiID, $revisionID );
 		if ( $previousEventID === $event->getID() ) {
-			// Already associated with this event, nothing to do, a successful response is still valid.
-			return;
+			// Already associated with this event, nothing to do.
+			return false;
 		} elseif ( $previousEventID !== null ) {
 			throw new LocalizedHttpException(
 				MessageValue::new( 'campaignevents-event-contribution-already-associated' ),
@@ -140,5 +142,6 @@ class EventContributionValidator {
 		];
 		$associateEditJob = new EventContributionJob( $jobParams );
 		$this->jobQueueGroup->push( $associateEditJob );
+		return true;
 	}
 }
