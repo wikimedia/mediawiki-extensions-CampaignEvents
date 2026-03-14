@@ -353,7 +353,7 @@ return [
 	},
 	EventPageCacheUpdater::SERVICE_NAME => static function ( MediaWikiServices $services ): EventPageCacheUpdater {
 		return new EventPageCacheUpdater(
-			$services->getHtmlCacheUpdater()
+			$services->getHTMLCacheUpdater()
 		);
 	},
 	TrackingToolEventWatcher::SERVICE_NAME =>
