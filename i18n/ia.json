@@ -574,6 +574,7 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Selige evento",
 	"campaignevents-postedit-dialog-action-no": "No, gratias",
 	"campaignevents-postedit-dialog-action-yes": "Si",
+	"campaignevents-postedit-success-text": "Tu modification ha essite associate a $1. Pro vider tu contribution, naviga al [$2 {{int:campaignevents-event-details-tab-contributions}} vista del evento].",
 	"campaignevents-contributions-summary-participants": "Participantes",
 	"campaignevents-contributions-summary-wikis-edited": "Wikis modificate",
 	"campaignevents-contributions-summary-articles-created": "Articulos create",
@@ -597,5 +598,13 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "Es tu secur de voler remover iste modification del evento?",
 	"campaignevents-event-details-contributions-delete-note": "Illo non essera delite, ma non plus essera associate al evento.",
 	"campaignevents-event-details-contributions-delete-cancel": "Cancellar",
-	"campaignevents-event-details-contributions-delete-confirm": "Remover"
+	"campaignevents-event-details-contributions-delete-confirm": "Remover",
+	"campaignevents-event-details-contributions-editors-username": "Nomine de usator",
+	"campaignevents-event-details-contributions-editors-created": "Articulos create",
+	"campaignevents-event-details-contributions-editors-edited": "Articulos modificate",
+	"campaignevents-event-details-contributions-editors-count": "Numero de modificationes",
+	"campaignevents-event-details-contributions-editors-bytes": "Bytes",
+	"campaignevents-event-details-contributions-edits-button-label": "Modificationes",
+	"campaignevents-event-details-contributions-editors-button-label": "Redactores",
+	"campaignevents-event-details-contributions-editors-table-caption": "Redactores"
 }
