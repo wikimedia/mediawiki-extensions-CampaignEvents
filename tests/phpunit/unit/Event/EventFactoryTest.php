@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\InvalidEventDataException;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidTitleStringException;
@@ -48,7 +49,7 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'timezone' => 'UTC',
 		'start' => '20220308120000',
 		'end' => '20220308150000',
-		'types' => [ EventTypesRegistry::EVENT_TYPE_OTHER ],
+		'types' => [ 'editing-event' ],
 		'wikis' => [ 'aawiki' ],
 		'topics' => [ 'atopic', 'btopic' ],
 		'participationOptions' => EventRegistration::PARTICIPATION_OPTION_ONLINE_AND_IN_PERSON,
@@ -57,9 +58,9 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 		'address' => 'Address',
 		'chat' => 'https://chaturl.example.org',
 		'istest' => false,
-		'tracksContributions' => false,
-		'goalType' => null,
-		'goalTarget' => null,
+		'tracksContributions' => true,
+		'goalType' => EventGoalMetricType::TotalArticlesCreated->value,
+		'goalTarget' => 10,
 		'trackingid' => null,
 		'trackingeventid' => null,
 		'questions' => [ 'age' ],
@@ -730,7 +731,12 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 
 	/** @dataProvider provideValidateTypes */
 	public function testValidateTypes( $types, ?array $expectedErrors, $expectedTypes = null ) {
-		$args = self::getTestDataWithDefault( [ 'types' => $types ] );
+		$args = self::getTestDataWithDefault( [
+			'types' => $types,
+			'tracksContributions' => false,
+			'goalType' => null,
+			'goalTarget' => null,
+		] );
 		$event = $this->doTestWithArgs( $args, $expectedErrors );
 		if ( $event ) {
 			$this->assertSame( $expectedTypes, $event->getTypes() );
