@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Pikne"
+			"Pikne",
+			"Rivoz"
 		]
 	},
 	"campaignevents-desc": "Lisab funktsioonid ürituste korraldajate ja osalejate jaoks.",
@@ -269,5 +270,9 @@
 	"campaignevents-contributions-summary-articles-edited": "Artikleid muudetud",
 	"campaignevents-contributions-summary-bytes-changed": "Muutus baitides",
 	"campaignevents-contributions-summary-links-changed": "Linke muudetud",
-	"campaignevents-contributions-summary-edit-count": "Muudatusi kokku"
+	"campaignevents-contributions-summary-edit-count": "Muudatusi kokku",
+	"campaignevents-event-details-contributions-editors-username": "Kasutajanimi",
+	"campaignevents-event-details-contributions-edits-button-label": "Muudatused",
+	"campaignevents-event-details-contributions-editors-button-label": "Toimetajad",
+	"campaignevents-event-details-contributions-editors-table-caption": "Toimetajad"
 }
