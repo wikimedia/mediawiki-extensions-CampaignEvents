@@ -67,6 +67,8 @@
 	"editeventregistration": "कार्यक्रम पंजीकरण सम्पादित करें",
 	"campaignevents-edit-form-details-label": "कार्यक्रम की जानकारी",
 	"campaignevents-edit-form-details-subtitle": "जो कार्यक्रम आप आयोजित कर रहे हैं उसके बारे में सामान्य जानकारी प्रदान करें",
+	"campaignevents-edit-form-impact-statistics-label": "प्रभाव सांख्यिकी",
+	"campaignevents-edit-form-impact-statistics-description": "अपने कार्यक्रमों के प्रभावों के आँकड़े इकट्ठा करें। आप ऐसा करने के लिए [$1 योगदान सांख्यिकी चालू कर] और/या [$2 कार्यक्रम डैशबोर्ड] की कड़ी जोड़ सकते हैं।",
 	"campaignevents-edit-field-page": "कार्यक्रम पृष्ठ",
 	"campaignevents-edit-field-page-help": "कार्यक्रम पृष्ठ पर आपके कार्यक्रम के बारे में जानकारी होगी। लोग कार्यक्रम पृष्ठ पर प्रतिभागियों के रूप में पंजीकृत कर पाएँगे।",
 	"campaignevents-edit-field-event-status": "कार्यक्रम की स्थिति",

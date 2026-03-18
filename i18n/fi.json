@@ -68,6 +68,7 @@
 	"editeventregistration": "Muokkaa tapahtumailmoittautumista",
 	"campaignevents-edit-form-details-label": "Tapahtuman tiedot",
 	"campaignevents-edit-form-details-subtitle": "Anna yleistä tietoa järjestämästäsi tapahtumasta",
+	"campaignevents-edit-form-impact-statistics-label": "Vaikuttavuustilastot",
 	"campaignevents-edit-field-page": "Tapahtumasivu",
 	"campaignevents-edit-field-page-help": "Tapahtumasivulla on tietoa tapahtumastasi. Osallistujat voivat ilmoittautua osallistujiksi tapahtumasivulla.",
 	"campaignevents-edit-field-event-status": "Tapahtuman tila",

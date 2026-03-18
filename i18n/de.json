@@ -68,6 +68,8 @@
 	"editeventregistration": "Veranstaltungsanmeldung bearbeiten",
 	"campaignevents-edit-form-details-label": "Veranstaltungsdetails",
 	"campaignevents-edit-form-details-subtitle": "Gib allgemeine Informationen über die Veranstaltung ein, die du organisierst",
+	"campaignevents-edit-form-impact-statistics-label": "Wirkungsstatistik",
+	"campaignevents-edit-form-impact-statistics-description": "Sammel Statistiken über die Auswirkungen deiner Veranstaltungen. Du kannst dies tun, indem du [$1 Beitragstatistiken aktivierst] und/oder den Link [$2 Programme & Veranstaltungs-Dashboard] hinzufügst.",
 	"campaignevents-edit-field-page": "Veranstaltungsseite",
 	"campaignevents-edit-field-page-help": "Eine Veranstaltungsseite enthält Informationen zu deiner Veranstaltung. Personen können sich auf der Veranstaltungsseite als Teilnehmer registrieren.",
 	"campaignevents-edit-field-event-status": "Status der Veranstaltung",
