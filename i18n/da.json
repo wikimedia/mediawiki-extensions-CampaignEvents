@@ -67,6 +67,8 @@
 	"editeventregistration": "Rediger tilmelding til begivenhed",
 	"campaignevents-edit-form-details-label": "Begivenhedsdetaljer",
 	"campaignevents-edit-form-details-subtitle": "Giv generelle oplysninger om den begivenhed, du arrangerer",
+	"campaignevents-edit-form-impact-statistics-label": "Effektstatistik",
+	"campaignevents-edit-form-impact-statistics-description": "Indsaml statistik om effekten af dine begivenheder. Du kan gøre dette ved at [ $1 aktivere bidragsstatistik] og/eller tilføje linket [$2 Programmer og begivenhedsdashboard].",
 	"campaignevents-edit-field-page": "Begivenhedsside",
 	"campaignevents-edit-field-page-help": "En begivenhedsside indeholder oplysninger om din begivenhed. Man kan registrere sig som deltagere på begivenhedssiden.",
 	"campaignevents-edit-field-event-status": "Begivenhedsstatus",

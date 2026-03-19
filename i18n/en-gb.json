@@ -43,11 +43,9 @@
 	"campaignevents-notification-registration-header-chat": "Join the $1 to connect with other participants and get additional updates from the organisers.",
 	"campaignevents-notification-registration-details-venue-not-available": "The venue location has not yet been shared by the {{PLURAL:$1|organiser|organisers}}.",
 	"campaignevents-notification-registration-details-organizers-header": "Event organisers",
-	"campaignevents-register-questions-label-title": "{{delete|no longer needed}}\nYour information",
 	"campaignevents-register-questions-label-subtitle": "This information will be shared with the event organisers only.",
 	"campaignevents-register-question-affiliate": "Do you belong to any Wikimedia affiliates (chapters, user groups, thematic organisations)? (optional)",
 	"campaignevents-register-question-affiliate-organizer-label": "Do you belong to any Wikimedia affiliates (chapters, user groups, thematic organisations)?",
-	"campaignevents-eventpage-register-dialog-questions-title": "{{delete|no longer needed}}\nYour information",
 	"campaignevents-eventpage-register-dialog-questions-subtitle": "This information will be shared with the event organisers only.",
 	"campaignevents-invitation-list-error-not-organizer": "Enter an event page that lists you as an organiser."
 }

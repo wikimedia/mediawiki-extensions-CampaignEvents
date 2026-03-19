@@ -66,6 +66,8 @@
 	"editeventregistration": "Editar a inscrición ao evento",
 	"campaignevents-edit-form-details-label": "Detalles do evento",
 	"campaignevents-edit-form-details-subtitle": "Proporciona información xeral sobre o evento que estás a organizar",
+	"campaignevents-edit-form-impact-statistics-label": "Estatísticas de impacto",
+	"campaignevents-edit-form-impact-statistics-description": "Recolle estatísticas sobre o impacto dos teus eventos. Podes facelo [$1 activando as estatísticas das contribucións] e/ou engadindo a ligazón ao [$2 taboleiro de programas e eventos].",
 	"campaignevents-edit-field-page": "Páxina do evento",
 	"campaignevents-edit-field-page-help": "A páxina do evento contén información sobre o teu evento. As persoas poden inscribirse como participantes na páxina do evento.",
 	"campaignevents-edit-field-event-status": "Estado do evento",

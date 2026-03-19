@@ -5,6 +5,7 @@
 			"Civvì",
 			"Daimona Eaytoy",
 			"Dream Indigo",
+			"FL2226",
 			"Yiyi"
 		]
 	},
@@ -52,6 +53,8 @@
 	"editeventregistration": "Modifica le registrazioni all'evento",
 	"campaignevents-edit-form-details-label": "Dettagli evento",
 	"campaignevents-edit-form-details-subtitle": "Fornisci informazioni generali sull'evento che stai organizzando",
+	"campaignevents-edit-form-impact-statistics-label": "Statistiche di impatto",
+	"campaignevents-edit-form-impact-statistics-description": "Raccogli statistiche sull'impatto dei tuoi eventi. Puoi farlo [attivando le statistiche sui contributi al costo di $1 ] e/o aggiungendo il link [Dashboard Programmi ed Eventi al costo di $2 ].",
 	"campaignevents-edit-field-page": "Pagina dell'evento",
 	"campaignevents-edit-field-page-help": "Una pagina evento contiene informazioni relative al tuo evento. Le persone possono registrarsi come partecipanti sulla pagina evento.",
 	"campaignevents-edit-field-event-status": "Stato dell'evento",
@@ -489,6 +492,7 @@
 	"campaignevents-event-contribution-event-deleted": "L'evento è stato cancellato",
 	"campaignevents-postedit-dialog-select-placeholder": "Seleziona evento",
 	"campaignevents-postedit-dialog-action-no": "No, grazie",
+	"campaignevents-postedit-success-text": "La tua modifica è stata associata a $1 . Per visualizzare il tuo contributo, vai alla vista dell'evento [$2 {{int:campaignevents-event-details-tab-contributions}}] .",
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Annulla",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Aggiungi modifica",
 	"campaignevents-event-details-contributions-add-dialog-title": "Aggiungi una modifica a $1",
