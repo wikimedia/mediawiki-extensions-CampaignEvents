@@ -44,7 +44,11 @@ readonly class EventContributionCombinedModule {
 	public function createContent(): Tag {
 		$container = new Tag();
 
-		$goalProgressData = $this->getGoalProgressTemplateData();
+		$goalProgressData = $this->goalProgressFormatter->getProgressData(
+			$this->event,
+			$this->output->getAuthority(),
+			$this->output->getLanguage()->getCode()
+		);
 		if ( $goalProgressData ) {
 			$goalProgressHtml = $this->templateParser->processTemplate( 'GoalProgressBar', $goalProgressData );
 			$container->appendContent( new HtmlSnippet( $goalProgressHtml ) );
@@ -107,17 +111,6 @@ readonly class EventContributionCombinedModule {
 		}
 
 		return $container;
-	}
-
-	/**
-	 * @return array<string,mixed>|null
-	 */
-	private function getGoalProgressTemplateData(): ?array {
-		return $this->goalProgressFormatter->getProgressData(
-			$this->event,
-			$this->output->getAuthority(),
-			$this->output->getLanguage()->getCode()
-		);
 	}
 
 	private function getContributionsSummaryModule(): Tag {

@@ -27,12 +27,7 @@ class GoalProgressFormatter {
 	}
 
 	/**
-	 * @return array{
-	 *   heading: string,
-	 *   description: string,
-	 *   percentComplete: int,
-	 *   numericText: string
-	 * }|null
+	 * @return array{heading:string,description:string,percentComplete:int,numericText:string}|null
 	 */
 	public function getProgressData(
 		ExistingEventRegistration $event,
