@@ -588,8 +588,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Annullér",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Tilføj redigering",
 	"campaignevents-event-details-contributions-add-dialog-title": "Tilføj en rettelse til $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Tilføj en redigering",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Du kan indtaste en sideversion-ID (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Rettelse tilføjet. Den vises snart her.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Tilføj redigering til denne begivenhed",
 	"campaignevents-contributions-summary-edit-count": "Antal redigeringer",

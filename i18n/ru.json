@@ -485,8 +485,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Отмена",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Добавить правку",
 	"campaignevents-event-details-contributions-add-dialog-title": "Добавить правку к $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Добавить правку",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Вы можете ввести идентификатор версии страницы (oldid).",
 	"campaignevents-event-details-contributions-add-dialog-success": "Правка добавлена. Она скоро появится здесь.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Добавить правку к этому мероприятию",
 	"campaignevents-contributions-summary-edit-count": "Число правок",

@@ -603,8 +603,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "取消",
 	"campaignevents-event-details-contributions-add-dialog-submit": "添加编辑",
 	"campaignevents-event-details-contributions-add-dialog-title": "向 $1 添加一个编辑",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "发布编辑",
-	"campaignevents-event-details-contributions-add-dialog-footer": "您可以输入一个版本ID（oldid）。",
 	"campaignevents-event-details-contributions-add-dialog-success": "编辑已发布。您的更改很快就会应用。",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "添加编辑到此活动",
 	"campaignevents-contributions-summary-edit-count": "编辑数",

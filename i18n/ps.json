@@ -480,8 +480,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "ناگارل",
 	"campaignevents-event-details-contributions-add-dialog-submit": "سمون ورگډول",
 	"campaignevents-event-details-contributions-add-dialog-title": "$1 ته سمون ورگډول",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "سمون ورگډول",
-	"campaignevents-event-details-contributions-add-dialog-footer": "تاسو کولی شئ بياليدنې پېژند دننه کړئ (زوړپېژند)",
 	"campaignevents-event-details-contributions-add-dialog-success": "سمون ورگډ شو. دا به ژر دلته څرگند شي.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "دې پېښې ته سمون ورگډول",
 	"campaignevents-contributions-summary-edit-count": "سمون شمېر",

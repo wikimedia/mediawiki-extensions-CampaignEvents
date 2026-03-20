@@ -588,8 +588,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Peruuta",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Lisää muokkaus",
 	"campaignevents-event-details-contributions-add-dialog-title": "Lisää muokkaus tapahtumaan $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Lisää muokkaus",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Voit syöttää versionumeron (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Muokkaus lisätty. Se näkyy täällä pian.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Lisää muokkaus tähän tapahtumaan",
 	"campaignevents-contributions-summary-edit-count": "Muokkausmäärä",

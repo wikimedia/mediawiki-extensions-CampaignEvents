@@ -586,8 +586,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "ביטול",
 	"campaignevents-event-details-contributions-add-dialog-submit": "הוספת עריכה",
 	"campaignevents-event-details-contributions-add-dialog-title": "הוספת עריכה לאירוע $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "הוספת עריכה",
-	"campaignevents-event-details-contributions-add-dialog-footer": "באפשרותך להוסיף מזהה גרסה (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "העריכה נוספה. היא תופיע כאן בקרוב.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "הוספת העריכה לאירוע הזה",
 	"campaignevents-contributions-summary-edit-count": "מונה עריכות",

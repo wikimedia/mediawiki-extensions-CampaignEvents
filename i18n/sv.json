@@ -406,8 +406,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Avbryt",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Lägg till redigering",
 	"campaignevents-event-details-contributions-add-dialog-title": "Lägg till en redigering till $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Lägg till en redigering",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Du kan ange ett revisions-ID (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Redigering tillagd. Den kommer att visas här snart.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Lägg till redigering i detta evenemang",
 	"campaignevents-contributions-summary-edit-count": "Antal redigeringar",

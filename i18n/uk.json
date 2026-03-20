@@ -594,8 +594,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Скасувати",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Додати редагування",
 	"campaignevents-event-details-contributions-add-dialog-title": "Додати редагування до $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Додати редагування",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Ви можете ввести ідентифікатор версії (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Редагування додано. Воно скоро з'явиться тут.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Додати редагування до цієї події",
 	"campaignevents-contributions-summary-edit-count": "Лічильник редагувань",

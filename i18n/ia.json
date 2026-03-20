@@ -584,8 +584,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Cancellar",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Adder modification",
 	"campaignevents-event-details-contributions-add-dialog-title": "Adder un modification a $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Adder un modification",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Tu pote inserer un ID de version (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Modification addite. Illo apparera hic tosto.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Adder modification a iste evento",
 	"campaignevents-contributions-summary-edit-count": "Numero de modificationes",

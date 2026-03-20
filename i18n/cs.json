@@ -587,8 +587,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Storno",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Přidat úpravu",
 	"campaignevents-event-details-contributions-add-dialog-title": "Přidat úpravu k $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Přidat úpravu",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Můžete zadat ID revize (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Úprava přidána. Brzy se zde zobrazí.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Přidat úpravu k této události",
 	"campaignevents-contributions-summary-edit-count": "Počet editací",

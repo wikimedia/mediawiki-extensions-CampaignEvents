@@ -608,8 +608,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "إلغاء",
 	"campaignevents-event-details-contributions-add-dialog-submit": "إضافة تعديل",
 	"campaignevents-event-details-contributions-add-dialog-title": "أضف تعديلا إلى $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "إضافة تعديل",
-	"campaignevents-event-details-contributions-add-dialog-footer": "يمكنك إدخال مُعرف الإصلاح (قديم)",
 	"campaignevents-event-details-contributions-add-dialog-success": "أضيف التعديل. سيظهر هنا قريبًا.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "إضافة تعديل إلى هذه الفعالية",
 	"campaignevents-contributions-summary-edit-count": "عدد التعديلات",

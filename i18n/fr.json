@@ -622,8 +622,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Annuler",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Ajouter une modification",
 	"campaignevents-event-details-contributions-add-dialog-title": "Ajouter une modification à $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Ajouter une modification",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Vous pouvez saisir un identifiant de révision (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Modification ajoutée. Elle apparaîtra ici prochainement.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Ajouter une modification à cet événement",
 	"campaignevents-contributions-summary-edit-count": "Nombre de modifications",

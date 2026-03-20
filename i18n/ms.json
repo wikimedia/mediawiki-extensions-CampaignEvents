@@ -584,8 +584,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Batalkan",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Tambah suntingan",
 	"campaignevents-event-details-contributions-add-dialog-title": "Tambah suntingan ke $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Tambah suntingan",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Anda boleh masukkan ID semakan (id lama)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Suntingan ditambah. Ia akan muncul di sini tidak lama lagi.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Tambah suntingan ke acara ini",
 	"campaignevents-contributions-summary-edit-count": "Kiraan suntingan",

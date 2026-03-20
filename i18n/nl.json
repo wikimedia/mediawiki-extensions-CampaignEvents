@@ -590,8 +590,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Annuleren",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Bewerking toevoegen",
 	"campaignevents-event-details-contributions-add-dialog-title": "Een bewerking aan $1 toevogen",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Een bewerking toevoegen",
-	"campaignevents-event-details-contributions-add-dialog-footer": "U kunt een versie-ID (oldid) invoeren",
 	"campaignevents-event-details-contributions-add-dialog-success": "Bewerking toegevoegd. Deze verschijnt binnenkort hier.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Een bewerking aan dit evenement toevoegen",
 	"campaignevents-contributions-summary-edit-count": "Aantal bewerkingen",

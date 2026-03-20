@@ -583,8 +583,6 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Anuluj",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Dodaj edycję",
 	"campaignevents-event-details-contributions-add-dialog-title": "Przypisz edycję do $1",
-	"campaignevents-event-details-contributions-add-dialog-subtitle": "Przypisz edycję",
-	"campaignevents-event-details-contributions-add-dialog-footer": "Możesz wprowadzić identyfikator wersji (oldid)",
 	"campaignevents-event-details-contributions-add-dialog-success": "Dodano edycję. Wkrótce się tu pojawi.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Przypisz edycję do tego wydarzenia",
 	"campaignevents-contributions-summary-edit-count": "Liczba edycji",
