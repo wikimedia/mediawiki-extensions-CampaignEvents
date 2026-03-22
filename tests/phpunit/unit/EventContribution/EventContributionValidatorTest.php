@@ -413,7 +413,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
 	}
 
-	public function provideTargetWikis() {
+	public static function provideTargetWikis() {
 		yield 'one wiki' => [ true, [ 'testwiki' ] ];
 		yield 'two wikis' => [ true, [ 'testwiki', 'testwiki2' ] ];
 		yield 'all wikis' => [ true, EventRegistration::ALL_WIKIS ];

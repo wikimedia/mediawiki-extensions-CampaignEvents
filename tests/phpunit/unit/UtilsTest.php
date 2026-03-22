@@ -130,7 +130,7 @@ class UtilsTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, $input );
 	}
 
-	public function provideDiacriticInsensitiveSort() {
+	public static function provideDiacriticInsensitiveSort() {
 		return [
 			'no diacritics' => [
 				[ 'DE' => 'Germany', 'FR' => 'France', 'GB' => 'England' ],
