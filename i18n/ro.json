@@ -97,6 +97,8 @@
 	"campaignevents-edit-field-address": "Adresă",
 	"campaignevents-edit-field-chat-url": "Invitație la chatul de grup",
 	"campaignevents-edit-field-chat-url-help": "Dacă aveți un grup de chat online pentru participanții la acest eveniment, puteți adăuga aici linkul de invitație. Participanții vor putea să vadă linkul de invitație după ce se înscriu.",
+	"campaignevents-edit-field-goal-type-total_bytes_added": "Octeți adăugați",
+	"campaignevents-edit-field-goal-type-total_links_removed": "Legături înlăturate",
 	"campaignevents-myevents-label-search": "Căutare",
 	"campaignevents-myevents-label-status": "Stare",
 	"campaignevents-myevents-field-status-open": "Evenimente deschise",

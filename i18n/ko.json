@@ -447,5 +447,9 @@
 	"campaignevents-allevents-placeholder-add-event-types": "이벤트 유형 추가...",
 	"campaignevents-email-error-notification-with-detail": "다음 이유로 이메일을 보낼 수 없습니다: $1",
 	"campaignevents-eventslist-types-label": "이벤트 유형",
-	"campaignevents-eventslist-country-label": "국가"
+	"campaignevents-eventslist-country-label": "국가",
+	"campaignevents-event-details-contributions-add-dialog-revid-label": "판 ID",
+	"campaignevents-event-details-contributions-editors-username": "사용자 이름",
+	"campaignevents-event-details-contributions-editors-bytes": "바이트",
+	"campaignevents-event-details-contributions-edits-button-label": "편집"
 }
