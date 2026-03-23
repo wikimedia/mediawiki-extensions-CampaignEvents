@@ -292,7 +292,8 @@
 				"CdxButton",
 				"CdxField",
 				"CdxTextInput",
-				"CdxMessage"
+				"CdxMessage",
+				"CdxProgressBar"
 			],
 			"packageFiles": [
 				"ext.campaignEvents.specialPages/dispatcher.js",
@@ -682,7 +683,8 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListOwnEventsForEditHandler",
 			"services": [
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsEventLookup"
+				"CampaignEventsEventLookup",
+				"CampaignEventsGoalProgressFormatter"
 			]
 		},
 		{

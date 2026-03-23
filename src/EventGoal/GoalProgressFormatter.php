@@ -9,7 +9,6 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Language\Language;
 use MediaWiki\Permissions\Authority;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
@@ -38,7 +37,7 @@ class GoalProgressFormatter {
 	public function getProgressData(
 		ExistingEventRegistration $event,
 		Authority $authority,
-		Language $language
+		string $languageCode
 	): ?array {
 		$goal = $event->getGoal();
 		if ( $goal === null ) {
@@ -108,9 +107,7 @@ class GoalProgressFormatter {
 
 		$goalTarget = $primaryMetric->getTarget();
 
-		$msgFormatter = $this->messageFormatterFactory->getTextFormatter(
-			$language->getCode()
-		);
+		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $languageCode );
 
 		$goalMetricLabel = $msgFormatter->format( MessageValue::new( $metricLabelKey )->numParams( $goalTarget ) );
 

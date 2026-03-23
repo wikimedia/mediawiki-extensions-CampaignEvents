@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -11,8 +12,10 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Registration\ExtensionRegistry;
 use Wikibase\Repo\WikibaseRepo;
+use Wikimedia\ObjectCache\HashBagOStuff;
 
 /**
  * Handler used to set up a JavaScript modal shown after edits, where users can choose to associate
@@ -61,24 +64,46 @@ class PostEditHandler implements BeforePageDisplayHook {
 			return;
 		}
 
-		$language = $out->getLanguage();
-		$templateParser = new TemplateParser( __DIR__ . '/../../../templates' );
+		$eventData = self::makeEventList(
+			$events, $authority, $out->getLanguage()->getCode(), $this->goalProgressFormatter
+		);
+
+		$out->addModules( 'ext.campaignEvents.postEdit' );
+		$out->addJsConfigVars( 'wgCampaignEventsEventsForAssociation', $eventData );
+	}
+
+	/**
+	 * Given a list of events, returns an array structure that can be passed to the post-edit dialog frontend.
+	 *
+	 * @param ExistingEventRegistration[] $events
+	 * @param Authority $authority
+	 * @param string $languageCode
+	 * @param GoalProgressFormatter $goalProgressFormatter
+	 * @return list<array{id:int,name:string,goalProgress?:string}>
+	 */
+	public static function makeEventList(
+		array $events,
+		Authority $authority,
+		string $languageCode,
+		GoalProgressFormatter $goalProgressFormatter
+	): array {
+		// XXX: Avoid global state access in ListOwnEventsForEditHandlerTest
+		$templateCache = defined( 'MW_PHPUNIT_TEST' ) ? new HashBagOStuff() : null;
+		$templateParser = new TemplateParser( __DIR__ . '/../../../templates', $templateCache );
 		$eventData = [];
 		foreach ( $events as $event ) {
 			$entry = [
 				'id' => $event->getID(),
 				'name' => $event->getName(),
 			];
-			$goalProgressData = $this->goalProgressFormatter->getProgressData( $event, $authority, $language );
+			$goalProgressData = $goalProgressFormatter->getProgressData( $event, $authority, $languageCode );
 			if ( $goalProgressData !== null ) {
 				// TODO: Replace with a Vue version once that is available (T407638)
 				$entry['goalProgress'] = $templateParser->processTemplate( 'GoalProgressBar', $goalProgressData );
 			}
 			$eventData[] = $entry;
 		}
-
-		$out->addModules( 'ext.campaignEvents.postEdit' );
-		$out->addJsConfigVars( 'wgCampaignEventsEventsForAssociation', $eventData );
+		return $eventData;
 	}
 
 	/**

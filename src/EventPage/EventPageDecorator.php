@@ -528,7 +528,7 @@ class EventPageDecorator {
 		$progressData = $this->goalProgressFormatter->getProgressData(
 			$registration,
 			$this->authority,
-			$this->language
+			$this->language->getCode()
 		);
 		if ( $progressData === null ) {
 			return null;

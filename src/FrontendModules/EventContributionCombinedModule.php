@@ -116,7 +116,7 @@ readonly class EventContributionCombinedModule {
 		return $this->goalProgressFormatter->getProgressData(
 			$this->event,
 			$this->output->getAuthority(),
-			$this->output->getLanguage()
+			$this->output->getLanguage()->getCode()
 		);
 	}
 

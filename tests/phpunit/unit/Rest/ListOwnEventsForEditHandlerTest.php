@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Rest\ListOwnEventsForEditHandler;
@@ -27,7 +28,8 @@ class ListOwnEventsForEditHandlerTest extends MediaWikiUnitTestCase {
 	): Handler {
 		return new ListOwnEventsForEditHandler(
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
-			$eventLookup ?? $this->createMock( IEventLookup::class )
+			$eventLookup ?? $this->createMock( IEventLookup::class ),
+			$this->createMock( GoalProgressFormatter::class )
 		);
 	}
 
