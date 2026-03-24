@@ -526,5 +526,13 @@
 	"campaignevents-event-details-contributions-editors-username": "Nome utente",
 	"campaignevents-event-details-contributions-editors-created": "Voci create",
 	"campaignevents-event-details-contributions-editors-edited": "Voci modificate",
-	"campaignevents-event-details-contributions-editors-bytes": "Byte"
+	"campaignevents-event-details-contributions-editors-bytes": "Byte",
+	"campaignevents-goal-progress-heading": "Progressi verso l'obiettivo",
+	"campaignevents-goal-progress-metric-total_articles_created": "$1 {{PLURAL:$1|voce creata|voci create}}",
+	"campaignevents-goal-progress-metric-total_articles_edited": "$1 {{PLURAL:$1|voce modificata|voci modificate}}",
+	"campaignevents-goal-progress-metric-total_edits": "$1 {{PLURAL:$1|modifica|modifiche}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 byte {{PLURAL:$1|aggiunto|aggiunti}}",
+	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 byte {{PLURAL:$1|rimosso|rimossi}}",
+	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|collegamento aggiunto|collegamenti aggiunti}}",
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|collegamento rimosso|collegamenti rimossi}}"
 }

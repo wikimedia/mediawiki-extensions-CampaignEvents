@@ -604,6 +604,7 @@
 	"campaignevents-event-details-contributions-add-dialog-submit": "Adder modification",
 	"campaignevents-event-details-contributions-add-dialog-title": "Adder un modification a $1",
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "ID del version",
+	"campaignevents-event-details-contributions-add-dialog-revid-help": "Insere le ID del version. Aperi le historia de versiones del pagina, clicca sur le data e hora del modification, e copia le numero del URL post “$1”.",
 	"campaignevents-event-details-contributions-add-dialog-success": "Modification addite. Illo apparera hic tosto.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Adder modification a iste evento",
 	"campaignevents-contributions-summary-edit-count": "Numero de modificationes",
@@ -624,5 +625,14 @@
 	"campaignevents-event-details-contributions-editors-bytes": "Bytes",
 	"campaignevents-event-details-contributions-edits-button-label": "Modificationes",
 	"campaignevents-event-details-contributions-editors-button-label": "Redactores",
-	"campaignevents-event-details-contributions-editors-table-caption": "Redactores"
+	"campaignevents-event-details-contributions-editors-table-caption": "Redactores",
+	"campaignevents-goal-progress-heading": "Progresso verso le objectivo",
+	"campaignevents-goal-progress-description": "Iste evento ha un objectivo de $1.",
+	"campaignevents-goal-progress-metric-total_articles_created": "$1 articulo{{PLURAL:$1||s}} create",
+	"campaignevents-goal-progress-metric-total_articles_edited": "$1 articulo{{PLURAL:$1||s}} modificate",
+	"campaignevents-goal-progress-metric-total_edits": "$1 modification{{PLURAL:$1||es}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 byte{{PLURAL:$1||s}} addite",
+	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 byte{{PLURAL:$1||s}} approbate",
+	"campaignevents-goal-progress-metric-total_links_added": "$1 ligamine{{PLURAL:$1||s}} addite",
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 ligamine{{PLURAL:$1||s}} removite"
 }

@@ -17,6 +17,11 @@
 	"campaignevents-edit-field-organizers-placeholder": "ਵਰਤੋਂਕਾਰ-ਨਾਂ ਸ਼ਾਮਲ ਕਰੋ",
 	"campaignevents-edit-field-country": "ਮੁਲਕ",
 	"campaignevents-edit-field-address": "ਪਤਾ",
+	"campaignevents-edit-field-goal-type-placeholder": "ਇੱਕ ਚੋਣ ਚੁਣੋ",
+	"campaignevents-edit-field-goal-type-total_articles_edited": "ਸੋਧੇ ਹੋਏ ਲੇਖਾਂ ਦੀ ਗਿਣਤੀ",
+	"campaignevents-edit-field-goal-type-total_edits": "ਕੁੱਲ ਸੋਧਾਂ",
+	"campaignevents-edit-field-goal-type-total_links_removed": "ਕੜੀਆਂ ਹਟਾਈਆਂ ਗਈਆਂ",
+	"campaignevents-edit-field-goal-target-label": "ਮਿੱਥੇ ਹੋਏ ਟੀਚੇ",
 	"campaignevents-edit-field-topics-placeholder": "ਵਿਸ਼ਾ ਜੋੜੋ",
 	"campaignevents-register-confirmation-btn": "ਇੰਦਰਾਜ ਕਰਾਓ",
 	"campaignevents-register-edit-btn": "ਤਬਦੀਲੀਆਂ ਸਾਂਭੋ",
@@ -89,5 +94,12 @@
 	"campaignevents-event-details-contributions-delete-success": "ਸੋਧ ਨੂੰ ਸਮਾਗਮ ਤੋਂ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਸੀ।",
 	"campaignevents-event-details-contributions-delete-title": "ਇਸ ਸੋਧ ਨੂੰ $1 ਤੋਂ ਹਟਾਓ",
 	"campaignevents-event-details-contributions-delete-cancel": "ਰੱਦ ਕਰੋ",
-	"campaignevents-event-details-contributions-delete-confirm": "ਹਟਾਓ"
+	"campaignevents-event-details-contributions-delete-confirm": "ਹਟਾਓ",
+	"campaignevents-goal-progress-heading": "ਟੀਚੇ ਵੱਲ ਤਰੱਕੀ",
+	"campaignevents-goal-progress-metric-total_articles_created": "$1 {{PLURAL:$1|ਲੇਖ ਬਣਾਇਆ ਗਿਆ|ਲੇਖ ਬਣਾਏ ਗਏ}}",
+	"campaignevents-goal-progress-metric-total_articles_edited": "$1 {{PLURAL:$1|ਲੇਖ ਸੋਧਿਆ ਗਿਆ|ਲੇਖ ਸੋਧੇ ਗਏ}}",
+	"campaignevents-goal-progress-metric-total_edits": "$1 {{PLURAL:$1|ਸੋਧ|ਸੋਧਾਂ}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1| ਬਾਈਟ ਜੋੜੀ|ਬਾਈਟਾਂ ਜੋੜਿਆਂ}}",
+	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|ਕੜੀ ਜੋੜੀ|ਕੜੀਆਂ ਜੋੜੀਆਂ}}",
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|ਕੜੀ ਹਟਾਈ ਗਈ|ਕੜੀਆਂ ਹਟਾਈਆਂ ਗਈਆਂ}}"
 }
