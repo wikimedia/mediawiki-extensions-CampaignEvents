@@ -11,6 +11,7 @@
 			"Fitoschido",
 			"IZapico (WMF)",
 			"JDíaz32",
+			"Kookoriko",
 			"MarcoAurelio",
 			"Monicapozo03",
 			"No se",
@@ -606,5 +607,8 @@
 	"campaignevents-event-details-contributions-editors-edited": "Artículos editados",
 	"campaignevents-event-details-contributions-editors-count": "Recuento de ediciones",
 	"campaignevents-event-details-contributions-editors-bytes": "Bytes",
-	"campaignevents-event-details-contributions-editors-table-caption": "Editores"
+	"campaignevents-event-details-contributions-editors-table-caption": "Editores",
+	"campaignevents-goal-progress-heading": "Progreso hacia la meta",
+	"campaignevents-goal-progress-metric-total_edits": "$1 {{PLURAL:$1|edición|ediciones}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1|byte añadido|bytes añadidos}}"
 }

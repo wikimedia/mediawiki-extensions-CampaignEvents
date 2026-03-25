@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chaduvari"
+		]
+	},
+	"campaignevents-rest-event-not-found": "ఈ IDతో ఈవెంట్ ఏదీ లేదు.",
+	"campaignevents-rest-enable-registration-permission-denied": "ఈవెంట్ నమోదులను ప్రారంభించే అనుమతి మీకు లేదు.",
+	"campaignevents-rest-edit-page-nonlocal": "ఈ ఈవెంట్ నమోదును కింది వికీలో చేతనం చేసారు. దాని దిద్దుబాట్లు అక్కడే చెయ్యాలి: $1.",
+	"campaignevents-rest-delete-already-deleted": "ఈ ఈవెంట్ నమోదును ఇప్పటికే తొలగించారు.",
+	"campaignevents-rest-user-not-found": "ఈ కేంద్రీయ ఐడితో వాడుకరి ఎవరూ లేరు.",
+	"campaignevents-rest-get-registration-deleted": "ఈ ఈవెంట్ నమోదును తొలగించారు.",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "పాల్గొనేవారిని తొలగించడం, ఈ ఈవెంటును సృష్టించిన $1 లో చెయ్యండి.",
+	"campaignevents-rest-list-participants-cannot-see-private": "ఈ ఈవెంటు కోసం గోప్యంగా నమోదు చేసుకున్నవారిని చూసే అధికారం మీకు లేదు.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> అనేది తప్పనిసరిగా వాడుకరిపేర్ల శ్రేణి అయి ఉండాలి, ఖాళీగా ఉండకూడదు.",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "నిర్వాహకులను చేర్చడం, ఈ ఈవెంటును సృష్టించిన $1 లో చెయ్యండి.",
+	"campaignevents-rest-get-registration-info-notparticipant": "మీరు ఈ ఈవెంటులో పాల్గొనడం లేదు.",
+	"campaignevents-rest-register-invalid-answer": "$1 వ ప్రశ్నకు ఇచ్చిన సమాధానం చెల్లదు",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "మీ ఈవెంటు నమోదును, ఈ ఈవెంటును సృష్టించిన $1 లో పూర్తి చెయ్యండి.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "మీ ఈవెంటు నమోదును తొలగించడం, ఈ ఈవెంటును సృష్టించిన $1 లో చెయ్యండి.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "పాల్గొనేవారికి ఈమెయిలు పంపించడం, ఈ ఈవెంటును సృష్టించిన $1 లో చెయ్యండి.",
+	"campaignevents-rest-contribution-not-found": "ఈ ఐడీతో ఎటువంటి తోడ్పాటూ లేదు.",
+	"campaignevents-rest-delete-contribution-permission-denied": "ఈ సహకారాన్ని తొలగించే అనుమతి మీకు లేదు."
+}
