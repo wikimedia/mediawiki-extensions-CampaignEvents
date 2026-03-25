@@ -36,7 +36,7 @@ class ListOwnEventsForEditHandler extends SimpleHandler {
 			return [];
 		}
 
-		return $this->eventLookup->getEventsForContributionAssociationByParticipant( $centralUser->getCentralID(), 50 );
+		return $this->eventLookup->getEventsForContributionAssociationByParticipant( $centralUser, 50 );
 	}
 
 	/**

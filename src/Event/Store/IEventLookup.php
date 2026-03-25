@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Event\Store;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use stdClass;
 use Wikimedia\Rdbms\IDBAccessObject;
@@ -54,11 +55,11 @@ interface IEventLookup {
 	 * opted out of seeing the association prompt (and therefore, association may be possible with some events not
 	 * listed here).
 	 *
-	 * @param int $participantID The user ID of the participant
+	 * @param CentralUser $participant
 	 * @param int $limit Maximum number of events to return
 	 * @return ExistingEventRegistration[]
 	 */
-	public function getEventsForContributionAssociationByParticipant( int $participantID, int $limit ): array;
+	public function getEventsForContributionAssociationByParticipant( CentralUser $participant, int $limit ): array;
 
 	/**
 	 * Given a result set containing full rows from the campaign_events table, constructs EventRegistration objects

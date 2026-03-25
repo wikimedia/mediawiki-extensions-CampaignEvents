@@ -16,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Questions\EventQuestionsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
@@ -263,7 +264,7 @@ class EventStore implements IEventStore, IEventLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEventsForContributionAssociationByParticipant( int $participantID, int $limit ): array {
+	public function getEventsForContributionAssociationByParticipant( CentralUser $participant, int $limit ): array {
 		$dbr = $this->dbHelper->getReplicaConnection();
 		$currentTime = $dbr->timestamp();
 
@@ -272,7 +273,7 @@ class EventStore implements IEventStore, IEventLookup {
 			->from( 'campaign_events' )
 			->join( 'ce_participants', null, [
 				'event_id=cep_event_id',
-				'cep_user_id' => $participantID,
+				'cep_user_id' => $participant->getCentralID(),
 				'cep_unregistered_at' => null,
 				'cep_hide_contribution_association_prompt' => false,
 			] )

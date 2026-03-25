@@ -469,6 +469,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		array $expectedEventNames
 	) {
 		// Create events based on configuration
+		$participant = new CentralUser( $participantID );
 		$participantsStore = CampaignEventsServices::getParticipantsStore();
 		foreach ( $eventConfigs as $config ) {
 			// Create event directly with all parameters from EventRegistration
@@ -479,7 +480,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			if ( $config[ 'addParticipant' ] ) {
 				$participantsStore->addParticipantToEvent(
 					$eventID,
-					new CentralUser( $participantID ),
+					$participant,
 					$config[ 'privateRegistration' ] ?? false,
 					[],
 					$config['hideAssociationPrompt'] ?? false
@@ -488,7 +489,7 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 		}
 
 		$events = CampaignEventsServices::getEventLookup()->getEventsForContributionAssociationByParticipant(
-			$participantID,
+			$participant,
 			$limit
 		);
 

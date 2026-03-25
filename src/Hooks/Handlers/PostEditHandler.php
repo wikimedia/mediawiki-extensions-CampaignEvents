@@ -56,7 +56,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 		}
 
 		$events = $this->eventLookup->getEventsForContributionAssociationByParticipant(
-			$centralUser->getCentralID(),
+			$centralUser,
 			50
 		);
 
