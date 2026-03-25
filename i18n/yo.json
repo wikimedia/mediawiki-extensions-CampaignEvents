@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jessephu",
-			"Best man"
+			"Best man",
+			"Matma Rex"
 		]
 	},
 	"campaignevents-desc": "Provides features for campaign organizers and participants.",
@@ -68,9 +69,9 @@
 	"campaignevents-edit-field-organizers-placeholder": "Fi orúkọ oníṣe kún",
 	"campaignevents-edit-field-organizers-creator-title": "Ẹni tó dá ìṣẹ̀lẹ̀ náà ni, àwọn olùdarí mìíràn ò lè mú òṣìṣẹ́ yìí kúrò.",
 	"campaignevents-edit-field-wiki-type": "Ṣé àwọn wikis pàtó ni àpéjọ yìí dá lé?",
-	"campaignevents-edit-field-wiki-type-none": "Kò sí àwọn wikis pàtó",
+	"campaignevents-edit-field-wiki-type-none": "No specific wikis",
 	"campaignevents-edit-field-wiki-type-all": "Bẹẹni (ti o ṣii fun gbogbo awọn wiki)",
-	"campaignevents-edit-field-wiki-type-specific": "Kò sí àwọn wikis pàtó",
+	"campaignevents-edit-field-wiki-type-specific": "Yes, specific wikis",
 	"campaignevents-edit-field-wikis-label": "Àwọn ìsọfúnni tó wà ní ìkànnì",
 	"campaignevents-edit-field-wikis-placeholder": "Kò sí àwọn wikis pàtó",
 	"campaignevents-edit-field-tracking-tools": "Àwọn Àkànṣe &amp; Ìṣẹ̀lẹ̀ Àtẹ̀sílẹ̀ ìjápọ̀",

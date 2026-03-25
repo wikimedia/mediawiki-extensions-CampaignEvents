@@ -5,7 +5,12 @@
 		]
 	},
 	"campaignevents-rest-event-not-found": "Et gëtt keen Evenement mat dëser ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Dir sidd net berechtegt, fir Evenementsumeldungen z'aktivéieren.",
+	"campaignevents-rest-edit-page-nonlocal": "Dës Evenementsumeldung gouf op der follgender Wiki aktivéiert a sollt och do geännert ginn: $1.",
+	"campaignevents-rest-delete-already-deleted": "Dës Evenementsumeldung gouf scho geläscht.",
 	"campaignevents-rest-user-not-found": "Et gëtt kee Benotzer mat dëser zentraler ID.",
+	"campaignevents-rest-get-registration-deleted": "Dës Evenementsumeldung gouf geläscht.",
 	"campaignevents-rest-set-organizers-empty-list": "<var>organisator_usernames</var> muss en Array vu Benotzernimm sinn an däerf net eidel sinn",
+	"campaignevents-rest-get-registration-info-notparticipant": "Dir sidd net Participant bei dësem Element.",
 	"campaignevents-rest-register-invalid-answer": "Ongülteg Äntwert op d'Fro $1"
 }
