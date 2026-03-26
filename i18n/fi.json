@@ -52,6 +52,7 @@
 	"campaignevents-error-trackingtool-without-eventid": "Anna tapahtuman tunniste annetussa seurantatyökalussa.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "Anna seurantatyökalun tunniste",
 	"campaignevents-error-invalid-trackingtool": "Anna kelvollinen seurantatyökalun tunniste",
+	"campaignevents-error-invalid-dashboard-url": "Annettu Dashboardin URL-osoite ei noudata oikeaa muotoa. URL-osoitteen tulisi olla tässä muodossa: $1/[järjestön nimi]/[ohjelman nimi]. Esimerkki: $1/Example_Organization/Example_Event_Title.",
 	"campaignevents-error-no-participation-options": "Valitse vähintään yksi osallistumisvaihtoehto.",
 	"campaignevents-error-invalid-meeting-url": "Anna kelvollinen kokouksen URL-osoite.",
 	"campaignevents-error-meeting-url-not-online": "Kokouksen URL-osoitetta ei tule antaa, jos kyseessä ei ole online-tapahtuma.",
