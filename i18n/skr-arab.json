@@ -184,5 +184,7 @@
 	"campaignevents-event-details-contributions-editors-bytes": "بائٹس",
 	"campaignevents-event-details-contributions-edits-button-label": "تبدیلیاں",
 	"campaignevents-event-details-contributions-editors-button-label": "ایڈیٹر",
-	"campaignevents-event-details-contributions-editors-table-caption": "ایڈیٹر"
+	"campaignevents-event-details-contributions-editors-table-caption": "ایڈیٹر",
+	"campaignevents-goal-progress-metric-total_articles_created": "$1 {{PLURAL:$1|مضمون}} تخلیق تھئے",
+	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|لنک|لنکاں}} شامل تھئے"
 }

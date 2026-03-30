@@ -45,6 +45,8 @@
 	"campaignevents-edit-field-country": "দেশ",
 	"campaignevents-edit-field-country-placeholder": "একটি দেশ নির্বাচন করুন",
 	"campaignevents-edit-field-address": "ঠিকানা",
+	"campaignevents-edit-field-goal-type-total_bytes_added": "বাইট যোগ হয়েছে",
+	"campaignevents-edit-field-goal-target-placeholder": "একটি সংখ্যা যোগ করুন",
 	"campaignevents-edit-field-topics-placeholder": "বিষয় যোগ করুন",
 	"campaignevents-edit-form-questions-label": "অংশগ্রহণকারীদের জন্য প্রশ্ন",
 	"campaignevents-enable-registration-form-submit": "নিবন্ধন সক্রিয় করুন",
@@ -288,5 +290,9 @@
 	"campaignevents-allevents-placeholder-add-event-types": "ইভেন্টের ধরণ যোগ করুন...",
 	"campaignevents-eventslist-types-label": "ইভেন্টের ধরন",
 	"campaignevents-eventslist-country-label": "দেশ",
-	"campaignevents-contributions-summary-edit-count": "মোট সম্পাদনা"
+	"campaignevents-contributions-summary-edit-count": "মোট সম্পাদনা",
+	"campaignevents-goal-progress-metric-total_articles_created": "$1টি {{PLURAL:$1|নিবন্ধ}} তৈরি হয়েছে",
+	"campaignevents-goal-progress-metric-total_edits": "$1টি {{PLURAL:$1|সম্পাদনা}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1|বাইট}} যোগ হয়েছে",
+	"campaignevents-goal-progress-metric-total_links_added": "$1টি {{PLURAL:$1|লিঙ্ক}} যোগ হয়েছে"
 }
