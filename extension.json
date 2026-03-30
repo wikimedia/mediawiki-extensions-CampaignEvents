@@ -83,10 +83,6 @@
 		"CampaignEventsContributionTrackingDisallowedCountries": {
 			"description": "Map of countries for which in-person or hybrid events cannot use contribution tracking (e.g. for legal reasons, see https://foundation.wikimedia.org/wiki/Legal:Wikimedia_Foundation_Country_and_Territory_Protection_List). This maps CLDR country codes to English country names, but only the former are used; the names are included for convenience, and are assumed to be correct.",
 			"value": {}
-		},
-		"CampaignEventsEnableEventGoals": {
-			"description": "Flag to enable the event goals feature, allowing organizers to define and track goals for events.",
-			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
@@ -544,8 +540,7 @@
 				"CampaignEventsWikiLookup",
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
-				"CampaignEventsCountryProvider",
-				"MainConfig"
+				"CampaignEventsCountryProvider"
 			]
 		},
 		{
@@ -558,8 +553,7 @@
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsOrganizersStore",
-				"CampaignEventsParticipantsStore",
-				"MainConfig"
+				"CampaignEventsParticipantsStore"
 			]
 		},
 		{
@@ -618,8 +612,7 @@
 				"CampaignEventsTopicRegistry",
 				"CampaignEventsEventTypesRegistry",
 				"CampaignEventsEventLookup",
-				"CampaignEventsCountryProvider",
-				"MainConfig"
+				"CampaignEventsCountryProvider"
 			]
 		},
 		{

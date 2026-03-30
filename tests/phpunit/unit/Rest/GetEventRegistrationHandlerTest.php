@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
 use DateTimeZone;
-use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -76,9 +75,6 @@ class GetEventRegistrationHandlerTest extends MediaWikiUnitTestCase {
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$organizersStore,
 			$participantStore ?? $this->createMock( ParticipantsStore::class ),
-			new HashConfig( [
-				'CampaignEventsEnableEventGoals' => true,
-			] ),
 		);
 	}
 

@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -24,8 +23,6 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
 class GetEventRegistrationHandler extends SimpleHandler {
 	use EventIDParamTrait;
 
-	private bool $enableEventGoals;
-
 	public function __construct(
 		private readonly IEventLookup $eventLookup,
 		private readonly TrackingToolRegistry $trackingToolRegistry,
@@ -33,9 +30,7 @@ class GetEventRegistrationHandler extends SimpleHandler {
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly OrganizersStore $organizersStore,
 		private readonly ParticipantsStore $participantsStore,
-		private readonly Config $mainConfig
 	) {
-		$this->enableEventGoals = $mainConfig->get( 'CampaignEventsEnableEventGoals' );
 	}
 
 	protected function run( int $eventID ): Response {
@@ -83,10 +78,8 @@ class GetEventRegistrationHandler extends SimpleHandler {
 			// chat_url added conditionally
 			'is_test_event' => $registration->getIsTestEvent(),
 			'tracks_contributions' => $registration->hasContributionTracking(),
-			'goal_type' => $this->enableEventGoals ?
-				$metric?->getMetric()->value : null,
-			'goal_target' => $this->enableEventGoals ?
-				$metric?->getTarget() : null,
+			'goal_type' => $metric?->getMetric()->value,
+			'goal_target' => $metric?->getTarget(),
 			'tracking_tools' => $trackingToolsData,
 			'questions' => $registration->getParticipantQuestions(),
 		];

@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use Config;
 use LogicException;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
@@ -43,7 +42,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 		EventTypesRegistry $eventTypesRegistry,
 		private readonly IEventLookup $eventLookup,
 		CountryProvider $countryProvider,
-		Config $config
 	) {
 		parent::__construct(
 			$eventFactory,
@@ -56,7 +54,6 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$topicRegistry,
 			$eventTypesRegistry,
 			$countryProvider,
-			$config
 		);
 	}
 
@@ -161,8 +158,8 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 			$body['chat_url'],
 			$body['is_test_event'],
 			$body['tracks_contributions'],
-			$this->isEventGoalsEnabled() ? ( $body['goal_type'] ?? null ) : null,
-			$this->isEventGoalsEnabled() ? ( $body['goal_target'] ?? null ) : null,
+			$body['goal_type'],
+			$body['goal_target'],
 			$body['tracking_tool_id'],
 			$body['tracking_tool_event_id'],
 			$participantQuestionNames,

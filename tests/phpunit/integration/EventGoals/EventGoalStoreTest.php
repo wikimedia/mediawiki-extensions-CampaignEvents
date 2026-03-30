@@ -19,10 +19,9 @@ use MediaWikiIntegrationTestCase;
  */
 class EventGoalStoreTest extends MediaWikiIntegrationTestCase {
 
-	private function newStore( bool $eventGoalFeatureEnabled ): EventGoalStore {
+	private function newStore(): EventGoalStore {
 		return new EventGoalStore(
 			CampaignEventsServices::getDatabaseHelper(),
-			$eventGoalFeatureEnabled
 		);
 	}
 
@@ -44,7 +43,7 @@ class EventGoalStoreTest extends MediaWikiIntegrationTestCase {
 		bool $setNull,
 		bool $expectedNull
 	): void {
-		$store = $this->newStore( true );
+		$store = $this->newStore();
 		$eventID = 42;
 
 		if ( $initialHasGoals ) {
@@ -91,7 +90,7 @@ class EventGoalStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testGetEventGoalsMultiReturnsGoalsOrNullPerEvent(): void {
-		$store = $this->newStore( true );
+		$store = $this->newStore();
 		$eventIDs = [ 1, 2, 3 ];
 
 		$goal1 = $this->newEventGoal();
@@ -109,20 +108,5 @@ class EventGoalStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertInstanceOf( EventGoal::class, $result[1] );
 		$this->assertNull( $result[2] );
 		$this->assertNull( $result[3] );
-	}
-
-	public function testStoreDoesNotReadOrWriteWhenGoalsFeatureDisabled(): void {
-		$store = $this->newStore( false );
-		$eventID = 100;
-
-		// Writes are no-op.
-		$store->replaceEventGoal( $eventID, $this->newEventGoal() );
-
-		// Reads always return null / nulls.
-		$this->assertNull( $store->getGoal( $eventID ) );
-
-		$resultMulti = $store->getGoalsMulti( [ $eventID ] );
-		$this->assertArrayHasKey( $eventID, $resultMulti );
-		$this->assertNull( $resultMulti[$eventID] );
 	}
 }

@@ -44,11 +44,6 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	private const CURWIKIID_PLACEHOLDER = '*curwiki*';
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( 'CampaignEventsEnableEventGoals', true );
-	}
-
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
 		$goal = new EventGoal(
 			EventGoal::OPERATOR_AND,

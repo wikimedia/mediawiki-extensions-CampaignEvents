@@ -72,7 +72,6 @@ class EventFactory {
 		private readonly CountryProvider $countryProvider,
 		private readonly array $allowedEventNamespaces,
 		private readonly array $contributionTrackingDisallowedCountryCodes,
-		private readonly bool $enableEventGoals,
 	) {
 	}
 
@@ -202,14 +201,9 @@ class EventFactory {
 			$res->merge( $this->validateContributionsTracking( $types, $meetingCountryCode, $wikis ) );
 		}
 
-		$goal = null;
-		if ( $this->enableEventGoals ) {
-			$goalStatus = $this->validateGoal( $goalType, $goalTarget );
-			$res->merge( $goalStatus );
-			if ( $goalStatus->isGood() ) {
-				$goal = $goalStatus->getValue();
-			}
-		}
+		$goalStatus = $this->validateGoal( $goalType, $goalTarget );
+		$res->merge( $goalStatus );
+		$goal = $goalStatus->isGood() ? $goalStatus->getValue() : null;
 		if ( $goal !== null && !$hasContributionTracking ) {
 			$res->fatal( 'campaignevents-error-goal-requires-contribution-tracking' );
 			$goal = null;

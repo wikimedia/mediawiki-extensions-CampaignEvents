@@ -157,7 +157,6 @@ class EventFactoryTest extends MediaWikiUnitTestCase {
 			$countryProvider,
 			$allowedNamespaces ?? [ NS_PROJECT ],
 			array_keys( self::COUNTRIES_DISALLOWED_TRACKING ),
-			true
 		);
 	}
 

@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventFactory;
@@ -37,8 +36,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	use TokenAwareHandlerTrait;
 	use FailStatusUtilTrait;
 
-	private bool $enableEventGoals;
-
 	public function __construct(
 		protected readonly EventFactory $eventFactory,
 		protected readonly PermissionChecker $permissionChecker,
@@ -50,9 +47,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 		protected readonly ITopicRegistry $topicRegistry,
 		private readonly EventTypesRegistry $eventTypesRegistry,
 		private readonly CountryProvider $countryProvider,
-		private readonly Config $mainConfig
 	) {
-		$this->enableEventGoals = $mainConfig->get( 'CampaignEventsEnableEventGoals' );
 	}
 
 	/**
@@ -191,6 +186,15 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
+			'goal_type' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => array_column( EventGoalMetricType::cases(), 'value' ),
+			],
+			'goal_target' => [
+				static::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_TYPE => 'integer',
+				IntegerDef::PARAM_MIN => 1,
+			],
 			'tracking_tool_id' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
@@ -200,17 +204,6 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 		] + $this->getTokenParamDefinition();
-		if ( $this->enableEventGoals ) {
-			$params['goal_type'] = [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => array_column( EventGoalMetricType::cases(), 'value' ),
-			];
-			$params['goal_target'] = [
-				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => 'integer',
-				IntegerDef::PARAM_MIN => 1,
-			];
-		}
 
 		return $params;
 	}
@@ -223,8 +216,4 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 	 * @throws InvalidEventDataException
 	 */
 	abstract protected function createEventObject( array $body ): EventRegistration;
-
-	protected function isEventGoalsEnabled(): bool {
-		return $this->enableEventGoals;
-	}
 }

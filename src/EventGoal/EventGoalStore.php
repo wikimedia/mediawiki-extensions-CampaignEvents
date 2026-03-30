@@ -15,15 +15,7 @@ class EventGoalStore {
 
 	public function __construct(
 		private readonly CampaignsDatabaseHelper $dbHelper,
-		private readonly bool $eventGoalFeatureEnabled
 	) {
-	}
-
-	/**
-	 * Whether the event goal feature is enabled (reads/writes to ce_event_goals allowed).
-	 */
-	public function isEventGoalFeatureEnabled(): bool {
-		return $this->eventGoalFeatureEnabled;
 	}
 
 	/**
@@ -42,7 +34,7 @@ class EventGoalStore {
 	 */
 	public function getGoalsMulti( array $eventIDs ): array {
 		$result = array_fill_keys( $eventIDs, null );
-		if ( !$this->isEventGoalFeatureEnabled() || $eventIDs === [] ) {
+		if ( $eventIDs === [] ) {
 			return $result;
 		}
 
@@ -76,10 +68,6 @@ class EventGoalStore {
 	 * @param EventGoal|null $goal Goal to store, or null to remove any existing goal
 	 */
 	public function replaceEventGoal( int $eventID, ?EventGoal $goal ): void {
-		if ( !$this->isEventGoalFeatureEnabled() ) {
-			return;
-		}
-
 		$dbw = $this->dbHelper->getPrimaryConnection();
 
 		// Always delete first to avoid duplicates on re-save.

@@ -95,7 +95,6 @@ return [
 	EventGoalStore::SERVICE_NAME => static function ( MediaWikiServices $services ): EventGoalStore {
 		return new EventGoalStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
-			(bool)$services->getMainConfig()->get( 'CampaignEventsEnableEventGoals' )
 		);
 	},
 	IEventStore::STORE_SERVICE_NAME => static function ( MediaWikiServices $services ): IEventStore {
@@ -156,7 +155,6 @@ return [
 			$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION )
 				->get( 'CampaignEventsEventNamespaces' ),
 			array_keys( $services->getMainConfig()->get( 'CampaignEventsContributionTrackingDisallowedCountries' ) ),
-			(bool)$services->getMainConfig()->get( 'CampaignEventsEnableEventGoals' )
 		);
 	},
 	CampaignsPageFormatter::SERVICE_NAME => static function ( MediaWikiServices $services ): CampaignsPageFormatter {
