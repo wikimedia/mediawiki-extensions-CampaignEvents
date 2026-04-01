@@ -46,7 +46,7 @@
 	"campaignevents-error-invalid-wikis": "معرفات الويكي التالية غير معروفـة: $1.",
 	"campaignevents-error-too-many-topics": "أدخل الحد الأقصى {{PLURAL:$1|موضوع واحد|$1 موضوعات}}.",
 	"campaignevents-error-invalid-topics": "المواضيع التالية غير معترف بها: $1.",
-	"campaignevents-error-invalid-chat-url": "أدخل عنوانا صحيحا نحو صفحة الدردشة.",
+	"campaignevents-error-invalid-chat-url": "أدخل عنوان مسار صالحًا للدردشة.",
 	"campaignevents-error-trackingtool-without-eventid": "قم بتوفير معرّف الفعالية على أداة التتبع المحددة.",
 	"campaignevents-error-trackingtool-eventid-without-toolid": "قم بتوفير معرف أداة التتبع",
 	"campaignevents-error-invalid-trackingtool": "قم بتوفير معرف أداة تتبع صالح",
