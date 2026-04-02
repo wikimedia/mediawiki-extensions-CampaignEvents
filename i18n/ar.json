@@ -74,7 +74,7 @@
 	"campaignevents-error-contribs-tracking-disallowed-country": "لا يمكن تفعيل إحصائيات المساهمة للبلد المحدد.",
 	"campaignevents-error-contribs-tracking-invalid-type": "لا يمكن تفعيل إحصائيات المساهمة إلا للفعاليات ذات الأنواع التالية: $1",
 	"campaignevents-error-contribs-tracking-no-wikis": "لا يمكن تفعيل إحصائيات المساهمة إلا للفعاليات التي تحتوي على ويكي مستهدف واحد على الأقل.",
-	"campaignevents-error-invalid-chat-url": "أدخل عنوانا صحيحا نحو صفحة الدردشة.",
+	"campaignevents-error-invalid-chat-url": "أدخل عنوان مسار صالحًا للدردشة.",
 	"campaignevents-error-invalid-question-names": "الأسئلة التالية غير معروفـة: $1",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "لا يُسمح بتسجيل الفعالية في هذا النطاق.",
 	"enableeventregistration": "تفعيل التسجيل في الفعالية",

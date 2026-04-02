@@ -22,5 +22,7 @@
 	"campaignevents-rest-register-invalid-answer": "Jawaban tidak valid terhadap pertanyaan $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Harap selesaikan pendaftaran acara Anda di $1, wiki tempat acara tersebut dibuat.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Harap hapus pendaftaran acara Anda di $1, wiki tempat acara tersebut dibuat.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Silakan kirim surel kepada peserta di $1, wiki tempat acara tersebut dibuat."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Silakan kirim surel kepada peserta di $1, wiki tempat acara tersebut dibuat.",
+	"campaignevents-rest-contribution-not-found": "Tidak ada kontribusi dengan ID ini.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Anda tidak diizinkan untuk menghapus kontribusi ini."
 }
