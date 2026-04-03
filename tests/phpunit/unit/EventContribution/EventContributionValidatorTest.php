@@ -183,13 +183,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			->with( $this->performer )
 			->willReturn( $centralUser );
 
-		// Create a mock event
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( 1 );
-		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isOngoing' )->willReturn( true );
-		$event->method( 'hasContributionTracking' )->willReturn( true );
-		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+		$event = $this->getValidEvent();
 
 		// Setup revision store to return null (revision not found)
 		$revisionStore = $this->createMock( RevisionStore::class );
@@ -207,6 +201,34 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer );
 	}
 
+	public function testValidateAndSchedule__authorNotGlobal(): void {
+		$centralUser = $this->createMock( CentralUser::class );
+		$this->centralUserLookup->method( 'newFromAuthority' )
+			->with( $this->performer )
+			->willReturn( $centralUser );
+		$this->centralUserLookup->expects( $this->atLeastOnce() )
+			->method( 'newFromUserIdentity' )
+			->willThrowException( new UserNotGlobalException( 12345 ) );
+		$revID = 123;
+		$rev = $this->createMock( RevisionRecord::class );
+		$rev->expects( $this->atLeastOnce() )
+			->method( 'getUser' )
+			->willReturn( $this->createStub( UserIdentity::class ) );
+
+		$revisionStore = $this->createMock( RevisionStore::class );
+		$revisionStore->method( 'getRevisionById' )->with( $revID )->willReturn( $rev );
+		$this->revisionStoreFactory->method( 'getRevisionStore' )->willReturn( $revisionStore );
+		$this->permissionChecker = $this->createNoOpMock( PermissionChecker::class );
+
+		$event = $this->getValidEvent();
+
+		// Expect exception
+		$this->expectException( LocalizedHttpException::class );
+		$this->expectExceptionMessage( 'campaignevents-event-contribution-not-participant' );
+
+		$this->validator->validateAndSchedule( $event, $revID, 'testwiki', $this->performer );
+	}
+
 	public function testValidateAndSchedulePermissionError(): void {
 		// Setup central user
 		$centralUser = $this->createMock( CentralUser::class );
@@ -215,13 +237,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			->with( $this->performer )
 			->willReturn( $centralUser );
 
-		// Create a mock event
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( 1 );
-		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isOngoing' )->willReturn( true );
-		$event->method( 'hasContributionTracking' )->willReturn( true );
-		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+		$event = $this->getValidEvent();
 
 		// Setup revision
 		$revisionAuthor = $this->createMock( UserIdentity::class );
@@ -267,12 +283,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$wikiID = 'awiki';
 		$revID = 54321;
 
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( $eventID );
-		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isOngoing' )->willReturn( true );
-		$event->method( 'hasContributionTracking' )->willReturn( true );
-		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+		$event = $this->getValidEvent( $eventID );
 		$rev = $this->createMock( RevisionRecord::class );
 		$rev->expects( $this->atLeastOnce() )->method( 'getUser' )->willReturn( null );
 
@@ -294,13 +305,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			->with( $this->performer )
 			->willReturn( $centralUser );
 
-		// Create a mock event
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( 1 );
-		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isOngoing' )->willReturn( true );
-		$event->method( 'hasContributionTracking' )->willReturn( true );
-		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+		$event = $this->getValidEvent();
 
 		// Setup revision
 		$revisionAuthor = $this->createMock( UserIdentity::class );
@@ -427,13 +432,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 			->with( $this->performer )
 			->willReturn( $centralUser );
 
-		// Create a mock event
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( 1 );
-		$event->method( 'getDeletionTimestamp' )->willReturn( null );
-		$event->method( 'isOngoing' )->willReturn( true );
-		$event->method( 'hasContributionTracking' )->willReturn( true );
-		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+		$event = $this->getValidEvent();
 
 		// Setup revision
 		$revisionAuthor = $this->createMock( UserIdentity::class );
@@ -474,5 +473,15 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$this->assertTrue(
 			$this->validator->validateAndSchedule( $event, 123, 'testwiki', $this->performer )
 		);
+	}
+
+	private function getValidEvent( int $eventID = 1 ): ExistingEventRegistration {
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getID' )->willReturn( $eventID );
+		$event->method( 'getDeletionTimestamp' )->willReturn( null );
+		$event->method( 'isOngoing' )->willReturn( true );
+		$event->method( 'hasContributionTracking' )->willReturn( true );
+		$event->method( 'getWikis' )->willReturn( EventRegistration::ALL_WIKIS );
+		return $event;
 	}
 }

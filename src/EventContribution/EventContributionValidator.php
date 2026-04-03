@@ -121,8 +121,16 @@ class EventContributionValidator {
 			);
 		}
 
-		// Get the central user ID for the revision author
-		$revisionAuthorCentralUser = $this->centralUserLookup->newFromUserIdentity( $revisionAuthor );
+		try {
+			$revisionAuthorCentralUser = $this->centralUserLookup->newFromUserIdentity( $revisionAuthor );
+		} catch ( UserNotGlobalException ) {
+			// If the author does not have a global account, they cannot be a participant.
+			// So, we can reuse this error message.
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-event-contribution-not-participant' ),
+				403
+			);
+		}
 
 		// Verify that the edit was made by the user making this API request, or an organizer
 		$userCanAddContribution = $this->permissionChecker->userCanAddContribution(
