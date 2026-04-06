@@ -12,6 +12,7 @@
 			"Mohammed Qays",
 			"Mohanad",
 			"Mohanad Kh",
+			"Mr. Ibrahem",
 			"SaldırganSincap",
 			"Sandra Hanbo",
 			"XIDME",
@@ -652,12 +653,12 @@
 	"campaignevents-event-details-contributions-editors-button-label": "المحررون",
 	"campaignevents-event-details-contributions-editors-table-caption": "المحررون",
 	"campaignevents-goal-progress-heading": "التقدم نحو الهدف",
-	"campaignevents-goal-progress-description": "يهدف هذا الحدث إلى جمع $1.",
-	"campaignevents-goal-progress-metric-total_articles_created": "حذفت {{PLURAL:$1|مقالة|مقالتان|$1 مقالات|$1 مقالة}}",
-	"campaignevents-goal-progress-metric-total_articles_edited": "{{PLURAL:$1|مقالة|مقالتان|$1 مقالات|$1 مقالة}} مُعدلة",
-	"campaignevents-goal-progress-metric-total_edits": "{{PLURAL:$1|تعديل واحد|تعديلان|$1 تعديلات|$1 تعديل}}",
-	"campaignevents-goal-progress-metric-total_bytes_added": "أُضيف {{PLURAL:$1|بايت|$1 بايت}}",
-	"campaignevents-goal-progress-metric-total_bytes_removed": "أُزيل {{PLURAL:$1|بايت|$1 بايت}}",
-	"campaignevents-goal-progress-metric-total_links_added": "أُضيف {{PLURAL:$1|لا وصلات|وصلة واحدة|وصلتان|$1 وصلات|$1 وصلة}}",
-	"campaignevents-goal-progress-metric-total_links_removed": "حُذفت {{PLURAL:$1|لا وصلات|وصلة واحدة|وصلتان|$1 وصلات|$1 وصلة}}"
+	"campaignevents-goal-progress-description": "هدف هذه الفعالية $1.",
+	"campaignevents-goal-progress-metric-total_articles_created": "إنشاء {{PLURAL:$1|مقالة|مقالتان|$1 مقالات|$1 مقالة}}",
+	"campaignevents-goal-progress-metric-total_articles_edited": "تعديل {{PLURAL:$1|مقالة|مقالتان|$1 مقالات|$1 مقالة}}",
+	"campaignevents-goal-progress-metric-total_edits": "إجراء {{PLURAL:$1|تعديل واحد|تعديلان|$1 تعديلات|$1 تعديل}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "إضافة {{PLURAL:$1|بايت|$1 بايت}}",
+	"campaignevents-goal-progress-metric-total_bytes_removed": "إزالة {{PLURAL:$1|بايت|$1 بايت}}",
+	"campaignevents-goal-progress-metric-total_links_added": "إضافة {{PLURAL:$1|لا وصلات|وصلة واحدة|وصلتان|$1 وصلات|$1 وصلة}}",
+	"campaignevents-goal-progress-metric-total_links_removed": "إزالة {{PLURAL:$1|لا وصلات|وصلة واحدة|وصلتان|$1 وصلات|$1 وصلة}}"
 }
