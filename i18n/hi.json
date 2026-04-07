@@ -20,7 +20,7 @@
 	"campaignevents-error-invalid-id": "कार्यक्रम ID एक धनात्मक पूर्णांक होनी चाहिए।",
 	"campaignevents-error-empty-title": "कार्यक्रम के पृष्ठ का शीर्षक दर्ज करें।",
 	"campaignevents-error-invalid-title": "कार्यक्रम के पृष्ठ का शीर्षक अमान्य है: $1।",
-	"campaignevents-error-invalid-title-interwiki": "लोकल विकि पर एक कार्यक्रम पृष्ठ निर्दिष्ट करें।",
+	"campaignevents-error-invalid-title-interwiki": "स्थानीय विकि पर एक कार्यक्रम पृष्ठ निर्दिष्ट करें।",
 	"campaignevents-error-page-not-found": "इस नाम से कोई भी कार्यक्रम पृष्ठ नहीं।",
 	"campaignevents-error-page-with-section": "कार्यक्रम पृष्ठ में किसी अनुभाग का नाम नहीं होना चाहिए।",
 	"campaignevents-error-invalid-chat-url": "एक मान्य चैट का URL दर्ज करें।",

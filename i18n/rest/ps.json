@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"campaignevents-rest-event-not-found": "په دې پېژند دلته هېڅ پېښه نشته.",
+	"campaignevents-rest-enable-registration-permission-denied": "تاسو د پېښې د نوم‌ليکنو چارنولو اجازه نه لرئ.",
+	"campaignevents-rest-edit-page-nonlocal": "د دې پېښې نوم‌ليکنه په لاندې ويکي کې چارن شوې وه او بايد هلته سمه شي: $1.",
+	"campaignevents-rest-delete-already-deleted": "د دې پېښې نوم‌ليکنه لاپخوا ړنگه شوې.",
+	"campaignevents-rest-user-not-found": "دې مرکزي پېژند سره هېڅ کارن نشته.",
+	"campaignevents-rest-get-registration-deleted": "د دې پېښې نوم‌ليکنه ړنگه شوې.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' ارزښت بايد د کارن پېژندونو لړۍ وي، يا تش وي (چې ټول کارنان لرې کړئ)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "مهرباني وکړئ گډونوال په $1 کې لرې کړئ، هغه ويکي چې دا پېښه پکې رامنځته شوې ده.",
+	"campaignevents-rest-list-participants-empty-filter": "د کارن‌نوم چاڼگر که ځانگړی شوی وي، بايد يوه ناتشه لړۍ وي.",
+	"campaignevents-rest-list-participants-cannot-see-private": "تاسو ته اجازه نشته چې هغه کارنان وگورئ چې دې پېښې ته يې په ځانواله توگه نوم‌ليکنه کړې ده.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> بايد د کارن‌نومونو يوه لړۍ وي او تشه نه وي",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "مهرباني وکړئ مهاروونکي په $1 کې وټاکئ، هغه ويکي چې دا پېښه پکې رامنځته شوې ده.",
+	"campaignevents-rest-get-registration-info-notparticipant": "تاسو دې پېښه کې گډون نه لرئ.",
+	"campaignevents-rest-register-invalid-answer": "$1 پوښتنې ته ناسم ځواب",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "مهرباني وکړئ په $1 کې خپل د پېښې نوم‌ليکنه بشپړه کړئ، هغه ويکي چې دا پېښه پکې رامنځته شوې ده.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "مهرباني وکړئ په $1 کې خپل د پېښې نوم‌ليکنه ړنگه کړئ، هغه ويکي چې دا پېښه پکې رامنځته شوې ده.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "مهرباني وکړئ گډونوالو ته په $1 کې برېښليک ولېږئ، هغه ويکي چې دا پېښه پکې رامنځته شوې ده."
+}
