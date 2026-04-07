@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Movses",
+			"Repakr",
 			"Ата",
 			"Пан Хаунд"
 		]
@@ -60,6 +61,7 @@
 	"campaignevents-error-contribs-tracking-disallowed-country": "Статистику внесків неможливо ввімкнути для вибраної країни.",
 	"campaignevents-error-contribs-tracking-invalid-type": "Статистику внесків можна ввімкнути лише для подій таких типів: $1",
 	"campaignevents-error-contribs-tracking-no-wikis": "Статистику внесків можна ввімкнути лише для подій, які мають принаймні одну цільову вікі.",
+	"campaignevents-error-goal-requires-contribution-tracking": "Ви повинні увімкнути статистику Внеску, щоб додати ціль події.",
 	"campaignevents-error-invalid-chat-url": "Введіть дійсну URL-адресу чату.",
 	"campaignevents-error-invalid-question-names": "Наступні запитання не розпізнано: $1.",
 	"campaignevents-error-move-eventpage-namespace-disallowed": "Реєстрація на подію заборонена в цьому просторі назв.",
@@ -67,6 +69,9 @@
 	"editeventregistration": "Редагувати реєстрацію на подію",
 	"campaignevents-edit-form-details-label": "Деталі події",
 	"campaignevents-edit-form-details-subtitle": "Вкажіть загальну інформацію про подію, яку ви організовуєте",
+	"campaignevents-edit-form-impact-statistics-label": "Статистика впливу",
+	"campaignevents-edit-form-impact-statistics-description": "Збирає статистику впливу Вашої події. Ви можете. Ви можете зробити це, [$1 увімкнувши статистику внеску] та/або додавши посилання на [$2 Панель керування програмами та подіями].",
+	"campaignevents-edit-form-impact-statistics-goals-description": "Якщо Ви увімкнете статистику Внеску, то Ви можете встановити спільні цілі, щоб надихнути Ваших учасників. Прогрес досягнення цілі буде публічно видимим.",
 	"campaignevents-edit-field-page": "Сторінка події",
 	"campaignevents-edit-field-page-help": "Сторінка події містить інформацію про вашу подію. Люди можуть зареєструватися як учасники на сторінці події.",
 	"campaignevents-edit-field-event-status": "Статус події",
@@ -103,6 +108,14 @@
 	"campaignevents-edit-field-address": "Адреса",
 	"campaignevents-edit-field-chat-url": "Запрошення в груповий чат",
 	"campaignevents-edit-field-chat-url-help": "Якщо у вас є груповий онлайн-чат для учасників цієї події, ви можете додати посилання запрошення сюди. Учасники зможуть переглянути посилання запрошення після реєстрації.",
+	"campaignevents-edit-field-goal-type-placeholder": "Виберіть варіант",
+	"campaignevents-edit-field-goal-type-total_articles_created": "Кількість створених статей",
+	"campaignevents-edit-field-goal-type-total_articles_edited": "Кількість відредагованих статей",
+	"campaignevents-edit-field-goal-type-total_edits": "Всього редагувань",
+	"campaignevents-edit-field-goal-type-total_bytes_added": "Байтів додано",
+	"campaignevents-edit-field-goal-type-total_bytes_removed": "Байтів вилучено",
+	"campaignevents-edit-field-goal-type-total_links_added": "Посилань додано",
+	"campaignevents-edit-field-goal-type-total_links_removed": "Посилань вилучено",
 	"campaignevents-edit-field-event-is-test": "Це справжня подія чи тест?",
 	"campaignevents-edit-field-status-live": "Справжня подія",
 	"campaignevents-edit-field-status-test": "Тестова подія",
@@ -594,6 +607,7 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Скасувати",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Додати редагування",
 	"campaignevents-event-details-contributions-add-dialog-title": "Додати редагування до $1",
+	"campaignevents-event-details-contributions-add-dialog-revid-label": "ID версії",
 	"campaignevents-event-details-contributions-add-dialog-success": "Редагування додано. Воно скоро з'явиться тут.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Додати редагування до цієї події",
 	"campaignevents-contributions-summary-edit-count": "Лічильник редагувань",
@@ -606,5 +620,13 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "Ви впевнені, що хочете прибрати це редагування з події?",
 	"campaignevents-event-details-contributions-delete-note": "Його не буде вилучено, але воно більше не буде пов'язане з подією.",
 	"campaignevents-event-details-contributions-delete-cancel": "Скасувати",
-	"campaignevents-event-details-contributions-delete-confirm": "Прибрати"
+	"campaignevents-event-details-contributions-delete-confirm": "Прибрати",
+	"campaignevents-event-details-contributions-editors-username": "Ім'я користувача",
+	"campaignevents-event-details-contributions-editors-created": "Створені статті",
+	"campaignevents-event-details-contributions-editors-edited": "Редаговані статті",
+	"campaignevents-event-details-contributions-editors-count": "Лічильник редагувань",
+	"campaignevents-event-details-contributions-editors-bytes": "Байти",
+	"campaignevents-event-details-contributions-edits-button-label": "Редагувань",
+	"campaignevents-event-details-contributions-editors-button-label": "Редактори",
+	"campaignevents-event-details-contributions-editors-table-caption": "Редактори"
 }
