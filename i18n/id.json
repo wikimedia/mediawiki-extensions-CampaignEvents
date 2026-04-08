@@ -643,11 +643,11 @@
 	"campaignevents-event-details-contributions-editors-table-caption": "Kontributor",
 	"campaignevents-goal-progress-heading": "Tingkat kemajuan acara",
 	"campaignevents-goal-progress-description": "Acara ini memiliki tujuan $1.",
-	"campaignevents-goal-progress-metric-total_articles_created": "$1 artikel dibuat",
-	"campaignevents-goal-progress-metric-total_articles_edited": "$1 artikel disunting",
-	"campaignevents-goal-progress-metric-total_edits": "$1 suntingan",
-	"campaignevents-goal-progress-metric-total_bytes_added": "$1 bita ditambahkan",
-	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 bita dihapus",
-	"campaignevents-goal-progress-metric-total_links_added": "$1 pranala ditambahkan",
-	"campaignevents-goal-progress-metric-total_links_removed": "$1 pranala dihapus"
+	"campaignevents-goal-progress-metric-total_articles_created": "$1 {{PLURAL:$1|artikel}} dibuat",
+	"campaignevents-goal-progress-metric-total_articles_edited": "$1 {{PLURAL:$1|artikel}} disunting",
+	"campaignevents-goal-progress-metric-total_edits": "$1 {{PLURAL:$1|suntingan}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1|bita}} ditambahkan",
+	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 {{PLURAL:$1|bita}} dihapus",
+	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|pranala}} ditambahkan",
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|pranala}} dihapus"
 }

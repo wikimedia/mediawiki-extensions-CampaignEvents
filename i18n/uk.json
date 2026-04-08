@@ -598,6 +598,7 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Вибрати подію",
 	"campaignevents-postedit-dialog-action-no": "Ні, дякую",
 	"campaignevents-postedit-dialog-action-yes": "Так",
+	"campaignevents-postedit-success-text": "Ваше редагування пов'язано з $1. Щоб переглянути Ваш внесок, перейдіть до [$2 переглянути {{int:campaignevents-event-details-tab-contributions}} до події].",
 	"campaignevents-contributions-summary-participants": "Учасники",
 	"campaignevents-contributions-summary-wikis-edited": "Редаговані вікі",
 	"campaignevents-contributions-summary-articles-created": "Створені статті",
@@ -608,6 +609,7 @@
 	"campaignevents-event-details-contributions-add-dialog-submit": "Додати редагування",
 	"campaignevents-event-details-contributions-add-dialog-title": "Додати редагування до $1",
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "ID версії",
+	"campaignevents-event-details-contributions-add-dialog-revid-help": "Введіть ID версії. Відкрийте історію версії сторінки, натисніть на дату і час редагування та скопіюйте число з URL після «$1».",
 	"campaignevents-event-details-contributions-add-dialog-success": "Редагування додано. Воно скоро з'явиться тут.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Додати редагування до цієї події",
 	"campaignevents-contributions-summary-edit-count": "Лічильник редагувань",
@@ -628,5 +630,14 @@
 	"campaignevents-event-details-contributions-editors-bytes": "Байти",
 	"campaignevents-event-details-contributions-edits-button-label": "Редагувань",
 	"campaignevents-event-details-contributions-editors-button-label": "Редактори",
-	"campaignevents-event-details-contributions-editors-table-caption": "Редактори"
+	"campaignevents-event-details-contributions-editors-table-caption": "Редактори",
+	"campaignevents-goal-progress-heading": "Прогрес до цілі",
+	"campaignevents-goal-progress-description": "Ця подія має ціль: $1.",
+	"campaignevents-goal-progress-metric-total_articles_created": "$1 {{PLURAL:$1|статтю|статті|статей}} створено",
+	"campaignevents-goal-progress-metric-total_articles_edited": "$1 {{PLURAL:$1|статтю|статті|статей}} відредаговано",
+	"campaignevents-goal-progress-metric-total_edits": "$1 {{PLURAL:$1|редагування|редагування|редагувань}}",
+	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1|байт|байти|байтів}} додано",
+	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 {{PLURAL:$1|байт|байти|байтів}} вилучено",
+	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|посилання|посилання|посилань}} додано",
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|посилання|посилання|посилань}} вилучено"
 }
