@@ -3,10 +3,12 @@
 		"authors": [
 			"Ekminarin",
 			"Patsagorn Y.",
-			"Trisorn Triboon"
+			"Trisorn Triboon",
+			"Wutkh"
 		]
 	},
 	"campaignevents-desc": "ให้ฟีเจอร์สำหรับผู้จัดแคมเปญและผู้มีส่วนร่วม",
+	"nstab-event": "กิจกรรม",
 	"action-campaignevents-enable-registration": "เปิดใช้งานการลงทะเบียนกิจกรรม",
 	"right-campaignevents-enable-registration": "เปิดใช้งานการลงทะเบียนกิจกรรม",
 	"action-campaignevents-delete-registration": "ลบการลงทะเบียนกิจกรรม",

@@ -24,5 +24,7 @@
 	"campaignevents-rest-register-invalid-answer": "Resposta inválida para a pergunta $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Por favor, complete o registro do seu evento em $1, a wiki onde o evento foi criado.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Por favor, exclua sua inscrição no evento em $1, a wiki onde o evento foi criado.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Envie um e-mail aos participantes sobre o $1, a wiki onde o evento foi criado."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Envie um e-mail aos participantes sobre o $1, a wiki onde o evento foi criado.",
+	"campaignevents-rest-contribution-not-found": "Não existe nenhuma contribuição com está ID.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Não tem permissão para excluir esta contribuição."
 }

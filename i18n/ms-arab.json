@@ -1,0 +1,38 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tofeiku"
+		]
+	},
+	"nstab-event": "اچارا",
+	"specialpages-group-campaignevents": "اچارا",
+	"campaignevents-edit-form-details-label": "بوتيرن اچارا",
+	"campaignevents-edit-form-submit": "سونتيڠ ڤندفترن",
+	"campaignevents-register-edit-legend": "سونتيڠ ڤندفترن",
+	"campaignevents-allevents-tab-events-heading": "اچارا",
+	"campaignevents-eventslist-column-date": "تاريخ",
+	"campaignevents-delete-submit-btn": "هاڤوس",
+	"campaignevents-eventpage-unregister-confirmation-confirm": "يا",
+	"eventdetails": "بوتيرن اچارا",
+	"campaignevents-event-details-participants": "نام ڤڠݢونا",
+	"campaignevents-event-details-tab-email": "ڤسنن",
+	"campaignevents-notification-registration-details-header": "بوتيرن اچارا",
+	"campaignevents-event-details-email-message-label": "ڤسنن",
+	"campaignevents-event-details-contributions-wiki": "ويکي",
+	"campaignevents-event-details-contributions-bytes": "باءيت",
+	"campaignevents-register-question-profession-option-educator": "ڤنديديق",
+	"campaignevents-register-question-affiliate-option-none": "تيدق",
+	"campaignevents-register-question-affiliate-option-affiliate": "يا",
+	"campaignevents-register-question-organizing-partner-details-placeholder": "سيلا ڽاتاکن",
+	"campaignevents-generateinvitationlist-article-list-field-label": "سناراي اچارا",
+	"campaignevents-myinvitationslist-new-button": "بهارو",
+	"campaignevents-eventtype-workshop": "بيڠکيل",
+	"campaignevents-eventtype-conference": "ڤرسيدڠن",
+	"campaignevents-edit-field-eventtypes-label": "جنيس اچارا",
+	"campaignevents-event-details-event-types-header": "جنيس اچارا",
+	"campaignevents-allevents-label-filter-event-types": "جنيس اچارا",
+	"campaignevents-eventslist-types-label": "جنيس اچارا",
+	"campaignevents-eventslist-country-label": "نݢارا",
+	"campaignevents-postedit-dialog-select-placeholder": "ڤيليه اچارا",
+	"campaignevents-postedit-dialog-action-yes": "يا"
+}
