@@ -52,6 +52,8 @@ class EventContributionsEditorsPager extends CodexTablePager {
 		],
 	];
 
+	private const AGGREGATE_INDICES = [ 'articles_created', 'articles_edited', 'edit_count', 'bytes' ];
+
 	/** @var array<string,mixed> */
 	private array $extraQuery = [];
 
@@ -168,6 +170,17 @@ class EventContributionsEditorsPager extends CodexTablePager {
 
 		$this->addPrivateParticipantConds( $queryInfo );
 		return $queryInfo;
+	}
+
+	protected function indexUsesAggregate(): bool {
+		return in_array( $this->mSort, self::AGGREGATE_INDICES, true );
+	}
+
+	protected function adjustQueryStringOffsets( array &$offsets ): void {
+		if ( $this->indexUsesAggregate() ) {
+			$aggregateCol = self::INDEX_FIELDS[$this->mSort][0];
+			$offsets[$aggregateCol] = (int)$offsets[$aggregateCol];
+		}
 	}
 
 	/**

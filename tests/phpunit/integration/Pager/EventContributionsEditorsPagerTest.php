@@ -13,23 +13,58 @@ use MediaWiki\MediaWikiServices;
  * @covers \MediaWiki\Extension\CampaignEvents\Pager\EventContributionsEditorsPager
  */
 class EventContributionsEditorsPagerTest extends AbstractContributionsPagerTestBase {
-	public function testSimpleAggregates(): void {
-		$pager = $this->getPager( [ 'sort' => 'username', 'desc' => 1 ] );
-		$pager->doQuery();
-		$result = $pager->mResult;
+	public function testAggregatePagination(): void {
+		$firstResPager = $this->getPager( [ 'sort' => 'bytes', 'desc' => 1, 'limit' => 1 ] );
+		$firstResPager->doQuery();
+		$firstRes = $firstResPager->mResult;
 
-		$this->assertCount( 3, $result, 'Three editor rows should be returned' );
+		$this->assertCount( 2, $firstRes, 'First batch should contain 2 rows (1 result, 1 padding)' );
 
-		$row = $result->fetchObject();
+		$firstRowForComparison = get_object_vars( $firstRes->fetchObject() );
+		ksort( $firstRowForComparison );
+		$this->assertSame(
+			[
+				'COALESCE(cec_user_name, "")' => 'Bob',
+				'articles_added' => '1',
+				'articles_edited' => '0',
+				'bytes' => '99',
+				'cec_user_id' => '1',
+				'cec_user_name' => 'Bob',
+				'cep_private' => '0',
+				'edit_count' => '1',
+			],
+			$firstRowForComparison,
+			'First row'
+		);
 
-		// Assertions
-		$this->assertSame( 1, (int)$row->cec_user_id );
-		$this->assertSame( 'Bob', $row->cec_user_name );
+		$secondPageOffset = $firstResPager->getPagingQueries()['next']['offset'];
+		$secondResPager = $this->getPager( [
+			'sort' => 'bytes',
+			'desc' => 1,
+			'limit' => 1,
+			'offset' => $secondPageOffset
+		] );
+		$secondResPager->doQuery();
+		$secondRes = $secondResPager->mResult;
 
-		// Aggregates
-		$this->assertSame( 1, (int)$row->articles_added, 'One page creation' );
-		$this->assertSame( 1, (int)$row->edit_count, 'One total edit' );
-		$this->assertSame( 99, (int)$row->bytes, 'Bytes summed correctly' );
+		$this->assertCount( 2, $secondRes, 'Second batch should contain 2 rows (1 result, 1 padding)' );
+
+		$secondRowForComparison = get_object_vars( $secondRes->fetchObject() );
+		ksort( $secondRowForComparison );
+		$this->assertSame(
+			[
+				'COALESCE(cec_user_name, "")' => '',
+				'articles_added' => '0',
+				'articles_edited' => '1',
+				'bytes' => '88',
+				'cec_user_id' => '2',
+				'cec_user_name' => null,
+				'cep_private' => '0',
+				'edit_count' => '1',
+			],
+			$secondRowForComparison,
+			'Second row'
+		);
 	}
 
 	protected function getPager( array $requestValues ): EventContributionsEditorsPager {
