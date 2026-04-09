@@ -595,6 +595,8 @@
 	"campaignevents-postedit-dialog-action-no": "Tidak, terima kasih",
 	"campaignevents-postedit-dialog-action-yes": "Ya",
 	"campaignevents-postedit-success-text": "Suntingan anda telah dikaitkan dengan $1. Untuk melihat sumbangan anda, navigasi ke [$2 paparan {{int:campaignevents-event-details-tab-contributions}} acara tersebut].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Anda boleh menyembunyikan mesej ini dalam [[$1|keutamaan acara]] anda.",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Anda boleh memilih untuk menyembunyikan mesej ini selepas anda memilih acara.",
 	"campaignevents-contributions-summary-participants": "Peserta",
 	"campaignevents-contributions-summary-wikis-edited": "Wiki yang disunting",
 	"campaignevents-contributions-summary-articles-created": "Rencana dicipta",

@@ -604,6 +604,8 @@
 	"campaignevents-postedit-dialog-action-no": "Nee merci",
 	"campaignevents-postedit-dialog-action-yes": "Jo",
 	"campaignevents-postedit-success-text": "Är Ännerung gouf mam Evenement $1 associéiert. Fir Är Kontributiounen ze gesinn, gitt op d'[$2 {{int:campaignevents-event-details-tab-contributions}} Vue vum Evenement].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Dir kënnt dëse Message iwwer Är [[$1|Evenementsastellunge]] verstoppen.",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Dir kënnt Iech décidéieren, dëse Message ze verstoppen, nodeems Dir en Evenement ausgewielt hutt.",
 	"campaignevents-contributions-summary-participants": "Participanten",
 	"campaignevents-contributions-summary-wikis-edited": "Geännert Wikien",
 	"campaignevents-contributions-summary-articles-created": "Artikelen ugeluecht",

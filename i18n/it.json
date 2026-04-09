@@ -507,6 +507,8 @@
 	"campaignevents-postedit-dialog-select-placeholder": "Seleziona evento",
 	"campaignevents-postedit-dialog-action-no": "No, grazie",
 	"campaignevents-postedit-success-text": "La tua modifica è stata associata a $1. Per visualizzare il tuo contributo, vai alla [$2 {{int:campaignevents-event-details-tab-contributions}} vista dell'evento].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Puoi nascondere questo messaggio nelle tue [[$1|preferenze evento]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Puoi scegliere di nascondere questo messaggio dopo aver selezionato un evento.",
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Annulla",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Aggiungi modifica",
 	"campaignevents-event-details-contributions-add-dialog-title": "Aggiungi una modifica a $1",

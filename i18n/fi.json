@@ -4,6 +4,7 @@
 			"Kyykaarme",
 			"MITO",
 			"Minilammas",
+			"Pxos",
 			"Pyscowicz",
 			"Samoasambia"
 		]
@@ -181,7 +182,7 @@
 	"campaignevents-unregister-not-allowed": "Sinulla ei ole oikeutta peruuttaa ilmoittautumistasi.",
 	"campaignevents-unregister-not-participant": "Et ole ilmoittautunut tähän tapahtumaan.",
 	"campaignevents-unregister-need-central-account": "Tarvitset keskitetyn käyttäjätunnuksen peruuttaaksesi tapahtumailmoittautumisesi.",
-	"myevents": "Tapahtumasi",
+	"myevents": "Omat tapahtumasi",
 	"allevents": "Kaikki tapahtumat",
 	"campaignevents-myevents-need-central-account": "Tarvitset keskitetyn käyttäjätunnuksen nähdäksesi luettelon tapahtumistasi.",
 	"campaignevents-myevents-filter-legend": "Suodata tapahtumia",
@@ -598,6 +599,8 @@
 	"campaignevents-postedit-dialog-action-no": "Ei kiitos",
 	"campaignevents-postedit-dialog-action-yes": "Kyllä",
 	"campaignevents-postedit-success-text": "Muokkauksesi on liitetty tapahtumaan $1. Katsoaksesi tekemäsi muokkaukset, siirry [$2 tapahtuman {{int:campaignevents-event-details-tab-contributions}}-näkymään].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Voit piilottaa tämän viestin [[$1|tapahtuman asetuksissa]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Voit piilottaa tämän viestin tapahtuman valitsemisen jälkeen.",
 	"campaignevents-contributions-summary-participants": "Osallistujat",
 	"campaignevents-contributions-summary-wikis-edited": "Muokatut wikit",
 	"campaignevents-contributions-summary-articles-created": "Luotuja artikkeleita",
