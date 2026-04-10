@@ -601,6 +601,8 @@
 	"campaignevents-postedit-dialog-action-no": "Nee, bedankt",
 	"campaignevents-postedit-dialog-action-yes": "Ja",
 	"campaignevents-postedit-success-text": "Uw bewerking is gekoppeld aan $1. Om uw bijdrage te bekijken, gaat u naar de [$2 weergave \"{{int:campaignevents-event-details-tab-contributions}}\" van het evenement].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "U kunt dit bericht verbergen in uw [[$1|evenementvoorkeuren]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "U kunt ervoor kiezen dit bericht te verbergen nadat u een evenement hebt geselecteerd.",
 	"campaignevents-contributions-summary-participants": "Deelnemers",
 	"campaignevents-contributions-summary-wikis-edited": "Bewerkte wiki’s",
 	"campaignevents-contributions-summary-articles-created": "Aangemaakte artikelen",

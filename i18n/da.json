@@ -596,6 +596,8 @@
 	"campaignevents-postedit-dialog-action-no": "Nej tak",
 	"campaignevents-postedit-dialog-action-yes": "Ja",
 	"campaignevents-postedit-success-text": "Din redigering er blevet knyttet til $1. For at se dit bidrag skal du navigere til [$2 {{int:campaignevents-event-details-tab-contributions}}-visningen af begivenheden].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Du kan skjule denne besked i dine [[$1|begivenhedsindstillinger]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Du kan vælge at skjule denne besked, når du har valgt en begivenhed.",
 	"campaignevents-contributions-summary-participants": "Deltagere",
 	"campaignevents-contributions-summary-wikis-edited": "Wikier redigeret",
 	"campaignevents-contributions-summary-articles-created": "Artikler oprettet",

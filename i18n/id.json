@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"BAPerdana-WMF",
+			"Budhiastawa",
 			"DARMAS BUDI SANTOSO",
 			"Felianiwiki",
 			"Penyuwangi",
@@ -609,6 +610,8 @@
 	"campaignevents-postedit-dialog-action-no": "Tidak, terima kasih",
 	"campaignevents-postedit-dialog-action-yes": "Ya",
 	"campaignevents-postedit-success-text": "Suntingan Anda telah dihubungkan ke acara $1. Untuk melihat kontribusi Anda, silakan kunjungi [$2 {{int:campaignevents-event-details-tab-contributions}} daftar kontribusi].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Anda dapat menyembunyikan pesan ini di [[$1|preferensi acara]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Anda dapat memilih untuk menyembunyikan pesan ini setelah Anda memilih suatu acara.",
 	"campaignevents-contributions-summary-participants": "Peserta",
 	"campaignevents-contributions-summary-wikis-edited": "Wiki yang disunting",
 	"campaignevents-contributions-summary-articles-created": "Artikel yang dibuat",

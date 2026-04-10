@@ -602,6 +602,8 @@
 	"campaignevents-postedit-dialog-action-no": "Non, grazas",
 	"campaignevents-postedit-dialog-action-yes": "Si",
 	"campaignevents-postedit-success-text": "A túa edición asociouse a «$1». Para ver a túa contribución, vai á [$2 vista «{{int:campaignevents-event-details-tab-contributions}}» do evento].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Podes agochar esta mensaxe nas túas [[$1|preferencias do evento]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Podes optar por agochar esta mensaxe despois de seleccionares un evento.",
 	"campaignevents-contributions-summary-participants": "Participantes",
 	"campaignevents-contributions-summary-wikis-edited": "Wikis editados",
 	"campaignevents-contributions-summary-articles-created": "Artigos creados",
