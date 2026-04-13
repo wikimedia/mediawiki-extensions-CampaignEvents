@@ -121,6 +121,14 @@
 	"campaignevents-edit-field-address": "地址",
 	"campaignevents-edit-field-chat-url": "群聊邀请",
 	"campaignevents-edit-field-chat-url-help": "如果您有本次活动参与者的在线聊天群组，您可以将链接添加于此处。参与者报名后方可查看链接。",
+	"campaignevents-edit-field-goal-type-placeholder": "选择一个选项",
+	"campaignevents-edit-field-goal-type-total_articles_created": "创建条目数",
+	"campaignevents-edit-field-goal-type-total_articles_edited": "编辑条目数",
+	"campaignevents-edit-field-goal-type-total_edits": "总编辑数",
+	"campaignevents-edit-field-goal-type-total_bytes_added": "添加的字节数",
+	"campaignevents-edit-field-goal-type-total_bytes_removed": "移除的字节数",
+	"campaignevents-edit-field-goal-type-total_links_added": "添加的链接",
+	"campaignevents-edit-field-goal-type-total_links_removed": "移除的链接",
 	"campaignevents-edit-field-event-is-test": "这是正式活动还是测试活动？",
 	"campaignevents-edit-field-status-live": "现场活动",
 	"campaignevents-edit-field-status-test": "测试活动",
@@ -603,6 +611,7 @@
 	"campaignevents-event-details-contributions-add-dialog-cancel": "取消",
 	"campaignevents-event-details-contributions-add-dialog-submit": "添加编辑",
 	"campaignevents-event-details-contributions-add-dialog-title": "向 $1 添加一个编辑",
+	"campaignevents-event-details-contributions-add-dialog-revid-label": "修订版本ID",
 	"campaignevents-event-details-contributions-add-dialog-success": "编辑已发布。您的更改很快就会应用。",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "添加编辑到此活动",
 	"campaignevents-contributions-summary-edit-count": "编辑数",
@@ -615,5 +624,8 @@
 	"campaignevents-event-details-contributions-delete-subtitle": "您确定要从活动中删除此编辑吗？",
 	"campaignevents-event-details-contributions-delete-note": "它不会被删除，但将不再与该活动关联。",
 	"campaignevents-event-details-contributions-delete-cancel": "取消",
-	"campaignevents-event-details-contributions-delete-confirm": "移除"
+	"campaignevents-event-details-contributions-delete-confirm": "移除",
+	"campaignevents-event-details-contributions-editors-username": "用户名",
+	"campaignevents-event-details-contributions-editors-created": "创建的条目",
+	"campaignevents-event-details-contributions-editors-edited": "编辑的条目"
 }

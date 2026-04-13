@@ -621,6 +621,8 @@
 	"campaignevents-postedit-dialog-action-no": "No, gracias",
 	"campaignevents-postedit-dialog-action-yes": "Sí",
 	"campaignevents-postedit-success-text": "Tu edición se ha asociado a $1. Para ver tu contribución, ve a la [$2 {{int:campaignevents-event-details-tab-contributions}} vista del evento].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Puedes ocultar este mensaje en tus [[$1|preferencias de eventos]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Puedes optar por ocultar este mensaje después de seleccionar un evento.",
 	"campaignevents-contributions-summary-participants": "Participantes",
 	"campaignevents-contributions-summary-wikis-edited": "Wikis editados",
 	"campaignevents-contributions-summary-articles-created": "Artículos creados",
