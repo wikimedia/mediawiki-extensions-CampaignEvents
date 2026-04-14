@@ -13,6 +13,9 @@ use MediaWiki\JobQueue\Job;
  * Job to associate an edit with an event and calculate metrics
  */
 class EventContributionJob extends Job implements GenericParameterJob {
+	/** @var bool Avoid duplicated entries (T422844) */
+	protected $removeDuplicates = true;
+
 	private int $eventID;
 	private int $revisionID;
 	private int $userID;
