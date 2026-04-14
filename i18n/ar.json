@@ -619,6 +619,8 @@
 	"campaignevents-postedit-dialog-action-no": "لا، شكرًا",
 	"campaignevents-postedit-dialog-action-yes": "نعم",
 	"campaignevents-postedit-success-text": "رُبط نقلك ب$1. لمشاهدة مساهمتك، انتقل إلى [$2 {{int:campaignevents-event-details-tab-contributions}} عرض الحدث].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "يمكنك إخفاء هذه الرسالة في [[$1|تفضيلات الحدث]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "يمكنك اختيار إخفاء هذه الرسالة بعد تحديد حدث ما.",
 	"campaignevents-contributions-summary-participants": "المشاركون",
 	"campaignevents-contributions-summary-wikis-edited": "الويكيات المحررة",
 	"campaignevents-contributions-summary-articles-created": "المقالات المنشأة",
