@@ -10,10 +10,10 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateUserContributionRecordsJob;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
-use MediaWiki\Hook\BlockIpCompleteHook;
-use MediaWiki\Hook\UnblockUserCompleteHook;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\RenameUser\Hook\RenameUserCompleteHook;
+use MediaWiki\Specials\Hook\BlockIpCompleteHook;
+use MediaWiki\Specials\Hook\UnblockUserCompleteHook;
 use MediaWiki\User\User;
 use Wikimedia\ObjectCache\WANObjectCache;
 

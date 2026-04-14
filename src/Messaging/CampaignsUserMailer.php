@@ -2,7 +2,6 @@
 declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Messaging;
 
-use MailAddress;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
@@ -12,7 +11,9 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialAllEvents;
 use MediaWiki\JobQueue\JobQueueGroup;
+use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Mail\EmailUserFactory;
+use MediaWiki\Mail\MailAddress;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Preferences\MultiUsernameFilter;
@@ -21,7 +22,6 @@ use MediaWiki\User\CentralId\CentralIdLookup;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
-use MessageLocalizer;
 use StatusValue;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;

@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Messaging;
 
 use Generator;
-use MailAddress;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
@@ -17,6 +16,7 @@ use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Mail\EmailUser;
 use MediaWiki\Mail\EmailUserFactory;
+use MediaWiki\Mail\MailAddress;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;

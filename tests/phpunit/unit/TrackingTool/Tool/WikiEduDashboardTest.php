@@ -12,8 +12,8 @@ use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\InvalidToolURLException;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\Tool\WikiEduDashboard;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Http\MWHttpRequest;
 use MediaWikiUnitTestCase;
-use MWHttpRequest;
 use PHPUnit\Framework\MockObject\MockObject;
 use StatusValue;
 

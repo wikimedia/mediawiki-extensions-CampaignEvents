@@ -5,8 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use Exception;
+use MediaWiki\Language\LanguageFactory;
 use MediaWiki\Language\LanguageNameUtils;
-use MediaWiki\Languages\LanguageFactory;
 use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;

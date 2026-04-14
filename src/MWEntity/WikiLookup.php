@@ -6,8 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\MWEntity;
 
 use MediaWiki\Config\SiteConfiguration;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\WikiMap\WikiMap;
-use MessageLocalizer;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**

@@ -15,9 +15,9 @@ use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserIdentity;
 use MediaWikiUnitTestCase;
-use WANObjectCache;
 use Wikimedia\ObjectCache\EmptyBagOStuff;
 use Wikimedia\ObjectCache\HashBagOStuff;
+use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * Lightweight tests for early-return scenarios in these hook handlers. Similar scenarios for other hooks are tested

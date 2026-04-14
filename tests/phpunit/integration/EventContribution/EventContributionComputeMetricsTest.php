@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Http\MWHttpRequest;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
@@ -22,7 +23,6 @@ use MediaWiki\Title\TitleFormatter;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use MockHttpTrait;
-use MWHttpRequest;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
