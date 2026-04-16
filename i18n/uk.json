@@ -3,6 +3,7 @@
 		"authors": [
 			"Movses",
 			"Repakr",
+			"Vlad5250",
 			"Ата",
 			"Пан Хаунд"
 		]
@@ -599,6 +600,7 @@
 	"campaignevents-postedit-dialog-action-no": "Ні, дякую",
 	"campaignevents-postedit-dialog-action-yes": "Так",
 	"campaignevents-postedit-success-text": "Ваше редагування пов'язано з $1. Щоб переглянути Ваш внесок, перейдіть до [$2 переглянути {{int:campaignevents-event-details-tab-contributions}} до події].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Ви можете сховати це повідомлення у своїх [[$1|налаштуваннях події]].",
 	"campaignevents-contributions-summary-participants": "Учасники",
 	"campaignevents-contributions-summary-wikis-edited": "Редаговані вікі",
 	"campaignevents-contributions-summary-articles-created": "Створені статті",
