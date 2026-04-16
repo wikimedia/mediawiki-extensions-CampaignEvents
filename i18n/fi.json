@@ -5,7 +5,8 @@
 			"MITO",
 			"Minilammas",
 			"Pyscowicz",
-			"Samoasambia"
+			"Samoasambia",
+			"Pxos"
 		]
 	},
 	"campaignevents-desc": "Tarjoaa ominaisuuksia kampanjoiden järjestäjille ja osallistujille.",
@@ -163,7 +164,7 @@
 	"campaignevents-unregister-not-allowed": "Sinulla ei ole oikeutta peruuttaa ilmoittautumistasi.",
 	"campaignevents-unregister-not-participant": "Et ole ilmoittautunut tähän tapahtumaan.",
 	"campaignevents-unregister-need-central-account": "Tarvitset keskitetyn käyttäjätunnuksen peruuttaaksesi tapahtumailmoittautumisesi.",
-	"myevents": "Tapahtumasi",
+	"myevents": "Omat tapahtumasi",
 	"allevents": "Kaikki tapahtumat",
 	"campaignevents-myevents-need-central-account": "Tarvitset keskitetyn käyttäjätunnuksen nähdäksesi luettelon tapahtumistasi.",
 	"campaignevents-myevents-filter-legend": "Suodata tapahtumia",
