@@ -446,7 +446,7 @@
 	"campaignevents-invitationlist-highly-recommended": "Настоятельно рекомендуется пригласить",
 	"campaignevents-invitationlist-recommended": "Рекомендуется пригласить",
 	"campaignevents-invitationlist-worklist-label": "Посмотреть список статей",
-	"campaignevents-invitationlist-preference": "Включать меня в [[mw:Help:Extension:CampaignEvents/Invitation_lists/ru|списки приглашённых]]",
+	"campaignevents-invitationlist-preference": "Включать меня в [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списки приглашённых]",
 	"prefs-campaignevents-invitations": "Списки приглашений",
 	"campaignevents-allevents-label-filter-wikis": "Вики-сайты",
 	"campaignevents-allevents-placeholder-add-wikis": "Добавить вики...",
@@ -485,7 +485,7 @@
 	"campaignevents-allevents-placeholder-add-event-types": "Добавить типы мероприятий…",
 	"campaignevents-eventslist-types-label": "Типы мероприятия",
 	"campaignevents-eventslist-country-label": "Страна",
-	"campaignevents-event-contribution-not-participant": "Участник не участвует в этом мероприятии",
+	"campaignevents-event-contribution-not-participant": "Добавить правку, сделанную участвующими в мероприятии.",
 	"campaignevents-event-contribution-user-not-global": "Участник не является глобальным участником",
 	"campaignevents-event-contribution-revision-not-found": "Версия страницы не найдена",
 	"campaignevents-event-contribution-event-deleted": "Мероприятие было удалено",
@@ -527,9 +527,12 @@
 	"campaignevents-event-details-contributions-editors-button-label": "Редакторы",
 	"campaignevents-event-details-contributions-editors-table-caption": "Редакторы",
 	"campaignevents-goal-progress-heading": "Прогресс в достижении цели",
+	"campaignevents-goal-progress-description": "У этого мероприятия есть цель — $1.",
 	"campaignevents-goal-progress-metric-total_articles_created": "$1 {{PLURAL:$1|статья создана|статьи созданы|статей создано}}",
+	"campaignevents-goal-progress-metric-total_articles_edited": "$1 {{PLURAL:$1|статья отредактирована|статьи отредактированы|статей отредактировано}}",
 	"campaignevents-goal-progress-metric-total_edits": "$1 {{PLURAL:$1|правка|правки|правок}}",
 	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1|байт|байта|байт}} добавлено",
 	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 {{PLURAL:$1|байт|байта|байт}} удалено",
-	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|ссылка добавлена|ссылки добавлены|ссылок добавлено}}"
+	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|ссылка добавлена|ссылки добавлены|ссылок добавлено}}",
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|ссылка удалена|ссылки удалены|ссылок удалено}}"
 }
