@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Page\ProperPageIdentity;
 use stdClass;
+use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IDatabase;
 
 /**
@@ -25,6 +26,7 @@ class EventContributionStore {
 
 	public function __construct(
 		private readonly CampaignsDatabaseHelper $dbHelper,
+		private readonly WANObjectCache $wanCache
 	) {
 	}
 
@@ -55,6 +57,9 @@ class EventContributionStore {
 			] )
 			->caller( __METHOD__ )
 			->execute();
+		$dbw->onTransactionPreCommitOrIdle( function () use ( $editObject ): void {
+			$this->clearInsertionLock( $editObject->getWiki(), $editObject->getRevisionId() );
+		}, __METHOD__ );
 	}
 
 	/**
@@ -222,33 +227,79 @@ class EventContributionStore {
 	/**
 	 * Permanently delete a contribution by its primary key.
 	 *
-	 * @param int $contribID The cec_id to delete
+	 * @param int $contribID The cec_id to delete; validation is up to the caller.
 	 */
 	public function deleteByID( int $contribID ): void {
 		$dbw = $this->dbHelper->getPrimaryConnection();
+		$row = $dbw->newSelectQueryBuilder()
+			->select( [ 'cec_wiki', 'cec_revision_id' ] )
+			->from( 'ce_event_contributions' )
+			->where( [ 'cec_id' => $contribID ] )
+			->caller( __METHOD__ )
+			->fetchRow();
+		if ( !$row ) {
+			// Should typically not happen, but potentially might if the caller validated from a lagged replica.
+			return;
+		}
 		$dbw->newDeleteQueryBuilder()
 			->deleteFrom( 'ce_event_contributions' )
 			->where( [ 'cec_id' => $contribID ] )
 			->caller( __METHOD__ )
 			->execute();
+		$dbw->onTransactionPreCommitOrIdle( function () use ( $row ): void {
+			$this->clearInsertionLock( $row->cec_wiki, (int)$row->cec_revision_id );
+		}, __METHOD__ );
 	}
 
 	/**
-	 * Returns the ID of the event with which the given revision is associated, or null if it's not
-	 * associated with any events.
+	 * Tries to lock insertion for the given revision. If a row already exists, or if a lock for the same revision has
+	 * already been acquired, returns the ID of the event of the existing (or tentative) association. Otherwise it
+	 * acquires the lock and returns null.
+	 * This is necessary because while validation happens synchronously, the actual insertion is deferred and performed
+	 * via the JobQueue. Therefore, we need to avoid situations where two requests try to insert a row for the same
+	 * revision, see T422844. This solution should work sufficiently well, provided a cache backend is available.
+	 * Additionally, we rely on job deduplication and a unique index on (cec_wiki, cec_revision_id).
 	 */
-	public function getEventIDForRevision( string $wikiID, int $revisionID ): ?int {
-		$dbr = $this->dbHelper->getReplicaConnection();
-		$eventID = $dbr->newSelectQueryBuilder()
-			->select( 'cec_event_id' )
-			->from( 'ce_event_contributions' )
-			->where( [
-				'cec_wiki' => $wikiID,
-				'cec_revision_id' => $revisionID,
-			] )
-			->caller( __METHOD__ )
-			->fetchField();
-		return $eventID !== false ? (int)$eventID : null;
+	public function tryAcquireInsertionLock( string $wikiID, int $revisionID, int $eventID ): ?int {
+		$fname = __METHOD__;
+		$newlyAcquired = false;
+		$previousEventID = $this->wanCache->getWithSetCallback(
+			$this->makeInsertionLockKey( $wikiID, $revisionID ),
+			WANObjectCache::TTL_HOUR,
+			function () use ( $wikiID, $revisionID, $eventID, $fname, &$newlyAcquired ): int {
+				// If no lock is set, check the database.
+				$dbr = $this->dbHelper->getReplicaConnection();
+				$storedEventID = $dbr->newSelectQueryBuilder()
+					->select( 'cec_event_id' )
+					->from( 'ce_event_contributions' )
+					->where( [
+						'cec_wiki' => $wikiID,
+						'cec_revision_id' => $revisionID,
+					] )
+					->caller( $fname )
+					->fetchField();
+				// Return (and cache) the stored ID if set...
+				if ( $storedEventID !== false ) {
+					return (int)$storedEventID;
+				}
+				// Otherwise, acquire the lock now for the given event
+				$newlyAcquired = true;
+				return $eventID;
+			}
+		);
+
+		// Note, it's important that we return null for a newly-acquired lock, as otherwise callers would
+		// have no way to distinguish between lock acquired, and the revision being already associated with
+		// the requested event.
+		return $newlyAcquired ? null : $previousEventID;
+	}
+
+	public function clearInsertionLock( string $wikiID, int $revisionID ): void {
+		$this->wanCache->delete( $this->makeInsertionLockKey( $wikiID, $revisionID ) );
+	}
+
+	private function makeInsertionLockKey( string $wikiID, int $revisionID ): string {
+		return $this->wanCache->makeGlobalKey( 'CampaignEvents-contribution-insert', $wikiID, $revisionID );
 	}
 
 	/**

@@ -91,7 +91,7 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event->method( 'getID' )->willReturn( $eventID );
 
 		$this->eventContributionStore->expects( $this->atLeastOnce() )
-			->method( 'getEventIDForRevision' )
+			->method( 'tryAcquireInsertionLock' )
 			->with( $wikiID, $revID )
 			->willReturn( $eventID );
 
@@ -107,13 +107,29 @@ class EventContributionValidatorTest extends MediaWikiUnitTestCase {
 		$event->method( 'getID' )->willReturn( $eventID );
 
 		$this->eventContributionStore->expects( $this->atLeastOnce() )
-			->method( 'getEventIDForRevision' )
+			->method( 'tryAcquireInsertionLock' )
 			->with( $wikiID, $revID )
 			->willReturn( $eventID + 1 );
 
 		$this->expectException( LocalizedHttpException::class );
 		$this->expectExceptionMessage( 'campaignevents-event-contribution-already-associated' );
 		$this->validator->validateAndSchedule( $event, $revID, $wikiID, $this->performer );
+	}
+
+	public function testValidateAndSchedule__errorClearsInsertionLock(): void {
+		$centralUser = $this->createMock( CentralUser::class );
+		$this->centralUserLookup->method( 'newFromAuthority' )
+			->with( $this->performer )
+			->willReturn( $centralUser );
+
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getID' )->willReturn( 1 );
+		$event->method( 'hasContributionTracking' )->willReturn( false );
+
+		$this->eventContributionStore->expects( $this->once() )->method( 'clearInsertionLock' );
+		$this->expectException( LocalizedHttpException::class );
+
+		$this->validator->validateAndSchedule( $event, 123, 'awiki', $this->performer );
 	}
 
 	public function testValidateAndScheduleContributionTrackingDisabled(): void {

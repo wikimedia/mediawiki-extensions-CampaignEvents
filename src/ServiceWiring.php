@@ -452,7 +452,8 @@ return [
 		MediaWikiServices $services
 	): EventContributionStore {
 		return new EventContributionStore(
-			$services->get( CampaignsDatabaseHelper::SERVICE_NAME )
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getMainWANObjectCache(),
 		);
 	},
 	CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION => static function ( MediaWikiServices $services ): Config{

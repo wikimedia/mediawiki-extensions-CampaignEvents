@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContribution;
 
 use BadMethodCallException;
+use EmptyBagOStuff;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
@@ -14,6 +15,7 @@ use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -778,16 +780,65 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( (int)$totalBefore, (int)$totalAfter );
 	}
 
-	/** @dataProvider provideGetEventIDForRevision */
-	public function testGetEventIDForRevision( string $wikiID, int $revisionID, ?int $expected ): void {
+	public function testDeleteByID__clearsInsertionLock(): void {
 		$store = CampaignEventsServices::getEventContributionStore();
-		$this->assertSame( $expected, $store->getEventIDForRevision( $wikiID, $revisionID ) );
+		$this->assertSame(
+			1,
+			$store->tryAcquireInsertionLock( 'enwiki', 123, 12345 ),
+			'Lock attempt should fail before deletion'
+		);
+		$store->deleteByID( 1 );
+		$this->assertNull(
+			$store->tryAcquireInsertionLock( 'enwiki', 123, 12345 ),
+			'Lock attempt should succeed after deletion'
+		);
 	}
 
-	public static function provideGetEventIDForRevision(): Generator {
-		yield 'Associated' => [ 'enwiki', 123, 1 ];
-		yield 'Not associated' => [ 'enwiki', 192837, null ];
-		yield 'Associated with revision of same ID but different wiki' => [ 'ptwiki', 777, null ];
+	/** @dataProvider provideTryAcquireInsertionLock */
+	public function testTryAcquireInsertionLock(
+		string $wikiID,
+		int $revisionID,
+		int $eventID,
+		?int $alreadyLockedForEvent,
+		?int $expected
+	): void {
+		$store = CampaignEventsServices::getEventContributionStore();
+		if ( $alreadyLockedForEvent ) {
+			$this->assertNull( $store->tryAcquireInsertionLock( $wikiID, $revisionID, $alreadyLockedForEvent ) );
+		}
+		$this->assertSame( $expected, $store->tryAcquireInsertionLock( $wikiID, $revisionID, $eventID ) );
+	}
+
+	public static function provideTryAcquireInsertionLock(): Generator {
+		yield 'Associated with another event' => [ 'enwiki', 123, 999, null, 1 ];
+		yield 'Associated with the same event' => [ 'enwiki', 123, 1, null, 1 ];
+		yield 'Not associated' => [ 'enwiki', 192837, 999, null, null ];
+		yield 'Associated with revision of same ID but different wiki' => [ 'ptwiki', 777, 999, null, null ];
+		yield 'Not associated but already locked' => [ 'enwiki', 192837, 999, 555777999, 555777999 ];
+	}
+
+	public function testTryAcquireInsertionLock__noCacheAvailable(): void {
+		$wikiID = 'some_wiki';
+		$revID = 9876;
+		$eventID = 5432;
+		$this->setService(
+			'MainWANObjectCache',
+			new WANObjectCache( [ 'cache' => new EmptyBagOStuff() ] )
+		);
+		$store = CampaignEventsServices::getEventContributionStore();
+		$this->assertNull(
+			$store->tryAcquireInsertionLock( $wikiID, $revID, $eventID ),
+			'First call succeeds'
+		);
+		$this->assertNull(
+			$store->tryAcquireInsertionLock( $wikiID, $revID, $eventID + 1 ),
+			'Subsequent calls also succeed despite previous lock attempt'
+		);
+		$this->assertSame(
+			1,
+			$store->tryAcquireInsertionLock( 'enwiki', 123, $eventID ),
+			'Existing database rows still prevent lock acquisition'
+		);
 	}
 
 	/** @dataProvider provideHasContributionsFromUser */

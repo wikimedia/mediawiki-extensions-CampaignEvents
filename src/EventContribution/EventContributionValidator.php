@@ -54,7 +54,8 @@ class EventContributionValidator {
 		}
 
 		$eventID = $event->getID();
-		$previousEventID = $this->eventContributionStore->getEventIDForRevision( $wikiID, $revisionID );
+		// Acquire the lock immediately, so concurrent requests will see it ASAP.
+		$previousEventID = $this->eventContributionStore->tryAcquireInsertionLock( $wikiID, $revisionID, $eventID );
 		if ( $previousEventID === $eventID ) {
 			// Already associated with this event, nothing to do.
 			return false;
@@ -65,7 +66,13 @@ class EventContributionValidator {
 			);
 		}
 
-		$revisionAuthor = $this->validateRevisionAndEvent( $event, $revisionID, $wikiID, $performer );
+		try {
+			$revisionAuthor = $this->validateRevisionAndEvent( $event, $revisionID, $wikiID, $performer );
+		} catch ( LocalizedHttpException $e ) {
+			// If validation failed, clear the lock for other requests.
+			$this->eventContributionStore->clearInsertionLock( $wikiID, $revisionID );
+			throw $e;
+		}
 
 		$jobParams = [
 			'revisionId' => $revisionID,
