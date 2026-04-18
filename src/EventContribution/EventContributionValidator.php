@@ -7,12 +7,12 @@ namespace MediaWiki\Extension\CampaignEvents\EventContribution;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Rest\FailStatusUtilTrait;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Permissions\Authority;
-use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Revision\RevisionStoreFactory;
 use Wikimedia\Message\MessageValue;
@@ -36,7 +36,7 @@ class EventContributionValidator {
 	 *
 	 * @return bool False if the event was already associated with this event, true otherwise. Either way, the
 	 * association is valid. Validation errors are reported by throwing exceptions.
-	 * @throws HttpException|LocalizedHttpException
+	 * @throws LocalizedHttpException
 	 */
 	public function validateAndSchedule(
 		ExistingEventRegistration $event,
@@ -53,8 +53,9 @@ class EventContributionValidator {
 			);
 		}
 
+		$eventID = $event->getID();
 		$previousEventID = $this->eventContributionStore->getEventIDForRevision( $wikiID, $revisionID );
-		if ( $previousEventID === $event->getID() ) {
+		if ( $previousEventID === $eventID ) {
 			// Already associated with this event, nothing to do.
 			return false;
 		} elseif ( $previousEventID !== null ) {
@@ -64,6 +65,30 @@ class EventContributionValidator {
 			);
 		}
 
+		$revisionAuthor = $this->validateRevisionAndEvent( $event, $revisionID, $wikiID, $performer );
+
+		$jobParams = [
+			'revisionId' => $revisionID,
+			'wiki' => $wikiID,
+			'eventId' => $eventID,
+			'userId' => $revisionAuthor->getCentralID(),
+		];
+		$associateEditJob = new EventContributionJob( $jobParams );
+		$this->jobQueueGroup->push( $associateEditJob );
+		return true;
+	}
+
+	/**
+	 * Validates a revision and event for insertion, returning the revision author when successful.
+	 *
+	 * @throws LocalizedHttpException
+	 */
+	private function validateRevisionAndEvent(
+		ExistingEventRegistration $event,
+		int $revisionID,
+		string $wikiID,
+		Authority $performer
+	): CentralUser {
 		// Check if event has contribution tracking enabled
 		if ( !$event->hasContributionTracking() ) {
 			throw new LocalizedHttpException(
@@ -141,15 +166,7 @@ class EventContributionValidator {
 		if ( !$userCanAddContribution->isOK() ) {
 			$this->exitWithStatus( $userCanAddContribution, 403 );
 		}
-		// Create job message and push to queue
-		$jobParams = [
-			'revisionId' => $revisionID,
-			'wiki' => $wikiID,
-			'eventId' => $event->getID(),
-			'userId' => $revisionAuthorCentralUser->getCentralID(),
-		];
-		$associateEditJob = new EventContributionJob( $jobParams );
-		$this->jobQueueGroup->push( $associateEditJob );
-		return true;
+
+		return $revisionAuthorCentralUser;
 	}
 }
