@@ -3,7 +3,8 @@
 		"authors": [
 			"Ykhwong",
 			"YeBoy371",
-			"Revi"
+			"Revi",
+			"Tensama0415"
 		]
 	},
 	"campaignevents-desc": "캠페인 조직자와 참가자를 위한 기능들을 제공합니다.",
@@ -269,10 +270,12 @@
 	"echo-category-title-campaign-events-notification-registration": "이벤트 등록",
 	"campaignevents-eventpage-dialog-private-registration-label": "{{GENDER:$1|참가자가 비공개로 등록됨}}",
 	"echo-pref-tooltip-campaign-events-notification-registration": "이벤트 등록 도구를 사용하는 이벤트에 등록할 때 내게 알립니다.",
+	"campaignevents-notification-registration-subject": "$1 등록 확인됨",
 	"campaignevents-notification-registration-header-intro": "$1에 등록해 주셔서 고맙습니다.",
 	"campaignevents-notification-registration-header-chat-label": "이벤트 그룹 채팅",
 	"campaignevents-notification-registration-details-header": "이벤트 상세 정보",
 	"campaignevents-notification-registration-details-dates-header": "날짜 및 시간",
+	"campaignevents-notification-registration-details-dates": "$1부터 $4까지",
 	"campaignevents-notification-registration-details-dates-timezone": "<strong>시간대:</strong> $1",
 	"campaignevents-notification-registration-details-type-header": "이벤트 유형",
 	"campaignevents-notification-registration-details-type-online-header": "온라인 이벤트",
@@ -361,6 +364,7 @@
 	"campaignevents-edit-field-clickwrap-form-continue": "응답 보기",
 	"campaignevents-participant-question-no-response": "응답 없음",
 	"campaignevents-event-register-for-event-title": "$1에 등록",
+	"campaignevents-event-details-not-local-wiki-prompt": "[$1 $2]에서 보기",
 	"campaignevents-event-details-sensitive-data-message-blocked-user": "당신의 계정은 차단되었습니다. 접근 권한이 없습니다.",
 	"generateinvitationlist": "초대 목록 생성",
 	"campaignevents-generateinvitationlist-name-field-label": "초대 목록 이름",
