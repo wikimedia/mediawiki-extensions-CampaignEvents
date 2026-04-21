@@ -6,7 +6,7 @@
 	},
 	"campaignevents-rest-event-not-found": "No hay event que ansina el ID.",
 	"campaignevents-rest-enable-registration-permission-denied": "No puede tu hace activa maga registracion del event.",
-	"campaignevents-rest-edit-page-nonlocal": "Este registracion del event ya hace activa na siguiente wiki y debe aquel hace edit alla: $1.",
+	"campaignevents-rest-edit-page-nonlocal": "Este registracion del evento ya hace activa na siguiente wiki y debe aquel edita alla: $1.",
 	"campaignevents-rest-delete-already-deleted": "Borrao ya el registracion del event.",
 	"campaignevents-rest-user-not-found": "No hay usuario ansina el central ID.",
 	"campaignevents-rest-get-registration-deleted": "Este registracion del event ya borra ya.",
