@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Suleiman the Magnificent Television",
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
@@ -9,7 +10,7 @@
 	"campaignevents-rest-enable-registration-permission-denied": "이벤트 등록을 활성화할 권한이 없습니다.",
 	"campaignevents-rest-edit-page-nonlocal": "이 이벤트 등록은 다음 위키에서 활성화되었으며 해당 장소에서 편집해야 합니다: $1.",
 	"campaignevents-rest-delete-already-deleted": "이 이벤트 등록은 이미 삭제되었습니다.",
-	"campaignevents-rest-user-not-found": "$1 사용자는 존재하지 않습니다.",
+	"campaignevents-rest-user-not-found": "이 통합 ID를 가진 사용자는 존재하지 않습니다.",
 	"campaignevents-rest-get-registration-deleted": "이 이벤트 등록이 삭제되었습니다.",
 	"campaignevents-rest-remove-participants-invalid-users-ids": "'user_ids' 변수는 사용자 ID 배열 또는 null(모든 사용자를 제거)이어야 합니다",
 	"campaignevents-rest-get-registration-info-notparticipant": "이 이벤트에 참가하고 있지 않습니다.",
