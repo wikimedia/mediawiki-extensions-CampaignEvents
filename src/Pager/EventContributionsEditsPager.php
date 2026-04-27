@@ -377,10 +377,6 @@ class EventContributionsEditsPager extends CodexTablePager {
 		return parent::getDefaultQuery() + $this->extraQuery;
 	}
 
-	protected function getTableClass(): string {
-		return 'ext-campaignevents-contributions-table' . ' ' . parent::getTableClass();
-	}
-
 	protected function shouldShowVisibleCaption(): bool {
 		return true;
 	}
