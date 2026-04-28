@@ -4,9 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
+use DateInvalidTimeZoneException;
 use DateTime;
 use DateTimeZone;
-use Exception;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\Address\Address;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
@@ -32,7 +32,6 @@ use MediaWiki\Utils\MWTimestamp;
 use StatusValue;
 use Wikimedia\Message\ListType;
 use Wikimedia\Message\MessageValue;
-use Wikimedia\RequestTimeout\TimeoutException;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class EventFactory {
@@ -438,19 +437,10 @@ class EventFactory {
 				// see https://github.com/php/php-src/issues/9763#issue-1411450292
 				return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
 			}
-			// Work around another PHP bug: if the hours are < 100 but hours + 60 * miutes >= 100*60, it will truncate
-			// the input and add a null byte that makes it unusable, see https://github.com/php/php-src/issues/9763
-			// This might be reconsidered when we require PHP >= 8.3.
-			if ( $matches[1] === '99' && (int)$matches[2] >= 60 ) {
-				return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
-			}
 		}
 		try {
 			return StatusValue::newGood( new DateTimeZone( $timezone ) );
-		} catch ( TimeoutException $e ) {
-			throw $e;
-		} catch ( Exception ) {
-			// PHP < 8.3 throws a generic Exception, but we don't want to catch excimer timeouts.
+		} catch ( DateInvalidTimeZoneException ) {
 			return StatusValue::newFatal( 'campaignevents-error-invalid-timezone' );
 		}
 	}

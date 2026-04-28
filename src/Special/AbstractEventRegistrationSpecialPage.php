@@ -4,9 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use DateInvalidTimeZoneException;
 use DateTime;
 use DateTimeZone;
-use Exception;
 use LogicException;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Address\CountryProvider;
@@ -46,7 +46,6 @@ use OOUI\MessageWidget;
 use RuntimeException;
 use StatusValue;
 use Wikimedia\Message\MessageSpecifier;
-use Wikimedia\RequestTimeout\TimeoutException;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
@@ -886,10 +885,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			$tzString = $this->parseSubmittedTimezone( $rawTZ );
 			try {
 				return new DateTimeZone( $tzString );
-			} catch ( TimeoutException $e ) {
-				throw $e;
-			} catch ( Exception ) {
-				// PHP < 8.3 throws a generic Exception, but we don't want to catch excimer timeouts.
+			} catch ( DateInvalidTimeZoneException ) {
 				return new DateTimeZone( 'UTC' );
 			}
 		}
