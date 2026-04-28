@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Aishik Rehman",
+			"Asked42",
 			"Shariyar Nayeem",
 			"Yahya",
 			"আজিজ",
@@ -9,12 +10,13 @@
 			"মোঃ মারুফ হাসান24"
 		]
 	},
-	"nstab-event": "ইভেন্ট",
+	"nstab-event": "কার্যক্রম",
 	"group-event-organizer": "ইভেন্ট আয়োজক",
 	"group-event-organizer-member": "{{GENDER:$1|ইভেন্ট আয়োজক}}",
 	"grouppage-event-organizer": "{{ns:project}}:ইভেন্ট আয়োজক",
 	"action-campaignevents-enable-registration": "ইভেন্ট নিবন্ধন সক্রিয়করণ",
 	"right-campaignevents-enable-registration": "ইভেন্ট নিবন্ধন সক্রিয়করণ",
+	"action-campaignevents-delete-registration": "ইভেন্ট নিবন্ধন অপসারণ",
 	"right-campaignevents-email-participants": "ইভেন্টে অংশগ্রহণকারীদের ইমেইল করুন",
 	"specialpages-group-campaignevents": "ইভেন্ট",
 	"campaignevents-error-page-namespace-not-allowed": "ইভেন্ট পাতাটি অবশ্যই অনুমোদিত নামস্থানের একটিতে থাকতে হবে",
