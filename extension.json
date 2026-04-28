@@ -8,7 +8,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "specialpage",
 	"requires": {
-		"MediaWiki": ">= 1.46",
+		"MediaWiki": ">= 1.47.0",
 		"extensions": {
 			"cldr": "*"
 		}
@@ -79,7 +79,6 @@
 			],
 			"merge_strategy": "provide_default"
 		},
-
 		"CampaignEventsContributionTrackingDisallowedCountries": {
 			"description": "Map of countries for which in-person or hybrid events cannot use contribution tracking (e.g. for legal reasons, see https://foundation.wikimedia.org/wiki/Legal:Wikimedia_Foundation_Country_and_Territory_Protection_List). This maps CLDR country codes to English country names, but only the former are used; the names are included for convenience, and are assumed to be correct.",
 			"value": {}
@@ -196,7 +195,10 @@
 	},
 	"DomainEventIngresses": [
 		{
-			"events": [ "PageDeleted", "PageMoved" ],
+			"events": [
+				"PageDeleted",
+				"PageMoved"
+			],
 			"class": "MediaWiki\\Extension\\CampaignEvents\\MediaWikiEventIngress\\EventPageEventIngress",
 			"services": [
 				"CampaignEventsPageFactory",
@@ -207,7 +209,12 @@
 			]
 		},
 		{
-			"events": [ "PageDeleted", "PageCreated", "PageMoved", "PageHistoryVisibilityChanged" ],
+			"events": [
+				"PageDeleted",
+				"PageCreated",
+				"PageMoved",
+				"PageHistoryVisibilityChanged"
+			],
 			"class": "MediaWiki\\Extension\\CampaignEvents\\MediaWikiEventIngress\\ContributionAssociationPageEventIngress",
 			"services": [
 				"CampaignEventsEventContributionStore",
