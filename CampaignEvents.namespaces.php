@@ -82,6 +82,11 @@ $namespaceNames['ko'] = [
 	NS_EVENT_TALK => '행사토론',
 ];
 
+$namespaceNames['lkt'] = [
+	NS_EVENT => 'Wóakhipȟa',
+	NS_EVENT_TALK => 'Wóakhipȟa_wóakhiye',
+];
+
 $namespaceNames['ms'] = [
 	NS_EVENT => 'Acara',
 	NS_EVENT_TALK => 'Perbincangan_acara',
