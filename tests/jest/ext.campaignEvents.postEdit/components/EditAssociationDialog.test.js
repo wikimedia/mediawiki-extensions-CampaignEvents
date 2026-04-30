@@ -43,6 +43,12 @@ const mountDialog = ( configOverrides = {} ) => {
 	return mount( EditAssociationDialog, {
 		props: { open: true },
 		global: {
+			stubs: {
+				CdxProgressBar: {
+					props: [ 'value', 'max', 'startLabel', 'ariaLabel' ],
+					template: '<div class="cdx-progress-bar ext-campaignevents-goal-progress__bar" :aria-label="ariaLabel"></div>'
+				}
+			},
 			directives: {
 				'i18n-html': i18nHtmlDirective
 			}
@@ -89,6 +95,27 @@ describe( 'EditAssociationDialog', () => {
 				'campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences'
 			);
 			expect( footer.html() ).toContain( `Special:RegisterForEvent/${ defaultEventID }` );
+		} );
+
+		it( 'does not show a goal progress card when the event has no goal', () => {
+			const wrapper = mountDialog();
+			expect( wrapper.find( '.ext-campaignevents-goal-progress-card' ).exists() ).toBe( false );
+			expect( wrapper.findComponent( { name: 'CdxProgressBar' } ).exists() ).toBe( false );
+		} );
+
+		it( 'shows the goal progress card when the event has a goal', () => {
+			const wrapper = mountDialog( {
+				wgCampaignEventsEventsForAssociation: [ {
+					id: defaultEventID,
+					name: defaultEventTitle,
+					goalPercent: 50,
+					goalDescription: 'This event has a goal of 2,000 articles edited.',
+					goalNumericText: '1000/2000'
+				} ]
+			} );
+			expect( wrapper.find( '.ext-campaignevents-goal-progress-card' ).exists() ).toBe( true );
+			expect( wrapper.find( '.ext-campaignevents-goal-progress__bar' ).exists() ).toBe( true );
+			expect( wrapper.find( '.cdx-progress-bar' ).attributes( 'aria-label' ) ).toBe( '1000/2000' );
 		} );
 	} );
 
@@ -167,6 +194,26 @@ describe( 'EditAssociationDialog', () => {
 			const associationEvents = wrapper.emitted( 'associate-edit' );
 			expect( associationEvents ).toHaveLength( 1 );
 			expect( associationEvents[ 0 ] ).toEqual( [ chosenEventID, chosenEventName ] );
+		} );
+
+		it( 'shows the goal progress card for the currently selected event', async () => {
+			const eventsWithGoals = [
+				{ id: 10, name: firstEventName, goalPercent: 10, goalDescription: 'First event goal', goalNumericText: '10/100' },
+				{ id: chosenEventID, name: chosenEventName, goalPercent: 75, goalDescription: 'Second event goal', goalNumericText: '75/100' },
+				{ id: 73, name: 'Test event 73', goalPercent: 20, goalDescription: 'Third event goal', goalNumericText: '20/100' }
+			];
+			wrapper = mountDialog( {
+				wgCampaignEventsEventsForAssociation: eventsWithGoals
+			} );
+
+			const selector = wrapper.getComponent( { name: 'CdxSelect' } );
+			selector.vm.$emit( 'update:selected', chosenEventID );
+			await wrapper.vm.$nextTick();
+
+			expect( wrapper.find( '.ext-campaignevents-goal-progress-card' ).exists() ).toBe( true );
+			expect( wrapper.find( '.ext-campaignevents-goal-progress__description' ).text() ).toContain( 'Second event goal' );
+			expect( wrapper.find( '.ext-campaignevents-goal-progress__description' ).text() ).not.toContain( 'First event goal' );
+			expect( wrapper.find( '.ext-campaignevents-goal-progress__bar' ).exists() ).toBe( true );
 		} );
 	} );
 } );

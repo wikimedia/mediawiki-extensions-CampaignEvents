@@ -341,6 +341,7 @@
 				"CdxTextArea",
 				"CdxMessage",
 				"CdxProgressBar",
+				"CdxCard",
 				"CdxIcon"
 			],
 			"packageFiles": [
@@ -581,7 +582,9 @@
 			"codexComponents": [
 				"CdxCard",
 				"CdxDialog",
-				"CdxSelect"
+				"CdxSelect",
+				"CdxProgressBar",
+				"CdxCard"
 			],
 			"dependencies": [
 				"mediawiki.api",
@@ -618,7 +621,8 @@
 				"campaignevents-eventdiscovery-dialog-description-multiple",
 				"campaignevents-eventdiscovery-dialog-visit-button",
 				"campaignevents-eventdiscovery-dialog-skip-button",
-				"campaignevents-eventdiscovery-dialog-hide-in-preferences"
+				"campaignevents-eventdiscovery-dialog-hide-in-preferences",
+				"campaignevents-goal-progress-heading"
 			]
 		}
 	},

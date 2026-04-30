@@ -14,7 +14,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
-use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
@@ -22,7 +21,6 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
 use Wikibase\Repo\WikibaseRepo;
-use Wikimedia\ObjectCache\HashBagOStuff;
 
 /**
  * Handler for the JavaScript modals shown after an edit reload: the contribution-association dialog
@@ -31,6 +29,8 @@ use Wikimedia\ObjectCache\HashBagOStuff;
  * once breaks the page (T431571); the association dialog takes precedence.
  */
 class PostEditHandler implements BeforePageDisplayHook {
+	private const MAX_EVENTS = 50;
+
 	public function __construct(
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly IEventLookup $eventLookup,
@@ -92,7 +92,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 	): bool {
 		$events = $this->eventLookup->getEventsForContributionAssociationByParticipant(
 			$centralUser,
-			50
+			self::MAX_EVENTS
 		);
 
 		if ( !$events ) {
@@ -135,7 +135,6 @@ class PostEditHandler implements BeforePageDisplayHook {
 		$eventData = self::makeEventList(
 			$events, $authority, $out->getLanguage()->getCode(), $this->goalProgressFormatter
 		);
-
 		$out->addModules( 'ext.campaignEvents.postEdit' );
 		$out->addJsConfigVars( 'wgCampaignEventsEventsForAssociation', $eventData );
 		return true;
@@ -195,7 +194,8 @@ class PostEditHandler implements BeforePageDisplayHook {
 	 * @param Authority $authority
 	 * @param string $languageCode
 	 * @param GoalProgressFormatter $goalProgressFormatter
-	 * @return list<array{id:int,name:string,goalProgress?:string}>
+	 *
+	 * @return list<array{id:int,name:string,goalPercent?:float,goalDescription?:string,goalNumericText?:string}>
 	 */
 	public static function makeEventList(
 		array $events,
@@ -203,22 +203,29 @@ class PostEditHandler implements BeforePageDisplayHook {
 		string $languageCode,
 		GoalProgressFormatter $goalProgressFormatter
 	): array {
-		// XXX: Avoid global state access in ListOwnEventsForEditHandlerTest
-		$templateCache = defined( 'MW_PHPUNIT_TEST' ) ? new HashBagOStuff() : null;
-		$templateParser = new TemplateParser( __DIR__ . '/../../../templates', $templateCache );
 		$eventData = [];
+
 		foreach ( $events as $event ) {
 			$entry = [
 				'id' => $event->getID(),
 				'name' => $event->getName(),
 			];
-			$goalProgressData = $goalProgressFormatter->getProgressData( $event, $authority, $languageCode );
+
+			$goalProgressData = $goalProgressFormatter->getProgressData(
+				$event,
+				$authority,
+				$languageCode
+			);
+
 			if ( $goalProgressData !== null ) {
-				// TODO: Replace with a Vue version once that is available (T407638)
-				$entry['goalProgress'] = $templateParser->processTemplate( 'GoalProgressBar', $goalProgressData );
+				$entry['goalPercent'] = $goalProgressData['percentComplete'];
+				$entry['goalDescription'] = $goalProgressData['description'];
+				$entry['goalNumericText'] = $goalProgressData['numericText'];
 			}
+
 			$eventData[] = $entry;
 		}
+
 		return $eventData;
 	}
 
@@ -231,7 +238,8 @@ class PostEditHandler implements BeforePageDisplayHook {
 	 * XXX This whole things is really ugly but there don't seem to be better options.
 	 */
 	private static function isPostEditReload( OutputPage $out ): bool {
-		if ( isset( $out->getJsConfigVars()['wgPostEdit'] ) ) {
+		$configVars = $out->getJsConfigVars();
+		if ( isset( $configVars['wgPostEdit'] ) ) {
 			return true;
 		}
 
