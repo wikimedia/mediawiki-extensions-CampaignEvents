@@ -13,7 +13,8 @@
 			"ZhaoFJx",
 			"列维劳德",
 			"沈澄心",
-			"魔琴"
+			"魔琴",
+			"Leo768"
 		]
 	},
 	"campaignevents-desc": "為活動籌辦人員和參與者提供功能。",
@@ -397,5 +398,6 @@
 	"campaignevents-invitationlist-highly-recommended": "強烈推薦邀請",
 	"campaignevents-invitationlist-recommended": "推薦邀請",
 	"campaignevents-invitationlist-worklist-label": "檢視條目清單",
+	"campaignevents-invitationlist-preference": "將自己加入至[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請名單]中",
 	"prefs-campaignevents-invitations": "邀請名單"
 }
