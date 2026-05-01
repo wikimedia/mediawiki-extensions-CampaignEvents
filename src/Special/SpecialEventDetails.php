@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -44,6 +45,7 @@ class SpecialEventDetails extends SpecialPage {
 	public const EMAIL_PANEL = 'EmailPanel';
 	public const STATS_PANEL = 'StatsPanel';
 	public const CONTRIBUTIONS_PANEL = 'ContributionsPanel';
+	public const WORKLIST_PANEL = 'WorklistPanel';
 
 	protected ?ExistingEventRegistration $event = null;
 
@@ -55,6 +57,7 @@ class SpecialEventDetails extends SpecialPage {
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly FrontendModulesFactory $frontendModulesFactory,
 		private readonly PermissionChecker $permissionChecker,
+		private readonly EventTypesRegistry $eventTypesRegistry
 	) {
 		parent::__construct( self::PAGE_NAME );
 	}
@@ -211,6 +214,19 @@ class SpecialEventDetails extends SpecialPage {
 				$out
 			)
 		);
+		$worklistsEnabled = $this->getConfig()->get( 'CampaignEventsEnableWorklists' );
+		$hasContributionType = (bool)array_intersect(
+			$this->event->getTypes(),
+			$this->eventTypesRegistry->getContributionTypes()
+		);
+
+		if ( $worklistsEnabled && $hasContributionType ) {
+			$tabs[] = $this->createTab(
+				self::WORKLIST_PANEL,
+				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-worklists' ) ),
+				new Tag()
+			);
+		}
 		if ( $this->event->hasContributionTracking() ) {
 			$eventContributionsModule = $this->frontendModulesFactory->newEventContributionsModule(
 				$this->getLinkRenderer(),

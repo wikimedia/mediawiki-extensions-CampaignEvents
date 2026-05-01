@@ -855,7 +855,8 @@
 				"MessageFormatterFactory",
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsFrontendModulesFactory",
-				"CampaignEventsPermissionChecker"
+				"CampaignEventsPermissionChecker",
+				"CampaignEventsEventTypesRegistry"
 			]
 		},
 		"GenerateInvitationList": {
