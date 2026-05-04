@@ -72,6 +72,8 @@
 	"campaignevents-edit-form-details-label": "Поединости за настанот",
 	"campaignevents-edit-form-details-subtitle": "Внесете општи информации за настанот што го приредувате",
 	"campaignevents-edit-form-impact-statistics-label": "Статистика за влијание",
+	"campaignevents-edit-form-impact-statistics-description": "Собирајте статистика за влијанието на вашите настани. Ова можете да го направите со [$1 вклучување на статистиките за придоенси] и/или додавајќи ја врската [$2 Управувачница за програми и настани].",
+	"campaignevents-edit-form-impact-statistics-goals-description": "Ако ја вклучите Статистиката за придонеси, можете да поставите заедничка цел за да ги поттикнете вашите учесници. Напредокот кон целта ќе биде јавно видлив.",
 	"campaignevents-edit-field-page": "Страница на настанот",
 	"campaignevents-edit-field-page-help": "Страницата за настан содржи информации за вашиот настан. Учесниците можат да се пријават на страницата за настанот.",
 	"campaignevents-edit-field-event-status": "Статус на настанот",

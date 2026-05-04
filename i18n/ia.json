@@ -594,6 +594,8 @@
 	"campaignevents-postedit-dialog-action-no": "No, gratias",
 	"campaignevents-postedit-dialog-action-yes": "Si",
 	"campaignevents-postedit-success-text": "Tu modification ha essite associate a $1. Pro vider tu contribution, naviga al [$2 {{int:campaignevents-event-details-tab-contributions}} vista del evento].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "Tu pote celar iste message in tu [[$1|preferentias del evento]].",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "Tu pote optar pro celar iste message post que tu selige un evento.",
 	"campaignevents-contributions-summary-participants": "Participantes",
 	"campaignevents-contributions-summary-wikis-edited": "Wikis modificate",
 	"campaignevents-contributions-summary-articles-created": "Articulos create",
