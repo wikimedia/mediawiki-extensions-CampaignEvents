@@ -78,6 +78,7 @@
 	"campaignevents-eventpage-header-participants-label": "Osalejate arv",
 	"campaignevents-eventpage-header-details": "Veel üksikasju",
 	"campaignevents-eventpage-btn-register": "Registreeru üritusele",
+	"campaignevents-eventpage-btn-event-ended": "Üritus läbi",
 	"campaignevents-eventpage-dialog-title": "Ürituse üksikasjad",
 	"campaignevents-eventpage-dialog-organizers": "{{PLURAL:$2|Korraldaja|Korraldajad}}: $1",
 	"campaignevents-eventpage-dialog-organizers-view-all": "Vaata kõiki korraldajaid",
