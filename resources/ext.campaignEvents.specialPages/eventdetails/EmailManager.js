@@ -169,7 +169,7 @@
 				'campaignevents-email-participants-count';
 
 			this.$recipientsListElement.text(
-				// eslint-disable-next-line mediawiki/msg-doc
+
 				mw.message( msg, mw.language.convertNumber( selectionSize ) ).text()
 			);
 			return;

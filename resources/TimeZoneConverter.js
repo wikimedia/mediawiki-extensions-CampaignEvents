@@ -64,7 +64,7 @@
 			'/campaignevents/v0/formatted_time/' + language + '/' + convertedStart + '/' + convertedEnd,
 			{}
 		).then( ( resp ) => {
-			// eslint-disable-next-line mediawiki/msg-doc
+
 			const formattedRange = mw.msg(
 				message,
 				resp.startDateTime,
