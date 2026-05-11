@@ -34,7 +34,7 @@ trait EventContributionUpdateTestHelperTrait {
 			0,
 			111,
 			22,
-			0,
+			33,
 			ConvertibleTimestamp::now(),
 			false
 		);
