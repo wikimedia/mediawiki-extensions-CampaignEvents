@@ -177,7 +177,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 88,
 				'cec_links_delta' => -3,
-				'cec_references_delta' => 0,
+				'cec_references_delta' => null,
 				'cec_timestamp' => $db->timestamp( '20250101000006' ),
 				'cec_deleted' => 0,
 			],

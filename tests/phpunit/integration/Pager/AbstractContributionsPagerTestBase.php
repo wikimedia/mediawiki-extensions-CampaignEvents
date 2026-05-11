@@ -59,7 +59,7 @@ abstract class AbstractContributionsPagerTestBase extends MediaWikiIntegrationTe
 				'cec_edit_flags' => 0,
 				'cec_bytes_delta' => 77,
 				'cec_links_delta' => 7,
-				'cec_references_delta' => 6,
+				'cec_references_delta' => null,
 				'cec_timestamp' => $db->timestamp( $startTS + 2 ),
 				'cec_deleted' => 0,
 			],

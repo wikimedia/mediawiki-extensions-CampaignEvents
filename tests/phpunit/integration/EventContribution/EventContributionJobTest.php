@@ -123,7 +123,7 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 			$expectedMetrics['editedType'],
 			$expectedMetrics['bytesDelta'],
 			$expectedMetrics['linksDelta'],
-			0,
+			$expectedMetrics['referencesDelta'],
 			$timestamp,
 			false
 		);
@@ -164,9 +164,14 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $pageID, $savedContribution->getPageId() );
 		$this->assertEquals( $pagePrefixedText, $savedContribution->getPagePrefixedtext() );
 		$this->assertEquals( $params['revisionId'], $savedContribution->getRevisionId() );
-		$this->assertEquals( $expectedMetrics['editedType'], $savedContribution->getEditFlags() );
-		$this->assertEquals( $expectedMetrics['bytesDelta'], $savedContribution->getBytesDelta() );
-		$this->assertEquals( $expectedMetrics['linksDelta'], $savedContribution->getLinksDelta() );
+		$this->assertEquals( $expectedMetrics['editedType'], $savedContribution->getEditFlags(), 'Flags' );
+		$this->assertEquals( $expectedMetrics['bytesDelta'], $savedContribution->getBytesDelta(), 'Bytes' );
+		$this->assertEquals( $expectedMetrics['linksDelta'], $savedContribution->getLinksDelta(), 'Links' );
+		$this->assertEquals(
+			$expectedMetrics['referencesDelta'],
+			$savedContribution->getReferencesDelta(),
+			'References'
+		);
 		$this->assertEquals( $timestamp, $savedContribution->getTimestamp() );
 		$this->assertFalse( $savedContribution->isDeleted() );
 	}
@@ -182,19 +187,22 @@ class EventContributionJobTest extends MediaWikiIntegrationTestCase {
 		$editMetrics = [
 			'bytesDelta' => 150,
 			'editedType' => 0,
-			'linksDelta' => 3
+			'linksDelta' => 3,
+			'referencesDelta' => -1,
 		];
 
 		$creationMetrics = [
 			'bytesDelta' => 500,
 			'editedType' => EventContribution::EDIT_FLAG_PAGE_CREATION,
-			'linksDelta' => 5
+			'linksDelta' => 5,
+			'referencesDelta' => 7,
 		];
 
 		$removalMetrics = [
 			'bytesDelta' => -200,
 			'editedType' => 0,
-			'linksDelta' => -2
+			'linksDelta' => -2,
+			'referencesDelta' => 1,
 		];
 
 		$testData = [
