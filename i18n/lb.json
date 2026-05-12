@@ -618,6 +618,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "Versiouns-ID",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Gitt d'Versiouns-ID an. Gitt op den Historique vun de Versioune vun der Säit, klickt op d'Auerzäit an den Datum vun der Ännerung a kopéiert d'Nummer hanner „$1“ an der URL.",
 	"campaignevents-event-details-contributions-add-dialog-success": "Ännerung derbäigesat. Se wäert geschwënn hei optauchen.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Dës Ännerung gouf scho fir dëst Evenement derbäigesat.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Ännerung fir dëst Evenement derbäisetzen",
 	"campaignevents-contributions-summary-edit-count": "Ännerungszuel",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "De Participant huet sech privat ugemellt",

@@ -615,6 +615,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "Versienummer",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Geef het versienummer op. Open de versiegeschiedenis van de pagina, klik op de datum en tijd van de bewerking en kopieer het nummer uit de URL na \"$1\".",
 	"campaignevents-event-details-contributions-add-dialog-success": "Bewerking toegevoegd. Deze verschijnt binnenkort hier.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Deze bewerking is al toegevoegd aan dit evenement.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Een bewerking aan dit evenement toevoegen",
 	"campaignevents-contributions-summary-edit-count": "Aantal bewerkingen",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Deelnemer heeft zich privé ingeschreven",

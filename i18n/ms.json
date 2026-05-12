@@ -609,6 +609,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "ID semakan",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Masukkan ID semakan. Buka sejarah semakan laman, klik tarikh dan masa suntingan, dan salin nombor daripada URL selepas \"$1\".",
 	"campaignevents-event-details-contributions-add-dialog-success": "Suntingan ditambah. Ia akan muncul di sini tidak lama lagi.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Suntingan ini telah ditambah ke acara ini.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Tambah suntingan ke acara ini",
 	"campaignevents-contributions-summary-edit-count": "Kiraan suntingan",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Peserta mendaftar secara persendirian",

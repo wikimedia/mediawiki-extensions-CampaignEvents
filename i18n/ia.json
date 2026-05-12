@@ -608,6 +608,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "ID del version",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Insere le ID del version. Aperi le historia de versiones del pagina, clicca sur le data e hora del modification, e copia le numero del URL post “$1”.",
 	"campaignevents-event-details-contributions-add-dialog-success": "Modification addite. Illo apparera hic tosto.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Iste modification ha ja essite addite a iste evento.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Adder modification a iste evento",
 	"campaignevents-contributions-summary-edit-count": "Numero de modificationes",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Le participante se ha inscribite privatemente",

@@ -611,6 +611,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "Versions-ID",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Gib die Versions-ID ein. Öffne die Versionsgeschichte der Seite, klicke auf Datum und Uhrzeit der Bearbeitung und kopiere die Zahl aus der URL nach „$1“.",
 	"campaignevents-event-details-contributions-add-dialog-success": "Bearbeitung hinzugefügt. Sie wird in Kürze hier erscheinen.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Dieser Bearbeitung wurde bereits zu dieser Veranstaltung hinzugefügt.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Eine Bearbeitung zu dieser Veranstaltung hinzufügen",
 	"campaignevents-contributions-summary-edit-count": "Bearbeitungszähler",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Teilnehmer hat sich privat angemeldet",

@@ -609,6 +609,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "Versiya ID-si",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Versiya ID-sini daxil edin. Səhifənin redaktə tarixçəsini açın, versiya tarixinə və vaxtına klikləyin və  URL-də \"$1\"-dən sonrakı nömrəni kopiyalayın.",
 	"campaignevents-event-details-contributions-add-dialog-success": "Redaktə əlavə edildi. Tezliklə burada görünəcək.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Bu redaktə artıq bu tədbirə əlavə edilib.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Bu tədbirə redaktə əlavə et",
 	"campaignevents-contributions-summary-edit-count": "Redaktə sayı",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "İştirakçı gizli şəkildə qeydiyyatdan keçib",
