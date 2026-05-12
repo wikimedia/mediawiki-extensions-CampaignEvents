@@ -154,6 +154,30 @@ CREATE TABLE /*_*/ce_invitation_lists (
 ) /*$wgDBTableOptions*/;
 
 
+CREATE TABLE /*_*/ce_worklists (
+  cew_id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+  cew_wiki VARCHAR(64) NOT NULL,
+  cew_page_id INT UNSIGNED NOT NULL,
+  cew_page_prefixedtext VARBINARY(512) NOT NULL,
+  cew_user_id INT UNSIGNED NOT NULL,
+  cew_username VARBINARY(255) DEFAULT NULL,
+  cew_timestamp BINARY(14) NOT NULL,
+  cew_content_rev BIGINT UNSIGNED DEFAULT NULL,
+  INDEX ce_worklists_user_id (cew_user_id),
+  UNIQUE INDEX ce_worklists_wiki_page_id (cew_wiki, cew_page_id),
+  PRIMARY KEY(cew_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_worklist_events (
+  cewe_id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+  cewe_cew_id BIGINT UNSIGNED NOT NULL,
+  cewe_event_id BIGINT UNSIGNED NOT NULL,
+  UNIQUE INDEX ce_worklist_events_worklist_event (cewe_cew_id, cewe_event_id),
+  PRIMARY KEY(cewe_id)
+) /*$wgDBTableOptions*/;
+
+
 CREATE TABLE /*_*/ce_worklist_articles (
   cewa_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
   cewa_page_id INT UNSIGNED NOT NULL,
@@ -161,6 +185,22 @@ CREATE TABLE /*_*/ce_worklist_articles (
   cewa_ceil_id BIGINT UNSIGNED NOT NULL,
   INDEX ce_worklist_articles_ceil_id (cewa_ceil_id),
   PRIMARY KEY(cewa_id)
+) /*$wgDBTableOptions*/;
+
+
+CREATE TABLE /*_*/ce_worklist_pages (
+  cewp_id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+  cewp_wiki VARCHAR(64) NOT NULL,
+  cewp_page_prefixedtext VARBINARY(512) NOT NULL,
+  cewp_user_id INT UNSIGNED NOT NULL,
+  cewp_cew_id INT UNSIGNED NOT NULL,
+  cewp_timestamp BINARY(14) NOT NULL,
+  INDEX ce_worklist_pages_cewp_cew_id (cewp_cew_id),
+  UNIQUE INDEX ce_worklist_pages_wiki_page_cew_id (
+    cewp_wiki, cewp_page_prefixedtext,
+    cewp_cew_id
+  ),
+  PRIMARY KEY(cewp_id)
 ) /*$wgDBTableOptions*/;
 
 

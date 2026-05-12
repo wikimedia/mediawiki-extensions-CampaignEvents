@@ -784,6 +784,139 @@
 		"pk": [ "ceil_id" ]
 	},
 	{
+		"name": "ce_worklists",
+		"comment": "Stores worklists.",
+		"columns": [
+			{
+				"name": "cew_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cew_wiki",
+				"type": "string",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "cew_page_id",
+				"comment": "Page ID of the worklist's backing wiki page (local to cew_wiki); used to track the page across moves/deletions.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cew_page_prefixedtext",
+				"comment": "Full prefixed text for cross-wiki display, see T226667.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
+				"name": "cew_user_id",
+				"comment": "Central user ID of the worklist owner.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cew_username",
+				"comment": "Username for display and sorting; nullable when only the central ID is known.",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"length": 255
+				}
+			},
+			{
+				"name": "cew_timestamp",
+				"comment": "Timestamp for the worklist row (UTC, TS_MW).",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			},
+			{
+				"name": "cew_content_rev",
+				"comment": "ID of the last revision used to synchronize the worklist content to the secondary store; null until the first synchronization.",
+				"type": "bigint",
+				"options": {
+					"notnull": false,
+					"unsigned": true,
+					"default": null
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklists_user_id",
+				"columns": [ "cew_user_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_worklists_wiki_page_id",
+				"comment": "Each worklist's backing page is unique per wiki; also used for lookups when the page changes.",
+				"columns": [ "cew_wiki", "cew_page_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "cew_id" ]
+	},
+	{
+		"name": "ce_worklist_events",
+		"comment": "Associates a worklist with campaign events.",
+		"columns": [
+			{
+				"name": "cewe_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewe_cew_id",
+				"comment": "Foreign key to ce_worklists.cew_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewe_event_id",
+				"comment": "Foreign key to campaign_events.event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklist_events_worklist_event",
+				"comment": "One row per worklist per event.",
+				"columns": [ "cewe_cew_id", "cewe_event_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "cewe_id" ]
+	},
+	{
 		"name": "ce_worklist_articles",
 		"comment": "Stores the articles related to invitation list.",
 		"columns": [
@@ -831,6 +964,78 @@
 			}
 		],
 		"pk": [ "cewa_id" ]
+	},
+	{
+		"name": "ce_worklist_pages",
+		"comment": "Stores pages belonging to a worklist.",
+		"columns": [
+			{
+				"name": "cewp_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewp_wiki",
+				"type": "string",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "cewp_page_prefixedtext",
+				"comment": "Full prefixed text for cross-wiki display, see T226667.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
+				"name": "cewp_user_id",
+				"comment": "Central user ID associated with the page row.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewp_cew_id",
+				"comment": "Foreign key to ce_worklists.cew_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewp_timestamp",
+				"comment": "Timestamp for the worklist page row (UTC, TS_MW).",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklist_pages_cewp_cew_id",
+				"columns": [ "cewp_cew_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_worklist_pages_wiki_page_cew_id",
+				"comment": "Unique per (wiki, page) within a worklist; the leftmost (wiki, page) columns also allow looking up which worklists a page belongs to, e.g. for the post-edit dialog.",
+				"columns": [ "cewp_wiki", "cewp_page_prefixedtext", "cewp_cew_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "cewp_id" ]
 	},
 	{
 		"name": "ce_invitation_list_users",

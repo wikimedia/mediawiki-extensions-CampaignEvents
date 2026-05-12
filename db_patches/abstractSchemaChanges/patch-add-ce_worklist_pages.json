@@ -1,0 +1,75 @@
+{
+	"before": {},
+	"after": {
+		"name": "ce_worklist_pages",
+		"comment": "Stores pages belonging to a worklist.",
+		"columns": [
+			{
+				"name": "cewp_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewp_wiki",
+				"type": "string",
+				"options": {
+					"notnull": true,
+					"length": 64
+				}
+			},
+			{
+				"name": "cewp_page_prefixedtext",
+				"comment": "Full prefixed text for cross-wiki display, see T226667.",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 512
+				}
+			},
+			{
+				"name": "cewp_user_id",
+				"comment": "Central user ID associated with the page row.",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewp_cew_id",
+				"comment": "Foreign key to ce_worklists.cew_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewp_timestamp",
+				"comment": "Timestamp for the worklist page row (UTC, TS_MW).",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklist_pages_cewp_cew_id",
+				"columns": [ "cewp_cew_id" ],
+				"unique": false
+			},
+			{
+				"name": "ce_worklist_pages_wiki_page_cew_id",
+				"comment": "Unique per (wiki, page) within a worklist; the leftmost (wiki, page) columns also allow looking up which worklists a page belongs to, e.g. for the post-edit dialog.",
+				"columns": [ "cewp_wiki", "cewp_page_prefixedtext", "cewp_cew_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "cewp_id" ]
+	}
+}

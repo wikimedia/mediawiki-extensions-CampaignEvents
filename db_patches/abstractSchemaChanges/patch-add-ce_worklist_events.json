@@ -1,0 +1,45 @@
+{
+	"before": {},
+	"after": {
+		"name": "ce_worklist_events",
+		"comment": "Associates a worklist with campaign events.",
+		"columns": [
+			{
+				"name": "cewe_id",
+				"type": "integer",
+				"options": {
+					"notnull": true,
+					"autoincrement": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewe_cew_id",
+				"comment": "Foreign key to ce_worklists.cew_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			},
+			{
+				"name": "cewe_event_id",
+				"comment": "Foreign key to campaign_events.event_id",
+				"type": "bigint",
+				"options": {
+					"notnull": true,
+					"unsigned": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "ce_worklist_events_worklist_event",
+				"comment": "One row per worklist per event.",
+				"columns": [ "cewe_cew_id", "cewe_event_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "cewe_id" ]
+	}
+}

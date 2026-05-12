@@ -146,6 +146,31 @@ CREATE INDEX ce_invitation_lists_wiki ON /*_*/ce_invitation_lists (ceil_wiki);
 CREATE INDEX ce_invitation_lists_user_wiki ON /*_*/ce_invitation_lists (ceil_user_id, ceil_wiki);
 
 
+CREATE TABLE /*_*/ce_worklists (
+  cew_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  cew_wiki VARCHAR(64) NOT NULL,
+  cew_page_id INTEGER UNSIGNED NOT NULL,
+  cew_page_prefixedtext BLOB NOT NULL,
+  cew_user_id INTEGER UNSIGNED NOT NULL,
+  cew_username BLOB DEFAULT NULL,
+  cew_timestamp BLOB NOT NULL,
+  cew_content_rev BIGINT UNSIGNED DEFAULT NULL
+);
+
+CREATE INDEX ce_worklists_user_id ON /*_*/ce_worklists (cew_user_id);
+
+CREATE UNIQUE INDEX ce_worklists_wiki_page_id ON /*_*/ce_worklists (cew_wiki, cew_page_id);
+
+
+CREATE TABLE /*_*/ce_worklist_events (
+  cewe_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  cewe_cew_id BIGINT UNSIGNED NOT NULL,
+  cewe_event_id BIGINT UNSIGNED NOT NULL
+);
+
+CREATE UNIQUE INDEX ce_worklist_events_worklist_event ON /*_*/ce_worklist_events (cewe_cew_id, cewe_event_id);
+
+
 CREATE TABLE /*_*/ce_worklist_articles (
   cewa_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   cewa_page_id INTEGER UNSIGNED NOT NULL,
@@ -153,6 +178,23 @@ CREATE TABLE /*_*/ce_worklist_articles (
 );
 
 CREATE INDEX ce_worklist_articles_ceil_id ON /*_*/ce_worklist_articles (cewa_ceil_id);
+
+
+CREATE TABLE /*_*/ce_worklist_pages (
+  cewp_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  cewp_wiki VARCHAR(64) NOT NULL,
+  cewp_page_prefixedtext BLOB NOT NULL,
+  cewp_user_id INTEGER UNSIGNED NOT NULL,
+  cewp_cew_id INTEGER UNSIGNED NOT NULL,
+  cewp_timestamp BLOB NOT NULL
+);
+
+CREATE INDEX ce_worklist_pages_cewp_cew_id ON /*_*/ce_worklist_pages (cewp_cew_id);
+
+CREATE UNIQUE INDEX ce_worklist_pages_wiki_page_cew_id ON /*_*/ce_worklist_pages (
+  cewp_wiki, cewp_page_prefixedtext,
+  cewp_cew_id
+);
 
 
 CREATE TABLE /*_*/ce_invitation_list_users (

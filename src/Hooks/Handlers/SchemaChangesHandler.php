@@ -140,5 +140,29 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 			"$dir/$dbType/patch-add-cec_references_delta.sql",
 			true
 		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_worklists',
+			"$dir/$dbType/patch-add-ce_worklists.sql",
+			true
+		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_worklist_events',
+			"$dir/$dbType/patch-add-ce_worklist_events.sql",
+			true
+		] );
+
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			Utils::VIRTUAL_DB_DOMAIN,
+			'addTable',
+			'ce_worklist_pages',
+			"$dir/$dbType/patch-add-ce_worklist_pages.sql",
+			true
+		] );
 	}
 }
