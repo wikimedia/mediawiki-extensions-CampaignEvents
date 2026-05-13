@@ -621,6 +621,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "ID версії",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Введіть ID версії. Відкрийте історію версії сторінки, натисніть на дату і час редагування та скопіюйте число з URL після «$1».",
 	"campaignevents-event-details-contributions-add-dialog-success": "Редагування додано. Воно скоро з'явиться тут.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Це редагування вже додано до цієї події.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Додати редагування до цієї події",
 	"campaignevents-contributions-summary-edit-count": "Лічильник редагувань",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Учасника зареєстровано приватно",

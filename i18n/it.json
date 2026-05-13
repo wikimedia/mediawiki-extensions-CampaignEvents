@@ -515,6 +515,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "ID versione",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Inserisci l'ID della versione. Apri la cronologia della pagina, clicca su data e ora della modifica e copia il numero dall'URL dopo \"$1\".",
 	"campaignevents-event-details-contributions-add-dialog-success": "Modifica aggiunta. Apparirà presto qui.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Questa modifica è già stata aggiunta a questo evento.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Aggiungi modifica a questo evento",
 	"campaignevents-event-details-contributions-actions": "Azioni",
 	"campaignevents-event-details-contributions-delete-tooltip": "Rimuovi contributo",
