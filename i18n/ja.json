@@ -14,7 +14,8 @@
 			"Sou0012",
 			"Tmv",
 			"もなー(偽物)",
-			"春春眠眠"
+			"春春眠眠",
+			"Marine-Blue"
 		]
 	},
 	"campaignevents-desc": "キャンペーンの主催者用と参加者用の機能を提供。",
@@ -32,6 +33,7 @@
 	"right-campaignevents-email-participants": "メールイベントに参加",
 	"action-campaignevents-view-private-participants": "プライベートイベントの参加者の閲覧",
 	"right-campaignevents-view-private-participants": "プライベートイベントの参加者を閲覧",
+	"right-campaignevents-generate-invitation-lists": "招待者リストを作成する",
 	"specialpages-group-campaignevents": "イベント",
 	"campaignevents-error-invalid-id": "イベントIDは正の整数である必要があります。",
 	"campaignevents-error-empty-title": "イベントページのタイトルを入力して下さい。",
