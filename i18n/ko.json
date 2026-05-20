@@ -615,7 +615,7 @@
 	"campaignevents-event-details-contributions-add-dialog-open-button": "이 이벤트에 편집을 추가",
 	"campaignevents-contributions-summary-edit-count": "편집 수",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "비공개로 등록된 참가자",
-	"campaignevents-event-details-contributions-actions": "동작",
+	"campaignevents-event-details-contributions-actions": "작업",
 	"campaignevents-event-details-contributions-delete-tooltip": "기여 제거",
 	"campaignevents-event-details-contributions-delete-success": "해당 편집은 이벤트에서 제거되었습니다.",
 	"campaignevents-event-details-contributions-delete-error": "기여를 제거하는 도중에 오류 발생.",
