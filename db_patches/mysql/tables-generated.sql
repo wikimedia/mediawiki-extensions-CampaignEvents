@@ -178,13 +178,13 @@ CREATE TABLE /*_*/ce_worklist_events (
 ) /*$wgDBTableOptions*/;
 
 
-CREATE TABLE /*_*/ce_worklist_articles (
-  cewa_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
-  cewa_page_id INT UNSIGNED NOT NULL,
-  cewa_page_title VARBINARY(255) NOT NULL,
-  cewa_ceil_id BIGINT UNSIGNED NOT NULL,
-  INDEX ce_worklist_articles_ceil_id (cewa_ceil_id),
-  PRIMARY KEY(cewa_id)
+CREATE TABLE /*_*/ce_invitation_list_articles (
+  ceila_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+  ceila_page_id INT UNSIGNED NOT NULL,
+  ceila_page_title VARBINARY(255) NOT NULL,
+  ceila_ceil_id BIGINT UNSIGNED NOT NULL,
+  INDEX ce_invitation_list_articles_ceil_id (ceila_ceil_id),
+  PRIMARY KEY(ceila_id)
 ) /*$wgDBTableOptions*/;
 
 
