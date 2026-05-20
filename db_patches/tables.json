@@ -917,11 +917,11 @@
 		"pk": [ "cewe_id" ]
 	},
 	{
-		"name": "ce_worklist_articles",
+		"name": "ce_invitation_list_articles",
 		"comment": "Stores the articles related to invitation list.",
 		"columns": [
 			{
-				"name": "cewa_id",
+				"name": "ceila_id",
 				"type": "bigint",
 				"options": {
 					"notnull": true,
@@ -930,7 +930,7 @@
 				}
 			},
 			{
-				"name": "cewa_page_id",
+				"name": "ceila_page_id",
 				"type": "integer",
 				"options": {
 					"notnull": true,
@@ -938,7 +938,7 @@
 				}
 			},
 			{
-				"name": "cewa_page_title",
+				"name": "ceila_page_title",
 				"comment": "This will be used to handle deleted pages to show redlinks, not storing page namespace because we're only supporting mainspace pages for now",
 				"type": "binary",
 				"options": {
@@ -947,7 +947,7 @@
 				}
 			},
 			{
-				"name": "cewa_ceil_id",
+				"name": "ceila_ceil_id",
 				"type": "bigint",
 				"options": {
 					"notnull": true,
@@ -957,13 +957,13 @@
 		],
 		"indexes": [
 			{
-				"name": "ce_worklist_articles_ceil_id",
+				"name": "ce_invitation_list_articles_ceil_id",
 				"comment": "Get the list of articles by invitation list ID",
-				"columns": [ "cewa_ceil_id" ],
+				"columns": [ "ceila_ceil_id" ],
 				"unique": false
 			}
 		],
-		"pk": [ "cewa_id" ]
+		"pk": [ "ceila_id" ]
 	},
 	{
 		"name": "ce_worklist_pages",

@@ -198,15 +198,15 @@ CREATE TABLE ce_worklist_events (
 CREATE UNIQUE INDEX ce_worklist_events_worklist_event ON ce_worklist_events (cewe_cew_id, cewe_event_id);
 
 
-CREATE TABLE ce_worklist_articles (
-  cewa_id BIGSERIAL NOT NULL,
-  cewa_page_id INT NOT NULL,
-  cewa_page_title TEXT NOT NULL,
-  cewa_ceil_id BIGINT NOT NULL,
-  PRIMARY KEY(cewa_id)
+CREATE TABLE ce_invitation_list_articles (
+  ceila_id BIGSERIAL NOT NULL,
+  ceila_page_id INT NOT NULL,
+  ceila_page_title TEXT NOT NULL,
+  ceila_ceil_id BIGINT NOT NULL,
+  PRIMARY KEY(ceila_id)
 );
 
-CREATE INDEX ce_worklist_articles_ceil_id ON ce_worklist_articles (cewa_ceil_id);
+CREATE INDEX ce_invitation_list_articles_ceil_id ON ce_invitation_list_articles (ceila_ceil_id);
 
 
 CREATE TABLE ce_worklist_pages (

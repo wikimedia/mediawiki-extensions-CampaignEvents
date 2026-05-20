@@ -55,14 +55,14 @@ class InvitationListStore {
 		$rows = [];
 		foreach ( $localPages as $article ) {
 			$rows[] = [
-				'cewa_page_id' => $article->getId( $article->getWikiId() ),
-				'cewa_page_title' => $article->getDBkey(),
-				'cewa_ceil_id' => $invitationListID,
+				'ceila_page_id' => $article->getId( $article->getWikiId() ),
+				'ceila_page_title' => $article->getDBkey(),
+				'ceila_ceil_id' => $invitationListID,
 			];
 		}
 		$dbw = $this->databaseHelper->getPrimaryConnection();
 		$dbw->newInsertQueryBuilder()
-			->insertInto( 'ce_worklist_articles' )
+			->insertInto( 'ce_invitation_list_articles' )
 			->rows( $rows )
 			->caller( __METHOD__ )
 			->execute();
@@ -141,8 +141,8 @@ class InvitationListStore {
 			->fetchField();
 		$res = $dbr->newSelectQueryBuilder()
 			->select( '*' )
-			->from( 'ce_worklist_articles' )
-			->where( [ 'cewa_ceil_id' => $invitationListID ] )
+			->from( 'ce_invitation_list_articles' )
+			->where( [ 'ceila_ceil_id' => $invitationListID ] )
 			->caller( __METHOD__ )
 			->fetchResultSet();
 
@@ -156,7 +156,7 @@ class InvitationListStore {
 	private function loadPagesFromDB( IResultWrapper $rows, string $invitationListWiki ): array {
 		$titlesById = [];
 		foreach ( $rows as $row ) {
-			$titlesById[$row->cewa_page_id] = $row->cewa_page_title;
+			$titlesById[$row->ceila_page_id] = $row->ceila_page_title;
 		}
 
 		$wikiID = $invitationListWiki === WikiMap::getCurrentWikiId() ? WikiAwareEntity::LOCAL : $invitationListWiki;

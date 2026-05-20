@@ -171,13 +171,13 @@ CREATE TABLE /*_*/ce_worklist_events (
 CREATE UNIQUE INDEX ce_worklist_events_worklist_event ON /*_*/ce_worklist_events (cewe_cew_id, cewe_event_id);
 
 
-CREATE TABLE /*_*/ce_worklist_articles (
-  cewa_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  cewa_page_id INTEGER UNSIGNED NOT NULL,
-  cewa_page_title BLOB NOT NULL, cewa_ceil_id BIGINT UNSIGNED NOT NULL
+CREATE TABLE /*_*/ce_invitation_list_articles (
+  ceila_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  ceila_page_id INTEGER UNSIGNED NOT NULL,
+  ceila_page_title BLOB NOT NULL, ceila_ceil_id BIGINT UNSIGNED NOT NULL
 );
 
-CREATE INDEX ce_worklist_articles_ceil_id ON /*_*/ce_worklist_articles (cewa_ceil_id);
+CREATE INDEX ce_invitation_list_articles_ceil_id ON /*_*/ce_invitation_list_articles (ceila_ceil_id);
 
 
 CREATE TABLE /*_*/ce_worklist_pages (
