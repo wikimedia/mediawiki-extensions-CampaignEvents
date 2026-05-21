@@ -749,7 +749,7 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 		// empty string (= the value was explicitly specified as an empty string) vs null (=value not specified).
 		// That's mostly intended for API consumers, and here for the UI we can just assume that
 		// empty string === not specified.
-				$nullableFields = [ 'EventMeetingURL', 'EventMeetingAddress', 'EventChatURL', 'EventGoalType' ];
+		$nullableFields = [ 'EventMeetingURL', 'EventMeetingAddress', 'EventChatURL', 'EventGoalType' ];
 		foreach ( $nullableFields as $fieldName ) {
 			if ( array_key_exists( $fieldName, $data ) ) {
 				$data[$fieldName] = $data[$fieldName] !== '' ? $data[$fieldName] : null;
@@ -811,8 +811,14 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 
 		$testEvent = $data['TestEvent'] === "1";
 
-		$goalTargetRaw = $data['EventGoalTarget'] ?? null;
-		$goalTarget = $goalTargetRaw !== '' && $goalTargetRaw !== null ? (int)$goalTargetRaw : null;
+		// XXX We need to set the target to null explicitly when there's no type, otherwise HTMLForm will forcefully
+		// use the default value, see T426950 / T426955.
+		if ( $data['EventGoalType'] !== null ) {
+			$goalTargetRaw = $data['EventGoalTarget'] ?? null;
+			$goalTarget = $goalTargetRaw !== '' && $goalTargetRaw !== null ? (int)$goalTargetRaw : null;
+		} else {
+			$goalTarget = null;
+		}
 
 		try {
 			$event = $this->eventFactory->newEvent(
