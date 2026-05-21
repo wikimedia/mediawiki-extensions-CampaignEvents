@@ -652,9 +652,8 @@ abstract class AbstractEventRegistrationSpecialPage extends FormSpecialPage {
 			'default' => $piiNotice->toString(),
 			'raw' => true,
 			'section' => self::PARTICIPANT_QUESTIONS_SECTION,
-			// XXX: Ideally we would use a `hide-if` here, but that doesn't work with `multiselect` (T358060).
-			// Or we could implement it manually in JS, except it still won't work because the multiselect cannot
-			// be infused (T358682).
+			// XXX: Ideally we would use a `hide-if` here, and hide this when no PII questions are selected. However,
+			// it won't work because the question multiselect cannot be infused (T358682).
 		];
 
 		return $fields;
