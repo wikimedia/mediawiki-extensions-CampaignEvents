@@ -59,6 +59,7 @@ use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
@@ -315,6 +316,12 @@ class CampaignEventsServices {
 		?ContainerInterface $services = null
 	): GoalProgressFormatter {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( GoalProgressFormatter::SERVICE_NAME );
+	}
+
+	public static function getWorklistArticleHelper(
+		?ContainerInterface $services = null
+	): WorklistArticleHelper {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistArticleHelper::SERVICE_NAME );
 	}
 
 	public static function getWorklistEventsStore( ?ContainerInterface $services = null ): WorklistEventsStore {

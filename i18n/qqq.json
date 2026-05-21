@@ -659,6 +659,8 @@
 	"campaignevents-goal-progress-metric-total_bytes_removed": "Short label used in the goal progress description for the \"bytes removed\" metric.\nParameters:\n* $1 - number of bytes, for PLURAL.\n*",
 	"campaignevents-goal-progress-metric-total_links_added": "Short label used in the goal progress description for the \"links added\" metric.\nParameters:\n* $1 - number of links, for PLURAL.\n*",
 	"campaignevents-goal-progress-metric-total_links_removed": "Short label used in the goal progress description for the \"links removed\" metric.\nParameters:\n* $1 - number of links, for PLURAL.\n*",
+	"campaignevents-worklist-page-not-worklist": "Shown as the error body when the target worklist page already exists but does not use the worklist content model, so it must not be overwritten.",
+	"campaignevents-worklist-edit-permission-denied": "Permission error shown by the GetUserPermissionsErrors hook when a non-named user (logged-out or temporary account) tries to edit a page that uses the worklist content model.",
 	"campaignevents-worklist-content-not-object": "Error message shown when the content of a worklist page is not a JSON object.",
 	"campaignevents-worklist-content-nonexistent-wiki": "Error message shown when a section of a worklist page uses an invalid wiki ID. Parameters:\n* $1 - The wiki ID",
 	"campaignevents-worklist-content-wiki-value-not-array": "Error message shown when the content of a section in a worklist page is not a JSON array. Parameters:\n* $1 - The contents of the section",

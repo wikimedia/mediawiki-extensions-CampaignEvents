@@ -652,6 +652,8 @@
 	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 {{PLURAL:$1|byte|bytes}} removed",
 	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|link|links}} added",
 	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|link|links}} removed",
+	"campaignevents-worklist-page-not-worklist": "The target page already exists and is not a worklist page.",
+	"campaignevents-worklist-edit-permission-denied": "Only logged-in (named) users may edit worklist pages.",
 	"campaignevents-worklist-content-not-object": "The worklist content must be an object",
 	"campaignevents-worklist-content-nonexistent-wiki": "Wiki ID $1 was not recognized. Please check that it is a valid wiki ID.",
 	"campaignevents-worklist-content-wiki-value-not-array": "The page list for each wiki must be an array. Found invalid value: $1",

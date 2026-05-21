@@ -185,6 +185,9 @@
 				"JobQueueGroup",
 				"MainWANObjectCache"
 			]
+		},
+		"WorklistPage": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\WorklistPageHandler"
 		}
 	},
 	"Hooks": {
@@ -200,7 +203,8 @@
 		"CentralAuthUserVisibilityChanged": "CentralAuthContributionUserChangesHandler",
 		"BlockIpComplete": "ContributionUserChangesHandler",
 		"UnblockUserComplete": "ContributionUserChangesHandler",
-		"RenameUserComplete": "ContributionUserChangesHandler"
+		"RenameUserComplete": "ContributionUserChangesHandler",
+		"getUserPermissionsErrors": "WorklistPage"
 	},
 	"DomainEventIngresses": [
 		{
