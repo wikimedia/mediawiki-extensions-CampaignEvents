@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Srđan"
+		]
+	},
+	"group-event-organizer": "Organizatori događaja",
+	"group-event-organizer-member": "{{GENDER:$1|organizator|organizatorica}} događaja",
+	"grouppage-event-organizer": "{{ns:project}}:Organizatori događaja"
+}
