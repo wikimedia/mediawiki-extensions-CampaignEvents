@@ -9,7 +9,7 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 trait InvitationListTestHelperTrait {
-	private function insertWorklistData() {
+	private function insertArticleListData() {
 		// TODO: Integrate the data better with the test methods (i.e., avoid assumptions)
 		$db = $this->getDb();
 

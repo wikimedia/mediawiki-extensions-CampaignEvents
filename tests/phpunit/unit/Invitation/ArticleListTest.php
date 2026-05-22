@@ -6,16 +6,16 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Invitation;
 
 use Generator;
 use MediaWiki\DAO\WikiAwareEntity;
-use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleList;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiUnitTestCase;
 use Wikimedia\Assert\AssertionException;
 
 /**
- * @covers \MediaWiki\Extension\CampaignEvents\Invitation\Worklist
+ * @covers \MediaWiki\Extension\CampaignEvents\Invitation\ArticleList
  */
-class WorklistTest extends MediaWikiUnitTestCase {
+class ArticleListTest extends MediaWikiUnitTestCase {
 	/**
 	 * @dataProvider provideConstructorData
 	 */
@@ -24,7 +24,7 @@ class WorklistTest extends MediaWikiUnitTestCase {
 			$this->expectException( AssertionException::class );
 			$this->expectExceptionMessage( $expectedError );
 		}
-		new Worklist( $pages );
+		new ArticleList( $pages );
 		if ( $expectedError === null ) {
 			$this->addToAssertionCount( 1 );
 		}
@@ -59,14 +59,14 @@ class WorklistTest extends MediaWikiUnitTestCase {
 
 	public function testGetter() {
 		$pagesByWiki = self::getSamplePagesByWiki();
-		$worklist = new Worklist( $pagesByWiki );
-		$this->assertSame( $pagesByWiki, $worklist->getPagesByWiki() );
+		$articleList = new ArticleList( $pagesByWiki );
+		$this->assertSame( $pagesByWiki, $articleList->getPagesByWiki() );
 	}
 
 	public function testSerialization() {
 		$pagesByWiki = self::getSamplePagesByWiki();
-		$worklist = new Worklist( $pagesByWiki );
-		$this->assertEquals( $worklist, Worklist::fromPlainArray( $worklist->toPlainArray() ) );
+		$articleList = new ArticleList( $pagesByWiki );
+		$this->assertEquals( $articleList, ArticleList::fromPlainArray( $articleList->toPlainArray() ) );
 	}
 
 	private static function getSamplePagesByWiki(): array {

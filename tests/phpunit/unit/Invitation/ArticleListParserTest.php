@@ -6,8 +6,8 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Invitation;
 
 use Generator;
 use LogicException;
-use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
-use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleList;
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleListParser;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\PageStore;
@@ -17,18 +17,18 @@ use MediaWikiUnitTestCase;
 use StatusValue;
 
 /**
- * @covers \MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser
+ * @covers \MediaWiki\Extension\CampaignEvents\Invitation\ArticleListParser
  */
-class WorklistParserTest extends MediaWikiUnitTestCase {
-	private function getWorklistParser(
+class ArticleListParserTest extends MediaWikiUnitTestCase {
+	private function getArticleListParser(
 		?PageStoreFactory $pageStoreFactory = null
-	): WorklistParser {
-		return new WorklistParser(
+	): ArticleListParser {
+		return new ArticleListParser(
 			$pageStoreFactory ?? $this->createMock( PageStoreFactory::class )
 		);
 	}
 
-	public function testParseWorklist() {
+	public function testParseArticleList() {
 		$wiki = 'some_wiki';
 		$pages = [
 			'Page 1' => new PageIdentityValue( 5, NS_MAIN, 'Page_1', $wiki ),
@@ -47,14 +47,14 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 		$pageStoreFactory->method( 'getPageStore' )
 			->with( $wiki )
 			->willReturn( $pageStore );
-		$parser = $this->getWorklistParser( $pageStoreFactory );
+		$parser = $this->getArticleListParser( $pageStoreFactory );
 
-		$expectedWorklist = new Worklist( [
+		$expectedArticleList = new ArticleList( [
 			$wiki => array_values( $pages )
 		] );
-		$status = $parser->parseWorklist( [ $wiki => array_keys( $pages ) ] );
+		$status = $parser->parseArticleList( [ $wiki => array_keys( $pages ) ] );
 		$this->assertStatusGood( $status );
-		$this->assertEquals( $expectedWorklist, $status->getValue() );
+		$this->assertEquals( $expectedArticleList, $status->getValue() );
 	}
 
 	/**
@@ -62,9 +62,9 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 	 * @param array<string,ProperPageIdentity|null> $pageToObjMap Array that maps page names to the page identity
 	 * (or null) that PageStore should return for that page.
 	 * @param StatusValue $expected
-	 * @dataProvider provideParseWorklist
+	 * @dataProvider provideParseArticleList
 	 */
-	public function testParseWorklist__error( array $pages, array $pageToObjMap, StatusValue $expected ) {
+	public function testParseArticleList__error( array $pages, array $pageToObjMap, StatusValue $expected ) {
 		$pageStore = $this->createMock( PageStore::class );
 		$pageStore->method( 'getPageByText' )
 			->willReturnCallback( static function ( $page ) use ( $pageToObjMap ) {
@@ -75,12 +75,12 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 			} );
 		$pageStoreFactory = $this->createMock( PageStoreFactory::class );
 		$pageStoreFactory->method( 'getPageStore' )->willReturn( $pageStore );
-		$parser = $this->getWorklistParser( $pageStoreFactory );
-		$status = $parser->parseWorklist( $pages );
+		$parser = $this->getArticleListParser( $pageStoreFactory );
+		$status = $parser->parseArticleList( $pages );
 		$this->assertStatusMessagesExactly( $expected, $status );
 	}
 
-	public static function provideParseWorklist(): Generator {
+	public static function provideParseArticleList(): Generator {
 		$wiki = 'localwiki';
 		$invalidTitles = [ 'Invalid title 1', 'Invalid title 2' ];
 		$nonexistentTitles = [ 'Nonexistent title 1', 'Nonexistent title 2' ];
@@ -324,13 +324,13 @@ class WorklistParserTest extends MediaWikiUnitTestCase {
 
 		yield 'Too many pages' => [
 			[
-				$wiki => range( 1, WorklistParser::ARTICLES_LIMIT + 1 )
+				$wiki => range( 1, ArticleListParser::ARTICLES_LIMIT + 1 )
 			],
 			[],
 			StatusValue::newFatal(
 				'campaignevents-worklist-error-too-large',
-				Message::numParam( WorklistParser::ARTICLES_LIMIT + 1 ),
-				Message::numParam( WorklistParser::ARTICLES_LIMIT )
+				Message::numParam( ArticleListParser::ARTICLES_LIMIT + 1 ),
+				Message::numParam( ArticleListParser::ARTICLES_LIMIT )
 			),
 		];
 	}

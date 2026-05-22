@@ -11,8 +11,8 @@ use MediaWiki\WikiMap\WikiMap;
 use StatusValue;
 use Wikimedia\Assert\Assert;
 
-class WorklistParser {
-	public const SERVICE_NAME = 'CampaignEventsWorklistParser';
+class ArticleListParser {
+	public const SERVICE_NAME = 'CampaignEventsArticleListParser';
 
 	public const ARTICLES_LIMIT = 300;
 
@@ -22,13 +22,13 @@ class WorklistParser {
 	}
 
 	/**
-	 * Converts a list of raw page titles into a Worklist object, validating them in the process.
+	 * Converts a list of raw page titles into a {@link ArticleList} object, validating them in the process.
 	 *
 	 * @param array<string,string[]> $pageNamesByWiki $pageNamesByWiki Wiki IDs should always be string, and not use
 	 * WikiAwareEntity::LOCAL to avoid fun autocasting issues where PHP turns `false` into `0` when used as array key.
-	 * @return StatusValue If good, the value is a Worklist object.
+	 * @return StatusValue<ArticleList>
 	 */
-	public function parseWorklist( array $pageNamesByWiki ): StatusValue {
+	public function parseArticleList( array $pageNamesByWiki ): StatusValue {
 		Assert::parameterKeyType( 'string', $pageNamesByWiki, '$pageNamesByWiki' );
 		$totalPageCount = array_sum( array_map( 'count', $pageNamesByWiki ) );
 		if ( $totalPageCount === 0 ) {
@@ -101,7 +101,7 @@ class WorklistParser {
 		}
 
 		if ( $ret->isGood() ) {
-			$ret->setResult( true, new Worklist( $pagesByWiki ) );
+			$ret->setResult( true, new ArticleList( $pagesByWiki ) );
 		}
 
 		return $ret;

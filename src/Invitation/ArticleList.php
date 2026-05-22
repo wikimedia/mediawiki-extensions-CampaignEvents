@@ -11,12 +11,12 @@ use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\Assert\Assert;
 
 /**
- * Value object that represents a worklist, i.e. a list of articles for which we can generate invitation lists.
+ * Value object that represents a list of articles for which we can generate invitation lists.
  */
-class Worklist {
+class ArticleList {
 	/**
-	 * @param array<string,PageIdentity[]> $pagesByWiki Must have been validated by WorklistParser if it comes from
-	 * the user.
+	 * @param array<string,PageIdentity[]> $pagesByWiki Must have been validated by {@link ArticleListParser} if it
+	 * comes from the user.
 	 * @phan-param non-empty-array<string,non-empty-list<PageIdentity>> $pagesByWiki
 	 */
 	public function __construct(
@@ -34,7 +34,7 @@ class Worklist {
 				} else {
 					Assert::precondition( $page->getWikiId() === $wiki, 'Page wiki ID should match array key' );
 				}
-				// No existence and namespace check, they might fail for stored worklists.
+				// No existence and namespace check, they might fail for stored article lists.
 			}
 		}
 	}

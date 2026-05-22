@@ -18,7 +18,7 @@ class PotentialInviteesFinderTest extends MediaWikiIntegrationTestCase {
 	use InvitationListTestHelperTrait;
 
 	public function addDBDataOnce(): void {
-		$this->insertWorklistData();
+		$this->insertArticleListData();
 	}
 
 	public function testGenerate() {
@@ -29,15 +29,15 @@ class PotentialInviteesFinderTest extends MediaWikiIntegrationTestCase {
 				'Page 3',
 			]
 		];
-		$worklistStatus = CampaignEventsServices::getWorklistParser()->parseWorklist( $pageNamesByWiki );
-		$this->assertStatusGood( $worklistStatus );
+		$articleListStatus = CampaignEventsServices::getArticleListParser()->parseArticleList( $pageNamesByWiki );
+		$this->assertStatusGood( $articleListStatus );
 		$debugLogs = '';
 		$debugLogCollector = static function ( string $msg ) use ( &$debugLogs ): void {
 			$debugLogs .= $msg . "\n";
 		};
 		$finder = CampaignEventsServices::getPotentialInviteesFinder();
 		$finder->setDebugLogger( $debugLogCollector );
-		$invitationList = $finder->generate( $worklistStatus->getValue() );
+		$invitationList = $finder->generate( $articleListStatus->getValue() );
 
 		$this->assertArrayEquals(
 			[

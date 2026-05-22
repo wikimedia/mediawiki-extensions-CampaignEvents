@@ -40,14 +40,14 @@ class InvitationListGenerator {
 	public function createIfAllowed(
 		string $name,
 		?string $eventPage,
-		Worklist $worklist,
+		ArticleList $articleList,
 		Authority $performer
 	): StatusValue {
 		$permStatus = $this->authorizeCreation( $performer );
 		if ( !$permStatus->isGood() ) {
 			return $permStatus;
 		}
-		return $this->createUnsafe( $name, $eventPage, $worklist, $performer );
+		return $this->createUnsafe( $name, $eventPage, $articleList, $performer );
 	}
 
 	private function authorizeCreation( Authority $performer ): PermissionStatus {
@@ -63,7 +63,7 @@ class InvitationListGenerator {
 	public function createUnsafe(
 		string $name,
 		?string $eventPage,
-		Worklist $worklist,
+		ArticleList $articleList,
 		Authority $performer
 	): StatusValue {
 		if ( trim( $name ) === '' ) {
@@ -85,11 +85,11 @@ class InvitationListGenerator {
 
 		$user = $this->centralUserLookup->newFromAuthority( $performer );
 		$listID = $this->invitationListStore->createInvitationList( $name, $eventID, $user );
-		$this->invitationListStore->storeWorklist( $listID, $worklist );
+		$this->invitationListStore->storeArticleList( $listID, $articleList );
 
 		$findInviteesJob = new FindPotentialInviteesJob( [
 			'list-id' => $listID,
-			'serialized-worklist' => $worklist->toPlainArray()
+			'serialized-articlelist' => $articleList->toPlainArray()
 		] );
 		$this->jobQueueGroup->push( $findInviteesJob );
 

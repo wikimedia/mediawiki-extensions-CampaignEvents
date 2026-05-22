@@ -46,8 +46,8 @@ class InvitationListStore {
 		return $dbw->insertId();
 	}
 
-	public function storeWorklist( int $invitationListID, Worklist $worklist ): void {
-		$pagesByWiki = $worklist->getPagesByWiki();
+	public function storeArticleList( int $invitationListID, ArticleList $articleList ): void {
+		$pagesByWiki = $articleList->getPagesByWiki();
 		$curWikiID = WikiMap::getCurrentWikiId();
 		Assert::precondition( count( $pagesByWiki ) === 1, 'Max 1 wiki' );
 		Assert::precondition( key( $pagesByWiki ) === $curWikiID, 'Pages must be local' );
@@ -131,7 +131,7 @@ class InvitationListStore {
 		);
 	}
 
-	public function getWorklist( int $invitationListID ): Worklist {
+	public function getArticleList( int $invitationListID ): ArticleList {
 		$dbr = $this->databaseHelper->getReplicaConnection();
 		$invitationListWiki = $dbr->newSelectQueryBuilder()
 			->select( 'ceil_wiki' )
@@ -147,7 +147,7 @@ class InvitationListStore {
 			->fetchResultSet();
 
 		$pages = $this->loadPagesFromDB( $res, $invitationListWiki );
-		return new Worklist( [ $invitationListWiki => $pages ] );
+		return new ArticleList( [ $invitationListWiki => $pages ] );
 	}
 
 	/**

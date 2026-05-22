@@ -735,7 +735,7 @@
 			"services": [
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsInvitationListGenerator",
-				"CampaignEventsWorklistParser"
+				"CampaignEventsArticleListParser"
 			]
 		},
 		"MyInvitationLists": {

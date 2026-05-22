@@ -11,20 +11,20 @@ use MediaWiki\JobQueue\Job;
 
 class FindPotentialInviteesJob extends Job implements GenericParameterJob {
 	private int $listID;
-	private Worklist $worklist;
+	private ArticleList $articleList;
 
 	/**
 	 * @inheritDoc
-	 * @phan-param array{list-id:int,serialized-worklist:array} $params
+	 * @phan-param array{list-id:int,serialized-articlelist:array} $params
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( 'CampaignEventsFindPotentialInvitees', $params );
-		$missingParams = array_diff( [ 'list-id', 'serialized-worklist' ], array_keys( $params ) );
+		$missingParams = array_diff( [ 'list-id', 'serialized-articlelist' ], array_keys( $params ) );
 		if ( $missingParams ) {
 			throw new InvalidArgumentException( "Missing parameters: " . implode( ', ', $missingParams ) );
 		}
 		$this->listID = $params['list-id'];
-		$this->worklist = Worklist::fromPlainArray( $params['serialized-worklist'] );
+		$this->articleList = ArticleList::fromPlainArray( $params['serialized-articlelist'] );
 	}
 
 	/**
@@ -32,7 +32,7 @@ class FindPotentialInviteesJob extends Job implements GenericParameterJob {
 	 */
 	public function run(): bool {
 		$finder = CampaignEventsServices::getPotentialInviteesFinder();
-		$inviteesByName = $finder->generate( $this->worklist );
+		$inviteesByName = $finder->generate( $this->articleList );
 
 		$centralUserLookup = CampaignEventsServices::getCentralUserLookup();
 		$usernameMap = array_fill_keys( array_keys( $inviteesByName ), null );

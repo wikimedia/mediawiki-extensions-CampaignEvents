@@ -7,10 +7,10 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Invitation;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleList;
 use MediaWiki\Extension\CampaignEvents\Invitation\FindPotentialInviteesJob;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
-use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\InvalidEventPageException;
@@ -68,9 +68,9 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 		$permChecker = $this->createMock( PermissionChecker::class );
 		$permChecker->method( 'userCanUseInvitationLists' )->willReturn( $canUseInvitationLists );
 		$generator = $this->getGenerator( $permChecker );
-		$worklist = $this->createMock( Worklist::class );
+		$articleList = $this->createMock( ArticleList::class );
 		$performer = $this->createMock( Authority::class );
-		$res = $generator->createIfAllowed( 'Name', null, $worklist, $performer );
+		$res = $generator->createIfAllowed( 'Name', null, $articleList, $performer );
 		if ( $expectedError ) {
 			$this->assertStatusNotGood( $res );
 			$this->assertStatusMessage( $expectedError, $res );
@@ -127,7 +127,7 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 		$organizersStore->method( 'isEventOrganizer' )
 			->willReturn( $isOrganizer );
 
-		$worklist = new Worklist( [
+		$articleList = new ArticleList( [
 			'some_wiki' => [
 				new PageIdentityValue( 42, NS_MAIN, 'Some_title', 'some_wiki' )
 			]
@@ -143,12 +143,12 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 				->willReturn( $listID );
 			$jobQueueGroup->expects( $this->once() )
 				->method( 'push' )
-				->willReturnCallback( function ( $job ) use ( $listID, $worklist ) {
+				->willReturnCallback( function ( $job ) use ( $listID, $articleList ) {
 					$this->assertInstanceOf( FindPotentialInviteesJob::class, $job );
 					/** @var TestingAccessWrapper&FindPotentialInviteesJob $jobWrapper */
 					$jobWrapper = TestingAccessWrapper::newFromObject( $job );
 					$this->assertSame( $listID, $jobWrapper->listID );
-					$this->assertEquals( $worklist, $jobWrapper->worklist );
+					$this->assertEquals( $articleList, $jobWrapper->articleList );
 				} );
 		}
 
@@ -156,7 +156,7 @@ class InvitationListGeneratorTest extends MediaWikiUnitTestCase {
 			null, $pageFactory, $pageEventLookup, $organizersStore, $invitationListStore, $jobQueueGroup
 		);
 
-		$res = $generator->createUnsafe( $name, $eventPageTitle, $worklist, $performer );
+		$res = $generator->createUnsafe( $name, $eventPageTitle, $articleList, $performer );
 		if ( $expectedError ) {
 			$this->assertStatusNotGood( $res );
 			$this->assertStatusMessage( $expectedError, $res );

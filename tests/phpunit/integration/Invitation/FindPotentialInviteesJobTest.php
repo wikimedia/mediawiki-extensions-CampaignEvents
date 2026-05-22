@@ -32,20 +32,20 @@ class FindPotentialInviteesJobTest extends MediaWikiIntegrationTestCase {
 
 	public static function provideConstructorArguments() {
 		yield 'No parameters' => [
-			'Missing parameters: list-id, serialized-worklist',
+			'Missing parameters: list-id, serialized-articlelist',
 			[],
 		];
 		yield 'No list ID' => [
 			'Missing parameters: list-id',
-			[ 'serialized-worklist' => [] ],
+			[ 'serialized-articlelist' => [] ],
 		];
-		yield 'No worklist' => [
-			'Missing parameters: serialized-worklist',
+		yield 'No article list' => [
+			'Missing parameters: serialized-articlelist',
 			[ 'list-id' => 42 ],
 		];
 		yield 'Good' => [
 			null,
-			[ 'serialized-worklist' => [], 'list-id' => 42 ],
+			[ 'serialized-articlelist' => [], 'list-id' => 42 ],
 		];
 	}
 
@@ -90,7 +90,7 @@ class FindPotentialInviteesJobTest extends MediaWikiIntegrationTestCase {
 			->with( $listID, InvitationList::STATUS_READY );
 		$this->setService( InvitationListStore::SERVICE_NAME, $invitationListStore );
 
-		$job = new FindPotentialInviteesJob( [ 'list-id' => $listID, 'serialized-worklist' => [] ] );
+		$job = new FindPotentialInviteesJob( [ 'list-id' => $listID, 'serialized-articlelist' => [] ] );
 		$job->run();
 	}
 
@@ -109,7 +109,7 @@ class FindPotentialInviteesJobTest extends MediaWikiIntegrationTestCase {
 		$inviteesFinder->method( 'generate' )->willReturn( [] );
 		$this->setService( PotentialInviteesFinder::SERVICE_NAME, $inviteesFinder );
 
-		$job = new FindPotentialInviteesJob( [ 'list-id' => $listID, 'serialized-worklist' => [] ] );
+		$job = new FindPotentialInviteesJob( [ 'list-id' => $listID, 'serialized-articlelist' => [] ] );
 		$job->run();
 	}
 }

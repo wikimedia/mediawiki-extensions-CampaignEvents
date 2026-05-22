@@ -173,9 +173,9 @@ class SpecialInvitationList extends SpecialPage {
 				'content' => $this->formatAsList( $this->getUserLinks( $recommended ) ),
 				'isopen' => !$highlyRecommendedLinks
 			],
-			'worklistAccordion' => [
+			'articleListAccordion' => [
 				'title' => $this->msg( 'campaignevents-invitationlist-worklist-label' )->text(),
-				'content' => $this->formatAsList( $this->getWorklistLinks( $list->getListID() ) )
+				'content' => $this->formatAsList( $this->getArticleListLinks( $list->getListID() ) )
 			]
 		];
 
@@ -184,9 +184,9 @@ class SpecialInvitationList extends SpecialPage {
 	}
 
 	/** @return list<string> */
-	private function getWorklistLinks( int $invitationListID ): array {
-		$worklist = $this->invitationListStore->getWorklist( $invitationListID );
-		$pagesByWiki = $worklist->getPagesByWiki();
+	private function getArticleListLinks( int $invitationListID ): array {
+		$articleList = $this->invitationListStore->getArticleList( $invitationListID );
+		$pagesByWiki = $articleList->getPagesByWiki();
 		if ( count( $pagesByWiki ) !== 1 ) {
 			throw new LogicException( 'Expected a single wiki' );
 		}

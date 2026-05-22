@@ -30,10 +30,10 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleListParser;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\Invitation\PotentialInviteesFinder;
-use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -241,8 +241,8 @@ class CampaignEventsServices {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( PotentialInviteesFinder::SERVICE_NAME );
 	}
 
-	public static function getWorklistParser( ?ContainerInterface $services = null ): WorklistParser {
-		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistParser::SERVICE_NAME );
+	public static function getArticleListParser( ?ContainerInterface $services = null ): ArticleListParser {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( ArticleListParser::SERVICE_NAME );
 	}
 
 	public static function getInvitationListGenerator( ?ContainerInterface $services = null ): InvitationListGenerator {

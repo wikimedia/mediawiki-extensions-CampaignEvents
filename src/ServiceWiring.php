@@ -33,10 +33,10 @@ use MediaWiki\Extension\CampaignEvents\EventPage\EventPageDecoratorFactory;
 use MediaWiki\Extension\CampaignEvents\Formatters\EventFormatter;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
 use MediaWiki\Extension\CampaignEvents\Hooks\CampaignEventsHookRunner;
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleListParser;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\Invitation\PotentialInviteesFinder;
-use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
 use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
@@ -414,8 +414,8 @@ return [
 			$services->getUserOptionsLookup()
 		);
 	},
-	WorklistParser::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistParser {
-		return new WorklistParser(
+	ArticleListParser::SERVICE_NAME => static function ( MediaWikiServices $services ): ArticleListParser {
+		return new ArticleListParser(
 			$services->getPageStoreFactory()
 		);
 	},

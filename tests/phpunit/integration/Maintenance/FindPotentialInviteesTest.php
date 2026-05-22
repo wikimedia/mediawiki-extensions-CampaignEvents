@@ -25,7 +25,7 @@ class FindPotentialInviteesTest extends MaintenanceBaseTestCase {
 	}
 
 	public function addDBDataOnce(): void {
-		$this->insertWorklistData();
+		$this->insertArticleListData();
 	}
 
 	public function testExecute() {

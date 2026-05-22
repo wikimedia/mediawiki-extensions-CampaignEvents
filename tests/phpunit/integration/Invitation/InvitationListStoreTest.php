@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Invitation;
 
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleList;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationList;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListNotFoundException;
-use MediaWiki\Extension\CampaignEvents\Invitation\Worklist;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
@@ -67,7 +67,7 @@ class InvitationListStoreTest extends MediaWikiIntegrationTestCase {
 		$store->getInvitationList( 1234556789 );
 	}
 
-	public function testWorklistRoundtrip() {
+	public function testArticleListRoundtrip() {
 		$store = CampaignEventsServices::getInvitationListStore();
 		$listID = $store->createInvitationList( __METHOD__, null, new CentralUser( 42 ) );
 		$existingPage = $this->getExistingTestPage();
@@ -77,15 +77,15 @@ class InvitationListStoreTest extends MediaWikiIntegrationTestCase {
 			$existingPage,
 			$deletedPage
 		];
-		$worklist = new Worklist( [
+		$articleList = new ArticleList( [
 			$wikiID => $articles
 		] );
-		$store->storeWorklist( $listID, $worklist );
+		$store->storeArticleList( $listID, $articleList );
 
 		$this->deletePage( $deletedPage );
 
-		$storedWorklist = $store->getWorklist( $listID );
-		$storedArticlesByWiki = $storedWorklist->getPagesByWiki();
+		$storedArticleList = $store->getArticleList( $listID );
+		$storedArticlesByWiki = $storedArticleList->getPagesByWiki();
 		$this->assertCount( 1, $storedArticlesByWiki );
 		$this->assertArrayHasKey( $wikiID, $storedArticlesByWiki );
 		$storedArticles = $storedArticlesByWiki[$wikiID];
@@ -97,7 +97,7 @@ class InvitationListStoreTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
-	public function testWorklistRoundtrip__movedPage() {
+	public function testArticleListRoundtrip__movedPage() {
 		$existingPage = $this->getExistingTestPage();
 		$oldPage = new PageIdentityValue(
 			$existingPage->getId(),
@@ -110,9 +110,9 @@ class InvitationListStoreTest extends MediaWikiIntegrationTestCase {
 		$store = CampaignEventsServices::getInvitationListStore();
 		$wikiID = WikiMap::getCurrentWikiId();
 		$listID = $store->createInvitationList( __METHOD__, null, new CentralUser( 42 ) );
-		$store->storeWorklist( $listID, new Worklist( [ $wikiID => [ $oldPage ] ] ) );
-		$storedWorklist = $store->getWorklist( $listID );
-		$storedArticlesByWiki = $storedWorklist->getPagesByWiki();
+		$store->storeArticleList( $listID, new ArticleList( [ $wikiID => [ $oldPage ] ] ) );
+		$storedArticleList = $store->getArticleList( $listID );
+		$storedArticlesByWiki = $storedArticleList->getPagesByWiki();
 		$this->assertCount( 1, $storedArticlesByWiki );
 		$this->assertArrayHasKey( $wikiID, $storedArticlesByWiki );
 		$storedArticles = $storedArticlesByWiki[$wikiID];

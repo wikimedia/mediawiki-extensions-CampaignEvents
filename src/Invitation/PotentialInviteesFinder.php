@@ -25,7 +25,7 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * This class generates a list of potential event participants ("invitation list") by looking at who contributed
- * to a given list of pages ("worklist").
+ * to a given list of pages ("article list").
  */
 class PotentialInviteesFinder {
 	public const SERVICE_NAME = 'CampaignEventsPotentialInviteesFinder';
@@ -63,12 +63,12 @@ class PotentialInviteesFinder {
 	/**
 	 * @return array<string,int>
 	 */
-	public function generate( Worklist $worklist ): array {
+	public function generate( ArticleList $articleList ): array {
 		$revisionsByWiki = [];
-		foreach ( $worklist->getPagesByWiki() as $wiki => $pages ) {
+		foreach ( $articleList->getPagesByWiki() as $wiki => $pages ) {
 			if ( $wiki !== WikiMap::getCurrentWikiID() ) {
-				// TODO: Re-implement support for multi-wiki worklists. Currently not doable because we'd need to read,
-				// and possibly merge, cross-wiki user preferences. Note that this code is currently unreachable.
+				// TODO: Re-implement support for multi-wiki article lists. Currently not doable because we'd need to
+				// read, and possibly merge, cross-wiki user preferences. Note that this code is currently unreachable.
 				throw new UnexpectedValueException( "Unexpected foreign page on $wiki" );
 			}
 			$revisionsByWiki[$wiki] = $this->getAllRevisionsForWiki( $wiki, $pages );
@@ -347,7 +347,7 @@ class PotentialInviteesFinder {
 
 	/**
 	 * Returns user identifiers (name, ID, actor ID) for each contributor, for each wiki where they made edits to
-	 * articles in the worklist. This can't just use UserIdentity because that doesn't include the actor ID, which we
+	 * articles in the list. This can't just use UserIdentity because that doesn't include the actor ID, which we
 	 * need for other queries later (particularly in getDaysSinceLastEdit()). Alternatively we could use
 	 * ActorNormalization or a join on the user table, but both seem unnecessary (and potentially slow) when we already
 	 * have the actor ID available.
@@ -407,7 +407,7 @@ class PotentialInviteesFinder {
 
 	/**
 	 * Returns a (0, 1) score based on the number and size of contributions that a single user made across all pages
-	 * in the worklist.
+	 * in the list.
 	 *
 	 * @param string $username
 	 * @param int[] $deltas

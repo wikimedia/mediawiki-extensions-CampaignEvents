@@ -4,8 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
+use MediaWiki\Extension\CampaignEvents\Invitation\ArticleListParser;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListGenerator;
-use MediaWiki\Extension\CampaignEvents\Invitation\WorklistParser;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
@@ -27,7 +27,7 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 	public function __construct(
 		private readonly PermissionChecker $permissionChecker,
 		private readonly InvitationListGenerator $invitationListGenerator,
-		private readonly WorklistParser $worklistParser,
+		private readonly ArticleListParser $articleListParser,
 	) {
 		parent::__construct( self::PAGE_NAME );
 	}
@@ -83,12 +83,12 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 				'placeholder-message' => 'campaignevents-generateinvitationlist-article-list-field-placeholder',
 				'help-message' => [
 					'campaignevents-generateinvitationlist-article-list-field-help',
-					Message::numParam( WorklistParser::ARTICLES_LIMIT )
+					Message::numParam( ArticleListParser::ARTICLES_LIMIT )
 				],
 				'rows' => 10,
 				'required' => true,
-				'validation-callback' => function ( string $worklist ): StatusValue {
-					return $this->worklistParser->parseWorklist( self::makePageMapFromInput( $worklist ) );
+				'validation-callback' => function ( string $articleList ): StatusValue {
+					return $this->articleListParser->parseArticleList( self::makePageMapFromInput( $articleList ) );
 				}
 			]
 		];
@@ -107,16 +107,18 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 	 */
 	public function onSubmit( array $data ) {
 		$eventPage = $data['EventPage'] !== '' ? $data['EventPage'] : null;
-		$worklistStatus = $this->worklistParser->parseWorklist( self::makePageMapFromInput( $data['ArticleList'] ) );
-		if ( !$worklistStatus->isGood() ) {
+		$articleListStatus = $this->articleListParser->parseArticleList(
+			self::makePageMapFromInput( $data['ArticleList'] )
+		);
+		if ( !$articleListStatus->isGood() ) {
 			// This shouldn't actually happen in practice thanks to validation-callback
-			return Status::wrap( $worklistStatus );
+			return Status::wrap( $articleListStatus );
 		}
 
 		$invitationListStatus = $this->invitationListGenerator->createIfAllowed(
 			$data['InvitationListName'],
 			$eventPage,
-			$worklistStatus->getValue(),
+			$articleListStatus->getValue(),
 			$this->getAuthority()
 		);
 		if ( $invitationListStatus->isGood() ) {
@@ -139,9 +141,9 @@ class SpecialGenerateInvitationList extends FormSpecialPage {
 	/**
 	 * @return array<string,string[]> Maps wiki ID to a list of page titles.
 	 */
-	private static function makePageMapFromInput( string $rawWorklist ): array {
+	private static function makePageMapFromInput( string $rawArticleList ): array {
 		$pageList = array_filter(
-			array_map( 'trim', explode( "\n", $rawWorklist ) ),
+			array_map( 'trim', explode( "\n", $rawArticleList ) ),
 			static fn ( string $line ): bool => $line !== ''
 		);
 		return [ WikiMap::getCurrentWikiId() => $pageList ];
