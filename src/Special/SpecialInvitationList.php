@@ -174,7 +174,7 @@ class SpecialInvitationList extends SpecialPage {
 				'isopen' => !$highlyRecommendedLinks
 			],
 			'articleListAccordion' => [
-				'title' => $this->msg( 'campaignevents-invitationlist-worklist-label' )->text(),
+				'title' => $this->msg( 'campaignevents-invitationlist-articlelist-label' )->text(),
 				'content' => $this->formatAsList( $this->getArticleListLinks( $list->getListID() ) )
 			]
 		];

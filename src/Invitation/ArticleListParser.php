@@ -32,11 +32,11 @@ class ArticleListParser {
 		Assert::parameterKeyType( 'string', $pageNamesByWiki, '$pageNamesByWiki' );
 		$totalPageCount = array_sum( array_map( 'count', $pageNamesByWiki ) );
 		if ( $totalPageCount === 0 ) {
-			return StatusValue::newFatal( 'campaignevents-worklist-error-empty' );
+			return StatusValue::newFatal( 'campaignevents-invitation-list-article-list-error-empty' );
 		}
 		if ( $totalPageCount > self::ARTICLES_LIMIT ) {
 			return StatusValue::newFatal(
-				'campaignevents-worklist-error-too-large',
+				'campaignevents-invitation-list-article-list-error-too-large',
 				Message::numParam( $totalPageCount ),
 				Message::numParam( self::ARTICLES_LIMIT )
 			);
@@ -74,7 +74,7 @@ class ArticleListParser {
 		// NOTE: The messages below need to be wrapped in Message objects due to T368821.
 		if ( $invalidTitles ) {
 			$ret->fatal( new Message(
-				'campaignevents-worklist-error-invalid-titles',
+				'campaignevents-invitation-list-article-list-error-invalid-titles',
 				[
 					Message::numParam( count( $invalidTitles ) ),
 					self::pagesToBulletList( $invalidTitles )
@@ -83,7 +83,7 @@ class ArticleListParser {
 		}
 		if ( $nonexistentPages ) {
 			$ret->fatal( new Message(
-				'campaignevents-worklist-error-nonexistent-titles',
+				'campaignevents-invitation-list-article-list-error-nonexistent-titles',
 				[
 					Message::numParam( count( $nonexistentPages ) ),
 					self::pagesToBulletList( $nonexistentPages )
@@ -92,7 +92,7 @@ class ArticleListParser {
 		}
 		if ( $nonMainspacePages ) {
 			$ret->fatal( new Message(
-				'campaignevents-worklist-error-titles-not-mainspace',
+				'campaignevents-invitation-list-article-list-error-titles-not-mainspace',
 				[
 					Message::numParam( count( $nonMainspacePages ) ),
 					self::pagesToBulletList( $nonMainspacePages )

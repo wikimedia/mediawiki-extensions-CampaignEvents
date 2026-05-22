@@ -123,7 +123,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-invalid-titles',
+				'campaignevents-invitation-list-article-list-error-invalid-titles',
 				1,
 				$makeList( $invalidTitles[0] )
 			),
@@ -138,7 +138,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-invalid-titles',
+				'campaignevents-invitation-list-article-list-error-invalid-titles',
 				2,
 				$makeList( $invalidTitles[0], $invalidTitles[1] )
 			),
@@ -152,7 +152,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-nonexistent-titles',
+				'campaignevents-invitation-list-article-list-error-nonexistent-titles',
 				1,
 				$makeList( $nonexistentTitles[0] )
 			),
@@ -167,7 +167,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-nonexistent-titles',
+				'campaignevents-invitation-list-article-list-error-nonexistent-titles',
 				2,
 				$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
 			),
@@ -181,7 +181,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-titles-not-mainspace',
+				'campaignevents-invitation-list-article-list-error-titles-not-mainspace',
 				1,
 				$makeList( $nonMainspaceTitles[0] )
 			),
@@ -196,7 +196,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-titles-not-mainspace',
+				'campaignevents-invitation-list-article-list-error-titles-not-mainspace',
 				2,
 				$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
 			),
@@ -213,12 +213,12 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-invalid-titles',
+				'campaignevents-invitation-list-article-list-error-invalid-titles',
 				2,
 				$makeList( $invalidTitles[0], $invalidTitles[1] )
 			)
 				->fatal(
-					'campaignevents-worklist-error-nonexistent-titles',
+					'campaignevents-invitation-list-article-list-error-nonexistent-titles',
 					2,
 					$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
 				),
@@ -234,12 +234,12 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-nonexistent-titles',
+				'campaignevents-invitation-list-article-list-error-nonexistent-titles',
 				2,
 				$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
 			)
 				->fatal(
-					'campaignevents-worklist-error-titles-not-mainspace',
+					'campaignevents-invitation-list-article-list-error-titles-not-mainspace',
 					2,
 					$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
 				),
@@ -255,12 +255,12 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-invalid-titles',
+				'campaignevents-invitation-list-article-list-error-invalid-titles',
 				2,
 				$makeList( $invalidTitles[0], $invalidTitles[1] )
 			)
 				->fatal(
-					'campaignevents-worklist-error-titles-not-mainspace',
+					'campaignevents-invitation-list-article-list-error-titles-not-mainspace',
 					2,
 					$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
 				),
@@ -278,17 +278,17 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-invalid-titles',
+				'campaignevents-invitation-list-article-list-error-invalid-titles',
 				2,
 				$makeList( $invalidTitles[0], $invalidTitles[1] )
 			)
 				->fatal(
-					'campaignevents-worklist-error-nonexistent-titles',
+					'campaignevents-invitation-list-article-list-error-nonexistent-titles',
 					2,
 					$makeList( $nonexistentTitles[0], $nonexistentTitles[1] )
 				)
 				->fatal(
-					'campaignevents-worklist-error-titles-not-mainspace',
+					'campaignevents-invitation-list-article-list-error-titles-not-mainspace',
 					2,
 					$makeList( $nonMainspaceTitles[0], $nonMainspaceTitles[1] )
 				),
@@ -302,7 +302,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			$pageToObjMap,
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-nonexistent-titles',
+				'campaignevents-invitation-list-article-list-error-nonexistent-titles',
 				1,
 				$makeList( $nonExistentNonMainspaceTitles[0] )
 			),
@@ -311,7 +311,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 		yield 'Empty list' => [
 			[],
 			$pageToObjMap,
-			StatusValue::newFatal( 'campaignevents-worklist-error-empty' ),
+			StatusValue::newFatal( 'campaignevents-invitation-list-article-list-error-empty' ),
 		];
 
 		yield 'Wiki with empty list' => [
@@ -319,7 +319,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 				$wiki => []
 			],
 			$pageToObjMap,
-			StatusValue::newFatal( 'campaignevents-worklist-error-empty' ),
+			StatusValue::newFatal( 'campaignevents-invitation-list-article-list-error-empty' ),
 		];
 
 		yield 'Too many pages' => [
@@ -328,7 +328,7 @@ class ArticleListParserTest extends MediaWikiUnitTestCase {
 			],
 			[],
 			StatusValue::newFatal(
-				'campaignevents-worklist-error-too-large',
+				'campaignevents-invitation-list-article-list-error-too-large',
 				Message::numParam( ArticleListParser::ARTICLES_LIMIT + 1 ),
 				Message::numParam( ArticleListParser::ARTICLES_LIMIT )
 			),
