@@ -610,6 +610,7 @@
 	"campaignevents-event-details-contributions-add-dialog-revid-label": "Назнака на преработката",
 	"campaignevents-event-details-contributions-add-dialog-revid-help": "Внесете ја назнаката на преработката. Отворете ја историјата на преработки на страницата, стиснете на датумот и времето на уредувањето, па прекопирајте го бројот по „$1“ од URL-адресата.",
 	"campaignevents-event-details-contributions-add-dialog-success": "Уредувањето е додадено. Наскоро ќе се прикажува тука.",
+	"campaignevents-event-details-contributions-add-dialog-nochange": "Ова уредување е веќе додадено во тој настан.",
 	"campaignevents-event-details-contributions-add-dialog-open-button": "Додај уредување во настанов",
 	"campaignevents-contributions-summary-edit-count": "Број на уредувања",
 	"campaignevents-event-details-contributions-private-participant-tooltip": "Учесникот се пријавил приватно",
