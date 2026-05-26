@@ -46,6 +46,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
@@ -304,6 +305,12 @@ class CampaignEventsServices {
 		?ContainerInterface $services = null
 	): EventContributionsPagerFactory {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( EventContributionsPagerFactory::SERVICE_NAME );
+	}
+
+	public static function getWorklistPagesPagerFactory(
+		?ContainerInterface $services = null
+	): WorklistPagesPagerFactory {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistPagesPagerFactory::SERVICE_NAME );
 	}
 
 	public static function getEventGoalCompletionCalculator(

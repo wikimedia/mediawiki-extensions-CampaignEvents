@@ -17,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
@@ -57,6 +58,7 @@ class FrontendModulesFactory {
 		private readonly GoalProgressFormatter $goalProgressFormatter,
 		private readonly PageURLResolver $pageURLResolver,
 		private readonly EventContributionsPagerFactory $eventContributionsPagerFactory,
+		private readonly WorklistPagesPagerFactory $worklistPagesPagerFactory,
 	) {
 	}
 
@@ -179,6 +181,19 @@ class FrontendModulesFactory {
 			$linkRenderer,
 			$output,
 			$event
+		);
+	}
+
+	public function newWorklistModule(
+		LinkRenderer $linkRenderer,
+		OutputPage $output,
+		ExistingEventRegistration $event,
+	): WorklistModule {
+		return new WorklistModule(
+			$this->worklistPagesPagerFactory,
+			$linkRenderer,
+			$output,
+			$event,
 		);
 	}
 }

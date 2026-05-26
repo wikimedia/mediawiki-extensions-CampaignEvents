@@ -48,6 +48,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Pager\EventsPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand;
 use MediaWiki\Extension\CampaignEvents\Participants\UnregisterParticipantCommand;
@@ -326,6 +327,7 @@ return [
 			$services->get( GoalProgressFormatter::SERVICE_NAME ),
 			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->get( EventContributionsPagerFactory::SERVICE_NAME ),
+			$services->get( WorklistPagesPagerFactory::SERVICE_NAME ),
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
@@ -513,6 +515,16 @@ return [
 			$services->get( UserLinker::SERVICE_NAME ),
 			$services->getTitleFactory(),
 			$services->get( EventContributionStore::SERVICE_NAME ),
+			$services->get( WikiLookup::SERVICE_NAME ),
+		);
+	},
+	WorklistPagesPagerFactory::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): WorklistPagesPagerFactory {
+		return new WorklistPagesPagerFactory(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getLinkBatchFactory(),
+			$services->getTitleFactory(),
 			$services->get( WikiLookup::SERVICE_NAME ),
 		);
 	},

@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsModule;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\EventDetailsParticipantsModule;
 use MediaWiki\Extension\CampaignEvents\FrontendModules\FrontendModulesFactory;
-use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -58,7 +57,7 @@ class SpecialEventDetails extends SpecialPage {
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly FrontendModulesFactory $frontendModulesFactory,
 		private readonly PermissionChecker $permissionChecker,
-		private readonly EventTypesRegistry $eventTypesRegistry
+		private readonly EventTypesRegistry $eventTypesRegistry,
 	) {
 		parent::__construct( self::PAGE_NAME );
 	}
@@ -222,16 +221,15 @@ class SpecialEventDetails extends SpecialPage {
 		);
 
 		if ( $worklistsEnabled && $hasContributionType ) {
-			// Expose the worklist page title so the frontend can target the worklist pages REST
-			// endpoint (PATCH /worklist/{title}/pages).
-			$out->addJsConfigVars( [
-				'wgCampaignEventsWorklistPagePrefixedText' =>
-					$this->event->getPage()->getPrefixedText() . '/' . WorklistPageEventIngress::WORKLIST_SUBPAGE,
-			] );
+			$worklistModule = $this->frontendModulesFactory->newWorklistModule(
+				$this->getLinkRenderer(),
+				$out,
+				$this->event,
+			);
 			$tabs[] = $this->createTab(
 				self::WORKLIST_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-worklist' ) ),
-				new Tag()
+				$worklistModule->createContent()
 			);
 		}
 		if ( $this->event->hasContributionTracking() ) {
