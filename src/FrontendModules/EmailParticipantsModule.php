@@ -60,6 +60,15 @@ class EmailParticipantsModule {
 	private function getEmailForm( ITextFormatter $msgFormatter ): FieldsetLayout {
 		$fields = [];
 
+		$fields[] = new FieldLayout(
+			new MessageWidget( [
+				'type' => 'notice',
+				'label' => $msgFormatter->format(
+					MessageValue::new( 'campaignevents-email-participants-warning' )
+				),
+			] )
+		);
+
 		$recipientsList = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-eventdetails-email-recipient-list' ] );
 		$addRecipientsBtn = new ButtonWidget( [
