@@ -152,6 +152,20 @@ $specialPageAliases['sk'] = [
 	'InvitationList' => [ 'ZoznamPozvaných' ],
 ];
 
+$specialPageAliases['uk'] = [
+	'EnableEventRegistration' => [ 'Увімкнути_реєстрацію_на_подію' ],
+	'DeleteEventRegistration' => [ 'Видалити_реєстрацію_на_подію' ],
+	'EditEventRegistration' => [ 'Редагувати_реєстрацію_на_подію' ],
+	'RegisterForEvent' => [ 'Зареєструватися_на_подію' ],
+	'CancelEventRegistration' => [ 'Скасувати_реєстрацію_на_подію' ],
+	'MyEvents' => [ 'Мої_події' ],
+	'AllEvents' => [ 'Усі_події', 'Всі_події' ],
+	'EventDetails' => [ 'Деталі_події' ],
+	'GenerateInvitationList' => [ 'Згенерувати_список_запрошень' ],
+	'MyInvitationLists' => [ 'Мої_списки_запрошень' ],
+	'InvitationList' => [ 'Список_запрошень' ],
+];
+
 $specialPageAliases['zh'] = [
 	'EnableEventRegistration' => [ 'EnableEventRegistration' ],
 	'DeleteEventRegistration' => [ 'DeleteEventRegistration' ],
