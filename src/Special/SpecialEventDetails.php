@@ -223,7 +223,7 @@ class SpecialEventDetails extends SpecialPage {
 		if ( $worklistsEnabled && $hasContributionType ) {
 			$tabs[] = $this->createTab(
 				self::WORKLIST_PANEL,
-				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-worklists' ) ),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-worklist' ) ),
 				new Tag()
 			);
 		}
