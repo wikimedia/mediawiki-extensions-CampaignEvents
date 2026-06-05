@@ -36,6 +36,15 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 		);
 	}
 
+	private function getLookupWithConfig( SiteConfiguration $siteConfig ): WikiLookup {
+		return new WikiLookup(
+			$siteConfig,
+			new WANObjectCache( [ 'cache' => new EmptyBagOStuff() ] ),
+			new FakeQqxMessageLocalizer(),
+			'qqx'
+		);
+	}
+
 	public function testGetAllWikis() {
 		$localWikis = [ 'foowiki', 'barwiki' ];
 		$lookup = $this->getLookup( $localWikis );
@@ -51,6 +60,33 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 	public function testGetAllWikis__noWgConf() {
 		$lookup = $this->getLookup( [] );
 		$this->assertSame( [ WikiMap::getCurrentWikiId() ], $lookup->getAllWikis() );
+	}
+
+	public function testGetRestPath() {
+		$siteConfig = $this->createMock( SiteConfiguration::class );
+		$siteConfig->method( 'getLocalDatabases' )->willReturn( [ 'foowiki', 'barwiki' ] );
+		$siteConfig->expects( $this->once() )
+			->method( 'get' )
+			->with( 'wgRestPath', 'barwiki' )
+			->willReturn( '/w2/rest.php' );
+		$lookup = $this->getLookupWithConfig( $siteConfig );
+		$this->assertSame( '/w2/rest.php', $lookup->getRestPath( 'barwiki' ) );
+	}
+
+	public function testGetRestPath__noWgConf() {
+		$siteConfig = $this->createMock( SiteConfiguration::class );
+		$siteConfig->method( 'getLocalDatabases' )->willReturn( [] );
+		$siteConfig->expects( $this->never() )->method( 'get' );
+		$lookup = $this->getLookupWithConfig( $siteConfig );
+		$this->assertNull( $lookup->getRestPath( 'barwiki' ) );
+	}
+
+	public function testGetRestPath__notConfigured() {
+		$siteConfig = $this->createMock( SiteConfiguration::class );
+		$siteConfig->method( 'getLocalDatabases' )->willReturn( [ 'foowiki' ] );
+		$siteConfig->method( 'get' )->willReturn( null );
+		$lookup = $this->getLookupWithConfig( $siteConfig );
+		$this->assertNull( $lookup->getRestPath( 'foowiki' ) );
 	}
 
 	public function testGetListForSelect() {

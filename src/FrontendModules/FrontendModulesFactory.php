@@ -191,6 +191,7 @@ class FrontendModulesFactory {
 	): WorklistModule {
 		return new WorklistModule(
 			$this->worklistPagesPagerFactory,
+			$this->wikiLookup,
 			$linkRenderer,
 			$output,
 			$event,

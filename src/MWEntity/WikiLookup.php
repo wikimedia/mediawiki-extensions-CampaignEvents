@@ -38,6 +38,21 @@ class WikiLookup {
 	}
 
 	/**
+	 * Return the RestPath ($wgRestPath) configured for the given wiki, or null when it can't be
+	 * determined (not running under $wgConf, or the farm doesn't override RestPath per-wiki). Used
+	 * to build cross-wiki REST URLs on farms where wikis share a domain but differ by path, where
+	 * the local RestPath would be wrong; see T312568.
+	 */
+	public function getRestPath( string $wikiID ): ?string {
+		if ( !$this->siteConfig->getLocalDatabases() ) {
+			// A wiki not using $wgConf; no per-wiki RestPath to resolve (T405034).
+			return null;
+		}
+		$restPath = $this->siteConfig->get( 'wgRestPath', $wikiID );
+		return is_string( $restPath ) && $restPath !== '' ? $restPath : null;
+	}
+
+	/**
 	 * @return array<string,string> That maps localized names to wiki IDs, suitable for use
 	 * in multiselect widgets.
 	 */

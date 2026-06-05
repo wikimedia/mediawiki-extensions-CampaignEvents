@@ -338,6 +338,7 @@
 	"campaignevents-worklist-table-article-column-header": "Column header on the Worklist tab table of [[Special:EventDetails]]. Cell contains a link to the article that was saved to the worklist.",
 	"campaignevents-worklist-table-wiki-column-header": "Column header on the Worklist tab table of [[Special:EventDetails]]. Cell contains the localized name of the wiki where the article is hosted.",
 	"campaignevents-worklist-table-date-column-header": "Column header on the Worklist tab table of [[Special:EventDetails]]. Cell contains the date and time when the article was added to the worklist.",
+	"campaignevents-worklist-table-remove-button-label": "Label and tooltip for the button that removes an article from the worklist, shown in the Actions column of the worklist article table on [[Special:EventDetails]].\n{{Identical|Remove}}",
 	"campaignevents-worklist-empty-state": "Empty-state message shown on the Worklist tab of [[Special:EventDetails]] when no articles have been added to any worklist associated with the event.",
 	"campaignevents-event-details-tab-contributions": "Tab label used on [[Special:EventDetails]]. This tab contains statistics about the participants' contributions",
 	"campaignevents-event-details-search-participants-placeholder": "A placeholder message for the search participants input on [[Special:EventDetails]]",

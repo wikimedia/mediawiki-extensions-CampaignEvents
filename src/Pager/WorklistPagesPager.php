@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Html\Html;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Page\PageIdentity;
@@ -37,6 +38,11 @@ class WorklistPagesPager extends CodexTablePager {
 	/** @var array<string,mixed> */
 	private array $extraQuery = [];
 
+	private readonly TemplateParser $templateParser;
+
+	/** Whether the performer may remove worklist articles. Memoized. */
+	private ?bool $canRemoveArticles = null;
+
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
 		private readonly LinkBatchFactory $linkBatchFactory,
@@ -49,6 +55,7 @@ class WorklistPagesPager extends CodexTablePager {
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getReplicaConnection();
+		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		parent::__construct(
 			$this->msg( 'campaignevents-worklist-table-header' )->text(),
 			$context,
@@ -136,6 +143,23 @@ class WorklistPagesPager extends CodexTablePager {
 		$linkBatch->execute();
 	}
 
+	/**
+	 * Whether the performer may remove worklist articles. The rule is: a named (logged-in) user who
+	 * can edit the worklist page may remove articles. When the worklist page is local we defer to
+	 * MediaWiki's permission system via probablyCan( 'edit', ... ), which also accounts for
+	 * page-specific (non-sitewide) blocks. When the worklist page is foreign ($worklistPage is null,
+	 * as it can't be resolved to a local title), permissions can't be evaluated here, so isNamed() is
+	 * used as a quick proxy and the full checks run at edit time (via ForeignApi). This only controls
+	 * button visibility.
+	 */
+	private function canRemoveArticles(): bool {
+		$performer = $this->getAuthority();
+		$this->canRemoveArticles ??= $performer->isNamed()
+			&& ( $this->worklistPage === null
+				|| $performer->probablyCan( 'edit', $this->worklistPage ) );
+		return $this->canRemoveArticles;
+	}
+
 	/** @inheritDoc */
 	public function formatValue( $name, $value ): ?string {
 		$row = $this->mCurrentRow;
@@ -143,17 +167,26 @@ class WorklistPagesPager extends CodexTablePager {
 			'page' => $this->formatPage( $row ),
 			'wiki' => $this->formatWiki( $row ),
 			'timestamp' => $this->formatTimestamp( $row ),
+			'actions' => $this->formatActions( $row ),
 			default => throw new UnexpectedValueException( 'Unexpected column: ' . $name ),
 		};
 	}
 
 	/** @inheritDoc */
 	protected function getFieldNames(): array {
-		return [
+		$fields = [
 			'page' => $this->msg( 'campaignevents-worklist-table-article-column-header' )->text(),
 			'wiki' => $this->msg( 'campaignevents-worklist-table-wiki-column-header' )->text(),
 			'timestamp' => $this->msg( 'campaignevents-worklist-table-date-column-header' )->text(),
 		];
+
+		// Show the actions column only if the performer may remove articles. The column
+		// intentionally has no header label.
+		if ( $this->canRemoveArticles() ) {
+			$fields['actions'] = '';
+		}
+
+		return $fields;
 	}
 
 	/** @inheritDoc */
@@ -193,6 +226,26 @@ class WorklistPagesPager extends CodexTablePager {
 			$row->cewp_timestamp,
 			$this->getAuthority()->getUser()
 		) );
+	}
+
+	/**
+	 * Render the remove button. Under the MVP rule any named user may remove any article, so the
+	 * button is shown on every row whenever the performer is eligible. It carries the wiki and the
+	 * prefixed title, which is how the REST PATCH endpoint identifies the article.
+	 */
+	private function formatActions( stdClass $row ): string {
+		if ( !$this->canRemoveArticles() ) {
+			return '';
+		}
+
+		return $this->templateParser->processTemplate(
+			'RemoveWorklistArticleButton',
+			[
+				'wiki' => $row->cewp_wiki,
+				'title' => $row->cewp_page_prefixedtext,
+				'tooltip' => $this->msg( 'campaignevents-worklist-table-remove-button-label' )->text(),
+			]
+		);
 	}
 
 	/**

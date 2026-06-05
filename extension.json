@@ -439,6 +439,7 @@
 			"styles": [
 				"ext.campaignEvents.specialPages.styles/pagers/EventContributionsEditorsPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventContributionsEditsPager.less",
+				"ext.campaignEvents.specialPages.styles/pagers/WorklistPagesPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventsListPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventsTablePager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/InvitationsListPager.less",
