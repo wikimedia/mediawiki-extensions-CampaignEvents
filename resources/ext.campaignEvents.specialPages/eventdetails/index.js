@@ -6,6 +6,7 @@ $( () => {
 		require( './EmailManager.js' );
 	}
 	require( './EventContributions.js' );
+	require( './Worklist.js' );
 	// eslint-disable-next-line no-jquery/no-global-selector
 	const tabLayout = OO.ui.IndexLayout.static.infuse( $( '#ext-campaignevents-eventdetails-tabs' ) ),
 		tabs = tabLayout.getTabs().items;

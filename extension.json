@@ -347,6 +347,9 @@
 				"ext.campaignEvents.specialPages/eventdetails/EventContributions.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/ContributionsActionsApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/DeleteContributionDialog.vue",
+				"ext.campaignEvents.specialPages/eventdetails/Worklist.js",
+				"ext.campaignEvents.specialPages/eventdetails/components/WorklistActionsApp.vue",
+				"ext.campaignEvents.specialPages/eventdetails/components/RemoveWorklistArticleDialog.vue",
 				"ext.campaignEvents.specialPages/eventlists/index.js",
 				"ext.campaignEvents.specialPages/eventlists/ConfirmEventDeletionDialog.js",
 				"ext.campaignEvents.specialPages/eventlists/FilterEventsWidget.js",
@@ -362,6 +365,7 @@
 				"oojs-ui-widgets",
 				"oojs-ui.styles.icons-interactions",
 				"mediawiki.api",
+				"mediawiki.ForeignApi",
 				"mediawiki.user",
 				"mediawiki.util",
 				"mediawiki.jqueryMsg",
@@ -430,7 +434,13 @@
 				"campaignevents-event-details-contributions-delete-subtitle",
 				"campaignevents-event-details-contributions-delete-note",
 				"campaignevents-event-details-contributions-delete-cancel",
-				"campaignevents-event-details-contributions-delete-confirm"
+				"campaignevents-event-details-contributions-delete-confirm",
+				"campaignevents-worklist-remove-confirm-title",
+				"campaignevents-worklist-remove-confirm-body",
+				"campaignevents-worklist-remove-confirm-action",
+				"campaignevents-worklist-remove-confirm-cancel",
+				"campaignevents-worklist-remove-success",
+				"campaignevents-worklist-remove-error"
 			]
 		},
 		"ext.campaignEvents.specialPages.styles": {
