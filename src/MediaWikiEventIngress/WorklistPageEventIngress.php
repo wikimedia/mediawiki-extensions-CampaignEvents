@@ -51,7 +51,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 	PageHistoryVisibilityChangedListener
 {
 	/** Leaf name of the subpage that holds an event's worklist (e.g. "Event:Foo/Worklist"). */
-	private const WORKLIST_SUBPAGE = 'Worklist';
+	public const WORKLIST_SUBPAGE = 'Worklist';
 
 	public function __construct(
 		private readonly WorklistSecondaryStore $worklistSecondaryStore,

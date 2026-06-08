@@ -303,6 +303,21 @@
 					]
 				}
 			}
+		},
+		"/worklist/{title}/pages": {
+			"patch": {
+				"summary": "Add or remove worklist pages",
+				"description": "Applies a delta to a worklist's page list: pages to add and/or remove, grouped by wiki. The worklist is identified by its page title.",
+				"tags": [ "Worklists" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\PatchWorklistPagesHandler",
+					"services": [
+						"CampaignEventsWorklistArticleHelper",
+						"TitleFactory",
+						"MainConfig"
+					]
+				}
+			}
 		}
 	}
 }
