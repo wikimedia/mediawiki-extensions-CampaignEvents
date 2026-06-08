@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"HakanIST",
 			"Hedda",
 			"JackUKElliott",
 			"Joseph",
@@ -10,7 +11,8 @@
 			"RuzDD",
 			"Sakblue",
 			"SaldırganSincap",
-			"ToprakM"
+			"ToprakM",
+			"Wooze"
 		]
 	},
 	"campaignevents-desc": "Kampanya düzenleyicileri ve katılımcıları için özellikler sağlar.",
@@ -81,6 +83,8 @@
 	"campaignevents-edit-field-address": "Adres",
 	"campaignevents-edit-field-chat-url": "Grup sohbeti daveti",
 	"campaignevents-edit-field-chat-url-help": "Bu etkinliğin katılımcıları için bir çevrimiçi sohbet grubunuz varsa davet bağlantısını buraya ekleyebilirsiniz. Katılımcılar kayıt olduktan sonra davet bağlantısını görebileceklerdir.",
+	"campaignevents-edit-field-topics-label": "Etkinlik konuları",
+	"campaignevents-edit-field-topics-placeholder": "Konu ekle",
 	"campaignevents-enable-registration-form-submit": "Kaydı etkinleştir",
 	"campaignevents-edit-form-submit": "Kaydı düzenle",
 	"campaignevents-edit-form-notice": "Kayıt sırasında katılımcılardan sadece kullanıcı adları alınacaktır. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration Daha fazla bilgi edinin].",
@@ -135,6 +139,7 @@
 	"campaignevents-myevents-label-events-per-page": "Sayfa başına etkinlikler",
 	"campaignevents-myevents-filter-btn-label": "Etkinlikleri filtrele",
 	"campaignevents-allevents-label-submit": "Filtreleri uygula",
+	"campaignevents-eventslist-organizer-label": "Organizatörler",
 	"campaignevents-eventslist-column-date": "Tarih",
 	"campaignevents-eventslist-column-name": "Etkinlik adı",
 	"campaignevents-eventslist-column-participants-number": "Katılımcı sayısı",
@@ -276,6 +281,7 @@
 	"campaignevents-event-details-email-message-label": "İleti",
 	"campaignevents-event-details-email-message-placeholder": "E-posta iletinizin düz metin içeriği, bu en az 10 karakter olmalıdır",
 	"campaignevents-event-details-email-recipients-button-text": "E-posta gönder",
+	"campaignevents-event-details-participants-deselect": "Seçimi kaldır",
 	"campaignevents-email-participants-label": "E-posta yaz",
 	"campaignevents-email-success-notification": "İleti gönderildi!",
 	"campaignevents-email-select-participant-notification": "Lütfen geçerli e-posta alıcıları seçin",
@@ -347,5 +353,11 @@
 	"campaignevents-invitationlist-preference": "Beni [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists davet listelerine] dahil et",
 	"prefs-campaignevents-invitations": "Davet listeleri",
 	"campaignevents-register-event-id": "Etkinlik Kimliği",
-	"campaignevents-event-details-contributions-private-participant-tooltip": "Katılımcı özel olarak kayıt yaptırdı"
+	"campaignevents-eventtype-other": "Diğer",
+	"campaignevents-edit-field-eventtypes-other-section-header": "Diğer",
+	"campaignevents-postedit-dialog-action-yes": "Evet",
+	"campaignevents-event-details-contributions-add-dialog-cancel": "İptal",
+	"campaignevents-event-details-contributions-private-participant-tooltip": "Katılımcı özel olarak kayıt yaptırdı",
+	"campaignevents-event-details-contributions-delete-cancel": "İptal",
+	"campaignevents-event-details-contributions-delete-confirm": "Kaldır"
 }
