@@ -10,7 +10,9 @@
 			"ToprakM",
 			"Leo",
 			"Sakblue",
-			"SaldırganSincap"
+			"SaldırganSincap",
+			"HakanIST",
+			"Wooze"
 		]
 	},
 	"campaignevents-desc": "Kampanya düzenleyicileri ve katılımcıları için özellikler sağlar.",
@@ -133,6 +135,7 @@
 	"campaignevents-myevents-label-events-per-page": "Sayfa başına etkinlikler",
 	"campaignevents-myevents-filter-btn-label": "Etkinlikleri filtrele",
 	"campaignevents-allevents-label-submit": "Filtreleri uygula",
+	"campaignevents-eventslist-organizer-label": "Organizatörler",
 	"campaignevents-eventslist-column-date": "Tarih",
 	"campaignevents-eventslist-column-name": "Etkinlik adı",
 	"campaignevents-eventslist-column-location": "Konum",
@@ -303,6 +306,7 @@
 	"campaignevents-event-details-email-message-label": "İleti",
 	"campaignevents-event-details-email-message-placeholder": "E-posta iletinizin düz metin içeriği, bu en az 10 karakter olmalıdır",
 	"campaignevents-event-details-email-recipients-button-text": "E-posta gönder",
+	"campaignevents-event-details-participants-deselect": "Seçimi kaldır",
 	"campaignevents-email-participants-label": "E-posta yaz",
 	"campaignevents-email-success-notification": "İleti gönderildi!",
 	"campaignevents-email-error-notification": "İleti gönderilemedi!",
