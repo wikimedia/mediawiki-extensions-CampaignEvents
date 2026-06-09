@@ -6,7 +6,8 @@
 			"Minilammas",
 			"Pxos",
 			"Pyscowicz",
-			"Samoasambia"
+			"Samoasambia",
+			"Wikipeedikko"
 		]
 	},
 	"campaignevents-desc": "Tarjoaa ominaisuuksia kampanjoiden järjestäjille ja osallistujille.",
@@ -329,6 +330,7 @@
 	"campaignevents-event-details-tab-email": "Lähetä viesti",
 	"campaignevents-event-details-tab-event-details": "Tapahtuman tiedot",
 	"campaignevents-event-details-tab-stats": "Vastaustilastot",
+	"campaignevents-event-details-tab-worklist": "Työluettelo",
 	"campaignevents-event-details-tab-contributions": "Muokkaukset",
 	"campaignevents-event-details-search-participants-placeholder": "Hae osallistujia",
 	"campaignevents-event-details-organizers-view-more": "Näytä lisää",
