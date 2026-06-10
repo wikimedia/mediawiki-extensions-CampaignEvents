@@ -658,5 +658,15 @@
 	"campaignevents-goal-progress-metric-total_bytes_added": "Short label used in the goal progress description for the \"bytes added\" metric.\nParameters:\n* $1 - number of bytes, for PLURAL.\n*",
 	"campaignevents-goal-progress-metric-total_bytes_removed": "Short label used in the goal progress description for the \"bytes removed\" metric.\nParameters:\n* $1 - number of bytes, for PLURAL.\n*",
 	"campaignevents-goal-progress-metric-total_links_added": "Short label used in the goal progress description for the \"links added\" metric.\nParameters:\n* $1 - number of links, for PLURAL.\n*",
-	"campaignevents-goal-progress-metric-total_links_removed": "Short label used in the goal progress description for the \"links removed\" metric.\nParameters:\n* $1 - number of links, for PLURAL.\n*"
+	"campaignevents-goal-progress-metric-total_links_removed": "Short label used in the goal progress description for the \"links removed\" metric.\nParameters:\n* $1 - number of links, for PLURAL.\n*",
+	"campaignevents-worklist-content-not-object": "Error message shown when the content of a worklist page is not a JSON object.",
+	"campaignevents-worklist-content-nonexistent-wiki": "Error message shown when a section of a worklist page uses an invalid wiki ID. Parameters:\n* $1 - The wiki ID",
+	"campaignevents-worklist-content-wiki-value-not-array": "Error message shown when the content of a section in a worklist page is not a JSON array. Parameters:\n* $1 - The contents of the section",
+	"campaignevents-worklist-content-wiki-empty": "Error message shown when the content of a section in a worklist page is an empty list. Parameters:\n* $1 - The wiki ID that identifies the section",
+	"campaignevents-worklist-content-title-not-string": "Error message shown when a section of a worklist page contains a non-string value instead of a page title. Parameters:\n* $1 - The invalid value",
+	"campaignevents-worklist-content-duplicated-title": "Error message shown when a section of a worklist page contains a duplicate title. Parameters:\n* $1 - The wiki that the page is for.\n* $2 - The title string",
+	"campaignevents-worklist-content-invalid-title": "Error message shown when a worklist page contains an invalid title (for example one with disallowed characters). Parameters:\n* $1 - The wiki that the page is for.\n* $2 - The title string",
+	"campaignevents-worklist-content-title-with-interwiki": "Error message shown when a worklist page contains a title with interwiki prefix. Parameters:\n* $1 - The title string",
+	"campaignevents-worklist-content-title-with-fragment": "Error message shown when a worklist page contains a title with a section fragment (<code>#</code>). Parameters:\n* $1 - The title string",
+	"campaignevents-worklist-content-title-non-canonical": "Error message shown when a worklist page is in non-canonical form (for example, if it uses underscores instead of spaces). Parameters:\n* $1 - The given title string\n* $2 - The expected title string."
 }

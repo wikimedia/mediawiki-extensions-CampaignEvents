@@ -651,5 +651,15 @@
 	"campaignevents-goal-progress-metric-total_bytes_added": "$1 {{PLURAL:$1|byte|bytes}} added",
 	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 {{PLURAL:$1|byte|bytes}} removed",
 	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|link|links}} added",
-	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|link|links}} removed"
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|link|links}} removed",
+	"campaignevents-worklist-content-not-object": "The worklist content must be an object",
+	"campaignevents-worklist-content-nonexistent-wiki": "Wiki ID $1 was not recognized. Please check that it is a valid wiki ID.",
+	"campaignevents-worklist-content-wiki-value-not-array": "The page list for each wiki must be an array. Found invalid value: $1",
+	"campaignevents-worklist-content-wiki-empty": "List of pages cannot be empty (for wiki $1)",
+	"campaignevents-worklist-content-title-not-string": "Page titles must be strings. Found invalid value: $1",
+	"campaignevents-worklist-content-duplicated-title": "Duplicate title found for wiki $1: $2",
+	"campaignevents-worklist-content-invalid-title": "Invalid title found for wiki $1: $2",
+	"campaignevents-worklist-content-title-with-interwiki": "Page titles must not include an interwiki prefix. Group pages by wiki instead. Offending title: $1",
+	"campaignevents-worklist-content-title-with-fragment": "Page titles must not link to specific sections. Offending title: $1",
+	"campaignevents-worklist-content-title-non-canonical": "Found a title that is not in canonical form: got \"$1\", expected \"$2\"."
 }
