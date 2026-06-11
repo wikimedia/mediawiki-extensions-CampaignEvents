@@ -251,7 +251,7 @@
 	"campaignevents-email-participants-count": "$1 জন {{PLURAL:$1|অংশগ্রহণকারী}}",
 	"campaignevents-email-participants-yes": "হ্যাঁ",
 	"campaignevents-email-participants-no": "না",
-	"campaignevents-email-footer": "এই ইমেইলটি $1-এর পক্ষ থেকে {{GENDER:$2|$2}}-এর নিকট {{GENDER:$1|পাঠানো হয়েছে}}, যিনি নিম্নলিখিত ইভেন্টের একজন নিবন্ধিত অংশগ্রহণকারী: $3। {{GENDER:$2|আপনি}} যদি এই ইমেইলটির উত্তর দেন, তাহলে {{GENDER:$2|আপনার}} উত্তরটি সরাসরি {{GENDER:$1|মূল প্রেরকের}} কাছে পাঠানো হবে, সেই সাথে {{GENDER:$2|আপনার}} ইমেইল ঠিকানা {{GENDER:$1|তার}} কাছে প্রকাশ করা হবে।",
+	"campaignevents-email-footer": "এই ইমেইলটি $1-এর পক্ষ থেকে {{GENDER:$2|$2}}-এর নিকট {{GENDER:$1|পাঠানো হয়েছে}}, যিনি নিম্নলিখিত ইভেন্টের একজন নিবন্ধিত অংশগ্রহণকারী: $3। {{GENDER:$2|আপনি}} যদি এই ইমেইলটির উত্তর দেন, তাহলে {{GENDER:$2|আপনার}} উত্তরটি সরাসরি {{GENDER:$1|মূল প্রেরকের}} কাছে পাঠানো হবে, সেই সাথে {{GENDER:$2|আপনার}} ইমেইল ঠিকানা তার কাছে প্রকাশ করা হবে।",
 	"campaignevents-email-footer-collaboration-list-link": "উইকির আরও ইভেন্ট ও সম্প্রদায় খুঁজে পেতে সহযোগিতার তালিকা দেখুন: $1",
 	"campaignevents-event-details-time-registered": "নিবন্ধনের সময়",
 	"campaignevents-event-details-contributions-table-caption": "অবদান",
