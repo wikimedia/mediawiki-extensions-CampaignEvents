@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Daimona Eaytoy",
-			"Luky001"
+			"Luky001",
+			"Wizzard"
 		]
 	},
 	"campaignevents-desc": "Poskytuje funkcie pre organizátorov a účastníkov podujatí.",
@@ -505,7 +506,7 @@
 	"campaignevents-invitationlist-recommended-info": "Títo redaktori dostali stredné hodnotenie zoznamu pozvaných, ale stále by mohli mať záujem zúčastniť sa vášho podujatia.",
 	"campaignevents-invitationlist-worklist-label": "Zobraziť zoznam článkov",
 	"campaignevents-event-details-footer": "Ďalšie podujatia a spoločné projekty nájdete v <strong>[[Special:AllEvents|Zozname spoločných aktivít]]</strong>.",
-	"campaignevents-invitationlist-preference": "Zahrnúť ma v [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists zoznamoch pozvaných].",
+	"campaignevents-invitationlist-preference": "Zahrnúť ma do [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists zoznamov pozvánok]",
 	"prefs-campaignevents-invitations": "Zoznamy pozvaných",
 	"campaignevents-allevents-label-filter-wikis": "Wikiprojekty",
 	"campaignevents-allevents-placeholder-add-wikis": "Pridať projekty...",
@@ -551,11 +552,11 @@
 	"campaignevents-eventslist-country-label": "Krajina",
 	"campaignevents-contributions-notice-private-participants-excluded": "Štatistiky a príspevky uvedené na tejto stránke nezahŕňajú údaje od súkromne zaregistrovaných účastníkov.",
 	"campaignevents-contributions-notice-other-private-participants-excluded": "Štatistiky a príspevky uvedené na tejto stránke nezahŕňajú údaje od ostatných účastníkov.",
-	"campaignevents-event-contribution-not-participant": "Používateľ nie je účastníkom tohto podujatia",
+	"campaignevents-event-contribution-not-participant": "Pridať možno len úpravu účastníka podujatia.",
 	"campaignevents-event-contribution-user-not-global": "Používateľ nemá globálny účet",
 	"campaignevents-event-contribution-already-associated": "Úpravu je možné priradiť iba k jednému podujatiu.",
 	"campaignevents-event-contribution-revision-not-found": "Revízia nenájdená",
-	"campaignevents-event-contribution-not-owner": "K podujatiam môžete priradiť len vlastné úpravy",
+	"campaignevents-event-contribution-not-owner": "Pridať možno len úpravu, ktorú ste vykonali vy.",
 	"campaignevents-event-contribution-tracking-disabled": "Sledovanie príspevkov nie je pre toto podujatie povolené",
 	"campaignevents-event-contribution-event-deleted": "Podujatie bolo odstránené",
 	"campaignevents-postedit-dialog-title-single": "Priradiť túto úpravu k podujatiu $1?",
