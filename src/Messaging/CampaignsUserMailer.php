@@ -100,7 +100,6 @@ class CampaignsUserMailer {
 
 			$recipientAddress = MailAddress::newFromUser( $recipientUser );
 			$curMessage = $this->getMessageWithFooter( $message, $performerAddress, $recipientAddress, $event );
-			// @phan-suppress-next-line SecurityCheck-XSS Gets confused by HTML and text body being passed together
 			$curEmailJob = $this->createEmailJob( $recipientAddress, $subject, $curMessage, $performerAddress );
 
 			if ( $recipientUser->equals( $performerUser ) ) {
@@ -122,7 +121,6 @@ class CampaignsUserMailer {
 				->params( $event->getName() )
 				->text();
 			$selfMessage = $this->getMessageWithFooter( $message, $performerAddress, $performerAddress, $event );
-			// @phan-suppress-next-line SecurityCheck-XSS As above
 			$jobs[] = $this->createEmailJob( $performerAddress, $selfSubject, $selfMessage, $performerAddress );
 		}
 
