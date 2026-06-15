@@ -64,6 +64,7 @@ use MediaWiki\Extension\CampaignEvents\Topics\WikimediaTopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
@@ -534,6 +535,14 @@ return [
 	WorklistSecondaryStore::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistSecondaryStore {
 		return new WorklistSecondaryStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+		);
+	},
+	WorklistPagesSecondaryStore::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): WorklistPagesSecondaryStore {
+		return new WorklistPagesSecondaryStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getConnectionProvider()
 		);
 	},
 ];

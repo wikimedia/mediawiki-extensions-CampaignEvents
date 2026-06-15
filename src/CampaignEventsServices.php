@@ -59,6 +59,7 @@ use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\MediaWikiServices;
 use Psr\Container\ContainerInterface;
@@ -317,5 +318,11 @@ class CampaignEventsServices {
 
 	public static function getWorklistSecondaryStore( ?ContainerInterface $services = null ): WorklistSecondaryStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistSecondaryStore::SERVICE_NAME );
+	}
+
+	public static function getWorklistPagesSecondaryStore(
+		?ContainerInterface $services = null
+	): WorklistPagesSecondaryStore {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistPagesSecondaryStore::SERVICE_NAME );
 	}
 }
