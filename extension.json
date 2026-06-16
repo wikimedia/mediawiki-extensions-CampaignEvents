@@ -230,6 +230,23 @@
 				"TitleFormatter",
 				"JobQueueGroup"
 			]
+		},
+		{
+			"events": [
+				"PageCreated",
+				"PageDeleted",
+				"PageMoved",
+				"PageLatestRevisionChanged",
+				"PageHistoryVisibilityChanged"
+			],
+			"class": "MediaWiki\\Extension\\CampaignEvents\\MediaWikiEventIngress\\WorklistPageEventIngress",
+			"services": [
+				"CampaignEventsWorklistSecondaryStore",
+				"TitleFactory",
+				"TitleFormatter",
+				"RevisionLookup",
+				"CampaignEventsCentralUserLookup"
+			]
 		}
 	],
 	"JobClasses": {
