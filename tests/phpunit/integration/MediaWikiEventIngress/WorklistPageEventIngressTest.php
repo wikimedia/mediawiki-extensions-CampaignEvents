@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\MediaWikiEventIngress;
 
+use IDBAccessObject;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
@@ -23,6 +24,9 @@ use stdClass;
  * @group Database
  */
 class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
+	/** The number of pages in {@link self::getNonEmptyContentPages} */
+	private const NON_EMPTY_CONTENT_PAGE_COUNT = 2;
+
 	protected function setUp(): void {
 		parent::setUp();
 		// Temporarily fill in for the extension registration callback, which runs too early. Remove when dropping
@@ -43,6 +47,7 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private static function getNonEmptyContentPages(): array {
+		// Keep this in sync with NON_EMPTY_CONTENT_PAGE_COUNT
 		return [ WikiMap::getCurrentWikiId() => [ 'Page 1', 'Page 2' ] ];
 	}
 
@@ -50,8 +55,13 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 		return new WorklistContent( json_encode( self::getNonEmptyContentPages() ) );
 	}
 
-	private function runAsyncUpdates(): void {
+	private function runAsyncUpdates( bool $expectsJob = true ): void {
 		DeferredUpdates::doUpdates();
+		$numExpectedJobs = $expectsJob ? 1 : 0;
+		$this->runJobs(
+			[ 'minJobs' => $numExpectedJobs, 'maxJobs' => $numExpectedJobs ],
+			[ 'type' => 'CampaignEventsUpdateWorklistPagesSecondaryStore' ]
+		);
 	}
 
 	private function getWorklistRow( int $pageID ): stdClass|false {
@@ -74,11 +84,21 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 			->fetchField();
 	}
 
+	private function getWorklistPageCount( int $worklistID ): int {
+		return (int)$this->getDb()->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'ce_worklist_pages' )
+			->where( [ 'cewp_cew_id' => $worklistID ] )
+			->caller( __METHOD__ )
+			->fetchField();
+	}
+
 	public function testCreateAndDelete() {
 		$page = $this->getNonexistingTestPage();
 		$performer = $this->getTestUser()->getUser();
 		$editStatus = $this->editPage( $page, self::getNonEmptyWorklistContent(), '', NS_MAIN, $performer );
 		$this->assertStatusGood( $editStatus );
+		$revID = $editStatus->getNewRevision()->getId();
 		$this->runAsyncUpdates();
 
 		$worklistRow = $this->getWorklistRow( $page->getId() );
@@ -86,17 +106,30 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $page->getTitle()->getPrefixedText(), $worklistRow->cew_page_prefixedtext, 'Prefixedtext' );
 		$this->assertSame( $performer->getId(), (int)$worklistRow->cew_user_id, 'User ID' );
 		$this->assertSame( $performer->getName(), $worklistRow->cew_username, 'Username' );
+		$this->assertSame( $revID, (int)$worklistRow->cew_content_rev, 'Content revision' );
+
+		$this->assertSame(
+			self::NON_EMPTY_CONTENT_PAGE_COUNT,
+			$this->getWorklistPageCount( (int)$worklistRow->cew_id ),
+			'Worklist page count'
+		);
 
 		$this->deletePage( $page );
 		$this->runAsyncUpdates();
 
 		$this->assertSame( 0, $this->getWorklistCount(), 'Expected worklist to be deleted' );
+		$this->assertSame(
+			0,
+			$this->getWorklistPageCount( (int)$worklistRow->cew_id ),
+			'Expected worklist pages to be deleted'
+		);
 	}
 
 	public function testHandlePageMovedEvent() {
 		$page = $this->getNonexistingTestPage();
 		$editStatus = $this->editPage( $page, self::getNonEmptyWorklistContent() );
 		$this->assertStatusGood( $editStatus );
+		$editRevID = $editStatus->getNewRevision()->getId();
 		$this->runAsyncUpdates();
 
 		$newTitleText = 'Help:A new worklist title';
@@ -105,12 +138,22 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 			->newMovePage( $page, Title::newFromText( $newTitleText ) )
 			->move( $this->getTestUser()->getUser() );
 		$this->assertStatusGood( $moveStatus );
+		$nullRev = $moveStatus->getValue()['nullRevision'];
+		$this->assertInstanceOf( RevisionRecord::class, $nullRev );
 		$this->runAsyncUpdates();
 
 		$worklistRow = $this->getWorklistRow( $page->getId() );
 
 		$this->assertNotFalse( $worklistRow );
 		$this->assertSame( $newTitleText, $worklistRow->cew_page_prefixedtext );
+		// ID gets updated even if no actual changes were made
+		$this->assertSame( $nullRev->getId(), (int)$worklistRow->cew_content_rev, 'Content revision' );
+
+		$this->assertSame(
+			self::NON_EMPTY_CONTENT_PAGE_COUNT,
+			$this->getWorklistPageCount( (int)$worklistRow->cew_id ),
+			'Worklist page count'
+		);
 	}
 
 	public function testHandlePageLatestRevisionChangedEvent__noLongerWorklist() {
@@ -130,6 +173,11 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 		$this->runAsyncUpdates();
 
 		$this->assertSame( 0, $this->getWorklistCount(), 'Worklist row should be deleted' );
+		$this->assertSame(
+			0,
+			$this->getWorklistPageCount( (int)$worklistRow->cew_id ),
+			'Expected worklist pages to be deleted'
+		);
 	}
 
 	public function testHandlePageLatestRevisionChangedEvent__isNowWorklist() {
@@ -138,7 +186,7 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 		$wikitextContent = json_encode( self::getNonEmptyContentPages() );
 		$editStatus = $this->editPage( $page, $wikitextContent );
 		$this->assertStatusGood( $editStatus );
-		$this->runAsyncUpdates();
+		$this->runAsyncUpdates( false );
 
 		$this->assertSame( 0, $this->getWorklistCount(), 'No worklists initially' );
 
@@ -149,12 +197,22 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 			->doContentModelChange( RequestContext::getMain(), __METHOD__, false );
 		$this->assertStatusGood( $changeStatus );
 		$this->runAsyncUpdates();
+		// Reload page ID (ChangeContentModel does not provide it)
+		$page->loadPageData( IDBAccessObject::READ_LATEST );
+		$revID = $page->getRevisionRecord()->getId();
 
 		$worklistRow = $this->getWorklistRow( $page->getId() );
 		$this->assertNotFalse( $worklistRow );
 		$this->assertSame( $page->getTitle()->getPrefixedText(), $worklistRow->cew_page_prefixedtext, 'Prefixedtext' );
 		$this->assertSame( $performer->getId(), (int)$worklistRow->cew_user_id, 'User ID' );
 		$this->assertSame( $performer->getName(), $worklistRow->cew_username, 'Username' );
+		$this->assertSame( $revID, (int)$worklistRow->cew_content_rev, 'Content revision' );
+
+		$this->assertSame(
+			self::NON_EMPTY_CONTENT_PAGE_COUNT,
+			$this->getWorklistPageCount( (int)$worklistRow->cew_id ),
+			'Worklist page count'
+		);
 	}
 
 	public function testHandlePageHistoryVisibilityChangedEvent() {
@@ -171,7 +229,7 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 
 		// Delete first revision
 		$this->revisionDelete( $firstRevID, [ RevisionRecord::DELETED_USER => 1 ] );
-		$this->runAsyncUpdates();
+		$this->runAsyncUpdates( false );
 
 		$worklistRowAfterDelete = $this->getWorklistRow( $page->getId() );
 		$this->assertNotFalse( $worklistRowAfterDelete );
@@ -180,7 +238,7 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 
 		// Then undelete it
 		$this->revisionDelete( $firstRevID, [ RevisionRecord::DELETED_USER => 0 ] );
-		$this->runAsyncUpdates();
+		$this->runAsyncUpdates( false );
 
 		$worklistRowAfterUndelete = $this->getWorklistRow( $page->getId() );
 		$this->assertNotFalse( $worklistRowAfterUndelete );

@@ -9,7 +9,9 @@ use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\DomainEvent\DomainEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Worklist\UpdateWorklistPagesSecondaryStoreJob;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
+use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Page\Event\PageCreatedEvent;
 use MediaWiki\Page\Event\PageCreatedListener;
 use MediaWiki\Page\Event\PageDeletedEvent;
@@ -27,6 +29,7 @@ use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\WikiMap\WikiMap;
+use RuntimeException;
 
 /**
  * This class listens for changes to pages, and intercept changes to worklist pages to update the secondary storage.
@@ -44,6 +47,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 		private readonly TitleFormatter $titleFormatter,
 		private readonly RevisionLookup $revisionLookup,
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
+		private readonly JobQueueGroup $jobQueueGroup,
 	) {
 	}
 
@@ -66,9 +70,10 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 		DeferredUpdates::addCallableUpdate( function () use ( $event, $performer, $needsCreation ): void {
 			$wiki = WikiMap::getCurrentWikiId();
 			$page = $event->getPageRecordAfter();
+			$revID = $event->getLatestRevisionAfter()->getId();
 
 			if ( $needsCreation ) {
-				$this->worklistSecondaryStore->createWorklist(
+				$worklistID = $this->worklistSecondaryStore->createWorklist(
 					$wiki,
 					$page->getId(),
 					$this->titleFormatter->getPrefixedText( $page ),
@@ -76,15 +81,28 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 					$event->getPerformer()->getName(),
 					$event->getEventTimestamp()
 				);
+			} else {
+				$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage( $wiki, $page->getId() );
+				if ( !$worklistID ) {
+					throw new RuntimeException( "Cannot find worklist to update that should exist for $page" );
+				}
 			}
-
-			// TODO Sync contents
+			$job = UpdateWorklistPagesSecondaryStoreJob::newForUpdate( $page, $worklistID, $performer, $revID );
+			$this->jobQueueGroup->push( $job );
 		} );
 	}
 
-	private function deleteWorklistFromPage( PageRecord $page ): void {
-		DeferredUpdates::addCallableUpdate( function () use ( $page ): void {
-			$this->worklistSecondaryStore->deleteWorklist( WikiMap::getCurrentWikiId(), $page->getId() );
+	private function deleteWorklistFromPage( PageRecord $page, ?int $revIDAfter ): void {
+		DeferredUpdates::addCallableUpdate( function () use ( $page, $revIDAfter ): void {
+			$wiki = WikiMap::getCurrentWikiId();
+
+			$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage( $wiki, $page->getId() );
+			if ( !$worklistID ) {
+				throw new RuntimeException( "Cannot find worklist to delete that should exist for $page" );
+			}
+			$this->worklistSecondaryStore->deleteWorklist( $wiki, $page->getId() );
+			$job = UpdateWorklistPagesSecondaryStoreJob::newForDeletion( $page, $worklistID, $revIDAfter );
+			$this->jobQueueGroup->push( $job );
 		} );
 	}
 
@@ -106,7 +124,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 			return;
 		}
 
-		$this->deleteWorklistFromPage( $event->getPageRecordBefore() );
+		$this->deleteWorklistFromPage( $event->getPageRecordBefore(), null );
 	}
 
 	public function handlePageMovedEvent( PageMovedEvent $event ): void {
@@ -140,7 +158,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 			$this->createOrUpdateWorklistFromEvent( $event, $contentModelBefore !== CONTENT_MODEL_WORKLIST );
 		} elseif ( $contentModelBefore === CONTENT_MODEL_WORKLIST ) {
 			// No longer a worklist
-			$this->deleteWorklistFromPage( $pageBefore );
+			$this->deleteWorklistFromPage( $pageBefore, $event->getLatestRevisionAfter()->getId() );
 		}
 	}
 
