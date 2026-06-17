@@ -346,6 +346,7 @@
 	"campaignevents-email-participants-no": "No",
 	"campaignevents-email-footer": "Questa email è stata inviata da $1 a $2, un partecipante registrato al seguente evento: $3. Se rispondi a questa email, la tua email sarò inviata direttamente {{GENDER:$1|al|alla}} mittente {{GENDER:$1|originario|originaria}}, {{GENDER:$1|rivelandogli|rivelandole}} il tuo indirizzo email.",
 	"campaignevents-email-footer-collaboration-list-link": "Visita la Collaboration list per trovare altri eventi e comunità su queste wiki: $1",
+	"campaignevents-email-participants-warning": "Il tuo indirizzo email sarà visibile ai partecipanti.",
 	"campaignevents-event-details-can-receive-email": "Può ricevere email",
 	"campaignevents-event-details-contributions-table-caption": "Contributi",
 	"campaignevents-event-details-contributions-article": "Voce modificata",

@@ -392,6 +392,7 @@
 	"campaignevents-email-footer": "Tämän sähköpostin {{GENDER:$1|lähetti}} $1 vastaanottajalle {{GENDER:$2|$2}}, joka on ilmoittautunut seuraavaan tapahtumaan: $3. Jos vastaat tähän sähköpostiin, sähköpostiviestisi lähetetään suoraan {{GENDER:$1|alkuperäiselle lähettäjälle}} ja samalla sähköpostiosoitteesi paljastetaan hänelle.",
 	"campaignevents-email-footer-collaboration-list-link": "Yhteistyölistalta löydät lisää wikien tapahtumia ja yhteisöjä: $1",
 	"campaignevents-email-self-subject": "Kopio viestistäsi tapahtuman $1 osallistujille",
+	"campaignevents-email-participants-warning": "Sähköpostiosoitteesi näkyy osallistujille.",
 	"campaignevents-event-details-time-registered": "Ilmoittautumisaika",
 	"campaignevents-event-details-can-receive-email": "Voi vastaanottaa sähköpostia",
 	"campaignevents-event-details-contributions-table-caption": "Muokkaukset",
