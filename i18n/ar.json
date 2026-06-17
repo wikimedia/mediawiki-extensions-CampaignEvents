@@ -16,7 +16,8 @@
 			"محمد أحمد عبد الفتاح",
 			"Mohammed Qays",
 			"SaldırganSincap",
-			"Dyolf77 (WMF)"
+			"Dyolf77 (WMF)",
+			"Mr. Ibrahem"
 		]
 	},
 	"campaignevents-desc": "يوفّر ميزات لمنظمي الحملة والمشاركين فيها.",
@@ -94,7 +95,7 @@
 	"campaignevents-edit-field-wikis-help": "إذا كانت الفعالية الخاصة بك تُعقد على مواقع ويكي معينة، يرجى إدراجها هنا. سيساعد ذلك الأشخاص في تحديد الفعاليات التي يرغبون في حضورها، كما يسهم في التحليلات أيضًا.",
 	"campaignevents-edit-field-tracking-tools": "رابط لوحة تحكم البرامج والفعاليات",
 	"campaignevents-edit-field-tracking-tools-help": "ستُرسل بشكل تلقائي أسماء المستخدمين المسجلين علنًا إلى لوحة التحكم. هذه الأداة تتيح مراقبة مساهمات المشاركين وقياس تأثير فعالية الحملة. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard لمزيد من المعلومات].",
-	"campaignevents-edit-field-tracking-tools-placeholder": "أدخل عنوان لوحة تحكم البرامج والفعاليات لفعاليتكم",
+	"campaignevents-edit-field-tracking-tools-placeholder": "أدخل عنوان URL للوحة معلومات البرامج والفعاليات الخاصة بفعاليتك",
 	"campaignevents-edit-field-meeting-type": "نوع إجتماع الفعالية",
 	"campaignevents-edit-field-type-online": "فعالية عن بعد",
 	"campaignevents-edit-field-type-in-person": "فعالية حضورية",

@@ -2,7 +2,10 @@
 	"@metadata": {
 		"authors": [
 			"Ата",
-			"Пан Хаунд"
+			"Пан Хаунд",
+			"Movses",
+			"Repakr",
+			"Vlad5250"
 		]
 	},
 	"campaignevents-desc": "Надає функціонал для організаторів та учасників кампаній.",
@@ -326,7 +329,7 @@
 	"campaignevents-userlink-deleted-user": "вилучений користувач",
 	"campaignevents-registration-confirmation-helptext-private-with-groups": "<strong>Приватна реєстрація:</strong> Ваше ім'я користувача у списку учасників можуть бачити лише організатори заходу та учасники {{PLURAL:$2|такої групи|таких груп}} користувачів: $1. Ваш внесок під час заходу може бути виключений організаторами з [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Панелі програм та подій] або інших інструментів для збору статистики.",
 	"campaignevents-registration-confirmation-helptext-private-no-groups": "<strong>Приватна реєстрація:</strong> Ваше ім'я користувача у списку учасників можуть бачити лише організатори заходу. Ваш внесок під час заходу може бути виключений організаторами з [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Панелі програм та подій] або інших інструментів для збору статистики.",
-	"campaignevents-registration-confirmation-helptext-public": "<strong>Публічна реєстрація:</strong> Ваше ім'я користувача видиме у публічному списку учасників. Ваш внесок під час заходу може бути включений організаторами на [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Панелі програм та подій] або інших інструментих для збору статистики.",
+	"campaignevents-registration-confirmation-helptext-public": "<strong>Публічна реєстрація:</strong> Ваше ім'я користувача видиме у публічному списку учасників. Ваш внесок під час заходу може бути включений організаторами на [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Панелі програм та подій] або інших інструментах для збору статистики.",
 	"campaignevents-registration-confirmation-toggle-private": "Приватна реєстрація",
 	"campaignevents-registration-confirmation-toggle-public": "Публічна реєстрація",
 	"campaignevents-register-confirmation-radio-private": "Приватна реєстрація",
@@ -401,11 +404,11 @@
 	"campaignevents-register-question-profession-option-librarian": "Бібліотекар",
 	"campaignevents-register-question-profession-option-mass-media": "Представник масмедіа",
 	"campaignevents-register-question-profession-option-museum-archive": "Фахівець музею або архіву",
-	"campaignevents-register-question-profession-option-nonprofit": "Фахівнець неприбуткової сфери",
+	"campaignevents-register-question-profession-option-nonprofit": "Фахівець неприбуткової сфери",
 	"campaignevents-register-question-profession-option-researcher": "Дослідник",
 	"campaignevents-register-question-profession-option-software-engineer": "Інженер-програміст",
 	"campaignevents-register-question-profession-option-student": "Студент",
-	"campaignevents-register-question-profession-option-other": "Професія не вказана",
+	"campaignevents-register-question-profession-option-other": "Професія не зі списку",
 	"campaignevents-register-question-confidence-contributing": "Наскільки впевнено ви почуваєтеся, роблячи свій внесок у проєкти Вікімедіа, для яких створена ця подія? (необов'язково)",
 	"campaignevents-register-question-confidence-contributing-not-say": "Не бажаю казати",
 	"campaignevents-register-question-confidence-contributing-option-none": "У мене немає жодного попереднього внеску у проєкт Вікімедіа",
