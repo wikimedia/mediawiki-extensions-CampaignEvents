@@ -388,6 +388,7 @@
 	"campaignevents-email-footer": "Este correo electrónico foi {{GENDER:$1|enviado}} por $1 a $2, {{GENDER:$2|un|unha}} participante {{GENDER:$2|inscrito|inscrita}} no seguinte evento: $3. Se respondes, o teu correo electrónico enviarase directamente {{GENDER:$1|ao emisor|á emisora}} orixinal, e así coñecerá o teu enderezo de correo electrónico.",
 	"campaignevents-email-footer-collaboration-list-link": "Visita a lista de colaboración para atopar máis eventos e comunidades nos wikis: $1",
 	"campaignevents-email-self-subject": "Copia da túa mensaxe aos participantes de $1",
+	"campaignevents-email-participants-warning": "O teu enderezo de correo electrónico será visible para os participantes.",
 	"campaignevents-event-details-time-registered": "Hora da inscrición",
 	"campaignevents-event-details-can-receive-email": "Pode recibir correos electrónicos",
 	"campaignevents-event-details-contributions-table-caption": "Contribucións",

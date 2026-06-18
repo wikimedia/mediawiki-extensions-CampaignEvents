@@ -388,6 +388,7 @@
 	"campaignevents-email-footer": "E-mel ini {{GENDER:$1|dihantar}} oleh $1 kepada {{GENDER:$2|$2}}, yakni peserta berdaftar acara berikut: $3. Jika {{GENDER:$2|anda}} balas e-mel ini, e-mel {{GENDER:$2|anda}} akan dihantar terus ke {{GENDER:$1|pengirim asal}}, mendedahkan alamat e-mel {{GENDER:$2|anda}} kepada {{GENDER:$1|mereka}}.",
 	"campaignevents-email-footer-collaboration-list-link": "Lawati senarai Kerjasama untuk mencari lebih banyak acara dan komuniti di pelbagai wiki: $1",
 	"campaignevents-email-self-subject": "Salinan mesej anda kepada peserta $1",
+	"campaignevents-email-participants-warning": "Alamat e-mel anda akan dapat dilihat oleh peserta.",
 	"campaignevents-event-details-time-registered": "Masa didaftarkan",
 	"campaignevents-event-details-can-receive-email": "Boleh terima e-mel",
 	"campaignevents-event-details-contributions-table-caption": "Sumbangan",

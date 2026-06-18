@@ -360,6 +360,7 @@
 	"campaignevents-email-footer": "این ایمیل توسط $1 برای {{GENDER:$2|$2}} {{GENDER:$1|فرستاده شده است}} که یک شرکت‌کنندهٔ ثبت نام کرده در رویداد $3 است. اگر به این ایمیل پاسخ {{GENDER:$2|دهید}}، ایمیل {{GENDER:$2|شما}} به‌صورت مستقیم برای {{GENDER:$1|فرستندهٔ اولیه}} ارسال خواهد شد و نشانی ایمیل {{GENDER:$2|شما}} برای {{GENDER:$1|ایشان}} فاش خواهد شد.",
 	"campaignevents-email-footer-collaboration-list-link": "برای یافتن رویدادها و جوامع بیشتر در ویکی‌ها، از فهرست همکاری بازدید کنید: $1.",
 	"campaignevents-email-self-subject": "رونوشت پیام شما به شرکت‌کنندگان در $1",
+	"campaignevents-email-participants-warning": "نشانی ایمیل شما برای شرکت‌کنندگان قابل مشاهده خواهد بود.",
 	"campaignevents-event-details-time-registered": "زمان ثبت نام",
 	"campaignevents-event-details-can-receive-email": "قابلیت دریافت ایمیل",
 	"campaignevents-register-questions-label-title": "اطلاعات شما",

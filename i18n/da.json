@@ -389,6 +389,7 @@
 	"campaignevents-email-footer": "Denne e-mail blev {{GENDER:$1|sendt}} af $1 til {{GENDER:$2|$2}}, som tilmeldt deltager i begivenheden $3. Hvis du svarer på denne e-mail, vil dit svar gå direkte til den oprindelige afsender og {{GENDER:$2|ham|hun|hen}} vil kunne se din emailadresse.",
 	"campaignevents-email-footer-collaboration-list-link": "Besøg Samarbejdslisten for at finde flere begivenheder og fællesskaber på wikierne: $1",
 	"campaignevents-email-self-subject": "Kopi af din besked til deltagerne på $1",
+	"campaignevents-email-participants-warning": "Din e-mailadresse vil være synlig for deltagerne.",
 	"campaignevents-event-details-time-registered": "Tid registreret",
 	"campaignevents-event-details-can-receive-email": "Kan modtage e-mail",
 	"campaignevents-event-details-contributions-table-caption": "Bidrag",

@@ -394,6 +394,7 @@
 	"campaignevents-email-footer": "Deze e-mail is {{GENDER:$1|verzonden}} door $1 naar {{GENDER:$2|$2 }}, een geregistreerde deelnemer aan het volgende evenement: $3. Als {{GENDER:$2|u}} deze e-mail beantwoordt, wordt {{GENDER:$2|uw}} e-mail rechtstreeks naar de {{GENDER:$1|oorspronkelijke afzender}} gestuurd, waardoor {{GENDER:$2|uw}} e-mailadres aan {{GENDER:$1|hen}} bekend wordt gemaakt.",
 	"campaignevents-email-footer-collaboration-list-link": "Zie de Samenwerkingslijst voor meer evenementen en gemeenschappen op de wiki‘s: $1",
 	"campaignevents-email-self-subject": "Kopie van uw bericht aan de deelnemers van $1",
+	"campaignevents-email-participants-warning": "Uw e-mailadres is zichtbaar voor de deelnemers.",
 	"campaignevents-event-details-time-registered": "Geregistreerde tijd",
 	"campaignevents-event-details-can-receive-email": "Kan e-mail ontvangen",
 	"campaignevents-event-details-contributions-table-caption": "Bijdragen",
