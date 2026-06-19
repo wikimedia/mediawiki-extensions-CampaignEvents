@@ -62,6 +62,7 @@ readonly class WorklistModule {
 		$pager->setExtraQuery( [ 'tab' => 'WorklistPanel' ] );
 
 		$container = new Tag( 'div' );
+		$container->addClasses( [ 'ext-campaignevents-worklist-table' ] );
 		$container->appendContent( new HtmlSnippet( $pager->getFullOutput()->getContentHolderText() ) );
 		return $container;
 	}

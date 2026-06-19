@@ -256,6 +256,11 @@ class WorklistPagesPager extends CodexTablePager {
 		return parent::getDefaultQuery() + $this->extraQuery;
 	}
 
+	/**
+	 * Show the visible "Worklist" caption. Besides labelling the table, the caption is rendered
+	 * inside the `.cdx-table__header` element, which the frontend appends the header controls
+	 * (add-article dialog, worklist-page link) to.
+	 */
 	protected function shouldShowVisibleCaption(): bool {
 		return true;
 	}

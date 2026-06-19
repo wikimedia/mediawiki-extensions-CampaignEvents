@@ -329,8 +329,10 @@
 				"CdxButton",
 				"CdxField",
 				"CdxTextInput",
+				"CdxTextArea",
 				"CdxMessage",
-				"CdxProgressBar"
+				"CdxProgressBar",
+				"CdxIcon"
 			],
 			"packageFiles": [
 				"ext.campaignEvents.specialPages/dispatcher.js",
@@ -348,6 +350,7 @@
 				"ext.campaignEvents.specialPages/eventdetails/components/ContributionsActionsApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/DeleteContributionDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/Worklist.js",
+				"ext.campaignEvents.specialPages/eventdetails/components/AddWorklistArticleDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistActionsApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/RemoveWorklistArticleDialog.vue",
 				"ext.campaignEvents.specialPages/eventlists/index.js",
@@ -356,7 +359,14 @@
 				"ext.campaignEvents.specialPages/eventlists/EventKebabMenu.js",
 				"ext.campaignEvents.specialPages/eventlists/DateTimeWidgetsEnhancer.js",
 				"ext.campaignEvents.specialPages/eventlists/EventAccordionWatcher.js",
-				"TimeZoneConverter.js"
+				"TimeZoneConverter.js",
+				{
+					"name": "icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconAdd"
+					]
+				}
 			],
 			"dependencies": [
 				"mediawiki.language",
@@ -369,6 +379,7 @@
 				"mediawiki.user",
 				"mediawiki.util",
 				"mediawiki.jqueryMsg",
+				"mediawiki.widgets",
 				"mediawiki.widgets.datetime",
 				"mediawiki.widgets.UsersMultiselectWidget",
 				"jquery.makeCollapsible"
@@ -435,6 +446,13 @@
 				"campaignevents-event-details-contributions-delete-note",
 				"campaignevents-event-details-contributions-delete-cancel",
 				"campaignevents-event-details-contributions-delete-confirm",
+				"campaignevents-event-details-worklist-add-button-label",
+				"campaignevents-event-details-worklist-add-dialog-title",
+				"campaignevents-event-details-worklist-add-dialog-article-label",
+				"campaignevents-event-details-worklist-add-dialog-article-help",
+				"campaignevents-event-details-worklist-add-dialog-search-placeholder",
+				"campaignevents-event-details-worklist-add-dialog-placeholder",
+				"campaignevents-event-details-worklist-add-dialog-submit",
 				"campaignevents-worklist-remove-confirm-title",
 				"campaignevents-worklist-remove-confirm-body",
 				"campaignevents-worklist-remove-confirm-action",

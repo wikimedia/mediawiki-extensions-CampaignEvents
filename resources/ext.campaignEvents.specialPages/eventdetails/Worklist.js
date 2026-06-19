@@ -21,6 +21,23 @@
 			.mount( worklistActionsAppContainer );
 	}
 
+	/**
+	 * Mounts the "add article" dialog into the worklist table header.
+	 */
+	function mountWorklistAddDialog() {
+		const AddWorklistArticleDialog = require( './components/AddWorklistArticleDialog.vue' ),
+			worklistTableHeader = document.querySelector(
+				'.ext-campaignevents-worklist-table .cdx-table__header'
+			),
+			addWorklistAppContainer = document.createElement( 'div' );
+
+		worklistTableHeader.appendChild( addWorklistAppContainer );
+		addWorklistAppContainer.id = 'ext-campaignevents-worklist-add-vue-root';
+		Vue.createMwApp( AddWorklistArticleDialog )
+			.mount( addWorklistAppContainer );
+	}
+
 	$( mountWorklistActionsApp );
+	$( mountWorklistAddDialog );
 
 }() );
