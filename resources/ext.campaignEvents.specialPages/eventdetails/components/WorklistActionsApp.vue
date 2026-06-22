@@ -61,7 +61,7 @@ module.exports = exports = defineComponent( {
 			remove[ article.wiki ] = [ article.title ];
 			// The worklist page may be on another wiki; when it is, the server passes that
 			// wiki's rest.php URL and we target it via mw.ForeignRest (else local mw.Rest).
-			const foreignRestUrl = mw.config.get( 'wgCampaignEventsWorklistPageRestUrl' );
+			const foreignRestUrl = mw.config.get( 'wgCampaignEventsWorklistWikiRestUrl' );
 			const api = foreignRestUrl ? new mw.ForeignRest( foreignRestUrl ) : new mw.Rest();
 			api.ajax(
 				'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPage ) + '/pages',

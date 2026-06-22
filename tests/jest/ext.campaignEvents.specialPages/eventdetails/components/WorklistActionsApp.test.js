@@ -121,7 +121,7 @@ describe( 'WorklistActionsApp', () => {
 	it( 'uses mw.ForeignRest when the worklist page is on another wiki', async () => {
 		const foreignRestUrl = 'https://foreign.example.org/w/rest.php';
 		const wrapper = mountApp( {
-			wgCampaignEventsWorklistPageRestUrl: foreignRestUrl
+			wgCampaignEventsWorklistWikiRestUrl: foreignRestUrl
 		} );
 		await nextTick();
 

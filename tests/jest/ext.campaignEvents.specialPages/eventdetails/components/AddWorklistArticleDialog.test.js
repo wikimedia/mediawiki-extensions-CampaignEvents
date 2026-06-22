@@ -1,6 +1,6 @@
 'use strict';
 
-/* global document */
+/* global document, setTimeout */
 
 const { mount } = require( '@vue/test-utils' );
 const { nextTick } = require( 'vue' );
@@ -128,12 +128,65 @@ describe( 'AddWorklistArticleDialog', () => {
 		expect( wrapper.vm.articlesText ).toBe( '' );
 	} );
 
-	it( 'closes the dialog on submit (saving is not implemented yet)', async () => {
+	it( 'does not call the API on submit when no titles are entered', async () => {
 		const wrapper = mountDialog();
 		await openDialog( wrapper );
+		const restAjax = jest.fn();
+		mw.Rest.mockImplementation( () => ( { ajax: restAjax } ) );
 
 		wrapper.vm.onSubmit();
 
+		expect( restAjax ).not.toHaveBeenCalled();
+	} );
+
+	it( 'sends a PATCH with the entered titles on submit', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		mw.config.get = ( key ) => ( {
+			wgCampaignEventsWorklistPagePrefixedText: 'Event:My Event/Worklist',
+			wgDBname: 'awiki',
+			wgCampaignEventsWorklistWikiRestUrl: null
+		} )[ key ];
+		jest.spyOn( mw.user.tokens, 'get' ).mockReturnValue( 'csrf-token' );
+		const restAjax = jest.fn().mockResolvedValue( {} );
+		mw.Rest.mockImplementation( () => ( { ajax: restAjax } ) );
+
+		wrapper.vm.articlesText = 'Moon\nSun';
+		await wrapper.vm.onSubmit();
+
+		expect( restAjax ).toHaveBeenCalledWith(
+			'/campaignevents/v0/worklist/' + encodeURIComponent( 'Event:My Event/Worklist' ) + '/pages',
+			{
+				type: 'PATCH',
+				headers: { 'content-type': 'application/json' },
+				data: JSON.stringify( {
+					add: { awiki: [ 'Moon', 'Sun' ] },
+					token: 'csrf-token'
+				} )
+			}
+		);
+	} );
+	it( 'closes the dialog and clears the input after a successful submit', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		mw.config.get = ( key ) => ( {
+			wgCampaignEventsWorklistPagePrefixedText: 'Event:My Event/Worklist',
+			wgDBname: 'awiki',
+			wgCampaignEventsWorklistWikiRestUrl: null
+		} )[ key ];
+		jest.spyOn( mw.user.tokens, 'get' ).mockReturnValue( 'csrf-token' );
+		mw.Rest.mockImplementation( () => ( { ajax: jest.fn().mockResolvedValue( {} ) } ) );
+
+		wrapper.vm.articlesText = 'Moon';
+		await wrapper.vm.onSubmit();
+		// Allow the save promise's success handler to run.
+		await new Promise( ( resolve ) => {
+			setTimeout( resolve, 0 );
+		} );
+
 		expect( wrapper.vm.open ).toBe( false );
+		expect( wrapper.vm.articlesText ).toBe( '' );
 	} );
 } );

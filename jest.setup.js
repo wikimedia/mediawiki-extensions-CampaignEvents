@@ -59,6 +59,9 @@ global.mw = {
 	} ) ),
 	util: {
 		getUrl: jest.fn( ( pageName ) => '/wiki/' + pageName )
+	},
+	language: {
+		convertNumber: jest.fn( ( num ) => String( num ) )
 	}
 };
 

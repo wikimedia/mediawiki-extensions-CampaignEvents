@@ -45,12 +45,20 @@
 				"
 			></cdx-text-area>
 		</cdx-field>
+
+		<cdx-message
+			v-if="hasMessage"
+			class="ext-campaignevents-event-details-worklist-add-dialog-message"
+			:type="messageType"
+		>
+			{{ message }}
+		</cdx-message>
 	</cdx-dialog>
 </template>
 
 <script>
 const { defineComponent, ref, watch, nextTick } = require( 'vue' );
-const { CdxButton, CdxDialog, CdxField, CdxTextArea, CdxIcon } = require( '../../../codex.js' );
+const { CdxButton, CdxDialog, CdxField, CdxTextArea, CdxMessage, CdxIcon } = require( '../../../codex.js' );
 const { cdxIconAdd } = require( '../../../icons.json' );
 
 module.exports = exports = defineComponent( {
@@ -60,6 +68,7 @@ module.exports = exports = defineComponent( {
 		CdxDialog,
 		CdxField,
 		CdxTextArea,
+		CdxMessage,
 		CdxIcon
 	},
 	setup() {
@@ -67,6 +76,9 @@ module.exports = exports = defineComponent( {
 		// One article title per line; the user only enters the title (the wiki is the current one).
 		const articlesText = ref( '' );
 		const searchContainer = ref( null );
+		const hasMessage = ref( false );
+		const message = ref( '' );
+		const messageType = ref( 'error' );
 		const primaryAction = {
 			label: mw.msg( 'campaignevents-event-details-worklist-add-dialog-submit' ),
 			actionType: 'progressive'
@@ -74,6 +86,7 @@ module.exports = exports = defineComponent( {
 		const searchPlaceholder = mw.msg( 'campaignevents-event-details-worklist-add-dialog-search-placeholder' );
 
 		let searchWidget = null;
+		let submitting = false;
 
 		/**
 		 * Append a title to the textarea list, one per line and de-duplicated.
@@ -85,13 +98,20 @@ module.exports = exports = defineComponent( {
 			if ( !title ) {
 				return;
 			}
-			const lines = articlesText.value.split( '\n' )
-				.map( ( line ) => line.trim() )
-				.filter( ( line ) => line !== '' );
+			const lines = getArticleTitles();
 			if ( !lines.includes( title ) ) {
 				lines.push( title );
 			}
 			articlesText.value = lines.join( '\n' );
+		}
+
+		/**
+		 * @return {string[]} The trimmed, non-empty article titles entered in the textarea.
+		 */
+		function getArticleTitles() {
+			return articlesText.value.split( '\n' )
+				.map( ( line ) => line.trim() )
+				.filter( ( line ) => line !== '' );
 		}
 
 		/**
@@ -131,19 +151,95 @@ module.exports = exports = defineComponent( {
 		watch( open, ( isOpen ) => {
 			if ( isOpen ) {
 				nextTick( mountSearchWidget );
+			} else {
+				hasMessage.value = false;
 			}
 		} );
 
+		/**
+		 * @param {string} text
+		 */
+		function showError( text ) {
+			messageType.value = 'error';
+			message.value = text;
+			hasMessage.value = true;
+		}
+
+		/**
+		 * Extract a human-readable error from a failed mw.Rest() request.
+		 *
+		 * @param {Object} errObj
+		 * @return {string}
+		 */
+		function restErrorText( errObj ) {
+			const json = errObj && errObj.xhr && errObj.xhr.responseJSON;
+			return mw.msg( 'campaignevents-event-details-worklist-add-dialog-error',
+				json.messageTranslations[ mw.config.get( 'wgContentLanguage' ) ] ||
+				json.message );
+		}
+
+		/**
+		 * Save the given titles (all on the current wiki) to the worklist.
+		 *
+		 * @param {string[]} titles
+		 * @return {jQuery.Promise}
+		 */
+		function saveArticles( titles ) {
+			const worklistPage = mw.config.get( 'wgCampaignEventsWorklistPagePrefixedText' );
+			const wiki = mw.config.get( 'wgDBname' );
+			// The worklist pages endpoint takes a delta, so this is a PATCH. mw.Rest has no
+			// patch() helper, so call ajax() with the PATCH verb directly.
+			// The worklist page may be on another wiki; when it is, the server passes that
+			// wiki's rest.php URL and we target it via mw.ForeignRest (else local mw.Rest).
+			const foreignRestUrl = mw.config.get( 'wgCampaignEventsWorklistWikiRestUrl' );
+			const api = foreignRestUrl ? new mw.ForeignRest( foreignRestUrl ) : new mw.Rest();
+			return api.ajax(
+				'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPage ) + '/pages',
+				{
+					type: 'PATCH',
+					headers: { 'content-type': 'application/json' },
+					data: JSON.stringify( {
+						add: { [ wiki ]: titles },
+						token: mw.user.tokens.get( 'csrfToken' )
+					} )
+				}
+			);
+		}
+
 		function onSubmit() {
-			// TODO: saving (REST PUT) and the success toast are implemented in a follow-up branch.
-			// For now the dialog just closes.
-			open.value = false;
+			hasMessage.value = false;
+			if ( submitting ) {
+				return;
+			}
+			const titles = getArticleTitles();
+			if ( !titles.length ) {
+				return;
+			}
+			submitting = true;
+
+			// Non-existent pages are allowed on purpose (participants may create them during the
+			// event), so the titles are saved without an existence check.
+			saveArticles( titles ).then( () => {
+				mw.notify(
+					mw.msg( 'campaignevents-event-details-worklist-add-dialog-success', mw.language.convertNumber( titles.length ) ),
+					{ type: 'success' }
+				);
+				submitting = false;
+				articlesText.value = '';
+				open.value = false;
+			}, ( err, errObj ) => {
+				submitting = false;
+				showError( restErrorText( errObj ) );
+			} );
 		}
 
 		return {
 			open,
 			articlesText,
 			searchContainer,
+			hasMessage,
+			message,
+			messageType,
 			primaryAction,
 			onSubmit,
 			cdxIconAdd
