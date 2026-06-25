@@ -1,0 +1,308 @@
+{
+	"mwapi": "1.1.0",
+	"moduleId": "campaignevents/v0",
+	"info": {
+		"title": "CampaignEvents API",
+		"version": "0.1.0",
+		"description": "REST API for the CampaignEvents extension, which enables organizers to create and manage campaign events, invite and track participants, and associate wiki contributions with events.",
+		"x-doc-url": "https://www.mediawiki.org/wiki/Extension:CampaignEvents"
+	},
+	"paths": {
+		"/event_registration": {
+			"post": {
+				"summary": "Create an event registration",
+				"description": "Creates a new campaign event registration. The authenticated user must have permission to enable event registrations. Returns the ID of the newly created event.",
+				"tags": [ "Events" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EnableEventRegistrationHandler",
+					"services": [
+						"CampaignEventsEventFactory",
+						"CampaignEventsPermissionChecker",
+						"CampaignEventsEditEventCommand",
+						"CampaignEventsOrganizersStore",
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsEventQuestionsRegistry",
+						"CampaignEventsWikiLookup",
+						"CampaignEventsTopicRegistry",
+						"CampaignEventsEventTypesRegistry",
+						"CampaignEventsCountryProvider"
+					]
+				}
+			}
+		},
+		"/event_registration/{id}": {
+			"get": {
+				"summary": "Get an event registration",
+				"description": "Returns full details of a single event registration identified by its numeric ID. Sensitive fields such as meeting URLs are only returned to organizers and participants with the appropriate permissions.",
+				"tags": [ "Events" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsTrackingToolRegistry",
+						"CampaignEventsPermissionChecker",
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsOrganizersStore",
+						"CampaignEventsParticipantsStore"
+					]
+				}
+			},
+			"put": {
+				"summary": "Update an event registration",
+				"description": "Updates an existing event registration. The authenticated user must be an organizer of the event or have the appropriate permissions. All required fields must be included in the request body.",
+				"tags": [ "Events" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UpdateEventRegistrationHandler",
+					"services": [
+						"CampaignEventsEventFactory",
+						"CampaignEventsPermissionChecker",
+						"CampaignEventsEditEventCommand",
+						"CampaignEventsOrganizersStore",
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsEventQuestionsRegistry",
+						"CampaignEventsWikiLookup",
+						"CampaignEventsTopicRegistry",
+						"CampaignEventsEventTypesRegistry",
+						"CampaignEventsEventLookup",
+						"CampaignEventsCountryProvider"
+					]
+				}
+			},
+			"delete": {
+				"summary": "Delete an event registration",
+				"description": "Permanently deletes an event registration. The authenticated user must have permission to delete the event. This action cannot be undone.",
+				"tags": [ "Events" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\DeleteEventRegistrationHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsDeleteEventCommand"
+					]
+				}
+			}
+		},
+		"/event_registration/{id}/participants/self": {
+			"put": {
+				"summary": "Register the current user for an event",
+				"description": "Registers the currently authenticated user as a participant in the specified event. The registration can be public or private. Answers to participant questions may also be submitted. The event must be hosted on the local wiki.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RegisterForEventHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsRegisterParticipantCommand",
+						"CampaignEventsEventQuestionsRegistry",
+						"CampaignEventsParticipantsStore",
+						"CampaignEventsCentralUserLookup"
+					]
+				}
+			},
+			"delete": {
+				"summary": "Cancel the current user's event registration",
+				"description": "Cancels the currently authenticated user's participation in the specified event.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\CancelEventRegistrationHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsUnregisterParticipantCommand"
+					]
+				}
+			},
+			"get": {
+				"summary": "Get the current user's registration info",
+				"description": "Returns registration details for the currently authenticated user in the specified event, including privacy setting and any answers submitted to participant questions.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetOwnRegistrationInfoHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsParticipantsStore",
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsEventQuestionsRegistry"
+					]
+				}
+			}
+		},
+		"/event_registration/{id}/organizers": {
+			"get": {
+				"summary": "List organizers of an event",
+				"description": "Returns a paginated list of organizers for the specified event. Each entry includes the organizer's user ID, username, roles, and user page path. Use the `last_organizer_id` parameter for pagination.",
+				"tags": [ "Organizers" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListOrganizersHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsOrganizersStore",
+						"CampaignEventsRoleFormatter",
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsUserLinker"
+					]
+				}
+			},
+			"put": {
+				"summary": "Set the organizers of an event",
+				"description": "Replaces the organizer list for the specified event with the provided list of usernames. The authenticated user must have permission to edit the event. The event must be hosted on the local wiki.",
+				"tags": [ "Organizers" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\SetOrganizersHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsEditEventCommand"
+					]
+				}
+			}
+		},
+		"/event_registration/{id}/participants": {
+			"get": {
+				"summary": "List participants of an event",
+				"description": "Returns a paginated list of participants for the specified event. Private participants are only visible to organizers and users with the appropriate permissions. Use `last_participant_id` for pagination and `username_filter` to search by username.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListParticipantsHandler",
+					"services": [
+						"CampaignEventsPermissionChecker",
+						"CampaignEventsEventLookup",
+						"CampaignEventsParticipantsStore",
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsUserLinker",
+						"UserFactory",
+						"CampaignEventsUserMailer",
+						"CampaignEventsEventQuestionsRegistry",
+						"MessageFormatterFactory"
+					]
+				}
+			},
+			"delete": {
+				"summary": "Remove participants from an event",
+				"description": "Removes one or more participants from the specified event. The authenticated user must have permission to manage participants. Specify `user_ids` to remove particular users, or use `invert_users` to remove all participants except those listed. The event must be on the local wiki.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RemoveParticipantsFromEventHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsUnregisterParticipantCommand"
+					]
+				}
+			}
+		},
+		"/organizer/{userid}/event_registrations": {
+			"get": {
+				"summary": "List events organized by a user",
+				"description": "Returns a list of event registrations for which the specified central user is an organizer. The `userid` path parameter is the user's global central user ID.",
+				"tags": [ "Organizers" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByOrganizerHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsCentralUserLookup"
+					]
+				}
+			}
+		},
+		"/participant/{userid}/event_registrations": {
+			"get": {
+				"summary": "List events a user participates in",
+				"description": "Returns a list of event registrations in which the specified central user is a participant. The `userid` path parameter is the user's global central user ID.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByParticipantHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsCentralUserLookup"
+					]
+				}
+			}
+		},
+		"/participant/self/events_for_edit": {
+			"get": {
+				"summary": "List events available for contribution association",
+				"description": "Returns a list of events in which the currently authenticated user is a participant and that are eligible for contribution association. Used internally to populate the post-edit contribution prompt.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListOwnEventsForEditHandler",
+					"services": [
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsEventLookup",
+						"CampaignEventsGoalProgressFormatter"
+					]
+				}
+			}
+		},
+		"/event_registration/{id}/email": {
+			"post": {
+				"summary": "Send an email to event participants",
+				"description": "Sends an email to participants of the specified event. The authenticated user must have permission to email participants. Specify `user_ids` to target particular participants, or use `invert_users` to email all except those listed. The event must be on the local wiki.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EmailUsersHandler",
+					"services": [
+						"CampaignEventsPermissionChecker",
+						"CampaignEventsUserMailer",
+						"CampaignEventsParticipantsStore",
+						"CampaignEventsEventLookup"
+					]
+				}
+			}
+		},
+		"/participant_questions": {
+			"get": {
+				"summary": "Get available participant questions",
+				"description": "Returns the set of questions that can be presented to participants when they register for an event. Optionally filtered to a specific set of question IDs via the `question_ids` query parameter.",
+				"tags": [ "Participants" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetParticipantQuestionsHandler",
+					"services": [
+						"CampaignEventsEventQuestionsRegistry",
+						"MessageFormatterFactory",
+						"ContentLanguage"
+					]
+				}
+			}
+		},
+		"/formatted_time/{languageCode}/{start}/{end}": {
+			"get": {
+				"summary": "Get localised time strings for a date range",
+				"description": "Returns localised time, date, and datetime strings for the given start and end timestamps in the specified language. Intended for internal use by the CampaignEvents front-end to render event times correctly per the viewer's language.",
+				"tags": [ "Utilities" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetFormattedTimeHandler",
+					"services": [
+						"LanguageFactory",
+						"LanguageNameUtils"
+					]
+				}
+			}
+		},
+		"/event_registration/{id}/edits/{wiki}/{revid}": {
+			"put": {
+				"summary": "Associate a revision with an event",
+				"description": "Associates a specific wiki revision with the given event for contribution tracking purposes. The revision is identified by its wiki ID and revision ID. This schedules a background job to validate and record the contribution.",
+				"tags": [ "Contributions" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EventContributionsHandler",
+					"services": [
+						"CampaignEventsEventContributionValidator",
+						"CampaignEventsWikiLookup",
+						"CampaignEventsEventLookup"
+					]
+				}
+			}
+		},
+		"/event_contributions/{id}": {
+			"delete": {
+				"summary": "Delete an event contribution record",
+				"description": "Removes a specific event contribution record by its ID. The authenticated user must have permission to delete contributions for the associated event.",
+				"tags": [ "Contributions" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\DeleteEventContributionHandler",
+					"services": [
+						"CampaignEventsEventContributionStore",
+						"CampaignEventsPermissionChecker",
+						"CampaignEventsEventLookup"
+					]
+				}
+			}
+		}
+	}
+}
