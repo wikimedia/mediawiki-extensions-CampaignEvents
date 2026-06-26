@@ -56,4 +56,9 @@ class CancelEventRegistrationHandler extends SimpleHandler {
 	public function getBodyParamSettings(): array {
 		return $this->getTokenParamDefinition();
 	}
+
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/ModifiedResult.json';
+	}
 }

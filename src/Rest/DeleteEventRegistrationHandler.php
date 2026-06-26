@@ -74,4 +74,15 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	public function getBodyParamSettings(): array {
 		return $this->getTokenParamDefinition();
 	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'204' => [ 'description' => 'Event registration deleted successfully.' ],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
+	}
 }

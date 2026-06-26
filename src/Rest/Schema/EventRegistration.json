@@ -1,0 +1,164 @@
+{
+	"description": "CampaignEvents event registration details",
+	"type": "object",
+	"required": [
+		"id",
+		"name",
+		"event_page",
+		"event_page_wiki",
+		"status",
+		"timezone",
+		"start_time",
+		"end_time",
+		"types",
+		"wikis",
+		"topics",
+		"online_meeting",
+		"inperson_meeting",
+		"is_test_event",
+		"tracks_contributions",
+		"tracking_tools",
+		"questions"
+	],
+	"properties": {
+		"id": {
+			"type": "integer",
+			"description": "Event registration ID",
+			"example": 42
+		},
+		"name": {
+			"type": "string",
+			"description": "Event name",
+			"example": "Wikipedia Education Campaign 2025"
+		},
+		"event_page": {
+			"type": "string",
+			"description": "Event page title, prefixed with the localized namespace. If the page is on a different wiki, the namespace is formatted in that wiki's language.",
+			"example": "Event:Wikipedia Education Campaign 2025"
+		},
+		"event_page_wiki": {
+			"type": "string",
+			"description": "Wiki ID of the event page.",
+			"example": "enwiki"
+		},
+		"status": {
+			"type": "string",
+			"description": "Event status:\n* `open` - Registration is accepting participants\n* `closed` - Registration is closed to participants",
+			"enum": [
+				"open",
+				"closed"
+			]
+		},
+		"timezone": {
+			"type": "string",
+			"description": "Timezone identifier, in any format accepted by PHP's DateTimeZone",
+			"example": "America/New_York"
+		},
+		"start_time": {
+			"type": "string",
+			"description": "Event start time in MediaWiki timestamp format (YYYYMMDDHHmmss), local to the event timezone.",
+			"example": "20250901120000"
+		},
+		"end_time": {
+			"type": "string",
+			"description": "Event end time in MediaWiki timestamp format (YYYYMMDDHHmmss), local to the event timezone.",
+			"example": "20250930180000"
+		},
+		"types": {
+			"type": "array",
+			"description": "Event type identifiers",
+			"items": {
+				"type": "string"
+			}
+		},
+		"wikis": {
+			"type": "array",
+			"description": "Associated wiki IDs. `[\"*\"]` means all wikis.",
+			"items": {
+				"type": "string"
+			},
+			"example": [
+				"enwiki",
+				"frwiki"
+			]
+		},
+		"topics": {
+			"type": "array",
+			"description": "Associated topic identifiers",
+			"items": {
+				"type": "string"
+			}
+		},
+		"online_meeting": {
+			"type": "boolean",
+			"description": "Whether the event has an online meeting component"
+		},
+		"inperson_meeting": {
+			"type": "boolean",
+			"description": "Whether the event has an in-person meeting component"
+		},
+		"meeting_url": {
+			"type": "string",
+			"nullable": true,
+			"description": "URL for the online meeting. Null if not set. Absent from the response if not visible to the requester."
+		},
+		"meeting_country_code": {
+			"type": "string",
+			"nullable": true,
+			"description": "CLDR country code for in-person location",
+			"example": "US"
+		},
+		"meeting_address": {
+			"type": "string",
+			"nullable": true,
+			"description": "Street address for in-person location"
+		},
+		"chat_url": {
+			"type": "string",
+			"nullable": true,
+			"description": "URL of the event chat channel. Null if not set. Absent from the response if not visible to the requester."
+		},
+		"is_test_event": {
+			"type": "boolean",
+			"description": "Whether the event is a test event excluded from statistics"
+		},
+		"tracks_contributions": {
+			"type": "boolean",
+			"description": "Whether the event tracks wiki contributions"
+		},
+		"goal_type": {
+			"type": "string",
+			"nullable": true,
+			"description": "Event goal metric type"
+		},
+		"goal_target": {
+			"type": "integer",
+			"nullable": true,
+			"description": "Event goal target value"
+		},
+		"tracking_tools": {
+			"type": "array",
+			"description": "External tracking tools associated with the event",
+			"items": {
+				"type": "object",
+				"properties": {
+					"tool_id": {
+						"type": "string",
+						"description": "Tracking tool's user-facing identifier"
+					},
+					"tool_event_id": {
+						"type": "string",
+						"description": "Event's identifier within the tracking tool"
+					}
+				}
+			}
+		},
+		"questions": {
+			"type": "array",
+			"description": "Participant question IDs enabled for the event",
+			"items": {
+				"type": "integer"
+			}
+		}
+	}
+}

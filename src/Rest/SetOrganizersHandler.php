@@ -90,8 +90,20 @@ class SetOrganizersHandler extends SimpleHandler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_DEFAULT => [],
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-organizer-usernames' ),
 			],
 		] + $this->getTokenParamDefinition();
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'204' => [ 'description' => 'Organizers updated successfully.' ],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
 	}
 
 }

@@ -77,7 +77,13 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 				static::PARAM_SOURCE => 'path',
 				ParamValidator::PARAM_TYPE => 'integer',
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-userid' ),
 			],
 		];
+	}
+
+	/** @inheritDoc */
+	public function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/EventList.json';
 	}
 }

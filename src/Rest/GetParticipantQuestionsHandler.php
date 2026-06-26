@@ -58,15 +58,18 @@ class GetParticipantQuestionsHandler extends Handler {
 		return $this->getResponseFactory()->createJson( $response );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/ParticipantQuestions.json';
+	}
+
 	public function getParamSettings(): array {
 		return [
 			'question_ids' => [
 				static::PARAM_SOURCE => 'query',
 				ParamValidator::PARAM_TYPE => 'integer',
-				ParamValidator::PARAM_ISMULTI => true
+				ParamValidator::PARAM_ISMULTI => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-question-ids' ),
 			],
 		];
 	}

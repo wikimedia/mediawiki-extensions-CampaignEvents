@@ -26,6 +26,7 @@ trait EventIDParamTrait {
 				Handler::PARAM_SOURCE => 'path',
 				ParamValidator::PARAM_TYPE => 'integer',
 				ParamValidator::PARAM_REQUIRED => true,
+				Handler::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-id' ),
 			]
 		];
 	}

@@ -1,0 +1,37 @@
+{
+	"description": "Current user's event registration details",
+	"type": "object",
+	"required": [ "private", "show_contribution_association_prompt", "answers" ],
+	"properties": {
+		"private": {
+			"type": "boolean",
+			"description": "Whether the user is registered as a private participant"
+		},
+		"show_contribution_association_prompt": {
+			"type": "boolean",
+			"description": "Whether the contribution association prompt should be shown to this participant"
+		},
+		"answers": {
+			"type": "object",
+			"description": "Participant's answers to the event questions, keyed by question name.",
+			"additionalProperties": {
+				"type": "object",
+				"required": [ "value" ],
+				"properties": {
+					"value": {
+						"type": "integer",
+						"description": "ID of the chosen answer option"
+					},
+					"other": {
+						"type": "string",
+						"description": "Free-text input for the chosen option, if provided"
+					},
+					"removed": {
+						"type": "boolean",
+						"description": "Present and true if this question has been removed from the event"
+					}
+				}
+			}
+		}
+	}
+}

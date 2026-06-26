@@ -1,0 +1,36 @@
+{
+	"description": "Events eligible for contribution association for the current user",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"required": [ "id", "name", "autoAssociable" ],
+		"properties": {
+			"id": {
+				"type": "integer",
+				"description": "Event registration ID",
+				"example": 42
+			},
+			"name": {
+				"type": "string",
+				"description": "Event name",
+				"example": "Wikipedia Education Campaign 2025"
+			},
+			"goalPercent": {
+				"type": "integer",
+				"description": "Percentage of the event goal completed. Absent if the event has no goal."
+			},
+			"goalDescription": {
+				"type": "string",
+				"description": "Localised sentence describing the event goal. Absent if the event has no goal."
+			},
+			"goalNumericText": {
+				"type": "string",
+				"description": "Localised progress towards the event goal, as current and target values. Absent if the event has no goal."
+			},
+			"autoAssociable": {
+				"type": "boolean",
+				"description": "Whether this event's contribution association can be performed automatically without showing the dialog."
+			}
+		}
+	}
+}

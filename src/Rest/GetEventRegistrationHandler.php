@@ -142,6 +142,21 @@ class GetEventRegistrationHandler extends SimpleHandler {
 		$response['chat_url'] = $chatURL;
 	}
 
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/EventRegistration.json';
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		$spec = parent::generateResponseSpec( $method );
+		$spec['404'] = [ 'description' => 'Event registration not found or deleted.' ];
+		return $spec;
+	}
+
 	/**
 	 * @inheritDoc
 	 */

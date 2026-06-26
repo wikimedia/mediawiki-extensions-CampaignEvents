@@ -12,6 +12,29 @@ use StatusValue;
 use Wikimedia\Message\MessageValue;
 
 class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandler {
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/EnableEventResult.json';
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'201' => [
+				'description' => 'Event registration created successfully.',
+				'content' => [
+					'application/json' => [
+						'schema' => $this->getResponseBodySchema( $method ) ?? [],
+					],
+				],
+			],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
+	}
+
 	protected function getSuccessResponse( StatusValue $saveStatus ): Response {
 		$id = $saveStatus->getValue();
 		$respValue = [

@@ -1,0 +1,24 @@
+{
+	"description": "Event registrations for a user",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"required": [ "event_id", "event_name" ],
+		"properties": {
+			"event_id": {
+				"type": "integer",
+				"description": "Event registration ID",
+				"example": 42
+			},
+			"event_name": {
+				"type": "string",
+				"description": "Event name",
+				"example": "Wikipedia Education Campaign 2025"
+			},
+			"event_deleted": {
+				"type": "boolean",
+				"description": "Present and true if the event has been deleted"
+			}
+		}
+	}
+}

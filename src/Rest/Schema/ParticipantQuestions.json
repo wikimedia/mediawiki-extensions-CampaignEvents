@@ -1,0 +1,30 @@
+{
+	"description": "Available participant questions, keyed by question ID",
+	"type": "object",
+	"additionalProperties": {
+		"type": "object",
+		"required": [ "name", "type", "label" ],
+		"properties": {
+			"name": {
+				"type": "string",
+				"description": "Question's internal name"
+			},
+			"type": {
+				"type": "string",
+				"description": "Question type (e.g. select, text)"
+			},
+			"label": {
+				"type": "string",
+				"description": "Human-readable question label"
+			},
+			"options": {
+				"type": "object",
+				"description": "Available answer options, mapping display labels to values. Present for select-type questions."
+			},
+			"other-options": {
+				"type": "object",
+				"description": "Conditional follow-up options shown depending on selected answer"
+			}
+		}
+	}
+}

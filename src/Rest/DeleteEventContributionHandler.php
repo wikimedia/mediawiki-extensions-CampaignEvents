@@ -58,6 +58,7 @@ class DeleteEventContributionHandler extends SimpleHandler {
 				self::PARAM_SOURCE => 'path',
 				ParamValidator::PARAM_TYPE => 'integer',
 				ParamValidator::PARAM_REQUIRED => true,
+				self::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-contribution-id' ),
 			],
 		];
 	}
@@ -65,5 +66,16 @@ class DeleteEventContributionHandler extends SimpleHandler {
 	/** @inheritDoc */
 	public function getBodyParamSettings(): array {
 		return $this->getTokenParamDefinition();
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'204' => [ 'description' => 'Event contribution record deleted successfully.' ],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
 	}
 }

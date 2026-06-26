@@ -114,12 +114,19 @@ class RegisterForEventHandler extends SimpleHandler {
 	/**
 	 * @return array<string,array<string,mixed>>
 	 */
+
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/ModifiedResult.json';
+	}
+
 	public function getBodyParamSettings(): array {
 		return [
 			'is_private' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-is-private' ),
 			],
 			// Note: unlike Special:RegisterForEvent, this lets users change the value after an event has ended, and
 			// for events that do not track contributions. This should be harmless.
@@ -127,10 +134,14 @@ class RegisterForEventHandler extends SimpleHandler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue(
+					'campaignevents-rest-param-desc-show-contribution-association-prompt'
+				),
 			],
 			'answers' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'array',
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-answers' ),
 			],
 		] + $this->getTokenParamDefinition();
 	}

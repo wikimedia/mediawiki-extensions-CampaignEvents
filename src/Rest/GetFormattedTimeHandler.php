@@ -11,6 +11,7 @@ use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 /**
@@ -52,25 +53,30 @@ class GetFormattedTimeHandler extends SimpleHandler {
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/FormattedTime.json';
+	}
+
 	public function getParamSettings(): array {
 		return [
 			'languageCode' => [
 				Handler::PARAM_SOURCE => 'path',
 				ParamValidator::PARAM_TYPE => array_keys( $this->languageNameUtils->getLanguageNames() ),
 				ParamValidator::PARAM_REQUIRED => true,
+				Handler::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-language-code' ),
 			],
 			'start' => [
 				Handler::PARAM_SOURCE => 'path',
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
+				Handler::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-start-timestamp' ),
 			],
 			'end' => [
 				Handler::PARAM_SOURCE => 'path',
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
+				Handler::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-end-timestamp' ),
 			],
 		];
 	}

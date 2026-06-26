@@ -1,0 +1,12 @@
+{
+	"description": "Result of sending emails to event participants.",
+	"type": "object",
+	"required": [ "sent" ],
+	"properties": {
+		"sent": {
+			"type": "integer",
+			"description": "Number of emails successfully sent",
+			"example": 15
+		}
+	}
+}

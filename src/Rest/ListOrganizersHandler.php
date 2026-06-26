@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Organizers\OrganizersStore;
 use MediaWiki\Extension\CampaignEvents\Organizers\RoleFormatter;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ListOrganizersHandler extends SimpleHandler {
@@ -59,6 +60,11 @@ class ListOrganizersHandler extends SimpleHandler {
 		return $this->getResponseFactory()->createJson( $respVal );
 	}
 
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/OrganizerList.json';
+	}
+
 	/**
 	 * @inheritDoc
 	 */
@@ -68,7 +74,8 @@ class ListOrganizersHandler extends SimpleHandler {
 			[
 				'last_organizer_id' => [
 					static::PARAM_SOURCE => 'query',
-					ParamValidator::PARAM_TYPE => 'integer'
+					ParamValidator::PARAM_TYPE => 'integer',
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-last-organizer-id' ),
 				],
 			]
 		);

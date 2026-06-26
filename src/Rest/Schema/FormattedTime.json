@@ -1,0 +1,37 @@
+{
+	"description": "Localised time, date, and datetime strings for a start/end range",
+	"type": "object",
+	"required": [ "startTime", "startDate", "startDateTime", "endTime", "endDate", "endDateTime" ],
+	"properties": {
+		"startTime": {
+			"type": "string",
+			"description": "Formatted start time",
+			"example": "12:00"
+		},
+		"startDate": {
+			"type": "string",
+			"description": "Formatted start date",
+			"example": "1 September 2025"
+		},
+		"startDateTime": {
+			"type": "string",
+			"description": "Formatted start date and time",
+			"example": "12:00, 1 September 2025"
+		},
+		"endTime": {
+			"type": "string",
+			"description": "Formatted end time",
+			"example": "18:00"
+		},
+		"endDate": {
+			"type": "string",
+			"description": "Formatted end date",
+			"example": "30 September 2025"
+		},
+		"endDateTime": {
+			"type": "string",
+			"description": "Formatted end date and time",
+			"example": "18:00, 30 September 2025"
+		}
+	}
+}

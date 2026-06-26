@@ -1,0 +1,15 @@
+{
+	"description": "Number of participants removed, broken down by visibility",
+	"type": "object",
+	"properties": {
+		"public": {
+			"type": "integer",
+			"description": "Number of publicly registered participants removed"
+		},
+		"private": {
+			"type": "integer",
+			"description": "Number of privately registered participants removed"
+		}
+	},
+	"required": [ "public", "private" ]
+}

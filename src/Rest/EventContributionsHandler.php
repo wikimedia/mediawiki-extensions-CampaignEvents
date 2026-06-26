@@ -12,6 +12,7 @@ use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\Validator;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class EventContributionsHandler extends SimpleHandler {
@@ -41,9 +42,29 @@ class EventContributionsHandler extends SimpleHandler {
 		return $response;
 	}
 
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/ModifiedResult.json';
+	}
+
 	/**
 	 * @inheritDoc
+	 * @return array<string, mixed>
 	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'202' => [
+				'description' => 'Contribution association job accepted.',
+				'content' => [
+					'application/json' => [
+						'schema' => $this->getResponseBodySchema( $method ) ?? [],
+					],
+				],
+			],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
+	}
+
 	public function getParamSettings(): array {
 		return array_merge(
 			$this->getIDParamSetting(),
@@ -52,11 +73,13 @@ class EventContributionsHandler extends SimpleHandler {
 					Handler::PARAM_SOURCE => 'path',
 					ParamValidator::PARAM_TYPE => $this->getAllowedWikiIds(),
 					ParamValidator::PARAM_REQUIRED => true,
+					Handler::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-wiki' ),
 				],
 				'revid' => [
 					Handler::PARAM_SOURCE => 'path',
 					ParamValidator::PARAM_TYPE => 'integer',
 					ParamValidator::PARAM_REQUIRED => true,
+					Handler::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-revid' ),
 				],
 			]
 		);

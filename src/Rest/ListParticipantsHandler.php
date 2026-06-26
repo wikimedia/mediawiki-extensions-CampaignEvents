@@ -262,9 +262,11 @@ class ListParticipantsHandler extends SimpleHandler {
 		return $questionAnswer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/ParticipantList.json';
+	}
+
 	public function getParamSettings(): array {
 		return array_merge(
 			$this->getIDParamSetting(),
@@ -272,20 +274,26 @@ class ListParticipantsHandler extends SimpleHandler {
 				'include_private' => [
 					static::PARAM_SOURCE => 'query',
 					ParamValidator::PARAM_REQUIRED => true,
-					ParamValidator::PARAM_TYPE => 'boolean'
+					ParamValidator::PARAM_TYPE => 'boolean',
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-include-private' ),
 				],
 				'last_participant_id' => [
 					static::PARAM_SOURCE => 'query',
-					ParamValidator::PARAM_TYPE => 'integer'
+					ParamValidator::PARAM_TYPE => 'integer',
+					static::PARAM_DESCRIPTION => new MessageValue(
+						'campaignevents-rest-param-desc-last-participant-id'
+					),
 				],
 				'username_filter' => [
 					static::PARAM_SOURCE => 'query',
-					ParamValidator::PARAM_TYPE => 'string'
+					ParamValidator::PARAM_TYPE => 'string',
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-username-filter' ),
 				],
 				'exclude_users' => [
 					static::PARAM_SOURCE => 'query',
 					ParamValidator::PARAM_TYPE => 'integer',
-					ParamValidator::PARAM_ISMULTI => true
+					ParamValidator::PARAM_ISMULTI => true,
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-exclude-users' ),
 				],
 			]
 		);

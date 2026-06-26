@@ -57,6 +57,11 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 		return $this->getResponseFactory()->createJson( $response );
 	}
 
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/OwnRegistrationInfo.json';
+	}
+
 	/**
 	 * @inheritDoc
 	 */

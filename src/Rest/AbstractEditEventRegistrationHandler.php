@@ -26,6 +26,7 @@ use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\Validator;
 use RuntimeException;
 use StatusValue;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\IntegerDef;
 use Wikimedia\ParamValidator\TypeDef\StringDef;
@@ -112,23 +113,27 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'title',
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-event-page' ),
 			],
 			'timezone' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-timezone' ),
 			],
 			'start_time' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',
 				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS::MW,
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-start-time' ),
 			],
 			'end_time' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'timestamp',
 				TimestampDef::PARAM_TIMESTAMP_FORMAT => TS::MW,
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-end-time' ),
 			],
 			'types' => [
 				static::PARAM_SOURCE => 'body',
@@ -136,6 +141,7 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TYPES,
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-types' ),
 			],
 			'wikis' => [
 				static::PARAM_SOURCE => 'body',
@@ -144,64 +150,80 @@ abstract class AbstractEditEventRegistrationHandler extends Handler {
 				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_WIKIS,
 				ParamValidator::PARAM_ALL => true,
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-wikis' ),
 			],
 			'topics' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => $this->topicRegistry->getAllTopics(),
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_ISMULTI_LIMIT1 => EventFactory::MAX_TOPICS,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-topics' ),
 			],
 			'online_meeting' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-online-meeting' ),
 			],
 			'inperson_meeting' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-inperson-meeting' ),
 			],
 			'meeting_url' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-meeting-url' ),
 			],
 			'meeting_country_code' => [
 				static::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_TYPE => $this->countryProvider->getValidCountryCodes()
+				ParamValidator::PARAM_TYPE => $this->countryProvider->getValidCountryCodes(),
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-meeting-country-code' ),
 			],
 			'meeting_address' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
 				StringDef::PARAM_MAX_BYTES => EventFactory::ADDRESS_MAXLENGTH_BYTES,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-meeting-address' ),
 			],
 			'chat_url' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-chat-url' ),
 			],
 			'is_test_event' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_DEFAULT => false,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-is-test-event' ),
 			],
 			'tracks_contributions' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-tracks-contributions' ),
 			],
 			'goal_type' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => array_column( EventGoalMetricType::cases(), 'value' ),
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-goal-type' ),
 			],
 			'goal_target' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'integer',
 				IntegerDef::PARAM_MIN => 1,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-goal-target' ),
 			],
 			'tracking_tool_id' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-tracking-tool-id' ),
 			],
 			'tracking_tool_event_id' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'string',
+				static::PARAM_DESCRIPTION => new MessageValue(
+					'campaignevents-rest-param-desc-tracking-tool-event-id'
+				),
 			],
 		] + $this->getTokenParamDefinition();
 

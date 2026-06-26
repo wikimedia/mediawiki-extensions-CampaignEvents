@@ -97,33 +97,64 @@ class EmailUsersHandler extends SimpleHandler {
 	/**
 	 * @return array<string,array<string,mixed>>
 	 */
+
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/EmailResult.json';
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'202' => [
+				'description' => 'Email send job accepted. The sent count reflects emails dispatched.',
+				'content' => [
+					'application/json' => [
+						'schema' => $this->getResponseBodySchema( $method ) ?? [],
+					],
+				],
+			],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
+	}
+
 	public function getBodyParamSettings(): array {
 		return [
 				'user_ids' => [
 					static::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_TYPE => 'array',
 					ParamValidator::PARAM_REQUIRED => false,
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-email-user-ids' ),
 				],
 				'invert_users' => [
 					static::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_TYPE => 'boolean',
 					ParamValidator::PARAM_REQUIRED => false,
 					ParamValidator::PARAM_DEFAULT => false,
+					static::PARAM_DESCRIPTION => new MessageValue(
+						'campaignevents-rest-param-desc-email-invert-users'
+					),
 				],
 				'message' => [
 					static::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_REQUIRED => true,
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-email-message' ),
 				],
 				'subject' => [
 					static::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_REQUIRED => true,
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-email-subject' ),
 				],
 				'ccme' => [
 					static::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_TYPE => 'boolean',
 					ParamValidator::PARAM_DEFAULT => false,
+					static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-ccme' ),
 				],
 			] + $this->getTokenParamDefinition();
 	}

@@ -28,6 +28,11 @@ class ListOwnEventsForEditHandler extends SimpleHandler {
 	) {
 	}
 
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/OwnEventsForEdit.json';
+	}
+
 	/** @phan-return list<array{id:int,name:string,goalProgress?:string,autoAssociable:bool}> */
 	public function run(): array {
 		$events = $this->getEvents();

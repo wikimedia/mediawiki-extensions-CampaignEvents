@@ -1,0 +1,11 @@
+{
+	"description": "Result indicating whether the resource was modified",
+	"type": "object",
+	"required": [ "modified" ],
+	"properties": {
+		"modified": {
+			"type": "boolean",
+			"description": "Whether the resource was modified (false if already in the desired state)"
+		}
+	}
+}

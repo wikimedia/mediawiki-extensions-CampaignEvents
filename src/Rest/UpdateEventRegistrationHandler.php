@@ -73,8 +73,20 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => EventRegistration::VALID_STATUSES,
 				ParamValidator::PARAM_REQUIRED => true,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-status' ),
 			]
 		] + parent::getBodyParamSettings();
+	}
+
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'204' => [ 'description' => 'Event registration updated successfully.' ],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
 	}
 
 	protected function getSuccessResponse( StatusValue $saveStatus ): Response {

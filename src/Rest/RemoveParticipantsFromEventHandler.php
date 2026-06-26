@@ -84,9 +84,11 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 		return $this->getIDParamSetting();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/RemoveParticipantsResult.json';
+	}
+
 	public function getBodyParamSettings(): array {
 		return [
 			'user_ids' => [
@@ -94,11 +96,17 @@ class RemoveParticipantsFromEventHandler extends SimpleHandler {
 				ParamValidator::PARAM_DEFAULT => null,
 				ParamValidator::PARAM_TYPE => 'integer',
 				ParamValidator::PARAM_ISMULTI => true,
+				static::PARAM_DESCRIPTION => new MessageValue(
+					'campaignevents-rest-param-desc-remove-participants-user-ids'
+				),
 			],
 			'invert_users' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_DEFAULT => false,
 				ParamValidator::PARAM_TYPE => 'boolean',
+				static::PARAM_DESCRIPTION => new MessageValue(
+					'campaignevents-rest-param-desc-remove-participants-invert-users'
+				),
 			],
 		] + $this->getTokenParamDefinition();
 	}

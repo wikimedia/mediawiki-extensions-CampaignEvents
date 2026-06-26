@@ -1,0 +1,30 @@
+{
+	"description": "Result of creating a new event registration.",
+	"type": "object",
+	"required": [ "id" ],
+	"properties": {
+		"id": {
+			"type": "integer",
+			"description": "ID of the newly created event registration",
+			"example": 42
+		},
+		"warnings": {
+			"type": "array",
+			"description": "Non-fatal warnings from the creation process, e.g. from tracking tool integration",
+			"items": {
+				"type": "object",
+				"properties": {
+					"key": {
+						"type": "string",
+						"description": "Warning message key"
+					},
+					"params": {
+						"type": "array",
+						"description": "Warning message parameters",
+						"items": {}
+					}
+				}
+			}
+		}
+	}
+}
