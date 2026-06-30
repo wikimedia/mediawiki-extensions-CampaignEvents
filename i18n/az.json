@@ -388,6 +388,7 @@
 	"campaignevents-email-footer": "Bu e-poçt $1 tərəfindən $3 tədbirinin qeydiyyatdan keçmiş iştirakçısı olan {{GENDER:$2|$2}} istifadəçisinə göndərilmişdir. Bu məktuba cavab versəniz, e-poçt ünvanınız qarşı tərəfə görünəcək.",
 	"campaignevents-email-footer-collaboration-list-link": "Vikilərdə daha çox tədbir və icma tapmaq üçün Əməkdaşlıq Siyahısını ziyarət edin: $1",
 	"campaignevents-email-self-subject": "$1 iştirakçılarına olan mesajınızın nüsxəsi",
+	"campaignevents-email-participants-warning": "E-poçt ünvanınız iştirakçılara görünəcək.",
 	"campaignevents-event-details-time-registered": "Qeydiyyat vaxtı",
 	"campaignevents-event-details-can-receive-email": "E-poçt qəbul edə bilər?",
 	"campaignevents-event-details-contributions-table-caption": "Töhfələr",

@@ -388,6 +388,7 @@
 	"campaignevents-email-footer": "Оваа порака е {{GENDER:$1|испратена}} од $1 до {{GENDER:$2|$2}}, како пријатен учесник на следниов настан: $3. Ако {{GENDER:$2|одговорите}} на пораката, {{GENDER:$2|вашата}} порака ќе биде испратена право на {{GENDER:$1|изворниот испраќач}}, откривајќи {{GENDER:$2|му}} ја {{GENDER:$1|вашата}} е-поштенска адреса.",
 	"campaignevents-email-footer-collaboration-list-link": "Посетете го Списокот на соработки за да најдете повеќе настани и заедници на викијата: $1",
 	"campaignevents-email-self-subject": "Примерок на вашата порака до учесниците на $1",
+	"campaignevents-email-participants-warning": "Вашата е-пошта ќе биде видлива за учесниците.",
 	"campaignevents-event-details-time-registered": "Зачленет од",
 	"campaignevents-event-details-can-receive-email": "Може да прима е-пошта",
 	"campaignevents-event-details-contributions-table-caption": "Придонеси",

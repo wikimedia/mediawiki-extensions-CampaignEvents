@@ -390,6 +390,7 @@
 	"campaignevents-email-footer": "Dës E-Mail gouf vum {{GENDER:$1|$1}} un {{GENDER:$2|de(n) $2|d'$2}} geschéckt, {{GENDER:$2|engem ugemellte Participant|enger ugemellter Participante}} vum follgenden Evenement: $3. Wann {{GENDER:$2|Dir}} op dës E-Mail äntwert, gëtt d'E-Mail direkt un {{GENDER:$1|den ursprénglechen Ofsender|d'ursprénglech Ofsenderin}} geschéckt, fir {{GENDER:$1|deen|déi}} doduerch {{GENDER:$2|Är}} E-Mail-Adress siichtbar gëtt.",
 	"campaignevents-email-footer-collaboration-list-link": "Gitt op d'Collaboratiounslëscht fir méi Evenementer a Communautéiten op de Wikien ze fannen: $1",
 	"campaignevents-email-self-subject": "Kopie vun Ärem Message un d'Participantë vun „$1“",
+	"campaignevents-email-participants-warning": "Är E-Mail-Adress wäert fir d'Participantë siichtbar sinn.",
 	"campaignevents-event-details-time-registered": "Umeldungszäitpunkt",
 	"campaignevents-event-details-can-receive-email": "Kann E-Maile kréien",
 	"campaignevents-event-details-contributions-table-caption": "Kontributiounen",

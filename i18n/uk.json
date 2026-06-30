@@ -393,6 +393,7 @@
 	"campaignevents-email-footer": "Цей лист {{GENDER:$1|надіслав|надіслала}} $1 {{GENDER:$2|користувачу|користувачці}} $2, {{GENDER:$2|зареєстрованому учаснику|зареєстрованій учасниці}} такої події: $3. Якщо ви відповісте на цей лист, ваш електронний лист буде надіслано безпосередньо {{GENDER:$1|початковому відправнику|початковій відправниці}}, відкривши {{GENDER:$1|йому|їй|їм}} {{GENDER:$2|вашу}} електронну адресу.",
 	"campaignevents-email-footer-collaboration-list-link": "Відвідайте список співпраці, щоб знайти більше подій та спільнот у вікі: $1",
 	"campaignevents-email-self-subject": "Копія вашого повідомлення учасникам $1",
+	"campaignevents-email-participants-warning": "Ваша адреса електронної пошти буде видимою для учасників.",
 	"campaignevents-event-details-time-registered": "Час реєстрації",
 	"campaignevents-event-details-can-receive-email": "Може отримувати електронну пошту",
 	"campaignevents-event-details-contributions-table-caption": "Внески",

@@ -405,6 +405,7 @@
 	"campaignevents-email-footer": "هذا البريد الإلكتروني {{GENDER:$1|إرسال}} بواسطة $1 إلى {{GENDER:$2|$2}}، وهو مشارك مسجل في الفعالية التالية: $3. لو {{GENDER:$2|أنك}} رددت على هذا البريد الإلكتروني، فسيرسل البريد الإلكتروني {{GENDER:$2|لديك}} مباشرة إلى {{GENDER:$1|المرسل الأصلي}}، كاشفاً عنوان البريد الإلكتروني {{GENDER:$2|الخاص بك }} إلى {{GENDER:$1|لديك}}.",
 	"campaignevents-email-footer-collaboration-list-link": "قم بزيارة قائمة التعاون للعثور على المزيد من الفعاليات والمجتمعات على الويكيات: $1",
 	"campaignevents-email-self-subject": "نسخة من رسالتك للمشاركين بقيمة $1",
+	"campaignevents-email-participants-warning": "سيكون عنوان بريدك الإلكتروني مرئيًا للمشاركين.",
 	"campaignevents-event-details-time-registered": "وقت التسجيل",
 	"campaignevents-event-details-can-receive-email": "يتلقى البريد الإلكتروني",
 	"campaignevents-event-details-contributions-table-caption": "مساهمات",
