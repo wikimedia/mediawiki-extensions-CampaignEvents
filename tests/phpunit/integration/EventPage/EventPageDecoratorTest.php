@@ -31,6 +31,8 @@ use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\GroupPermissionsLookup;
 use MediaWiki\Request\WebRequest;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
+use MediaWiki\Title\Title;
+use MediaWiki\Title\TitleFactory;
 use MediaWikiIntegrationTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Wikimedia\Message\IMessageFormatterFactory;
@@ -50,7 +52,8 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 		bool $canEnableRegistration,
 		Authority $performer,
 		OutputPage $out,
-		?GoalProgressFormatter $goalProgressFormatter = null
+		?GoalProgressFormatter $goalProgressFormatter = null,
+		?TitleFactory $titleFactory = null,
 	): EventPageDecorator {
 		// Explicit mocking to make sure that information such as the page namespace is preserved.
 		$campaignsPageFactory = $this->createMock( CampaignsPageFactory::class );
@@ -74,6 +77,14 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$goalProgressFormatter = $this->createMock( GoalProgressFormatter::class );
 		}
 
+		if ( !$titleFactory ) {
+			$title = $this->createMock( Title::class );
+			$title->method( 'getContentModel' )->willReturn( CONTENT_MODEL_WIKITEXT );
+
+			$titleFactory = $this->createMock( TitleFactory::class );
+			$titleFactory->method( 'newFromPageIdentity' )->willReturn( $title );
+		}
+
 		return new EventPageDecorator(
 			$pageEventLookup,
 			$this->createMock( ParticipantsStore::class ),
@@ -91,6 +102,7 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			] ),
 			$this->createMock( CountryProvider::class ),
 			$goalProgressFormatter,
+			$titleFactory,
 			$this->createMock( Language::class ),
 			$performer,
 			$out
@@ -340,6 +352,32 @@ class EventPageDecoratorTest extends MediaWikiIntegrationTestCase {
 			$doesNotExpectRegistrationHeader,
 			$doesNotExpectCTAHeader
 		];
+	}
+
+	public function testHeaderIsNotShownForNonWikitextPage() {
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->expects( $this->once() )
+			->method( 'getRegistrationForLocalPage' )
+			->willReturn( null );
+
+		$title = $this->createMock( Title::class );
+		$title->expects( $this->once() )->method( 'getContentModel' )->willReturn( CONTENT_MODEL_JSON );
+		$titleFactory = $this->createMock( TitleFactory::class );
+		$titleFactory->expects( $this->once() )->method( 'newFromPageIdentity' )->willReturn( $title );
+
+		// No-op mock to assert that the output isn't changed
+		$out = $this->createNoOpMock( OutputPage::class );
+
+		$performer = $this->mockRegisteredUltimateAuthority();
+		$decorator = $this->getDecorator(
+			$pageEventLookup,
+			[ NS_EVENT ],
+			true,
+			$performer,
+			$out,
+			titleFactory: $titleFactory,
+		);
+		$decorator->decoratePage( new PageIdentityValue( 42, NS_EVENT, 'Event:Json_page', PageIdentity::LOCAL ) );
 	}
 
 	/**

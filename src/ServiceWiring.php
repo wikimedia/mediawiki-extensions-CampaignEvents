@@ -259,6 +259,7 @@ return [
 				$services->get( CampaignEventsServices::CAMPAIGN_EVENTS_CONFIGURATION ),
 				$services->get( CountryProvider::SERVICE_NAME ),
 				$services->get( GoalProgressFormatter::SERVICE_NAME ),
+				$services->getTitleFactory(),
 			);
 		},
 	CampaignEventsHookRunner::SERVICE_NAME =>

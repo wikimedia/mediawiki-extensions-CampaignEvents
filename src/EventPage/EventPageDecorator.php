@@ -41,6 +41,7 @@ use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\GroupPermissionsLookup;
 use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\UserGroupMembership;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonWidget;
@@ -97,6 +98,7 @@ class EventPageDecorator {
 		private readonly Config $config,
 		private readonly CountryProvider $countryProvider,
 		private readonly GoalProgressFormatter $goalProgressFormatter,
+		private readonly TitleFactory $titleFactory,
 		private readonly Language $language,
 		private readonly Authority $authority,
 		private readonly OutputPage $out,
@@ -132,6 +134,12 @@ class EventPageDecorator {
 			!in_array( NS_EVENT, $this->config->get( 'CampaignEventsEventNamespaces' ), true ) ||
 			!$this->permissionChecker->userCanEnableRegistration( $this->authority, $eventPage )
 		) {
+			return;
+		}
+
+		$title = $this->titleFactory->newFromPageIdentity( $eventPage->getPageIdentity() );
+		if ( $title->getContentModel() !== CONTENT_MODEL_WIKITEXT ) {
+			// T430862: don't show the call to action for non-wikitext pages.
 			return;
 		}
 

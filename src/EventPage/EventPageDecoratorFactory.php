@@ -19,6 +19,7 @@ use MediaWiki\Language\Language;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\GroupPermissionsLookup;
+use MediaWiki\Title\TitleFactory;
 use Wikimedia\Message\IMessageFormatterFactory;
 
 class EventPageDecoratorFactory {
@@ -39,6 +40,7 @@ class EventPageDecoratorFactory {
 		private readonly Config $config,
 		private readonly CountryProvider $countryProvider,
 		private readonly GoalProgressFormatter $goalProgressFormatter,
+		private readonly TitleFactory $titleFactory,
 	) {
 	}
 
@@ -62,6 +64,7 @@ class EventPageDecoratorFactory {
 			$this->config,
 			$this->countryProvider,
 			$this->goalProgressFormatter,
+			$this->titleFactory,
 			$language,
 			$viewingAuthority,
 			$out
