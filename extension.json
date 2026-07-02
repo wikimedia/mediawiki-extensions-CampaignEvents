@@ -94,7 +94,8 @@
 	"DefaultUserOptions": {
 		"echo-subscriptions-email-campaign-events-notification-registration": true,
 		"echo-subscriptions-web-campaign-events-notification-registration": false,
-		"campaignevents-allow-invitations": true
+		"campaignevents-allow-invitations": true,
+		"campaignevents-opt-out-event-discovery": true
 	},
 	"GroupPermissions": {
 		"event-organizer": {
@@ -148,7 +149,10 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\EchoHooksHandler"
 		},
 		"GetPreferencesHandler": {
-			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\GetPreferencesHandler"
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\GetPreferencesHandler",
+			"services": [
+				"MainConfig"
+			]
 		},
 		"PostEditHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\PostEditHandler",
