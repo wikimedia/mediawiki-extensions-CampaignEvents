@@ -64,6 +64,7 @@ use MediaWiki\Extension\CampaignEvents\Topics\WikimediaTopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Logger\LoggerFactory;
@@ -530,6 +531,11 @@ return [
 			$services->get( EventContributionStore::SERVICE_NAME ),
 			$services->get( EventGoalCompletionCalculator::SERVICE_NAME ),
 			$services->getMessageFormatterFactory(),
+		);
+	},
+	WorklistEventsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistEventsStore {
+		return new WorklistEventsStore(
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 		);
 	},
 	WorklistSecondaryStore::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistSecondaryStore {
