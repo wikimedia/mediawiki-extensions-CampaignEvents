@@ -6,10 +6,13 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MediaWikiEventIngress;
 
 use Generator;
 use MediaWiki\Deferred\DeferredUpdates;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Worklist\UpdateWorklistPagesSecondaryStoreJob;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Page\Event\PageCreatedEvent;
@@ -43,6 +46,8 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		?RevisionLookup $revisionLookup = null,
 		?CampaignsCentralUserLookup $centralUserLookup = null,
 		?JobQueueGroup $jobQueueGroup = null,
+		?WorklistEventsStore $worklistEventsStore = null,
+		?PageEventLookup $pageEventLookup = null,
 	): WorklistPageEventIngress {
 		// Needed because `getPrefixedText` has no return type declaration, so an unconfigured mock would return null.
 		$titleFormatter = $this->createMock( TitleFormatter::class );
@@ -54,6 +59,8 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 			$revisionLookup ?? $this->createMock( RevisionLookup::class ),
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$jobQueueGroup ?? $this->createMock( JobQueueGroup::class ),
+			$worklistEventsStore ?? $this->createMock( WorklistEventsStore::class ),
+			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),
 		);
 	}
 
@@ -201,6 +208,131 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		$eventIngress = $this->getEventIngress( $worklistSecondaryStore, $titleFactory, jobQueueGroup: $jobQueueGroup );
 
 		$eventIngress->handlePageMovedEvent( $this->createMock( PageMovedEvent::class ) );
+		DeferredUpdates::doUpdates();
+	}
+
+	public function testHandlePageCreatedEvent__associatesEventWithWorklist() {
+		$baseTitle = $this->createMock( Title::class );
+		$worklistTitle = $this->createMock( Title::class );
+		$worklistTitle->method( 'getContentModel' )->willReturn( CONTENT_MODEL_WORKLIST );
+		$worklistTitle->method( 'getSubpageText' )->willReturn( 'Worklist' );
+		$worklistTitle->method( 'getBaseTitle' )->willReturn( $baseTitle );
+		$titleFactory = $this->createMock( TitleFactory::class );
+		$titleFactory->method( 'newFromPageReference' )->willReturn( $worklistTitle );
+
+		$eventReg = $this->createMock( ExistingEventRegistration::class );
+		$eventReg->method( 'getID' )->willReturn( 5 );
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->method( 'getRegistrationForLocalPage' )->with( $baseTitle )->willReturn( $eventReg );
+
+		$worklistSecondaryStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistSecondaryStore->method( 'createWorklist' )->willReturn( 10 );
+
+		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
+		$worklistEventsStore->expects( $this->once() )
+			->method( 'associateEventWithWorklist' )
+			->with( 5, 10 );
+
+		$eventIngress = $this->getEventIngress(
+			$worklistSecondaryStore, $titleFactory,
+			worklistEventsStore: $worklistEventsStore, pageEventLookup: $pageEventLookup
+		);
+
+		$revisionAfter = $this->createMock( RevisionRecord::class );
+		$revisionAfter->method( 'getId' )->willReturn( 123 );
+		$event = $this->createMock( PageCreatedEvent::class );
+		$event->method( 'getLatestRevisionAfter' )->willReturn( $revisionAfter );
+		$eventIngress->handlePageCreatedEvent( $event );
+		DeferredUpdates::doUpdates();
+	}
+
+	public function testHandlePageMovedEvent__associatesWhenMovedOntoWorklistSubpage() {
+		$pageBefore = $this->createMock( ExistingPageRecord::class );
+		$pageAfter = $this->createMock( ExistingPageRecord::class );
+		$pageAfter->method( 'getId' )->willReturn( 77 );
+
+		$baseTitle = $this->createMock( Title::class );
+		$titleBefore = $this->createMock( Title::class );
+		$titleBefore->method( 'getSubpageText' )->willReturn( 'SomethingElse' );
+		$titleAfter = $this->createMock( Title::class );
+		$titleAfter->method( 'getContentModel' )->willReturn( CONTENT_MODEL_WORKLIST );
+		$titleAfter->method( 'getSubpageText' )->willReturn( 'Worklist' );
+		$titleAfter->method( 'getBaseTitle' )->willReturn( $baseTitle );
+
+		$titleFactory = $this->createMock( TitleFactory::class );
+		$titleFactory->method( 'newFromPageReference' )->willReturnCallback(
+			static fn ( $page ) => $page === $pageAfter ? $titleAfter : $titleBefore
+		);
+
+		$eventReg = $this->createMock( ExistingEventRegistration::class );
+		$eventReg->method( 'getID' )->willReturn( 5 );
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturnCallback(
+			static fn ( $title ) => $title === $baseTitle ? $eventReg : null
+		);
+
+		$worklistSecondaryStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistSecondaryStore->expects( $this->once() )->method( 'moveWorklist' );
+		$worklistSecondaryStore->method( 'getWorklistIDFromPage' )->willReturn( 10 );
+
+		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
+		$worklistEventsStore->expects( $this->never() )->method( 'removeWorklistAssociation' );
+		$worklistEventsStore->expects( $this->once() )->method( 'associateEventWithWorklist' )->with( 5, 10 );
+
+		$event = $this->createMock( PageMovedEvent::class );
+		$event->method( 'getPageRecordAfter' )->willReturn( $pageAfter );
+		$event->method( 'getPageRecordBefore' )->willReturn( $pageBefore );
+
+		$eventIngress = $this->getEventIngress(
+			$worklistSecondaryStore, $titleFactory,
+			worklistEventsStore: $worklistEventsStore, pageEventLookup: $pageEventLookup
+		);
+		$eventIngress->handlePageMovedEvent( $event );
+		DeferredUpdates::doUpdates();
+	}
+
+	public function testHandlePageMovedEvent__dissociatesWhenMovedAwayFromWorklistSubpage() {
+		$pageBefore = $this->createMock( ExistingPageRecord::class );
+		$pageAfter = $this->createMock( ExistingPageRecord::class );
+		$pageAfter->method( 'getId' )->willReturn( 77 );
+
+		$baseTitle = $this->createMock( Title::class );
+		$titleBefore = $this->createMock( Title::class );
+		$titleBefore->method( 'getSubpageText' )->willReturn( 'Worklist' );
+		$titleBefore->method( 'getBaseTitle' )->willReturn( $baseTitle );
+		$titleAfter = $this->createMock( Title::class );
+		$titleAfter->method( 'getContentModel' )->willReturn( CONTENT_MODEL_WORKLIST );
+		$titleAfter->method( 'getSubpageText' )->willReturn( 'Renamed' );
+
+		$titleFactory = $this->createMock( TitleFactory::class );
+		$titleFactory->method( 'newFromPageReference' )->willReturnCallback(
+			static fn ( $page ) => $page === $pageAfter ? $titleAfter : $titleBefore
+		);
+
+		$eventReg = $this->createMock( ExistingEventRegistration::class );
+		$eventReg->method( 'getID' )->willReturn( 5 );
+		$pageEventLookup = $this->createMock( PageEventLookup::class );
+		$pageEventLookup->method( 'getRegistrationForLocalPage' )->willReturnCallback(
+			static fn ( $title ) => $title === $baseTitle ? $eventReg : null
+		);
+
+		$worklistSecondaryStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistSecondaryStore->expects( $this->once() )->method( 'moveWorklist' );
+		$worklistSecondaryStore->method( 'getWorklistIDFromPage' )->willReturn( 10 );
+
+		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
+		$worklistEventsStore->expects( $this->once() )->method( 'removeWorklistAssociation' )->with( 10, 5 );
+		$worklistEventsStore->expects( $this->never() )->method( 'associateEventWithWorklist' );
+
+		$event = $this->createMock( PageMovedEvent::class );
+		$event->method( 'getPageRecordAfter' )->willReturn( $pageAfter );
+		$event->method( 'getPageRecordBefore' )->willReturn( $pageBefore );
+
+		$eventIngress = $this->getEventIngress(
+			$worklistSecondaryStore, $titleFactory,
+			worklistEventsStore: $worklistEventsStore, pageEventLookup: $pageEventLookup
+		);
+		$eventIngress->handlePageMovedEvent( $event );
 		DeferredUpdates::doUpdates();
 	}
 

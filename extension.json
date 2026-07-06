@@ -246,7 +246,9 @@
 				"TitleFormatter",
 				"RevisionLookup",
 				"CampaignEventsCentralUserLookup",
-				"JobQueueGroup"
+				"JobQueueGroup",
+				"CampaignEventsWorklistEventsStore",
+				"CampaignEventsPageEventLookup"
 			]
 		}
 	],
