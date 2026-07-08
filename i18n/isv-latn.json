@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"IJzeren Jan"
+		]
+	},
+	"action-campaignevents-delete-registration": "Odstranjenje registracije na sobytja",
+	"right-campaignevents-delete-registration": "Odstranjenje registracije na sobytja",
+	"specialpages-group-campaignevents": "Sobytja",
+	"enableeventregistration": "Vključenje registracije na sobytje",
+	"editeventregistration": "Praviti registraciju na sobytje",
+	"campaignevents-edit-form-details-label": "Podrobnosti o sobytju",
+	"registerforevent": "Registrovati na sobytje",
+	"canceleventregistration": "Anulovati svoju registraciju na sobytje",
+	"myevents": "Vaše sobytja",
+	"allevents": "Vse sobytja",
+	"deleteeventregistration": "Odstraniti registraciju na sobytje",
+	"eventdetails": "Podrobnosti o sobytju",
+	"campaignevents-event-details-label": "Podrobnosti o sobytju",
+	"campaignevents-event-details-event": "Podrobnosti o sobytju: $1",
+	"campaignevents-event-details-tab-event-details": "Podrobnosti o sobytju",
+	"campaignevents-notification-registration-details-header": "Podrobnosti o sobytju",
+	"generateinvitationlist": "Generovati spiska prizvanij",
+	"myinvitationlists": "Vaše spisky prizvanij",
+	"invitationlist": "Spisok prizvanij",
+	"campaignevents-invitationlist-event": "$1: Spisok prizvanij"
+}
