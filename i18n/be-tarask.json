@@ -10,10 +10,13 @@
 	"campaignevents-enable-registration-form-submit": "Увамкнуць рэгістрацыю",
 	"campaignevents-myevents-label-status": "Статус",
 	"campaignevents-myevents-field-status-any": "Усякае",
+	"campaignevents-allevents-label-submit": "Ужыць фільтры",
 	"campaignevents-eventslist-delete-dialog-cancel": "Скасаваць",
 	"campaignevents-eventpage-enableheader-button-label": "Увамкнуць рэгістрацыю",
 	"campaignevents-eventpage-enable-registration-dialog-confirm": "Увамкнуць рэгістрацыю",
 	"campaignevents-event-details-edit-button": "Рэдагаваць",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Скасаваць",
+	"campaignevents-register-question-gender-option-not-say": "Не жадаю адказваць",
+	"campaignevents-register-question-confidence-contributing-not-say": "Не жадаю адказваць",
 	"campaignevents-allevents-label-upcoming-events-title": "Будучыя падзеі"
 }
