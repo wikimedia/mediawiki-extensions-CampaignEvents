@@ -44,6 +44,9 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	private const CURWIKIID_PLACEHOLDER = '*curwiki*';
 
+	private const WORKLIST_ID = 1;
+	private const DISCOVERY_PAGE_TITLE = 'Test discovery article';
+
 	private function getTestEvent( ?MWPageProxy $page = null ): EventRegistration {
 		$goal = new EventGoal(
 			EventGoal::OPERATOR_AND,
@@ -846,5 +849,130 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			],
 			[ 'Valid Ongoing Event' ]
 		];
+	}
+
+	private function saveTestEvent(): int {
+		$this->editPage( Title::makeTitle( NS_MAIN, 'Test_event_page' ), 'Event page' );
+		// Only override what matters for discovery: a real local page, and an end timestamp in
+		// the future (default is in the past, i.e. an ended event, which discovery ignores).
+		$event = $this->makeEventWithArgs( array_replace( self::getBaseCtrArgs(), [
+			'name' => 'Test discovery event',
+			'page' => new MWPageProxy(
+				new PageIdentityValue( 0, NS_MAIN, 'Test_event_page', PageIdentityValue::LOCAL ),
+				'Test event page'
+			),
+			'start' => wfTimestamp( TS::MW, time() - 3600 ),
+			'end' => wfTimestamp( TS::MW, time() + 3600 ),
+		] ) );
+		return CampaignEventsServices::getEventStore()->saveRegistration( $event );
+	}
+
+	private function linkEventToPage( int $eventID, string $pageTitle, string $wikiID ): void {
+		$db = $this->getDb();
+		$db->newInsertQueryBuilder()
+			->insertInto( 'ce_worklist_events' )
+			->row( [ 'cewe_cew_id' => self::WORKLIST_ID, 'cewe_event_id' => $eventID ] )
+			->caller( __METHOD__ )
+			->execute();
+		$db->newInsertQueryBuilder()
+			->insertInto( 'ce_worklist_pages' )
+			->row( [
+				'cewp_wiki' => $wikiID,
+				'cewp_page_prefixedtext' => $pageTitle,
+				'cewp_user_id' => 1,
+				'cewp_cew_id' => self::WORKLIST_ID,
+				'cewp_timestamp' => $db->timestamp(),
+			] )
+			->caller( __METHOD__ )
+			->execute();
+	}
+
+	/**
+	 * @covers ::getEventsForDiscoveryByPage
+	 */
+	public function testReturnsEventsForMatchingPage(): void {
+		$eventID = $this->saveTestEvent();
+		$wikiID = WikiMap::getCurrentWikiId();
+		$this->linkEventToPage( $eventID, self::DISCOVERY_PAGE_TITLE, $wikiID );
+
+		$results = CampaignEventsServices::getEventLookup()->getEventsForDiscoveryByPage(
+			self::DISCOVERY_PAGE_TITLE,
+			$wikiID,
+			new CentralUser( 999 ),
+			10
+		);
+
+		$this->assertCount( 1, $results );
+		$this->assertArrayHasKey( $eventID, $results );
+	}
+
+	/**
+	 * @covers ::getEventsForDiscoveryByPage
+	 */
+	public function testExcludesParticipatingUser(): void {
+		$eventID = $this->saveTestEvent();
+		$wikiID = WikiMap::getCurrentWikiId();
+		$this->linkEventToPage( $eventID, self::DISCOVERY_PAGE_TITLE, $wikiID );
+
+		$centralUserID = 888;
+		$db = $this->getDb();
+		$db->newInsertQueryBuilder()
+			->insertInto( 'ce_participants' )
+			->row( [
+				'cep_event_id' => $eventID,
+				'cep_user_id' => $centralUserID,
+				'cep_private' => 0,
+				'cep_registered_at' => $db->timestamp(),
+				'cep_unregistered_at' => null,
+				'cep_first_answer_timestamp' => null,
+				'cep_aggregation_timestamp' => null,
+				'cep_hide_contribution_association_prompt' => 0,
+			] )
+			->caller( __METHOD__ )
+			->execute();
+
+		$results = CampaignEventsServices::getEventLookup()->getEventsForDiscoveryByPage(
+			self::DISCOVERY_PAGE_TITLE,
+			$wikiID,
+			new CentralUser( $centralUserID ),
+			10
+		);
+
+		$this->assertCount( 0, $results );
+	}
+
+	/**
+	 * @covers ::getEventsForDiscoveryByPage
+	 */
+	public function testExcludesPageOnDifferentWiki(): void {
+		$eventID = $this->saveTestEvent();
+		$this->linkEventToPage( $eventID, self::DISCOVERY_PAGE_TITLE, 'otherwiki' );
+
+		$results = CampaignEventsServices::getEventLookup()->getEventsForDiscoveryByPage(
+			self::DISCOVERY_PAGE_TITLE,
+			WikiMap::getCurrentWikiId(),
+			new CentralUser( 999 ),
+			10
+		);
+
+		$this->assertCount( 0, $results );
+	}
+
+	/**
+	 * @covers ::getEventsForDiscoveryByPage
+	 */
+	public function testExcludesDifferentPageTitle(): void {
+		$eventID = $this->saveTestEvent();
+		$wikiID = WikiMap::getCurrentWikiId();
+		$this->linkEventToPage( $eventID, 'Different article', $wikiID );
+
+		$results = CampaignEventsServices::getEventLookup()->getEventsForDiscoveryByPage(
+			self::DISCOVERY_PAGE_TITLE,
+			$wikiID,
+			new CentralUser( 999 ),
+			10
+		);
+
+		$this->assertCount( 0, $results );
 	}
 }

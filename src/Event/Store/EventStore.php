@@ -294,6 +294,40 @@ class EventStore implements IEventStore, IEventLookup {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function getEventsForDiscoveryByPage(
+		string $pageTitle, string $wikiID, CentralUser $user, int $limit
+	): array {
+		$dbr = $this->dbHelper->getReplicaConnection();
+
+		$eventRows = $dbr->newSelectQueryBuilder()
+			->select( '*' )
+			->from( 'ce_worklist_pages' )
+			->join( 'ce_worklist_events', null, 'cewp_cew_id=cewe_cew_id' )
+			->join( 'campaign_events', null, 'cewe_event_id=event_id' )
+			->leftJoin( 'ce_participants', null, [
+				'event_id=cep_event_id',
+				'cep_user_id' => $user->getCentralID(),
+				'cep_unregistered_at' => null,
+			] )
+			->where( [
+				'cewp_wiki' => $wikiID,
+				'cewp_page_prefixedtext' => $pageTitle,
+				'cep_id' => null,
+				'event_deleted_at' => null,
+				'event_status' => self::EVENT_STATUS_MAP[EventRegistration::STATUS_OPEN],
+				$dbr->expr( 'event_end_utc', '>', $dbr->timestamp() )
+			] )
+			->orderBy( 'event_start_utc' )
+			->limit( $limit )
+			->caller( __METHOD__ )
+			->fetchResultSet();
+
+		return $this->newEventsFromDBRows( $dbr, $eventRows );
+	}
+
+	/**
 	 * @param IReadableDatabase $dbr
 	 * @param iterable<stdClass> $eventRows
 	 * @return ExistingEventRegistration[]

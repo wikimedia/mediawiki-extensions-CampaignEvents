@@ -62,6 +62,20 @@ interface IEventLookup {
 	public function getEventsForContributionAssociationByParticipant( CentralUser $participant, int $limit ): array;
 
 	/**
+	 * Returns open events for which the given page is listed in a worklist and the user is not a participant.
+	 * Used to determine which events to surface in the event discovery dialog.
+	 *
+	 * @param string $pageTitle Prefixed title (as from Title::getPrefixedText()) of the article being viewed
+	 * @param string $wikiID Wiki ID to match against worklist page wiki
+	 * @param CentralUser $user User whose participant status is checked
+	 * @param int $limit Maximum number of events to return
+	 * @return ExistingEventRegistration[]
+	 */
+	public function getEventsForDiscoveryByPage(
+		string $pageTitle, string $wikiID, CentralUser $user, int $limit
+	): array;
+
+	/**
 	 * Given a result set containing full rows from the campaign_events table, constructs EventRegistration objects
 	 * for those rows, looking up the required additional information.
 	 *

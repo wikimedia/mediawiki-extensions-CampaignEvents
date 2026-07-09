@@ -160,7 +160,10 @@
 			"services": [
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventLookup",
-				"CampaignEventsGoalProgressFormatter"
+				"CampaignEventsGoalProgressFormatter",
+				"MainConfig",
+				"CampaignEventsDiscoveryPromotionStore",
+				"UserOptionsLookup"
 			]
 		},
 		"CentralAuthContributionUserChangesHandler": {

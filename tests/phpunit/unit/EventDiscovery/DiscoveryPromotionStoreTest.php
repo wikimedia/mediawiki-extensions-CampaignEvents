@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWikiUnitTestCase;
 use Wikimedia\ObjectCache\HashBagOStuff;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoveryPromotionStore
@@ -19,7 +20,7 @@ class DiscoveryPromotionStoreTest extends MediaWikiUnitTestCase {
 	}
 
 	private function getFutureTimestamp( int $secondsFromNow = 3600 ): string {
-		return wfTimestamp( TS_MW, time() + $secondsFromNow );
+		return wfTimestamp( TS::MW, time() + $secondsFromNow );
 	}
 
 	public function testTryRecordPromotion_firstTime_returnsTrue(): void {
@@ -54,7 +55,7 @@ class DiscoveryPromotionStoreTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testTryRecordPromotion_eventAlreadyEnded_returnsFalse(): void {
-		$pastTimestamp = wfTimestamp( TS_MW, time() - 3600 );
+		$pastTimestamp = wfTimestamp( TS::MW, time() - 3600 );
 		$result = $this->getStore()->tryRecordPromotion( 42, new CentralUser( 1 ), $pastTimestamp );
 		$this->assertFalse( $result );
 	}

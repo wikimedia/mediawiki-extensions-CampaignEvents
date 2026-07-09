@@ -4,28 +4,38 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\User\Options\UserOptionsLookup;
+use MediaWiki\WikiMap\WikiMap;
 use Wikibase\Repo\WikibaseRepo;
 use Wikimedia\ObjectCache\HashBagOStuff;
 
 /**
- * Handler used to set up a JavaScript modal shown after edits, where users can choose to associate
- * their edit with an event.
+ * Handler for the JavaScript modals shown after an edit reload: the contribution-association dialog
+ * (where users associate their edit with an event) and, when no association dialog applies, the
+ * event-discovery/promotion dialog. Only one dialog is shown per page load, since showing both at
+ * once breaks the page (T431571); the association dialog takes precedence.
  */
 class PostEditHandler implements BeforePageDisplayHook {
 	public function __construct(
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly IEventLookup $eventLookup,
 		private readonly GoalProgressFormatter $goalProgressFormatter,
+		private readonly Config $config,
+		private readonly IDiscoveryPromotionStore $promotionStore,
+		private readonly UserOptionsLookup $userOptionsLookup,
 	) {
 	}
 
@@ -34,7 +44,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 	 */
 	public function onBeforePageDisplay( $out, $skin ): void {
 		if ( $out->getTitle()->inNamespace( NS_EVENT ) ) {
-			// Don't show the dialog in the Event: namespace, T406672
+			// Don't show a dialog in the Event: namespace, T406672
 			return;
 		}
 
@@ -51,17 +61,37 @@ class PostEditHandler implements BeforePageDisplayHook {
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
 		} catch ( UserNotGlobalException ) {
-			// They can't be participating in any events without a global account.
+			// Without a global account they can neither be participating in nor be promoted events.
 			return;
 		}
 
+		// The association dialog takes precedence: only fall through to event discovery when there
+		// is no association dialog to show, so the two dialogs never appear together (T431571).
+		if ( $this->maybeShowAssociationDialog( $out, $authority, $centralUser ) ) {
+			return;
+		}
+
+		$this->maybeShowDiscoveryDialog( $out, $authority, $centralUser );
+	}
+
+	/**
+	 * Show the contribution-association dialog when the user participates in events that their edit
+	 * can be associated with.
+	 *
+	 * @return bool Whether the dialog was shown.
+	 */
+	private function maybeShowAssociationDialog(
+		OutputPage $out,
+		Authority $authority,
+		CentralUser $centralUser
+	): bool {
 		$events = $this->eventLookup->getEventsForContributionAssociationByParticipant(
 			$centralUser,
 			50
 		);
 
 		if ( !$events ) {
-			return;
+			return false;
 		}
 
 		$eventData = self::makeEventList(
@@ -70,6 +100,78 @@ class PostEditHandler implements BeforePageDisplayHook {
 
 		$out->addModules( 'ext.campaignEvents.postEdit' );
 		$out->addJsConfigVars( 'wgCampaignEventsEventsForAssociation', $eventData );
+		return true;
+	}
+
+	/**
+	 * Show the event-discovery/promotion dialog for named users who are participants of events
+	 * promoted on the current page. Records the promotion so each event is only promoted once; this
+	 * is why it must run only when the association dialog is not shown, to avoid consuming the
+	 * one-time promotion for a dialog the user never sees.
+	 */
+	private function maybeShowDiscoveryDialog(
+		OutputPage $out,
+		Authority $authority,
+		CentralUser $centralUser
+	): void {
+		if ( !$this->config->get( 'CampaignEventsEnableWorklists' ) ) {
+			return;
+		}
+
+		// Temporary accounts are registered but not named, so isNamed() (not isRegistered())
+		// is required to exclude them.
+		if ( !$authority->isNamed() ) {
+			return;
+		}
+
+		if ( !$this->userOptionsLookup->getBoolOption(
+			$authority->getUser(),
+			GetPreferencesHandler::OPT_OUT_EVENT_DISCOVERY_PREFERENCE
+		) ) {
+			return;
+		}
+
+		$title = $out->getTitle();
+		if ( !$title->getArticleID() ) {
+			return;
+		}
+
+		$events = $this->eventLookup->getEventsForDiscoveryByPage(
+			$title->getPrefixedText(),
+			WikiMap::getCurrentWikiId(),
+			$centralUser,
+			3
+		);
+
+		if ( !$events ) {
+			return;
+		}
+
+		$newlyPromoted = [];
+		foreach ( $events as $event ) {
+			if ( $this->promotionStore->tryRecordPromotion(
+				$event->getID(),
+				$centralUser,
+				$event->getEndUTCTimestamp()
+			) ) {
+
+				$newlyPromoted[] = $event;
+			}
+		}
+
+		if ( !$newlyPromoted ) {
+			return;
+		}
+
+		$out->addJsConfigVars( 'wgCampaignEventsDiscoveryEvents', array_map(
+			/**
+			 * @return array{id:int,name:string}
+			 */
+			static fn ( ExistingEventRegistration $event ): array =>
+				[ 'id' => $event->getID(), 'name' => $event->getName() ],
+			$newlyPromoted
+		) );
+		$out->addModules( 'ext.campaignEvents.eventDiscovery' );
 	}
 
 	/**
