@@ -266,7 +266,7 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 	public function testDiscovery_showsDialogForNewlyPromotedEvent(): void {
 		$out = $this->makeOutputPage();
 		$out->expects( $this->once() )->method( 'addModules' )
-			->with( 'ext.campaignEvents.eventDiscovery' );
+			->with( 'ext.campaignEvents.postEdit' );
 		$out->expects( $this->once() )->method( 'addJsConfigVars' )
 			->with( 'wgCampaignEventsDiscoveryEvents', [ [ 'id' => 1, 'name' => 'Event 1' ] ] );
 

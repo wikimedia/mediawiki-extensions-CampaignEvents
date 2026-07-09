@@ -573,6 +573,7 @@
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.postEdit",
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
+				"CdxCard",
 				"CdxDialog",
 				"CdxSelect"
 			],
@@ -585,7 +586,9 @@
 			"packageFiles": [
 				"index.js",
 				"components/App.vue",
-				"components/EditAssociationDialog.vue"
+				"components/EditAssociationDialog.vue",
+				"components/EventDiscoveryApp.vue",
+				"components/EventDiscoveryDialog.vue"
 			],
 			"styles": [
 				"GoalProgressBar.less"
@@ -601,7 +604,13 @@
 				"campaignevents-postedit-success-text",
 				"campaignevents-event-details-tab-contributions",
 				"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences",
-				"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select"
+				"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select",
+				"campaignevents-eventdiscovery-dialog-title",
+				"campaignevents-eventdiscovery-dialog-description",
+				"campaignevents-eventdiscovery-dialog-description-multiple",
+				"campaignevents-eventdiscovery-dialog-visit-button",
+				"campaignevents-eventdiscovery-dialog-skip-button",
+				"campaignevents-eventdiscovery-dialog-hide-in-preferences"
 			]
 		}
 	},

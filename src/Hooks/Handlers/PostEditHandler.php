@@ -171,7 +171,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 				[ 'id' => $event->getID(), 'name' => $event->getName() ],
 			$newlyPromoted
 		) );
-		$out->addModules( 'ext.campaignEvents.eventDiscovery' );
+		$out->addModules( 'ext.campaignEvents.postEdit' );
 	}
 
 	/**

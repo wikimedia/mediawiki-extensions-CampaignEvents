@@ -318,6 +318,23 @@
 					]
 				}
 			}
+		},
+		"/event_discovery/discoverable_events": {
+			"get": {
+				"summary": "List discoverable events for a page",
+				"description": "Returns the open events whose worklist contains the given page and for which the authenticated user (a non-participant who has not opted out) should be shown the event discovery dialog, recording the once-per-user-and-event suppression as it does so. Used by the front-end to trigger the discovery dialog after a VisualEditor save, where the server-side BeforePageDisplay hook does not run.",
+				"tags": [ "Worklists" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListDiscoverableEventsForPageHandler",
+					"services": [
+						"CampaignEventsCentralUserLookup",
+						"CampaignEventsEventLookup",
+						"CampaignEventsDiscoveryPromotionStore",
+						"UserOptionsLookup",
+						"TitleFactory"
+					]
+				}
+			}
 		}
 	}
 }
