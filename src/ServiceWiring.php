@@ -22,6 +22,8 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
+use MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoveryPromotionStore;
+use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionCalculator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
@@ -422,6 +424,13 @@ return [
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( InvitationListStore::SERVICE_NAME ),
 			$services->getJobQueueGroup()
+		);
+	},
+	IDiscoveryPromotionStore::STORE_SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): IDiscoveryPromotionStore {
+		return new DiscoveryPromotionStore(
+			$services->getMainObjectStash()
 		);
 	},
 	InvitationListStore::SERVICE_NAME => static function ( MediaWikiServices $services ): InvitationListStore {
