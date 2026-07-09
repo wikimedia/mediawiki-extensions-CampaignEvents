@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"AhmedG612"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Ma jiro dhacdo leh aqoonsigan.",
+	"campaignevents-rest-enable-registration-permission-denied": "Looma oggola inaad hawlgeliso diiwaangelinta dhacdooyinka.",
+	"campaignevents-rest-edit-page-nonlocal": "Diiwaangelinta dhacdadan waxaa laga hawlgeliyey wiki-ga soo socda, waana in halkaas lagu tafatiro: $1.",
+	"campaignevents-rest-delete-already-deleted": "Diiwaangelintan dhacdada hore ayaa loo tirtiray.",
+	"campaignevents-rest-user-not-found": "Ma jiro isticmaale leh aqoonsigan dhexe.",
+	"campaignevents-rest-get-registration-deleted": "Diiwaangelintan dhacdada waa la tirtiray.",
+	"campaignevents-rest-remove-participants-invalid-users-ids": "Halbeegga 'user_ids' waa inuu noqdaa liis aqoonsiyo isticmaalayaal ah, ama waa inuu noqdaa madhan (si looga saaro dhammaan isticmaalayaasha)",
+	"campaignevents-rest-remove-participants-nonlocal-error-message": "Fadlan ka saar ka qaybgalayaasha ee $1, oo ah wiki-ga lagu abuuray dhacdada.",
+	"campaignevents-rest-list-participants-empty-filter": "Shaandhada magaca isticmaalaha, haddii la cayimay, waa inay noqotaa qoraal aan madhnayn.",
+	"campaignevents-rest-list-participants-cannot-see-private": "Looma oggola inaad aragto ka qaybgalayaasha si gaar ah isu diiwaangeliyey dhacdadan.",
+	"campaignevents-rest-set-organizers-empty-list": "<var>organizer_usernames</var> waa inuu noqdaa liis magacyada isticmaalayaasha ah, mana noqon karo madhan",
+	"campaignevents-rest-set-organizers-nonlocal-error-message": "Fadlan ku xadid qabanqaabiyayaasha $1, oo ah wiki-ga lagu abuuray dhacdada.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Adigu kama qaybqaadanaysid dhacdadan.",
+	"campaignevents-rest-register-invalid-answer": "Jawaabta su'aasha $1 ma aha mid sax ah",
+	"campaignevents-rest-register-for-event-nonlocal-error-message": "Fadlan ku dhammaystir diiwaangelintaada dhacdada ee $1, oo ah wiki-ga lagu abuuray dhacdada.",
+	"campaignevents-rest-delete-event-nonlocal-error-message": "Fadlan tirtir diiwaangelintaada dhacdada ee $1, oo ah wiki-ga lagu abuuray dhacdada.",
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Fadlan iimayl u dir ka qaybgalayaasha ee $1, oo ah wiki-ga lagu abuuray dhacdada.",
+	"campaignevents-rest-contribution-not-found": "Ma jiro wax ku biirin leh aqoonsigan.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Looma oggola inaad tirtirto wax ku biirintan."
+}
