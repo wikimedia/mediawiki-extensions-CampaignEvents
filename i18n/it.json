@@ -473,7 +473,7 @@
 	"campaignevents-invitationlist-worklist-label": "Visualizza l'elenco delle voci/articoli",
 	"campaignevents-event-details-footer": "Visita la <strong>[[Special:AllEvents|Collaboration list]]</strong> per trovare altri eventi e comunità.",
 	"campaignevents-invitationlist-preference": "Includimi nelle [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation list]",
-	"prefs-campaignevents-invitations": "Elenchi di inviti",
+	"campaignevents-eventdiscovery-preference-label": "Dopo la pubblicazione di una modifica, avvisami degli eventi rilevanti.",
 	"campaignevents-allevents-label-filter-wikis": "Wiki",
 	"campaignevents-allevents-placeholder-add-wikis": "Aggiungi wiki...",
 	"campaignevents-allevents-label-filter-topics": "Argomenti",

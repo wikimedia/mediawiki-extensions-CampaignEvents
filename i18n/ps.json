@@ -541,7 +541,6 @@
 	"campaignevents-invitationlist-worklist-label": "ليکنې لړليک کتل",
 	"campaignevents-event-details-footer": "د نورو پېښو او ټولنو موندلو لپاره له <strong>[[Special:AllEvents|همکارۍ لړليک]]</strong> نه ليدنه وکړئ.",
 	"campaignevents-invitationlist-preference": "د  [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists بلنې لړليکونو] کې مې راونغاړئ",
-	"prefs-campaignevents-invitations": "د بلنې لړليکونه",
 	"campaignevents-allevents-label-filter-wikis": "ويکي‌گانې",
 	"campaignevents-allevents-placeholder-add-wikis": "ويکي‌گانې ورگډول...",
 	"campaignevents-allevents-label-filter-topics": "سکالوگانې",

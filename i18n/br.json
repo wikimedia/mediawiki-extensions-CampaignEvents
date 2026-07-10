@@ -36,6 +36,5 @@
 	"campaignevents-generateinvitationlist-name-field-label": "Anv roll pediñ",
 	"invitationlist": "Roll pediñ",
 	"campaignevents-invitationlist-event": "$1 : Roll pediñ",
-	"campaignevents-invitationlist-preference": "Lakait ma anv e [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/rolloù pediñ].",
-	"prefs-campaignevents-invitations": "Rolloù pediñ"
+	"campaignevents-invitationlist-preference": "Lakait ma anv e [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/rolloù pediñ]."
 }

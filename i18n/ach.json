@@ -469,7 +469,6 @@
 	"campaignevents-invitationlist-worklist-label": "Nen karatac ma ki coyo piny",
 	"campaignevents-event-details-footer": "Cet i <strong>[[Special:AllEvents|Collaboration list]]</strong> me nongo yub ki kabedo mukene.",
 	"campaignevents-invitationlist-preference": "Ket an i [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists invitation lists].",
-	"prefs-campaignevents-invitations": "Nying karatac me lwongo",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",
 	"campaignevents-allevents-placeholder-add-wikis": "Med wikis...",
 	"campaignevents-allevents-label-filter-topics": "Wi lok",

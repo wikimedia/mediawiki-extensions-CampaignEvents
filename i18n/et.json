@@ -243,7 +243,6 @@
 	"invitationlist": "Kutsutute loend",
 	"campaignevents-event-details-footer": "Külasta <strong>[[Special:AllEvents|osalemisloendit]]</strong>, et leida veel üritusi ja kogukondi.",
 	"campaignevents-invitationlist-preference": "Arva mind [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists kutsutute loenditesse]",
-	"prefs-campaignevents-invitations": "Kutsutute loendid",
 	"campaignevents-allevents-label-filter-wikis": "Vikid",
 	"campaignevents-allevents-placeholder-add-wikis": "Lisa vikid...",
 	"campaignevents-allevents-label-filter-topics": "Teemad",

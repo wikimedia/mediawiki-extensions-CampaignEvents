@@ -501,7 +501,6 @@
 	"campaignevents-invitationlist-worklist-label": "نمایش فهرست مقاله‌ها",
 	"campaignevents-event-details-footer": "برای یافتن رویدادها و جوامع بیشتر، از <strong>[[Special:AllEvents|فهرست همکاری]]</strong> بازدید کنید.",
 	"campaignevents-invitationlist-preference": "نام من در [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists فهرست‌های دعوت] گنجانده شود.",
-	"prefs-campaignevents-invitations": "فهرست‌های دعوت",
 	"campaignevents-allevents-label-filter-wikis": "ویکی‌ها",
 	"campaignevents-allevents-placeholder-add-wikis": "افزودن ویکی...",
 	"campaignevents-allevents-label-filter-topics": "موضوعات",

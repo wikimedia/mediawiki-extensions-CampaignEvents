@@ -387,7 +387,6 @@
 	"campaignevents-invitationlist-worklist-label": "檢視文章列表",
 	"campaignevents-event-details-footer": "瀏覽 <strong>[[Special:AllEvents|合作名單]]</strong> 搵更多活動同社群。",
 	"campaignevents-invitationlist-preference": "摻埋我落[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請清單]。",
-	"prefs-campaignevents-invitations": "邀請清單",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",
 	"campaignevents-allevents-placeholder-add-wikis": "加維基...",
 	"campaignevents-allevents-label-filter-topics": "主題",

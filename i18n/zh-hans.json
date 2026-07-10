@@ -540,7 +540,6 @@
 	"campaignevents-invitationlist-worklist-label": "查看条目列表",
 	"campaignevents-event-details-footer": "访问<strong>[[Special:AllEvents|协作清单]]</strong>，查找更多活动和社群。",
 	"campaignevents-invitationlist-preference": "将我添加到[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀请名单]中",
-	"prefs-campaignevents-invitations": "邀请名单",
 	"campaignevents-allevents-label-filter-wikis": "维基",
 	"campaignevents-allevents-placeholder-add-wikis": "添加维基……",
 	"campaignevents-allevents-label-filter-topics": "主题",

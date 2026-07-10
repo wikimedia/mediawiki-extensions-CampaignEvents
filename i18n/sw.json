@@ -477,7 +477,6 @@
 	"campaignevents-invitationlist-worklist-label": "Tazama orodha ya makala",
 	"campaignevents-event-details-footer": "Tembelea <strong>[[Special:AllEvents|orodha ya Ushirikiano]]</strong> ili kupata matukio na jumuiya zaidi.",
 	"campaignevents-invitationlist-preference": "Nijumuishe katika [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists orodha za mialiko].",
-	"prefs-campaignevents-invitations": "Orodha ya mwaliko",
 	"campaignevents-allevents-label-filter-wikis": "Wiki",
 	"campaignevents-allevents-placeholder-add-wikis": "Ongeza wiki...",
 	"campaignevents-allevents-label-filter-topics": "mada",

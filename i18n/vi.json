@@ -74,6 +74,5 @@
 	"campaignevents-eventpage-register-dialog-clear": "Làm lại",
 	"echo-category-title-campaign-events-notification-registration": "Đăng ký sự kiện",
 	"echo-pref-tooltip-campaign-events-notification-registration": "Thông báo cho tôi khi tôi đăng ký sự kiện sử dụng công cụ Đăng ký sự kiện.",
-	"campaignevents-invitationlist-preference": "Hiển thị tôi trong [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists danh sách mời].",
-	"prefs-campaignevents-invitations": "Danh sách mời"
+	"campaignevents-invitationlist-preference": "Hiển thị tôi trong [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists danh sách mời]."
 }

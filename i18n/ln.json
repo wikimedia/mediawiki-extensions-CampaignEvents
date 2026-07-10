@@ -473,7 +473,6 @@
 	"campaignevents-invitationlist-worklist-label": "Talá liste ya masolo",
 	"campaignevents-event-details-footer": "Kota na <strong>[[Special:AllEvents|Liste ya boyokani]]</strong> mpo na koluka makambo mpe masanga mingi.",
 	"campaignevents-invitationlist-preference": "Bo kotisa ngai na [https://www.mediawiki.org/wiki/Special:MyLanguage/Lisalisi:Extension:CampaignEvents/Invitation_lists ba liste ya ba invitations].",
-	"prefs-campaignevents-invitations": "Ba liste ya ba invitations",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",
 	"campaignevents-allevents-placeholder-add-wikis": "Bakisa ba wiki...",
 	"campaignevents-allevents-label-filter-topics": "Mitó ya makambo",

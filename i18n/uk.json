@@ -545,7 +545,6 @@
 	"campaignevents-invitationlist-worklist-label": "Переглянути список статей",
 	"campaignevents-event-details-footer": "Відвідайте <strong>[[Special:AllEvents|список співпраці]],</strong> де знайдете більше подій та спільнот.",
 	"campaignevents-invitationlist-preference": "Включити мене до [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списків запрошень].",
-	"prefs-campaignevents-invitations": "Списки запрошень",
 	"campaignevents-allevents-label-filter-wikis": "Вікі",
 	"campaignevents-allevents-placeholder-add-wikis": "Додати вікі…",
 	"campaignevents-allevents-label-filter-topics": "Теми",

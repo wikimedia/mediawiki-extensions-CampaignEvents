@@ -489,7 +489,6 @@
 	"campaignevents-invitationlist-worklist-label": "記事リストを表示",
 	"campaignevents-event-details-footer": "その他のイベントやコミュニティを見つけるには、<strong>[[Special:AllEvents|コラボレーションリスト]]</strong>へアクセスしてください。",
 	"campaignevents-invitationlist-preference": "[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 招待リスト]への追加を許可する。",
-	"prefs-campaignevents-invitations": "招待リスト",
 	"campaignevents-allevents-label-filter-wikis": "ウィキ",
 	"campaignevents-allevents-placeholder-add-wikis": "ウィキを追加…",
 	"campaignevents-allevents-label-filter-topics": "トピック",

@@ -507,7 +507,6 @@
 	"campaignevents-invitationlist-worklist-label": "Zobraziť zoznam článkov",
 	"campaignevents-event-details-footer": "Ďalšie podujatia a spoločné projekty nájdete v <strong>[[Special:AllEvents|Zozname spoločných aktivít]]</strong>.",
 	"campaignevents-invitationlist-preference": "Zahrnúť ma do [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists zoznamov pozvánok]",
-	"prefs-campaignevents-invitations": "Zoznamy pozvaných",
 	"campaignevents-allevents-label-filter-wikis": "Wikiprojekty",
 	"campaignevents-allevents-placeholder-add-wikis": "Pridať projekty...",
 	"campaignevents-allevents-label-filter-topics": "Témy",

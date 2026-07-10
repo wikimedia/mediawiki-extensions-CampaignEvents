@@ -541,7 +541,6 @@
 	"campaignevents-invitationlist-worklist-label": "వ్యాసాల జాబితాను చూడండి",
 	"campaignevents-event-details-footer": "మరిన్ని ఈవెంట్లు, సముదాయాలను చూసేందుకు <strong>[[Special:AllEvents|తోడ్పాటు జాబితాకు]]</strong> వెళ్ళండి.",
 	"campaignevents-invitationlist-preference": "నన్ను [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists ఆహ్వాన జాబితాల్లో] చేర్చు",
-	"prefs-campaignevents-invitations": "ఆహ్వాన జాబితాలు",
 	"campaignevents-allevents-label-filter-wikis": "వికీలు",
 	"campaignevents-allevents-placeholder-add-wikis": "వికీలను చేర్చండి...",
 	"campaignevents-allevents-label-filter-topics": "అంశాలు",

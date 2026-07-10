@@ -403,7 +403,6 @@
 	"campaignevents-generateinvitationlist-submit-button-text": "Gerar",
 	"campaignevents-myinvitationslist-new-button": "Novo",
 	"campaignevents-invitation-list-error-empty-name": "Forneça um nome para a lista de convidados.",
-	"prefs-campaignevents-invitations": "Listas de convidados",
 	"campaignevents-edit-field-eventtypes-placeholder": "Adicionar tipos de eventos...",
 	"campaignevents-event-contribution-already-associated": "Uma edição só pode ser associada a um evento."
 }

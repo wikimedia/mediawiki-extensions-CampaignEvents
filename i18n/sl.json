@@ -450,7 +450,6 @@
 	"campaignevents-invitationlist-worklist-label": "Ogled seznama člankov",
 	"campaignevents-event-details-footer": "Obiščite <strong>[[Special:AllEvents|seznam sodelovanj]],</strong> da najdete več dogodkov in skupnosti.",
 	"campaignevents-invitationlist-preference": "Vključi me v [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists sezname povabil].",
-	"prefs-campaignevents-invitations": "Seznami povabil",
 	"campaignevents-allevents-label-filter-wikis": "Vikiji",
 	"campaignevents-allevents-placeholder-add-wikis": "Dodaj vikije ...",
 	"campaignevents-eventslist-all-wikis": "Ta dogodek je odprt za vse vikije.",

@@ -513,7 +513,6 @@
 	"campaignevents-invitationlist-worklist-label": "Zobacz listę artykułów",
 	"campaignevents-event-details-footer": "Odwiedź <strong>[[Special:AllEvents|Listę współpracy]]</strong>, aby zobaczyć więcej wydarzeń i społeczności.",
 	"campaignevents-invitationlist-preference": "Uwzględnij mnie w [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists listach zaproszeń].",
-	"prefs-campaignevents-invitations": "Listy zaproszeń",
 	"campaignevents-allevents-label-filter-wikis": "Wiki",
 	"campaignevents-allevents-placeholder-add-wikis": "Dodaj wiki...",
 	"campaignevents-allevents-label-filter-topics": "Tematy",

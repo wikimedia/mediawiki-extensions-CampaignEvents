@@ -351,7 +351,6 @@
 	"myinvitationlists": "Davet listeleriniz",
 	"invitationlist": "Davetiye listesi",
 	"campaignevents-invitationlist-preference": "Beni [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists davet listelerine] dahil et",
-	"prefs-campaignevents-invitations": "Davet listeleri",
 	"campaignevents-register-event-id": "Etkinlik Kimliği",
 	"campaignevents-eventtype-other": "Diğer",
 	"campaignevents-edit-field-eventtypes-other-section-header": "Diğer",

@@ -60,6 +60,5 @@
 	"campaignevents-event-details-tab-participants": "Sudionici",
 	"campaignevents-event-details-tab-event-details": "Podaci o događaju",
 	"campaignevents-event-details-tab-contributions": "Doprinosi",
-	"campaignevents-invitationlist-preference": "Uvrsti me u [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists popise uzvanika].",
-	"prefs-campaignevents-invitations": "Popisi uzvanika"
+	"campaignevents-invitationlist-preference": "Uvrsti me u [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists popise uzvanika]."
 }

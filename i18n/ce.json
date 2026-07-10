@@ -502,7 +502,6 @@
 	"campaignevents-invitationlist-worklist-label": "Хьажа йззамийн могӀаме",
 	"campaignevents-event-details-footer": "Кхин а хиламаш а, йукъараллаш а лахархьама <strong>[[Special:AllEvents|Цхьаьнаболхбаран могӀаме]]</strong> хьажа.",
 	"campaignevents-invitationlist-preference": "Со а тӀетоха [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists кхайкхаран могӀаме].",
-	"prefs-campaignevents-invitations": "Кхайкхаран могӀам",
 	"campaignevents-allevents-label-filter-wikis": "Вики",
 	"campaignevents-allevents-placeholder-add-wikis": "ТӀетоха вики...",
 	"campaignevents-allevents-label-filter-topics": "Темаш",

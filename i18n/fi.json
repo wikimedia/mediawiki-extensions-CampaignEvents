@@ -538,7 +538,6 @@
 	"campaignevents-invitationlist-worklist-label": "Näytä artikkelilista",
 	"campaignevents-event-details-footer": "<strong>[[Special:AllEvents|Yhteistyölistalta]]</strong> löydät lisää tapahtumia ja yhteisöjä.",
 	"campaignevents-invitationlist-preference": "Salli käyttäjien lisätä minut tapahtumien [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists kutsulistoille]",
-	"prefs-campaignevents-invitations": "Kutsulistat",
 	"campaignevents-allevents-label-filter-wikis": "Wikit",
 	"campaignevents-allevents-placeholder-add-wikis": "Lisää wikejä...",
 	"campaignevents-allevents-label-filter-topics": "Aiheet",

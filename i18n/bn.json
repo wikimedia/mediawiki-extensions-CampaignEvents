@@ -326,7 +326,6 @@
 	"campaignevents-invitationlist-worklist-label": "নিবন্ধের তালিকা দেখুন",
 	"campaignevents-event-details-footer": "আরও ইভেন্ট ও সম্প্রদায় খুঁজে পেতে <strong>[[Special:AllEvents|সহযোগিতার তালিকা]]</strong> দেখুন।",
 	"campaignevents-invitationlist-preference": "আমাকে [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists আমন্ত্রণ তালিকায়] যুক্ত করুন",
-	"prefs-campaignevents-invitations": "আমন্ত্রণ তালিকা",
 	"campaignevents-allevents-label-filter-wikis": "উইকি",
 	"campaignevents-allevents-placeholder-add-wikis": "উইকি যোগ করুন...",
 	"campaignevents-allevents-label-filter-topics": "বিষয়",

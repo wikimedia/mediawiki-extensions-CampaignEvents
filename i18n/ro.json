@@ -186,7 +186,6 @@
 	"campaignevents-invitations-pager-status-editors": "{{PLURAL:$1|S-a|S-au}} găsit $1 {{PLURAL:$1|editor|editori}}.",
 	"campaignevents-invitations-pager-status-processing": "În curs de procesare...",
 	"campaignevents-invitationlist-preference": "Include-mă în [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists liste de invitații].",
-	"prefs-campaignevents-invitations": "Liste de invitații",
 	"campaignevents-allevents-label-filter-wikis": "Wiki-uri",
 	"campaignevents-allevents-placeholder-add-wikis": "Adaugă wiki-uri...",
 	"campaignevents-allevents-label-filter-topics": "Subiecte",
