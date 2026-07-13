@@ -533,6 +533,8 @@
 	"campaignevents-invitationlist-worklist-label": "Məqalə siyahısına bax",
 	"campaignevents-event-details-footer": "Daha çox tədbir və icma tapmaq üçün <strong>[[Special:AllEvents|Əməkdaşlıq Siyahısına]]</strong> daxil olun.",
 	"campaignevents-invitationlist-preference": "Məni [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists dəvət siyahılarına] əlavə et",
+	"prefs-campaignevents-event-discovery": "Tədbirlərin kəşf olunması",
+	"campaignevents-eventdiscovery-preference-label": "Redaktəni yayımladıqdan sonra müvafiq tədbirlər barədə mənə məlumat verin.",
 	"campaignevents-allevents-label-filter-wikis": "Vikilər",
 	"campaignevents-allevents-placeholder-add-wikis": "Viki əlavə et...",
 	"campaignevents-allevents-label-filter-topics": "Mövzular",

@@ -557,6 +557,8 @@
 	"campaignevents-invitationlist-worklist-label": "عرض قائمة المقالات",
 	"campaignevents-event-details-footer": "قم بزيارة <strong>[[Special:AllEvents|قائمة التعاون]]</strong> للعثور على المزيد من الفعاليات والمجتمعات.",
 	"campaignevents-invitationlist-preference": "أدرجني في [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists قوائم الدعوة]",
+	"prefs-campaignevents-event-discovery": "اكتشاف الأحداث",
+	"campaignevents-eventdiscovery-preference-label": "بعد نشر التعديل، يرجى إبلاغي بالأحداث ذات الصلة.",
 	"campaignevents-allevents-label-filter-wikis": "الويكيات",
 	"campaignevents-allevents-placeholder-add-wikis": "أضف الويكيات...",
 	"campaignevents-allevents-label-filter-topics": "المواضيع",

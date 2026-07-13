@@ -535,6 +535,8 @@
 	"campaignevents-invitationlist-worklist-label": "문서 목록 보기",
 	"campaignevents-event-details-footer": "더 많은 이벤트와 커뮤니티를 찾으려면 <strong>[[Special:AllEvents|협업 목록]]</strong>을 방문하세요.",
 	"campaignevents-invitationlist-preference": "[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 초대 목록]에 나를 포함합니다",
+	"prefs-campaignevents-event-discovery": "이벤트 발견",
+	"campaignevents-eventdiscovery-preference-label": "수정 사항을 게시한 후 관련 이벤트가 발생하면 알립니다.",
 	"campaignevents-allevents-label-filter-wikis": "위키",
 	"campaignevents-allevents-placeholder-add-wikis": "위키 추가...",
 	"campaignevents-allevents-label-filter-topics": "주제",
