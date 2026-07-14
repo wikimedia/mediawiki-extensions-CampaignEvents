@@ -539,6 +539,8 @@
 	"campaignevents-invitationlist-worklist-label": "Paginalijst bekijken",
 	"campaignevents-event-details-footer": "Bekijk de <strong>[[Special:AllEvents|Samenwerkingslijst]]</strong> om meer evenementen en gemeenschappen te vinden.",
 	"campaignevents-invitationlist-preference": "Voeg mij toe aan de [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists uitnodigingslijsten]",
+	"prefs-campaignevents-event-discovery": "Gebeurtenissen ontdeken",
+	"campaignevents-eventdiscovery-preference-label": "Breng me op de hoogte van relevante gebeurtenissen nadat ik een bewerking heb gepubliceerd.",
 	"campaignevents-allevents-label-filter-wikis": "Wiki’s",
 	"campaignevents-allevents-placeholder-add-wikis": "Wiki’s toevoegen…",
 	"campaignevents-allevents-label-filter-topics": "Onderwerpen",
