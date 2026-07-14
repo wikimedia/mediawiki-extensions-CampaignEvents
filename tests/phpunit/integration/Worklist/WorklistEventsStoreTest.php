@@ -24,6 +24,35 @@ class WorklistEventsStoreTest extends MediaWikiIntegrationTestCase {
 			->rows( $rows )
 			->caller( __METHOD__ )
 			->execute();
+
+		$pageRows = [];
+		foreach ( self::worklistPages() as $i => $page ) {
+			$pageRows[] = [
+				'cewp_id' => $i + 1,
+				'cewp_user_id' => 1,
+				'cewp_timestamp' => $this->getDb()->timestamp( '20240101000000' ),
+			] + $page;
+		}
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_worklist_pages' )
+			->rows( $pageRows )
+			->caller( __METHOD__ )
+			->execute();
+	}
+
+	/**
+	 * @return array<array{cewp_cew_id:int,cewp_wiki:string,cewp_page_prefixedtext:string}>
+	 */
+	private static function worklistPages(): array {
+		// Worklist 10 (event 100) and worklist 20 (event 200) both contain "Shared Page" on
+		// enwiki; only worklist 10 contains "Only Ten"; worklist 10 also contains "Shared Page"
+		// on dewiki, to exercise the wiki filter.
+		return [
+			[ 'cewp_cew_id' => 10, 'cewp_wiki' => 'enwiki', 'cewp_page_prefixedtext' => 'Shared Page' ],
+			[ 'cewp_cew_id' => 20, 'cewp_wiki' => 'enwiki', 'cewp_page_prefixedtext' => 'Shared Page' ],
+			[ 'cewp_cew_id' => 10, 'cewp_wiki' => 'enwiki', 'cewp_page_prefixedtext' => 'Only Ten' ],
+			[ 'cewp_cew_id' => 10, 'cewp_wiki' => 'dewiki', 'cewp_page_prefixedtext' => 'Shared Page' ],
+		];
 	}
 
 	/**
@@ -104,5 +133,34 @@ class WorklistEventsStoreTest extends MediaWikiIntegrationTestCase {
 		$store->removeWorklistAssociation( 10, 999 );
 
 		$this->assertStoredPairs( self::initialPairs() );
+	}
+
+	/**
+	 * @dataProvider provideFilterEventsByPageInWorklist
+	 * @param int[] $eventIDs
+	 * @param string $wiki
+	 * @param string $pageTitle
+	 * @param int[] $expected
+	 */
+	public function testFilterEventsByPageInWorklist(
+		array $eventIDs,
+		string $wiki,
+		string $pageTitle,
+		array $expected
+	): void {
+		$store = CampaignEventsServices::getWorklistEventsStore();
+		$this->assertEqualsCanonicalizing(
+			$expected,
+			$store->filterEventsByPageInWorklist( $eventIDs, $wiki, $pageTitle )
+		);
+	}
+
+	public static function provideFilterEventsByPageInWorklist(): Generator {
+		yield 'Multiple worklists contain the page' => [ [ 100, 200 ], 'enwiki', 'Shared Page', [ 100, 200 ] ];
+		yield 'Only one worklist contains the page' => [ [ 100, 200 ], 'enwiki', 'Only Ten', [ 100 ] ];
+		yield 'Events not in input are excluded' => [ [ 200 ], 'enwiki', 'Only Ten', [] ];
+		yield 'The wiki is respected' => [ [ 100, 200 ], 'dewiki', 'Shared Page', [ 100 ] ];
+		yield 'No worklist contains the page' => [ [ 100, 200 ], 'enwiki', 'Missing Page', [] ];
+		yield 'Empty input short-circuits' => [ [], 'enwiki', 'Shared Page', [] ];
 	}
 }

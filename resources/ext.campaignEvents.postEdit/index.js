@@ -1,4 +1,7 @@
 ( function () {
+	const associateEdit = require( './associateEdit.js' );
+	const notifyAssociationSuccess = require( './notifyAssociationSuccess.js' );
+
 	/**
 	 * Mounts the contribution-association app. Precondition: there is at least one event
 	 * in wgCampaignEventsEventsForAssociation.
@@ -30,43 +33,65 @@
 			.mount( appContainer );
 	}
 
-	// Event discovery is exposed server-side (PostEditHandler) only when no association dialog
-	// applies, so the two never appear together. It is only set on a full post-edit reload.
-	if ( mw.config.get( 'wgCampaignEventsDiscoveryEvents' ) ) {
-		mountDiscoveryApp();
-		return;
-	}
-
-	if ( mw.config.get( 'wgCampaignEventsEventsForAssociation' ) ) {
-		// Variable set server-side in PostEditHandler. Means the page was just reloaded after an
-		// edit (source editor), so mount the app immediately. Note, the server-side hook handler
-		// guarantees that there is at least one event.
-		mountAssociationApp();
-	} else {
-		// Module loaded as a VE plugin (or potentially manually, e.g. for Wikibase). Mount the app
-		// after the actual edit, lazy-loading the list of events...
-		// Not in the NS_EVENT namespace, though (T406672)
+	/**
+	 * Handles client-side edits that don't reload the page: VisualEditor, and edits from modules
+	 * loaded manually such as for Wikibase. Each edit is evaluated independently — a single
+	 * worklist match is auto-associated (and we keep listening so further edits are handled too),
+	 * otherwise the association dialog, or failing that the discovery dialog, is mounted and takes
+	 * over from here.
+	 *
+	 * @param {number|null} handledRevisionId The revision already handled server-side on this
+	 *   reload, if any; its edit signal is ignored so the same edit isn't handled twice.
+	 */
+	function setupClientEditHandler( handledRevisionId ) {
+		// Not in the NS_EVENT namespace (T406672)
 		if ( mw.config.get( 'wgNamespaceNumber' ) === 1728 ) {
 			return;
 		}
-		const lazyMount = async () => {
-			// Remove the handlers first so we only run once, even if a hook fires again while
-			// the requests below are in flight.
-			mw.hook( 'postEdit' ).remove( lazyMount );
-			mw.hook( 'wikibase.statement.saved' ).remove( lazyMount );
-			mw.hook( 'wikibase.statement.removed' ).remove( lazyMount );
 
-			const userEvents = await new mw.Rest().get( '/campaignevents/v0/participant/self/events_for_edit' );
+		let lastHandledRevisionId = handledRevisionId;
+
+		function stopListening() {
+			mw.hook( 'postEdit' ).remove( onPostEdit );
+			mw.hook( 'wikibase.statement.saved' ).remove( onWikibaseEdit );
+			mw.hook( 'wikibase.statement.removed' ).remove( onWikibaseEdit );
+		}
+
+		async function handleEdit( revisionId ) {
+			if ( revisionId === lastHandledRevisionId ) {
+				// Already handled (the reload's own edit, or a duplicate signal).
+				return;
+			}
+			// Set before any await, so a repeated signal for the same edit is ignored.
+			lastHandledRevisionId = revisionId;
+
+			const userEvents = await new mw.Rest().get(
+				'/campaignevents/v0/participant/self/events_for_edit?title=' +
+					encodeURIComponent( mw.config.get( 'wgPageName' ) )
+			);
+
+			// Exactly one candidate event has this page on its worklist: auto-associate and show a
+			// confirmation, mirroring the server-side reload path. Keep listening so each further
+			// in-place edit is auto-associated too.
+			const autoAssociable = userEvents.filter( ( event ) => event.autoAssociable );
+			if ( autoAssociable.length === 1 ) {
+				const event = autoAssociable[ 0 ];
+				await associateEdit( event.id, revisionId );
+				notifyAssociationSuccess( event.id, event.name );
+				return;
+			}
+
+			// Otherwise a dialog is shown. It mounts a persistent app that handles subsequent
+			// edits itself, so stop listening here to avoid double-handling.
+			stopListening();
+
 			mw.config.set( 'wgCampaignEventsEventsForAssociation', userEvents );
 			if ( userEvents.length ) {
 				mountAssociationApp();
 				return;
 			}
 
-			// No association dialog applies, so fall through to event discovery (the association
-			// dialog takes precedence, so the two never appear together, T431571). VE saves in
-			// place, so the server-side hook never ran: fetch the discoverable events for this page
-			// (which also records the once-per-user promotion) and mount if there are any.
+			// The association dialog takes precedence, so the two never appear together (T431571).
 			const discoveryEvents = await new mw.Rest().get(
 				'/campaignevents/v0/event_discovery/discoverable_events?page=' +
 					encodeURIComponent( mw.config.get( 'wgPageName' ) )
@@ -75,9 +100,45 @@
 				mw.config.set( 'wgCampaignEventsDiscoveryEvents', discoveryEvents );
 				mountDiscoveryApp();
 			}
-		};
-		mw.hook( 'postEdit' ).add( lazyMount );
-		mw.hook( 'wikibase.statement.saved' ).add( lazyMount );
-		mw.hook( 'wikibase.statement.removed' ).add( lazyMount );
+		}
+
+		// VE updates wgRevisionId on save; Wikibase does not, so take the revision from the hook.
+		function onPostEdit() {
+			handleEdit( mw.config.get( 'wgRevisionId' ) );
+		}
+		// Both wikibase hooks pass the new revision ID as their last argument.
+		function onWikibaseEdit( ...args ) {
+			handleEdit( args[ args.length - 1 ] );
+		}
+
+		mw.hook( 'postEdit' ).add( onPostEdit );
+		mw.hook( 'wikibase.statement.saved' ).add( onWikibaseEdit );
+		mw.hook( 'wikibase.statement.removed' ).add( onWikibaseEdit );
+	}
+
+	// These vars are set server-side (PostEditHandler) on a full post-edit reload and are mutually
+	// exclusive. For auto-association the client edit handler is still registered so that further
+	// in-place edits are handled, guarded against re-handling this reload's own edit.
+	const autoAssociatedEvent = mw.config.get( 'wgCampaignEventsAutoAssociatedEvent' );
+	if ( autoAssociatedEvent ) {
+		notifyAssociationSuccess( autoAssociatedEvent.id, autoAssociatedEvent.name );
+		setupClientEditHandler( mw.config.get( 'wgRevisionId' ) );
+		return;
+	}
+
+	if ( mw.config.get( 'wgCampaignEventsDiscoveryEvents' ) ) {
+		mountDiscoveryApp();
+		return;
+	}
+
+	if ( mw.config.get( 'wgCampaignEventsEventsForAssociation' ) ) {
+		// Variable set server-side in PostEditHandler: the page was just reloaded after a
+		// source-editor edit, so mount the app immediately (App.vue then registers its own hooks
+		// to handle subsequent in-place edits).
+		mountAssociationApp();
+	} else {
+		// Module loaded as a VE plugin, or manually (e.g. for Wikibase): no server-side signal, so
+		// handle edits on the client as they happen.
+		setupClientEditHandler( null );
 	}
 }() );

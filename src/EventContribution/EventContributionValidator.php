@@ -74,15 +74,28 @@ class EventContributionValidator {
 			throw $e;
 		}
 
-		$jobParams = [
+		$this->scheduleAssociationJob( $revisionID, $wikiID, $eventID, $revisionAuthor->getCentralID() );
+		return true;
+	}
+
+	/**
+	 * Build and enqueue the job that associates a revision with an event.
+	 *
+	 * Callers that have already established the association is valid (e.g. the post-edit
+	 * auto-association path) can use this directly to avoid re-running validation.
+	 */
+	public function scheduleAssociationJob(
+		int $revisionID,
+		string $wikiID,
+		int $eventID,
+		int $userID
+	): void {
+		$this->jobQueueGroup->push( new EventContributionJob( [
 			'revisionId' => $revisionID,
 			'wiki' => $wikiID,
 			'eventId' => $eventID,
-			'userId' => $revisionAuthor->getCentralID(),
-		];
-		$associateEditJob = new EventContributionJob( $jobParams );
-		$this->jobQueueGroup->push( $associateEditJob );
-		return true;
+			'userId' => $userID,
+		] ) );
 	}
 
 	/**

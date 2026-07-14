@@ -161,6 +161,8 @@
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventLookup",
 				"CampaignEventsGoalProgressFormatter",
+				"CampaignEventsWorklistEventsStore",
+				"CampaignEventsEventContributionValidator",
 				"MainConfig",
 				"CampaignEventsDiscoveryPromotionStore",
 				"UserOptionsLookup",
@@ -586,6 +588,8 @@
 			],
 			"packageFiles": [
 				"index.js",
+				"associateEdit.js",
+				"notifyAssociationSuccess.js",
 				"components/App.vue",
 				"components/EditAssociationDialog.vue",
 				"components/EventDiscoveryApp.vue",

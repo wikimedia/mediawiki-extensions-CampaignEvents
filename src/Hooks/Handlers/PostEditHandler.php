@@ -7,12 +7,14 @@ namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
 use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
@@ -20,6 +22,7 @@ use MediaWiki\Permissions\Authority;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\WikiMap\WikiMap;
+use RuntimeException;
 use Wikibase\Repo\WikibaseRepo;
 use Wikimedia\ObjectCache\HashBagOStuff;
 
@@ -34,6 +37,8 @@ class PostEditHandler implements BeforePageDisplayHook {
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly IEventLookup $eventLookup,
 		private readonly GoalProgressFormatter $goalProgressFormatter,
+		private readonly WorklistEventsStore $worklistEventsStore,
+		private readonly EventContributionValidator $eventContributionValidator,
 		private readonly Config $config,
 		private readonly IDiscoveryPromotionStore $promotionStore,
 		private readonly UserOptionsLookup $userOptionsLookup,
@@ -78,9 +83,11 @@ class PostEditHandler implements BeforePageDisplayHook {
 
 	/**
 	 * Show the contribution-association dialog when the user participates in events that their edit
-	 * can be associated with.
+	 * can be associated with. When exactly one candidate event has this page on its worklist, the
+	 * edit is auto-associated (via a job) instead of showing the dialog.
 	 *
-	 * @return bool Whether the dialog was shown.
+	 * @return bool Whether the association was handled (dialog shown or auto-associated); when true,
+	 *   the caller skips the discovery dialog.
 	 */
 	private function maybeShowAssociationDialog(
 		OutputPage $out,
@@ -96,6 +103,39 @@ class PostEditHandler implements BeforePageDisplayHook {
 			return false;
 		}
 
+		$eventIDs = array_map( static fn ( ExistingEventRegistration $e ): int => $e->getID(),
+			$events );
+		$wikiID = WikiMap::getCurrentWikiId();
+		$autoAssociableEventIDs = $this->worklistEventsStore->filterEventsByPageInWorklist(
+			$eventIDs,
+			$wikiID,
+			$out->getTitle()->getPrefixedText()
+		);
+
+		if ( count( $autoAssociableEventIDs ) === 1 ) {
+			// Exactly one candidate event has this page on its worklist: auto-associate without
+			// showing the modal. Validation is skipped here because
+			// getEventsForContributionAssociationByParticipant already guarantees each event is
+			// ongoing, has contributions enabled, and the user is a participant. The job's
+			// removeDuplicates flag handles any duplicate dispatches (e.g. repeated page reloads).
+			$autoAssociatedEventID = $autoAssociableEventIDs[0];
+			$this->eventContributionValidator->scheduleAssociationJob(
+				$out->getRevisionId(),
+				$wikiID,
+				$autoAssociatedEventID,
+				$centralUser->getCentralID()
+			);
+
+			// Signal the frontend to show lightweight confirmation feedback in place of the modal.
+			$out->addJsConfigVars( 'wgCampaignEventsAutoAssociatedEvent', [
+				'id' => $autoAssociatedEventID,
+				'name' => self::findEventName( $events, $autoAssociatedEventID ),
+			] );
+			$out->addModules( 'ext.campaignEvents.postEdit' );
+			// Auto-associated without a dialog: treat as handled so discovery is skipped.
+			return true;
+		}
+
 		$eventData = self::makeEventList(
 			$events, $authority, $out->getLanguage()->getCode(), $this->goalProgressFormatter
 		);
@@ -103,6 +143,20 @@ class PostEditHandler implements BeforePageDisplayHook {
 		$out->addModules( 'ext.campaignEvents.postEdit' );
 		$out->addJsConfigVars( 'wgCampaignEventsEventsForAssociation', $eventData );
 		return true;
+	}
+
+	/**
+	 * @param ExistingEventRegistration[] $events
+	 */
+	private static function findEventName( array $events, int $eventID ): string {
+		foreach ( $events as $event ) {
+			if ( $event->getID() === $eventID ) {
+				return $event->getName();
+			}
+		}
+		// $eventID is always drawn from $events (via filterEventsByPageInWorklist), so this is
+		// unreachable in practice.
+		throw new RuntimeException( "Event $eventID not found in the candidate list" );
 	}
 
 	/**

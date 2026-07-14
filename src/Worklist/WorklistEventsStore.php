@@ -58,6 +58,35 @@ class WorklistEventsStore {
 	}
 
 	/**
+	 * Given a list of event IDs and a page, returns the subset of those event IDs whose worklist
+	 * contains that page.
+	 *
+	 * @param int[] $eventIDs
+	 * @return int[]
+	 */
+	public function filterEventsByPageInWorklist(
+		array $eventIDs,
+		string $wiki,
+		string $pageTitle
+	): array {
+		if ( !$eventIDs ) {
+			return [];
+		}
+		$eventIDs = $this->dbHelper->getReplicaConnection()->newSelectQueryBuilder()
+			->select( 'cewe_event_id' )
+			->from( 'ce_worklist_events' )
+			->join( 'ce_worklist_pages', null, 'cewe_cew_id = cewp_cew_id' )
+			->where( [
+				'cewe_event_id' => $eventIDs,
+				'cewp_wiki' => $wiki,
+				'cewp_page_prefixedtext' => $pageTitle,
+			] )
+			->caller( __METHOD__ )
+			->fetchFieldValues();
+		return array_map( 'intval', $eventIDs );
+	}
+
+	/**
 	 * Removes the association between the given worklist and event.
 	 */
 	public function removeWorklistAssociation( int $worklistID, int $eventID ): void {

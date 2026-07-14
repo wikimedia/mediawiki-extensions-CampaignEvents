@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
 use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\GetPreferencesHandler;
@@ -16,6 +17,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Language\Language;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
@@ -42,11 +44,15 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		?GoalProgressFormatter $goalProgressFormatter = null,
 		?IDiscoveryPromotionStore $promotionStore = null,
 		?UserOptionsLookup $userOptionsLookup = null,
+		?WorklistEventsStore $worklistEventsStore = null,
+		?EventContributionValidator $eventContributionValidator = null,
 	): PostEditHandler {
 		return new PostEditHandler(
 			$centralUserLookup ?? $this->createNoOpMock( CampaignsCentralUserLookup::class ),
 			$eventLookup ?? $this->createNoOpMock( IEventLookup::class ),
 			$goalProgressFormatter ?? $this->makeGoalProgressFormatter(),
+			$worklistEventsStore ?? $this->makeWorklistEventsStore(),
+			$eventContributionValidator ?? $this->createNoOpMock( EventContributionValidator::class ),
 			new HashConfig( [ 'CampaignEventsEnableWorklists' => $featureEnabled ] ),
 			$promotionStore ?? $this->createNoOpMock( IDiscoveryPromotionStore::class ),
 			$userOptionsLookup ?? $this->createNoOpMock( UserOptionsLookup::class ),
@@ -122,6 +128,12 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		return $lookup;
 	}
 
+	private function makeWorklistEventsStore( array $autoAssociableEventIDs = [] ): WorklistEventsStore {
+		$store = $this->createMock( WorklistEventsStore::class );
+		$store->method( 'filterEventsByPageInWorklist' )->willReturn( $autoAssociableEventIDs );
+		return $store;
+	}
+
 	private function makeGoalProgressFormatter(): GoalProgressFormatter {
 		$formatter = $this->createMock( GoalProgressFormatter::class );
 		$formatter->method( 'getProgressData' )->willReturn( null );
@@ -180,6 +192,27 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		$this->getHandler(
 			centralUserLookup: $this->makeCentralUserLookup(),
 			eventLookup: $this->makeEventLookup( associationEvents: [ $this->makeEvent() ] ),
+		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
+	}
+
+	public function testAutoAssociation_signalsConfirmationInsteadOfDialog(): void {
+		$out = $this->makeOutputPage();
+		$out->method( 'getRevisionId' )->willReturn( 555 );
+		// The single auto-associated event is signalled to the client (which shows a lightweight
+		// confirmation), and the association dialog's event list is not set.
+		$out->expects( $this->once() )->method( 'addModules' )
+			->with( 'ext.campaignEvents.postEdit' );
+		$out->expects( $this->once() )->method( 'addJsConfigVars' )
+			->with( 'wgCampaignEventsAutoAssociatedEvent', [ 'id' => 1, 'name' => 'Event 1' ] );
+
+		$validator = $this->createMock( EventContributionValidator::class );
+		$validator->expects( $this->once() )->method( 'scheduleAssociationJob' );
+
+		$this->getHandler(
+			centralUserLookup: $this->makeCentralUserLookup(),
+			eventLookup: $this->makeEventLookup( associationEvents: [ $this->makeEvent( 1 ) ] ),
+			worklistEventsStore: $this->makeWorklistEventsStore( [ 1 ] ),
+			eventContributionValidator: $validator,
 		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
 	}
 

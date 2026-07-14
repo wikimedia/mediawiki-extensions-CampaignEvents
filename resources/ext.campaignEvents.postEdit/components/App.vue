@@ -10,6 +10,8 @@
 <script>
 const { defineComponent, ref } = require( 'vue' );
 const EditAssociationDialog = require( './EditAssociationDialog.vue' );
+const associateEdit = require( '../associateEdit.js' );
+const notifyAssociationSuccess = require( '../notifyAssociationSuccess.js' );
 
 module.exports = exports = defineComponent( {
 	name: 'App',
@@ -38,23 +40,9 @@ module.exports = exports = defineComponent( {
 		} );
 
 		async function onAssociateEdit( eventID, eventName ) {
-			const curWikiID = mw.config.get( 'wgDBname' );
-			await new mw.Rest().put(
-				`/campaignevents/v0/event_registration/${ eventID }/edits/${ curWikiID }/${ revisionID }`,
-				{ token: mw.user.tokens.get( 'csrfToken' ) }
-			);
+			await associateEdit( eventID, revisionID );
 			isOpen.value = false;
-			mw.notify(
-				mw.message(
-					'campaignevents-postedit-success-text',
-					eventName,
-					mw.util.getUrl( `Special:EventDetails/${ eventID }`, { tab: 'ContributionsPanel' } )
-				),
-				{
-					type: 'success',
-					autoHideSeconds: 'long'
-				}
-			);
+			notifyAssociationSuccess( eventID, eventName );
 		}
 
 		return {
