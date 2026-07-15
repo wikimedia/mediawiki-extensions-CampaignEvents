@@ -109,7 +109,7 @@
 	"campaignevents-error-page-already-registered-deleted": "Non puoi completare l'azione perché la registrazione all'evento è stata cancellata da questa pagina evento.",
 	"campaignevents-edit-not-allowed-registration": "Non hai l'autorizzazione di modificare la registrazione a questo evento.",
 	"campaignevents-enable-registration-not-allowed-page": "Non hai l'autorizzazione di abilitare la registrazione all'evento in questa pagina evento.",
-	"registerforevent": "Registrazione a un evento.",
+	"registerforevent": "Registrazione a un evento",
 	"campaignevents-register-error-no-event-id": "Questa pagina non ha un identificativo evento valido. Inserisci un identificativo valido o vedi tutti gli eventi nella Collaboration List.",
 	"campaignevents-register-error-event-not-found": "Non ci sono eventi con questo identificativo.",
 	"campaignevents-register-success": "Ora sei registrato/a a questo evento.",
