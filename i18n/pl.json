@@ -3,7 +3,8 @@
 		"authors": [
 			"Msz2001",
 			"Rzuwig",
-			"Woytecr"
+			"Woytecr",
+			"PanWor"
 		]
 	},
 	"campaignevents-desc": "Dostarcza narzędzia dla organizatorów i uczestników kampanii.",
@@ -89,7 +90,7 @@
 	"campaignevents-edit-field-wiki-type-specific": "Tak, konkretne wiki",
 	"campaignevents-edit-field-wikis-label": "Docelowe wiki",
 	"campaignevents-edit-field-wikis-placeholder": "Dodaj konkretne wiki",
-	"campaignevents-edit-field-wikis-help": "Jeśli twoje wydarzenie odbywa się na konkretnych wiki, podaj je tutaj. To pomoże ludziom zdecydować, w jakich wydarzeniach wziąć udział, a także pomaga w analizie.",
+	"campaignevents-edit-field-wikis-help": "Jeśli Twoje wydarzenie odbywa się na konkretnych wiki, podaj je tutaj. To pomoże ludziom zdecydować, w jakich wydarzeniach wziąć udział, a także pomaga w analizie.",
 	"campaignevents-edit-field-wikis-empty-specific": "Wprowadź co najmniej jedną wiki",
 	"campaignevents-edit-field-tracking-tools": "Link do panelu programów i wydarzeń",
 	"campaignevents-edit-field-tracking-tools-help": "Nazwy użytkowników publicznie zarejestrowanych uczestników zostaną automatycznie przesłane do Panelu. To narzędzie pomaga monitorować wkład uczestników i mierzyć wpływ wydarzenia w ramach kampanii. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard Dowiedz się więcej].",
