@@ -289,6 +289,10 @@
 	"campaignevents-event-details-tab-email": "Messaggio",
 	"campaignevents-event-details-tab-event-details": "Dettagli evento",
 	"campaignevents-event-details-tab-stats": "Statistiche delle risposte",
+	"campaignevents-worklist-table-article-column-header": "Pagina",
+	"campaignevents-worklist-table-wiki-column-header": "Wiki",
+	"campaignevents-worklist-table-remove-button-label": "Rimuovi",
+	"campaignevents-worklist-empty-state": "A questo elenco di lavoro non è stata ancora aggiunta alcuna voce.",
 	"campaignevents-event-details-tab-contributions": "Contributi",
 	"campaignevents-event-details-search-participants-placeholder": "Cerca partecipanti",
 	"campaignevents-event-details-organizers-view-more": "Mostra altro",
@@ -538,5 +542,11 @@
 	"campaignevents-goal-progress-metric-total_bytes_added": "$1 byte {{PLURAL:$1|aggiunto|aggiunti}}",
 	"campaignevents-goal-progress-metric-total_bytes_removed": "$1 byte {{PLURAL:$1|rimosso|rimossi}}",
 	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|collegamento aggiunto|collegamenti aggiunti}}",
-	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|collegamento rimosso|collegamenti rimossi}}"
+	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|collegamento rimosso|collegamenti rimossi}}",
+	"campaignevents-worklist-edit-permission-denied": "Solo gli utenti registrati (con nome utente) possono modificare le pagine dell'elenco di lavoro.",
+	"campaignevents-worklist-content-not-object": "Il contenuto della lista di lavoro deve essere un oggetto",
+	"campaignevents-worklist-content-wiki-empty": "L'elenco delle pagine non può essere vuoto (per wiki $1 )",
+	"campaignevents-worklist-content-title-not-string": "I titoli delle pagine devono essere stringhe. Trovato valore non valido: $1",
+	"campaignevents-worklist-content-duplicated-title": "Titolo duplicato trovato per wiki $1: $2",
+	"campaignevents-worklist-content-invalid-title": "Titolo non valido trovato per wiki $1: $2"
 }
