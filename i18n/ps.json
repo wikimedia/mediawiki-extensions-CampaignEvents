@@ -604,6 +604,8 @@
 	"campaignevents-postedit-dialog-action-no": "نه، مننه",
 	"campaignevents-postedit-dialog-action-yes": "هو",
 	"campaignevents-postedit-success-text": "ستاسو سمون له $1 سره مل دی. د خپلې ونډې ليدلو لپاره د  [$2 {{int:campaignevents-event-details-tab-contributions}} پېښې کتلو] ته ورشئ.",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-in-event-preferences": "تاسو دا پيغام په خپل [[$1|پېښو غوره‌توبونه]] کې پټولی شئ.",
+	"campaignevents-postedit-dialog-hide-associate-edit-dialog-before-select": "تاسو کولی شئ د پېښې غوره‌کولو وروسته دا پيغام پټ کړئ.",
 	"campaignevents-contributions-summary-participants": "گډونوال",
 	"campaignevents-contributions-summary-wikis-edited": "سمې شوې ويکي‌گانې",
 	"campaignevents-contributions-summary-articles-created": "ليکنې جوړې شوې",
