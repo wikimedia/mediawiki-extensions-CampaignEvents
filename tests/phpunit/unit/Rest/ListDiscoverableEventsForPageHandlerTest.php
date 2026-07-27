@@ -8,6 +8,8 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Rest\ListDiscoverableEventsForPageHandler;
 use MediaWiki\Permissions\Authority;
@@ -37,12 +39,17 @@ class ListDiscoverableEventsForPageHandlerTest extends MediaWikiUnitTestCase {
 		?UserOptionsLookup $userOptionsLookup = null,
 		?TitleFactory $titleFactory = null
 	): Handler {
+		$pageURLResolver = $this->createMock( PageURLResolver::class );
+		$pageURLResolver->method( 'getUrl' )->willReturnCallback(
+			static fn ( MWPageProxy $page ): string => '/wiki/' . $page->getPrefixedText()
+		);
 		return new ListDiscoverableEventsForPageHandler(
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$eventLookup ?? $this->createMock( IEventLookup::class ),
 			$promotionStore ?? $this->getRecordingPromotionStore(),
 			$userOptionsLookup ?? $this->getUserOptionsLookup(),
-			$titleFactory ?? $this->getExistingPageTitleFactory()
+			$titleFactory ?? $this->getExistingPageTitleFactory(),
+			$pageURLResolver
 		);
 	}
 
@@ -70,9 +77,12 @@ class ListDiscoverableEventsForPageHandlerTest extends MediaWikiUnitTestCase {
 	private function getEventLookupReturning( array $events ): IEventLookup {
 		$objects = [];
 		foreach ( $events as $eventData ) {
+			$page = $this->createMock( MWPageProxy::class );
+			$page->method( 'getPrefixedText' )->willReturn( $eventData['page'] );
 			$event = $this->createMock( ExistingEventRegistration::class );
 			$event->method( 'getID' )->willReturn( $eventData['id'] );
 			$event->method( 'getName' )->willReturn( $eventData['name'] );
+			$event->method( 'getPage' )->willReturn( $page );
 			$event->method( 'getEndUTCTimestamp' )->willReturn( '20300101000000' );
 			$objects[] = $event;
 		}
@@ -109,17 +119,21 @@ class ListDiscoverableEventsForPageHandlerTest extends MediaWikiUnitTestCase {
 	/**
 	 * @dataProvider provideRun
 	 */
-	public function testRun( array $expected ) {
-		$handler = $this->newHandler( null, $this->getEventLookupReturning( $expected ) );
+	public function testRun( array $events, array $expected ) {
+		$handler = $this->newHandler( null, $this->getEventLookupReturning( $events ) );
 		$this->assertSame( $expected, $this->runHandler( $handler ) );
 	}
 
 	public static function provideRun() {
-		yield 'No events' => [ [] ];
+		yield 'No events' => [ [], [] ];
 		yield 'Has events' => [
 			[
-				[ 'id' => 42, 'name' => 'Pizza party' ],
-				[ 'id' => 24, 'name' => 'Ytrap azzip' ],
+				[ 'id' => 42, 'name' => 'Pizza party', 'page' => 'Event:Pizza party' ],
+				[ 'id' => 24, 'name' => 'Ytrap azzip', 'page' => 'Event:Ytrap azzip' ],
+			],
+			[
+				[ 'id' => 42, 'name' => 'Pizza party', 'url' => '/wiki/Event:Pizza party' ],
+				[ 'id' => 24, 'name' => 'Ytrap azzip', 'url' => '/wiki/Event:Ytrap azzip' ],
 			],
 		];
 	}
@@ -166,7 +180,9 @@ class ListDiscoverableEventsForPageHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testRun__alreadyPromoted() {
-		$eventLookup = $this->getEventLookupReturning( [ [ 'id' => 7, 'name' => 'Seen event' ] ] );
+		$eventLookup = $this->getEventLookupReturning(
+			[ [ 'id' => 7, 'name' => 'Seen event', 'page' => 'Event:Seen event' ] ]
+		);
 		$handler = $this->newHandler( null, $eventLookup, $this->getRecordingPromotionStore( false ) );
 		$this->assertSame( [], $this->runHandler( $handler ) );
 	}

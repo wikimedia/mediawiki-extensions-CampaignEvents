@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
@@ -36,6 +37,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 		private readonly Config $config,
 		private readonly IDiscoveryPromotionStore $promotionStore,
 		private readonly UserOptionsLookup $userOptionsLookup,
+		private readonly PageURLResolver $pageURLResolver,
 	) {
 	}
 
@@ -165,10 +167,15 @@ class PostEditHandler implements BeforePageDisplayHook {
 
 		$out->addJsConfigVars( 'wgCampaignEventsDiscoveryEvents', array_map(
 			/**
-			 * @return array{id:int,name:string}
+			 * @return array{id:int,name:string,url:string}
 			 */
-			static fn ( ExistingEventRegistration $event ): array =>
-				[ 'id' => $event->getID(), 'name' => $event->getName() ],
+			fn ( ExistingEventRegistration $event ): array => [
+				'id' => $event->getID(),
+				'name' => $event->getName(),
+				// The event page may be on a foreign wiki, so resolve the URL server-side
+				// rather than building it client-side with mw.util.getUrl (local-only).
+				'url' => $this->pageURLResolver->getUrl( $event->getPage() ),
+			],
 			$newlyPromoted
 		) );
 		$out->addModules( 'ext.campaignEvents.postEdit' );

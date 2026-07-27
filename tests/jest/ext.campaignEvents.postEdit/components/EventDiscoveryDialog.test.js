@@ -4,11 +4,11 @@
 const { mount } = require( '@vue/test-utils' );
 const EventDiscoveryDialog = require( '../../../../resources/ext.campaignEvents.postEdit/components/EventDiscoveryDialog.vue' );
 
-const singleEvent = { id: 1, name: 'Test event 1' };
+const singleEvent = { id: 1, name: 'Test event 1', url: '/wiki/Event:Test event 1' };
 const multipleEvents = [
-	{ id: 1, name: 'Test event 1' },
-	{ id: 2, name: 'Test event 2' },
-	{ id: 3, name: 'Test event 3' }
+	{ id: 1, name: 'Test event 1', url: '/wiki/Event:Test event 1' },
+	{ id: 2, name: 'Test event 2', url: '/wiki/Event:Test event 2' },
+	{ id: 3, name: 'Test event 3', url: '/wiki/Event:Test event 3' }
 ];
 
 const mountDialog = ( events = [ singleEvent ] ) => {
@@ -81,7 +81,7 @@ describe( 'EventDiscoveryDialog', () => {
 			const wrapper = mountDialog();
 			wrapper.getComponent( { name: 'CdxDialog' } ).vm.$emit( 'primary' );
 			expect( windowOpenSpy ).toHaveBeenCalledWith(
-				`/wiki/Special:EventDetails/${ singleEvent.id }`,
+				singleEvent.url,
 				'_blank',
 				'noopener,noreferrer'
 			);
@@ -113,7 +113,7 @@ describe( 'EventDiscoveryDialog', () => {
 			expect( cards ).toHaveLength( multipleEvents.length );
 			multipleEvents.forEach( ( event, i ) => {
 				expect( cards[ i ].find( '.cdx-card__text__title' ).text() ).toBe( event.name );
-				expect( cards[ i ].attributes( 'href' ) ).toBe( `/wiki/Special:EventDetails/${ event.id }` );
+				expect( cards[ i ].attributes( 'href' ) ).toBe( event.url );
 				expect( cards[ i ].attributes( 'target' ) ).toBe( '_blank' );
 			} );
 		} );

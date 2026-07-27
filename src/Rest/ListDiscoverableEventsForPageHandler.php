@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\GetPreferencesHandler;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Title\TitleFactory;
@@ -32,10 +33,11 @@ class ListDiscoverableEventsForPageHandler extends SimpleHandler {
 		private readonly IDiscoveryPromotionStore $promotionStore,
 		private readonly UserOptionsLookup $userOptionsLookup,
 		private readonly TitleFactory $titleFactory,
+		private readonly PageURLResolver $pageURLResolver,
 	) {
 	}
 
-	/** @phan-return list<array{id:int,name:string}> */
+	/** @phan-return list<array{id:int,name:string,url:string}> */
 	public function run(): array {
 		$authority = $this->getAuthority();
 		// Temporary accounts are registered but not named, so isNamed() (not isRegistered())
@@ -82,10 +84,15 @@ class ListDiscoverableEventsForPageHandler extends SimpleHandler {
 
 		return array_map(
 			/**
-			 * @return array{id:int,name:string}
+			 * @return array{id:int,name:string,url:string}
 			 */
-			static fn ( ExistingEventRegistration $event ): array =>
-				[ 'id' => $event->getID(), 'name' => $event->getName() ],
+			fn ( ExistingEventRegistration $event ): array => [
+				'id' => $event->getID(),
+				'name' => $event->getName(),
+				// The event page may be on a foreign wiki, so resolve the URL server-side
+				// rather than building it client-side with mw.util.getUrl (local-only).
+				'url' => $this->pageURLResolver->getUrl( $event->getPage() ),
+			],
 			$newlyPromoted
 		);
 	}

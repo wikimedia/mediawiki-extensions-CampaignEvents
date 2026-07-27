@@ -163,7 +163,8 @@
 				"CampaignEventsGoalProgressFormatter",
 				"MainConfig",
 				"CampaignEventsDiscoveryPromotionStore",
-				"UserOptionsLookup"
+				"UserOptionsLookup",
+				"CampaignEventsPageURLResolver"
 			]
 		},
 		"CentralAuthContributionUserChangesHandler": {

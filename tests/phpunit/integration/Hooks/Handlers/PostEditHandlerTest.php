@@ -13,6 +13,8 @@ use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\GetPreferencesHandler;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PostEditHandler;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Language\Language;
 use MediaWiki\Output\OutputPage;
@@ -48,7 +50,16 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 			new HashConfig( [ 'CampaignEventsEnableWorklists' => $featureEnabled ] ),
 			$promotionStore ?? $this->createNoOpMock( IDiscoveryPromotionStore::class ),
 			$userOptionsLookup ?? $this->createNoOpMock( UserOptionsLookup::class ),
+			$this->makePageURLResolver(),
 		);
+	}
+
+	private function makePageURLResolver(): PageURLResolver {
+		$resolver = $this->createMock( PageURLResolver::class );
+		$resolver->method( 'getUrl' )->willReturnCallback(
+			static fn ( MWPageProxy $page ): string => '/wiki/' . $page->getPrefixedText()
+		);
+		return $resolver;
 	}
 
 	private function makeOutputPage(
@@ -126,9 +137,12 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function makeEvent( int $id = 1 ): ExistingEventRegistration {
+		$page = $this->createMock( MWPageProxy::class );
+		$page->method( 'getPrefixedText' )->willReturn( "Event:Event $id" );
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( $id );
 		$event->method( 'getName' )->willReturn( "Event $id" );
+		$event->method( 'getPage' )->willReturn( $page );
 		$event->method( 'getEndUTCTimestamp' )->willReturn( wfTimestamp( TS::MW, time() + 3600 ) );
 		return $event;
 	}
@@ -268,7 +282,9 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		$out->expects( $this->once() )->method( 'addModules' )
 			->with( 'ext.campaignEvents.postEdit' );
 		$out->expects( $this->once() )->method( 'addJsConfigVars' )
-			->with( 'wgCampaignEventsDiscoveryEvents', [ [ 'id' => 1, 'name' => 'Event 1' ] ] );
+			->with( 'wgCampaignEventsDiscoveryEvents',
+				[ [ 'id' => 1, 'name' => 'Event 1', 'url' => '/wiki/Event:Event 1' ] ]
+			);
 
 		$promotionStore = $this->createMock( IDiscoveryPromotionStore::class );
 		$promotionStore->method( 'tryRecordPromotion' )->willReturn( true );
@@ -284,7 +300,9 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 	public function testDiscovery_signalsOnlyNewlyPromotedEvents(): void {
 		$out = $this->makeOutputPage();
 		$out->expects( $this->once() )->method( 'addJsConfigVars' )
-			->with( 'wgCampaignEventsDiscoveryEvents', [ [ 'id' => 2, 'name' => 'Event 2' ] ] );
+			->with( 'wgCampaignEventsDiscoveryEvents',
+				[ [ 'id' => 2, 'name' => 'Event 2', 'url' => '/wiki/Event:Event 2' ] ]
+			);
 
 		$promotionStore = $this->createMock( IDiscoveryPromotionStore::class );
 		// Event 1 already promoted, event 2 is new.

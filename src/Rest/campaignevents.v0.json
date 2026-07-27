@@ -331,7 +331,8 @@
 						"CampaignEventsEventLookup",
 						"CampaignEventsDiscoveryPromotionStore",
 						"UserOptionsLookup",
-						"TitleFactory"
+						"TitleFactory",
+						"CampaignEventsPageURLResolver"
 					]
 				}
 			}

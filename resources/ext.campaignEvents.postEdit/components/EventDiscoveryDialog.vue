@@ -14,7 +14,7 @@
 			<cdx-card
 				v-for="event in events"
 				:key="event.id"
-				:url="getEventUrl( event.id )"
+				:url="event.url"
 				target="_blank"
 				rel="noopener noreferrer"
 				@click="$emit( 'default' )"
@@ -71,12 +71,8 @@ module.exports = exports = defineComponent( {
 			'Special:Preferences#mw-prefsection-personal-campaignevents-event-discovery'
 		);
 
-		function getEventUrl( id ) {
-			return mw.util.getUrl( `Special:EventDetails/${ id }` );
-		}
-
 		function onVisitEvent() {
-			window.open( getEventUrl( events[ 0 ].id ), '_blank', 'noopener,noreferrer' );
+			window.open( events[ 0 ].url, '_blank', 'noopener,noreferrer' );
 			emit( 'default' );
 		}
 
@@ -87,7 +83,6 @@ module.exports = exports = defineComponent( {
 			defaultAction,
 			primaryAction,
 			footerMessageHTML,
-			getEventUrl,
 			onVisitEvent
 		};
 	}
