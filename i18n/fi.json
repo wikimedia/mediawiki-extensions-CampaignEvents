@@ -331,6 +331,7 @@
 	"campaignevents-event-details-tab-event-details": "Tapahtuman tiedot",
 	"campaignevents-event-details-tab-stats": "Vastaustilastot",
 	"campaignevents-event-details-tab-worklist": "Työlista",
+	"campaignevents-event-details-worklist-view-page": "Siirry työlistan wikisivulle",
 	"campaignevents-event-details-worklist-add-button-label": "Lisää työlistalle",
 	"campaignevents-event-details-worklist-add-dialog-title": "Lisää työlistalle",
 	"campaignevents-event-details-worklist-add-dialog-article-label": "Artikkelin nimi",
@@ -338,6 +339,8 @@
 	"campaignevents-event-details-worklist-add-dialog-search-placeholder": "Hae artikkelia",
 	"campaignevents-event-details-worklist-add-dialog-placeholder": "Maa \nKuu \nJupiter",
 	"campaignevents-event-details-worklist-add-dialog-submit": "Lisää",
+	"campaignevents-event-details-worklist-add-dialog-success": "{{PLURAL:$1|Artikkeli|Artikkelit}} on lisätty työlistalle. {{PLURAL:$1|Uusi artikkeli näkyy|Uudet artikkelit näkyvät}} muutaman sekunnin kuluttua.",
+	"campaignevents-event-details-worklist-add-dialog-error": "Artikkeleita ei voitu lisätä työlistalle: $1",
 	"campaignevents-worklist-table-header": "Työlista",
 	"campaignevents-worklist-table-article-column-header": "Sivu",
 	"campaignevents-worklist-table-wiki-column-header": "Wiki",
@@ -663,5 +666,14 @@
 	"campaignevents-goal-progress-metric-total_bytes_added": "lisätä $1 {{PLURAL:$1|tavu|tavua}}",
 	"campaignevents-goal-progress-metric-total_bytes_removed": "poistaa $1 {{PLURAL:$1|tavu|tavua}}",
 	"campaignevents-goal-progress-metric-total_links_added": "lisätä $1 {{PLURAL:$1|linkki|linkkiä}}",
-	"campaignevents-goal-progress-metric-total_links_removed": "poistaa $1 {{PLURAL:$1|linkki|linkkiä}}"
+	"campaignevents-goal-progress-metric-total_links_removed": "poistaa $1 {{PLURAL:$1|linkki|linkkiä}}",
+	"campaignevents-worklist-page-not-worklist": "Kohdesivu on jo olemassa eikä se ole työlistasivu.",
+	"campaignevents-worklist-edit-permission-denied": "Vain sisäänkirjautuneet (käyttäjänimelliset) käyttäjät voivat muokata työlistasivuja.",
+	"campaignevents-worklist-content-not-object": "Työlistan sisällön on oltava objekti",
+	"campaignevents-worklist-content-nonexistent-wiki": "Wikitunnistetta $1 ei tunnistettu. Varmista, että se on kelvollinen wikitunniste.",
+	"campaignevents-worklist-content-wiki-value-not-array": "Kunkin wikin sivuluettelon on oltava taulukko. Löytyi virheellinen arvo: $1",
+	"campaignevents-worklist-content-wiki-empty": "Sivuluettelo ei voi olla tyhjä (wiki $1)",
+	"campaignevents-worklist-content-title-not-string": "Sivujen otsikoiden on oltava merkkijonoja. Löytyi virheellinen arvo: $1",
+	"campaignevents-worklist-content-duplicated-title": "Duplikaattiotsikko löytyi wikille $1: $2",
+	"campaignevents-worklist-content-invalid-title": "Virheellinen otsikko löytyi wikille $1: $2"
 }
