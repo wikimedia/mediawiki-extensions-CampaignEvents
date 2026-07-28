@@ -6,8 +6,10 @@
 			"Ninjastrikers"
 		]
 	},
+	"nstab-event": "ဖြစ်ရပ်",
 	"action-campaignevents-organize-events": "ပွဲများကိုစီစဉ်ပါ",
 	"right-campaignevents-organize-events": "ပွဲများကိုစီစဉ်ပါ",
+	"specialpages-group-campaignevents": "ဖြစ်ရပ်များ",
 	"campaignevents-edit-field-organizers": "စီစဉ်သူများ",
 	"campaignevents-edit-field-organizers-help": "ဤအစီအစဉ်ကို စီမံခန့်ခွဲခွင့်ပြုရန် အခြားစီစဉ်သူများ၏ အသုံးပြုသူအမည်ကို ထည့်ပါ။",
 	"campaignevents-edit-field-organizers-placeholder": "အသုံးပြုသူ ပေါင်းထည့်",
@@ -20,5 +22,6 @@
 	"campaignevents-edit-too-many-organizers": "$1 ထက် ပိုထည့်၍မရပါ {{PLURAL:$1| စီစဉ်သူ|စီစဉ်သူများ}}။",
 	"campaignevents-edit-organizer-need-central-account": "အောက်ပါ {{PLURAL:$1| user does|users do}} တွင် ဗဟိုအသုံးပြုသူအကောင့် မရှိသည့်အပြင် {{PLURAL:$1| အဖြစ်ထည့်၍မရပါ။ စီစဉ်သူ|စီစဉ်သူများ}}- $2 ။",
 	"campaignevents-edit-invalid-username": "\" $1 \" သည် မှန်ကန်သော အသုံးပြုသူအမည်မဟုတ်ပါ။",
-	"campaignevents-eventpage-register-dialog-register": "မှတ်ပုံတင်ရန်"
+	"campaignevents-eventpage-register-dialog-register": "မှတ်ပုံတင်ရန်",
+	"echo-pref-tooltip-campaign-events-notification-registration": "ပွဲမှတ်ပုံတင်ခြင်းကိရိယာကို အသုံးပြုသည့် ပွဲတစ်ခုအတွက် မှတ်ပုံတင်သည့်အခါ ကျွန်ုပ်အား အကြောင်းကြားပါ။"
 }
