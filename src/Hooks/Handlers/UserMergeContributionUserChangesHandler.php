@@ -7,14 +7,16 @@ namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateUserContributionRecordsJob;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Worklist\UpdateUserWorklistRecordsJob;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Extension\UserMerge\Hooks\AccountFieldsHook;
 use MediaWiki\Extension\UserMerge\Hooks\DeleteAccountHook;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\User\User;
 
 /**
- * This class is part of a series of hook handlers that update event contributions records in case of user changes
- * (renames, deletions, hiding/unhiding).
+ * This class is part of a series of hook handlers that update event contributions and worklist records in case of user
+ * changes (renames, deletions, hiding/unhiding).
  * This class in particular deals with UserMerge-specific changes. Note that UserMerge is incompatible with either
  * $wgSharedDB or CentralAuth as per extension documentation, so here we assume that the wiki is not part of a wikifarm.
  */
@@ -24,6 +26,7 @@ class UserMergeContributionUserChangesHandler implements
 {
 	public function __construct(
 		private readonly EventContributionStore $eventContributionStore,
+		private readonly WorklistSecondaryStore $worklistSecondaryStore,
 		private readonly JobQueueGroup $jobQueueGroup,
 	) {
 	}
@@ -31,14 +34,20 @@ class UserMergeContributionUserChangesHandler implements
 	public function onDeleteAccount( User &$oldUser ): void {
 		// UserMerge is not compatible with wikifarms, so we know the user's local ID is also their "central" ID.
 		$user = new CentralUser( $oldUser->getId() );
-		if ( !$this->eventContributionStore->hasContributionsFromUser( $user ) ) {
-			return;
+		$jobs = [];
+		if ( $this->eventContributionStore->hasContributionsFromUser( $user ) ) {
+			$jobs[] = new UpdateUserContributionRecordsJob( [
+				'type' => UpdateUserContributionRecordsJob::TYPE_DELETE,
+				'userID' => $user->getCentralID(),
+			] );
 		}
-		$job = new UpdateUserContributionRecordsJob( [
-			'type' => UpdateUserContributionRecordsJob::TYPE_DELETE,
-			'userID' => $user->getCentralID(),
-		] );
-		$this->jobQueueGroup->push( $job );
+		if ( $this->worklistSecondaryStore->hasWorklistsFromCreator( $user ) ) {
+			$jobs[] = new UpdateUserWorklistRecordsJob( [
+				'type' => UpdateUserWorklistRecordsJob::TYPE_DELETE,
+				'userID' => $user->getCentralID(),
+			] );
+		}
+		$this->jobQueueGroup->push( $jobs );
 	}
 
 	/** @param list<array<string|int,string|int>> &$updateFields */
@@ -48,6 +57,12 @@ class UserMergeContributionUserChangesHandler implements
 			'cec_user_id',
 			'cec_user_name',
 			'batchKey' => 'cec_id',
+		];
+		$updateFields[] = [
+			'ce_worklists',
+			'cew_user_id',
+			'cew_username',
+			'batchKey' => 'cew_id',
 		];
 	}
 }

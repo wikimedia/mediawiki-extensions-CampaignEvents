@@ -171,6 +171,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\CentralAuthContributionUserChangesHandler",
 			"services": [
 				"CampaignEventsEventContributionStore",
+				"CampaignEventsWorklistSecondaryStore",
 				"JobQueueGroup"
 			]
 		},
@@ -178,6 +179,7 @@
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\UserMergeContributionUserChangesHandler",
 			"services": [
 				"CampaignEventsEventContributionStore",
+				"CampaignEventsWorklistSecondaryStore",
 				"JobQueueGroup"
 			]
 		},
@@ -186,6 +188,7 @@
 			"services": [
 				"CampaignEventsCentralUserLookup",
 				"CampaignEventsEventContributionStore",
+				"CampaignEventsWorklistSecondaryStore",
 				"JobQueueGroup",
 				"MainWANObjectCache"
 			]

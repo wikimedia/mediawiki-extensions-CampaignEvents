@@ -8,8 +8,11 @@ use MediaWiki\Block\DatabaseBlock;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\UpdateUserContributionRecordsJob;
+use MediaWiki\Extension\CampaignEvents\Job\UpdateUsernameRecordsJobBase;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Worklist\UpdateUserWorklistRecordsJob;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\RenameUser\Hook\RenameUserCompleteHook;
 use MediaWiki\Specials\Hook\BlockIpCompleteHook;
@@ -18,9 +21,9 @@ use MediaWiki\User\User;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
- * This class is part of a series of hook handlers that update event contributions records in case of user changes
- * (renames, deletions, hiding/unhiding).
- * This class in particular deals with changes coming from core
+ * This class is part of a series of hook handlers that update event contributions and worklist records in case of user
+ * changes (renames, deletions, hiding/unhiding).
+ * This class in particular deals with changes coming from core.
  */
 class ContributionUserChangesHandler implements
 	BlockIpCompleteHook,
@@ -30,6 +33,7 @@ class ContributionUserChangesHandler implements
 	public function __construct(
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly EventContributionStore $eventContributionStore,
+		private readonly WorklistSecondaryStore $worklistSecondaryStore,
 		private readonly JobQueueGroup $jobQueueGroup,
 		private readonly WANObjectCache $wanCache,
 	) {
@@ -60,20 +64,32 @@ class ContributionUserChangesHandler implements
 		} catch ( UserNotGlobalException ) {
 			return;
 		}
-		if ( !$this->eventContributionStore->hasContributionsFromUser( $centralUser ) ) {
-			return;
-		}
 
-		$isHidden = $block->getHideName();
-		// Optimization: don't look up the username when not needed (it's optional when deleting)
-		$userName = $isHidden ? null : $this->centralUserLookup->getUserName( $centralUser );
-		$job = new UpdateUserContributionRecordsJob( [
-			'type' => UpdateUserContributionRecordsJob::TYPE_VISIBILITY,
-			'userID' => $centralUser->getCentralID(),
-			'isHidden' => $isHidden,
-			'userName' => $userName,
-		] );
-		$this->jobQueueGroup->push( $job );
+		/** @return array<string,mixed> */
+		$getJobParams = function () use ( $block, $centralUser ): array {
+			static $cache;
+			if ( !$cache ) {
+				$isHidden = $block->getHideName();
+				// Optimization: don't look up the username when not needed (it's optional when deleting)
+				$userName = $isHidden ? null : $this->centralUserLookup->getUserName( $centralUser );
+				$cache = [
+					'type' => UpdateUsernameRecordsJobBase::TYPE_VISIBILITY,
+					'userID' => $centralUser->getCentralID(),
+					'isHidden' => $isHidden,
+					'userName' => $userName,
+				];
+			}
+			return $cache;
+		};
+
+		$jobs = [];
+		if ( $this->eventContributionStore->hasContributionsFromUser( $centralUser ) ) {
+			$jobs[] = new UpdateUserContributionRecordsJob( $getJobParams() );
+		}
+		if ( $this->worklistSecondaryStore->hasWorklistsFromCreator( $centralUser ) ) {
+			$jobs[] = new UpdateUserWorklistRecordsJob( $getJobParams() );
+		}
+		$this->jobQueueGroup->push( $jobs );
 	}
 
 	/**
@@ -96,16 +112,27 @@ class ContributionUserChangesHandler implements
 		} catch ( UserNotGlobalException ) {
 			return;
 		}
-		if ( !$this->eventContributionStore->hasContributionsFromUser( $centralUser ) ) {
-			return;
+
+		/** @return array<string,mixed> */
+		$getJobParams = function () use ( $centralUser ): array {
+			static $cache;
+			$cache ??= [
+				'type' => UpdateUsernameRecordsJobBase::TYPE_VISIBILITY,
+				'userID' => $centralUser->getCentralID(),
+				'userName' => $this->centralUserLookup->getUserName( $centralUser ),
+				'isHidden' => false,
+			];
+			return $cache;
+		};
+
+		$jobs = [];
+		if ( $this->eventContributionStore->hasContributionsFromUser( $centralUser ) ) {
+			$jobs[] = new UpdateUserContributionRecordsJob( $getJobParams() );
 		}
-		$job = new UpdateUserContributionRecordsJob( [
-			'type' => UpdateUserContributionRecordsJob::TYPE_VISIBILITY,
-			'userID' => $centralUser->getCentralID(),
-			'userName' => $this->centralUserLookup->getUserName( $centralUser ),
-			'isHidden' => false,
-		] );
-		$this->jobQueueGroup->push( $job );
+		if ( $this->worklistSecondaryStore->hasWorklistsFromCreator( $centralUser ) ) {
+			$jobs[] = new UpdateUserWorklistRecordsJob( $getJobParams() );
+		}
+		$this->jobQueueGroup->push( $jobs );
 	}
 
 	/**
@@ -142,16 +169,22 @@ class ContributionUserChangesHandler implements
 			$checkKey,
 			WANObjectCache::TTL_WEEK,
 			function () use ( $centralUser, $new ): int {
-				if ( !$this->eventContributionStore->hasContributionsFromUser( $centralUser ) ) {
-					// Cache failure
-					return 1;
+				$jobs = [];
+				if ( $this->eventContributionStore->hasContributionsFromUser( $centralUser ) ) {
+					$jobs[] = new UpdateUserContributionRecordsJob( [
+						'type' => UpdateUserContributionRecordsJob::TYPE_RENAME,
+						'userID' => $centralUser->getCentralID(),
+						'newName' => $new,
+					] );
 				}
-				$job = new UpdateUserContributionRecordsJob( [
-					'type' => UpdateUserContributionRecordsJob::TYPE_RENAME,
-					'userID' => $centralUser->getCentralID(),
-					'newName' => $new,
-				] );
-				$this->jobQueueGroup->push( $job );
+				if ( $this->worklistSecondaryStore->hasWorklistsFromCreator( $centralUser ) ) {
+					$jobs[] = new UpdateUserWorklistRecordsJob( [
+						'type' => UpdateUserWorklistRecordsJob::TYPE_RENAME,
+						'userID' => $centralUser->getCentralID(),
+						'newName' => $new,
+					] );
+				}
+				$this->jobQueueGroup->push( $jobs );
 				return 1;
 			}
 		);

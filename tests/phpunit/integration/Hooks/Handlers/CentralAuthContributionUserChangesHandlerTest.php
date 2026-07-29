@@ -8,6 +8,8 @@ use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\CentralAuthContributionUserChangesHandler;
 use MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContributionUpdateTestHelperTrait;
+use MediaWiki\Extension\CampaignEvents\Tests\Integration\WorklistUpdateTestHelperTrait;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Extension\CentralAuth\User\CentralAuthUser;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWikiIntegrationTestCase;
@@ -18,6 +20,7 @@ use MediaWikiIntegrationTestCase;
  */
 class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 	use EventContributionUpdateTestHelperTrait;
+	use WorklistUpdateTestHelperTrait;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -38,21 +41,28 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 		$status = $centralAuthUser->adminDelete( __METHOD__, $this->getTestSysop()->getUserIdentity() );
 		$this->assertStatusGood( $status );
 
-		$this->runUserUpdateJob();
+		$this->runContributionUserUpdateJob();
 
 		$storedContrib = $this->getStoredContrib();
 		$this->assertSame( $user->getId(), $storedContrib->getUserId(), 'User ID unchanged after deletion' );
 		$this->assertNull( $storedContrib->getUserName(), 'No username after deletion' );
 	}
 
-	public function testOnCentralAuthAccountDeleted__noContributions() {
+	public function testOnCentralAuthAccountDeleted__noChanges() {
 		$contribsStore = $this->createMock( EventContributionStore::class );
 		$contribsStore->expects( $this->once() )
 			->method( 'hasContributionsFromUser' )
 			->willReturn( false );
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->expects( $this->once() )
+			->method( 'hasWorklistsFromCreator' )
+			->willReturn( false );
+		$jobQueueGroup = $this->createMock( JobQueueGroup::class );
+		$jobQueueGroup->expects( $this->once() )->method( 'push' )->with( [] );
 		$handler = new CentralAuthContributionUserChangesHandler(
 			$contribsStore,
-			$this->createNoOpMock( JobQueueGroup::class ),
+			$worklistStore,
+			$jobQueueGroup,
 		);
 		$handler->onCentralAuthAccountDeleted( 42, 'Name' );
 		// Rely on the no-op JobQueueGroup mock to soft-assert that nothing was done.
@@ -69,34 +79,58 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 			self::makeContributionWithUser( $centralAuthUser->getId(), $centralAuthUser->getName() )
 		);
 
+		$this->createWorklistForUser( $centralAuthUser->getId(), $centralAuthUser->getName() );
+
 		$hideStatus = $centralAuthUser->adminSetHidden( CentralAuthUser::HIDDEN_LEVEL_SUPPRESSED );
 		$this->assertStatusGood( $hideStatus );
 
-		$this->runUserUpdateJob();
+		$this->runContributionUserUpdateJob();
+		$this->runWorklistUpdateJob();
 
 		$storedContribAfterHide = $this->getStoredContrib();
 		$this->assertSame(
 			$user->getId(),
 			$storedContribAfterHide->getUserId(),
-			'User ID unchanged after suppression'
+			'Contribution user ID unchanged after suppression'
 		);
-		$this->assertNull( $storedContribAfterHide->getUserName(), 'No username after suppression' );
+		$this->assertNull( $storedContribAfterHide->getUserName(), 'No contribution username after suppression' );
+
+		$storedWorklistRowAfterHide = $this->getStoredWorklistRow();
+		$this->assertSame(
+			$user->getId(),
+			(int)$storedWorklistRowAfterHide->cew_user_id,
+			'Worklist user ID unchanged after suppression'
+		);
+		$this->assertNull( $storedWorklistRowAfterHide->cew_username, 'No worklist username after suppression' );
 
 		$unhideStatus = $centralAuthUser->adminSetHidden( CentralAuthUser::HIDDEN_LEVEL_NONE );
 		$this->assertStatusGood( $unhideStatus );
 
-		$this->runUserUpdateJob();
+		$this->runContributionUserUpdateJob();
+		$this->runWorklistUpdateJob();
 
 		$storedContribAfterUnhide = $this->getStoredContrib();
 		$this->assertSame(
 			$user->getId(),
 			$storedContribAfterUnhide->getUserId(),
-			'User ID unchanged after restore'
+			'Contribution user ID unchanged after restore'
 		);
 		$this->assertSame(
 			$user->getName(),
 			$storedContribAfterUnhide->getUserName(),
-			'Username is back after restore'
+			'Contribution username is back after restore'
+		);
+
+		$storedWorklistRowAfterUnhide = $this->getStoredWorklistRow();
+		$this->assertSame(
+			$user->getId(),
+			(int)$storedWorklistRowAfterUnhide->cew_user_id,
+			'Worklist user ID unchanged after restore'
+		);
+		$this->assertSame(
+			$user->getName(),
+			$storedWorklistRowAfterUnhide->cew_username,
+			'Worklist username is back after restore'
 		);
 	}
 
@@ -105,9 +139,16 @@ class CentralAuthContributionUserChangesHandlerTest extends MediaWikiIntegration
 		$contribsStore->expects( $this->once() )
 			->method( 'hasContributionsFromUser' )
 			->willReturn( false );
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->expects( $this->once() )
+			->method( 'hasWorklistsFromCreator' )
+			->willReturn( false );
+		$jobQueueGroup = $this->createMock( JobQueueGroup::class );
+		$jobQueueGroup->expects( $this->once() )->method( 'push' )->with( [] );
 		$handler = new CentralAuthContributionUserChangesHandler(
 			$contribsStore,
-			$this->createNoOpMock( JobQueueGroup::class ),
+			$worklistStore,
+			$jobQueueGroup,
 		);
 		$centralUser = $this->createMock( CentralAuthUser::class );
 		$centralUser->method( 'getId' )->willReturn( 42 );

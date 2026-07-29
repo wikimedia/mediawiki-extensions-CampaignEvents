@@ -40,7 +40,7 @@ trait EventContributionUpdateTestHelperTrait {
 		);
 	}
 
-	private function runUserUpdateJob(): void {
+	private function runContributionUserUpdateJob(): void {
 		$this->runJobs(
 			[ 'minJobs' => 1, 'maxJobs' => 1 ],
 			[ 'type' => 'CampaignEventsUpdateUserContributionRecords' ]

@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 use MediaWiki\Block\BlockUser;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContributionUpdateTestHelperTrait;
+use MediaWiki\Extension\CampaignEvents\Tests\Integration\WorklistUpdateTestHelperTrait;
 use MediaWiki\Extension\CentralAuth\CentralAuthServices;
 use MediaWiki\Extension\CentralAuth\User\CentralAuthUser;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -21,6 +22,7 @@ use MediaWikiIntegrationTestCase;
  */
 class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 	use EventContributionUpdateTestHelperTrait;
+	use WorklistUpdateTestHelperTrait;
 
 	private function getGlobalUser(): User {
 		$user = $this->getMutableTestUser()->getUser();
@@ -49,6 +51,8 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 			self::makeContributionWithUser( $user->getId(), $user->getName() )
 		);
 
+		$this->createWorklistForUser( $user->getId(), $user->getName() );
+
 		$blockUserFactory = $this->getServiceContainer()->getBlockUserFactory();
 		$blocker = $this->getTestSysop()->getAuthority();
 
@@ -58,15 +62,30 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 		)->placeBlockUnsafe();
 		$this->assertStatusGood( $blockStatus, 'First block' );
 
-		$this->runUserUpdateJob();
+		$this->runContributionUserUpdateJob();
+		$this->runWorklistUpdateJob();
 
 		$storedContribAfterBlockHide = $this->getStoredContrib();
 		$this->assertSame(
 			$user->getId(),
 			$storedContribAfterBlockHide->getUserId(),
+			'Contribution user ID unchanged after block with isHideUser'
+		);
+		$this->assertNull(
+			$storedContribAfterBlockHide->getUserName(),
+			'No contribution username after block with isHideUser'
+		);
+
+		$storedWorklistRowAfterBlockHide = $this->getStoredWorklistRow();
+		$this->assertSame(
+			$user->getId(),
+			(int)$storedWorklistRowAfterBlockHide->cew_user_id,
 			'User ID unchanged after block with isHideUser'
 		);
-		$this->assertNull( $storedContribAfterBlockHide->getUserName(), 'No username after block with isHideUser' );
+		$this->assertNull(
+			$storedWorklistRowAfterBlockHide->cew_username,
+			'No worklist username after block with isHideUser'
+		);
 
 		// Then reblock without isHideUser to test restoration
 		$reblockStatus = $blockUserFactory->newBlockUser(
@@ -74,18 +93,31 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 		)->placeBlockUnsafe( BlockUser::CONFLICT_REBLOCK );
 		$this->assertStatusGood( $reblockStatus, 'Reblock' );
 
-		$this->runUserUpdateJob();
+		$this->runContributionUserUpdateJob();
+		$this->runWorklistUpdateJob();
 
 		$storedContribAfterBlockUnhide = $this->getStoredContrib();
 		$this->assertSame(
 			$user->getId(),
 			$storedContribAfterBlockUnhide->getUserId(),
-			'User ID unchanged after reblocking without isHideUser'
+			'Contribution user ID unchanged after reblocking without isHideUser'
 		);
 		$this->assertSame(
 			$user->getName(),
 			$storedContribAfterBlockUnhide->getUserName(),
-			'Username is restored after reblocking without isHideUser'
+			'Contribution username is restored after reblocking without isHideUser'
+		);
+
+		$storedWorklistRowAfterBlockUnhide = $this->getStoredWorklistRow();
+		$this->assertSame(
+			$user->getId(),
+			(int)$storedWorklistRowAfterBlockUnhide->cew_user_id,
+			'Worklist user ID unchanged after reblocking without isHideUser'
+		);
+		$this->assertSame(
+			$user->getName(),
+			$storedWorklistRowAfterBlockUnhide->cew_username,
+			'Worklist username is restored after reblocking without isHideUser'
 		);
 	}
 
@@ -96,6 +128,8 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 		$eventContributionsStore->saveEventContribution(
 			self::makeContributionWithUser( $user->getId(), $user->getName() )
 		);
+
+		$this->createWorklistForUser( $user->getId(), $user->getName() );
 
 		$blockUserFactory = $this->getServiceContainer()->getBlockUserFactory();
 		$blocker = $this->getTestSysop()->getAuthority();
@@ -109,18 +143,31 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 		$unblockStatus = $unblockUserFactory->newUnblockUser( $user, $blocker, '' )->unblockUnsafe();
 		$this->assertStatusGood( $unblockStatus, 'Reblock' );
 
-		$this->runUserUpdateJob();
+		$this->runContributionUserUpdateJob();
+		$this->runWorklistUpdateJob();
 
 		$storedContribAfterUnblock = $this->getStoredContrib();
 		$this->assertSame(
 			$user->getId(),
 			$storedContribAfterUnblock->getUserId(),
-			'User ID unchanged after unblock'
+			'Contribution user ID unchanged after unblock'
 		);
 		$this->assertSame(
 			$user->getName(),
 			$storedContribAfterUnblock->getUserName(),
-			'Username is back after unblock'
+			'Contribution username is back after unblock'
+		);
+
+		$storedWorklistRowAfterUnblock = $this->getStoredWorklistRow();
+		$this->assertSame(
+			$user->getId(),
+			(int)$storedWorklistRowAfterUnblock->cew_user_id,
+			'Worklist user ID unchanged after unblock'
+		);
+		$this->assertSame(
+			$user->getName(),
+			$storedWorklistRowAfterUnblock->cew_username,
+			'Worklist username is back after unblock'
 		);
 	}
 
@@ -133,6 +180,8 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 		$eventContributionsStore->saveEventContribution(
 			self::makeContributionWithUser( $user->getId(), $user->getName() )
 		);
+
+		$this->createWorklistForUser( $user->getId(), $user->getName() );
 
 		$newName = $user->getName() . '-renamed';
 		$performer = $this->getTestSysop()->getUser();
@@ -158,11 +207,20 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 				[ 'type' => 'LocalRenameUserJob' ]
 			);
 		}
-		// Then wait for our job to run. Note that this also runs deferred updates.
-		$this->runUserUpdateJob();
+		// Then wait for our jobs to run. Note that this also runs deferred updates.
+		$this->runContributionUserUpdateJob();
+		$this->runWorklistUpdateJob();
 
 		$storedContrib = $this->getStoredContrib();
-		$this->assertSame( $user->getId(), $storedContrib->getUserId(), 'User ID unchanged after rename' );
-		$this->assertSame( $newName, $storedContrib->getUserName(), 'Username updated after rename' );
+		$this->assertSame( $user->getId(), $storedContrib->getUserId(), 'Contribution user ID unchanged after rename' );
+		$this->assertSame( $newName, $storedContrib->getUserName(), 'Contribution username updated after rename' );
+
+		$storedWorklistRow = $this->getStoredWorklistRow();
+		$this->assertSame(
+			$user->getId(),
+			(int)$storedWorklistRow->cew_user_id,
+			'Worklist user ID unchanged after rename'
+		);
+		$this->assertSame( $newName, $storedWorklistRow->cew_username, 'Worklist username updated after rename' );
 	}
 }

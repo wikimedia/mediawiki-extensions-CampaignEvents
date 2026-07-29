@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\ContributionUserChangesHan
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserIdentity;
@@ -30,6 +31,7 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		return new ContributionUserChangesHandler(
 			$this->createNoOpMock( CampaignsCentralUserLookup::class ),
 			$this->createNoOpMock( EventContributionStore::class ),
+			$this->createNoOpMock( WorklistSecondaryStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
 		);
@@ -85,6 +87,7 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		$handler = new ContributionUserChangesHandler(
 			$centralUserLookup,
 			$this->createNoOpMock( EventContributionStore::class ),
+			$this->createNoOpMock( WorklistSecondaryStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
 		);
@@ -96,15 +99,22 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
 	}
 
-	public function testOnBlockIpComplete__noContributions() {
+	public function testOnBlockIpComplete__noChanges() {
 		$contribsStore = $this->createMock( EventContributionStore::class );
 		$contribsStore->expects( $this->once() )
 			->method( 'hasContributionsFromUser' )
 			->willReturn( false );
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->expects( $this->once() )
+			->method( 'hasWorklistsFromCreator' )
+			->willReturn( false );
+		$jobQueueGroup = $this->createMock( JobQueueGroup::class );
+		$jobQueueGroup->expects( $this->once() )->method( 'push' )->with( [] );
 		$handler = new ContributionUserChangesHandler(
 			$this->createMock( CampaignsCentralUserLookup::class ),
 			$contribsStore,
-			$this->createNoOpMock( JobQueueGroup::class ),
+			$worklistStore,
+			$jobQueueGroup,
 			$this->createNoOpMock( WANObjectCache::class ),
 		);
 		$handler->onBlockIpComplete(
@@ -145,6 +155,7 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		$handler = new ContributionUserChangesHandler(
 			$centralUserLookup,
 			$this->createNoOpMock( EventContributionStore::class ),
+			$this->createNoOpMock( WorklistSecondaryStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
 		);
@@ -155,15 +166,22 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
 	}
 
-	public function testOnUnblockUserComplete__noContributions() {
+	public function testOnUnblockUserComplete__noChanges() {
 		$contribsStore = $this->createMock( EventContributionStore::class );
 		$contribsStore->expects( $this->once() )
 			->method( 'hasContributionsFromUser' )
 			->willReturn( false );
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->expects( $this->once() )
+			->method( 'hasWorklistsFromCreator' )
+			->willReturn( false );
+		$jobQueueGroup = $this->createMock( JobQueueGroup::class );
+		$jobQueueGroup->expects( $this->once() )->method( 'push' )->with( [] );
 		$handler = new ContributionUserChangesHandler(
 			$this->createMock( CampaignsCentralUserLookup::class ),
 			$contribsStore,
-			$this->createNoOpMock( JobQueueGroup::class ),
+			$worklistStore,
+			$jobQueueGroup,
 			$this->createNoOpMock( WANObjectCache::class ),
 		);
 		$handler->onUnblockUserComplete(
@@ -181,6 +199,7 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		$handler = new ContributionUserChangesHandler(
 			$centralUserLookup,
 			$this->createNoOpMock( EventContributionStore::class ),
+			$this->createNoOpMock( WorklistSecondaryStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$this->createNoOpMock( WANObjectCache::class ),
 		);
@@ -205,6 +224,7 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		$handler = new ContributionUserChangesHandler(
 			$centralUserLookup,
 			$this->createNoOpMock( EventContributionStore::class ),
+			$this->createNoOpMock( WorklistSecondaryStore::class ),
 			$this->createNoOpMock( JobQueueGroup::class ),
 			$wanCache,
 		);
@@ -213,15 +233,22 @@ class ContributionUserChangesHandlerTest extends MediaWikiUnitTestCase {
 		// Rely on soft assertions from the no-op mocks to assert that nothing was done.
 	}
 
-	public function testOnRenameUserComplete__noContributions() {
+	public function testOnRenameUserComplete__noChanges() {
 		$contribsStore = $this->createMock( EventContributionStore::class );
 		$contribsStore->expects( $this->once() )
 			->method( 'hasContributionsFromUser' )
 			->willReturn( false );
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->expects( $this->once() )
+			->method( 'hasWorklistsFromCreator' )
+			->willReturn( false );
+		$jobQueueGroup = $this->createMock( JobQueueGroup::class );
+		$jobQueueGroup->expects( $this->once() )->method( 'push' )->with( [] );
 		$handler = new ContributionUserChangesHandler(
 			$this->createMock( CampaignsCentralUserLookup::class ),
 			$contribsStore,
-			$this->createNoOpMock( JobQueueGroup::class ),
+			$worklistStore,
+			$jobQueueGroup,
 			new WANObjectCache( [ 'cache' => new EmptyBagOStuff() ] ),
 		);
 		$handler->onRenameUserComplete( 1, 'Old', 'New' );
