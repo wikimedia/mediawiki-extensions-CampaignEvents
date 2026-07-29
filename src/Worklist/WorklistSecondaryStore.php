@@ -4,9 +4,12 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Worklist;
 
+use BadMethodCallException;
+use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use RuntimeException;
+use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
@@ -17,6 +20,8 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  */
 class WorklistSecondaryStore {
 	public const SERVICE_NAME = 'CampaignEventsWorklistSecondaryStore';
+
+	private const UPDATES_BATCH_SIZE = 500;
 
 	public function __construct(
 		private readonly CampaignsDatabaseHelper $dbHelper,
@@ -112,6 +117,8 @@ class WorklistSecondaryStore {
 	}
 
 	/**
+	 * Updates the username of the creator of a single worklist.
+	 *
 	 * @param string $wiki
 	 * @param int $pageID
 	 * @param string|null $newName Null to indicate a deletion
@@ -128,6 +135,96 @@ class WorklistSecondaryStore {
 			] )
 			->caller( __METHOD__ )
 			->execute();
+	}
+
+	public function hasWorklistsFromCreator( CentralUser $user ): bool {
+		$dbr = $this->dbHelper->getReplicaConnection();
+		$res = $dbr->newSelectQueryBuilder()
+			->select( '1' )
+			->from( 'ce_worklists' )
+			->where( [
+				'cew_user_id' => $user->getCentralID()
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
+		return $res !== false;
+	}
+
+	/**
+	 * @phan-param mixed[] $where
+	 * @phan-param mixed[] $set
+	 */
+	private function doBatchedUpdate( IDatabase $dbw, array $where, array $set ): void {
+		$lastBatchIDs = [];
+		do {
+			$curBatchIDs = $dbw->newSelectQueryBuilder()
+				->select( 'cew_id' )
+				->from( 'ce_worklists' )
+				->where( $where )
+				->limit( self::UPDATES_BATCH_SIZE )
+				->caller( __METHOD__ )
+				->fetchFieldValues();
+
+			if ( !$curBatchIDs ) {
+				break;
+			}
+
+			if ( $curBatchIDs === $lastBatchIDs ) {
+				throw new LogicException(
+					'Infinite recursion detected! Make sure the WHERE conditions filter out already updated rows.'
+				);
+			}
+
+			$dbw->newUpdateQueryBuilder()
+				->update( 'ce_worklists' )
+				->set( $set )
+				->where( [ 'cew_id' => $curBatchIDs ] )
+				->caller( __METHOD__ )
+				->execute();
+
+			$lastBatchIDs = $curBatchIDs;
+		} while ( true );
+	}
+
+	/**
+	 * Updates a username across all stored worklists.
+	 */
+	public function updateUserName( CentralUser $user, string $newUserName ): void {
+		$dbw = $this->dbHelper->getPrimaryConnection();
+		$this->doBatchedUpdate(
+			$dbw,
+			[
+				'cew_user_id' => $user->getCentralID(),
+				$dbw->expr( 'cew_username', '!=', $newUserName ),
+			],
+			[ 'cew_username' => $newUserName ]
+		);
+	}
+
+	/**
+	 * Updates a user's visibility across all stored worklists. The username needs to be passed in if and only if
+	 * $isHidden is false. A null cew_username is used to indicate a deleted/hidden user.
+	 */
+	public function updateUserVisibility( CentralUser $user, bool $isHidden, ?string $userName = null ): void {
+		if ( !$isHidden && !$userName ) {
+			throw new BadMethodCallException( 'Missing required $userName for user unhide.' );
+		}
+		$newDBName = $isHidden ? null : $userName;
+		$dbw = $this->dbHelper->getPrimaryConnection();
+		$whereInequality = $dbw->expr( 'cew_username', '!=', $newDBName );
+		if ( $newDBName !== null ) {
+			// The column is nullable, so when the RHS is a string `cew_username != 'literal'` will fail for null
+			// values. So, compare with null explicitly.
+			$whereInequality = $whereInequality->or( 'cew_username', '=', null );
+		}
+		$this->doBatchedUpdate(
+			$dbw,
+			[
+				'cew_user_id' => $user->getCentralID(),
+				$whereInequality,
+			],
+			[ 'cew_username' => $newDBName ]
+		);
 	}
 
 	/**

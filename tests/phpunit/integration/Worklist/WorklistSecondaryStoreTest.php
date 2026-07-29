@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Worklist;
 
+use BadMethodCallException;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
@@ -44,6 +45,16 @@ class WorklistSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 				'cew_page_prefixedtext' => 'Worklist 1',
 				'cew_user_id' => 102,
 				'cew_username' => 'User 102',
+				'cew_timestamp' => $timestamp,
+				'cew_content_rev' => null,
+			],
+			[
+				'cew_id' => 3,
+				'cew_wiki' => 'awiki',
+				'cew_page_id' => 2,
+				'cew_page_prefixedtext' => 'Worklist 2',
+				'cew_user_id' => 103,
+				'cew_username' => null,
 				'cew_timestamp' => $timestamp,
 				'cew_content_rev' => null,
 			],
@@ -89,7 +100,7 @@ class WorklistSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 			[
 				...$this->transformTimestampsForDB( self::getInitialRowsWithPlainTimestamps() ),
 				[
-					'cew_id' => 3,
+					'cew_id' => 4,
 					'cew_wiki' => $wiki,
 					'cew_page_id' => $pageID,
 					'cew_page_prefixedtext' => $prefixedText,
@@ -107,9 +118,9 @@ class WorklistSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 
 		$store->deleteWorklist( 'bwiki', 1 );
 
-		$this->assertExpectedRows(
-			$this->transformTimestampsForDB( [ self::getInitialRowsWithPlainTimestamps()[0] ] )
-		);
+		$newRows = array_values( array_diff_key( self::getInitialRowsWithPlainTimestamps(), [ 1 => true ] ) );
+
+		$this->assertExpectedRows( $this->transformTimestampsForDB( $newRows ) );
 	}
 
 	public function testMoveWorklist() {
@@ -180,5 +191,125 @@ class WorklistSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( "Worklist $nonexistentWorklistID doesn't exist" );
 		$store->getWorklistContentSyncedRev( $nonexistentWorklistID );
+	}
+
+	/** @dataProvider provideHasWorklistsFromCreator */
+	public function testHasWorklistsFromCreator( int $userID, bool $expected ) {
+		$store = CampaignEventsServices::getWorklistSecondaryStore();
+		$this->assertSame( $expected, $store->hasWorklistsFromCreator( new CentralUser( $userID ) ) );
+	}
+
+	public static function provideHasWorklistsFromCreator() {
+		yield 'Yes' => [ 101, true ];
+		yield 'No' => [ 719843587134, false ];
+		yield 'Deleted username' => [ 103, true ];
+	}
+
+	public function testUpdateUserName() {
+		$store = CampaignEventsServices::getWorklistSecondaryStore();
+		$newUserName = 'A new username 1234';
+		$store->updateUserName( new CentralUser( 101 ), $newUserName );
+
+		$newData = $this->getDb()->newSelectQueryBuilder()
+			->select( [ 'cew_id', 'cew_user_id', 'cew_username' ] )
+			->from( 'ce_worklists' )
+			->orderBy( 'cew_id' )
+			->fetchResultSet();
+
+		$this->assertEquals(
+			[
+				(object)[
+					'cew_id' => 1,
+					'cew_user_id' => 101,
+					'cew_username' => $newUserName,
+				],
+				(object)[
+					'cew_id' => 2,
+					'cew_user_id' => 102,
+					'cew_username' => 'User 102',
+				],
+				(object)[
+					'cew_id' => 3,
+					'cew_user_id' => 103,
+					'cew_username' => null,
+				],
+			],
+			iterator_to_array( $newData )
+		);
+	}
+
+	public function testUpdateUserVisibility__throwsWhenVisibleAndNoName() {
+		$store = CampaignEventsServices::getWorklistSecondaryStore();
+		$this->expectException( BadMethodCallException::class );
+		$this->expectExceptionMessage( 'Missing required $userName' );
+		$store->updateUserVisibility( new CentralUser( 101 ), false );
+	}
+
+	/** @dataProvider provideUpdateUserVisibility */
+	public function testUpdateUserVisibility(
+		int $userID,
+		bool $isHidden,
+		?string $userName,
+		array $expectedRows
+	) {
+		$store = CampaignEventsServices::getWorklistSecondaryStore();
+		$store->updateUserVisibility( new CentralUser( $userID ), $isHidden, $userName );
+
+		$newData = $this->getDb()->newSelectQueryBuilder()
+			->select( [ 'cew_id', 'cew_user_id', 'cew_username' ] )
+			->from( 'ce_worklists' )
+			->fetchResultSet();
+
+		$this->assertEquals( $expectedRows, iterator_to_array( $newData ) );
+	}
+
+	public static function provideUpdateUserVisibility(): Generator {
+		$getStartingData = static fn () => [
+			(object)[
+				'cew_id' => 1,
+				'cew_user_id' => 101,
+				'cew_username' => 'User 101',
+			],
+			(object)[
+				'cew_id' => 2,
+				'cew_user_id' => 102,
+				'cew_username' => 'User 102',
+			],
+			(object)[
+				'cew_id' => 3,
+				'cew_user_id' => 103,
+				'cew_username' => null,
+			],
+		];
+
+		$user101HiddenData = $getStartingData();
+		$user101HiddenData[0]->cew_username = null;
+		yield 'Hide' => [
+			101,
+			true,
+			null,
+			$user101HiddenData,
+		];
+		yield 'Hide, already hidden' => [
+			103,
+			true,
+			null,
+			$getStartingData(),
+		];
+
+		$user103UnhiddenData = $getStartingData();
+		$user103UnhiddenData[2]->cew_username = 'User 103';
+		yield 'Unhide' => [
+			103,
+			false,
+			'User 103',
+			$user103UnhiddenData,
+		];
+		yield 'Unhide, already visible' => [
+			101,
+			false,
+			'User 101',
+			$getStartingData(),
+		];
 	}
 }
