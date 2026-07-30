@@ -7,6 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress;
 use IDBAccessObject;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\DomainEvent\DomainEventIngress;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
@@ -62,6 +64,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 		private readonly JobQueueGroup $jobQueueGroup,
 		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly PageEventLookup $pageEventLookup,
+		private readonly EventTypesRegistry $eventTypesRegistry,
 	) {
 	}
 
@@ -76,13 +79,12 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 	 * The worklist lives at a fixed "/Worklist" subpage of the event page, so the event page is its
 	 * base title.
 	 */
-	private function getEventIDForWorklistPage( PageIdentity $worklistPage ): ?int {
+	private function getEventForWorklistPage( PageIdentity $worklistPage ): ?ExistingEventRegistration {
 		$worklistTitle = $this->titleFactory->newFromPageReference( $worklistPage );
 		if ( $worklistTitle->getSubpageText() !== self::WORKLIST_SUBPAGE ) {
 			return null;
 		}
-		$event = $this->pageEventLookup->getRegistrationForLocalPage( $worklistTitle->getBaseTitle() );
-		return $event?->getID();
+		return $this->pageEventLookup->getRegistrationForLocalPage( $worklistTitle->getBaseTitle() );
 	}
 
 	private function createOrUpdateWorklistFromEvent(
@@ -112,11 +114,17 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 				);
 
 				// Link the new worklist to its event (primary storage in ce_worklist_events) when it
-				// is an event's "/Worklist" subpage. Done only on creation to avoid a replica-read/
-				// master-write race on every edit; moves are handled by handlePageMovedEvent().
-				$eventID = $this->getEventIDForWorklistPage( $page );
-				if ( $eventID !== null ) {
-					$this->worklistEventsStore->associateEventWithWorklist( $eventID, $worklistID );
+				// is an event's "/Worklist" subpage, for contribution events only. Done only on creation to avoid
+				// a replica-read/master-write race on every edit; moves are handled by handlePageMovedEvent().
+				$event = $this->getEventForWorklistPage( $page );
+				if ( $event !== null ) {
+					$hasContributionType = (bool)array_intersect(
+						$event->getTypes(),
+						$this->eventTypesRegistry->getContributionTypes()
+					);
+					if ( $hasContributionType ) {
+						$this->worklistEventsStore->associateEventWithWorklist( $event->getID(), $worklistID );
+					}
 				}
 			} else {
 				$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage( $wiki, $page->getId() );
@@ -139,7 +147,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 				throw new RuntimeException( "Cannot find worklist to delete that should exist for $page" );
 			}
 			$this->worklistSecondaryStore->deleteWorklist( $wiki, $page->getId() );
-			$eventID = $this->getEventIDForWorklistPage( $page );
+			$eventID = $this->getEventForWorklistPage( $page )?->getID();
 			if ( $eventID !== null ) {
 				$this->worklistEventsStore->removeWorklistAssociation( $worklistID, $eventID );
 			}
@@ -189,8 +197,8 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 			// event's "/Worklist" subpage becomes associated, and one moved away from it is
 			// dissociated (otherwise it would keep a stale association, and recreating "/Worklist"
 			// would leave the event with two associated worklists).
-			$eventIDBefore = $this->getEventIDForWorklistPage( $pageBefore );
-			$eventIDAfter = $this->getEventIDForWorklistPage( $pageAfter );
+			$eventIDBefore = $this->getEventForWorklistPage( $pageBefore )?->getID();
+			$eventIDAfter = $this->getEventForWorklistPage( $pageAfter )?->getID();
 			if ( $eventIDBefore === $eventIDAfter ) {
 				return;
 			}

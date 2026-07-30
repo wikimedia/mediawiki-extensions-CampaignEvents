@@ -258,7 +258,8 @@
 				"CampaignEventsCentralUserLookup",
 				"JobQueueGroup",
 				"CampaignEventsWorklistEventsStore",
-				"CampaignEventsPageEventLookup"
+				"CampaignEventsPageEventLookup",
+				"CampaignEventsEventTypesRegistry"
 			]
 		}
 	],

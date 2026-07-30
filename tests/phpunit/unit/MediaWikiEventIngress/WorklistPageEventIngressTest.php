@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\MediaWikiEventIngress;
 
 use Generator;
 use MediaWiki\Deferred\DeferredUpdates;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
@@ -48,6 +49,7 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		?JobQueueGroup $jobQueueGroup = null,
 		?WorklistEventsStore $worklistEventsStore = null,
 		?PageEventLookup $pageEventLookup = null,
+		?EventTypesRegistry $eventTypesRegistry = null,
 	): WorklistPageEventIngress {
 		// Needed because `getPrefixedText` has no return type declaration, so an unconfigured mock would return null.
 		$titleFormatter = $this->createMock( TitleFormatter::class );
@@ -61,6 +63,7 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 			$jobQueueGroup ?? $this->createMock( JobQueueGroup::class ),
 			$worklistEventsStore ?? $this->createMock( WorklistEventsStore::class ),
 			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),
+			$eventTypesRegistry ?? $this->createMock( EventTypesRegistry::class )
 		);
 	}
 
@@ -211,7 +214,11 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		DeferredUpdates::doUpdates();
 	}
 
-	public function testHandlePageCreatedEvent__associatesEventWithWorklist() {
+	/** @dataProvider provideHandlePageCreatedEvent__worklistAndEventAssociation */
+	public function testHandlePageCreatedEvent__worklistAndEventAssociation(
+		bool $isContributionEvent,
+		bool $expectsAssociation
+	) {
 		$baseTitle = $this->createMock( Title::class );
 		$worklistTitle = $this->createMock( Title::class );
 		$worklistTitle->method( 'getContentModel' )->willReturn( CONTENT_MODEL_WORKLIST );
@@ -220,22 +227,35 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		$titleFactory = $this->createMock( TitleFactory::class );
 		$titleFactory->method( 'newFromPageReference' )->willReturn( $worklistTitle );
 
+		$eventType = 'some-event-type';
 		$eventReg = $this->createMock( ExistingEventRegistration::class );
 		$eventReg->method( 'getID' )->willReturn( 5 );
+		$eventReg->method( 'getTypes' )->willReturn( [ $eventType ] );
 		$pageEventLookup = $this->createMock( PageEventLookup::class );
 		$pageEventLookup->method( 'getRegistrationForLocalPage' )->with( $baseTitle )->willReturn( $eventReg );
+
+		$eventTypesRegistry = $this->createMock( EventTypesRegistry::class );
+		$eventTypesRegistry->method( 'getContributionTypes' )
+			->willReturn( $isContributionEvent ? [ $eventType ] : [] );
 
 		$worklistSecondaryStore = $this->createMock( WorklistSecondaryStore::class );
 		$worklistSecondaryStore->method( 'createWorklist' )->willReturn( 10 );
 
 		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
-		$worklistEventsStore->expects( $this->once() )
-			->method( 'associateEventWithWorklist' )
-			->with( 5, 10 );
+		if ( $expectsAssociation ) {
+			$worklistEventsStore->expects( $this->once() )
+				->method( 'associateEventWithWorklist' )
+				->with( 5, 10 );
+		} else {
+			$worklistEventsStore->expects( $this->never() )->method( 'associateEventWithWorklist' );
+		}
 
 		$eventIngress = $this->getEventIngress(
-			$worklistSecondaryStore, $titleFactory,
-			worklistEventsStore: $worklistEventsStore, pageEventLookup: $pageEventLookup
+			$worklistSecondaryStore,
+			$titleFactory,
+			worklistEventsStore: $worklistEventsStore,
+			pageEventLookup: $pageEventLookup,
+			eventTypesRegistry: $eventTypesRegistry,
 		);
 
 		$revisionAfter = $this->createMock( RevisionRecord::class );
@@ -244,6 +264,11 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		$event->method( 'getLatestRevisionAfter' )->willReturn( $revisionAfter );
 		$eventIngress->handlePageCreatedEvent( $event );
 		DeferredUpdates::doUpdates();
+	}
+
+	public static function provideHandlePageCreatedEvent__worklistAndEventAssociation(): Generator {
+		yield 'Contribution event' => [ true, true ];
+		yield 'Not a contribution event' => [ false, false ];
 	}
 
 	public function testHandlePageMovedEvent__associatesWhenMovedOntoWorklistSubpage() {
