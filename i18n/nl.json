@@ -187,6 +187,7 @@
 	"campaignevents-allevents-label-end-date": "Tot",
 	"campaignevents-allevents-label-country": "Land",
 	"campaignevents-allevents-country-all": "Alle landen",
+	"campaignevents-eventslist-date-separator": "$1 – $2",
 	"campaignevents-eventslist-participation-options-label": "Deelnamemogelijkheden",
 	"campaignevents-eventslist-organizer-label": "Organisatoren",
 	"campaignevents-eventslist-column-date": "Datum",
@@ -221,6 +222,7 @@
 	"campaignevents-eventpage-header-participation-options-online": "Online evenement",
 	"campaignevents-eventpage-header-participation-options-in-person": "Evenement op locatie",
 	"campaignevents-eventpage-header-participation-options-online-and-in-person": "Evenement online en op locatie",
+	"campaignevents-eventpage-header-dates": "$1 – $4",
 	"campaignevents-eventpage-header-timezone": "<strong>Tijdzone:</strong> $1",
 	"campaignevents-eventpage-header-dates-label": "Begin- en eindtijd",
 	"campaignevents-eventpage-header-participants": "$1 {{PLURAL:$1|deelnemer|deelnemers}}",
@@ -414,6 +416,13 @@
 	"campaignevents-register-question-age": "Wat is uw leeftijd? (optioneel)",
 	"campaignevents-register-question-age-placeholder": "Selecteer leeftijdsbereik",
 	"campaignevents-register-question-age-option-under-25": "Onder de 25",
+	"campaignevents-register-question-age-option-25-34": "25–34",
+	"campaignevents-register-question-age-option-35-44": "35–44",
+	"campaignevents-register-question-age-option-45-54": "45–54",
+	"campaignevents-register-question-age-option-55-64": "55–64",
+	"campaignevents-register-question-age-option-65-74": "65–74",
+	"campaignevents-register-question-age-option-75-84": "75–84",
+	"campaignevents-register-question-age-option-85-plus": "85+",
 	"campaignevents-register-question-profession": "Wat is uw beroep? (optioneel)",
 	"campaignevents-register-question-profession-placeholder": "Selecteer uw beroep",
 	"campaignevents-register-question-profession-option-artist-creative": "Kunstenaar/creatieve professional",
@@ -607,5 +616,6 @@
 	"campaignevents-contributions-summary-articles-created": "Aangemaakte pagina's",
 	"campaignevents-contributions-summary-articles-edited": "Bewerkte pagina's",
 	"campaignevents-contributions-summary-bytes-changed": "Gewijzigde bytes",
-	"campaignevents-contributions-summary-links-changed": "Gewijzigde koppelingen"
+	"campaignevents-contributions-summary-links-changed": "Gewijzigde koppelingen",
+	"campaignevents-contributions-summary-delta-separator": "/"
 }
