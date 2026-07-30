@@ -94,6 +94,24 @@ class WorklistSecondaryStore {
 	}
 
 	/**
+	 * Returns the ID of the worklist for the given page title, or null if there is no such worklist.
+	 * @note {@link self::getWorklistIDFromPage} should be used instead whenever possible.
+	 */
+	public function getWorklistIDFromPageText( string $wiki, string $prefixedText ): ?int {
+		$dbr = $this->dbHelper->getReplicaConnection();
+		$storedID = $dbr->newSelectQueryBuilder()
+			->select( 'cew_id' )
+			->from( 'ce_worklists' )
+			->where( [
+				'cew_wiki' => $wiki,
+				'cew_page_prefixedtext' => $prefixedText,
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
+		return $storedID !== false ? (int)$storedID : null;
+	}
+
+	/**
 	 * @param string $wiki
 	 * @param int $pageID
 	 * @param string|null $newName Null to indicate a deletion

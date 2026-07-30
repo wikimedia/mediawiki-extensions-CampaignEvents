@@ -194,7 +194,10 @@ return [
 			LoggerFactory::getInstance( 'CampaignEvents' ),
 			$services->get( ParticipantAnswersStore::SERVICE_NAME ),
 			$services->get( EventAggregatedAnswersStore::SERVICE_NAME ),
-			$services->get( PageEventLookup::SERVICE_NAME )
+			$services->get( PageEventLookup::SERVICE_NAME ),
+			$services->get( WorklistEventsStore::SERVICE_NAME ),
+			$services->get( EventTypesRegistry::SERVICE_NAME ),
+			$services->get( WorklistSecondaryStore::SERVICE_NAME ),
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {

@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
+use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -24,6 +25,8 @@ use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Utils\MWTimestamp;
@@ -73,7 +76,10 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		?TrackingToolUpdater $trackingToolUpdater = null,
 		?ParticipantAnswersStore $participantAnswersStore = null,
 		?EventAggregatedAnswersStore $eventAggregatedAnswersStore = null,
-		?IEventLookup $eventLookup = null
+		?IEventLookup $eventLookup = null,
+		?WorklistEventsStore $worklistEventsStore = null,
+		?EventTypesRegistry $eventTypesRegistry = null,
+		?WorklistSecondaryStore $worklistSecondaryStore = null,
 	): EditEventCommand {
 		$eventStore ??= $this->createMock( IEventStore::class );
 
@@ -115,7 +121,10 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			new NullLogger(),
 			$participantAnswersStore ?? $this->createMock( ParticipantAnswersStore::class ),
 			$eventAggregatedAnswersStore ?? $this->createMock( EventAggregatedAnswersStore::class ),
-			$pageEventLookup ?? $this->createMock( PageEventLookup::class )
+			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),
+			$worklistEventsStore ?? $this->createMock( WorklistEventsStore::class ),
+			$eventTypesRegistry ?? $this->createMock( EventTypesRegistry::class ),
+			$worklistSecondaryStore ?? $this->createMock( WorklistSecondaryStore::class ),
 		);
 	}
 
@@ -597,6 +606,57 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 				return [ $watcher, $updater, $changStatusErrorsToWarnings( $creationError ) ];
 			},
 		];
+	}
+
+	/** @dataProvider provideUpdateWorklistAssociation */
+	public function testUpdateWorklistAssociation(
+		bool $isContributionEvent,
+		bool $hasWorklist,
+		bool $worklistExists,
+		?string $expectedMethod
+	) {
+		$event = $this->createMock( EventRegistration::class );
+		$eventType = 'some-event-type';
+		$event->method( 'getTypes' )->willReturn( [ $eventType ] );
+
+		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
+		$worklistEventsStore->expects( $this->once() )
+			->method( 'getWorklistIDForEvent' )
+			->willReturn( $hasWorklist ? 123 : null );
+		if ( $expectedMethod ) {
+			$worklistEventsStore->expects( $this->once() )->method( $expectedMethod );
+		} else {
+			$worklistEventsStore->expects( $this->never() )->method( 'removeWorklistAssociation' );
+			$worklistEventsStore->expects( $this->never() )->method( 'associateEventWithWorklist' );
+		}
+
+		$eventTypesRegistry = $this->createMock( EventTypesRegistry::class );
+		$eventTypesRegistry->method( 'getContributionTypes' )
+			->willReturn( $isContributionEvent ? [ $eventType ] : [] );
+
+		$worklistSecondaryStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistSecondaryStore->method( 'getWorklistIDFromPageText' )->willReturn( $worklistExists ? 123 : null );
+
+		$cmd = $this->getCommand(
+			worklistEventsStore: $worklistEventsStore,
+			eventTypesRegistry: $eventTypesRegistry,
+			worklistSecondaryStore: $worklistSecondaryStore
+		);
+		$status = $cmd->doEditUnsafe(
+			$event,
+			$this->createMock( Authority::class ),
+			self::ORGANIZER_USERNAMES
+		);
+		$this->assertStatusGood( $status );
+	}
+
+	public static function provideUpdateWorklistAssociation(): Generator {
+		yield 'Not a contribution event, no worklist' => [ false, false, true, null ];
+		yield 'Not a contribution event, has worklist' => [ false, true, true, 'removeWorklistAssociation' ];
+		yield 'Contribution event, has worklist' => [ true, true, true, null ];
+		yield 'Contribution event, no worklist, worklist page does not exist' => [ true, false, false, null ];
+		yield 'Contribution event, no worklist, worklist page exists' =>
+			[ true, false, true, 'associateEventWithWorklist' ];
 	}
 
 	/**

@@ -135,6 +135,17 @@ class WorklistSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'Does not exist' => [ 'xyzwiki', 1, null ];
 	}
 
+	/** @dataProvider provideGetWorklistIDFromPageText */
+	public function testGetWorklistIDFromPageText( string $wiki, string $prefixedText, ?int $expected ) {
+		$store = CampaignEventsServices::getWorklistSecondaryStore();
+		$this->assertSame( $expected, $store->getWorklistIDFromPageText( $wiki, $prefixedText ) );
+	}
+
+	public static function provideGetWorklistIDFromPageText(): Generator {
+		yield 'Exists' => [ 'awiki', 'Worklist 1', 1 ];
+		yield 'Does not exist' => [ 'xyzwiki', 'Not a worklist', null ];
+	}
+
 	/** @dataProvider provideUpdateWorklistCreatorName */
 	public function testUpdateWorklistCreatorName( ?string $newName ) {
 		$store = CampaignEventsServices::getWorklistSecondaryStore();

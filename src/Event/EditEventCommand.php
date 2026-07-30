@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Event;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
+use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
@@ -19,10 +20,13 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Message\Message;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use MediaWiki\Utils\MWTimestamp;
+use MediaWiki\WikiMap\WikiMap;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use StatusValue;
@@ -51,6 +55,9 @@ class EditEventCommand {
 		private readonly ParticipantAnswersStore $answersStore,
 		private readonly EventAggregatedAnswersStore $aggregatedAnswersStore,
 		private readonly PageEventLookup $pageEventLookup,
+		private readonly WorklistEventsStore $worklistEventsStore,
+		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly WorklistSecondaryStore $worklistSecondaryStore,
 	) {
 	}
 
@@ -174,6 +181,7 @@ class EditEventCommand {
 			$registration,
 			$organizerCentralUsers
 		);
+		$this->updateWorklistAssociation( $newEventID, $registration );
 
 		$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
 
@@ -410,6 +418,27 @@ class EditEventCommand {
 			return false;
 		}
 		return true;
+	}
+
+	private function updateWorklistAssociation( int $eventID, EventRegistration $event ): void {
+		$hasContributionType = (bool)array_intersect(
+			$event->getTypes(),
+			$this->eventTypesRegistry->getContributionTypes()
+		);
+		$curWorklist = $this->worklistEventsStore->getWorklistIDForEvent( $eventID );
+		if ( $curWorklist && !$hasContributionType ) {
+			// No longer a contribution event, drop the worklist association.
+			$this->worklistEventsStore->removeWorklistAssociation( $curWorklist, $eventID );
+		} elseif ( !$curWorklist && $hasContributionType ) {
+			// Contribution event (not necessarily a new one), do the association if the worklist page exists.
+			$worklistPagePrefixedText = $event->getPage()->getPrefixedText() . '/' .
+				WorklistPageEventIngress::WORKLIST_SUBPAGE;
+			$worklistForPage = $this->worklistSecondaryStore
+				->getWorklistIDFromPageText( WikiMap::getCurrentWikiId(), $worklistPagePrefixedText );
+			if ( $worklistForPage ) {
+				$this->worklistEventsStore->associateEventWithWorklist( $eventID, $worklistForPage );
+			}
+		}
 	}
 
 	public function eventHasAnswersOrAggregates( int $registrationID ): bool {
