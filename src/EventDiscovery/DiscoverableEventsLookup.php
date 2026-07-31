@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\User\Options\UserOptionsLookup;
+use Wikimedia\Assert\Assert;
 
 /**
  * Selects the event-discovery events to promote to a user for a given page, recording the
@@ -19,6 +20,12 @@ use MediaWiki\User\Options\UserOptionsLookup;
  */
 class DiscoverableEventsLookup {
 	public const SERVICE_NAME = 'CampaignEventsDiscoverableEventsLookup';
+
+	/**
+	 * Results are filtered after the EventLookup query, so use a high limit. This is not always guaranteed to work,
+	 * but it should be good enough in practice.
+	 */
+	private const LOOKUP_QUERY_LIMIT = 50;
 
 	public function __construct(
 		private readonly IEventLookup $eventLookup,
@@ -42,6 +49,8 @@ class DiscoverableEventsLookup {
 		string $wikiID,
 		int $limit
 	): array {
+		Assert::parameter( $limit > 0, '$limit', 'The limit must be positive' );
+
 		// Temporary accounts are registered but not named, so isNamed() (not isRegistered())
 		// is required to exclude them.
 		if ( !$authority->isNamed() ) {
@@ -59,10 +68,11 @@ class DiscoverableEventsLookup {
 			$pagePrefixedText,
 			$wikiID,
 			$centralUser,
-			$limit
+			self::LOOKUP_QUERY_LIMIT,
 		);
 
 		$newlyPromoted = [];
+		$remaining = $limit;
 		foreach ( $events as $event ) {
 			if ( $this->promotionStore->tryRecordPromotion(
 				$event->getID(),
@@ -70,6 +80,9 @@ class DiscoverableEventsLookup {
 				$event->getEndUTCTimestamp()
 			) ) {
 				$newlyPromoted[] = $event;
+				if ( --$remaining === 0 ) {
+					break;
+				}
 			}
 		}
 

@@ -15,6 +15,7 @@ use MediaWiki\Permissions\Authority;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWikiUnitTestCase;
+use Wikimedia\Assert\ParameterAssertionException;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoverableEventsLookup
@@ -74,13 +75,17 @@ class DiscoverableEventsLookupTest extends MediaWikiUnitTestCase {
 		return $lookup;
 	}
 
-	private function callWith( DiscoverableEventsLookup $lookup, ?Authority $authority = null ): array {
+	private function callWith(
+		DiscoverableEventsLookup $lookup,
+		?Authority $authority = null,
+		int $limit = 50
+	): array {
 		return $lookup->getAndRecordPromotableEvents(
 			$authority ?? $this->makeAuthority(),
 			new CentralUser( 1 ),
 			'Some page',
 			'testwiki',
-			50
+			$limit
 		);
 	}
 
@@ -120,5 +125,24 @@ class DiscoverableEventsLookupTest extends MediaWikiUnitTestCase {
 		] );
 		$lookup = $this->newLookup( $eventLookup, $this->makePromotionStore( false ) );
 		$this->assertSame( [], $this->callWith( $lookup ) );
+	}
+
+	public function testLimit() {
+		$limit = 3;
+		$events = [];
+		for ( $i = 1; $i <= 2 * $limit; $i++ ) {
+			$events[] = [ 'id' => $i, 'name' => "Event $i", 'page' => "Event:Event $i" ];
+		}
+		$eventLookup = $this->makeEventLookupReturning( $events );
+		$lookup = $this->newLookup( $eventLookup, $this->makePromotionStore() );
+		$this->assertCount( $limit, $this->callWith( $lookup, null, $limit ) );
+	}
+
+	public function testLimit__notPositive() {
+		$this->expectException( ParameterAssertionException::class );
+		$this->expectExceptionMessage( 'The limit must be positive' );
+		$eventLookup = $this->createNoOpMock( IEventLookup::class );
+		$lookup = $this->newLookup( $eventLookup, $this->makePromotionStore() );
+		$this->callWith( $lookup, null, 0 );
 	}
 }

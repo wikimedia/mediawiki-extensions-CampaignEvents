@@ -45,7 +45,7 @@ class ListDiscoverableEventsForPageHandler extends SimpleHandler {
 			$centralUser,
 			$this->titleFormatter->getPrefixedText( $title ),
 			WikiMap::getCurrentWikiId(),
-			50
+			3
 		);
 	}
 
