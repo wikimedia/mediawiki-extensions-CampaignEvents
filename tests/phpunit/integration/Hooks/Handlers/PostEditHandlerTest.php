@@ -8,14 +8,11 @@ use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
-use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
+use MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoverableEventsLookup;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
-use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\GetPreferencesHandler;
 use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\PostEditHandler;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
-use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Language\Language;
@@ -23,11 +20,9 @@ use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Request\WebRequest;
 use MediaWiki\Title\Title;
-use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\User;
 use MediaWikiIntegrationTestCase;
 use Skin;
-use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * Integration test because PostEditHandler reaches ExtensionRegistry (via isWikibaseEntityPage),
@@ -42,10 +37,9 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		?CampaignsCentralUserLookup $centralUserLookup = null,
 		?IEventLookup $eventLookup = null,
 		?GoalProgressFormatter $goalProgressFormatter = null,
-		?IDiscoveryPromotionStore $promotionStore = null,
-		?UserOptionsLookup $userOptionsLookup = null,
 		?WorklistEventsStore $worklistEventsStore = null,
 		?EventContributionValidator $eventContributionValidator = null,
+		?DiscoverableEventsLookup $discoverableEventsLookup = null,
 	): PostEditHandler {
 		return new PostEditHandler(
 			$centralUserLookup ?? $this->createNoOpMock( CampaignsCentralUserLookup::class ),
@@ -54,18 +48,14 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 			$worklistEventsStore ?? $this->makeWorklistEventsStore(),
 			$eventContributionValidator ?? $this->createNoOpMock( EventContributionValidator::class ),
 			new HashConfig( [ 'CampaignEventsEnableWorklists' => $featureEnabled ] ),
-			$promotionStore ?? $this->createNoOpMock( IDiscoveryPromotionStore::class ),
-			$userOptionsLookup ?? $this->createNoOpMock( UserOptionsLookup::class ),
-			$this->makePageURLResolver(),
+			$discoverableEventsLookup ?? $this->makeDiscoverableEventsLookup(),
 		);
 	}
 
-	private function makePageURLResolver(): PageURLResolver {
-		$resolver = $this->createMock( PageURLResolver::class );
-		$resolver->method( 'getUrl' )->willReturnCallback(
-			static fn ( MWPageProxy $page ): string => '/wiki/' . $page->getPrefixedText()
-		);
-		return $resolver;
+	private function makeDiscoverableEventsLookup( array $events = [] ): DiscoverableEventsLookup {
+		$lookup = $this->createMock( DiscoverableEventsLookup::class );
+		$lookup->method( 'getAndRecordPromotableEvents' )->willReturn( $events );
+		return $lookup;
 	}
 
 	private function makeOutputPage(
@@ -140,22 +130,10 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		return $formatter;
 	}
 
-	private function makeOptedInLookup( bool $optedIn ): UserOptionsLookup {
-		$lookup = $this->createMock( UserOptionsLookup::class );
-		$lookup->method( 'getBoolOption' )
-			->with( $this->anything(), GetPreferencesHandler::OPT_OUT_EVENT_DISCOVERY_PREFERENCE )
-			->willReturn( $optedIn );
-		return $lookup;
-	}
-
 	private function makeEvent( int $id = 1 ): ExistingEventRegistration {
-		$page = $this->createMock( MWPageProxy::class );
-		$page->method( 'getPrefixedText' )->willReturn( "Event:Event $id" );
 		$event = $this->createMock( ExistingEventRegistration::class );
 		$event->method( 'getID' )->willReturn( $id );
 		$event->method( 'getName' )->willReturn( "Event $id" );
-		$event->method( 'getPage' )->willReturn( $page );
-		$event->method( 'getEndUTCTimestamp' )->willReturn( wfTimestamp( TS::MW, time() + 3600 ) );
 		return $event;
 	}
 
@@ -224,19 +202,15 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		$out->expects( $this->once() )->method( 'addJsConfigVars' )
 			->with( 'wgCampaignEventsEventsForAssociation', $this->anything() );
 
-		// The promotion must not be recorded when the discovery dialog is not shown, otherwise the
-		// one-time promotion would be consumed for a dialog the user never sees.
-		$promotionStore = $this->createMock( IDiscoveryPromotionStore::class );
-		$promotionStore->expects( $this->never() )->method( 'tryRecordPromotion' );
+		// Discovery must not even be consulted when the association dialog is shown, so its one-time
+		// promotion is not consumed for a dialog the user never sees.
+		$discoverableEventsLookup = $this->createMock( DiscoverableEventsLookup::class );
+		$discoverableEventsLookup->expects( $this->never() )->method( 'getAndRecordPromotableEvents' );
 
 		$this->getHandler(
 			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup(
-				associationEvents: [ $this->makeEvent( 1 ) ],
-				discoveryEvents: [ $this->makeEvent( 2 ) ],
-			),
-			promotionStore: $promotionStore,
-			userOptionsLookup: $this->makeOptedInLookup( true ),
+			eventLookup: $this->makeEventLookup( associationEvents: [ $this->makeEvent( 1 ) ] ),
+			discoverableEventsLookup: $discoverableEventsLookup,
 		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
 	}
 
@@ -244,73 +218,30 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		$out = $this->makeOutputPage();
 		$out->expects( $this->never() )->method( 'addModules' );
 
+		// The discovery service must not even be consulted when worklists are disabled.
+		$discoverableEventsLookup = $this->createMock( DiscoverableEventsLookup::class );
+		$discoverableEventsLookup->expects( $this->never() )->method( 'getAndRecordPromotableEvents' );
+
 		$this->getHandler(
 			featureEnabled: false,
 			centralUserLookup: $this->makeCentralUserLookup(),
 			eventLookup: $this->makeEventLookup(),
+			discoverableEventsLookup: $discoverableEventsLookup,
 		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
 	}
 
-	public function testDiscovery_skipsTemporaryAccount(): void {
-		// Temporary accounts are registered but not named; they must not trigger the dialog.
-		$out = $this->makeOutputPage( isNamed: false, isRegistered: true );
-		$out->expects( $this->never() )->method( 'addModules' );
-
-		$this->getHandler(
-			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup(),
-		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
-	}
-
-	public function testDiscovery_skipsWhenOptedOut(): void {
+	public function testDiscovery_skipsWhenServiceReturnsNoEvents(): void {
 		$out = $this->makeOutputPage();
 		$out->expects( $this->never() )->method( 'addModules' );
 
 		$this->getHandler(
 			centralUserLookup: $this->makeCentralUserLookup(),
 			eventLookup: $this->makeEventLookup(),
-			userOptionsLookup: $this->makeOptedInLookup( false ),
+			discoverableEventsLookup: $this->makeDiscoverableEventsLookup( [] ),
 		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
 	}
 
-	public function testDiscovery_skipsWhenNoPageID(): void {
-		$out = $this->makeOutputPage( hasPageID: false );
-		$out->expects( $this->never() )->method( 'addModules' );
-
-		$this->getHandler(
-			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup(),
-			userOptionsLookup: $this->makeOptedInLookup( true ),
-		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
-	}
-
-	public function testDiscovery_skipsWhenNoMatchingEvents(): void {
-		$out = $this->makeOutputPage();
-		$out->expects( $this->never() )->method( 'addModules' );
-
-		$this->getHandler(
-			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup(),
-			userOptionsLookup: $this->makeOptedInLookup( true ),
-		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
-	}
-
-	public function testDiscovery_skipsWhenAllAlreadyPromoted(): void {
-		$out = $this->makeOutputPage();
-		$out->expects( $this->never() )->method( 'addModules' );
-
-		$promotionStore = $this->createMock( IDiscoveryPromotionStore::class );
-		$promotionStore->method( 'tryRecordPromotion' )->willReturn( false );
-
-		$this->getHandler(
-			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup( discoveryEvents: [ $this->makeEvent() ] ),
-			promotionStore: $promotionStore,
-			userOptionsLookup: $this->makeOptedInLookup( true ),
-		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
-	}
-
-	public function testDiscovery_showsDialogForNewlyPromotedEvent(): void {
+	public function testDiscovery_showsDialogForEventsFromService(): void {
 		$out = $this->makeOutputPage();
 		$out->expects( $this->once() )->method( 'addModules' )
 			->with( 'ext.campaignEvents.postEdit' );
@@ -319,35 +250,14 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 				[ [ 'id' => 1, 'name' => 'Event 1', 'url' => '/wiki/Event:Event 1' ] ]
 			);
 
-		$promotionStore = $this->createMock( IDiscoveryPromotionStore::class );
-		$promotionStore->method( 'tryRecordPromotion' )->willReturn( true );
+		$discoverableEventsLookup = $this->makeDiscoverableEventsLookup(
+			[ [ 'id' => 1, 'name' => 'Event 1', 'url' => '/wiki/Event:Event 1' ] ]
+		);
 
 		$this->getHandler(
 			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup( discoveryEvents: [ $this->makeEvent( 1 ) ] ),
-			promotionStore: $promotionStore,
-			userOptionsLookup: $this->makeOptedInLookup( true ),
-		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
-	}
-
-	public function testDiscovery_signalsOnlyNewlyPromotedEvents(): void {
-		$out = $this->makeOutputPage();
-		$out->expects( $this->once() )->method( 'addJsConfigVars' )
-			->with( 'wgCampaignEventsDiscoveryEvents',
-				[ [ 'id' => 2, 'name' => 'Event 2', 'url' => '/wiki/Event:Event 2' ] ]
-			);
-
-		$promotionStore = $this->createMock( IDiscoveryPromotionStore::class );
-		// Event 1 already promoted, event 2 is new.
-		$promotionStore->method( 'tryRecordPromotion' )->willReturnOnConsecutiveCalls( false, true );
-
-		$this->getHandler(
-			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup(
-				discoveryEvents: [ $this->makeEvent( 1 ), $this->makeEvent( 2 ) ],
-			),
-			promotionStore: $promotionStore,
-			userOptionsLookup: $this->makeOptedInLookup( true ),
+			eventLookup: $this->makeEventLookup(),
+			discoverableEventsLookup: $discoverableEventsLookup,
 		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
 	}
 }

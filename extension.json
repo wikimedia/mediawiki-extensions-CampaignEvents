@@ -164,9 +164,7 @@
 				"CampaignEventsWorklistEventsStore",
 				"CampaignEventsEventContributionValidator",
 				"MainConfig",
-				"CampaignEventsDiscoveryPromotionStore",
-				"UserOptionsLookup",
-				"CampaignEventsPageURLResolver"
+				"CampaignEventsDiscoverableEventsLookup"
 			]
 		},
 		"CentralAuthContributionUserChangesHandler": {

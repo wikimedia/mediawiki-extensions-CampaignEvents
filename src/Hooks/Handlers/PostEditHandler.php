@@ -8,11 +8,10 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
-use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
+use MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoverableEventsLookup;
 use MediaWiki\Extension\CampaignEvents\EventGoal\GoalProgressFormatter;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Html\TemplateParser;
@@ -20,7 +19,6 @@ use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
 use Wikibase\Repo\WikibaseRepo;
@@ -40,9 +38,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly EventContributionValidator $eventContributionValidator,
 		private readonly Config $config,
-		private readonly IDiscoveryPromotionStore $promotionStore,
-		private readonly UserOptionsLookup $userOptionsLookup,
-		private readonly PageURLResolver $pageURLResolver,
+		private readonly DiscoverableEventsLookup $discoverableEventsLookup,
 	) {
 	}
 
@@ -174,28 +170,13 @@ class PostEditHandler implements BeforePageDisplayHook {
 			return;
 		}
 
-		// Temporary accounts are registered but not named, so isNamed() (not isRegistered())
-		// is required to exclude them.
-		if ( !$authority->isNamed() ) {
-			return;
-		}
-
-		if ( !$this->userOptionsLookup->getBoolOption(
-			$authority->getUser(),
-			GetPreferencesHandler::OPT_OUT_EVENT_DISCOVERY_PREFERENCE
-		) ) {
-			return;
-		}
-
 		$title = $out->getTitle();
-		if ( !$title->getArticleID() ) {
-			return;
-		}
 
-		$events = $this->eventLookup->getEventsForDiscoveryByPage(
+		$events = $this->discoverableEventsLookup->getAndRecordPromotableEvents(
+			$authority,
+			$centralUser,
 			$title->getPrefixedText(),
 			WikiMap::getCurrentWikiId(),
-			$centralUser,
 			3
 		);
 
@@ -203,35 +184,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 			return;
 		}
 
-		$newlyPromoted = [];
-		foreach ( $events as $event ) {
-			if ( $this->promotionStore->tryRecordPromotion(
-				$event->getID(),
-				$centralUser,
-				$event->getEndUTCTimestamp()
-			) ) {
-
-				$newlyPromoted[] = $event;
-			}
-		}
-
-		if ( !$newlyPromoted ) {
-			return;
-		}
-
-		$out->addJsConfigVars( 'wgCampaignEventsDiscoveryEvents', array_map(
-			/**
-			 * @return array{id:int,name:string,url:string}
-			 */
-			fn ( ExistingEventRegistration $event ): array => [
-				'id' => $event->getID(),
-				'name' => $event->getName(),
-				// The event page may be on a foreign wiki, so resolve the URL server-side
-				// rather than building it client-side with mw.util.getUrl (local-only).
-				'url' => $this->pageURLResolver->getUrl( $event->getPage() ),
-			],
-			$newlyPromoted
-		) );
+		$out->addJsConfigVars( 'wgCampaignEventsDiscoveryEvents', $events );
 		$out->addModules( 'ext.campaignEvents.postEdit' );
 	}
 
