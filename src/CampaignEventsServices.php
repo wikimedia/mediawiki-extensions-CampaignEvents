@@ -20,6 +20,7 @@ use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionComputeMetrics;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
+use MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoverableEventsLookup;
 use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionCalculator;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalStore;
@@ -252,6 +253,12 @@ class CampaignEventsServices {
 		?ContainerInterface $services = null
 	): IDiscoveryPromotionStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( IDiscoveryPromotionStore::STORE_SERVICE_NAME );
+	}
+
+	public static function getDiscoverableEventsLookup(
+		?ContainerInterface $services = null
+	): DiscoverableEventsLookup {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( DiscoverableEventsLookup::SERVICE_NAME );
 	}
 
 	public static function getInvitationListStore( ?ContainerInterface $services = null ): InvitationListStore {
