@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Adriendelucca",
-			"Huñvreüs"
+			"Huñvreüs",
+			"Gwendal"
 		]
 	},
 	"nstab-event": "Darvoud",
@@ -15,10 +16,14 @@
 	"right-campaignevents-delete-registration": "Dilemel enskrivadurioù d’an darvoudoù",
 	"action-campaignevents-organize-events": "aozañ dardoudoù",
 	"right-campaignevents-organize-events": "Aozañ darvoudoù",
+	"specialpages-group-campaignevents": "Darvoudoù",
+	"myevents": "Ho tarvoudoù",
 	"allevents": "An holl zarvoudoù",
+	"campaignevents-allevents-tab-events-heading": "Darvoudoù",
 	"campaignevents-allevents-label-start-date": "Deus",
 	"campaignevents-allevents-label-end-date": "Da",
 	"campaignevents-eventslist-participation-options-all-events": "An holl zarvoudoù",
+	"campaignevents-eventslist-menu-edit": "Kemmañ an darvoud",
 	"campaignevents-eventpage-register-dialog-clear": "Skarzhañ diouzh",
 	"campaignevents-event-details-participants": "Anv implijer",
 	"campaignevents-event-details-remove-participant-remove-btn": "Dilemel",
