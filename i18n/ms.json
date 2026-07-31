@@ -556,7 +556,7 @@
 	"campaignevents-event-details-footer": "Lawati <strong>[[Special:AllEvents|Senarai Kerjasama]]</strong> untuk mencari lebih banyak acara dan komuniti.",
 	"campaignevents-invitationlist-preference": "Sertakan saya dalam [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists senarai jemputan]",
 	"prefs-campaignevents-event-discovery": "Penemuan acara",
-	"campaignevents-eventdiscovery-preference-label": "Selepas saya menerbitkan suntingan, maklumkan saya tentang acara yang berkaitan.",
+	"campaignevents-eventdiscovery-preference-label": "Selepas saya menerbitkan suntingan, maklumkan saya tentang acara yang berkaitan",
 	"campaignevents-eventdiscovery-dialog-title": "Sunting anda berkaitan dengan usaha yang lebih besar",
 	"campaignevents-eventdiscovery-dialog-description": "Rencana ini akan ditambah baik dengan menjadi sebahagian daripada $1. Sertailah acara ini untuk bantu memberi impak dan berhubung dengan penyunting lain.",
 	"campaignevents-eventdiscovery-dialog-description-multiple": "Rencana ini akan ditambah baik dengan menjadi sebahagian daripada $1 {{PLURAL:$1|acara}} aktif. Pilihlah satu untuk ketahui lebih lanjut.",
