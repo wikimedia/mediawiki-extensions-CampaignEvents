@@ -330,11 +330,8 @@
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListDiscoverableEventsForPageHandler",
 					"services": [
 						"CampaignEventsCentralUserLookup",
-						"CampaignEventsEventLookup",
-						"CampaignEventsDiscoveryPromotionStore",
-						"UserOptionsLookup",
-						"TitleFactory",
-						"CampaignEventsPageURLResolver"
+						"TitleFormatter",
+						"CampaignEventsDiscoverableEventsLookup"
 					]
 				}
 			}

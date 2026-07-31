@@ -4,16 +4,12 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\EventDiscovery\IDiscoveryPromotionStore;
-use MediaWiki\Extension\CampaignEvents\Hooks\Handlers\GetPreferencesHandler;
+use MediaWiki\Extension\CampaignEvents\EventDiscovery\DiscoverableEventsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
+use MediaWiki\ParamValidator\TypeDef\TitleDef;
 use MediaWiki\Rest\SimpleHandler;
-use MediaWiki\Title\TitleFactory;
-use MediaWiki\User\Options\UserOptionsLookup;
+use MediaWiki\Title\TitleFormatter;
 use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\ParamValidator\ParamValidator;
 
@@ -21,79 +17,35 @@ use Wikimedia\ParamValidator\ParamValidator;
  * Returns the events whose worklist contains the given page and for which the current user should be
  * shown the event discovery dialog, recording the once-per-user-and-event suppression as it does so.
  *
- * This mirrors, for the VisualEditor (in-place save) flow, what EventDiscoveryHandler does server-side
- * on a full page reload after a source-editor save: VE never triggers BeforePageDisplay, so the
- * ext.campaignEvents.eventDiscovery module (loaded as a VE plugin) calls this endpoint from the
- * post-edit hook instead.
+ * This is the in-place client-edit (e.g. VisualEditor) counterpart to what PostEditHandler does
+ * server-side on a full page reload: such edits never trigger BeforePageDisplay, so the
+ * ext.campaignEvents.postEdit module calls this endpoint from the post-edit hook instead. The shared
+ * selection/promotion logic lives in DiscoverableEventsLookup.
  */
 class ListDiscoverableEventsForPageHandler extends SimpleHandler {
 	public function __construct(
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
-		private readonly IEventLookup $eventLookup,
-		private readonly IDiscoveryPromotionStore $promotionStore,
-		private readonly UserOptionsLookup $userOptionsLookup,
-		private readonly TitleFactory $titleFactory,
-		private readonly PageURLResolver $pageURLResolver,
+		private readonly TitleFormatter $titleFormatter,
+		private readonly DiscoverableEventsLookup $discoverableEventsLookup,
 	) {
 	}
 
 	/** @phan-return list<array{id:int,name:string,url:string}> */
 	public function run(): array {
 		$authority = $this->getAuthority();
-		// Temporary accounts are registered but not named, so isNamed() (not isRegistered())
-		// is required to exclude them.
-		if ( !$authority->isNamed() ) {
-			return [];
-		}
-
-		if ( !$this->userOptionsLookup->getBoolOption(
-			$authority->getUser(),
-			GetPreferencesHandler::OPT_OUT_EVENT_DISCOVERY_PREFERENCE
-		) ) {
-			return [];
-		}
-
 		try {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $authority );
 		} catch ( UserNotGlobalException ) {
 			return [];
 		}
 
-		$title = $this->titleFactory->newFromText( $this->getValidatedParams()['page'] );
-		if ( !$title || !$title->getArticleID() ) {
-			return [];
-		}
-
-		$events = $this->eventLookup->getEventsForDiscoveryByPage(
-			$title->getPrefixedText(),
-			WikiMap::getCurrentWikiId(),
+		$title = $this->getValidatedParams()['page'];
+		return $this->discoverableEventsLookup->getAndRecordPromotableEvents(
+			$authority,
 			$centralUser,
+			$this->titleFormatter->getPrefixedText( $title ),
+			WikiMap::getCurrentWikiId(),
 			50
-		);
-
-		$newlyPromoted = [];
-		foreach ( $events as $event ) {
-			if ( $this->promotionStore->tryRecordPromotion(
-				$event->getID(),
-				$centralUser,
-				$event->getEndUTCTimestamp()
-			) ) {
-				$newlyPromoted[] = $event;
-			}
-		}
-
-		return array_map(
-			/**
-			 * @return array{id:int,name:string,url:string}
-			 */
-			fn ( ExistingEventRegistration $event ): array => [
-				'id' => $event->getID(),
-				'name' => $event->getName(),
-				// The event page may be on a foreign wiki, so resolve the URL server-side
-				// rather than building it client-side with mw.util.getUrl (local-only).
-				'url' => $this->pageURLResolver->getUrl( $event->getPage() ),
-			],
-			$newlyPromoted
 		);
 	}
 
@@ -101,8 +53,10 @@ class ListDiscoverableEventsForPageHandler extends SimpleHandler {
 		return [
 			'page' => [
 				static::PARAM_SOURCE => 'query',
-				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_TYPE => 'title',
 				ParamValidator::PARAM_REQUIRED => true,
+				TitleDef::PARAM_RETURN_OBJECT => true,
+				TitleDef::PARAM_MUST_EXIST => true,
 			],
 		];
 	}
