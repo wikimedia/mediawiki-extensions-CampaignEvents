@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Title\TitleFactory;
@@ -24,6 +25,7 @@ class WorklistPagesPagerFactory {
 		private readonly LinkBatchFactory $linkBatchFactory,
 		private readonly TitleFactory $titleFactory,
 		private readonly WikiLookup $wikiLookup,
+		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
 	) {
 	}
 
@@ -48,6 +50,7 @@ class WorklistPagesPagerFactory {
 			$this->linkBatchFactory,
 			$this->titleFactory,
 			$this->wikiLookup,
+			$this->worklistPagesSecondaryStore,
 			$context,
 			$linkRenderer,
 			$event,

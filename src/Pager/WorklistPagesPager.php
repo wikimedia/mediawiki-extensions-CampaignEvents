@@ -8,6 +8,7 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
@@ -48,6 +49,7 @@ class WorklistPagesPager extends CodexTablePager {
 		private readonly LinkBatchFactory $linkBatchFactory,
 		private readonly TitleFactory $titleFactory,
 		private readonly WikiLookup $wikiLookup,
+		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
 		private readonly ExistingEventRegistration $event,
@@ -78,26 +80,7 @@ class WorklistPagesPager extends CodexTablePager {
 	 * @return array<string,mixed>
 	 */
 	public function getQueryInfo(): array {
-		// Pages belong to a worklist (cewp_cew_id), and worklists are associated with events via
-		// ce_worklist_events, so the event filter is applied through that join.
-		return [
-			'tables' => [
-				'cewp' => 'ce_worklist_pages',
-				'cewe' => 'ce_worklist_events',
-			],
-			'fields' => [
-				'cewp_id',
-				'cewp_page_prefixedtext',
-				'cewp_wiki',
-				'cewp_timestamp',
-			],
-			'conds' => [
-				'cewe.cewe_event_id' => $this->event->getID(),
-			],
-			'join_conds' => [
-				'cewe' => [ 'JOIN', 'cewp.cewp_cew_id = cewe.cewe_cew_id' ],
-			],
-		];
+		return $this->worklistPagesSecondaryStore->getQueryInfo( $this->event->getID() );
 	}
 
 	/** @inheritDoc */

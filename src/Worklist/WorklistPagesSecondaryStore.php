@@ -29,6 +29,34 @@ class WorklistPagesSecondaryStore {
 	}
 
 	/**
+	 * Returns query info for listing pages in the worklist associated with a given event, intended
+	 * for use in pagers. Pages belong to a worklist (cewp_cew_id), linked to the event via
+	 * ce_worklist_events, so the event filter is applied through that join.
+	 *
+	 * @return array{tables: array, fields: array, conds: array, join_conds: array}
+	 */
+	public function getQueryInfo( int $eventId ): array {
+		return [
+			'tables' => [
+				'cewp' => 'ce_worklist_pages',
+				'cewe' => 'ce_worklist_events',
+			],
+			'fields' => [
+				'cewp_id',
+				'cewp_page_prefixedtext',
+				'cewp_wiki',
+				'cewp_timestamp',
+			],
+			'conds' => [
+				'cewe.cewe_event_id' => $eventId,
+			],
+			'join_conds' => [
+				'cewe' => [ 'JOIN', 'cewp.cewp_cew_id = cewe.cewe_cew_id' ],
+			],
+		];
+	}
+
+	/**
 	 * Updates stored pages based on a delta of removed and added pages.
 	 * This should ONLY be called from methods with outer transaction scope.
 	 * To avoid ambiguities, this method should never be called with the same page in both $removed and $added.

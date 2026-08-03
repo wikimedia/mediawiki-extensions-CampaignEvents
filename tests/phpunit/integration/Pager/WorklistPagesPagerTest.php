@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPager;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Request\FauxRequest;
@@ -83,6 +84,7 @@ class WorklistPagesPagerTest extends MediaWikiIntegrationTestCase {
 			$services->getLinkBatchFactory(),
 			$services->getTitleFactory(),
 			$this->createMock( WikiLookup::class ),
+			$services->get( WorklistPagesSecondaryStore::SERVICE_NAME ),
 			$context,
 			$services->getLinkRenderer(),
 			$event,

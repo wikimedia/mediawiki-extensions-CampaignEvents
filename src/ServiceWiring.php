@@ -549,6 +549,7 @@ return [
 			$services->getLinkBatchFactory(),
 			$services->getTitleFactory(),
 			$services->get( WikiLookup::SERVICE_NAME ),
+			$services->get( WorklistPagesSecondaryStore::SERVICE_NAME ),
 		);
 	},
 	EventGoalCompletionCalculator::SERVICE_NAME => static function (
