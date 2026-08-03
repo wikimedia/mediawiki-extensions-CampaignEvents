@@ -22,6 +22,12 @@ class EventContributionStore {
 
 	public const SERVICE_NAME = 'CampaignEventsEventContributionStore';
 
+	/**
+	 * Stringified username expression for query ordering, to avoid wrong sorting with NULL values (T404995).
+	 * Cannot be used with an alias in MySQL/MariaDB (T416569).
+	 */
+	public const QUERY_USERNAME_STR = 'COALESCE(cec_user_name, "")';
+
 	private const UPDATES_BATCH_SIZE = 500;
 
 	public function __construct(
@@ -86,6 +92,105 @@ class EventContributionStore {
 			$row->cec_timestamp,
 			(bool)$row->cec_deleted
 		);
+	}
+
+	/**
+	 * Returns the base query info for querying contributions for a given event.
+	 * Callers should prefer {@see getEditsQueryInfo} or {@see getEditorsQueryInfo} where applicable;
+	 * use this only when building a custom field set. Callers must still add privacy filtering via
+	 * addPrivateParticipantConds() or equivalent.
+	 *
+	 * @return array{tables: array, fields: array, conds: array, join_conds: array, options: array}
+	 */
+	public function getQueryInfo( int $eventId ): array {
+		return [
+			'tables' => [
+				'cec' => 'ce_event_contributions',
+				'cep' => 'ce_participants',
+			],
+			'fields' => [],
+			'conds' => [
+				'cec.cec_event_id' => $eventId,
+				'cec.cec_deleted' => 0,
+			],
+			'join_conds' => [
+				'cep' => [
+					'JOIN',
+					[
+						'cec.cec_event_id = cep.cep_event_id',
+						'cec.cec_user_id = cep.cep_user_id',
+						'cep.cep_unregistered_at' => null,
+					],
+				],
+			],
+			'options' => [],
+		];
+	}
+
+	/**
+	 * Returns query info for the per-edit contributions pager, including all row-level fields.
+	 * Callers must still apply privacy filtering.
+	 *
+	 * @return array{tables: array, fields: array, conds: array, join_conds: array, options: array}
+	 */
+	public function getEditsQueryInfo( int $eventId ): array {
+		$queryInfo = $this->getQueryInfo( $eventId );
+		$queryInfo['fields'] = [
+			'cec_id',
+			'cec_event_id',
+			'cec_page_prefixedtext',
+			'cec_wiki',
+			'cec_user_id',
+			'cec_user_name',
+			self::QUERY_USERNAME_STR,
+			'cec_timestamp',
+			'cec_bytes_delta',
+			'cec_links_delta',
+			'cec_references_delta',
+			'cec_edit_flags',
+			'cec_revision_id',
+			'cec_page_id',
+			'cec_deleted',
+			'cep_private',
+		];
+		return $queryInfo;
+	}
+
+	/**
+	 * Returns query info for the per-editor contributions pager, with aggregated fields and GROUP BY.
+	 * Callers must still apply privacy filtering.
+	 *
+	 * @return array{tables: array, fields: array, conds: array, join_conds: array, options: array}
+	 */
+	public function getEditorsQueryInfo( int $eventId ): array {
+		$dbr = $this->dbHelper->getReplicaConnection();
+		// We need to GROUP BY all non-aggregate fields to satisfy ONLY_FULL_GROUP_BY in MariaDB: even though
+		// `cec_user_id` uniquely determines a row, MariaDB does not detect functional dependencies:
+		// https://jira.mariadb.org/browse/MDEV-11588
+		$groupByFields = [
+			'cec_user_name',
+			self::QUERY_USERNAME_STR,
+			'cec_user_id',
+			'cep_private',
+		];
+		$queryInfo = $this->getQueryInfo( $eventId );
+		$queryInfo['fields'] = [
+			...$groupByFields,
+			'articles_added' => 'SUM(' . $dbr->conditional(
+				$dbr->bitAnd( 'cec.cec_edit_flags', EventContribution::EDIT_FLAG_PAGE_CREATION ) . ' != 0',
+				1,
+				0
+			) . ')',
+			'articles_edited' => 'COUNT(DISTINCT ' . $dbr->conditional(
+				$dbr->bitAnd( 'cec.cec_edit_flags', EventContribution::EDIT_FLAG_PAGE_CREATION ) . ' = 0',
+				$dbr->buildConcat( [ 'cec.cec_wiki', $dbr->addQuotes( '|' ), 'cec.cec_page_id' ] ),
+				'NULL'
+			) . ')',
+			'edit_count' => 'COUNT(*)',
+			'bytes' => 'SUM(cec_bytes_delta)',
+		];
+		$queryInfo['options'] = [ 'GROUP BY' => $groupByFields ];
+		return $queryInfo;
 	}
 
 	/**

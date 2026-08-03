@@ -35,19 +35,12 @@ class EventContributionsEditsPager extends CodexTablePager {
 	use EventContributionsPagerTrait;
 
 	/**
-	 * Stringified username to be used in the pager query to avoid wrong sorting with NULL values (see
-	 * T404995#11321541 and following comments). Note that this cannot be used with an alias as that won't
-	 * work in MySQL/MariaDB (T416569).
-	 */
-	private const QUERY_USERNAME_STR = 'COALESCE(cec_user_name, "")';
-
-	/**
 	 * Unique sort fields per column, including stable tiebreaker by primary key
 	 */
 	private const INDEX_FIELDS = [
 		'article' => [ 'cec_page_prefixedtext', 'cec_wiki', 'cec_timestamp', 'cec_id' ],
 		'wiki' => [ 'cec_wiki', 'cec_timestamp', 'cec_id' ],
-		'username' => [ self::QUERY_USERNAME_STR, 'cec_timestamp', 'cec_id' ],
+		'username' => [ EventContributionStore::QUERY_USERNAME_STR, 'cec_timestamp', 'cec_id' ],
 		'timestamp' => [ 'cec_timestamp', 'cec_id' ],
 		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp', 'cec_id' ],
 	];
@@ -104,47 +97,8 @@ class EventContributionsEditsPager extends CodexTablePager {
 	 * @return array<string,mixed>
 	 */
 	public function getQueryInfo(): array {
-		$queryInfo = [
-			'tables' => [
-				'cec' => 'ce_event_contributions',
-				'cep' => 'ce_participants'
-			],
-			'fields' => [
-				'cec_id',
-				'cec_event_id',
-				'cec_page_prefixedtext',
-				'cec_wiki',
-				'cec_user_id',
-				'cec_user_name',
-				self::QUERY_USERNAME_STR,
-				'cec_timestamp',
-				'cec_bytes_delta',
-				'cec_links_delta',
-				'cec_references_delta',
-				'cec_edit_flags',
-				'cec_revision_id',
-				'cec_page_id',
-				'cec_deleted',
-				'cep_private'
-			],
-			'conds' => [
-				'cec.cec_event_id' => $this->event->getID(),
-				'cec.cec_deleted' => 0
-			],
-			'join_conds' => [
-				'cep' => [
-					'JOIN',
-					[
-						'cec.cec_event_id = cep.cep_event_id',
-						'cec.cec_user_id = cep.cep_user_id',
-						'cep.cep_unregistered_at' => null
-					]
-				]
-			]
-		];
-
+		$queryInfo = $this->eventContributionStore->getEditsQueryInfo( $this->event->getID() );
 		$this->addPrivateParticipantConds( $queryInfo );
-
 		return $queryInfo;
 	}
 
