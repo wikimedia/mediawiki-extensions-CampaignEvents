@@ -564,7 +564,6 @@ return [
 		return new GoalProgressFormatter(
 			$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 			$services->get( PermissionChecker::SERVICE_NAME ),
-			$services->get( EventContributionStore::SERVICE_NAME ),
 			$services->get( EventGoalCompletionCalculator::SERVICE_NAME ),
 			$services->getMessageFormatterFactory(),
 		);

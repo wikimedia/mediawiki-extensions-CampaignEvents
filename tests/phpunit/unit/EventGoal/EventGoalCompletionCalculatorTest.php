@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionSummary;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoal;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionCalculator;
+use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalCompletionResult;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetric;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWikiUnitTestCase;
@@ -31,13 +32,13 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 	public function testCalculateCompletion(
 		EventContributionSummary $summary,
 		EventGoal $goals,
-		float $expectedCompletion
+		EventGoalCompletionResult $expectedResult
 	): void {
 		$this->storeMock->method( 'getEventSummaryData' )
 			->willReturn( $summary );
 
-		$this->assertSame(
-			$expectedCompletion,
+		$this->assertEquals(
+			$expectedResult,
 			$this->calculator->calculateCompletion( $goals, 1, null, true )
 		);
 	}
@@ -57,7 +58,7 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 					new EventGoalMetric( EventGoalMetricType::TotalLinksAdded, 400 ),
 				]
 			),
-			0.5,
+			new EventGoalCompletionResult( 0.5, EventGoalMetricType::TotalEdits, 150 ),
 		];
 
 		yield 'OR operator picks max metric' => [
@@ -74,7 +75,7 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 					new EventGoalMetric( EventGoalMetricType::TotalLinksAdded, 200 ),
 				]
 			),
-			0.6,
+			new EventGoalCompletionResult( 0.6, EventGoalMetricType::TotalEdits, 30 ),
 		];
 
 		yield 'completion is capped at one' => [
@@ -90,7 +91,7 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 					new EventGoalMetric( EventGoalMetricType::TotalLinksAdded, 400 ),
 				]
 			),
-			1.0,
+			new EventGoalCompletionResult( 1.0, EventGoalMetricType::TotalBytesAdded, 12000 ),
 		];
 
 		yield 'removed bytes and links are handled correctly' => [
@@ -105,7 +106,7 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 					new EventGoalMetric( EventGoalMetricType::TotalLinksRemoved, 40 ),
 				]
 			),
-			0.5,
+			new EventGoalCompletionResult( 0.5, EventGoalMetricType::TotalBytesRemoved, 500 ),
 		];
 	}
 
@@ -130,7 +131,9 @@ class EventGoalCompletionCalculatorTest extends MediaWikiUnitTestCase {
 
 		$completion = $this->calculator->calculateCompletion( $goals, 1, null, true );
 
-		$this->assertEqualsWithDelta( 1 / 3, $completion, 0.000001 );
+		$this->assertEqualsWithDelta( 1 / 3, $completion->getCompletionRatio(), 0.000001 );
+		$this->assertSame( EventGoalMetricType::TotalEdits, $completion->getPrimaryMetricType() );
+		$this->assertSame( 1, $completion->getPrimaryMetricCurrent() );
 	}
 
 	private static function summary( array $overrides = [] ): EventContributionSummary {

@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\EventGoal;
 
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -20,7 +19,6 @@ class GoalProgressFormatter {
 	public function __construct(
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly PermissionChecker $permissionChecker,
-		private readonly EventContributionStore $eventContributionStore,
 		private readonly EventGoalCompletionCalculator $goalCompletionCalculator,
 		private readonly IMessageFormatterFactory $messageFormatterFactory,
 	) {
@@ -51,56 +49,27 @@ class GoalProgressFormatter {
 			$includePrivateParticipants = false;
 		}
 
-		$completion = $this->goalCompletionCalculator->calculateCompletion(
+		$result = $this->goalCompletionCalculator->calculateCompletion(
 			$goal,
 			$eventId,
 			$centralUser,
 			$includePrivateParticipants
 		);
-		$goalPercentComplete = (int)floor( $completion * 100 );
+		$goalPercentComplete = (int)floor( $result->getCompletionRatio() * 100 );
 
-		$metrics = $goal->getMetrics();
-		$primaryMetric = $metrics[0];
-
-		$summary = $this->eventContributionStore->getEventSummaryData(
-			$eventId,
-			$centralUser,
-			$includePrivateParticipants
-		);
-
-		$metricType = $primaryMetric->getMetric();
-		[ $goalCurrent, $metricLabelKey ] = match ( $metricType ) {
-			EventGoalMetricType::TotalArticlesCreated => [
-				$summary->getArticlesCreatedCount(),
-				'campaignevents-goal-progress-metric-total_articles_created',
-			],
-			EventGoalMetricType::TotalArticlesEdited => [
-				$summary->getArticlesEditedCount(),
-				'campaignevents-goal-progress-metric-total_articles_edited',
-			],
-			EventGoalMetricType::TotalEdits => [
-				$summary->getEditCount(),
-				'campaignevents-goal-progress-metric-total_edits',
-			],
-			EventGoalMetricType::TotalBytesAdded => [
-				$summary->getBytesAdded(),
-				'campaignevents-goal-progress-metric-total_bytes_added',
-			],
-			EventGoalMetricType::TotalBytesRemoved => [
-				abs( $summary->getBytesRemoved() ),
-				'campaignevents-goal-progress-metric-total_bytes_removed',
-			],
-			EventGoalMetricType::TotalLinksAdded => [
-				$summary->getLinksAdded(),
-				'campaignevents-goal-progress-metric-total_links_added',
-			],
-			EventGoalMetricType::TotalLinksRemoved => [
-				abs( $summary->getLinksRemoved() ),
-				'campaignevents-goal-progress-metric-total_links_removed',
-			],
-		};
-
+		$primaryMetric = $goal->getMetrics()[0];
 		$goalTarget = $primaryMetric->getTarget();
+		$goalCurrent = $result->getPrimaryMetricCurrent();
+
+		$metricLabelKey = match ( $result->getPrimaryMetricType() ) {
+			EventGoalMetricType::TotalArticlesCreated => 'campaignevents-goal-progress-metric-total_articles_created',
+			EventGoalMetricType::TotalArticlesEdited => 'campaignevents-goal-progress-metric-total_articles_edited',
+			EventGoalMetricType::TotalEdits => 'campaignevents-goal-progress-metric-total_edits',
+			EventGoalMetricType::TotalBytesAdded => 'campaignevents-goal-progress-metric-total_bytes_added',
+			EventGoalMetricType::TotalBytesRemoved => 'campaignevents-goal-progress-metric-total_bytes_removed',
+			EventGoalMetricType::TotalLinksAdded => 'campaignevents-goal-progress-metric-total_links_added',
+			EventGoalMetricType::TotalLinksRemoved => 'campaignevents-goal-progress-metric-total_links_removed',
+		};
 
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $languageCode );
 

@@ -19,21 +19,19 @@ class EventGoalCompletionCalculator {
 	}
 
 	/**
-	 * Compute the completion percentage for an event's goals.
+	 * Compute the completion for an event's goals.
 	 *
 	 * @param EventGoal $goal
 	 * @param int $eventId
 	 * @param CentralUser|null $currentUser
 	 * @param bool $includePrivateParticipants Whether to include other users' private contributions
-	 *
-	 * @return float Value between 0.0 and 1.0
 	 */
 	public function calculateCompletion(
 		EventGoal $goal,
 		int $eventId,
 		?CentralUser $currentUser,
 		bool $includePrivateParticipants
-	): float {
+	): EventGoalCompletionResult {
 		$summary = $this->contribStore->getEventSummaryData(
 			$eventId,
 			$currentUser,
@@ -42,17 +40,27 @@ class EventGoalCompletionCalculator {
 
 		$metrics = $goal->getMetrics();
 		$completions = [];
-		foreach ( $metrics as $metric ) {
+		$primaryMetricCurrent = 0;
+		foreach ( $metrics as $i => $metric ) {
 			$actual = $this->mapMetricToValue( $metric, $summary );
+			if ( $i === 0 ) {
+				$primaryMetricCurrent = $actual;
+			}
 			$target = $metric->getTarget();
 			$completions[] = min( $actual / $target, 1.0 );
 		}
 
-		return match ( $goal->getOperator() ) {
+		$ratio = match ( $goal->getOperator() ) {
 			EventGoal::OPERATOR_AND => array_sum( $completions ) / count( $completions ),
 			EventGoal::OPERATOR_OR => max( $completions ),
 			default => throw new InvalidArgumentException( 'Unknown goal operator' ),
 		};
+
+		return new EventGoalCompletionResult(
+			$ratio,
+			$metrics[0]->getMetric(),
+			$primaryMetricCurrent,
+		);
 	}
 
 	private function mapMetricToValue( EventGoalMetric $metric, EventContributionSummary $summary ): int {
