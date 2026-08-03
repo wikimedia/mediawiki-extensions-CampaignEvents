@@ -182,6 +182,52 @@ class InvitationListStore {
 	}
 
 	/**
+	 * Returns the base query info for listing invitation lists belonging to a user on a given wiki,
+	 * intended for use in pagers. The result includes a COUNT of recommended editors per list.
+	 *
+	 * @param string $wikiId
+	 * @param int $userId Central user ID
+	 * @param int $minScore Score threshold for an editor to count as recommended
+	 * @return array{tables: array, fields: array, conds: array, join_conds: array, options: array}
+	 */
+	public function getQueryInfo( string $wikiId, int $userId, int $minScore ): array {
+		$dbr = $this->databaseHelper->getReplicaConnection();
+		$ceilFields = [
+			'ceil_id',
+			'ceil_name',
+			'ceil_status',
+			'ceil_created_at',
+			'ceil_user_id',
+		];
+		return [
+			'tables' => [ 'ce_invitation_lists', 'ce_invitation_list_users' ],
+			'fields' => [
+				...$ceilFields,
+				'list_editor_count' => 'COUNT(ceilu_id)',
+			],
+			'conds' => [
+				'ceil_wiki' => $wikiId,
+				'ceil_user_id' => $userId,
+			],
+			// We need to GROUP BY all fields to pass ONLY_FULL_GROUP_BY in MariaDB: even though `ceil_id` alone
+			// uniquely determines a row, MariaDB does not detect functional dependencies:
+			// https://jira.mariadb.org/browse/MDEV-11588
+			'options' => [
+				'GROUP BY' => $ceilFields,
+			],
+			'join_conds' => [
+				'ce_invitation_list_users' => [
+					'LEFT JOIN',
+					[
+						'ceil_id=ceilu_ceil_id',
+						$dbr->expr( 'ceilu_score', '>=', $minScore ),
+					],
+				],
+			],
+		];
+	}
+
+	/**
 	 * @return array<int,int> [ user => score ] A maximum of 200 users is returned, ordered by score (high to low)
 	 */
 	public function getInvitationListUsers( int $invitationListID ): array {

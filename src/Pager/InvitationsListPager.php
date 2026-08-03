@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Invitation\InvitationList;
+use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialGenerateInvitationList;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialInvitationList;
@@ -23,6 +24,7 @@ class InvitationsListPager extends ReverseChronologicalPager {
 
 	public function __construct(
 		private readonly CentralUser $centralUser,
+		private readonly InvitationListStore $invitationListStore,
 		CampaignsDatabaseHelper $databaseHelper,
 		IContextSource $context,
 		LinkRenderer $linkRenderer
@@ -56,42 +58,11 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	 * @return array<string,mixed>
 	 */
 	public function getQueryInfo(): array {
-		$ceilFields = [
-			'ceil_id',
-			'ceil_name',
-			'ceil_status',
-			'ceil_created_at',
-			'ceil_user_id',
-		];
-		return [
-			'tables' => [ 'ce_invitation_lists', 'ce_invitation_list_users' ],
-			'fields' => [
-				...$ceilFields,
-				'list_editor_count' => 'COUNT(ceilu_id)'
-			],
-			'conds' => [
-				 'ceil_wiki' => WikiMap::getCurrentWikiId(),
-				 'ceil_user_id' => $this->centralUser->getCentralID()
-			],
-			'options' => [
-				// We need to GROUP BY all fields to pass ONLY_FULL_GROUP_BY in MariaDB: even though `ceil_id` alone
-				// uniquely determines a row, MariaDB does not detect functional dependencies:
-				// https://jira.mariadb.org/browse/MDEV-11588
-				'GROUP BY' => $ceilFields,
-			],
-			'join_conds' => [
-				'ce_invitation_list_users' => [
-					'LEFT JOIN', [
-						'ceil_id=ceilu_ceil_id',
-						$this->mDb->expr(
-							'ceilu_score',
-							'>=',
-							SpecialInvitationList::RECOMMENDED_MIN_SCORE
-						)
-					]
-				]
-			]
-		];
+		return $this->invitationListStore->getQueryInfo(
+			WikiMap::getCurrentWikiId(),
+			$this->centralUser->getCentralID(),
+			SpecialInvitationList::RECOMMENDED_MIN_SCORE
+		);
 	}
 
 	/**

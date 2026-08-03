@@ -743,7 +743,8 @@
 			"services": [
 				"CampaignEventsPermissionChecker",
 				"CampaignEventsCentralUserLookup",
-				"CampaignEventsDatabaseHelper"
+				"CampaignEventsDatabaseHelper",
+				"CampaignEventsInvitationListStore"
 			]
 		},
 		"InvitationList": {

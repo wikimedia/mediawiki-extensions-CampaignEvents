@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Special;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Invitation\InvitationListStore;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\InvitationsListPager;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
@@ -19,6 +20,7 @@ class SpecialMyInvitationLists extends SpecialPage {
 		private readonly PermissionChecker $permissionChecker,
 		private readonly CampaignsCentralUserLookup $centralUserLookup,
 		private readonly CampaignsDatabaseHelper $databaseHelper,
+		private readonly InvitationListStore $invitationListStore,
 	) {
 		parent::__construct( self::PAGE_NAME );
 	}
@@ -45,6 +47,7 @@ class SpecialMyInvitationLists extends SpecialPage {
 			$centralUser = $this->centralUserLookup->newFromAuthority( $performer );
 			$pager = new InvitationsListPager(
 				$centralUser,
+				$this->invitationListStore,
 				$this->databaseHelper,
 				$this->getContext(),
 				$this->getLinkRenderer()
