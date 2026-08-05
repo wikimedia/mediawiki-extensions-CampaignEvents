@@ -57,6 +57,21 @@ class GetOwnRegistrationInfoHandler extends SimpleHandler {
 		return $this->getResponseFactory()->createJson( $response );
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		$spec = parent::generateResponseSpec( $method );
+		$spec['403'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-403' )
+		) ];
+		$spec['404'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-404-not-participant' )
+		) ];
+		return $spec;
+	}
+
 	/** @inheritDoc */
 	protected function getResponseBodySchemaFileName( string $method ): ?string {
 		return __DIR__ . '/Schema/OwnRegistrationInfo.json';

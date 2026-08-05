@@ -63,6 +63,9 @@ class EventContributionsHandler extends SimpleHandler {
 					],
 				],
 			],
+			'404' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-registration-not-found' )
+			) ],
 			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
 		];
 	}

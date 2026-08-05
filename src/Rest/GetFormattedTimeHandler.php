@@ -53,6 +53,18 @@ class GetFormattedTimeHandler extends SimpleHandler {
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		$spec = parent::generateResponseSpec( $method );
+		$spec['400'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-400' )
+		) ];
+		return $spec;
+	}
+
 	/** @inheritDoc */
 	protected function getResponseBodySchemaFileName( string $method ): ?string {
 		return __DIR__ . '/Schema/FormattedTime.json';

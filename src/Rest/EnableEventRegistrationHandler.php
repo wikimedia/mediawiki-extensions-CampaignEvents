@@ -33,6 +33,12 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 					],
 				],
 			],
+			'400' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-400' )
+			) ],
+			'403' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-403' )
+			) ],
 			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
 		];
 	}

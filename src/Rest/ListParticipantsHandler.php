@@ -262,6 +262,24 @@ class ListParticipantsHandler extends SimpleHandler {
 		return $questionAnswer;
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		$spec = parent::generateResponseSpec( $method );
+		$spec['400'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-400' )
+		) ];
+		$spec['403'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-403' )
+		) ];
+		$spec['404'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-registration-not-found' )
+		) ];
+		return $spec;
+	}
+
 	/** @inheritDoc */
 	protected function getResponseBodySchemaFileName( string $method ): ?string {
 		return __DIR__ . '/Schema/ParticipantList.json';

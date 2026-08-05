@@ -82,6 +82,18 @@ abstract class AbstractListEventsByUserHandler extends Handler {
 		];
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		$spec = parent::generateResponseSpec( $method );
+		$spec['404'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-404-user-not-found' )
+		) ];
+		return $spec;
+	}
+
 	/** @inheritDoc */
 	public function getResponseBodySchemaFileName( string $method ): ?string {
 		return __DIR__ . '/Schema/EventList.json';

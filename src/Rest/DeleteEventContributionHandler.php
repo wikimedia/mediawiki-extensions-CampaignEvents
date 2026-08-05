@@ -77,6 +77,12 @@ class DeleteEventContributionHandler extends SimpleHandler {
 			'204' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
 				new MessageValue( 'campaignevents-rest-response-contribution-deleted' )
 			) ],
+			'403' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-403' )
+			) ],
+			'404' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-404-contribution-not-found' )
+			) ],
 			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
 		];
 	}

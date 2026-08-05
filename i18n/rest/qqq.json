@@ -80,5 +80,11 @@
 	"campaignevents-rest-response-organizers-updated": "Success response description for the set-organizers REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-response-email-accepted": "Success response description for the email-participants REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-response-contribution-accepted": "Success response description for the associate-revision REST API endpoint. Shown in the REST API sandbox.",
-	"campaignevents-rest-response-contribution-deleted": "Success response description for the delete-contribution REST API endpoint. Shown in the REST API sandbox."
+	"campaignevents-rest-response-contribution-deleted": "Success response description for the delete-contribution REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-400": "Generic error response description for REST API endpoints when the request contains invalid parameters. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-403": "Generic error response description for REST API endpoints when the user lacks permission to perform the action. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-404-user-not-found": "Error response description for the list-events-by-organizer and list-events-by-participant REST API endpoints when the specified user does not exist. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-404-not-participant": "Error response description for the get-own-registration-info REST API endpoint when the event does not exist or the current user is not registered for it. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-404-contribution-not-found": "Error response description for the delete-contribution REST API endpoint when the contribution record does not exist. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-worklist-updated": "Success response description for the patch-worklist-pages REST API endpoint. Shown in the REST API sandbox."
 }

@@ -74,6 +74,25 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		return [
+			'204' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-worklist-updated' )
+			) ],
+			'400' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-400' )
+			) ],
+			'403' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-403' )
+			) ],
+			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
+		];
+	}
+
 	/** @inheritDoc */
 	public function getParamSettings(): array {
 		return [

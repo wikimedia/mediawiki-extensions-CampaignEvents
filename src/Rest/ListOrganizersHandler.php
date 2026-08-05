@@ -60,6 +60,18 @@ class ListOrganizersHandler extends SimpleHandler {
 		return $this->getResponseFactory()->createJson( $respVal );
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return array<string, mixed>
+	 */
+	protected function generateResponseSpec( string $method ): array {
+		$spec = parent::generateResponseSpec( $method );
+		$spec['404'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-registration-not-found' )
+		) ];
+		return $spec;
+	}
+
 	/** @inheritDoc */
 	protected function getResponseBodySchemaFileName( string $method ): ?string {
 		return __DIR__ . '/Schema/OrganizerList.json';

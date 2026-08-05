@@ -77,5 +77,11 @@
 	"campaignevents-rest-response-organizers-updated": "Organizers updated.",
 	"campaignevents-rest-response-email-accepted": "Email send job accepted. The sent count reflects emails dispatched.",
 	"campaignevents-rest-response-contribution-accepted": "Contribution association job accepted.",
-	"campaignevents-rest-response-contribution-deleted": "Event contribution record deleted."
+	"campaignevents-rest-response-contribution-deleted": "Event contribution record deleted.",
+	"campaignevents-rest-response-400": "The request contains invalid parameters.",
+	"campaignevents-rest-response-403": "The user does not have permission to perform this action.",
+	"campaignevents-rest-response-404-user-not-found": "The specified user does not exist.",
+	"campaignevents-rest-response-404-not-participant": "The event registration does not exist, or the current user is not registered for it.",
+	"campaignevents-rest-response-404-contribution-not-found": "The specified contribution record does not exist.",
+	"campaignevents-rest-response-worklist-updated": "Worklist pages updated."
 }
