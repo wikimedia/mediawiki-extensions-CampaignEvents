@@ -72,5 +72,13 @@
 	"campaignevents-rest-param-desc-end-timestamp": "Description of the end path parameter for the get-formatted-time REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-param-desc-wiki": "Description of the wiki path parameter for the event-contributions REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-param-desc-revid": "Description of the revid path parameter for the event-contributions REST API endpoint. Shown in the REST API sandbox.",
-	"campaignevents-rest-patch-worklist-title-not-plain": "Error message used when editing a worklist, but its provided title contains a section fragment or an interwiki prefix."
+	"campaignevents-rest-patch-worklist-title-not-plain": "Error message used when editing a worklist, but its provided title contains a section fragment or an interwiki prefix.",
+	"campaignevents-rest-response-registration-created": "Success response description for the create-event-registration REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-registration-updated": "Success response description for the update-event-registration REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-registration-deleted": "Success response description for the delete-event-registration REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-registration-not-found": "Error response description for the get-event-registration REST API endpoint when the event does not exist or has been deleted. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-organizers-updated": "Success response description for the set-organizers REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-email-accepted": "Success response description for the email-participants REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-contribution-accepted": "Success response description for the associate-revision REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-response-contribution-deleted": "Success response description for the delete-contribution REST API endpoint. Shown in the REST API sandbox."
 }

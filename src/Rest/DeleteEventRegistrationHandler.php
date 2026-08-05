@@ -81,7 +81,9 @@ class DeleteEventRegistrationHandler extends SimpleHandler {
 	 */
 	protected function generateResponseSpec( string $method ): array {
 		return [
-			'204' => [ 'description' => 'Event registration deleted successfully.' ],
+			'204' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-registration-deleted' )
+			) ],
 			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
 		];
 	}

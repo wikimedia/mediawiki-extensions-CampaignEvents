@@ -69,5 +69,13 @@
 	"campaignevents-rest-param-desc-end-timestamp": "End timestamp in any format accepted by the MediaWiki timestamp parser.",
 	"campaignevents-rest-param-desc-wiki": "ID of the wiki where the revision was made.",
 	"campaignevents-rest-param-desc-revid": "Revision ID on the target wiki.",
-	"campaignevents-rest-patch-worklist-title-not-plain": "The worklist title must not contain an interwiki prefix or a section fragment."
+	"campaignevents-rest-patch-worklist-title-not-plain": "The worklist title must not contain an interwiki prefix or a section fragment.",
+	"campaignevents-rest-response-registration-created": "Event registration created.",
+	"campaignevents-rest-response-registration-updated": "Event registration updated.",
+	"campaignevents-rest-response-registration-deleted": "Event registration deleted.",
+	"campaignevents-rest-response-registration-not-found": "Event registration not found or deleted.",
+	"campaignevents-rest-response-organizers-updated": "Organizers updated.",
+	"campaignevents-rest-response-email-accepted": "Email send job accepted. The sent count reflects emails dispatched.",
+	"campaignevents-rest-response-contribution-accepted": "Contribution association job accepted.",
+	"campaignevents-rest-response-contribution-deleted": "Event contribution record deleted."
 }

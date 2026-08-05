@@ -101,7 +101,9 @@ class SetOrganizersHandler extends SimpleHandler {
 	 */
 	protected function generateResponseSpec( string $method ): array {
 		return [
-			'204' => [ 'description' => 'Organizers updated successfully.' ],
+			'204' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-organizers-updated' )
+			) ],
 			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
 		];
 	}

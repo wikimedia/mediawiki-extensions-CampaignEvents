@@ -110,7 +110,9 @@ class EmailUsersHandler extends SimpleHandler {
 	protected function generateResponseSpec( string $method ): array {
 		return [
 			'202' => [
-				'description' => 'Email send job accepted. The sent count reflects emails dispatched.',
+				'description' => $this->getJsonLocalizer()->getFormattedMessage(
+					new MessageValue( 'campaignevents-rest-response-email-accepted' )
+				),
 				'content' => [
 					'application/json' => [
 						'schema' => $this->getResponseBodySchema( $method ) ?? [],

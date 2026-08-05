@@ -153,7 +153,9 @@ class GetEventRegistrationHandler extends SimpleHandler {
 	 */
 	protected function generateResponseSpec( string $method ): array {
 		$spec = parent::generateResponseSpec( $method );
-		$spec['404'] = [ 'description' => 'Event registration not found or deleted.' ];
+		$spec['404'] = [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+			new MessageValue( 'campaignevents-rest-response-registration-not-found' )
+		) ];
 		return $spec;
 	}
 

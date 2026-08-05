@@ -84,7 +84,9 @@ class UpdateEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	 */
 	protected function generateResponseSpec( string $method ): array {
 		return [
-			'204' => [ 'description' => 'Event registration updated successfully.' ],
+			'204' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-registration-updated' )
+			) ],
 			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
 		];
 	}

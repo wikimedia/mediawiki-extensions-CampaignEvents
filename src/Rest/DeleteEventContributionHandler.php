@@ -74,7 +74,9 @@ class DeleteEventContributionHandler extends SimpleHandler {
 	 */
 	protected function generateResponseSpec( string $method ): array {
 		return [
-			'204' => [ 'description' => 'Event contribution record deleted successfully.' ],
+			'204' => [ 'description' => $this->getJsonLocalizer()->getFormattedMessage(
+				new MessageValue( 'campaignevents-rest-response-contribution-deleted' )
+			) ],
 			'default' => [ '$ref' => '#/components/responses/GenericErrorResponse' ],
 		];
 	}

@@ -54,7 +54,9 @@ class EventContributionsHandler extends SimpleHandler {
 	protected function generateResponseSpec( string $method ): array {
 		return [
 			'202' => [
-				'description' => 'Contribution association job accepted.',
+				'description' => $this->getJsonLocalizer()->getFormattedMessage(
+					new MessageValue( 'campaignevents-rest-response-contribution-accepted' )
+				),
 				'content' => [
 					'application/json' => [
 						'schema' => $this->getResponseBodySchema( $method ) ?? [],

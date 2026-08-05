@@ -24,7 +24,9 @@ class EnableEventRegistrationHandler extends AbstractEditEventRegistrationHandle
 	protected function generateResponseSpec( string $method ): array {
 		return [
 			'201' => [
-				'description' => 'Event registration created successfully.',
+				'description' => $this->getJsonLocalizer()->getFormattedMessage(
+					new MessageValue( 'campaignevents-rest-response-registration-created' )
+				),
 				'content' => [
 					'application/json' => [
 						'schema' => $this->getResponseBodySchema( $method ) ?? [],
