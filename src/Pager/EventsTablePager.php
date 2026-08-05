@@ -26,9 +26,7 @@ use OOUI\ButtonWidget;
  * this might be expanded to allow listing all events, not just those of a single user.
  */
 class EventsTablePager extends TablePager {
-	use EventPagerTrait {
-		EventPagerTrait::getSubqueryInfo as getDefaultSubqueryInfo;
-	}
+	use EventPagerTrait;
 
 	public const STATUS_ANY = 'any';
 	public const STATUS_OPEN = 'open';
@@ -217,8 +215,8 @@ class EventsTablePager extends TablePager {
 	 * @inheritDoc
 	 * @return array<string,mixed>
 	 */
-	public function getSubqueryInfo(): array {
-		$query = $this->getDefaultSubqueryInfo();
+	public function getQueryInfo(): array {
+		$query = $this->getBaseQueryInfo();
 		switch ( $this->status ) {
 			case self::STATUS_ANY:
 				break;
@@ -235,5 +233,15 @@ class EventsTablePager extends TablePager {
 		// the current implementation ties presentation and data retrieval too closely
 		$query['join_conds']['ce_organizers'][1]['ceo_user_id'] = $this->centralUser->getCentralID();
 		return $query;
+	}
+
+	protected function indexUsesAggregate(): bool {
+		return $this->mSort === 'num_participants';
+	}
+
+	protected function adjustQueryStringOffsets( array &$offsets ): void {
+		if ( $this->mSort === 'num_participants' ) {
+			$offsets['num_participants'] = (int)$offsets['num_participants'];
+		}
 	}
 }

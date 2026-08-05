@@ -13,7 +13,6 @@ use Wikimedia\Rdbms\IExpression;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\LikeValue;
-use Wikimedia\Rdbms\Subquery;
 
 /**
  * @property string $search;
@@ -28,12 +27,12 @@ trait EventPagerTrait {
 	private array $eventPageCache = [];
 
 	/**
-	 * @todo The joins and grouping below are not used by EventsListPager (which wouldn't even need a subquery), and
+	 * @todo The joins and grouping below are not used by EventsListPager, and
 	 * they just slow the query down. We should either implement those features in the list pager, or move the
 	 * complexity to EventsTablePager.
 	 * @return array<string,mixed>
 	 */
-	public function getSubqueryInfo(): array {
+	public function getBaseQueryInfo(): array {
 		$eventFields = [
 			'event_id',
 			'event_name',
@@ -57,15 +56,24 @@ trait EventPagerTrait {
 			'event_deleted_at',
 			'event_is_test_event',
 		];
+
+		$conds = [
+			'event_deleted_at' => null,
+		];
+		if ( $this->search !== '' ) {
+			// TODO Make this case-insensitive. Not easy right now because the name is a binary string and the DBAL does
+			// not provide a method for converting it to a non-binary value on which LOWER can be applied.
+			$conds[] = $this->mDb->expr( 'event_name', IExpression::LIKE,
+				new LikeValue( $this->mDb->anyString(), $this->search, $this->mDb->anyString() ) );
+		}
+
 		return [
 			'tables' => [ 'campaign_events', 'ce_participants', 'ce_organizers' ],
 			'fields' => [
 				...$eventFields,
 				'num_participants' => 'COUNT(cep_id)'
 			],
-			'conds' => [
-					'event_deleted_at' => null,
-			],
+			'conds' => $conds,
 			'options' => [
 				'GROUP BY' => [
 					'cep_event_id',
@@ -91,33 +99,6 @@ trait EventPagerTrait {
 					]
 				],
 			],
-		];
-	}
-
-	/**
-	 * @inheritDoc
-	 * @return array<string,mixed>
-	 */
-	public function getQueryInfo(): array {
-		// Use a subquery and a temporary table to work around IndexPager not using HAVING for aggregates (T308694)
-		// and to support postgres (which doesn't allow aliases in HAVING).
-		$subqueryInfo = $this->getSubqueryInfo();
-		$subquery = $this->mDb->newSelectQueryBuilder()
-			->queryInfo( $subqueryInfo )
-			->caller( __METHOD__ );
-		$conds = [];
-		if ( $this->search !== '' ) {
-			// TODO Make this case-insensitive. Not easy right now because the name is a binary string and the DBAL does
-			// not provide a method for converting it to a non-binary value on which LOWER can be applied.
-			$conds[] = $this->mDb->expr( 'event_name', IExpression::LIKE,
-				new LikeValue( $this->mDb->anyString(), $this->search, $this->mDb->anyString() ) );
-		}
-		return [
-			'tables' => [ 'tmp' => new Subquery( $subquery->getSQL() ) ],
-			'fields' => '*',
-			'conds' => $conds,
-			'options' => [],
-			'join_conds' => []
 		];
 	}
 

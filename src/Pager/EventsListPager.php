@@ -40,9 +40,7 @@ use Wikimedia\Rdbms\RawSQLExpression;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 class EventsListPager extends ReverseChronologicalPager {
-	use EventPagerTrait {
-		EventPagerTrait::getSubqueryInfo as getDefaultSubqueryInfo;
-	}
+	use EventPagerTrait;
 
 	private const DISPLAYED_WIKI_COUNT = 3;
 
@@ -444,8 +442,8 @@ class EventsListPager extends ReverseChronologicalPager {
 	/**
 	 * @return array<string,mixed>
 	 */
-	public function getSubqueryInfo(): array {
-		$query = $this->getDefaultSubqueryInfo();
+	public function getQueryInfo(): array {
+		$query = $this->getBaseQueryInfo();
 		if ( $this->participationOptions !== null ) {
 			$query['conds']['event_meeting_type'] = EventStore::participationOptionsToDBVal(
 				$this->participationOptions
