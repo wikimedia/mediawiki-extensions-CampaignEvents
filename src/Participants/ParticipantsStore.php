@@ -279,7 +279,8 @@ class ParticipantsStore {
 			$centralIDsMap[$userID] = null;
 			$centralUsersByID[$userID] = new CentralUser( $userID );
 		}
-		$globalNames = $this->centralUserLookup->getNames( $centralIDsMap );
+		// Performance: don't load usernames if there's no filter.
+		$globalNames = $usernameFilter !== null ? $this->centralUserLookup->getNames( $centralIDsMap ) : [];
 		$answersByUser = $this->answersStore->getParticipantAnswersMulti( $eventID, $centralUsersByID );
 
 		$participants = [];

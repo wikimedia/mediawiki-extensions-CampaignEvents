@@ -22,6 +22,8 @@ use MediaWiki\Language\Language;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\User\User;
+use MediaWiki\User\UserArray;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use OOUI\ButtonGroupWidget;
@@ -34,6 +36,7 @@ use OOUI\MessageWidget;
 use OOUI\PanelLayout;
 use OOUI\SearchInputWidget;
 use OOUI\Tag;
+use RuntimeException;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\ITextFormatter;
 use Wikimedia\Message\MessageValue;
@@ -49,6 +52,9 @@ class EventDetailsParticipantsModule {
 
 	private readonly ITextFormatter $msgFormatter;
 	private bool $isPastEvent;
+
+	/** @var array<string,User> Cache of local User object, keyed by username. */
+	private array $localUserMap = [];
 
 	public function __construct(
 		IMessageFormatterFactory $messageFormatterFactory,
@@ -105,6 +111,7 @@ class EventDetailsParticipantsModule {
 			$showPrivateParticipants,
 			$centralUser ? [ $centralUser->getCentralID() ] : null
 		);
+		$this->preloadUserInfo( array_filter( [ $curUserParticipant, ...$otherParticipants ] ) );
 		$lastParticipant = $otherParticipants ? end( $otherParticipants ) : $curUserParticipant;
 		$lastParticipantID = $lastParticipant ? $lastParticipant->getParticipantID() : null;
 		$canRemoveParticipants = false;
@@ -174,6 +181,19 @@ class EventDetailsParticipantsModule {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * @param Participant[] $participants
+	 */
+	private function preloadUserInfo( array $participants ): void {
+		$userIDs = array_map( static fn ( Participant $p ): int => $p->getUser()->getCentralID(), $participants );
+		$usernamesMap = $this->centralUserLookup->getNames( array_fill_keys( $userIDs, null ) );
+		$this->userLinker->preloadUserLinks( $usernamesMap );
+		$userArray = UserArray::newFromNames( $usernamesMap );
+		foreach ( $userArray as $user ) {
+			$this->localUserMap[$user->getName()] = $user;
+		}
 	}
 
 	private function getPrimaryHeader(
@@ -493,7 +513,8 @@ class EventDetailsParticipantsModule {
 		try {
 			$userName = $this->centralUserLookup->getUserName( $participant->getUser() );
 			$genderUserName = $userName;
-			$user = $this->userFactory->newFromName( $userName );
+			$user = $this->localUserMap[$userName] ??
+				throw new RuntimeException( 'Cache should be set for valid users' );
 			$userLinkComponents = $this->userLinker->getUserPagePath( $participant->getUser() );
 		} catch ( CentralUserNotFoundException | HiddenCentralUserException ) {
 			$user = null;
