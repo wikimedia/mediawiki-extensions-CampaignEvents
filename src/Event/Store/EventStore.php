@@ -559,7 +559,9 @@ class EventStore implements IEventStore, IEventLookup {
 		$this->eventGoalStore->replaceEventGoal( $eventID, $event->getGoal() );
 
 		$dbw->onTransactionCommitOrIdle(
-			fn (): bool => $this->wanCache->delete( $this->makePageEventCacheKey( $event->getPage() ) ),
+			function () use ( $event ): void {
+				$this->wanCache->delete( $this->makePageEventCacheKey( $event->getPage() ) );
+			},
 			__METHOD__
 		);
 
@@ -587,7 +589,9 @@ class EventStore implements IEventStore, IEventLookup {
 		unset( $this->cache[$registration->getID()] );
 
 		$dbw->onTransactionCommitOrIdle(
-			fn (): bool => $this->wanCache->delete( $this->makePageEventCacheKey( $registration->getPage() ) ),
+			function () use ( $registration ): void {
+				$this->wanCache->delete( $this->makePageEventCacheKey( $registration->getPage() ) );
+			},
 			__METHOD__
 		);
 
