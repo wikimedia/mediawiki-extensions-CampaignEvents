@@ -131,14 +131,12 @@ class UpdateWorklistPagesSecondaryStoreJob extends Job implements GenericParamet
 			return true;
 		}
 
-		$dbw = $services->getConnectionProvider()->getPrimaryDatabase();
-		$lockKey = "{$dbw->getDomainID()}:UpdateWorklistPagesSecondaryStoreJob:pageid:{$page->getId()}";
+		$lockKey = "UpdateWorklistPagesSecondaryStoreJob:pageid:{$page->getId()}";
 		if ( defined( 'MW_PHPUNIT_TEST' ) && $this->testLockFunction ) {
 			$scopedLock = ( $this->testLockFunction )();
 		} else {
-			$scopedLock = $dbw->getScopedLockAndFlush( $lockKey, __METHOD__, 1 );
+			$scopedLock = $services->getLockManager()->scopedLock( $lockKey, 1 );
 		}
-
 		if ( !$scopedLock ) {
 			// A job is already handling an update for this page, most likely from a previous revision. Retry later.
 			$this->logger->info(

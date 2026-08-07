@@ -27,7 +27,6 @@ use RuntimeException;
 use stdClass;
 use Wikimedia\JsonCodec\JsonCodec;
 use Wikimedia\ObjectCache\WANObjectCache;
-use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDBAccessObject;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Timestamp\TimestampFormat as TS;
@@ -111,15 +110,10 @@ class EventStore implements IEventStore, IEventLookup {
 			self::PAGE_EVENT_CACHE_TTL,
 			/**
 			 * @param ExistingEventRegistration|false|null $oldValue
-			 * @param array<string,mixed> &$setOpts
 			 */
-			function ( ExistingEventRegistration|bool|null $oldValue, int &$ttl, array &$setOpts )
+			function ( ExistingEventRegistration|bool|null $oldValue, int &$ttl )
 				use ( $page, $readFlags ): ?string
 			{
-				$db = $this->dbHelper->getReplicaConnection();
-
-				$setOpts += Database::getCacheSetOptions( $db );
-
 				try {
 					$event = $this->loadEventFromDB( $page, $readFlags );
 					$lastMod = max( $event->getLastEditTimestamp(), $event->getDeletionTimestamp() );
