@@ -176,6 +176,7 @@
 	"campaignevents-event-details-chat-link-not-available": "এই ইভেন্টের জন্য কোনও চ্যাট গ্রুপ উপলব্ধ নেই।",
 	"campaignevents-event-details-organizers-header": "আয়োজক",
 	"campaignevents-event-details-wikis-header": "উইকি",
+	"campaignevents-event-details-wikis-all": "এই ইভেন্টটি সকল উইকির জন্য উন্মুক্ত।",
 	"campaignevents-event-details-register-prompt": "এই তথ্য দেখতে আপনাকে নিবন্ধন করতে হবে",
 	"campaignevents-event-details-view-event-page": "ইভেন্ট পাতাটি দেখুন",
 	"campaignevents-event-details-participants": "ব্যবহারকারী নাম",
