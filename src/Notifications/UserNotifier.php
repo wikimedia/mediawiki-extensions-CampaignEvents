@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Notifications;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\Notifications\Model\Event;
+use MediaWiki\Notification\RecipientSet;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Title\Title;
 
@@ -20,14 +21,17 @@ class UserNotifier {
 	public function notifyRegistration( Authority $performer, ExistingEventRegistration $event ): void {
 		if ( $this->isEchoLoaded ) {
 			DeferredUpdates::addCallableUpdate( static function () use ( $performer, $event ): void {
-				Event::create( [
-					'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
-					'title' => Title::castFromPageIdentity( $event->getPage()->getPageIdentity() ),
-					'extra' => [
-						'user' => $performer->getUser()->getId(),
-						'event-id' => $event->getID()
-					]
-				] );
+				Event::create(
+					[
+						'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
+						'title' => Title::castFromPageIdentity( $event->getPage()->getPageIdentity() ),
+						'extra' => [
+							'user' => $performer->getUser()->getId(),
+							'event-id' => $event->getID()
+						]
+					],
+					new RecipientSet( $performer->getUser() )
+				);
 			} );
 		}
 	}
