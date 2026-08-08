@@ -357,7 +357,7 @@ return [
 	},
 	UserNotifier::SERVICE_NAME => static function ( MediaWikiServices $services ): UserNotifier {
 		return new UserNotifier(
-			ExtensionRegistry::getInstance()->isLoaded( 'Echo' )
+			$services->getNotificationService(),
 		);
 	},
 	MWPermissionsLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): MWPermissionsLookup {

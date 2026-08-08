@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
 use MediaWiki\Extension\CampaignEvents\Notifications\RegistrationNotificationPresentationModel;
+use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\Notifications\Hooks\BeforeCreateEchoEventHook;
 
 class EchoHooksHandler implements BeforeCreateEchoEventHook {
@@ -32,11 +33,12 @@ class EchoHooksHandler implements BeforeCreateEchoEventHook {
 			'tooltip' => 'echo-pref-tooltip-' . self::REGISTRATION_NOTIFICATION_CATEGORY
 		];
 
-		$notifications[ RegistrationNotificationPresentationModel::NOTIFICATION_NAME ] = [
+		$notifications[ UserNotifier::NOTIFICATION_NAME ] = [
 			'category' => self::REGISTRATION_NOTIFICATION_CATEGORY,
 			'group' => 'positive',
 			'section' => 'message',
 			'presentation-model' => RegistrationNotificationPresentationModel::class,
+			'canNotifyAgent' => true,
 		];
 
 		$notificationIcons[RegistrationNotificationPresentationModel::ICON_NAME]['path'] =

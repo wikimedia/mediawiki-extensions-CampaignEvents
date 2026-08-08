@@ -25,7 +25,6 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\User\User;
 
 class RegistrationNotificationPresentationModel extends EchoEventPresentationModel {
-	public const NOTIFICATION_NAME = 'campaign-events-notification-registration-confirmation';
 	public const ICON_NAME = 'campaignevents-registration';
 
 	private const ORGANIZERS_LIMIT = 4;

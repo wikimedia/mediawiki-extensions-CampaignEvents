@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetric;
 use MediaWiki\Extension\CampaignEvents\EventGoal\EventGoalMetricType;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\Notifications\RegistrationNotificationPresentationModel;
+use MediaWiki\Extension\CampaignEvents\Notifications\UserNotifier;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolAssociation;
 use MediaWiki\Extension\Notifications\Formatters\EchoEventPresentationModel;
 use MediaWiki\Extension\Notifications\Model\Event;
@@ -35,7 +36,7 @@ class RegistrationNotificationPresentationModelTest extends MediaWikiIntegration
 
 	private function makeNotificationModel( int $eventID ): EchoEventPresentationModel {
 		$echoEvent = Event::create( [
-			'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
+			'type' => UserNotifier::NOTIFICATION_NAME,
 			'extra' => [
 				'event-id' => $eventID
 			]
