@@ -26,7 +26,6 @@ class UserNotifier {
 						'type' => RegistrationNotificationPresentationModel::NOTIFICATION_NAME,
 						'title' => Title::castFromPageIdentity( $event->getPage()->getPageIdentity() ),
 						'extra' => [
-							'user' => $performer->getUser()->getId(),
 							'event-id' => $event->getID()
 						]
 					],
