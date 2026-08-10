@@ -169,7 +169,7 @@
 	"campaignevents-invitations-pager-status-editors": "$1 {{PLURAL:$1|urednik pronađen|urednika pronađeno}}",
 	"campaignevents-invitations-pager-status-processing": "Obrađujem...",
 	"campaignevents-myinvitationslist-new-button": "Novo",
-	"campaignevents-worklist-error-empty": "Navedite bar jedan članak.",
+	"campaignevents-invitation-list-article-list-error-empty": "Navedite bar jedan članak.",
 	"campaignevents-eventslist-wiki-label": "Vikiji",
 	"campaignevents-event-details-topics-header": "Teme"
 }

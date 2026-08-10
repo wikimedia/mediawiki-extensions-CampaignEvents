@@ -324,7 +324,7 @@
 	"campaignevents-invitationlist-event": "$1: আমন্ত্রণ তালিকা",
 	"campaignevents-invitation-list-invalid-id": "একটি বৈধ আমন্ত্রণ তালিকার আইডি প্রদান করুন। [[Special:MyInvitationLists|আপনার আমন্ত্রণ তালিকাসমূহ দেখুন]]।",
 	"campaignevents-invitation-list-does-not-exist": "এই আমন্ত্রণ তালিকাটির অস্তিত্ব নেই। [[Special:MyInvitationLists|আপনার আমন্ত্রণ তালিকাসমূহ দেখুন]]।",
-	"campaignevents-invitationlist-worklist-label": "নিবন্ধের তালিকা দেখুন",
+	"campaignevents-invitationlist-articlelist-label": "নিবন্ধের তালিকা দেখুন",
 	"campaignevents-event-details-footer": "আরও ইভেন্ট ও সম্প্রদায় খুঁজে পেতে <strong>[[Special:AllEvents|সহযোগিতার তালিকা]]</strong> দেখুন।",
 	"campaignevents-invitationlist-preference": "আমাকে [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists আমন্ত্রণ তালিকায়] যুক্ত করুন",
 	"campaignevents-eventdiscovery-dialog-skip-button": "এড়ান",

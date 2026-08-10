@@ -251,7 +251,7 @@
 	"campaignevents-invitations-pager-status-processing": "Ke nka iso ...",
 	"campaignevents-myinvitationslist-generate-button": "Sio ufa nwed ikod",
 	"campaignevents-myinvitationslist-new-button": "adufa",
-	"campaignevents-worklist-error-empty": "Siñ adiok abogọ iwuot nwed kiet",
+	"campaignevents-invitation-list-article-list-error-empty": "Siñ adiok abogọ iwuot nwed kiet",
 	"campaignevents-invitationlist-event": "$1: nwed ikod",
 	"campaignevents-invitationlist-recommended": "Tang ikoh bangha ikod",
 	"campaignevents-allevents-label-filter-wikis": "Wikis",

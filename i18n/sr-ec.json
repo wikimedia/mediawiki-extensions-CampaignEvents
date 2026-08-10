@@ -241,7 +241,7 @@
 	"campaignevents-invitations-pager-status-editors": "$1 {{PLURAL:$1|уредник пронађен|уредника пронађено}}",
 	"campaignevents-invitations-pager-status-processing": "Обрађујем...",
 	"campaignevents-myinvitationslist-new-button": "Ново",
-	"campaignevents-worklist-error-empty": "Наведите бар један чланак.",
+	"campaignevents-invitation-list-article-list-error-empty": "Наведите бар један чланак.",
 	"campaignevents-allevents-label-filter-wikis": "Викији",
 	"campaignevents-allevents-placeholder-add-wikis": "Додај викије...",
 	"campaignevents-allevents-label-filter-topics": "Теме",

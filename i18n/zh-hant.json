@@ -393,11 +393,11 @@
 	"campaignevents-invitation-list-error-invalid-page": "請輸入使用活動註冊工具的活動頁面。",
 	"campaignevents-invitation-list-error-event-ended": "此活動已結束，請輸入其他活動。",
 	"campaignevents-invitation-list-error-not-organizer": "請輸入將您列為籌辦人員的活動頁面。",
-	"campaignevents-worklist-error-empty": "請輸入至少一個條目標題。",
+	"campaignevents-invitation-list-article-list-error-empty": "請輸入至少一個條目標題。",
 	"invitationlist": "邀請名單",
 	"campaignevents-invitationlist-event": "$1：邀請名單",
 	"campaignevents-invitationlist-highly-recommended": "強烈推薦邀請",
 	"campaignevents-invitationlist-recommended": "推薦邀請",
-	"campaignevents-invitationlist-worklist-label": "檢視條目清單",
+	"campaignevents-invitationlist-articlelist-label": "檢視條目清單",
 	"campaignevents-invitationlist-preference": "將自己加入至[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請名單]中"
 }

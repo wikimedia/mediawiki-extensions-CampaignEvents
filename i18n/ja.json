@@ -486,7 +486,7 @@
 	"campaignevents-invitationlist-highly-recommended-info": "これらの編集者は招待リスト上で上位に位置しており、あなたの活動へ参加することに対して興味を持っている可能性があります。",
 	"campaignevents-invitationlist-recommended": "招待を推奨",
 	"campaignevents-invitationlist-recommended-info": "これらの編集者は招待リスト上で中程度に位置しており、あなたの活動へ参加することに対して興味を持っているかもしれません。",
-	"campaignevents-invitationlist-worklist-label": "記事リストを表示",
+	"campaignevents-invitationlist-articlelist-label": "記事リストを表示",
 	"campaignevents-event-details-footer": "その他のイベントやコミュニティを見つけるには、<strong>[[Special:AllEvents|コラボレーションリスト]]</strong>へアクセスしてください。",
 	"campaignevents-invitationlist-preference": "[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 招待リスト]への追加を許可する。",
 	"campaignevents-allevents-label-filter-wikis": "ウィキ",
