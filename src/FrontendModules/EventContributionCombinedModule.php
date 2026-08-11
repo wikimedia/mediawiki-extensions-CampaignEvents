@@ -16,6 +16,7 @@ use MediaWiki\Output\OutputPage;
 use MediaWiki\RecentChanges\ChangesList;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
+use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Message\IMessageFormatterFactory;
 use Wikimedia\Message\MessageValue;
 
@@ -189,13 +190,11 @@ readonly class EventContributionCombinedModule {
 			$messageKey = $participantIsPrivate
 				? 'campaignevents-contributions-notice-other-private-participants-excluded'
 				: 'campaignevents-contributions-notice-private-participants-excluded';
-			$notice = [
-				'status' => 'notice',
-				'message' => $msgFormatter->format(
-					MessageValue::new( $messageKey )
-				)
-			];
-			$renderedNotice = $this->templateParser->processTemplate( 'Message', $notice );
+			$renderedNotice = ( new Codex() )->message()
+				->setType( 'notice' )
+				->setContentText( $msgFormatter->format( MessageValue::new( $messageKey ) ) )
+				->build()
+				->getHtml();
 			$container->appendContent( new HtmlSnippet( $renderedNotice ) );
 		}
 		$renderedSummaryHtml = $this->templateParser->processTemplate( 'EventContributionsSummary', $templateData );
