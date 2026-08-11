@@ -87,6 +87,10 @@
 		"CampaignEventsEnableWorklists": {
 			"description": "Flag to enable the worklist feature, allowing creation of worklists so that participants know what to work on",
 			"value": false
+		},
+		"CampaignEventsEnableWorklistEventDiscoveryTracking": {
+			"description": "Flag to enable Test Kitchen tracking for worklist promotion by article (event discovery funnel)",
+			"value": false
 		}
 	},
 	"DatabaseVirtualDomains": [
