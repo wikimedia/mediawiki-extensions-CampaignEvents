@@ -622,6 +622,19 @@
 				"campaignevents-eventdiscovery-dialog-hide-in-preferences",
 				"campaignevents-goal-progress-heading"
 			]
+		},
+		"ext.campaignEvents.worklistEventDiscoveryTracking": {
+			"localBasePath": "resources/ext.campaignEvents.worklistEventDiscoveryTracking",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.worklistEventDiscoveryTracking",
+			"packageFiles": [
+				"index.js",
+				{
+					"name": "config.json",
+					"config": {
+						"CampaignEventsEnableWorklistEventDiscoveryTracking": "CampaignEventsEnableWorklistEventDiscoveryTracking"
+					}
+				}
+			]
 		}
 	},
 	"RestModuleFiles": [
