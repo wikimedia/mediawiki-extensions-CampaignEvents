@@ -194,6 +194,11 @@ class EventDetailsParticipantsModule {
 		foreach ( $userArray as $user ) {
 			$this->localUserMap[$user->getName()] = $user;
 		}
+		// For any remaining users that don't have a local account (and are therefore not in the UserArray),
+		// fill the cache with a user that's known not to exist.
+		foreach ( array_diff( $usernamesMap, $this->localUserMap ) as $nonLocalUsername ) {
+			$this->localUserMap[$nonLocalUsername] = $this->userFactory->newFromAnyId( 0, $nonLocalUsername, 0 );
+		}
 	}
 
 	private function getPrimaryHeader(
