@@ -14,7 +14,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
-use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Pager\CodexTablePager;
@@ -25,6 +24,7 @@ use MediaWiki\WikiMap\WikiMap;
 use OOUI\IconWidget;
 use stdClass;
 use UnexpectedValueException;
+use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Rdbms\IResultWrapper;
 
 /**
@@ -44,8 +44,6 @@ class EventContributionsEditsPager extends CodexTablePager {
 		'timestamp' => [ 'cec_timestamp', 'cec_id' ],
 		'bytes' => [ 'cec_bytes_delta', 'cec_timestamp', 'cec_id' ],
 	];
-
-	private readonly TemplateParser $templateParser;
 
 	/** @var array<int,EventContribution> */
 	private array $contribObjects = [];
@@ -78,8 +76,6 @@ class EventContributionsEditsPager extends CodexTablePager {
 			$context,
 			$linkRenderer
 		);
-
-		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 
 	/**
@@ -314,14 +310,20 @@ class EventContributionsEditsPager extends CodexTablePager {
 			}
 		}
 
-		// Render Codex CSS-only delete button via mustache template
-		return $this->templateParser->processTemplate(
-			'DeleteContributionButton',
-			[
-				'contribId' => $contribID,
-				'tooltip' => $this->msg( 'campaignevents-event-details-contributions-delete-tooltip' )->text(),
-			]
-		);
+		$tooltip = $this->msg( 'campaignevents-event-details-contributions-delete-tooltip' )->text();
+		return ( new Codex() )->button()
+			->setAction( 'destructive' )
+			->setWeight( 'quiet' )
+			->setIconOnly( true )
+			->setIconClass( 'cdx-css-icon--trash' )
+			->setAttributes( [
+				'class' => 'ext-campaignevents-delete-contribution-btn',
+				'title' => $tooltip,
+				'aria-label' => $tooltip,
+				'data-contrib-id' => $contribID,
+			] )
+			->build()
+			->getHtml();
 	}
 
 	/**
