@@ -11,11 +11,13 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialEventDetails;
+use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\RecentChanges\ChangesList;
 use OOUI\HtmlSnippet;
 use OOUI\Tag;
+use Wikimedia\Codex\Component\HtmlSnippet as CodexHtmlSnippet;
 use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Message\IMessageFormatterFactory;
@@ -135,50 +137,45 @@ readonly class EventContributionCombinedModule {
 		);
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $this->output->getLanguage()->getCode() );
 		$language = $this->output->getLanguage();
-		$templateData = [
-			'participantsCard' => [
-				'value' => $language->formatNum( $summaryData->getParticipantsCount() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-participants' )
-				)
-			],
-			'wikisEditedCard' => [
-				'value' => $language->formatNum( $summaryData->getWikisEditedCount() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-wikis-edited' )
-				)
-			],
-			'articlesCreatedCard' => [
-				'value' => $language->formatNum( $summaryData->getArticlesCreatedCount() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-articles-created' )
-				)
-			],
-			'articlesEditedCard' => [
-				'value' => $language->formatNum( $summaryData->getArticlesEditedCount() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-articles-edited' )
-				)
-			],
-			'editCountCard' => [
-				'value' => $language->formatNum( $summaryData->getEditCount() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-edit-count' )
-				)
-			],
-			'bytesChangedCard' => [
-				'value' => $this->formatDeltas( $summaryData->getBytesAdded(), $summaryData->getBytesRemoved() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-bytes-changed' )
-				)
-			],
-			'linksChangedCard' => [
-				'value' => $this->formatDeltas( $summaryData->getLinksAdded(), $summaryData->getLinksRemoved() ),
-				'label' => $msgFormatter->format(
-					MessageValue::new( 'campaignevents-contributions-summary-links-changed' )
-				)
-			],
+		$cards = [
+			$this->makeCard(
+				$language->formatNum( $summaryData->getParticipantsCount() ),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-contributions-summary-participants' ) )
+			),
+			$this->makeCard(
+				$language->formatNum( $summaryData->getWikisEditedCount() ),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-contributions-summary-wikis-edited' ) )
+			),
+			$this->makeCard(
+				$language->formatNum( $summaryData->getArticlesCreatedCount() ),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-contributions-summary-articles-created' ) )
+			),
+			$this->makeCard(
+				$language->formatNum( $summaryData->getArticlesEditedCount() ),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-contributions-summary-articles-edited' ) )
+			),
+			$this->makeCard(
+				$language->formatNum( $summaryData->getEditCount() ),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-contributions-summary-edit-count' ) )
+			),
+			$this->makeCard(
+				$this->codex->htmlSnippet(
+					$this->formatDeltas( $summaryData->getBytesAdded(), $summaryData->getBytesRemoved() )
+				),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-contributions-summary-bytes-changed' ) )
+			),
+			$this->makeCard(
+				$this->codex->htmlSnippet(
+					$this->formatDeltas( $summaryData->getLinksAdded(), $summaryData->getLinksRemoved() )
+				),
+				$msgFormatter->format( MessageValue::new( 'campaignevents-contributions-summary-links-changed' ) )
+			),
 		];
+		$summaryHtml = Html::rawElement(
+			'div',
+			[ 'class' => 'ext-campaignevents-eventdetails-contributions-summary' ],
+			implode( '', $cards )
+		);
 		$privateCount = $this->participantsStore->getPrivateParticipantCountForEvent( $eventId );
 		$showMessage = ( !$participantIsPrivate && $privateCount > 0 ) ||
 			( $participantIsPrivate && $privateCount > 1 );
@@ -190,9 +187,19 @@ readonly class EventContributionCombinedModule {
 				->getHtml();
 			$container->appendContent( new HtmlSnippet( $renderedNotice ) );
 		}
-		$renderedSummaryHtml = $this->templateParser->processTemplate( 'EventContributionsSummary', $templateData );
 
-		return $container->appendContent( new HtmlSnippet( $renderedSummaryHtml ) );
+		return $container->appendContent( new HtmlSnippet( $summaryHtml ) );
+	}
+
+	/**
+	 * Renders a summary card. Values containing raw HTML (e.g. delta formatting) must be passed
+	 * as an HtmlSnippet, which Codex leaves unescaped; plain strings are escaped for us.
+	 */
+	private function makeCard( string|CodexHtmlSnippet $value, string $label ): string {
+		return $this->codex->card(
+			title: $value,
+			description: $label
+		)->getHtml();
 	}
 
 	/**
