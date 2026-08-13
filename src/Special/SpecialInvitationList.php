@@ -15,18 +15,17 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\HiddenCentralUserException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Html\Html;
-use MediaWiki\Html\TemplateParser;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
+use Wikimedia\Codex\Component\HtmlSnippet;
+use Wikimedia\Codex\Utility\Codex;
 
 class SpecialInvitationList extends SpecialPage {
 	use InvitationFeatureAccessTrait;
 
 	public const PAGE_NAME = 'InvitationList';
-
-	private readonly TemplateParser $templateParser;
 
 	private const HIGHLY_RECOMMENDED_MIN_SCORE = 70;
 	public const RECOMMENDED_MIN_SCORE = 25;
@@ -38,7 +37,6 @@ class SpecialInvitationList extends SpecialPage {
 		private readonly UserLinker $userLinker,
 	) {
 		parent::__construct( self::PAGE_NAME );
-		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 	}
 
 	/**
@@ -159,28 +157,34 @@ class SpecialInvitationList extends SpecialPage {
 		}
 		$highlyRecommendedLinks = $this->getUserLinks( $highlyRecommended );
 		$highlyRecommendedLinksList = $this->formatAsList( $highlyRecommendedLinks );
-		$data = [
-			'noUsersWarning' => $noUsersWarning,
-			'highlyRecommendedAccordion' => [
-				'title' => $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text(),
-				'description' => $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text(),
-				'content' => $highlyRecommendedLinksList,
-				'isopen' => (bool)$highlyRecommendedLinks
-			],
-			'recommendedAccordion' => [
-				'title' => $this->msg( 'campaignevents-invitationlist-recommended' )->text(),
-				'description' => $this->msg( 'campaignevents-invitationlist-recommended-info' )->text(),
-				'content' => $this->formatAsList( $this->getUserLinks( $recommended ) ),
-				'isopen' => !$highlyRecommendedLinks
-			],
-			'articleListAccordion' => [
-				'title' => $this->msg( 'campaignevents-invitationlist-articlelist-label' )->text(),
-				'content' => $this->formatAsList( $this->getArticleListLinks( $list->getListID() ) )
-			]
-		];
-
-		$template = $this->templateParser->processTemplate( 'InvitationList', $data );
-		$out->addHTML( $template );
+		$html = $noUsersWarning;
+		if ( $highlyRecommendedLinksList !== '' ) {
+			$html .= ( new Codex() )->accordion()
+				->setTitle( $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text() )
+				->setDescription( $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text() )
+				->setContentHtml( new HtmlSnippet( $highlyRecommendedLinksList, [] ) )
+				->setOpen( (bool)$highlyRecommendedLinks )
+				->build()
+				->getHtml();
+		}
+		$recommendedLinksList = $this->formatAsList( $this->getUserLinks( $recommended ) );
+		if ( $recommendedLinksList !== '' ) {
+			$html .= ( new Codex() )->accordion()
+				->setTitle( $this->msg( 'campaignevents-invitationlist-recommended' )->text() )
+				->setDescription( $this->msg( 'campaignevents-invitationlist-recommended-info' )->text() )
+				->setContentHtml( new HtmlSnippet( $recommendedLinksList, [] ) )
+				->setOpen( !$highlyRecommendedLinks )
+				->build()
+				->getHtml();
+		}
+		$html .= ( new Codex() )->accordion()
+			->setTitle( $this->msg( 'campaignevents-invitationlist-articlelist-label' )->text() )
+			->setContentHtml( new HtmlSnippet( $this->formatAsList(
+				$this->getArticleListLinks( $list->getListID() )
+			), [] ) )
+			->build()
+			->getHtml();
+		$out->addHTML( $html );
 	}
 
 	/** @return list<string> */
