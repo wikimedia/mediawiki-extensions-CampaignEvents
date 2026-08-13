@@ -10,7 +10,6 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Html\Html;
-use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Page\PageIdentity;
@@ -19,6 +18,7 @@ use MediaWiki\Title\TitleFactory;
 use MediaWiki\WikiMap\WikiMap;
 use stdClass;
 use UnexpectedValueException;
+use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Rdbms\IResultWrapper;
 
 /**
@@ -39,8 +39,6 @@ class WorklistPagesPager extends CodexTablePager {
 	/** @var array<string,mixed> */
 	private array $extraQuery = [];
 
-	private readonly TemplateParser $templateParser;
-
 	/** Whether the performer may remove worklist articles. Memoized. */
 	private ?bool $canRemoveArticles = null;
 
@@ -57,7 +55,6 @@ class WorklistPagesPager extends CodexTablePager {
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getReplicaConnection();
-		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		parent::__construct(
 			$this->msg( 'campaignevents-worklist-table-header' )->text(),
 			$context,
@@ -221,14 +218,21 @@ class WorklistPagesPager extends CodexTablePager {
 			return '';
 		}
 
-		return $this->templateParser->processTemplate(
-			'RemoveWorklistArticleButton',
-			[
-				'wiki' => $row->cewp_wiki,
-				'title' => $row->cewp_page_prefixedtext,
-				'tooltip' => $this->msg( 'campaignevents-worklist-table-remove-button-label' )->text(),
-			]
-		);
+		$tooltip = $this->msg( 'campaignevents-worklist-table-remove-button-label' )->text();
+		return ( new Codex() )->button()
+			->setAction( 'destructive' )
+			->setWeight( 'quiet' )
+			->setIconOnly( true )
+			->setIconClass( 'cdx-css-icon--trash' )
+			->setAttributes( [
+				'class' => 'ext-campaignevents-delete-worklist-page-btn',
+				'title' => $tooltip,
+				'aria-label' => $tooltip,
+				'data-wiki' => $row->cewp_wiki,
+				'data-title' => $row->cewp_page_prefixedtext,
+			] )
+			->build()
+			->getHtml();
 	}
 
 	/**
