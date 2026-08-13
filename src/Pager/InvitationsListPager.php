@@ -11,16 +11,15 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialGenerateInvitationList;
 use MediaWiki\Extension\CampaignEvents\Special\SpecialInvitationList;
 use MediaWiki\Html\Html;
-use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Pager\ReverseChronologicalPager;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\ButtonWidget;
 use stdClass;
+use Wikimedia\Codex\Utility\Codex;
 
 class InvitationsListPager extends ReverseChronologicalPager {
-	private TemplateParser $templateParser;
 
 	public function __construct(
 		private readonly CentralUser $centralUser,
@@ -29,7 +28,6 @@ class InvitationsListPager extends ReverseChronologicalPager {
 		IContextSource $context,
 		LinkRenderer $linkRenderer
 	) {
-		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
 		$this->mDb = $databaseHelper->getReplicaConnection();
 		parent::__construct( $context, $linkRenderer );
 	}
@@ -111,20 +109,20 @@ class InvitationsListPager extends ReverseChronologicalPager {
 
 	private function getInfoChip( stdClass $row ): string {
 		if ( (int)$row->ceil_status === InvitationList::STATUS_PENDING ) {
-			$data = [
-				'status' => 'notice',
-				'message' => $this->msg( 'campaignevents-invitations-pager-status-processing' )->text()
-			];
-		} else {
-			$editorCount = (int)$row->list_editor_count;
-			$data = [
-				'status' => $editorCount > 0 ? 'success' : 'warning',
-				'message' => $this->msg( 'campaignevents-invitations-pager-status-editors' )
-					->numParams( $editorCount )
-					->text()
-			];
+			return ( new Codex() )->infoChip()
+				->setStatus( 'notice' )
+				->setIcon( 'cdx-info-chip__icon' )
+				->setText( $this->msg( 'campaignevents-invitations-pager-status-processing' )->text() )
+				->build()
+				->getHtml();
 		}
-
-		return $this->templateParser->processTemplate( 'InfoChip', $data );
+		$editorCount = (int)$row->list_editor_count;
+		return ( new Codex() )->infoChip()
+			->setStatus( $editorCount > 0 ? 'success' : 'warning' )
+			->setText( $this->msg( 'campaignevents-invitations-pager-status-editors' )
+				->numParams( $editorCount )
+				->text() )
+			->build()
+			->getHtml();
 	}
 }
