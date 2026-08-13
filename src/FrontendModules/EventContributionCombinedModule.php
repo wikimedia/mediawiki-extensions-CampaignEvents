@@ -24,6 +24,7 @@ use Wikimedia\Message\MessageValue;
 readonly class EventContributionCombinedModule {
 
 	private TemplateParser $templateParser;
+	private Codex $codex;
 
 	public function __construct(
 		private CampaignsCentralUserLookup $centralUserLookup,
@@ -38,6 +39,7 @@ readonly class EventContributionCombinedModule {
 		private OutputPage $output,
 	) {
 		$this->templateParser = new TemplateParser( __DIR__ . '/../../templates' );
+		$this->codex = new Codex( new MediaWikiLocalization( $output ) );
 	}
 
 	public const EDITORS_MODULE = 'editors';
@@ -74,32 +76,25 @@ readonly class EventContributionCombinedModule {
 		$buttonContainer = ( new Tag() )->addClasses(
 			[ 'ext-campaignevents-eventdetails-contributions-button-container' ]
 		);
-		$editorsButton = $this->templateParser->processTemplate(
-			"FakeButton", [
-				"cssClass" => 'ext-campaignevents-eventdetails-contributions-editors-button ' .
-					'cdx-button--weight-primary' .
-					" " .
-					( $module === self::EDITORS_MODULE ? 'cdx-button--action-progressive'
-						: 'cdx-button--action-default' ),
-				"buttonText" => $this->output->msg(
-					'campaignevents-event-details-contributions-editors-button-label'
-				)->text(),
-				"href" => $editorsLink
-			]
-		);
+		$editorsButton = $this->codex->button(
+			label: $this->output->msg(
+				'campaignevents-event-details-contributions-editors-button-label'
+			)->text(),
+			action: $module === self::EDITORS_MODULE ? 'progressive' : 'default',
+			weight: 'primary',
+			attributes: [ 'class' => 'ext-campaignevents-eventdetails-contributions-editors-button' ],
+			href: $editorsLink
+		)->getHtml();
 
-		$editsButton = $this->templateParser->processTemplate(
-			"FakeButton", [
-				"cssClass" => 'ext-campaignevents-eventdetails-contributions-edits-button cdx-button--weight-primary' .
-					" " .
-					( $module === self::EDITS_MODULE || $module === null ? 'cdx-button--action-progressive'
-						: 'cdx-button--action-default' ),
-				"buttonText" => $this->output->msg(
-					'campaignevents-event-details-contributions-edits-button-label'
-				)->text(),
-				"href" => $editsLink
-			]
-		);
+		$editsButton = $this->codex->button(
+			label: $this->output->msg(
+				'campaignevents-event-details-contributions-edits-button-label'
+			)->text(),
+			action: $module === self::EDITS_MODULE || $module === null ? 'progressive' : 'default',
+			weight: 'primary',
+			attributes: [ 'class' => 'ext-campaignevents-eventdetails-contributions-edits-button' ],
+			href: $editsLink
+		)->getHtml();
 		$buttonContainer->appendContent( [
 			new HtmlSnippet( $editsButton ),
 			new HtmlSnippet( $editorsButton ),
@@ -191,11 +186,9 @@ readonly class EventContributionCombinedModule {
 			$messageKey = $participantIsPrivate
 				? 'campaignevents-contributions-notice-other-private-participants-excluded'
 				: 'campaignevents-contributions-notice-private-participants-excluded';
-			$codex = new Codex( new MediaWikiLocalization( $this->output->getContext() ) );
-			$renderedNotice = $codex->message()
+			$renderedNotice = $this->codex->message()
 				->setType( 'notice' )
-				->setContentText( $msgFormatter->format( MessageValue::new( $messageKey ) ) )
-				->build()
+				->setContent( $msgFormatter->format( MessageValue::new( $messageKey ) ) )
 				->getHtml();
 			$container->appendContent( new HtmlSnippet( $renderedNotice ) );
 		}
