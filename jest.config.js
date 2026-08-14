@@ -33,7 +33,9 @@ module.exports = {
 	// names that allow to stub out resources with a single module
 	moduleNameMapper: {
 		'codex.js': '@wikimedia/codex',
-		'icons.json': '@wikimedia/codex-icons'
+		'icons.json': '@wikimedia/codex-icons',
+		'^ext\\.campaignEvents\\.worklistEventDiscoveryTracking$':
+			'<rootDir>/tests/jest/mocks/ext.campaignEvents.worklistEventDiscoveryTracking.js'
 	},
 
 	setupFiles: [

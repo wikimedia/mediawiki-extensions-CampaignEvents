@@ -14,10 +14,10 @@
 			<cdx-card
 				v-for="event in events"
 				:key="event.id"
-				:url="event.url"
+				:url="getEventUrl( event )"
 				target="_blank"
 				rel="noopener noreferrer"
-				@click="$emit( 'default' )"
+				@click="onEventCardClick( event )"
 			>
 				<template #title>
 					{{ event.name }}
@@ -31,8 +31,9 @@
 </template>
 
 <script>
-const { defineComponent } = require( 'vue' );
+const { defineComponent, watch } = require( 'vue' );
 const { CdxDialog, CdxCard } = require( './../codex.js' );
+const worklistEventDiscoveryTracking = require( 'ext.campaignEvents.worklistEventDiscoveryTracking' );
 
 module.exports = exports = defineComponent( {
 	name: 'EventDiscoveryDialog',
@@ -71,8 +72,54 @@ module.exports = exports = defineComponent( {
 			'Special:Preferences#mw-prefsection-personal-campaignevents-event-discovery'
 		);
 
+		/**
+		 * @param {Object} event
+		 * @return {string}
+		 */
+		function getEventUrl( event ) {
+			return worklistEventDiscoveryTracking.appendOriginToUrl( event.url );
+		}
+
+		function recordModalImpression() {
+			const eventIDs = events.map( ( event ) => event.id );
+			worklistEventDiscoveryTracking.recordPromotionModalInteraction(
+				'impression',
+				{
+					eventIds: eventIDs
+				}
+			);
+		}
+
+		watch( () => props.open, ( isOpen ) => {
+			if ( isOpen ) {
+				recordModalImpression();
+			}
+		}, { immediate: true } );
+
+		/**
+		 * @param {Object} event
+		 */
+		function recordClick( event ) {
+			worklistEventDiscoveryTracking.recordPromotionModalInteraction(
+				'click',
+				{
+					eventId: event.id
+				}
+			);
+		}
+
 		function onVisitEvent() {
-			window.open( events[ 0 ].url, '_blank', 'noopener,noreferrer' );
+			const event = events[ 0 ];
+			recordClick( event );
+			window.open( getEventUrl( event ), '_blank', 'noopener,noreferrer' );
+			emit( 'default' );
+		}
+
+		/**
+		 * @param {Object} event
+		 */
+		function onEventCardClick( event ) {
+			recordClick( event );
 			emit( 'default' );
 		}
 
@@ -83,7 +130,9 @@ module.exports = exports = defineComponent( {
 			defaultAction,
 			primaryAction,
 			footerMessageHTML,
-			onVisitEvent
+			getEventUrl,
+			onVisitEvent,
+			onEventCardClick
 		};
 	}
 } );

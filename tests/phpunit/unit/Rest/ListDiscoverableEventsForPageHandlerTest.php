@@ -56,7 +56,11 @@ class ListDiscoverableEventsForPageHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testRun__returnsEventsFromLookup() {
-		$events = [ [ 'id' => 42, 'name' => 'Pizza party', 'url' => '/wiki/Event:Pizza party' ] ];
+		$events = [ [
+			'id' => 42,
+			'name' => 'Pizza party',
+			'url' => '/wiki/Event:Pizza party',
+		] ];
 		$discoverableEventsLookup = $this->createMock( DiscoverableEventsLookup::class );
 		$discoverableEventsLookup->method( 'getAndRecordPromotableEvents' )->willReturn( $events );
 

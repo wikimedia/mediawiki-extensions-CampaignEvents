@@ -2,9 +2,16 @@
 
 /* global window */
 const { mount } = require( '@vue/test-utils' );
+const mockTracking = require( 'ext.campaignEvents.worklistEventDiscoveryTracking' );
 const EventDiscoveryDialog = require( '../../../../resources/ext.campaignEvents.postEdit/components/EventDiscoveryDialog.vue' );
 
-const singleEvent = { id: 1, name: 'Test event 1', url: '/wiki/Event:Test event 1' };
+const trackingUrlWithOrigin = ( url ) => url + '?ce_from=61ac4b96c6aed176';
+
+const singleEvent = {
+	id: 1,
+	name: 'Test event 1',
+	url: '/wiki/Event:Test event 1'
+};
 const multipleEvents = [
 	{ id: 1, name: 'Test event 1', url: '/wiki/Event:Test event 1' },
 	{ id: 2, name: 'Test event 2', url: '/wiki/Event:Test event 2' },
@@ -59,6 +66,16 @@ describe( 'EventDiscoveryDialog', () => {
 		expect( footer.html() ).toContain( 'mw-prefsection-personal-campaignevents-event-discovery' );
 	} );
 
+	it( 'records an impression for all listed events when the dialog opens', () => {
+		mountDialog( multipleEvents );
+		expect( mockTracking.recordPromotionModalInteraction ).toHaveBeenCalledWith(
+			'impression',
+			{
+				eventIds: multipleEvents.map( ( e ) => e.id )
+			}
+		);
+	} );
+
 	describe( 'single event', () => {
 		it( 'includes the event name in the description', () => {
 			const wrapper = mountDialog();
@@ -77,13 +94,26 @@ describe( 'EventDiscoveryDialog', () => {
 			expect( wrapper.find( '.cdx-card' ).exists() ).toBe( false );
 		} );
 
-		it( 'opens the event page in a new tab when the primary button is clicked', () => {
+		it( 'opens the event page with origin param when the primary button is clicked', () => {
 			const wrapper = mountDialog();
 			wrapper.getComponent( { name: 'CdxDialog' } ).vm.$emit( 'primary' );
+			expect( mockTracking.appendOriginToUrl ).toHaveBeenCalledWith( singleEvent.url );
 			expect( windowOpenSpy ).toHaveBeenCalledWith(
-				singleEvent.url,
+				trackingUrlWithOrigin( singleEvent.url ),
 				'_blank',
 				'noopener,noreferrer'
+			);
+		} );
+
+		it( 'records a click when the primary button is clicked', () => {
+			const wrapper = mountDialog();
+			mockTracking.recordPromotionModalInteraction.mockClear();
+			wrapper.getComponent( { name: 'CdxDialog' } ).vm.$emit( 'primary' );
+			expect( mockTracking.recordPromotionModalInteraction ).toHaveBeenCalledWith(
+				'click',
+				{
+					eventId: singleEvent.id
+				}
 			);
 		} );
 
@@ -107,20 +137,27 @@ describe( 'EventDiscoveryDialog', () => {
 			expect( cdxDialog.props( 'primaryAction' ) ).toBeNull();
 		} );
 
-		it( 'renders a card for each event', () => {
+		it( 'renders a card for each event with origin param in the URL', () => {
 			const wrapper = mountDialog( multipleEvents );
 			const cards = wrapper.findAll( '.cdx-card' );
 			expect( cards ).toHaveLength( multipleEvents.length );
 			multipleEvents.forEach( ( event, i ) => {
 				expect( cards[ i ].find( '.cdx-card__text__title' ).text() ).toBe( event.name );
-				expect( cards[ i ].attributes( 'href' ) ).toBe( event.url );
+				expect( cards[ i ].attributes( 'href' ) ).toBe( trackingUrlWithOrigin( event.url ) );
 				expect( cards[ i ].attributes( 'target' ) ).toBe( '_blank' );
 			} );
 		} );
 
-		it( 'emits default when an event card is clicked', async () => {
+		it( 'records a click and emits default when an event card is clicked', async () => {
 			const wrapper = mountDialog( multipleEvents );
+			mockTracking.recordPromotionModalInteraction.mockClear();
 			await wrapper.find( '.cdx-card' ).trigger( 'click' );
+			expect( mockTracking.recordPromotionModalInteraction ).toHaveBeenCalledWith(
+				'click',
+				{
+					eventId: multipleEvents[ 0 ].id
+				}
+			);
 			expect( wrapper.emitted( 'default' ) ).toHaveLength( 1 );
 		} );
 	} );

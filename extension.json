@@ -585,6 +585,7 @@
 				"CdxProgressBar"
 			],
 			"dependencies": [
+				"ext.campaignEvents.worklistEventDiscoveryTracking",
 				"mediawiki.api",
 				"mediawiki.jqueryMsg",
 				"mediawiki.user",

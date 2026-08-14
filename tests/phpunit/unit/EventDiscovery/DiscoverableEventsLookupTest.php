@@ -96,8 +96,16 @@ class DiscoverableEventsLookupTest extends MediaWikiUnitTestCase {
 		] );
 		$this->assertSame(
 			[
-				[ 'id' => 42, 'name' => 'Pizza party', 'url' => '/wiki/Event:Pizza party' ],
-				[ 'id' => 24, 'name' => 'Ytrap azzip', 'url' => '/wiki/Event:Ytrap azzip' ],
+				[
+					'id' => 42,
+					'name' => 'Pizza party',
+					'url' => '/wiki/Event:Pizza party',
+				],
+				[
+					'id' => 24,
+					'name' => 'Ytrap azzip',
+					'url' => '/wiki/Event:Ytrap azzip',
+				],
 			],
 			$this->callWith( $this->newLookup( $eventLookup ) )
 		);
