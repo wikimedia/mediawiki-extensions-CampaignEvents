@@ -44,6 +44,18 @@
 		} );
 	}
 
+	/**
+	 * Track the Register control. The shared logic derives the action source
+	 * (direct vs. from-promotion) from the presence of the promotion origin param.
+	 *
+	 * @param {string} action
+	 */
+	function trackRegisterInteraction( action ) {
+		worklistEventDiscoveryTracking.recordEventPageRegisterInteraction( action, {
+			eventId: eventID
+		} );
+	}
+
 	function redirectToLogin() {
 		const currentQuery = new URL( window.location.href ).searchParams;
 		// Prevent duplicate "title" param
@@ -335,10 +347,15 @@
 		maybeShowRegistrationSuccessNotification();
 		setupTimeConversion();
 
-		$( '.ext-campaignevents-eventpage-register-btn' ).on( 'click', ( e ) => {
-			e.preventDefault();
-			handleRegistrationOrEdit();
-		} );
+		const $registerBtn = $( '.ext-campaignevents-eventpage-register-btn' );
+		if ( $registerBtn.length ) {
+			trackRegisterInteraction( 'impression' );
+			$registerBtn.on( 'click', ( e ) => {
+				e.preventDefault();
+				trackRegisterInteraction( 'click' );
+				handleRegistrationOrEdit();
+			} );
+		}
 
 		showEnableRegistrationDialogOnPageCreation();
 		maybeShowRegistrationUpdatedNotification();
