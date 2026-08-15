@@ -344,8 +344,6 @@
 				"CdxTextInput",
 				"CdxTextArea",
 				"CdxMessage",
-				"CdxProgressBar",
-				"CdxCard",
 				"CdxIcon"
 			],
 			"packageFiles": [
@@ -587,8 +585,7 @@
 				"CdxCard",
 				"CdxDialog",
 				"CdxSelect",
-				"CdxProgressBar",
-				"CdxCard"
+				"CdxProgressBar"
 			],
 			"dependencies": [
 				"mediawiki.api",
