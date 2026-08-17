@@ -10,7 +10,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\UpdateWorklistPagesSecondaryStoreJob;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent;
-use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Page\PageIdentity;
@@ -27,12 +26,6 @@ use Wikimedia\ScopedCallback;
 class UpdateWorklistPagesSecondaryStoreJobTest extends MediaWikiIntegrationTestCase {
 	protected function setUp(): void {
 		parent::setUp();
-		// Temporarily fill in for the extension registration callback, which runs too early. Remove when dropping
-		// feature flag wgCampaignEventsEnableWorklists
-		$this->mergeMwGlobalArrayValue(
-			'wgContentHandlers',
-			[ CONTENT_MODEL_WORKLIST => WorklistContentHandler::class ]
-		);
 		// Disable events, so we can test the job in isolation.
 		$this->setService( 'DomainEventDispatcher', $this->createEventDispatcher() );
 

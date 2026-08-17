@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Hooks\Handlers;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
@@ -37,7 +36,6 @@ class PostEditHandler implements BeforePageDisplayHook {
 		private readonly GoalProgressFormatter $goalProgressFormatter,
 		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly EventContributionValidator $eventContributionValidator,
-		private readonly Config $config,
 		private readonly DiscoverableEventsLookup $discoverableEventsLookup,
 	) {
 	}
@@ -165,10 +163,6 @@ class PostEditHandler implements BeforePageDisplayHook {
 		Authority $authority,
 		CentralUser $centralUser
 	): void {
-		if ( !$this->config->get( 'CampaignEventsEnableWorklists' ) ) {
-			return;
-		}
-
 		$title = $out->getTitle();
 
 		$events = $this->discoverableEventsLookup->getAndRecordPromotableEvents(

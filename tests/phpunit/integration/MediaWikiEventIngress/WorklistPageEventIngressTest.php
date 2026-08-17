@@ -11,7 +11,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent;
-use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\User\UserIdentity;
@@ -29,12 +28,6 @@ class WorklistPageEventIngressTest extends MediaWikiIntegrationTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		// Temporarily fill in for the extension registration callback, which runs too early. Remove when dropping
-		// feature flag wgCampaignEventsEnableWorklists
-		$this->mergeMwGlobalArrayValue(
-			'wgContentHandlers',
-			[ CONTENT_MODEL_WORKLIST => WorklistContentHandler::class ]
-		);
 		// XXX T407288: test users are not made global by CentralAuth...
 		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
 		$centralUserLookup->method( 'newFromUserIdentity' )

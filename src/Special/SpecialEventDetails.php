@@ -214,13 +214,12 @@ class SpecialEventDetails extends SpecialPage {
 				$out
 			)
 		);
-		$worklistsEnabled = $this->getConfig()->get( 'CampaignEventsEnableWorklists' );
+
 		$hasContributionType = (bool)array_intersect(
 			$this->event->getTypes(),
 			$this->eventTypesRegistry->getContributionTypes()
 		);
-
-		if ( $worklistsEnabled && $hasContributionType ) {
+		if ( $hasContributionType ) {
 			$worklistModule = $this->frontendModulesFactory->newWorklistModule(
 				$this->getLinkRenderer(),
 				$out,

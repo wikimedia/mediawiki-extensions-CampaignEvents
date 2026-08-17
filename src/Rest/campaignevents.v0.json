@@ -315,8 +315,7 @@
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\PatchWorklistPagesHandler",
 					"services": [
 						"CampaignEventsWorklistArticleHelper",
-						"TitleFactory",
-						"MainConfig"
+						"TitleFactory"
 					]
 				}
 			}

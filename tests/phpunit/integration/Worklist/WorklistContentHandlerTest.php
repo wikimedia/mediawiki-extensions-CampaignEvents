@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Worklist;
 use MediaWiki\Content\ValidationParams;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent;
-use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Parser\ParserOutputLinkTypes;
 use MediaWiki\WikiMap\WikiMap;
@@ -19,15 +18,6 @@ use MediaWikiIntegrationTestCase;
  * @group Database
  */
 class WorklistContentHandlerTest extends MediaWikiIntegrationTestCase {
-	protected function setUp(): void {
-		parent::setUp();
-		// TODO: Drop this when dropping the `CampaignEventsEnableWorklists` feature flag.
-		$this->mergeMwGlobalArrayValue(
-			'wgContentHandlers',
-			[ CONTENT_MODEL_WORKLIST => WorklistContentHandler::class ]
-		);
-	}
-
 	public function testFillParserOutput() {
 		$linkText = 'Some title 12345';
 		$localWiki = WikiMap::getCurrentWikiId();

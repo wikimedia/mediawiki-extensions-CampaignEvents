@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Hooks\Handlers;
 
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContributionValidator;
@@ -33,7 +32,6 @@ use Skin;
 class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 
 	private function getHandler(
-		bool $featureEnabled = true,
 		?CampaignsCentralUserLookup $centralUserLookup = null,
 		?IEventLookup $eventLookup = null,
 		?GoalProgressFormatter $goalProgressFormatter = null,
@@ -47,7 +45,6 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 			$goalProgressFormatter ?? $this->makeGoalProgressFormatter(),
 			$worklistEventsStore ?? $this->makeWorklistEventsStore(),
 			$eventContributionValidator ?? $this->createNoOpMock( EventContributionValidator::class ),
-			new HashConfig( [ 'CampaignEventsEnableWorklists' => $featureEnabled ] ),
 			$discoverableEventsLookup ?? $this->makeDiscoverableEventsLookup(),
 		);
 	}
@@ -210,22 +207,6 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		$this->getHandler(
 			centralUserLookup: $this->makeCentralUserLookup(),
 			eventLookup: $this->makeEventLookup( associationEvents: [ $this->makeEvent( 1 ) ] ),
-			discoverableEventsLookup: $discoverableEventsLookup,
-		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
-	}
-
-	public function testDiscovery_skipsWhenFeatureDisabled(): void {
-		$out = $this->makeOutputPage();
-		$out->expects( $this->never() )->method( 'addModules' );
-
-		// The discovery service must not even be consulted when worklists are disabled.
-		$discoverableEventsLookup = $this->createMock( DiscoverableEventsLookup::class );
-		$discoverableEventsLookup->expects( $this->never() )->method( 'getAndRecordPromotableEvents' );
-
-		$this->getHandler(
-			featureEnabled: false,
-			centralUserLookup: $this->makeCentralUserLookup(),
-			eventLookup: $this->makeEventLookup(),
 			discoverableEventsLookup: $discoverableEventsLookup,
 		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
 	}

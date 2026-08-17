@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Rest;
 
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\CampaignEvents\Rest\PatchWorklistPagesHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Permissions\PermissionStatus;
@@ -41,7 +40,6 @@ class PatchWorklistPagesHandlerTest extends MediaWikiUnitTestCase {
 
 	private function newHandler(
 		?WorklistArticleHelper $helper = null,
-		bool $worklistsEnabled = true
 	): PatchWorklistPagesHandler {
 		if ( $helper === null ) {
 			$helper = $this->createMock( WorklistArticleHelper::class );
@@ -58,9 +56,8 @@ class PatchWorklistPagesHandlerTest extends MediaWikiUnitTestCase {
 		// The handler resolves that LinkTarget back to a PageIdentity before calling the behaviour layer.
 		$titleFactory = $this->createMock( TitleFactory::class );
 		$titleFactory->method( 'newFromLinkTarget' )->willReturn( $this->createMock( Title::class ) );
-		$config = new HashConfig( [ 'CampaignEventsEnableWorklists' => $worklistsEnabled ] );
 
-		return new PatchWorklistPagesHandler( $helper, $titleFactory, $config );
+		return new PatchWorklistPagesHandler( $helper, $titleFactory );
 	}
 
 	/**
@@ -125,18 +122,5 @@ class PatchWorklistPagesHandlerTest extends MediaWikiUnitTestCase {
 		$this->expectException( LocalizedHttpException::class );
 		$this->expectExceptionCode( 403 );
 		$this->executeHandler( $this->newHandler( $helper ), new RequestData( $this->getRequestData() ) );
-	}
-
-	public function testFeatureDisabled_returns404(): void {
-		$helper = $this->createMock( WorklistArticleHelper::class );
-		$helper->expects( $this->never() )->method( 'applyDelta' );
-
-		$this->expectException( LocalizedHttpException::class );
-		$this->expectExceptionMessage( 'campaignevents-rest-event-not-found' );
-		$this->expectExceptionCode( 404 );
-		$this->executeHandler(
-			$this->newHandler( $helper, false ),
-			new RequestData( $this->getRequestData() )
-		);
 	}
 }

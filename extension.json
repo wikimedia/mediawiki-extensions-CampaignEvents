@@ -84,14 +84,13 @@
 			"description": "Map of countries for which in-person or hybrid events cannot use contribution tracking (e.g. for legal reasons, see https://foundation.wikimedia.org/wiki/Legal:Wikimedia_Foundation_Country_and_Territory_Protection_List). This maps CLDR country codes to English country names, but only the former are used; the names are included for convenience, and are assumed to be correct.",
 			"value": {}
 		},
-		"CampaignEventsEnableWorklists": {
-			"description": "Flag to enable the worklist feature, allowing creation of worklists so that participants know what to work on",
-			"value": false
-		},
 		"CampaignEventsEnableWorklistEventDiscoveryTracking": {
 			"description": "Flag to enable Test Kitchen tracking for worklist promotion by article (event discovery funnel)",
 			"value": false
 		}
+	},
+	"ContentHandlers": {
+		"worklist": "MediaWiki\\Extension\\CampaignEvents\\Worklist\\WorklistContentHandler"
 	},
 	"DatabaseVirtualDomains": [
 		"virtual-campaignevents"
@@ -155,9 +154,7 @@
 		},
 		"GetPreferencesHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\GetPreferencesHandler",
-			"services": [
-				"MainConfig"
-			]
+			"services": []
 		},
 		"PostEditHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\PostEditHandler",
@@ -167,7 +164,6 @@
 				"CampaignEventsGoalProgressFormatter",
 				"CampaignEventsWorklistEventsStore",
 				"CampaignEventsEventContributionValidator",
-				"MainConfig",
 				"CampaignEventsDiscoverableEventsLookup"
 			]
 		},

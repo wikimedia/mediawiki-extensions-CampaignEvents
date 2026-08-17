@@ -4,19 +4,16 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\ParamValidator\TypeDef\TitleDef;
 use MediaWiki\Permissions\PermissionStatus;
-use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\Validator;
 use MediaWiki\Title\TitleFactory;
 use StatusValue;
-use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 /**
@@ -36,7 +33,6 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 	public function __construct(
 		private readonly WorklistArticleHelper $worklistArticleHelper,
 		private readonly TitleFactory $titleFactory,
-		private readonly Config $config,
 	) {
 	}
 
@@ -47,11 +43,6 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 	}
 
 	protected function run( LinkTarget $worklistTitle ): Response {
-		// When the worklist feature is disabled the endpoint behaves as if it did not exist.
-		if ( !$this->config->get( 'CampaignEventsEnableWorklists' ) ) {
-			throw new LocalizedHttpException( new MessageValue( 'campaignevents-rest-event-not-found' ), 404 );
-		}
-
 		$body = $this->getValidatedBody() ?? [];
 		// Articles are grouped by wiki, e.g. { "enwiki": [ "Article One" ], "ptwiki": [ "Artigo" ] }.
 		$add = $body['add'] ?? [];
