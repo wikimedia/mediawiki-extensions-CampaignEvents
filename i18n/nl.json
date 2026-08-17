@@ -8,7 +8,8 @@
 			"Mitsjol",
 			"Romaine",
 			"Siebrand",
-			"Sjoerddebruin"
+			"Sjoerddebruin",
+			"Sumurai8"
 		]
 	},
 	"campaignevents-desc": "Biedt functies voor organisatoren van en deelnemers aan campagnes.",
@@ -188,7 +189,7 @@
 	"allevents": "Alle evenementen",
 	"campaignevents-myevents-need-central-account": "U hebt een centraal gebruikersaccount nodig om de lijst met uw evenementen te zien.",
 	"campaignevents-myevents-filter-legend": "Evenementen filteren",
-	"campaignevents-myevents-label-search": "Zoeken",
+	"campaignevents-myevents-label-search": "Zoeken (hoofdlettergevoelig)",
 	"campaignevents-myevents-label-status": "Status",
 	"campaignevents-myevents-field-status-any": "Alle",
 	"campaignevents-myevents-field-status-open": "Open evenementen",
@@ -198,7 +199,7 @@
 	"campaignevents-allevents-tab-events-heading": "Evenementen",
 	"campaignevents-allevents-filter-legend": "Evenementen filteren",
 	"campaignevents-allevents-label-submit": "Filters toepassen",
-	"campaignevents-allevents-label-search": "Zoekwoord",
+	"campaignevents-allevents-label-search": "Zoekwoord (hoofdlettergevoelig)",
 	"campaignevents-allevents-label-participation-options": "Deelnamemogelijkheden",
 	"campaignevents-allevents-label-events-per-page": "Evenementen per pagina",
 	"campaignevents-allevents-label-start-date": "Van",
