@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\EventContribution;
 
 use BadMethodCallException;
-use EmptyBagOStuff;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\EventContribution\EventContribution;
@@ -15,7 +14,6 @@ use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
-use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -821,10 +819,7 @@ class EventContributionStoreTest extends MediaWikiIntegrationTestCase {
 		$wikiID = 'some_wiki';
 		$revID = 9876;
 		$eventID = 5432;
-		$this->setService(
-			'MainWANObjectCache',
-			new WANObjectCache( [ 'cache' => new EmptyBagOStuff() ] )
-		);
+		$this->setMainCache( CACHE_NONE );
 		$store = CampaignEventsServices::getEventContributionStore();
 		$this->assertNull(
 			$store->tryAcquireInsertionLock( $wikiID, $revID, $eventID ),
