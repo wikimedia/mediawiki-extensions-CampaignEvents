@@ -564,6 +564,7 @@
 				"campaignevents-eventpage-header-dates"
 			],
 			"dependencies": [
+				"ext.campaignEvents.worklistEventDiscoveryTracking",
 				"mediawiki.api",
 				"mediawiki.cookie",
 				"mediawiki.jqueryMsg",

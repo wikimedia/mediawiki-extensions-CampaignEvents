@@ -10,6 +10,7 @@
 		ManageRegistrationWidget = require( './ManageRegistrationWidget.js' ),
 		EventQuestions = require( './EventQuestions.js' ),
 		timeZoneConverter = require( '../TimeZoneConverter.js' ),
+		worklistEventDiscoveryTracking = require( 'ext.campaignEvents.worklistEventDiscoveryTracking' ),
 		eventID = mw.config.get( 'wgCampaignEventsEventID' ),
 		eventQuestionsData = mw.config.get( 'wgCampaignEventsEventQuestions' ),
 		configData = require( './data.json' ),
@@ -26,6 +27,22 @@
 		windowManager = new OO.ui.WindowManager();
 	let confirmUnregistrationDialog,
 		participantRegistrationDialog;
+
+	/**
+	 * Track the registration confirmation modal. The shared logic derives the action
+	 * source (direct vs. from-promotion) from the presence of the promotion origin param.
+	 * Skipped for existing participants, since the modal is then an edit flow.
+	 *
+	 * @param {string} action
+	 */
+	function trackRegisterModalInteraction( action ) {
+		if ( userIsParticipant ) {
+			return;
+		}
+		worklistEventDiscoveryTracking.recordRegisterModalInteraction( action, {
+			eventId: eventID
+		} );
+	}
 
 	function redirectToLogin() {
 		const currentQuery = new URL( window.location.href ).searchParams;
@@ -173,6 +190,7 @@
 			configData.policyMsg, new EventQuestions( eventQuestionsData )
 		);
 		windowManager.closeWindow( windowManager.getCurrentWindow() );
+		trackRegisterModalInteraction( 'impression' );
 		return windowManager.openWindow( participantRegistrationDialog ).closed;
 	}
 
@@ -194,6 +212,7 @@
 		}
 		showParticipantRegistrationDialog().then( ( data ) => {
 			if ( data && data.action === 'confirm' ) {
+				trackRegisterModalInteraction( 'click' );
 				registerUser( data.isPrivate, data.answers, data.showContributionPrompt )
 					.catch(
 						() => {
