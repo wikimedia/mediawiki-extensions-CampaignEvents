@@ -582,7 +582,7 @@
 	"prefs-campaignevents-event-discovery": "اكتشاف الأحداث",
 	"campaignevents-eventdiscovery-preference-label": "بعد نشر التعديل، أبلغني بالأحداث ذات الصلة.",
 	"campaignevents-eventdiscovery-dialog-title": "يرتبط تعديلك بجهد أكبر",
-	"campaignevents-eventdiscovery-dialog-description": "سيتم تحسين هذه المقالة كجزء من مشروع $1 . انضم إلى هذا الحدث للمساهمة في إحداث تأثير والتواصل مع محررين آخرين.",
+	"campaignevents-eventdiscovery-dialog-description": "ستحسّن هذه المقالة كجزء من مشروع $1 . انضم إلى هذه الفعالية للمساهمة في إحداث تأثير والتواصل مع محررين آخرين.",
 	"campaignevents-eventdiscovery-dialog-description-multiple": "سيتم تحسين هذه المقالة كجزء من مشروع $1 النشط {{PLURAL:$1| event|events}}. اختر أحدها لمعرفة المزيد.",
 	"campaignevents-eventdiscovery-dialog-visit-button": "قم بزيارة صفحة الفعالية",
 	"campaignevents-eventdiscovery-dialog-skip-button": "تجاوز",
