@@ -514,6 +514,8 @@
 	"campaignevents-invitationlist-articlelist-label": "צפייה ברשימת ערכים",
 	"campaignevents-event-details-footer": "נא לבקר ב<strong>[[Special:AllEvents|רשימת העבודה המשותפת]]</strong> כדי למצוא עוד אירועים וקהילות.",
 	"campaignevents-invitationlist-preference": "לכלול אותי ב[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists רשימות הזמנות]",
+	"prefs-campaignevents-event-discovery": "גילוי אירועים",
+	"campaignevents-eventdiscovery-preference-label": "לאחר שאני {{GENDER:|מפרסם|מפרסמת}} עריכה, להודיע לי על אירועים רלוונטיים",
 	"campaignevents-allevents-label-filter-wikis": "אתרי ויקי",
 	"campaignevents-allevents-placeholder-add-wikis": "נא להוסיף אתרי ויקי...",
 	"campaignevents-allevents-label-filter-topics": "נושאים",
