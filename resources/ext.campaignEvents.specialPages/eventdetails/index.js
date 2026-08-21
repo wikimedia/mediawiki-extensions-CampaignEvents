@@ -7,22 +7,23 @@ $( () => {
 	}
 	require( './EventContributions.js' );
 	require( './Worklist.js' );
+	const tabURLManager = require( './TabURLManager.js' );
 	// eslint-disable-next-line no-jquery/no-global-selector
 	const tabLayout = OO.ui.IndexLayout.static.infuse( $( '#ext-campaignevents-eventdetails-tabs' ) ),
-		tabs = tabLayout.getTabs().items;
-	tabs.forEach( ( header ) => {
+		tabSelect = tabLayout.getTabs();
+	tabSelect.items.forEach( ( header ) => {
 		header.$element.on( 'click', ( e ) => {
 			// override click event so that OOUI can handle it
 			e.preventDefault();
 		} );
 	} );
-	// FIXME Remove when T322271 is resolved
-	const tab = mw.util.getParamValue( 'tab' ) ?
-		mw.util.getParamValue( 'tab' ) :
-		'EventDetailsPanel';
-	if ( tabLayout.getTabPanel( tab ) ) {
-		tabLayout.setTabPanel( tab );
+	// FIXME Remove when T322271 is resolved: infusion restores which tab is selected, but not
+	// the layout's own notion of the current tab panel, so re-apply the server-side selection.
+	const selectedTab = tabSelect.findSelectedItem();
+	if ( selectedTab ) {
+		tabLayout.setTabPanel( selectedTab.getData() );
 	}
+	tabURLManager.connect( tabLayout );
 
 	// Enable collapsible stats section explicitly, for skins that disable it by
 	// default (like Minerva)

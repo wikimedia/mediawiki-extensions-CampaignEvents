@@ -348,6 +348,7 @@
 				"ext.campaignEvents.specialPages/editeventregistration/OrganizerSelectionFieldEnhancer.js",
 				"ext.campaignEvents.specialPages/editeventregistration/TimeFieldsEnhancer.js",
 				"ext.campaignEvents.specialPages/eventdetails/index.js",
+				"ext.campaignEvents.specialPages/eventdetails/TabURLManager.js",
 				"ext.campaignEvents.specialPages/eventdetails/OrganizersLoader.js",
 				"ext.campaignEvents.specialPages/eventdetails/ParticipantsManager.js",
 				"ext.campaignEvents.specialPages/eventdetails/EmailManager.js",
