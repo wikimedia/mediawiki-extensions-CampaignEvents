@@ -689,7 +689,7 @@
 	"campaignevents-goal-progress-metric-total_links_added": "$1 {{PLURAL:$1|koppeling|koppelingen}} toegevoegd",
 	"campaignevents-goal-progress-metric-total_links_removed": "$1 {{PLURAL:$1|koppeling|koppelingen}} verwijderd",
 	"campaignevents-worklist-page-not-worklist": "De doelpagina bestaat al en is geen werklijstpagina.",
-	"campaignevents-worklist-edit-permission-denied": "Alleen ingelogde (benoemde) gebruikers mogen werklijstpagina's bewerken.",
+	"campaignevents-worklist-edit-permission-denied": "Alleen aangemelde (benoemde) gebruikers mogen werklijstpagina's bewerken.",
 	"campaignevents-worklist-content-not-object": "De inhoud van de werklijst moet een object zijn",
 	"campaignevents-worklist-content-nonexistent-wiki": "Wiki-ID $1 werd niet herkend. Controleer of het een geldig wiki-ID is.",
 	"campaignevents-worklist-content-wiki-value-not-array": "De paginalijst voor elke wiki moet een array zijn. Ongeldige waarde gevonden: $1",
