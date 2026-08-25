@@ -18,6 +18,7 @@ use MediaWiki\Title\TitleFactory;
 use MediaWiki\WikiMap\WikiMap;
 use stdClass;
 use UnexpectedValueException;
+use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Rdbms\IResultWrapper;
 
@@ -219,7 +220,8 @@ class WorklistPagesPager extends CodexTablePager {
 		}
 
 		$tooltip = $this->msg( 'campaignevents-worklist-table-remove-button-label' )->text();
-		return ( new Codex() )->button()
+		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
+		return $codex->button()
 			->setAction( 'destructive' )
 			->setWeight( 'quiet' )
 			->setIconOnly( true )

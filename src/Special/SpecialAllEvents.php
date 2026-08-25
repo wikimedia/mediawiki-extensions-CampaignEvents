@@ -16,6 +16,7 @@ use MediaWiki\Html\TemplateParser;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\IncludableSpecialPage;
 use Wikimedia\Codex\Component\HtmlSnippet;
+use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Message\MessageSpecifier;
 use Wikimedia\Message\MessageValue;
@@ -339,7 +340,8 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		bool $isOpen
 	): string {
 		$navigation = $this->including() ? '' : $pager->getNavigationBar();
-		return ( new Codex() )->accordion()
+		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
+		return $codex->accordion()
 			->setTitle( $this->msg( $title )->text() )
 			->setDescription( $this->msg( $description )->text() )
 			->setContentHtml( new HtmlSnippet( $pager->getBody() . $navigation, [] ) )

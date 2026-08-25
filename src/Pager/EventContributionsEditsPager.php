@@ -24,6 +24,7 @@ use MediaWiki\WikiMap\WikiMap;
 use OOUI\IconWidget;
 use stdClass;
 use UnexpectedValueException;
+use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Rdbms\IResultWrapper;
 
@@ -311,7 +312,8 @@ class EventContributionsEditsPager extends CodexTablePager {
 		}
 
 		$tooltip = $this->msg( 'campaignevents-event-details-contributions-delete-tooltip' )->text();
-		return ( new Codex() )->button()
+		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
+		return $codex->button()
 			->setAction( 'destructive' )
 			->setWeight( 'quiet' )
 			->setIconOnly( true )

@@ -20,6 +20,7 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\Codex\Component\HtmlSnippet;
+use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 
 class SpecialInvitationList extends SpecialPage {
@@ -128,6 +129,7 @@ class SpecialInvitationList extends SpecialPage {
 
 		// TODO: Load only the styles for accordions. We need a RL module for that.
 		$out->addModuleStyles( [ 'codex-styles' ] );
+		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
 
 		$invitationListUsers = $this->invitationListStore->getInvitationListUsers( $list->getListID() );
 		[ $highlyRecommended, $recommended ] = self::splitUsersByScore( $invitationListUsers );
@@ -159,7 +161,7 @@ class SpecialInvitationList extends SpecialPage {
 		$highlyRecommendedLinksList = $this->formatAsList( $highlyRecommendedLinks );
 		$html = $noUsersWarning;
 		if ( $highlyRecommendedLinksList !== '' ) {
-			$html .= ( new Codex() )->accordion()
+			$html .= $codex->accordion()
 				->setTitle( $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text() )
 				->setDescription( $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text() )
 				->setContentHtml( new HtmlSnippet( $highlyRecommendedLinksList, [] ) )
@@ -169,7 +171,7 @@ class SpecialInvitationList extends SpecialPage {
 		}
 		$recommendedLinksList = $this->formatAsList( $this->getUserLinks( $recommended ) );
 		if ( $recommendedLinksList !== '' ) {
-			$html .= ( new Codex() )->accordion()
+			$html .= $codex->accordion()
 				->setTitle( $this->msg( 'campaignevents-invitationlist-recommended' )->text() )
 				->setDescription( $this->msg( 'campaignevents-invitationlist-recommended-info' )->text() )
 				->setContentHtml( new HtmlSnippet( $recommendedLinksList, [] ) )
@@ -177,7 +179,7 @@ class SpecialInvitationList extends SpecialPage {
 				->build()
 				->getHtml();
 		}
-		$html .= ( new Codex() )->accordion()
+		$html .= $codex->accordion()
 			->setTitle( $this->msg( 'campaignevents-invitationlist-articlelist-label' )->text() )
 			->setContentHtml( new HtmlSnippet( $this->formatAsList(
 				$this->getArticleListLinks( $list->getListID() )
