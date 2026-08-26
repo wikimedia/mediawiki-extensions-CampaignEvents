@@ -87,6 +87,10 @@
 		"CampaignEventsEnableWorklistEventDiscoveryTracking": {
 			"description": "Flag to enable Test Kitchen tracking for worklist promotion by article (event discovery funnel)",
 			"value": false
+		},
+		"CampaignEventsEnableWorklistCardView": {
+			"description": "Flag to enable the card presentation of an event's worklist, and the REST endpoint that feeds it, on a wiki.",
+			"value": false
 		}
 	},
 	"ContentHandlers": {
