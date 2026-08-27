@@ -108,16 +108,11 @@ class EventStore implements IEventStore, IEventLookup {
 		$cachedEventEncoded = $this->wanCache->getWithSetCallback(
 			$this->makePageEventCacheKey( $page ),
 			self::PAGE_EVENT_CACHE_TTL,
-			/**
-			 * @param ExistingEventRegistration|false|null $oldValue
-			 */
-			function ( ExistingEventRegistration|bool|null $oldValue, int &$ttl )
+			function ( ExistingEventRegistration|false|null $oldValue )
 				use ( $page, $readFlags ): ?string
 			{
 				try {
 					$event = $this->loadEventFromDB( $page, $readFlags );
-					$lastMod = max( $event->getLastEditTimestamp(), $event->getDeletionTimestamp() );
-					$ttl = $this->wanCache->adaptiveTTL( $lastMod, self::PAGE_EVENT_CACHE_TTL );
 					return $this->jsonCodec->toJsonString( $event );
 				} catch ( EventNotFoundException ) {
 					return null;
