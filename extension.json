@@ -340,6 +340,7 @@
 			"codexComponents": [
 				"CdxDialog",
 				"CdxButton",
+				"CdxCard",
 				"CdxField",
 				"CdxTextInput",
 				"CdxTextArea",
@@ -364,6 +365,8 @@
 				"ext.campaignEvents.specialPages/eventdetails/components/DeleteContributionDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/Worklist.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistTableControls.vue",
+				"ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue",
+				"ext.campaignEvents.specialPages/eventdetails/components/WorklistArticleCard.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/AddWorklistArticleDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/worklistPages.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistActionsApp.vue",
@@ -379,7 +382,9 @@
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
-						"cdxIconAdd"
+						"cdxIconAdd",
+						"cdxIconHistory",
+						"cdxIconTrash"
 					]
 				}
 			],
@@ -476,7 +481,12 @@
 				"campaignevents-worklist-remove-confirm-action",
 				"campaignevents-worklist-remove-confirm-cancel",
 				"campaignevents-worklist-remove-success",
-				"campaignevents-worklist-remove-error"
+				"campaignevents-worklist-remove-error",
+				"campaignevents-worklist-empty-state",
+				"campaignevents-worklist-table-remove-button-label",
+				"campaignevents-event-details-worklist-loading",
+				"campaignevents-event-details-worklist-history-button-label",
+				"campaignevents-event-details-worklist-load-error"
 			]
 		},
 		"ext.campaignEvents.specialPages.styles": {
@@ -486,6 +496,7 @@
 				"ext.campaignEvents.specialPages.styles/pagers/EventContributionsEditorsPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventContributionsEditsPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/WorklistPagesPager.less",
+				"ext.campaignEvents.specialPages.styles/Worklist.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventsListPager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/EventsTablePager.less",
 				"ext.campaignEvents.specialPages.styles/pagers/InvitationsListPager.less",

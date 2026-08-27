@@ -71,7 +71,8 @@ module.exports = exports = defineComponent( {
 		CdxMessage,
 		CdxIcon
 	},
-	setup() {
+	emits: [ 'added' ],
+	setup( props, { emit } ) {
 		const open = ref( false );
 		// One article title per line; the user only enters the title (the wiki is the current one).
 		const articlesText = ref( '' );
@@ -227,6 +228,7 @@ module.exports = exports = defineComponent( {
 				submitting = false;
 				articlesText.value = '';
 				open.value = false;
+				emit( 'added' );
 			}, ( err, errObj ) => {
 				submitting = false;
 				showError( restErrorText( errObj ) );

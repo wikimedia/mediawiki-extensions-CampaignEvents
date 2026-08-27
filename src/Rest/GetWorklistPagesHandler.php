@@ -32,9 +32,9 @@ use MediaWiki\WikiMap\WikiMap;
  * Special:EventDetails, so this endpoint performs no permission checks beyond requiring the event
  * to exist.
  *
- * The whole list is returned in a single response rather than page by page: the Worklist tab
- * filters and paginates it client-side, which has to happen without a page load, so the client
- * needs the complete list up front.
+ * The whole list is returned in one response rather than page by page: the card view searches and
+ * paginates it client-side, which has to happen without a page load, so the client needs every
+ * article up front.
  */
 class GetWorklistPagesHandler extends SimpleHandler {
 	use EventIDParamTrait;
@@ -93,7 +93,7 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			);
 		}
 
-		return $this->getResponseFactory()->createJson( $respVal );
+		return $this->getResponseFactory()->createJson( [ 'pages' => $respVal ] );
 	}
 
 	/**

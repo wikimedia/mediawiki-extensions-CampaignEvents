@@ -2,6 +2,36 @@
 
 const worklistPages = require( '../../../../resources/ext.campaignEvents.specialPages/eventdetails/worklistPages.js' );
 
+const EVENT_ID = 71;
+const EXPECTED_PATH = '/campaignevents/v0/event_registration/71/worklist_pages';
+
+// Responses as the endpoint sends them.
+const EMPTY_RESPONSE = { pages: [] };
+const ONE_ARTICLE_RESPONSE = {
+	pages: [ {
+		wiki: 'awiki',
+		title: 'Beavers',
+		url: 'https://a.example.org/wiki/Beavers',
+		classes: 'external'
+	} ]
+};
+
+/**
+ * @param {Object} [config] Config vars beyond the event ID
+ * @return {jest.Mock} The mocked mw.Rest get()
+ */
+const mockRest = ( config ) => {
+	const vars = Object.assign(
+		{ wgCampaignEventsWorklistEventId: EVENT_ID },
+		config || {}
+	);
+	mw.config.get.mockImplementation( ( name ) => vars[ name ] );
+
+	const get = jest.fn().mockResolvedValue( EMPTY_RESPONSE );
+	mw.Rest.mockImplementation( () => ( { get } ) );
+	return get;
+};
+
 /**
  * @param {Object} responseJSON Body of the failed response
  * @return {Object} An error object shaped like the one mw.Rest rejects with
@@ -47,5 +77,48 @@ describe( 'worklistPages.errorText', () => {
 
 	it( 'returns an empty string when there is no response', () => {
 		expect( worklistPages.errorText( {} ) ).toBe( '' );
+	} );
+} );
+
+describe( 'worklistPages.fetchPages', () => {
+	afterEach( () => {
+		jest.resetAllMocks();
+	} );
+
+	it( 'reads the articles in the event\'s worklist', async () => {
+		const get = mockRest();
+
+		await worklistPages.fetchPages();
+
+		expect( get ).toHaveBeenCalledWith( EXPECTED_PATH );
+	} );
+
+	it( 'normalises the response for the components', async () => {
+		const get = mockRest();
+		get.mockResolvedValue( ONE_ARTICLE_RESPONSE );
+
+		await expect( worklistPages.fetchPages() ).resolves.toStrictEqual( {
+			pages: [ {
+				wiki: 'awiki',
+				title: 'Beavers',
+				url: 'https://a.example.org/wiki/Beavers',
+				classes: 'external'
+			} ]
+		} );
+	} );
+
+	it( 'reads from the hosting wiki when the worklist page is on another wiki', async () => {
+		const foreignRestUrl = 'https://foreign.example.org/w/rest.php';
+		const restGet = mockRest( { wgCampaignEventsWorklistWikiRestUrl: foreignRestUrl } );
+		const foreignGet = jest.fn().mockResolvedValue( EMPTY_RESPONSE );
+		mw.ForeignRest = jest.fn().mockImplementation( () => ( { get: foreignGet } ) );
+
+		await worklistPages.fetchPages();
+
+		// The articles come from the worklist page, so the read goes to that page's wiki. A local
+		// read could not name that page: its title is formatted by the wiki holding it.
+		expect( mw.ForeignRest ).toHaveBeenCalledWith( foreignRestUrl );
+		expect( foreignGet ).toHaveBeenCalledWith( EXPECTED_PATH );
+		expect( restGet ).not.toHaveBeenCalled();
 	} );
 } );

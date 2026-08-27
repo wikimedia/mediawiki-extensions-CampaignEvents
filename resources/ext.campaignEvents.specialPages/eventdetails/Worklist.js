@@ -2,7 +2,7 @@
 	'use strict';
 
 	// eslint-disable-next-line no-jquery/no-global-selector
-	if ( !mw.user.isNamed() || !$( '#WorklistPanel' ).length ) {
+	if ( !$( '#WorklistPanel' ).length ) {
 		return;
 	}
 
@@ -27,10 +27,13 @@
 	 * header.
 	 */
 	function mountTableViewControls() {
+		const worklistTableHeader = document.querySelector(
+			'.ext-campaignevents-worklist-table .cdx-table__header'
+		);
+		if ( !worklistTableHeader ) {
+			return;
+		}
 		const WorklistTableControls = require( './components/WorklistTableControls.vue' ),
-			worklistTableHeader = document.querySelector(
-				'.ext-campaignevents-worklist-table .cdx-table__header'
-			),
 			container = document.createElement( 'div' );
 
 		worklistTableHeader.appendChild( container );
@@ -38,7 +41,34 @@
 		Vue.createMwApp( WorklistTableControls ).mount( container );
 	}
 
-	$( mountTableViewActions );
-	$( mountTableViewControls );
+	/**
+	 * Mounts the card view, which renders the worklist itself: the toolbar and the article cards.
+	 * The server renders placeholder cards inside the mount point, which mounting replaces.
+	 *
+	 * @return {boolean} Whether the card view was rendered, and so mounted
+	 */
+	function mountWorklistApp() {
+		const container = document.querySelector( '.ext-campaignevents-worklist-app' );
+		if ( !container ) {
+			return false;
+		}
+		const WorklistApp = require( './components/WorklistApp.vue' );
+		Vue.createMwApp( WorklistApp ).mount( container );
+		return true;
+	}
+
+	$( () => {
+		// The server renders one view or the other, depending on the card view feature flag and
+		// the requested view, so mount whichever is actually on the page. The table's controls
+		// are for editing, which only a named user may do; the cards are read-only until one of
+		// their own controls is used, so anonymous readers get them too.
+		if ( mountWorklistApp() ) {
+			return;
+		}
+		if ( mw.user.isNamed() ) {
+			mountTableViewActions();
+			mountTableViewControls();
+		}
+	} );
 
 }() );

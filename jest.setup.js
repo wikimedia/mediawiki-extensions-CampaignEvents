@@ -30,7 +30,8 @@ global.mw = {
 	user: {
 		tokens: {
 			get: jest.fn()
-		}
+		},
+		isNamed: jest.fn( () => true )
 	},
 	notify: jest.fn(),
 	Rest: jest.fn(),

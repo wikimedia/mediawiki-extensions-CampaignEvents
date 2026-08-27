@@ -1,0 +1,105 @@
+@import 'mediawiki.skin.variables.less';
+
+// Styles for the card presentation of an event's worklist, which the frontend renders. The
+// placeholder cards the server draws while the app loads share the card geometry, so that the
+// list does not jump when the real cards replace them.
+.ext-campaignevents-worklist-toolbar {
+	display: flex;
+	align-items: center;
+	gap: @spacing-50;
+	margin-bottom: @spacing-100;
+}
+
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-cards {
+	display: grid;
+	// As many cards per row as fit, rather than a column count fixed at each breakpoint: a wider
+	// viewport shows more cards instead of stretching three of them.
+	//
+	// `auto-fill` keeps the empty tracks, so a row holding one or two cards leaves them card-sized
+	// rather than blowing them up across the full width; `auto-fit` would do the opposite.
+	//
+	// The minimum has to stay narrow enough to fit the content area of the narrowest supported
+	// viewport, or the track overflows it; 16rem clears 320px with room to spare.
+	grid-template-columns: repeat( auto-fill, minmax( @size-1600, 1fr ) );
+	gap: @spacing-50;
+	// The list markup is for assistive tech only; drop the skin's bullets and indentation.
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+// One card per article. Consistent padding, border and gap keep the worklist easy to scan.
+// The Codex card brings the card's own chrome and typography, and fills the grid cell on its own,
+// so the list item needs no layout of its own — except that it is a list item, and the skin's
+// spacing for those would otherwise show up between the cards, on top of the grid's own gap.
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card {
+	margin: 0;
+}
+
+.ext-campaignevents-worklist-card__card {
+	// A floor rather than a fixed height, so a card with a long title still grows. Cards in the
+	// same grid row then match each other, via the grid's default stretch alignment. Sized for the
+	// one line the card holds here; the patches that add a description and a date raise it.
+	min-height: @size-400;
+}
+
+// Taken out of the flow into the card's corner. The Codex card is `position: relative`, so it is
+// the positioning context; the padding matches the card's own.
+.ext-campaignevents-worklist-card__remove {
+	position: absolute;
+	top: @spacing-50;
+	right: @spacing-50;
+}
+
+// Room for the button, so a long title does not run underneath it.
+.ext-campaignevents-worklist-card__card .cdx-card__text__title {
+	padding-right: @size-200;
+}
+
+// Sits below the list of cards, per the acceptance criteria.
+.ext-campaignevents-worklist-page-link {
+	display: inline-block;
+	margin-top: @spacing-100;
+}
+
+// Spans the grid, so the message is not squeezed into a single column.
+.ext-campaignevents-worklist-empty-state {
+	grid-column: ~'1 / -1';
+	color: @color-subtle;
+}
+
+// Placeholder cards, shown until the app has the worklist. Same geometry as a real card.
+.ext-campaignevents-worklist-skeleton-card {
+	box-sizing: border-box;
+	max-width: @size-2400;
+	// Matches the real card, so the list does not jump when the cards replace the placeholders.
+	min-height: @size-400;
+	border: @border-base;
+	border-radius: @border-radius-base;
+	background-color: @background-color-interactive-subtle;
+	opacity: 0.6;
+	animation: ext-campaignevents-worklist-pulse 1.5s ease-in-out infinite;
+}
+
+.ext-campaignevents-worklist-skeleton-toolbar {
+	height: @size-200;
+	max-width: @size-2400;
+	margin-bottom: @spacing-100;
+	background-color: @background-color-interactive-subtle;
+	opacity: 0.6;
+	animation: ext-campaignevents-worklist-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ext-campaignevents-worklist-pulse {
+	50% {
+		opacity: 0.3;
+	}
+}
+
+// Respect a reader who has asked for less motion: the placeholders still show, they just sit still.
+@media ( prefers-reduced-motion: reduce ) {
+	.ext-campaignevents-worklist-skeleton-card,
+	.ext-campaignevents-worklist-skeleton-toolbar {
+		animation: none;
+	}
+}

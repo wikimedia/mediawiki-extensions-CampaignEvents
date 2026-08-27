@@ -2,18 +2,44 @@
 	'use strict';
 
 	/**
-	 * Requests against an event's worklist, and the error handling they share.
+	 * Requests against an event's worklist, shared by the card view and the table view.
 	 */
 
 	/**
-	 * The REST client for editing the worklist. The worklist page may live on another wiki, in
-	 * which case the server hands us that wiki's rest.php and we target it directly.
+	 * The REST client for the worklist. The worklist page may live on another wiki, in which case
+	 * the server hands us that wiki's rest.php and we target it directly. Both reading and editing
+	 * go through it, because both act on that page.
 	 *
 	 * @return {mw.Rest|mw.ForeignRest}
 	 */
-	function editApi() {
+	function worklistApi() {
 		const foreignRestUrl = mw.config.get( 'wgCampaignEventsWorklistWikiRestUrl' );
 		return foreignRestUrl ? new mw.ForeignRest( foreignRestUrl ) : new mw.Rest();
+	}
+
+	/**
+	 * Read the articles in the worklist.
+	 *
+	 * The whole list comes back in one response, for the caller to search and paginate. The
+	 * request goes to the wiki hosting the worklist page, because that is where the articles are.
+	 *
+	 * @return {jQuery.Promise} Resolves with { pages }
+	 */
+	function fetchPages() {
+		const eventId = mw.config.get( 'wgCampaignEventsWorklistEventId' );
+		return worklistApi().get(
+			'/campaignevents/v0/event_registration/' + encodeURIComponent( eventId ) +
+				'/worklist_pages'
+		).then( ( response ) => ( {
+			// The endpoint speaks snake_case, like the extension's other endpoints; the rest of the
+			// frontend does not, so the shape is normalised here rather than in every component.
+			pages: response.pages.map( ( page ) => ( {
+				wiki: page.wiki,
+				title: page.title,
+				url: page.url,
+				classes: page.classes
+			} ) )
+		} ) );
 	}
 
 	/**
@@ -30,7 +56,7 @@
 		const worklistPage = mw.config.get( 'wgCampaignEventsWorklistPagePrefixedText' );
 		const remove = {};
 		remove[ wiki ] = [ title ];
-		return editApi().ajax(
+		return worklistApi().ajax(
 			'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPage ) + '/pages',
 			{
 				type: 'PATCH',
@@ -71,6 +97,7 @@
 	}
 
 	module.exports = {
+		fetchPages,
 		removeArticle,
 		errorText
 	};

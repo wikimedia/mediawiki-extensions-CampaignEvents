@@ -99,11 +99,16 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		return $this->executeHandlerAndGetBodyData(
 			$this->newHandler( $storedPages ),
 			new RequestData( self::REQ_DATA )
-		);
+		)['pages'];
 	}
 
 	public function testRun__noPages(): void {
-		$this->assertSame( [], $this->executeWithPages( [] ) );
+		$respData = $this->executeHandlerAndGetBodyData(
+			$this->newHandler( [] ),
+			new RequestData( self::REQ_DATA )
+		);
+
+		$this->assertSame( [ 'pages' => [] ], $respData );
 	}
 
 	public function testRun__localPages(): void {
@@ -229,6 +234,6 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 			new RequestData( self::REQ_DATA )
 		);
 
-		$this->assertSame( [], $respData );
+		$this->assertSame( [ 'pages' => [] ], $respData );
 	}
 }
