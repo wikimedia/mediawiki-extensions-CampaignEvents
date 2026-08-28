@@ -517,6 +517,8 @@
 	"campaignevents-invitationlist-articlelist-label": "Zobrazit seznam článků",
 	"campaignevents-event-details-footer": "Navštivte <strong>[[Special:AllEvents|Seznam spoluprací]]</strong> a objevte další události a komunity.",
 	"campaignevents-invitationlist-preference": "Zahrňte mě do [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists pozvánkových seznamů].",
+	"prefs-campaignevents-event-discovery": "Objevování událostí",
+	"campaignevents-eventdiscovery-preference-label": "Poté, co zveřejním editaci, mě informujte o souvisejících událostech",
 	"campaignevents-allevents-label-filter-wikis": "Wikiprojekty",
 	"campaignevents-allevents-placeholder-add-wikis": "Přidat projekty...",
 	"campaignevents-allevents-label-filter-topics": "Témata",
