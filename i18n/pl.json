@@ -245,7 +245,7 @@
 	"campaignevents-eventpage-register-dialog-contribstats-title": "Statystyki wkładu",
 	"campaignevents-eventpage-register-dialog-contribstats-label": "Po opublikowaniu edycji zapytaj mnie, czy edycja dotyczy tego wydarzenia.",
 	"campaignevents-eventpage-register-dialog-contribstats-help": "Dzięki temu łatwiej będzie Ci zobaczyć swój wpływ i udostępnić swoją pracę innym. Jeśli zrezygnujesz, nadal będziesz mógł dodawać lub usuwać powiązania edycji na [$1 liście wkładu].",
-	"campaignevents-eventpage-registration-enabled-notification": "Rejestracja jest włączona. Uczestnicy mogą teraz zarejestrować się na stronie twojego wydarzenia.",
+	"campaignevents-eventpage-registration-enabled-notification": "Rejestracja jest włączona. Uczestnicy mogą teraz zarejestrować się na stronie Twojego wydarzenia.",
 	"campaignevents-eventpage-registration-updated-notification-list": "To wydarzenie znajduje się na <strong>[[Special:AllEvents|Liście współpracy]]</strong>.",
 	"campaignevents-eventpage-registration-edit-notification": "Dane rejestracyjne zostały zaktualizowane.",
 	"campaignevents-eventpage-enableheader-organizer": "Jesteś organizatorem",
