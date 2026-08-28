@@ -344,7 +344,7 @@ class SpecialAllEvents extends IncludableSpecialPage {
 		return $codex->accordion()
 			->setTitle( $this->msg( $title )->text() )
 			->setDescription( $this->msg( $description )->text() )
-			->setContentHtml( new HtmlSnippet( $pager->getBody() . $navigation, [] ) )
+			->setContentHtml( new HtmlSnippet( $pager->getBody() . $navigation ) )
 			->setOpen( $isOpen )
 			->setAttributes( [ 'class' => $cssClass ] )
 			->build()

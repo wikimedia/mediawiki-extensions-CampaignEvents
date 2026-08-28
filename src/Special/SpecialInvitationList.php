@@ -164,7 +164,7 @@ class SpecialInvitationList extends SpecialPage {
 			$html .= $codex->accordion()
 				->setTitle( $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text() )
 				->setDescription( $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text() )
-				->setContentHtml( new HtmlSnippet( $highlyRecommendedLinksList, [] ) )
+				->setContentHtml( new HtmlSnippet( $highlyRecommendedLinksList ) )
 				->setOpen( (bool)$highlyRecommendedLinks )
 				->build()
 				->getHtml();
@@ -174,7 +174,7 @@ class SpecialInvitationList extends SpecialPage {
 			$html .= $codex->accordion()
 				->setTitle( $this->msg( 'campaignevents-invitationlist-recommended' )->text() )
 				->setDescription( $this->msg( 'campaignevents-invitationlist-recommended-info' )->text() )
-				->setContentHtml( new HtmlSnippet( $recommendedLinksList, [] ) )
+				->setContentHtml( new HtmlSnippet( $recommendedLinksList ) )
 				->setOpen( !$highlyRecommendedLinks )
 				->build()
 				->getHtml();
@@ -183,7 +183,7 @@ class SpecialInvitationList extends SpecialPage {
 			->setTitle( $this->msg( 'campaignevents-invitationlist-articlelist-label' )->text() )
 			->setContentHtml( new HtmlSnippet( $this->formatAsList(
 				$this->getArticleListLinks( $list->getListID() )
-			), [] ) )
+			) ) )
 			->build()
 			->getHtml();
 		$out->addHTML( $html );
