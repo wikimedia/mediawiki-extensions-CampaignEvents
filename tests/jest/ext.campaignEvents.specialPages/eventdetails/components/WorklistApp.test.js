@@ -43,6 +43,18 @@ const settle = async () => {
 	await nextTick();
 };
 
+const SEARCH = '.ext-campaignevents-worklist-search';
+/**
+ * Type into the search field. Filtering is immediate: the list is already in the client.
+ *
+ * @param {Object} wrapper
+ * @param {string} term
+ */
+const search = async ( wrapper, term ) => {
+	await wrapper.get( SEARCH + ' input' ).setValue( term );
+	await settle();
+};
+
 describe( 'WorklistApp', () => {
 	beforeEach( () => {
 		jest.useFakeTimers();
@@ -147,4 +159,91 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.find( '.ext-campaignevents-worklist-toolbar__history' ).exists() )
 			.toBe( false );
 	} );
+
+	it( 'filters as the reader types, without asking the server', async () => {
+		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Beavers', 'Chickens' ] ) );
+		const wrapper = mountApp();
+		await settle();
+		worklistPages.fetchPages.mockClear();
+
+		await search( wrapper, 'bea' );
+
+		expect( wrapper.findAll( CARD ).map( ( c ) => c.text() ) ).toEqual( [
+			expect.stringContaining( 'Bears' ),
+			expect.stringContaining( 'Beavers' )
+		] );
+		// The endpoint sends the whole worklist, so filtering it costs no request.
+		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
+	} );
+
+	it( 'matches any part of a title, whatever the case', async () => {
+		worklistPages.fetchPages.mockResolvedValue( page( [ 'Great bustard', 'Chickens' ] ) );
+		const wrapper = mountApp();
+		await settle();
+
+		await search( wrapper, 'BUST' );
+
+		expect( wrapper.findAll( CARD ).map( ( c ) => c.text() ) )
+			.toEqual( [ expect.stringContaining( 'Great bustard' ) ] );
+	} );
+
+	it( 'restores the whole worklist when the search field is cleared', async () => {
+		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Chickens' ] ) );
+		const wrapper = mountApp();
+		await settle();
+
+		await search( wrapper, 'bea' );
+		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
+
+		await search( wrapper, '' );
+
+		expect( wrapper.findAll( CARD ) ).toHaveLength( 2 );
+	} );
+
+	it( 'says that nothing matched rather than that the worklist is empty', async () => {
+		const wrapper = mountApp();
+		await settle();
+
+		await search( wrapper, 'nothing matches this' );
+
+		expect( wrapper.get( '.ext-campaignevents-worklist-empty-state' ).text() )
+			.toContain( 'worklist-search-no-results' );
+	} );
+
+	it( 'ignores a list response that a later load has superseded', async () => {
+		const wrapper = mountApp();
+		await settle();
+
+		let resolveStale;
+		worklistPages.fetchPages
+			.mockImplementationOnce( () => new Promise( ( resolve ) => {
+				resolveStale = resolve;
+			} ) )
+			.mockResolvedValue( page( [ 'Beavers' ] ) );
+
+		wrapper.vm.reload();
+		wrapper.vm.reload();
+		await settle();
+
+		resolveStale( page( [ 'Bears' ] ) );
+		await settle();
+
+		expect( wrapper.findAll( CARD ).map( ( c ) => c.text() ) )
+			.toEqual( [ expect.stringContaining( 'Beavers' ) ] );
+	} );
+
+	it( 'keeps the cards on screen while the list refreshes', async () => {
+		const wrapper = mountApp();
+		await settle();
+
+		worklistPages.fetchPages.mockReturnValue( new Promise( () => {} ) );
+		wrapper.vm.reload();
+		await settle();
+
+		// Replacing the list with placeholders on a refresh would make it flicker.
+		expect( wrapper.find( '.ext-campaignevents-worklist-skeleton' ).exists() ).toBe( false );
+		expect( wrapper.get( '.ext-campaignevents-worklist-cards' ).attributes( 'aria-busy' ) )
+			.toBe( 'true' );
+	} );
+
 } );

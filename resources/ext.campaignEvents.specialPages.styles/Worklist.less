@@ -10,6 +10,10 @@
 	margin-bottom: @spacing-100;
 }
 
+.ext-campaignevents-worklist-search {
+	margin-bottom: @spacing-100;
+}
+
 .ext-campaignevents-worklist-app .ext-campaignevents-worklist-cards {
 	display: grid;
 	// As many cards per row as fit, rather than a column count fixed at each breakpoint: a wider
@@ -71,7 +75,6 @@
 // Placeholder cards, shown until the app has the worklist. Same geometry as a real card.
 .ext-campaignevents-worklist-skeleton-card {
 	box-sizing: border-box;
-	max-width: @size-2400;
 	// Matches the real card, so the list does not jump when the cards replace the placeholders.
 	min-height: @size-400;
 	border: @border-base;

@@ -17,12 +17,20 @@
 			</a>
 		</div>
 
+		<cdx-search-input
+			v-model="searchTerm"
+			class="ext-campaignevents-worklist-search"
+			:placeholder="searchPlaceholder"
+			:aria-label="searchPlaceholder"
+			clearable
+		></cdx-search-input>
+
 		<cdx-message v-if="errorMessage" type="error">
 			{{ errorMessage }}
 		</cdx-message>
 
 		<div
-			v-else-if="isLoading"
+			v-else-if="showSkeleton"
 			class="ext-campaignevents-worklist-skeleton"
 			role="status"
 			:aria-label="$i18n( 'campaignevents-event-details-worklist-loading' ).text()"
@@ -36,13 +44,17 @@
 			</div>
 		</div>
 
-		<p v-else-if="!articles.length" class="ext-campaignevents-worklist-empty-state">
-			{{ $i18n( 'campaignevents-worklist-empty-state' ).text() }}
+		<p v-else-if="!matchingArticles.length" class="ext-campaignevents-worklist-empty-state">
+			{{ emptyStateMessage }}
 		</p>
 
-		<ul v-else class="ext-campaignevents-worklist-cards">
+		<ul
+			v-else
+			class="ext-campaignevents-worklist-cards"
+			:aria-busy="isLoading"
+		>
 			<worklist-article-card
-				v-for="article in articles"
+				v-for="article in matchingArticles"
 				:key="article.wiki + '|' + article.title"
 				:article="article"
 				:can-remove="canRemoveArticles"
@@ -68,8 +80,8 @@
 </template>
 
 <script>
-const { defineComponent, ref, onMounted } = require( 'vue' );
-const { CdxIcon, CdxMessage } = require( '../../../codex.js' );
+const { defineComponent, ref, computed, onMounted } = require( 'vue' );
+const { CdxIcon, CdxMessage, CdxSearchInput } = require( '../../../codex.js' );
 const { cdxIconHistory } = require( '../../../icons.json' );
 const AddWorklistArticleDialog = require( './AddWorklistArticleDialog.vue' );
 const RemoveWorklistArticleDialog = require( './RemoveWorklistArticleDialog.vue' );
@@ -101,12 +113,26 @@ module.exports = exports = defineComponent( {
 		RemoveWorklistArticleDialog,
 		WorklistArticleCard,
 		CdxIcon,
-		CdxMessage
+		CdxMessage,
+		CdxSearchInput
 	},
 	setup() {
 		const articles = ref( [] );
 		const isLoading = ref( true );
 		const errorMessage = ref( '' );
+
+		const searchTerm = ref( '' );
+		// The endpoint sends the whole worklist, so filtering it is a computed rather than a
+		// request: results appear as the reader types, with no round trip to wait for.
+		const matchingArticles = computed( () => {
+			const needle = searchTerm.value.trim().toLowerCase();
+			if ( !needle ) {
+				return articles.value;
+			}
+			return articles.value.filter(
+				( article ) => article.title.toLowerCase().includes( needle )
+			);
+		} );
 
 		const isRemoveDialogOpen = ref( false );
 		const isRemoving = ref( false );
@@ -120,6 +146,17 @@ module.exports = exports = defineComponent( {
 		// Identifies the most recent request, so that a slow response cannot overwrite the results
 		// of a newer one; a reload while one is in flight is enough to get two.
 		let latestRequestId = 0;
+
+		// The placeholders stand in for a list that is not on screen yet. Once there are cards to
+		// show, a refresh leaves them in place rather than replacing the list with placeholders on
+		// every keystroke; the list is marked busy instead.
+		const showSkeleton = computed( () => isLoading.value && !articles.value.length );
+		// An empty list means something different once the reader has filtered it.
+		const emptyStateMessage = computed( () => mw.msg(
+			searchTerm.value.trim() ?
+				'campaignevents-event-details-worklist-search-no-results' :
+				'campaignevents-worklist-empty-state'
+		) );
 
 		/** Read the worklist, replacing whatever is on screen. */
 		function load() {
@@ -191,9 +228,12 @@ module.exports = exports = defineComponent( {
 		onMounted( reload );
 
 		return {
-			articles,
 			isLoading,
 			errorMessage,
+			searchTerm,
+			matchingArticles,
+			showSkeleton,
+			emptyStateMessage,
 			isRemoveDialogOpen,
 			isRemoving,
 			canAddArticles,
@@ -202,6 +242,7 @@ module.exports = exports = defineComponent( {
 			historyUrl: mw.config.get( 'wgCampaignEventsWorklistPageHistoryUrl' ) || '',
 			historyLabel: mw.msg( 'campaignevents-event-details-worklist-history-button-label' ),
 			historyButtonClasses: HISTORY_BUTTON_CLASSES,
+			searchPlaceholder: mw.msg( 'campaignevents-event-details-worklist-search-placeholder' ),
 			skeletonCards: SKELETON_CARDS,
 			cdxIconHistory,
 			onRemoveRequested,

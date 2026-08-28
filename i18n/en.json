@@ -340,6 +340,8 @@
 	"campaignevents-event-details-worklist-loading": "Loading pages…",
 	"campaignevents-event-details-worklist-history-button-label": "View history",
 	"campaignevents-event-details-worklist-load-error": "The worklist could not be loaded. $1",
+	"campaignevents-event-details-worklist-search-placeholder": "Search pages",
+	"campaignevents-event-details-worklist-search-no-results": "No pages in this worklist match your search.",
 	"campaignevents-worklist-table-header": "Worklist",
 	"campaignevents-worklist-table-article-column-header": "Page",
 	"campaignevents-worklist-table-wiki-column-header": "Wiki",

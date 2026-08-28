@@ -342,6 +342,7 @@
 				"CdxButton",
 				"CdxCard",
 				"CdxField",
+				"CdxSearchInput",
 				"CdxTextInput",
 				"CdxTextArea",
 				"CdxMessage",
@@ -486,7 +487,9 @@
 				"campaignevents-worklist-table-remove-button-label",
 				"campaignevents-event-details-worklist-loading",
 				"campaignevents-event-details-worklist-history-button-label",
-				"campaignevents-event-details-worklist-load-error"
+				"campaignevents-event-details-worklist-load-error",
+				"campaignevents-event-details-worklist-search-placeholder",
+				"campaignevents-event-details-worklist-search-no-results"
 			]
 		},
 		"ext.campaignEvents.specialPages.styles": {
