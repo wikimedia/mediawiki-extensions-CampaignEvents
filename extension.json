@@ -385,6 +385,8 @@
 					"callbackParam": [
 						"cdxIconAdd",
 						"cdxIconHistory",
+						"cdxIconNext",
+						"cdxIconPrevious",
 						"cdxIconTrash"
 					]
 				}
@@ -489,7 +491,11 @@
 				"campaignevents-event-details-worklist-history-button-label",
 				"campaignevents-event-details-worklist-load-error",
 				"campaignevents-event-details-worklist-search-placeholder",
-				"campaignevents-event-details-worklist-search-no-results"
+				"campaignevents-event-details-worklist-search-no-results",
+				"campaignevents-event-details-worklist-previous-page",
+				"campaignevents-event-details-worklist-next-page",
+				"campaignevents-event-details-worklist-pagination-label",
+				"ellipsis"
 			]
 		},
 		"ext.campaignEvents.specialPages.styles": {

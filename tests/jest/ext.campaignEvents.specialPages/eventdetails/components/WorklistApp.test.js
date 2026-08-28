@@ -17,9 +17,48 @@ const article = ( title, overrides = {} ) => Object.assign( {
 	classes: ''
 }, overrides );
 
-const page = ( titles ) => ( {
-	pages: titles.map( ( t ) => article( t ) )
-} );
+const page = ( titles ) => ( { pages: titles.map( ( t ) => article( t ) ) } );
+
+const ARTICLES_PER_PAGE = 24;
+
+/**
+ * Titles for a worklist of a given size, numbered so a page of them can be identified.
+ *
+ * @param {number} count
+ * @return {string[]}
+ */
+const articleTitles = ( count ) => Array.from(
+	{ length: count },
+	( ignored, index ) => 'Article ' + ( index + 1 )
+);
+
+/**
+ * A response holding a worklist of a given size.
+ *
+ * @param {number} count
+ * @return {Object}
+ */
+const worklistOf = ( count ) => page( articleTitles( count ) );
+
+const PAGE_BUTTON = '.ext-campaignevents-worklist-pagination__page';
+
+/**
+ * The page numbers on offer, with a gap written as the character the markup renders.
+ *
+ * @param {Object} wrapper
+ * @return {string[]}
+ */
+const offered = ( wrapper ) => wrapper
+	.findAll( '.ext-campaignevents-worklist-pagination__item' )
+	.map( ( item ) => item.text() );
+
+const currentPage = ( wrapper ) => wrapper.findAll( PAGE_BUTTON )
+	.filter( ( button ) => button.attributes( 'aria-current' ) === 'page' )
+	.map( ( button ) => button.text() );
+
+const PAGINATION = '.ext-campaignevents-worklist-pagination';
+const nextButton = ( wrapper ) => wrapper.get( PAGINATION + '__next' );
+const prevButton = ( wrapper ) => wrapper.get( PAGINATION + '__prev' );
 
 /**
  * @param {Object} [config]
@@ -93,15 +132,135 @@ describe( 'WorklistApp', () => {
 			.toContain( 'worklist-empty-state' );
 	} );
 
-	it( 'renders the whole worklist, with no paging of its own', async () => {
-		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Chickens', 'Beavers' ] ) );
+	it( 'shows no pagination for a worklist that fits on one page', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE ) );
 		const wrapper = mountApp();
 		await settle();
 
-		expect( wrapper.findAll( CARD ) ).toHaveLength( 3 );
-		// Paging the list is the card view's own business, added separately; the request asks for
-		// no page of its own.
-		expect( worklistPages.fetchPages ).toHaveBeenCalledWith();
+		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
+		expect( wrapper.find( '.ext-campaignevents-worklist-pagination' ).exists() ).toBe( false );
+	} );
+
+	it( 'pages through the articles it already holds, without asking again', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+		const wrapper = mountApp();
+		await settle();
+		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
+		worklistPages.fetchPages.mockClear();
+
+		await nextButton( wrapper ).trigger( 'click' );
+		await settle();
+
+		const shown = wrapper.findAll( CARD ).map( ( c ) => c.text() );
+		expect( shown ).toHaveLength( 3 );
+		expect( shown[ 0 ] ).toContain( 'Article ' + ( ARTICLES_PER_PAGE + 1 ) );
+		// The whole worklist is already in hand, so a page change costs no request.
+		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
+
+		await prevButton( wrapper ).trigger( 'click' );
+		await settle();
+		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
+	} );
+
+	it( 'offers a numbered button for every page', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		expect( offered( wrapper ) ).toEqual( [ '1', '2', '3' ] );
+		expect( currentPage( wrapper ) ).toEqual( [ '1' ] );
+	} );
+
+	it( 'jumps straight to a page the reader picks', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
+		const wrapper = mountApp();
+		await settle();
+		worklistPages.fetchPages.mockClear();
+
+		await wrapper.findAll( PAGE_BUTTON )[ 2 ].trigger( 'click' );
+		await settle();
+
+		expect( currentPage( wrapper ) ).toEqual( [ '3' ] );
+		expect( wrapper.findAll( CARD )[ 0 ].text() )
+			.toContain( 'Article ' + ( ARTICLES_PER_PAGE * 2 + 1 ) );
+		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
+	} );
+
+	it( 'leaves out a run of pages once there are too many to show', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 20 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		expect( offered( wrapper ) ).toEqual( [ '1', '2', '3', '4', '5', '(ellipsis)', '20' ] );
+
+		await wrapper.findAll( PAGE_BUTTON ).find( ( b ) => b.text() === '5' ).trigger( 'click' );
+		await settle();
+
+		// The control count is held steady, so the row does not resize as the reader moves.
+		expect( offered( wrapper ) ).toEqual( [ '1', '(ellipsis)', '4', '5', '6', '(ellipsis)', '20' ] );
+	} );
+
+	it( 'keeps the gap out of the accessibility tree', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 20 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		expect(
+			wrapper.get( '.ext-campaignevents-worklist-pagination__ellipsis' )
+				.attributes( 'aria-hidden' )
+		).toBe( 'true' );
+	} );
+
+	it( 'names the icon-only paging buttons for assistive technology', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		// The chevrons say nothing on their own, so the name has to come from the label.
+		expect( prevButton( wrapper ).attributes( 'aria-label' ) )
+			.toContain( 'worklist-previous-page' );
+		expect( nextButton( wrapper ).attributes( 'aria-label' ) )
+			.toContain( 'worklist-next-page' );
+	} );
+
+	it( 'names the pagination landmark', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.get( 'nav.ext-campaignevents-worklist-pagination' )
+			.attributes( 'aria-label' ) )
+			.toContain( 'worklist-pagination-label' );
+	} );
+
+	it( 'stops the reader paging off either end', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+		await nextButton( wrapper ).trigger( 'click' );
+		await settle();
+		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+	} );
+
+	it( 'drops back a page when removing an article empties the one shown', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 1 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		await nextButton( wrapper ).trigger( 'click' );
+		await settle();
+		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
+
+		// The one article on the last page is removed, so that page no longer exists.
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE ) );
+		await wrapper.get( '.ext-campaignevents-worklist-card__remove' ).trigger( 'click' );
+		wrapper.vm.confirmRemove();
+		await settle();
+
+		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
 		expect( wrapper.find( '.ext-campaignevents-worklist-pagination' ).exists() ).toBe( false );
 	} );
 
@@ -114,7 +273,7 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.find( '.ext-campaignevents-worklist-empty-state' ).exists() ).toBe( false );
 	} );
 
-	it( 're-reads the worklist after removing an article', async () => {
+	it( 're-reads the current page after removing an article', async () => {
 		const wrapper = mountApp();
 		await settle();
 
@@ -172,7 +331,7 @@ describe( 'WorklistApp', () => {
 			expect.stringContaining( 'Bears' ),
 			expect.stringContaining( 'Beavers' )
 		] );
-		// The endpoint sends the whole worklist, so filtering it costs no request.
+		// Paging client-side means the whole worklist is in hand, so filtering costs no request.
 		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
 	} );
 
@@ -246,4 +405,19 @@ describe( 'WorklistApp', () => {
 			.toBe( 'true' );
 	} );
 
+	it( 'returns to the first page when a search is entered', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+		const wrapper = mountApp();
+		await settle();
+
+		await nextButton( wrapper ).trigger( 'click' );
+		await settle();
+		expect( wrapper.findAll( CARD ) ).toHaveLength( 3 );
+
+		await search( wrapper, 'article' );
+
+		// Back on the first page of the filtered results, not the second page of the old ones.
+		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
+		expect( currentPage( wrapper ) ).toEqual( [ '1' ] );
+	} );
 } );

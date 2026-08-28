@@ -14,6 +14,48 @@
 	margin-bottom: @spacing-100;
 }
 
+.ext-campaignevents-worklist-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: @spacing-50;
+	margin-top: @spacing-100;
+}
+
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-pagination__list {
+	display: flex;
+	align-items: center;
+	gap: @spacing-25;
+	// The list markup is for assistive tech only; drop the skin's bullets and indentation.
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-pagination__item {
+	margin: 0;
+}
+
+// The current page is filled rather than outlined. These are quiet buttons, and Codex gives them
+// a transparent background from a selector as specific as an unprefixed rule of ours, which then
+// loses on stylesheet order; the reader is left with the focus ring as the only clue, and that
+// follows the last click rather than the page. The fill is the one Codex gives a hovered quiet
+// button, so the text keeps its usual colour and contrast.
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-pagination__page {
+	&.ext-campaignevents-worklist-pagination__page--current:enabled {
+		background-color: @background-color-interactive-subtle--hover;
+
+		&:active {
+			background-color: @background-color-interactive-subtle--active;
+		}
+	}
+}
+
+.ext-campaignevents-worklist-pagination__ellipsis {
+	color: @color-subtle;
+}
+
 .ext-campaignevents-worklist-app .ext-campaignevents-worklist-cards {
 	display: grid;
 	// As many cards per row as fit, rather than a column count fixed at each breakpoint: a wider

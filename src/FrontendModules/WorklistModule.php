@@ -126,8 +126,8 @@ readonly class WorklistModule {
 	}
 
 	/**
-	 * The card view is rendered by the frontend, which reads the worklist a page at a time so that
-	 * paging needs no reload. What the server emits is the element the app mounts on, holding
+	 * The card view is rendered by the frontend, which is sent the whole worklist so that filtering
+	 * and paging need no reload. What the server emits is the element the app mounts on, holding
 	 * placeholder cards so that the tab is not blank while the first request is in flight, and a
 	 * pointer to the table view for readers without JavaScript.
 	 */
