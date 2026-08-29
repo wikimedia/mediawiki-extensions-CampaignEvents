@@ -166,6 +166,20 @@ $specialPageAliases['uk'] = [
 	'InvitationList' => [ 'Список_запрошень' ],
 ];
 
+$specialPageAliases['vi'] = [
+	'EnableEventRegistration' => [ 'Bật_đăng_ký_sự_kiện' ],
+	'DeleteEventRegistration' => [ 'Tắt_đăng_ký_sự_kiện' ],
+	'EditEventRegistration' => [ 'Sửa_đăng_ký_sự_kiện' ],
+	'RegisterForEvent' => [ 'Đăng_ký_tham_gia_sự_kiện' ],
+	'CancelEventRegistration' => [ 'Hủy_đăng_ký_sự_kiện' ],
+	'MyEvents' => [ 'Sự_kiện_của_tôi' ],
+	'AllEvents' => [ 'Tất_cả_sự_kiện' ],
+	'EventDetails' => [ 'Chi_tiết_sự_kiện' ],
+	'GenerateInvitationList' => [ 'Tạo_danh_sách_mời' ],
+	'MyInvitationLists' => [ 'Danh_sách_mời_của_tôi' ],
+	'InvitationList' => [ 'Danh_sách_mời' ],
+];
+
 $specialPageAliases['zh'] = [
 	'EnableEventRegistration' => [ 'EnableEventRegistration' ],
 	'DeleteEventRegistration' => [ 'DeleteEventRegistration' ],
