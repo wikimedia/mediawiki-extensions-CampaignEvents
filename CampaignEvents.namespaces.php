@@ -141,3 +141,18 @@ $namespaceNames['vi'] = [
 	NS_EVENT => 'Sự_kiện',
 	NS_EVENT_TALK => 'Thảo_luận_Sự_kiện',
 ];
+
+$namespaceNames['zh'] = [
+	NS_EVENT => 'Event',
+	NS_EVENT_TALK => 'Event_talk',
+];
+
+$namespaceNames['zh-hans'] = [
+	NS_EVENT => '活动',
+	NS_EVENT_TALK => '活动讨论',
+];
+
+$namespaceNames['zh-hant'] = [
+	NS_EVENT => '活動',
+	NS_EVENT_TALK => '活動討論',
+];
