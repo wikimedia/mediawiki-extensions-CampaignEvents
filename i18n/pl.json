@@ -10,7 +10,7 @@
 	"campaignevents-desc": "Dostarcza narzędzia dla organizatorów i uczestników kampanii.",
 	"nstab-event": "Wydarzenie",
 	"group-event-organizer": "Organizatorzy wydarzeń",
-	"group-event-organizer-member": "{{GENDER:$1|organizator|organizatorka|organizator(-ka)}} wydarzeń",
+	"group-event-organizer-member": "{{GENDER:$1|organizator|organizatorka|organizator(ka)}} wydarzeń",
 	"grouppage-event-organizer": "{{ns:project}}:Organizatorzy wydarzeń",
 	"action-campaignevents-enable-registration": "włączania rejestracji na wydarzenia",
 	"right-campaignevents-enable-registration": "Włączanie rejestracji na wydarzenia",
