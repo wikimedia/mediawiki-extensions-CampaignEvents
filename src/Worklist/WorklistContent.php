@@ -95,15 +95,19 @@ class WorklistContent extends JsonContent {
 					}
 					if ( $title->hasFragment() ) {
 						$ret->fatal( 'campaignevents-worklist-content-title-with-fragment', $pageElement );
-					}
-					// Make sure titles use the canonical form, to avoid sneaky duplicates and any formatting issues.
-					$canonicalPrefixedText = $title->getPrefixedText();
-					if ( $canonicalPrefixedText !== $pageElement ) {
-						$ret->fatal(
-							'campaignevents-worklist-content-title-non-canonical',
-							$pageElement,
-							$canonicalPrefixedText
-						);
+					} else {
+						// Make sure titles use the canonical form, to avoid sneaky duplicates and any
+						// formatting issues. Skipped when the title has a fragment: getPrefixedText()
+						// strips the fragment, so the comparison would always report a spurious
+						// non-canonical mismatch on top of the fragment error (T432667).
+						$canonicalPrefixedText = $title->getPrefixedText();
+						if ( $canonicalPrefixedText !== $pageElement ) {
+							$ret->fatal(
+								'campaignevents-worklist-content-title-non-canonical',
+								$pageElement,
+								$canonicalPrefixedText
+							);
+						}
 					}
 				} catch ( MalformedTitleException ) {
 					$ret->fatal(

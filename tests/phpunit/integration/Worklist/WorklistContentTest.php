@@ -82,6 +82,25 @@ class WorklistContentTest extends MediaWikiIntegrationTestCase {
 		];
 	}
 
+	/**
+	 * A title with a section fragment must report only the fragment error, not the
+	 * non-canonical one, since getPrefixedText() strips the fragment (T432667).
+	 */
+	public function testValidate__fragmentSkipsNonCanonicalError() {
+		$content = new WorklistContent(
+			json_encode( [ self::VALID_WIKI => [ 'Some Title#Section' ] ] )
+		);
+		$status = $content->validate();
+
+		$this->assertStatusError( 'campaignevents-worklist-content-title-with-fragment', $status );
+		$messageKeys = array_map(
+			static fn ( $message ) => $message->getKey(),
+			$status->getMessages()
+		);
+		$this->assertNotContains( 'campaignevents-worklist-content-title-non-canonical', $messageKeys );
+		$this->assertCount( 1, $messageKeys );
+	}
+
 	public function testGetLocalLinkTargets() {
 		$contentStructure = [
 			self::VALID_WIKI => [
