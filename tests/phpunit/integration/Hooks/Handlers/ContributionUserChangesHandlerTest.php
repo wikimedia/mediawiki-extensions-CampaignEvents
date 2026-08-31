@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Tests\Integration\WorklistUpdateTestHelpe
 use MediaWiki\Extension\CentralAuth\CentralAuthServices;
 use MediaWiki\Extension\CentralAuth\User\CentralAuthUser;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Site\HashSiteStore;
 use MediaWiki\Site\MediaWikiSite;
 use MediaWiki\User\User;
 use MediaWiki\WikiMap\WikiMap;
@@ -34,11 +35,10 @@ class ContributionUserChangesHandlerTest extends MediaWikiIntegrationTestCase {
 			$centralUser->attach( WikiMap::getCurrentWikiId() );
 			// Next, register the site to avoid T407298... (CentralAuthUser::queryAttachedBasic relies on this)
 			// This was stolen from SpecialCentralAuthTest::setUp.
-			$sitesTable = $this->getServiceContainer()->getSiteStore();
-			$site = $sitesTable->getSite( WikiMap::getCurrentWikiId() ) ?? new MediaWikiSite();
+			$site = new MediaWikiSite();
 			$site->setGlobalId( WikiMap::getCurrentWikiId() );
 			$site->setPath( MediaWikiSite::PATH_PAGE, "https://en.wikipedia.org/wiki/$1" );
-			$sitesTable->saveSite( $site );
+			$this->setService( 'SiteLookup', new HashSiteStore( [ $site ] ) );
 		}
 		return $user;
 	}
