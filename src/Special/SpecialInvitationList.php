@@ -19,7 +19,6 @@ use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\WikiMap\WikiMap;
-use Wikimedia\Codex\Component\HtmlSnippet;
 use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 
@@ -161,31 +160,26 @@ class SpecialInvitationList extends SpecialPage {
 		$highlyRecommendedLinksList = $this->formatAsList( $highlyRecommendedLinks );
 		$html = $noUsersWarning;
 		if ( $highlyRecommendedLinksList !== '' ) {
-			$html .= $codex->accordion()
-				->setTitle( $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text() )
-				->setDescription( $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text() )
-				->setContentHtml( new HtmlSnippet( $highlyRecommendedLinksList ) )
-				->setOpen( (bool)$highlyRecommendedLinks )
-				->build()
-				->getHtml();
+			$html .= $codex->accordion(
+				title: $this->msg( 'campaignevents-invitationlist-highly-recommended' )->text(),
+				description: $this->msg( 'campaignevents-invitationlist-highly-recommended-info' )->text(),
+				content: $codex->htmlSnippet( $highlyRecommendedLinksList ),
+				open: (bool)$highlyRecommendedLinks,
+			)->getHtml();
 		}
 		$recommendedLinksList = $this->formatAsList( $this->getUserLinks( $recommended ) );
 		if ( $recommendedLinksList !== '' ) {
-			$html .= $codex->accordion()
-				->setTitle( $this->msg( 'campaignevents-invitationlist-recommended' )->text() )
-				->setDescription( $this->msg( 'campaignevents-invitationlist-recommended-info' )->text() )
-				->setContentHtml( new HtmlSnippet( $recommendedLinksList ) )
-				->setOpen( !$highlyRecommendedLinks )
-				->build()
-				->getHtml();
+			$html .= $codex->accordion(
+				title: $this->msg( 'campaignevents-invitationlist-recommended' )->text(),
+				description: $this->msg( 'campaignevents-invitationlist-recommended-info' )->text(),
+				content: $codex->htmlSnippet( $recommendedLinksList ),
+				open: !$highlyRecommendedLinks,
+			)->getHtml();
 		}
-		$html .= $codex->accordion()
-			->setTitle( $this->msg( 'campaignevents-invitationlist-articlelist-label' )->text() )
-			->setContentHtml( new HtmlSnippet( $this->formatAsList(
-				$this->getArticleListLinks( $list->getListID() )
-			) ) )
-			->build()
-			->getHtml();
+		$html .= $codex->accordion(
+			title: $this->msg( 'campaignevents-invitationlist-articlelist-label' )->text(),
+			content: $codex->htmlSnippet( $this->formatAsList( $this->getArticleListLinks( $list->getListID() ) ) )
+		)->getHtml();
 		$out->addHTML( $html );
 	}
 

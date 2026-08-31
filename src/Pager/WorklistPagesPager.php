@@ -221,20 +221,19 @@ class WorklistPagesPager extends CodexTablePager {
 
 		$tooltip = $this->msg( 'campaignevents-worklist-table-remove-button-label' )->text();
 		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
-		return $codex->button()
-			->setAction( 'destructive' )
-			->setWeight( 'quiet' )
-			->setIconOnly( true )
-			->setIconClass( 'cdx-css-icon--trash' )
-			->setAttributes( [
+		return $codex->button(
+			action: 'destructive',
+			weight: 'quiet',
+			iconClass: 'cdx-css-icon--trash',
+			iconOnly: true,
+			attributes: [
 				'class' => 'ext-campaignevents-delete-worklist-page-btn',
 				'title' => $tooltip,
 				'aria-label' => $tooltip,
 				'data-wiki' => $row->cewp_wiki,
 				'data-title' => $row->cewp_page_prefixedtext,
-			] )
-			->build()
-			->getHtml();
+			],
+		)->getHtml();
 	}
 
 	/**

@@ -313,19 +313,18 @@ class EventContributionsEditsPager extends CodexTablePager {
 
 		$tooltip = $this->msg( 'campaignevents-event-details-contributions-delete-tooltip' )->text();
 		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
-		return $codex->button()
-			->setAction( 'destructive' )
-			->setWeight( 'quiet' )
-			->setIconOnly( true )
-			->setIconClass( 'cdx-css-icon--trash' )
-			->setAttributes( [
+		return $codex->button(
+			action: 'destructive',
+			weight: 'quiet',
+			iconClass: 'cdx-css-icon--trash',
+			iconOnly: true,
+			attributes: [
 				'class' => 'ext-campaignevents-delete-contribution-btn',
 				'title' => $tooltip,
 				'aria-label' => $tooltip,
 				'data-contrib-id' => $contribID,
-			] )
-			->build()
-			->getHtml();
+			]
+		)->getHtml();
 	}
 
 	/**

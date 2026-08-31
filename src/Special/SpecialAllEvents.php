@@ -15,7 +15,6 @@ use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\IncludableSpecialPage;
-use Wikimedia\Codex\Component\HtmlSnippet;
 use Wikimedia\Codex\Localization\MediaWikiLocalization;
 use Wikimedia\Codex\Utility\Codex;
 use Wikimedia\Message\MessageSpecifier;
@@ -341,14 +340,13 @@ class SpecialAllEvents extends IncludableSpecialPage {
 	): string {
 		$navigation = $this->including() ? '' : $pager->getNavigationBar();
 		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
-		return $codex->accordion()
-			->setTitle( $this->msg( $title )->text() )
-			->setDescription( $this->msg( $description )->text() )
-			->setContentHtml( new HtmlSnippet( $pager->getBody() . $navigation ) )
-			->setOpen( $isOpen )
-			->setAttributes( [ 'class' => $cssClass ] )
-			->build()
-			->getHtml();
+		return $codex->accordion(
+			title: $this->msg( $title )->text(),
+			description: $this->msg( $description )->text(),
+			content: $codex->htmlSnippet( $pager->getBody() . $navigation ),
+			open: $isOpen,
+			attributes: [ 'class' => $cssClass ],
+		)->getHtml();
 	}
 
 	/**

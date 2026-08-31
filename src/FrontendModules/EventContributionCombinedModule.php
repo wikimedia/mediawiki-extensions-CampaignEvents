@@ -186,9 +186,7 @@ readonly class EventContributionCombinedModule {
 			$messageKey = $participantIsPrivate
 				? 'campaignevents-contributions-notice-other-private-participants-excluded'
 				: 'campaignevents-contributions-notice-private-participants-excluded';
-			$renderedNotice = $this->codex->message()
-				->setType( 'notice' )
-				->setContent( $msgFormatter->format( MessageValue::new( $messageKey ) ) )
+			$renderedNotice = $this->codex->message( $msgFormatter->format( MessageValue::new( $messageKey ) ) )
 				->getHtml();
 			$container->appendContent( new HtmlSnippet( $renderedNotice ) );
 		}

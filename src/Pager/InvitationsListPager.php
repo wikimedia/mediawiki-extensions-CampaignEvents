@@ -111,20 +111,17 @@ class InvitationsListPager extends ReverseChronologicalPager {
 	private function getInfoChip( stdClass $row ): string {
 		$codex = new Codex( new MediaWikiLocalization( $this->getContext() ) );
 		if ( (int)$row->ceil_status === InvitationList::STATUS_PENDING ) {
-			return $codex->infoChip()
-				->setStatus( 'notice' )
-				->setIcon( 'cdx-info-chip__icon' )
-				->setText( $this->msg( 'campaignevents-invitations-pager-status-processing' )->text() )
-				->build()
-				->getHtml();
+			return $codex->infoChip(
+				text: $this->msg( 'campaignevents-invitations-pager-status-processing' )->text(),
+				icon: 'cdx-info-chip__icon',
+			)->getHtml();
 		}
 		$editorCount = (int)$row->list_editor_count;
-		return $codex->infoChip()
-			->setStatus( $editorCount > 0 ? 'success' : 'warning' )
-			->setText( $this->msg( 'campaignevents-invitations-pager-status-editors' )
+		return $codex->infoChip(
+			text: $this->msg( 'campaignevents-invitations-pager-status-editors' )
 				->numParams( $editorCount )
-				->text() )
-			->build()
-			->getHtml();
+				->text(),
+			status: $editorCount > 0 ? 'success' : 'warning'
+		)->getHtml();
 	}
 }
