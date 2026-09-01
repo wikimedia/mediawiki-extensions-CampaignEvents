@@ -125,7 +125,7 @@
 	"campaignevents-register-event-past": "Okres rejestracji na to wydarzenie już się zakończył.",
 	"campaignevents-register-event-not-open": "Rejestracja na to wydarzenie jest zamknięta.",
 	"campaignevents-register-need-central-account": "Potrzebujesz globalnego konta użytkownika, aby móc się rejestrować na wydarzenia.",
-	"campaignevents-register-answers-aggregated-error": "Nie możesz udzielić odpowiedzi, ponieważ te, które już podałeś, zostały już zagregowane i usunięte.",
+	"campaignevents-register-answers-aggregated-error": "Nie możesz udzielić odpowiedzi, ponieważ już udzielone przez Ciebie odpowiedzi zostały zebrane i usunięte.",
 	"campaignevents-unregister-not-allowed": "Nie masz uprawnień do anulowania swojej rejestracji.",
 	"campaignevents-unregister-not-participant": "Nie jesteś {{GENDER:|zarejestrowany|zarejestrowana|zarejestrowany(-a)}} na to wydarzenie.",
 	"campaignevents-unregister-need-central-account": "Potrzebujesz globalnego konta użytkownika, aby móc anulować swoją rejestrację na wydarzenie.",
