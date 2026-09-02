@@ -44,8 +44,14 @@
 	 *   reload, if any; its edit signal is ignored so the same edit isn't handled twice.
 	 */
 	function setupClientEditHandler( handledRevisionId ) {
+		const namespace = mw.config.get( 'wgNamespaceNumber' );
 		// Not in the NS_EVENT namespace (T406672)
-		if ( mw.config.get( 'wgNamespaceNumber' ) === 1728 ) {
+		if ( namespace === 1728 ) {
+			return;
+		}
+		// Editing a talk page or another non-content page is not event participation, so no
+		// dialog there. Mirrors the server-side check in PostEditHandler.
+		if ( !mw.config.get( 'wgContentNamespaces', [] ).includes( namespace ) ) {
 			return;
 		}
 

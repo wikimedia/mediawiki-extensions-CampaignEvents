@@ -168,7 +168,8 @@
 				"CampaignEventsGoalProgressFormatter",
 				"CampaignEventsWorklistEventsStore",
 				"CampaignEventsEventContributionValidator",
-				"CampaignEventsDiscoverableEventsLookup"
+				"CampaignEventsDiscoverableEventsLookup",
+				"NamespaceInfo"
 			]
 		},
 		"CentralAuthContributionUserChangesHandler": {

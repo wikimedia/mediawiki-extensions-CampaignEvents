@@ -15,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Language\Language;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Request\WebRequest;
@@ -46,6 +47,7 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 			$worklistEventsStore ?? $this->makeWorklistEventsStore(),
 			$eventContributionValidator ?? $this->createNoOpMock( EventContributionValidator::class ),
 			$discoverableEventsLookup ?? $this->makeDiscoverableEventsLookup(),
+			$this->getServiceContainer()->getNamespaceInfo(),
 		);
 	}
 
@@ -60,7 +62,7 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		bool $isNamed = true,
 		bool $hasPageID = true,
 		bool $isRegistered = true,
-		bool $inEventNamespace = false,
+		int $namespace = NS_MAIN,
 	): OutputPage {
 		$out = $this->createMock( OutputPage::class );
 		$out->method( 'getJsConfigVars' )
@@ -77,7 +79,10 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 		$out->method( 'getAuthority' )->willReturn( $authority );
 
 		$title = $this->createMock( Title::class );
-		$title->method( 'inNamespace' )->willReturn( $inEventNamespace );
+		$title->method( 'getNamespace' )->willReturn( $namespace );
+		$title->method( 'inNamespace' )->willReturnCallback(
+			static fn ( int $ns ): bool => $ns === $namespace
+		);
 		$title->method( 'getArticleID' )->willReturn( $hasPageID ? 42 : 0 );
 		$title->method( 'getPrefixedText' )->willReturn( 'Test Article' );
 		$out->method( 'getTitle' )->willReturn( $title );
@@ -135,10 +140,25 @@ class PostEditHandlerTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testSkip_eventNamespace(): void {
-		$out = $this->makeOutputPage( inEventNamespace: true );
+		// NS_EVENT is not a content namespace by default, so make it one to check that the
+		// Event: namespace is skipped regardless of the content-namespace restriction.
+		$this->overrideConfigValue( MainConfigNames::ContentNamespaces, [ NS_MAIN, NS_EVENT ] );
+		$out = $this->makeOutputPage( namespace: NS_EVENT );
 		$out->expects( $this->never() )->method( 'addModules' );
 
 		$this->getHandler()->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
+	}
+
+	public function testSkip_nonContentNamespace(): void {
+		$out = $this->makeOutputPage( namespace: NS_TALK );
+		$out->expects( $this->never() )->method( 'addModules' );
+
+		// Neither dialog is considered: no events are looked up at all.
+		$this->getHandler(
+			centralUserLookup: $this->createNoOpMock( CampaignsCentralUserLookup::class ),
+			eventLookup: $this->createNoOpMock( IEventLookup::class ),
+			discoverableEventsLookup: $this->createNoOpMock( DiscoverableEventsLookup::class ),
+		)->onBeforePageDisplay( $out, $this->createMock( Skin::class ) );
 	}
 
 	public function testSkip_notPostEdit(): void {

@@ -24,12 +24,13 @@ function makeHookFactory() {
 }
 
 function setupMw( configValues ) {
-	const store = Object.assign( {}, configValues );
+	// Only content namespaces are handled, so default to the main namespace being the only one.
+	const store = Object.assign( { wgContentNamespaces: [ 0 ] }, configValues );
 	const restGet = jest.fn().mockResolvedValue( [] );
 	const restPut = jest.fn().mockResolvedValue( {} );
 	global.mw = {
 		config: {
-			get: ( key ) => ( key in store ? store[ key ] : null ),
+			get: ( key, fallback = null ) => ( key in store ? store[ key ] : fallback ),
 			set: ( key, value ) => {
 				store[ key ] = value;
 			}
@@ -172,7 +173,23 @@ describe( 'ext.campaignEvents.postEdit entry point', () => {
 		} );
 
 		it( 'does not register hooks in the NS_EVENT namespace', () => {
-			const { restGet } = setupMw( { wgNamespaceNumber: 1728 } );
+			// NS_EVENT is treated as a content namespace here, so the skip can only come from the
+			// NS_EVENT check itself.
+			const { restGet } = setupMw( {
+				wgNamespaceNumber: 1728,
+				wgContentNamespaces: [ 0, 1728 ]
+			} );
+
+			jest.isolateModules( () => {
+				require( INDEX );
+			} );
+
+			global.mw.hook( 'postEdit' ).fire();
+			expect( restGet ).not.toHaveBeenCalled();
+		} );
+
+		it( 'does not register hooks in a non-content namespace', () => {
+			const { restGet } = setupMw( { wgNamespaceNumber: 1, wgPageName: 'Talk:Foo' } );
 
 			jest.isolateModules( () => {
 				require( INDEX );

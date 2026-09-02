@@ -17,6 +17,7 @@ use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Title\NamespaceInfo;
 use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
 use Wikibase\Repo\WikibaseRepo;
@@ -25,7 +26,8 @@ use Wikibase\Repo\WikibaseRepo;
  * Handler for the JavaScript modals shown after an edit reload: the contribution-association dialog
  * (where users associate their edit with an event) and, when no association dialog applies, the
  * event-discovery/promotion dialog. Only one dialog is shown per page load, since showing both at
- * once breaks the page (T431571); the association dialog takes precedence.
+ * once breaks the page (T431571); the association dialog takes precedence. Both are limited to
+ * content namespaces.
  */
 class PostEditHandler implements BeforePageDisplayHook {
 	private const MAX_EVENTS = 50;
@@ -37,6 +39,7 @@ class PostEditHandler implements BeforePageDisplayHook {
 		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly EventContributionValidator $eventContributionValidator,
 		private readonly DiscoverableEventsLookup $discoverableEventsLookup,
+		private readonly NamespaceInfo $namespaceInfo,
 	) {
 	}
 
@@ -44,8 +47,15 @@ class PostEditHandler implements BeforePageDisplayHook {
 	 * @inheritDoc
 	 */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		if ( $out->getTitle()->inNamespace( NS_EVENT ) ) {
+		$title = $out->getTitle();
+		if ( $title->inNamespace( NS_EVENT ) ) {
 			// Don't show a dialog in the Event: namespace, T406672
+			return;
+		}
+
+		if ( !$this->namespaceInfo->isContent( $title->getNamespace() ) ) {
+			// Editing a talk page or another non-content page is not event participation, so no
+			// dialog there. Contributions can still be associated manually on Special:EventDetails.
 			return;
 		}
 
