@@ -4,6 +4,9 @@
 			"Joao Xavier"
 		]
 	},
+	"group-event-organizer": "Organizeri di eventi",
+	"group-event-organizer-member": "{{GENDER:$1|Organizero di eventi}}",
+	"grouppage-event-organizer": "{{nsːproject}} ːOrganizeri di eventi",
 	"action-campaignevents-enable-registration": "kapabligar registro di eventi",
 	"right-campaignevents-enable-registration": "Kapabligo di registro di eventi",
 	"action-campaignevents-delete-registration": "efacar registri di evento",
