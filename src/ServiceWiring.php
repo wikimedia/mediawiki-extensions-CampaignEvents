@@ -573,7 +573,8 @@ return [
 		static function ( MediaWikiServices $services ): WorklistArticleHelper {
 			return new WorklistArticleHelper(
 				$services->getWikiPageFactory(),
-				$services->getTitleFormatter()
+				$services->getTitleFormatter(),
+				$services->getTitleParser(),
 			);
 		},
 	WorklistEventsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistEventsStore {

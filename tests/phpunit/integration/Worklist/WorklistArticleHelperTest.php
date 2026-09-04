@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Worklist;
 
+use Generator;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
@@ -12,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Title\Title;
+use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\Rdbms\IDBAccessObject;
 
@@ -168,5 +170,63 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( 'campaignevents-worklist-page-not-worklist', $status );
+	}
+
+	public function testApplyDelta__canonicalizesLocalTitles() {
+		$curWikiID = WikiMap::getCurrentWikiId();
+		$wikiLookup = $this->createMock( WikiLookup::class );
+		$wikiLookup->method( 'getAllWikis' )->willReturn( [ $curWikiID ] );
+		$this->setService( WikiLookup::SERVICE_NAME, $wikiLookup );
+
+		$title = $this->worklistTitle();
+		$this->seedWorklist( $title, [ $curWikiID => [ 'Article One' ] ] );
+
+		$status = $this->getHelper()->applyDelta(
+			$title,
+			[ $curWikiID => [ 'article_Two' ], 'some_other_wiki' => [] ],
+			[ $curWikiID => [ 'article_One' ], 'some_other_wiki' => [] ],
+		);
+
+		$this->assertStatusGood( $status );
+		$this->assertSame( [ $curWikiID => [ 'Article Two' ] ], $this->getSavedData( $title ) );
+	}
+
+	public function testApplyDelta__doesNotCanonicalizeForeignTitles() {
+		$otherWikiID = WikiMap::getCurrentWikiId() . '_other';
+		$wikiLookup = $this->createMock( WikiLookup::class );
+		$wikiLookup->method( 'getAllWikis' )->willReturn( [ $otherWikiID ] );
+		$this->setService( WikiLookup::SERVICE_NAME, $wikiLookup );
+
+		$title = $this->worklistTitle();
+		$this->seedWorklist( $title, [ $otherWikiID => [ 'Article One' ] ] );
+
+		$status = $this->getHelper()->applyDelta(
+			$title,
+			[ $otherWikiID => [ 'article_Two' ] ],
+			[ $otherWikiID => [ 'article_One' ] ],
+		);
+
+		$this->assertStatusError( 'campaignevents-worklist-content-title-non-canonical', $status );
+	}
+
+	/** @dataProvider provideInvalidTitleCases */
+	public function testApplyDelta__invalidTitlesFailEarly( bool $isAddition ) {
+		$curWikiID = WikiMap::getCurrentWikiId();
+		$invalidTitleData = [ $curWikiID => [ '|' ] ];
+		$title = $this->worklistTitle();
+		$status = $this->getHelper()->applyDelta(
+			$title,
+			$isAddition ? $invalidTitleData : [],
+			$isAddition ? [] : $invalidTitleData,
+		);
+
+		$this->assertStatusNotGood( $status );
+		$this->assertStatusMessage( 'campaignevents-worklist-content-invalid-title', $status );
+	}
+
+	public static function provideInvalidTitleCases(): Generator {
+		// For simplicity, the invalid data is created in the test method because we can't access the cur wiki ID here
+		yield 'Addition' => [ true ];
+		yield 'Removal' => [ false ];
 	}
 }

@@ -8,10 +8,14 @@ use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Request\DerivativeRequest;
+use MediaWiki\Title\MalformedTitleException;
 use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
+use MediaWiki\WikiMap\WikiMap;
 use StatusValue;
 
 /**
@@ -33,6 +37,7 @@ class WorklistArticleHelper {
 	public function __construct(
 		private readonly WikiPageFactory $wikiPageFactory,
 		private readonly TitleFormatter $titleFormatter,
+		private readonly TitleParser $titleParser,
 	) {
 	}
 
@@ -67,10 +72,21 @@ class WorklistArticleHelper {
 			}
 		}
 
+		$toAddCanonicalizationStatus = $this->canonicalizeTitles( $toAdd );
+		if ( !$toAddCanonicalizationStatus->isGood() ) {
+			return $toAddCanonicalizationStatus;
+		}
+		$toAddCanonical = $toAddCanonicalizationStatus->getValue();
+		$toRemoveCanonicalizationStatus = $this->canonicalizeTitles( $toRemove );
+		if ( !$toRemoveCanonicalizationStatus->isGood() ) {
+			return $toRemoveCanonicalizationStatus;
+		}
+		$toRemoveCanonical = $toRemoveCanonicalizationStatus->getValue();
+
 		// Additions are applied before removals, so if the same title appears in both it ends up
 		// removed.
-		$newData = $this->applyChanges( $currentData, $toAdd, self::ACTION_ADD );
-		$newData = $this->applyChanges( $newData, $toRemove, self::ACTION_REMOVE );
+		$newData = $this->applyChanges( $currentData, $toAddCanonical, self::ACTION_ADD );
+		$newData = $this->applyChanges( $newData, $toRemoveCanonical, self::ACTION_REMOVE );
 
 		// Skip the save if there is nothing to change. This also covers removing from a worklist
 		// page that does not exist yet: the data stays empty, so no page is created.
@@ -86,6 +102,41 @@ class WorklistArticleHelper {
 		);
 
 		return $this->saveViaEditApi( $worklistPage, $text );
+	}
+
+	/**
+	 * Given a list of titles by wiki, filters out wikis with an empty list, and canonicalizes titles on the local wiki.
+	 * @param array<string,string[]> $titlesByWiki
+	 * @return StatusValue<array<string,string[]>>
+	 */
+	private function canonicalizeTitles( array $titlesByWiki ): StatusValue {
+		$ret = [];
+		$curWiki = WikiMap::getCurrentWikiId();
+		foreach ( $titlesByWiki as $wiki => $titles ) {
+			if ( $wiki === $curWiki ) {
+				// Titles can only be parsed reliably in the context of the current wiki.
+				$canonicalizedTitles = [];
+				foreach ( $titles as $title ) {
+					try {
+						$parsedTitle = $this->titleParser->parseTitle( $title );
+					} catch ( MalformedTitleException ) {
+						// Fail immediately, without waiting for the analogous validation in WorklistContent.
+						return StatusValue::newFatal(
+							'campaignevents-worklist-content-invalid-title',
+							$wiki,
+							Message::plaintextParam( $title )
+						);
+					}
+					$canonicalizedTitles[] = $this->titleFormatter->getPrefixedText( $parsedTitle );
+				}
+			} else {
+				$canonicalizedTitles = $titles;
+			}
+			if ( $canonicalizedTitles ) {
+				$ret[$wiki] = $canonicalizedTitles;
+			}
+		}
+		return StatusValue::newGood( $ret );
 	}
 
 	/**
