@@ -16,7 +16,7 @@ use MediaWikiIntegrationTestCase;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper
+ * @covers \MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper
  * @group Database
  */
 class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
@@ -51,10 +51,7 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function getHelper(): WorklistArticleHelper {
-		return new WorklistArticleHelper(
-			$this->getServiceContainer()->getWikiPageFactory(),
-			$this->getServiceContainer()->getTitleFormatter()
-		);
+		return $this->getServiceContainer()->get( WorklistArticleHelper::SERVICE_NAME );
 	}
 
 	private function worklistTitle(): Title {
@@ -82,11 +79,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertStatusGood( $this->getHelper()->applyDelta( $title, $data, [] ) );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 * @covers ::saveViaEditApi
-	 * @covers ::applyChanges
-	 */
 	public function testAddArticles_createsPageWithArticles(): void {
 		$title = $this->worklistTitle();
 
@@ -97,10 +89,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( [ self::WIKI_ID => [ 'Article One' ] ], $this->getSavedData( $title ) );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 * @covers ::applyChanges
-	 */
 	public function testAddArticles_appendsToExistingWorklist(): void {
 		$title = $this->worklistTitle();
 		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One' ] ] );
@@ -111,9 +99,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ], $this->getSavedData( $title ) );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 */
 	public function testAddArticles_existingTitleIsNoOp(): void {
 		$title = $this->worklistTitle();
 		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One' ] ] );
@@ -125,10 +110,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $revBefore, $this->latestRevId( $title ), 'A no-op must not create a new revision.' );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 * @covers ::applyChanges
-	 */
 	public function testRemoveArticles_removesMatchingTitle(): void {
 		$title = $this->worklistTitle();
 		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );
@@ -139,10 +120,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( [ self::WIKI_ID => [ 'Article One' ] ], $this->getSavedData( $title ) );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 * @covers ::applyChanges
-	 */
 	public function testRemoveArticles_droppingLastTitleEmptiesWiki(): void {
 		$title = $this->worklistTitle();
 		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One' ] ] );
@@ -154,9 +131,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( [], $this->getSavedData( $title ) );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 */
 	public function testRemoveArticles_nonExistentPageIsNoOp(): void {
 		$title = $this->worklistTitle();
 
@@ -166,10 +140,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertFalse( $title->exists( IDBAccessObject::READ_LATEST ) );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 * @covers ::applyChanges
-	 */
 	public function testApplyDelta_addsAndRemovesInASingleEdit(): void {
 		$title = $this->worklistTitle();
 		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );
@@ -189,9 +159,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertNotSame( $revBefore, $this->latestRevId( $title ), 'The delta must create a revision.' );
 	}
 
-	/**
-	 * @covers ::applyDelta
-	 */
 	public function testAddArticles_nonWorklistPageReturnsFatal(): void {
 		$title = $this->worklistTitle();
 		// Pre-create a normal (wikitext) page at the target title.
