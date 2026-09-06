@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Pager;
 
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Pager\EventContributionsEditsPager;
-use MediaWiki\MediaWikiServices;
 
 /**
  * @group Database
@@ -37,10 +36,11 @@ class EventContributionsEditsPagerTest extends AbstractContributionsPagerTestBas
 	public function getPager( array $requestValues ): EventContributionsEditsPager {
 		$context = $this->createContext( $requestValues );
 		$event = $this->createEventMock();
+		$services = $this->getServiceContainer();
 
-		return CampaignEventsServices::getEventContributionsPagerFactory()->newEditsPager(
+		return CampaignEventsServices::getEventContributionsPagerFactory( $services )->newEditsPager(
 			$context,
-			MediaWikiServices::getInstance()->getLinkRenderer(),
+			$services->getLinkRenderer(),
 			$event,
 		);
 	}
