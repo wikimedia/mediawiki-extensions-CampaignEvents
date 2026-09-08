@@ -8,6 +8,7 @@ use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
@@ -28,7 +29,7 @@ use StatusValue;
  * The page is saved through the internal edit API rather than a raw PageUpdater, so that all of
  * core's edit logic (permission checks, blocks, edit-conflict detection, AbuseFilter, ...) runs.
  */
-class WorklistArticleHelper {
+class WorklistArticleHelper implements IWorklistArticlesLookup {
 	public const SERVICE_NAME = 'CampaignEventsWorklistArticleHelper';
 
 	private const ACTION_ADD = 'add';
@@ -38,6 +39,8 @@ class WorklistArticleHelper {
 		private readonly WikiPageFactory $wikiPageFactory,
 		private readonly TitleFormatter $titleFormatter,
 		private readonly TitleParser $titleParser,
+		private readonly WorklistSecondaryStore $worklistSecondaryStore,
+		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
 	) {
 	}
 
@@ -50,6 +53,7 @@ class WorklistArticleHelper {
 	 * @param PageIdentity $worklistPage The worklist page to edit
 	 * @param array<string,list<string>> $toAdd Articles to add, as wiki ID => list of prefixed titles
 	 * @param array<string,list<string>> $toRemove Articles to remove, as wiki ID => list of prefixed titles
+	 *
 	 * @return StatusValue Good on success; a fatal StatusValue otherwise
 	 */
 	public function applyDelta(
@@ -165,6 +169,7 @@ class WorklistArticleHelper {
 		} catch ( ApiUsageException $e ) {
 			return $e->getStatusValue();
 		}
+
 		return StatusValue::newGood();
 	}
 
@@ -172,6 +177,7 @@ class WorklistArticleHelper {
 	 * @param array<string,list<string>> $data Current worklist content (wiki ID => titles)
 	 * @param array<string,list<string>> $articlesByWiki Changes to apply (wiki ID => titles)
 	 * @param string $action
+	 *
 	 * @return array<string,list<string>> Updated content
 	 */
 	private function applyChanges( array $data, array $articlesByWiki, string $action ): array {
@@ -189,6 +195,41 @@ class WorklistArticleHelper {
 				}
 			}
 		}
+
 		return $data;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getWorklistArticles(
+		PageIdentity $page,
+		int $limit,
+		int $offset,
+		string $direction,
+		string $sort
+	): array {
+		// Read the mirror table rather than the page: it is the only place the whole list can be
+		// had in one query, and the endpoint asking for it is keyed by event. This moves to the
+		// page itself, which is the source of truth, once the endpoint is keyed by the page.
+		//
+		// The worklist is found by page ID rather than by title, because a title is formatted with
+		// the local namespace names and the page may belong to another wiki.
+		$wikiID = $page->getWikiId();
+		$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage(
+			Utils::getWikiIDString( $wikiID ),
+			$page->getId( $wikiID )
+		);
+		if ( $worklistID === null ) {
+			return [];
+		}
+
+		return $this->worklistPagesSecondaryStore->getPagesForWorklist(
+			$worklistID,
+			$limit,
+			$offset,
+			$direction,
+			$sort
+		);
 	}
 }

@@ -7,6 +7,7 @@ use Generator;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
@@ -269,5 +270,102 @@ class WorklistPagesSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 			->fetchField();
 
 		$this->assertSame( 0, $remainingRowNum );
+	}
+
+	/**
+	 * @dataProvider provideGetPagesForWorklist
+	 */
+	public function testGetPagesForWorklist(
+		int $worklistID,
+		int $limit,
+		int $offset,
+		string $direction,
+		string $sort,
+		array $expected
+	): void {
+		$this->assertSame(
+			$expected,
+			CampaignEventsServices::getWorklistPagesSecondaryStore()
+				->getPagesForWorklist( $worklistID, $limit, $offset, $direction, $sort )
+		);
+	}
+
+	public static function provideGetPagesForWorklist(): Generator {
+		$awikiPage1 = [ 'wiki' => 'awiki', 'prefixedtext' => 'Page 1' ];
+		$awikiPage2 = [ 'wiki' => 'awiki', 'prefixedtext' => 'Page 2' ];
+		$bwikiPage1 = [ 'wiki' => 'bwiki', 'prefixedtext' => 'Page 1' ];
+		$cwikiPage11 = [ 'wiki' => 'cwiki', 'prefixedtext' => 'Page 11' ];
+
+		// Every fixture row shares a timestamp, so cewp_id breaks the tie.
+		yield 'Newest first' => [
+			1001,
+			0,
+			0,
+			IWorklistArticlesLookup::DESCENDING,
+			IWorklistArticlesLookup::TIMESTAMP_SORT,
+			[ $cwikiPage11, $bwikiPage1, $awikiPage2, $awikiPage1 ],
+		];
+		yield 'Oldest first' => [
+			1001,
+			0,
+			0,
+			IWorklistArticlesLookup::ASCENDING,
+			IWorklistArticlesLookup::TIMESTAMP_SORT,
+			[ $awikiPage1, $awikiPage2, $bwikiPage1, $cwikiPage11 ],
+		];
+		yield 'By title' => [
+			1001,
+			0,
+			0,
+			IWorklistArticlesLookup::ASCENDING,
+			IWorklistArticlesLookup::PAGE_SORT,
+			[ $awikiPage1, $bwikiPage1, $cwikiPage11, $awikiPage2 ],
+		];
+		yield 'By wiki' => [
+			1001,
+			0,
+			0,
+			IWorklistArticlesLookup::ASCENDING,
+			IWorklistArticlesLookup::WIKI_SORT,
+			[ $awikiPage1, $awikiPage2, $bwikiPage1, $cwikiPage11 ],
+		];
+		yield 'Limit and offset' => [
+			1001,
+			2,
+			1,
+			IWorklistArticlesLookup::DESCENDING,
+			IWorklistArticlesLookup::TIMESTAMP_SORT,
+			[ $bwikiPage1, $awikiPage2 ],
+		];
+		yield 'Another worklist' => [
+			1002,
+			0,
+			0,
+			IWorklistArticlesLookup::ASCENDING,
+			IWorklistArticlesLookup::TIMESTAMP_SORT,
+			[ $awikiPage1, $bwikiPage1 ],
+		];
+		yield 'Worklist with no pages' => [
+			9999,
+			0,
+			0,
+			IWorklistArticlesLookup::ASCENDING,
+			IWorklistArticlesLookup::TIMESTAMP_SORT,
+			[],
+		];
+	}
+
+	/**
+	 * @dataProvider provideGetPagesForWorklist__invalidArgs
+	 */
+	public function testGetPagesForWorklist__invalidArgs( string $direction, string $sort ): void {
+		$this->expectException( InvalidArgumentException::class );
+		CampaignEventsServices::getWorklistPagesSecondaryStore()
+			->getPagesForWorklist( 1001, 0, 0, $direction, $sort );
+	}
+
+	public static function provideGetPagesForWorklist__invalidArgs(): Generator {
+		yield 'Unknown sort' => [ IWorklistArticlesLookup::ASCENDING, 'nonexistent' ];
+		yield 'Unknown direction' => [ 'sideways', IWorklistArticlesLookup::TIMESTAMP_SORT ];
 	}
 }

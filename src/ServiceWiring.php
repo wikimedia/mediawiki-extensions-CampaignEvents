@@ -575,6 +575,8 @@ return [
 				$services->getWikiPageFactory(),
 				$services->getTitleFormatter(),
 				$services->getTitleParser(),
+				$services->get( WorklistSecondaryStore::SERVICE_NAME ),
+				$services->get( WorklistPagesSecondaryStore::SERVICE_NAME ),
 			);
 		},
 	WorklistEventsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistEventsStore {
