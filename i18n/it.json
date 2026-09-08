@@ -437,7 +437,7 @@
 	"campaignevents-warning-change-event-end-date-past": "Se modifichi la data di fine in una data passata, l'evento verrà chiuso e riceverai un riepilogo delle risposte dei partecipanti. Questa azione non può essere annullata. Questo è applicabile solo se i partecipanti hanno fornito risposte alle domande in fase di registrazione.",
 	"campaignevents-event-details-participants-individual-data-deleted": "Le risposte individuali dei partecipanti sono state eliminate e le risposte in forma aggregata sono disponibili su [$1 {{int:campaignevents-event-details-tab-stats}}].",
 	"campaignevents-event-register-for-event-title": "Registrati all'evento $1",
-	"campaignevents-register-page-nonlocal": "'''[$1 completa la tua registrazione all'evento su $2]''', il wiki dove l'evento è stato creato.",
+	"campaignevents-register-page-nonlocal": "'''[$1 Completa la tua registrazione all'evento su $2]''', il wiki dove l'evento è stato creato.",
 	"campaignevents-delete-registration-page-nonlocal": "'''[$1 Cancella la tua registrazione all'evento su $2]''', il wiki dove l'evento è stato creato.",
 	"campaignevents-event-details-page-nonlocal": "Stai visualizzando una versione limitata di questa pagina. <b>[$1 visita questa pagina su $2]</b>, il wiki dove l'evento è stato creato, per visualizzare i dettagli completi dell'evento e accedere alle funzionalità aggiuntive.",
 	"campaignevents-event-details-not-local-wiki-prompt": "Vedi su [$1 $2]",
