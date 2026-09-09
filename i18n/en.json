@@ -709,6 +709,7 @@
 	"campaignevents-worklist-content-nonexistent-wiki": "Wiki ID $1 was not recognized. Please check that it is a valid wiki ID.",
 	"campaignevents-worklist-content-wiki-value-not-array": "The page list for each wiki must be an array. Found invalid value: $1",
 	"campaignevents-worklist-content-wiki-empty": "List of pages cannot be empty (for wiki $1)",
+	"campaignevents-worklist-content-too-many-pages": "The worklist can include up to $1 pages. Remove some pages before saving.",
 	"campaignevents-worklist-content-title-not-string": "Page titles must be strings. Found invalid value: $1",
 	"campaignevents-worklist-content-duplicated-title": "Duplicate title found for wiki $1: $2",
 	"campaignevents-worklist-content-invalid-title": "Invalid title found for wiki $1: $2",

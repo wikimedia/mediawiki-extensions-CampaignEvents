@@ -8,6 +8,7 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent;
 use MediaWiki\Tests\Unit\DummyServicesTrait;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent
@@ -80,6 +81,15 @@ class WorklistContentTest extends MediaWikiIntegrationTestCase {
 			$e( [ self::VALID_WIKI => [ '[|]' ] ] ),
 			'campaignevents-worklist-content-invalid-title'
 		];
+	}
+
+	public function testValidate__tooManyPages() {
+		$limit = TestingAccessWrapper::constant( WorklistContent::class, 'PAGE_LIMIT' );
+		$contentText = json_encode( [
+			self::VALID_WIKI => array_map( static fn () => ucfirst( wfRandomString() ), range( 1, $limit + 1 ) )
+		] );
+		$content = new WorklistContent( $contentText );
+		$this->assertStatusError( 'campaignevents-worklist-content-too-many-pages', $content->validate() );
 	}
 
 	/**

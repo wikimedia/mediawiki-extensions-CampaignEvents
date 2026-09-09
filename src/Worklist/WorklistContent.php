@@ -14,6 +14,8 @@ use MediaWiki\WikiMap\WikiMap;
 use StatusValue;
 
 class WorklistContent extends JsonContent {
+	private const PAGE_LIMIT = 7_000;
+
 	/** Cached validation result, to avoid recomputation */
 	private ?StatusValue $validationStatus = null;
 
@@ -55,6 +57,7 @@ class WorklistContent extends JsonContent {
 		// XXX: DI not easily possible for Content classes.
 		$validWikis = CampaignEventsServices::getWikiLookup()->getAllWikis();
 		$ret = StatusValue::newGood();
+		$pageCount = 0;
 		foreach ( $worklist as $wikiID => $wikiPages ) {
 			if ( !in_array( $wikiID, $validWikis, true ) ) {
 				$ret->fatal( 'campaignevents-worklist-content-nonexistent-wiki', Message::plaintextParam( $wikiID ) );
@@ -72,6 +75,16 @@ class WorklistContent extends JsonContent {
 			if ( !$wikiPages ) {
 				$ret->fatal( 'campaignevents-worklist-content-wiki-empty', Message::plaintextParam( $wikiID ) );
 				continue;
+			}
+
+			$pageCount += count( $wikiPages );
+			if ( $pageCount > self::PAGE_LIMIT ) {
+				$ret->fatal(
+					'campaignevents-worklist-content-too-many-pages',
+					Message::numParam( self::PAGE_LIMIT )
+				);
+				// Stop validation upon reaching the limit.
+				break;
 			}
 
 			$titlesSeen = [];
