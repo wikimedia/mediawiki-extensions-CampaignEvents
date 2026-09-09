@@ -576,7 +576,7 @@ return [
 	WorklistArticleHelper::SERVICE_NAME =>
 		static function ( MediaWikiServices $services ): WorklistArticleHelper {
 			return new WorklistArticleHelper(
-				$services->getWikiPageFactory(),
+				$services->getRevisionStoreFactory(),
 				$services->getTitleFormatter(),
 				$services->getTitleParser(),
 				$services->get( WorklistSecondaryStore::SERVICE_NAME ),

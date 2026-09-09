@@ -11,9 +11,12 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Page\WikiPage;
 use MediaWiki\Request\DerivativeRequest;
+use MediaWiki\Revision\RevisionStoreFactory;
+use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\MalformedTitleException;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\WikiMap\WikiMap;
@@ -36,7 +39,7 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 	private const ACTION_REMOVE = 'remove';
 
 	public function __construct(
-		private readonly WikiPageFactory $wikiPageFactory,
+		private readonly RevisionStoreFactory $revisionStoreFactory,
 		private readonly TitleFormatter $titleFormatter,
 		private readonly TitleParser $titleParser,
 		private readonly WorklistSecondaryStore $worklistSecondaryStore,
@@ -61,19 +64,19 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		array $toAdd,
 		array $toRemove
 	): StatusValue {
-		$wikiPage = $this->wikiPageFactory->newFromTitle( $worklistPage );
-		$currentContent = $wikiPage->getContent();
-		// Never overwrite an existing page that is not a worklist: this helper only edits worklist
-		// content, so treat any other content model as an error rather than clobbering it.
-		if ( $currentContent !== null && !( $currentContent instanceof WorklistContent ) ) {
-			return StatusValue::newFatal( 'campaignevents-worklist-page-not-worklist' );
-		}
-		$currentData = [];
-		if ( $currentContent instanceof WorklistContent ) {
-			$data = $currentContent->getData()->getValue();
-			if ( is_object( $data ) ) {
-				$currentData = wfObjectToArray( $data );
+		$revisionStore = $this->revisionStoreFactory->getRevisionStore();
+		$latestRevision = $revisionStore->getRevisionByTitle( $worklistPage );
+
+		if ( $latestRevision ) {
+			$currentContent = $latestRevision->getContent( SlotRecord::MAIN );
+			if ( !$currentContent instanceof WorklistContent ) {
+				// Never overwrite an existing page that is not a worklist: this helper only edits worklist
+				// content, so treat any other content model as an error rather than clobbering it.
+				return StatusValue::newFatal( 'campaignevents-worklist-page-not-worklist' );
 			}
+			$currentData = wfObjectToArray( $currentContent->getData()->getValue() );
+		} else {
+			$currentData = [];
 		}
 
 		$toAddCanonicalizationStatus = $this->canonicalizeTitles( $toAdd );
@@ -169,6 +172,16 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		} catch ( ApiUsageException $e ) {
 			return $e->getStatusValue();
 		}
+
+		// Clear caches manually: it's not done for us due to the APi indirection, and we don't want stale
+		// data around after an edit. It can cause issues such as T437520.
+		// @codeCoverageIgnoreStart
+		if ( $worklistPage instanceof WikiPage ) {
+			$worklistPage->clear();
+		} elseif ( $worklistPage instanceof Title ) {
+			$worklistPage->resetArticleID( false );
+		}
+		// @codeCoverageIgnoreEnd
 
 		return StatusValue::newGood();
 	}

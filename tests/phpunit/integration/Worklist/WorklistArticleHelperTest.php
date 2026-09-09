@@ -14,10 +14,9 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
-use MediaWiki\Title\Title;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
-use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper
@@ -58,99 +57,95 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		return $this->getServiceContainer()->get( WorklistArticleHelper::SERVICE_NAME );
 	}
 
-	private function worklistTitle(): Title {
-		return Title::makeTitle( NS_MAIN, 'My Event/Worklist' );
-	}
-
 	/**
 	 * @return array<string,list<string>>|null Decoded worklist data, or null if not a worklist page
 	 */
-	private function getSavedData( Title $title ): ?array {
+	private function getSavedData( PageIdentity $page ): ?array {
 		$content = $this->getServiceContainer()->getWikiPageFactory()
-			->newFromTitle( $title )->getContent();
+			->newFromTitle( $page )->getContent();
 		if ( !$content instanceof WorklistContent ) {
 			return null;
 		}
 		return json_decode( $content->getText(), true );
 	}
 
-	private function latestRevId( Title $title ): int {
-		$wikiPage = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $title );
+	private function latestRevId( PageIdentity $page ): int {
+		$wikiPage = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $page );
 		return $wikiPage->getLatest();
 	}
 
-	private function seedWorklist( Title $title, array $data ): void {
-		$this->assertStatusGood( $this->getHelper()->applyDelta( $title, $data, [] ) );
+	private function seedWorklist( PageIdentity $page, array $data ): void {
+		$this->assertStatusGood( $this->editPage( $page, new WorklistContent( json_encode( $data ) ) ) );
 	}
 
 	public function testAddArticles_createsPageWithArticles(): void {
-		$title = $this->worklistTitle();
+		$page = $this->getNonexistingTestPage();
 
-		$status = $this->getHelper()->applyDelta( $title, [ self::WIKI_ID => [ 'Article One' ] ], [] );
+		$status = $this->getHelper()->applyDelta( $page, [ self::WIKI_ID => [ 'Article One' ] ], [] );
 
 		$this->assertStatusGood( $status );
-		$this->assertSame( CONTENT_MODEL_WORKLIST, $title->getContentModel( IDBAccessObject::READ_LATEST ) );
-		$this->assertSame( [ self::WIKI_ID => [ 'Article One' ] ], $this->getSavedData( $title ) );
+		$this->assertSame( CONTENT_MODEL_WORKLIST, $page->getContentModel() );
+		$this->assertSame( [ self::WIKI_ID => [ 'Article One' ] ], $this->getSavedData( $page ) );
 	}
 
 	public function testAddArticles_appendsToExistingWorklist(): void {
-		$title = $this->worklistTitle();
-		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One' ] ] );
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ self::WIKI_ID => [ 'Article One' ] ] );
 
-		$status = $this->getHelper()->applyDelta( $title, [ self::WIKI_ID => [ 'Article Two' ] ], [] );
+		$status = $this->getHelper()->applyDelta( $page, [ self::WIKI_ID => [ 'Article Two' ] ], [] );
 
 		$this->assertStatusGood( $status );
-		$this->assertSame( [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ], $this->getSavedData( $title ) );
+		$this->assertSame( [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ], $this->getSavedData( $page ) );
 	}
 
 	public function testAddArticles_existingTitleIsNoOp(): void {
-		$title = $this->worklistTitle();
-		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One' ] ] );
-		$revBefore = $this->latestRevId( $title );
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ self::WIKI_ID => [ 'Article One' ] ] );
+		$revBefore = $this->latestRevId( $page );
 
-		$status = $this->getHelper()->applyDelta( $title, [ self::WIKI_ID => [ 'Article One' ] ], [] );
+		$status = $this->getHelper()->applyDelta( $page, [ self::WIKI_ID => [ 'Article One' ] ], [] );
 
 		$this->assertStatusGood( $status );
-		$this->assertSame( $revBefore, $this->latestRevId( $title ), 'A no-op must not create a new revision.' );
+		$this->assertSame( $revBefore, $this->latestRevId( $page ), 'A no-op must not create a new revision.' );
 	}
 
 	public function testRemoveArticles_removesMatchingTitle(): void {
-		$title = $this->worklistTitle();
-		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );
 
-		$status = $this->getHelper()->applyDelta( $title, [], [ self::WIKI_ID => [ 'Article Two' ] ] );
+		$status = $this->getHelper()->applyDelta( $page, [], [ self::WIKI_ID => [ 'Article Two' ] ] );
 
 		$this->assertStatusGood( $status );
-		$this->assertSame( [ self::WIKI_ID => [ 'Article One' ] ], $this->getSavedData( $title ) );
+		$this->assertSame( [ self::WIKI_ID => [ 'Article One' ] ], $this->getSavedData( $page ) );
 	}
 
 	public function testRemoveArticles_droppingLastTitleEmptiesWiki(): void {
-		$title = $this->worklistTitle();
-		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One' ] ] );
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ self::WIKI_ID => [ 'Article One' ] ] );
 
-		$status = $this->getHelper()->applyDelta( $title, [], [ self::WIKI_ID => [ 'Article One' ] ] );
+		$status = $this->getHelper()->applyDelta( $page, [], [ self::WIKI_ID => [ 'Article One' ] ] );
 
 		$this->assertStatusGood( $status );
 		// The wiki key is dropped (content model rejects empty arrays), leaving an empty object.
-		$this->assertSame( [], $this->getSavedData( $title ) );
+		$this->assertSame( [], $this->getSavedData( $page ) );
 	}
 
 	public function testRemoveArticles_nonExistentPageIsNoOp(): void {
-		$title = $this->worklistTitle();
+		$page = $this->getNonexistingTestPage();
 
-		$status = $this->getHelper()->applyDelta( $title, [], [ self::WIKI_ID => [ 'Article One' ] ] );
+		$status = $this->getHelper()->applyDelta( $page, [], [ self::WIKI_ID => [ 'Article One' ] ] );
 
 		$this->assertStatusGood( $status );
-		$this->assertFalse( $title->exists( IDBAccessObject::READ_LATEST ) );
+		$this->assertFalse( $page->exists() );
 	}
 
 	public function testApplyDelta_addsAndRemovesInASingleEdit(): void {
-		$title = $this->worklistTitle();
-		$this->seedWorklist( $title, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );
-		$revBefore = $this->latestRevId( $title );
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );
+		$revBefore = $this->latestRevId( $page );
 
 		$status = $this->getHelper()->applyDelta(
-			$title,
+			$page,
 			[ self::WIKI_ID => [ 'Article Three' ] ],
 			[ self::WIKI_ID => [ 'Article One' ] ]
 		);
@@ -158,17 +153,17 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertStatusGood( $status );
 		$this->assertSame(
 			[ self::WIKI_ID => [ 'Article Two', 'Article Three' ] ],
-			$this->getSavedData( $title )
+			$this->getSavedData( $page )
 		);
-		$this->assertNotSame( $revBefore, $this->latestRevId( $title ), 'The delta must create a revision.' );
+		$this->assertNotSame( $revBefore, $this->latestRevId( $page ), 'The delta must create a revision.' );
 	}
 
 	public function testAddArticles_nonWorklistPageReturnsFatal(): void {
-		$title = $this->worklistTitle();
+		$page = $this->getNonexistingTestPage();
 		// Pre-create a normal (wikitext) page at the target title.
-		$this->editPage( $title, 'Not a worklist' );
+		$this->editPage( $page, 'Not a worklist' );
 
-		$status = $this->getHelper()->applyDelta( $title, [ self::WIKI_ID => [ 'Article One' ] ], [] );
+		$status = $this->getHelper()->applyDelta( $page, [ self::WIKI_ID => [ 'Article One' ] ], [] );
 
 		$this->assertStatusNotGood( $status );
 		$this->assertStatusMessage( 'campaignevents-worklist-page-not-worklist', $status );
@@ -180,17 +175,17 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$wikiLookup->method( 'getAllWikis' )->willReturn( [ $curWikiID ] );
 		$this->setService( WikiLookup::SERVICE_NAME, $wikiLookup );
 
-		$title = $this->worklistTitle();
-		$this->seedWorklist( $title, [ $curWikiID => [ 'Article One' ] ] );
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ $curWikiID => [ 'Article One' ] ] );
 
 		$status = $this->getHelper()->applyDelta(
-			$title,
+			$page,
 			[ $curWikiID => [ 'article_Two' ], 'some_other_wiki' => [] ],
 			[ $curWikiID => [ 'article_One' ], 'some_other_wiki' => [] ],
 		);
 
 		$this->assertStatusGood( $status );
-		$this->assertSame( [ $curWikiID => [ 'Article Two' ] ], $this->getSavedData( $title ) );
+		$this->assertSame( [ $curWikiID => [ 'Article Two' ] ], $this->getSavedData( $page ) );
 	}
 
 	public function testApplyDelta__doesNotCanonicalizeForeignTitles() {
@@ -199,11 +194,11 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$wikiLookup->method( 'getAllWikis' )->willReturn( [ $otherWikiID ] );
 		$this->setService( WikiLookup::SERVICE_NAME, $wikiLookup );
 
-		$title = $this->worklistTitle();
-		$this->seedWorklist( $title, [ $otherWikiID => [ 'Article One' ] ] );
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ $otherWikiID => [ 'Article One' ] ] );
 
 		$status = $this->getHelper()->applyDelta(
-			$title,
+			$page,
 			[ $otherWikiID => [ 'article_Two' ] ],
 			[ $otherWikiID => [ 'article_One' ] ],
 		);
@@ -215,9 +210,9 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 	public function testApplyDelta__invalidTitlesFailEarly( bool $isAddition ) {
 		$curWikiID = WikiMap::getCurrentWikiId();
 		$invalidTitleData = [ $curWikiID => [ '|' ] ];
-		$title = $this->worklistTitle();
+		$page = $this->getNonexistingTestPage();
 		$status = $this->getHelper()->applyDelta(
-			$title,
+			$page,
 			$isAddition ? $invalidTitleData : [],
 			$isAddition ? [] : $invalidTitleData,
 		);
@@ -238,7 +233,7 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 	): WorklistArticleHelper {
 		$services = $this->getServiceContainer();
 		return new WorklistArticleHelper(
-			$services->getWikiPageFactory(),
+			$services->getRevisionStoreFactory(),
 			$services->getTitleFormatter(),
 			$services->getTitleParser(),
 			$worklistSecondaryStore,
@@ -289,7 +284,7 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame(
 			[],
 			$this->getHelperWithStores( $worklistStore, $pagesStore )->getWorklistArticles(
-				$this->worklistTitle(),
+				$this->getNonexistingTestPage(),
 				0,
 				0,
 				IWorklistArticlesLookup::DESCENDING,
