@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIn
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Worklist\UpdateWorklistPagesSecondaryStoreJob;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\JobQueue\JobQueueGroup;
@@ -29,6 +30,7 @@ use MediaWiki\Title\TitleFactory;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\User\UserIdentityValue;
 use MediaWikiUnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress
@@ -50,6 +52,7 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		?WorklistEventsStore $worklistEventsStore = null,
 		?PageEventLookup $pageEventLookup = null,
 		?EventTypesRegistry $eventTypesRegistry = null,
+		?WorklistArticleHelper $worklistArticleHelper = null,
 	): WorklistPageEventIngress {
 		// Needed because `getPrefixedText` has no return type declaration, so an unconfigured mock would return null.
 		$titleFormatter = $this->createMock( TitleFormatter::class );
@@ -63,7 +66,8 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 			$jobQueueGroup ?? $this->createMock( JobQueueGroup::class ),
 			$worklistEventsStore ?? $this->createMock( WorklistEventsStore::class ),
 			$pageEventLookup ?? $this->createMock( PageEventLookup::class ),
-			$eventTypesRegistry ?? $this->createMock( EventTypesRegistry::class )
+			$eventTypesRegistry ?? $this->createMock( EventTypesRegistry::class ),
+			$worklistArticleHelper ?? $this->createMock( WorklistArticleHelper::class ),
 		);
 	}
 
@@ -104,6 +108,12 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		return $revisionLookup;
 	}
 
+	private function mockWorklistHelperExpectingInvalidation(): WorklistArticleHelper&MockObject {
+		$worklistHelper = $this->createMock( WorklistArticleHelper::class );
+		$worklistHelper->expects( $this->once() )->method( 'invalidateWorklistContentCache' );
+		return $worklistHelper;
+	}
+
 	public function testHandlePageCreatedEvent__wrongContentModel() {
 		// Use no-op mocks to assert the secondary store isn't invoked
 		$worklistSecondaryStore = $this->createNoOpMock( WorklistSecondaryStore::class );
@@ -142,7 +152,12 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 			} );
 
 		$titleFactory = $this->mockTitleFactoryWithContentModel( CONTENT_MODEL_WORKLIST );
-		$eventIngress = $this->getEventIngress( $worklistSecondaryStore, $titleFactory, jobQueueGroup: $jobQueueGroup );
+		$eventIngress = $this->getEventIngress(
+			$worklistSecondaryStore,
+			$titleFactory,
+			jobQueueGroup: $jobQueueGroup,
+			worklistArticleHelper: $this->mockWorklistHelperExpectingInvalidation(),
+		);
 
 		// Mock revision to ensure it has a non-null ID.
 		$revisionAfter = $this->createMock( RevisionRecord::class );
@@ -187,7 +202,11 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		$event->expects( $this->atLeastOnce() )
 			->method( 'getLatestRevisionBefore' )
 			->willReturn( $revision );
-		$eventIngress = $this->getEventIngress( $worklistSecondaryStore, jobQueueGroup: $jobQueueGroup );
+		$eventIngress = $this->getEventIngress(
+			$worklistSecondaryStore,
+			jobQueueGroup: $jobQueueGroup,
+			worklistArticleHelper: $this->mockWorklistHelperExpectingInvalidation(),
+		);
 
 		$eventIngress->handlePageDeletedEvent( $event );
 		DeferredUpdates::doUpdates();
@@ -208,9 +227,34 @@ class WorklistPageEventIngressTest extends MediaWikiUnitTestCase {
 		// No content changes
 		$jobQueueGroup = $this->createNoOpMock( JobQueueGroup::class );
 		$titleFactory = $this->mockTitleFactoryWithContentModel( CONTENT_MODEL_WORKLIST );
-		$eventIngress = $this->getEventIngress( $worklistSecondaryStore, $titleFactory, jobQueueGroup: $jobQueueGroup );
 
-		$eventIngress->handlePageMovedEvent( $this->createMock( PageMovedEvent::class ) );
+		$pageBefore = $this->createMock( ExistingPageRecord::class );
+		$pageAfter = $this->createMock( ExistingPageRecord::class );
+		$pageMovedEvent = $this->createMock( PageMovedEvent::class );
+		$pageMovedEvent->method( 'getPageRecordBefore' )->willReturn( $pageBefore );
+		$pageMovedEvent->method( 'getPageRecordAfter' )->willReturn( $pageAfter );
+
+		$worklistHelper = $this->createMock( WorklistArticleHelper::class );
+		$worklistHelper->expects( $this->exactly( 2 ) )
+			->method( 'invalidateWorklistContentCache' )
+			->willReturnCallback( function ( $page ) use ( $pageBefore, $pageAfter ) {
+				static $lastPageSeen;
+				$this->assertContains( $page, [ $pageBefore, $pageAfter ] );
+				if ( !$lastPageSeen ) {
+					$lastPageSeen = $page;
+				} else {
+					$this->assertNotSame( $lastPageSeen, $page );
+				}
+			} );
+
+		$eventIngress = $this->getEventIngress(
+			$worklistSecondaryStore,
+			$titleFactory,
+			jobQueueGroup: $jobQueueGroup,
+			worklistArticleHelper: $worklistHelper,
+		);
+
+		$eventIngress->handlePageMovedEvent( $pageMovedEvent );
 		DeferredUpdates::doUpdates();
 	}
 

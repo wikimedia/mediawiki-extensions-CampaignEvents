@@ -21,6 +21,7 @@ use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\WikiMap\WikiMap;
 use StatusValue;
+use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
@@ -45,6 +46,7 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		private readonly TitleParser $titleParser,
 		private readonly WorklistSecondaryStore $worklistSecondaryStore,
 		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
+		private readonly WANObjectCache $wanCache,
 	) {
 	}
 
@@ -65,19 +67,11 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		array $toAdd,
 		array $toRemove
 	): StatusValue {
-		$revisionStore = $this->revisionStoreFactory->getRevisionStore();
-		$latestRevision = $revisionStore->getRevisionByTitle( $worklistPage, 0, IDBAccessObject::READ_LATEST );
-
-		if ( $latestRevision ) {
-			$currentContent = $latestRevision->getContent( SlotRecord::MAIN );
-			if ( !$currentContent instanceof WorklistContent ) {
-				// Never overwrite an existing page that is not a worklist: this helper only edits worklist
-				// content, so treat any other content model as an error rather than clobbering it.
-				return StatusValue::newFatal( 'campaignevents-worklist-page-not-worklist' );
-			}
-			$currentData = wfObjectToArray( $currentContent->getData()->getValue() );
-		} else {
-			$currentData = [];
+		$currentData = $this->fetchRawWorklistContent( $worklistPage, IDBAccessObject::READ_LATEST );
+		if ( $currentData === null ) {
+			// Never overwrite an existing page that is not a worklist: this helper only edits worklist
+			// content, so treat any other content model as an error rather than clobbering it.
+			return StatusValue::newFatal( 'campaignevents-worklist-page-not-worklist' );
 		}
 
 		$toAddCanonicalizationStatus = $this->canonicalizeTitles( $toAdd );
@@ -245,5 +239,52 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 			$direction,
 			$sort
 		);
+	}
+
+	/**
+	 * Returns the content of a worklist page, cached.
+	 *
+	 * @return array<string,string[]>|null Null iff the page exists but it isn't a worklist.
+	 */
+	public function getRawWorklistContentCached( PageIdentity $page ): ?array {
+		return $this->wanCache->buildGetWithSetCallback()
+			->rawKey( $this->makeContentCacheKey( $page ) )
+			->keepForADay()
+			->callback(
+				/** @return array<string,string[]>|null */
+				fn (): ?array => $this->fetchRawWorklistContent( $page )
+			)
+			->fetch();
+	}
+
+	private function makeContentCacheKey( PageIdentity $page ): string {
+		// TODO: Switch to CacheKeyHelper when T439632 is fixed.
+		$pageKey = 'ns' . $page->getNamespace() .
+			'@id@' . Utils::getWikiIDString( $page->getWikiId() ) .
+			':' . $page->getDBkey();
+		return $this->wanCache->makeGlobalKey(
+			'CampaignEvents-WorklistContent',
+			$pageKey,
+		);
+	}
+
+	public function invalidateWorklistContentCache( PageIdentity $page ): void {
+		$this->wanCache->delete( $this->makeContentCacheKey( $page ) );
+	}
+
+	/** @return array<string,string[]>|null */
+	private function fetchRawWorklistContent( PageIdentity $page, int $flags = IDBAccessObject::READ_NORMAL ): ?array {
+		$revisionStore = $this->revisionStoreFactory->getRevisionStore();
+		$latestRevision = $revisionStore->getRevisionByTitle( $page, 0, $flags );
+
+		if ( !$latestRevision ) {
+			// Page doesn't exist.
+			return [];
+		}
+		$currentContent = $latestRevision->getContent( SlotRecord::MAIN );
+		if ( !$currentContent instanceof WorklistContent ) {
+			return null;
+		}
+		return wfObjectToArray( $currentContent->getData()->getValue() );
 	}
 }

@@ -15,6 +15,8 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Revision\RevisionStore;
+use MediaWiki\Revision\RevisionStoreFactory;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 
@@ -237,7 +239,8 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 			$services->getTitleFormatter(),
 			$services->getTitleParser(),
 			$worklistSecondaryStore,
-			$worklistPagesSecondaryStore
+			$worklistPagesSecondaryStore,
+			$services->getWANObjectCache(),
 		);
 	}
 
@@ -291,5 +294,23 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 				IWorklistArticlesLookup::TIMESTAMP_SORT
 			)
 		);
+	}
+
+	public function testGetRawWorklistContentCached() {
+		$page = $this->getNonexistingTestPage();
+		$this->seedWorklist( $page, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );
+
+		$revisionStore = $this->createMock( RevisionStore::class );
+		// This should only be called once, as the second call below should read from cache instead
+		$revisionStore->expects( $this->once() )
+			->method( 'getRevisionByTitle' )
+			->with( $page )
+			->willReturn( $page->getRevisionRecord() );
+		$revisionStoreFactory = $this->createMock( RevisionStoreFactory::class );
+		$revisionStoreFactory->method( 'getRevisionStore' )->willReturn( $revisionStore );
+		$this->setService( 'RevisionStoreFactory', $revisionStoreFactory );
+
+		$this->assertIsArray( $this->getHelper()->getRawWorklistContentCached( $page ) );
+		$this->assertIsArray( $this->getHelper()->getRawWorklistContentCached( $page ) );
 	}
 }

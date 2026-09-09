@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Worklist\UpdateWorklistPagesSecondaryStoreJob;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\JobQueue\JobQueueGroup;
@@ -65,6 +66,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly PageEventLookup $pageEventLookup,
 		private readonly EventTypesRegistry $eventTypesRegistry,
+		private readonly WorklistArticleHelper $worklistArticleHelper,
 	) {
 	}
 
@@ -135,6 +137,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 
 			$job = UpdateWorklistPagesSecondaryStoreJob::newForUpdate( $page, $worklistID, $performer, $revID );
 			$this->jobQueueGroup->push( $job );
+			$this->worklistArticleHelper->invalidateWorklistContentCache( $page );
 		} );
 	}
 
@@ -153,6 +156,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 			}
 			$job = UpdateWorklistPagesSecondaryStoreJob::newForDeletion( $page, $worklistID, $revIDAfter );
 			$this->jobQueueGroup->push( $job );
+			$this->worklistArticleHelper->invalidateWorklistContentCache( $page );
 		} );
 	}
 
@@ -192,6 +196,8 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 				$event->getPageId(),
 				$this->titleFormatter->getPrefixedText( $pageAfter )
 			);
+			$this->worklistArticleHelper->invalidateWorklistContentCache( $pageBefore );
+			$this->worklistArticleHelper->invalidateWorklistContentCache( $pageAfter );
 
 			// Keep the event association in sync with the page's location: a page moved onto an
 			// event's "/Worklist" subpage becomes associated, and one moved away from it is
