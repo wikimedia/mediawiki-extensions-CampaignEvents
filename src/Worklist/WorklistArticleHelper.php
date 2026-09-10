@@ -21,6 +21,7 @@ use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\WikiMap\WikiMap;
 use StatusValue;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * Behaviour layer for worklists (T424021).
@@ -65,7 +66,7 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		array $toRemove
 	): StatusValue {
 		$revisionStore = $this->revisionStoreFactory->getRevisionStore();
-		$latestRevision = $revisionStore->getRevisionByTitle( $worklistPage );
+		$latestRevision = $revisionStore->getRevisionByTitle( $worklistPage, 0, IDBAccessObject::READ_LATEST );
 
 		if ( $latestRevision ) {
 			$currentContent = $latestRevision->getContent( SlotRecord::MAIN );
