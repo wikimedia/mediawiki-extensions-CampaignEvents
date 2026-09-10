@@ -68,5 +68,6 @@
 	"campaignevents-rest-param-desc-start-timestamp": "Start timestamp in any format accepted by the MediaWiki timestamp parser.",
 	"campaignevents-rest-param-desc-end-timestamp": "End timestamp in any format accepted by the MediaWiki timestamp parser.",
 	"campaignevents-rest-param-desc-wiki": "ID of the wiki where the revision was made.",
-	"campaignevents-rest-param-desc-revid": "Revision ID on the target wiki."
+	"campaignevents-rest-param-desc-revid": "Revision ID on the target wiki.",
+	"campaignevents-rest-patch-worklist-title-not-plain": "The worklist title must not contain an interwiki prefix or a section fragment."
 }

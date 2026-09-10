@@ -15,10 +15,12 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\RevisionStoreFactory;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Assert\PreconditionException;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper
@@ -227,6 +229,19 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		// For simplicity, the invalid data is created in the test method because we can't access the cur wiki ID here
 		yield 'Addition' => [ true ];
 		yield 'Removal' => [ false ];
+	}
+
+	public function testApplyDelta__foreignWorklist() {
+		$otherWikiID = WikiMap::getCurrentWikiId() . '_other';
+		$foreignPage = new PageReferenceValue( NS_MAIN, 'Foreign_worklist', $otherWikiID );
+
+		$this->expectException( PreconditionException::class );
+		$this->expectExceptionMessage( 'to belong to the local wiki' );
+		$this->getHelper()->applyDelta(
+			$foreignPage,
+			[ self::WIKI_ID => [ 'Article' ] ],
+			[]
+		);
 	}
 
 	private function getHelperWithStores(

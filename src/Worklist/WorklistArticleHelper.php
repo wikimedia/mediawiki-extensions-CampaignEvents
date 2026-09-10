@@ -11,6 +11,7 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageReference;
 use MediaWiki\Page\WikiPage;
 use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\Revision\RevisionStoreFactory;
@@ -56,17 +57,19 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 	 * Reading, applying and saving happen once for the whole delta, so the page is updated
 	 * atomically and a request that both adds and removes creates a single revision.
 	 *
-	 * @param PageIdentity $worklistPage The worklist page to edit
+	 * @param PageReference $worklistPage The worklist page to edit. Must be a local page, and the caller is responsible
+	 *  for making sure that is the case.
 	 * @param array<string,list<string>> $toAdd Articles to add, as wiki ID => list of prefixed titles
 	 * @param array<string,list<string>> $toRemove Articles to remove, as wiki ID => list of prefixed titles
 	 *
 	 * @return StatusValue Good on success; a fatal StatusValue otherwise
 	 */
 	public function applyDelta(
-		PageIdentity $worklistPage,
+		PageReference $worklistPage,
 		array $toAdd,
 		array $toRemove
 	): StatusValue {
+		$worklistPage->assertWiki( PageReference::LOCAL );
 		$currentData = $this->fetchRawWorklistContent( $worklistPage, IDBAccessObject::READ_LATEST );
 		if ( $currentData === null ) {
 			// Never overwrite an existing page that is not a worklist: this helper only edits worklist
@@ -149,7 +152,7 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 	 *
 	 * @return StatusValue Good on success; the edit API's own error status otherwise
 	 */
-	private function saveViaEditApi( PageIdentity $worklistPage, string $text ): StatusValue {
+	private function saveViaEditApi( PageReference $worklistPage, string $text ): StatusValue {
 		$context = new DerivativeContext( RequestContext::getMain() );
 		$params = [
 			'action' => 'edit',
@@ -246,7 +249,7 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 	 *
 	 * @return array<string,string[]>|null Null iff the page exists but it isn't a worklist.
 	 */
-	public function getRawWorklistContentCached( PageIdentity $page ): ?array {
+	public function getRawWorklistContentCached( PageReference $page ): ?array {
 		return $this->wanCache->buildGetWithSetCallback()
 			->rawKey( $this->makeContentCacheKey( $page ) )
 			->keepForADay()
@@ -257,7 +260,7 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 			->fetch();
 	}
 
-	private function makeContentCacheKey( PageIdentity $page ): string {
+	private function makeContentCacheKey( PageReference $page ): string {
 		// TODO: Switch to CacheKeyHelper when T439632 is fixed.
 		$pageKey = 'ns' . $page->getNamespace() .
 			'@id@' . Utils::getWikiIDString( $page->getWikiId() ) .
@@ -268,13 +271,13 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		);
 	}
 
-	public function invalidateWorklistContentCache( PageIdentity $page ): void {
+	public function invalidateWorklistContentCache( PageReference $page ): void {
 		$this->wanCache->delete( $this->makeContentCacheKey( $page ) );
 	}
 
 	/** @return array<string,string[]>|null */
-	private function fetchRawWorklistContent( PageIdentity $page, int $flags = IDBAccessObject::READ_NORMAL ): ?array {
-		$revisionStore = $this->revisionStoreFactory->getRevisionStore();
+	private function fetchRawWorklistContent( PageReference $page, int $flags = IDBAccessObject::READ_NORMAL ): ?array {
+		$revisionStore = $this->revisionStoreFactory->getRevisionStore( $page->getWikiId() );
 		$latestRevision = $revisionStore->getRevisionByTitle( $page, 0, $flags );
 
 		if ( !$latestRevision ) {

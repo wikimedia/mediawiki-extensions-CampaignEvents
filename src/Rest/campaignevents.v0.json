@@ -390,8 +390,7 @@
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\PatchWorklistPagesHandler",
 					"services": [
-						"CampaignEventsWorklistArticleHelper",
-						"TitleFactory"
+						"CampaignEventsWorklistArticleHelper"
 					]
 				}
 			}

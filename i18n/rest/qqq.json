@@ -71,5 +71,6 @@
 	"campaignevents-rest-param-desc-start-timestamp": "Description of the start path parameter for the get-formatted-time REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-param-desc-end-timestamp": "Description of the end path parameter for the get-formatted-time REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-param-desc-wiki": "Description of the wiki path parameter for the event-contributions REST API endpoint. Shown in the REST API sandbox.",
-	"campaignevents-rest-param-desc-revid": "Description of the revid path parameter for the event-contributions REST API endpoint. Shown in the REST API sandbox."
+	"campaignevents-rest-param-desc-revid": "Description of the revid path parameter for the event-contributions REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-patch-worklist-title-not-plain": "Error message used when editing a worklist, but its provided title contains a section fragment or an interwiki prefix."
 }

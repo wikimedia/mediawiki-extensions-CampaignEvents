@@ -6,14 +6,16 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\ParamValidator\TypeDef\TitleDef;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\Rest\TokenAwareHandlerTrait;
 use MediaWiki\Rest\Validator\Validator;
-use MediaWiki\Title\TitleFactory;
 use StatusValue;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
 
 /**
@@ -32,7 +34,6 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 
 	public function __construct(
 		private readonly WorklistArticleHelper $worklistArticleHelper,
-		private readonly TitleFactory $titleFactory,
 	) {
 	}
 
@@ -43,6 +44,13 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 	}
 
 	protected function run( LinkTarget $worklistTitle ): Response {
+		if ( $worklistTitle->hasFragment() || $worklistTitle->isExternal() ) {
+			throw new LocalizedHttpException(
+				MessageValue::new( 'campaignevents-rest-patch-worklist-title-not-plain' ),
+				400,
+			);
+		}
+
 		$body = $this->getValidatedBody() ?? [];
 		// Articles are grouped by wiki, e.g. { "enwiki": [ "Article One" ], "ptwiki": [ "Artigo" ] }.
 		$add = $body['add'] ?? [];
@@ -50,7 +58,7 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 
 		// Apply the whole delta in one atomic edit (see WorklistArticleHelper::applyDelta).
 		$this->applyOrThrow( $this->worklistArticleHelper->applyDelta(
-			$this->titleFactory->newFromLinkTarget( $worklistTitle ),
+			PageReferenceValue::localReference( $worklistTitle->getNamespace(), $worklistTitle->getDBkey() ),
 			$add,
 			$remove
 		) );

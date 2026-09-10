@@ -40,6 +40,7 @@ class PatchWorklistPagesHandlerTest extends MediaWikiUnitTestCase {
 
 	private function newHandler(
 		?WorklistArticleHelper $helper = null,
+		?TitleFactory $titleFactory = null,
 	): PatchWorklistPagesHandler {
 		if ( $helper === null ) {
 			$helper = $this->createMock( WorklistArticleHelper::class );
@@ -47,17 +48,15 @@ class PatchWorklistPagesHandlerTest extends MediaWikiUnitTestCase {
 		}
 		// The 'title' path param is validated with TitleDef::PARAM_RETURN_OBJECT, so the validator
 		// needs a TitleFactory service and hands a LinkTarget to run().
-		$mockTitle = $this->createMock( Title::class );
-		$mockTitle->method( 'getTitleValue' )->willReturn( new TitleValue( NS_MAIN, 'Event1/Worklist' ) );
-		$validatorTitleFactory = $this->createMock( TitleFactory::class );
-		$validatorTitleFactory->method( 'newFromText' )->willReturn( $mockTitle );
-		$this->setService( 'TitleFactory', $validatorTitleFactory );
+		if ( !$titleFactory ) {
+			$mockTitle = $this->createMock( Title::class );
+			$mockTitle->method( 'getTitleValue' )->willReturn( new TitleValue( NS_MAIN, 'Event1/Worklist' ) );
+			$titleFactory = $this->createMock( TitleFactory::class );
+			$titleFactory->method( 'newFromText' )->willReturn( $mockTitle );
+		}
+		$this->setService( 'TitleFactory', $titleFactory );
 
-		// The handler resolves that LinkTarget back to a PageIdentity before calling the behaviour layer.
-		$titleFactory = $this->createMock( TitleFactory::class );
-		$titleFactory->method( 'newFromLinkTarget' )->willReturn( $this->createMock( Title::class ) );
-
-		return new PatchWorklistPagesHandler( $helper, $titleFactory );
+		return new PatchWorklistPagesHandler( $helper );
 	}
 
 	/**
@@ -72,6 +71,30 @@ class PatchWorklistPagesHandlerTest extends MediaWikiUnitTestCase {
 			$token,
 			$excepMsg
 		);
+	}
+
+	public function testRun__titleWithFragment() {
+		$helper = $this->createNoOpMock( WorklistArticleHelper::class );
+		$titleFactory = $this->createMock( TitleFactory::class );
+		$titleFactory->method( 'newFromText' )
+			->willReturn( Title::makeTitle( NS_MAIN, __METHOD__, 'Section' ) );
+		$handler = $this->newHandler( $helper, $titleFactory );
+
+		$this->expectException( LocalizedHttpException::class );
+		$this->expectExceptionMessage( 'campaignevents-rest-patch-worklist-title-not-plain' );
+		$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
+	}
+
+	public function testRun__titleWithInterwiki() {
+		$helper = $this->createNoOpMock( WorklistArticleHelper::class );
+		$titleFactory = $this->createMock( TitleFactory::class );
+		$titleFactory->method( 'newFromText' )
+			->willReturn( Title::makeTitle( NS_MAIN, __METHOD__, '', 'otherwiki' ) );
+		$handler = $this->newHandler( $helper, $titleFactory );
+
+		$this->expectException( LocalizedHttpException::class );
+		$this->expectExceptionMessage( 'campaignevents-rest-patch-worklist-title-not-plain' );
+		$this->executeHandler( $handler, new RequestData( $this->getRequestData() ) );
 	}
 
 	public function testAdd_returns204(): void {
