@@ -98,11 +98,6 @@ module.exports = exports = defineComponent( {
 			label: mw.msg( 'campaignevents-postedit-dialog-action-no' )
 		};
 
-		// Do not render anything if we have no events, which should never actually happen in
-		// practice. This complements the error thrown above, which on its own does not
-		// prevent the component from being rendered.
-		const canRender = computed( () => events.length > 0 );
-
 		const eventsById = new Map( events.map( ( e ) => [ e.id, e ] ) );
 		const selectedEventData = computed(
 			() => eventsById.get( selectedEvent.value ) || null
@@ -149,11 +144,20 @@ module.exports = exports = defineComponent( {
 			primaryAction,
 			defaultAction,
 			onPrimary,
-			canRender,
 			selectedEventData,
 			hasGoal,
 			footerMessageHTML
 		};
+	},
+	computed: {
+		canRender() {
+			// Do not render anything if we have no events, which should ever actually happen in
+			// practice. This complements the error thrown above, which on its own does not
+			// prevent the component from being rendered, and would cause access to uninitialized
+			// properties. This property needs to be defined here, as it's meant to be available
+			// regardless of whether setup() runs.
+			return mw.config.get( 'wgCampaignEventsEventsForAssociation' ).length > 0;
+		}
 	}
 } );
 </script>
