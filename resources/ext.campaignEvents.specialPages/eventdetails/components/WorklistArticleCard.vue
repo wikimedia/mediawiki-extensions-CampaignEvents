@@ -30,6 +30,13 @@
 					<cdx-icon :icon="cdxIconTrash"></cdx-icon>
 				</cdx-button>
 			</template>
+
+			<!-- The wiki is only worth naming for an article from elsewhere: two articles with the
+				same title on different wikis would otherwise look identical. Relative to the wiki
+				that answered the request, not the reader's. -->
+			<template v-if="!article.isLocal" #supporting-text>
+				<span class="ext-campaignevents-worklist-card__wiki">{{ article.wikiName }}</span>
+			</template>
 		</cdx-card>
 	</li>
 </template>

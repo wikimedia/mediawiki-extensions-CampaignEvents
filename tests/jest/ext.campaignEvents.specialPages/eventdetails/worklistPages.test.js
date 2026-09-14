@@ -5,16 +5,21 @@ const worklistPages = require( '../../../../resources/ext.campaignEvents.special
 const EVENT_ID = 71;
 const EXPECTED_PATH = '/campaignevents/v0/event_registration/71/worklist_pages';
 
-// Responses as the endpoint sends them.
-const EMPTY_RESPONSE = { pages: [] };
+/* eslint-disable camelcase */
+// Responses as the endpoint sends them, in snake_case.
+const EMPTY_RESPONSE = { wikis: {}, pages: [] };
 const ONE_ARTICLE_RESPONSE = {
+	// The wiki's name is sent once for the whole response, not on every page.
+	wikis: { awiki: { name: 'A Wiki' } },
 	pages: [ {
 		wiki: 'awiki',
+		is_local: false,
 		title: 'Beavers',
 		url: 'https://a.example.org/wiki/Beavers',
 		classes: 'external'
 	} ]
 };
+/* eslint-enable camelcase */
 
 /**
  * @param {Object} [config] Config vars beyond the event ID
@@ -100,6 +105,8 @@ describe( 'worklistPages.fetchPages', () => {
 		await expect( worklistPages.fetchPages() ).resolves.toStrictEqual( {
 			pages: [ {
 				wiki: 'awiki',
+				wikiName: 'A Wiki',
+				isLocal: false,
 				title: 'Beavers',
 				url: 'https://a.example.org/wiki/Beavers',
 				classes: 'external'

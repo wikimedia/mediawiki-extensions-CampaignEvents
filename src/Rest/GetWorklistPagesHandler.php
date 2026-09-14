@@ -8,6 +8,7 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkRendererFactory;
@@ -43,6 +44,7 @@ class GetWorklistPagesHandler extends SimpleHandler {
 		private readonly Config $config,
 		private readonly IEventLookup $eventLookup,
 		private readonly IWorklistArticlesLookup $worklistArticlesLookup,
+		private readonly WikiLookup $wikiLookup,
 		private readonly TitleFactory $titleFactory,
 		private readonly LinkBatchFactory $linkBatchFactory,
 		private readonly PageStoreFactory $pageStoreFactory,
@@ -70,7 +72,12 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			IWorklistArticlesLookup::DESCENDING,
 			IWorklistArticlesLookup::TIMESTAMP_SORT
 		);
-		$localTitles = $this->preloadLocalTitles( $pages );
+		// Resolved once: a worklist can hold thousands of pages, and WikiMap works the current
+		// wiki's ID out from its database domain on every call.
+		$currentWiki = WikiMap::getCurrentWikiId();
+		$localTitles = $this->preloadLocalTitles( $pages, $currentWiki );
+		$wikis = array_values( array_unique( array_column( $pages, 'wiki' ) ) );
+		$wikiNames = $this->wikiLookup->getLocalizedNames( $wikis );
 
 		// URLs are expanded because a worklist can list articles from other wikis, and a relative
 		// path would be ambiguous for those: on a farm whose wikis share a domain it would resolve
@@ -84,16 +91,33 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			$prefixedText = $page['prefixedtext'];
 			$respVal[] = [
 				'wiki' => $wiki,
+				// Relative to the wiki hosting the worklist page, which answered this request and
+				// is not necessarily the wiki the reader is on; the link attributes say the same.
+				'is_local' => $wiki === $currentWiki,
 				'title' => $prefixedText,
 			] + $this->linkAttributes(
 				$linkRenderer,
+				$wiki === $currentWiki,
 				$wiki,
 				$prefixedText,
 				$localTitles[$prefixedText] ?? null
 			);
 		}
 
-		return $this->getResponseFactory()->createJson( [ 'pages' => $respVal ] );
+		// Keyed by wiki ID rather than repeated on every page, to keep the response small: a
+		// worklist of a few thousand pages spans a handful of wikis at most, so repeating each
+		// wiki's data per page would be almost entirely duplication, and this response is what
+		// the reader waits on.
+		$wikiInfo = [];
+		foreach ( $wikis as $wiki ) {
+			$wikiInfo[$wiki] = [ 'name' => $wikiNames[$wiki] ];
+		}
+
+		return $this->getResponseFactory()->createJson( [
+			// Cast so that a worklist with no pages still yields an object, not an empty list.
+			'wikis' => (object)$wikiInfo,
+			'pages' => $respVal,
+		] );
 	}
 
 	/**
@@ -125,11 +149,12 @@ class GetWorklistPagesHandler extends SimpleHandler {
 	 */
 	private function linkAttributes(
 		LinkRenderer $linkRenderer,
+		bool $isLocal,
 		string $wiki,
 		string $prefixedText,
 		?Title $localTitle
 	): array {
-		if ( WikiMap::isCurrentWikiId( $wiki ) ) {
+		if ( $isLocal ) {
 			if ( !$localTitle ) {
 				// A title this wiki cannot parse has nothing to link to.
 				return [ 'url' => '', 'classes' => '' ];
@@ -168,13 +193,13 @@ class GetWorklistPagesHandler extends SimpleHandler {
 	 * @param list<array{wiki: string, prefixedtext: string}> $pages
 	 * @return array<string,Title>
 	 */
-	private function preloadLocalTitles( array $pages ): array {
+	private function preloadLocalTitles( array $pages, string $currentWiki ): array {
 		$titles = [];
 		$linkBatch = $this->linkBatchFactory->newLinkBatch();
 		$linkBatch->setCaller( __METHOD__ );
 		foreach ( $pages as $page ) {
 			$prefixedText = $page['prefixedtext'];
-			if ( !WikiMap::isCurrentWikiId( $page['wiki'] ) ) {
+			if ( $page['wiki'] !== $currentWiki ) {
 				continue;
 			}
 			$title = $this->titleFactory->newFromText( $prefixedText );

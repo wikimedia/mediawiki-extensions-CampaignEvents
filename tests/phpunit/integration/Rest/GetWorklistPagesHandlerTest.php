@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Rest\GetWorklistPagesHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
 use MediaWiki\Page\PageIdentity;
@@ -19,6 +20,7 @@ use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
 use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
+use stdClass;
 
 /**
  * @group Test
@@ -80,11 +82,20 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 				->willThrowException( $this->createMock( EventNotFoundException::class ) );
 		}
 
+		$wikiLookup = $this->createMock( WikiLookup::class );
+		$wikiLookup->method( 'getLocalizedNames' )->willReturnCallback(
+			static fn ( array $wikiIDs ): array => array_combine(
+				$wikiIDs,
+				array_map( static fn ( string $wiki ): string => "Name of $wiki", $wikiIDs )
+			)
+		);
+
 		$services = $this->getServiceContainer();
 		return new GetWorklistPagesHandler(
 			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => $cardViewEnabled ] ),
 			$eventLookup,
 			$lookup,
+			$wikiLookup,
 			$services->getTitleFactory(),
 			$services->getLinkBatchFactory(),
 			$services->getPageStoreFactory(),
@@ -96,10 +107,14 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 	 * @param list<array{wiki: string, prefixedtext: string}> $storedPages
 	 */
 	private function executeWithPages( array $storedPages ): array {
+		return $this->executeForBody( $storedPages )['pages'];
+	}
+
+	private function executeForBody( array $storedPages ): array {
 		return $this->executeHandlerAndGetBodyData(
 			$this->newHandler( $storedPages ),
 			new RequestData( self::REQ_DATA )
-		)['pages'];
+		);
 	}
 
 	public function testRun__noPages(): void {
@@ -108,7 +123,8 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 			new RequestData( self::REQ_DATA )
 		);
 
-		$this->assertSame( [ 'pages' => [] ], $respData );
+		// An empty worklist still names no wikis, so the map comes back alongside the pages.
+		$this->assertSame( [ 'wikis' => [], 'pages' => [] ], $respData );
 	}
 
 	public function testRun__localPages(): void {
@@ -125,12 +141,14 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 			[
 				[
 					'wiki' => $localWiki,
+					'is_local' => true,
 					'title' => $existingPage->getPrefixedText(),
 					'url' => $existingPage->getLinkURL( [], false, PROTO_RELATIVE ),
 					'classes' => '',
 				],
 				[
 					'wiki' => $localWiki,
+					'is_local' => true,
 					'title' => $missingPage->getPrefixedText(),
 					// A page still to be created is linked as a red link, exactly as the
 					// server-rendered worklist table does.
@@ -152,6 +170,7 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		$this->assertCount( 1, $respData );
 		$entry = $respData[0];
 		$this->assertSame( self::FOREIGN_WIKI, $entry['wiki'] );
+		$this->assertFalse( $entry['is_local'], 'Relative to the wiki that answered the request' );
 		$this->assertSame( 'Foreign article', $entry['title'] );
 		// An article on a wiki this one cannot resolve has nothing to link to. Where the wiki farm
 		// does resolve it, WikiMap gives a URL and the link is rendered with the `external` class,
@@ -170,6 +189,7 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 			[
 				[
 					'wiki' => $localWiki,
+					'is_local' => true,
 					'title' => '<invalid title>',
 					'url' => '',
 					'classes' => '',
@@ -177,6 +197,37 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 			],
 			$respData
 		);
+	}
+
+	public function testRun__namesEachWikiOnce(): void {
+		$localWiki = WikiMap::getCurrentWikiId();
+		$body = $this->executeForBody( [
+			[ 'wiki' => $localWiki, 'prefixedtext' => 'One' ],
+			[ 'wiki' => $localWiki, 'prefixedtext' => 'Two' ],
+			[ 'wiki' => self::FOREIGN_WIKI, 'prefixedtext' => 'Three' ],
+		] );
+
+		// One entry per wiki, not one per page: the name is the same for every page of a wiki and
+		// a worklist can hold thousands of them.
+		$this->assertSame(
+			[
+				$localWiki => [ 'name' => "Name of $localWiki" ],
+				self::FOREIGN_WIKI => [ 'name' => 'Name of ' . self::FOREIGN_WIKI ],
+			],
+			(array)$body['wikis']
+		);
+	}
+
+	public function testRun__noPagesStillSendsAWikiObject(): void {
+		$response = $this->executeHandler(
+			$this->newHandler( [] ),
+			new RequestData( self::REQ_DATA )
+		);
+
+		// Decoded into objects rather than arrays: decoding associatively turns both [] and {}
+		// into an empty PHP array, so only this tells apart what a client would receive.
+		$body = json_decode( (string)$response->getBody(), false );
+		$this->assertInstanceOf( stdClass::class, $body->wikis );
 	}
 
 	public function testRun__cardViewDisabled(): void {
@@ -234,6 +285,7 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 			new RequestData( self::REQ_DATA )
 		);
 
-		$this->assertSame( [ 'pages' => [] ], $respData );
+		// An empty worklist still names no wikis, so the map comes back alongside the pages.
+		$this->assertSame( [ 'wikis' => [], 'pages' => [] ], $respData );
 	}
 }

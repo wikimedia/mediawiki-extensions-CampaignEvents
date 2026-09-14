@@ -12,6 +12,7 @@ const CARD = '.ext-campaignevents-worklist-card';
 
 const article = ( title, overrides = {} ) => Object.assign( {
 	wiki: LOCAL_WIKI,
+	wikiName: 'My wiki',
 	title: title,
 	url: '/wiki/' + title,
 	classes: ''

@@ -9,6 +9,9 @@ const article = ( overrides = {} ) => Object.assign( {
 	wiki: LOCAL_WIKI,
 	title: 'Bears',
 	url: '/wiki/Bears',
+	wikiName: 'My wiki',
+	// Whether the article is on the wiki that answered the request, which the server decides.
+	isLocal: true,
 	classes: ''
 }, overrides );
 
@@ -36,7 +39,7 @@ describe( 'WorklistArticleCard', () => {
 
 	it( 'marks an article on another wiki as an external link', () => {
 		const wrapper = mountCard( {
-			article: article( { wiki: 'otherwiki', classes: 'external' } )
+			article: article( { wiki: 'otherwiki', isLocal: false, classes: 'external' } )
 		} );
 		expect(
 			wrapper.get( '.cdx-card__text__title a' ).classes()
@@ -74,4 +77,15 @@ describe( 'WorklistArticleCard', () => {
 		// Nesting a button inside a link would be invalid, so the card must not be one.
 		expect( wrapper.get( '.cdx-card' ).element.tagName ).not.toBe( 'A' );
 	} );
+	it( 'names the wiki only for an article from another wiki', () => {
+		expect( mountCard().find( '.ext-campaignevents-worklist-card__wiki' ).exists() )
+			.toBe( false );
+
+		const foreign = mountCard( {
+			article: article( { wiki: 'otherwiki', isLocal: false, wikiName: 'The other wiki' } )
+		} );
+		expect( foreign.get( '.ext-campaignevents-worklist-card__wiki' ).text() )
+			.toBe( 'The other wiki' );
+	} );
+
 } );

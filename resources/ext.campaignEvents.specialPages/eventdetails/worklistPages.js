@@ -35,6 +35,10 @@
 			// frontend does not, so the shape is normalised here rather than in every component.
 			pages: response.pages.map( ( page ) => ( {
 				wiki: page.wiki,
+				// The name is sent once per wiki rather than once per page; flatten it back onto
+				// each page so components do not have to carry the lookup around.
+				wikiName: ( response.wikis[ page.wiki ] || {} ).name,
+				isLocal: page.is_local,
 				title: page.title,
 				url: page.url,
 				classes: page.classes

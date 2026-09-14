@@ -365,7 +365,7 @@
 		"/event_registration/{id}/worklist_pages": {
 			"get": {
 				"summary": "List the pages in an event's worklist",
-				"description": "Returns every page in the worklist associated with the specified event, newest first, each with the URL and CSS classes its link would have in the server-rendered worklist table (a red link for a page still to be created, an external link for another wiki). The complete list is returned in one response, capped at 5000 articles, because the Worklist tab filters and paginates it client-side.",
+				"description": "Returns every page in the worklist associated with the specified event, newest first, each with the URL and CSS classes its link would have in the server-rendered worklist table (a red link for a page still to be created, an external link for another wiki). Data that belongs to a wiki rather than to a page, such as its localised name, is returned once in a `wikis` map keyed by wiki ID, which each page refers to by its `wiki`. The complete list is returned in one response, capped at 5000 articles, because the Worklist tab filters and paginates it client-side.",
 				"tags": [ "Worklists" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetWorklistPagesHandler",
@@ -373,6 +373,7 @@
 						"MainConfig",
 						"CampaignEventsEventLookup",
 						"CampaignEventsWorklistArticleHelper",
+						"CampaignEventsWikiLookup",
 						"TitleFactory",
 						"LinkBatchFactory",
 						"PageStoreFactory",
