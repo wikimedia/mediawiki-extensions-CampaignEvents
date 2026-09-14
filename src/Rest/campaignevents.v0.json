@@ -396,6 +396,20 @@
 				}
 			}
 		},
+		"/event_registration/{id}/worklist_pages/metadata": {
+			"get": {
+				"summary": "List when the pages in an event's worklist were added",
+				"description": "Returns the date each page in the worklist was added, newest first, both formatted for the requesting user and as an ISO 8601 timestamp. This is the part of the worklist that lives only in the secondary store, so the card view asks for it separately once it has the pages themselves.",
+				"tags": [ "Worklists" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetWorklistPagesMetadataHandler",
+					"services": [
+						"CampaignEventsEventLookup",
+						"CampaignEventsWorklistPagesSecondaryStore"
+					]
+				}
+			}
+		},
 		"/event_discovery/discoverable_events": {
 			"get": {
 				"summary": "List discoverable events for a page",

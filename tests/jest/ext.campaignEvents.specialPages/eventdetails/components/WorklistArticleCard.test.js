@@ -88,4 +88,21 @@ describe( 'WorklistArticleCard', () => {
 			.toBe( 'The other wiki' );
 	} );
 
+	it( 'shows when the article was added, once that has been fetched', () => {
+		const wrapper = mountCard( {
+			added: '14:32, 3 September 2026',
+			addedAt: '2026-09-03T14:32:00Z'
+		} );
+
+		const time = wrapper.get( 'time.ext-campaignevents-worklist-card__added' );
+		expect( time.attributes( 'datetime' ) ).toBe( '2026-09-03T14:32:00Z' );
+		expect( time.text() ).toContain( '14:32, 3 September 2026' );
+	} );
+
+	it( 'shows no date until one has been fetched', () => {
+		expect(
+			mountCard().find( '.ext-campaignevents-worklist-card__added' ).exists()
+		).toBe( false );
+	} );
+
 } );

@@ -34,8 +34,19 @@
 			<!-- The wiki is only worth naming for an article from elsewhere: two articles with the
 				same title on different wikis would otherwise look identical. Relative to the wiki
 				that answered the request, not the reader's. -->
-			<template v-if="!article.isLocal" #supporting-text>
-				<span class="ext-campaignevents-worklist-card__wiki">{{ article.wikiName }}</span>
+			<template v-if="!article.isLocal || added" #supporting-text>
+				<span
+					v-if="!article.isLocal"
+					class="ext-campaignevents-worklist-card__wiki"
+				>{{ article.wikiName }}</span>
+				<time
+					v-if="added"
+					class="ext-campaignevents-worklist-card__added"
+					:datetime="addedAt"
+				>{{ $i18n(
+					'campaignevents-event-details-worklist-card-added',
+					added
+				).text() }}</time>
 			</template>
 		</cdx-card>
 	</li>
@@ -58,6 +69,14 @@ module.exports = exports = defineComponent( {
 		canRemove: {
 			type: Boolean,
 			default: false
+		},
+		added: {
+			type: String,
+			default: null
+		},
+		addedAt: {
+			type: String,
+			default: null
 		}
 	},
 	emits: [ 'remove' ],

@@ -245,4 +245,31 @@ class WorklistPagesSecondaryStore {
 		}
 		return $pages;
 	}
+
+	/**
+	 * Returns when each article in the event's worklist was added, newest first.
+	 *
+	 * Kept apart from the article list itself, which the card view reads first: the dates are
+	 * not needed to draw the cards, so they are asked for once the cards are on screen.
+	 *
+	 * @return list<array{wiki: string, prefixedtext: string, timestamp: string}>
+	 */
+	public function getPagesMetadataForEvent( int $eventID ): array {
+		$rows = $this->dbHelper->getReplicaConnection()->newSelectQueryBuilder()
+			->queryInfo( $this->getQueryInfo( $eventID ) )
+			->orderBy( [ 'cewp_timestamp', 'cewp_id' ], SelectQueryBuilder::SORT_DESC )
+			->limit( self::MAX_PAGES_PER_WORKLIST )
+			->caller( __METHOD__ )
+			->fetchResultSet();
+
+		$metadata = [];
+		foreach ( $rows as $row ) {
+			$metadata[] = [
+				'wiki' => $row->cewp_wiki,
+				'prefixedtext' => $row->cewp_page_prefixedtext,
+				'timestamp' => $row->cewp_timestamp,
+			];
+		}
+		return $metadata;
+	}
 }

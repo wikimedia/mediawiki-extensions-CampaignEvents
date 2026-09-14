@@ -114,6 +114,27 @@ describe( 'worklistPages.fetchPages', () => {
 		} );
 	} );
 
+	it( 'normalises the metadata response for the components', async () => {
+		const get = mockRest();
+		/* eslint-disable camelcase */
+		get.mockResolvedValue( {
+			pages: [ {
+				wiki: 'awiki',
+				title: 'Beavers',
+				added: '14:32, 3 September 2026',
+				added_at: '2026-09-03T14:32:00Z'
+			} ]
+		} );
+		/* eslint-enable camelcase */
+
+		expect( await worklistPages.fetchMetadata() ).toEqual( [ {
+			wiki: 'awiki',
+			title: 'Beavers',
+			added: '14:32, 3 September 2026',
+			addedAt: '2026-09-03T14:32:00Z'
+		} ] );
+	} );
+
 	it( 'reads from the hosting wiki when the worklist page is on another wiki', async () => {
 		const foreignRestUrl = 'https://foreign.example.org/w/rest.php';
 		const restGet = mockRest( { wgCampaignEventsWorklistWikiRestUrl: foreignRestUrl } );

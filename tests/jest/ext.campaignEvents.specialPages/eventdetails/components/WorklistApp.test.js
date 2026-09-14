@@ -99,6 +99,7 @@ describe( 'WorklistApp', () => {
 	beforeEach( () => {
 		jest.useFakeTimers();
 		jest.spyOn( mw.user, 'isNamed' ).mockReturnValue( true );
+		jest.spyOn( worklistPages, 'fetchMetadata' ).mockResolvedValue( [] );
 		jest.spyOn( worklistPages, 'fetchPages' ).mockResolvedValue( page( [ 'Bears' ] ) );
 		jest.spyOn( worklistPages, 'removeArticle' ).mockResolvedValue( {} );
 		global.$ = jest.fn();
@@ -420,5 +421,76 @@ describe( 'WorklistApp', () => {
 		// Back on the first page of the filtered results, not the second page of the old ones.
 		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
 		expect( currentPage( wrapper ) ).toEqual( [ '1' ] );
+	} );
+	it( 'fills in when the articles were added, after the list has loaded', async () => {
+		worklistPages.fetchMetadata.mockResolvedValue( [ {
+			wiki: LOCAL_WIKI,
+			title: 'Bears',
+			added: '14:32, 3 September 2026',
+			addedAt: '2026-09-03T14:32:00Z'
+		} ] );
+
+		const wrapper = mountApp();
+		await settle();
+
+		const time = wrapper.get( 'time.ext-campaignevents-worklist-card__added' );
+		expect( time.attributes( 'datetime' ) ).toBe( '2026-09-03T14:32:00Z' );
+		expect( time.text() ).toContain( '14:32, 3 September 2026' );
+	} );
+
+	it( 'leaves an article without a date when the store has no row for it yet', async () => {
+		// The secondary store lags behind the worklist page, so a freshly added article can be
+		// missing from the metadata.
+		worklistPages.fetchMetadata.mockResolvedValue( [] );
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.find( '.ext-campaignevents-worklist-card__added' ).exists() ).toBe( false );
+	} );
+
+	it( 'still shows the articles when the dates cannot be fetched', async () => {
+		worklistPages.fetchMetadata.mockRejectedValue( {} );
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.findAll( '.ext-campaignevents-worklist-card' ) ).toHaveLength( 1 );
+		expect( wrapper.find( '.ext-campaignevents-worklist-card__added' ).exists() ).toBe( false );
+	} );
+
+	it( 'asks again for the dates when an article is added to the list', async () => {
+		worklistPages.fetchMetadata.mockResolvedValue( [ {
+			wiki: LOCAL_WIKI,
+			title: 'Bears',
+			added: '14:32, 3 September 2026',
+			addedAt: '2026-09-03T14:32:00Z'
+		} ] );
+		const wrapper = mountApp();
+		await settle();
+		expect( worklistPages.fetchMetadata ).toHaveBeenCalledTimes( 1 );
+
+		// The list comes back with an article the store was never asked about.
+		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Chickens' ] ) );
+		wrapper.vm.reload();
+		await settle();
+
+		expect( worklistPages.fetchMetadata ).toHaveBeenCalledTimes( 2 );
+	} );
+
+	it( 'does not ask again when every article already has a date', async () => {
+		worklistPages.fetchMetadata.mockResolvedValue( [ {
+			wiki: LOCAL_WIKI,
+			title: 'Bears',
+			added: '14:32, 3 September 2026',
+			addedAt: '2026-09-03T14:32:00Z'
+		} ] );
+		const wrapper = mountApp();
+		await settle();
+
+		wrapper.vm.reload();
+		await settle();
+
+		expect( worklistPages.fetchMetadata ).toHaveBeenCalledTimes( 1 );
 	} );
 } );

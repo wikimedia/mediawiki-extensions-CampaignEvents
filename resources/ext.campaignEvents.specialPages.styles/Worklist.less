@@ -83,10 +83,10 @@
 }
 
 .ext-campaignevents-worklist-card__card {
-	// A floor rather than a fixed height, so a card with a long title still grows. Cards in the
-	// same grid row then match each other, via the grid's default stretch alignment. Sized for the
-	// one line the card holds here; the patches that add a description and a date raise it.
-	min-height: @size-400;
+	// A floor rather than a fixed height, so a card with a long title or description still grows.
+	// Cards in the same grid row then match each other, via the grid's default stretch alignment.
+	// Raised here because the date is the card's third line.
+	min-height: @size-800;
 }
 
 // Taken out of the flow into the card's corner. The Codex card is `position: relative`, so it is
@@ -108,7 +108,8 @@
 	margin-top: @spacing-100;
 }
 
-.ext-campaignevents-worklist-card__wiki {
+.ext-campaignevents-worklist-card__wiki,
+.ext-campaignevents-worklist-card__added {
 	display: block;
 }
 
@@ -122,7 +123,7 @@
 .ext-campaignevents-worklist-skeleton-card {
 	box-sizing: border-box;
 	// Matches the real card, so the list does not jump when the cards replace the placeholders.
-	min-height: @size-400;
+	min-height: @size-800;
 	border: @border-base;
 	border-radius: @border-radius-base;
 	background-color: @background-color-interactive-subtle;
