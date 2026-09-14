@@ -118,6 +118,40 @@ describe( 'WorklistActionsApp', () => {
 		expect( mockFadeOut ).toHaveBeenCalled();
 	} );
 
+	it( 'shows the API message in the wiki content language when removal fails', async () => {
+		const wrapper = mountApp( { wgContentLanguage: 'zh-hans' } );
+		await nextTick();
+		jest.spyOn( mw.user.tokens, 'get' ).mockReturnValue( 'csrf-token' );
+		// The translations are keyed by BCP-47 tag, which differs from the wiki's internal code
+		// on wikis such as this one; the shared helper maps between them.
+		mw.language.bcp47.mockImplementation( ( code ) => ( code === 'zh-hans' ? 'zh-Hans' : code ) );
+
+		mw.Rest.mockImplementation( () => ( {
+			ajax: jest.fn().mockImplementation( () => ( {
+				then: ( success, failure ) => failure( null, {
+					xhr: {
+						responseText: 'raw body',
+						responseJSON: {
+							messageTranslations: { 'zh-Hans': '翻译过的消息' },
+							message: 'Untranslated message'
+						}
+					}
+				} )
+			} ) )
+		} ) );
+
+		wrapper.vm.openDeleteDialog( 'awiki', 'Test Article' );
+		await wrapper.vm.onConfirmDelete();
+		await new Promise( ( resolve ) => {
+			setTimeout( resolve, 0 );
+		} );
+
+		expect( mw.notify ).toHaveBeenCalledWith(
+			'(campaignevents-worklist-remove-error, 翻译过的消息)',
+			{ type: 'error' }
+		);
+	} );
+
 	it( 'uses mw.ForeignRest when the worklist page is on another wiki', async () => {
 		const foreignRestUrl = 'https://foreign.example.org/w/rest.php';
 		const wrapper = mountApp( {

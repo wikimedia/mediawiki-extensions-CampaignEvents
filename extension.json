@@ -365,6 +365,7 @@
 				"ext.campaignEvents.specialPages/eventdetails/Worklist.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/AddWorklistArticleDialog.vue",
+				"ext.campaignEvents.specialPages/eventdetails/worklistPages.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistActionsApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/RemoveWorklistArticleDialog.vue",
 				"ext.campaignEvents.specialPages/eventlists/index.js",

@@ -61,7 +61,9 @@ global.mw = {
 		getUrl: jest.fn( ( pageName ) => '/wiki/' + pageName )
 	},
 	language: {
-		convertNumber: jest.fn( ( num ) => String( num ) )
+		convertNumber: jest.fn( ( num ) => String( num ) ),
+		// Identity by default; a test that cares about the mapping stubs it itself.
+		bcp47: jest.fn( ( languageTag ) => languageTag )
 	}
 };
 

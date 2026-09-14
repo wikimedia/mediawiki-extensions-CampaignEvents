@@ -12,6 +12,7 @@
 <script>
 const { defineComponent, ref, onMounted, onBeforeUnmount } = require( 'vue' );
 const RemoveWorklistArticleDialog = require( './RemoveWorklistArticleDialog.vue' );
+const worklistPages = require( '../worklistPages.js' );
 
 module.exports = exports = defineComponent( {
 	name: 'WorklistActionsApp',
@@ -54,26 +55,7 @@ module.exports = exports = defineComponent( {
 			isDeleting.value = true;
 
 			const article = currentArticle;
-			const worklistPage = mw.config.get( 'wgCampaignEventsWorklistPagePrefixedText' );
-			// The worklist pages endpoint takes a delta, so removal is a PATCH. mw.Rest has no
-			// patch() helper, so call ajax() with the PATCH verb directly.
-			const remove = {};
-			remove[ article.wiki ] = [ article.title ];
-			// The worklist page may be on another wiki; when it is, the server passes that
-			// wiki's rest.php URL and we target it via mw.ForeignRest (else local mw.Rest).
-			const foreignRestUrl = mw.config.get( 'wgCampaignEventsWorklistWikiRestUrl' );
-			const api = foreignRestUrl ? new mw.ForeignRest( foreignRestUrl ) : new mw.Rest();
-			api.ajax(
-				'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPage ) + '/pages',
-				{
-					type: 'PATCH',
-					headers: { 'content-type': 'application/json' },
-					data: JSON.stringify( {
-						remove: remove,
-						token: mw.user.tokens.get( 'csrfToken' )
-					} )
-				}
-			).then( () => {
+			worklistPages.removeArticle( article.wiki, article.title ).then( () => {
 				mw.notify( mw.msg( 'campaignevents-worklist-remove-success' ), {
 					type: 'success'
 				} );
@@ -85,21 +67,8 @@ module.exports = exports = defineComponent( {
 			}, ( err, errObj ) => {
 				// Show the API's real error message (content language, per T269492), like
 				// AddContributionDialog.vue, instead of a generic "please try again".
-				let errMessage = errObj.xhr.responseText;
-				if ( errObj.xhr &&
-					errObj.xhr.responseJSON &&
-					errObj.xhr.responseJSON.messageTranslations
-				) {
-					errMessage = errObj.xhr.responseJSON.messageTranslations[
-						mw.config.get( 'wgContentLanguage' )
-					];
-				} else if (
-					errObj.xhr &&
-					errObj.xhr.responseJSON &&
-					errObj.xhr.responseJSON.message ) {
-					errMessage = errObj.xhr.responseJSON.message;
-				}
-				mw.notify( mw.msg( 'campaignevents-worklist-remove-error', errMessage ), {
+				mw.notify( mw.msg( 'campaignevents-worklist-remove-error',
+					worklistPages.errorText( errObj ) ), {
 					type: 'error'
 				} );
 				// Keep the dialog open and re-enable the confirm button so the user can retry.
