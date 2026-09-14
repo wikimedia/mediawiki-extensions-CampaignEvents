@@ -9,9 +9,10 @@
 	const Vue = require( 'vue' );
 
 	/**
-	 * Mounts the worklist actions app, which handles removing articles from the worklist.
+	 * Handles removing an article from the worklist table, by a delegated click on the buttons the
+	 * server renders.
 	 */
-	function mountWorklistActionsApp() {
+	function mountTableViewActions() {
 		const WorklistActionsApp = require( './components/WorklistActionsApp.vue' );
 		const worklistActionsAppContainer = document.createElement( 'div' );
 		worklistActionsAppContainer.id = 'ext-campaignevents-worklist-actions-vue-root';
@@ -22,11 +23,11 @@
 	}
 
 	/**
-	 * Mounts the worklist header controls (view-page link + add-article dialog) into the worklist
-	 * table header.
+	 * Mounts the controls for the worklist table (view-page link + add-article dialog) into its
+	 * header.
 	 */
-	function mountWorklistApp() {
-		const WorklistApp = require( './components/WorklistApp.vue' ),
+	function mountTableViewControls() {
+		const WorklistTableControls = require( './components/WorklistTableControls.vue' ),
 			worklistTableHeader = document.querySelector(
 				'.ext-campaignevents-worklist-table .cdx-table__header'
 			),
@@ -34,10 +35,10 @@
 
 		worklistTableHeader.appendChild( container );
 		container.id = 'ext-campaignevents-worklist-app';
-		Vue.createMwApp( WorklistApp ).mount( container );
+		Vue.createMwApp( WorklistTableControls ).mount( container );
 	}
 
-	$( mountWorklistActionsApp );
-	$( mountWorklistApp );
+	$( mountTableViewActions );
+	$( mountTableViewControls );
 
 }() );

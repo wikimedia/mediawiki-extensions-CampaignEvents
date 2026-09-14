@@ -15,8 +15,12 @@
 const { defineComponent } = require( 'vue' );
 const AddWorklistArticleDialog = require( './AddWorklistArticleDialog.vue' );
 
+/**
+ * Controls rendered into the header of the worklist table: the link to the worklist wiki page and
+ * the add-article dialog.
+ */
 module.exports = exports = defineComponent( {
-	name: 'WorklistApp',
+	name: 'WorklistTableControls',
 	components: { AddWorklistArticleDialog },
 	setup() {
 		// Only logged-in (named) users may add articles, mirroring the backend permission.

@@ -363,7 +363,7 @@
 				"ext.campaignEvents.specialPages/eventdetails/components/ContributionsActionsApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/DeleteContributionDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/Worklist.js",
-				"ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue",
+				"ext.campaignEvents.specialPages/eventdetails/components/WorklistTableControls.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/AddWorklistArticleDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/worklistPages.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistActionsApp.vue",
