@@ -1,12 +1,12 @@
 <template>
 	<cdx-button
 		class="ext-campaignevents-event-details-worklist-add-button"
-		:aria-label="$i18n( 'campaignevents-event-details-worklist-add-button-label' ).text()"
 		action="progressive"
 		weight="primary"
 		@click="open = true"
 	>
 		<cdx-icon :icon="cdxIconAdd"></cdx-icon>
+		{{ $i18n( 'campaignevents-event-details-worklist-add-button-label' ).text() }}
 	</cdx-button>
 
 	<cdx-dialog
