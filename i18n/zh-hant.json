@@ -4,6 +4,7 @@
 			"Arielyurusova",
 			"Cookai1205",
 			"Ericliu1912",
+			"LNDDYL",
 			"Leo768",
 			"LowensteinYang",
 			"Peterxy",
@@ -399,5 +400,6 @@
 	"campaignevents-invitationlist-highly-recommended": "強烈推薦邀請",
 	"campaignevents-invitationlist-recommended": "推薦邀請",
 	"campaignevents-invitationlist-articlelist-label": "檢視條目清單",
-	"campaignevents-invitationlist-preference": "將自己加入至[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請名單]中"
+	"campaignevents-invitationlist-preference": "將自己加入至[https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists 邀請名單]中",
+	"campaignevents-eventdiscovery-preference-label": "發佈編輯後，通知我相關活動"
 }
