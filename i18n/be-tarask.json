@@ -6,6 +6,8 @@
 			"Ucukor"
 		]
 	},
+	"group-event-organizer": "Арганізатары падзеяў",
+	"grouppage-event-organizer": "{{ns:project}}:Арганізатары падзеяў",
 	"campaignevents-edit-field-timezone": "Часавы пояс",
 	"campaignevents-enable-registration-form-submit": "Увамкнуць рэгістрацыю",
 	"campaignevents-myevents-label-status": "Статус",
