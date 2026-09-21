@@ -199,6 +199,8 @@ return [
 			$services->get( WorklistEventsStore::SERVICE_NAME ),
 			$services->get( EventTypesRegistry::SERVICE_NAME ),
 			$services->get( WorklistSecondaryStore::SERVICE_NAME ),
+			$services->getDomainEventDispatcher(),
+			$services->getConnectionProvider(),
 		);
 	},
 	DeleteEventCommand::SERVICE_NAME => static function ( MediaWikiServices $services ): DeleteEventCommand {

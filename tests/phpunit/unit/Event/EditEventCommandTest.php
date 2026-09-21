@@ -5,6 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Event;
 
 use Generator;
+use MediaWiki\DomainEvent\DomainEventDispatcher;
+use MediaWiki\Extension\CampaignEvents\DomainEvent\EventRegistrationCreatedEvent;
 use MediaWiki\Extension\CampaignEvents\Event\EditEventCommand;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -33,6 +35,7 @@ use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use Psr\Log\NullLogger;
 use StatusValue;
+use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
@@ -80,6 +83,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		?WorklistEventsStore $worklistEventsStore = null,
 		?EventTypesRegistry $eventTypesRegistry = null,
 		?WorklistSecondaryStore $worklistSecondaryStore = null,
+		?DomainEventDispatcher $domainEventDispatcher = null,
 	): EditEventCommand {
 		$eventStore ??= $this->createMock( IEventStore::class );
 
@@ -125,6 +129,8 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			$worklistEventsStore ?? $this->createMock( WorklistEventsStore::class ),
 			$eventTypesRegistry ?? $this->createMock( EventTypesRegistry::class ),
 			$worklistSecondaryStore ?? $this->createMock( WorklistSecondaryStore::class ),
+			$domainEventDispatcher ?? $this->createMock( DomainEventDispatcher::class ),
+			$this->createMock( IConnectionProvider::class )
 		);
 	}
 
@@ -232,19 +238,44 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 		$this->assertStatusMessage( 'campaignevents-edit-registration-deleted', $status );
 	}
 
+	private function makeDomainEventDispatcherExpectingEventCreation(
+		EventRegistration $registration,
+		Authority $performer,
+	): DomainEventDispatcher {
+		$domainEventDispatcher = $this->createMock( DomainEventDispatcher::class );
+		$domainEventDispatcher->expects( $this->once() )
+			->method( 'dispatch' )
+			->willReturnCallback( function ( EventRegistrationCreatedEvent $event ) use ( $registration, $performer ) {
+				$this->assertSame( $registration, $event->getEvent() );
+				$this->assertSame( $performer, $event->getPerformer() );
+			} );
+		return $domainEventDispatcher;
+	}
+
 	/**
 	 * @covers ::doEditIfAllowed
 	 * @covers ::authorizeEdit
 	 * @dataProvider provideEventRegistrations
 	 */
-	public function testDoEditIfAllowed__successful( callable $registration ) {
+	public function testDoEditIfAllowed__successful( callable $registration, bool $isCreation ) {
 		$registration = $registration( $this );
 		$id = 42;
+		$performer = $this->createMock( Authority::class );
+
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );
-		$status = $this->getCommand( $eventStore )->doEditIfAllowed(
+
+		if ( $isCreation ) {
+			$domainEventDispatcher = $this->makeDomainEventDispatcherExpectingEventCreation(
+				$registration, $performer
+			);
+		} else {
+			$domainEventDispatcher = $this->createNoOpMock( DomainEventDispatcher::class );
+		}
+
+		$status = $this->getCommand( $eventStore, domainEventDispatcher: $domainEventDispatcher )->doEditIfAllowed(
 			$registration,
-			$this->createMock( Authority::class ),
+			$performer,
 			self::ORGANIZER_USERNAMES
 		);
 		$this->assertStatusGood( $status );
@@ -414,14 +445,25 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	 * @covers ::doEditUnsafe
 	 * @dataProvider provideEventRegistrations
 	 */
-	public function testDoEditUnsafe__successful( callable $registration ) {
+	public function testDoEditUnsafe__successful( callable $registration, bool $isCreation ) {
 		$registration = $registration( $this );
 		$id = 42;
+		$performer = $this->createMock( Authority::class );
+
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );
-		$status = $this->getCommand( $eventStore )->doEditUnsafe(
+
+		if ( $isCreation ) {
+			$domainEventDispatcher = $this->makeDomainEventDispatcherExpectingEventCreation(
+				$registration, $performer
+			);
+		} else {
+			$domainEventDispatcher = $this->createNoOpMock( DomainEventDispatcher::class );
+		}
+
+		$status = $this->getCommand( $eventStore, domainEventDispatcher: $domainEventDispatcher )->doEditUnsafe(
 			$registration,
-			$this->createMock( Authority::class ),
+			$performer,
 			self::ORGANIZER_USERNAMES
 		);
 		$this->assertStatusGood( $status );
@@ -498,14 +540,20 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	}
 
 	public static function provideEventRegistrations(): Generator {
-		yield 'New (creation)' => [ static function ( $testCase ) {
-			return $testCase->createMock( EventRegistration::class );
-		} ];
-		yield 'Existing (update)' => [ static function ( $testCase ) {
-			$existing = $testCase->createMock( EventRegistration::class );
-			$existing->method( 'getID' )->willReturn( 1 );
-			return $existing;
-		} ];
+		yield 'New (creation)' => [
+			static function ( $testCase ) {
+				return $testCase->createMock( EventRegistration::class );
+			},
+			true,
+		];
+		yield 'Existing (update)' => [
+			static function ( $testCase ) {
+				$existing = $testCase->createMock( EventRegistration::class );
+				$existing->method( 'getID' )->willReturn( 1 );
+				return $existing;
+			},
+			false,
+		];
 	}
 
 	/**

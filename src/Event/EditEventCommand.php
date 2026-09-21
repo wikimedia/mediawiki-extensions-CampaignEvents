@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Event;
 
+use MediaWiki\DomainEvent\DomainEventDispatcher;
+use MediaWiki\Extension\CampaignEvents\DomainEvent\EventRegistrationCreatedEvent;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -30,6 +32,7 @@ use MediaWiki\WikiMap\WikiMap;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use StatusValue;
+use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\ScopedCallback;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
@@ -58,6 +61,8 @@ class EditEventCommand {
 		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly EventTypesRegistry $eventTypesRegistry,
 		private readonly WorklistSecondaryStore $worklistSecondaryStore,
+		private readonly DomainEventDispatcher $eventDispatcher,
+		private readonly IConnectionProvider $connectionProvider,
 	) {
 	}
 
@@ -174,7 +179,9 @@ class EditEventCommand {
 		}
 
 		$newEventID = $this->eventStore->saveRegistration( $registration );
-		$this->addOrganizers( $registrationID === null, $newEventID, $organizerCentralUserIDs, $performerCentralUser );
+		$isCreation = $registrationID === null;
+
+		$this->addOrganizers( $isCreation, $newEventID, $organizerCentralUserIDs, $performerCentralUser );
 		$toolStatus = $this->updateTrackingTools(
 			$newEventID,
 			$previousVersion,
@@ -184,6 +191,13 @@ class EditEventCommand {
 		$this->updateWorklistAssociation( $newEventID, $registration );
 
 		$this->eventPageCacheUpdater->purgeEventPageCache( $registration );
+
+		if ( $isCreation ) {
+			$this->eventDispatcher->dispatch(
+				new EventRegistrationCreatedEvent( $registration, $performer ),
+				$this->connectionProvider
+			);
+		}
 
 		$ret = StatusValue::newGood( $newEventID );
 		if ( !$toolStatus->isGood() ) {
