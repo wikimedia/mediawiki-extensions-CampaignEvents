@@ -224,7 +224,9 @@ return [
 				$services->get( CampaignsCentralUserLookup::SERVICE_NAME ),
 				$services->get( UserNotifier::SERVICE_NAME ),
 				$services->get( EventPageCacheUpdater::SERVICE_NAME ),
-				$services->get( TrackingToolEventWatcher::SERVICE_NAME )
+				$services->get( TrackingToolEventWatcher::SERVICE_NAME ),
+				$services->getDomainEventDispatcher(),
+				$services->getConnectionProvider(),
 			);
 		},
 	UnregisterParticipantCommand::SERVICE_NAME =>

@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Participants;
 
+use MediaWiki\DomainEvent\DomainEventDispatcher;
+use MediaWiki\Extension\CampaignEvents\DomainEvent\ParticipantRegisteredEvent;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -16,6 +18,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
 use StatusValue;
+use Wikimedia\Rdbms\IConnectionProvider;
 
 class RegisterParticipantCommand {
 	public const SERVICE_NAME = 'CampaignEventsRegisterParticipantCommand';
@@ -42,6 +45,8 @@ class RegisterParticipantCommand {
 		private readonly UserNotifier $userNotifier,
 		private readonly EventPageCacheUpdater $eventPageCacheUpdater,
 		private readonly TrackingToolEventWatcher $trackingToolEventWatcher,
+		private readonly DomainEventDispatcher $domainEventDispatcher,
+		private readonly IConnectionProvider $connectionProvider,
 	) {
 	}
 
@@ -166,6 +171,10 @@ class RegisterParticipantCommand {
 		if ( $modified !== ParticipantsStore::MODIFIED_NOTHING ) {
 			if ( $modified === ParticipantsStore::MODIFIED_REGISTRATION ) {
 				$this->userNotifier->notifyRegistration( $performer, $registration );
+				$this->domainEventDispatcher->dispatch(
+					new ParticipantRegisteredEvent( $registration, $performer->getUser(), $centralUser, $isPrivate ),
+					$this->connectionProvider,
+				);
 			}
 			$this->trackingToolEventWatcher->onParticipantAdded(
 				$registration,

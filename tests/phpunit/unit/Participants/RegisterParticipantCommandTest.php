@@ -5,6 +5,8 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Participants;
 
 use Generator;
+use MediaWiki\DomainEvent\DomainEventDispatcher;
+use MediaWiki\Extension\CampaignEvents\DomainEvent\ParticipantRegisteredEvent;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
@@ -20,14 +22,18 @@ use MediaWiki\Extension\CampaignEvents\Questions\Answer;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWikiUnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use StatusValue;
+use Wikimedia\Rdbms\IConnectionProvider;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Participants\RegisterParticipantCommand
  */
 class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
+	use MockAuthorityTrait;
+
 	/**
 	 * @param ParticipantsStore|null $participantsStore
 	 * @param PermissionChecker|null $permChecker
@@ -39,7 +45,8 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		?ParticipantsStore $participantsStore = null,
 		?PermissionChecker $permChecker = null,
 		?CampaignsCentralUserLookup $centralUserLookup = null,
-		?TrackingToolEventWatcher $trackingToolEventWatcher = null
+		?TrackingToolEventWatcher $trackingToolEventWatcher = null,
+		?DomainEventDispatcher $domainEventDispatcher = null,
 	): RegisterParticipantCommand {
 		if ( !$permChecker ) {
 			$permChecker = $this->createMock( PermissionChecker::class );
@@ -55,7 +62,9 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 			$centralUserLookup ?? $this->createMock( CampaignsCentralUserLookup::class ),
 			$this->createMock( UserNotifier::class ),
 			$this->createMock( EventPageCacheUpdater::class ),
-			$trackingToolEventWatcher
+			$trackingToolEventWatcher,
+			$domainEventDispatcher ?? $this->createMock( DomainEventDispatcher::class ),
+			$this->createMock( IConnectionProvider::class ),
 		);
 	}
 
@@ -120,6 +129,33 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		];
 	}
 
+	private function makeDomainEventDispatcher(
+		int $modified,
+		ExistingEventRegistration $event,
+		Authority $performer,
+		CentralUser $centralUser,
+		bool $isPrivate,
+	): DomainEventDispatcher {
+		if ( $modified !== ParticipantsStore::MODIFIED_REGISTRATION ) {
+			return $this->createNoOpMock( DomainEventDispatcher::class );
+		}
+
+		$domainEventDispatcher = $this->createMock( DomainEventDispatcher::class );
+		$domainEventDispatcher->expects( $this->once() )
+			->method( 'dispatch' )
+			->willReturnCallback(
+				function ( ParticipantRegisteredEvent $domainEvent ) use (
+					$event, $performer, $centralUser, $isPrivate
+				) {
+					$this->assertSame( $event, $domainEvent->getEvent() );
+					$this->assertSame( $performer->getUser(), $domainEvent->getParticipant() );
+					$this->assertSame( $centralUser, $domainEvent->getParticipantCentralUser() );
+					$this->assertSame( $isPrivate, $domainEvent->isPrivateParticipant() );
+				}
+			);
+		return $domainEventDispatcher;
+	}
+
 	/**
 	 * @dataProvider provideSuccessfulCases
 	 */
@@ -129,14 +165,34 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		string $contributionAssociationMode,
 		bool $expectedModified
 	) {
+		$event = $this->getValidRegistration();
+		$performer = $this->mockRegisteredUltimateAuthority();
+		$centralUser = new CentralUser( 12347 );
+
 		$store = $this->createMock( ParticipantsStore::class );
 		$store->method( 'addParticipantToEvent' )->willReturn( $modified );
 		$store->expects( $this->once() )
 			->method( 'addParticipantToEvent' )
 			->with( $this->anything(), $this->anything(), $isPrivate );
-		$status = $this->getCommand( $store )->registerIfAllowed(
-			$this->getValidRegistration(),
-			$this->createMock( Authority::class ),
+
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->expects( $this->once() )
+			->method( 'newFromAuthority' )
+			->with( $performer )
+			->willReturn( $centralUser );
+
+		$domainEventDispatcher = $this->makeDomainEventDispatcher(
+			$modified, $event, $performer, $centralUser, $isPrivate
+		);
+
+		$command = $this->getCommand(
+			$store,
+			centralUserLookup: $centralUserLookup,
+			domainEventDispatcher: $domainEventDispatcher
+		);
+		$status = $command->registerIfAllowed(
+			$event,
+			$performer,
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC,
@@ -156,15 +212,34 @@ class RegisterParticipantCommandTest extends MediaWikiUnitTestCase {
 		string $contributionAssociationMode,
 		bool $expectedModified
 	) {
+		$event = $this->getValidRegistration();
+		$performer = $this->mockRegisteredUltimateAuthority();
+		$centralUser = new CentralUser( 12347 );
+
 		$store = $this->createMock( ParticipantsStore::class );
 		$store->expects( $this->once() )
 			->method( 'addParticipantToEvent' )
 			->with( $this->anything(), $this->anything(), $isPrivate )
 			->willReturn( $modified );
 
-		$status = $this->getCommand( $store )->registerUnsafe(
-			$this->getValidRegistration(),
-			$this->createMock( Authority::class ),
+		$centralUserLookup = $this->createMock( CampaignsCentralUserLookup::class );
+		$centralUserLookup->expects( $this->once() )
+			->method( 'newFromAuthority' )
+			->with( $performer )
+			->willReturn( $centralUser );
+
+		$domainEventDispatcher = $this->makeDomainEventDispatcher(
+			$modified, $event, $performer, $centralUser, $isPrivate
+		);
+
+		$command = $this->getCommand(
+			$store,
+			centralUserLookup: $centralUserLookup,
+			domainEventDispatcher: $domainEventDispatcher
+		);
+		$status = $command->registerUnsafe(
+			$event,
+			$performer,
 			$isPrivate ?
 				RegisterParticipantCommand::REGISTRATION_PRIVATE :
 				RegisterParticipantCommand::REGISTRATION_PUBLIC,
