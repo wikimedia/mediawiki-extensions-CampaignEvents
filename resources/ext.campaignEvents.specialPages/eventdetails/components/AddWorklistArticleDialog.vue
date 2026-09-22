@@ -174,9 +174,12 @@ module.exports = exports = defineComponent( {
 		 */
 		function restErrorText( errObj ) {
 			const json = errObj && errObj.xhr && errObj.xhr.responseJSON;
+			const bcp47Code = mw.language.bcp47( mw.config.get( 'wgContentLanguage' ) );
+			const translated = json &&
+				json.messageTranslations &&
+				json.messageTranslations[ bcp47Code ];
 			return mw.msg( 'campaignevents-event-details-worklist-add-dialog-error',
-				json.messageTranslations[ mw.config.get( 'wgContentLanguage' ) ] ||
-				json.message );
+				translated || ( json && json.message ) || '' );
 		}
 
 		/**

@@ -189,4 +189,48 @@ describe( 'AddWorklistArticleDialog', () => {
 		expect( wrapper.vm.open ).toBe( false );
 		expect( wrapper.vm.articlesText ).toBe( '' );
 	} );
+
+	it( 'shows error formatted with BCP-47 messageTranslation on API rejection', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		mw.config.get = ( key ) => ( {
+			wgCampaignEventsWorklistPagePrefixedText: 'Event:My Event/Worklist',
+			wgDBname: 'awiki',
+			wgCampaignEventsWorklistWikiRestUrl: null,
+			wgContentLanguage: 'sr-ec'
+		} )[ key ];
+		mw.language.bcp47 = jest.fn( ( lang ) => ( lang === 'sr-ec' ? 'sr-Cyrl' : lang ) );
+		jest.spyOn( mw.user.tokens, 'get' ).mockReturnValue( 'csrf-token' );
+
+		mw.Rest.mockImplementation( () => ( {
+			ajax: jest.fn().mockImplementation( () => ( {
+				then: ( success, failure ) => {
+					failure(
+						null,
+						{
+							xhr: {
+								responseJSON: {
+									messageTranslations: {
+										'sr-Cyrl': 'Грешка'
+									}
+								}
+							}
+						}
+					);
+				}
+			} ) )
+		} ) );
+
+		wrapper.vm.articlesText = 'Moon';
+		await wrapper.vm.onSubmit();
+
+		await new Promise( ( resolve ) => {
+			setTimeout( resolve, 0 );
+		} );
+
+		expect( mw.language.bcp47 ).toHaveBeenCalledWith( 'sr-ec' );
+		expect( wrapper.vm.hasMessage ).toBe( true );
+		expect( wrapper.vm.message ).toBe( '(campaignevents-event-details-worklist-add-dialog-error, Грешка)' );
+	} );
 } );

@@ -261,13 +261,22 @@
 					}
 				},
 				( _err, errData ) => {
+					const json = errData && errData.xhr && errData.xhr.responseJSON;
+					const bcp47Code = mw.language.bcp47( mw.config.get( 'wgContentLanguage' ) );
+					const translated = json &&
+						json.messageTranslations &&
+						json.messageTranslations[ bcp47Code ];
+					const detail = translated ||
+						( json && json.message ) ||
+						( errData && errData.xhr && errData.xhr.responseText ) ||
+						'';
 					self.setError(
 						mw.message(
 							'campaignevents-email-error-notification-with-detail',
-							errData.xhr.responseJSON.messageTranslations[ mw.config.get( 'wgContentLanguage' ) ]
+							detail
 						).text()
 					);
-					mw.log.error( errData.xhr.responseText || 'Unknown error' );
+					mw.log.error( ( errData && errData.xhr && errData.xhr.responseText ) || 'Unknown error' );
 				}
 			);
 	};

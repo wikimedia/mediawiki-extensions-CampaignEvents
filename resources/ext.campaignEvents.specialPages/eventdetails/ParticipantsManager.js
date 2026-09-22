@@ -361,9 +361,16 @@
 				},
 				( _err, errData ) => {
 					let errorMsg;
+					const json = errData && errData.xhr && errData.xhr.responseJSON;
+					const bcp47Code = mw.language.bcp47( mw.config.get( 'wgContentLanguage' ) );
+					const translated = json &&
+						json.messageTranslations &&
+						( json.messageTranslations[ bcp47Code ] ||
+							json.messageTranslations.en ||
+							json.message );
 
-					if ( errData.xhr.responseJSON.messageTranslations ) {
-						errorMsg = errData.xhr.responseJSON.messageTranslations.en;
+					if ( translated ) {
+						errorMsg = translated;
 					} else {
 						errorMsg = mw.message(
 							'campaignevents-event-details-remove-participant-notification-error',

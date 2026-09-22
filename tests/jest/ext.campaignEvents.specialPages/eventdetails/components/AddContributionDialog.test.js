@@ -162,4 +162,78 @@ describe( 'AddContributionDialog', () => {
 		expect( messageType ).toBe( 'error' );
 		expect( message ).toBe( 'API Error' );
 	} );
+
+	it( 'displays translated error message using BCP-47 language tag', async () => {
+		mw.config.get = jest.fn( ( key ) => ( {
+			...defaultConfig,
+			wgContentLanguage: 'zh-hans'
+		} )[ key ] );
+		mw.language.bcp47 = jest.fn( ( lang ) => ( lang === 'zh-hans' ? 'zh-Hans' : lang ) );
+
+		const restAdd = jest.fn().mockImplementation( () => ( {
+			then: ( success, failure ) => {
+				failure(
+					null,
+					{
+						xhr: {
+							responseText: 'API Error',
+							responseJSON: {
+								messageTranslations: {
+									'zh-Hans': '翻译过的错误'
+								}
+							}
+						}
+					}
+				);
+			}
+		} ) );
+		mw.Rest.mockImplementation( () => ( {
+			put: restAdd
+		} ) );
+		wrapper.vm.inputValue = 789;
+		await wrapper.vm.onSubmit();
+
+		await new Promise( ( resolve ) => {
+			setTimeout( resolve, 0 );
+		} );
+		expect( mw.language.bcp47 ).toHaveBeenCalledWith( 'zh-hans' );
+		expect( wrapper.vm.message ).toBe( '翻译过的错误' );
+	} );
+
+	it( 'falls back to json.message if BCP-47 language key is missing in messageTranslations', async () => {
+		mw.config.get = jest.fn( ( key ) => ( {
+			...defaultConfig,
+			wgContentLanguage: 'sr-ec'
+		} )[ key ] );
+		mw.language.bcp47 = jest.fn( ( lang ) => ( lang === 'sr-ec' ? 'sr-Cyrl' : lang ) );
+
+		const restAdd = jest.fn().mockImplementation( () => ( {
+			then: ( success, failure ) => {
+				failure(
+					null,
+					{
+						xhr: {
+							responseText: 'Fallback raw response',
+							responseJSON: {
+								messageTranslations: {
+									en: 'English message'
+								},
+								message: 'Fallback message'
+							}
+						}
+					}
+				);
+			}
+		} ) );
+		mw.Rest.mockImplementation( () => ( {
+			put: restAdd
+		} ) );
+		wrapper.vm.inputValue = 789;
+		await wrapper.vm.onSubmit();
+
+		await new Promise( ( resolve ) => {
+			setTimeout( resolve, 0 );
+		} );
+		expect( wrapper.vm.message ).toBe( 'Fallback message' );
+	} );
 } );

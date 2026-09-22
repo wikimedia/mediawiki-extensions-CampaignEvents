@@ -91,19 +91,16 @@ module.exports = exports = defineComponent( {
 					);
 				}
 			}, ( err, errObj ) => {
-				let errMessage = errObj.xhr.responseText;
-				if ( errObj.xhr &&
-					errObj.xhr.responseJSON &&
-					errObj.xhr.responseJSON.messageTranslations
-				) {
-					errMessage = errObj.xhr.responseJSON.messageTranslations[
-						mw.config.get( 'wgContentLanguage' )
-					];
-				} else if (
-					errObj.xhr &&
-					errObj.xhr.responseJSON &&
-					errObj.xhr.responseJSON.message ) {
-					errMessage = errObj.xhr.responseJSON.message;
+				const json = errObj && errObj.xhr && errObj.xhr.responseJSON;
+				const bcp47Code = mw.language.bcp47( mw.config.get( 'wgContentLanguage' ) );
+				let errMessage;
+
+				if ( json && json.messageTranslations && json.messageTranslations[ bcp47Code ] ) {
+					errMessage = json.messageTranslations[ bcp47Code ];
+				} else if ( json && json.message ) {
+					errMessage = json.message;
+				} else {
+					errMessage = ( errObj && errObj.xhr && errObj.xhr.responseText ) || '';
 				}
 
 				hasMessage.value = true;
