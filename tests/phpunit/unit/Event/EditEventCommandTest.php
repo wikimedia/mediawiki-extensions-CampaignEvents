@@ -31,6 +31,7 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use Psr\Log\NullLogger;
@@ -43,6 +44,7 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
  * @covers ::__construct
  */
 class EditEventCommandTest extends MediaWikiUnitTestCase {
+	use MockAuthorityTrait;
 
 	private const ORGANIZER_USERNAMES = [ 'organizerA', 'organizerB' ];
 
@@ -247,7 +249,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 			->method( 'dispatch' )
 			->willReturnCallback( function ( EventRegistrationCreatedEvent $event ) use ( $registration, $performer ) {
 				$this->assertSame( $registration, $event->getEvent() );
-				$this->assertSame( $performer, $event->getPerformer() );
+				$this->assertSame( $performer->getUser(), $event->getPerformer() );
 			} );
 		return $domainEventDispatcher;
 	}
@@ -260,7 +262,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	public function testDoEditIfAllowed__successful( callable $registration, bool $isCreation ) {
 		$registration = $registration( $this );
 		$id = 42;
-		$performer = $this->createMock( Authority::class );
+		$performer = $this->mockRegisteredUltimateAuthority();
 
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );
@@ -448,7 +450,7 @@ class EditEventCommandTest extends MediaWikiUnitTestCase {
 	public function testDoEditUnsafe__successful( callable $registration, bool $isCreation ) {
 		$registration = $registration( $this );
 		$id = 42;
-		$performer = $this->createMock( Authority::class );
+		$performer = $this->mockRegisteredUltimateAuthority();
 
 		$eventStore = $this->createMock( IEventStore::class );
 		$eventStore->expects( $this->once() )->method( 'saveRegistration' )->willReturn( $id );

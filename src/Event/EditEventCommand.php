@@ -194,7 +194,7 @@ class EditEventCommand {
 
 		if ( $isCreation ) {
 			$this->eventDispatcher->dispatch(
-				new EventRegistrationCreatedEvent( $registration, $performer ),
+				new EventRegistrationCreatedEvent( $registration, $performer->getUser() ),
 				$this->connectionProvider
 			);
 		}
