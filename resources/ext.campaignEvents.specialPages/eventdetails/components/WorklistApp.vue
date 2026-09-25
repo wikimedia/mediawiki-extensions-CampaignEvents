@@ -64,6 +64,7 @@
 				:views="viewsFor( article )"
 				:image="imageFor( article )"
 				:description="descriptionFor( article )"
+				:signals="signalsFor( article )"
 				@remove="onRemoveRequested"
 			></worklist-article-card>
 		</ul>
@@ -150,6 +151,7 @@ const RemoveWorklistArticleDialog = require( './RemoveWorklistArticleDialog.vue'
 const WorklistArticleCard = require( './WorklistArticleCard.vue' );
 const worklistPages = require( '../worklistPages.js' );
 const worklistPageData = require( '../WorklistPageData.js' );
+const worklistQuality = require( '../WorklistQuality.js' );
 
 // Enough cards to make paging rare on a wide screen without a long first load. The grid takes
 // as many columns as the viewport allows, so no page size can promise a full last row.
@@ -253,6 +255,10 @@ module.exports = exports = defineComponent( {
 		const errorMessage = ref( '' );
 
 		const searchTerm = ref( '' );
+
+		// Quality held against `wiki|title`. A ref rather than a plain object so that filling one
+		// in after its card has rendered redraws that card.
+		const quality = ref( new Map() );
 
 		const isRemoveDialogOpen = ref( false );
 		const isRemoving = ref( false );
@@ -384,6 +390,39 @@ module.exports = exports = defineComponent( {
 			currentPage.value = 1;
 		} );
 
+		/**
+		 * Fill in the quality of the articles now on screen.
+		 *
+		 * A second request, made once the cards are rendered: a quality score is real work for
+		 * the model behind it, and the list is what the reader is waiting for. Only the visible
+		 * articles are asked about, so paging or searching costs one small request rather than
+		 * one for the whole worklist.
+		 */
+		function loadQuality() {
+			const showing = visibleArticles.value;
+			if ( !showing.length ) {
+				return;
+			}
+			worklistQuality.fetchQuality( showing ).then( ( known ) => {
+				// A new Map, so that Vue sees the change and redraws the cards.
+				quality.value = new Map( known );
+			}, () => {
+				// The card is complete without it, so a failure leaves the cards as they are
+				// rather than being surfaced to the reader.
+			} );
+		}
+
+		watch( visibleArticles, loadQuality );
+
+		/**
+		 * @param {Object} article
+		 * @return {string[]}
+		 */
+		function signalsFor( article ) {
+			const known = quality.value.get( article.wiki + '|' + article.title );
+			return known ? known.signals : [];
+		}
+
 		function nextPage() {
 			currentPage.value = Math.min( currentPage.value + 1, totalPages.value );
 		}
@@ -494,6 +533,7 @@ module.exports = exports = defineComponent( {
 			viewsFor,
 			imageFor,
 			descriptionFor,
+			signalsFor,
 			isEmpty,
 			isLoading,
 			errorMessage,

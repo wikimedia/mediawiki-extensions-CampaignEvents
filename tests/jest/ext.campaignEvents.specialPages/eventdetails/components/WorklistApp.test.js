@@ -8,6 +8,7 @@ const { nextTick } = require( 'vue' );
 const WorklistApp = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue' );
 const worklistPages = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/worklistPages.js' );
 const worklistPageData = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/WorklistPageData.js' );
+const worklistQuality = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/WorklistQuality.js' );
 
 const LOCAL_WIKI = 'my_wiki';
 const CARD = '.ext-campaignevents-worklist-card';
@@ -105,6 +106,7 @@ describe( 'WorklistApp', () => {
 		jest.spyOn( worklistPages, 'fetchPages' ).mockResolvedValue( page( [ 'Bears' ] ) );
 		jest.spyOn( worklistPages, 'removeArticle' ).mockResolvedValue( {} );
 		jest.spyOn( worklistPageData, 'fetchPageData' ).mockResolvedValue( new Map() );
+		jest.spyOn( worklistQuality, 'fetchQuality' ).mockResolvedValue( new Map() );
 		global.$ = jest.fn();
 	} );
 
@@ -570,4 +572,26 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.find( '.ext-campaignevents-worklist-card__views' ).exists() ).toBe( false );
 	} );
 
+	it( 'fills the signals in after the cards have rendered', async () => {
+		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears' ] ) );
+		worklistQuality.fetchQuality.mockResolvedValue(
+			new Map( [ [ LOCAL_WIKI + '|Bears', { signals: [ 'Needs images' ] } ] ] )
+		);
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.get( '.ext-campaignevents-worklist-card__signals' ).text() )
+			.toContain( 'Needs images' );
+	} );
+
+	it( 'still shows the cards when the signals cannot be fetched', async () => {
+		worklistQuality.fetchQuality.mockRejectedValue( new Error( 'nope' ) );
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
+		expect( wrapper.find( '.ext-campaignevents-worklist-card__signals' ).exists() ).toBe( false );
+	} );
 } );

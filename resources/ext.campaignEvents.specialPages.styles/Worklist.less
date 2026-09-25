@@ -160,7 +160,23 @@
 	color: @color-subtle;
 }
 
-.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__views-icon {
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__signals {
+	// A line of text rather than a row of boxes, so a long need wraps within the card instead
+	// of being squeezed by its neighbours.
+	color: @color-subtle;
+}
+
+// Both are inline, so they share a line with nothing but a collapsed newline between them.
+// Keyed on the view count being there, so a card without one is not indented by the gap.
+.ext-campaignevents-worklist-card__views + .ext-campaignevents-worklist-card__signals {
+	margin-inline-start: @spacing-25;
+}
+
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__views-icon,
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__signals-icon {
+	// The lightbulb repeats what the words beside it say, so it carries no label and Codex marks
+	// it aria-hidden.
+	//
 	// Codex sizes a small icon against the medium font size whatever it sits in, which leaves
 	// the glyph adrift in a box wider than itself on the card's smaller meta line. Tied to the
 	// text instead, so it scales with whatever the line is set in.
@@ -168,4 +184,5 @@
 	height: 1em;
 	margin-right: @spacing-12;
 	vertical-align: text-bottom;
+	color: @color-subtle;
 }
