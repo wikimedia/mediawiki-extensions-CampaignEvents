@@ -10,7 +10,9 @@ const EXPECTED_PATH = '/campaignevents/v0/event_registration/71/worklist_pages';
 const EMPTY_RESPONSE = { wikis: {}, pages: [] };
 const ONE_ARTICLE_RESPONSE = {
 	// The wiki's name is sent once for the whole response, not on every page.
-	wikis: { awiki: { name: 'A Wiki' } },
+	wikis: {
+		awiki: { name: 'A Wiki', api_url: 'https://a.example.org/w/api.php' }
+	},
 	pages: [ {
 		wiki: 'awiki',
 		is_local: false,
@@ -106,6 +108,7 @@ describe( 'worklistPages.fetchPages', () => {
 			pages: [ {
 				wiki: 'awiki',
 				wikiName: 'A Wiki',
+				apiUrl: 'https://a.example.org/w/api.php',
 				isLocal: false,
 				title: 'Beavers',
 				url: 'https://a.example.org/wiki/Beavers',

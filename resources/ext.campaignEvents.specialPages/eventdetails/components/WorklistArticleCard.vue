@@ -34,7 +34,10 @@
 			<!-- The wiki is only worth naming for an article from elsewhere: two articles with the
 				same title on different wikis would otherwise look identical. Relative to the wiki
 				that answered the request, not the reader's. -->
-			<template v-if="!article.isLocal || added" #supporting-text>
+			<template
+				v-if="!article.isLocal || added || viewsText"
+				#supporting-text
+			>
 				<span
 					v-if="!article.isLocal"
 					class="ext-campaignevents-worklist-card__wiki"
@@ -47,15 +50,53 @@
 					'campaignevents-event-details-worklist-card-added',
 					added
 				).text() }}</time>
+
+				<!-- How often the article is read. Hidden entirely when the wiki cannot say: the
+					card has to look complete without it. The figure is shown bare, as the design
+					has it, so the icon rather than the text says what the number counts. -->
+				<span v-if="viewsText" class="ext-campaignevents-worklist-card__views">
+					<cdx-icon
+						class="ext-campaignevents-worklist-card__views-icon"
+						:icon="cdxIconChartLine"
+						:icon-label="viewsLabel"
+						size="small"
+					></cdx-icon>{{ viewsText }}
+				</span>
 			</template>
 		</cdx-card>
 	</li>
 </template>
 
 <script>
-const { defineComponent } = require( 'vue' );
+const { computed, defineComponent } = require( 'vue' );
 const { CdxButton, CdxCard, CdxIcon } = require( '../../../codex.js' );
-const { cdxIconTrash } = require( '../../../icons.json' );
+const { cdxIconChartLine, cdxIconTrash } = require( '../../../icons.json' );
+
+/** Counts of a thousand or more are shortened; the suffix is a message, not a letter in code. */
+const THOUSAND = 1000;
+const MILLION = 1000000;
+
+/**
+ * The view count as the reader sees it: shortened past a thousand, in their own digits.
+ *
+ * @param {number} count
+ * @return {string}
+ */
+function shorten( count ) {
+	if ( count >= MILLION ) {
+		return mw.msg(
+			'campaignevents-event-details-worklist-card-views-millions',
+			mw.language.convertNumber( Math.round( count / MILLION ) )
+		);
+	}
+	if ( count >= THOUSAND ) {
+		return mw.msg(
+			'campaignevents-event-details-worklist-card-views-thousands',
+			mw.language.convertNumber( Math.round( count / THOUSAND ) )
+		);
+	}
+	return mw.language.convertNumber( count );
+}
 
 // @vue/component
 module.exports = exports = defineComponent( {
@@ -77,11 +118,23 @@ module.exports = exports = defineComponent( {
 		addedAt: {
 			type: String,
 			default: null
+		},
+		views: {
+			type: Object,
+			default: null
 		}
 	},
 	emits: [ 'remove' ],
-	setup() {
+	setup( props ) {
+		const viewsText = computed( () => props.views ? shorten( props.views.count ) : '' );
+
 		return {
+			viewsText,
+			// The figure beside it is a bare number, so the icon is what names it. Labelled
+			// rather than hidden, or a screen reader would read "20k" with nothing saying what
+			// 20k counts.
+			viewsLabel: mw.msg( 'campaignevents-event-details-worklist-card-views-label' ),
+			cdxIconChartLine,
 			removeLabel: mw.msg( 'campaignevents-worklist-table-remove-button-label' ),
 			cdxIconTrash
 		};

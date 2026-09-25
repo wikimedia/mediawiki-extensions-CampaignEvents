@@ -23,6 +23,36 @@ const mountCard = ( props = {} ) => {
 };
 
 describe( 'WorklistArticleCard', () => {
+	const VIEWS = '.ext-campaignevents-worklist-card__views';
+
+	it( 'hides the view count when the wiki cannot say', () => {
+		// The criteria are explicit: no view data means no count, and the card still loads.
+		expect( mountCard().find( VIEWS ).exists() ).toBe( false );
+	} );
+
+	it.each( [
+		[ 40, '40' ],
+		[ 999, '999' ],
+		[ 1000, '(campaignevents-event-details-worklist-card-views-thousands, 1)' ],
+		[ 20437, '(campaignevents-event-details-worklist-card-views-thousands, 20)' ],
+		[ 120000, '(campaignevents-event-details-worklist-card-views-thousands, 120)' ],
+		[ 2400000, '(campaignevents-event-details-worklist-card-views-millions, 2)' ]
+	] )( 'shortens %s past a thousand', ( count, shown ) => {
+		const card = mountCard( { views: { count: count } } );
+		expect( card.get( VIEWS ).text() ).toContain( shown );
+	} );
+
+	it( 'names the count with the icon, since the figure is shown bare', () => {
+		// A screen reader would otherwise read "10" with nothing saying what ten counts.
+		const icon = mountCard( { views: { count: 10 } } ).get( VIEWS ).get( 'svg' );
+		expect( icon.attributes( 'aria-hidden' ) ).toBeUndefined();
+	} );
+
+	it( 'puts the icon before the figure, as the design has it', () => {
+		const html = mountCard( { views: { count: 10 } } ).get( VIEWS ).html();
+		expect( html.indexOf( 'svg' ) ).toBeLessThan( html.indexOf( '10' ) );
+	} );
+
 	it( 'links the title to the article', () => {
 		const link = mountCard().get( '.cdx-card__text__title a' );
 		expect( link.attributes( 'href' ) ).toBe( '/wiki/Bears' );

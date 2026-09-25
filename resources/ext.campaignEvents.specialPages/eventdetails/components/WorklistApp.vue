@@ -61,6 +61,7 @@
 				:can-remove="canRemoveArticles"
 				:added="addedFor( article ).added"
 				:added-at="addedFor( article ).addedAt"
+				:views="viewsFor( article )"
 				@remove="onRemoveRequested"
 			></worklist-article-card>
 		</ul>
@@ -146,6 +147,7 @@ const AddWorklistArticleDialog = require( './AddWorklistArticleDialog.vue' );
 const RemoveWorklistArticleDialog = require( './RemoveWorklistArticleDialog.vue' );
 const WorklistArticleCard = require( './WorklistArticleCard.vue' );
 const worklistPages = require( '../worklistPages.js' );
+const worklistPageData = require( '../WorklistPageData.js' );
 
 // Enough cards to make paging rare on a wide screen without a long first load. The grid takes
 // as many columns as the viewport allows, so no page size can promise a full last row.
@@ -239,6 +241,9 @@ module.exports = exports = defineComponent( {
 		// Every article matching the current search. The server decides which those are; splitting
 		// them into pages is this component's job, so that paging costs no request.
 		const articles = ref( [] );
+		// Per-article data held against `wiki|title`. A ref rather than a plain object so that
+		// filling one in after its card has rendered redraws that card.
+		const pageData = ref( new Map() );
 		// Keyed by wiki and title, the pair that identifies an article across wikis.
 		const metadata = ref( {} );
 		const currentPage = ref( 1 );
@@ -389,6 +394,39 @@ module.exports = exports = defineComponent( {
 			currentPage.value = Math.min( Math.max( page, 1 ), totalPages.value );
 		}
 
+		/**
+		 * Fill in the per-article data for the articles now on screen.
+		 *
+		 * A request per wiki, made once the cards are rendered. Only the articles on screen are
+		 * asked about: a worklist can hold thousands, and the reader is only looking at a page
+		 * of them. Whatever brings an article into view — paging, filtering, a reload — is a
+		 * reason to ask for what it still lacks.
+		 */
+		function loadPageData() {
+			const showing = visibleArticles.value;
+			if ( !showing.length ) {
+				return;
+			}
+			worklistPageData.fetchPageData( showing ).then( ( known ) => {
+				// A new Map, so that Vue sees the change and redraws the cards.
+				pageData.value = new Map( known );
+			}, () => {
+				// The card is complete without it, so a failure leaves the cards as they are
+				// rather than being surfaced to the reader.
+			} );
+		}
+
+		watch( visibleArticles, loadPageData );
+
+		/**
+		 * @param {Object} article
+		 * @return {?Object}
+		 */
+		function viewsFor( article ) {
+			const known = pageData.value.get( article.wiki + '|' + article.title );
+			return known ? known.views : null;
+		}
+
 		function onRemoveRequested( article ) {
 			articleToRemove.value = article;
 			isRemoveDialogOpen.value = true;
@@ -433,6 +471,7 @@ module.exports = exports = defineComponent( {
 		return {
 			visibleArticles,
 			addedFor,
+			viewsFor,
 			isEmpty,
 			isLoading,
 			errorMessage,

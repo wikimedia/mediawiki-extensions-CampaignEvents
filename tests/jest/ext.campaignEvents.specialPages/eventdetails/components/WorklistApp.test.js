@@ -6,6 +6,7 @@ const { mount } = require( '@vue/test-utils' );
 const { nextTick } = require( 'vue' );
 const WorklistApp = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue' );
 const worklistPages = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/worklistPages.js' );
+const worklistPageData = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/WorklistPageData.js' );
 
 const LOCAL_WIKI = 'my_wiki';
 const CARD = '.ext-campaignevents-worklist-card';
@@ -102,6 +103,7 @@ describe( 'WorklistApp', () => {
 		jest.spyOn( worklistPages, 'fetchMetadata' ).mockResolvedValue( [] );
 		jest.spyOn( worklistPages, 'fetchPages' ).mockResolvedValue( page( [ 'Bears' ] ) );
 		jest.spyOn( worklistPages, 'removeArticle' ).mockResolvedValue( {} );
+		jest.spyOn( worklistPageData, 'fetchPageData' ).mockResolvedValue( new Map() );
 		global.$ = jest.fn();
 	} );
 
@@ -493,4 +495,39 @@ describe( 'WorklistApp', () => {
 
 		expect( worklistPages.fetchMetadata ).toHaveBeenCalledTimes( 1 );
 	} );
+	it( 'fills the view counts in after the cards have rendered', async () => {
+		worklistPageData.fetchPageData.mockResolvedValue(
+			new Map( [ [ LOCAL_WIKI + '|Bears', { views: { count: 20437 } } ] ] )
+		);
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.get( '.ext-campaignevents-worklist-card__views' ).text() )
+			.toContain( 'views-thousands, 20' );
+	} );
+
+	it( 'only asks about the articles on screen', async () => {
+		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
+
+		mountApp();
+		await settle();
+
+		// A worklist can hold thousands; the reader is looking at a page of them.
+		expect( worklistPageData.fetchPageData ).toHaveBeenCalled();
+		worklistPageData.fetchPageData.mock.calls.forEach( ( [ asked ] ) => {
+			expect( asked ).toHaveLength( ARTICLES_PER_PAGE );
+		} );
+	} );
+
+	it( 'still shows the cards when the view counts cannot be fetched', async () => {
+		worklistPageData.fetchPageData.mockRejectedValue( new Error( 'nope' ) );
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
+		expect( wrapper.find( '.ext-campaignevents-worklist-card__views' ).exists() ).toBe( false );
+	} );
+
 } );

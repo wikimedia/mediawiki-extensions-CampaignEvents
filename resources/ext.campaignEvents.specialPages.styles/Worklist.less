@@ -153,3 +153,19 @@
 		animation: none;
 	}
 }
+
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__views {
+	// A line of text rather than a row of boxes, so the count sits on the same baseline as
+	// whatever follows it on the line and wraps with it.
+	color: @color-subtle;
+}
+
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__views-icon {
+	// Codex sizes a small icon against the medium font size whatever it sits in, which leaves
+	// the glyph adrift in a box wider than itself on the card's smaller meta line. Tied to the
+	// text instead, so it scales with whatever the line is set in.
+	width: 1em;
+	height: 1em;
+	margin-right: @spacing-12;
+	vertical-align: text-bottom;
+}
