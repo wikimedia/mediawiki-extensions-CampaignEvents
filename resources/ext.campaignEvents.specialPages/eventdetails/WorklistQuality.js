@@ -15,6 +15,34 @@
 	const THRESHOLD = 0.5;
 
 	/**
+	 * Highest whole percentage in each impact band, largest opportunity first.
+	 *
+	 * The bands are contiguous only because the figure being banded is a whole percentage: the
+	 * score is rounded to two decimal places first, as the acceptance criteria say, so 0.854
+	 * becomes 85 and falls in the middle band rather than through the gap between 85 and 86.
+	 */
+	const BANDS = [
+		{ band: 'high', upTo: 40 },
+		{ band: 'medium', upTo: 85 },
+		{ band: 'low', upTo: 100 }
+	];
+
+	/**
+	 * Which impact band a score falls in, or null when there is no usable score.
+	 *
+	 * @param {number|undefined} score Between 0 and 1
+	 * @return {string|null}
+	 */
+	function bandFor( score ) {
+		if ( typeof score !== 'number' || !isFinite( score ) ) {
+			return null;
+		}
+		const percent = Math.round( score * 100 );
+		const match = BANDS.find( ( candidate ) => percent <= candidate.upTo );
+		return match ? match.band : null;
+	}
+
+	/**
 	 * Elements that become a signal, in the order they are offered to the reader, each with the
 	 * message describing what the article needs.
 	 *
@@ -77,7 +105,7 @@
 	 * worklist — are recorded as having nothing to show, so they are not asked about again.
 	 *
 	 * @param {Array<{wiki: string, title: string}>} articles
-	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ signals }`
+	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ signals, band }`
 	 */
 	function fetchQuality( articles ) {
 		const unknown = articles.filter( ( article ) => !cache.has( cacheKey( article ) ) );
@@ -119,7 +147,8 @@
 			).then( ( response ) => {
 				( response.articles || [] ).forEach( ( entry ) => {
 					cache.set( cacheKey( entry ), {
-						signals: signalsFor( entry.elements || {} )
+						signals: signalsFor( entry.elements || {} ),
+						band: bandFor( entry.score )
 					} );
 				} );
 			}, () => {
@@ -137,7 +166,7 @@
 			unknown.forEach( ( article ) => {
 				const key = cacheKey( article );
 				if ( !cache.has( key ) ) {
-					cache.set( key, { signals: [] } );
+					cache.set( key, { signals: [], band: null } );
 				}
 			} );
 			return cache;
@@ -146,6 +175,8 @@
 
 	module.exports = {
 		fetchQuality,
+		// Exported for the tests, which pin the band edges the criteria specify.
+		bandFor,
 		// For tests, which would otherwise carry answers between cases.
 		clearCache: () => cache.clear()
 	};

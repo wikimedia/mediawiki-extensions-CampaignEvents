@@ -65,6 +65,7 @@
 				:image="imageFor( article )"
 				:description="descriptionFor( article )"
 				:signals="signalsFor( article )"
+				:impact-band="bandFor( article )"
 				@remove="onRemoveRequested"
 			></worklist-article-card>
 		</ul>
@@ -423,6 +424,15 @@ module.exports = exports = defineComponent( {
 			return known ? known.signals : [];
 		}
 
+		/**
+		 * @param {Object} article
+		 * @return {string|null}
+		 */
+		function bandFor( article ) {
+			const known = quality.value.get( article.wiki + '|' + article.title );
+			return known ? known.band : null;
+		}
+
 		function nextPage() {
 			currentPage.value = Math.min( currentPage.value + 1, totalPages.value );
 		}
@@ -534,6 +544,7 @@ module.exports = exports = defineComponent( {
 			imageFor,
 			descriptionFor,
 			signalsFor,
+			bandFor,
 			isEmpty,
 			isLoading,
 			errorMessage,

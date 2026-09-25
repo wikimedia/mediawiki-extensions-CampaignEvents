@@ -85,6 +85,32 @@ describe( 'WorklistArticleCard', () => {
 	} );
 
 	const SIGNALS = '.ext-campaignevents-worklist-card__signals';
+	const CHIP = '.ext-campaignevents-worklist-card__impact';
+
+	it( 'shows no chip when the model gave no score', () => {
+		// The criteria are explicit: no score means no chip, and the card still loads.
+		expect( mountCard().find( CHIP ).exists() ).toBe( false );
+	} );
+
+	it.each( [ [ 'high' ], [ 'medium' ], [ 'low' ] ] )( 'names the %s band', ( band ) => {
+		expect( mountCard( { impactBand: band } ).get( CHIP ).text() )
+			.toBe( '(campaignevents-event-details-worklist-card-impact-' + band + ')' );
+	} );
+
+	it( 'draws every band the same way', () => {
+		// The words carry the difference. Colour or weight would rank one reader's article above
+		// another's on a page listing work still to do.
+		const classesFor = ( band ) => mountCard( { impactBand: band } )
+			.get( CHIP ).classes().sort();
+		expect( classesFor( 'high' ) ).toEqual( classesFor( 'low' ) );
+		expect( classesFor( 'medium' ) ).toEqual( classesFor( 'low' ) );
+	} );
+
+	it( 'puts the chip above the title', () => {
+		const card = mountCard( { impactBand: 'high' } );
+		const html = card.html();
+		expect( html.indexOf( 'worklist-card__impact' ) ).toBeLessThan( html.indexOf( '<a' ) );
+	} );
 
 	it( 'shows nothing when the article has no signals', () => {
 		// A card with nothing to report must not leave an empty row behind.

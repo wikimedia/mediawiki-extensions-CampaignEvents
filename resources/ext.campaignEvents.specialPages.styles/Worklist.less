@@ -80,26 +80,49 @@
 // spacing for those would otherwise show up between the cards, on top of the grid's own gap.
 .ext-campaignevents-worklist-app .ext-campaignevents-worklist-card {
 	margin: 0;
-}
-
-.ext-campaignevents-worklist-card__card {
-	// A floor rather than a fixed height, so a card with a long title or description still grows.
-	// Cards in the same grid row then match each other, via the grid's default stretch alignment.
-	// Raised here because the date is the card's third line.
+	// The frame moves here from the Codex card inside it, so the impact chip can sit across the
+	// top: the card's own slots all live in the text column beside the thumbnail, which would
+	// put the chip alongside the image rather than above it.
+	// TODO: Remove all of this and use the component as intended once T440458 is done,
+	// which in turn waits on T436852.
+	box-sizing: border-box;
+	position: relative;
+	border: @border-base;
+	border-radius: @border-radius-base;
+	background-color: @background-color-base;
+	padding: @spacing-75;
+	// A floor rather than a fixed height, so a card with a long title still grows. Cards in the
+	// same grid row then match each other, via the grid's default stretch alignment. Tall
+	// enough for the date and the needs, the card's later lines.
 	min-height: @size-800;
 }
 
-// Taken out of the flow into the card's corner. The Codex card is `position: relative`, so it is
-// the positioning context; the padding matches the card's own.
+// Prefixed so it outweighs Codex's own `.cdx-card`, which carries the same single-class weight
+// and would otherwise win on stylesheet order.
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__card {
+	// The frame belongs to the element around this one now, so the chip can sit above the
+	// thumbnail; what is left here is the thumbnail-and-text row. Static, so the remove control
+	// anchors to the card's outer edge rather than to this row, which begins below the chip.
+	position: static;
+	border: 0;
+	border-radius: 0;
+	background-color: transparent;
+	padding: 0;
+}
+
+// Taken out of the flow into the card's corner, against the list item that now frames the card
+// and carries `position: relative`; the offsets match that element's padding.
 .ext-campaignevents-worklist-card__remove {
 	position: absolute;
 	top: @spacing-50;
 	right: @spacing-50;
 }
 
-// Room for the button, so a long title does not run underneath it.
+// Room for the button, so neither a long title nor the impact chip runs underneath it. The
+// button is @size-200 wide and sits @spacing-50 in from the edge, so the gutter has to clear
+// both.
 .ext-campaignevents-worklist-card__card .cdx-card__text__title {
-	padding-right: @size-200;
+	padding-right: calc( @size-200 + @spacing-50 );
 }
 
 // Sits below the list of cards, per the acceptance criteria.
@@ -185,4 +208,14 @@
 	margin-right: @spacing-12;
 	vertical-align: text-bottom;
 	color: @color-subtle;
+}
+
+.ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__impact {
+	// Only as wide as its words: stretched across the card it would run under the remove
+	// control sitting in the corner.
+	display: flex;
+	width: fit-content;
+	margin-bottom: @spacing-25;
+	// Outlined on white, as the design has it, rather than Codex's filled grey.
+	background-color: @background-color-base;
 }

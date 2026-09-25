@@ -1,5 +1,19 @@
 <template>
 	<li class="ext-campaignevents-worklist-card">
+		<!-- How much the article could gain from being worked on, across the top of the card
+			because it is what the reader is scanning for. Outside the Codex card rather than in
+			its title slot: that slot sits in the text column beside the thumbnail, which would
+			put the chip alongside the image instead of above it. The card's own frame is
+			therefore drawn by this element. Framed as the size of the opportunity, not as a
+			fault — the words carry the difference and every band looks the same, because
+			grading them by colour would rank one reader's article above another's. -->
+		<cdx-info-chip
+			v-if="impactLabel"
+			class="ext-campaignevents-worklist-card__impact"
+		>
+			{{ impactLabel }}
+		</cdx-info-chip>
+
 		<!-- No `url`: the card is a plain element rather than a link, so the remove control can
 			sit inside it and the title can carry the red-link class of its own. -->
 		<!-- Every card carries a thumbnail slot whether or not the article has an image, so the
@@ -100,9 +114,22 @@
 
 <script>
 const { computed, defineComponent } = require( 'vue' );
-const { CdxButton, CdxCard, CdxIcon } = require( '../../../codex.js' );
+const { CdxButton, CdxCard, CdxIcon, CdxInfoChip } = require( '../../../codex.js' );
 const { cdxIconChartLine, cdxIconLightbulbOutline, cdxIconTrash } =
 	require( '../../../icons.json' );
+
+/**
+ * What each impact band is called.
+ *
+ * All three are drawn the same, as the design has them: the words carry the difference. Grading
+ * them by colour or weight would rank one reader's article above another's on a page whose whole
+ * purpose is listing work still to do.
+ */
+const IMPACT_MESSAGES = {
+	high: 'campaignevents-event-details-worklist-card-impact-high',
+	medium: 'campaignevents-event-details-worklist-card-impact-medium',
+	low: 'campaignevents-event-details-worklist-card-impact-low'
+};
 
 /** Counts of a thousand or more are shortened; the suffix is a message, not a letter in code. */
 const THOUSAND = 1000;
@@ -136,7 +163,7 @@ function shorten( count ) {
 // @vue/component
 module.exports = exports = defineComponent( {
 	name: 'WorklistArticleCard',
-	components: { CdxButton, CdxCard, CdxIcon },
+	components: { CdxButton, CdxCard, CdxIcon, CdxInfoChip },
 	props: {
 		article: {
 			type: Object,
@@ -169,6 +196,10 @@ module.exports = exports = defineComponent( {
 		signals: {
 			type: Array,
 			default: () => []
+		},
+		impactBand: {
+			type: String,
+			default: null
 		}
 	},
 	emits: [ 'remove' ],
@@ -189,6 +220,12 @@ module.exports = exports = defineComponent( {
 			) : first;
 		} );
 
+		// No chip at all when the model gave no score, rather than an empty or guessed one.
+		const impactLabel = computed( () => {
+			const message = IMPACT_MESSAGES[ props.impactBand ];
+			return message ? mw.msg( message ) : '';
+		} );
+
 		return {
 			viewsText,
 			// The figure beside it is a bare number, so the icon is what names it. Labelled
@@ -197,6 +234,7 @@ module.exports = exports = defineComponent( {
 			viewsLabel: mw.msg( 'campaignevents-event-details-worklist-card-views-label' ),
 			cdxIconChartLine,
 			signalsText,
+			impactLabel,
 			removeLabel: mw.msg( 'campaignevents-worklist-table-remove-button-label' ),
 			cdxIconLightbulbOutline,
 			cdxIconTrash

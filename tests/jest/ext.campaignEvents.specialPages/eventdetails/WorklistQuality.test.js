@@ -35,6 +35,35 @@ beforeEach( () => {
 } );
 
 describe( 'WorklistQuality', () => {
+	describe( 'bandFor', () => {
+		it.each( [
+			[ 0, 'high' ],
+			[ 0.4, 'high' ],
+			// 40% is in the first band only: the middle one was moved to start at 41 so that the
+			// two do not overlap, and so 85 to 86 is not a gap.
+			[ 0.41, 'medium' ],
+			[ 0.85, 'medium' ],
+			[ 0.86, 'low' ],
+			[ 1, 'low' ]
+		] )( 'puts %s in the %s band', ( score, band ) => {
+			expect( worklistQuality.bandFor( score ) ).toBe( band );
+		} );
+
+		it( 'rounds to a whole percentage before banding', () => {
+			// Without rounding first, 0.854 falls between the bands rather than inside one.
+			expect( worklistQuality.bandFor( 0.854 ) ).toBe( 'medium' );
+			expect( worklistQuality.bandFor( 0.856 ) ).toBe( 'low' );
+			expect( worklistQuality.bandFor( 0.404 ) ).toBe( 'high' );
+			expect( worklistQuality.bandFor( 0.406 ) ).toBe( 'medium' );
+		} );
+
+		it( 'gives no band without a usable score', () => {
+			[ undefined, null, 'lots', NaN ].forEach( ( score ) => {
+				expect( worklistQuality.bandFor( score ) ).toBeNull();
+			} );
+		} );
+	} );
+
 	it( 'reports an element scoring below 50% as a signal', async () => {
 		const get = mockRest();
 		get.mockResolvedValue( { articles: [ entry( 'Beavers', { refs: 0.2, wikilinks: 1 } ) ] } );

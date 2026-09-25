@@ -356,7 +356,8 @@
 				"CdxTextInput",
 				"CdxTextArea",
 				"CdxMessage",
-				"CdxIcon"
+				"CdxIcon",
+				"CdxInfoChip"
 			],
 			"packageFiles": [
 				"ext.campaignEvents.specialPages/dispatcher.js",
@@ -508,6 +509,9 @@
 				"campaignevents-event-details-worklist-card-views-thousands",
 				"campaignevents-event-details-worklist-card-views-millions",
 				"campaignevents-event-details-worklist-card-added",
+				"campaignevents-event-details-worklist-card-impact-high",
+				"campaignevents-event-details-worklist-card-impact-medium",
+				"campaignevents-event-details-worklist-card-impact-low",
 				"campaignevents-event-details-worklist-card-signal-refs",
 				"campaignevents-event-details-worklist-card-signal-wikilinks",
 				"campaignevents-event-details-worklist-card-signal-headings",

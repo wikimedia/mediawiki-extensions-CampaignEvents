@@ -575,7 +575,7 @@ describe( 'WorklistApp', () => {
 	it( 'fills the signals in after the cards have rendered', async () => {
 		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears' ] ) );
 		worklistQuality.fetchQuality.mockResolvedValue(
-			new Map( [ [ LOCAL_WIKI + '|Bears', { signals: [ 'Needs images' ] } ] ] )
+			new Map( [ [ LOCAL_WIKI + '|Bears', { signals: [ 'Needs images' ], band: null } ] ] )
 		);
 
 		const wrapper = mountApp();
@@ -594,4 +594,21 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
 		expect( wrapper.find( '.ext-campaignevents-worklist-card__signals' ).exists() ).toBe( false );
 	} );
+
+	it( 'puts the impact chip on the card it belongs to', async () => {
+		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Otters' ] ) );
+		worklistQuality.fetchQuality.mockResolvedValue( new Map( [
+			[ LOCAL_WIKI + '|Bears', { signals: [], band: 'high' } ],
+			[ LOCAL_WIKI + '|Otters', { signals: [], band: null } ]
+		] ) );
+
+		const wrapper = mountApp();
+		await settle();
+
+		const cards = wrapper.findAll( CARD );
+		expect( cards[ 0 ].find( '.ext-campaignevents-worklist-card__impact' ).exists() ).toBe( true );
+		// An article the model could not score keeps a complete card, without a chip.
+		expect( cards[ 1 ].find( '.ext-campaignevents-worklist-card__impact' ).exists() ).toBe( false );
+	} );
+
 } );
