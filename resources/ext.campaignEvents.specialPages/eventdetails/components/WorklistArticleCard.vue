@@ -2,7 +2,14 @@
 	<li class="ext-campaignevents-worklist-card">
 		<!-- No `url`: the card is a plain element rather than a link, so the remove control can
 			sit inside it and the title can carry the red-link class of its own. -->
-		<cdx-card class="ext-campaignevents-worklist-card__card">
+		<!-- Every card carries a thumbnail slot whether or not the article has an image, so the
+			titles line up down the column; Codex draws its placeholder icon where one is
+			missing. -->
+		<cdx-card
+			class="ext-campaignevents-worklist-card__card"
+			:thumbnail="image"
+			force-thumbnail
+		>
 			<template #title>
 				<!-- The server renders the link, so a page still to be created carries core's
 					red-link class and an article on another wiki carries `external`, exactly as in
@@ -120,6 +127,10 @@ module.exports = exports = defineComponent( {
 			default: null
 		},
 		views: {
+			type: Object,
+			default: null
+		},
+		image: {
 			type: Object,
 			default: null
 		}

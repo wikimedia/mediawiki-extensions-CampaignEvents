@@ -3,6 +3,7 @@
 /* global global */
 
 const { mount } = require( '@vue/test-utils' );
+const { CdxCard } = require( '@wikimedia/codex' );
 const { nextTick } = require( 'vue' );
 const WorklistApp = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue' );
 const worklistPages = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/worklistPages.js' );
@@ -497,7 +498,10 @@ describe( 'WorklistApp', () => {
 	} );
 	it( 'fills the view counts in after the cards have rendered', async () => {
 		worklistPageData.fetchPageData.mockResolvedValue(
-			new Map( [ [ LOCAL_WIKI + '|Bears', { views: { count: 20437 } } ] ] )
+			new Map( [ [ LOCAL_WIKI + '|Bears', {
+				views: { count: 20437 },
+				image: { url: 'https://example.org/bears.jpg', width: 200, height: 200 }
+			} ] ] )
 		);
 
 		const wrapper = mountApp();
@@ -505,6 +509,9 @@ describe( 'WorklistApp', () => {
 
 		expect( wrapper.get( '.ext-campaignevents-worklist-card__views' ).text() )
 			.toContain( 'views-thousands, 20' );
+		// The image arrives on the same request, so it reaches the card at the same moment.
+		expect( wrapper.getComponent( CdxCard ).props( 'thumbnail' ).url )
+			.toBe( 'https://example.org/bears.jpg' );
 	} );
 
 	it( 'only asks about the articles on screen', async () => {

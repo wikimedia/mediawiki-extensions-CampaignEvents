@@ -62,6 +62,7 @@
 				:added="addedFor( article ).added"
 				:added-at="addedFor( article ).addedAt"
 				:views="viewsFor( article )"
+				:image="imageFor( article )"
 				@remove="onRemoveRequested"
 			></worklist-article-card>
 		</ul>
@@ -427,6 +428,15 @@ module.exports = exports = defineComponent( {
 			return known ? known.views : null;
 		}
 
+		/**
+		 * @param {Object} article
+		 * @return {?Object}
+		 */
+		function imageFor( article ) {
+			const known = pageData.value.get( article.wiki + '|' + article.title );
+			return known ? known.image : null;
+		}
+
 		function onRemoveRequested( article ) {
 			articleToRemove.value = article;
 			isRemoveDialogOpen.value = true;
@@ -472,6 +482,7 @@ module.exports = exports = defineComponent( {
 			visibleArticles,
 			addedFor,
 			viewsFor,
+			imageFor,
 			isEmpty,
 			isLoading,
 			errorMessage,

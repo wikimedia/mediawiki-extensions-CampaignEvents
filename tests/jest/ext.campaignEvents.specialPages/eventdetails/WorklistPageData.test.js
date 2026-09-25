@@ -39,9 +39,11 @@ function mockApis() {
 
 const pagesResponse = ( entries ) => ( {
 	query: {
-		pages: entries.map(
-			( [ title, pageviews ] ) => ( { title: title, pageviews: pageviews } )
-		)
+		pages: entries.map( ( [ title, pageviews, thumbnail ] ) => ( {
+			title: title,
+			pageviews: pageviews,
+			thumbnail: thumbnail
+		} ) )
 	}
 } );
 
@@ -72,12 +74,40 @@ describe( 'summarise', () => {
 	} );
 } );
 
+describe( 'thumbnailOf', () => {
+	it( 'renames the address to what Codex expects', () => {
+		// PageImages calls it `source`; Codex's thumbnail reads `url`.
+		expect( worklistPageData.thumbnailOf( {
+			thumbnail: { source: 'https://example.org/beaver.jpg', width: 200, height: 150 }
+		} ) ).toEqual( { url: 'https://example.org/beaver.jpg', width: 200, height: 150 } );
+	} );
+
+	it( 'has no image for an article without one', () => {
+		// Also covers a wiki with no PageImages, which sends no thumbnail at all.
+		expect( worklistPageData.thumbnailOf( {} ) ).toBeNull();
+		expect( worklistPageData.thumbnailOf( { thumbnail: {} } ) ).toBeNull();
+	} );
+} );
+
 describe( 'fetchPageData', () => {
-	it( 'reads an article from the wiki that holds it', async () => {
+	it( 'asks for the views and the image in one request', async () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, 60 ) ] ] ) );
 
+		await worklistPageData.fetchPageData( [ FOREIGN ] );
+
+		// Each is a separate extension on the wiki, but neither is worth its own round trip.
+		expect( get.mock.calls[ 0 ][ 0 ].prop ).toBe( 'pageviews|pageimages' );
+	} );
+
+	it( 'reads an article from the wiki that holds it', async () => {
+		const get = mockApis();
+		get.mockResolvedValue( pagesResponse( [
+			[ 'Beaver', flat( 2, 60 ), { source: 'https://example.org/b.jpg', width: 200, height: 200 } ]
+		] ) );
+
 		const views = await worklistPageData.fetchPageData( [ FOREIGN ] );
+		expect( views.get( 'enwiki|Beaver' ).image.url ).toBe( 'https://example.org/b.jpg' );
 
 		expect( mw.ForeignApi ).toHaveBeenCalledWith(
 			'https://en.wikipedia.org/w/api.php',

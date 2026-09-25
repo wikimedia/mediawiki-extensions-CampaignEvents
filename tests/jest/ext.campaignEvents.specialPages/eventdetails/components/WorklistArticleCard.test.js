@@ -1,6 +1,7 @@
 'use strict';
 
 const { mount } = require( '@vue/test-utils' );
+const { CdxCard } = require( '@wikimedia/codex' );
 const WorklistArticleCard = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/components/WorklistArticleCard.vue' );
 
 const LOCAL_WIKI = 'my_wiki';
@@ -24,6 +25,22 @@ const mountCard = ( props = {} ) => {
 
 describe( 'WorklistArticleCard', () => {
 	const VIEWS = '.ext-campaignevents-worklist-card__views';
+	const THUMB = '.cdx-thumbnail';
+
+	it( 'keeps the thumbnail slot even without an image', () => {
+		// Codex draws its placeholder icon, so the titles still line up down the column.
+		const card = mountCard();
+		expect( card.find( THUMB ).exists() ).toBe( true );
+		expect( card.find( '.cdx-thumbnail__placeholder' ).exists() ).toBe( true );
+	} );
+
+	it( 'hands the lead image to the card', () => {
+		const image = { url: 'https://example.org/beaver.jpg', width: 200, height: 200 };
+		// Asserted on the prop rather than the rendered image: Codex loads it through an Image
+		// object, and jsdom never fires the load that would swap out the placeholder.
+		expect( mountCard( { image: image } ).getComponent( CdxCard ).props( 'thumbnail' ) )
+			.toEqual( image );
+	} );
 
 	it( 'hides the view count when the wiki cannot say', () => {
 		// The criteria are explicit: no view data means no count, and the card still loads.

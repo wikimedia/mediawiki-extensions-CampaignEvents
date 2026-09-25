@@ -19,6 +19,12 @@
 	/** How far back the count reaches. The API returns 60 days; the card shows the last 30. */
 	const WINDOW_DAYS = 30;
 
+	/**
+	 * Widest the card ever draws a thumbnail, so one image serves every screen density rather
+	 * than the wiki being asked again for a larger one.
+	 */
+	const THUMBNAIL_SIZE = 200;
+
 	/** Data held against `wiki|title`, so a title on two wikis is not confused for one. */
 	const cache = new Map();
 
@@ -63,13 +69,34 @@
 	}
 
 	/**
+	 * The article's lead image, in the shape Codex's thumbnail wants.
+	 *
+	 * PageImages calls the address `source`; Codex calls it `url`. An article without one — or a
+	 * wiki without the extension — simply has none, and the card draws its placeholder.
+	 *
+	 * @param {Object} page One page of the API response
+	 * @return {?{url: string, width: ?number, height: ?number}}
+	 */
+	function thumbnailOf( page ) {
+		const thumbnail = page.thumbnail;
+		if ( !thumbnail || !thumbnail.source ) {
+			return null;
+		}
+		return {
+			url: thumbnail.source,
+			width: thumbnail.width || null,
+			height: thumbnail.height || null
+		};
+	}
+
+	/**
 	 * Read the data for the given articles, filling in any that are not already known.
 	 *
 	 * Articles the API says nothing about, or on a wiki missing the extension behind a piece of
 	 * data, are recorded as having none of it, so they are not asked about again.
 	 *
 	 * @param {Array<{wiki: string, title: string, isLocal: boolean, apiUrl: ?string}>} articles
-	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ views }`
+	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ views, image }`
 	 */
 	function fetchPageData( articles ) {
 		const unknown = articles.filter( ( article ) => !cache.has( cacheKey( article ) ) );
@@ -97,7 +124,11 @@
 				const batch = wikiArticles.slice( i, i + TITLES_PER_REQUEST );
 				requests.push( api.get( {
 					action: 'query',
-					prop: 'pageviews',
+					// Both in one request: each is a separate extension on the wiki, and either may
+					// be missing, but neither costs an extra round trip.
+					prop: 'pageviews|pageimages',
+					piprop: 'thumbnail',
+					pithumbsize: THUMBNAIL_SIZE,
 					titles: batch.map( ( article ) => article.title ),
 					format: 'json',
 					formatversion: 2
@@ -105,7 +136,8 @@
 					const pages = ( response.query && response.query.pages ) || [];
 					pages.forEach( ( page ) => {
 						cache.set( wiki + '|' + page.title, {
-							views: summarise( page.pageviews )
+							views: summarise( page.pageviews ),
+							image: thumbnailOf( page )
 						} );
 					} );
 				}, () => {
@@ -121,7 +153,7 @@
 			unknown.forEach( ( article ) => {
 				const key = cacheKey( article );
 				if ( !cache.has( key ) ) {
-					cache.set( key, { views: null } );
+					cache.set( key, { views: null, image: null } );
 				}
 			} );
 			return cache;
@@ -132,6 +164,7 @@
 		fetchPageData,
 		// Exported for the tests, which pin the window and the trend edges.
 		summarise,
+		thumbnailOf,
 		clearCache: () => cache.clear()
 	};
 }() );
