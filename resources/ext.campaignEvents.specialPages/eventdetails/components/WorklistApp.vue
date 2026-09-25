@@ -7,6 +7,7 @@
 			></add-worklist-article-dialog>
 			<a
 				v-if="historyUrl"
+				role="button"
 				class="ext-campaignevents-worklist-toolbar__history"
 				:class="historyButtonClasses"
 				:href="historyUrl"
