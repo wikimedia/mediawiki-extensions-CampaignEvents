@@ -382,6 +382,23 @@
 				}
 			}
 		},
+		"/event_registration/{id}/worklist_pages/quality": {
+			"get": {
+				"summary": "Quality scores for pages in an event's worklist",
+				"description": "Returns the quality of the requested pages, as scored by the Wikimedia Foundation's language-agnostic articlequality model: an overall score between 0 and 1, the class the model assigns, and the per-element scores behind it (references, wikilinks, headings, media, infobox, categories, sources and length). Asked for a screenful of pages at a time rather than a whole worklist, because the model scores one revision per request and fetches the article to do it. Pages that are not in the worklist are ignored, as are pages the model cannot score, so the response may name fewer pages than were asked for.",
+				"tags": [ "Worklists" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetWorklistPagesQualityHandler",
+					"services": [
+						"MainConfig",
+						"CampaignEventsEventLookup",
+						"CampaignEventsWorklistArticleHelper",
+						"PageStoreFactory",
+						"CampaignEventsArticleQualityLookup"
+					]
+				}
+			}
+		},
 		"/worklist/{title}/pages": {
 			"patch": {
 				"summary": "Add or remove worklist pages",

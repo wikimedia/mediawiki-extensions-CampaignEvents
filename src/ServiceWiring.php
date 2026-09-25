@@ -68,6 +68,7 @@ use MediaWiki\Extension\CampaignEvents\Topics\WikimediaTopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolEventWatcher;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
+use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
@@ -573,6 +574,15 @@ return [
 			$services->getMessageFormatterFactory(),
 		);
 	},
+	ArticleQualityLookup::SERVICE_NAME =>
+		static function ( MediaWikiServices $services ): ArticleQualityLookup {
+			return new ArticleQualityLookup(
+				$services->getHttpRequestFactory(),
+				$services->getMainWANObjectCache(),
+				$services->getSiteLookup(),
+				LoggerFactory::getInstance( 'CampaignEvents' ),
+			);
+		},
 	WorklistArticleHelper::SERVICE_NAME =>
 		static function ( MediaWikiServices $services ): WorklistArticleHelper {
 			return new WorklistArticleHelper(
