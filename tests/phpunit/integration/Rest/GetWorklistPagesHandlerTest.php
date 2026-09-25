@@ -4,7 +4,9 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Rest;
 
+use Generator;
 use MediaWiki\Config\HashConfig;
+use MediaWiki\Config\SiteConfiguration;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
@@ -13,6 +15,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Rest\GetWorklistPagesHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\LocalizedHttpException;
@@ -36,6 +39,9 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		'pathParams' => [ 'id' => self::EVENT_ID ],
 	];
 	private const FOREIGN_WIKI = 'someforeignwiki';
+	private const LOCAL_SERVER = 'https://local.example.org';
+	private const LOCAL_SCRIPT_PATH = '/w';
+	private const LOCAL_API_URL = self::LOCAL_SERVER . self::LOCAL_SCRIPT_PATH . '/api.php';
 
 	private const EVENT_PAGE_DBKEY = 'My_event';
 	private const WORKLIST_PAGE_DBKEY = 'My_event/Worklist';
@@ -61,11 +67,19 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		return $this->newHandlerWithLookup( $lookup, $eventExists, $cardViewEnabled );
 	}
 
+	/**
+	 * @param IWorklistArticlesLookup $lookup
+	 * @param bool $eventExists
+	 * @param bool $cardViewEnabled
+	 * @param string $eventPageDBkey
+	 * @param array<string,string> $scriptPaths Per-wiki ScriptPath, as $wgConf would resolve it
+	 */
 	private function newHandlerWithLookup(
 		IWorklistArticlesLookup $lookup,
 		bool $eventExists = true,
 		bool $cardViewEnabled = true,
-		string $eventPageDBkey = self::EVENT_PAGE_DBKEY
+		string $eventPageDBkey = self::EVENT_PAGE_DBKEY,
+		array $scriptPaths = []
 	): GetWorklistPagesHandler {
 		$eventPage = $this->createMock( MWPageProxy::class );
 		$eventPage->method( 'getNamespace' )->willReturn( NS_MAIN );
@@ -89,10 +103,17 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 				array_map( static fn ( string $wiki ): string => "Name of $wiki", $wikiIDs )
 			)
 		);
+		$wikiLookup->method( 'getScriptPath' )->willReturnCallback(
+			static fn ( string $wiki ): ?string => $scriptPaths[$wiki] ?? null
+		);
 
 		$services = $this->getServiceContainer();
 		return new GetWorklistPagesHandler(
-			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => $cardViewEnabled ] ),
+			new HashConfig( [
+				'CampaignEventsEnableWorklistCardView' => $cardViewEnabled,
+				MainConfigNames::CanonicalServer => self::LOCAL_SERVER,
+				MainConfigNames::ScriptPath => self::LOCAL_SCRIPT_PATH,
+			] ),
 			$eventLookup,
 			$lookup,
 			$wikiLookup,
@@ -179,6 +200,57 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( '', $entry['classes'] );
 	}
 
+	/**
+	 * @dataProvider provideForeignApiUrl
+	 */
+	public function testRun__foreignApiUrl( array $scriptPaths, string $expectedUrl ): void {
+		$conf = new SiteConfiguration();
+		$conf->suffixes = [ 'wiki' ];
+		$conf->settings = [
+			'wgServer' => [ 'resolvedwiki' => '//resolved.example.org' ],
+			'wgCanonicalServer' => [ 'resolvedwiki' => 'https://resolved.example.org' ],
+			'wgArticlePath' => [ 'resolvedwiki' => '/wiki/$1' ],
+		];
+		$this->setMwGlobals( 'wgConf', $conf );
+
+		$lookup = $this->createMock( IWorklistArticlesLookup::class );
+		$lookup->method( 'getWorklistArticles' )->willReturn( [
+			[ 'wiki' => 'resolvedwiki', 'prefixedtext' => 'Foreign article' ],
+		] );
+		$body = $this->executeHandlerAndGetBodyData(
+			$this->newHandlerWithLookup( $lookup, true, true, self::EVENT_PAGE_DBKEY, $scriptPaths ),
+			new RequestData( self::REQ_DATA )
+		);
+
+		$this->assertSame( $expectedUrl, $body['wikis']['resolvedwiki']['api_url'] );
+	}
+
+	public static function provideForeignApiUrl(): Generator {
+		yield 'ScriptPath resolved for the wiki' => [
+			[ 'resolvedwiki' => '/w2' ],
+			'https://resolved.example.org/w2/api.php',
+		];
+		yield 'Falls back to the local ScriptPath' => [
+			[],
+			'https://resolved.example.org' . self::LOCAL_SCRIPT_PATH . '/api.php',
+		];
+	}
+
+	public function testRun__keepsTheOrderTheLookupReturned(): void {
+		$localWiki = WikiMap::getCurrentWikiId();
+		$respData = $this->executeWithPages( [
+			[ 'wiki' => self::FOREIGN_WIKI, 'prefixedtext' => 'Zebra' ],
+			[ 'wiki' => $localWiki, 'prefixedtext' => 'Beaver' ],
+			[ 'wiki' => self::FOREIGN_WIKI, 'prefixedtext' => 'Aardvark' ],
+		] );
+
+		$this->assertSame(
+			[ 'Zebra', 'Beaver', 'Aardvark' ],
+			array_column( $respData, 'title' ),
+			'Ordering is the lookup\'s business; the handler must not reshuffle it'
+		);
+	}
+
 	public function testRun__unparseableLocalTitleIsNotFatal(): void {
 		$localWiki = WikiMap::getCurrentWikiId();
 		$respData = $this->executeWithPages( [
@@ -211,8 +283,12 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		// a worklist can hold thousands of them.
 		$this->assertSame(
 			[
-				$localWiki => [ 'name' => "Name of $localWiki" ],
-				self::FOREIGN_WIKI => [ 'name' => 'Name of ' . self::FOREIGN_WIKI ],
+				$localWiki => [ 'name' => "Name of $localWiki", 'api_url' => self::LOCAL_API_URL ],
+				self::FOREIGN_WIKI => [
+					'name' => 'Name of ' . self::FOREIGN_WIKI,
+					// No farm is configured for this wiki in tests, so it cannot be resolved.
+					'api_url' => null,
+				],
 			],
 			(array)$body['wikis']
 		);

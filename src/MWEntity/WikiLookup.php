@@ -44,12 +44,24 @@ class WikiLookup {
 	 * the local RestPath would be wrong; see T312568.
 	 */
 	public function getRestPath( string $wikiID ): ?string {
+		return $this->getPathSetting( 'wgRestPath', $wikiID );
+	}
+
+	/**
+	 * Return the ScriptPath ($wgScriptPath) configured for the given wiki, or null when it can't be
+	 * determined, like getRestPath(). Used to build the URL of another wiki's api.php.
+	 */
+	public function getScriptPath( string $wikiID ): ?string {
+		return $this->getPathSetting( 'wgScriptPath', $wikiID );
+	}
+
+	private function getPathSetting( string $settingName, string $wikiID ): ?string {
 		if ( !$this->siteConfig->getLocalDatabases() ) {
-			// A wiki not using $wgConf; no per-wiki RestPath to resolve (T405034).
+			// A wiki not using $wgConf; no per-wiki setting to resolve (T405034).
 			return null;
 		}
-		$restPath = $this->siteConfig->get( 'wgRestPath', $wikiID );
-		return is_string( $restPath ) && $restPath !== '' ? $restPath : null;
+		$path = $this->siteConfig->get( $settingName, $wikiID );
+		return is_string( $path ) && $path !== '' ? $path : null;
 	}
 
 	/**

@@ -89,6 +89,33 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 		$this->assertNull( $lookup->getRestPath( 'foowiki' ) );
 	}
 
+	public function testGetScriptPath() {
+		$siteConfig = $this->createMock( SiteConfiguration::class );
+		$siteConfig->method( 'getLocalDatabases' )->willReturn( [ 'foowiki', 'barwiki' ] );
+		$siteConfig->expects( $this->once() )
+			->method( 'get' )
+			->with( 'wgScriptPath', 'barwiki' )
+			->willReturn( '/w2' );
+		$lookup = $this->getLookupWithConfig( $siteConfig );
+		$this->assertSame( '/w2', $lookup->getScriptPath( 'barwiki' ) );
+	}
+
+	public function testGetScriptPath__noWgConf() {
+		$siteConfig = $this->createMock( SiteConfiguration::class );
+		$siteConfig->method( 'getLocalDatabases' )->willReturn( [] );
+		$siteConfig->expects( $this->never() )->method( 'get' );
+		$lookup = $this->getLookupWithConfig( $siteConfig );
+		$this->assertNull( $lookup->getScriptPath( 'barwiki' ) );
+	}
+
+	public function testGetScriptPath__notConfigured() {
+		$siteConfig = $this->createMock( SiteConfiguration::class );
+		$siteConfig->method( 'getLocalDatabases' )->willReturn( [ 'foowiki' ] );
+		$siteConfig->method( 'get' )->willReturn( null );
+		$lookup = $this->getLookupWithConfig( $siteConfig );
+		$this->assertNull( $lookup->getScriptPath( 'foowiki' ) );
+	}
+
 	public function testGetListForSelect() {
 		$localWikis = [ 'foowiki', 'barwiki' ];
 		$lookup = $this->getLookup( $localWikis );

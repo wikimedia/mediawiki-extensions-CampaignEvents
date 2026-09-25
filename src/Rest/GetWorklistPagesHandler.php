@@ -12,6 +12,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkRendererFactory;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\Page\ProperPageIdentity;
@@ -110,7 +111,10 @@ class GetWorklistPagesHandler extends SimpleHandler {
 		// the reader waits on.
 		$wikiInfo = [];
 		foreach ( $wikis as $wiki ) {
-			$wikiInfo[$wiki] = [ 'name' => $wikiNames[$wiki] ];
+			$wikiInfo[$wiki] = [
+				'name' => $wikiNames[$wiki],
+				'api_url' => $this->getApiUrl( $wiki ),
+			];
 		}
 
 		return $this->getResponseFactory()->createJson( [
@@ -181,6 +185,29 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			'url' => $attribs['href'] ?? '',
 			'classes' => $attribs['class'] ?? '',
 		];
+	}
+
+	/**
+	 * The api.php URL of the wiki an article belongs to, so the client can read data about the
+	 * article from the wiki that holds it. Always absolute, because the reader is not necessarily on
+	 * the wiki answering this request. Null when a foreign wiki cannot be resolved from $wgConf.
+	 *
+	 * The ScriptPath is resolved per wiki, falling back to the local one, in the same way as the
+	 * rest.php URL in WorklistModule.
+	 */
+	private function getApiUrl( string $wiki ): ?string {
+		if ( WikiMap::isCurrentWikiId( $wiki ) ) {
+			// Resolved from local config, which works whether or not this wiki is part of a farm.
+			return $this->config->get( MainConfigNames::CanonicalServer ) .
+				$this->config->get( MainConfigNames::ScriptPath ) . '/api.php';
+		}
+		$foreignWiki = WikiMap::getWiki( $wiki );
+		if ( !$foreignWiki ) {
+			return null;
+		}
+		$scriptPath = $this->wikiLookup->getScriptPath( $wiki ) ??
+			$this->config->get( MainConfigNames::ScriptPath );
+		return $foreignWiki->getCanonicalServer() . $scriptPath . '/api.php';
 	}
 
 	/**
