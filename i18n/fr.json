@@ -642,7 +642,6 @@
 	"campaignevents-contributions-summary-articles-edited": "Articles modifiés",
 	"campaignevents-contributions-summary-bytes-changed": "Octets modifiés",
 	"campaignevents-contributions-summary-links-changed": "Liens modifiés",
-	"campaignevents-contributions-summary-delta-separator": "/",
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Annuler",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Ajouter une modification",
 	"campaignevents-event-details-contributions-add-dialog-title": "Ajouter une modification à $1",

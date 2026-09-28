@@ -29,5 +29,7 @@
 	"generateinvitationlist": "Създаване на списък с покани",
 	"myinvitationlists": "Вашите списъци с покани",
 	"invitationlist": "Списък с покани",
-	"campaignevents-invitationlist-preference": "Включване в [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списъци с покани]"
+	"campaignevents-invitationlist-preference": "Включване в [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists списъци с покани]",
+	"prefs-campaignevents-event-discovery": "Откриване на събития",
+	"campaignevents-eventdiscovery-preference-label": "Известяване за свързани събития, след публикуване на редакция"
 }
