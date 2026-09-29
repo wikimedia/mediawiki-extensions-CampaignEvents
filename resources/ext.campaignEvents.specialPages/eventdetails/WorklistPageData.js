@@ -7,6 +7,10 @@
 	 * PageViewInfo's prop=pageviews returns daily counts for the days asked for
 	 * (see WINDOW_DAYS), which the card shows totalled.
 	 *
+	 * `prop=description` resolves a local {{SHORTDESC:}} as well as the description of a linked
+	 * Wikibase item, which is where most articles get theirs from. It is the only source that
+	 * covers both, so it is used despite being marked internal upstream.
+	 *
 	 * Read from the wiki holding each article, not this one: a worklist spans wikis by design,
 	 * and that wiki's api.php comes back with the article.
 	 */
@@ -27,7 +31,9 @@
 	 * Titles per request for everything else.
 	 *
 	 * `action=query` takes fifty, and PageImages answers for all of them, so asking in the
-	 * fives that PageViewInfo needs would be ten times the requests for nothing.
+	 * fives that PageViewInfo needs would be ten times the requests for nothing. Fifty is also
+	 * as many as `prop=description` answers for without a continuation, so this cannot be
+	 * raised without following one.
 	 */
 	const TITLES_PER_REQUEST = 50;
 
@@ -124,7 +130,7 @@
 	 * data, are recorded as having none of it, so they are not asked about again.
 	 *
 	 * @param {Array<{wiki: string, title: string, isLocal: boolean, apiUrl: ?string}>} articles
-	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ views, image }`
+	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ views, image, description }`
 	 */
 	function fetchPageData( articles ) {
 		const unknown = articles.filter( ( article ) => !cache.has( cacheKey( article ) ) );
@@ -187,10 +193,13 @@
 			const titles = wikiArticles.map( ( article ) => article.title );
 
 			ask( api, wiki, titles, TITLES_PER_REQUEST, {
-				prop: 'pageimages',
+				prop: 'pageimages|description',
 				piprop: 'thumbnail',
 				pithumbsize: THUMBNAIL_SIZE
-			}, ( page ) => ( { image: thumbnailOf( page ) } ) );
+			}, ( page ) => ( {
+				image: thumbnailOf( page ),
+				description: page.description || null
+			} ) );
 
 			ask( api, wiki, titles, VIEWS_PER_REQUEST, {
 				prop: 'pageviews',
@@ -202,7 +211,8 @@
 			found.forEach( ( data, key ) => {
 				cache.set( key, {
 					views: data.views || null,
-					image: data.image || null
+					image: data.image || null,
+					description: data.description || null
 				} );
 			} );
 			// Whatever the API did not answer for has nothing to show. Recording that stops the
@@ -210,7 +220,7 @@
 			unknown.forEach( ( article ) => {
 				const key = cacheKey( article );
 				if ( !cache.has( key ) ) {
-					cache.set( key, { views: null, image: null } );
+					cache.set( key, { views: null, image: null, description: null } );
 				}
 			} );
 			return cache;

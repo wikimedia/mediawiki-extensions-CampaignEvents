@@ -42,10 +42,11 @@ function mockApis() {
 
 const pagesResponse = ( entries ) => ( {
 	query: {
-		pages: entries.map( ( [ title, pageviews, thumbnail ] ) => ( {
+		pages: entries.map( ( [ title, pageviews, thumbnail, description ] ) => ( {
 			title: title,
 			pageviews: pageviews,
-			thumbnail: thumbnail
+			thumbnail: thumbnail,
+			description: description
 		} ) )
 	}
 } );
@@ -89,16 +90,16 @@ describe( 'thumbnailOf', () => {
 } );
 
 describe( 'fetchPageData', () => {
-	it( 'asks for the image and the view count apart', async () => {
+	it( 'asks for the image and the description together, the views apart', async () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, WINDOW_DAYS ) ] ] ) );
 
 		await worklistPageData.fetchPageData( [ FOREIGN ] );
 
-		// PageImages answers for every title given; PageViewInfo answers for five. Sharing a
-		// request would mean asking for images five at a time as well.
+		// PageImages and the description answer for every title given; PageViewInfo answers for
+		// five. Sharing one request would mean asking for all of it five at a time.
 		expect( get.mock.calls.map( ( call ) => call[ 0 ].prop ) )
-			.toEqual( [ 'pageimages', 'pageviews' ] );
+			.toEqual( [ 'pageimages|description', 'pageviews' ] );
 	} );
 
 	it( 'asks the API for only the days the card counts', async () => {
@@ -121,8 +122,27 @@ describe( 'fetchPageData', () => {
 
 		await worklistPageData.fetchPageData( [ FOREIGN ] );
 
-		const images = get.mock.calls.find( ( call ) => call[ 0 ].prop === 'pageimages' );
+		const images = get.mock.calls.find( ( call ) => call[ 0 ].prop === 'pageimages|description' );
 		expect( standard ).toContain( images[ 0 ].pithumbsize );
+	} );
+
+	it( 'reads the description of an article from the wiki that holds it', async () => {
+		const get = mockApis();
+		get.mockResolvedValue( pagesResponse( [
+			[ 'Beaver', flat( 2, 60 ), null, 'semiaquatic rodent' ]
+		] ) );
+
+		const data = await worklistPageData.fetchPageData( [ FOREIGN ] );
+		expect( data.get( 'enwiki|Beaver' ).description ).toBe( 'semiaquatic rodent' );
+	} );
+
+	it( 'has no description for an article without one', async () => {
+		// Also covers a wiki with no Wikibase client, which sends no description at all.
+		const get = mockApis();
+		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, 60 ) ] ] ) );
+
+		const data = await worklistPageData.fetchPageData( [ FOREIGN ] );
+		expect( data.get( 'enwiki|Beaver' ).description ).toBeNull();
 	} );
 
 	it( 'reads an article from the wiki that holds it', async () => {
@@ -180,7 +200,7 @@ describe( 'fetchPageData', () => {
 		expect( viewRequests ).toHaveLength( 3 );
 		expect( viewRequests.every( ( call ) => call[ 0 ].titles.length <= 5 ) ).toBe( true );
 		// The images come back in one request, not five.
-		expect( get.mock.calls.filter( ( call ) => call[ 0 ].prop === 'pageimages' ) )
+		expect( get.mock.calls.filter( ( call ) => call[ 0 ].prop === 'pageimages|description' ) )
 			.toHaveLength( 1 );
 		titles.forEach( ( title ) => {
 			expect( data.get( 'enwiki|' + title ).views.count ).toBe( 90 );

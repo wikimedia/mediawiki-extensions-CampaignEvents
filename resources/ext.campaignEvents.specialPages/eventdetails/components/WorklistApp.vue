@@ -63,6 +63,7 @@
 				:added-at="addedFor( article ).addedAt"
 				:views="viewsFor( article )"
 				:image="imageFor( article )"
+				:description="descriptionFor( article )"
 				@remove="onRemoveRequested"
 			></worklist-article-card>
 		</ul>
@@ -430,6 +431,15 @@ module.exports = exports = defineComponent( {
 
 		/**
 		 * @param {Object} article
+		 * @return {?string}
+		 */
+		function descriptionFor( article ) {
+			const known = pageData.value.get( article.wiki + '|' + article.title );
+			return known ? known.description : null;
+		}
+
+		/**
+		 * @param {Object} article
 		 * @return {?Object}
 		 */
 		function imageFor( article ) {
@@ -483,6 +493,7 @@ module.exports = exports = defineComponent( {
 			addedFor,
 			viewsFor,
 			imageFor,
+			descriptionFor,
 			isEmpty,
 			isLoading,
 			errorMessage,

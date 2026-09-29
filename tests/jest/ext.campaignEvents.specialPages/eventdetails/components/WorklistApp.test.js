@@ -425,6 +425,39 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
 		expect( currentPage( wrapper ) ).toEqual( [ '1' ] );
 	} );
+	it( 'shows the description of each article once it arrives', async () => {
+		worklistPageData.fetchPageData.mockResolvedValue( new Map( [
+			[ LOCAL_WIKI + '|Bears', { views: null, image: null,
+				description: 'Large omnivorous mammals' } ]
+		] ) );
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.get( '.cdx-card__text__description' ).text() )
+			.toBe( 'Large omnivorous mammals' );
+	} );
+
+	it( 'shows the description of an article on another wiki', async () => {
+		// The description is read from the wiki holding the article, so a worklist whose pages
+		// live elsewhere — as those on metawiki do — still gets one.
+		worklistPages.fetchPages.mockResolvedValue( {
+			pages: [ article( 'Foreign article', {
+				wiki: 'otherwiki', isLocal: false, classes: 'external'
+			} ) ]
+		} );
+		worklistPageData.fetchPageData.mockResolvedValue( new Map( [
+			[ 'otherwiki|Foreign article', { views: null, image: null,
+				description: 'an article elsewhere' } ]
+		] ) );
+
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.get( '.cdx-card__text__description' ).text() )
+			.toBe( 'an article elsewhere' );
+	} );
+
 	it( 'fills in when the articles were added, after the list has loaded', async () => {
 		worklistPages.fetchMetadata.mockResolvedValue( [ {
 			wiki: LOCAL_WIKI,

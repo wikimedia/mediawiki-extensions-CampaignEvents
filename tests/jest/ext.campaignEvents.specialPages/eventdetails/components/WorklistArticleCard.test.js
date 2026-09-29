@@ -27,6 +27,15 @@ describe( 'WorklistArticleCard', () => {
 	const VIEWS = '.ext-campaignevents-worklist-card__views';
 	const THUMB = '.cdx-thumbnail';
 
+	it( 'shows a description when the article has one', () => {
+		expect( mountCard().find( '.cdx-card__text__description' ).exists() )
+			.toBe( false );
+
+		const described = mountCard( { description: 'Large omnivorous mammals' } );
+		expect( described.get( '.cdx-card__text__description' ).text() )
+			.toBe( 'Large omnivorous mammals' );
+	} );
+
 	it( 'keeps the thumbnail slot even without an image', () => {
 		// Codex draws its placeholder icon, so the titles still line up down the column.
 		const card = mountCard();

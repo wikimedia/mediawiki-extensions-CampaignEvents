@@ -38,6 +38,12 @@
 				</cdx-button>
 			</template>
 
+			<!-- Left out entirely when there is no description: the card renders its container,
+				and its title-only styling, from the slot's presence. -->
+			<template v-if="description" #description>
+				{{ description }}
+			</template>
+
 			<!-- The wiki is only worth naming for an article from elsewhere: two articles with the
 				same title on different wikis would otherwise look identical. Relative to the wiki
 				that answered the request, not the reader's. -->
@@ -135,6 +141,10 @@ module.exports = exports = defineComponent( {
 		},
 		image: {
 			type: Object,
+			default: null
+		},
+		description: {
+			type: String,
 			default: null
 		}
 	},
