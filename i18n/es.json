@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"A.jalate",
 			"Angoca",
 			"Avengium",
 			"Balunhnoh",
@@ -355,6 +356,9 @@
 	"campaignevents-event-details-worklist-add-dialog-submit": "Añadir",
 	"campaignevents-event-details-worklist-add-dialog-success": "{{PLURAL:$1|Artículo añadido|Artículos añadidos}} a la lista de tareas. {{PLURAL:$1|Un nuevo artículo aparacerá|Nuevos artículos aparecerán}} en unos segundos.",
 	"campaignevents-event-details-worklist-add-dialog-error": "No ha sido posible añadir los artículos a la lista de tareas: $1",
+	"campaignevents-event-details-worklist-history-button-label": "Historial del archivo",
+	"campaignevents-event-details-worklist-previous-page": "Anterior",
+	"campaignevents-event-details-worklist-next-page": "Siguiente",
 	"campaignevents-worklist-table-header": "Lista de tareas",
 	"campaignevents-worklist-table-article-column-header": "Página",
 	"campaignevents-worklist-table-wiki-column-header": "Wiki",
