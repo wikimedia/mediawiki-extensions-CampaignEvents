@@ -56,7 +56,7 @@ readonly class WorklistModule {
 		$worklistPageUrl = '';
 		$worklistPageHistoryUrl = '';
 		$worklistWikiRestUrl = null;
-		if ( $eventWikiId === WikiAwareEntity::LOCAL ) {
+		if ( $eventWikiId === WikiAwareEntity::LOCAL || WikiMap::isCurrentWikiId( $eventWikiId ) ) {
 			$eventTitle = Title::newFromPageIdentity( $eventPage->getPageIdentity() );
 			$worklistTitle = $eventTitle->getSubpage(
 				WorklistPageEventIngress::WORKLIST_SUBPAGE
