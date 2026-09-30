@@ -6,9 +6,10 @@
 	 */
 
 	/**
-	 * The REST client for the worklist. The worklist page may live on another wiki, in which case
-	 * the server hands us that wiki's rest.php and we target it directly. Both reading and editing
-	 * go through it, because both act on that page.
+	 * The REST client for editing the worklist. The worklist page may live on another wiki, in
+	 * which case the server hands us that wiki's rest.php and we target it directly, because an
+	 * edit has to land on that page. Reads do not need it: they answer from the shared
+	 * CampaignEvents tables, so any wiki can serve them.
 	 *
 	 * @return {mw.Rest|mw.ForeignRest}
 	 */
@@ -20,14 +21,18 @@
 	/**
 	 * Read the articles in the worklist.
 	 *
-	 * The whole list comes back in one response, for the caller to search and paginate. The
-	 * request goes to the wiki hosting the worklist page, because that is where the articles are.
+	 * The whole list comes back in one response, for the caller to search and paginate.
+	 *
+	 * Read from this wiki rather than the one hosting the worklist page. The articles live in the
+	 * shared CampaignEvents tables, so the answer is the same either way, but which pages count as
+	 * local is decided by the wiki answering: asking here makes that the reader's own wiki, so a
+	 * page on it is named as theirs and links to it carry its red-link status.
 	 *
 	 * @return {jQuery.Promise} Resolves with { pages }
 	 */
 	function fetchPages() {
 		const eventId = mw.config.get( 'wgCampaignEventsWorklistEventId' );
-		return worklistApi().get(
+		return new mw.Rest().get(
 			'/campaignevents/v0/event_registration/' + encodeURIComponent( eventId ) +
 				'/worklist_pages'
 		).then( ( response ) => ( {

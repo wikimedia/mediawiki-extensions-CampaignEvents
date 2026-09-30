@@ -138,18 +138,37 @@ describe( 'worklistPages.fetchPages', () => {
 		} ] );
 	} );
 
-	it( 'reads from the hosting wiki when the worklist page is on another wiki', async () => {
+	it( 'reads from this wiki even when the worklist page is on another', async () => {
 		const foreignRestUrl = 'https://foreign.example.org/w/rest.php';
 		const restGet = mockRest( { wgCampaignEventsWorklistWikiRestUrl: foreignRestUrl } );
-		const foreignGet = jest.fn().mockResolvedValue( EMPTY_RESPONSE );
-		mw.ForeignRest = jest.fn().mockImplementation( () => ( { get: foreignGet } ) );
+		mw.ForeignRest = jest.fn();
 
 		await worklistPages.fetchPages();
 
-		// The articles come from the worklist page, so the read goes to that page's wiki. A local
-		// read could not name that page: its title is formatted by the wiki holding it.
+		// The articles are in the shared tables, so any wiki answers the same. Asking here makes
+		// the response's idea of a local page the reader's own, rather than the worklist page's.
+		expect( restGet ).toHaveBeenCalledWith( EXPECTED_PATH );
+		expect( mw.ForeignRest ).not.toHaveBeenCalled();
+	} );
+
+	it( 'still edits on the wiki hosting the worklist page', async () => {
+		// The read moved to this wiki, but an edit has to land on the page itself, so the write
+		// keeps targeting the wiki holding it.
+		const foreignRestUrl = 'https://foreign.example.org/w/rest.php';
+		mockRest( {
+			wgCampaignEventsWorklistWikiRestUrl: foreignRestUrl,
+			wgCampaignEventsWorklistPagePrefixedText: 'Event:Edrinks/Worklist'
+		} );
+		const ajax = jest.fn().mockResolvedValue( {} );
+		mw.ForeignRest = jest.fn().mockImplementation( () => ( { ajax } ) );
+		mw.user = { tokens: { get: jest.fn().mockReturnValue( 'token' ) } };
+
+		await worklistPages.removeArticle( 'awiki', 'Beavers' );
+
 		expect( mw.ForeignRest ).toHaveBeenCalledWith( foreignRestUrl );
-		expect( foreignGet ).toHaveBeenCalledWith( EXPECTED_PATH );
-		expect( restGet ).not.toHaveBeenCalled();
+		expect( ajax ).toHaveBeenCalledWith(
+			'/campaignevents/v0/worklist/Event%3AEdrinks%2FWorklist/pages',
+			expect.objectContaining( { type: 'PATCH' } )
+		);
 	} );
 } );

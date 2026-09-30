@@ -92,8 +92,9 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			$prefixedText = $page['prefixedtext'];
 			$respVal[] = [
 				'wiki' => $wiki,
-				// Relative to the wiki hosting the worklist page, which answered this request and
-				// is not necessarily the wiki the reader is on; the link attributes say the same.
+				// Relative to the wiki answering this request, as the link attributes are. The
+				// card view asks its own wiki, so that is the reader's; the articles themselves
+				// come from the shared tables and do not depend on who answers.
 				'is_local' => $wiki === $currentWiki,
 				'title' => $prefixedText,
 			] + $this->linkAttributes(
