@@ -72,5 +72,4 @@
 	"campaignevents-rest-param-desc-end-timestamp": "Description of the end path parameter for the get-formatted-time REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-param-desc-wiki": "Description of the wiki path parameter for the event-contributions REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-param-desc-revid": "Description of the revid path parameter for the event-contributions REST API endpoint. Shown in the REST API sandbox."
-
 }
