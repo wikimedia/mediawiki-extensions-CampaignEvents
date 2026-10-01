@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ansony89",
 			"Anterdc99",
 			"Kly"
 		]
@@ -23,5 +24,9 @@
 	"campaignevents-rest-delete-event-nonlocal-error-message": "請刪除您在建立該活動的 wiki $1上的活動報名。",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "請發送電郵給建立該活動的 wiki $1上的參與者。",
 	"campaignevents-rest-contribution-not-found": "此 ID 下沒有任何貢獻。",
-	"campaignevents-rest-delete-contribution-permission-denied": "您不被允許刪除此貢獻。"
+	"campaignevents-rest-delete-contribution-permission-denied": "您不被允許刪除此貢獻。",
+	"campaignevents-rest-param-desc-event-page": "本地維基上該事件頁面的標題。",
+	"campaignevents-rest-param-desc-remove-participants-invert-users": "若屬實，請移除除user_ids中所列者以外的所有參與者。",
+	"campaignevents-rest-param-desc-email-user-ids": "要納入或排除的中央使用者ID（取決於invert_users）。",
+	"campaignevents-rest-param-desc-revid": "目標維基上的修訂ID。"
 }

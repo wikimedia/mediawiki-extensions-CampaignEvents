@@ -14,5 +14,7 @@
 	"campaignevents-rest-get-registration-info-notparticipant": "Dir sidd net Participant bei dësem Element.",
 	"campaignevents-rest-register-invalid-answer": "Ongülteg Äntwert op d'Fro $1",
 	"campaignevents-rest-contribution-not-found": "Et gëtt keng Kontributioun mat dëser ID.",
-	"campaignevents-rest-delete-contribution-permission-denied": "Dir sidd net berechtegt, fir dës Kontributioun ze läschen."
+	"campaignevents-rest-delete-contribution-permission-denied": "Dir sidd net berechtegt, fir dës Kontributioun ze läschen.",
+	"campaignevents-rest-param-desc-event-page": "Titel vun der Säit fir dëst Evenement op der lokaler Wiki.",
+	"campaignevents-rest-param-desc-revid": "Versiouns-ID op der Zil-Wiki."
 }

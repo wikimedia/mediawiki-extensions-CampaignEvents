@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Beta empire",
 			"MagicAho",
 			"MathXplore",
 			"Omotecho",
@@ -12,5 +13,7 @@
 	"campaignevents-rest-edit-page-nonlocal": "このイベントの登録は次のウィキで受け付けているため、そちらを編集してください:$1。",
 	"campaignevents-rest-delete-already-deleted": "このイベント登録は既に削除されています。",
 	"campaignevents-rest-get-registration-deleted": "このイベント登録は削除されました。",
-	"campaignevents-rest-register-invalid-answer": "質問に対する無効な答え$1"
+	"campaignevents-rest-register-invalid-answer": "質問に対する無効な答え$1",
+	"campaignevents-rest-param-desc-event-page": "ローカルWikiにおけるこのイベントのページタイトル。",
+	"campaignevents-rest-param-desc-remove-participants-invert-users": "もしそうであれば、user_idsに含まれる参加者以外のすべての参加者を削除します。"
 }

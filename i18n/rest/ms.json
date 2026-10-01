@@ -23,5 +23,6 @@
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Sila padamkan pendaftaran acara anda pada $1, yakni wiki acara itu dicipta.",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "Sila e-mel peserta pada $1, yakni wiki acara itu dicipta.",
 	"campaignevents-rest-contribution-not-found": "Tiada sumbangan dengan ID ini.",
-	"campaignevents-rest-delete-contribution-permission-denied": "Anda tidak dibenarkan memadamkan sumbangan ini."
+	"campaignevents-rest-delete-contribution-permission-denied": "Anda tidak dibenarkan memadamkan sumbangan ini.",
+	"campaignevents-rest-param-desc-id": "ID berangka pendaftaran acara."
 }
