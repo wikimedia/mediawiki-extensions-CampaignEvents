@@ -32,7 +32,10 @@
 			"ߒߓߋ߫ ߝߏߝߣߊ߫",
 			"Asteralee",
 			"Codeurluce",
-			"Framawiki"
+			"Framawiki",
+			"Aquasen",
+			"Geugeor-WMF",
+			"Raveloaritiana Mamisoa"
 		]
 	},
 	"campaignevents-desc": "Fournit des fonctionnalités aux organisateurs de campagne et aux participants.",
@@ -640,6 +643,5 @@
 	"campaignevents-contributions-summary-articles-created": "Articles créés",
 	"campaignevents-contributions-summary-articles-edited": "Articles modifiés",
 	"campaignevents-contributions-summary-bytes-changed": "Octets modifiés",
-	"campaignevents-contributions-summary-links-changed": "Liens modifiés",
-	"campaignevents-contributions-summary-delta-separator": "/"
+	"campaignevents-contributions-summary-links-changed": "Liens modifiés"
 }
