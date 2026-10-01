@@ -24,12 +24,8 @@
 				}}
 			</template>
 
-			<!-- OOUI title-search input (Codex has none); selecting a result appends to the
-				textarea below. -->
-			<div
-				ref="searchContainer"
-				class="ext-campaignevents-event-details-worklist-add-dialog-search"
-			></div>
+			<!-- Picking a result appends it to the textarea below. -->
+			<worklist-article-search @choose="appendTitle"></worklist-article-search>
 		</cdx-field>
 		<cdx-field>
 			<template #help-text>
@@ -57,9 +53,10 @@
 </template>
 
 <script>
-const { defineComponent, ref, watch, nextTick } = require( 'vue' );
+const { defineComponent, ref, watch } = require( 'vue' );
 const { CdxButton, CdxDialog, CdxField, CdxTextArea, CdxMessage, CdxIcon } = require( '../../../codex.js' );
 const { cdxIconAdd } = require( '../../../icons.json' );
+const WorklistArticleSearch = require( './WorklistArticleSearch.vue' );
 
 module.exports = exports = defineComponent( {
 	name: 'AddWorklistArticleDialog',
@@ -69,14 +66,14 @@ module.exports = exports = defineComponent( {
 		CdxField,
 		CdxTextArea,
 		CdxMessage,
-		CdxIcon
+		CdxIcon,
+		WorklistArticleSearch
 	},
 	emits: [ 'added' ],
 	setup( props, { emit } ) {
 		const open = ref( false );
 		// One article title per line; the user only enters the title (the wiki is the current one).
 		const articlesText = ref( '' );
-		const searchContainer = ref( null );
 		const hasMessage = ref( false );
 		const message = ref( '' );
 		const messageType = ref( 'error' );
@@ -84,9 +81,6 @@ module.exports = exports = defineComponent( {
 			label: mw.msg( 'campaignevents-event-details-worklist-add-dialog-submit' ),
 			actionType: 'progressive'
 		};
-		const searchPlaceholder = mw.msg( 'campaignevents-event-details-worklist-add-dialog-search-placeholder' );
-
-		let searchWidget = null;
 		let submitting = false;
 
 		/**
@@ -115,44 +109,8 @@ module.exports = exports = defineComponent( {
 				.filter( ( line ) => line !== '' );
 		}
 
-		/**
-		 * Create the OOUI title-search widget on first use and (re)attach it to the dialog, which
-		 * is only rendered in the DOM while open.
-		 */
-		function mountSearchWidget() {
-			if ( !searchWidget ) {
-				searchWidget = new mw.widgets.TitleInputWidget( {
-					placeholder: searchPlaceholder,
-					namespace: 0,
-					// Allow searching for and adding pages that do not exist yet (shown as red
-					// links in the menu), so participants can queue articles to create.
-					addQueryInput: true,
-					showMissing: true,
-					validateTitle: false
-				} );
-				// Append the chosen title to the textarea and clear the search. The menu's public
-				// 'choose' event fires both when a suggestion is picked and, because addQueryInput
-				// is set, when the free-typed query row is chosen (click or Enter), so no separate
-				// 'enter' handler is needed.
-				searchWidget.lookupMenu.on( 'choose', ( item ) => {
-					appendTitle( item.getData() );
-					searchWidget.setValue( '' );
-				} );
-			}
-			// The container ref lives inside CdxDialog, which teleports (and transitions) its
-			// contents into the DOM only while open. This runs on the nextTick after `open`
-			// becomes true, but the dialog's content isn't guaranteed to be rendered by then,
-			// so guard against the ref not yet being set to avoid appending to null.
-			if ( searchContainer.value ) {
-				searchWidget.setValue( '' );
-				searchContainer.value.appendChild( searchWidget.$element[ 0 ] );
-			}
-		}
-
 		watch( open, ( isOpen ) => {
-			if ( isOpen ) {
-				nextTick( mountSearchWidget );
-			} else {
+			if ( !isOpen ) {
 				hasMessage.value = false;
 			}
 		} );
@@ -241,11 +199,11 @@ module.exports = exports = defineComponent( {
 		return {
 			open,
 			articlesText,
-			searchContainer,
 			hasMessage,
 			message,
 			messageType,
 			primaryAction,
+			appendTitle,
 			onSubmit,
 			cdxIconAdd
 		};

@@ -59,7 +59,16 @@ global.mw = {
 		deprecate: jest.fn()
 	} ) ),
 	util: {
-		getUrl: jest.fn( ( pageName ) => '/wiki/' + pageName )
+		getUrl: jest.fn( ( pageName ) => '/wiki/' + pageName ),
+		// Trailing-edge only, like mw.util.debounce without `immediate`. Built on setTimeout, so
+		// tests can drive it with fake timers.
+		debounce: ( func, wait ) => {
+			let timeout;
+			return ( ...args ) => {
+				clearTimeout( timeout );
+				timeout = setTimeout( () => func( ...args ), wait );
+			};
+		}
 	},
 	language: {
 		convertNumber: jest.fn( ( num ) => String( num ) ),

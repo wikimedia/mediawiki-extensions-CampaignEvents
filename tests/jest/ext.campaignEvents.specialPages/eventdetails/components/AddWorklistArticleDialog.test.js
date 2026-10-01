@@ -1,6 +1,6 @@
 'use strict';
 
-/* global document, setTimeout */
+/* global setTimeout */
 
 const { mount } = require( '@vue/test-utils' );
 const { nextTick } = require( 'vue' );
@@ -8,44 +8,21 @@ const AddWorklistArticleDialog = require( '../../../../../resources/ext.campaign
 
 const ADD_BUTTON = '.ext-campaignevents-event-details-worklist-add-button';
 
-// Captured from the stubbed search widget so tests can drive the 'choose' flow directly.
-let chooseHandler;
-let searchSetValue;
-
-// Minimal stand-in for mw.widgets.TitleInputWidget: the component only uses lookupMenu.on(),
-// setValue() and $element when (re)mounting the widget.
-const makeSearchWidgetStub = () => {
-	chooseHandler = null;
-	searchSetValue = jest.fn();
-	return {
-		lookupMenu: {
-			on: ( eventName, handler ) => {
-				if ( eventName === 'choose' ) {
-					chooseHandler = handler;
-				}
-			}
-		},
-		setValue: searchSetValue,
-		$element: [ document.createElement( 'div' ) ]
-	};
-};
-
 const mountDialog = () => {
-	mw.widgets = {
-		TitleInputWidget: jest.fn().mockImplementation( makeSearchWidgetStub )
-	};
+	// For the article search, which has its own tests.
+	mw.Api = jest.fn( () => ( { get: jest.fn() } ) );
 	return mount( AddWorklistArticleDialog );
 };
 
-// Opening is watched; the search widget is (re)mounted on the following tick, which registers
-// the 'choose' handler. Two ticks: one for the watcher, one for its nextTick( mountSearchWidget ).
+// The dialog content, including the article search, is only rendered while open.
 const openDialog = async ( wrapper ) => {
 	wrapper.vm.open = true;
 	await nextTick();
-	await nextTick();
 };
 
-const chooseTitle = ( title ) => chooseHandler( { getData: () => title } );
+const chooseTitle = ( wrapper, title ) => wrapper
+	.getComponent( { name: 'WorklistArticleSearch' } )
+	.vm.$emit( 'choose', title );
 
 describe( 'AddWorklistArticleDialog', () => {
 	it( 'is closed initially', () => {
@@ -73,29 +50,27 @@ describe( 'AddWorklistArticleDialog', () => {
 		expect( wrapper.vm.primaryAction.actionType ).toBe( 'progressive' );
 	} );
 
-	it( 'creates the title search widget and listens for its choose event when opened', async () => {
+	it( 'renders the article search when opened', async () => {
 		const wrapper = mountDialog();
 		await openDialog( wrapper );
-		expect( mw.widgets.TitleInputWidget ).toHaveBeenCalledTimes( 1 );
-		expect( typeof chooseHandler ).toBe( 'function' );
+		expect( wrapper.findComponent( { name: 'WorklistArticleSearch' } ).exists() ).toBe( true );
 	} );
 
-	it( 'appends a chosen title to the textarea and clears the search', async () => {
+	it( 'appends a chosen title to the textarea', async () => {
 		const wrapper = mountDialog();
 		await openDialog( wrapper );
 
-		chooseTitle( 'Moon' );
+		chooseTitle( wrapper, 'Moon' );
 
 		expect( wrapper.vm.articlesText ).toBe( 'Moon' );
-		expect( searchSetValue ).toHaveBeenCalledWith( '' );
 	} );
 
 	it( 'appends multiple titles one per line', async () => {
 		const wrapper = mountDialog();
 		await openDialog( wrapper );
 
-		chooseTitle( 'Moon' );
-		chooseTitle( 'Sun' );
+		chooseTitle( wrapper, 'Moon' );
+		chooseTitle( wrapper, 'Sun' );
 
 		expect( wrapper.vm.articlesText ).toBe( 'Moon\nSun' );
 	} );
@@ -104,8 +79,8 @@ describe( 'AddWorklistArticleDialog', () => {
 		const wrapper = mountDialog();
 		await openDialog( wrapper );
 
-		chooseTitle( 'Moon' );
-		chooseTitle( 'Moon' );
+		chooseTitle( wrapper, 'Moon' );
+		chooseTitle( wrapper, 'Moon' );
 
 		expect( wrapper.vm.articlesText ).toBe( 'Moon' );
 	} );
@@ -114,7 +89,7 @@ describe( 'AddWorklistArticleDialog', () => {
 		const wrapper = mountDialog();
 		await openDialog( wrapper );
 
-		chooseTitle( '  Moon  ' );
+		chooseTitle( wrapper, '  Moon  ' );
 
 		expect( wrapper.vm.articlesText ).toBe( 'Moon' );
 	} );
@@ -123,7 +98,7 @@ describe( 'AddWorklistArticleDialog', () => {
 		const wrapper = mountDialog();
 		await openDialog( wrapper );
 
-		chooseTitle( '   ' );
+		chooseTitle( wrapper, '   ' );
 
 		expect( wrapper.vm.articlesText ).toBe( '' );
 	} );
