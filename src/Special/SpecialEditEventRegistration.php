@@ -154,7 +154,7 @@ class SpecialEditEventRegistration extends AbstractEventRegistrationSpecialPage 
 			],
 			$this->getContext()
 		)
-			->setSubmitCallback( [ $this, 'onFormSubmit' ] )
+			->setSubmitCallback( $this->onFormSubmit( ... ) )
 			->show();
 	}
 

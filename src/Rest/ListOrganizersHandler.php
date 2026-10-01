@@ -53,7 +53,7 @@ class ListOrganizersHandler extends SimpleHandler {
 				'user_id' => $user->getCentralID(),
 				'user_name' => $userName,
 				// TODO Should these be localized? It doesn't seem possible right now anyway (T269492)
-				'roles' => array_map( [ $this->roleFormatter, 'getDebugName' ], $organizer->getRoles() ),
+				'roles' => array_map( $this->roleFormatter->getDebugName( ... ), $organizer->getRoles() ),
 				'user_page' => $this->userLinker->getUserPagePath( $user ),
 			];
 		}

@@ -166,7 +166,7 @@ abstract class ChangeRegistrationSpecialPageBase extends FormSpecialPage {
 			],
 			$this->getContext()
 		)
-			->setSubmitCallback( [ $this, 'onFormSubmit' ] )
+			->setSubmitCallback( $this->onFormSubmit( ... ) )
 			->show();
 	}
 

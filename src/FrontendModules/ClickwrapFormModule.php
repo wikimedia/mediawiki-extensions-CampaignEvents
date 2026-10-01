@@ -39,7 +39,7 @@ class ClickwrapFormModule {
 		);
 		$form = $this->createForm( $context )
 			->setAction( $action )
-			->setSubmitCallback( [ $this, 'processInput' ] )
+			->setSubmitCallback( $this->processInput( ... ) )
 			->suppressDefaultSubmit()
 			->setPreHtml( $formIntro )
 			->prepareForm();

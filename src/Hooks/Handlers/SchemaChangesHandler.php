@@ -167,7 +167,7 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 		] );
 		$updater->addExtensionUpdateOnVirtualDomain( [
 			Utils::VIRTUAL_DB_DOMAIN,
-			[ $this, 'migrateAndDropWorklistArticlesTable' ]
+			$this->migrateAndDropWorklistArticlesTable( ... )
 		] );
 	}
 
