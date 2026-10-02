@@ -11,8 +11,8 @@ use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
- * This service can be used to obtain a list of valid wiki IDs in the current wiki family, and localized names
- * for them when available.
+ * This service can be used to obtain a list of valid wiki IDs in the current wiki family, localized names
+ * for them when available, and the URLs of their APIs.
  */
 class WikiLookup {
 	public const SERVICE_NAME = 'CampaignEventsWikiLookup';
@@ -85,6 +85,55 @@ class WikiLookup {
 			$ret[ htmlspecialchars( $name ) ] = $value;
 		}
 		return $ret;
+	}
+
+	/**
+	 * Like {@see self::getLocalizedNames()} for every wiki in {@see self::getAllWikis()}, but cached,
+	 * since computing the names for all wikis is expensive on large farms.
+	 *
+	 * @return array<string,string> Maps wiki IDs to raw names, needs escaping before use in HTML.
+	 */
+	public function getAllLocalizedNames(): array {
+		return $this->cache->getWithSetCallback(
+			$this->cache->makeGlobalKey( 'CampaignEvents-AllWikisLocalizedNames', $this->languageCode ),
+			WANObjectCache::TTL_HOUR,
+			/** @return array<string,string> */
+			fn (): array => $this->getLocalizedNames( $this->getAllWikis() )
+		);
+	}
+
+	/**
+	 * URL of the action API (api.php) of each given wiki.
+	 *
+	 * @param string[] $wikiIDs
+	 * @param string $defaultScriptPath Used for wikis whose own ScriptPath can't be determined
+	 * @return array<string,string|null> Maps wiki IDs to URLs, or null where the wiki is unknown
+	 */
+	public function getApiUrls( array $wikiIDs, string $defaultScriptPath ): array {
+		$ret = [];
+		foreach ( $wikiIDs as $wikiID ) {
+			$wiki = WikiMap::getWiki( $wikiID );
+			$ret[$wikiID] = $wiki
+				? $wiki->getCanonicalServer() . ( $this->getScriptPath( $wikiID ) ?? $defaultScriptPath ) . '/api.php'
+				: null;
+		}
+		return $ret;
+	}
+
+	/**
+	 * Like {@see self::getApiUrls()} for every wiki in {@see self::getAllWikis()}, but cached, since
+	 * resolving every wiki of a large farm on each request is expensive.
+	 *
+	 * @param string $defaultScriptPath Used for wikis whose own ScriptPath can't be determined
+	 * @return array<string,string|null> Maps wiki IDs to URLs, or null where the wiki is unknown
+	 */
+	public function getAllApiUrls( string $defaultScriptPath ): array {
+		return $this->cache->getWithSetCallback(
+			$this->cache->makeGlobalKey( 'CampaignEvents-AllWikisApiUrls', $defaultScriptPath ),
+			WANObjectCache::TTL_HOUR,
+			/** @return array<string,string|null> */
+			fn (): array => $this->getApiUrls( $this->getAllWikis(), $defaultScriptPath )
+		);
 	}
 
 	/**

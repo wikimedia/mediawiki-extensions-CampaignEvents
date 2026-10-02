@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
@@ -86,6 +87,13 @@ readonly class WorklistModule {
 			'wgCampaignEventsWorklistPageHistoryUrl' => $worklistPageHistoryUrl,
 			'wgCampaignEventsWorklistWikiRestUrl' => $worklistWikiRestUrl,
 		] );
+		// Only named users can add articles, so only they need the (potentially long) list of wikis.
+		if ( $this->output->getUser()->isNamed() ) {
+			$this->output->addJsConfigVars(
+				'wgCampaignEventsWorklistWikiOptions',
+				$this->getWikiOptions()
+			);
+		}
 
 		$container = new Tag( 'div' );
 		if ( $this->getRequestedView() === self::VIEW_TABLE ) {
@@ -96,6 +104,46 @@ readonly class WorklistModule {
 			$container->appendContent( new HtmlSnippet( $this->renderCardView() ) );
 		}
 		return $container;
+	}
+
+	/**
+	 * The wikis that articles can be added to: those of the event, or every wiki for an event that
+	 * covers all wikis. An event with no wikis falls back to the current wiki, as before the wiki
+	 * selector existed.
+	 *
+	 * Each option also has the URL of the wiki's action API, for searching its articles; it is null
+	 * for the current wiki, which the frontend searches locally, and for wikis that can't be
+	 * resolved, which then can't be searched.
+	 *
+	 * @return list<array{value:string,label:string,apiUrl:string|null}> The current wiki first, as
+	 *   on the event details, then the others sorted by label; labels are raw text.
+	 */
+	private function getWikiOptions(): array {
+		$wikis = $this->event->getWikis();
+		$scriptPath = $this->output->getConfig()->get( MainConfigNames::ScriptPath );
+		if ( $wikis === EventRegistration::ALL_WIKIS ) {
+			$names = $this->wikiLookup->getAllLocalizedNames();
+			$apiUrls = $this->wikiLookup->getAllApiUrls( $scriptPath );
+		} else {
+			$wikis = $wikis ?: [ WikiMap::getCurrentWikiId() ];
+			$names = $this->wikiLookup->getLocalizedNames( $wikis );
+			$apiUrls = $this->wikiLookup->getApiUrls( $wikis, $scriptPath );
+		}
+		asort( $names, SORT_NATURAL | SORT_FLAG_CASE );
+		$currentWiki = WikiMap::getCurrentWikiId();
+		if ( isset( $names[$currentWiki] ) ) {
+			$names = [ $currentWiki => $names[$currentWiki] ] + $names;
+		}
+		$options = [];
+		foreach ( $names as $wikiID => $name ) {
+			$wikiID = (string)$wikiID;
+			$options[] = [
+				'value' => $wikiID,
+				'label' => $name,
+				'apiUrl' => $wikiID === $currentWiki ? null : ( $apiUrls[$wikiID] ?? null ),
+			];
+		}
+		return $options;
 	}
 
 	/**

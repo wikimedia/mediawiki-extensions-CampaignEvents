@@ -135,6 +135,14 @@ class WikiLookupTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedLocalized, $lookup->getLocalizedNames( array_keys( $expectedLocalized ) ) );
 	}
 
+	public function testGetAllLocalizedNames() {
+		$lookup = $this->getLookup( [ 'foowiki', 'barwiki' ] );
+		$this->assertSame(
+			[ 'foowiki' => '(project-localized-name-foowiki)', 'barwiki' => '(project-localized-name-barwiki)' ],
+			$lookup->getAllLocalizedNames()
+		);
+	}
+
 	public function testGetLocalizedNames__cacheVariesByLanguage() {
 		$testWiki = 'frwiki';
 		$msgKey = "project-localized-name-$testWiki";

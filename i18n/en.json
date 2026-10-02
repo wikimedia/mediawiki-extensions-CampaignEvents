@@ -330,6 +330,8 @@
 	"campaignevents-event-details-worklist-view-page": "Go to worklist wiki page",
 	"campaignevents-event-details-worklist-add-button-label": "Add to worklist",
 	"campaignevents-event-details-worklist-add-dialog-title": "Add to worklist",
+	"campaignevents-event-details-worklist-add-dialog-wiki-label": "Wiki",
+	"campaignevents-event-details-worklist-add-dialog-wiki-placeholder": "Search for a wiki",
 	"campaignevents-event-details-worklist-add-dialog-article-label": "Article name",
 	"campaignevents-event-details-worklist-add-dialog-article-help": "Paste one article name per line",
 	"campaignevents-event-details-worklist-add-dialog-search-placeholder": "Search for an article",

@@ -337,6 +337,8 @@
 	"campaignevents-event-details-worklist-view-page": "Label of the link, shown below the list of worklist pages, that opens the worklist wiki page (shown only when that page can be resolved).",
 	"campaignevents-event-details-worklist-add-button-label": "Label of the button that opens the dialog for adding pages to the worklist, in the worklist toolbar and in the worklist table header on [[Special:EventDetails]].",
 	"campaignevents-event-details-worklist-add-dialog-title": "Title of the dialog for adding articles to the worklist.",
+	"campaignevents-event-details-worklist-add-dialog-wiki-label": "Label for the field where the user chooses which wiki the articles added to the worklist are on. Only shown when the event covers wikis other than the current one.",
+	"campaignevents-event-details-worklist-add-dialog-wiki-placeholder": "Placeholder for the searchable wiki field in the dialog for adding articles to the worklist, used when the event covers many wikis.",
 	"campaignevents-event-details-worklist-add-dialog-article-label": "Label for the field where the user enters article titles to add to the worklist.",
 	"campaignevents-event-details-worklist-add-dialog-article-help": "Help text under the article field, explaining that one article title should be entered per line.",
 	"campaignevents-event-details-worklist-add-dialog-search-placeholder": "Placeholder for the article search/autocomplete input in the \"add to worklist\" dialog.",

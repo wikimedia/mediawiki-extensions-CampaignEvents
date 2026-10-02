@@ -17,6 +17,12 @@
 		:primary-action="primaryAction"
 		@primary="onSubmit"
 	>
+		<worklist-wiki-selector
+			v-if="showWikiSelector"
+			v-model:selected="selectedWiki"
+			:options="wikiOptions"
+		></worklist-wiki-selector>
+
 		<cdx-field>
 			<template #label>
 				{{
@@ -24,8 +30,14 @@
 				}}
 			</template>
 
-			<!-- Picking a result appends it to the textarea below. -->
-			<worklist-article-search @choose="appendTitle"></worklist-article-search>
+			<!-- Picking a result appends it to the textarea below. Searches the selected wiki,
+				and is recreated when that changes; missing when the wiki can't be searched. -->
+			<worklist-article-search
+				v-if="searchApi"
+				:key="selectedWiki"
+				:api="searchApi"
+				@choose="appendTitle"
+			></worklist-article-search>
 		</cdx-field>
 		<cdx-field>
 			<template #help-text>
@@ -53,10 +65,12 @@
 </template>
 
 <script>
-const { defineComponent, ref, watch } = require( 'vue' );
+const { defineComponent, ref, computed, watch } = require( 'vue' );
 const { CdxButton, CdxDialog, CdxField, CdxTextArea, CdxMessage, CdxIcon } = require( '../../../codex.js' );
 const { cdxIconAdd } = require( '../../../icons.json' );
 const WorklistArticleSearch = require( './WorklistArticleSearch.vue' );
+const WorklistWikiSelector = require( './WorklistWikiSelector.vue' );
+const useWorklistWikiOptions = require( '../composables/useWorklistWikiOptions.js' );
 
 module.exports = exports = defineComponent( {
 	name: 'AddWorklistArticleDialog',
@@ -67,20 +81,26 @@ module.exports = exports = defineComponent( {
 		CdxTextArea,
 		CdxMessage,
 		CdxIcon,
-		WorklistArticleSearch
+		WorklistArticleSearch,
+		WorklistWikiSelector
 	},
 	emits: [ 'added' ],
 	setup( props, { emit } ) {
 		const open = ref( false );
-		// One article title per line; the user only enters the title (the wiki is the current one).
+		// One article title per line; the user only enters the title, the wiki is the selected one.
 		const articlesText = ref( '' );
 		const hasMessage = ref( false );
 		const message = ref( '' );
 		const messageType = ref( 'error' );
-		const primaryAction = {
+
+		const { wikiOptions, showWikiSelector, selectedWiki, searchApi } = useWorklistWikiOptions();
+
+		const primaryAction = computed( () => ( {
 			label: mw.msg( 'campaignevents-event-details-worklist-add-dialog-submit' ),
-			actionType: 'progressive'
-		};
+			actionType: 'progressive',
+			// The lookup has no selection while the user is typing a wiki name.
+			disabled: !selectedWiki.value
+		} ) );
 		let submitting = false;
 
 		/**
@@ -141,14 +161,14 @@ module.exports = exports = defineComponent( {
 		}
 
 		/**
-		 * Save the given titles (all on the current wiki) to the worklist.
+		 * Save the given titles (all on the given wiki) to the worklist.
 		 *
+		 * @param {string} wiki
 		 * @param {string[]} titles
 		 * @return {jQuery.Promise}
 		 */
-		function saveArticles( titles ) {
+		function saveArticles( wiki, titles ) {
 			const worklistPage = mw.config.get( 'wgCampaignEventsWorklistPagePrefixedText' );
-			const wiki = mw.config.get( 'wgDBname' );
 			// The worklist pages endpoint takes a delta, so this is a PATCH. mw.Rest has no
 			// patch() helper, so call ajax() with the PATCH verb directly.
 			// The worklist page may be on another wiki; when it is, the server passes that
@@ -173,15 +193,17 @@ module.exports = exports = defineComponent( {
 			if ( submitting ) {
 				return;
 			}
-			const titles = getArticleTitles();
-			if ( !titles.length ) {
+			// The server only normalizes titles of its own wiki (T353916), so at least turn
+			// underscores into spaces, which is safe on every wiki.
+			const titles = getArticleTitles().map( ( title ) => title.replace( /_/g, ' ' ) );
+			if ( !titles.length || !selectedWiki.value ) {
 				return;
 			}
 			submitting = true;
 
 			// Non-existent pages are allowed on purpose (participants may create them during the
 			// event), so the titles are saved without an existence check.
-			saveArticles( titles ).then( () => {
+			saveArticles( selectedWiki.value, titles ).then( () => {
 				mw.notify(
 					mw.msg( 'campaignevents-event-details-worklist-add-dialog-success', mw.language.convertNumber( titles.length ) ),
 					{ type: 'success' }
@@ -202,6 +224,10 @@ module.exports = exports = defineComponent( {
 			hasMessage,
 			message,
 			messageType,
+			wikiOptions,
+			showWikiSelector,
+			selectedWiki,
+			searchApi,
 			primaryAction,
 			appendTitle,
 			onSubmit,
