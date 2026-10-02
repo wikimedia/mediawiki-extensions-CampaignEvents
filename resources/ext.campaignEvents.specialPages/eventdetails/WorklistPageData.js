@@ -8,11 +8,27 @@
 	 * card shows the most recent 30 totalled.
 	 *
 	 * Read from the wiki holding each article, not this one: a worklist spans wikis by design,
-	 * and that wiki's api.php comes back with the article. One request per wiki covers every
-	 * piece of data, so adding another costs no extra round trip.
+	 * and that wiki's api.php comes back with the article.
 	 */
 
-	/** action=query accepts at most 50 titles per request. */
+	/**
+	 * Titles per request when asking for view counts.
+	 *
+	 * PageViewInfo looks up only
+	 * $wgPageViewInfoWikimediaRequestLimit of the titles it is given — five, as Wikimedia
+	 * configures it — and leaves the rest to a continuation it is on the caller to follow.
+	 * Asking in batches that small gets every count in one round of parallel requests, where
+	 * following the continuation would serialise them, each token depending on the response
+	 * before it. Counts are asked for on their own because of it; see TITLES_PER_REQUEST.
+	 */
+	const VIEWS_PER_REQUEST = 5;
+
+	/**
+	 * Titles per request for everything else.
+	 *
+	 * `action=query` takes fifty, and PageImages answers for all of them, so asking in the
+	 * fives that PageViewInfo needs would be ten times the requests for nothing.
+	 */
 	const TITLES_PER_REQUEST = 50;
 
 	/** How far back the count reaches. The API returns 60 days; the card shows the last 30. */
@@ -112,41 +128,69 @@
 			byWiki.get( article.wiki ).push( article );
 		} );
 
+		// Answers are collected here rather than written straight to the cache, because the two
+		// kinds of request each carry part of what a card needs and either may fail on its own.
+		const found = new Map();
 		const requests = [];
+
+		/**
+		 * One request per batch of titles, against the wiki's own API.
+		 *
+		 * A failure leaves the cards as they are: a card is complete without any of this, so
+		 * nothing is surfaced to the reader.
+		 *
+		 * @param {mw.Api|mw.ForeignApi} api
+		 * @param {string} wiki
+		 * @param {string[]} titles
+		 * @param {number} perRequest
+		 * @param {Object} params Query parameters beyond the titles
+		 * @param {Function} take Called with each page of the response, returning what to keep
+		 */
+		function ask( api, wiki, titles, perRequest, params, take ) {
+			for ( let i = 0; i < titles.length; i += perRequest ) {
+				requests.push( api.get( Object.assign( {
+					action: 'query',
+					titles: titles.slice( i, i + perRequest ),
+					format: 'json',
+					formatversion: 2
+				}, params ) ).then( ( response ) => {
+					const pages = ( response.query && response.query.pages ) || [];
+					pages.forEach( ( page ) => {
+						const key = wiki + '|' + page.title;
+						// Merged field by field, so one kind of request cannot blank what the
+						// other found.
+						found.set( key, Object.assign( {}, found.get( key ), take( page ) ) );
+					} );
+				}, () => {} ) );
+			}
+		}
+
 		byWiki.forEach( ( wikiArticles ) => {
 			const api = apiFor( wikiArticles[ 0 ] );
 			if ( !api ) {
 				return;
 			}
 			const wiki = wikiArticles[ 0 ].wiki;
-			for ( let i = 0; i < wikiArticles.length; i += TITLES_PER_REQUEST ) {
-				const batch = wikiArticles.slice( i, i + TITLES_PER_REQUEST );
-				requests.push( api.get( {
-					action: 'query',
-					// Both in one request: each is a separate extension on the wiki, and either may
-					// be missing, but neither costs an extra round trip.
-					prop: 'pageviews|pageimages',
-					piprop: 'thumbnail',
-					pithumbsize: THUMBNAIL_SIZE,
-					titles: batch.map( ( article ) => article.title ),
-					format: 'json',
-					formatversion: 2
-				} ).then( ( response ) => {
-					const pages = ( response.query && response.query.pages ) || [];
-					pages.forEach( ( page ) => {
-						cache.set( wiki + '|' + page.title, {
-							views: summarise( page.pageviews ),
-							image: thumbnailOf( page )
-						} );
-					} );
-				}, () => {
-					// The card is complete without a view count, so a failed request leaves the
-					// cards as they are rather than being surfaced to the reader.
-				} ) );
-			}
+			const titles = wikiArticles.map( ( article ) => article.title );
+
+			ask( api, wiki, titles, TITLES_PER_REQUEST, {
+				prop: 'pageimages',
+				piprop: 'thumbnail',
+				pithumbsize: THUMBNAIL_SIZE
+			}, ( page ) => ( { image: thumbnailOf( page ) } ) );
+
+			ask( api, wiki, titles, VIEWS_PER_REQUEST, {
+				prop: 'pageviews'
+			}, ( page ) => ( { views: summarise( page.pageviews ) } ) );
 		} );
 
 		return Promise.all( requests ).then( () => {
+			found.forEach( ( data, key ) => {
+				cache.set( key, {
+					views: data.views || null,
+					image: data.image || null
+				} );
+			} );
 			// Whatever the API did not answer for has nothing to show. Recording that stops the
 			// same articles being asked about on every page turn.
 			unknown.forEach( ( article ) => {

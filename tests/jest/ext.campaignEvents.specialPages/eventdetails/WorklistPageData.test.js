@@ -90,14 +90,16 @@ describe( 'thumbnailOf', () => {
 } );
 
 describe( 'fetchPageData', () => {
-	it( 'asks for the views and the image in one request', async () => {
+	it( 'asks for the image and the view count apart', async () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, 60 ) ] ] ) );
 
 		await worklistPageData.fetchPageData( [ FOREIGN ] );
 
-		// Each is a separate extension on the wiki, but neither is worth its own round trip.
-		expect( get.mock.calls[ 0 ][ 0 ].prop ).toBe( 'pageviews|pageimages' );
+		// PageImages answers for every title given; PageViewInfo answers for five. Sharing a
+		// request would mean asking for images five at a time as well.
+		expect( get.mock.calls.map( ( call ) => call[ 0 ].prop ) )
+			.toEqual( [ 'pageimages', 'pageviews' ] );
 	} );
 
 	it( 'reads an article from the wiki that holds it', async () => {
@@ -137,13 +139,39 @@ describe( 'fetchPageData', () => {
 		expect( views.get( 'enwiki|Beaver' ).views ).toBeNull();
 	} );
 
+	it( 'gets a count for every article, past PageViewInfo\'s own lookup limit', async () => {
+		// PageViewInfo looks up five titles per request and leaves the rest to a continuation
+		// that nothing follows, so asking for more than five at a time lost the remainder.
+		const titles = Array.from( { length: 12 }, ( ignored, i ) => 'Article ' + i );
+		const articles = titles.map( ( title ) => ( {
+			wiki: 'enwiki', title: title, isLocal: false, apiUrl: FOREIGN.apiUrl
+		} ) );
+		const get = mockApis();
+		get.mockImplementation( ( params ) => Promise.resolve( pagesResponse(
+			( params.titles || [] ).map( ( title ) => [ title, flat( 3, 60 ) ] )
+		) ) );
+
+		const data = await worklistPageData.fetchPageData( articles );
+
+		const viewRequests = get.mock.calls.filter( ( call ) => call[ 0 ].prop === 'pageviews' );
+		expect( viewRequests ).toHaveLength( 3 );
+		expect( viewRequests.every( ( call ) => call[ 0 ].titles.length <= 5 ) ).toBe( true );
+		// The images come back in one request, not five.
+		expect( get.mock.calls.filter( ( call ) => call[ 0 ].prop === 'pageimages' ) )
+			.toHaveLength( 1 );
+		titles.forEach( ( title ) => {
+			expect( data.get( 'enwiki|' + title ).views.count ).toBe( 90 );
+		} );
+	} );
+
 	it( 'asks each wiki separately', async () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [] ) );
 
 		await worklistPageData.fetchPageData( [ LOCAL, FOREIGN ] );
 
-		expect( get ).toHaveBeenCalledTimes( 2 );
+		// Two kinds of request per wiki, each against that wiki's own API.
+		expect( get ).toHaveBeenCalledTimes( 4 );
 	} );
 
 	it( 'does not ask again about articles it already knows', async () => {
@@ -153,7 +181,8 @@ describe( 'fetchPageData', () => {
 		await worklistPageData.fetchPageData( [ LOCAL ] );
 		await worklistPageData.fetchPageData( [ LOCAL ] );
 
-		expect( get ).toHaveBeenCalledTimes( 1 );
+		// The second call is answered from the cache, so only the first asks.
+		expect( get ).toHaveBeenCalledTimes( 2 );
 	} );
 
 	it( 'keeps the cards when a wiki has no pageview data', async () => {
