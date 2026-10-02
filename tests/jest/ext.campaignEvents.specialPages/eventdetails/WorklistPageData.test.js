@@ -102,6 +102,19 @@ describe( 'fetchPageData', () => {
 			.toEqual( [ 'pageimages', 'pageviews' ] );
 	} );
 
+	it( 'asks for the lead image at a standard width', async () => {
+		// MediaWiki rounds a non-standard width up to the next standard one and keeps what it
+		// rendered indefinitely, so asking for one that is not on the list stores it for good.
+		const standard = [ 20, 40, 60, 120, 250, 330, 500, 960, 1280, 1920, 3840 ];
+		const get = mockApis();
+		get.mockResolvedValue( pagesResponse( [] ) );
+
+		await worklistPageData.fetchPageData( [ FOREIGN ] );
+
+		const images = get.mock.calls.find( ( call ) => call[ 0 ].prop === 'pageimages' );
+		expect( standard ).toContain( images[ 0 ].pithumbsize );
+	} );
+
 	it( 'reads an article from the wiki that holds it', async () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [

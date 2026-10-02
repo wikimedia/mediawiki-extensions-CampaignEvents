@@ -35,10 +35,17 @@
 	const WINDOW_DAYS = 30;
 
 	/**
-	 * Widest the card ever draws a thumbnail, so one image serves every screen density rather
-	 * than the wiki being asked again for a larger one.
+	 * Width to ask for the lead image at.
+	 *
+	 * Codex draws the card's thumbnail at @size-search-figure, 40px, and CdxThumbnail takes no
+	 * size, so that is the only width it is ever shown at. 120px covers a three-times display
+	 * without asking the wiki for a larger one later.
+	 *
+	 * One of the standard widths, which matters: MediaWiki rounds anything else up to the next
+	 * standard width and keeps the thumbnail it rendered indefinitely, so an invented size is
+	 * stored for good. See https://www.mediawiki.org/wiki/Common_thumbnail_sizes
 	 */
-	const THUMBNAIL_SIZE = 200;
+	const THUMBNAIL_SIZE = 120;
 
 	/** Data held against `wiki|title`, so a title on two wikis is not confused for one. */
 	const cache = new Map();
