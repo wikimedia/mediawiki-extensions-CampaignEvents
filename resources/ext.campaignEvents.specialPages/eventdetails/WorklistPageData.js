@@ -4,8 +4,8 @@
 	/**
 	 * Data about worklist articles that only the wiki holding them can give.
 	 *
-	 * PageViewInfo's `prop=pageviews` returns the last 60 days of daily counts, of which the
-	 * card shows the most recent 30 totalled.
+	 * PageViewInfo's prop=pageviews returns daily counts for the days asked for
+	 * (see WINDOW_DAYS), which the card shows totalled.
 	 *
 	 * Read from the wiki holding each article, not this one: a worklist spans wikis by design,
 	 * and that wiki's api.php comes back with the article.
@@ -31,7 +31,13 @@
 	 */
 	const TITLES_PER_REQUEST = 50;
 
-	/** How far back the count reaches. The API returns 60 days; the card shows the last 30. */
+	/**
+	 * How far back the count reaches, asked for as `pvipdays`.
+	 *
+	 * The API would return sixty days by default. It caches whatever its own configuration
+	 * says regardless of what is asked for, and trims the answer to the days requested, so
+	 * asking for thirty costs nothing and halves what comes back.
+	 */
 	const WINDOW_DAYS = 30;
 
 	/**
@@ -72,7 +78,7 @@
 	}
 
 	/**
-	 * Total views over the window, from a run of daily counts.
+	 * Total views over the window, from the run of daily counts the API returned.
 	 *
 	 * Days the API has no figure for come back as null — the current day usually is one, being
 	 * incomplete — and count as zero rather than discarding the article.
@@ -85,8 +91,8 @@
 		if ( !days.length ) {
 			return null;
 		}
-		const count = days.slice( -WINDOW_DAYS )
-			.reduce( ( sum, day ) => sum + ( pageviews[ day ] || 0 ), 0 );
+		// Every day returned counts: the window is set by `pvipdays` on the request.
+		const count = days.reduce( ( sum, day ) => sum + ( pageviews[ day ] || 0 ), 0 );
 		return { count: count };
 	}
 
@@ -187,7 +193,8 @@
 			}, ( page ) => ( { image: thumbnailOf( page ) } ) );
 
 			ask( api, wiki, titles, VIEWS_PER_REQUEST, {
-				prop: 'pageviews'
+				prop: 'pageviews',
+				pvipdays: WINDOW_DAYS
 			}, ( page ) => ( { views: summarise( page.pageviews ) } ) );
 		} );
 

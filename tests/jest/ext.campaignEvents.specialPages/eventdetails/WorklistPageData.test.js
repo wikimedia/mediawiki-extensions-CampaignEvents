@@ -29,6 +29,9 @@ function daily( counts ) {
 
 const flat = ( count, days ) => daily( new Array( days ).fill( count ) );
 
+/** The days the module asks the API for, so fixtures match what would come back. */
+const WINDOW_DAYS = 30;
+
 /** @return {jest.Mock} The mocked get(), shared by mw.Api and mw.ForeignApi */
 function mockApis() {
 	const get = jest.fn();
@@ -53,18 +56,14 @@ beforeEach( () => {
 } );
 
 describe( 'summarise', () => {
-	it( 'totals the most recent 30 days', () => {
-		// 60 days of 10 views: the figure is one window's worth, not the whole run.
-		expect( worklistPageData.summarise( flat( 10, 60 ) ).count ).toBe( 300 );
-	} );
-
-	it( 'counts only the window, however many days came back', () => {
-		expect( worklistPageData.summarise( flat( 10, 40 ) ).count ).toBe( 300 );
+	it( 'totals every day the API returned', () => {
+		// The window is set on the request, so whatever comes back is what the card counts.
+		expect( worklistPageData.summarise( flat( 10, 30 ) ).count ).toBe( 300 );
 	} );
 
 	it( 'counts a day the API has no figure for as zero', () => {
 		// The current day is usually null, being incomplete; it must not lose the article.
-		const withNull = daily( new Array( 59 ).fill( 10 ).concat( [ null ] ) );
+		const withNull = daily( new Array( 29 ).fill( 10 ).concat( [ null ] ) );
 		expect( worklistPageData.summarise( withNull ).count ).toBe( 290 );
 	} );
 
@@ -92,7 +91,7 @@ describe( 'thumbnailOf', () => {
 describe( 'fetchPageData', () => {
 	it( 'asks for the image and the view count apart', async () => {
 		const get = mockApis();
-		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, 60 ) ] ] ) );
+		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, WINDOW_DAYS ) ] ] ) );
 
 		await worklistPageData.fetchPageData( [ FOREIGN ] );
 
@@ -100,6 +99,17 @@ describe( 'fetchPageData', () => {
 		// request would mean asking for images five at a time as well.
 		expect( get.mock.calls.map( ( call ) => call[ 0 ].prop ) )
 			.toEqual( [ 'pageimages', 'pageviews' ] );
+	} );
+
+	it( 'asks the API for only the days the card counts', async () => {
+		// Trimming server-side halves the response; the default would be sixty days.
+		const get = mockApis();
+		get.mockResolvedValue( pagesResponse( [] ) );
+
+		await worklistPageData.fetchPageData( [ FOREIGN ] );
+
+		const views = get.mock.calls.find( ( call ) => call[ 0 ].prop === 'pageviews' );
+		expect( views[ 0 ].pvipdays ).toBe( 30 );
 	} );
 
 	it( 'asks for the lead image at a standard width', async () => {
@@ -118,7 +128,7 @@ describe( 'fetchPageData', () => {
 	it( 'reads an article from the wiki that holds it', async () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [
-			[ 'Beaver', flat( 2, 60 ), { source: 'https://example.org/b.jpg', width: 200, height: 200 } ]
+			[ 'Beaver', flat( 2, WINDOW_DAYS ), { source: 'https://example.org/b.jpg', width: 200, height: 200 } ]
 		] ) );
 
 		const views = await worklistPageData.fetchPageData( [ FOREIGN ] );
@@ -133,7 +143,7 @@ describe( 'fetchPageData', () => {
 
 	it( 'uses this wiki for a local article', async () => {
 		const get = mockApis();
-		get.mockResolvedValue( pagesResponse( [ [ 'Bears', flat( 1, 60 ) ] ] ) );
+		get.mockResolvedValue( pagesResponse( [ [ 'Bears', flat( 1, WINDOW_DAYS ) ] ] ) );
 
 		await worklistPageData.fetchPageData( [ LOCAL ] );
 
@@ -161,7 +171,7 @@ describe( 'fetchPageData', () => {
 		} ) );
 		const get = mockApis();
 		get.mockImplementation( ( params ) => Promise.resolve( pagesResponse(
-			( params.titles || [] ).map( ( title ) => [ title, flat( 3, 60 ) ] )
+			( params.titles || [] ).map( ( title ) => [ title, flat( 3, WINDOW_DAYS ) ] )
 		) ) );
 
 		const data = await worklistPageData.fetchPageData( articles );
@@ -189,7 +199,7 @@ describe( 'fetchPageData', () => {
 
 	it( 'does not ask again about articles it already knows', async () => {
 		const get = mockApis();
-		get.mockResolvedValue( pagesResponse( [ [ 'Bears', flat( 1, 60 ) ] ] ) );
+		get.mockResolvedValue( pagesResponse( [ [ 'Bears', flat( 1, WINDOW_DAYS ) ] ] ) );
 
 		await worklistPageData.fetchPageData( [ LOCAL ] );
 		await worklistPageData.fetchPageData( [ LOCAL ] );
