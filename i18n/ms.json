@@ -339,6 +339,7 @@
 	"campaignevents-event-details-worklist-loading": "Memuatkan laman…",
 	"campaignevents-event-details-worklist-history-button-label": "Lihat sejarah",
 	"campaignevents-event-details-worklist-load-error": "Senarai kerja tidak dapat dimuatkan. $1",
+	"campaignevents-event-details-worklist-card-added": "Ditambah $1",
 	"campaignevents-event-details-worklist-search-placeholder": "Cari laman",
 	"campaignevents-event-details-worklist-search-no-results": "Tiada laman dalam senarai kerja ini yang berpadanan dengan carian anda.",
 	"campaignevents-event-details-worklist-previous-page": "Sebelumnya",
