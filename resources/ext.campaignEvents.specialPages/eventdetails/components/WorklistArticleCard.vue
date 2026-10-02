@@ -90,19 +90,22 @@ const MILLION = 1000000;
  * @return {string}
  */
 function shorten( count ) {
-	if ( count >= MILLION ) {
-		return mw.msg(
-			'campaignevents-event-details-worklist-card-views-millions',
-			mw.language.convertNumber( Math.round( count / MILLION ) )
-		);
+	if ( count < THOUSAND ) {
+		return mw.language.convertNumber( count );
 	}
-	if ( count >= THOUSAND ) {
+	// The unit is chosen from the rounded figure rather than the raw count, so a count that
+	// rounds up into the next unit is shown in that unit: 999,600 reads as 1M, not 1000k.
+	const thousands = Math.round( count / THOUSAND );
+	if ( thousands < THOUSAND ) {
 		return mw.msg(
 			'campaignevents-event-details-worklist-card-views-thousands',
-			mw.language.convertNumber( Math.round( count / THOUSAND ) )
+			mw.language.convertNumber( thousands )
 		);
 	}
-	return mw.language.convertNumber( count );
+	return mw.msg(
+		'campaignevents-event-details-worklist-card-views-millions',
+		mw.language.convertNumber( Math.round( count / MILLION ) )
+	);
 }
 
 // @vue/component

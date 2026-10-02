@@ -4,9 +4,8 @@
 	/**
 	 * Data about worklist articles that only the wiki holding them can give.
 	 *
-	 * PageViewInfo's `prop=pageviews` returns the last 60 days of daily counts. The card shows
-	 * the most recent 30 as the figure and compares them with the 30 before to set the trend, so
-	 * one request answers both halves.
+	 * PageViewInfo's `prop=pageviews` returns the last 60 days of daily counts, of which the
+	 * card shows the most recent 30 totalled.
 	 *
 	 * Read from the wiki holding each article, not this one: a worklist spans wikis by design,
 	 * and that wiki's api.php comes back with the article. One request per wiki covers every
@@ -141,8 +140,8 @@
 						} );
 					} );
 				}, () => {
-					// A wiki without PageViewInfo answers with a warning rather than the data.
-					// The card is complete without a view count, so nothing is surfaced.
+					// The card is complete without a view count, so a failed request leaves the
+					// cards as they are rather than being surfaced to the reader.
 				} ) );
 			}
 		} );
@@ -162,7 +161,7 @@
 
 	module.exports = {
 		fetchPageData,
-		// Exported for the tests, which pin the window and the trend edges.
+		// Exported for the tests, which pin the window the figure covers.
 		summarise,
 		thumbnailOf,
 		clearCache: () => cache.clear()

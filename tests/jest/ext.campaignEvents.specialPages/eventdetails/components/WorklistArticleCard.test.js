@@ -53,6 +53,11 @@ describe( 'WorklistArticleCard', () => {
 		[ 1000, '(campaignevents-event-details-worklist-card-views-thousands, 1)' ],
 		[ 20437, '(campaignevents-event-details-worklist-card-views-thousands, 20)' ],
 		[ 120000, '(campaignevents-event-details-worklist-card-views-thousands, 120)' ],
+		[ 999499, '(campaignevents-event-details-worklist-card-views-thousands, 999)' ],
+		// Rounds up into the next unit, so it reads as 1M rather than 1000k.
+		[ 999500, '(campaignevents-event-details-worklist-card-views-millions, 1)' ],
+		[ 999999, '(campaignevents-event-details-worklist-card-views-millions, 1)' ],
+		[ 1000000, '(campaignevents-event-details-worklist-card-views-millions, 1)' ],
 		[ 2400000, '(campaignevents-event-details-worklist-card-views-millions, 2)' ]
 	] )( 'shortens %s past a thousand', ( count, shown ) => {
 		const card = mountCard( { views: { count: count } } );
