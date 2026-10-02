@@ -19,7 +19,8 @@
 			"Rajadinho",
 			"SpikeShroom",
 			"Whovian Biologist",
-			"Zapipedia (WMF)"
+			"Zapipedia (WMF)",
+			"A.jalate"
 		]
 	},
 	"campaignevents-desc": "Proporciona funcionalidades para las personas que organizan y/o participan en campañas.",
@@ -629,7 +630,6 @@
 	"campaignevents-contributions-summary-articles-edited": "Artículos editados",
 	"campaignevents-contributions-summary-bytes-changed": "Bytes cambiados",
 	"campaignevents-contributions-summary-links-changed": "Enlaces cambiados",
-	"campaignevents-contributions-summary-delta-separator": "/",
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Cancelar",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Añadir edición",
 	"campaignevents-event-details-contributions-add-dialog-title": "Añadir un edición a $1",

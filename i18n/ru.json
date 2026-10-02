@@ -500,7 +500,6 @@
 	"campaignevents-contributions-summary-articles-edited": "Статей отредактировано",
 	"campaignevents-contributions-summary-bytes-changed": "Байт изменено",
 	"campaignevents-contributions-summary-links-changed": "Ссылок изменено",
-	"campaignevents-contributions-summary-delta-separator": "/",
 	"campaignevents-event-details-contributions-add-dialog-cancel": "Отмена",
 	"campaignevents-event-details-contributions-add-dialog-submit": "Добавить правку",
 	"campaignevents-event-details-contributions-add-dialog-title": "Добавить правку к $1",
