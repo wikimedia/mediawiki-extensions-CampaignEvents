@@ -92,20 +92,12 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 			return [];
 		}
 
-		$pages = $this->worklistArticlesLookup->getWorklistArticles(
-			$worklistPage,
-			0,
-			0,
-			IWorklistArticlesLookup::DESCENDING,
-			IWorklistArticlesLookup::TIMESTAMP_SORT
+		// Only the requested titles are looked up, not the whole worklist: a screen of cards asks
+		// about a few dozen at most, whatever the size of the list.
+		$inWorklist = array_fill_keys(
+			$this->worklistArticlesLookup->filterWorklistArticles( $worklistPage, $wiki, $requested ),
+			true
 		);
-
-		$inWorklist = [];
-		foreach ( $pages as $page ) {
-			if ( $page['wiki'] === $wiki ) {
-				$inWorklist[$page['prefixedtext']] = true;
-			}
-		}
 
 		return array_values( array_filter(
 			$requested,

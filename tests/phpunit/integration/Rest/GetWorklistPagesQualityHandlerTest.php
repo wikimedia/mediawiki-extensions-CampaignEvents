@@ -73,7 +73,18 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 		}
 
 		$articlesLookup = $this->createMock( IWorklistArticlesLookup::class );
-		$articlesLookup->method( 'getWorklistArticles' )->willReturn( $storedPages );
+		// Filters as the store does: the titles asked about that are in the worklist for that wiki.
+		$articlesLookup->method( 'filterWorklistArticles' )->willReturnCallback(
+			static function ( $page, string $wiki, array $titles ) use ( $storedPages ): array {
+				$stored = [];
+				foreach ( $storedPages as $storedPage ) {
+					if ( $storedPage['wiki'] === $wiki ) {
+						$stored[$storedPage['prefixedtext']] = true;
+					}
+				}
+				return array_values( array_filter( $titles, static fn ( $title ) => isset( $stored[$title] ) ) );
+			}
+		);
 
 		$qualityLookup = $this->createMock( ArticleQualityLookup::class );
 		$qualityLookup->method( 'getQualityForArticles' )->willReturnCallback(

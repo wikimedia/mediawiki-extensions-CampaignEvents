@@ -247,6 +247,34 @@ class WorklistPagesSecondaryStore {
 	}
 
 	/**
+	 * Returns which of the given pages, all on one wiki, are in the given worklist.
+	 *
+	 * Answered from the unique index on wiki, title and worklist, so the cost depends on how many
+	 * pages are asked about rather than on the size of the worklist.
+	 *
+	 * @param int $worklistID
+	 * @param string $wiki
+	 * @param list<string> $prefixedTexts
+	 * @return list<string> Those of $prefixedTexts that are in the worklist, in no particular order
+	 */
+	public function filterPagesInWorklist( int $worklistID, string $wiki, array $prefixedTexts ): array {
+		if ( !$prefixedTexts ) {
+			return [];
+		}
+
+		return $this->dbHelper->getReplicaConnection()->newSelectQueryBuilder()
+			->select( 'cewp_page_prefixedtext' )
+			->from( 'ce_worklist_pages' )
+			->where( [
+				'cewp_wiki' => $wiki,
+				'cewp_page_prefixedtext' => $prefixedTexts,
+				'cewp_cew_id' => $worklistID,
+			] )
+			->caller( __METHOD__ )
+			->fetchFieldValues();
+	}
+
+	/**
 	 * Returns when each article in the event's worklist was added, newest first.
 	 *
 	 * Kept apart from the article list itself, which the card view reads first: the dates are

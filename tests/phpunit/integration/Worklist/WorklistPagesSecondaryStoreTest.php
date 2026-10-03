@@ -418,4 +418,33 @@ class WorklistPagesSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
+	/**
+	 * @dataProvider provideFilterPagesInWorklist
+	 */
+	public function testFilterPagesInWorklist(
+		int $worklistID,
+		string $wiki,
+		array $prefixedTexts,
+		array $expected
+	): void {
+		$actual = CampaignEventsServices::getWorklistPagesSecondaryStore()
+			->filterPagesInWorklist( $worklistID, $wiki, $prefixedTexts );
+		// The order is not guaranteed.
+		sort( $actual );
+		$this->assertSame( $expected, $actual );
+	}
+
+	public static function provideFilterPagesInWorklist(): Generator {
+		yield 'Only the pages in the worklist' => [
+			1001,
+			'awiki',
+			[ 'Page 1', 'Page 2', 'Page 3' ],
+			[ 'Page 1', 'Page 2' ]
+		];
+		yield 'Not the same title on another wiki' => [ 1001, 'cwiki', [ 'Page 1' ], [] ];
+		yield 'Not the same title in another worklist' => [ 1002, 'awiki', [ 'Page 2' ], [] ];
+		yield 'Nothing asked' => [ 1001, 'awiki', [], [] ];
+		yield 'Nonexistent worklist' => [ 99999999, 'awiki', [ 'Page 1' ], [] ];
+	}
+
 }

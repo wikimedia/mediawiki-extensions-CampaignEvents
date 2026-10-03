@@ -311,6 +311,40 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
+	public function testFilterWorklistArticles(): void {
+		$worklistPage = $this->getExistingTestPage( 'My Event/Worklist' )->getTitle();
+
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->expects( $this->once() )
+			->method( 'getWorklistIDFromPage' )
+			->with( WikiMap::getCurrentWikiId(), $worklistPage->getId() )
+			->willReturn( 7 );
+		$pagesStore = $this->createMock( WorklistPagesSecondaryStore::class );
+		$pagesStore->expects( $this->once() )
+			->method( 'filterPagesInWorklist' )
+			->with( 7, 'awiki', [ 'Beavers', 'Otters' ] )
+			->willReturn( [ 'Beavers' ] );
+
+		$this->assertSame(
+			[ 'Beavers' ],
+			$this->getHelperWithStores( $worklistStore, $pagesStore )
+				->filterWorklistArticles( $worklistPage, 'awiki', [ 'Beavers', 'Otters' ] )
+		);
+	}
+
+	public function testFilterWorklistArticles__noWorklistForPage(): void {
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->method( 'getWorklistIDFromPage' )->willReturn( null );
+		$pagesStore = $this->createMock( WorklistPagesSecondaryStore::class );
+		$pagesStore->expects( $this->never() )->method( 'filterPagesInWorklist' );
+
+		$this->assertSame(
+			[],
+			$this->getHelperWithStores( $worklistStore, $pagesStore )
+				->filterWorklistArticles( $this->getNonexistingTestPage(), 'awiki', [ 'Beavers' ] )
+		);
+	}
+
 	public function testGetRawWorklistContentCached() {
 		$page = $this->getNonexistingTestPage();
 		$this->seedWorklist( $page, [ self::WIKI_ID => [ 'Article One', 'Article Two' ] ] );

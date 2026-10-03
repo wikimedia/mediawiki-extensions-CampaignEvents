@@ -223,14 +223,7 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		// Read the mirror table rather than the page: it is the only place the whole list can be
 		// had in one query, and the endpoint asking for it is keyed by event. This moves to the
 		// page itself, which is the source of truth, once the endpoint is keyed by the page.
-		//
-		// The worklist is found by page ID rather than by title, because a title is formatted with
-		// the local namespace names and the page may belong to another wiki.
-		$wikiID = $page->getWikiId();
-		$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage(
-			Utils::getWikiIDString( $wikiID ),
-			$page->getId( $wikiID )
-		);
+		$worklistID = $this->getWorklistID( $page );
 		if ( $worklistID === null ) {
 			return [];
 		}
@@ -241,6 +234,35 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 			$offset,
 			$direction,
 			$sort
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function filterWorklistArticles( PageIdentity $page, string $wiki, array $prefixedTexts ): array {
+		// Checked against the mirror table rather than the page, so that a handful of titles can be
+		// looked up without reading the whole list. An article added moments ago may not be there
+		// yet, until the job copying it over has run.
+		$worklistID = $this->getWorklistID( $page );
+		if ( $worklistID === null ) {
+			return [];
+		}
+
+		return $this->worklistPagesSecondaryStore->filterPagesInWorklist( $worklistID, $wiki, $prefixedTexts );
+	}
+
+	/**
+	 * The ID of the worklist held by the given page, or null if it has none.
+	 *
+	 * Found by page ID rather than by title, because a title is formatted with the local namespace
+	 * names and the page may belong to another wiki.
+	 */
+	private function getWorklistID( PageIdentity $page ): ?int {
+		$wikiID = $page->getWikiId();
+		return $this->worklistSecondaryStore->getWorklistIDFromPage(
+			Utils::getWikiIDString( $wikiID ),
+			$page->getId( $wikiID )
 		);
 	}
 
