@@ -19,10 +19,10 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Request\WebRequest;
+use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 use MediaWikiIntegrationTestCase;
-use Skin;
 
 /**
  * Integration test because PostEditHandler reaches ExtensionRegistry (via isWikibaseEntityPage),

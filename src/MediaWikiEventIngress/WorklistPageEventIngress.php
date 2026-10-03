@@ -4,7 +4,6 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress;
 
-use IDBAccessObject;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\DomainEvent\DomainEventIngress;
 use MediaWiki\Extension\CampaignEvents\Event\EventTypesRegistry;
@@ -35,6 +34,7 @@ use MediaWiki\Title\TitleFactory;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\WikiMap\WikiMap;
 use RuntimeException;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * Listens for changes to worklist pages and keeps both the worklist secondary storage
