@@ -11,6 +11,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Rest\GetWorklistPagesQualityHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
@@ -94,12 +95,16 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 			}
 		);
 
+		$wikiLookup = $this->createMock( WikiLookup::class );
+		$wikiLookup->method( 'getAllWikis' )->willReturn( [ self::WIKI ] );
+
 		return new GetWorklistPagesQualityHandler(
 			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => $cardViewEnabled ] ),
 			$eventLookup,
 			$articlesLookup,
 			$qualityLookup,
 			CampaignEventsServices::getWorklistEventsStore(),
+			$wikiLookup,
 		);
 	}
 
@@ -205,12 +210,16 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 		$eventLookup = $this->createMock( IEventLookup::class );
 		$eventLookup->method( 'getEventByID' )->willReturn( $event );
 
+		$wikiLookup = $this->createMock( WikiLookup::class );
+		$wikiLookup->method( 'getAllWikis' )->willReturn( [ self::WIKI ] );
+
 		return new GetWorklistPagesQualityHandler(
 			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => true ] ),
 			$eventLookup,
 			$this->createMock( IWorklistArticlesLookup::class ),
 			$this->createMock( ArticleQualityLookup::class ),
 			CampaignEventsServices::getWorklistEventsStore(),
+			$wikiLookup,
 		);
 	}
 

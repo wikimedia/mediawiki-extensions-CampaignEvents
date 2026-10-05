@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Rest;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
@@ -38,6 +39,7 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 		private readonly IWorklistArticlesLookup $worklistArticlesLookup,
 		private readonly ArticleQualityLookup $articleQualityLookup,
 		private readonly WorklistEventsStore $worklistEventsStore,
+		private readonly WikiLookup $wikiLookup,
 	) {
 	}
 
@@ -111,7 +113,7 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 		return $this->getIDParamSetting() + [
 			'wiki' => [
 				static::PARAM_SOURCE => 'query',
-				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			'titles' => [

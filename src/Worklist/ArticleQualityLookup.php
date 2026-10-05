@@ -70,7 +70,7 @@ class ArticleQualityLookup {
 	 * shows no chip for them and carries on, and one unscorable article should not cost the reader
 	 * the rest of the screen.
 	 *
-	 * @param string $wiki Wiki ID the articles belong to
+	 * @param string $wiki Wiki ID the articles belong to. Callers must check that it's a valid wiki.
 	 * @param list<string> $prefixedTexts At most self::MAX_ARTICLES of them
 	 * @return array<string,array{score: float, label: string, elements: array<string,float|bool>}>
 	 */

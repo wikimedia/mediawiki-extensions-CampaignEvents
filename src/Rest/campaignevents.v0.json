@@ -394,7 +394,8 @@
 						"CampaignEventsEventLookup",
 						"CampaignEventsWorklistArticleHelper",
 						"CampaignEventsArticleQualityLookup",
-						"CampaignEventsWorklistEventsStore"
+						"CampaignEventsWorklistEventsStore",
+						"CampaignEventsWikiLookup"
 					]
 				}
 			}
