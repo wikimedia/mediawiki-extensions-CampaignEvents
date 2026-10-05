@@ -339,6 +339,8 @@
 	"campaignevents-event-details-worklist-loading": "Cargando as páxinas…",
 	"campaignevents-event-details-worklist-history-button-label": "Ver o historial",
 	"campaignevents-event-details-worklist-load-error": "Non se puido cargar a lista de traballo. $1",
+	"campaignevents-event-details-worklist-card-views-label": "Visitas",
+	"campaignevents-event-details-worklist-card-added": "Engadida o $1",
 	"campaignevents-event-details-worklist-search-placeholder": "Procurar páxinas",
 	"campaignevents-event-details-worklist-search-no-results": "Ningunha páxina desta lista de traballo coincide coa túa procura.",
 	"campaignevents-event-details-worklist-previous-page": "Anterior",
@@ -696,5 +698,7 @@
 	"campaignevents-worklist-content-invalid-title": "Atopouse un título non válido para o wiki $1: $2",
 	"campaignevents-worklist-content-title-with-interwiki": "Os títulos das páxinas non poden incluír un prefixo interwiki. Agrupa as páxinas por wiki. Título non permitido: $1",
 	"campaignevents-worklist-content-title-with-fragment": "Os títulos das páxinas non poden ligar a seccións específicas. Título non permitido: $1",
-	"campaignevents-worklist-content-title-non-canonical": "Atopouse un título que non está en forma canónica: obtívose «$1», esperábase «$2»."
+	"campaignevents-worklist-content-title-non-canonical": "Atopouse un título que non está en forma canónica: obtívose «$1», esperábase «$2».",
+	"namespaceinfo-description-ns1728": "Espazo de nomes para páxinas de eventos, que describen eventos de campaña e poden ter activada a [[mw:Special:MyLanguage/Help:Extension:CampaignEvents|inscrición a eventos]]",
+	"namespaceinfo-description-ns1729": "Páxinas de conversa das páxinas de eventos"
 }

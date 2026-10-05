@@ -67,5 +67,14 @@
 	"campaignevents-rest-param-desc-start-timestamp": "Marca de tempo inicial en calquera formato aceptado polo analizador de marca de tempo de MediaWiki.",
 	"campaignevents-rest-param-desc-end-timestamp": "Marca de tempo final en calquera formato aceptado polo analizador de marcas de tempo de MediaWiki.",
 	"campaignevents-rest-param-desc-wiki": "Identificador do wiki no que se fixo a revisión.",
-	"campaignevents-rest-param-desc-revid": "Identificador de revisión no wiki de destino."
+	"campaignevents-rest-param-desc-revid": "Identificador de revisión no wiki de destino.",
+	"campaignevents-rest-patch-worklist-title-not-plain": "O título da lista de traballo non pode conter un prefixo interwiki nin un fragmento de sección.",
+	"campaignevents-rest-response-registration-created": "Creouse a inscrición ao evento.",
+	"campaignevents-rest-response-registration-updated": "Actualizouse a inscrición ao evento.",
+	"campaignevents-rest-response-registration-deleted": "Eliminouse a inscrición ao evento.",
+	"campaignevents-rest-response-registration-not-found": "Eliminouse ou non se atopou a inscrición ao evento.",
+	"campaignevents-rest-response-organizers-updated": "Actualizáronse os organizadores.",
+	"campaignevents-rest-response-email-accepted": "Aceptouse o traballo de envío de correo electrónico. A contaxe de correos reflicte o número de correos enviados.",
+	"campaignevents-rest-response-contribution-accepted": "Aceptouse o traballo de asociación de contribucións.",
+	"campaignevents-rest-response-contribution-deleted": "Eliminouse o rexistro de contribucións ao evento."
 }

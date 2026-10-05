@@ -341,6 +341,7 @@
 	"campaignevents-event-details-worklist-loading": "Seiten werden geladen …",
 	"campaignevents-event-details-worklist-history-button-label": "Versionsgeschichte ansehen",
 	"campaignevents-event-details-worklist-load-error": "Die Arbeitsliste konnte nicht geladen werden. $1",
+	"campaignevents-event-details-worklist-card-views-label": "Aufrufe",
 	"campaignevents-event-details-worklist-card-added": "Hinzugefügt $1",
 	"campaignevents-event-details-worklist-search-placeholder": "Seiten durchsuchen",
 	"campaignevents-event-details-worklist-search-no-results": "Keine der Seiten in dieser Arbeitsliste entspricht deiner Suche.",
@@ -692,5 +693,7 @@
 	"campaignevents-worklist-content-invalid-title": "Ungültiger Titel für Wiki $1 gefunden: $2",
 	"campaignevents-worklist-content-title-with-interwiki": "Seitentitel dürfen kein Interwiki-Präfix enthalten. Gruppiere die Seiten stattdessen nach Wiki. Fehlerhafter Titel: $1",
 	"campaignevents-worklist-content-title-with-fragment": "Seitentitel dürfen nicht auf bestimmte Abschnitte verlinken. Zuwiderhandelnder Titel: $1",
-	"campaignevents-worklist-content-title-non-canonical": "Es wurde ein Titel gefunden, der nicht in kanonischer Form vorliegt: erhalten „$1“, erwartet „$2“."
+	"campaignevents-worklist-content-title-non-canonical": "Es wurde ein Titel gefunden, der nicht in kanonischer Form vorliegt: erhalten „$1“, erwartet „$2“.",
+	"namespaceinfo-description-ns1728": "Namensraum für Veranstaltungsseiten, die Kampagnenereignisse beschreiben und für die die [[mw:Special:MyLanguage/Help:Extension:CampaignEvents|Veranstaltungsregistrierung]] aktiviert sein kann.",
+	"namespaceinfo-description-ns1729": "Diskussionsseiten für Veranstaltungsseiten"
 }

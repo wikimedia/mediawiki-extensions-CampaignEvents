@@ -340,6 +340,8 @@
 	"campaignevents-event-details-worklist-loading": "Indlæser sider…",
 	"campaignevents-event-details-worklist-history-button-label": "Vis historik",
 	"campaignevents-event-details-worklist-load-error": "Arbejdslisten kunne ikke indlæses. $1",
+	"campaignevents-event-details-worklist-card-views-label": "Visninger",
+	"campaignevents-event-details-worklist-card-added": "Tilføjet $1",
 	"campaignevents-event-details-worklist-search-placeholder": "Søge sider",
 	"campaignevents-event-details-worklist-search-no-results": "Ingen sider i denne arbejdsliste svarer til din søgning.",
 	"campaignevents-event-details-worklist-previous-page": "Forrige",
@@ -690,5 +692,7 @@
 	"campaignevents-worklist-content-invalid-title": "Ugyldig titel fundet for wiki $1: $2",
 	"campaignevents-worklist-content-title-with-interwiki": "Sidetitler må ikke indeholde et interwiki-præfiks. Gruppér sider efter wiki i stedet. Problemtitel: $1",
 	"campaignevents-worklist-content-title-with-fragment": "Sidetitler må ikke linke til bestemte sektioner. Problemtitel: $1",
-	"campaignevents-worklist-content-title-non-canonical": "Fundet en titel, der ikke er i kanonisk form: fik \"$1\", forventede \"$2\"."
+	"campaignevents-worklist-content-title-non-canonical": "Fundet en titel, der ikke er i kanonisk form: fik \"$1\", forventede \"$2\".",
+	"namespaceinfo-description-ns1728": "Navnerum til begivenhedssider, som beskriver kampagnebegivenheder og kan have [[mw:Special:MyLanguage/Help:Extension:CampaignEvents|begivenhedsregistrering]] aktiveret",
+	"namespaceinfo-description-ns1729": "Diskussionssider for begivenhedssider"
 }

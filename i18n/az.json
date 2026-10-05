@@ -339,6 +339,8 @@
 	"campaignevents-event-details-worklist-loading": "Səhifələr yüklənir…",
 	"campaignevents-event-details-worklist-history-button-label": "Tarixçəyə bax",
 	"campaignevents-event-details-worklist-load-error": "İş siyahısı yüklənə bilmədi. $1",
+	"campaignevents-event-details-worklist-card-views-label": "Oxunma sayı",
+	"campaignevents-event-details-worklist-card-added": "$1 tarixində əlavə edildi",
 	"campaignevents-event-details-worklist-search-placeholder": "Səhifələrdə axtar",
 	"campaignevents-event-details-worklist-search-no-results": "Bu iş siyahısında axtarışınıza uyğun səhifə yoxdur.",
 	"campaignevents-event-details-worklist-previous-page": "Əvvəlki",
@@ -689,5 +691,7 @@
 	"campaignevents-worklist-content-invalid-title": "$1 vikisi üçün etibarsız başlıq tapıldı: $2",
 	"campaignevents-worklist-content-title-with-interwiki": "Səhifə başlıqlarında interviki prefiksi olmamalıdır. Bunun əvəzinə səhifələri vikiyə görə qruplaşdırın. Bəhs olunan başlıq: $1",
 	"campaignevents-worklist-content-title-with-fragment": "Səhifə başlıqları müəyyən bölmələrə keçid verməməlidir. Bəhs olunan başlıq: $1",
-	"campaignevents-worklist-content-title-non-canonical": "Kanonik formada olmayan bir başlıq tapıldı: \"$1\" göstərilib amma \"$2\" gözlənilirdi."
+	"campaignevents-worklist-content-title-non-canonical": "Kanonik formada olmayan bir başlıq tapıldı: \"$1\" göstərilib amma \"$2\" gözlənilirdi.",
+	"namespaceinfo-description-ns1728": "Tədbirləri təsvir edən və [[mw:Special:MyLanguage/Help:Extension:CampaignEvents|tədbir qeydiyyatı]] aktivləşdirilə bilən tədbir səhifələri üçün ad fəzası",
+	"namespaceinfo-description-ns1729": "Tədbir səhifələri üçün müzakirə səhifələri"
 }

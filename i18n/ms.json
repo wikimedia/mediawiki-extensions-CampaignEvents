@@ -339,6 +339,7 @@
 	"campaignevents-event-details-worklist-loading": "Memuatkan laman…",
 	"campaignevents-event-details-worklist-history-button-label": "Lihat sejarah",
 	"campaignevents-event-details-worklist-load-error": "Senarai kerja tidak dapat dimuatkan. $1",
+	"campaignevents-event-details-worklist-card-views-label": "Bilangan paparan",
 	"campaignevents-event-details-worklist-card-added": "Ditambah $1",
 	"campaignevents-event-details-worklist-search-placeholder": "Cari laman",
 	"campaignevents-event-details-worklist-search-no-results": "Tiada laman dalam senarai kerja ini yang berpadanan dengan carian anda.",
@@ -690,5 +691,7 @@
 	"campaignevents-worklist-content-invalid-title": "Tajuk tidak sah ditemui untuk wiki $1: $2",
 	"campaignevents-worklist-content-title-with-interwiki": "Tajuk laman tidak boleh mengandungi awalan antara wiki. Sebaliknya, kumpulkan laman mengikut wiki. Tajuk yang silap: $1",
 	"campaignevents-worklist-content-title-with-fragment": "Tajuk laman tidak boleh dipautkan ke bahagian tertentu. Tajuk yang silap: $1",
-	"campaignevents-worklist-content-title-non-canonical": "Menemui tajuk yang bukan dalam bentuk berkanun: yang dapat \"$1\", yang dijangka \"$2\"."
+	"campaignevents-worklist-content-title-non-canonical": "Menemui tajuk yang bukan dalam bentuk berkanun: yang dapat \"$1\", yang dijangka \"$2\".",
+	"namespaceinfo-description-ns1728": "Ruang nama untuk laman acara, yang menerangkan acara kempen dan boleh mengaktifkan [[mw:Special:MyLanguage/Help:Extension:CampaignEvents|pendaftaran acara]]",
+	"namespaceinfo-description-ns1729": "Laman perbincangan untuk laman acara"
 }

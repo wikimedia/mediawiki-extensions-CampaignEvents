@@ -67,5 +67,14 @@
 	"campaignevents-rest-param-desc-start-timestamp": "Shaambadda waqtiga bilowga oo ah qaab kasta oo uu aqbalo falanqayaha shaambadda waqtiga ee MediaWiki.",
 	"campaignevents-rest-param-desc-end-timestamp": "Shaambadda waqtiga dhammaadka oo ah qaab kasta oo uu aqbalo falanqayaha shaambadda waqtiga ee MediaWiki.",
 	"campaignevents-rest-param-desc-wiki": "Aqoonsiga wikiga dib u eegista lagu sameeyay.",
-	"campaignevents-rest-param-desc-revid": "Aqoonsiga dib u eegista ee wikiga bartilmaameedka."
+	"campaignevents-rest-param-desc-revid": "Aqoonsiga dib u eegista ee wikiga bartilmaameedka.",
+	"campaignevents-rest-patch-worklist-title-not-plain": "Cinwaanka liiska shaqada waa inuusan ka koobnaan horgale interwiki ama qayb ka mid ah bogga.",
+	"campaignevents-rest-response-registration-created": "Diiwaangelinta dhacdada waa la abuuray.",
+	"campaignevents-rest-response-registration-updated": "Diiwaangelinta dhacdada waa la cusboonaysiiyay.",
+	"campaignevents-rest-response-registration-deleted": "Diiwaangelinta dhacdada waa la tirtiray.",
+	"campaignevents-rest-response-registration-not-found": "Diiwaangelinta dhacdada lama helin ama waa la tirtiray.",
+	"campaignevents-rest-response-organizers-updated": "Qabanqaabiyeyaasha waa la cusboonaysiiyay.",
+	"campaignevents-rest-response-email-accepted": "Hawsha dirista iimaylka waa la aqbalay. Tirada la diray waxay ka tarjumaysaa iimayllada la diray.",
+	"campaignevents-rest-response-contribution-accepted": "Hawsha isku xirka wax ku biirinta waa la aqbalay.",
+	"campaignevents-rest-response-contribution-deleted": "Diiwaanka wax ku biirinta dhacdada waa la tirtiray."
 }

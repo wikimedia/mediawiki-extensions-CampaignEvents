@@ -344,6 +344,7 @@
 	"campaignevents-event-details-worklist-loading": "Ladataan sivuja…",
 	"campaignevents-event-details-worklist-history-button-label": "Näytä historia",
 	"campaignevents-event-details-worklist-load-error": "Työlistaa ei voitu ladata. $1",
+	"campaignevents-event-details-worklist-card-views-label": "Näyttökerrat",
 	"campaignevents-event-details-worklist-search-placeholder": "Hae sivuja",
 	"campaignevents-event-details-worklist-search-no-results": "Yksikään tämän työlistan sivu ei vastaa hakuasi.",
 	"campaignevents-event-details-worklist-previous-page": "Edellinen",
@@ -691,5 +692,6 @@
 	"campaignevents-worklist-content-wiki-empty": "Sivuluettelo ei voi olla tyhjä (wiki $1)",
 	"campaignevents-worklist-content-title-not-string": "Sivujen otsikoiden on oltava merkkijonoja. Löytyi virheellinen arvo: $1",
 	"campaignevents-worklist-content-duplicated-title": "Duplikaattiotsikko löytyi wikille $1: $2",
-	"campaignevents-worklist-content-invalid-title": "Virheellinen otsikko löytyi wikille $1: $2"
+	"campaignevents-worklist-content-invalid-title": "Virheellinen otsikko löytyi wikille $1: $2",
+	"namespaceinfo-description-ns1729": "Keskustelusivut tapahtumasivuille"
 }

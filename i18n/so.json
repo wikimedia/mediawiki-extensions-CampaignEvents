@@ -338,6 +338,8 @@
 	"campaignevents-event-details-worklist-loading": "Bogagga ayaa la soo rarayaa…",
 	"campaignevents-event-details-worklist-history-button-label": "Eeg taariikhda",
 	"campaignevents-event-details-worklist-load-error": "Liiska shaqada lama soo rari karin. $1",
+	"campaignevents-event-details-worklist-card-views-label": "Aragtiyo",
+	"campaignevents-event-details-worklist-card-added": "$1 waa lagu daray",
 	"campaignevents-event-details-worklist-search-placeholder": "Raadi bogagga",
 	"campaignevents-event-details-worklist-search-no-results": "Ma jiraan bogag ku jira liiskan shaqada oo ku habboon raadintaada.",
 	"campaignevents-event-details-worklist-previous-page": "Kii hore",
@@ -688,5 +690,7 @@
 	"campaignevents-worklist-content-invalid-title": "Cinwaan aan sax ahayn ayaa laga helay wiki-ga $1: $2",
 	"campaignevents-worklist-content-title-with-interwiki": "Cinwaannada bogagga waa inaysan ku jirin hordhac interwiki ah. Ku ururi bogagga wiki kasta halkii. Cinwaanka khaladka leh: $1",
 	"campaignevents-worklist-content-title-with-fragment": "Cinwaannada bogagga waa inaysan ku xirnaan qaybo gaar ah. Cinwaanka khaladka leh: $1",
-	"campaignevents-worklist-content-title-non-canonical": "Waxaa la helay cinwaan aan ku jirin qaabka saxda ah: waxaa la helay \"$1\", waxaa la filayey \"$2\"."
+	"campaignevents-worklist-content-title-non-canonical": "Waxaa la helay cinwaan aan ku jirin qaabka saxda ah: waxaa la helay \"$1\", waxaa la filayey \"$2\".",
+	"namespaceinfo-description-ns1728": "Meel magaca bogagga dhacdooyinka, kuwaas oo sharxaya dhacdooyinka ololaha, laguna hawlgelin karo [[mw:Special:MyLanguage/Help:Extension:CampaignEvents|diiwaangelinta dhacdada]]",
+	"namespaceinfo-description-ns1729": "Bogagga wada hadalka ee bogagga dhacdooyinka"
 }
