@@ -6,11 +6,15 @@ namespace MediaWiki\Extension\CampaignEvents\Worklist;
 
 use JsonException;
 use MediaWiki\Http\HttpRequestFactory;
-use MediaWiki\Site\MediaWikiSite;
+use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\Site\SiteLookup;
-use MediaWiki\WikiMap\WikiMap;
+use MediaWiki\Title\MalformedTitleException;
+use MediaWiki\Title\TitleParser;
 use Psr\Log\LoggerInterface;
 use Wikimedia\ObjectCache\WANObjectCache;
+use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -34,9 +38,6 @@ class ArticleQualityLookup {
 
 	/** How many articles one call may ask about. A screen of cards, with room to spare. */
 	public const MAX_ARTICLES = 30;
-
-	/** Titles the MediaWiki action API accepts in a single query. */
-	private const TITLES_PER_QUERY = 50;
 
 	/**
 	 * A score cannot change for a fixed revision, so the only cost of an entry expiring is
@@ -74,6 +75,9 @@ class ArticleQualityLookup {
 		private readonly WANObjectCache $wanCache,
 		private readonly SiteLookup $siteLookup,
 		private readonly LoggerInterface $logger,
+		private readonly TitleParser $titleParser,
+		private readonly PageStoreFactory $pageStoreFactory,
+		private readonly IConnectionProvider $connectionProvider,
 		private readonly ?string $endpoint,
 		private readonly ?string $hostHeader,
 	) {
@@ -433,70 +437,46 @@ class ArticleQualityLookup {
 	 * @return array<string,int>
 	 */
 	private function getCurrentRevisionIDs( string $wiki, array $prefixedTexts ): array {
-		$apiUrl = $this->getApiUrl( $wiki );
-		if ( $apiUrl === null ) {
-			return [];
+		// Note, title parsing occurs in the context of the local wiki, but PageStore would do the same (T353916).
+		$titles = [];
+		foreach ( $prefixedTexts as $prefixedText ) {
+			try {
+				$titles[$prefixedText] = $this->titleParser->parseTitle( $prefixedText );
+			} catch ( MalformedTitleException ) {
+				continue;
+			}
 		}
 
+		$makePageKey = static fn ( PageIdentity|LinkTarget $page ): string =>
+			$page->getNamespace() . '|' . $page->getDBkey();
+
+		$dbr = $this->connectionProvider->getReplicaDatabase( $wiki );
+		$titleWhereConds = [];
+		$prefixedTextsByPageKey = [];
+		foreach ( $titles as $prefixedText => $title ) {
+			$titleWhereConds[] = $dbr->makeList(
+				[
+					'page_namespace' => $title->getNamespace(),
+					'page_title' => $title->getDBkey(),
+				],
+				LIST_AND
+			);
+			$prefixedTextsByPageKey[$makePageKey( $title )] = $prefixedText;
+		}
+
+		$pageStore = $this->pageStoreFactory->getPageStore( $wiki );
+		$pageRecords = $pageStore->newSelectQueryBuilder( $dbr )
+			->where( $dbr->makeList( $titleWhereConds, LIST_OR ) )
+			->caller( __METHOD__ )
+			->fetchPageRecords();
+
 		$revisionIDs = [];
-		foreach ( array_chunk( $prefixedTexts, self::TITLES_PER_QUERY ) as $chunk ) {
-			$url = wfAppendQuery( $apiUrl, [
-				'action' => 'query',
-				'prop' => 'revisions',
-				'rvprop' => 'ids',
-				'titles' => implode( '|', $chunk ),
-				'format' => 'json',
-				'formatversion' => '2',
-			] );
-			$response = $this->httpRequestFactory->get( $url, [], __METHOD__ );
-			if ( !is_string( $response ) ) {
-				$this->logger->info( 'No response from the revisions query on {wiki}', [ 'wiki' => $wiki ] );
-				continue;
-			}
-
-			try {
-				$parsed = json_decode( $response, true, 512, JSON_THROW_ON_ERROR );
-			} catch ( JsonException ) {
-				$this->logger->warning( 'Invalid JSON from the revisions query on {wiki}', [ 'wiki' => $wiki ] );
-				continue;
-			}
-
-			// The API normalises what it was given, so map its titles back to what was asked for.
-			$asked = [];
-			foreach ( $chunk as $prefixedText ) {
-				$asked[$this->normalizeTitle( $prefixedText )] = $prefixedText;
-			}
-			foreach ( $parsed['query']['normalized'] ?? [] as $normalization ) {
-				$from = $this->normalizeTitle( $normalization['from'] ?? '' );
-				if ( isset( $asked[$from] ) ) {
-					$asked[$this->normalizeTitle( $normalization['to'] ?? '' )] = $asked[$from];
-				}
-			}
-
-			foreach ( $parsed['query']['pages'] ?? [] as $page ) {
-				$revisionID = $page['revisions'][0]['revid'] ?? null;
-				$requested = $asked[$this->normalizeTitle( $page['title'] ?? '' )] ?? null;
-				// A page still to be created has no revision, and so no quality to report.
-				if ( is_int( $revisionID ) && $requested !== null ) {
-					$revisionIDs[$requested] = $revisionID;
-				}
-			}
+		foreach ( $pageRecords as $pageRecord ) {
+			$prefixedText = $prefixedTextsByPageKey[$makePageKey( $pageRecord )];
+			$revisionIDs[$prefixedText] = $pageRecord->getLatest( $pageRecord->getWikiId() );
 		}
 
 		return $revisionIDs;
-	}
-
-	/** Underscores and spaces are the same character to MediaWiki; to array keys they are not. */
-	private function normalizeTitle( string $title ): string {
-		return strtr( $title, '_', ' ' );
-	}
-
-	private function getApiUrl( string $wiki ): ?string {
-		if ( WikiMap::isCurrentWikiId( $wiki ) ) {
-			return wfScript( 'api' );
-		}
-		$site = $this->siteLookup->getSite( $wiki );
-		return $site instanceof MediaWikiSite ? $site->getFileUrl( 'api.php' ) : null;
 	}
 
 	private function getLanguageCode( string $wiki ): ?string {

@@ -585,6 +585,9 @@ return [
 				$services->getMainWANObjectCache(),
 				$services->getSiteLookup(),
 				LoggerFactory::getInstance( 'CampaignEvents' ),
+				$services->getTitleParser(),
+				$services->getPageStoreFactory(),
+				$services->getConnectionProvider(),
 				$config->get( 'CampaignEventsArticleQualityEndpoint' ),
 				$config->get( 'CampaignEventsArticleQualityHostHeader' ),
 			);

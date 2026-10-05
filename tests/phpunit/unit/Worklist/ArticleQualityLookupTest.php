@@ -4,16 +4,25 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Worklist;
 
+use ArrayIterator;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Page\ExistingPageRecord;
+use MediaWiki\Page\PageSelectQueryBuilder;
+use MediaWiki\Page\PageStore;
+use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\Site\MediaWikiSite;
 use MediaWiki\Site\SiteLookup;
+use MediaWiki\Title\TitleParser;
+use MediaWiki\Title\TitleValue;
 use MediaWikiUnitTestCase;
 use Psr\Log\NullLogger;
 use Wikimedia\Http\MultiHttpClient;
 use Wikimedia\ObjectCache\HashBagOStuff;
 use Wikimedia\ObjectCache\WANObjectCache;
+use Wikimedia\Rdbms\IConnectionProvider;
+use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -51,20 +60,8 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		return json_encode( $response );
 	}
 
-	private static function revisionsResponse( array $titleToRevID ): string {
-		$pages = [];
-		foreach ( $titleToRevID as $title => $revID ) {
-			// The API always sends a title as a string, even one PHP made an int as an array key.
-			$title = (string)$title;
-			$pages[] = $revID === null
-				? [ 'title' => $title, 'missing' => true ]
-				: [ 'title' => $title, 'revisions' => [ [ 'revid' => $revID ] ] ];
-		}
-		return json_encode( [ 'query' => [ 'pages' => $pages ] ] );
-	}
-
 	/**
-	 * @param string|false $revisionsResponse Body of the action API revisions query
+	 * @param array<string,int> $revisionIDs Map of prefixed text to revID for existing pages (must be in the mainspace)
 	 * @param array $modelResponses Model responses keyed by the title they answer for
 	 * @param WANObjectCache|null $cache
 	 * @param string|null $langCode Language of the wiki, or null for a wiki the lookup cannot find
@@ -75,7 +72,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	 * @return ArticleQualityLookup
 	 */
 	private function newLookup(
-		$revisionsResponse,
+		array $revisionIDs,
 		array $modelResponses,
 		?WANObjectCache $cache = null,
 		?string $langCode = 'en',
@@ -108,7 +105,6 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		);
 
 		$httpRequestFactory = $this->createMock( HttpRequestFactory::class );
-		$httpRequestFactory->method( 'get' )->willReturn( $revisionsResponse );
 		$httpRequestFactory->method( 'createMultiClient' )->willReturn( $multiClient );
 		$httpRequestFactory->method( 'getUserAgent' )->willReturn( 'TestAgent' );
 
@@ -122,13 +118,45 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			$siteLookup->method( 'getSite' )->willReturn( $site );
 		}
 
+		$titleParser = $this->createMock( TitleParser::class );
+		$titleParser->method( 'parseTitle' )
+			->willReturnCallback( static fn ( string $text ) => new TitleValue( NS_MAIN, $text ) );
+
+		$returnedRevisionIDs = array_slice( $revisionIDs, 0, ArticleQualityLookup::MAX_ARTICLES, true );
+		$pages = [];
+		foreach ( $returnedRevisionIDs as $prefixedText => $revisionID ) {
+			$page = $this->createMock( ExistingPageRecord::class );
+			$page->method( 'getNamespace' )->willReturn( NS_MAIN );
+			$page->method( 'getDBkey' )->willReturn( strtr( (string)$prefixedText, ' ', '_' ) );
+			$page->method( 'getLatest' )->willReturn( $revisionID );
+			$pages[] = $page;
+		}
+
+		$pageStore = $this->createMock( PageStore::class );
+		$pageQueryBuilder = $this->getMockBuilder( PageSelectQueryBuilder::class )
+			->onlyMethods( [ 'fetchPageRecords' ] )
+			->setConstructorArgs( [
+				$this->createMock( IReadableDatabase::class ),
+				$this->createMock( PageStore::class ),
+			] )
+			->getMock();
+		$pageQueryBuilder->method( 'fetchPageRecords' )->willReturn( new ArrayIterator( $pages ) );
+
+		$pageStore->method( 'newSelectQueryBuilder' )->willReturn( $pageQueryBuilder );
+
+		$pageStoreFactory = $this->createMock( PageStoreFactory::class );
+		$pageStoreFactory->method( 'getPageStore' )->willReturn( $pageStore );
+
 		return new ArticleQualityLookup(
 			$httpRequestFactory,
 			$cache ?? new WANObjectCache( [ 'cache' => new HashBagOStuff() ] ),
 			$siteLookup,
 			new NullLogger(),
+			$titleParser,
+			$pageStoreFactory,
+			$this->createMock( IConnectionProvider::class ),
 			$endpoint,
-			$hostHeader
+			$hostHeader,
 		);
 	}
 
@@ -137,7 +165,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		// A wiki with no inference service shows no quality rather than failing: nothing is
 		// asked for, and the cards are complete without it.
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
 			null,
 			'en',
@@ -157,7 +185,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__sendsTheConfiguredEndpointAndHost(): void {
 		// An inference service may route on the Host header and not answer without it.
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
 			null,
 			'en',
@@ -176,7 +204,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__sendsNoHostHeaderWhenNotConfigured( ?string $hostHeader ): void {
 		// The public API gateway needs none, and sending an empty one would misroute.
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
 			null,
 			'en',
@@ -214,7 +242,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	private function scoreAll( WANObjectCache $cache, array $titleToRevID, float $score, string $version ): array {
 		$titles = array_keys( $titleToRevID );
 		return $this->newLookup(
-			self::revisionsResponse( $titleToRevID ),
+			$titleToRevID,
 			array_fill_keys( $titles, self::modelResponse( $score, 'C', [], $version ) ),
 			$cache
 		)->getQualityForArticles( self::WIKI, $titles );
@@ -222,13 +250,13 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 	/** Look the given articles up with the model returning nothing, so only the cache can answer. */
 	private function lookUpCached( WANObjectCache $cache, array $titleToRevID ): array {
-		return $this->newLookup( self::revisionsResponse( $titleToRevID ), [], $cache )
+		return $this->newLookup( $titleToRevID, [], $cache )
 			->getQualityForArticles( self::WIKI, array_keys( $titleToRevID ) );
 	}
 
 	public function testGetQualityForArticles__returnsScoreAndElements(): void {
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.958, 'GA', [ 'refs' => 1, 'infobox' => true ] ) ]
 		);
 
@@ -244,7 +272,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 	public function testGetQualityForArticles__skipsArticlesTheModelCannotScore(): void {
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17, 'Otters' => 18 ] ),
+			[ 'Beavers' => 17, 'Otters' => 18 ],
 			// No entry for Otters, so the mocked client answers 503 for it.
 			[ 'Beavers' => self::modelResponse( 0.5, 'C', [ 'refs' => 0.4 ] ) ]
 		);
@@ -259,7 +287,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__skipsPagesWithNoRevision(): void {
 		$lookup = $this->newLookup(
 			// A page still to be created has nothing to score.
-			self::revisionsResponse( [ 'Beavers' => 17, 'Not yet written' => null ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.5, 'C', [] ) ]
 		);
 
@@ -273,11 +301,11 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		$cache = new WANObjectCache( [ 'cache' => new HashBagOStuff() ] );
 		$body = self::modelResponse( 0.7, 'B', [ 'refs' => 0.8 ] );
 
-		$first = $this->newLookup( self::revisionsResponse( [ 'Beavers' => 17 ] ), [ 'Beavers' => $body ], $cache );
+		$first = $this->newLookup( [ 'Beavers' => 17 ], [ 'Beavers' => $body ], $cache );
 		$expected = $first->getQualityForArticles( self::WIKI, [ 'Beavers' ] );
 
 		// The model answers nothing this time; the same revision must still produce the score.
-		$second = $this->newLookup( self::revisionsResponse( [ 'Beavers' => 17 ] ), [], $cache );
+		$second = $this->newLookup( [ 'Beavers' => 17 ], [], $cache );
 		$this->assertSame( $expected, $second->getQualityForArticles( self::WIKI, [ 'Beavers' ] ) );
 	}
 
@@ -285,7 +313,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		$cache = new WANObjectCache( [ 'cache' => new HashBagOStuff() ] );
 
 		$first = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.2, 'Stub', [] ) ],
 			$cache
 		);
@@ -293,7 +321,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 		// The article has been edited, so the cached score for the old revision must not be used.
 		$second = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 18 ] ),
+			[ 'Beavers' => 18 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
 			$cache
 		);
@@ -303,7 +331,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 	public function testGetQualityForArticles__anUnknownVersionIsLearnedFromOneArticle(): void {
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17, 'Otters' => 18, 'Voles' => 19 ] ),
+			[ 'Beavers' => 17, 'Otters' => 18, 'Voles' => 19 ],
 			array_fill_keys( [ 'Beavers', 'Otters', 'Voles' ], self::modelResponse( 0.5, 'C', [], '1' ) )
 		);
 
@@ -316,7 +344,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__aKnownVersionIsNotLearnedAgain(): void {
 		$cache = new WANObjectCache( [ 'cache' => new HashBagOStuff() ] );
 		$this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.5, 'C', [], '1' ) ],
 			$cache
 		)->getQualityForArticles( self::WIKI, [ 'Beavers' ] );
@@ -324,7 +352,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		// The version is cached now, so new articles are all scored together.
 		$this->batches = [];
 		$this->newLookup(
-			self::revisionsResponse( [ 'Otters' => 18, 'Voles' => 19 ] ),
+			[ 'Otters' => 18, 'Voles' => 19 ],
 			array_fill_keys( [ 'Otters', 'Voles' ], self::modelResponse( 0.5, 'C', [], '1' ) ),
 			$cache
 		)->getQualityForArticles( self::WIKI, [ 'Otters', 'Voles' ] );
@@ -333,7 +361,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 	public function testGetQualityForArticles__aFailedProbeFallsBackToScoringTheRest(): void {
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17, 'Otters' => 18, 'Voles' => 19 ] ),
+			[ 'Beavers' => 17, 'Otters' => 18, 'Voles' => 19 ],
 			// No entry for Beavers, so the article tried first fails.
 			[
 				'Otters' => self::modelResponse( 0.5, 'C', [], '1' ),
@@ -350,14 +378,14 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 	public function testGetQualityForArticles__noVersionIsLearnedWhenNothingNeedsScoring(): void {
 		$cache = new WANObjectCache( [ 'cache' => new HashBagOStuff() ] );
-		$failing = $this->newLookup( self::revisionsResponse( [ 'Beavers' => 17 ] ), [], $cache );
+		$failing = $this->newLookup( [ 'Beavers' => 17 ], [], $cache );
 		$failing->getQualityForArticles( self::WIKI, [ 'Beavers' ] );
 
 		// Beavers has just failed and nothing else needs scoring, so nothing is asked about,
 		// not even to learn the version.
 		$this->batches = [];
 		$this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.5, 'C', [], '1' ) ],
 			$cache
 		)->getQualityForArticles( self::WIKI, [ 'Beavers' ] );
@@ -367,7 +395,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__anEmptyVersionIsAVersion(): void {
 		$cache = new WANObjectCache( [ 'cache' => new HashBagOStuff() ] );
 		$this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			// No version in the response.
 			[ 'Beavers' => self::modelResponse( 0.5, 'C', [] ) ],
 			$cache
@@ -376,7 +404,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		// So it is not learned again: the next articles are scored together.
 		$this->batches = [];
 		$this->newLookup(
-			self::revisionsResponse( [ 'Otters' => 18, 'Voles' => 19 ] ),
+			[ 'Otters' => 18, 'Voles' => 19 ],
 			array_fill_keys( [ 'Otters', 'Voles' ], self::modelResponse( 0.5, 'C', [] ) ),
 			$cache
 		)->getQualityForArticles( self::WIKI, [ 'Otters', 'Voles' ] );
@@ -437,7 +465,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 		// While Otters is being scored, another request records version 2.
 		$this->newLookup(
-			self::revisionsResponse( [ 'Otters' => 18 ] ),
+			[ 'Otters' => 18 ],
 			[ 'Otters' => self::modelResponse( 0.5, 'C', [], '1' ) ],
 			$cache,
 			'en',
@@ -466,7 +494,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 		// Within a day of version 1's last response, its score is still served.
 		$this->now += WANObjectCache::TTL_HOUR * 22;
-		$quality = $this->newLookup( self::revisionsResponse( [ 'Beavers' => 17 ] ), $newModel, $cache )
+		$quality = $this->newLookup( [ 'Beavers' => 17 ], $newModel, $cache )
 			->getQualityForArticles( self::WIKI, [ 'Beavers' ] );
 		$this->assertSame( 0.2, $quality['Beavers']['score'] );
 
@@ -474,7 +502,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		// article is simply scored again, by the new model.
 		$this->now += WANObjectCache::TTL_MINUTE * 90;
 		$this->batches = [];
-		$quality = $this->newLookup( self::revisionsResponse( [ 'Beavers' => 17 ] ), $newModel, $cache )
+		$quality = $this->newLookup( [ 'Beavers' => 17 ], $newModel, $cache )
 			->getQualityForArticles( self::WIKI, [ 'Beavers' ] );
 		$this->assertSame( [ [ 'Beavers' ] ], $this->batches );
 		$this->assertSame( 0.9, $quality['Beavers']['score'] );
@@ -515,7 +543,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__keepsBothVersionsDuringARollout(): void {
 		$cache = $this->newCache();
 		$this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17, 'Otters' => 18 ] ),
+			[ 'Beavers' => 17, 'Otters' => 18 ],
 			// Old and new pods responding side by side.
 			[
 				'Beavers' => self::modelResponse( 0.2, 'Stub', [], '1' ),
@@ -555,7 +583,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__aScoreWithNoVersionIsServedFromTheCache(): void {
 		$cache = $this->newCache();
 		$this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			// No version in the response, which is still a version: the empty one.
 			[ 'Beavers' => self::modelResponse( 0.5, 'C', [] ) ],
 			$cache
@@ -570,36 +598,23 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public function testGetQualityForArticles__failuresAreNotRetriedImmediately(): void {
 		$cache = new WANObjectCache( [ 'cache' => new HashBagOStuff() ] );
 
-		$failing = $this->newLookup( self::revisionsResponse( [ 'Beavers' => 17 ] ), [], $cache );
+		$failing = $this->newLookup( [ 'Beavers' => 17 ], [], $cache );
 		$this->assertSame( [], $failing->getQualityForArticles( self::WIKI, [ 'Beavers' ] ) );
 
 		// A revision the model has just failed on is left alone rather than asked about again on
 		// every page view, so a working model is not consulted until the failure expires.
 		$working = $this->newLookup(
-			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
 			$cache
 		);
 		$this->assertSame( [], $working->getQualityForArticles( self::WIKI, [ 'Beavers' ] ) );
 	}
 
-	public function testGetQualityForArticles__normalisedTitlesMapBackToWhatWasAsked(): void {
-		$lookup = $this->newLookup(
-			// The API answers with the normalised form, which is not what the worklist stores.
-			self::revisionsResponse( [ 'Beaver dam' => 17 ] ),
-			[ 'Beaver_dam' => self::modelResponse( 0.6, 'C', [] ) ]
-		);
-
-		$this->assertSame(
-			[ 'Beaver_dam' ],
-			array_keys( $lookup->getQualityForArticles( self::WIKI, [ 'Beaver_dam' ] ) )
-		);
-	}
-
 	public function testGetQualityForArticles__numericTitle(): void {
 		// PHP turns a key such as "1984" into an int, which must still reach the model as a title.
 		$lookup = $this->newLookup(
-			self::revisionsResponse( [ '1984' => 17 ] ),
+			[ '1984' => 17 ],
 			[ '1984' => self::modelResponse( 0.9, 'GA', [] ) ]
 		);
 
@@ -609,20 +624,13 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 
 	public function testGetQualityForArticles__wikiWithNoKnownLanguage(): void {
 		// The model needs a language, so a wiki the site lookup does not know cannot be scored.
-		$lookup = $this->newLookup( self::revisionsResponse( [ 'Beavers' => 17 ] ), [], null, null );
+		$lookup = $this->newLookup( [ 'Beavers' => 17 ], [], null, null );
 		$this->assertSame( [], $lookup->getQualityForArticles( self::WIKI, [ 'Beavers' ] ) );
 	}
 
-	/** @dataProvider provideNothingToDo */
-	public function testGetQualityForArticles__nothingToDo( array $titles, $revisionsResponse ): void {
-		$lookup = $this->newLookup( $revisionsResponse, [] );
-		$this->assertSame( [], $lookup->getQualityForArticles( self::WIKI, $titles ) );
-	}
-
-	public static function provideNothingToDo(): Generator {
-		yield 'No titles asked for' => [ [], '{}' ];
-		yield 'The revisions query failed' => [ [ 'Beavers' ], false ];
-		yield 'The revisions query returned nonsense' => [ [ 'Beavers' ], 'not json' ];
+	public function testGetQualityForArticles__noRevisions(): void {
+		$lookup = $this->newLookup( [], [] );
+		$this->assertSame( [], $lookup->getQualityForArticles( self::WIKI, [ 'Beavers' ] ) );
 	}
 
 	public function testGetQualityForArticles__capsTheNumberOfArticles(): void {
@@ -637,7 +645,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			$responses[$title] = self::modelResponse( 0.5, 'C', [] );
 		}
 
-		$lookup = $this->newLookup( self::revisionsResponse( $revisions ), $responses );
+		$lookup = $this->newLookup( $revisions, $responses );
 
 		// One request per article is real work for the model, so a caller cannot ask for a
 		// worklist's worth of them at once.
