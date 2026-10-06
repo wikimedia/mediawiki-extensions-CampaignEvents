@@ -71,6 +71,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesLookupFactory;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Logger\LoggerFactory;
@@ -616,6 +617,14 @@ return [
 		return new WorklistPagesSecondaryStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->getConnectionProvider()
+		);
+	},
+	WorklistPagesLookupFactory::SERVICE_NAME => static function (
+		MediaWikiServices $services
+	): WorklistPagesLookupFactory {
+		return new WorklistPagesLookupFactory(
+			$services->get( WorklistPagesPagerFactory::SERVICE_NAME ),
+			$services->getLinkRenderer(),
 		);
 	},
 ];

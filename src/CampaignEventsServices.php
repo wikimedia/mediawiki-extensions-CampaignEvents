@@ -65,6 +65,7 @@ use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolUpdater;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesLookupFactory;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\MediaWikiServices;
@@ -364,5 +365,11 @@ class CampaignEventsServices {
 		?ContainerInterface $services = null
 	): WorklistPagesSecondaryStore {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistPagesSecondaryStore::SERVICE_NAME );
+	}
+
+	public static function getWorklistPagesLookupFactory(
+		?ContainerInterface $services = null
+	): WorklistPagesLookupFactory {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( WorklistPagesLookupFactory::SERVICE_NAME );
 	}
 }
