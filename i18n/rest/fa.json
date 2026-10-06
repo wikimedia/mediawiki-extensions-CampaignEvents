@@ -23,5 +23,7 @@
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Please delete your event registration on $1, the wiki where the event was created.\nلطفا ثبت رویداد خود را در ویکی حذف کنید",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "لطفاً در $1، ویکی‌ای که رویداد در آن ایجاد شده است، به شرکت‌کنندگان ایمیل بفرستید.",
 	"campaignevents-rest-contribution-not-found": "هیچ مشارکتی با این شناسه موجود نیست.",
-	"campaignevents-rest-delete-contribution-permission-denied": "شما مجاز به حذف این مشارکت نیستید."
+	"campaignevents-rest-delete-contribution-permission-denied": "شما مجاز به حذف این مشارکت نیستید.",
+	"campaignevents-rest-response-organizers-updated": "برگزارکنندگان به‌روز شدند.",
+	"campaignevents-rest-response-email-accepted": "کار ارسال رایانامه پذیرفته شد. تعداد ایمیل‌های ارسال‌شده نشان داده شده است."
 }

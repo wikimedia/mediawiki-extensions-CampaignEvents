@@ -4,6 +4,7 @@
 			"Anterdc99",
 			"Peterxy",
 			"Peterxy12",
+			"Villager-bloc-h",
 			"Wzl19371",
 			"ZhaoFJx",
 			"七八年再来一次",
@@ -28,5 +29,14 @@
 	"campaignevents-rest-delete-event-nonlocal-error-message": "请删除您在创建该活动的wiki$1上的活动报名。",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "请发送电邮给创建该活动的wiki$1上的参与者。",
 	"campaignevents-rest-contribution-not-found": "此ID下没有任何贡献。",
-	"campaignevents-rest-delete-contribution-permission-denied": "您无权删除此贡献。"
+	"campaignevents-rest-delete-contribution-permission-denied": "您无权删除此贡献。",
+	"campaignevents-rest-param-desc-userid": "用户的全局中央用户ID。",
+	"campaignevents-rest-response-registration-created": "活动注册已创建。",
+	"campaignevents-rest-response-registration-updated": "活动注册信息已更新。",
+	"campaignevents-rest-response-registration-deleted": "活动报名已删除。",
+	"campaignevents-rest-response-registration-not-found": "未找到或已删除活动注册信息。",
+	"campaignevents-rest-response-organizers-updated": "组织者更新了信息。",
+	"campaignevents-rest-response-email-accepted": "邮件发送任务已接受。已发送邮件数量反映的是实际发送的邮件数量。",
+	"campaignevents-rest-response-contribution-accepted": "接受捐助协会的工作。",
+	"campaignevents-rest-response-contribution-deleted": "活动贡献记录已删除。"
 }
