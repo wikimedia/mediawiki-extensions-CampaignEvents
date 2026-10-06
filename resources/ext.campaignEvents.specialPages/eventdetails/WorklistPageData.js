@@ -38,6 +38,19 @@
 	const TITLES_PER_REQUEST = 50;
 
 	/**
+	 * How long a shared cache may keep these answers, in seconds.
+	 *
+	 * Everything asked for here is public and slow-moving: a view count changes once a day, a
+	 * lead image rarely. An hour is well inside that, and an event's worklist is read by every
+	 * participant, so the same screenful is asked for over and over across readers.
+	 *
+	 * `smaxage` only, not `maxage`: a shared cache is where that repetition is. Within one page
+	 * the Map above already answers, so a browser cache would do nothing but delay a reload
+	 * meant to pick up a change.
+	 */
+	const SHARED_CACHE_SECONDS = 3600;
+
+	/**
 	 * How far back the count reaches, asked for as `pvipdays`.
 	 *
 	 * The API would return sixty days by default. It caches whatever its own configuration
@@ -170,6 +183,15 @@
 				requests.push( api.get( Object.assign( {
 					action: 'query',
 					titles: titles.slice( i, i + perRequest ),
+					// Every prop asked for here reports `public` from getCacheMode, so the
+					// response can be shared.
+					smaxage: SHARED_CACHE_SECONDS,
+					// Without this the action API answers in the reader's own language, which it
+					// can only do privately: a logged-in reader would be sent
+					// `Cache-Control: private` and the smaxage above would be dropped. Nothing
+					// asked for here is in the reader's language anyway — a short description is
+					// in the wiki's, and the rest are numbers and URLs.
+					uselang: 'content',
 					format: 'json',
 					formatversion: 2
 				}, params ) ).then( ( response ) => {

@@ -145,6 +145,26 @@ describe( 'fetchPageData', () => {
 		expect( data.get( 'enwiki|Beaver' ).description ).toBeNull();
 	} );
 
+	it( 'lets a shared cache keep the answers', async () => {
+		// Every participant in an event reads the same worklist, so the same screenful is asked
+		// for across readers. All the props used report `public` from getCacheMode.
+		const get = mockApis();
+		get.mockResolvedValue( pagesResponse( [] ) );
+
+		await worklistPageData.fetchPageData( [ FOREIGN ] );
+
+		expect( get.mock.calls.length ).toBeGreaterThan( 0 );
+		get.mock.calls.forEach( ( call ) => {
+			expect( call[ 0 ].smaxage ).toBe( 3600 );
+			// Not maxage: within a page the module's own cache answers, and a browser cache
+			// would only delay a reload meant to pick up a change.
+			expect( call[ 0 ].maxage ).toBeUndefined();
+			// Left to the reader's own language, the API answers privately and drops the
+			// smaxage above, which would leave this doing nothing for a logged-in reader.
+			expect( call[ 0 ].uselang ).toBe( 'content' );
+		} );
+	} );
+
 	it( 'reads an article from the wiki that holds it', async () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [
