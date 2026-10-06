@@ -576,11 +576,14 @@ return [
 	},
 	ArticleQualityLookup::SERVICE_NAME =>
 		static function ( MediaWikiServices $services ): ArticleQualityLookup {
+			$config = $services->getMainConfig();
 			return new ArticleQualityLookup(
 				$services->getHttpRequestFactory(),
 				$services->getMainWANObjectCache(),
 				$services->getSiteLookup(),
 				LoggerFactory::getInstance( 'CampaignEvents' ),
+				$config->get( 'CampaignEventsArticleQualityEndpoint' ),
+				$config->get( 'CampaignEventsArticleQualityHostHeader' ),
 			);
 		},
 	WorklistArticleHelper::SERVICE_NAME =>

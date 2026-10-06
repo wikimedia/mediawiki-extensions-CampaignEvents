@@ -20,6 +20,10 @@ use Wikimedia\ObjectCache\WANObjectCache;
  */
 class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	private const WIKI = 'awiki';
+	private const ENDPOINT = 'https://inference.example.org/v1/models/articlequality:predict';
+
+	/** @var array The requests the multi client was handed, so the URL and headers can be read */
+	private array $sentRequests = [];
 
 	/** A trimmed articlequality response, in the shape the model really sends. */
 	private static function modelResponse( float $score, string $label, array $normalized ): string {
@@ -46,20 +50,26 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	 * @param array $modelResponses Model responses keyed by the title they answer for
 	 * @param WANObjectCache|null $cache
 	 * @param string|null $langCode Language of the wiki, or null for a wiki the lookup cannot find
+	 * @param string|null $endpoint Inference endpoint, or null for a wiki that configures none
+	 * @param string|null $hostHeader Host header to route on, or null to send none
 	 * @return ArticleQualityLookup
 	 */
 	private function newLookup(
 		$revisionsResponse,
 		array $modelResponses,
 		?WANObjectCache $cache = null,
-		?string $langCode = 'en'
+		?string $langCode = 'en',
+		?string $endpoint = self::ENDPOINT,
+		?string $hostHeader = null
 	): ArticleQualityLookup {
+		$this->sentRequests = [];
 		$multiClient = $this->createMock( MultiHttpClient::class );
 		$multiClient->method( 'runMulti' )->willReturnCallback(
-			static function ( array $reqs ) use ( $modelResponses ): array {
+			function ( array $reqs ) use ( $modelResponses ): array {
 				// As MultiHttpClient really answers: each request back, with its own reply
 				// under 'response'. Getting this wrong in the mock hid a bug that only
 				// showed up against the live service.
+				$this->sentRequests = $reqs;
 				foreach ( $reqs as $title => &$req ) {
 					$req['response'] = array_key_exists( $title, $modelResponses )
 						? [ 'code' => 200, 'reason' => 'OK', 'headers' => [],
@@ -91,8 +101,72 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			$httpRequestFactory,
 			$cache ?? new WANObjectCache( [ 'cache' => new HashBagOStuff() ] ),
 			$siteLookup,
-			new NullLogger()
+			new NullLogger(),
+			$endpoint,
+			$hostHeader
 		);
+	}
+
+	/** @dataProvider provideNoEndpointConfigured */
+	public function testGetQualityForArticles__noEndpointConfigured( ?string $endpoint ): void {
+		// A wiki with no inference service shows no quality rather than failing: nothing is
+		// asked for, and the cards are complete without it.
+		$lookup = $this->newLookup(
+			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
+			null,
+			'en',
+			$endpoint
+		);
+
+		$this->assertSame( [], $lookup->getQualityForArticles( 'awiki', [ 'Beavers' ] ) );
+		$this->assertSame( [], $this->sentRequests );
+	}
+
+	public static function provideNoEndpointConfigured(): Generator {
+		yield 'Unset' => [ null ];
+		// Blanked rather than unset, which would otherwise be requested as an empty URL.
+		yield 'Blanked' => [ '' ];
+	}
+
+	public function testGetQualityForArticles__sendsTheConfiguredEndpointAndHost(): void {
+		// An inference service may route on the Host header and not answer without it.
+		$lookup = $this->newLookup(
+			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
+			null,
+			'en',
+			self::ENDPOINT,
+			'articlequality.example.wikimedia.org'
+		);
+
+		$lookup->getQualityForArticles( 'awiki', [ 'Beavers' ] );
+
+		$sent = reset( $this->sentRequests );
+		$this->assertSame( self::ENDPOINT, $sent['url'] );
+		$this->assertSame( 'articlequality.example.wikimedia.org', $sent['headers']['Host'] );
+	}
+
+	/** @dataProvider provideNoHostHeader */
+	public function testGetQualityForArticles__sendsNoHostHeaderWhenNotConfigured( ?string $hostHeader ): void {
+		// The public API gateway needs none, and sending an empty one would misroute.
+		$lookup = $this->newLookup(
+			self::revisionsResponse( [ 'Beavers' => 17 ] ),
+			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
+			null,
+			'en',
+			self::ENDPOINT,
+			$hostHeader
+		);
+
+		$lookup->getQualityForArticles( 'awiki', [ 'Beavers' ] );
+
+		$this->assertArrayNotHasKey( 'Host', reset( $this->sentRequests )['headers'] );
+	}
+
+	public static function provideNoHostHeader(): Generator {
+		yield 'Unset' => [ null ];
+		yield 'Blanked' => [ '' ];
 	}
 
 	public function testGetQualityForArticles__returnsScoreAndElements(): void {

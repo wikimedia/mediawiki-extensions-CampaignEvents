@@ -64,6 +64,14 @@
 			"description": "API secret to use with the selected P&E Dashboard instance. Must be configured if you intend to use the P&E Dashboard.",
 			"value": null
 		},
+		"CampaignEventsArticleQualityEndpoint": {
+			"description": "URL of the articlequality inference endpoint used to score worklist articles, or null to score none. Defaults to the public API gateway, which works anywhere and needs no Host header. A deployment with its own inference service can point this at it instead; where that service routes on a Host header, $wgCampaignEventsArticleQualityHostHeader supplies one. Set to null to make no request at all, in which case the worklist cards simply show no quality information.",
+			"value": "https://api.wikimedia.org/service/lw/inference/v1/models/articlequality:predict"
+		},
+		"CampaignEventsArticleQualityHostHeader": {
+			"description": "Host header to send with requests to $wgCampaignEventsArticleQualityEndpoint, or null to send none. Some inference services route on it and will not answer without it. The default endpoint does not need one.",
+			"value": null
+		},
 		"CampaignEventsEnableWikimediaParticipantQuestions": {
 			"description": "Flag to enable Wikimedia-specific participant questions. This flag could be reconsidered in the future, in favour of other solutions (like a hook to add Wikimedia-specific questions).",
 			"value": true

@@ -31,9 +31,6 @@ use Wikimedia\ObjectCache\WANObjectCache;
 class ArticleQualityLookup {
 	public const SERVICE_NAME = 'CampaignEventsArticleQualityLookup';
 
-	private const ENDPOINT =
-		'https://api.wikimedia.org/service/lw/inference/v1/models/articlequality:predict';
-
 	/** How many articles one call may ask about. A screen of cards, with room to spare. */
 	public const MAX_ARTICLES = 30;
 
@@ -61,6 +58,8 @@ class ArticleQualityLookup {
 		private readonly WANObjectCache $wanCache,
 		private readonly SiteLookup $siteLookup,
 		private readonly LoggerInterface $logger,
+		private readonly ?string $endpoint,
+		private readonly ?string $hostHeader,
 	) {
 	}
 
@@ -76,6 +75,13 @@ class ArticleQualityLookup {
 	 * @return array<string,array{score: float, label: string, elements: array<string,float|bool>}>
 	 */
 	public function getQualityForArticles( string $wiki, array $prefixedTexts ): array {
+		if ( $this->endpoint === null || $this->endpoint === '' ) {
+			// No inference service to ask, a blanked setting counting as none rather than as a
+			// request to an empty URL. The cards are complete without a score, so this is a wiki
+			// that simply shows none rather than an error.
+			return [];
+		}
+
 		$prefixedTexts = array_slice( array_values( array_unique( $prefixedTexts ) ), 0, self::MAX_ARTICLES );
 		if ( !$prefixedTexts ) {
 			return [];
@@ -131,13 +137,19 @@ class ArticleQualityLookup {
 		$client = $this->httpRequestFactory->createMultiClient( [ 'reqTimeout' => 10 ] );
 		$requests = [];
 		foreach ( $missing as $title => $revisionID ) {
+			$headers = [
+				'Content-Type' => 'application/json',
+				'User-Agent' => $this->httpRequestFactory->getUserAgent(),
+			];
+			if ( $this->hostHeader !== null && $this->hostHeader !== '' ) {
+				// Some inference services route on this and will not answer without it. An empty
+				// one would misroute rather than be ignored, so it counts as none.
+				$headers['Host'] = $this->hostHeader;
+			}
 			$requests[$title] = [
 				'method' => 'POST',
-				'url' => self::ENDPOINT,
-				'headers' => [
-					'Content-Type' => 'application/json',
-					'User-Agent' => $this->httpRequestFactory->getUserAgent(),
-				],
+				'url' => $this->endpoint,
+				'headers' => $headers,
 				'body' => json_encode( [
 					'rev_id' => $revisionID,
 					'lang' => $langCode,
