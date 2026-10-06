@@ -29,10 +29,10 @@ use Wikimedia\Rdbms\IResultWrapper;
 class WorklistPagesPager extends CodexTablePager {
 
 	/**
-	 * Unique sort fields per column, including stable tiebreaker by primary key.
+	 * Unique sort fields per column
 	 */
 	private const INDEX_FIELDS = [
-		'page' => [ 'cewp_page_prefixedtext', 'cewp_wiki', 'cewp_timestamp', 'cewp_id' ],
+		'page' => [ 'cewp_page_prefixedtext', 'cewp_wiki' ],
 		'wiki' => [ 'cewp_wiki', 'cewp_timestamp', 'cewp_id' ],
 		'timestamp' => [ 'cewp_timestamp', 'cewp_id' ],
 	];
