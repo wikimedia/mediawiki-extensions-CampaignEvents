@@ -623,8 +623,13 @@ return [
 		MediaWikiServices $services
 	): WorklistPagesLookupFactory {
 		return new WorklistPagesLookupFactory(
+			$services->get( WorklistSecondaryStore::SERVICE_NAME ),
+			$services->getPageStoreFactory(),
 			$services->get( WorklistPagesPagerFactory::SERVICE_NAME ),
 			$services->getLinkRenderer(),
+			$services->get( WorklistArticleHelper::SERVICE_NAME ),
+			$services->get( WorklistPagesSecondaryStore::SERVICE_NAME ),
+			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 		);
 	},
 ];

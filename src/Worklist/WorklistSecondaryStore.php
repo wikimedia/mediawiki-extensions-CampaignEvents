@@ -8,6 +8,8 @@ use BadMethodCallException;
 use LogicException;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\Utils;
+use MediaWiki\Page\PageIdentity;
 use RuntimeException;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IDBAccessObject;
@@ -257,6 +259,26 @@ class WorklistSecondaryStore {
 			throw new RuntimeException( "Worklist $worklistID doesn't exist" );
 		}
 		return $val !== null ? (int)$val : null;
+	}
+
+	/**
+	 * Returns the ID of the revision that was last used to synchronize the content of a worklist with the wikipage,
+	 * or null when the given page has no associated worklist or it was never synced.
+	 */
+	public function getWorklistContentSyncedRevFromPage( PageIdentity $worklistPage ): ?int {
+		$db = $this->dbHelper->getReplicaConnection();
+
+		$val = $db->newSelectQueryBuilder()
+			->select( 'cew_content_rev' )
+			->from( 'ce_worklists' )
+			->where( [
+				'cew_wiki' => Utils::getWikiIDString( $worklistPage->getWikiId() ),
+				'cew_page_id' => $worklistPage->getId( $worklistPage->getWikiId() ),
+			] )
+			->caller( __METHOD__ )
+			->fetchField();
+
+		return $val !== null && $val !== false ? (int)$val : null;
 	}
 
 	/**
